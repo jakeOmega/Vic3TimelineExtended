@@ -1395,7 +1395,7 @@ Put every PM a setting can switch to in the same group as the one it replaces, a
 top of `common/production_methods/08_monuments.txt`). A setting that leaves a choice between
 several PMs in a group only disables the others; `force_` is for a group that has exactly one PM
 per setting. The flags act on the PM key, so they reach every building whose groups list it, and
-a shared group (this mod's `pmg_maintenance` sits on 54 building types) needs only one pair. Mod
+a shared group (this mod's four maintenance groups sit on 69 building types, and share one `pm_no_maintenance`) needs only one pair. Mod
 example: `free_market_construction_rule` (`common/game_rules/extra_game_rules.txt`, methods in
 `common/production_methods/te_construction_market_pms.txt`) swaps six groups per setting and no
 script switches a PM. Two unverified details are worth watching in game: which PM the engine picks

@@ -1,6 +1,7 @@
 ﻿INJECT:building_oil_rig = {
 	production_method_groups = {
 		pmg_depth_oil_rig
+		pmg_maintenance_heavy
 	}
 }
 
@@ -420,7 +421,7 @@ INJECT:building_power_plant = {
 	production_method_groups = {
 		pmg_power_automation
 		pmg_emissions_control
-		pmg_maintenance
+		pmg_maintenance_heavy
 	}
 }
 
@@ -471,7 +472,7 @@ REPLACE_OR_CREATE:building_airport = {
 
 	production_method_groups = {
 		pmg_base_building_airport
-		pmg_maintenance
+		pmg_maintenance_heavy
 	}
 
 	required_construction = construction_cost_super_high
@@ -497,7 +498,7 @@ REPLACE_OR_CREATE:building_highway = {
 
 	production_method_groups = {
 		pmg_base_building_highway
-		pmg_maintenance
+		pmg_maintenance_heavy
 	}
 
 	required_construction = construction_cost_super_high
@@ -518,7 +519,7 @@ REPLACE_OR_CREATE:building_software_industry = {
 	production_method_groups = {
 		pmg_base_building_software_industry
 		pmg_automation_building_software
-		pmg_maintenance
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_very_high
@@ -548,7 +549,7 @@ REPLACE_OR_CREATE:building_network_infrastructure = {
 	production_method_groups = {
 		pmg_base_building_network
 		pmg_automation_building_network
-		pmg_maintenance
+		pmg_maintenance_heavy
 	}
 
 	required_construction = construction_cost_mega_high
@@ -565,7 +566,7 @@ REPLACE_OR_CREATE:building_hydro_plant = {
 	production_method_groups = {
 		pmg_base_building_hydro_power
 		pmg_power_automation
-		pmg_maintenance
+		pmg_maintenance_heavy
 	}
 
 	unlocking_technologies = {
@@ -592,7 +593,7 @@ REPLACE_OR_CREATE:building_nuclear_plant = {
 	production_method_groups = {
 		pmg_base_building_nuclear_power
 		pmg_power_automation
-		pmg_maintenance
+		pmg_maintenance_intensive
 	}
 
 	unlocking_technologies = {
@@ -613,7 +614,7 @@ REPLACE_OR_CREATE:building_fusion_plant = {
 	production_method_groups = {
 		pmg_base_building_fusion_power
 		pmg_power_automation
-		pmg_maintenance
+		pmg_maintenance_intensive
 	}
 
 	unlocking_technologies = {
@@ -634,7 +635,7 @@ REPLACE_OR_CREATE:building_renewable_energy_plant = {
 	production_method_groups = {
 		pmg_base_building_renewable_power
 		pmg_power_automation
-		pmg_maintenance
+		pmg_maintenance_heavy
 	}
 
 	unlocking_technologies = {
@@ -906,7 +907,7 @@ REPLACE_OR_CREATE:building_space_mine = {
 
 	production_method_groups = {
 		pmg_base_building_space_mine
-		pmg_maintenance
+		pmg_maintenance_intensive
 	}
 
 	required_construction = construction_cost_space_mine
@@ -926,7 +927,7 @@ REPLACE_OR_CREATE:building_ocean_mine = {
 
 	production_method_groups = {
 		pmg_base_building_ocean_mine
-		pmg_maintenance
+		pmg_maintenance_intensive
 	}
 
 	required_construction = construction_cost_mega_high
@@ -1044,7 +1045,7 @@ REPLACE_OR_CREATE:building_national_park = {
 INJECT:building_art_academy = {
 	production_method_groups = {
 		pmg_principle_artistic_expression
-		pmg_maintenance
+		pmg_maintenance_light
 	}
 }
 
@@ -1058,7 +1059,7 @@ INJECT:building_port = {
 	production_method_groups = {
 		pmg_water_personal_transport
 		pmg_emissions_control
-		pmg_maintenance
+		pmg_maintenance_heavy
 	}
 
 	possible = {
@@ -1071,13 +1072,13 @@ INJECT:building_port = {
 
 INJECT:building_railway = {
 	production_method_groups = {
-		pmg_maintenance
+		pmg_maintenance_heavy
 	}
 }
 
 INJECT:building_trade_center = {
 	production_method_groups = {
-		pmg_maintenance
+		pmg_maintenance_light
 	}
 }
 
@@ -1191,7 +1192,7 @@ building_state_youth_centers = {
 	production_method_groups = {
 		pmg_childrens_creche_philosophy
 		pmg_childrens_creche_advanced_nurturing
-		pmg_maintenance
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_medium
@@ -1238,6 +1239,7 @@ REPLACE_OR_CREATE:building_manganese_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_very_high
@@ -1266,6 +1268,7 @@ REPLACE_OR_CREATE:building_chromium_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_very_high
@@ -1294,6 +1297,7 @@ REPLACE_OR_CREATE:building_specialty_alloy_metal_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_very_high
@@ -1322,6 +1326,7 @@ REPLACE_OR_CREATE:building_copper_mine = {
 		pmg_steam_automation_building_lead_mine
 		pmg_train_automation_building_lead_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_high
@@ -1350,6 +1355,7 @@ REPLACE_OR_CREATE:building_bauxite_mine = {
 		pmg_steam_automation_building_iron_mine
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_high
@@ -1378,6 +1384,7 @@ REPLACE_OR_CREATE:building_precious_minor_base_metal_mine = {
 		pmg_steam_automation_building_lead_mine
 		pmg_train_automation_building_lead_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_very_high
@@ -1406,6 +1413,7 @@ REPLACE_OR_CREATE:building_nickel_cobalt_mine = {
 		pmg_steam_automation_building_tech_metals_mine
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_very_high
@@ -1434,6 +1442,7 @@ REPLACE_OR_CREATE:building_lithium_mine = {
 		pmg_steam_automation_building_tech_metals_mine
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_very_high
@@ -1462,6 +1471,7 @@ REPLACE_OR_CREATE:building_rare_earth_metals_mine = {
 		pmg_steam_automation_building_tech_metals_mine
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_very_high
@@ -1490,6 +1500,7 @@ REPLACE_OR_CREATE:building_platinum_group_metals_mine = {
 		pmg_steam_automation_building_tech_metals_mine
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_very_high
@@ -1518,6 +1529,7 @@ REPLACE_OR_CREATE:building_graphite_mine = {
 		pmg_steam_automation_building_coal_mine
 		pmg_train_automation_building_coal_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_high
@@ -1546,6 +1558,7 @@ REPLACE_OR_CREATE:building_phosphate_mine = {
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_high
@@ -1574,6 +1587,7 @@ REPLACE_OR_CREATE:building_potash_mine = {
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_high
@@ -1602,6 +1616,7 @@ REPLACE_OR_CREATE:building_industrial_mineral_salt_mine = {
 		pmg_steam_automation_building_sulfur_mine
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
+		pmg_maintenance_light
 	}
 
 	required_construction = construction_cost_high

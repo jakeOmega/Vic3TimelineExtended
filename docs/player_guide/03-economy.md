@@ -68,11 +68,22 @@ methods:
 
 ### Construction maintenance and retooling
 
-Most factories, power plants, railways, ports, airports, highways, trade centers
-and skyscrapers use 0.1 construction per level each week as maintenance. Farms,
-ordinary mines, plantations and urban centers don't. A few company buildings
-also use construction in their production. This upkeep competes with your queues
-for the same supply, so a growing economy needs a growing construction sector.
+Most industry, transport, power and service buildings use some construction
+each week as maintenance, per level, at a rate that depends on the kind of
+building:
+
+| Rate per level | Buildings |
+|---|---|
+| 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries and the modern mines (bauxite, chromium, copper, graphite, lithium and the like) |
+| 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries |
+| 0.15 | Railways, Highways, Airports, Ports, Network Infrastructure, Power Plants, Hydro Plants, Renewable Energy Plants, Oil Rigs |
+| 0.2 | Nuclear Plants, Fusion Plants, Deep-Sea Mines, Extraplanetary Bases |
+
+Farms, plantations, the original coal, iron, lead, sulfur and gold mines, and
+urban centers pay none. A few company buildings also use construction in their
+production. This upkeep competes with your queues for the same supply, so a
+growing economy needs a growing construction sector, and a country built around
+railways and power pays more than one built around trade.
 
 When a building switches production method it gets the Production Method
 Retooling modifier, which raises its construction use by +1,000% right after the

@@ -187,7 +187,8 @@ universal_aptitude_traits_rule = {
 #   no_retooling    the market with maintenance, without the retooling
 #                   surcharge: script removes pm_retooling as the engine
 #                   applies it (te_pm_retooling_waived).
-#   no_maintenance  the market without construction maintenance: pmg_maintenance
+#   no_maintenance  the market without construction maintenance: every
+#                   maintenance group (pmg_maintenance, _light, _heavy, _intensive)
 #                   runs pm_no_maintenance, as in direct games. Retooling has
 #                   no construction to multiply then; script removes the
 #                   modifier anyway, so no building shows a penalty.
@@ -278,6 +279,9 @@ free_market_construction_rule = {
 
 		# No construction maintenance
 		flag = disable_pm_maintenance
+		flag = disable_pm_maintenance_light
+		flag = disable_pm_maintenance_heavy
+		flag = disable_pm_maintenance_intensive
 		flag = force_pm_no_maintenance
 
 		# Company and Engineering & Logistics methods keep the construction
@@ -300,6 +304,9 @@ free_market_construction_rule = {
 
 		# No construction good anywhere
 		flag = disable_pm_maintenance
+		flag = disable_pm_maintenance_light
+		flag = disable_pm_maintenance_heavy
+		flag = disable_pm_maintenance_intensive
 		flag = force_pm_no_maintenance
 
 		flag = disable_pm_disney_world

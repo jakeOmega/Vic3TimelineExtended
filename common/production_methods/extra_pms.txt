@@ -18279,6 +18279,41 @@ pm_maintenance = {
 	}
 }
 
+# Maintenance tiers. pm_maintenance is the standard rate (factories, most heavy and
+# high-tech industry); each other tier sits in its own group so a building type takes
+# the rate that fits it (pmg_maintenance_light / _heavy / _intensive in
+# extra_pm_groups.txt). free_market_construction_rule disables every tier and forces
+# pm_no_maintenance in their place, so a new tier needs its flags there too.
+pm_maintenance_light = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
+	is_hidden_when_unavailable = yes
+	building_modifiers = {
+		level_scaled = {
+			goods_input_construction_add = 0.05               # Price:  500, Total cost: 25.0
+		}
+	}
+}
+
+pm_maintenance_heavy = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
+	is_hidden_when_unavailable = yes
+	building_modifiers = {
+		level_scaled = {
+			goods_input_construction_add = 0.15               # Price:  500, Total cost: 75.0
+		}
+	}
+}
+
+pm_maintenance_intensive = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
+	is_hidden_when_unavailable = yes
+	building_modifiers = {
+		level_scaled = {
+			goods_input_construction_add = 0.2                # Price:  500, Total cost: 100.0
+		}
+	}
+}
+
 # ===========================================================================================
 # POLLUTION MITIGATION PRODUCTION METHODS
 # ===========================================================================================
