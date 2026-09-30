@@ -302,6 +302,34 @@ The UN GUI pass (#567; the icons' record is now `docs/systems/un_gui_icons.md`) 
 
 **Pies.** `gen_ch_model_pie_textures.py` writes `un_icons/pie_members.dds` (UN blue, `#5b92e5`) and `pie_rest.dds` (grey, `#8c8474`) in the Cultural Hegemony pie's format. Checked with the dataviz validator against the dark panel: ΔE 16.8 normal and 16.9 protan, and both clear 3:1 contrast. The grey fails only the chroma floor, as intended for the part that is not the subject.
 
+## System panels' GUI icons (2026-09-29)
+
+The system-panel style pass (#573–#583) drew about 120 icons and ten pies with placeholders, listed per system in `docs/systems/<system>_gui_icons.md` on each system's branch. This slice made them the UN's way: GUI-hosted categories, one emblem per family, and each state as a tint, a drawn mark or a drawn break on it. Per system there is a `<sys>_part` category (the emblems and the objects used as marks), a derived `<sys>_state` category and a plain cut-out category for the icons that are one object of their own. List 1 (Banking, Cultural Hegemony, Covert, Global Warming, Grand Monuments, Strategic Reserve) was final; List 2 (Nuclear, Colonial Empire, Space Race) was provisional, its systems still in play-test.
+
+**What the derived icons gained.**
+- Metal tints map the emblem's own light and shade onto a metal's ramp, so one render is stone, gilded, silver or iron with its shape unchanged (the gilded bank of Boom and Frenzy, the covert shields). `moss` greys the stone and turns only its shadows green; noise patches read as camouflage paint.
+- Drawn marks take settings: arrows up, down, left or right in eight colours, single or double; a level bar; rank chevrons; a striped barrier; a soap bubble whose rim carries the band's colour; a thermometer with its column at any level; an enamel disc (a lamp, or an alert's ground); a shield outline; a dome; a curved tie between two coasts, whole, taut, cracked or broken.
+- A mark can sit beneath the icon (`under`), be rotated, and a part used as a mark can be tinted.
+- The emblem itself can be cracked or split (drawn: FLUX will not break things), leaned (`tilt`), turned about its centre (`turn`), or shrunk and placed (`base`), which is how a mark gets room beside it.
+- An entry with `disc` in place of `from` is drawn outright, with no render: the seven warming tiers are one drawn thermometer, its column climbing, on a disc warming from blue-green to dark red.
+
+**What review of the drafts found.**
+- A small bubble resting on a tall coin stack read as a light bulb at 32 px. The coins went inside the bubble, which grows around them band by band.
+- Coins under a tap read as a pile, not a flow, until they were spaced and turned.
+- A split emblem's halves leaned off the canvas; the emblem is shrunk before it is split.
+- The pie colours the lists proposed failed the dataviz validator's normal-vision floor against the grey rest disc (ΔE 12–13); each fill moved to the nearest lighter step that clears it (`gen_ch_model_pie_textures.py`). The three-slice pies (Colonial Empire, Space Race) were checked on every pair (`--pairs all`).
+
+**What FLUX would not draw, and what stood in** (four seeds each, often eight):
+- **A shut eye.** Every covert shield had its eye open, including four seeds that asked for the lid shut. The lid is a drawn `eyelid` mark, drawn as a `pre` mark (before the tint and the break) so it takes the shield's metal and cracks with it.
+- **A standing warhead.** Every warhead lay on its side. The programme's row became a rack, and Compellence mirrors the bomb (`flip`).
+- **A flame alone.** Every exhaust flame came with a rocket above it; the Space Race flame is Banking's flame part turned upside down.
+- **A heater shield, an empty launcher, rays.** Plaques and discs, trucks already loaded, a wreath without rays: the shield and the rays are drawn marks, and readiness is the missile on a drawn pad.
+- **Grey leaves.** The negligible CH sprig came out green whatever the subject said; it is tinted.
+- **Legible at 36 px, and not:** a slender obelisk is a needle and a gantry a lattice; a round table of flags seen from above is a brown disc with specks; a stele can read as a gravestone. A reroll that only repeats a failure is better replaced by a drawn mark or a derived icon.
+- **Lettering** came back on a wrench handle, a crate, a tram and a cabinet's dials, and a crescent and eagles on cap badges. Zoom every pick.
+
+**Disc marks and rewrites.** `write` compares recipes, not drawing code, so a change to a drawn mark (the disc's highlight, once a blob that read as a sun) does not rewrite the icons that use it: delete their DDS files and write again.
+
 ## Review lessons (2026-09-27)
 
 About 250 icons were generated in one session: era 6 techs, all treaty articles and all diplomatic actions. The owner reviewed every batch on annotated sheets and changed about one pick in eight.

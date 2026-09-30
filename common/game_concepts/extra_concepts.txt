@@ -11,6 +11,34 @@ concept_banking_crash = {}
 concept_banking_contagion = {}
 concept_financial_regulation = {}
 
+# Banking panel readings (row labels of the banking overview and the Monetary
+# Policy section, gui/journal_entry_widgets/banking_dashboard_widget.gui)
+concept_banking_intervention_budget = {}
+concept_banking_policy_stance = {}
+concept_banking_inflation = {}
+concept_banking_reference_rate = {}
+concept_banking_world_rate = {}
+concept_banking_policy_rate = {}
+concept_banking_rate_target = {}
+concept_banking_delegation = {}
+concept_banking_mandate = {}
+concept_banking_bank_gold = {}
+concept_banking_gold_flow = {}
+concept_banking_borrowed_gold = {}
+concept_banking_peg_confidence = {}
+concept_banking_exchange_rate = {}
+concept_banking_monetary_anchor = {}
+concept_banking_backstops = {}
+concept_banking_monetary_union = {}
+concept_banking_rate_paid = {}
+concept_banking_credit_standing = {}
+concept_banking_risk_premium = {}
+concept_banking_expected_inflation = {}
+concept_banking_wage_pressure = {}
+concept_banking_price_pressure = {}
+concept_banking_inflation_anchoring = {}
+concept_banking_monetisation = {}
+
 # Banking Intervention Tools (cb_* scripted buttons on je_banking_cycle)
 concept_open_market_operations = {}
 concept_directed_credit = {}

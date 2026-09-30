@@ -546,9 +546,8 @@ def regenerate(mod_state) -> dict:
 if __name__ == "__main__":
     import sys
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from mod_state import ModState
     from path_constants import mod_path
     import mod_state_server
-    ms = ModState(mod_state_server.base_game_paths, mod_state_server.mod_paths)
+    ms = mod_state_server.cli_mod_state()
     result = audit(ms, mod_path=mod_path)
     print(render_report(result))

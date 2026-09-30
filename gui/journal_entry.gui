@@ -243,9 +243,10 @@ types journal_entry_panel_types
 					parentanchor = hcenter
 					direction = vertical
 
-					### TIMELINE EXTENDED — the ONLY change to this vanilla file. A journal entry
-					### that draws its own scripted bars higher up the panel says so by putting a
-					### (zero-sized) widget in custom_widget_container_7; see je_banking.txt and
+					### TIMELINE EXTENDED — one of two changes to this vanilla file (the other
+					### is the goal bar below). A journal entry that draws its own bars higher up
+					### the panel says so by putting a (zero-sized) widget in
+					### custom_widget_container_7; see je_banking.txt and
 					### gui/journal_entry_widgets/te_je_bars_on_top_marker.gui.
 					visible = "[And( Not( IsDataModelEmpty( JournalEntry.GetScriptedProgressBars ) ), Not( JournalEntry.HasCustomWidget('custom_widget_container_7') ) )]"
 					datamodel = "[JournalEntry.GetScriptedProgressBars]"
@@ -671,7 +672,9 @@ types journal_entry_panel_types
 
 				flowcontainer = {
 					parentanchor = hcenter
-					visible = "[And(JournalEntry.HasProgressBar, JournalEntry.IsActive)]"
+					### TIMELINE EXTENDED — the bars-on-top marker (custom_widget_container_7)
+					### hides the goal bar too, for an entry whose own widget shows its progress.
+					visible = "[And( And(JournalEntry.HasProgressBar, JournalEntry.IsActive), Not( JournalEntry.HasCustomWidget('custom_widget_container_7') ) )]"
 					margin = { 0 5 }
 
 					default_progressbar_horizontal = {
