@@ -2887,3 +2887,11 @@ banking_display_bubble_monthly_add = {
 banking_display_points_free = {
 	value = modifier:country_banking_intervention_max_add
 }
+
+# Extra repeal weight the AI gives a button that ends a programme costing
+# authority, while the country's available authority is negative. Low authority
+# cuts bureaucracy, which can tip a country into a bankruptcy cycle, so an AI in
+# deficit should shed what it can. Used by the cultural hegemony and colonial
+# empire disable buttons; the global warming repeals carry their own table
+# (gw_ai_authority_deficit_repeal_weight in global_warming_ai_values.txt).
+te_ai_authority_deficit_repeal_weight = 30
