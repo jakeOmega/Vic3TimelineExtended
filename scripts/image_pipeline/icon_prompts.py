@@ -1139,8 +1139,11 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     "covert": {
         # A searchlight's beam would cut out as a grey blob: the caught spy's raised hands say it.
-        "spy_caught": {"subject": "a man in a tan trench coat and black fedora with both hands raised high above "
-                                  "his head, full figure", "seed": 1,
+        # The first subject (s1 kept in ~/flux_runs/originals/gui_spy_caught) looked too
+        # photorealistic (owner): stylized, the face in shadow, brush strokes.
+        "spy_caught": {"subject": "a stylized cartoon spy in a tan trench coat and black fedora with both hands raised "
+                                  "high, his face hidden in shadow under the hat brim, simple bold shapes, loosely "
+                                  "hand-painted with visible brush strokes", "seed": 0,
                        "now": f"{_GI}/military_icons/navy_icons/detection_navy.dds"},
         "operation_slot": {"subject": "a closed tan manila case file folder with a small black-and-white photograph "
                                       "held on its cover by a steel paper clip", "seed": 2,
@@ -1244,6 +1247,11 @@ ICONS: dict[str, dict[str, dict]] = {
                                  "island", "seed": 1},
     },
     "colonial": {
+        # The eligible-territories row (22 px), lit while the territory counts as a colony and
+        # dimmed to 25% while not: one file, the widget dims it. Added in the updated list (2026-09-30).
+        "territory_colony": {"subject": "a small plain orange cloth flag on a pole planted on a small green tropical "
+                                        "island coast with one palm tree and a strip of sandy beach", "seed": 0,
+                             "now": f"{_GI}/state_status_icons/colony.dds"},
         "programme_invest": {"subject": "a short steel railway bridge span under construction over a river, a small "
                                         "yellow crane on it", "seed": 1,
                              "now": f"{_GI}/building_icons/building_browser_filter_icons/filter_icons_development.dds"},
