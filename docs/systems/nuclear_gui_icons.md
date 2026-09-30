@@ -36,8 +36,6 @@ Code: `nuclear_program_display_state` (`common/script_values/extra_script_values
 
 The credibility cell is a meter, not an icon.
 
-The Military panel's Nuclear tab shows `warheads.dds` at 20 px left of its name (`gui/panel_military.gui`, the tab strip's fourth slot). It is set in the slot's `fourth_button_name` block, not `fourth_button_icon`, which vanilla's `tab_buttons` also draws on the fifth slot's selected half, where the Covert tab is.
-
 ## Row 2: the posture (while armed)
 
 Codes: `nd_display_doctrine_code`, `nd_display_readiness_code` and `nd_display_authority_code` (`common/script_values/nuclear_deterrence_values.txt`). Each falls back as the name blocks in `nuclear_deterrence_custom_loc.txt` do. Each cell's hover is the posture row's own tooltip.

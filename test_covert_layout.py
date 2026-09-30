@@ -851,21 +851,26 @@ class MilitaryCovertTabTest(unittest.TestCase):
         self.assertEqual({s for s in SLOTS if f'blockoverride "{s}_button"' in strip}, set(SLOTS))
         self.assertNotIn("IsTabSelected('te_covert')", "".join(nuclear))
 
-    def test_the_tab_icon_is_the_tradecraft_emblem(self):
-        m = re.search(r'blockoverride "fifth_button_name" \{.*?texture = "([^"]+)"', self.blocks[0], re.S)
-        self.assertEqual(m.group(1), TRADECRAFT_ICONS[0])
-        self.assertIn("The Military panel's Covert tab", _read(ICONS_DOC))
-        # tab_buttons draws fourth_button_icon on slot 5's selected half as
-        # well, so no tab of this strip may use it: it would show on Covert.
-        self.assertNotIn('blockoverride "fourth_button_icon"', self.military)
-        self.assertNotIn('blockoverride "fifth_button_icon"', self.military)
+    def test_no_tab_on_the_strip_carries_an_icon(self):
+        """System tabs carry no icon, as vanilla's tabs don't (gui_style_guide.md
+        rule 9): no mod block in the Military panel's tab strip draws one, in
+        any slot block (*_button_icon, *_button_name or another)."""
+        strip = _braced(self.military, r"^\t\t\ttab_buttons = \{")
+        tabs = re.findall(r"### MOD: [^\n]*tab[^\n]*###.*?### END MOD ###", strip, re.S)
+        self.assertEqual(len(tabs), 2)   # Nuclear and Covert
+        for block in tabs:
+            code = re.sub(r"#[^\n]*", "", block)
+            with self.subTest(tab=block.split("\n", 1)[0]):
+                self.assertNotRegex(code, r"\bicon = \{")
+                self.assertNotIn("texture =", code)
 
-    def test_the_label_is_no_longer_than_nuclear(self):
-        """Five tabs in 540 are 104.8 each; a 20 px icon at 4 leaves a centred
-        name 56.8 wide. "Nuclear" in bold (the selected half) measures 56.1 in
-        EB Garamond 17, the tabs' font, so a name no longer clears the icon."""
+    def test_the_mod_labels_fit_five_slots(self):
+        """Five tabs in 540 are (540 - 2 x 3 margin - 2 x 5 dividers) / 5 = 104.8
+        wide, and tab_text_properties keeps 10 each side for the name: 84.8, at
+        the large-font budget (10 a character, plus 10%)."""
         loc = _loc()
-        self.assertLessEqual(len(loc["te_military_tab_covert"]), len(loc["te_military_tab_nuclear"]))
+        for key in ("te_military_tab_nuclear", "te_military_tab_covert"):
+            self.assertLessEqual(len(loc[key]) * 10 * 1.1, 84.8, key)
 
     def test_the_gates_read_the_rule_and_the_entry(self):
         sguis = _read(TAB_SGUIS)

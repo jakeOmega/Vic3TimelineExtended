@@ -633,7 +633,8 @@ types panel_military {
 				# tab's tooltip lists the unlock conditions with a tick or a cross.
 				# tab_buttons defaults both halves of an unused slot to `visible = no`,
 				# so each visibility block tests the gate as well as the tab. Gates:
-				# common/scripted_guis/te_system_tab_sguis.txt.
+				# common/scripted_guis/te_system_tab_sguis.txt. No icon: system tabs
+				# carry none, as vanilla's don't (gui_style_guide.md rule 9).
 				blockoverride "fourth_button" {
 					text = "te_military_tab_nuclear"
 				}
@@ -653,21 +654,6 @@ types panel_military {
 				blockoverride "fourth_button_selected" {
 					text = "te_military_tab_nuclear"
 				}
-				# The warhead from the entry's overview (#586), left of the name, in
-				# both halves of the slot. In fourth_button_name, not
-				# fourth_button_icon: tab_buttons also draws fourth_button_icon on
-				# slot 5's selected half (vanilla's slip), so the warhead would sit
-				# on the selected Covert tab. The name block is drawn in both halves
-				# of slot 4 and nowhere else. 20 px at 4, so that with five tabs
-				# (104.8 each in 540) it clears the centred name.
-				blockoverride "fourth_button_name" {
-					icon = {
-						size = { 20 20 }
-						parentanchor = left|vcenter
-						position = { 4 0 }
-						texture = "gfx/interface/icons/nuclear_icons/warheads.dds"
-					}
-				}
 				### END MOD ###
 
 				### MOD: Covert tab (te_covert) ###
@@ -677,7 +663,8 @@ types panel_military {
 				# (te_military_covert_tab_unlock_sgui), greyed until the entry runs
 				# (te_military_covert_tab_sgui); the greyed tab's tooltip lists the
 				# unlock test with a tick or a cross. Gates:
-				# common/scripted_guis/te_system_tab_sguis.txt.
+				# common/scripted_guis/te_system_tab_sguis.txt. No icon, as for
+				# Nuclear (gui_style_guide.md rule 9).
 				blockoverride "fifth_button" {
 					text = "te_military_tab_covert"
 				}
@@ -696,18 +683,6 @@ types panel_military {
 				}
 				blockoverride "fifth_button_selected" {
 					text = "te_military_tab_covert"
-				}
-				# The fedora on the dossier, the Tradecraft emblem without a
-				# chevron (#586), left of the name in both halves of the slot. Slot
-				# 5's selected half has no fifth_button_icon block, so the name
-				# block carries it, as for Nuclear.
-				blockoverride "fifth_button_name" {
-					icon = {
-						size = { 20 20 }
-						parentanchor = left|vcenter
-						position = { 4 0 }
-						texture = "gfx/interface/icons/covert_icons/tradecraft_0.dds"
-					}
 				}
 				### END MOD ###
 			}

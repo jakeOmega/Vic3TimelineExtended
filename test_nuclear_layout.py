@@ -779,13 +779,6 @@ class MilitaryTabTest(unittest.TestCase):
                     "te_military_nuclear_open_journal_tt"):
             self.assertTrue(_loc(key), key)
 
-    def test_the_tab_icon_is_the_warhead(self):
-        # In the name block: tab_buttons draws fourth_button_icon on slot 5's
-        # selected half too, where the Covert tab is (test_covert_layout.py).
-        m = re.search(r'blockoverride "fourth_button_name" \{.*?texture = "([^"]+)"', self.blocks[0], re.S)
-        self.assertEqual(m.group(1), "gfx/interface/icons/nuclear_icons/warheads.dds")
-        self.assertNotIn('blockoverride "fourth_button_icon"', self.military)
-
     def test_the_gates_read_the_rule_and_the_entry(self):
         sguis = _read(TAB_SGUIS)
         gate = _txt_block(sguis, "te_military_nuclear_tab_sgui")
