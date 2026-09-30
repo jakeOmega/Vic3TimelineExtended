@@ -339,34 +339,52 @@ is_overseas_colonial_state = {
 		# Not a homeland of the owner's primary/accepted cultures
 		NOT = { is_homeland_of_country_cultures = owner }
 		# Meaningful population - filters tiny outposts (Falklands, Wallis & Futuna, etc.)
-		state_population >= 100000
+		state_population >= colonial_territory_min_population
 		OR = {
-			# Indigenous-population signal: a non-primary culture that is more than
-			# a tenth of the state and has low acceptance. Acceptance runs 0-100;
-			# acceptance_status_4 is vanilla's 60 (the old `value < 0.6` read it as
-			# 0-1 and so matched almost no one). The share is a 0-1 fraction
-			# (culture_percent_state, as in vanilla 06_language_policy.txt); 4f222c8b
-			# had it, and 9b61d999 dropped it.
-			any_scope_culture = {
-				NOT = { is_primary_culture_of = owner }
-				prev = {
-					state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_4 }
-					culture_percent_state = { target = prev value > 0.1 }
-				}
-			}
-			# Economic-disparity signal: state SoL falls below 0.8 x metropole
-			# average, AND there is at least some non-primary population
-			# (otherwise a poor metropole state would qualify).
-			AND = {
-				any_scope_culture = {
-					NOT = { is_primary_culture_of = owner }
-				}
-				average_sol < colonial_state_sol_qualifying_floor
-			}
+			colonial_state_indigenous_signal = yes
+			colonial_state_disparity_signal = yes
 		}
 		# Outside the capital's macro-region and all neighboring macro-regions
 		is_overseas_from_capital = yes
 	}
+}
+
+# The two signals of is_overseas_colonial_state, one trigger each so the
+# Colonial Empire panel's list of territories (colonial_territory_disp_* in
+# colonial_empire_values.txt) reads exactly the test the entry uses.
+# Scope: state.
+#
+# Indigenous-population signal: a non-primary culture that is more than a
+# tenth of the state and has low acceptance. Acceptance runs 0-100;
+# acceptance_status_4 is vanilla's 60 (the old `value < 0.6` read it as 0-1
+# and so matched almost no one). The share is a 0-1 fraction
+# (culture_percent_state, as in vanilla 06_language_policy.txt); 4f222c8b had
+# it, and 9b61d999 dropped it.
+colonial_state_indigenous_signal = {
+	any_scope_culture = {
+		NOT = { is_primary_culture_of = owner }
+		prev = {
+			state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_4 }
+			culture_percent_state = { target = prev value > colonial_state_indigenous_min_share }
+		}
+	}
+}
+
+# Economic-disparity signal: state SoL falls below 0.8 x metropole average,
+# AND there is at least some non-primary population (otherwise a poor
+# metropole state would qualify).
+colonial_state_disparity_signal = {
+	any_scope_culture = {
+		NOT = { is_primary_culture_of = owner }
+	}
+	average_sol < colonial_state_sol_qualifying_floor
+}
+
+# Is colonial stability at least $N$? Country scope; `?=` because the entry
+# may have ended. For colonial_empire_live_bar (colonial_empire_values.txt),
+# which reads the bar as a whole number for the overview's projection.
+colonial_stability_bar_at_least = {
+	je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= $N$ }
 }
 
 # Looser counterpart of is_overseas_colonial_state, used by the three
@@ -382,7 +400,7 @@ is_decolonization_eligible_state = {
 	custom_tooltip = {
 		text = IS_DECOLONIZATION_ELIGIBLE_STATE_TT
 		NOT = { is_homeland_of_country_cultures = owner }
-		state_population >= 100000
+		state_population >= colonial_territory_min_population
 		is_overseas_from_capital = yes
 	}
 }
@@ -545,14 +563,14 @@ is_unintegrated_culturally_distinct_state = {
 	custom_tooltip = {
 		text = IS_UNINTEGRATED_CULTURALLY_DISTINCT_STATE_TT
 		NOT = { is_homeland_of_country_cultures = owner }
-		state_population >= 100000
+		state_population >= colonial_territory_min_population
 		# A low-acceptance culture above a tenth of the state, as in
 		# is_overseas_colonial_state (acceptance 0-100, share 0-1).
 		any_scope_culture = {
 			NOT = { is_primary_culture_of = owner }
 			prev = {
 				state_average_culture_pop_acceptance = { culture = prev value < acceptance_status_4 }
-				culture_percent_state = { target = prev value > 0.1 }
+				culture_percent_state = { target = prev value > colonial_state_indigenous_min_share }
 			}
 		}
 	}

@@ -1,0 +1,219 @@
+﻿### Nuclear Weapons — layout. The one place that sets the order of the nuclear
+### entry's sections (je_nuclear_program, "Nuclear Weapons"). The entry attaches
+### the named roots at the foot of this file; the sections are types in
+### nuclear_program_widget.gui (programme, taboo, delivery and defence, powers)
+### and nuclear_deterrence_widget.gui (crisis, posture, forces, at home,
+### reputation); the overview is nuclear_overview_widget.gui. A future tab
+### (style guide rule 9) would compose the same types.
+###
+### The whole panel, top to bottom (gui/journal_entry.gui draws container_1,
+### the status desc (188), container_2, the button grid (hidden from humans),
+### container_3, the native bar (670), container_4):
+###   container_1  widget_je_nuclear_overview   the overview, always shown
+###   status desc  empty while the entry is active (the overview says it all);
+###                the taboo, programme and posture lines for an inactive one,
+###                where it is the only thing drawn
+###   container_3  widget_je_nuclear_programme  The Programme (only with one),
+###                directly above the native bar, which is progress toward the
+###                next warhead
+###   native bar   progress toward the next warhead
+###   container_4  widget_je_nuclear_status     the live sections, open:
+###                Nuclear Crisis (only in one), Nuclear Posture, Forces and
+###                At Home (only while armed), Reputation (once there is a
+###                record), The Nuclear Taboo (from the first warhead), Delivery
+###                and Defence, Nuclear Powers (from the first warhead)
+###   container_4  widget_je_nuclear_reference  How Nuclear Weapons Work,
+###                collapsed
+###
+### Collapse flags say their default: *_closed sections are open until closed,
+### *_open ones collapsed until opened (test_nuclear_layout.py).
+
+types nuclear_layout_widget_types
+{
+	### Everything a returning player checks, open by default. The crisis comes
+	### first while there is one: it has a deadline.
+	type te_nuclear_status_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_nuclear_sec_crisis = {}
+		te_nuclear_sec_posture = {}
+		te_nuclear_sec_forces = {}
+		te_nuclear_sec_home = {}
+		te_nuclear_sec_reputation = {}
+		te_nuclear_sec_taboo = {}
+		te_nuclear_sec_delivery = {}
+		te_nuclear_sec_powers = {}
+	}
+
+	### "How Nuclear Weapons Work": the explanations gathered out of the live
+	### sections into one section, collapsed by default, one heading per topic
+	### in the panel's order. The live sections say what is happening; this
+	### says how it works.
+	type te_nuclear_sec_how = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		nd_section_header = {
+			blockoverride "left_text" {
+				text = "je_nuclear_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('nuclear_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('nuclear_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('nuclear_how_open')]"
+			}
+		}
+
+		nd_panel = {
+			visible = "[GetVariableSystem.Exists('nuclear_how_open')]"
+
+			nd_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "je_nuclear_how_sub_programme"
+				}
+			}
+			nd_note = {
+				text = "je_nuclear_how_programme"
+			}
+			nd_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_nuclear_how_sub_crisis"
+				}
+			}
+			nd_note = {
+				text = "nd_w_crisis_actions_legend"
+			}
+			nd_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_nuclear_how_sub_posture"
+				}
+			}
+			nd_note = {
+				text = "je_nuclear_how_posture"
+			}
+			nd_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_nuclear_how_sub_home"
+				}
+			}
+			nd_note = {
+				text = "nd_w_home_legend"
+			}
+			nd_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_nuclear_how_sub_reputation"
+				}
+			}
+			nd_note = {
+				text = "nd_w_reputation_legend"
+			}
+			nd_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_nuclear_how_sub_taboo"
+				}
+			}
+			nd_note = {
+				text = "je_nuclear_how_taboo"
+			}
+			nd_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_nuclear_how_sub_delivery"
+				}
+			}
+			nd_note = {
+				text = "je_nuclear_program_widget_odds_note"
+			}
+			nd_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_nuclear_how_sub_powers"
+				}
+			}
+			nd_note = {
+				text = "je_nuclear_program_widget_powers_legend"
+			}
+		}
+	}
+
+	### How it all works. (The leaderboard was here, collapsed, until the owner's
+	### rule of 2026-09-29 that live lists stay open.)
+	type te_nuclear_reference_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_nuclear_sec_how = {}
+	}
+}
+
+### ==========================================================================
+### JOURNAL ENTRY ROOTS (je_nuclear_program.txt). Bare wrappers that repeat
+### the IsActive gate, so an inactive entry's containers collapse: the entry
+### carries is_shown_when_inactive, and a country whose entry never activated
+### has none of the system's variables (gui_modding_guide.md gotcha #14).
+###
+### Each root is vertical and exactly a section's width (520, the section
+### headers'). A wrapper whose width came from its one child was centred in
+### the journal's column by the width it had when first laid out: the
+### programme's, laid out while its section was still hidden, drew half its
+### width off the column's left edge (play-test 2026-09-29). A fixed width
+### cannot lag.
+### ==========================================================================
+flowcontainer = {
+	name = "widget_je_nuclear_overview"
+	visible = "[JournalEntry.IsActive]"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	minimumsize = { 520 -1 }
+
+	te_nuclear_overview_panel = {}
+}
+
+### container_3, directly above the native bar. The root carries the section's
+### "has a programme" gate as well as IsActive, as main's root did, so it is
+### laid out only once there is something in it.
+flowcontainer = {
+	name = "widget_je_nuclear_programme"
+	visible = "[And( JournalEntry.IsActive, GetScriptedGui('nuclear_program_has_programme_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	minimumsize = { 520 -1 }
+
+	te_nuclear_sec_programme = {}
+}
+
+flowcontainer = {
+	name = "widget_je_nuclear_status"
+	visible = "[JournalEntry.IsActive]"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	minimumsize = { 520 -1 }
+
+	te_nuclear_status_sections = {}
+}
+
+flowcontainer = {
+	name = "widget_je_nuclear_reference"
+	visible = "[JournalEntry.IsActive]"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	minimumsize = { 520 -1 }
+
+	te_nuclear_reference_sections = {}
+}

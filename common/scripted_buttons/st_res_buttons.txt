@@ -8,12 +8,23 @@
 # goods, negative values withdraw them.
 # Step-size button: cycles 1 → 10 → 100 → 1000 → 10000 → 1.
 # See te_strategic_reserve_l_english.yml for labels.
+#
+# BOTH ARE THE AI'S ONLY (2026-09-29). The panel draws its own Cycle Step Size
+# and Reset Reserve Rates buttons beside the adjustment step
+# (st_res_cycle_step_sgui / st_res_reset_rates_sgui in
+# common/scripted_guis/st_res_scripted_gui.txt), whose effects are these
+# buttons' effects. So each `visible` carries `is_ai = yes`, as the colonial
+# and banking buttons do, and a player sees no vanilla button grid. They are
+# kept rather than deleted because the journal entry binds its scripted
+# buttons when it activates, and `ai_chance = 0` means the AI never presses
+# them either.
 
 # ---------------- STEP SIZE BUTTON ----------------
 st_res_cycle_step_size_button = {
 	name = "st_res_cycle_step_size_button"
 	desc = "st_res_cycle_step_size_button_desc"
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_strategic_reserve
 	}
 	ai_chance = {
@@ -29,6 +40,7 @@ st_res_reset_rates_button = {
 	name = "st_res_reset_rates_button"
 	desc = "st_res_reset_rates_button_desc"
 	visible = {
+		is_ai = yes
 		has_journal_entry = je_strategic_reserve
 	}
 	ai_chance = {

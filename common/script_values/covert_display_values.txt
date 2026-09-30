@@ -1,0 +1,193 @@
+﻿# ============================================================================
+# COVERT WARFARE — display values for the journal entry's panels
+# ============================================================================
+# Read by gui/journal_entry_widgets/covert_operations_widget.gui (the overview,
+# the network rows and the Funding Levels table) and by its loc. Display only: nothing in script acts on
+# them. Every var: read is guarded, because the journal entry is shown while
+# inactive and a save from before a slice lacks its variables until the next
+# monthly pass (gui_modding_guide.md gotchas #14 and #23;
+# test_covert_layout.py).
+# Scope: country (the viewer), unless a block says otherwise.
+# ============================================================================
+
+# ---- Intelligence standing ---------------------------------------------------
+
+# The five-tier verdict the journal entry's status text printed until the
+# style-guide pass, as a code for the overview's icon: 0 Vulnerable, 1 Exposed,
+# 2 Defended, 3 Hardened, 4 Fortress. The floors are our intelligence capacity
+# as a percentage of the world's best, and live only here; "How Covert Warfare
+# Works" prints them.
+covert_disp_standing_floor_1 = 20
+covert_disp_standing_floor_2 = 40
+covert_disp_standing_floor_3 = 60
+covert_disp_standing_floor_4 = 80
+
+covert_disp_standing_code = {
+	value = 0
+	if = {
+		limit = { intelligence_capacity_relative >= covert_disp_standing_floor_1 }
+		add = 1
+	}
+	if = {
+		limit = { intelligence_capacity_relative >= covert_disp_standing_floor_2 }
+		add = 1
+	}
+	if = {
+		limit = { intelligence_capacity_relative >= covert_disp_standing_floor_3 }
+		add = 1
+	}
+	if = {
+		limit = { intelligence_capacity_relative >= covert_disp_standing_floor_4 }
+		add = 1
+	}
+}
+
+# Our capacity as a 0-1 share of the world's best: the overview's capacity bar.
+covert_disp_capacity_frac = {
+	value = intelligence_capacity_relative
+	divide = 100
+	min = 0
+	max = 1
+}
+
+# ---- Operation slots ---------------------------------------------------------
+
+# How many slot icons the overview draws: every slot we hold, or every
+# operation running if losing a slot left more running than we hold (the
+# operations keep running; only launching is gated). At most
+# covert_ops_max_slot_cap, the most icons the overview has.
+covert_disp_slots_shown = {
+	value = covert_operations_active
+	min = covert_operation_max_slots
+	max = covert_ops_max_slot_cap
+}
+
+# ---- Tradecraft --------------------------------------------------------------
+
+# The score as a 0-1 share of the maximum: the overview's Tradecraft bar.
+covert_disp_tc_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_tradecraft }
+		add = var:iw_tradecraft
+		divide = covert_tradecraft_max
+	}
+	min = 0
+	max = 1
+}
+
+# The floor of the next tier, where the bar's marker sits and what the
+# headline says the score is heading for. The maximum once Veteran, where the
+# marker is hidden. Branches on the tier triggers, which own the floors.
+covert_disp_tc_next_floor = {
+	value = covert_tradecraft_max
+	if = {
+		limit = { covert_tradecraft_tier_1 = no }
+		value = covert_tradecraft_tier_1_floor
+	}
+	else_if = {
+		limit = { covert_tradecraft_tier_2 = no }
+		value = covert_tradecraft_tier_2_floor
+	}
+	else_if = {
+		limit = { covert_tradecraft_tier_3 = no }
+		value = covert_tradecraft_tier_3_floor
+	}
+	else_if = {
+		limit = { covert_tradecraft_tier_4 = no }
+		value = covert_tradecraft_tier_4_floor
+	}
+}
+
+covert_disp_tc_next_frac = {
+	value = covert_disp_tc_next_floor
+	divide = covert_tradecraft_max
+	min = 0
+	max = 1
+}
+
+# Which way the score last moved, for the overview's trend arrow: 1 up, -1
+# down, 0 level. Read from why it last moved (iw_tradecraft_last_reason,
+# written by covert_tradecraft_gain / _loss): 1 is a month's gain, 20-24 an
+# exposure or idle decay. A gain at the maximum or a loss at zero moved
+# nothing, so it reads level. No new state: the reason code is the record.
+covert_disp_tc_trend = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = iw_tradecraft
+			has_variable = iw_tradecraft_last_reason
+			var:iw_tradecraft_last_reason = 1
+			var:iw_tradecraft < covert_tradecraft_max
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			has_variable = iw_tradecraft
+			has_variable = iw_tradecraft_last_reason
+			var:iw_tradecraft_last_reason >= 20
+			var:iw_tradecraft > 0
+		}
+		value = -1
+	}
+}
+
+# ---- Network rows ------------------------------------------------------------
+# Scope: a network container (iw_net), read by its row as
+# ScriptContainer.MakeScope.ScriptValue(...), the shape the homeland project
+# tile uses (te_state_panel_widgets.gui).
+
+# Strength as a 0-1 share of the maximum: the row's bar.
+covert_disp_net_strength_frac = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_net_strength }
+		add = var:iw_net_strength
+		divide = covert_net_max
+	}
+	min = 0
+	max = 1
+}
+
+# ---- Funding Levels table ----------------------------------------------------
+
+# What covert funding costs a week per level, from the terms
+# covert_operation_cost_mult charges: the priority-weighted operations plus one
+# base share, times covert_operations_cost_scale. The table's level N costs N
+# times this, which is what covert_operation_cost_mult charges at level N.
+covert_disp_cost_per_level = {
+	value = covert_priority_cost_units
+	add = 1
+	multiply = covert_operations_cost_scale
+	min = 0
+}
+
+covert_disp_cost_at_1 = {
+	value = covert_disp_cost_per_level
+	round = yes
+}
+
+covert_disp_cost_at_2 = {
+	value = covert_disp_cost_per_level
+	multiply = 2
+	round = yes
+}
+
+covert_disp_cost_at_3 = {
+	value = covert_disp_cost_per_level
+	multiply = 3
+	round = yes
+}
+
+covert_disp_cost_at_4 = {
+	value = covert_disp_cost_per_level
+	multiply = 4
+	round = yes
+}
+
+covert_disp_cost_at_5 = {
+	value = covert_disp_cost_per_level
+	multiply = 5
+	round = yes
+}

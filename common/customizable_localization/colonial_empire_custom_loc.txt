@@ -3,14 +3,20 @@
 # ============================================================================
 # The five stability bands used to be five triggered_desc chains on
 # je_colonial_empire's status_desc. They are here instead, keyed on
-# var:colonial_empire_tier, which colonial_empire_refresh_display derives from
-# the ONE threshold ladder in
-# common/scripted_effects/colonial_empire_display_effects.txt.
+# colonial_empire_live_tier, the band ladder in
+# common/script_values/colonial_empire_values.txt, which reads the bar live.
 #
 # Nothing in this file knows a threshold: it reads the tier integer, never the
 # bar. That is deliberate — the boundaries (20 / 40 / 65 / 90) exist in exactly
 # one place, and the widget prints the next one from
-# var:colonial_empire_next_boundary.
+# colonial_empire_live_next_boundary.
+#
+# Live, not the colonial_empire_tier variable: that snapshot is also taken in
+# the entry's `immediate`, before the bar holds its start value, so these read
+# "Collapsing" on a newly activated entry until its first monthly pulse
+# (play-test, 2026-09-29). The script value is a bare name on the left of a
+# comparison (the documented way to use one as a trigger), the ladder
+# descending; it is O(1), so these are safe to evaluate per frame.
 #
 # Tier mapping (1..5), matching the phase modifier the JE pulse applies:
 #   1 collapsing  (bar  0-20)  -> colonial_empire_crumbling_modifier
@@ -18,6 +24,7 @@
 #   3 strained    (bar 40-65)  -> colonial_empire_strained_modifier
 #   4 stable      (bar 65-90)  -> colonial_empire_stable_modifier
 #   5 solidified  (bar 90+)    -> colonial_empire_solidified_modifier
+# 0 means the country has no active entry, and reads as "still taking stock".
 # (The band names and the modifier KEYS are offset by one for historical
 # reasons, and renaming a key would break saves; the mapping above is the
 # authority. The modifiers' displayed names follow the bands: the
@@ -34,23 +41,23 @@ colonial_empire_status_custom = {
 	random_valid = no
 
 	text = {
-		trigger = { NOT = { has_variable = colonial_empire_tier } }
+		trigger = { colonial_empire_live_tier < 1 }
 		localization_key = je_colonial_empire_status_pending
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 5 }
+		trigger = { colonial_empire_live_tier >= 5 }
 		localization_key = je_colonial_empire_status_solidified
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 4 }
+		trigger = { colonial_empire_live_tier >= 4 }
 		localization_key = je_colonial_empire_status_stable
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 3 }
+		trigger = { colonial_empire_live_tier >= 3 }
 		localization_key = je_colonial_empire_status_strained
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 2 }
+		trigger = { colonial_empire_live_tier >= 2 }
 		localization_key = je_colonial_empire_status_crumbling
 	}
 	text = {
@@ -64,23 +71,23 @@ colonial_empire_tier_name = {
 	random_valid = no
 
 	text = {
-		trigger = { NOT = { has_variable = colonial_empire_tier } }
+		trigger = { colonial_empire_live_tier < 1 }
 		localization_key = je_colonial_empire_band_unknown
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 5 }
+		trigger = { colonial_empire_live_tier >= 5 }
 		localization_key = je_colonial_empire_band_solidified
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 4 }
+		trigger = { colonial_empire_live_tier >= 4 }
 		localization_key = je_colonial_empire_band_stable
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 3 }
+		trigger = { colonial_empire_live_tier >= 3 }
 		localization_key = je_colonial_empire_band_strained
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 2 }
+		trigger = { colonial_empire_live_tier >= 2 }
 		localization_key = je_colonial_empire_band_crumbling
 	}
 	text = {
@@ -95,23 +102,23 @@ colonial_empire_next_band_name = {
 	random_valid = no
 
 	text = {
-		trigger = { NOT = { has_variable = colonial_empire_tier } }
+		trigger = { colonial_empire_live_tier < 1 }
 		localization_key = je_colonial_empire_band_unknown
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 5 }
+		trigger = { colonial_empire_live_tier >= 5 }
 		localization_key = je_colonial_empire_band_at_cap
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 4 }
+		trigger = { colonial_empire_live_tier >= 4 }
 		localization_key = je_colonial_empire_band_solidified
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 3 }
+		trigger = { colonial_empire_live_tier >= 3 }
 		localization_key = je_colonial_empire_band_stable
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 2 }
+		trigger = { colonial_empire_live_tier >= 2 }
 		localization_key = je_colonial_empire_band_strained
 	}
 	text = {
@@ -130,23 +137,23 @@ colonial_empire_phase_modifier = {
 	random_valid = no
 
 	text = {
-		trigger = { NOT = { has_variable = colonial_empire_tier } }
+		trigger = { colonial_empire_live_tier < 1 }
 		localization_key = je_colonial_empire_phase_unknown
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 5 }
+		trigger = { colonial_empire_live_tier >= 5 }
 		localization_key = je_colonial_empire_phase_solidified
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 4 }
+		trigger = { colonial_empire_live_tier >= 4 }
 		localization_key = je_colonial_empire_phase_stable
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 3 }
+		trigger = { colonial_empire_live_tier >= 3 }
 		localization_key = je_colonial_empire_phase_strained
 	}
 	text = {
-		trigger = { var:colonial_empire_tier = 2 }
+		trigger = { colonial_empire_live_tier >= 2 }
 		localization_key = je_colonial_empire_phase_under_pressure
 	}
 	text = {

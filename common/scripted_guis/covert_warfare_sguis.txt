@@ -2,7 +2,8 @@
 # COVERT WARFARE — SCRIPTED GUIS FOR THE JOURNAL-ENTRY WIDGETS
 # ============================================================================
 # Read from gui/journal_entry_widgets/covert_operations_widget.gui. Five kinds
-# of entry live here.
+# of entry live here. (A sixth, the funding-ladder tooltip builder, went when
+# the Funding section's ladder became a table of GUI rows, style-guide round 3.)
 #
 # 1. THE FUNDING CONTROL (covert_funding_sgui). Delegates to the same
 #    covert_possible_* trigger and covert_effect_* effect the journal entry's
@@ -16,9 +17,9 @@
 #    The op table is restated in the .gui header and in
 #    docs/systems/journal_entry_systems.md — keep all three in step.
 #
-# 2. A TOOLTIP BUILDER (covert_funding_ladder_sgui). It exists only so the .gui
+# 2. A TOOLTIP BUILDER (covert_last_exposed_sgui). It exists only so the .gui
 #    can call `[GetScriptedGui('…').ExecuteTooltip(GuiScope.SetRoot(
-#    JournalEntry.GetCountry.MakeScope).End)]` and render the resulting lines.
+#    JournalEntry.GetCountry.MakeScope).End)]` and render the resulting line.
 #    ExecuteTooltip *renders* an effect without running it — vanilla's
 #    documented "Using SGUIs to build lists in loc" pattern; see
 #    game/common/scripted_guis/scripted_guis.md.
@@ -75,89 +76,6 @@ covert_funding_sgui = {
 		}
 		else = {
 			covert_effect_increase_funding = yes
-		}
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-}
-
-# ---- TOOLTIP BUILDER: the funding ladder -----------------------------------
-# Six rows, one per funding level, each carrying that level's detection
-# reduction and counterintelligence capacity from the covert_funding_*_at_N
-# script values — which are sums of the tuning constants, so the ladder cannot
-# drift from the detection formula. The row for the level in force is rendered
-# by its own _current key, which is both the highlight and the "you are here"
-# marker.
-#
-# Cheap enough to leave expanded: every line reads constants plus one country
-# variable, and there is no iteration.
-covert_funding_ladder_sgui = {
-	scope = country
-
-	effect = {
-		if = {
-			limit = {
-				OR = {
-					NOT = { has_variable = iw_funding_level }
-					var:iw_funding_level < 1
-				}
-			}
-			custom_tooltip_no_bullet = je_iw_ladder_row_0_current
-		}
-		else = {
-			custom_tooltip_no_bullet = je_iw_ladder_row_0
-		}
-		if = {
-			limit = {
-				has_variable = iw_funding_level
-				var:iw_funding_level = 1
-			}
-			custom_tooltip_no_bullet = je_iw_ladder_row_1_current
-		}
-		else = {
-			custom_tooltip_no_bullet = je_iw_ladder_row_1
-		}
-		if = {
-			limit = {
-				has_variable = iw_funding_level
-				var:iw_funding_level = 2
-			}
-			custom_tooltip_no_bullet = je_iw_ladder_row_2_current
-		}
-		else = {
-			custom_tooltip_no_bullet = je_iw_ladder_row_2
-		}
-		if = {
-			limit = {
-				has_variable = iw_funding_level
-				var:iw_funding_level = 3
-			}
-			custom_tooltip_no_bullet = je_iw_ladder_row_3_current
-		}
-		else = {
-			custom_tooltip_no_bullet = je_iw_ladder_row_3
-		}
-		if = {
-			limit = {
-				has_variable = iw_funding_level
-				var:iw_funding_level = 4
-			}
-			custom_tooltip_no_bullet = je_iw_ladder_row_4_current
-		}
-		else = {
-			custom_tooltip_no_bullet = je_iw_ladder_row_4
-		}
-		if = {
-			limit = {
-				has_variable = iw_funding_level
-				var:iw_funding_level >= 5
-			}
-			custom_tooltip_no_bullet = je_iw_ladder_row_5_current
-		}
-		else = {
-			custom_tooltip_no_bullet = je_iw_ladder_row_5
 		}
 	}
 

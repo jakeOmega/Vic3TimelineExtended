@@ -32,55 +32,25 @@
 #
 # EDITING RULE: if the widget needs a new number, add it here and read
 # `var:` in the .gui. Never derive state in .gui, never in loc, and never
-# re-encode a tier boundary anywhere but the ladder below.
+# re-encode a tier boundary anywhere but the band ladder in
+# colonial_empire_values.txt (colonial_empire_live_tier /
+# colonial_empire_live_next_boundary), which the displays read live and this
+# effect snapshots.
 # ============================================================================
 
 colonial_empire_refresh_display = {
 	hidden_effect = {
 		# --- Stability tier and the next band's boundary -------------------
-		# The five bands are the ones je_colonial_empire's own phase-modifier
-		# ladder uses: collapsing 0-20, crumbling 20-40, strained 40-65,
-		# stable 65-90, solidified 90+. Stored as an integer so the widget can
-		# pick a label through customizable localization without knowing a
-		# single threshold, and as the next boundary so the panel can say
-		# "Stable -> Solidified at 90" without a literal in the .gui.
-		#
-		# Read through the `je:` scope link rather than scope:journal_entry,
-		# because this effect is also called from button actions and from
-		# `immediate`, where scope:journal_entry is not reliably saved. `?=`
-		# because the entry may already have ended.
-		if = {
-			limit = {
-				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 90 }
-			}
-			set_variable = { name = colonial_empire_tier value = 5 }
-			set_variable = { name = colonial_empire_next_boundary value = 100 }
-		}
-		else_if = {
-			limit = {
-				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 65 }
-			}
-			set_variable = { name = colonial_empire_tier value = 4 }
-			set_variable = { name = colonial_empire_next_boundary value = 90 }
-		}
-		else_if = {
-			limit = {
-				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 40 }
-			}
-			set_variable = { name = colonial_empire_tier value = 3 }
-			set_variable = { name = colonial_empire_next_boundary value = 65 }
-		}
-		else_if = {
-			limit = {
-				je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 20 }
-			}
-			set_variable = { name = colonial_empire_tier value = 2 }
-			set_variable = { name = colonial_empire_next_boundary value = 40 }
-		}
-		else = {
-			set_variable = { name = colonial_empire_tier value = 1 }
-			set_variable = { name = colonial_empire_next_boundary value = 20 }
-		}
+		# A snapshot of the band ladder in colonial_empire_values.txt
+		# (colonial_empire_live_tier, 1 collapsing .. 5 solidified, 0 with no
+		# active entry; colonial_empire_live_next_boundary, the next band's
+		# edge). The displays read the ladder live instead: from `immediate`
+		# this runs before the bar holds its start value, so the snapshot is
+		# wrong until the first monthly pulse (play-test, 2026-09-29). It is
+		# kept for colonial_empire_display_ready (which asks whether this
+		# effect has run) and the debug harness.
+		set_variable = { name = colonial_empire_tier value = colonial_empire_live_tier }
+		set_variable = { name = colonial_empire_next_boundary value = colonial_empire_live_next_boundary }
 
 		# --- Bar value, bucketed to the nearest 5 --------------------------
 		# `scripted_bar_progress` is a TRIGGER only (engine docs: type
@@ -187,8 +157,27 @@ colonial_empire_refresh_display = {
 		set_variable = { name = colonial_empire_d_acceptance value = colonial_stability_drift_acceptance }
 
 		# Condemners' share of great-power prestige (0-1), the number the two
-		# great-power escalations fire on. Read by colonial_empire_pressure_sgui.
+		# great-power escalations fire on. Read by colonial_empire_pressure_sgui
+		# and the overview's pie.
 		set_variable = { name = colonial_empire_condemner_share value = colonial_gp_condemner_prestige_share }
+
+		# The supporters' share of the same pool: the pie's second slice and a
+		# roster line. Display only; no escalation reads it.
+		set_variable = { name = colonial_empire_supporter_share value = colonial_gp_supporter_prestige_share }
+
+		# Which of those two escalations applies: 0 neither, 1 diplomatic
+		# isolation, 2 international consensus (the two stack, so 2 means
+		# both). Read off the bar's own escalation leaves, so the share
+		# thresholds stay in colonial_empire_values.txt. The overview's alert.
+		set_variable = { name = colonial_empire_pressure_level value = 0 }
+		if = {
+			limit = { colonial_stability_term_gp_extreme_pressure < 0 }
+			set_variable = { name = colonial_empire_pressure_level value = 2 }
+		}
+		else_if = {
+			limit = { colonial_stability_term_gp_high_pressure < 0 }
+			set_variable = { name = colonial_empire_pressure_level value = 1 }
+		}
 
 		# Projected monthly change. Identical by construction to the sum the bar
 		# applies -- both are built from the same leaf script values. Feeds the
@@ -217,5 +206,200 @@ colonial_empire_refresh_display = {
 				}
 			}
 		}
+
+		# --- Eligible territories, for the list under Why Stability ---------
+		# The first eight eligible territories by GDP, stored as state scopes
+		# (colonial_empire_territory_1..8) for the panel's rows, which read
+		# everything else live from the stored state (colonial_territory_disp_*
+		# in colonial_empire_values.txt). Players only: no AI reads a panel.
+		# Each position is taken only while the count reaches it, because
+		# `check_range_bounds = no` clamps an out-of-range `position` to the
+		# last one rather than skipping it (the note in
+		# colonial_empire_effect_release_territory). Each listed state also
+		# gets its primary-culture share, the one figure that walks its pops.
+		remove_variable = colonial_empire_territory_1
+		remove_variable = colonial_empire_territory_2
+		remove_variable = colonial_empire_territory_3
+		remove_variable = colonial_empire_territory_4
+		remove_variable = colonial_empire_territory_5
+		remove_variable = colonial_empire_territory_6
+		remove_variable = colonial_empire_territory_7
+		remove_variable = colonial_empire_territory_8
+		if = {
+			limit = {
+				is_player = yes
+				has_variable = colonial_empire_eligible_count
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 1 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 0
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_1
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 2 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 1
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_2
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 3 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 2
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_3
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 4 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 3
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_4
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 5 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 4
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_5
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 6 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 5
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_6
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 7 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 6
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_7
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 8 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 7
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_8
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# State scope: record the share of the state's people of its owner's primary
+# cultures, for the eligible-territories list (colonial_territory_disp_primary).
+# Walks the state's pops, so it runs from the monthly refresh, not per frame.
+colonial_territory_record_primary_share = {
+	set_variable = {
+		name = colonial_territory_primary_share
+		value = colonial_territory_primary_share_value
+	}
+}
+
+# One line of the "+N more" hover on the eligible-territories list
+# (colonial_empire_territories_sgui): the eligible territory at GDP position
+# $POS$ (0-based), named from the country's own scope, gui_modding_guide
+# gotcha #27's shape (a): the pick is saved and the line printed at country
+# scope, and only while the count reaches the position (gotcha #25; and see
+# the note on `check_range_bounds` in colonial_empire_refresh_display).
+# Country scope.
+colonial_empire_more_territory_line = {
+	if = {
+		limit = {
+			has_variable = colonial_empire_eligible_count
+			var:colonial_empire_eligible_count > $POS$
+		}
+		ordered_scope_state = {
+			limit = { is_decolonization_eligible_state = yes }
+			order_by = gdp
+			position = $POS$
+			check_range_bounds = no
+			save_temporary_scope_as = colonial_empire_more_state
+		}
+		custom_tooltip = je_colonial_empire_territory_more_line
 	}
 }

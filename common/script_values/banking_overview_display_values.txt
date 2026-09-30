@@ -1,0 +1,140 @@
+﻿# ============================================================================
+# BANKING OVERVIEW — display values
+# ============================================================================
+# Read by gui/journal_entry_widgets/banking_dashboard_widget.gui
+# (te_banking_overview_panel): each picks the icon of one overview cell, whose
+# word beneath comes from the band's customizable localization
+# (common/customizable_localization/banking_dash_custom_loc.txt). So each code
+# below repeats its band word's tests, edges and order exactly, and the icon
+# and the word cannot disagree; test_banking_layout.py (BandCodeTest) compares
+# the two. Display only: nothing reads these but the panel.
+# Every read is guarded: a variable not written yet reads 0 (no icon; the
+# word says "not yet known").
+# Scope: country (the viewer)
+# ============================================================================
+
+# Momentum band (banking_dash_momentum_band): 1 Collapsing · 2 Falling ·
+# 3 Steady · 4 Rising · 5 Surging.
+banking_disp_momentum_band_code = {
+	value = 0
+	if = {
+		limit = { has_variable = finance_cycle_momentum }
+		if = {
+			limit = { var:finance_cycle_momentum >= 3 }
+			value = 5
+		}
+		else_if = {
+			limit = { var:finance_cycle_momentum >= 1 }
+			value = 4
+		}
+		else_if = {
+			limit = { var:finance_cycle_momentum > -1 }
+			value = 3
+		}
+		else_if = {
+			limit = { var:finance_cycle_momentum > -3 }
+			value = 2
+		}
+		else = {
+			value = 1
+		}
+	}
+}
+
+# Bubble pressure band (banking_dash_bubble_band): 1 Low · 2 Building ·
+# 3 Elevated · 4 High · 5 Severe.
+banking_disp_bubble_band_code = {
+	value = 0
+	if = {
+		limit = { has_variable = bubble_pressure }
+		if = {
+			limit = { var:bubble_pressure < 15 }
+			value = 1
+		}
+		else_if = {
+			limit = { var:bubble_pressure < 30 }
+			value = 2
+		}
+		else_if = {
+			limit = { var:bubble_pressure < 50 }
+			value = 3
+		}
+		else_if = {
+			limit = { var:bubble_pressure < 75 }
+			value = 4
+		}
+		else = {
+			value = 5
+		}
+	}
+}
+
+# Policy stance band (te_mon_stance_band_name): 1 Very Loose · 2 Loose ·
+# 3 Neutral · 4 Tight · 5 Very Tight.
+banking_disp_stance_band_code = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_stance_band }
+		if = {
+			limit = { var:te_mon_stance_band <= 1 }
+			value = 1
+		}
+		else_if = {
+			limit = { var:te_mon_stance_band <= 2 }
+			value = 2
+		}
+		else_if = {
+			limit = { var:te_mon_stance_band <= 3 }
+			value = 3
+		}
+		else_if = {
+			limit = { var:te_mon_stance_band <= 4 }
+			value = 4
+		}
+		else = {
+			value = 5
+		}
+	}
+}
+
+# Price band (te_mon_inflation_band_name): 1 Deflation · 2 Stable prices ·
+# 3 Elevated · 4 High · 5 Very high · 6 Hyperinflation · 7 Foreign money
+# (dollarised) · 8 Set by plan (a command economy). The two states with no
+# band come first, as in the word's own tests.
+banking_disp_price_band_code = {
+	value = 0
+	if = {
+		limit = { has_variable = te_inflation_band }
+		if = {
+			limit = { te_mon_is_dollarised = yes }
+			value = 7
+		}
+		else_if = {
+			limit = { te_mon_has_inflation = no }
+			value = 8
+		}
+		else_if = {
+			limit = { var:te_inflation_band <= 1 }
+			value = 1
+		}
+		else_if = {
+			limit = { var:te_inflation_band <= 2 }
+			value = 2
+		}
+		else_if = {
+			limit = { var:te_inflation_band <= 3 }
+			value = 3
+		}
+		else_if = {
+			limit = { var:te_inflation_band <= 4 }
+			value = 4
+		}
+		else_if = {
+			limit = { var:te_inflation_band <= 5 }
+			value = 5
+		}
+		else = {
+			value = 6
+		}
+	}
+}

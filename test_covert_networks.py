@@ -259,19 +259,33 @@ NET_LOC_KEYS = (
 
 
 class WidgetTests(unittest.TestCase):
-    def test_je_mounts_network_widget_on_container_3(self):
+    # Since the style-guide pass the networks are a section type,
+    # te_covert_sec_networks, composed into the status sections that the JE
+    # mounts as widget_je_covert_status (test_covert_layout.py pins the order
+    # and the roots). These two follow the list there.
+    def test_je_mounts_the_section_that_lists_networks(self):
         je = _text(JE)
         self.assertRegex(
             je,
-            r'name = "widget_je_covert_networks"\s*\n\s*container = "custom_widget_container_3"',
+            r'name = "widget_je_covert_status"\s*\n\s*container = "custom_widget_container_2"',
         )
+        gui = _text(WIDGET)
+        composer = gui[gui.index("type te_covert_status_sections = "):]
+        composer = composer[: composer.index("\n\t}\n")]
+        self.assertIn("te_covert_sec_networks = {}", composer)
 
     def test_network_widget_gated(self):
         gui = _text(WIDGET)
-        root = gui[gui.index('name = "widget_je_covert_networks"'):]
+        root = gui[gui.index('name = "widget_je_covert_status"'):]
         self.assertIn('visible = "[JournalEntry.IsActive]"', root[:400])
-        self.assertIn("GetList('iw_nets')", root)
-        self.assertIn("IsDataModelEmpty", root)
+        section = gui[gui.index("type te_covert_sec_networks = "):]
+        section = section[: section.index("\n\t}\n")]
+        # The whole section waits for a network, and lists iw_nets.
+        self.assertIn(
+            "visible = \"[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_nets') ) )]\"",
+            section[:400],
+        )
+        self.assertIn("datamodel = \"[JournalEntry.GetCountry.MakeScope.GetList('iw_nets')]\"", section)
 
     def test_trend_lines_cover_all_three_codes(self):
         gui = _text(WIDGET)
