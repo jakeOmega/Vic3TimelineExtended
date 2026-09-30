@@ -673,6 +673,10 @@ together. The harness establishes evidence; it is not itself the player-facing s
 
 ## 12. Delivery sequence
 
+The companion [implementation plan draft](../plans/2026-09-30-legislated-tax-code.md) breaks this
+sequence into work packages, proposed integration points, probe gates, and release scenarios. It
+does not establish that any capability has passed runtime verification.
+
 1. Developer probes: verify payable bases, control interception, amendments, tariffs, snapshots,
    persistence, and the minimal player/AI passage experiment. Publish the capability table.
 2. Canonical schedule and migration: reproduce the current economy, including future transitions,
