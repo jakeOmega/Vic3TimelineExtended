@@ -1,96 +1,101 @@
 # Banking GUI: Icons
 
-The banking overview (`te_banking_overview_panel`, at the top of the Banking Cycle journal entry and of the Budget panel's Banking tab) draws its readings as icons, each with a caption and its word beside it. There are 32 icon slots: one per state of six readings, plus a crash-risk badge. Since play-test round 3, the tool rows draw one more, beside each tool's point cost. All of them are placeholders (style guide rule 10): textures the mod already uses elsewhere, mostly vanilla's timed-modifier icons, chosen so the layout could be judged in game before the art exists. The owner's first play-test (2026-09-29) asked for them, starting with the inflation band. This page lists each one: where it is set, what the final art should show, and where it should go. The model is [`un_gui_icons.md`](un_gui_icons.md), which records how the UN's set went from placeholders to finished art.
+The banking overview (`te_banking_overview_panel`, at the top of the Banking Cycle journal entry and of the Budget panel's Banking tab) draws its readings as icons, each with a caption and its word beside it. The tool rows draw one more icon, beside each tool's point cost. The icons started as placeholders in the style-guide pass: vanilla timed-modifier and generic icons, requested by the owner's first play-test (2026-09-29). PR #586 replaced them with 26 icons of the mod's own, all in `gfx/interface/icons/banking_icons/`. The momentum arrows and the crash-risk badge stay vanilla's, as the list allowed.
 
-**Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/banking_dashboard_widget.gui`, inside `te_banking_overview_panel`. No script reads the paths. Each icon is picked by one of two things. The cycle phase uses the `banking_dash_phase_*` scripted GUI that also picks its coloured word. The other readings use a display code, `banking_disp_<reading>_band_code` in `common/script_values/banking_overview_display_values.txt`, which repeats its band word's customizable-localization tests, so icon and word cannot disagree. Swapping one in is one path change. `IconsDocTest` in `test_banking_layout.py` holds each row below to its code; `BandCodeTest` holds each code to its word.
+**Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/banking_dashboard_widget.gui`: the overview's in `te_banking_overview_panel`, the cost icon in `banking_dash_policy_row`'s `cost_icon` block. No script reads the paths. Two things pick an icon:
+- The cycle phase uses the `banking_dash_phase_*` scripted GUI that also picks its coloured word.
+- The other readings use a display code, `banking_disp_<reading>_band_code` in `common/script_values/banking_overview_display_values.txt`. Each code repeats its band word's customizable-localization tests, so the icon and the word cannot disagree.
 
-**Proposed home.** `gfx/interface/icons/banking_icons/`, made with the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/specs/2026-09-26-icon-pipeline-design.md`) under a new `banking_*` registry category, as the UN's were.
+`BankingIconsTest` in `test_banking_layout.py` holds each code to its file and fails on any placeholder left. `IconsDocTest` holds each row below to the code. `BandCodeTest` holds each code to its word.
 
-**The rule for the set** is the UN's. Icons must be simple and easy to recognize at 32 px, one bold object each. The states of one reading share an emblem and differ by a mark or a colour. The pairs across the cycle mirror each other: Panic and Frenzy, Downturn and Boom, Stagnation and Expansion.
+**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/specs/2026-09-26-icon-pipeline-design.md`), under the banking categories of `icon_prompts.py` that PR #586 added. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
+
+**The rule for the set** is the UN's: simple and easy to recognize at 32 px, one bold object each, with the states of one reading sharing an emblem and differing by a mark or a colour. The phases are one bank front, and the bubble bands one stack of coins inside a bubble. The stances are one tap. The price bands are one price tag. The pairs across the cycle mirror each other: Panic and Frenzy, Downturn and Boom, Stagnation and Expansion.
 
 ## Overview row 1: cycle phase
 
-32 px, the phase's coloured word beside it. Picked by `banking_dash_phase_<phase>`.
+One emblem, a columned bank front, with a mark beside it. 32 px, the phase's coloured word beside it. Picked by `banking_dash_phase_<phase>`.
 
-| Phase | Placeholder | Final art | Proposed path |
-|---|---|---|---|
-| panic | `gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds` | a bank's columned front with a crowd-dark doorway and a red down arrow crashing through its steps | `banking_icons/phase_panic.dds` |
-| downturn | `gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds` | the bank front, a short red down arrow beside it | `banking_icons/phase_downturn.dds` |
-| stagnation | `gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds` | the bank front, greyed, a flat amber line beside it | `banking_icons/phase_stagnation.dds` |
-| stable | `gfx/interface/icons/event_icons/je_banking_cycle.dds` | the bank front in plain stone, a level white line beside it | `banking_icons/phase_stable.dds` |
-| expansion | `gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds` | the bank front, a short green up arrow beside it | `banking_icons/phase_expansion.dds` |
-| boom | `gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds` | the bank front, gilded, a tall blue up arrow beside it | `banking_icons/phase_boom.dds` |
-| frenzy | `gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds` | the gilded bank front, a red arrow shooting off the top, coins spilling from it | `banking_icons/phase_frenzy.dds` |
+| Phase | Shows | File |
+|---|---|---|
+| panic | the bank front, a red double down arrow beside it | `gfx/interface/icons/banking_icons/phase_panic.dds` |
+| downturn | the bank front, a red down arrow | `gfx/interface/icons/banking_icons/phase_downturn.dds` |
+| stagnation | the bank front in grey stone, a flat amber bar | `gfx/interface/icons/banking_icons/phase_stagnation.dds` |
+| stable | the bank front in plain stone, a level white bar | `gfx/interface/icons/banking_icons/phase_stable.dds` |
+| expansion | the bank front, a green up arrow | `gfx/interface/icons/banking_icons/phase_expansion.dds` |
+| boom | the bank front gilded, a blue up arrow | `gfx/interface/icons/banking_icons/phase_boom.dds` |
+| frenzy | the gilded bank front, two gold coins at its foot, a red double up arrow | `gfx/interface/icons/banking_icons/phase_frenzy.dds` |
+
+The list asked for Panic as a crowd-dark doorway with an arrow crashing through the steps, and for Frenzy's coins spilling from its arrow. At 32 px the doorway and steps were specks, so Panic got the double down arrow, the mirror of Frenzy's; Frenzy's coins lie at the bank's foot.
 
 ## Overview row 1: momentum
 
-32 px, the band word beside it. Code: `banking_disp_momentum_band_code`. The arrows are vanilla's and can stay. The double arrows mark the two bands the old table tagged "(overheating)" and "(contracting)".
+Vanilla's arrows, kept. 32 px, the band word beside it. Code: `banking_disp_momentum_band_code`. The double arrows mark the two bands the old table tagged "(overheating)" and "(contracting)".
 
-| Code | Band | Placeholder | Final art | Proposed path |
-|---|---|---|---|---|
-| 1 | Collapsing | `gfx/interface/icons/generic_icons/down_down.dds` | vanilla's double down arrow, may stay | (none) |
-| 2 | Falling | `gfx/interface/icons/generic_icons/trend_down.dds` | vanilla's down arrow, may stay | (none) |
-| 3 | Steady | `gfx/interface/icons/generic_icons/trend_nochange.dds` | vanilla's level arrow, may stay | (none) |
-| 4 | Rising | `gfx/interface/icons/generic_icons/trend_up.dds` | vanilla's up arrow, may stay | (none) |
-| 5 | Surging | `gfx/interface/icons/generic_icons/trend_upup.dds` | vanilla's double up arrow, may stay | (none) |
+| Code | Band | Shows | File |
+|---|---|---|---|
+| 1 | Collapsing | vanilla's double down arrow | `gfx/interface/icons/generic_icons/down_down.dds` |
+| 2 | Falling | vanilla's down arrow | `gfx/interface/icons/generic_icons/trend_down.dds` |
+| 3 | Steady | vanilla's level arrow | `gfx/interface/icons/generic_icons/trend_nochange.dds` |
+| 4 | Rising | vanilla's up arrow | `gfx/interface/icons/generic_icons/trend_up.dds` |
+| 5 | Surging | vanilla's double up arrow | `gfx/interface/icons/generic_icons/trend_upup.dds` |
 
 ## Overview row 1: bubble pressure
 
-32 px, the band word beside it. Code: `banking_disp_bubble_band_code`.
+One emblem, a stack of gold coins inside a bubble that grows band by band, its rim changing colour. 32 px, the band word beside it. Code: `banking_disp_bubble_band_code`.
 
-| Code | Band | Placeholder | Final art | Proposed path |
-|---|---|---|---|---|
-| 1 | Low | `gfx/interface/icons/generic_icons/green_checkmark.dds` | a small soap bubble resting on a stack of coins, green rim | `banking_icons/bubble_low.dds` |
-| 2 | Building | `gfx/interface/icons/generic_icons/maybe_icon.dds` | the bubble half again as large over the coins, white rim | `banking_icons/bubble_building.dds` |
-| 3 | Elevated | `gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds` | the bubble twice as large, yellow rim | `banking_icons/bubble_elevated.dds` |
-| 4 | High | `gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds` | the bubble dwarfing the coins, gold rim, a thin spot catching the light | `banking_icons/bubble_high.dds` |
-| 5 | Severe | `gfx/interface/icons/generic_icons/red_cross.dds` | the bubble stretched to bursting, red rim, a crack across it | `banking_icons/bubble_severe.dds` |
+| Code | Band | Shows | File |
+|---|---|---|---|
+| 1 | Low | a small bubble round the coins, green rim | `gfx/interface/icons/banking_icons/bubble_low.dds` |
+| 2 | Building | the bubble larger, white rim | `gfx/interface/icons/banking_icons/bubble_building.dds` |
+| 3 | Elevated | larger again, yellow rim | `gfx/interface/icons/banking_icons/bubble_elevated.dds` |
+| 4 | High | larger again, gold rim | `gfx/interface/icons/banking_icons/bubble_high.dds` |
+| 5 | Severe | the largest bubble, red rim, a drawn crack across it | `gfx/interface/icons/banking_icons/bubble_severe.dds` |
+
+The list asked for the bubble resting on a coin stack. A small bubble on a tall stack read as a light bulb at 32 px, so the coins went inside. Severe was to be stretched to bursting, which the renderer would not draw, so the crack is drawn.
 
 **Crash-risk badge.** 16 px, over the bubble icon's top-right corner, while `banking_dash_bubble_risk_high` holds: the cycle is at the top of its range, or booming with momentum surging. The badge carries the old row's "(crash risk)" tag, and its tooltip says why.
 
-| Badge | Placeholder | Final art | Proposed path |
-|---|---|---|---|
-| crash risk | `gfx/interface/icons/generic_icons/warning.dds` | vanilla's warning mark may stay; otherwise a red lightning bolt | (none) |
+| Badge | Shows | File |
+|---|---|---|
+| crash risk | vanilla's warning mark, kept | `gfx/interface/icons/generic_icons/warning.dds` |
 
 ## Overview row 2: policy stance
 
-32 px, the band word beside it, only for a country with a dial once the monetary layer has reported. Code: `banking_disp_stance_band_code`.
+One emblem, a brass tap with a red handwheel; the coins falling from it count the stance. 32 px, the band word beside it, only for a country with a dial once the monetary layer has reported. Code: `banking_disp_stance_band_code`.
 
-| Code | Band | Placeholder | Final art | Proposed path |
-|---|---|---|---|---|
-| 1 | Very Loose | `gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds` | a brass valve wheel spun wide open, a gush of coins from the pipe | `banking_icons/stance_very_loose.dds` |
-| 2 | Loose | `gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds` | the valve half open, a steady stream of coins | `banking_icons/stance_loose.dds` |
-| 3 | Neutral | `gfx/interface/icons/generic_icons/money.dds` | the valve at its middle mark, a trickle | `banking_icons/stance_neutral.dds` |
-| 4 | Tight | `gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds` | the valve nearly shut, a few drops | `banking_icons/stance_tight.dds` |
-| 5 | Very Tight | `gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds` | the valve shut, a padlock on the wheel | `banking_icons/stance_very_tight.dds` |
+| Code | Band | Shows | File |
+|---|---|---|---|
+| 1 | Very Loose | the tap, four coins falling | `gfx/interface/icons/banking_icons/stance_very_loose.dds` |
+| 2 | Loose | three coins | `gfx/interface/icons/banking_icons/stance_loose.dds` |
+| 3 | Neutral | two coins | `gfx/interface/icons/banking_icons/stance_neutral.dds` |
+| 4 | Tight | one coin | `gfx/interface/icons/banking_icons/stance_tight.dds` |
+| 5 | Very Tight | no coins, a padlock on the handwheel | `gfx/interface/icons/banking_icons/stance_very_tight.dds` |
+
+The list asked for a valve wheel at five angles. A wheel's angle does not read at 32 px, and the coin count does.
 
 ## Overview row 2: inflation (the price band)
 
-32 px, the band word beside it, only while the monetary layer is on and has reported. Code: `banking_disp_price_band_code`. Where a band modifier has an icon of its own, the placeholder is that icon (`te_inflation_band_*` in `extra_modifiers.txt`), apart from Elevated and Hyperinflation, which borrow an icon so they read differently from their neighbours.
+One emblem, a paper price tag on a string, with a mark on it. 32 px, the band word beside it, only while the monetary layer is on and has reported. Code: `banking_disp_price_band_code`.
 
-| Code | Band | Placeholder | Final art | Proposed path |
-|---|---|---|---|---|
-| 1 | Deflation | `gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds` | a price tag, a blue down arrow on it | `banking_icons/price_deflation.dds` |
-| 2 | Stable prices | `gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds` | the price tag, a green level line on it | `banking_icons/price_stable.dds` |
-| 3 | Elevated | `gfx/interface/icons/generic_icons/warning.dds` | the price tag, a yellow up arrow | `banking_icons/price_elevated.dds` |
-| 4 | High | `gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds` | the price tag, an orange double up arrow | `banking_icons/price_high.dds` |
-| 5 | Very high | `gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds` | the price tag catching fire at one corner | `banking_icons/price_very_high.dds` |
-| 6 | Hyperinflation | `gfx/interface/icons/generic_icons/red_cross.dds` | a wheelbarrow heaped with banknotes | `banking_icons/price_hyper.dds` |
-| 7 | Foreign money | `gfx/interface/icons/generic_icons/world_market.dds` | the price tag with a foreign coin pinned to it | `banking_icons/price_dollarised.dds` |
-| 8 | Set by plan | `gfx/interface/icons/generic_icons/government_building_icon.dds` | the price tag stamped with an official seal | `banking_icons/price_planned.dds` |
-
-## Overview row 2: intervention budget
-
-32 px, "N free" beside it. One icon, always shown.
-
-| Cell | Placeholder | Final art | Proposed path |
+| Code | Band | Shows | File |
 |---|---|---|---|
-| budget | `gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds` | a small stack of gold counters, one set aside | `banking_icons/budget.dds` |
+| 1 | Deflation | the tag, a blue down arrow | `gfx/interface/icons/banking_icons/price_deflation.dds` |
+| 2 | Stable prices | the tag, a green level bar | `gfx/interface/icons/banking_icons/price_stable.dds` |
+| 3 | Elevated | the tag, a yellow up arrow | `gfx/interface/icons/banking_icons/price_elevated.dds` |
+| 4 | High | the tag, an orange double up arrow | `gfx/interface/icons/banking_icons/price_high.dds` |
+| 5 | Very high | the tag, a flame beside it | `gfx/interface/icons/banking_icons/price_very_high.dds` |
+| 6 | Hyperinflation | a wheelbarrow heaped with banknotes | `gfx/interface/icons/banking_icons/price_hyper.dds` |
+| 7 | Foreign money | the tag with a foreign silver coin on it | `gfx/interface/icons/banking_icons/price_dollarised.dds` |
+| 8 | Set by plan | the tag stamped with a red wax seal | `gfx/interface/icons/banking_icons/price_planned.dds` |
 
-## Tool rows: point cost
+The list asked for the tag catching fire at one corner. The renderer would not set part of an object alight, so the flame is a separate part beside it.
 
-18 px, before the points a tool holds while it is enabled, in every row of Active Policies, Available Interventions and the open-market operations row (play-test round 3 replaced the "At least 2 free Banking Intervention Points" column with it; the full line is in the row's tooltip under Requires). Set once, in `banking_dash_policy_row`'s `cost_icon` block; the two investment-pool transfers, which cost GDP rather than points, override it empty. It is the same budget emblem as the overview's Budget cell, so the two should stay one picture.
+## Overview row 2: intervention budget; tool rows: point cost
 
-| Cell | Placeholder | Final art | Proposed path |
-|---|---|---|---|
-| cost | `gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds` | the budget's stack of gold counters at 18 px, reduced to three counters so it reads that small | `banking_icons/budget.dds` (the Budget cell's, at its small size) |
+A short stack of gold tokens with one set aside. One picture in two places: 32 px in the overview's Budget cell, with "N free" beside it, and 18 px before the points in every row of Active Policies, Available Interventions and the open-market operations row. Play-test round 3 put the cost there, in place of the "At least 2 free Banking Intervention Points" column. The full line is in the row's tooltip, under Requires. The two investment-pool transfers cost GDP rather than points, so they override the `cost_icon` block empty.
+
+| Cell | Shows | File |
+|---|---|---|
+| budget | a short stack of gold tokens, one aside | `gfx/interface/icons/banking_icons/budget.dds` |
+| cost | the same picture at 18 px | `gfx/interface/icons/banking_icons/budget.dds` |

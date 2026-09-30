@@ -305,7 +305,7 @@ types banking_dashboard_widget_types
 				icon = {
 					size = { 18 18 }
 					parentanchor = left|vcenter
-					texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds"
+					texture = "gfx/interface/icons/banking_icons/budget.dds"
 				}
 			}
 			textbox = {
@@ -345,9 +345,10 @@ types banking_dashboard_widget_types
 	### beside it (style guide rule 4; the owner's first play-test, 2026-09-29:
 	### "an icon for the inflation band, maybe other banking icons"). The cells
 	### replace the Current Conditions table; each cell's tooltip is the one its
-	### row had. Every icon is a placeholder: docs/systems/banking_gui_icons.md
-	### lists what each should become and where it is set
-	### (test_banking_layout.IconsDocTest).
+	### row had. The icons are the banking set of PR #586
+	### (gfx/interface/icons/banking_icons/), apart from vanilla's momentum
+	### arrows and warning badge; docs/systems/banking_gui_icons.md records
+	### what each shows (test_banking_layout.BankingIconsTest).
 
 	### A cell of the overview: the icon on the left, and beside it the caption
 	### (a concept) over the reading's word. Play-test round 2 laid the cells
@@ -438,37 +439,37 @@ types banking_dashboard_widget_types
 					icon = {
 						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+						texture = "gfx/interface/icons/banking_icons/phase_panic.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+						texture = "gfx/interface/icons/banking_icons/phase_downturn.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+						texture = "gfx/interface/icons/banking_icons/phase_stagnation.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/event_icons/je_banking_cycle.dds"
+						texture = "gfx/interface/icons/banking_icons/phase_stable.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+						texture = "gfx/interface/icons/banking_icons/phase_expansion.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+						texture = "gfx/interface/icons/banking_icons/phase_boom.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds"
+						texture = "gfx/interface/icons/banking_icons/phase_frenzy.dds"
 					}
 				}
 				blockoverride "word" {
@@ -556,27 +557,27 @@ types banking_dashboard_widget_types
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)1' )]"
-						texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+						texture = "gfx/interface/icons/banking_icons/bubble_low.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)2' )]"
-						texture = "gfx/interface/icons/generic_icons/maybe_icon.dds"
+						texture = "gfx/interface/icons/banking_icons/bubble_building.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)3' )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+						texture = "gfx/interface/icons/banking_icons/bubble_elevated.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)4' )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+						texture = "gfx/interface/icons/banking_icons/bubble_high.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)5' )]"
-						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+						texture = "gfx/interface/icons/banking_icons/bubble_severe.dds"
 					}
 				}
 				blockoverride "word" {
@@ -616,27 +617,27 @@ types banking_dashboard_widget_types
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)1' )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds"
+						texture = "gfx/interface/icons/banking_icons/stance_very_loose.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)2' )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+						texture = "gfx/interface/icons/banking_icons/stance_loose.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)3' )]"
-						texture = "gfx/interface/icons/generic_icons/money.dds"
+						texture = "gfx/interface/icons/banking_icons/stance_neutral.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)4' )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+						texture = "gfx/interface/icons/banking_icons/stance_tight.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)5' )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"
+						texture = "gfx/interface/icons/banking_icons/stance_very_tight.dds"
 					}
 				}
 				blockoverride "word" {
@@ -658,42 +659,42 @@ types banking_dashboard_widget_types
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)1' )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+						texture = "gfx/interface/icons/banking_icons/price_deflation.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)2' )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+						texture = "gfx/interface/icons/banking_icons/price_stable.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)3' )]"
-						texture = "gfx/interface/icons/generic_icons/warning.dds"
+						texture = "gfx/interface/icons/banking_icons/price_elevated.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)4' )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+						texture = "gfx/interface/icons/banking_icons/price_high.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)5' )]"
-						texture = "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+						texture = "gfx/interface/icons/banking_icons/price_very_high.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)6' )]"
-						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+						texture = "gfx/interface/icons/banking_icons/price_hyper.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)7' )]"
-						texture = "gfx/interface/icons/generic_icons/world_market.dds"
+						texture = "gfx/interface/icons/banking_icons/price_dollarised.dds"
 					}
 					icon = {
 						size = { 32 32 }
 						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)8' )]"
-						texture = "gfx/interface/icons/generic_icons/government_building_icon.dds"
+						texture = "gfx/interface/icons/banking_icons/price_planned.dds"
 					}
 				}
 				blockoverride "word" {
@@ -712,7 +713,7 @@ types banking_dashboard_widget_types
 				blockoverride "icons" {
 					icon = {
 						size = { 32 32 }
-						texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds"
+						texture = "gfx/interface/icons/banking_icons/budget.dds"
 					}
 				}
 				blockoverride "word" {
