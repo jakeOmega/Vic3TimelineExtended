@@ -197,10 +197,11 @@ class Linter:
         for k in re.findall(r"GetPlayerJournalEntry\(\s*'(\w+)'", expr):
             if k not in self.jes:
                 self.report("ERROR", path, ln, f"journal entry {k} not found")
-        if re.search(r"\bGet\w+\.GetJournalEntry\(", expr):
-            self.report("ERROR", path, ln, "GetJournalEntry needs a non-const Country, and a Get* promote before it is "
-                        "const: reach the country through Access* promotes, e.g. "
-                        "Market.AccessMarketCapital.AccessOwner (gotcha #35)")
+        if re.search(r"\.GetJournalEntry\(", expr):
+            self.report("ERROR", path, ln, "another country's journal entry (.GetJournalEntry) failed in game: after a "
+                        "const Get* promote it fails at load and crashed the panel, and through Access* promotes it "
+                        "loads but silently keeps the parent's entry. Read that country's data through a Country datacontext instead, e.g. "
+                        "datacontext = \"[MarketPanel.GetMarket.GetOwner]\"; GetPlayerJournalEntry is fine (gotcha #35)")
         for k in re.findall(r"Concept\(\s*'(\w+)'", expr):
             if k not in self.concepts:
                 self.report("ERROR", path, ln, f"concept {k} is not defined")
