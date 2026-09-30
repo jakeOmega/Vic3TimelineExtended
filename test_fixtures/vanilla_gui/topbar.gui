@@ -582,13 +582,6 @@ types topbar_components
 								}
 							}
 
-							### TIMELINE EXTENDED — the Banking readings, the one change to this vanilla
-							### file: the cycle's phase, momentum and bubble pressure as three icons after
-							### MONEY, hidden unless the banking journal entry is running (and in observer
-							### mode). The type is te_banking_topbar_readings in
-							### gui/journal_entry_widgets/banking_dashboard_widget.gui.
-							te_banking_topbar_readings = {}
-
 						}
 
 						#shows only on hover

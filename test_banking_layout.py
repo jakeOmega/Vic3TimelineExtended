@@ -298,16 +298,36 @@ def _norm(s):
     return " ".join(s.split())
 
 
+# The icon stacks the cycle's three readings share with the top bar
+# (te_banking_topbar_readings): a cell's "icons" block instances one of these.
+ICON_TYPES = ["te_banking_phase_icons", "te_banking_momentum_icons", "te_banking_bubble_icons"]
+
+
+def _icons(dash, block):
+    """An "icons" block, with the icon-stack type it instances inlined."""
+    for name in re.findall(r"\b(te_banking_\w+_icons) = \{", block):
+        block += _type_body(dash, name)
+    return block
+
+
+def _badge(dash, block):
+    """A "badge" block, with the crash-risk badge type it instances inlined."""
+    if re.search(r"\bte_banking_crash_risk_badge = \{", block):
+        block += _type_body(dash, "te_banking_crash_risk_badge")
+    return block
+
+
 def _cells():
     """(tooltip, caption, [(picker, key, texture)], block) per overview cell."""
-    body = _type_body(_read(DASH), "te_banking_overview_panel")
+    dash = _read(DASH)
+    body = _type_body(dash, "te_banking_overview_panel")
     out = []
     for m in re.finditer(r"te_banking_ov_cell = \{", body):
         block = _block_from(body, m.end() - 1)
         tip = re.search(r'^\t*tooltip = "(\w+)"', block, re.M).group(1)
         cap = re.search(r'blockoverride "caption" \{\s*text = "(\w+)"', block).group(1)
         icons_at = block.index('blockoverride "icons" {')
-        icons = _block_from(block, icons_at)
+        icons = _icons(dash, _block_from(block, icons_at))
         found = []
         for im in re.finditer(r"icon = \{", icons):
             ib = _block_from(icons, im.end() - 1)
@@ -364,7 +384,7 @@ class OverviewTest(unittest.TestCase):
 
     def test_the_crash_risk_tag_is_a_badge(self):
         block = [b for tip, _, _, b in _cells() if tip == "banking_dash_bubble_tt"][0]
-        badge = _block_from(block, block.index('blockoverride "badge" {'))
+        badge = _badge(_read(DASH), _block_from(block, block.index('blockoverride "badge" {')))
         self.assertIn("GetScriptedGui('banking_dash_bubble_risk_high').IsShown", badge)
         self.assertIn('tooltip = "banking_dash_ov_crash_risk_tt"', badge)
         self.assertIn("banking_dash_ov_crash_risk_tt", _loc())
@@ -433,7 +453,8 @@ class IconsDocTest(unittest.TestCase):
 
     def test_the_badge_is_listed(self):
         block = [b for tip, _, _, b in _cells() if tip == "banking_dash_bubble_tt"][0]
-        tex = re.search(r'blockoverride "badge" \{.*?texture = "([^"]+)"', block, re.S).group(1)
+        badge = _badge(_read(DASH), _block_from(block, block.index('blockoverride "badge" {')))
+        tex = re.search(r'texture = "([^"]+)"', badge).group(1)
         self.assertEqual(self.doc["Overview row 1: bubble pressure"].get("crash risk"), tex)
 
     def test_the_cost_icon_is_listed(self):
@@ -495,8 +516,10 @@ class BankingIconsTest(unittest.TestCase):
         self.assertIn(f'texture = "{BANKING_ICONS}budget.dds"', _block_from(row, row.index('block "cost_icon" {')))
 
     def test_no_placeholder_is_left(self):
-        for tex in re.findall(r'texture = "([^"]+)"', _type_body(_read(DASH), "te_banking_overview_panel") +
-                              _type_body(_read(DASH), "banking_dash_policy_row")):
+        dash = _read(DASH)
+        drawn = "".join(_type_body(dash, t) for t in ["te_banking_overview_panel", "banking_dash_policy_row",
+                                                      "te_banking_crash_risk_badge"] + ICON_TYPES)
+        for tex in re.findall(r'texture = "([^"]+)"', drawn):
             with self.subTest(texture=tex):
                 self.assertTrue(tex.startswith(BANKING_ICONS) or tex in VANILLA_KEPT, tex)
 

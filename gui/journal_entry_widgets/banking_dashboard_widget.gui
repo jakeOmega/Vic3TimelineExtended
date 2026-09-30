@@ -1,19 +1,22 @@
 ﻿### Banking policy dashboard journal-entry widgets.
 ###
 ### A type library, one type per section:
-###   te_banking_overview_panel     the entry's four bars and Current Conditions,
-###                                 always shown
+###   te_banking_overview_panel     the entry's four bars and the readings'
+###                                 icons, always shown
 ###   te_banking_sec_active         Active Policies
 ###   te_banking_sec_monetary       Monetary Policy (the dial block)
 ###   te_banking_sec_interventions  Available Interventions, one collapsible
 ###                                 category per group of tools
+###   te_banking_topbar_readings    the cycle's three readings in vanilla's top
+###                                 bar (gui/topbar.gui), from the overview's
+###                                 icon types
 ### gui/journal_entry_widgets/banking_layout_widget.gui sets their order, with
 ### the history charts (banking_history_widget.gui) and How Banking Works, for
 ### both hosts: the journal entry (je_banking.txt attaches the named roots at
 ### the foot of that file) and the Budget panel's Banking tab
 ### (gui/budget_panel.gui), which instances the same types under datacontext
-### GetPlayerJournalEntry('je_banking_cycle'). So every JournalEntry.*
-### expression below resolves in both hosts. Keep it that way: read nothing
+### GetPlayerJournalEntry('je_banking_cycle'), as te_banking_topbar_readings
+### does too. So every JournalEntry.* expression below resolves in all three. Keep it that way: read nothing
 ### the tab's datacontext does not supply.
 ###
 ### Every yes/no question and every action is answered by a scripted GUI in
@@ -394,6 +397,128 @@ types banking_dashboard_widget_types
 		using = fontsize_small
 	}
 
+	### The icons of the cycle's three readings, one per state, each with its own
+	### visible: the phase from the banking_dash_phase_* scripted GUI its word
+	### uses, momentum and bubble pressure from their display codes
+	### (banking_overview_display_values.txt). The icons fill the widget, so an
+	### instance sets the size: 32, the default, in the overview's cells and 28 in
+	### the top bar (te_banking_topbar_readings). One type per reading, so the two
+	### places cannot draw different art for the same state.
+	type te_banking_phase_icons = widget {
+		size = { 32 32 }
+
+		icon = {
+			size = { 100% 100% }
+			visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			texture = "gfx/interface/icons/banking_icons/phase_panic.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			texture = "gfx/interface/icons/banking_icons/phase_downturn.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			texture = "gfx/interface/icons/banking_icons/phase_stagnation.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			texture = "gfx/interface/icons/banking_icons/phase_stable.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			texture = "gfx/interface/icons/banking_icons/phase_expansion.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			texture = "gfx/interface/icons/banking_icons/phase_boom.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			texture = "gfx/interface/icons/banking_icons/phase_frenzy.dds"
+		}
+	}
+
+	### Momentum: an arrow per band, from the band word's own edges
+	### (banking_disp_momentum_band_code). The double arrows are Surging and
+	### Collapsing, which the old table also tagged overheating / contracting.
+	type te_banking_momentum_icons = widget {
+		size = { 32 32 }
+
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)1' )]"
+			texture = "gfx/interface/icons/generic_icons/down_down.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)2' )]"
+			texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)3' )]"
+			texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)4' )]"
+			texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)5' )]"
+			texture = "gfx/interface/icons/generic_icons/trend_upup.dds"
+		}
+	}
+
+	### Bubble pressure's band (banking_disp_bubble_band_code).
+	type te_banking_bubble_icons = widget {
+		size = { 32 32 }
+
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)1' )]"
+			texture = "gfx/interface/icons/banking_icons/bubble_low.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)2' )]"
+			texture = "gfx/interface/icons/banking_icons/bubble_building.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)3' )]"
+			texture = "gfx/interface/icons/banking_icons/bubble_elevated.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)4' )]"
+			texture = "gfx/interface/icons/banking_icons/bubble_high.dds"
+		}
+		icon = {
+			size = { 100% 100% }
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)5' )]"
+			texture = "gfx/interface/icons/banking_icons/bubble_severe.dds"
+		}
+	}
+
+	### The crash-risk mark over the bubble icon's top-right corner, the old
+	### row's "(crash risk)" tag: the cycle at the top of its range, or booming
+	### with momentum surging. The instance sets its position (and, in the top
+	### bar, a smaller size).
+	type te_banking_crash_risk_badge = icon {
+		size = { 16 16 }
+		visible = "[GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		texture = "gfx/interface/icons/generic_icons/warning.dds"
+		tooltip = "banking_dash_ov_crash_risk_tt"
+	}
+
 	type te_banking_overview_panel = flowcontainer {
 		# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
 		# country whose entry has not activated yet and therefore has none of the
@@ -436,41 +561,7 @@ types banking_dashboard_widget_types
 					text = "banking_dash_phase_label"
 				}
 				blockoverride "icons" {
-					icon = {
-						size = { 32 32 }
-						visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/banking_icons/phase_panic.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/banking_icons/phase_downturn.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/banking_icons/phase_stagnation.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/banking_icons/phase_stable.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/banking_icons/phase_expansion.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/banking_icons/phase_boom.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/banking_icons/phase_frenzy.dds"
-					}
+					te_banking_phase_icons = {}
 				}
 				blockoverride "word" {
 					te_banking_ov_word = {
@@ -504,40 +595,14 @@ types banking_dashboard_widget_types
 				}
 			}
 
-			### Momentum: an arrow per band, from the band word's own edges
-			### (banking_disp_momentum_band_code). The double arrows are Surging and
-			### Collapsing, which the old table also tagged overheating / contracting.
+			### Momentum's band (te_banking_momentum_icons).
 			te_banking_ov_cell = {
 				tooltip = "banking_dash_momentum_tt"
 				blockoverride "caption" {
 					text = "banking_dash_momentum_label"
 				}
 				blockoverride "icons" {
-					icon = {
-						size = { 32 32 }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)1' )]"
-						texture = "gfx/interface/icons/generic_icons/down_down.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)2' )]"
-						texture = "gfx/interface/icons/generic_icons/trend_down.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)3' )]"
-						texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)4' )]"
-						texture = "gfx/interface/icons/generic_icons/trend_up.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)5' )]"
-						texture = "gfx/interface/icons/generic_icons/trend_upup.dds"
-					}
+					te_banking_momentum_icons = {}
 				}
 				blockoverride "word" {
 					te_banking_ov_word = {
@@ -546,39 +611,15 @@ types banking_dashboard_widget_types
 				}
 			}
 
-			### Bubble pressure's band (banking_disp_bubble_band_code). The badge is the
-			### old row's '(crash risk)' tag: the cycle at its top, or booming and surging.
+			### Bubble pressure's band (te_banking_bubble_icons), with the crash-risk
+			### badge over the icon's corner.
 			te_banking_ov_cell = {
 				tooltip = "banking_dash_bubble_tt"
 				blockoverride "caption" {
 					text = "banking_dash_bubble_label"
 				}
 				blockoverride "icons" {
-					icon = {
-						size = { 32 32 }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)1' )]"
-						texture = "gfx/interface/icons/banking_icons/bubble_low.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)2' )]"
-						texture = "gfx/interface/icons/banking_icons/bubble_building.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)3' )]"
-						texture = "gfx/interface/icons/banking_icons/bubble_elevated.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)4' )]"
-						texture = "gfx/interface/icons/banking_icons/bubble_high.dds"
-					}
-					icon = {
-						size = { 32 32 }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)5' )]"
-						texture = "gfx/interface/icons/banking_icons/bubble_severe.dds"
-					}
+					te_banking_bubble_icons = {}
 				}
 				blockoverride "word" {
 					te_banking_ov_word = {
@@ -586,12 +627,8 @@ types banking_dashboard_widget_types
 					}
 				}
 				blockoverride "badge" {
-					icon = {
-						size = { 16 16 }
+					te_banking_crash_risk_badge = {
 						position = { 22 0 }
-						visible = "[GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						texture = "gfx/interface/icons/generic_icons/warning.dds"
-						tooltip = "banking_dash_ov_crash_risk_tt"
 					}
 				}
 			}
@@ -723,6 +760,85 @@ types banking_dashboard_widget_types
 				}
 			}
 		}
+	}
+
+	### ==========================================================================
+	### THE TOP BAR'S BANKING READINGS
+	### ==========================================================================
+	### The cycle's phase, momentum and bubble pressure as three icons in
+	### vanilla's top bar, after MONEY (gui/topbar.gui, its one change). The
+	### owner asked for the band, not the number: no figures and no words. Hover
+	### an icon for its word and the overview's tooltip for that reading; click
+	### it for the Budget panel's Banking tab. The icons are the overview's own
+	### types at 28 px, so the two cannot disagree.
+	###
+	### Three gates, one widget each, outermost first, so nothing inside a closed
+	### one is evaluated: not in observer mode (GetPlayer is empty there); the
+	### Budget tab's gate, te_budget_banking_tab_sgui (the rule on and the entry
+	### held), on the parent of the datacontext as budget_panel.gui has it; and
+	### the entry running (JournalEntry.IsActive), the overview's own gate. The
+	### top bar's hud_visibility hides it with the bar. 3 x 30 + 2 x 2 = 94
+	### wide, a little under one of vanilla's 100-wide buttons.
+	type te_banking_topbar_readings = flowcontainer {
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+		ignoreinvisible = yes
+
+		flowcontainer = {
+			visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			ignoreinvisible = yes
+
+			flowcontainer = {
+				datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+				ignoreinvisible = yes
+
+				flowcontainer = {
+					visible = "[JournalEntry.IsActive]"
+					direction = horizontal
+					spacing = 2
+
+					te_banking_topbar_reading = {
+						name = "te_topbar_banking_phase"
+						tooltip = "banking_dash_top_phase_tt"
+						te_banking_phase_icons = {
+							size = { 28 28 }
+							position = { 0 2 }
+							parentanchor = center
+						}
+					}
+					te_banking_topbar_reading = {
+						name = "te_topbar_banking_momentum"
+						tooltip = "banking_dash_top_momentum_tt"
+						te_banking_momentum_icons = {
+							size = { 28 28 }
+							position = { 0 2 }
+							parentanchor = center
+						}
+					}
+					te_banking_topbar_reading = {
+						name = "te_topbar_banking_bubble"
+						tooltip = "banking_dash_top_bubble_tt"
+						te_banking_bubble_icons = {
+							size = { 28 28 }
+							position = { 0 2 }
+							parentanchor = center
+						}
+						te_banking_crash_risk_badge = {
+							size = { 12 12 }
+							position = { 18 6 }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### One reading's hover and click target: vanilla's top-bar button (glow on
+	### hover, tooltip below, a click opens a panel) at under a third of the width.
+	type te_banking_topbar_reading = button {
+		using = glow_button
+		size = { 30 40 }
+		using = tooltip_below
+		onclick = "[InformationPanelBar.OpenPanelTab('budget', 'te_banking')]"
 	}
 
 	### ==========================================================================
