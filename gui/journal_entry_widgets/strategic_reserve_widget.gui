@@ -19,9 +19,10 @@
 ### open until closed, *_open collapsed until opened.
 ### test_strategic_reserve_layout.py holds the order, the flags and the rows.
 ###
-### Icons: the hub cell uses the hub building's own icon; the row's policy
-### icon is a vanilla placeholder. docs/systems/strategic_reserve_gui_icons.md
-### lists both, with the final art the placeholder should become.
+### Icons: the hub cell uses the hub building's own icon; the row's status
+### and policy icons are the panel's own, in gfx/interface/icons/st_res_icons/
+### (PR #586). docs/systems/strategic_reserve_gui_icons.md records each file
+### and what it shows.
 ###
 ### THE INVENTORY is a table with one te_st_res_good_row per unlocked good:
 ###   Good | Stock | status icon | policy icon | decrease / stop / increase
@@ -833,7 +834,8 @@ types strategic_reserve_widget_types
 			### Withdrawing or Blocked, the word and its reason on hover
 			### (`row_status`). The four icons share the cell, and each one's
 			### `visible` tests one value of the good's st_res_<good>_disp_status
-			### code, so exactly one is ever drawn. Placeholders:
+			### code, so exactly one is ever drawn. One crate for all four, the
+			### state a mark in the word's colour:
 			### docs/systems/strategic_reserve_gui_icons.md.
 			widget = {
 				size = { 30 28 }
@@ -844,25 +846,25 @@ types strategic_reserve_widget_types
 					size = { 24 24 }
 					parentanchor = center
 					block "row_status_idle" {}
-					texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+					texture = "gfx/interface/icons/st_res_icons/status_idle.dds"
 				}
 				icon = {
 					size = { 24 24 }
 					parentanchor = center
 					block "row_status_storing" {}
-					texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+					texture = "gfx/interface/icons/st_res_icons/status_storing.dds"
 				}
 				icon = {
 					size = { 24 24 }
 					parentanchor = center
 					block "row_status_withdrawing" {}
-					texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+					texture = "gfx/interface/icons/st_res_icons/status_withdrawing.dds"
 				}
 				icon = {
 					size = { 24 24 }
 					parentanchor = center
 					block "row_status_blocked" {}
-					texture = "gfx/interface/icons/generic_icons/warning.dds"
+					texture = "gfx/interface/icons/st_res_icons/status_blocked.dds"
 				}
 			}
 
@@ -883,14 +885,14 @@ types strategic_reserve_widget_types
 					parentanchor = center
 					alpha = 0.25
 					alwaystransparent = yes
-					texture = "gfx/interface/production_methods/auto_expand.dds"
+					texture = "gfx/interface/icons/st_res_icons/policy_automated.dds"
 				}
 				icon = {
 					size = { 24 24 }
 					parentanchor = center
 					alwaystransparent = yes
 					block "row_auto" {}
-					texture = "gfx/interface/production_methods/auto_expand.dds"
+					texture = "gfx/interface/icons/st_res_icons/policy_automated.dds"
 				}
 			}
 
