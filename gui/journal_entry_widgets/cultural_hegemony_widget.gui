@@ -53,8 +53,9 @@
 ### No threshold, no classification and no arithmetic lives in this file. The only
 ### widget-local state is the GUI variable system flag behind each expander.
 ###
-### Placeholder art (the tier icon, the share pie's colours, the benchmark
-### alert) is listed in docs/systems/cultural_hegemony_gui_icons.md.
+### The overview's art (the tier icons, the benchmark alert, the share pie's
+### pair, gfx/interface/icons/ch_icons/ and ch_model_pie/) and what each shows
+### are in docs/systems/cultural_hegemony_gui_icons.md.
 ###
 ### ---- ch_policy_sgui op table (mirrored in the sgui file and the system doc) --
 ###   0 / 1   programme funding   decrease / increase
@@ -506,8 +507,8 @@ types cultural_hegemony_widget_types
 
 	### A 0..1 share as a pie over a background disc, inside vanilla's decorated
 	### round frame, its label and trend arrow beneath (te_un_ov_pie's shape).
-	### PLACEHOLDER colours: the models pie's "Mixed / Other" grey as the disc and
-	### its "Liberal" gold as the fill (docs/systems/cultural_hegemony_gui_icons.md).
+	### Its own pair (#586, docs/systems/cultural_hegemony_gui_icons.md): our share
+	### in amber over the rest of the world in a muted grey.
 	type te_ch_ov_pie = widget {
 		size = { 180 108 }
 
@@ -526,7 +527,7 @@ types cultural_hegemony_widget_types
 				min = 0
 				max = 1
 				value = 1
-				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_share_rest.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -535,7 +536,7 @@ types cultural_hegemony_widget_types
 				min = 0
 				max = 1
 				block "pie_value" {}
-				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
+				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_share_fill.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -595,7 +596,7 @@ types cultural_hegemony_widget_types
 					spacing = 6
 
 					### The influence tier (ch_tier, 0-5), its full name and blurb on
-					### hover. PLACEHOLDER: one texture for all six tiers.
+					### hover. One icon per tier (docs/systems/cultural_hegemony_gui_icons.md).
 					flowcontainer = {
 						ignoreinvisible = yes
 						tooltip = "je_ch_ov_tier_tt"
@@ -603,7 +604,7 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_tier_code'), '(CFixedPoint)0' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_cultural_hegemony.dds"
+								texture = "gfx/interface/icons/ch_icons/tier_negligible.dds"
 							}
 							blockoverride "label" {
 								text = "je_ch_ov_tier_0"
@@ -612,7 +613,7 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_tier_code'), '(CFixedPoint)1' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_cultural_hegemony.dds"
+								texture = "gfx/interface/icons/ch_icons/tier_minor.dds"
 							}
 							blockoverride "label" {
 								text = "je_ch_ov_tier_1"
@@ -621,7 +622,7 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_tier_code'), '(CFixedPoint)2' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_cultural_hegemony.dds"
+								texture = "gfx/interface/icons/ch_icons/tier_moderate.dds"
 							}
 							blockoverride "label" {
 								text = "je_ch_ov_tier_2"
@@ -630,7 +631,7 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_tier_code'), '(CFixedPoint)3' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_cultural_hegemony.dds"
+								texture = "gfx/interface/icons/ch_icons/tier_significant.dds"
 							}
 							blockoverride "label" {
 								text = "je_ch_ov_tier_3"
@@ -639,7 +640,7 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_tier_code'), '(CFixedPoint)4' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_cultural_hegemony.dds"
+								texture = "gfx/interface/icons/ch_icons/tier_major.dds"
 							}
 							blockoverride "label" {
 								text = "je_ch_ov_tier_4"
@@ -648,7 +649,7 @@ types cultural_hegemony_widget_types
 						te_ch_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_tier_code'), '(CFixedPoint)5' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_cultural_hegemony.dds"
+								texture = "gfx/interface/icons/ch_icons/tier_hegemon.dds"
 							}
 							blockoverride "label" {
 								text = "je_ch_ov_tier_5"
@@ -952,12 +953,11 @@ types cultural_hegemony_widget_types
 					}
 
 					### Foreign Cultural Benchmark, only while we carry it.
-					### PLACEHOLDER icon.
 					te_ch_ov_icon_label = {
 						visible = "[GetScriptedGui('ch_benchmark_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						tooltip = "je_ch_ov_benchmark_tt"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/warning.dds"
+							texture = "gfx/interface/icons/ch_icons/benchmark.dds"
 						}
 						blockoverride "label" {
 							text = "je_ch_ov_benchmark_label"
@@ -2251,7 +2251,8 @@ types cultural_hegemony_widget_types
 							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_ch_share' ), '(CFixedPoint)2' ) ) )]"
 						}
 						blockoverride "color" {
-							color = { 0.78 0.60 0.30 1.0 }
+							# The share's amber, as the overview's pie (#d89a2b).
+							color = { 0.85 0.60 0.17 1.0 }
 						}
 					}
 				}
