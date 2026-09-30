@@ -592,11 +592,13 @@ types market_panel
 						}
 					}
 
-					### TE: Top 5 Trade Partners table (below chart)
+					### TE: Top 5 Trade Partners table (below chart), full panel width
+					### (@panel_width_plus_14, the width of the filters box below it):
+					### 10 margin + Market 244 + Trade / yr 150 + % of GDP 140 + 10 margin.
 					flowcontainer = {
 						direction = vertical
 						visible = "[GreaterThan_CFixedPoint(Market.GetOwner.MakeScope.ScriptValue('gui_tp_count'), '(CFixedPoint)0')]"
-						minimumsize = { 340 -1 }
+						minimumsize = { @panel_width_plus_14 -1 }
 						margin_top = 10
 
 						background = {
@@ -608,7 +610,7 @@ types market_panel
 							raw_text = "#title Top Trade Partners#!"
 							autoresize = yes
 							align = hcenter|nobaseline
-							minimumsize = { 340 -1 }
+							minimumsize = { @panel_width_plus_14 -1 }
 							margin_top = 8
 							margin_bottom = 5
 						}
@@ -620,46 +622,35 @@ types market_panel
 
 							textbox = {
 								raw_text = "#bold Market#!"
-								minimumsize = { 145 -1 }
-								maximumsize = { 145 -1 }
+								minimumsize = { 244 -1 }
+								maximumsize = { 244 -1 }
 								autoresize = yes
 								align = left|nobaseline
 								fontsize = 13
 							}
 							textbox = {
-								raw_text = "#bold Trade#!"
-								minimumsize = { 70 -1 }
-								maximumsize = { 70 -1 }
+								raw_text = "#bold Trade / yr#!"
+								minimumsize = { 150 -1 }
+								maximumsize = { 150 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								raw_tooltip = "Total bilateral trade value between your market and theirs"
+								tooltip = "TP_TRADE_TOOLTIP"
 							}
 							textbox = {
-								raw_text = "#bold Imp%#!"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
+								raw_text = "#bold % of GDP#!"
+								minimumsize = { 140 -1 }
+								maximumsize = { 140 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								margin_left = 5
-								raw_tooltip = "Fraction of your buy orders filled by imports from this partner"
-							}
-							textbox = {
-								raw_text = "#bold Exp%#!"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
-								autoresize = yes
-								align = right|nobaseline
-								fontsize = 13
-								margin_left = 5
-								raw_tooltip = "Fraction of your sell orders filled by exports to this partner"
+								tooltip = "TP_GDP_TOOLTIP"
 							}
 						}
 
 						# Divider line
 						widget = {
-							size = { 320 2 }
+							size = { 534 2 }
 							parentanchor = hcenter
 							divider_decorative = {
 								size = { 100% 100% }
@@ -673,7 +664,7 @@ types market_panel
 							datacontext = "[Market.GetOwner.MakeScope.Var('tp_1_tc').GetState.GetCountry]"
 
 							widget = {
-								size = { 145 22 }
+								size = { 244 22 }
 
 								button = {
 									using = clean_button
@@ -691,8 +682,8 @@ types market_panel
 							}
 							textbox = {
 								raw_text = "@money![Market.GetOwner.MakeScope.Var('tp_1_total').GetValue|D]"
-								minimumsize = { 70 -1 }
-								maximumsize = { 70 -1 }
+								minimumsize = { 150 -1 }
+								maximumsize = { 150 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
@@ -703,24 +694,13 @@ types market_panel
 								}
 							}
 							textbox = {
-								raw_text = "[Market.GetOwner.MakeScope.Var('tp_1_imp_rel').GetValue|1]%"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_1_gdp_pct').GetValue|1]%"
+								minimumsize = { 140 -1 }
+								maximumsize = { 140 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								margin_left = 5
-								tooltip = "TP_IMP_TOOLTIP"
-							}
-							textbox = {
-								raw_text = "[Market.GetOwner.MakeScope.Var('tp_1_exp_rel').GetValue|1]%"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
-								autoresize = yes
-								align = right|nobaseline
-								fontsize = 13
-								margin_left = 5
-								tooltip = "TP_EXP_TOOLTIP"
+								tooltip = "TP_GDP_TOOLTIP"
 							}
 						}
 
@@ -731,7 +711,7 @@ types market_panel
 							datacontext = "[Market.GetOwner.MakeScope.Var('tp_2_tc').GetState.GetCountry]"
 
 							widget = {
-								size = { 145 22 }
+								size = { 244 22 }
 
 								button = {
 									using = clean_button
@@ -749,8 +729,8 @@ types market_panel
 							}
 							textbox = {
 								raw_text = "@money![Market.GetOwner.MakeScope.Var('tp_2_total').GetValue|D]"
-								minimumsize = { 70 -1 }
-								maximumsize = { 70 -1 }
+								minimumsize = { 150 -1 }
+								maximumsize = { 150 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
@@ -761,24 +741,13 @@ types market_panel
 								}
 							}
 							textbox = {
-								raw_text = "[Market.GetOwner.MakeScope.Var('tp_2_imp_rel').GetValue|1]%"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_2_gdp_pct').GetValue|1]%"
+								minimumsize = { 140 -1 }
+								maximumsize = { 140 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								margin_left = 5
-								tooltip = "TP_IMP_TOOLTIP"
-							}
-							textbox = {
-								raw_text = "[Market.GetOwner.MakeScope.Var('tp_2_exp_rel').GetValue|1]%"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
-								autoresize = yes
-								align = right|nobaseline
-								fontsize = 13
-								margin_left = 5
-								tooltip = "TP_EXP_TOOLTIP"
+								tooltip = "TP_GDP_TOOLTIP"
 							}
 						}
 
@@ -789,7 +758,7 @@ types market_panel
 							datacontext = "[Market.GetOwner.MakeScope.Var('tp_3_tc').GetState.GetCountry]"
 
 							widget = {
-								size = { 145 22 }
+								size = { 244 22 }
 
 								button = {
 									using = clean_button
@@ -807,8 +776,8 @@ types market_panel
 							}
 							textbox = {
 								raw_text = "@money![Market.GetOwner.MakeScope.Var('tp_3_total').GetValue|D]"
-								minimumsize = { 70 -1 }
-								maximumsize = { 70 -1 }
+								minimumsize = { 150 -1 }
+								maximumsize = { 150 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
@@ -819,24 +788,13 @@ types market_panel
 								}
 							}
 							textbox = {
-								raw_text = "[Market.GetOwner.MakeScope.Var('tp_3_imp_rel').GetValue|1]%"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_3_gdp_pct').GetValue|1]%"
+								minimumsize = { 140 -1 }
+								maximumsize = { 140 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								margin_left = 5
-								tooltip = "TP_IMP_TOOLTIP"
-							}
-							textbox = {
-								raw_text = "[Market.GetOwner.MakeScope.Var('tp_3_exp_rel').GetValue|1]%"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
-								autoresize = yes
-								align = right|nobaseline
-								fontsize = 13
-								margin_left = 5
-								tooltip = "TP_EXP_TOOLTIP"
+								tooltip = "TP_GDP_TOOLTIP"
 							}
 						}
 
@@ -847,7 +805,7 @@ types market_panel
 							datacontext = "[Market.GetOwner.MakeScope.Var('tp_4_tc').GetState.GetCountry]"
 
 							widget = {
-								size = { 145 22 }
+								size = { 244 22 }
 
 								button = {
 									using = clean_button
@@ -865,8 +823,8 @@ types market_panel
 							}
 							textbox = {
 								raw_text = "@money![Market.GetOwner.MakeScope.Var('tp_4_total').GetValue|D]"
-								minimumsize = { 70 -1 }
-								maximumsize = { 70 -1 }
+								minimumsize = { 150 -1 }
+								maximumsize = { 150 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
@@ -877,24 +835,13 @@ types market_panel
 								}
 							}
 							textbox = {
-								raw_text = "[Market.GetOwner.MakeScope.Var('tp_4_imp_rel').GetValue|1]%"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_4_gdp_pct').GetValue|1]%"
+								minimumsize = { 140 -1 }
+								maximumsize = { 140 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								margin_left = 5
-								tooltip = "TP_IMP_TOOLTIP"
-							}
-							textbox = {
-								raw_text = "[Market.GetOwner.MakeScope.Var('tp_4_exp_rel').GetValue|1]%"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
-								autoresize = yes
-								align = right|nobaseline
-								fontsize = 13
-								margin_left = 5
-								tooltip = "TP_EXP_TOOLTIP"
+								tooltip = "TP_GDP_TOOLTIP"
 							}
 						}
 
@@ -902,11 +849,10 @@ types market_panel
 						flowcontainer = {
 							visible = "[GreaterThan_CFixedPoint(Market.GetOwner.MakeScope.ScriptValue('gui_tp_count'), '(CFixedPoint)4')]"
 							margin = { 10 2 }
-							margin_bottom = 8
 							datacontext = "[Market.GetOwner.MakeScope.Var('tp_5_tc').GetState.GetCountry]"
 
 							widget = {
-								size = { 145 22 }
+								size = { 244 22 }
 
 								button = {
 									using = clean_button
@@ -924,8 +870,8 @@ types market_panel
 							}
 							textbox = {
 								raw_text = "@money![Market.GetOwner.MakeScope.Var('tp_5_total').GetValue|D]"
-								minimumsize = { 70 -1 }
-								maximumsize = { 70 -1 }
+								minimumsize = { 150 -1 }
+								maximumsize = { 150 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
@@ -936,24 +882,13 @@ types market_panel
 								}
 							}
 							textbox = {
-								raw_text = "[Market.GetOwner.MakeScope.Var('tp_5_imp_rel').GetValue|1]%"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
+								raw_text = "[Market.GetOwner.MakeScope.Var('tp_5_gdp_pct').GetValue|1]%"
+								minimumsize = { 140 -1 }
+								maximumsize = { 140 -1 }
 								autoresize = yes
 								align = right|nobaseline
 								fontsize = 13
-								margin_left = 5
-								tooltip = "TP_IMP_TOOLTIP"
-							}
-							textbox = {
-								raw_text = "[Market.GetOwner.MakeScope.Var('tp_5_exp_rel').GetValue|1]%"
-								minimumsize = { 50 -1 }
-								maximumsize = { 50 -1 }
-								autoresize = yes
-								align = right|nobaseline
-								fontsize = 13
-								margin_left = 5
-								tooltip = "TP_EXP_TOOLTIP"
+								tooltip = "TP_GDP_TOOLTIP"
 							}
 						}
 					}

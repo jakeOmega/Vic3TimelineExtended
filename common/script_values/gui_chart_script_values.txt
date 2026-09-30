@@ -27,19 +27,29 @@ gui_trade_with_market_owner = {
 	}
 }
 
-# Import reliance on partner as percentage (0-100).
-# market_imports_reliance = fraction of buy orders filled by imports from partner.
-# Evaluated in our market scope. scope:tp_partner_iter = partner market.
-gui_tp_import_reliance = {
-	value = "market_imports_reliance(scope:tp_partner_iter)"
-	multiply = 100
+# Annual bilateral trade value (imports + exports) between our market owner and
+# the partner market owner. mutual_trade_value_with_country is the *weekly* base
+# value of goods traded. Vanilla prints no unit, but every market flow is per week
+# and the engine describes the related piracy value as an "average weekly base
+# value", so x52 gives the per-year figure the Top Trade Partners table shows.
+# Evaluated in our market owner's country scope. scope:tp_partner_country = the
+# partner market's owner (saved in store_trade_partner_data).
+gui_tp_annual_trade = {
+	value = "mutual_trade_value_with_country(scope:tp_partner_country)"
+	multiply = 52
 }
 
-# Export reliance on partner as percentage (0-100).
-# market_exports_reliance = fraction of sell orders filled by exports to partner.
-# Evaluated in our market scope. scope:tp_partner_iter = partner market.
-gui_tp_export_reliance = {
-	value = "market_exports_reliance(scope:tp_partner_iter)"
+# Bilateral trade as a percentage of our market owner's GDP (0-100+).
+# Weekly trade over GDP: GDP is the market value of one week's production, so the
+# ratio needs no x52 (annual trade / annual GDP is the same number). Trade is at
+# base prices and GDP at market prices; the table's tooltip says so.
+# Evaluated in our market owner's country scope. scope:tp_partner_country as above.
+gui_tp_trade_pct_gdp = {
+	value = "mutual_trade_value_with_country(scope:tp_partner_country)"
+	divide = {
+		value = gdp
+		min = 1
+	}
 	multiply = 100
 }
 
