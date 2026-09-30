@@ -1,7 +1,9 @@
 """The construction-maintenance tiers: one rate per group (pmg_maintenance,
-_light, _heavy, _intensive), every tier switched off by the no-maintenance
-settings of free_market_construction_rule, and every group hidden in the PM
-panels (docs/systems/mod_systems.md, "Maintenance tiers")."""
+_light, _heavy, _intensive), the mines' equipment-driven group (_mine), every
+tier switched off by the no-maintenance settings of free_market_construction_rule,
+and every group hidden in the PM panels (docs/systems/mod_systems.md,
+"Maintenance tiers")."""
+import json
 import os
 import re
 import unittest
@@ -15,6 +17,12 @@ TIERS = {
     "pmg_maintenance_heavy": ("pm_maintenance_heavy", 0.15),
     "pmg_maintenance_intensive": ("pm_maintenance_intensive", 0.2),
 }
+MINE_GROUP = "pmg_maintenance_mine"
+MINE_PMS = ["pm_maintenance_traditional", "pm_maintenance_mechanized_mine"]
+MINE_TYPES = ["coal", "iron", "lead", "sulfur", "gold"]
+# Equipment PMs from the condensing engine pump on: the ones that make a mine mechanized.
+MECHANIZED_STEMS = ["condensing_engine_pump", "diesel_pump", "high_pressure_hydraulic_pump",
+                    "continuous_miners", "smart_miners"]
 HIDING_GUI = ["production_methods.gui", "building_details_panel.gui",
               "building_browser_panel.gui", "goods_state_panel.gui"]
 TOP_LEVEL = re.compile(r"^(?:[A-Z_]+:)?(\w+) = \{", re.M)
@@ -69,9 +77,35 @@ class MaintenanceTiers(unittest.TestCase):
 
     def test_a_building_takes_at_most_one_tier(self):
         for name, body in _buildings().items():
-            found = [g for g in TIERS if re.search(rf"(?m)^\s*{g}\s*$", body)]
+            found = [g for g in list(TIERS) + [MINE_GROUP] if re.search(rf"(?m)^\s*{g}\s*$", body)]
             with self.subTest(building=name):
                 self.assertLessEqual(len(found), 1, found)
+
+    def test_mine_group_follows_the_equipment(self):
+        groups = _top_level_blocks(_read("common", "production_method_groups", "extra_pm_groups.txt"))
+        pms = _top_level_blocks(_read("common", "production_methods", "extra_pms.txt"))
+        listed = re.search(r"production_methods = \{(.*?)\}", groups[MINE_GROUP], re.S).group(1).split()
+        self.assertEqual(listed, MINE_PMS + ["pm_no_maintenance"])
+        # free method first (the default and the fallback) and swapping to the paid one
+        self.assertIn("replacement_if_valid = pm_maintenance_mechanized_mine", pms[MINE_PMS[0]])
+        self.assertNotIn("goods_input_construction_add", pms[MINE_PMS[0]])
+        paid = pms[MINE_PMS[1]]
+        self.assertAlmostEqual(float(re.search(r"goods_input_construction_add = ([\d.]+)", paid).group(1)), 0.05)
+        unlocked = re.search(r"unlocking_production_methods = \{(.*?)\}", paid, re.S).group(1).split()
+        expected = [f"pm_{s}_building_{t}_mine" for t in MINE_TYPES for s in MECHANIZED_STEMS]
+        self.assertCountEqual(unlocked, expected)
+        # every unlocking PM is a real method: vanilla's, or one this mod defines
+        with open(os.path.join(REPO, "vanilla_parsed", "common", "pms.json"), encoding="utf-8") as f:
+            known = set(json.load(f))
+        known |= set(_top_level_blocks(_read("common", "production_methods", "extra_pms.txt")))
+        for pm in unlocked:
+            with self.subTest(pm=pm):
+                self.assertIn(pm, known)
+        # the five original mines use it, and each of their equipment groups lists those PMs
+        buildings = _buildings()
+        for t in MINE_TYPES:
+            with self.subTest(mine=t):
+                self.assertRegex(buildings[f"building_{t}_mine"], rf"(?m)^\s*{MINE_GROUP}\s*$")
 
     def test_assignments(self):
         expected = {
@@ -94,7 +128,7 @@ class MaintenanceTiers(unittest.TestCase):
 
     def test_no_maintenance_settings_switch_every_tier_off(self):
         settings = _rule_settings()
-        pm_keys = [pm for pm, _ in TIERS.values()]
+        pm_keys = [pm for pm, _ in TIERS.values()] + MINE_PMS
         for setting in ("free_market_construction_no_maintenance", "free_market_construction_disabled"):
             with self.subTest(setting=setting):
                 self.assertIn("force_pm_no_maintenance", settings[setting])
@@ -111,7 +145,7 @@ class MaintenanceTiers(unittest.TestCase):
             text = _read("gui", fn)
             base = text.count("'pmg_maintenance')")
             self.assertGreater(base, 0, fn)
-            for group in TIERS:
+            for group in list(TIERS) + [MINE_GROUP]:
                 if group != "pmg_maintenance":
                     with self.subTest(gui=fn, group=group):
                         self.assertEqual(text.count(f"'{group}')"), base)
@@ -123,6 +157,10 @@ class MaintenanceTiers(unittest.TestCase):
                 self.assertIn(f" {group}:0 ", loc)
                 self.assertIn(f" {pm}:0 ", loc)
                 self.assertIn(f" {pm}_desc:0 ", loc)
+        self.assertIn(f" {MINE_GROUP}:0 ", loc)
+        for pm in MINE_PMS:
+            self.assertIn(f" {pm}:0 ", loc)
+            self.assertIn(f" {pm}_desc:0 ", loc)
 
 
 if __name__ == "__main__":

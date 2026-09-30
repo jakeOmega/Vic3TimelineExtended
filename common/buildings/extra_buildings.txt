@@ -1633,30 +1633,35 @@ REPLACE_OR_CREATE:building_industrial_mineral_salt_mine = {
 INJECT:building_coal_mine = {
 	production_method_groups = {
 		pmg_tailings_wastewater_management
+		pmg_maintenance_mine
 	}
 }
 
 INJECT:building_iron_mine = {
 	production_method_groups = {
 		pmg_tailings_wastewater_management
+		pmg_maintenance_mine
 	}
 }
 
 INJECT:building_lead_mine = {
 	production_method_groups = {
 		pmg_tailings_wastewater_management
+		pmg_maintenance_mine
 	}
 }
 
 INJECT:building_sulfur_mine = {
 	production_method_groups = {
 		pmg_tailings_wastewater_management
+		pmg_maintenance_mine
 	}
 }
 
 INJECT:building_gold_mine = {
 	production_method_groups = {
 		pmg_tailings_wastewater_management
+		pmg_maintenance_mine
 	}
 }
 

@@ -3364,7 +3364,7 @@ types building_panels
 					block "pms_item_size" {
 						size = { 50 50 }
 					}
-					visible = "[And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive')))]"
+					visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')))]"
 					datacontext = "[Building.AccessProductionMethod(ProductionMethodGroup.Self)]"
 					datacontext = "[ProductionMethod]"
 					datacontext = "[Building]"

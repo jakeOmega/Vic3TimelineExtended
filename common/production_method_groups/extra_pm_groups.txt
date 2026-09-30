@@ -1433,6 +1433,20 @@ REPLACE_OR_CREATE:pmg_maintenance_intensive = {
 	}
 }
 
+# The mines' maintenance follows their equipment; see pm_maintenance_traditional in
+# extra_pms.txt. Traditional first: it is the default and the fallback.
+REPLACE_OR_CREATE:pmg_maintenance_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	is_hidden_when_unavailable = yes
+
+	production_methods = {
+		pm_maintenance_traditional
+		pm_maintenance_mechanized_mine
+		pm_no_maintenance
+	}
+}
+
 # ===== POLLUTION MITIGATION PRODUCTION METHOD GROUPS =====
 
 # Tailings and Wastewater Management - shared by all mines

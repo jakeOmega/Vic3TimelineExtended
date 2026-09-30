@@ -74,14 +74,16 @@ building:
 
 | Rate per level | Buildings |
 |---|---|
-| 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries and the modern mines (bauxite, chromium, copper, graphite, lithium and the like) |
+| 0.05 | Trade Centers, Arts Academies, State Youth Centers, Software Industries, the modern mines (bauxite, chromium, copper, graphite, lithium and the like) and the coal, iron, lead, sulfur and gold mines once they run a mechanized pump |
 | 0.1 | Factories of every kind, military industry, synthetic and biotechnology plants, Shipyards, Skyscrapers, Tourism Industries |
 | 0.15 | Railways, Highways, Airports, Ports, Network Infrastructure, Power Plants, Hydro Plants, Renewable Energy Plants, Oil Rigs |
 | 0.2 | Nuclear Plants, Fusion Plants, Deep-Sea Mines, Extraplanetary Bases |
 
-Farms, plantations, the original coal, iron, lead, sulfur and gold mines, and
-urban centers pay none. A few company buildings also use construction in their
-production. This upkeep competes with your queues for the same supply, so a
+Farms, plantations and urban centers pay none. The coal, iron, lead, sulfur and
+gold mines pay none while they run picks and shovels or the atmospheric engine
+pump, and start paying when their equipment changes to a condensing engine pump
+or anything later; going back to the old equipment stops the upkeep. A few
+company buildings also use construction in their production. This upkeep competes with your queues for the same supply, so a
 growing economy needs a growing construction sector, and a country built around
 railways and power pays more than one built around trade.
 

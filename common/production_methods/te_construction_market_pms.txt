@@ -17,7 +17,7 @@
 #     1 construction good -> 1 point          a Construction Sector tier's goods
 #     (script places and sizes the sites)     -> its construction as points; the
 #                                             site is the buildable sector
-#   pm_maintenance* (69 building types)     pm_no_maintenance (forced)
+#   pm_maintenance* (74 building types)     pm_no_maintenance (forced)
 #   pm_disney_world, pm_generic_industrial_ pm_<same>_direct (forced): the same
 #     city, pm_generic_monument_to_industry   recipe without the construction good
 #   pm_principle_engineering_and_logistics  pm_principle_engineering_and_logistics
@@ -367,8 +367,8 @@ pm_te_direct_construction_nanomaterial = {
 # Forced in place of the pm_maintenance tiers in direct games (no construction good to
 # pay upkeep in) and in no_maintenance market games (the good exists, but
 # buildings pay no upkeep in it). Disabled in the other market settings, so
-# each tier stays its group's only method there, as before. Shared by the four
-# maintenance groups (pmg_maintenance, _light, _heavy, _intensive).
+# the tiers are all there is, as before. Shared by the five
+# maintenance groups (pmg_maintenance, _light, _heavy, _intensive, _mine).
 pm_no_maintenance = {
 	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
 	is_hidden_when_unavailable = yes
