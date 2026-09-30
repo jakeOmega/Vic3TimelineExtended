@@ -35,6 +35,23 @@
 #   era 11 swarm_technology             → autonomous_swarm_submarine        (raider, terminal)
 #   era 12 antimatter_production        → antimatter_battleship             (capital, terminal)
 #   era 12 orbital_weapon_platforms     → orbital_support_amphibious_mothership (troop, terminal)
+#
+# Power projection (ship_power_projection_add, vanilla 1.14.5's per-ship value):
+# feeds navy prestige, involvement in the strategic regions a fleet patrols,
+# country_navy_power_projection and the flagship pick (flagship_score_for_ship
+# = PP / 10). Navy prestige per ship = PP x 0.0077 x max HP / 1150, so HP is
+# already inside the prestige term. Each value is sized so the ship's PRESTIGE
+# keeps its vanilla class analogue's prestige per point of (hull + crew damage):
+#     PP = analogue_ratio x (hull + crew damage) x 1150 / (0.0077 x max HP)
+# analogue ratios (vanilla prestige / damage): super_dreadnought 0.065 for the
+# capital ships, light_cruiser 0.030 for the cruiser-group escorts, destroyer
+# 0.035 for asw_destroyer / guided_missile_ship, aircraft_carrier 0.021 for the
+# carriers, submarine 0.010 for the submarines. Rounded to 5. A successor never
+# projects less than the vanilla class it replaces, so asw_destroyer and the two
+# carriers sit at the analogue's own PP (200 / 275) where the formula gave 130-140
+# (their strength is armor, accuracy and screening, not hull damage). The five
+# troop ships set none, as vanilla's troop_ship and supply_ship do.
+# Range modules add PP in vanilla (up to ~30% of the hull's); the mod's do not yet.
 # =============================================================================
 
 
@@ -54,6 +71,7 @@ ship_type_asw_destroyer = {
 	}
 
 	modifier = {
+		ship_power_projection_add = 200
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 4000
 		ship_crew_max_add = 200
@@ -150,6 +168,7 @@ ship_type_nuclear_submarine = {
 	}
 
 	modifier = {
+		ship_power_projection_add = 75
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 4500
 		ship_crew_max_add = 200
@@ -238,6 +257,7 @@ ship_type_guided_missile_ship = {
 	}
 
 	modifier = {
+		ship_power_projection_add = 290
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 5000
 		ship_crew_max_add = 200
@@ -334,6 +354,7 @@ ship_type_nuclear_supercarrier = {
 	}
 
 	modifier = {
+		ship_power_projection_add = 275
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 7500
 		ship_crew_max_add = 1500
@@ -435,6 +456,7 @@ ship_type_arsenal_ship = {
 	}
 
 	modifier = {
+		ship_power_projection_add = 1130
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 12000
 		ship_crew_max_add = 700
@@ -709,6 +731,7 @@ ship_type_hypersonic_missile_platform = {
 	}
 
 	modifier = {
+		ship_power_projection_add = 1130
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 18000
 		ship_crew_max_add = 1100
@@ -799,6 +822,7 @@ ship_type_pulsed_laser_escort = {
 	can_be_flagship = yes
 
 	modifier = {
+		ship_power_projection_add = 570
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 8500
 		ship_crew_max_add = 400
@@ -884,6 +908,7 @@ ship_type_swarm_coordination_vessel = {
 	combat_power_multiplier = 5.0
 
 	modifier = {
+		ship_power_projection_add = 440
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 9000
 		ship_crew_max_add = 400
@@ -981,6 +1006,7 @@ ship_type_fleet_carrier = {
 	}
 
 	modifier = {
+		ship_power_projection_add = 275
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 5500
 		ship_crew_max_add = 1100
@@ -1259,6 +1285,7 @@ ship_type_stealth_battlecruiser = {
 	}
 
 	modifier = {
+		ship_power_projection_add = 970
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 13000
 		ship_crew_max_add = 900
@@ -1357,6 +1384,7 @@ ship_type_networked_air_defense_cruiser = {
 	}
 
 	modifier = {
+		ship_power_projection_add = 315
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 6500
 		ship_crew_max_add = 300
@@ -1450,6 +1478,7 @@ ship_type_stealth_attack_submarine = {
 	}
 
 	modifier = {
+		ship_power_projection_add = 105
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 6000
 		ship_crew_max_add = 200
@@ -1531,6 +1560,7 @@ ship_type_autonomous_swarm_submarine = {
 	modification_construction_cost = 220
 
 	modifier = {
+		ship_power_projection_add = 150
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 7500
 		ship_crew_max_add = 100
@@ -1615,6 +1645,7 @@ ship_type_antimatter_battleship = {
 	combat_power_multiplier = 14.0
 
 	modifier = {
+		ship_power_projection_add = 1350
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 28000
 		ship_crew_max_add = 1400
