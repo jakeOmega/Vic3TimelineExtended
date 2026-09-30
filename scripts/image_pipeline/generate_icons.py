@@ -316,7 +316,7 @@ def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str)
 ENTRY_SPEC_KEYS = ("solid",)
 # A derived entry's settings added after the UN's (tint, layout, size,
 # marks); recorded only when set, so the UN's manifest entries stay valid.
-DERIVED_KEYS = ("damage", "tilt", "base")
+DERIVED_KEYS = ("damage", "tilt", "base", "turn")
 
 
 def entry_spec(cat: str, e: dict) -> dict:
@@ -397,10 +397,10 @@ class Finals:
         """A derived entry built on its source's candidate `seed`; None with no render.
 
         In order: the source (or, for a drawn entry, its `disc`), `tint`,
-        `damage` and `tilt`, `base` (shrunk and placed), the `flag` layout, then
-        the marks. A drawn entry has one candidate, whatever `seed` says.
+        `turn` (about its centre), `damage` and `tilt` (a lean about its foot),
+        `base` (shrunk and placed), the `flag` layout, then the marks. A drawn entry has one candidate, whatever `seed` says.
         """
-        from icon_render import damage, draw_disc, flag_layout, place, tint
+        from icon_render import damage, draw_disc, flag_layout, place, tint, turn
 
         if "disc" in e:
             base = draw_disc(size, e["disc"])
@@ -409,6 +409,8 @@ class Finals:
             if base is None:
                 return None
         im = tint(base, e.get("tint"))
+        if e.get("turn"):
+            im = turn(im, e["turn"])
         if e.get("damage") or e.get("tilt"):
             im = damage(im, e.get("damage"), e.get("tilt", 0))
         if "base" in e:

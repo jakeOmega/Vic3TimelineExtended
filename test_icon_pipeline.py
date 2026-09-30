@@ -737,6 +737,36 @@ class PanelStateTests(unittest.TestCase):
             return int(np.argmax(red[:, 60]))
         self.assertLess(column_top(0.8), column_top(0.2))                      # higher column, higher top
 
+    def test_disc_shield_dome_and_link(self):
+        d = np.asarray(self.r.disc(60, "green")).astype(int)
+        self.assertEqual(d[0, 0, 3], 0)                                        # round
+        self.assertGreater(d[40, 30, 1], d[40, 30, 0] + 40)                    # green enamel
+        sh = np.asarray(self.r.shield_outline(60, "blue"))
+        self.assertLess(sh[26, 30, 3], 30)                                     # open inside
+        self.assertGreater(sh[5, 30, 3], 200)                                  # the rim at the top
+        dm = np.asarray(self.r.dome(60))
+        self.assertLess(dm[40, 30, 3], 128)                                    # clear, so the rocket shows
+        whole = np.asarray(self.r.link(100, "gold", 0.1))
+        broken = np.asarray(self.r.link(100, "gold", 0.1, "broken"))
+        self.assertGreater((whole[..., 3] > 128).sum(), (broken[..., 3] > 128).sum())   # a gap in the broken tie
+        right = np.asarray(self.r.arrow(60, "right", "red"))
+        widths = [w for w in (right[..., 3] > 128).sum(axis=0) if w]
+        self.assertLess(widths[-1], widths[0])                                 # the tip on the right
+
+    def test_turn_and_rotated_marks(self):
+        tall = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
+        tall.paste((200, 200, 200, 255), (45, 5, 55, 95))
+        lying = np.asarray(self.r.turn(tall, -90))
+        self.assertEqual(lying.shape, (100, 100, 4))
+        self.assertTrue((lying[50, 10:90, 3] > 128).all())                     # now across, not up
+        self.assertTrue((lying[10, 45:55, 3] < 128).all())
+        bar = Image.new("RGBA", (40, 8), (220, 20, 20, 255))
+        out = np.asarray(self.r.apply_marks(Image.new("RGBA", (100, 100), (0, 0, 0, 0)),
+                                            [{"icon": "x", "at": (0.5, 0.5), "scale": 0.6, "rotate": 90,
+                                              "outline": False}], lambda m: bar))
+        self.assertGreater(out[30, 50, 3], 128)                                # the bar stands upright
+        self.assertEqual(out[50, 25, 3], 0)
+
     def test_damage_and_tilt(self):
         solid = Image.new("RGBA", (80, 80), (160, 160, 160, 255))
         crack = np.asarray(self.r.damage(solid, "crack")).astype(int)

@@ -456,7 +456,7 @@ def draw_disc(size: int, drawn: dict) -> Image.Image:
 # keep its exact shape (the banking phases' gilded bank, the covert shields).
 METAL_RAMPS = {
     "gold": ((62, 38, 8), (205, 150, 48), (255, 238, 165)),
-    "silver": ((38, 42, 48), (150, 156, 164), (242, 244, 247)),
+    "silver": ((30, 34, 42), (124, 132, 146), (222, 228, 238)),
     "iron": ((26, 24, 22), (96, 92, 86), (178, 172, 162)),
 }
 TINTS = ("grey", "faint", "moss") + tuple(METAL_RAMPS)
@@ -486,10 +486,12 @@ def tint(im: Image.Image, how: str | None) -> Image.Image:
         lo, hi = (np.percentile(lum[opaque], (2, 98)) if opaque.any() else (0, 255))
         a[..., :3] = _ramp((lum - lo) / max(hi - lo, 1) * 255, METAL_RAMPS[how])
     elif how == "moss":
-        # Darker parts take the green most, as moss sits in the recesses.
-        green = lum * np.array((0.62, 0.8, 0.42), np.float32) + np.array((8, 18, 4), np.float32)
-        w = np.clip(1.15 - lum / 200, 0.25, 0.8)
-        a[..., :3] = a[..., :3] * 0.8 * (1 - w) + green * w
+        # Aged stone: greyer and darker, the shadows and recesses gone moss
+        # green (patches of noise read as camouflage paint).
+        stone = a[..., :3] * 0.55 + lum * 0.3
+        green = lum * np.array((0.5, 0.82, 0.32), np.float32) + np.array((10, 26, 4), np.float32)
+        w = np.clip((170 - lum) / 150, 0, 0.85)
+        a[..., :3] = stone * (1 - w) + green * w
     else:
         lum = lum * 0.85 + 12
         a[..., :3] = lum * np.array((1.0, 0.97, 0.92), np.float32)
@@ -504,6 +506,19 @@ def place(im: Image.Image, scale: float, at: tuple[float, float]) -> Image.Image
     small = resize_premultiplied(im, (max(1, round(w * scale)), max(1, round(h * scale))))
     out = Image.new("RGBA", im.size, (0, 0, 0, 0))
     paste(out, small, round(at[0] * w - small.width / 2), round(at[1] * h - small.height / 2))
+    return out
+
+
+def turn(im: Image.Image, deg: float) -> Image.Image:
+    """`im` rotated `deg` about its centre (counter-clockwise), refitted to its own size (a warhead laid pointing right)."""
+    rot = im.convert("RGBA").rotate(deg, resample=Image.BICUBIC, expand=True)
+    bbox = rot.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
+    if bbox:
+        rot = rot.crop(bbox)
+    k = min(im.width / rot.width, im.height / rot.height, 1.0) * 0.96
+    rot = resize_premultiplied(rot, (max(1, round(rot.width * k)), max(1, round(rot.height * k))))
+    out = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    paste(out, rot, (im.width - rot.width) // 2, (im.height - rot.height) // 2)
     return out
 
 
@@ -539,7 +554,7 @@ def damage(im: Image.Image, how: str | None, tilt_deg: float = 0) -> Image.Image
         path = [(x * ss, y * ss) for x, y in _crack_path(w, h)]
         if how == "crack":
             line = Image.new("L", (w * ss, h * ss), 0)
-            ImageDraw.Draw(line).line(path, fill=255, width=max(2, w * ss // 40), joint="curve")
+            ImageDraw.Draw(line).line(path, fill=255, width=max(2, w * ss // 26), joint="curve")
             line = line.resize((w, h), Image.LANCZOS)
             glint = Image.new("L", (w * ss, h * ss), 0)
             ImageDraw.Draw(glint).line([(x + ss * 2, y) for x, y in path], fill=255, width=max(1, w * ss // 90))
@@ -551,6 +566,8 @@ def damage(im: Image.Image, how: str | None, tilt_deg: float = 0) -> Image.Image
             a[..., :3] = a[..., :3] * (1 - g) + 235 * g
             im = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
         else:
+            # Shrunk first, so the halves leaning apart stay on the canvas.
+            im = place(im, 0.84, (0.5, 0.54))
             left = Image.new("L", (w * ss, h * ss), 0)
             ImageDraw.Draw(left).polygon([(0, 0)] + path + [(0, h * ss)], fill=255)
             left = np.asarray(left.resize((w, h), Image.LANCZOS), np.float32) / 255
@@ -561,9 +578,9 @@ def damage(im: Image.Image, how: str | None, tilt_deg: float = 0) -> Image.Image
                 part[..., 3] *= k
                 halves.append(Image.fromarray(part.astype(np.uint8), "RGBA"))
             out = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-            gap = w * 0.05
+            gap = w * 0.035
             for part, sign in zip(halves, (-1, 1)):
-                part = part.rotate(-sign * 7, resample=Image.BICUBIC, center=(w * 0.56, h))
+                part = part.rotate(-sign * 5, resample=Image.BICUBIC, center=(w * 0.56, h * 0.96))
                 paste(out, part, round(sign * gap), 0)
             im = out
     if tilt_deg:
@@ -648,8 +665,10 @@ def arrow(size: int, direction: str = "down", colour: str = "red", double: bool 
                  [(0.35, 0.03), (0.65, 0.03), (0.65, 0.34), (0.35, 0.34)]]
     else:
         polys = [[(0.34, 0.04), (0.66, 0.04), (0.66, 0.5), (0.92, 0.5), (0.5, 0.96), (0.08, 0.5), (0.34, 0.5)]]
-    if direction == "up":
+    if direction in ("up", "left"):
         polys = [[(x, 1 - y) for x, y in poly] for poly in polys]
+    if direction in ("left", "right"):
+        polys = [[(y, x) for x, y in poly] for poly in polys]
     return _shape_mark(size, polys, colour)
 
 
@@ -713,8 +732,8 @@ def bubble(size: int, rim: str = "white", cracked: bool = False) -> Image.Image:
     rim_rgb = np.array(MARK_COLOURS[rim][0], np.float32)
     # The film: faintly iridescent, clearer in the middle.
     ang = np.arctan2(yy - c, xx - c)
-    film = np.stack([200 + 40 * np.cos(ang), 215 + 30 * np.cos(ang + 2.1), 235 + 20 * np.cos(ang + 4.2)], -1)
-    film_a = 0.16 + 0.3 * np.clip(r, 0, 1) ** 3
+    film = np.stack([205 + 50 * np.cos(ang), 215 + 40 * np.cos(ang + 2.1), 235 + 20 * np.cos(ang + 4.2)], -1)
+    film_a = 0.1 + 0.45 * np.clip(r, 0, 1) ** 4
     # The rim carries the band's colour, so it has to be thick enough to read at 32 px.
     ring = np.clip((1 - np.abs(r - 0.9) / 0.1) * 1.6, 0, 1)
     rgb = film * (1 - ring[..., None]) + rim_rgb * ring[..., None]
@@ -780,6 +799,82 @@ def thermometer(size: int, level: float, burst: bool = False) -> Image.Image:
     return resize_premultiplied(im, (size, size))
 
 
+def disc(size: int, colour: str = "red") -> Image.Image:
+    """A round enamel badge in one of MARK_COLOURS, lit from above: an alert's ground, or a lamp."""
+    ss = 4
+    n = size * ss
+    mask = Image.new("L", (n, n), 0)
+    ImageDraw.Draw(mask).ellipse([n * 0.04, n * 0.04, n * 0.96, n * 0.96], fill=255)
+    im = _gradient_fill(mask, colour)
+    glint = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+    ImageDraw.Draw(glint).ellipse([n * 0.26, n * 0.14, n * 0.5, n * 0.32], fill=(255, 255, 255, 120))
+    im.alpha_composite(glint.filter(ImageFilter.GaussianBlur(n * 0.02)))
+    return resize_premultiplied(outlined(im, ss * max(1, size // 40)), (size, size))
+
+
+def shield_outline(size: int, colour: str = "blue") -> Image.Image:
+    """A heater shield's thick outline, open inside, so what it guards shows through."""
+    ss = 4
+    n = size * ss
+    pts = [(0.1, 0.06), (0.9, 0.06), (0.9, 0.46), (0.78, 0.72), (0.5, 0.96), (0.22, 0.72), (0.1, 0.46)]
+    outer = Image.new("L", (n, n), 0)
+    ImageDraw.Draw(outer).polygon([(x * n, y * n) for x, y in pts], fill=255)
+    inner = outer.filter(ImageFilter.MinFilter(2 * (n // 14) + 1))
+    ring = Image.fromarray(np.asarray(outer) - np.minimum(np.asarray(outer), np.asarray(inner)))
+    return resize_premultiplied(outlined(_gradient_fill(ring, colour), ss * max(1, size // 40)), (size, size))
+
+
+def dome(size: int) -> Image.Image:
+    """A clear pale-blue half dome with a rim and a highlight: something kept under cover."""
+    ss = 4
+    n = size * ss
+    im = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    box = [n * 0.04, n * 0.08, n * 0.96, n * 1.9]
+    d.pieslice(box, 180, 360, fill=(170, 215, 245, 80))
+    d.arc(box, 180, 360, fill=(20, 16, 14, 220), width=max(4, n // 30))
+    d.arc(box, 180, 360, fill=(190, 230, 255, 255), width=max(2, n // 60))
+    d.arc([n * 0.14, n * 0.18, n * 0.86, n * 1.8], 205, 250, fill=(255, 255, 255, 220), width=max(3, n // 28))
+    d.rounded_rectangle([n * 0.02, n * 0.92, n * 0.98, n * 0.99], radius=n * 0.02, fill=(120, 130, 140, 255),
+                        outline=(20, 16, 14, 255), width=max(2, n // 80))
+    return resize_premultiplied(im, (size, size))
+
+
+def link(size: int, colour: str = "gold", width: float = 0.09, state: str = "whole") -> Image.Image:
+    """An arc from the lower left to the upper right: a tie between two coasts.
+
+    `width` is its thickness (share of the side); `state` "whole", "taut"
+    (straight), "cracked" (a dark break across it) or "broken" (a gap).
+    """
+    ss = 4
+    n = size * ss
+    im = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+    a, b = (0.12, 0.8), (0.88, 0.2)
+    if state == "taut":
+        pts = [a, b]
+    else:
+        t = np.linspace(0, 1, 24)
+        mid = (0.36, 0.3)   # the arc bows up and left, over the globe's face
+        pts = list(zip(((1 - t) ** 2 * a[0] + 2 * (1 - t) * t * mid[0] + t ** 2 * b[0]).tolist(),
+                       ((1 - t) ** 2 * a[1] + 2 * (1 - t) * t * mid[1] + t ** 2 * b[1]).tolist()))
+    xy = [(x * n, y * n) for x, y in pts]
+    w = max(2, round(width * n))
+    mask = Image.new("L", (n, n), 0)
+    md = ImageDraw.Draw(mask)
+    md.line(xy, fill=255, width=w, joint="curve")
+    for x, y in (xy[0], xy[-1]):
+        md.ellipse([x - w * 0.9, y - w * 0.9, x + w * 0.9, y + w * 0.9], fill=255)
+    if state == "broken":
+        cx, cy = xy[len(xy) // 2]
+        md.ellipse([cx - w * 1.6, cy - w * 1.6, cx + w * 1.6, cy + w * 1.6], fill=0)
+    im = _gradient_fill(mask, colour)
+    if state == "cracked":
+        cx, cy = xy[len(xy) // 2]
+        ImageDraw.Draw(im).line([(cx - w, cy - w * 1.2), (cx + w * 0.3, cy - w * 0.1), (cx - w * 0.2, cy + w * 0.3),
+                                 (cx + w, cy + w * 1.2)], fill=(20, 16, 14, 255), width=max(2, w // 3))
+    return resize_premultiplied(outlined(im, ss * max(1, size // 40)), (size, size))
+
+
 # Drawn marks by name; each takes the box size and the mark's own settings.
 DRAWN = {
     "star": lambda box, m: star(box),
@@ -791,6 +886,10 @@ DRAWN = {
     "barrier": lambda box, m: barrier(box),
     "bubble": lambda box, m: bubble(box, m.get("colour", "white"), m.get("cracked", False)),
     "thermometer": lambda box, m: thermometer(box, m.get("level", 0), m.get("burst", False)),
+    "disc": lambda box, m: disc(box, m.get("colour", "red")),
+    "shield": lambda box, m: shield_outline(box, m.get("colour", "blue")),
+    "dome": lambda box, m: dome(box),
+    "link": lambda box, m: link(box, m.get("colour", "gold"), m.get("width", 0.09), m.get("state", "whole")),
 }
 
 
@@ -827,8 +926,12 @@ def apply_marks(icon: Image.Image, marks: list[dict], load) -> Image.Image:
                 im = im.crop(bbox)
             k = box / max(im.size)
             im = resize_premultiplied(im, (max(1, round(im.width * k)), max(1, round(im.height * k))))
+            if mark.get("tint"):
+                im = tint(im, mark["tint"])
             if mark.get("outline", True):
                 im = outlined(im, max(1, side // 50))
+        if mark.get("rotate"):
+            im = im.rotate(mark["rotate"], resample=Image.BICUBIC, expand=True)
         cx, cy = mark.get("at", (0.72, 0.72))
         x, y = round(cx * icon.width - im.width / 2), round(cy * icon.height - im.height / 2)
         if mark.get("under"):
