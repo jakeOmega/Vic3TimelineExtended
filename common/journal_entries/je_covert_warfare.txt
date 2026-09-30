@@ -1,12 +1,15 @@
 ﻿# ============================================================================
 # COVERT WARFARE — Journal Entry (Command Center)
 # ============================================================================
-# Three custom widgets carry the interface: widget_je_covert_command_centre shows
-# intelligence capacity, slots, the funding ladder and its stepper, detection
-# factors and covert defence; widget_je_covert_operations lists each running
-# operation; widget_je_covert_networks lists each per-target network (slice 4).
-# status_desc is left with the one thing that is genuinely prose — the
-# intelligence-standing verdict — plus the empty-state pointer.
+# Three custom widgets carry the interface, all from
+# gui/journal_entry_widgets/covert_operations_widget.gui, whose types a future
+# system tab can compose too (docs/guides/gui_style_guide.md rule 9):
+# widget_je_covert_overview (standing, funding, Tradecraft, slots, capacity),
+# widget_je_covert_status (Operations, Agent Networks, Funding, Detection Risk,
+# Counterintelligence) and widget_je_covert_reference (How Covert Warfare
+# Works). The entry has no status_desc: the intelligence-standing verdict it
+# printed is the overview's standing icon's tooltip, and its empty-state
+# pointer to the diplomatic actions is the Operations section's.
 #
 # Operations are toggled via diplomatic actions (pact-based); each running
 # operation's state lives in a script container (covert_warfare_effects.txt).
@@ -17,24 +20,24 @@ je_covert_warfare = {
 
 	group = je_group_covert_warfare
 
-	# The command centre carries everything status_desc used to say in prose.
-	# Its funding stepper calls the very shared trigger and effect the scripted
-	# buttons below call, so the two surfaces cannot diverge — which is why
-	# those buttons are hidden from humans with `visible = { is_ai = yes }`
-	# rather than deleted.
+	# The overview, the live sections and the explanations, in that order
+	# (gui/journal_entry_widgets/covert_operations_widget.gui). Funding's stepper
+	# calls the very shared trigger and effect the scripted buttons below call,
+	# so the two surfaces cannot diverge — which is why those buttons are hidden
+	# from humans with `visible = { is_ai = yes }` rather than deleted.
 	widget = {
 		gui = "gui/journal_entry_widgets/covert_operations_widget.gui"
-		name = "widget_je_covert_command_centre"
+		name = "widget_je_covert_overview"
 		container = "custom_widget_container_1"
 	}
 	widget = {
 		gui = "gui/journal_entry_widgets/covert_operations_widget.gui"
-		name = "widget_je_covert_operations"
+		name = "widget_je_covert_status"
 		container = "custom_widget_container_2"
 	}
 	widget = {
 		gui = "gui/journal_entry_widgets/covert_operations_widget.gui"
-		name = "widget_je_covert_networks"
+		name = "widget_je_covert_reference"
 		container = "custom_widget_container_3"
 	}
 
@@ -58,48 +61,6 @@ je_covert_warfare = {
 			AND = {
 				NOT = { country_rank >= rank_value:major_power }
 				covert_operation_max_slots >= 2
-			}
-		}
-	}
-
-	status_desc = {
-		# ---- Intelligence Status Tier (relative to global best) ----
-		first_valid = {
-			triggered_desc = {
-				desc = je_iw_status_fortress
-				trigger = { intelligence_capacity_relative >= 80 }
-			}
-			triggered_desc = {
-				desc = je_iw_status_hardened
-				trigger = { intelligence_capacity_relative >= 60 }
-			}
-			triggered_desc = {
-				desc = je_iw_status_defended
-				trigger = { intelligence_capacity_relative >= 40 }
-			}
-			triggered_desc = {
-				desc = je_iw_status_exposed
-				trigger = { intelligence_capacity_relative >= 20 }
-			}
-			triggered_desc = {
-				desc = je_iw_status_vulnerable
-				trigger = { always = yes }
-			}
-		}
-
-		# Everything else that used to live here — the capacity breakdown, the
-		# slot counts, the funding level and its cost, the detection factors and
-		# the defensive side — is drawn by widget_je_covert_command_centre
-		# (custom_widget_container_1, above this text). Per-operation rows come
-		# from widget_je_covert_operations (custom_widget_container_2, below);
-		# per-target networks from widget_je_covert_networks
-		# (custom_widget_container_3, below the buttons).
-		# Only the empty state stays, because it tells the player where
-		# operations are actually launched.
-		triggered_desc = {
-			desc = je_iw_no_operations
-			trigger = {
-				covert_operations_active < 1
 			}
 		}
 	}
