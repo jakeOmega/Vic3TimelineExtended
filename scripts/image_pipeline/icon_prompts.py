@@ -21,8 +21,14 @@ may instead be derived: {"from": "<cat>/<key>", "tint": "grey"|"faint",
 "layout": "flag", "size": (w, h), "marks": [...], "now": ...}, another
 entry's icon reworked with no render of its own. Any entry may carry
 "marks": each {"icon": <vanilla .dds>} | {"part": "<cat>/<key>"} |
-{"draw": "star"|"pause"|"arrow_down"}, with "at" (centre, as shares of the side) and
-"scale". "solid": True fills back any hole the cut-out left inside the
+{"draw": <icon_render.DRAWN name>, ...its settings}, with "at" (centre, as
+shares of the side) and "scale", and optionally "under" (drawn beneath the
+icon), "rotate" (degrees) and, for a part, "tint". The system panels' states
+(#573-#583) added to a derived entry: "tint" "gold"|"silver"|"iron"|"moss",
+"damage" "crack"|"split" (FLUX will not break things), "tilt" (a lean about
+its foot), "turn" (about its centre), "base" {"scale", "at"} (the emblem
+shrunk and placed), and "disc" in place of "from": drawn outright on a disc
+of its own colours (the warming tiers). "solid": True fills back any hole the cut-out left inside the
 object (rembg took a crate's front boards for background); only for
 objects with no real holes. A `part` category is reviewed like icons but never written; it
 supplies derived icons and marks (the UN's emblem and scroll badge).
@@ -110,6 +116,33 @@ SILHOUETTE = ("a bold solid black silhouette icon of {subject}, simple flat pict
 # The UN's GUI icons show at 32-40 px: one bold object in clear colours.
 UN_STYLE = ("{subject}, one compact bold object filling the frame, simple chunky silhouette, strong clear "
             "colours, " + PAINTED)
+
+# The system panels whose GUI icons come from here (the style pass,
+# #573-#583): registry prefix -> folder under gfx/interface/icons/, and the
+# widget that draws them.
+_GUI_SYSTEMS = {
+    "banking": "banking_icons",
+    "ch": "ch_icons",
+    "covert": "covert_icons",
+    "gw": "gw_icons",
+    "gm": "gm_icons",
+    "st_res": "st_res_icons",
+    # List 2: provisional until the systems' play-test round 3 ends.
+    "nuclear": "nuclear_icons",
+    "colonial": "colonial_empire_icons",
+    "space": "space_race_icons",
+}
+_GUI_FILES = {
+    "banking": "gui/journal_entry_widgets/banking_dashboard_widget.gui",
+    "ch": "gui/journal_entry_widgets/cultural_hegemony_widget.gui",
+    "covert": "gui/journal_entry_widgets/covert_operations_widget.gui",
+    "gw": "gui/journal_entry_widgets/global_warming_widget.gui",
+    "gm": "gui/journal_entry_widgets/grand_monuments_widget.gui",
+    "st_res": "gui/journal_entry_widgets/strategic_reserve_widget.gui",
+    "nuclear": "gui/journal_entry_widgets/nuclear_overview_widget.gui",
+    "colonial": "gui/journal_entry_widgets/colonial_empire_widget.gui",
+    "space": "gui/journal_entry_widgets/space_race_widget.gui",
+}
 
 # folder/size/mode/fill/style drive rendering and composing. A category that
 # `generate_icons.py` produces also names where its entities live
@@ -319,6 +352,21 @@ CATEGORIES = {
     "un_member": dict(
         folder="un_icons", size=150, mode="derived", grade_folder="alert_icons", neighbours="alert_icons",
         gui=("gui/journal_entry_widgets/un_overview_widget.gui",)),
+    # The system panels' GUI icons (the style pass, #573-#583), made as the
+    # UN's were: each system's own list, docs/systems/<system>_gui_icons.md,
+    # names the placeholder and the proposed path. Per system, a `_part`
+    # category holds the emblems its states share, a derived `_state` category
+    # draws each state as its emblem under a mark, tint or break, and a plain
+    # cut-out category holds the icons that are one object of their own.
+    **{f"{sys_}_part": dict(folder=folder, size=150, mode="cutout", fill=0.96, grade_strength=0.5, part=True,
+                            grade_folder="alert_icons", neighbours="alert_icons", gui=(), style=UN_STYLE)
+       for sys_, folder in _GUI_SYSTEMS.items()},
+    **{f"{sys_}_state": dict(folder=folder, size=150, mode="derived", grade_folder="alert_icons",
+                             neighbours="alert_icons", gui=(_GUI_FILES[sys_],))
+       for sys_, folder in _GUI_SYSTEMS.items()},
+    **{sys_: dict(folder=folder, size=150, mode="cutout", fill=0.92, grade_strength=0.5,
+                  grade_folder="alert_icons", neighbours="alert_icons", gui=(_GUI_FILES[sys_],), style=UN_STYLE)
+       for sys_, folder in _GUI_SYSTEMS.items()},
 }
 
 
@@ -1026,7 +1074,555 @@ ICONS: dict[str, dict[str, dict]] = {
         "seat_vacant": {"from": "un_part/emblem", "layout": "flag", "size": (132, 88),
                         "now": "gfx/interface/progressbar/progressbar_empty.dds"},
     },
+    # ── The system panels (docs/systems/<system>_gui_icons.md) ────────────
+    # Banking (banking_gui_icons.md): 32 px, the budget emblem also at 18 px.
+    "banking_part": {
+        "bank": {"subject": "a squat tan sandstone bank building front: four thick columns under a triangular pediment, "
+                            "a heavy dark wooden door, three broad steps", "seed": 1},
+        "coins": {"subject": "a short neat stack of five thick plain gold coins, each stamped with a small star", "seed": 3},
+        "coin": {"subject": "a single thick plain gold coin stamped with a small star, tilted toward the viewer",
+                 "seed": 0},
+        "valve": {"subject": "a dry polished brass pipe tap with a large round red handwheel on top and a short thick "
+                             "spout pointing straight down", "seed": 3},
+        "padlock": {"subject": "a heavy closed dark steel padlock with a thick shackle", "seed": 2},
+        # Kraft brown, not white: a pale tag is lost in the cut-out.
+        "tag": {"subject": "a blank brown kraft-paper price tag with a punched round hole and a loop of red string",
+                "seed": 3},
+        "flame": {"subject": "a single bold bright orange and red flame with a yellow core, flat stylized shape",
+                  "seed": 2},
+        "foreign_coin": {"subject": "a large plain silver coin with a square hole in its centre", "seed": 3},
+        "seal": {"subject": "a round red wax seal stamped with a small star", "seed": 0},
+    },
+    "banking": {
+        "price_hyper": {"subject": "a wooden wheelbarrow heaped high with bundles of plain green paper banknotes "
+                                   "tied with string", "seed": 0,
+                        "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # Also drawn at 18 px beside each tool's point cost: few, thick counters.
+        "budget": {"subject": "a short stack of three thick plain gold tokens stamped with a small star, "
+                              "a fourth token lying flat beside it", "seed": 0,
+                   "now": f"{_GI}/diplomatic_treaties_articles_icons/bankroll_treaties.dds"},
+    },
+    # Cultural Hegemony (cultural_hegemony_gui_icons.md): 36 px. The tiers are
+    # one emblem growing, as the UN's tiers are one colonnade: separate renders.
+    # FLUX drew the negligible sprig green whatever the subject said: it is
+    # greyed as a derived icon.
+    "ch_part": {
+        "sprig": {"subject": "a short grey stone laurel twig with two broad thick leaves", "seed": 3},
+        # FLUX drew no rays in four seeds: they are drawn under the wreath.
+        "wreath_gold": {"subject": "a gleaming gold lyre inside a full round wreath of thick gold laurel leaves, "
+                                   "short thick pointed gold rays fanning out behind the wreath", "seed": 0},
+    },
+    "ch": {
+        "tier_minor": {"subject": "a small plain wooden lyre with a short bronze laurel twig lying across its base",
+                       "seed": 3, "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+        "tier_moderate": {"subject": "a bronze lyre with one thick curved bronze laurel branch rising along its left "
+                                     "side only", "seed": 1,
+                          "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+        "tier_significant": {"subject": "a bronze lyre inside a full round wreath of thick bronze laurel leaves",
+                             "seed": 1, "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+        "tier_major": {"subject": "a polished silver lyre inside a full round wreath of thick silver laurel leaves",
+                       "seed": 1, "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+        "benchmark": {"subject": "a small plain grey iron sceptre standing in front of a large gold laurel wreath",
+                      "seed": 0, "now": f"{_GI}/generic_icons/warning.dds",
+                      "marks": [{"draw": "arrow", "dir": "down", "colour": "red", "at": (0.78, 0.7), "scale": 0.44}]},
+    },
+    # Covert Warfare (covert_gui_icons.md): 36 px, the slot 26 px and faded while free.
+    "covert_part": {
+        "shield": {"subject": "a round polished steel shield with a thick gold rim and a large closed eye embossed "
+                              "in its centre", "seed": 1},
+        # A word on the band would be written out ("classified"): name the band only.
+        "envelope": {"subject": "a sealed tan manila envelope with a red paper band around it, a thick stack of plain "
+                                "green banknotes showing at its open edge", "seed": 2},
+        "envelope_empty": {"subject": "an open empty tan manila envelope, its flap up, a torn red paper band hanging "
+                                      "from it", "seed": 1},
+        "fedora": {"subject": "a black fedora hat resting on a closed brown leather dossier folder", "seed": 1},
+    },
+    "covert": {
+        # A searchlight's beam would cut out as a grey blob: the caught spy's raised hands say it.
+        # The first subject (s1 kept in ~/flux_runs/originals/gui_spy_caught) looked too
+        # photorealistic (owner): stylized, the face in shadow, brush strokes.
+        "spy_caught": {"subject": "a stylized cartoon spy in a tan trench coat and black fedora with both hands raised "
+                                  "high, his face hidden in shadow under the hat brim, simple bold shapes, loosely "
+                                  "hand-painted with visible brush strokes", "seed": 0,
+                       "now": f"{_GI}/military_icons/navy_icons/detection_navy.dds"},
+        "operation_slot": {"subject": "a closed tan manila case file folder with a small black-and-white photograph "
+                                      "held on its cover by a steel paper clip", "seed": 2,
+                           "now": f"{_GI}/event_icons/je_covert_warfare.dds"},
+    },
+    # Global Warming (global_warming_gui_icons.md): tiers 36 px (drawn), policies
+    # 26 px and at 25% opacity while not in force.
+    "gw_part": {
+        "crate": {"subject": "a small closed wooden crate of goods with rope handles", "seed": 1},
+        "crown": {"subject": "a small gold crown with red jewels", "seed": 0},
+    },
+    "gw": {
+        "penalty": {"subject": "a square tile of cracked dry parched brown earth", "seed": 3,
+                    "now": f"{_GI}/generic_icons/warning.dds",
+                    "marks": [{"draw": "arrow", "dir": "down", "colour": "red", "at": (0.5, 0.3), "scale": 0.5}]},
+        "policy_carbon_tax": {"subject": "a red brick factory smokestack with a large plain gold coin stamped with a "
+                                         "small star leaning against its base", "seed": 2,
+                              "now": f"{_GI}/trade_icons/consumption_tax.dds"},
+        # White turbines are lost in the cut-out: grey.
+        "policy_renewable_investment": {"subject": "a tilted blue solar panel with a light grey three-bladed wind "
+                                                   "turbine with thick blades behind it", "seed": 1,
+                                        "now": f"{_GI}/building_icons/renewable_plant.dds"},
+        "policy_emission_standards": {"subject": "a red brick factory smokestack with a large round gauge on its side, "
+                                                 "a dark gauge face with a green zone and the needle in the green",
+                                      "seed": 3, "now": f"{_GI}/decree/decree_pollution_control.dds"},
+        "policy_climate_adaptation": {"subject": "a thick grey stone sea wall with a big curling deep blue wave "
+                                                 "breaking against it", "seed": 3,
+                                      "now": f"{_GI}/state_status_icons/state_infrastructure.dds"},
+        "policy_reforestation": {"subject": "a young green sapling tree planted in a mound of brown earth",
+                                 "seed": 0, "now": f"{_GI}/decree/decree_greenest_grass_campaign.dds"},
+        "policy_public_transit": {"subject": "a green electric tram seen from the front, its pantograph on top",
+                                  "seed": 1, "now": f"{_GI}/goods_icons/transportation.dds"},
+        "policy_fossil_fuel_divestment": {"subject": "a black oil barrel with a plain gold coin stamped with a small "
+                                                     "star flying up and away from it", "seed": 3,
+                                          "now": f"{_GI}/generic_icons/money.dds"},
+        "policy_green_building_codes": {"subject": "a small red brick building front with a large bright green leaf "
+                                                   "emblem on its wall", "seed": 3,
+                                        "now": f"{_GI}/production_method_icons/cat_building_green_p1.dds"},
+    },
+    # Grand Monuments (grand_monuments_gui_icons.md): 36 px, faded while a count is zero.
+    "gm_part": {
+        "monument": {"subject": "a small grey stone obelisk on a square stone plinth, a blank flat panel on its face",
+                     "seed": 2},
+        "wreath": {"subject": "a small round gold laurel wreath of thick leaves", "seed": 2},
+        "railing": {"subject": "a short low bronze railing of thick round posts joined by a thick rail", "seed": 0},
+        # The stele (monument s2) reads as a gravestone at 36 px: an obelisk as the alternative.
+        "obelisk": {"subject": "a tall slender grey stone obelisk with a pointed top on a stepped square stone "
+                               "plinth, a blank smooth panel on the plinth's face", "seed": None},
+    },
+    "gm": {
+        # The first subject drew a mortar and pestle or a cleaver (its s2, bowl and tools
+        # spread apart, is kept in ~/flux_runs/originals/gui_hard_times).
+        "hard_times": {"subject": "a stonemason's steel chisel and wooden mallet lying crossed in front of an empty "
+                                  "upturned wooden bowl", "seed": 3,
+                       "now": f"{_GI}/generic_icons/warning.dds"},
+    },
+    # Strategic Reserve (strategic_reserve_gui_icons.md): 24 px.
+    "st_res_part": {
+        "crate": {"subject": "an empty open-topped wooden supply crate with thick planks", "seed": 3},
+    },
+    "st_res": {
+        # Drawn at 25% opacity on Manual: the silhouette carries it.
+        "policy_automated": {"subject": "a brass centrifugal governor: two heavy brass balls on thick angled arms "
+                                        "around a central brass spindle", "seed": 0,
+                             "now": "gfx/interface/production_methods/auto_expand.dds"},
+    },
+    # ── List 2 (provisional): Nuclear, Colonial Empire, Space Race ────────
+    # Nuclear Weapons (nuclear_gui_icons.md): 36 px. The programme and the
+    # doctrines share the warhead; readiness the missile on its launcher; launch
+    # authority the brass key.
+    "nuclear_part": {
+        "warhead": {"subject": "a stubby polished steel-grey nuclear warhead casing with a rounded nose cone and four "
+                               "small fins, standing nose up, a small yellow-and-black radiation trefoil on its side",
+                    "seed": 0},
+        "wrench": {"subject": "a heavy brass adjustable wrench", "seed": 3},
+        "treaty_seal": {"subject": "a round red wax seal on a short wide blue silk ribbon", "seed": 1},
+        # A dove seen from the front read as a heraldic eagle (UN); white is lost in the cut-out.
+        "dove": {"subject": "a pale grey dove flying in side view, an olive branch in its beak", "seed": 2},
+        "wall": {"subject": "a low thick wall of rough grey stone blocks", "seed": 3},
+        "sword": {"subject": "a broad steel sword with a gold hilt", "seed": 2},
+        "crate": {"subject": "a closed heavy dark green steel military crate with steel corners", "seed": 1},
+        "missile": {"subject": "a long slender olive-green ballistic missile with a dark grey nose cone and small "
+                               "fins, lying horizontal", "seed": 1},
+        "key": {"subject": "a large ornate brass key", "seed": 3},
+        "gov_seal": {"subject": "a round bronze seal medallion with a raised laurel border and a star in its centre",
+                     "seed": 0},
+        "cap": {"subject": "an olive-green military officer's peaked cap with a gold badge and gold braid",
+                "seed": 1},
+        "radar": {"subject": "a grey radar dish on a sturdy mount, tilted up", "seed": 2},
+        "cabinet": {"subject": "a grey steel mainframe computer cabinet with rows of dials and a big red lamp on top",
+                    "seed": 2},
+    },
+    # Colonial Empire (colonial_empire_gui_icons.md): 36 px; the programmes faded while idle.
+    "colonial_part": {
+        # A globe needs its continents named, or it renders as a plain ball (UN).
+        "globe": {"subject": "a small globe of the Earth with green continents and blue oceans, no stand",
+                  "seed": 1},
+        # A ring of turned-away figures, or a round table of flags (tried: a brown disc with
+        # specks at 36 px), would not read: a lone flag on a bare rock, for both alerts.
+        "lone_flag": {"subject": "a small plain orange cloth flag on a thin pole planted on a tiny bare grey rock "
+                                 "island", "seed": 1},
+    },
+    "colonial": {
+        # The eligible-territories row (22 px), lit while the territory counts as a colony and
+        # dimmed to 25% while not: one file, the widget dims it. Added in the updated list (2026-09-30).
+        "territory_colony": {"subject": "a small plain orange cloth flag on a pole planted on a small green tropical "
+                                        "island coast with one palm tree and a strip of sandy beach", "seed": 0,
+                             "now": f"{_GI}/state_status_icons/colony.dds"},
+        "programme_invest": {"subject": "a short steel railway bridge span under construction over a river, a small "
+                                        "yellow crane on it", "seed": 1,
+                             "now": f"{_GI}/building_icons/building_browser_filter_icons/filter_icons_development.dds"},
+        "programme_garrison": {"subject": "a squat sandstone fort gatehouse with crenellations and a plain red pennant "
+                                          "on a short pole", "seed": 1,
+                               "now": f"{_GI}/generic_icons/battalions.dds"},
+        "programme_assimilation": {"subject": "a small red wooden schoolhouse with a bell tower, an open book lying on "
+                                              "its front steps", "seed": 2,
+                                   "now": "gfx/interface/population/pop_culture.dds"},
+    },
+    # Space Race (space_race_gui_icons.md): 36 px; the interstellar states 44 px,
+    # the first-to-finish mark 18 px. A white craft loses its body in the cut-out.
+    "space_part": {
+        "rocket": {"subject": "a squat silver rocket with red fins and a pointed nose cone, standing upright",
+                   "seed": 1},
+    },
+    "space": {
+        "first": {"subject": "a gold pennant flag on a staff planted on the rim of a grey moon crater", "seed": 3,
+                  "now": f"{_GI}/event_icons/waving_flag.dds"},
+        "first_mark": {"subject": "a small bold gold pennant flag on a thick short staff", "seed": 0,
+                       "now": f"{_GI}/event_icons/waving_flag.dds"},
+        "stage": {"subject": "a small rust-red ringed planet with a small silver domed settlement on its upper edge",
+                  "seed": 3, "now": f"{_GI}/state_status_icons/colonizable.dds"},
+    },
 }
+
+
+# ── The system panels' derived states ────────────────────────────────────
+# Each family is one emblem (a `_part`) drawn in each state: a tint for the
+# metal, a drawn mark for the direction, a drawn break for damage. Marks sit
+# at the lower right, as the UN's do, unless the idea needs them elsewhere.
+_TM = f"{_GI}/timed_modifier_icons"
+
+
+# The covert shield's eyelid, over the eye of shield s1 (drawn: FLUX kept it open).
+_LID = {"draw": "eyelid", "pre": True, "at": (0.485, 0.505), "scale": 0.43}
+
+
+def _bank(now, tint=None, marks=()):
+    """A banking phase: the bank front, nudged left, with its mark beside it."""
+    e = {"from": "banking_part/bank", "base": {"scale": 0.88, "at": (0.44, 0.5)}, "now": now,
+         "marks": [dict(m, at=m.get("at", (0.76, 0.66)), scale=m.get("scale", 0.5)) for m in marks]}
+    if tint:
+        e["tint"] = tint
+    return e
+
+
+def _bubble(now, scale, colour, cracked=False):
+    """Bubble pressure: the same coin stack inside a bubble that grows each band.
+
+    A bubble resting on top of the stack read as a light bulb at 32 px.
+    """
+    mark = {"draw": "bubble", "colour": colour, "scale": scale, "at": (0.5, 0.97 - scale / 2)}
+    if cracked:
+        mark["cracked"] = True
+    return {"from": "banking_part/coins", "base": {"scale": 0.34, "at": (0.5, 0.78)}, "marks": [mark], "now": now}
+
+
+# The coins tumbling from the tap's spout (at x 0.4 of the icon), nearest
+# first: one coin is a drop, four a gush. Spaced and turned, so they read as
+# falling rather than as a pile.
+_FLOW = [(0.41, 0.68, 0.2, 20), (0.34, 0.8, 0.21, -25), (0.53, 0.84, 0.2, 40), (0.2, 0.88, 0.19, -10)]
+
+
+def _stance(now, coins, lock=False):
+    marks = [{"part": "banking_part/coin", "at": (x, y), "scale": k, "rotate": r} for x, y, k, r in _FLOW[:coins]]
+    if lock:
+        marks.append({"part": "banking_part/padlock", "at": (0.66, 0.3), "scale": 0.42})
+    return {"from": "banking_part/valve", "base": {"scale": 0.66, "at": (0.52, 0.34)}, "marks": marks, "now": now}
+
+
+def _tag(now, mark):
+    return {"from": "banking_part/tag", "base": {"scale": 0.9, "at": (0.44, 0.48)},
+            "marks": [dict(mark, at=mark.get("at", (0.74, 0.68)), scale=mark.get("scale", 0.5))], "now": now}
+
+
+def _gw_tier(level, centre, edge, burst=False):
+    mark = {"draw": "thermometer", "level": level, "at": (0.5, 0.5), "scale": 0.78}
+    if burst:
+        mark["burst"] = True
+    return {"disc": {"centre": centre, "edge": edge, "rim_light": (240, 225, 190), "rim_dark": (120, 95, 60)},
+            "marks": [mark], "now": f"{_GI}/event_icons/je_global_warming.dds"}
+
+
+_DT = f"{_GI}/diplomatic_treaties_articles_icons"
+
+
+def _row_of_warheads(now, marks=(), top=0.22):
+    """Three identical warheads racked one above another (series production), with any marks over them.
+
+    FLUX lays a warhead on its side whatever the subject says (four seeds), so
+    the row the list asked for is a rack."""
+    step = (0.8 - top) / 2
+    return {"from": "nuclear_part/warhead", "base": {"scale": 0.66, "at": (0.5, 0.8)}, "now": now,
+            "marks": [{"part": "nuclear_part/warhead", "under": True, "at": (0.5, y), "scale": 0.66,
+                       "outline": False} for y in (top, top + step)] + list(marks)}
+
+
+def _readiness(angle, lamp, now):
+    """The missile on its pad at `angle` (0 lying, 90 upright), and the lamp.
+
+    Every launcher FLUX drew was a long flat truck, most already carrying a
+    missile, and a sliver at 36 px: the missile stands on a drawn pad instead.
+    Missile s1 lies nose down-left at about 30 degrees, hence the offset."""
+    return {"from": "nuclear_part/missile", "turn": -(30 + angle), "now": now,
+            "base": {"scale": 0.84 if angle else 0.9, "at": (0.5, 0.46 if angle else 0.62)},
+            "marks": [{"draw": "bar", "colour": "steel", "at": (0.5, 0.92), "scale": 0.7},
+                      {"draw": "disc", "colour": lamp, "at": (0.84, 0.16), "scale": 0.26}]}
+
+
+def _key(holder, now):
+    """Launch authority: the brass key with whoever holds it."""
+    return {"from": f"nuclear_part/{holder}", "base": {"scale": 0.86, "at": (0.44, 0.46)}, "now": now,
+            "marks": [{"part": "nuclear_part/key", "at": (0.72, 0.72), "scale": 0.54}]}
+
+
+def _band(link, now):
+    return {"from": "colonial_part/globe", "base": {"scale": 0.86, "at": (0.5, 0.5)}, "now": now,
+            "marks": [dict({"draw": "link", "at": (0.5, 0.5), "scale": 0.96}, **link)]}
+
+
+def _rocket(now, flame, marks=(), tilt=0):
+    """The rocket; under it Banking's flame turned to point down, `flame` long (0: on its pad).
+
+    Every render asked for an exhaust flame alone drew a rocket with it."""
+    e = {"from": "space_part/rocket", "base": {"scale": 0.72, "at": (0.5, 0.4 if flame else 0.5)}, "now": now,
+         "marks": ([{"part": "banking_part/flame", "rotate": 180 + tilt, "under": True,
+                     "at": (0.5 + tilt / 300, 0.78 + flame / 5), "scale": flame}] if flame else []) + list(marks)}
+    if tilt:
+        e["tilt"] = tilt
+    return e
+
+
+def _st_res(now, mark):
+    return {"from": "st_res_part/crate", "base": {"scale": 0.78, "at": (0.5, 0.62)}, "marks": [mark], "now": now}
+
+
+ICONS.update({
+    "banking_state": {
+        # The cycle's mirror pairs: Panic and Frenzy, Downturn and Boom, Stagnation and Expansion.
+        "phase_panic": _bank(f"{_TM}/modifier_fire_negative.dds",
+                             marks=[{"draw": "arrow", "dir": "down", "colour": "red", "double": True, "scale": 0.58}]),
+        "phase_downturn": _bank(f"{_TM}/modifier_coins_negative.dds",
+                                marks=[{"draw": "arrow", "dir": "down", "colour": "red"}]),
+        "phase_stagnation": _bank(f"{_TM}/modifier_flag_negative.dds", tint="grey",
+                                  marks=[{"draw": "bar", "colour": "amber", "scale": 0.44}]),
+        "phase_stable": _bank(f"{_GI}/event_icons/je_banking_cycle.dds",
+                              marks=[{"draw": "bar", "colour": "white", "scale": 0.44}]),
+        "phase_expansion": _bank(f"{_TM}/modifier_flag_positive.dds",
+                                 marks=[{"draw": "arrow", "dir": "up", "colour": "green"}]),
+        "phase_boom": _bank(f"{_TM}/modifier_coins_positive.dds", tint="gold",
+                            marks=[{"draw": "arrow", "dir": "up", "colour": "blue"}]),
+        "phase_frenzy": _bank(f"{_TM}/modifier_fire_positive.dds", tint="gold",
+                              marks=[{"draw": "arrow", "dir": "up", "colour": "red", "double": True, "scale": 0.58},
+                                     {"part": "banking_part/coin", "at": (0.2, 0.86), "scale": 0.22},
+                                     {"part": "banking_part/coin", "at": (0.36, 0.9), "scale": 0.2}]),
+        "bubble_low": _bubble(f"{_GI}/generic_icons/green_checkmark.dds", 0.5, "green"),
+        "bubble_building": _bubble(f"{_GI}/generic_icons/maybe_icon.dds", 0.6, "white"),
+        "bubble_elevated": _bubble(f"{_TM}/modifier_coins_negative.dds", 0.72, "yellow"),
+        "bubble_high": _bubble(f"{_TM}/modifier_fire_negative.dds", 0.84, "gold"),
+        "bubble_severe": _bubble(f"{_GI}/generic_icons/red_cross.dds", 0.94, "red", cracked=True),
+        "stance_very_loose": _stance(f"{_TM}/modifier_fire_positive.dds", 4),
+        "stance_loose": _stance(f"{_TM}/modifier_coins_positive.dds", 3),
+        "stance_neutral": _stance(f"{_GI}/generic_icons/money.dds", 2),
+        "stance_tight": _stance(f"{_TM}/modifier_coins_negative.dds", 1),
+        "stance_very_tight": _stance(f"{_TM}/modifier_documents_negative.dds", 0, lock=True),
+        "price_deflation": _tag(f"{_TM}/modifier_coins_negative.dds", {"draw": "arrow", "dir": "down", "colour": "blue"}),
+        "price_stable": _tag(f"{_TM}/modifier_coins_positive.dds", {"draw": "bar", "colour": "green", "scale": 0.44}),
+        "price_elevated": _tag(f"{_GI}/generic_icons/warning.dds", {"draw": "arrow", "dir": "up", "colour": "yellow"}),
+        "price_high": _tag(f"{_TM}/modifier_fire_negative.dds",
+                           {"draw": "arrow", "dir": "up", "colour": "orange", "double": True, "scale": 0.56}),
+        "price_very_high": _tag(f"{_TM}/modifier_fire_negative.dds", {"part": "banking_part/flame", "scale": 0.56}),
+        "price_dollarised": _tag(f"{_GI}/generic_icons/world_market.dds", {"part": "banking_part/foreign_coin"}),
+        "price_planned": _tag(f"{_GI}/generic_icons/government_building_icon.dds", {"part": "banking_part/seal"}),
+    },
+    "ch_state": {
+        "tier_negligible": {"from": "ch_part/sprig", "tint": "grey",
+                            "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+        "tier_hegemon": {"from": "ch_part/wreath_gold", "base": {"scale": 0.8, "at": (0.5, 0.5)},
+                         "marks": [{"draw": "rays", "under": True, "at": (0.5, 0.5), "scale": 1.0}],
+                         "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+    },
+    "covert_state": {
+        # One shield, its metal and damage the standing: gold rim, silver, dull
+        # iron, iron cracked, iron split. FLUX will not crack or split a shield,
+        # so the breaks are drawn; nor shut an eye, so the lid is drawn too:
+        # shut while defended, half open when exposed, wide open when vulnerable.
+        "standing_fortress": {"from": "covert_part/shield", "marks": [_LID],
+                              "now": f"{_GI}/generic_icons/green_checkmark.dds"},
+        "standing_hardened": {"from": "covert_part/shield", "marks": [_LID], "tint": "silver",
+                              "now": f"{_GI}/generic_icons/approval_icon.dds"},
+        "standing_defended": {"from": "covert_part/shield", "marks": [_LID], "tint": "iron",
+                              "now": f"{_GI}/generic_icons/undecided_icon.dds"},
+        "standing_exposed": {"from": "covert_part/shield", "marks": [dict(_LID, opening=0.5)], "tint": "iron",
+                             "damage": "crack", "now": f"{_GI}/generic_icons/disapproval_icon.dds"},
+        "standing_vulnerable": {"from": "covert_part/shield", "tint": "iron", "damage": "split",
+                                "now": f"{_GI}/generic_icons/red_cross.dds"},
+        "funding": {"from": "covert_part/envelope", "now": f"{_GI}/generic_icons/gdp.dds"},
+        "funding_dormant": {"from": "covert_part/envelope_empty", "tint": "grey",
+                            "now": f"{_GI}/generic_icons/warning.dds"},
+        # The agent's rise: the fedora on its dossier, one gold chevron per tier.
+        **{f"tradecraft_{n}": {"from": "covert_part/fedora", "base": {"scale": 0.84, "at": (0.42, 0.5)},
+                               "marks": ([{"draw": "chevrons", "count": n, "patch": True, "at": (0.8, 0.66),
+                                           "scale": 0.5}]
+                                         if n else []),
+                               "now": now}
+           for n, now in ((0, f"{_GI}/generic_icons/maybe_icon.dds"), (1, f"{_GI}/generic_icons/population.dds"),
+                          (2, "gfx/interface/politics_view/institution_level_icon.dds"),
+                          (3, f"{_GI}/formation_order_icons/upgrade.dds"),
+                          (4, f"{_GI}/generic_icons/most_senior_front_commander.dds"))},
+    },
+    "gw_state": {
+        # The warming tiers: one drawn thermometer, its column climbing, on a
+        # disc warming from blue-green to dark red. Drawn, so only the column
+        # and the colour change.
+        "tier_negligible": _gw_tier(0.0, (150, 205, 195), (60, 120, 115)),
+        "tier_slight": _gw_tier(0.2, (190, 210, 120), (95, 125, 45)),
+        "tier_moderate": _gw_tier(0.4, (235, 210, 90), (150, 120, 30)),
+        "tier_significant": _gw_tier(0.6, (240, 160, 70), (160, 80, 25)),
+        "tier_severe": _gw_tier(0.8, (230, 105, 60), (150, 45, 25)),
+        "tier_catastrophic": _gw_tier(1.0, (200, 50, 40), (110, 20, 15)),
+        "tier_apocalyptic": _gw_tier(1.0, (130, 25, 25), (55, 8, 10), burst=True),
+        # Vanilla's market-capital mark may stay for the leader (the sheet shows it as "current").
+        "role_leader": {"from": "gw_part/crate", "base": {"scale": 0.8, "at": (0.5, 0.6)},
+                        "marks": [{"part": "gw_part/crown", "at": (0.5, 0.22), "scale": 0.52}],
+                        "now": f"{_GI}/state_status_icons/state_market_capital_icon.dds"},
+        "role_member": {"from": "gw_part/crate", "tint": "grey", "base": {"scale": 0.8, "at": (0.5, 0.6)},
+                        "now": f"{_GI}/generic_icons/world_market.dds"},
+    },
+    "gm_state": {
+        # One monument, its state: bare, wreathed, mossy behind a railing, cracked and leaning.
+        "status_undedicated": {"from": "gm_part/monument", "now": f"{_GI}/generic_icons/undecided_icon.dds"},
+        "status_upheld": {"from": "gm_part/monument", "marks": [{"part": "gm_part/wreath", "at": (0.5, 0.52),
+                                                                  "scale": 0.4}],
+                          "now": f"{_GI}/generic_icons/green_checkmark.dds"},
+        "status_heritage": {"from": "gm_part/monument", "tint": "moss",
+                            "marks": [{"part": "gm_part/railing", "at": (0.5, 0.86), "scale": 0.86}],
+                            "now": f"{_GI}/generic_icons/maybe_icon.dds"},
+        "status_contested": {"from": "gm_part/monument", "damage": "crack", "tilt": 9,
+                             "now": f"{_GI}/generic_icons/disapproval_icon.dds"},
+    },
+    "nuclear_state": {
+        # The programme: one warhead in each state.
+        "programme_unfunded": {"from": "nuclear_part/warhead", "tint": "grey", "marks": [{"draw": "pause", "scale": 0.5}],
+                               "now": f"{_GI}/generic_icons/paused.dds"},
+        "programme_developing": {"from": "nuclear_part/warhead",
+                                 "marks": [{"part": "nuclear_part/wrench", "at": (0.72, 0.7), "scale": 0.56}],
+                                 "now": f"{_GI}/invention_icons/nuclear_weapons.dds"},
+        "programme_producing": _row_of_warheads(f"{_GI}/event_icons/mushroom_cloud.dds"),
+        "programme_frozen": {"from": "nuclear_part/warhead",
+                             "marks": [{"part": "nuclear_part/treaty_seal", "at": (0.7, 0.7), "scale": 0.52}],
+                             "now": f"{_DT}/nuclear_program_pause.dds"},
+        "programme_at_ceiling": _row_of_warheads(f"{_DT}/nuclear_arms_limitation.dds",
+                                                 [{"draw": "bar", "colour": "gold", "at": (0.5, 0.1), "scale": 0.96}],
+                                                 top=0.34),
+        "programme_dismantling": {"from": "nuclear_part/warhead", "damage": "split",
+                                  "marks": [{"part": "nuclear_part/wrench", "at": (0.5, 0.78), "scale": 0.46}],
+                                  "now": f"{_DT}/nuclear_disarmament.dds"},
+        "programme_none": {"from": "nuclear_part/warhead", "tint": "faint",
+                           "now": f"{_GI}/invention_icons/nuclear_weapons.dds"},
+        "programme_renounced": {"from": "nuclear_part/warhead", "damage": "split",
+                                "marks": [{"part": "nuclear_part/dove", "at": (0.5, 0.3), "scale": 0.62}],
+                                "now": f"{_DT}/nuclear_disarmament.dds"},
+        "programme_disarmed": {"from": "nuclear_part/warhead", "tint": "grey",
+                               "marks": [{"icon": f"{_GI}/generic_icons/red_cross.dds", "scale": 0.6}],
+                               "now": f"{_DT}/nuclear_disarmament.dds"},
+        "warheads": {"from": "nuclear_part/warhead", "now": f"{_GI}/invention_icons/guided_missiles.dds"},
+        "crisis": {"from": "nuclear_part/warhead", "base": {"scale": 0.78, "at": (0.5, 0.5)},
+                   "marks": [{"draw": "disc", "colour": "red", "under": True, "at": (0.5, 0.5), "scale": 1.0},
+                             {"icon": f"{_GI}/generic_icons/warning.dds", "at": (0.74, 0.74), "scale": 0.5}],
+                   "now": f"{_GI}/diplomatic_action_icons/nd_nuclear_ultimatum_action.dds"},
+        # Doctrine: the warhead with what it answers to.
+        "doctrine_nfu": {"from": "nuclear_part/warhead", "base": {"scale": 0.62, "at": (0.5, 0.48)},
+                         "marks": [{"draw": "shield", "colour": "gold", "filled": True, "under": True,
+                                    "at": (0.5, 0.5), "scale": 0.98}],
+                         "now": f"{_DT}/crisis_resolution.dds"},
+        "doctrine_existential": {"from": "nuclear_part/warhead", "base": {"scale": 0.82, "at": (0.5, 0.42)},
+                                 "marks": [{"part": "nuclear_part/wall", "at": (0.5, 0.8), "scale": 0.96}],
+                                 "now": f"{_DT}/nuclear_guarantee.dds"},
+        "doctrine_flexible": {"from": "nuclear_part/warhead", "tilt": 18, "base": {"scale": 0.8, "at": (0.44, 0.5)},
+                              "marks": [{"draw": "shield", "colour": "gold", "filled": True, "under": True,
+                                         "at": (0.66, 0.5), "scale": 0.74}],
+                              "now": f"{_GI}/diplomatic_action_icons/nd_nuclear_warning_action.dds"},
+        "doctrine_compellence": {"from": "nuclear_part/warhead", "flip": True, "base": {"scale": 0.8, "at": (0.42, 0.5)},
+                                 "marks": [{"draw": "arrow", "dir": "right", "colour": "red", "at": (0.86, 0.5),
+                                            "scale": 0.34}],
+                                 "now": f"{_GI}/diplomatic_action_icons/nd_nuclear_ultimatum_action.dds"},
+        # The sword lies lower left to upper right; the warhead turned to cross it.
+        "doctrine_warfighting": {"from": "nuclear_part/warhead", "turn": -40, "base": {"scale": 0.86, "at": (0.5, 0.5)},
+                                 "marks": [{"part": "nuclear_part/sword", "under": True, "at": (0.5, 0.5),
+                                            "scale": 0.96}],
+                                 "now": f"{_GI}/invention_icons/tactical_nuclear_weapons.dds"},
+        # Readiness: the missile lying, raised, upright on its launcher; the lamp green, amber, red.
+        "readiness_recessed": {"from": "nuclear_part/crate",
+                               "marks": [{"part": "banking_part/padlock", "at": (0.72, 0.7), "scale": 0.46}],
+                               "now": "gfx/interface/buttons/button_icons/lock.dds"},
+        "readiness_routine": _readiness(0, "green", f"{_GI}/commander_order_icons/standby.dds"),
+        "readiness_heightened": _readiness(40, "amber", f"{_GI}/generic_icons/warning.dds"),
+        "readiness_high_alert": _readiness(90, "red", f"{_GI}/generic_icons/mobilize_icon_single.dds"),
+        # Launch authority: the brass key, and whose it is.
+        "authority_central": _key("gov_seal", f"{_GI}/generic_icons/government_building_icon.dds"),
+        "authority_delegation": _key("cap", f"{_GI}/generic_icons/most_senior_front_commander.dds"),
+        "authority_on_warning": _key("radar", f"{_GI}/lens_toolbar_icons/nd_nuclear_warning_action.dds"),
+        "authority_automatic": _key("cabinet", f"{_GI}/generic_icons/observer_mode_icon.dds"),
+    },
+    "colonial_state": {
+        # One globe; the tie between home and overseas coasts is the band.
+        "band_solidified": _band({"colour": "gold", "width": 0.13}, f"{_GI}/state_status_icons/state_homelands.dds"),
+        "band_stable": _band({"colour": "gold", "width": 0.06}, f"{_GI}/state_status_icons/incorporated_state.dds"),
+        "band_strained": _band({"colour": "amber", "width": 0.06, "state": "taut"},
+                               f"{_GI}/generic_icons/warning.dds"),
+        "band_crumbling": _band({"colour": "red", "width": 0.08, "state": "cracked"},
+                                f"{_GI}/state_status_icons/has_turmoil.dds"),
+        "band_collapsing": _band({"colour": "red", "width": 0.08, "state": "broken"},
+                                 f"{_GI}/war_goals/independence.dds"),
+        # Great-power pressure: the lone flag on amber (isolated), on red with
+        # arrows closing in (a consensus against it).
+        "alert_isolation": {"from": "colonial_part/lone_flag", "base": {"scale": 0.8, "at": (0.5, 0.52)},
+                            "marks": [{"draw": "disc", "colour": "amber", "under": True, "at": (0.5, 0.5),
+                                       "scale": 1.0}],
+                            "now": f"{_GI}/generic_icons/disapproval_icon.dds"},
+        "alert_consensus": {"from": "colonial_part/lone_flag", "base": {"scale": 0.6, "at": (0.5, 0.53)},
+                            "marks": [{"draw": "disc", "colour": "red", "under": True, "at": (0.5, 0.5), "scale": 1.0},
+                                      {"draw": "arrows_in", "at": (0.5, 0.5), "scale": 0.98}],
+                            "now": f"{_GI}/generic_icons/red_cross.dds"},
+    },
+    "space_state": {
+        # One rocket; its state is what surrounds it.
+        # An empty gantry (the list's idea) was a thin lattice at 36 px: the rocket, greyed.
+        "state_idle": {"from": "space_part/rocket", "tint": "grey", "base": {"scale": 0.78, "at": (0.5, 0.5)},
+                       "now": f"{_GI}/generic_icons/inactive_building.dds"},
+        "state_standard": _rocket(f"{_GI}/commander_order_icons/move.dds", 0.3),
+        "state_safe": _rocket(f"{_GI}/commander_order_icons/defend.dds", 0,
+                              [{"draw": "shield", "colour": "blue", "under": True, "at": (0.5, 0.52), "scale": 0.98}]),
+        "state_ambitious": _rocket(f"{_GI}/military_icons/navy_icons/speed_navy.dds", 0.48, tilt=-20),
+        "state_shielded": _rocket(f"{_GI}/generic_icons/clock.dds", 0,
+                                  [{"draw": "dome", "at": (0.5, 0.5), "scale": 0.98},
+                                   {"icon": f"{_GI}/generic_icons/clock.dds", "at": (0.78, 0.76), "scale": 0.36}]),
+        "risk": {"from": "space_part/rocket", "damage": "crack",
+                 "marks": [{"icon": f"{_GI}/generic_icons/warning.dds", "at": (0.74, 0.72), "scale": 0.5}],
+                 "now": f"{_GI}/generic_icons/warning.dds"},
+        # The interstellar programme's four states, on its journal icons (#571),
+        # so the row keeps the Space Race's painted disc.
+        "interstellar_not_begun": {"from": "journal_entry_space/je_space_race_interstellar_probe", "tint": "grey",
+                                   "now": f"{_GI}/event_icons/je_space_race_interstellar_probe.dds"},
+        "interstellar_under_way": {"from": "journal_entry_space/je_space_race_interstellar_probe",
+                                   "marks": [{"part": "nuclear_part/wrench", "at": (0.74, 0.74), "scale": 0.46}],
+                                   "now": f"{_GI}/event_icons/je_space_race_interstellar_probe.dds"},
+        "interstellar_awaiting_data": {"from": "journal_entry_space/je_space_race_interstellar_results",
+                                       "marks": [{"icon": f"{_GI}/generic_icons/clock.dds", "at": (0.74, 0.74),
+                                                  "scale": 0.42}],
+                                       "now": f"{_GI}/event_icons/je_space_race_interstellar_results.dds"},
+        "interstellar_data_received": {"from": "journal_entry_space/je_space_race_interstellar_results",
+                                       "marks": [{"icon": f"{_GI}/generic_icons/green_checkmark.dds",
+                                                  "at": (0.74, 0.74), "scale": 0.46}],
+                                       "now": f"{_GI}/event_icons/je_space_race_interstellar_results.dds"},
+    },
+    "st_res_state": {
+        # One crate; the lane's state is the mark in its word's colour.
+        "status_idle": _st_res(f"{_GI}/generic_icons/trend_nochange.dds",
+                               {"draw": "bar", "colour": "yellow", "at": (0.5, 0.64), "scale": 0.66}),
+        "status_storing": _st_res(f"{_GI}/generic_icons/trend_up.dds",
+                                  {"draw": "arrow", "dir": "down", "colour": "green", "at": (0.5, 0.26),
+                                   "scale": 0.5}),
+        "status_withdrawing": _st_res(f"{_GI}/generic_icons/trend_down.dds",
+                                      {"draw": "arrow", "dir": "up", "colour": "orange", "at": (0.5, 0.26),
+                                       "scale": 0.5}),
+        "status_blocked": _st_res(f"{_GI}/generic_icons/warning.dds",
+                                  {"draw": "barrier", "at": (0.5, 0.62), "scale": 0.86}),
+    },
+})
 
 
 def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
@@ -1090,7 +1686,7 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
                 else:
                     report["bad_entry"].append((cat, key))
                 continue
-            if "from" in entry:
+            if _is_derived(entry):
                 if not _derived_ok(spec, entry):
                     report["bad_entry"].append((cat, key))
                     continue
@@ -1126,9 +1722,13 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
     return report
 
 
-TINTS = ("grey", "faint")
+TINTS = ("grey", "faint", "moss", "gold", "silver", "iron")
 LAYOUTS = ("flag",)
-DRAWN_MARKS = ("star", "pause", "arrow_down")
+DAMAGE = ("crack", "split")
+DRAWN_MARKS = ("star", "pause", "arrow_down", "arrow", "bar", "chevrons", "barrier", "bubble", "thermometer",
+               "disc", "shield", "dome", "link", "rays", "eyelid",
+               "arrows_in")
+MARK_COLOURS = ("red", "green", "blue", "yellow", "amber", "orange", "white", "gold", "steel")
 
 
 def _is_gfx_path(path, suffixes) -> bool:
@@ -1143,13 +1743,19 @@ def _ref(path) -> tuple[str, str] | None:
     return (cat, key) if key in ICONS.get(cat, {}) else None
 
 
+def _is_derived(entry: dict) -> bool:
+    """Built on another entry's icon ("from") or drawn on a disc ("disc"): no render of its own."""
+    return "from" in entry or "disc" in entry
+
+
 def _depends_on(entry: dict) -> list[tuple[str, str]]:
-    return [_ref(entry["from"])] + [_ref(m["part"]) for m in entry.get("marks", []) if "part" in m]
+    return (([_ref(entry["from"])] if "from" in entry else [])
+            + [_ref(m["part"]) for m in entry.get("marks", []) if "part" in m])
 
 
 def _accepted(cat: str, key: str) -> bool:
     seed = ICONS[cat][key].get("seed")
-    return "from" not in ICONS[cat][key] and isinstance(seed, int) and not isinstance(seed, bool)
+    return not _is_derived(ICONS[cat][key]) and isinstance(seed, int) and not isinstance(seed, bool)
 
 
 def _marks_ok(marks) -> bool:
@@ -1164,7 +1770,11 @@ def _marks_ok(marks) -> bool:
             return False
         if "part" in m and not (_ref(m["part"]) and CATEGORIES[_ref(m["part"])[0]].get("part")):
             return False
-        if "draw" in m and m["draw"] not in DRAWN_MARKS:
+        if "draw" in m and (m["draw"] not in DRAWN_MARKS or m.get("colour", "red") not in MARK_COLOURS
+                            or m.get("dir", "down") not in ("up", "down", "left", "right")
+                            or m.get("state", "whole") not in ("whole", "taut", "cracked", "broken")):
+            return False
+        if m.get("tint") not in (None,) + TINTS or not isinstance(m.get("rotate", 0), (int, float)):
             return False
         at, scale = m.get("at", (0.5, 0.5)), m.get("scale", 0.5)
         if not (len(at) == 2 and all(0 <= v <= 1 for v in at) and 0 < scale <= 1):
@@ -1173,11 +1783,27 @@ def _marks_ok(marks) -> bool:
 
 
 def _derived_ok(spec: dict, entry: dict) -> bool:
-    """A derived entry: GUI-hosted, built on a rendered entry, with a known tint and layout."""
-    src = _ref(entry["from"])
-    if "gui" not in spec or not src or "from" in ICONS[src[0]][src[1]] or "subject" not in ICONS[src[0]][src[1]]:
+    """A derived entry: GUI-hosted, built on a rendered entry or a drawn disc, with a known tint, damage and layout."""
+    if "gui" not in spec:
         return False
+    if "disc" in entry:
+        disc = entry["disc"]
+        if "from" in entry or not all(isinstance(disc.get(k), tuple) and len(disc[k]) == 3
+                                      for k in ("centre", "edge", "rim_light", "rim_dark")):
+            return False
+    else:
+        src = _ref(entry["from"])
+        if not src or _is_derived(ICONS[src[0]][src[1]]) or "subject" not in ICONS[src[0]][src[1]]:
+            return False
     if entry.get("tint") not in (None,) + TINTS or entry.get("layout") not in (None,) + LAYOUTS:
+        return False
+    if entry.get("damage") not in (None,) + DAMAGE or not all(isinstance(entry.get(k, 0), (int, float))
+                                                              for k in ("tilt", "turn")) \
+            or not isinstance(entry.get("flip", False), bool):
+        return False
+    base = entry.get("base", {})
+    if not (isinstance(base, dict) and 0 < base.get("scale", 1) <= 1
+            and all(0 <= v <= 1 for v in base.get("at", (0.5, 0.5)))):
         return False
     return entry.get("layout") != "flag" or (isinstance(entry.get("size"), tuple) and len(entry["size"]) == 2)
 

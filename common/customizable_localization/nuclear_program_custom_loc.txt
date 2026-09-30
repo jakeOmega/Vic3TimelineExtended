@@ -375,6 +375,23 @@ nd_taboo_ceiling_value = {
 	}
 }
 
+# The dismantling's pace, under the Arsenal row's tooltip. Round 3 (2026-09-30):
+# the row itself says only how long is left, so it fits its cell; this line
+# carries the rest (nd_taboo_arsenal_dismantling used to hold both).
+nd_taboo_dismantle_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { nd_taboo_is_dismantling = yes }
+		localization_key = nd_taboo_dismantle_note_on
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuke_line_empty
+	}
+}
+
 # Where the burden would ease a domestic step (nd_disp_taboo_step_down_warheads).
 nd_taboo_burden_hint = {
 	type = country

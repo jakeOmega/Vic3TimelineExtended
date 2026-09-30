@@ -527,14 +527,24 @@ nd_crisis_next_pressure_sgui = {
 	}
 }
 
-# ---- At Home: each interest group with a view, and its numbers ----------------
-# Script-built text (ExecuteTooltip). Reads the variables nd_refresh_domestic_stance
-# stores on each group; the numbers are the ones in the group's approval breakdown.
+# ---- At Home: the list's empty states ------------------------------------------
+# Each interest group with a view is a table of its own in the panel (round 3,
+# 2026-09-30: a datamodel over the country's groups, reading the nd_disp_ig_*
+# values in nuclear_deterrence_values.txt). This handler says only what the
+# tables cannot: that the groups have not judged us yet, or that none holds a
+# view. is_shown is true in just those two states, so the line is not drawn
+# above the tables otherwise.
 nd_home_list_sgui = {
 	scope = country
 	is_shown = {
 		nd_is_armed = yes
 		nd_is_initialized = yes
+		OR = {
+			NOT = { has_variable = nd_stance_applied }
+			NOT = {
+				any_interest_group = { has_variable = nd_ig_class }
+			}
+		}
 	}
 	is_valid = { always = no }
 	ai_is_valid = { always = no }
@@ -545,22 +555,16 @@ nd_home_list_sgui = {
 		}
 		else_if = {
 			limit = {
-				any_interest_group = { has_variable = nd_ig_class }
+				NOT = {
+					any_interest_group = { has_variable = nd_ig_class }
+				}
 			}
-			every_interest_group = {
-				limit = { has_variable = nd_ig_class }
-				nd_home_line = yes
-			}
-		}
-		else = {
 			custom_tooltip_no_bullet = nd_home_list_none
 		}
 	}
 }
 
-# The At Home footer, its own text below the list: a scope's lines print before
-# its nested blocks' lines (gui_modding_guide.md gotcha #18), so a closing line
-# inside nd_home_list_sgui would print above the groups.
+# The At Home footer, its own line below the tables.
 nd_home_footer_sgui = {
 	scope = country
 	is_shown = {

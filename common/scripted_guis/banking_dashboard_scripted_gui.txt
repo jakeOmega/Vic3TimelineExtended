@@ -131,22 +131,6 @@ banking_dash_phase_frenzy = {
 	effect = { }
 }
 
-banking_dash_momentum_rising = {
-	scope = country
-	is_shown = { has_variable = finance_cycle_momentum banking_cycle_bubble_risk_rising = yes }
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
-
-banking_dash_momentum_falling = {
-	scope = country
-	is_shown = { has_variable = finance_cycle_momentum banking_cycle_risk_falling = yes }
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
-
 banking_dash_bubble_risk_high = {
 	scope = country
 	is_shown = { has_variable = finance_cycle_value banking_cycle_bubble_risk_high = yes }
