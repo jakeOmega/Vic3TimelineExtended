@@ -88,7 +88,7 @@ under its own name and followed by an Open Journal Entry button, then How the
 Space Race Works once at the end. It is grayed until your first milestone
 starts; hover it for what is still missing.
 
-<!-- screenshot: the Moon Landing journal entry: the overview (Standard, Risk, First: Open, the Progress bar and the Programme row) above Mission Control with the approach buttons and the funding stepper -->
+![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Programme row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies.](images/solar_system_colonization_tab.png)
 
 The overview is always shown. Its first row is three icons, each with a label
 under it:

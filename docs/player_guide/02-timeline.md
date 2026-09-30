@@ -142,6 +142,26 @@ Revolution. It stacks with the technology's bonus once you research it.
 Countries that appear later, through release or formation, receive the bonuses
 already in the world.
 
+### Why some technologies lower education access
+
+Four technologies take 10 points off education access in every state: Public
+Works Programs and Computing Machines in era 6, Digital Education in era 9 and
+Brain-Computer Interfaces in era 11. Literacy drifts toward education access, so
+with nothing else changed each one lowers the level your literacy settles at by
+10 points, and literacy follows down over the next years. All four together take
+40 points off.
+
+This is deliberate. Each of these technologies raises the standard for what
+counts as literate: working with computers, networks and digital systems asks
+more of a person than reading a newspaper, so the same schooling reaches a
+smaller share of the population. The technology tooltip shows the penalty. It
+also keeps education relevant in the late game, because the gain has to be kept
+up as the bar rises.
+
+Each of the four also raises the Schools institution's maximum investment by one
+level. Funding schools and the laws that raise education access are how a
+country holds its literacy against the drop.
+
 ### Technologies that open the mod's systems
 
 Several of the new technologies first bring a system from another chapter into
@@ -415,7 +435,9 @@ Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
 
-<!-- screenshot: the Monuments journal entry with Contested lit in the overview, National Effects' bars, and a contested monument's row with its three buttons -->
+![The Grand Monuments tab of the Timeline Extended window: the overview's four counts (ten monuments Upheld), National Effects with Interest Group Approval, and the start of Our Monuments.](images/grand_monuments_tab.png)
+
+<!-- screenshot: the Monuments panel with Contested lit in the overview and a contested monument's row with its three buttons -->
 
 ### The Monuments journal entry
 

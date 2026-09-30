@@ -232,7 +232,7 @@ costs 15 relations with the target and voting against gains 15. When a power
 bloc leader's resolution carries, its bloc gains 3 leverage in each of its other
 members that sits in the Assembly; when it falls, the bloc loses 3.
 
-<!-- screenshot: the General Assembly chamber with a resolution in session, showing the grounds, the tally, our lean term by term and the vote buttons -->
+![The General Assembly with a Humanitarian Aid Request in session, in its first month with two votes for and none against: what happens if it carries or falls, how the Assembly reads our position term by term, the vote buttons and the start of Delegations.](images/un_general_assembly.png)
 
 ### General Assembly topics
 
@@ -607,7 +607,7 @@ until the journal entry is active; hover it for what is still missing. The tab
 adds the entry's status text and buttons as Status and Actions sections, and
 ends with an Open Journal Entry button.
 
-<!-- screenshot: the UN tab in the Diplomacy panel, with the overview and the General Assembly in view -->
+![The UN tab of the Diplomacy panel: the overview (membership, tier, standing, the authority bar, the countries, GDP and population pies, the Security Council, the agencies and the headquarters) and Status.](images/un_tab_overview.png)
 
 The overview at the top is always shown. Its first row is icons: your
 membership (a check for a member, a star for a permanent member, a pause mark

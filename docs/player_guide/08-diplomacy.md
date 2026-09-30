@@ -303,7 +303,7 @@ mod's eras. Mass Media opens tier IV of ten groups, Combined Arms of the four
 military ones, Globalization tier V of six. The principle's tooltip names its
 technology.
 
-<!-- screenshot: the power bloc principle picker with a tier V principle and its technology requirement in the tooltip -->
+![The Change or Upgrade Companies V window: every principle group laid out in tiers I to V, with Companies V selected and five mandates available.](images/principle_picker_tier_v.png)
 
 ### Principles that unlock articles and actions
 
