@@ -21,6 +21,11 @@ Once the first warhead exists, the entry is active for every country except
 decentralized ones, whether or not it has the technology. An active entry has
 no status line: the overview at its top says the same at a glance.
 
+The same panels appear as a Nuclear tab in the Military panel, and a change made
+in one shows in the other. The tab is grayed until the journal entry is active;
+hover it for what is still missing. There, the progress bar shows only while you
+have a program, and the tab ends with an Open Journal Entry button.
+
 <!-- screenshot: the Nuclear Weapons overview of an armed power, with the programme icon, warheads, the three posture icons and the taboo bar in view -->
 
 The overview has three rows. Each icon has its word beneath, and hovering it

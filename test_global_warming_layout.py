@@ -17,12 +17,12 @@ CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "global_w
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "global_warming_gui_icons.md")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-STATUS = ["te_gw_sec_policies"]
+STATUS = ["te_gw_sec_policies", "te_gw_sec_emitters"]
 REFERENCE = ["te_gw_sec_history", "te_gw_sec_how"]
 ROOTS = {"widget_je_gw_overview": ("custom_widget_container_1", "te_gw_overview_panel"),
          "widget_je_gw_status": ("custom_widget_container_2", "te_gw_status_sections"),
          "widget_je_gw_reference": ("custom_widget_container_3", "te_gw_reference_sections")}
-FLAGS = {"gw_policies_closed", "gw_world_closed", "gw_hist_closed", "gw_how_open"}
+FLAGS = {"gw_policies_closed", "gw_emitters_closed", "gw_world_closed", "gw_hist_closed", "gw_how_open"}
 OLD_FLAGS = ["gw_hist_open", "gw_world_open", "gw_emissions_closed"]
 MARKET_WIDE = ["carbon_tax", "renewable_investment", "emission_standards"]
 NATIONAL = ["climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
@@ -509,6 +509,7 @@ class WidthBudgetTest(unittest.TestCase):
             ("gw_emis_warming_label", "medium", self.label_cell),
             ("gw_sect_world", "medium", 440 - 32),        # nested header, text after its arrow
             ("gw_sect_policies", "large", 480),           # section headers, 520 with the arrow
+            ("gw_sect_emitters", "large", 480),
             ("gw_sect_history", "large", 480),
             ("gw_how_header", "large", 480),
             ("gw_btn_adopt", "large", 104),               # the buttons' text, taken as large
@@ -541,6 +542,36 @@ class WidthBudgetTest(unittest.TestCase):
         ]
         for text, font, cell, what in cases:
             self.assertFits(text, font, cell, what)
+
+
+    def test_top_emitters(self):
+        """The rows' cells, read from the .gui. The name has the whole 480 line:
+        the longest country name in vanilla is 48 characters (dyn_c_ussr_californias,
+        "United Socialist Council Republics of California")."""
+        gui = _read(GUI)
+        row = _type_body(gui, "gw_emitter_row")
+        name = int(re.search(r'minimumsize = \{ (\d+) -1 \}\s*maximumsize = \{ \d+ -1 \}\s*autoresize = yes\s*'
+                             r'elide = right\s*align = left\|nobaseline\s*using = fontsize_medium\s*'
+                             r'default_format = "#tooltippable"\s*text = "gw_te_row_name"', row).group(1))
+        cell = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
+                                                 r'using = fontsize_\w+\s*(?:default_format = "#v"\s*)?'
+                                                 r'(?:block "row_ours" \{\}\s*)?text = "(\w+)"', row)}
+        head = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
+                                                 r'using = fontsize_small\s*default_format = "#tooltippable"\s*'
+                                                 r'text = "(\w+)"', _type_body(gui, "gw_emitter_header"))}
+        self.assertEqual(set(cell), {"gw_te_row_annual", "gw_te_row_share", "gw_te_row_cum", "gw_te_ours"})
+        self.assertEqual(set(head), {"gw_te_head_annual", "gw_te_head_share", "gw_te_head_cum"})
+        cases = [
+            ("United Socialist Council Republics of California", "medium", name, "the longest country name"),
+            ("-9999.9/yr", "medium", cell["gw_te_row_annual"], "a market's annual emissions"),
+            ("100%", "medium", cell["gw_te_row_share"], "a share"),
+            ("-9,999,999", "medium", cell["gw_te_row_cum"], "a cumulative total"),
+            (_visible_text(_loc_value("gw_te_ours")), "small", cell["gw_te_ours"], "our market's mark"),
+        ]
+        for key, width in head.items():
+            cases.append((_visible_text(_loc_value(key)), "small", width, key))
+        for text, font, width, what in cases:
+            self.assertFits(text, font, width, what)
 
 
 class LocTest(unittest.TestCase):

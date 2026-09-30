@@ -932,6 +932,9 @@ global_warming_update_on_action = {
 					name = greenhouse_gas_emissions
 					add = var:gw_disp_market_emis
 				}
+				# The same figure into this leader's cumulative total, for the
+				# panel's Top Emitters list (display only).
+				gw_accumulate_market_emissions_effect = yes
 			}
 		}
 	}

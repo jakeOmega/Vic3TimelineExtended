@@ -422,3 +422,119 @@ gw_disp_captured = {
 	value = gw_capture_display
 	multiply = -1
 }
+
+# ----------------------------------------------------------------------------
+# Top Emitters (te_gw_sec_emitters). The first four are read in a LISTED
+# LEADER's scope (State.GetCountry.MakeScope.ScriptValue on a row, and
+# gw_disp_own_emis also as the ranking's order_by); they read that country's
+# own variables, the figures its market's last yearly pulse stored, so a row
+# shows the numbers it was ranked by. The rest are read in the viewer's scope,
+# over the snapshot gw_top_emitters_refresh writes (global_warming_effects.txt).
+# Every read is guarded: a country that never led a market has none of these.
+# ----------------------------------------------------------------------------
+
+# This leader's market's annual emissions (the figure the overview's "Our
+# Market's Emissions" shows for a member of that market).
+gw_disp_own_emis = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_disp_market_emis }
+		add = var:gw_disp_market_emis
+	}
+}
+
+# Its share of the world's annual emissions, in per cent (0-100, as the
+# overview's pie).
+gw_disp_own_share_pct = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = gw_disp_market_emis
+			has_global_variable = gw_g_global_emis
+			global_var:gw_g_global_emis > 0
+		}
+		add = var:gw_disp_market_emis
+		divide = global_var:gw_g_global_emis
+		multiply = 100
+	}
+	min = 0
+	max = 100
+}
+
+# Its cumulative emissions: every year's figure this country's market added to
+# the world total while this country led it (gw_accumulate_market_emissions_effect).
+gw_disp_own_cum = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_disp_market_emis_cum }
+		add = var:gw_disp_market_emis_cum
+	}
+}
+
+# 1 while an Enforce Emissions Reduction treaty binds this leader.
+gw_disp_is_treaty_bound = {
+	value = 0
+	if = {
+		limit = { gw_bound_by_emissions_treaty = yes }
+		value = 1
+	}
+}
+
+# Viewer scope: how many markets emit (the rows show five).
+gw_disp_emitters_total = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_emitters_total }
+		add = var:gw_emitters_total
+	}
+}
+
+# Viewer scope: what the section can show. 0: no yearly figures yet (the
+# overview's "figures arrive in January" line); 1: figures, but the monthly
+# snapshot has not been taken since (a month at most); 2: the list.
+gw_disp_emitters_state = {
+	value = 0
+	if = {
+		limit = { gw_has_yearly_figures = yes }
+		value = 1
+		if = {
+			limit = { has_variable = gw_emitters_total }
+			value = 2
+		}
+	}
+}
+
+# Viewer scope: how many rows are filled (0-5).
+gw_disp_emitters_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_emitters_shown }
+		add = var:gw_emitters_shown
+	}
+}
+
+# Viewer scope: how many are not shown ("+N more").
+gw_disp_emitters_more = {
+	value = gw_disp_emitters_total
+	subtract = 5
+	min = 0
+}
+
+# Viewer scope: the row (1-5) that is our own market, 0 when none is.
+gw_disp_emitters_own_slot = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_emitters_own_slot }
+		add = var:gw_emitters_own_slot
+	}
+}
+
+# Viewer scope: our market's place among all emitting markets, 0 when it does
+# not emit on balance.
+gw_disp_emitters_own_rank = {
+	value = 0
+	if = {
+		limit = { has_variable = gw_emitters_own_rank }
+		add = var:gw_emitters_own_rank
+	}
+}
