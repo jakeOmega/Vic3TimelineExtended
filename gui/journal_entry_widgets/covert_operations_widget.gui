@@ -12,7 +12,7 @@
 ###     shares, then one row per running operation, from the operator's
 ###     `iw_ops` list of script containers; see
 ###     common/scripted_effects/covert_warfare_effects.txt for their tags and
-###     variables), Funding (the stepper, cost and ladder), Agent Networks
+###     variables), Funding (the stepper and the Funding Levels table), Agent Networks
 ###     (one row per `iw_nets` container, slices 4 and 7) and
 ###     Counterintelligence.
 ###   widget_je_covert_reference  custom_widget_container_3  te_covert_reference_sections
@@ -264,6 +264,65 @@ types covert_operations_widget_types
 			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 			tooltip = "je_iw_funding_step_up_tooltip"
+		}
+	}
+
+	### One row of the Funding Levels table: the level, its stealth, its
+	### capacity and its weekly cost, in fixed columns (4 + 170 + 80 + 80 +
+	### 130 + 4 = 468). The level in force is tinted: `row_current` sets the
+	### tint's visible. The header row uses it too, and keeps the default.
+	type covert_levels_row = widget {
+		size = { 468 24 }
+
+		icon = {
+			size = { 100% 100% }
+			texture = "gfx/interface/backgrounds/white.dds"
+			color = { 0.9 0.75 0.35 0.2 }
+			block "row_current" {
+				visible = no
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = vcenter
+			margin = { 4 0 }
+
+			textbox = {
+				autoresize = yes
+				minimumsize = { 170 -1 }
+				maximumsize = { 170 -1 }
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "level_text" {}
+			}
+			textbox = {
+				autoresize = yes
+				minimumsize = { 80 -1 }
+				maximumsize = { 80 -1 }
+				align = right|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "stealth_text" {}
+			}
+			textbox = {
+				autoresize = yes
+				minimumsize = { 80 -1 }
+				maximumsize = { 80 -1 }
+				align = right|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "capacity_text" {}
+			}
+			textbox = {
+				autoresize = yes
+				minimumsize = { 130 -1 }
+				maximumsize = { 130 -1 }
+				align = right|nobaseline
+				using = fontsize_medium
+				elide = right
+				block "cost_text" {}
+			}
 		}
 	}
 
@@ -731,9 +790,9 @@ types covert_operations_widget_types
 
 	### One row per network in the operator's iw_nets. All numbers are
 	### variables the monthly tick (covert_nets_sync) writes on the container;
-	### the trend arrow is chosen by the stored code, never by comparing
-	### strength against a literal, and the bar reads strength through a
-	### container-scoped display value.
+	### the trend arrow and the report lines are chosen by stored codes, never
+	### by comparing strength against a literal, and the bar reads strength
+	### through a container-scoped display value.
 	type widget_je_covert_network_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -780,74 +839,33 @@ types covert_operations_widget_types
 			}
 		}
 
-		# ---- Strength: where it is heading, then the bar ----
-		# Play-test round 1: the bar's marker read as an unexplained target.
-		# The headline above the bar now names it: "45 → 50: their service
-		# revealed", then "→ 75: their operations revealed", then "full
-		# report", with the marker hidden, as the Tradecraft bar says where it
-		# is heading (style rule 5). Which headline shows is chosen by the
-		# stored report tier, like the report lines below, so no strength is
-		# compared here. The hover (headline and bar) says what each part of
-		# the report reveals and why the marker sits there.
-		widget_je_covert_operation_detail = {
-			visible = "[Not( ScriptContainer.HasVariable('iw_net_intel_tier') )]"
-			text = "je_iw_net_row_strength"
-			tooltip = "je_iw_net_row_strength_tt"
-		}
-		widget_je_covert_operation_detail = {
-			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)0') )]"
-			text = "je_iw_net_row_strength_to_service"
-			tooltip = "je_iw_net_row_strength_tt"
-		}
-		widget_je_covert_operation_detail = {
-			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)1') )]"
-			text = "je_iw_net_row_strength_to_ops"
-			tooltip = "je_iw_net_row_strength_tt"
-		}
-		widget_je_covert_operation_detail = {
-			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') )]"
-			text = "je_iw_net_row_strength_full"
-			tooltip = "je_iw_net_row_strength_tt"
-		}
-		# The bar, full width under its headline, with the marker where the
-		# next part of the report starts, and which way strength is moving.
+		# ---- Strength: the figure, the bar filling up, and which way it is
+		#      moving (owner, round 3: no marker and no "45 → 50" headline; the
+		#      hover still says what each part of the report reveals) ----
 		flowcontainer = {
 			direction = horizontal
 			spacing = 8
 			margin_left = 12
+			tooltip = "je_iw_net_row_strength_tt"
 
-			default_progressbar_horizontal = {
-				size = { 400 14 }
+			textbox = {
+				minimumsize = { 120 -1 }
+				maximumsize = { 120 -1 }
+				autoresize = yes
 				parentanchor = vcenter
-				tooltip = "je_iw_net_row_strength_tt"
+				align = left|nobaseline
+				using = fontsize_medium
+				default_format = "#tooltippable"
+				elide = right
+				text = "je_iw_net_row_strength"
+			}
+			default_progressbar_horizontal = {
+				size = { 280 14 }
+				parentanchor = vcenter
 				blockoverride "values" {
 					value = "[FixedPointToFloat( ScriptContainer.MakeScope.ScriptValue('covert_disp_net_strength_frac') )]"
 					min = 0
 					max = 1
-				}
-				blockoverride "on_top_of_the_progressbar" {
-					# Where the next part of the report starts: the service's
-					# figures, then its operations against us. None once the
-					# network reports everything, or before its first report.
-					progressbar = {
-						visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), NotEqualTo_CFixedPoint( ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2' ) )]"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						size = { 100% 100% }
-						skip_initial_animation = yes
-						direction = horizontal
-						value = "[FixedPointToFloat( ScriptContainer.MakeScope.ScriptValue('covert_disp_net_next_intel_frac') )]"
-						min = 0
-						max = 1
-						marker = {
-							icon = {
-								size = { 36 20 }
-								parentanchor = vcenter
-								widgetanchor = center
-								texture = "gfx/interface/progressbar/progressbar_marker.dds"
-							}
-						}
-					}
 				}
 			}
 			# Growing / decaying / holding at full strength, from the stored
@@ -983,8 +1001,9 @@ types covert_operations_widget_types
 					}
 				}
 
-				# Funding: the level's name; a warning while it is zero, when
-				# nothing runs.
+				# Funding: "Funding 3", the level's name on hover (round 3: a name
+				# like "Covert Network" is too long for a 108-unit cell); a
+				# warning icon while it is zero, when nothing runs.
 				covert_ov_icon_label = {
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), '(CFixedPoint)0' )]"
 					tooltip = "je_iw_ov_funding_tt"
@@ -1462,8 +1481,8 @@ types covert_operations_widget_types
 		}
 	}
 
-	### Funding: what the level is doing, the stepper, what it costs, and the
-	### ladder with the level in force marked.
+	### Funding: what the level is doing, the stepper, and the Funding Levels
+	### table (what each level buys and costs, the level in force tinted).
 	type te_covert_sec_funding = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1492,36 +1511,138 @@ types covert_operations_widget_types
 				text = "je_iw_funding_state"
 			}
 			covert_cc_funding_stepper = { }
-			covert_value_row = {
-				tooltip = "je_iw_funding_cost_tt"
-				blockoverride "row_label" {
-					default_format = "#tooltippable"
-					text = "je_iw_funding_cost_now_label"
-				}
-				blockoverride "row_value" {
-					text = "je_iw_funding_cost_now"
-				}
-			}
-			# Nothing above the top level.
-			covert_value_row = {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), JournalEntry.GetCountry.MakeScope.ScriptValue('iw_funding_level_max') )]"
-				blockoverride "row_label" {
-					text = "je_iw_funding_cost_next_label"
-				}
-				blockoverride "row_value" {
-					text = "je_iw_funding_cost_next"
-				}
-			}
 
-			### The six-level ladder. One ExecuteTooltip call over constants and one
-			### country variable — no iteration — so it is cheap enough to leave open.
+			### The six levels as a table (owner, round 3): what each buys and
+			### what it costs a week now, the level in force tinted. The costs
+			### are covert_disp_cost_at_N (covert_display_values.txt), built from
+			### the terms covert_operation_cost_mult charges; the stealth and
+			### capacity figures are the tuning constants' sums. The weekly cost
+			### now and one level up, which had two rows of their own above the
+			### ladder, are the tinted row and the one below it.
 			covert_subheader = {
 				blockoverride "subheader_text" {
 					text = "je_iw_funding_sub_levels"
 				}
 			}
-			covert_text = {
-				text = "[GetScriptedGui('covert_funding_ladder_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			covert_levels_row = {
+				blockoverride "level_text" {
+					text = "je_iw_fund_tbl_head_level"
+				}
+				blockoverride "stealth_text" {
+					text = "je_iw_fund_tbl_head_stealth"
+				}
+				blockoverride "capacity_text" {
+					text = "je_iw_fund_tbl_head_capacity"
+				}
+				blockoverride "cost_text" {
+					default_format = "#tooltippable"
+					text = "je_iw_fund_tbl_head_cost"
+					tooltip = "je_iw_funding_cost_tt"
+				}
+			}
+			covert_levels_row = {
+				tooltip = "je_iw_fund_tbl_row_0_tt"
+				blockoverride "row_current" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "level_text" {
+					text = "je_iw_fund_tbl_level_0"
+				}
+				blockoverride "stealth_text" {
+					text = "je_iw_fund_tbl_none"
+				}
+				blockoverride "capacity_text" {
+					text = "je_iw_fund_tbl_none"
+				}
+				blockoverride "cost_text" {
+					text = "je_iw_fund_tbl_none"
+				}
+			}
+			covert_levels_row = {
+				tooltip = "je_iw_fund_tbl_row_1_tt"
+				blockoverride "row_current" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "level_text" {
+					text = "je_iw_fund_tbl_level_1"
+				}
+				blockoverride "stealth_text" {
+					text = "je_iw_fund_tbl_none"
+				}
+				blockoverride "capacity_text" {
+					text = "je_iw_fund_tbl_none"
+				}
+				blockoverride "cost_text" {
+					text = "je_iw_fund_tbl_cost_1"
+				}
+			}
+			covert_levels_row = {
+				blockoverride "row_current" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "level_text" {
+					text = "je_iw_fund_tbl_level_2"
+				}
+				blockoverride "stealth_text" {
+					text = "je_iw_fund_tbl_stealth_2"
+				}
+				blockoverride "capacity_text" {
+					text = "je_iw_fund_tbl_capacity_2"
+				}
+				blockoverride "cost_text" {
+					text = "je_iw_fund_tbl_cost_2"
+				}
+			}
+			covert_levels_row = {
+				blockoverride "row_current" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "level_text" {
+					text = "je_iw_fund_tbl_level_3"
+				}
+				blockoverride "stealth_text" {
+					text = "je_iw_fund_tbl_stealth_3"
+				}
+				blockoverride "capacity_text" {
+					text = "je_iw_fund_tbl_capacity_3"
+				}
+				blockoverride "cost_text" {
+					text = "je_iw_fund_tbl_cost_3"
+				}
+			}
+			covert_levels_row = {
+				blockoverride "row_current" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), '(CFixedPoint)4' )]"
+				}
+				blockoverride "level_text" {
+					text = "je_iw_fund_tbl_level_4"
+				}
+				blockoverride "stealth_text" {
+					text = "je_iw_fund_tbl_stealth_4"
+				}
+				blockoverride "capacity_text" {
+					text = "je_iw_fund_tbl_capacity_4"
+				}
+				blockoverride "cost_text" {
+					text = "je_iw_fund_tbl_cost_4"
+				}
+			}
+			covert_levels_row = {
+				blockoverride "row_current" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), '(CFixedPoint)5' )]"
+				}
+				blockoverride "level_text" {
+					text = "je_iw_fund_tbl_level_5"
+				}
+				blockoverride "stealth_text" {
+					text = "je_iw_fund_tbl_stealth_5"
+				}
+				blockoverride "capacity_text" {
+					text = "je_iw_fund_tbl_capacity_5"
+				}
+				blockoverride "cost_text" {
+					text = "je_iw_fund_tbl_cost_5"
+				}
 			}
 		}
 	}

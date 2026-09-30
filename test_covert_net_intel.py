@@ -19,7 +19,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 VALUES = ROOT / "common/script_values/covert_warfare_script_values.txt"
-DISPLAY_VALUES = ROOT / "common/script_values/covert_display_values.txt"
 EFFECTS = ROOT / "common/scripted_effects/covert_warfare_effects.txt"
 WIDGET = ROOT / "gui/journal_entry_widgets/covert_operations_widget.gui"
 DEBUG_EFFECTS = ROOT / "common/scripted_effects/te_debug_covert_effects.txt"
@@ -85,12 +84,6 @@ class ConstantTests(unittest.TestCase):
                 if path == VALUES:
                     # The definition, plus the one comparison.
                     self.assertEqual(uses, 2, name)
-                elif path == DISPLAY_VALUES:
-                    # The network row's bar marker (style-guide pass) reads
-                    # each constant once, as a position picked by the stored
-                    # code: `value = <name>`, never a comparison.
-                    self.assertEqual(uses, 1, name)
-                    self.assertRegex(body, r"(?m)^\s*value = %s$" % name)
                 else:
                     self.assertEqual(uses, 0, "%s in %s" % (name, path.name))
 
@@ -253,17 +246,14 @@ class WidgetTests(unittest.TestCase):
         self.assertIn("GetVariableValue('iw_net_intel_techs')", service)
         self.assertIn("ScriptValue('covert_techs_researched_display')", service)
         self.assertIn("GetVariableValue('iw_net_intel_ops')", value("je_iw_net_row_intel_ops"))
-        # Thresholds are printed from the constants, never typed. Since play-
-        # test round 1 the row's strength headline names the next threshold
-        # ("45 -> 50: their service revealed"), so the report lines below it
-        # no longer repeat it, and its hover names both.
-        self.assertIn("covert_net_intel_tier_1_strength", value("je_iw_net_row_strength_to_service"))
-        self.assertIn("covert_net_intel_tier_2_strength", value("je_iw_net_row_strength_to_ops"))
+        # Thresholds are printed from the constants, never typed. Since the
+        # style-guide pass the row's strength hover names both (the owner
+        # dropped round 1's "45 -> 50" headline and bar marker in round 3),
+        # and the report lines below don't repeat them.
         hover = value("je_iw_net_row_strength_tt")
         self.assertIn("covert_net_intel_tier_1_strength", hover)
         self.assertIn("covert_net_intel_tier_2_strength", hover)
-        for key in ("je_iw_net_row_intel_none", "je_iw_net_row_intel_ops_locked", "je_iw_net_row_strength_to_service",
-                    "je_iw_net_row_strength_to_ops", "je_iw_net_row_strength_tt"):
+        for key in ("je_iw_net_row_intel_none", "je_iw_net_row_intel_ops_locked", "je_iw_net_row_strength_tt"):
             self.assertNotRegex(value(key), r"\b(50|75)\b", key)
         header = value("je_iw_net_header_tooltip")
         self.assertIn("covert_net_intel_tier_1_strength", header)

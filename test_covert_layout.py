@@ -245,8 +245,11 @@ class StateGateTest(unittest.TestCase):
     def test_markers_hide_when_there_is_nothing_further(self):
         ov = _type_body(self.text, "te_covert_overview_panel")
         self.assertIn("visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)4' )]\"", ov)
+        # The network bar's marker went in round 3 (owner: "just the
+        # strength, the bar filling up, and the trend").
         net = _type_body(self.text, "widget_je_covert_network_row")
-        self.assertIn("visible = \"[And( ScriptContainer.HasVariable('iw_net_intel_tier'), NotEqualTo_CFixedPoint( ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2' ) )]\"", net)
+        self.assertNotIn("marker = {", net)
+        self.assertNotIn("covert_disp_net_next_intel_frac", self.text)
 
     def test_no_section_opens_on_a_line_that_can_be_empty(self):
         # Funding opens on the state line, which the custom loc always fills.
@@ -350,16 +353,10 @@ class OperationRowTest(unittest.TestCase):
 
 
 class NetworkRowTest(unittest.TestCase):
-    """Play-test round 1: the strength bar's marker read as an unexplained
-    target. A headline above the bar names where it is heading and what that
-    reveals; the hover says what each part of the report is."""
-
-    HEADLINES = {  # gate -> headline key
-        "Not( ScriptContainer.HasVariable('iw_net_intel_tier') )": "je_iw_net_row_strength",
-        "(CFixedPoint)0": "je_iw_net_row_strength_to_service",
-        "(CFixedPoint)1": "je_iw_net_row_strength_to_ops",
-        "(CFixedPoint)2": "je_iw_net_row_strength_full",
-    }
+    """The network row: the target's flag and title (round 2), then the
+    strength, the bar filling up and the trend (round 3: no marker and no
+    "45 -> 50" headline), then the report lines. The strength's hover says
+    what each part of the report reveals."""
 
     @classmethod
     def setUpClass(cls):
@@ -376,41 +373,204 @@ class NetworkRowTest(unittest.TestCase):
         self.assertIn("datacontext = \"[ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry]\"", wrapper)
         self.assertLess(self.row.index("flag = {"), self.row.index("je_iw_net_row_strength"))
 
-    def test_one_headline_per_report_state_each_with_the_hover(self):
-        for gate, key in self.HEADLINES.items():
-            block = self.row[self.row.rindex("widget_je_covert_operation_detail = {", 0, self.row.index(f'text = "{key}"')):]
-            block = block[:block.index("\n\t\t}")]
-            self.assertIn(gate, _gate_before(self.row, key), key)
-            self.assertIn('tooltip = "je_iw_net_row_strength_tt"', block, key)
-        # Exactly one of the four can show: no report yet, or one tier each.
-        for code in ("0", "1", "2"):
-            self.assertEqual(self.row.count(f"'iw_net_intel_tier'), '(CFixedPoint){code}') )]\"\n\t\t\ttext = \"je_iw_net_row_strength"), 1, code)
+    def test_strength_bar_and_trend_share_one_line(self):
+        start = self.row.rindex("flowcontainer = {", 0, self.row.index('text = "je_iw_net_row_strength"'))
+        line = self.row[start:self.row.index('text = "je_iw_net_row_ops"')]
+        self.assertIn("direction = horizontal", line[:120])
+        self.assertIn('tooltip = "je_iw_net_row_strength_tt"', line[:300])
+        self.assertLess(line.index("je_iw_net_row_strength"), line.index("default_progressbar_horizontal"))
+        self.assertLess(line.index("default_progressbar_horizontal"), line.index("iw_net_trend"))
+        self.assertIn("ScriptValue('covert_disp_net_strength_frac')", line)
+        self.assertNotIn("marker", line)
+        self.assertEqual(self.row.count('text = "je_iw_net_row_strength'), 1)
 
-    def test_the_headline_sits_right_above_the_bar(self):
-        last = self.row.index('text = "je_iw_net_row_strength_full"')
-        bar = self.row.index("default_progressbar_horizontal = {")
-        self.assertLess(last, bar)
-        between = self.row[last:bar]
-        self.assertNotIn("widget_je_covert_operation_detail", between)
-        self.assertIn("size = { 400 14 }", self.row[bar:bar + 200])
-        self.assertIn('tooltip = "je_iw_net_row_strength_tt"', self.row[bar:bar + 200])
-
-    def test_headlines_name_the_next_mark_from_the_constants(self):
-        self.assertIn("covert_net_intel_tier_1_strength", self.loc["je_iw_net_row_strength_to_service"])
-        self.assertIn("covert_net_intel_tier_2_strength", self.loc["je_iw_net_row_strength_to_ops"])
-        self.assertIn("→", self.loc["je_iw_net_row_strength_to_service"])
-        self.assertIn("→", self.loc["je_iw_net_row_strength_to_ops"])
-        self.assertNotIn("→", self.loc["je_iw_net_row_strength_full"])
-        self.assertIn("full report", self.loc["je_iw_net_row_strength_full"])
+    def test_strength_reads_the_figure_and_the_hover_names_the_marks(self):
+        self.assertRegex(self.loc["je_iw_net_row_strength"], r"^Strength #v \[ScriptContainer\.GetVariableValue\('iw_net_strength'\)\|0\]#!$")
         hover = self.loc["je_iw_net_row_strength_tt"]
-        for name in ("covert_net_intel_tier_1_strength", "covert_net_intel_tier_2_strength", "marker"):
+        for name in ("covert_net_intel_tier_1_strength", "covert_net_intel_tier_2_strength"):
             self.assertIn(name, hover, name)
+        self.assertNotIn("marker", hover)
+        for gone in ("je_iw_net_row_strength_to_service", "je_iw_net_row_strength_to_ops", "je_iw_net_row_strength_full"):
+            self.assertNotIn(gone, self.loc, gone)
+
 
 def _git_files():
     import subprocess
     out = subprocess.run(["git", "ls-files", "gfx/interface/icons/diplomatic_action_icons"], cwd=REPO,
                          capture_output=True, text=True).stdout
     return out.split("\n")
+
+
+class FundingTableTest(unittest.TestCase):
+    """Owner, round 3: the funding levels as a table, one row per level, with
+    what each gives and its weekly cost, the level in force highlighted."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.fund = _type_body(cls.gui, "te_covert_sec_funding")
+        cls.loc = _loc()
+
+    def _rows(self):
+        return re.findall(r"\n\t\t\tcovert_levels_row = \{(.*?)\n\t\t\t\}", self.fund, re.S)
+
+    def test_a_header_and_a_row_per_level_under_the_stepper(self):
+        rows = self._rows()
+        self.assertEqual(len(rows), 7)
+        self.assertIn('text = "je_iw_fund_tbl_head_level"', rows[0])
+        self.assertNotIn("row_current", rows[0])
+        self.assertLess(self.fund.index("covert_cc_funding_stepper = { }"), self.fund.index("covert_levels_row = {"))
+        for n, row in enumerate(rows[1:]):
+            self.assertIn(f"visible = \"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), '(CFixedPoint){n}' )]\"", row, n)
+            self.assertIn(f'text = "je_iw_fund_tbl_level_{n}"', row, n)
+            self.assertIn(f'"je_iw_fund_tbl_cost_{n}"' if n else '"je_iw_fund_tbl_none"', row, n)
+            if n >= 2:
+                self.assertIn(f'"je_iw_fund_tbl_stealth_{n}"', row, n)
+                self.assertIn(f'"je_iw_fund_tbl_capacity_{n}"', row, n)
+
+    def test_the_tint_is_one_visible_defaulting_to_hidden(self):
+        body = _type_body(self.gui, "covert_levels_row")
+        tint = body[body.index("icon = {"):body.index("flowcontainer = {")]
+        self.assertEqual(tint.count("visible"), 1)
+        self.assertIn('block "row_current" {\n\t\t\t\tvisible = no', tint)
+
+    def test_every_figure_is_read_never_typed(self):
+        for n in range(1, 6):
+            self.assertIn(f"ScriptValue('covert_disp_cost_at_{n}')|D]", self.loc[f"je_iw_fund_tbl_cost_{n}"], n)
+        for n in range(2, 6):
+            self.assertIn(f"ScriptValue('covert_funding_detect_reduction_at_{n}')", self.loc[f"je_iw_fund_tbl_stealth_{n}"])
+            self.assertIn(f"ScriptValue('covert_funding_ci_ic_at_{n}')", self.loc[f"je_iw_fund_tbl_capacity_{n}"])
+        for n in range(6):
+            self.assertEqual(self.loc[f"je_iw_fund_tbl_level_{n}"], f"#v {n}#! $iw_funding_name_{n}$")
+        for key in [k for k in self.loc if k.startswith("je_iw_fund_tbl_")]:
+            if key.startswith("je_iw_fund_tbl_level_"):
+                continue
+            outside = re.sub(r"\[[^\[\]]*\]", "", self.loc[key])
+            self.assertNotRegex(outside, r"\d", key)
+
+    def test_the_costs_are_the_cost_formulas_terms(self):
+        values = _read(VALUES)
+        per = values[values.index("covert_disp_cost_per_level = {"):]
+        per = per[:per.index("\n}\n")]
+        for term in ("value = covert_priority_cost_units", "add = 1", "multiply = covert_operations_cost_scale"):
+            self.assertIn(term, per)
+        for n in range(1, 6):
+            block = values[values.index(f"covert_disp_cost_at_{n} = {{"):]
+            block = block[:block.index("\n}\n")]
+            self.assertIn("value = covert_disp_cost_per_level", block)
+            if n > 1:
+                self.assertIn(f"multiply = {n}", block)
+
+    def test_the_ladder_and_the_separate_cost_rows_are_gone(self):
+        sguis = _read(os.path.join(REPO, "common", "scripted_guis", "covert_warfare_sguis.txt"))
+        self.assertNotIn("covert_funding_ladder_sgui", sguis + self.gui)
+        for key in ("je_iw_funding_cost_now", "je_iw_funding_cost_next", "je_iw_ladder_row_0"):
+            self.assertNotIn(f'"{key}"', self.gui, key)
+            self.assertNotIn(key, self.loc, key)
+        # The cost's explanation stays, on the cost column's header.
+        self.assertIn('tooltip = "je_iw_funding_cost_tt"', self._rows()[0])
+
+
+# ---- Round 3, rule 1: nothing a player reads ends in "..." ----------------
+# The owner's measurements, in GUI units per character: the large font about
+# 10, the medium (table) font about 8.6. The small font was not measured; it
+# is taken at the medium rate, which overstates it. Plus 10% margin.
+UNITS = {"small": 8.6, "medium": 8.6, "large": 10.0}
+MARGIN = 1.1
+# The longest names a dynamic label can show.
+LONGEST = {
+    "covert_funding_level_name": "Covert Network",   # iw_funding_name_3
+    "covert_tradecraft_tier_name": "Established",    # iw_tradecraft_tier_name_2
+}
+# Fixed-width cells whose text is set outside a row type: (key, width, font).
+FIXED_CELLS = [
+    ("je_iw_ov_standing_0", 108, "small"), ("je_iw_ov_standing_1", 108, "small"),
+    ("je_iw_ov_standing_2", 108, "small"), ("je_iw_ov_standing_3", 108, "small"),
+    ("je_iw_ov_standing_4", 108, "small"), ("je_iw_ov_funding_label", 108, "small"),
+    ("je_iw_ov_tc_label", 108, "small"), ("je_iw_ov_caught_label", 108, "small"),
+    ("je_iw_capacity_header", 100, "medium"), ("je_iw_tradecraft_header", 100, "medium"),
+    ("je_iw_capacity_total", 120, "medium"), ("je_iw_tradecraft_line", 120, "medium"),
+    ("je_iw_funding_stepper_label", 80, "medium"), ("je_iw_funding_stepper_value", 180, "medium"),
+    ("je_iw_priority_stepper_label", 80, "small"), ("je_iw_stand_down_button", 140, "small"),
+    ("je_iw_net_row_strength", 120, "medium"),
+    # Section headers: 520 wide, less the arrow.
+    ("je_iw_sec_ops_header", 440, "large"), ("je_iw_funding_header", 440, "large"),
+    ("je_iw_net_header", 440, "large"), ("je_iw_defense_header", 440, "large"),
+    ("je_iw_how_header", 440, "large"),
+]
+# Columns of the row types, by block name: (width, font).
+ROW_COLUMNS = {
+    "covert_value_row": {"row_label": (320, "medium"), "row_value": (140, "medium")},
+    "covert_levels_row": {"level_text": (170, "medium"), "stealth_text": (80, "medium"),
+                          "capacity_text": (80, "medium"), "cost_text": (130, "medium")},
+}
+
+
+def _shown(value, loc):
+    """What a player reads, with every dynamic part at its longest."""
+    for _ in range(2):
+        value = re.sub(r"\$([\w.]+)\$", lambda m: loc.get(m.group(1), m.group(0)), value)
+    value = re.sub(r"\[Concept\('\w+', ?'([^']*)'\)\]", r"\1", value)
+    value = re.sub(r"\[(concept_\w+)\]", lambda m: loc[m.group(1)], value)
+
+    def data(m):
+        expr = m.group(0)
+        for name, longest in LONGEST.items():
+            if f"GetCustom('{name}')" in expr:
+                return longest
+        return "123.4K" if "|D]" in expr else "100"
+    for _ in range(3):
+        value = re.sub(r"\[[^\[\]]*\]", data, value)
+    value = re.sub(r"@\w+!", "@@", value)                    # a text icon: about two characters
+    value = re.sub(r"#[A-Za-z_]+(?:;[^ ]*)? ?", "", value)    # format openers
+    return value.replace("#!", "")
+
+
+class WidthBudgetTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.loc = _loc()
+        cls.gui = _read(GUI)
+
+    def _fits(self, key, width, font):
+        text = _shown(self.loc[key], self.loc) if key in self.loc else _shown(key, self.loc)
+        need = len(text) * UNITS[font] * MARGIN
+        self.assertLessEqual(need, width, f"{key}: {text!r} needs {need:.0f} of {width}")
+
+    def test_the_longest_dynamic_names_are_named(self):
+        funding = [self.loc[f"iw_funding_name_{n}"] for n in range(6)]
+        tiers = [self.loc[f"iw_tradecraft_tier_name_{n}"] for n in range(5)]
+        self.assertEqual(max(funding, key=len), LONGEST["covert_funding_level_name"])
+        self.assertEqual(max(tiers, key=len), LONGEST["covert_tradecraft_tier_name"])
+
+    def test_fixed_cells(self):
+        for key, width, font in FIXED_CELLS:
+            with self.subTest(key=key):
+                self.assertIn(f'"{key}"', self.gui, key)
+                self._fits(key, width, font)
+
+    def test_row_columns(self):
+        checked = 0
+        for row_type, columns in ROW_COLUMNS.items():
+            for m in re.finditer(rf"\n\t+{row_type} = \{{", self.gui):
+                end = self.gui.index("\n" + m.group(0)[1:].split(row_type)[0] + "}", m.end())
+                block = self.gui[m.end():end]
+                for column, (width, font) in columns.items():
+                    b = re.search(rf'blockoverride "{column}" \{{(.*?)\}}', block, re.S)
+                    if not b:
+                        continue
+                    text = re.search(r'\btext = "([^"]*)"', b.group(1))
+                    if text:
+                        with self.subTest(row=row_type, column=column, text=text.group(1)):
+                            self._fits(text.group(1), width, font)
+                            checked += 1
+        self.assertGreater(checked, 40)
+
+    def test_the_overview_funding_word_is_short(self):
+        # "Covert Network" does not fit a 108-unit cell, so the cell says
+        # "Funding 3" and the name is on hover.
+        self.assertIn("covert_funding_level_name", self.loc["je_iw_ov_funding_tt"])
+        self.assertNotIn("covert_funding_level_name", self.loc["je_iw_ov_funding_label"])
 
 
 class HowItWorksTest(unittest.TestCase):
@@ -445,9 +605,8 @@ class LocTest(unittest.TestCase):
         # Style rule 8: no tooltip or line starts or ends with an empty line,
         # and a line that is its own row needs no leading spaces.
         keys = set(re.findall(r'\b(?:text|tooltip) = "([a-z]\w+)"', self.gui))
-        keys |= {f"je_iw_ladder_row_{n}{s}" for n in range(6) for s in ("", "_current")}
         keys |= {"concept_tradecraft_desc", "concept_agent_network_desc", "concept_covert_funding_desc",
-                 "concept_operation_slots_desc"}
+                 "concept_operation_slots_desc", "concept_funding_stealth_desc"}
         for key in keys:
             value = self.loc[key]
             self.assertFalse(value.startswith("\\n") or value.endswith("\\n"), key)
@@ -455,11 +614,44 @@ class LocTest(unittest.TestCase):
 
     def test_new_terms_are_concepts(self):
         concepts = _read(CONCEPTS)
-        for c in ("concept_tradecraft", "concept_agent_network", "concept_covert_funding", "concept_operation_slots"):
+        for c in ("concept_tradecraft", "concept_agent_network", "concept_covert_funding", "concept_operation_slots",
+                  "concept_funding_stealth"):
             self.assertRegex(concepts, rf"(?m)^{c} = \{{\}}", c)
             self.assertIn(f"{c}_desc", self.loc, c)
         self.assertIn("concept_tradecraft", self.loc["je_iw_tradecraft_header"])
         self.assertIn("concept_operation_slots", self.loc["je_iw_slots_detail"])
+
+    def test_detection_risk_and_funding_stealth_are_concepts(self):
+        # Owner, round 3. Detection Risk is the existing detection concept
+        # renamed, not a second concept meaning the same thing.
+        concepts = _read(CONCEPTS)
+        self.assertEqual(self.loc["concept_operation_detection"], "Detection Risk")
+        self.assertNotRegex(concepts, r"(?m)^concept_detection_risk = ")
+        self.assertEqual(self.loc["je_iw_detection_header"], "[concept_operation_detection]")
+        self.assertEqual(self.loc["je_iw_detection_funding_label"], "[concept_funding_stealth]")
+        self.assertIn("concept_operation_detection", self.loc["je_iw_op_row_detection"])
+        for key in ("je_iw_how_detection", "je_iw_how_funding"):
+            self.assertIn("[concept_funding_stealth]", self.loc[key], key)
+            self.assertIn("[concept_operation_detection]", self.loc[key], key)
+        self.assertIn("Stealth", self.loc["je_iw_fund_tbl_head_stealth"])
+        self.assertIn("concept_funding_stealth", self.loc["je_iw_fund_tbl_head_stealth"])
+        # No "Detection Risk risk" once the name changed.
+        for key, value in self.loc.items():
+            self.assertNotIn("[concept_operation_detection] risk", value, key)
+
+    def test_no_raw_modifier_keys_in_covert_text(self):
+        # Owner, round 3: Efficiency Factor showed the raw modifier key. Any
+        # country_/state_ key in what a player reads must be a $splice$ (the
+        # modifier's own name) or inside a data expression.
+        for key, value in self.loc.items():
+            if not any(w in (key + value).lower() for w in ("covert", "iw_", "intelligence", "tradecraft", "espionage")):
+                continue
+            shown = re.sub(r"\$[\w.]+\$", "", value)
+            for _ in range(3):
+                shown = re.sub(r"\[[^\[\]]*\]", "", shown)
+            shown = re.sub(r"#tooltippable;tooltip:\S+", "", shown)
+            self.assertNotRegex(shown, r"\b(?:country|state|building|unit)_[a-z_]+_(?:add|mult)\b", key)
+        self.assertIn("$country_covert_operation_efficiency_mult$", self.loc["concept_covert_efficiency_desc"])
 
     def test_standing_floors_are_printed_not_typed(self):
         how = self.loc["je_iw_how_standing"]
@@ -482,10 +674,12 @@ class DisplayValueTest(unittest.TestCase):
                 self.assertIn(f"has_variable = {var}", body, f"{name} reads var:{var} unguarded")
 
     def test_every_display_value_is_read(self):
-        # Nothing in script reads them; the panels and their loc do.
+        # Nothing in script reads them; the panels and their loc do, or
+        # another display value does (the per-level cost).
         text = _read(GUI) + "".join(_loc().values())
+        others = "\n".join(self.blocks.values())
         for name in self.blocks:
-            self.assertIn(f"'{name}'", text, name)
+            self.assertTrue(f"'{name}'" in text or re.search(rf"\b{name}\b", others), name)
 
     def test_the_standing_floors_live_only_here(self):
         for path in glob.glob(os.path.join(REPO, "common", "**", "*.txt"), recursive=True):
