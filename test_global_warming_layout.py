@@ -1,5 +1,6 @@
 """Global Warming panels: section order, collapse defaults, state-gated lines, the
-warming ladder's one definition, and the placeholder icon list
+warming ladder's one definition, and the icons (#586's art, recorded in
+docs/systems/global_warming_gui_icons.md)
 (docs/guides/gui_style_guide.md; test_un_layout.py is the model)."""
 import glob
 import os
@@ -26,8 +27,8 @@ OLD_FLAGS = ["gw_hist_open", "gw_world_open", "gw_emissions_closed"]
 MARKET_WIDE = ["carbon_tax", "renewable_investment", "emission_standards"]
 NATIONAL = ["climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
             "green_building_codes"]
-# Textures in the widget that are not placeholders for art still to come.
-NOT_PLACEHOLDERS = {"gfx/interface/backgrounds/round_frame_dec.dds",
+# Textures in the widget that are not icons: frames, fills and blanks.
+NOT_ICONS = {"gfx/interface/backgrounds/round_frame_dec.dds",
                     "gfx/interface/backgrounds/white.dds",   # the threshold line, a tinted flat fill
                     "gfx/interface/icons/generic_icons/transparent.dds"}
 
@@ -552,13 +553,81 @@ class LocTest(unittest.TestCase):
         self.assertEqual(missing, [])
 
 
+GW_ICONS = "gfx/interface/icons/gw_icons/"
+TIERS = ["negligible", "slight", "moderate", "significant", "severe", "catastrophic", "apocalyptic"]
+# Placeholders the #586 art replaced; none may come back.
+OLD_PLACEHOLDERS = {
+    "gfx/interface/icons/event_icons/je_global_warming.dds",
+    "gfx/interface/icons/state_status_icons/state_market_capital_icon.dds",
+    "gfx/interface/icons/generic_icons/world_market.dds",
+    "gfx/interface/icons/generic_icons/warning.dds",
+    "gfx/interface/icons/trade_icons/consumption_tax.dds",
+    "gfx/interface/icons/building_icons/renewable_plant.dds",
+    "gfx/interface/icons/decree/decree_pollution_control.dds",
+    "gfx/interface/icons/state_status_icons/state_infrastructure.dds",
+    "gfx/interface/icons/decree/decree_greenest_grass_campaign.dds",
+    "gfx/interface/icons/goods_icons/transportation.dds",
+    "gfx/interface/icons/generic_icons/money.dds",
+    "gfx/interface/icons/production_method_icons/cat_building_green_p1.dds",
+    "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds",
+    "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds",
+}
+# The two marks that stay vanilla by design.
+VANILLA_MARKS = {"gfx/interface/icons/generic_icons/green_checkmark.dds",
+                 "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"}
+
+
+class GwIconsTest(unittest.TestCase):
+    """Each code, role, policy and pie is held to its #586 file (the UN's UnIconsTest)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.overview = _type_body(cls.gui, "te_gw_overview_panel")
+        cls.policies = _type_body(cls.gui, "te_gw_sec_policies")
+
+    def test_every_tier_code_has_its_own_file(self):
+        found = dict(re.findall(r"ScriptValue\('gw_disp_tier_code'\), '\(CFixedPoint\)(\d)' \)\]\"\s*"
+                                r"blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"", self.overview))
+        self.assertEqual(found, {str(c): f"{GW_ICONS}tier_{t}.dds" for c, t in enumerate(TIERS)})
+
+    def test_roles_and_penalty(self):
+        leader = re.search(r"IsShown\( GuiScope\.SetRoot\( JournalEntry\.GetCountry\.MakeScope \)\.End \)\]\"\s*"
+                           r"blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"", self.overview)
+        member = re.search(r"IsShown\( GuiScope\.SetRoot\( JournalEntry\.GetCountry\.MakeScope \)\.End \) \)\]\"\s*"
+                           r"blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"", self.overview)
+        self.assertEqual(leader.group(1), f"{GW_ICONS}role_leader.dds")
+        self.assertEqual(member.group(1), f"{GW_ICONS}role_member.dds")
+        self.assertRegex(self.overview, rf'tooltip = "gw_cond_penalty_tt"\s*blockoverride "icon_texture" \{{\s*'
+                                        rf'texture = "{re.escape(GW_ICONS)}penalty\.dds"')
+
+    def test_every_policy_has_its_own_file(self):
+        for p in MARKET_WIDE + NATIONAL:
+            self.assertRegex(self.policies, rf"GetScriptedGui\('gw_active_{p}_sgui'\)\]\"\s*"
+                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(GW_ICONS)}policy_{p}\.dds"', p)
+
+    def test_pies(self):
+        for pie, key in (("pie_share", "gw_ov_pie_share"), ("pie_cut", "gw_ov_pie_cut")):
+            self.assertRegex(self.overview, rf'texture = "{re.escape(GW_ICONS)}{pie}\.dds"\s*\}}\s*'
+                                            rf'blockoverride "label" \{{\s*text = "{key}"')
+
+    def test_no_placeholder_left(self):
+        textures = set(re.findall(r'texture = "(gfx/[^"]+)"', self.gui))
+        self.assertEqual(textures & OLD_PLACEHOLDERS, set())
+        icons = textures - NOT_ICONS - VANILLA_MARKS - {"gfx/interface/icons/un_icons/pie_rest.dds",
+                                                        "gfx/interface/icons/un_icons/pie_members.dds"}
+        self.assertTrue(all(t.startswith(GW_ICONS) for t in icons), sorted(icons))
+        self.assertEqual(len(icons), 7 + 2 + 1 + 8 + 2)   # tiers, roles, penalty, policies, pies
+
+
 class IconsDocTest(unittest.TestCase):
-    def test_every_placeholder_is_listed(self):
-        textures = set(re.findall(r'texture = "(gfx/[^"]+)"', _read(GUI))) - NOT_PLACEHOLDERS
+    def test_every_icon_is_recorded(self):
+        textures = set(re.findall(r'texture = "(gfx/[^"]+)"', _read(GUI))) - NOT_ICONS
         doc = _read(ICONS_DOC)
         listed = set(re.findall(r"`(gfx/[^`]+\.dds)`", doc))
+        listed |= {GW_ICONS + n for n in re.findall(r"`([a-z_]+\.dds)`", doc)}
         self.assertTrue(textures)
-        self.assertEqual(textures - listed, set(), "placeholder textures missing from the icons doc")
+        self.assertEqual(textures - listed, set(), "textures missing from the icons doc")
 
 
 if __name__ == "__main__":

@@ -61,8 +61,11 @@
 ### The two charts reuse te_history_chart from te_history_chart.gui; the samples
 ### come from common/scripted_effects/te_history_global_warming_effects.txt.
 ###
-### Icons are placeholders (style rule 10): every one is listed, with what the
-### final art should show, in docs/systems/global_warming_gui_icons.md.
+### The icons are the painted set in gfx/interface/icons/gw_icons/ (PR #586),
+### except the in-force check and Treaty-Bound, which stay vanilla marks. Each
+### is a literal `texture` line below; docs/systems/global_warming_gui_icons.md
+### records what each shows, and test_global_warming_layout.py
+### (GwIconsTest) holds each code to its file.
 
 types global_warming_widget_types
 {
@@ -431,7 +434,7 @@ types global_warming_widget_types
 						te_gw_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)0' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+								texture = "gfx/interface/icons/gw_icons/tier_negligible.dds"
 							}
 							blockoverride "label" {
 								text = "gw_cond_tier_value"
@@ -440,7 +443,7 @@ types global_warming_widget_types
 						te_gw_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)1' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+								texture = "gfx/interface/icons/gw_icons/tier_slight.dds"
 							}
 							blockoverride "label" {
 								text = "gw_cond_tier_value"
@@ -449,7 +452,7 @@ types global_warming_widget_types
 						te_gw_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)2' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+								texture = "gfx/interface/icons/gw_icons/tier_moderate.dds"
 							}
 							blockoverride "label" {
 								text = "gw_cond_tier_value"
@@ -458,7 +461,7 @@ types global_warming_widget_types
 						te_gw_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)3' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+								texture = "gfx/interface/icons/gw_icons/tier_significant.dds"
 							}
 							blockoverride "label" {
 								text = "gw_cond_tier_value"
@@ -467,7 +470,7 @@ types global_warming_widget_types
 						te_gw_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)4' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+								texture = "gfx/interface/icons/gw_icons/tier_severe.dds"
 							}
 							blockoverride "label" {
 								text = "gw_cond_tier_value"
@@ -476,7 +479,7 @@ types global_warming_widget_types
 						te_gw_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)5' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+								texture = "gfx/interface/icons/gw_icons/tier_catastrophic.dds"
 							}
 							blockoverride "label" {
 								text = "gw_cond_tier_value"
@@ -485,7 +488,7 @@ types global_warming_widget_types
 						te_gw_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_tier_code'), '(CFixedPoint)6' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/je_global_warming.dds"
+								texture = "gfx/interface/icons/gw_icons/tier_apocalyptic.dds"
 							}
 							blockoverride "label" {
 								text = "gw_cond_tier_value"
@@ -501,7 +504,7 @@ types global_warming_widget_types
 						te_gw_ov_icon_label = {
 							visible = "[GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/state_status_icons/state_market_capital_icon.dds"
+								texture = "gfx/interface/icons/gw_icons/role_leader.dds"
 							}
 							blockoverride "label" {
 								text = "gw_cond_role_value"
@@ -510,7 +513,7 @@ types global_warming_widget_types
 						te_gw_ov_icon_label = {
 							visible = "[Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/generic_icons/world_market.dds"
+								texture = "gfx/interface/icons/gw_icons/role_member.dds"
 							}
 							blockoverride "label" {
 								text = "gw_cond_role_value"
@@ -522,7 +525,7 @@ types global_warming_widget_types
 					te_gw_ov_icon_label = {
 						tooltip = "gw_cond_penalty_tt"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/warning.dds"
+							texture = "gfx/interface/icons/gw_icons/penalty.dds"
 						}
 						blockoverride "label" {
 							text = "gw_ov_penalty_label"
@@ -759,7 +762,7 @@ types global_warming_widget_types
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_share_frac') )]"
 						}
 						blockoverride "pie_fill" {
-							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
+							texture = "gfx/interface/icons/gw_icons/pie_share.dds"
 						}
 						blockoverride "label" {
 							text = "gw_ov_pie_share"
@@ -771,7 +774,7 @@ types global_warming_widget_types
 							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_cut_frac') )]"
 						}
 						blockoverride "pie_fill" {
-							texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
+							texture = "gfx/interface/icons/gw_icons/pie_cut.dds"
 						}
 						blockoverride "label" {
 							text = "gw_ov_pie_cut"
@@ -845,7 +848,7 @@ types global_warming_widget_types
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_carbon_tax_sgui')]"
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/trade_icons/consumption_tax.dds"
+					texture = "gfx/interface/icons/gw_icons/policy_carbon_tax.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_CARBON_TAX_ROW"
@@ -866,7 +869,7 @@ types global_warming_widget_types
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_renewable_investment_sgui')]"
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/building_icons/renewable_plant.dds"
+					texture = "gfx/interface/icons/gw_icons/policy_renewable_investment.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_RENEWABLE_INVESTMENT_ROW"
@@ -887,7 +890,7 @@ types global_warming_widget_types
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_emission_standards_sgui')]"
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/decree/decree_pollution_control.dds"
+					texture = "gfx/interface/icons/gw_icons/policy_emission_standards.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_EMISSION_STANDARDS_ROW"
@@ -915,7 +918,7 @@ types global_warming_widget_types
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_climate_adaptation_sgui')]"
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/state_status_icons/state_infrastructure.dds"
+					texture = "gfx/interface/icons/gw_icons/policy_climate_adaptation.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_CLIMATE_ADAPTATION_ROW"
@@ -936,7 +939,7 @@ types global_warming_widget_types
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_reforestation_sgui')]"
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/decree/decree_greenest_grass_campaign.dds"
+					texture = "gfx/interface/icons/gw_icons/policy_reforestation.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_REFORESTATION_ROW"
@@ -957,7 +960,7 @@ types global_warming_widget_types
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_public_transit_sgui')]"
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/goods_icons/transportation.dds"
+					texture = "gfx/interface/icons/gw_icons/policy_public_transit.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_PUBLIC_TRANSIT_ROW"
@@ -978,7 +981,7 @@ types global_warming_widget_types
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_fossil_fuel_divestment_sgui')]"
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/generic_icons/money.dds"
+					texture = "gfx/interface/icons/gw_icons/policy_fossil_fuel_divestment.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_FOSSIL_FUEL_DIVESTMENT_ROW"
@@ -999,7 +1002,7 @@ types global_warming_widget_types
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_green_building_codes_sgui')]"
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/production_method_icons/cat_building_green_p1.dds"
+					texture = "gfx/interface/icons/gw_icons/policy_green_building_codes.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_GREEN_BUILDING_CODES_ROW"
