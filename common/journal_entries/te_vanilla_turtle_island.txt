@@ -14,7 +14,7 @@
 # silently from a union that already holds it (an active entry otherwise stays
 # active through change_tag, buttons and all). Turtle Island may still form UNA.
 #
-# Everything else is vanilla 00_turtle_island.txt, copied from 1.14.4
+# Everything else is vanilla 00_turtle_island.txt, copied from 1.14.5
 # (unchanged since 1.13.9) — re-diff on every Vic3 patch. The mod-only
 # lines are the three te_is_north_american_capable_union checks.
 

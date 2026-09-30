@@ -1135,7 +1135,7 @@
    ]
   }
  ],
- "country_prestige_from_navy_combat_power_mult": [
+ "country_prestige_from_navy_power_projection_mult": [
   "=",
   {
    "decimals": [
@@ -9477,6 +9477,84 @@
   }
  ],
  "ship_battle_against_ship_type_destroyer_accuracy_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "ship_battle_against_ship_type_early_ironclad_hull_damage_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "ship_battle_against_ship_type_monitor_hull_damage_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "ship_battle_against_ship_type_coastal_defense_ship_hull_damage_mult": [
   "=",
   {
    "decimals": [
@@ -19887,6 +19965,96 @@
   }
  ],
  "country_allow_multiple_alliances_bool": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "boolean": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_homeland_infamy_reduction_bool": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "boolean": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_shared_language_infamy_reduction_bool": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "boolean": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_ban_slavery_no_infamy_bool": [
   "=",
   {
    "script_only": [

@@ -8,7 +8,7 @@
 	}
 
 	possible = {
-		is_subject = no
+		is_independent_and_not_being_subjugated = yes
 		has_technology_researched = decolonization
 		capital = {
 			any_scope_culture = {

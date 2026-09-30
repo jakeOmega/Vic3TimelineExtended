@@ -3,7 +3,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "4",
+        "goods_input_ammunition_add": "2",
         "goods_input_oil_add": "3",
         "goods_input_radios_add": "2",
         "goods_input_small_arms_add": "4",
@@ -17,7 +17,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "10",
+        "goods_input_ammunition_add": "5",
         "goods_input_radios_add": "12",
         "goods_input_robotics_add": "30",
         "goods_input_small_arms_add": "15",
@@ -31,7 +31,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "30",
+        "goods_input_ammunition_add": "15",
         "goods_input_radios_add": "30",
         "goods_input_robotics_add": "60",
         "goods_input_small_arms_add": "30",
@@ -46,7 +46,7 @@
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
         "goods_input_advanced_materials_add": "3",
-        "goods_input_ammunition_add": "30",
+        "goods_input_ammunition_add": "15",
         "goods_input_radios_add": "30",
         "goods_input_robotics_add": "60",
         "goods_input_small_arms_add": "30",
@@ -60,7 +60,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "8",
+        "goods_input_ammunition_add": "4",
         "goods_input_artillery_add": "10",
         "goods_input_automobiles_add": "2",
         "goods_input_oil_add": "4",
@@ -76,7 +76,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "16",
+        "goods_input_ammunition_add": "8",
         "goods_input_artillery_add": "16",
         "goods_input_automobiles_add": "4",
         "goods_input_electronic_components_add": "8",
@@ -93,7 +93,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "32",
+        "goods_input_ammunition_add": "16",
         "goods_input_artillery_add": "40",
         "goods_input_automobiles_add": "6",
         "goods_input_electronic_components_add": "40",
@@ -110,7 +110,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "44",
+        "goods_input_ammunition_add": "22",
         "goods_input_artillery_add": "60",
         "goods_input_electronic_components_add": "60",
         "goods_input_launch_capacity_add": "40",
@@ -126,7 +126,7 @@
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
         "goods_input_advanced_materials_add": "4",
-        "goods_input_ammunition_add": "52",
+        "goods_input_ammunition_add": "26",
         "goods_input_artillery_add": "60",
         "goods_input_electronic_components_add": "66",
         "goods_input_launch_capacity_add": "54",
@@ -141,7 +141,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "10",
+        "goods_input_ammunition_add": "5",
         "goods_input_artillery_add": "6",
         "goods_input_electronic_components_add": "20",
         "goods_input_oil_add": "3",
@@ -158,7 +158,7 @@
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
         "goods_input_aeroplanes_add": "10",
-        "goods_input_ammunition_add": "16",
+        "goods_input_ammunition_add": "8",
         "goods_input_artillery_add": "20",
         "goods_input_electronic_components_add": "40",
         "goods_input_oil_add": "6",
@@ -177,7 +177,7 @@
       "modifiers": {
         "goods_input_advanced_materials_add": "1",
         "goods_input_aeroplanes_add": "10",
-        "goods_input_ammunition_add": "40",
+        "goods_input_ammunition_add": "20",
         "goods_input_artillery_add": "40",
         "goods_input_electronic_components_add": "70",
         "goods_input_radios_add": "50",
@@ -193,7 +193,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "20",
+        "goods_input_ammunition_add": "10",
         "goods_input_artillery_add": "20",
         "goods_input_electronic_components_add": "8",
         "goods_input_oil_add": "12",
@@ -209,7 +209,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "26",
+        "goods_input_ammunition_add": "13",
         "goods_input_artillery_add": "26",
         "goods_input_electronic_components_add": "30",
         "goods_input_oil_add": "12",
@@ -225,7 +225,7 @@
     {
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
-        "goods_input_ammunition_add": "80",
+        "goods_input_ammunition_add": "40",
         "goods_input_artillery_add": "64",
         "goods_input_electronic_components_add": "90",
         "goods_input_oil_add": "20",
@@ -243,7 +243,7 @@
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
         "goods_input_aeroplanes_add": "30",
-        "goods_input_ammunition_add": "40",
+        "goods_input_ammunition_add": "20",
         "goods_input_oil_add": "20",
         "goods_input_radios_add": "10",
         "unit_defense_add": "340",
@@ -257,7 +257,7 @@
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
         "goods_input_aeroplanes_add": "60",
-        "goods_input_ammunition_add": "40",
+        "goods_input_ammunition_add": "20",
         "goods_input_electronic_components_add": "10",
         "goods_input_oil_add": "20",
         "goods_input_radios_add": "20",
@@ -272,7 +272,7 @@
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
         "goods_input_aeroplanes_add": "125",
-        "goods_input_ammunition_add": "40",
+        "goods_input_ammunition_add": "20",
         "goods_input_electronic_components_add": "40",
         "goods_input_oil_add": "20",
         "goods_input_radios_add": "50",
@@ -287,7 +287,7 @@
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
         "goods_input_aeroplanes_add": "240",
-        "goods_input_ammunition_add": "64",
+        "goods_input_ammunition_add": "32",
         "goods_input_electronic_components_add": "80",
         "goods_input_launch_capacity_add": "100",
         "goods_input_radios_add": "80",
@@ -304,7 +304,7 @@
       "modifiers": {
         "goods_input_advanced_materials_add": "5",
         "goods_input_aeroplanes_add": "240",
-        "goods_input_ammunition_add": "64",
+        "goods_input_ammunition_add": "32",
         "goods_input_electronic_components_add": "80",
         "goods_input_launch_capacity_add": "300",
         "goods_input_radios_add": "80",
@@ -320,7 +320,7 @@
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
         "goods_input_aeroplanes_add": "4",
-        "goods_input_ammunition_add": "10",
+        "goods_input_ammunition_add": "5",
         "goods_input_artillery_add": "2",
         "goods_input_oil_add": "6",
         "goods_input_radios_add": "3",
@@ -337,7 +337,7 @@
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
         "goods_input_aeroplanes_add": "16",
-        "goods_input_ammunition_add": "14",
+        "goods_input_ammunition_add": "7",
         "goods_input_artillery_add": "5",
         "goods_input_electronic_components_add": "10",
         "goods_input_oil_add": "7",
@@ -355,7 +355,7 @@
       "file": "common/combat_unit_types/extra_combat_units.txt",
       "modifiers": {
         "goods_input_aeroplanes_add": "31",
-        "goods_input_ammunition_add": "33",
+        "goods_input_ammunition_add": "16.5",
         "goods_input_artillery_add": "18",
         "goods_input_electronic_components_add": "34",
         "goods_input_launch_capacity_add": "18",
@@ -376,7 +376,7 @@
       "modifiers": {
         "goods_input_advanced_materials_add": "4",
         "goods_input_aeroplanes_add": "31",
-        "goods_input_ammunition_add": "56",
+        "goods_input_ammunition_add": "28",
         "goods_input_artillery_add": "25",
         "goods_input_electronic_components_add": "44",
         "goods_input_launch_capacity_add": "44",
@@ -4941,6 +4941,22 @@
     {
       "file": "common/production_methods/extra_pms.txt",
       "modifiers": {
+        "goods_input_electronic_components_add": "5",
+        "goods_input_explosives_add": "8"
+      },
+      "name": "pm_missile_defense_battery"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
+        "goods_input_electricity_add": "20",
+        "goods_input_electronic_components_add": "5"
+      },
+      "name": "pm_directed_energy_point_defense"
+    },
+    {
+      "file": "common/production_methods/extra_pms.txt",
+      "modifiers": {
         "goods_input_ammunition_add": "10",
         "goods_input_engines_add": "10",
         "goods_input_explosives_add": "15",
@@ -4967,19 +4983,34 @@
     {
       "file": "common/production_methods/resettlement_pms.txt",
       "modifiers": {
-        "goods_input_paper_add": "10",
+        "goods_input_paper_add": "5",
         "goods_input_services_add": "5"
       },
-      "name": "pm_homesteading_program"
+      "name": "pm_resettlement_land_grants"
     },
     {
       "file": "common/production_methods/resettlement_pms.txt",
       "modifiers": {
-        "goods_input_paper_add": "15",
-        "goods_input_services_add": "10",
-        "goods_input_transportation_add": "10"
+        "goods_input_paper_add": "5",
+        "goods_input_small_arms_add": "5"
       },
-      "name": "pm_organized_colonization"
+      "name": "pm_resettlement_military_colonies"
+    },
+    {
+      "file": "common/production_methods/resettlement_pms.txt",
+      "modifiers": {
+        "goods_input_paper_add": "3",
+        "goods_input_small_arms_add": "3"
+      },
+      "name": "pm_resettlement_penal_transportation"
+    },
+    {
+      "file": "common/production_methods/resettlement_pms.txt",
+      "modifiers": {
+        "goods_input_paper_add": "10",
+        "goods_input_services_add": "5"
+      },
+      "name": "pm_resettlement_organized_colonization"
     },
     {
       "file": "common/production_methods/resettlement_pms.txt",
@@ -4988,87 +5019,65 @@
         "goods_input_paper_add": "10",
         "goods_input_small_arms_add": "10"
       },
-      "name": "pm_forced_resettlement"
-    },
-    {
-      "file": "common/production_methods/resettlement_pms.txt",
-      "modifiers": {
-        "goods_input_paper_add": "5",
-        "goods_input_small_arms_add": "5"
-      },
-      "name": "pm_penal_transportation"
-    },
-    {
-      "file": "common/production_methods/resettlement_pms.txt",
-      "modifiers": {
-        "goods_input_paper_add": "15",
-        "goods_input_services_add": "20",
-        "goods_input_transportation_add": "15"
-      },
-      "name": "pm_incentivized_relocation"
+      "name": "pm_resettlement_special_settlements"
     },
     {
       "file": "common/production_methods/resettlement_pms.txt",
       "modifiers": {
         "goods_input_paper_add": "10",
-        "goods_input_services_add": "10"
+        "goods_input_services_add": "15"
       },
-      "name": "pm_settler_homesteads"
+      "name": "pm_resettlement_development_program"
     },
     {
       "file": "common/production_methods/resettlement_pms.txt",
       "modifiers": {
-        "goods_input_paper_add": "15",
-        "goods_input_services_add": "15",
-        "goods_input_transportation_add": "10"
-      },
-      "name": "pm_planned_settlement"
-    },
-    {
-      "file": "common/production_methods/resettlement_pms.txt",
-      "modifiers": {
-        "goods_input_paper_add": "15",
-        "goods_input_services_add": "10",
+        "goods_input_paper_add": "10",
         "goods_input_small_arms_add": "5"
       },
-      "name": "pm_administered_territory"
+      "name": "pm_resettlement_rustication"
     },
     {
       "file": "common/production_methods/resettlement_pms.txt",
       "modifiers": {
-        "goods_input_paper_add": "15",
-        "goods_input_services_add": "20",
+        "goods_input_paper_add": "10",
+        "goods_input_services_add": "15"
+      },
+      "name": "pm_resettlement_managed_retreat"
+    },
+    {
+      "file": "common/production_methods/resettlement_pms.txt",
+      "modifiers": {
+        "goods_input_tools_add": "5"
+      },
+      "name": "pm_resettlement_work_settlements"
+    },
+    {
+      "file": "common/production_methods/resettlement_pms.txt",
+      "modifiers": {
+        "goods_input_services_add": "10"
+      },
+      "name": "pm_resettlement_planned_towns"
+    },
+    {
+      "file": "common/production_methods/resettlement_pms.txt",
+      "modifiers": {
+        "goods_input_transportation_add": "10"
+      },
+      "name": "pm_resettlement_rail_steamship"
+    },
+    {
+      "file": "common/production_methods/resettlement_pms.txt",
+      "modifiers": {
         "goods_input_transportation_add": "15"
       },
-      "name": "pm_development_zone"
-    },
-    {
-      "file": "common/production_methods/resettlement_pms.txt",
-      "modifiers": {
-        "goods_input_transportation_add": "5"
-      },
-      "name": "pm_resettlement_overland"
-    },
-    {
-      "file": "common/production_methods/resettlement_pms.txt",
-      "modifiers": {
-        "goods_input_transportation_add": "15"
-      },
-      "name": "pm_resettlement_railway"
+      "name": "pm_resettlement_motor_transport"
     },
     {
       "file": "common/production_methods/resettlement_pms.txt",
       "modifiers": {
         "goods_input_services_add": "5",
         "goods_input_transportation_add": "20"
-      },
-      "name": "pm_resettlement_steamship"
-    },
-    {
-      "file": "common/production_methods/resettlement_pms.txt",
-      "modifiers": {
-        "goods_input_services_add": "10",
-        "goods_input_transportation_add": "25"
       },
       "name": "pm_resettlement_airlift"
     },
@@ -5078,6 +5087,7 @@
         "goods_input_aeroplanes_add": "1",
         "goods_input_ammunition_add": "1",
         "goods_input_artillery_add": "1",
+        "goods_input_fertilizer_add": "1",
         "goods_input_grain_add": "1",
         "goods_input_oil_add": "1",
         "goods_input_small_arms_add": "1",
@@ -5091,6 +5101,90 @@
         "goods_input_construction_add": "1"
       },
       "name": "pm_te_construction_market_base"
+    },
+    {
+      "file": "common/production_methods/te_construction_market_pms.txt",
+      "modifiers": {
+        "goods_input_fabric_add": "10",
+        "goods_input_wood_add": "40"
+      },
+      "name": "pm_te_direct_construction_wooden"
+    },
+    {
+      "file": "common/production_methods/te_construction_market_pms.txt",
+      "modifiers": {
+        "goods_input_fabric_add": "8",
+        "goods_input_iron_add": "20",
+        "goods_input_merchant_marine_add": "0.50",
+        "goods_input_tools_add": "4",
+        "goods_input_wood_add": "16"
+      },
+      "name": "pm_te_direct_construction_iron_frame"
+    },
+    {
+      "file": "common/production_methods/te_construction_market_pms.txt",
+      "modifiers": {
+        "goods_input_explosives_add": "4",
+        "goods_input_glass_add": "16",
+        "goods_input_merchant_marine_add": "10",
+        "goods_input_steel_add": "20",
+        "goods_input_tools_add": "8"
+      },
+      "name": "pm_te_direct_construction_steel_frame"
+    },
+    {
+      "file": "common/production_methods/te_construction_market_pms.txt",
+      "modifiers": {
+        "goods_input_electricity_add": "16",
+        "goods_input_explosives_add": "8",
+        "goods_input_glass_add": "16",
+        "goods_input_merchant_marine_add": "20",
+        "goods_input_steel_add": "20",
+        "goods_input_tools_add": "16"
+      },
+      "name": "pm_te_direct_construction_arc_welded"
+    },
+    {
+      "file": "common/production_methods/te_construction_market_pms.txt",
+      "modifiers": {
+        "goods_input_electricity_add": "16",
+        "goods_input_engines_add": "2",
+        "goods_input_explosives_add": "8",
+        "goods_input_glass_add": "16",
+        "goods_input_merchant_marine_add": "25",
+        "goods_input_steel_add": "20",
+        "goods_input_tools_add": "16"
+      },
+      "name": "pm_te_direct_construction_reinforced_concrete"
+    },
+    {
+      "file": "common/production_methods/te_construction_market_pms.txt",
+      "modifiers": {
+        "goods_input_digital_assets_add": "20",
+        "goods_input_electricity_add": "20",
+        "goods_input_engines_add": "4",
+        "goods_input_explosives_add": "8",
+        "goods_input_glass_add": "16",
+        "goods_input_merchant_marine_add": "25",
+        "goods_input_steel_add": "20",
+        "goods_input_tools_add": "16"
+      },
+      "name": "pm_te_direct_construction_advanced"
+    },
+    {
+      "file": "common/production_methods/te_construction_market_pms.txt",
+      "modifiers": {
+        "goods_input_advanced_materials_add": "1",
+        "goods_input_digital_assets_add": "20",
+        "goods_input_electricity_add": "20",
+        "goods_input_engines_add": "4",
+        "goods_input_explosives_add": "8",
+        "goods_input_glass_add": "16",
+        "goods_input_merchant_marine_add": "25",
+        "goods_input_steel_add": "20",
+        "goods_input_tools_add": "16"
+      },
+      "name": "pm_te_direct_construction_nanomaterial"
     },
     {
       "file": "common/production_methods/unique_pms.txt",
@@ -5930,6 +6024,14 @@
         "goods_input_tools_add": "10"
       },
       "name": "pm_generic_lumber_yard"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_coal_add": "15",
+        "goods_input_wood_add": "20"
+      },
+      "name": "pm_generic_dye_fiber_park"
     },
     {
       "file": "common/production_methods/unique_pms.txt",
@@ -7434,6 +7536,131 @@
         "goods_input_tools_add": "10"
       },
       "name": "pm_sumitomo_besshi_mine"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_coal_add": "10",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_yasuda_atosanupuri_mine"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_coal_add": "20",
+        "goods_input_engines_add": "5"
+      },
+      "name": "pm_tokyo_electric_asakusa_station"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_paper_add": "5",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_guthrie_singapore_agency"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "building_port_throughput_add": "0.05",
+        "goods_input_tools_add": "10",
+        "goods_input_wood_add": "10"
+      },
+      "name": "pm_sfct_hon_gai_collieries"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_coal_add": "10",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_bhp_broken_hill_mine"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_fish_add": "20",
+        "goods_input_steel_add": "5"
+      },
+      "name": "pm_ramirez_vila_real_cannery"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_explosives_add": "5",
+        "goods_input_tools_add": "10"
+      },
+      "name": "pm_ocmc_unsan_gold_mines"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_coal_add": "15",
+        "goods_input_engines_add": "5"
+      },
+      "name": "pm_siam_electric_wat_liab_station"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_glass_add": "5",
+        "goods_input_steel_add": "10"
+      },
+      "name": "pm_ferranti_hollinwood_works"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "building_shipyard_throughput_add": "0.05",
+        "goods_input_coal_add": "10",
+        "goods_input_steel_add": "15"
+      },
+      "name": "pm_van_vlissingen_oostenburg_works"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_coal_add": "10",
+        "goods_input_steel_add": "10"
+      },
+      "name": "pm_mfo_oerlikon_works"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "building_port_throughput_add": "0.05",
+        "goods_input_coal_add": "10",
+        "goods_input_grain_add": "20"
+      },
+      "name": "pm_markwald_bangkok_rice_mill"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_clothes_add": "10",
+        "goods_input_paper_add": "10"
+      },
+      "name": "pm_nhm_factorij_batavia"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "building_port_throughput_add": "0.15",
+        "building_shipyard_throughput_add": "0.05",
+        "goods_input_coal_add": "15",
+        "goods_input_groceries_add": "10"
+      },
+      "name": "pm_white_star_albion_house"
+    },
+    {
+      "file": "common/production_methods/unique_pms.txt",
+      "modifiers": {
+        "goods_input_grain_add": "20",
+        "goods_input_wood_add": "5"
+      },
+      "name": "pm_noda_shoyu_goyogura"
     }
   ],
   "ship_types": [
@@ -7449,8 +7676,12 @@
         "modification_construction_cost": "110",
         "ship_accuracy_add": "8",
         "ship_armor_add": "50",
+        "ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult": "1.0",
+        "ship_battle_against_ship_type_autonomous_swarm_submarine_hull_damage_mult": "0.5",
         "ship_battle_against_ship_type_nuclear_submarine_accuracy_mult": "1.0",
         "ship_battle_against_ship_type_nuclear_submarine_hull_damage_mult": "0.5",
+        "ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult": "1.0",
+        "ship_battle_against_ship_type_stealth_attack_submarine_hull_damage_mult": "0.5",
         "ship_battle_against_ship_type_submarine_accuracy_mult": "1.0",
         "ship_battle_against_ship_type_submarine_hull_damage_mult": "0.5",
         "ship_blockade_strength_add": "150",
@@ -8432,6 +8663,20 @@
         "goods_input_tanks_mult": "1"
       },
       "name": "st_res_tanks_store_flow"
+    },
+    {
+      "file": "common/static_modifiers/extra_modifiers.txt",
+      "modifiers": {
+        "goods_input_fertilizer_mult": "1"
+      },
+      "name": "st_res_fertilizer_store_flow"
+    },
+    {
+      "file": "common/static_modifiers/te_event_agency_decol_modifiers.txt",
+      "modifiers": {
+        "character_loyalty_add": "1"
+      },
+      "name": "post_imperial_modifier"
     }
   ],
   "technologies": [
@@ -8584,7 +8829,9 @@
       "modifiers": {
         "country_admiral_rank_impact_mult": "0.5",
         "country_ship_type_destroyer_construction_efficiency_add": "0.5",
+        "ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult": "0.30",
         "ship_battle_against_ship_type_nuclear_submarine_accuracy_mult": "0.30",
+        "ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult": "0.30",
         "ship_battle_against_ship_type_submarine_accuracy_mult": "0.30"
       },
       "name": "anti_sub_warfare"

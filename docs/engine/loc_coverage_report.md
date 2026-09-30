@@ -26,12 +26,7 @@ entity's opening line:
 
 ## Unreviewed Flags
 
-### Messages (4)
-
-- `common/messages/extra_messages.txt:94` — `tactical_nuke_fails_attacker` — missing: `notification_tactical_nuke_fails_attacker_name`, `notification_tactical_nuke_fails_attacker_desc`
-- `common/messages/extra_messages.txt:101` — `tactical_nuke_fails_defender` — missing: `notification_tactical_nuke_fails_defender_name`, `notification_tactical_nuke_fails_defender_desc`
-- `common/messages/extra_messages.txt:80` — `tactical_nuke_succeeds_attacker` — missing: `notification_tactical_nuke_succeeds_attacker_name`, `notification_tactical_nuke_succeeds_attacker_desc`
-- `common/messages/extra_messages.txt:87` — `tactical_nuke_succeeds_defender` — missing: `notification_tactical_nuke_succeeds_defender_name`, `notification_tactical_nuke_succeeds_defender_desc`
+_None._
 
 ## Reviewed Exemptions
 
@@ -53,10 +48,9 @@ entity's opening line:
 ## Coverage
 
 - flags by category:
-  - Messages: 4
   - Modifiers: 14
-- total flags: 18
-- unreviewed: 4
+- total flags: 14
+- unreviewed: 0
 - exempted: 14
 
 ## Scope notes

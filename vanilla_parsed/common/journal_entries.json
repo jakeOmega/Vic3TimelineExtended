@@ -5551,9 +5551,9 @@
    "invalid": [
     "=",
     {
-     "is_subject": [
+     "is_independent_and_not_being_subjugated": [
       "=",
-      "no"
+      "yes"
      ]
     }
    ],
@@ -5878,9 +5878,9 @@
    "invalid": [
     "=",
     {
-     "is_subject": [
+     "is_independent_and_not_being_subjugated": [
       "=",
-      "no"
+      "yes"
      ]
     }
    ],
@@ -6144,6 +6144,20 @@
            "has_building": [
             "=",
             "building_suez_canal"
+           ],
+           "owner": [
+            "=",
+            {
+             "NOT": [
+              "=",
+              {
+               "has_war_with": [
+                "=",
+                "root"
+               ]
+              }
+             ]
+            }
            ]
           }
          ]
@@ -6265,6 +6279,20 @@
            "has_building": [
             "=",
             "building_suez_canal"
+           ],
+           "owner": [
+            "=",
+            {
+             "NOT": [
+              "=",
+              {
+               "has_war_with": [
+                "=",
+                "root"
+               ]
+              }
+             ]
+            }
            ]
           }
          ]
@@ -6410,6 +6438,20 @@
            "has_building": [
             "=",
             "building_panama_canal"
+           ],
+           "owner": [
+            "=",
+            {
+             "NOT": [
+              "=",
+              {
+               "has_war_with": [
+                "=",
+                "root"
+               ]
+              }
+             ]
+            }
            ]
           }
          ]
@@ -6531,6 +6573,20 @@
            "has_building": [
             "=",
             "building_panama_canal"
+           ],
+           "owner": [
+            "=",
+            {
+             "NOT": [
+              "=",
+              {
+               "has_war_with": [
+                "=",
+                "root"
+               ]
+              }
+             ]
+            }
            ]
           }
          ]
@@ -7543,6 +7599,10 @@
    "complete": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "any_scope_state": [
       [
        "=",
@@ -12603,6 +12663,15 @@
           ]
          }
         ],
+        "NOT": [
+         "=",
+         {
+          "has_war_with": [
+           "=",
+           "c:DEN"
+          ]
+         }
+        ],
         "custom_tooltip": [
          "=",
          {
@@ -14698,22 +14767,38 @@
      "OR": [
       "=",
       {
-       "is_subject": [
-        "=",
-        "yes"
-       ],
        "AND": [
-        "=",
-        {
-         "country_rank": [
-          "<",
-          "rank_value:minor_power"
-         ],
-         "gold_reserves": [
-          "<",
-          "0"
-         ]
-        }
+        [
+         "=",
+         {
+          "is_subject": [
+           "=",
+           "yes"
+          ],
+          "NOT": [
+           "=",
+           {
+            "is_at_war_with_overlord": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "country_rank": [
+           "<",
+           "rank_value:minor_power"
+          ],
+          "gold_reserves": [
+           "<",
+           "0"
+          ]
+         }
+        ]
        ]
       }
      ]
@@ -14995,6 +15080,15 @@
      "is_subject": [
       "=",
       "yes"
+     ],
+     "NOT": [
+      "=",
+      {
+       "is_at_war_with_overlord": [
+        "=",
+        "yes"
+       ]
+      }
      ]
     }
    ],
@@ -15121,10 +15215,19 @@
          "is_subject_of": [
           "=",
           "ROOT"
+         ],
+         "NOT": [
+          "=",
+          {
+           "has_war_with": [
+            "=",
+            "root"
+           ]
+          }
          ]
         }
        ],
-       "owns_entire_state_region": [
+       "owns_entire_state_region_uncontested": [
         "=",
         "STATE_HAWAIIAN_ISLANDS"
        ]
@@ -16765,6 +16868,31 @@
    "invalid": [
     "=",
     {
+     "NOT": [
+      [
+       "=",
+       {
+        "c:SEQ": [
+         "?=",
+         {
+          "is_at_war_with_overlord": [
+           "=",
+           "yes"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "war_may_restore_country": [
+         "=",
+         "SEQ"
+        ]
+       }
+      ]
+     ],
      "OR": [
       "=",
       {
@@ -16772,7 +16900,7 @@
         [
          "=",
          {
-          "owns_entire_state_region": [
+          "owns_entire_or_is_contesting_state_region": [
            "=",
            "STATE_GEORGIA"
           ]
@@ -17177,6 +17305,10 @@
    "fail": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "custom_tooltip": [
       "=",
       {
@@ -17613,7 +17745,7 @@
         [
          "=",
          {
-          "owns_entire_state_region": [
+          "owns_entire_or_is_contesting_state_region": [
            "=",
            "STATE_FRIESLAND"
           ]
@@ -17622,7 +17754,7 @@
         [
          "=",
          {
-          "owns_entire_state_region": [
+          "owns_entire_or_is_contesting_state_region": [
            "=",
            "STATE_HOLLAND"
           ]
@@ -24832,6 +24964,15 @@
            ]
           }
          ],
+         "NOT": [
+          "=",
+          {
+           "has_war_with": [
+            "=",
+            "root"
+           ]
+          }
+         ],
          "OR": [
           "=",
           {
@@ -25040,6 +25181,15 @@
           }
          ]
         }
+       ]
+      }
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_war_with": [
+        "=",
+        "scope:target"
        ]
       }
      ],
@@ -36678,6 +36828,10 @@
    "complete": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "trigger_if": [
       [
        "=",
@@ -37363,13 +37517,24 @@
           "c:ROM"
          ],
          "NOT": [
-          "=",
-          {
-           "c:ROM": [
-            "?=",
-            "THIS"
-           ]
-          }
+          [
+           "=",
+           {
+            "c:ROM": [
+             "?=",
+             "THIS"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "has_war_with": [
+             "=",
+             "c:ROM"
+            ]
+           }
+          ]
          ]
         }
        ],
@@ -37386,13 +37551,33 @@
         "=",
         {
          "NOT": [
-          "=",
-          {
-           "is_subject_of": [
-            "=",
-            "ROOT"
-           ]
-          }
+          [
+           "=",
+           {
+            "is_subject_of": [
+             "=",
+             "ROOT"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "OR": [
+             "=",
+             {
+              "has_war_with": [
+               "=",
+               "root"
+              ],
+              "is_at_war_with_overlord": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
          ]
         }
        ]
@@ -38488,6 +38673,10 @@
    "fail": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "custom_tooltip": [
       "=",
       {
@@ -39002,7 +39191,7 @@
        "c:SML": [
         "?=",
         {
-         "owns_entire_state_region": [
+         "owns_entire_state_region_uncontested": [
           "=",
           "STATE_FLORIDA"
          ]
@@ -39011,7 +39200,7 @@
        "c:MSC": [
         "?=",
         {
-         "owns_entire_state_region": [
+         "owns_entire_state_region_uncontested": [
           "=",
           "STATE_FLORIDA"
          ]
@@ -53215,7 +53404,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_ORAN"
         ]
@@ -53224,7 +53413,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_ALGIERS"
         ]
@@ -53233,7 +53422,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_CONSTANTINE"
         ]
@@ -53647,7 +53836,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_ORAN"
         ]
@@ -53656,7 +53845,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_ALGIERS"
         ]
@@ -53665,7 +53854,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_CONSTANTINE"
         ]
@@ -53778,7 +53967,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_ORAN"
         ]
@@ -53787,7 +53976,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_ALGIERS"
         ]
@@ -53796,7 +53985,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_CONSTANTINE"
         ]
@@ -53818,7 +54007,7 @@
        "NOT": [
         "=",
         {
-         "has_state_in_state_region": [
+         "has_or_is_contesting_state_in_state_region": [
           "=",
           "STATE_EAST_SAHARA"
          ]
@@ -53909,7 +54098,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_ORAN"
         ]
@@ -53918,7 +54107,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_ALGIERS"
         ]
@@ -53927,7 +54116,7 @@
       [
        "=",
        {
-        "has_state_in_state_region": [
+        "has_or_is_contesting_state_in_state_region": [
          "=",
          "STATE_CONSTANTINE"
         ]
@@ -57031,7 +57220,7 @@
        ]
       }
      ],
-     "owns_entire_state_region": [
+     "owns_entire_state_region_uncontested": [
       "=",
       "STATE_WEST_GALICIA"
      ]
@@ -57083,13 +57272,24 @@
       }
      ],
      "NOT": [
-      "=",
-      {
-       "owns_entire_state_region": [
-        "=",
-        "STATE_WEST_GALICIA"
-       ]
-      }
+      [
+       "=",
+       {
+        "owns_entire_or_is_contesting_state_region": [
+         "=",
+         "STATE_WEST_GALICIA"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "war_may_restore_country": [
+         "=",
+         "KRA"
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -57674,6 +57874,20 @@
      "exists": [
       "=",
       "c:RHN"
+     ],
+     "NOT": [
+      "=",
+      {
+       "c:RHN": [
+        "?=",
+        {
+         "is_at_war_with_overlord": [
+          "=",
+          "yes"
+         ]
+        }
+       ]
+      }
      ],
      "c:RHN": [
       "?=",
@@ -67423,133 +67637,160 @@
      "OR": [
       "=",
       {
-       "NOT": [
-        "=",
-        {
-         "exists": [
-          "=",
-          "c:BOL"
-         ]
-        }
-       ],
        "AND": [
-        "=",
-        {
-         "OR": [
-          [
-           "=",
-           {
-            "NOT": [
-             "=",
-             {
-              "exists": [
-               "=",
-               "c:SPU"
-              ]
-             }
-            ],
-            "c:SPU": [
-             "?=",
-             {
-              "NOT": [
-               "=",
-               {
-                "is_subject_of": [
-                 "=",
-                 "c:BOL"
-                ]
-               }
-              ]
-             }
-            ]
-           }
-          ],
-          [
-           "=",
-           {
-            "NOT": [
-             "=",
-             {
-              "exists": [
-               "=",
-               "c:NPU"
-              ]
-             }
-            ],
-            "c:NPU": [
-             "?=",
-             {
-              "NOT": [
-               "=",
-               {
-                "is_subject_of": [
-                 "=",
-                 "c:BOL"
-                ]
-               }
-              ]
-             }
-            ]
-           }
-          ],
-          [
-           "=",
-           {
-            "NOT": [
-             "=",
-             {
-              "exists": [
-               "=",
-               "c:IQU"
-              ]
-             }
-            ],
-            "c:IQU": [
-             "?=",
-             {
-              "NOT": [
-               "=",
-               {
-                "is_subject_of": [
-                 "=",
-                 "c:BOL"
-                ]
-               }
-              ]
-             }
-            ]
-           }
-          ],
-          [
-           "=",
-           {
-            "NOT": [
-             "=",
-             {
-              "exists": [
-               "=",
-               "c:PEU"
-              ]
-             }
-            ],
-            "c:PEU": [
-             "?=",
-             {
-              "NOT": [
-               "=",
-               {
-                "is_subject_of": [
-                 "=",
-                 "c:BOL"
-                ]
-               }
-              ]
-             }
-            ]
-           }
+        [
+         "=",
+         {
+          "NOT": [
+           [
+            "=",
+            {
+             "exists": [
+              "=",
+              "c:BOL"
+             ]
+            }
+           ],
+           [
+            "=",
+            {
+             "war_may_restore_country": [
+              "=",
+              "BOL"
+             ]
+            }
+           ]
           ]
-         ]
-        }
+         }
+        ],
+        [
+         "=",
+         {
+          "c:BOL": [
+           "?=",
+           {
+            "is_at_war": [
+             "=",
+             "no"
+            ]
+           }
+          ],
+          "OR": [
+           [
+            "=",
+            {
+             "NOT": [
+              "=",
+              {
+               "exists": [
+                "=",
+                "c:SPU"
+               ]
+              }
+             ],
+             "c:SPU": [
+              "?=",
+              {
+               "NOT": [
+                "=",
+                {
+                 "is_subject_of": [
+                  "=",
+                  "c:BOL"
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ],
+           [
+            "=",
+            {
+             "NOT": [
+              "=",
+              {
+               "exists": [
+                "=",
+                "c:NPU"
+               ]
+              }
+             ],
+             "c:NPU": [
+              "?=",
+              {
+               "NOT": [
+                "=",
+                {
+                 "is_subject_of": [
+                  "=",
+                  "c:BOL"
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ],
+           [
+            "=",
+            {
+             "NOT": [
+              "=",
+              {
+               "exists": [
+                "=",
+                "c:IQU"
+               ]
+              }
+             ],
+             "c:IQU": [
+              "?=",
+              {
+               "NOT": [
+                "=",
+                {
+                 "is_subject_of": [
+                  "=",
+                  "c:BOL"
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ],
+           [
+            "=",
+            {
+             "NOT": [
+              "=",
+              {
+               "exists": [
+                "=",
+                "c:PEU"
+               ]
+              }
+             ],
+             "c:PEU": [
+              "?=",
+              {
+               "NOT": [
+                "=",
+                {
+                 "is_subject_of": [
+                  "=",
+                  "c:BOL"
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          ]
+         }
+        ]
        ],
        "c:BOL": [
         "?=",
@@ -67557,6 +67798,10 @@
          "is_subject": [
           "=",
           "yes"
+         ],
+         "is_at_war": [
+          "=",
+          "no"
          ]
         }
        ]
@@ -71519,6 +71764,10 @@
    "complete": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "NOR": [
       "=",
       {
@@ -79428,6 +79677,10 @@
    "complete": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "custom_tooltip": [
       "=",
       {
@@ -79774,33 +80027,18 @@
        "NOT": [
         "=",
         {
-         "any_scope_state": [
+         "has_or_is_contesting_state_in_state_region": [
           [
            "=",
-           {
-            "state_region": [
-             "=",
-             "s:STATE_DAGESTAN"
-            ]
-           }
+           "STATE_DAGESTAN"
           ],
           [
            "=",
-           {
-            "state_region": [
-             "=",
-             "s:STATE_KUBAN"
-            ]
-           }
+           "STATE_KUBAN"
           ],
           [
            "=",
-           {
-            "state_region": [
-             "=",
-             "s:STATE_NORTH_CAUCASUS"
-            ]
-           }
+           "STATE_NORTH_CAUCASUS"
           ]
          ]
         }
@@ -79885,36 +80123,58 @@
        "c:CIR": [
         "?=",
         {
+         "NOT": [
+          [
+           "=",
+           {
+            "is_at_war_with_overlord": [
+             "=",
+             "yes"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "is_subject_of": [
+             "=",
+             "ROOT"
+            ]
+           }
+          ]
+         ],
          "is_subject": [
           "=",
           "yes"
-         ],
-         "NOT": [
-          "=",
-          {
-           "is_subject_of": [
-            "=",
-            "ROOT"
-           ]
-          }
          ]
         }
        ],
        "c:CHC": [
         "?=",
         {
+         "NOT": [
+          [
+           "=",
+           {
+            "is_at_war_with_overlord": [
+             "=",
+             "yes"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "is_subject_of": [
+             "=",
+             "ROOT"
+            ]
+           }
+          ]
+         ],
          "is_subject": [
           "=",
           "yes"
-         ],
-         "NOT": [
-          "=",
-          {
-           "is_subject_of": [
-            "=",
-            "ROOT"
-           ]
-          }
          ]
         }
        ]
@@ -80753,6 +81013,20 @@
    "complete": [
     "=",
     {
+     "c:RUS": [
+      "?=",
+      {
+       "NOT": [
+        "=",
+        {
+         "has_war_with": [
+          "=",
+          "root"
+         ]
+        }
+       ]
+      }
+     ],
      "custom_tooltip": [
       "=",
       {
@@ -81035,6 +81309,20 @@
    "complete": [
     "=",
     {
+     "c:RUS": [
+      "?=",
+      {
+       "NOT": [
+        "=",
+        {
+         "has_war_with": [
+          "=",
+          "root"
+         ]
+        }
+       ]
+      }
+     ],
      "custom_tooltip": [
       [
        "=",
@@ -81437,13 +81725,33 @@
       "?=",
       {
        "NOT": [
-        "=",
-        {
-         "is_subject_of": [
-          "=",
-          "ROOT"
-         ]
-        }
+        [
+         "=",
+         {
+          "is_subject_of": [
+           "=",
+           "ROOT"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_war_with": [
+             "=",
+             "root"
+            ],
+            "is_at_war_with_overlord": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ]
        ]
       }
      ],
@@ -81451,13 +81759,33 @@
       "?=",
       {
        "NOT": [
-        "=",
-        {
-         "is_subject_of": [
-          "=",
-          "ROOT"
-         ]
-        }
+        [
+         "=",
+         {
+          "is_subject_of": [
+           "=",
+           "ROOT"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_war_with": [
+             "=",
+             "root"
+            ],
+            "is_at_war_with_overlord": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ]
        ]
       }
      ],
@@ -81465,13 +81793,33 @@
       "?=",
       {
        "NOT": [
-        "=",
-        {
-         "is_subject_of": [
-          "=",
-          "ROOT"
-         ]
-        }
+        [
+         "=",
+         {
+          "is_subject_of": [
+           "=",
+           "ROOT"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_war_with": [
+             "=",
+             "root"
+            ],
+            "is_at_war_with_overlord": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ]
        ]
       }
      ]
@@ -85386,13 +85734,33 @@
     "=",
     {
      "NOT": [
-      "=",
-      {
-       "is_subject_of": [
-        "=",
-        "scope:overlord_scope"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_subject_of": [
+         "=",
+         "scope:overlord_scope"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "OR": [
+         "=",
+         {
+          "has_war_with": [
+           "=",
+           "scope:overlord_scope"
+          ],
+          "is_at_war_with_overlord": [
+           "=",
+           "yes"
+          ]
+         }
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -85581,13 +85949,33 @@
     "=",
     {
      "NOT": [
-      "=",
-      {
-       "is_subject_of": [
-        "=",
-        "scope:overlord_scope"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_subject_of": [
+         "=",
+         "scope:overlord_scope"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "OR": [
+         "=",
+         {
+          "has_war_with": [
+           "=",
+           "scope:overlord_scope"
+          ],
+          "is_at_war_with_overlord": [
+           "=",
+           "yes"
+          ]
+         }
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -86218,13 +86606,33 @@
     "=",
     {
      "NOT": [
-      "=",
-      {
-       "is_subject_of": [
-        "=",
-        "scope:overlord_scope"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_subject_of": [
+         "=",
+         "scope:overlord_scope"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "OR": [
+         "=",
+         {
+          "has_war_with": [
+           "=",
+           "scope:overlord_scope"
+          ],
+          "is_at_war_with_overlord": [
+           "=",
+           "yes"
+          ]
+         }
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -86750,13 +87158,33 @@
         "?=",
         {
          "NOT": [
-          "=",
-          {
-           "is_subject_of": [
-            "=",
-            "scope:overlord_scope"
-           ]
-          }
+          [
+           "=",
+           {
+            "is_subject_of": [
+             "=",
+             "scope:overlord_scope"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "OR": [
+             "=",
+             {
+              "has_war_with": [
+               "=",
+               "scope:overlord_scope"
+              ],
+              "is_at_war_with_overlord": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
          ]
         }
        ]
@@ -87018,12 +87446,28 @@
      "OR": [
       "=",
       {
-       "NOT": [
+       "AND": [
         "=",
         {
-         "exists": [
-          "=",
-          "scope:india_scope"
+         "NOT": [
+          [
+           "=",
+           {
+            "exists": [
+             "=",
+             "scope:india_scope"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "war_may_restore_country": [
+             "=",
+             "BIC"
+            ]
+           }
+          ]
          ]
         }
        ],
@@ -87031,13 +87475,33 @@
         "?=",
         {
          "NOT": [
-          "=",
-          {
-           "is_subject_of": [
-            "=",
-            "ROOT"
-           ]
-          }
+          [
+           "=",
+           {
+            "is_subject_of": [
+             "=",
+             "ROOT"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "OR": [
+             "=",
+             {
+              "has_war_with": [
+               "=",
+               "ROOT"
+              ],
+              "is_at_war_with_overlord": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
          ]
         }
        ]
@@ -92312,9 +92776,23 @@
      "OR": [
       "=",
       {
-       "is_subject": [
+       "AND": [
         "=",
-        "yes"
+        {
+         "is_subject": [
+          "=",
+          "yes"
+         ],
+         "NOT": [
+          "=",
+          {
+           "is_at_war_with_overlord": [
+            "=",
+            "yes"
+           ]
+          }
+         ]
+        }
        ],
        "custom_tooltip": [
         "=",
@@ -96095,6 +96573,26 @@
         }
        ]
       }
+     ],
+     "NOT": [
+      [
+       "=",
+       {
+        "has_war_with": [
+         "=",
+         "c:TUR"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "war_may_restore_country": [
+         "=",
+         "TUR"
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -97544,6 +98042,15 @@
      "is_subject": [
       "=",
       "yes"
+     ],
+     "NOT": [
+      "=",
+      {
+       "is_at_war_with_overlord": [
+        "=",
+        "yes"
+       ]
+      }
      ]
     }
    ],
@@ -97906,6 +98413,15 @@
      "is_subject": [
       "=",
       "yes"
+     ],
+     "NOT": [
+      "=",
+      {
+       "is_at_war_with_overlord": [
+        "=",
+        "yes"
+       ]
+      }
      ]
     }
    ],
@@ -104818,18 +105334,29 @@
     "=",
     {
      "NOT": [
-      "=",
-      {
-       "c:TUR": [
-        "?=",
-        {
-         "is_country_alive": [
-          "=",
-          "yes"
-         ]
-        }
-       ]
-      }
+      [
+       "=",
+       {
+        "c:TUR": [
+         "?=",
+         {
+          "is_country_alive": [
+           "=",
+           "yes"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "war_may_restore_country": [
+         "=",
+         "TUR"
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -104960,22 +105487,21 @@
    "fail": [
     "=",
     {
-     "trigger_if": [
+     "exists": [
       "=",
+      "c:TUR"
+     ],
+     "c:MON": [
+      "?=",
       {
-       "limit": [
+       "is_subject_of": [
+        "=",
+        "c:TUR"
+       ],
+       "NOT": [
         "=",
         {
-         "exists": [
-          "=",
-          "c:TUR"
-         ]
-        }
-       ],
-       "c:MON": [
-        "?=",
-        {
-         "is_subject_of": [
+         "has_war_with": [
           "=",
           "c:TUR"
          ]
@@ -105382,9 +105908,23 @@
      "OR": [
       "=",
       {
-       "is_subject_of": [
+       "AND": [
         "=",
-        "c:TUR"
+        {
+         "is_subject_of": [
+          "=",
+          "c:TUR"
+         ],
+         "NOT": [
+          "=",
+          {
+           "has_war_with": [
+            "=",
+            "c:TUR"
+           ]
+          }
+         ]
+        }
        ],
        "any_diplomatic_play": [
         "=",
@@ -105515,20 +106055,15 @@
       "=",
       "c:AUS"
      ],
-     "NOT": [
-      "=",
+     "c:AUS": [
+      "?=",
       {
-       "s:STATE_MONTENEGRO": [
+       "NOT": [
         "=",
         {
-         "any_scope_state": [
+         "has_or_is_contesting_state_in_state_region": [
           "=",
-          {
-           "owner": [
-            "=",
-            "c:AUS"
-           ]
-          }
+          "STATE_MONTENEGRO"
          ]
         }
        ]
@@ -106224,12 +106759,28 @@
      "OR": [
       "=",
       {
-       "NOT": [
+       "AND": [
         "=",
         {
-         "exists": [
-          "=",
-          "c:MON"
+         "NOT": [
+          [
+           "=",
+           {
+            "exists": [
+             "=",
+             "c:MON"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "war_may_restore_country": [
+             "=",
+             "MON"
+            ]
+           }
+          ]
          ]
         }
        ],
@@ -106246,6 +106797,15 @@
            "is_subject_of": [
             "=",
             "ROOT"
+           ]
+          }
+         ],
+         "NOT": [
+          "=",
+          {
+           "has_war_with": [
+            "=",
+            "root"
            ]
           }
          ]
@@ -113739,6 +114299,10 @@
    "complete": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "trigger_if": [
       "=",
       {
@@ -115176,6 +115740,10 @@
    "invalid": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "any_scope_state": [
       "=",
       {
@@ -115198,7 +115766,12 @@
    ],
    "on_invalid": [
     "=",
-    {}
+    {
+     "the_grand_collapse_mod_cleanser": [
+      "=",
+      "yes"
+     ]
+    }
    ],
    "timeout": [
     "=",
@@ -115909,9 +116482,9 @@
          ]
         }
        ],
-       "is_subject": [
+       "is_independent_and_not_being_subjugated": [
         "=",
-        "no"
+        "yes"
        ]
       }
      ]
@@ -116449,9 +117022,9 @@
           "c:CUB": [
            "?=",
            {
-            "is_subject": [
+            "is_independent_and_not_being_subjugated": [
              "=",
-             "no"
+             "yes"
             ]
            }
           ]
@@ -118077,7 +118650,7 @@
         [
          "=",
          {
-          "has_state_in_state_region": [
+          "has_or_is_contesting_state_in_state_region": [
            [
             "=",
             "STATE_BASQUE_COUNTRY"
@@ -125925,13 +126498,24 @@
     "=",
     {
      "NOT": [
-      "=",
-      {
-       "exists": [
-        "=",
-        "c:BRZ"
-       ]
-      }
+      [
+       "=",
+       {
+        "exists": [
+         "=",
+         "c:BRZ"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "war_may_restore_country": [
+         "=",
+         "BRZ"
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -126110,7 +126694,7 @@
             {
              "value": [
               "=",
-              "var:al_rif_progress_bar_current_var"
+              "root.var:al_rif_progress_bar_current_var"
              ],
              "divide": [
               "=",
@@ -126163,7 +126747,7 @@
             {
              "value": [
               "=",
-              "var:marrakech_progress_bar_current_var"
+              "root.var:marrakech_progress_bar_current_var"
              ],
              "divide": [
               "=",
@@ -126216,7 +126800,7 @@
             {
              "value": [
               "=",
-              "var:inner_morocco_progress_bar_current_var"
+              "root.var:inner_morocco_progress_bar_current_var"
              ],
              "divide": [
               "=",
@@ -126339,7 +126923,7 @@
               {
                "value": [
                 "=",
-                "var:al_rif_progress_bar_current_var"
+                "root.var:al_rif_progress_bar_current_var"
                ],
                "divide": [
                 "=",
@@ -126397,7 +126981,7 @@
               {
                "value": [
                 "=",
-                "var:marrakech_progress_bar_current_var"
+                "root.var:marrakech_progress_bar_current_var"
                ],
                "divide": [
                 "=",
@@ -126455,7 +127039,7 @@
               {
                "value": [
                 "=",
-                "var:inner_morocco_progress_bar_current_var"
+                "root.var:inner_morocco_progress_bar_current_var"
                ],
                "divide": [
                 "=",
@@ -127342,7 +127926,7 @@
         [
          "=",
          {
-          "has_state_in_state_region": [
+          "has_or_is_contesting_state_in_state_region": [
            "=",
            "STATE_LUZON"
           ]
@@ -127351,7 +127935,7 @@
         [
          "=",
          {
-          "has_state_in_state_region": [
+          "has_or_is_contesting_state_in_state_region": [
            "=",
            "STATE_VISAYAS"
           ]
@@ -130803,6 +131387,10 @@
                   "ROOT"
                  ]
                 }
+               ],
+               "has_war_with": [
+                "=",
+                "ROOT"
                ]
               }
              ]
@@ -130835,6 +131423,10 @@
                   "ROOT"
                  ]
                 }
+               ],
+               "has_war_with": [
+                "=",
+                "ROOT"
                ]
               }
              ]
@@ -130872,9 +131464,23 @@
          ]
         }
        ],
-       "is_subject": [
+       "AND": [
         "=",
-        "yes"
+        {
+         "is_subject": [
+          "=",
+          "yes"
+         ],
+         "NOT": [
+          "=",
+          {
+           "is_at_war_with_overlord": [
+            "=",
+            "yes"
+           ]
+          }
+         ]
+        }
        ]
       }
      ]
@@ -131138,6 +131744,10 @@
                   "ROOT"
                  ]
                 }
+               ],
+               "has_war_with": [
+                "=",
+                "ROOT"
                ]
               }
              ]
@@ -131170,6 +131780,10 @@
                   "ROOT"
                  ]
                 }
+               ],
+               "has_war_with": [
+                "=",
+                "ROOT"
                ]
               }
              ]
@@ -131202,6 +131816,10 @@
                   "ROOT"
                  ]
                 }
+               ],
+               "has_war_with": [
+                "=",
+                "ROOT"
                ]
               }
              ]
@@ -131230,6 +131848,15 @@
      "is_subject": [
       "=",
       "yes"
+     ],
+     "NOT": [
+      "=",
+      {
+       "is_at_war_with_overlord": [
+        "=",
+        "yes"
+       ]
+      }
      ]
     }
    ],
@@ -136130,7 +136757,7 @@
      "NOT": [
       "=",
       {
-       "has_state_in_state_region": [
+       "has_or_is_contesting_state_in_state_region": [
         "=",
         "STATE_HOKKAIDO"
        ]
@@ -137935,6 +138562,25 @@
        "text": [
         "=",
         "je_colonize_korea_fail_tt"
+       ],
+       "NOT": [
+        "=",
+        {
+         "any_state_in_korea": [
+          "=",
+          {
+           "owner": [
+            "=",
+            {
+             "has_war_with": [
+              "=",
+              "root"
+             ]
+            }
+           ]
+          }
+         ]
+        }
        ],
        "OR": [
         "=",

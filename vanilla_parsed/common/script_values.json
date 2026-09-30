@@ -3675,6 +3675,44 @@
    ]
   }
  ],
+ "state_infamy_population_share_uncapped": [
+  "=",
+  {
+   "value": [
+    "=",
+    "state_population_global_share"
+   ],
+   "multiply": [
+    [
+     "=",
+     "define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_WEIGHT"
+    ],
+    [
+     "=",
+     "define:NDiplomacy|WAR_GOAL_INFAMY_WORLD_SHARE_SCALE"
+    ]
+   ]
+  }
+ ],
+ "state_infamy_gdp_share_uncapped": [
+  "=",
+  {
+   "value": [
+    "=",
+    "state_gdp_global_share"
+   ],
+   "multiply": [
+    [
+     "=",
+     "define:NDiplomacy|WAR_GOAL_INFAMY_GDP_WEIGHT"
+    ],
+    [
+     "=",
+     "define:NDiplomacy|WAR_GOAL_INFAMY_WORLD_SHARE_SCALE"
+    ]
+   ]
+  }
+ ],
  "state_infamy_base": [
   "=",
   {
@@ -3692,21 +3730,64 @@
      {
       "desc": [
        "=",
+       "\"INFAMY_BASE_VALUE\""
+      ],
+      "value": [
+       "=",
+       "define:NDiplomacy|WAR_GOAL_INFAMY_STATE_BASELINE"
+      ]
+     }
+    ],
+    [
+     "=",
+     {
+      "desc": [
+       "=",
        "\"INFAMY_STATE_POPULATION_SHARE\""
       ],
       "value": [
        "=",
-       "state_population_global_share"
+       "state_infamy_population_share_uncapped"
       ],
-      "multiply": [
-       [
-        "=",
-        "define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_WEIGHT"
-       ],
-       [
-        "=",
-        "define:NDiplomacy|WAR_GOAL_INFAMY_WORLD_SHARE_SCALE"
-       ]
+      "if": [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "state_infamy_population_share_uncapped": [
+           ">",
+           "define:NDiplomacy|WAR_GOAL_INFAMY_SHARE_SOFT_CAP"
+          ]
+         }
+        ],
+        "subtract": [
+         "=",
+         {
+          "value": [
+           "=",
+           "state_infamy_population_share_uncapped"
+          ],
+          "subtract": [
+           "=",
+           "define:NDiplomacy|WAR_GOAL_INFAMY_SHARE_SOFT_CAP"
+          ],
+          "multiply": [
+           "=",
+           {
+            "value": [
+             "=",
+             "1"
+            ],
+            "subtract": [
+             "=",
+             "define:NDiplomacy|WAR_GOAL_INFAMY_SHARE_SOFT_CAP_SLOPE"
+            ]
+           }
+          ]
+         }
+        ]
+       }
       ],
       "max": [
        "=",
@@ -3723,17 +3804,47 @@
       ],
       "value": [
        "=",
-       "state_gdp_global_share"
+       "state_infamy_gdp_share_uncapped"
       ],
-      "multiply": [
-       [
-        "=",
-        "define:NDiplomacy|WAR_GOAL_INFAMY_GDP_WEIGHT"
-       ],
-       [
-        "=",
-        "define:NDiplomacy|WAR_GOAL_INFAMY_WORLD_SHARE_SCALE"
-       ]
+      "if": [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "state_infamy_gdp_share_uncapped": [
+           ">",
+           "define:NDiplomacy|WAR_GOAL_INFAMY_SHARE_SOFT_CAP"
+          ]
+         }
+        ],
+        "subtract": [
+         "=",
+         {
+          "value": [
+           "=",
+           "state_infamy_gdp_share_uncapped"
+          ],
+          "subtract": [
+           "=",
+           "define:NDiplomacy|WAR_GOAL_INFAMY_SHARE_SOFT_CAP"
+          ],
+          "multiply": [
+           "=",
+           {
+            "value": [
+             "=",
+             "1"
+            ],
+            "subtract": [
+             "=",
+             "define:NDiplomacy|WAR_GOAL_INFAMY_SHARE_SOFT_CAP_SLOPE"
+            ]
+           }
+          ]
+         }
+        ]
+       }
       ],
       "max": [
        "=",
@@ -3906,6 +4017,42 @@
          "define:NDiplomacy|WAR_GOAL_INFAMY_HOMELAND_FACTOR"
         ]
        }
+      ],
+      "if": [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "root": [
+           "=",
+           {
+            "modifier:country_homeland_infamy_reduction_bool": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         {
+          "desc": [
+           "=",
+           "\"INFAMY_AGGRESSOR_HOMELAND_BONUS\""
+          ],
+          "value": [
+           "=",
+           "1"
+          ],
+          "add": [
+           "=",
+           "define:NDiplomacy|WAR_GOAL_INFAMY_HOMELAND_BONUS_FACTOR"
+          ]
+         }
+        ]
+       }
       ]
      }
     ],
@@ -4037,6 +4184,10 @@
         "any_scope_culture": [
          "=",
          {
+          "has_homeland": [
+           "=",
+           "scope:infamy_target_state"
+          ],
           "shares_language_trait_with_any_primary_culture": [
            "=",
            "root"
@@ -4059,6 +4210,83 @@
         "add": [
          "=",
          "define:NDiplomacy|WAR_GOAL_INFAMY_SHARED_LANGUAGE_FACTOR"
+        ]
+       }
+      ],
+      "if": [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "root": [
+           "=",
+           {
+            "modifier:country_shared_language_infamy_reduction_bool": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         {
+          "desc": [
+           "=",
+           "\"INFAMY_AGGRESSOR_SHARED_LANGUAGE_BONUS\""
+          ],
+          "value": [
+           "=",
+           "1"
+          ],
+          "add": [
+           "=",
+           "define:NDiplomacy|WAR_GOAL_INFAMY_SHARED_LANGUAGE_BONUS_FACTOR"
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    [
+     "=",
+     {
+      "limit": [
+       "=",
+       {
+        "root": [
+         "=",
+         {
+          "is_scripted_unification_conquest": [
+           "=",
+           {
+            "TARGET": [
+             "=",
+             "scope:infamy_target_state.owner"
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ],
+      "multiply": [
+       "=",
+       {
+        "desc": [
+         "=",
+         "\"INFAMY_SCRIPTED_UNIFICATION\""
+        ],
+        "value": [
+         "=",
+         "1"
+        ],
+        "add": [
+         "=",
+         "define:NDiplomacy|WAR_GOAL_INFAMY_SCRIPTED_UNIFICATION_FACTOR"
         ]
        }
       ]
@@ -8605,6 +8833,14 @@
   "=",
   "50"
  ],
+ "ai_strait_fallout_weight": [
+  "=",
+  "0.25"
+ ],
+ "ai_strait_toll_income_weight": [
+  "=",
+  "3"
+ ],
  "ai_state_ambition_floor": [
   "=",
   "0"
@@ -10698,6 +10934,53 @@
    "value": [
     "=",
     "0"
+   ]
+  }
+ ],
+ "ai_decree_agricultural_levels_script_value": [
+  "=",
+  {
+   "value": [
+    "=",
+    "\"state_has_building_group_levels(bg_agriculture)\""
+   ],
+   "add": [
+    [
+     "=",
+     "\"state_has_building_group_levels(bg_ranching)\""
+    ],
+    [
+     "=",
+     "\"state_has_building_group_levels(bg_plantations)\""
+    ]
+   ],
+   "subtract": [
+    [
+     "=",
+     {
+      "value": [
+       "=",
+       "\"state_has_building_group_levels(bg_subsistence_agriculture)\""
+      ],
+      "multiply": [
+       "=",
+       "0.5"
+      ]
+     }
+    ],
+    [
+     "=",
+     {
+      "value": [
+       "=",
+       "\"state_has_building_group_levels(bg_subsistence_ranching)\""
+      ],
+      "multiply": [
+       "=",
+       "0.5"
+      ]
+     }
+    ]
    ]
   }
  ],
@@ -29480,6 +29763,22 @@
   "=",
   "50"
  ],
+ "prestige_from_army_power_projection": [
+  "=",
+  "0.03"
+ ],
+ "prestige_from_navy_power_projection": [
+  "=",
+  "0.0077"
+ ],
+ "prestige_from_subject_army_power_projection": [
+  "=",
+  "0.0005"
+ ],
+ "prestige_from_subject_navy_power_projection": [
+  "=",
+  "0.01"
+ ],
  "static_treaty_acceptance": [
   "=",
   {
@@ -31201,6 +31500,27 @@
        "multiply": [
         "=",
         "0.33"
+       ]
+      }
+     ],
+     "multiply": [
+      "=",
+      {
+       "value": [
+        "=",
+        "scope:strait_grievance"
+       ],
+       "multiply": [
+        "=",
+        "0.05"
+       ],
+       "add": [
+        "=",
+        "1"
+       ],
+       "max": [
+        "=",
+        "3"
        ]
       }
      ]

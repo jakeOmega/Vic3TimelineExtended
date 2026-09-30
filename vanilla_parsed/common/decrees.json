@@ -609,51 +609,53 @@
         "limit": [
          "=",
          {
-          "literacy_rate": [
-           "<",
-           "0.25"
+          "scope:country.total_population": [
+           ">",
+           "0"
           ]
          }
         ],
         "add": [
-         "=",
-         "75"
-        ]
-       }
-      ],
-      [
-       "=",
-       {
-        "limit": [
          "=",
          {
-          "literacy_rate": [
-           "<",
-           "0.5"
+          "value": [
+           "=",
+           "1"
+          ],
+          "subtract": [
+           "=",
+           "literacy_rate"
+          ],
+          "multiply": [
+           "=",
+           "100"
           ]
          }
         ],
-        "add": [
-         "=",
-         "75"
-        ]
-       }
-      ],
-      [
-       "=",
-       {
-        "limit": [
+        "multiply": [
          "=",
          {
-          "literacy_rate": [
-           "<",
-           "0.75"
+          "value": [
+           "=",
+           "state_population"
+          ],
+          "divide": [
+           "=",
+           "scope:country.total_population"
+          ],
+          "multiply": [
+           "=",
+           "20"
+          ],
+          "min": [
+           "=",
+           "0"
+          ],
+          "max": [
+           "=",
+           "2"
           ]
          }
-        ],
-        "add": [
-         "=",
-         "50"
         ]
        }
       ],
@@ -726,6 +728,42 @@
         "multiply": [
          "=",
          "1.5"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "is_incorporated": [
+           "=",
+           "no"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0.25"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "is_capital": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "2"
         ]
        }
       ],
@@ -1758,7 +1796,7 @@
         ],
         "add": [
          "=",
-         "50"
+         "5"
         ]
        }
       ],
@@ -1785,7 +1823,7 @@
         ],
         "add": [
          "=",
-         "50"
+         "10"
         ]
        }
       ],
@@ -1812,7 +1850,56 @@
         ],
         "add": [
          "=",
-         "50"
+         "15"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "scope:country": [
+           "?=",
+           {
+            "has_variable_map": [
+             "=",
+             "industrial_states_map"
+            ],
+            "is_key_in_variable_map": [
+             "=",
+             {
+              "name": [
+               "=",
+               "industrial_states_map"
+              ],
+              "target": [
+               "=",
+               "root"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "5"
+          ],
+          "subtract": [
+           "=",
+           "\"scope:country.variable_map(industrial_states_map|root)\""
+          ],
+          "multiply": [
+           "=",
+           "20"
+          ]
+         }
         ]
        }
       ],
@@ -1972,7 +2059,7 @@
         ],
         "add": [
          "=",
-         "50"
+         "5"
         ]
        }
       ],
@@ -2014,7 +2101,7 @@
         ],
         "add": [
          "=",
-         "50"
+         "10"
         ]
        }
       ],
@@ -2056,7 +2143,56 @@
         ],
         "add": [
          "=",
-         "50"
+         "15"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "scope:country": [
+           "?=",
+           {
+            "has_variable_map": [
+             "=",
+             "agricultural_states_map"
+            ],
+            "is_key_in_variable_map": [
+             "=",
+             {
+              "name": [
+               "=",
+               "agricultural_states_map"
+              ],
+              "target": [
+               "=",
+               "root"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "5"
+          ],
+          "subtract": [
+           "=",
+           "\"scope:country.variable_map(agricultural_states_map|root)\""
+          ],
+          "multiply": [
+           "=",
+           "20"
+          ]
+         }
         ]
        }
       ],
@@ -2247,7 +2383,7 @@
         ],
         "add": [
          "=",
-         "50"
+         "5"
         ]
        }
       ],
@@ -2297,7 +2433,7 @@
         ],
         "add": [
          "=",
-         "50"
+         "10"
         ]
        }
       ],
@@ -2347,7 +2483,56 @@
         ],
         "add": [
          "=",
-         "50"
+         "15"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "scope:country": [
+           "?=",
+           {
+            "has_variable_map": [
+             "=",
+             "resource_states_map"
+            ],
+            "is_key_in_variable_map": [
+             "=",
+             {
+              "name": [
+               "=",
+               "resource_states_map"
+              ],
+              "target": [
+               "=",
+               "root"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "5"
+          ],
+          "subtract": [
+           "=",
+           "\"scope:country.variable_map(resource_states_map|root)\""
+          ],
+          "multiply": [
+           "=",
+           "20"
+          ]
+         }
         ]
        }
       ],
@@ -2481,7 +2666,7 @@
         ],
         "add": [
          "=",
-         "50"
+         "10"
         ]
        }
       ],
@@ -2508,7 +2693,7 @@
         ],
         "add": [
          "=",
-         "50"
+         "15"
         ]
        }
       ],
@@ -2535,7 +2720,7 @@
         ],
         "add": [
          "=",
-         "50"
+         "25"
         ]
        }
       ],
@@ -2741,7 +2926,7 @@
         ],
         "multiply": [
          "=",
-         "2.0"
+         "3.0"
         ]
        }
       ],
@@ -2829,7 +3014,7 @@
         ],
         "add": [
          "=",
-         "25"
+         "5"
         ]
        }
       ],
@@ -2856,7 +3041,7 @@
         ],
         "add": [
          "=",
-         "50"
+         "10"
         ]
        }
       ],
@@ -2883,7 +3068,56 @@
         ],
         "add": [
          "=",
-         "75"
+         "15"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "scope:country": [
+           "?=",
+           {
+            "has_variable_map": [
+             "=",
+             "army_states_map"
+            ],
+            "is_key_in_variable_map": [
+             "=",
+             {
+              "name": [
+               "=",
+               "army_states_map"
+              ],
+              "target": [
+               "=",
+               "root"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "5"
+          ],
+          "subtract": [
+           "=",
+           "\"scope:country.variable_map(army_states_map|root)\""
+          ],
+          "multiply": [
+           "=",
+           "20"
+          ]
+         }
         ]
        }
       ],
@@ -2922,60 +3156,6 @@
         "multiply": [
          "=",
          "5.0"
-        ]
-       }
-      ],
-      [
-       "=",
-       {
-        "limit": [
-         "=",
-         {
-          "any_scope_building": [
-           "=",
-           {
-            "is_building_type": [
-             "=",
-             "building_naval_administration"
-            ],
-            "count": [
-             ">=",
-             "5"
-            ]
-           }
-          ]
-         }
-        ],
-        "add": [
-         "=",
-         "50"
-        ]
-       }
-      ],
-      [
-       "=",
-       {
-        "limit": [
-         "=",
-         {
-          "any_scope_building": [
-           "=",
-           {
-            "is_building_type": [
-             "=",
-             "building_naval_administration"
-            ],
-            "count": [
-             ">=",
-             "10"
-            ]
-           }
-          ]
-         }
-        ],
-        "add": [
-         "=",
-         "50"
         ]
        }
       ]

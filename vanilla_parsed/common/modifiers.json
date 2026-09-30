@@ -1108,7 +1108,7 @@
     "=",
     "-0.2"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "-0.2"
    ]
@@ -1137,7 +1137,7 @@
     "=",
     "-0.1"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "-0.1"
    ]
@@ -1166,7 +1166,7 @@
     "=",
     "0.1"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "0.1"
    ],
@@ -1195,7 +1195,7 @@
     "=",
     "0.2"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "0.2"
    ],
@@ -12169,7 +12169,7 @@
     "=",
     "0.1"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "0.1"
    ]
@@ -36848,7 +36848,7 @@
     "=",
     "gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "-0.1"
    ]
@@ -37513,7 +37513,7 @@
     "=",
     "gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "0.1"
    ]
@@ -37565,7 +37565,7 @@
     "=",
     "gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "0.1"
    ]
@@ -76736,7 +76736,7 @@
     "=",
     "0.10"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "0.10"
    ]
@@ -78344,7 +78344,7 @@
     "=",
     "gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "0.1"
    ]
@@ -82194,7 +82194,7 @@
     "=",
     "gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "0.1"
    ]
@@ -83751,7 +83751,7 @@
     "=",
     "gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds"
    ],
-   "country_prestige_from_navy_combat_power_mult": [
+   "country_prestige_from_navy_power_projection_mult": [
     "=",
     "0.10"
    ]

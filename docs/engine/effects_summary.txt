@@ -1,4 +1,4 @@
-# Auto-generated from effects.log (engine docs 1.14.4). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from effects.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 # Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a fixed description: the engine dump prints unrelated script there, reshuffled on every dump.
 
 interest_group|abandon_revolution|Removes interest group from revolution

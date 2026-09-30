@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** war systems work, written for AI agents that need context before touching mod content that hooks the war/military layer (anti-war movement events, war-support modifiers, mobilization-side modifiers, treaty articles tied to war outcomes, etc.). Mod-specific systems (covert warfare, nuclear weapons, the world-war journal entry, etc.) live in `docs/systems/mod_systems.md` and `docs/systems/journal_entry_systems.md`.
 
-> **Last verified against vanilla:** 1.14.2 (open beta). § 13 rewritten for the 1.14 war support rework. When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** The wiki source for this doc is roughly a week post-1.13 patch and may be slightly inaccurate in places — verify any specific name or number via the server before relying on it.
+> **Last verified against vanilla:** 1.14.5. § 13 rewritten for the 1.14 war support rework; § 1.5 and § 13 cover 1.14.5's war goal control/expiry, capitulation desire and war-flip triggers. When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** The wiki source for this doc is roughly a week post-1.13 patch and may be slightly inaccurate in places — verify any specific name or number via the server before relying on it.
 >
 > **Verify before relying on names.** Modifier names, unit type IDs, and trigger names cited below should be confirmed via the mod state server (`/modifier-search?q=`, `/engine-docs/modifiers`, `/raw/CombatUnitType/<id>`) before you reference them in code. Vanilla renames things across patches.
 >
@@ -70,6 +70,10 @@ Common regular war goals (verify infamy/maneuver costs via the server, since the
 - **Revoke Claim** — removes a target claim.
 
 Special / event-only war goals: **Colonization Rights**, **Native Uprising**, **Revoke All Claims**, **Revolution** (annex other side of civil war), **Secession**. These are added programmatically and don't follow the normal infamy/maneuver shape.
+
+**Control, expiry and flipping (1.14.5).** A war goal is *controlled* when its holder, or their allies, occupy at least `NWar|STATE_PARTIAL_OCCUPATION_THRESHOLD` of the states it requires (`concept_controlled_war_goal`). Once a non-civil war has lasted `WAR_GOAL_UNCONTESTED_DROP_WAR_MONTHS`, a goal that has not been controlled for `WAR_GOAL_UNCONTESTED_DROP_GOAL_MONTHS` since it was created or last controlled is **dropped**; the holder gets a "war goal expiring" alert `WAR_GOAL_UNCONTESTED_WARNING_MONTHS` before (`has_war_goal_at_risk_of_being_dropped`, loc `GetWarGoalAtRiskOfBeingDropped`). Goals also *flip* mid-war: an enforced goal can leave the loser a mirror goal, and annexing a country mid-war creates one that would put it back on the map. So who owns a state, whether a country is a subject, and even whether a country exists are all provisional while a war runs.
+
+Vanilla script guards its end-state conditions against that. On a `complete` it wants the result settled (`owns_entire_state_region_uncontested`, or plain `is_at_war = no`); on a `fail`/`invalid` it refuses to fire while the war is still deciding it (`owns_entire_or_is_contesting_state_region`, `has_or_is_contesting_state_in_state_region`, `is_independent_and_not_being_subjugated`, `NOT = { is_at_war_with_overlord = yes }`, `NOT = { war_may_restore_country = TAG }`). 1.14.5 edited 57 vanilla journal entries, the `dp_unify_*` plays and a batch of decisions and scripted buttons this way; the rendered before/after for each is what `scripts/analysis/vanilla_patch_diff.py parsed --out` produces (runbook § 2). The old triggers still work, so nothing errors when mod script skips the guard: it just ends or fails early.
 
 The mod adds unification war goals (Pan-X major-unify, X-Leadership candidate-suppression). Those live in `common/diplomatic_plays/te_unification_plays.txt`; consult that file rather than this section for behavior.
 
@@ -271,9 +275,9 @@ Plus **Utility modifications** that shift secondary stats (e.g. Patrol Boat util
 
 A ship can be designated a **Flagship** with a unique figurehead ornament. Flagships generate **prestige from successful battles** they participate in (and *lose* prestige from defeats). A fleet containing a Flagship also generates extra **involvement** in the strategic regions where the fleet is active (the diplomacy hook, see `vanilla_diplomacy_reference.md` § 6).
 
-### 9.4 20 ship types and Naval Doctrine
+### 9.4 Ship types and Naval Doctrine
 
-1.13 ships ship in **20 different types**, all modeled on historical templates. The taxonomy is now wider than the simple Capital / Light / Support split older docs use, and ship type IDs and unlocking technologies have largely been renamed. **Always verify ship type IDs and unlocks via `/raw/CombatUnitType/<id>` and `/raw/Technology/<id>` rather than relying on older wiki tables.**
+1.13 ships ship in **about twenty different types** (1.14.5: 19 combat types plus early troop, troop and supply ships), all modeled on historical templates. The taxonomy is now wider than the simple Capital / Light / Support split older docs use, and ship type IDs and unlocking technologies have largely been renamed. **Always verify ship type IDs and unlocks via `/raw/CombatUnitType/<id>` and `/raw/Technology/<id>` rather than relying on older wiki tables.**
 
 A new **Naval Doctrine** law group provides bonuses to construction of different ship types — choose the law variant matched to your intended fleet composition.
 
@@ -285,7 +289,9 @@ Marines are a new special **land unit** type. All-marine formations can be **per
 
 The combat model itself was rewritten. Each ship has an **Initiative** value driving turn order. On its turn a ship either attacks or attempts to retreat. Attacks deal **hull damage** or **crew damage** based on attack vs armor and the engaged ships' specific stats. The **wood-to-steel transition is intentionally very impactful** — a steel-hulled ironclad-class ship decisively outclasses a wooden capital ship in a way the old offense/defense flotilla model didn't capture.
 
-1.13.7 made **accuracy** compare against both the target's speed *and* visibility for hit chance — capital ships now genuinely struggle to hit torpedo craft, and torpedo craft were made the fastest ships of their era. 1.13.9 reworked ship **critical hits** to ignore the target's armor entirely (with reduced crit damage in compensation) and rebalanced gun modules to sit within a narrow band of the base module.
+1.13.7 made **accuracy** compare against both the target's speed *and* visibility for hit chance — capital ships now genuinely struggle to hit torpedo craft, and torpedo craft were made the fastest ships of their era. 1.13.9 reworked ship **critical hits** to ignore the target's armor (with reduced crit damage in compensation) and rebalanced gun modules to sit within a narrow band of the base module. How much armor a crit ignores is `NBattle|NAVAL_BATTLE_CRIT_ARMOR_REDUCTION` (1 = all of it; it was 1 in 1.13.9 and is 0.5 in 1.14.5).
+
+**Targeting, vulnerability and screening (1.14).** Each ship type carries `ship_vulnerability_add` and `ship_screening_add`. A ship's *vulnerability* raises the chance hostile ships pick it as a target; a fleet's total *screening* counters that, diverting attacks from its most vulnerable ships (up to `TARGETING_SCREENING_MAX_EFFECT`) once screening covers its total vulnerability. If a side has less total screening than total vulnerability, each of its ships takes **extra damage up to its own vulnerability in percentage units**, in proportion to the missing screening (`UNSCREENED_DAMAGE_VULNERABILITY_DIVISOR`). Capital ships are vulnerable and screen little; cruisers and destroyers screen and are hard to hit. 1.14.5 added an optional per-type cap, `vulnerability_exploitation`: the most of a target's vulnerability an attacker of that type can turn into extra damage, so older hulls (ship of the line, early ironclads) can no longer fully exploit a modern unscreened fleet, and it also rescaled vulnerability and screening across the vanilla types by roughly half. Types that don't set it exploit everything, which includes every mod ship. Torpedo boats, torpedo boat destroyers, destroyers and submarines gained `ship_battle_against_ship_type_{early_ironclad,monitor,coastal_defense_ship}_hull_damage_mult` bonuses, the counter to early armoured hulls.
 
 Naval battles are visualized as **dioramas** showing the two clashing fleet compositions.
 
@@ -367,8 +373,8 @@ Units consuming prestige goods gain bonuses to offense, defense, and morale reco
 
 ## 12. Power projection and prestige
 
-Power projection = average of (offense + defense) × manpower-ratio, summed across all units. It produces:
-- prestige (0.03 per army unit, 0.1 per navy unit; subjects contribute at 0.0005 / 0.01 respectively)
+Power projection is what a unit contributes to a country's standing. Army units contribute from their offense, defense and manpower; **1.14 gave every ship an explicit `ship_power_projection_add`** on its ship type (plus small per-module adds) instead of computing it from combat stats. It produces:
+- prestige: `common/script_values/prestige_values.txt` gives a per-point rate for army and for navy power projection, and a smaller one for the same in subjects. Navy prestige scales each ship's power projection by its **maximum hit points divided by `PRESTIGE_FROM_NAVY_POWER_PROJECTION_HIT_POINTS_REFERENCE`**, so larger hulls give more. (1.14.4 briefly tied navy prestige to combat power and renamed the modifier `country_prestige_from_navy_combat_power_mult`; 1.14.5 reverted both to power projection. A ship type that sets no `ship_power_projection_add`, like every mod ship, adds nothing here.)
 - naval power projection contributes to **involvement** in the strategic regions a fleet patrols (the 1.13 tiered-interest system; see `vanilla_diplomacy_reference.md` § 6 — the old "extra declared interest per 100 naval power projection" formulation is from the pre-1.13 binary interest model and no longer applies)
 
 ## 13. War support — the political ceiling on a war
@@ -397,6 +403,8 @@ The weekly change is the sum of the named script values in vanilla `common/scrip
 
 Low war support raises AI capitulation desire (`NAI|AI_CAPITULATE_*`); on capitulation all war goals against the country are enforced and it leaves the war. Voluntary capitulation is also possible at any time. If all countries on one side fully capitulate, the war ends.
 
+**AI capitulation desire (1.14.5).** An AI country capitulates once its *capitulation desire* (`concept_capitulation_desire`) reaches 0 or more, so a clearly beaten AI now folds instead of grinding at the floor of war support. The value is a sum of `NAI|AI_CAPITULATE_*` terms: a base, a war-leader term, war support (linear between the radicalization band and the confident band), the war goals it holds and controls, the peace-deal value of the war goals against it (weighted very differently when the enemy does not yet control them), peace desire, a near-certainty term when its whole allied side is occupied, and an expectation that an enemy with higher desire will fold first. Revolutions, secessions and native uprisings floor a participant at minimum war support at a minimum desire. Together with goal expiry above, this is what stops long wars from sitting at minimum war support forever.
+
 1.14 also lets war goals **self-enforce mid-war**: a goal with a `mirrored_wargoal` block fills an occupation bar while contested (`fill_per_week` / `deplete_per_week`, default `WAR_GOAL_ENFORCEMENT_*` defines) and enforces itself at 100. The loser then receives an infamy-free mirror goal (retake the land, swap, reparations, …) so the war continues. Goals with `assent_required` or no mirror block only enforce through capitulation or a peace deal. `side_switch` decides whether an enforced subjugation also moves the target to the enforcer's side. See `<vic3_modding_digests_path>/1.14-openbeta/types/war_goal_types.md` for the full schema.
 
 ### Peace negotiation
@@ -408,6 +416,7 @@ Aside from capitulation, peace deals require unanimous agreement from all **nego
 - **Porting pre-1.14 numbers**: vanilla halved every war support delta (`add_war_war_support`, `add_diplomatic_play_war_support`) when the range shrank from 200 to 100 points; map old levels `v` to `(v+100)/2`.
 - `has_war_support = { target = X value < N }` (war scope): the 0–100 level. Use this for "the war is going badly" checks, ideally against the band defines above.
 - `has_war_support_change = { target = X value < N }` (war scope): the signed **per-beat delta**, not a level. Vanilla uses `value < -5` for "support is collapsing".
+- **War-flip guards (1.14.5)**: `owns_entire_state_region_uncontested`, `owns_entire_or_is_contesting_state_region`, `has_or_is_contesting_state_in_state_region`, `is_independent_and_not_being_subjugated`, `war_may_restore_country = <TAG>` (country scope), and `has_war_goal_at_risk_of_being_dropped = <country>` (war scope). `is_at_war_with_overlord` is a vanilla *scripted* trigger. New on-actions: `on_won_war`, `on_lost_war`, `on_inconclusive_war`, `on_wargoal_enforced_by_timer`; the saved scope `scope:enforced_by_timer` no longer exists on `on_wargoal_enforced`.
 - Newer war-state reads: `war_duration_months`, `num_significant_battles`, `size_weighted_won_battles_fraction`, `enemy_side_occupation`, `is_at_war_with_rival`, `has_stalled_wargoal_against` / `_held_by`, `war_goal_time_ramp`, `average_devastation`, `weeks_until_bankruptcy`.
 
 ### Modifier names that touch war support
@@ -424,7 +433,7 @@ Aside from capitulation, peace deals require unanimous agreement from all **nego
 
 ## 14. Where to look in the codebase
 
-- `common/combat_unit_types/` — unit type definitions (offense/defense/morale base stats); now includes **20 ship types** post-1.13.
+- `common/combat_unit_types/` — unit type definitions (offense/defense/morale base stats); now includes **about twenty ship types** post-1.13.
 - `common/mobilization_options/` — mobilization options and their `unit_modifier` blocks.
 - `common/military_formations/` — formation type definitions.
 - `common/admiral_orders/` and `common/general_orders/` — naval mission and land order definitions, including 1.13-added Port Bombardment / Piracy / Hunt Pirates / Privateering.

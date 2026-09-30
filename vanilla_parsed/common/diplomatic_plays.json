@@ -3331,32 +3331,26 @@
     "=",
     {
      "NOT": [
-      [
-       "=",
-       {
-        "exists": [
-         "=",
-         "c:ETH"
-        ]
-       }
-      ],
-      [
-       "=",
-       {
-        "is_country_type": [
-         "=",
-         "decentralized"
-        ]
-       }
-      ]
+      "=",
+      {
+       "is_country_type": [
+        "=",
+        "decentralized"
+       ]
+      }
      ],
      "is_subject": [
       "=",
       "no"
      ],
-     "has_journal_entry": [
+     "is_ethiopia_unification_pair": [
       "=",
-      "je_age_of_princes"
+      {
+       "TARGET": [
+        "=",
+        "scope:target_country"
+       ]
+      }
      ],
      "scope:target_country": [
       "=",
@@ -3367,19 +3361,6 @@
          "is_country_type": [
           "=",
           "decentralized"
-         ]
-        }
-       ],
-       "custom_tooltip": [
-        "=",
-        {
-         "text": [
-          "=",
-          "ETH_tt"
-         ],
-         "can_form_nation": [
-          "=",
-          "ETH"
          ]
         }
        ],
@@ -3458,20 +3439,12 @@
       "=",
       "no"
      ],
-     "OR": [
+     "is_china_unification_pair": [
       "=",
       {
-       "has_journal_entry": [
+       "TARGET": [
         "=",
-        "je_reunify_china"
-       ],
-       "global_var:chinese_central_government": [
-        "?=",
-        "THIS"
-       ],
-       "c:CHI": [
-        "?=",
-        "this"
+        "scope:target_country"
        ]
       }
      ],
@@ -3490,29 +3463,6 @@
        "aggressive_diplomatic_plays_permitted": [
         "=",
         "yes"
-       ],
-       "OR": [
-        "=",
-        {
-         "has_journal_entry": [
-          "=",
-          "je_reunify_china"
-         ],
-         "global_var:chinese_central_government": [
-          "?=",
-          "THIS"
-         ],
-         "country_has_primary_culture": [
-          [
-           "=",
-           "cu:han"
-          ],
-          [
-           "=",
-           "cu:manchu"
-          ]
-         ]
-        }
        ]
       }
      ]
@@ -3560,24 +3510,13 @@
     "=",
     {
      "NOT": [
-      [
-       "=",
-       {
-        "exists": [
-         "=",
-         "c:ARA"
-        ]
-       }
-      ],
-      [
-       "=",
-       {
-        "is_country_type": [
-         "=",
-         "decentralized"
-        ]
-       }
-      ]
+      "=",
+      {
+       "is_country_type": [
+        "=",
+        "decentralized"
+       ]
+      }
      ],
      "has_technology_researched": [
       "=",
@@ -3587,9 +3526,14 @@
       "=",
       "no"
      ],
-     "can_form_nation": [
+     "is_arabia_unification_pair": [
       "=",
-      "ARA"
+      {
+       "TARGET": [
+        "=",
+        "scope:target_country"
+       ]
+      }
      ],
      "scope:target_country": [
       "=",
@@ -3606,19 +3550,6 @@
        "aggressive_diplomatic_plays_permitted": [
         "=",
         "yes"
-       ],
-       "custom_tooltip": [
-        "=",
-        {
-         "text": [
-          "=",
-          "ARA_tt"
-         ],
-         "can_form_nation": [
-          "=",
-          "ARA"
-         ]
-        }
        ]
       }
      ]
@@ -3691,25 +3622,12 @@
       "=",
       "no"
      ],
-     "OR": [
+     "is_india_unification_pair": [
       "=",
       {
-       "custom_tooltip": [
+       "TARGET": [
         "=",
-        {
-         "text": [
-          "=",
-          "BHT_tt"
-         ],
-         "can_form_nation": [
-          "=",
-          "BHT"
-         ]
-        }
-       ],
-       "c:BHT": [
-        "?=",
-        "this"
+        "scope:target_country"
        ]
       }
      ],
@@ -3728,46 +3646,6 @@
        "aggressive_diplomatic_plays_permitted": [
         "=",
         "yes"
-       ],
-       "OR": [
-        "=",
-        {
-         "custom_tooltip": [
-          "=",
-          {
-           "text": [
-            "=",
-            "BHT_tt"
-           ],
-           "can_form_nation": [
-            "=",
-            "BHT"
-           ]
-          }
-         ],
-         "AND": [
-          "=",
-          {
-           "is_in_geographic_region": [
-            "=",
-            "geographic_region_india"
-           ],
-           "custom_tooltip": [
-            "=",
-            {
-             "text": [
-              "=",
-              "indian_primary_culture_tt"
-             ],
-             "has_indian_primary_culture": [
-              "=",
-              "yes"
-             ]
-            }
-           ]
-          }
-         ]
-        }
        ]
       }
      ]
@@ -3815,24 +3693,13 @@
     "=",
     {
      "NOT": [
-      [
-       "=",
-       {
-        "exists": [
-         "=",
-         "c:IDN"
-        ]
-       }
-      ],
-      [
-       "=",
-       {
-        "is_country_type": [
-         "=",
-         "decentralized"
-        ]
-       }
-      ]
+      "=",
+      {
+       "is_country_type": [
+        "=",
+        "decentralized"
+       ]
+      }
      ],
      "has_technology_researched": [
       "=",
@@ -3842,16 +3709,12 @@
       "=",
       "no"
      ],
-     "custom_tooltip": [
+     "is_indonesia_unification_pair": [
       "=",
       {
-       "text": [
+       "TARGET": [
         "=",
-        "IDN_tt"
-       ],
-       "can_form_nation": [
-        "=",
-        "IDN"
+        "scope:target_country"
        ]
       }
      ],
@@ -3870,19 +3733,6 @@
        "aggressive_diplomatic_plays_permitted": [
         "=",
         "yes"
-       ],
-       "custom_tooltip": [
-        "=",
-        {
-         "text": [
-          "=",
-          "IDN_tt"
-         ],
-         "can_form_nation": [
-          "=",
-          "IDN"
-         ]
-        }
        ]
       }
      ]

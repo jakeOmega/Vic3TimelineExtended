@@ -31,7 +31,7 @@ _None._
 - `events/banking_cycle_events.txt` — `banking_cycle_events.68` option `banking_cycle_events.68.b` (no_effect_option) — **2026-09-26**: the decline; the tooltip says no appeal is made
 - `events/irredentism_events.txt` — `irredentism.1` option `irredentism.1.bide` (no_effect_option) — **2026-09-26**: the decline: biding our time is the choice
 - `events/minor_events.txt` — `minor_events_timelineextended.2` option `minor_events_timelineextended.2.a` (no_effect_option) — **2026-09-26**: the decline: the law proceeds with no intervention
-- `events/monument_events.txt` — `monument_events.2` option `monument_events.2.a` (no_effect_option) — **2026-09-26**: keeps the default production method, whose output the tooltip describes
+- `events/monument_events.txt` — `monument_events.17` option `monument_events.17.d` (no_effect_option) — **2026-09-27**: the decision waits on the monument's journal entry row; the tooltip says the standing penalty continues
 - `events/movement_events_te.txt` — `movement_events_te.17` option `movement_events_te.17.b` (no_effect_option) — **2026-09-26**: the decline; the tooltip says nothing is said
 - `events/nuclear_custody_events.txt` — `nuclear_custody.6` option `nuclear_custody.6.e` (no_effect_option) — **2026-09-26**: the decline: we stay out of their civil war
 - `events/nuclear_custody_events.txt` — `nuclear_custody.10` option `nuclear_custody.10.b` (no_effect_option) — **2026-09-26**: the decline: we leave the matter to others
@@ -45,6 +45,7 @@ _None._
 - `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.11` option `nuclear_weapon_events.11.a` (no_effect_option) — **2026-09-26**: absorbing the blow without retaliating is the choice
 - `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.21` option `nuclear_weapon_events.21.c` (no_effect_option) — **2026-09-26**: silence is the choice, beside the two reforms
 - `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.24` option `nuclear_weapon_events.24.a` (no_effect_option) — **2026-09-26**: standing the crews down is the choice
+- `events/resettlement_events.txt` — `resettlement.20` option `resettlement.20.a` (no_effect_option) — **2026-09-26**: continuing the coercive program
 - `events/te_formable_formation_events.txt` — `formation_te.10` option `formation_te.10.c` (no_effect_option) — **2026-09-26**: the decline: no annexation
 - `events/te_inflation_events.txt` — `te_inflation.1` option `te_inflation.1.c` (no_effect_option) — **2026-09-26**: doing nothing is the choice; the tooltip says the question returns in two years
 - `events/te_map_modes_events.txt` — `te_map_modes.1` option `te_map_modes.1.f_dismiss` (no_effect_option) — **2026-09-26**: closes the survey menu
@@ -54,6 +55,6 @@ _None._
 ## Coverage
 
 - empty blocks: 0 (0 unreviewed)
-- no-effect options: 22 (0 unreviewed)
+- no-effect options: 23 (0 unreviewed)
 - stale tags: 0
 

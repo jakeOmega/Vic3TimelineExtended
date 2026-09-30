@@ -385,6 +385,8 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetPrimaryCulture": "culture",
         # Power bloc
         "GetPowerBloc": "power_bloc",
+        # 1.14.5: the AI regional objective the country holds in a strategic region
+        "GetRegionalObjectiveIn": "regional_objective",
         # Subjects / overlords
         "GetOverlord": "country",
         "GetTopOverlord": "country",
@@ -728,6 +730,12 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "Self": "war",
         "GetName": "value",
         "GetDiplomaticPlay": "diplomatic_play",
+        # 1.14.5: the country's war goal that is about to be dropped as uncontested
+        "GetWarGoalAtRiskOfBeingDropped": "war_goal",
+    },
+    "regional_objective": {
+        "Self": "regional_objective",
+        "GetName": "value",
     },
     "market_goods": {
         "Self": "market_goods",

@@ -2734,6 +2734,10 @@
    "possible": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "country_has_monarchy_law": [
       "=",
       "yes"
@@ -8328,6 +8332,10 @@
    "possible": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "OR": [
       "=",
       {
@@ -8694,6 +8702,10 @@
    "possible": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "OR": [
       "=",
       {
@@ -9901,9 +9913,9 @@
    "possible": [
     "=",
     {
-     "is_subject": [
+     "is_independent_and_not_being_subjugated": [
       "=",
-      "no"
+      "yes"
      ],
      "has_technology_researched": [
       "=",
@@ -11622,6 +11634,10 @@
    "possible": [
     "=",
     {
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "c:ITA": [
       "?=",
       "ROOT"

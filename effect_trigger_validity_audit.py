@@ -513,15 +513,24 @@ def bootstrap_catalog(base_game_path: str, mod_path: str) -> dict:
             except OSError:
                 continue
 
+    # Vanilla's own callable helpers. The depth-0 rule above drops their names,
+    # and a mod call to one that vanilla never uses at depth > 0 (1.14.5's
+    # `has_treaty_alliance_with`) would flag as an unresolved helper. The audit
+    # already allows the mod's own helper names the same way (see `audit`).
+    for rel in _HELPER_NAME_DIRS:
+        keys |= _top_level_names(os.path.join(game, rel))
+
     out_path = os.path.join(mod_path, _CATALOG_REL)
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(
             "# AUTO-GENERATED valid effect/trigger/scope/control-flow keyword "
             "catalog.\n# Union of effects_summary.txt + triggers_summary.txt "
-            "names and every LHS keyword\n# vanilla uses in the audit's "
+            "names, every LHS keyword\n# vanilla uses in the audit's "
             "SCAN_ROOTS (events/ + the script-bearing common/ dirs),\n"
-            "# excluding depth-0 entity names and static-modifier block bodies."
+            "# excluding depth-0 entity names and static-modifier block "
+            "bodies, and the top-level\n# names vanilla defines under "
+            "scripted_effects/scripted_triggers/on_actions/script_values."
             "\n# Regenerate on a vanilla bump: "
             "effect_trigger_validity_audit.bootstrap_catalog(...).\n"
         )

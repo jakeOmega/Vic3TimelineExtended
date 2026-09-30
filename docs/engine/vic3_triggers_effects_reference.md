@@ -1,9 +1,9 @@
-<!-- Auto-generated from triggers.log + effects.log (engine docs 1.14.4). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from triggers.log + effects.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Triggers & Effects Compressed Reference
 
-*Auto-generated from 1846 trigger entries and 3158 effect entries.*
-*99 iterator families, 930 standalone triggers, 390 standalone effects.*
+*Auto-generated from 1854 trigger entries and 3158 effect entries.*
+*99 iterator families, 938 standalone triggers, 390 standalone effects.*
 
 ## Reading Guide
 
@@ -82,7 +82,7 @@
 - `any/every/ordered/random_subject_or_below` → country — Any country below current in hierarchy
 - `any/every/ordered/random_valid_mass_migration_culture` → culture — Lists for cultures in the scoped country that are valid for mass migration
 
-### Triggers (336)
+### Triggers (341)
 
 - `additional_war_support_change` — Compares the additional war support change the scoped country has accumulated from scripted events in the target diplomatic play
 - `aggressive_diplomatic_plays_permitted` — True if country is independent or permitted to start their own Diplomatic Plays
@@ -186,7 +186,7 @@
 - `has_any_law_commitment` — Checks if a country has a commitment to enact any law
 - `has_any_naval_only_hostilities` — Check if the country has naval hostilities with any country it is not also at war with
 - `has_any_potential_strait_province` — Check if a state, state region or country owns any potential strait province (scopes: country, state, state_region)
-- `has_any_regional_objective` — Checks if the scoped country's AI has a regional objective in a strategic region, completed or not Leave out type to match an objective of any type Usage:
+- `has_any_regional_objective` — Checks if the scoped country's AI has a regional objective in a strategic region, whatever its status Leave out type to match an objective of any type Usage:
 - `has_any_secessionists_broken_out` — Check if the country has secessionists broken out
 - `has_any_secessionists_growing` — Check if the country has any secessionists growing
 - `has_any_strait_control` — Check if the scoped country owns a strait province with naval fortification
@@ -223,6 +223,7 @@
 - `has_military_strait_access_through` — Check if the scoped country has military access through every strait owned by the target country → country
 - `has_modifier` — Check if a supported scope has a certain timed modifier Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front (scopes: country, building, character, institution, interest_group, journal_entry, political_movement, power_bloc, state)
 - `has_objective` — Checks if the scoped country has a certain objective type
+- `has_or_is_contesting_state_in_state_region` — Check if country has a state in the state region, or is at war with a country that holds one - i.e.
 - `has_overlapping_interests` — Checks if country in scope has an overlapping interest marker with any of target country's interests → country
 - `has_port_country` — Check if scoped country has at least one port
 - `has_possible_decisions` — Check if a country has any possible Decisions
@@ -292,6 +293,7 @@
 - `is_in_power_bloc` — Checks if the country is in a Power Bloc
 - `is_in_same_power_bloc` — Checks if the scoped country is in the same power bloc as the target scoped country → country
 - `is_in_war_together` — Checks if country in scope is in war on the same side as event target → country
+- `is_independent_and_not_being_subjugated` — True if the country is not a subject and no war goal to make it a subject is pending against it in any of its wars
 - `is_indirect_subject_of` — Checks if country in scope is an indirect subject (subject-of-subject) of event target → country
 - `is_insurrectionary` — Check if country, movement or IG is insurrectionary (scopes: country, interest_group, political_movement)
 - `is_involved_in_journal_entry` — Check if the country is involved in a specific journal entry
@@ -350,7 +352,9 @@
 - `number_of_possible_decisions` — The number of possible Descision a Country can take
 - `overlord_can_decrease_subject_autonomy` — Check if an overlord can decrease a subject autonomy
 - `owes_obligation_to` — Checks if country in scope owes a obligation to event target → country
+- `owns_entire_or_is_contesting_state_region` — Check if country owns the entire region, or is at war with a country that holds a state in it - i.e.
 - `owns_entire_state_region` — Check if country owns entire region
+- `owns_entire_state_region_uncontested` — Check if country owns the entire region and no war goal in any of its wars is targeting a state in it
 - `owns_treaty_port_in` — Does country own the treaty port in assigned state region
 - `play_participant_has_war_goal_of_type_against` — Checks if scope country holds a war goal of a specific type targeting a specific country in any diplomatic play
 - `play_side_has_war_goal_of_type_against` — Checks if any country on the same side as scope country in any diplomatic play holds a war goal of a specific type targeting a specificcountry
@@ -413,6 +417,7 @@
 - `total_population_share` — Compares the total population of a given country's share of the global population
 - `transfer_money_gross_income` — Does the country have this amount of gross income (income before expenses) from money transfer treaties
 - `transfer_money_net_income` — Does the country have this amount of net income (income after expenses) from money transfer treaties
+- `war_may_restore_country` — Checks if a war the scoped country is committed to has a war goal that would put the specified country back on the map, such as the mirror goal created when a country is annexed mid-war → country_definition
 - `war_participant_has_war_goal_of_type_against` — Checks if scope country holds a war goal of a specific type targeting a specific country in any war
 - `war_side_has_war_goal_of_type_against` — Checks if any country on the same side as scope country in any war holds a war goal of a specific type targeting a specific country
 - `war_support_from_war_goals` — Signed war support change per beat for the scoped country from war goals it holds (positive) or is targeted by (negative), by progress tier
@@ -1146,12 +1151,13 @@
 - `any/every/ordered/random_scope_front` → front — Iterate through all Fronts related to the scoped War
 - `any/every/ordered/random_war_participant` → country — Iterate through all participants in a war
 
-### Triggers (25)
+### Triggers (26)
 
 - `gdp_change_since_war_start` — Compares the fraction of GDP the target country has gained or lost since it entered the scoped war
 - `has_stalled_wargoal_against` — Checks if any enemy war goal in the scoped war targets the specified country without being contested or advanced on → country
 - `has_stalled_wargoal_held_by` — Checks if the specified country holds a war goal in the scoped war that is neither being contested nor advanced on → country
 - `has_war_goal` — Checks if war has a certain war goal type
+- `has_war_goal_at_risk_of_being_dropped` — Checks if the target country holds a war goal in the scoped war that is at risk of being dropped for having been uncontested for too long → country
 - `has_war_support` — Checks the war support of the target country in the scoped war
 - `has_war_support_change` — Checks the war support change of the target country in the scoped war
 - `is_at_war_with_rival` — Checks if the specified country is at war against a declared rival in the scoped war → country
@@ -1571,10 +1577,12 @@
 ---
 ## Ai Regional Objective
 
-### Triggers (3)
+### Triggers (5)
 
-- `completion_date` — Compare to the date the scoped AI regional objective was completed Uncompleted objectives have no completion date, so check is_completed first
+- `conclusion_date` — Compare to the date the scoped AI regional objective was concluded Only concluded objectives have a date, so check is_completed or is_failed first
+- `is_active` — Checks if the scoped AI regional objective is still being pursued, meaning it has neither completed nor failed
 - `is_completed` — Checks if the scoped AI regional objective has been completed
+- `is_failed` — Checks if the scoped AI regional objective has failed or been invalidated
 - `start_date` — Compare to the date the scoped AI regional objective was rolled
 
 ---

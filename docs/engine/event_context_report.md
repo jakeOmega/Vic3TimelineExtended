@@ -2,7 +2,7 @@
 
 Events whose text does not match the context they fire in: events about a mod system that ignore it, and events that claim a country acted when it never chose to. Heuristic ranking for a human read — see `event_context_audit.py` for the rules. Suppress a reviewed flag with a check-tagged comment on its own line inside the event block: `# REVIEWED YYYY-MM-DD (<check>): rationale`.
 
-- `system_ungated`: **0** unreviewed, 11 REVIEWED
+- `system_ungated`: **0** unreviewed, 9 REVIEWED
 - `unchosen_self_action`: **0** unreviewed, 7 REVIEWED
 - `imputed_foreign_action`: **0** unreviewed, 6 REVIEWED
 - Tags to remove: **0**
@@ -19,11 +19,9 @@ No unreviewed flags. ✅
 - `modern_election_events.33` — events/modern_election_events.txt (REVIEWED 2026-09-25: a campaign proposal the voters debate, not an augmentation outcome)
 - `movement_events_te.9` — events/movement_events_te.txt (REVIEWED 2026-09-25: scientists petition for trials; the options are the government deciding)
 - `social_tensions_events.1` — events/social_tensions_events.txt (REVIEWED 2026-09-25: a domestic terror attack, not a state covert operation)
-- `un_events.2` — events/un_events.txt (REVIEWED 2026-09-25: fired by the nuclear strike itself (extra_effects.txt); the UN condemnation of a real use)
 - `un_events.12` — events/un_events.txt (REVIEWED 2026-09-25: a UN topic raised by a real colonial collapse (docket item 8); UN history, independent of the decolonization JE)
 - `un_vote.1` — events/un_vote_events.txt (REVIEWED 2026-09-25: the generic vote event names every resolution topic; each topic is raised by its own gated docket item)
 - `un_vote.1` — events/un_vote_events.txt (REVIEWED 2026-09-25: the generic vote event names every resolution topic; each topic is raised by its own gated docket item)
-- `un_vote.2` — events/un_vote_events.txt (REVIEWED 2026-09-25: the generic result event; the non-proliferation text shows only for that resolution)
 - `wonder_events.1` — events/wonder_events.txt (REVIEWED 2026-09-25: the space elevator is a wonder building the country chose to build, not space-race state)
 - `wonder_events.6` — events/wonder_events.txt (REVIEWED 2026-09-25: flavour of the space elevator wonder, not space-race state)
 

@@ -1,4 +1,8 @@
-﻿# COPY-PASTED FOR NOW
+﻿# TE override of vanilla military_formation_panel.gui (1.14.5). Everything else is vanilla; re-diff against
+# the installed file on every vanilla patch. Deviations kept from the mod's older copy (each a few lines):
+#   1. mobilization option groups listed in one column (datamodel_wrap = 1 on GetMobilizationOptionGroups)
+#   2. the formation settings section (borrow / lending) shown for armies only (two MilitaryFormation.IsArmy gates)
+#   3. the Raise Conscripts and Mobilize icons are not disabled by IsValid(...) (two `enabled` lines removed)
 @panel_width_minus_30 = 510
 @panel_width_minus_20 = 520
 @panel_width_minus_10 = 530			# used to be 450
@@ -1384,8 +1388,8 @@ types military_formation_panel_types
 										onclick = "[Execute(SetCharacterOrderForSelectedFormations(CommanderOrderType.Self))]"
 										tooltip = "SET_COMMANDER_ORDER_IN_SELECTED_FORMATIONS_TOOLTIP"
 										using = tooltip_above
-										
-										blockoverride "icon_size" { 
+
+										blockoverride "icon_size" {
 											size = { 75% 75% }
 										}
 
@@ -1395,10 +1399,10 @@ types military_formation_panel_types
 
 										action_selection_number = {
 											visible = "[Or(
-												NotZero(GetNumCommandersInSelectedFormationsWithOrderActive(CommanderOrderType.Self)), 
+												NotZero(GetNumCommandersInSelectedFormationsWithOrderActive(CommanderOrderType.Self)),
 												NotZero(GetNumCommandersInSelectedFormationsWithOrderNext(CommanderOrderType.Self))
 											)]"
-		
+
 											blockoverride "text" {
 												text = "NUM_ACTIVE_AND_NEXT_ORDERS_FOR_SELECTED"
 											}
@@ -2747,15 +2751,28 @@ types military_formation_panel_types
 		}
 
 		### DEBUG INFO
-		textbox = {
-			parentanchor = hcenter
-			text = "FORMATION_PANEL_DEBUG_INFO"
-			maximumsize = { @panel_width -1 }
+		flowcontainer = {
 			max_width = @panel_width_minus_10
-			autoresize = yes
-			multiline = yes
-			align = left|nobaseline
+			direction = vertical
 			visible = "[InDebugMode]"
+
+			textbox = {
+				text = "[MilitaryFormation.GetCommonDebugInfo]"
+				maximumsize = { @panel_width -1 }
+				max_width = @panel_width_minus_10
+				autoresize = yes
+				multiline = yes
+				align = left|nobaseline
+			}
+
+			textbox = {
+				text = "[MilitaryFormation.GetAIDebugInfo]"
+				maximumsize = { @panel_width -1 }
+				max_width = @panel_width_minus_10
+				autoresize = yes
+				multiline = yes
+				align = left|nobaseline
+			}
 		}
 	}
 
@@ -3068,7 +3085,7 @@ types military_formation_panel_types
 			using = tooltip_ne
 
 			block "next_order_visibility" {
-				visible = "[And(Character.GetCountry.IsLocalPlayer, Character.GetNextOrderType.IsValid)]"
+				visible = "[And(Character.GetCountry.IsPlayer, Character.GetNextOrderType.IsValid)]"
 			}
 
 			blockoverride "size" {
@@ -3108,7 +3125,7 @@ types military_formation_panel_types
 			using = tooltip_ne
 
 			block "current_order_visibility" {
-				visible = "[And(Character.GetCountry.IsLocalPlayer, Not(Character.GetNextOrderType.IsValid))]"
+				visible = "[And(Character.GetCountry.IsPlayer, Not(Character.GetNextOrderType.IsValid))]"
 			}
 
 			blockoverride "size" {
@@ -3143,14 +3160,14 @@ types military_formation_panel_types
 		}
 
 		icon = {
-			visible = "[Not(Character.GetCountry.IsLocalPlayer)]"
+			visible = "[Not(Character.GetCountry.IsPlayer)]"
 			size = { 100% 100% }
 			texture = "gfx/interface/backgrounds/round_button_bg.dds"
 			parentanchor = center
 		}
 
 		icon = {
-			visible = "[And( Not(Character.GetCountry.IsLocalPlayer), Not(Character.GetNextOrderType.IsValid))]"
+			visible = "[And( Not(Character.GetCountry.IsPlayer), Not(Character.GetNextOrderType.IsValid))]"
 			parentanchor = center
 			size = { 75% 75% }
 			tooltip = "COMMANDER_ORDER_TOOLTIP"
@@ -3172,7 +3189,7 @@ types military_formation_panel_types
 		}
 
 		icon = {
-			visible = "[And( Not(Character.GetCountry.IsLocalPlayer), Character.GetNextOrderType.IsValid)]"
+			visible = "[And( Not(Character.GetCountry.IsPlayer), Character.GetNextOrderType.IsValid)]"
 			parentanchor = center
 			size = { 75% 75% }
 			tooltip = "COMMANDER_NEXT_ORDER_TOOLTIP"
@@ -5653,7 +5670,8 @@ types military_formation_panel_types
 
 						### REMOVE UNITS
 						button_icon_round_action = {
-							visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
+							visible = "[MilitaryFormation.GetCountry.IsLocalPlayer
+							]"
 							size = { 30 30 }
 							parentanchor = vcenter
 							tooltip = "MILITARY_FORMATION_REMOVE_CONSCRIPT_UNIT_TOOLTIP"
@@ -6092,7 +6110,7 @@ types military_formation_panel_types
 						organization_bar = {
 							using = formation_item_progressbar_size
 							parentanchor = vcenter
-							
+
 							blockoverride "organization_value" {
 								value = "[FixedPointToFloat( MilitaryFormation.GetOrganizationPercentage )]"
 							}
@@ -6132,7 +6150,7 @@ types military_formation_panel_types
 						organization_bar = {
 							using = formation_item_progressbar_size
 							parentanchor = vcenter
-							
+
 							blockoverride "organization_value" {
 								value = "[MilitaryFormation.GetSupplyRatio]"
 							}
@@ -6803,9 +6821,11 @@ types military_formation_panel_types
 				blockoverride "size" {
 					size = { 250 60 }
 				}
+
 				blockoverride "button_size" {
 					size = { 90% 75% }
 				}
+
 				blockoverride "mobilization_icon_size" {
 					size = { 55 55 }
 				}
@@ -6817,47 +6837,32 @@ types military_formation_panel_types
 
 			### TRANSFER UNITS
 			button_icon_round = {
-				blockoverride "icon_size" { size = { 75% 75% } }
 				size = { 55 55 }
 				parentanchor = vcenter
 				tooltip = "MILITARY_FORMATION_TRANSFER_UNIT_TOOLTIP"
 				using = tooltip_ne
 				onclick = "[PopupManager.ShowTransferFormation( MilitaryFormation.AccessSelf )]"
+				
+				blockoverride "icon_size" {
+					size = { 75% 75% }
+				}
 
 				blockoverride "icon" {
 					texture = "gfx/interface/icons/formation_order_icons/transfer.dds"
 				}
 			}
 
-			### INVASION
-			button_icon_round_map_interaction = {
-				blockoverride "icon_size" { size = { 75% 75% } }
-				size = { 55 55 }
-				parentanchor = vcenter
-				tooltip = "MILITARY_FORMATION_INVASION_TOOLTIP"
-				onclick = "[MilitaryFormation.OnInvasionClicked]"
-				using = tooltip_ne
-				enabled = "[MilitaryFormation.CanInvade]"
-
-				blockoverride "icon" {
-					texture = "gfx/interface/icons/formation_order_icons/invasion_land_and_naval.dds"
-				}
-
-				action_selection_number = {
-					blockoverride "text" {
-						text = "[MilitaryFormation.GetNumInvasionSelections|+]"
-					}
-				}
-			}
-			
 			### STRATEGIC OBJECTIVE
 			button_icon_round_map_interaction = {
-				blockoverride "icon_size" { size = { 75% 75% } }
 				size = { 55 55 }
 				parentanchor = vcenter
 				tooltip = "MILITARY_FORMATION_SET_STRATEGIC_OBJECTIVE_TOOLTIP"
-				onclick = "[MilitaryFormation.OnSetStrategicObjectiveClicked]"
 				using = tooltip_ne
+				onclick = "[MilitaryFormation.OnSetStrategicObjectiveClicked]"
+				
+				blockoverride "icon_size" {
+					size = { 75% 75% }
+				}
 
 				blockoverride "icon" {
 					texture = "gfx/interface/icons/formation_order_icons/strategic_objective.dds"
@@ -6882,17 +6887,66 @@ types military_formation_panel_types
 				}
 			}
 
-			### TRANSFER UNITS
+			### Station in State
+			button_icon_round_map_interaction = {
+				size = { 55 55 }
+				parentanchor = vcenter
+				tooltip = "STATION_MILITARY_FORMATION_TOOLTIP"
+				using = tooltip_ne
+				onclick = "[MilitaryFormation.OnStationClicked]"
+				enabled = "[MilitaryFormation.CanStation]"
+				
+				blockoverride "icon_size" {
+					size = { 75% 75% } }
+
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/formation_order_icons/station_armies.dds"
+				}
+
+				action_selection_number = {
+					blockoverride "text" {
+						text = "[MilitaryFormation.GetNumStationSelections|+]"
+					}
+				}
+			}
+
+			### Deploy to Front
+			button_icon_round_map_interaction = {
+				size = { 55 55 }
+				tooltip = "DEPLOY_MILITARY_FORMATION_TO_FRONT_TOOLTIP"
+				using = tooltip_ne
+				onclick = "[MilitaryFormation.OnDeployToFrontClicked]"
+				enabled = "[And( MilitaryFormation.CanDeployToFront, MilitaryFormation.IsMobilized )]"
+
+				blockoverride "icon_size" {
+					size = { 75% 75% }
+				}
+
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/formation_order_icons/send_to_front.dds"
+				}
+
+				action_selection_number = {
+					blockoverride "text" {
+						text = "[MilitaryFormation.GetNumDeployToFrontSelections|+]"
+					}
+				}
+			}
+
+			### Additional actions Army
 			button_icon_round = {
-				blockoverride "icon_size" { size = { 75% 75% } }
 				size = { 55 55 }
 				parentanchor = vcenter
 				tooltip = "ADDITIONAL_ACTIONS_MILITARY_FORMATION"
 				using = tooltip_nw
 				onclick = "[RightClickMenuManager.ToggleArmyAdditionalActions( MilitaryFormation.AccessSelf, PdxGuiWidget.AccessSelf )]"
+				
+				blockoverride "icon_size" {
+					size = { 75% 75% }
+				}
 
 				blockoverride "icon" {
-					texture = "gfx/interface/icons/commander_order_icons/move.dds"
+					texture = "gfx/interface/buttons/button_icons/menu.dds"
 				}
 			}
 		}
@@ -6908,54 +6962,43 @@ types military_formation_panel_types
 			spacing = 2
 			parentanchor = hcenter
 
-			# edit mission sea regions
-			button_icon_round_map_interaction = {
-				blockoverride "icon_size" { size = { 75% 75% } }
-				size = { 60 60 }
-				parentanchor = vcenter
-                datacontext = "[MilitaryFormation]" # needed for the tooltip
-				tooltip = "EDIT_NAVAL_MISSION_SEA_REGIONS_TOOLTIP"
-				onclick = "[MilitaryFormation.OnEditMissionSeaRegionsClicked]"
-				enabled = "[MilitaryFormation.CanEditMissionSeaRegions]"
-				using = tooltip_ne
-
-				blockoverride "icon" {
-					texture = "gfx/interface/icons/generic_icons/edit_sea_nodes.dds"
-				}
-			}
-
-			### INVASION
-			button_icon_round_map_interaction = {
-				blockoverride "icon_size" { size = { 75% 75% } }
-				size = { 60 60 }
-				parentanchor = vcenter
-				tooltip = "MILITARY_FORMATION_INVASION_TOOLTIP"
-				onclick = "[MilitaryFormation.OnInvasionClicked]"
-				using = tooltip_above
-				enabled = "[MilitaryFormation.CanInvade]"
-
-				blockoverride "icon" {
-					texture = "gfx/interface/icons/formation_order_icons/invasion_land_and_naval.dds"
-				}
-
-				action_selection_number = {
-					blockoverride "text" {
-						text = "[MilitaryFormation.GetNumInvasionSelections|+]"
-					}
-				}
-			}
-
 			### TRANSFER UNITS
 			button_icon_round = {
-				blockoverride "icon_size" { size = { 75% 75% } }
 				size = { 60 60 }
 				parentanchor = vcenter
 				tooltip = "MILITARY_FORMATION_TRANSFER_UNIT_TOOLTIP"
 				using = tooltip_ne
 				onclick = "[PopupManager.ShowTransferFormation( MilitaryFormation.AccessSelf )]"
+				
+				blockoverride "icon_size" {
+					size = { 75% 75% }
+				}
 
 				blockoverride "icon" {
 					texture = "gfx/interface/icons/formation_order_icons/transfer.dds"
+				}
+			}
+
+			### Station in State
+			button_icon_round_map_interaction = {
+				size = { 60 60 }
+				tooltip = "STATION_MILITARY_FORMATION_TOOLTIP"
+				using = tooltip_ne
+				enabled = "[MilitaryFormation.CanStation]"
+				onclick = "[MilitaryFormation.OnStationClicked]"
+
+				blockoverride "icon_size" {
+					size = { 75% 75% }
+				}
+
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/formation_order_icons/station_fleet.dds"
+				}
+
+				action_selection_number = {
+					blockoverride "text" {
+						text = "[MilitaryFormation.GetNumStationSelections|+]"
+					}
 				}
 			}
 
@@ -6965,18 +7008,40 @@ types military_formation_panel_types
 					onclick = "[RightClickMenuManager.ToggleSelectNavalMissionTypeForFleet(MilitaryFormation.AccessSelf, PdxGuiWidget.AccessSelf)]"
 				}
 			}
+
+			# edit mission sea regions
+			button_icon_round_map_interaction = {
+				size = { 60 60 }
+				parentanchor = vcenter
+                datacontext = "[MilitaryFormation]" # needed for the tooltip
+				tooltip = "EDIT_NAVAL_MISSION_SEA_REGIONS_TOOLTIP"
+				onclick = "[MilitaryFormation.OnEditMissionSeaRegionsClicked]"
+				enabled = "[MilitaryFormation.CanEditMissionSeaRegions]"
+				using = tooltip_ne
+				
+				blockoverride "icon_size" {
+					size = { 75% 75% }
+				}
+
+				blockoverride "icon" {
+					texture = "gfx/interface/icons/generic_icons/edit_sea_nodes.dds"
+				}
+			}
 			
 			### Additional Fleet Actions Menu
 			button_icon_round = {
-				blockoverride "icon_size" { size = { 75% 75% } }
 				size = { 60 60 }
 				parentanchor = vcenter
 				tooltip = "ADDITIONAL_ACTIONS_MILITARY_FORMATION"
 				onclick = "[RightClickMenuManager.ToggleFleetAdditionalActions( MilitaryFormation.AccessSelf, PdxGuiWidget.AccessSelf )]"
 				using = tooltip_nw
+				
+				blockoverride "icon_size" {
+					size = { 75% 75% }
+				}
 
 				blockoverride "icon" {
-					texture = "gfx/interface/icons/commander_order_icons/move.dds"
+					texture = "gfx/interface/buttons/button_icons/menu.dds"
 				}
 			}
 		}
@@ -7525,7 +7590,7 @@ types military_formation_panel_types
 			block "remove_unit" {
 				button_icon_round_action = {
 					size = { 23 23 }
-					visible = "[Country.IsLocalPlayer]"
+					visible = "[Country.IsPlayer]"
 					enabled = "[IsValid( CombatUnit.GetMilitaryFormation.GetDisbandUnitCommand( CombatUnit.Self ) )]"
 					onclick = "[Execute( CombatUnit.GetMilitaryFormation.GetDisbandUnitCommand( CombatUnit.Self ) )]"
 					tooltip = "DISBAND_COMBAT_UNIT"
@@ -7888,7 +7953,7 @@ types mobilization
 
 types formation_header {
 	type header_grid_item = widget {
-		size = { 140 30 } 
+		size = { 140 30 }
 
 		textbox = {
 			block "text_maximumsize" {

@@ -37,6 +37,7 @@
 		Unlocks Buildings: Barracks
 		Unlocks Combat Unit Types: Hussars
 		Unlocks Decrees: Violent Suppression
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Navigation - Through various different methods, from stars, to maps, to a compass it is possible to correctly chart a course across the world.
 		Unlocks Buildings: Port, Shipyards, Whaling Stations
 	Drydocks - Creating enclosed areas where ships can be docked on dry land allows for easier and more thorough maintenance of cargo vessels and warships alike.
@@ -82,7 +83,6 @@
 	Paddle Steamer - The paddle steamer is a steam powered watercraft, where the steam is used to turn paddles that pushes the ship through the water.
 		Unlocking Technologies:
 			Admiralty
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Urbanization - As more and more people move from living in the countryside to living in the cities, their very way of life is bound to change too.
 		Unlocks Buildings: Construction Sector, Urban Center
 		Unlocks Laws: Cultural Assimilation, Ghettoization, Ministry of Urban Planning Established
@@ -109,7 +109,7 @@
 	Romanticism - An art movement celebrating the emotional and imaginary, in contrast to the proper and rational. Depictions of nature, history and dramatic, emotionally powerful scenes are common.
 		Unlocking Technologies:
 			Academia
-		Unlocks Buildings: Creative Industries, Tourism Industry
+		Unlocks Buildings: Creative Industry, Tourism Industry
 		Unlocks Laws: Agrarianism, Industry Banned, Legal Limbo
 		Unlocks Decrees: Greener Grass Campaign
 		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
@@ -144,6 +144,7 @@
 			Bureaucracy
 			Urban Planning
 		Unlocks Laws: Censorship, Dedicated Police Force, National Guard, Shinsengumi
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Stock Exchange - An organized market where stocks and bonds can be bought and sold, the stock exchange is a central element of the modern market economy.
 		Unlocking Technologies:
 			International Trade
@@ -197,7 +198,7 @@
 			Atmospheric Engine
 		Unlocks Buildings: Railway
 		Unlocks Mobilization Options: Rail Transport
-		Unlocks PMs: 11 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
 	Chemical Bleaching - Through the addition of certain salts, minerals, or chemicals to the raw materials, the visual qualities of manufactured goods can be greatly increased.
 		Unlocking Technologies:
 			Crystal Glass
@@ -320,7 +321,6 @@
 		Unlocking Technologies:
 			Mass Communication
 			International Relations
-		Unlocks Buildings: Resettlement Camp, Resettlement Colony
 		Unlocks Laws: Ancestral Citizenship, Civic Monolingualism
 		Unlocks Decrees: Promote National Values
 	Labor Movement - Just as the world becomes more industrialized, so too do the workers become more organized, campaigning for better wages and better working conditions.
@@ -391,7 +391,7 @@
 	Steel Railway Cars - Steel Railway Cars allow trains to be much sturdier and in turn to carry much more weight.
 		Unlocking Technologies:
 			Railways
-		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 8 (listed under their buildings in buildings.txt)
 	Electrical Generation - It is possible to capture the very essence of lightning and use it to power all sorts of different types of machinery.
 		Unlocking Technologies:
 			Rotary Valve Engine
@@ -479,7 +479,6 @@
 			Nationalism
 		Unlocks Buildings: Panama Canal
 		Unlocks Decrees: Establish Missions
-		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Anarchism - A political ideology promoting self-governance and opposition to authority. Anarchism seeks to do away with the state and other institutions which rule over people against their will, replacing them with voluntary associations.
 		Unlocking Technologies:
 			Egalitarianism
@@ -548,13 +547,13 @@
 		Unlocking Technologies:
 			Electrical Capacitors
 			Steel Railway Cars
-		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 13 (listed under their buildings in buildings.txt)
 	Combustion Engine - A combustion engine allows fuel to be turned directly into mechanical power, based on combustions taking place inside the engine constantly.
 		Unlocking Technologies:
 			Rotary Valve Engine
 		Unlocks Buildings: Automotive Industries
 		Unlocks Mobilization Options: Motorized Reconnaissance, Truck Transport
-		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
 	Pneumatic Tools - One of the greatest forces man can harness is the air itself. Pressurized air, applied correctly in pipes and pistons, can provide an astounding amount of force for industrial use.
 		Unlocking Technologies:
 			Rotary Valve Engine
@@ -717,7 +716,7 @@
 	Compression Ignition - A compression ignition engine ignites the fuel by compressing air and has the highest thermal efficiency of any engine.
 		Unlocking Technologies:
 			Combustion Engine
-		Unlocks PMs: 13 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 14 (listed under their buildings in buildings.txt)
 	Destroyer - Lighter vessels, equipped with torpedoes and smaller guns, are just as important in modern navies as capital ships.
 		Unlocking Technologies:
 			$ship_type_modern_ironclad$
@@ -767,7 +766,7 @@
 	Mass Surveillance - By having specific people whose sole purpose is to follow and report on others, it is possible to keep a much closer eye on what is going on in your country.
 		Unlocking Technologies:
 			Central Planning
-		Unlocks Laws: Militarized Police Force, Ministry of Intelligence and Security Established, Population Control Measures
+		Unlocks Laws: Militarized Police Force, Ministry of Intelligence and Security Established, Penal Labor Camps, Population Control Measures
 	Antibiotics - Antibiotics are an advanced medicine used for fighting infections, allowing a greater survival rate in hospitals.
 		Unlocking Technologies:
 			Malaria Prevention
@@ -777,7 +776,7 @@
 			Film
 		Unlocks Laws: Dirigiste Policy, Linguistic Purity, Ministry of Culture Established, Pro-Natalist Subsidies
 		Unlocks Parties: fascist_party
-		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Modern Financial Instruments - Moneymaking methods continue to grow and proliferate. Some methods may involve money flowing in a pyramid upwards, but all of them involve more and more money flowing all the time.
 		Unlocking Technologies:
 			International Exchange Standards
@@ -845,7 +844,7 @@
 			Macroeconomics
 		Unlocks Laws: Central Bank Independence, Fiat Money, Publicly Funded Elections
 		Unlocks Decrees: Tax Breaks
-		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Combined Arms - By having different branches of the military work together, we can be much more effective in combat. Each army general whose formation fields at least two different unit groups - infantry, artillery, cavalry, tanks, or aircraft - with each comprising at least 5% of the formation gains unique [concept_combined_arms] traits that provide combat bonuses. Fielding all five groups in a single formation unlocks the ultimate Full Spectrum Dominance bonus.
 		Unlocking Technologies:
 			Mobile Armor
@@ -906,7 +905,7 @@
 			Film
 		Unlocks Laws: Donation Limits, Ministry of Propaganda Established, Ministry of Religion Established, State-Led Language Reform
 		Unlocks Decrees: Natalism Initiative, Political Patronage
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Animation - By making drawings appear to move, we've created a new form of entertainment. It's a popular way to tell stories and express artistic ideas, for better or worse.
 		Unlocking Technologies:
 			Mass Media
@@ -1110,7 +1109,7 @@
 	Modern Urban Planning - By planning our cities more systematically, we can create more efficient, sustainable, and pleasant places to live. It's a way to bring some order to the chaos of urban growth.
 		Unlocking Technologies:
 			Art Deco Architecture
-		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
 	Satellite Communications - Satellites have given us a global communication network. Now we can transmit information instantly across the world, making our planet a much more connected place.
 		Unlocking Technologies:
 			Space Exploration
@@ -1184,6 +1183,7 @@
 		Unlocking Technologies:
 			Pollution Control
 		Unlocks Parties: green_party
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Sexual Revolution - A social movement that has challenged traditional ideas about sexuality and relationships. It has led to greater acceptance of premarital sex, contraception, and different family structures.
 		Unlocking Technologies:
 			Second Wave Feminism
@@ -1303,7 +1303,7 @@
 		Unlocking Technologies:
 			Guided Missiles
 		Unlocks Mobilization Options: Missile Defense System
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Automated Surveillance - With ground sensors and aerial drones, we can keep an eye on things without having to send people out. This makes our military operations more effective, if a bit intrusive.
 		Unlocking Technologies:
 			Military-Grade Cybersecurity
@@ -1394,7 +1394,7 @@
 		Unlocking Technologies:
 			Industrial Robotics
 		Unlocks Buildings: Golden Bridge, Shanghai Tower, Statue of Unity
-	Electric Vehicles - Battery-electric powertrains overtake internal combustion for passenger transport. Charging [concept_infrastructure], regenerative braking, and rare-earth supply chains reshape automotive manufacturing.
+	Electric Vehicles - Battery-electric powertrains overtake internal combustion for passenger transport. Charging infrastructure, regenerative braking, and rare-earth supply chains reshape automotive manufacturing.
 		Unlocking Technologies:
 			Clean Energy Technologies
 		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
@@ -1421,6 +1421,7 @@
 			Stealth Technology
 			Missile Defense Systems
 		Unlocks Mobilization Options: Directed Energy Defenses
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Joint All-Domain Command and Control (JADC2) - A military concept that aims to connect all of our forces across every domain. It's designed to improve our situational awareness and decision-making, making us a more effective fighting force.
 		Unlocking Technologies:
 			Network Centric Warfare
