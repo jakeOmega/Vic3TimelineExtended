@@ -200,23 +200,23 @@ types covert_operations_widget_types
 		}
 	}
 
-	### One operation slot: lit while an operation fills it, dimmed while it is
-	### free (te_un_ov_agency). PLACEHOLDER art: the journal entry's own icon
-	### (docs/systems/covert_gui_icons.md).
+	### One operation slot: lit while an operation fills it, dimmed to 25% while
+	### it is free (te_un_ov_agency). The art is a case file with a clipped
+	### photograph (docs/systems/covert_gui_icons.md).
 	type covert_ov_slot = widget {
 		size = { 30 30 }
 
 		icon = {
 			size = { 26 26 }
 			parentanchor = center
-			texture = "gfx/interface/icons/event_icons/je_covert_warfare.dds"
+			texture = "gfx/interface/icons/covert_icons/operation_slot.dds"
 			block "lit" {}
 		}
 		icon = {
 			size = { 26 26 }
 			parentanchor = center
 			alpha = 0.25
-			texture = "gfx/interface/icons/event_icons/je_covert_warfare.dds"
+			texture = "gfx/interface/icons/covert_icons/operation_slot.dds"
 			block "unlit" {}
 		}
 	}
@@ -939,8 +939,8 @@ types covert_operations_widget_types
 		covert_panel = {
 			spacing = 10
 
-			### Row 1: standing · funding · Tradecraft · a recent catch.
-			### PLACEHOLDER icons, listed in docs/systems/covert_gui_icons.md.
+			### Row 1: standing · funding · Tradecraft · a recent catch. The
+			### covert icons (PR #586), listed in docs/systems/covert_gui_icons.md.
 			flowcontainer = {
 				direction = horizontal
 				spacing = 6
@@ -954,7 +954,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_code'), '(CFixedPoint)4' )]"
 					tooltip = "je_iw_status_fortress"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+						texture = "gfx/interface/icons/covert_icons/standing_fortress.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_standing_4"
@@ -964,7 +964,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_code'), '(CFixedPoint)3' )]"
 					tooltip = "je_iw_status_hardened"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/approval_icon.dds"
+						texture = "gfx/interface/icons/covert_icons/standing_hardened.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_standing_3"
@@ -974,7 +974,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_code'), '(CFixedPoint)2' )]"
 					tooltip = "je_iw_status_defended"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
+						texture = "gfx/interface/icons/covert_icons/standing_defended.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_standing_2"
@@ -984,7 +984,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_code'), '(CFixedPoint)1' )]"
 					tooltip = "je_iw_status_exposed"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/disapproval_icon.dds"
+						texture = "gfx/interface/icons/covert_icons/standing_exposed.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_standing_1"
@@ -994,7 +994,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_code'), '(CFixedPoint)0' )]"
 					tooltip = "je_iw_status_vulnerable"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+						texture = "gfx/interface/icons/covert_icons/standing_vulnerable.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_standing_0"
@@ -1008,7 +1008,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), '(CFixedPoint)0' )]"
 					tooltip = "je_iw_ov_funding_tt"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/warning.dds"
+						texture = "gfx/interface/icons/covert_icons/funding_dormant.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_funding_label"
@@ -1018,7 +1018,7 @@ types covert_operations_widget_types
 					visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_funding_level_display'), '(CFixedPoint)0' ) )]"
 					tooltip = "je_iw_ov_funding_tt"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/gdp.dds"
+						texture = "gfx/interface/icons/covert_icons/funding.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_funding_label"
@@ -1030,7 +1030,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)0' )]"
 					tooltip = "je_iw_ov_tc_tt"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/maybe_icon.dds"
+						texture = "gfx/interface/icons/covert_icons/tradecraft_0.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_tc_label"
@@ -1040,7 +1040,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)1' )]"
 					tooltip = "je_iw_ov_tc_tt"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/population.dds"
+						texture = "gfx/interface/icons/covert_icons/tradecraft_1.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_tc_label"
@@ -1050,7 +1050,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)2' )]"
 					tooltip = "je_iw_ov_tc_tt"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/politics_view/institution_level_icon.dds"
+						texture = "gfx/interface/icons/covert_icons/tradecraft_2.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_tc_label"
@@ -1060,7 +1060,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)3' )]"
 					tooltip = "je_iw_ov_tc_tt"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/formation_order_icons/upgrade.dds"
+						texture = "gfx/interface/icons/covert_icons/tradecraft_3.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_tc_label"
@@ -1070,7 +1070,7 @@ types covert_operations_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)4' )]"
 					tooltip = "je_iw_ov_tc_tt"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/most_senior_front_commander.dds"
+						texture = "gfx/interface/icons/covert_icons/tradecraft_4.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_tc_label"
@@ -1084,7 +1084,7 @@ types covert_operations_widget_types
 					visible = "[GetScriptedGui('covert_last_exposed_known_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					tooltip = "[GetScriptedGui('covert_last_exposed_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/military_icons/navy_icons/detection_navy.dds"
+						texture = "gfx/interface/icons/covert_icons/spy_caught.dds"
 					}
 					blockoverride "label" {
 						text = "je_iw_ov_caught_label"

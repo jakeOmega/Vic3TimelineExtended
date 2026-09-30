@@ -4,8 +4,8 @@ In the spirit of test_un_layout.py: the composers' section order; each named
 root a gated wrapper the journal entry mounts; collapse flags that say their
 default; explanations only in "How Covert Warfare Works"; subsections shown
 only in the state they describe; what the overview draws for each code; the
-display values' guards; loc tidiness; and the placeholder icons held to
-docs/systems/covert_gui_icons.md.
+display values' guards; loc tidiness; and the covert icons (PR #586) held
+to docs/systems/covert_gui_icons.md, each code to its file.
 """
 import glob
 import os
@@ -43,33 +43,28 @@ DORMANT = "GetScriptedGui('covert_ops_dormant_sgui').IsShown( GuiScope.SetRoot( 
 CAUGHT = "GetScriptedGui('covert_last_exposed_known_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
 NO_OPS = "IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_ops') )"
 
-# The overview's placeholder icons (docs/systems/covert_gui_icons.md): what
-# each one stands for -> the texture it uses now.
+# The overview's icons, the covert set from PR #586 (docs/systems/
+# covert_gui_icons.md): what each one stands for -> its file.
 GENERIC = "gfx/interface/icons/generic_icons/"
+COVERT_ICONS = "gfx/interface/icons/covert_icons/"
 STANDING_ICONS = {
-    4: GENERIC + "green_checkmark.dds",
-    3: GENERIC + "approval_icon.dds",
-    2: GENERIC + "undecided_icon.dds",
-    1: GENERIC + "disapproval_icon.dds",
-    0: GENERIC + "red_cross.dds",
+    4: COVERT_ICONS + "standing_fortress.dds",
+    3: COVERT_ICONS + "standing_hardened.dds",
+    2: COVERT_ICONS + "standing_defended.dds",
+    1: COVERT_ICONS + "standing_exposed.dds",
+    0: COVERT_ICONS + "standing_vulnerable.dds",
 }
 # Owner, round 2: an icon per Tradecraft tier (covert_tradecraft_tier).
-TRADECRAFT_ICONS = {
-    0: GENERIC + "maybe_icon.dds",
-    1: GENERIC + "population.dds",
-    2: "gfx/interface/politics_view/institution_level_icon.dds",
-    3: "gfx/interface/icons/formation_order_icons/upgrade.dds",
-    4: GENERIC + "most_senior_front_commander.dds",
-}
+TRADECRAFT_ICONS = {n: COVERT_ICONS + f"tradecraft_{n}.dds" for n in range(5)}
 OTHER_ICONS = {
-    "funding_dormant": GENERIC + "warning.dds",
-    "funding": GENERIC + "gdp.dds",
-    "caught": "gfx/interface/icons/military_icons/navy_icons/detection_navy.dds",
-    "slot": "gfx/interface/icons/event_icons/je_covert_warfare.dds",
+    "funding_dormant": COVERT_ICONS + "funding_dormant.dds",
+    "funding": COVERT_ICONS + "funding.dds",
+    "caught": COVERT_ICONS + "spy_caught.dds",
+    "slot": COVERT_ICONS + "operation_slot.dds",
 }
-# Final art, not placeholders: vanilla's own marks.
-NOT_PLACEHOLDERS = {GENERIC + "trend_up.dds", GENERIC + "trend_down.dds", GENERIC + "trend_nochange.dds",
-                    GENERIC + "transparent.dds", "gfx/interface/progressbar/progressbar_marker.dds"}
+# Vanilla's own marks, kept as the UN's panels keep them.
+VANILLA_MARKS = {GENERIC + "trend_up.dds", GENERIC + "trend_down.dds", GENERIC + "trend_nochange.dds",
+                 GENERIC + "transparent.dds", "gfx/interface/progressbar/progressbar_marker.dds"}
 
 
 def _read(path):
@@ -277,7 +272,7 @@ class OverviewTest(unittest.TestCase):
     def test_each_tradecraft_tier_draws_its_own_icon(self):
         self.assertEqual(self._coded("covert_tradecraft_tier"), TRADECRAFT_ICONS)
         self.assertEqual(len(set(TRADECRAFT_ICONS.values())), 5)
-        # Distinct from every other placeholder in the row.
+        # Distinct from every other icon in the row.
         self.assertFalse(set(TRADECRAFT_ICONS.values()) & (set(STANDING_ICONS.values()) | set(OTHER_ICONS.values())))
 
     def test_ten_slots_lit_by_the_operations_running(self):
@@ -689,20 +684,37 @@ class DisplayValueTest(unittest.TestCase):
 
 
 class IconsTest(unittest.TestCase):
-    """Every placeholder is listed in covert_gui_icons.md with the path it
-    uses now, and the overview uses no texture the list doesn't know."""
+    """The covert icons (PR #586, the UN's UnIconsTest shape): each code
+    draws its own file, the icon list records every file, and the overview
+    draws nothing else but vanilla's trend and bar marks."""
 
-    def test_the_doc_lists_every_placeholder(self):
+    def test_the_doc_records_every_icon(self):
         doc = _read(ICONS_DOC)
         for path in list(STANDING_ICONS.values()) + list(TRADECRAFT_ICONS.values()) + list(OTHER_ICONS.values()):
-            self.assertIn(f"`{path}`", doc, path)
+            self.assertIn(f"`{path.rsplit('/', 1)[1]}`", doc, path)
+        self.assertIn(f"`{COVERT_ICONS}`", doc)
 
-    def test_the_overview_uses_only_listed_textures(self):
+    def test_the_overview_uses_only_the_covert_icons_and_vanilla_marks(self):
         gui = _read(GUI)
         used = set(re.findall(r'texture = "([^"]+)"', _type_body(gui, "te_covert_overview_panel")))
         used |= set(re.findall(r'texture = "([^"]+)"', _type_body(gui, "covert_ov_slot")))
-        known = set(STANDING_ICONS.values()) | set(TRADECRAFT_ICONS.values()) | set(OTHER_ICONS.values()) | NOT_PLACEHOLDERS
+        known = set(STANDING_ICONS.values()) | set(TRADECRAFT_ICONS.values()) | set(OTHER_ICONS.values()) | VANILLA_MARKS
         self.assertEqual(used - known, set())
+        self.assertEqual(set(STANDING_ICONS.values()) | set(TRADECRAFT_ICONS.values()) | set(OTHER_ICONS.values()),
+                         {p for p in used if p.startswith(COVERT_ICONS)})
+
+    def test_the_slot_keeps_its_fade_and_draws_one_file(self):
+        slot = _type_body(_read(GUI), "covert_ov_slot")
+        self.assertEqual(slot.count(f'texture = "{OTHER_ICONS["slot"]}"'), 2)
+        self.assertEqual(slot.count("alpha = 0.25"), 1)
+
+    def test_no_placeholder_is_left(self):
+        gui = _read(GUI)
+        for gone in ("green_checkmark", "approval_icon", "undecided_icon", "disapproval_icon", "red_cross",
+                     "warning.dds", "gdp.dds", "maybe_icon", "population.dds", "institution_level_icon",
+                     "formation_order_icons/upgrade", "most_senior_front_commander", "detection_navy",
+                     "event_icons/je_covert_warfare"):
+            self.assertNotIn(gone, gui, gone)
 
 
 if __name__ == "__main__":
