@@ -947,8 +947,12 @@ types space_race_widget_types
 
 	### One rival in the Rivals section: its name, its estimated progress as a
 	### band with a marker, and the band in words; the tooltip says it is an
-	### estimate and what narrows it. Fixed columns (160 + 220 + 84, with the
-	### spacing 480), so nothing shifts as the numbers move.
+	### estimate and what narrows it. The name has the whole 480 line to
+	### itself, because a country's name can run to 48 characters ("United
+	### Socialist Council Republics of California"), which no column beside a
+	### bar holds without "..." (round 3; test_space_race_labels.py). The bar
+	### and the band in words share the line beneath, in fixed columns
+	### (380 + 92, with the spacing 480), so nothing shifts as the numbers move.
 	###
 	### The bar is two layers and a marker: a white bar to the top of the band,
 	### the plain bar to its bottom over it (its own background and frame
@@ -958,79 +962,81 @@ types space_race_widget_types
 	### datacontext, on the inner one, so a slot that is not filled is never
 	### read (the UN's Security Council seats do the same).
 	type te_sr_rival_row = widget {
-		size = { 480 24 }
+		size = { 480 42 }
 		block "row_visible" {}
 
 		flowcontainer = {
-			direction = horizontal
-			spacing = 8
-			parentanchor = vcenter
+			direction = vertical
+			spacing = 2
 			block "row_context" {}
 			block "row_tooltip" {}
 
 			textbox = {
-				minimumsize = { 160 -1 }
-				maximumsize = { 160 -1 }
+				minimumsize = { 480 -1 }
+				maximumsize = { 480 -1 }
 				autoresize = yes
 				elide = right
-				parentanchor = vcenter
 				align = left|nobaseline
 				using = fontsize_medium
 				default_format = "#tooltippable"
 				text = "je_space_race_widget_rival_name"
 			}
-			widget = {
-				size = { 220 14 }
-				parentanchor = vcenter
+			flowcontainer = {
+				direction = horizontal
+				spacing = 8
+				widget = {
+					size = { 380 14 }
+					parentanchor = vcenter
 
-				white_progressbar_horizontal = {
-					size = { 100% 100% }
-					blockoverride "values" {
-						block "row_hi" {}
-						min = 0
-						max = 1
-					}
-				}
-				default_progressbar_horizontal = {
-					size = { 100% 100% }
-					blockoverride "background" {}
-					blockoverride "frame" {}
-					blockoverride "values" {
-						block "row_lo" {}
-						min = 0
-						max = 1
-					}
-					blockoverride "on_top_of_the_progressbar" {
-						progressbar = {
-							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-							size = { 100% 100% }
-							skip_initial_animation = yes
-							direction = horizontal
-							block "row_est" {}
+					white_progressbar_horizontal = {
+						size = { 100% 100% }
+						blockoverride "values" {
+							block "row_hi" {}
 							min = 0
 							max = 1
-							marker = {
-								icon = {
-									size = { 24 18 }
-									parentanchor = vcenter
-									widgetanchor = center
-									texture = "gfx/interface/progressbar/progressbar_marker.dds"
+						}
+					}
+					default_progressbar_horizontal = {
+						size = { 100% 100% }
+						blockoverride "background" {}
+						blockoverride "frame" {}
+						blockoverride "values" {
+							block "row_lo" {}
+							min = 0
+							max = 1
+						}
+						blockoverride "on_top_of_the_progressbar" {
+							progressbar = {
+								noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+								progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+								size = { 100% 100% }
+								skip_initial_animation = yes
+								direction = horizontal
+								block "row_est" {}
+								min = 0
+								max = 1
+								marker = {
+									icon = {
+										size = { 24 18 }
+										parentanchor = vcenter
+										widgetanchor = center
+										texture = "gfx/interface/progressbar/progressbar_marker.dds"
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-			textbox = {
-				minimumsize = { 84 -1 }
-				maximumsize = { 84 -1 }
-				autoresize = yes
-				elide = right
-				parentanchor = vcenter
-				align = right|nobaseline
-				using = fontsize_medium
-				block "row_range" {}
+				textbox = {
+					minimumsize = { 92 -1 }
+					maximumsize = { 92 -1 }
+					autoresize = yes
+					elide = right
+					parentanchor = vcenter
+					align = right|nobaseline
+					using = fontsize_medium
+					block "row_range" {}
+				}
 			}
 		}
 	}

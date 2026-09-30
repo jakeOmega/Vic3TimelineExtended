@@ -162,7 +162,7 @@ class BandTest(unittest.TestCase):
                 for truth in (0, 0.02, 0.3, 0.5, 0.97, 1):
                     est = min(1, max(0, truth + fuzz * band))
                     lo, hi = max(0, est - band), min(1, est + band)
-                    # within the engine's fixed-point step (0.001), invisible on a 220 px bar
+                    # within the engine's fixed-point step (0.001), invisible on a 380 px bar
                     self.assertTrue(lo - 1e-3 <= truth <= hi + 1e-3, (band, fuzz, truth))
 
 
@@ -196,13 +196,17 @@ class RowTest(unittest.TestCase):
 
     def test_the_row_is_fixed_width_and_reads_its_slot_only_when_shown(self):
         row = _body(self.gui, "te_sr_rival_row", prefix=r"\ttype ")
-        self.assertTrue(row.lstrip().startswith("size = { 480 24 }\n\t\tblock \"row_visible\" {}"), row[:80])
+        self.assertTrue(row.lstrip().startswith("size = { 480 42 }\n\t\tblock \"row_visible\" {}"), row[:80])
         inner = row[row.index("flowcontainer = {"):]
         self.assertIn('block "row_context" {}', inner)          # the datacontext is on the inner container
         self.assertNotIn('block "row_context"', row[:row.index("flowcontainer = {")])
-        for width in (160, 84):
-            self.assertIn(f"minimumsize = {{ {width} -1 }}\n\t\t\t\tmaximumsize = {{ {width} -1 }}", inner)
-        self.assertIn("size = { 220 14 }", inner)
+        # round 3: the name has the whole line (a country's name runs to 48
+        # characters); the bar and the band in words share the line beneath,
+        # 380 + 8 + 92 = 480
+        self.assertIn("direction = vertical", inner[:inner.index("textbox")])
+        self.assertIn("minimumsize = { 480 -1 }\n\t\t\t\tmaximumsize = { 480 -1 }", inner)
+        self.assertIn("minimumsize = { 92 -1 }\n\t\t\t\t\tmaximumsize = { 92 -1 }", inner)
+        self.assertIn("size = { 380 14 }", inner)
         self.assertIn("white_progressbar_horizontal", inner)
         self.assertRegex(inner, r'default_progressbar_horizontal = \{\s*size = \{ 100% 100% \}\s*'
                                 r'blockoverride "background" \{\}\s*blockoverride "frame" \{\}')
