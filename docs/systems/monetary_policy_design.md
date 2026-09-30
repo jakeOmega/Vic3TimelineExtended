@@ -3976,7 +3976,7 @@ tolerate a gap that is one month old.
 Target and monetisation steppers copy the Cultural Hegemony funding stepper: one
 `op`-parameterised scripted GUI, `is_shown` scope-free, `is_valid`/`effect` branching on
 `scope:op` (`common/scripted_guis/cultural_hegemony_sguis.txt:65+`,
-`gui/journal_entry_widgets/cultural_hegemony_widget.gui:430-485`), step effect in
+the funding stepper in `te_ch_sec_programmes`, `gui/journal_entry_widgets/cultural_hegemony_widget.gui`), step effect in
 `hidden_effect` with one `custom_tooltip` outside it. All dashboard sguis keep
 `ai_is_valid = { always = no }`. Guard every `var:` read (GUI gotcha #14). Add
 `te_policy_rate`, `te_inflation` and rate-paid to the history store

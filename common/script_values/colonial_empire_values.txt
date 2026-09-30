@@ -3,6 +3,28 @@
 # Used by colonial_stability_bar monthly_progress and decolonization events
 # ============================================================================
 
+# ---- Thresholds of the colonial tests, named so the panel can print them ----
+
+# The fewest people a state may hold and still count as a colonial
+# territory. is_overseas_colonial_state, is_decolonization_eligible_state and
+# is_unintegrated_culturally_distinct_state (colonial_empire_triggers.txt) and
+# colonial_high_acceptance_count below all read it; it filters tiny outposts
+# (Falklands, Wallis & Futuna). The eligible-territories list's hover prints it.
+colonial_territory_min_population = 100000
+
+# The share of our national average standard of living below which a
+# territory's is poor enough for the living-standards signal
+# (colonial_state_sol_qualifying_floor). Named so the eligible-territories
+# list's hover can print it.
+colonial_state_sol_floor_share = 0.8
+
+# The indigenous-population signal's share: a non-primary culture counts when
+# it is more than this fraction of the state (culture_percent_state in
+# colonial_state_indigenous_signal and is_unintegrated_culturally_distinct_state,
+# which take a script value as homeland_triggers.txt's do). The
+# eligible-territories list's hover prints it.
+colonial_state_indigenous_min_share = 0.1
+
 # Count of overseas colonial states (non-homeland, overseas, 100k+ pop, has unintegrated pops)
 colonial_state_count = {
 	value = 0
@@ -35,7 +57,7 @@ colonial_high_acceptance_count = {
 	every_scope_state = {
 		limit = {
 			NOT = { is_homeland_of_country_cultures = owner }
-			state_population >= 100000
+			state_population >= colonial_territory_min_population
 			is_overseas_from_capital = yes
 			NOT = {
 				any_scope_pop = {
@@ -187,6 +209,23 @@ colonial_gp_condemner_prestige_share = {
 	divide = colonial_gp_prestige_pool
 }
 
+# The supporting great powers' share of the same pool (0-1). Display only: the
+# overview's pie shows it beside the condemners' share, but neither escalation
+# reads it; support acts through the per-power colonial_stability_term_gp_support.
+# Snapshotted into colonial_empire_supporter_share for the widget.
+colonial_gp_supporter_prestige_share = {
+	value = 0
+	every_country = {
+		limit = {
+			NOT = { this = prev }
+			country_rank >= rank_value:great_power
+			has_variable = gp_pro_colonial_stance
+		}
+		add = prestige
+	}
+	divide = colonial_gp_prestige_pool
+}
+
 # Bureaucracy cost of colonial maintenance - scaled by number of colonial states
 colonial_maintenance_bureaucracy_cost = {
 	value = colonial_state_count
@@ -261,7 +300,7 @@ colonial_assimilate_startup_cost = {
 # colonies are still markedly poorer than the mainland.
 colonial_state_sol_qualifying_floor = {
 	value = owner.average_sol
-	multiply = 0.8
+	multiply = colonial_state_sol_floor_share
 }
 
 # ============================================================================
@@ -675,4 +714,846 @@ colonial_invest_startup_cost_display = {
 colonial_assimilate_startup_cost_display = {
 	value = colonial_assimilate_startup_cost
 	multiply = -1
+}
+
+# ============================================================================
+# STABILITY BANDS — THE ONE LADDER
+#
+# The five bands, read LIVE from the bar: collapsing 0-20, crumbling 20-40,
+# strained 40-65, stable 65-90, solidified 90+ (the edges of
+# je_colonial_empire's phase-modifier ladder). Every display of the band reads
+# these: the overview, the customizable loc (status line, band names, phase
+# modifier) and "Next band". colonial_empire_refresh_display snapshots both
+# into var:colonial_empire_tier / var:colonial_empire_next_boundary for any
+# other reader.
+#
+# They are live because the snapshot alone was wrong on activation: the refresh
+# also runs in the entry's `immediate`, before the bar holds its start value,
+# so a newly activated entry at 50 read "Collapsing" until its first monthly
+# pulse (play-test, 2026-09-29).
+#
+# SCOPE: country. The bar is reached through `je:`, as the refresh always has,
+# because the GUI, the customizable loc and the button actions all read from
+# country scope; `?=` because the entry may have ended. At most four bar
+# comparisons, so safe to read every frame.
+# ============================================================================
+
+# 1 collapsing .. 5 solidified; 0 while the country has no active entry (the
+# customizable loc's "still taking stock" line).
+colonial_empire_live_tier = {
+	value = 0
+	if = {
+		limit = { has_journal_entry = je_colonial_empire }
+		value = 1
+		if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 90 } }
+			value = 5
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 65 } }
+			value = 4
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 40 } }
+			value = 3
+		}
+		else_if = {
+			limit = { je:je_colonial_empire ?= { "scripted_bar_progress(colonial_stability_bar)" >= 20 } }
+			value = 2
+		}
+	}
+}
+
+# Where the band above the current one starts: 20 / 40 / 65 / 90, and 100 (the
+# cap, which completion needs held) from the top band. 0 with no active entry.
+colonial_empire_live_next_boundary = {
+	value = 0
+	if = {
+		limit = { colonial_empire_live_tier >= 5 }
+		value = 100
+	}
+	else_if = {
+		limit = { colonial_empire_live_tier >= 4 }
+		value = 90
+	}
+	else_if = {
+		limit = { colonial_empire_live_tier >= 3 }
+		value = 65
+	}
+	else_if = {
+		limit = { colonial_empire_live_tier >= 2 }
+		value = 40
+	}
+	else_if = {
+		limit = { colonial_empire_live_tier >= 1 }
+		value = 20
+	}
+}
+
+# ============================================================================
+# PROGRAMME-MONTH COUNTERS, GUARDED
+#
+# The monthly pulse creates colonial_invest_months / _garrison_months /
+# _assimilate_months (at 0) and counts each programme's months; the endings
+# pick the dominant programme from them (on_complete, on_fail,
+# apply_decolonization_path). Before the entry's first pulse they do not
+# exist, and the journal panel renders on_complete and on_fail as tooltips
+# every frame, so bare var: reads there logged "Failed to fetch variable" per
+# frame (play-test, 2026-09-29). These read 0 until the counter exists. No
+# ending can fire before the first pulse, so every ending picks the same event
+# it did with the bare reads.
+#
+# SCOPE: country (the metropole).
+# ============================================================================
+
+colonial_invest_months_value = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_invest_months }
+		value = var:colonial_invest_months
+	}
+}
+
+colonial_garrison_months_value = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_garrison_months }
+		value = var:colonial_garrison_months
+	}
+}
+
+colonial_assimilate_months_value = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_assimilate_months }
+		value = var:colonial_assimilate_months
+	}
+}
+
+# ============================================================================
+# COMPLETION CLOCKS
+#
+# How long the two winning holds must last. je_colonial_empire's `complete`
+# reads the first; the Imperial Federation Act and the Civilizing Mission
+# Compact (common/decisions/extra_decisions.txt) read the second; the
+# overview and the entry's completion tooltip print both. The numbers live
+# here only.
+# ============================================================================
+
+# Consecutive months the bar must hold at 100 (var:colonial_at_100_months,
+# which the monthly pulse resets below 100).
+colonial_empire_completion_months = 60
+
+# Consecutive months in the Solidified band (var:colonial_solidified_months,
+# reset below 90) the two Imperial Federation Act decisions need.
+colonial_empire_federation_months = 36
+
+# ============================================================================
+# OVERVIEW DISPLAY VALUES
+#
+# Read every frame by the overview at the top of the panel (te_ce_overview_panel
+# in gui/journal_entry_widgets/colonial_empire_widget.gui). Each one reads the
+# live band ladder above, a snapshot colonial_empire_refresh_display wrote, or
+# the O(1) headline above, and every var: read is guarded, so an entry before
+# its first refresh (or a save from before the overview) reads 0 rather than
+# failing per frame. Display only: nothing in the mechanic reads these.
+#
+# SCOPE: country.
+# ============================================================================
+
+# The stability band, 1 collapsing .. 5 solidified; 0 with no active entry.
+# Picks the band icon.
+colonial_empire_disp_tier = {
+	value = colonial_empire_live_tier
+}
+
+# Where the next band starts, as a 0-1 fraction of the bar (which runs 0-100):
+# the position of the thin line on the overview's stability bar.
+colonial_empire_disp_next_boundary_frac = {
+	value = colonial_empire_live_next_boundary
+	divide = 100
+	min = 0
+	max = 1
+}
+
+# Which way the bar is heading this month, from the projected change the
+# overview prints beside it: 1 up, -1 down, 0 flat (under half a hundredth
+# either way, which the panel prints as 0.00). Picks the trend arrow.
+colonial_empire_disp_trend = {
+	value = 0
+	if = {
+		limit = { colonial_stability_drift_total_display > 0.005 }
+		value = 1
+	}
+	else_if = {
+		limit = { colonial_stability_drift_total_display < -0.005 }
+		value = -1
+	}
+}
+
+# The condemning great powers' share of great-power prestige, ours included
+# (0-1): the overview's pie.
+colonial_empire_disp_condemner_share = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_condemner_share }
+		value = var:colonial_empire_condemner_share
+	}
+	min = 0
+	max = 1
+}
+
+# 0 no escalation, 1 diplomatic isolation, 2 international consensus: the
+# overview's alert beside the pie.
+colonial_empire_disp_pressure_level = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_pressure_level }
+		value = var:colonial_empire_pressure_level
+	}
+}
+
+# The supporting great powers' share of great-power prestige (0-1): the pie's
+# second slice. Display only; the escalations count the condemners alone.
+colonial_empire_disp_supporter_share = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_supporter_share }
+		value = var:colonial_empire_supporter_share
+	}
+	min = 0
+	max = 1
+}
+
+# The two slices stacked: the lower (supporters') layer fills to the sum, and
+# the condemners' layer on top fills to its own share, so the supporters show
+# between the two (gui_modding_guide.md, "Pie charts of script-held data").
+colonial_empire_disp_pressure_cum = {
+	value = colonial_empire_disp_condemner_share
+	add = colonial_empire_disp_supporter_share
+	min = 0
+	max = 1
+}
+
+# The completion clocks, shown in the top band: months held at 100, and months
+# in the Solidified band for the Imperial Federation Act; each as a count and
+# as a 0-1 fraction of its target (the bar's end).
+colonial_empire_disp_at_100_months = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_at_100_months }
+		value = var:colonial_at_100_months
+	}
+}
+
+colonial_empire_disp_at_100_frac = {
+	value = colonial_empire_disp_at_100_months
+	divide = colonial_empire_completion_months
+	min = 0
+	max = 1
+}
+
+colonial_empire_disp_solidified_months = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_solidified_months }
+		value = var:colonial_solidified_months
+	}
+}
+
+colonial_empire_disp_solidified_frac = {
+	value = colonial_empire_disp_solidified_months
+	divide = colonial_empire_federation_months
+	min = 0
+	max = 1
+}
+
+# 1 while the Imperial Federation Act's clock is worth showing: we are a great
+# power, which both decisions need and a player cannot change quickly. The
+# clock's tooltip lists their other requirements.
+colonial_empire_disp_act_in_reach = {
+	value = 0
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		value = 1
+	}
+}
+
+# ============================================================================
+# WHY STABILITY IS MOVING — PILLAR BARS
+#
+# One bar per group of the bar's formula (the colonial_stability_drift_*
+# group sums above), drawn as the UN's "why authority is moving" pillars are:
+# double_direction_progressbar, the negative half from the left of the centre
+# line in red and the positive half to the right in green, each half a 0-1
+# fraction of the group's own range. The ranges are approximate, derived from
+# how the script computes each group (the comment above each pair says how);
+# a group past its range fills its half and the value beside the bar still
+# reads true. Display only.
+#
+# The base decline (a constant), the monthly limit and the projected change
+# are rows without a bar. SCOPE: country.
+# ============================================================================
+
+# modifier:country_colonial_stability_drift_add. Laws, one per law group: the
+# most favourable set sums to about +1.45 and the least to about -1.7
+# (colonial_empire_law_injections.txt and the colonization laws). Knowledge
+# Economy and Globalization add -0.75 and -1.5 (era_9.txt); events add up to
+# +1 (Positive Colonial Development) or -1 (Colonial Crisis) and a few tenths
+# more (extra_modifiers.txt); institutions and treaties a few tenths. So about
+# -6 to +3.
+colonial_pillar_laws_min = -6
+colonial_pillar_laws_max = 3
+
+# colonial_stability_term_ig_*: powerful Landowners +0.3 and Armed Forces
+# +0.2 at best; powerful Intelligentsia -0.4 and Trade Unions -0.3 at worst.
+colonial_pillar_igs_min = -0.7
+colonial_pillar_igs_max = 0.5
+
+# colonial_stability_term_gp_rank / _non_gp: +0.3 as a great power, -0.5 as
+# anything else.
+colonial_pillar_rank_min = -0.5
+colonial_pillar_rank_max = 0.3
+
+# colonial_stability_term_{garrison,assim,invest}: each running programme's
+# effectiveness, base +1.0 / +0.7 / +0.5 (extra_modifiers.txt), which laws
+# move by up to +1.5 / +1.0 / +0.85 or -1.45 / -1.85 / -0.55 (the law
+# injections), events by a few tenths. All three at their best about +5.6,
+# at their worst about -1.7. So -2 to +6.
+colonial_pillar_policies_min = -2
+colonial_pillar_policies_max = 6
+
+# colonial_stability_term_{war,revolution,turmoil}: -0.5 at war, -1 in a
+# revolution, and turmoil x -2 (turmoil runs 0-1). Never positive.
+colonial_pillar_domestic_min = -3.5
+colonial_pillar_domestic_max = 0
+
+# colonial_stability_term_overreach: (colonial states / other states - 1.5)
+# x -0.4, unbounded below. -2 is five colonial states per metropole state
+# beyond the 1.5 allowance; a larger drain fills the bar. Never positive.
+colonial_pillar_overreach_min = -2
+colonial_pillar_overreach_max = 0
+
+# colonial_stability_term_gp_*: each condemning great power -0.6 x its
+# weight (0.25-2, its prestige against ours), each supporting one +0.3 x its
+# weight, and the escalations -1 and a further -2 at a third and two thirds
+# of the prestige. Five peers condemning, with both escalations, is -6; a
+# few strong supporters about +2.
+colonial_pillar_gp_min = -6
+colonial_pillar_gp_max = 2
+
+# colonial_stability_term_{low,high}_acceptance: -0.4 per colony with a
+# severely unaccepted population, +0.5 per overseas state where everyone is
+# well accepted, both unbounded. Ten bad colonies are -4; six well-integrated
+# states +3.
+colonial_pillar_acceptance_min = -4
+colonial_pillar_acceptance_max = 3
+
+# The three groups that iterate are read from the monthly snapshot, guarded
+# (the rows are behind colonial_empire_display_ready as well).
+colonial_empire_disp_d_overreach = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_d_overreach }
+		value = var:colonial_empire_d_overreach
+	}
+}
+
+colonial_empire_disp_d_gp = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_d_gp }
+		value = var:colonial_empire_d_gp
+	}
+}
+
+colonial_empire_disp_d_acceptance = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_d_acceptance }
+		value = var:colonial_empire_d_acceptance
+	}
+}
+
+colonial_empire_disp_pillar_laws_pos = {
+	value = colonial_stability_drift_laws
+	divide = colonial_pillar_laws_max
+	min = 0
+	max = 1
+}
+colonial_empire_disp_pillar_laws_neg = {
+	value = colonial_stability_drift_laws
+	divide = colonial_pillar_laws_min
+	multiply = -1
+	min = -1
+	max = 0
+}
+
+colonial_empire_disp_pillar_igs_pos = {
+	value = colonial_stability_drift_igs
+	divide = colonial_pillar_igs_max
+	min = 0
+	max = 1
+}
+colonial_empire_disp_pillar_igs_neg = {
+	value = colonial_stability_drift_igs
+	divide = colonial_pillar_igs_min
+	multiply = -1
+	min = -1
+	max = 0
+}
+
+colonial_empire_disp_pillar_rank_pos = {
+	value = colonial_stability_drift_rank
+	divide = colonial_pillar_rank_max
+	min = 0
+	max = 1
+}
+colonial_empire_disp_pillar_rank_neg = {
+	value = colonial_stability_drift_rank
+	divide = colonial_pillar_rank_min
+	multiply = -1
+	min = -1
+	max = 0
+}
+
+colonial_empire_disp_pillar_policies_pos = {
+	value = colonial_stability_drift_policies
+	divide = colonial_pillar_policies_max
+	min = 0
+	max = 1
+}
+colonial_empire_disp_pillar_policies_neg = {
+	value = colonial_stability_drift_policies
+	divide = colonial_pillar_policies_min
+	multiply = -1
+	min = -1
+	max = 0
+}
+
+colonial_empire_disp_pillar_domestic_pos = {
+	value = 0
+}
+colonial_empire_disp_pillar_domestic_neg = {
+	value = colonial_stability_drift_domestic
+	divide = colonial_pillar_domestic_min
+	multiply = -1
+	min = -1
+	max = 0
+}
+
+colonial_empire_disp_pillar_overreach_pos = {
+	value = 0
+}
+colonial_empire_disp_pillar_overreach_neg = {
+	value = colonial_empire_disp_d_overreach
+	divide = colonial_pillar_overreach_min
+	multiply = -1
+	min = -1
+	max = 0
+}
+
+colonial_empire_disp_pillar_gp_pos = {
+	value = colonial_empire_disp_d_gp
+	divide = colonial_pillar_gp_max
+	min = 0
+	max = 1
+}
+colonial_empire_disp_pillar_gp_neg = {
+	value = colonial_empire_disp_d_gp
+	divide = colonial_pillar_gp_min
+	multiply = -1
+	min = -1
+	max = 0
+}
+
+colonial_empire_disp_pillar_acceptance_pos = {
+	value = colonial_empire_disp_d_acceptance
+	divide = colonial_pillar_acceptance_max
+	min = 0
+	max = 1
+}
+colonial_empire_disp_pillar_acceptance_neg = {
+	value = colonial_empire_disp_d_acceptance
+	divide = colonial_pillar_acceptance_min
+	multiply = -1
+	min = -1
+	max = 0
+}
+
+# ============================================================================
+# THE OVERVIEW'S STABILITY BAR: WHERE IT IS HEADING
+#
+# The bar shows today's stability and where it is heading, as the Global
+# Warming and Nuclear bars do (play-test round 3, 2026-09-30): the solid fill
+# runs to the lower of the two, and a translucent stretch to the higher, green
+# while stability rises (good for the player) and red while it falls (bad).
+# "Where it is heading" is stability in colonial_empire_projection_months at
+# this month's projected change (colonial_stability_drift_total_display), so
+# the stretch is long enough to see; the tooltip says it is an extrapolation.
+#
+# The layers need today's value in script, and scripted_bar_progress is a
+# trigger only, so colonial_empire_live_bar reads it as a whole number: a
+# ladder of tens, then units within the ten (at most 19 comparisons of the
+# bar; colonial_stability_bar_at_least in colonial_empire_triggers.txt). The
+# bar's end is therefore within one point of the exact value the text beside
+# it prints. Display only. SCOPE: country.
+# ============================================================================
+
+colonial_empire_projection_months = 12
+
+# Colonial stability as a whole number, 0-100 (0 with no active entry).
+colonial_empire_live_bar = {
+	value = 0
+	if = {
+		limit = { colonial_stability_bar_at_least = { N = 100 } }
+		value = 100
+	}
+	else_if = {
+		limit = { colonial_stability_bar_at_least = { N = 90 } }
+		value = 90
+		if = { limit = { colonial_stability_bar_at_least = { N = 99 } } value = 99 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 98 } } value = 98 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 97 } } value = 97 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 96 } } value = 96 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 95 } } value = 95 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 94 } } value = 94 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 93 } } value = 93 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 92 } } value = 92 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 91 } } value = 91 }
+	}
+	else_if = {
+		limit = { colonial_stability_bar_at_least = { N = 80 } }
+		value = 80
+		if = { limit = { colonial_stability_bar_at_least = { N = 89 } } value = 89 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 88 } } value = 88 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 87 } } value = 87 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 86 } } value = 86 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 85 } } value = 85 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 84 } } value = 84 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 83 } } value = 83 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 82 } } value = 82 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 81 } } value = 81 }
+	}
+	else_if = {
+		limit = { colonial_stability_bar_at_least = { N = 70 } }
+		value = 70
+		if = { limit = { colonial_stability_bar_at_least = { N = 79 } } value = 79 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 78 } } value = 78 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 77 } } value = 77 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 76 } } value = 76 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 75 } } value = 75 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 74 } } value = 74 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 73 } } value = 73 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 72 } } value = 72 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 71 } } value = 71 }
+	}
+	else_if = {
+		limit = { colonial_stability_bar_at_least = { N = 60 } }
+		value = 60
+		if = { limit = { colonial_stability_bar_at_least = { N = 69 } } value = 69 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 68 } } value = 68 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 67 } } value = 67 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 66 } } value = 66 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 65 } } value = 65 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 64 } } value = 64 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 63 } } value = 63 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 62 } } value = 62 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 61 } } value = 61 }
+	}
+	else_if = {
+		limit = { colonial_stability_bar_at_least = { N = 50 } }
+		value = 50
+		if = { limit = { colonial_stability_bar_at_least = { N = 59 } } value = 59 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 58 } } value = 58 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 57 } } value = 57 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 56 } } value = 56 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 55 } } value = 55 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 54 } } value = 54 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 53 } } value = 53 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 52 } } value = 52 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 51 } } value = 51 }
+	}
+	else_if = {
+		limit = { colonial_stability_bar_at_least = { N = 40 } }
+		value = 40
+		if = { limit = { colonial_stability_bar_at_least = { N = 49 } } value = 49 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 48 } } value = 48 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 47 } } value = 47 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 46 } } value = 46 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 45 } } value = 45 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 44 } } value = 44 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 43 } } value = 43 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 42 } } value = 42 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 41 } } value = 41 }
+	}
+	else_if = {
+		limit = { colonial_stability_bar_at_least = { N = 30 } }
+		value = 30
+		if = { limit = { colonial_stability_bar_at_least = { N = 39 } } value = 39 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 38 } } value = 38 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 37 } } value = 37 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 36 } } value = 36 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 35 } } value = 35 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 34 } } value = 34 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 33 } } value = 33 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 32 } } value = 32 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 31 } } value = 31 }
+	}
+	else_if = {
+		limit = { colonial_stability_bar_at_least = { N = 20 } }
+		value = 20
+		if = { limit = { colonial_stability_bar_at_least = { N = 29 } } value = 29 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 28 } } value = 28 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 27 } } value = 27 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 26 } } value = 26 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 25 } } value = 25 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 24 } } value = 24 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 23 } } value = 23 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 22 } } value = 22 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 21 } } value = 21 }
+	}
+	else_if = {
+		limit = { colonial_stability_bar_at_least = { N = 10 } }
+		value = 10
+		if = { limit = { colonial_stability_bar_at_least = { N = 19 } } value = 19 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 18 } } value = 18 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 17 } } value = 17 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 16 } } value = 16 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 15 } } value = 15 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 14 } } value = 14 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 13 } } value = 13 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 12 } } value = 12 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 11 } } value = 11 }
+	}
+	else_if = {
+		limit = { colonial_stability_bar_at_least = { N = 0 } }
+		value = 0
+		if = { limit = { colonial_stability_bar_at_least = { N = 9 } } value = 9 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 8 } } value = 8 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 7 } } value = 7 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 6 } } value = 6 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 5 } } value = 5 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 4 } } value = 4 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 3 } } value = 3 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 2 } } value = 2 }
+		else_if = { limit = { colonial_stability_bar_at_least = { N = 1 } } value = 1 }
+	}
+}
+
+# Stability in colonial_empire_projection_months at this month's rate, 0-100.
+colonial_empire_disp_projected = {
+	value = colonial_stability_drift_total_display
+	multiply = colonial_empire_projection_months
+	add = colonial_empire_live_bar
+	min = 0
+	max = 100
+}
+
+# The higher and the lower of today's value and the projection, as 0-1
+# fractions of the bar: the stretch runs to the higher, the solid fill to the
+# lower.
+colonial_empire_disp_bar_high_frac = {
+	value = colonial_empire_live_bar
+	if = {
+		limit = { colonial_empire_disp_projected > colonial_empire_live_bar }
+		value = colonial_empire_disp_projected
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+
+colonial_empire_disp_bar_low_frac = {
+	value = colonial_empire_live_bar
+	if = {
+		limit = { colonial_empire_disp_projected < colonial_empire_live_bar }
+		value = colonial_empire_disp_projected
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+
+# Months until the bar reaches the next band's edge at this month's
+# projected change, rounded up; 0 while it is not rising. The line's hover.
+colonial_empire_disp_months_to_next = {
+	value = 0
+	if = {
+		limit = { colonial_stability_drift_total_display > 0.005 }
+		value = colonial_empire_live_next_boundary
+		subtract = colonial_empire_live_bar
+		divide = colonial_stability_drift_total_display
+		ceiling = yes
+		min = 1
+	}
+}
+
+# 1 while the next band's edge is worth a line on the bar: bands 1-4. In the
+# top band the next edge is the bar's end, which the completion clocks cover.
+colonial_empire_disp_next_tick = {
+	value = 0
+	if = {
+		limit = {
+			colonial_empire_live_tier >= 1
+			colonial_empire_live_tier < 5
+		}
+		value = 1
+	}
+}
+
+# ============================================================================
+# ELIGIBLE TERRITORIES — THE LIST UNDER WHY STABILITY IS MOVING
+#
+# Every state of ours that is_decolonization_eligible_state (not a homeland of
+# our cultures, at least 100,000 people, overseas): the territories the three
+# decolonization decisions can offer, and the superset of those the
+# stability bar counts as colonies (is_overseas_colonial_state adds one of
+# two signals, colonial_state_indigenous_signal or
+# colonial_state_disparity_signal). colonial_empire_refresh_display stores the
+# first eight by GDP as colonial_empire_territory_1..8 (players only); the
+# rows read these values with the stored state as their scope. Each reads the
+# entry's own triggers, so a row cannot disagree with the entry. The one
+# figure no trigger gives, the primary-culture share, walks the state's pops,
+# so the refresh records it monthly on the state.
+# ============================================================================
+
+# SCOPE: state.
+colonial_territory_disp_population = {
+	value = state_population
+}
+
+colonial_territory_disp_gdp = {
+	value = gdp
+}
+
+colonial_territory_disp_sol = {
+	value = average_sol
+}
+
+# The disparity signal's line: 80% of our national average standard of living.
+colonial_territory_disp_sol_floor = {
+	value = colonial_state_sol_qualifying_floor
+}
+
+# Share of the state's people of our primary cultures, 0-1, as of the last
+# monthly assessment (colonial_territory_record_primary_share).
+colonial_territory_disp_primary = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_territory_primary_share }
+		value = var:colonial_territory_primary_share
+	}
+	min = 0
+	max = 1
+}
+
+# What colonial_territory_record_primary_share stores. Walks the state's pops.
+colonial_territory_primary_share_value = {
+	value = 0
+	every_scope_pop = {
+		limit = { pop_has_primary_culture = yes }
+		add = total_size
+	}
+	divide = {
+		value = state_population
+		min = 1
+	}
+	min = 0
+	max = 1
+}
+
+# 1 when the signal or the test holds, else 0.
+colonial_territory_disp_indigenous = {
+	value = 0
+	if = {
+		limit = { colonial_state_indigenous_signal = yes }
+		value = 1
+	}
+}
+
+colonial_territory_disp_disparity = {
+	value = 0
+	if = {
+		limit = { colonial_state_disparity_signal = yes }
+		value = 1
+	}
+}
+
+colonial_territory_disp_colony = {
+	value = 0
+	if = {
+		limit = { is_overseas_colonial_state = yes }
+		value = 1
+	}
+}
+
+# SCOPE: country. How many rows are stored (the slots are filled 1, 2, ... in
+# order), and how many eligible territories the rows leave out.
+colonial_empire_disp_territory_rows = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_territory_1 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_territory_2 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_territory_3 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_territory_4 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_territory_5 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_territory_6 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_territory_7 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = colonial_empire_territory_8 }
+		add = 1
+	}
+}
+
+colonial_empire_disp_territories_eligible = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_eligible_count }
+		value = var:colonial_empire_eligible_count
+	}
+}
+
+colonial_empire_disp_territories_more = {
+	value = colonial_empire_disp_territories_eligible
+	subtract = colonial_empire_disp_territory_rows
+	min = 0
+	if = {
+		limit = { colonial_empire_disp_territory_rows < 1 }
+		value = 0
+	}
+}
+
+# 1 while there are eligible territories but no stored rows: a save upgraded
+# mid-entry, until the next monthly assessment. The list says so instead of
+# counting them all as "+N more".
+colonial_empire_disp_territories_pending = {
+	value = 0
+	if = {
+		limit = {
+			colonial_empire_disp_territories_eligible > 0
+			colonial_empire_disp_territory_rows < 1
+		}
+		value = 1
+	}
 }

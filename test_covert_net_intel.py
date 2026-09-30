@@ -246,9 +246,15 @@ class WidgetTests(unittest.TestCase):
         self.assertIn("GetVariableValue('iw_net_intel_techs')", service)
         self.assertIn("ScriptValue('covert_techs_researched_display')", service)
         self.assertIn("GetVariableValue('iw_net_intel_ops')", value("je_iw_net_row_intel_ops"))
-        # Thresholds are printed from the constants, never typed.
-        self.assertIn("covert_net_intel_tier_1_strength", value("je_iw_net_row_intel_none"))
-        self.assertIn("covert_net_intel_tier_2_strength", value("je_iw_net_row_intel_ops_locked"))
+        # Thresholds are printed from the constants, never typed. Since the
+        # style-guide pass the row's strength hover names both (the owner
+        # dropped round 1's "45 -> 50" headline and bar marker in round 3),
+        # and the report lines below don't repeat them.
+        hover = value("je_iw_net_row_strength_tt")
+        self.assertIn("covert_net_intel_tier_1_strength", hover)
+        self.assertIn("covert_net_intel_tier_2_strength", hover)
+        for key in ("je_iw_net_row_intel_none", "je_iw_net_row_intel_ops_locked", "je_iw_net_row_strength_tt"):
+            self.assertNotRegex(value(key), r"\b(50|75)\b", key)
         header = value("je_iw_net_header_tooltip")
         self.assertIn("covert_net_intel_tier_1_strength", header)
         self.assertIn("covert_net_intel_tier_2_strength", header)

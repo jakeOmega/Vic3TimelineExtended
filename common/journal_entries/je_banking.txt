@@ -16,28 +16,30 @@
 	scripted_progress_bar = banking_policy_stance_bar
 	scripted_progress_bar = banking_bubble_pressure_bar
 
-	# Policy dashboard. Both widgets are presentation only: every action they
-	# expose runs through common/scripted_guis/banking_dashboard_scripted_gui.txt,
-	# which calls the same shared triggers and effects as the scripted buttons
-	# below, so the two surfaces cannot diverge.
+	# Policy dashboard: the overview (the bars and Current Conditions), the live
+	# sections (Active Policies, Monetary Policy, Available Interventions) and the
+	# reference sections (the history charts, collapsed here, and How Banking
+	# Works), in the order gui/journal_entry_widgets/banking_layout_widget.gui
+	# sets for this entry and the Budget panel's Banking tab alike. All of it is
+	# presentation only: every action runs through
+	# common/scripted_guis/banking_dashboard_scripted_gui.txt, which calls the same
+	# shared triggers and effects as the scripted buttons below, so the two
+	# surfaces cannot diverge. The history charts only read the samples
+	# te_history_effects.txt records from the monthly pulse below.
 	widget = {
-		gui = "gui/journal_entry_widgets/banking_dashboard_widget.gui"
-		name = "widget_je_banking_conditions"
+		gui = "gui/journal_entry_widgets/banking_layout_widget.gui"
+		name = "widget_je_banking_overview"
 		container = "custom_widget_container_1"
 	}
 	widget = {
-		gui = "gui/journal_entry_widgets/banking_dashboard_widget.gui"
-		name = "widget_je_banking_policies"
-		container = "custom_widget_container_3"
-	}
-
-	# History charts. Collapsed by default, so the bars are only built once the
-	# player asks for them. Purely a view over the samples te_history_effects.txt
-	# records from the monthly pulse below — the section has no effect of its own.
-	widget = {
-		gui = "gui/journal_entry_widgets/banking_history_widget.gui"
-		name = "widget_je_banking_history"
+		gui = "gui/journal_entry_widgets/banking_layout_widget.gui"
+		name = "widget_je_banking_status"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/banking_layout_widget.gui"
+		name = "widget_je_banking_reference"
+		container = "custom_widget_container_3"
 	}
 
 	# MARKER, not content. gui/journal_entry.gui (the mod's override of the
@@ -54,8 +56,8 @@
 
 	# Buttons
 	# These stay declared here: their `ai_chance` blocks are the AI's only path to
-	# banking policy, and they remain the player's fallback controls next to the
-	# dashboard above.
+	# banking policy. Each `visible` starts with `is_ai = yes`, so the player
+	# never sees them; the dashboard above carries the same actions.
 	scripted_button = cb_open_market_ops
 	scripted_button = cb_disable_open_market_ops
 	scripted_button = cb_countercyclical_buffer
@@ -215,75 +217,24 @@
 		}
 	}
 
+	# The status text keeps only what the panels do not show: the three monthly
+	# modifier totals, each with the engine's breakdown on hover. The phase,
+	# momentum and bubble pressure are the overview's icons, so their paragraphs
+	# went in play-test round 2 (the owner's rule: status text that repeats the
+	# overview is removed). The entry can show before it starts
+	# (is_shown_when_inactive), when there are no readings yet and the overview
+	# draws nothing, so that state has one line of its own; finance_cycle_value
+	# is set on the first activation, and a revolution's winner inherits it.
 	status_desc = {
 		first_valid = {
-			triggered_desc = { desc = banking_cycle_status_panic_cmd       trigger = { var:finance_cycle_value < 10  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_panic_coop      trigger = { var:finance_cycle_value < 10  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_panic           trigger = { var:finance_cycle_value < 10 } }
-			triggered_desc = { desc = banking_cycle_status_downturn_cmd    trigger = { var:finance_cycle_value >= 10  var:finance_cycle_value < 25  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_downturn_coop   trigger = { var:finance_cycle_value >= 10  var:finance_cycle_value < 25  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_downturn        trigger = { var:finance_cycle_value >= 10  var:finance_cycle_value < 25 } }
-			triggered_desc = { desc = banking_cycle_status_stagnation_cmd  trigger = { var:finance_cycle_value >= 25  var:finance_cycle_value < 40  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_stagnation_coop trigger = { var:finance_cycle_value >= 25  var:finance_cycle_value < 40  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_stagnation      trigger = { var:finance_cycle_value >= 25  var:finance_cycle_value < 40 } }
-			triggered_desc = { desc = banking_cycle_status_stable_cmd      trigger = { var:finance_cycle_value >= 40  var:finance_cycle_value < 60  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_stable_coop     trigger = { var:finance_cycle_value >= 40  var:finance_cycle_value < 60  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_stable          trigger = { var:finance_cycle_value >= 40  var:finance_cycle_value < 60 } }
-			triggered_desc = { desc = banking_cycle_status_expansion_cmd   trigger = { var:finance_cycle_value >= 60  var:finance_cycle_value < 75  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_expansion_coop  trigger = { var:finance_cycle_value >= 60  var:finance_cycle_value < 75  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_expansion       trigger = { var:finance_cycle_value >= 60  var:finance_cycle_value < 75 } }
-			triggered_desc = { desc = banking_cycle_status_boom_cmd        trigger = { var:finance_cycle_value >= 75  var:finance_cycle_value < 88  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_boom_coop       trigger = { var:finance_cycle_value >= 75  var:finance_cycle_value < 88  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_boom            trigger = { var:finance_cycle_value >= 75  var:finance_cycle_value < 88 } }
-			triggered_desc = { desc = banking_cycle_status_frenzy_cmd      trigger = { var:finance_cycle_value >= 88  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_frenzy_coop     trigger = { var:finance_cycle_value >= 88  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_frenzy          trigger = { var:finance_cycle_value >= 88 } }
-		}
-
-		# Same edges as the dashboard's Momentum row (banking_dash_momentum_band):
-		# Collapsing at -3 or below, Falling above -3 to -1, Steady strictly
-		# inside +-1, Rising from 1, Surging from 3.
-		first_valid = {
-			triggered_desc = { desc = banking_cycle_status_fast_downturn_cmd  trigger = { var:finance_cycle_momentum <= -3  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_fast_downturn_coop trigger = { var:finance_cycle_momentum <= -3  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_fast_downturn      trigger = { var:finance_cycle_momentum <= -3 } }
-			triggered_desc = { desc = banking_cycle_status_slow_downturn_cmd  trigger = { var:finance_cycle_momentum > -3  var:finance_cycle_momentum <= -1  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_slow_downturn_coop trigger = { var:finance_cycle_momentum > -3  var:finance_cycle_momentum <= -1  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_slow_downturn      trigger = { var:finance_cycle_momentum > -3  var:finance_cycle_momentum <= -1 } }
-			triggered_desc = { desc = banking_cycle_status_neutral_cmd        trigger = { var:finance_cycle_momentum > -1  var:finance_cycle_momentum < 1  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_neutral_coop       trigger = { var:finance_cycle_momentum > -1  var:finance_cycle_momentum < 1  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_neutral            trigger = { var:finance_cycle_momentum > -1  var:finance_cycle_momentum < 1 } }
-			triggered_desc = { desc = banking_cycle_status_slow_expansion_cmd  trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_slow_expansion_coop trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_slow_expansion      trigger = { var:finance_cycle_momentum >= 1  var:finance_cycle_momentum < 3 } }
-			triggered_desc = { desc = banking_cycle_status_fast_expansion_cmd  trigger = { var:finance_cycle_momentum >= 3  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_fast_expansion_coop trigger = { var:finance_cycle_momentum >= 3  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_fast_expansion      trigger = { var:finance_cycle_momentum >= 3 } }
-		}
-
-		# Same band edges as the dashboard's Bubble Pressure row
-		# (banking_dash_bubble_band, 15 / 30 / 50 / 75), so the two never name
-		# different bands. The loc names the band, never the number.
-		first_valid = {
-			triggered_desc = { desc = banking_cycle_status_no_bubble_cmd          trigger = { var:bubble_pressure < 15  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_no_bubble_coop         trigger = { var:bubble_pressure < 15  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_no_bubble              trigger = { var:bubble_pressure < 15 } }
-			triggered_desc = { desc = banking_cycle_status_bubble_stable_cmd      trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 30  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_bubble_stable_coop     trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 30  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_bubble_stable          trigger = { var:bubble_pressure >= 15  var:bubble_pressure < 30 } }
-			triggered_desc = { desc = banking_cycle_status_bubble_expansion_cmd   trigger = { var:bubble_pressure >= 30  var:bubble_pressure < 50  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_bubble_expansion_coop  trigger = { var:bubble_pressure >= 30  var:bubble_pressure < 50  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_bubble_expansion       trigger = { var:bubble_pressure >= 30  var:bubble_pressure < 50 } }
-			triggered_desc = { desc = banking_cycle_status_bubble_frenzy_cmd      trigger = { var:bubble_pressure >= 50  var:bubble_pressure < 75  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_bubble_frenzy_coop     trigger = { var:bubble_pressure >= 50  var:bubble_pressure < 75  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_bubble_frenzy          trigger = { var:bubble_pressure >= 50  var:bubble_pressure < 75 } }
-			triggered_desc = { desc = banking_cycle_status_bubble_extreme_cmd     trigger = { var:bubble_pressure >= 75  has_law = law_type:law_command_economy } }
-			triggered_desc = { desc = banking_cycle_status_bubble_extreme_coop    trigger = { var:bubble_pressure >= 75  has_law = law_type:law_cooperative_ownership } }
-			triggered_desc = { desc = banking_cycle_status_bubble_extreme         trigger = { var:bubble_pressure >= 75 } }
-		}
-
-		first_valid = {
-			triggered_desc = { desc = BANKING_CURR_MODIFIERS trigger = { always = yes } }
+			triggered_desc = {
+				desc = banking_cycle_status_not_started
+				trigger = { NOT = { has_variable = finance_cycle_value } }
+			}
+			triggered_desc = {
+				desc = BANKING_CURR_MODIFIERS
+				trigger = { always = yes }
+			}
 		}
 	}
 

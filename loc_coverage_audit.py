@@ -571,21 +571,11 @@ if __name__ == "__main__":
     # CLI entry: run against the live mod state.
     import sys
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from mod_state import ModState
-    from path_constants import mod_path, base_game_path
-    import mod_state_server  # for base_game_paths / mod_paths
-    ms = ModState(mod_state_server.base_game_paths, mod_state_server.mod_paths)
-    # ModState starts with empty localization and only fills it via
-    # add_localization() -- the server does this at load time, but a bare
-    # construction does not. Without it has_localization() is always False and
-    # every entity false-flags. Load the same vanilla + mod english dirs the
-    # server feeds it (see mod_state_server.reload) so the CLI matches.
-    for _loc_dir in (
-        os.path.join(base_game_path, "game", "localization", "english"),
-        os.path.join(mod_path, "localization", "english"),
-        os.path.join(mod_path, "localization", "english", "replace"),
-    ):
-        if os.path.isdir(_loc_dir):
-            ms.add_localization(_loc_dir)
+    from path_constants import mod_path
+    import mod_state_server
+    # Vanilla from where a server load takes it (the vanilla_parsed/ snapshot
+    # without a game install), and the English loc loaded, as the server loads
+    # it: a bare ModState has none, so every entity false-flags.
+    ms = mod_state_server.cli_mod_state()
     result = audit(ms, mod_path=mod_path)
     print(render_report(result))
