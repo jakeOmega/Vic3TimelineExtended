@@ -253,7 +253,7 @@ types space_race_widget_types
 			block "first_open" {}
 			tooltip = "sr_rivals_first_open"
 			blockoverride "icon_texture" {
-				texture = "gfx/interface/icons/event_icons/waving_flag.dds"
+				texture = "gfx/interface/icons/space_race_icons/first.dds"
 			}
 			blockoverride "label" {
 				text = "je_space_race_widget_ov_first_open"
@@ -266,7 +266,7 @@ types space_race_widget_types
 				alpha = 0.25
 			}
 			blockoverride "icon_texture" {
-				texture = "gfx/interface/icons/event_icons/waving_flag.dds"
+				texture = "gfx/interface/icons/space_race_icons/first.dds"
 			}
 			blockoverride "label" {
 				text = "je_space_race_widget_ov_first_claimed"
@@ -325,7 +325,7 @@ types space_race_widget_types
 	### A share of the 34 worlds as a framed pie (te_un_ov_pie, with a third
 	### layer): the disc is the unclaimed rest, then every world claimed, then
 	### ours on top — largest first (gui_modding_guide.md, "Pie charts of
-	### script-held data"). Placeholder textures: docs/systems/space_race_gui_icons.md.
+	### script-held data"). The textures: docs/systems/space_race_gui_icons.md.
 	type te_sr_ov_pie = widget {
 		size = { 150 108 }
 
@@ -344,7 +344,7 @@ types space_race_widget_types
 				min = 0
 				max = 1
 				value = 1
-				texture = "gfx/interface/icons/un_icons/pie_rest.dds"
+				texture = "gfx/interface/icons/space_race_icons/pie_unclaimed.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -353,7 +353,7 @@ types space_race_widget_types
 				min = 0
 				max = 1
 				block "pie_claimed" {}
-				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
+				texture = "gfx/interface/icons/space_race_icons/pie_claimed.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -362,7 +362,7 @@ types space_race_widget_types
 				min = 0
 				max = 1
 				block "pie_ours" {}
-				texture = "gfx/interface/icons/un_icons/pie_members.dds"
+				texture = "gfx/interface/icons/space_race_icons/pie_ours.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -407,7 +407,7 @@ types space_race_widget_types
 		icon = {
 			size = { 18 18 }
 			parentanchor = top|right
-			texture = "gfx/interface/icons/event_icons/waving_flag.dds"
+			texture = "gfx/interface/icons/space_race_icons/first_mark.dds"
 			block "first" {
 				visible = no
 			}
@@ -418,10 +418,10 @@ types space_race_widget_types
 	### states (owner's play-test, round 3). Each state is its own icon, with
 	### its own texture and hover, shown by one equality test on
 	### sr_disp_prog_interstellar, so no two can show at once: 0 not begun,
-	### 1 under way, 2 launched and awaiting data, 3 data received. The
-	### textures are placeholders (space_race_gui_icons.md). The flag marks a
-	### first, as in te_sr_ov_prog_cell, and lets the hover through to the
-	### state beneath it.
+	### 1 under way, 2 launched and awaiting data, 3 data received. Each
+	### state's art (PR #586, space_race_gui_icons.md) carries the state, so
+	### none is faded. The flag marks a first, as in te_sr_ov_prog_cell, and
+	### lets the hover through to the state beneath it.
 	type te_sr_ov_prog_cell_interstellar = widget {
 		size = { 50 50 }
 
@@ -429,8 +429,7 @@ types space_race_widget_types
 		icon = {
 			size = { 44 44 }
 			parentanchor = center
-			alpha = 0.25
-			texture = "gfx/interface/icons/event_icons/je_space_race_interstellar_probe.dds"
+			texture = "gfx/interface/icons/space_race_icons/interstellar_not_begun.dds"
 			tooltip = "je_space_race_widget_prog_interstellar_0"
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)0' )]"
 		}
@@ -439,8 +438,7 @@ types space_race_widget_types
 		icon = {
 			size = { 44 44 }
 			parentanchor = center
-			alpha = 0.6
-			texture = "gfx/interface/icons/event_icons/je_space_race_interstellar_probe.dds"
+			texture = "gfx/interface/icons/space_race_icons/interstellar_under_way.dds"
 			tooltip = "je_space_race_widget_prog_interstellar_1"
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)1' )]"
 		}
@@ -449,8 +447,7 @@ types space_race_widget_types
 		icon = {
 			size = { 44 44 }
 			parentanchor = center
-			alpha = 0.6
-			texture = "gfx/interface/icons/event_icons/je_space_race_interstellar_results.dds"
+			texture = "gfx/interface/icons/space_race_icons/interstellar_awaiting_data.dds"
 			tooltip = "je_space_race_widget_prog_interstellar_2"
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)2' )]"
 		}
@@ -459,7 +456,7 @@ types space_race_widget_types
 		icon = {
 			size = { 44 44 }
 			parentanchor = center
-			texture = "gfx/interface/icons/event_icons/je_space_race_interstellar_results.dds"
+			texture = "gfx/interface/icons/space_race_icons/interstellar_data_received.dds"
 			tooltip = "je_space_race_widget_prog_interstellar_3"
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)3' )]"
 		}
@@ -468,7 +465,7 @@ types space_race_widget_types
 			size = { 18 18 }
 			parentanchor = top|right
 			alwaystransparent = yes
-			texture = "gfx/interface/icons/event_icons/waving_flag.dds"
+			texture = "gfx/interface/icons/space_race_icons/first_mark.dds"
 			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)4' )]"
 		}
 	}
@@ -658,7 +655,7 @@ types space_race_widget_types
 					visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
 					tooltip = "je_space_race_widget_ov_idle_tt"
 					blockoverride "icon_texture" {
-						texture = "gfx/interface/icons/generic_icons/inactive_building.dds"
+						texture = "gfx/interface/icons/space_race_icons/state_idle.dds"
 					}
 					blockoverride "label" {
 						text = "je_space_race_widget_ov_idle"
@@ -672,7 +669,7 @@ types space_race_widget_types
 						block "sr_status_standard" {}
 						tooltip = "sr_pace_note_standard"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/commander_order_icons/move.dds"
+							texture = "gfx/interface/icons/space_race_icons/state_standard.dds"
 						}
 						blockoverride "label" {
 							text = "je_space_race_widget_standard_label"
@@ -684,7 +681,7 @@ types space_race_widget_types
 						block "sr_status_safe" {}
 						tooltip = "sr_pace_note_safe"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/commander_order_icons/defend.dds"
+							texture = "gfx/interface/icons/space_race_icons/state_safe.dds"
 						}
 						blockoverride "label" {
 							block "sr_label_safe" {}
@@ -694,7 +691,7 @@ types space_race_widget_types
 						block "sr_status_ambitious" {}
 						tooltip = "sr_pace_note_ambitious"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/military_icons/navy_icons/speed_navy.dds"
+							texture = "gfx/interface/icons/space_race_icons/state_ambitious.dds"
 						}
 						blockoverride "label" {
 							block "sr_label_ambitious" {}
@@ -704,7 +701,7 @@ types space_race_widget_types
 						block "sr_status_shielded" {}
 						tooltip = "sr_pace_note_shielded"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/clock.dds"
+							texture = "gfx/interface/icons/space_race_icons/state_shielded.dds"
 						}
 						blockoverride "label" {
 							text = "je_space_race_widget_ov_shielded"
@@ -721,7 +718,7 @@ types space_race_widget_types
 					te_sr_ov_icon_label = {
 						block "sr_risk_lit" {}
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/warning.dds"
+							texture = "gfx/interface/icons/space_race_icons/risk.dds"
 						}
 						blockoverride "label" {
 							block "sr_risk_label" {}
@@ -733,7 +730,7 @@ types space_race_widget_types
 							alpha = 0.25
 						}
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/warning.dds"
+							texture = "gfx/interface/icons/space_race_icons/risk.dds"
 						}
 						blockoverride "label" {
 							block "sr_risk_label" {}
@@ -2636,7 +2633,7 @@ flowcontainer = {
 			te_sr_ov_icon_label = {
 				tooltip = "je_space_race_widget_profile_solar_colonization"
 				blockoverride "icon_texture" {
-					texture = "gfx/interface/icons/state_status_icons/colonizable.dds"
+					texture = "gfx/interface/icons/space_race_icons/stage.dds"
 				}
 				blockoverride "label" {
 					text = "je_space_race_widget_ov_stage"

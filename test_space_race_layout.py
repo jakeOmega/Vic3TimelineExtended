@@ -32,8 +32,9 @@ ALL = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_land
 # the wait for its data share one four-state icon (owner's play-test, round 3).
 ROW = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
        "interstellar", "solar_colonization"]
-INTERSTELLAR_STATES = {0: "je_space_race_interstellar_probe", 1: "je_space_race_interstellar_probe",
-                       2: "je_space_race_interstellar_results", 3: "je_space_race_interstellar_results"}
+SR_ICONS = "gfx/interface/icons/space_race_icons/"   # the Space Race's own art (PR #586)
+INTERSTELLAR_STATES = {0: "interstellar_not_begun", 1: "interstellar_under_way",
+                       2: "interstellar_awaiting_data", 3: "interstellar_data_received"}
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "space_race_gui_icons.md")
 
 STATUS = ["te_sr_sec_control", "te_sr_sec_rivals"]
@@ -351,6 +352,11 @@ class ProgrammeRowTest(unittest.TestCase):
         for m in ALL:
             self.assertIn(f"gfx/interface/icons/event_icons/je_space_race_{m}.dds", tracked)
 
+    def test_every_entry_has_an_overview_that_draws_the_row(self):
+        gui = _read(GUI)
+        for composer in ("te_sr_overview_milestone", "te_sr_overview_transit"):
+            self.assertIn("te_sr_ov_programme = {}", _type_body(gui, composer))
+
 
 class InterstellarCellTest(unittest.TestCase):
     """The Interstellar Probe and its wait for data: one cell, four states, each
@@ -375,7 +381,8 @@ class InterstellarCellTest(unittest.TestCase):
                 self.assertIsNotNone(m, visibles[0])
                 codes.append(int(m.group(1)))
                 self.assertIn(f'tooltip = "je_space_race_widget_prog_interstellar_{n}"', icon)
-                self.assertIn(f'texture = "gfx/interface/icons/event_icons/{INTERSTELLAR_STATES[n]}.dds"', icon)
+                self.assertIn(f'texture = "{SR_ICONS}{INTERSTELLAR_STATES[n]}.dds"', icon)
+                self.assertNotIn("alpha", icon, "the art carries the state; no state is faded")
         # Each state tests equality with a code of its own, so no two show at once.
         self.assertEqual(codes, [0, 1, 2, 3])
         flag = self.icons[4]
@@ -404,13 +411,85 @@ class InterstellarCellTest(unittest.TestCase):
         doc = _read(ICONS_DOC)
         for n, texture in INTERSTELLAR_STATES.items():
             with self.subTest(state=n):
-                self.assertRegex(doc, rf"(?m)^\| {n}: [^|]+\| `event_icons/{texture}\.dds`[^|]*\|[^|]+\| `interstellar_\w+\.dds` \|$")
+                self.assertRegex(doc, rf"(?m)^\| {n} \| [^|]+\| [^|]+\| `{texture}\.dds` \|$")
 
 
-    def test_every_entry_has_an_overview_that_draws_the_row(self):
-        gui = _read(GUI)
-        for composer in ("te_sr_overview_milestone", "te_sr_overview_transit"):
-            self.assertIn("te_sr_ov_programme = {}", _type_body(gui, composer))
+
+# Textures the widget uses as they are: vanilla's, used as vanilla uses them.
+# Everything else is the Space Race's own art or a #571 journal icon.
+VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
+                # the rival rows' band marker, drawn as the UN's authority bar draws it
+                "gfx/interface/icons/generic_icons/transparent.dds",
+                "gfx/interface/progressbar/progressbar_marker.dds"}
+
+
+def _enclosing(text, anchor, opener):
+    """The block opened by the last `opener` before `anchor` (e.g. the icon
+    cell holding a given tooltip)."""
+    i = text.index(anchor)
+    start = text.rindex(opener, 0, i)
+    brace = text.index("{", start)
+    return text[start:_close(text, brace) + 1]
+
+
+class SpaceRaceIconsTest(unittest.TestCase):
+    """The Space Race's own icons (PR #586) replace every placeholder."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+
+    def _cell_texture(self, anchor):
+        cell = _enclosing(self.gui, anchor, "te_sr_ov_icon_label = {")
+        return re.findall(r'texture = "([^"]+)"', cell)
+
+    def test_each_state_draws_its_own_icon(self):
+        for anchor, name in (('tooltip = "je_space_race_widget_ov_idle_tt"', "state_idle"),
+                             ('tooltip = "sr_pace_note_standard"', "state_standard"),
+                             ('tooltip = "sr_pace_note_safe"', "state_safe"),
+                             ('tooltip = "sr_pace_note_ambitious"', "state_ambitious"),
+                             ('tooltip = "sr_pace_note_shielded"', "state_shielded"),
+                             ('block "sr_risk_lit"', "risk"),
+                             ('block "sr_risk_unlit"', "risk"),
+                             ('tooltip = "sr_rivals_first_open"', "first"),
+                             ('tooltip = "sr_rivals_first_claimed"', "first"),
+                             ('text = "je_space_race_widget_ov_stage"', "stage")):
+            with self.subTest(cell=anchor):
+                self.assertEqual(self._cell_texture(anchor), [f"{SR_ICONS}{name}.dds"])
+
+    def test_the_first_to_finish_mark(self):
+        for cell in ("te_sr_ov_prog_cell", "te_sr_ov_prog_cell_interstellar"):
+            with self.subTest(cell=cell):
+                mark = _enclosing(_type_body(self.gui, cell), "size = { 18 18 }", "icon = {")
+                self.assertIn(f'texture = "{SR_ICONS}first_mark.dds"', mark)
+
+    def test_the_pies(self):
+        pie = _type_body(self.gui, "te_sr_ov_pie")
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', pie)[-3:],
+                         [f"{SR_ICONS}pie_unclaimed.dds", f"{SR_ICONS}pie_claimed.dds", f"{SR_ICONS}pie_ours.dds"])
+        self.assertEqual(pie.count("framesize = { 128 128 }\n\t\t\t\tframe = 2"), 3)
+
+    def test_no_placeholder_left(self):
+        journal = {f"gfx/interface/icons/event_icons/je_space_race_{m}.dds" for m in ALL}
+        for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', self.gui):
+            with self.subTest(path=path):
+                self.assertTrue(path.startswith(SR_ICONS) or path in journal or path in VANILLA_KEPT,
+                                f"placeholder left: {path}")
+
+    def test_every_icon_exists_once_the_art_is_in(self):
+        tracked = set(subprocess.run(["git", "-C", REPO, "ls-files", SR_ICONS],
+                                     capture_output=True, text=True, check=True).stdout.split())
+        if not tracked:
+            self.skipTest("the #586 art is not on this branch yet")
+        for path in sorted(set(re.findall(rf'texture = "({re.escape(SR_ICONS)}[^"]+)"', self.gui))):
+            with self.subTest(path=path):
+                self.assertIn(path, tracked)
+
+    def test_every_icon_has_a_row_in_the_list(self):
+        doc = _read(ICONS_DOC)
+        for path in sorted(set(re.findall(rf'texture = "{re.escape(SR_ICONS)}([^"]+)"', self.gui))):
+            with self.subTest(file=path):
+                self.assertRegex(doc, rf"(?m)^\|.*\| `{re.escape(path)}` \|$")
 
 
 class DisplayValuesTest(unittest.TestCase):
