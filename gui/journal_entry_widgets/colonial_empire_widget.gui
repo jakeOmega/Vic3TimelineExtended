@@ -86,10 +86,11 @@
 ### decolonization_events.400 / .401, which is real game state and offers a
 ### Reconsider option.
 ###
-### Placeholder art: the band, alert and programme icons, the pie's two
-### fills and the territory list's colony icon are vanilla textures standing
-### in for the system's own icons. Each is listed,
-### with what the final art should show, in docs/systems/colonial_empire_gui_icons.md.
+### Art: the band, alert and programme icons, the pie's three discs and the
+### territory list's colony icon are the system's own, in
+### gfx/interface/icons/colonial_empire_icons/ (PR #586). Each is listed, with
+### what it shows, in docs/systems/colonial_empire_gui_icons.md. The trend
+### arrows, the pie's round frame and the bar's line are vanilla's.
 
 types colonial_empire_widget_types
 {
@@ -391,7 +392,7 @@ types colonial_empire_widget_types
 					size = { 22 22 }
 					parentanchor = center
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_colony'), '(CFixedPoint)1' )]"
-					texture = "gfx/interface/icons/state_status_icons/colony.dds"
+					texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
 					tooltip = "je_colonial_empire_territory_colony_tt"
 				}
 				icon = {
@@ -399,7 +400,7 @@ types colonial_empire_widget_types
 					parentanchor = center
 					alpha = 0.25
 					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('colonial_territory_disp_colony'), '(CFixedPoint)0' )]"
-					texture = "gfx/interface/icons/state_status_icons/colony.dds"
+					texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
 					tooltip = "je_colonial_empire_territory_not_colony_tt"
 				}
 			}
@@ -696,7 +697,7 @@ types colonial_empire_widget_types
 				min = 0
 				max = 1
 				value = 1
-				texture = "gfx/interface/icons/un_icons/pie_rest.dds"
+				texture = "gfx/interface/icons/colonial_empire_icons/pie_rest.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -705,7 +706,7 @@ types colonial_empire_widget_types
 				min = 0
 				max = 1
 				block "pie_value_cum" {}
-				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
+				texture = "gfx/interface/icons/colonial_empire_icons/pie_supporters.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -714,7 +715,7 @@ types colonial_empire_widget_types
 				min = 0
 				max = 1
 				block "pie_value" {}
-				texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
+				texture = "gfx/interface/icons/colonial_empire_icons/pie_condemners.dds"
 				framesize = { 128 128 }
 				frame = 2
 			}
@@ -794,7 +795,7 @@ types colonial_empire_widget_types
 						te_ce_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/state_status_icons/state_homelands.dds"
+								texture = "gfx/interface/icons/colonial_empire_icons/band_solidified.dds"
 							}
 							blockoverride "label" {
 								text = "je_colonial_empire_band_solidified"
@@ -803,7 +804,7 @@ types colonial_empire_widget_types
 						te_ce_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)4' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/state_status_icons/incorporated_state.dds"
+								texture = "gfx/interface/icons/colonial_empire_icons/band_stable.dds"
 							}
 							blockoverride "label" {
 								text = "je_colonial_empire_band_stable"
@@ -812,7 +813,7 @@ types colonial_empire_widget_types
 						te_ce_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)3' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/generic_icons/warning.dds"
+								texture = "gfx/interface/icons/colonial_empire_icons/band_strained.dds"
 							}
 							blockoverride "label" {
 								text = "je_colonial_empire_band_strained"
@@ -821,7 +822,7 @@ types colonial_empire_widget_types
 						te_ce_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)2' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/state_status_icons/has_turmoil.dds"
+								texture = "gfx/interface/icons/colonial_empire_icons/band_crumbling.dds"
 							}
 							blockoverride "label" {
 								text = "je_colonial_empire_band_crumbling"
@@ -830,7 +831,7 @@ types colonial_empire_widget_types
 						te_ce_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)1' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/war_goals/independence.dds"
+								texture = "gfx/interface/icons/colonial_empire_icons/band_collapsing.dds"
 							}
 							blockoverride "label" {
 								text = "je_colonial_empire_band_collapsing"
@@ -851,7 +852,7 @@ types colonial_empire_widget_types
 
 							te_ce_ov_programme = {
 								blockoverride "programme_texture" {
-									texture = "gfx/interface/icons/building_icons/building_browser_filter_icons/filter_icons_development.dds"
+									texture = "gfx/interface/icons/colonial_empire_icons/programme_invest.dds"
 								}
 								blockoverride "lit" {
 									visible = "[GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
@@ -864,7 +865,7 @@ types colonial_empire_widget_types
 							}
 							te_ce_ov_programme = {
 								blockoverride "programme_texture" {
-									texture = "gfx/interface/icons/generic_icons/battalions.dds"
+									texture = "gfx/interface/icons/colonial_empire_icons/programme_garrison.dds"
 								}
 								blockoverride "lit" {
 									visible = "[GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
@@ -877,7 +878,7 @@ types colonial_empire_widget_types
 							}
 							te_ce_ov_programme = {
 								blockoverride "programme_texture" {
-									texture = "gfx/interface/population/pop_culture.dds"
+									texture = "gfx/interface/icons/colonial_empire_icons/programme_assimilation.dds"
 								}
 								blockoverride "lit" {
 									visible = "[GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
@@ -1185,7 +1186,7 @@ types colonial_empire_widget_types
 
 							te_ce_ov_legend_row = {
 								blockoverride "legend_swatch" {
-									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
+									texture = "gfx/interface/icons/colonial_empire_icons/pie_condemners.dds"
 								}
 								blockoverride "legend_text" {
 									text = "je_colonial_empire_ov_legend_condemn"
@@ -1193,7 +1194,7 @@ types colonial_empire_widget_types
 							}
 							te_ce_ov_legend_row = {
 								blockoverride "legend_swatch" {
-									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
+									texture = "gfx/interface/icons/colonial_empire_icons/pie_supporters.dds"
 								}
 								blockoverride "legend_text" {
 									text = "je_colonial_empire_ov_legend_support"
@@ -1215,7 +1216,7 @@ types colonial_empire_widget_types
 						parentanchor = vcenter
 						tooltip = "je_colonial_empire_ov_isolation_tt"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/disapproval_icon.dds"
+							texture = "gfx/interface/icons/colonial_empire_icons/alert_isolation.dds"
 						}
 						blockoverride "label" {
 							text = "je_colonial_empire_ov_isolation"
@@ -1226,7 +1227,7 @@ types colonial_empire_widget_types
 						parentanchor = vcenter
 						tooltip = "je_colonial_empire_ov_consensus_tt"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/generic_icons/red_cross.dds"
+							texture = "gfx/interface/icons/colonial_empire_icons/alert_consensus.dds"
 						}
 						blockoverride "label" {
 							text = "je_colonial_empire_ov_consensus"

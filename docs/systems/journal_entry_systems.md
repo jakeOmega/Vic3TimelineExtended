@@ -300,7 +300,7 @@ Nine handlers. All carry `ai_is_valid = { always = no }`; the five read-only one
 | History | open | the two history charts |
 | How the Colonial Empire Works | collapsed | every explanation, one subheading per topic |
 
-Section state is `GetVariableSystem` only, and each flag says its default: `colonial_empire_stability_closed` / `_pressure_closed` / `_programmes_closed` / `_decisions_closed` / `_history_closed` are *closed* flags (open until closed), `colonial_empire_how_open` and `colonial_empire_territories_open` (the list inside Why Stability Is Moving) are *open* flags (collapsed until opened). The overview's placeholder icons are listed in `docs/systems/colonial_empire_gui_icons.md`.
+Section state is `GetVariableSystem` only, and each flag says its default: `colonial_empire_stability_closed` / `_pressure_closed` / `_programmes_closed` / `_decisions_closed` / `_history_closed` are *closed* flags (open until closed), `colonial_empire_how_open` and `colonial_empire_territories_open` (the list inside Why Stability Is Moving) are *open* flags (collapsed until opened). The panel's icons (PR #586's art, in `gfx/interface/icons/colonial_empire_icons/`) are listed, with what each shows, in `docs/systems/colonial_empire_gui_icons.md`; `ColonialIconsTest` holds each code to its file.
 
 **No arm/confirm flag anywhere.** The three decisions confirm through `decolonization_events.400` / `.401`, which preview up to three candidates and offer a "Reconsider" option. That is real game state: it survives a save, cannot be left half-armed by closing the panel, and lets the player choose *which* territory. A `GetVariableSystem` arm flag would be client-side with no lifetime.
 

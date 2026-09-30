@@ -4,6 +4,7 @@ the explanations went. Modelled on test_un_layout.py."""
 import glob
 import os
 import re
+import subprocess
 import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -274,7 +275,7 @@ class OverviewTest(unittest.TestCase):
         pie = _type_body(_read(GUI), "te_ce_ov_pie")
         # Largest first: the supporters' layer (the sum) under the condemners'.
         self.assertLess(pie.index('block "pie_value_cum"'), pie.index('block "pie_value"'))
-        self.assertLess(pie.index("ch_pie_developmentalist_junta.dds"), pie.index("ch_pie_communist.dds"))
+        self.assertLess(pie.index("pie_supporters.dds"), pie.index("pie_condemners.dds"))
         self.assertIn("ScriptValue('colonial_empire_disp_pressure_cum')", self.body)
         self.assertIn("ScriptValue('colonial_empire_disp_condemner_share')", self.body)
         for key in ("je_colonial_empire_ov_legend_condemn", "je_colonial_empire_ov_legend_support",
@@ -474,32 +475,85 @@ class HowItWorksTest(unittest.TestCase):
 
 
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "colonial_empire_gui_icons.md")
-# Textures the overview uses as mechanics (frame, marker, arrows), not as art.
-NOT_PLACEHOLDERS = {"gfx/interface/backgrounds/round_frame_dec.dds",
-                    "gfx/interface/backgrounds/white.dds",
-                    "gfx/interface/icons/generic_icons/transparent.dds",
-                    "gfx/interface/icons/generic_icons/trend_up.dds",
-                    "gfx/interface/icons/generic_icons/trend_down.dds",
-                    "gfx/interface/icons/generic_icons/trend_nochange.dds"}
+CE_ICONS = "gfx/interface/icons/colonial_empire_icons/"
+# The system's own art (PR #586), by the code or cell that draws it.
+BAND_ICONS = {5: "band_solidified", 4: "band_stable", 3: "band_strained", 2: "band_crumbling", 1: "band_collapsing"}
+ALERT_ICONS = {1: "alert_isolation", 2: "alert_consensus"}
+PROGRAMME_ICONS = {"invest": "programme_invest", "garrison": "programme_garrison",
+                   "assimilation": "programme_assimilation"}
+# Vanilla textures the panel keeps as mechanics (frame, line, arrows), not art.
+VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
+                "gfx/interface/backgrounds/white.dds",
+                "gfx/interface/icons/generic_icons/transparent.dds",
+                "gfx/interface/icons/generic_icons/trend_up.dds",
+                "gfx/interface/icons/generic_icons/trend_down.dds",
+                "gfx/interface/icons/generic_icons/trend_nochange.dds"}
 
 
-class PlaceholderIconsTest(unittest.TestCase):
-    """Style rule 10: every placeholder is listed, so swapping in the art is one
-    path change (docs/systems/colonial_empire_gui_icons.md)."""
+def _tracked(path):
+    return subprocess.run(["git", "ls-files", "--error-unmatch", path], cwd=REPO,
+                          capture_output=True).returncode == 0
 
-    def test_every_placeholder_is_listed(self):
-        gui = _read(GUI)
-        textures = set(re.findall(r'texture = "([^"]+)"', _type_body(gui, "te_ce_overview_panel")))
-        for t in ("te_ce_ov_pie", "te_ce_ov_icon_label", "te_ce_ov_programme", "te_ce_territory_row"):
-            textures |= set(re.findall(r'texture = "([^"]+)"', _type_body(gui, t)))
-        placeholders = textures - NOT_PLACEHOLDERS
-        # 5 bands, 2 alerts, 3 programmes, 3 pie layers, the territory list's colony icon
-        self.assertEqual(len(placeholders), 14)
-        self.assertEqual(set(re.findall(r'texture = "([^"]+)"', gui)) - textures, set(),
-                         "a texture outside the listed types")
+
+class ColonialIconsTest(unittest.TestCase):
+    """The system's own icons (PR #586) replace every placeholder, each code
+    drawing its own file (the UN's UnIconsTest)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.overview = _type_body(cls.gui, "te_ce_overview_panel")
+
+    def _coded(self, value):
+        """{code: texture} for the icons gated on ScriptValue(value) == code."""
+        pat = (rf"visible = \"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('{value}'\), "
+               rf"'\(CFixedPoint\)(\d+)' \)\]\"(.*?)texture = \"([^\"]+)\"")
+        found = {}
+        for m in re.finditer(pat, self.overview, re.S):
+            found.setdefault(int(m.group(1)), m.group(3))   # the first; the clocks share code 5's gate
+        return found
+
+    def test_each_code_draws_its_own_icon(self):
+        for value, names in (("colonial_empire_disp_tier", BAND_ICONS),
+                             ("colonial_empire_disp_pressure_level", ALERT_ICONS)):
+            with self.subTest(value=value):
+                self.assertEqual(self._coded(value), {k: f"{CE_ICONS}{n}.dds" for k, n in names.items()})
+
+    def test_each_programme_draws_its_own_icon(self):
+        cells = [self.overview[slice(*_span(self.overview, m.start()))]
+                 for m in re.finditer(r"te_ce_ov_programme = \{", self.overview)]
+        for p, cell in zip(PROGRAMMES, cells):
+            with self.subTest(programme=p):
+                self.assertRegex(cell, rf'blockoverride "programme_texture" \{{\s*texture = "{CE_ICONS}{PROGRAMME_ICONS[p]}\.dds"')
+        # Lit and dimmed are one texture; the 25% fade is the design.
+        self.assertIn("alpha = 0.25", _type_body(self.gui, "te_ce_ov_programme"))
+
+    def test_pies_legend_and_territory_icon(self):
+        pie = _type_body(self.gui, "te_ce_ov_pie")
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', pie),
+                         ["gfx/interface/backgrounds/round_frame_dec.dds", f"{CE_ICONS}pie_rest.dds",
+                          f"{CE_ICONS}pie_supporters.dds", f"{CE_ICONS}pie_condemners.dds"])
+        swatches = re.findall(r'blockoverride "legend_swatch" \{\s*texture = "([^"]+)"', self.overview)
+        self.assertEqual(swatches, [f"{CE_ICONS}pie_condemners.dds", f"{CE_ICONS}pie_supporters.dds"])
+        row = _type_body(self.gui, "te_ce_territory_row")
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', row), [f"{CE_ICONS}territory_colony.dds"] * 2)
+        self.assertEqual(row.count("alpha = 0.25"), 1, "dimmed while not a colony, by the widget")
+
+    def test_no_placeholder_left(self):
+        for path in set(re.findall(r'texture = "([^"]+)"', self.gui)):
+            with self.subTest(path=path):
+                self.assertTrue(path.startswith(CE_ICONS) or path in VANILLA_KEPT, f"placeholder left: {path}")
+
+    def test_every_icon_is_listed_and_in_the_repo(self):
         doc = _read(ICONS_DOC)
-        for t in sorted(placeholders):
-            self.assertIn(f"`{t}`", doc, t)
+        ours = sorted({p for p in re.findall(r'texture = "([^"]+)"', self.gui) if p.startswith(CE_ICONS)})
+        self.assertEqual(len(ours), 14)   # 5 bands, 2 alerts, 3 programmes, 3 pie discs, the colony
+        for path in ours:
+            self.assertIn(f"`{path}`", doc, path)
+        if not any(_tracked(p) for p in ours):
+            self.skipTest("the art lands with PR #586")
+        for path in ours:
+            self.assertTrue(_tracked(path), f"{path} is not in the repo")
 
 
 CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "colonial_empire_custom_loc.txt")
