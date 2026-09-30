@@ -161,8 +161,11 @@ class CostTest(unittest.TestCase):
     def test_the_overview_shows_the_cost_beside_the_approach(self):
         gui = _read(GUI, comments=True)
         for m in MILESTONES:
-            root = gui[gui.index(f'name = "widget_je_space_race_{m}_overview"'):]
-            root = root[:root.index("\nflowcontainer = {")]
+            # the milestone's overview type, which its journal root wraps
+            wrapper = gui[gui.index(f'name = "widget_je_space_race_{m}_overview"'):]
+            self.assertIn(f"te_sr_{m}_overview = {{}}", wrapper[:wrapper.index("\n}\n")])
+            root = gui[gui.index(f"\ttype te_sr_{m}_overview = flowcontainer {{"):]
+            root = root[:root.index("\n\t}\n")]
             for kind in ("safe", "ambitious"):
                 with self.subTest(milestone=m, approach=kind):
                     self.assertRegex(root, rf'blockoverride "sr_label_{kind}" \{{\s*text = "je_space_race_widget_ov_{kind}_{m}"')

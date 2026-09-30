@@ -42,6 +42,25 @@ sr_milestone_followup_is_shown = {
 	has_technology_researched = $TECH$
 }
 
+# Country scope. The Timeline Extended window's Space Race tab checklist
+# (te_window_space_race_tab_unlock_sgui's is_valid, rendered by IsValidTooltip
+# on the greyed tab): when the first milestone, Suborbital Flight, starts. Its
+# `possible` in je_space_race.txt less the completion guard, one line per
+# condition. The OR in is_great_or_major_power sits inside a custom_tooltip, so
+# it prints as one line (TabUnlockTooltipTest in test_un_layout.py).
+# test_te_systems_window.py holds the three to the entry's `possible`.
+sr_entry_unlocked = {
+	has_technology_researched = rocketry
+	custom_tooltip = {
+		text = sr_unlock_rank_tt
+		is_great_or_major_power = yes
+	}
+	custom_tooltip = {
+		text = sr_unlock_earth_orbit_tt
+		modifier:country_sr_earth_orbit_program_bool = yes
+	}
+}
+
 sr_has_failure_cooldown = {
 	has_variable = sr_failure_cooldown
 	var:sr_failure_cooldown > 0

@@ -517,6 +517,34 @@ country_has_qualifying_colonial_subject = {
 	}
 }
 
+# Country scope. The Timeline Extended window's Colonial Empire tab checklist
+# (te_window_colonial_empire_tab_unlock_sgui's is_valid, rendered by
+# IsValidTooltip on the greyed tab): je_colonial_empire's
+# `is_shown_when_inactive` technology and its `possible`, one line per
+# condition. The possible's OR sits inside a custom_tooltip, so it prints as one
+# line (TabUnlockTooltipTest in test_un_layout.py); test_te_systems_window.py
+# holds the lines to the entry.
+ce_entry_unlocked = {
+	has_technology_researched = decolonization
+	custom_tooltip = {
+		text = ce_unlock_colonies_tt
+		OR = {
+			any_scope_state = {
+				is_overseas_colonial_state = yes
+			}
+			country_has_qualifying_colonial_subject = yes
+		}
+	}
+	custom_tooltip = {
+		text = ce_unlock_not_secured_tt
+		NOT = { has_variable = colonial_empire_completed }
+	}
+	custom_tooltip = {
+		text = ce_unlock_no_collapse_tt
+		NOT = { has_variable = colonial_empire_collapsed_recently }
+	}
+}
+
 # Country-scope (evaluated on a METROPOLE): is it fighting a colonial war?
 # At war, and one of:
 #   - its colonial crackdown is running (colonial_crackdown_modifier, from

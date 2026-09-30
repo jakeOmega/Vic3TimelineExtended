@@ -200,3 +200,207 @@ te_market_strategic_reserve_tab_unlock_sgui = {
 	is_valid = { st_res_entry_unlocked = yes }
 	effect = { }
 }
+# The Timeline Extended window (gui/te_systems_window.gui) uses the same pair
+# per tab, named te_window_<system>_tab_sgui / _tab_unlock_sgui, plus a gate for
+# its launcher and one per Space Race entry (at the foot of this file).
+#
+
+# ===========================================================================
+# THE TIMELINE EXTENDED WINDOW (gui/te_systems_window.gui): the systems with no
+# vanilla home, one tab each (docs/systems/system_panels_feasibility.md §9).
+# ===========================================================================
+
+# The launcher under the sidebar shows while any of the three systems' game
+# rules is on.
+te_window_launcher_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			has_game_rule = space_race_enabled
+			has_game_rule = decolonization_enabled
+			gm_system_enabled = yes
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Space Race: the nine je_space_race_* entries (je_space_race.txt). The tab
+# opens while any of them runs; each entry's block has its own gate below,
+# because GetPlayerJournalEntry takes one literal key. The checklist is when
+# the first milestone starts (sr_entry_unlocked).
+# ---------------------------------------------------------------------------
+te_window_space_race_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		OR = {
+			has_journal_entry = je_space_race_suborbital
+			has_journal_entry = je_space_race_orbital
+			has_journal_entry = je_space_race_moon_landing
+			has_journal_entry = je_space_race_probe
+			has_journal_entry = je_space_race_moon_base
+			has_journal_entry = je_space_race_mars_landing
+			has_journal_entry = je_space_race_interstellar_probe
+			has_journal_entry = je_space_race_interstellar_results
+			has_journal_entry = je_space_race_solar_colonization
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = space_race_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { sr_entry_unlocked = yes }
+	effect = { }
+}
+
+te_window_space_race_suborbital_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_suborbital
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_orbital_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_orbital
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_moon_landing_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_moon_landing
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_probe_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_probe
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_moon_base_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_moon_base
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_mars_landing_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_mars_landing
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_interstellar_probe_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_interstellar_probe
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_interstellar_results_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_interstellar_results
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_solar_colonization_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_solar_colonization
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Colonial Empire: je_colonial_empire.
+# ---------------------------------------------------------------------------
+te_window_colonial_empire_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = decolonization_enabled
+		has_journal_entry = je_colonial_empire
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_colonial_empire_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = decolonization_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { ce_entry_unlocked = yes }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Grand Monuments: je_grand_monuments. The entry stays after the last monument
+# goes while its fading effects run out, so the tab does too.
+# ---------------------------------------------------------------------------
+te_window_grand_monuments_tab_sgui = {
+	scope = country
+	is_shown = {
+		gm_system_enabled = yes
+		has_journal_entry = je_grand_monuments
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_grand_monuments_tab_unlock_sgui = {
+	scope = country
+	is_shown = { gm_system_enabled = yes }
+	ai_is_valid = { always = no }
+	is_valid = { gm_entry_unlocked = yes }
+	effect = { }
+}

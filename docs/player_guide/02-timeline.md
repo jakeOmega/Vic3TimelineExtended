@@ -423,6 +423,11 @@ The Monuments journal entry appears when you own a Grand Monument. After your
 last monument is gone, it stays until the fading approval and legitimacy it
 shows have run out.
 
+The same panels appear on the Grand Monuments tab of the Timeline Extended
+window, which the button under the sidebar's Map List opens, and a change made
+in one shows in the other. The tab is grayed until the journal entry is active, and it
+ends with an Open Journal Entry button.
+
 The overview at the top is always shown. It has an icon for each status a
 monument can hold, with the number of your monuments in that status beneath:
 Upheld (a gold wreath on the stone), Heritage (a railing in front), Undedicated
