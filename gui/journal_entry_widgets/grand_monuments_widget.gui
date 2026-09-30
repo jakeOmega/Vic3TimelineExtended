@@ -109,9 +109,9 @@ types grand_monuments_widget_types
 	### A cell of the overview: an icon, its word small beneath. Lit at full
 	### colour while its count is above zero, dimmed at zero; the instance sets
 	### the texture and the two `visible`s. Fixed width, so the row cannot push
-	### the panel wider.
+	### the panel wider: four cells of 120 fill the 480 column.
 	type gm_ov_cell = widget {
-		size = { 92 58 }
+		size = { 120 58 }
 
 		icon = {
 			size = { 36 36 }
@@ -129,7 +129,7 @@ types grand_monuments_widget_types
 		textbox = {
 			parentanchor = bottom|hcenter
 			autoresize = yes
-			max_width = 90
+			max_width = 118
 			elide = right
 			align = hcenter|nobaseline
 			using = fontsize_small
@@ -140,8 +140,10 @@ types grand_monuments_widget_types
 
 	### A stepped national total: its name, a bar showing how far the step now
 	### being filled has come, and its value. The tooltip (on the instance)
-	### gives the grandeur behind it and where the next step completes.
-	### 4 + 200 + 8 + 170 + 8 + 86 + 4 = 480.
+	### gives the full modifier name, the grandeur behind it and where the next
+	### step completes. 4 + 240 + 8 + 130 + 8 + 86 + 4 = 480: the label column
+	### holds 25 characters of the medium font (play-test round 3; the budget
+	### is test_grand_monuments_layout.LabelBudgetTest).
 	type gm_step_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -149,8 +151,8 @@ types grand_monuments_widget_types
 		margin = { 4 2 }
 
 		textbox = {
-			minimumsize = { 200 -1 }
-			maximumsize = { 200 -1 }
+			minimumsize = { 240 -1 }
+			maximumsize = { 240 -1 }
 			autoresize = yes
 			parentanchor = vcenter
 			align = left|nobaseline
@@ -160,7 +162,7 @@ types grand_monuments_widget_types
 			block "row_label" {}
 		}
 		default_progressbar_horizontal = {
-			size = { 170 14 }
+			size = { 130 14 }
 			parentanchor = vcenter
 			blockoverride "values" {
 				block "row_frac" {}
@@ -210,7 +212,7 @@ types grand_monuments_widget_types
 	### sets the texture, the `visible` (one status code each) and a tooltip
 	### that reads nothing (gotcha #24).
 	type gm_row_status = widget {
-		size = { 80 58 }
+		size = { 96 58 }
 
 		icon = {
 			size = { 36 36 }
@@ -220,7 +222,7 @@ types grand_monuments_widget_types
 		textbox = {
 			parentanchor = bottom|hcenter
 			autoresize = yes
-			max_width = 78
+			max_width = 94
 			elide = right
 			align = hcenter|nobaseline
 			using = fontsize_small
@@ -229,12 +231,12 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### A line of a monument's row, beside its status (80 + 8 + 392 = 480).
+	### A line of a monument's row, beside its status (96 + 8 + 376 = 480).
 	type gm_row_line = textbox {
 		autoresize = yes
 		multiline = yes
-		minimumsize = { 392 -1 }
-		maximumsize = { 392 -1 }
+		minimumsize = { 376 -1 }
+		maximumsize = { 376 -1 }
 		align = left|nobaseline
 		using = fontsize_medium
 	}
@@ -315,8 +317,8 @@ types grand_monuments_widget_types
 				textbox = {
 					autoresize = yes
 					multiline = yes
-					minimumsize = { 392 -1 }
-					maximumsize = { 392 -1 }
+					minimumsize = { 376 -1 }
+					maximumsize = { 376 -1 }
 					align = left|nobaseline
 					using = fontsize_large
 					text = "gm_row_title"
@@ -382,7 +384,7 @@ types grand_monuments_widget_types
 
 				flowcontainer = {
 					direction = horizontal
-					spacing = 4
+					spacing = 0
 					ignoreinvisible = yes
 					parentanchor = hcenter
 

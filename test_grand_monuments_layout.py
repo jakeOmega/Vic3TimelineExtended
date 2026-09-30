@@ -219,7 +219,7 @@ class StateGatedTest(unittest.TestCase):
         """Four fixed cells, none gated: a row whose width comes from its
         content is centred by the width it had at first layout."""
         ov = _squash(_strip_comments(_type_body(_gui(), "te_gm_overview_panel")))
-        row = re.search(r"flowcontainer = \{ direction = horizontal spacing = 4 ignoreinvisible = yes "
+        row = re.search(r"flowcontainer = \{ direction = horizontal spacing = \d+ ignoreinvisible = yes "
                         r"parentanchor = hcenter (.*?) \} flowcontainer = \{ direction = vertical", ov)
         self.assertTrue(row)
         self.assertEqual(row.group(1).count("gm_ov_cell = {"), 4)
@@ -316,7 +316,7 @@ class StatusWordTest(unittest.TestCase):
         """"Stands" became "Upheld" (owner, play-test round 3): the cell's
         caption, the rows' word and the status tooltip's title."""
         loc = _loc()
-        self.assertTrue(loc["gm_je_ov_upheld"].startswith("Upheld: "))
+        self.assertTrue(loc["gm_je_ov_upheld"].startswith("Upheld #v "))
         self.assertEqual(loc["gm_status_fits"], "#G Upheld#!")
         self.assertTrue(loc["gm_je_status_upheld_tt"].startswith("#b Upheld#!"))
         for key, value in loc.items():
@@ -451,7 +451,135 @@ class TidinessTest(unittest.TestCase):
                          + int(re.search(r"minimumsize = \{ (\d+) ", _type_body(gui, "gm_row_line")).group(1)), 480)
         self.assertIn("spacing = 8", row)
         cell = int(re.search(r"size = \{ (\d+) ", _type_body(gui, "gm_ov_cell")).group(1))
-        self.assertLessEqual(4 * cell + 3 * 4, 480)
+        ov = _squash(_type_body(gui, "te_gm_overview_panel"))
+        gap = int(re.search(r"flowcontainer = \{ direction = horizontal spacing = (\d+) ", ov).group(1))
+        self.assertLessEqual(4 * cell + 3 * gap, 480)
+
+
+# ---- Play-test round 3: nothing a player reads may end in "..." ----------
+# Units per character of each font, plus a 10% margin. Large and medium were
+# measured from the owner's screenshots (round-3 rules); small is an estimate,
+# 0.85 of medium, until it is measured.
+UNITS = {"fontsize_large": 10.0, "fontsize_medium": 8.6, "fontsize_small": 7.3}
+MARGIN = 1.1
+VANILLA_LOC = os.path.join(REPO, "vanilla_parsed", "localization_english.json")
+CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "gm_custom_loc.txt")
+# The longest a number printed in a cell can be: counts reach two digits, and
+# no effect or ledger value is wider than "+1000.0".
+LONGEST_COUNT = "99"
+LONGEST_VALUE = "1000.0"
+
+
+def _all_loc():
+    import json
+    loc = {}
+    with open(VANILLA_LOC, encoding="utf-8") as f:
+        loc.update(json.load(f))
+    for path in sorted(os.listdir(os.path.dirname(LOC))):
+        if path.endswith(".yml"):
+            for line in _read(os.path.join(os.path.dirname(LOC), path)).splitlines():
+                m = re.match(r'\s*([\w.]+):\d*\s+"(.*)"\s*$', line)
+                if m:
+                    loc[m.group(1)] = m.group(2)
+    return loc
+
+
+def _rendered(value, loc, data):
+    """The text a loc value shows: $splices$ and concept links resolved to
+    their words, a text icon counted as two characters, every data expression
+    replaced by `data`, formatting codes dropped."""
+    for _ in range(6):
+        value = re.sub(r"\$(\w+)\$", lambda m: loc.get(m.group(1), m.group(0)), value)
+        value = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", value)
+        value = re.sub(r"\[(concept_\w+)\]", lambda m: loc[m.group(1)], value)
+    value = value.replace("[Nbsp]", " ")
+    value = re.sub(r"@\w+!", "XX", value)
+    value = re.sub(r"\[[^\[\]]*\]", data, value)
+    value = re.sub(r"#[\w;:.,']+ ", "", value)
+    return value.replace("#!", "")
+
+
+def _cells(body):
+    """(width, font) of each fixed-width textbox in a type, in order."""
+    out = []
+    for m in re.finditer(r"textbox = \{", body):
+        tb = _match_brace(body, m.end())
+        width = re.search(r"(?:maximumsize = \{ |max_width = )(\d+)", tb)
+        font = re.search(r"using = (fontsize_\w+)", tb)
+        if width and font:
+            out.append((int(width.group(1)), font.group(1)))
+    return out
+
+
+class LabelBudgetTest(unittest.TestCase):
+    """Every label in a fixed-width cell fits it: characters x units per
+    character x 1.1 <= the cell's width (play-test round 3, rule 1). The
+    effect rows' labels are static words; each row's tooltip names the full,
+    country-dependent modifier name."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc = _all_loc()
+        cls.gui = _gui()
+
+    def _fits(self, key, cell, data=""):
+        width, font = cell
+        text = _rendered(self.loc[key], self.loc, data)
+        need = len(text) * UNITS[font] * MARGIN
+        self.assertLessEqual(need, width, f"{key}: {text!r} needs {need:.0f} of {width} ({font})")
+
+    def test_effect_rows(self):
+        nat = _squash(_type_body(self.gui, "te_gm_sec_national"))
+        label, value = _cells(_type_body(self.gui, "gm_step_row"))
+        steps = re.findall(r'gm_step_row = \{.*?"row_label" \{ text = "(\w+)" \}.*?"row_value" \{ text = "(\w+)" \}', nat)
+        self.assertEqual(len(steps), len(FRACS))
+        for lbl, val in steps:
+            self._fits(lbl, label)
+            self._fits(val, value, LONGEST_VALUE)
+        label, value = _cells(_type_body(self.gui, "gm_value_row"))
+        rows = re.findall(r'gm_value_row = \{.*?"row_label" \{ text = "(\w+)" \}.*?"row_value" \{ text = "(\w+)" \}', nat)
+        self.assertEqual(len(rows), len(IGS) + 2)
+        for lbl, val in rows:
+            self._fits(lbl, label)
+            self._fits(val, value, LONGEST_VALUE)
+
+    def test_the_flagged_labels_are_short(self):
+        """The owner saw these two overrun (round 3)."""
+        for key, words in (("gm_je_lbl_artistic", "Intelligentsia Attraction"),
+                           ("gm_je_lbl_scientific", "Max Innovation")):
+            self.assertEqual(_rendered(self.loc[key], self.loc, ""), words)
+        for key, modifier in (("gm_je_tt_artistic", "interest_group_ig_intelligentsia_pop_attraction_mult"),
+                              ("gm_je_tt_scientific", "country_weekly_innovation_max_add"),
+                              ("gm_je_tt_religious", "interest_group_ig_devout_pop_attraction_mult"),
+                              ("gm_je_tt_industrial", "interest_group_ig_industrialists_pop_attraction_mult"),
+                              ("gm_je_tt_war_memorial", "country_war_support_casualties_mult")):
+            self.assertTrue(self.loc[key].startswith(f"#b ${modifier}$#!"), f"{key} lost the full name")
+
+    def test_overview_captions(self):
+        (cell,) = _cells(_type_body(self.gui, "gm_ov_cell"))
+        ov = _type_body(self.gui, "te_gm_overview_panel")
+        keys = set(re.findall(r'"label" \{\s*text = "(\w+)"', ov)) | set(re.findall(r"'(gm_je_ov_\w+)'", ov))
+        self.assertEqual(len(keys), 5)
+        for key in keys:
+            self._fits(key, cell, LONGEST_COUNT)
+
+    def test_row_status_words(self):
+        """The row's word is custom loc: the longest word it can pick."""
+        (cell,) = _cells(_type_body(self.gui, "gm_row_status"))
+        words = re.findall(r"localization_key = (\w+)", _block(_read(CUSTOM_LOC), "gm_status_name"))
+        self.assertEqual(len(words), 5)
+        for key in words:
+            self._fits(key, cell)
+
+    def test_choice_buttons(self):
+        (cell,) = _cells(_type_body(self.gui, "gm_choice_button"))
+        keys = re.findall(r'"choice_text" \{ text = "(\w+)" \}', _type_body(self.gui, "gm_monument_row"))
+        self.assertEqual(len(keys), 3)
+        for key in keys:
+            self._fits(key, cell)
+
+    def test_hard_times_phrase(self):
+        self._fits("gm_je_ov_hard_times", (480, "fontsize_large"))
 
 
 if __name__ == "__main__":
