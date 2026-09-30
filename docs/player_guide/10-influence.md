@@ -18,8 +18,6 @@ background and have no effect. The entry never completes. Before it opens, the
 entry shows only your tier and cultural share; after that, its panels show the
 rest (see [The Cultural Hegemony panels](#the-cultural-hegemony-panels)).
 
-![The lower sections of the Cultural Hegemony journal entry: where our pull comes from, the top ten cultural powers with each one's change since the last recount, and the world's political models weighted by cultural pull.](images/cultural_hegemony.png)
-
 ### The Cultural Hegemony panels
 
 The Cultural Hegemony journal entry and the Hegemony tab in the Society panel
@@ -27,7 +25,7 @@ show the same panels, and a change made in one shows in the other. The tab is
 grayed until the journal entry opens; hover it for what is still missing. It
 ends with an Open Journal Entry button.
 
-<!-- screenshot: the Hegemony tab in the Society panel, with the overview and Top Cultural Powers in view -->
+![The Hegemony tab of the Society panel: the overview, Top Cultural Powers with each one's change since the last recount, Cultural Programmes, and where our pull comes from.](images/hegemony_tab.png)
 
 The overview at the top is always shown. Its first row is icons with a word
 beneath: your influence tier (a gray sprig for Negligible, then a lyre that

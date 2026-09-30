@@ -37,7 +37,7 @@ hover it for what you still need. It ends with an Open Journal Entry button,
 which opens the entry with its description and status text. [The banking
 panels](#the-banking-panels) describes what they show.
 
-<!-- screenshot: the Banking tab of the Budget panel, with the four bars, the overview's icons and Active Policies in view -->
+![The Banking tab of the Budget panel: the four bars, the overview's icons, Active Policies and the start of Monetary Policy.](images/banking_tab.png)
 
 ### Cycle value, momentum and bubble pressure
 
@@ -57,8 +57,6 @@ reads Low (under 15), Building (15 to 29), Elevated (30 to 49), High (50 to 74) 
 Monthly Cycle Value, Monthly Momentum and Monthly Bubble Pressure, the change
 your country's modifiers make to each reading every month. Hover a figure for
 the modifiers behind it.
-
-![The Boom & Bust Cycle journal entry in Stagnation with momentum rising: the Current Conditions readout, the status text and, below them, the History charts.](images/banking_stagnation.png)
 
 ### The seven banking cycle phases
 

@@ -640,7 +640,7 @@ Below the rows, a line says whether a nuclear weapon has been used in war and,
 if so, when the last one fell. The Taboo Over Time, open by default, holds two
 charts, the score and its target, month by month.
 
-![The Nuclear Taboo panel after a nuclear weapon has been used in war. The taboo is Normalised at 29 and steady, and below 40 the arsenal carries no burden.](images/nuclear_taboo.png)
+![The Nuclear tab of the Military panel for a country with no warheads and a Renounced posture: Reputation, The Nuclear Taboo with its two charts, Delivery and Defence, and the start of Nuclear Powers. The taboo is Established at 52 and rising toward 58.](images/nuclear_taboo.png)
 
 The band is named beside the score and marks where the taboo's effects start.
 
