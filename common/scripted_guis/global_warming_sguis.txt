@@ -468,3 +468,46 @@ gw_treaty_bound_sgui = {
 	is_valid = { always = no }
 	effect = { }
 }
+
+# ---------------------------------------------------------------------------
+# Top Emitters: two tooltip builders, only ever rendered through
+# ExecuteTooltip (nothing here runs). The country lists print one line per
+# country from inside its own scope, the shape vanilla ships for a country list
+# (gui_modding_guide.md gotcha #11), with the intro at the root, above them
+# (gotcha #18: root lines print first). The root is a STATE, never a country,
+# so no country in a list is also the tooltip's root (gotcha #27: a country's
+# lines gather under its first appearance), and each country is listed once.
+# ---------------------------------------------------------------------------
+
+# A row's hover: the countries in the market the row's leader leads, the
+# leader among them. Root: the leader's capital (the row's State).
+gw_te_members_sgui = {
+	scope = state
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = {
+		custom_tooltip_no_bullet = gw_te_members_intro
+		every_country = {
+			limit = { market_capital ?= { owner ?= ROOT.owner } }
+			custom_tooltip = gw_te_list_entry
+		}
+	}
+}
+
+# "+N more"'s hover: every emitting market, largest first, named by its leader
+# with its annual emissions. Root: the viewer's capital (any state would do).
+gw_top_emitters_sgui = {
+	scope = state
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = {
+		custom_tooltip_no_bullet = gw_te_all_intro
+		ordered_country = {
+			limit = { gw_is_ranked_emitter = yes }
+			order_by = gw_disp_own_emis
+			max = 200
+			check_range_bounds = no
+			custom_tooltip = gw_te_all_entry
+		}
+	}
+}

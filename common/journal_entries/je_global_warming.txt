@@ -143,6 +143,13 @@
 			# in hidden_effect there, so this costs nothing for an untracked
 			# country and never writes state during a tooltip render.
 			te_history_record_global_warming_samples = yes
+
+			# The panel's Top Emitters rows (global_warming_effects.txt):
+			# players only, since nobody else looks. Display only.
+			if = {
+				limit = { is_player = yes }
+				gw_top_emitters_refresh = yes
+			}
 		}
 	}
 
