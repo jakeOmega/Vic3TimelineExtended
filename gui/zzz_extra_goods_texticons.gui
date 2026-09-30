@@ -138,3 +138,29 @@ texticon = {
 		fontsize = 91
 	}
 }
+
+# The Market panel's Climate and Reserve tabs (gui/market_panel.gui) carry
+# their icon at the front of the label, "@te_tab_global_warming! Climate", so
+# icon and name centre together in a six-tab strip. The art is the systems'
+# own (#586): the Global Warming overview's Significant thermometer and the
+# Strategic Reserve inventory's Storing crate. The goods icons' size and
+# offset, which are seen in game in running text.
+texticon = {
+	icon = te_tab_global_warming
+	iconsize = {
+		texture = "gfx/interface/icons/gw_icons/tier_significant.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}
+
+texticon = {
+	icon = te_tab_strategic_reserve
+	iconsize = {
+		texture = "gfx/interface/icons/st_res_icons/status_storing.dds"
+		size = { 25 25 }
+		offset = { 0 7 }
+		fontsize = 18
+	}
+}

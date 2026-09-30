@@ -232,8 +232,9 @@ types te_system_tab_widgets
 	}
 
 	### Vanilla's tab_buttons (gui/shared/tab_bars.gui), copied verbatim with a
-	### sixth slot (sixth_button* blocks) before the end divider, for a panel whose
-	### five slots vanilla already fills (diplomatic_overview.gui). Slot 6 has no
+	### sixth slot (sixth_button* blocks) before the end divider, for a strip that
+	### needs six: diplomatic_overview.gui (vanilla's five and the UN) and
+	### market_panel.gui (vanilla's four, Climate and Reserve). Slot 6 has no
 	### input_action: vanilla's input profile defines tab_1 to tab_5 only. Slot 5
 	### keeps vanilla's `block "fourth_button_icon"` slip on its selected icon;
 	### slot 6 uses its own name. Re-copy on a vanilla patch that changes

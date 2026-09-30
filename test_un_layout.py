@@ -550,6 +550,8 @@ UNLOCK_TRIGGERS = {   # the tab gates' is_valid (te_system_tab_sguis.txt), and t
     "ch_entry_unlocked": "cultural_hegemony_triggers.txt",
     "un_entry_unlocked": "un_membership_triggers.txt",
     "nuclear_program_entry_unlocked": "nuke_triggers.txt",
+    "gw_entry_unlocked": "global_warming_triggers.txt",
+    "st_res_entry_unlocked": "st_res_triggers.txt",
 }
 
 

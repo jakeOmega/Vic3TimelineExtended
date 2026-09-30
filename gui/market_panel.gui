@@ -62,7 +62,13 @@ types market_panel
 		
 		blockoverride "fixed_top"
 		{
-			tab_buttons = {
+			### TE: Climate and Reserve tabs (te_global_warming, te_strategic_reserve):
+			### vanilla's four tabs and the mod's two need six slots, one more than
+			### tab_buttons has, so the strip is te_tab_buttons_six
+			### (gui/te_system_tab_widgets.gui), vanilla's type with a sixth slot.
+			### Vanilla's four tabs' blockoverrides below are unchanged; this type
+			### name is the only vanilla line changed.
+			te_tab_buttons_six = {
 				blockoverride "first_button" {
 					text = "MARKET_PANEL_DETAILS_TAB_LABEL"
 				}
@@ -138,6 +144,76 @@ types market_panel
 				blockoverride "fourth_button_selected" {
 					text = "MARKET_PANEL_STATES_TAB_LABEL_BOLD"
 				}
+
+				### TE: Climate and Reserve tabs (te_global_warming, te_strategic_reserve) ###
+				# Two tabs showing journal entries' own panels (the content blocks at
+				# the end of scrollarea_content's container): Climate, the Global
+				# Warming entry, in slot 5, and Reserve, the Strategic Reserve entry,
+				# in slot 6. Each is on the strip once its unlock gate's is_shown
+				# holds (te_market_<system>_tab_unlock_sgui) and greyed until its
+				# entry runs (te_market_<system>_tab_sgui); the greyed tab's tooltip
+				# lists the unlock conditions with a tick or a cross.
+				# te_tab_buttons_six defaults both halves of an unused slot to
+				# `visible = no`, so each visibility block tests the gate as well as
+				# the tab. Gates: common/scripted_guis/te_system_tab_sguis.txt.
+				#
+				# Which market. This panel also opens other markets, and both tabs
+				# read the player's journal entries whichever it shows. Climate is on
+				# every market: the warming and the Top Emitters table are the
+				# world's. Reserve is on the player's own market only, the one its
+				# capital is in, led or joined (vanilla's test, from the tariff
+				# buttons in budget_panel.gui): the reserve buys and sells there, and
+				# every tab here describes the market named in the header. Its
+				# selected half leaves that test out, so a panel that opens another
+				# market with Reserve still selected marks the tab and shows its
+				# note (the content block), not an empty body under no tab.
+				#
+				# Each tab's icon is a text icon at the front of its label
+				# (gui/zzz_extra_goods_texticons.gui), not a *_button_icon block. At
+				# six tabs a slot is about 87 wide, so an icon anchored beside
+				# vanilla's centred label would cover its first letters; in the label
+				# the two centre together. (Slot 5's selected half would also draw
+				# fourth_button_icon, a slip te_tab_buttons_six keeps from vanilla.)
+				blockoverride "fifth_button" {
+					text = "te_market_tab_global_warming"
+				}
+				blockoverride "fifth_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_global_warming_tt', Concatenate( Localize( 'te_market_tab_global_warming_locked_tt' ), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				}
+				blockoverride "fifth_button_click" {
+					enabled = "[GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[InformationPanel.SelectTab('te_global_warming')]"
+				}
+				blockoverride "fifth_button_visibility" {
+					visible = "[And( InformationPanel.IsTabSelected('te_global_warming'), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				}
+				blockoverride "fifth_button_visibility_checked" {
+					visible = "[And( Not( InformationPanel.IsTabSelected('te_global_warming') ), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				}
+				blockoverride "fifth_button_selected" {
+					text = "te_market_tab_global_warming"
+				}
+
+				blockoverride "sixth_button" {
+					text = "te_market_tab_strategic_reserve"
+				}
+				blockoverride "sixth_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_strategic_reserve_tt', Concatenate( Localize( 'te_market_tab_strategic_reserve_locked_tt' ), GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				}
+				blockoverride "sixth_button_click" {
+					enabled = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[InformationPanel.SelectTab('te_strategic_reserve')]"
+				}
+				blockoverride "sixth_button_visibility" {
+					visible = "[And( InformationPanel.IsTabSelected('te_strategic_reserve'), GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				}
+				blockoverride "sixth_button_visibility_checked" {
+					visible = "[And( Not( InformationPanel.IsTabSelected('te_strategic_reserve') ), And( GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket ) ) )]"
+				}
+				blockoverride "sixth_button_selected" {
+					text = "te_market_tab_strategic_reserve"
+				}
+				### END TE ###
 			}
 			
 			flowcontainer = {
@@ -1355,6 +1431,181 @@ types market_panel
 						on_start = "[MarketPanel.GetMapModeList.SelectDefault]"
 					}
 				}
+
+				### TE: Climate tab (te_global_warming) ###
+				# The Global Warming journal entry's panels, composed by the same
+				# types the entry attaches (gui/journal_entry_widgets/
+				# global_warming_widget.gui), in the entry's order: the overview,
+				# the live sections (Mitigation Policies, Top Emitters), then
+				# History and How Global Warming Works. Then a link back to the
+				# entry, below everything else. Not drawn: the goal bar (the entry
+				# mounts the bars-on-top marker, and the overview draws the
+				# temperature bar), the status description (empty while the entry is
+				# active) and the sixteen scripted buttons (the AI's; the policy rows
+				# carry the same actions for a human). Nothing in these types reads
+				# the panel's Market: Top Emitters' rows set their own State
+				# datacontext, and its two list tooltips take a state root
+				# (gw_te_members_sgui, gw_top_emitters_sgui), so they read the same
+				# here as in the journal.
+				#
+				# Three layers, as in the Nuclear tab (panel_military.gui): the
+				# header sits outside the gate, so it shows whenever the tab is
+				# selected; the gate (te_market_global_warming_tab_sgui, the one the
+				# tab button uses) sits on a parent of the GetPlayerJournalEntry
+				# datacontext, never on the widget carrying it; the column is a fixed
+				# 520, the journal roots' width, centred in the panel's 540. The map
+				# mode goes back to the market's default, as for vanilla's tabs.
+				flowcontainer = {
+					name = "te_market_global_warming_tab"
+					visible = "[InformationPanel.IsTabSelected('te_global_warming')]"
+					using = default_fade_in_out
+					parentanchor = hcenter
+					direction = vertical
+					spacing = 10
+					margin_top = 10
+					margin_bottom = 15
+
+					state = {
+						name = _show
+						on_start = "[MarketPanel.GetMapModeList.SelectDefault]"
+					}
+
+					default_header = {
+						using = default_list_position
+						blockoverride "text" {
+							text = "je_global_warming"
+						}
+					}
+
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_global_warming')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_gw_overview_panel = {}
+							te_gw_status_sections = {}
+							te_gw_reference_sections = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_market_global_warming_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+				}
+				### END TE ###
+
+				### TE: Reserve tab (te_strategic_reserve) ###
+				# The Strategic Reserve journal entry's panels, composed by the same
+				# types the entry attaches (gui/journal_entry_widgets/
+				# strategic_reserve_widget.gui), in the entry's order: the overview,
+				# the inventory, then How the Strategic Reserve Works. Then a link
+				# back to the entry. Not drawn: the status description (the no-hub
+				# line, which prints only while the entry is inactive) and the two
+				# scripted buttons (the AI's; the inventory's Cycle Step Size and
+				# Reset Reserve Rates are the player's). The entry has no goal bar
+				# and no scripted bars.
+				#
+				# Shown on the player's own market only (the strip's comment above).
+				# On another market the gate stays shut and a note says where the
+				# reserve trades, with a button that opens the player's market on
+				# this tab (the sidebar's market, AccessFirstMarket, and vanilla's
+				# OpenMarketPanelTab, from states_panel.gui). The layers are the
+				# Climate tab's.
+				flowcontainer = {
+					name = "te_market_strategic_reserve_tab"
+					visible = "[InformationPanel.IsTabSelected('te_strategic_reserve')]"
+					using = default_fade_in_out
+					parentanchor = hcenter
+					direction = vertical
+					spacing = 10
+					margin_top = 10
+					margin_bottom = 15
+
+					state = {
+						name = _show
+						on_start = "[MarketPanel.GetMapModeList.SelectDefault]"
+					}
+
+					default_header = {
+						using = default_list_position
+						blockoverride "text" {
+							text = "je_strategic_reserve"
+						}
+					}
+
+					flowcontainer = {
+						visible = "[Not( MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket ) )]"
+						parentanchor = hcenter
+						direction = vertical
+						spacing = 10
+						margin_top = 5
+
+						textbox = {
+							text = "te_market_strategic_reserve_elsewhere"
+							parentanchor = hcenter
+							autoresize = yes
+							multiline = yes
+							minimumsize = { 480 -1 }
+							maximumsize = { 480 -1 }
+							align = hcenter|nobaseline
+						}
+
+						button = {
+							using = default_button
+							parentanchor = hcenter
+							size = { 480 32 }
+							text = "te_market_strategic_reserve_open_own"
+							tooltip = "te_market_strategic_reserve_open_own_tt"
+							onclick = "[InformationPanelBar.OpenMarketPanelTab(AccessPlayer.AccessFirstMarket.Self, 'te_strategic_reserve')]"
+						}
+					}
+
+					flowcontainer = {
+						visible = "[And( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket ) )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_st_res_overview_panel = {}
+							te_st_res_status_sections = {}
+							te_st_res_reference_sections = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_market_strategic_reserve_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+				}
+				### END TE ###
 			}
 		}
 

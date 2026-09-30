@@ -3,6 +3,7 @@ warming ladder's one definition, and the icons (#586's art, recorded in
 docs/systems/global_warming_gui_icons.md)
 (docs/guides/gui_style_guide.md; test_un_layout.py is the model)."""
 import glob
+import json
 import os
 import re
 import unittest
@@ -659,6 +660,263 @@ class IconsDocTest(unittest.TestCase):
         listed |= {GW_ICONS + n for n in re.findall(r"`([a-z_]+\.dds)`", doc)}
         self.assertTrue(textures)
         self.assertEqual(textures - listed, set(), "textures missing from the icons doc")
+
+
+
+MARKET = os.path.join(REPO, "gui", "market_panel.gui")
+TAB_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")
+TAB_TEXTICONS = os.path.join(REPO, "gui", "zzz_extra_goods_texticons.gui")
+TAB_WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
+BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "global_warming_buttons.txt")
+VANILLA_LOC = os.path.join(REPO, "vanilla_parsed", "localization_english.json")
+GW_TAB_GATE = "GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+GW_TAB_UNLOCK = "GetScriptedGui('te_market_global_warming_tab_unlock_sgui')"
+OWN_MARKET = "MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket )"
+BUTTONS_TAG = "### TE: Climate and Reserve tabs (te_global_warming, te_strategic_reserve) ###"
+# Vanilla's four Market tabs, as market_panel.gui has them: slot, tab name, label,
+# tooltip (vanilla gives Members none) and the selected half's label.
+VANILLA_TABS = [("first", "default", "MARKET_PANEL_DETAILS_TAB_LABEL", "MARKET_PANEL_DETAILS_TAB_LABEL",
+                 "MARKET_PANEL_DETAILS_TAB_LABEL_BOLD"),
+                ("second", "world_market_trade", "MARKET_PANEL_WORLD_MARKET_TRADE", "MARKET_PANEL_WORLD_MARKET_TRADE",
+                 "MARKET_PANEL_WORLD_MARKET_TRADE"),
+                ("third", "food_security", "MARKET_PANEL_FOOD_SECURITY_TAB_LABEL",
+                 "MARKET_PANEL_FOOD_SECURITY_TAB_LABEL", "MARKET_PANEL_FOOD_SECURITY_TAB_LABEL"),
+                ("fourth", "states", "MARKET_PANEL_STATES_TAB_LABEL", None, "MARKET_PANEL_STATES_TAB_LABEL_BOLD")]
+# The width budget (style guide rule 3) at the tab font, and one slot of six: the
+# panel's 540 less the strip's 3 + 3 margin and its two 5-wide dividers.
+TAB_UNITS, TAB_MARGIN = 10.0, 1.1
+SIX_SLOT = (540 - 6 - 10) / 6
+TEXT_ICON = "XX"   # a @texticon! draws about two characters wide (test_strategic_reserve_layout.py)
+
+
+def _te_blocks(text, tag):
+    """Each block of market_panel.gui opened by `tag`, up to its END TE line."""
+    out = []
+    start = text.find(tag)
+    while start != -1:
+        end = text.index("### END TE ###", start)
+        out.append(text[start:end])
+        start = text.find(tag, end)
+    return out
+
+
+def _strip(text):
+    """The body of the Market panel's tab strip."""
+    m = re.search(r"(?m)^\t\t\tte_tab_buttons_six = \{", text)
+    assert m, "no te_tab_buttons_six strip"
+    return _block_from(text, m.end())
+
+
+def _overrides(body):
+    """{blockoverride name: its body, whitespace collapsed}, for one-level blocks."""
+    return {m.group(1): " ".join(m.group(2).split())
+            for m in re.finditer(r'blockoverride "(\w+)" \{([^{}]*)\}', body)}
+
+
+def _label_units(text):
+    """A label's width in GUI units: text icons as two characters, formatting dropped."""
+    text = re.sub(r"@\w+!", TEXT_ICON, text)
+    text = re.sub(r"#\w+ |#!", "", text)
+    return len(text) * TAB_UNITS * TAB_MARGIN
+
+
+def _vanilla_loc():
+    with open(VANILLA_LOC, encoding="utf-8") as f:
+        return dict(json.load(f))
+
+
+def _txt_block(text, name):
+    return _top_level(text, name)
+
+
+class MarketTabTest(unittest.TestCase):
+    """The Market panel's Climate tab (style guide rule 9; feasibility §5.1): the
+    journal entry's own composers under GetPlayerJournalEntry, gated, greyed
+    until the entry runs, and ending with Open Journal Entry. Also the strip it
+    sits on: te_tab_buttons_six, with vanilla's four tabs unchanged."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.market = _read(MARKET)
+        cls.buttons = _te_blocks(cls.market, BUTTONS_TAG)
+        cls.content = _te_blocks(cls.market, "### TE: Climate tab (te_global_warming) ###")
+
+    def _gw_buttons(self):
+        return {k: v for k, v in _overrides(self.buttons[0]).items() if k.startswith("fifth_button")}
+
+    def test_one_button_block_and_one_content_block(self):
+        self.assertEqual(len(self.buttons), 1)
+        self.assertEqual(len(self.content), 1)
+        self.assertIn('name = "te_market_global_warming_tab"', self.content[0])
+        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_global_warming')]\"", self.content[0])
+
+    def test_the_strip_has_six_slots(self):
+        fixed_top = self.market[self.market.index('blockoverride "fixed_top"'):
+                                self.market.index('blockoverride "scrollarea_content"')]
+        self.assertNotRegex(fixed_top, r"(?<!\w)tab_buttons = \{")
+        self.assertIn("te_tab_buttons_six = {", fixed_top)
+        self.assertIn("type te_tab_buttons_six = hbox", _read(TAB_WIDGETS))
+        # The type change is marked as the mod's, as every changed vanilla line is.
+        comment = fixed_top[:fixed_top.index("te_tab_buttons_six = {")]
+        self.assertIn("### TE: Climate and Reserve tabs", comment)
+
+    def test_vanillas_four_tabs_are_unchanged(self):
+        expected = {}
+        for slot, tab, label, tooltip, selected in VANILLA_TABS:
+            expected[f"{slot}_button"] = f'text = "{label}"'
+            if tooltip:
+                expected[f"{slot}_button_tooltip"] = f'tooltip = "{tooltip}"'
+            expected[f"{slot}_button_click"] = f"onclick = \"[InformationPanel.SelectTab('{tab}')]\""
+            expected[f"{slot}_button_visibility"] = f"visible = \"[InformationPanel.IsTabSelected('{tab}')]\""
+            expected[f"{slot}_button_visibility_checked"] = (
+                f"visible = \"[Not( InformationPanel.IsTabSelected('{tab}') )]\"")
+            expected[f"{slot}_button_selected"] = f'text = "{selected}"'
+        expected["first_button_name"] = 'name = "tutorial_highlight_market_details"'
+        found = {k: v for k, v in _overrides(_strip(self.market)).items()
+                 if k.split("_")[0] in ("first", "second", "third", "fourth")}
+        self.assertEqual(found, expected)
+        # ...and they come before the mod's two, which are all in the marked block.
+        strip = _strip(self.market)
+        self.assertLess(strip.index('blockoverride "fourth_button_selected"'), strip.index(BUTTONS_TAG))
+        for slot in ("fifth", "sixth"):
+            self.assertEqual(strip.count(f'blockoverride "{slot}_button'), self.buttons[0].count(f'blockoverride "{slot}_button'))
+
+    def test_the_climate_tab_is_slot_five(self):
+        halves = self._gw_buttons()
+        self.assertEqual(set(halves), {"fifth_button", "fifth_button_tooltip", "fifth_button_click",
+                                       "fifth_button_visibility", "fifth_button_visibility_checked",
+                                       "fifth_button_selected"})
+        self.assertEqual(halves["fifth_button"], 'text = "te_market_tab_global_warming"')
+        self.assertEqual(halves["fifth_button_selected"], 'text = "te_market_tab_global_warming"')
+
+    def test_the_tab_composes_the_journal_roots_types_in_order(self):
+        body = self.content[0]
+        found = re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
+        self.assertEqual(found, [wrapped for _, wrapped in ROOTS.values()])
+        # The link back to the entry comes after every section.
+        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_gw_reference_sections"))
+        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+
+    def test_the_gate_sits_above_the_journal_entry_datacontext(self):
+        body = self.content[0]
+        dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_global_warming')]\"")
+        self.assertLess(body.index(f'visible = "[{GW_TAB_GATE}]"'), dc)
+        # The header sits outside the gate.
+        self.assertLess(body.index('text = "je_global_warming"'), body.index(f'visible = "[{GW_TAB_GATE}]"'))
+        # Never on the widget that carries the datacontext itself.
+        opener = body.rindex("flowcontainer = {", 0, dc)
+        self.assertNotIn("visible", body[opener:dc])
+
+    def test_the_column_is_as_wide_as_the_journal_roots(self):
+        body = self.content[0]
+        dc = body.index("GetPlayerJournalEntry('je_global_warming')")
+        head = body[dc:body.index("te_gw_overview_panel", dc)]
+        self.assertIn("minimumsize = { 520 -1 }", head)
+        self.assertIn("parentanchor = hcenter", head)
+
+    def test_the_button_is_greyed_until_the_entry_runs(self):
+        halves = self._gw_buttons()
+        self.assertEqual(halves["fifth_button_click"],
+                         f'enabled = "[{GW_TAB_GATE}]" onclick = "[InformationPanel.SelectTab(\'te_global_warming\')]"')
+        self.assertIn(f"{GW_TAB_UNLOCK}.IsValidTooltip(", halves["fifth_button_tooltip"])
+        self.assertIn("'te_market_tab_global_warming_tt'", halves["fifth_button_tooltip"])
+        self.assertIn("'te_market_tab_global_warming_locked_tt'", halves["fifth_button_tooltip"])
+        for half in ("fifth_button_visibility", "fifth_button_visibility_checked"):
+            self.assertIn("IsTabSelected('te_global_warming')", halves[half], half)
+            self.assertIn(f"{GW_TAB_UNLOCK}.IsShown(", halves[half], half)
+        for key in ("te_market_tab_global_warming", "te_market_tab_global_warming_tt",
+                    "te_market_tab_global_warming_locked_tt", "te_market_global_warming_open_journal_tt",
+                    "gw_entry_unlock_tt"):
+            self.assertTrue(_loc_value(key), key)
+
+    def test_climate_shows_on_every_market(self):
+        """The warming and the Top Emitters table are the world's, so the tab
+        does not ask which market the panel shows (the Reserve tab does)."""
+        self.assertNotIn("IsSame", " ".join(self._gw_buttons().values()))
+        self.assertNotIn("IsSame", self.content[0])
+
+    def test_the_tab_icon_is_the_thermometer_in_the_label(self):
+        label = _loc_value("te_market_tab_global_warming")
+        self.assertTrue(label.startswith("@te_tab_global_warming! "), label)
+        m = re.search(r"icon = te_tab_global_warming\s*iconsize = \{[^}]*texture = \"([^\"]+)\"", _read(TAB_TEXTICONS))
+        self.assertTrue(m)
+        self.assertEqual(m.group(1), f"{GW_ICONS}tier_significant.dds")
+        # Not a *_button_icon block: beside a centred label in a six-tab slot it would cover the name.
+        self.assertEqual([k for k in _overrides(self.buttons[0]) if k.endswith("_icon")], [])
+
+    def test_the_label_fits_beside_vanillas(self):
+        """The word alone fits one of six slots by the house budget; with its
+        icon, the label is no wider than vanilla's widest on the same strip."""
+        label = _loc_value("te_market_tab_global_warming")
+        self.assertLessEqual(_label_units(re.sub(r"@\w+! ", "", label)), SIX_SLOT)
+        vanilla = _vanilla_loc()
+        widest = max(_label_units(vanilla[lab]) for _, _, lab, _, _ in VANILLA_TABS)
+        self.assertLessEqual(_label_units(label), widest)
+
+    def test_the_gates_read_the_rule_and_the_entry(self):
+        sguis = _read(TAB_SGUIS)
+        gate = _txt_block(sguis, "te_market_global_warming_tab_sgui")
+        self.assertIn("has_game_rule = global_warming_enabled", gate)
+        self.assertIn("has_journal_entry = je_global_warming", gate)
+        unlock = _txt_block(sguis, "te_market_global_warming_tab_unlock_sgui")
+        self.assertIn("is_shown = { has_game_rule = global_warming_enabled }", unlock)
+        self.assertIn("is_valid = { gw_entry_unlocked = yes }", unlock)
+        # The tab is on the strip exactly when the greyed entry is in the journal.
+        self.assertRegex(_read(JE), r"is_shown_when_inactive = \{\s*has_game_rule = global_warming_enabled\s*\}")
+
+    def test_the_checklist_is_the_entrys_own_test_in_one_line(self):
+        trig = _top_level(_read(TRIGGERS), "gw_entry_unlocked")
+        m = re.search(r"custom_tooltip = \{\s*text = gw_entry_unlock_tt\s*(.*?)\s*\}", trig, re.S)
+        self.assertTrue(m, trig)
+        possible = _top_level(_read(JE), "je_global_warming")
+        possible = _block_from(possible, possible.index("possible = {") + len("possible = {"))
+        self.assertEqual(" ".join(m.group(1).split()), " ".join(possible.split()))
+        self.assertIn("0.1", _loc_value("gw_entry_unlock_tt"))
+
+    def test_what_the_journal_draws_besides_the_roots_needs_nothing_in_the_tab(self):
+        """§5.1: the goal bar, scripted bars, status text and human buttons."""
+        je = _read(JE)
+        # The overview draws the temperature bar; the marker hides the journal's own.
+        self.assertIn('container = "custom_widget_container_7"', je)
+        self.assertNotIn("scripted_progress_bar", je)
+        # The status text is empty while the entry is active.
+        self.assertEqual(_loc_value("je_global_warming_status_none"), "")
+        # Every scripted button is the AI's.
+        names = re.findall(r"(?m)^\tscripted_button = (\w+)", je)
+        self.assertEqual(len(names), 16)
+        buttons = _read(BUTTONS)
+        for name in names:
+            self.assertRegex(_top_level(buttons, name), r"visible = \{\s*is_ai = yes", name)
+
+    def test_top_emitters_needs_nothing_from_the_panel(self):
+        """#590's section works in the tab as in the journal: it is composed
+        there, its rows set their own State datacontext, its two list tooltips
+        take a state root, and no type reads the panel's ambient Market."""
+        self.assertIn("te_gw_sec_emitters = {}", _type_body(_read(GUI), "te_gw_status_sections"))
+        emitters = _type_body(_read(GUI), "te_gw_sec_emitters")
+        self.assertIn("datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_1').GetState]\"", emitters)
+        self.assertIn("GetScriptedGui('gw_top_emitters_sgui').ExecuteTooltip( GuiScope.SetRoot( "
+                      "JournalEntry.GetCountry.GetCapital.MakeScope ).End )", emitters)
+        self.assertIn("GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )",
+                      _loc_value("gw_te_row_tt"))
+        sguis = _read(SGUIS)
+        for name in ("gw_te_members_sgui", "gw_top_emitters_sgui"):
+            self.assertIn("scope = state", _top_level(sguis, name), name)
+        ambient = re.findall(r"(?<![\w.'])(Market|Country|GetPlayer|GetMetaPlayer)\.\w+", _read(GUI))
+        self.assertEqual(ambient, [])
+
+    def test_one_visible_per_widget(self):
+        for i, block in enumerate(self.buttons + self.content):
+            stack = [0]
+            for line in block.splitlines():
+                s = line.strip()
+                if s.startswith("visible ="):
+                    stack[-1] += 1
+                    self.assertLessEqual(stack[-1], 1, f"block {i}: two visibles near {s[:60]}")
+                stack.extend([0] * line.count("{"))
+                for _ in range(line.count("}")):
+                    if len(stack) > 1:
+                        stack.pop()
 
 
 if __name__ == "__main__":
