@@ -2,14 +2,16 @@
 # Strategic Reserve Journal Entry
 # ============================================================================
 # Activates automatically when a country builds a Strategic Reserve Hub.
-# All per-good presentation and control lives in the inventory widget
-# (gui/journal_entry_widgets/strategic_reserve_widget.gui): one row per
-# unlocked good with its stock, capacity, fill bar, configured signed rate,
-# actual net weekly movement, status label and decrease/stop/increase controls.
-# Positive rates store goods, negative rates withdraw them. This JE keeps only
-# the reserve-wide summary text, the two shared buttons (step size, reset all)
-# and the lifecycle entry points into the SR wrapper effects; persistent
-# reserve state lives on country vars.
+# All presentation and per-good control lives in the panel
+# (gui/journal_entry_widgets/strategic_reserve_widget.gui): an overview of the
+# hub, its flow cap and the week's sales income; the inventory table, one row
+# per unlocked good with its fill bar, status, policy and decrease/stop/increase
+# controls, the step size and reset-all buttons, and each good's fill history;
+# and How the Strategic Reserve Works. Positive rates store goods, negative
+# rates withdraw them. This JE keeps the no-hub status line, the two shared
+# scripted buttons (now the AI's only; the panel's buttons are the player's),
+# the weekly pulse, the monthly history sample and the lifecycle entry points
+# into the SR wrapper effects; persistent reserve state lives on country vars.
 # ============================================================================
 
 je_strategic_reserve = {
@@ -42,53 +44,47 @@ je_strategic_reserve = {
 		st_res_je_invalid_effect = yes
 	}
 
-	# Reserve inventory table: one row per unlocked good with its stock, fill
-	# bar, configured rate, actual net weekly movement, status and controls.
-	# container_2 puts it directly under the summary status text and above the
-	# two shared buttons below.
+	# The panel, in three parts (gui/journal_entry_widgets/strategic_reserve_widget.gui):
+	# the overview at the top, the inventory table (with the step size and
+	# reset-all buttons), and How the Strategic Reserve Works at the foot.
+	widget = {
+		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
+		name = "widget_je_strategic_reserve_overview"
+		container = "custom_widget_container_1"
+	}
 	widget = {
 		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
 		name = "widget_je_strategic_reserve_inventory"
 		container = "custom_widget_container_2"
 	}
+	widget = {
+		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
+		name = "widget_je_strategic_reserve_reference"
+		container = "custom_widget_container_3"
+	}
 
-	# Per-good fill bars and the fourteen per-good rate buttons now live inside
-	# the inventory widget above. Only the two shared, reserve-wide actions stay
-	# as vanilla-rendered journal-entry buttons.
+	# The two reserve-wide actions. The panel draws them as its own buttons
+	# beside the adjustment step (st_res_cycle_step_sgui, st_res_reset_rates_sgui,
+	# the same effects), so these carry `is_ai = yes` in their `visible` and the
+	# vanilla grid is empty for a player. They stay declared because an entry
+	# binds its scripted buttons when it activates.
 	scripted_button = st_res_cycle_step_size_button
 	scripted_button = st_res_reset_rates_button
 
-	# Summary only. The per-good stock / rate / status detail moved into the
-	# inventory widget; status_desc also renders in the journal list, where
-	# seven multi-line good blocks were pure noise.
+	# Only the no-hub line. The entry is shown from Logistics
+	# (is_shown_when_inactive), before a hub exists, when the panel draws
+	# nothing, so this line is what says to build one. While the entry runs, the overview's hub
+	# cell says whether the hub is operating or understaffed, so the status
+	# text is empty then (owner, 2026-09-29: status text that repeats the
+	# overview is removed).
 	status_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = je_strategic_reserve_status_no_hub
-				trigger = {
-					NOT = {
-						any_scope_building = { is_building_type = building_strategic_reserve_hub }
-					}
+		triggered_desc = {
+			desc = je_strategic_reserve_status_no_hub
+			trigger = {
+				NOT = {
+					any_scope_building = { is_building_type = building_strategic_reserve_hub }
 				}
 			}
-			triggered_desc = {
-				desc = je_strategic_reserve_status_deactivated
-				trigger = {
-					var:st_res_hub_workforce_cached <= 0.99
-				}
-			}
-			triggered_desc = {
-				desc = je_strategic_reserve_status_active
-				trigger = { always = yes }
-			}
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_profit_line
-			trigger = { always = yes }
-		}
-		triggered_desc = {
-			desc = je_strategic_reserve_rate_line
-			trigger = { always = yes }
 		}
 	}
 
@@ -96,6 +92,15 @@ je_strategic_reserve = {
 	on_weekly_pulse = {
 		effect = {
 			st_res_je_weekly_pulse_effect = yes
+		}
+	}
+
+	# Each unlocked good's fill, once a month, for the history chart in its
+	# expanded row. Display only: the shared history store
+	# (common/scripted_effects/te_history_strategic_reserve_effects.txt).
+	on_monthly_pulse = {
+		effect = {
+			te_history_record_strategic_reserve_samples = yes
 		}
 	}
 

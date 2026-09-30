@@ -1,0 +1,73 @@
+﻿# ============================================================================
+# STRATEGIC RESERVE — HISTORY SAMPLES
+#
+# The whole per-system surface in common/ for the reserve's charts: one
+# wrapper, called once from je_strategic_reserve's on_monthly_pulse. It
+# follows te_history_colonial_effects.txt; the shared store, pruning, month
+# index and eligibility rule live in the te_history_* infrastructure files and
+# are not touched here.
+#
+# Eligibility is te_history_record_sample's own te_history_country_is_tracked
+# check (player or major power), deliberately not widened. The gates below are
+# only "is the reserve running" and "is this good in the reserve": a good the
+# country has not unlocked has no row, so recording it would store a chart no
+# one can open.
+#
+# SERIES, one per good: st_res_<good> — the stockpile's share of capacity,
+# 0-100 (st_res_<good>_fill_pct, the value the row's fill bar shows). A share
+# rather than units because the chart's axis is a fixed 0-100, the same scale
+# as the bar above it; the price is that building Silos lowers the share of an
+# unchanged stock, which the chart's legend says.
+#
+# COST. The store keeps one container per country and month for every series,
+# so the reserve adds variables, not containers: one per unlocked good per
+# month, eight at most, on the 240 monthly containers a tracked country
+# already keeps. Per month: eight `te_history_record_sample` calls, each a
+# handful of variable writes.
+#
+# NO MARKERS. Marker tooltips branch inside the shared
+# common/scripted_guis/te_history_scripted_gui.txt; the reserve's charts
+# override "marker_pips" to nothing so other systems' pips do not show on them.
+#
+# Adding a good: one more block below (.claude/skills/add-strategic-reserve-good).
+#
+# Scope: country
+# ============================================================================
+
+te_history_record_strategic_reserve_samples = {
+	if = {
+		limit = { has_journal_entry = je_strategic_reserve }
+		if = {
+			limit = { st_res_grain_unlocked_trigger = yes }
+			te_history_record_sample = { METRIC = st_res_grain VALUE = st_res_grain_fill_pct }
+		}
+		if = {
+			limit = { st_res_ammunition_unlocked_trigger = yes }
+			te_history_record_sample = { METRIC = st_res_ammunition VALUE = st_res_ammunition_fill_pct }
+		}
+		if = {
+			limit = { st_res_oil_unlocked_trigger = yes }
+			te_history_record_sample = { METRIC = st_res_oil VALUE = st_res_oil_fill_pct }
+		}
+		if = {
+			limit = { st_res_small_arms_unlocked_trigger = yes }
+			te_history_record_sample = { METRIC = st_res_small_arms VALUE = st_res_small_arms_fill_pct }
+		}
+		if = {
+			limit = { st_res_artillery_unlocked_trigger = yes }
+			te_history_record_sample = { METRIC = st_res_artillery VALUE = st_res_artillery_fill_pct }
+		}
+		if = {
+			limit = { st_res_aeroplanes_unlocked_trigger = yes }
+			te_history_record_sample = { METRIC = st_res_aeroplanes VALUE = st_res_aeroplanes_fill_pct }
+		}
+		if = {
+			limit = { st_res_tanks_unlocked_trigger = yes }
+			te_history_record_sample = { METRIC = st_res_tanks VALUE = st_res_tanks_fill_pct }
+		}
+		if = {
+			limit = { st_res_fertilizer_unlocked_trigger = yes }
+			te_history_record_sample = { METRIC = st_res_fertilizer VALUE = st_res_fertilizer_fill_pct }
+		}
+	}
+}
