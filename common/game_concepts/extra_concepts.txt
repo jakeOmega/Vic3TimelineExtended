@@ -194,6 +194,9 @@ concept_legislative_override_capacity = {}
 # Strategic Reserve
 concept_st_res_rate_setting = {}
 concept_st_res_active_rate = {}
+concept_st_res_flow_cap = {}
+concept_st_res_adjustment_step = {}
+concept_st_res_policy = {}
 
 # Other
 concept_religious_revival = {}
