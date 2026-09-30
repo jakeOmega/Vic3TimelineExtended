@@ -1087,11 +1087,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "padlock": {"subject": "a heavy closed dark steel padlock with a thick shackle", "seed": 2},
         # Kraft brown, not white: a pale tag is lost in the cut-out.
         "tag": {"subject": "a blank brown kraft-paper price tag with a punched round hole and a loop of red string",
-                "seed": None},
+                "seed": 3},
         "flame": {"subject": "a single bold bright orange and red flame with a yellow core, flat stylized shape",
-                  "seed": None},
-        "foreign_coin": {"subject": "a large plain silver coin with a square hole in its centre", "seed": None},
-        "seal": {"subject": "a round red wax seal stamped with a small star", "seed": None},
+                  "seed": 2},
+        "foreign_coin": {"subject": "a large plain silver coin with a square hole in its centre", "seed": 3},
+        "seal": {"subject": "a round red wax seal stamped with a small star", "seed": 0},
     },
     "banking": {
         "price_hyper": {"subject": "a wooden wheelbarrow heaped high with bundles of plain green paper banknotes "
