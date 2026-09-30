@@ -696,6 +696,70 @@ class DisplayValuesTest(unittest.TestCase):
                 self.assertIsNone(hit, f"{path} reads {hit and hit.group(0)}")
 
 
+class PaceBreakdownTest(unittest.TestCase):
+    """Hovering a headline's "+N/mo" shows where the pace comes from.
+
+    The pace is one number for the whole country (sr_progress: the added
+    progress modifier times one plus the multiplier, floored at 0.5), so one
+    tooltip serves all eight milestone overviews, through the shared composer.
+    The breakdown is the engine's own (GetValueWithBreakdownFor), which lists
+    every modifier that feeds the two figures; nothing is re-derived by hand.
+    """
+
+    ADD = "country_space_race_progress_add"
+    MULT = "country_space_race_progress_mult"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+
+    def test_the_headline_cell_carries_the_breakdown_tooltip(self):
+        composer = _type_body(self.gui, "te_sr_overview_milestone")
+        def override(name):
+            start = composer.index(f'blockoverride "{name}" {{')
+            brace = composer.index("{", start)
+            return composer[brace + 1:_close(composer, brace)]
+
+        cell = override("bar_text")
+        self.assertIn('tooltip = "je_space_race_widget_pace_tt"', cell)
+        self.assertIn('block "sr_progress_text" {}', cell)
+        # the rest of the row keeps the reward preview: the tooltip is set on
+        # the headline's own textbox, not on the row
+        row = override("row_tooltip")
+        self.assertNotIn("pace_tt", row)
+        self.assertIn('block "sr_progress_tooltip" {}', row)
+
+    def test_every_milestone_headline_marks_its_rate_as_hoverable(self):
+        for m in CONTROLLED:
+            with self.subTest(milestone=m):
+                text = _loc(f"je_space_race_widget_progress_{m}")
+                self.assertRegex(
+                    text, rf"\(#tooltippable \+\[JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('sr_pace_rate_{m}'\)\|1\]/mo#!\)$")
+
+    def test_the_tooltip_breaks_down_both_figures_and_states_the_pace(self):
+        tip = _loc("je_space_race_widget_pace_tt")
+        for key in (self.ADD, self.MULT):
+            self.assertIn(
+                f"[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('{key}')]", tip)
+        self.assertLess(tip.index(self.ADD), tip.index(self.MULT))
+        self.assertIn("ScriptValue('sr_progress')", tip)
+
+    def test_both_keys_are_registered_modifier_types(self):
+        # GetValueWithBreakdownFor works on modifier keys and nothing else
+        types = _read(os.path.join(REPO, "common", "modifier_type_definitions", "space_race_modifier_types.txt"))
+        for key in (self.ADD, self.MULT):
+            self.assertRegex(types, rf"(?m)^{key} = \{{")
+
+    def test_the_pace_shown_is_the_pace_the_pulse_applies(self):
+        values = _read(os.path.join(REPO, "common", "script_values", "space_race_values.txt"))
+        progress = _block(values, "sr_progress")
+        self.assertIn(f"modifier:{self.ADD}", progress)
+        self.assertIn(f"modifier:{self.MULT}", progress)
+        self.assertIn("min = 0.5", progress)
+        for m in CONTROLLED:
+            self.assertEqual(_block(values, f"sr_pace_rate_{m}").split()[:3], ["value", "=", "sr_progress"])
+
+
 class LocTest(unittest.TestCase):
     def test_no_panel_line_starts_or_ends_with_a_break(self):
         for path in glob.glob(os.path.join(LOC_DIR, "*.yml")):

@@ -2926,3 +2926,51 @@ un_chamber_deleg_pledge_against_sgui = {
 		}
 	}
 }
+
+# ---- The bulk buttons (Lobby Top Members For / Against) -------------------------------
+# One press starts a campaign on each listed member that qualifies, from the top
+# row down, until our influence is spent (un_deleg_bulk_lobby). They take no
+# `op`: they read all 24 rows themselves. Two separate sguis rather than one
+# with an op, as the row buttons' for / against pair.
+
+un_chamber_deleg_bulk_for_sgui = {
+	scope = country
+
+	is_shown = {
+		has_global_variable = un_founded
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		un_deleg_bulk_can = { DIR = for }
+	}
+
+	effect = {
+		custom_tooltip = un_deleg_bulk_for_effect_tt
+		hidden_effect = {
+			un_deleg_bulk_lobby = { DIR = for }
+		}
+	}
+}
+
+un_chamber_deleg_bulk_against_sgui = {
+	scope = country
+
+	is_shown = {
+		has_global_variable = un_founded
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		un_deleg_bulk_can = { DIR = against }
+	}
+
+	effect = {
+		custom_tooltip = un_deleg_bulk_against_effect_tt
+		hidden_effect = {
+			un_deleg_bulk_lobby = { DIR = against }
+		}
+	}
+}

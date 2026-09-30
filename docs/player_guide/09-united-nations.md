@@ -426,6 +426,13 @@ you can stop it at any time, which frees the influence and loses what it had
 gained. Only AI members can be lobbied, never the resolution's target, and you
 need a vote yourself.
 
+Lobby Top Members For and Lobby Top Members Against, above the Delegations rows,
+start campaigns in bulk. One press puts a campaign on each listed member the
+Assembly doesn't yet read as leaning your way, from the top of the list down,
+until your influence runs out. Members you already lobby are skipped. The
+tooltip says how many campaigns your influence covers. A button is greyed if you
+have no vote, less than 100 influence, or no member on the list left to lobby.
+
 Seek a Vote Commitment: For and Seek a Vote Commitment: Against ask a member to
 pledge its vote. If it accepts, you owe it an obligation and its lean moves 100
 points your way. A member pledges once per resolution, and the first pledge it

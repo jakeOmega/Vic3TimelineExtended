@@ -437,3 +437,97 @@ un_lobby_holds_pledge_on_active = {
 	has_variable = un_pledge_res
 	var:un_pledge_res ?= global_var:un_active_resolution
 }
+
+# ---- The Delegations' bulk buttons (Lobby Top Members For / Against) -------------------
+# Each starts a campaign on the listed members from the top of the list down,
+# for as long as the influence lasts (un_deleg_bulk_lobby, un_lobby_effects.txt).
+# Members the Assembly already reads as leaning our way are left alone: the
+# influence goes to the members still to be won.
+
+# A listed member the Assembly does not yet read as leaning FOR (shown lean
+# under the "leaning for" line). The shown lean, never the true one, so the
+# button follows exactly what the row reads.
+# Scope: a member
+un_deleg_band_open_for = {
+	un_deleg_listed = yes
+	var:un_lean_shown < un_lean_band_lean
+}
+
+# A listed member the Assembly does not yet read as leaning AGAINST.
+# Scope: a member
+un_deleg_band_open_against = {
+	un_deleg_listed = yes
+	var:un_lean_shown > un_lean_band_lean_against
+}
+
+# Whether the bulk button $DIR$ would start a campaign on the member in row $N$:
+# the member can be lobbied, is not already leaning our way, we are not lobbying
+# it already, and the engine lets us send the pact. Affordability is not read
+# here: the caller spends from un_deleg_bulk_budget (see its note), and the
+# button's own is_valid asks for one campaign's worth.
+# `prev` below is deliberate, as in un_deleg_row_can_lobby.
+# Parameters: $N$ = 0-23, $DIR$ = for | against
+# Scope: the viewer (ROOT)
+un_deleg_row_bulk_ok = {
+	global_var:un_active_resolution ?= {
+		has_variable = un_deleg_row_$N$
+		var:un_deleg_row_$N$ ?= {
+			un_lobby_member_lobbyable = yes
+			un_deleg_band_open_$DIR$ = yes
+			NOT = { has_diplomatic_pact = { who = ROOT type = un_lobby_for_action } }
+			NOT = { has_diplomatic_pact = { who = ROOT type = un_lobby_against_action } }
+		}
+	}
+	global_var:un_active_resolution ?= {
+		var:un_deleg_row_$N$ ?= {
+			ROOT = {
+				can_send_diplomatic_action = { target = prev type = un_lobby_$DIR$_action } # REVIEWED 2026-09-30: prev is the row's member (var:un_deleg_row_$N$), deliberately
+			}
+		}
+	}
+}
+
+# The bulk button $DIR$'s is_valid: we hold a vote, we can afford one campaign,
+# and some row qualifies. The cheap clauses come first, and the row search
+# stops at the first row that qualifies.
+# Parameters: $DIR$ = for | against
+# Scope: the viewer (ROOT)
+un_deleg_bulk_can = {
+	custom_tooltip = {
+		text = un_deleg_we_vote_tt
+		un_lobby_campaign_selectable = yes
+	}
+	custom_tooltip = {
+		text = un_deleg_can_afford_tt
+		influence >= un_lobby_campaign_cost
+	}
+	custom_tooltip = {
+		text = un_deleg_bulk_target_$DIR$_tt
+		OR = {
+			un_deleg_row_bulk_ok = { N = 0 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 1 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 2 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 3 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 4 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 5 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 6 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 7 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 8 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 9 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 10 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 11 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 12 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 13 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 14 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 15 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 16 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 17 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 18 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 19 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 20 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 21 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 22 DIR = $DIR$ }
+			un_deleg_row_bulk_ok = { N = 23 DIR = $DIR$ }
+		}
+	}
+}
