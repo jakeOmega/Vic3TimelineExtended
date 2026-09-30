@@ -81,11 +81,14 @@ but neither can start before the Moon Landing.
 ### The space milestone panel
 
 Each running milestone has a panel in its journal entry. It shows progress
-against the goal, the pace per month, the current setback risk, the setbacks so
-far and a rough estimate of the months left. Hover the progress line to see the
+against the goal, the pace per month, the current setback risk, whether the
+milestone's first is still open, the setbacks so far and a rough estimate of
+the months left. Hover the progress line to see the
 reward for finishing first and for finishing later. The controls are an approach
-selector (Standard, Safe or Ambitious) and a funding stepper. The row of nine
-icons shows how far your own program has come across all nine entries.
+selector (Standard, Safe or Ambitious) and a funding stepper. The row of icons
+at the foot of the overview shows how far your own program has come. The
+Interstellar Probe and its wait for data share one icon, which changes when the
+probe launches and again when its data arrives.
 
 Rivals lists the other powers running the same milestone. The first five each
 show an estimate of how far along they are: a band reaching 25% of the goal to

@@ -1,6 +1,6 @@
 # Space Race GUI: Placeholder Icons
 
-The Space Race panels' overview (the GUI style guide pass, September 2026) draws a handful of icons of its own. All of them are vanilla or borrowed placeholders for now, so the layout can be judged in game before the art exists (`gui_style_guide.md` rule 10). The programme row is not a placeholder: it draws the nine journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`).
+The Space Race panels' overview (the GUI style guide pass, September 2026) draws a handful of icons of its own. All of them are vanilla or borrowed placeholders for now, so the layout can be judged in game before the art exists (`gui_style_guide.md` rule 10). The programme row's seven single-state icons are not placeholders: they are the journal-entry icons painted in PR #571 (`gfx/interface/icons/event_icons/je_space_race_<m>.dds`). Its interstellar icon, which has four states, borrows two of them for now (below).
 
 **Where each is set.** Every placeholder is a literal `texture = "…"` line in `gui/journal_entry_widgets/space_race_widget.gui`, in the type named below. No script reads the paths, so swapping one in is one path change. The proposed paths are new files under `gfx/interface/icons/space_race_icons/`.
 
@@ -34,7 +34,18 @@ The First cell is set in `te_sr_ov_first`, the stage in the solar colonization o
 |---|---|---|---|
 | We were first (18 px, top right of the entry's icon) | `event_icons/waving_flag.dds` | a small gold pennant on a staff, readable at 18 px | `first_mark.dds` |
 
-Set in `te_sr_ov_prog_cell`.
+Set in `te_sr_ov_prog_cell` and `te_sr_ov_prog_cell_interstellar`.
+
+## Programme row: the interstellar icon, four states
+
+The Interstellar Probe and Interstellar Probe: Awaiting Data share one 44 px icon in the programme row (owner's play-test, round 3). Each state is its own icon with its own texture and tooltip (`je_space_race_widget_prog_interstellar_<n>`), shown by one test on `sr_disp_prog_interstellar`, so only one ever shows. The placeholders are the two PR #571 journal icons at different opacities; the final art gives each state its own drawing, so the `alpha` lines go when it lands. Set in `te_sr_ov_prog_cell_interstellar`.
+
+| State | Placeholder | What the final art should show | Proposed file |
+|---|---|---|---|
+| 0: not begun (or another power finished it first) | `event_icons/je_space_race_interstellar_probe.dds` at 25% | the probe as a grey outline on a dark star field, unlit | `interstellar_not_begun.dds` |
+| 1: under way | `event_icons/je_space_race_interstellar_probe.dds` at 60% | the probe on its assembly cradle, half its panels fitted, amber work lights | `interstellar_under_way.dds` |
+| 2: launched, awaiting data | `event_icons/je_space_race_interstellar_results.dds` at 60% | the probe small against the stars, a dotted line back to a quiet radio dish | `interstellar_awaiting_data.dds` |
+| 3: data received | `event_icons/je_space_race_interstellar_results.dds` | a radio dish lit by a bright signal arc from a distant star | `interstellar_data_received.dds` |
 
 ## Colonization: the worlds pie
 

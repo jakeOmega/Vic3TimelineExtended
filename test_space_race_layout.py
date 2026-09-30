@@ -27,7 +27,14 @@ RACING = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_l
           "interstellar_probe"]
 CONTROLLED = RACING + ["solar_colonization"]  # the eight with controls, in sr_rivals_sgui op order
 ALL = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
-       "interstellar_probe", "interstellar_results", "solar_colonization"]  # programme row order
+       "interstellar_probe", "interstellar_results", "solar_colonization"]  # journal order
+# The programme row: one icon per entry, except that the Interstellar Probe and
+# the wait for its data share one four-state icon (owner's play-test, round 3).
+ROW = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+       "interstellar", "solar_colonization"]
+INTERSTELLAR_STATES = {0: "je_space_race_interstellar_probe", 1: "je_space_race_interstellar_probe",
+                       2: "je_space_race_interstellar_results", 3: "je_space_race_interstellar_results"}
+ICONS_DOC = os.path.join(REPO, "docs", "systems", "space_race_gui_icons.md")
 
 STATUS = ["te_sr_sec_control", "te_sr_sec_rivals"]
 REFERENCE = ["te_sr_sec_how"]
@@ -181,9 +188,11 @@ class RootTest(unittest.TestCase):
                          "te_sr_status_sections", "te_sr_reference_sections"):
             self.assertIn("minimumsize = { 520 -1 }", _type_body(self.gui, composer).split("\n\n")[0], composer)
         bar = _type_body(self.gui, "te_sr_ov_bar_row")
-        for width in (90, 170):
+        # round 3: the label column fits "Next Colony" (test_space_race_labels.py)
+        for width in (110, 210):
             self.assertIn(f"minimumsize = {{ {width} -1 }}\n\t\t\tmaximumsize = {{ {width} -1 }}", bar)
-        self.assertIn("size = { 200 18 }", bar)
+        self.assertIn("size = { 140 18 }", bar)
+        self.assertIn("spacing = 8", bar)  # 110 + 140 + 210 + 2 × 8 = 476, inside the 480 column
 
     def test_each_root_reads_only_its_own_milestone(self):
         for m in CONTROLLED:
@@ -309,22 +318,94 @@ class HowItWorksTest(unittest.TestCase):
 
 
 class ProgrammeRowTest(unittest.TestCase):
-    def test_nine_icons_each_its_own(self):
+    def test_eight_icons_in_journal_order(self):
         row = _type_body(_read(GUI), "te_sr_ov_programme")
-        cells = row.split("te_sr_ov_prog_cell = {")[1:]
-        self.assertEqual([re.search(r'tooltip = "je_space_race_widget_prog_(\w+)"', c).group(1) for c in cells], ALL)
-        for m, cell in zip(ALL, cells):
+        found = re.findall(r"\bte_sr_ov_prog_cell(_interstellar)? = \{", row)
+        cells = re.split(r"\bte_sr_ov_prog_cell(?:_interstellar)? = \{", row)[1:]
+        names = []
+        for suffix, cell in zip(found, cells):
+            if suffix:
+                self.assertTrue(cell.lstrip().startswith("}"), "the interstellar cell takes no overrides")
+                names.append("interstellar")
+            else:
+                names.append(re.search(r'tooltip = "je_space_race_widget_prog_(\w+)"', cell).group(1))
+        self.assertEqual(names, ROW)
+        for m, cell in zip(names, cells):
+            if m == "interstellar":
+                continue
             with self.subTest(milestone=m):
                 self.assertIn(f'texture = "gfx/interface/icons/event_icons/je_space_race_{m}.dds"', cell)
                 self.assertEqual(_milestones_named(cell), {m})
                 self.assertIn(f"ScriptValue('sr_disp_prog_{m}')", cell)
                 self.assertEqual('blockoverride "first"' in cell, m in RACING)
 
+    def test_the_row_fits_the_column(self):
+        cell = re.search(r"size = \{ (\d+) \d+ \}", _type_body(_read(GUI), "te_sr_ov_prog_cell")).group(1)
+        spacing = re.search(r"direction = horizontal\s+spacing = (\d+)",
+                            _type_body(_read(GUI), "te_sr_ov_programme")).group(1)
+        self.assertLessEqual(len(ROW) * int(cell) + (len(ROW) - 1) * int(spacing), 480)
+
     def test_the_textures_exist(self):
         tracked = subprocess.run(["git", "-C", REPO, "ls-files", "gfx/interface/icons/event_icons/"],
                                  capture_output=True, text=True, check=True).stdout.split()
         for m in ALL:
             self.assertIn(f"gfx/interface/icons/event_icons/je_space_race_{m}.dds", tracked)
+
+
+class InterstellarCellTest(unittest.TestCase):
+    """The Interstellar Probe and its wait for data: one cell, four states, each
+    its own icon, texture and hover, never two at once (round 3)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.body = _type_body(_read(GUI), "te_sr_ov_prog_cell_interstellar")
+        starts = [m.start() for m in re.finditer(r"(?m)^\t\ticon = \{", cls.body)]
+        cls.icons = [cls.body[i:_close(cls.body, cls.body.index("{", i)) + 1] for i in starts]
+
+    def test_four_states_and_the_flag(self):
+        self.assertEqual(len(self.icons), 5)
+        codes = []
+        for n, icon in enumerate(self.icons[:4]):
+            with self.subTest(state=n):
+                visibles = re.findall(r'visible = "(.*)"', icon)
+                self.assertEqual(len(visibles), 1, "one visible per widget")
+                m = re.fullmatch(r"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\."
+                                 r"ScriptValue\('sr_disp_prog_interstellar'\), '\(CFixedPoint\)(\d)' \)\]",
+                                 visibles[0])
+                self.assertIsNotNone(m, visibles[0])
+                codes.append(int(m.group(1)))
+                self.assertIn(f'tooltip = "je_space_race_widget_prog_interstellar_{n}"', icon)
+                self.assertIn(f'texture = "gfx/interface/icons/event_icons/{INTERSTELLAR_STATES[n]}.dds"', icon)
+        # Each state tests equality with a code of its own, so no two show at once.
+        self.assertEqual(codes, [0, 1, 2, 3])
+        flag = self.icons[4]
+        self.assertIn("ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)4'", flag)
+        self.assertIn("alwaystransparent = yes", flag)
+        self.assertNotIn("tooltip", flag)
+
+    def test_the_code_covers_every_state_once(self):
+        body = _strip_comments(_block(_read(DISPLAY), "sr_disp_prog_interstellar"))
+        self.assertRegex(body, r"^\s*value = 0")
+        tests = re.findall(r"has_variable = (\w+) \} value = (\d)", body)
+        self.assertEqual(tests, [("sr_interstellar_results_received", "3"), ("sr_probe_launched", "2"),
+                                 ("sr_active_interstellar_probe", "1")])
+
+    def test_the_flags_it_reads_are_set(self):
+        script = "\n".join(_strip_comments(_read(p)) for sub in ("common", "events")
+                           for p in glob.glob(os.path.join(REPO, sub, "**", "*.txt"), recursive=True))
+        for flag in ("sr_interstellar_results_received", "sr_probe_launched", "sr_active_interstellar_probe"):
+            self.assertRegex(script, rf"set_variable = \{{ name = {flag}\b", flag)
+
+    def test_every_state_has_its_hover(self):
+        for n in range(4):
+            self.assertTrue(_loc(f"je_space_race_widget_prog_interstellar_{n}"))
+
+    def test_every_state_has_a_row_in_the_icon_list(self):
+        doc = _read(ICONS_DOC)
+        for n, texture in INTERSTELLAR_STATES.items():
+            with self.subTest(state=n):
+                self.assertRegex(doc, rf"(?m)^\| {n}: [^|]+\| `event_icons/{texture}\.dds`[^|]*\|[^|]+\| `interstellar_\w+\.dds` \|$")
+
 
     def test_every_entry_has_an_overview_that_draws_the_row(self):
         gui = _read(GUI)
