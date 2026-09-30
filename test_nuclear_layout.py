@@ -681,5 +681,140 @@ class TidinessTest(unittest.TestCase):
         self.assertLess(head, body.index('text = "nd_w_crisis_act_public"'))
 
 
+
+MILITARY = os.path.join(REPO, "gui", "panel_military.gui")
+TAB_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")
+TAB_WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
+NUKE_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "nuke_triggers.txt")
+TAB_GATE = "GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+TAB_UNLOCK = "GetScriptedGui('te_military_nuclear_tab_unlock_sgui')"
+
+
+def _mod_blocks(text, tag="### MOD: Nuclear tab (te_nuclear) ###"):
+    """Each marked block of panel_military.gui, up to its END MOD line."""
+    out = []
+    start = text.find(tag)
+    while start != -1:
+        end = text.index("### END MOD ###", start)
+        out.append(text[start:end])
+        start = text.find(tag, end)
+    return out
+
+
+def _txt_block(text, name):
+    m = re.search(rf"^{name} = \{{", text, re.M)
+    assert m, f"no {name}"
+    depth = 0
+    for j in range(m.end() - 1, len(text)):
+        if text[j] == "{":
+            depth += 1
+        elif text[j] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[m.end():j]
+
+
+class MilitaryTabTest(unittest.TestCase):
+    """The Military panel's Nuclear tab (style guide rule 9): the journal entry's
+    own composers under GetPlayerJournalEntry, gated, greyed until the entry
+    runs, and ending with Open Journal Entry."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.military = _read(MILITARY)
+        cls.blocks = _mod_blocks(cls.military)
+
+    def _content(self):
+        body = self.blocks[1]
+        self.assertIn('name = "te_military_nuclear_tab"', body)
+        return body
+
+    def test_two_marked_blocks_the_button_and_the_content(self):
+        self.assertEqual(len(self.blocks), 2)
+        self.assertIn('blockoverride "fourth_button"', self.blocks[0])
+        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_nuclear')]\"", self._content())
+
+    def test_the_tab_composes_the_journal_roots_types_in_order(self):
+        body = self._content()
+        found = re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
+        roots = [wrapped for _, _, wrapped in ROOTS]
+        # The journal's roots, with the entry's own bar under The Programme, as in the journal.
+        self.assertEqual(found, roots[:2] + ["te_je_goal_bar"] + roots[2:])
+        # The link back to the entry comes after every section.
+        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_nuclear_reference_sections"))
+        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+
+    def test_the_gate_sits_above_the_journal_entry_datacontext(self):
+        body = self._content()
+        dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_nuclear_program')]\"")
+        self.assertLess(body.index(f'visible = "[{TAB_GATE}]"'), dc)
+        # Never on the widget that carries the datacontext itself.
+        opener = body.rindex("flowcontainer = {", 0, dc)
+        self.assertNotIn("visible", body[opener:dc])
+
+    def test_the_column_is_as_wide_as_the_journal_roots(self):
+        body = self._content()
+        dc = body.index("GetPlayerJournalEntry('je_nuclear_program')")
+        self.assertIn("minimumsize = { 520 -1 }", body[dc:body.index("te_nuclear_overview_panel", dc)])
+        self.assertIn("parentanchor = hcenter", body[dc:body.index("te_nuclear_overview_panel", dc)])
+
+    def test_the_bar_shows_with_a_programme_only(self):
+        body = self._content()
+        bar = body.index("te_je_goal_bar = {}")
+        wrapper = body[body.rindex("flowcontainer = {", 0, bar):bar]
+        self.assertIn(_sgui("nuclear_program_has_programme_sgui"), wrapper)
+        self.assertIn("type te_je_goal_bar = flowcontainer", _read(TAB_WIDGETS))
+
+    def test_the_button_is_greyed_until_the_entry_runs(self):
+        button = self.blocks[0]
+        self.assertIn(f'enabled = "[{TAB_GATE}]"', button)
+        self.assertIn("onclick = \"[InformationPanel.SelectTab('te_nuclear')]\"", button)
+        self.assertIn(f"{TAB_UNLOCK}.IsValidTooltip(", button)
+        for half in ("fourth_button_visibility", "fourth_button_visibility_checked"):
+            m = re.search(rf'blockoverride "{half}" \{{\s*visible = "(.*)"', button)
+            self.assertTrue(m, half)
+            self.assertIn("IsTabSelected('te_nuclear')", m.group(1))
+            self.assertIn(f"{TAB_UNLOCK}.IsShown(", m.group(1))
+        for key in ("te_military_tab_nuclear", "te_military_tab_nuclear_tt", "te_military_tab_nuclear_locked_tt",
+                    "te_military_nuclear_open_journal_tt"):
+            self.assertTrue(_loc(key), key)
+
+    def test_the_tab_icon_is_the_warhead(self):
+        m = re.search(r'blockoverride "fourth_button_icon" \{.*?texture = "([^"]+)"', self.blocks[0], re.S)
+        self.assertEqual(m.group(1), "gfx/interface/icons/nuclear_icons/warheads.dds")
+
+    def test_the_gates_read_the_rule_and_the_entry(self):
+        sguis = _read(TAB_SGUIS)
+        gate = _txt_block(sguis, "te_military_nuclear_tab_sgui")
+        self.assertIn("has_game_rule = nuclear_weapons_enabled", gate)
+        self.assertIn("has_journal_entry = je_nuclear_program", gate)
+        unlock = _txt_block(sguis, "te_military_nuclear_tab_unlock_sgui")
+        self.assertIn("is_shown = { has_game_rule = nuclear_weapons_enabled }", unlock)
+        self.assertIn("is_valid = { nuclear_program_entry_unlocked = yes }", unlock)
+
+    def test_the_checklist_is_the_entrys_own_test_in_one_line(self):
+        trig = _txt_block(_read(NUKE_TRIGGERS), "nuclear_program_entry_unlocked")
+        self.assertRegex(trig, r"custom_tooltip = \{\s*text = nuclear_program_unlock_tt\s*"
+                               r"nuclear_program_entry_applies = yes\s*\}")
+        # ...and that is the entry's `possible`, so the two cannot drift apart.
+        self.assertRegex(_read(JE), r"possible = \{\s*nuclear_program_entry_applies = yes\s*\}")
+        line = _loc("nuclear_program_unlock_tt")
+        for part in ("$nuclear_weapons$", "$ICBMs$", "warheads", "crisis"):
+            self.assertIn(part, line)
+
+    def test_one_visible_per_widget(self):
+        for i, block in enumerate(self.blocks):
+            stack = [0]
+            for line in block.splitlines():
+                s = line.strip()
+                if s.startswith("visible ="):
+                    stack[-1] += 1
+                    self.assertLessEqual(stack[-1], 1, f"block {i}: two visibles near {s[:60]}")
+                stack.extend([0] * line.count("{"))
+                for _ in range(line.count("}")):
+                    if len(stack) > 1:
+                        stack.pop()
+
+
 if __name__ == "__main__":
     unittest.main()
