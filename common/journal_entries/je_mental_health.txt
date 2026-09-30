@@ -82,13 +82,17 @@
 	}
 
 	fail = {
-		# Fail if they still have punitive justice and have moved past the era.
-		# Penal Labor Camps is the harsher punitive law, so it fails too.
+		# Fail if punitive justice is still in force after a decade of debate:
+		# half the timeout, so there is room to reform first. Penal Labor Camps is
+		# the harsher punitive law, so it fails too. This was gated on Decline of
+		# Organized Religion, an era-10 tech like the one that opens the entry, so
+		# it could fail the crisis the day it began (every country starts under
+		# Punishment-Focused).
 		OR = {
 			has_law = law_type:law_punishment_focused_criminal_justice
 			has_law = law_type:law_penal_labor_camps
 		}
-		has_technology_researched = decline_of_organized_religion
+		scope:journal_entry.journal_entry_age >= 3650
 	}
 
 	on_fail = {
