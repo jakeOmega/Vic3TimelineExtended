@@ -80,6 +80,18 @@ gw_bound_by_emissions_treaty = {
 	has_variable = has_emissions_reduction_treaty
 }
 
+# A market that counts in the panel's Top Emitters list: its leader holds a
+# yearly emissions figure (gw_disp_market_emis, written by
+# gw_snapshot_market_emissions_effect on its market capital's yearly pulse)
+# and it is above zero. A market is named by its leader, so a country that
+# stopped leading keeps its old figure but drops out here. A market that
+# captures more than it emits is not an emitter. Scope: country.
+gw_is_ranked_emitter = {
+	gw_is_market_leader = yes
+	has_variable = gw_disp_market_emis
+	var:gw_disp_market_emis > 0
+}
+
 # Have the yearly emissions figures been taken yet? False on a brand-new game
 # before the first yearly state pulse and on a save upgraded mid-year, which is
 # when the widget shows "figures update each January" instead of a row of
