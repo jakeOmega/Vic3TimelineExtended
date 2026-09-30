@@ -254,6 +254,30 @@ class UnresolvedHelperCallTests(unittest.TestCase):
         self.assertEqual(eva.unresolved_helper_calls(m.root, m.audit()), [])
 
 
+class BootstrapCatalogTests(unittest.TestCase):
+    """`bootstrap_catalog` must keep vanilla's callable helper names valid."""
+
+    def test_vanilla_helper_defined_but_never_used_at_depth_is_in_the_catalog(self):
+        # 1.14.5: `has_treaty_alliance_with` is defined in vanilla's
+        # 00_diplomacy_triggers.txt and no vanilla script calls it at depth > 0,
+        # so the LHS harvest alone drops it and mod calls flagged unresolved.
+        game = tempfile.mkdtemp()
+        mod = tempfile.mkdtemp()
+        for rel, text in {
+            "game/common/scripted_triggers/00_diplomacy_triggers.txt":
+                "has_treaty_alliance_with = {\n\tis_at_war = no\n}\n",
+            "game/common/script_values/x.txt": "some_vanilla_value = 5\n",
+        }.items():
+            p = os.path.join(game, rel)
+            os.makedirs(os.path.dirname(p), exist_ok=True)
+            with open(p, "w", encoding="utf-8-sig") as f:
+                f.write(text)
+        eva.bootstrap_catalog(game, mod)
+        catalog = eva.load_catalog(mod)
+        self.assertIn("has_treaty_alliance_with", catalog)
+        self.assertIn("some_vanilla_value", catalog)
+
+
 class SuppressionTests(unittest.TestCase):
     def test_reviewed_partitions_flag(self):
         m = _Mod(

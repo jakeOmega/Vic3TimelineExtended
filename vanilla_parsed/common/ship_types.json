@@ -36,6 +36,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "65"
+   ],
    "modifier": [
     "=",
     {
@@ -93,7 +97,7 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "50"
+      "48"
      ],
      "ship_screening_add": [
       "=",
@@ -266,6 +270,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "50"
+   ],
    "modifier": [
     "=",
     {
@@ -315,11 +323,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "30"
+      "17"
      ],
      "ship_screening_add": [
       "=",
-      "10"
+      "5"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -506,6 +514,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "75"
+   ],
    "modifier": [
     "=",
     {
@@ -563,11 +575,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "120"
+      "70"
      ],
      "ship_screening_add": [
       "=",
-      "11"
+      "5"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -737,6 +749,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "55"
+   ],
    "modifier": [
     "=",
     {
@@ -786,11 +802,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "60"
+      "36"
      ],
      "ship_screening_add": [
       "=",
-      "15"
+      "10"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -981,6 +997,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "90"
+   ],
    "modifier": [
     "=",
     {
@@ -1038,11 +1058,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "140"
+      "79"
      ],
      "ship_screening_add": [
       "=",
-      "14"
+      "10"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -1223,6 +1243,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "125"
+   ],
    "modifier": [
     "=",
     {
@@ -1280,11 +1304,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "180"
+      "90"
      ],
      "ship_screening_add": [
       "=",
-      "16"
+      "10"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -1471,6 +1495,10 @@
     "=",
     "yes"
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "125"
+   ],
    "modifier": [
     "=",
     {
@@ -1528,11 +1556,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "180"
+      "99"
      ],
      "ship_screening_add": [
       "=",
-      "18"
+      "10"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -1710,6 +1738,10 @@
     "=",
     "yes"
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "140"
+   ],
    "modifier": [
     "=",
     {
@@ -1767,11 +1799,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "200"
+      "111"
      ],
      "ship_screening_add": [
       "=",
-      "20"
+      "10"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -1984,6 +2016,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "45"
+   ],
    "modifier": [
     "=",
     {
@@ -2033,7 +2069,7 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "2.5"
+      "4"
      ],
      "ship_screening_add": [
       "=",
@@ -2195,6 +2231,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "75"
+   ],
    "modifier": [
     "=",
     {
@@ -2244,11 +2284,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "4.5"
+      "4"
      ],
      "ship_screening_add": [
       "=",
-      "175"
+      "100"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -2767,6 +2807,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "100"
+   ],
    "modifier": [
     "=",
     {
@@ -2816,11 +2860,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "12"
+      "9"
      ],
      "ship_screening_add": [
       "=",
-      "190"
+      "105"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -2981,6 +3025,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "125"
+   ],
    "modifier": [
     "=",
     {
@@ -3030,11 +3078,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "10"
+      "4"
      ],
      "ship_screening_add": [
       "=",
-      "250"
+      "140"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -3185,6 +3233,10 @@
     "=",
     "yes"
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "140"
+   ],
    "modifier": [
     "=",
     {
@@ -3234,11 +3286,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "10"
+      "4"
      ],
      "ship_screening_add": [
       "=",
-      "270"
+      "150"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -3398,6 +3450,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "110"
+   ],
    "modifier": [
     "=",
     {
@@ -3447,11 +3503,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "50"
+      "28"
      ],
      "ship_screening_add": [
       "=",
-      "10"
+      "5"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -3594,6 +3650,10 @@
     "=",
     "2.0"
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "140"
+   ],
    "modifier": [
     "=",
     {
@@ -3643,11 +3703,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "100"
+      "56"
      ],
      "ship_screening_add": [
       "=",
-      "10"
+      "5"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -3817,6 +3877,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "90"
+   ],
    "modifier": [
     "=",
     {
@@ -3866,11 +3930,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "20"
+      "12"
      ],
      "ship_screening_add": [
       "=",
-      "50"
+      "30"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -3891,6 +3955,18 @@
      "ship_blockade_strength_add": [
       "=",
       "25"
+     ],
+     "ship_battle_against_ship_type_early_ironclad_hull_damage_mult": [
+      "=",
+      "2.0"
+     ],
+     "ship_battle_against_ship_type_monitor_hull_damage_mult": [
+      "=",
+      "2.0"
+     ],
+     "ship_battle_against_ship_type_coastal_defense_ship_hull_damage_mult": [
+      "=",
+      "2.0"
      ],
      "ship_battle_against_ship_type_modern_ironclad_hull_damage_mult": [
       "=",
@@ -4031,6 +4107,10 @@
      ]
     }
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "125"
+   ],
    "modifier": [
     "=",
     {
@@ -4080,11 +4160,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "40"
+      "24"
      ],
      "ship_screening_add": [
       "=",
-      "100"
+      "55"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -4105,6 +4185,18 @@
      "ship_blockade_strength_add": [
       "=",
       "50"
+     ],
+     "ship_battle_against_ship_type_early_ironclad_hull_damage_mult": [
+      "=",
+      "2.0"
+     ],
+     "ship_battle_against_ship_type_monitor_hull_damage_mult": [
+      "=",
+      "2.0"
+     ],
+     "ship_battle_against_ship_type_coastal_defense_ship_hull_damage_mult": [
+      "=",
+      "2.0"
      ],
      "ship_battle_against_ship_type_modern_ironclad_hull_damage_mult": [
       "=",
@@ -4230,6 +4322,10 @@
     "=",
     "80"
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "125"
+   ],
    "modifier": [
     "=",
     {
@@ -4279,7 +4375,7 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "5"
+      "4"
      ],
      "ship_screening_add": [
       "=",
@@ -4304,6 +4400,18 @@
      "ship_blockade_strength_add": [
       "=",
       "25"
+     ],
+     "ship_battle_against_ship_type_early_ironclad_hull_damage_mult": [
+      "=",
+      "2.0"
+     ],
+     "ship_battle_against_ship_type_monitor_hull_damage_mult": [
+      "=",
+      "2.0"
+     ],
+     "ship_battle_against_ship_type_coastal_defense_ship_hull_damage_mult": [
+      "=",
+      "2.0"
      ],
      "ship_battle_against_ship_type_modern_ironclad_hull_damage_mult": [
       "=",
@@ -4425,6 +4533,10 @@
     "=",
     "yes"
    ],
+   "vulnerability_exploitation": [
+    "=",
+    "140"
+   ],
    "modifier": [
     "=",
     {
@@ -4474,11 +4586,11 @@
      ],
      "ship_vulnerability_add": [
       "=",
-      "50"
+      "28"
      ],
      "ship_screening_add": [
       "=",
-      "150"
+      "85"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -4507,6 +4619,18 @@
      "ship_marine_capacity_add": [
       "=",
       "0.075"
+     ],
+     "ship_battle_against_ship_type_early_ironclad_hull_damage_mult": [
+      "=",
+      "2.0"
+     ],
+     "ship_battle_against_ship_type_monitor_hull_damage_mult": [
+      "=",
+      "2.0"
+     ],
+     "ship_battle_against_ship_type_coastal_defense_ship_hull_damage_mult": [
+      "=",
+      "2.0"
      ],
      "ship_battle_against_ship_type_modern_ironclad_hull_damage_mult": [
       "=",

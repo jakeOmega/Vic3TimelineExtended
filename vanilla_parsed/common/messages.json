@@ -1263,6 +1263,56 @@
    ]
   }
  ],
+ "strait_restricted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"strait_grievance_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/trade_route.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "strait_eased": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"strait_grievance_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/trade_route.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
  "fleet_defeated": [
   "=",
   {

@@ -4,12 +4,8 @@ Lowercase LHS keywords in every script-bearing mod directory (`events/` plus the
 
 Flag kinds: **unresolved-helper-call** is an unknown name in call form (`x = yes` / `x = { ... }`) — typically a scripted effect/trigger that was renamed or deleted while a call site survived (#288). **unknown-name** is any other unknown LHS keyword (#295). **call-syntax** is unquoted `f(...)`. Static-modifier block bodies (`modifier = { ... }`, `member_modifier`, …) are skipped here — their names are validated by `modifier_visibility_audit`.
 
-- Catalog size: **7145**
+- Catalog size: **7536**
 - Flags (unreviewed): **0**
-- Flags (REVIEWED-suppressed): **1**
+- Flags (REVIEWED-suppressed): **0**
 
 No unreviewed effect/trigger name issues. ✅
-
-## REVIEWED-suppressed
-
-- `actor` (unknown-name) — common/scripted_effects/un_lobby_effects.txt (REVIEWED 2026-09-27: `actor` is the trigger's documented key (engine triggers.log: would_accept_diplomatic_action = { actor = <country scope> type = <action type key> }))

@@ -1,9 +1,9 @@
 {
  "format_version": 1,
- "game_version": "1.14.4",
+ "game_version": "1.14.5",
  "game_version_source": "launcher-settings.json",
  "parser_fingerprint": "4627473117c4f6ad",
- "built_at": "2026-09-24T17:50:44+00:00",
+ "built_at": "2026-09-30T14:55:42+00:00",
  "entity_types": {
   "Building Groups": {
    "dir": "game/common/building_groups",
@@ -113,7 +113,7 @@
   "Messages": {
    "dir": "game/common/messages",
    "file": "common/messages.json",
-   "entities": 473
+   "entities": 475
   },
   "Mobilization Option Groups": {
    "dir": "game/common/mobilization_option_groups",
@@ -128,7 +128,7 @@
   "Modifier Types": {
    "dir": "game/common/modifier_type_definitions",
    "file": "common/modifier_types.json",
-   "entities": 2365
+   "entities": 2371
   },
   "Modifiers": {
    "dir": "game/common/static_modifiers",
@@ -148,7 +148,7 @@
   "Script Values": {
    "dir": "game/common/script_values",
    "file": "common/script_values.json",
-   "entities": 493
+   "entities": 502
   },
   "Scripted Buttons": {
    "dir": "game/common/scripted_buttons",
@@ -264,7 +264,7 @@
  "localization": {
   "dir": "game/localization/english",
   "file": "localization_english.json",
-  "keys": 102271
+  "keys": 102373
  },
  "parse_failures": [],
  "sources": {
@@ -325,8 +325,8 @@
    "sha256": "5bd858a79aca4a25e7f61956692fa9b56a5dc3f847971f63d7365db51623b25f"
   },
   "game/common/buildings/07_government.txt": {
-   "size": 2631,
-   "sha256": "3c83d9f86d2d986e02749fc438959227012dccda54411f211c1cd7c8b3118954"
+   "size": 2633,
+   "sha256": "02a854fb0d6a1e78787ccec1211c66db8fa226bd603057baab548e32c6c26e6b"
   },
   "game/common/buildings/08_monuments.txt": {
    "size": 34000,
@@ -381,8 +381,8 @@
    "sha256": "d691744cecc2ba1a98a9dc3955cfee2b5d69b3bc7235dc1e46e35592bddb3c9f"
   },
   "game/common/character_traits/personality_traits.txt": {
-   "size": 18390,
-   "sha256": "a020157d2f3a3157e20e5e64cc43b5445613f211d4debb6f790b8b6ecc243150"
+   "size": 18398,
+   "sha256": "a931c39c70b994085a8813c85ea8da6ce18d4ca3b381f9ee5a7472b2d88c55a0"
   },
   "game/common/character_traits/skill_traits.txt": {
    "size": 43492,
@@ -537,8 +537,8 @@
    "sha256": "545bff6e490ef3e556765b2952b3ff821d32bcb0b3e099fa2ea3e80c8ab74c60"
   },
   "game/common/decisions/bulgaria_decisions.txt": {
-   "size": 1252,
-   "sha256": "c495b54adf9120f9910c38f99ec698adcf061f0c542882c8377b4b148c6263c2"
+   "size": 1269,
+   "sha256": "39f3647a995b9795de51ba0f8084f83e2699103b797ca5ea60b48b0193447f08"
   },
   "game/common/decisions/canal_decisions.txt": {
    "size": 6159,
@@ -581,8 +581,8 @@
    "sha256": "310cfdd220e1f3e8673801cff342bd5fd12334fe2d4dbbfe821ea943316eaf0e"
   },
   "game/common/decisions/ip4_portugal_decisions.txt": {
-   "size": 7814,
-   "sha256": "ace9d665053f76b403f6f561966c92b58c9c9ee88f68d31bcc201dc20a1c2257"
+   "size": 7848,
+   "sha256": "9656ce0ce3f81b940458fde69cb4f04a8ecac89578ed883b8fb8efdb2b6cf19a"
   },
   "game/common/decisions/japan_decisions.txt": {
    "size": 3172,
@@ -593,8 +593,8 @@
    "sha256": "75b66aed1659c2638cae71e3323ff192f97bfcb8118b9f6d133415b12ba3f2e9"
   },
   "game/common/decisions/korea_decisions.txt": {
-   "size": 454,
-   "sha256": "50a26a6af1bbed7c92b879886209bb35aa2b094b3844c8a40e3538663876ba4f"
+   "size": 484,
+   "sha256": "57ccce7a96e0c88067fedecfca739b246773d8c510be1b4811f503d9e299f908"
   },
   "game/common/decisions/manifest_destiny.txt": {
    "size": 4024,
@@ -625,8 +625,8 @@
    "sha256": "30ebce626f2477b7251c9cc4f314f735ea615f0c597c5d58abc21ea7be394fc5"
   },
   "game/common/decisions/rome_decision.txt": {
-   "size": 554,
-   "sha256": "0061e2c92878a13213280ee4f8709005f2b8340f12017dd9d96d49fa7bef6dbd"
+   "size": 571,
+   "sha256": "35d8f68ae55127d7872a6852854736822be8aa15a7d3dceced23604414304299"
   },
   "game/common/decisions/skyscraper_decision.txt": {
    "size": 1190,
@@ -645,8 +645,8 @@
    "sha256": "63e342570e2a1351e3a4d48f1f7d65fe606dc088b3cf5e5ff17ded91e7b5372c"
   },
   "game/common/decrees/00_decree.txt": {
-   "size": 22626,
-   "sha256": "be606fd97d2abac578293a6602e61fac421ba09147d8683c104676dc82f8e6ff"
+   "size": 23813,
+   "sha256": "13a4cd2087d668746b39c9f4c6c44bfd3e742be5c7dd2743a289a1effc956c3d"
   },
   "game/common/diplomatic_actions/00_relations_actions.txt": {
    "size": 7445,
@@ -833,16 +833,16 @@
    "sha256": "ff46d9a18c548adc2b7538b0a2b5a6e4e78e6fd5f540c1dbef9c0023018c662a"
   },
   "game/common/diplomatic_actions/56_stake_colonial_claim.txt": {
-   "size": 6470,
-   "sha256": "cc026105b23eb02e90feb1f342094c186a70554b090b126d6a02c3fda11ccd5d"
+   "size": 6468,
+   "sha256": "2cb2e977f11412ef0de117e92c58ad8d45ce52ad7747ff9695cd630c2c15ca01"
   },
   "game/common/diplomatic_actions/57_orchestrate_coup.txt": {
    "size": 10782,
    "sha256": "a5fd89a5847b98fe245853fec019aa6d7d616d388d842f85f5fe5ec57bcab56d"
   },
   "game/common/diplomatic_plays/00_diplomatic_plays.txt": {
-   "size": 31798,
-   "sha256": "2698ec93bf2d30693d39d59db1ecb9618db2294d4b4f3c980886fcd8a5c30130"
+   "size": 31018,
+   "sha256": "b0e43ae3386ac11e9312beab91a8032a4f1e96affc92fbf18aa874701ff094bf"
   },
   "game/common/discrimination_traits/00_cultural_heritages.txt": {
    "size": 9538,
@@ -1009,20 +1009,20 @@
    "sha256": "45b347fcab28c194ec7afb7f9f68cde9440f39f25cc6393b4f5b9ecab322fd82"
   },
   "game/common/journal_entries/00_canada_australia.txt": {
-   "size": 4901,
-   "sha256": "c9004f91694c3065e61e9b0febf5f6eafd0f28c6c4351a9e129089a95f9526d0"
+   "size": 4961,
+   "sha256": "6461429891c9b2f8c2aa092523fdbebba3387a82e5b6a2740314ef7c9396f50b"
   },
   "game/common/journal_entries/00_canals.txt": {
-   "size": 3449,
-   "sha256": "0b1bf860886a6997058f5a39364a6533018a854dd3a6e28b0aca9b0a74f0e8e0"
+   "size": 3637,
+   "sha256": "bf308239931e7ba9182435fe440aa013d44f91b06def54b443ec907b80a8a65a"
   },
   "game/common/journal_entries/00_central_africa.txt": {
    "size": 3719,
    "sha256": "60ea35b2177c18a3eebddd57c3555be0559cb480dedda2277243ab8a34fb9bf4"
   },
   "game/common/journal_entries/00_central_and_south_america.txt": {
-   "size": 3474,
-   "sha256": "60bfa6dfc4c0331b549218f8f4fcdc5ca88ad3c8644596d2fc8c895004d20b06"
+   "size": 3491,
+   "sha256": "cff8452e8462865b88b40b53da5ded908a7a6a65714e904233e6d84406c03787"
   },
   "game/common/journal_entries/00_communism.txt": {
    "size": 6255,
@@ -1057,20 +1057,20 @@
    "sha256": "da01c819e6610e2b1278199c0987b8c050ac927a881482993af27ae20046315e"
   },
   "game/common/journal_entries/00_german_unification.txt": {
-   "size": 7717,
-   "sha256": "38a42bbfae01cbc32d42b9076c904a4d0cb65c3c2959f7f7c3aca2271a7c66b8"
+   "size": 7751,
+   "sha256": "a4425ccaedea4fbbd46137d6ab3dc2552deca5b9b606f9e9c2a99e20dedcac0b"
   },
   "game/common/journal_entries/00_grand_exhibition.txt": {
    "size": 2909,
    "sha256": "2a9de48e559b2bee5be16f677bc499aacc450bb4dc6d87e36e87f44ecae18bcc"
   },
   "game/common/journal_entries/00_greek_nationalism.txt": {
-   "size": 6024,
-   "sha256": "76925b166c659f1da986a445fe8343638465860628dfc5881db4427ce1877517"
+   "size": 6085,
+   "sha256": "628c24fd3631274f4291bfd65a4911bf9d766dd43e6e4b1b62252828fc176a91"
   },
   "game/common/journal_entries/00_hawaii.txt": {
-   "size": 2505,
-   "sha256": "43eb4de1c8d507f679d35f6228fa09cbae258e926414f6deb91c71092e82ddbd"
+   "size": 2593,
+   "sha256": "07841abe75193e95c0e2aaf626a6ef13c6039de315626aed53386328afc6377c"
   },
   "game/common/journal_entries/00_ig_agendas.txt": {
    "size": 8708,
@@ -1085,20 +1085,20 @@
    "sha256": "62fe40c1b04fd352a4f997bb623a795bb54c4b4ffbbc27584ec039606f9e313b"
   },
   "game/common/journal_entries/00_indian_removal.txt": {
-   "size": 1441,
-   "sha256": "9a849a3b3e5a64709a9e5cd09a1e13174c6a88cb2c95eb5b907f7142c1b53cb0"
+   "size": 1555,
+   "sha256": "5385f434af1b62e53d4f616c902edce1b25ba221422e338f3df71b09732af09b"
   },
   "game/common/journal_entries/00_italian_unification.txt": {
-   "size": 2548,
-   "sha256": "9515ee785f32b69dd06883136c40d4e39f17376049685d29f992abd536238a52"
+   "size": 2565,
+   "sha256": "17145d92c20c616f07959353dc78d1401459be78f9e163213b0a11f08467d3bf"
   },
   "game/common/journal_entries/00_krakatoa.txt": {
    "size": 1832,
    "sha256": "57427adc923621dfb59b07bf7753936f55d0544d5ecb00d4120906cf81943d2c"
   },
   "game/common/journal_entries/00_land_reclamation.txt": {
-   "size": 1422,
-   "sha256": "9e758e20dcc0b7f3524912bc963266ebb52d60cdcc430abbe7d831f97241a26b"
+   "size": 1456,
+   "sha256": "cdffd8b85b547c8b589c117614fcca8d66ac318a1169cb0c6dae782b8fcf6ea6"
   },
   "game/common/journal_entries/00_liberalism.txt": {
    "size": 3597,
@@ -1133,8 +1133,8 @@
    "sha256": "7aa000f4e516ced02003ac08307406f191e4651b7e1ca608087f4a3a555d5e4e"
   },
   "game/common/journal_entries/00_opium_wars.txt": {
-   "size": 3211,
-   "sha256": "affb2f5a9e8b526cd57231ed5d1189a95a413aeaecbee8240df28296fa7f19e2"
+   "size": 3285,
+   "sha256": "db06daedac61c0ba4feb0f2267e1dddb66fce862392dd3a942968b4ff82ada92"
   },
   "game/common/journal_entries/00_oregon.txt": {
    "size": 2929,
@@ -1185,28 +1185,28 @@
    "sha256": "7ef4d78d42264da727bdeaf4a9027fb7d829828936288d8a035abb8d04cfd939"
   },
   "game/common/journal_entries/00_reunify_china.txt": {
-   "size": 3046,
-   "sha256": "e5c184040e8439e588f431191d61956a894914f34459658d32d8fbec56aefe66"
+   "size": 3063,
+   "sha256": "23818a259dc8af4b06e7de3231f5bd37172e46304cce7913d0199419cfc849f5"
   },
   "game/common/journal_entries/00_romania.txt": {
-   "size": 4062,
-   "sha256": "74149d3a3b778732de318d7fb522ce4255289b410f6184625ba9670e6cccab9a"
+   "size": 4298,
+   "sha256": "23049c2910d7880771ed23ee2d5e9fbaea3e3ce9363cbd979a40c8864334aa7b"
   },
   "game/common/journal_entries/00_scotland_yard.txt": {
    "size": 4910,
    "sha256": "9aec69acfeb42f1b42233a5e25dd48e9a01babe3acaf7a3acd6e3be2fe5350c8"
   },
   "game/common/journal_entries/00_scramble_for_africa.txt": {
-   "size": 3829,
-   "sha256": "1e36081fe6e081fef17cf4880de26257233e20236292f605f3441785729a1e4c"
+   "size": 3846,
+   "sha256": "ceab17043e593f50489a89dd0f68973e2f4349e63690cd839f49ed322e2f45d8"
   },
   "game/common/journal_entries/00_secret_police.txt": {
    "size": 397,
    "sha256": "a798bd250fd58fca3f60521d84adc3508635865542b1a66d983fb94d3bf12ae0"
   },
   "game/common/journal_entries/00_seminole_wars.txt": {
-   "size": 1506,
-   "sha256": "183c795ac9cbef95a616392908bea6335c03b4eb03e133895f3211f5d5a931bd"
+   "size": 1530,
+   "sha256": "3c6c45e8b552c31392ba5e5b4e41e3f036dbe0592782dbf17fa11179b2894a46"
   },
   "game/common/journal_entries/00_sick_man.txt": {
    "size": 8916,
@@ -1281,8 +1281,8 @@
    "sha256": "3f7a36bfccd130040abad23af17316e2c848c7d9a42bffe63f6ab9290e668bcd"
   },
   "game/common/journal_entries/01_algeria.txt": {
-   "size": 5676,
-   "sha256": "cff9ea3ebe37c8c9cdcafe19b5efbc8daead3badd5ff181be556062151fffcef"
+   "size": 5897,
+   "sha256": "568fabaa1b1da3fcb44f5ed85a62d49bd966469640522f5f0ea136650e335aec"
   },
   "game/common/journal_entries/01_coup.txt": {
    "size": 3074,
@@ -1305,12 +1305,12 @@
    "sha256": "0fee51a5ad3d17edbebb323964867aefe730c8c944434cef2e9adf99f07520c9"
   },
   "game/common/journal_entries/01_krakow.txt": {
-   "size": 1528,
-   "sha256": "eff18342bd7b652a83abd178d5aeb44083054658cd7a099859b6407bba353c65"
+   "size": 1605,
+   "sha256": "84131f29a690db0878126edf2d3d85870c99356aed1f34203a7c866c885e789e"
   },
   "game/common/journal_entries/01_natural_borders_of_france.txt": {
-   "size": 4146,
-   "sha256": "7410283c9f4fb832576be6af56bc441015643add42a0a31714d559bdf9d35959"
+   "size": 4201,
+   "sha256": "6ae652cbc2fc513595c0d4d3118f9f2bcc4da60ac1bc99531861a034f8cf5aa2"
   },
   "game/common/journal_entries/01_nihilism.txt": {
    "size": 4148,
@@ -1373,8 +1373,8 @@
    "sha256": "88824a36f7cf731a12101555befd106642e0b03e72d2707ac502db6132b2e47d"
   },
   "game/common/journal_entries/02_peru_bolivia.txt": {
-   "size": 6481,
-   "sha256": "96095b62af0c7911aad5a3636c25fc933b58e92516803c9eaa08e948b922989f"
+   "size": 6586,
+   "sha256": "116350c2584bc06b1f51fcc51c8e0cc7b787bc30b0fcbc7864b3bdf3eb9d0996"
   },
   "game/common/journal_entries/02_positivism.txt": {
    "size": 3265,
@@ -1385,8 +1385,8 @@
    "sha256": "9f0f471d402393926be0fee0cbf4d2ea682917a19543923d26d8e80dcea2141a"
   },
   "game/common/journal_entries/02_south_american_national_identity.txt": {
-   "size": 10841,
-   "sha256": "a95a6f54dfd7ce6cbef09e0c04ac84a66c195a833849ee782d3bb88523f65a85"
+   "size": 10858,
+   "sha256": "4d941aeb26534e5b187f761521a31414728d8ba34640de6469d2d16992604d2b"
   },
   "game/common/journal_entries/02_vargas.txt": {
    "size": 6085,
@@ -1409,8 +1409,8 @@
    "sha256": "1251d7c6d88566bf353f1aa49452904ccb298f1a03005370b84f3e9366602f4a"
   },
   "game/common/journal_entries/03_russia.txt": {
-   "size": 36530,
-   "sha256": "b75480663aab7d093be6b85d4c49dee3d8d84d6e264467ee9ed81d2eccfa2e2d"
+   "size": 37212,
+   "sha256": "6a9378dfa567d1fb1305d480a2f9d3d42cf3dc3031fe4c2535f780e90b404b40"
   },
   "game/common/journal_entries/03_tibetan_expedition.txt": {
    "size": 6010,
@@ -1429,12 +1429,12 @@
    "sha256": "f97a929a3cc9faa98a8ce3824a4a6196866afba18a89e477600dda230153d7fc"
   },
   "game/common/journal_entries/04_india_british_dictates.txt": {
-   "size": 8785,
-   "sha256": "c73fc3451cd7dcf5d41061b933fcf1689bec98daf6319370e14175fd074dab3c"
+   "size": 9094,
+   "sha256": "84ba8b17aa36752875d347baaa562dccc21c6f9ef1988f3053c153945ef476bd"
   },
   "game/common/journal_entries/04_india_home_rule.txt": {
-   "size": 5071,
-   "sha256": "16832b35e57012bf3207e8e0289d3478e71f484afc726db924d3b81579c3ca25"
+   "size": 5339,
+   "sha256": "974542e750f31bff41828f0a9578a68ef3e5c7d3daf2284aba2a38c342a581cb"
   },
   "game/common/journal_entries/04_india_nationalism.txt": {
    "size": 2138,
@@ -1469,8 +1469,8 @@
    "sha256": "8a213d7c395c6b2cc5f5e8d72d51cb55ab2c0dde62873c30cac07682141e490b"
   },
   "game/common/journal_entries/04_sikh_empire.txt": {
-   "size": 4034,
-   "sha256": "f18359847df1993c48adf36690ab6b2a5b9c83b966978088efad836a459d96a5"
+   "size": 4095,
+   "sha256": "d7e510d9f796a0c307e2ae9d6b1803724f3e44ce8a14341997d92c9992e67ffb"
   },
   "game/common/journal_entries/04_victoria_terminus.txt": {
    "size": 2882,
@@ -1489,16 +1489,16 @@
    "sha256": "2a95d9fa10559080c057693f3372b07c144722984895f2cb82a097a82b8da5c5"
   },
   "game/common/journal_entries/05_balkan_wars.txt": {
-   "size": 10017,
-   "sha256": "3e0aad24bc1fc90814bd0b3ae269e4616bc395f459b0c66b35b2306e5cc0c833"
+   "size": 10092,
+   "sha256": "753368ae35b53a63fb851f9264c125fc848a548b792befc5724b41d8cb65ca79"
   },
   "game/common/journal_entries/05_bulgaria_je.txt": {
-   "size": 2712,
-   "sha256": "fd3dbd34e7d1b3901fccea6d7aebbc965ecf054a20dff09e42b15a337ed5c28a"
+   "size": 2754,
+   "sha256": "530ffad0750245ed0bc64bb3974f36878ccc617e31b4a59786b3236976fef6f6"
   },
   "game/common/journal_entries/05_creation_of_yugoslavia.txt": {
-   "size": 3089,
-   "sha256": "4575c5c9e91e60177d6eb69e9af34e319b680ed22de1de899bb3b033c4d48b60"
+   "size": 3131,
+   "sha256": "f11b3b71ca09a38dae16f828812cb33c38bb86c66275bb218e9fe67d52dba251"
   },
   "game/common/journal_entries/05_danubian_federation.txt": {
    "size": 17732,
@@ -1533,8 +1533,8 @@
    "sha256": "b1dbab51a443be351872ab283e8263451ef6b58e917f3eacbbc81741ef8abaed"
   },
   "game/common/journal_entries/05_montenegro_je.txt": {
-   "size": 15649,
-   "sha256": "552ebe834895e63d0a3a5475df741e4890a64bbb9180b6dda12c17115dba2b4c"
+   "size": 15786,
+   "sha256": "172b5787f6ebb381170c4ea2285d4283fdc937151f1d34043b6fb4d7e1758ba8"
   },
   "game/common/journal_entries/05_national_awakening_monument.txt": {
    "size": 7679,
@@ -1549,28 +1549,28 @@
    "sha256": "5b309340d35ede9fdbc8671840a364d1ef737854b131c7fd64754460e1d424f7"
   },
   "game/common/journal_entries/05_struggle_for_the_highveld.txt": {
-   "size": 7142,
-   "sha256": "cd0d30f6efb844f72d3ad377fddb204db62830fecf72056e11f31520a0bcda9b"
+   "size": 7159,
+   "sha256": "8481811ef74f4842d682c99dc1e98dc4779cfbf9b42e13fbdecb71ffc99df243"
   },
   "game/common/journal_entries/05_technocracy.txt": {
    "size": 1779,
    "sha256": "089b9383952b0d5217f4c59c13027e0f552fb3201d7d18c85f7c883b2ac71195"
   },
   "game/common/journal_entries/05_the_grand_collapse.txt": {
-   "size": 2945,
-   "sha256": "27aeabf0c364f45d6048b15253d0c34e7ce45291f8ce519f3b97bac55198e1f6"
+   "size": 3001,
+   "sha256": "64b87d5734203258fdf72bfd9969cb40bb4ce1c991f832db69fcd39143c1a891"
   },
   "game/common/journal_entries/06_cuba.txt": {
-   "size": 12711,
-   "sha256": "6c8333d481e47a5d21b65aeefa34ab939a6ca8406699e72e7e7acc3e6a593928"
+   "size": 12771,
+   "sha256": "25cab4b8fafd50b7038072ccf784a942b59bb4ed70cfdd85e0511cffb9805a87"
   },
   "game/common/journal_entries/06_dominican_content.txt": {
    "size": 2329,
    "sha256": "d5c620a407876f9ef14e068cf59779af87546dc3d5f65da800608549172b5a95"
   },
   "game/common/journal_entries/06_economic_regeneration.txt": {
-   "size": 48138,
-   "sha256": "7bcacb34f6ad1e6f19a7177476b61306f97babeb6ea67b972c7ad2b8c1fdd087"
+   "size": 48206,
+   "sha256": "1f4d2a972e62c5ddb66c77e52307c3270ca35528f6d3849482b7005cd051553e"
   },
   "game/common/journal_entries/06_iberia.txt": {
    "size": 6555,
@@ -1585,24 +1585,24 @@
    "sha256": "75e8da8adcfa18ae1c4af17d0c7e084d8d51687a03516eb2aff5f134c0ca4a33"
   },
   "game/common/journal_entries/06_lusosphere.txt": {
-   "size": 4109,
-   "sha256": "a90bf7b608dc468351ed7dccdb0e9b24011defa7e5f1ae57c49ef0233ccf6725"
+   "size": 4146,
+   "sha256": "9a3906e629d0a01b080c56105c8009652cb9a384a483678fea10fc62c6993173"
   },
   "game/common/journal_entries/06_morocco_lands_of_anarchy.txt": {
-   "size": 7797,
-   "sha256": "ea3ee07ee02f998dcbc5b5bf23ce4e69ffc52b4dbde6174b06c43c7521cbd39e"
+   "size": 7827,
+   "sha256": "17c5b60fd622a523da3653afc8122704c027824c70abcd302e4bbf0380d78956"
   },
   "game/common/journal_entries/06_philippines_je.txt": {
-   "size": 12399,
-   "sha256": "199e4c1620eef9d82ba8a2f9ca5e859c49e7826c65c833d68098ddfcbf54a92b"
+   "size": 12375,
+   "sha256": "6f7a07ecafb7d6b18efafd0a6f9899cac08c72d770a0c408941258e37c5c6376"
   },
   "game/common/journal_entries/06_portugal_politics.txt": {
    "size": 14647,
    "sha256": "c72620de8c07b2553ce0ea3421450cc91c03f4c2d992cd70d544ee3cd2206acb"
   },
   "game/common/journal_entries/06_portuguese_colonialism.txt": {
-   "size": 5442,
-   "sha256": "04ccccf13e9d7b4ea1dbbb29f86861ca8b1db7f77b635175a39d889b9234ee7a"
+   "size": 5680,
+   "sha256": "bf6c893afb76b81b8827940d882c41ed3817b1c4648525b0da842c9031c5a515"
   },
   "game/common/journal_entries/06_spain_provisional_government.txt": {
    "size": 2838,
@@ -1629,8 +1629,8 @@
    "sha256": "d44de6521aa89d1e1e93d027d1b1c6302563f0535d2e351facc1b8d26a7e6e4b"
   },
   "game/common/journal_entries/07_hokkaido.txt": {
-   "size": 8276,
-   "sha256": "867af26f75e9e3b4f90c603ddbf0e7b357eb57fb6b92ac0f7989b7756436724d"
+   "size": 8293,
+   "sha256": "c3ebac74ec3c3c26ec6d9444ccc9f3c5a06d9c5950095ea9cdedd1501a6c3b21"
   },
   "game/common/journal_entries/07_iwakura_mission.txt": {
    "size": 3075,
@@ -1641,8 +1641,8 @@
    "sha256": "7e4b96f4ea5134a1983de2fde8b16c60f3127fc40caf5acd038ea9a2c1a90234"
   },
   "game/common/journal_entries/07_korea_colonization.txt": {
-   "size": 5992,
-   "sha256": "48f246262ac93d7d722608d8e31e3a81bd75d423c4b2c340e575142e287a3eb8"
+   "size": 6062,
+   "sha256": "4a3ad873568f1264d10dba6c4adad5730ab82329c10b4ac93e0ebdd960324f97"
   },
   "game/common/journal_entries/07_sakoku.txt": {
    "size": 2211,
@@ -1701,8 +1701,8 @@
    "sha256": "3e7b3fb954ee6d71e87f7e9a5878cadcb8acf9f4704b492c21d20552997caab2"
   },
   "game/common/laws/00_navy_model.txt": {
-   "size": 3986,
-   "sha256": "4f9151c671022a5b8b21baefe5940f10540fb261b88fdc300d9072940aec58c4"
+   "size": 3990,
+   "sha256": "6605480a4c4c8cf066822629a2c4b7b0076d95beb6fd854a947e898a507fb414"
   },
   "game/common/laws/01_colonial_affairs.txt": {
    "size": 7119,
@@ -1769,8 +1769,8 @@
    "sha256": "42594f77b4566637631453c60749318f21e154e23d554be166ac68c7cac44784"
   },
   "game/common/messages/00_messages.txt": {
-   "size": 45889,
-   "sha256": "f89cb3e3931afb37d9f05543ad71e48726aee30427be1009599825e1bbbb8e8a"
+   "size": 46255,
+   "sha256": "1e00113585fc07f36f7a934ddf4374a5d07ecf13f38a4a688fbb83ee63b039ef"
   },
   "game/common/messages/01_event_messages.txt": {
    "size": 26083,
@@ -1809,16 +1809,16 @@
    "sha256": "e3e5d52365bc56ec270ab91a6f6f280a07eebd862187e8c604574ae89cc5df40"
   },
   "game/common/modifier_type_definitions/00_modifier_types.txt": {
-   "size": 47435,
-   "sha256": "85a3af4fc77e0ac99948f4b9ea31e5c9a0690da0d96b2472f333de9992d86ad8"
+   "size": 47843,
+   "sha256": "bb5a8d750d0bbcf6f778b85e6f3fdc7467b95391164e9413b8a8a2895cfb09ef"
   },
   "game/common/modifier_type_definitions/01_building_modifier_types.txt": {
    "size": 36489,
    "sha256": "d6417513cc0c299f3be7c51cd42974a096251d3b36dad64e5e54e0f4063062b1"
   },
   "game/common/modifier_type_definitions/02_modifier_types_rules.txt": {
-   "size": 4623,
-   "sha256": "f5e3a31b81660f824fdf82578910c8d98acff74064a7827fa1244daf20e4cb32"
+   "size": 5013,
+   "sha256": "65ee70b677e7b4c899b482274a54074a57f4ffac792085cc309a19cf5fa385f8"
   },
   "game/common/modifier_type_definitions/03_modifier_types_script_only.txt": {
    "size": 4323,
@@ -2073,16 +2073,16 @@
    "sha256": "8deac494cce48c8b1d00f67f76134d3abd34328ee99d8a285428051acb28bc48"
   },
   "game/common/script_values/00_infamy_values.txt": {
-   "size": 4468,
-   "sha256": "ea930b0b139257c80a7120c4bc3d7ceda539850a6da27b72356a74b8ae0344d0"
+   "size": 6317,
+   "sha256": "003b90b8a5a8a8a934258c05c41e2c8f16895fa61be08fee8ce2f3956290df2d"
   },
   "game/common/script_values/01_power_bloc_values.txt": {
    "size": 32656,
    "sha256": "cddf5e3615183e3917b272cb7ef5ef050f5ba0c70e8cc31d756542790c089d7c"
   },
   "game/common/script_values/ai_script_values.txt": {
-   "size": 18183,
-   "sha256": "1cabe254f9969ddd46d74cf945367b85978b69d98dcb7af1b230a2c11f4fe4d1"
+   "size": 19071,
+   "sha256": "e30fda467b1baab99e499e79867683e5a2c59e1ca344cbe27e4171349290e3a4"
   },
   "game/common/script_values/building_values.txt": {
    "size": 1116,
@@ -2172,9 +2172,13 @@
    "size": 174,
    "sha256": "891f3df80cb4abce6ff4f76168457629a025f33cc6428c56ae7b7d9afe6ed66e"
   },
+  "game/common/script_values/prestige_values.txt": {
+   "size": 567,
+   "sha256": "a836003d3525e3079800fab83d617953471848b012283825622a7cff1423fe20"
+  },
   "game/common/script_values/static_treaty_acceptance.txt": {
-   "size": 11304,
-   "sha256": "aebde4afa661abecc54aa3b72a79f285d96f9205241c8c4afea5e5275caef2c0"
+   "size": 11479,
+   "sha256": "a3922c1b86ae919360f9f7b95c8f9536de5085997b8fb9e1036cd65d374f3b62"
   },
   "game/common/script_values/treaty_propose_chance.txt": {
    "size": 184,
@@ -2297,8 +2301,8 @@
    "sha256": "16db5493955d886c92885aa9912ae3d8c2b233acd5b72ca1b84b481a0a5fa90e"
   },
   "game/common/scripted_buttons/06_reconquista_buttons.txt": {
-   "size": 7820,
-   "sha256": "ed5465ebfebda1e48fe6da90ae3de4f13d25b811270d2aafccc7c679ba178267"
+   "size": 8145,
+   "sha256": "af3e0edf96affff8c6158cb53a8500c980b0c666149603f38b0961589d0105b5"
   },
   "game/common/scripted_buttons/06_spa_economic_regeneration_buttons.txt": {
    "size": 5471,
@@ -2393,8 +2397,8 @@
    "sha256": "def9515eff3646a43596eda05e66bf89ce7a883c707cfd67155e31b043307bf0"
   },
   "game/common/ship_modifications/00_ship_modifications.txt": {
-   "size": 139666,
-   "sha256": "93c111d3e565955b78a19e9b8ea206059fe8b77ccbfa89568480ef02fc53b8f7"
+   "size": 139525,
+   "sha256": "1926e35ec5e069dbff987521b6a9d5499d7588430bcc5b87912625bd57747ef6"
   },
   "game/common/ship_modifications/01_utility_modifications.txt": {
    "size": 4808,
@@ -2457,12 +2461,12 @@
    "sha256": "12b801ba870f53c77bbc30ae137d4dd8ee85994a07f2934479e556b0ac205049"
   },
   "game/common/ship_types/00_ship_types.txt": {
-   "size": 60589,
-   "sha256": "356bcffae24060972b28cc7db994854b380f980761aeb19e9967bdedfa87fefa"
+   "size": 62193,
+   "sha256": "b2b9f9bf3bde62cec5182771941224758b3a7db6631dd66f00a64e535c49616f"
   },
   "game/common/static_modifiers/00_code_static_modifiers.txt": {
-   "size": 33922,
-   "sha256": "0cb258ac92666db82a4092e0dfb4fd245e81765a72566112ec6b231b361df50d"
+   "size": 33938,
+   "sha256": "36f22b9964e6bb4412be83850c1d47208368ac9ceb26b9aa61d22304d3d0f036"
   },
   "game/common/static_modifiers/00_companies.txt": {
    "size": 208,
@@ -2521,8 +2525,8 @@
    "sha256": "2f0247eddcd69c6804bf8a9f1e1b7a5d8f7838968201d5bf6258c71dd44c4e0b"
   },
   "game/common/static_modifiers/00_ip4_02_modifiers.txt": {
-   "size": 12391,
-   "sha256": "aea792c5730913f44c59317c911d4c19ef82fec62aa6c12fdc613529e1ce7d79"
+   "size": 12395,
+   "sha256": "8a5ae9742a3289bbe342bfe49f4ad15881ac53d6e0f0003aac3cd76cf4aea7dd"
   },
   "game/common/static_modifiers/00_ip4_03_modifiers.txt": {
    "size": 7523,
@@ -2597,8 +2601,8 @@
    "sha256": "01ec03fb2a35d10b1e74fb3439af027933aea2f960e8adc1121d62241c30af42"
   },
   "game/common/static_modifiers/105_modifiers.txt": {
-   "size": 24478,
-   "sha256": "3f29dea09e41db23aade3cd7fea5d45e17e4a5941b14936c8c321006e94953e4"
+   "size": 24490,
+   "sha256": "4a0f8d1041eafd13f58f30e123d84f60789d4a8f38ebc16339482a7c5c3643d0"
   },
   "game/common/static_modifiers/106_modifiers.txt": {
    "size": 10413,
@@ -2669,24 +2673,24 @@
    "sha256": "fe7422bbba33d6d2901dc7b3a0e98acd8443ada584a4b458558fc8688a16be02"
   },
   "game/common/static_modifiers/content_204_modifiers.txt": {
-   "size": 24345,
-   "sha256": "72aaeab517b637905b672e87e2483500642cb629ef9d6fe2c65947ed3f5d47ff"
+   "size": 24349,
+   "sha256": "841f9694c955c03f55c12203cb7d3eb3d1db2f8fcb6a851eef15287e43296320"
   },
   "game/common/static_modifiers/content_2_modifiers.txt": {
-   "size": 22599,
-   "sha256": "c29d5735a69ecb66abc62ee4c4d78b00a3894627f8963ee4aa9fb394376425d8"
+   "size": 22603,
+   "sha256": "d0d8f757948cf483719841f332a7773e099921c9656a1380c197e943664214d1"
   },
   "game/common/static_modifiers/content_304_modifiers.txt": {
    "size": 24850,
    "sha256": "65b39f1a5051189ee09e6f3d5d9acf7ebf71a8b46d61ca401e7794053c3b1ddf"
   },
   "game/common/static_modifiers/content_3_modifiers.txt": {
-   "size": 19945,
-   "sha256": "12a48944c3dbd6bab107b1f708b6d2092d81d112b0beffb3d69b6b71df93201e"
+   "size": 19949,
+   "sha256": "7a59c9a78ab560a0c4301046eb4f5cc0322376f3c367b9d448246eba54a17159"
   },
   "game/common/static_modifiers/content_4_modifiers.txt": {
-   "size": 28843,
-   "sha256": "c648749b16e9d2aafc08098f2de2b2455f7061c16487ee5681c173825f410ca2"
+   "size": 28847,
+   "sha256": "e5501f40882be8478338324042195c6a244c06c533dc3c27e18b2affa14cc297"
   },
   "game/common/static_modifiers/cuban_modifiers.txt": {
    "size": 4113,
@@ -2745,8 +2749,8 @@
    "sha256": "3f28d2e2395e9d337ca58cace117edd922e2cfc6e4f500c7c0e6385901ec6489"
   },
   "game/common/technology/technologies/30_society.txt": {
-   "size": 34273,
-   "sha256": "da4cf39cf4a04812a45f826aac378d748bb57947b07eacdd02a92bceda7d0f32"
+   "size": 34622,
+   "sha256": "39fb1574d4dafdb67293b4e0e465a82b82bee63e4ac810f9715727d48a0fd918"
   },
   "game/common/terrain/01_terrain.txt": {
    "size": 24309,
@@ -2761,8 +2765,8 @@
    "sha256": "caa5603cf92e93bedfef94dbb94d464666772bcf5acadbc6d81991a6409334c2"
   },
   "game/common/treaty_articles/02_guarantee_independence.txt": {
-   "size": 7633,
-   "sha256": "a846af719f23c510c1b3afde81d06aeb2a3a1be13089c68bf21108ca0ba770b3"
+   "size": 7631,
+   "sha256": "633f57dd7b0f934d66e268d82e95be4e4f820acba1419064d3a80c5e3914ebc3"
   },
   "game/common/treaty_articles/03_support_independence.txt": {
    "size": 9958,
@@ -2865,24 +2869,24 @@
    "sha256": "2281e4c5ff5b5dbfee8625e4633ce9e5b6ef4c839116504a80ec88fa6d242b84"
   },
   "game/common/treaty_articles/31_toll_exemption.txt": {
-   "size": 4231,
-   "sha256": "e11b6d59363253d77f0999a9a8b87c57eb3aa77fe05cec962b7de7aced009091"
+   "size": 5369,
+   "sha256": "3c0a017977d3e88e0a9c15e32a12ab9e0bfbe7dc53c0d7cc8f994665163bd98c"
   },
   "game/common/treaty_articles/32_no_tolls.txt": {
-   "size": 4199,
-   "sha256": "b0b9860cb583516c72916bc982d71bc65f5f3502b7ae8a10cdc9e004a1b1d714"
+   "size": 4912,
+   "sha256": "a9b44e9696572c43845302f1b418be654084319250b35bf45a2f9bf9446c8806"
   },
   "game/common/treaty_articles/33_strait_access.txt": {
-   "size": 6236,
-   "sha256": "56a76078d2519de8d7270c005a69dd5728a660e27fb5545cab0812b054264122"
+   "size": 7363,
+   "sha256": "e4d5a0551f2b085780381a8e2eb7019a44f3683aba87e14dff719255af1d7e16"
   },
   "game/common/treaty_articles/34_no_strait_closure.txt": {
-   "size": 6358,
-   "sha256": "2185679715cfba111ccb89b12190009927b4bab3f5887949358b533fce83890c"
+   "size": 7042,
+   "sha256": "917a6d91976c646ac3631a9a9f0c1dfbdcaddd690dcb0d9d96040b8e6d30fdc8"
   },
   "game/common/treaty_articles/35_non_piracy_agreement.txt": {
-   "size": 4627,
-   "sha256": "89532a330cb616f0d3bdd5a8725c10c510f6ca8242ff0e19fdd1cdb3359427a9"
+   "size": 4398,
+   "sha256": "34068fc3b270610d1b3a6d8bcf1426ef871140e4c637871a9036b31ea96f867b"
   },
   "game/common/treaty_articles/36_abandon_piracy.txt": {
    "size": 4625,
@@ -2929,12 +2933,12 @@
    "sha256": "cbaa135519adee2468591fc42cfc960e90157aa7b445d49697828527e92ec9e3"
   },
   "game/localization/english/ai_strategies_l_english.yml": {
-   "size": 19786,
-   "sha256": "17e7546316e1d05363397f4885b2a32cc836670cd09ac0b43cdd249052b0ccb9"
+   "size": 19940,
+   "sha256": "f6a1fc35a62ce06bfa90a139f4652eb42cc74881d281c77c0c92272a492b969c"
   },
   "game/localization/english/alerts_l_english.yml": {
-   "size": 76638,
-   "sha256": "24b3d8c135df4caede814ac73d3397387c4694eacba41652bbe56676f31fd8d8"
+   "size": 77643,
+   "sha256": "3245b61065dd95731fba26ba441d9818e57972dcca0c3d677138559de5dda827"
   },
   "game/localization/english/amendments_ep2_l_english.yml": {
    "size": 1192,
@@ -3021,8 +3025,8 @@
    "sha256": "70de5a795826d178246973b3e852959e552bdc551e319f9e36aa69d85b68c114"
   },
   "game/localization/english/concepts_l_english.yml": {
-   "size": 409088,
-   "sha256": "55c7f8bb9f33d89b747c13b4b46098d9c6c8bc18337ae2b442bbd172d6c6b630"
+   "size": 409741,
+   "sha256": "5543a4380e645252ad4bf7df2bc17a18d4e37b88bed90788bf8bef6bfdf200b4"
   },
   "game/localization/english/content_101_l_english.yml": {
    "size": 78281,
@@ -3061,8 +3065,8 @@
    "sha256": "8fc8b0df199a95c7655a1847b94d89da1e6c37e97bed72935ebfb51bd209b63a"
   },
   "game/localization/english/core_l_english.yml": {
-   "size": 25043,
-   "sha256": "8167d9cebcc16f69385f0a1804fdf242524c42cc57a75b7acc36b520282a097b"
+   "size": 25305,
+   "sha256": "6afebac5365a7e49ac95e8aa25e11d5e73372fb117d9032d06296f043255c88c"
   },
   "game/localization/english/countries_l_english.yml": {
    "size": 46915,
@@ -3085,8 +3089,8 @@
    "sha256": "d26b794e76aeaa662fb6e31678bd5a02095510c497363d4aa7d037d4d9063511"
   },
   "game/localization/english/customized_tooltips_l_english.yml": {
-   "size": 113888,
-   "sha256": "441355224b775d7944943c3f8e1cf19722bcdb0dda706e652fe062fcc2c1e616"
+   "size": 113958,
+   "sha256": "2d3a1c9f22b52d52b5f9b3ce16e79c9421af22b724bef8e9714f02d3497eb947"
   },
   "game/localization/english/debug_l_english.yml": {
    "size": 3463,
@@ -3097,8 +3101,8 @@
    "sha256": "4b60105542f85553a41ad7141873514e8b557352b10889222986376399d2b2f1"
   },
   "game/localization/english/diplomacy_l_english.yml": {
-   "size": 282974,
-   "sha256": "23a47cbf51fd4a9319354ea6a7fc7da9185f749d6673fb6c4bafdab82b406bc4"
+   "size": 284708,
+   "sha256": "1efde2a18fdee867822a921a3666f87cd98db8b6405e779fe9ea6ff90c3a8f7c"
   },
   "game/localization/english/diplomatic_plays_l_english.yml": {
    "size": 88928,
@@ -3193,8 +3197,8 @@
    "sha256": "2c2d46df571533045e0b6c6c5fd238493e1dfe4dc298af757111b672b61f2819"
   },
   "game/localization/english/game_rules_l_english.yml": {
-   "size": 12729,
-   "sha256": "fa9a803d2e09b35eaa8af5b3e2b3f85d910f26e6c1bec15dd82238050a2c9728"
+   "size": 13872,
+   "sha256": "0231973ea736e5609de7ad9136eedcad404e1d5faa7c5175c342fe9819d431e4"
   },
   "game/localization/english/geographic_regions_l_english.yml": {
    "size": 15685,
@@ -3249,8 +3253,8 @@
    "sha256": "24ce0bb318a79e80c1aa9ecc49f8a0e0fedb7bc2d2dba1de6862ca9359a3e49a"
   },
   "game/localization/english/interfaces_l_english.yml": {
-   "size": 1370398,
-   "sha256": "86f24247e1dd449a9de7a710829850bf7f5fd7b76b9d5e048673f307441eba14"
+   "size": 1372106,
+   "sha256": "d5650c82653a0e0bd563580b5244690ec783364039c1045fa1aca43494c50ff8"
   },
   "game/localization/english/inventions_l_english.yml": {
    "size": 86891,
@@ -3333,8 +3337,8 @@
    "sha256": "008be75947406f364845345c080215f66fc8be7ca51a621caf607d7846540426"
   },
   "game/localization/english/ip4_portuguese_colonialism_l_english.yml": {
-   "size": 23369,
-   "sha256": "37ee3b4eb9380d68117cc56a549437b1adccc85696d0914da62627183d7ecdf5"
+   "size": 23439,
+   "sha256": "22fe08a832e949ae1df1c05d1a8914a48ef91f16056f4f860755b54c8cad142f"
   },
   "game/localization/english/ip4_spain_l_english.yml": {
    "size": 61867,
@@ -3405,8 +3409,8 @@
    "sha256": "d377378c14ca7d79249f5602f95e8873366c9dd8b01b37c24d2902c43dd1642b"
   },
   "game/localization/english/modifiers_l_english.yml": {
-   "size": 494303,
-   "sha256": "d444f7f7292c91fa84476ff72eea9b07a0b6496c654967b01008c2f9814377dd"
+   "size": 495800,
+   "sha256": "efafef113e15718b9f32965fc000f21788b333dfc7ae0f18e063e38029ec8d3d"
   },
   "game/localization/english/mp1_04_l_english.yml": {
    "size": 29417,
@@ -3529,12 +3533,12 @@
    "sha256": "eef053b7e815d3225c2bc5cd851c5f2472f569c5e2e38a15b1b95b3833bb9622"
   },
   "game/localization/english/straits_l_english.yml": {
-   "size": 16519,
-   "sha256": "fd71aa6aa455aae3c10c403393122852e5177f12d3d9ce3f665cb614f94c759c"
+   "size": 16876,
+   "sha256": "cd78bcc2bd0247b5a6245b9d350637c100802863b1fcf098c49ad1517ba9b8a4"
   },
   "game/localization/english/strategic_region_stances_l_english.yml": {
-   "size": 5111,
-   "sha256": "192dd8685971e85bbf4da707a71308337afa2b7b53892a55785561ce2044df4b"
+   "size": 5196,
+   "sha256": "3af8c895e8a9bce94c5c5a909f305225116b5a790571e924650845b215c228de"
   },
   "game/localization/english/test_modifiers_l_english.yml": {
    "size": 111,
@@ -3549,8 +3553,8 @@
    "sha256": "76a37e8fa14e4b1983a2503de9f60bbd1993816d7b2acffe3e2696811acd02da"
   },
   "game/localization/english/triggers_l_english.yml": {
-   "size": 577438,
-   "sha256": "ea8131c053f8bf0dc4065d29985cc98b7308dfe27149e62ee8267f1752e663f3"
+   "size": 582153,
+   "sha256": "2454e4f06721590b308ec9810c3a73f59df384d4eb7cf5e0bc90ac22015faa12"
   },
   "game/localization/english/tutorial_l_english.yml": {
    "size": 206636,
