@@ -1,14 +1,14 @@
-"""The Banking readings in vanilla's top bar (gui/topbar.gui).
+"""The Banking phase in vanilla's top bar (gui/topbar.gui).
 
-The owner asked for the cycle's phase, momentum and bubble pressure in the top
-bar itself, as bands: icons after MONEY, each its own hover and click target,
-the phase on the bar's top row and the other two beneath it on the second. This
-checks that the override is vanilla's file plus two marked changes (the
-readings and the bar's declared width), that the declared width covers the
-widest bar so the alerts beside it cannot sit on the readings again, that the
-two rows line up with vanilla's and add no height, that the readings are gated
-like the Budget panel's Banking tab, and that they draw the overview's own
-icons and tooltips rather than a copy.
+The owner asked for Banking readings in the top bar itself, as bands, and then
+for the phase alone: one icon after MONEY, level with vanilla's primary icons,
+with its word and the overview's tooltip on hover and the Banking tab on a
+click. This checks that the override is vanilla's file plus two marked changes
+(the phase and the bar's declared width), that the declared width covers the
+widest bar so the alerts beside it cannot sit on the phase again (#588's
+three icons were under them), that the phase lines up with vanilla's icons and
+adds no height, that it is gated like the Budget panel's Banking tab, and that
+it draws the overview's own icon and tooltip rather than a copy.
 """
 import difflib
 import os
@@ -26,12 +26,9 @@ TOPBAR = os.path.join(REPO, "gui", "topbar.gui")
 VANILLA = os.path.join(REPO, "test_fixtures", "vanilla_gui", "topbar.gui")
 MARK = "### TIMELINE EXTENDED"
 
-READINGS = [  # (reading, icon type, overview tooltip, the word the tooltip names)
-    ("phase", "te_banking_phase_icons", "banking_dash_phase_tt",
-     "[JournalEntry.GetCountry.GetCustom('banking_dash_phase_word')]"),
-    ("momentum", "te_banking_momentum_icons", "banking_dash_momentum_tt", "$banking_dash_momentum_value$"),
-    ("bubble", "te_banking_bubble_icons", "banking_dash_bubble_tt", "$banking_dash_bubble_value$"),
-]
+PHASE_WORD = "[JournalEntry.GetCountry.GetCustom('banking_dash_phase_word')]"
+CRASH_RISK = ("[AddLocalizationIf( GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( "
+              "JournalEntry.GetCountry.MakeScope ).End ), 'banking_dash_ov_crash_risk_tt' )]")
 PHASES = ["panic", "downturn", "stagnation", "stable", "expansion", "boom", "frenzy"]
 
 
@@ -145,24 +142,27 @@ def _instances(block, name):
 
 
 class Readings:
-    """The readings' blocks: the top row, the bottom row, the three buttons."""
+    """The top bar's Banking type: the reserved widget and the phase button."""
 
     def __init__(self):
         self.dash = _read(DASH)
         self.body = "{" + _type_body(self.dash, "te_banking_topbar_readings") + "}"
-        self.top = _children(self.body, "widget")[0]
         self.gates = _instances(self.body, "te_banking_topbar_gate")
-        self.bottom_gate = self.gates[1]
-        self.pair = _block_from(self.bottom_gate, self.bottom_gate.index("flowcontainer = {"))
         self.buttons = _instances(self.body, "te_banking_topbar_reading")
+        self.phase = self.buttons[0]
+        self.icon = _block_from(self.phase, self.phase.index("te_banking_phase_icons = {"))
+        # the button's size: the instance's, or else its type's
+        button_type = "{" + _type_body(self.dash, "te_banking_topbar_reading") + "}"
+        own = re.search(r"size = \{", _own(self.phase))
+        self.phase_size = _size(self.phase if own else button_type)
 
 
 class GateTest(unittest.TestCase):
     """Hidden in observer mode, while the Banking tab is closed to the player,
     and until the entry runs: one widget per gate, as budget_panel.gui nests
-    them, for each row."""
+    them."""
 
-    def test_three_nested_gates_then_the_row(self):
+    def test_three_nested_gates_then_the_phase(self):
         gate = "{" + _type_body(_read(DASH), "te_banking_topbar_gate") + "}"
         self.assertIn('visible = "[Not( GetMetaPlayer.IsObserver )]"', _own(gate))
         tab, = _children(gate)
@@ -176,14 +176,12 @@ class GateTest(unittest.TestCase):
         self.assertIn('visible = "[JournalEntry.IsActive]"', _own(running))
         self.assertIn('block "readings" {}', running)
 
-    def test_every_reading_is_behind_a_gate(self):
+    def test_the_phase_is_behind_the_gate_and_the_widget_is_not(self):
         r = Readings()
-        self.assertEqual(len(r.gates), 2)
-        inside = sum(len(_instances(g, "te_banking_topbar_reading")) for g in r.gates)
-        self.assertEqual(inside, 3)
-        self.assertEqual(len(r.buttons), 3)
-        self.assertNotRegex(_own(r.body), r"\bvisible =")    # the top row's 80 stay: see GeometryTest
-        self.assertNotRegex(_own(r.top), r"\bvisible =")
+        self.assertEqual(len(r.gates), 1)
+        self.assertEqual(len(r.buttons), 1)
+        self.assertEqual(len(_instances(r.gates[0], "te_banking_topbar_reading")), 1)
+        self.assertNotRegex(_own(r.body), r"\bvisible =")    # its 40 stay: see GeometryTest
 
     def test_the_gate_is_the_budget_tabs(self):
         tab = _read(BUDGET)
@@ -196,8 +194,8 @@ class GateTest(unittest.TestCase):
 
 class GeometryTest(unittest.TestCase):
     """The bar's declared width covers its widest content, so ingame_hud.gui's
-    hbox puts the alerts after the readings (#588 put them under the alerts),
-    and the two rows line up with vanilla's without making the bar taller.
+    hbox puts the alerts after the phase (#588 put its icons under them), and
+    the phase lines up with vanilla's icons without making the bar taller.
     Every number is read from the markup."""
 
     @classmethod
@@ -207,8 +205,6 @@ class GeometryTest(unittest.TestCase):
         cls.named = _block_from(bar, bar.index("widget = {"))
         cls.outer = _block_from(cls.named, cls.named.index("flowcontainer = {"))
         cls.primary = _block_from(cls.named, cls.named.index("flowcontainer = {", cls.named.index("### PRIMARY ICONS")))
-        cls.secondary = "{" + _type_body(text, "topbar_secondary_icons") + "}"
-        cls.secondary_icon = int(re.search(r"@secondary_icon_size = (\d+)", text).group(1))
         cls.r = Readings()
 
         cls.spacing = int(re.search(r'block "spacing" \{\s*spacing = (\d+)', cls.primary).group(1))
@@ -216,13 +212,13 @@ class GeometryTest(unittest.TestCase):
         supply = _block_from(cls.primary, supply_at)
         buttons = [(m.start(), _block_from(cls.primary, m.end() - 1))
                    for m in re.finditer(r"\bbutton = \{", cls.primary)]
-        glow = [(at, b) for at, b in buttons if "using = glow_button" in _own(b)]
-        cls.widths = [_size(b)[0] for _, b in glow]
-        cls.supply_width = sum(_size(b)[0] for at, b in glow if supply_at < at < supply_at + len(supply) + 30)
-        cls.first_icon = _block_from(glow[0][1], glow[0][1].index("icon = {"))
+        cls.glow = [(at, b) for at, b in buttons if "using = glow_button" in _own(b)]
+        cls.widths = [_size(b)[0] for _, b in cls.glow]
+        cls.supply_width = sum(_size(b)[0] for at, b in cls.glow if supply_at < at < supply_at + len(supply) + 30)
+        cls.first_icon = _block_from(cls.glow[0][1], cls.glow[0][1].index("icon = {"))
 
     def start(self, landlocked):
-        """Where the readings start: after the capacities, supply ships and
+        """Where the phase starts: after the capacities, supply ships and
         MONEY, with a gap before each child of the row and inside the
         capacities' own row."""
         x = _position(self.primary)[0]
@@ -238,90 +234,54 @@ class GeometryTest(unittest.TestCase):
     def test_the_declared_width_covers_the_widest_bar(self):
         width, height = _size(self.named)
         self.assertEqual(height, 80)
-        reserved = _size(self.r.top)[0]
+        reserved = _size(self.r.body)[0]
         right = _int(self.outer, "margin_right")
         widest = max(self.start(False), self.start(True)) + reserved + right
         self.assertEqual(width, -(-widest // 5) * 5, "the widest case, rounded up to a multiple of 5")
 
-    def test_the_lock_toggle_clears_the_bottom_row(self):
+    def test_the_lock_toggle_is_below_the_phase(self):
+        """The toggle is anchored to the declared size's bottom-right corner,
+        so it moves with the width: onto the bottom row, under the phase."""
         toggle = _block_from(self.named, self.named.index("button_icon_round_toggle = {"))
         self.assertIn("parentanchor = bottom|right", _own(toggle))
         tw, th = _size(toggle)
         tx, ty = _position(toggle)
         width, height = _size(self.named)
-        left = width + tx - tw
-        pair_right = _int(self.r.pair, "margin_left") + 2 * _size(self.r.buttons[1])[0] + _int(self.r.pair, "spacing")
-        for landlocked in (False, True):
-            with self.subTest(landlocked=landlocked):
-                self.assertGreaterEqual(left - (self.start(landlocked) + pair_right), 2)
+        top = height + ty - th
+        phase_bottom = _position(self.primary)[1] + self.r.phase_size[1]
+        self.assertGreaterEqual(top - phase_bottom, 2)
 
-    def test_the_bottom_row_clears_the_secondary_row(self):
-        items = [int(w) for w, h in re.findall(r"minimumsize = \{ (\d+) (\d+) \}", self.secondary)]
-        background = _block_from(self.secondary, self.secondary.index("background = {"))
-        end = _position(self.secondary)[0] + sum(items) + _int(background, "margin_right")
-        self.assertEqual(end, 676)
-        first = min(self.start(False), self.start(True)) + _int(self.r.pair, "margin_left")
-        self.assertGreaterEqual(first - end, 2, "tight: the landlocked bar leaves this gap")
-
-    def test_the_rows_line_up_with_vanillas_and_add_no_height(self):
-        py = _position(self.primary)[1]
-        top_h = _size(self.r.top)[1]
-        phase, momentum, bubble = self.r.buttons
-        # top row: vanilla's primary buttons are 40 high, their icons 32, 2 down from centre
-        self.assertEqual(top_h, 40)
-        self.assertEqual(_size(phase)[1], 40)
-        icon = _block_from(phase, phase.index("te_banking_phase_icons = {"))
-        self.assertEqual(_size(icon), _size(self.first_icon))
-        self.assertEqual(_position(icon), _position(self.first_icon))
-        # bottom row: the secondary row's icons, at the locked row's y
-        locked_y = int(re.search(r'blockoverride "animation" \{\s*position = \{ 0 (\d+) \}', self.named).group(1))
-        item_h = int(re.search(r"minimumsize = \{ \d+ (\d+) \}", self.secondary).group(1))
-        vanilla_icon_y = locked_y + (item_h - self.secondary_icon) // 2
-        for button, name in ((momentum, "te_banking_momentum_icons"), (bubble, "te_banking_bubble_icons")):
-            with self.subTest(icons=name):
-                icon = _block_from(button, button.index(f"{name} = {{"))
-                self.assertEqual(_size(icon), (self.secondary_icon, self.secondary_icon))
-                self.assertEqual(py + top_h + _position(icon)[1], vanilla_icon_y)
-        # no taller: the primary row ends where the locked secondary row does
-        bottom_h = _size(momentum)[1]
-        self.assertLessEqual(py + top_h + bottom_h + _int(self.primary, "margin_bottom"), locked_y + item_h)
-
-    def test_the_phase_is_centred_over_the_pair(self):
-        phase_gate = _instances(self.r.top, "te_banking_topbar_gate")[0]
-        phase_w = _size(self.r.buttons[0])[0]
-        pair_w = 2 * _size(self.r.buttons[1])[0] + _int(self.r.pair, "spacing")
-        self.assertEqual(_position(phase_gate)[0] + phase_w / 2, _int(self.r.pair, "margin_left") + pair_w / 2)
-        self.assertLessEqual(_position(phase_gate)[0] + phase_w, _size(self.r.top)[0])
+    def test_the_phase_lines_up_with_vanillas_icons_and_adds_no_height(self):
+        self.assertEqual(_size(self.r.body), (self.r.phase_size[0], 40))
+        self.assertEqual(self.r.phase_size[1], _size(self.glow[0][1])[1])       # 40, a primary button's height
+        self.assertEqual(_size(self.r.icon), _size(self.first_icon))            # 32
+        self.assertEqual(_position(self.r.icon), _position(self.first_icon))    # 2 below centre
 
 
 class ReuseTest(unittest.TestCase):
-    """The readings draw the overview's icon types and name the overview's
-    words and tooltips: no texture, band code or threshold of their own."""
+    """The phase draws the overview's icon type and names the overview's word
+    and tooltip: no texture, band code or threshold of its own."""
 
     def setUp(self):
         self.r = Readings()
         self.dash = self.r.dash
-        self.body = self.r.body
-        self.buttons = self.r.buttons
 
-    def test_each_reading_instances_the_overviews_icon_type(self):
+    def test_the_phase_instances_the_overviews_icon_type(self):
         overview = _type_body(self.dash, "te_banking_overview_panel")
-        self.assertEqual(len(self.buttons), len(READINGS))
-        for button, (reading, icons, _, _), px in zip(self.buttons, READINGS, (32, 26, 26)):
-            with self.subTest(reading=reading):
-                self.assertIn(f"{icons} = {{", button)
-                self.assertEqual(_size(_block_from(button, button.index(f"{icons} = {{"))), (px, px))
-                self.assertRegex(overview, rf'blockoverride "icons" \{{\s*{icons} = \{{\}}')
+        self.assertRegex(overview, r'blockoverride "icons" \{\s*te_banking_phase_icons = \{\}')
+
+    def test_only_the_phase(self):
+        body = self.r.body + _type_body(self.dash, "te_banking_topbar_gate")
+        for gone in ("te_banking_momentum_icons", "te_banking_bubble_icons", "te_banking_crash_risk_badge"):
+            self.assertNotIn(gone, body)
+        loc = _loc()
+        for gone in ("banking_dash_top_momentum_tt", "banking_dash_top_bubble_tt"):
+            self.assertNotIn(gone, loc)
 
     def test_nothing_is_drawn_or_decided_here(self):
-        for body in (self.body, _type_body(self.dash, "te_banking_topbar_gate")):
+        for body in (self.r.body, _type_body(self.dash, "te_banking_topbar_gate")):
             for needle in ("texture =", "ScriptValue(", "CFixedPoint", "banking_dash_phase_", "Var("):
                 self.assertNotIn(needle, body)
-
-    def test_the_bubble_carries_the_overviews_crash_risk_badge(self):
-        self.assertIn("te_banking_crash_risk_badge = {", self.buttons[2])
-        overview = _type_body(self.dash, "te_banking_overview_panel")
-        self.assertRegex(overview, r'blockoverride "badge" \{\s*te_banking_crash_risk_badge = \{')
 
     def test_a_click_opens_the_banking_tab(self):
         reading = _type_body(self.dash, "te_banking_topbar_reading")
@@ -330,22 +290,22 @@ class ReuseTest(unittest.TestCase):
         self.assertIn("using = tooltip_below", reading)
         self.assertIn("InformationPanel.SelectTab('te_banking')", _read(BUDGET))
 
-    def test_each_tooltip_is_the_word_then_the_overviews_tooltip(self):
+    def test_the_tooltip_is_the_word_the_crash_risk_then_the_overviews_tooltip(self):
         loc = _loc()
-        for button, (reading, _, overview_tt, word) in zip(self.buttons, READINGS):
-            with self.subTest(reading=reading):
-                key = re.search(r'tooltip = "(\w+)"', _own(button)).group(1)
-                self.assertEqual(key, f"banking_dash_top_{reading}_tt")
-                header = re.match(r"(#header [^#]+#!)\\n\$(\w+)\$$", loc[overview_tt])
-                self.assertIsNotNone(header, f"{overview_tt} is its header and its body")
-                self.assertEqual(header.group(2), f"{overview_tt}_body")
-                self.assertIn(header.group(2), loc)
-                self.assertEqual(loc[key], f"{header.group(1)}\\n{word}\\n$TOOLTIP_DELIMITER$\\n${header.group(2)}$")
+        key = re.search(r'tooltip = "(\w+)"', _own(self.r.phase)).group(1)
+        self.assertEqual(key, "banking_dash_top_phase_tt")
+        header = re.match(r"(#header [^#]+#!)\\n\$(\w+)\$$", loc["banking_dash_phase_tt"])
+        self.assertIsNotNone(header, "banking_dash_phase_tt is its header and its body")
+        self.assertEqual(header.group(2), "banking_dash_phase_tt_body")
+        self.assertIn(header.group(2), loc)
+        self.assertEqual(loc[key],
+                         f"{header.group(1)}\\n{PHASE_WORD} {CRASH_RISK}\\n$TOOLTIP_DELIMITER$\\n${header.group(2)}$")
 
-    def test_the_momentum_and_bubble_words_are_the_overviews(self):
-        overview = _type_body(self.dash, "te_banking_overview_panel")
-        for key in ("banking_dash_momentum_value", "banking_dash_bubble_value"):
-            self.assertIn(f'text = "{key}"', overview)
+    def test_the_crash_risk_line_is_the_overviews_badge(self):
+        badge = _type_body(self.dash, "te_banking_crash_risk_badge")
+        self.assertIn("GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( "
+                      "JournalEntry.GetCountry.MakeScope ).End )", badge)
+        self.assertIn('tooltip = "banking_dash_ov_crash_risk_tt"', badge)
 
 
 class PhaseWordTest(unittest.TestCase):

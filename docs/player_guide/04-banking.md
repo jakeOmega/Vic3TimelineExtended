@@ -205,11 +205,10 @@ Surging. The words are colored by how far the reading is from calm: green and
 white are safe, yellow and gold warn, and red marks an extreme (Panic, Frenzy,
 Collapsing momentum, Severe bubble pressure). A Boom reads blue.
 
-The first row's three icons also sit in the top bar, right after your weekly
-balance, while the journal entry is running: the phase on top, momentum and
-bubble pressure beneath it. They show no words or figures: hover one for its
-word and the same tooltip, with the warning mark on the bubble as here, and
-click it to open the Banking tab.
+The cycle's phase also shows in the top bar, as its icon right after your
+weekly balance, while the journal entry is running. Hover it for the phase's
+word and the same tooltip, with a crash-risk warning while that risk is high,
+and click it to open the Banking tab.
 
 Below the overview come five sections. All start open except the explanations,
 and each heading opens or closes its section:
