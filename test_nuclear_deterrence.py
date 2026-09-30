@@ -790,6 +790,19 @@ class TestAtHome(unittest.TestCase):
             self.assertTrue(loc_value(f"nd_home_row_{term}_tt"), term)
         self.assertIn("[InterestGroup.GetName]", loc_value("nd_home_ig_name"))
 
+    def test_cap_row_shows_what_the_cap_cut(self):
+        """A group whose terms total past the cap (doctrine 2 + readiness 1 -> 2)
+        gets a closing row with the difference, so the rows visibly add up."""
+        sv = "InterestGroup.MakeScope.ScriptValue"
+        self.assertIn(f"{sv}('nd_disp_ig_cap_cut'), '(CFixedPoint)0' )", self.table)
+        self.assertIn('text = "nd_home_row_cap_value"', self.table)
+        self.assertIn(f"{sv}('nd_disp_ig_cap_cut')", loc_value("nd_home_row_cap_value"))
+        self.assertTrue(loc_value("nd_home_row_cap_tt"))
+        body = block(self.values, "nd_disp_ig_cap_cut")
+        self.assertIn("value = nd_disp_ig_stance", body)
+        for term in HOME_TERMS:
+            self.assertIn(f"subtract = nd_disp_ig_term_{term}", body, term)
+
     def test_each_class_shows_the_terms_its_line_printed(self):
         """militarist: doctrine, readiness; restraint: + authority, the arsenal;
         officers: doctrine, readiness, crew strain; business: alerts and crises,
