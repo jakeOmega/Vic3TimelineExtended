@@ -39,7 +39,7 @@ engine capabilities are insufficient. No engine feasibility claim is implied by 
 ### What this document does not settle
 
 Exact rates, technology gates, political weights, durations, implementation identifiers, and
-performance budgets require prototypes and balancing. The illustrative party example is not a
+performance budgets require prototypes and balancing. The worked passage example is not a
 balance table. Detailed parliamentary/presidential institutions remain a separate system; this
 spec defines their interface and a fallback when that system is absent.
 
@@ -76,6 +76,7 @@ Conceptually separate these records, whatever storage the engine supports:
 | Bill | Base code version, sponsor, changed provisions, revision, stage, proposed commencement |
 | Provision | Instrument, tax base, rate/amount, coverage, exceptions, precedence, duration |
 | Commitment | Actor, bill revision, conditions, promised action, circumstances allowing release |
+| Spending obligation | Required action, baseline, start/deadline, duration, actual cost, verification, fulfillment/breach state |
 | Estimate | Economy snapshot date, code/bill revision, method, coverage, uncertainty |
 | Legislative result | Required authorities, recorded decisions, assent, pending commencement |
 | Scheduled transition | Provision identity, date, successor rule, later amendments that supersede it |
@@ -83,9 +84,38 @@ Conceptually separate these records, whatever storage the engine supports:
 A bill is a patch to a complete code. Unchanged provisions remain visible but need not be
 renegotiated individually. Review always compares the complete resulting code with the enacted one.
 
-Proposed initial scope: one active legislative tax bill per country, plus one editable draft.
+Initial scope: one tax bill under debate per country, plus one editable draft. Approval frees
+the debate slot; approved future changes remain separately recorded and become part of the
+baseline for subsequent bills. A delayed commencement or long phase-in must not block legislation.
 This controls bookkeeping, not the number of clauses a bill may contain. Reconcile a draft with
-any intervening enacted change before introduction; do not silently overwrite a newer code.
+intervening changes before introduction; do not silently overwrite a newer code.
+
+### Baseline changes and approved timelines
+
+A bill changes named provisions to explicit resulting values on explicit dates. Review compares
+the timeline under existing law, including approved future changes, with the timeline if the bill
+passes. Approaching expiries do not prevent introduction or passage.
+
+For example, a 30% dividend rate is due to revert to 15% on January 1:
+
+- A bill setting 25% from February 1 shows 30% -> 15% in January -> 25% in February.
+- A bill setting 25% from December 1 explicitly supersedes the old January expiry.
+- A bill extending the temporary 30% rate explicitly replaces its expiry date.
+
+Expected expiries and phase-ins execute without invalidating a bill that already accounts for
+them. Unrelated changes are preserved and do not interrupt passage. Unexpected changes to a
+provision the bill touches, including delegated adjustments, reopen that clause's review and
+affected commitments. A material change to the approved bargain requires renewed approval.
+Recompute estimates when the economy changes, but do not treat ordinary economic movement as a
+change to the legal text.
+
+Revalidate at introduction, revision, approval, and commencement. If a conflict remains at
+commencement, hold the entire package pending resolution and retain current collections; do not
+partially apply it or silently rewrite approved terms. Missed commencement dates require explicit
+rescheduling and review, with renewed approval where timing materially changes the bargain.
+Scheduled transitions on the same date have an explicit supersession order established by law;
+ambiguous overlaps block approval. This includes later bills replacing already-approved future
+provisions. Never implement a bill by restoring a stale whole-code snapshot.
 
 ### Lifecycle
 
@@ -181,8 +211,8 @@ collection requirements, and spending commitments. Every row shows its current a
 The introduction action states that present collections remain unchanged until commencement.
 
 During debate, show a revision log and actors' offers. Previewing an offer shows its clause diff,
-revenue change, and political changes across all actors. Accepting it creates a new revision and
-records the commitment. Removing its condition reopens that commitment.
+revenue change, the existing-law and proposed timelines, and political changes across all actors.
+Accepting it creates a new revision and records the commitment. Removing its condition reopens that commitment.
 
 After passage, show the effective date and future steps. After defeat, offer revise/reintroduce
 subject to procedure, retaining the draft; never silently enact the desired settings.
@@ -305,6 +335,34 @@ Purpose benefits reference actual spending or enforceable commitments with costs
 Breaking such a commitment has explicit trust/political effects. Never award support solely for
 selecting a rhetorical justification.
 
+#### Spending commitment lifecycle
+
+Start with a small catalog of obligations whose delivery and real costs can both be verified.
+An education bargain can require reaching a specified institution level by an agreed deadline
+and maintaining its funding for 24 months. Only offer this bargain where the institution and
+its costs are supported; a scripted treasury expense alone does not create education benefits.
+
+| Field | Required behavior |
+|---|---|
+| Requirement and baseline | Record the actual institution/service target and existing or already-promised provision |
+| Start and deadline | Begin at commencement, or allow an explicit, costed delivery grace period |
+| Duration | Record absolute start/end dates; the maintenance term starts on verified delivery |
+| Cost | Include normal institution/resource costs and their fiscal consequences in the estimate |
+| Verification | Check actual delivery and funding monthly; record progress and shortfalls |
+| Fulfillment | End the obligation after its full maintenance term, without repeated political rewards |
+| Breach | Missing the delivery deadline or exceeding an agreed shortfall grace period triggers stated trust/political consequences |
+
+The obligation becomes binding with the enacted bargain and follows its approved start date.
+Support reflects a credible promise; service benefits arise only from actual delivery. Existing
+spending may be promised protection, but must be labeled maintenance rather than new investment.
+Deduplicate overlapping obligations so the same spending cannot repeatedly manufacture support.
+
+If funding becomes impossible, allow explicit renegotiation with affected actors or an openly
+recorded breach. Financial distress may mitigate the penalty, but cannot count as fulfillment.
+Renegotiation records revised terms and consent; material legislative changes use the bill process.
+An election, reload, or change of government does not silently clear an obligation or reset its
+clock. Apply breach consequences once per recorded breach, with a defined recovery path.
+
 ### 7.3 Preference, salience, and commitment
 
 Keep separate: substantive preference, issue salience, willingness to bargain, and vote commitment.
@@ -338,18 +396,49 @@ Before a full republic system exists, aggregate IG/party support and legitimacy 
 passage process. Label this honestly; do not imply simulated seats where none exist. Bypass options
 integrate legislative override capacity and expose authority costs and political consequences.
 
-## 8. Illustrative negotiation scenario
+## 8. Worked fallback negotiation scenario
 
-A government proposes dividend-tax increases, basic-food exemption, and a pollution levy.
-Urban workers favor food relief; extraction workers fear job losses. Owners of clean industry
-and fossil production differ. Liberals accept the revenue need but dislike privileges.
-Agrarians ask for smallholding relief; fiscal conservatives support debt reduction but oppose
-the incidence of the package.
+This example establishes the interaction sequence, not final weights, durations, or balance.
+Assume the fallback uses non-overlapping IG blocs weighted by political strength. Its illustrative
+rule requires commitments representing more than 50% of that strength, an eligible government
+meeting the displayed legitimacy requirement, and 30 days of debate on the final material revision.
+Parties organize bargaining but do not contribute a second set of votes. Public approval remains
+a separate measure. No parliamentary seats or chambers are implied by this fallback.
 
-A phased pollution levy, targeted transition spending, and a smallholding allowance may produce
-a majority. They also reduce net revenue and can lose liberal support. Compare all changes at once.
-Under parliament, defeat may challenge confidence; under a presidency it may leave a rejected bill
-and an unchanged fiscal position. Neither event suspends existing collection.
+The existing dividend surcharge is 30%, reverting to 15% on January 1. The government drafts a
+25% replacement starting February 1 and basic-food consumption-tax relief. Review shows both
+timelines: existing law falls to 15% and stays there; the proposal falls to 15% in January and
+rises to 25% in February. Revenue and burdens use the same dated economy snapshot.
+
+1. **Initial evaluation.** A worker bloc with 35% of political strength supports the package.
+   An agrarian bloc with 20% is persuadable; an ownership bloc with 45% opposes it. Food relief,
+   dividend burdens, and fiscal concerns appear as separate inspectable reasons. The bill lacks
+   committed support to pass.
+2. **Offer and revision.** Agrarians condition support on a measurable education commitment:
+   reach the specified institution level within six months of commencement and maintain it for
+   24 months. The government previews its actual costs, reduced fiscal benefit, and effects on
+   every bloc before accepting. The obligation must be feasible under the supported catalog.
+3. **Commitment and debate.** Accepting creates a new revision. Workers reconfirm after reviewing
+   the added costs; agrarians commit subject to the recorded education terms. Committed strength
+   is now 55%. The material revision starts the illustrative final-text debate period; the player
+   sees the remaining days and all unmet conditions.
+4. **Approval.** Once debate and legitimacy conditions are satisfied, the journal action records
+   passage of that revision and its February commencement. Rejection or withdrawal would leave
+   the existing schedule untouched. Approval frees the debate slot and adds the future change
+   to the baseline for any next bill.
+5. **Expiry and commencement.** The January expiry executes as reviewed, without reopening the
+   bargain. In February the complete approved tax package commences and the education delivery
+   clock starts. An unexpected legal conflict instead holds the package for resolution.
+6. **Delivery or breach.** Education benefits begin only as the institution actually delivers
+   them. Monthly checks track delivery, maintenance, and costs. A missed deadline or sustained
+   funding shortfall causes the recorded breach consequences unless the terms are explicitly
+   renegotiated. It does not automatically repeal the tax package.
+7. **A small follow-up.** A supported minor reform can use a shorter displayed debate period and
+   fewer affected commitments to renegotiate. It still needs political approval; neither a
+   preset nor a small rate change bypasses the process.
+
+Full constitutional integration replaces the fallback passage rule while retaining the same
+code, timelines, obligations, and distinction between preference and commitment.
 
 ## 9. Law amendments and state ownership
 
@@ -390,11 +479,30 @@ supported code while preserving receipts/burdens as closely as possible. Any app
 reported. Disable or reroute old rate buttons, tax-law AI, events, and effects to avoid a second
 control path. Migration is versioned and idempotent.
 
-Proposed continuity default: the winner of a revolution continues the country's enacted tax code
-and dates, reconstructs collection effects, and revalidates political commitments/pending bills.
-New constitutions can require a pending bill's reintroduction. Territorial changes re-evaluate clause
-eligibility and customs authority. Specify whether an exemption follows the capital designation or
-a named state at drafting time; moving the capital must not create an accidental exploit.
+At revolution outbreak, both sides receive the operative code and already-approved future changes,
+including original commencement and expiry dates. Each collects only from its own eligible tax
+base. Rebuild collection effects for the copied schedule. Unfinished bills and actor commitments
+do not automatically transfer to the rebels; the original government revalidates its own.
+Already-binding spending obligations follow the copied code, with eligibility and deliverability
+reassessed rather than silently marked fulfilled.
+
+Both sides may legislate independently under their institutions during the war. At reunification,
+the winner's complete code, including its wartime reforms and future schedule, applies across the
+reunited country. Retain the winner's binding obligations and re-evaluate their territorial reach;
+losing-side obligations require explicit disposition in the reunification record, not an automatic
+fulfillment reward. Revalidate pending bills and commitments; a new constitution may require
+reintroduction. This preserves functioning taxation while allowing victory to determine policy.
+
+Do not rely on native variable merging to construct this result. The [repository's civil-war reference](../../guides/scripting_best_practices.md#what-a-civil-wars-winner-inherits-the-losers-missing-variables--no-modifiers-no-lists) documents that
+the winner's existing variable values take precedence, variable lists are not inherited, and
+modifiers are not inherited. Restore one coherent winning version, never a mixture of both codes,
+and preserve clocks without duplicating collection or rewards. Cover both loyalist and rebel
+victories, including different reforms enacted by each side.
+
+Territorial changes re-evaluate clause eligibility and customs authority. Specify whether an
+exemption follows the capital designation or a named state at drafting time; moving the capital
+must not create an accidental exploit. Secession and other country-creation paths need explicit
+initialization coverage; they must not accidentally execute revolution reunification rules.
 
 If a game-rule fallback is provided, choose mode at campaign setup initially. Mid-save disabling
 requires an explicit tested reverse migration and is not assumed safe.
@@ -427,24 +535,63 @@ question in the [economy reference](../../vanilla/vanilla_economy_reference.md#1
 Authority reservation may need reconciliation with legislated consumption taxes; neither preserve
 nor remove it silently without a documented balance decision.
 
+### Developer probe harness
+
+Before production implementation, build an isolated, disposable developer harness with a journal
+panel that triggers focused experiments and logs expected versus observed results. Keep it outside
+normal campaign behavior. Each probe answers a specific uncertainty:
+
+- Payer deduction and treasury reconciliation for each proposed tax channel, accounting for
+  collection losses and administrative costs.
+- Actual rate, goods, territory, and exemption control, including consumption-tax authority.
+- Native buttons, events, amendments, and AI actions that could bypass the canonical schedule.
+- Atomic package application, detecting missing or duplicate collections.
+- Persistence across save/load, expiry, revolution outbreak and either side's victory, and market
+  changes, including independent wartime reforms.
+- Observable preview inputs, estimation accuracy against actual collections, and the cost of
+  collecting and refreshing those inputs.
+
+Seeing a modifier or successfully executing a command is not evidence that an economic effect
+works. Record the payer, receipts, scope, timing, and relevant before/after observations.
+Publish a capability table with verified behavior, reproducible setup/evidence, supported fallback,
+and unresolved questions. An unsuccessful probe records a limitation rather than silently passing.
+
+Include one minimal end-to-end experiment: draft two clauses, obtain simplified approval, commence
+the package, and have an AI country perform the same sequence. Individual capabilities must work
+together. The harness establishes evidence; it is not itself the player-facing system.
+
 ## 12. Delivery sequence
 
-1. Feasibility and compatibility spikes: establish payable bases, control interception, amendments,
-   tariffs, snapshots, and persistence. Record supported/fallback choices.
-2. Canonical schedule and migration: reproduce the current economy before adding new powers.
-3. Workbench and estimates: draft/review without economic mutation; native control reconciliation.
-4. Bundled passage: explainable actor support, offers, commitments, enactment, sunsets.
-5. Customs integration: tariff-only/mixed bills, treaties, delegation, shared-market authority.
-6. Institutional integration: parliamentary/presidential/direct-democracy procedure.
-7. Advanced instruments and forecasts where evidence supports them.
-8. AI/balance/save validation and updated player guide/PDF with the actual implemented behavior.
+1. Developer probes: verify payable bases, control interception, amendments, tariffs, snapshots,
+   persistence, and the minimal player/AI passage experiment. Publish the capability table.
+2. Canonical schedule and migration: reproduce the current economy, including future transitions,
+   before adding new powers; establish baseline and conflict handling.
+3. First playable implementation: verified native tax channels and supported customs controls,
+   discrete rates, bundled concessions, static estimates, category-based draft/review UI, and
+   the IG-based journal passage fallback. Include only measurable, costed spending commitments.
+4. In that same playable milestone, implement basic AI drafting, negotiation, and legal emergency
+   fiscal responses. Validate solvency, save/load, expiry conflicts, and civil-war continuity.
+   Do not postpone discovery of AI or persistence failures until after the player workflow.
+5. Expand customs and constitutional integration: richer treaties, delegation, shared-market
+   interactions, and parliamentary/presidential/direct-democracy procedures where verified.
+6. Add advanced instruments and behavioral forecasts only where evidence supports them.
+7. Extend balance and performance coverage throughout later milestones; update the player guide
+   and PDF whenever implemented player-facing behavior changes.
 
-Do not treat this sequence as approval to ship unverified advanced instruments. Each implementation
-PR records its deviations and fallbacks. A first playable release must still satisfy the invariants.
+The first playable release includes the full draft -> bargain -> approval -> commencement loop
+for both player and AI, with supported tariffs using the same legal process. It may omit arbitrary
+brackets, genuine land-value/wealth/inheritance/business-profit instruments, detailed legislatures,
+and medium-term forecasts. If essential customs authority or native-control interception cannot be
+made coherent, keep the feature experimental rather than shipping a bypass of the invariants.
+
+Each implementation PR records its deviations and fallbacks. Every playable release must satisfy
+the invariants; the rich editor in section 4 describes the eventual target, and unsupported
+instruments must not appear as functional controls.
 
 ## 13. Acceptance criteria for implementation
 
 ### Code and lifecycle
+
 - Editing, previewing, saving, and discarding drafts do not alter collections or political rewards.
 - Failed/withdrawn bills, elections, and confidence defeats retain current taxes.
 - Passage applies the approved revision only after all required approvals and commencement.
@@ -452,8 +599,14 @@ PR records its deviations and fallbacks. A first playable release must still sat
 - Small and large bills differ in procedure cost without making small changes politically free.
 - Later revisions invalidate relevant commitments/approvals; no last-minute substitution exploit.
 - Phase-ins/sunsets survive reload and revolution; superseded sunsets do not restore old provisions.
+- Review compares existing-law and proposed timelines, including already-approved future changes.
+- Expected expiries and unrelated changes preserve valid bills; conflicting changes reopen affected
+  review/commitments and require renewed approval when material.
+- Unresolved commencement conflicts hold the whole package with current collections intact.
+- Approved future changes free the debate slot and form the baseline of subsequent bills.
 
 ### Economics and politics
+
 - Estimates compare schedules against the same snapshot and identify approximations.
 - Marginal brackets do not create all-income tax cliffs.
 - Each instrument has an identifiable base, payer, revenue path, and collection cost.
@@ -461,10 +614,16 @@ PR records its deviations and fallbacks. A first playable release must still sat
 - Party and IG aggregation does not double-count votes or economic harm.
 - Narrow franchise changes electoral influence without erasing disenfranchised opposition.
 - Sectoral coalitions can divide both workers and owners; concessions can lose support elsewhere.
-- Spending promises require real costs; broken promises and revoked concessions matter.
+- Spending promises require real costs, delivery deadlines, maintenance periods, and monthly checks.
+- Existing or overlapping spending cannot repeatedly earn support as a new benefit; services appear
+  only through actual delivery, and completion/breach rewards or penalties cannot replay.
+- Funding failure requires explicit renegotiation or breach, never automatic fulfillment.
+- The fallback exposes its support threshold, legitimacy conditions, debate duration, and recorded
+  commitments without inventing seats or counting party and IG strength twice.
 - Public approval, policy preference, commitments, and constitutional passage remain separate.
 
 ### Customs and integration
+
 - Import/export duties are distinct; tariff-only and mixed bills both work.
 - Delegated actions enforce eligibility, limits, trigger, expiry, and successor rules.
 - Treaty conflicts require explicit handling; members cannot override shared customs authority.
@@ -473,6 +632,7 @@ PR records its deviations and fallbacks. A first playable release must still sat
 - Migration is idempotent and documents economic discrepancies.
 
 ### UI, AI, and persistence
+
 - Current versus proposed versus pending settings are unambiguous.
 - Review exposes every changed provision, beneficiary, expiry, and legal constraint.
 - Actor detail traces support to clauses; disabled controls explain their conditions.
@@ -481,12 +641,20 @@ PR records its deviations and fallbacks. A first playable release must still sat
 - Opening the GUI does not mutate simulation state or cause expensive per-frame world sweeps.
 - Save/load, revolution, capital relocation, territorial transfer, and market changes have
   scenario coverage before release.
+- Revolution outbreak copies the operative and approved future code with original dates; each side
+  collects only from its own base and may legislate independently.
+- Either side's victory restores its complete code across the reunited country without mixing
+  losing-side clauses, resetting clocks, or duplicating collections.
+- The capability table contains reproducible economic evidence, supported fallbacks, and unresolved
+  questions; a modifier appearing alone is insufficient verification.
+- The first playable milestone includes a functioning AI passage loop and persistence validation.
 
 ## 14. Remaining decisions
 
 - Exact precision, brackets, rates, caps, administrative costs, and technology progression.
 - Political component weights, salience scaling, commitment release rules, debate timing.
-- How to represent spending commitments without turning this feature into a full expenditure editor.
+- The initial spending-commitment catalog, exact targets, grace periods, breach penalties, and
+  implementation of renegotiation and recovery; the lifecycle in section 7.2 is fixed.
 - Constitutional delegation defaults and specific upper-house money-bill powers.
 - Which engine fallbacks are required after prototypes.
 - Native consumption-tax authority treatment and reverse migration, if supported.
