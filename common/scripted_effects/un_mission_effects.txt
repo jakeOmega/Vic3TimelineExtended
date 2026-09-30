@@ -756,10 +756,12 @@ un_mission_close = {
 }
 
 # Success: the UN delivered. A delivery entry, standing and the host's thanks
-# for every contributor, and word to all of them.
+# for every contributor, and word to all of them. The notices name the
+# mission's state through scope:un_msn_state_done.
 # Scope: mission container
 un_mission_outcome_succeeded = {
 	un_mission_ledger_outcome = { PILLAR = delivery POINTS = un_mission_success_delivery PEACEKEEPING = 21 AID = 22 STABILISATION = 23 }
+	var:un_msn_state ?= { save_scope_as = un_msn_state_done }
 	var:un_msn_host ?= {
 		save_scope_as = un_msn_host_done
 		post_notification = un_mission_succeeded_notice
@@ -778,10 +780,12 @@ un_mission_outcome_succeeded = {
 	}
 }
 
-# Failure: the Assembly promised and did not deliver.
+# Failure: the Assembly promised and did not deliver. The notices name the
+# mission's state through scope:un_msn_state_done.
 # Scope: mission container
 un_mission_outcome_failed = {
 	un_mission_ledger_outcome = { PILLAR = credibility POINTS = un_mission_failure_credibility PEACEKEEPING = 24 AID = 25 STABILISATION = 26 }
+	var:un_msn_state ?= { save_scope_as = un_msn_state_done }
 	var:un_msn_host ?= { post_notification = un_mission_failed_notice }
 	if = {
 		limit = { has_variable_list = un_msn_contributors }
