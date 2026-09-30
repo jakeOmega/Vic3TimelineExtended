@@ -32,7 +32,7 @@
  je_ch_how_sub_pull:0 "Where Our Pull Comes From"
  je_ch_how_sub_share:0 "Cultural Share and Tiers"
  je_ch_ov_benchmark_label:0 "#R Benchmark#!"
- je_ch_ov_benchmark_tt:0 "#title [concept_foreign_cultural_benchmark]#!\nWe trail the leading cultural power, and our people measure our government against it.\nStrength: #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('cultural_hegemony_benchmark_mult')|2]#! of\n[GetStaticModifier('cultural_hegemony_foreign_benchmark').GetDesc]"
+ je_ch_ov_benchmark_tt:0 "#title [concept_foreign_cultural_benchmark]#!\nWe trail the leading cultural power, and our people measure our government against it.\nStrength: #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\n#R -[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]"
  je_ch_ov_leaders_label:0 "Leading Powers"
  je_ch_ov_leaders_tt:0 "The three largest cultural shares at the last recount, the leader first. Hover a flag for the country, and click it to open the country."
  je_ch_ov_model_anarchist:0 "Anarchist"

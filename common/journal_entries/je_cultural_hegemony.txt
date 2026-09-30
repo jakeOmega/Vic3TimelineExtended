@@ -135,10 +135,12 @@ je_cultural_hegemony = {
 				limit = { cultural_hegemony_benchmark_mult >= 0.1 }
 				remove_modifier = cultural_hegemony_foreign_benchmark
 				add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = cultural_hegemony_benchmark_mult }
+				set_variable = { name = ch_benchmark_applied value = cultural_hegemony_benchmark_mult }
 			}
 			else_if = {
 				limit = { has_modifier = cultural_hegemony_foreign_benchmark }
 				remove_modifier = cultural_hegemony_foreign_benchmark
+				set_variable = { name = ch_benchmark_applied value = 0 }
 			}
 
 			# Record this month's share for the widget's history chart, after the
