@@ -220,6 +220,68 @@ types te_systems_window_types
 				}
 
 				### TAB CONTENT
+
+				### ------------------------------------------------------------------
+				### TAB: GRAND MONUMENTS (je_grand_monuments;
+				### gui/journal_entry_widgets/grand_monuments_widget.gui). The three
+				### composers the entry's roots wrap, in its order: the overview, the
+				### live sections (National Effects, Our Monuments), How Grand
+				### Monuments Work. Then Open Journal Entry, below everything else.
+				### Nothing else to draw: the entry has no status line, no bar and no
+				### scripted buttons.
+				###
+				### As the Military panel's Nuclear tab: the header sits outside the
+				### gate, so it shows whenever the tab does; the gate
+				### (te_window_grand_monuments_tab_sgui) sits on a parent of the
+				### GetPlayerJournalEntry datacontext, never on the widget carrying it;
+				### the column is a fixed 520, the journal roots' width, centred.
+				flowcontainer = {
+					name = "te_systems_window_grand_monuments_tab"
+					using = te_systems_window_grand_monuments_selected
+					using = default_fade_in_out
+					parentanchor = hcenter
+					direction = vertical
+					spacing = 10
+					margin_top = 10
+					margin_bottom = 15
+
+					default_header = {
+						using = default_list_position
+						blockoverride "text" {
+							text = "je_grand_monuments"
+						}
+					}
+
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_grand_monuments')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_gm_overview_panel = {}
+							te_gm_status_sections = {}
+							te_gm_reference_sections = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_grand_monuments_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+				}
 			}
 		}
 	}

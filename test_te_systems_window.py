@@ -381,6 +381,78 @@ class StripTest(unittest.TestCase):
                       _read(os.path.join(JE_DIR, "je_grand_monuments.txt")))
 
 
+def _journal_types(entry_key, je_file, widget_file, skip=()):
+    """The types the entry's journal roots wrap, in the order it attaches them
+    (the bars-on-top marker is not content)."""
+    entry = _txt_block(_read(os.path.join(JE_DIR, je_file)), entry_key)
+    widgets = _read(os.path.join(WIDGETS, widget_file))
+    types = []
+    for name in re.findall(r'name = "(\w+)"\s*container', entry):
+        if name == "widget_te_je_bars_on_top_marker" or name in skip:
+            continue
+        types += re.findall(r"^\t(te_\w+) = \{\}", _top_level(widgets, name), re.M)
+    return types
+
+
+def _entry_blocks(tab_block):
+    """Each GetPlayerJournalEntry datacontext in a tab: (entry key, the widget
+    carrying it, the text of the tab before that widget)."""
+    for m in re.finditer(r"datacontext = \"\[GetPlayerJournalEntry\('(\w+)'\)\]\"", tab_block):
+        opener = tab_block.rindex("flowcontainer = {", 0, m.start())
+        yield m.group(1), _block_at(tab_block, opener), tab_block[:opener]
+
+
+class TabContentTest(unittest.TestCase):
+    """Style guide rule 9 and feasibility §5.1: each tab shows its entries' own
+    composers under GetPlayerJournalEntry, in the journal's order, gated on a
+    parent, in a fixed 520 column, and ends with Open Journal Entry."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+
+    def _tab(self, tab):
+        block = _named(self.gui, f"te_systems_window_{tab}_tab")
+        self.assertIn(f"using = te_systems_window_{tab}_selected", block.split("\n\n")[0])
+        return block
+
+    def _check_entry(self, widget, before, gate, types, link_tooltip):
+        # the gate on a parent, never on the widget carrying the datacontext
+        gates = re.findall(r'visible = "\[(GetScriptedGui\(\'\w+\'\)\.IsShown\( GuiScope\.SetRoot\( '
+                           r'GetPlayer\.MakeScope \)\.End \))\]"', before)
+        self.assertEqual(gates[-1], _gate(gate))
+        head = widget[:widget.index("\n\n")]
+        self.assertNotRegex(head, r"\bvisible =")
+        self.assertIn("minimumsize = { 520 -1 }", head)
+        self.assertIn("parentanchor = hcenter", head)
+        # the journal roots' types, in order, then the link
+        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", widget, re.M), types)
+        link = widget.index('text = "te_system_tab_open_journal"')
+        self.assertGreater(link, widget.index(f"{types[-1]} = {{}}"))
+        button = widget[widget.rindex("button = {", 0, link):]
+        self.assertIn('visible = "[JournalEntry.IsActive]"', button)
+        self.assertIn(f'tooltip = "{link_tooltip}"', button)
+        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", button)
+        # nothing the journal hides behind the bars-on-top marker comes back
+        self.assertNotIn("te_je_goal_bar", widget)
+
+    def test_grand_monuments(self):
+        tab = self._tab("grand_monuments")
+        blocks = list(_entry_blocks(tab))
+        self.assertEqual([key for key, _, _ in blocks], ["je_grand_monuments"])
+        _, widget, before = blocks[0]
+        # the header outside the gate
+        self.assertRegex(before, re.compile(r'default_header = \{.*?text = "je_grand_monuments"', re.S))
+        self.assertLess(before.index("default_header"), before.index("te_window_grand_monuments_tab_sgui"))
+        self._check_entry(widget, before, "te_window_grand_monuments_tab_sgui",
+                          _journal_types("je_grand_monuments", "je_grand_monuments.txt", "grand_monuments_widget.gui"),
+                          "te_window_grand_monuments_open_journal_tt")
+        # no status line, bar or button of its own to draw
+        entry = _read(os.path.join(JE_DIR, "je_grand_monuments.txt"))
+        for absent in ("status_desc", "scripted_button", "scripted_progress_bar", "progressbar"):
+            self.assertNotRegex(_strip_comments(entry), rf"\b{absent} =")
+
+
 class LocTest(unittest.TestCase):
     def test_every_key_the_window_uses_exists(self):
         gui = _strip_comments(_read(GUI))

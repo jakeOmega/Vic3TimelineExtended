@@ -4345,6 +4345,7 @@
  te_systems_window_title:0 "Timeline Extended"
  te_trade_center_boost:0 "Merchant Quarter Bustles"
  te_trade_center_chill:0 "Merchant Quarter Sluggish"
+ te_window_grand_monuments_open_journal_tt:0 "Opens $je_grand_monuments$ in the journal."
  te_window_tab_colonial_empire:0 "Colonies"
  te_window_tab_colonial_empire_locked_tt:0 "#b $je_colonial_empire$#!\nNot open yet. It opens once:\n"
  te_window_tab_colonial_empire_tt:0 "$je_colonial_empire$: your [concept_colonial_stability] and why it is moving, great-power pressure, the colonial programmes and the decolonization decisions. These are the journal entry's own panels: a change made here shows there too."
