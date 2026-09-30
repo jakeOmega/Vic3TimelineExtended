@@ -138,6 +138,13 @@ Program no longer runs the method it needs, the approach reads Idle, the risk
 and progress rows are hidden, and Mission Control shows only the Mission
 Profile.
 
+Solar System Colonization also has a fourth section, Our Colonies (open), below
+Rivals. It lists every world you hold, grouped by stage, under the
+specialization you chose for it, with Colonies Held (out of 34) at the top. A
+stage's heading appears once you hold one of its worlds, and hovering a colony
+shows its permanent effects. It stays on the panel when the program is Idle, so
+you can always see where your colony modifiers come from.
+
 Interstellar Probe: Awaiting Data has nothing to control, so it has no Mission
 Control or Rivals. Its overview is the Transit bar ("40 / 132 months") and the
 Programme row; hover the bar for the months to go and what the probe might

@@ -43,7 +43,7 @@ SETBACKS_CEILING = 99     # sr_setbacks_<m>_value, a count of setbacks
 FUNDING_CEILING = 10      # sr_funding_<m> and sr_max_funding_level: 3, plus technology
 STAGE_CEILING = 5         # sr_current_colonization_stage, "Stage: 5 of 5"
 TRANSIT_MONTHS = 132      # sr_interstellar_transit_value, pinned by the waiting entry's goal
-WORLDS = 34               # sr_total_global_colonies, the 34 worlds
+WORLDS = 34               # sr_total_global_colonies, the 34 worlds; sr_disp_colonies_held is a share of them
 SECTION_HEADER_WIDTH = 400  # the text of the 520-wide section_header_button, less its arrow
 
 
@@ -189,7 +189,8 @@ def _longest_figure(name):
     if re.fullmatch(r"sr_disp_rival_(lo|hi|est)_\w+", name):
         return 1.0  # a share of the goal, clamped to 0..1: "100%"
     fixed = {"sr_disp_cooldown_months": SCRIPT.cooldown, "sr_current_colonization_stage": STAGE_CEILING,
-             "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS}
+             "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS,
+             "sr_disp_colonies_held": WORLDS}
     assert name in fixed, f"no longest figure known for {name}: add one to _longest_figure"
     return fixed[name]
 
@@ -218,7 +219,7 @@ def _render(value):
 
 # Every loc key the panel shows, by the cell it shows in. Keys in more than one
 # cell are measured against each.
-MULTILINE = r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+)"
+MULTILINE = r"je_space_race_widget_(how_\w+|profile_\w+|rival_more_\w+|colonies_empty)"
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -236,10 +237,10 @@ CELLS = {
         r"je_space_race_widget_progress_\w+"),
     "value-row label (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_label"'),
-        r"je_space_race_widget_(setbacks_label|eta_label)"),
+        r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
-        r"je_space_race_widget_(setbacks|eta)_(?!label)\w+"),
+        r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure)"),
     "approach label (te_sr_sec_control)": (
         ("te_sr_sec_control", 'text = "je_space_race_widget_approach_label"'),
         r"je_space_race_widget_approach_label"),
@@ -258,11 +259,14 @@ CELLS = {
     "rival band in words (te_sr_rival_row)": (
         ("te_sr_rival_row", 'block "row_range"'),
         r"je_space_race_widget_rival_range_\w+"),
+    "colony stage heading (te_sr_subheader)": (
+        ("te_sr_subheader", 'block "subheader_text"'),
+        r"je_space_race_widget_colonies_stage_\d"),
     "programme label (te_sr_ov_programme)": (
         ("te_sr_ov_programme", 'text = "je_space_race_widget_programme_header"'),
         r"je_space_race_widget_programme_header"),
 }
-SECTION_HEADERS = r"je_space_race_widget_(control_header|rivals_header|how_header)"
+SECTION_HEADERS = r"je_space_race_widget_(control_header|rivals_header|colonies_header|how_header)"
 
 
 def _cell(gui, type_name, marker):
