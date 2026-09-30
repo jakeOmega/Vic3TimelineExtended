@@ -1033,6 +1033,20 @@ class MarketTabTest(unittest.TestCase):
         self.assertIn("owner.market_capital = THIS", site)
         self.assertNotIn("is_player", site)
 
+    def test_the_tooltip_has_three_branches(self):
+        """Open: the tab's own tooltip. Conditions met but the entry not
+        running: te_market_tab_met_tt, since IsValidTooltip prints nothing for
+        a passing test. Otherwise: the locked line and the checklist."""
+        root = "GuiScope.SetRoot( GetPlayer.MakeScope ).End"
+        expected = (f"tooltip = \"[SelectLocalization( {GW_TAB_GATE}, 'te_market_tab_global_warming_tt', "
+                    f"SelectLocalization( {GW_TAB_UNLOCK}.IsValid( {root} ), 'te_market_tab_met_tt', "
+                    f"Concatenate( Localize( 'te_market_tab_global_warming_locked_tt' ), "
+                    f"{GW_TAB_UNLOCK}.IsValidTooltip( {root} ) ) ) )]\"")
+        self.assertEqual(self._gw_buttons()["fifth_button_tooltip"], expected)
+        met = _loc_value("te_market_tab_met_tt")
+        self.assertTrue(met.startswith("#b Not open yet#!"), met)
+        self.assertIn("conditions are met", met)
+
     def test_no_tab_icon(self):
         """System tabs carry no icon, as vanilla's tabs don't (the owner, 2026-09-30):
         none in a *_button_icon block, none as a text icon in the label."""

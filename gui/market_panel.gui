@@ -151,8 +151,12 @@ types market_panel
 				# Warming entry, in slot 5, and Reserve, the Strategic Reserve entry,
 				# in slot 6. Each is on the strip once its unlock gate's is_shown
 				# holds (te_market_<system>_tab_unlock_sgui) and greyed until its
-				# entry runs (te_market_<system>_tab_sgui); the greyed tab's tooltip
-				# lists the unlock conditions with a tick or a cross.
+				# entry runs (te_market_<system>_tab_sgui). The tooltip has three
+				# branches: the tab's own while the entry runs; else, when the
+				# unlock conditions are all met (the unlock gate's IsValid), a line
+				# saying so, because IsValidTooltip prints nothing for a passing
+				# test and the checklist would read as empty (te_market_tab_met_tt);
+				# else the unlock conditions with a tick or a cross.
 				# te_tab_buttons_six defaults both halves of an unused slot to
 				# `visible = no`, so each visibility block tests the gate as well as
 				# the tab. Gates: common/scripted_guis/te_system_tab_sguis.txt.
@@ -174,7 +178,7 @@ types market_panel
 					text = "te_market_tab_global_warming"
 				}
 				blockoverride "fifth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_global_warming_tt', Concatenate( Localize( 'te_market_tab_global_warming_locked_tt' ), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_global_warming_tt', SelectLocalization( GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_met_tt', Concatenate( Localize( 'te_market_tab_global_warming_locked_tt' ), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "fifth_button_click" {
 					enabled = "[GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -194,7 +198,7 @@ types market_panel
 					text = "te_market_tab_strategic_reserve"
 				}
 				blockoverride "sixth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_strategic_reserve_tt', Concatenate( Localize( 'te_market_tab_strategic_reserve_locked_tt' ), GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_strategic_reserve_tt', SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_met_tt', Concatenate( Localize( 'te_market_tab_strategic_reserve_locked_tt' ), GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "sixth_button_click" {
 					enabled = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
