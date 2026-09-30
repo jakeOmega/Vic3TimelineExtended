@@ -1095,11 +1095,11 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     "banking": {
         "price_hyper": {"subject": "a wooden wheelbarrow heaped high with bundles of plain green paper banknotes "
-                                   "tied with string", "seed": None,
+                                   "tied with string", "seed": 0,
                         "now": f"{_GI}/generic_icons/red_cross.dds"},
         # Also drawn at 18 px beside each tool's point cost: few, thick counters.
         "budget": {"subject": "a short stack of three thick plain gold tokens stamped with a small star, "
-                              "a fourth token lying flat beside it", "seed": None,
+                              "a fourth token lying flat beside it", "seed": 0,
                    "now": f"{_GI}/diplomatic_treaties_articles_icons/bankroll_treaties.dds"},
     },
     # Cultural Hegemony (cultural_hegemony_gui_icons.md): 36 px. The tiers are
@@ -1305,7 +1305,7 @@ def _bubble(now, scale, colour, cracked=False):
 # The coins tumbling from the tap's spout (at x 0.4 of the icon), nearest
 # first: one coin is a drop, four a gush. Spaced and turned, so they read as
 # falling rather than as a pile.
-_FLOW = [(0.41, 0.7, 0.22, 20), (0.36, 0.86, 0.23, -25), (0.54, 0.9, 0.22, 40), (0.2, 0.94, 0.21, -10)]
+_FLOW = [(0.41, 0.68, 0.2, 20), (0.34, 0.8, 0.21, -25), (0.53, 0.84, 0.2, 40), (0.2, 0.88, 0.19, -10)]
 
 
 def _stance(now, coins, lock=False):
