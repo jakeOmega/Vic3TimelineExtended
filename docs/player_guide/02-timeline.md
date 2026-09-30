@@ -415,7 +415,9 @@ Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
 
-<!-- screenshot: the Monuments journal entry with Contested lit in the overview, National Effects' bars, and a contested monument's row with its three buttons -->
+![The Grand Monuments tab of the Timeline Extended window: the overview's four counts (ten monuments Upheld), National Effects with Interest Group Approval, and the start of Our Monuments.](images/grand_monuments_tab.png)
+
+<!-- screenshot: the Monuments panel with Contested lit in the overview and a contested monument's row with its three buttons -->
 
 ### The Monuments journal entry
 

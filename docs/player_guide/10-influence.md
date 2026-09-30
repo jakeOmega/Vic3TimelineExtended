@@ -201,7 +201,7 @@ The same panels appear as a Covert tab in the Military panel, and a change made
 in one shows in the other. The tab is grayed until the journal entry is active;
 hover it for what is still missing. It ends with an Open Journal Entry button.
 
-<!-- screenshot: the Covert Warfare journal entry: the overview, then the Operations section with two operation rows -->
+![The Covert tab of the Military panel: the overview (Fortress, Funding 2, Veteran, Spy Caught; three of nine operation slots in use; Capacity and Tradecraft), the Operations section with three operation rows, and the start of Funding.](images/covert_tab.png)
 
 The overview at the top is always shown. Its first row is icons with a word
 beneath:
