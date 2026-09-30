@@ -436,6 +436,61 @@ class TabContentTest(unittest.TestCase):
         # nothing the journal hides behind the bars-on-top marker comes back
         self.assertNotIn("te_je_goal_bar", widget)
 
+    def test_space_race(self):
+        """Nine entries, nine gated blocks in the journal's order, each under its
+        own header; the shared reference once, at the end."""
+        tab = self._tab("space_race")
+        blocks = list(_entry_blocks(tab))
+        self.assertEqual([key for key, _, _ in blocks], [f"je_space_race_{m}" for m in SR])
+        for m, (key, widget, before) in zip(SR, blocks):
+            with self.subTest(entry=key):
+                # the entry's own header, inside its gate and above its datacontext
+                block_start = before.rindex(f"visible = \"[{_gate(f'te_window_space_race_{m}_sgui')}]\"")
+                self.assertRegex(before[block_start:], re.compile(rf'default_header = \{{.*?text = "{key}"', re.S))
+                self._check_entry(widget, before, f"te_window_space_race_{m}_sgui",
+                                  _journal_types(key, "je_space_race.txt", "space_race_widget.gui",
+                                                 skip=("widget_je_space_race_reference",)),
+                                  "te_window_space_race_open_journal_tt")
+        # How the Space Race Works: once, after every entry, the section the
+        # journal's shared reference root composes.
+        reference = _named(self.gui, "te_systems_window_space_race_reference")
+        self.assertGreater(tab.index(reference), tab.index(blocks[-1][1]))
+        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", reference, re.M), ["te_sr_sec_how"])
+        self.assertIn("minimumsize = { 520 -1 }", reference)
+        self.assertIn(f'visible = "[{_gate("te_window_space_race_tab_sgui")}]"', reference)
+        widgets = _read(os.path.join(WIDGETS, "space_race_widget.gui"))
+        self.assertEqual(re.findall(r"^\t\t(te_\w+) = \{\}", _type_body(widgets, "te_sr_reference_sections"), re.M),
+                         ["te_sr_sec_how"])
+        self.assertEqual(tab.count("te_sr_sec_how"), 1)
+        # every entry mounts the bars-on-top marker (its overview draws the
+        # progress), shows its status line only while inactive, and every
+        # scripted button is the AI's
+        je = _read(os.path.join(JE_DIR, "je_space_race.txt"))
+        buttons = _read(os.path.join(REPO, "common", "scripted_buttons", "space_race_buttons.txt"))
+        for m in SR:
+            entry = _txt_block(je, f"je_space_race_{m}")
+            self.assertIn('name = "widget_te_je_bars_on_top_marker"', entry)
+            self.assertIn(f"trigger = {{ NOT = {{ has_journal_entry = je_space_race_{m} }} }}", entry)
+            self.assertNotIn("scripted_progress_bar", entry)
+            for name in re.findall(r"scripted_button = (\w+)", entry):
+                self.assertRegex(_txt_block(buttons, name), r"visible = \{[^}]*is_ai = yes", name)
+
+    def test_the_milestone_types_are_the_journal_roots_bodies(self):
+        """Each controlled milestone's roots are thin wrappers around its own
+        types, which set its scripted GUI as the datacontext."""
+        widgets = _read(os.path.join(WIDGETS, "space_race_widget.gui"))
+        for m in SR:
+            if m == "interstellar_results":
+                continue
+            for kind, root in (("overview", f"widget_je_space_race_{m}_overview"), ("status", f"widget_je_space_race_{m}")):
+                with self.subTest(root=root):
+                    wrapper = _top_level(widgets, root)
+                    self.assertEqual(re.findall(r"^\t(\w+) = \{\}$", wrapper, re.M), [f"te_sr_{m}_{kind}"])
+                    self.assertNotIn("datacontext", wrapper)
+                    body = _type_body(widgets, f"te_sr_{m}_{kind}")
+                    self.assertIn(f"datacontext = \"[GetScriptedGui('sr_milestone_{m}_sgui')]\"", body)
+                    self.assertIn("minimumsize = { 520 -1 }", body)
+
     def test_colonial_empire(self):
         tab = self._tab("colonial_empire")
         blocks = list(_entry_blocks(tab))

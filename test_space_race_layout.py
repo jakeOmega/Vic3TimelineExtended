@@ -87,11 +87,17 @@ def _type_body(text, name):
 
 
 def _root(text, name):
+    """A journal root as the journal renders it: the wrapper, and the body of the
+    milestone's own type it wraps (te_sr_<m>_overview, te_sr_<m>_status), which
+    the Timeline Extended window's Space Race tab instances too."""
     m = re.search(rf'name = "{name}"', text)
     assert m, f"no root {name}"
     start = text.rfind("flowcontainer = {", 0, m.start())
     brace = text.index("{", start)
-    return text[start:_close(text, brace) + 1]
+    root = text[start:_close(text, brace) + 1]
+    for wrapped in re.findall(r"^\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
+        root += "\n" + _type_body(text, wrapped)
+    return root
 
 
 def _block(text, name):

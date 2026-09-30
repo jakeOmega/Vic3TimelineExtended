@@ -219,7 +219,395 @@ types te_systems_window_types
 					text = "te_systems_window_none"
 				}
 
-				### TAB CONTENT
+				### The tabs' content, in the strip's order. Each is up only while
+				### its tab is shown (the *_selected templates), so a closed tab's
+				### panels are never built.
+
+				### ------------------------------------------------------------------
+				### TAB: SPACE RACE (the nine je_space_race_* entries;
+				### gui/journal_entry_widgets/space_race_widget.gui). GetPlayerJournalEntry
+				### takes one literal key, so each entry has its own block, in
+				### je_space_race.txt's order, each shown only while the player holds
+				### that entry active (te_window_space_race_<m>_sgui, on a parent of
+				### the datacontext). Several can run at once, so each block has its
+				### own header, the entry's name, then the types its journal roots
+				### wrap (the milestone's overview and live sections, or the waiting
+				### entry's transit), then Open Journal Entry for that entry. How the
+				### Space Race Works, the reference all nine entries share, comes once,
+				### at the end.
+				###
+				### Not drawn, as in the journal: the goal bar (every entry mounts the
+				### bars-on-top marker, and the overview draws the progress), the
+				### status line (only for an inactive entry) and the 32 scripted
+				### buttons (the AI's: each `visible` carries is_ai = yes; Mission
+				### Control carries the same actions for a human).
+				flowcontainer = {
+					name = "te_systems_window_space_race_tab"
+					using = te_systems_window_space_race_selected
+					using = default_fade_in_out
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 10
+					margin_top = 10
+					margin_bottom = 15
+
+					### suborbital
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_space_race_suborbital_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						default_header = {
+							using = default_list_position
+							blockoverride "text" {
+								text = "je_space_race_suborbital"
+							}
+						}
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_space_race_suborbital')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_sr_suborbital_overview = {}
+							te_sr_suborbital_status = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_space_race_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+
+					### orbital
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_space_race_orbital_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						default_header = {
+							using = default_list_position
+							blockoverride "text" {
+								text = "je_space_race_orbital"
+							}
+						}
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_space_race_orbital')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_sr_orbital_overview = {}
+							te_sr_orbital_status = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_space_race_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+
+					### moon_landing
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_space_race_moon_landing_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						default_header = {
+							using = default_list_position
+							blockoverride "text" {
+								text = "je_space_race_moon_landing"
+							}
+						}
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_space_race_moon_landing')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_sr_moon_landing_overview = {}
+							te_sr_moon_landing_status = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_space_race_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+
+					### probe
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_space_race_probe_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						default_header = {
+							using = default_list_position
+							blockoverride "text" {
+								text = "je_space_race_probe"
+							}
+						}
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_space_race_probe')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_sr_probe_overview = {}
+							te_sr_probe_status = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_space_race_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+
+					### moon_base
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_space_race_moon_base_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						default_header = {
+							using = default_list_position
+							blockoverride "text" {
+								text = "je_space_race_moon_base"
+							}
+						}
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_space_race_moon_base')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_sr_moon_base_overview = {}
+							te_sr_moon_base_status = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_space_race_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+
+					### mars_landing
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_space_race_mars_landing_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						default_header = {
+							using = default_list_position
+							blockoverride "text" {
+								text = "je_space_race_mars_landing"
+							}
+						}
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_space_race_mars_landing')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_sr_mars_landing_overview = {}
+							te_sr_mars_landing_status = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_space_race_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+
+					### interstellar_probe
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_space_race_interstellar_probe_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						default_header = {
+							using = default_list_position
+							blockoverride "text" {
+								text = "je_space_race_interstellar_probe"
+							}
+						}
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_space_race_interstellar_probe')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_sr_interstellar_probe_overview = {}
+							te_sr_interstellar_probe_status = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_space_race_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+
+					### interstellar_results
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_space_race_interstellar_results_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						default_header = {
+							using = default_list_position
+							blockoverride "text" {
+								text = "je_space_race_interstellar_results"
+							}
+						}
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_space_race_interstellar_results')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_sr_overview_transit = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_space_race_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+
+					### solar_colonization
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						default_header = {
+							using = default_list_position
+							blockoverride "text" {
+								text = "je_space_race_solar_colonization"
+							}
+						}
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_sr_solar_colonization_overview = {}
+							te_sr_solar_colonization_status = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_window_space_race_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+
+					### How the Space Race Works, once for every entry. The journal wraps
+					### it in te_sr_reference_sections, whose IsActive gate needs one
+					### entry's datacontext; the tab has the section itself, under the
+					### tab's own gate, in the same fixed 520 column.
+					flowcontainer = {
+						name = "te_systems_window_space_race_reference"
+						visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						minimumsize = { 520 -1 }
+
+						te_sr_sec_how = {}
+					}
+				}
 
 				### ------------------------------------------------------------------
 				### TAB: COLONIAL EMPIRE (je_colonial_empire;
