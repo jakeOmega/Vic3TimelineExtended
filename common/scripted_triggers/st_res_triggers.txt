@@ -46,6 +46,24 @@ st_res_fertilizer_unlocked_trigger = {
 }
 
 # ============================================================================
+# Journal entry unlock — country scope
+# ============================================================================
+# What je_strategic_reserve needs to activate, its `possible`, as one tooltip
+# line: the checklist on the Market panel's greyed Reserve tab
+# (te_market_strategic_reserve_tab_unlock_sgui's is_valid,
+# te_system_tab_sguis.txt). The test inside is the entry's `possible` word for
+# word, and MarketTabTest in test_strategic_reserve_layout.py fails if the two
+# drift apart.
+st_res_entry_unlocked = {
+	custom_tooltip = {
+		text = st_res_entry_unlock_tt
+		any_scope_building = {
+			is_building_type = building_strategic_reserve_hub
+		}
+	}
+}
+
+# ============================================================================
 # AI storage demand — country scope
 # ============================================================================
 # True when any reserve good stands at 75% of its capacity or more: the point

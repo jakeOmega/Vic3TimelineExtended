@@ -405,6 +405,14 @@ collapsed How the Strategic Reserve Works. Before you build a hub the entry
 shows only a line telling you to build one. Once the hub stands there is no
 status line, because the overview shows how the hub is doing.
 
+The same panels appear as a Reserve tab in the Market panel, and a change made
+in one shows in the other. The tab is there once you research Logistics and is
+grayed until you build a hub; hover it for what is still missing. It shows only
+while the Market panel shows your own market, the one your capital is in,
+whether you lead it or joined it, because that is where the reserve buys and
+sells. If you open another market with the tab still selected, it offers a
+button back to your own. The tab ends with an Open Journal Entry button.
+
 <!-- screenshot: the Strategic Reserve panel, the overview and the Reserve Inventory in view, one good's row expanded to its figures and Fill by Month chart -->
 
 The overview at the top is always shown. The hub's icon is at full colour

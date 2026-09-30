@@ -779,10 +779,6 @@ class MilitaryTabTest(unittest.TestCase):
                     "te_military_nuclear_open_journal_tt"):
             self.assertTrue(_loc(key), key)
 
-    def test_the_tab_icon_is_the_warhead(self):
-        m = re.search(r'blockoverride "fourth_button_icon" \{.*?texture = "([^"]+)"', self.blocks[0], re.S)
-        self.assertEqual(m.group(1), "gfx/interface/icons/nuclear_icons/warheads.dds")
-
     def test_the_gates_read_the_rule_and_the_entry(self):
         sguis = _read(TAB_SGUIS)
         gate = _txt_block(sguis, "te_military_nuclear_tab_sgui")

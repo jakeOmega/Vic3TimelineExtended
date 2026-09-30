@@ -6,6 +6,9 @@
 > - **Banking as a Budget tab** (`gui/budget_panel.gui`; `mod_systems.md` § Policy Dashboard). **Seen in game the same day:** the tab selects and all three panels render. So custom tab names work (§3.4, §8 test 1), and `GetPlayerJournalEntry` works for an active entry (§3.2). What it returns for an entry the player lacks or holds inactive is still untested (§8 test 2); the tabs never build the datacontext then.
 > - **Cultural Hegemony as a Society tab** (`gui/culture_panel.gui`, the fifth slot). Not yet seen in game. CMF redefines `society_panel` (§7.4), so with CMF enabled one side's version is dropped.
 > - **Nuclear Weapons as a Military tab** (`gui/panel_military.gui`, the fourth slot; 2026-09-30, the first of phase 2). Not yet seen in game. The Military panel was already a full-file override, so no new vanilla file is replaced. The first tab to draw an entry's goal bar (`te_je_goal_bar`). What the next tabs need: §5.1.
+> - **Covert Warfare as a Military tab** (`gui/panel_military.gui`, the fifth slot; 2026-09-30, phase 2). Not yet seen in game. Five tabs fill `tab_buttons`, so no six-slot strip. The entry's three composers and nothing from `te_system_tab_widgets.gui`: no goal bar, scripted bars or status text, and only AI buttons. Like every system tab, neither Military tab carries an icon (style guide rule 9).
+> - **Global Warming as a Market tab** (`gui/market_panel.gui`, the fifth slot, "Climate"; 2026-09-30). Not yet seen in game. The Market panel was already a full-file override. Vanilla fills four of `tab_buttons`' five slots and this tab and the next need six, so the strip is `te_tab_buttons_six`, as in Diplomacy. The tab shows on every market the panel opens. On another market (the owner, 2026-09-30) the market's parts show that market: the overview's market cells and the Mitigation Policies read the market's leader as a `Country` datacontext, `MarketPanel.GetMarket.GetOwner`, under a gate that asks the leader's entry is running, with every Adopt and Repeal greyed on `Country.IsLocalPlayer`. The first two builds read the leader's journal entry instead, through `Country.GetJournalEntry`, the country form of §3.2: after the const `Market.GetOwner` it failed at load and crashed the game when the panel switched market, and through `Market.AccessMarketCapital.AccessOwner` it loaded cleanly and logged nothing but silently kept the player's entry, so the other market showed the player's figures (play-tests 2026-09-30; GUI guide gotcha #35). The world's parts stay the player's: the temperature, Top Emitters (#590; its rows set their own `State` datacontext and its list tooltips take a state root), History and How Global Warming Works. The journal is unchanged: the market parts read `Country` from a block, `gw_market_country`, whose default is the entry's own country; only the tab overrides it. The entry mounts the bars-on-top marker, so no goal bar. No tab icon, as vanilla's tabs have none (the owner, 2026-09-30).
+> - **The Strategic Reserve as a Market tab** (`gui/market_panel.gui`, the sixth slot, "Reserve"; 2026-09-30). Not yet seen in game. The system has no game rule, so the tab is on the strip from Logistics, when the greyed entry first shows in the journal. It shows only while the panel shows the player's own market (vanilla's `IsSame( GetPlayer.GetCapital.GetMarket )`, led or joined), because the reserve buys and sells there and every Market tab describes the market in the header. If the panel opens another market with Reserve still selected, the tab stays marked and a note links to the player's market (`OpenMarketPanelTab`). No tab icon.
 > - **The Timeline Extended window: Space Race, Colonial Empire and Grand Monuments** (`gui/te_systems_window.gui`, 2026-09-30, phase 2). Not yet seen in game. The mod's own window (§9, item 3), a scripted widget that replaces no vanilla file: a small sidebar button under Map List opens a `default_block_window` with three tabs, Space Race, Colonial Empire and Grand Monuments, each greyed until its entry runs. The tabs carry no icon, as vanilla's don't (owner, 2026-09-30). Space Race has one gated block per `je_space_race_*` entry the player holds active (§5), so each milestone's journal root bodies became types. The open state is CMF's `com_open_window` key (§7.5, item 3). What was chosen: §3.1, §3.5 and §3.6.
 > - **The UN as a Diplomacy tab** (`gui/diplomatic_overview.gui`; `journal_entry_systems.md` § Chamber Widget). Vanilla's five tabs fill `tab_buttons`, so the strip is `te_tab_buttons_six`, a copy with a sixth slot; the only vanilla line changed is that type name. Unlike the other two, the tab draws the entry's scripted buttons (founding, joining and leaving exist only there) and its status description. Seen in game 2026-09-28: six tabs fit. Then round 1 of a visual pass of the UN's panels, in both hosts (`docs/superpowers/specs/2026-09-28-un-gui-pass-design.md`).
 >
@@ -41,7 +44,7 @@ Scripted widgets exist from the main menu on, so a window's root must be gated. 
 
 ### 3.2 A journal entry as the data source, outside the journal [verified]
 
-`GetPlayerJournalEntry( Arg0 )` is a global promote returning `JournalEntry` (`data_types_uncategorized.txt`, 1.14 digest); `Country.GetJournalEntry( Arg0 )` is the country form. Vanilla uses the global with a literal key at `game/gui/states_panel.gui:1059`:
+`GetPlayerJournalEntry( Arg0 )` is a global promote returning `JournalEntry` (`data_types_uncategorized.txt`, 1.14 digest); `Country.GetJournalEntry( Arg0 )` is the country form, but it did not work in game for another country (Climate tab, 2026-09-30; GUI guide gotcha #35): read another country's data through a `Country` datacontext. Vanilla uses the global with a literal key at `game/gui/states_panel.gui:1059`:
 
 ```
 datacontext = "[GetPlayerJournalEntry('je_meiji_restoration')]"
@@ -77,9 +80,10 @@ Tabs are plain strings. The tab buttons call `InformationPanel.SelectTab('states
 | Budget | `budget_panel.gui` (2,112) | 3 | yes |
 | Society | `culture_panel.gui` (1,875), type `society_panel` | 4 | yes; a fifth has shipped before (§7.1) |
 | Diplomacy | `diplomatic_overview.gui` (1,827) | 5 | none in `tab_buttons`, which has five slots; the UN prototype uses a six-slot copy |
-| Military | `panel_military.gui` | 3 | yes; the Nuclear tab takes the fourth slot |
+| Military | `panel_military.gui` | 3 | yes; the Nuclear tab takes the fourth slot and the Covert tab the fifth, which fills `tab_buttons` |
+| Market | `market_panel.gui` | 4 | one slot in `tab_buttons`; Climate and Reserve use the six-slot copy |
 
-Before the prototypes (header), this mod replaced none of the three; it now replaces all three. It already replaced the Military panel before its Nuclear tab. Each one added is another file to merge every patch (the 3-way merge in `docs/guides/gui_modding_guide.md`). It also collides with any other mod that replaces it (§7.4): Demography replaces `budget_panel.gui`, and CMF redefines `society_panel`.
+Before the prototypes (header), this mod replaced none of the three; it now replaces all three. It already replaced the Military panel before its Nuclear tab, and the Market panel before its Climate and Reserve tabs. Each one added is another file to merge every patch (the 3-way merge in `docs/guides/gui_modding_guide.md`). It also collides with any other mod that replaces it (§7.4): Demography replaces `budget_panel.gui`, and CMF redefines `society_panel`.
 
 ### 3.5 A sidebar button
 
@@ -136,14 +140,15 @@ widget = { state = { trigger_when = "[MapListPanelManager.IsVisible]"      on_fi
 Each later tab is a copy of the Nuclear one (`gui/panel_military.gui`, the two `### MOD: Nuclear tab` blocks). What it took:
 
 - **Gates**, in `common/scripted_guis/te_system_tab_sguis.txt`: `te_<host>_<system>_tab_sgui` (the rule and `has_journal_entry`) and `te_<host>_<system>_tab_unlock_sgui` (`is_shown` the rule; `is_valid` the entry's own unlock test). If that test is an `OR`, or reads through one, wrap it in one `custom_tooltip` in a trigger of its own (`nuclear_program_entry_unlocked` wraps the entry's `possible`), and add that trigger to `UNLOCK_TRIGGERS` in `test_un_layout.py`.
-- **The tab button:** six blockoverrides on a free slot of the host's strip (`*_button`, `_tooltip`, `_click` with `enabled` on the gate, `_visibility` and `_visibility_checked` both testing the unlock gate, `_selected`), plus an optional `*_button_icon`.
+- **The tab button:** six blockoverrides on a free slot of the host's strip (`*_button`, `_tooltip`, `_click` with `enabled` on the gate, `_visibility` and `_visibility_checked` both testing the unlock gate, `_selected`), and no icon (style guide).
 - **The content:** a header outside the gate; the gate on a parent; the `GetPlayerJournalEntry('<key>')` datacontext on a child with `minimumsize = { 520 -1 }` and `parentanchor = hcenter`. In it, the types the journal roots wrap, in the entry's order, then Open Journal Entry.
 - **What the journal draws that no composer does:** the goal bar of an entry with `progressbar = yes` and no bars-on-top marker (`te_je_goal_bar`; only Nuclear so far), scripted bars (`te_je_scripted_bars`, drawn by Banking's overview), the status description (`te_je_status_desc`; drawn only by the UN tab: Banking and Hegemony leave it to the journal, and Nuclear's is empty while the entry is active), and human scripted buttons (`te_je_scripted_buttons`). Every scripted button of the six systems still without a tab is the AI's (`is_ai = yes`), so none needs the grid.
 - **Buttons and steppers need nothing more.** The panels' scripted GUIs take `JournalEntry.GetCountry.MakeScope` as their root, and that resolves to the player under the tab's datacontext as it does in the journal.
-- **Loc:** the tab name, its tooltip, the locked tooltip (ending `It opens once:\n`, which `check_gui_lint.py` warns about, as for every tab), the Open Journal Entry tooltip, and the unlock line.
+- **Loc:** the tab name, its tooltip, the tooltip for a greyed tab whose conditions are met (`te_system_tab_met_tt`: `IsValidTooltip` renders nothing when `is_valid` passes, so the tooltip asks `IsValid` first), the locked tooltip (ending `It opens once:\n`, which `check_gui_lint.py` warns about, as for every tab), the Open Journal Entry tooltip, and the unlock line.
 - **Tests:** the tab block composes the roots' types in order and ends with the link, the gate sits above the datacontext, the button is greyed on the gate (`MilitaryTabTest` in `test_nuclear_layout.py`).
 - **Docs:** the widget table in `gui_modding_guide.md`, the system's "Second host" line in `journal_entry_systems.md`, this file's header, and the player guide's chapter plus the PDF.
 - **Per system:** Space Race is nine entries in one file (`je_space_race.txt`), so nine gated blocks. Global Warming, Space Race and the Colonial Empire mount the bars-on-top marker and draw their own progress, so they need no goal bar.
+- **A panel that also shows others' objects** (the Market tabs): a tab that belongs to the player's own market tests the panel's market on its clickable half only. A tab that shows the other object's side (Climate on another market) reads that country as a `Country` datacontext, never its journal entry (gotcha #35), gated on the country; the shared types read `Country` in the parts that change hands, from a block whose default is `JournalEntry.GetCountry`, so the journal stays as it was; and every control greys on `Country.IsLocalPlayer`, with a script-side `is_player` in the handlers' effects (`gui_modding_guide.md` gotcha #31).
 
 ## 6. Size of each system
 
@@ -155,10 +160,10 @@ Widget lines, the entry's scripted buttons, and the number of top-level widgets 
 | United Nations | 3,369 | 25 | 2 | Diplomacy (crowded) or own window |
 | Nuclear | 1,946 | 2 | 4 | Military (tab, 2026-09-30) |
 | Cultural Hegemony | 1,434 | 10 | 3 | Society |
-| Strategic Reserve | 1,165 | 2 | 1 | own window |
+| Strategic Reserve | 1,165 | 2 | 1 | Market (tab, 2026-09-30) |
 | Space Race | 1,061 | 32 over 9 entries | 9 | own window (the Timeline Extended window's Space Race tab, 2026-09-30) |
-| Global Warming | 819 | 16 | 3 | own window |
-| Covert Warfare | 694 | 2 | 3 | own window |
+| Global Warming | 819 | 16 | 3 | Market (tab, 2026-09-30) |
+| Covert Warfare | 694 | 2 | 3 | Military (tab, 2026-09-30) |
 | Colonial Empire | 680 | 9 | 2 | own window (the Timeline Extended window's Colonial Empire tab, 2026-09-30) |
 | Grand Monuments | 293 | 0 | 2 | own window (the Timeline Extended window's Grand Monuments tab, 2026-09-30) |
 
@@ -247,5 +252,5 @@ Each fits in one throwaway test file and one launch.
 
 1. Run §8.
 2. If custom tabs work, pilot Banking as a Budget tab. It is the headline case and exercises every piece. Note the Demography collision on `budget_panel.gui`.
-3. Put systems with no natural vanilla home (space race, covert, global warming, strategic reserve, colonial, monuments) in one mod window with its own tabs, not a sidebar button each. Nuclear went to the Military panel (owner, 2026-09-30). The Space Race, the Colonial Empire and Grand Monuments share that window, the Timeline Extended window (`gui/te_systems_window.gui`, 2026-09-30).
+3. Put systems with no natural vanilla home (space race, colonial, monuments) in one mod window with its own tabs, not a sidebar button each. Nuclear and Covert Warfare went to the Military panel, and Global Warming and the Strategic Reserve to the Market panel (owner, 2026-09-30). The Space Race, the Colonial Empire and Grand Monuments share that window, the Timeline Extended window (`gui/te_systems_window.gui`, 2026-09-30).
 4. Take CMF as an optional integration (§7.5), not a dependency.
