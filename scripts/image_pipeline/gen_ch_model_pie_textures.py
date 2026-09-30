@@ -33,7 +33,8 @@ deutan dE was 5.4), so each is the nearest lighter step that clears it:
 Cultural Hegemony's share #d89a2b (dE 16.1 normal, 14.0 protan), Global
 Warming's share #e0661a (15.6, 10.0) and cut #4fb85a (17.5, 10.2). They sit
 above the categorical lightness band on purpose: a single subject over the
-rest, not one of several equal slices.
+rest, not one of several equal slices. List 2's three-slice pies (Colonial
+Empire, Space Race) were checked on every pair, the wrap-around included.
 
 Run standalone (numpy only; no Pillow needed):
     .venv/bin/python scripts/image_pipeline/gen_ch_model_pie_textures.py
@@ -86,6 +87,17 @@ PANEL_PIES: tuple[tuple[str, str], ...] = (
     ("journal_entry_widgets/ch_model_pie/ch_share_rest.dds", "#8c8474"),
     ("icons/gw_icons/pie_share.dds", "#e0661a"),
     ("icons/gw_icons/pie_cut.dds", "#4fb85a"),
+    # List 2 (provisional). Colonial Empire: condemners over supporters over
+    # the rest, three slices side by side, so every pair was checked
+    # (`--pairs all`: worst dE 8.1 deutan, 15.6 normal).
+    ("icons/colonial_empire_icons/pie_condemners.dds", "#dd4a3a"),
+    ("icons/colonial_empire_icons/pie_supporters.dds", "#4cbc9a"),
+    ("icons/colonial_empire_icons/pie_rest.dds", "#8c8474"),
+    # Space Race: ours over everyone's claims over the unclaimed rest
+    # (worst dE 8.7 deutan, 16.2 normal).
+    ("icons/space_race_icons/pie_unclaimed.dds", "#8c8474"),
+    ("icons/space_race_icons/pie_claimed.dds", "#cf4a2a"),
+    ("icons/space_race_icons/pie_ours.dds", "#ecc043"),
 )
 
 

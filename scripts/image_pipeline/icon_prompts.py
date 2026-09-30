@@ -1214,11 +1214,11 @@ ICONS: dict[str, dict[str, dict]] = {
     "nuclear_part": {
         "warhead": {"subject": "a stubby polished steel-grey nuclear warhead casing with a rounded nose cone and four "
                                "small fins, standing nose up, a small yellow-and-black radiation trefoil on its side",
-                    "seed": None},
-        "wrench": {"subject": "a heavy brass adjustable wrench", "seed": None},
-        "treaty_seal": {"subject": "a round red wax seal on a short wide blue silk ribbon", "seed": None},
+                    "seed": 0},
+        "wrench": {"subject": "a heavy brass adjustable wrench", "seed": 3},
+        "treaty_seal": {"subject": "a round red wax seal on a short wide blue silk ribbon", "seed": 1},
         # A dove seen from the front read as a heraldic eagle (UN); white is lost in the cut-out.
-        "dove": {"subject": "a pale grey dove flying in side view, an olive branch in its beak", "seed": None},
+        "dove": {"subject": "a pale grey dove flying in side view, an olive branch in its beak", "seed": 2},
         "shield": {"subject": "a plain polished gold heater shield seen from the front", "seed": None},
         "wall": {"subject": "a low thick wall of rough grey stone blocks", "seed": None},
         "sword": {"subject": "a broad steel sword with a gold hilt", "seed": None},
@@ -1344,11 +1344,15 @@ def _gw_tier(level, centre, edge, burst=False):
 _DT = f"{_GI}/diplomatic_treaties_articles_icons"
 
 
-def _row_of_warheads(now, marks=()):
-    """Three identical warheads standing in a row (series production), with any marks over them."""
-    return {"from": "nuclear_part/warhead", "base": {"scale": 0.7, "at": (0.5, 0.56)}, "now": now,
-            "marks": [{"part": "nuclear_part/warhead", "under": True, "at": (x, 0.58), "scale": 0.62,
-                       "outline": False} for x in (0.2, 0.8)] + list(marks)}
+def _row_of_warheads(now, marks=(), top=0.22):
+    """Three identical warheads racked one above another (series production), with any marks over them.
+
+    FLUX lays a warhead on its side whatever the subject says (four seeds), so
+    the row the list asked for is a rack."""
+    step = (0.8 - top) / 2
+    return {"from": "nuclear_part/warhead", "base": {"scale": 0.66, "at": (0.5, 0.8)}, "now": now,
+            "marks": [{"part": "nuclear_part/warhead", "under": True, "at": (0.5, y), "scale": 0.66,
+                       "outline": False} for y in (top, top + step)] + list(marks)}
 
 
 def _readiness(angle, lamp, now):
@@ -1500,7 +1504,8 @@ ICONS.update({
                              "marks": [{"part": "nuclear_part/treaty_seal", "at": (0.7, 0.7), "scale": 0.52}],
                              "now": f"{_DT}/nuclear_program_pause.dds"},
         "programme_at_ceiling": _row_of_warheads(f"{_DT}/nuclear_arms_limitation.dds",
-                                                 [{"draw": "bar", "colour": "gold", "at": (0.5, 0.16), "scale": 0.96}]),
+                                                 [{"draw": "bar", "colour": "gold", "at": (0.5, 0.1), "scale": 0.96}],
+                                                 top=0.34),
         "programme_dismantling": {"from": "nuclear_part/warhead", "damage": "split",
                                   "marks": [{"part": "nuclear_part/wrench", "at": (0.5, 0.78), "scale": 0.46}],
                                   "now": f"{_DT}/nuclear_disarmament.dds"},
@@ -1524,11 +1529,11 @@ ICONS.update({
         "doctrine_existential": {"from": "nuclear_part/warhead", "base": {"scale": 0.82, "at": (0.5, 0.42)},
                                  "marks": [{"part": "nuclear_part/wall", "at": (0.5, 0.8), "scale": 0.96}],
                                  "now": f"{_DT}/nuclear_guarantee.dds"},
-        "doctrine_flexible": {"from": "nuclear_part/warhead", "tilt": -22, "base": {"scale": 0.8, "at": (0.58, 0.5)},
-                              "marks": [{"part": "nuclear_part/shield", "under": True, "at": (0.3, 0.52),
-                                         "scale": 0.72}],
+        "doctrine_flexible": {"from": "nuclear_part/warhead", "tilt": 18, "base": {"scale": 0.8, "at": (0.44, 0.5)},
+                              "marks": [{"part": "nuclear_part/shield", "under": True, "at": (0.66, 0.5),
+                                         "scale": 0.74}],
                               "now": f"{_GI}/diplomatic_action_icons/nd_nuclear_warning_action.dds"},
-        "doctrine_compellence": {"from": "nuclear_part/warhead", "turn": -90, "base": {"scale": 0.84, "at": (0.44, 0.5)},
+        "doctrine_compellence": {"from": "nuclear_part/warhead", "flip": True, "base": {"scale": 0.8, "at": (0.42, 0.5)},
                                  "marks": [{"draw": "arrow", "dir": "right", "colour": "red", "at": (0.86, 0.5),
                                             "scale": 0.34}],
                                  "now": f"{_GI}/diplomatic_action_icons/nd_nuclear_ultimatum_action.dds"},
@@ -1778,7 +1783,8 @@ def _derived_ok(spec: dict, entry: dict) -> bool:
     if entry.get("tint") not in (None,) + TINTS or entry.get("layout") not in (None,) + LAYOUTS:
         return False
     if entry.get("damage") not in (None,) + DAMAGE or not all(isinstance(entry.get(k, 0), (int, float))
-                                                              for k in ("tilt", "turn")):
+                                                              for k in ("tilt", "turn")) \
+            or not isinstance(entry.get("flip", False), bool):
         return False
     base = entry.get("base", {})
     if not (isinstance(base, dict) and 0 < base.get("scale", 1) <= 1
