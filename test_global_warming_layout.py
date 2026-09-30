@@ -379,7 +379,9 @@ class RoundThreeTest(unittest.TestCase):
 
 
 class ProjectionBarTest(unittest.TestCase):
-    """Play-test round 3: the bar shows the projection as a segment, not a marker."""
+    """Play-test round 3: the bar shows the projection as a segment, not a marker.
+    The segment is coloured by whether the change is good or bad for the player
+    (the owner's convention: red bad, green good): warming is red, cooling green."""
 
     @classmethod
     def setUpClass(cls):
@@ -399,18 +401,20 @@ class ProjectionBarTest(unittest.TestCase):
         for m in re.finditer(r"(?m)^\t{6}(\w+) = \{", self.bar):
             if m.group(1) != "size":
                 layers.append(_block_from(self.bar, m.end()))
-        base, pale, red, solid, tick = layers
+        base, warming, cooling, solid, tick = layers
         self.assertRegex(base, r"value = 0\s*min = 0\s*max = 1")
         self.assertNotIn('blockoverride "background" {}', base)
-        self.assertIn("alpha = 0.4", pale)
-        self.assertIn("ScriptValue('gw_disp_temp_trend'), '(CFixedPoint)1' )", pale)
-        self.assertIn("default_progressbar_horizontal = {", pale)
-        self.assertIn("ScriptValue('gw_disp_bar_high_frac')", pale)
-        self.assertIn("alpha = 0.5", red)
-        self.assertIn("ScriptValue('gw_disp_temp_trend'), '(CFixedPoint)-1' )", red)
-        self.assertIn("bad_progressbar_horizontal = {", red)
-        self.assertIn("ScriptValue('gw_disp_bar_high_frac')", red)
-        for layer in (pale, red, solid):
+        # Warming is bad: red, past the solid fill, up to the projection.
+        self.assertIn("alpha = 0.4", warming)
+        self.assertIn("ScriptValue('gw_disp_temp_trend'), '(CFixedPoint)1' )", warming)
+        self.assertIn("bad_progressbar_horizontal = {", warming)
+        self.assertIn("ScriptValue('gw_disp_bar_high_frac')", warming)
+        # Cooling is good: green, the tail from the projection up to the reading.
+        self.assertIn("alpha = 0.5", cooling)
+        self.assertIn("ScriptValue('gw_disp_temp_trend'), '(CFixedPoint)-1' )", cooling)
+        self.assertIn("green_progressbar_horizontal = {", cooling)
+        self.assertIn("ScriptValue('gw_disp_bar_high_frac')", cooling)
+        for layer in (warming, cooling, solid):
             self.assertIn('blockoverride "background" {}', layer)
             self.assertIn('blockoverride "frame" {}', layer)
         self.assertIn("ScriptValue('gw_disp_bar_low_frac')", solid)
@@ -418,6 +422,12 @@ class ProjectionBarTest(unittest.TestCase):
         self.assertRegex(tick, r"marker = \{\s*icon = \{\s*size = \{ 3 24 \}")
         self.assertIn('texture = "gfx/interface/backgrounds/white.dds"', tick)
         self.assertIn('tooltip = "gw_ov_tick_tt"', tick)
+
+    def test_the_tooltip_explains_the_colours(self):
+        tt = _loc_value("gw_ov_temp_tt")
+        self.assertIn("#R red#!", tt)
+        self.assertIn("#G green#!", tt)
+        self.assertNotIn("pale", tt)
 
     def test_low_and_high_swap_when_cooling(self):
         values = _read(VALUES)

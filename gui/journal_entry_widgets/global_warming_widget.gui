@@ -550,17 +550,21 @@ types global_warming_widget_types
 				###
 				### THE BAR (play-test round 3, 2026-09-30; the Nuclear taboo bar
 				### follows the same spec). Five layers in one fixed 160 x 18 cell,
-				### bottom to top, so the end of the coloured bar is always the
-				### reading and its solid part is always where it is heading:
+				### bottom to top. The solid fill runs to the lower of reading and
+				### projection; a translucent segment runs from there to the higher.
+				### THE SEGMENT'S COLOUR SAYS WHETHER THE CHANGE IS GOOD OR BAD FOR
+				### THE PLAYER, not its direction (the owner's convention for every
+				### projection bar: red bad, green good, the bar's own fill, pale, for
+				### a neutral change). Where it sits already shows the direction:
+				### past the solid fill when rising, the bar's tail when falling.
 				###   1. default_progressbar_horizontal at value 0: the bar's own
 				###      background and frame, no fill.
-				###   2. Rising (gw_disp_temp_trend 1): the same bar's fill at 40%
-				###      opacity (a wrapper widget, alpha = 0.4) up to the higher of
-				###      reading and projection, i.e. a pale extension to where the
-				###      reading will be in ten years.
-				###   3. Falling (gw_disp_temp_trend -1): bad_progressbar_horizontal's
-				###      red fill at 50% opacity up to the higher value, the reading:
-				###      the part about to be lost, like damage on a health bar.
+				###   2. Rising (gw_disp_temp_trend 1), i.e. warming, which is BAD:
+				###      bad_progressbar_horizontal's red fill at 40% opacity (a
+				###      wrapper widget, alpha = 0.4) up to the projection.
+				###   3. Falling (gw_disp_temp_trend -1), i.e. cooling, which is GOOD:
+				###      green_progressbar_horizontal's green fill at 50% opacity up
+				###      to today's reading, the tail the temperature is set to lose.
 				###   4. default_progressbar_horizontal's own fill, background and
 				###      frame blanked (the UN tally's stacking), up to the lower of
 				###      the two: solid.
@@ -600,13 +604,13 @@ types global_warming_widget_types
 								max = 1
 							}
 						}
-						# 2. Rising: the pale extension to the projection.
+						# 2. Rising, i.e. warming (bad): red, from the reading to the projection.
 						widget = {
 							size = { 100% 100% }
 							alpha = 0.4
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_temp_trend'), '(CFixedPoint)1' )]"
 
-							default_progressbar_horizontal = {
+							bad_progressbar_horizontal = {
 								size = { 100% 100% }
 								blockoverride "background" {}
 								blockoverride "frame" {}
@@ -617,13 +621,13 @@ types global_warming_widget_types
 								}
 							}
 						}
-						# 3. Falling: the red stretch from the projection up to the reading.
+						# 3. Falling, i.e. cooling (good): green, from the projection up to the reading.
 						widget = {
 							size = { 100% 100% }
 							alpha = 0.5
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_temp_trend'), '(CFixedPoint)-1' )]"
 
-							bad_progressbar_horizontal = {
+							green_progressbar_horizontal = {
 								size = { 100% 100% }
 								blockoverride "background" {}
 								blockoverride "frame" {}

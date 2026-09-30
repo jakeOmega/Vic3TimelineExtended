@@ -54,7 +54,7 @@ One icon per `gw_disp_tier_code`, 36 px, the tier's coloured word beneath. All s
 
 ## Overview: the temperature bar
 
-No art. Play-test round 3 replaced the vanilla eye marker with drawn layers: the projection as a translucent stretch of the bar's own fill (vanilla `default_progressbar_horizontal` at 40%, or `bad_progressbar_horizontal` at 50% while cooling) and the next tier's threshold as a 3 × 24 px line of `gfx/interface/backgrounds/white.dds` tinted cream (`color = { 0.96 0.90 0.72 0.95 }`). The layer spec is in `te_gw_overview_panel`'s comment.
+No art. Play-test round 3 replaced the vanilla eye marker with drawn layers: the projection as a translucent stretch coloured by whether the change is good or bad (warming: vanilla `bad_progressbar_horizontal`'s red at 40%; cooling: `green_progressbar_horizontal`'s green at 50%) and the next tier's threshold as a 3 × 24 px line of `gfx/interface/backgrounds/white.dds` tinted cream (`color = { 0.96 0.90 0.72 0.95 }`). The layer spec is in `te_gw_overview_panel`'s comment.
 
 ## Overview: pies
 

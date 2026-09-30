@@ -344,9 +344,9 @@ gw_disp_temp_projected = {
 # te_gw_overview_panel's comment). The projection on the bar's 0-4 C scale,
 # then the lower and the higher of reading and projection. The solid fill runs
 # to the lower and a translucent layer under it to the higher. Rising, the
-# solid part ends at the reading and a pale stretch runs on to the projection;
-# falling, the solid part ends at the projection and a red stretch runs on to
-# the reading. Falling is gw_disp_temp_trend < 0, which is exactly when the
+# solid part ends at the reading and a red stretch (warming is bad) runs on to
+# the projection; falling, the solid part ends at the projection and a green
+# stretch (cooling is good) runs on to the reading. Falling is gw_disp_temp_trend < 0, which is exactly when the
 # projection (the reading plus ten years of last year's change) is lower.
 gw_disp_proj_frac = {
 	value = gw_disp_temp_projected
