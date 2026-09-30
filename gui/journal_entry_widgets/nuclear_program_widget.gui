@@ -104,7 +104,8 @@ types nuclear_program_widget_types
 	}
 
 	### A label/value line. One tooltip for the whole row, so the number and the
-	### explanation of the number are never separated.
+	### explanation of the number are never separated. 200 + 276 (round 3: the
+	### values are the longer half; test_nuclear_layout.LabelBudgetTest).
 	type nuclear_program_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -114,7 +115,7 @@ types nuclear_program_widget_types
 		block "row_tooltip" {}
 
 		textbox = {
-			size = { 240 24 }
+			size = { 200 24 }
 			align = left|nobaseline
 			using = fontsize_medium
 			parentanchor = vcenter
@@ -124,7 +125,7 @@ types nuclear_program_widget_types
 		}
 
 		textbox = {
-			size = { 236 24 }
+			size = { 276 24 }
 			align = right|nobaseline
 			using = fontsize_medium
 			parentanchor = vcenter
@@ -149,7 +150,7 @@ types nuclear_program_widget_types
 
 		textbox = {
 			text = "je_nuclear_program_widget_funding_label"
-			size = { 200 24 }
+			size = { 170 24 }
 			align = left|nobaseline
 			using = fontsize_medium
 			parentanchor = vcenter
@@ -168,7 +169,7 @@ types nuclear_program_widget_types
 		textbox = {
 			text = "je_nuclear_program_widget_funding_value"
 			tooltip = "je_nuclear_program_widget_funding_tt"
-			size = { 216 24 }
+			size = { 246 24 }
 			align = center|nobaseline
 			using = fontsize_medium
 			parentanchor = vcenter

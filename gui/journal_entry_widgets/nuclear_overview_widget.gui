@@ -22,8 +22,8 @@
 ### Cells have a fixed width (style guide rule 8), so a long word cannot push
 ### its neighbours off-centre. The rows sit in one column of a fixed 480
 ### (the frame's 520 less its margins, a section's width), and every row
-### fits inside it: row 1 up to 4 x 110 + 3 x 6 = 458, row 2 3 x 150 + 2 x 6
-### = 462, row 3 104 + 170 + 146 + 24 + 3 x 8 = 468. Before the play-test of
+### fits inside it: row 1 up to 3 x 112 + 126 + 3 x 6 = 480, row 2 3 x 150 + 2 x 6
+### = 462, row 3 60 + 170 + 190 + 24 + 3 x 8 = 468. Before the play-test of
 ### 2026-09-29 the frame took its width from the rows, and rows 2 and 3,
 ### which appear once their IsShown answers, widened it after it had been
 ### centred: the overview drew ~80 px left of the column, clipped.
@@ -45,9 +45,10 @@ types nuclear_overview_widget_types
 	}
 
 	### A cell of row 1: an icon, its word small beneath (te_un_ov_icon_label's
-	### shape). Fixed width, so the row cannot push the panel wider.
+	### shape). Fixed width, so the row cannot push the panel wider: 112, which
+	### fits "Confrontation" and "Warheads 999" by the round-3 width budget.
 	type te_nuclear_ov_icon_label = widget {
-		size = { 110 58 }
+		size = { 112 58 }
 
 		icon = {
 			size = { 36 36 }
@@ -57,7 +58,7 @@ types nuclear_overview_widget_types
 		textbox = {
 			parentanchor = bottom|hcenter
 			autoresize = yes
-			max_width = 108
+			max_width = 112
 			elide = right
 			align = hcenter|nobaseline
 			using = fontsize_small
@@ -68,9 +69,12 @@ types nuclear_overview_widget_types
 
 	### A cell of row 2, wider: the posture's names run to 22 letters
 	### ("Existential Deterrence", "Conditional Delegation", about 135 px
-	### at this size in game).
+	### at this size in game). The name may wrap onto a second line rather
+	### than end in "..." (round 3: by the width budget a 22-letter name needs
+	### two lines of 150; in game it has fitted on one), so the name hangs
+	### from under the icon and the cell is tall enough for two lines.
 	type te_nuclear_ov_posture_cell = widget {
-		size = { 150 58 }
+		size = { 150 70 }
 
 		icon = {
 			size = { 36 36 }
@@ -78,10 +82,11 @@ types nuclear_overview_widget_types
 			block "icon_texture" {}
 		}
 		textbox = {
-			parentanchor = bottom|hcenter
+			parentanchor = top|hcenter
+			position = { 0 38 }
 			autoresize = yes
-			max_width = 148
-			elide = right
+			multiline = yes
+			maximumsize = { 150 -1 }
 			align = hcenter|nobaseline
 			using = fontsize_small
 			default_format = "#tooltippable"
@@ -220,9 +225,10 @@ types nuclear_overview_widget_types
 							text = "je_nuclear_ov_crisis_label"
 						}
 					}
-					### Credibility, once there is a record: a meter (the UN standing cell's shape).
+					### Credibility, once there is a record: a meter (the UN standing cell's
+					### shape), 126 wide so "Credibility 100" fits by the round-3 budget.
 					widget = {
-						size = { 110 58 }
+						size = { 126 58 }
 						visible = "[GetScriptedGui('nd_has_reputation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						tooltip = "nd_w_credibility_tt"
 
@@ -387,61 +393,92 @@ types nuclear_overview_widget_types
 					}
 				}
 
-				### Row 3: the nuclear taboo, heading for its target (the marker
-				### technique of the UN overview's authority bar). The hover is the taboo
-				### section's own: what the score is and the target's breakdown.
+				### Row 3: the nuclear taboo, heading for its target. The hover is the
+				### taboo section's own (what the score is and the target's breakdown),
+				### then a line on what the bar shows.
+				###
+				### THE BAR (play-test round 3, 2026-09-30): the projection bar shared
+				### with Global Warming, in one fixed 170 x 18 cell, bottom to top: the
+				### bar's background and frame (default_progressbar_horizontal at 0);
+				### the change still to come, to the higher of the score and its target,
+				### in the bar's own fill at 40% (a wrapper widget, alpha 0.4); and the
+				### solid fill to the lower of the two (nd_disp_taboo_bar_low / _high).
+				### The change is coloured neutral, not green or red, because the taboo
+				### is two-sided for the player: a stronger taboo weighs on an arsenal
+				### and on threats, and shields the unarmed. The arrow says which way it
+				### is going. No eye marker, and no threshold line: the bar never had one.
+				###
+				### Fixed cells, 60 + 170 + 190 + 24 and three 8 px gaps = 468, sized by
+				### the round-3 width budget (test_nuclear_layout.LabelBudgetTest): the
+				### label is the concept's short name ("Taboo"; its hover names the
+				### Nuclear Taboo), and the headline, at the table font, fits
+				### "100 → 100 (+1.00/mo)".
 				flowcontainer = {
 					direction = horizontal
 					spacing = 8
 					ignoreinvisible = yes
 					parentanchor = hcenter
 					visible = "[GetScriptedGui('nd_taboo_exists_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "[Concatenate( Localize( 'je_nuclear_program_widget_taboo_score_tt' ), GetScriptedGui('nd_taboo_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+					tooltip = "[Concatenate( Localize( 'je_nuclear_program_widget_taboo_score_tt' ), Concatenate( GetScriptedGui('nd_taboo_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), Localize( 'je_nuclear_ov_taboo_bar_tt' ) ) ) )]"
 
 					textbox = {
 						autoresize = yes
-						minimumsize = { 104 -1 }
-						maximumsize = { 104 -1 }
+						minimumsize = { 60 -1 }
+						maximumsize = { 60 -1 }
 						parentanchor = vcenter
 						align = left|nobaseline
+						using = fontsize_medium
 						elide = right
 						text = "je_nuclear_ov_taboo_label"
 					}
-					default_progressbar_horizontal = {
+					widget = {
 						size = { 170 18 }
 						parentanchor = vcenter
-						blockoverride "values" {
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo') )]"
-							min = 0
-							max = 100
-						}
-						blockoverride "on_top_of_the_progressbar" {
-							progressbar = {
-								noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								size = { 100% 100% }
-								skip_initial_animation = yes
-								direction = horizontal
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_target') )]"
+
+						# 1. Background and frame.
+						default_progressbar_horizontal = {
+							size = { 100% 100% }
+							blockoverride "values" {
+								value = 0
 								min = 0
 								max = 100
-								marker = {
-									icon = {
-										size = { 36 20 }
-										parentanchor = vcenter
-										widgetanchor = center
-										texture = "gfx/interface/progressbar/progressbar_marker.dds"
-									}
+							}
+						}
+						# 2. The change still to come, either way: the bar's own fill, pale (neutral).
+						widget = {
+							size = { 100% 100% }
+							alpha = 0.4
+
+							default_progressbar_horizontal = {
+								size = { 100% 100% }
+								blockoverride "background" {}
+								blockoverride "frame" {}
+								blockoverride "values" {
+									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_bar_high') )]"
+									min = 0
+									max = 100
 								}
+							}
+						}
+						# 3. Solid: the lower of the score and its target.
+						default_progressbar_horizontal = {
+							size = { 100% 100% }
+							blockoverride "background" {}
+							blockoverride "frame" {}
+							blockoverride "values" {
+								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_bar_low') )]"
+								min = 0
+								max = 100
 							}
 						}
 					}
 					textbox = {
 						autoresize = yes
-						minimumsize = { 146 -1 }
-						maximumsize = { 146 -1 }
+						minimumsize = { 190 -1 }
+						maximumsize = { 190 -1 }
 						parentanchor = vcenter
 						align = left|nobaseline
+						using = fontsize_medium
 						elide = right
 						text = "je_nuclear_ov_taboo_value"
 					}
