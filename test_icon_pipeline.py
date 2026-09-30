@@ -723,7 +723,8 @@ class PanelStateTests(unittest.TestCase):
 
     def test_chevrons_count(self):
         for n in (1, 2, 4):
-            a = np.concatenate([[False], np.asarray(self.r.chevrons(120, n))[:, 60, 3] > 128])   # the middle column
+            col = np.asarray(self.r.chevrons(120, n))[:, 60].astype(int)       # the middle column
+            a = np.concatenate([[False], (col[:, 3] > 128) & (col[:, 0] > 120)])   # gold, not the dark outline
             bands = int(np.sum(a[1:] & ~a[:-1]))
             self.assertEqual(bands, n)
 

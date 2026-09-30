@@ -1129,21 +1129,21 @@ ICONS: dict[str, dict[str, dict]] = {
     # Covert Warfare (covert_gui_icons.md): 36 px, the slot 26 px and faded while free.
     "covert_part": {
         "shield": {"subject": "a round polished steel shield with a thick gold rim and a large closed eye embossed "
-                              "in its centre", "seed": None},
+                              "in its centre", "seed": 1},
         # A word on the band would be written out ("classified"): name the band only.
         "envelope": {"subject": "a sealed tan manila envelope with a red paper band around it, a thick stack of plain "
-                                "green banknotes showing at its open edge", "seed": None},
+                                "green banknotes showing at its open edge", "seed": 2},
         "envelope_empty": {"subject": "an open empty tan manila envelope, its flap up, a torn red paper band hanging "
-                                      "from it", "seed": None},
-        "fedora": {"subject": "a black fedora hat resting on a closed brown leather dossier folder", "seed": None},
+                                      "from it", "seed": 1},
+        "fedora": {"subject": "a black fedora hat resting on a closed brown leather dossier folder", "seed": 1},
     },
     "covert": {
         # A searchlight's beam would cut out as a grey blob: the caught spy's raised hands say it.
         "spy_caught": {"subject": "a man in a tan trench coat and black fedora with both hands raised high above "
-                                  "his head, full figure", "seed": None,
+                                  "his head, full figure", "seed": 1,
                        "now": f"{_GI}/military_icons/navy_icons/detection_navy.dds"},
         "operation_slot": {"subject": "a closed tan manila case file folder with a small black-and-white photograph "
-                                      "held on its cover by a steel paper clip", "seed": None,
+                                      "held on its cover by a steel paper clip", "seed": 2,
                            "now": f"{_GI}/event_icons/je_covert_warfare.dds"},
     },
     # Global Warming (global_warming_gui_icons.md): tiers 36 px (drawn), policies
@@ -1437,7 +1437,8 @@ ICONS.update({
                             "now": f"{_GI}/generic_icons/warning.dds"},
         # The agent's rise: the fedora on its dossier, one gold chevron per tier.
         **{f"tradecraft_{n}": {"from": "covert_part/fedora", "base": {"scale": 0.84, "at": (0.42, 0.5)},
-                               "marks": ([{"draw": "chevrons", "count": n, "at": (0.8, 0.64), "scale": 0.46}]
+                               "marks": ([{"draw": "chevrons", "count": n, "patch": True, "at": (0.8, 0.66),
+                                           "scale": 0.5}]
                                          if n else []),
                                "now": now}
            for n, now in ((0, f"{_GI}/generic_icons/maybe_icon.dds"), (1, f"{_GI}/generic_icons/population.dds"),

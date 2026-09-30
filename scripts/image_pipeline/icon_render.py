@@ -686,9 +686,21 @@ def bar(size: int, colour: str = "white") -> Image.Image:
     return _shape_mark(size, [], colour, rects=[(0.05, 0.37, 0.95, 0.63)])
 
 
-def chevrons(size: int, count: int, colour: str = "gold") -> Image.Image:
-    """`count` rank chevrons stacked, pointing up, centred in the box."""
-    t, rise = 0.13, 0.17
+def chevrons(size: int, count: int, colour: str = "gold", patch: bool = False) -> Image.Image:
+    """`count` rank chevrons stacked, pointing up, centred in the box; `patch`
+    sets them on a dark cloth patch, as rank insignia are, so they read over a
+    ground of their own colour."""
+    if patch:
+        ss = 4
+        n = size * ss
+        im = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+        ImageDraw.Draw(im).rounded_rectangle([n * 0.08, n * 0.02, n * 0.92, n * 0.98], radius=n * 0.16,
+                                             fill=(34, 38, 52, 255), outline=(12, 12, 16, 255), width=max(3, n // 30))
+        im = resize_premultiplied(im, (size, size))
+        inner = chevrons(round(size * 0.8), count, colour)
+        im.alpha_composite(inner, ((size - inner.width) // 2, (size - inner.height) // 2))
+        return im
+    t, rise = 0.14, 0.17
     step = min(0.22, (0.9 - rise - t) / max(count - 1, 1))   # inside the box, outline and all
     total = rise + t + (count - 1) * step
     y0 = (1 - total) / 2
@@ -900,7 +912,7 @@ DRAWN = {
     "arrow_down": lambda box, m: arrow_down(box),
     "arrow": lambda box, m: arrow(box, m.get("dir", "down"), m.get("colour", "red"), m.get("double", False)),
     "bar": lambda box, m: bar(box, m.get("colour", "white")),
-    "chevrons": lambda box, m: chevrons(box, m.get("count", 1), m.get("colour", "gold")),
+    "chevrons": lambda box, m: chevrons(box, m.get("count", 1), m.get("colour", "gold"), m.get("patch", False)),
     "barrier": lambda box, m: barrier(box),
     "bubble": lambda box, m: bubble(box, m.get("colour", "white"), m.get("cracked", False)),
     "thermometer": lambda box, m: thermometer(box, m.get("level", 0), m.get("burst", False)),
