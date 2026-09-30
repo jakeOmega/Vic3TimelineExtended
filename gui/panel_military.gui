@@ -639,7 +639,7 @@ types panel_military {
 					text = "te_military_tab_nuclear"
 				}
 				blockoverride "fourth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_military_tab_nuclear_tt', Concatenate( Localize( 'te_military_tab_nuclear_locked_tt' ), GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_military_tab_nuclear_tt', SelectLocalization( GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_military_tab_nuclear_locked_tt' ), GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "fourth_button_click" {
 					enabled = "[GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -669,7 +669,7 @@ types panel_military {
 					text = "te_military_tab_covert"
 				}
 				blockoverride "fifth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_military_tab_covert_tt', Concatenate( Localize( 'te_military_tab_covert_locked_tt' ), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_military_tab_covert_tt', SelectLocalization( GetScriptedGui('te_military_covert_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_military_tab_covert_locked_tt' ), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "fifth_button_click" {
 					enabled = "[GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
