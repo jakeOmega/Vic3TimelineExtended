@@ -1,0 +1,122 @@
+﻿# ============================================================================
+# UN PROPOSAL PACE — HOW OFTEN A MEMBER MAY BRING BUSINESS TO THE FLOOR
+# ============================================================================
+# Tabling a resolution costs the proposer two timed modifiers: the sponsor mark
+# (un_ga_resolution_modifier), which also bars a second proposal while it runs,
+# and un_request_cooldown, which bars the next own-motion proposal of any topic.
+# Both used to run for a fixed 5 and 10 years. They now run for that long times
+# un_propose_pace_mult, so a great power in good standing is back at the
+# rostrum far sooner than a middling member, and one with a ruined record is
+# not. The docket reads the same multiplier: it offers convention business to
+# the member with the best claim (un_docket_offer_order), and takes Assembly
+# business up twice as often while a great power stands well
+# (un_docket_agenda_months).
+#
+# Restated in words in docs/player_guide/09-united-nations.md ("Tabling UN
+# business", "International standing"), je_un_standing_help_* and
+# je_un_chamber_raised_agenda (te_journal_entries_l_english.yml), and
+# docs/systems/journal_entry_systems.md. Edit them with these figures.
+# ============================================================================
+
+# ---- Tuning -----------------------------------------------------------------------------
+
+# Great powers set the agenda: half the wait.
+un_propose_pace_great_power = { value = 0.5 }
+
+# Standing multiplies the wait (the positive tiers only while the benefits are
+# not suspended, like every other standing reward).
+un_propose_pace_exemplary = { value = 0.7 }
+un_propose_pace_respected = { value = 0.85 }
+un_propose_pace_poor = { value = 1.25 }
+un_propose_pace_disgraced = { value = 1.5 }
+
+# The wait never drops below this fraction of the base, and never below
+# un_propose_min_days whatever it is multiplied by.
+un_propose_pace_floor = { value = 0.25 }
+un_propose_min_days = { value = 365 }
+
+# Assembly business, with no situation behind it, is taken up this often while
+# a great power member stands at Respected or better; otherwise as
+# un_docket_agenda_months says.
+un_docket_agenda_months_good_standing = { value = 12 }
+
+# ---- The multiplier ---------------------------------------------------------------------
+
+# Scope: the proposing country
+un_propose_pace_mult = {
+	value = 1
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		multiply = un_propose_pace_great_power
+	}
+	if = {
+		limit = {
+			un_standing_tier_exemplary = yes
+			un_standing_benefits_suspended = no
+		}
+		multiply = un_propose_pace_exemplary
+	}
+	else_if = {
+		limit = {
+			un_standing_tier_respected = yes
+			un_standing_benefits_suspended = no
+		}
+		multiply = un_propose_pace_respected
+	}
+	else_if = {
+		limit = { un_standing_tier_poor = yes }
+		multiply = un_propose_pace_poor
+	}
+	else_if = {
+		limit = { un_standing_tier_disgraced = yes }
+		multiply = un_propose_pace_disgraced
+	}
+	min = un_propose_pace_floor
+}
+
+# ---- Durations ---------------------------------------------------------------------------
+
+# The sponsor mark: five years at the base pace. Scope: the proposing country
+un_propose_sponsor_days = {
+	value = normal_modifier_time
+	multiply = un_propose_pace_mult
+	min = un_propose_min_days
+}
+
+# The bar on the next own-motion proposal: ten years at the base pace.
+# Scope: the proposing country
+un_propose_cooldown_days = {
+	value = long_modifier_time
+	multiply = un_propose_pace_mult
+	min = un_propose_min_days
+}
+
+# ---- The docket ---------------------------------------------------------------------------
+
+# Order the members a convention is offered to: power share, weighted by the
+# same pace multiplier (a great power in good standing first, a member with a
+# ruined record last). Scope: country
+un_docket_offer_order = {
+	value = un_docket_share_order
+	divide = un_propose_pace_mult
+}
+
+# Months between Assembly-business items. Scope: any
+un_docket_agenda_months_value = {
+	value = un_docket_agenda_months
+	if = {
+		limit = {
+			any_country = {
+				country_rank >= rank_value:great_power
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				NOT = { un_representation_suspended = yes }
+				un_standing_benefits_suspended = no
+				OR = {
+					un_standing_tier_respected = yes
+					un_standing_tier_exemplary = yes
+				}
+			}
+		}
+		value = un_docket_agenda_months_good_standing
+	}
+}
