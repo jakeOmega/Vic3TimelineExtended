@@ -197,8 +197,6 @@
  je_grand_monuments:0 "Monuments"
  je_grand_monuments_desc:0 "What our monuments honour, and what they give us for it."
  je_grand_monuments_reason:0 "A monument says something about the government that raised it. While its crown, republic, revolution or leader still stands, it lends legitimacy; every monument that is not contested lends prestige, and each pleases the interest groups that share its message. When that falls, the next government must decide what to do with it. Everything here grows with [concept_grandeur]."
- je_grand_monuments_status:0 "#bold Grand Monuments:#! [ROOT.GetCountry.MakeScope.ScriptValue('gm_display_count')|0]"
- je_grand_monuments_status_contested:0 "#bold Grand Monuments:#! [ROOT.GetCountry.MakeScope.ScriptValue('gm_display_count')|0], #R contested: [ROOT.GetCountry.MakeScope.ScriptValue('gm_display_contested')|0]#!"
  je_group_covert_warfare:0 "Covert Warfare"
  je_group_environment:0 "Environment"
  je_group_soft_power:0 "Soft Power"
