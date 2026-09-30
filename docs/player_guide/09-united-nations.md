@@ -513,6 +513,11 @@ mandate loses less war support to casualties and defeats.
 
 Missions put the UN's work in one state:
 
+Hover the name of a mission (on the state panel, in Missions in the Field or in
+a tooltip) for its Peacekeeping Mission, Aid Mission or Stabilisation Mission
+entry, which sets out how that kind opens, what it does, what its progress
+means and when it succeeds, fails or lapses.
+
 | Mission | Opened by | Effect on its state | Succeeds when |
 |---|---|---|---|
 | Peacekeeping | A peacekeeping request carried in full | Turmoil effects −20%, devastation recovery +50% | The host has 24 months of peace. |
@@ -523,8 +528,12 @@ Effects scale with the UN's enforcement, fall by up to half when members
 withhold dues, and rise with each contributor up to three. A mission fails if
 its host is attacked after it arrived, if every contributor leaves a
 peacekeeping or Stabilisation mission, or if the host expels a Stabilisation
-mission. It lapses after five years, or after six months if nobody has joined a
-peacekeeping or Stabilisation mission. Success adds delivery and gives each
+mission. It lapses after six months if nobody has joined a peacekeeping or
+Stabilisation mission, or if its host or state is gone. A mission has no time
+limit: one that is not done goes on for as long as it keeps contributors, so a
+member that keeps paying for its contingent can keep it in the field. Time
+works on the AI instead, which grows less willing to send a contingent to a
+mission the longer it has run. Success adds delivery and gives each
 contributor 3 standing and 15 relations with the host; failure costs
 credibility. The state panel shows a UN Mission tile, and contributors build
 covert networks in the host faster.

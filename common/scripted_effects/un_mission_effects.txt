@@ -693,13 +693,11 @@ un_mission_monthly = {
 				set_variable = { name = un_msn_progress value = 100 }
 			}
 		}
+		# No time limit: a mission that is not done goes on, for as long as its
+		# contributors stay and its host is not attacked.
 		if = {
 			limit = { var:un_msn_progress >= 100 }
 			un_mission_close = { STATUS = succeeded }
-		}
-		else_if = {
-			limit = { var:un_msn_months >= un_mission_max_months }
-			un_mission_close = { STATUS = lapsed }
 		}
 	}
 }
@@ -815,7 +813,8 @@ un_mission_ledger_outcome = {
 	}
 }
 
-# Lapsed: the mission ran out its time, or had nothing left to do. No entry.
+# Lapsed: the mission had nothing left to do (its host or state is gone, or
+# nobody joined a force the Assembly voted for). No entry.
 # Scope: mission container
 un_mission_outcome_lapsed = {
 	var:un_msn_host ?= { post_notification = un_mission_lapsed_notice }
