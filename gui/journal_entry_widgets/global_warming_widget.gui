@@ -20,9 +20,11 @@
 ###   widget_je_gw_reference -> custom_widget_container_3 (below the grid)
 ###       te_gw_reference_sections: History (the two charts, open) and How
 ###       Global Warming Works (every explanation, collapsed).
-### Each section is a type, so a tab in a vanilla panel can compose the same
-### pieces later (style rule 9); the roots are thin wrappers that repeat the
-### composers' [JournalEntry.IsActive] gate.
+### Each section is a type, so the Market panel's Climate tab
+### (gui/market_panel.gui) composes the same pieces (style rule 9); the roots
+### are thin wrappers that repeat the composers' [JournalEntry.IsActive] gate.
+### Nothing here may read the panel's ambient Market or Country: under the tab
+### it is the market the panel shows (MarketTabTest).
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_global_warming_layout.py).
@@ -196,6 +198,14 @@ types global_warming_widget_types
 	### widget in gw_policy_row decides which of the pair is rendered (two
 	### `visible` properties on one widget is a bug, not a conjunction).
 	###
+	### Both controls are greyed unless the entry is the local player's
+	### (JournalEntry.GetCountry.IsLocalPlayer, vanilla's test: Country.IsLocalPlayer
+	### in military_formation_panel.gui and right_click_menu.gui, and in vanilla
+	### loc): always true in the journal, false for the market
+	### leader's entry the Market panel's Climate tab shows on another market,
+	### where the tooltip says whose policies these are. The handlers' effects
+	### also require is_player (global_warming_sguis.txt).
+	###
 	### `button` + `using = default_button_action` is the in-game text-button
 	### idiom (vanilla scripted_journal_entry_button); the button_standard_*
 	### family is frontend-only and never instantiated in game.
@@ -204,9 +214,9 @@ types global_warming_widget_types
 		size = { 104 30 }
 		parentanchor = vcenter
 		text = "gw_btn_adopt"
-		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+		enabled = "[And( JournalEntry.GetCountry.IsLocalPlayer, ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
 		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+		tooltip = "[SelectLocalization( JournalEntry.GetCountry.IsLocalPlayer, Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) ), 'gw_btn_not_ours_tt' )]"
 	}
 
 	### The Repeal control, op 1. Stays visible and greyed when a treaty or
@@ -216,9 +226,9 @@ types global_warming_widget_types
 		size = { 104 30 }
 		parentanchor = vcenter
 		text = "gw_btn_repeal"
-		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		enabled = "[And( JournalEntry.GetCountry.IsLocalPlayer, ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) )]"
 		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+		tooltip = "[SelectLocalization( JournalEntry.GetCountry.IsLocalPlayer, Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) ), 'gw_btn_not_ours_tt' )]"
 	}
 
 	### One policy: its icon, lit while in force and dimmed while not (style
@@ -399,6 +409,15 @@ types global_warming_widget_types
 		}
 	}
 
+	### The overview. Its market cells (row 1, whose tier and penalty read the
+	### same for every country; the market's emissions and capture rows; the
+	### two pies) carry an empty block "gw_market_context". The journal and
+	### the Market panel's Climate tab on the player's own market leave it
+	### empty; the tab on another market fills it with that market leader's
+	### entry as the datacontext, so those cells show the market the panel
+	### shows while the temperature and the world's figures stay the player's
+	### (market_panel.gui). Labels that say "our" pick their wording on
+	### JournalEntry.GetCountry.IsLocalPlayer, as the policy controls do.
 	type te_gw_overview_panel = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -425,6 +444,7 @@ types global_warming_widget_types
 					spacing = 6
 					ignoreinvisible = yes
 					parentanchor = hcenter
+					block "gw_market_context" {}
 
 					### The tier, one icon per gw_disp_tier_code; the word is
 					### gw_severity_short and the tooltip the tier's sentence.
@@ -710,6 +730,7 @@ types global_warming_widget_types
 					visible = "[GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 					gw_value_row = {
+						block "gw_market_context" {}
 						tooltip = "gw_cond_emis_tt"
 						blockoverride "row_label" {
 							text = "gw_emis_market_label"
@@ -720,6 +741,7 @@ types global_warming_widget_types
 						}
 					}
 					gw_value_row = {
+						block "gw_market_context" {}
 						tooltip = "gw_emis_capture_tt"
 						blockoverride "row_label" {
 							text = "gw_emis_capture_label"
@@ -756,6 +778,7 @@ types global_warming_widget_types
 				flowcontainer = {
 					direction = horizontal
 					parentanchor = hcenter
+					block "gw_market_context" {}
 
 					te_gw_ov_pie = {
 						tooltip = "gw_cond_share_tt"

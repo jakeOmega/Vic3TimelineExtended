@@ -14,9 +14,11 @@
 ### Style: docs/guides/gui_style_guide.md. The overview is always shown. The
 ### inventory is open until closed (st_res_inventory_closed). How the
 ### Strategic Reserve Works is collapsed until opened (st_res_how_open). Each
-### section is a type, and the two composers set their order, so a system tab
-### could show the same pieces. Collapse flags say their default: *_closed is
-### open until closed, *_open collapsed until opened.
+### section is a type, and the two composers set their order, so the Market
+### panel's Reserve tab (gui/market_panel.gui) shows the same pieces. Nothing
+### here may read the panel's ambient Market or Country (MarketTabTest).
+### Collapse flags say their default: *_closed is open until closed, *_open
+### collapsed until opened.
 ### test_strategic_reserve_layout.py holds the order, the flags and the rows.
 ###
 ### Icons: the hub cell uses the hub building's own icon; the row's status
@@ -2266,7 +2268,7 @@ types strategic_reserve_widget_types
 
 	### ======================================================================
 	### COMPOSERS. The one order of the sections, for the journal entry's
-	### roots below and for any future tab.
+	### roots below and for the Market panel's Reserve tab.
 	### ======================================================================
 
 	### What a returning player checks, open by default.

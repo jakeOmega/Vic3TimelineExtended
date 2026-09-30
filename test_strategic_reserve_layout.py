@@ -559,5 +559,188 @@ class IconsTest(unittest.TestCase):
                 self.assertIn(t, doc, t)
 
 
+
+MARKET = os.path.join(REPO, "gui", "market_panel.gui")
+TAB_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")
+SR_TAB_GATE = ("GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( "
+               "GuiScope.SetRoot( GetPlayer.MakeScope ).End )")
+SR_TAB_UNLOCK = "GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui')"
+# Vanilla's test for "the player's own market" (budget_panel.gui's tariff buttons): the
+# market its capital is in, whether it leads it or joined it.
+OWN_MARKET = "MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket )"
+BUTTONS_TAG = "### TE: Climate and Reserve tabs (te_global_warming, te_strategic_reserve) ###"
+# One slot of six in the house width budget (test_global_warming_layout.py's MarketTabTest).
+SIX_SLOT = (540 - 6 - 10) / 6
+
+
+def _te_blocks(text, tag):
+    """Each block of market_panel.gui opened by `tag`, up to its END TE line."""
+    out = []
+    start = text.find(tag)
+    while start != -1:
+        end = text.index("### END TE ###", start)
+        out.append(text[start:end])
+        start = text.find(tag, end)
+    return out
+
+
+def _overrides(body):
+    """{blockoverride name: its body, whitespace collapsed}, for one-level blocks."""
+    return {m.group(1): " ".join(m.group(2).split())
+            for m in re.finditer(r'blockoverride "(\w+)" \{([^{}]*)\}', body)}
+
+
+class MarketTabTest(unittest.TestCase):
+    """The Market panel's Reserve tab (style guide rule 9; feasibility §5.1):
+    the journal entry's own composers under GetPlayerJournalEntry, gated,
+    greyed until the entry runs, ending with Open Journal Entry, and shown on
+    the player's own market only."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.market = _read(MARKET)
+        cls.buttons = _te_blocks(cls.market, BUTTONS_TAG)
+        cls.content = _te_blocks(cls.market, "### TE: Reserve tab (te_strategic_reserve) ###")
+
+    def _sr_buttons(self):
+        return {k: v for k, v in _overrides(self.buttons[0]).items() if k.startswith("sixth_button")}
+
+    def test_one_button_block_and_one_content_block(self):
+        self.assertEqual(len(self.buttons), 1)
+        self.assertEqual(len(self.content), 1)
+        self.assertIn('name = "te_market_strategic_reserve_tab"', self.content[0])
+        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_strategic_reserve')]\"", self.content[0])
+
+    def test_the_reserve_tab_is_slot_six(self):
+        halves = self._sr_buttons()
+        self.assertEqual(set(halves), {"sixth_button", "sixth_button_tooltip", "sixth_button_click",
+                                       "sixth_button_visibility", "sixth_button_visibility_checked",
+                                       "sixth_button_selected"})
+        self.assertEqual(halves["sixth_button"], 'text = "te_market_tab_strategic_reserve"')
+        self.assertEqual(halves["sixth_button_selected"], 'text = "te_market_tab_strategic_reserve"')
+        self.assertIn("te_tab_buttons_six = {", self.market)
+
+    def test_the_tab_composes_the_journal_roots_types_in_order(self):
+        body = self.content[0]
+        found = re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
+        self.assertEqual(found, [wrapped for _, wrapped in ROOTS.values()])
+        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_st_res_reference_sections"))
+        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+
+    def test_the_gate_sits_above_the_journal_entry_datacontext(self):
+        body = self.content[0]
+        dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_strategic_reserve')]\"")
+        gate = body.index(f'visible = "[And( {SR_TAB_GATE}, {OWN_MARKET} )]"')
+        self.assertLess(gate, dc)
+        self.assertLess(body.index('text = "je_strategic_reserve"'), gate)   # the header sits outside it
+        opener = body.rindex("flowcontainer = {", 0, dc)
+        self.assertNotIn("visible", body[opener:dc])
+
+    def test_the_column_is_as_wide_as_the_journal_roots(self):
+        body = self.content[0]
+        dc = body.index("GetPlayerJournalEntry('je_strategic_reserve')")
+        head = body[dc:body.index("te_st_res_overview_panel", dc)]
+        self.assertIn("minimumsize = { 520 -1 }", head)
+        self.assertIn("parentanchor = hcenter", head)
+
+    def test_the_button_is_greyed_until_the_entry_runs(self):
+        halves = self._sr_buttons()
+        self.assertEqual(halves["sixth_button_click"],
+                         f'enabled = "[{SR_TAB_GATE}]" onclick = "[InformationPanel.SelectTab(\'te_strategic_reserve\')]"')
+        self.assertIn(f"{SR_TAB_UNLOCK}.IsValidTooltip(", halves["sixth_button_tooltip"])
+        self.assertIn("'te_market_tab_strategic_reserve_tt'", halves["sixth_button_tooltip"])
+        self.assertIn("'te_market_tab_strategic_reserve_locked_tt'", halves["sixth_button_tooltip"])
+        for half in ("sixth_button_visibility", "sixth_button_visibility_checked"):
+            self.assertIn("IsTabSelected('te_strategic_reserve')", halves[half], half)
+            self.assertIn(f"{SR_TAB_UNLOCK}.IsShown(", halves[half], half)
+        loc = _loc()
+        for key in ("te_market_tab_strategic_reserve", "te_market_tab_strategic_reserve_tt",
+                    "te_market_tab_strategic_reserve_locked_tt", "te_market_strategic_reserve_open_journal_tt",
+                    "st_res_entry_unlock_tt", "te_market_strategic_reserve_elsewhere",
+                    "te_market_strategic_reserve_open_own", "te_market_strategic_reserve_open_own_tt"):
+            self.assertTrue(loc.get(key), key)
+
+    def test_the_tab_shows_on_the_players_own_market_only(self):
+        """The clickable half asks which market the panel shows; the selected
+        half does not, so a panel opened on another market with the tab still
+        selected marks it and shows the note instead of an empty body."""
+        halves = self._sr_buttons()
+        self.assertIn(OWN_MARKET, halves["sixth_button_visibility_checked"])
+        self.assertNotIn(OWN_MARKET, halves["sixth_button_visibility"])
+        body = self.content[0]
+        note = body.index(f'visible = "[Not( {OWN_MARKET} )]"')
+        note_body = body[note:body.index(f'visible = "[And( {SR_TAB_GATE}, {OWN_MARKET} )]"')]
+        self.assertIn('text = "te_market_strategic_reserve_elsewhere"', note_body)
+        # The link opens the player's market (the sidebar's AccessFirstMarket) at this tab,
+        # through vanilla's OpenMarketPanelTab (states_panel.gui).
+        self.assertIn("onclick = \"[InformationPanelBar.OpenMarketPanelTab(AccessPlayer.AccessFirstMarket.Self, "
+                      "'te_strategic_reserve')]\"", note_body)
+        for vanilla in ((os.path.join(REPO, "gui", "budget_panel.gui"), "IsSame(GetPlayer.GetCapital.GetMarket)"),
+                        (os.path.join(REPO, "gui", "states_panel.gui"), "InformationPanelBar.OpenMarketPanelTab("),
+                        (os.path.join(REPO, "gui", "topbar.gui"), "AccessPlayer.AccessFirstMarket.Self")):
+            self.assertIn(vanilla[1], _read(vanilla[0]), vanilla)
+
+    def test_no_tab_icon(self):
+        """System tabs carry no icon, as vanilla's tabs don't (the owner, 2026-09-30)."""
+        self.assertEqual([k for k in _overrides(self.buttons[0]) if k.endswith("_icon")], [])
+        self.assertNotIn("@", _loc()["te_market_tab_strategic_reserve"])
+
+    def test_the_label_fits_one_of_six_slots(self):
+        word = _loc()["te_market_tab_strategic_reserve"]
+        self.assertLessEqual(len(word) * UPC["large"] * MARGIN, SIX_SLOT, word)
+
+    def test_the_gates_read_the_entry(self):
+        sguis = _read(TAB_SGUIS)
+        gate = _body(sguis, r"(?m)^te_market_strategic_reserve_tab_sgui = \{")
+        self.assertIn("is_shown = { has_journal_entry = je_strategic_reserve }", gate)
+        unlock = _body(sguis, r"(?m)^te_market_strategic_reserve_tab_unlock_sgui = \{")
+        self.assertIn("is_valid = { st_res_entry_unlocked = yes }", unlock)
+        # No game rule: the tab is on the strip exactly when the greyed entry is in the journal.
+        shown = re.search(r"is_shown = \{\s*(.*?)\s*\}", unlock).group(1)
+        inactive = _body(_read(JE), r"is_shown_when_inactive = \{")
+        self.assertEqual(" ".join(shown.split()), " ".join(inactive.split()))
+
+    def test_the_checklist_is_the_entrys_own_test_in_one_line(self):
+        trig = _body(_read(TRIGGERS), r"(?m)^st_res_entry_unlocked = \{")
+        m = re.search(r"custom_tooltip = \{\s*text = st_res_entry_unlock_tt\s*(.*)\s*\}\s*$", trig, re.S)
+        self.assertTrue(m, trig)
+        possible = _body(_read(JE), r"possible = \{")
+        self.assertEqual(" ".join(m.group(1).split()), " ".join(possible.split()))
+        self.assertIn("$building_strategic_reserve_hub$", _loc()["st_res_entry_unlock_tt"])
+
+    def test_what_the_journal_draws_besides_the_roots_needs_nothing_in_the_tab(self):
+        """§5.1: no goal bar, no scripted bars, status text only without a hub
+        (the entry is inactive then), and both scripted buttons the AI's."""
+        je = _strip_comments(_read(JE))
+        self.assertNotIn("progressbar", je)
+        self.assertNotIn("scripted_progress_bar", je)
+        status = _body(je, r"status_desc = \{")
+        self.assertEqual(re.findall(r"desc = (\w+)", status), ["je_strategic_reserve_status_no_hub"])
+        self.assertIn("building_strategic_reserve_hub", _body(status, r"trigger = \{"))
+        names = re.findall(r"(?m)^\tscripted_button = (\w+)", je)
+        self.assertEqual(len(names), 2)
+        buttons = _read(BUTTONS)
+        for name in names:
+            self.assertRegex(_body(buttons, rf"(?m)^{name} = \{{"), r"visible = \{\s*is_ai = yes", name)
+
+    def test_the_types_read_nothing_from_the_panel(self):
+        """No section type reads the Market panel's ambient Market or Country."""
+        ambient = re.findall(r"(?<![\w.'])(Market|Country|GetPlayer|GetMetaPlayer)\.\w+", _read(WIDGET))
+        self.assertEqual(ambient, [])
+
+    def test_one_visible_per_widget(self):
+        for i, block in enumerate(self.buttons + self.content):
+            stack = [0]
+            for line in block.splitlines():
+                s = line.strip()
+                if s.startswith("visible ="):
+                    stack[-1] += 1
+                    self.assertLessEqual(stack[-1], 1, f"block {i}: two visibles near {s[:60]}")
+                stack.extend([0] * line.count("{"))
+                for _ in range(line.count("}")):
+                    if len(stack) > 1:
+                        stack.pop()
+
+
 if __name__ == "__main__":
     unittest.main()

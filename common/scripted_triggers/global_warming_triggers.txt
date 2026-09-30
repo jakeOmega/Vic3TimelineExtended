@@ -104,6 +104,20 @@ gw_has_yearly_figures = {
 	}
 }
 
+# What je_global_warming needs to activate, its `possible`, as one tooltip
+# line: the checklist on the Market panel's greyed Climate tab
+# (te_market_global_warming_tab_unlock_sgui's is_valid,
+# te_system_tab_sguis.txt). Wrapped because the engine would print the bare
+# comparison under the script value's key. The test inside is the entry's
+# `possible` word for word, and MarketTabTest in test_global_warming_layout.py
+# fails if the two drift apart. Scope: country.
+gw_entry_unlocked = {
+	custom_tooltip = {
+		text = gw_entry_unlock_tt
+		temperature_anomaly_display >= 0.1
+	}
+}
+
 
 # ---------------------------------------------------------------------------
 # Adopt / repeal eligibility. Bodies extracted verbatim from the scripted
