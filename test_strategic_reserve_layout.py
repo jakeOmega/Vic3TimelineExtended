@@ -361,7 +361,7 @@ class PolicyIconTest(unittest.TestCase):
         row_type = _type_body(_read(WIDGET), "te_st_res_good_row")
         icon = _body(row_type, r'button = \{\s*size = \{ 30 28 \}')
         self.assertIn('block "row_settings_toggle" {}', icon)
-        self.assertIn("auto_expand.dds", icon)
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', icon), [f"{ST_RES_ICONS}policy_automated.dds"] * 2)
 
     def test_settings_show_under_a_collapsed_row_while_open(self):
         widget = _read(WIDGET)
@@ -523,18 +523,40 @@ class StatusIconTest(unittest.TestCase):
 
 
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "strategic_reserve_gui_icons.md")
+ST_RES_ICONS = "gfx/interface/icons/st_res_icons/"
+# The row's status icons (PR #586), by the block that gates each.
+STATUS_ICONS = {"row_status_idle": "status_idle", "row_status_storing": "status_storing",
+                "row_status_withdrawing": "status_withdrawing", "row_status_blocked": "status_blocked"}
+# The vanilla textures that stood in before #586; none may come back.
+PLACEHOLDERS = ("generic_icons/trend_nochange.dds", "generic_icons/trend_up.dds", "generic_icons/trend_down.dds",
+                "generic_icons/warning.dds", "production_methods/auto_expand.dds")
 # Interface chrome, not icons: the transparent overlay and the UN's bar marker.
 CHROME = {"gfx/interface/icons/generic_icons/transparent.dds", "gfx/interface/progressbar/progressbar_marker.dds"}
 
 
 class IconsTest(unittest.TestCase):
+    def test_each_status_draws_its_own_icon(self):
+        """Like the UN's UnIconsTest: each status's block is held to its file."""
+        row_type = _type_body(_read(WIDGET), "te_st_res_good_row")
+        found = dict(re.findall(r'block "(row_status_\w+)" \{\}\s*texture = "([^"]+)"', row_type))
+        self.assertEqual(found, {b: f"{ST_RES_ICONS}{n}.dds" for b, n in STATUS_ICONS.items()})
+
+    def test_no_placeholder_is_left(self):
+        widget = _read(WIDGET)
+        for p in PLACEHOLDERS:
+            self.assertNotIn(p, widget, p)
+
     def test_every_icon_is_listed(self):
         """Style rule 10: every icon, placeholder or final, is in the icons doc."""
         doc = _read(ICONS_DOC)
         textures = set(re.findall(r'texture = "([^"]+)"', _read(WIDGET))) - CHROME
         self.assertTrue(textures)
         for t in textures:
-            self.assertIn(t, doc, t)
+            if t.startswith(ST_RES_ICONS):   # listed by file name under the folder, as the UN's list is
+                self.assertIn(ST_RES_ICONS, doc)
+                self.assertIn(f"`{t[len(ST_RES_ICONS):]}`", doc, t)
+            else:
+                self.assertIn(t, doc, t)
 
 
 if __name__ == "__main__":
