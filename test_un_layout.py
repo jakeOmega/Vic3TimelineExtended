@@ -550,6 +550,7 @@ UNLOCK_TRIGGERS = {   # the tab gates' is_valid (te_system_tab_sguis.txt), and t
     "ch_entry_unlocked": "cultural_hegemony_triggers.txt",
     "un_entry_unlocked": "un_membership_triggers.txt",
     "nuclear_program_entry_unlocked": "nuke_triggers.txt",
+    "covert_warfare_entry_unlocked": "covert_warfare_triggers.txt",
     "gw_entry_unlocked": "global_warming_triggers.txt",
     "st_res_entry_unlocked": "st_res_triggers.txt",
 }
@@ -563,6 +564,25 @@ class TabUnlockTooltipTest(unittest.TestCase):
     def _body(self, name):
         text = _read(os.path.join(REPO, "common", "scripted_triggers", UNLOCK_TRIGGERS[name]))
         return _block(text, name)
+
+    def test_a_greyed_tab_says_when_its_conditions_are_met(self):
+        # IsValidTooltip renders nothing when is_valid passes, so a greyed tab
+        # whose unlock conditions are all met (an entry that has run its
+        # course) read "It opens once:" over nothing (play-test 2026-09-30).
+        # Every tab tooltip built on IsValidTooltip first asks IsValid and
+        # then says te_system_tab_met_tt.
+        pat = re.compile(r"GetScriptedGui\('([a-z_]+_tab_unlock_sgui)'\)\.IsValidTooltip\(")
+        found = 0
+        for name in ("budget_panel.gui", "culture_panel.gui", "diplomatic_overview.gui", "panel_military.gui"):
+            text = _read(os.path.join(REPO, "gui", name))
+            for line in text.splitlines():
+                for sgui in pat.findall(line):
+                    found += 1
+                    with self.subTest(gui=name, sgui=sgui):
+                        self.assertIn("GetScriptedGui('%s').IsValid(" % sgui, line)
+                        self.assertIn("'te_system_tab_met_tt'", line)
+                        self.assertLess(line.index("'te_system_tab_met_tt'"), line.index(".IsValidTooltip("))
+        self.assertEqual(found, 5)
 
     def test_no_bare_or(self):
         for name in UNLOCK_TRIGGERS:

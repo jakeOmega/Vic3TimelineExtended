@@ -1888,6 +1888,8 @@ article, power-bloc principle, GUI.
 
 **Gate:** `has_game_rule = covert_warfare_enabled` (shows the entry). It activates once `covert_operation_max_slots` is one above the rank baseline: 4 for a great power, 3 for a major power, 2 for anyone else (`je_covert_warfare.txt` `possible`). Slots (`country_covert_operation_slot_add`) come from the base 1 every country has (`base_values`), the rank bonus (great power +2, major power +1, `extra_country_ranks.txt`), four technologies (`mainframe_computers`, `computer_networks`, `cyber_warfare`, `quantum_computing`, +1 each) and the Ministry of Intelligence and Security institution (`law_ministry_of_intelligence_and_security`, +1 per level). No technology gates the entry directly; the first extra slot usually comes from `mainframe_computers` or the ministry.
 
+**Military tab (2026-09-30; not yet seen in game).** The panels also show in a fifth tab of the Military panel, *Covert* (`gui/panel_military.gui`), under `datacontext = "[GetPlayerJournalEntry('je_covert_warfare')]"`: the overview, the live sections and How Covert Warfare Works, then a link back to the entry. The tab is greyed until the entry is active; its tooltip lists the unlock test, `covert_warfare_entry_unlocked` (`covert_warfare_triggers.txt`: the entry's `possible` as one line, a verbatim copy held to it by `MilitaryCovertTabTest`). The Funding stepper, the priority steppers, Stand down and the collapse toggles work there as in the journal: their scripted GUIs root on `JournalEntry.GetCountry`.
+
 ### Key Files
 | File | Purpose |
 |---|---|

@@ -146,7 +146,7 @@ types society_panel
 					text = "te_society_tab_ch"
 				}
 				blockoverride "fifth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_society_tab_ch_tt', Concatenate( Localize( 'te_society_tab_ch_locked_tt' ), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_society_tab_ch_tt', SelectLocalization( GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_society_tab_ch_locked_tt' ), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "fifth_button_click" {
 					enabled = "[GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
