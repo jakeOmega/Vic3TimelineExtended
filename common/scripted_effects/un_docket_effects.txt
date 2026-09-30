@@ -615,7 +615,7 @@ un_docket_offer_topic_next = {
 					is_ai = no
 					un_docket_may_propose_$TOPIC$ = yes
 				}
-				order_by = un_docket_share_order
+				order_by = un_docket_offer_order
 				max = 1
 				un_docket_send_offer = { EVENT = $EVENT$ }
 			}
@@ -623,7 +623,7 @@ un_docket_offer_topic_next = {
 		else = {
 			ordered_country = {
 				limit = { un_docket_may_propose_$TOPIC$ = yes }
-				order_by = un_docket_share_order
+				order_by = un_docket_offer_order
 				max = 1
 				un_docket_send_offer = { EVENT = $EVENT$ }
 			}
@@ -736,7 +736,7 @@ un_docket_take_up_embargo = {
 # at random among those open with a member to table them.
 # Scope: any
 un_docket_take_up_agenda = {
-	set_global_variable = { name = un_dkt_agenda_months_left value = un_docket_agenda_months }
+	set_global_variable = { name = un_dkt_agenda_months_left value = un_docket_agenda_months_value }
 	un_docket_log = { TYPE = 13 }
 	random_list = {
 		10 = {

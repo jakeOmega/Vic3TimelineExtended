@@ -285,7 +285,7 @@ un_events.2 = {
 		custom_tooltip = un_vote_initiated_tt
 		add_modifier = {
 			name = un_ga_resolution_modifier
-			days = normal_modifier_time
+			days = un_propose_sponsor_days
 			is_decaying = yes
 		}
 		change_relations = { country = scope:condemned_country value = -20 }
@@ -327,12 +327,12 @@ un_events.2 = {
 		custom_tooltip = un_vote_initiated_tt
 		add_modifier = {
 			name = un_ga_resolution_modifier
-			days = normal_modifier_time
+			days = un_propose_sponsor_days
 			is_decaying = yes
 		}
 		add_modifier = {
 			name = un_request_cooldown
-			days = long_modifier_time
+			days = un_propose_cooldown_days
 			is_decaying = yes
 		}
 		change_relations = { country = scope:condemned_country value = -30 }

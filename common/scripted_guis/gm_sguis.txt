@@ -96,7 +96,7 @@ gm_preserve_sgui = {
 }
 
 # YES/NO: would a level finished now cause vanity backlash (§5)? Read-only,
-# scope-free (gotcha #22): the warning line's visibility.
+# scope-free (gotcha #22): the overview's Hard Times cell shows while it holds.
 gm_hard_times_sgui = {
 	scope = country
 
