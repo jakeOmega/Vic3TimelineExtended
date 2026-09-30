@@ -417,7 +417,10 @@ class InterstellarCellTest(unittest.TestCase):
 
 # Textures the widget uses as they are: vanilla's, used as vanilla uses them.
 # Everything else is the Space Race's own art or a #571 journal icon.
-VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds"}
+VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds",
+                # the rival rows' band marker, drawn as the UN's authority bar draws it
+                "gfx/interface/icons/generic_icons/transparent.dds",
+                "gfx/interface/progressbar/progressbar_marker.dds"}
 
 
 def _enclosing(text, anchor, opener):
