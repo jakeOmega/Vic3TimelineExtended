@@ -1,6 +1,6 @@
 # Banking GUI: Icons
 
-The banking overview (`te_banking_overview_panel`, at the top of the Banking Cycle journal entry and of the Budget panel's Banking tab) draws its readings as icons, each with a caption and its word beside it. There are 32 icon slots: one per state of six readings, plus a crash-risk badge. All of them are placeholders (style guide rule 10): textures the mod already uses elsewhere, mostly vanilla's timed-modifier icons, chosen so the layout could be judged in game before the art exists. The owner's first play-test (2026-09-29) asked for them, starting with the inflation band. This page lists each one: where it is set, what the final art should show, and where it should go. The model is [`un_gui_icons.md`](un_gui_icons.md), which records how the UN's set went from placeholders to finished art.
+The banking overview (`te_banking_overview_panel`, at the top of the Banking Cycle journal entry and of the Budget panel's Banking tab) draws its readings as icons, each with a caption and its word beside it. There are 32 icon slots: one per state of six readings, plus a crash-risk badge. Since play-test round 3, the tool rows draw one more, beside each tool's point cost. All of them are placeholders (style guide rule 10): textures the mod already uses elsewhere, mostly vanilla's timed-modifier icons, chosen so the layout could be judged in game before the art exists. The owner's first play-test (2026-09-29) asked for them, starting with the inflation band. This page lists each one: where it is set, what the final art should show, and where it should go. The model is [`un_gui_icons.md`](un_gui_icons.md), which records how the UN's set went from placeholders to finished art.
 
 **Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/banking_dashboard_widget.gui`, inside `te_banking_overview_panel`. No script reads the paths. Each icon is picked by one of two things. The cycle phase uses the `banking_dash_phase_*` scripted GUI that also picks its coloured word. The other readings use a display code, `banking_disp_<reading>_band_code` in `common/script_values/banking_overview_display_values.txt`, which repeats its band word's customizable-localization tests, so icon and word cannot disagree. Swapping one in is one path change. `IconsDocTest` in `test_banking_layout.py` holds each row below to its code; `BandCodeTest` holds each code to its word.
 
@@ -86,3 +86,11 @@ The banking overview (`te_banking_overview_panel`, at the top of the Banking Cyc
 | Cell | Placeholder | Final art | Proposed path |
 |---|---|---|---|
 | budget | `gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds` | a small stack of gold counters, one set aside | `banking_icons/budget.dds` |
+
+## Tool rows: point cost
+
+18 px, before the points a tool holds while it is enabled, in every row of Active Policies, Available Interventions and the open-market operations row (play-test round 3 replaced the "At least 2 free Banking Intervention Points" column with it; the full line is in the row's tooltip under Requires). Set once, in `banking_dash_policy_row`'s `cost_icon` block; the two investment-pool transfers, which cost GDP rather than points, override it empty. It is the same budget emblem as the overview's Budget cell, so the two should stay one picture.
+
+| Cell | Placeholder | Final art | Proposed path |
+|---|---|---|---|
+| cost | `gfx/interface/icons/diplomatic_treaties_articles_icons/bankroll_treaties.dds` | the budget's stack of gold counters at 18 px, reduced to three counters so it reads that small | `banking_icons/budget.dds` (the Budget cell's, at its small size) |

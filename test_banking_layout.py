@@ -5,6 +5,7 @@ of test_un_layout.py: one layout for the journal entry and the Budget tab, an
 overview on top, the live sections open, the history and How Banking Works
 at the foot, and every collapse flag named for its default.
 """
+import json
 import os
 import re
 import unittest
@@ -435,10 +436,18 @@ class IconsDocTest(unittest.TestCase):
         tex = re.search(r'blockoverride "badge" \{.*?texture = "([^"]+)"', block, re.S).group(1)
         self.assertEqual(self.doc["Overview row 1: bubble pressure"].get("crash risk"), tex)
 
+    def test_the_cost_icon_is_listed(self):
+        """Play-test round 3: the compact point-cost cell of every tool row."""
+        row = _type_body(_read(DASH), "banking_dash_policy_row")
+        cost = _block_from(row, row.index('block "cost_icon" {'))
+        tex = re.search(r'texture = "([^"]+)"', cost).group(1)
+        self.assertEqual(self.doc["Tool rows: point cost"].get("cost"), tex)
+
     def test_no_row_names_a_state_the_overview_lacks(self):
         listed = {(s, k) for s, rows in self.doc.items() for k in rows}
         drawn = {(DOC_SECTIONS[p], k) for _, _, found, _ in _cells() for p, k, _ in found}
         drawn.add(("Overview row 1: bubble pressure", "crash risk"))
+        drawn.add(("Tool rows: point cost", "cost"))
         self.assertEqual(listed, drawn)
 
 
@@ -560,6 +569,206 @@ class ShortPanelTest(unittest.TestCase):
         v = cloc["BANKING_CURR_MODIFIERS"]
         self.assertFalse(v.startswith("\\n") or v.endswith("\\n"))
         self.assertIn("banking_cycle_status_not_started", _loc())
+
+
+# ---------------------------------------------------------------------------
+# Play-test round 3: nothing a player reads may end in "...". Every label in a
+# fixed-width cell must fit it by the width budget the coordinator measured
+# from the owner's screenshots, in GUI units per character, plus 10%.
+# ---------------------------------------------------------------------------
+UNITS = {"large": 10.0, "medium": 8.6,
+         # not measured: the medium/large ratio (0.86) applied once more
+         "small": 7.4}
+MARGIN = 1.1
+CUSTOM_LOC_DIR = os.path.join(REPO, "common", "customizable_localization")
+# The longest a number printed in a cell can be, named per cell. Rates and
+# pressures print one decimal and a sign ("-10.0%" is the widest a rate,
+# premium or inflation reading reaches); monetisation is a level out of
+# te_mon_monetisation_max (3); points are one or two digits.
+NUMBER = "-10.0"
+MONETISE = "3"
+
+
+def _all_loc():
+    """The mod's English loc over vanilla's (vanilla_parsed/), for the names
+    of vanilla concepts such as [concept_infrastructure]."""
+    with open(os.path.join(REPO, "vanilla_parsed", "localization_english.json"), encoding="utf-8") as f:
+        keys = dict(json.load(f))
+    loc_dir = os.path.dirname(LOC)
+    for name in sorted(os.listdir(loc_dir)):
+        if name.endswith(".yml"):
+            for line in _read(os.path.join(loc_dir, name)).splitlines():
+                m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+                if m:
+                    keys[m.group(1)] = m.group(2)
+    return keys
+
+
+def _custom_options():
+    """Every customizable-localization key's possible localization keys."""
+    out = {}
+    for name in sorted(os.listdir(CUSTOM_LOC_DIR)):
+        text = _read(os.path.join(CUSTOM_LOC_DIR, name))
+        for m in re.finditer(r"(?m)^(\w+) = \{", text):
+            block = _block_from(text, m.end() - 1)
+            out[m.group(1)] = re.findall(r"localization_key = (\w+)", block)
+    return out
+
+
+class WidthBudgetTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.loc = _all_loc()
+        cls.custom = _custom_options()
+        cls.dash = _read(DASH)
+
+    def shown(self, key, number=NUMBER, depth=0):
+        """The widest text the key can show: splices and concepts resolved,
+        formatting stripped, a customizable localization at its longest
+        option, and any other data read at the cell's longest number."""
+        v = self.loc.get(key)
+        self.assertIsNotNone(v, key)
+        return self._text(v, number, depth)
+
+    def _text(self, v, number, depth):
+        v = re.sub(r"\$(\w+)\$", lambda m: self.shown(m.group(1), number, depth + 1), v)
+        v = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", v)
+        v = re.sub(r"\[(concept_\w+)\]", lambda m: self.shown(m.group(1), number, depth + 1), v)
+
+        def custom(m):
+            options = [self.shown(k, number, depth + 1) for k in self.custom[m.group(1)]]
+            return max(options, key=len)
+        v = re.sub(r"\[[^\[\]]*GetCustom\('(\w+)'\)[^\[\]]*\]", custom, v)
+        v = re.sub(r"\[[^\[\]]*\]", number, v)
+        v = re.sub(r"#[A-Za-z_]+(?:;\S*)? ", "", v).replace("#!", "")
+        v = re.sub(r"@\w+!", "", v)
+        return v.replace("\\n", "")
+
+    def fits(self, key, cell, number=NUMBER):
+        width, font = cell
+        text = self.shown(key, number)
+        need = len(text) * UNITS[font] * MARGIN
+        self.assertLessEqual(need, width, f"{key} shows {text!r}: {need:.0f} units in a {width} {font} cell")
+
+    def box(self, text, anchor):
+        """(max_width, font) of the textbox around `anchor` in `text`, read
+        from the markup, so a narrower cell or a bigger font fails here."""
+        at = text.index(anchor)
+        start = text.rindex("textbox = {", 0, at)
+        tb = _block_from(text, start + len("textbox = "))
+        self.assertIn(anchor, tb)
+        width = int(re.search(r"max_width = (\d+)", tb).group(1))
+        font = re.search(r"using = fontsize_(small|medium|large)", tb).group(1)
+        return width, font
+
+    def type_box(self, typ, block):
+        return self.box(_type_body(self.dash, typ), 'block "%s"' % block)
+
+    def texts(self, block_name, body=None):
+        body = self.dash if body is None else body
+        return sorted(set(re.findall(r'blockoverride "%s" \{\s*text = "(\w+)"' % block_name, body)))
+
+    def test_tool_names(self):
+        """The owner: "a lot of the interventions ... are too long"."""
+        names = self.texts("row_label")
+        self.assertGreaterEqual(len(names), 40)
+        cell = self.type_box("banking_dash_policy_row", "row_label")
+        self.assertEqual(cell, (288, "medium"))
+        for key in names:
+            with self.subTest(name=key):
+                self.fits(key, cell)
+
+    def test_directed_credit_rows_name_the_sector(self):
+        available = _type_body(self.dash, "te_banking_sec_interventions")
+        for sector, name in (("infrastructure", "Infrastructure"), ("heavy_industry", "Heavy Industry"),
+                             ("agriculture", "Agriculture"), ("armaments", "Armaments"),
+                             ("electrification", "Electrification & High Tech")):
+            key = "banking_dash_name_cb_directed_credit_" + sector
+            self.assertIn('text = "%s"' % key, available)
+            self.assertEqual(self.shown(key), name)
+            self.assertIn("banking_dash_name_active_cb_directed_credit_" + sector,
+                          _type_body(self.dash, "te_banking_sec_active"))
+        self.assertEqual(self.shown("banking_dash_name_cb_countercyclical_buffer"), "Counter-cyclical Buffer")
+
+    def test_costs_are_compact_and_the_full_requirement_is_on_hover(self):
+        cell = self.type_box("banking_dash_policy_row", "row_cost")
+        for key in self.texts("row_cost"):
+            with self.subTest(cost=key):
+                self.fits(key, cell)
+                tool = key[len("banking_dash_cost_"):]
+                tip = self.loc["banking_dash_tt_" + tool]
+                if self.shown(key):
+                    points = re.search(r"#title Requires:#! \$(\w+_POINTS_\d)\$", tip)
+                    self.assertTrue(points, f"{tool}: no Requires line in the tooltip")
+                    self.assertEqual(points.group(1)[-1], self.shown(key))
+                else:   # the pool transfers: the cost is GDP, which their text states
+                    self.assertIn("GDP", self.shown("banking_dash_tt_" + tool))
+
+    def test_monetary_labels(self):
+        for typ, block in (("banking_dash_condition_row", "condition_label"), ("banking_dash_pair", "pair_label"),
+                           ("banking_dash_mon_label", "mon_label_text")):
+            cell = self.type_box(typ, block)
+            for key in self.texts(block):
+                with self.subTest(label=key):
+                    self.fits(key, cell)
+        body = _type_body(self.dash, "te_banking_sec_monetary")
+        self.fits("banking_dash_mon_target_label", self.box(body, '"banking_dash_mon_target_label"'))
+        self.assertEqual(self.shown("banking_dash_mon_anchoring_label"), "Anchoring")
+
+    def test_monetary_values(self):
+        for typ, block in (("banking_dash_pair", "pair_value"), ("banking_dash_mon_value", "mon_value_text")):
+            cell = self.type_box(typ, block)
+            for key in self.texts(block):
+                with self.subTest(value=key):
+                    self.fits(key, cell)
+        body = _type_body(self.dash, "te_banking_sec_monetary")
+        self.fits("banking_dash_mon_target_value", self.box(body, '"banking_dash_mon_target_value"'))
+        self.fits("banking_dash_mon_monetise_value", self.box(body, '"banking_dash_mon_monetise_value"'),
+                  number=MONETISE)
+        value = self.dash[self.dash.index("type banking_dash_condition_value = textbox {"):]
+        value = _block_from(value, value.index("{"))
+        cell = (int(re.search(r"max_width = (\d+)", value).group(1)),
+                re.search(r"using = fontsize_(\w+)", value).group(1))
+        for m in re.finditer(r"banking_dash_condition_value = \{", body):
+            box = _block_from(body, m.end() - 1)
+            if "multiline = yes" in box:
+                continue      # wraps rather than eliding
+            key = re.search(r'text = "(\w+)"', box).group(1)
+            with self.subTest(value=key):
+                self.fits(key, cell)
+
+    def test_overview_cells(self):
+        body = _type_body(self.dash, "te_banking_overview_panel")
+        cell = self.type_box("te_banking_ov_cell", "caption")
+        for key in self.texts("caption", body):
+            with self.subTest(caption=key):
+                self.fits(key, cell)
+        word = _type_body(self.dash, "te_banking_ov_word")
+        cell = (int(re.search(r"max_width = (\d+)", word).group(1)),
+                re.search(r"using = fontsize_(\w+)", word).group(1))
+        words = sorted(set(re.findall(r'te_banking_ov_word = \{[^{}]*?text = "(\w+)"', body)))
+        self.assertEqual(len(words), 12)   # seven phase words and five readings
+        for key in words:
+            with self.subTest(word=key):
+                self.fits(key, cell)
+        # the longest band word, named: the price band's
+        self.assertEqual(self.shown("banking_dash_mon_band_value"), "Hyperinflation")
+
+    def test_buttons(self):
+        """A button's label is in the medium type (assumed: its font is the
+        button template's)."""
+        types = {"banking_dash_mon_button": 128, "banking_dash_action_button": 100}
+        for typ, default in types.items():
+            for m in re.finditer(r"\b%s = \{" % typ, self.dash):
+                block = _block_from(self.dash, m.end() - 1)
+                size = re.search(r"size = \{ (\d+) \d+ \}", block)
+                key = re.search(r'text = "(\w+)"', block)
+                if key is None:          # the type's own block slots
+                    continue
+                with self.subTest(button=key.group(1)):
+                    self.fits(key.group(1), (int(size.group(1)) if size else default, "medium"))
+        for key in ("banking_dash_btn_enable", "banking_dash_btn_disable", "banking_dash_btn_execute"):
+            self.fits(key, (100, "medium"))
 
 
 if __name__ == "__main__":
