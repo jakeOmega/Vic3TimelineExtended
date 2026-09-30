@@ -40,9 +40,9 @@ detail. While the entry runs it has no status line, because the overview shows
 where you stand. An entry that isn't running says why: the empire is secured,
 it collapsed less than ten years ago, or you hold no colony or colonial subject.
 
-The same panels appear on the Colonies tab of the Timeline Extended window,
-which the button under the sidebar's Map List opens, and a change made in one
-shows in the other. The tab is grayed until the journal entry is active; hover
+The same panels appear on the Colonial Empire tab of the Timeline Extended
+window, which the button under the sidebar's Map List opens, and a change made
+in one shows in the other. The tab is grayed until the journal entry is active; hover
 it for what is still missing. It ends with an Open Journal Entry button.
 
 <!-- screenshot: the Colonial Empire overview with the stability bar showing a red stretch, and Why Stability Is Moving open with its bars and the Eligible Territories list expanded -->

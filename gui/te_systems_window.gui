@@ -103,11 +103,12 @@ types te_systems_window_types
 			### when its half shows: the templates above.
 			###
 			### No tab carries an icon, as vanilla's tabs and the mod's other tabs
-			### don't (owner, 2026-09-30). The names are the short ones: three tabs
-			### share about 540, so a name gets about 160 inside the tab's 10 px
-			### margins, and "Colonial Empire" and "Grand Monuments" need 165 at the
-			### house budget (10 units a character plus 10%). The tooltips and the
-			### content's headers carry the full names.
+			### don't (owner, 2026-09-30), so each tab shows the system's full name.
+			### Three tabs share about 540: a name gets about 160 inside the tab's
+			### 10 px margins, and the longest, "Colonial Empire" and "Grand
+			### Monuments", need 142 at the medium budget (8.6 units a character plus
+			### 10%), which fits vanilla's tab text (EB Garamond 17, measured at about
+			### 7.7 a character bold in PR #593).
 			tab_buttons = {
 				### Space Race
 				blockoverride "first_button" {

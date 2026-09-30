@@ -45,7 +45,7 @@ gm_system_enabled = {
 	NOT = { has_game_rule = grand_monuments_disabled }
 }
 
-# Country scope. The Timeline Extended window's Monuments tab checklist
+# Country scope. The Timeline Extended window's Grand Monuments tab checklist
 # (te_window_grand_monuments_tab_unlock_sgui's is_valid, rendered by
 # IsValidTooltip on the greyed tab): je_grand_monuments' `possible` less the
 # rule, which the tab's own gate already reads, as one line.

@@ -34,6 +34,12 @@ SR = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landi
 FULL_NAMES = {"space_race": "Space Race", "colonial_empire": "Colonial Empire",
               "grand_monuments": "Grand Monuments"}
 NAME_WIDTH = 540 / 3 - 2 * 10
+# Tab labels are budgeted at the medium rate, 8.6 units a character plus 10%,
+# not the large row font's 10. Vanilla's tab text is the default EB Garamond 17
+# (tab_text_properties; #title unselected, #variable bold selected), and the
+# Covert branch measured "Mobilization" at 84.7 regular and 91.9 bold for 12
+# characters, about 7.7 a character (the measured table is in PR #593).
+TAB_UNITS_PER_CHAR = 8.6
 OPEN = "GetVariableSystem.HasValue('com_open_window', 'te_systems_window')"
 PLAYED = "GetMetaPlayer.GetPlayedOrObservedCountry.IsValid"
 NOT_OBSERVER = "Not( GetMetaPlayer.IsObserver )"
@@ -555,24 +561,16 @@ class LocTest(unittest.TestCase):
                     "ce_unlock_not_secured_tt", "ce_unlock_no_collapse_tt", "gm_unlock_tt"):
             self.assertIn(key, loc)
 
-    def test_each_tab_has_its_full_name_when_it_fits(self):
-        """The tabs carry no icon, so a name gets its tab less tab_text_properties'
-        10 px margins: three tabs share about 540. The full name when it fits
-        the house budget (10 units a character plus 10%), otherwise the short
-        one, and the tooltip names the system in full."""
+    def test_each_tab_shows_its_full_name(self):
+        """The tabs carry no icon, so a name gets its tab less
+        tab_text_properties' 10 px margins: three tabs share about 540. Each
+        tab shows the system's full name, which fits at the medium budget."""
         loc = _all_loc()
-
-        def expanded(value):
-            return re.sub(r"\$(\w+)\$", lambda m: loc.get(m.group(1), m.group(0)), value)
-
         for tab, full in FULL_NAMES.items():
             with self.subTest(tab=tab):
                 name = loc[f"te_window_tab_{tab}"]
-                self.assertLessEqual(len(name) * 10 * 1.1, NAME_WIDTH, name)
-                if len(full) * 10 * 1.1 <= NAME_WIDTH:
-                    self.assertEqual(name, full)
-                else:
-                    self.assertIn(full, expanded(loc[f"te_window_tab_{tab}_tt"]))
+                self.assertEqual(name, full)
+                self.assertLessEqual(len(name) * TAB_UNITS_PER_CHAR * 1.1, NAME_WIDTH, name)
 
 
 class IconsTest(unittest.TestCase):
