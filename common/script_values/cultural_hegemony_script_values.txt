@@ -50,6 +50,10 @@ cultural_pull_civil_war_penalty = -20
 # Hegemony effect scaling (multiplier = cultural_pull_total directly, 0-100)
 cultural_hegemony_modifier_max_mult = 100
 cultural_hegemony_foreign_benchmark_max = 3
+# Legitimacy lost at multiplier 1: keep equal to country_legitimacy_base_add in
+# the cultural_hegemony_foreign_benchmark static modifier (the overview tooltip
+# scales it by the multiplier the pulse actually applied)
+cultural_hegemony_foreign_benchmark_legitimacy = 5
 # Per year decay multiplier for tech leadership bonus (1 = no decay, 0.5 = 50% decay per year)
 cultural_hegemony_tech_firsts_decay_mult = 0.9 # ~6.5 year half-life
 
@@ -513,8 +517,18 @@ cultural_hegemony_modifier_mult = {
 # Uses global_var:ch_top_cultural_pull set by yearly pulse
 cultural_hegemony_benchmark_mult = {
 	value = 0
+	# The leader never pays it. ch_top_cultural_pull is the leader's share as of
+	# the last yearly recount, while cultural_pull_total is this country's live
+	# share, so without this the leader "trails" its own snapshot by whatever its
+	# share has drifted since (a fraction of a point, ×0.01).
 	if = {
-		limit = { has_global_variable = ch_top_cultural_pull }
+		limit = {
+			has_global_variable = ch_top_cultural_pull
+			NOT = {
+				exists = global_var:ch_rank_1
+				this = global_var:ch_rank_1
+			}
+		}
 		# The higher the hegemon's share vs yours, the larger the legitimacy loss
 		add = global_var:ch_top_cultural_pull
 		subtract = cultural_pull_total
@@ -527,6 +541,22 @@ cultural_hegemony_benchmark_mult = {
 		max = cultural_hegemony_foreign_benchmark_max
 		multiply = ch_ideology_resistance_factor
 	}
+}
+
+# The multiplier the last monthly pulse actually applied (0 when none), for the
+# overview tooltip. cultural_hegemony_benchmark_mult is live, so the two differ
+# for up to a month after the gap moves.
+ch_benchmark_applied_display = {
+	value = 0
+	if = {
+		limit = { has_variable = ch_benchmark_applied }
+		add = var:ch_benchmark_applied
+	}
+}
+
+ch_benchmark_legitimacy_display = {
+	value = ch_benchmark_applied_display
+	multiply = cultural_hegemony_foreign_benchmark_legitimacy
 }
 
 # How much of the foreign benchmark still lands: 1 minus
