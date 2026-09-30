@@ -197,6 +197,10 @@ class Linter:
         for k in re.findall(r"GetPlayerJournalEntry\(\s*'(\w+)'", expr):
             if k not in self.jes:
                 self.report("ERROR", path, ln, f"journal entry {k} not found")
+        if re.search(r"\bGet\w+\.GetJournalEntry\(", expr):
+            self.report("ERROR", path, ln, "GetJournalEntry needs a non-const Country, and a Get* promote before it is "
+                        "const: reach the country through Access* promotes, e.g. "
+                        "Market.AccessMarketCapital.AccessOwner (gotcha #35)")
         for k in re.findall(r"Concept\(\s*'(\w+)'", expr):
             if k not in self.concepts:
                 self.report("ERROR", path, ln, f"concept {k} is not defined")

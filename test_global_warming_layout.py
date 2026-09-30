@@ -673,7 +673,7 @@ GW_TAB_GATE = "GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiS
 GW_TAB_UNLOCK = "GetScriptedGui('te_market_global_warming_tab_unlock_sgui')"
 OWN_MARKET = "MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket )"
 BUTTONS_TAG = "### TE: Climate and Reserve tabs (te_global_warming, te_strategic_reserve) ###"
-LEADER_JE = "MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_global_warming')"
+LEADER_JE = "Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_global_warming')"
 LEADER_GATE = ("GetScriptedGui('te_market_global_warming_leader_sgui').IsShown( "
                "GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).End )")
 MARKET_BLOCK = 'block "gw_market_context" {}'
