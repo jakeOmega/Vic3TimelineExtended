@@ -54,7 +54,7 @@ enforce_emissions_reduction = {
 		building_group_bg_coal_mining_throughput_add = -0.10
 		building_group_bg_oil_extraction_throughput_add = -0.10
 		country_authority_cost_add = -750
-		interest_group_ig_industrialists_approval_add = -5
+		interest_group_ig_industrialists_approval_add = -2
 	}
 
 	# Target = the country demanding emissions reduction (gains prestige)
