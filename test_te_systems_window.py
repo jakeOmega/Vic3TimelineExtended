@@ -244,9 +244,14 @@ class WindowTest(unittest.TestCase):
         self.assertIn("te_systems_window_panel = {}", self.root)
         self.assertIn("type te_systems_window_panel = default_block_window {", self.gui)
 
-    def test_the_header_title_close_and_no_back_button(self):
+    def test_the_header_title_close_and_back_button(self):
         self.assertRegex(self.panel, r'blockoverride "window_header_name" \{\s*text = "te_systems_window_title"')
-        self.assertRegex(self.panel, r'blockoverride "entire_back_button" \{\}')
+        # The back button stays (its socket is in the header art): it closes
+        # the window and reopens the panel it replaced.
+        self.assertNotIn('"entire_back_button"', self.panel)
+        self.assertRegex(self.panel, r'blockoverride "header_back_button" \{\s*'
+                                     r"onclick = \"\[GetVariableSystem\.Clear\('com_open_window'\)\]\"\s*"
+                                     r'onclick = "\[InformationPanelBar\.OpenPreviousPanel\]"')
         self.assertRegex(self.panel, r'blockoverride "header_close_button" \{\s*'
                                      r"onclick = \"\[GetVariableSystem\.Clear\('com_open_window'\)\]\"\s*\}")
         self.assertEqual(_all_loc()["te_systems_window_title"], "Timeline Extended")

@@ -1122,7 +1122,7 @@ Replacing `information_panel_bar.gui` also works, but it is a 790-line full-file
 
 **This mod's own: `gui/te_systems_window.gui`** (the Timeline Extended window, 2026-09-30; not yet seen in game). What it takes from vanilla's `information_panel_bar.gui` and `block_windows.gui`:
 - **The launcher** takes the next small slot under Map List, at `{ 0 825 }`: the bar sits at `{ 0 200 }`, its buttons' flowcontainer has a 5 px top margin, and the small slots are 40 high, Map List's at +580. It is built as vanilla builds Map List, with `sidepanel_button_small`, `selected_sidepanel_animation_small` (lit while the window is open) and `sidebar_tooltip_area_small`. It has no hover label: the sidebar's labels slide out on the sidebar flowcontainer's own mouse events.
-- **The window.** In `default_block_window` the close button carries `shortcut = "close_window"` outside its `header_close_button` block, so overriding the block keeps Escape. The back button is the `entire_back_button` block, emptied for a window with no previous panel.
+- **The window.** In `default_block_window` the close button carries `shortcut = "close_window"` outside its `header_close_button` block, so overriding the block keeps Escape. Keep the back button: the header art has a socket for it, so emptying `entire_back_button` leaves a hole (play-test 2026-09-30). The window overrides `header_back_button` to clear its open state and call `InformationPanelBar.OpenPreviousPanel`, vanilla's default, which reopens the panel the window replaced.
 - **The open state** gates the registered root, not the panel type, so the root's own `_show` runs `ClosePanel` and `CloseCurrentPanel`. The two clearing widgets sit in the launcher's root, which is up whenever the window can be.
 
 ### Key Points

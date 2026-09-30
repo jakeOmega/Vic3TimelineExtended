@@ -84,8 +84,16 @@ types te_systems_window_types
 			text = "te_systems_window_title"
 		}
 
-		### No previous panel to go back to.
-		blockoverride "entire_back_button" {}
+		### Back, as on every vanilla panel: the window closes and the panel it
+		### replaced (if any) opens again. The header art keeps a socket for the
+		### button, so an emptied block left a hole (play-test 2026-09-30).
+		### OpenPreviousPanel is vanilla's default for this block; with no
+		### previous panel the window only closes.
+		blockoverride "header_back_button" {
+			onclick = "[GetVariableSystem.Clear('com_open_window')]"
+			onclick = "[InformationPanelBar.OpenPreviousPanel]"
+			input_action = "back"
+		}
 
 		### The close button clears the open state. default_block_window puts
 		### shortcut = "close_window" on the button outside this block, so
