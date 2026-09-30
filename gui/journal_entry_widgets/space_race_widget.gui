@@ -1,22 +1,35 @@
-﻿### Space Race JE widget — one milestone panel, mounted on nine journal entries.
+﻿### Space Race JE widgets — the milestone panels, mounted on nine journal entries.
 ###
-### Each of the nine je_space_race_* entries mounts its own named widget from
-### this file into custom_widget_container_2, and all nine are the same shared
-### `widget_je_sr_milestone_panel` type with per-milestone blockoverrides. What
-### differs between them is only data: which scripted GUI the controls address,
-### which script values the readout reads, and which localization keys it
-### shows. Vanilla ships two named widgets in one journal-entry widget file
-### (gui/journal_entry_widgets/ep2_japan_widgets.gui:501,550 mounted by
-### 00_meiji_restoration.txt:10,16); nine is the same mechanism at scale.
+### Every milestone entry attaches three named roots from this file, in the UN's
+### shape (un_layout_widget.gui):
+###   custom_widget_container_1  widget_je_space_race_<m>_overview   the overview
+###   custom_widget_container_2  widget_je_space_race_<m>            the live sections
+###   custom_widget_container_3  widget_je_space_race_reference      How the Space Race Works
+### The overview sits above the entry's one-line status text, the live sections
+### below it. The waiting entry (je_space_race_interstellar_results) has no
+### controls and no live sections: an overview and the reference only. The
+### reference root is one widget shared by all nine entries.
 ###
-### The panel replaces the vanilla button grid, which is hidden from humans:
+### Each section is a type (te_sr_sec_*); te_sr_status_sections and
+### te_sr_reference_sections set their order, and te_sr_overview_milestone /
+### te_sr_overview_transit compose the overview, so a future tab can instance
+### the same pieces. What differs between milestones is only data (which
+### scripted GUI the controls address, which script values and loc keys the
+### panel reads), passed by the roots at the foot of this file as sr_*
+### blockoverrides. Vanilla ships several named widgets in one journal-entry
+### widget file (gui/journal_entry_widgets/ep2_japan_widgets.gui:501,550 mounted
+### by 00_meiji_restoration.txt:10,16).
+###
+### The panels replace the vanilla button grid, which is hidden from humans:
 ### every space race scripted button carries `is_ai = yes` in its `visible`, so
 ### the AI still picks its approach and funding through the buttons' ai_chance
 ### while a player sees only this. That makes the mapping an obligation — all
-### four actions per milestone have a control here:
+### four of the buttons' actions per milestone have a control here
+### (te_sr_sec_control), and a fifth the grid never had:
 ###
 ###   op 0  Safe approach        op 2  funding −
 ###   op 1  Ambitious approach   op 3  funding +
+###   op 4  Standard approach (player only; every milestone starts on it)
 ###
 ### The table is repeated in common/scripted_guis/space_race_sguis.txt; keep the
 ### two in step. Neither side holds a rule: every op delegates to the shared
@@ -24,45 +37,61 @@
 ### call, so the grid and the panel cannot drift.
 ###
 ### DATA CONTRACT — everything shown comes from script, nothing is re-derived:
-###   progress / goal   -> ScriptValue('sr_progress_<m>_value'), ('sr_<m>_goal')
-###   pace              -> ScriptValue('sr_pace_rate_<m>'), the rate the pulse
-###                        actually applies (sr_progress once an approach is
-###                        chosen, sr_progress_drift before that)
-###   setback risk      -> ScriptValue('sr_risk_shown_<m>'), the value the roll
-###                        uses, forced to zero while no approach is chosen or
-###                        the post-setback cooldown runs (no roll either way)
-###   setbacks, colonies-> ScriptValue('sr_setbacks_<m>_value'), guarded reads
-###   the sentence below -> GetCustom('sr_<m>_pace'), branching on
-###                        sr_<m>_last_status, whose single derivation site is
-###                        sr_set_milestone_status_base
-###   mission profile   -> GetCustom('sr_<m>_profile'), the 44 triggered_desc
-###                        branches the journal entries used to carry
-###   reward preview    -> GetStaticModifier('sr_first_<m>').GetDesc in the
-###                        readout's tooltip, never a typed number
-###   who else is racing-> sr_rivals_sgui via ExecuteTooltip, because `.gui` has
-###                        no verified way to list countries (gotchas #11, #15)
-###   programme overview-> GetCustom('sr_prog_<m>') per row
+###   state (status cell) -> ScriptValue('sr_disp_status_<m>'), read from
+###                          sr_<m>_last_status, whose single derivation site
+###                          is sr_set_milestone_status_base; its tooltip is the
+###                          matching sr_pace_note_* sentence, and Safe and
+###                          Ambitious carry their weekly cost in the word
+###                          (sr_disp_cost_*_<m>)
+###   progress / goal     -> ScriptValue('sr_progress_<m>_value'), ('sr_<m>_goal');
+###                          the bar reads sr_disp_progress_frac_<m>, the same
+###                          two numbers as a 0..1 fraction
+###   pace                -> ScriptValue('sr_pace_rate_<m>'), the rate the pulse
+###                          actually applies
+###   setback risk        -> ScriptValue('sr_risk_shown_<m>'), the value the roll
+###                          uses, forced to zero during the post-setback review
+###   the first           -> ScriptValue('sr_disp_first_claimed_<m>')
+###   setbacks, estimate  -> sr_setbacks_<m>_value, sr_eta_months_<m>
+###   mission profile     -> GetCustom('sr_<m>_profile')
+###   reward preview      -> GetStaticModifier('sr_first_<m>').GetDesc in the
+###                          progress bar's tooltip, never a typed number
+###   who else is racing  -> sr_rivals_sgui via ExecuteTooltip, because `.gui` has
+###                          no verified way to list countries (gotchas #11, #15)
+###   programme row       -> ScriptValue('sr_disp_prog_<m>'); each icon's
+###                          tooltip is GetCustom('sr_prog_<m>'). The
+###                          interstellar icon's four states read
+###                          sr_disp_prog_interstellar
+### The sr_disp_* values are in common/script_values/space_race_display_values.txt.
 ###
-### COST. The two collapsible sections are the only expensive things here, and
-### both live inside the container whose `visible` is their expander flag, so
-### neither is evaluated while collapsed. `sr_rivals_sgui` iterates every country
-### once per frame while its section is open, which is why it is closed by
-### default.
+### COST. sr_rivals_sgui iterates every country once per frame while the Rivals
+### section is open. It opens by default now (gui_style_guide.md rule 1); it
+### sits inside the container whose `visible` is its collapse flag, so closing
+### it stops the iteration.
 ###
-### The root of every widget is gated on `[JournalEntry.IsActive]`: all nine
-### entries carry `is_shown_when_inactive`, so a widget is otherwise built for
-### countries that hold none of the space race's variables — the failure mode
-### that produced ~1,000 "Failed to fetch variable" errors on the UN chamber's
-### first in-game test (docs/guides/gui_modding_guide.md gotcha #14).
+### Widths are fixed, never content-sized: every root and composer is 520
+### wide (`minimumsize`), each panel's content 480, and rows of numbers use
+### fixed columns, so nothing shifts when a value changes length.
 ###
-### Expander state is per milestone (`sr_panel_rivals_<m>`,
-### `sr_panel_programme_<m>`) because several milestone entries can be active at
-### once, and it lives in GetVariableSystem, which is client-side, never saved
-### and invisible to script.
+### Every root is gated on `[JournalEntry.IsActive]`: all nine entries carry
+### `is_shown_when_inactive`, so a widget is otherwise built for countries that
+### hold none of the space race's variables — the failure mode that produced
+### ~1,000 "Failed to fetch variable" errors on the UN chamber's first in-game
+### test (docs/guides/gui_modding_guide.md gotcha #14).
+###
+### Collapse flags say their default (test_space_race_layout.py): *_closed
+### sections are open until closed, *_open ones collapsed until opened. The live
+### sections' flags are per milestone (`sr_panel_control_<m>_closed`,
+### `sr_panel_rivals_<m>_closed`), because several milestone entries can be
+### active at once; the shared reference has one (`sr_panel_how_open`). They
+### live in GetVariableSystem, which is client-side, never saved and invisible
+### to script.
 
 types space_race_widget_types
 {
-	type widget_je_sr_text = textbox {
+	### ======================================================================
+	### PRIMITIVES (shapes copied from un_chamber_widget.gui)
+	### ======================================================================
+	type te_sr_text = textbox {
 		autoresize = yes
 		multiline = yes
 		minimumsize = { 480 -1 }
@@ -71,7 +100,7 @@ types space_race_widget_types
 		using = fontsize_medium
 	}
 
-	type widget_je_sr_inset = flowcontainer {
+	type te_sr_panel = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		parentanchor = hcenter
@@ -84,26 +113,92 @@ types space_race_widget_types
 		}
 	}
 
-	type widget_je_sr_section_header = section_header_button {
+	type te_sr_section_header = section_header_button {
 		blockoverride "layout" {
 			parentanchor = hcenter
 			size = { 520 38 }
 		}
 	}
 
+	### A heading inside a section's panel, with a faint rule under it
+	### (un_chamber_subheader).
+	type te_sr_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 10
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### Explanatory text under a heading (un_chamber_note). Static keys only.
+	type te_sr_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		default_format = "#lore"
+	}
+
+	### A table row: a label on the left and its value on the right
+	### (un_chamber_value_row), the value column wide enough for the longest
+	### figure, an estimate of "1300 months".
+	type te_sr_value_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 1 }
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 330 -1 }
+			maximumsize = { 330 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			block "row_label" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 130 -1 }
+			maximumsize = { 130 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			block "row_value" {}
+		}
+	}
+
 	### One approach option. `action_binding` carries the four properties that
 	### address the scripted GUI, because they are the only part that differs
-	### between the two options; the sizing is shared.
-	type widget_je_sr_action_button = button {
+	### between the three options; the sizing is shared (110 + 3 × 116 + 3 × 4
+	### fits the 480 content width).
+	type te_sr_action_button = button {
 		using = default_button_action
-		size = { 174 30 }
+		size = { 116 30 }
 		parentanchor = vcenter
 
 		textbox = {
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 164
+			max_width = 106
 			elide = right
 			using = fontsize_small
 			block "action_label" {}
@@ -112,113 +207,787 @@ types space_race_widget_types
 		block "action_binding" {}
 	}
 
-	### Approach selector and funding stepper. Fully shared: which milestone a
-	### click lands on comes from the panel's datacontext, not from the button, so
-	### the only per-milestone part is the funding value cell.
-	###
-	### The whole inset is gated on the scripted GUI's is_shown, which is the same
-	### gate the milestone's four journal-entry buttons use. That is what keeps
-	### the value cell's `Var` read safe, and what hides the controls when solar
-	### colonization drops into passive mode with every colony claimed.
-	type widget_je_sr_controls = widget_je_sr_inset {
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+	### ======================================================================
+	### OVERVIEW PIECES
+	### ======================================================================
 
-		### Approach — ops 0 and 1. The option already in force greys itself out
-		### through is_valid, which doubles as the "you are here" indicator.
-		flowcontainer = {
-			direction = horizontal
-			spacing = 4
-			ignoreinvisible = yes
+	### A cell of the overview's first row: an icon, its word small beneath
+	### (te_un_ov_icon_label). Fixed width, so the row cannot push the panel
+	### wider: three cells fill the 480 column (3 × 156 + 2 × 6), so the longest
+	### word ("Ambitious −360/wk") fits without "..." (round 3;
+	### test_space_race_labels.py holds every label to its cell). `icon_alpha`
+	### dims the icon.
+	type te_sr_ov_icon_label = widget {
+		size = { 156 58 }
 
-			textbox = {
-				text = "je_space_race_widget_approach_label"
-				size = { 118 30 }
-				align = left|nobaseline
-				using = fontsize_medium
-				parentanchor = vcenter
-				elide = right
+		icon = {
+			size = { 36 36 }
+			parentanchor = top|hcenter
+			block "icon_alpha" {}
+			block "icon_texture" {}
+		}
+		textbox = {
+			parentanchor = bottom|hcenter
+			autoresize = yes
+			max_width = 154
+			elide = right
+			align = hcenter|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			block "label" {}
+		}
+	}
+
+	### "The first": open (lit) or claimed by another power (dimmed). The
+	### instance sets which one shows; the tooltips are the sentences the
+	### Rivals list used to open with.
+	type te_sr_ov_first = flowcontainer {
+		ignoreinvisible = yes
+
+		te_sr_ov_icon_label = {
+			block "first_open" {}
+			tooltip = "sr_rivals_first_open"
+			blockoverride "icon_texture" {
+				texture = "gfx/interface/icons/space_race_icons/first.dds"
 			}
-
-			widget_je_sr_action_button = {
-				blockoverride "action_label" {
-					text = "je_space_race_widget_safe_label"
-				}
-				blockoverride "action_binding" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
-				}
-			}
-
-			widget_je_sr_action_button = {
-				blockoverride "action_label" {
-					text = "je_space_race_widget_ambitious_label"
-				}
-				blockoverride "action_binding" {
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
-				}
+			blockoverride "label" {
+				text = "je_space_race_widget_ov_first_open"
 			}
 		}
-
-		### Funding — op 2 down, op 3 up. The ceiling is sr_max_funding_level, read
-		### by the shared trigger the minus and plus buttons both ask.
-		flowcontainer = {
-			direction = horizontal
-			spacing = 4
-			ignoreinvisible = yes
-
-			textbox = {
-				text = "je_space_race_widget_funding_label"
-				size = { 330 26 }
-				align = left|nobaseline
-				using = fontsize_small
-				parentanchor = vcenter
-				elide = right
+		te_sr_ov_icon_label = {
+			block "first_claimed" {}
+			tooltip = "sr_rivals_first_claimed"
+			blockoverride "icon_alpha" {
+				alpha = 0.25
 			}
-
-			button_icon_minus_action = {
-				size = { 26 26 }
-				parentanchor = vcenter
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+			blockoverride "icon_texture" {
+				texture = "gfx/interface/icons/space_race_icons/first.dds"
 			}
-
-			textbox = {
-				block "controls_funding" {}
-				size = { 84 26 }
-				align = center|nobaseline
-				using = fontsize_medium
-				parentanchor = vcenter
-				elide = right
-			}
-
-			button_icon_plus_action = {
-				size = { 26 26 }
-				parentanchor = vcenter
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+			blockoverride "label" {
+				text = "je_space_race_widget_ov_first_claimed"
 			}
 		}
 	}
 
-	### Who else is racing. Collapsed by default: the list is built by a scripted
-	### GUI that walks every country, and ExecuteTooltip re-renders every frame
-	### the section is open.
-	type widget_je_sr_rivals = flowcontainer {
+	### Progress towards the goal: a label, the bar and the headline
+	### ("124 / 200 (+3.5/mo)"); the tooltip is on the whole row, as the UN's
+	### authority row. The bar ends at the goal, so it needs no target marker.
+	### Fixed columns (110 + 140 + 210, with the spacing 476), so a longer number
+	### never moves the bar. The label column fits the longest label, "Next
+	### Colony"; the headline column the longest figure, "650 / 650 (+99.9/mo)"
+	### (round 3: "Next Colony" was cut to "Next Colo..." at 90). The tooltip's
+	### block is "row_tooltip", not "bar_tooltip": that name is the history
+	### charts', whose bar tooltips have no JournalEntry to read
+	### (test_history_chart_tooltip_context.py).
+	type te_sr_ov_bar_row = flowcontainer {
+		direction = horizontal
+		spacing = 8
+		parentanchor = hcenter
+		block "row_tooltip" {}
+
+		textbox = {
+			minimumsize = { 110 -1 }
+			maximumsize = { 110 -1 }
+			autoresize = yes
+			elide = right
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			block "bar_label" {}
+		}
+		default_progressbar_horizontal = {
+			size = { 140 18 }
+			parentanchor = vcenter
+			blockoverride "values" {
+				block "bar_value" {}
+				min = 0
+				max = 1
+			}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 210 -1 }
+			maximumsize = { 210 -1 }
+			elide = right
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = fontsize_medium
+			block "bar_text" {}
+		}
+	}
+
+	### A share of the 34 worlds as a framed pie (te_un_ov_pie, with a third
+	### layer): the disc is the unclaimed rest, then every world claimed, then
+	### ours on top — largest first (gui_modding_guide.md, "Pie charts of
+	### script-held data"). The textures: docs/systems/space_race_gui_icons.md.
+	type te_sr_ov_pie = widget {
+		size = { 150 108 }
+
+		icon = {
+			size = { 86 86 }
+			parentanchor = top|hcenter
+			texture = "gfx/interface/backgrounds/round_frame_dec.dds"
+		}
+		widget = {
+			size = { 62 62 }
+			parentanchor = top|hcenter
+			position = { 0 12 }
+
+			progresspie = {
+				size = { 100% 100% }
+				min = 0
+				max = 1
+				value = 1
+				texture = "gfx/interface/icons/space_race_icons/pie_unclaimed.dds"
+				framesize = { 128 128 }
+				frame = 2
+			}
+			progresspie = {
+				size = { 100% 100% }
+				min = 0
+				max = 1
+				block "pie_claimed" {}
+				texture = "gfx/interface/icons/space_race_icons/pie_claimed.dds"
+				framesize = { 128 128 }
+				frame = 2
+			}
+			progresspie = {
+				size = { 100% 100% }
+				min = 0
+				max = 1
+				block "pie_ours" {}
+				texture = "gfx/interface/icons/space_race_icons/pie_ours.dds"
+				framesize = { 128 128 }
+				frame = 2
+			}
+		}
+		textbox = {
+			parentanchor = bottom|hcenter
+			autoresize = yes
+			align = hcenter|nobaseline
+			using = fontsize_medium
+			default_format = "#tooltippable"
+			block "pie_label" {}
+		}
+	}
+
+	### One entry of the programme row: its journal icon (PR #571) at full
+	### colour once achieved, half while under way, faint otherwise, with a
+	### flag in the corner when we were first. The instance sets the texture
+	### on the three icons and the code tests that pick one.
+	type te_sr_ov_prog_cell = widget {
+		size = { 50 50 }
+
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			block "lit" {}
+			block "prog_texture" {}
+		}
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			alpha = 0.6
+			block "running" {}
+			block "prog_texture" {}
+		}
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			alpha = 0.25
+			block "unlit" {}
+			block "prog_texture" {}
+		}
+		icon = {
+			size = { 18 18 }
+			parentanchor = top|right
+			texture = "gfx/interface/icons/space_race_icons/first_mark.dds"
+			block "first" {
+				visible = no
+			}
+		}
+	}
+
+	### The Interstellar Probe and the wait for its data, one cell with four
+	### states (owner's play-test, round 3). Each state is its own icon, with
+	### its own texture and hover, shown by one equality test on
+	### sr_disp_prog_interstellar, so no two can show at once: 0 not begun,
+	### 1 under way, 2 launched and awaiting data, 3 data received. Each
+	### state's art (PR #586, space_race_gui_icons.md) carries the state, so
+	### none is faded. The flag marks a first, as in te_sr_ov_prog_cell, and
+	### lets the hover through to the state beneath it.
+	type te_sr_ov_prog_cell_interstellar = widget {
+		size = { 50 50 }
+
+		### 0: not begun, or another power finished it first
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			texture = "gfx/interface/icons/space_race_icons/interstellar_not_begun.dds"
+			tooltip = "je_space_race_widget_prog_interstellar_0"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)0' )]"
+		}
+
+		### 1: under way
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			texture = "gfx/interface/icons/space_race_icons/interstellar_under_way.dds"
+			tooltip = "je_space_race_widget_prog_interstellar_1"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)1' )]"
+		}
+
+		### 2: launched, awaiting data
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			texture = "gfx/interface/icons/space_race_icons/interstellar_awaiting_data.dds"
+			tooltip = "je_space_race_widget_prog_interstellar_2"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)2' )]"
+		}
+
+		### 3: data received
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			texture = "gfx/interface/icons/space_race_icons/interstellar_data_received.dds"
+			tooltip = "je_space_race_widget_prog_interstellar_3"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)3' )]"
+		}
+
+		icon = {
+			size = { 18 18 }
+			parentanchor = top|right
+			alwaystransparent = yes
+			texture = "gfx/interface/icons/space_race_icons/first_mark.dds"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)4' )]"
+		}
+	}
+
+	### The whole programme, eight icons in a row under a centred label: the
+	### same on every panel. Each icon's tooltip is the row of the old
+	### "programme so far" list (name and state, sr_prog_<m>). The Interstellar
+	### Probe and its wait for data share the seventh icon, which has four
+	### states of its own (te_sr_ov_prog_cell_interstellar). Code order:
+	### space_race_display_values.txt, sr_disp_prog_*.
+	type te_sr_ov_programme = flowcontainer {
+		direction = vertical
+		spacing = 2
+		parentanchor = hcenter
+		minimumsize = { 480 -1 }
+
+		textbox = {
+			autoresize = yes
+			parentanchor = hcenter
+			align = hcenter|nobaseline
+			default_format = "#tooltippable"
+			text = "je_space_race_widget_programme_header"
+			tooltip = "je_space_race_widget_ov_programme_tt"
+		}
+		flowcontainer = {
+			direction = horizontal
+			spacing = 3
+			parentanchor = hcenter
+
+			te_sr_ov_prog_cell = {
+				tooltip = "je_space_race_widget_prog_suborbital"
+				blockoverride "prog_texture" {
+					texture = "gfx/interface/icons/event_icons/je_space_race_suborbital.dds"
+				}
+				blockoverride "lit" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "running" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "unlit" {
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)1' ) )]"
+				}
+				blockoverride "first" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)4' )]"
+				}
+			}
+			te_sr_ov_prog_cell = {
+				tooltip = "je_space_race_widget_prog_orbital"
+				blockoverride "prog_texture" {
+					texture = "gfx/interface/icons/event_icons/je_space_race_orbital.dds"
+				}
+				blockoverride "lit" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "running" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "unlit" {
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)1' ) )]"
+				}
+				blockoverride "first" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)4' )]"
+				}
+			}
+			te_sr_ov_prog_cell = {
+				tooltip = "je_space_race_widget_prog_moon_landing"
+				blockoverride "prog_texture" {
+					texture = "gfx/interface/icons/event_icons/je_space_race_moon_landing.dds"
+				}
+				blockoverride "lit" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "running" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "unlit" {
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)1' ) )]"
+				}
+				blockoverride "first" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)4' )]"
+				}
+			}
+			te_sr_ov_prog_cell = {
+				tooltip = "je_space_race_widget_prog_probe"
+				blockoverride "prog_texture" {
+					texture = "gfx/interface/icons/event_icons/je_space_race_probe.dds"
+				}
+				blockoverride "lit" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "running" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "unlit" {
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)1' ) )]"
+				}
+				blockoverride "first" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)4' )]"
+				}
+			}
+			te_sr_ov_prog_cell = {
+				tooltip = "je_space_race_widget_prog_moon_base"
+				blockoverride "prog_texture" {
+					texture = "gfx/interface/icons/event_icons/je_space_race_moon_base.dds"
+				}
+				blockoverride "lit" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "running" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "unlit" {
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)1' ) )]"
+				}
+				blockoverride "first" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)4' )]"
+				}
+			}
+			te_sr_ov_prog_cell = {
+				tooltip = "je_space_race_widget_prog_mars_landing"
+				blockoverride "prog_texture" {
+					texture = "gfx/interface/icons/event_icons/je_space_race_mars_landing.dds"
+				}
+				blockoverride "lit" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "running" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "unlit" {
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)1' ) )]"
+				}
+				blockoverride "first" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)4' )]"
+				}
+			}
+			te_sr_ov_prog_cell_interstellar = {}
+			te_sr_ov_prog_cell = {
+				tooltip = "je_space_race_widget_prog_solar_colonization"
+				blockoverride "prog_texture" {
+					texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
+				}
+				blockoverride "lit" {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "running" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "unlit" {
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)1' ) )]"
+				}
+			}
+		}
+	}
+
+	### ======================================================================
+	### OVERVIEW COMPOSERS
+	### ======================================================================
+
+	### The overview of a milestone with controls (eight entries). Row 1: the
+	### state, the setback risk, and "the first" (or, for colonization, the
+	### stage); row 2: progress; then any extra rows (colonization's worlds
+	### pie); then the programme. The datacontext is the milestone's scripted
+	### GUI, set on the root. While it is not shown (solar colonization held
+	### open for its colony modifiers, or its production method switched off),
+	### the state reads Idle and the risk and progress rows are hidden.
+	type te_sr_overview_milestone = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		minimumsize = { 520 -1 }
+		ignoreinvisible = yes
+		visible = "[JournalEntry.IsActive]"
+
+		te_sr_panel = {
+			spacing = 10
+
+			### Row 1
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
+				ignoreinvisible = yes
+				parentanchor = hcenter
+
+				### The state: one cell of five shows.
+				te_sr_ov_icon_label = {
+					visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
+					tooltip = "je_space_race_widget_ov_idle_tt"
+					blockoverride "icon_texture" {
+						texture = "gfx/interface/icons/space_race_icons/state_idle.dds"
+					}
+					blockoverride "label" {
+						text = "je_space_race_widget_ov_idle"
+					}
+				}
+				flowcontainer = {
+					ignoreinvisible = yes
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+
+					te_sr_ov_icon_label = {
+						block "sr_status_standard" {}
+						tooltip = "sr_pace_note_standard"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/space_race_icons/state_standard.dds"
+						}
+						blockoverride "label" {
+							text = "je_space_race_widget_standard_label"
+						}
+					}
+					### Safe and Ambitious carry their weekly cost in the word
+					### (round 2: "make that clear").
+					te_sr_ov_icon_label = {
+						block "sr_status_safe" {}
+						tooltip = "sr_pace_note_safe"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/space_race_icons/state_safe.dds"
+						}
+						blockoverride "label" {
+							block "sr_label_safe" {}
+						}
+					}
+					te_sr_ov_icon_label = {
+						block "sr_status_ambitious" {}
+						tooltip = "sr_pace_note_ambitious"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/space_race_icons/state_ambitious.dds"
+						}
+						blockoverride "label" {
+							block "sr_label_ambitious" {}
+						}
+					}
+					te_sr_ov_icon_label = {
+						block "sr_status_shielded" {}
+						tooltip = "sr_pace_note_shielded"
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/space_race_icons/state_shielded.dds"
+						}
+						blockoverride "label" {
+							text = "je_space_race_widget_ov_shielded"
+						}
+					}
+				}
+
+				### Setback risk: lit while the monthly roll is made, faint at 0%.
+				flowcontainer = {
+					ignoreinvisible = yes
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					tooltip = "je_space_race_widget_ov_risk_tt"
+
+					te_sr_ov_icon_label = {
+						block "sr_risk_lit" {}
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/space_race_icons/risk.dds"
+						}
+						blockoverride "label" {
+							block "sr_risk_label" {}
+						}
+					}
+					te_sr_ov_icon_label = {
+						block "sr_risk_unlit" {}
+						blockoverride "icon_alpha" {
+							alpha = 0.25
+						}
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/icons/space_race_icons/risk.dds"
+						}
+						blockoverride "label" {
+							block "sr_risk_label" {}
+						}
+					}
+				}
+
+				### The first (seven milestones) or the stage (colonization).
+				block "sr_third_cells" {}
+			}
+
+			### Row 2: progress, while the programme runs.
+			te_sr_ov_bar_row = {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				blockoverride "row_tooltip" {
+					block "sr_progress_tooltip" {}
+				}
+				blockoverride "bar_label" {
+					block "sr_progress_label" {}
+				}
+				blockoverride "bar_value" {
+					block "sr_progress_value" {}
+				}
+				blockoverride "bar_text" {
+					block "sr_progress_text" {}
+				}
+			}
+
+			block "sr_extra_rows" {}
+
+			te_sr_ov_programme = {}
+		}
+	}
+
+	### The waiting entry's overview: the transit and the programme.
+	type te_sr_overview_transit = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		minimumsize = { 520 -1 }
+		ignoreinvisible = yes
+		visible = "[JournalEntry.IsActive]"
+
+		te_sr_panel = {
+			spacing = 10
+
+			te_sr_ov_bar_row = {
+				blockoverride "row_tooltip" {
+					tooltip = "je_space_race_widget_ov_transit_tt"
+				}
+				blockoverride "bar_label" {
+					text = "je_space_race_widget_ov_transit_label"
+				}
+				blockoverride "bar_value" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_interstellar_results') )]"
+				}
+				blockoverride "bar_text" {
+					text = "je_space_race_widget_progress_interstellar_results"
+				}
+			}
+
+			te_sr_ov_programme = {}
+		}
+	}
+
+	### ======================================================================
+	### LIVE SECTIONS (open by default)
+	### ======================================================================
+
+	### Mission Control: the approach selector and the funding stepper, the
+	### figures they move, and the mission profile.
+	###
+	### The controls, the setbacks and the estimate are gated on the scripted
+	### GUI's is_shown, which is the same gate the milestone's four
+	### journal-entry buttons use. That is what keeps the funding cell's `Var`
+	### read safe, and what hides them when solar colonization drops into
+	### passive mode with every colony claimed or its method off; the estimate
+	### would otherwise quote a pace nothing is adding.
+	type te_sr_sec_control = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		parentanchor = hcenter
 		spacing = 2
 
-		widget_je_sr_section_header = {
+		te_sr_section_header = {
+			blockoverride "left_text" {
+				text = "je_space_race_widget_control_header"
+			}
+			blockoverride "onclick" {
+				block "control_onclick" {}
+			}
+			blockoverride "onclick_showmore" {
+				block "control_showmore" {}
+			}
+			blockoverride "onclick_showless" {
+				block "control_showless" {}
+			}
+		}
+
+		te_sr_panel = {
+			block "control_visible" {}
+
+			flowcontainer = {
+				direction = vertical
+				spacing = 4
+				ignoreinvisible = yes
+				minimumsize = { 480 -1 }
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+
+				### Approach — ops 4 (Standard), 0 (Safe) and 1 (Ambitious),
+				### beside their label. The option already in force greys itself
+				### out through is_valid, and its tooltip says so (IsValidTooltip,
+				### then what it does and what it costs a week). The two rows are
+				### left-aligned so their labels form one column.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					ignoreinvisible = yes
+
+					textbox = {
+						text = "je_space_race_widget_approach_label"
+						size = { 110 30 }
+						align = left|nobaseline
+						using = fontsize_medium
+						parentanchor = vcenter
+						elide = right
+					}
+
+					te_sr_action_button = {
+						blockoverride "action_label" {
+							text = "je_space_race_widget_standard_label"
+						}
+						blockoverride "action_binding" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+						}
+					}
+
+					te_sr_action_button = {
+						blockoverride "action_label" {
+							text = "je_space_race_widget_safe_label"
+						}
+						blockoverride "action_binding" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+						}
+					}
+
+					te_sr_action_button = {
+						blockoverride "action_label" {
+							text = "je_space_race_widget_ambitious_label"
+						}
+						blockoverride "action_binding" {
+							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+						}
+					}
+				}
+
+				### Funding — op 2 down, op 3 up, beside their label. The ceiling
+				### is sr_max_funding_level, read by the shared trigger the minus
+				### and plus buttons both ask.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					ignoreinvisible = yes
+
+					textbox = {
+						text = "je_space_race_widget_funding_label"
+						size = { 110 26 }
+						align = left|nobaseline
+						using = fontsize_medium
+						parentanchor = vcenter
+						elide = right
+					}
+
+					button_icon_minus_action = {
+						size = { 26 26 }
+						parentanchor = vcenter
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+					}
+
+					textbox = {
+						block "funding_value" {}
+						size = { 84 26 }
+						align = center|nobaseline
+						using = fontsize_medium
+						parentanchor = vcenter
+						elide = right
+					}
+
+					button_icon_plus_action = {
+						size = { 26 26 }
+						parentanchor = vcenter
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+					}
+				}
+			}
+
+			### The figures pace and risk leave out (both are in the overview).
+			te_sr_value_row = {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_setbacks_label"
+				}
+				blockoverride "row_value" {
+					block "setbacks_value" {}
+				}
+			}
+			te_sr_value_row = {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				tooltip = "je_space_race_widget_eta_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_eta_label"
+				}
+				blockoverride "row_value" {
+					block "eta_value" {}
+				}
+			}
+
+			### The mission profile. Its heading keeps its top margin only
+			### when the controls are above it, so the section never opens on
+			### an empty line.
+			te_sr_subheader = {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_profile_header"
+				}
+			}
+			te_sr_subheader = {
+				visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_profile_header"
+				}
+			}
+			te_sr_text = {
+				block "profile_text" {}
+			}
+		}
+	}
+
+	### Rivals: every other power whose programme is running this milestone
+	### and moving. Whether "the first" is still open is the overview's.
+	type te_sr_sec_rivals = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 2
+
+		te_sr_section_header = {
 			blockoverride "left_text" {
 				text = "je_space_race_widget_rivals_header"
 			}
@@ -233,829 +1002,1124 @@ types space_race_widget_types
 			}
 		}
 
-		widget_je_sr_inset = {
+		te_sr_panel = {
 			block "rivals_visible" {}
 
-			widget_je_sr_text = {
+			te_sr_text = {
 				block "rivals_text" {}
 			}
 		}
 	}
 
-	### The whole nine-milestone programme, one row each. Identical on every
-	### panel, and the only place the shape of the space race is legible at all.
-	### Each row reads own variables and the sr_global_first_* globals through
-	### customizable localization; nothing here restates a prerequisite, because
-	### those are already visible in the journal list through the entries'
-	### is_shown_when_inactive.
-	type widget_je_sr_programme = flowcontainer {
+	### Everything a returning player checks, open by default.
+	type te_sr_status_sections = flowcontainer {
 		direction = vertical
-		ignoreinvisible = yes
 		parentanchor = hcenter
-		spacing = 2
+		minimumsize = { 520 -1 }
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
 
-		widget_je_sr_section_header = {
-			blockoverride "left_text" {
-				text = "je_space_race_widget_programme_header"
+		te_sr_sec_control = {
+			blockoverride "control_onclick" {
+				block "sr_control_onclick" {}
 			}
-			blockoverride "onclick" {
-				block "programme_onclick" {}
+			blockoverride "control_showmore" {
+				block "sr_control_showmore" {}
 			}
-			blockoverride "onclick_showmore" {
-				block "programme_showmore" {}
+			blockoverride "control_showless" {
+				block "sr_control_showless" {}
 			}
-			blockoverride "onclick_showless" {
-				block "programme_showless" {}
+			blockoverride "control_visible" {
+				block "sr_control_visible" {}
+			}
+			blockoverride "funding_value" {
+				block "sr_funding_value" {}
+			}
+			blockoverride "setbacks_value" {
+				block "sr_setbacks_value" {}
+			}
+			blockoverride "eta_value" {
+				block "sr_eta_value" {}
+			}
+			blockoverride "profile_text" {
+				block "sr_profile_text" {}
 			}
 		}
-
-		widget_je_sr_inset = {
-			block "programme_visible" {}
-
-			textbox = {
-				text = "je_space_race_widget_prog_suborbital"
-				size = { 480 22 }
-				align = left|nobaseline
-				using = fontsize_small
-				elide = right
+		te_sr_sec_rivals = {
+			blockoverride "rivals_onclick" {
+				block "sr_rivals_onclick" {}
 			}
-			textbox = {
-				text = "je_space_race_widget_prog_orbital"
-				size = { 480 22 }
-				align = left|nobaseline
-				using = fontsize_small
-				elide = right
+			blockoverride "rivals_showmore" {
+				block "sr_rivals_showmore" {}
 			}
-			textbox = {
-				text = "je_space_race_widget_prog_moon_landing"
-				size = { 480 22 }
-				align = left|nobaseline
-				using = fontsize_small
-				elide = right
+			blockoverride "rivals_showless" {
+				block "sr_rivals_showless" {}
 			}
-			textbox = {
-				text = "je_space_race_widget_prog_probe"
-				size = { 480 22 }
-				align = left|nobaseline
-				using = fontsize_small
-				elide = right
+			blockoverride "rivals_visible" {
+				block "sr_rivals_visible" {}
 			}
-			textbox = {
-				text = "je_space_race_widget_prog_moon_base"
-				size = { 480 22 }
-				align = left|nobaseline
-				using = fontsize_small
-				elide = right
-			}
-			textbox = {
-				text = "je_space_race_widget_prog_mars_landing"
-				size = { 480 22 }
-				align = left|nobaseline
-				using = fontsize_small
-				elide = right
-			}
-			textbox = {
-				text = "je_space_race_widget_prog_interstellar_probe"
-				size = { 480 22 }
-				align = left|nobaseline
-				using = fontsize_small
-				elide = right
-			}
-			textbox = {
-				text = "je_space_race_widget_prog_solar_colonization"
-				size = { 480 22 }
-				align = left|nobaseline
-				using = fontsize_small
-				elide = right
-			}
-			textbox = {
-				text = "je_space_race_widget_prog_interstellar_results"
-				size = { 480 22 }
-				align = left|nobaseline
-				using = fontsize_small
-				elide = right
+			blockoverride "rivals_text" {
+				block "sr_rivals_text" {}
 			}
 		}
 	}
 
-	### The panel every journal entry mounts. `panel_controls`, `panel_rivals` and
-	### `panel_programme` are empty by default, so the read-only waiting entry
-	### (je_space_race_interstellar_results, which has no buttons to replace)
-	### simply leaves the first two unfilled and no empty frame is drawn — a
-	### flowcontainer gives an absent child no space at all.
-	type widget_je_sr_milestone_panel = flowcontainer {
+	### ======================================================================
+	### REFERENCE (collapsed by default)
+	### ======================================================================
+
+	### "How the Space Race Works": every explanation the live sections used to
+	### carry, one heading per topic. The same on all nine entries, so one
+	### flag serves them all.
+	type te_sr_sec_how = flowcontainer {
 		direction = vertical
-		ignoreinvisible = yes
 		parentanchor = hcenter
-		spacing = 4
+		ignoreinvisible = yes
+		spacing = 2
 
-		### The milestone's scripted GUI, inherited by every control below it.
-		block "panel_context" {}
-
-		widget_je_sr_inset = {
-			### The reward preview lives on this readout's tooltip.
-			block "panel_tooltip" {}
-
-			widget_je_sr_text = {
-				block "panel_progress" {}
+		te_sr_section_header = {
+			blockoverride "left_text" {
+				text = "je_space_race_widget_how_header"
 			}
-			widget_je_sr_text = {
-				block "panel_pace" {}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('sr_panel_how_open')]"
 			}
-			widget_je_sr_text = {
-				block "panel_note" {}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('sr_panel_how_open'))]"
 			}
-			widget_je_sr_text = {
-				block "panel_profile" {}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('sr_panel_how_open')]"
 			}
 		}
 
-		block "panel_controls" {}
-		block "panel_rivals" {}
-		block "panel_programme" {}
+		te_sr_panel = {
+			visible = "[GetVariableSystem.Exists('sr_panel_how_open')]"
+
+			te_sr_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_how_sub_approach"
+				}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_how_approach"
+			}
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_how_sub_funding"
+				}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_how_funding"
+			}
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_how_sub_setbacks"
+				}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_how_setbacks"
+			}
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_how_sub_first"
+				}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_how_first"
+			}
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_how_sub_rivals"
+				}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_how_rivals"
+			}
+			te_sr_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_how_sub_programme"
+				}
+			}
+			te_sr_note = {
+				text = "je_space_race_widget_how_programme"
+			}
+		}
+	}
+
+	### The reference, after the live sections.
+	type te_sr_reference_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		minimumsize = { 520 -1 }
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_sr_sec_how = {}
 	}
 }
 
-### WIDGETS
+### ==========================================================================
+### JOURNAL ENTRY ROOTS (je_space_race.txt). Thin wrappers that repeat the
+### composers' IsActive gate, so an inactive entry's containers collapse, set
+### the milestone's scripted GUI as the datacontext the controls address, and
+### pass the milestone's data. Per milestone: the overview
+### (custom_widget_container_1) and the live sections (custom_widget_container_2);
+### the waiting entry has an overview only. One reference root serves all nine
+### (custom_widget_container_3).
+### ==========================================================================
+
+### suborbital
+
+flowcontainer = {
+	name = "widget_je_space_race_suborbital_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_suborbital_sgui')]"
+
+	te_sr_overview_milestone = {
+		blockoverride "sr_status_standard" {
+			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)1' )]"
+		}
+		blockoverride "sr_status_safe" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)2' )]"
+		}
+		blockoverride "sr_status_ambitious" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)3' )]"
+		}
+		blockoverride "sr_status_shielded" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)4' )]"
+		}
+		blockoverride "sr_risk_lit" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_unlit" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_label" {
+			text = "je_space_race_widget_risk_suborbital"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_suborbital"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_suborbital"
+		}
+		blockoverride "sr_third_cells" {
+			te_sr_ov_first = {
+				blockoverride "first_open" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_suborbital'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "first_claimed" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_suborbital'), '(CFixedPoint)1' )]"
+				}
+			}
+		}
+		blockoverride "sr_progress_label" {
+			text = "je_space_race_widget_ov_progress_label"
+		}
+		blockoverride "sr_progress_value" {
+			value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_suborbital') )]"
+		}
+		blockoverride "sr_progress_text" {
+			text = "je_space_race_widget_progress_suborbital"
+		}
+		blockoverride "sr_progress_tooltip" {
+			tooltip = "je_space_race_widget_reward_suborbital"
+		}
+	}
+}
 
 flowcontainer = {
 	name = "widget_je_space_race_suborbital"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
 	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_suborbital_sgui')]"
 
-	widget_je_sr_milestone_panel = {
-		blockoverride "panel_context" {
-			datacontext = "[GetScriptedGui('sr_milestone_suborbital_sgui')]"
+	te_sr_status_sections = {
+		blockoverride "sr_control_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_control_suborbital_closed')]"
 		}
-		blockoverride "panel_tooltip" {
-			tooltip = "je_space_race_widget_reward_suborbital"
+		blockoverride "sr_control_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_control_suborbital_closed')]"
 		}
-		blockoverride "panel_progress" {
-			text = "je_space_race_widget_progress_suborbital"
+		blockoverride "sr_control_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_suborbital_closed'))]"
 		}
-		# No pace and no estimate for a programme that is not running: solar
-		# colonization keeps its entry alive with every colony claimed, and the
-		# rate would fall back to the drift floor with no progress left to divide.
-		# The sentence below still says so, from GetCustom.
-		blockoverride "panel_pace" {
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			text = "je_space_race_widget_pace_suborbital"
+		blockoverride "sr_control_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_suborbital_closed'))]"
 		}
-		blockoverride "panel_note" {
-			text = "je_space_race_widget_note_suborbital"
+		blockoverride "sr_funding_value" {
+			text = "je_space_race_widget_funding_suborbital"
 		}
-		blockoverride "panel_profile" {
+		blockoverride "sr_setbacks_value" {
+			text = "je_space_race_widget_setbacks_suborbital"
+		}
+		blockoverride "sr_eta_value" {
+			text = "je_space_race_widget_eta_suborbital"
+		}
+		blockoverride "sr_profile_text" {
 			text = "je_space_race_widget_profile_suborbital"
 		}
+		blockoverride "sr_rivals_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_suborbital_closed')]"
+		}
+		blockoverride "sr_rivals_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_rivals_suborbital_closed')]"
+		}
+		blockoverride "sr_rivals_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_suborbital_closed'))]"
+		}
+		blockoverride "sr_rivals_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_suborbital_closed'))]"
+		}
+		blockoverride "sr_rivals_text" {
+			text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+		}
+	}
+}
 
-		blockoverride "panel_controls" {
-			widget_je_sr_controls = {
-				blockoverride "controls_funding" {
-					text = "je_space_race_widget_funding_suborbital"
+### orbital
+
+flowcontainer = {
+	name = "widget_je_space_race_orbital_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_orbital_sgui')]"
+
+	te_sr_overview_milestone = {
+		blockoverride "sr_status_standard" {
+			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)1' )]"
+		}
+		blockoverride "sr_status_safe" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)2' )]"
+		}
+		blockoverride "sr_status_ambitious" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)3' )]"
+		}
+		blockoverride "sr_status_shielded" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)4' )]"
+		}
+		blockoverride "sr_risk_lit" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_unlit" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_label" {
+			text = "je_space_race_widget_risk_orbital"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_orbital"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_orbital"
+		}
+		blockoverride "sr_third_cells" {
+			te_sr_ov_first = {
+				blockoverride "first_open" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_orbital'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "first_claimed" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_orbital'), '(CFixedPoint)1' )]"
 				}
 			}
 		}
-
-		blockoverride "panel_rivals" {
-			widget_je_sr_rivals = {
-				blockoverride "rivals_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_suborbital')]"
-				}
-				blockoverride "rivals_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_suborbital'))]"
-				}
-				blockoverride "rivals_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_suborbital')]"
-				}
-				blockoverride "rivals_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_suborbital')]"
-				}
-				blockoverride "rivals_text" {
-					text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				}
-			}
+		blockoverride "sr_progress_label" {
+			text = "je_space_race_widget_ov_progress_label"
 		}
-		blockoverride "panel_programme" {
-			widget_je_sr_programme = {
-				blockoverride "programme_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_programme_suborbital')]"
-				}
-				blockoverride "programme_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_programme_suborbital'))]"
-				}
-				blockoverride "programme_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_suborbital')]"
-				}
-				blockoverride "programme_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_suborbital')]"
-				}
-			}
+		blockoverride "sr_progress_value" {
+			value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_orbital') )]"
+		}
+		blockoverride "sr_progress_text" {
+			text = "je_space_race_widget_progress_orbital"
+		}
+		blockoverride "sr_progress_tooltip" {
+			tooltip = "je_space_race_widget_reward_orbital"
 		}
 	}
 }
 
 flowcontainer = {
 	name = "widget_je_space_race_orbital"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
 	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_orbital_sgui')]"
 
-	widget_je_sr_milestone_panel = {
-		blockoverride "panel_context" {
-			datacontext = "[GetScriptedGui('sr_milestone_orbital_sgui')]"
+	te_sr_status_sections = {
+		blockoverride "sr_control_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_control_orbital_closed')]"
 		}
-		blockoverride "panel_tooltip" {
-			tooltip = "je_space_race_widget_reward_orbital"
+		blockoverride "sr_control_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_control_orbital_closed')]"
 		}
-		blockoverride "panel_progress" {
-			text = "je_space_race_widget_progress_orbital"
+		blockoverride "sr_control_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_orbital_closed'))]"
 		}
-		# No pace and no estimate for a programme that is not running: solar
-		# colonization keeps its entry alive with every colony claimed, and the
-		# rate would fall back to the drift floor with no progress left to divide.
-		# The sentence below still says so, from GetCustom.
-		blockoverride "panel_pace" {
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			text = "je_space_race_widget_pace_orbital"
+		blockoverride "sr_control_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_orbital_closed'))]"
 		}
-		blockoverride "panel_note" {
-			text = "je_space_race_widget_note_orbital"
+		blockoverride "sr_funding_value" {
+			text = "je_space_race_widget_funding_orbital"
 		}
-		blockoverride "panel_profile" {
+		blockoverride "sr_setbacks_value" {
+			text = "je_space_race_widget_setbacks_orbital"
+		}
+		blockoverride "sr_eta_value" {
+			text = "je_space_race_widget_eta_orbital"
+		}
+		blockoverride "sr_profile_text" {
 			text = "je_space_race_widget_profile_orbital"
 		}
+		blockoverride "sr_rivals_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_orbital_closed')]"
+		}
+		blockoverride "sr_rivals_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_rivals_orbital_closed')]"
+		}
+		blockoverride "sr_rivals_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_orbital_closed'))]"
+		}
+		blockoverride "sr_rivals_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_orbital_closed'))]"
+		}
+		blockoverride "sr_rivals_text" {
+			text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		}
+	}
+}
 
-		blockoverride "panel_controls" {
-			widget_je_sr_controls = {
-				blockoverride "controls_funding" {
-					text = "je_space_race_widget_funding_orbital"
+### moon_landing
+
+flowcontainer = {
+	name = "widget_je_space_race_moon_landing_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_moon_landing_sgui')]"
+
+	te_sr_overview_milestone = {
+		blockoverride "sr_status_standard" {
+			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)1' )]"
+		}
+		blockoverride "sr_status_safe" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)2' )]"
+		}
+		blockoverride "sr_status_ambitious" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)3' )]"
+		}
+		blockoverride "sr_status_shielded" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)4' )]"
+		}
+		blockoverride "sr_risk_lit" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_unlit" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_label" {
+			text = "je_space_race_widget_risk_moon_landing"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_moon_landing"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_moon_landing"
+		}
+		blockoverride "sr_third_cells" {
+			te_sr_ov_first = {
+				blockoverride "first_open" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_moon_landing'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "first_claimed" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_moon_landing'), '(CFixedPoint)1' )]"
 				}
 			}
 		}
-
-		blockoverride "panel_rivals" {
-			widget_je_sr_rivals = {
-				blockoverride "rivals_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_orbital')]"
-				}
-				blockoverride "rivals_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_orbital'))]"
-				}
-				blockoverride "rivals_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_orbital')]"
-				}
-				blockoverride "rivals_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_orbital')]"
-				}
-				blockoverride "rivals_text" {
-					text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				}
-			}
+		blockoverride "sr_progress_label" {
+			text = "je_space_race_widget_ov_progress_label"
 		}
-		blockoverride "panel_programme" {
-			widget_je_sr_programme = {
-				blockoverride "programme_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_programme_orbital')]"
-				}
-				blockoverride "programme_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_programme_orbital'))]"
-				}
-				blockoverride "programme_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_orbital')]"
-				}
-				blockoverride "programme_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_orbital')]"
-				}
-			}
+		blockoverride "sr_progress_value" {
+			value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_landing') )]"
+		}
+		blockoverride "sr_progress_text" {
+			text = "je_space_race_widget_progress_moon_landing"
+		}
+		blockoverride "sr_progress_tooltip" {
+			tooltip = "je_space_race_widget_reward_moon_landing"
 		}
 	}
 }
 
 flowcontainer = {
 	name = "widget_je_space_race_moon_landing"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
 	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_moon_landing_sgui')]"
 
-	widget_je_sr_milestone_panel = {
-		blockoverride "panel_context" {
-			datacontext = "[GetScriptedGui('sr_milestone_moon_landing_sgui')]"
+	te_sr_status_sections = {
+		blockoverride "sr_control_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_control_moon_landing_closed')]"
 		}
-		blockoverride "panel_tooltip" {
-			tooltip = "je_space_race_widget_reward_moon_landing"
+		blockoverride "sr_control_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_control_moon_landing_closed')]"
 		}
-		blockoverride "panel_progress" {
-			text = "je_space_race_widget_progress_moon_landing"
+		blockoverride "sr_control_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_moon_landing_closed'))]"
 		}
-		# No pace and no estimate for a programme that is not running: solar
-		# colonization keeps its entry alive with every colony claimed, and the
-		# rate would fall back to the drift floor with no progress left to divide.
-		# The sentence below still says so, from GetCustom.
-		blockoverride "panel_pace" {
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			text = "je_space_race_widget_pace_moon_landing"
+		blockoverride "sr_control_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_moon_landing_closed'))]"
 		}
-		blockoverride "panel_note" {
-			text = "je_space_race_widget_note_moon_landing"
+		blockoverride "sr_funding_value" {
+			text = "je_space_race_widget_funding_moon_landing"
 		}
-		blockoverride "panel_profile" {
+		blockoverride "sr_setbacks_value" {
+			text = "je_space_race_widget_setbacks_moon_landing"
+		}
+		blockoverride "sr_eta_value" {
+			text = "je_space_race_widget_eta_moon_landing"
+		}
+		blockoverride "sr_profile_text" {
 			text = "je_space_race_widget_profile_moon_landing"
 		}
+		blockoverride "sr_rivals_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_moon_landing_closed')]"
+		}
+		blockoverride "sr_rivals_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_rivals_moon_landing_closed')]"
+		}
+		blockoverride "sr_rivals_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_moon_landing_closed'))]"
+		}
+		blockoverride "sr_rivals_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_moon_landing_closed'))]"
+		}
+		blockoverride "sr_rivals_text" {
+			text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+		}
+	}
+}
 
-		blockoverride "panel_controls" {
-			widget_je_sr_controls = {
-				blockoverride "controls_funding" {
-					text = "je_space_race_widget_funding_moon_landing"
+### probe
+
+flowcontainer = {
+	name = "widget_je_space_race_probe_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_probe_sgui')]"
+
+	te_sr_overview_milestone = {
+		blockoverride "sr_status_standard" {
+			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)1' )]"
+		}
+		blockoverride "sr_status_safe" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)2' )]"
+		}
+		blockoverride "sr_status_ambitious" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)3' )]"
+		}
+		blockoverride "sr_status_shielded" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)4' )]"
+		}
+		blockoverride "sr_risk_lit" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_unlit" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_label" {
+			text = "je_space_race_widget_risk_probe"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_probe"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_probe"
+		}
+		blockoverride "sr_third_cells" {
+			te_sr_ov_first = {
+				blockoverride "first_open" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_probe'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "first_claimed" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_probe'), '(CFixedPoint)1' )]"
 				}
 			}
 		}
-
-		blockoverride "panel_rivals" {
-			widget_je_sr_rivals = {
-				blockoverride "rivals_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_moon_landing')]"
-				}
-				blockoverride "rivals_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_moon_landing'))]"
-				}
-				blockoverride "rivals_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_moon_landing')]"
-				}
-				blockoverride "rivals_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_moon_landing')]"
-				}
-				blockoverride "rivals_text" {
-					text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				}
-			}
+		blockoverride "sr_progress_label" {
+			text = "je_space_race_widget_ov_progress_label"
 		}
-		blockoverride "panel_programme" {
-			widget_je_sr_programme = {
-				blockoverride "programme_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_programme_moon_landing')]"
-				}
-				blockoverride "programme_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_programme_moon_landing'))]"
-				}
-				blockoverride "programme_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_moon_landing')]"
-				}
-				blockoverride "programme_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_moon_landing')]"
-				}
-			}
+		blockoverride "sr_progress_value" {
+			value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_probe') )]"
+		}
+		blockoverride "sr_progress_text" {
+			text = "je_space_race_widget_progress_probe"
+		}
+		blockoverride "sr_progress_tooltip" {
+			tooltip = "je_space_race_widget_reward_probe"
 		}
 	}
 }
 
 flowcontainer = {
 	name = "widget_je_space_race_probe"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
 	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_probe_sgui')]"
 
-	widget_je_sr_milestone_panel = {
-		blockoverride "panel_context" {
-			datacontext = "[GetScriptedGui('sr_milestone_probe_sgui')]"
+	te_sr_status_sections = {
+		blockoverride "sr_control_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_control_probe_closed')]"
 		}
-		blockoverride "panel_tooltip" {
-			tooltip = "je_space_race_widget_reward_probe"
+		blockoverride "sr_control_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_control_probe_closed')]"
 		}
-		blockoverride "panel_progress" {
-			text = "je_space_race_widget_progress_probe"
+		blockoverride "sr_control_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_probe_closed'))]"
 		}
-		# No pace and no estimate for a programme that is not running: solar
-		# colonization keeps its entry alive with every colony claimed, and the
-		# rate would fall back to the drift floor with no progress left to divide.
-		# The sentence below still says so, from GetCustom.
-		blockoverride "panel_pace" {
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			text = "je_space_race_widget_pace_probe"
+		blockoverride "sr_control_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_probe_closed'))]"
 		}
-		blockoverride "panel_note" {
-			text = "je_space_race_widget_note_probe"
+		blockoverride "sr_funding_value" {
+			text = "je_space_race_widget_funding_probe"
 		}
-		blockoverride "panel_profile" {
+		blockoverride "sr_setbacks_value" {
+			text = "je_space_race_widget_setbacks_probe"
+		}
+		blockoverride "sr_eta_value" {
+			text = "je_space_race_widget_eta_probe"
+		}
+		blockoverride "sr_profile_text" {
 			text = "je_space_race_widget_profile_probe"
 		}
+		blockoverride "sr_rivals_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_probe_closed')]"
+		}
+		blockoverride "sr_rivals_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_rivals_probe_closed')]"
+		}
+		blockoverride "sr_rivals_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_probe_closed'))]"
+		}
+		blockoverride "sr_rivals_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_probe_closed'))]"
+		}
+		blockoverride "sr_rivals_text" {
+			text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+		}
+	}
+}
 
-		blockoverride "panel_controls" {
-			widget_je_sr_controls = {
-				blockoverride "controls_funding" {
-					text = "je_space_race_widget_funding_probe"
+### moon_base
+
+flowcontainer = {
+	name = "widget_je_space_race_moon_base_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_moon_base_sgui')]"
+
+	te_sr_overview_milestone = {
+		blockoverride "sr_status_standard" {
+			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)1' )]"
+		}
+		blockoverride "sr_status_safe" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)2' )]"
+		}
+		blockoverride "sr_status_ambitious" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)3' )]"
+		}
+		blockoverride "sr_status_shielded" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)4' )]"
+		}
+		blockoverride "sr_risk_lit" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_unlit" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_label" {
+			text = "je_space_race_widget_risk_moon_base"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_moon_base"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_moon_base"
+		}
+		blockoverride "sr_third_cells" {
+			te_sr_ov_first = {
+				blockoverride "first_open" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_moon_base'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "first_claimed" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_moon_base'), '(CFixedPoint)1' )]"
 				}
 			}
 		}
-
-		blockoverride "panel_rivals" {
-			widget_je_sr_rivals = {
-				blockoverride "rivals_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_probe')]"
-				}
-				blockoverride "rivals_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_probe'))]"
-				}
-				blockoverride "rivals_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_probe')]"
-				}
-				blockoverride "rivals_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_probe')]"
-				}
-				blockoverride "rivals_text" {
-					text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-				}
-			}
+		blockoverride "sr_progress_label" {
+			text = "je_space_race_widget_ov_progress_label"
 		}
-		blockoverride "panel_programme" {
-			widget_je_sr_programme = {
-				blockoverride "programme_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_programme_probe')]"
-				}
-				blockoverride "programme_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_programme_probe'))]"
-				}
-				blockoverride "programme_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_probe')]"
-				}
-				blockoverride "programme_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_probe')]"
-				}
-			}
+		blockoverride "sr_progress_value" {
+			value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_base') )]"
+		}
+		blockoverride "sr_progress_text" {
+			text = "je_space_race_widget_progress_moon_base"
+		}
+		blockoverride "sr_progress_tooltip" {
+			tooltip = "je_space_race_widget_reward_moon_base"
 		}
 	}
 }
 
 flowcontainer = {
 	name = "widget_je_space_race_moon_base"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
 	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_moon_base_sgui')]"
 
-	widget_je_sr_milestone_panel = {
-		blockoverride "panel_context" {
-			datacontext = "[GetScriptedGui('sr_milestone_moon_base_sgui')]"
+	te_sr_status_sections = {
+		blockoverride "sr_control_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_control_moon_base_closed')]"
 		}
-		blockoverride "panel_tooltip" {
-			tooltip = "je_space_race_widget_reward_moon_base"
+		blockoverride "sr_control_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_control_moon_base_closed')]"
 		}
-		blockoverride "panel_progress" {
-			text = "je_space_race_widget_progress_moon_base"
+		blockoverride "sr_control_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_moon_base_closed'))]"
 		}
-		# No pace and no estimate for a programme that is not running: solar
-		# colonization keeps its entry alive with every colony claimed, and the
-		# rate would fall back to the drift floor with no progress left to divide.
-		# The sentence below still says so, from GetCustom.
-		blockoverride "panel_pace" {
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			text = "je_space_race_widget_pace_moon_base"
+		blockoverride "sr_control_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_moon_base_closed'))]"
 		}
-		blockoverride "panel_note" {
-			text = "je_space_race_widget_note_moon_base"
+		blockoverride "sr_funding_value" {
+			text = "je_space_race_widget_funding_moon_base"
 		}
-		blockoverride "panel_profile" {
+		blockoverride "sr_setbacks_value" {
+			text = "je_space_race_widget_setbacks_moon_base"
+		}
+		blockoverride "sr_eta_value" {
+			text = "je_space_race_widget_eta_moon_base"
+		}
+		blockoverride "sr_profile_text" {
 			text = "je_space_race_widget_profile_moon_base"
 		}
+		blockoverride "sr_rivals_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_moon_base_closed')]"
+		}
+		blockoverride "sr_rivals_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_rivals_moon_base_closed')]"
+		}
+		blockoverride "sr_rivals_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_moon_base_closed'))]"
+		}
+		blockoverride "sr_rivals_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_moon_base_closed'))]"
+		}
+		blockoverride "sr_rivals_text" {
+			text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+		}
+	}
+}
 
-		blockoverride "panel_controls" {
-			widget_je_sr_controls = {
-				blockoverride "controls_funding" {
-					text = "je_space_race_widget_funding_moon_base"
+### mars_landing
+
+flowcontainer = {
+	name = "widget_je_space_race_mars_landing_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_mars_landing_sgui')]"
+
+	te_sr_overview_milestone = {
+		blockoverride "sr_status_standard" {
+			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)1' )]"
+		}
+		blockoverride "sr_status_safe" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)2' )]"
+		}
+		blockoverride "sr_status_ambitious" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)3' )]"
+		}
+		blockoverride "sr_status_shielded" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)4' )]"
+		}
+		blockoverride "sr_risk_lit" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_unlit" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_label" {
+			text = "je_space_race_widget_risk_mars_landing"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_mars_landing"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_mars_landing"
+		}
+		blockoverride "sr_third_cells" {
+			te_sr_ov_first = {
+				blockoverride "first_open" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_mars_landing'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "first_claimed" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_mars_landing'), '(CFixedPoint)1' )]"
 				}
 			}
 		}
-
-		blockoverride "panel_rivals" {
-			widget_je_sr_rivals = {
-				blockoverride "rivals_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_moon_base')]"
-				}
-				blockoverride "rivals_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_moon_base'))]"
-				}
-				blockoverride "rivals_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_moon_base')]"
-				}
-				blockoverride "rivals_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_moon_base')]"
-				}
-				blockoverride "rivals_text" {
-					text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-				}
-			}
+		blockoverride "sr_progress_label" {
+			text = "je_space_race_widget_ov_progress_label"
 		}
-		blockoverride "panel_programme" {
-			widget_je_sr_programme = {
-				blockoverride "programme_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_programme_moon_base')]"
-				}
-				blockoverride "programme_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_programme_moon_base'))]"
-				}
-				blockoverride "programme_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_moon_base')]"
-				}
-				blockoverride "programme_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_moon_base')]"
-				}
-			}
+		blockoverride "sr_progress_value" {
+			value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_mars_landing') )]"
+		}
+		blockoverride "sr_progress_text" {
+			text = "je_space_race_widget_progress_mars_landing"
+		}
+		blockoverride "sr_progress_tooltip" {
+			tooltip = "je_space_race_widget_reward_mars_landing"
 		}
 	}
 }
 
 flowcontainer = {
 	name = "widget_je_space_race_mars_landing"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
 	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_mars_landing_sgui')]"
 
-	widget_je_sr_milestone_panel = {
-		blockoverride "panel_context" {
-			datacontext = "[GetScriptedGui('sr_milestone_mars_landing_sgui')]"
+	te_sr_status_sections = {
+		blockoverride "sr_control_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_control_mars_landing_closed')]"
 		}
-		blockoverride "panel_tooltip" {
-			tooltip = "je_space_race_widget_reward_mars_landing"
+		blockoverride "sr_control_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_control_mars_landing_closed')]"
 		}
-		blockoverride "panel_progress" {
-			text = "je_space_race_widget_progress_mars_landing"
+		blockoverride "sr_control_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_mars_landing_closed'))]"
 		}
-		# No pace and no estimate for a programme that is not running: solar
-		# colonization keeps its entry alive with every colony claimed, and the
-		# rate would fall back to the drift floor with no progress left to divide.
-		# The sentence below still says so, from GetCustom.
-		blockoverride "panel_pace" {
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			text = "je_space_race_widget_pace_mars_landing"
+		blockoverride "sr_control_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_mars_landing_closed'))]"
 		}
-		blockoverride "panel_note" {
-			text = "je_space_race_widget_note_mars_landing"
+		blockoverride "sr_funding_value" {
+			text = "je_space_race_widget_funding_mars_landing"
 		}
-		blockoverride "panel_profile" {
+		blockoverride "sr_setbacks_value" {
+			text = "je_space_race_widget_setbacks_mars_landing"
+		}
+		blockoverride "sr_eta_value" {
+			text = "je_space_race_widget_eta_mars_landing"
+		}
+		blockoverride "sr_profile_text" {
 			text = "je_space_race_widget_profile_mars_landing"
 		}
+		blockoverride "sr_rivals_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_mars_landing_closed')]"
+		}
+		blockoverride "sr_rivals_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_rivals_mars_landing_closed')]"
+		}
+		blockoverride "sr_rivals_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_mars_landing_closed'))]"
+		}
+		blockoverride "sr_rivals_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_mars_landing_closed'))]"
+		}
+		blockoverride "sr_rivals_text" {
+			text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+		}
+	}
+}
 
-		blockoverride "panel_controls" {
-			widget_je_sr_controls = {
-				blockoverride "controls_funding" {
-					text = "je_space_race_widget_funding_mars_landing"
+### interstellar_probe
+
+flowcontainer = {
+	name = "widget_je_space_race_interstellar_probe_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_interstellar_probe_sgui')]"
+
+	te_sr_overview_milestone = {
+		blockoverride "sr_status_standard" {
+			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)1' )]"
+		}
+		blockoverride "sr_status_safe" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)2' )]"
+		}
+		blockoverride "sr_status_ambitious" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)3' )]"
+		}
+		blockoverride "sr_status_shielded" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)4' )]"
+		}
+		blockoverride "sr_risk_lit" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_unlit" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_label" {
+			text = "je_space_race_widget_risk_interstellar_probe"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_interstellar_probe"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_interstellar_probe"
+		}
+		blockoverride "sr_third_cells" {
+			te_sr_ov_first = {
+				blockoverride "first_open" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_interstellar_probe'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "first_claimed" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_interstellar_probe'), '(CFixedPoint)1' )]"
 				}
 			}
 		}
-
-		blockoverride "panel_rivals" {
-			widget_je_sr_rivals = {
-				blockoverride "rivals_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_mars_landing')]"
-				}
-				blockoverride "rivals_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_mars_landing'))]"
-				}
-				blockoverride "rivals_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_mars_landing')]"
-				}
-				blockoverride "rivals_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_mars_landing')]"
-				}
-				blockoverride "rivals_text" {
-					text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-				}
-			}
+		blockoverride "sr_progress_label" {
+			text = "je_space_race_widget_ov_progress_label"
 		}
-		blockoverride "panel_programme" {
-			widget_je_sr_programme = {
-				blockoverride "programme_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_programme_mars_landing')]"
-				}
-				blockoverride "programme_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_programme_mars_landing'))]"
-				}
-				blockoverride "programme_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_mars_landing')]"
-				}
-				blockoverride "programme_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_mars_landing')]"
-				}
-			}
+		blockoverride "sr_progress_value" {
+			value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_interstellar_probe') )]"
+		}
+		blockoverride "sr_progress_text" {
+			text = "je_space_race_widget_progress_interstellar_probe"
+		}
+		blockoverride "sr_progress_tooltip" {
+			tooltip = "je_space_race_widget_reward_interstellar_probe"
 		}
 	}
 }
 
 flowcontainer = {
 	name = "widget_je_space_race_interstellar_probe"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
 	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_interstellar_probe_sgui')]"
 
-	widget_je_sr_milestone_panel = {
-		blockoverride "panel_context" {
-			datacontext = "[GetScriptedGui('sr_milestone_interstellar_probe_sgui')]"
+	te_sr_status_sections = {
+		blockoverride "sr_control_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_control_interstellar_probe_closed')]"
 		}
-		blockoverride "panel_tooltip" {
-			tooltip = "je_space_race_widget_reward_interstellar_probe"
+		blockoverride "sr_control_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_control_interstellar_probe_closed')]"
 		}
-		blockoverride "panel_progress" {
-			text = "je_space_race_widget_progress_interstellar_probe"
+		blockoverride "sr_control_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_interstellar_probe_closed'))]"
 		}
-		# No pace and no estimate for a programme that is not running: solar
-		# colonization keeps its entry alive with every colony claimed, and the
-		# rate would fall back to the drift floor with no progress left to divide.
-		# The sentence below still says so, from GetCustom.
-		blockoverride "panel_pace" {
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			text = "je_space_race_widget_pace_interstellar_probe"
+		blockoverride "sr_control_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_interstellar_probe_closed'))]"
 		}
-		blockoverride "panel_note" {
-			text = "je_space_race_widget_note_interstellar_probe"
+		blockoverride "sr_funding_value" {
+			text = "je_space_race_widget_funding_interstellar_probe"
 		}
-		blockoverride "panel_profile" {
+		blockoverride "sr_setbacks_value" {
+			text = "je_space_race_widget_setbacks_interstellar_probe"
+		}
+		blockoverride "sr_eta_value" {
+			text = "je_space_race_widget_eta_interstellar_probe"
+		}
+		blockoverride "sr_profile_text" {
 			text = "je_space_race_widget_profile_interstellar_probe"
 		}
-
-		blockoverride "panel_controls" {
-			widget_je_sr_controls = {
-				blockoverride "controls_funding" {
-					text = "je_space_race_widget_funding_interstellar_probe"
-				}
-			}
+		blockoverride "sr_rivals_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_interstellar_probe_closed')]"
 		}
-
-		blockoverride "panel_rivals" {
-			widget_je_sr_rivals = {
-				blockoverride "rivals_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_interstellar_probe')]"
-				}
-				blockoverride "rivals_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_interstellar_probe'))]"
-				}
-				blockoverride "rivals_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_interstellar_probe')]"
-				}
-				blockoverride "rivals_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_interstellar_probe')]"
-				}
-				blockoverride "rivals_text" {
-					text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-				}
-			}
+		blockoverride "sr_rivals_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_rivals_interstellar_probe_closed')]"
 		}
-		blockoverride "panel_programme" {
-			widget_je_sr_programme = {
-				blockoverride "programme_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_programme_interstellar_probe')]"
-				}
-				blockoverride "programme_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_programme_interstellar_probe'))]"
-				}
-				blockoverride "programme_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_interstellar_probe')]"
-				}
-				blockoverride "programme_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_interstellar_probe')]"
-				}
-			}
+		blockoverride "sr_rivals_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_interstellar_probe_closed'))]"
+		}
+		blockoverride "sr_rivals_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_interstellar_probe_closed'))]"
+		}
+		blockoverride "sr_rivals_text" {
+			text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 		}
 	}
 }
 
+### solar_colonization
+
 flowcontainer = {
-	name = "widget_je_space_race_interstellar_results"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
-	# The waiting entry has no buttons to replace and nothing to adjust: the
-	# probe is coasting. Its panel leaves the controls and rivals blocks
-	# unfilled and shows the transit, then the programme as a whole.
-
+	name = "widget_je_space_race_solar_colonization_overview"
 	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_solar_colonization_sgui')]"
 
-	widget_je_sr_milestone_panel = {
-		blockoverride "panel_tooltip" {
-			tooltip = "je_space_race_widget_reward_interstellar_results"
+	te_sr_overview_milestone = {
+		blockoverride "sr_status_standard" {
+			visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)1' )]"
 		}
-		blockoverride "panel_progress" {
-			text = "je_space_race_widget_progress_interstellar_results"
+		blockoverride "sr_status_safe" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)2' )]"
 		}
-		blockoverride "panel_pace" {
-			text = "je_space_race_widget_pace_interstellar_results"
+		blockoverride "sr_status_ambitious" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)3' )]"
 		}
-		blockoverride "panel_programme" {
-			widget_je_sr_programme = {
-				blockoverride "programme_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_programme_interstellar_results')]"
+		blockoverride "sr_status_shielded" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)4' )]"
+		}
+		blockoverride "sr_risk_lit" {
+			visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_unlit" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "sr_risk_label" {
+			text = "je_space_race_widget_risk_solar_colonization"
+		}
+		blockoverride "sr_label_safe" {
+			text = "je_space_race_widget_ov_safe_solar_colonization"
+		}
+		blockoverride "sr_label_ambitious" {
+			text = "je_space_race_widget_ov_ambitious_solar_colonization"
+		}
+		# No first to race for: the stage, whose tooltip is the stage's description.
+		blockoverride "sr_third_cells" {
+			te_sr_ov_icon_label = {
+				tooltip = "je_space_race_widget_profile_solar_colonization"
+				blockoverride "icon_texture" {
+					texture = "gfx/interface/icons/space_race_icons/stage.dds"
 				}
-				blockoverride "programme_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_programme_interstellar_results'))]"
-				}
-				blockoverride "programme_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_interstellar_results')]"
-				}
-				blockoverride "programme_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_interstellar_results')]"
+				blockoverride "label" {
+					text = "je_space_race_widget_ov_stage"
 				}
 			}
+		}
+		blockoverride "sr_progress_label" {
+			text = "je_space_race_widget_ov_colony_label"
+		}
+		# The 34 worlds: every one claimed, ours on top.
+		blockoverride "sr_extra_rows" {
+			te_sr_ov_pie = {
+				parentanchor = hcenter
+				tooltip = "je_space_race_widget_ov_worlds_tt"
+				blockoverride "pie_claimed" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_worlds_claimed_frac') )]"
+				}
+				blockoverride "pie_ours" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_worlds_ours_frac') )]"
+				}
+				blockoverride "pie_label" {
+					text = "je_space_race_widget_ov_worlds"
+				}
+			}
+		}
+		blockoverride "sr_progress_value" {
+			value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_solar_colonization') )]"
+		}
+		blockoverride "sr_progress_text" {
+			text = "je_space_race_widget_progress_solar_colonization"
+		}
+		blockoverride "sr_progress_tooltip" {
+			tooltip = "je_space_race_widget_reward_solar_colonization"
 		}
 	}
 }
 
 flowcontainer = {
 	name = "widget_je_space_race_solar_colonization"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	spacing = 4
-
 	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+	datacontext = "[GetScriptedGui('sr_milestone_solar_colonization_sgui')]"
 
-	widget_je_sr_milestone_panel = {
-		blockoverride "panel_context" {
-			datacontext = "[GetScriptedGui('sr_milestone_solar_colonization_sgui')]"
+	te_sr_status_sections = {
+		blockoverride "sr_control_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_control_solar_colonization_closed')]"
 		}
-		blockoverride "panel_tooltip" {
-			tooltip = "je_space_race_widget_reward_solar_colonization"
+		blockoverride "sr_control_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_control_solar_colonization_closed')]"
 		}
-		blockoverride "panel_progress" {
-			text = "je_space_race_widget_progress_solar_colonization"
+		blockoverride "sr_control_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_solar_colonization_closed'))]"
 		}
-		# No pace and no estimate for a programme that is not running: solar
-		# colonization keeps its entry alive with every colony claimed, and the
-		# rate would fall back to the drift floor with no progress left to divide.
-		# The sentence below still says so, from GetCustom.
-		blockoverride "panel_pace" {
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-			text = "je_space_race_widget_pace_solar_colonization"
+		blockoverride "sr_control_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_control_solar_colonization_closed'))]"
 		}
-		blockoverride "panel_note" {
-			text = "je_space_race_widget_note_solar_colonization"
+		blockoverride "sr_funding_value" {
+			text = "je_space_race_widget_funding_solar_colonization"
 		}
-		blockoverride "panel_profile" {
+		blockoverride "sr_setbacks_value" {
+			text = "je_space_race_widget_setbacks_solar_colonization"
+		}
+		blockoverride "sr_eta_value" {
+			text = "je_space_race_widget_eta_solar_colonization"
+		}
+		blockoverride "sr_profile_text" {
 			text = "je_space_race_widget_profile_solar_colonization"
 		}
-
-		blockoverride "panel_controls" {
-			widget_je_sr_controls = {
-				blockoverride "controls_funding" {
-					text = "je_space_race_widget_funding_solar_colonization"
-				}
-			}
+		blockoverride "sr_rivals_onclick" {
+			onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_solar_colonization_closed')]"
 		}
-
-		blockoverride "panel_rivals" {
-			widget_je_sr_rivals = {
-				blockoverride "rivals_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_rivals_solar_colonization')]"
-				}
-				blockoverride "rivals_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_solar_colonization'))]"
-				}
-				blockoverride "rivals_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_solar_colonization')]"
-				}
-				blockoverride "rivals_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_rivals_solar_colonization')]"
-				}
-				blockoverride "rivals_text" {
-					text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-				}
-			}
+		blockoverride "sr_rivals_showmore" {
+			visible = "[GetVariableSystem.Exists('sr_panel_rivals_solar_colonization_closed')]"
 		}
-		blockoverride "panel_programme" {
-			widget_je_sr_programme = {
-				blockoverride "programme_onclick" {
-					onclick = "[GetVariableSystem.Toggle('sr_panel_programme_solar_colonization')]"
-				}
-				blockoverride "programme_showmore" {
-					visible = "[Not(GetVariableSystem.Exists('sr_panel_programme_solar_colonization'))]"
-				}
-				blockoverride "programme_showless" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_solar_colonization')]"
-				}
-				blockoverride "programme_visible" {
-					visible = "[GetVariableSystem.Exists('sr_panel_programme_solar_colonization')]"
-				}
-			}
+		blockoverride "sr_rivals_showless" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_solar_colonization_closed'))]"
+		}
+		blockoverride "sr_rivals_visible" {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_rivals_solar_colonization_closed'))]"
+		}
+		blockoverride "sr_rivals_text" {
+			text = "[GetScriptedGui('sr_rivals_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 		}
 	}
+}
+
+### interstellar_results — the waiting entry: no controls, nothing to adjust;
+### the probe is coasting.
+flowcontainer = {
+	name = "widget_je_space_race_interstellar_results_overview"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+
+	te_sr_overview_transit = {}
+}
+
+### How the Space Race Works, on all nine entries.
+flowcontainer = {
+	name = "widget_je_space_race_reference"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	minimumsize = { 520 -1 }
+	ignoreinvisible = yes
+
+	te_sr_reference_sections = {}
 }
