@@ -26,7 +26,7 @@ in one shows in the other. The tab is grayed until the journal entry is active;
 hover it for what is still missing. There, the progress bar shows only while you
 have a program, and the tab ends with an Open Journal Entry button.
 
-<!-- screenshot: the Nuclear Weapons overview of an armed power, with the programme icon, warheads, the three posture icons and the taboo bar in view -->
+![The Nuclear tab of the Military panel for a country holding 12 warheads: the overview (an Unfunded programme, warheads, credibility, doctrine, readiness, launch authority and the taboo bar), The Programme at funding step 0 with its progress bar, Nuclear Posture, and the start of Forces.](images/nuclear_tab_armed.png)
 
 The overview has three rows. Each icon has its word beneath, and hovering it
 gives the detail.
@@ -53,8 +53,6 @@ subsections under Nuclear Posture.
 | Delivery and Defence | Always | Your delivery capability and home defence |
 | Nuclear Powers | From the world's first warhead | The ten largest arsenals as the world estimates them |
 | How Nuclear Weapons Work | Always | The explanations, collapsed |
-
-![The Nuclear Weapons journal entry of a country holding 32 warheads: The Programme panel (funding at step 0, so no new warhead is coming), the progress bar and the Nuclear Posture panel.](images/nuclear_posture_and_programme.png)
 
 An armed power that loses its rank stops building but keeps its warheads, its
 posture, its upkeep and its accidents.
