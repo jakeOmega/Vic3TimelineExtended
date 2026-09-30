@@ -765,21 +765,109 @@ types banking_dashboard_widget_types
 	### ==========================================================================
 	### THE TOP BAR'S BANKING READINGS
 	### ==========================================================================
-	### The cycle's phase, momentum and bubble pressure as three icons in
-	### vanilla's top bar, after MONEY (gui/topbar.gui, its one change). The
-	### owner asked for the band, not the number: no figures and no words. Hover
-	### an icon for its word and the overview's tooltip for that reading; click
-	### it for the Budget panel's Banking tab. The icons are the overview's own
-	### types at 28 px, so the two cannot disagree.
+	### The cycle's phase, momentum and bubble pressure as icons in vanilla's top
+	### bar, after MONEY (gui/topbar.gui). The owner asked for the band, not the
+	### number: no figures and no words. Hover an icon for its word and the
+	### overview's tooltip for that reading; click it for the Budget panel's
+	### Banking tab. The icons are the overview's own types, so the two cannot
+	### disagree.
+	###
+	### Two rows, as the bar has (the owner's suggestion after the first
+	### version's icons sat under the alerts): the phase on the top row at 32 px,
+	### vanilla's primary icon size, level with Bureaucracy ... MONEY; momentum
+	### and bubble pressure beneath it at 26 px (@secondary_icon_size), level
+	### with GDP ... infamy. The bottom row shows whenever the readings do, not
+	### with the secondary row's hover or lock.
+	###
+	### Measures, in the primary row's own coordinates (it sits at y -1 of the
+	### bar's content):
+	###   the top row is 80 x 40, a primary button's height, and always there,
+	###   even while the readings are hidden: gui/topbar.gui declares the bar's
+	###   width with these 80 in it (see the comment on its size line);
+	###   the bottom row is 30 high below it, and only there while the readings
+	###   show, so 40 + 30 = 70 and the row, with its margin_bottom 5, ends at
+	###   y 74, where the secondary row ends: the bar is no taller;
+	###   the pair of bottom icons is 28 + 2 + 28 = 58 wide, from x 4 to 62 of
+	###   this block: the secondary row's background ends 2 before the block
+	###   when landlocked, and the lock toggle starts at x 66 of it with supply
+	###   ships (78 without); the phase is centred over the pair.
+	### test_topbar_banking.py recomputes all of this from the markup.
 	###
 	### Three gates, one widget each, outermost first, so nothing inside a closed
-	### one is evaluated: not in observer mode (GetPlayer is empty there); the
-	### Budget tab's gate, te_budget_banking_tab_sgui (the rule on and the entry
-	### held), on the parent of the datacontext as budget_panel.gui has it; and
-	### the entry running (JournalEntry.IsActive), the overview's own gate. The
-	### top bar's hud_visibility hides it with the bar. 3 x 30 + 2 x 2 = 94
-	### wide, a little under one of vanilla's 100-wide buttons.
+	### one is evaluated (te_banking_topbar_gate, once per row). The top bar's
+	### hud_visibility hides the readings with the bar.
 	type te_banking_topbar_readings = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+
+		### The top row: the phase, centred over the pair beneath.
+		widget = {
+			size = { 80 40 }
+
+			te_banking_topbar_gate = {
+				position = { 13 0 }
+				blockoverride "readings" {
+					te_banking_topbar_reading = {
+						name = "te_topbar_banking_phase"
+						size = { 40 40 }
+						tooltip = "banking_dash_top_phase_tt"
+						te_banking_phase_icons = {
+							size = { 32 32 }
+							position = { 0 2 }
+							parentanchor = center
+						}
+					}
+				}
+			}
+		}
+
+		### The bottom row: momentum and bubble pressure, from x 4 (a margin: a
+		### flowcontainer places its children itself). The icons sit 7 down
+		### their 30-high buttons, which puts them at y 46 to 72 of the bar,
+		### level with the secondary row's icons; their last 3 px hang below
+		### the button, so the row stays within the 70.
+		te_banking_topbar_gate = {
+			blockoverride "readings" {
+				flowcontainer = {
+					direction = horizontal
+					margin_left = 4
+					spacing = 2
+
+					te_banking_topbar_reading = {
+						name = "te_topbar_banking_momentum"
+						size = { 28 30 }
+						tooltip = "banking_dash_top_momentum_tt"
+						te_banking_momentum_icons = {
+							size = { 26 26 }
+							position = { 0 7 }
+							parentanchor = hcenter
+						}
+					}
+					te_banking_topbar_reading = {
+						name = "te_topbar_banking_bubble"
+						size = { 28 30 }
+						tooltip = "banking_dash_top_bubble_tt"
+						te_banking_bubble_icons = {
+							size = { 26 26 }
+							position = { 0 7 }
+							parentanchor = hcenter
+						}
+						te_banking_crash_risk_badge = {
+							size = { 12 12 }
+							position = { 16 4 }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### The readings' gates: not in observer mode (GetPlayer is empty there);
+	### the Budget tab's gate, te_budget_banking_tab_sgui (the rule on and the
+	### entry held), on the parent of the datacontext as budget_panel.gui has
+	### it; and the entry running (JournalEntry.IsActive), the overview's own
+	### gate. The instance puts its row in "readings".
+	type te_banking_topbar_gate = flowcontainer {
 		visible = "[Not( GetMetaPlayer.IsObserver )]"
 		ignoreinvisible = yes
 
@@ -793,50 +881,19 @@ types banking_dashboard_widget_types
 
 				flowcontainer = {
 					visible = "[JournalEntry.IsActive]"
-					direction = horizontal
-					spacing = 2
+					ignoreinvisible = yes
 
-					te_banking_topbar_reading = {
-						name = "te_topbar_banking_phase"
-						tooltip = "banking_dash_top_phase_tt"
-						te_banking_phase_icons = {
-							size = { 28 28 }
-							position = { 0 2 }
-							parentanchor = center
-						}
-					}
-					te_banking_topbar_reading = {
-						name = "te_topbar_banking_momentum"
-						tooltip = "banking_dash_top_momentum_tt"
-						te_banking_momentum_icons = {
-							size = { 28 28 }
-							position = { 0 2 }
-							parentanchor = center
-						}
-					}
-					te_banking_topbar_reading = {
-						name = "te_topbar_banking_bubble"
-						tooltip = "banking_dash_top_bubble_tt"
-						te_banking_bubble_icons = {
-							size = { 28 28 }
-							position = { 0 2 }
-							parentanchor = center
-						}
-						te_banking_crash_risk_badge = {
-							size = { 12 12 }
-							position = { 18 6 }
-						}
-					}
+					block "readings" {}
 				}
 			}
 		}
 	}
 
 	### One reading's hover and click target: vanilla's top-bar button (glow on
-	### hover, tooltip below, a click opens a panel) at under a third of the width.
+	### hover, tooltip below, a click opens a panel). The instance sets the size.
 	type te_banking_topbar_reading = button {
 		using = glow_button
-		size = { 30 40 }
+		size = { 40 40 }
 		using = tooltip_below
 		onclick = "[InformationPanelBar.OpenPanelTab('budget', 'te_banking')]"
 	}

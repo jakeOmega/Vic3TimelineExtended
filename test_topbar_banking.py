@@ -1,10 +1,14 @@
 """The Banking readings in vanilla's top bar (gui/topbar.gui).
 
 The owner asked for the cycle's phase, momentum and bubble pressure in the top
-bar itself, as bands: three icons after MONEY, each its own hover and click
-target. This checks that the override is vanilla's file plus that one marked
-change, that the readings are gated like the Budget panel's Banking tab, and
-that they draw the overview's own icons and tooltips rather than a copy.
+bar itself, as bands: icons after MONEY, each its own hover and click target,
+the phase on the bar's top row and the other two beneath it on the second. This
+checks that the override is vanilla's file plus two marked changes (the
+readings and the bar's declared width), that the declared width covers the
+widest bar so the alerts beside it cannot sit on the readings again, that the
+two rows line up with vanilla's and add no height, that the readings are gated
+like the Budget panel's Banking tab, and that they draw the overview's own
+icons and tooltips rather than a copy.
 """
 import difflib
 import os
@@ -54,15 +58,18 @@ def _children(block, kind="flowcontainer"):
 
 
 def _own(block):
-    """A block's own lines: the text outside its nested braces."""
-    out, depth = [], 0
-    for c in block[1:-1]:
-        if c == "{":
-            depth += 1
-        elif c == "}":
-            depth -= 1
-        elif depth == 0:
-            out.append(c)
+    """A block's own lines: the text outside its nested blocks. A one-line
+    value in braces (`size = { 26 26 }`) stays."""
+    out, i, inner = [], 0, block[1:-1]
+    while i < len(inner):
+        if inner[i] == "{":
+            nested = _block_from(inner, i)
+            if "\n" not in nested:
+                out.append(nested)
+            i += len(nested)
+            continue
+        out.append(inner[i])
+        i += 1
     return "".join(out)
 
 
@@ -87,14 +94,18 @@ class OverrideTest(unittest.TestCase):
                 self.assertTrue(any(line.strip().startswith(MARK) for line in new),
                                 f"unmarked {tag}: {old!r} -> {new!r}")
 
-    def test_the_one_change_adds_the_readings_and_removes_nothing(self):
+    def test_two_changes_the_width_and_the_readings(self):
+        def code(lines):
+            return [line.strip() for line in lines if line.strip() and not line.strip().startswith("#")]
         hunks = self.hunks()
-        self.assertEqual(len(hunks), 1)
-        tag, old, new = hunks[0]
-        self.assertEqual(tag, "insert")
-        self.assertEqual(old, [])
-        self.assertEqual([line.strip() for line in new if line.strip() and not line.strip().startswith("#")],
-                         ["te_banking_topbar_readings = {}"])
+        self.assertEqual(len(hunks), 2)
+        (tag, old, new), (tag2, old2, new2) = hunks
+        self.assertEqual(tag, "replace")
+        self.assertEqual(code(old), ["size = { 705 80 }"])
+        self.assertRegex(" ".join(code(new)), r"^size = \{ \d+ 80 \}$")
+        self.assertEqual(tag2, "insert")
+        self.assertEqual(old2, [])
+        self.assertEqual(code(new2), ["te_banking_topbar_readings = {}"])
 
     def test_the_readings_sit_after_money_in_the_primary_row(self):
         bar = _type_body(_read(TOPBAR), "topbar")
@@ -110,18 +121,51 @@ class OverrideTest(unittest.TestCase):
                         "the readings follow the MONEY container directly")
 
 
+# ingame_hud.gui (vanilla, not in the repo) instances the bar twice: with
+# supply ships, and landlocked with blockoverride "supply_ships_info" {} and
+# blockoverride "spacing" { spacing = 37 }.
+LANDLOCKED_SPACING = 37
+
+
+def _size(block):
+    return tuple(int(n) for n in re.search(r"size = \{ (-?\d+) (-?\d+) \}", _own(block)).groups())
+
+
+def _position(block):
+    m = re.search(r"position = \{ (-?\d+) (-?\d+) \}", _own(block))
+    return tuple(int(n) for n in m.groups()) if m else (0, 0)
+
+
+def _int(block, prop):
+    return int(re.search(rf"\b{prop} = (-?\d+)", _own(block)).group(1))
+
+
+def _instances(block, name):
+    return [_block_from(block, m.end() - 1) for m in re.finditer(rf"\b{name} = \{{", block)]
+
+
+class Readings:
+    """The readings' blocks: the top row, the bottom row, the three buttons."""
+
+    def __init__(self):
+        self.dash = _read(DASH)
+        self.body = "{" + _type_body(self.dash, "te_banking_topbar_readings") + "}"
+        self.top = _children(self.body, "widget")[0]
+        self.gates = _instances(self.body, "te_banking_topbar_gate")
+        self.bottom_gate = self.gates[1]
+        self.pair = _block_from(self.bottom_gate, self.bottom_gate.index("flowcontainer = {"))
+        self.buttons = _instances(self.body, "te_banking_topbar_reading")
+
+
 class GateTest(unittest.TestCase):
     """Hidden in observer mode, while the Banking tab is closed to the player,
     and until the entry runs: one widget per gate, as budget_panel.gui nests
-    them."""
+    them, for each row."""
 
-    def setUp(self):
-        self.body = "{" + _type_body(_read(DASH), "te_banking_topbar_readings") + "}"
-
-    def test_three_nested_gates_then_the_readings(self):
-        observer = _own(self.body)
-        self.assertIn('visible = "[Not( GetMetaPlayer.IsObserver )]"', observer)
-        tab, = _children(self.body)
+    def test_three_nested_gates_then_the_row(self):
+        gate = "{" + _type_body(_read(DASH), "te_banking_topbar_gate") + "}"
+        self.assertIn('visible = "[Not( GetMetaPlayer.IsObserver )]"', _own(gate))
+        tab, = _children(gate)
         self.assertIn("GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope )"
                       ".End )", _own(tab))
         self.assertNotRegex(_own(tab), r"\bdatacontext =")
@@ -130,7 +174,16 @@ class GateTest(unittest.TestCase):
         self.assertNotRegex(_own(entry), r"\bvisible =")
         running, = _children(entry)
         self.assertIn('visible = "[JournalEntry.IsActive]"', _own(running))
-        self.assertEqual(len(re.findall(r"\bte_banking_topbar_reading = \{", running)), 3)
+        self.assertIn('block "readings" {}', running)
+
+    def test_every_reading_is_behind_a_gate(self):
+        r = Readings()
+        self.assertEqual(len(r.gates), 2)
+        inside = sum(len(_instances(g, "te_banking_topbar_reading")) for g in r.gates)
+        self.assertEqual(inside, 3)
+        self.assertEqual(len(r.buttons), 3)
+        self.assertNotRegex(_own(r.body), r"\bvisible =")    # the top row's 80 stay: see GeometryTest
+        self.assertNotRegex(_own(r.top), r"\bvisible =")
 
     def test_the_gate_is_the_budget_tabs(self):
         tab = _read(BUDGET)
@@ -141,28 +194,129 @@ class GateTest(unittest.TestCase):
                       _read(os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")))
 
 
+class GeometryTest(unittest.TestCase):
+    """The bar's declared width covers its widest content, so ingame_hud.gui's
+    hbox puts the alerts after the readings (#588 put them under the alerts),
+    and the two rows line up with vanilla's without making the bar taller.
+    Every number is read from the markup."""
+
+    @classmethod
+    def setUpClass(cls):
+        text = _read(TOPBAR)
+        bar = _type_body(text, "topbar")
+        cls.named = _block_from(bar, bar.index("widget = {"))
+        cls.outer = _block_from(cls.named, cls.named.index("flowcontainer = {"))
+        cls.primary = _block_from(cls.named, cls.named.index("flowcontainer = {", cls.named.index("### PRIMARY ICONS")))
+        cls.secondary = "{" + _type_body(text, "topbar_secondary_icons") + "}"
+        cls.secondary_icon = int(re.search(r"@secondary_icon_size = (\d+)", text).group(1))
+        cls.r = Readings()
+
+        cls.spacing = int(re.search(r'block "spacing" \{\s*spacing = (\d+)', cls.primary).group(1))
+        supply_at = cls.primary.index('block "supply_ships_info" {')
+        supply = _block_from(cls.primary, supply_at)
+        buttons = [(m.start(), _block_from(cls.primary, m.end() - 1))
+                   for m in re.finditer(r"\bbutton = \{", cls.primary)]
+        glow = [(at, b) for at, b in buttons if "using = glow_button" in _own(b)]
+        cls.widths = [_size(b)[0] for _, b in glow]
+        cls.supply_width = sum(_size(b)[0] for at, b in glow if supply_at < at < supply_at + len(supply) + 30)
+        cls.first_icon = _block_from(glow[0][1], glow[0][1].index("icon = {"))
+
+    def start(self, landlocked):
+        """Where the readings start: after the capacities, supply ships and
+        MONEY, with a gap before each child of the row and inside the
+        capacities' own row."""
+        x = _position(self.primary)[0]
+        if landlocked:
+            return x + sum(self.widths) - self.supply_width + 4 * LANDLOCKED_SPACING
+        return x + sum(self.widths) + 5 * self.spacing
+
+    def test_the_widest_case_is_as_briefed(self):
+        self.assertEqual(len(self.widths), 5)
+        self.assertEqual(self.start(False), 130 + 5 * 100 + 5 * 12)
+        self.assertEqual(self.start(True), 130 + 4 * 100 + 4 * 37)
+
+    def test_the_declared_width_covers_the_widest_bar(self):
+        width, height = _size(self.named)
+        self.assertEqual(height, 80)
+        reserved = _size(self.r.top)[0]
+        right = _int(self.outer, "margin_right")
+        widest = max(self.start(False), self.start(True)) + reserved + right
+        self.assertEqual(width, -(-widest // 5) * 5, "the widest case, rounded up to a multiple of 5")
+
+    def test_the_lock_toggle_clears_the_bottom_row(self):
+        toggle = _block_from(self.named, self.named.index("button_icon_round_toggle = {"))
+        self.assertIn("parentanchor = bottom|right", _own(toggle))
+        tw, th = _size(toggle)
+        tx, ty = _position(toggle)
+        width, height = _size(self.named)
+        left = width + tx - tw
+        pair_right = _int(self.r.pair, "margin_left") + 2 * _size(self.r.buttons[1])[0] + _int(self.r.pair, "spacing")
+        for landlocked in (False, True):
+            with self.subTest(landlocked=landlocked):
+                self.assertGreaterEqual(left - (self.start(landlocked) + pair_right), 2)
+
+    def test_the_bottom_row_clears_the_secondary_row(self):
+        items = [int(w) for w, h in re.findall(r"minimumsize = \{ (\d+) (\d+) \}", self.secondary)]
+        background = _block_from(self.secondary, self.secondary.index("background = {"))
+        end = _position(self.secondary)[0] + sum(items) + _int(background, "margin_right")
+        self.assertEqual(end, 676)
+        first = min(self.start(False), self.start(True)) + _int(self.r.pair, "margin_left")
+        self.assertGreaterEqual(first - end, 2, "tight: the landlocked bar leaves this gap")
+
+    def test_the_rows_line_up_with_vanillas_and_add_no_height(self):
+        py = _position(self.primary)[1]
+        top_h = _size(self.r.top)[1]
+        phase, momentum, bubble = self.r.buttons
+        # top row: vanilla's primary buttons are 40 high, their icons 32, 2 down from centre
+        self.assertEqual(top_h, 40)
+        self.assertEqual(_size(phase)[1], 40)
+        icon = _block_from(phase, phase.index("te_banking_phase_icons = {"))
+        self.assertEqual(_size(icon), _size(self.first_icon))
+        self.assertEqual(_position(icon), _position(self.first_icon))
+        # bottom row: the secondary row's icons, at the locked row's y
+        locked_y = int(re.search(r'blockoverride "animation" \{\s*position = \{ 0 (\d+) \}', self.named).group(1))
+        item_h = int(re.search(r"minimumsize = \{ \d+ (\d+) \}", self.secondary).group(1))
+        vanilla_icon_y = locked_y + (item_h - self.secondary_icon) // 2
+        for button, name in ((momentum, "te_banking_momentum_icons"), (bubble, "te_banking_bubble_icons")):
+            with self.subTest(icons=name):
+                icon = _block_from(button, button.index(f"{name} = {{"))
+                self.assertEqual(_size(icon), (self.secondary_icon, self.secondary_icon))
+                self.assertEqual(py + top_h + _position(icon)[1], vanilla_icon_y)
+        # no taller: the primary row ends where the locked secondary row does
+        bottom_h = _size(momentum)[1]
+        self.assertLessEqual(py + top_h + bottom_h + _int(self.primary, "margin_bottom"), locked_y + item_h)
+
+    def test_the_phase_is_centred_over_the_pair(self):
+        phase_gate = _instances(self.r.top, "te_banking_topbar_gate")[0]
+        phase_w = _size(self.r.buttons[0])[0]
+        pair_w = 2 * _size(self.r.buttons[1])[0] + _int(self.r.pair, "spacing")
+        self.assertEqual(_position(phase_gate)[0] + phase_w / 2, _int(self.r.pair, "margin_left") + pair_w / 2)
+        self.assertLessEqual(_position(phase_gate)[0] + phase_w, _size(self.r.top)[0])
+
+
 class ReuseTest(unittest.TestCase):
     """The readings draw the overview's icon types and name the overview's
     words and tooltips: no texture, band code or threshold of their own."""
 
     def setUp(self):
-        self.dash = _read(DASH)
-        self.body = _type_body(self.dash, "te_banking_topbar_readings")
-        self.buttons = [_block_from(self.body, m.end() - 1)
-                        for m in re.finditer(r"\bte_banking_topbar_reading = \{", self.body)]
+        self.r = Readings()
+        self.dash = self.r.dash
+        self.body = self.r.body
+        self.buttons = self.r.buttons
 
     def test_each_reading_instances_the_overviews_icon_type(self):
         overview = _type_body(self.dash, "te_banking_overview_panel")
         self.assertEqual(len(self.buttons), len(READINGS))
-        for button, (reading, icons, _, _) in zip(self.buttons, READINGS):
+        for button, (reading, icons, _, _), px in zip(self.buttons, READINGS, (32, 26, 26)):
             with self.subTest(reading=reading):
                 self.assertIn(f"{icons} = {{", button)
-                self.assertRegex(_block_from(button, button.index(f"{icons} = {{")), r"size = \{ 28 28 \}")
+                self.assertEqual(_size(_block_from(button, button.index(f"{icons} = {{"))), (px, px))
                 self.assertRegex(overview, rf'blockoverride "icons" \{{\s*{icons} = \{{\}}')
 
     def test_nothing_is_drawn_or_decided_here(self):
-        for needle in ("texture =", "ScriptValue(", "CFixedPoint", "banking_dash_phase_", "Var("):
-            self.assertNotIn(needle, self.body)
+        for body in (self.body, _type_body(self.dash, "te_banking_topbar_gate")):
+            for needle in ("texture =", "ScriptValue(", "CFixedPoint", "banking_dash_phase_", "Var("):
+                self.assertNotIn(needle, body)
 
     def test_the_bubble_carries_the_overviews_crash_risk_badge(self):
         self.assertIn("te_banking_crash_risk_badge = {", self.buttons[2])
@@ -175,13 +329,6 @@ class ReuseTest(unittest.TestCase):
         self.assertIn("using = glow_button", reading)
         self.assertIn("using = tooltip_below", reading)
         self.assertIn("InformationPanel.SelectTab('te_banking')", _read(BUDGET))
-
-    def test_narrower_than_one_vanilla_button(self):
-        reading = _type_body(self.dash, "te_banking_topbar_reading")
-        width = int(re.search(r"size = \{ (\d+) 40 \}", reading).group(1))
-        running = _children(_children(_children("{" + self.body + "}")[0])[0])[0]
-        spacing = int(re.search(r"spacing = (\d+)", _own(running)).group(1))
-        self.assertLessEqual(3 * width + 2 * spacing, 100)
 
     def test_each_tooltip_is_the_word_then_the_overviews_tooltip(self):
         loc = _loc()
