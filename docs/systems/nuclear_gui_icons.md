@@ -53,4 +53,6 @@ Codes: `nd_display_doctrine_code`, `nd_display_readiness_code`, `nd_display_auth
 
 ## Row 3: the nuclear taboo
 
-No placeholder: the bar and its target marker are vanilla's (`progressbar_marker.dds`, as the UN overview's authority bar uses), and the trend arrow is vanilla's `trend_up` / `trend_down` / `trend_nochange`, picked by `nd_disp_taboo_trend`.
+No placeholder. The bar is the projection bar shared with Global Warming (play-test round 3): vanilla's `default_progressbar_horizontal` layers, the change still to come drawn in the bar's own fill at 40% opacity, and no marker. The trend arrow is vanilla's `trend_up` / `trend_down` / `trend_nochange`, picked by `nd_disp_taboo_trend`.
+
+The Forces section's survivability bar is built the same way, with vanilla's green and red fills for the change, and marks its ceiling with a 3 px line of vanilla's `gfx/interface/backgrounds/white.dds` tinted cream. Neither needs art.

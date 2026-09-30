@@ -875,6 +875,54 @@ nd_display_survivability_cap = {
 	value = nd_survivability_cap
 }
 
+# Where survivability is heading, for the Forces bar (round 3): the ceiling
+# while we pay for hardening, back toward the floor without it, as
+# nd_survivability_step moves it; where it is when neither applies.
+nd_display_survivability_heading = {
+	value = nd_survivability_or_zero
+	if = {
+		limit = {
+			has_variable = nd_survivability
+			has_variable = nd_hardening
+			var:nd_hardening >= 1
+			nd_survivability_cap > nd_survivability_or_zero
+		}
+		value = nd_survivability_cap
+	}
+	else_if = {
+		limit = {
+			has_variable = nd_survivability
+			NOT = {
+				AND = {
+					has_variable = nd_hardening
+					var:nd_hardening >= 1
+				}
+			}
+			nd_survivability_or_zero > nd_survivability_floor
+		}
+		value = nd_survivability_floor
+	}
+}
+
+# The Forces bar's layers: the solid fill runs to the lower of survivability and
+# where it is heading, the green or red change still to come to the higher.
+nd_display_survivability_bar_low = {
+	value = nd_survivability_or_zero
+	if = {
+		limit = { nd_display_survivability_heading < nd_survivability_or_zero }
+		value = nd_display_survivability_heading
+	}
+}
+
+nd_display_survivability_bar_high = {
+	value = nd_survivability_or_zero
+	if = {
+		limit = { nd_display_survivability_heading > nd_survivability_or_zero }
+		value = nd_display_survivability_heading
+	}
+}
+
+
 nd_display_reliability = {
 	value = nd_reliability_or_default
 }
@@ -1354,6 +1402,209 @@ nd_display_stance_months_left = {
 		subtract = var:nd_doctrine_months
 	}
 	min = 0
+}
+
+# ----------------------------------------------------------------------------
+# AT HOME TABLE — interest-group scope, display only
+# ----------------------------------------------------------------------------
+# One group's view of our posture for the At Home table (te_nuclear_sec_home in
+# nuclear_deterrence_widget.gui, one table per group from a datamodel over the
+# country's interest groups): the numbers nd_ig_store_opinion stores on the
+# group, each read guarded (a group with no view has none of them). Which rows
+# a group shows follows its class, as the text list's lines did
+# (nd_ig_term_*_value says which terms a class can have).
+
+# 0 no view, 1 militarist, 2 restraint, 3 officers, 4 business.
+nd_disp_ig_class = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_ig_class }
+		value = var:nd_ig_class
+	}
+}
+
+nd_disp_ig_lean = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_ig_lean }
+		value = var:nd_ig_lean
+	}
+}
+
+nd_disp_ig_strength = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_ig_strength }
+		value = var:nd_ig_strength
+	}
+}
+
+# The approval the group's breakdown shows: the terms' capped total.
+nd_disp_ig_stance = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_ig_stance }
+		value = var:nd_ig_stance
+	}
+}
+
+nd_disp_ig_term_doctrine = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_ig_term_doctrine }
+		value = var:nd_ig_term_doctrine
+	}
+}
+
+nd_disp_ig_term_readiness = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_ig_term_readiness }
+		value = var:nd_ig_term_readiness
+	}
+}
+
+nd_disp_ig_term_authority = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_ig_term_authority }
+		value = var:nd_ig_term_authority
+	}
+}
+
+nd_disp_ig_term_strain = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_ig_term_strain }
+		value = var:nd_ig_term_strain
+	}
+}
+
+nd_disp_ig_term_business = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_ig_term_business }
+		value = var:nd_ig_term_business
+	}
+}
+
+nd_disp_ig_term_possession = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_ig_term_possession }
+		value = var:nd_ig_term_possession
+	}
+}
+
+# The class word under the group's name: 1 militarist, 2 militarist (mild),
+# 3 restraint, 4 restraint (mild), 5 officers, hawkish, 6 officers,
+# restrained, 7 officers, 8 business, hawkish, 9 business, restrained,
+# 10 business. 0 no view.
+nd_disp_ig_view = {
+	value = 0
+	if = {
+		limit = { nd_disp_ig_class = 1 }
+		value = 2
+		if = {
+			limit = { nd_disp_ig_strength = 2 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { nd_disp_ig_class = 2 }
+		value = 4
+		if = {
+			limit = { nd_disp_ig_strength = 2 }
+			value = 3
+		}
+	}
+	else_if = {
+		limit = { nd_disp_ig_class = 3 }
+		value = 7
+		if = {
+			limit = { nd_disp_ig_lean = 1 }
+			value = 5
+		}
+		else_if = {
+			limit = { nd_disp_ig_lean = 2 }
+			value = 6
+		}
+	}
+	else_if = {
+		limit = { nd_disp_ig_class = 4 }
+		value = 10
+		if = {
+			limit = { nd_disp_ig_lean = 1 }
+			value = 8
+		}
+		else_if = {
+			limit = { nd_disp_ig_lean = 2 }
+			value = 9
+		}
+	}
+}
+
+# Which rows the group's table shows (1 shown, 0 not): its class's terms.
+nd_disp_ig_shows_doctrine = {
+	value = 0
+	if = {
+		limit = {
+			nd_disp_ig_class >= 1
+			nd_disp_ig_class <= 3
+		}
+		value = 1
+	}
+	# Business judges doctrine only when its leader leans one way.
+	else_if = {
+		limit = {
+			nd_disp_ig_class = 4
+			nd_disp_ig_lean > 0
+		}
+		value = 1
+	}
+}
+
+nd_disp_ig_shows_readiness = {
+	value = 0
+	if = {
+		limit = {
+			nd_disp_ig_class >= 1
+			nd_disp_ig_class <= 3
+		}
+		value = 1
+	}
+}
+
+nd_disp_ig_shows_authority = {
+	value = 0
+	if = {
+		limit = { nd_disp_ig_class = 2 }
+		value = 1
+	}
+}
+
+nd_disp_ig_shows_possession = {
+	value = 0
+	if = {
+		limit = { nd_disp_ig_class = 2 }
+		value = 1
+	}
+}
+
+nd_disp_ig_shows_strain = {
+	value = 0
+	if = {
+		limit = { nd_disp_ig_class = 3 }
+		value = 1
+	}
+}
+
+nd_disp_ig_shows_business = {
+	value = 0
+	if = {
+		limit = { nd_disp_ig_class = 4 }
+		value = 1
+	}
 }
 
 # ----------------------------------------------------------------------------
