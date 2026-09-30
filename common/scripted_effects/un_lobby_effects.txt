@@ -1019,3 +1019,57 @@ un_deleg_row_pledge = {
 		}
 	}
 }
+
+# ---- The Delegations' bulk buttons (Lobby Top Members For / Against) -------------------
+
+# Start a $DIR$ campaign on the member in row $N$ if the run has budget left
+# (un_bulk_left) and the row qualifies (un_deleg_row_bulk_ok), and spend one
+# campaign from the budget. The campaign is the row button's own
+# (un_deleg_row_lobby), so a pact made here is the same as one made there.
+# Parameters: $N$ = 0-23, $DIR$ = for | against
+# Scope: the viewer (ROOT)
+un_deleg_bulk_row = {
+	if = {
+		limit = {
+			var:un_bulk_left > 0
+			un_deleg_row_bulk_ok = { N = $N$ DIR = $DIR$ }
+		}
+		un_deleg_row_lobby = { N = $N$ DIR = $DIR$ }
+		change_variable = { name = un_bulk_left add = -1 }
+	}
+}
+
+# Lobby the listed members $DIR$, from the top row down, until the influence
+# runs out: one campaign per row that qualifies, at most as many as
+# un_deleg_bulk_budget counted before the first one. Runs hidden: the button's
+# own tooltip carries the one-line description.
+# Parameters: $DIR$ = for | against
+# Scope: the viewer (ROOT)
+un_deleg_bulk_lobby = {
+	set_variable = { name = un_bulk_left value = un_deleg_bulk_budget }
+	un_deleg_bulk_row = { N = 0 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 1 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 2 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 3 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 4 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 5 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 6 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 7 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 8 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 9 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 10 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 11 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 12 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 13 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 14 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 15 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 16 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 17 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 18 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 19 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 20 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 21 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 22 DIR = $DIR$ }
+	un_deleg_bulk_row = { N = 23 DIR = $DIR$ }
+	remove_variable = un_bulk_left
+}

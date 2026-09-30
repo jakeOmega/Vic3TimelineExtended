@@ -762,7 +762,10 @@ types space_race_widget_types
 				blockoverride "bar_value" {
 					block "sr_progress_value" {}
 				}
+				### The headline's rate opens the breakdown of where the pace
+				### comes from; the rest of the row keeps the reward preview.
 				blockoverride "bar_text" {
+					tooltip = "je_space_race_widget_pace_tt"
 					block "sr_progress_text" {}
 				}
 			}
