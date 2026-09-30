@@ -1,8 +1,8 @@
 ﻿# ============================================================================
 # COVERT WARFARE — display values for the journal entry's panels
 # ============================================================================
-# Read by gui/journal_entry_widgets/covert_operations_widget.gui (the overview
-# and the network rows) and by its loc. Display only: nothing in script acts on
+# Read by gui/journal_entry_widgets/covert_operations_widget.gui (the overview,
+# the network rows and the Funding Levels table) and by its loc. Display only: nothing in script acts on
 # them. Every var: read is guarded, because the journal entry is shown while
 # inactive and a save from before a slice lacks its variables until the next
 # monthly pass (gui_modding_guide.md gotchas #14 and #23;
@@ -150,21 +150,44 @@ covert_disp_net_strength_frac = {
 	max = 1
 }
 
-# Where the next part of the network's report starts, as a 0-1 share: the
-# bar's marker. From the stored report tier (iw_net_intel_tier, restated by
-# covert_net_clamp), so no strength is compared here. The row hides the marker
-# at tier 2, where there is nothing further to reach, and before the first
-# report.
-covert_disp_net_next_intel_frac = {
-	value = covert_net_intel_tier_1_strength
-	if = {
-		limit = {
-			has_variable = iw_net_intel_tier
-			var:iw_net_intel_tier >= 1
-		}
-		value = covert_net_intel_tier_2_strength
-	}
-	divide = covert_net_max
+# ---- Funding Levels table ----------------------------------------------------
+
+# What covert funding costs a week per level, from the terms
+# covert_operation_cost_mult charges: the priority-weighted operations plus one
+# base share, times covert_operations_cost_scale. The table's level N costs N
+# times this, which is what covert_operation_cost_mult charges at level N.
+covert_disp_cost_per_level = {
+	value = covert_priority_cost_units
+	add = 1
+	multiply = covert_operations_cost_scale
 	min = 0
-	max = 1
+}
+
+covert_disp_cost_at_1 = {
+	value = covert_disp_cost_per_level
+	round = yes
+}
+
+covert_disp_cost_at_2 = {
+	value = covert_disp_cost_per_level
+	multiply = 2
+	round = yes
+}
+
+covert_disp_cost_at_3 = {
+	value = covert_disp_cost_per_level
+	multiply = 3
+	round = yes
+}
+
+covert_disp_cost_at_4 = {
+	value = covert_disp_cost_per_level
+	multiply = 4
+	round = yes
+}
+
+covert_disp_cost_at_5 = {
+	value = covert_disp_cost_per_level
+	multiply = 5
+	round = yes
 }

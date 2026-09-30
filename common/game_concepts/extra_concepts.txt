@@ -204,6 +204,7 @@ concept_tradecraft = {}
 concept_agent_network = {}
 concept_covert_funding = {}
 concept_operation_slots = {}
+concept_funding_stealth = {}
 
 # Institutions
 concept_ministry_system = {}
