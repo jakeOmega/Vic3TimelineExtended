@@ -4393,6 +4393,7 @@
  te_window_tab_grand_monuments:0 "Grand Monuments"
  te_window_tab_grand_monuments_locked_tt:0 "#b $je_grand_monuments$#!\nNot open yet. It opens once:\n"
  te_window_tab_grand_monuments_tt:0 "Your Grand Monuments, their national effects and any that are contested. These are the journal entry's own panels: a change made here shows there too."
+ te_window_tab_met_tt:0 "#b Not open yet#!\nIts conditions are met, but its journal entry is not running. It opens at the journal's next check, unless it has already run its course."
  te_window_tab_space_race:0 "Space Race"
  te_window_tab_space_race_locked_tt:0 "#b Space Race#!\nNot open yet. It opens while a milestone is under way. The first, $je_space_race_suborbital$, starts once:\n"
  te_window_tab_space_race_tt:0 "Each milestone under way, with its overview, Mission Control and rivals. These are the journal entries' own panels: a change made here shows there too."

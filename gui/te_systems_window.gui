@@ -84,14 +84,13 @@ types te_systems_window_types
 			text = "te_systems_window_title"
 		}
 
-		### Back, as on every vanilla panel: the window closes and the panel it
-		### replaced (if any) opens again. The header art keeps a socket for the
-		### button, so an emptied block left a hole (play-test 2026-09-30).
-		### OpenPreviousPanel is vanilla's default for this block; with no
-		### previous panel the window only closes.
+		### Back, as on every vanilla panel: the header art keeps a socket for
+		### the button, so an emptied block left a hole (play-test 2026-09-30).
+		### It closes the window. Vanilla's InformationPanelBar.OpenPreviousPanel
+		### was tried and reopened nothing in game: the window closes the panel
+		### it replaces with ClosePanel, which leaves no history.
 		blockoverride "header_back_button" {
 			onclick = "[GetVariableSystem.Clear('com_open_window')]"
-			onclick = "[InformationPanelBar.OpenPreviousPanel]"
 			input_action = "back"
 		}
 
@@ -106,7 +105,10 @@ types te_systems_window_types
 			### Vanilla's strip, as the Military panel uses it (panel_military.gui).
 			### Each tab is on the strip while its system's rule is on, greyed
 			### until one of its entries runs; the greyed tab's tooltip lists the
-			### unlock conditions with a tick or a cross. tab_buttons defaults both
+			### unlock conditions with a tick or a cross. When they all pass but the
+			### entry is not running (in a save whose entry had run its course, the
+			### checklist came out empty: play-test 2026-09-30), the tooltip says so
+			### instead (te_window_tab_met_tt). tab_buttons defaults both
 			### halves of a slot to `visible = no`, so each visibility block says
 			### when its half shows: the templates above.
 			###
@@ -123,7 +125,7 @@ types te_systems_window_types
 					text = "te_window_tab_space_race"
 				}
 				blockoverride "first_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "first_button_click" {
 					enabled = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -144,7 +146,7 @@ types te_systems_window_types
 					text = "te_window_tab_colonial_empire"
 				}
 				blockoverride "second_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "second_button_click" {
 					enabled = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -165,7 +167,7 @@ types te_systems_window_types
 					text = "te_window_tab_grand_monuments"
 				}
 				blockoverride "third_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "third_button_click" {
 					enabled = "[GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
