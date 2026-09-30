@@ -59,6 +59,10 @@ One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_cod
 
 Beside the name, a 20 px check shows while the policy is in force (play-test round 3; it replaced the "Active"/"Inactive" word) and nothing shows while it is not. It is vanilla's `gfx/interface/icons/generic_icons/green_checkmark.dds`, kept.
 
+## Top Emitters: the row marks
+
+No new art. Each row starts with the leader's flag, vanilla's `tiny_flag` widget (a widget, not a texture: its name on hover, the country on click). A 20 px treaty mark shows while an Enforce Emissions Reduction treaty binds the leader; it is the Treaty-Bound cell's vanilla icon above, `gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds`. Our own market's row says "Our market" in words.
+
 ## Overview: the temperature bar
 
 No art. Play-test round 3 replaced the vanilla eye marker with drawn layers:

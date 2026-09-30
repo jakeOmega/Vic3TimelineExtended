@@ -204,6 +204,43 @@ gw_snapshot_market_emissions_effect = {
 	}
 }
 
+# The market's CUMULATIVE emissions, for the panel's Top Emitters list: every
+# year's figure this country's market added to the world total while this
+# country led it. Called right after gw_snapshot_market_emissions_effect and the
+# global accumulation (global_warming_update_on_action), so it adds exactly the
+# number the world total received that year. Display only; nothing reads it but
+# the panel.
+#
+# THE RULE WHEN LEADERSHIP CHANGES. Like the annual figure, the total is stored
+# on the leader, so it follows the country, not the market:
+# - a country that stops leading (it joins another market, or a customs union
+#   it led dissolves) keeps its total but adds nothing until it leads a market
+#   again, when it carries on from where it stopped;
+# - a market's new leader starts from its own total (zero if it never led one);
+# - when markets merge, the leader of the merged market goes on adding to its
+#   own total, and the absorbed leader's total stays with that country.
+# The panel labels the figure accordingly ("while this country led its market").
+# A variable, so a revolution's winner keeps it (CLAUDE.md's revolution rule).
+# The annual figure can be negative (a market that captures more than it
+# emits), so the total can fall.
+#
+# Scope: country (the market leader)
+gw_accumulate_market_emissions_effect = {
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_variable = gw_disp_market_emis_cum } }
+			set_variable = {
+				name = gw_disp_market_emis_cum
+				value = 0
+			}
+		}
+		change_variable = {
+			name = gw_disp_market_emis_cum
+			add = var:gw_disp_market_emis
+		}
+	}
+}
+
 # Re-base the annual world emissions figure each January, as the change in the
 # cumulative global variable since last January. O(1), and more truthful than
 # re-summing every market: it reports what actually accumulated rather than
@@ -309,5 +346,144 @@ gw_refresh_global_counts_effect = {
 				}
 			}
 		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Top Emitters (display only)
+# ---------------------------------------------------------------------------
+# The panel's Top Emitters section (global_warming_widget.gui,
+# te_gw_sec_emitters) lists the five markets emitting most, each named by its
+# leader. There is no datamodel of markets a journal-entry widget can walk (the
+# only market lists in any .gui are per-market: Market.AccessParticipants,
+# Market.GetExports, ...), so, as the Space Race's Rivals rows do
+# (sr_rivals_estimate_refresh), the viewer keeps a snapshot:
+#   gw_emitters_total        how many markets emit (gw_is_ranked_emitter)
+#   gw_emitter_1 .. _5       the first five leaders' capitals, largest first
+#                            (gotcha #11: the GUI reaches a country through a
+#                            stored state)
+#   gw_emitters_shown        how many of those rows are filled (0-5)
+#   gw_emitters_own_slot     1-5 when our own market is one of those rows
+#   gw_emitters_own_rank     our market's place among all of them (0: ours
+#                            does not emit on balance)
+# The figures on each row are read live from the listed leader's own variables
+# (gw_disp_own_* in global_warming_values.txt). Monthly and for players only
+# (je_global_warming's on_monthly_pulse): the leaders' figures are written on
+# their market capitals' yearly state pulses, not on the viewer's, so a
+# snapshot taken once a year could predate some of them and list the rows out
+# of the order their figures show; monthly, the order is at most a month
+# behind. Everything is a variable, so a revolution's winner keeps it, and the
+# snapshot is rebuilt every month anyway.
+# Scope: country (a player).
+gw_top_emitters_refresh = {
+	hidden_effect = {
+		save_scope_as = gw_te_viewer
+		market_capital ?= {
+			owner ?= { save_scope_as = gw_te_own_leader }
+		}
+		set_variable = { name = gw_emitters_total value = 0 }
+		every_country = {
+			limit = { gw_is_ranked_emitter = yes }
+			scope:gw_te_viewer = {
+				change_variable = { name = gw_emitters_total add = 1 }
+			}
+		}
+		set_variable = { name = gw_emitters_own_slot value = 0 }
+		gw_top_emitter_slot = { N = 1 POS = 0 }
+		gw_top_emitter_slot = { N = 2 POS = 1 }
+		gw_top_emitter_slot = { N = 3 POS = 2 }
+		gw_top_emitter_slot = { N = 4 POS = 3 }
+		gw_top_emitter_slot = { N = 5 POS = 4 }
+		# How many rows to show: the filled slots, counted from the first. A
+		# slot is empty only past the end of the list (or, in principle, for a
+		# leader with no capital), and the rows after an empty one hide too.
+		set_variable = { name = gw_emitters_shown value = 0 }
+		if = {
+			limit = { has_variable = gw_emitter_1 }
+			set_variable = { name = gw_emitters_shown value = 1 }
+			if = {
+				limit = { has_variable = gw_emitter_2 }
+				set_variable = { name = gw_emitters_shown value = 2 }
+				if = {
+					limit = { has_variable = gw_emitter_3 }
+					set_variable = { name = gw_emitters_shown value = 3 }
+					if = {
+						limit = { has_variable = gw_emitter_4 }
+						set_variable = { name = gw_emitters_shown value = 4 }
+						if = {
+							limit = { has_variable = gw_emitter_5 }
+							set_variable = { name = gw_emitters_shown value = 5 }
+						}
+					}
+				}
+			}
+		}
+		# Our market's place: one more than the markets emitting more than it.
+		set_variable = { name = gw_emitters_own_rank value = 0 }
+		if = {
+			limit = {
+				exists = scope:gw_te_own_leader
+				scope:gw_te_own_leader = { gw_is_ranked_emitter = yes }
+			}
+			set_variable = {
+				name = gw_emitters_own_emis
+				value = scope:gw_te_own_leader.var:gw_disp_market_emis
+			}
+			set_variable = { name = gw_emitters_own_rank value = 1 }
+			every_country = {
+				limit = {
+					gw_is_ranked_emitter = yes
+					var:gw_disp_market_emis > scope:gw_te_viewer.var:gw_emitters_own_emis
+				}
+				scope:gw_te_viewer = {
+					change_variable = { name = gw_emitters_own_rank add = 1 }
+				}
+			}
+			remove_variable = gw_emitters_own_emis
+		}
+	}
+}
+
+# Slot $N$ (1-5) gets the leader at position $POS$ ($N$ - 1) by annual
+# emissions. An ordered_ position past the end of the list clamps to the last
+# element instead of skipping (un_overview_display_effects.txt), so the count
+# is checked first. The capital is saved under a name per slot, so a leader
+# without one can never pass on the previous slot's. Scope: the viewer
+# (scope:gw_te_viewer, and scope:gw_te_own_leader when it exists, are set).
+gw_top_emitter_slot = {
+	if = {
+		limit = {
+			any_country = {
+				gw_is_ranked_emitter = yes
+				count >= $N$
+			}
+		}
+		ordered_country = {
+			limit = { gw_is_ranked_emitter = yes }
+			order_by = gw_disp_own_emis
+			position = $POS$
+			capital ?= { save_scope_as = gw_te_capital_$N$ }
+			if = {
+				limit = {
+					exists = scope:gw_te_own_leader
+					THIS = scope:gw_te_own_leader
+				}
+				scope:gw_te_viewer = {
+					set_variable = { name = gw_emitters_own_slot value = $N$ }
+				}
+			}
+		}
+		if = {
+			limit = { exists = scope:gw_te_capital_$N$ }
+			set_variable = { name = gw_emitter_$N$ value = scope:gw_te_capital_$N$ }
+		}
+		else_if = {
+			limit = { has_variable = gw_emitter_$N$ }
+			remove_variable = gw_emitter_$N$
+		}
+	}
+	else_if = {
+		limit = { has_variable = gw_emitter_$N$ }
+		remove_variable = gw_emitter_$N$
 	}
 }
