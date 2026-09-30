@@ -1149,35 +1149,35 @@ ICONS: dict[str, dict[str, dict]] = {
     # Global Warming (global_warming_gui_icons.md): tiers 36 px (drawn), policies
     # 26 px and at 25% opacity while not in force.
     "gw_part": {
-        "crate": {"subject": "a small closed wooden crate of goods with rope handles", "seed": None},
-        "crown": {"subject": "a small gold crown with red jewels", "seed": None},
+        "crate": {"subject": "a small closed wooden crate of goods with rope handles", "seed": 1},
+        "crown": {"subject": "a small gold crown with red jewels", "seed": 0},
     },
     "gw": {
-        "penalty": {"subject": "a square tile of cracked dry parched brown earth", "seed": None,
+        "penalty": {"subject": "a square tile of cracked dry parched brown earth", "seed": 3,
                     "now": f"{_GI}/generic_icons/warning.dds",
                     "marks": [{"draw": "arrow", "dir": "down", "colour": "red", "at": (0.5, 0.3), "scale": 0.5}]},
         "policy_carbon_tax": {"subject": "a red brick factory smokestack with a large plain gold coin stamped with a "
-                                         "small star leaning against its base", "seed": None,
+                                         "small star leaning against its base", "seed": 2,
                               "now": f"{_GI}/trade_icons/consumption_tax.dds"},
         # White turbines are lost in the cut-out: grey.
         "policy_renewable_investment": {"subject": "a tilted blue solar panel with a light grey three-bladed wind "
-                                                   "turbine with thick blades behind it", "seed": None,
+                                                   "turbine with thick blades behind it", "seed": 1,
                                         "now": f"{_GI}/building_icons/renewable_plant.dds"},
         "policy_emission_standards": {"subject": "a red brick factory smokestack with a large round gauge on its side, "
                                                  "a dark gauge face with a green zone and the needle in the green",
-                                      "seed": None, "now": f"{_GI}/decree/decree_pollution_control.dds"},
+                                      "seed": 3, "now": f"{_GI}/decree/decree_pollution_control.dds"},
         "policy_climate_adaptation": {"subject": "a thick grey stone sea wall with a big curling deep blue wave "
-                                                 "breaking against it", "seed": None,
+                                                 "breaking against it", "seed": 3,
                                       "now": f"{_GI}/state_status_icons/state_infrastructure.dds"},
         "policy_reforestation": {"subject": "a young green sapling tree planted in a mound of brown earth",
-                                 "seed": None, "now": f"{_GI}/decree/decree_greenest_grass_campaign.dds"},
+                                 "seed": 0, "now": f"{_GI}/decree/decree_greenest_grass_campaign.dds"},
         "policy_public_transit": {"subject": "a green electric tram seen from the front, its pantograph on top",
-                                  "seed": None, "now": f"{_GI}/goods_icons/transportation.dds"},
+                                  "seed": 1, "now": f"{_GI}/goods_icons/transportation.dds"},
         "policy_fossil_fuel_divestment": {"subject": "a black oil barrel with a plain gold coin stamped with a small "
-                                                     "star flying up and away from it", "seed": None,
+                                                     "star flying up and away from it", "seed": 3,
                                           "now": f"{_GI}/generic_icons/money.dds"},
         "policy_green_building_codes": {"subject": "a small red brick building front with a large bright green leaf "
-                                                   "emblem on its wall", "seed": None,
+                                                   "emblem on its wall", "seed": 3,
                                         "now": f"{_GI}/production_method_icons/cat_building_green_p1.dds"},
     },
     # Grand Monuments (grand_monuments_gui_icons.md): 36 px, faded while a count is zero.
