@@ -1203,6 +1203,238 @@ st_res_fertilizer_disp_policy = {
 	}
 }
 
+# The good's status for the row's status icon: 0 Idle, 1 Storing,
+# 2 Withdrawing, 3 Blocked. The same grouping of st_res_<good>_last_status
+# (written only by st_res_set_good_status_effect) as st_res_<good>_mode_text
+# in common/customizable_localization/st_res_custom_loc.txt, which gives the
+# status word: 1 and 3 Storing, 2 and 4 Withdrawing, 5 and up Blocked,
+# anything else Idle. Keep the two in step; test_strategic_reserve_layout.py
+# checks it. A save without the variable reads Idle, as the word does.
+st_res_grain_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_last_status }
+		if = {
+			limit = {
+				OR = {
+					var:st_res_grain_last_status = 1
+					var:st_res_grain_last_status = 3
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:st_res_grain_last_status = 2
+					var:st_res_grain_last_status = 4
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = { var:st_res_grain_last_status >= 5 }
+			value = 3
+		}
+	}
+}
+st_res_ammunition_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_last_status }
+		if = {
+			limit = {
+				OR = {
+					var:st_res_ammunition_last_status = 1
+					var:st_res_ammunition_last_status = 3
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:st_res_ammunition_last_status = 2
+					var:st_res_ammunition_last_status = 4
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = { var:st_res_ammunition_last_status >= 5 }
+			value = 3
+		}
+	}
+}
+st_res_oil_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_last_status }
+		if = {
+			limit = {
+				OR = {
+					var:st_res_oil_last_status = 1
+					var:st_res_oil_last_status = 3
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:st_res_oil_last_status = 2
+					var:st_res_oil_last_status = 4
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = { var:st_res_oil_last_status >= 5 }
+			value = 3
+		}
+	}
+}
+st_res_small_arms_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_last_status }
+		if = {
+			limit = {
+				OR = {
+					var:st_res_small_arms_last_status = 1
+					var:st_res_small_arms_last_status = 3
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:st_res_small_arms_last_status = 2
+					var:st_res_small_arms_last_status = 4
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = { var:st_res_small_arms_last_status >= 5 }
+			value = 3
+		}
+	}
+}
+st_res_artillery_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_last_status }
+		if = {
+			limit = {
+				OR = {
+					var:st_res_artillery_last_status = 1
+					var:st_res_artillery_last_status = 3
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:st_res_artillery_last_status = 2
+					var:st_res_artillery_last_status = 4
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = { var:st_res_artillery_last_status >= 5 }
+			value = 3
+		}
+	}
+}
+st_res_aeroplanes_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_last_status }
+		if = {
+			limit = {
+				OR = {
+					var:st_res_aeroplanes_last_status = 1
+					var:st_res_aeroplanes_last_status = 3
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:st_res_aeroplanes_last_status = 2
+					var:st_res_aeroplanes_last_status = 4
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = { var:st_res_aeroplanes_last_status >= 5 }
+			value = 3
+		}
+	}
+}
+st_res_tanks_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_last_status }
+		if = {
+			limit = {
+				OR = {
+					var:st_res_tanks_last_status = 1
+					var:st_res_tanks_last_status = 3
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:st_res_tanks_last_status = 2
+					var:st_res_tanks_last_status = 4
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = { var:st_res_tanks_last_status >= 5 }
+			value = 3
+		}
+	}
+}
+st_res_fertilizer_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_last_status }
+		if = {
+			limit = {
+				OR = {
+					var:st_res_fertilizer_last_status = 1
+					var:st_res_fertilizer_last_status = 3
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:st_res_fertilizer_last_status = 2
+					var:st_res_fertilizer_last_status = 4
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = { var:st_res_fertilizer_last_status >= 5 }
+			value = 3
+		}
+	}
+}
+
 # Where the row's fill bar marks the policy's stock band, in percent of
 # capacity (the bar's own scale). The target stockpile applies while the
 # policy can buy (Buy When Cheap, Stabilize Prices), the protected stockpile
