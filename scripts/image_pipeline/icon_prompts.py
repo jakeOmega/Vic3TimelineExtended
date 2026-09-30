@@ -1136,6 +1136,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "envelope_empty": {"subject": "an open empty tan manila envelope, its flap up, a torn red paper band hanging "
                                       "from it", "seed": 1},
         "fedora": {"subject": "a black fedora hat resting on a closed brown leather dossier folder", "seed": 1},
+        # Every shield seed drew the eye open; the list's standings open it as exposure grows.
+        "shield_closed": {"subject": "a round polished steel shield with a thick gold rim and a large embossed eye in "
+                                     "its centre, the eyelid shut, a curved line of lashes", "seed": None},
     },
     "covert": {
         # A searchlight's beam would cut out as a grey blob: the caught spy's raised hands say it.
@@ -1183,13 +1186,19 @@ ICONS: dict[str, dict[str, dict]] = {
     # Grand Monuments (grand_monuments_gui_icons.md): 36 px, faded while a count is zero.
     "gm_part": {
         "monument": {"subject": "a small grey stone obelisk on a square stone plinth, a blank flat panel on its face",
-                     "seed": None},
-        "wreath": {"subject": "a small round gold laurel wreath of thick leaves", "seed": None},
-        "railing": {"subject": "a short low bronze railing of thick round posts joined by a thick rail", "seed": None},
+                     "seed": 2},
+        "wreath": {"subject": "a small round gold laurel wreath of thick leaves", "seed": 2},
+        "railing": {"subject": "a short low bronze railing of thick round posts joined by a thick rail", "seed": 0},
+        # The stele (monument s2) reads as a gravestone at 36 px: an obelisk as the alternative.
+        "obelisk": {"subject": "a tall slender grey stone obelisk with a pointed top on a stepped square stone "
+                               "plinth, a blank smooth panel on the plinth's face", "seed": None},
     },
     "gm": {
-        "hard_times": {"subject": "an empty wooden alms bowl beside a stonemason's steel chisel and wooden mallet",
-                       "seed": None, "now": f"{_GI}/generic_icons/warning.dds"},
+        # The first subject drew a mortar and pestle or a cleaver (its s2, bowl and tools
+        # spread apart, is kept in ~/flux_runs/originals/gui_hard_times).
+        "hard_times": {"subject": "a stonemason's steel chisel and wooden mallet lying crossed in front of an empty "
+                                  "upturned wooden bowl", "seed": None,
+                       "now": f"{_GI}/generic_icons/warning.dds"},
     },
     # Strategic Reserve (strategic_reserve_gui_icons.md): 24 px.
     "st_res_part": {
