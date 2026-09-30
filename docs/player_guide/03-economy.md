@@ -110,7 +110,7 @@ building that is only adding levels already has finished ones, so it pays.
 The Construction Market section sits at the top of the construction panel's
 National Queue tab.
 
-![The Construction Market section, with the government buying 1,000 construction a week while private investors take 91% of it and the market is short.](images/construction_market.png)
+![The Construction Market section under Fixed Budget. The government spends £40.0M a week and buys 3,042 points, still closing on the 3,075 the budget buys at today's price; private investors take 84% of construction and the market is short.](images/construction_market.png)
 
 | Line | What it shows |
 |---|---|
@@ -426,7 +426,7 @@ whether you lead it or joined it, because that is where the reserve buys and
 sells. If you open another market with the tab still selected, it offers a
 button back to your own. The tab ends with an Open Journal Entry button.
 
-<!-- screenshot: the Strategic Reserve panel, the overview and the Reserve Inventory in view, one good's row expanded to its figures and Fill by Month chart -->
+![The Strategic Reserve tab of the Market panel: the overview (Hub Operating, Flow Cap, Sales Income) above the Reserve Inventory, with the Ammunition row expanded to its figures, the Fill by Month chart and the start of its Policy Settings.](images/strategic_reserve_tab.png)
 
 The overview at the top is always shown. The hub's icon is at full colour
 while the hub is fully staffed, marked Hub Operating, and dimmed and marked
@@ -466,8 +466,6 @@ settings, sales income and the fill history.
 
 You store and release goods from each good's row in the Reserve Inventory, as
 set out in [The Strategic Reserve panel](#the-strategic-reserve-panel).
-
-![The Strategic Reserve journal entry with the Ammunition row expanded and its settings open. The good runs Stabilize Prices with the Aggressive preset.](images/strategic_reserve.png)
 
 A positive rate buys that many units a week from the market into the reserve; a
 negative rate releases that many onto the market. Every press of a good's

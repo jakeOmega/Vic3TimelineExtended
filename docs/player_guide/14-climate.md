@@ -93,9 +93,7 @@ The journal entry opens with an overview that is always shown. The sections
 below it start open, except How Global Warming Works. While the entry is active
 it has no status line: the overview carries the tier and the readings.
 
-![The Global Warming journal entry at 1.59 °C, status Significant: Climate Conditions, the status line, the eight Mitigation Policies (seven active) and Adoption Around the World.](images/global_warming_JE.png)
-
-<!-- screenshot: the Global Warming journal entry as it is now: the overview (tier, Market Leader, Penalty, the Temperature bar with its red stretch and threshold line, the emissions table, the two pies) and Mitigation Policies -->
+![The Climate tab of the Market panel at 1.90 °C, tier Significant: the overview (tier, Market Leader, Penalty ×1.90, the Temperature bar and its threshold line, the emissions table and the two pies) and the start of Mitigation Policies.](images/global_warming_tab.png)
 
 The overview's first row is icons with a word under each: the warming tier
 (hover it for what the tier means), Market Leader or Market Member (whether you
