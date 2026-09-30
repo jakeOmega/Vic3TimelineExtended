@@ -95,10 +95,6 @@ Suppress an intentional case with a trailing comment on the same line:
 - line 1146: `desc = LAW_UNRESTRICTED_AUGMENTATION`
 - line 1153: `desc = LAW_REGULATED_AUGMENTATION`
 
-### `common/power_bloc_identities/extra_power_bloc_identities.txt` (1)
-
-- line 89: `desc = POWER_BLOC_COHESION_LEADER_INFAMY`
-
 ### `common/script_values/extra_script_values.txt` (2)
 
 - line 357: `desc = POWER_BLOC_MANDATE_PROGRESS_AVERAGE_LITERACY`
@@ -110,8 +106,8 @@ Suppress an intentional case with a trailing comment on the same line:
 
 ### `common/treaty_articles/extra_treaty_articles.txt` (2)
 
-- line 2125: `desc = AI_ISOLATIONIST`
-- line 2133: `desc = AI_TOTAL_WAR`
+- line 2114: `desc = AI_ISOLATIONIST`
+- line 2122: `desc = AI_TOTAL_WAR`
 
 ## Reviewed Exemptions
 
@@ -119,7 +115,7 @@ _None._
 
 ## Coverage
 
-- total flags: 73
-- unreviewed: 73
+- total flags: 72
+- unreviewed: 72
 - exempted: 0
 

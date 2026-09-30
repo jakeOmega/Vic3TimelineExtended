@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.14.4). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 additional_war_support_change: Compares the additional war support change the scoped country has accumulated from scripted events in the target diplomatic play
 aggressive_diplomatic_plays_permitted: True if country is independent or permitted to start their own Diplomatic Plays
@@ -155,7 +155,7 @@ has_active_peace_deal: True if the country is in a war where there is a proposed
 has_any_law_commitment: Checks if a country has a commitment to enact any law
 has_any_naval_only_hostilities: Check if the country has naval hostilities with any country it is not also at war with
 has_any_potential_strait_province: Check if a state, state region or country owns any potential strait province
-has_any_regional_objective: Checks if the scoped country's AI has a regional objective in a strategic region, completed or not Leave out type to match an objective of any type Usage:
+has_any_regional_objective: Checks if the scoped country's AI has a regional objective in a strategic region, whatever its status Leave out type to match an objective of any type Usage:
 has_any_secessionists_broken_out: Check if the country has secessionists broken out
 has_any_secessionists_growing: Check if the country has any secessionists growing
 has_any_strait_control: Check if the scoped country owns a strait province with naval fortification
@@ -192,6 +192,7 @@ has_law_or_variant: Checks if a country has a certain law or one its variant law
 has_military_strait_access_through: Check if the scoped country has military access through every strait owned by the target country
 has_modifier: Check if a supported scope has a certain timed modifier Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front
 has_objective: Checks if the scoped country has a certain objective type
+has_or_is_contesting_state_in_state_region: Check if country has a state in the state region, or is at war with a country that holds one - i.e.
 has_overlapping_interests: Checks if country in scope has an overlapping interest marker with any of target country's interests
 has_port_country: Check if scoped country has at least one port
 has_possible_decisions: Check if a country has any possible Decisions
@@ -261,6 +262,7 @@ is_in_geographic_region: Checks if a scoped object is in a specific geographic r
 is_in_power_bloc: Checks if the country is in a Power Bloc
 is_in_same_power_bloc: Checks if the scoped country is in the same power bloc as the target scoped country
 is_in_war_together: Checks if country in scope is in war on the same side as event target
+is_independent_and_not_being_subjugated: True if the country is not a subject and no war goal to make it a subject is pending against it in any of its wars
 is_indirect_subject_of: Checks if country in scope is an indirect subject (subject-of-subject) of event target
 is_insurrectionary: Check if country, movement or IG is insurrectionary
 is_involved_in_journal_entry: Check if the country is involved in a specific journal entry
@@ -319,7 +321,9 @@ number_of_claims: The number of claims on foreign states the country has
 number_of_possible_decisions: The number of possible Descision a Country can take
 overlord_can_decrease_subject_autonomy: Check if an overlord can decrease a subject autonomy
 owes_obligation_to: Checks if country in scope owes a obligation to event target
+owns_entire_or_is_contesting_state_region: Check if country owns the entire region, or is at war with a country that holds a state in it - i.e.
 owns_entire_state_region: Check if country owns entire region
+owns_entire_state_region_uncontested: Check if country owns the entire region and no war goal in any of its wars is targeting a state in it
 owns_treaty_port_in: Does country own the treaty port in assigned state region
 play_participant_has_war_goal_of_type_against: Checks if scope country holds a war goal of a specific type targeting a specific country in any diplomatic play
 play_side_has_war_goal_of_type_against: Checks if any country on the same side as scope country in any diplomatic play holds a war goal of a specific type targeting a specificcountry
@@ -382,6 +386,7 @@ total_population_including_subjects_share: Compares the total population in the 
 total_population_share: Compares the total population of a given country's share of the global population
 transfer_money_gross_income: Does the country have this amount of gross income (income before expenses) from money transfer treaties
 transfer_money_net_income: Does the country have this amount of net income (income after expenses) from money transfer treaties
+war_may_restore_country: Checks if a war the scoped country is committed to has a war goal that would put the specified country back on the map, such as the mirror goal created when a country is annexed mid-war
 war_participant_has_war_goal_of_type_against: Checks if scope country holds a war goal of a specific type targeting a specific country in any war
 war_side_has_war_goal_of_type_against: Checks if any country on the same side as scope country in any war holds a war goal of a specific type targeting a specific country
 war_support_from_war_goals: Signed war support change per beat for the scoped country from war goals it holds (positive) or is targeted by (negative), by progress tier

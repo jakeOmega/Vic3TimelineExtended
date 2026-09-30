@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.14.4). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 # Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a fixed description: the engine dump prints unrelated script there, reshuffled on every dump.
 
 none|active_lens|Checks if the specified lens is open
@@ -1008,7 +1008,7 @@ company|company_is_prosperous|Check if a company is considered to be prosperous
 company|company_owned_levels|Check the number of owned building levels of the scoped company
 company|company_productivity|Check the productivity of the scoped company
 company|company_prosperity|Check the prosperity of a company
-ai_regional_objective|completion_date|Compare to the date the scoped AI regional objective was completed Uncompleted objectives have no completion date, so check is_completed first
+ai_regional_objective|conclusion_date|Compare to the date the scoped AI regional objective was concluded Only concluded objectives have a date, so check is_completed or is_failed first
 country|construction_queue_duration|Compares the maximum of all the very roughly approximated weeks remaining to finish the constructions in any queue:
 country|construction_queue_government_duration|Compares the very roughly approximated weeks remaining to finish the constructions in the government queue:
 country|construction_queue_num_queued_government_levels|Compares the number of government constructed building levels in the construction queue
@@ -1126,7 +1126,7 @@ law|has_amendment|Check if scoped law has an amendment of the given type
 country|has_any_law_commitment|Checks if a country has a commitment to enact any law
 country|has_any_naval_only_hostilities|Check if the country has naval hostilities with any country it is not also at war with
 country,state,state_region|has_any_potential_strait_province|Check if a state, state region or country owns any potential strait province
-country|has_any_regional_objective|Checks if the scoped country's AI has a regional objective in a strategic region, completed or not Leave out type to match an objective of any type...
+country|has_any_regional_objective|Checks if the scoped country's AI has a regional objective in a strategic region, whatever its status Leave out type to match an objective of any t...
 country|has_any_secessionists_broken_out|Check if the country has secessionists broken out
 country|has_any_secessionists_growing|Check if the country has any secessionists growing
 country|has_any_strait_control|Check if the scoped country owns a strait province with naval fortification
@@ -1211,6 +1211,7 @@ interest_group|has_negotiated|Checks whether the interest group has finished neg
 country|has_objective|Checks if the scoped country has a certain objective type
 pop|has_ongoing_assimilation|Checks if the scoped pop has ongoing cultural assimilation
 pop|has_ongoing_conversion|Checks if the scoped pop has ongoing religious conversion
+country|has_or_is_contesting_state_in_state_region|Check if country has a state in the state region, or is at war with a country that holds one - i.e.
 country|has_overlapping_interests|Checks if country in scope has an overlapping interest marker with any of target country's interests
 container|has_parent|True if the script container in scope has a parent
 amendment_type|has_parent_law|Check if the amendment type has a parent law
@@ -1274,6 +1275,7 @@ none|has_variable|Checks whether the current scope has the specified variable se
 none|has_variable_list|Checks whether the current scope has the specified variable list set
 none|has_variable_map|Checks whether the current scope has the specified variable map
 war|has_war_goal|Checks if war has a certain war goal type
+war|has_war_goal_at_risk_of_being_dropped|Checks if the target country holds a war goal in the scoped war that is at risk of being dropped for having been uncontested for too long
 war|has_war_support|Checks the war support of the target country in the scoped war
 war|has_war_support_change|Checks the war support change of the target country in the scoped war
 country|has_war_with|Checks if country in scope is at war with event target
@@ -1307,6 +1309,7 @@ invasion|invasion_has_marines|Checks if any combat unit in the scoped invasion's
 country|investment_pool|Does the country have this amount of money saved in its investment pool
 country|investment_pool_gross_income|Does the country have this amount of gross income (income before expenses) for its investment pool
 country|investment_pool_net_income|Does the country have this amount of net income (income after expenses) for its investment pool
+ai_regional_objective|is_active|Checks if the scoped AI regional objective is still being pursued, meaning it has neither completed nor failed
 country|is_adjacent_to_country|Checks if country in scope is adjacent to a target country
 market|is_adjacent_to_market|Checks if market in scope is adjacent to a target market
 country|is_adjacent_to_state|Checks if country in scope is adjacent to a target state
@@ -1368,6 +1371,7 @@ treaty_options,treaty|is_equal_exchange_for|Checks if the scoped treaty is consi
 treaty_options,treaty|is_exchanging_obligations|Checks if the scoped treaty is exchanging any obligations, scope:some_treaty
 country|is_expanding_institution|Are you expanding an institution
 market_goods|is_exported_to|Whether the scoped market goods are being exported to the target market by the local market
+ai_regional_objective|is_failed|Checks if the scoped AI regional objective has failed or been invalidated
 character|is_female|Check if character is female
 war|is_fighting_overlord_in_war|Checks if the specified country is a subject fighting its own overlord in the scoped war
 ship|is_flagship|Checks if the scoped ship is assigned as the flagship
@@ -1409,6 +1413,7 @@ pop|is_in_starvation|Check if the pop is in starvation (mild or severe)
 character|is_in_void|Check if character is in the void
 country|is_in_war_together|Checks if country in scope is in war on the same side as event target
 state|is_incorporated|Check if state is
+country|is_independent_and_not_being_subjugated|True if the country is not a subject and no war goal to make it a subject is pending against it in any of its wars
 country|is_indirect_subject_of|Checks if country in scope is an indirect subject (subject-of-subject) of event target
 country,interest_group,political_movement|is_insurrectionary|Check if country, movement or IG is insurrectionary
 character|is_interest_group_leader|Checks if character is the leader of their interest group is_interest_group_Leader = bool
@@ -1638,7 +1643,9 @@ military_formation|organization|Compares the Organization of the Military Format
 military_formation|organization_target|Compares the target Organization of the Military Formation in scope
 country|overlord_can_decrease_subject_autonomy|Check if an overlord can decrease a subject autonomy
 country|owes_obligation_to|Checks if country in scope owes a obligation to event target
+country|owns_entire_or_is_contesting_state_region|Check if country owns the entire region, or is at war with a country that holds a state in it - i.e.
 country|owns_entire_state_region|Check if country owns entire region
+country|owns_entire_state_region_uncontested|Check if country owns the entire region and no war goal in any of its wars is targeting a state in it
 country|owns_treaty_port_in|Does country own the treaty port in assigned state region
 country|play_participant_has_war_goal_of_type_against|Checks if scope country holds a war goal of a specific type targeting a specific country in any diplomatic play
 country|play_side_has_war_goal_of_type_against|Checks if any country on the same side as scope country in any diplomatic play holds a war goal of a specific type targeting a specificcountry
@@ -1825,6 +1832,7 @@ none|variable_map_size|Checks the size of a variable map Where X is the name of 
 war|war_duration_months|Number of months the scoped war has lasted scope:war
 war|war_goal_time_ramp|How much of their full weight war-goal-driven war support factors currently carry, from zero early in the war to one once it is old
 war|war_has_active_peace_deal|True if the war has a proposed peace deal
+country|war_may_restore_country|Checks if a war the scoped country is committed to has a war goal that would put the specified country back on the map, such as the mirror goal cre...
 country|war_participant_has_war_goal_of_type_against|Checks if scope country holds a war goal of a specific type targeting a specific country in any war
 country|war_side_has_war_goal_of_type_against|Checks if any country on the same side as scope country in any war holds a war goal of a specific type targeting a specific country
 war|war_support_from_acceptance_of_dead|Determines the war support change a country gets from their degree of cultural acceptance of manpower killed in the war, regardless of what side th...

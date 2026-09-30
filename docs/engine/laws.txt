@@ -383,6 +383,8 @@ Right to Information:
 	Open Government [progressiveness=50] - Unlocking Technology: Knowledge Economy
 		Government operates with transparency and accountability, proactively providing public access to information, decision-making processes, and official records.
 Criminal Justice:
+	Penal Labor Camps [progressiveness=-50] - Unlocking Technology: Mass Surveillance
+		Convicts and political prisoners serve their sentences as forced labor in state camps, digging the mines, felling the forests and working the plantations. The camps cow the opposition and pay part of their own way, but a government that runs them loses the trust of its own people.
 	Punishment-Focused Criminal Justice
 		A criminal justice system that emphasizes punishment and retribution, with a focus on deterrence and incapacitation.
 	Restorative Justice [progressiveness=25] - Unlocking Technology: Behaviorism
@@ -430,7 +432,7 @@ Minority Rights:
 		The government implements policies to address historical [concept_discrimination] and promote equal opportunities for minority groups.
 State Power:
 	Traditional Vassalage [progressiveness=-10]
-		The state is a tapestry of personal oaths and traditional [Concept('concept_obligation', 'obligations')].
+		The state is a tapestry of personal oaths and traditional obligations.
 	Unitary State
 		All administrative power is concentrated in the hands of the central government.
 	Federal System [progressiveness=10]
