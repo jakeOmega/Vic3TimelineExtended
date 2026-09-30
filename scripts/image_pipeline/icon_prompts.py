@@ -1286,17 +1286,17 @@ ICONS: dict[str, dict[str, dict]] = {
         "colony_jovian": {"subject": "a small round cratered grey-and-ochre moon in front of the curved edge of a "
                                      "large banded orange-and-tan gas giant planet",
                           "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
-        "colony_venus": {"subject": "a round yellow-ochre planet wrapped in thick swirling yellow clouds",
-                         "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
+        "colony_venus": {"subject": "a smooth glossy round yellow-ochre planet with soft swirled cloud bands across it",
+                         "seed": 3, "now": f"{_GI}/state_status_icons/colonizable.dds"},
         "colony_mercury": {"subject": "a small round grey-brown cratered planet, bright on one side and dark on the other",
                            "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
-        "colony_saturnian": {"subject": "a small round hazy orange moon in front of a wide tilted tan ring of a "
-                                        "ringed planet",
-                             "seed": 2, "now": f"{_GI}/state_status_icons/colonizable.dds"},
+        "colony_saturnian": {"subject": "a round hazy orange planet with one wide flat tan ring tilted at a steep "
+                                        "angle around its middle, the ring passing in front of the planet",
+                             "seed": 3, "now": f"{_GI}/state_status_icons/colonizable.dds"},
         "colony_uranian": {"subject": "a small round icy grey-blue moon with a thin cyan ring tilted steeply behind it",
                            "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
         "colony_neptunian": {"subject": "a small round pink-and-blue moon with a dark streak of geyser plumes across it",
-                             "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
+                             "seed": 2, "now": f"{_GI}/state_status_icons/colonizable.dds"},
         "colony_dwarf": {"subject": "a small round tan-and-rust-brown dwarf planet with a pale heart-shaped patch and "
                                     "one tiny grey moon beside it",
                          "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},

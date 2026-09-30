@@ -72,11 +72,11 @@ One icon for each of nine kinds of world, not one for each of the 34 worlds or 6
 | Mars | Valles Marineris, Olympus Mons, Hellas, Utopia, Arcadia | a rust-red planet with canyon scars and a pale polar cap | `colony_mars.dds` |
 | Asteroid | Ceres, Vesta, Psyche, Pallas, Hygiea | a lumpy, cratered grey-brown rock | `colony_asteroid.dds` |
 | Jovian moon | Io, Europa, Ganymede, Callisto, Himalia, Amalthea | a cratered moon before a banded orange gas giant | `colony_jovian.dds` |
-| Venus | Venus | a yellow-ochre planet in swirling cloud | `colony_venus.dds` |
-| Mercury | Mercury | a small cratered planet, bright on one side | `colony_mercury.dds` |
-| Saturnian moon | Titan, Enceladus, Rhea, Mimas, Iapetus | a hazy orange moon before a tan ring | `colony_saturnian.dds` |
-| Uranian moon | Titania, Oberon, Miranda, Ariel | an icy grey-blue moon with a steep cyan ring behind | `colony_uranian.dds` |
-| Neptunian moon | Triton, Proteus | a pink-and-blue moon streaked with geyser plumes | `colony_neptunian.dds` |
+| Venus | Venus | a smooth pale-yellow planet with soft cloud bands | `colony_venus.dds` |
+| Mercury | Mercury | a grey planet of cracked rock, shaded on its lower right | `colony_mercury.dds` |
+| Saturnian moon | Titan, Enceladus, Rhea, Mimas, Iapetus | a hazy orange planet with a tan ring tilted across its middle | `colony_saturnian.dds` |
+| Uranian moon | Titania, Oberon, Miranda, Ariel | an icy grey-blue moon with dark craters | `colony_uranian.dds` |
+| Neptunian moon | Triton, Proteus | a pink moon with a dark geyser streak across it | `colony_neptunian.dds` |
 | Dwarf planet | Pluto, Eris, Makemake, Haumea, Sedna | a tan-and-brown dwarf planet with a pale heart patch and a tiny moon | `colony_dwarf.dds` |
 
 The kinds group worlds by the body they orbit. Each falls inside one stage (Mars and the asteroids in stage 1, the Jovian moons and Venus in 2, Mercury and the Saturnian moons in 3, the Uranian and Neptunian moons in 4, the dwarf planets in 5), so no kind's icon sits under two stage headings. A world that is mostly white or pale loses its body in the cut-out, so Venus and the dwarf planet are drawn in colour. The modifiers' own icons (`icon =` on the 68 `sr_colony_*` static modifiers) are not these: they are the shared lightbulb and coins glyphs that say what kind of effect it is.
