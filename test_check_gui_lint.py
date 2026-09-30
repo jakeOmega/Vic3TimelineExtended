@@ -37,6 +37,8 @@ NEW_GUI = BOM + """types t {
 		textbox = { text = "[SelectLocalization( GetScriptedGui('known_sgui').IsShown( GuiScope.End ), 'known_key', 'gone_key' )]" }
 		icon = { texture = "gfx/interface/nope.dds" }
 		button = { onclick = "[GetVariableSystem.Toggle('te_new_details')]" }
+		widget = { datacontext = "[MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_x')]" }
+		widget = { datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_x')]" }
 	}
 """
 
@@ -92,6 +94,7 @@ class LintTest(unittest.TestCase):
         self.assertIn("'gone_key'", errs)
         self.assertNotIn("known_key", errs)
         self.assertNotIn("known_sgui", errs)
+        self.assertEqual(errs.count("GetJournalEntry needs a non-const Country"), 1)
 
     def test_unproven_warnings(self):
         warns = " | ".join(self.msgs("gui/new.gui", "WARN"))

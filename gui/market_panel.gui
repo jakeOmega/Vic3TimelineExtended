@@ -1448,7 +1448,10 @@ types market_panel
 				# the tab is the journal's view. On another market the market's
 				# parts show that market, read from its leader's entry
 				# (Country.GetJournalEntry, a promote to JournalEntry in the 1.14
-				# data types): the overview's role, treaty, emissions, capture and
+				# data types, reached as Market.AccessMarketCapital.AccessOwner:
+				# GetJournalEntry needs a non-const country, and Market.GetOwner is
+				# const, which failed at load and crashed the panel; gotcha #35 in
+				# the GUI guide): the overview's role, treaty, emissions, capture and
 				# pie cells, and the Mitigation Policies with every Adopt and
 				# Repeal greyed. The world's parts stay the player's: the
 				# temperature, Top Emitters, History and How Global Warming Works.
@@ -1544,7 +1547,7 @@ types market_panel
 									spacing = 10
 
 									flowcontainer = {
-										datacontext = "[MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_global_warming')]"
+										datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_global_warming')]"
 										parentanchor = hcenter
 
 										gw_text = {
@@ -1555,7 +1558,7 @@ types market_panel
 
 									te_gw_overview_panel = {
 										blockoverride "gw_market_context" {
-											datacontext = "[MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_global_warming')]"
+											datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_global_warming')]"
 										}
 									}
 								}
@@ -1575,7 +1578,7 @@ types market_panel
 										ignoreinvisible = yes
 
 										flowcontainer = {
-											datacontext = "[MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_global_warming')]"
+											datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_global_warming')]"
 											parentanchor = hcenter
 											direction = vertical
 											ignoreinvisible = yes
