@@ -1,5 +1,5 @@
 """The Grand Monuments panel: section order, collapse defaults, state-gated
-lines, placeholder icons and display values (style pass 2026-09-29,
+lines, icons and display values (style pass 2026-09-29,
 docs/guides/gui_style_guide.md; the UN's test_un_layout.py is the model).
 
 Run: python3 -m unittest test_grand_monuments_layout -v
@@ -38,15 +38,15 @@ FRACS = {"prestige": "standing", "legitimacy": "regime", "culture": "culture",
          "leader": "leader", "religious": "religious", "war_memorial": "war_memorial",
          "artistic": "artistic", "scientific": "scientific", "industrial": "industrial"}
 
-# Placeholder icons (docs/systems/grand_monuments_gui_icons.md): status code or
-# cell -> vanilla texture. Swapping in the real art is one path here and one in
-# the widget.
-_GI = "gfx/interface/icons/generic_icons"
-ICONS = {1: f"{_GI}/undecided_icon.dds",
-         2: f"{_GI}/green_checkmark.dds",
-         3: f"{_GI}/maybe_icon.dds",
-         4: f"{_GI}/disapproval_icon.dds",
-         "hard_times": f"{_GI}/warning.dds"}
+# The panel's icons (docs/systems/grand_monuments_gui_icons.md; the art is
+# PR #586's): status code or cell -> texture. Remaking one keeps its file
+# name, so neither this table nor the widget changes.
+_GM = "gfx/interface/icons/gm_icons"
+ICONS = {1: f"{_GM}/status_undedicated.dds",
+         2: f"{_GM}/status_upheld.dds",
+         3: f"{_GM}/status_heritage.dds",
+         4: f"{_GM}/status_contested.dds",
+         "hard_times": f"{_GM}/hard_times.dds"}
 # The overview's four status cells: count value -> status code (for its icon).
 CELLS = {"gm_disp_count_undedicated": 1, "gm_disp_count_upheld": 2,
          "gm_disp_count_heritage": 3, "gm_disp_count_contested": 4}
@@ -345,12 +345,17 @@ class IconsTest(unittest.TestCase):
         hard = re.search(r'tooltip = "gm_je_ov_hard_times_tt" texture = "([^"]+)" \}', ov)
         self.assertEqual(hard.group(1), ICONS["hard_times"])
 
-    def test_every_placeholder_is_listed(self):
+    def test_every_icon_is_the_mods_own_and_listed(self):
+        """The #586 art is wired: every texture in the widget is a
+        gm_icons file in ICONS, and the icon list records each one. No vanilla
+        placeholder is left."""
         doc = _read(ICONS_DOC)
         for path in set(ICONS.values()):
-            self.assertIn(f"`{path}`", doc, path)
+            self.assertIn(f"`{os.path.basename(path)}`", doc, path)
+        self.assertIn(f"`{_GM}/`", doc)
         gui_textures = set(re.findall(r'texture = "([^"]+)"', _strip_comments(_gui())))
         self.assertEqual(gui_textures, set(ICONS.values()), "a texture in the widget is not in ICONS")
+        self.assertNotIn("generic_icons", _strip_comments(_gui()), "a vanilla placeholder is left")
 
 
 class DisplayValuesTest(unittest.TestCase):
