@@ -40,6 +40,12 @@ climate policies at 0.5 °C. It activates for everyone once the anomaly reaches
 the world cools again. The temperature bar at its top runs to 4 °C, but the
 penalties keep growing past that.
 
+The same panels appear as a Climate tab in the Market panel, and a change made
+in one shows in the other. The tab is the same whichever market the panel
+shows, since the warming and the list of top emitters are the world's. It is
+grayed until the journal entry is active; hover it for what is still missing.
+The tab ends with an Open Journal Entry button.
+
 The anomaly sets the warming tier, which the entry shows as a thermometer icon
 with the tier's name beneath it:
 

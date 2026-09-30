@@ -20,9 +20,11 @@
 ###   widget_je_gw_reference -> custom_widget_container_3 (below the grid)
 ###       te_gw_reference_sections: History (the two charts, open) and How
 ###       Global Warming Works (every explanation, collapsed).
-### Each section is a type, so a tab in a vanilla panel can compose the same
-### pieces later (style rule 9); the roots are thin wrappers that repeat the
-### composers' [JournalEntry.IsActive] gate.
+### Each section is a type, so the Market panel's Climate tab
+### (gui/market_panel.gui) composes the same pieces (style rule 9); the roots
+### are thin wrappers that repeat the composers' [JournalEntry.IsActive] gate.
+### Nothing here may read the panel's ambient Market or Country: under the tab
+### it is the market the panel shows (MarketTabTest).
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_global_warming_layout.py).

@@ -33,6 +33,10 @@ The list asked for a closed crate for Idle. The art keeps the one open crate for
 
 One file serves both states: the dimmed state is the same texture at 25% alpha, the panel's lit/dimmed convention (style rule 4).
 
+## The Market panel's Reserve tab
+
+The tab's label, "Reserve" (`gui/market_panel.gui`, the sixth slot), starts with the Storing crate, `status_storing.dds`, as the text icon `te_tab_strategic_reserve` in `gui/zzz_extra_goods_texticons.gui` (25 px, the goods icons' size and offset): goods going into store, which is what the reserve is for. It is the inventory's own file, so no new art. It is in the label, not in the strip's `*_button_icon` block, because at six tabs an icon beside the centred name would cover its first letters (`gui_modding_guide.md` gotcha #31). `MarketTabTest` in `test_strategic_reserve_layout.py` holds the text icon to its file.
+
 ## Interface chrome
 
 The fill bar's markers use vanilla's `gfx/interface/progressbar/progressbar_marker.dds`, the marker the UN authority bar uses. It is chrome rather than an icon, and stays.
