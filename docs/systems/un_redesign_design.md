@@ -800,11 +800,20 @@ covert price (§7.4) and the mission forms of §5.2's peacekeeping row.
      host did not start (`un_msn_war_at_open`) is not failed by it; the flag clears at the
      host's first month of peace, and peacekeeping stalls meanwhile. A stabilisation mission
      also fails when its host **expels** it (`un_events.102` B, resenting the peacekeepers).
-   - **Lapses** after 60 months; when its host loses the state or stops existing; when a host
+   - **Lapses** when its host loses the state or stops existing; when a host
      that requested it leaves the UN (`un_msn_requested`); or, for peacekeeping and
      stabilisation, when no member has joined it within 6 months (a resolution opens its
      mission before the pledges in `un_vote.3` arrive). A mission sent to a collapse or a famine
      may serve a country outside the UN.
+   - **No time limit** (owner's ruling, 2026-09-30; the first design lapsed a mission after 60
+     months). A mission the work of which is not done goes on while it keeps contributors, so a
+     member that keeps paying for its contingent can keep it in the field for ever. Time works on
+     the AI instead: `un_mission_ai_join_score` loses `un_mission_ai_age_weight` (0.5) points a
+     month of the mission's age, and the option that joins a mission in `un_events.4` A and
+     `un_events.7` A has its `ai_chance` halved at 36, 72 and 120 months (`un_mission_hosts_aged`).
+     Contingents already in the field stay; a pledge or an appeal's contributors never leave on
+     their own, so an AI-staffed mission that cannot finish stays until its host is attacked or
+     loses the state.
    - **Success:** delivery +2 (institutional, reason 19), standing +3 for each contributor
      (reason 34), relations +15 with the host, and word to all of them.
    - **Failure:** credibility −1 (reason 20).
@@ -2402,7 +2411,7 @@ of this file, as `monetary_policy_design.md` does.
 | space leader / laggard | the most milestones, at least 3 / 3 or more behind (phase 5) | §5.3 |
 | headquarters host's network growth in members | ×1.25 (phase 5) | §7.4 |
 | lending facility: loan / repayment / score | min(2% of GDP, 26 weeks of the budget) / 110% over 5 years / 45 (phase 5) | §8.1 |
-| missions: register / lapse / peacekeeping / stabilisation / aid | 12 / 60 months / 24 months of peace / 12 months after the collapse (48 during) / no famine and SoL 10 after 6 months (phase 6) | §9 |
+| missions: register / lapse / peacekeeping / stabilisation / aid | 12 / no time limit (was 60 months) / 24 months of peace / 12 months after the collapse (48 during) / no famine and SoL 10 after 6 months (phase 6) | §9 |
 | mission strength | E × (1 − 0.5 × arrears share) × (0.75 + 0.25 × contributors, up to 3) (phase 6) | §9 |
 | mission outcomes | success: delivery +2, contributors' standing +3; failure: credibility −1 (phase 6) | §9 |
 | contributors' network growth in a host | ×1.25 (phase 6) | §7.4 |
