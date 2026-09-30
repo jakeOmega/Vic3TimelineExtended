@@ -500,5 +500,189 @@ class ValueColourTest(unittest.TestCase):
                 self.assertTrue(loc[f"je_ch_widget_bd_{part}_value"].startswith("#R "))
 
 
+COMPONENT_BARS = {   # breakdown row -> (right-half fraction, left-half fraction) script values
+    "art": ("ch_disp_bar_art_pos", None),
+    "prestige": ("ch_disp_bar_prestige_pos", None),
+    "sol": ("ch_disp_bar_sol_pos", "ch_disp_bar_sol_neg"),
+    "tech": ("ch_disp_bar_tech_pos", None),
+    "monuments": ("ch_disp_bar_monuments_pos", None),
+    "megaprojects": ("ch_disp_bar_megaprojects_pos", None),
+    "modifiers": ("ch_disp_bar_modifiers_pos", None),
+    "infamy": (None, "ch_disp_bar_infamy_neg"),
+    "instability": (None, "ch_disp_bar_instability_neg"),
+}
+
+
+class PullBarTest(unittest.TestCase):
+    """The breakdown as UN pillar rows (owner, 2026-09-30): a bar per component,
+    zero at the centre line, the ranges in script values."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(WIDGET)
+        cls.sec = _type_body(cls.gui, "te_ch_sec_breakdown")
+        cls.values = _read(VALUES)
+
+    def _row(self, part):
+        m = re.search(rf'ch_bar_row = \{{\s*tooltip = "je_ch_widget_bd_{part}_tt"', self.sec)
+        self.assertTrue(m, part)
+        return _braced(self.sec, self.sec.index("{", m.start()))
+
+    def test_each_component_has_its_bar_and_tooltip(self):
+        for part, (pos, neg) in COMPONENT_BARS.items():
+            with self.subTest(part=part):
+                row = self._row(part)
+                self.assertIn("ch_pull_bar = {", row)
+                for block, value in (("pos_value", pos), ("neg_value", neg)):
+                    if value:
+                        self.assertIn(f"ScriptValue('{value}')", row)
+                    else:
+                        self.assertNotIn(f'blockoverride "{block}"', row)
+                self.assertIn(f"je_ch_widget_bd_{part}_tt", _loc())
+
+    def test_totals_have_no_bar(self):
+        for part in ("raw", "mult"):
+            with self.subTest(part=part):
+                self.assertNotIn("ch_pull_bar", self._row(part))
+
+    def test_the_fractions_are_clamped_and_scaled_by_named_ranges(self):
+        for part, (pos, neg) in COMPONENT_BARS.items():
+            for value, side, lo, hi in ((pos, "max", "0", "1"), (neg, "min", "-1", "0")):
+                if not value:
+                    continue
+                with self.subTest(value=value):
+                    body = _block(self.values, value)
+                    self.assertIn(f"divide = ch_bar_{part}_{side}", body)
+                    self.assertIn(f"min = {lo}", body)
+                    self.assertIn(f"max = {hi}", body)
+                    self.assertRegex(self.values, rf"(?m)^ch_bar_{part}_{side} = \{{")
+
+    def test_the_owners_ranges(self):
+        """Art and Prestige 0-100, SoL -5 to 20 (its own clamp), Instability -30 (turmoil
+        -10 plus civil war -20); Infamy -10, the owner's "about -100" read as infamy points."""
+        for name, body in (("ch_bar_art_max", "value = 100"), ("ch_bar_prestige_max", "value = 100"),
+                           ("ch_bar_sol_min", "value = cultural_pull_sol_min"),
+                           ("ch_bar_sol_max", "value = cultural_pull_sol_max"),
+                           ("ch_bar_instability_min", "value = cultural_pull_turmoil_factor"),
+                           ("ch_bar_infamy_min", "multiply = cultural_pull_infamy_factor")):
+            with self.subTest(range=name):
+                self.assertIn(body, _block(self.values, name))
+
+    def test_the_bar_draws_red_left_and_green_right(self):
+        bar = _type_body(self.gui, "ch_pull_bar")
+        neg = bar[bar.index('block "neg_value"') - 600:bar.index('block "neg_value"')]
+        self.assertIn('noprogresstexture = "gfx/interface/backgrounds/white.dds"', neg)   # the reverse hack
+        self.assertIn("min = -1", neg)
+        self.assertIn("color = { 0.78 0.31 0.28 1.0 }", neg)
+        pos = bar[bar.index('block "pos_value"') - 600:bar.index('block "pos_value"')]
+        self.assertIn('progresstexture = "gfx/interface/backgrounds/white.dds"', pos)
+        self.assertIn("color = { 0.36 0.68 0.40 1.0 }", pos)
+        self.assertNotRegex(self.sec, r"\bmin = |\bmax = ", "a range in the .gui")
+
+
+class ArtMultiplierTest(unittest.TestCase):
+    """The art multiplier on its own line, under a name that says what it boosts."""
+
+    def test_its_line_follows_the_art_row(self):
+        sec = _type_body(_read(WIDGET), "te_ch_sec_breakdown")
+        m = re.search(r"ch_bar_subrow = \{\s*tooltip = \"je_ch_widget_bd_art_mult_tt\"\s*blockoverride \"row_visible\" \{\s*visible = \"\[(.*?)\]\"", sec, re.S)
+        self.assertTrue(m)
+        self.assertIn("NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display'), '(CFixedPoint)0' )", m.group(1))
+        self.assertLess(sec.index("je_ch_widget_bd_art_dr_tt"), m.start())
+        self.assertLess(m.start(), sec.index("je_ch_widget_bd_prestige_tt"))
+
+    def test_the_modifier_is_named_for_what_it_boosts(self):
+        loc = _loc()
+        self.assertEqual(loc["country_cultural_hegemony_art_mult"], "Cultural Pull from Art")
+        self.assertEqual(loc["je_ch_widget_bd_art_mult_label"], "$country_cultural_hegemony_art_mult$")
+
+
+# ---- Rule 1 (round 3): nothing a player reads ends in "..." ----------------------
+# Units per character, from the owner's screenshots (round3_rules.md): the large
+# row-name font about 10, the medium table font about 8.6. The small font is not
+# measured; 7.4 scales medium by the large/medium ratio. Plus 10% margin.
+UNITS = {"large": 10.0, "medium": 8.6, "small": 7.4}
+MARGIN = 1.1
+MODEL_KEYS = ["communist", "anarchist", "fascist", "corporatist", "socialist", "royalist_absolutist",
+              "royalist_constitutional", "religious", "reactionary", "military_junta", "liberal", "other",
+              "technocratic", "republican", "developmentalist_junta"]
+# (key, cell width, font, worst-case data values in order)
+STATIC_LABELS = (
+    [(f"je_ch_widget_bd_{p}_label", 176, "medium", ()) for p in
+     ("art", "prestige", "sol", "tech", "monuments", "megaprojects", "modifiers", "infamy", "instability", "raw", "mult")]
+    + [("je_ch_widget_bd_art_mult_label", 332, "medium", ())]
+    + [(f"je_ch_widget_prog_{p}", 250, "large", ()) for p in ("outreach", "institutes", "media", "protectionism")]
+    + [("je_ch_widget_funding_label", 250, "large", ()),
+       ("ch_policy_status_active", 80, "medium", ()), ("ch_policy_status_idle", 80, "medium", ())]
+    + [(f"ch_policy_{p}_{s}", 112, "large", ()) for p in ("outreach", "institutes", "media", "protectionism") for s in ("on", "off")]
+    + [(f"je_ch_ov_tier_{n}", 108, "small", ()) for n in range(6)]
+    + [("je_ch_ov_rank_label", 108, "small", ()), ("je_ch_ov_benchmark_label", 108, "small", ()),
+       ("je_ch_ov_leaders_label", 222, "medium", ())]
+    + [(k, 440, "large", ()) for k in ("je_ch_widget_programmes_header", "je_ch_widget_breakdown_header",
+                                        "je_ch_widget_board_header", "je_ch_widget_models_header",
+                                        "je_ch_widget_history_header", "je_ch_how_header")]
+)
+# Dynamic text, at its longest: the political models' short names (the longest are
+# "Constitutional", "Military Junta" and "Technocratic"; the full names, up to
+# "Liberal / Progressive Democratic", are on hover), and numbers at their widest.
+DYNAMIC_LABELS = (
+    [(f"je_ch_ov_model_{m}", 116, "small", ()) for m in MODEL_KEYS]          # the overview's model cell
+    + [(f"je_ch_ov_model_{m}", 216, "medium", ()) for m in MODEL_KEYS]       # the models legend
+    + [("je_ch_ov_rank_value", 108, "large", ("999", "999")),
+       ("je_ch_ov_share_label", 156, "medium", ("100.0",)),                 # 180 cell less the 20 px arrow and 4 spacing
+       ("je_ch_widget_funding_value", 80, "medium", ("10", "10")),
+       ("je_ch_widget_board_us", 474, "medium", ("999", "999")),
+       ("je_ch_widget_bd_art_value", 60, "medium", ("150.0",)),
+       ("je_ch_widget_bd_prestige_value", 60, "medium", ("100.0",)),
+       ("je_ch_widget_bd_sol_value", 60, "medium", ("-5.0",)),
+       ("je_ch_widget_bd_tech_value", 60, "medium", ("40.0",)),
+       ("je_ch_widget_bd_monuments_value", 60, "medium", ("150",)),
+       ("je_ch_widget_bd_megaprojects_value", 60, "medium", ("21",)),
+       ("je_ch_widget_bd_modifiers_value", 60, "medium", ("30.0",)),
+       ("je_ch_widget_bd_infamy_value", 60, "medium", ("-20.0",)),
+       ("je_ch_widget_bd_instability_value", 60, "medium", ("-30.0",)),
+       ("je_ch_widget_bd_raw_value", 60, "medium", ("9999.9",)),
+       ("je_ch_widget_bd_mult_value", 60, "medium", ("999",)),
+       ("je_ch_widget_bd_art_mult_value", 60, "medium", ("+100",))]
+    + [(f"je_ch_widget_models_share_{m}", 60, "medium", ("100.0",)) for m in MODEL_KEYS]
+)
+
+
+def _visible(loc, key, data=(), depth=0):
+    """The text a key shows: splices and concept names resolved, data replaced by
+    the worst case, formatting codes stripped."""
+    val = loc[key]
+    val = re.sub(r"\$([\w.]+)\$", lambda m: _visible(loc, m.group(1), (), depth + 1), val)
+    val = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", val)
+    val = re.sub(r"\[(concept_\w+)\]", lambda m: _visible(loc, m.group(1), (), depth + 1), val)
+    it = iter(data)
+    val = re.sub(r"\[[^\[\]]*(?:\[[^\[\]]*\][^\[\]]*)*\]", lambda m: next(it, "0"), val)
+    val = val.replace("#!", "")
+    val = re.sub(r"#[A-Za-z]+ ", "", val)
+    return val
+
+
+class LabelBudgetTest(unittest.TestCase):
+    def test_every_label_fits_its_cell(self):
+        loc = _loc()
+        for key, width, font, data in STATIC_LABELS + DYNAMIC_LABELS:
+            text = _visible(loc, key, data)
+            with self.subTest(key=key, text=text):
+                self.assertLessEqual(len(text) * UNITS[font] * MARGIN, width)
+
+    def test_the_cells_are_the_widths_the_budget_assumes(self):
+        gui = _read(WIDGET)
+        for type_name, sizes in (("ch_bar_row", ["176 22", "164 22", "60 22"]),
+                                 ("ch_bar_subrow", ["348 20", "60 20"]),
+                                 ("ch_programme_row", ["250 26", "80 26"]),
+                                 ("ch_model_legend_row", ["216 20", "60 20"]),
+                                 ("te_ch_ov_pie", ["180 108"])):
+            body = _type_body(gui, type_name)
+            for size in sizes:
+                with self.subTest(type=type_name, size=size):
+                    self.assertIn(f"size = {{ {size} }}", body)
+        self.assertEqual(_read(WIDGET).count("size = { 118 58 }"), 15)   # the model cells
+
+
 if __name__ == "__main__":
     unittest.main()
