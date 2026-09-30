@@ -15,7 +15,8 @@
 ###                             above the vanilla button grid, which is hidden
 ###                             from humans)
 ###       te_gw_status_sections: Mitigation Policies (the eight rows, with
-###       Around the World nested). Open.
+###       Around the World nested) and Top Emitters (the five markets emitting
+###       most, named by their leaders). Open.
 ###   widget_je_gw_reference -> custom_widget_container_3 (below the grid)
 ###       te_gw_reference_sections: History (the two charts, open) and How
 ###       Global Warming Works (every explanation, collapsed).
@@ -1118,6 +1119,318 @@ types global_warming_widget_types
 		}
 	}
 
+	### ======================================================================
+	### TOP EMITTERS (the owner, 2026-09-30: "show the top emitters, so the
+	### player knows who to target for climate agreements").
+	### ======================================================================
+
+	### The headings over the rows' second line, said once above the rows:
+	### the same fixed cells, 44 (the flag) + 120 + 80 + 120 + 116 (the marks)
+	### = 480. Hover a heading for how its figure is counted.
+	type gw_emitter_header = flowcontainer {
+		direction = horizontal
+
+		widget = {
+			size = { 44 20 }
+		}
+		widget = {
+			size = { 120 20 }
+
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 120
+				elide = right
+				align = right|nobaseline
+				using = fontsize_small
+				default_format = "#tooltippable"
+				text = "gw_te_head_annual"
+				tooltip = "gw_te_head_annual_tt"
+			}
+		}
+		widget = {
+			size = { 80 20 }
+
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 80
+				elide = right
+				align = right|nobaseline
+				using = fontsize_small
+				default_format = "#tooltippable"
+				text = "gw_te_head_share"
+				tooltip = "gw_te_head_share_tt"
+			}
+		}
+		widget = {
+			size = { 120 20 }
+
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 120
+				elide = right
+				align = right|nobaseline
+				using = fontsize_small
+				default_format = "#tooltippable"
+				text = "gw_te_head_cum"
+				tooltip = "gw_te_head_cum_tt"
+			}
+		}
+		widget = {
+			size = { 116 20 }
+		}
+	}
+
+	### One market, named by its leader, on two lines, so a long name (up to
+	### "United Socialist Council Republics of California", 48 characters)
+	### has the whole 480 column. The second line is fixed cells under
+	### gw_emitter_header's headings: the leader's flag (vanilla's tiny_flag:
+	### its name on hover, the country on click), the annual figure, the share
+	### of the world's, the cumulative total, and the marks: the treaty icon
+	### while an Enforce Emissions Reduction treaty binds the leader, and "Our
+	### market". The row's `visible` is on the outer widget and the leader's
+	### capital, the datacontext, on the inner one, so an empty slot is never
+	### read (the Space Race's Rivals rows and the UN's Security Council seats
+	### do the same). Hover the row for the market's members and its cut.
+	type gw_emitter_row = widget {
+		size = { 480 50 }
+		block "row_visible" {}
+
+		flowcontainer = {
+			direction = vertical
+			spacing = 2
+			block "row_context" {}
+			tooltip = "gw_te_row_tt"
+
+			textbox = {
+				minimumsize = { 480 -1 }
+				maximumsize = { 480 -1 }
+				autoresize = yes
+				elide = right
+				align = left|nobaseline
+				using = fontsize_medium
+				default_format = "#tooltippable"
+				text = "gw_te_row_name"
+			}
+			flowcontainer = {
+				direction = horizontal
+
+				widget = {
+					size = { 44 24 }
+
+					tiny_flag = {
+						parentanchor = left|vcenter
+						datacontext = "[State.GetCountry]"
+					}
+				}
+				widget = {
+					size = { 120 24 }
+
+					textbox = {
+						parentanchor = right|vcenter
+						autoresize = yes
+						max_width = 120
+						elide = right
+						align = right|nobaseline
+						using = fontsize_medium
+						default_format = "#v"
+						text = "gw_te_row_annual"
+					}
+				}
+				widget = {
+					size = { 80 24 }
+
+					textbox = {
+						parentanchor = right|vcenter
+						autoresize = yes
+						max_width = 80
+						elide = right
+						align = right|nobaseline
+						using = fontsize_medium
+						default_format = "#v"
+						text = "gw_te_row_share"
+					}
+				}
+				widget = {
+					size = { 120 24 }
+
+					textbox = {
+						parentanchor = right|vcenter
+						autoresize = yes
+						max_width = 120
+						elide = right
+						align = right|nobaseline
+						using = fontsize_medium
+						default_format = "#v"
+						text = "gw_te_row_cum"
+					}
+				}
+				widget = {
+					size = { 116 24 }
+
+					flowcontainer = {
+						direction = horizontal
+						parentanchor = right|vcenter
+						spacing = 4
+						ignoreinvisible = yes
+
+						icon = {
+							size = { 20 20 }
+							parentanchor = vcenter
+							visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('gw_disp_is_treaty_bound'), '(CFixedPoint)1' )]"
+							texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"
+							tooltip = "gw_te_treaty_tt"
+						}
+						textbox = {
+							parentanchor = vcenter
+							autoresize = yes
+							max_width = 92
+							elide = right
+							align = right|nobaseline
+							using = fontsize_small
+							block "row_ours" {}
+							text = "gw_te_ours"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### Top Emitters: the five markets emitting most, largest first, each named
+	### by its leader, with its annual and cumulative emissions and its share
+	### of the world's; "+N more" lists the rest on hover; a line says where
+	### our own market stands when it is not among the five. The rows come from
+	### the viewer's snapshot (gw_top_emitters_refresh,
+	### global_warming_effects.txt, monthly, players only); the figures on a
+	### row are read live from the listed leader. A live list, so open by
+	### default. Before the first January's figures, one line says when they
+	### arrive, as the overview's table does; in the month at most between
+	### the figures and the first snapshot, another says the list is coming
+	### (gw_disp_emitters_state).
+	type te_gw_sec_emitters = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		gw_section_header = {
+			blockoverride "left_text" {
+				text = "gw_sect_emitters"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('gw_emitters_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('gw_emitters_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('gw_emitters_closed'))]"
+			}
+		}
+
+		gw_panel = {
+			visible = "[Not(GetVariableSystem.Exists('gw_emitters_closed'))]"
+
+			gw_text = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_state'), '(CFixedPoint)0' )]"
+				align = hcenter|nobaseline
+				text = "gw_emis_pending"
+			}
+			gw_text = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_state'), '(CFixedPoint)1' )]"
+				align = hcenter|nobaseline
+				text = "gw_te_list_pending"
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				minimumsize = { 480 -1 }
+				spacing = 4
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_state'), '(CFixedPoint)2' )]"
+
+				gw_emitter_header = {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)1' )]"
+				}
+				gw_emitter_row = {
+					blockoverride "row_visible" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_1').GetState]"
+					}
+					blockoverride "row_ours" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_slot'), '(CFixedPoint)1' )]"
+					}
+				}
+				gw_emitter_row = {
+					blockoverride "row_visible" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)2' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_2').GetState]"
+					}
+					blockoverride "row_ours" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_slot'), '(CFixedPoint)2' )]"
+					}
+				}
+				gw_emitter_row = {
+					blockoverride "row_visible" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)3' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_3').GetState]"
+					}
+					blockoverride "row_ours" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_slot'), '(CFixedPoint)3' )]"
+					}
+				}
+				gw_emitter_row = {
+					blockoverride "row_visible" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)4' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_4').GetState]"
+					}
+					blockoverride "row_ours" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_slot'), '(CFixedPoint)4' )]"
+					}
+				}
+				gw_emitter_row = {
+					blockoverride "row_visible" {
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_shown'), '(CFixedPoint)5' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_5').GetState]"
+					}
+					blockoverride "row_ours" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_slot'), '(CFixedPoint)5' )]"
+					}
+				}
+				gw_text = {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_total'), '(CFixedPoint)6' )]"
+					align = hcenter|nobaseline
+					text = "gw_te_more"
+					tooltip = "[GetScriptedGui('gw_top_emitters_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.GetCapital.MakeScope ).End )]"
+				}
+				# Our own market, when it is not among the five rows.
+				gw_text = {
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_rank'), '(CFixedPoint)6' )]"
+					align = hcenter|nobaseline
+					text = "gw_te_own_rank"
+				}
+				gw_text = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gw_disp_emitters_own_rank'), '(CFixedPoint)0' )]"
+					align = hcenter|nobaseline
+					text = "gw_te_own_none"
+				}
+			}
+		}
+	}
+
 	### History: two series from the shared history store, the global anomaly
 	### (identical for everyone, stored per tracked country so it shares this
 	### country's x-axis and the chart's country datamodel) and this market's
@@ -1365,6 +1678,7 @@ types global_warming_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_gw_sec_policies = {}
+		te_gw_sec_emitters = {}
 	}
 
 	### The charts, then how it all works.
