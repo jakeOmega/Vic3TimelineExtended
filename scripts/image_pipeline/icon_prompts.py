@@ -1293,6 +1293,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "colony_saturnian": {"subject": "a round hazy orange planet with one wide flat tan ring tilted at a steep "
                                         "angle around its middle, the ring passing in front of the planet",
                              "seed": 3, "now": f"{_GI}/state_status_icons/colonizable.dds"},
+        # The pick (s1) drew no ring: its icy blue-grey colour carries the kind. Saturnian and Venus
+        # were rerolled with rewritten subjects (a face-on ring read as a plate, "wrapped in clouds"
+        # gave a crumpled rim), so their subjects describe what the picks drew.
         "colony_uranian": {"subject": "a small round icy grey-blue moon with a thin cyan ring tilted steeply behind it",
                            "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
         "colony_neptunian": {"subject": "a small round pink-and-blue moon with a dark streak of geyser plumes across it",
