@@ -16,7 +16,9 @@
 # At most one new item every this many months.
 un_docket_cadence_months = { value = 3 }
 # Assembly business with no situation behind it (the conventions' "agenda"
-# items) is taken up at most once in this many months.
+# items) is taken up at most once in this many months (half as many while a
+# great power member stands Respected or better: un_docket_agenda_months_value,
+# un_propose_pace_values.txt).
 un_docket_agenda_months = { value = 24 }
 # How many members an item is offered to before it lapses: the first choice
 # (the aggrieved party, or a human delegation for Assembly business) and one
