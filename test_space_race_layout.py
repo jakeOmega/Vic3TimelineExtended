@@ -36,6 +36,10 @@ SR_ICONS = "gfx/interface/icons/space_race_icons/"   # the Space Race's own art 
 INTERSTELLAR_STATES = {0: "interstellar_not_begun", 1: "interstellar_under_way",
                        2: "interstellar_awaiting_data", 3: "interstellar_data_received"}
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "space_race_gui_icons.md")
+COLONY_EVENTS = os.path.join(REPO, "events", "space_race_colony_events.txt")
+COLONY_MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "space_race_modifiers.txt")
+# The events that offer each stage's worlds (space_race_colony_events.<n>).
+COLONY_STAGES = {1: range(1, 11), 2: range(11, 18), 3: range(18, 24), 4: range(24, 30), 5: range(30, 35)}
 
 STATUS = ["te_sr_sec_control", "te_sr_sec_rivals"]
 REFERENCE = ["te_sr_sec_how"]
@@ -238,7 +242,8 @@ class FlagTest(unittest.TestCase):
 
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 1)
+        # two live sections per milestone, solar colonization's Our Colonies, and the shared reference
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 2)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -257,6 +262,7 @@ class FlagTest(unittest.TestCase):
             self.assertIn(f"'sr_panel_control_{m}_closed'", root)
             self.assertIn(f"'sr_panel_rivals_{m}_closed'", root)
         self.assertIn("Toggle('sr_panel_how_open')", _type_body(self.text, "te_sr_sec_how"))
+        self.assertIn("Toggle('sr_panel_colonies_closed')", _type_body(self.text, "te_sr_sec_colonies"))
 
     def test_no_old_flag_survives(self):
         for f in OLD_FLAGS:
@@ -298,6 +304,100 @@ class GatingTest(unittest.TestCase):
             risk = f"ScriptValue('sr_risk_shown_{m}')"
             self.assertIn(f"NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{risk}, '(CFixedPoint)0' )", root)
             self.assertIn(f"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{risk}, '(CFixedPoint)0' )]", root)
+
+
+def _colony_sites():
+    """[(event number, [the two specializations it grants])] in event order."""
+    text = _read(COLONY_EVENTS)
+    parts = re.split(r"\n(space_race_colony_events\.(\d+)) = \{", text)
+    return [(int(parts[i + 1]), re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", parts[i + 2]))
+            for i in range(1, len(parts), 3)]
+
+
+class ColoniesTest(unittest.TestCase):
+    """The Our Colonies section of the solar colonization panel: one row for each
+    of the 68 specializations, shown while the country holds it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.values = _read(DISPLAY)
+        cls.sites = _colony_sites()
+        cls.section = _type_body(cls.gui, "te_sr_sec_colonies")
+        cls.mods = [m for _, ms in cls.sites for m in ms]
+
+    def _order(self, text):
+        return re.findall(r"text = \"(sr_colony_\w+)\"", text)
+
+    def test_every_specialization_has_a_row_in_the_order_the_events_offer_them(self):
+        self.assertEqual(len(self.sites), 34)
+        self.assertTrue(all(len(ms) == 2 for _, ms in self.sites))
+        self.assertEqual(self._order(self.section), self.mods)
+        static = re.findall(r"(?m)^(sr_colony_\w+) = \{", _read(COLONY_MODIFIERS))
+        self.assertEqual(sorted(self.mods), sorted(static), "a colony modifier no event grants, or the reverse")
+
+    def test_a_row_reads_its_own_held_record(self):
+        """The row's value, its tooltip and its name are one modifier's, and the
+        value reads that modifier's <modifier>_held (sr_grant_colony_modifier)."""
+        rows = self.section.split("te_sr_colony_row = {")[1:]
+        self.assertEqual(len(rows), 68)
+        for row, mod in zip(rows, self.mods):
+            sx = mod[len("sr_colony_"):]
+            with self.subTest(modifier=mod):
+                self.assertIn(f"ScriptValue('sr_disp_colony_{sx}'), '(CFixedPoint)1' )", row)
+                self.assertIn(f'tooltip = "je_space_race_widget_colony_{sx}_tt"', row)
+                body = _strip_comments(_block(self.values, f"sr_disp_colony_{sx}"))
+                self.assertRegex(body, rf"limit = \{{ has_variable = {mod}_held \}} value = 1")
+                self.assertEqual(_loc(f"je_space_race_widget_colony_{sx}_tt"),
+                                 f"#header ${mod}$#!\\n[GetStaticModifier('{mod}').GetDesc]")
+
+    def test_stage_counts_and_headings_follow_the_events(self):
+        for stage, numbers in COLONY_STAGES.items():
+            mods = [m for n, ms in self.sites if n in numbers for m in ms]
+            with self.subTest(stage=stage):
+                body = _strip_comments(_block(self.values, f"sr_disp_colonies_stage_{stage}"))
+                self.assertEqual(re.findall(r"add = sr_disp_colony_(\w+)", body),
+                                 [m[len("sr_colony_"):] for m in mods])
+                self.assertIn(f"ScriptValue('sr_disp_colonies_stage_{stage}'), '(CFixedPoint)1' )", self.section)
+                self.assertEqual(_loc(f"je_space_race_widget_colonies_stage_{stage}").split(":")[0], f"Stage {stage}")
+        held = _strip_comments(_block(self.values, "sr_disp_colonies_held"))
+        self.assertEqual(re.findall(r"add = (\w+)", held), [f"sr_disp_colonies_stage_{s}" for s in COLONY_STAGES])
+
+    def test_a_stage_heading_sits_above_its_own_rows(self):
+        headings = [m.start() for m in re.finditer(r"sr_disp_colonies_stage_\d", self.section)]
+        self.assertEqual(len(headings), 5)
+        for stage, numbers in COLONY_STAGES.items():
+            first = next(m for n, ms in self.sites if n in numbers for m in ms)
+            last = [m for n, ms in self.sites if n in numbers for m in ms][-1]
+            self.assertLess(self.section.index(f"sr_disp_colonies_stage_{stage}"),
+                            self.section.index(f'text = "{first}"'))
+            self.assertLess(self.section.index(f'text = "{last}"'),
+                            self.section.index(f"sr_disp_colonies_stage_{stage + 1}") if stage < 5 else len(self.section))
+
+    def test_the_section_is_solar_colonizations_alone(self):
+        self.assertEqual(len(re.findall(r"te_sr_sec_colonies = \{\}", self.gui)), 1)
+        self.assertIn("te_sr_sec_colonies = {}", _type_body(self.gui, "te_sr_solar_colonization_status"))
+        for m in ALL:
+            if m != "solar_colonization" and m != "interstellar_results":
+                self.assertNotIn("te_sr_sec_colonies", _type_body(self.gui, f"te_sr_{m}_status"), m)
+
+    def test_it_stacks_below_the_live_sections_and_shows_in_passive_mode(self):
+        status = _type_body(self.gui, "te_sr_solar_colonization_status")
+        self.assertIn("direction = vertical", status.split("\n\n")[0])
+        self.assertLess(status.index("te_sr_status_sections = {"), status.index("te_sr_sec_colonies = {}"))
+        # not behind the controls' is_shown: a finished programme still lists its colonies
+        self.assertNotIn("ScriptedGui.IsShown", self.section)
+        self.assertIn('visible = "[JournalEntry.IsActive]"', self.section.split("\n\n")[0])
+
+    def test_every_name_fits_its_row(self):
+        row = _type_body(self.gui, "te_sr_colony_row")
+        self.assertIn("minimumsize = { 470 -1 }\n\t\t\tmaximumsize = { 470 -1 }", row)
+        self.assertIn("margin = { 4 1 }", row)  # 470 + 2 x 4 = the 480 column
+        self.assertIn("using = fontsize_medium", row)
+        for mod in self.mods:
+            with self.subTest(modifier=mod):
+                need = len(_loc(mod)) * 8.6 * 1.1  # the labels test's medium-font budget
+                self.assertLessEqual(need, 470, _loc(mod))
 
 
 class HowItWorksTest(unittest.TestCase):

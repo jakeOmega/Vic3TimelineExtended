@@ -250,6 +250,462 @@ sr_disp_worlds_ours_frac = {
 	max = 1
 }
 
+# ---- Solar colonization: the colonies we hold ---------------------------------
+# One value per specialization (68, two for each of the 34 worlds, in the order
+# space_race_colony_events.1-34 offer them): 1 while we hold it, else 0. The
+# record is <modifier>_held, which sr_grant_colony_modifier sets with the
+# modifier and sr_sync_colony_modifier_base keeps in step through a revolution.
+# The panel's "Our Colonies" rows each show on one of these; the per-stage
+# counts show the stage headings and their sum the "held" figure. A world holds
+# at most one of its two, so a stage's count is its worlds.
+
+# Stage 1: Mars & Asteroids
+
+sr_disp_colony_valles_marineris_research = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_valles_marineris_research_held } value = 1 }
+}
+
+sr_disp_colony_valles_marineris_mining = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_valles_marineris_mining_held } value = 1 }
+}
+
+sr_disp_colony_olympus_mons_atmospheric = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_olympus_mons_atmospheric_held } value = 1 }
+}
+
+sr_disp_colony_olympus_mons_geothermal = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_olympus_mons_geothermal_held } value = 1 }
+}
+
+sr_disp_colony_hellas_settlement = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_hellas_settlement_held } value = 1 }
+}
+
+sr_disp_colony_hellas_astrobiology = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_hellas_astrobiology_held } value = 1 }
+}
+
+sr_disp_colony_utopia_ice = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_utopia_ice_held } value = 1 }
+}
+
+sr_disp_colony_utopia_agriculture = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_utopia_agriculture_held } value = 1 }
+}
+
+sr_disp_colony_arcadia_civilian = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_arcadia_civilian_held } value = 1 }
+}
+
+sr_disp_colony_arcadia_military = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_arcadia_military_held } value = 1 }
+}
+
+sr_disp_colony_ceres_waystation = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ceres_waystation_held } value = 1 }
+}
+
+sr_disp_colony_ceres_observatory = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ceres_observatory_held } value = 1 }
+}
+
+sr_disp_colony_vesta_mining = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_vesta_mining_held } value = 1 }
+}
+
+sr_disp_colony_vesta_science = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_vesta_science_held } value = 1 }
+}
+
+sr_disp_colony_psyche_industrial = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_psyche_industrial_held } value = 1 }
+}
+
+sr_disp_colony_psyche_careful = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_psyche_careful_held } value = 1 }
+}
+
+sr_disp_colony_pallas_composites = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_pallas_composites_held } value = 1 }
+}
+
+sr_disp_colony_pallas_observatory = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_pallas_observatory_held } value = 1 }
+}
+
+sr_disp_colony_hygiea_volatiles = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_hygiea_volatiles_held } value = 1 }
+}
+
+sr_disp_colony_hygiea_automated = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_hygiea_automated_held } value = 1 }
+}
+
+# Stage 2: Jupiter System & Venus
+
+sr_disp_colony_io_mining = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_io_mining_held } value = 1 }
+}
+
+sr_disp_colony_io_research = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_io_research_held } value = 1 }
+}
+
+sr_disp_colony_europa_drilling = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_europa_drilling_held } value = 1 }
+}
+
+sr_disp_colony_europa_surface = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_europa_surface_held } value = 1 }
+}
+
+sr_disp_colony_ganymede_settlement = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ganymede_settlement_held } value = 1 }
+}
+
+sr_disp_colony_ganymede_command = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ganymede_command_held } value = 1 }
+}
+
+sr_disp_colony_callisto_gateway = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_callisto_gateway_held } value = 1 }
+}
+
+sr_disp_colony_callisto_agricultural = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_callisto_agricultural_held } value = 1 }
+}
+
+sr_disp_colony_himalia_telescope = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_himalia_telescope_held } value = 1 }
+}
+
+sr_disp_colony_himalia_depot = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_himalia_depot_held } value = 1 }
+}
+
+sr_disp_colony_amalthea_physics = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_amalthea_physics_held } value = 1 }
+}
+
+sr_disp_colony_amalthea_rings = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_amalthea_rings_held } value = 1 }
+}
+
+sr_disp_colony_venus_atmospheric = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_venus_atmospheric_held } value = 1 }
+}
+
+sr_disp_colony_venus_extraction = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_venus_extraction_held } value = 1 }
+}
+
+# Stage 3: Mercury & Saturn System
+
+sr_disp_colony_mercury_solar = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_mercury_solar_held } value = 1 }
+}
+
+sr_disp_colony_mercury_ice = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_mercury_ice_held } value = 1 }
+}
+
+sr_disp_colony_titan_hydrocarbons = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_titan_hydrocarbons_held } value = 1 }
+}
+
+sr_disp_colony_titan_prebiotic = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_titan_prebiotic_held } value = 1 }
+}
+
+sr_disp_colony_enceladus_astrobiology = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_enceladus_astrobiology_held } value = 1 }
+}
+
+sr_disp_colony_enceladus_water = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_enceladus_water_held } value = 1 }
+}
+
+sr_disp_colony_rhea_propellant = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_rhea_propellant_held } value = 1 }
+}
+
+sr_disp_colony_rhea_observation = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_rhea_observation_held } value = 1 }
+}
+
+sr_disp_colony_mimas_installation = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_mimas_installation_held } value = 1 }
+}
+
+sr_disp_colony_mimas_gravity = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_mimas_gravity_held } value = 1 }
+}
+
+sr_disp_colony_iapetus_ridge = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_iapetus_ridge_held } value = 1 }
+}
+
+sr_disp_colony_iapetus_organics = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_iapetus_organics_held } value = 1 }
+}
+
+# Stage 4: Uranus & Neptune Systems
+
+sr_disp_colony_titania_mining = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_titania_mining_held } value = 1 }
+}
+
+sr_disp_colony_titania_geophysics = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_titania_geophysics_held } value = 1 }
+}
+
+sr_disp_colony_oberon_relay = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_oberon_relay_held } value = 1 }
+}
+
+sr_disp_colony_oberon_research = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_oberon_research_held } value = 1 }
+}
+
+sr_disp_colony_miranda_rupes = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_miranda_rupes_held } value = 1 }
+}
+
+sr_disp_colony_miranda_drilling = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_miranda_drilling_held } value = 1 }
+}
+
+sr_disp_colony_ariel_cryovolcanic = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ariel_cryovolcanic_held } value = 1 }
+}
+
+sr_disp_colony_ariel_quarrying = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ariel_quarrying_held } value = 1 }
+}
+
+sr_disp_colony_triton_geyser = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_triton_geyser_held } value = 1 }
+}
+
+sr_disp_colony_triton_gateway = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_triton_gateway_held } value = 1 }
+}
+
+sr_disp_colony_proteus_probe = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_proteus_probe_held } value = 1 }
+}
+
+sr_disp_colony_proteus_extraction = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_proteus_extraction_held } value = 1 }
+}
+
+# Stage 5: Kuiper Belt & Beyond
+
+sr_disp_colony_pluto_research = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_pluto_research_held } value = 1 }
+}
+
+sr_disp_colony_pluto_harvesting = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_pluto_harvesting_held } value = 1 }
+}
+
+sr_disp_colony_eris_selfsufficiency = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_eris_selfsufficiency_held } value = 1 }
+}
+
+sr_disp_colony_eris_monitoring = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_eris_monitoring_held } value = 1 }
+}
+
+sr_disp_colony_makemake_chemistry = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_makemake_chemistry_held } value = 1 }
+}
+
+sr_disp_colony_makemake_solarwind = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_makemake_solarwind_held } value = 1 }
+}
+
+sr_disp_colony_haumea_dynamics = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_haumea_dynamics_held } value = 1 }
+}
+
+sr_disp_colony_haumea_rings = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_haumea_rings_held } value = 1 }
+}
+
+sr_disp_colony_sedna_outpost = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_sedna_outpost_held } value = 1 }
+}
+
+sr_disp_colony_sedna_interstellar = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_sedna_interstellar_held } value = 1 }
+}
+
+sr_disp_colonies_stage_1 = {
+	value = 0
+	add = sr_disp_colony_valles_marineris_research
+	add = sr_disp_colony_valles_marineris_mining
+	add = sr_disp_colony_olympus_mons_atmospheric
+	add = sr_disp_colony_olympus_mons_geothermal
+	add = sr_disp_colony_hellas_settlement
+	add = sr_disp_colony_hellas_astrobiology
+	add = sr_disp_colony_utopia_ice
+	add = sr_disp_colony_utopia_agriculture
+	add = sr_disp_colony_arcadia_civilian
+	add = sr_disp_colony_arcadia_military
+	add = sr_disp_colony_ceres_waystation
+	add = sr_disp_colony_ceres_observatory
+	add = sr_disp_colony_vesta_mining
+	add = sr_disp_colony_vesta_science
+	add = sr_disp_colony_psyche_industrial
+	add = sr_disp_colony_psyche_careful
+	add = sr_disp_colony_pallas_composites
+	add = sr_disp_colony_pallas_observatory
+	add = sr_disp_colony_hygiea_volatiles
+	add = sr_disp_colony_hygiea_automated
+}
+
+sr_disp_colonies_stage_2 = {
+	value = 0
+	add = sr_disp_colony_io_mining
+	add = sr_disp_colony_io_research
+	add = sr_disp_colony_europa_drilling
+	add = sr_disp_colony_europa_surface
+	add = sr_disp_colony_ganymede_settlement
+	add = sr_disp_colony_ganymede_command
+	add = sr_disp_colony_callisto_gateway
+	add = sr_disp_colony_callisto_agricultural
+	add = sr_disp_colony_himalia_telescope
+	add = sr_disp_colony_himalia_depot
+	add = sr_disp_colony_amalthea_physics
+	add = sr_disp_colony_amalthea_rings
+	add = sr_disp_colony_venus_atmospheric
+	add = sr_disp_colony_venus_extraction
+}
+
+sr_disp_colonies_stage_3 = {
+	value = 0
+	add = sr_disp_colony_mercury_solar
+	add = sr_disp_colony_mercury_ice
+	add = sr_disp_colony_titan_hydrocarbons
+	add = sr_disp_colony_titan_prebiotic
+	add = sr_disp_colony_enceladus_astrobiology
+	add = sr_disp_colony_enceladus_water
+	add = sr_disp_colony_rhea_propellant
+	add = sr_disp_colony_rhea_observation
+	add = sr_disp_colony_mimas_installation
+	add = sr_disp_colony_mimas_gravity
+	add = sr_disp_colony_iapetus_ridge
+	add = sr_disp_colony_iapetus_organics
+}
+
+sr_disp_colonies_stage_4 = {
+	value = 0
+	add = sr_disp_colony_titania_mining
+	add = sr_disp_colony_titania_geophysics
+	add = sr_disp_colony_oberon_relay
+	add = sr_disp_colony_oberon_research
+	add = sr_disp_colony_miranda_rupes
+	add = sr_disp_colony_miranda_drilling
+	add = sr_disp_colony_ariel_cryovolcanic
+	add = sr_disp_colony_ariel_quarrying
+	add = sr_disp_colony_triton_geyser
+	add = sr_disp_colony_triton_gateway
+	add = sr_disp_colony_proteus_probe
+	add = sr_disp_colony_proteus_extraction
+}
+
+sr_disp_colonies_stage_5 = {
+	value = 0
+	add = sr_disp_colony_pluto_research
+	add = sr_disp_colony_pluto_harvesting
+	add = sr_disp_colony_eris_selfsufficiency
+	add = sr_disp_colony_eris_monitoring
+	add = sr_disp_colony_makemake_chemistry
+	add = sr_disp_colony_makemake_solarwind
+	add = sr_disp_colony_haumea_dynamics
+	add = sr_disp_colony_haumea_rings
+	add = sr_disp_colony_sedna_outpost
+	add = sr_disp_colony_sedna_interstellar
+}
+
+sr_disp_colonies_held = {
+	value = 0
+	add = sr_disp_colonies_stage_1
+	add = sr_disp_colonies_stage_2
+	add = sr_disp_colonies_stage_3
+	add = sr_disp_colonies_stage_4
+	add = sr_disp_colonies_stage_5
+}
+
 # ---- What an approach costs, for the panel and the approach buttons ----------
 # Weekly innovation on top of funding: Safe one cost level, Ambitious two
 # (sr_<m>_cost), times the milestone's factor. Standard costs nothing. Read by
