@@ -820,8 +820,9 @@ def disc(size: int, colour: str = "red") -> Image.Image:
     ImageDraw.Draw(mask).ellipse([n * 0.04, n * 0.04, n * 0.96, n * 0.96], fill=255)
     im = _gradient_fill(mask, colour)
     glint = Image.new("RGBA", (n, n), (0, 0, 0, 0))
-    ImageDraw.Draw(glint).ellipse([n * 0.26, n * 0.14, n * 0.5, n * 0.32], fill=(255, 255, 255, 120))
-    im.alpha_composite(glint.filter(ImageFilter.GaussianBlur(n * 0.02)))
+    ImageDraw.Draw(glint).arc([n * 0.12, n * 0.12, n * 0.88, n * 0.88], 200, 250, fill=(255, 255, 255, 110),
+                              width=max(2, n // 30))
+    im.alpha_composite(glint.filter(ImageFilter.GaussianBlur(n * 0.008)))
     return resize_premultiplied(outlined(im, ss * max(1, size // 40)), (size, size))
 
 
@@ -955,6 +956,23 @@ def eyelid(size: int, opening: float = 0.0) -> Image.Image:
     return resize_premultiplied(im, (size, size))
 
 
+def arrows_in(size: int, count: int = 6, colour: str = "white") -> Image.Image:
+    """`count` short arrows around the box's rim, all pointing at its centre: many against one."""
+    ss = 4
+    n = size * ss
+    c = n / 2
+    mask = Image.new("L", (n, n), 0)
+    d = ImageDraw.Draw(mask)
+    for i in range(count):
+        ang = -np.pi / 2 + i * 2 * np.pi / count
+        ux, uy = np.cos(ang), np.sin(ang)
+        px, py = -uy, ux
+        tip, tail, head, half, shaft = 0.33, 0.48, 0.4, 0.07, 0.03
+        pts = [(tip, 0), (head, half), (head, shaft), (tail, shaft), (tail, -shaft), (head, -shaft), (head, -half)]
+        d.polygon([(c + (r * ux + w * px) * n, c + (r * uy + w * py) * n) for r, w in pts], fill=255)
+    return resize_premultiplied(outlined(_gradient_fill(mask, colour), ss * max(1, size // 50)), (size, size))
+
+
 # Drawn marks by name; each takes the box size and the mark's own settings.
 DRAWN = {
     "star": lambda box, m: star(box),
@@ -970,6 +988,7 @@ DRAWN = {
     "shield": lambda box, m: shield_outline(box, m.get("colour", "blue"), m.get("filled", False)),
     "dome": lambda box, m: dome(box),
     "eyelid": lambda box, m: eyelid(box, m.get("opening", 0.0)),
+    "arrows_in": lambda box, m: arrows_in(box, m.get("count", 6), m.get("colour", "white")),
     "rays": lambda box, m: rays(box, m.get("count", 16), m.get("colour", "gold")),
     "link": lambda box, m: link(box, m.get("colour", "gold"), m.get("width", 0.09), m.get("state", "whole")),
 }

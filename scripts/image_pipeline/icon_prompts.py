@@ -1237,28 +1237,21 @@ ICONS: dict[str, dict[str, dict]] = {
     "colonial_part": {
         # A globe needs its continents named, or it renders as a plain ball (UN).
         "globe": {"subject": "a small globe of the Earth with green continents and blue oceans, no stand",
-                  "seed": None},
+                  "seed": 1},
+        # A ring of turned-away figures, or a round table of flags (tried: a brown disc with
+        # specks at 36 px), would not read: a lone flag on a bare rock, for both alerts.
+        "lone_flag": {"subject": "a small plain orange cloth flag on a thin pole planted on a tiny bare grey rock "
+                                 "island", "seed": 1},
     },
     "colonial": {
-        # A ring of turned-away figures would be specks at 36 px: a lone flag on a bare rock.
-        "alert_isolation": {"subject": "a small plain orange cloth flag on a thin pole planted on a tiny bare grey rock "
-                                       "island", "seed": None,
-                            "marks": [{"draw": "disc", "colour": "amber", "under": True, "at": (0.5, 0.5),
-                                       "scale": 1.0}],
-                            "now": f"{_GI}/generic_icons/disapproval_icon.dds"},
-        "alert_consensus": {"subject": "a round dark wooden conference table seen from above with seven small plain "
-                                       "coloured cloth flags on stands around its rim", "seed": None,
-                            "marks": [{"draw": "disc", "colour": "red", "under": True, "at": (0.5, 0.5),
-                                       "scale": 1.0}],
-                            "now": f"{_GI}/generic_icons/red_cross.dds"},
         "programme_invest": {"subject": "a short steel railway bridge span under construction over a river, a small "
-                                        "yellow crane on it", "seed": None,
+                                        "yellow crane on it", "seed": 1,
                              "now": f"{_GI}/building_icons/building_browser_filter_icons/filter_icons_development.dds"},
         "programme_garrison": {"subject": "a squat sandstone fort gatehouse with crenellations and a plain red pennant "
-                                          "on a short pole", "seed": None,
+                                          "on a short pole", "seed": 1,
                                "now": f"{_GI}/generic_icons/battalions.dds"},
         "programme_assimilation": {"subject": "a small red wooden schoolhouse with a bell tower, an open book lying on "
-                                              "its front steps", "seed": None,
+                                              "its front steps", "seed": 2,
                                    "now": "gfx/interface/population/pop_culture.dds"},
     },
     # Space Race (space_race_gui_icons.md): 36 px; the interstellar states 44 px,
@@ -1567,6 +1560,16 @@ ICONS.update({
                                 f"{_GI}/state_status_icons/has_turmoil.dds"),
         "band_collapsing": _band({"colour": "red", "width": 0.08, "state": "broken"},
                                  f"{_GI}/war_goals/independence.dds"),
+        # Great-power pressure: the lone flag on amber (isolated), on red with
+        # arrows closing in (a consensus against it).
+        "alert_isolation": {"from": "colonial_part/lone_flag", "base": {"scale": 0.8, "at": (0.5, 0.52)},
+                            "marks": [{"draw": "disc", "colour": "amber", "under": True, "at": (0.5, 0.5),
+                                       "scale": 1.0}],
+                            "now": f"{_GI}/generic_icons/disapproval_icon.dds"},
+        "alert_consensus": {"from": "colonial_part/lone_flag", "base": {"scale": 0.6, "at": (0.5, 0.53)},
+                            "marks": [{"draw": "disc", "colour": "red", "under": True, "at": (0.5, 0.5), "scale": 1.0},
+                                      {"draw": "arrows_in", "at": (0.5, 0.5), "scale": 0.98}],
+                            "now": f"{_GI}/generic_icons/red_cross.dds"},
     },
     "space_state": {
         # One rocket; its state is what surrounds it.
@@ -1715,7 +1718,8 @@ TINTS = ("grey", "faint", "moss", "gold", "silver", "iron")
 LAYOUTS = ("flag",)
 DAMAGE = ("crack", "split")
 DRAWN_MARKS = ("star", "pause", "arrow_down", "arrow", "bar", "chevrons", "barrier", "bubble", "thermometer",
-               "disc", "shield", "dome", "link", "rays", "eyelid")
+               "disc", "shield", "dome", "link", "rays", "eyelid",
+               "arrows_in")
 MARK_COLOURS = ("red", "green", "blue", "yellow", "amber", "orange", "white", "gold", "steel")
 
 
