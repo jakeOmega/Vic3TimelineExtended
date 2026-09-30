@@ -1329,10 +1329,24 @@ docket prompts reaching human players, and the aggrieved party going first.
    - `un_events.20` goes to every other great-power member when a great power leaves through
      the Leave button.
    - `un_events.8` is fired when a wronged member takes the accused to the World Court.
-8. **Seeding.** The first time the docket runs for a UN, whatever has already happened is
+8. **Proposal pace (great powers and standing).** `common/script_values/un_propose_pace_values.txt`
+   holds one multiplier, `un_propose_pace_mult`, read three ways:
+   - the sponsor mark (`un_ga_resolution_modifier`, 5 years) and `un_request_cooldown` (10 years)
+     run `un_propose_sponsor_days` / `un_propose_cooldown_days` at every site that adds them
+     (`un_propose_effects.txt`, `un_events.2`). The sponsor mark also bars a second proposal, so
+     the two are scaled together;
+   - `un_docket_offer_order` ranks the members a convention is offered to (power share ÷ the
+     multiplier), so a great power in good standing is offered first;
+   - `un_docket_agenda_months_value` halves the Assembly-business cadence (24 to 12 months) while
+     a great-power member is Respected or better.
+   The multiplier is ×0.5 for a great power and ×0.7 / ×0.85 / ×1.25 / ×1.5 for Exemplary /
+   Respected / Poor / Disgraced, floored at ×0.25 and one year. The global cadence
+   (`un_docket_cadence_months`) is unchanged. Restated in the player guide, `je_un_standing_help_intro`,
+   `je_un_chamber_propose_intro`, `je_un_chamber_raised_agenda` and `un_request_cooldown_desc`.
+9. **Seeding.** The first time the docket runs for a UN, whatever has already happened is
    treated as history: existing nuclear powers, collapsed empires, warming thresholds already
    crossed and a space age already begun.
-9. **Old saves.** The roll stops at once. Events it had already queued are checked against
+10. **Old saves.** The roll stops at once. Events it had already queued are checked against
    their new triggers:
    - those that now need a docket scope (2, 4, 7, 8, 11, 15, 20) fail harmlessly;
    - the proposer events still fire if their gates hold.

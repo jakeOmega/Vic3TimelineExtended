@@ -1,14 +1,10 @@
 ﻿### Banking history charts — the "History" section of je_banking_cycle.
 ###
-### The charts are the te_banking_history_charts type, shown in two places,
-### each through its own collapsible shell:
-### - te_banking_history_panel, which common/journal_entries/je_banking.txt
-###   attaches through the named wrapper at the foot of the file,
-###   `widget = { name = "widget_je_banking_history" container = "custom_widget_container_2" }`,
-###   directly under Current Conditions;
-### - te_banking_history_panel_open, which the Budget panel's Banking tab
-###   (gui/budget_panel.gui) instances below the policies, under datacontext
-###   GetPlayerJournalEntry('je_banking_cycle').
+### The charts are the te_banking_history_charts type, in one collapsible
+### shell, te_banking_history_panel, which te_banking_reference_sections
+### (gui/journal_entry_widgets/banking_layout_widget.gui) puts at the foot of
+### both hosts: the journal entry (je_banking.txt, custom_widget_container_3)
+### and the Budget panel's Banking tab (gui/budget_panel.gui).
 ###
 ### Six charts, one per unit: the cycle value and bubble pressure are 0..100
 ### indices, momentum is a signed monthly delta, and the three monetary series
@@ -21,11 +17,10 @@
 ### common/scripted_effects/te_history_banking_effects.txt; the reusable
 ### chart type lives in te_history_chart.gui.
 ###
-### In the journal the section is collapsed by default — the flag is the *open*
-### flag, the inverse of the dashboard's collapsed flags — so a player who does
-### not open it never pays for 1,440 bar slots (six charts x the 240-month store
-### cap). The Budget tab's shell is open by default (owner's call, 2026-09-28):
-### the tab is a page the player chose to open, and the charts sit below the policies.
+### The section is open by default in both hosts (the owner's rule since
+### play-test round 2). Until then the journal kept it collapsed, so a player
+### who never opened it paid for none of the 1,440 bar slots (six charts x the
+### 240-month store cap); closing it still costs nothing below the header.
 ### An out-of-range month costs one `visible` test and nothing below it, so the
 ### 1-year view is as cheap as it ever was; only the 20-year view draws them
 ### all. Nothing here has an effect: the only click targets are the collapse
@@ -54,7 +49,7 @@ types te_banking_history_types
 	### { 1 0.97 0.66 }, white
 	### { 0.94 0.95 0.88 }, green { 0.39 0.67 0.33 }, blue { 0.41 0.67 0.74 } —
 	### so a bar is literally the colour the phase's own name is printed in,
-	### both in banking_cycle_status_* and in the dashboard's Cycle Phase row.
+	### in the overview's Cycle Phase cell (banking_dash_phase_*_value).
 	### Panic and Frenzy share red, which is why six bars cover seven phases. If either the ladder or a phase
 	### colour moves, move it here too.
 	type te_history_bar_cycle_phase = widget {
@@ -627,8 +622,11 @@ types te_banking_history_types
 		}
 	}
 
-	### The journal entry's section: collapsed by default (te_hist_charts_open is
-	### the OPEN flag), for the cost reason in the header.
+	### The section, in both hosts: open by default (the owner's rule for every
+	### panel since play-test round 2: history charts start open), so the
+	### journal and the Budget tab share this one shell and its one CLOSED flag,
+	### banking_dash_history_closed. Until then the journal had a collapsed
+	### shell of its own.
 	type te_banking_history_panel = flowcontainer {
 		# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
 		# country whose entry has not activated yet and therefore has none of the
@@ -645,65 +643,18 @@ types te_banking_history_types
 				using = elide_fontsize_min
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_hist_charts_open')]"
+				onclick = "[GetVariableSystem.Toggle('banking_dash_history_closed')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_hist_charts_open'))]"
+				visible = "[GetVariableSystem.Exists('banking_dash_history_closed')]"
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_hist_charts_open')]"
+				visible = "[Not(GetVariableSystem.Exists('banking_dash_history_closed'))]"
 			}
 		}
 
 		te_banking_history_charts = {
-			visible = "[GetVariableSystem.Exists('te_hist_charts_open')]"
+			visible = "[Not(GetVariableSystem.Exists('banking_dash_history_closed'))]"
 		}
 	}
-
-	### The Budget panel's Banking tab's section: open by default. It has a flag
-	### of its own, te_banking_tab_hist_closed (the CLOSED flag), so opening or
-	### closing it in one host leaves the other as it was.
-	type te_banking_history_panel_open = flowcontainer {
-		# je_banking_cycle has is_shown_when_inactive, so the panel can open for a
-		# country whose entry has not activated yet and therefore has none of the
-		# cycle variables. Draw nothing until the journal entry is running.
-		visible = "[JournalEntry.IsActive]"
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 2
-
-		banking_dash_category_header = {
-			blockoverride "left_text" {
-				text = "te_hist_section_header"
-				using = elide_fontsize_min
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_banking_tab_hist_closed')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('te_banking_tab_hist_closed')]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[Not(GetVariableSystem.Exists('te_banking_tab_hist_closed'))]"
-			}
-		}
-
-		te_banking_history_charts = {
-			visible = "[Not(GetVariableSystem.Exists('te_banking_tab_hist_closed'))]"
-		}
-	}
-}
-
-### The name je_banking.txt attaches: a bare wrapper around the panel type
-### above, which the Budget panel's Banking tab (gui/budget_panel.gui) also
-### instances. It repeats the panel's IsActive gate so an inactive entry's
-### container collapses as it did when the panel was the root.
-flowcontainer = {
-	name = "widget_je_banking_history"
-	visible = "[JournalEntry.IsActive]"
-	parentanchor = hcenter
-	ignoreinvisible = yes
-
-	te_banking_history_panel = {}
 }
