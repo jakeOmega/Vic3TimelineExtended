@@ -905,6 +905,42 @@ def rays(size: int, count: int = 16, colour: str = "gold") -> Image.Image:
     return resize_premultiplied(outlined(_gradient_fill(mask, colour), ss * max(1, size // 50)), (size, size))
 
 
+def eyelid(size: int, opening: float = 0.0) -> Image.Image:
+    """A steel eyelid over an embossed eye, `size` px across: shut (0), or
+    lowered to leave the lower `opening` share of the eye showing. FLUX drew
+    the covert shield's eye open in eight seeds whatever the subject said.
+    Drawn before the emblem's tint (a `pre` mark), so it takes the metal."""
+    ss = 4
+    n = size * ss
+    top, bottom = n * 0.26, n * 0.74
+    t = np.linspace(0, 1, 40)
+    upper = [(x * n, n * 0.5 - (n * 0.5 - top) * np.sin(np.pi * x)) for x in t]
+    lower = [(x * n, n * 0.5 + (bottom - n * 0.5) * np.sin(np.pi * x)) for x in t[::-1]]
+    almond = Image.new("L", (n, n), 0)
+    ImageDraw.Draw(almond).polygon(upper + lower, fill=255)
+    # The lid's edge: the lower arc when shut, a flatter curve higher up when half open.
+    k = 1 - opening
+    edge = [(x * n, (n * 0.5 + (bottom - n * 0.5) * np.sin(np.pi * x)) * k + (n * 0.5 - (n * 0.5 - top)
+             * np.sin(np.pi * x)) * (1 - k)) for x in t]
+    lid = Image.new("L", (n, n), 0)
+    ImageDraw.Draw(lid).polygon(upper + edge[::-1], fill=255)
+    mask = Image.fromarray(np.minimum(np.asarray(almond), np.asarray(lid)))
+    yy = np.linspace(0, 1, n, dtype=np.float32)[:, None, None]
+    rgb = np.array((176, 184, 190), np.float32) * (1 - yy) + np.array((96, 104, 112), np.float32) * yy
+    im = Image.fromarray(np.dstack([np.broadcast_to(rgb, (n, n, 3)), np.asarray(mask)]).astype(np.uint8), "RGBA")
+    d = ImageDraw.Draw(im)
+    w = max(3, n // 22)
+    d.line(edge, fill=(22, 20, 20, 255), width=w, joint="curve")
+    for x in (0.3, 0.42, 0.54, 0.66):
+        i = round(x * (len(edge) - 1))
+        ex, ey = edge[i]
+        d.line([(ex, ey), (ex - n * 0.02, ey + n * 0.07)], fill=(22, 20, 20, 255), width=max(2, w // 2))
+    glint = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+    ImageDraw.Draw(glint).line(upper[8:32], fill=(235, 240, 245, 150), width=max(2, n // 40))
+    im.alpha_composite(glint)
+    return resize_premultiplied(im, (size, size))
+
+
 # Drawn marks by name; each takes the box size and the mark's own settings.
 DRAWN = {
     "star": lambda box, m: star(box),
@@ -919,6 +955,7 @@ DRAWN = {
     "disc": lambda box, m: disc(box, m.get("colour", "red")),
     "shield": lambda box, m: shield_outline(box, m.get("colour", "blue")),
     "dome": lambda box, m: dome(box),
+    "eyelid": lambda box, m: eyelid(box, m.get("opening", 0.0)),
     "rays": lambda box, m: rays(box, m.get("count", 16), m.get("colour", "gold")),
     "link": lambda box, m: link(box, m.get("colour", "gold"), m.get("width", 0.09), m.get("state", "whole")),
 }

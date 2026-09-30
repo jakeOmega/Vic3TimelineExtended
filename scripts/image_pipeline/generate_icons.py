@@ -379,7 +379,8 @@ class Finals:
     def finish(self, e: dict, icon):
         from icon_render import apply_marks
 
-        return apply_marks(icon, e["marks"], self.load_mark) if e.get("marks") else icon
+        marks = [m for m in e.get("marks", []) if not m.get("pre")]
+        return apply_marks(icon, marks, self.load_mark) if marks else icon
 
     def load_mark(self, mark: dict):
         from icon_render import load_rgba
@@ -408,6 +409,12 @@ class Finals:
             base = self.get(*ref(e["from"]), seed)
             if base is None:
                 return None
+        # A `pre` mark is part of the emblem (the covert shield's eyelid): drawn
+        # before the tint and the break, so it takes the metal and cracks with it.
+        pre = [m for m in e.get("marks", []) if m.get("pre")]
+        if pre:
+            from icon_render import apply_marks
+            base = apply_marks(base, pre, self.load_mark)
         im = tint(base, e.get("tint"))
         if e.get("turn"):
             im = turn(im, e["turn"])

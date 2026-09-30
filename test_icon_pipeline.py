@@ -754,6 +754,25 @@ class PanelStateTests(unittest.TestCase):
         widths = [w for w in (right[..., 3] > 128).sum(axis=0) if w]
         self.assertLess(widths[-1], widths[0])                                 # the tip on the right
 
+    def test_eyelid_shuts_or_half_opens(self):
+        shut = np.asarray(self.r.eyelid(100)).astype(int)
+        half = np.asarray(self.r.eyelid(100, 0.5)).astype(int)
+        self.assertGreater(shut[62, 50, 3], 200)                               # the lid covers the lower eye
+        self.assertLess(half[64, 50, 3], 60)                                   # half open: the lower eye shows
+        self.assertGreater(half[34, 50, 3], 200)                               # while the lid covers the top
+        self.assertEqual(shut[5, 50, 3], 0)                                    # nothing outside the eye
+
+    def test_pre_marks_are_part_of_the_emblem(self):
+        # A `pre` mark is drawn before the tint, so it takes the emblem's metal.
+        finals = gi.Finals.__new__(gi.Finals)
+        finals.load_mark = lambda m: None
+        base = Image.new("RGBA", (100, 100), (150, 150, 150, 255))
+        finals.get = lambda cat, key, seed: base
+        e = {"from": "covert_part/shield", "tint": "gold",
+             "marks": [{"draw": "bar", "colour": "white", "at": (0.5, 0.5), "scale": 0.8, "pre": True}]}
+        out = np.asarray(finals.derived(e, 0)).astype(int)
+        self.assertGreater(out[50, 50, 0], out[50, 50, 2] + 40)               # the white bar turned gold
+
     def test_turn_and_rotated_marks(self):
         tall = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
         tall.paste((200, 200, 200, 255), (45, 5, 55, 95))

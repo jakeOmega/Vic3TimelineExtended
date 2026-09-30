@@ -1136,9 +1136,6 @@ ICONS: dict[str, dict[str, dict]] = {
         "envelope_empty": {"subject": "an open empty tan manila envelope, its flap up, a torn red paper band hanging "
                                       "from it", "seed": 1},
         "fedora": {"subject": "a black fedora hat resting on a closed brown leather dossier folder", "seed": 1},
-        # Every shield seed drew the eye open; the list's standings open it as exposure grows.
-        "shield_closed": {"subject": "a round polished steel shield with a thick gold rim and a large embossed eye in "
-                                     "its centre, the eyelid shut, a curved line of lashes", "seed": None},
     },
     "covert": {
         # A searchlight's beam would cut out as a grey blob: the caught spy's raised hands say it.
@@ -1197,7 +1194,7 @@ ICONS: dict[str, dict[str, dict]] = {
         # The first subject drew a mortar and pestle or a cleaver (its s2, bowl and tools
         # spread apart, is kept in ~/flux_runs/originals/gui_hard_times).
         "hard_times": {"subject": "a stonemason's steel chisel and wooden mallet lying crossed in front of an empty "
-                                  "upturned wooden bowl", "seed": None,
+                                  "upturned wooden bowl", "seed": 3,
                        "now": f"{_GI}/generic_icons/warning.dds"},
     },
     # Strategic Reserve (strategic_reserve_gui_icons.md): 24 px.
@@ -1292,6 +1289,10 @@ ICONS: dict[str, dict[str, dict]] = {
 # metal, a drawn mark for the direction, a drawn break for damage. Marks sit
 # at the lower right, as the UN's do, unless the idea needs them elsewhere.
 _TM = f"{_GI}/timed_modifier_icons"
+
+
+# The covert shield's eyelid, over the eye of shield s1 (drawn: FLUX kept it open).
+_LID = {"draw": "eyelid", "pre": True, "at": (0.485, 0.505), "scale": 0.43}
 
 
 def _bank(now, tint=None, marks=()):
@@ -1431,14 +1432,16 @@ ICONS.update({
     "covert_state": {
         # One shield, its metal and damage the standing: gold rim, silver, dull
         # iron, iron cracked, iron split. FLUX will not crack or split a shield,
-        # so the breaks are drawn.
-        "standing_fortress": {"from": "covert_part/shield", "now": f"{_GI}/generic_icons/green_checkmark.dds"},
-        "standing_hardened": {"from": "covert_part/shield", "tint": "silver",
+        # so the breaks are drawn; nor shut an eye, so the lid is drawn too:
+        # shut while defended, half open when exposed, wide open when vulnerable.
+        "standing_fortress": {"from": "covert_part/shield", "marks": [_LID],
+                              "now": f"{_GI}/generic_icons/green_checkmark.dds"},
+        "standing_hardened": {"from": "covert_part/shield", "marks": [_LID], "tint": "silver",
                               "now": f"{_GI}/generic_icons/approval_icon.dds"},
-        "standing_defended": {"from": "covert_part/shield", "tint": "iron",
+        "standing_defended": {"from": "covert_part/shield", "marks": [_LID], "tint": "iron",
                               "now": f"{_GI}/generic_icons/undecided_icon.dds"},
-        "standing_exposed": {"from": "covert_part/shield", "tint": "iron", "damage": "crack",
-                             "now": f"{_GI}/generic_icons/disapproval_icon.dds"},
+        "standing_exposed": {"from": "covert_part/shield", "marks": [dict(_LID, opening=0.5)], "tint": "iron",
+                             "damage": "crack", "now": f"{_GI}/generic_icons/disapproval_icon.dds"},
         "standing_vulnerable": {"from": "covert_part/shield", "tint": "iron", "damage": "split",
                                 "now": f"{_GI}/generic_icons/red_cross.dds"},
         "funding": {"from": "covert_part/envelope", "now": f"{_GI}/generic_icons/gdp.dds"},
@@ -1704,7 +1707,7 @@ TINTS = ("grey", "faint", "moss", "gold", "silver", "iron")
 LAYOUTS = ("flag",)
 DAMAGE = ("crack", "split")
 DRAWN_MARKS = ("star", "pause", "arrow_down", "arrow", "bar", "chevrons", "barrier", "bubble", "thermometer",
-               "disc", "shield", "dome", "link", "rays")
+               "disc", "shield", "dome", "link", "rays", "eyelid")
 MARK_COLOURS = ("red", "green", "blue", "yellow", "amber", "orange", "white", "gold")
 
 
