@@ -212,9 +212,11 @@ or union; it never locks either path.
 The Reunify the Nation war goal annexes a candidate outright. It needs enough
 irredentist pressure, which comes mostly from claims on the target's homeland
 states: several of them, or fewer when your government leans hard toward war or
-union, and more when you share a bloc with the target. Its infamy grows with the
-target's population. It isn't offered against countries with the base game's
-German, Italian or Chinese unification entries.
+union, and more when you share a bloc with the target. Its infamy is what the
+base game charges for annexing that country: it grows with the size and wealth of
+the states taken, and it falls for states that are homeland to your culture, states
+you hold claims on and states you border. It isn't offered against countries with
+the base game's German, Italian or Chinese unification entries.
 
 ### Irredentist events
 
