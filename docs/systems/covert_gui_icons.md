@@ -49,6 +49,10 @@ At 36 px. Funding picks its icon by whether `covert_funding_level_display` is 0,
 |---|---|---|
 | Operation slot (lit in use, at 25% opacity while free) | a closed tan manila case file with a small photograph paper-clipped to its cover | `operation_slot.dds` |
 
+## The Military panel's Covert tab
+
+The tab (`gui/panel_military.gui`, the strip's fifth slot) shows `tradecraft_0.dds` at 20 px left of its name: the fedora and dossier with no chevron, the emblem the Tradecraft icons share. It is set in the slot's `fifth_button_name` block, since vanilla's `tab_buttons` has no icon block on slot 5's selected half. `MilitaryCovertTabTest` holds the path.
+
 ## Not from this set
 
 - **Operation rows:** each row's icon is that operation's own diplomatic-action icon (`gfx/interface/icons/diplomatic_action_icons/covert_<type>_action.dds`).

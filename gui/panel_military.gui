@@ -654,13 +654,59 @@ types panel_military {
 					text = "te_military_tab_nuclear"
 				}
 				# The warhead from the entry's overview (#586), left of the name, in
-				# both halves of the slot (tab_buttons draws the block in each).
-				blockoverride "fourth_button_icon" {
+				# both halves of the slot. In fourth_button_name, not
+				# fourth_button_icon: tab_buttons also draws fourth_button_icon on
+				# slot 5's selected half (vanilla's slip), so the warhead would sit
+				# on the selected Covert tab. The name block is drawn in both halves
+				# of slot 4 and nowhere else. 20 px at 4, so that with five tabs
+				# (104.8 each in 540) it clears the centred name.
+				blockoverride "fourth_button_name" {
 					icon = {
-						size = { 24 24 }
+						size = { 20 20 }
 						parentanchor = left|vcenter
-						position = { 8 0 }
+						position = { 4 0 }
 						texture = "gfx/interface/icons/nuclear_icons/warheads.dds"
+					}
+				}
+				### END MOD ###
+
+				### MOD: Covert tab (te_covert) ###
+				# A fifth tab showing the covert journal entry's own panels (the
+				# content block at the foot of scrollarea_content), a copy of the
+				# Nuclear tab above. On the strip whenever the covert rule is on
+				# (te_military_covert_tab_unlock_sgui), greyed until the entry runs
+				# (te_military_covert_tab_sgui); the greyed tab's tooltip lists the
+				# unlock test with a tick or a cross. Gates:
+				# common/scripted_guis/te_system_tab_sguis.txt.
+				blockoverride "fifth_button" {
+					text = "te_military_tab_covert"
+				}
+				blockoverride "fifth_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_military_tab_covert_tt', Concatenate( Localize( 'te_military_tab_covert_locked_tt' ), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				}
+				blockoverride "fifth_button_click" {
+					enabled = "[GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[InformationPanel.SelectTab('te_covert')]"
+				}
+				blockoverride "fifth_button_visibility" {
+					visible = "[And( InformationPanel.IsTabSelected('te_covert'), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				}
+				blockoverride "fifth_button_visibility_checked" {
+					visible = "[And( Not( InformationPanel.IsTabSelected('te_covert') ), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				}
+				blockoverride "fifth_button_selected" {
+					text = "te_military_tab_covert"
+				}
+				# The fedora on the dossier, the Tradecraft emblem without a
+				# chevron (#586), left of the name in both halves of the slot. Slot
+				# 5's selected half has no fifth_button_icon block, so the name
+				# block carries it, as for Nuclear.
+				blockoverride "fifth_button_name" {
+					icon = {
+						size = { 20 20 }
+						parentanchor = left|vcenter
+						position = { 4 0 }
+						texture = "gfx/interface/icons/covert_icons/tradecraft_0.dds"
 					}
 				}
 				### END MOD ###
@@ -776,6 +822,69 @@ types panel_military {
 								size = { 480 32 }
 								text = "te_system_tab_open_journal"
 								tooltip = "te_military_nuclear_open_journal_tt"
+								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+							}
+						}
+					}
+				}
+				### END MOD ###
+
+				### MOD: Covert tab (te_covert) ###
+				# The covert journal entry's panels, composed by the same types the
+				# entry's three roots wrap (gui/journal_entry_widgets/
+				# covert_operations_widget.gui), in the entry's order: the overview,
+				# the live sections, then How Covert Warfare Works. Then a link back
+				# to the entry, below everything else. Nothing else to draw: the
+				# entry has no goal bar (no progressbar), no scripted bars and no
+				# status description, and its two scripted buttons are the AI's (the
+				# Funding stepper carries the same actions for a human).
+				#
+				# The Nuclear tab's three layers: the header outside the gate; the
+				# gate (te_military_covert_tab_sgui, the one the tab button uses) on a
+				# parent of the GetPlayerJournalEntry datacontext, never on the widget
+				# carrying it; the column a fixed 520, centred in the panel's 540.
+				flowcontainer = {
+					name = "te_military_covert_tab"
+					visible = "[InformationPanel.IsTabSelected('te_covert')]"
+					using = default_fade_in_out
+					parentanchor = hcenter
+					direction = vertical
+					spacing = 10
+					margin_top = 10
+					margin_bottom = 15
+
+					default_header = {
+						using = default_list_position
+						blockoverride "text" {
+							text = "je_covert_warfare"
+						}
+					}
+
+					flowcontainer = {
+						visible = "[GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+
+						flowcontainer = {
+							datacontext = "[GetPlayerJournalEntry('je_covert_warfare')]"
+							parentanchor = hcenter
+							direction = vertical
+							ignoreinvisible = yes
+							spacing = 10
+							minimumsize = { 520 -1 }
+
+							te_covert_overview_panel = {}
+							te_covert_status_sections = {}
+							te_covert_reference_sections = {}
+
+							button = {
+								visible = "[JournalEntry.IsActive]"
+								using = default_button
+								parentanchor = hcenter
+								size = { 480 32 }
+								text = "te_system_tab_open_journal"
+								tooltip = "te_military_covert_open_journal_tt"
 								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
 							}
 						}

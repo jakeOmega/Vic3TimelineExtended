@@ -199,6 +199,10 @@ You launch operations from another country's diplomatic actions, listed as
 "Covert: ..." with the operation's name. Everything else is in the journal
 entry.
 
+The same panels appear as a Covert tab in the Military panel, and a change made
+in one shows in the other. The tab is grayed until the journal entry is active;
+hover it for what is still missing. It ends with an Open Journal Entry button.
+
 <!-- screenshot: the Covert Warfare journal entry: the overview, then the Operations section with two operation rows -->
 
 The overview at the top is always shown. Its first row is icons with a word
