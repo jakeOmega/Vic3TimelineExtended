@@ -3631,7 +3631,7 @@ types building_browser_panel_types {
 							item = {
 								widget = {
 									size = { 50 50 }
-									visible = "[Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance'))]"
+									visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')))]"
 									tooltip = "BUILDING_TYPE_BULK_CHANGE_TOOLTIP"
 									using = tooltip_above
 

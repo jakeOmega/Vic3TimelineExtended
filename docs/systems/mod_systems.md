@@ -107,7 +107,25 @@ New buildings get built / expanded
 
 **Construction-cost-scaling layer.** The `construction_cost_scaling` static modifier (above) applies `goods_input_construction_mult = 1` (multiplied by a per-country GDPpc-driven multiplier). This scales how much *construction good* every consumer burns — each construction site per point delivered, and every building's maintenance PM. So a richer country burns more construction good per same building → competes more for the same supply → stockouts and higher prices → fewer net `country_construction_add` produced → vanilla queues stall on availability rather than treasury.
 
-**Buildings consume the construction good as maintenance.** `pm_maintenance` (`pmg_maintenance`, hidden in PM displays) carries `goods_input_construction_add = 0.1` per level; it is on 54 building types — industry, power, and transport infrastructure (railways, ports, airports, highways), not farms, mines or urban centres. A few company buildings in `unique_pms.txt` consume more (0.5–1). Construction is therefore not just an upfront build cost — it's an ongoing maintenance load tied to current economic activity.
+**Buildings consume the construction good as maintenance.** Each maintenance group (`pmg_maintenance` and its `_light`, `_heavy`, `_intensive` and `_mine` variants, all hidden in PM displays) carries one rate of `goods_input_construction_add` per level, set by the kind of building (§ Maintenance tiers); it is on 74 building types — industry, power, transport infrastructure (railways, ports, airports, highways), services, mines — not farms, plantations or urban centres, and the original mines only once they are mechanized. A few company buildings in `unique_pms.txt` consume more (0.5–1). Construction is therefore not just an upfront build cost — it's an ongoing maintenance load tied to current economic activity.
+
+### Maintenance tiers
+
+`pmg_maintenance` was one rate (0.1 per level) for every building that had it. It is now five groups. Four are a single PM plus `pm_no_maintenance`; the fifth, for mines, changes with the equipment (below):
+
+| Group / PM | Per level | Buildings |
+|---|---|---|
+| `pmg_maintenance_light` / `pm_maintenance_light` | 0.05 | Trade center, art academy, state youth centers, software industry; the 14 discoverable mines (`bg_discoverable_mining`) |
+| `pmg_maintenance` / `pm_maintenance` | 0.1 | Everything else that had it: light, heavy, military and high-tech industry, synthetics and biotech plants, shipyard, skyscraper, tourism, construction sector, grand monument |
+| `pmg_maintenance_heavy` / `pm_maintenance_heavy` | 0.15 | Railway, highway, airport, port, network infrastructure; power, hydro and renewable plants; oil rig |
+| `pmg_maintenance_intensive` / `pm_maintenance_intensive` | 0.2 | Nuclear and fusion plants, ocean mine, space mine |
+| `pmg_maintenance_mine` / `pm_maintenance_traditional` or `pm_maintenance_mechanized_mine` | 0 or 0.05 | The original coal, iron, lead, sulfur and gold mines |
+
+The principle: upkeep follows the physical plant that wears with use, not the building's price or output. Offices, exchanges and institutions carry little; transport and power networks are all plant; hostile sites (reactors, the sea floor, vacuum) leave nothing to run down. Heavy industry keeps the original 0.1.
+
+- **Mines follow their equipment.** `pmg_maintenance_mine` lists `pm_maintenance_traditional` (free, first, so the default and the fallback), `pm_maintenance_mechanized_mine` (0.05) and `pm_no_maintenance`. The paid method's `unlocking_production_methods` names the equipment PMs of the five mines from the condensing engine pump on (condensing, diesel, high-pressure hydraulic, continuous miners, smart miners); picks and shovels and the atmospheric engine pump are the hand-worked tier. The free method carries `replacement_if_valid = pm_maintenance_mechanized_mine`, the vanilla mechanism that moves the train methods onto their principle variants, so the swap happens by itself when the equipment does. It is deliberately tied to the building's own PM, not to a technology: a technology-gated method would swap every mine in the country at once when the tech arrived, and each swap applies `pm_retooling`; here the swap comes with the equipment switch that already paid it. Vanilla drops a PM that depends on another PM when the other is swapped out, provided another PM in the group still fits, so going back to picks and shovels returns the mine to the free method. The discoverable mines have no hand-worked tier (their equipment PMs are all mechanized) and use `pmg_maintenance_light`. The test pins the unlock list to the equipment PMs; unverified in game: the automatic swap in both directions, and the default on a newly built mine.
+- **Adding a tier or a building.** Give the building the group whose rate fits (`INJECT:` or the building's own `production_method_groups`). A new *rate* needs a PM, a group in `extra_pm_groups.txt`, `disable_<pm>` in the `no_maintenance` and `disabled` settings of `free_market_construction_rule`, loc for the PM and group, and the group's key in the six `ProductionMethodGroup.GetKey` checks (five keys now, `And(And4(...), Not(...))`) that hide maintenance in `gui/production_methods.gui`, `building_details_panel.gui`, `building_browser_panel.gui` and `goods_state_panel.gui`. `test_maintenance_tiers.py` checks the rule flags, the shared `pm_no_maintenance` and that every maintenance group is hidden in those panels.
+- **Left without maintenance on purpose.** Farms, plantations, ranches, logging, fishing and whaling (land-based, and their tools and machines are already inputs). Farms and plantations could take the same equipment-driven split as mines (their harvesting PMs, such as steam threshers and tractors, are shared across crops, so one paid method could list them), but they are the largest sector and need their own balance decision. Also left out: universities and government buildings (paid from the budget, not built to earn); barracks, fortifications and bases; urban centers; canals (one level, not expandable, so the upkeep would be a rounding error); monuments and wonders (caretaker PMs); company buildings (their own recipes); the mod's late-game megastructures and the Strategic Reserve buildings (their own construction and cost rules). The original mines are not left out: they pay from the first mechanized pump, so an 1836 economy's hand-worked mines stay free while construction supply is scarcest.
 
 **Retooling.** The engine puts the `pm_retooling` static modifier on a building that switches production methods (`NEconomy.RETOOLING_WEEKS = 260` in `extra_defines.txt`); this mod REPLACEs it with `goods_input_construction_mult = 10`, so a retooling building pays +1000% on its construction input. Two `free_market_construction_rule` settings waive the retooling cost, and one of them maintenance as well (§ Market settings without retooling or maintenance).
 
@@ -117,7 +135,7 @@ New buildings get built / expanded
 
 - **The two FCFS queues still apply unchanged** — government queue from treasury, private queue from IP. The mod hasn't replaced the queue model; it's added an upstream market that determines whether the queue's currency is actually being produced, and drives the allocation between the queues from the two purchases.
 - **A goods-side stockout stalls both queues** regardless of treasury/IP balance. This is the design intent: construction is gated by economic capacity, not just by money.
-- **When mod-adding new buildings**, give them realistic `goods_input_construction_add` in their maintenance PMs (or add `pmg_maintenance`). Skipping this makes the building free to maintain in capacity terms, undermining the system.
+- **When mod-adding new buildings**, give them a maintenance group of the tier that fits (§ Maintenance tiers), or a realistic `goods_input_construction_add` in their own maintenance PMs. Skipping this makes the building free to maintain in capacity terms, undermining the system.
 
 **Scripts (`common/scripted_effects/te_construction_market_*.txt`):**
 
@@ -147,10 +165,10 @@ Wiring: `common/on_actions/te_construction_market_on_actions.txt` (yearly heartb
 
 `free_market_construction_rule` has four settings. Three run the market (`te_free_market_construction_on` is true for all three, so nothing else in the system tells them apart):
 
-| Setting | Maintenance (`pmg_maintenance`) | Retooling (`pm_retooling`) |
+| Setting | Maintenance (`pmg_maintenance*`) | Retooling (`pm_retooling`) |
 |---|---|---|
-| `free_market_construction_enabled` (default) | `pm_maintenance` | applies |
-| `free_market_construction_no_retooling` | `pm_maintenance` | removed by script |
+| `free_market_construction_enabled` (default) | `pm_maintenance` tiers | applies |
+| `free_market_construction_no_retooling` | `pm_maintenance` tiers | removed by script |
 | `free_market_construction_no_maintenance` | `pm_no_maintenance`, forced (the direct setting's flags for that group) | removed by script (it would multiply nothing) |
 | `free_market_construction_disabled` | `pm_no_maintenance`, forced | applies, multiplies nothing (§ Free Market Construction off) |
 
@@ -188,7 +206,7 @@ The sweep is a fallback only for a swap the hook missed. If the hook fired and t
 |---|---|---|
 | `pmg_base_te_construction_market_site` (site) | `pm_te_construction_market_base`: 1 construction good → 1 point | `pm_te_direct_construction_<tier>`, 7 tiers: the Construction Sector tier of the same name (`extra_pms.txt`) with its construction-good output as `country_construction_add` — the same inputs, employment, `state_construction_mult`, mortality and required inputs. Per level: 1 / 2 / 3.5 / 5 / 6 / 10 / 16 points. `ai_selection = most_productive`; the tech gates are the sector's |
 | `pmg_construction_automation`, `pmg_construction_principle` (sector and site) | on the sector only in practice: each gated PM's `unlocking_production_methods` lists the 7 sector tiers and the 7 direct tiers, never the market base PM | the same PMs, on the site |
-| `pmg_maintenance` (54 building types) | `pm_maintenance` (0.1 construction per level); `pm_no_maintenance`, forced, in the no-maintenance setting | `pm_no_maintenance`, forced |
+| `pmg_maintenance`, `_light`, `_heavy`, `_intensive` (74 building types) | `pm_maintenance` (0.1 construction per level) or its `_light` (0.05), `_heavy` (0.15) or `_intensive` (0.2) variant; `pm_no_maintenance`, forced, in the no-maintenance setting | `pm_no_maintenance`, forced |
 | `pmg_disney_world`, `pmg_generic_industrial_city`, `pmg_generic_monument_to_industry` | the original PM (consumes the construction good) | `pm_<same>_direct`, forced: the recipe without the good |
 | `pmg_principle_engineering_and_logistics` (barracks) | the principle PM (0.2 construction good per level) and its no-effect fallback | `_direct` twins: 0.2 `country_construction_add` per level instead |
 

@@ -1395,6 +1395,58 @@ REPLACE_OR_CREATE:pmg_maintenance = {
 	}
 }
 
+# Maintenance at other rates (pm_maintenance_* in extra_pms.txt). Same shape as
+# pmg_maintenance: one rate, and pm_no_maintenance under the game rule. The GUI hides
+# all four groups by key (production_methods.gui and the building panels), so a new
+# tier group must be added to those checks too. Which building takes which tier:
+# docs/systems/mod_systems.md, "Maintenance tiers".
+REPLACE_OR_CREATE:pmg_maintenance_light = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	is_hidden_when_unavailable = yes
+
+	production_methods = {
+		pm_maintenance_light
+		pm_no_maintenance
+	}
+}
+
+REPLACE_OR_CREATE:pmg_maintenance_heavy = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	is_hidden_when_unavailable = yes
+
+	production_methods = {
+		pm_maintenance_heavy
+		pm_no_maintenance
+	}
+}
+
+REPLACE_OR_CREATE:pmg_maintenance_intensive = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	is_hidden_when_unavailable = yes
+
+	production_methods = {
+		pm_maintenance_intensive
+		pm_no_maintenance
+	}
+}
+
+# The mines' maintenance follows their equipment; see pm_maintenance_traditional in
+# extra_pms.txt. Traditional first: it is the default and the fallback.
+REPLACE_OR_CREATE:pmg_maintenance_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	is_hidden_when_unavailable = yes
+
+	production_methods = {
+		pm_maintenance_traditional
+		pm_maintenance_mechanized_mine
+		pm_no_maintenance
+	}
+}
+
 # ===== POLLUTION MITIGATION PRODUCTION METHOD GROUPS =====
 
 # Tailings and Wastewater Management - shared by all mines
