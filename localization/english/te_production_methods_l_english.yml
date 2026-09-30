@@ -464,7 +464,7 @@
  pm_magnetic_drive_cruise_ships:0 "Magnetic Drive Cruise Ships"
  pm_magnetic_drive_cruise_ships_desc:0 "Long-range cruise lines built around magnetic drive propulsion offer a transport class that consumer-appliance comforts and digital networks elevate further."
  pm_magnetic_drive_ports:0 "Magnetic Drive Ports"
- pm_magnetic_drive_ports_desc:0 "Magnetically-driven ships docking at automated terminals push [concept_throughput] far past containerization-era levels. Heavy electronic and digital [concept_infrastructure] required."
+ pm_magnetic_drive_ports_desc:0 "Magnetically-driven ships docking at automated terminals push [concept_throughput] far past containerization-era levels. Heavy electronic and digital infrastructure required."
  pm_magnetic_drive_trawlers:0 "Magnetic Drive Trawlers"
  pm_magnetic_drive_trawlers_desc:0 "Sensor-guided fishing vessels with magnetic drive propulsion track shoals across whole ocean basins. Sustained yields are unmatched by earlier fleets."
  pm_magnetic_drive_whaling_ships:0 "Magnetic Drive Whaling Ships"
