@@ -111,12 +111,12 @@ un_propose_condemn_effect = {
 		scope:un_propose_condemn_target ?= { save_scope_as = un_vote_target }
 		add_modifier = {
 			name = un_ga_resolution_modifier
-			days = normal_modifier_time
+			days = un_propose_sponsor_days
 			is_decaying = yes
 		}
 		add_modifier = {
 			name = un_request_cooldown
-			days = long_modifier_time
+			days = un_propose_cooldown_days
 			is_decaying = yes
 		}
 		un_resolution_open = { TOPIC = condemn }
@@ -135,12 +135,12 @@ un_propose_sanctions_effect = {
 		scope:un_propose_sanctions_target ?= { save_scope_as = un_vote_target }
 		add_modifier = {
 			name = un_ga_resolution_modifier
-			days = normal_modifier_time
+			days = un_propose_sponsor_days
 			is_decaying = yes
 		}
 		add_modifier = {
 			name = un_request_cooldown
-			days = long_modifier_time
+			days = un_propose_cooldown_days
 			is_decaying = yes
 		}
 		un_resolution_open = { TOPIC = sanctions }
@@ -159,7 +159,7 @@ un_propose_expulsion_effect = {
 		scope:un_propose_expulsion_target ?= { save_scope_as = un_vote_target }
 		add_modifier = {
 			name = un_request_cooldown
-			days = long_modifier_time
+			days = un_propose_cooldown_days
 			is_decaying = yes
 		}
 		# Every other member votes, including the target — it gets to defend itself
@@ -182,12 +182,12 @@ un_propose_mandate_effect = {
 			scope:un_mandate_case_target = { save_scope_as = un_vote_target }
 			add_modifier = {
 				name = un_ga_resolution_modifier
-				days = normal_modifier_time
+				days = un_propose_sponsor_days
 				is_decaying = yes
 			}
 			add_modifier = {
 				name = un_request_cooldown
-				days = long_modifier_time
+				days = un_propose_cooldown_days
 				is_decaying = yes
 			}
 			set_variable = { name = un_mandate_proposal_cooldown days = 1825 }
@@ -218,7 +218,7 @@ un_propose_peacekeepers_effect = {
 		text = "UN_REQUEST_PEACEKEEPERS_TT"
 		add_modifier = {
 			name = un_request_cooldown
-			days = long_modifier_time
+			days = un_propose_cooldown_days
 			is_decaying = yes
 		}
 		# Open the vote; the requester is also the resolution's target
@@ -235,7 +235,7 @@ un_propose_aid_effect = {
 		text = "UN_REQUEST_AID_TT"
 		add_modifier = {
 			name = un_request_cooldown
-			days = long_modifier_time
+			days = un_propose_cooldown_days
 			is_decaying = yes
 		}
 		# Open the vote; the requester is also the resolution's target
@@ -252,12 +252,12 @@ un_propose_reform_effect = {
 		text = "UN_PROPOSE_CHARTER_REFORM_TT"
 		add_modifier = {
 			name = un_ga_resolution_modifier
-			days = normal_modifier_time
+			days = un_propose_sponsor_days
 			is_decaying = yes
 		}
 		add_modifier = {
 			name = un_request_cooldown
-			days = long_modifier_time
+			days = un_propose_cooldown_days
 			is_decaying = yes
 		}
 		# The proposer champions reform (as un_events.6's own option does).
@@ -321,12 +321,12 @@ un_charter_reform_open = {
 un_propose_own_motion_costs = {
 	add_modifier = {
 		name = un_ga_resolution_modifier
-		days = normal_modifier_time
+		days = un_propose_sponsor_days
 		is_decaying = yes
 	}
 	add_modifier = {
 		name = un_request_cooldown
-		days = long_modifier_time
+		days = un_propose_cooldown_days
 		is_decaying = yes
 	}
 }
