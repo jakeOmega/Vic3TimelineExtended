@@ -246,12 +246,33 @@ class WindowTest(unittest.TestCase):
 
     def test_the_header_title_close_and_back_button(self):
         self.assertRegex(self.panel, r'blockoverride "window_header_name" \{\s*text = "te_systems_window_title"')
-        # The back button stays (its socket is in the header art): it closes
-        # the window and reopens the panel it replaced.
+        # The back button stays (its socket is in the header art) and closes
+        # the window. OpenPreviousPanel reopened nothing in game, since the
+        # window's own ClosePanel leaves no history (play-test 2026-09-30).
         self.assertNotIn('"entire_back_button"', self.panel)
         self.assertRegex(self.panel, r'blockoverride "header_back_button" \{\s*'
                                      r"onclick = \"\[GetVariableSystem\.Clear\('com_open_window'\)\]\"\s*"
-                                     r'onclick = "\[InformationPanelBar\.OpenPreviousPanel\]"')
+                                     r'input_action = "back"\s*\}')
+        self.assertNotIn("[InformationPanelBar.OpenPreviousPanel]", self.panel)
+
+    def test_a_greyed_tabs_tooltip_has_three_branches(self):
+        # Running: the open tooltip. Greyed with every unlock condition met
+        # (an entry that has run its course): te_window_tab_met_tt, since
+        # IsValidTooltip then renders nothing (play-test 2026-09-30).
+        # Otherwise: the locked line and the checklist.
+        for sys_ in ("space_race", "colonial_empire", "grand_monuments"):
+            with self.subTest(tab=sys_):
+                m = re.search(r"tooltip = \"(\[SelectLocalization\( GetScriptedGui\('te_window_%s_tab_sgui'\)[^\"]*)\"" % sys_,
+                              self.panel)
+                self.assertIsNotNone(m)
+                tt = m.group(1)
+                self.assertIn("'te_window_tab_%s_tt'" % sys_, tt)
+                self.assertIn("GetScriptedGui('te_window_%s_tab_unlock_sgui').IsValid(" % sys_, tt)
+                self.assertIn("'te_window_tab_met_tt'", tt)
+                self.assertIn("Localize( 'te_window_tab_%s_locked_tt' )" % sys_, tt)
+                self.assertIn("GetScriptedGui('te_window_%s_tab_unlock_sgui').IsValidTooltip(" % sys_, tt)
+                self.assertLess(tt.index(".IsValid("), tt.index("'te_window_tab_met_tt'"))
+        self.assertIn("te_window_tab_met_tt", _all_loc())
         self.assertRegex(self.panel, r'blockoverride "header_close_button" \{\s*'
                                      r"onclick = \"\[GetVariableSystem\.Clear\('com_open_window'\)\]\"\s*\}")
         self.assertEqual(_all_loc()["te_systems_window_title"], "Timeline Extended")
