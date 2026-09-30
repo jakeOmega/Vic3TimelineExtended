@@ -4338,6 +4338,7 @@
  te_subjugation_strength_sufficient_tt:0 "Our Subjugation Strength against [SCOPE.sCountry('target_country').GetName] is at least #V 1.0#! (base [concept_prestige] ratio plus any identity-conditional bonuses)"
  te_swap_already_provided_tt:0 "The recipient has no other $swap_line$"
  te_swap_provider_solvent_tt:0 "The swap-line provider is not in default"
+ te_system_tab_met_tt:0 "#b Not open yet#!\nIts conditions are met, but its journal entry is not running. It opens at the journal's next check, unless it has already run its course."
  te_system_tab_open_journal:0 "Open Journal Entry"
  te_trade_center_boost:0 "Merchant Quarter Bustles"
  te_trade_center_chill:0 "Merchant Quarter Sluggish"

@@ -190,7 +190,7 @@ types diplomatic_panel
 					text = "te_diplomacy_tab_un"
 				}
 				blockoverride "sixth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_diplomacy_tab_un_tt', Concatenate( Localize( 'te_diplomacy_tab_un_locked_tt' ), GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_diplomacy_tab_un_tt', SelectLocalization( GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_diplomacy_tab_un_locked_tt' ), GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "sixth_button_click" {
 					enabled = "[GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
