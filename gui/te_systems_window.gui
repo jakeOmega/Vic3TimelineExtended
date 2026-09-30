@@ -788,9 +788,13 @@ widget = {
 			visible = "[GetScriptedGui('te_window_launcher_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 
 			### The dark strip behind the label: vanilla's, sized for one row
-			### (the bar's is as tall as the whole sidebar).
+			### (the bar's is as tall as the whole sidebar). Its right margin
+			### (+40) extends the strip past the widget, so it ends at about
+			### width + 40. 200 puts that where vanilla's dark area ends, near
+			### 240 (measured from a play-test screenshot, 2026-09-30: 300 ran
+			### about 100 past it).
 			widget = {
-				size = { 300 40 }
+				size = { 200 40 }
 				alpha = 0
 
 				background = {
