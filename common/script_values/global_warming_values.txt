@@ -340,6 +340,37 @@ gw_disp_temp_projected = {
 	add = temperature_anomaly_display
 }
 
+# The overview bar's layers (play-test round 3; the layer list is in
+# te_gw_overview_panel's comment). The projection on the bar's 0-4 C scale,
+# then the lower and the higher of reading and projection. The solid fill runs
+# to the lower and a translucent layer under it to the higher. Rising, the
+# solid part ends at the reading and a pale stretch runs on to the projection;
+# falling, the solid part ends at the projection and a red stretch runs on to
+# the reading. Falling is gw_disp_temp_trend < 0, which is exactly when the
+# projection (the reading plus ten years of last year's change) is lower.
+gw_disp_proj_frac = {
+	value = gw_disp_temp_projected
+	divide = 4
+	min = 0
+	max = 1
+}
+
+gw_disp_bar_low_frac = {
+	value = gw_disp_temp_frac
+	if = {
+		limit = { gw_disp_temp_trend < 0 }
+		value = gw_disp_proj_frac
+	}
+}
+
+gw_disp_bar_high_frac = {
+	value = gw_disp_proj_frac
+	if = {
+		limit = { gw_disp_temp_trend < 0 }
+		value = gw_disp_temp_frac
+	}
+}
+
 # 1 while the next threshold is being approached: warming, and below the top
 # tier. Picks the bar tooltip's "N years away" line; otherwise it says no
 # threshold is being approached at last year's rate.
