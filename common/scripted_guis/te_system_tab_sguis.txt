@@ -89,3 +89,28 @@ te_diplomacy_un_tab_unlock_sgui = {
 	is_valid = { un_entry_unlocked = yes }
 	effect = { }
 }
+
+# ---------------------------------------------------------------------------
+# Nuclear Weapons: Military panel (gui/panel_military.gui), je_nuclear_program.
+# The entry is active for a country with a programme, warheads or a part in a
+# crisis, and for every country once the world's first warhead exists, so the
+# tab opens for all of them.
+# ---------------------------------------------------------------------------
+te_military_nuclear_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = nuclear_weapons_enabled
+		has_journal_entry = je_nuclear_program
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_military_nuclear_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = nuclear_weapons_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { nuclear_program_entry_unlocked = yes }
+	effect = { }
+}

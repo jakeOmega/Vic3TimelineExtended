@@ -63,6 +63,19 @@ nuclear_program_entry_applies = {
 	}
 }
 
+# Country scope: nuclear_program_entry_applies (the entry's `possible`) as one
+# tooltip line: the checklist in the Military panel's greyed Nuclear tab
+# (te_military_nuclear_tab_unlock_sgui's is_valid, te_system_tab_sguis.txt).
+# One line because the test is an OR, and a bare OR prints there as an empty
+# "All of these:" (gui_modding_guide.md gotcha #31, the UN tab). It calls the
+# entry's own trigger, so the checklist cannot drift from the entry.
+nuclear_program_entry_unlocked = {
+	custom_tooltip = {
+		text = nuclear_program_unlock_tt
+		nuclear_program_entry_applies = yes
+	}
+}
+
 # Country scope: may funding be stepped up? Body of
 # increase_funding_nuclear_program's `possible`. The engine renders the last
 # three clauses with a tick or a cross each, which is both more informative
