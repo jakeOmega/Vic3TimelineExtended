@@ -1,58 +1,74 @@
 # Nuclear Weapons GUI: Icons
 
-The overview at the top of the Nuclear Weapons journal entry (`je_nuclear_program`) draws 24 icons: one per state of the programme and of the posture, plus the warheads and crisis cells. All of them are placeholders: textures the mod or vanilla already uses elsewhere, chosen so the layout can be judged in game before the art exists (style guide rule 10). This page lists every one, what the final art should show and a proposed path, as `un_gui_icons.md` did for the UN before PR #572 replaced its placeholders.
+The overview at the top of the Nuclear Weapons journal entry (`je_nuclear_program`) draws 24 icons of its own: one per state of the programme and of the posture, plus the warheads and crisis cells. They were vanilla placeholders through the Nuclear panels' style pass and its play-tests, and PR #586 replaced them. All of them live in `gfx/interface/icons/nuclear_icons/`.
 
-**Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/nuclear_overview_widget.gui`, one icon widget per state, picked by a display value's code (`EqualTo_CFixedPoint( …ScriptValue('<code value>'), '(CFixedPoint)N' )`). No script reads the paths, so swapping one in is one path change. `OverviewTest` in `test_nuclear_layout.py` checks that each code draws exactly one icon and that every texture in the overview is listed on this page.
+**Where each is set.** Every icon is a literal `texture = "…"` line in `gui/journal_entry_widgets/nuclear_overview_widget.gui`. There is one icon widget per state, picked by a display value's code (`EqualTo_CFixedPoint( …ScriptValue('<code value>'), '(CFixedPoint)N' )`). No script reads the paths. `NuclearIconsTest` in `test_nuclear_layout.py` holds each code to its file. It fails on any placeholder left in the overview and on any icon faded to tell it from another. Once the folder is in the tree, it also checks that every file is there.
 
-**The rule for the set** (from the UN's): simple and easy to recognize at 36 px. The states of one thing share an emblem and differ by a mark. Proposed home: `gfx/interface/icons/nuclear_icons/`.
+**Remaking one.** The icons come from the icon pipeline (`scripts/image_pipeline/`, spec `docs/superpowers/specs/2026-09-26-icon-pipeline-design.md` § "System panels' GUI icons"). Their registry entries are the `nuclear_part` and `nuclear_state` categories in `icon_prompts.py`. `nuclear_part` holds the rendered objects: the warhead, the missile, the key and the things drawn beside them. `nuclear_state` builds each icon from those objects. Each `nuclear_state` entry's `now` field names the vanilla placeholder it replaced. Change the entry, re-render, review, then `write`. The GUI needs no edit unless a file name changes.
+
+**The rule for the set** (the UN's): simple and easy to recognize at 36 px. The states of one thing share an emblem and differ by a mark:
+- The programme, the warheads cell, the crisis and the doctrines share one steel warhead. It lies on its side with a small radiation trefoil on its tail.
+- Readiness shares the olive-green missile on a drawn steel pad.
+- Launch authority shares the brass key.
 
 ## Row 1: the programme
 
-Code: `nuclear_program_display_state` (`common/script_values/extra_script_values.txt`), in the order of the status line's programme sentence (`nuclear_program_status_line`). The cell's hover is that sentence.
+Code: `nuclear_program_display_state` (`common/script_values/extra_script_values.txt`), in the order of the status line's programme sentence (`nuclear_program_status_line`). The cell's hover is that sentence. Every state is drawn at full opacity: the art tells No Programme and Disarmed from their neighbours itself, so the 30% fade the placeholders needed is gone.
 
-| Code | State | Placeholder now | Final art should show | Proposed file |
-|---|---|---|---|---|
-| 0 | Unfunded | `gfx/interface/icons/generic_icons/paused.dds` | a steel warhead casing on a cradle, grey, under a drawn pause mark | `programme_unfunded.dds` |
-| 1 | Developing (first device) | `gfx/interface/icons/invention_icons/nuclear_weapons.dds` | the warhead casing with an open inspection panel and a brass wrench beside it | `programme_developing.dds` |
-| 2 | Producing (series production) | `gfx/interface/icons/event_icons/mushroom_cloud.dds` | three identical steel warheads standing in a row | `programme_producing.dds` |
-| 3 | Frozen (pause treaty) | `gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_program_pause.dds` | the warhead casing behind a blue ribbon with a wax treaty seal | `programme_frozen.dds` |
-| 4 | At ceiling | `gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_arms_limitation.dds` | a row of warheads under a flat gold bar at their tips | `programme_at_ceiling.dds` |
-| 5 | Dismantling | `gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_disarmament.dds` | the warhead casing split in two halves, a wrench between them | `programme_dismantling.dds` |
-| 6 | No programme | `gfx/interface/icons/invention_icons/nuclear_weapons.dds` (30% opacity) | the warhead casing, faint grey, no mark | `programme_none.dds` |
-| 7 | Renounced | `gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_disarmament.dds` | a white dove over a broken warhead casing | `programme_renounced.dds` |
-| 8 | Disarmed (settlement or NPT) | `gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_disarmament.dds` (30% opacity) | the warhead casing, grey, under vanilla's red cross | `programme_disarmed.dds` |
+| Code | State | Shows | File |
+|---|---|---|---|
+| 0 | Unfunded | the warhead, grey, under a drawn pause mark (amber bars on a dark badge) | `programme_unfunded.dds` |
+| 1 | Developing (first device) | the warhead with a brass wrench across its tail | `programme_developing.dds` |
+| 2 | Producing (series production) | a rack of three warheads, one above another | `programme_producing.dds` |
+| 3 | Frozen (pause treaty) | the warhead with a red wax seal on a blue ribbon | `programme_frozen.dds` |
+| 4 | At ceiling | the rack of three under a flat gold bar | `programme_at_ceiling.dds` |
+| 5 | Dismantling | the warhead split in two halves, a brass wrench between them | `programme_dismantling.dds` |
+| 6 | No programme | the warhead, faint grey, no mark | `programme_none.dds` |
+| 7 | Renounced | a pale grey dove with an olive branch over the split warhead | `programme_renounced.dds` |
+| 8 | Disarmed (settlement or NPT) | the warhead, grey, under vanilla's red cross | `programme_disarmed.dds` |
 
 ## Row 1: warheads and the crisis
 
-| Cell | Shown | Placeholder now | Final art should show | Proposed file |
-|---|---|---|---|---|
-| Warheads | always | `gfx/interface/icons/invention_icons/guided_missiles.dds` | a single steel warhead, nose up, with a small radiation trefoil | `warheads.dds` |
-| Crisis | while in one | `gfx/interface/icons/diplomatic_action_icons/nd_nuclear_ultimatum_action.dds` | the warhead under vanilla's warning mark, on a red disc | `crisis.dds` |
+| Cell | Shown | Shows | File |
+|---|---|---|---|
+| Warheads | always | the warhead alone | `warheads.dds` |
+| Crisis | while in one | the warhead on a red disc, under vanilla's warning mark | `crisis.dds` |
 
 The credibility cell is a meter, not an icon.
 
 ## Row 2: the posture (while armed)
 
-Codes: `nd_display_doctrine_code`, `nd_display_readiness_code`, `nd_display_authority_code` (`common/script_values/nuclear_deterrence_values.txt`), falling back as the name blocks in `nuclear_deterrence_custom_loc.txt` do. Each cell's hover is the posture row's own tooltip.
+Codes: `nd_display_doctrine_code`, `nd_display_readiness_code` and `nd_display_authority_code` (`common/script_values/nuclear_deterrence_values.txt`). Each falls back as the name blocks in `nuclear_deterrence_custom_loc.txt` do. Each cell's hover is the posture row's own tooltip.
 
-| Axis | Code | State | Placeholder now | Final art should show | Proposed file |
-|---|---|---|---|---|---|
-| Doctrine | 1 | No First Use | `gfx/interface/icons/diplomatic_treaties_articles_icons/crisis_resolution.dds` | a warhead inside a closed gold shield | `doctrine_nfu.dds` |
-| Doctrine | 2 | Existential Deterrence | `gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds` | a warhead behind a stone wall, nose up | `doctrine_existential.dds` |
-| Doctrine | 3 | Flexible First Use | `gfx/interface/icons/diplomatic_action_icons/nd_nuclear_warning_action.dds` | a warhead tilted forward on a half-drawn shield | `doctrine_flexible.dds` |
-| Doctrine | 4 | Nuclear Compellence | `gfx/interface/icons/diplomatic_action_icons/nd_nuclear_ultimatum_action.dds` | a warhead pointing right past a raised gauntlet | `doctrine_compellence.dds` |
-| Doctrine | 5 | Nuclear Warfighting | `gfx/interface/icons/invention_icons/tactical_nuclear_weapons.dds` | a warhead crossed with a sword | `doctrine_warfighting.dds` |
-| Readiness | 0 | Recessed | `gfx/interface/buttons/button_icons/lock.dds` | a warhead in a locked steel crate | `readiness_recessed.dds` |
-| Readiness | 1 | Routine | `gfx/interface/icons/commander_order_icons/standby.dds` | a missile lying flat on its launcher, green lamp | `readiness_routine.dds` |
-| Readiness | 2 | Heightened | `gfx/interface/icons/generic_icons/warning.dds` | the missile raised halfway, amber lamp | `readiness_heightened.dds` |
-| Readiness | 3 | High Alert | `gfx/interface/icons/generic_icons/mobilize_icon_single.dds` | the missile upright on its launcher, red lamp | `readiness_high_alert.dds` |
-| Launch authority | 1 | Central Authorization | `gfx/interface/icons/generic_icons/government_building_icon.dds` | a single brass key in a government seal | `authority_central.dds` |
-| Launch authority | 2 | Conditional Delegation | `gfx/interface/icons/generic_icons/most_senior_front_commander.dds` | the brass key handed from a gloved hand to an officer's | `authority_delegation.dds` |
-| Launch authority | 3 | Launch on Warning | `gfx/interface/icons/lens_toolbar_icons/nd_nuclear_warning_action.dds` | a radar dish with the brass key under it | `authority_on_warning.dds` |
-| Launch authority | 4 | Automatic Retaliation | `gfx/interface/icons/generic_icons/observer_mode_icon.dds` | a grey machine cabinet with the brass key turned in it, red lamp | `authority_automatic.dds` |
+| Axis | Code | State | Shows | File |
+|---|---|---|---|---|
+| Doctrine | 1 | No First Use | the warhead inside a drawn gold heater shield | `doctrine_nfu.dds` |
+| Doctrine | 2 | Existential Deterrence | the warhead resting on a low wall of rough grey stone | `doctrine_existential.dds` |
+| Doctrine | 3 | Flexible First Use | the warhead tilted forward, a smaller drawn gold heater shield behind it | `doctrine_flexible.dds` |
+| Doctrine | 4 | Nuclear Compellence | the warhead pointing right at a red arrow | `doctrine_compellence.dds` |
+| Doctrine | 5 | Nuclear Warfighting | the warhead crossed with a broad steel sword, gold hilt | `doctrine_warfighting.dds` |
+| Readiness | 0 | Recessed | a closed dark-green steel crate under a brass padlock | `readiness_recessed.dds` |
+| Readiness | 1 | Routine | the missile lying flat over the pad, green lamp | `readiness_routine.dds` |
+| Readiness | 2 | Heightened | the missile raised about 40 degrees, amber lamp | `readiness_heightened.dds` |
+| Readiness | 3 | High Alert | the missile upright on the pad, red lamp | `readiness_high_alert.dds` |
+| Launch authority | 1 | Central Authorization | the key before a bronze seal with a star inside a laurel border | `authority_central.dds` |
+| Launch authority | 2 | Conditional Delegation | the key beside an officer's peaked cap | `authority_delegation.dds` |
+| Launch authority | 3 | Launch on Warning | the key beside a radar dish tilted up | `authority_on_warning.dds` |
+| Launch authority | 4 | Automatic Retaliation | the key beside a grey computer cabinet with dials and a red lamp | `authority_automatic.dds` |
+
+## Where the art departs from the list
+
+The list this page used to be asked for some things the renderer would not draw, or that did not read at 36 px. What stood in (#586):
+- **The warhead lies on its side.** The list had it standing nose up. FLUX laid it down in all four seeds, so Producing and At Ceiling are a rack of three rather than a row, and Compellence mirrors the warhead.
+- **Developing** has the wrench but no open inspection panel, which was a speck at 36 px.
+- **No First Use and Flexible First Use** have a drawn heater shield, because FLUX drew plaques and discs.
+- **Compellence** points at a red arrow, not past a raised gauntlet, which read as a mug.
+- **Readiness** stands the missile on a drawn steel pad. Every launcher FLUX drew was a flat truck already carrying a missile. The three angles and the green, amber and red lamps are as the list asked.
+- **Conditional Delegation** puts the key beside an officer's cap. The list's gloved hands are a risk at icon size.
+- Smaller changes: Unfunded's warhead has no cradle. Renounced's dove is pale grey, because white is lost in the cut-out. Existential's warhead rests on the wall, not behind it. On Warning's and Automatic's keys lie beside the dish and the cabinet, not under or in them.
 
 ## Row 3: the nuclear taboo
 
-No placeholder. The bar is the projection bar shared with Global Warming (play-test round 3): vanilla's `default_progressbar_horizontal` layers, the change still to come drawn in the bar's own fill at 40% opacity, and no marker. The trend arrow is vanilla's `trend_up` / `trend_down` / `trend_nochange`, picked by `nd_disp_taboo_trend`.
+No icon of its own. The bar is the projection bar shared with Global Warming (play-test round 3). It has vanilla's `default_progressbar_horizontal` layers and no marker, and draws the change still to come in the bar's own fill at 40% opacity. The trend arrow is vanilla's `trend_up`, `trend_down` or `trend_nochange`, picked by `nd_disp_taboo_trend`. `NuclearIconsTest` allows these three as the only vanilla textures left in the overview.
 
-The Forces section's survivability bar is built the same way, with vanilla's green and red fills for the change, and marks its ceiling with a 3 px line of vanilla's `gfx/interface/backgrounds/white.dds` tinted cream. Neither needs art.
+The Forces section's survivability bar is built the same way. It draws the change in vanilla's green and red fills and marks its ceiling with a 3 px line of vanilla's `gfx/interface/backgrounds/white.dds`, tinted cream. Neither bar needs art.

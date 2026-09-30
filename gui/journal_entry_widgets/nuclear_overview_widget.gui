@@ -15,9 +15,9 @@
 ### nd_display_doctrine_code / _readiness_code / _authority_code
 ### (nuclear_deterrence_values.txt), each falling back the way the status
 ### line and the posture's name blocks do; nd_disp_taboo_step and
-### nd_disp_taboo_trend (nuclear_taboo_values.txt). Every icon is a
-### placeholder, one widget per state so that the finished art is one path
-### change each: docs/systems/nuclear_gui_icons.md lists them.
+### nd_disp_taboo_trend (nuclear_taboo_values.txt). One icon widget per
+### state. Icons are the system's own (gfx/interface/icons/nuclear_icons/,
+### PR #586); what each shows is in docs/systems/nuclear_gui_icons.md.
 ###
 ### Cells have a fixed width (style guide rule 8), so a long word cannot push
 ### its neighbours off-centre. The rows sit in one column of a fixed 480
@@ -123,7 +123,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)0' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/generic_icons/paused.dds"
+								texture = "gfx/interface/icons/nuclear_icons/programme_unfunded.dds"
 							}
 							blockoverride "label" {
 								text = "je_nuclear_ov_prog_0"
@@ -132,7 +132,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)1' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/invention_icons/nuclear_weapons.dds"
+								texture = "gfx/interface/icons/nuclear_icons/programme_developing.dds"
 							}
 							blockoverride "label" {
 								text = "je_nuclear_ov_prog_1"
@@ -141,7 +141,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)2' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+								texture = "gfx/interface/icons/nuclear_icons/programme_producing.dds"
 							}
 							blockoverride "label" {
 								text = "je_nuclear_ov_prog_2"
@@ -150,7 +150,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)3' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_program_pause.dds"
+								texture = "gfx/interface/icons/nuclear_icons/programme_frozen.dds"
 							}
 							blockoverride "label" {
 								text = "je_nuclear_ov_prog_3"
@@ -159,7 +159,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)4' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_arms_limitation.dds"
+								texture = "gfx/interface/icons/nuclear_icons/programme_at_ceiling.dds"
 							}
 							blockoverride "label" {
 								text = "je_nuclear_ov_prog_4"
@@ -168,7 +168,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)5' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_disarmament.dds"
+								texture = "gfx/interface/icons/nuclear_icons/programme_dismantling.dds"
 							}
 							blockoverride "label" {
 								text = "je_nuclear_ov_prog_5"
@@ -177,8 +177,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)6' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/invention_icons/nuclear_weapons.dds"
-								alpha = 0.3
+								texture = "gfx/interface/icons/nuclear_icons/programme_none.dds"
 							}
 							blockoverride "label" {
 								text = "je_nuclear_ov_prog_6"
@@ -187,7 +186,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)7' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_disarmament.dds"
+								texture = "gfx/interface/icons/nuclear_icons/programme_renounced.dds"
 							}
 							blockoverride "label" {
 								text = "je_nuclear_ov_prog_7"
@@ -196,8 +195,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_icon_label = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_state'), '(CFixedPoint)8' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_disarmament.dds"
-								alpha = 0.3
+								texture = "gfx/interface/icons/nuclear_icons/programme_disarmed.dds"
 							}
 							blockoverride "label" {
 								text = "je_nuclear_ov_prog_8"
@@ -208,7 +206,7 @@ types nuclear_overview_widget_types
 					te_nuclear_ov_icon_label = {
 						tooltip = "je_nuclear_ov_warheads_tt"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/invention_icons/guided_missiles.dds"
+							texture = "gfx/interface/icons/nuclear_icons/warheads.dds"
 						}
 						blockoverride "label" {
 							text = "je_nuclear_ov_warheads_label"
@@ -219,7 +217,7 @@ types nuclear_overview_widget_types
 						visible = "[GetScriptedGui('nd_in_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						tooltip = "je_nuclear_ov_crisis_tt"
 						blockoverride "icon_texture" {
-							texture = "gfx/interface/icons/diplomatic_action_icons/nd_nuclear_ultimatum_action.dds"
+							texture = "gfx/interface/icons/nuclear_icons/crisis.dds"
 						}
 						blockoverride "label" {
 							text = "je_nuclear_ov_crisis_label"
@@ -268,7 +266,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)1' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/crisis_resolution.dds"
+								texture = "gfx/interface/icons/nuclear_icons/doctrine_nfu.dds"
 							}
 							blockoverride "label" {
 								text = "nd_doctrine_1"
@@ -277,7 +275,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)2' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds"
+								texture = "gfx/interface/icons/nuclear_icons/doctrine_existential.dds"
 							}
 							blockoverride "label" {
 								text = "nd_doctrine_2"
@@ -286,7 +284,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)3' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/diplomatic_action_icons/nd_nuclear_warning_action.dds"
+								texture = "gfx/interface/icons/nuclear_icons/doctrine_flexible.dds"
 							}
 							blockoverride "label" {
 								text = "nd_doctrine_3"
@@ -295,7 +293,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)4' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/diplomatic_action_icons/nd_nuclear_ultimatum_action.dds"
+								texture = "gfx/interface/icons/nuclear_icons/doctrine_compellence.dds"
 							}
 							blockoverride "label" {
 								text = "nd_doctrine_4"
@@ -304,7 +302,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)5' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/invention_icons/tactical_nuclear_weapons.dds"
+								texture = "gfx/interface/icons/nuclear_icons/doctrine_warfighting.dds"
 							}
 							blockoverride "label" {
 								text = "nd_doctrine_5"
@@ -317,7 +315,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)0' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/buttons/button_icons/lock.dds"
+								texture = "gfx/interface/icons/nuclear_icons/readiness_recessed.dds"
 							}
 							blockoverride "label" {
 								text = "nd_readiness_0"
@@ -326,7 +324,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)1' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/commander_order_icons/standby.dds"
+								texture = "gfx/interface/icons/nuclear_icons/readiness_routine.dds"
 							}
 							blockoverride "label" {
 								text = "nd_readiness_1"
@@ -335,7 +333,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)2' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/generic_icons/warning.dds"
+								texture = "gfx/interface/icons/nuclear_icons/readiness_heightened.dds"
 							}
 							blockoverride "label" {
 								text = "nd_readiness_2"
@@ -344,7 +342,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_code'), '(CFixedPoint)3' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/generic_icons/mobilize_icon_single.dds"
+								texture = "gfx/interface/icons/nuclear_icons/readiness_high_alert.dds"
 							}
 							blockoverride "label" {
 								text = "nd_readiness_3"
@@ -357,7 +355,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)1' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/generic_icons/government_building_icon.dds"
+								texture = "gfx/interface/icons/nuclear_icons/authority_central.dds"
 							}
 							blockoverride "label" {
 								text = "nd_authority_1"
@@ -366,7 +364,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)2' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/generic_icons/most_senior_front_commander.dds"
+								texture = "gfx/interface/icons/nuclear_icons/authority_delegation.dds"
 							}
 							blockoverride "label" {
 								text = "nd_authority_2"
@@ -375,7 +373,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)3' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/lens_toolbar_icons/nd_nuclear_warning_action.dds"
+								texture = "gfx/interface/icons/nuclear_icons/authority_on_warning.dds"
 							}
 							blockoverride "label" {
 								text = "nd_authority_3"
@@ -384,7 +382,7 @@ types nuclear_overview_widget_types
 						te_nuclear_ov_posture_cell = {
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)4' )]"
 							blockoverride "icon_texture" {
-								texture = "gfx/interface/icons/generic_icons/observer_mode_icon.dds"
+								texture = "gfx/interface/icons/nuclear_icons/authority_automatic.dds"
 							}
 							blockoverride "label" {
 								text = "nd_authority_4"

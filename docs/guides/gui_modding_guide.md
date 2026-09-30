@@ -1733,7 +1733,7 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 | `global_warming_widget.gui` | `je_global_warming` | climate conditions readout, all eight mitigation policies as rows, world adoption counts, two history charts |
 | `nuclear_program_widget.gui` | `je_nuclear_program` | the programme half's sections as types (`te_nuclear_sec_*`): the programme (funding stepper, production rate, time to the next warhead, first device), the nuclear taboo with its chart, delivery and defence, the nuclear-powers leaderboard |
 | `nuclear_deterrence_widget.gui` | `je_nuclear_program` | the deterrence half's sections as types: the crisis and our moves, the posture with its doctrine and readiness/authority choices as collapsed subsections, forces, at home, reputation |
-| `nuclear_overview_widget.gui` | `je_nuclear_program` | the overview: programme state, warheads, crisis, credibility, the posture as three icons, the taboo as a bar with its target and trend (placeholder icons: `docs/systems/nuclear_gui_icons.md`) |
+| `nuclear_overview_widget.gui` | `je_nuclear_program` | the overview: programme state, warheads, crisis, credibility, the posture as three icons, the taboo as a bar with its target and trend (icons: `docs/systems/nuclear_gui_icons.md`) |
 | `nuclear_layout_widget.gui` | `je_nuclear_program` | the one order of the nuclear sections and the entry's named roots (overview in container 1, programme above the native bar in container 3, live and reference sections in container 4); How Nuclear Weapons Work |
 | `te_history_chart.gui` | (type library) | reusable `te_history_chart` column-chart types, usable from any JE widget |
 

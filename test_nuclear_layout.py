@@ -250,19 +250,20 @@ class HowItWorksTest(unittest.TestCase):
         self.assertIn('blockoverride "subheader_margin" {}', first)
 
 
+def _coded(text, value):
+    """{code: [textures]} for the icons gated on ScriptValue(value) == code."""
+    found = {}
+    pat = (rf"visible = \"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('{value}'\), "
+           rf"'\(CFixedPoint\)(-?\d+)' \)\]\"(.*?)texture = \"([^\"]+)\"")
+    for m in re.finditer(pat, text, re.S):
+        found.setdefault(int(m.group(1)), []).append(m.group(3))
+    return found
+
+
 class OverviewTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ov = _read(OVERVIEW)
-
-    def _coded(self, value):
-        """{code: [textures]} for the icons gated on ScriptValue(value) == code."""
-        found = {}
-        pat = (rf"visible = \"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('{value}'\), "
-               rf"'\(CFixedPoint\)(-?\d+)' \)\]\"(.*?)texture = \"([^\"]+)\"")
-        for m in re.finditer(pat, self.ov, re.S):
-            found.setdefault(int(m.group(1)), []).append(m.group(3))
-        return found
 
     def test_every_state_has_one_icon(self):
         for value, codes in (("nuclear_program_display_state", range(0, 9)),
@@ -271,7 +272,7 @@ class OverviewTest(unittest.TestCase):
                              ("nd_display_authority_code", range(1, 5)),
                              ("nd_disp_taboo_trend", range(-1, 2))):
             with self.subTest(value=value):
-                found = self._coded(value)
+                found = _coded(self.ov, value)
                 self.assertEqual(sorted(found), list(codes))
                 for code, textures in found.items():
                     self.assertEqual(len(textures), 1, f"{value} {code}")
@@ -371,18 +372,75 @@ class OverviewTest(unittest.TestCase):
             self.assertRegex(body, r"\n\t\tsize = \{ \d+ \d+ \}\n", t)
             self.assertIn(bound, body, t)
 
-    def test_every_placeholder_is_listed(self):
-        doc = _read(ICON_DOC)
-        textures = set(re.findall(r'texture = "([^"]+)"', self.ov))
-        textures -= {"gfx/interface/icons/generic_icons/transparent.dds",
-                     "gfx/interface/progressbar/progressbar_marker.dds",
-                     "gfx/interface/icons/generic_icons/trend_up.dds",
-                     "gfx/interface/icons/generic_icons/trend_down.dds",
-                     "gfx/interface/icons/generic_icons/trend_nochange.dds"}
-        self.assertTrue(textures)
-        for t in textures:
-            self.assertIn(f"`{t}`", doc, f"placeholder {t} is not in nuclear_gui_icons.md")
 
+NUCLEAR_ICONS = "gfx/interface/icons/nuclear_icons/"
+# The overview's own icons (PR #586), per display value, in code order.
+CODED_ICONS = {
+    "nuclear_program_display_state": {0: "programme_unfunded", 1: "programme_developing", 2: "programme_producing",
+                                      3: "programme_frozen", 4: "programme_at_ceiling", 5: "programme_dismantling",
+                                      6: "programme_none", 7: "programme_renounced", 8: "programme_disarmed"},
+    "nd_display_doctrine_code": {1: "doctrine_nfu", 2: "doctrine_existential", 3: "doctrine_flexible",
+                                 4: "doctrine_compellence", 5: "doctrine_warfighting"},
+    "nd_display_readiness_code": {0: "readiness_recessed", 1: "readiness_routine", 2: "readiness_heightened",
+                                  3: "readiness_high_alert"},
+    "nd_display_authority_code": {1: "authority_central", 2: "authority_delegation", 3: "authority_on_warning",
+                                  4: "authority_automatic"},
+}
+# Vanilla marks the overview uses as vanilla does: the taboo's trend arrows.
+VANILLA_KEPT = {"gfx/interface/icons/generic_icons/trend_up.dds", "gfx/interface/icons/generic_icons/trend_down.dds",
+                "gfx/interface/icons/generic_icons/trend_nochange.dds"}
+
+
+def _all_icon_names():
+    names = [n for codes in CODED_ICONS.values() for n in codes.values()]
+    return names + ["warheads", "crisis"]
+
+
+class NuclearIconsTest(unittest.TestCase):
+    """The overview's own icons (PR #586) replace every placeholder (UnIconsTest's shape)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.ov = _read(OVERVIEW)
+
+    def test_each_code_draws_its_own_icon(self):
+        for value, names in CODED_ICONS.items():
+            with self.subTest(value=value):
+                self.assertEqual(_coded(self.ov, value),
+                                 {code: [f"{NUCLEAR_ICONS}{n}.dds"] for code, n in names.items()})
+
+    def test_warheads_and_crisis(self):
+        for name, tooltip in (("warheads", "je_nuclear_ov_warheads_tt"), ("crisis", "je_nuclear_ov_crisis_tt")):
+            with self.subTest(cell=name):
+                m = re.search(rf'tooltip = "{tooltip}".*?texture = "([^"]+)"', self.ov, re.S)
+                self.assertEqual(m.group(1), f"{NUCLEAR_ICONS}{name}.dds")
+
+    def test_no_placeholder_left(self):
+        for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', self.ov):
+            with self.subTest(path=path):
+                self.assertTrue(path.startswith(NUCLEAR_ICONS) or path in VANILLA_KEPT, f"placeholder left: {path}")
+
+    def test_no_icon_is_faded(self):
+        # The placeholders faded No Programme and Disarmed to 30% to tell them from
+        # Developing and Dismantling; the art draws those states itself.
+        for body in re.findall(r'blockoverride "icon_texture" \{(.*?)\}', self.ov, re.S):
+            self.assertNotIn("alpha", body)
+
+    def test_every_icon_is_listed(self):
+        doc = _read(ICON_DOC)
+        for name in _all_icon_names():
+            with self.subTest(icon=name):
+                self.assertIn(f"`{name}.dds`", doc)
+
+    def test_every_icon_is_in_the_repo(self):
+        import subprocess
+        out = subprocess.run(["git", "ls-files", NUCLEAR_ICONS], cwd=REPO, capture_output=True, text=True)
+        tracked = set(out.stdout.split())
+        if out.returncode != 0 or not tracked:
+            self.skipTest(f"{NUCLEAR_ICONS} is not in this tree: the art lands with PR #586")
+        for name in _all_icon_names():
+            with self.subTest(icon=name):
+                self.assertIn(f"{NUCLEAR_ICONS}{name}.dds", tracked)
 
 VALUES = os.path.join(REPO, "common", "script_values")
 
