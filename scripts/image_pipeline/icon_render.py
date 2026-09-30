@@ -451,18 +451,124 @@ def draw_disc(size: int, drawn: dict) -> Image.Image:
 # one emblem under seven marks; its convention topics are the agency icon
 # under a scroll.
 
+# Metal tints: the icon's light and shade mapped onto a metal's ramp (dark,
+# mid, light), so one rendered emblem can be stone, gilded, silver or iron and
+# keep its exact shape (the banking phases' gilded bank, the covert shields).
+METAL_RAMPS = {
+    "gold": ((62, 38, 8), (205, 150, 48), (255, 238, 165)),
+    "silver": ((38, 42, 48), (150, 156, 164), (242, 244, 247)),
+    "iron": ((26, 24, 22), (96, 92, 86), (178, 172, 162)),
+}
+TINTS = ("grey", "faint", "moss") + tuple(METAL_RAMPS)
+
+
+def _ramp(lum: np.ndarray, ramp) -> np.ndarray:
+    """lum (0-255) through a three-stop colour ramp."""
+    t = np.clip(lum / 255, 0, 1)
+    dark, mid, light = (np.array(c, np.float32) for c in ramp)
+    lo = dark + (mid - dark) * np.clip(t * 2, 0, 1)
+    return np.where(t < 0.5, lo, mid + (light - mid) * np.clip(t * 2 - 1, 0, 1))
+
+
 def tint(im: Image.Image, how: str | None) -> Image.Image:
-    """`grey`: the icon as greyed stone. `faint`: grey, and half transparent."""
+    """`grey`: the icon as greyed stone. `faint`: grey, and half transparent.
+    `gold`, `silver`, `iron`: the icon in that metal. `moss`: weathered, its
+    shadows gone green."""
     if not how:
         return im
-    if how not in ("grey", "faint"):
+    if how not in TINTS:
         raise ValueError(f"unknown tint {how!r}")
     a = np.asarray(im.convert("RGBA"), dtype=np.float32)
-    lum = (a[..., :3] @ LUMA)[..., None] * 0.85 + 12
-    a[..., :3] = lum * np.array((1.0, 0.97, 0.92), np.float32)
-    if how == "faint":
-        a[..., 3] *= 0.45
+    lum = (a[..., :3] @ LUMA)[..., None]
+    if how in METAL_RAMPS:
+        # Stretch the icon's own range first, so a pale stone still reaches the metal's darks.
+        opaque = a[..., 3] > 128
+        lo, hi = (np.percentile(lum[opaque], (2, 98)) if opaque.any() else (0, 255))
+        a[..., :3] = _ramp((lum - lo) / max(hi - lo, 1) * 255, METAL_RAMPS[how])
+    elif how == "moss":
+        # Darker parts take the green most, as moss sits in the recesses.
+        green = lum * np.array((0.62, 0.8, 0.42), np.float32) + np.array((8, 18, 4), np.float32)
+        w = np.clip(1.15 - lum / 200, 0.25, 0.8)
+        a[..., :3] = a[..., :3] * 0.8 * (1 - w) + green * w
+    else:
+        lum = lum * 0.85 + 12
+        a[..., :3] = lum * np.array((1.0, 0.97, 0.92), np.float32)
+        if how == "faint":
+            a[..., 3] *= 0.45
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
+
+
+def place(im: Image.Image, scale: float, at: tuple[float, float]) -> Image.Image:
+    """`im` shrunk to `scale` of its side and centred at `at` (shares) on a clear canvas of its size."""
+    w, h = im.size
+    small = resize_premultiplied(im, (max(1, round(w * scale)), max(1, round(h * scale))))
+    out = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    paste(out, small, round(at[0] * w - small.width / 2), round(at[1] * h - small.height / 2))
+    return out
+
+
+def paste(canvas: Image.Image, im: Image.Image, x: int, y: int) -> None:
+    """alpha_composite `im` at (x, y), clipped to `canvas` (Pillow refuses a negative corner)."""
+    l, t = max(0, -x), max(0, -y)
+    r, b = min(im.width, canvas.width - x), min(im.height, canvas.height - y)
+    if r > l and b > t:
+        canvas.alpha_composite(im.crop((l, t, r, b)), (x + l, y + t))
+
+
+def _crack_path(w: int, h: int, seed: int = 3) -> list[tuple[float, float]]:
+    """A jagged line from the top edge to the bottom, a little off centre."""
+    rng = np.random.default_rng(seed)
+    n = 7
+    ys = np.linspace(0, h, n)
+    xs = w * (0.54 + np.cumsum(rng.uniform(-0.09, 0.09, n)) * 0.8)
+    xs[0] = w * 0.58
+    return list(zip(xs.tolist(), ys.tolist()))
+
+
+def damage(im: Image.Image, how: str | None, tilt_deg: float = 0) -> Image.Image:
+    """`crack`: a dark jagged crack down the object. `split`: the object broken
+    in two along that line, the halves leaning apart. FLUX will not break
+    things on request, so the break is drawn. `tilt_deg` leans the whole
+    object (a monument being pulled over)."""
+    if how not in (None, "crack", "split"):
+        raise ValueError(f"unknown damage {how!r}")
+    im = im.convert("RGBA")
+    if how:
+        w, h = im.size
+        ss = 4
+        path = [(x * ss, y * ss) for x, y in _crack_path(w, h)]
+        if how == "crack":
+            line = Image.new("L", (w * ss, h * ss), 0)
+            ImageDraw.Draw(line).line(path, fill=255, width=max(2, w * ss // 40), joint="curve")
+            line = line.resize((w, h), Image.LANCZOS)
+            glint = Image.new("L", (w * ss, h * ss), 0)
+            ImageDraw.Draw(glint).line([(x + ss * 2, y) for x, y in path], fill=255, width=max(1, w * ss // 90))
+            glint = glint.resize((w, h), Image.LANCZOS)
+            a = np.asarray(im, np.float32).copy()
+            k = (np.asarray(line, np.float32) / 255)[..., None]
+            g = (np.asarray(glint, np.float32) / 255)[..., None] * 0.5
+            a[..., :3] = a[..., :3] * (1 - k) + np.array((18, 14, 12), np.float32) * k
+            a[..., :3] = a[..., :3] * (1 - g) + 235 * g
+            im = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
+        else:
+            left = Image.new("L", (w * ss, h * ss), 0)
+            ImageDraw.Draw(left).polygon([(0, 0)] + path + [(0, h * ss)], fill=255)
+            left = np.asarray(left.resize((w, h), Image.LANCZOS), np.float32) / 255
+            a = np.asarray(im, np.float32)
+            halves = []
+            for k in (left, 1 - left):
+                part = a.copy()
+                part[..., 3] *= k
+                halves.append(Image.fromarray(part.astype(np.uint8), "RGBA"))
+            out = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+            gap = w * 0.05
+            for part, sign in zip(halves, (-1, 1)):
+                part = part.rotate(-sign * 7, resample=Image.BICUBIC, center=(w * 0.56, h))
+                paste(out, part, round(sign * gap), 0)
+            im = out
+    if tilt_deg:
+        im = im.rotate(tilt_deg, resample=Image.BICUBIC, center=(im.width / 2, im.height * 0.92))
+    return im
 
 
 def star(size: int, fill=(250, 214, 110), shade=(190, 130, 30)) -> Image.Image:
@@ -500,21 +606,192 @@ def pause(size: int, bars=(250, 190, 70), badge=(38, 36, 42)) -> Image.Image:
     return resize_premultiplied(im, (size, size))
 
 
-def arrow_down(size: int, top=(235, 80, 62), bottom=(150, 28, 22)) -> Image.Image:
+# The drawn marks' colours, as (top, bottom) of a vertical gradient.
+MARK_COLOURS = {
+    "red": ((235, 80, 62), (150, 28, 22)),
+    "green": ((130, 222, 95), (38, 125, 40)),
+    "blue": ((120, 182, 250), (35, 85, 178)),
+    "yellow": ((252, 230, 95), (196, 150, 25)),
+    "amber": ((250, 190, 70), (186, 112, 22)),
+    "orange": ((250, 150, 60), (186, 78, 18)),
+    "white": ((250, 248, 242), (188, 184, 176)),
+    "gold": ((250, 214, 110), (190, 130, 30)),
+}
+
+
+def _gradient_fill(mask: Image.Image, colour: str) -> Image.Image:
+    top, bottom = MARK_COLOURS[colour]
+    n_h, n_w = mask.height, mask.width
+    t = np.linspace(0, 1, n_h, dtype=np.float32)[:, None, None]
+    rgb = np.array(top, np.float32) * (1 - t) + np.array(bottom, np.float32) * t
+    return Image.fromarray(np.dstack([np.broadcast_to(rgb, (n_h, n_w, 3)), np.asarray(mask)]).astype(np.uint8),
+                           "RGBA")
+
+
+def _shape_mark(size: int, polys: list, colour: str, rects: list = ()) -> Image.Image:
+    """Polygons and rounded rectangles in shares of the side, filled with `colour`, outlined."""
+    ss = 4
+    n = size * ss
+    mask = Image.new("L", (n, n), 0)
+    d = ImageDraw.Draw(mask)
+    for poly in polys:
+        d.polygon([(x * n, y * n) for x, y in poly], fill=255)
+    for x0, y0, x1, y1 in rects:
+        d.rounded_rectangle([x0 * n, y0 * n, x1 * n, y1 * n], radius=(y1 - y0) * n * 0.3, fill=255)
+    return resize_premultiplied(outlined(_gradient_fill(mask, colour), ss * max(1, size // 40)), (size, size))
+
+
+def arrow(size: int, direction: str = "down", colour: str = "red", double: bool = False) -> Image.Image:
+    """A thick arrow, up or down, in one of MARK_COLOURS; `double` stacks two heads (vanilla's upup/downdown)."""
+    if double:
+        polys = [[(0.1, 0.3), (0.9, 0.3), (0.5, 0.64)], [(0.1, 0.58), (0.9, 0.58), (0.5, 0.97)],
+                 [(0.35, 0.03), (0.65, 0.03), (0.65, 0.34), (0.35, 0.34)]]
+    else:
+        polys = [[(0.34, 0.04), (0.66, 0.04), (0.66, 0.5), (0.92, 0.5), (0.5, 0.96), (0.08, 0.5), (0.34, 0.5)]]
+    if direction == "up":
+        polys = [[(x, 1 - y) for x, y in poly] for poly in polys]
+    return _shape_mark(size, polys, colour)
+
+
+def arrow_down(size: int) -> Image.Image:
     """A thick red arrow pointing down, `size` px square: loss, as vanilla's alerts draw it.
 
     Vanilla's generic trend_down.dds is an orange-gold triangle, which merges
     with a gold object under it.
     """
+    return arrow(size, "down", "red")
+
+
+def bar(size: int, colour: str = "white") -> Image.Image:
+    """A thick level bar across the box: steady, held."""
+    return _shape_mark(size, [], colour, rects=[(0.05, 0.37, 0.95, 0.63)])
+
+
+def chevrons(size: int, count: int, colour: str = "gold") -> Image.Image:
+    """`count` rank chevrons stacked, pointing up, centred in the box."""
+    t, rise = 0.13, 0.17
+    step = min(0.22, (0.9 - rise - t) / max(count - 1, 1))   # inside the box, outline and all
+    total = rise + t + (count - 1) * step
+    y0 = (1 - total) / 2
+    polys = []
+    for i in range(count):
+        y = y0 + i * step
+        polys.append([(0.06, y + rise), (0.5, y), (0.94, y + rise), (0.94, y + rise + t), (0.5, y + t),
+                      (0.06, y + rise + t)])
+    return _shape_mark(size, polys, colour)
+
+
+def barrier(size: int) -> Image.Image:
+    """A red-and-white striped barrier bar: the way is shut."""
     ss = 4
     n = size * ss
-    pts = [(0.34, 0.04), (0.66, 0.04), (0.66, 0.5), (0.92, 0.5), (0.5, 0.96), (0.08, 0.5), (0.34, 0.5)]
+    y0, y1 = 0.34 * n, 0.66 * n
     mask = Image.new("L", (n, n), 0)
-    ImageDraw.Draw(mask).polygon([(x * n, y * n) for x, y in pts], fill=255)
-    t = np.linspace(0, 1, n, dtype=np.float32)[:, None, None]
-    rgb = np.array(top, np.float32) * (1 - t) + np.array(bottom, np.float32) * t
-    im = Image.fromarray(np.dstack([np.broadcast_to(rgb, (n, n, 3)), np.asarray(mask)]).astype(np.uint8), "RGBA")
+    ImageDraw.Draw(mask).rounded_rectangle([0.04 * n, y0, 0.96 * n, y1], radius=(y1 - y0) * 0.25, fill=255)
+    im = _gradient_fill(mask, "red")
+    stripes = Image.new("L", (n, n), 0)
+    d = ImageDraw.Draw(stripes)
+    w = n * 0.11
+    for k in range(-2, 8):
+        x = n * 0.08 + k * 2 * w
+        d.polygon([(x, y1), (x + w, y1), (x + w + (y1 - y0), y0), (x + (y1 - y0), y0)], fill=255)
+    white = _gradient_fill(Image.fromarray(np.minimum(np.asarray(stripes), np.asarray(mask))), "white")
+    im.alpha_composite(white)
     return resize_premultiplied(outlined(im, ss * max(1, size // 40)), (size, size))
+
+
+def bubble(size: int, rim: str = "white", cracked: bool = False) -> Image.Image:
+    """A soap bubble `size` px across: a clear film with a coloured rim and a
+    bright highlight. Drawn, since a render's transparent film would not
+    survive the cut-out. `cracked` draws a split across it, about to burst."""
+    ss = 4
+    n = size * ss
+    c = (n - 1) / 2
+    yy, xx = np.mgrid[0:n, 0:n].astype(np.float32)
+    r = np.hypot(xx - c, yy - c) / (n * 0.48)
+    inside = np.clip((1 - r) * n * 0.02, 0, 1)
+    rim_rgb = np.array(MARK_COLOURS[rim][0], np.float32)
+    # The film: faintly iridescent, clearer in the middle.
+    ang = np.arctan2(yy - c, xx - c)
+    film = np.stack([200 + 40 * np.cos(ang), 215 + 30 * np.cos(ang + 2.1), 235 + 20 * np.cos(ang + 4.2)], -1)
+    film_a = 0.16 + 0.3 * np.clip(r, 0, 1) ** 3
+    # The rim carries the band's colour, so it has to be thick enough to read at 32 px.
+    ring = np.clip((1 - np.abs(r - 0.9) / 0.1) * 1.6, 0, 1)
+    rgb = film * (1 - ring[..., None]) + rim_rgb * ring[..., None]
+    a = np.maximum(film_a, ring * 0.95) * inside
+    # The outline keeps the edge on any ground.
+    edge = np.clip(1 - np.abs(r - 1.0) / 0.025, 0, 1) * 0.7
+    rgb = rgb * (1 - edge[..., None]) + np.array((20, 16, 14), np.float32) * edge[..., None]
+    a = np.maximum(a, edge)
+    im = Image.fromarray(np.dstack([np.clip(rgb, 0, 255), np.clip(a * 255, 0, 255)]).astype(np.uint8), "RGBA")
+    d = ImageDraw.Draw(im)
+    d.arc([n * 0.17, n * 0.17, n * 0.83, n * 0.83], 200, 250, fill=(255, 255, 255, 230), width=max(2, n // 18))
+    d.ellipse([n * 0.66, n * 0.26, n * 0.74, n * 0.34], fill=(255, 255, 255, 200))
+    if cracked:
+        pts = [(0.3, 0.12), (0.42, 0.3), (0.36, 0.42), (0.52, 0.56), (0.46, 0.7), (0.62, 0.88)]
+        d.line([(x * n, y * n) for x, y in pts], fill=(20, 16, 14, 255), width=max(3, n // 22), joint="curve")
+        d.line([(x * n + n * 0.012, y * n) for x, y in pts], fill=tuple(rim_rgb.astype(int).tolist()) + (255,),
+               width=max(1, n // 50))
+    return resize_premultiplied(im, (size, size))
+
+
+def thermometer(size: int, level: float, burst: bool = False) -> Image.Image:
+    """A glass thermometer `size` px tall, its red column `level` (0-1) up the
+    tube. `burst`: the column through the top and the glass cracked. Drawn, so
+    the seven warming tiers differ only by the column."""
+    ss = 4
+    n = size * ss
+    im = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    dark, glass, red = (32, 26, 24, 255), (222, 230, 238, 255), (232, 52, 40, 255)
+    tx0, tx1, ty0, ty1 = 0.39 * n, 0.61 * n, 0.07 * n, 0.74 * n
+    bc, br = (0.5 * n, 0.8 * n), 0.155 * n
+    ow = max(3, n // 26)
+    d.rounded_rectangle([tx0 - ow, ty0 - ow, tx1 + ow, ty1], radius=(tx1 - tx0) / 2 + ow, fill=dark)
+    d.ellipse([bc[0] - br - ow, bc[1] - br - ow, bc[0] + br + ow, bc[1] + br + ow], fill=dark)
+    d.rounded_rectangle([tx0, ty0, tx1, ty1], radius=(tx1 - tx0) / 2, fill=glass)
+    d.ellipse([bc[0] - br, bc[1] - br, bc[0] + br, bc[1] + br], fill=red)
+    # The column: from the bulb up to `level` of the tube.
+    cx0, cx1 = 0.455 * n, 0.545 * n
+    top_y = ty1 - (ty1 - ty0 - 0.03 * n) * min(max(level, 0), 1)
+    if burst:
+        top_y = ty0
+    d.rectangle([cx0, top_y, cx1, bc[1]], fill=red)
+    d.ellipse([cx0, top_y - (cx1 - cx0) / 2, cx1, top_y + (cx1 - cx0) / 2], fill=red)
+    d.ellipse([bc[0] - br * 0.45, bc[1] - br * 0.6, bc[0] - br * 0.05, bc[1] - br * 0.2], fill=(255, 150, 130, 255))
+    # Ticks, and a highlight down the glass.
+    for k in range(1, 6):
+        y = ty1 - (ty1 - ty0) * k / 6
+        d.line([(tx1 - 0.05 * n, y), (tx1 - 0.005 * n, y)], fill=(90, 90, 96, 255), width=max(2, n // 70))
+    d.line([(tx0 + 0.035 * n, ty0 + 0.06 * n), (tx0 + 0.035 * n, ty1 - 0.04 * n)], fill=(255, 255, 255, 235),
+           width=max(2, n // 40))
+    if burst:
+        # Red bursting out of the top, and cracks through the glass.
+        cx, cy = 0.5 * n, ty0 + 0.02 * n
+        spikes = []
+        for i in range(16):
+            ang = i * 2 * np.pi / 16
+            rad = (0.17 if i % 2 == 0 else 0.07) * n
+            spikes.append((cx + rad * np.cos(ang) * 1.3, cy + rad * np.sin(ang) * 0.9))
+        d.polygon(spikes, fill=(250, 190, 60, 255), outline=dark, width=max(3, n // 50))
+        d.ellipse([cx - 0.06 * n, cy - 0.05 * n, cx + 0.06 * n, cy + 0.05 * n], fill=red)
+        for pts in (((0.4, 0.2), (0.47, 0.28), (0.43, 0.36), (0.5, 0.44)), ((0.6, 0.3), (0.53, 0.38), (0.58, 0.46))):
+            d.line([(x * n, y * n) for x, y in pts], fill=dark, width=max(2, n // 45), joint="curve")
+    return resize_premultiplied(im, (size, size))
+
+
+# Drawn marks by name; each takes the box size and the mark's own settings.
+DRAWN = {
+    "star": lambda box, m: star(box),
+    "pause": lambda box, m: pause(box),
+    "arrow_down": lambda box, m: arrow_down(box),
+    "arrow": lambda box, m: arrow(box, m.get("dir", "down"), m.get("colour", "red"), m.get("double", False)),
+    "bar": lambda box, m: bar(box, m.get("colour", "white")),
+    "chevrons": lambda box, m: chevrons(box, m.get("count", 1), m.get("colour", "gold")),
+    "barrier": lambda box, m: barrier(box),
+    "bubble": lambda box, m: bubble(box, m.get("colour", "white"), m.get("cracked", False)),
+    "thermometer": lambda box, m: thermometer(box, m.get("level", 0), m.get("burst", False)),
+}
 
 
 def outlined(im: Image.Image, width: int, colour=(20, 16, 12), opacity: float = 0.85) -> Image.Image:
@@ -530,22 +807,19 @@ def apply_marks(icon: Image.Image, marks: list[dict], load) -> Image.Image:
     """Draw each mark over `icon`.
 
     A mark is {"icon": <vanilla path>} or {"part": "<cat>/<key>"} or
-    {"draw": "star" | "pause" | "arrow_down"}, placed with "at" (its centre, as shares of the width and
-    height; default the lower right, (0.72, 0.72)) and "scale" (its larger
-    side as a share of the icon's side; default 0.55). `load(mark)` returns
-    the mark's image for the first two kinds. Each gets a dark outline so it
-    reads over the icon and the panel alike.
+    {"draw": <a DRAWN name>, ...its settings}, placed with "at" (its centre, as
+    shares of the width and height; default the lower right, (0.72, 0.72)) and
+    "scale" (its larger side as a share of the icon's side; default 0.55).
+    "under": True draws it beneath the icon instead (a bubble the coins rest
+    against). `load(mark)` returns the mark's image for the first two kinds.
+    Each gets a dark outline so it reads over the icon and the panel alike.
     """
     icon = icon.copy()
     side = min(icon.size)
     for mark in marks:
         box = max(1, round(side * mark.get("scale", 0.55)))
-        if mark.get("draw") == "star":
-            im = star(box)
-        elif mark.get("draw") == "pause":
-            im = pause(box)
-        elif mark.get("draw") == "arrow_down":
-            im = arrow_down(box)
+        if "draw" in mark:
+            im = DRAWN[mark["draw"]](box, mark)
         else:
             im = load(mark).convert("RGBA")
             bbox = im.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
@@ -553,9 +827,17 @@ def apply_marks(icon: Image.Image, marks: list[dict], load) -> Image.Image:
                 im = im.crop(bbox)
             k = box / max(im.size)
             im = resize_premultiplied(im, (max(1, round(im.width * k)), max(1, round(im.height * k))))
-            im = outlined(im, max(1, side // 50))
+            if mark.get("outline", True):
+                im = outlined(im, max(1, side // 50))
         cx, cy = mark.get("at", (0.72, 0.72))
-        icon.alpha_composite(im, (round(cx * icon.width - im.width / 2), round(cy * icon.height - im.height / 2)))
+        x, y = round(cx * icon.width - im.width / 2), round(cy * icon.height - im.height / 2)
+        if mark.get("under"):
+            below = Image.new("RGBA", icon.size, (0, 0, 0, 0))
+            paste(below, im, x, y)
+            below.alpha_composite(icon)
+            icon = below
+        else:
+            paste(icon, im, x, y)
     return icon
 
 
