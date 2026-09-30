@@ -1202,12 +1202,12 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     # Strategic Reserve (strategic_reserve_gui_icons.md): 24 px.
     "st_res_part": {
-        "crate": {"subject": "an empty open-topped wooden supply crate with thick planks", "seed": None},
+        "crate": {"subject": "an empty open-topped wooden supply crate with thick planks", "seed": 3},
     },
     "st_res": {
         # Drawn at 25% opacity on Manual: the silhouette carries it.
         "policy_automated": {"subject": "a brass centrifugal governor: two heavy brass balls on thick angled arms "
-                                        "around a central brass spindle", "seed": None,
+                                        "around a central brass spindle", "seed": 0,
                              "now": "gfx/interface/production_methods/auto_expand.dds"},
     },
     # ── List 2 (provisional): Nuclear, Colonial Empire, Space Race ────────
