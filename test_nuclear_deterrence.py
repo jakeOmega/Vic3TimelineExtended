@@ -757,22 +757,63 @@ class TestInterestGroupOpinion(unittest.TestCase):
             self.assertIn("nd_ig_posture_judged = yes", block(self.values, name), name)
 
 
-HOME_LINES = ["nd_home_line_militarist", "nd_home_line_militarist_mild", "nd_home_line_restraint",
-              "nd_home_line_restraint_mild", "nd_home_line_officers", "nd_home_line_officers_hawkish",
-              "nd_home_line_officers_restrained", "nd_home_line_business", "nd_home_line_business_hawkish",
-              "nd_home_line_business_restrained"]
-HOME_TERMS = ["nd_home_terms_militarist", "nd_home_terms_restraint", "nd_home_terms_officers",
-              "nd_home_terms_business", "nd_home_terms_business_lean"]
+# The At Home table (play-test round 3, 2026-09-30): one small table per
+# interest group with a view, in place of the two script-built lines per group
+# that nd_home_line printed. Each class shows the terms its line used to print.
+HOME_TERMS = ("doctrine", "readiness", "authority", "strain", "possession", "business")
+HOME_VIEWS = range(1, 11)   # the ten lines: class x lean / strength
 
 
 class TestAtHome(unittest.TestCase):
-    def test_every_class_line_is_printed_and_localised(self):
-        body = block(strip_comments(read(EFFECTS)), "nd_home_line")
-        for key in HOME_LINES + HOME_TERMS:
-            self.assertRegex(body, rf"custom_tooltip_no_bullet = {key}\s", key)
-            self.assertIn("THIS.Var('nd_ig_", loc_value(key), key)
-        for key in HOME_LINES:
-            self.assertIn("[THIS.GetInterestGroup.GetName]", loc_value(key), key)
+    def setUp(self):
+        self.gui = read(GUI)
+        start = self.gui.index("type nd_home_ig_table = flowcontainer {")
+        depth, i = 0, self.gui.index("{", start)
+        for i in range(i, len(self.gui)):
+            depth += (self.gui[i] == "{") - (self.gui[i] == "}")
+            if depth == 0:
+                break
+        self.table = self.gui[start:i]
+        self.values = strip_comments(read(VALUES))
+
+    def test_every_group_view_and_term_is_a_row(self):
+        sv = "InterestGroup.MakeScope.ScriptValue"
+        for n in HOME_VIEWS:
+            self.assertIn(f"{sv}('nd_disp_ig_view'), '(CFixedPoint){n}' )", self.table, n)
+            self.assertIn(f'text = "nd_home_view_{n}"', self.table, n)
+            self.assertTrue(loc_value(f"nd_home_view_{n}"), n)
+        self.assertIn('text = "nd_home_row_approval_value"', self.table)
+        self.assertIn(f"{sv}('nd_disp_ig_stance')", loc_value("nd_home_row_approval_value"))
+        for term in HOME_TERMS:
+            self.assertIn(f"{sv}('nd_disp_ig_shows_{term}'), '(CFixedPoint)1' )", self.table, term)
+            self.assertIn(f"{sv}('nd_disp_ig_term_{term}')", loc_value(f"nd_home_row_{term}_value"), term)
+            self.assertTrue(loc_value(f"nd_home_row_{term}_tt"), term)
+        self.assertIn("[InterestGroup.GetName]", loc_value("nd_home_ig_name"))
+
+    def test_each_class_shows_the_terms_its_line_printed(self):
+        """militarist: doctrine, readiness; restraint: + authority, the arsenal;
+        officers: doctrine, readiness, crew strain; business: alerts and crises,
+        and doctrine when its leader leans."""
+        shows = {term: block(self.values, f"nd_disp_ig_shows_{term}") for term in HOME_TERMS}
+        for term in ("doctrine", "readiness"):
+            self.assertIn("nd_disp_ig_class >= 1", shows[term], term)
+            self.assertIn("nd_disp_ig_class <= 3", shows[term], term)
+        self.assertRegex(shows["doctrine"], r"nd_disp_ig_class = 4\s+nd_disp_ig_lean > 0")
+        self.assertNotIn("nd_disp_ig_class = 4", shows["readiness"])
+        for term, cls in (("authority", 2), ("possession", 2), ("strain", 3), ("business", 4)):
+            self.assertIn(f"nd_disp_ig_class = {cls}", shows[term], term)
+
+    def test_display_values_read_guarded(self):
+        for var in ("class", "lean", "strength", "stance") + tuple(f"term_{t}" for t in HOME_TERMS):
+            name = f"nd_disp_ig_{var}"
+            body = block(self.values, name)
+            self.assertIn(f"has_variable = nd_ig_{var}", body, name)
+
+    def test_item_tooltips_need_no_journal_entry(self):
+        """gui_modding_guide.md gotcha #24: a datamodel item's tooltip sees only the item."""
+        for key in re.findall(r'tooltip = "(\w+)"', self.table):
+            self.assertNotIn("JournalEntry", loc_value(key), key)
+        self.assertIn('datamodel = "[AccessPlayer.AccessAllInterestGroups]"', self.gui)
 
     def test_list_is_drawn_and_old_rows_are_gone(self):
         gui = read(GUI)
@@ -782,11 +823,15 @@ class TestAtHome(unittest.TestCase):
             self.assertNotIn(old, gui)
         custom = strip_comments(read(CUSTOM_LOC))
         self.assertNotIn("nd_stance_warfighting_word", custom)
+        self.assertNotIn("nd_home_line = {", strip_comments(read(EFFECTS)))
 
     def test_list_handler_is_display_only(self):
+        """Only the empty states now: before the first review, and no group with a view."""
         body = block(strip_comments(read(SGUIS)), "nd_home_list_sgui")
         self.assertIn("is_valid = { always = no }", body)
-        self.assertIn("every_interest_group", body)
+        self.assertIn("any_interest_group", body)
+        self.assertNotIn("every_interest_group", body)
+        self.assertIn("custom_tooltip_no_bullet = nd_home_list_none", body)
 
 class TestReviewFixes(unittest.TestCase):
     """Fixes from the PR 1 whole-branch review."""

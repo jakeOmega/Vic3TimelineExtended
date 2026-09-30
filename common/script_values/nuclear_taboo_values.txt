@@ -526,6 +526,50 @@ nd_taboo_gap_value = {
 	subtract = nd_taboo_value
 }
 
+# Next month's step, for the overview's headline "62 → 68 (+0.4/mo)": the
+# guarded twin of nd_taboo_step_value, which reads the globals bare.
+nd_disp_taboo_step = {
+	value = nd_taboo_gap_value
+	divide = nd_taboo_approach_months
+	min = nd_taboo_max_step_down
+	max = nd_taboo_max_step
+}
+
+# The overview's trend icon: 1 rising, -1 falling, 0 steady. The same bounds as
+# nd_taboo_heading (nuclear_program_custom_loc.txt), so the icon and the
+# taboo section's "(rising)" agree.
+nd_disp_taboo_trend = {
+	value = 0
+	if = {
+		limit = { nd_taboo_gap_value > 1 }
+		value = 1
+	}
+	else_if = {
+		limit = { nd_taboo_gap_value < -1 }
+		value = -1
+	}
+}
+
+# The overview's taboo bar (round 3, the projection bar shared with Global
+# Warming): the solid fill runs to the lower of the score and its target, the
+# pale change still to come to the higher.
+nd_disp_taboo_bar_low = {
+	value = nd_taboo_value
+	if = {
+		limit = { nd_disp_taboo_target < nd_taboo_value }
+		value = nd_disp_taboo_target
+	}
+}
+
+nd_disp_taboo_bar_high = {
+	value = nd_taboo_value
+	if = {
+		limit = { nd_disp_taboo_target > nd_taboo_value }
+		value = nd_disp_taboo_target
+	}
+}
+
+
 # ---- POSSESSION (spec §4.4) — country scope unless noted ----------------------
 # One number drives both costs: the taboo's weight (0 below 40, 1 at 100) times
 # the arsenal's size (0.2 for a token force, 1 from fifty warheads, the count

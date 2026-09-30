@@ -4597,3 +4597,73 @@ st_res_policy_fertilizer_sgui = {
 		st_res_policy_apply_good_effect = { GOOD = fertilizer }
 	}
 }
+
+# ============================================================================
+# Reserve-wide controls — the panel's Cycle Step Size and Reset Reserve Rates
+# ============================================================================
+# The two buttons beside the inventory's adjustment step
+# (gui/journal_entry_widgets/strategic_reserve_widget.gui, st_res_shared_button).
+# Each effect is exactly its scripted button's effect
+# (common/scripted_buttons/st_res_buttons.txt), which now carries `is_ai = yes`
+# so the player sees only these. The call sits in `hidden_effect` so the
+# button's ExecuteTooltip shows the one custom_tooltip line saying what it
+# does, rather than every hub-flow modifier the refresh rebuilds; hiding a
+# tooltip does not change what runs.
+#
+# Neither button could be greyed out as a journal-entry button, and neither
+# can here: `is_valid` holds one condition, always true while the panel shows
+# (it is gated on the running entry, which needs the hub), so the composed
+# tooltip's first line reads as a tick rather than a blank.
+# ============================================================================
+
+st_res_cycle_step_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
+	}
+
+	effect = {
+		custom_tooltip = st_res_cycle_step_sgui_effect_tt
+		hidden_effect = {
+			st_res_cycle_step_size_effect = yes
+		}
+	}
+}
+
+st_res_reset_rates_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = "st_res_hub_built_possible"
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+		}
+	}
+
+	effect = {
+		custom_tooltip = st_res_reset_rates_sgui_effect_tt
+		hidden_effect = {
+			st_res_reset_rates_effect = yes
+		}
+	}
+}
