@@ -24,7 +24,7 @@
 ### lists both, with the final art the placeholder should become.
 ###
 ### THE INVENTORY is a table with one te_st_res_good_row per unlocked good:
-###   Good | Stock | Status | policy icon | decrease / stop / increase
+###   Good | Stock | status icon | policy icon | decrease / stop / increase
 ### Stock is the fill bar, with a marker at the policy's target stockpile while
 ### it can buy and at its protected stockpile while it can sell. The policy
 ### icon is lit while an automated policy sets the good's rate; clicking it
@@ -41,9 +41,12 @@
 ###                        st_res_<good>_unlocked_trigger
 ###                        (common/scripted_triggers/st_res_triggers.txt)
 ###   - button enabled  -> ScriptedGui.IsValid (cap / stockpile-room checks)
-###   - status label    -> GetCustom('st_res_<good>_mode_text'), driven by the
-###                        st_res_<good>_last_status variable written by
-###                        st_res_set_good_status_effect
+###   - status icon     -> ScriptValue('st_res_<good>_disp_status'), the
+###                        st_res_<good>_last_status code (written by
+###                        st_res_set_good_status_effect) grouped as the
+###                        status word groups it; the word, from
+###                        GetCustom('st_res_<good>_mode_text'), and the
+###                        reason are on the icon's hover
 ###   - fill bar        -> ScriptValue('st_res_<good>_fill_pct')
 ###   - bar markers     -> ScriptValue('st_res_<good>_disp_target') and
 ###                        ScriptValue('st_res_<good>_disp_floor'), which sit at
@@ -90,7 +93,7 @@
 ###   0-3   select policy   Manual / Buy When Cheap / Release When Expensive /
 ###                         Stabilize Prices. The four buttons use the SHORT
 ###                         labels (st_res_policy_short_*) so they fit the
-###                         104px button; the expanded figures and the
+###                         110px button; the expanded figures and the
 ###                         tooltips carry the full names.
 ###   10-12 apply preset    Conservative / Standard / Aggressive
 ###   20/21 purchase threshold  - / +      26/27 protected stockpile - / +
@@ -374,13 +377,13 @@ types strategic_reserve_widget_types
 	### lands on comes from the policy panel's datacontext, not from the button.
 	type widget_je_st_res_policy_choice = button {
 		using = default_button_action
-		size = { 104 26 }
+		size = { 110 26 }
 
 		textbox = {
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 96
+			max_width = 102
 			elide = right
 			using = fontsize_small
 			block "choice_label" {}
@@ -392,14 +395,14 @@ types strategic_reserve_widget_types
 	### One settings row: label, minus, current value, plus. `stepper_value` is
 	### the only per-good part; every panel instance overrides it with that
 	### good's variable, and the two op codes stay shared.
-	### 240 + 24 + 110 + 24 and three 3px gaps: 407.
+	### 300 + 24 + 90 + 24 and three 3px gaps: 447.
 	type widget_je_st_res_policy_stepper = flowcontainer {
 		direction = horizontal
 		spacing = 3
 
 		textbox = {
 			block "stepper_label" {}
-			size = { 240 24 }
+			size = { 300 24 }
 			align = left|nobaseline
 			using = fontsize_small
 			parentanchor = vcenter
@@ -414,7 +417,7 @@ types strategic_reserve_widget_types
 
 		textbox = {
 			block "stepper_value" {}
-			size = { 110 24 }
+			size = { 90 24 }
 			align = center|nobaseline
 			using = fontsize_small
 			parentanchor = vcenter
@@ -437,7 +440,7 @@ types strategic_reserve_widget_types
 	### st_res_policy_<good>_sgui, and every button below addresses it by op
 	### code alone. The op-code table lives in
 	### common/scripted_guis/st_res_scripted_gui.txt — keep the two in sync.
-	### 424 wide inside a 6px margin: 436 of the 456 the row's figures leave.
+	### 450 wide inside a 6px margin, set in 24px: 486 of the inventory's 496.
 	type widget_je_st_res_policy_panel = flowcontainer {
 		direction = vertical
 		spacing = 3
@@ -453,7 +456,7 @@ types strategic_reserve_widget_types
 
 		textbox = {
 			text = "st_res_policy_panel_policy_header"
-			size = { 424 22 }
+			size = { 450 22 }
 			align = left|nobaseline
 			using = fontsize_small
 			elide = right
@@ -504,7 +507,7 @@ types strategic_reserve_widget_types
 		textbox = {
 			text = "st_res_policy_panel_preset_header"
 			tooltip = "st_res_policy_panel_preset_header_tt"
-			size = { 424 22 }
+			size = { 450 22 }
 			align = left|nobaseline
 			using = fontsize_small
 			default_format = "#tooltippable"
@@ -546,7 +549,7 @@ types strategic_reserve_widget_types
 
 		textbox = {
 			text = "st_res_policy_panel_settings_header"
-			size = { 424 22 }
+			size = { 450 22 }
 			align = left|nobaseline
 			using = fontsize_small
 			elide = right
@@ -671,7 +674,12 @@ types strategic_reserve_widget_types
 			}
 		}
 		widget_je_st_res_policy_stepper = {
-			blockoverride "stepper_label" { text = "st_res_policy_label_ramp" }
+			### A shortened label; its full meaning is on hover (round 3, rule 1).
+			blockoverride "stepper_label" {
+				text = "st_res_policy_label_ramp"
+				tooltip = "st_res_policy_label_ramp_tt"
+				default_format = "#tooltippable"
+			}
 			blockoverride "stepper_value" { block "policy_value_ramp" {} }
 			blockoverride "stepper_down" {
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
@@ -696,7 +704,10 @@ types strategic_reserve_widget_types
 	###   tooltip               st_res_row_<good>_tooltip, the whole breakdown
 	###   row_toggle, row_open, row_closed
 	###                         the row's st_res_row_<good>_open key
-	###   row_name, row_status  loc keys
+	###   row_name              loc key
+	###   row_status            the status icon's tooltip (loc key)
+	###   row_status_idle, row_status_storing, row_status_withdrawing,
+	###   row_status_blocked    each status icon's visible
 	###   row_fill              the bar's value, st_res_<good>_fill_pct
 	###   row_target_marker, row_floor_marker
 	###                         each marker's value and its visible
@@ -716,8 +727,10 @@ types strategic_reserve_widget_types
 		ignoreinvisible = yes
 		spacing = 2
 
-		### The table line. 136 + 126 + 96 + 26 + 3 x 26, with seven 4px gaps,
-		### is 490 of the inventory's 496; the column headings' widths match.
+		### The table line. 170 + 150 + 30 + 30 + 3 x 26, with seven 4px gaps,
+		### is 486 of the inventory's 496; the column headings' widths match.
+		### Every static label fits its cell by the round-3 width budget
+		### (test_strategic_reserve_layout.WidthBudgetTest).
 		flowcontainer = {
 			direction = horizontal
 			spacing = 4
@@ -729,7 +742,7 @@ types strategic_reserve_widget_types
 			### expanded. Both are alwaystransparent, so chevron and name are one
 			### click target. Its tooltip replaces the row's over the name only.
 			button = {
-				size = { 136 28 }
+				size = { 170 28 }
 				parentanchor = vcenter
 				block "row_toggle" {}
 
@@ -749,7 +762,7 @@ types strategic_reserve_widget_types
 				}
 				textbox = {
 					position = { 20 0 }
-					size = { 116 28 }
+					size = { 150 28 }
 					align = left|nobaseline
 					using = fontsize_medium
 					elide = right
@@ -764,11 +777,11 @@ types strategic_reserve_widget_types
 			### does not use that bound. The marker technique is the UN
 			### authority bar's (un_overview_widget.gui).
 			widget = {
-				size = { 126 28 }
+				size = { 150 28 }
 				parentanchor = vcenter
 
 				default_progressbar_horizontal = {
-					size = { 126 18 }
+					size = { 150 18 }
 					parentanchor = vcenter
 					blockoverride "values" {
 						block "row_fill" {}
@@ -816,15 +829,41 @@ types strategic_reserve_widget_types
 				}
 			}
 
-			### Status: Storing / Withdrawing / Idle / Blocked, coloured. The
-			### reason is on the row's tooltip.
-			textbox = {
-				size = { 96 28 }
+			### Status: one icon per status (owner, 2026-09-30), Idle, Storing,
+			### Withdrawing or Blocked, the word and its reason on hover
+			### (`row_status`). The four icons share the cell, and each one's
+			### `visible` tests one value of the good's st_res_<good>_disp_status
+			### code, so exactly one is ever drawn. Placeholders:
+			### docs/systems/strategic_reserve_gui_icons.md.
+			widget = {
+				size = { 30 28 }
 				parentanchor = vcenter
-				align = left|nobaseline
-				using = fontsize_medium
-				elide = right
 				block "row_status" {}
+
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "row_status_idle" {}
+					texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "row_status_storing" {}
+					texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "row_status_withdrawing" {}
+					texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "row_status_blocked" {}
+					texture = "gfx/interface/icons/generic_icons/warning.dds"
+				}
 			}
 
 			### Policy: lit while an automated reserve policy sets this good's
@@ -834,7 +873,7 @@ types strategic_reserve_widget_types
 			### Settings (owner, 2026-09-29). Both icons are alwaystransparent,
 			### so the whole cell is the click target.
 			button = {
-				size = { 26 28 }
+				size = { 30 28 }
 				parentanchor = vcenter
 				tooltip = "st_res_row_auto_tooltip"
 				block "row_settings_toggle" {}
@@ -1060,9 +1099,11 @@ types strategic_reserve_widget_types
 			margin = { 12 8 }
 
 			### The step, and the two buttons that act on every good's rate:
-			### 240 + 110 + 134 and two 4px gaps, 492 of 496. They call
+			### 240 + 100 + 110 and two 4px gaps, 458 of 496. They call
 			### st_res_cycle_step_sgui and st_res_reset_rates_sgui, whose
-			### effects are the scripted buttons' effects.
+			### effects are the scripted buttons' effects. The labels are short
+			### ("Cycle Step", "Reset Rates") so they fit; each tooltip opens
+			### with the full name.
 			flowcontainer = {
 				direction = horizontal
 				spacing = 4
@@ -1078,18 +1119,18 @@ types strategic_reserve_widget_types
 				}
 				st_res_shared_button = {
 					datacontext = "[GetScriptedGui('st_res_cycle_step_sgui')]"
-					size = { 110 26 }
+					size = { 100 26 }
 					blockoverride "button_label" {
-						max_width = 102
-						text = "st_res_cycle_step_size_button"
+						max_width = 92
+						text = "st_res_panel_cycle_step"
 					}
 				}
 				st_res_shared_button = {
 					datacontext = "[GetScriptedGui('st_res_reset_rates_sgui')]"
-					size = { 134 26 }
+					size = { 110 26 }
 					blockoverride "button_label" {
-						max_width = 126
-						text = "st_res_reset_rates_button"
+						max_width = 102
+						text = "st_res_panel_reset_rates"
 					}
 				}
 			}
@@ -1101,27 +1142,26 @@ types strategic_reserve_widget_types
 				margin_top = 4
 
 				st_res_col_heading = {
-					size = { 136 20 }
+					size = { 170 20 }
 					margin_left = 20
 					text = "je_strategic_reserve_inv_col_good"
 				}
 				st_res_col_heading = {
-					size = { 126 20 }
+					size = { 150 20 }
 					default_format = "#tooltippable"
 					text = "je_strategic_reserve_inv_col_stock"
 					tooltip = "je_strategic_reserve_inv_col_stock_tt"
 				}
+				### Over the status and policy icons (30 + 4 + 30).
 				st_res_col_heading = {
-					size = { 96 20 }
+					size = { 64 20 }
 					default_format = "#tooltippable"
 					text = "je_strategic_reserve_inv_col_status"
 					tooltip = "je_strategic_reserve_inv_col_status_tt"
 				}
-				### Over the three rate buttons; the policy icon's column has no
-				### heading (its tooltip says what it is).
+				### Over the three rate buttons.
 				st_res_col_heading = {
-					size = { 116 20 }
-					margin_left = 30
+					size = { 86 20 }
 					default_format = "#tooltippable"
 					text = "je_strategic_reserve_inv_col_rate"
 					tooltip = "je_strategic_reserve_inv_col_rate_tt"
@@ -1149,7 +1189,19 @@ types strategic_reserve_widget_types
 					visible = "[Not(GetVariableSystem.Exists('st_res_row_grain_open'))]"
 				}
 				blockoverride "row_name" { text = "st_res_row_grain_name" }
-				blockoverride "row_status" { text = "st_res_row_grain_status" }
+				blockoverride "row_status" { tooltip = "st_res_row_grain_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_status'), '(CFixedPoint)3' )]"
+				}
 				blockoverride "row_fill" {
 					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_fill_pct') )]"
 				}
@@ -1261,7 +1313,19 @@ types strategic_reserve_widget_types
 					visible = "[Not(GetVariableSystem.Exists('st_res_row_ammunition_open'))]"
 				}
 				blockoverride "row_name" { text = "st_res_row_ammunition_name" }
-				blockoverride "row_status" { text = "st_res_row_ammunition_status" }
+				blockoverride "row_status" { tooltip = "st_res_row_ammunition_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_status'), '(CFixedPoint)3' )]"
+				}
 				blockoverride "row_fill" {
 					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_fill_pct') )]"
 				}
@@ -1373,7 +1437,19 @@ types strategic_reserve_widget_types
 					visible = "[Not(GetVariableSystem.Exists('st_res_row_oil_open'))]"
 				}
 				blockoverride "row_name" { text = "st_res_row_oil_name" }
-				blockoverride "row_status" { text = "st_res_row_oil_status" }
+				blockoverride "row_status" { tooltip = "st_res_row_oil_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_status'), '(CFixedPoint)3' )]"
+				}
 				blockoverride "row_fill" {
 					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_fill_pct') )]"
 				}
@@ -1485,7 +1561,19 @@ types strategic_reserve_widget_types
 					visible = "[Not(GetVariableSystem.Exists('st_res_row_small_arms_open'))]"
 				}
 				blockoverride "row_name" { text = "st_res_row_small_arms_name" }
-				blockoverride "row_status" { text = "st_res_row_small_arms_status" }
+				blockoverride "row_status" { tooltip = "st_res_row_small_arms_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_status'), '(CFixedPoint)3' )]"
+				}
 				blockoverride "row_fill" {
 					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_fill_pct') )]"
 				}
@@ -1597,7 +1685,19 @@ types strategic_reserve_widget_types
 					visible = "[Not(GetVariableSystem.Exists('st_res_row_artillery_open'))]"
 				}
 				blockoverride "row_name" { text = "st_res_row_artillery_name" }
-				blockoverride "row_status" { text = "st_res_row_artillery_status" }
+				blockoverride "row_status" { tooltip = "st_res_row_artillery_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_status'), '(CFixedPoint)3' )]"
+				}
 				blockoverride "row_fill" {
 					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_fill_pct') )]"
 				}
@@ -1709,7 +1809,19 @@ types strategic_reserve_widget_types
 					visible = "[Not(GetVariableSystem.Exists('st_res_row_aeroplanes_open'))]"
 				}
 				blockoverride "row_name" { text = "st_res_row_aeroplanes_name" }
-				blockoverride "row_status" { text = "st_res_row_aeroplanes_status" }
+				blockoverride "row_status" { tooltip = "st_res_row_aeroplanes_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_status'), '(CFixedPoint)3' )]"
+				}
 				blockoverride "row_fill" {
 					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_fill_pct') )]"
 				}
@@ -1821,7 +1933,19 @@ types strategic_reserve_widget_types
 					visible = "[Not(GetVariableSystem.Exists('st_res_row_tanks_open'))]"
 				}
 				blockoverride "row_name" { text = "st_res_row_tanks_name" }
-				blockoverride "row_status" { text = "st_res_row_tanks_status" }
+				blockoverride "row_status" { tooltip = "st_res_row_tanks_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_status'), '(CFixedPoint)3' )]"
+				}
 				blockoverride "row_fill" {
 					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_fill_pct') )]"
 				}
@@ -1933,7 +2057,19 @@ types strategic_reserve_widget_types
 					visible = "[Not(GetVariableSystem.Exists('st_res_row_fertilizer_open'))]"
 				}
 				blockoverride "row_name" { text = "st_res_row_fertilizer_name" }
-				blockoverride "row_status" { text = "st_res_row_fertilizer_status" }
+				blockoverride "row_status" { tooltip = "st_res_row_fertilizer_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_status'), '(CFixedPoint)3' )]"
+				}
 				blockoverride "row_fill" {
 					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_fill_pct') )]"
 				}

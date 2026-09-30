@@ -32,7 +32,7 @@ OLD_FLAGS = ["st_res_row_expanded_", "st_res_policy_open_"]
 HOW_TOPICS = ["hub", "rates", "status", "decay", "policies", "presets", "income", "history"]
 # Per-good loc keys a row reads; the skill's file 14 lists the same set.
 ROW_LOC = ["name", "status", "tooltip", "amount", "flow", "last", "decay", "price", "policy", "policy_reason"]
-DISPLAY_VALUES = ["disp_policy", "disp_target", "disp_floor"]
+DISPLAY_VALUES = ["disp_policy", "disp_target", "disp_floor", "disp_status"]
 
 
 def _read(path):
@@ -359,7 +359,7 @@ class PolicyIconTest(unittest.TestCase):
 
     def test_the_icon_toggles_the_settings(self):
         row_type = _type_body(_read(WIDGET), "te_st_res_good_row")
-        icon = _body(row_type, r'button = \{\s*size = \{ 26 28 \}')
+        icon = _body(row_type, r'button = \{\s*size = \{ 30 28 \}')
         self.assertIn('block "row_settings_toggle" {}', icon)
         self.assertIn("auto_expand.dds", icon)
 
@@ -370,6 +370,156 @@ class PolicyIconTest(unittest.TestCase):
             shown = _body(row, r'blockoverride "row_settings_shown" \{')
             self.assertIn(f"Or( GetVariableSystem.Exists('st_res_row_{g}_open'), "
                           f"GetVariableSystem.Exists('st_res_policy_{g}_open') )", shown, g)
+
+
+# ---------------------------------------------------------------------------
+# Round 3, rule 1: nothing a player reads may end in "...". Every label in a
+# fixed-width cell must fit it: characters x units per character x 1.1 <= the
+# cell's width. Units per character are the owner's screenshot measurements
+# for the large (10) and medium (8.6) fonts; the small font's 7.3 is scaled
+# from those by the font sizes, and is an estimate.
+# ---------------------------------------------------------------------------
+UPC = {"large": 10.0, "medium": 8.6, "small": 7.3}
+MARGIN = 1.1
+TEXT_ICON = "XX"  # a @texticon! draws about two characters wide
+
+
+def _display(value, loc, stand_ins=()):
+    """The text a loc value shows, formatting stripped, data replaced by stand-ins."""
+    v = value.replace("\\n", "\n")
+    v = re.sub(r"\$(\w+)\$", lambda m: loc.get(m.group(1), ""), v)
+    v = re.sub(r"\[Concept\(\s*'\w+'\s*,\s*'([^']*)'\s*\)\]", r"\1", v)
+    v = re.sub(r"\[(concept_\w+)\]", lambda m: loc[m.group(1)], v)
+    fills = iter(stand_ins)
+    v = re.sub(r"\[[^\]]*\]", lambda m: next(fills), v)
+    self_check = next(fills, None)
+    assert self_check is None, f"unused stand-in {self_check!r} for {value!r}"
+    v = re.sub(r"@\w+!", TEXT_ICON, v)
+    v = v.replace("#!", "")
+    v = re.sub(r"#[A-Za-z_]+ ?", "", v)
+    return max(v.split("\n"), key=len)
+
+
+# (loc key, cell width, font, stand-ins for its [data] in order)
+STATIC_CELLS = (
+    [(f"st_res_row_{g}_name", 150, "medium", ()) for g in
+     ("grain", "ammunition", "oil", "small_arms", "artillery", "aeroplanes", "tanks", "fertilizer")]
+    + [("je_strategic_reserve_inv_col_good", 150, "small", ()),
+       ("je_strategic_reserve_inv_col_stock", 150, "small", ()),
+       ("je_strategic_reserve_inv_col_status", 64, "small", ()),
+       ("je_strategic_reserve_inv_col_rate", 86, "small", ()),
+       ("je_strategic_reserve_inv_step", 240, "medium", ("10,000",)),
+       ("st_res_panel_cycle_step", 92, "small", ()),
+       ("st_res_panel_reset_rates", 102, "small", ()),
+       ("je_strategic_reserve_ov_hub_staffed", 128, "small", ()),
+       ("je_strategic_reserve_ov_hub_understaffed", 128, "small", ()),
+       ("je_strategic_reserve_ov_cap_label", 128, "small", ()),
+       ("je_strategic_reserve_ov_income_label", 128, "small", ()),
+       ("je_strategic_reserve_ov_cap_value", 128, "large", ("99,999",)),
+       ("je_strategic_reserve_ov_income_value", 128, "large", ("999.9K",)),
+       ("st_res_row_settings_header", 390, "medium", ()),
+       ("je_strategic_reserve_inv_header", 480, "large", ()),
+       ("je_strategic_reserve_how_header", 480, "large", ()),
+       ("st_res_hist_title", 484, "large", ())]
+    + [(f"st_res_row_label_{k}", 170, "medium", ()) for k in
+       ("stored", "rate", "last", "decay", "price", "policy")]
+    + [(f"st_res_policy_short_{k}", 102, "small", ()) for k in ("manual", "buy_cheap", "release_high", "stabilize")]
+    + [(f"st_res_preset_{k}", 102, "small", ()) for k in ("conservative", "standard", "aggressive")]
+    + [(f"st_res_policy_label_{k}", 300, "small", ()) for k in
+       ("buy_thr", "sell_thr", "max_flow", "floor_pct", "ceil_pct", "budget", "price_memory", "ramp")]
+    + [(f"st_res_policy_panel_{k}_header", 450, "small", ()) for k in ("policy", "preset", "settings")]
+)
+
+# Value cells whose text is data: the longest reading each can show.
+DYNAMIC_CELLS = [
+    ("st_res_row_ammunition_amount", 270, "medium", ("999,999", "999,999", "100")),
+    ("st_res_row_ammunition_flow", 270, "medium", ("-10,000",)),
+    ("st_res_row_ammunition_last", 270, "medium", ("-10,000.0",)),
+    ("st_res_row_oil_decay", 270, "medium", ("25.00%", "9,999.9")),
+    ("st_res_row_ammunition_price", 270, "medium", ("-100%", "+100")),
+]
+# The longest names the policy value cell (270, medium) and the stepper value
+# cells (90, small) can show.
+LONGEST_POLICY_NAME_KEYS = ("st_res_policy_manual", "st_res_policy_buy_cheap",
+                            "st_res_policy_release_high", "st_res_policy_stabilize")
+LONGEST_STEPPER_VALUE = "9,999,999"  # the weekly budget's ceiling grows with the hub
+
+
+class WidthBudgetTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.loc = _loc()
+
+    def _check(self, key, width, font, stand_ins=()):
+        text = _display(self.loc[key], self.loc, stand_ins)
+        need = len(text) * UPC[font] * MARGIN
+        self.assertLessEqual(need, width, f"{key} {text!r}: {need:.0f} > {width} ({font})")
+
+    def test_static_labels_fit_their_cells(self):
+        for key, width, font, stand_ins in STATIC_CELLS:
+            with self.subTest(key=key):
+                self._check(key, width, font, stand_ins)
+
+    def test_dynamic_values_fit_their_cells(self):
+        for key, width, font, stand_ins in DYNAMIC_CELLS:
+            with self.subTest(key=key):
+                self._check(key, width, font, stand_ins)
+        longest = max((self.loc[k] for k in LONGEST_POLICY_NAME_KEYS), key=len)
+        self.assertLessEqual(len(longest) * UPC["medium"] * MARGIN, 270, longest)
+        self.assertLessEqual(len(LONGEST_STEPPER_VALUE) * UPC["small"] * MARGIN, 90)
+
+    def test_the_cells_are_the_widths_the_budget_assumes(self):
+        widget = _read(WIDGET)
+        row = _type_body(widget, "te_st_res_good_row")
+        self.assertIn("size = { 150 28 }", row)            # the name's text
+        stepper = _type_body(widget, "widget_je_st_res_policy_stepper")
+        self.assertIn("size = { 300 24 }", stepper)        # the label
+        self.assertIn("size = { 90 24 }", stepper)         # the value
+        self.assertIn("max_width = 102", _type_body(widget, "widget_je_st_res_policy_choice"))
+        self.assertIn("minimumsize = { 170 -1 }", _type_body(widget, "st_res_value_row"))
+        self.assertIn("minimumsize = { 270 -1 }", _type_body(widget, "st_res_value_row"))
+
+
+class StatusIconTest(unittest.TestCase):
+    """One icon per status (owner, 2026-09-30); exactly one drawn at a time."""
+    CODES = {"idle": 0, "storing": 1, "withdrawing": 2, "blocked": 3}
+
+    def test_each_status_icon_is_gated_on_one_code(self):
+        widget = _read(WIDGET)
+        cell = _body(_type_body(widget, "te_st_res_good_row"), r'widget = \{\s*size = \{ 30 28 \}')
+        textures = re.findall(r'texture = "([^"]+)"', cell)
+        self.assertEqual(len(textures), 4)
+        self.assertEqual(len(set(textures)), 4, "two statuses share an icon")
+        for row in _instances(_type_body(widget, "te_st_res_sec_inventory"), "te_st_res_good_row"):
+            g = re.search(r"st_res_adjust_(\w+)_sgui", row).group(1)
+            self.assertIn(f'tooltip = "st_res_row_{g}_status"', row)
+            for status, code in self.CODES.items():
+                body = _body(row, rf'blockoverride "row_status_{status}" \{{')
+                self.assertEqual(re.findall(r"visible = ", body), ["visible = "], f"{g} {status}")
+                self.assertIn(f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                              f"'st_res_{g}_disp_status'), '(CFixedPoint){code}' )", body, f"{g} {status}")
+
+    def test_the_status_code_groups_as_the_status_word_does(self):
+        """st_res_<good>_disp_status and st_res_<good>_mode_text read the same code the same way."""
+        values = _strip_comments(_read(SVALS))
+        custom = _read(os.path.join(REPO, "common", "customizable_localization", "st_res_custom_loc.txt"))
+        for g in _goods():
+            disp = _body(values, rf"(?m)^st_res_{g}_disp_status = \{{")
+            self.assertIn(f"has_variable = st_res_{g}_last_status", disp)
+            self.assertRegex(disp, rf"var:st_res_{g}_last_status = 1\s*var:st_res_{g}_last_status = 3\s*\}}\s*\}}\s*value = 1")
+            self.assertRegex(disp, rf"var:st_res_{g}_last_status = 2\s*var:st_res_{g}_last_status = 4\s*\}}\s*\}}\s*value = 2")
+            self.assertRegex(disp, rf"var:st_res_{g}_last_status >= 5 \}}\s*value = 3")
+            mode = _body(custom, rf"(?m)^st_res_{g}_mode_text = \{{")
+            self.assertRegex(mode, rf"var:st_res_{g}_last_status = 1\s*var:st_res_{g}_last_status = 3\s*\}}\s*\}}\s*localization_key = st_res_mode_storing")
+            self.assertRegex(mode, rf"var:st_res_{g}_last_status = 2\s*var:st_res_{g}_last_status = 4\s*\}}\s*\}}\s*localization_key = st_res_mode_withdrawing")
+            self.assertRegex(mode, rf"var:st_res_{g}_last_status >= 5\s*\}}\s*localization_key = st_res_mode_blocked")
+
+    def test_the_hover_gives_the_word_and_the_reason(self):
+        loc = _loc()
+        for g in _goods():
+            value = loc[f"st_res_row_{g}_status"]
+            self.assertIn(f"GetCustom('st_res_{g}_mode_text')", value)
+            self.assertIn(f"GetCustom('st_res_{g}_reason_text')", value)
 
 
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "strategic_reserve_gui_icons.md")

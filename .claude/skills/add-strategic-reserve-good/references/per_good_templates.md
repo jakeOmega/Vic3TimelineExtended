@@ -158,9 +158,40 @@ st_res_<GOOD>_last_net = {
 }
 ```
 
-### Panel display values (three more, in the "Panel display values" group after the accessors)
+### Panel display values (four more, in the "Panel display values" group after the accessors)
 
-Display only: the row's policy icon and the two markers on its fill bar. No script reads them. **Guard every read**, for the same every-frame reason as the accessors. `_disp_target` and `_disp_floor` must use the same policy codes the evaluator does (target while the policy can buy, 1 and 3; protected while it can sell, 2 and 3), and sit at the bar's ends (100 / 0) otherwise, where the widget hides the marker. `test_strategic_reserve_layout.py` checks all three.
+Display only: the row's status icon, its policy icon and the two markers on its fill bar. No script reads them. **Guard every read**, for the same every-frame reason as the accessors. `_disp_target` and `_disp_floor` must use the same policy codes the evaluator does (target while the policy can buy, 1 and 3; protected while it can sell, 2 and 3), and sit at the bar's ends (100 / 0) otherwise, where the widget hides the marker. `_disp_status` must group `st_res_<GOOD>_last_status` exactly as the good's `st_res_<GOOD>_mode_text` custom loc does (1 and 3 Storing, 2 and 4 Withdrawing, 5 and up Blocked, else Idle). `test_strategic_reserve_layout.py` checks all four.
+
+```
+st_res_<GOOD>_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_<GOOD>_last_status }
+		if = {
+			limit = {
+				OR = {
+					var:st_res_<GOOD>_last_status = 1
+					var:st_res_<GOOD>_last_status = 3
+				}
+			}
+			value = 1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:st_res_<GOOD>_last_status = 2
+					var:st_res_<GOOD>_last_status = 4
+				}
+			}
+			value = 2
+		}
+		else_if = {
+			limit = { var:st_res_<GOOD>_last_status >= 5 }
+			value = 3
+		}
+	}
+}
+```
 
 ```
 st_res_<GOOD>_disp_policy = {
@@ -611,7 +642,19 @@ One `te_st_res_good_row` instance, added inside the `te_st_res_sec_inventory` ty
 			visible = "[Not(GetVariableSystem.Exists('st_res_row_<GOOD>_open'))]"
 		}
 		blockoverride "row_name" { text = "st_res_row_<GOOD>_name" }
-		blockoverride "row_status" { text = "st_res_row_<GOOD>_status" }
+		blockoverride "row_status" { tooltip = "st_res_row_<GOOD>_status" }
+		blockoverride "row_status_idle" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_disp_status'), '(CFixedPoint)0' )]"
+		}
+		blockoverride "row_status_storing" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_disp_status'), '(CFixedPoint)1' )]"
+		}
+		blockoverride "row_status_withdrawing" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_disp_status'), '(CFixedPoint)2' )]"
+		}
+		blockoverride "row_status_blocked" {
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_disp_status'), '(CFixedPoint)3' )]"
+		}
 		blockoverride "row_fill" {
 			value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct') )]"
 		}
@@ -711,6 +754,7 @@ One `te_st_res_good_row` instance, added inside the `te_st_res_sec_inventory` ty
 What each part does:
 
 - `row_toggle` / `row_open` / `row_closed` share one GUI-only key, `st_res_row_<GOOD>_open`: clicking the good's name shows or hides its figures and Policy Settings, and swaps the chevron beside the name. The key is absent until the first click, so a new good's row starts collapsed like the others. `st_res_row_collapse_tooltip` is shared.
+- `row_status` is the status icon's hover (`st_res_row_<GOOD>_status`: the word and the reason); `row_status_idle` / `_storing` / `_withdrawing` / `_blocked` each show one icon on one value of `st_res_<GOOD>_disp_status`, so exactly one is drawn.
 - `row_fill` drives the fill bar; `row_target_marker` / `row_floor_marker` place the two markers and hide each at its end of the bar (the display values above put it there when the policy does not use that bound).
 - `row_auto` shows the lit policy icon over the always-drawn dimmed one.
 - `row_stored` … `row_policy_reason` are the expanded figures, one loc key each (file 14).
@@ -757,7 +801,7 @@ All row expressions use `JournalEntry.GetCountry…`, **not** `ROOT…` — the 
  st_res_<GOOD>_store_flow:0 "Strategic Reserve <GOOD_DISPLAY> Intake"
  st_res_<GOOD>_withdraw_flow:0 "Strategic Reserve <GOOD_DISPLAY> Release"
  st_res_row_<GOOD>_name:0 "@<GOOD>! #bold <GOOD_DISPLAY>#!"
- st_res_row_<GOOD>_status:0 "[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')]"
+ st_res_row_<GOOD>_status:0 "[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')]\n[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_reason_text')]"
  st_res_row_<GOOD>_amount:0 "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct')|0]%)"
  st_res_row_<GOOD>_flow:0 "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0]/wk"
  st_res_row_<GOOD>_last:0 "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1]/wk"
