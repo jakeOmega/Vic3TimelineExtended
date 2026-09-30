@@ -372,9 +372,9 @@ Two buildings make up the reserve, both unlocked by Logistics.
 The hub is the reserve: it holds the controls and does the buying and selling.
 It can't be expanded past its single level, downsized or demolished. Silos are
 how a reserve grows: they only add room and flow, and do nothing without a
-hub. The hub trades only when it is fully staffed. Below full
-occupancy the journal entry shows the hub as deactivated, and it neither trades
-nor replaces what decays.
+hub. The hub trades only when it is fully staffed. Below full occupancy the
+panel marks the hub Understaffed and every good Blocked, and the hub neither
+trades nor replaces what decays.
 
 ### Reserve goods and decay
 
@@ -395,30 +395,72 @@ technology lowers.
 Aeroplane and tank decay rises for a time with jets, stealth aircraft and
 composite armor before later technologies bring it down. The hub buys each
 week's decay on top of whatever rate you set, so a rate of 0 holds a stockpile
-steady at a small ongoing cost. The good's row tooltip breaks its decay rate
+steady at a small ongoing cost. Hover a good's row for its decay rate broken
 down by source.
+
+### The Strategic Reserve panel
+
+The journal entry's panel has an overview, the Reserve Inventory and a
+collapsed How the Strategic Reserve Works. Before you build a hub the entry
+shows only a line telling you to build one. Once the hub stands there is no
+status line, because the overview shows how the hub is doing.
+
+<!-- screenshot: the Strategic Reserve panel, the overview and the Reserve Inventory in view, one good's row expanded to its figures and Fill by Month chart -->
+
+The overview at the top is always shown. The hub's icon is at full colour
+while the hub is fully staffed, marked Hub Operating, and dimmed and marked
+Understaffed below that; hover it for the staffing. Beside it are the Flow Cap,
+how many units of each good the hub may move in a week (hover it for where
+that comes from), and Sales Income, what this week's releases earn.
+
+The Reserve Inventory starts open. Its first line shows the Adjustment Step,
+with the Cycle Step and Reset Rates buttons beside it. Below that is a row for
+each good you have unlocked:
+
+| Cell | What it shows |
+|---|---|
+| Good | The good's name. Click it to expand the row. |
+| Stock | How full the good's reserve is. A marker shows the target stockpile when a buying policy stops short of full, and the protected stockpile when a selling policy keeps a floor. |
+| Status | A crate icon: a yellow bar for Idle, a green arrow going in for Storing, an orange arrow coming out for Withdrawing, a striped barrier for Blocked. Hover it for the word and the reason. |
+| Policy icon | A brass governor, lit while a reserve policy sets the good's rate and dimmed while you set it by hand. Click it to open the good's Policy Settings. |
+| Rate | The decrease, stop and increase buttons. |
+
+Blocked means the stockpile is full, or empty while a release is set, or the
+hub is understaffed. Hover anywhere else on a row for its full breakdown:
+stock, rates, decay by source, the hub's flow cap and staffing, and the policy.
+
+An expanded row lists Stored, Rate Setting, Last Week (what actually moved),
+Decay, Market Price (against the good's base price, with the average the policy
+acts on) and Reserve Policy, then a line on what the policy is doing and why.
+Under them, Fill by Month charts how full the reserve was each month, with 1
+Year, 5 Years and 20 Years ranges. Each bar is a share of capacity, so building
+Silos lowers the bars of an unchanged stock. Policy Settings comes last,
+collapsed until you open it or click the policy icon.
+
+How the Strategic Reserve Works sits at the foot of the entry, collapsed. It
+explains the hub and silos, rates, status, decay, reserve policies, presets and
+settings, sales income and the fill history.
 
 ### Storing and releasing reserve goods
 
-Each good has a row in the journal entry with a fill bar, a status (Storing,
-Withdrawing, Idle or Blocked) and decrease, stop and increase buttons. Click the
-good's name to expand the row: stock against capacity, your rate setting, what
-actually moved last week, decay, and the good's policy.
+You store and release goods from each good's row in the Reserve Inventory, as
+set out in [The Strategic Reserve panel](#the-strategic-reserve-panel).
 
 ![The Strategic Reserve journal entry with the Ammunition row expanded and its settings open. The good runs Stabilize Prices with the Aggressive preset.](images/strategic_reserve.png)
 
 A positive rate buys that many units a week from the market into the reserve; a
-negative rate releases that many onto the market. Every button press moves the
-rate by the shared adjustment step, which the Cycle Step Size button sets to 1,
-10, 100, 1,000 or 10,000 (10 at first). Reset Reserve Rates sets every rate to
-0. The game keeps each rate within the weekly flow limit and the room or stock
+negative rate releases that many onto the market. Every press of a good's
+decrease or increase button moves its rate by the Adjustment Step, which the
+Cycle Step button sets to 1, 10, 100, 1,000 or 10,000 (10 at first). The stop
+button sets the good's rate to 0, and Reset Rates sets every good's rate to 0.
+The game keeps each rate within the weekly flow limit and the room or stock
 left, and sets it to 0 when the reserve fills or empties.
 
 The hub is a government building in your capital, and the goods pass through it
 as its inputs and outputs. Storing buys from your national market, paid from the
 treasury, and adds demand that raises the price. Releasing sells onto your
-market, adds supply that lowers the price, and pays the treasury; the journal
-entry shows this as Weekly Sales Income.
+market, adds supply that lowers the price, and pays the treasury; the overview
+shows this as Sales Income.
 
 The budget panel shows the two sides separately. Sales appear under Additional
 Income, as the Strategic Reserve journal entry's income; purchases appear with the
@@ -430,8 +472,9 @@ and −2,000 a week of expenses at the same time.
 
 Instead of setting a rate by hand, you can give each good a policy that decides
 its rate every week from the national market price, measured against the good's
-base price and averaged over several weeks. The gear button in a good's row
-opens its settings.
+base price and averaged over several weeks. Click a good's policy icon, or
+expand its row and open Policy Settings, to choose one. The four policy buttons
+there use short names: Manual, Buy Cheap, Release High and Stabilize.
 
 | Policy | What it does |
 |---|---|
@@ -444,12 +487,12 @@ Eight settings shape a policy, and three presets fill them all in one click:
 
 | Setting | Conservative | Standard | Aggressive |
 |---|---|---|---|
-| Buy below base price by | 20% | 10% | 5% |
-| Release above base price by | 30% | 20% | 10% |
-| Maximum weekly flow | 2% of capacity | 5% of capacity | 12% of capacity |
-| Weekly purchase budget, per good | 0.1% of weekly GDP | 0.3% of weekly GDP | 0.8% of weekly GDP |
-| Price memory | 8 weeks | 4 weeks | 2 weeks |
-| Response ramp | 20 points | 10 points | 5 points |
+| Buy below (% of base price) | −20 | −10 | −5 |
+| Release above (% of base price) | +30 | +20 | +10 |
+| Maximum weekly flow (units) | 2% of capacity | 5% of capacity | 12% of capacity |
+| Weekly purchase budget (estimated) | 0.1% of weekly GDP | 0.3% of weekly GDP | 0.8% of weekly GDP |
+| Price memory (weeks averaged) | 8 | 4 | 2 |
+| Response ramp (points) | 20 | 10 | 5 |
 
 Every preset uses the whole capacity: a protected stockpile of 0% and a target
 stockpile of 100%. Set those two yourself if you want a floor the policy never
@@ -460,10 +503,11 @@ switch that runs at full flow once the price crosses the threshold.
 A preset keeps its flow and budget in step with your country, recalculating them
 every week from your capacity and GDP, until you change either by hand. The
 preset in force is grayed out, and changing any setting by hand ends it. The
-budget is a cap for each week; what goes unspent doesn't carry over. A new reserve starts every good on Manual with the Standard settings
-loaded, so switching a good to a policy works at once. The row's own buttons and
-Reset Reserve Rates switch goods back to Manual. Policies keep running while the
-journal entry is closed.
+budget is set for each good and caps each week's spending; what goes unspent
+doesn't carry over. A new reserve starts every good on Manual with the Standard
+settings loaded, so switching a good to a policy works at once. The row's own
+rate buttons and Reset Rates switch goods back to Manual. Policies keep running
+while the journal entry is closed.
 
 ### Moving or losing the reserve hub
 

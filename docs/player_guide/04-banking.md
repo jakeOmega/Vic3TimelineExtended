@@ -32,28 +32,31 @@ carries on the cycle and the central bank where the old one left them (see
 switched on are lost and must be enabled again.
 
 The same panels appear as a Banking tab in the Budget panel, and a change made
-in one shows in the other. The tab is greyed until the journal entry appears;
-hover it for what you still need. It shows Current Conditions, the policies and
-the History charts (open there, collapsed in the journal), and ends with an Open
-Journal Entry button.
+in one shows in the other. The tab is grayed until the journal entry appears;
+hover it for what you still need. It ends with an Open Journal Entry button,
+which opens the entry with its description and status text. [The banking
+panels](#the-banking-panels) describes what they show.
 
-<!-- screenshot: the Banking tab of the Budget panel, Current Conditions and the policy list in view -->
+<!-- screenshot: the Banking tab of the Budget panel, with the four bars, the overview's icons and Active Policies in view -->
 
 ### Cycle value, momentum and bubble pressure
 
-Three readings drive the cycle, each drawn as a bar at the top of the entry. The
-cycle value runs from 0 to 100 and decides the phase. Momentum is added to the
-cycle value every month, so it sets how fast conditions change; it loses a tenth
-of itself each month. Bubble pressure, also 0 to 100, is accumulated
-speculation. It decides how likely a crash is and how hard it hits. A fourth
-bar, Policy Stance, shows whether your interest rate is loose or tight; it moves
-only under the full Banking System.
+Three readings drive the cycle, each drawn as a bar at the top of the panels:
+Banking Cycle Value, Banking Momentum and Bubble Pressure. The cycle value runs
+from 0 to 100 and decides the phase. Momentum is added to the cycle value every
+month, so it sets how fast conditions change; it loses a tenth of itself each
+month. Bubble pressure, also 0 to 100, is accumulated speculation. It decides
+how likely a crash is and how hard it hits. A fourth bar, Policy Stance, runs
+from tight to loose and shows where your interest rate sits; it moves only
+under the full Banking System.
 
-The dashboard reports momentum and bubble pressure as bands, not figures.
+The overview's icons report momentum and bubble pressure as bands, not figures.
 Momentum reads Collapsing, Falling, Steady, Rising or Surging. Bubble pressure
 reads Low (under 15), Building (15 to 29), Elevated (30 to 49), High (50 to 74) or Severe <!-- style: allow ai-vocab -->
-(75 and up). The entry's status text describes the phase, momentum and bubble
-pressure over the same bands, in its own words, and shows no figures either.
+(75 and up). The entry's status text lists the Financial Cycle Modifiers:
+Monthly Cycle Value, Monthly Momentum and Monthly Bubble Pressure, the change
+your country's modifiers make to each reading every month. Hover a figure for
+the modifiers behind it.
 
 ![The Boom & Bust Cycle journal entry in Stagnation with momentum rising: the Current Conditions readout, the status text and, below them, the History charts.](images/banking_stagnation.png)
 
@@ -148,7 +151,7 @@ emergency capital controls (Corporate Governance).
 Each response adds back 3 to 12 cycle value and up to 3 momentum. It costs a
 GDP-scaled treasury expense that fades over six months, holds 1 to 4
 intervention points for a year (see [the intervention
-budget](#current-conditions-and-the-intervention-budget)), and radicalizes some
+budget](#the-intervention-budget)), and radicalizes some
 of the upper strata. If your intervention budget goes negative, for example
 after a law downgrade, the game switches off one crash response a month. Once
 those are gone, it lifts one of the five monetary interventions in External &
@@ -177,29 +180,63 @@ guarantee makes an imported one start less deep. The contagion event lets you
 shut your markets to protect domestic banks or keep them open at the cost of
 more radicals.
 
-## The banking policy dashboard
+## The banking panels
 
-The journal entry replaces the base game's button grid with a dashboard: a
-Current Conditions readout, the policy list, and a collapsible History section.
+The journal entry and the Budget panel's Banking tab show the same overview and
+sections, in the same order. The overview at the top is always shown: the four
+bars, then two rows of icons, each with a caption above it and a word beside
+it. Hover a caption for what the term means, and hover the icon or its word for
+the reading in detail; the first row's tooltips also list what pushes the cycle
+each month.
 
-### Current Conditions and the intervention budget
+| Caption | Icon | Word |
+|---|---|---|
+| Cycle Phase | A bank front with a mark: arrows down in a Panic or Downturn, a level bar in Stagnation or Stable, arrows up from Expansion, and the bank gilded in a Boom or Frenzy | The phase |
+| Momentum | An arrow, doubled for Collapsing and Surging | The momentum band |
+| Bubble Pressure | Coins inside a bubble that grows band by band, its rim going from green to red, cracked at Severe | The bubble band |
+| Policy Stance | A tap: the more coins fall from it, the looser the stance, and a padlock at Very Tight | Very Loose, Loose, Neutral, Tight or Very Tight |
+| Inflation | A price tag marked for the band, from a blue arrow down at Deflation to a flame at Very high; a wheelbarrow of banknotes at Hyperinflation | The price band, or Foreign money once you dollarize, or Set by plan in a command economy |
+| Budget | A stack of gold tokens | How many intervention points are free |
 
-Current Conditions shows the phase, the momentum and bubble bands and your
-Intervention Budget, and every tooltip lists what is pushing that reading this
-month. Under the full Banking System the Monetary Policy block follows.
+Policy Stance appears only once you hold a dial, and Inflation only under the
+full Banking System. A warning mark on the bubble means a crash is at its most
+likely: the cycle value is 90 or more, or a Boom or Frenzy has momentum
+Surging. The words are colored by how far the reading is from calm: green and
+white are safe, yellow and gold warn, and red marks an extreme (Panic, Frenzy,
+Collapsing momentum, Severe bubble pressure). A Boom reads blue.
+
+Below the overview come five sections. All start open except the explanations,
+and each heading opens or closes its section:
+
+| Section | Starts | Shows |
+|---|---|---|
+| Active Policies | Open | The tools in force, each with its point cost and a Disable button. |
+| Monetary Policy | Open | Under the full Banking System, the rate, gold, the exchange rate, what borrowing costs and prices (see [Monetary policy under the full Banking System](#monetary-policy-under-the-full-banking-system)). Under Simplified, only the Open-Market Operations row, in a market economy. |
+| Available Interventions | Open | Your economic system's other tools, in categories you can close one by one, each tool with its point cost and an Enable button. |
+| History | Open | The charts in [Banking history charts](#banking-history-charts). |
+| How Banking Works | Collapsed | The explanations: the cycle, crashes and the intervention budget, and under the full Banking System the policy rate, the stance and what borrowing costs. |
+
+Each tool's name is underlined: hover it for what the tool does, its full name
+and what it requires. A grayed button means you cannot use the tool now, and
+its tooltip says why. Enabling a tool moves it to Active Policies. Some rows
+carry a shortened name: under Directed Credit each row names only its sector,
+and Counter-cyclical Buffer stands for Enable Counter-cyclical Buffer. The
+tables in this chapter use the full names.
+
+### The intervention budget
 
 The intervention budget is the pool of points your active policies hold. Your
 financial regulation law gives 1 to 7 points, National Bank Established 1 more,
-and a power bloc's banking union 1 more. Command economies call it the Free
-Planning Budget and cooperatives the Free Council Mandate Points.
+and a power bloc's banking union 1 more. The overview's Budget icon shows how
+many are free, and the journal entry repeats it as Free Intervention Points: a
+command economy calls it the Free Planning Budget and a cooperative the Free
+Council Mandate Points.
 
-Active Policies lists what is in force, each with a Disable button; Available
-Interventions lists your economic system's tools, grayed out with the reason
-when you cannot use them. Switching a tool on has its own price: the lending
-tools charge the treasury 0.2% to 2.5% of GDP, most regulatory tools create
-radicals, and Capital Controls (Outflows) costs infamy and great-power relations.
-Sterilize Capital Inflows and Emergency Import Financing charge cash on
-activation and each month; their tooltips show the current monthly cost.
+Switching a tool on has its own price: the lending tools charge the treasury
+0.2% to 2.5% of GDP, most regulatory tools create radicals, and Capital Controls
+(Outflows) costs infamy and great-power relations. Sterilize Capital Inflows and
+Emergency Import Financing charge cash on activation and each month; their
+tooltips show the current monthly cost.
 
 ### Market economy banking tools
 
@@ -209,7 +246,7 @@ credit tools feed growth, the crisis tools shorten a slump, and the foreign
 capital tools manage gold and the exchange rate. The sections below say what
 each group buys, what it needs and when it is worth its points. [Banking tool
 list](19-appendix-reference-lists.md#banking-tool-list) gives every tool with its
-dashboard category, points and requirements in one table.
+category, points and requirements in one table.
 
 Because momentum loses a tenth of itself each month, a steady push settles at
 about ten times its monthly figure. A tool worth −0.05 momentum a month ends up
@@ -365,12 +402,12 @@ reasons end.
 
 ### Command economy and cooperative tools
 
-Under Command Economy the cycle measures planning strain, and the dashboard
-offers eight planning tools plus two transfers. Under Cooperative Ownership it
-measures the balance between what worker-owners pay themselves and what they
-reinvest, and there are eight council tools. Changing economic system switches
-the old system's tools off. An open Emergency Liquidity Program still refunds 1%
-of GDP when that closes it.
+Under Command Economy the cycle measures planning strain, and the panels offer
+eight planning tools plus two transfers, which have a Transfer button and no
+point cost. Under Cooperative Ownership it measures the balance between what
+worker-owners pay themselves and what they reinvest, and there are eight council
+tools. Changing economic system switches the old system's tools off. An open
+Emergency Liquidity Program still refunds 1% of GDP when that closes it.
 
 | Economy | Category | Tools (points) |
 |---|---|---|
@@ -385,12 +422,13 @@ of GDP when that closes it.
 
 ### Banking history charts
 
-The History section charts the last 1, 5 or 20 years month by month: the cycle's
-three readings, the policy rate and the rate paid on debt, plus inflation and
-the exchange-rate index under the full Banking System. Markers flag policy
-changes, including tools a change of economic system switches off, and crashes,
-including imported ones. History is kept for the player and for major powers and
-above.
+The History section starts open in both the journal entry and the Banking tab.
+It charts the last 1 Year, 5 Years or 20 Years month by month: Cycle Value,
+Cycle Momentum, Bubble Pressure, Policy Rate and Rate Paid on Debt, plus
+Inflation and the Exchange Rate Index under the full Banking System. Markers
+flag policy changes, including tools a change of economic system switches off,
+and crashes, including imported ones. History is kept for the player and for
+major powers and above.
 
 ## Financial regulation laws
 
@@ -428,8 +466,14 @@ and the United States with Free & Mutual Banking.
 
 ## Monetary policy under the full Banking System
 
-With the rule on Enabled, the dashboard gains a Monetary Policy block, and every
-country runs the monetary model whether or not it holds the journal entry.
+With the rule on Enabled, every country runs the monetary model whether or not
+it holds the journal entry, and the Monetary Policy section shows it. Its rows
+are grouped under The Rate, Gold and the Peg (on a gold standard with a dial),
+Exchange Rate, International Arrangements (while you are anchored, party to a
+monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
+Costs and Prices. Hover a row's label for what the term means and the row for
+the detail behind its figure. Your Policy Stance and price band are icons in
+the overview.
 
 ![The Monetary Policy block of the banking dashboard: the rates and the Rate Target stepper, the exchange rate, what borrowing costs, prices, and the central bank's stance, delegation and mandate.](images/banking_rate.png)
 
@@ -438,10 +482,11 @@ country runs the monetary model whether or not it holds the journal entry.
 You have a dial, a policy rate of your own, with National Bank Established and a
 currency law of Commodity Money, Gold Standard, Fiat Money or Digital Currency,
 unless you run a Command Economy, have dollarized, or tie your currency to
-another country's. Everyone else still has a rate, and the dashboard says why it
-is out of your hands: without a national bank or under Decentralized
-Cryptocurrency it is the world rate plus expected inflation plus a point, a
-command economy's is fixed at 3%, and an anchored country takes its anchor's.
+another country's. Everyone else still has a rate, and the Monetary Policy
+section says why it is out of your hands: without a national bank or under
+Decentralized Cryptocurrency it is the world rate plus expected inflation plus a
+point, a command economy's is fixed at 3%, and an anchored country takes its
+anchor's.
 
 ### Rate target, delegation and mandates
 
@@ -533,10 +578,10 @@ inflation strays from the target and is gone 10 points from it. Expectations
 adjust twice as fast under an independent bank, and only inflation that lenders
 did not foresee erodes your debt.
 
-Inflation puts you in one of six price bands, each a modifier on your country.
-You leave a band only once inflation is a quarter point past its edge. Above
-Stable prices, each band is worse than the one below on every count; the
-modifier's tooltip gives the figures.
+Inflation puts you in one of six price bands, each a modifier on your country;
+the overview's Inflation icon shows which. You leave a band only once inflation
+is a quarter point past its edge. Above Stable prices, each band is worse than
+the one below on every count; the modifier's tooltip gives the figures.
 
 | Band | Inflation | Main effects |
 |---|---|---|
@@ -575,14 +620,14 @@ Your Monetary Policy law sets the dial's range.
 
 ### Gold reserves and the run on the vault
 
-A gold-standard country with a dial gets a Gold and the Peg section. The Bank's
-Gold Reserve is the central bank's vault, not your treasury. Each point your
-rate sits above the World Rate draws in gold worth 0.2% of GDP a month, and each
-point below sends as much out. Gold drawn in is Borrowed Gold: your budget pays
-your policy rate on it (Interest on Borrowed Gold), and it leaves first, at
-double speed, once your rate is no longer above the world's. Recapitalise the
-Bank moves a tenth of the reserve's limit from treasury to vault, in cash, for
-good.
+A gold-standard country with a dial gets a Gold and the Peg group in the
+Monetary Policy section. The Bank's Gold is the central bank's vault, not your
+treasury. Each point your rate sits above the World Rate draws in gold worth
+0.2% of GDP a month, and each point below sends as much out. Gold drawn in is
+Borrowed Gold: your budget pays your policy rate on it (the Interest on It row
+beneath), and it leaves first, at double speed, once your rate is no longer
+above the world's. Recapitalise the Bank moves a tenth of the reserve's limit
+from treasury to vault, in cash, for good.
 
 Peg Confidence (0 to 100) reacts to your rate only while the vault is under a
 tenth of its limit:
@@ -811,5 +856,5 @@ own versions for command economies and cooperatives. Which ones can fire depends
 on the phase, the bubble, your technology and your economic system. After one,
 no random banking event fires for at least 18 months, and none in a crash month.
 Their options move the cycle's readings, and the tooltip shows by how much. A
-few defer to the dashboard: The Bank Holiday appears only when you could declare
-one, and its first option does.
+few tie into the banking tools: The Bank Holiday appears only when you could
+declare one, and its first option does.

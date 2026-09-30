@@ -76,28 +76,65 @@ each need two of those three finished. The Deep-Space Probe and Mars Landing
 show up in the journal as soon as you reach orbit and have their technologies,
 but neither can start before the Moon Landing.
 
-<!-- screenshot: the Moon Landing journal entry with its milestone panel open, showing progress, pace, setback risk, the Safe and Ambitious selector and the funding stepper -->
-
 ### The space milestone panel
 
-Each running milestone has a panel in its journal entry. It shows progress
-against the goal, the pace per month, the current setback risk, whether the
-milestone's first is still open, the setbacks so far and a rough estimate of
-the months left. Hover the progress line to see the
-reward for finishing first and for finishing later. The controls are an approach
-selector (Standard, Safe or Ambitious) and a funding stepper. The row of icons
-at the foot of the overview shows how far your own program has come. The
-Interstellar Probe and its wait for data share one icon, which changes when the
-probe launches and again when its data arrives.
+A running milestone's journal entry shows its panel: an overview at the top and
+sections below it. An entry that hasn't started yet shows only its status text.
 
-Rivals lists the other powers running the same milestone. The first five each
-show an estimate of how far along they are: a band reaching 25% of the goal to
-either side of a marker, which always contains the true figure. Programs are
-announced but their schedules are not, so where the marker sits in the band is
-drawn again once a year. An agent network in the rival's country narrows the
-band to ±10% at strength 50 and ±5% at 75 (see [Agent
-networks](10-influence.md#agent-networks)). Hover a rival for its figures; any
-rivals past the fifth are listed when you hover the line below them.
+<!-- screenshot: the Moon Landing journal entry: the overview (Standard, Risk, First: Open, the Progress bar and the Programme row) above Mission Control with the approach buttons and the funding stepper -->
+
+The overview is always shown. Its first row is three icons, each with a label
+under it:
+
+| Icon | Reads | Means |
+|---|---|---|
+| Approach | Standard, Safe −30/wk or Ambitious −60/wk | The approach in force. Safe and Ambitious show their weekly innovation cost. |
+| Approach, during a post-setback review | Shielded: 4 mo | No milestone can suffer a setback for the months shown. The approach itself is unchanged. |
+| Setback risk | Risk: 6%/mo | This month's chance of a setback. The icon is faint while it reads 0%. |
+| The first | First: Open or First: Claimed | Whether the larger reward is still there to win. The icon is faint once another power has claimed it. |
+
+Below them, the Progress bar fills toward the goal. Beside it are your progress,
+the goal and this month's pace, as in "124 / 200 (+3.5/mo)". Hover the bar for
+the reward for finishing first and for finishing later.
+
+At the foot of the overview, the Programme row has an icon for each entry, in
+order. An icon is lit once you have achieved that milestone, with a flag if you
+were first. It is half-lit while under way, and faint if you haven't begun it
+or another power finished it first. The Interstellar Probe and its wait for data
+share one icon with four pictures: the probe greyed (not begun), the probe with
+a wrench (under way), radio dishes with a clock (launched, awaiting data) and
+the dishes with a check (data received). Hover any icon for its state.
+
+Three sections follow the overview:
+
+| Section | Starts | Shows |
+|---|---|---|
+| Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is greyed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), and the Mission Profile. |
+| Rivals | Open | The other powers running the same milestone, each with an estimate of its progress. |
+| How the Space Race Works | Collapsed | The explanations: approach and pace, funding, setbacks, the first, rivals and the programme. |
+
+A rival's progress is an estimate. The first five rivals each show a band
+reaching 25% of the goal to either side of a marker, which always contains the
+true figure, with the band's range in percent beside it. Programs are announced but their schedules are
+not, so where the marker sits in the band is drawn again once a year. An agent
+network in the rival's country narrows the band to ±10% at strength 50 and ±5%
+at 75 (see [Agent networks](10-influence.md#agent-networks)). Hover a rival for
+its figures; any rivals past the fifth are listed when you hover the line below
+them.
+
+Solar System Colonization's overview shows its stage (Stage: 2 of 5) in place
+of the first, and its bar is Next Colony, the progress toward your next colony.
+Under the bar, the Worlds pie counts the 34 worlds: gold for your colonies, red
+for other powers' and grey for the worlds no one holds; hover it for the counts.
+While the program isn't running, because every world is claimed or your Space
+Program no longer runs the method it needs, the approach reads Idle, the risk
+and progress rows are hidden, and Mission Control shows only the Mission
+Profile.
+
+Interstellar Probe: Awaiting Data has nothing to control, so it has no Mission
+Control or Rivals. Its overview is the Transit bar ("40 / 132 months") and the
+Programme row; hover the bar for the months to go and what the probe might
+find.
 
 A new milestone starts on the Standard approach at funding level 1. It moves at
 your program's pace and rolls against its base setback risk from its first
@@ -115,9 +152,10 @@ at any time, back to Standard included.
 | Safe | −50% setback risk. | One extra funding level's worth. |
 | Ambitious | +50% progress. | Two extra funding levels' worth. |
 
-The panel shows each approach's weekly cost in innovation beside it in the
-overview and in its button's tooltip: 15 times the milestone's cost factor for
-Safe and twice that for Ambitious, so 30 and 60 a week on the Moon Landing.
+The approach label in the overview shows the weekly innovation cost of the
+approach in force, and each approach button's tooltip gives its own: 15 times
+the milestone's cost factor for Safe and twice that for Ambitious, so 30 and 60
+a week on the Moon Landing.
 
 Approach, funding and mission choices apply to your whole program, not to the
 milestone they sit on. Their modifiers appear on each milestone's journal entry,
@@ -203,7 +241,7 @@ cost 25% of that milestone's progress, give Space Mission Failure (−2% prestig
 and −25 innovation cap, fading over five years) and radicalize some academics.
 They also start a six-month safety period during which none of your milestones
 can suffer another setback, although they keep moving at full pace; the panel
-says the program is inside its post-setback review and shows the risk as 0%. One
+reads Shielded, with the months left, and shows the risk as 0%. One
 option usually adds a Temporary Safety Review, which fades over ten years, and
 in some events also switches the milestone to Safe. Another usually presses on
 with a further flat loss of progress and more radicals, and no safety period.
@@ -294,8 +332,8 @@ the event Beyond the Blue.
 
 The entry stays open for as long as you hold a colony, even if you switch off
 the Solar Colonization method, so your colony modifiers are never lost; the
-program simply stops, and bills no funding or approach cost, until the method
-returns. Once all 34 worlds are claimed,
+program simply stops (its panel reads Idle), and bills no funding or approach
+cost, until the method returns. Once all 34 worlds are claimed,
 Solar System Colonization finishes for the country that took the last one, and
 for any other colony holder whose program is still running when its bar next
 fills. Finishing grants Interplanetary Trade Networks: +10% prestige, +5%

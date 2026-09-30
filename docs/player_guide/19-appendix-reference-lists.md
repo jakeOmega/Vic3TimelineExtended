@@ -45,7 +45,7 @@ country can race to build, are in [Wonders](02-timeline.md#wonders).
 
 ## Banking tool list
 
-Every market economy banking tool, with its dashboard category, the intervention
+Every market economy banking tool, with its category in the banking panels, the intervention
 points it holds and what it needs. What each does and when to use it is in
 [Market economy banking tools](04-banking.md#market-economy-banking-tools) and
 the sections after it.

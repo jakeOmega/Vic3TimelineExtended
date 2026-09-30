@@ -18,17 +18,36 @@ first warhead, it is active for any country with a working program; a country
 with the technology but not the standing to build sees it inactive, with a
 status line saying what it lacks.
 Once the first warhead exists, the entry is active for every country except
-decentralized ones, whether or not it has the technology, and its status line
-opens with the nuclear taboo's score and band.
+decentralized ones, whether or not it has the technology. An active entry has
+no status line: the overview at its top says the same at a glance.
 
-| Panel | Shown when | What it holds |
+<!-- screenshot: the Nuclear Weapons overview of an armed power, with the programme icon, warheads, the three posture icons and the taboo bar in view -->
+
+The overview has three rows. Each icon has its word beneath, and hovering it
+gives the detail.
+
+- The first row is always there. It shows the program's state (Unfunded, Developing, Producing, Frozen, At Ceiling, Dismantling, No Programme, Renounced or Disarmed; hover it for the program's status), your warheads, a crisis icon with its stage while you are in one, and your credibility as a small bar once you have a record.
+- The second row, while you hold warheads, is your posture: doctrine, readiness and launch authority, one icon each.
+- The third row, from the world's first warhead, is the nuclear taboo: a bar, the score and its target with the monthly change ("62 → 68 (+0.40/mo)"), and an arrow for the direction. The solid bar runs to the lower of the score and its target, and a pale stretch to the higher. The stretch is pale rather than green or red because a stronger taboo cuts both ways: it weighs on an arsenal and on threats, and shields countries without one. Hover it for the target's breakdown.
+
+The Programme sits directly above the entry's progress bar, which is progress
+toward your next warhead. The other sections follow below the bar. Every
+section starts open except How Nuclear Weapons Work, which holds the
+explanations, one heading per topic. The posture's choices are two collapsed
+subsections under Nuclear Posture.
+
+| Section | Shown when | What it holds |
 |---|---|---|
-| The Programme | You have a program | Funding, production rate, time to the next warhead, warheads held, the year of your first device and whether it was the world's first |
-| Progress bar | Always | Progress toward the next warhead |
-| Nuclear Posture | You hold warheads | Doctrine, readiness, launch authority, forces, upkeep, incident exposure, interest-group opinions; in the Forces section, your arsenal ceiling and dismantling |
-| Nuclear Crisis and Reputation | In a crisis, or once you have a record | The crisis and your moves in it; credibility and pledges |
-| The Nuclear Taboo | From the world's first warhead | The taboo's score and band, where it is heading and why, what nuclear acts cost now, your arsenal's burden, and its history |
-| Delivery and Defence, Nuclear Powers | Always | Strike and interception ratings; the ten largest arsenals as the world estimates them |
+| The Programme | You have a program | Programme funding (a stepper), warhead production a month, the time to the next warhead, and the year of your first device and whether it was the world's first |
+| Nuclear Crisis | You are in a crisis | Your side, the dispute, the stage, the weeks to the deadline, danger, pressure, what conceding would cost, whether the threat can be carried out and your stakes; your buttons under Our Moves |
+| Nuclear Posture | You hold warheads | Doctrine, readiness (with the level it is moving to), launch authority, your nuclear umbrella, warheads unaccounted for, upkeep and incident exposure; Change Doctrine and Change Readiness or Launch Authority under it |
+| Forces | You hold warheads | Warheads held beside the world's estimate, survivability, command reliability, crew strain and the chance of a halt; safeguards and hardening under Investment; your arsenal ceiling and dismantling under Arsenal Size |
+| At Home | You hold warheads | A small table for each interest group with a view of your posture |
+| Reputation | You have a record | How your last crisis ended, your credibility and your non-use pledges |
+| The Nuclear Taboo | From the world's first warhead | The score and its band, where it is heading, what nuclear acts cost now, your arsenal's burden, and The Taboo Over Time, its history in two charts |
+| Delivery and Defence | Always | Your delivery capability and home defence |
+| Nuclear Powers | From the world's first warhead | The ten largest arsenals as the world estimates them |
+| How Nuclear Weapons Work | Always | The explanations, collapsed |
 
 ![The Nuclear Weapons journal entry of a country holding 32 warheads: The Programme panel (funding at step 0, so no new warhead is coming), the progress bar and the Nuclear Posture panel.](images/nuclear_posture_and_programme.png)
 
@@ -59,7 +78,7 @@ many warheads. Losing the rank that qualified you zeroes funding the same week.
 
 ### Program funding and warhead production
 
-Funding is a stepper in the program panel. Each step costs 100 weekly
+Programme funding is a stepper in The Programme. Each step costs 100 weekly
 innovation, taken out of your research, and you can add a step only while your
 innovation is above 100. A warhead needs 100 progress.
 
@@ -106,8 +125,8 @@ From the week your first warhead exists you pay for it, and a human player gets
 ### Nuclear deterrent upkeep
 
 Nuclear Deterrent Upkeep is a weekly expense that scales with GDP. The figures
-below are shares of GDP a year; each readiness and investment button shows its
-exact weekly cost.
+below are shares of GDP a year. The Upkeep row in Nuclear Posture shows the
+weekly total, and each readiness choice and investment row its own weekly cost.
 
 | Item | Cost |
 |---|---|
@@ -121,10 +140,10 @@ exact weekly cost.
 
 ### Survivability, reliability and crew strain
 
-The posture panel's Forces section tracks three numbers on a 0–100 scale,
-updated monthly, and two investment steppers from 0 to 3.
+The Forces section tracks three numbers on a 0–100 scale, updated monthly, and
+two investment steppers from 0 to 3, Safeguards and Hardening.
 
-- Survivability is how much of your force would survive a first strike. It climbs toward a ceiling set by technology (25, plus 15 for Radar, 20 for Intercontinental Ballistic Missiles, 25 for Advanced Submarine Technology and 10 for Missile Defense Systems) only while you pay for hardening, and erodes when you stop.
+- Survivability is how much of your force would survive a first strike. It climbs toward a ceiling set by technology (25, plus 15 for Radar, 20 for Intercontinental Ballistic Missiles, 25 for Advanced Submarine Technology and 10 for Missile Defense Systems) only while you pay for hardening, and erodes when you stop. Its bar shows where it is heading: a green stretch while it climbs, a red one while it erodes, and a cream line at the ceiling.
 - Command reliability is how well the chain of command holds. Each safeguards level raises it by about 12; strain, buried incidents and enemy sabotage lower it.
 - Crew strain rises 5 a month at High Alert, settles around 40 at Heightened, and falls 6 a month at Routine or Recessed.
 
@@ -153,8 +172,9 @@ general are in [Military and war](12-military.md).
 
 ## Nuclear posture
 
-Posture is three separate choices, set in the posture panel. A button you can't
-use says why.
+Posture is three separate choices. Nuclear Posture shows the ones in force.
+Open Change Doctrine, or Change Readiness or Launch Authority, under it to
+change them with the Adopt and Order buttons. A button you can't use says why.
 
 ### Nuclear doctrine
 
@@ -209,16 +229,22 @@ once a year.
 | Launch on Warning | Radar, Intercontinental Ballistic Missiles | A false warning can become a launch under standing orders |
 | Automatic Retaliation | Radar, Intercontinental Ballistic Missiles, Mainframe Computers | A strategic first strike on you is answered in full, up to three warheads, with no choice left to you. Threats against you count as if your forces were survivable. Extra upkeep; restraint-minded groups dislike it; an accident at home during a war or an acute crisis can set it off |
 
-The Forces section shows the chance that someone in the chain halts a launch
-begun under delegation or launch on warning. Automatic Retaliation never answers
-a retaliation, and answers a given attacker at most once in six months.
+The Forces section's Chance of a halt row is the chance that someone in the
+chain halts a launch begun under delegation or launch on warning. Automatic
+Retaliation never answers a retaliation, and answers a given attacker at most
+once in six months.
 
 ### How interest groups judge your posture
 
-The At Home section lists each interest group with a view and the approval it
-adds: Nuclear Posture: Enthusiastic (+2), Approving (+1), Uneasy (−1) or Opposed
-(−2). Opinions are reviewed monthly, and doctrine and readiness count only once
-a doctrine has stood for six months.
+The At Home section has a small table for each interest group with a view. It
+names the group and how it judges you (militarist, restraint, officers or
+business, some of them mild, hawkish or restrained). Then comes the approval
+your posture adds, and a row for each term behind it: Doctrine, Readiness,
+Launch authority, Crew strain, The arsenal itself, and Alerts and crises. Hover
+a row for what the group objects to or wants. The approval appears in the
+group's breakdown as Nuclear Posture: Enthusiastic (+2), Approving (+1), Uneasy
+(−1) or Opposed (−2). Opinions are reviewed monthly, and doctrine and readiness
+count only once a doctrine has stood for six months.
 
 | Group | Wants | Dislikes |
 |---|---|---|
@@ -230,9 +256,9 @@ a doctrine has stood for six months.
 A group that only approves of its preferred Rules of War law, rather than
 strongly, holds a mild view (±1). The Armed Forces and the Industrialists also
 lean with their leader: a jingoist-led army wants compellence. The objection to
-the arsenal itself, listed as "the arsenal itself" among the group's terms,
-comes from [the nuclear taboo's burden](#what-the-nuclear-taboo-costs) and
-counts at once, whatever your doctrine's tenure.
+the arsenal itself, its own row in the group's table, comes from [the nuclear
+taboo's burden](#what-the-nuclear-taboo-costs) and counts at once, whatever
+your doctrine's tenure.
 
 ### The nuclear umbrella and nuclear guarantees
 
@@ -293,7 +319,8 @@ target is at Heightened or higher. Any crisis turns Acute when the issuer holds
 firm, a play becomes a war, or a launch between the two is recalled at the last
 moment. A crisis can be settled at any stage, and it lapses after a year.
 
-The crisis panel shows two figures, each broken down in its tooltip.
+The Nuclear Crisis section shows two figures, each broken down in its tooltip:
+Danger, and Pressure on the target (Pressure on us when you are the target).
 
 - Danger (0–100) rises with the stage, time, publicity, readiness, poor command reliability, counter-threats and exercises, and falls with open talks. It is lower when the target has no arsenal and no armed protector. High danger makes incidents likelier.
 - Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind and an armed protector behind it lower it. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
@@ -301,11 +328,12 @@ The crisis panel shows two figures, each broken down in its tooltip.
 From Confrontation on, the target is pressed every six weeks unless talks are
 open.
 
-<!-- screenshot: the Nuclear Crisis panel during a Confrontation, with the pressure breakdown tooltip open -->
+<!-- screenshot: the Nuclear Crisis section during a Confrontation, with the pressure breakdown tooltip open -->
 
 ### Moves during a crisis
 
-Each side acts through events and the crisis panel's buttons.
+Each side acts through events and the buttons under Our Moves in the Nuclear
+Crisis section.
 
 | Move | Who | Effect |
 |---|---|---|
@@ -327,11 +355,12 @@ stand-down.
 
 ### Credibility, bluffs and crisis outcomes
 
-Doctrine is public, so the panel rates every threat: Backed (+10 pressure; your
-doctrine permits a strike now, or you hold Compellence or Warfighting),
-Uncertain (Flexible First Use, or Existential Deterrence with something at
-stake), or A bluff (−25, or −35 under No First Use; your doctrine or Rules of
-War law forbids a strike).
+Doctrine is public, so the Nuclear Crisis section rates every threat in its "Can
+we carry it out?" row ("Can they carry it out?" when you are the target): Backed
+(+10 pressure; your doctrine permits a strike now, or you hold Compellence or
+Warfighting), Uncertain (Flexible First Use, or Existential Deterrence with
+something at stake), or A bluff (−25, or −35 under No First Use; your doctrine
+or Rules of War law forbids a strike).
 
 | Outcome | Issuer | Target |
 |---|---|---|
@@ -535,8 +564,8 @@ to demand your disarmament.
 
 ## Loose warheads
 
-Lost warheads stay in the world. The posture panel's Unaccounted for row counts
-those from your arsenal.
+Lost warheads stay in the world. The Unaccounted for row in Nuclear Posture
+counts those from your arsenal.
 
 ### Nuclear terror plots
 
@@ -587,7 +616,7 @@ it costs to use it, threaten with it and, above 40, simply to hold it. It also
 shapes how the AI builds, threatens and strikes (see [How the AI plays nuclear
 weapons](#how-the-ai-plays-nuclear-weapons)).
 
-### The taboo panel and its bands
+### The taboo section and its bands
 
 The Nuclear Taboo section of the entry is open by default.
 
@@ -595,20 +624,19 @@ The Nuclear Taboo section of the entry is open by default.
 |---|---|
 | Nuclear taboo | The score and its band |
 | Heading toward | The target the score is moving to, and whether it is rising, falling or steady. Hover this row or the one above for the target's breakdown, part by part |
-| First use on a city, First use on a battlefield | The infamy and the relations with every other country that a strategic or tactical first use would cost now |
+| First use on a city, First use in battle | The infamy and the relations with every other country that a strategic or tactical first use would cost now |
 | A public ultimatum | The infamy a public ultimatum would cost now |
-| Burden of our arsenal | Only while you hold warheads: your burden, and the prestige and leverage it costs |
+| Burden of our arsenal | Only while you hold warheads: the prestige and leverage your arsenal's burden costs. Hover it for the burden itself |
 
 Below the rows, a line says whether a nuclear weapon has been used in war and,
-if so, when the last one fell; The Taboo Over Time holds two charts, the score
-and its target, month by month.
+if so, when the last one fell. The Taboo Over Time, open by default, holds two
+charts, the score and its target, month by month.
 
 ![The Nuclear Taboo panel after a nuclear weapon has been used in war. The taboo is Normalised at 29 and steady, and below 40 the arsenal carries no burden.](images/nuclear_taboo.png)
 
-The band sets the words of the status line and marks where the taboo's effects
-start.
+The band is named beside the score and marks where the taboo's effects start.
 
-| Band | Score | The status line says | What starts here |
+| Band | Score | What it means | What starts here |
 |---|---|---|---|
 | Normalised | 0–29 | The bomb is treated as one weapon among others | Below 30, AI rulers drop some of their restraint |
 | Fragile | 30–49 | The bomb is feared, but its use is still argued for | Above 40, holding warheads is a burden |
@@ -675,25 +703,26 @@ Every scaled cost is nothing at a taboo of 0 and grows in step with it.
 
 A strike that answers one on you or on a country you cover costs no infamy and
 no relations at any taboo. At 100 a single first strike on a city costs 100
-infamy, enough on its own to reach the Pariah threshold. The panel's cost rows
-show today's figures, and a strike's confirmation repeats them before you
-launch. The taboo also moves the pressure a threat puts on its target (see
+infamy, enough on its own to reach the Pariah threshold. The taboo section's
+cost rows show today's figures, and a strike's confirmation repeats them before
+you launch. The taboo also moves the pressure a threat puts on its target (see
 [Crisis stages, danger and pressure](#crisis-stages-danger-and-pressure)).
 
-Above a taboo of 40, holding warheads is a burden in itself. Your burden, shown
-as a percentage in the panel, grows with the taboo, from nothing at 40 to full
-at 100, and with your arsenal, from about a fifth of full for a single warhead
-to all of it at fifty warheads or more. It does two things:
+Above a taboo of 40, holding warheads is a burden in itself. Your burden, a
+percentage the Burden of our arsenal row shows on hover, grows with the taboo,
+from nothing at 40 to full at 100, and with your arsenal, from about a fifth of
+full for a single warhead to all of it at fifty warheads or more. It does two
+things:
 
 - The Burden of the Bomb lowers prestige by up to 45% and leverage generation by up to 25%. At a taboo of 100, a fifty-warhead arsenal turns Nuclear Power's +30% prestige into −15% and cancels its leverage bonus; five warheads in the same world keep about +17% prestige.
 - Interest groups favoring Limited War over Total War object to the arsenal itself: −1 to their view of your posture from a burden of 33%, −2 from 67% (see [How interest groups judge your posture](#how-interest-groups-judge-your-posture)). The ceiling's tooltip says how many warheads would ease them a step.
 
 ### Reducing or giving up an arsenal
 
-The exits sit in the Forces section of the posture panel, which is collapsed by
-default: an Arsenal row saying whether a ceiling holds you or you are
-dismantling, the Arsenal ceiling stepper with a Lift button, and Dismantle the
-arsenal with Begin and Halt buttons.
+The exits sit under Arsenal Size in the Forces section. An Arsenal row says
+whether a ceiling holds you or you are dismantling. Below it are the Arsenal
+ceiling stepper, Lift the arsenal ceiling with its Lift button, Dismantle the
+arsenal with Begin, and Halt the dismantling with Halt.
 
 The **arsenal ceiling** is the most warheads you will hold. The minus button
 sets one below your stock, or lowers the one you have, by 1 warhead up to 10, by
@@ -702,9 +731,10 @@ steps. It goes no lower than 1; below that you dismantle. Warheads above the
 ceiling are taken apart, a tenth of the excess a month and at least one, and
 each strengthens the taboo a little. While you hold at least as many warheads as
 the ceiling, Programme Held stops your program: funding goes to zero and can't
-be raised, and the program's status reads "Development is held at our arsenal
-ceiling." Raising the ceiling above your stock, or lifting it, costs nothing and
-releases the program at once, unless a treaty's ceiling still holds you.
+be raised, and the overview's program icon reads At Ceiling ("Development is
+held at our arsenal ceiling." on hover). Raising the ceiling above your stock,
+or lifting it, costs nothing and releases the program at once, unless a treaty's
+ceiling still holds you.
 
 Dismantle the Arsenal needs warheads, peace, no nuclear crisis and no civil
 war. It takes 12 months, one more for every 10 warheads above 20, and at most
@@ -720,12 +750,13 @@ dismantling ends without its rewards.
 
 When the last warhead goes, "The Last Warhead" fires. Its option gives The Bomb
 Renounced, a prestige bonus of up to +20% in proportion to the taboo (+10% at
-50) that fades over 20 years, and raises relations with every country by a
-fifth of the taboo (+10 at 50). Restraint-minded interest groups approve and
-hawks disapprove. You lose Nuclear Power and take Renounced the Bomb: you count
-as a disarmed country, so no program can run, and the status line reads "We
-gave up the bomb of our own accord." Only Dismantle the Arsenal brings these
-rewards and Renounced the Bomb; every path counts toward the taboo.
+50) that fades over 20 years, and raises relations with every country by a fifth
+of the taboo (+10 at 50). Restraint-minded interest groups approve and hawks
+disapprove. You lose Nuclear Power and take Renounced the Bomb: you count as a
+disarmed country, so no program can run, and the overview's program icon reads
+Renounced ("We gave up the bomb of our own accord." on hover). Only Dismantle
+the Arsenal brings these rewards and Renounced the Bomb; every path counts
+toward the taboo.
 
 Resume the Nuclear Programme is a decision you can take while you hold
 Renounced the Bomb. It ends the renunciation and The Bomb Renounced, and costs
@@ -744,7 +775,7 @@ program. You set the ceiling in the draft, from 1 up to a quarter above the
 larger of the two arsenals (at least 5). While the treaty is in force:
 
 - Neither party holds more warheads than the ceiling. Those above it are taken apart, a tenth of the excess a month, and each party's program is held at the ceiling from its next monthly review.
-- The Arsenal row reads "Held to N warheads by an arms-control treaty" when the treaty binds you tighter than your own ceiling, or you have none.
+- The Arsenal row reads "Held to N by treaty" when the treaty binds you tighter than your own ceiling, or you have none.
 - Each country it binds adds to the taboo's Restraint part, once however many such treaties it has, weighted by rank.
 
 Leaving costs nothing directly, but it weakens the taboo. When a treaty ends,
