@@ -4379,6 +4379,7 @@
  te_swap_provider_solvent_tt:0 "The swap-line provider is not in default"
  te_system_tab_met_tt:0 "#b Not open yet#!\nIts conditions are met, but its journal entry is not running. It opens at the journal's next check, unless it has already run its course."
  te_system_tab_open_journal:0 "Open Journal Entry"
+ te_systems_window_launcher_label:0 "Timeline Extended"
  te_systems_window_launcher_tt:0 "#b Timeline Extended#!\nThe Space Race, the Colonial Empire and Grand Monuments, a tab each. These are the journal entries' own panels: a change made here shows there too."
  te_systems_window_none:0 "None of these systems has begun for you yet. Hover a tab for what it needs."
  te_systems_window_title:0 "Timeline Extended"
