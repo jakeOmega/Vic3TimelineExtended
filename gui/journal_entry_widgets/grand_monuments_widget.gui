@@ -30,7 +30,8 @@
 ### * Collapse flags say their default: *_closed sections are open until
 ###   closed, *_open ones collapsed until opened (test_grand_monuments_layout.py).
 ### * Every root and composer is gated on [JournalEntry.IsActive] (gotcha #14).
-### * The status icons are vanilla placeholders, listed in
+### * The status and Hard Times icons are the mod's own (gfx/interface/icons/
+###   gm_icons/, PR #586); what each shows is in
 ###   docs/systems/grand_monuments_gui_icons.md.
 
 types grand_monuments_widget_types
@@ -284,28 +285,28 @@ types grand_monuments_widget_types
 				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)1' )]"
 				tooltip = "gm_je_status_undedicated_tt"
 				blockoverride "status_texture" {
-					texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
+					texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
 				}
 			}
 			gm_row_status = {
 				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)2' )]"
 				tooltip = "gm_je_status_upheld_tt"
 				blockoverride "status_texture" {
-					texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+					texture = "gfx/interface/icons/gm_icons/status_upheld.dds"
 				}
 			}
 			gm_row_status = {
 				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)3' )]"
 				tooltip = "gm_je_status_heritage_tt"
 				blockoverride "status_texture" {
-					texture = "gfx/interface/icons/generic_icons/maybe_icon.dds"
+					texture = "gfx/interface/icons/gm_icons/status_heritage.dds"
 				}
 			}
 			gm_row_status = {
 				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
 				tooltip = "gm_je_status_contested_tt"
 				blockoverride "status_texture" {
-					texture = "gfx/interface/icons/generic_icons/disapproval_icon.dds"
+					texture = "gfx/interface/icons/gm_icons/status_contested.dds"
 				}
 			}
 
@@ -391,7 +392,7 @@ types grand_monuments_widget_types
 					gm_ov_cell = {
 						tooltip = "gm_je_status_upheld_tt"
 						blockoverride "cell_texture" {
-							texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+							texture = "gfx/interface/icons/gm_icons/status_upheld.dds"
 						}
 						blockoverride "lit" {
 							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_upheld'), '(CFixedPoint)0' )]"
@@ -406,7 +407,7 @@ types grand_monuments_widget_types
 					gm_ov_cell = {
 						tooltip = "gm_je_status_heritage_tt"
 						blockoverride "cell_texture" {
-							texture = "gfx/interface/icons/generic_icons/maybe_icon.dds"
+							texture = "gfx/interface/icons/gm_icons/status_heritage.dds"
 						}
 						blockoverride "lit" {
 							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_heritage'), '(CFixedPoint)0' )]"
@@ -421,7 +422,7 @@ types grand_monuments_widget_types
 					gm_ov_cell = {
 						tooltip = "gm_je_status_undedicated_tt"
 						blockoverride "cell_texture" {
-							texture = "gfx/interface/icons/generic_icons/undecided_icon.dds"
+							texture = "gfx/interface/icons/gm_icons/status_undedicated.dds"
 						}
 						blockoverride "lit" {
 							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_undedicated'), '(CFixedPoint)0' )]"
@@ -436,7 +437,7 @@ types grand_monuments_widget_types
 					gm_ov_cell = {
 						tooltip = "gm_je_status_contested_tt"
 						blockoverride "cell_texture" {
-							texture = "gfx/interface/icons/generic_icons/disapproval_icon.dds"
+							texture = "gfx/interface/icons/gm_icons/status_contested.dds"
 						}
 						blockoverride "lit" {
 							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_disp_count_contested'), '(CFixedPoint)0' )]"
@@ -469,7 +470,7 @@ types grand_monuments_widget_types
 						size = { 32 32 }
 						parentanchor = hcenter
 						tooltip = "gm_je_ov_hard_times_tt"
-						texture = "gfx/interface/icons/generic_icons/warning.dds"
+						texture = "gfx/interface/icons/gm_icons/hard_times.dds"
 					}
 					textbox = {
 						autoresize = yes
