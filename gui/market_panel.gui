@@ -151,8 +151,12 @@ types market_panel
 				# Warming entry, in slot 5, and Reserve, the Strategic Reserve entry,
 				# in slot 6. Each is on the strip once its unlock gate's is_shown
 				# holds (te_market_<system>_tab_unlock_sgui) and greyed until its
-				# entry runs (te_market_<system>_tab_sgui); the greyed tab's tooltip
-				# lists the unlock conditions with a tick or a cross.
+				# entry runs (te_market_<system>_tab_sgui). The tooltip has three
+				# branches: the tab's own while the entry runs; else, when the
+				# unlock conditions are all met (the unlock gate's IsValid), a line
+				# saying so, because IsValidTooltip prints nothing for a passing
+				# test and the checklist would read as empty (te_market_tab_met_tt);
+				# else the unlock conditions with a tick or a cross.
 				# te_tab_buttons_six defaults both halves of an unused slot to
 				# `visible = no`, so each visibility block tests the gate as well as
 				# the tab. Gates: common/scripted_guis/te_system_tab_sguis.txt.
@@ -174,7 +178,7 @@ types market_panel
 					text = "te_market_tab_global_warming"
 				}
 				blockoverride "fifth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_global_warming_tt', Concatenate( Localize( 'te_market_tab_global_warming_locked_tt' ), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_global_warming_tt', SelectLocalization( GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_met_tt', Concatenate( Localize( 'te_market_tab_global_warming_locked_tt' ), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "fifth_button_click" {
 					enabled = "[GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -194,7 +198,7 @@ types market_panel
 					text = "te_market_tab_strategic_reserve"
 				}
 				blockoverride "sixth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_strategic_reserve_tt', Concatenate( Localize( 'te_market_tab_strategic_reserve_locked_tt' ), GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_strategic_reserve_tt', SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_market_tab_met_tt', Concatenate( Localize( 'te_market_tab_strategic_reserve_locked_tt' ), GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "sixth_button_click" {
 					enabled = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -1446,17 +1450,19 @@ types market_panel
 				#
 				# Which market (the owner, 2026-09-30). On the player's own market
 				# the tab is the journal's view. On another market the market's
-				# parts show that market, read from its leader's entry
-				# (Country.GetJournalEntry, a promote to JournalEntry in the 1.14
-				# data types, reached as Market.AccessMarketCapital.AccessOwner:
-				# GetJournalEntry needs a non-const country, and Market.GetOwner is
-				# const, which failed at load and crashed the panel; gotcha #35 in
-				# the GUI guide): the overview's role, treaty, emissions, capture and
-				# pie cells, and the Mitigation Policies with every Adopt and
-				# Repeal greyed. The world's parts stay the player's: the
-				# temperature, Top Emitters, History and How Global Warming Works.
-				# Labels that say "our" switch on JournalEntry.GetCountry.
-				# IsLocalPlayer, the test that greys the controls.
+				# parts show that market: the overview's role, treaty, emissions,
+				# capture and pie cells, and the Mitigation Policies with every
+				# Adopt and Repeal greyed. They read the market's leader as a
+				# `Country` datacontext, MarketPanel.GetMarket.GetOwner (read-only
+				# access works on a const country; the trade-partner rows above
+				# use Scope.GetMarket.GetOwner the same way), never the leader's
+				# journal entry: Country.GetJournalEntry failed at load on a const
+				# country and crashed the panel, and through Access* promotes it
+				# loaded but silently kept the player's entry (gotcha #35 in the
+				# GUI guide). The world's parts
+				# stay the player's entry: the temperature, Top Emitters, History
+				# and How Global Warming Works. Labels that say "our" switch on
+				# Country.IsLocalPlayer, the test that greys the controls.
 				#
 				# Three layers, as in the Nuclear tab (panel_military.gui): the
 				# header sits outside the gate, so it shows whenever the tab is
@@ -1515,17 +1521,18 @@ types market_panel
 							}
 
 							### Another market: the same sections in the same
-							### order, with the market's parts read from its
-							### leader's entry, read-only. The overview's market
-							### cells take the leader's entry through the type's
-							### gw_market_context block; the Mitigation Policies
-							### are composed under it, their controls greyed (the
-							### entry is not the local player's); Top Emitters and
-							### everything below stay the player's. Both parts
-							### that read the leader's entry sit under a gate that
-							### asks the leader, and the datacontext is on a child
-							### of it. Until the leader's entry is active (never
-							### long after the player's), a line says so.
+							### order. The market's parts read its leader as
+							### `Country`: the overview's market cells and the
+							### Mitigation Policies through the types'
+							### gw_market_country block (whose default, the
+							### entry's own country, is what the journal and the
+							### own-market view read), and the intro line through
+							### its own datacontext. The controls are greyed
+							### (Country.IsLocalPlayer is false). Top Emitters and
+							### everything below stay the player's entry. The
+							### leader's parts show once its entry runs (never
+							### long after the player's); until then a line says
+							### so.
 							flowcontainer = {
 								visible = "[Not( MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket ) )]"
 								parentanchor = hcenter
@@ -1547,7 +1554,7 @@ types market_panel
 									spacing = 10
 
 									flowcontainer = {
-										datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_global_warming')]"
+										datacontext = "[MarketPanel.GetMarket.GetOwner]"
 										parentanchor = hcenter
 
 										gw_text = {
@@ -1557,14 +1564,15 @@ types market_panel
 									}
 
 									te_gw_overview_panel = {
-										blockoverride "gw_market_context" {
-											datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_global_warming')]"
+										blockoverride "gw_market_country" {
+											datacontext = "[MarketPanel.GetMarket.GetOwner]"
 										}
 									}
 								}
 
-								### te_gw_status_sections' two sections, split
-								### between the two entries.
+								### te_gw_status_sections' two sections: the
+								### policies read the leader, Top Emitters the
+								### player's entry.
 								flowcontainer = {
 									parentanchor = hcenter
 									direction = vertical
@@ -1577,13 +1585,10 @@ types market_panel
 										direction = vertical
 										ignoreinvisible = yes
 
-										flowcontainer = {
-											datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_global_warming')]"
-											parentanchor = hcenter
-											direction = vertical
-											ignoreinvisible = yes
-
-											te_gw_sec_policies = {}
+										te_gw_sec_policies = {
+											blockoverride "gw_market_country" {
+												datacontext = "[MarketPanel.GetMarket.GetOwner]"
+											}
 										}
 									}
 

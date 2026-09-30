@@ -38,15 +38,15 @@
 # tooltips DO read `scope:op`, which Strategic Reserve proves in shipped code.
 # See docs/guides/gui_modding_guide.md gotcha #22.
 #
-# ANOTHER COUNTRY'S ENTRY. The Market panel's Climate tab shows, on another
-# market, that market leader's entry in the same rows, with every Adopt and
-# Repeal greyed (JournalEntry.GetCountry.IsLocalPlayer in the widget's button
-# types). As a second guard, each action's effect also requires `is_player =
-# yes`, so a click that reached an AI country's handler would change nothing.
-# It is in the branch limits, next to the op test, so the tooltip the player
-# sees for their own entry is unchanged. (`is_player` holds for any human, so
-# in multiplayer the widget's greying is the guard against another human's
-# entry.)
+# ANOTHER COUNTRY. The Market panel's Climate tab shows, on another market,
+# that market's leader in the same rows (the section's `Country` datacontext),
+# with every Adopt and Repeal greyed (Country.IsLocalPlayer in the widget's
+# button types). As a second guard, each action's effect also requires
+# `is_player = yes`, so a click that reached an AI country's handler would
+# change nothing. It is in the branch limits, next to the op test, so the
+# tooltip the player sees for their own country is unchanged. (`is_player`
+# holds for any human, so in multiplayer the widget's greying is the guard
+# against another human's policies.)
 #
 # READ-ONLY HANDLERS carry `is_valid = { always = no }` and an empty effect.
 # They exist only so the widget can ask script a yes/no question instead of

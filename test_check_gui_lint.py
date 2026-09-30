@@ -39,6 +39,8 @@ NEW_GUI = BOM + """types t {
 		button = { onclick = "[GetVariableSystem.Toggle('te_new_details')]" }
 		widget = { datacontext = "[MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_x')]" }
 		widget = { datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_x')]" }
+		widget = { datacontext = "[MarketPanel.GetMarket.GetOwner]" }
+		widget = { datacontext = "[GetPlayerJournalEntry('je_x')]" }
 	}
 """
 
@@ -94,7 +96,9 @@ class LintTest(unittest.TestCase):
         self.assertIn("'gone_key'", errs)
         self.assertNotIn("known_key", errs)
         self.assertNotIn("known_sgui", errs)
-        self.assertEqual(errs.count("GetJournalEntry needs a non-const Country"), 1)
+        # Both ways into another country's journal entry failed in game; a Country
+        # datacontext and GetPlayerJournalEntry are fine.
+        self.assertEqual(errs.count("another country's journal entry (.GetJournalEntry)"), 2)
 
     def test_unproven_warnings(self):
         warns = " | ".join(self.msgs("gui/new.gui", "WARN"))

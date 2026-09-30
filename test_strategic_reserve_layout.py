@@ -680,6 +680,20 @@ class MarketTabTest(unittest.TestCase):
                         (os.path.join(REPO, "gui", "topbar.gui"), "AccessPlayer.AccessFirstMarket.Self")):
             self.assertIn(vanilla[1], _read(vanilla[0]), vanilla)
 
+    def test_the_tooltip_has_three_branches(self):
+        """Open: the tab's own tooltip. Conditions met but the entry not
+        running: te_market_tab_met_tt, since IsValidTooltip prints nothing for
+        a passing test. Otherwise: the locked line and the checklist."""
+        root = "GuiScope.SetRoot( GetPlayer.MakeScope ).End"
+        expected = (f"tooltip = \"[SelectLocalization( {SR_TAB_GATE}, 'te_market_tab_strategic_reserve_tt', "
+                    f"SelectLocalization( {SR_TAB_UNLOCK}.IsValid( {root} ), 'te_market_tab_met_tt', "
+                    f"Concatenate( Localize( 'te_market_tab_strategic_reserve_locked_tt' ), "
+                    f"{SR_TAB_UNLOCK}.IsValidTooltip( {root} ) ) ) )]\"")
+        self.assertEqual(self._sr_buttons()["sixth_button_tooltip"], expected)
+        met = _loc()["te_market_tab_met_tt"]
+        self.assertTrue(met.startswith("#b Not open yet#!"), met)
+        self.assertIn("conditions are met", met)
+
     def test_no_tab_icon(self):
         """System tabs carry no icon, as vanilla's tabs don't (the owner, 2026-09-30)."""
         self.assertEqual([k for k in _overrides(self.buttons[0]) if k.endswith("_icon")], [])

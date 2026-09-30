@@ -165,9 +165,11 @@ te_market_global_warming_tab_unlock_sgui = {
 }
 
 # Root: the leader of the market the panel shows, when it is not the player's.
-# The Climate tab reads that leader's entry for the market's emissions and
-# policies (read-only), so it asks first that the entry is running, and puts
-# the entry's datacontext on a child of the widget this gates.
+# The Climate tab shows that market's emissions and policies (read-only),
+# reading the leader as a Country datacontext on a child of the widget this
+# gates, once the leader's entry is running: before that its policies and
+# figures mean nothing. (Not the leader's journal entry: another country's
+# entry did not resolve in GUI; gotcha #35 in docs/guides/gui_modding_guide.md.)
 te_market_global_warming_leader_sgui = {
 	scope = country
 	is_shown = { has_journal_entry = je_global_warming }
