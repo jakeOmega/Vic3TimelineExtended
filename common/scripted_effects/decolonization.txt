@@ -723,6 +723,19 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_empire_eligible_count
 	remove_variable = colonial_empire_round_table_count
 	remove_variable = colonial_empire_largest_eligible_state
+	remove_variable = colonial_empire_territory_1
+	remove_variable = colonial_empire_territory_2
+	remove_variable = colonial_empire_territory_3
+	remove_variable = colonial_empire_territory_4
+	remove_variable = colonial_empire_territory_5
+	remove_variable = colonial_empire_territory_6
+	remove_variable = colonial_empire_territory_7
+	remove_variable = colonial_empire_territory_8
+	# And the primary-culture shares the list recorded on its states.
+	every_scope_state = {
+		limit = { has_variable = colonial_territory_primary_share }
+		remove_variable = colonial_territory_primary_share
+	}
 
 	# Country-scope policy modifiers from the three policy buttons. If any
 	# button was active at end-of-JE, its modifier persisted after the JE

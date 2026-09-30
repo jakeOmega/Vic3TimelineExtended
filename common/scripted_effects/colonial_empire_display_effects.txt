@@ -206,5 +206,200 @@ colonial_empire_refresh_display = {
 				}
 			}
 		}
+
+		# --- Eligible territories, for the list under Why Stability ---------
+		# The first eight eligible territories by GDP, stored as state scopes
+		# (colonial_empire_territory_1..8) for the panel's rows, which read
+		# everything else live from the stored state (colonial_territory_disp_*
+		# in colonial_empire_values.txt). Players only: no AI reads a panel.
+		# Each position is taken only while the count reaches it, because
+		# `check_range_bounds = no` clamps an out-of-range `position` to the
+		# last one rather than skipping it (the note in
+		# colonial_empire_effect_release_territory). Each listed state also
+		# gets its primary-culture share, the one figure that walks its pops.
+		remove_variable = colonial_empire_territory_1
+		remove_variable = colonial_empire_territory_2
+		remove_variable = colonial_empire_territory_3
+		remove_variable = colonial_empire_territory_4
+		remove_variable = colonial_empire_territory_5
+		remove_variable = colonial_empire_territory_6
+		remove_variable = colonial_empire_territory_7
+		remove_variable = colonial_empire_territory_8
+		if = {
+			limit = {
+				is_player = yes
+				has_variable = colonial_empire_eligible_count
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 1 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 0
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_1
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 2 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 1
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_2
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 3 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 2
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_3
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 4 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 3
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_4
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 5 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 4
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_5
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 6 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 5
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_6
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 7 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 6
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_7
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+			if = {
+				limit = { var:colonial_empire_eligible_count >= 8 }
+				ordered_scope_state = {
+					limit = { is_decolonization_eligible_state = yes }
+					order_by = gdp
+					position = 7
+					check_range_bounds = no
+					colonial_territory_record_primary_share = yes
+					save_temporary_scope_as = colonial_empire_territory_pick
+					prev = {
+						set_variable = {
+							name = colonial_empire_territory_8
+							value = scope:colonial_empire_territory_pick
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# State scope: record the share of the state's people of its owner's primary
+# cultures, for the eligible-territories list (colonial_territory_disp_primary).
+# Walks the state's pops, so it runs from the monthly refresh, not per frame.
+colonial_territory_record_primary_share = {
+	set_variable = {
+		name = colonial_territory_primary_share
+		value = colonial_territory_primary_share_value
+	}
+}
+
+# One line of the "+N more" hover on the eligible-territories list
+# (colonial_empire_territories_sgui): the eligible territory at GDP position
+# $POS$ (0-based), named from the country's own scope, gui_modding_guide
+# gotcha #27's shape (a): the pick is saved and the line printed at country
+# scope, and only while the count reaches the position (gotcha #25; and see
+# the note on `check_range_bounds` in colonial_empire_refresh_display).
+# Country scope.
+colonial_empire_more_territory_line = {
+	if = {
+		limit = {
+			has_variable = colonial_empire_eligible_count
+			var:colonial_empire_eligible_count > $POS$
+		}
+		ordered_scope_state = {
+			limit = { is_decolonization_eligible_state = yes }
+			order_by = gdp
+			position = $POS$
+			check_range_bounds = no
+			save_temporary_scope_as = colonial_empire_more_state
+		}
+		custom_tooltip = je_colonial_empire_territory_more_line
 	}
 }
