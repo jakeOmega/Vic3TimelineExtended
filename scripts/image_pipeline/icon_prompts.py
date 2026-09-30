@@ -1258,18 +1258,15 @@ ICONS: dict[str, dict[str, dict]] = {
     # the first-to-finish mark 18 px. A white craft loses its body in the cut-out.
     "space_part": {
         "rocket": {"subject": "a squat silver rocket with red fins and a pointed nose cone, standing upright",
-                   "seed": None},
-        "flame": {"subject": "a bold stylized yellow-orange rocket exhaust flame pointing straight down",
-                  "seed": None},
-        "gantry": {"subject": "an empty grey steel launch gantry tower on a concrete pad", "seed": None},
+                   "seed": 1},
     },
     "space": {
-        "first": {"subject": "a gold pennant flag on a staff planted on the rim of a grey moon crater", "seed": None,
+        "first": {"subject": "a gold pennant flag on a staff planted on the rim of a grey moon crater", "seed": 3,
                   "now": f"{_GI}/event_icons/waving_flag.dds"},
-        "first_mark": {"subject": "a small bold gold pennant flag on a thick short staff", "seed": None,
+        "first_mark": {"subject": "a small bold gold pennant flag on a thick short staff", "seed": 0,
                        "now": f"{_GI}/event_icons/waving_flag.dds"},
         "stage": {"subject": "a small rust-red ringed planet with a small silver domed settlement on its upper edge",
-                  "seed": None, "now": f"{_GI}/state_status_icons/colonizable.dds"},
+                  "seed": 3, "now": f"{_GI}/state_status_icons/colonizable.dds"},
     },
 }
 
@@ -1369,10 +1366,12 @@ def _band(link, now):
 
 
 def _rocket(now, flame, marks=(), tilt=0):
-    """The rocket; a flame under it `flame` long (0: on its pad)."""
-    e = {"from": "space_part/rocket", "base": {"scale": 0.78, "at": (0.5, 0.42 if flame else 0.5)}, "now": now,
-         "marks": ([{"part": "space_part/flame", "under": True, "at": (0.5, 0.8 + flame / 4), "scale": flame}]
-                   if flame else []) + list(marks)}
+    """The rocket; under it Banking's flame turned to point down, `flame` long (0: on its pad).
+
+    Every render asked for an exhaust flame alone drew a rocket with it."""
+    e = {"from": "space_part/rocket", "base": {"scale": 0.72, "at": (0.5, 0.4 if flame else 0.5)}, "now": now,
+         "marks": ([{"part": "banking_part/flame", "rotate": 180 + tilt, "under": True,
+                     "at": (0.5 + tilt / 300, 0.78 + flame / 5), "scale": flame}] if flame else []) + list(marks)}
     if tilt:
         e["tilt"] = tilt
     return e
@@ -1573,7 +1572,8 @@ ICONS.update({
     },
     "space_state": {
         # One rocket; its state is what surrounds it.
-        "state_idle": {"from": "space_part/gantry", "tint": "grey",
+        # An empty gantry (the list's idea) was a thin lattice at 36 px: the rocket, greyed.
+        "state_idle": {"from": "space_part/rocket", "tint": "grey", "base": {"scale": 0.78, "at": (0.5, 0.5)},
                        "now": f"{_GI}/generic_icons/inactive_building.dds"},
         "state_standard": _rocket(f"{_GI}/commander_order_icons/move.dds", 0.3),
         "state_safe": _rocket(f"{_GI}/commander_order_icons/defend.dds", 0,
