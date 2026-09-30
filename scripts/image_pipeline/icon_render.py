@@ -633,6 +633,7 @@ MARK_COLOURS = {
     "orange": ((250, 150, 60), (186, 78, 18)),
     "white": ((250, 248, 242), (188, 184, 176)),
     "gold": ((250, 214, 110), (190, 130, 30)),
+    "steel": ((170, 176, 184), (84, 90, 98)),
 }
 
 
@@ -824,14 +825,27 @@ def disc(size: int, colour: str = "red") -> Image.Image:
     return resize_premultiplied(outlined(im, ss * max(1, size // 40)), (size, size))
 
 
-def shield_outline(size: int, colour: str = "blue") -> Image.Image:
-    """A heater shield's thick outline, open inside, so what it guards shows through."""
+def shield_outline(size: int, colour: str = "blue", filled: bool = False) -> Image.Image:
+    """A heater shield's thick outline, open inside, so what it guards shows through;
+    `filled`, a solid shield with a raised rim (FLUX drew plaques and discs for one)."""
     ss = 4
     n = size * ss
     pts = [(0.1, 0.06), (0.9, 0.06), (0.9, 0.46), (0.78, 0.72), (0.5, 0.96), (0.22, 0.72), (0.1, 0.46)]
     outer = Image.new("L", (n, n), 0)
     ImageDraw.Draw(outer).polygon([(x * n, y * n) for x, y in pts], fill=255)
     inner = outer.filter(ImageFilter.MinFilter(2 * (n // 14) + 1))
+    if filled:
+        # The face a shade darker than the rim, lit from the upper left.
+        face = _gradient_fill(inner, colour)
+        a = np.asarray(face, np.float32).copy()
+        a[..., :3] *= 0.82
+        im = _gradient_fill(outer, colour)
+        im.alpha_composite(Image.fromarray(a.astype(np.uint8), "RGBA"))
+        glint = Image.new("RGBA", (n, n), (0, 0, 0, 0))
+        ImageDraw.Draw(glint).polygon([(0.2 * n, 0.14 * n), (0.46 * n, 0.14 * n), (0.2 * n, 0.5 * n)],
+                                      fill=(255, 255, 255, 70))
+        im.alpha_composite(glint.filter(ImageFilter.GaussianBlur(n * 0.02)))
+        return resize_premultiplied(outlined(im, ss * max(1, size // 40)), (size, size))
     ring = Image.fromarray(np.asarray(outer) - np.minimum(np.asarray(outer), np.asarray(inner)))
     return resize_premultiplied(outlined(_gradient_fill(ring, colour), ss * max(1, size // 40)), (size, size))
 
@@ -953,7 +967,7 @@ DRAWN = {
     "bubble": lambda box, m: bubble(box, m.get("colour", "white"), m.get("cracked", False)),
     "thermometer": lambda box, m: thermometer(box, m.get("level", 0), m.get("burst", False)),
     "disc": lambda box, m: disc(box, m.get("colour", "red")),
-    "shield": lambda box, m: shield_outline(box, m.get("colour", "blue")),
+    "shield": lambda box, m: shield_outline(box, m.get("colour", "blue"), m.get("filled", False)),
     "dome": lambda box, m: dome(box),
     "eyelid": lambda box, m: eyelid(box, m.get("opening", 0.0)),
     "rays": lambda box, m: rays(box, m.get("count", 16), m.get("colour", "gold")),

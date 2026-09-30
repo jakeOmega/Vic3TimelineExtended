@@ -1219,22 +1219,19 @@ ICONS: dict[str, dict[str, dict]] = {
         "treaty_seal": {"subject": "a round red wax seal on a short wide blue silk ribbon", "seed": 1},
         # A dove seen from the front read as a heraldic eagle (UN); white is lost in the cut-out.
         "dove": {"subject": "a pale grey dove flying in side view, an olive branch in its beak", "seed": 2},
-        "shield": {"subject": "a plain polished gold heater shield seen from the front", "seed": None},
-        "wall": {"subject": "a low thick wall of rough grey stone blocks", "seed": None},
-        "sword": {"subject": "a broad steel sword with a gold hilt", "seed": None},
-        "crate": {"subject": "a closed heavy dark green steel military crate with steel corners", "seed": None},
+        "wall": {"subject": "a low thick wall of rough grey stone blocks", "seed": 3},
+        "sword": {"subject": "a broad steel sword with a gold hilt", "seed": 2},
+        "crate": {"subject": "a closed heavy dark green steel military crate with steel corners", "seed": 1},
         "missile": {"subject": "a long slender olive-green ballistic missile with a dark grey nose cone and small "
-                               "fins, lying horizontal", "seed": None},
-        "launcher": {"subject": "a low flat olive-green military missile launcher trailer with six wheels, empty",
-                     "seed": None},
-        "key": {"subject": "a large ornate brass key", "seed": None},
+                               "fins, lying horizontal", "seed": 1},
+        "key": {"subject": "a large ornate brass key", "seed": 3},
         "gov_seal": {"subject": "a round bronze seal medallion with a raised laurel border and a star in its centre",
-                     "seed": None},
+                     "seed": 0},
         "cap": {"subject": "an olive-green military officer's peaked cap with a gold badge and gold braid",
-                "seed": None},
-        "radar": {"subject": "a grey radar dish on a sturdy mount, tilted up", "seed": None},
+                "seed": 1},
+        "radar": {"subject": "a grey radar dish on a sturdy mount, tilted up", "seed": 2},
         "cabinet": {"subject": "a grey steel mainframe computer cabinet with rows of dials and a big red lamp on top",
-                    "seed": None},
+                    "seed": 2},
     },
     # Colonial Empire (colonial_empire_gui_icons.md): 36 px; the programmes faded while idle.
     "colonial_part": {
@@ -1356,17 +1353,21 @@ def _row_of_warheads(now, marks=(), top=0.22):
 
 
 def _readiness(angle, lamp, now):
-    """The missile on its launcher at `angle` (0 lying, 90 upright), and the lamp."""
-    return {"from": "nuclear_part/launcher", "base": {"scale": 0.9, "at": (0.5, 0.78)}, "now": now,
-            "marks": [{"part": "nuclear_part/missile", "rotate": angle, "under": True,
-                       "at": (0.5, 0.62 - 0.26 * angle / 90), "scale": 0.86 if angle else 0.9},
-                      {"draw": "disc", "colour": lamp, "at": (0.84, 0.18), "scale": 0.26}]}
+    """The missile on its pad at `angle` (0 lying, 90 upright), and the lamp.
+
+    Every launcher FLUX drew was a long flat truck, most already carrying a
+    missile, and a sliver at 36 px: the missile stands on a drawn pad instead.
+    Missile s1 lies nose down-left at about 30 degrees, hence the offset."""
+    return {"from": "nuclear_part/missile", "turn": -(30 + angle), "now": now,
+            "base": {"scale": 0.84 if angle else 0.9, "at": (0.5, 0.46 if angle else 0.62)},
+            "marks": [{"draw": "bar", "colour": "steel", "at": (0.5, 0.92), "scale": 0.7},
+                      {"draw": "disc", "colour": lamp, "at": (0.84, 0.16), "scale": 0.26}]}
 
 
 def _key(holder, now):
     """Launch authority: the brass key with whoever holds it."""
     return {"from": f"nuclear_part/{holder}", "base": {"scale": 0.86, "at": (0.44, 0.46)}, "now": now,
-            "marks": [{"part": "nuclear_part/key", "rotate": -35, "at": (0.72, 0.72), "scale": 0.5}]}
+            "marks": [{"part": "nuclear_part/key", "at": (0.72, 0.72), "scale": 0.54}]}
 
 
 def _band(link, now):
@@ -1524,22 +1525,24 @@ ICONS.update({
                    "now": f"{_GI}/diplomatic_action_icons/nd_nuclear_ultimatum_action.dds"},
         # Doctrine: the warhead with what it answers to.
         "doctrine_nfu": {"from": "nuclear_part/warhead", "base": {"scale": 0.62, "at": (0.5, 0.48)},
-                         "marks": [{"part": "nuclear_part/shield", "under": True, "at": (0.5, 0.5), "scale": 0.98}],
+                         "marks": [{"draw": "shield", "colour": "gold", "filled": True, "under": True,
+                                    "at": (0.5, 0.5), "scale": 0.98}],
                          "now": f"{_DT}/crisis_resolution.dds"},
         "doctrine_existential": {"from": "nuclear_part/warhead", "base": {"scale": 0.82, "at": (0.5, 0.42)},
                                  "marks": [{"part": "nuclear_part/wall", "at": (0.5, 0.8), "scale": 0.96}],
                                  "now": f"{_DT}/nuclear_guarantee.dds"},
         "doctrine_flexible": {"from": "nuclear_part/warhead", "tilt": 18, "base": {"scale": 0.8, "at": (0.44, 0.5)},
-                              "marks": [{"part": "nuclear_part/shield", "under": True, "at": (0.66, 0.5),
-                                         "scale": 0.74}],
+                              "marks": [{"draw": "shield", "colour": "gold", "filled": True, "under": True,
+                                         "at": (0.66, 0.5), "scale": 0.74}],
                               "now": f"{_GI}/diplomatic_action_icons/nd_nuclear_warning_action.dds"},
         "doctrine_compellence": {"from": "nuclear_part/warhead", "flip": True, "base": {"scale": 0.8, "at": (0.42, 0.5)},
                                  "marks": [{"draw": "arrow", "dir": "right", "colour": "red", "at": (0.86, 0.5),
                                             "scale": 0.34}],
                                  "now": f"{_GI}/diplomatic_action_icons/nd_nuclear_ultimatum_action.dds"},
-        "doctrine_warfighting": {"from": "nuclear_part/warhead", "turn": -30, "base": {"scale": 0.9, "at": (0.5, 0.5)},
-                                 "marks": [{"part": "nuclear_part/sword", "under": True, "rotate": 45,
-                                            "at": (0.5, 0.5), "scale": 0.9}],
+        # The sword lies lower left to upper right; the warhead turned to cross it.
+        "doctrine_warfighting": {"from": "nuclear_part/warhead", "turn": -40, "base": {"scale": 0.86, "at": (0.5, 0.5)},
+                                 "marks": [{"part": "nuclear_part/sword", "under": True, "at": (0.5, 0.5),
+                                            "scale": 0.96}],
                                  "now": f"{_GI}/invention_icons/tactical_nuclear_weapons.dds"},
         # Readiness: the missile lying, raised, upright on its launcher; the lamp green, amber, red.
         "readiness_recessed": {"from": "nuclear_part/crate",
@@ -1713,7 +1716,7 @@ LAYOUTS = ("flag",)
 DAMAGE = ("crack", "split")
 DRAWN_MARKS = ("star", "pause", "arrow_down", "arrow", "bar", "chevrons", "barrier", "bubble", "thermometer",
                "disc", "shield", "dome", "link", "rays", "eyelid")
-MARK_COLOURS = ("red", "green", "blue", "yellow", "amber", "orange", "white", "gold")
+MARK_COLOURS = ("red", "green", "blue", "yellow", "amber", "orange", "white", "gold", "steel")
 
 
 def _is_gfx_path(path, suffixes) -> bool:
