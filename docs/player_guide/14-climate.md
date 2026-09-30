@@ -41,10 +41,19 @@ the world cools again. The temperature bar at its top runs to 4 °C, but the
 penalties keep growing past that.
 
 The same panels appear as a Climate tab in the Market panel, and a change made
-in one shows in the other. The tab is the same whichever market the panel
-shows, since the warming and the list of top emitters are the world's. It is
-grayed until the journal entry is active; hover it for what is still missing.
-The tab ends with an Open Journal Entry button.
+in one shows in the other. It is grayed until the journal entry is active; hover
+it for what is still missing. The tab ends with an Open Journal Entry button.
+
+The tab is on the Market panel for every market. On your own market, whether
+you lead it or joined it, it is the journal entry. On another market, a line
+names the market's leader, and the parts about the market show that market: in
+the overview, the leader's role and any Enforce Emissions Reduction treaty that
+binds it, the market's emissions and carbon captured, and its share and
+emissions-cut pies; below, the leader's Mitigation Policies, with every Adopt and
+Repeal grayed, since only that leader can change them. The temperature, Top
+Emitters, the history charts and How Global Warming Works stay your own view.
+Use it to check what a market you want to bind with Enforce Emissions Reduction
+emits and which policies it already runs.
 
 The anomaly sets the warming tier, which the entry shows as a thermometer icon
 with the tier's name beneath it:

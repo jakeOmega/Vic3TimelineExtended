@@ -118,8 +118,8 @@ te_military_nuclear_tab_unlock_sgui = {
 # ---------------------------------------------------------------------------
 # Global Warming: Market panel (gui/market_panel.gui), je_global_warming. The
 # entry is active for every country once the world has warmed 0.1 C, so the
-# tab opens for all of them. The warming is the world's, so the tab shows on
-# every market the panel opens, the player's own or not.
+# tab opens for all of them. It shows on every market the panel opens: on
+# another market, that market's emissions and policies, read-only.
 # ---------------------------------------------------------------------------
 te_market_global_warming_tab_sgui = {
 	scope = country
@@ -137,6 +137,18 @@ te_market_global_warming_tab_unlock_sgui = {
 	is_shown = { has_game_rule = global_warming_enabled }
 	ai_is_valid = { always = no }
 	is_valid = { gw_entry_unlocked = yes }
+	effect = { }
+}
+
+# Root: the leader of the market the panel shows, when it is not the player's.
+# The Climate tab reads that leader's entry for the market's emissions and
+# policies (read-only), so it asks first that the entry is running, and puts
+# the entry's datacontext on a child of the widget this gates.
+te_market_global_warming_leader_sgui = {
+	scope = country
+	is_shown = { has_journal_entry = je_global_warming }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
 	effect = { }
 }
 

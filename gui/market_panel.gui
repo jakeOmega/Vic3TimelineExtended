@@ -159,8 +159,9 @@ types market_panel
 				#
 				# Which market. This panel also opens other markets, and both tabs
 				# read the player's journal entries whichever it shows. Climate is on
-				# every market: the warming and the Top Emitters table are the
-				# world's. Reserve is on the player's own market only, the one its
+				# every market: on another it shows that market's emissions and
+				# policies, read-only (its content block). Reserve is on the
+				# player's own market only, the one its
 				# capital is in, led or joined (vanilla's test, from the tariff
 				# buttons in budget_panel.gui): the reserve buys and sells there, and
 				# every tab here describes the market named in the header. Its
@@ -1443,6 +1444,17 @@ types market_panel
 				# (gw_te_members_sgui, gw_top_emitters_sgui), so they read the same
 				# here as in the journal.
 				#
+				# Which market (the owner, 2026-09-30). On the player's own market
+				# the tab is the journal's view. On another market the market's
+				# parts show that market, read from its leader's entry
+				# (Country.GetJournalEntry, a promote to JournalEntry in the 1.14
+				# data types): the overview's role, treaty, emissions, capture and
+				# pie cells, and the Mitigation Policies with every Adopt and
+				# Repeal greyed. The world's parts stay the player's: the
+				# temperature, Top Emitters, History and How Global Warming Works.
+				# Labels that say "our" switch on JournalEntry.GetCountry.
+				# IsLocalPlayer, the test that greys the controls.
+				#
 				# Three layers, as in the Nuclear tab (panel_military.gui): the
 				# header sits outside the gate, so it shows whenever the tab is
 				# selected; the gate (te_market_global_warming_tab_sgui, the one the
@@ -1486,8 +1498,96 @@ types market_panel
 							spacing = 10
 							minimumsize = { 520 -1 }
 
-							te_gw_overview_panel = {}
-							te_gw_status_sections = {}
+							### The player's own market (led or joined): the entry
+							### as the journal has it.
+							flowcontainer = {
+								visible = "[MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket )]"
+								parentanchor = hcenter
+								direction = vertical
+								ignoreinvisible = yes
+								spacing = 10
+
+								te_gw_overview_panel = {}
+								te_gw_status_sections = {}
+							}
+
+							### Another market: the same sections in the same
+							### order, with the market's parts read from its
+							### leader's entry, read-only. The overview's market
+							### cells take the leader's entry through the type's
+							### gw_market_context block; the Mitigation Policies
+							### are composed under it, their controls greyed (the
+							### entry is not the local player's); Top Emitters and
+							### everything below stay the player's. Both parts
+							### that read the leader's entry sit under a gate that
+							### asks the leader, and the datacontext is on a child
+							### of it. Until the leader's entry is active (never
+							### long after the player's), a line says so.
+							flowcontainer = {
+								visible = "[Not( MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket ) )]"
+								parentanchor = hcenter
+								direction = vertical
+								ignoreinvisible = yes
+								spacing = 10
+
+								gw_text = {
+									visible = "[Not( GetScriptedGui('te_market_global_warming_leader_sgui').IsShown( GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).End ) )]"
+									align = hcenter|nobaseline
+									text = "te_market_gw_foreign_pending"
+								}
+
+								flowcontainer = {
+									visible = "[GetScriptedGui('te_market_global_warming_leader_sgui').IsShown( GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).End )]"
+									parentanchor = hcenter
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 10
+
+									flowcontainer = {
+										datacontext = "[MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_global_warming')]"
+										parentanchor = hcenter
+
+										gw_text = {
+											align = hcenter|nobaseline
+											text = "te_market_gw_foreign_intro"
+										}
+									}
+
+									te_gw_overview_panel = {
+										blockoverride "gw_market_context" {
+											datacontext = "[MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_global_warming')]"
+										}
+									}
+								}
+
+								### te_gw_status_sections' two sections, split
+								### between the two entries.
+								flowcontainer = {
+									parentanchor = hcenter
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 4
+
+									flowcontainer = {
+										visible = "[GetScriptedGui('te_market_global_warming_leader_sgui').IsShown( GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).End )]"
+										parentanchor = hcenter
+										direction = vertical
+										ignoreinvisible = yes
+
+										flowcontainer = {
+											datacontext = "[MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_global_warming')]"
+											parentanchor = hcenter
+											direction = vertical
+											ignoreinvisible = yes
+
+											te_gw_sec_policies = {}
+										}
+									}
+
+									te_gw_sec_emitters = {}
+								}
+							}
+
 							te_gw_reference_sections = {}
 
 							button = {

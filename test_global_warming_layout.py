@@ -369,7 +369,8 @@ class RoundThreeTest(unittest.TestCase):
 
     def test_each_row_keeps_its_tooltip(self):
         body = _type_body(_read(GUI), "te_gw_overview_panel")
-        rows = re.findall(r'gw_value_row = \{\s*tooltip = "(\w+)"\s*blockoverride "row_label" \{\s*text = "(\w+)"', body)
+        rows = re.findall(r'gw_value_row = \{\s*(?:block "gw_market_context" \{\}\s*)?tooltip = "(\w+)"\s*'
+                          r'blockoverride "row_label" \{\s*text = "(\w+)"', body)
         self.assertEqual(rows, [("gw_cond_emis_tt", "gw_emis_market_label"), ("gw_emis_capture_tt", "gw_emis_capture_label"),
                                 ("gw_emis_world_tt", "gw_emis_world_label"), ("gw_cond_trend_tt", "gw_emis_warming_label")])
 
@@ -503,7 +504,8 @@ class WidthBudgetTest(unittest.TestCase):
             ("gw_ov_treaty_label", "small", self.icon_cell),
             ("gw_market_role_leader", "small", self.icon_cell),
             ("gw_market_role_member", "small", self.icon_cell),
-            ("gw_emis_market_label", "medium", self.label_cell),
+            ("gw_emis_market_label_ours", "medium", self.label_cell),
+            ("gw_emis_market_label_theirs", "medium", self.label_cell),
             ("gw_emis_capture_label", "medium", self.label_cell),
             ("gw_emis_world_label", "medium", self.label_cell),
             ("gw_emis_warming_label", "medium", self.label_cell),
@@ -533,8 +535,9 @@ class WidthBudgetTest(unittest.TestCase):
              "headline before January"),
             ("Emissions Cut 100%", "medium", self.pie_cell, "cut pie label"),
             ("Our Share 100%", "medium", self.pie_cell, "share pie label"),
-            (_visible_text(_loc_value("gw_ov_pie_share_pending")), "medium", self.pie_cell,
-             "share pie label, pending"),
+            ("Their Share 100%", "medium", self.pie_cell, "share pie label, another market"),
+            (_visible_text(_loc_value("gw_ov_share_theirs") + _loc_value("gw_ov_pie_share_pending").split(")]", 1)[1]),
+             "medium", self.pie_cell, "share pie label, pending"),
             ("-999.9/yr", "medium", self.value_cell, "an emissions value"),
             ("99999/yr", "medium", self.value_cell, "world emissions"),
             ("+0.20 °C", "medium", self.value_cell, "warming last year"),
@@ -670,6 +673,13 @@ GW_TAB_GATE = "GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiS
 GW_TAB_UNLOCK = "GetScriptedGui('te_market_global_warming_tab_unlock_sgui')"
 OWN_MARKET = "MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket )"
 BUTTONS_TAG = "### TE: Climate and Reserve tabs (te_global_warming, te_strategic_reserve) ###"
+LEADER_JE = "MarketPanel.GetMarket.GetOwner.GetJournalEntry('je_global_warming')"
+LEADER_GATE = ("GetScriptedGui('te_market_global_warming_leader_sgui').IsShown( "
+               "GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).End )")
+MARKET_BLOCK = 'block "gw_market_context" {}'
+# The market cells' texts that say "our" or "we", each switched on IsLocalPlayer.
+OUR_KEYS = ["gw_cond_role_tt", "gw_ov_treaty_tt", "gw_emis_market_label", "gw_cond_emis_tt",
+            "gw_emis_capture_tt", "gw_cond_share_tt"]
 # Vanilla's four Market tabs, as market_panel.gui has them: slot, tab name, label,
 # tooltip (vanilla gives Members none) and the selected half's label.
 VANILLA_TABS = [("first", "default", "MARKET_PANEL_DETAILS_TAB_LABEL", "MARKET_PANEL_DETAILS_TAB_LABEL",
@@ -694,6 +704,21 @@ def _te_blocks(text, tag):
         out.append(text[start:end])
         start = text.find(tag, end)
     return out
+
+
+def _widget_with(text, line, start=None):
+    """The body of the widget whose own property `line` is: from the opener
+    before it to its matching close. `start` picks an occurrence."""
+    at = text.index(line) if start is None else start
+    depth = 0
+    for j in range(at, -1, -1):
+        if text[j] == "}":
+            depth += 1
+        elif text[j] == "{":
+            if depth == 0:
+                return _block_from(text, j + 1)
+            depth -= 1
+    raise AssertionError(f"no widget holds {line!r}")
 
 
 def _strip(text):
@@ -780,9 +805,19 @@ class MarketTabTest(unittest.TestCase):
         self.assertEqual(halves["fifth_button_selected"], 'text = "te_market_tab_global_warming"')
 
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
+        """On the player's own market, the roots' types in the entry's order;
+        on another, the same order with the status composer's two sections
+        composed one by one (Mitigation Policies under the leader's entry)."""
         body = self.content[0]
-        found = re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
-        self.assertEqual(found, [wrapped for _, wrapped in ROOTS.values()])
+        own = _widget_with(body, f'visible = "[{OWN_MARKET}]"')
+        foreign = _widget_with(body, f'visible = "[Not( {OWN_MARKET} )]"')
+        roots = [wrapped for _, wrapped in ROOTS.values()]
+        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{", own, re.M), roots[:2])
+        status = re.findall(r"^\t\t(te_gw_sec_\w+) = \{", _type_body(_read(GUI), "te_gw_status_sections"), re.M)
+        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{", foreign, re.M), roots[:1] + status)
+        # The reference sections follow both, as the entry's third root does.
+        rest = body[body.index(foreign) + len(foreign):]
+        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", rest, re.M), roots[2:])
         # The link back to the entry comes after every section.
         self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_gw_reference_sections"))
         self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
@@ -820,10 +855,116 @@ class MarketTabTest(unittest.TestCase):
             self.assertTrue(_loc_value(key), key)
 
     def test_climate_shows_on_every_market(self):
-        """The warming and the Top Emitters table are the world's, so the tab
-        does not ask which market the panel shows (the Reserve tab does)."""
+        """The tab button does not ask which market the panel shows (the
+        Reserve tab's does); the content does, to pick whose market it shows."""
         self.assertNotIn("IsSame", " ".join(self._gw_buttons().values()))
-        self.assertNotIn("IsSame", self.content[0])
+        self.assertEqual(self.content[0].count(f'visible = "[{OWN_MARKET}]"'), 1)
+        self.assertEqual(self.content[0].count(f'visible = "[Not( {OWN_MARKET} )]"'), 1)
+
+    def test_another_markets_parts_read_its_leaders_entry_under_a_gate(self):
+        """Every datacontext on the leader's entry sits on a child (or, for the
+        overview's market cells, a descendant) of a widget gated on the
+        leader's entry running, and never carries a visible of its own."""
+        foreign = _widget_with(self.content[0], f'visible = "[Not( {OWN_MARKET} )]"')
+        sites = [m.start() for m in re.finditer(re.escape(f'datacontext = "[{LEADER_JE}]"'), foreign)]
+        self.assertEqual(len(sites), 3)   # the intro line, the overview's market cells, the policies
+        for at in sites:
+            gate = foreign.rfind(f'visible = "[{LEADER_GATE}]"', 0, at)
+            self.assertNotEqual(gate, -1)
+            gated = _widget_with(foreign, f'visible = "[{LEADER_GATE}]"', start=gate)
+            self.assertIn(foreign[at:at + 40], gated)
+            opener = max(foreign.rfind("flowcontainer = {", 0, at), foreign.rfind("blockoverride", 0, at))
+            self.assertNotIn("visible", foreign[opener:at])
+        self.assertRegex(foreign, r'te_gw_overview_panel = \{\s*blockoverride "gw_market_context" \{\s*'
+                                  + re.escape(f'datacontext = "[{LEADER_JE}]"'))
+        policies = foreign.index("te_gw_sec_policies = {}")
+        self.assertGreater(policies, sites[2])
+        # Top Emitters stays the player's: it is outside every leader datacontext.
+        self.assertNotIn("te_gw_sec_emitters", _widget_with(foreign, f'datacontext = "[{LEADER_JE}]"', start=sites[2]))
+        self.assertIn("te_gw_sec_emitters = {}", foreign)
+        # Until the leader's entry runs, one line says so.
+        self.assertRegex(foreign, r'visible = "\[Not\( ' + re.escape(LEADER_GATE) + r' \)\]"\s*'
+                                  r'align = hcenter\|nobaseline\s*text = "te_market_gw_foreign_pending"')
+        gate = _txt_block(_read(TAB_SGUIS), "te_market_global_warming_leader_sgui")
+        self.assertIn("is_shown = { has_journal_entry = je_global_warming }", gate)
+        self.assertIn("MarketPanel.GetMarket.GetOwner.MakeScope", LEADER_GATE)
+
+    def test_the_market_cells_carry_the_empty_block(self):
+        """The journal and the own-market tab leave gw_market_context empty; it
+        sits on the overview's market cells only, never on the temperature or
+        the world's figures."""
+        ov = _type_body(_read(GUI), "te_gw_overview_panel")
+        self.assertEqual(ov.count(MARKET_BLOCK), 4)
+        self.assertEqual(ov.count('block "gw_market_context"'), 4)   # all four empty
+        self.assertRegex(ov, r"### Row 1:[^\n]*\n\t+flowcontainer = \{[^{}]*" + re.escape(MARKET_BLOCK))
+        self.assertRegex(ov, r"### Row 4:[^\n]*\n[^\n]*\n\t+flowcontainer = \{[^{}]*" + re.escape(MARKET_BLOCK))
+        for tip in ("gw_cond_emis_tt", "gw_emis_capture_tt"):
+            self.assertRegex(ov, r"gw_value_row = \{\s*" + re.escape(MARKET_BLOCK) + rf'\s*tooltip = "{tip}"', tip)
+        for tip in ("gw_emis_world_tt", "gw_cond_trend_tt", "gw_ov_temp_tt"):
+            self.assertNotRegex(ov, re.escape(MARKET_BLOCK) + rf'\s*tooltip = "{tip}"', tip)
+        # The journal's root instances the overview bare, so the block stays empty there.
+        root = _read(GUI).split('name = "widget_je_gw_overview"', 1)[1]
+        self.assertIn("te_gw_overview_panel = {}", root[:root.index("}") + 1])
+
+    def test_the_controls_are_greyed_off_the_players_entry(self):
+        """Adopt and Repeal act only on the local player's entry: greyed, with
+        a tooltip naming the leader, on anyone else's; the handlers' effects
+        also require is_player. In the journal, the entry is the player's, so
+        the button reads as before."""
+        gui = _read(GUI)
+        for name, op in (("gw_adopt_button", "0"), ("gw_repeal_button", "1")):
+            body = _type_body(gui, name)
+            scope = (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', "
+                     f"MakeScopeValue( '(CFixedPoint){op}' ) ).End")
+            self.assertIn(f'enabled = "[And( JournalEntry.GetCountry.IsLocalPlayer, ScriptedGui.IsValid( {scope} ) )]"',
+                          body, name)
+            self.assertIn("tooltip = \"[SelectLocalization( JournalEntry.GetCountry.IsLocalPlayer, Concatenate( "
+                          f"ScriptedGui.IsValidTooltip( {scope} )", body, name)
+            self.assertTrue(body.rstrip().endswith("'gw_btn_not_ours_tt' )]\""), name)
+        self.assertIn("[JournalEntry.GetCountry.GetName]", _loc_value("gw_btn_not_ours_tt"))
+        sguis = _read(SGUIS)
+        for p in MARKET_WIDE + NATIONAL:
+            handler = _top_level(sguis, f"gw_policy_{p}_sgui")
+            effect = _block_from(handler, handler.index("effect = {") + len("effect = {"))
+            limits = re.findall(r"limit = \{ ([^}]*) \}", effect)
+            self.assertEqual(limits, ["scope:op = 0 is_player = yes", "scope:op = 1 is_player = yes"], p)
+            valid = _block_from(handler, handler.index("is_valid = {") + len("is_valid = {"))
+            self.assertNotIn("is_player", valid, p)   # the tooltip's conditions are unchanged
+
+    def test_our_labels_switch_on_the_same_test(self):
+        """A label or tooltip of the market cells that says "our" or "we"
+        picks its wording on JournalEntry.GetCountry.IsLocalPlayer: the
+        journal's text for the player's own entry, the market's for a leader's."""
+        for key in OUR_KEYS:
+            self.assertEqual(_loc_value(key), f"[SelectLocalization( JournalEntry.GetCountry.IsLocalPlayer, "
+                                              f"'{key}_ours', '{key}_theirs' )]", key)
+            theirs = _loc_value(f"{key}_theirs")
+            self.assertTrue(_loc_value(f"{key}_ours"), key)
+            self.assertNotRegex(theirs, r"\b([Oo]ur|[Oo]urs|[Ww]e|[Uu]s)\b", key)
+        for key in ("gw_ov_pie_share_value", "gw_ov_pie_share_pending"):
+            self.assertTrue(_loc_value(key).startswith("[SelectLocalization( JournalEntry.GetCountry.IsLocalPlayer, "
+                                                       "'gw_ov_share_ours', 'gw_ov_share_theirs' )] "), key)
+        self.assertIn("'gw_ov_cut_policies_ours', 'gw_ov_cut_policies_theirs'", _loc_value("gw_ov_pie_cut_tt"))
+        # ...and every one of them is a market cell's.
+        ov = _type_body(_read(GUI), "te_gw_overview_panel")
+        for key in OUR_KEYS:
+            self.assertIn(f'"{key}"', ov, key)
+
+    def test_the_market_cells_read_no_players_only_figure(self):
+        """The data audit: what the leader's cells read exists for an AI
+        leader. The market figures are written for every market leader each
+        year (no is_player on the site that writes them); the players-only
+        snapshots (Top Emitters' rows, the history store) feed only sections
+        that stay the player's."""
+        ov = _type_body(_read(GUI), "te_gw_overview_panel")
+        pol = _type_body(_read(GUI), "te_gw_sec_policies")
+        for players_only in ("gw_disp_emitters_", "gw_emitter_", "te_hist"):
+            self.assertNotIn(players_only, ov + pol, players_only)
+        pulse = _read(os.path.join(REPO, "common", "on_actions", "extra_on_actions.txt"))
+        at = pulse.index("gw_snapshot_market_emissions_effect = yes")
+        site = pulse[pulse.rindex("if = {", 0, at):at]
+        self.assertIn("owner.market_capital = THIS", site)
+        self.assertNotIn("is_player", site)
 
     def test_no_tab_icon(self):
         """System tabs carry no icon, as vanilla's tabs don't (the owner, 2026-09-30):
@@ -883,7 +1024,8 @@ class MarketTabTest(unittest.TestCase):
         sguis = _read(SGUIS)
         for name in ("gw_te_members_sgui", "gw_top_emitters_sgui"):
             self.assertIn("scope = state", _top_level(sguis, name), name)
-        ambient = re.findall(r"(?<![\w.'])(Market|Country|GetPlayer|GetMetaPlayer)\.\w+", _read(GUI))
+        code = "\n".join(line.split("#", 1)[0] for line in _read(GUI).splitlines())
+        ambient = re.findall(r"(?<![\w.'])(Market|Country|GetPlayer|GetMetaPlayer)\.\w+", code)
         self.assertEqual(ambient, [])
 
     def test_one_visible_per_widget(self):

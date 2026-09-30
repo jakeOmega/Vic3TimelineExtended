@@ -38,6 +38,16 @@
 # tooltips DO read `scope:op`, which Strategic Reserve proves in shipped code.
 # See docs/guides/gui_modding_guide.md gotcha #22.
 #
+# ANOTHER COUNTRY'S ENTRY. The Market panel's Climate tab shows, on another
+# market, that market leader's entry in the same rows, with every Adopt and
+# Repeal greyed (JournalEntry.GetCountry.IsLocalPlayer in the widget's button
+# types). As a second guard, each action's effect also requires `is_player =
+# yes`, so a click that reached an AI country's handler would change nothing.
+# It is in the branch limits, next to the op test, so the tooltip the player
+# sees for their own entry is unchanged. (`is_player` holds for any human, so
+# in multiplayer the widget's greying is the guard against another human's
+# entry.)
+#
 # READ-ONLY HANDLERS carry `is_valid = { always = no }` and an empty effect.
 # They exist only so the widget can ask script a yes/no question instead of
 # re-encoding a threshold in `.gui`.
@@ -73,11 +83,11 @@ gw_policy_carbon_tax_sgui = {
 
 	effect = {
 		if = {
-			limit = { scope:op = 0 }
+			limit = { scope:op = 0 is_player = yes }
 			gw_effect_carbon_tax = yes
 		}
 		else_if = {
-			limit = { scope:op = 1 }
+			limit = { scope:op = 1 is_player = yes }
 			gw_effect_remove_carbon_tax = yes
 		}
 	}
@@ -111,11 +121,11 @@ gw_policy_renewable_investment_sgui = {
 
 	effect = {
 		if = {
-			limit = { scope:op = 0 }
+			limit = { scope:op = 0 is_player = yes }
 			gw_effect_renewable_investment = yes
 		}
 		else_if = {
-			limit = { scope:op = 1 }
+			limit = { scope:op = 1 is_player = yes }
 			gw_effect_remove_renewable_investment = yes
 		}
 	}
@@ -149,11 +159,11 @@ gw_policy_emission_standards_sgui = {
 
 	effect = {
 		if = {
-			limit = { scope:op = 0 }
+			limit = { scope:op = 0 is_player = yes }
 			gw_effect_emission_standards = yes
 		}
 		else_if = {
-			limit = { scope:op = 1 }
+			limit = { scope:op = 1 is_player = yes }
 			gw_effect_remove_emission_standards = yes
 		}
 	}
@@ -187,11 +197,11 @@ gw_policy_climate_adaptation_sgui = {
 
 	effect = {
 		if = {
-			limit = { scope:op = 0 }
+			limit = { scope:op = 0 is_player = yes }
 			gw_effect_climate_adaptation = yes
 		}
 		else_if = {
-			limit = { scope:op = 1 }
+			limit = { scope:op = 1 is_player = yes }
 			gw_effect_remove_climate_adaptation = yes
 		}
 	}
@@ -225,11 +235,11 @@ gw_policy_reforestation_sgui = {
 
 	effect = {
 		if = {
-			limit = { scope:op = 0 }
+			limit = { scope:op = 0 is_player = yes }
 			gw_effect_reforestation = yes
 		}
 		else_if = {
-			limit = { scope:op = 1 }
+			limit = { scope:op = 1 is_player = yes }
 			gw_effect_remove_reforestation = yes
 		}
 	}
@@ -263,11 +273,11 @@ gw_policy_public_transit_sgui = {
 
 	effect = {
 		if = {
-			limit = { scope:op = 0 }
+			limit = { scope:op = 0 is_player = yes }
 			gw_effect_public_transit = yes
 		}
 		else_if = {
-			limit = { scope:op = 1 }
+			limit = { scope:op = 1 is_player = yes }
 			gw_effect_remove_public_transit = yes
 		}
 	}
@@ -301,11 +311,11 @@ gw_policy_fossil_fuel_divestment_sgui = {
 
 	effect = {
 		if = {
-			limit = { scope:op = 0 }
+			limit = { scope:op = 0 is_player = yes }
 			gw_effect_fossil_fuel_divestment = yes
 		}
 		else_if = {
-			limit = { scope:op = 1 }
+			limit = { scope:op = 1 is_player = yes }
 			gw_effect_remove_fossil_fuel_divestment = yes
 		}
 	}
@@ -339,11 +349,11 @@ gw_policy_green_building_codes_sgui = {
 
 	effect = {
 		if = {
-			limit = { scope:op = 0 }
+			limit = { scope:op = 0 is_player = yes }
 			gw_effect_green_building_codes = yes
 		}
 		else_if = {
-			limit = { scope:op = 1 }
+			limit = { scope:op = 1 is_player = yes }
 			gw_effect_remove_green_building_codes = yes
 		}
 	}
