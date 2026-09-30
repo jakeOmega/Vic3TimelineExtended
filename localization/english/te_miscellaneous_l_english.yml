@@ -3678,7 +3678,6 @@
  sr_probe_target_venus:0 "Venus Probe Data"
  sr_prog_state_done:0 "#G achieved#!"
  sr_prog_state_first:0 "#G achieved, and we were first#!"
- sr_prog_state_in_transit:0 "#Y the probe is in transit#!"
  sr_prog_state_open:0 "not begun"
  sr_prog_state_running:0 "#Y under way#!"
  sr_prog_state_signal_received:0 "#G the signal has reached us#!"

@@ -58,7 +58,9 @@
 ###   who else is racing  -> sr_rivals_sgui via ExecuteTooltip, because `.gui` has
 ###                          no verified way to list countries (gotchas #11, #15)
 ###   programme row       -> ScriptValue('sr_disp_prog_<m>'); each icon's
-###                          tooltip is GetCustom('sr_prog_<m>')
+###                          tooltip is GetCustom('sr_prog_<m>'). The
+###                          interstellar icon's four states read
+###                          sr_disp_prog_interstellar
 ### The sr_disp_* values are in common/script_values/space_race_display_values.txt.
 ###
 ### COST. sr_rivals_sgui iterates every country once per frame while the Rivals
@@ -156,7 +158,8 @@ types space_race_widget_types
 	}
 
 	### A table row: a label on the left and its value on the right
-	### (un_chamber_value_row).
+	### (un_chamber_value_row), the value column wide enough for the longest
+	### figure, an estimate of "1300 months".
 	type te_sr_value_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -164,8 +167,8 @@ types space_race_widget_types
 
 		textbox = {
 			autoresize = yes
-			minimumsize = { 360 -1 }
-			maximumsize = { 360 -1 }
+			minimumsize = { 330 -1 }
+			maximumsize = { 330 -1 }
 			align = left|nobaseline
 			using = fontsize_medium
 			elide = right
@@ -173,8 +176,8 @@ types space_race_widget_types
 		}
 		textbox = {
 			autoresize = yes
-			minimumsize = { 100 -1 }
-			maximumsize = { 100 -1 }
+			minimumsize = { 130 -1 }
+			maximumsize = { 130 -1 }
 			align = right|nobaseline
 			using = fontsize_medium
 			default_format = "#v"
@@ -210,9 +213,12 @@ types space_race_widget_types
 
 	### A cell of the overview's first row: an icon, its word small beneath
 	### (te_un_ov_icon_label). Fixed width, so the row cannot push the panel
-	### wider. `icon_alpha` dims the icon.
+	### wider: three cells fill the 480 column (3 × 156 + 2 × 6), so the longest
+	### word ("Ambitious −360/wk") fits without "..." (round 3;
+	### test_space_race_labels.py holds every label to its cell). `icon_alpha`
+	### dims the icon.
 	type te_sr_ov_icon_label = widget {
-		size = { 110 58 }
+		size = { 156 58 }
 
 		icon = {
 			size = { 36 36 }
@@ -223,7 +229,7 @@ types space_race_widget_types
 		textbox = {
 			parentanchor = bottom|hcenter
 			autoresize = yes
-			max_width = 108
+			max_width = 154
 			elide = right
 			align = hcenter|nobaseline
 			using = fontsize_small
@@ -266,26 +272,32 @@ types space_race_widget_types
 	### Progress towards the goal: a label, the bar and the headline
 	### ("124 / 200 (+3.5/mo)"); the tooltip is on the whole row, as the UN's
 	### authority row. The bar ends at the goal, so it needs no target marker.
-	### Fixed columns (90 + 200 + 170, with the spacing 476), so a longer number
-	### never moves the bar.
+	### Fixed columns (110 + 140 + 210, with the spacing 476), so a longer number
+	### never moves the bar. The label column fits the longest label, "Next
+	### Colony"; the headline column the longest figure, "650 / 650 (+99.9/mo)"
+	### (round 3: "Next Colony" was cut to "Next Colo..." at 90). The tooltip's
+	### block is "row_tooltip", not "bar_tooltip": that name is the history
+	### charts', whose bar tooltips have no JournalEntry to read
+	### (test_history_chart_tooltip_context.py).
 	type te_sr_ov_bar_row = flowcontainer {
 		direction = horizontal
 		spacing = 8
 		parentanchor = hcenter
-		block "bar_tooltip" {}
+		block "row_tooltip" {}
 
 		textbox = {
-			minimumsize = { 90 -1 }
-			maximumsize = { 90 -1 }
+			minimumsize = { 110 -1 }
+			maximumsize = { 110 -1 }
 			autoresize = yes
 			elide = right
 			parentanchor = vcenter
 			align = left|nobaseline
+			using = fontsize_medium
 			default_format = "#tooltippable"
 			block "bar_label" {}
 		}
 		default_progressbar_horizontal = {
-			size = { 200 18 }
+			size = { 140 18 }
 			parentanchor = vcenter
 			blockoverride "values" {
 				block "bar_value" {}
@@ -295,11 +307,12 @@ types space_race_widget_types
 		}
 		textbox = {
 			autoresize = yes
-			minimumsize = { 170 -1 }
-			maximumsize = { 170 -1 }
+			minimumsize = { 210 -1 }
+			maximumsize = { 210 -1 }
 			elide = right
 			parentanchor = vcenter
 			align = left|nobaseline
+			using = fontsize_medium
 			block "bar_text" {}
 		}
 	}
@@ -396,9 +409,70 @@ types space_race_widget_types
 		}
 	}
 
-	### The whole programme, nine icons in a row under a centred label: the
+	### The Interstellar Probe and the wait for its data, one cell with four
+	### states (owner's play-test, round 3). Each state is its own icon, with
+	### its own texture and hover, shown by one equality test on
+	### sr_disp_prog_interstellar, so no two can show at once: 0 not begun,
+	### 1 under way, 2 launched and awaiting data, 3 data received. The
+	### textures are placeholders (space_race_gui_icons.md). The flag marks a
+	### first, as in te_sr_ov_prog_cell, and lets the hover through to the
+	### state beneath it.
+	type te_sr_ov_prog_cell_interstellar = widget {
+		size = { 50 50 }
+
+		### 0: not begun, or another power finished it first
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			alpha = 0.25
+			texture = "gfx/interface/icons/event_icons/je_space_race_interstellar_probe.dds"
+			tooltip = "je_space_race_widget_prog_interstellar_0"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)0' )]"
+		}
+
+		### 1: under way
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			alpha = 0.6
+			texture = "gfx/interface/icons/event_icons/je_space_race_interstellar_probe.dds"
+			tooltip = "je_space_race_widget_prog_interstellar_1"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)1' )]"
+		}
+
+		### 2: launched, awaiting data
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			alpha = 0.6
+			texture = "gfx/interface/icons/event_icons/je_space_race_interstellar_results.dds"
+			tooltip = "je_space_race_widget_prog_interstellar_2"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)2' )]"
+		}
+
+		### 3: data received
+		icon = {
+			size = { 44 44 }
+			parentanchor = center
+			texture = "gfx/interface/icons/event_icons/je_space_race_interstellar_results.dds"
+			tooltip = "je_space_race_widget_prog_interstellar_3"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)3' )]"
+		}
+
+		icon = {
+			size = { 18 18 }
+			parentanchor = top|right
+			alwaystransparent = yes
+			texture = "gfx/interface/icons/event_icons/waving_flag.dds"
+			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)4' )]"
+		}
+	}
+
+	### The whole programme, eight icons in a row under a centred label: the
 	### same on every panel. Each icon's tooltip is the row of the old
-	### "programme so far" list (name and state, sr_prog_<m>). Code order:
+	### "programme so far" list (name and state, sr_prog_<m>). The Interstellar
+	### Probe and its wait for data share the seventh icon, which has four
+	### states of its own (te_sr_ov_prog_cell_interstellar). Code order:
 	### space_race_display_values.txt, sr_disp_prog_*.
 	type te_sr_ov_programme = flowcontainer {
 		direction = vertical
@@ -527,39 +601,7 @@ types space_race_widget_types
 					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)4' )]"
 				}
 			}
-			te_sr_ov_prog_cell = {
-				tooltip = "je_space_race_widget_prog_interstellar_probe"
-				blockoverride "prog_texture" {
-					texture = "gfx/interface/icons/event_icons/je_space_race_interstellar_probe.dds"
-				}
-				blockoverride "lit" {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "running" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "unlit" {
-					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)1' ) )]"
-				}
-				blockoverride "first" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)4' )]"
-				}
-			}
-			te_sr_ov_prog_cell = {
-				tooltip = "je_space_race_widget_prog_interstellar_results"
-				blockoverride "prog_texture" {
-					texture = "gfx/interface/icons/event_icons/je_space_race_interstellar_results.dds"
-				}
-				blockoverride "lit" {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_results'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "running" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_results'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "unlit" {
-					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_results'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_results'), '(CFixedPoint)1' ) )]"
-				}
-			}
+			te_sr_ov_prog_cell_interstellar = {}
 			te_sr_ov_prog_cell = {
 				tooltip = "je_space_race_widget_prog_solar_colonization"
 				blockoverride "prog_texture" {
@@ -701,7 +743,7 @@ types space_race_widget_types
 			### Row 2: progress, while the programme runs.
 			te_sr_ov_bar_row = {
 				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				blockoverride "bar_tooltip" {
+				blockoverride "row_tooltip" {
 					block "sr_progress_tooltip" {}
 				}
 				blockoverride "bar_label" {
@@ -733,7 +775,7 @@ types space_race_widget_types
 			spacing = 10
 
 			te_sr_ov_bar_row = {
-				blockoverride "bar_tooltip" {
+				blockoverride "row_tooltip" {
 					tooltip = "je_space_race_widget_ov_transit_tt"
 				}
 				blockoverride "bar_label" {

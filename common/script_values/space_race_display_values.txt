@@ -215,11 +215,17 @@ sr_disp_prog_interstellar_probe = {
 	else_if = { limit = { has_variable = sr_active_interstellar_probe } value = 1 }
 	else_if = { limit = { has_global_variable = sr_global_first_interstellar_probe } value = 2 }
 }
-# The waiting entry: 3 once the signal is in, 1 while the probe is in transit.
-sr_disp_prog_interstellar_results = {
+# The Interstellar Probe and the wait for its data share one cell (owner's
+# play-test, round 3), with four states of its own: 0 not begun (or another
+# power finished it first), 1 under way, 2 launched and awaiting data, 3 the
+# data is in. sr_probe_launched is set when the probe entry completes, before
+# the waiting entry opens, so state 2 has no gap. The cell's first-to-finish
+# flag still reads sr_disp_prog_interstellar_probe above.
+sr_disp_prog_interstellar = {
 	value = 0
 	if = { limit = { has_variable = sr_interstellar_results_received } value = 3 }
-	else_if = { limit = { has_variable = sr_active_interstellar_results } value = 1 }
+	else_if = { limit = { has_variable = sr_probe_launched } value = 2 }
+	else_if = { limit = { has_variable = sr_active_interstellar_probe } value = 1 }
 }
 # No first and no "taken" for colonization (sr_prog_solar_colonization).
 sr_disp_prog_solar_colonization = {
