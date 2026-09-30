@@ -1104,23 +1104,26 @@ ICONS: dict[str, dict[str, dict]] = {
     },
     # Cultural Hegemony (cultural_hegemony_gui_icons.md): 36 px. The tiers are
     # one emblem growing, as the UN's tiers are one colonnade: separate renders.
+    # FLUX drew the negligible sprig green whatever the subject said: it is
+    # greyed as a derived icon.
+    "ch_part": {
+        "sprig": {"subject": "a short grey stone laurel twig with two broad thick leaves", "seed": 3},
+        # FLUX drew no rays in four seeds: they are drawn under the wreath.
+        "wreath_gold": {"subject": "a gleaming gold lyre inside a full round wreath of thick gold laurel leaves, "
+                                   "short thick pointed gold rays fanning out behind the wreath", "seed": 0},
+    },
     "ch": {
-        "tier_negligible": {"subject": "a short grey stone laurel twig with two broad thick leaves", "seed": None,
-                            "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
         "tier_minor": {"subject": "a small plain wooden lyre with a short bronze laurel twig lying across its base",
-                       "seed": None, "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+                       "seed": 3, "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
         "tier_moderate": {"subject": "a bronze lyre with one thick curved bronze laurel branch rising along its left "
-                                     "side only", "seed": None,
+                                     "side only", "seed": 1,
                           "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
         "tier_significant": {"subject": "a bronze lyre inside a full round wreath of thick bronze laurel leaves",
-                             "seed": None, "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+                             "seed": 1, "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
         "tier_major": {"subject": "a polished silver lyre inside a full round wreath of thick silver laurel leaves",
-                       "seed": None, "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
-        "tier_hegemon": {"subject": "a gleaming gold lyre inside a full round wreath of thick gold laurel leaves, "
-                                    "short thick pointed gold rays fanning out behind the wreath", "seed": None,
-                         "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+                       "seed": 1, "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
         "benchmark": {"subject": "a small plain grey iron sceptre standing in front of a large gold laurel wreath",
-                      "seed": None, "now": f"{_GI}/generic_icons/warning.dds",
+                      "seed": 0, "now": f"{_GI}/generic_icons/warning.dds",
                       "marks": [{"draw": "arrow", "dir": "down", "colour": "red", "at": (0.78, 0.7), "scale": 0.44}]},
     },
     # Covert Warfare (covert_gui_icons.md): 36 px, the slot 26 px and faded while free.
@@ -1409,6 +1412,13 @@ ICONS.update({
         "price_dollarised": _tag(f"{_GI}/generic_icons/world_market.dds", {"part": "banking_part/foreign_coin"}),
         "price_planned": _tag(f"{_GI}/generic_icons/government_building_icon.dds", {"part": "banking_part/seal"}),
     },
+    "ch_state": {
+        "tier_negligible": {"from": "ch_part/sprig", "tint": "grey",
+                            "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+        "tier_hegemon": {"from": "ch_part/wreath_gold", "base": {"scale": 0.8, "at": (0.5, 0.5)},
+                         "marks": [{"draw": "rays", "under": True, "at": (0.5, 0.5), "scale": 1.0}],
+                         "now": f"{_GI}/event_icons/je_cultural_hegemony.dds"},
+    },
     "covert_state": {
         # One shield, its metal and damage the standing: gold rim, silver, dull
         # iron, iron cracked, iron split. FLUX will not crack or split a shield,
@@ -1684,7 +1694,7 @@ TINTS = ("grey", "faint", "moss", "gold", "silver", "iron")
 LAYOUTS = ("flag",)
 DAMAGE = ("crack", "split")
 DRAWN_MARKS = ("star", "pause", "arrow_down", "arrow", "bar", "chevrons", "barrier", "bubble", "thermometer",
-               "disc", "shield", "dome", "link")
+               "disc", "shield", "dome", "link", "rays")
 MARK_COLOURS = ("red", "green", "blue", "yellow", "amber", "orange", "white", "gold")
 
 

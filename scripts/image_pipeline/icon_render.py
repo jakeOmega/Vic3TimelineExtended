@@ -875,6 +875,24 @@ def link(size: int, colour: str = "gold", width: float = 0.09, state: str = "who
     return resize_premultiplied(outlined(im, ss * max(1, size // 40)), (size, size))
 
 
+def rays(size: int, count: int = 16, colour: str = "gold") -> Image.Image:
+    """A starburst of thick pointed rays, drawn under an emblem to crown it (the Hegemon tier)."""
+    ss = 4
+    n = size * ss
+    c = n / 2
+    pts = []
+    for i in range(count * 2):
+        ang = -np.pi / 2 + i * np.pi / count
+        rad = n * (0.49 if i % 2 == 0 else 0.3)
+        pts.append((c + rad * np.cos(ang), c + rad * np.sin(ang)))
+    mask = Image.new("L", (n, n), 0)
+    d = ImageDraw.Draw(mask)
+    d.polygon(pts, fill=255)
+    # Only the points: the middle stays clear, so an emblem's gaps show the panel, not gold.
+    d.ellipse([c - n * 0.34, c - n * 0.34, c + n * 0.34, c + n * 0.34], fill=0)
+    return resize_premultiplied(outlined(_gradient_fill(mask, colour), ss * max(1, size // 50)), (size, size))
+
+
 # Drawn marks by name; each takes the box size and the mark's own settings.
 DRAWN = {
     "star": lambda box, m: star(box),
@@ -889,6 +907,7 @@ DRAWN = {
     "disc": lambda box, m: disc(box, m.get("colour", "red")),
     "shield": lambda box, m: shield_outline(box, m.get("colour", "blue")),
     "dome": lambda box, m: dome(box),
+    "rays": lambda box, m: rays(box, m.get("count", 16), m.get("colour", "gold")),
     "link": lambda box, m: link(box, m.get("colour", "gold"), m.get("width", 0.09), m.get("state", "whole")),
 }
 
