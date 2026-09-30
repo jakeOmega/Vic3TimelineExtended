@@ -158,21 +158,49 @@ campaigns, and drop protectionism once their share passes 10%.
 
 ## The Covert Warfare journal entry
 
-The Covert Warfare journal entry is your agency's command center. It becomes
-active when you hold one more covert operation slot than your rank grants for
-free (every country gets one, major powers two, great powers three). The first
-extra slots come from the Ministry of Intelligence and Security Established law
-(unlocked by Mass Surveillance), whose institution adds a slot per level, and
-from the era 7 technology Mainframe Computers. Once active, the entry stays open
-even if you later lose that extra slot. It never completes.
+The Covert Warfare journal entry is where you run your intelligence agency. It
+becomes active when you hold one more covert operation slot than your rank
+grants for free (every country gets one, major powers two, great powers three).
+The first extra slots come from the Ministry of Intelligence and Security
+Established law (unlocked by Mass Surveillance), whose institution adds a slot
+per level, and from the era 7 technology Mainframe Computers. Once active, the
+entry stays open even if you later lose that extra slot. It never completes.
 
 You launch operations from another country's diplomatic actions, listed as
 "Covert: ..." with the operation's name. Everything else is in the journal
-entry: the command center (capacity, slots, the funding stepper, detection
-factors, Tradecraft, covert defense and the last foreign operation you exposed),
-one row per running operation, and one row per agent network.
+entry.
 
-<!-- screenshot: the Covert Warfare command center with two operation rows and a network row visible -->
+<!-- screenshot: the Covert Warfare journal entry: the overview, then the Operations section with two operation rows -->
+
+The overview at the top is always shown. Its first row is icons with a word
+beneath:
+
+- Your intelligence standing, a shield from gold-rimmed (Fortress) to split in
+  two (Vulnerable); see [Intelligence capacity and operation
+  slots](#intelligence-capacity-and-operation-slots).
+- Your funding level ("Funding 3"), an envelope of banknotes, or an empty grey
+  one at 0.
+- Your Tradecraft tier, a fedora with up to four chevrons.
+- Spy Caught, while your counterintelligence has caught a foreign operation in
+  the last ten years.
+
+Below the icons, Operation Slots shows how many slots you hold and how many are
+in use, as case files lit while an operation fills them. Two bars follow:
+Capacity, your intelligence capacity as a share of the world's best, and
+Tradecraft, with a tick at the next tier and an arrow for which way it last
+moved. Hover any of them for the detail: the standing's meaning, the funding
+level's name and cost, the capacity breakdown, the Tradecraft rules and why it
+last changed.
+
+The sections below are open by default, except the explanations at the foot:
+
+| Section | Starts | Shows |
+|---|---|---|
+| Operations | Open | A warning while funding is 0, or "No operations running" (hover it for how to launch one). Then the Detection Risk every operation shares (base risk, Funding Stealth, Efficiency Factor), and a row for each running operation: its icon, type and target, its phase, its own Detection Risk, the priority stepper and Stand down. |
+| Funding | Open | What your funding level is doing, the Level stepper, and the Funding Levels table: each level's Stealth, Capacity and weekly cost, with your level's row shaded gold. |
+| Agent Networks | Open, once you have a network | A row for each network: the target's flag (hover it for the country, click it to open the country), its strength with a bar and an arrow for growing or decaying, and what it reports. |
+| Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; then Last Caught while a catch stands. |
+| How Covert Warfare Works | Collapsed | The explanations: operations, funding, detection, networks, Tradecraft, counterintelligence and intelligence standing. |
 
 ### Intelligence capacity and operation slots
 
@@ -181,9 +209,9 @@ power +10, major power +5), your literacy (up to 50 at full literacy), your
 share of world GDP (a point per percent, up to 25), and modifiers from
 technologies, laws such as Secret Police and Censorship, and the Ministry of
 Intelligence and Security (+4 per level). Tradecraft then multiplies the total.
-The journal entry rates you against the world's best, from Intelligence Fortress
-(80% of the best or more) through Hardened, Defended and Exposed to Vulnerable
-(below 20%).
+The overview's first icon rates your capacity against the world's best:
+Fortress at 80% of the best or more, Hardened from 60%, Defended from 40%,
+Exposed from 20% and Vulnerable below that.
 
 Capacity cuts both ways. The stronger a target's capacity is against yours, the
 likelier your operations there are caught; the stronger yours, the likelier you
@@ -198,16 +226,21 @@ more of each type with Mainframe Computers, with Cyber Warfare and with a
 
 ### Covert funding levels
 
-The command center's funding stepper sets what the agency spends. Every
+The Level stepper in the Funding section sets what the agency spends. Every
 operation needs funding of at least 1, so stepping down to 0 ends them all; the
-button warns you first. The weekly cost grows with your GDP, the funding level
-and the number of operations (weighted by priority, plus a base share paid even
-with nothing running).
+step's tooltip warns you first. The weekly cost grows with your GDP, the funding
+level and the number of operations (weighted by priority, plus a base share paid
+even with nothing running). The section's Funding Levels table shows what each
+level costs you a week at your current operations, with your level's row shaded
+gold.
 
-| Level | Name | Detection risk | Counterintelligence |
+Funding from level 2 up gives Funding Stealth, points off every operation's
+Detection Risk, and counterintelligence capacity:
+
+| Level | Name | Funding Stealth | Counterintelligence |
 |---|---|---|---|
 | 0 | Dormant | Nothing can run | None |
-| 1 | Operational | Base | None |
+| 1 | Operational | None | None |
 | 2 | Professional | −3 points | +5 intelligence capacity |
 | 3 | Covert Network | −8 points | +10 intelligence capacity |
 | 4 | Black Budget | −13 points | +15 intelligence capacity |
@@ -261,11 +294,13 @@ and the description says how the world will read it if it is exposed.
 An operation does nothing for its first six months (Preparatory). From month 6
 it is Establishing and has its base effect; from month 12 it is Fully
 Operational and its effects double. Each row shows the phase and the months to
-the next one. Ideological Subversion's push on movements is the exception: it
-doesn't double, and stays at its establishing strength.
+the next one; hover the phase for what it does. Ideological Subversion's push on
+movements is the exception: it doesn't double, and stays at its establishing
+strength.
 
-Each row also has a priority stepper from 1 to 3. Priority multiplies what the
-operation does, but costs and exposure rise faster:
+Each row also has a priority stepper from 1 to 3; hover the word Priority for
+what the current level multiplies. Priority multiplies what the operation does,
+but costs and exposure rise faster:
 
 | Priority | Effect | Share of upkeep | Detection risk |
 |---|---|---|---|
@@ -295,9 +330,12 @@ A strong network gives new operations there a head start of up to five months
 50 it reports the target's intelligence capacity and technology count beside
 yours, and from 75 how many covert operations the target runs against you: the
 only way to learn of operations your counterintelligence has not caught, though
-it never says which. In the space race, the same two tiers narrow your estimate
-of that country's progress on a milestone from ±25% of the goal to ±10% and ±5%
-(see [The space milestone panel](15-space.md#the-space-milestone-panel)).
+it never says which. Each network's row shows its strength as a number and a
+bar, with an arrow for growing, decaying or at full strength; hover the strength
+for what the report shows at 50 and at 75. In the space race, the same two tiers
+narrow your estimate of that country's progress on a milestone from ±25% of the
+goal to ±10% and ±5% (see [The space milestone
+panel](15-space.md#the-space-milestone-panel)).
 
 ### Tradecraft
 
@@ -322,14 +360,17 @@ networks grow 15% faster. Falling below a tier never ends a running operation.
 
 ### Detection and exposure
 
-Each operation has its own monthly detection risk, shown on its row. It starts
-at 10%, falls with your funding level and your network in the target, and rises
-with priority and with the target's counterintelligence (its capacity plus its
-defense against that kind of operation, compared to yours; up to +20 points).
-Your covert efficiency, from technologies, laws and the Ministry of Intelligence
-and Security, then cuts it by up to four fifths, within a range of 0.1% to 50%.
-Each operation rolls separately, so three at 10% give about a 27% monthly chance
-of a catch, but at most one is exposed a month.
+Each operation has its own monthly Detection Risk, shown on its row (hover
+it for how it is made up). It starts at 10%, falls with your Funding Stealth and
+your network in the target, and rises with priority and with the target's
+counterintelligence (its capacity plus its defense against that kind of
+operation, compared to yours; up to +20 points). Your Efficiency Factor, from
+the Covert Operation Efficiency modifier that technologies, laws and the
+Ministry of Intelligence and Security give, then cuts it by up to four fifths,
+within a range of 0.1% to 50%. The Operations section lists the base risk, your
+Funding Stealth and your Efficiency Factor above the rows. Each operation rolls
+separately, so three at 10% give about a 27% monthly chance of a catch, but at
+most one is exposed a month.
 
 A caught operation ends in the Operation Compromised event, which also costs its
 network 25 and costs you Tradecraft. Recalling your operatives and apologizing
@@ -361,11 +402,12 @@ more separatism and coup resistance, fading over five years), retaliate in kind
 (a network of up to 25 inside your country, if it has a Covert Warfare journal
 entry of its own), or make the evidence public (−3 infamy for itself). The event
 fires at most once every two years per country, whether or not that country has
-a Covert Warfare journal entry. The command center shows the latest catch for
-ten years. Nothing else names the country behind an operation. A target can see
-the effects among its own modifiers, gets an unsigned Election Interference
-Detected notification with each confidence hit, and can count the operations
-against it through a strong network of its own.
+a Covert Warfare journal entry. The Spy Caught icon and the Last Caught line in
+the Counterintelligence section show your latest catch, and who ran it, for ten
+years. Nothing else names the country behind an operation. A target can see the
+effects among its own modifiers, gets an unsigned Election Interference Detected
+notification with each confidence hit, and can count the operations against it
+through a strong network of its own.
 
 ### Covert defense
 
