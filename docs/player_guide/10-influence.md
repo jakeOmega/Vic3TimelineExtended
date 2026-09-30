@@ -14,16 +14,43 @@ The game scores every country's cultural pull from the first day of the
 campaign, but the Cultural Hegemony journal entry and everything it does wait
 until some country in the world has researched Mass Media (an era 6 society
 technology) and you have Romanticism. Until then the scores run in the
-background and have no effect. The entry never completes.
-
-Its panels show your tier, share and world rank, the cultural programs, and
-collapsible sections for your pull breakdown, the top ten cultural powers, the
-world's political models and a history chart of your share. The same panels
-appear as a Hegemony tab in the Society panel, and a change made in one shows in
-the other. The tab is greyed until the journal entry opens; hover it for what is
-still missing. It ends with an Open Journal Entry button.
+background and have no effect. The entry never completes. Before it opens, the
+entry shows only your tier and cultural share; after that, its panels show the
+rest (see [The Cultural Hegemony panels](#the-cultural-hegemony-panels)).
 
 ![The lower sections of the Cultural Hegemony journal entry: where our pull comes from, the top ten cultural powers with each one's change since the last recount, and the world's political models weighted by cultural pull.](images/cultural_hegemony.png)
+
+### The Cultural Hegemony panels
+
+The Cultural Hegemony journal entry and the Hegemony tab in the Society panel
+show the same panels, and a change made in one shows in the other. The tab is
+grayed until the journal entry opens; hover it for what is still missing. It
+ends with an Open Journal Entry button.
+
+<!-- screenshot: the Hegemony tab in the Society panel, with the overview and Top Cultural Powers in view -->
+
+The overview at the top is always shown. Its first row is icons with a word
+beneath: your influence tier (a gray sprig for Negligible, then a lyre that
+gains a laurel wreath and turns bronze, silver and gold up to Hegemon), your
+World Rank, the leading power's political model in its pie color, and a red
+Benchmark icon while you carry the Foreign Cultural Benchmark. Below them are a
+pie of your cultural share (amber for yours, gray for the rest of the world),
+with an arrow for the change since last month, and the flags of the three
+Leading Powers, the leader first. Hover a flag for the country and click it to
+open the country. Hover the other icons for the detail: the tier's full name,
+the model's share of world culture and its push abroad, the benchmark's
+strength.
+
+The sections below all start open except the explanations:
+
+| Section | Starts | Shows |
+|---|---|---|
+| Top Cultural Powers | Open | The ten largest cultural shares at the last recount, each with its change since the recount before (green up, red down). An arrow marks your row; hover a row for that country's pull components. When you are outside the top ten, Our Rank below the list gives your place. |
+| Cultural Programmes | Open | Programme Funding with its − and + buttons, then a row for each program with Running or Idle and its button (International Cultural Outreach's row reads International Outreach). Hover a program's name for what it gives while it runs, and a button for what is missing and what it would do. While you lack Ministry of Culture Established, a line above the rows says so. |
+| Where Our Pull Comes From | Open | A bar for each component of your pull, with zero in the middle: gains fill to the right in green, penalties to the left in red, each against that component's usual range. Hover a row for the working behind the number and the bar's range. Cultural Pull from Art sits under Art Production when it is not zero, and Raw Score and Pull Multiplier close the list. |
+| Political Models of the World | Open | The pie of the world's political models and its legend, by short name (hover one for the full name). |
+| History | Open | Your share of global influence month by month, with a marker where a program started or ended, over 1, 5 or 20 years. |
+| How Cultural Hegemony Works | Collapsed | The explanations: cultural share and tiers, the programs, where pull comes from, the top cultural powers, political models and the Foreign Cultural Benchmark. |
 
 ### Cultural share and influence tiers
 
@@ -47,7 +74,8 @@ hegemon, whatever its tier.
 ### Where cultural pull comes from
 
 Your raw score is the sum of the components below, multiplied by your pull
-multiplier. The breakdown section lists each one for your country.
+multiplier. Where Our Pull Comes From, in the panel, shows each one for your
+country as a bar.
 
 | Component | How it counts |
 |---|---|
@@ -93,7 +121,8 @@ than about three points carries the Foreign Cultural Benchmark modifier: its
 people measure their government against the leading power's, and legitimacy
 falls. The penalty grows with the gap. With the hegemon at 30% and you at 5%, it
 costs about 4 legitimacy. The hegemon never carries it. Tier V of the Education
-power bloc principle shrinks the penalty.
+power bloc principle shrinks the penalty. While you carry it, the overview shows
+a red Benchmark icon; hover it for the current strength.
 
 ### Political models of the world
 
@@ -107,8 +136,8 @@ The hegemon's model pushes on every country that carries the Foreign Cultural
 Benchmark: the matching political movement there (a liberal movement under a
 liberal hegemon, for example, or a related one if it is absent) grows more
 active and attracts more pops. The push is zero while the model holds less than
-15% of world culture and grows with its share after that; the tooltip on the
-exported model shows its strength. A hegemon with feminist, civil-rights,
+15% of world culture and grows with its share after that; hover the model in
+the overview for its strength. A hegemon with feminist, civil-rights,
 environmental, abolitionist, labor or land-reform laws also feeds those
 movements abroad, and one at peace without Mass Conscription feeds anti-war
 movements. Movements are covered in [Government, laws and
@@ -122,7 +151,7 @@ at the next monthly update.
 
 | Program | Controls | Effect | Cost |
 |---|---|---|---|
-| Cultural Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
+| Programme Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
 | International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media. | The weekly cost of one funding step. |
 | Cultural Institutes | Fund / Defund | +10% pull. | +100 authority cost. |
 | Global Media Campaign | Launch / End | +15% pull, +5% prestige. Needs Mass Media. | +100 authority cost. |
