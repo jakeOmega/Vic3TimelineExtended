@@ -1683,7 +1683,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 27 GUI files at the top of `gui/`: 23 full-file replacements of vanilla panels plus 4 additive files (marked below):
+Currently 28 GUI files at the top of `gui/`: 24 full-file replacements of vanilla panels plus 4 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1711,6 +1711,7 @@ Currently 27 GUI files at the top of `gui/`: 23 full-file replacements of vanill
 | `te_system_tab_widgets.gui` | (additive, type library) | For system tabs in vanilla panels: a journal entry's bars, status description and button grid (`te_je_*`), and `te_tab_buttons_six`, vanilla's tab strip with a sixth slot |
 | `te_trade_partner_tooltips.gui` | (additive) | Per-partner goods-breakdown tooltip used by `market_panel.gui` |
 | `tooltip.gui` | Tooltip widget | Custom tooltip content |
+| `topbar.gui` | Top bar (the HUD's treasury row) | The Banking cycle's phase, momentum and bubble pressure as three icons after MONEY: one line, `te_banking_topbar_readings = {}`, in a `### TIMELINE EXTENDED` block. The type is in `banking_dashboard_widget.gui`. Vanilla's copy is kept as `test_fixtures/vanilla_gui/topbar.gui`, and `test_topbar_banking.py` fails on any other change. Top bars are a common target for UI mods, so this is a likely collision (`system_panels_feasibility.md` § 7.4) |
 | `treaty_draft_panel.gui` | Treaty drafting | Custom treaty interface |
 | `treaty_panel.gui` | Treaty view | Enhanced treaty display |
 | `zzz_extra_goods_texticons.gui` | (additive) | Custom goods text icons |
@@ -1764,6 +1765,8 @@ git merge-file -p /tmp/<file>.work /tmp/<file>.old /tmp/<file>.new > /tmp/<file>
 # Exit code 0 = clean merge, copy to mod; non-zero = N conflicts to resolve
 echo "Conflicts: $(grep -c '<<<<<<<' /tmp/<file>.merged)"
 ```
+
+`gui/topbar.gui` also has its base committed, as `test_fixtures/vanilla_gui/topbar.gui`: after merging a patch into it, replace that file with the new vanilla copy (BOM kept), or `test_topbar_banking.py` fails.
 
 For the 1.13 migration this resolved 14 of 17 GUI overrides cleanly; the giants (`right_click_menu.gui` 4845-line vanilla diff, `military_formation_panel.gui` 5012-line) had only 0 and 4 conflicts respectively.
 

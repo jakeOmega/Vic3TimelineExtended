@@ -205,6 +205,11 @@ Surging. The words are colored by how far the reading is from calm: green and
 white are safe, yellow and gold warn, and red marks an extreme (Panic, Frenzy,
 Collapsing momentum, Severe bubble pressure). A Boom reads blue.
 
+The first row's three icons also sit in the top bar, right after your weekly
+balance, while the journal entry is running. They show no words or figures:
+hover one for its word and the same tooltip, with the warning mark on the
+bubble as here, and click it to open the Banking tab.
+
 Below the overview come five sections. All start open except the explanations,
 and each heading opens or closes its section:
 

@@ -71,6 +71,54 @@ banking_dash_bubble_band = {
 }
 
 # ----------------------------------------------------------------------------
+# Cycle phase, as a word
+# ----------------------------------------------------------------------------
+# The phase's coloured word for a tooltip, where the overview's seven
+# visible-gated words cannot go: the top bar's phase icon
+# (te_banking_topbar_readings in banking_dashboard_widget.gui) prints it at the
+# head of the overview's own tooltip. Each branch asks what the matching
+# banking_dash_phase_* scripted GUI asks, through the same banking_cycle_is_*
+# trigger, and names the overview's word for that phase, so the word and the
+# icon cannot disagree (test_topbar_banking.py). No edge is restated here.
+banking_dash_phase_word = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = finance_cycle_value } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { banking_cycle_is_panic = yes }
+		localization_key = banking_dash_phase_panic_value
+	}
+	text = {
+		trigger = { banking_cycle_is_downturn = yes }
+		localization_key = banking_dash_phase_downturn_value
+	}
+	text = {
+		trigger = { banking_cycle_is_stagnation = yes }
+		localization_key = banking_dash_phase_stagnation_value
+	}
+	text = {
+		trigger = { banking_cycle_is_stable = yes }
+		localization_key = banking_dash_phase_stable_value
+	}
+	text = {
+		trigger = { banking_cycle_is_expansion = yes }
+		localization_key = banking_dash_phase_expansion_value
+	}
+	text = {
+		trigger = { banking_cycle_is_boom = yes }
+		localization_key = banking_dash_phase_boom_value
+	}
+	text = {
+		trigger = { banking_cycle_is_frenzy = yes }
+		localization_key = banking_dash_phase_frenzy_value
+	}
+}
+
+# ----------------------------------------------------------------------------
 # Monetary stance band (monetary_policy_design.md §8)
 # ----------------------------------------------------------------------------
 # Returns the NAME of the stance band and nothing else — no gap, no rate, no
