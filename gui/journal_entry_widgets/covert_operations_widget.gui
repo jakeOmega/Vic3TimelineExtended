@@ -2,7 +2,8 @@
 ###
 ### A type library, one type per section, composed for the journal entry by
 ### three named roots at the foot of this file (je_covert_warfare.txt attaches
-### them) so that a future system tab can compose the same types:
+### them); the Military panel's Covert tab (gui/panel_military.gui) composes
+### the same types in the same order:
 ###   widget_je_covert_overview   custom_widget_container_1  te_covert_overview_panel
 ###     Always shown: intelligence standing, funding level, Tradecraft tier and a
 ###     recent catch as icons; operation slots as a row of lit/dimmed icons;

@@ -717,5 +717,197 @@ class IconsTest(unittest.TestCase):
             self.assertNotIn(gone, gui, gone)
 
 
+MILITARY = os.path.join(REPO, "gui", "panel_military.gui")
+TAB_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")
+TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "covert_warfare_triggers.txt")
+BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "covert_warfare_scripted_buttons.txt")
+TAB_TAG = "### MOD: Covert tab (te_covert) ###"
+NUCLEAR_TAG = "### MOD: Nuclear tab (te_nuclear) ###"
+TAB_GATE = "GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+TAB_UNLOCK = "GetScriptedGui('te_military_covert_tab_unlock_sgui')"
+SLOTS = ("first", "second", "third", "fourth", "fifth")
+
+
+def _marked(text, tag):
+    """Each block of panel_military.gui marked with `tag`, up to its END MOD line."""
+    out = []
+    start = text.find(tag)
+    while start != -1:
+        end = text.index("### END MOD ###", start)
+        out.append(text[start:end])
+        start = text.find(tag, end)
+    return out
+
+
+def _braced(text, opener):
+    """The body of the first `opener` block (the text between its braces)."""
+    m = re.search(opener, text, re.M)
+    assert m, opener
+    depth = 0
+    for j in range(m.end() - 1, len(text)):
+        if text[j] == "{":
+            depth += 1
+        elif text[j] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[m.end():j]
+    raise AssertionError(f"{opener} never closes")
+
+
+def _words(script):
+    """Script with comments dropped and whitespace collapsed, for comparing."""
+    return " ".join(re.sub(r"#[^\n]*", "", script).split())
+
+
+class MilitaryCovertTabTest(unittest.TestCase):
+    """The Military panel's Covert tab, the fifth slot (style guide rule 9; a
+    copy of the Nuclear tab, MilitaryTabTest in test_nuclear_layout.py): the
+    journal entry's own composers under GetPlayerJournalEntry, gated, greyed
+    until the entry runs, and ending with Open Journal Entry."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.military = _read(MILITARY)
+        cls.blocks = _marked(cls.military, TAB_TAG)
+
+    def _content(self):
+        body = self.blocks[1]
+        self.assertIn('name = "te_military_covert_tab"', body)
+        return body
+
+    def test_two_marked_blocks_the_button_and_the_content(self):
+        self.assertEqual(len(self.blocks), 2)
+        self.assertIn('blockoverride "fifth_button"', self.blocks[0])
+        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_covert')]\"", self._content())
+
+    def test_the_tab_composes_the_journal_roots_types_in_order(self):
+        body = self._content()
+        mounted = re.findall(r'name = "(widget_je_covert_\w+)"', _read(JE))
+        wrapped = [ROOTS[name][1] for name in mounted]
+        self.assertEqual(wrapped, ["te_covert_overview_panel", "te_covert_status_sections",
+                                   "te_covert_reference_sections"])
+        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", body, re.M), wrapped)
+        # The link back to the entry comes after every section.
+        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index(wrapped[-1]))
+        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+
+    def test_the_journal_draws_nothing_the_composers_do_not(self):
+        """No te_je_* piece is needed (feasibility study 5.1): no goal bar, no
+        scripted bars, no status text, and no scripted button a human sees."""
+        je = re.sub(r"#[^\n]*", "", _read(JE))
+        for absent in ("progressbar", "scripted_progress_bar", "status_desc", "current_value"):
+            self.assertNotIn(absent, je, absent)
+        buttons = re.sub(r"#[^\n]*", "", _read(BUTTONS))
+        names = re.findall(r"^\tscripted_button = (\w+)", je, re.M)
+        self.assertEqual(len(names), 2)
+        for name in names:
+            self.assertRegex(_braced(buttons, rf"^{name} = \{{"), r"visible = \{\s*is_ai = yes\s*\}", name)
+        self.assertNotIn("te_je_", self._content())
+
+    def test_the_gate_sits_above_the_journal_entry_datacontext(self):
+        body = self._content()
+        dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_covert_warfare')]\"")
+        self.assertLess(body.index(f'visible = "[{TAB_GATE}]"'), dc)
+        # Never on the widget that carries the datacontext itself.
+        opener = body.rindex("flowcontainer = {", 0, dc)
+        self.assertNotIn("visible", body[opener:dc])
+        # The header sits outside the gate.
+        self.assertLess(body.index('text = "je_covert_warfare"'), body.index(f'visible = "[{TAB_GATE}]"'))
+
+    def test_the_column_is_as_wide_as_the_journal_roots(self):
+        body = self._content()
+        dc = body.index("GetPlayerJournalEntry('je_covert_warfare')")
+        head = body[dc:body.index("te_covert_overview_panel", dc)]
+        self.assertIn("minimumsize = { 520 -1 }", head)
+        self.assertIn("parentanchor = hcenter", head)
+
+    def test_the_button_is_greyed_until_the_entry_runs(self):
+        button = self.blocks[0]
+        self.assertIn(f'enabled = "[{TAB_GATE}]"', button)
+        self.assertIn("onclick = \"[InformationPanel.SelectTab('te_covert')]\"", button)
+        self.assertIn(f"{TAB_UNLOCK}.IsValidTooltip(", button)
+        for half in ("fifth_button_visibility", "fifth_button_visibility_checked"):
+            m = re.search(rf'blockoverride "{half}" \{{\s*visible = "(.*)"', button)
+            self.assertTrue(m, half)
+            self.assertIn("IsTabSelected('te_covert')", m.group(1))
+            self.assertIn(f"{TAB_UNLOCK}.IsShown(", m.group(1))
+        loc = _loc()
+        for key in ("te_military_tab_covert", "te_military_tab_covert_tt", "te_military_tab_covert_locked_tt",
+                    "te_military_covert_open_journal_tt", "covert_warfare_unlock_tt"):
+            self.assertIn(key, loc)
+
+    def test_the_nuclear_and_covert_tabs_do_not_share_a_slot(self):
+        def slots(blocks):
+            found = set()
+            for block in blocks:
+                found |= set(re.findall(r'blockoverride "(\w+?)_button', block))
+            return found
+        nuclear = _marked(self.military, NUCLEAR_TAG)
+        self.assertEqual(slots(nuclear[:1]), {"fourth"})
+        self.assertEqual(slots(self.blocks[:1]), {"fifth"})
+        # And no other tab of the strip is on the fifth slot.
+        strip = _braced(self.military, r"^\t\t\ttab_buttons = \{")
+        self.assertEqual(strip.count('blockoverride "fifth_button"'), 1)
+        self.assertEqual({s for s in SLOTS if f'blockoverride "{s}_button"' in strip}, set(SLOTS))
+        self.assertNotIn("IsTabSelected('te_covert')", "".join(nuclear))
+
+    def test_no_tab_on_the_strip_carries_an_icon(self):
+        """System tabs carry no icon, as vanilla's tabs don't (gui_style_guide.md
+        rule 9): no mod block in the Military panel's tab strip draws one, in
+        any slot block (*_button_icon, *_button_name or another)."""
+        strip = _braced(self.military, r"^\t\t\ttab_buttons = \{")
+        tabs = re.findall(r"### MOD: [^\n]*tab[^\n]*###.*?### END MOD ###", strip, re.S)
+        self.assertEqual(len(tabs), 2)   # Nuclear and Covert
+        for block in tabs:
+            code = re.sub(r"#[^\n]*", "", block)
+            with self.subTest(tab=block.split("\n", 1)[0]):
+                self.assertNotRegex(code, r"\bicon = \{")
+                self.assertNotIn("texture =", code)
+
+    def test_the_mod_labels_fit_five_slots(self):
+        """Five tabs in 540 are (540 - 2 x 3 margin - 2 x 5 dividers) / 5 = 104.8
+        wide, and tab_text_properties keeps 10 each side for the name: 84.8, at
+        the large-font budget (10 a character, plus 10%)."""
+        loc = _loc()
+        for key in ("te_military_tab_nuclear", "te_military_tab_covert"):
+            self.assertLessEqual(len(loc[key]) * 10 * 1.1, 84.8, key)
+
+    def test_the_gates_read_the_rule_and_the_entry(self):
+        sguis = _read(TAB_SGUIS)
+        gate = _braced(sguis, r"^te_military_covert_tab_sgui = \{")
+        self.assertIn("has_game_rule = covert_warfare_enabled", gate)
+        self.assertIn("has_journal_entry = je_covert_warfare", gate)
+        unlock = _braced(sguis, r"^te_military_covert_tab_unlock_sgui = \{")
+        self.assertIn("is_shown = { has_game_rule = covert_warfare_enabled }", unlock)
+        self.assertIn("is_valid = { covert_warfare_entry_unlocked = yes }", unlock)
+        # The entry is shown on the same rule.
+        self.assertIn("has_game_rule = covert_warfare_enabled", _braced(_read(JE), r"is_shown_when_inactive = \{"))
+
+    def test_the_checklist_is_the_entrys_own_possible_in_one_line(self):
+        trig = _braced(_read(TRIGGERS), r"^covert_warfare_entry_unlocked = \{")
+        tooltip = _braced(trig, r"custom_tooltip = \{")
+        self.assertEqual(_words(trig), f"custom_tooltip = {{ {_words(tooltip)} }}")
+        m = re.match(r"text = (\w+) (.*)", _words(tooltip))
+        self.assertEqual(m.group(1), "covert_warfare_unlock_tt")
+        # A verbatim copy of the entry's `possible`, which is left as it is.
+        self.assertEqual(m.group(2), _words(_braced(_read(JE), r"^\tpossible = \{")))
+        line = _loc()["covert_warfare_unlock_tt"]
+        for part in ("concept_operation_slots", "concept_great_power", "concept_major_power", "4", "3", "2"):
+            self.assertIn(part, line)
+
+    def test_one_visible_per_widget(self):
+        for i, block in enumerate(self.blocks):
+            stack = [0]
+            for line in block.splitlines():
+                s = line.strip()
+                if s.startswith("visible ="):
+                    stack[-1] += 1
+                    self.assertLessEqual(stack[-1], 1, f"block {i}: two visibles near {s[:60]}")
+                stack.extend([0] * line.count("{"))
+                for _ in range(line.count("}")):
+                    if len(stack) > 1:
+                        stack.pop()
+
+
 if __name__ == "__main__":
     unittest.main()
