@@ -77,21 +77,22 @@ Supreme political authority vested in AI; human institutions advise and execute.
 - **Kept:** +2 companies, +50% enactment speed, −25% stall, −30% ideological incoherence, doubled radicals and loyalists
   from SoL change, −25% decree cost (directing policy, not administering it), +10% research, the academic, engineer and
   Intelligentsia clout, +2 Legislative Override Capacity.
-- **Added: a flat +50 legitimacy base** (`country_legitimacy_base_add`). The first play-test of this law found the mandate
+- **Added: a flat +70 legitimacy base** (`country_legitimacy_base_add`). The first play-test of this law found the mandate
   alone left a Presidential Republic on very low taxes at 42, Unstable Government, with the mandate at its +25 cap: every
   other Distribution of Power law carries legitimacy of its own (clout 25–120, votes 40–110, Elder Council a flat 20) and
-  this one has no clout, votes or head-of-state term. The base puts the neutral case (mandate 0) at 50 before taxes, the
-  head of state's group and timed modifiers. The cap stays at ±25: legitimacy is clamped at 100 on the upside, so a higher
-  cap would only deepen slumps.
+  this one has no clout, votes or head-of-state term. A first fix (base 50, cap ±25) still topped out at 92 on very low
+  taxes, so base and cap are sized for headroom: 70 + 40 = 110, enough for a boom to reach 100 after taxes and penalties,
+  as the other laws do. The neutral case (mandate 0) sits at 70 before taxes, the head of state's group and timed
+  modifiers; a deep slump (gap −8) takes the mandate to −40.
 - **Added: legitimacy from results.** `algorithmic_mandate` (`sol_expectations_modifiers.txt`) carries
   `country_legitimacy_base_add = 1` and is re-applied each month with multiplier `algorithmic_mandate_value`
-  (`extra_script_values.txt`): 5 × `var:sol_expectations_gap_cached`, capped at ±25. The gap is
+  (`extra_script_values.txt`): 5 × `var:sol_expectations_gap_cached`, capped at ±40. The gap is
   `average_sol + country_sol_expectations_target_add − average_expected_sol`; it returns to zero once expectations catch
   up, so the mandate pays for living standards that outrun expectations and costs for ones that fall behind, not for a
   level of wealth. `te_refresh_algorithmic_mandate` (`sol_expectations_effects.txt`) runs from
   `sol_expectations_monthly_on_action` right after the update caches the gap: the modifier's only refresh site. The law's
   `on_deactivate` removes it at once. The 5 and the cap are first values to tune in play.
-- **Net, for a country that holds it:** it gains −20% institution cost (through Automated Bureaucracy), the flat +50
+- **Net, for a country that holds it:** it gains −20% institution cost (through Automated Bureaucracy), the flat +70
   legitimacy and the mandate, and loses half its resize speed and the old leader-clout legitimacy.
 - Parties still dissolve on activation. Algorithmic Directorate and Algorithmic Commons (`amendment_collective_algorithmic_commons`) already describe machine rule and are unchanged.
 

@@ -4,9 +4,11 @@
 The law is a Distribution of Power law with no clout, votes or head-of-state
 term, so it has no legitimacy of its own beyond the base it carries, and the
 mandate (algorithmic_mandate_value, 5 per point of the SoL expectations gap,
-capped at +-25) is an adjustment on top of that base. A country on Algorithmic
-Governance sat in Unstable Government with the mandate at its +25 cap until the
-base was added (play-test of #623).
+capped at +-40) is an adjustment on top of that base. Play-testing #623 found a
+country on Algorithmic Governance in Unstable Government with the mandate at its
+old +25 cap; a first fix (base 50, cap 25) still peaked at 92 on very low taxes,
+short of the 100 the other laws reach with room to spare for higher taxes. So the
+test pins headroom (base plus cap) as well as the two numbers.
 
 The law's tooltip quotes the mandate's rate and cap by hand, and nothing in the
 engine checks that the loc and the script value agree. This pins them.
@@ -86,8 +88,8 @@ class MandateValueTests(unittest.TestCase):
 
     def test_rate_and_cap(self):
         self.assertEqual(float(re.search(r"multiply\s*=\s*(-?[\d.]+)", self.body).group(1)), 5)
-        self.assertEqual(float(re.search(r"\bmax\s*=\s*(-?[\d.]+)", self.body).group(1)), 25)
-        self.assertEqual(float(re.search(r"\bmin\s*=\s*(-?[\d.]+)", self.body).group(1)), -25)
+        self.assertEqual(float(re.search(r"\bmax\s*=\s*(-?[\d.]+)", self.body).group(1)), 40)
+        self.assertEqual(float(re.search(r"\bmin\s*=\s*(-?[\d.]+)", self.body).group(1)), -40)
 
 
 class LawTests(unittest.TestCase):
@@ -95,10 +97,21 @@ class LawTests(unittest.TestCase):
         self.law = _block(_read(LAWS), "law_algorithmic_governance")
         self.modifier = _inner(self.law, "modifier")
 
-    def test_carries_a_flat_legitimacy_base(self):
+    def _base(self):
         m = re.search(r"country_legitimacy_base_add\s*=\s*(-?[\d.]+)", self.modifier)
         self.assertIsNotNone(m, "no legitimacy base: the mandate alone leaves the country in Unstable Government")
-        self.assertGreaterEqual(float(m.group(1)), 50)
+        return float(m.group(1))
+
+    def test_carries_a_flat_legitimacy_base(self):
+        self.assertGreaterEqual(self._base(), 70)
+
+    def test_base_plus_mandate_cap_leaves_headroom_over_100(self):
+        # Taxes (+10 at very low, negative above medium), a head of state's group
+        # and timed modifiers are added to this, and legitimacy tops out at 100:
+        # a boom must reach it with room to absorb them (92 was reported short).
+        body = _block(_read(SCRIPT_VALUES), "algorithmic_mandate_value")
+        cap = float(re.search(r"\bmax\s*=\s*(-?[\d.]+)", body).group(1))
+        self.assertGreaterEqual(self._base() + cap, 110)
 
     def test_tooltip_is_the_mandate_explainer(self):
         on_enact = " ".join(_inner(self.law, "on_enact").split())
@@ -122,7 +135,7 @@ class LocTests(unittest.TestCase):
         text = self.loc[TOOLTIP_KEY]
         self.assertIn("#v +5#!", text)
         self.assertIn("#v -5#!", text)
-        self.assertIn("#v 25#!", text)
+        self.assertIn("#v 40#!", text)
         self.assertIn("[concept_sol_expectations]", text)
 
     def test_modifier_has_loc(self):

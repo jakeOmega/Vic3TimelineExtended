@@ -185,15 +185,15 @@ enact no other Bureaucracy law. It dissolves your parties and makes you an
 Algorithmic Directorate, or an Algorithmic Commons under [Collective
 Governance](#collective-governance). Laws pass 50% faster, research runs 10%
 faster, decrees cost a quarter less and you can run two more companies. It has
-no clout or votes to draw legitimacy from, so it gives 50 legitimacy flat and
+no clout or votes to draw legitimacy from, so it gives 70 legitimacy flat and
 the rest comes from results: the Algorithmic Mandate adds legitimacy while
 living standards run ahead of what people expect and takes it away while they
-fall behind, up to 25 either way, and it shrinks as expectations catch up.
+fall behind, up to 40 either way, and it shrinks as expectations catch up.
 Taxes, your head of state's interest group and timed modifiers count as usual,
-so with a steady standard of living you sit near 50 plus those, and the mandate
-carries you toward 100 in a boom or toward Unstable Government in a slump.
-Radicals and loyalists from changes in living standards double as well, so a
-falling standard of living turns on you fast.
+so with a steady standard of living you sit near 70 plus those, a boom takes
+you to or near 100 even under heavier taxes, and a deep slump drops you toward
+Unstable Government. Radicals and loyalists from changes in living standards
+double as well, so a falling standard of living turns on you fast.
 
 ### Law enactment events
 

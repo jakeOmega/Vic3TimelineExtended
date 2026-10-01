@@ -4314,10 +4314,12 @@ law_algorithmic_governance = {
 		# (clout 25-120, votes 40-110, Elder Council a flat 20), and this one
 		# has no clout, votes or head-of-state term, so without a base a country
 		# sat in Unstable Government (25-50) even with the mandate at its +25
-		# cap. 50 puts the neutral case (mandate 0) at 50 before taxes, the head
-		# of state's group and timed modifiers, and leaves the mandate's +-25 to
-		# swing it from there.
-		country_legitimacy_base_add = 50
+		# cap. The first fix, 50 with the mandate capped at +-25, still topped out
+		# at 92 on very low taxes, where other laws reach 100 with room to spare
+		# for higher taxes. 70 puts the neutral case (mandate 0) at 70 before
+		# taxes, the head of state's group and timed modifiers; with the mandate's
+		# +40 (algorithmic_mandate_value) a boom has about 110 to absorb those.
+		country_legitimacy_base_add = 70
 
 		# Vanilla's Technocracy gives one company slot; this goes further.
 		country_max_companies_add = 2
