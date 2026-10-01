@@ -86,15 +86,13 @@ disband_company = {
 		# source_country and must disband their own company.
 		article_ai_usage = { request }
 
-		# AI will only consider this when significantly more powerful.
+		# Major powers consider this more often; relative rank is checked in acceptance.
 		evaluation_chance = {
-			value = 0
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			value = 0.01
 			if = {
-				limit = {
-					exists = scope:other_country
-					country_rank > scope:other_country.country_rank
-				}
-				add = 0.1
+				limit = { country_rank >= rank_value:major_power }
+				add = 0.09
 			}
 		}
 
@@ -210,6 +208,11 @@ disband_company = {
 					max = 50
 					min = 0
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.target_country = root country_rank <= scope:article.source_country.country_rank }
+				add = { desc = "DIPLOMATIC_ACCEPTANCE_RANK" value = -1000 }
 			}
 		}
 	}

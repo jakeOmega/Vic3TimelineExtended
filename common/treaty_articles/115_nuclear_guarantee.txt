@@ -121,20 +121,14 @@ nuclear_guarantee = {
 		treaty_categories = { military_defense }
 		article_ai_usage = { offer request }
 		evaluation_chance = {
-			value = 0
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			value = 0.02
 			if = {
 				limit = {
 					nd_is_armed = yes
 					country_rank >= rank_value:major_power
 				}
 				add = 0.05
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = protective }
-				}
-				add = 0.1
 			}
 		}
 		inherent_accept_score = {

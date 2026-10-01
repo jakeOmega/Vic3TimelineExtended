@@ -47,7 +47,7 @@ The sections below all start open except the explanations:
 | Cultural Programmes | Open | Programme Funding with its − and + buttons, then a row for each program with Running or Idle and its button (International Cultural Outreach's row reads International Outreach). Hover a program's name for what it gives while it runs, and a button for what is missing and what it would do. While you lack Ministry of Culture Established, a line above the rows says so. |
 | Where Our Pull Comes From | Open | A bar for each component of your pull, with zero in the middle: gains fill to the right in green, penalties to the left in red, each against that component's usual range. Hover a row for the working behind the number and the bar's range. Cultural Pull from Art sits under Art Production when it is not zero, and Raw Score and Pull Multiplier close the list. |
 | Political Models of the World | Open | The pie of the world's political models and its legend, by short name (hover one for the full name). |
-| History | Open | Your share of global influence month by month, with a marker where a program started or ended, over 1, 5 or 20 years. |
+| History | Open | Each political model's share of world cultural influence, stacked to 100% in one bar per year, over 5, 20 or 100 years. Hover a bar for its date and all fifteen model shares. Every country sees the same history. Existing saves begin collecting at the next cultural recount; up to 100 annual snapshots are kept. |
 | How Cultural Hegemony Works | Collapsed | The explanations: cultural share and tiers, the programs, where pull comes from, the top cultural powers, political models and the Foreign Cultural Benchmark. |
 
 ### Cultural share and influence tiers

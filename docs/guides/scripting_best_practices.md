@@ -1761,7 +1761,7 @@ on_entry_into_force = {
 - `on_entry_into_force` / `on_break` / `on_withdrawal`: use `scope:article_options.source_country` / `.target_country` per the snippet above.
 - `ai` block: each field has its own scopes (vanilla `common/treaty_articles/treaty_articles.md` § AI block).
   - **`evaluation_chance` has root only.** The doc says "Only has root scope for the country we're looking at", and no vanilla article reads `scope:other_country` there. Check the partner in `possible`, which binds `scope:other_country`.
-  - A partner check inside `evaluation_chance` fails silently. If `scope:other_country` is unset there, the chance stays 0 and the AI never proposes the article. On 2026-09-27 about 18 mod articles did this (owner call pending). `nuclear_arms_limitation` was fixed before it shipped.
+  - A partner check inside `evaluation_chance` fails silently. If `scope:other_country` is unset there, the chance stays 0 and the AI never proposes the article. Issue #521 corrected 22 articles: proposal frequency now uses root motives, with partner preferences retained or moved to acceptance. `nuclear_arms_limitation` was already correct. Run `python3 treaty_evaluation_scope_audit.py --strict` before committing treaty changes; CI rejects direct named-scope reads in this field, including quoted script-value arguments. The audit does not expand called scripted triggers/values, so review their dependencies too.
   - `quantity_input_value` and the input filters get `root`, `scope:other_country` and `scope:article`.
   - `inherent_accept_score` gets `root` and `scope:article`, plus `scope:first_country` and `scope:second_country` on a mutual article.
 

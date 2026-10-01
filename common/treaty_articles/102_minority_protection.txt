@@ -105,21 +105,8 @@ minority_protection = {
 		article_ai_usage = { request }
 
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.05
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = protective }
-				}
-				add = 0.15
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = domineering }
-				}
-				add = 0.1
-			}
 			if = {
 				limit = {
 					country_rank >= rank_value:great_power
@@ -336,6 +323,15 @@ minority_protection = {
 						value = -50
 					}
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = protective } }
+				add = { desc = "AI_PROTECTIVE_ATTITUDE" value = 15 }
+			}
+			if = {
+				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = domineering } }
+				add = { desc = "AI_DOMINEERING_ATTITUDE" value = 10 }
 			}
 		}
 	}

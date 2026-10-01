@@ -164,13 +164,9 @@ ch_set_display_state = {
 # matching scripted_button's `effect` block. Both the journal-entry button and
 # `ch_policy_sgui` call these, so the two surfaces cannot drift.
 #
-# Three deliberate additions over the original inline bodies:
+# Display additions over the original inline bodies:
 #   * `ch_set_display_state = yes` in the tail, so a click moves the widget's
 #     labels immediately.
-#   * on the four programme toggles, one
-#     `te_history_record_cultural_hegemony_marker` call, so the history chart can
-#     date the change. Both the AI's journal-entry button and the widget reach it
-#     from here.
 #   * on the two funding steppers, one `custom_tooltip` OUTSIDE the
 #     `hidden_effect`: the original body is wholly hidden, so the widget's
 #     composed tooltip would otherwise render an empty "what this does" half.
@@ -224,7 +220,6 @@ ch_effect_world_exposition = {
 	je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition } }
 	je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult_for_je } }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_on_outreach }
 		ch_set_display_state = yes
 	}
 }
@@ -233,7 +228,6 @@ ch_effect_disable_world_exposition = {
 	je:je_cultural_hegemony = { remove_modifier = ch_world_exposition }
 	je:je_cultural_hegemony = { remove_modifier = ch_world_exposition_cost }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_off_outreach }
 		ch_set_display_state = yes
 	}
 }
@@ -241,7 +235,6 @@ ch_effect_disable_world_exposition = {
 ch_effect_cultural_institutes = {
 	je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_institutes_program } }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_on_institutes }
 		ch_set_display_state = yes
 	}
 }
@@ -249,7 +242,6 @@ ch_effect_cultural_institutes = {
 ch_effect_disable_cultural_institutes = {
 	je:je_cultural_hegemony = { remove_modifier = ch_cultural_institutes_program }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_off_institutes }
 		ch_set_display_state = yes
 	}
 }
@@ -257,7 +249,6 @@ ch_effect_disable_cultural_institutes = {
 ch_effect_global_media_campaign = {
 	je:je_cultural_hegemony = { add_modifier = { name = ch_global_media_campaign } }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_on_media }
 		ch_set_display_state = yes
 	}
 }
@@ -265,7 +256,6 @@ ch_effect_global_media_campaign = {
 ch_effect_disable_global_media_campaign = {
 	je:je_cultural_hegemony = { remove_modifier = ch_global_media_campaign }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_off_media }
 		ch_set_display_state = yes
 	}
 }
@@ -273,7 +263,6 @@ ch_effect_disable_global_media_campaign = {
 ch_effect_cultural_protectionism = {
 	je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_protectionism_program } }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_on_protectionism }
 		ch_set_display_state = yes
 	}
 }
@@ -281,7 +270,6 @@ ch_effect_cultural_protectionism = {
 ch_effect_disable_cultural_protectionism = {
 	je:je_cultural_hegemony = { remove_modifier = ch_cultural_protectionism_program }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_off_protectionism }
 		ch_set_display_state = yes
 	}
 }
@@ -951,6 +939,8 @@ ch_yearly_global_update = {
 			ch_add_country_to_model_totals = yes
 		}
 		ch_finish_all_model_buckets = yes
+		# One immutable global snapshot per calendar year, even after wars.
+		te_history_record_cultural_hegemony_models = yes
 		if = {
 			limit = { has_global_variable = ch_rank_1 }
 			global_var:ch_rank_1 = {

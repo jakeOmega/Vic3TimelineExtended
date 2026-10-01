@@ -227,13 +227,10 @@ currency_peg = {
 
 		# Wide gate, continuous tilt (§15A.2 "AI").
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.02
 			if = {
-				limit = {
-					exists = scope:other_country
-					scope:other_country = { country_rank >= rank_value:major_power }
-					country_rank < rank_value:major_power
-				}
+				limit = { country_rank < rank_value:major_power }
 				add = 0.06
 			}
 			if = {
@@ -351,6 +348,11 @@ currency_peg = {
 					desc = "AI_HOSTILE_ATTITUDE"
 					value = -50
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.source_country = root country_rank < rank_value:major_power scope:article.target_country = { country_rank >= rank_value:major_power } }
+				add = { desc = "DIPLOMATIC_ACCEPTANCE_RANK" value = 10 }
 			}
 		}
 	}
