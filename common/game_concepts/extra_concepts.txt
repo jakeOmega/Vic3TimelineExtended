@@ -36,6 +36,7 @@ concept_banking_risk_premium = {}
 concept_banking_expected_inflation = {}
 concept_banking_wage_pressure = {}
 concept_banking_price_pressure = {}
+concept_banking_asset_purchases = {}
 concept_banking_inflation_anchoring = {}
 concept_banking_monetisation = {}
 

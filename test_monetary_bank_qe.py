@@ -472,7 +472,14 @@ class PurchaseDisplay(unittest.TestCase):
 
     def test_the_row_text_prints_the_display_values_and_says_anchoring_does_not_absorb_them(self):
         loc = TooltipNumbers.loc
-        self.assertEqual(loc(self, 'banking_dash_mon_purchases_label'), 'Asset Purchases')
+        # A game concept like every other label in the block, so it renders as a concept link.
+        self.assertEqual(loc(self, 'banking_dash_mon_purchases_label'),
+                         "[Concept('concept_banking_asset_purchases','Asset Purchases')]")
+        concepts = (ROOT / 'common/game_concepts/extra_concepts.txt').read_text(encoding='utf-8-sig')
+        self.assertIn('\nconcept_banking_asset_purchases = {}\n', concepts)
+        self.assertEqual(loc(self, 'concept_banking_asset_purchases'), 'Asset Purchases')
+        desc = (ROOT / 'localization/english/te_concepts_l_english.yml').read_text(encoding='utf-8-sig')
+        self.assertIn(' concept_banking_asset_purchases_desc:0 "', desc)
         self.assertIn("ScriptValue('te_mon_purchase_pressure_display')",
                       loc(self, 'banking_dash_mon_purchases_value'))
         tip = loc(self, 'banking_dash_mon_purchases_tt')
