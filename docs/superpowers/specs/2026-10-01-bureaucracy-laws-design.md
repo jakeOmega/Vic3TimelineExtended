@@ -77,6 +77,12 @@ Supreme political authority vested in AI; human institutions advise and execute.
 - **Kept:** +2 companies, +50% enactment speed, −25% stall, −30% ideological incoherence, doubled radicals and loyalists
   from SoL change, −25% decree cost (directing policy, not administering it), +10% research, the academic, engineer and
   Intelligentsia clout, +2 Legislative Override Capacity.
+- **Added: a flat +50 legitimacy base** (`country_legitimacy_base_add`). The first play-test of this law found the mandate
+  alone left a Presidential Republic on very low taxes at 42, Unstable Government, with the mandate at its +25 cap: every
+  other Distribution of Power law carries legitimacy of its own (clout 25–120, votes 40–110, Elder Council a flat 20) and
+  this one has no clout, votes or head-of-state term. The base puts the neutral case (mandate 0) at 50 before taxes, the
+  head of state's group and timed modifiers. The cap stays at ±25: legitimacy is clamped at 100 on the upside, so a higher
+  cap would only deepen slumps.
 - **Added: legitimacy from results.** `algorithmic_mandate` (`sol_expectations_modifiers.txt`) carries
   `country_legitimacy_base_add = 1` and is re-applied each month with multiplier `algorithmic_mandate_value`
   (`extra_script_values.txt`): 5 × `var:sol_expectations_gap_cached`, capped at ±25. The gap is
@@ -85,8 +91,8 @@ Supreme political authority vested in AI; human institutions advise and execute.
   level of wealth. `te_refresh_algorithmic_mandate` (`sol_expectations_effects.txt`) runs from
   `sol_expectations_monthly_on_action` right after the update caches the gap: the modifier's only refresh site. The law's
   `on_deactivate` removes it at once. The 5 and the cap are first values to tune in play.
-- **Net, for a country that holds it:** it gains −20% institution cost (through Automated Bureaucracy) and the mandate,
-  and loses half its resize speed and the flat +10 legitimacy.
+- **Net, for a country that holds it:** it gains −20% institution cost (through Automated Bureaucracy), the flat +50
+  legitimacy and the mandate, and loses half its resize speed and the old leader-clout legitimacy.
 - Parties still dissolve on activation. Algorithmic Directorate and Algorithmic Commons (`amendment_collective_algorithmic_commons`) already describe machine rule and are unchanged.
 
 ## 3. Install and lock, and the consistency walk
@@ -98,7 +104,8 @@ nearest-progressiveness valid law, every month and on every law change, Distribu
   walk evict the governing law whenever the bureaucracy changed, and every existing save holding Algorithmic Governance
   with Appointed Bureaucrats would lose it the month after the update.
 - **What ships.** Algorithmic Governance's `on_activate` enacts Automated Bureaucracy (in place of the old
-  Elected→Appointed swap) and its `on_enact` says so (`ALGORITHMIC_GOVERNANCE_TT_INSTALLS_AUTOMATED_BUREAUCRACY`).
+  Elected→Appointed swap). The engine's own "enables law" line already shows that, so `on_enact` carries
+  `ALGORITHMIC_GOVERNANCE_TT_MANDATE`, which explains the mandate instead.
   `law_appointed_bureaucrats`, `law_hereditary_bureaucrats` and `law_crownland_diets` get
   `disallowing_laws = { law_algorithmic_governance }` (`common/laws/modified.txt`); Elected already needs a voting law.
   An old save holding Algorithmic Governance with Appointed Bureaucrats moves to Automated Bureaucracy once it has

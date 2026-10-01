@@ -218,7 +218,7 @@
  ai_strategy_irredentist_desc:0 "Pursue reunification with same-culture neighbors whose home states we hold claims on. Government ideology shapes whether the path is warlike or peaceful, but both paths remain available."
  ai_strategy_un_mandate_desc:0 "Exercise an authorization the [concept_un_general_assembly] has granted us: recover the named [concept_state_region] from the named state, and take nothing else from it."
  algorithmic_mandate:0 "Algorithmic Mandate"
- algorithmic_mandate_desc:0 "The algorithm's authority rests on its results. [concept_legitimacy] rises while living standards run ahead of what people expect and falls while they lag behind, returning to nothing once [concept_sol_expectations] catch up."
+ algorithmic_mandate_desc:0 "The algorithm's authority rests on its results. [concept_legitimacy] rises while living standards run ahead of what people expect and falls while they lag behind, returning to nothing once [concept_sol_expectations] catch up. It comes on top of the base [concept_legitimacy] the law itself gives."
  alternative_service_modifier:0 "Alternative Service Program"
  alternative_service_modifier_desc:0 "An alternative service program for conscientious objectors has reduced military manpower but eased social tensions."
  amendment_collective_administration:0 "Collegial Administration"
