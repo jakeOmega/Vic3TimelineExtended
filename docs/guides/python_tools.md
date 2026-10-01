@@ -83,6 +83,7 @@ Every row writes only its report under `docs/engine/`, so `?audits_only=true` le
 | `python3 attitude_key_audit.py` | any unexempted flag exists — **no flag at all**; `main()` returns the exit code natively, so passing `--strict` does nothing |
 | `python3 event_image_audit.py --strict` | any unexempted flag exists |
 | `python3 treaty_leverage_side_audit.py --strict` | any unexempted flag exists |
+| `python3 treaty_evaluation_scope_audit.py --strict` | any direct named-scope read in treaty AI `evaluation_chance` exists (root only; quoted expressions included). CI-only, not a post-load audit; supports `--mod-path PATH`. |
 | `python3 event_context_audit.py --strict` | any flag without a check-tagged `# REVIEWED YYYY-MM-DD (<check>): …` comment inside the event, or any such comment that suppresses nothing (stale — the check no longer fires there — or a misspelled check name) |
 | `python3 silent_variable_audit.py --strict` | any flag without a `# REVIEWED YYYY-MM-DD (silent_variable): …` comment inside the option, or any such comment on an option that is no longer flagged |
 | `python3 prev_scope_audit.py --strict` | any unexempted flag exists |

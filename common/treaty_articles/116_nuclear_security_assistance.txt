@@ -99,12 +99,11 @@ nuclear_security_assistance = {
 		treaty_categories = { other }
 		article_ai_usage = { offer request }
 		evaluation_chance = {
-			value = 0
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			# Countries with missing warheads can request help securing them.
+			value = 0.02
 			if = {
-				limit = {
-					exists = scope:other_country
-					scope:other_country = { nd_loose_has_line = yes }
-				}
+				limit = { nd_loose_has_line = yes }
 				add = 0.1
 			}
 			if = {

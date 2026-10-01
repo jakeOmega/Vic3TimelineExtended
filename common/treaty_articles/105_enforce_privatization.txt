@@ -82,6 +82,7 @@ enforce_privatization = {
 		article_ai_usage = { request }
 
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.01
 			# Non-capitalist countries have no interest in demanding privatization
 			if = {
@@ -102,31 +103,11 @@ enforce_privatization = {
 				}
 				add = 0.03
 			}
-			# Only meaningful if the target actually has substantial state-owned economy
-			if = {
-				limit = {
-					exists = scope:other_country
-					scope:other_country = {
-						OR = {
-							has_law = law_type:law_cooperative_ownership
-							has_law = law_type:law_traditionalism
-						}
-					}
-				}
-				add = 0.04
-			}
 			if = {
 				limit = {
 					ig:ig_industrialists = {
 						is_in_government = yes
 					}
-				}
-				add = 0.03
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = domineering }
 				}
 				add = 0.03
 			}
@@ -275,6 +256,11 @@ enforce_privatization = {
 						}
 					}
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.target_country = root scope:article.source_country = { has_law = law_type:law_traditionalism } }
+				add = { desc = "AI_SOURCE_TRADITIONALIST_ECONOMY" value = 10 }
 			}
 		}
 	}

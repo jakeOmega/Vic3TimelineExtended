@@ -78,40 +78,8 @@ cultural_exchange_program = {
 		article_ai_usage = { offer request }
 
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.08
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = cooperative }
-				}
-				add = 0.08
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = genial }
-				}
-				add = 0.12
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = conciliatory }
-				}
-				add = 0.04
-			}
-			# Don't consider for hostile nations
-			if = {
-				limit = {
-					exists = scope:other_country
-					OR = {
-						has_attitude = { who = scope:other_country attitude = antagonistic }
-						has_attitude = { who = scope:other_country attitude = domineering }
-						has_attitude = { who = scope:other_country attitude = belligerent }
-					}
-				}
-				add = -1.0
-			}
 			# Ethnostates don't do cultural exchange
 			if = {
 				limit = {
@@ -123,6 +91,15 @@ cultural_exchange_program = {
 
 		inherent_accept_score = {
 			value = -10
+
+			# Mutual articles bind first/second, not other_country, here.
+			if = {
+				limit = { root = scope:first_country }
+				scope:second_country = { save_temporary_scope_as = te_treaty_partner }
+			}
+			else = {
+				scope:first_country = { save_temporary_scope_as = te_treaty_partner }
+			}
 
 			# Ethnostate: hard refusal
 			if = {
@@ -138,9 +115,9 @@ cultural_exchange_program = {
 			if = {
 				limit = {
 					OR = {
-						has_attitude = { who = scope:other_country attitude = antagonistic }
-						has_attitude = { who = scope:other_country attitude = domineering }
-						has_attitude = { who = scope:other_country attitude = belligerent }
+						has_attitude = { who = scope:te_treaty_partner attitude = antagonistic }
+						has_attitude = { who = scope:te_treaty_partner attitude = domineering }
+						has_attitude = { who = scope:te_treaty_partner attitude = belligerent }
 					}
 				}
 				add = {
@@ -152,7 +129,7 @@ cultural_exchange_program = {
 			if = {
 				limit = {
 					any_primary_culture = {
-						shares_heritage_trait_group_with_any_primary_culture = scope:other_country
+						shares_heritage_trait_group_with_any_primary_culture = scope:te_treaty_partner
 					}
 				}
 				add = {
@@ -183,7 +160,7 @@ cultural_exchange_program = {
 			# Cooperative attitude
 			if = {
 				limit = {
-					has_attitude = { who = scope:other_country attitude = cooperative }
+					has_attitude = { who = scope:te_treaty_partner attitude = cooperative }
 				}
 				add = {
 					desc = "AI_COOPERATIVE_ATTITUDE"
@@ -193,7 +170,7 @@ cultural_exchange_program = {
 			# Genial attitude
 			if = {
 				limit = {
-					has_attitude = { who = scope:other_country attitude = genial }
+					has_attitude = { who = scope:te_treaty_partner attitude = genial }
 				}
 				add = {
 					desc = "AI_FRIENDLY_ATTITUDE"
@@ -203,12 +180,17 @@ cultural_exchange_program = {
 			# Same power bloc
 			if = {
 				limit = {
-					is_in_same_power_bloc = scope:other_country
+					is_in_same_power_bloc = scope:te_treaty_partner
 				}
 				add = {
 					desc = "AI_SAME_POWER_BLOC"
 					value = 10
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { has_attitude = { who = scope:te_treaty_partner attitude = conciliatory } }
+				add = { desc = "AI_CONCILIATORY_ATTITUDE" value = 5 }
 			}
 		}
 	}
