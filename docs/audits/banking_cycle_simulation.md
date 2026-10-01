@@ -1442,6 +1442,16 @@ at most 0.03 crashes a century, 0.006 points of mean inflation and 0.04 points o
 cell are identical in every column: a mandate bank is on its floor in at most 0.2% of months under fiat and never under
 digital. Over 40 ordinary centuries per cell, a mandate bank buys in at most 0.05% of months under fiat, about 0.6 points on average while it does, and never under digital. A Growth bank buys with headline at or above target in 0.01% of months, the only place the mandate condition binds.
 
+A delegated bank without independence can monetise beside its own purchases (design doc ruling N1, resolved as intended
+pending playtests). Stacking adds almost nothing: Monetise Deficit's inflation (added by the trap script, since the
+simulator does not model monetisation) lifts the bank's rule off the floor within months.
+
+| Price Stability, noise held at zero | Month at 0%: without / with purchases | Peak inflation: without / with | Months buying |
+|---|---|---|---|
+| Monetise Deficit off | 98 / 76 | 1.3 / 1.9 | 20 |
+| Monetise Deficit 1 | 37 / 35 | 5.4 / 5.4 | 7 |
+| Monetise Deficit 3 | 11 / 11 | 25.6 / 25.8 | 4 |
+
 **Not modelled.** The exchange-rate channel, and the cycle: the Deflation band's momentum drain and the Stagnation phase
 term would make a real recovery slower than the table.
 

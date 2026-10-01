@@ -881,3 +881,35 @@ te_mon_virtual_rate_note = {
 		localization_key = banking_dash_mon_purchases_virtual_none
 	}
 }
+
+# §0.12, ruling N1 — one sentence appended to the Delegation tooltip's first
+# paragraph for a dial the player steers by hand, while its rate is on the floor
+# and prices are falling: the moment a delegated bank might be buying assets on
+# its own account, which a hand-steered dial never does. It names the condition
+# rather than promising purchases, because whether a delegated bank would buy
+# depends on its rule's answer, which is hidden state for a dial nobody has
+# delegated (at 1.5% inflation a price-stability bank on the floor would raise
+# its rate, not buy). Empty for every other country, and under independence,
+# which is always mandate-run.
+te_mon_delegation_purchase_hint = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_mandate_binds = no
+			OR = {
+				has_law_or_variant = law_type:law_fiat_currency
+				has_law_or_variant = law_type:law_digital_currency
+			}
+			te_mon_policy_rate_at_floor = yes
+			has_variable = te_inflation
+			var:te_inflation < 0
+		}
+		localization_key = banking_dash_mon_delegation_purchase_hint
+	}
+	text = {
+		localization_key = banking_dash_mon_delegation_purchase_hint_none
+	}
+}

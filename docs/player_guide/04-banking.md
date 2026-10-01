@@ -566,8 +566,9 @@ them on. While there are any, an Asset Purchases row below Price Pressure shows
 how much they add, together with Open-Market Operations, and its tooltip gives
 the rate the bank would set without the floor. They need Fiat Money or Digital
 Currency. A dial you set by hand gets none of them, because you have Monetise
-Deficit instead. AI countries are always delegated, so they get the purchases
-too.
+Deficit instead; while your rate is on its floor and prices are falling, the
+Delegation tooltip reminds you that a delegated bank would buy. AI countries
+are always delegated, so they get the purchases too.
 
 Under Central Bank Independence you can't print for the treasury, so a long
 deflation leaves you the bank's purchases, Open-Market Operations and a budget

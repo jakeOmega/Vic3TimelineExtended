@@ -498,6 +498,35 @@ class PurchaseDisplay(unittest.TestCase):
         self.assertIn('a row of their own', tip)
 
 
+class DelegationHint(unittest.TestCase):
+    """Ruling N1: a manual dial gets no purchases, and the Delegation tooltip says so when it matters."""
+
+    def test_the_hint_closes_the_tooltips_first_paragraph(self):
+        tip = TooltipNumbers.loc(self, 'banking_dash_mon_delegation_tt')
+        call = "[JournalEntry.GetCountry.GetCustom('te_mon_delegation_purchase_hint')]"
+        self.assertEqual(tip.count(call), 1)
+        self.assertLess(tip.index(call), tip.index('$TOOLTIP_DELIMITER$'))
+
+    def test_it_shows_only_for_a_manual_fiat_or_digital_dial_on_its_floor_with_prices_falling(self):
+        text = (ROOT / 'common/customizable_localization/banking_dash_custom_loc.txt').read_text(encoding='utf-8-sig')
+        block = re.search(r'^te_mon_delegation_purchase_hint = \{\n(.*?)^\}', text, re.M | re.S).group(1)
+        trigger = re.search(r'trigger = \{(.*?)\n\t\t\}', block, re.S).group(1)
+        for line in ('te_mon_has_dial = yes', 'te_mon_mandate_binds = no',
+                     'has_law_or_variant = law_type:law_fiat_currency',
+                     'has_law_or_variant = law_type:law_digital_currency',
+                     'te_mon_policy_rate_at_floor = yes', 'var:te_inflation < 0'):
+            self.assertIn(line, trigger)
+        self.assertLess(block.index('banking_dash_mon_delegation_purchase_hint\n'),
+                        block.index('banking_dash_mon_delegation_purchase_hint_none'))
+
+    def test_the_hint_names_the_condition_rather_than_promising_purchases(self):
+        hint = TooltipNumbers.loc(self, 'banking_dash_mon_delegation_purchase_hint')
+        self.assertTrue(hint.startswith(' Your rate is on its floor and prices are falling'))
+        self.assertIn('whenever its rule asked for a lower rate than the floor allows', hint)
+        self.assertNotIn('\\n', hint)
+        self.assertEqual(TooltipNumbers.loc(self, 'banking_dash_mon_delegation_purchase_hint_none'), '')
+
+
 class TooltipNumbers(unittest.TestCase):
     """The tooltips state the figures in words, so a retune has to edit them."""
 

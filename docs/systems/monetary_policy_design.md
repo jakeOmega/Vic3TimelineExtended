@@ -1687,7 +1687,7 @@ The switch-on was a step too (2.0 at once under digital).
 
 | # | Ruling | Why |
 |---|---|---|
-| **N1** | **Mandate-run banks only; a manual dial gets nothing** | the manual dial has the monetisation stepper for this job. Everyone else (AI included, which is always delegated) has no other lever. **Open (raised with the owner 2026-10-01, no ruling yet):** Delegation is a free toggle and only independence blocks monetisation, so a player without independence can delegate at the floor to get the purchases, and a delegated bank without independence can monetise beside them |
+| **N1** | **Mandate-run banks only; a manual dial gets nothing. A delegated bank without independence may also monetise** (resolved by the owner 2026-10-01; revisit after playtesting) | the manual dial has the monetisation stepper for this job, and under direct control the bank does what the government tells it: print (Monetise Deficit) or run a programme (OMO), nothing unasked. A delegated bank uses its own tools, and a bank that is not independent can run its rate and still be made to finance the treasury (the Fed's yield cap until 1951, the Bank of England before 1997). Delegation is a free toggle, so a player without independence can delegate at the floor to get the purchases: that buys a deflation exit weaker than one level of Monetise Deficit, without its premium but without its minting either. Stacking the two adds almost nothing, because printing lifts inflation and the bank's rule stops wanting a lower rate within months (table below). What the rule did cost was visibility, so the Delegation tooltip says when it applies (`te_mon_delegation_purchase_hint`) |
 | **N2** | **The regime test is the fiat/digital *law* pair, not `country_can_create_unbacked_money_bool`** | same pair as `te_mon_can_monetise`, and Q4 already says a suspended gold standard (which keeps `law_gold_standard`) is a five-year emergency, not a licence to print. The bool gates the OMO *tool* the player buys; this is the bank doing its job |
 | **N3** | **"Under the floor" is against `te_mon_target_min`**, the bound OMO's gate reads | −3 under digital, 0 under fiat. A bank that can still cut cuts: the virtual pair only parts from the real one once the real target is on the floor, and §8's stance push already rewards the cut |
 | **N4** | **The purchases read the virtual rate, not inflation** | the virtual rate is the mandate formula on core, r̂\* and the cycle lean, built exactly as the delegated target is, and the dashboard already prints that target. Printing the purchases (and the virtual rate, in the Asset Purchases tooltip) shows no more of core or r\* than the target does above the floor, and nothing of the stance gap (P7). Supersedes the first version's reading of headline |
@@ -1732,6 +1732,17 @@ century and 0.006 points of mean inflation, and 60 digital runs per cell are ide
 column, because a mandate bank is on its floor in at most 0.2% of months under fiat and never
 under digital. Over 40 ordinary centuries per cell, a mandate bank buys in at most 0.05% of months under fiat, about 0.6 points on average while it does, and never under digital. A Growth bank buys with headline at or above target in 0.01% of months, the only place the mandate condition binds.
 
+A delegated bank without independence that also monetises the deficit, started in the same trap
+(Price Stability, noise held at zero; the simulator does not model monetisation, so
+`banking_deflation_trap.py` adds its inflation side, `te_mon_monetisation_pressure` per level,
+and leaves out its premium and minting):
+
+| Monetise Deficit | Month headline reaches 0%: without / with the bank's purchases | Peak inflation: without / with | Months the bank buys |
+|---|---|---|---|
+| Off | 98 / 76 | 1.3 / 1.9 | 20 |
+| Level 1 | 37 / 35 | 5.4 / 5.4 | 7 |
+| Level 3 | 11 / 11 | 25.6 / 25.8 | 4 |
+
 #### Known roughnesses (§0.12)
 
 - **A slower exit than the first version**, by four or five months in the trap above. Open-Market
@@ -1767,6 +1778,7 @@ under digital. Over 40 ordinary centuries per cell, a mandate bank buys in at mo
 | **N-6** | The Mandate tooltip shows the *Out of room* paragraph with both mandates' rules; the Delegation tooltip's CBI paragraph says the bank cannot be asked to print |
 | **N-7** | The **Asset Purchases** row appears under Anchoring (under Price Pressure for a country with none) only while Open-Market Operations is on or the bank is buying: +1.0% with Open-Market Operations alone, up to +2.5% from the bank, up to +3.5% with both, and no row otherwise. Its tooltip lists the two halves, and the bank's line ends "(it would set its rate at X% without the floor)" only while the bank buys. Price Pressure still reads 0.0% with no modifiers. The row renders (no raw key, no data-system error in `debug.log`), lines up with Anchoring's, and shows in both the journal entry and the Budget panel's Banking tab |
 | **N-8** | A Price Stability bank buying when headline reaches 2%: the purchases wind down over a few months rather than vanishing. A Growth bank whose target sits on the floor in a panic with inflation at target: it buys |
+| **N-9** | A **manual** fiat or digital dial on its floor with headline below 0: the Delegation tooltip's first paragraph ends "Your rate is on its floor and prices are falling: …". Not shown once delegated, under independence, above the floor or with prices rising. Playtest N1 here too: whether players find the delegate-at-the-floor move, and whether it feels like a trick or a choice |
 
 **Not verified in a running game**, like everything else in §0.
 

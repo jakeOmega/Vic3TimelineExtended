@@ -10,7 +10,12 @@ docs/audits/banking_cycle_simulation.md §15 quote both tables this prints:
   inflation noise held at zero, before (`--tune pre_bank_qe`) and after;
 * the same start with the noise on, over many seeds: how often the bank's own
   purchases switch on or off, the largest one-month change in them, and how
-  long headline takes to reach 0%.
+  long headline takes to reach 0%;
+* a delegated bank without independence that also monetises the deficit
+  (ruling N1): what the bank's purchases add on top of Monetise Deficit. The
+  simulator does not model monetisation, so its inflation side is added here
+  as te_mon_monetisation_pressure per level; its risk premium and minting are
+  not modelled.
 
 Usage:
     python3 scripts/analysis/banking_deflation_trap.py [--runs 200]
@@ -28,10 +33,14 @@ CBI = "law_central_bank_independence"
 DELEGATED = "law_universal_banking_light_prudence"
 
 
-def run(seed, currency, fin_law, mode, *, noise=True, omo=False, months=120, tune=None):
-    """One trapped country; returns (switches, largest change, month at 0%, yearly headline)."""
+def run(seed, currency, fin_law, mode, *, noise=True, omo=False, months=120, tune=None, monetise=0):
+    """One trapped country: switches, largest change, month at 0%, yearly headline and more."""
     sim.TUNE.clear()
     sim.TUNE.update(tune or {})
+    pressure_total = sim.pressure_total
+    if monetise:
+        per_level = sim.K.sv("te_mon_monetisation_pressure")
+        sim.pressure_total = lambda cfg, st, wr: pressure_total(cfg, st, wr) + per_level * monetise
     cfg = sim.Config(currency=currency, mode=mode, points=8, fin_law=fin_law,
                      wage_pressure=0.9, bank_level=9)
     floor = sim.target_bounds(cfg, sim.State(), 3.0)[0]
@@ -43,7 +52,7 @@ def run(seed, currency, fin_law, mode, *, noise=True, omo=False, months=120, tun
         st.tools.add("omo")
     rng = random.Random(seed)
     switches, largest, at_zero, yearly = 0, 0.0, None, []
-    previous = None
+    previous, peak, months_buying = None, -100.0, 0
     try:
         for month in range(1, months + 1):
             if not noise:
@@ -51,6 +60,8 @@ def run(seed, currency, fin_law, mode, *, noise=True, omo=False, months=120, tun
             st.deficit_pct = 0.0
             sim.monetary_update(cfg, st, rng, 0)
             bought = sim.bank_qe_pressure(cfg, st, 3.0)
+            months_buying += bought > 0
+            peak = max(peak, st.inflation)
             if previous is not None:
                 largest = max(largest, abs(bought - previous))
                 switches += (bought > 0) != (previous > 0)
@@ -61,7 +72,9 @@ def run(seed, currency, fin_law, mode, *, noise=True, omo=False, months=120, tun
                 yearly.append(st.inflation)
     finally:
         sim.TUNE.clear()
-    return switches, largest, at_zero, yearly
+        sim.pressure_total = pressure_total
+    return dict(switches=switches, largest=largest, at_zero=at_zero, yearly=yearly,
+                peak=peak, months_buying=months_buying)
 
 
 def main() -> int:
@@ -80,7 +93,7 @@ def main() -> int:
         ("manual dial + OMO, after", DELEGATED, sim.MODE_NOTHING, True, {}),
     ]
     for label, law, mode, omo, tune in rows:
-        yearly = run(0, "digital", law, mode, noise=False, omo=omo, tune=tune)[3]
+        yearly = run(0, "digital", law, mode, noise=False, omo=omo, tune=tune)["yearly"]
         print(f"  {label:40s}" + "".join(f"{x:+7.1f}" for x in yearly[:6]))
 
     print(f"\nNoise on, {args.runs} seeds per row, no OMO:")
@@ -92,11 +105,19 @@ def main() -> int:
         ("delegated, fiat, growth", "fiat", DELEGATED, sim.MODE_GROWTH),
     ):
         results = [run(seed, currency, law, mode) for seed in range(args.runs)]
-        switches = [r[0] for r in results]
-        reached = [r[2] for r in results if r[2]]
+        switches = [r["switches"] for r in results]
+        reached = [r["at_zero"] for r in results if r["at_zero"]]
         median = statistics.median(reached) if reached else float("nan")
         print(f"  {label:34s}{statistics.mean(switches):>17.2f} / {max(switches):<4d}"
-              f"{max(r[1] for r in results):>25.2f}{median:>14.0f} ({len(reached)}/{args.runs})")
+              f"{max(r['largest'] for r in results):>25.2f}{median:>14.0f} ({len(reached)}/{args.runs})")
+
+    print("\nDelegated, no independence, Digital, Price Stability, monetising, noise held at zero:")
+    print(f"  {'':22s}{'month at 0%: without / with purchases':>40s}{'peak inflation':>18s}{'months buying':>15s}")
+    for level in (0, 1, 3):
+        off = run(0, "digital", DELEGATED, sim.MODE_PRICE, noise=False, monetise=level, tune={"bank_qe": 0.0})
+        on = run(0, "digital", DELEGATED, sim.MODE_PRICE, noise=False, monetise=level)
+        print(f"  Monetise Deficit {level}    {off['at_zero']!s:>20s} / {on['at_zero']!s:<17s}"
+              f"{off['peak']:>8.1f} / {on['peak']:<7.1f}{on['months_buying']:>13d}")
     return 0
 
 
