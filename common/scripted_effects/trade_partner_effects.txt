@@ -7,7 +7,8 @@
 #   tp_X_tc      = partner's trade center state (for flag/name display)
 #   tp_X_total   = annual bilateral trade value (gui_tp_annual_trade: the weekly
 #                  mutual_trade_value_with_country x 52, at base prices)
-#   tp_X_gdp_pct = that trade as a percentage of the owner's GDP (gui_tp_trade_pct_gdp)
+#   tp_X_gdp_pct = that yearly trade as a percentage of the owner's (yearly) GDP
+#                  (gui_tp_trade_pct_gdp)
 #   tp_count     = number of trade partners found (1-5)
 #
 # NOTE: Per-good per-partner trade data is not reachable from the SCRIPT layer
