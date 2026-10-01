@@ -1471,23 +1471,26 @@ the cyclical premium held at 4.5 and the basket neutral; the simulator itself st
 
 | Playtest start | Leaves −10% (month) | Reaches 0% (month) | Peak in the 3 years after | Mean, years 8–10 |
 |---|---|---|---|---|
-| Growth, cap 2.5 | 38 | 90 (48 of 60) | 5.7 | 1.7 |
-| Growth, cap 5 | 5 | 40 | 5.3 | 5.2 |
-| Price Stability, cap 2.5 | 38 | 90 (48 of 60) | 5.4 | 1.7 |
-| Price Stability, cap 5 | 5 | 40 | 4.6 | 3.8 |
-| Growth, cap 2.5, Restrict Speculative Inflows in place of Bail-in | 16 | 79 (51 of 60) | 5.3 | 3.8 |
-| Growth, cap 2.5, no currency loop | 1 | 49 | 3.0 | 3.3 |
-| Growth, cap 2.5, the currency ignores the inflation gap | 5 | 41 (59 of 60) | 3.9 | 3.6 |
+| Growth, before (cap 2.5, two-sided confidence) | 38 | 90 (48 of 60) | 5.7 | 1.7 |
+| Growth, cap 5 alone | 5 | 40 | 5.3 | 5.2 |
+| Growth, one-sided confidence alone (cap 2.5) | 5 | 41 (59 of 60) | 3.9 | 3.8 |
+| Growth, shipped (cap 5, one-sided) | 3 | 27 | 4.0 | 3.9 |
+| Price Stability, before | 38 | 90 (48 of 60) | 5.4 | 1.7 |
+| Price Stability, shipped | 3 | 27 | 3.7 | 2.8 |
+| Growth, before, Restrict Speculative Inflows in place of Bail-in | 16 | 79 (51 of 60) | 5.3 | 3.8 |
+| Growth, before, no currency loop | 1 | 49 | 3.0 | 3.3 |
 
-So the cap went to 5 (design doc §0.12, "The cap"). The rebound after the exit peaks no higher at 5: it is the currency
-falling back, and the purchases still wind down a drift step a month. The century matrix reruns at 5 to the same figures
-as at 2.5 (150 fiat runs per cell, 60 digital, with and without independence). The currency loop's inflation-gap term is the
-larger cause, and is left for its own review: it amplifies high inflation the same way.
+Two changes shipped (design doc §0.12, "The cap and the currency"). The cap went to 5: the century matrix reruns at 5 to
+the same figures as at 2.5 (150 fiat runs per cell, 60 digital, with and without independence). And the exchange rate's
+confidence term is one-sided for a float (ruling N10): half the playtest's currency rise was that term rewarding the
+deflation, on top of the carry term that already pays for holding a currency that gains value, and the rise then came
+back as imported deflation. Together they get the playtest off the clamp in about three months and to 0% in about 27,
+and the rebound settles lower because the currency no longer overshoots and falls back. Outside the trap, ordinary centuries of floating countries with the same currency loop on (`banking_deflation_trap.py --ordinary-runs 30`; the century simulator itself holds the exchange rate at par) spend about half as many months below 0% (a delegated digital bank 1.24% of months → 0.22%), mean inflation moves by at most 0.2 points, and crash rates are unchanged within noise: the two Growth cells, rerun at 100 centuries, differ by −0.2 ± 0.7 and +0.4 ± 0.7 crashes a century.
 
 **Reproduce:**
 
 ```
-.venv/bin/python scripts/analysis/banking_deflation_trap.py [--runs 200] [--playtest-runs 60] [--playtest-only]
+.venv/bin/python scripts/analysis/banking_deflation_trap.py [--runs 200] [--playtest-runs 60] [--playtest-only] [--ordinary-runs 30]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 0,8 --seed 1 [--fin-law law_central_bank_independence] [--tune pre_bank_qe]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 60 --only digital --points 0,8 --seed 1 [--fin-law law_central_bank_independence] [--tune pre_bank_qe]
 .venv/bin/python -m unittest test_monetary_bank_qe

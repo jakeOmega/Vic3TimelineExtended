@@ -1696,6 +1696,7 @@ The switch-on was a step too (2.0 at once under digital).
 | **N7** | **Neither OMO's point nor the bank's purchases is carried on `country_inflation_pressure_add`**, though that channel is what shows in the Price Pressure row and puts a tool's effect in its own tooltip (`banking_reserve_requirements` does) | `te_mon_pressure_anchoring` nets Inflation Anchoring against the *net positive* sum of that channel and the wage channel. An independent bank would absorb up to its capacity (0.9pp at nine levels) of its own stimulus, in the deflation the term exists for. Monetisation is counted on its own for the same reason (`country_inflation_pressure_add_desc` says so). `te_mon_omo_pressure_display`, `te_mon_bank_purchase_display` and their sum `te_mon_purchase_pressure_display` are what an **Asset Purchases** row of its own prints instead, under the Anchoring row and only while something is bought (`banking_mon_has_purchases`). The Price Pressure row keeps printing the modifier alone, so it cannot disagree with its own breakdown, and its tooltip points at the new row |
 | **N8** | **The virtual rate drifts at the real rate's speeds, and the real rate is the virtual one held at the floor** (owner, 2026-10-01) | the purchases never switch on or off in one step, and they are gone before the rate rises. The owner's design, in place of a taper by distance from the floor, which smooths the switch-off but sizes the purchases by headline and lets them run while the rate is above the floor |
 | **N9** | **The mandate sets the condition** (owner, 2026-10-01): price stability may take the virtual target under the floor only while last month's headline is under the anchor; growth always may (`te_mon_bank_may_go_under_floor`) | price stability with prices on target does not buy its way through a crash; growth buys through any slump its rule asks for, as central banks did in 2008 and 2020. When the condition fails the virtual target is held at the floor, so the purchases wind down at the hike speed rather than stopping |
+| **N10** | **The currency's confidence term is one-sided for a float** (owner, 2026-10-01): `te_mon_fx_term_confidence` = the price-gap term, capped at 0 when the index follows its own target | trust is lost by inflating, not won by deflating; what a deflating currency pays its holders is already the carry term. Read both ways it strengthened a deflating currency twice and imported the result back as deflation. Metal and anchored currencies keep both halves, because their target is only the shadow their overvaluation is judged on, and the specie term keeps reading the whole gap |
 
 **Measured.** `scripts/analysis/banking_cycle_sim.py` ports all four steps (`settle_virtual_rate`,
 `update_virtual_target`, `monetary_drift_rate`, `bank_qe_pressure`); `--tune pre_bank_qe` keeps the
@@ -1744,7 +1745,7 @@ and leaves out its premium and minting):
 | Level 1 | 37 / 35 | 5.4 / 5.4 | 8 |
 | Level 3 | 11 / 11 | 25.6 / 25.8 | 4 |
 
-#### The cap: raised from 2.5 to 5 after a playtest (2026-10-01)
+#### The cap and the currency: changed after a playtest (2026-10-01)
 
 **The report.** An independent Digital country on Growth sat on the −10% clamp for ten months
 with everything on: Panic, Steady momentum, a Very Tight stance, policy rate −3, expected −9.1, a
@@ -1772,32 +1773,48 @@ cyclical premium held at 4.5, basket neutral). Medians of 60 seeds:
 
 | Playtest start | Leaves −10% (month) | Reaches 0% (month) | Peak in the 3 years after | Mean, years 8–10 |
 |---|---|---|---|---|
-| Growth, cap 2.5 | 38 | 90 (48 of 60) | 5.7 | 1.7 |
-| **Growth, cap 5** | **5** | **40** | **5.3** | **5.2** |
-| Price Stability, cap 2.5 | 38 | 90 (48 of 60) | 5.4 | 1.7 |
-| **Price Stability, cap 5** | **5** | **40** | **4.6** | **3.8** |
-| Growth, cap 2.5, Restrict Speculative Inflows in place of Bail-in | 16 | 79 (51 of 60) | 5.3 | 3.8 |
-| Growth, cap 2.5, no currency loop | 1 | 49 | 3.0 | 3.3 |
-| Growth, cap 2.5, the currency ignores the inflation gap | 5 | 41 (59 of 60) | 3.9 | 3.6 |
+| Growth, before (cap 2.5, two-sided confidence) | 38 | 90 (48 of 60) | 5.7 | 1.7 |
+| Growth, cap 5 alone | 5 | 40 | 5.3 | 5.2 |
+| Growth, one-sided confidence alone (cap 2.5) | 5 | 41 (59 of 60) | 3.9 | 3.8 |
+| **Growth, shipped (cap 5, one-sided)** | **3** | **27** | **4.0** | **3.9** |
+| Price Stability, before | 38 | 90 (48 of 60) | 5.4 | 1.7 |
+| **Price Stability, shipped** | **3** | **27** | **3.7** | **2.8** |
+| Growth, before, Restrict Speculative Inflows in place of Bail-in | 16 | 79 (51 of 60) | 5.3 | 3.8 |
+| Growth, before, no currency loop | 1 | 49 | 3.0 | 3.3 |
 
-**What shipped.** `te_mon_bank_qe_cap` = 5, with the slope still 1, so the virtual target may go 5
-under the floor. The rebound peaks no higher, because the purchases still wind down a drift step a
-month as the mandate's answer rises; the 4–5% after the exit is the currency falling back, and
-happens at either cap. A save already in the trap picks it up at its next pulse: the virtual
-target moves to the new depth at once, and in Panic the bank cuts at three times the drift step,
-so the virtual rate gets there within two months. Ordinary play is unchanged from the cap of 2.5:
-the century matrix reruns to the same figures (fiat within 0.03 crashes a century of
-`--tune pre_bank_qe`, digital identical to the printed digit), because a bank that buys at all
-rarely wants to go more than 2.5 under the floor outside a trap like this one.
+**What shipped: the cap.** `te_mon_bank_qe_cap` = 5, with the slope still 1, so the virtual
+target may go 5 under the floor. The rebound peaks no higher, because the purchases still wind
+down a drift step a month as the mandate's answer rises. A save already in the trap picks it up at
+its next pulse: the virtual target moves to the new depth at once, and in Panic the bank cuts at
+three times the drift step, so the virtual rate gets there within two months. Ordinary play is
+unchanged from the cap of 2.5: the century matrix reruns to the same figures (fiat within 0.03
+crashes a century of `--tune pre_bank_qe`, digital identical to the printed digit), because a bank
+that buys at all rarely wants to go more than 2.5 under the floor outside a trap like this one.
+
+**What shipped: the currency (ruling N10).** Half the currency's rise in the playtest was §15.1's
+confidence term rewarding the deflation: +2 points per point of inflation below the world's, on
+top of the carry term, which already pays for the higher real return of holding a deflating
+currency. The rise against its three-year average then came back as imported deflation. Real
+currencies do not do this. A price gap mostly moves the nominal rate, which leaves import prices
+falling only as fast as domestic ones, so only a real appreciation imports anything; and that one
+is what capital chasing a return produces, which the carry term models. The target now reads
+`te_mon_fx_term_confidence`, which drops the below-the-world half for a currency whose index
+follows its own target (`te_mon_fx_floats`, not anchored). Above the world's inflation nothing
+changes. Metal and anchored currencies keep both halves: for them the target is only the shadow
+their overvaluation is judged on, and running below the world under a fixed parity really does
+leave it undervalued. With both changes the playtest leaves the clamp in about three months and
+reaches 0% in about 27, and its rebound settles lower, because the currency no longer overshoots
+and falls back. Outside the trap, ordinary centuries of floating countries with the same currency loop on (`banking_deflation_trap.py --ordinary-runs 30`; the century simulator itself holds the exchange rate at par) spend about half as many months below 0% (a delegated digital bank 1.24% of months → 0.22%), mean inflation moves by at most 0.2 points, and crash rates are unchanged within noise: the two Growth cells, rerun at 100 centuries, differ by −0.2 ± 0.7 and +0.4 ± 0.7 crashes a century.
 
 #### Known roughnesses (§0.12)
 
-- **The currency loop is the deeper cause, and is not changed here.** The exchange rate's
-  inflation term moves the currency 2 points per point of inflation gap against the world, and the
-  move against the three-year average then counts as imported inflation. A deflation that
-  strengthens the currency imports more deflation; a high inflation that weakens it imports more
-  inflation. Without that term the playtest leaves the clamp in five months even at the old cap.
-  Every country's currency runs on it, so changing it is its own review.
+- **The currency loop is only partly fixed.** A deflating float still strengthens through the
+  carry term (up to +20 at a real rate five points over the world's), and three things still
+  make the import side heavier than a real economy's: imports are measured against a three-year
+  average, so one move keeps importing for about three years; expected inflation is built from
+  headline, so once it is ten points off target it follows the imported share too; and a high
+  inflation that weakens a currency imports more inflation the same way, through the half of the
+  confidence term that stays. Each touches every country, so each is its own review.
 - **A slower exit than the first version**, by two to four months in the first trap. Open-Market
   Operations still takes a year and a half off it.
 - **Some re-entries remain under noise** (a mean of 1.05 to 1.38 switches a run, at most 5), but
@@ -1835,6 +1852,7 @@ rarely wants to go more than 2.5 under the floor outside a trap like this one.
 | **N-8** | A Price Stability bank buying when headline reaches 2%: the purchases wind down over a few months rather than vanishing. A Growth bank whose target sits on the floor in a panic with inflation at target: it buys |
 | **N-9** | A **manual** fiat or digital dial on its floor with headline below 0: the Delegation tooltip's first paragraph ends "Your rate is on its floor and prices are falling: …". Not shown once delegated, under independence, above the floor or with prices rising. Playtest N1 here too: whether players find the delegate-at-the-floor move, and whether it feels like a trick or a choice |
 | **N-10** | The playtest save (independent, Digital, Growth, Panic, headline on −10%, currency near 125): within two months of the patch the Asset Purchases row reads about +6%, and headline leaves −10% within about half a year |
+| **N-11** | The Exchange Rate Index tooltip on a deflating float shows the inflation line at 0 and the target without it; on a float inflating above the world it is negative as before; on gold the shadow and Peg Confidence behave as before. `te_debug_monetary.9` prints the confidence term beside the whole price gap |
 
 **Not verified in a running game**, like everything else in §0.
 
@@ -2947,6 +2965,7 @@ goods and assets are to foreigners, never how many francs buy a pound.
 fx_target = 100
           + 4.0 × clamp( own_real_rate − world_rate , −5 , +5 ) × controls_damp     carry / capital flows
           − 2.0 × clamp( expected − world_inflation , −10 , +10 )                   confidence in the currency
+                                                       (0 to +10 for a float since 2026-10-01: §0.12 "The currency")
           − 1.5 × max( 0 , cyclical_premium )                                       flight from a distressed sovereign
           + te_fx_shock                                                             events; decays 1/12 per month
 
@@ -2969,7 +2988,12 @@ te_fx_index += (1/12) × ( fx_target − te_fx_index )          ~1-year adjustme
 - The inflation term looks double-counted against the real-rate term (which already
   subtracts `expected`) and is not: the first is the return on holding the currency, the
   second is whether anyone trusts it. A country at 12% policy and 10% expected inflation has
-  a healthy real rate and a weak currency.
+  a healthy real rate and a weak currency. **The deflation side was double-counted, and is
+  gone for a float** (`te_mon_fx_term_confidence`, 2026-10-01): trust is lost by inflating,
+  not won by deflating, because what a deflating currency pays its holders is the carry term.
+  Metal and anchored currencies keep both sides, since for them the target is only the
+  shadow their overvaluation is judged on, and the commodity-specie term
+  (`te_mon_commodity_specie_gap`) still reads the whole gap.
 - `controls_damp` = **0.25** while `banking_capital_controls_out` is active, else 1 (§15.4).
 - `te_fx_shock` is the only event-writable input: events never `set_variable` the index
   (two documented exceptions: §12.3's *Devalue*, which is *defined* as a jump, and the §18.2

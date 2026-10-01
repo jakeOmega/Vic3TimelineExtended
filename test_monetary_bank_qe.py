@@ -426,10 +426,11 @@ class SimulatorPort(unittest.TestCase):
         self.assertEqual(self.sim.fx_imported(self.config(), self.sim.State(), 3.0), 0.0)
 
     def test_the_playtest_leaves_the_clamp_with_the_shipped_cap(self):
-        """§0.12 "The cap": Panic, a strong currency, headline on -10%. The old cap held it there."""
+        """§0.12 "The cap": Panic, a strong currency, headline on -10%. The old cap and currency held it there."""
         from scripts.analysis import banking_deflation_trap as trap
         shipped = [trap.playtest(seed, months=24)['off_clamp'] for seed in range(6)]
-        previous = [trap.playtest(seed, months=24, cap=trap.PREVIOUS_CAP)['off_clamp'] for seed in range(6)]
+        previous = [trap.playtest(seed, months=24, cap=trap.PREVIOUS_CAP, two_sided=True)['off_clamp']
+                    for seed in range(6)]
         self.assertTrue(all(month is not None and month <= 12 for month in shipped), shipped)
         self.assertGreaterEqual(sum(month is None for month in previous), 4, previous)
 

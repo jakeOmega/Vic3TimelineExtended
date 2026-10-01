@@ -733,7 +733,8 @@ and drains Peg Confidence on gold.
 Fiat Money, Digital Currency and Decentralized Cryptocurrency float, and nobody
 sets the index: it moves between 50 and 150, drifting toward a target that
 rises when your real interest rate beats the World Rate and falls when your
-inflation runs above the world's, when lenders charge you a risk premium, or
+inflation runs above the world's (running below it does not raise it), when
+lenders charge you a risk premium, or
 when events knock it; the tooltip lists each term. Every point below par
 gives +1.25% export advantage and −1.25% import advantage, and above par the
 reverse. A weak currency adds risk premium, and a fall below its three-year

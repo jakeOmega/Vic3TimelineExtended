@@ -22,10 +22,19 @@ docs/audits/banking_cycle_simulation.md §15 quote both tables this prints:
   Credit to Electrification and Bail-in on. The cycle RUNS here, and an
   exchange-rate loop the simulator otherwise leaves out is added (CurrencyLoop
   below, after te_monetary_fx_script_values.txt). Core under the pinned
-  headline is not shown in game; -8.5 is assumed.
+  headline is not shown in game; -8.5 is assumed. The rows compare the cap
+  (2.5 before the playtest, 5 after) and the confidence term (two-sided before,
+  one-sided for a float after).
+
+* with --ordinary-runs N: ordinary centuries of floating (fiat, digital)
+  countries with the same currency loop switched on (cyclical premium 0, world
+  inflation 2), the confidence term two-sided against one-sided. The century
+  simulator itself holds the exchange rate at par, so this is the only read of
+  what the one-sided term does outside a trap.
 
 Usage:
     python3 scripts/analysis/banking_deflation_trap.py [--runs 200] [--playtest-runs 60] [--playtest-only]
+                                                       [--ordinary-runs 30]
 """
 import argparse
 import random
@@ -39,6 +48,8 @@ from scripts.analysis import banking_cycle_sim as sim  # noqa: E402
 CBI = "law_central_bank_independence"
 DELEGATED = "law_universal_banking_light_prudence"
 PREVIOUS_CAP = 2.5  # te_mon_bank_qe_cap before the playtest
+# Before the same playtest the confidence term also rewarded a floating currency
+# for deflating: `two_sided=True` reproduces that.
 
 
 class CurrencyLoop:
@@ -46,27 +57,28 @@ class CurrencyLoop:
 
     target = par + rate term + inflation term + premium term. The rate term is
     4 x clamp(policy - expected - world rate, +-5), its positive side halved by
-    Restrict Speculative Inflows; the inflation term -2 x clamp(expected - world
-    inflation, +-10); the premium term -1.5 x the cyclical premium, held here at
-    the playtest's 4.5. The index closes 1/12 of the gap a month, and imports
-    0.15 x (three-year average - index), the average moving 0.0278 of the gap.
-    `inflation_term=False` drops the inflation term, to show what it does.
+    Restrict Speculative Inflows; the confidence term -2 x clamp(expected - world
+    inflation, 0, 10), one-sided as te_mon_fx_term_confidence is for a float
+    (`two_sided=True`: the -10 to 10 it was before); the premium term -1.5 x the
+    cyclical premium, held here at the playtest's 4.5. The index closes 1/12 of
+    the gap a month, and imports 0.15 x (three-year average - index), the
+    average moving 0.0278 of the gap.
     """
 
-    def __init__(self, index, imported, *, premium=4.5, world_inflation=2.0, inflation_term=True):
+    def __init__(self, index, imported, *, premium=4.5, world_inflation=2.0, two_sided=False):
         self.index = index
         self.avg = index + imported / 0.15  # so that it imports `imported` this month
         self.premium = premium
         self.world_inflation = world_inflation
-        self.inflation_term = inflation_term
+        self.two_sided = two_sided
 
     def __call__(self, cfg, state, world_rate):
         rate = max(-5.0, min(5.0, state.policy_rate - state.inflation_expected - world_rate))
         if rate > 0 and "restrict_inflows" in state.tools:
             rate *= 0.5
         target = 100 + 4 * rate - 1.5 * max(0.0, self.premium)
-        if self.inflation_term:
-            target -= 2 * max(-10.0, min(10.0, state.inflation_expected - self.world_inflation))
+        gap = max(-10.0, min(10.0, state.inflation_expected - self.world_inflation))
+        target -= 2 * (gap if self.two_sided else max(0.0, gap))
         self.index = max(50.0, min(150.0, self.index + (target - self.index) / 12))
         imported = (self.avg - self.index) * 0.15
         self.avg += (self.index - self.avg) * 0.0278
@@ -74,13 +86,13 @@ class CurrencyLoop:
 
 
 def playtest(seed, *, mode=sim.MODE_GROWTH, cap=None, tools=("omo", "dc_elec", "bail_in"),
-             currency_loop=True, inflation_term=True, months=120):
+             currency_loop=True, two_sided=False, months=120):
     """The playtest's country from its screenshot, cycle running; `cap` overrides te_mon_bank_qe_cap."""
     sv, imported = sim.K.sv, sim.fx_imported
     if cap is not None:
         sim.K.sv = lambda name: cap if name == "te_mon_bank_qe_cap" else sv(name)
     if currency_loop:
-        sim.fx_imported = CurrencyLoop(125.3, -2.6, inflation_term=inflation_term)
+        sim.fx_imported = CurrencyLoop(125.3, -2.6, two_sided=two_sided)
     sim.TUNE.clear()
     try:
         cfg = sim.Config(currency="digital", mode=mode, points=8, ai_tools=False, fin_law=CBI,
@@ -162,11 +174,49 @@ def main() -> int:
     ap.add_argument("--runs", type=int, default=200, help="seeds per row of the noise table")
     ap.add_argument("--playtest-runs", type=int, default=60, help="seeds per row of the playtest table")
     ap.add_argument("--playtest-only", action="store_true", help="print only the playtest table")
+    ap.add_argument("--ordinary-runs", type=int, default=0,
+                    help="centuries per cell for the ordinary-play table (0 skips it)")
     args = ap.parse_args()
     if not args.playtest_only:
         first_trap(args)
     playtest_table(args)
+    if args.ordinary_runs:
+        ordinary_table(args)
     return 0
+
+
+def ordinary_century(cfg, seed, *, two_sided):
+    """sim.run_once with the currency loop on; returns the run's headline series and crashes."""
+    imported = sim.fx_imported
+    sim.fx_imported = CurrencyLoop(100.0, 0.0, premium=0.0, two_sided=two_sided)
+    sim.TUNE.clear()
+    try:
+        state = sim.run_once(cfg, seed)
+    finally:
+        sim.fx_imported = imported
+    return state.inflation_series, len(state.crashes)
+
+
+def ordinary_table(args) -> None:
+    n = args.ordinary_runs
+    print(f"\nOrdinary centuries with the currency loop on, {n} per cell: two-sided -> one-sided")
+    print(f"  {'':34s}{'mean inflation':>18s}{'months < 0%':>16s}{'months on -10%':>17s}{'crashes / 100y':>18s}")
+    for currency in ("fiat", "digital"):
+        for label, law, mode in (("independent, price", CBI, sim.MODE_PRICE),
+                                 ("delegated, price", DELEGATED, sim.MODE_PRICE),
+                                 ("delegated, growth", DELEGATED, sim.MODE_GROWTH)):
+            cfg = sim.Config(currency=currency, mode=mode, points=5, fin_law=law)
+            cells = []
+            for two_sided in (True, False):
+                runs = [ordinary_century(cfg, 7 + seed, two_sided=two_sided) for seed in range(n)]
+                months = [x for series, _ in runs for x in series]
+                cells.append((statistics.mean(months),
+                              100 * sum(x < 0 for x in months) / len(months),
+                              100 * sum(x <= -9.95 for x in months) / len(months),
+                              statistics.mean(c for _, c in runs) * 100 / cfg.years))
+            (a1, b1, c1, d1), (a2, b2, c2, d2) = cells
+            print(f"  {currency + ', ' + label:34s}{a1:>8.2f} -> {a2:<6.2f}{b1:>7.2f}% -> {b2:<5.2f}%"
+                  f"{c1:>7.2f}% -> {c2:<5.2f}%{d1:>8.1f} -> {d2:<6.1f}")
 
 
 def first_trap(args) -> None:
@@ -213,14 +263,16 @@ def playtest_table(args) -> None:
     n = args.playtest_runs
     print(f"\nThe playtest (Panic, strong currency, headline on -10%), cycle running, {n} seeds, medians:")
     print(f"  {'':52s}{'leaves -10%':>14s}{'reaches 0%':>16s}{'peak after':>12s}{'yrs 8-10':>10s}")
+    before = dict(cap=PREVIOUS_CAP, two_sided=True)
     cases = [
-        ("Growth, previous cap 2.5", dict(cap=PREVIOUS_CAP)),
-        ("Growth, cap 5 (shipped)", dict()),
-        ("Price Stability, previous cap 2.5", dict(mode=sim.MODE_PRICE, cap=PREVIOUS_CAP)),
-        ("Price Stability, cap 5 (shipped)", dict(mode=sim.MODE_PRICE)),
-        ("Growth, cap 2.5, Restrict Inflows for Bail-in", dict(cap=PREVIOUS_CAP, tools=("omo", "dc_elec", "restrict_inflows"))),
-        ("Growth, cap 2.5, no currency loop", dict(cap=PREVIOUS_CAP, currency_loop=False)),
-        ("Growth, cap 2.5, currency ignores the inflation gap", dict(cap=PREVIOUS_CAP, inflation_term=False)),
+        ("Growth, before (cap 2.5, two-sided)", before),
+        ("Growth, cap 5 alone (two-sided)", dict(two_sided=True)),
+        ("Growth, one-sided alone (cap 2.5)", dict(cap=PREVIOUS_CAP)),
+        ("Growth, shipped (cap 5, one-sided)", dict()),
+        ("Price Stability, before", dict(before, mode=sim.MODE_PRICE)),
+        ("Price Stability, shipped", dict(mode=sim.MODE_PRICE)),
+        ("Growth, before, Restrict Inflows for Bail-in", dict(before, tools=("omo", "dc_elec", "restrict_inflows"))),
+        ("Growth, before, no currency loop", dict(before, currency_loop=False)),
     ]
     for label, kw in cases:
         results = [playtest(seed, **kw) for seed in range(n)]
