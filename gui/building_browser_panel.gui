@@ -1109,7 +1109,7 @@ types building_browser_panel_types
 										}
 
 										blockoverride "left_text" {
-											text = "STATE"
+											text = "STATE_NAME"
 											alpha = "[Select_float(BuildingBrowserPanel.StateFiltersAreAllStatesShown,'(float)0.5','(float)1.0')]"
 										}
 
