@@ -210,6 +210,18 @@ def _explicit_name_field(name: str, body) -> list[tuple[str, bool, str]]:
     return keys
 
 
+def _progress_bar_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """Bars declare their own name/desc keys, rather than entity autokeys."""
+    if not isinstance(body, dict):
+        return []
+    result = []
+    for field_name in ("name", "desc"):
+        value = _strip_quotes(_unwrap(body.get(field_name, "")))
+        if isinstance(value, str) and re.fullmatch(r"[A-Za-z_][\w.\-]*", value):
+            result.append((value, True, field_name))
+    return result
+
+
 # entity_type → derivation fn(name, body). Categories deliberately absent
 # (code-only or noisy): Scripted Effects/Triggers, On Actions, Script Values.
 #
@@ -227,6 +239,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Laws":                   _name_and_desc,
     "Decrees":                _name_and_desc,
     "Scripted Buttons":       _explicit_name_field,
+    "Scripted Progress Bars": _progress_bar_keys,
     "Buildings":              _name_and_desc,
     "PMs":                    _name_and_desc,
     "PM Groups":              _simple_name,
@@ -260,6 +273,7 @@ _DIR_MAP: dict[str, str] = {
     "Laws":                   "common/laws",
     "Decrees":                "common/decrees",
     "Scripted Buttons":       "common/scripted_buttons",
+    "Scripted Progress Bars": "common/scripted_progress_bars",
     "Buildings":              "common/buildings",
     "PMs":                    "common/production_methods",
     "PM Groups":              "common/production_method_groups",

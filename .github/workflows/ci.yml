@@ -118,6 +118,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 scripts/analysis/check_localization_files.py
 
+      - name: Audit — GUI references and widget mounts
+        if: ${{ !cancelled() }}
+        run: python3 gui_reference_audit.py --strict
+
       - name: Audit — duplicate top-level keys
         if: ${{ !cancelled() }}
         run: python3 duplicate_key_audit.py --strict

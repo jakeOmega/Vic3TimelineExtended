@@ -171,7 +171,7 @@ types military_formation_change_name
 							visible = "[Not(MilitaryFormationChangeNamePopup.IsNameUnitsAfterStateSelected)]"
 
 							blockoverride "text" {
-								text = "STATE"
+								text = "STATE_NAME"
 							}
 							block "size" {
 								size = { 170 40 }
@@ -186,7 +186,7 @@ types military_formation_change_name
 							visible = "[MilitaryFormationChangeNamePopup.IsNameUnitsAfterStateSelected]"
 
 							blockoverride "text" {
-								text = "STATE"
+								text = "STATE_NAME"
 							}
 							block "size" {
 								size = { 170 40 }
