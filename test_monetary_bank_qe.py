@@ -19,9 +19,10 @@ Four things are pinned here:
   no national bank, a rate above the floor);
 * the figures the in-game tooltips state in words ("half a point", "two and a
   half"), which nothing else reads back from the constants;
-* the Price Pressure tooltip's asset-purchases line: the displayed figure is OMO
-  plus the bank's term, and neither goes through the modifier channel that
-  Inflation Anchoring nets against.
+* the Asset Purchases row: its figure is OMO plus the bank's term, neither goes
+  through the modifier channel that Inflation Anchoring nets against (so the
+  Price Pressure row cannot print them), and the row is wired in under the
+  anchoring row.
 """
 import re
 import unittest
@@ -109,14 +110,16 @@ class Gate(unittest.TestCase):
 
 
 class PurchaseDisplay(unittest.TestCase):
-    """te_mon_purchase_pressure_display, and the tooltip that prints it."""
+    """The Asset Purchases row, and the display values it prints."""
 
-    def display(self, omo, buys, headline=-5):
+    WIDGET = ROOT / 'gui/journal_entry_widgets/banking_dashboard_widget.gui'
+
+    def display(self, omo, buys, headline=-5, name='te_mon_purchase_pressure_display'):
         s = Script(te_mon_bank_buys_assets=buys, te_mon_inflation_anchor=2)
         s.vars['te_inflation'] = headline
         if omo:
             s.tools.add('omo')
-        return s.number('te_mon_purchase_pressure_display')
+        return s.number(name)
 
     def test_is_omo_plus_the_banks_own_purchases(self):
         _, cap = constants()
@@ -125,21 +128,58 @@ class PurchaseDisplay(unittest.TestCase):
         self.assertEqual(self.display(omo=False, buys=True), cap)
         self.assertEqual(self.display(omo=True, buys=True), cap + 1.0)
 
+    def test_the_two_halves_the_tooltip_lists_add_up_to_the_row(self):
+        _, cap = constants()
+        omo = self.display(True, True, name='te_mon_omo_pressure_display')
+        bank = self.display(True, True, name='te_mon_bank_purchase_display')
+        self.assertEqual((omo, bank), (1.0, cap))
+        self.assertEqual(omo + bank, self.display(True, True))
+
     def test_neither_term_goes_through_the_anchored_modifier_channel(self):
         values = definitions('common/script_values/te_monetary_script_values.txt')
         for name in ('te_mon_pressure_modifiers', 'te_mon_pressure_anchoring',
                      'te_mon_other_pressure_display', 'te_mon_wage_pressure_display'):
             text = repr(values[name])
-            self.assertNotIn('te_mon_pressure_qe', text, name)
-            self.assertNotIn('te_mon_pressure_bank_qe', text, name)
-            self.assertNotIn('te_mon_purchase_pressure_display', text, name)
+            for purchase in ('te_mon_pressure_qe', 'te_mon_pressure_bank_qe',
+                             'te_mon_purchase_pressure_display', 'te_mon_omo_pressure_display',
+                             'te_mon_bank_purchase_display'):
+                self.assertNotIn(purchase, text, (name, purchase))
 
-    def test_the_tooltip_prints_it_and_says_anchoring_does_not_absorb_it(self):
-        text = TooltipNumbers.loc(self, 'banking_dash_mon_pressure_tt')
-        self.assertIn("ScriptValue('te_mon_purchase_pressure_display')", text)
-        self.assertIn('Anchoring does not absorb it', text)
-        # ...and the modifier breakdown it sits beside is still there.
-        self.assertIn("GetValueWithBreakdownFor('country_inflation_pressure_add')", text)
+    def test_the_row_is_shown_only_while_something_is_bought(self):
+        # Text, not definitions(): the interpreter's parser stops after the first entry of this file.
+        text = (ROOT / 'common/scripted_guis/te_monetary_sguis.txt').read_text(encoding='utf-8-sig')
+        block = re.search(r'^banking_mon_has_purchases = \{\n(.*?)^\}', text, re.M | re.S)
+        self.assertIsNotNone(block)
+        self.assertIn('is_shown = { te_mon_purchase_pressure_display > 0 }', block.group(1))
+
+    def test_the_row_is_wired_and_sits_between_anchoring_and_monetising(self):
+        text = self.WIDGET.read_text(encoding='utf-8-sig')
+        for needle in ("GetScriptedGui('banking_mon_has_purchases').IsShown(",
+                       'tooltip = "banking_dash_mon_purchases_tt"',
+                       'text = "banking_dash_mon_purchases_label"',
+                       'text = "banking_dash_mon_purchases_value"'):
+            self.assertEqual(text.count(needle), 1, needle)
+        anchoring = text.index('banking_dash_mon_anchoring_tt')
+        purchases = text.index('banking_dash_mon_purchases_tt')
+        monetise = text.index('banking_dash_mon_monetise_tt')
+        self.assertLess(anchoring, purchases)  # the anchoring row's comment says "the two rows above"
+        self.assertLess(purchases, monetise)
+
+    def test_the_row_text_prints_the_display_values_and_says_anchoring_does_not_absorb_them(self):
+        loc = TooltipNumbers.loc
+        self.assertEqual(loc(self, 'banking_dash_mon_purchases_label'), 'Asset Purchases')
+        self.assertIn("ScriptValue('te_mon_purchase_pressure_display')",
+                      loc(self, 'banking_dash_mon_purchases_value'))
+        tip = loc(self, 'banking_dash_mon_purchases_tt')
+        self.assertIn("ScriptValue('te_mon_omo_pressure_display')", tip)
+        self.assertIn("ScriptValue('te_mon_bank_purchase_display')", tip)
+        self.assertIn('Inflation Anchoring does not absorb it', tip)
+
+    def test_price_pressure_keeps_its_modifier_breakdown_and_points_at_the_row(self):
+        tip = TooltipNumbers.loc(self, 'banking_dash_mon_pressure_tt')
+        self.assertIn("GetValueWithBreakdownFor('country_inflation_pressure_add')", tip)
+        self.assertNotIn('te_mon_purchase_pressure_display', tip)  # the row's figure stays modifiers only
+        self.assertIn('a row of their own', tip)
 
 
 class SimulatorPort(unittest.TestCase):

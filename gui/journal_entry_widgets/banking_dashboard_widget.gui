@@ -2426,6 +2426,26 @@ types banking_dashboard_widget_types
 						}
 					}
 
+					### Asset purchases — what the open-market operations tool and the
+					### bank's own purchases at its rate floor add to prices
+					### (te_mon_purchase_pressure_display, §0.12). A row of its own
+					### because neither is a modifier: they are counted outside
+					### country_inflation_pressure_add so Inflation Anchoring
+					### cannot absorb them, which means the Price Pressure row
+					### above cannot print them. Only while something is bought.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_has_purchases').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_purchases_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_purchases_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_purchases_value"
+							}
+						}
+					}
+
 					### Monetising the deficit — ops 7 (down) and 8 (up) of
 					### banking_mon_control_sgui, the same shape as the target
 					### stepper above.

@@ -548,8 +548,8 @@ under its 2% target. It adds about half a point of inflation pressure for each
 point under the target, up to 2.5 points, on top of Open-Market Operations.
 
 The purchases cost no intervention points and no money, and you don't switch
-them on. The Price Pressure tooltip shows how much they add, together with
-Open-Market Operations. They stop when inflation is back at 2% or the rate
+them on. An Asset Purchases row below Price Pressure shows how much they add, together
+with Open-Market Operations, while there are any. They stop when inflation is back at 2% or the rate
 leaves the floor.
 They need Fiat Money or Digital Currency. A dial you set by hand gets none of
 them, because you have Monetise Deficit instead. AI countries are always
