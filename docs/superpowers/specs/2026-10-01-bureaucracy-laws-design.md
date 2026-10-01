@@ -159,7 +159,7 @@ PR 1 set this checklist and left the questions below open; PR 2 settles them, fo
 | Question | Decision |
 |---|---|
 | Contracted's technology | **Supply Chain Management** (era 9, 1988–2012): contracting out is supply-chain thinking applied to the state, and New Public Management peaked then (Next Steps 1988, the 1990s). Computer Networks (era 8) was the other candidate |
-| Contracted's tradeoff | **Contract overruns: +10% institution bureaucracy cost.** Tax capacity lost to contractor margins was the alternative, but by era 9–10 a country has spare tax capacity (PR 1's reasoning), so it would not bite |
+| Contracted's tradeoff | **Contract overruns: +5% institution bureaucracy cost** (owner, 2026-10-01; first drafted at +10%). Tax capacity lost to contractor margins was the alternative, but by era 9–10 a country has spare tax capacity (PR 1's reasoning), so it would not bite |
 | Contracted's clout lever | **Capitalists +15%**, the contracting firms' owners, mostly Industrialists. A pop-type lever like Appointed's bureaucrats and Hereditary's aristocrats; Neocameralism's is the Industrialists IG lever |
 | Contracted's override | **None.** Contractors carry out the terms they were hired on: neither the ruler's appointees (+1) nor officials with their own mandate (−1) |
 | Communal's technology | **None.** Its unlocking laws already need Socialism, Anarchism or Political Agitation (eras 3–4) |
@@ -179,7 +179,7 @@ Private firms run substantial state functions under contract (New Public Managem
 | Group, unlock | `lawgroup_bureaucracy`, `supply_chain_management`; `unlocking_laws` Laissez-Faire or Interventionism (which excludes Command Economy); `disallowing_laws` Council Republic, Algorithmic Governance |
 | `country_capitalists_pol_str_mult` / `country_bureaucrats_pol_str_mult` | +0.15 / −0.25 |
 | `country_institution_size_change_speed_mult` | +0.25 (half Automated's): contracts are let and ended faster than officials are hired and dismissed |
-| `country_bureaucracy_investment_cost_factor_mult` | +0.1 (overruns) |
+| `country_bureaucracy_investment_cost_factor_mult` | +0.05 (overruns) |
 | Progressiveness | −2 (§10) |
 | `on_enact` | Appointed's two IG-shift tooltips |
 | AI weight | 5, +15 while the Industrialists are in government |

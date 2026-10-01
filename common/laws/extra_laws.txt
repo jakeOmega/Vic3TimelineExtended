@@ -4081,7 +4081,7 @@ law_contracted_administration = {
 		# Contracts are let and ended faster than officials are hired and
 		# dismissed, and they run over budget.
 		country_institution_size_change_speed_mult = 0.25
-		country_bureaucracy_investment_cost_factor_mult = 0.1
+		country_bureaucracy_investment_cost_factor_mult = 0.05
 		# No Legislative Override Capacity either way: contractors carry out
 		# the terms they were hired on. They are neither the ruler's own
 		# appointees (Appointed +1) nor officials with a mandate of their own

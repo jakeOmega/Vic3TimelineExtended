@@ -138,7 +138,7 @@ rule](#machine-administration-and-machine-rule).
 | Available | From Supply Chain Management, with Laissez-Faire or Interventionism; not in a Council Republic | In a Council Republic, under Anarchy or under Collective Governance; not with Technocracy or Elder Council | From Generative AI |
 | Staffing | Service Contractors: 250 bureaucrats a level, buying 20 Services | Recallable Delegates: 250 bureaucrats and 250 clerks a level | Automated Casework: 150 bureaucrats and 100 engineers a level, buying Digital Access and Software |
 | You gain | Institutions change size 25% faster; capitalists +15% political strength | Movements 5% less radical; Trade Unions and Rural Folk +10% political strength | Institutions cost 20% less bureaucracy and change size 50% faster; engineers +15% political strength; Legislative Override Capacity +1 |
-| You pay | Institutions cost 10% more bureaucracy | Tax capacity −10%; Legislative Override Capacity −2 | Nothing beyond the staffing |
+| You pay | Institutions cost 5% more bureaucracy | Tax capacity −10%; Legislative Override Capacity −2 | Nothing beyond the staffing |
 | Bureaucrats | −25% political strength | −25% political strength | −25% political strength |
 
 Contracted Administration suits a market economy with high wages. Each
