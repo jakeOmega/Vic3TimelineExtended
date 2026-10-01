@@ -1744,7 +1744,8 @@ te_mon_stance_politics_months_neg = {
 # is one ScriptValue() accessor away from a tooltip, so the rule is: these are
 # printable from te_debug_monetary.1 and from nowhere else. te_inflation,
 # te_inflation_expected and the player's own country_inflation_pressure_add /
-# country_wage_pressure_add are the displayable parts.
+# country_wage_pressure_add are the displayable parts, and so is
+# te_mon_purchase_pressure_display (OMO plus the bank's own purchases, §0.12).
 
 
 # --- The cost-push basket (§9.3) --------------------------------------------
@@ -2213,6 +2214,25 @@ te_mon_pressure_bank_qe = {
 		multiply = te_mon_bank_qe_per_pp
 		max = te_mon_bank_qe_cap
 	}
+}
+
+# What the Price Pressure tooltip prints for asset purchases (§0.12): OMO's flat
+# point and the bank's own purchases, in pp. NOT A MODIFIER, ON PURPOSE. Both
+# are counted on their own, like monetisation, rather than through
+# country_inflation_pressure_add, because that channel is netted against
+# Inflation Anchoring (te_mon_pressure_anchoring absorbs up to the bank's
+# capacity of whatever net positive pressure it carries). An independent bank
+# would then absorb up to 0.9pp of its own stimulus, in exactly the deflation the
+# term exists for. So the pressure stays a script-value term and this value is
+# what lets the dashboard say so.
+#
+# PRINTABLE DESPITE RULING P7, and only because of what these two are built from:
+# OMO is a tool the player bought, and the bank's term is a function of the
+# headline and the floor, both of which the dashboard shows. Neither carries the
+# stance gap or core. Do not widen this to the rest of te_mon_pressure_*.
+te_mon_purchase_pressure_display = {
+	value = te_mon_pressure_qe
+	add = te_mon_pressure_bank_qe
 }
 
 # Everything script grants as standing pressure, in pp. TWO TYPES, not one

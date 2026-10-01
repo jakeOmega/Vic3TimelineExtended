@@ -18,7 +18,10 @@ Four things are pinned here:
   numbers, and against the regimes that must not get it (metal, a manual dial,
   no national bank, a rate above the floor);
 * the figures the in-game tooltips state in words ("half a point", "two and a
-  half"), which nothing else reads back from the constants.
+  half"), which nothing else reads back from the constants;
+* the Price Pressure tooltip's asset-purchases line: the displayed figure is OMO
+  plus the bank's term, and neither goes through the modifier channel that
+  Inflation Anchoring nets against.
 """
 import re
 import unittest
@@ -103,6 +106,40 @@ class Gate(unittest.TestCase):
         text = repr(body)
         self.assertIn('var:te_inflation', text)
         self.assertNotIn('te_inflation_core', text)  # hidden state, ruling P7
+
+
+class PurchaseDisplay(unittest.TestCase):
+    """te_mon_purchase_pressure_display, and the tooltip that prints it."""
+
+    def display(self, omo, buys, headline=-5):
+        s = Script(te_mon_bank_buys_assets=buys, te_mon_inflation_anchor=2)
+        s.vars['te_inflation'] = headline
+        if omo:
+            s.tools.add('omo')
+        return s.number('te_mon_purchase_pressure_display')
+
+    def test_is_omo_plus_the_banks_own_purchases(self):
+        _, cap = constants()
+        self.assertEqual(self.display(omo=False, buys=False), 0)
+        self.assertEqual(self.display(omo=True, buys=False), 1.0)
+        self.assertEqual(self.display(omo=False, buys=True), cap)
+        self.assertEqual(self.display(omo=True, buys=True), cap + 1.0)
+
+    def test_neither_term_goes_through_the_anchored_modifier_channel(self):
+        values = definitions('common/script_values/te_monetary_script_values.txt')
+        for name in ('te_mon_pressure_modifiers', 'te_mon_pressure_anchoring',
+                     'te_mon_other_pressure_display', 'te_mon_wage_pressure_display'):
+            text = repr(values[name])
+            self.assertNotIn('te_mon_pressure_qe', text, name)
+            self.assertNotIn('te_mon_pressure_bank_qe', text, name)
+            self.assertNotIn('te_mon_purchase_pressure_display', text, name)
+
+    def test_the_tooltip_prints_it_and_says_anchoring_does_not_absorb_it(self):
+        text = TooltipNumbers.loc(self, 'banking_dash_mon_pressure_tt')
+        self.assertIn("ScriptValue('te_mon_purchase_pressure_display')", text)
+        self.assertIn('Anchoring does not absorb it', text)
+        # ...and the modifier breakdown it sits beside is still there.
+        self.assertIn("GetValueWithBreakdownFor('country_inflation_pressure_add')", text)
 
 
 class SimulatorPort(unittest.TestCase):

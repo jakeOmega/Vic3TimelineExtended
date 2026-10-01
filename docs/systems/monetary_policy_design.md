@@ -1662,6 +1662,7 @@ replacing it. Owner-approved shape, 2026-10-01.
 | **N4** | **It reads last month's *headline*, not core** | the mandates read core so they can look through cost-push, but core is hidden state (P7) and this term is `0.5 × (2 − π)` until the cap: if it read core, a printed value would be core itself. Headline is what the player is shown. It is the same one-month lag the wage-spiral gate has |
 | **N5** | **It touches inflation pressure only** | no points, no treasury cost, none of OMO's momentum, services or bubble lines. It is the bank's balance sheet, and the cycle already has its own deflation drag (the Deflation band). It cannot push inflation past target: it is zero at π ≥ 2 and the month the rate leaves the floor |
 | **N6** | **The pressure is capped at 2.5, reached at π = −3** | one monetisation level's worth. The cap, not the slope, is what keeps it a safety net: a bank that bought without limit would be monetisation under another name |
+| **N7** | **Neither OMO's point nor the bank's purchases is carried on `country_inflation_pressure_add`**, though that channel is what shows in the Price Pressure row and puts a tool's effect in its own tooltip (`banking_reserve_requirements` does) | `te_mon_pressure_anchoring` nets Inflation Anchoring against the *net positive* sum of that channel and the wage channel. An independent bank would absorb up to its capacity (0.9pp at nine levels) of its own stimulus, in the deflation the term exists for: whatever capacity wage pressure leaves unused comes out of the purchases, so a country with 0.2pp of wage pressure would lose 0.7pp of them (the reported country, at 0.9 against 0.9, would lose none). The effect would also differ by regime, which `te_mon_pressure_qe` does not. Monetisation is counted on its own for the same reason (`country_inflation_pressure_add_desc` says so). `te_mon_purchase_pressure_display` (OMO plus the bank's term) is what the Price Pressure tooltip prints instead, as an **Asset purchases** section under the modifier breakdown |
 
 **Measured.** `scripts/analysis/banking_cycle_sim.py` ports the term (`bank_qe_pressure`;
 `--tune pre_bank_qe` switches it off). A CBI / Digital / price-stability country started as
@@ -1699,10 +1700,12 @@ identical in every column.
 - **The sim has no exchange-rate channel and holds the cycle still**, so the deflation band's
   momentum drain and the Stagnation phase term (−0.3) that a real trap adds are missing. The real
   recovery is slower than the table.
-- **No dashboard row.** The Mandate and Delegation tooltips say what the bank does; nothing shows
-  the term live. P7 keeps every `te_mon_pressure_*` term out of player-visible text. This one is
-  built from headline and the floor, so a row would leak nothing, but it would be the first
-  exception to a rule written per name.
+- **No dedicated row, and the Price Pressure figure still reads modifiers only.** The tooltip lists
+  the purchases in their own section (N7), so the row can read 0.0% while the tooltip says
+  +1.0% or more. Folding them into the row's figure would make it disagree with the breakdown
+  directly under it. P7 keeps every other `te_mon_pressure_*` term out of player-visible text;
+  `te_mon_purchase_pressure_display` is the one exception, and its comment says why it is safe
+  (OMO is a tool the player bought; the bank's term is built from headline and the floor).
 - The tooltips and `docs/player_guide/04-banking.md` state the numbers in words. Retuning the two
   constants means editing `banking_dash_mon_mandate_tt` and that chapter.
 
@@ -1716,6 +1719,7 @@ identical in every column.
 | **N-4** | The rate leaves the floor and the term goes with it; there is no month-by-month on/off in the policy-rate chart |
 | **N-5** | An AI great power pushed into deflation at the floor recovers rather than sitting at −10 |
 | **N-6** | The Mandate tooltip shows the *Out of room* paragraph; the Delegation tooltip's CBI paragraph says the bank cannot be asked to print |
+| **N-7** | The Price Pressure tooltip shows an **Asset purchases** line under the modifier list: +1.0% with Open-Market Operations alone, +2.5% from the bank's own purchases at −3% or lower, +3.5% with both, 0.0% otherwise. It renders (no raw key, no data-system error in `debug.log`) in both the journal entry and the Budget panel's Banking tab |
 
 **Not verified in a running game**, like everything else in §0.
 
