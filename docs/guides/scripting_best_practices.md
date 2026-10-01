@@ -1492,6 +1492,8 @@ PMs can define modifiers under three scaling blocks, each with different behavio
 
 **Critical:** `state_building_X_max_level_add` and similar state-scoped cap modifiers **must** go in `state_modifiers > level_scaled`, never `country_modifiers` and never `workforce_scaled`. Placing them in `country_modifiers` makes the cap apply to every state (so multiple buildings across states stack their caps everywhere). Placing them in `workforce_scaled` makes the cap fluctuate with throughput, causing erratic downsizing.
 
+**Don't multiply a `workforce_scaled` modifier by `occupancy` again.** A script value that reads `b:<building>.modifier:<m>`, where the PM puts `<m>` in `workforce_scaled`, already gets the staffed share. Multiplying by `.occupancy` as well makes the result go with the square of staffing: the megaproject tick ran a half-staffed site at a quarter speed until #626. To apply occupancy yourself, put the modifier in `level_scaled`.
+
 These blocks can appear inside `building_modifiers`, `country_modifiers`, or `state_modifiers`:
 ```
 state_modifiers = {
