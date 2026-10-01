@@ -106,9 +106,10 @@ class LawTests(unittest.TestCase):
         self.assertGreaterEqual(self._base(), 70)
 
     def test_base_plus_mandate_cap_leaves_headroom_over_100(self):
-        # Taxes (+10 at very low, negative above medium), a head of state's group
-        # and timed modifiers are added to this, and legitimacy tops out at 100:
-        # a boom must reach it with room to absorb them (92 was reported short).
+        # Taxes (tax_modifier_*: +10 very low, 0 medium, -10 high, -20 very high),
+        # a head of state's group and timed modifiers are added to this, and
+        # legitimacy tops out at 100: a boom must reach it with room to absorb
+        # them (92 on very low taxes was reported short).
         body = _block(_read(SCRIPT_VALUES), "algorithmic_mandate_value")
         cap = float(re.search(r"\bmax\s*=\s*(-?[\d.]+)", body).group(1))
         self.assertGreaterEqual(self._base() + cap, 110)

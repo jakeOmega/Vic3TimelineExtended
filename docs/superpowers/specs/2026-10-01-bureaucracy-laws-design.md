@@ -81,8 +81,9 @@ Supreme political authority vested in AI; human institutions advise and execute.
   alone left a Presidential Republic on very low taxes at 42, Unstable Government, with the mandate at its +25 cap: every
   other Distribution of Power law carries legitimacy of its own (clout 25–120, votes 40–110, Elder Council a flat 20) and
   this one has no clout, votes or head-of-state term. A first fix (base 50, cap ±25) still topped out at 92 on very low
-  taxes, so base and cap are sized for headroom: 70 + 40 = 110, enough for a boom to reach 100 after taxes and penalties,
-  as the other laws do. The neutral case (mandate 0) sits at 70 before taxes, the head of state's group and timed
+  taxes, so base and cap are sized for headroom: 70 + 40 = 110 before taxes (`tax_modifier_*`: +10 very low … −10 high,
+  −20 very high), the head of state's group and timed modifiers. At the cap a Presidential Republic reaches 100 through
+  High taxes; at +25 it reaches 100 through Medium and falls to 92 (High) and 82 (Very High). The neutral case (mandate 0) sits at 70 before taxes, the head of state's group and timed
   modifiers; a deep slump (gap −8) takes the mandate to −40.
 - **Added: legitimacy from results.** `algorithmic_mandate` (`sol_expectations_modifiers.txt`) carries
   `country_legitimacy_base_add = 1` and is re-applied each month with multiplier `algorithmic_mandate_value`

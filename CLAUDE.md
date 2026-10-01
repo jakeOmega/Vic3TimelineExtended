@@ -13,7 +13,7 @@ The repo lives in WSL; the engine reads files from a Windows-side mod folder (se
 
 ## Common commands
 
-- **Fresh-machine setup**: `python3 scripts/setup.py` — bootstraps `.venv`, installs `requirements.txt`, autodetects paths, writes a gitignored `paths.local.json`. Re-runnable.
+- **Fresh-machine setup**: `python3 scripts/setup.py` — bootstraps `.venv`, installs `requirements.txt`, autodetects paths, writes a gitignored `paths.local.json`. Re-runnable. In a game-less cloud container, `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-docs.txt` (a minute or two, no Victoria 3 needed) is enough to run the whole suite and to rebuild the player guide PDF; the system `python3` lacks `numpy` and fails two tests.
 - **Deploy to game**: `./scripts/deploy.sh` (dry run) / `./scripts/deploy.sh --apply`. Auto-deploy runs while VS Code is open (`scripts/watch_deploy_on_edit.sh`).
 - **Mod state server** (the primary lookup tool, port 8950, ~30 s startup; the parse itself is a few seconds since the linear-time parser):
   - Start: `.venv/bin/python mod_state_server.py` — auto-starts under VS Code. **Claude has standing approval to start/restart it without asking** — announce in one short sentence and bring it up. A cold start runs the 12 regenerators on the working tree, like a full `/reload`: start on a clean tree or with `VIC3_SKIP_POST_LOAD_GENERATORS=1`, then `git status` and stage or revert everything they wrote as one unit. A half-committed `organize_loc` move silently drops keys (#613, #617).
@@ -93,6 +93,7 @@ Before redesigning, rebalancing, or extending an existing gameplay system, read 
 - **External**: [`Modding-Digests`](https://github.com/Victoria-3-Modding-Co-op/Modding-Digests/) — community-maintained per-vanilla-patch summaries (breaking changes, script-doc diffs, new modifiers/effects/triggers, file-level changes). Local clone at `vic3_modding_digests_path` (`~/src/Modding-Digests` by default), auto-pulled on `mod_state_server` cold start. **First stop** for any "what changed in vanilla 1.x" question — beats manually diffing `~/src/vic3` between version commits.
 
 ### Top gotchas (full lists in `docs/guides/scripting_best_practices.md`)
+- **Before telling the user a vanilla value is engine-hardcoded or missing from the snapshot, scan `vanilla_parsed/common/*.json` by the *effect's* name** (recipe: `docs/guides/python_tools.md`). Tax levels are static modifiers (`tax_modifier_very_low` +10 … `_very_high` −20 legitimacy); a search on guessed key names missed them and the wrong claim reached a PR (#638).
 - **The Clausewitz engine silently ignores invalid modifier names and unregistered dynamic patterns.** Validate via `/modifier-search?q=` or `/engine-docs/origin/<name>`. Booleans, building/goods/state-building patterns, and ship axis combos all need explicit registration in `common/modifier_type_definitions/`.
 - **Top-level entity collisions get silently dropped** (`Duplicated key X will not be created`). Use `INJECT:X = { ... }` to extend rather than redeclare.
 - **`add_modifier`/`remove_modifier` results are not visible inside the same effect block.** To recompute from "base" values, store the prior contribution as a variable and subtract from the `modifier:X` read.

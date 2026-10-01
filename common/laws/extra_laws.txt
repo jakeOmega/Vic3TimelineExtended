@@ -4317,8 +4317,9 @@ law_algorithmic_governance = {
 		# cap. The first fix, 50 with the mandate capped at +-25, still topped out
 		# at 92 on very low taxes, where other laws reach 100 with room to spare
 		# for higher taxes. 70 puts the neutral case (mandate 0) at 70 before
-		# taxes, the head of state's group and timed modifiers; with the mandate's
-		# +40 (algorithmic_mandate_value) a boom has about 110 to absorb those.
+		# taxes (tax_modifier_*: +10 very low, -10 high, -20 very high), the head
+		# of state's group and timed modifiers; with the mandate's +40
+		# (algorithmic_mandate_value) a boom has about 110 to absorb those.
 		country_legitimacy_base_add = 70
 
 		# Vanilla's Technocracy gives one company slot; this goes further.
