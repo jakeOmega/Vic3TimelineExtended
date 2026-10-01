@@ -2068,13 +2068,40 @@ un_mission_opened_notice = {
 	notification_type = feed
 	color = good
 }
-un_mission_succeeded_notice = {
+# The outcome notices come in one per kind of mission, because a notification's
+# text cannot branch on the mission's tags: un_mission_post_succeeded_notice and
+# un_mission_post_failed_notice pick the one that names the kind.
+un_mission_peacekeeping_succeeded_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
 	color = good
 }
-un_mission_failed_notice = {
+un_mission_aid_succeeded_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+un_mission_stabilisation_succeeded_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+un_mission_peacekeeping_failed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+un_mission_aid_failed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+un_mission_stabilisation_failed_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
 	notification_type = feed

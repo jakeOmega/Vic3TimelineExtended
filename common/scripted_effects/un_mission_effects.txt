@@ -755,14 +755,15 @@ un_mission_close = {
 
 # Success: the UN delivered. A delivery entry, standing and the host's thanks
 # for every contributor, and word to all of them. The notices name the
-# mission's state through scope:un_msn_state_done.
+# mission's kind (un_mission_post_succeeded_notice) and its state, through
+# scope:un_msn_state_done.
 # Scope: mission container
 un_mission_outcome_succeeded = {
 	un_mission_ledger_outcome = { PILLAR = delivery POINTS = un_mission_success_delivery PEACEKEEPING = 21 AID = 22 STABILISATION = 23 }
 	var:un_msn_state ?= { save_scope_as = un_msn_state_done }
 	var:un_msn_host ?= {
 		save_scope_as = un_msn_host_done
-		post_notification = un_mission_succeeded_notice
+		un_mission_post_succeeded_notice = yes
 	}
 	if = {
 		limit = { has_variable_list = un_msn_contributors }
@@ -773,24 +774,60 @@ un_mission_outcome_succeeded = {
 				limit = { exists = scope:un_msn_host_done }
 				change_relations = { country = scope:un_msn_host_done value = 15 }
 			}
-			post_notification = un_mission_succeeded_notice
+			un_mission_post_succeeded_notice = yes
 		}
 	}
 }
 
 # Failure: the Assembly promised and did not deliver. The notices name the
-# mission's state through scope:un_msn_state_done.
+# mission's kind (un_mission_post_failed_notice) and its state, through
+# scope:un_msn_state_done.
 # Scope: mission container
 un_mission_outcome_failed = {
 	un_mission_ledger_outcome = { PILLAR = credibility POINTS = un_mission_failure_credibility PEACEKEEPING = 24 AID = 25 STABILISATION = 26 }
 	var:un_msn_state ?= { save_scope_as = un_msn_state_done }
-	var:un_msn_host ?= { post_notification = un_mission_failed_notice }
+	var:un_msn_host ?= { un_mission_post_failed_notice = yes }
 	if = {
 		limit = { has_variable_list = un_msn_contributors }
 		every_in_list = {
 			variable = un_msn_contributors
-			post_notification = un_mission_failed_notice
+			un_mission_post_failed_notice = yes
 		}
+	}
+}
+
+# Tell the country in scope how the mission being closed ended, in the notice
+# for its kind: a notification's text cannot branch on the mission's tags, so
+# each kind has its own (common/messages/extra_messages.txt). The kind is read
+# from scope:un_msn_closing, which un_mission_close saves.
+# Scope: the country to tell
+un_mission_post_succeeded_notice = {
+	if = {
+		limit = { scope:un_msn_closing = { has_tag = un_msn_peacekeeping } }
+		post_notification = un_mission_peacekeeping_succeeded_notice
+	}
+	else_if = {
+		limit = { scope:un_msn_closing = { has_tag = un_msn_aid } }
+		post_notification = un_mission_aid_succeeded_notice
+	}
+	else = {
+		post_notification = un_mission_stabilisation_succeeded_notice
+	}
+}
+
+# As un_mission_post_succeeded_notice, for a mission that failed.
+# Scope: the country to tell
+un_mission_post_failed_notice = {
+	if = {
+		limit = { scope:un_msn_closing = { has_tag = un_msn_peacekeeping } }
+		post_notification = un_mission_peacekeeping_failed_notice
+	}
+	else_if = {
+		limit = { scope:un_msn_closing = { has_tag = un_msn_aid } }
+		post_notification = un_mission_aid_failed_notice
+	}
+	else = {
+		post_notification = un_mission_stabilisation_failed_notice
 	}
 }
 
