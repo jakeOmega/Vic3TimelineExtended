@@ -1290,7 +1290,7 @@ was worth (F16). Recession months and peak rates are unchanged.
 
 **Question (owner).** The five sectors of §11 read as one tool with five labels: 3 points, 0.8% of GDP, +10%
 construction for a building group, an interest-group line, and momentum and bubble within 0.01 and 0.2 of each
-other. Make them distinct, and price each differently (Electrification & High Tech cheap).
+other. Make them distinct, and price each differently (Electrification cheap).
 
 **What shipped.** Each sector has its own price, cycle signature and a second effect beyond construction
 (`extra_modifiers.txt`, the table above `banking_directed_credit_infrastructure`):
@@ -1301,7 +1301,7 @@ other. Make them distinct, and price each differently (Electrification & High Te
 | Heavy Industry | 4 (was 3) | 0.06 / 0.5 (was 0.05 / 0.3) | heavy-industry throughput +5% | greenhouse gas emissions +5%; Industrialists +2 (was +3) |
 | Agriculture | 2 (was 3) | 0.03 / 0.4 (was 0.04 / 0.4) | food security +5% | the worst momentum for its bubble |
 | Armaments | 3 (was 3) | 0.06 / 0.05 (was 0.05 / 0.2) | military throughput +5%, military goods cost −10% | Intelligentsia −3 (was −2) |
-| Electrification & High Tech | 2 (was 3) | 0.04 / 0.2 (was 0.05 / 0.3) | electricity output +5% | era-gated |
+| Electrification | 1 (was 3) | 0.04 / 0.2 (was 0.05 / 0.3) | electricity output +5% | covers power plants only; era-gated |
 
 The simulator reads points and both monthly lines from those modifiers, so it needed no change for them. It cannot
 see what construction, throughput, food security, emissions or interest-group approval are worth, so those lines
@@ -1311,53 +1311,56 @@ are sized by judgement, and what the simulation checks is the cycle signature an
 
 `law_directed_credit_development_banks` grants a budget of 5 (6 with a national bank) and a second sector, but
 two 3-point sectors cost 6. Below the national bank the second slot could not be filled, and with it the two
-sectors took every point and left nothing for a lean or a crisis tool. At 2 / 3 / 4 points any two sectors fit
-in 5 except Heavy Industry, which needs the sixth point beside a 2-point sector.
+sectors took every point and left nothing for a lean or a crisis tool. At 1 / 2 / 3 / 4 points Electrification
+fits beside any sector and Agriculture beside Infrastructure or Armaments; the sixth point adds Infrastructure
+with Armaments and Heavy Industry with Agriculture, and Heavy Industry never sits beside Infrastructure or
+Armaments.
 
-### F19 — Priced at 2, the cheap sectors put the AI's riskiest tool within reach of every budget
+### F19 — Cheap sectors at real prices: the AI uses them far more, and holds them too long
 
-With the new prices and the AI's old rules, Agriculture and Electrification were affordable at 2 points and
-stayed affordable when other tools held most of a budget. Directed-credit clicks a century, summed over the
-fiat grid, `--dc-affinity dc_heavy,dc_agri,dc_arms,dc_elec`:
+The AI pays the same points as a player (its buttons share the sectors' `possible` triggers), so a sector priced
+at 1 or 2 is affordable at budgets and in half-spent budgets where a 3-point sector was not. An earlier draft kept
+the AI's click count constant by making every sector a candidate only above three free points. That is a price only
+the AI pays, and it was rejected: the AI may choose not to buy, but it may not face a different price.
 
-| | before | new prices, no AI reserve | shipped |
-|---|---|---|---|
-| all four favoured | 105.2 | 193.3 (+84%) | 106.1 |
-| all four, Directed Credit law | 149.6 | 256.5 (+71%) | 154.3 |
+At real prices with the AI's lift weights unchanged, directed-credit clicks a century roughly doubled, almost all of
+it in Electrification (1 point) and Agriculture (2): with all four favoured they went from 26.7 / 25.5 to 137 / 72, and
+at a 2-point budget the AI, which never directed credit there, made 13–14 clicks. Crashes rose with them, most in the
+growth mandate at 3 points (13.1 → 14.3 at 600 runs). The harm is F11's, holding directed credit through the
+recovery, so the fix is the lift side, which is an AI preference and not a price: every sector's disable button now
+adds 40 in Stable (momentum not falling) and 50 in Expansion, where it added 20 and 30. `--tune dc_lift_boost=0`
+restores the old weights.
 
-The law cell's crashes rose from 9.0 to 9.4 a century without the reserve, against §11's finding that directed credit
-is the AI's riskiest tool (F11). Shipped: no sector is an AI candidate below three free points
-(`banking_points_low = no` in `banking_dc_ai_candidate_*`), so the AI keeps the reserve it had when every sector
-cost 3. The discount is the player's. Heavy Industry still needs its own 4 points, so a heavy-industry
-government at 3 points falls back to Infrastructure.
-
-### Result — 150 runs × 100 years per cell, fiat, 2 / 3 / 4 / 5 / 8 points (4 / 5 / 6 / 8 under the law), before → shipped
+### Result — 150 runs × 100 years per cell, fiat, 2 / 3 / 4 / 5 / 8 points (4 / 5 / 6 / 8 under the law), before → real prices, old lift → shipped
 
 Directed-credit clicks a century, summed over the grid, and mean crashes a century over the price-stability and
 growth cells (the no-touch cells are flat):
 
 | affinity | clicks | crashes |
 |---|---|---|
-| none | 103.9 → 105.0 | 8.85 → 8.82 |
-| heavy industry | 104.5 → 105.2 | 8.28 → 8.42 |
-| electrification | 104.5 → 105.4 | 8.28 → 8.25 |
-| all four | 105.2 → 106.1 | 8.97 → 8.89 |
-| all four, Directed Credit law | 149.6 → 154.3 | 9.02 → 8.83 |
+| none | 103.9 → 105.0 → 108.3 | 8.85 → 8.82 → 8.93 |
+| heavy industry | 104.5 → 105.2 → 108.9 | 8.28 → 8.42 → 8.43 |
+| electrification | 104.5 → 200.2 → 209.6 | 8.28 → 8.86 → 8.55 |
+| all four | 105.2 → 247.0 → 258.4 | 8.97 → 9.24 → 8.92 |
+| all four, Directed Credit law | 149.6 → 334.7 → 344.0 | 9.02 → 9.32 → 9.00 |
 
-With all four favoured Heavy Industry drops from 26.7 to 13.6 clicks (it costs 4, so it is out of reach at 3 points)
-and the other three each gain 4–5; the total does not move. Infrastructure, the default sector, is clicked as often
-as before (94.9 → 95.7 with no affinity) at lower momentum and bubble, and its cell crashes do not move (8.85 → 8.82).
+With all four favoured, shipped, Heavy Industry drops from 26.7 to 12.8 clicks (it costs 4, so it is out of reach at
+3 points) while Agriculture and Electrification rise to 76 and 143; Armaments is unchanged (27). Infrastructure, the
+default sector, is clicked as often as before (94.9 → 95.7 with no affinity, before the lift change) at lower
+momentum and bubble.
 
-**One cell drifts.** Fiat / growth at 3 points with all four favoured, 600 runs: 13.1 → 13.6 crashes a century
-(+0.5; price stability 6.3 → 6.2). At 3 points Heavy Industry is out of reach, so the AI chooses among the three
-lighter sectors; the link to the drift was not isolated. Every other cell is within ±0.4 at 150 runs, the budget curve stays as it was (2-point cells
-are identical: the AI reserve means the AI directs no credit there), and §8's targets do not depend on it.
+**What remains.** The AI directs credit about twice as often wherever a cheap sector is favoured, by design of the
+prices, and crashes are back to the old level in the all-four cells. Two cells stay slightly above it: favouring
+electrification alone (8.28 → 8.55) and fiat / growth at 3 points with all four favoured, 600 runs (13.1 → 13.5; price
+stability 6.3 → 6.5). Raising the lift weights further (stable 55, expansion 65) moved the all-four cells by under
+0.1, so the rest is the cost of the extra months spent in directed credit. The 2-point cells with no sector favoured
+are unchanged, and §8's targets do not depend on any of this.
 
 **Not re-run.** The leave-one-out of each new sector, the currency laws other than fiat, and the 400-run matrix.
 
-**Reproduce** (`before` is the commit before this change):
+**Reproduce** (`before` is the commit before this change; the middle column is `--tune dc_lift_boost=0`):
 
 ```
-.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 2,3,4,5,8 [--dc-affinity dc_heavy,dc_agri,dc_arms,dc_elec] [--tune ai_dc_reserve=off]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 2,3,4,5,8 [--dc-affinity dc_heavy,dc_agri,dc_arms,dc_elec] [--tune dc_lift_boost=0]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 4,5,6,8 --fin-law law_directed_credit_development_banks --dc-affinity dc_heavy,dc_agri,dc_arms,dc_elec
 ```

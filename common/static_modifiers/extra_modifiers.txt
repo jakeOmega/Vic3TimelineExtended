@@ -924,12 +924,14 @@ banking_expand_deposit_guarantee = {
 #   Heavy Industry     4      0.06     0.5    the boom-maker: the strongest push, the most froth, the smoke
 #   Agriculture        2      0.03     0.4    cheap and weak; land booms bust
 #   Armaments          3      0.06     0.05   the State is the buyer: momentum with almost no froth
-#   Electrification    2      0.04     0.2    cheap, era-gated, modest
+#   Electrification    1      0.04     0.2    cheapest: power plants only, era-gated
 #
 # The Directed Credit & Development Banks law's budget is 5 (6 with a national
 # bank). At a flat 3 points its second sector did not fit until the national
-# bank and then used every point; now any two sectors fit in 5 points except
-# Heavy Industry, which needs the national bank's sixth beside a 2-point sector.
+# bank and then used every point. Now Electrification (1) fits beside any sector,
+# and Agriculture (2) beside Infrastructure or Armaments; the national bank's
+# sixth point adds Infrastructure + Armaments and Heavy Industry + Agriculture.
+# Heavy Industry never sits beside Infrastructure or Armaments.
 banking_directed_credit_infrastructure = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	interest_group_ig_industrialists_approval_add = -3
@@ -1115,17 +1117,18 @@ banking_directed_credit_armaments = {
 
 banking_directed_credit_electrification = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	# Power plants only. bg_high_tech sits under bg_heavy_industry, so Heavy
+	# Industry's construction line already covers it; listing it here too would
+	# double-count.
 	building_group_bg_power_construction_efficiency_add = 0.1
-	# Also under bg_heavy_industry, so beside Heavy Industry (the Directed Credit
-	# law's second slot, 6 points) high tech gets +20% — a priced synergy.
-	building_group_bg_high_tech_construction_efficiency_add = 0.1
 	goods_output_electricity_mult = 0.05
 	interest_group_ig_intelligentsia_approval_add = 2
 	interest_group_ig_trade_unions_approval_add = 1
 	# private utilities fought the REA and the TVA:
 	interest_group_ig_industrialists_approval_add = -3
-	country_banking_intervention_max_add = -2
-	# monthly — cheap and era-gated (rural_electrification), so modest:
+	country_banking_intervention_max_add = -1
+	# monthly — the cheapest of the five because it covers the fewest buildings,
+	# and era-gated (rural_electrification), so modest:
 	country_finance_momentum_monthly_add = 0.04
 	country_bubble_pressure_monthly_add  = 0.2
 }

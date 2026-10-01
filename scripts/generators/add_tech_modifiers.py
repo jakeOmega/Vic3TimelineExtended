@@ -293,7 +293,7 @@ BUTTON_TECH_MODIFIERS = {
         ('country_can_use_export_credit_bool', 'Enables Export Credit Facility', 'Enables the Export Credit Facility banking intervention.'),
     ],
     'rural_electrification': [
-        ('country_can_use_directed_credit_electrification_bool', 'Enables Directed Credit: Electrification & High Tech', 'Enables the Directed Credit: Electrification & High Tech banking intervention.'),
+        ('country_can_use_directed_credit_electrification_bool', 'Enables Directed Credit: Electrification', 'Enables the Directed Credit: Electrification banking intervention.'),
     ],
     'globalization': [
         ('country_can_use_bail_in_bool', 'Enables Bail-in Regime', 'Enables the Bail-in Regime banking intervention.'),

@@ -290,8 +290,8 @@ momentum and bubble pressure, so it belongs in a cycle at or below Stable, not i
 a boom. Switching one on costs a one-off 0.8% of GDP from the treasury, the
 state's share of the loans, and lifting it radicalizes 2% of pops. Only one
 sector runs at a time, two under Directed Credit & Development Banks, and
-Prudential / Narrow Banking forbids them all. Electrification & High Tech needs
-Rural Electrification; the other four are available from the start.
+Prudential / Narrow Banking forbids them all. Electrification needs Rural
+Electrification; the other four are available from the start.
 
 The sectors are priced and built differently, so they are not interchangeable.
 
@@ -301,7 +301,7 @@ The sectors are priced and built differently, so they are not interchangeable.
 | Directed Credit to Heavy Industry | 4 | Heavy industry builds 10% faster and runs at +5% throughput | Industrialists +2 | Landowners −3 | +0.06 momentum, +0.5 bubble pressure; greenhouse gas emissions +5% |
 | Directed Credit to Agriculture | 2 | Farms, plantations and ranches build 10% faster; food security +5% | Landowners +3, Rural Folk +2 | Industrialists −3 | +0.03 momentum, +0.4 bubble pressure |
 | Directed Credit to Armaments | 3 | Military industry and shipyards build 10% faster; military industry runs at +5% throughput; military goods cost 10% less | Armed Forces +3 | Intelligentsia −3 | +0.06 momentum, +0.05 bubble pressure |
-| Directed Credit to Electrification & High Tech | 2 | Power plants and high-tech industry build 10% faster; electricity output +5% | Intelligentsia +2, Trade Unions +1 | Industrialists −3 | +0.04 momentum, +0.2 bubble pressure |
+| Directed Credit to Electrification | 1 | Power plants build 10% faster; electricity output +5% | Intelligentsia +2, Trade Unions +1 | Industrialists −3 | +0.04 momentum, +0.2 bubble pressure |
 
 Heavy Industry is the strongest push and the one that overheats a cycle, so it
 costs the most, adds emissions, and is the sector to lift first when the cycle
@@ -309,13 +309,15 @@ warms. Armaments pushes as hard with almost no bubble pressure, but it pays only
 where you build or buy military goods. Infrastructure adds the least bubble
 pressure of the five and is the one to hold into a recovery, though it is also the
 weakest rescue in a slump. Agriculture gives the least momentum for its bubble
-pressure, which is why it is cheap. Electrification & High Tech is the other
-2-point sector and a modest one.
+pressure, which is why it is cheap. Electrification covers only power plants,
+which makes it the cheapest sector and a modest one. Heavy Industry also builds
+high-tech industry faster, because high tech is part of it.
 
-Under Directed Credit & Development Banks, two sectors fit in its 5 points
-unless one is Heavy Industry, which needs a National Bank's extra point to sit
-beside a 2-point sector. Heavy Industry and Electrification & High Tech both
-speed up high-tech buildings, so running the two together gives them +20%.
+Under Directed Credit & Development Banks the second sector has to fit in its 5
+points. Electrification fits beside any sector, and Agriculture beside
+Infrastructure or Armaments. A National Bank's sixth point adds Infrastructure
+with Armaments, and Heavy Industry with Agriculture. Heavy Industry never runs
+beside Infrastructure or Armaments.
 
 Export Credit Facility, listed under External & Currency, is the credit tool for
 exporters. It gives +25% export advantage, +0.05 momentum and +0.15 bubble
@@ -324,12 +326,12 @@ collection while it runs. It needs Corporate Governance, and Prudential / Narrow
 Banking forbids it.
 
 AI countries direct credit in a Downturn, in Stagnation, or while a Stable cycle
-has momentum Collapsing, and only with at least 3 points free. They choose the
-sector by who governs: heavy industry for Industrialists (which needs 4 points),
-agriculture for Landowners or Rural Folk, armaments for the Armed Forces or in
-war, electrification for the Intelligentsia, infrastructure otherwise. They lift
-it in a Panic or once the cycle climbs past Stable, and run Export Credit
-Facility from Stagnation down.
+has momentum Collapsing. They choose the sector by who governs: heavy industry
+for Industrialists, agriculture for Landowners or Rural Folk, armaments for the
+Armed Forces or in war, electrification for the Intelligentsia, infrastructure
+otherwise. They pay the same points as you, so a sector they cannot afford is
+not chosen. They lift it in a Panic or once the cycle climbs past Stable, and
+run Export Credit Facility from Stagnation down.
 
 ### Pulling out of a slump
 

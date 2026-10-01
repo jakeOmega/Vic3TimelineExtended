@@ -62,7 +62,7 @@ the sections after it.
 | Directed Credit | Directed Credit to Heavy Industry | 4 | – |
 | Directed Credit | Directed Credit to Agriculture | 2 | – |
 | Directed Credit | Directed Credit to Armaments | 3 | – |
-| Directed Credit | Directed Credit to Electrification & High Tech | 2 | Rural Electrification |
+| Directed Credit | Directed Credit to Electrification | 1 | Rural Electrification |
 | External & Currency | Export Credit Facility | 2 | Corporate Governance |
 | External & Currency | Capital Controls (Outflows) | 2 | a law that allows it, or war |
 | External & Currency | Restrict Speculative Inflows | 2 | full Banking System; your own policy rate; a law that allows capital controls, or war |

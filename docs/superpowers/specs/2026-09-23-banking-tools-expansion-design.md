@@ -35,12 +35,11 @@ command economy fails `banking_is_market_economy`, so every `cb_*` tool is hidde
 the way in (`remove_banking_market_modifiers_effect`). The grant would have been dead text on the law.
 
 **Amended 2026-09-30 (owner).** The five sectors were one template with five labels, so they now differ in
-price, cycle signature and a second effect; Electrification & High Tech became the cheap one. Points are now
-Infrastructure 3, Heavy Industry 4, Agriculture 2, Armaments 3, Electrification 2, and the numbers in B1 and the
+price, cycle signature and a second effect. Electrification lost "& High Tech" (Heavy Industry already covers high tech)
+and became the cheap one. Points are now Infrastructure 3, Heavy Industry 4, Agriculture 2, Armaments 3, Electrification 1, and the numbers in B1 and the
 table at the end of this document are superseded by the profile table in
 `docs/audits/banking_cycle_simulation.md` §14 and above `banking_directed_credit_infrastructure` in
-`extra_modifiers.txt`. The AI is unchanged by design: it still needs three free points before it directs credit,
-so the discount is the player's (§14, F19).
+`extra_modifiers.txt`. The AI pays the same prices as a player; see §14 of the simulation study.
 
 ## Constraints the design works inside
 
@@ -72,8 +71,8 @@ momentum and bubble pressure, 3 points and `banking_directed_credit_activation_c
 All five sectors share Infrastructure's `country_banking_lock_directed_credit_bool`, so Prudential /
 Narrow Banking locks the whole category. `bg_high_tech` is a child of `bg_heavy_industry`
 (`common/building_groups/extra_building_groups.txt`), so Heavy Industry already covers high-tech
-buildings; Electrification's own addition is `bg_power`. The overlap matters only when both run at
-once under the Directed Credit law, where high tech gets +20 %.
+buildings; Electrification's own addition is `bg_power`. (As first shipped Electrification also listed
+`bg_high_tech`, so both together gave +20 %; dropped 2026-09-30.)
 
 **The cap.** `country_directed_credit_sectors_add` (new, `banking_cycle_modifier_types.txt`) is granted
 `+1` by `law_directed_credit_development_banks`. `banking_directed_credit_slots_free` = 1 + that

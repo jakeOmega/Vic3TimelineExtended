@@ -248,12 +248,12 @@
   "de": "Der Staat verbürgt die Kredite von Zeughäusern, Munitionsfabriken und Werften und kauft ihre Erzeugnisse. Mit der Regierung als Käufer bleibt weniger Raum für Spekulation als bei anderer Kreditvergabe, doch die Intellektuellen fragen, was sonst mit dem Geld hätte gebaut werden können."
  },
  "CB_DIRECTED_CREDIT_ELEC": {
-  "en": "Directed Credit to Electrification & High Tech",
-  "de": "Gelenkte Kreditvergabe an Elektrifizierung und Hochtechnologie"
+  "en": "Directed Credit to Electrification",
+  "de": "Gelenkte Kreditvergabe an Elektrifizierung"
  },
  "CB_DIRECTED_CREDIT_ELEC_DESC": {
-  "en": "Public lending carries power lines where no private utility would build them, and backs the laboratories of new industry. The private utilities, which would rather set the pace of electrification themselves, fight it every step of the way.",
-  "de": "Öffentliche Kredite bringen Stromleitungen dorthin, wo kein privater Versorger sie bauen würde, und stützen die Laboratorien der neuen Industrie. Die privaten Versorger, die das Tempo der Elektrifizierung lieber selbst bestimmen würden, bekämpfen dies auf Schritt und Tritt."
+  "en": "Public lending carries power lines where no private utility would build them. The private utilities, which would rather set the pace of electrification themselves, fight it every step of the way.",
+  "de": "Öffentliche Kredite bringen Stromleitungen dorthin, wo kein privater Versorger sie bauen würde. Die privaten Versorger, die das Tempo der Elektrifizierung lieber selbst bestimmen würden, bekämpfen dies auf Schritt und Tritt."
  },
  "CB_DIRECTED_CREDIT_HEAVY": {
   "en": "Directed Credit to Heavy Industry",
@@ -328,12 +328,12 @@
   "de": "Verbürgt die Kredite der Rüstungsindustrie nicht mehr und überlässt Kreditentscheidungen wieder dem Markt."
  },
  "CB_DISABLE_DIRECTED_CREDIT_ELEC": {
-  "en": "End Directed Credit to Electrification & High Tech",
-  "de": "Gelenkte Kreditvergabe an Elektrifizierung und Hochtechnologie beenden"
+  "en": "End Directed Credit to Electrification",
+  "de": "Gelenkte Kreditvergabe an Elektrifizierung beenden"
  },
  "CB_DISABLE_DIRECTED_CREDIT_ELEC_DESC": {
-  "en": "Stop financing power and high technology on the State's terms and return lending decisions to the market.",
-  "de": "Finanziert Energie und Hochtechnologie nicht mehr zu den Bedingungen des Staates und überlässt Kreditentscheidungen wieder dem Markt."
+  "en": "Stop financing power on the State's terms and return lending decisions to the market.",
+  "de": "Finanziert die Energieversorgung nicht mehr zu den Bedingungen des Staates und überlässt Kreditentscheidungen wieder dem Markt."
  },
  "CB_DISABLE_DIRECTED_CREDIT_HEAVY": {
   "en": "End Directed Credit to Heavy Industry",
@@ -5284,8 +5284,8 @@
   "de": "#header $CB_DIRECTED_CREDIT_ARMS$#!\\n$CB_DIRECTED_CREDIT_ARMS_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_3$\\n$banking_dc_sector_cap_tt$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_directed_credit_armaments').GetDesc]"
  },
  "banking_dash_tt_cb_directed_credit_electrification": {
-  "en": "#header $CB_DIRECTED_CREDIT_ELEC$#!\\n$CB_DIRECTED_CREDIT_ELEC_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_2$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_electrification').GetDesc]",
-  "de": "#header $CB_DIRECTED_CREDIT_ELEC$#!\\n$CB_DIRECTED_CREDIT_ELEC_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_2$\\n$banking_dc_sector_cap_tt$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_directed_credit_electrification').GetDesc]"
+  "en": "#header $CB_DIRECTED_CREDIT_ELEC$#!\\n$CB_DIRECTED_CREDIT_ELEC_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_1$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_electrification').GetDesc]",
+  "de": "#header $CB_DIRECTED_CREDIT_ELEC$#!\\n$CB_DIRECTED_CREDIT_ELEC_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Erfordert:#! $BANKING_POINTS_1$\\n$banking_dc_sector_cap_tt$\\n#title Solange aktiv:#!\\n[GetStaticModifier('banking_directed_credit_electrification').GetDesc]"
  },
  "banking_dash_tt_cb_directed_credit_heavy_industry": {
   "en": "#header $CB_DIRECTED_CREDIT_HEAVY$#!\\n$CB_DIRECTED_CREDIT_HEAVY_DESC$\\n$TOOLTIP_DELIMITER$\\n#title Requires:#! $BANKING_POINTS_4$\\n$banking_dc_sector_cap_tt$\\n#title While active:#!\\n[GetStaticModifier('banking_directed_credit_heavy_industry').GetDesc]",
@@ -5420,8 +5420,8 @@
   "de": "Gelenkte Kreditvergabe an die Rüstungsindustrie"
  },
  "banking_directed_credit_electrification": {
-  "en": "Directed Credit to Electrification & High Tech",
-  "de": "Gelenkte Kreditvergabe an Elektrifizierung & Hochtechnologie"
+  "en": "Directed Credit to Electrification",
+  "de": "Gelenkte Kreditvergabe an Elektrifizierung"
  },
  "banking_directed_credit_heavy_industry": {
   "en": "Directed Credit to Heavy Industry",
@@ -6428,8 +6428,8 @@
   "de": "Schaltet #bold Erweiterte Einlagensicherung#! frei"
  },
  "country_can_use_directed_credit_electrification_bool": {
-  "en": "Enables Directed Credit: Electrification & High Tech",
-  "de": "Schaltet Gelenkte Kreditvergabe: Elektrifizierung & Hochtechnologie frei"
+  "en": "Enables Directed Credit: Electrification",
+  "de": "Schaltet Gelenkte Kreditvergabe: Elektrifizierung frei"
  },
  "country_can_use_emergency_liquidity_bool": {
   "en": "Enables #bold Emergency Liquidity Program#!",
