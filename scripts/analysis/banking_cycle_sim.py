@@ -500,11 +500,17 @@ PRE_ANCHORING = {
     "inst_momentum": -0.02,
     "inst_anchoring": 0.0,
 }
+# The mandate bank's own asset purchases at the rate floor (2026-10-01,
+# monetary_policy_design.md §0.12) switched off: `--tune pre_bank_qe`.
+PRE_BANK_QE = {
+    "bank_qe": 0.0,
+}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
     "pre_delegation_fix": PRE_DELEGATION_FIX,
     "pre_anchoring": PRE_ANCHORING,
+    "pre_bank_qe": PRE_BANK_QE,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -1124,6 +1130,35 @@ def hyperinflation_crisis(cfg: Config, state: State, rng: random.Random) -> None
         state.inflation_expected = anchor
 
 
+def bank_buys_assets(cfg: Config, state: State, world_rate: float) -> bool:
+    """te_mon_bank_buys_assets — a mandate-run fiat/digital bank on its rate floor.
+
+    The mandate must be what runs the dial (delegated, AI or CBI, which
+    `mandate_for` already says), the currency must be one a bank can create
+    (the same fiat/digital pair `te_mon_can_monetise` reads, so never metal), and
+    the policy rate must sit on the regime's floor with the script's 0.01 slack.
+    """
+    if not has_dial(cfg, state) or cfg.currency not in ("fiat", "digital"):
+        return False
+    if mandate_for(cfg, state) is None:
+        return False
+    lo, _ = target_bounds(cfg, state, world_rate)
+    return state.policy_rate <= lo + 0.01
+
+
+def bank_qe_pressure(cfg: Config, state: State, world_rate: float) -> float:
+    """te_mon_pressure_bank_qe — per_pp x (anchor - last month's headline), capped.
+
+    `tuned("bank_qe", 1)` scales it, so `--tune bank_qe=0` is the pre-§0.12 world
+    for a before/after read.
+    """
+    if not bank_buys_assets(cfg, state, world_rate):
+        return 0.0
+    shortfall = max(0.0, 2.0 - state.inflation)
+    pressure = min(K.sv("te_mon_bank_qe_cap"), K.sv("te_mon_bank_qe_per_pp") * shortfall)
+    return pressure * tuned("bank_qe", 1.0)
+
+
 def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     """te_mon_pressure_total — the standing inflation pressure sum (§9.1)."""
     total = 0.0
@@ -1150,6 +1185,9 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     # QE, while open market operations are running
     if "omo" in state.tools:
         total += K.sv("te_mon_qe_pressure")
+
+    # the bank's own purchases at the floor (te_mon_pressure_bank_qe, §0.12)
+    total += bank_qe_pressure(cfg, state, world_rate)
 
     # te_mon_pressure_modifiers: the wage half (the standing labour-law
     # pressure) plus the other half — country_inflation_pressure_add from laws,
@@ -2569,7 +2607,8 @@ def main() -> int:
                          "stood before the 2026-09-22 retune, or --tune "
                          "pre_boom_rescue for the mod as #371 left it (§10), or "
                          "--tune pre_delegation_fix for the delegated bank before §12, or "
-                         "--tune pre_anchoring for independence's institution bonus before §13.")
+                         "--tune pre_anchoring for independence's institution bonus before §13, or "
+                         "--tune pre_bank_qe for a mandate bank with no asset purchases at the floor.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")

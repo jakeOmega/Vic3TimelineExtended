@@ -2,6 +2,8 @@
 
 > **External policy expansion (2026-09-27):** Five banking interventions now influence positive capital flows, sterilization, FX debt exposure, paid reserve accumulation, and emergency import credit. See `mod_systems.md` → External & Currency tools for costs, gates, monthly ordering and modeling limits. Exchange rates remain endogenous and treaty arrangements retain their existing role; the retired direct FX buttons are not restored.
 
+> **Deflation exit for mandate-run banks (2026-10-01):** a delegated, AI or independent bank on its rate floor with prices under target now buys assets itself (`te_mon_pressure_bank_qe`). See [§0.12](#012-the-mandate-banks-own-asset-purchases-at-the-floor--2026-10-01), §9.1 and §11.
+
 > **STATUS: PHASES 1–6 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 6 (§19 rows 6a / 6b /
 > 6c — the swap line as a repayable capped single-provider loan, the guarantee's call counter,
 > `non_fulfillment` on the friendly three, treaty leverage, and the two hostile articles
@@ -1624,6 +1626,101 @@ leaves only the engine itself unverified.
 
 ---
 
+### 0.12 The mandate bank's own asset purchases at the floor — 2026-10-01
+
+**The report.** A player on Central Bank Independence and Digital Currency sat in deflation they
+could not leave: Stable cycle, Steady momentum, policy rate on the −3.0% floor, headline −6.6%,
+expected −4.9%, a 115.1 exchange index (exports −18.9%, prices −2.4 points), Open-Market
+Operations and Expand Deposit Guarantee on, nothing left of the intervention budget, and a
+Monetise Deficit stepper that CBI had switched off. Three things made it a trap rather than a
+slump:
+
+1. **The mandates are pinned.** At π = −6.6 *both* formulas ask for far less than −3
+   (price stability: `r̂* + π + 1.0 × (π − 2)`; growth is never harder). Switching mandate does
+   nothing, and the real rate (−3 − (−4.9) = +1.9) is about neutral, so the stance reads
+   Neutral and §8's loose-money push is zero.
+2. **Expectations de-anchor.** At 8.6 points from the 2% anchor, `c_eff` is `c × 0.14`
+   (0.1 under CBI), so expected inflation just follows headline (α = 1/12 under CBI, twice as fast
+   as delegated).
+3. **Independence forbids the one big lever.** Monetisation (+2.5pp a level) needs a bank that takes
+   instructions (`te_mon_can_monetise`, §6 "a commitment device"). That is intended. What was
+   missing is that the bank, which *can* buy assets, did nothing but what the player bought for it
+   with OMO's 4 points: a flat +1.0.
+
+**What shipped.** `te_mon_pressure_bank_qe` joins `te_mon_pressure_total` (§9.1) beside the OMO
+term: `min(te_mon_bank_qe_cap = 2.5, te_mon_bank_qe_per_pp = 0.5 × (anchor − last month's
+headline))` pp of pressure while `te_mon_bank_buys_assets` holds — a bank with a dial whose
+mandate runs it (`te_mon_mandate_binds`: delegated, AI or CBI), under `law_fiat_currency` or
+`law_digital_currency`, with `te_mon_policy_rate_at_floor`. It stacks with OMO rather than
+replacing it. Owner-approved shape, 2026-10-01.
+
+| # | Ruling | Why |
+|---|---|---|
+| **N1** | **Mandate-run banks only; a manual dial gets nothing** | the manual dial has the monetisation stepper for this job. Giving it the bank's purchases as well would make the stepper redundant *and* stack +7.5 on top. Everyone else (AI included, which is always delegated) has no other lever |
+| **N2** | **The regime test is the fiat/digital *law* pair, not `country_can_create_unbacked_money_bool`** | same pair as `te_mon_can_monetise`, and Q4 already says a suspended gold standard (which keeps `law_gold_standard`) is a five-year emergency, not a licence to print. The bool gates the OMO *tool* the player buys; this is the bank doing its job |
+| **N3** | **"At the floor" is `te_mon_policy_rate_at_floor`, OMO's own gate** | −3 under digital, 0 under fiat. A bank that can still cut cuts: cheaper, reversible, and §8's stance push already rewards it |
+| **N4** | **It reads last month's *headline*, not core** | the mandates read core so they can look through cost-push, but core is hidden state (P7) and this term is `0.5 × (2 − π)` until the cap: if it read core, a printed value would be core itself. Headline is what the player is shown. It is the same one-month lag the wage-spiral gate has |
+| **N5** | **It touches inflation pressure only** | no points, no treasury cost, none of OMO's momentum, services or bubble lines. It is the bank's balance sheet, and the cycle already has its own deflation drag (the Deflation band). It cannot push inflation past target: it is zero at π ≥ 2 and the month the rate leaves the floor |
+| **N6** | **The pressure is capped at 2.5, reached at π = −3** | one monetisation level's worth. The cap, not the slope, is what keeps it a safety net: a bank that bought without limit would be monetisation under another name |
+
+**Measured.** `scripts/analysis/banking_cycle_sim.py` ports the term (`bank_qe_pressure`;
+`--tune pre_bank_qe` switches it off). A CBI / Digital / price-stability country started as
+reported (core −4.2 under a −2.4 cost-push drag that fades as its average catches up, expected
+−4.9, rate −3, OMO on, 0.9 wage pressure absorbed by nine bank levels, cycle held at 50, no
+exogenous noise):
+
+| Headline at year | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| CBI + OMO, before | −5.9 | −5.0 | −3.4 | −1.6 | 0.0 | +1.2 |
+| CBI + OMO, after | −3.3 | −2.3 | −0.8 | +0.5 | +1.4 | +2.0 |
+| CBI, no OMO, before | −7.1 | −7.6 | −8.3 | −9.3 | −10 | −10 (the clamp, for ever) |
+| CBI, no OMO, after | −4.3 | −3.1 | −2.2 | −1.0 | 0.0 | +0.7 |
+| Manual dial + OMO, before and after | −5.1 | −3.9 | −2.7 | −1.5 | −0.4 | +0.7 |
+
+The exit is about a year and a half sooner with OMO and, without it, exists at all. The ordinary
+century matrix is unchanged, because a mandate bank is on its floor in 0.0–0.2% of months (the
+`floor%` column). With independence, 150 fiat runs per cell differ from the pre-change run by at
+most 0.1 crashes a century and 0.01 points of mean inflation, and 60 digital runs per cell are
+identical in every column.
+
+#### Known roughnesses (§0.12)
+
+- **It switches off when the *bank* leaves the floor, not when prices recover.** The bank's rate
+  follows core, which the cost-push drag hides from the headline, so the rate can lift off the
+  floor while headline is still three points under target. In the sim above, digital leaves the
+  floor around month 13–15 at headline −3.2 and the term drops from 2.5 to 0 in one step. The
+  recovery after that is the old, slower one. No oscillation appeared in 72 months (one switch-off,
+  none back on), but the step is real.
+- **The switch-on is a step too.** The mandate's target reaches the floor at core π = −2 under
+  digital (`2π + 1 = −3` at r\* = 3, no cycle lean) and π = −0.5 under fiat, so with headline
+  equal to core the term arrives at once at 2.0 (digital) or 1.25 (fiat), and higher while a
+  cost-push drag holds headline under core. A taper by distance from the floor would smooth both
+  ends; nobody asked for one.
+- **The sim has no exchange-rate channel and holds the cycle still**, so the deflation band's
+  momentum drain and the Stagnation phase term (−0.3) that a real trap adds are missing. The real
+  recovery is slower than the table.
+- **No dashboard row.** The Mandate and Delegation tooltips say what the bank does; nothing shows
+  the term live. P7 keeps every `te_mon_pressure_*` term out of player-visible text. This one is
+  built from headline and the floor, so a row would leak nothing, but it would be the first
+  exception to a rule written per name.
+- The tooltips and `docs/player_guide/04-banking.md` state the numbers in words. Retuning the two
+  constants means editing `banking_dash_mon_mandate_tt` and that chapter.
+
+#### IN-GAME VERIFICATION CHECKLIST (§0.12)
+
+| # | Check |
+|---|---|
+| **N-1** | CBI + Digital Currency, policy rate on −3, headline under −2: Inflation on the History chart **rises** month on month, where before it fell or stayed flat |
+| **N-2** | The same country on a **manual** dial (no CBI, not delegated): no change from before — inflation does not rise on its own |
+| **N-3** | Gold standard, commodity money and a suspended gold standard: unaffected (no bank purchases) |
+| **N-4** | The rate leaves the floor and the term goes with it; there is no month-by-month on/off in the policy-rate chart |
+| **N-5** | An AI great power pushed into deflation at the floor recovers rather than sitting at −10 |
+| **N-6** | The Mandate tooltip shows the *Out of room* paragraph; the Delegation tooltip's CBI paragraph says the bank cannot be asked to print |
+
+**Not verified in a running game**, like everything else in §0.
+
+---
+
 ## 1. Goals, non-goals, principles
 
 **Goal.** Replace the two on/off toggles that currently stand in for monetary policy
@@ -1902,7 +1999,9 @@ momentum, faster bubble build-up, more crash risk. (Written when the bias was 1p
 
 **Why CBI is not just "automation".** Delegation already gives everyone automation. CBI is
 a *commitment device*: the player cannot override the bank, cannot monetise deficits, and
-cannot pre-load a loose stance before a war. In exchange markets believe the mandate:
+cannot pre-load a loose stance before a war. (The bank still buys assets on its own account at
+its rate floor with prices under target — §0.12 — which is the central bank's job, not the
+treasury's.) In exchange markets believe the mandate:
 lower premium and floor, faster-anchoring expectations (disinflation is cheaper), a
 better estimate of r\*, and — per level of the National Bank institution, on top of the
 institution's own modifier — **inflation anchoring**: `country_inflation_anchoring_add`
@@ -2183,6 +2282,7 @@ pressure (pp) =
     + 0.3 × max(0, deficit % of GDP − 1)     ×2 at war
     + 2.5 × monetisation_level               §11
     + 1.0 if QE active                       §11
+    + min(2.5, 0.5 × (anchor − last month's headline))   §11, §0.12 — a mandate-run fiat/digital bank on its rate floor, prices under target
     + 100 × modifier:country_inflation_pressure_add          wage pressure, §9.4; also event modifiers (§11)
     + 0.5 × gold flow in % of GDP per year   phase 3, §12.2 — inflows inflate, outflows deflate
     − 2 × max(0, π_core − π_world − 1)       commodity money only, clamped at −6 — §0.6 R7, the
@@ -2481,6 +2581,13 @@ and treasury cost. Changes:
   inflation pressure (§9.1); the interest field is deleted.
 - AI weights rewritten: use at the floor in recession or deflation.
 - Under digital currency the floor is −3%, so QE arrives later — negative rates substitute.
+
+**The bank's own purchases (2026-10-01, §0.12).** OMO is the tool a *player* buys. A bank that
+runs its mandate — delegated, AI or independent — also buys assets itself once its rate is on
+the floor and headline inflation is under the anchor: `te_mon_pressure_bank_qe` =
+`min(2.5, 0.5 × (anchor − headline))` pp of pressure, stacking with OMO's flat +1.0. It exists
+because independence forbids monetisation, and at the floor both mandates ask for less than the
+floor allows, so a CBI country in deflation had only OMO's flat point to climb out on.
 
 `cb_policy_rate_hike` / `cb_disable_policy_rate_hike` are **deleted** (§18).
 
@@ -4362,6 +4469,7 @@ P6-1…13).
 | Rank: decentralized | +10 | 7.3 |
 | Mod techs (structural) | **−0.3 ×4, −0.15** = −1.35 (was −0.4 ×4, −0.2 = −1.8), re-homed 2026-09-20 to `keynesian_economics` (6), `computer_networks` (8), `knowledge_economy` (9), `machine_learning` (10, the −0.15) and `universal_digital_identity` (11); the last two also carry `country_credit_standing_floor_add` −0.1pp each, so the floor goes 0.5 → 0.3 (CBI 0.25 → 0.05) | 7.5 |
 | Delegated target rounding / hysteresis | integer / 0.75 | 4 |
+| Bank's own asset purchases at the floor (`te_mon_bank_qe_per_pp` / `te_mon_bank_qe_cap`) | 0.5pp of pressure per point headline is under the 2% anchor, capped at 2.5 (reached at −3%); stacks with OMO's +1.0 (`te_mon_qe_pressure`); since 2026-10-01 | 11, 0.12 |
 | Gold / CBI credibility | −1.0 / −0.5 | 5 |
 | CBI inflation anchoring, per National Bank level | 0.1pp of net positive wage + price pressure absorbed (`country_inflation_anchoring_add` 0.001; 0.9pp at nine levels), since 2026-09-25 | 6 |
 | `_mult` → pp conversion | × 20 | 7.5 |

@@ -432,6 +432,37 @@ te_mon_policy_rate_at_floor = {
 	var:te_policy_rate <= te_mon_floor_threshold
 }
 
+# Is this country's central bank buying assets on its own account? (§0.12) Under
+# independence the treasury cannot tell the bank to print (te_mon_can_monetise).
+# But a bank whose rate is on the floor with prices under its target has nothing
+# left but its balance sheet, and buying assets is a central-bank act, not a
+# fiscal one. So a bank that runs its mandate — delegated, AI or independent —
+# does it unasked, in proportion to the shortfall (te_mon_pressure_bank_qe).
+#
+# THE FOUR CONDITIONS, AND WHY EACH:
+#   * te_mon_has_dial: a bank with a rate to be stuck on. Carries the game rule,
+#     the national bank, the command-economy, dollarisation and anchoring tests.
+#   * te_mon_mandate_binds: the mandate is what runs the bank. A manual dial is
+#     the player's own hand and has the monetisation stepper for this job.
+#   * fiat or digital, by LAW, the same pair te_mon_can_monetise reads and for
+#     the same reason: a convertible currency cannot create money to buy bonds,
+#     and a suspended gold standard (§12.3) is a five-year emergency, not a
+#     licence to print (ruling Q4). It is not the declarative
+#     country_can_create_unbacked_money_bool, which gates the OMO TOOL: the
+#     tool is a programme the player buys, this is the bank doing its job.
+#   * te_mon_policy_rate_at_floor: the same gate OMO has, for the same reason —
+#     a bank that can still cut does not buy assets, because cutting is cheaper
+#     and reversible and does the same job.
+te_mon_bank_buys_assets = {
+	te_mon_has_dial = yes
+	te_mon_mandate_binds = yes
+	OR = {
+		has_law_or_variant = law_type:law_fiat_currency
+		has_law_or_variant = law_type:law_digital_currency
+	}
+	te_mon_policy_rate_at_floor = yes
+}
+
 
 # --- Phase 3: the world rate, gold flows and the peg (§12) ------------------
 #

@@ -1370,3 +1370,51 @@ are unchanged, and §8's targets do not depend on any of this.
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 2,3,4,5,8 [--dc-affinity dc_heavy,dc_agri,dc_arms,dc_elec] [--tune dc_lift_boost=0]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 4,5,6,8 --fin-law law_directed_credit_development_banks --dc-affinity dc_heavy,dc_agri,dc_arms,dc_elec
 ```
+
+---
+
+## 15. The mandate bank's asset purchases at the rate floor (2026-10-01)
+
+**Question (owner).** A player on Central Bank Independence and Digital Currency was stuck in deflation with the
+policy rate on the −3% floor and headline inflation at −6.6%. Central Bank Independence rules out Monetise Deficit, and
+at the floor both mandates ask for less than the floor allows. What can a mandate-run bank do?
+
+### F20 — At the floor the bank has no lever of its own, and without Open-Market Operations the loop has no exit
+
+The model is §9.1's: core moves a tenth of the way to `expected + pressure` each month, and expectations lose their
+anchor once inflation is ten points from target (`c_eff`). At −6.6% an independent bank has `c_eff` of about 0.1, so
+expectations follow headline, and the only upward pressure is Open-Market Operations' flat +1.0, which costs 4 intervention
+points. Started as reported (core −4.2 under a −2.4 cost-push drag that fades as its average catches up, expected −4.9, rate
+−3, 0.9 of wage pressure absorbed by nine National Bank levels, cycle held at 50, no noise), headline reaches 0 after
+five years with Open-Market Operations on. With it off, headline falls to the −10 clamp and stays there.
+
+### What shipped
+
+`te_mon_pressure_bank_qe`, `min(2.5, 0.5 × (anchor − last month's headline))` pp, while a mandate-run fiat or digital bank
+sits on its rate floor (`te_mon_bank_buys_assets`; design doc §0.12). It stacks with Open-Market Operations. The
+simulator ports it as `bank_qe_pressure`; `--tune pre_bank_qe` switches it off.
+
+### Result
+
+| Headline inflation at year | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| independent, Open-Market Operations on, before | −5.9 | −5.0 | −3.4 | −1.6 | 0.0 | +1.2 |
+| independent, Open-Market Operations on, after | −3.3 | −2.3 | −0.8 | +0.5 | +1.4 | +2.0 |
+| independent, no Open-Market Operations, before | −7.1 | −7.6 | −8.3 | −9.3 | −10 | −10 |
+| independent, no Open-Market Operations, after | −4.3 | −3.1 | −2.2 | −1.0 | 0.0 | +0.7 |
+| manual dial, Open-Market Operations on, before and after | −5.1 | −3.9 | −2.7 | −1.5 | −0.4 | +0.7 |
+
+Ordinary play does not move. With independence, 150 fiat runs per cell changed by at most 0.1 crashes a century and
+0.01 points of mean inflation, and 60 digital runs per cell did not change in any column, because a mandate bank sits on
+its floor in 0.0–0.2% of months. In the deflation runs the term switches off once, when the bank's rate leaves the floor
+(around month 13–15 under digital, while headline is still −3.2), and never back on.
+
+**Not modelled.** The exchange-rate channel, and the cycle: the Deflation band's momentum drain and the Stagnation phase
+term would make a real recovery slower than the table.
+
+**Reproduce:**
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --fin-law law_central_bank_independence --points 0,8 [--tune pre_bank_qe]
+.venv/bin/python -m unittest test_monetary_bank_qe
+```

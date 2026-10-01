@@ -1388,6 +1388,27 @@ te_mon_qe_pressure = {
 	value = 1.0
 }
 
+# The bank's OWN asset purchases (§0.12), in pp of pressure per point that
+# headline inflation sits under the mandate's anchor, and the most they can add.
+# te_mon_pressure_bank_qe is min(cap, per_pp x shortfall) while
+# te_mon_bank_buys_assets holds, so the cap is reached five points under target
+# (-3% on the 2% anchor). It stacks with the OMO programme above rather than
+# replacing it: OMO is the player's own escalation and costs points and cash,
+# this is the bank doing its job.
+#
+# STATED IN WORDS by banking_dash_mon_mandate_tt (see te_mon_qe_pressure for why
+# the tooltips spell the numbers out instead of reading them back).
+# test_monetary_bank_qe.py fails when these move. Retune them and edit that
+# string, the player guide's "When the bank cannot cut" section and
+# monetary_policy_design.md §0.12.
+te_mon_bank_qe_per_pp = {
+	value = 0.5
+}
+
+te_mon_bank_qe_cap = {
+	value = 2.5
+}
+
 
 # --- Cost-push: the goods basket (§9.3) -------------------------------------
 
@@ -2158,6 +2179,42 @@ te_mon_pressure_qe = {
 	}
 }
 
+# The central bank's own purchases when its rate cannot fall further and prices
+# are under its target (§0.12): te_mon_bank_qe_per_pp for every point headline
+# inflation is under the anchor, capped at te_mon_bank_qe_cap. This is the
+# deflation exit for a bank that cannot be told to print — central bank
+# independence forbids monetisation, and at the floor both mandates ask for far
+# less than the floor allows, so without this term the bank's only lever was the
+# flat +1.0 of the OMO tool.
+#
+# IT READS HEADLINE, NOT CORE. The mandates look through cost-push by reading
+# te_inflation_core, but core is hidden state (ruling P7) and this term's size is
+# not: it is te_mon_bank_qe_per_pp x (anchor - core) until the cap, so a term that
+# read core would be core itself the moment anything printed it. Headline is
+# what the player is shown. It is also last month's headline — step 6b sums the
+# pressure before it writes this month's — the same one-month lag the wage
+# spiral's gate has, and the same figure the player last saw.
+#
+# THE ANCHOR is te_mon_inflation_anchor, the mandate's own target (2 on fiat and
+# digital; the term cannot fire on metal), so "under target" means what the
+# mandate means by it. Inflation at or above the anchor adds nothing, and the
+# term is zero the month the rate leaves the floor: it can ease a deflation, not
+# push inflation past the target the bank is set to hold.
+te_mon_pressure_bank_qe = {
+	value = 0
+	if = {
+		limit = {
+			te_mon_bank_buys_assets = yes
+			has_variable = te_inflation
+		}
+		add = te_mon_inflation_anchor
+		subtract = var:te_inflation
+		min = 0
+		multiply = te_mon_bank_qe_per_pp
+		max = te_mon_bank_qe_cap
+	}
+}
+
 # Everything script grants as standing pressure, in pp. TWO TYPES, not one
 # (ruling P11): country_wage_pressure_add is what labour and welfare laws carry
 # and what the §9.4 real-wage dividend pays back on, country_inflation_pressure_add
@@ -2460,6 +2517,7 @@ te_mon_pressure_total = {
 	add = te_mon_pressure_deficit
 	add = te_mon_pressure_monetisation
 	add = te_mon_pressure_qe
+	add = te_mon_pressure_bank_qe
 	add = te_mon_pressure_modifiers
 	add = te_mon_pressure_wage_spiral
 	add = te_mon_pressure_noise
