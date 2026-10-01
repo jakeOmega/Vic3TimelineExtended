@@ -143,12 +143,6 @@ je_cultural_hegemony = {
 				set_variable = { name = ch_benchmark_applied value = 0 }
 			}
 
-			# Record this month's share for the widget's history chart, after the
-			# programme modifiers above have settled, so the sample is the month's
-			# final state. hidden_effect-wrapped inside the helper; nothing is
-			# recorded for a country the history store does not track.
-			te_history_record_cultural_hegemony_samples = yes
-
 			# Milestone events — self-gated by ch_milestone_* variables, fire
 			# at most once per country when cultural_pull_total crosses 10 / 25
 			# (.9 at 25 also needs the world's #1 rank).

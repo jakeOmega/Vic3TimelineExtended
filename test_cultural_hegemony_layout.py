@@ -314,8 +314,12 @@ class DisplayDataTest(unittest.TestCase):
     """The overview's numbers come from guarded, display-only script values."""
 
     def test_every_script_value_the_panels_read_exists(self):
-        values = set(re.findall(r"^(\w+) = ", _read(VALUES), re.M))
-        text = _read(WIDGET) + "\n".join(v for k, v in _loc().items() if k.startswith(("je_ch_", "ch_policy_")))
+        # The annual world history also uses the shared history clock and
+        # its own guarded readers. Check actual definitions in all files.
+        values = set()
+        for path in glob.glob(os.path.join(REPO, "common", "script_values", "*.txt")):
+            values.update(re.findall(r"^(\w+) = ", _read(path), re.M))
+        text = _read(WIDGET) + "\n".join(v for k, v in _loc().items() if k.startswith(("je_ch_", "ch_policy_", "ch_model_hist_")))
         for sv in set(re.findall(r"ScriptValue\('(\w+)'\)", text)):
             with self.subTest(value=sv):
                 self.assertIn(sv, values)
