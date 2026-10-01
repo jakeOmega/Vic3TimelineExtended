@@ -755,7 +755,7 @@ class WidthBudgetTest(unittest.TestCase):
         available = _type_body(self.dash, "te_banking_sec_interventions")
         for sector, name in (("infrastructure", "Infrastructure"), ("heavy_industry", "Heavy Industry"),
                              ("agriculture", "Agriculture"), ("armaments", "Armaments"),
-                             ("electrification", "Electrification & High Tech")):
+                             ("electrification", "Electrification")):
             key = "banking_dash_name_cb_directed_credit_" + sector
             self.assertIn('text = "%s"' % key, available)
             self.assertEqual(self.shown(key), name)

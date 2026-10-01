@@ -1898,8 +1898,12 @@ def disable_scores(cfg: Config, state: State) -> dict[str, float]:
     if TUNE.get("ai_directed_off") != "off":
         # lift it once the recovery it was bought for has arrived (F11,
         # 2026-09-22); `--tune ai_directed_off=off` restores the old weights
-        v += 20 if (p == STABLE and not risk_falling) else 0
-        v += 30 if p == EXPANSION else 0
+        # +20 on stable / expansion since 2026-09-30 (audit §14, F19): the cheaper
+        # sectors are enabled at budgets they were not, so the AI lifts them sooner.
+        # `--tune dc_lift_boost=0` restores the 20 / 30 of §7.
+        boost = tuned("dc_lift_boost", 20.0)
+        v += 20 + boost if (p == STABLE and not risk_falling) else 0
+        v += 30 + boost if p == EXPANSION else 0
     else:
         v += 10 if p == EXPANSION else 0
     v += 35 if p == BOOM else 0

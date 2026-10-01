@@ -1440,8 +1440,8 @@
   "de": "Wendet die Effekte der Bankenpolitik Gelenkte Kreditvergabe an die Rüstungsindustrie an."
  },
  "banking_directed_credit_electrification_desc": {
-  "en": "Applies the effects of the Directed Credit to Electrification & High Tech banking policy.",
-  "de": "Wendet die Effekte der Bankenpolitik Gelenkte Kreditvergabe an Elektrifizierung & Hochtechnologie an."
+  "en": "Applies the effects of the Directed Credit to Electrification banking policy.",
+  "de": "Wendet die Effekte der Bankenpolitik Gelenkte Kreditvergabe an Elektrifizierung an."
  },
  "banking_directed_credit_heavy_industry_desc": {
   "en": "Applies the effects of the Directed Credit to Heavy Industry banking policy.",
@@ -3416,8 +3416,8 @@
   "de": "Ein Instrument des [concept_banking_cycle], das die Ersparnisse der Bürger während einer Finanzpanik absichert. Sparer flüchten nicht mehr in Scharen, sodass Kreditgeber dem Staat einen geringeren Risikoaufschlag berechnen; verringert außerdem den [concept_bubble_pressure] und erzeugt [Concept('concept_loyalist', 'Loyalisten')] in der Bevölkerung."
  },
  "country_can_use_directed_credit_electrification_bool_desc": {
-  "en": "Enables the Directed Credit: Electrification & High Tech banking intervention.",
-  "de": "Schaltet die Bankenintervention „Gelenkte Kreditvergabe: Elektrifizierung & Hochtechnologie“ frei."
+  "en": "Enables the Directed Credit: Electrification banking intervention.",
+  "de": "Schaltet die Bankenintervention „Gelenkte Kreditvergabe: Elektrifizierung“ frei."
  },
  "country_can_use_emergency_liquidity_bool_desc": {
   "en": "A [concept_banking_cycle] tool that acts as a lender of last resort during a financial panic. Provides a massive boost to the financial cycle, and a central bank that will not let banks fail cuts the risk premium lenders charge the government — but it greatly increases [concept_bubble_pressure] and costs treasury reserves.",

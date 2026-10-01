@@ -249,17 +249,20 @@ cb_disable_directed_credit_infrastructure = {
 	desc = "CB_DISABLE_DIRECTED_CREDIT_INFRA_DESC"
 	visible = { is_ai = yes banking_tool_directed_active = yes }
 	# Lift it once the recovery it was bought for has arrived. Directed credit
-	# is bought in a downturn and carries +0.05 momentum (+0.5 cycle points a
-	# month, standing) and +0.3 bubble; held through stable and expansion it
-	# ran the cycle hot, and the simulation attributed 30-40% of a tooled
-	# AI's crashes to it (docs/audits/banking_cycle_simulation.md F11). The
-	# stable and expansion weights below are what the other expansionary tools
-	# already carry.
+	# is bought in a downturn and carried +0.05 momentum (+0.5 cycle points a
+	# month, standing) and +0.3 bubble when F11 measured it; held through stable
+	# and expansion it ran the cycle hot, and the simulation attributed 30-40% of
+	# a tooled AI's crashes to it (docs/audits/banking_cycle_simulation.md F11).
+	# Infrastructure now carries +0.03 and +0.1 (§14), the safest sector to hold,
+	# but the weights below serve all five. Stable and expansion were 20 and 30;
+	# with the cheaper sectors the AI enables directed credit at budgets it could
+	# not before, and 40 and 50 lift it before it runs the cycle hot (§14, F19).
+	# They are an AI preference, not a price: the AI pays what a player pays.
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
-		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 20 }
-		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 40 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 50 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
@@ -652,8 +655,8 @@ cb_disable_directed_credit_heavy_industry = {
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
-		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 20 }
-		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 40 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 50 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
@@ -689,8 +692,8 @@ cb_disable_directed_credit_agriculture = {
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
-		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 20 }
-		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 40 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 50 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
@@ -726,8 +729,8 @@ cb_disable_directed_credit_armaments = {
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
-		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 20 }
-		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 40 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 50 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
@@ -763,8 +766,8 @@ cb_disable_directed_credit_electrification = {
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
-		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 20 }
-		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 40 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 50 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
