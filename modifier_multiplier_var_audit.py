@@ -1,5 +1,8 @@
-"""Audit for a permanent `add_modifier { multiplier = var:X }` whose backing
-variable is removed later in the same top-level block.
+"""Audit for `add_modifier { multiplier = var:X }` reads that come back `'none'`.
+
+Two checks. `removed_variable`: a permanent modifier whose backing variable is
+removed later in the same top-level block. `building_scope`: a multiplier that
+reads the variable of a building, which holds none (below).
 
 The engine stores the `multiplier` **expression** with the modifier and
 re-evaluates it on later ticks (decay, tooltip, recalculation), not just at
@@ -53,6 +56,22 @@ would be nothing to report or to hang a `# REVIEWED YYYY-MM-DD:` suppression
 comment on. This audit blanks comments and string bodies in place (offsets and
 therefore line numbers preserved), then brace-walks the raw text.
 
+The `building_scope` check
+--------------------------
+Buildings hold no variables (`scripting_best_practices.md`, "Buildings Have No
+Variables"), so `multiplier = this.var:X` or a bare `var:X` inside a building
+scope reads `'none'`, logs the same `jomini_scriptvalue.cpp` line and scales the
+modifier by 1. All seven megaproject construction sites shipped that way: their
+progress modifier read a constant "+100%" from the first month while the real
+counter, on the state, was a few percent (2026-10-01). Keep the number on the
+state and read it as `root.var:X` from a state pulse.
+
+A building scope is an `every_` / `random_` / `ordered_scope_building` iterator
+or a `b:<building>` link. Control flow between it and the `add_modifier` (`if`,
+`random_list`, `hidden_effect`, …) is transparent; any other block (`owner`,
+`state`, `scope:x`, …) is taken as leaving the building, and the read is not
+flagged. Timed modifiers count here: the read fails whatever the duration.
+
 Suppress a deliberate case with a trailing `# REVIEWED YYYY-MM-DD: rationale`
 comment on either the `multiplier = …` line or the `remove_variable` line.
 """
@@ -76,7 +95,7 @@ DURATION_KEYS = ("days", "months", "years")
 _REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
 )
-_OPENER_RE = re.compile(r"(?P<name>[A-Za-z_][\w.:|@$\-]*)\s*(?:\?=|=)\s*\{")
+_OPENER_RE = re.compile(r"(?P<name>[A-Za-z_0-9][\w.:|@$\-]*)\s*(?:\?=|=)\s*\{")
 _ADD_MODIFIER_RE = re.compile(r"\badd_modifier\s*=\s*\{")
 _MULTIPLIER_RE = re.compile(r"\bmultiplier\s*=\s*(?P<value>[^\s{}]+)")
 _MODIFIER_NAME_RE = re.compile(r"\bname\s*=\s*(?P<name>[^\s{}]+)")
@@ -86,6 +105,14 @@ _VAR_REF_RE = re.compile(r"(?:^|[.:])(?P<kind>local_var|var):(?P<name>[A-Za-z_$]
 _REMOVE_RE = re.compile(
     r"\bremove_(?P<kind>local_variable|variable)\s*=\s*(?P<name>[A-Za-z_$][\w$]*)"
 )
+# A multiplier reading THIS's own variable: `var:X` or `this.var:X`.
+_THIS_VAR_RE = re.compile(r"^(?:this\.)?var:(?P<name>[A-Za-z_$][\w$]*)$", re.IGNORECASE)
+_BUILDING_SCOPE_RE = re.compile(r"^(?:(?:every|random|ordered)_scope_building|b:\w+)$")
+# Blocks that do not change scope. Numeric names are `random_list` weights.
+_CONTROL_FLOW = frozenset((
+    "if", "else_if", "else", "while", "random", "random_list", "switch",
+    "hidden_effect", "custom_tooltip", "show_as_tooltip", "add_modifier",
+))
 
 
 @dataclass
@@ -99,6 +126,9 @@ class Flag:
     block: str  # top-level block the pair lives in
     block_line: int
     exemption: dict | None = None
+    check: str = "removed_variable"  # or "building_scope" (remove_line 0)
+    scope_block: str = ""  # building_scope: the iterator or `b:` link
+    scope_line: int = 0
 
 
 @dataclass
@@ -277,13 +307,61 @@ def _variable_scaled_modifiers(clean: str, block: _Block, starts: list[int],
     return adds
 
 
+def _building_scope(pos: int, blocks: list[_Block]) -> _Block | None:
+    """The building scope `pos` executes in, or None.
+
+    Walks out from `pos` through control flow; the first other block decides.
+    """
+    for b in reversed(_ancestors(pos, blocks)):
+        if b.name in _CONTROL_FLOW or b.name.isdigit():
+            continue
+        return b if _BUILDING_SCOPE_RE.match(b.name) else None
+    return None
+
+
+def _building_scope_flags(clean: str, blocks: list[_Block], starts: list[int],
+                          by_start: dict[int, _Block],
+                          comments: dict[int, str], rel_path: str) -> list[Flag]:
+    """`add_modifier` blocks, timed or not, reading a building's own variable."""
+    flags: list[Flag] = []
+    for m in _ADD_MODIFIER_RE.finditer(clean):
+        body = by_start.get(clean.index("{", m.start()))
+        if body is None:
+            continue
+        mult = _MULTIPLIER_RE.search(clean, body.start, body.end)
+        ref = _THIS_VAR_RE.match(mult.group("value")) if mult else None
+        if not ref:
+            continue
+        scope = _building_scope(m.start(), blocks)
+        if scope is None:
+            continue
+        top = next(b for b in blocks if b.depth == 0 and b.start <= m.start() < b.end)
+        name_m = _MODIFIER_NAME_RE.search(clean, body.start, body.end)
+        line = _line_of(mult.start(), starts)
+        flags.append(Flag(
+            file=rel_path,
+            add_line=line,
+            remove_line=0,
+            variable=ref.group("name"),
+            multiplier=mult.group("value"),
+            modifier_name=name_m.group("name") if name_m else "?",
+            block=top.name,
+            block_line=top.line,
+            exemption=_parse_reviewed(comments.get(line)),
+            check="building_scope",
+            scope_block=scope.name,
+            scope_line=scope.line,
+        ))
+    return flags
+
+
 def scan_text(text: str, rel_path: str) -> list[Flag]:
-    """Scan one file's raw text for permanent multiplier-variable removals."""
+    """Scan one file's raw text for multiplier variables that read 'none'."""
     clean, comments = blank_comments_and_strings(text)
     starts = _line_starts(clean)
     blocks = _blocks(clean, starts)
     by_start = {b.start: b for b in blocks}
-    flags: list[Flag] = []
+    flags = _building_scope_flags(clean, blocks, starts, by_start, comments, rel_path)
 
     for top in [b for b in blocks if b.depth == 0]:
         adds = _variable_scaled_modifiers(clean, top, starts, by_start)
@@ -367,7 +445,13 @@ def render_report(result: AuditResult) -> str:
         "Auto-generated by `modifier_multiplier_var_audit.py` on every",
         "`POST /reload` of the mod state server. Do not hand-edit.",
         "",
-        "Flagged: a permanent `add_modifier = { … multiplier = var:X }` (no",
+        "Flagged, two ways. A multiplier reading a building's own variable",
+        "(`this.var:X` or `var:X` inside a building iterator or `b:` link):",
+        "buildings hold no variables, so it reads `'none'` and the engine",
+        "scales the modifier by 1. Fix: keep the number on ROOT (the state, in",
+        "a state pulse) and read `root.var:X`.",
+        "",
+        "And a permanent `add_modifier = { … multiplier = var:X }` (no",
         "`days` / `months` / `years`) followed, later in the same top-level",
         "block, by `remove_variable = X`. The engine re-evaluates the stored",
         "multiplier expression on later ticks, so a removed variable makes every",
@@ -396,6 +480,15 @@ def render_report(result: AuditResult) -> str:
             out.append(f"### `{fname}`")
             out.append("")
             for f in by_file[fname]:
+                if f.check == "building_scope":
+                    out.append(
+                        f"- `{f.block}` (line {f.block_line}): `{f.modifier_name}` "
+                        f"applied at line {f.add_line} with `multiplier = "
+                        f"{f.multiplier}` inside `{f.scope_block}` (line "
+                        f"{f.scope_line}); a building holds no `{f.variable}`. "
+                        f"Keep it on ROOT and read `root.var:{f.variable}`"
+                    )
+                    continue
                 out.append(
                     f"- `{f.block}` (line {f.block_line}): `{f.modifier_name}` "
                     f"applied at line {f.add_line} with `multiplier = "
@@ -414,6 +507,13 @@ def render_report(result: AuditResult) -> str:
         # variable name it, and an edit above it would otherwise churn the
         # report.
         for f in exemp:
+            if f.check == "building_scope":
+                out.append(
+                    f"- `{f.file}` — `{f.block}`: `{f.modifier_name}` with "
+                    f"`multiplier = {f.multiplier}` in `{f.scope_block}` — "
+                    f"**{f.exemption['date']}**: {f.exemption['rationale']}"
+                )
+                continue
             out.append(
                 f"- `{f.file}` — `{f.block}`: `{f.modifier_name}` with "
                 f"`multiplier = {f.multiplier}`, `{f.variable}` removed — "

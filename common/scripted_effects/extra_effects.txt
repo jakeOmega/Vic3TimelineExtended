@@ -9,8 +9,12 @@ remove_modifier_if_exists_effect = {
 
 # State-scope wonder construction tick (ROOT is the state holding the
 # construction site). Called from each wonder's on_monthly_pulse_state
-# on-action through the wonder's named wrapper. Tracks progress against the construction
-# site's annual-progress modifier; on completion, removes the site, posts the
+# on-action through the wonder's named wrapper. Adds a twelfth of the
+# construction site's annual-progress modifier each month (none in a month the
+# site is short of an input). That modifier is workforce_scaled, so it already
+# scales with how fully the site is staffed: do not multiply by occupancy again,
+# which made progress go with the square of staffing (fixed 2026-10-01). On
+# completion, removes the site, posts the
 # wonder-complete notification, and either bumps the wonder one level (capped
 # at $MAX_LEVEL$) or creates the level-1 wonder if none exists yet.
 #
@@ -37,9 +41,8 @@ generic_wonder_construction_base = {
 		change_variable = {
 			name = $WONDER$_progress_var
 			add = {
-				value = b:building_$WONDER$_construction_site.occupancy
+				value = b:building_$WONDER$_construction_site.modifier:building_annual_$WONDER$_progress
 				divide = 12
-				multiply = b:building_$WONDER$_construction_site.modifier:building_annual_$WONDER$_progress
 				multiply = 1000
 				ceiling = yes
 				divide = 1000
