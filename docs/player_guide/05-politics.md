@@ -158,7 +158,8 @@ recall them, which costs override capacity. If a Council Republic or a country
 under Collective Governance loses Elected Bureaucrats because its Distribution
 of Power stops being a voting law, it moves to Communal Administration rather
 than Appointed Bureaucrats. A country that can no longer hold Contracted
-Administration moves to Appointed Bureaucrats, and one that can no longer hold
+Administration moves to Appointed Bureaucrats (Automated Bureaucracy under
+Algorithmic Governance), and one that can no longer hold
 Communal Administration moves to Elected Bureaucrats where it can, otherwise to
 Appointed.
 
