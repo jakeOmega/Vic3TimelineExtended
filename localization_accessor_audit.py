@@ -440,7 +440,10 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "sReligion": "religion",
         "sPop": "pop",
         "sBuilding": "building",
-        "sInterestGroup": "interest_group",
+        # No `sInterestGroup` here: the engine has no such accessor (vanilla loc
+        # uses `gsInterestGroup` 947 times and `sInterestGroup` never). A text
+        # that used it rendered with everything up to the accessor missing
+        # (un_events.34.d), so the audit must flag it, not wave it through.
         "sJournalEntry": "journal_entry",
         "sPoliticalMovement": "political_movement",
         "sPoliticalLobby": "political_lobby",

@@ -5165,7 +5165,7 @@
  un_events.34.a:0 "They are right. We will leave."
  un_events.34.b:0 "Buy their patience with concessions"
  un_events.34.c:0 "We stay, whatever they say"
- un_events.34.d:0 "The United Nations has grown into something its founders never imagined: its resolutions are enforced, its embargoes bite, its dues are a levy on our wealth. To [SCOPE.sInterestGroup('un_sov_ig').GetName] it is a foreign government in all but name. They are in the streets and in the chamber, demanding that [ROOT.GetCountry.GetName] take back its sovereignty and leave."
+ un_events.34.d:0 "The United Nations has grown into something its founders never imagined: its resolutions are enforced, its embargoes bite, its dues are a levy on our wealth. To [SCOPE.gsInterestGroup('un_sov_ig').GetName] it is a foreign government in all but name. They are in the streets and in the chamber, demanding that [ROOT.GetCountry.GetName] take back its sovereignty and leave."
  un_events.34.f:0 "\"We did not win our independence to hand it to a committee in a glass tower.\""
  un_events.34.t:0 "Sovereignty First"
  un_events.35.a:0 "Accept the facility and its conditions"
