@@ -1,0 +1,43 @@
+﻿# Global annual Cultural Hegemony history display. No country-local state.
+ch_model_hist_has_data = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_model_hist_last_y }
+		value = 1
+	}
+}
+ch_model_hist_since_year = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_model_hist_since_y }
+		value = global_var:ch_model_hist_since_y
+	}
+}
+ch_model_hist_last_year = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_model_hist_last_y }
+		value = global_var:ch_model_hist_last_y
+	}
+}
+
+# The census denominator has a floor of 1. Normalize the cached model shares
+# if that floor binds; a world with no pull has no meaningful distribution.
+ch_model_hist_total_share = {
+	value = 0
+	add = global_var:ch_ideology_republican_share
+	add = global_var:ch_ideology_corporatist_share
+	add = global_var:ch_ideology_anarchist_share
+	add = global_var:ch_ideology_other_share
+	add = global_var:ch_ideology_royalist_absolutist_share
+	add = global_var:ch_ideology_technocratic_share
+	add = global_var:ch_ideology_religious_share
+	add = global_var:ch_ideology_socialist_share
+	add = global_var:ch_ideology_military_junta_share
+	add = global_var:ch_ideology_royalist_constitutional_share
+	add = global_var:ch_ideology_communist_share
+	add = global_var:ch_ideology_liberal_share
+	add = global_var:ch_ideology_reactionary_share
+	add = global_var:ch_ideology_developmentalist_junta_share
+	add = global_var:ch_ideology_fascist_share
+}
