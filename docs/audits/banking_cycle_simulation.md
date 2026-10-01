@@ -16,7 +16,8 @@ those sections means that state). §3 is the retune it proposed and the subset t
 and the final matrix of #371. §10 is the follow-up that lets a maxed player pull back a boom (and occasionally a
 frenzy), with `--rescue` and the refreshed matrix. §12 (2026-09-25) is the delegated bank's overshoot under
 standing wage pressure (`--wage-pressure`) and the three changes that answer it; §13 replaces independence's
-crash and momentum bonus with inflation anchoring (`--bank-level`). Every table states which script
+crash and momentum bonus with inflation anchoring (`--bank-level`). §14 (2026-09-30) prices and shapes the five
+directed-credit sectors apart (`--tune ai_dc_reserve=off`). Every table states which script
 it measured.
 
 ---
@@ -984,6 +985,7 @@ credit is the AI's riskiest tool — is not multiplied by four more of it. Leavi
 (`--exclude-tool dc_heavy`) moves the mean by −0.2, Infrastructure's own small harm. Under the Directed Credit law
 the second slot is used: at 8 points a heavy-industry government adds Infrastructure about 4 times a century,
 and the mean over cells goes 10.7 → 10.2 against the same law before the expansion.
+These clicks and crash rates are with every sector at 3 points; §14 re-measures them once the sectors are priced 1 to 4.
 
 ### Reserve requirements: defer to the buffer
 
@@ -1281,4 +1283,215 @@ was worth (F16). Recession months and peak rates are unchanged.
 
 ```
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 0 --fin-law law_central_bank_independence --bank-level 9 --wage-pressure 1.0 [--tune pre_anchoring]
+```
+
+---
+
+## 14. Five directed-credit sectors, five profiles (2026-09-30)
+
+**Question (owner).** The five sectors of §11 read as one tool with five labels: 3 points, 0.8% of GDP, +10%
+construction for a building group, an interest-group line, and momentum and bubble within 0.01 and 0.2 of each
+other. Make them distinct, and price each differently (Electrification cheap).
+
+**What shipped.** Each sector has its own price, cycle signature and a second effect beyond construction
+(`extra_modifiers.txt`, the table above `banking_directed_credit_infrastructure`):
+
+| Sector | Points | Momentum / bubble per month | Second effect | Liability |
+|---|---|---|---|---|
+| Infrastructure | 3 (was 3) | 0.03 / 0.1 (was 0.05 / 0.3) | infrastructure +5% in every state | Industrialists −3 (was −5) |
+| Heavy Industry | 4 (was 3) | 0.06 / 0.5 (was 0.05 / 0.3) | heavy-industry throughput +5% | greenhouse gas emissions +5%; Industrialists +2 (was +3) |
+| Agriculture | 2 (was 3) | 0.03 / 0.4 (was 0.04 / 0.4) | food security +5% | the worst momentum for its bubble |
+| Armaments | 3 (was 3) | 0.06 / 0.05 (was 0.05 / 0.2) | military throughput +5%, military goods cost −10% | Intelligentsia −3 (was −2) |
+| Electrification | 1 (was 3) | 0.04 / 0.2 (was 0.05 / 0.3) | electricity output +5% | covers power plants only; era-gated |
+
+The simulator reads points and both monthly lines from those modifiers, so it needed no change for them. It cannot
+see what construction, throughput, food security, emissions or interest-group approval are worth, so those lines
+are sized by judgement, and what the simulation checks is the cycle signature and the AI.
+
+### F18 — The Directed Credit law's second slot did not fit its own budget
+
+`law_directed_credit_development_banks` grants a budget of 5 (6 with a national bank) and a second sector, but
+two 3-point sectors cost 6. Below the national bank the second slot could not be filled, and with it the two
+sectors took every point and left nothing for a lean or a crisis tool. At 1 / 2 / 3 / 4 points Electrification
+fits beside any sector and Agriculture beside Infrastructure or Armaments; the sixth point adds Infrastructure
+with Armaments and Heavy Industry with Agriculture, and Heavy Industry never sits beside Infrastructure or
+Armaments.
+
+### F19 — Cheap sectors at real prices: the AI uses them far more, and holds them too long
+
+The AI pays the same points as a player. Its button and the dashboard's run the same `banking_effect_cb_*`, which
+adds the sector's modifier and its `country_banking_intervention_max_add`, so every later `possible` check and
+points-based weight reads the reduced budget. A sector priced at 1 or 2 is therefore affordable at budgets, and in
+half-spent budgets, where a 3-point sector was not. An earlier draft held the AI's click count constant by making
+every sector a candidate only above three free points. That changed when the AI pressed the button and nothing about
+what it cost, so the AI's other decisions saw the full reduction either way. It was dropped in favour of adjusting the
+AI's weights.
+
+At real prices with the AI's lift weights unchanged, directed-credit clicks a century roughly doubled, almost all of
+it in Electrification (1 point) and Agriculture (2): with all four favoured they went from 26.7 / 25.5 to 137 / 72, and
+at a 2-point budget the AI, which never directed credit there, made 13–14 clicks. Crashes rose with them, most in the
+growth mandate at 3 points (13.1 → 14.3 at 600 runs). The harm is F11's, holding directed credit through the
+recovery, so the fix is the lift side, which is an AI preference and not a price: every sector's disable button now
+adds 40 in Stable (momentum not falling) and 50 in Expansion, where it added 20 and 30. `--tune dc_lift_boost=0`
+restores the old weights.
+
+### Result — 150 runs × 100 years per cell, fiat, 2 / 3 / 4 / 5 / 8 points (4 / 5 / 6 / 8 under the law), before → real prices, old lift → shipped
+
+Directed-credit clicks a century, summed over the grid, and mean crashes a century over the price-stability and
+growth cells (the no-touch cells are flat):
+
+| affinity | clicks | crashes |
+|---|---|---|
+| none | 103.9 → 105.0 → 108.3 | 8.85 → 8.82 → 8.93 |
+| heavy industry | 104.5 → 105.2 → 108.9 | 8.28 → 8.42 → 8.43 |
+| electrification | 104.5 → 200.2 → 209.6 | 8.28 → 8.86 → 8.55 |
+| all four | 105.2 → 247.0 → 258.4 | 8.97 → 9.24 → 8.92 |
+| all four, Directed Credit law | 149.6 → 334.7 → 344.0 | 9.02 → 9.32 → 9.00 |
+
+With all four favoured, shipped, Heavy Industry drops from 26.7 to 12.8 clicks (it costs 4, so it is out of reach at
+3 points) while Agriculture and Electrification rise to 76 and 143; Armaments is unchanged (27). Infrastructure, the
+default sector, is clicked as often as before (94.9 → 95.7 with no affinity, before the lift change) at lower
+momentum and bubble.
+
+**What remains.** The AI directs credit about twice as often wherever a cheap sector is favoured, by design of the
+prices, and crashes are back to the old level in the all-four cells. Two cells stay slightly above it: favouring
+electrification alone (8.28 → 8.55) and fiat / growth at 3 points with all four favoured, 600 runs (13.1 → 13.5; price
+stability 6.3 → 6.5). Raising the lift weights further (stable 55, expansion 65) moved the all-four cells by under
+0.1, so the rest is the cost of the extra months spent in directed credit. The 2-point cells with no sector favoured
+are unchanged, and §8's targets do not depend on any of this.
+
+**Further levers, not tried.** A lower enable weight (`banking_dc_ai_weight`), for every sector or only the cheap ones.
+
+**Not re-run.** The leave-one-out of each new sector, the currency laws other than fiat, and the 400-run matrix.
+
+**Reproduce** (`before` is the commit before this change; the middle column is `--tune dc_lift_boost=0`):
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 2,3,4,5,8 [--dc-affinity dc_heavy,dc_agri,dc_arms,dc_elec] [--tune dc_lift_boost=0]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 4,5,6,8 --fin-law law_directed_credit_development_banks --dc-affinity dc_heavy,dc_agri,dc_arms,dc_elec
+```
+
+---
+
+## 15. The mandate bank's asset purchases at the rate floor (2026-10-01)
+
+**Question (owner).** A player on Central Bank Independence and Digital Currency was stuck in deflation with the
+policy rate on the −3% floor and headline inflation at −6.6%. Central Bank Independence rules out Monetise Deficit, and
+at the floor both mandates ask for less than the floor allows. What can a mandate-run bank do?
+
+### F20 — At the floor the bank has no lever of its own, and without Open-Market Operations the loop has no exit
+
+The model is §9.1's: core moves a tenth of the way to `expected + pressure` each month, and expectations lose their
+anchor once inflation is ten points from target (`c_eff`). At −6.6% an independent bank has `c_eff` of about 0.1, so
+expectations follow headline, and the only upward pressure is Open-Market Operations' flat +1.0, which costs 4 intervention
+points. Started as reported (core −4.2 under a −2.4 cost-push drag that fades as its average catches up, expected −4.9, rate
+−3, 0.9 of wage pressure absorbed by nine National Bank levels, cycle held at 50, no noise), headline reaches 0 after
+five years with Open-Market Operations on. With it off, headline falls to the −10 clamp and stays there.
+
+### What shipped first
+
+`te_mon_pressure_bank_qe`, `min(2.5, 0.5 × (anchor − last month's headline))` pp, while a mandate-run fiat or digital
+bank sat on its rate floor. Measured with the inflation noise held at zero, it got out of the trap, and switched off once
+when the bank's rate left the floor.
+
+### F21 — With the noise on, the first version flickered at the floor
+
+The term was gated on the real rate being on the floor, so the month the rate rose by one drift step (−3.00 → −2.33 under
+digital) it dropped from 2.5 to 0. Inflation stalled, the mandate's target fell back, the rate returned to the floor and
+the term came back. Over 200 seeds, a delegated digital bank switched 3.41 times a run on average (at most 7), every 2–6
+months for about two years, and a month's change in the term reached 2.5.
+
+### What shipped instead: a virtual rate
+
+The bank keeps a virtual target and rate (`te_mon_virtual_target` / `te_mon_virtual_rate`, design doc §0.12) where it would
+put them without the floor: the mandate formula with the real target's hysteresis, drifting at the real rate's speeds, at
+most 5 points under the floor (2.5 until F22 below). The real rate is the virtual one held at the floor, and the
+purchases are `min(5, 1.0 × (floor − virtual rate))`. Price stability may take the virtual target under the floor only while headline
+is under the anchor; growth always may. The simulator ports it as `settle_virtual_rate`, `update_virtual_target`,
+`monetary_drift_rate` and `bank_qe_pressure`; `--tune pre_bank_qe` keeps the virtual target on the floor, which is the
+pre-§0.12 world exactly.
+
+### Result
+
+`scripts/analysis/banking_deflation_trap.py` starts the reported country (core −4.2 under a −2.4 cost-push drag that fades
+as its average catches up, expected −4.9, rate −3, 0.9 of wage pressure absorbed by nine National Bank levels, cycle held at
+50). "First version" is the same script on that version's commit; "virtual rate" is the shipped cap of 5, which this trap
+barely reaches (its purchases peak at 4 without Open-Market Operations and 3 with them).
+
+| Headline inflation at year, noise held at zero | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| independent, Open-Market Operations on, before | −6.0 | −5.0 | −3.4 | −1.7 | +0.1 | +1.2 |
+| independent, Open-Market Operations on, first version | −3.3 | −2.3 | −0.8 | +0.5 | +1.4 | +1.9 |
+| independent, Open-Market Operations on, virtual rate | −4.1 | −2.7 | −1.1 | +0.3 | +1.3 | +1.8 |
+| independent, no Open-Market Operations, before | −7.1 | −7.6 | −8.3 | −9.3 | −10 | −10 |
+| independent, no Open-Market Operations, first version | −4.3 | −3.1 | −2.2 | −1.0 | 0.0 | +0.7 |
+| independent, no Open-Market Operations, virtual rate | −4.5 | −3.3 | −2.5 | −1.3 | −0.2 | +0.6 |
+| manual dial, Open-Market Operations on, every version | −5.1 | −3.8 | −2.7 | −1.5 | −0.4 | +0.7 |
+
+| Noise on, no Open-Market Operations, 200 seeds | Switches on/off, mean (max): first version → virtual | Largest one-month change | Median month at 0% |
+|---|---|---|---|
+| independent, digital, price stability | 1.82 (5) → 1.05 (3) | 2.50 → 0.67 | 60 → 63 |
+| delegated, digital, price stability | 3.41 (7) → 1.38 (5) | 2.50 → 0.67 | 71 → 75 |
+| delegated, fiat, price stability | 2.18 (5) → 1.07 (3) | 1.87 → 0.33 | 66 → 68 |
+| delegated, fiat, growth | 2.18 (5) → 1.07 (3) | 1.87 → 0.33 | 66 → 68 |
+
+The virtual rate gives up two to four months of the exit and moves the purchases by at most a drift step a month (×3 in
+a Stagnation's emergency cuts, on the way in only). The real rate leaves the floor only once they are at zero.
+
+Ordinary play does not move. With and without independence, 150 fiat runs per cell differ from `--tune pre_bank_qe` by
+at most 0.03 crashes a century, 0.006 points of mean inflation and 0.04 points of recession share, and 60 digital runs per
+cell are identical in every column: a mandate bank is on its floor in at most 0.2% of months under fiat and never under
+digital. Over 40 ordinary centuries per cell, a mandate bank buys in at most 0.05% of months under fiat, about 0.6 points on average while it does, and never under digital. A Growth bank buys with headline at or above target in 0.01% of months, the only place the mandate condition binds.
+
+A delegated bank without independence can monetise beside its own purchases (design doc ruling N1, resolved as intended
+pending playtests). Stacking adds almost nothing: Monetise Deficit's inflation (added by the trap script, since the
+simulator does not model monetisation) lifts the bank's rule off the floor within months.
+
+| Price Stability, noise held at zero | Month at 0%: without / with purchases | Peak inflation: without / with | Months buying |
+|---|---|---|---|
+| Monetise Deficit off | 98 / 76 | 1.3 / 1.9 | 19 |
+| Monetise Deficit 1 | 37 / 35 | 5.4 / 5.4 | 8 |
+| Monetise Deficit 3 | 11 / 11 | 25.6 / 25.8 | 4 |
+
+**Not modelled in the tables above.** The exchange-rate channel, and the cycle: the Deflation band's momentum drain and
+the Stagnation phase term would make a real recovery slower. F22 shows how much slower.
+
+### F22 — A Panic and a strong currency held the first cap on the −10% clamp (playtest, 2026-10-01)
+
+A playtest put an independent Digital country on Growth in Panic, with the policy rate on −3, headline on the −10% clamp for
+ten months, expected −9.1, a currency at 125.3 importing −2.6 points, and the bank's purchases at their cap of 2.5 beside
+Open-Market Operations. Those +3.5 points matched the Panic (−1.5) and the Very Tight stance (−1.6); the currency took the
+rest from headline, and expectations twelve points off target followed it down. The deflation lifts the currency (both its
+real-rate and inflation-gap terms) and the tight stance holds the Panic, so the state feeds itself.
+
+`banking_deflation_trap.py --playtest-only` starts from that screenshot (core, hidden under the pinned headline, assumed
+−8.5), runs the cycle, and adds the script's currency loop (`CurrencyLoop`, after `te_monetary_fx_script_values.txt`, with
+the cyclical premium held at 4.5 and the basket neutral; the simulator itself still imports nothing, through its new
+`fx_imported` hook). Medians of 60 seeds:
+
+| Playtest start | Leaves −10% (month) | Reaches 0% (month) | Peak in the 3 years after | Mean, years 8–10 |
+|---|---|---|---|---|
+| Growth, before (cap 2.5, two-sided confidence) | 38 | 90 (48 of 60) | 5.7 | 1.7 |
+| Growth, cap 5 alone | 5 | 40 | 5.3 | 5.2 |
+| Growth, one-sided confidence alone (cap 2.5) | 5 | 41 (59 of 60) | 3.9 | 3.8 |
+| Growth, shipped (cap 5, one-sided) | 3 | 27 | 4.0 | 3.9 |
+| Price Stability, before | 38 | 90 (48 of 60) | 5.4 | 1.7 |
+| Price Stability, shipped | 3 | 27 | 3.7 | 2.8 |
+| Growth, before, Restrict Speculative Inflows in place of Bail-in | 16 | 79 (51 of 60) | 5.3 | 3.8 |
+| Growth, before, no currency loop | 1 | 49 | 3.0 | 3.3 |
+
+Two changes shipped (design doc §0.12, "The cap and the currency"). The cap went to 5: the century matrix reruns at 5 to
+the same figures as at 2.5 (150 fiat runs per cell, 60 digital, with and without independence). And the exchange rate's
+confidence term is one-sided for a float (ruling N10): half the playtest's currency rise was that term rewarding the
+deflation, on top of the carry term that already pays for holding a currency that gains value, and the rise then came
+back as imported deflation. Together they get the playtest off the clamp in about three months and to 0% in about 27,
+and the rebound settles lower because the currency no longer overshoots and falls back. Outside the trap, ordinary centuries of floating countries with the same currency loop on (`banking_deflation_trap.py --ordinary-runs 30`; the century simulator itself holds the exchange rate at par) spend about half as many months below 0% (a delegated digital bank 1.24% of months → 0.22%), mean inflation moves by at most 0.2 points, and crash rates are unchanged within noise: the two Growth cells, rerun at 100 centuries, differ by −0.2 ± 0.7 and +0.4 ± 0.7 crashes a century.
+
+**Reproduce:**
+
+```
+.venv/bin/python scripts/analysis/banking_deflation_trap.py [--runs 200] [--playtest-runs 60] [--playtest-only] [--ordinary-runs 30]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 0,8 --seed 1 [--fin-law law_central_bank_independence] [--tune pre_bank_qe]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 60 --only digital --points 0,8 --seed 1 [--fin-law law_central_bank_independence] [--tune pre_bank_qe]
+.venv/bin/python -m unittest test_monetary_bank_qe
 ```

@@ -345,6 +345,27 @@ types un_chamber_widget_types
 		block "action_binding" {}
 	}
 
+	### One of the Delegations' two bulk buttons, Lobby Top Members For and
+	### Against: wider than a row button, two across the 480 column
+	### (236 + 4 + 236 = 476).
+	type un_chamber_deleg_bulk_button = button {
+		using = default_button_action
+		size = { 236 28 }
+		parentanchor = vcenter
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 228
+			elide = right
+			using = fontsize_small
+			block "action_label" {}
+		}
+
+		block "action_binding" {}
+	}
+
 	### ======================================================================
 	### SECTIONS. Each is composed, in order, by un_layout_widget.gui.
 	### ======================================================================
@@ -529,6 +550,38 @@ types un_chamber_widget_types
 			un_chamber_text = {
 				text = "[GetScriptedGui('un_chamber_deleg_summary_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 				tooltip = "[GetScriptedGui('un_chamber_deleg_firm_list_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
+			### Lobby the top of the list in one press, either way: a campaign on
+			### each member that qualifies, from the top row down, until our
+			### influence runs out (common/scripted_guis/un_chamber_sguis.txt,
+			### § the bulk buttons). No op: each reads all 24 rows itself.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				margin_bottom = 2
+
+				un_chamber_deleg_bulk_button = {
+					blockoverride "action_label" {
+						text = "je_un_chamber_deleg_bulk_for_label"
+					}
+					blockoverride "action_binding" {
+						enabled = "[GetScriptedGui('un_chamber_deleg_bulk_for_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('un_chamber_deleg_bulk_for_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('un_chamber_deleg_bulk_for_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('un_chamber_deleg_bulk_for_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+					}
+				}
+				un_chamber_deleg_bulk_button = {
+					blockoverride "action_label" {
+						text = "je_un_chamber_deleg_bulk_against_label"
+					}
+					blockoverride "action_binding" {
+						enabled = "[GetScriptedGui('un_chamber_deleg_bulk_against_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('un_chamber_deleg_bulk_against_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('un_chamber_deleg_bulk_against_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('un_chamber_deleg_bulk_against_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+					}
+				}
 			}
 
 			un_chamber_deleg_row = {

@@ -25318,9 +25318,9 @@
                  "=",
                  "aro:ai_regional_objective_acquire_states"
                 ],
-                "is_completed": [
+                "is_active": [
                  "=",
-                 "no"
+                 "yes"
                 ]
                }
               ]

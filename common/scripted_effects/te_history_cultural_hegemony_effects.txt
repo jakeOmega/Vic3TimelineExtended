@@ -1,61 +1,164 @@
-﻿# ============================================================================
-# HISTORY STORE — cultural-hegemony series
-# ============================================================================
-# The cultural-hegemony system's side of the generic store in
-# te_history_effects.txt: one metric and the programme changes that explain its
-# turning points. Same shape as te_history_banking_effects.txt.
+﻿# Annual global political-model history (#413).
+# One parentless store, reached through global_var:ch_model_hist_store, owns
+# ch_model_hist: at most 100 parentless sample containers, oldest first.
+# Scope.GetList can read the store through GetGlobalVariable in the GUI; no
+# country has a copy. The local-list pruning/sorting below follows the proven
+# te_history_effects.txt pattern, with a container instead of a country owner.
+# Old country/monthly ch_share samples are deliberately not migrated: they
+# contain no political-model breakdown. Existing saves start at the next
+# successful global rebuild. Nothing here records programme/banking markers.
 #
-# Metric (te_hist_v_<METRIC> on the month's sample container):
-#   ch_share   var:ch_total — this country's share of global cultural influence,
-#              0..100. The numerator moves every month (ch_monthly_country_update
-#              rewrites ch_total from cultural_pull_total), but the denominator
-#              global_var:ch_cached_global_raw is only refreshed by the yearly
-#              pulse, so the series RE-BASES each January: a step at the turn of
-#              the year is the world total being recomputed, not this country
-#              gaining or losing influence. The chart legend says so.
-#
-# Markers:
-#   ch_on_<prog> / ch_off_<prog>   a cultural programme was started / stopped,
-#                                  for prog in outreach, institutes, media,
-#                                  protectionism.
-#
-# Deliberately NO marker for the funding stepper. te_history_record_marker sets
-# one flag per (month, marker) but increments the month's marker count on every
-# call, so a player who walks funding up three steps in one month would leave
-# three counts behind one flag — and a funding step is a small, frequent,
-# reversible nudge rather than a turning point worth a pip. Programme toggles are
-# the events that visibly bend the line.
-#
-# Both helpers re-check the game rule and the journal entry. The sampling call
-# sits inside je_cultural_hegemony's monthly pulse, but the marker call is
-# reached from the ch_effect_* helpers, which the AI can also run from the
-# journal entry's scripted buttons — so the gate lives here rather than at each
-# call site. Eligibility itself is te_history_country_is_tracked, unchanged:
-# the store stays bounded per tracked owner and this series widens nothing.
-# ============================================================================
+# Each year's FIRST successful rebuild is the snapshot (which may be a
+# war-end rebuild). The 180-day census lock is not an annual sampling guard.
+# Once written, a year's sample is immutable; no missing years are backfilled.
 
-# One sample per month, taken from je_cultural_hegemony's monthly pulse after the
-# programme modifiers have been refreshed.
-# Scope: country
-te_history_record_cultural_hegemony_samples = {
-	if = {
-		limit = {
-			has_game_rule = cultural_hegemony_enabled
-			has_journal_entry = je_cultural_hegemony
-			has_variable = ch_total
+# Scope: any, called immediately after ch_finish_all_model_buckets.
+te_history_record_cultural_hegemony_models = {
+	hidden_effect = {
+		if = {
+			limit = {
+				has_game_rule = cultural_hegemony_enabled
+				ch_model_hist_total_share > 0
+				OR = {
+					NOT = { has_global_variable = ch_model_hist_last_y }
+					global_var:ch_model_hist_last_y < te_history_current_year
+				}
+			}
+			if = {
+				limit = { NOT = { has_global_variable = ch_model_hist_store } }
+				create_container = {
+					tags = { ch_model_history_store }
+					save_scope_as = ch_model_hist_store_new
+				}
+				if = {
+					limit = { exists = scope:ch_model_hist_store_new }
+					set_global_variable = { name = ch_model_hist_store value = scope:ch_model_hist_store_new }
+				}
+			}
+			if = {
+				limit = { has_global_variable = ch_model_hist_store }
+				create_container = {
+					tags = { te_hist te_hist_sample te_hist_global ch_model_hist_sample }
+					save_scope_as = ch_model_hist_new
+				}
+				if = {
+					limit = { exists = scope:ch_model_hist_new }
+					scope:ch_model_hist_new = {
+						set_variable = { name = te_hist_i value = te_history_current_year }
+						set_variable = { name = te_hist_y value = te_history_current_year }
+						set_variable = { name = te_hist_mo value = te_history_current_month }
+						set_variable = { name = ch_model_hist_cumulative value = 0 }
+						set_variable = { name = ch_model_hist_total value = ch_model_hist_total_share }
+						te_history_copy_ch_model = { MODEL = republican }
+						te_history_copy_ch_model = { MODEL = corporatist }
+						te_history_copy_ch_model = { MODEL = anarchist }
+						te_history_copy_ch_model = { MODEL = other }
+						te_history_copy_ch_model = { MODEL = royalist_absolutist }
+						te_history_copy_ch_model = { MODEL = technocratic }
+						te_history_copy_ch_model = { MODEL = religious }
+						te_history_copy_ch_model = { MODEL = socialist }
+						te_history_copy_ch_model = { MODEL = military_junta }
+						te_history_copy_ch_model = { MODEL = royalist_constitutional }
+						te_history_copy_ch_model = { MODEL = communist }
+						te_history_copy_ch_model = { MODEL = liberal }
+						te_history_copy_ch_model = { MODEL = reactionary }
+						te_history_copy_ch_model = { MODEL = developmentalist_junta }
+						te_history_copy_ch_model = { MODEL = fascist }
+						# Rounding may leave the sum a fraction below 100. The outer
+						# boundary is exactly 100; hover still shows the stored shares.
+						set_variable = { name = ch_model_hist_cum_fascist value = 100 }
+						remove_variable = ch_model_hist_cumulative
+						remove_variable = ch_model_hist_total
+					}
+					global_var:ch_model_hist_store = {
+						add_to_variable_list = { name = ch_model_hist target = scope:ch_model_hist_new }
+						te_history_prune_ch_models = yes
+						ordered_in_list = {
+							variable = ch_model_hist
+							position = 0
+							order_by = te_history_sample_order
+							save_scope_as = ch_model_hist_oldest
+						}
+						if = {
+							limit = { exists = scope:ch_model_hist_oldest }
+							set_global_variable = { name = ch_model_hist_since_y value = scope:ch_model_hist_oldest.var:te_hist_y }
+						}
+					}
+					# Commit the guard only after the sample has been stored.
+					set_global_variable = { name = ch_model_hist_last_y value = te_history_current_year }
+				}
+			}
 		}
-		te_history_record_sample = { METRIC = ch_share VALUE = var:ch_total }
 	}
 }
 
-# Parameters: $MARK$ = marker key (see the header)
-# Scope: country
-te_history_record_cultural_hegemony_marker = {
+# Scope: new sample container. Palette/order matches gen_ch_model_pie_textures.
+# No world/country iteration: all fifteen aggregates already exist.
+te_history_copy_ch_model = {
+	set_variable = { name = ch_model_hist_$MODEL$ value = global_var:ch_ideology_$MODEL$_share }
+	change_variable = { name = ch_model_hist_$MODEL$ divide = var:ch_model_hist_total }
+	change_variable = { name = ch_model_hist_$MODEL$ multiply = 100 }
+	change_variable = { name = ch_model_hist_cumulative add = var:ch_model_hist_$MODEL$ }
+	clamp_variable = { name = ch_model_hist_cumulative min = 0 max = 100 }
+	set_variable = { name = ch_model_hist_cum_$MODEL$ value = var:ch_model_hist_cumulative }
+}
+
+# Scope: the global store container. Append alone preserves order; removal
+# swaps the last list element into the hole, so eviction MUST sort again.
+te_history_prune_ch_models = {
 	if = {
-		limit = {
-			has_game_rule = cultural_hegemony_enabled
-			has_journal_entry = je_cultural_hegemony
+		limit = { any_in_list = { variable = ch_model_hist count >= 101 has_tag = ch_model_hist_sample } }
+		ordered_in_list = {
+			variable = ch_model_hist
+			position = 0
+			order_by = te_history_sample_order
+			save_scope_as = ch_model_hist_evicted
 		}
-		te_history_record_marker = { MARK = $MARK$ }
+		if = {
+			limit = { exists = scope:ch_model_hist_evicted }
+			remove_list_variable = { name = ch_model_hist target = scope:ch_model_hist_evicted }
+			scope:ch_model_hist_evicted = { destroy_container = yes }
+			te_history_sort_ch_models = yes
+		}
+	}
+}
+
+# Scope: store container. Build and verify the sorted copy before clearing
+# the live list, so a short iterator cannot orphan all retained containers.
+te_history_sort_ch_models = {
+	save_scope_as = ch_model_hist_sorter
+	if = {
+		limit = { has_variable_list = ch_model_hist_tmp }
+		clear_variable_list = ch_model_hist_tmp
+	}
+	ordered_in_list = {
+		variable = ch_model_hist
+		order_by = te_history_sample_order
+		min = 0
+		max = 100
+		check_range_bounds = no
+		save_scope_as = ch_model_hist_moved
+		scope:ch_model_hist_sorter = {
+			add_to_variable_list = { name = ch_model_hist_tmp target = scope:ch_model_hist_moved }
+		}
+	}
+	if = {
+		limit = { any_in_list = { variable = ch_model_hist_tmp count >= 100 has_tag = ch_model_hist_sample } }
+		clear_variable_list = ch_model_hist
+		ordered_in_list = {
+			variable = ch_model_hist_tmp
+			order_by = te_history_sample_order
+			min = 0
+			max = 100
+			check_range_bounds = no
+			save_scope_as = ch_model_hist_moved
+			scope:ch_model_hist_sorter = {
+				add_to_variable_list = { name = ch_model_hist target = scope:ch_model_hist_moved }
+			}
+		}
+	}
+	if = {
+		limit = { has_variable_list = ch_model_hist_tmp }
+		clear_variable_list = ch_model_hist_tmp
 	}
 }

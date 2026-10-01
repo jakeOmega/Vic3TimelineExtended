@@ -1003,6 +1003,7 @@
 							autoresize = yes
 							align = hcenter|nobaseline
 							using = fontsize_large
+
 							max_width = 80
 							elide = right
 							fontsize_min = 12
@@ -1095,6 +1096,7 @@
 							autoresize = yes
 							align = hcenter|nobaseline
 							using = fontsize_large
+
 							max_width = 90
 							elide = right
 							fontsize_min = 12
@@ -2295,8 +2297,29 @@ right_click_menu = {
 					texture = "gfx/interface/icons/formation_order_icons/transfer.dds"
 				}
 
-				blockoverride = "text" {
+				blockoverride "text" {
 					text = "TRANSFER_POPUP_HEADER"
+				}
+
+				blockoverride "size" {
+					size = { 260 44 }
+				}
+			}
+
+			### Rehome
+			right_click_menu_item = {
+				blockoverride "properties" {
+					tooltip = "REHOME_MILITARY_FORMATION_TOOLTIP"
+					enabled = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
+					onclick = "[MilitaryFormation.OnRehomeClicked]"
+				}
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/generic_icons/home_hq.dds"
+				}
+
+				blockoverride "text" {
+					text = "REHOME_MILITARY_FORMATION_LABEL"
 				}
 
 				blockoverride "size" {
@@ -4437,7 +4460,7 @@ right_click_menu = {
 
 	blockoverride "items" {
 		dynamicgridbox = {
-			datamodel = "[TransportPlannerPopup.GetSortedFleets]"
+			datamodel = "[TransportPlannerPopup.GetFleetsForTransport]"
 			flipdirection = yes
 			datamodel_wrap = 2
 
@@ -13515,60 +13538,31 @@ right_click_menu = {
 		flowcontainer = {
 			direction = vertical
 
-			### Station in State
+			### Invasion
 			right_click_menu_item = {
 				size = { 260 44 }
-				tooltip = "STATION_MILITARY_FORMATION_TOOLTIP"
+				tooltip = "MILITARY_FORMATION_INVASION_TOOLTIP"
 
 				blockoverride "button" {
 					using = default_button_map_interaction
 				}
 
 				blockoverride "properties" {
-					onclick = "[MilitaryFormation.OnStationClicked]"
-					enabled = "[MilitaryFormation.CanStation]"
+					onclick = "[MilitaryFormation.OnInvasionClicked]"
+					enabled = "[MilitaryFormation.CanInvade]"
 				}
 
 				blockoverride "texture" {
-					texture = "gfx/interface/icons/formation_order_icons/station_armies.dds"
+					texture = "gfx/interface/icons/formation_order_icons/invasion_land_and_naval.dds"
 				}
 
 				blockoverride "text" {
-					text = "STATION_MILITARY_FORMATION_LABEL"
+					text = "MILITARY_FORMATION_INVADE_LABEL"
 				}
 
 				action_selection_number = {
 					blockoverride "text" {
-						text = "[MilitaryFormation.GetNumStationSelections|+]"
-					}
-				}
-			}
-
-			### Deploy to Front
-			right_click_menu_item = {
-				size = { 260 44 }
-				tooltip = "DEPLOY_MILITARY_FORMATION_TO_FRONT_TOOLTIP"
-
-				blockoverride "button" {
-					using = default_button_map_interaction
-				}
-
-				blockoverride "properties" {
-					onclick = "[MilitaryFormation.OnDeployToFrontClicked]"
-					enabled = "[And( MilitaryFormation.CanDeployToFront, MilitaryFormation.IsMobilized )]"
-				}
-
-				blockoverride "texture" {
-					texture = "gfx/interface/icons/formation_order_icons/send_to_front.dds"
-				}
-
-				blockoverride "text" {
-					text = "DEPLOY_MILITARY_FORMATION_TO_FRONT_TEXT"
-				}
-
-				action_selection_number = {
-					blockoverride "text" {
-						text = "[MilitaryFormation.GetNumDeployToFrontSelections|+]"
+						text = "[MilitaryFormation.GetNumInvasionSelections|+]"
 					}
 				}
 			}
@@ -13669,32 +13663,32 @@ right_click_menu = {
 		flowcontainer = {
 			direction = vertical
 
-			### Station in State
+			### Invasion
 			right_click_menu_item = {
 				visible = "[MilitaryFormation.IsFleet]"
 				size = { 260 44 }
-				tooltip = "STATION_MILITARY_FORMATION_TOOLTIP"
+				tooltip = "MILITARY_FORMATION_INVASION_TOOLTIP"
 
 				blockoverride "button" {
 					using = default_button_map_interaction
 				}
 
 				blockoverride "properties" {
-					enabled = "[MilitaryFormation.CanStation]"
-					onclick = "[MilitaryFormation.OnStationClicked]"
+					enabled = "[MilitaryFormation.CanInvade]"
+					onclick = "[MilitaryFormation.OnInvasionClicked]"
 				}
 
 				blockoverride "texture" {
-					texture = "gfx/interface/icons/formation_order_icons/station_fleet.dds"
+					texture = "gfx/interface/icons/formation_order_icons/invasion_land_and_naval.dds"
 				}
 
 				blockoverride "text" {
-					text = "STATION_MILITARY_FORMATION_LABEL"
+					text = "MILITARY_FORMATION_INVADE_LABEL"
 				}
 
 				action_selection_number = {
 					blockoverride "text" {
-						text = "[MilitaryFormation.GetNumStationSelections|+]"
+						text = "[MilitaryFormation.GetNumInvasionSelections|+]"
 					}
 				}
 			}

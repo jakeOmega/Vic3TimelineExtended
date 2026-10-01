@@ -385,6 +385,8 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetPrimaryCulture": "culture",
         # Power bloc
         "GetPowerBloc": "power_bloc",
+        # 1.14.5: the AI regional objective the country holds in a strategic region
+        "GetRegionalObjectiveIn": "regional_objective",
         # Subjects / overlords
         "GetOverlord": "country",
         "GetTopOverlord": "country",
@@ -438,7 +440,10 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "sReligion": "religion",
         "sPop": "pop",
         "sBuilding": "building",
-        "sInterestGroup": "interest_group",
+        # No `sInterestGroup` here: the engine has no such accessor (vanilla loc
+        # uses `gsInterestGroup` 947 times and `sInterestGroup` never). A text
+        # that used it rendered with everything up to the accessor missing
+        # (un_events.34.d), so the audit must flag it, not wave it through.
         "sJournalEntry": "journal_entry",
         "sPoliticalMovement": "political_movement",
         "sPoliticalLobby": "political_lobby",
@@ -728,6 +733,12 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "Self": "war",
         "GetName": "value",
         "GetDiplomaticPlay": "diplomatic_play",
+        # 1.14.5: the country's war goal that is about to be dropped as uncontested
+        "GetWarGoalAtRiskOfBeingDropped": "war_goal",
+    },
+    "regional_objective": {
+        "Self": "regional_objective",
+        "GetName": "value",
     },
     "market_goods": {
         "Self": "market_goods",

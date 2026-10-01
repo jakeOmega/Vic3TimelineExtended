@@ -72,6 +72,7 @@ te_debug_ch_make_us_rank_1 = {
 	set_global_variable = { name = ch_ranked_total value = 168 }
 	set_variable = { name = ch_total value = 31 }
 	ch_set_display_state = yes
+	ch_leaders_display_write = yes
 }
 
 # Fill all ten slots with other countries and put us well outside them. The board
@@ -136,6 +137,7 @@ te_debug_ch_push_us_outside = {
 	set_variable = { name = ch_rank_self value = 14 }
 	set_global_variable = { name = ch_ranked_total value = 168 }
 	ch_set_display_state = yes
+	ch_leaders_display_write = yes
 }
 
 # Empty board slot 5, the way an annexation between yearly recounts does. Row 5

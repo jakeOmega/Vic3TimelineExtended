@@ -169,10 +169,13 @@ te_mon_fx_term_rate = {
 	}
 }
 
-# Confidence in the currency. NOT double-counted against the carry term, which
-# also subtracts inflation: that one is the return on holding the currency,
-# this one is whether anyone trusts it. 12% policy and 10% expected inflation
-# is a healthy real rate and a weak currency.
+# The price gap against the world, as exchange-rate points: -2 per pp of
+# inflation above the world's, +2 per pp below, to ten pp. TWO READERS. The
+# target reads it through te_mon_fx_term_confidence below, which drops the
+# below-the-world half for a floating currency. te_mon_commodity_specie_gap reads
+# it whole, because a price gap under a fixed parity is what specie answers in
+# both directions; and through the shadow it is also the whole of what a peg's
+# overvaluation is judged on.
 te_mon_fx_term_inflation = {
 	value = te_mon_fx_inflation_read
 	if = {
@@ -202,10 +205,39 @@ te_mon_fx_term_premium = {
 	multiply = -1
 }
 
+# Confidence in the currency, as the target reads it. NOT double-counted against
+# the carry term, which also subtracts inflation: that one is the return on
+# holding the currency, this one is whether anyone trusts it. 12% policy and 10%
+# expected inflation is a healthy real rate and a weak currency.
+#
+# ONE-SIDED FOR A FLOATING CURRENCY (§0.12 "The currency", 2026-10-01). Trust is
+# lost by inflating; it is not gained by deflating, because what a deflating
+# currency pays its holders is already the carry term's higher real rate. Read
+# both ways, a deflation strengthened its own currency twice, and the currency's
+# rise against its three-year average then came back as imported deflation
+# (te_fx_imported): a playtest sat on the -10% clamp with half its currency's
+# rise from this term. Above the world's inflation it is unchanged.
+#
+# WHERE IT IS NOT ONE-SIDED: a currency whose index does not follow its own
+# target. On metal the index is the parity and an anchored one takes its
+# anchor's, so the target here is only the shadow their overvaluation is judged
+# on, and running below the world's inflation under a fixed parity really does
+# leave it undervalued — the price-specie logic. They keep the whole gap.
+te_mon_fx_term_confidence = {
+	value = te_mon_fx_term_inflation
+	if = {
+		limit = {
+			te_mon_fx_floats = yes
+			te_mon_is_anchored = no
+		}
+		max = 0
+	}
+}
+
 te_mon_fx_target_value = {
 	value = te_mon_fx_par
 	add = te_mon_fx_term_rate
-	add = te_mon_fx_term_inflation
+	add = te_mon_fx_term_confidence
 	add = te_mon_fx_term_premium
 	if = {
 		limit = { has_variable = te_fx_shock }

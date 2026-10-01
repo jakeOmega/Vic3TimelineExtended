@@ -1,12 +1,14 @@
 # Legislated tax code — implementation plan draft
 
-**Status:** proposed sequencing; no implementation or probe results yet.
+**Status:** proposed sequencing; an opt-in developer probe harness is implemented, with no runtime results yet.
+**Probe runbook:** [Tax code engine probes](../../testing/tax-code-probes.md).
+**Results form:** [Copy for each playtest run](../../testing/tax-code-probe-results.md).
 **Design:** [Legislated tax code and customs schedule](../specs/2026-09-29-legislated-tax-code-design.md).
 **Outcome:** a player and an AI country can draft, negotiate, approve, and commence a fiscal package while existing collections continue until its effective date.
 
 The design is authoritative. This plan proposes implementation boundaries and exit criteria;
 identifiers, record storage, rate steps, numerical budgets, and exact PR splits remain provisional
-until the capability probes establish what works. Every checkbox below is unfinished. A static
+until the capability probes establish what works. Every production checkbox below is unfinished; probe implementation does not satisfy its runtime exit gate. A static
 hook reference is a candidate, not a passed experiment. Do not implement the entire aspirational
 instrument catalog before delivering the supported first playable loop.
 

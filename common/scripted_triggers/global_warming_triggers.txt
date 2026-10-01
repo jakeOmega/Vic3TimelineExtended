@@ -80,6 +80,18 @@ gw_bound_by_emissions_treaty = {
 	has_variable = has_emissions_reduction_treaty
 }
 
+# A market that counts in the panel's Top Emitters list: its leader holds a
+# yearly emissions figure (gw_disp_market_emis, written by
+# gw_snapshot_market_emissions_effect on its market capital's yearly pulse)
+# and it is above zero. A market is named by its leader, so a country that
+# stopped leading keeps its old figure but drops out here. A market that
+# captures more than it emits is not an emitter. Scope: country.
+gw_is_ranked_emitter = {
+	gw_is_market_leader = yes
+	has_variable = gw_disp_market_emis
+	var:gw_disp_market_emis > 0
+}
+
 # Have the yearly emissions figures been taken yet? False on a brand-new game
 # before the first yearly state pulse and on a save upgraded mid-year, which is
 # when the widget shows "figures update each January" instead of a row of
@@ -92,20 +104,20 @@ gw_has_yearly_figures = {
 	}
 }
 
-# At least one of the eight policies is in force. Drives the widget's
-# "no policies adopted yet" line.
-gw_any_policy_active = {
-	OR = {
-		gw_policy_carbon_tax_active = yes
-		gw_policy_renewable_investment_active = yes
-		gw_policy_emission_standards_active = yes
-		gw_policy_climate_adaptation_active = yes
-		gw_policy_reforestation_active = yes
-		gw_policy_public_transit_active = yes
-		gw_policy_fossil_fuel_divestment_active = yes
-		gw_policy_green_building_codes_active = yes
+# What je_global_warming needs to activate, its `possible`, as one tooltip
+# line: the checklist on the Market panel's greyed Climate tab
+# (te_market_global_warming_tab_unlock_sgui's is_valid,
+# te_system_tab_sguis.txt). Wrapped because the engine would print the bare
+# comparison under the script value's key. The test inside is the entry's
+# `possible` word for word, and MarketTabTest in test_global_warming_layout.py
+# fails if the two drift apart. Scope: country.
+gw_entry_unlocked = {
+	custom_tooltip = {
+		text = gw_entry_unlock_tt
+		temperature_anomaly_display >= 0.1
 	}
 }
+
 
 # ---------------------------------------------------------------------------
 # Adopt / repeal eligibility. Bodies extracted verbatim from the scripted

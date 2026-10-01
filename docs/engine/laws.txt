@@ -20,6 +20,12 @@ Bureaucracy:
 		Bureaucrats are appointed by rulers to serve the country's best interests in exchange for high wages.
 	Elected Bureaucrats [progressiveness=50]
 		Local governors are elected by their constituents, decentralizing power while making citizens easier to manage.
+	Contracted Administration [progressiveness=-2] - Unlocking Technology: Supply Chain Management
+		Private firms carry out much of the state's administration under contract. A smaller civil service writes and oversees the contracts, and the firms that win them answer for results rather than procedure.
+	Communal Administration [progressiveness=75]
+		Local assemblies run public services and local affairs through delegates who serve short terms and can be recalled at any time. Citizens take part in administration directly rather than electing officials to act for them.
+	Automated Bureaucracy [progressiveness=-10] - Unlocking Technology: Generative AI
+		Autonomous systems administer the state's institutions within mandates established by its political authorities. Human officials retain oversight, but routine administration and operational decisions are entrusted to machines.
 Caste Hegemony:
 	Caste System Enforced [progressiveness=-75]
 		Caste hierarchy is legally enforced and prevents upward socioeconomic mobility.
@@ -89,8 +95,8 @@ Distribution of Power:
 		Local communities govern their own affairs and send representatives to serve limited terms on larger cooperative councils. With no formal hierarchies, central authority is difficult to exercise.
 	Single-Party State [progressiveness=50] - Unlocking Technology: Political Agitation
 		The state is governed by a single legal political party, which has a monopoly on all political activity within the nation.
-	Algorithmic Governance - Unlocking Technology: Machine Learning
-		A system of government where decisions are made by algorithms or artificial intelligence, based on data analysis and predictive modeling.
+	Algorithmic Governance - Unlocking Technology: Artificial General Intelligence
+		Supreme political authority is vested in artificial intelligence, which determines the state's objectives and directs their implementation. Human institutions serve in advisory and executive capacities.
 Governance Principles:
 	Chiefdom [progressiveness=-100]
 		A hierarchical pre-industrial political system based on kinship, with a warlord or elder of a prominent family at the head. It is incapable of efficient centralized control over entire states.
@@ -383,6 +389,8 @@ Right to Information:
 	Open Government [progressiveness=50] - Unlocking Technology: Knowledge Economy
 		Government operates with transparency and accountability, proactively providing public access to information, decision-making processes, and official records.
 Criminal Justice:
+	Penal Labor Camps [progressiveness=-50] - Unlocking Technology: Mass Surveillance
+		Convicts and political prisoners serve their sentences as forced labor in state camps, digging the mines, felling the forests and working the plantations. The camps cow the opposition and pay part of their own way, but a government that runs them loses the trust of its own people.
 	Punishment-Focused Criminal Justice
 		A criminal justice system that emphasizes punishment and retribution, with a focus on deterrence and incapacitation.
 	Restorative Justice [progressiveness=25] - Unlocking Technology: Behaviorism
@@ -430,7 +438,7 @@ Minority Rights:
 		The government implements policies to address historical [concept_discrimination] and promote equal opportunities for minority groups.
 State Power:
 	Traditional Vassalage [progressiveness=-10]
-		The state is a tapestry of personal oaths and traditional [Concept('concept_obligation', 'obligations')].
+		The state is a tapestry of personal oaths and traditional obligations.
 	Unitary State
 		All administrative power is concentrated in the hands of the central government.
 	Federal System [progressiveness=10]

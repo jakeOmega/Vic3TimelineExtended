@@ -45,7 +45,7 @@ country can race to build, are in [Wonders](02-timeline.md#wonders).
 
 ## Banking tool list
 
-Every market economy banking tool, with its dashboard category, the intervention
+Every market economy banking tool, with its category in the banking panels, the intervention
 points it holds and what it needs. What each does and when to use it is in
 [Market economy banking tools](04-banking.md#market-economy-banking-tools) and
 the sections after it.
@@ -59,10 +59,10 @@ the sections after it.
 | Prudential Regulation | Raise Margin Requirements | 2 | – |
 | Prudential Regulation | Expand Deposit Guarantee | 4 | Consumer Credit |
 | Directed Credit | Directed Credit to Infrastructure | 3 | – |
-| Directed Credit | Directed Credit to Heavy Industry | 3 | – |
-| Directed Credit | Directed Credit to Agriculture | 3 | – |
+| Directed Credit | Directed Credit to Heavy Industry | 4 | – |
+| Directed Credit | Directed Credit to Agriculture | 2 | – |
 | Directed Credit | Directed Credit to Armaments | 3 | – |
-| Directed Credit | Directed Credit to Electrification & High Tech | 3 | Rural Electrification |
+| Directed Credit | Directed Credit to Electrification | 1 | Rural Electrification |
 | External & Currency | Export Credit Facility | 2 | Corporate Governance |
 | External & Currency | Capital Controls (Outflows) | 2 | a law that allows it, or war |
 | External & Currency | Restrict Speculative Inflows | 2 | full Banking System; your own policy rate; a law that allows capital controls, or war |

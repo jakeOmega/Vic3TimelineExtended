@@ -807,7 +807,7 @@ space_elevator_on_action = {
 				remove_modifier = space_elevator_progress
 				add_modifier = {
 					name = space_elevator_progress
-					multiplier = this.var:space_elevator_progress_var
+					multiplier = root.var:space_elevator_progress_var
 				}
 			}
 		}
@@ -828,7 +828,7 @@ solar_collector_on_action = {
 				remove_modifier = solar_collector_progress
 				add_modifier = {
 					name = solar_collector_progress
-					multiplier = this.var:solar_collector_progress_var
+					multiplier = root.var:solar_collector_progress_var
 				}
 			}
 		}
@@ -932,6 +932,9 @@ global_warming_update_on_action = {
 					name = greenhouse_gas_emissions
 					add = var:gw_disp_market_emis
 				}
+				# The same figure into this leader's cumulative total, for the
+				# panel's Top Emitters list (display only).
+				gw_accumulate_market_emissions_effect = yes
 			}
 		}
 	}
@@ -2571,8 +2574,8 @@ society_technology_events_on_action = {
 			}
 			5 = {
 				trigger = {
-					has_technology_researched = artificial_intelligence
-					NOT = { has_law = law_type:law_algorithmic_governance }
+					has_technology_researched = generative_ai
+					NOT = { has_law = law_type:law_automated_bureaucracy }
 				}
 				trigger_event = { id = society_technology_events.27 }
 			}
@@ -2905,7 +2908,7 @@ orbital_battlestation_on_action = {
 				remove_modifier = orbital_battlestation_progress
 				add_modifier = {
 					name = orbital_battlestation_progress
-					multiplier = this.var:orbital_battlestation_progress_var
+					multiplier = root.var:orbital_battlestation_progress_var
 				}
 			}
 		}
@@ -2926,7 +2929,7 @@ mind_upload_nexus_on_action = {
 				remove_modifier = mind_upload_nexus_progress
 				add_modifier = {
 					name = mind_upload_nexus_progress
-					multiplier = this.var:mind_upload_nexus_progress_var
+					multiplier = root.var:mind_upload_nexus_progress_var
 				}
 			}
 		}
@@ -2951,7 +2954,7 @@ antimatter_facility_on_action = {
 				remove_modifier = antimatter_facility_progress
 				add_modifier = {
 					name = antimatter_facility_progress
-					multiplier = this.var:antimatter_facility_progress_var
+					multiplier = root.var:antimatter_facility_progress_var
 				}
 			}
 		}
@@ -3090,7 +3093,7 @@ nanofabrication_center_on_action = {
 				remove_modifier = nanofabrication_center_progress
 				add_modifier = {
 					name = nanofabrication_center_progress
-					multiplier = this.var:nanofabrication_center_progress_var
+					multiplier = root.var:nanofabrication_center_progress_var
 				}
 			}
 		}
@@ -3115,7 +3118,7 @@ consciousness_network_on_action = {
 				remove_modifier = consciousness_network_progress
 				add_modifier = {
 					name = consciousness_network_progress
-					multiplier = this.var:consciousness_network_progress_var
+					multiplier = root.var:consciousness_network_progress_var
 				}
 			}
 		}

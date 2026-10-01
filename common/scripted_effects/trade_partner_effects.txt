@@ -5,15 +5,18 @@
 #
 # Per-rank variables stored on market owner country:
 #   tp_X_tc      = partner's trade center state (for flag/name display)
-#   tp_X_total   = bilateral trade value (mutual_trade_value_with_country)
-#   tp_X_imp_rel = import reliance % on partner (0-100)
-#   tp_X_exp_rel = export reliance % on partner (0-100)
+#   tp_X_total   = annual bilateral trade value (gui_tp_annual_trade: the weekly
+#                  mutual_trade_value_with_country x 52, at base prices)
+#   tp_X_gdp_pct = that yearly trade as a percentage of the owner's (yearly) GDP
+#                  (gui_tp_trade_pct_gdp)
 #   tp_count     = number of trade partners found (1-5)
 #
 # NOTE: Per-good per-partner trade data is not reachable from the SCRIPT layer
 # here: market_imports_reliance(target) in parenthesized form only passes the
 # target parameter, not the goods parameter, so all goods evaluate to the same
 # total reliance (ordered_market_goods then sorts by default order, not per-good).
+# (The table used to show that reliance as Imp%/Exp% columns; it now shows the
+# trade as a share of GDP instead.)
 # It IS reachable from the GUI layer, though: Market.GetImportedAmountFromMarket(
 # otherMarket, Goods) / Market.GetExportedAmountToMarket(otherMarket, Goods) give
 # per-good per-market-pair amounts. The Top Trade Partners rows use exactly that
@@ -37,29 +40,15 @@ store_trade_partner_data = {
 		}
 	}
 
-	# Store bilateral trade value
+	# Store annual bilateral trade value and its share of our owner's GDP
 	trade_center = {
 		owner = {
 			save_scope_as = tp_partner_country
 		}
 	}
 	scope:tp_market_owner = {
-		set_variable = {
-			name = tp_$RANK$_total
-			value = "mutual_trade_value_with_country(scope:tp_partner_country)"
-		}
-	}
-
-	# Store import/export reliance as percentages (0-100)
-	# market_imports_reliance(partner) = fraction of buy orders filled via imports from partner
-	# market_exports_reliance(partner) = fraction of sell orders filled via exports to partner
-	scope:tp_current_market = {
-		set_global_variable = { name = tp_temp_imp value = gui_tp_import_reliance }
-		set_global_variable = { name = tp_temp_exp value = gui_tp_export_reliance }
-	}
-	scope:tp_market_owner = {
-		set_variable = { name = tp_$RANK$_imp_rel value = global_var:tp_temp_imp }
-		set_variable = { name = tp_$RANK$_exp_rel value = global_var:tp_temp_exp }
+		set_variable = { name = tp_$RANK$_total value = gui_tp_annual_trade }
+		set_variable = { name = tp_$RANK$_gdp_pct value = gui_tp_trade_pct_gdp }
 	}
 }
 
@@ -76,25 +65,32 @@ update_market_trade_partners = {
 	}
 
 	# Clear previous data on market owner country
+	# (tp_X_imp_rel / tp_X_exp_rel are the Imp%/Exp% columns' old variables; removing
+	# them clears what saves made before the GDP column still carry.)
 	scope:tp_market_owner = {
 		remove_variable = tp_1_tc
 		remove_variable = tp_1_total
+		remove_variable = tp_1_gdp_pct
 		remove_variable = tp_1_imp_rel
 		remove_variable = tp_1_exp_rel
 		remove_variable = tp_2_tc
 		remove_variable = tp_2_total
+		remove_variable = tp_2_gdp_pct
 		remove_variable = tp_2_imp_rel
 		remove_variable = tp_2_exp_rel
 		remove_variable = tp_3_tc
 		remove_variable = tp_3_total
+		remove_variable = tp_3_gdp_pct
 		remove_variable = tp_3_imp_rel
 		remove_variable = tp_3_exp_rel
 		remove_variable = tp_4_tc
 		remove_variable = tp_4_total
+		remove_variable = tp_4_gdp_pct
 		remove_variable = tp_4_imp_rel
 		remove_variable = tp_4_exp_rel
 		remove_variable = tp_5_tc
 		remove_variable = tp_5_total
+		remove_variable = tp_5_gdp_pct
 		remove_variable = tp_5_imp_rel
 		remove_variable = tp_5_exp_rel
 		remove_variable = tp_count
@@ -184,10 +180,6 @@ update_market_trade_partners = {
 			add_to_variable_list = { name = te_tp_export_markets target = scope:tp_iter_mkt }
 		}
 	}
-
-	# Clean up temp globals
-	remove_global_variable = tp_temp_imp
-	remove_global_variable = tp_temp_exp
 }
 
 # ============================================================================

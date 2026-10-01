@@ -1,0 +1,301 @@
+﻿# TEMPORARY PR 585 ENGINE PROBES. Remove before release; see docs/testing/tax-code-probes.md.
+# Inert until event te_debug_tax.1 explicitly arms a country. Disposable saves only.
+
+# Scope country. Arm is read-only economically, and does not reset an existing run.
+te_tp_arm = {
+	if = {
+		limit = { NOT = { has_variable = te_tp_armed } }
+		set_variable = { name = te_tp_armed value = 1 }
+		set_variable = { name = te_tp_version value = 0 }
+		set_variable = { name = te_tp_revision value = 0 }
+		set_variable = { name = te_tp_operative value = 0 }
+		set_variable = { name = te_tp_stage value = 0 }
+		set_variable = { name = te_tp_snapshot_seq value = 0 }
+	}
+	te_tp_snapshot = yes
+}
+
+# Scope country. Parameter CLAUSE is the explicit suffix of a probe amendment.
+# Idempotent per clause; preserves other clauses for the two-clause experiment.
+te_tp_add_clause = {
+	active_law:lawgroup_taxation = {
+		if = {
+			limit = { NOT = { has_amendment = amendment_type:amendment_te_tp_$CLAUSE$ } }
+			add_amendment = { type = amendment_te_tp_$CLAUSE$ sponsor = ROOT.ig:ig_intelligentsia cooldown = 0 }
+		}
+	}
+}
+
+te_tp_clear_rates = {
+	every_active_law = {
+		every_scope_amendment = {
+			limit = { OR = {
+					type = amendment_type:amendment_te_tp_wage
+					type = amendment_type:amendment_te_tp_dividend
+					type = amendment_type:amendment_te_tp_rural
+					type = amendment_type:amendment_te_tp_head
+					type = amendment_type:amendment_te_tp_consumption
+					type = amendment_type:amendment_te_tp_consumption_high
+				} }
+			remove_amendment = yes
+		}
+	}
+	remove_modifier = te_tp_static_wage
+}
+
+te_tp_clear = {
+	if = { limit = { has_variable = te_tp_controls_actions } remove_variable = te_tp_controls_actions }
+	save_scope_as = te_tp_clear_owner
+	te_tp_clear_rates = yes
+	remove_modifier = te_tp_state_relief
+	remove_modifier = te_tp_state_exempt
+	remove_modifier = te_tp_capacity
+	remove_modifier = te_tp_waste
+	remove_modifier = te_tp_agriculture
+	remove_modifier = te_tp_manufacturing
+	remove_modifier = te_tp_authority
+	remove_modifier = te_tp_import_rate
+	remove_modifier = te_tp_export_rate
+	remove_modifier = te_tp_grain_import
+	remove_modifier = te_tp_grain_export
+	remove_modifier = te_tp_grain_max
+	remove_modifier = te_tp_grain_min
+	remove_modifier = te_tp_static_wage
+	remove_modifier = te_tp_bureaucracy
+	every_scope_state = {
+		remove_modifier = te_tp_state_relief
+		remove_modifier = te_tp_state_exempt
+		remove_modifier = te_tp_capacity
+		remove_modifier = te_tp_waste
+	}
+	if = {
+		limit = { has_variable_list = te_tp_records }
+		every_in_list = {
+			variable = te_tp_records
+			limit = { var:te_tp_record_owner = scope:te_tp_clear_owner }
+			destroy_container = yes
+		}
+		clear_variable_list = te_tp_records
+	}
+	if = { limit = { has_variable = te_tp_pending } remove_variable = te_tp_pending }
+	if = { limit = { has_variable = te_tp_due } remove_variable = te_tp_due }
+	if = { limit = { has_variable = te_tp_expiry } remove_variable = te_tp_expiry }
+	if = { limit = { has_variable = te_tp_draft_revision } remove_variable = te_tp_draft_revision }
+	if = { limit = { has_variable = te_tp_draft_base } remove_variable = te_tp_draft_base }
+	if = { limit = { has_variable = te_tp_approved_revision } remove_variable = te_tp_approved_revision }
+	if = { limit = { has_variable = te_tp_approved_base } remove_variable = te_tp_approved_base }
+	if = { limit = { has_variable = te_tp_ai_step } remove_variable = te_tp_ai_step }
+	if = { limit = { has_variable = te_tp_lock } remove_variable = te_tp_lock }
+	if = { limit = { has_variable = te_tp_timer } remove_variable = te_tp_timer }
+	if = { limit = { has_variable = te_tp_timer_days } remove_variable = te_tp_timer_days }
+	if = { limit = { has_variable = te_tp_last_month } remove_variable = te_tp_last_month }
+	if = { limit = { has_variable = te_tp_expiry_version } remove_variable = te_tp_expiry_version }
+	if = { limit = { has_variable = te_tp_customs_clause } remove_variable = te_tp_customs_clause }
+	if = { limit = { has_variable = te_tp_approved_customs } remove_variable = te_tp_approved_customs }
+	set_variable = { name = te_tp_operative value = 0 }
+	set_variable = { name = te_tp_stage value = 0 }
+	set_variable = { name = te_tp_record_count value = 0 }
+	change_variable = { name = te_tp_version add = 1 }
+	debug_log = "TE_TAX_PROBE clear: native settings not restored; reload baseline"
+}
+
+te_tp_snapshot = {
+	if = {
+		limit = { has_variable = te_tp_armed }
+		change_variable = { name = te_tp_snapshot_seq add = 1 }
+		set_variable = { name = te_tp_sample_month value = te_history_month_index }
+		set_variable = { name = te_tp_obs_tax_income value = te_tp_read_tax_income }
+		set_variable = { name = te_tp_obs_tax_waste value = te_tp_read_tax_waste }
+		set_variable = { name = te_tp_obs_net_fixed_income value = te_tp_read_net_fixed_income }
+		set_variable = { name = te_tp_obs_net_total_income value = te_tp_read_net_total_income }
+		set_variable = { name = te_tp_obs_bureaucracy value = te_tp_read_bureaucracy }
+		set_variable = { name = te_tp_obs_bureaucracy_usage value = te_tp_read_bureaucracy_usage }
+		set_variable = { name = te_tp_obs_authority value = te_tp_read_authority }
+		set_variable = { name = te_tp_obs_tax_level_value value = te_tp_read_tax_level_value }
+		set_variable = { name = te_tp_obs_military_wage_level_value value = te_tp_read_military_wage_level_value }
+		set_variable = { name = te_tp_grain_selected value = 0 }
+		if = { limit = { has_consumption_tax = g:grain } set_variable = { name = te_tp_grain_selected value = 1 } }
+		set_variable = { name = te_tp_school_level value = -1 }
+		set_variable = { name = te_tp_school_expanding value = 0 }
+		if = {
+			limit = { has_institution = institution_schools }
+			if = { limit = { institution_investment_level = { institution = institution_schools value >= 0 } } set_variable = { name = te_tp_school_level value = 0 } }
+			if = { limit = { institution_investment_level = { institution = institution_schools value >= 1 } } set_variable = { name = te_tp_school_level value = 1 } }
+			if = { limit = { institution_investment_level = { institution = institution_schools value >= 2 } } set_variable = { name = te_tp_school_level value = 2 } }
+			if = { limit = { institution_investment_level = { institution = institution_schools value >= 3 } } set_variable = { name = te_tp_school_level value = 3 } }
+			if = { limit = { institution_investment_level = { institution = institution_schools value >= 4 } } set_variable = { name = te_tp_school_level value = 4 } }
+			if = { limit = { institution_investment_level = { institution = institution_schools value >= 5 } } set_variable = { name = te_tp_school_level value = 5 } }
+		}
+		if = { limit = { expanding_institution = institution_schools } set_variable = { name = te_tp_school_expanding value = 1 } }
+		debug_log = "TE_TAX_PROBE country=[THIS.GetCountry.GetNameNoFormatting] seq=[SCOPE.ScriptValue('te_tp_view_snapshot_seq')|0] month=[SCOPE.ScriptValue('te_history_month_index')|0]"
+		debug_log = "TE_TAX_PROBE tax_income=[SCOPE.ScriptValue('te_tp_view_obs_tax_income')|3]"
+		debug_log = "TE_TAX_PROBE tax_waste=[SCOPE.ScriptValue('te_tp_view_obs_tax_waste')|3]"
+		debug_log = "TE_TAX_PROBE net_fixed_income=[SCOPE.ScriptValue('te_tp_view_obs_net_fixed_income')|3]"
+		debug_log = "TE_TAX_PROBE net_total_income=[SCOPE.ScriptValue('te_tp_view_obs_net_total_income')|3]"
+		debug_log = "TE_TAX_PROBE bureaucracy=[SCOPE.ScriptValue('te_tp_view_obs_bureaucracy')|3]"
+		debug_log = "TE_TAX_PROBE bureaucracy_usage=[SCOPE.ScriptValue('te_tp_view_obs_bureaucracy_usage')|3]"
+		debug_log = "TE_TAX_PROBE authority=[SCOPE.ScriptValue('te_tp_view_obs_authority')|3]"
+		debug_log = "TE_TAX_PROBE tax_level_value=[SCOPE.ScriptValue('te_tp_view_obs_tax_level_value')|3]"
+		debug_log = "TE_TAX_PROBE military_wage_level_value=[SCOPE.ScriptValue('te_tp_view_obs_military_wage_level_value')|3]"
+		debug_log = "TE_TAX_PROBE version=[SCOPE.ScriptValue('te_tp_view_version')|0] stage=[SCOPE.ScriptValue('te_tp_view_stage')|0] operative=[SCOPE.ScriptValue('te_tp_view_operative')|0] due=[SCOPE.ScriptValue('te_tp_view_due')|0] expiry=[SCOPE.ScriptValue('te_tp_view_expiry')|0]"
+		set_variable = { name = te_tp_policy_target value = -999 }
+		set_variable = { name = te_tp_policy_actual value = -999 }
+		if = { limit = { has_variable = te_policy_rate_target } set_variable = { name = te_tp_policy_target value = var:te_policy_rate_target } }
+		if = { limit = { has_variable = te_policy_rate } set_variable = { name = te_tp_policy_actual value = var:te_policy_rate } }
+		set_variable = { name = te_tp_controls value = 0 }
+		if = { limit = { te_mon_capital_controls_in_force = yes } set_variable = { name = te_tp_controls value = 1 } }
+		set_variable = { name = te_tp_public_schools value = 0 }
+		if = { limit = { has_law = law_type:law_public_schools } set_variable = { name = te_tp_public_schools value = 1 } }
+		debug_log = "TE_TAX_PROBE target=[SCOPE.ScriptValue('te_tp_view_policy_target')|3] actual=[SCOPE.ScriptValue('te_tp_view_policy_actual')|3] capital_controls_sample=[SCOPE.ScriptValue('te_tp_view_controls')|0] public_schools=[SCOPE.ScriptValue('te_tp_view_public_schools')|0]"
+		debug_log = "TE_TAX_PROBE school_trigger=[SCOPE.ScriptValue('te_tp_view_school_level')|0] expanding=[SCOPE.ScriptValue('te_tp_view_school_expanding')|0] grain=[SCOPE.ScriptValue('te_tp_view_grain_selected')|0]"
+	}
+}
+
+# Bounded records test storage, iteration, missing native inheritance and reload.
+# No timed variables on containers; the date is an absolute calendar-month index.
+te_tp_append_record = {
+	if = {
+		limit = { OR = { NOT = { has_variable_list = te_tp_records } NOT = { any_in_list = { variable = te_tp_records count >= 2 } } } }
+		save_scope_as = te_tp_owner
+		create_container = { tags = { te_tp_record } save_scope_as = te_tp_new }
+		scope:te_tp_new = {
+			set_variable = { name = te_tp_record_owner value = scope:te_tp_owner }
+			set_variable = { name = te_tp_record_month value = te_history_month_index }
+		}
+		add_to_variable_list = { name = te_tp_records target = scope:te_tp_new }
+		debug_log = "TE_TAX_PROBE record appended"
+	}
+	else = { debug_log = "TE_TAX_PROBE record rejected: capacity two" }
+	te_tp_inspect_records = yes
+}
+te_tp_inspect_records = {
+	set_variable = { name = te_tp_record_count value = 0 }
+	save_scope_as = te_tp_owner
+	if = {
+		limit = { has_variable_list = te_tp_records }
+		every_in_list = {
+			variable = te_tp_records
+			if = {
+				limit = { var:te_tp_record_owner = scope:te_tp_owner }
+				scope:te_tp_owner = { change_variable = { name = te_tp_record_count add = 1 } }
+			}
+			else = { debug_log = "TE_TAX_PROBE record owner mismatch" }
+		}
+	}
+	debug_log = "TE_TAX_PROBE owned records=[SCOPE.ScriptValue('te_tp_view_record_count')|0]"
+}
+
+# These are deliberately simplified approval commands, not a production legislature.
+te_tp_draft = {
+	if = {
+		limit = { has_variable = te_tp_armed has_law = law_type:law_te_probe_carrier NOT = { has_variable = te_tp_pending } }
+		change_variable = { name = te_tp_revision add = 1 }
+		set_variable = { name = te_tp_draft_revision value = var:te_tp_revision }
+		set_variable = { name = te_tp_draft_base value = var:te_tp_version }
+		set_variable = { name = te_tp_stage value = 1 }
+		debug_log = "TE_TAX_PROBE draft only: no collection writes"
+	}
+}
+te_tp_approve = {
+	if = {
+		limit = { te_tp_can_approve = yes }
+		set_variable = { name = te_tp_approved_revision value = var:te_tp_draft_revision }
+		set_variable = { name = te_tp_approved_base value = var:te_tp_draft_base }
+		set_variable = { name = te_tp_due value = te_history_month_index }
+		change_variable = { name = te_tp_due add = 1 }
+		set_variable = { name = te_tp_expiry value = var:te_tp_due }
+		change_variable = { name = te_tp_expiry add = 1 }
+		set_variable = { name = te_tp_pending value = 1 }
+		if = { limit = { has_variable = te_tp_customs_clause } set_variable = { name = te_tp_approved_customs value = 1 } }
+		set_variable = { name = te_tp_stage value = 2 }
+		remove_variable = te_tp_draft_revision
+		debug_log = "TE_TAX_PROBE approved: both clauses due next month, zero successor one month later"
+	}
+}
+# Single writer for the integration experiment. Both adds run in one effect;
+# whether economy accounting is atomic is a runtime question, not asserted here.
+te_tp_rebuild = {
+	if = {
+		limit = { has_variable = te_tp_armed has_law = law_type:law_te_probe_carrier }
+		te_tp_clear_rates = yes
+		if = {
+			limit = { var:te_tp_operative = 1 }
+			te_tp_add_clause = { CLAUSE = wage }
+			te_tp_add_clause = { CLAUSE = dividend }
+			if = { limit = { has_variable = te_tp_approved_customs } set_import_tariff_level = { goods = g:grain level = low_tariffs } }
+		}
+	}
+}
+te_tp_process_queue = {
+	# Callers are armed country events; never call from GUI preview.
+	if = {
+		limit = { has_variable = te_tp_armed has_variable = te_tp_pending te_history_month_index >= var:te_tp_due }
+		if = {
+			limit = { var:te_tp_approved_base = var:te_tp_version has_law = law_type:law_te_probe_carrier }
+			set_variable = { name = te_tp_operative value = 1 }
+			change_variable = { name = te_tp_version add = 1 }
+			set_variable = { name = te_tp_expiry_version value = var:te_tp_version }
+			remove_variable = te_tp_pending
+			set_variable = { name = te_tp_stage value = 3 }
+			te_tp_rebuild = yes
+			debug_log = "TE_TAX_PROBE commenced both clauses"
+		}
+		else = {
+			set_variable = { name = te_tp_stage value = 4 }
+			debug_log = "TE_TAX_PROBE held entire package: baseline or carrier conflict"
+		}
+	}
+	if = {
+		limit = { has_variable = te_tp_armed has_variable = te_tp_expiry NOT = { has_variable = te_tp_pending } has_variable = te_tp_expiry_version te_history_month_index >= var:te_tp_expiry }
+		if = {
+			limit = { var:te_tp_version = var:te_tp_expiry_version }
+			set_variable = { name = te_tp_operative value = 0 }
+			change_variable = { name = te_tp_version add = 1 }
+			set_variable = { name = te_tp_stage value = 5 }
+			te_tp_rebuild = yes
+			if = { limit = { has_variable = te_tp_approved_customs } set_import_tariff_level = { goods = g:grain level = no_tariffs_or_subventions } }
+			debug_log = "TE_TAX_PROBE expired to explicit zero successor"
+		}
+		else = { debug_log = "TE_TAX_PROBE stale expiry ignored" }
+		remove_variable = te_tp_expiry
+	}
+}
+te_tp_monthly = {
+	if = {
+		limit = { has_variable = te_tp_armed }
+		# A repeated event in the same month must not advance AI twice.
+		if = { limit = { NOT = { has_variable = te_tp_last_month } } set_variable = { name = te_tp_last_month value = -1 } }
+		if = {
+			limit = { var:te_tp_last_month < te_history_month_index }
+			set_variable = { name = te_tp_last_month value = te_history_month_index }
+			te_tp_process_queue = yes
+			if = {
+				limit = { is_ai = yes has_variable = te_tp_ai_step }
+				if = {
+					limit = { var:te_tp_ai_step = 1 }
+					te_tp_draft = yes
+					set_variable = { name = te_tp_ai_step value = 2 }
+				}
+				else_if = {
+					limit = { var:te_tp_ai_step = 2 te_tp_can_approve = yes }
+					te_tp_approve = yes
+					remove_variable = te_tp_ai_step
+				}
+			}
+			te_tp_snapshot = yes
+		}
+	}
+}
+
+# Scope country; KIND = ordinary | emergency, used only in a literal log tag.
+# Sticky action record survives a same-month repeal, unlike the sampled active flag.
+# This observes attempts through the two known activation paths, not arbitrary engine writes.
+te_tp_observe_controls = {
+	if = {
+		limit = { has_variable = te_tp_armed }
+		if = { limit = { NOT = { has_variable = te_tp_controls_actions } } set_variable = { name = te_tp_controls_actions value = 0 } }
+		change_variable = { name = te_tp_controls_actions add = 1 }
+		set_variable = { name = te_tp_controls_action_month value = te_history_month_index }
+		debug_log = "TE_TAX_PROBE controls action KIND=$KIND$; inspect active state after native action"
+	}
+}

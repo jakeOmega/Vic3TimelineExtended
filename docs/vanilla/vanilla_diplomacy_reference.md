@@ -2,7 +2,7 @@
 
 A primer on how the **base game's** diplomacy systems work, written for AI agents that need context before touching mod content that hooks the diplomatic layer (formables and unification plays, infamy/relations modifiers, power-bloc principles, treaty articles, subject mechanics). Mod-specific systems (Pan-X unification plays, formable candidacy, covert warfare, etc.) live in `docs/systems/mod_systems.md` and `docs/systems/journal_entry_systems.md`. Diplomatic *plays* themselves are covered in detail in `docs/vanilla/vanilla_war_reference.md` § 1; this doc focuses on everything that surrounds and feeds into a play.
 
-> **Last verified against vanilla:** 1.14.2 (open beta). When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** Wiki sources for this doc are tagged at versions ranging from 1.9 to 1.13; verify any specific name or number via the server before relying on it.
+> **Last verified against vanilla:** 1.14.5. § 5.3 (infamy) was rewritten and § 11 gained the 1.14.5 strait reactions. When `mod_state_server` reports a different vanilla version (`/status`), assume sections may be stale until cross-checked. **Revisit this file on every vanilla bump per `docs/guides/vanilla_patch_runbook.md`.** Wiki sources for this doc are tagged at versions ranging from 1.9 to 1.13; verify any specific name or number via the server before relying on it.
 >
 > **Verify before relying on names.** Modifier names, war goal IDs, treaty article IDs, principle IDs, subject type IDs, and trigger names cited below should be confirmed via the mod state server (`/modifier-search?q=`, `/engine-docs/modifiers`, `/raw/SubjectType/<id>`, `/raw/PowerBlocPrinciple/<id>`, `/raw/DiplomaticPlay/<id>`) before referencing them in code. Vanilla renames things across patches.
 >
@@ -115,28 +115,28 @@ Infamy is bucketed into four levels: **Reputable → Infamous → Notorious → 
 
 ### 5.3 Infamy gain — the shape of the formula
 
-For most diplomatic demands (war goals, sovereignty violations, expel-diplomats), infamy is computed as a base value scaled by a chain of multiplicative factors. The *factors* are the durable mechanism; the specific values move between patches.
+Infamy for a war goal is computed from the **states it takes**. Since 1.14 the territorial goals (annex, conquer/return a state, make a subject, ban slavery, reduce autonomy) read shared script values in `common/script_values/00_infamy_values.txt` (`state_infamy_value` per state, `country_infamy_value` as the sum over a country's states); a goal declares `infamy_severity`/`infamy_min`/`infamy_max` on top. 1.14.5 reworked those values. The *factors* below are the durable mechanism; the numbers live in `NDiplomacy|WAR_GOAL_INFAMY_*` and move between patches.
 
-The factor chain conceptually looks like:
+Per state, conceptually:
 
 ```
-Infamy ≈ Base × (1 + PopMult) × StateMult × (1 + InitiatorRankMod + TargetRankMod)
-            × SubjectMult × UnrecognizedTargetMod × OtherModifiers
+StateInfamy ≈ (Baseline + PopulationShareTerm + GDPShareTerm) × Standing
+              × (1 + Homeland + SharedLanguage + Claim + Adjacency + ScriptedUnification ...) × TargetMods
 ```
 
-What each factor means:
+- **Baseline and world-share terms.** Every state costs a flat baseline plus a term for its share of *world* population and a term for its share of *world* GDP. Each term has a soft cap (growth slows above it) and a hard maximum. So cost follows what a state is worth to the world, not its absolute head count, and a very large or rich state is cheaper than it used to be. A country's total is the plain sum: there is no total cap.
+- **Standing.** Multiplied by whether the state is its owner's incorporated capital, an incorporated homeland, another incorporated state, or unincorporated (the last is discounted).
+- **Aggressor relationship** — each is a `1 + factor` step: the state is a homeland of the aggressor's primary cultures (further reduced by the nationalism tech), a homeland of a culture that shares a language with the aggressor's (further reduced by pan-nationalism), the aggressor holds a claim (the largest single discount), the aggressor is adjacent, or the aggressor and the state's owner qualify for one of the **scripted unification** pairs (China, Ethiopia, Arabia, India, Indonesia: `is_scripted_unification_conquest`).
+- **Target modifiers.** Unrecognized targets are discounted for recognized aggressors (progressive with Colonization → Civilizing Mission → the *Colonial Offices* principle); a rebellious or low-liberty-desire subject is cheap to act against; interest tier scales the demand.
+- **Country modifiers on the total.** `country_infamy_generation_mult` from techs (the five Psychology techs each trim it), ruler traits (Cautious / Reckless), laws and event modifiers; and the **`infamy_generation` game rule**, whose multiplier is applied by the engine to calculated infamy (war goals and diplomatic incidents; whether it also scales script `change_infamy` is not documented). Three boolean modifiers gate the tech discounts: `country_homeland_infamy_reduction_bool`, `country_shared_language_infamy_reduction_bool`, `country_ban_slavery_no_infamy_bool`.
+- **Non-territorial demands** (law commitments, transit rights, money, goods, ships) use their own bounded scales (`WAR_GOAL_INFAMY_*_DEMAND_MIN/MAX`, transfer-share multipliers), and 1.14.5 made the defensive strait demands infamy-free.
 
-- **Base** — set per war goal / action. Annexation is the largest; sovereignty violations and minor goals are smaller.
-- **Pop multiplier** — scales by the *population* of the targeted state(s), with per-state and total caps. Targeting a high-population state is dramatically more expensive than a low-population one of equivalent strategic value.
-- **State multiplier** — discounts apply per state for unincorporated targets and primary-culture-homeland targets of the initiator (these stack). So reclaiming your own primary-culture homeland is cheaper than grabbing a foreign incorporated state.
-- **Initiator / target rank modifiers** — high-rank initiators and high-rank targets both inflate infamy; unrecognized targets are discounted for recognized initiators (with progressive discounts from Colonization → Civilizing Mission → the *Colonial Offices* principle).
-- **Subject multiplier** — heavily discounts annexing your own docile subject (low liberty desire or opposing you in a play).
-- **Other modifiers** — tech (Multilateral Alliances), ruler traits (Cautious / Reckless), and event-applied country modifiers.
+Two practical implications survive any specific rebalance:
 
-Pull the actual numbers from `common/diplomatic_plays/`, `common/defines/`, and the relevant tech / trait files. Two practical implications survive any specific rebalance:
-
-1. **Conquering one big incorporated state is much costlier than conquering several small unincorporated states** with the same total population, because pop multiplier is per-state-capped.
+1. **Cost follows world share, so the same conquest costs about the same in 1836 and 2036.** A mod formula that scales with absolute population instead drifts upward as populations grow, and diverges from vanilla for every state-based goal.
 2. **Sovereignty violations and regime changes are also infamy-bearing** — not just war goals. Expel-diplomats has its own scaled infamy charge by target rank.
+
+Pull the actual numbers from `common/defines/00_defines.txt` (the `WAR_GOAL_INFAMY_*` block), `common/script_values/00_infamy_values.txt`, and the goal files in `common/war_goal_types/`. The mod's reunification goal (`te_reunify_country`) uses vanilla's annex block since 1.14.5, so it gets all of the discounts above; its force-subject action (`te_force_become_subject`) still uses the pre-1.14 shape (issue #387) and gets none of them.
 
 ### 5.4 Diplomatic incidents
 
@@ -459,6 +459,8 @@ Plays are *the* mechanism by which infamy is generated. Almost every infamy-bear
 
 Since 1.13.9, plays can be started directly over strait-related war goals. On the modding side, 1.13.7 added an `add_maneuvers` effect usable in the diplomatic-play scope.
 
+**Straits, tolls and grievance (1.14.5).** A strait controller's restrictions now generate *grievance* in the countries that depend on the strait, and AI controllers weigh the toll income they earn against the harm and anger a restriction causes (`ai_strait_toll_income_weight`, `ai_strait_fallout_weight`, the default strategy's `strait_scores`). Affected countries push back through the strait treaty articles (toll exemption, no tolls, strait access, no strait closure) and through plays over the matching war goals: the articles' AI acceptance now reads `strait_dependence_by` / `strait_trade_dependence_by` (the old `strait_trade_importance_by` is gone), their `evaluation_chance` and `proposal_weight` grow with `worst_strait_toll_grievance` / `worst_strait_access_grievance`, and the defensive demands cost no infamy. A war goal can declare `settles_grievance`, which lets an AI with an Antagonistic attitude toward the target start a play over it even when it would otherwise be too minor. Restricting or easing a strait posts the `strait_restricted` / `strait_eased` toasts, and the relations hit goes through dedicated catalyst categories (`cc_strait_tolls`, `cc_strait_access`) so it does not share the cooldown of general relations catalysts. Separately, the AI no longer starts a play whose initial war goal scores below `NAI|START_DIPLO_PLAY_MIN_WARGOAL_SCORE`.
+
 Plays interact with everything in this doc:
 
 - **Rank** caps maneuvers and gates which goals are usable (subjugation requires major-or-better target; *Cut Down to Size* requires a pariah target).
@@ -510,11 +512,11 @@ When introducing a new diplomacy-touching modifier name, **always** verify via `
 
 ## 15. Notes for mod design
 
-- **Don't double-tax infamy.** Mod events that "punish aggression" via `country_infamy_generation_mult = +X` stack multiplicatively with vanilla infamy. The vanilla pop multiplier already makes high-pop-target conquests very expensive — adding a further multiplier on top can vault a single annexation past Pariah threshold. Audit the cumulative effect on a high-population-target annexation before shipping.
+- **Don't double-tax infamy.** Mod events that "punish aggression" via `country_infamy_generation_mult = +X` stack multiplicatively with vanilla infamy. Vanilla infamy already grows with the target's share of the world (§ 5.3) — adding a further multiplier on top can vault a large annexation past the Pariah threshold. Audit the cumulative effect on a high-population-target annexation before shipping.
 - **Subject income transfer caps the overlord's economic leverage.** Income-transfer percentages are meaningful when the subject is small and a wash when the subject is comparable to the overlord. Subject-scaling rebalances should multiply the *transfer rate* (game lever in `common/subject_types/`) rather than adding flat country income (leaks out of the system).
 - **Power bloc cohesion is fragile near non-great-power leaders.** The flat-multiplier cohesion penalty for non-great-power leaders is severe; designing a small-power-led bloc system needs to either remove that penalty in script or accept that the bloc will sit at low cohesion most of its life.
 - **Liberty desire is a scope trap.** Some `country_subject_liberty_desire_*` modifiers apply to the *subject* scope; others apply to the overlord. Read the modifier's signature in `/engine-docs/modifiers` and verify which scope you're applying it from. Don't paste from another modifier without checking.
 - **Don't grant interest, grant involvement.** With the tiered system (§ 6), there is no interest "slot" to hand out. Mod events that want to push a country into a region should add involvement through the existing levers (subject grant, treaty article, fleet projection, owned-state grant) rather than inventing a flat-tier-up effect. Bumping a country from None straight to Hegemonic via event skips the whole mechanic and kills the gameplay loop the system is built around.
 - **Treaty articles are bilateral.** Articles that "punish breakage with infamy on the breaker" already exist in vanilla — don't re-implement that as a custom event. See `docs/vanilla/treaty_articles_reference.md` for the engine-supported article shapes.
 - **Recognition is sticky.** When designing events that hand recognition out (or strip it away), use vanilla precedent: only the Sick Man path strips it, and only because that JE is gated on extreme conditions. Mass-stripping recognition through events would invalidate decades of player diplomacy.
-- **Wargoal infamy cost is a *weak* gate at low pop densities and a *very strong* one at high.** The pop multiplier can blow up the cost by 50× for a high-pop target. When designing a play that creates wargoals programmatically, check the actual generated infamy on a representative target; don't assume the base value is what'll show up in-game.
+- **Wargoal infamy cost depends on what is taken, not on the goal's base value.** A state's cost is a baseline plus its world-share terms, then discounted or inflated by standing, claims, homelands and unification pairs, so the same goal can differ by an order of magnitude between targets (a claimed homeland versus a large foreign state). When designing a play that creates wargoals programmatically, check the actual generated infamy on a representative target; don't assume the base value is what'll show up in-game.

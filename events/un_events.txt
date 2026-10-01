@@ -611,6 +611,19 @@ un_events.4 = {
 				trigger = { country_rank >= rank_value:great_power }
 				add = 3
 			}
+			# Less willing to join a mission that has dragged on.
+			modifier = {
+				trigger = { scope:peacekeeping_target = { un_mission_hosts_aged = { TYPE = stabilisation MONTHS = 36 } } }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { scope:peacekeeping_target = { un_mission_hosts_aged = { TYPE = stabilisation MONTHS = 72 } } }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { scope:peacekeeping_target = { un_mission_hosts_aged = { TYPE = stabilisation MONTHS = 120 } } }
+				factor = 0.5
+			}
 		}
 		add_modifier = {
 			name = un_peacekeeping_deployed_modifier
@@ -1026,6 +1039,19 @@ un_events.7 = {
 			modifier = {
 				trigger = { country_rank >= rank_value:great_power }
 				add = 3
+			}
+			# Less willing to join a mission that has dragged on.
+			modifier = {
+				trigger = { scope:crisis_country = { un_mission_hosts_aged = { TYPE = aid MONTHS = 36 } } }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { scope:crisis_country = { un_mission_hosts_aged = { TYPE = aid MONTHS = 72 } } }
+				factor = 0.5
+			}
+			modifier = {
+				trigger = { scope:crisis_country = { un_mission_hosts_aged = { TYPE = aid MONTHS = 120 } } }
+				factor = 0.5
 			}
 		}
 		add_modifier = {

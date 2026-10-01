@@ -34,36 +34,39 @@ je_cultural_hegemony = {
 	scripted_button = ch_disable_cultural_protectionism_button
 
 	# The human-facing surface. Every scripted button above carries `is_ai = yes`,
-	# so the vanilla button grid renders nothing for a player; these three panels
+	# so the vanilla button grid renders nothing for a player; these panels
 	# replace it. Their controls call ch_policy_sgui, which delegates to the very
-	# triggers and effects the buttons use.
+	# triggers and effects the buttons use. Three named roots, in the order
+	# cultural_hegemony_widget.gui composes for both hosts: the overview above the
+	# status text, the live sections below it, and the history and "How Cultural
+	# Hegemony Works" below the (empty for a human) button grid.
 	widget = {
 		gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"
-		name = "widget_je_ch_summary"
+		name = "widget_je_ch_overview"
 		container = "custom_widget_container_1"
 	}
 	widget = {
 		gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"
-		name = "widget_je_ch_programmes"
+		name = "widget_je_ch_status"
 		container = "custom_widget_container_2"
 	}
 	widget = {
 		gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"
-		name = "widget_je_ch_standing"
+		name = "widget_je_ch_reference"
 		container = "custom_widget_container_3"
 	}
 
 	status_desc = {
-		# The journal entry's own text is deliberately short: three lines that read
-		# sensibly on a pinned, unopened entry. Everything that used to be here —
-		# the component breakdown, the cultural-policy readout, the ideological
-		# alignment block and the top-ten leaderboard — is now the custom widget
-		# mounted above, which can lay it out in columns instead of as prose.
-		desc = je_cultural_hegemony_status
-		desc = je_ch_share_info
+		# No status text while the entry is active: the panels above and below
+		# show everything it said (the overview's tier and share, the programmes'
+		# funding row), and status text that repeats the overview goes (owner,
+		# 2026-09-29). The entry is also shown while inactive
+		# (is_shown_when_inactive), when the panels are hidden and the scores
+		# already run, so it keeps one line there: tier and share.
+		# has_journal_entry counts active entries only.
 		triggered_desc = {
-			desc = je_ch_policy_program_funding
-			trigger = { has_law = law_type:law_ministry_of_culture }
+			desc = je_cultural_hegemony_status
+			trigger = { NOT = { has_journal_entry = je_cultural_hegemony } }
 		}
 	}
 
@@ -132,17 +135,13 @@ je_cultural_hegemony = {
 				limit = { cultural_hegemony_benchmark_mult >= 0.1 }
 				remove_modifier = cultural_hegemony_foreign_benchmark
 				add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = cultural_hegemony_benchmark_mult }
+				set_variable = { name = ch_benchmark_applied value = cultural_hegemony_benchmark_mult }
 			}
 			else_if = {
 				limit = { has_modifier = cultural_hegemony_foreign_benchmark }
 				remove_modifier = cultural_hegemony_foreign_benchmark
+				set_variable = { name = ch_benchmark_applied value = 0 }
 			}
-
-			# Record this month's share for the widget's history chart, after the
-			# programme modifiers above have settled, so the sample is the month's
-			# final state. hidden_effect-wrapped inside the helper; nothing is
-			# recorded for a country the history store does not track.
-			te_history_record_cultural_hegemony_samples = yes
 
 			# Milestone events — self-gated by ch_milestone_* variables, fire
 			# at most once per country when cultural_pull_total crosses 10 / 25

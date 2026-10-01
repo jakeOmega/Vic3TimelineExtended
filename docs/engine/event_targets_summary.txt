@@ -1,4 +1,4 @@
-# Auto-generated from event_targets.log (engine docs 1.14.4). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from event_targets.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 country|active_law|law|Scope to the scoped country's active law in the named law group (active_law:lawgroup_trade_policy)
 country|ai_army_comparison|value|Scope to comparative army strength between two countries (example:
@@ -80,6 +80,7 @@ war|defender_warleader|country|Scope to the defender warleader of a war
 new_combat_unit|defense|value|Returns the unit's defense rating (including impact from their commander)
 |define|value|Reference the value of a numeric or color define: define:Namespace|Name Global Link: yes
 new_combat_unit|demoralized|value|Returns the unit's number of demoralized manpower
+strait|dependence_for|value|Scope to how much a target country depends on this strait, as a percentage - whichever of trade_dependence_for and military_dependence_for is large...
 military_formation|detection|value|Links from a fleet scope to the total detection of the ships in the fleet
 country|diplomatic_pact_expense_ratio|value|Scope to the ratio of diplomatic pact expenses to income for this country, clamped 0-1 (example:
 diplomatic_pact|diplomatic_pact_other_country|country|Scope to the other country of the diplomatic pact in scope
@@ -87,6 +88,7 @@ war|diplomatic_play|diplomatic_play|Scope from a war to its diplomatic play
 treaty|enforced_on_country|country|Scope to the enforced_on_country of an enforced treaty
 treaty|enforcer_country|country|Scope to the enforcer_country of an enforced treaty
 company|executive|character|Scope from a company to its executive character
+strait|fallout_for|value|Scope to how many countries a target controller of this strait would hurt by closing it: like trade_fallout_for, but summing trade plus military de...
 diplomatic_pact,treaty_article,treaty_options,treaty_article_options,treaty|first_country|country|Scope to the first_country of any of: 1.
 |flag|flag|Flag literals eg: flag:the_boss Global Link: yes
 country|flagship|ship|Get the flagship of the scoped country
@@ -173,8 +175,10 @@ market_goods|market_import_cap|value|Get the maximum amount of goods the market 
 state|mass_migration_culture|culture|Scope to the mass migration target culture of a state
 market|mg|market_goods|Scope from a market to the MarketGoods with the specified key
 country,state|migration_pull|value|Get the migration pull for a state or the mass migration pull for a country.
+strait|military_dependence_for|value|Scope to how much a target country would be cut off if this strait were closed to it, as a percentage - 100 if it would lose most of the sea it can...
 country|military_expenses|value|Get the current military expenses (slaves, wages and goods) of the scoped country
 country|military_expenses_share|value|Get the current share of military expenses (slaves, wages and goods) relative to the total expenses of the scoped country
+strait|military_fallout_for|value|Scope to how many countries a target controller of this strait would hurt by blocking warships: like trade_fallout_for, but summing military_depend...
 new_combat_unit|mobilization|value|Returns the unit's mobilization value between 0 and 1
 |mobilization_option|mobilization_option|Scope to a mobilization option from its name (mobilization_option:key) Global Link: yes
 country,battle_side,building,character,interest_group,market,power_bloc,state|modifier|value,boolean|Scope to the value of the modifier type of specified key belonging to the current object
@@ -263,6 +267,7 @@ character,military_formation|num_units_not_in_battle|value|Get the number of act
 character|num_units_share|value|Share of units a commander has considering his command limit.
 state|num_world_market_hub_trade_center_levels|value|Get the total number of trade center levels associated with scope world market hub state
 new_combat_unit|offense|value|Returns the unit's offense rating (including impact from their commander)
+strait|only_allies_fallout_for|value|Scope to how many countries a target controller of this strait would hurt by letting only its allies through its current restriction: like trade_fa...
 character|opposing_commander|character|Scope from a character in battle to the character on the other side of the battle
 battle_side|opposite_battle_side|battle_side|Scope from a battle side to its opposite
 country|overlord|country|Scope to the direct overlord of the country in scope
@@ -327,7 +332,10 @@ amendment|sponsor|interest_group|Links from an amendment scope to the interest g
 ai_regional_objective|stance|ai_strategic_region_stance_type|Scope to the AI regional stance an AI regional objective was rolled under
 building,market,pop,province|state|state|Scope to the state of the object
 state|state_region|state_region|Scope to the state region of a state
-country|strait_trade_importance_by|value|Scope to the trade importance of goods this country is trading through straits controlled by a target country.
+country|strait_access_grievance_against|value|Scope to how badly the strait closures and blocked warships of a target country hurt this country, as a percentage - its dependence on the worst re...
+country|strait_dependence_by|value|Scope to how much this country depends on straits controlled by a target country, as a percentage - the larger of its trade dependence across all o...
+country|strait_toll_grievance_against|value|Scope to how badly the strait tolls of a target country hurt this country, as a percentage - its dependence on the worst tolled strait, scaled by t...
+country|strait_trade_dependence_by|value|Scope to how much this country relies on its trade volume through straits controlled by a target country, as a percentage of total reliance.
 |strait_type|strait_type|Scope to a strait type from its name (strait_type:key) Global Link: yes
 diplomatic_play,diplomatic_catalyst,political_lobby,journal_entry|target||Scope to the target of the object
 treaty_article,treaty_article_options|target_country|country|Scope to the target_country of any of: 1.
@@ -345,6 +353,8 @@ country|total_marine_capacity|value|Get the total marine capacity across all fle
 diplomatic_relations|total_pirated_trade_value|value|Scope to the total average weekly base value of goods pilfered via piracy between two countries in a diplomatic relations scope (example:
 country|total_trade_value|value|Scope to the total value of scope country's trade with the world market (example:
 market|trade_center|state|Scope to the trade center state of the market!
+strait|trade_dependence_for|value|Scope to how much a target country relies on its trade volume through this strait, as a percentage of total reliance.
+strait|trade_fallout_for|value|Scope to how many countries a target controller of this strait would hurt by charging tolls: the sum of trade_dependence_for over every country not...
 building|training_rate|value|Scope to the current maximum weekly training rate of a building
 treaty_article|treaty|treaty|Scope to the treaty a treaty article belongs to
 market_goods|treaty_exports|value|Get the current number of treaty (NOT world market) exports of the good to the market of the scoped MarketGoods
@@ -360,4 +370,6 @@ diplomatic_play|war|war|Scope from a diplomatic play to its war
 company|weekly_prosperity_change|value|Scope to the weekly prosperity change for scope company (example:
 pop|workplace|building|Scope to the workplace of a pop
 state|world_market_hub|state|Scope to the world market hub state associated with the scoped state
+country|worst_strait_access_grievance|value|Scope to the largest strait_access_grievance_against this country holds against any strait controller (example:
+country|worst_strait_toll_grievance|value|Scope to the largest strait_toll_grievance_against this country holds against any strait controller (example:
 |yes|boolean|Boolean literal for true values Global Link: yes

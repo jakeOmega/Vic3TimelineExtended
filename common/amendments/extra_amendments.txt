@@ -649,6 +649,63 @@ amendment_religious_exemption = {
 	amendment_activism_multiplier = 0.5
 }
 
+# ======================================================================
+#  BUREAUCRACY
+# ======================================================================
+
+# Spoils System - ordinary administrative posts go to the governing
+# faction's supporters ("to the victor belong the spoils"). It fits the 1836
+# start: civil-service reform came in 1883. Attaches to the two vanilla laws
+# that fill posts by appointment or election; Hereditary posts are not the
+# government's to give, and the mod's bureaucracy laws staff theirs with
+# contractors, delegates or machines. Modelled on vanilla's
+# amendment_preserved_bureaucratic_caste (sponsor +15% political strength).
+# Distinct from decree_political_patronage, a state decree that doubles the
+# state's pop political strength.
+# Spec: docs/superpowers/specs/2026-10-01-bureaucracy-laws-design.md
+amendment_spoils_system = {
+	parent = law_appointed_bureaucrats
+
+	allowed_laws = {
+		law_appointed_bureaucrats
+		law_elected_bureaucrats
+	}
+
+	# Loyalty, not competence, fills the tax offices.
+	modifier = {
+		state_tax_capacity_mult = -0.1
+	}
+
+	sponsor_modifier = {
+		interest_group_pol_str_mult = 0.15
+	}
+
+	possible = {
+		always = yes
+	}
+
+	# The governing groups share out the posts. Vanilla's Jacksonian
+	# Democrat leader, the spoils system's author, sponsors it from anywhere.
+	would_sponsor = {
+		OR = {
+			is_in_government = yes
+			leader ?= {
+				has_ideology = ideology:ideology_jacksonian_democrat
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		always = yes
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
 # ----------------------------------------------------------------------
 #  Environmental grandfather clause (issue #278)
 #  Attached TEMPORARILY (timeout = 120 months from law activation) by

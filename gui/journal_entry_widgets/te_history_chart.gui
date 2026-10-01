@@ -245,7 +245,9 @@ types te_history_chart_types
 		ignoreinvisible = yes
 		spacing = 0
 
-		datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_hist')]"
+		block "sample_datamodel" {
+			datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_hist')]"
+		}
 
 		item = {
 			widget = {
@@ -260,7 +262,9 @@ types te_history_chart_types
 				### sample, so the default view needs no test at all.
 				### The sample's age in months is "now" minus the month
 				### index stored on the container.
-				visible = "[Or( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) ), Or( And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_CFixedPoint( Subtract_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' ) ), And( GetVariableSystem.HasValue( 'te_hist_range', '5' ), LessThan_CFixedPoint( Subtract_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' ) ) ) )]"
+				block "sample_visible" {
+					visible = "[Or( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) ), Or( And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_CFixedPoint( Subtract_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' ) ), And( GetVariableSystem.HasValue( 'te_hist_range', '5' ), LessThan_CFixedPoint( Subtract_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' ) ) ) )]"
+				}
 
 				block "bar_tooltip" {}
 				block "bar_body" {}
@@ -373,32 +377,38 @@ types te_history_chart_types
 
 			block "zero_axis" {}
 
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
-				blockoverride "bar_size" {
-					size = { 40 84 }
+			block "plot_layouts" {
+				te_history_plot = {
+					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
 				}
-			}
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue( 'te_hist_range', '5' )]"
-				blockoverride "bar_size" {
-					size = { 8 84 }
+				te_history_plot = {
+					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '5' )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
 				}
-			}
-			te_history_plot = {
-				visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) )]"
+				te_history_plot = {
+					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) )]"
+				}
 			}
 
 			### Empty state — nothing recorded yet, e.g. an existing save that
 			### has not reached its first monthly pulse since the update.
 			textbox = {
-				visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') )]"
+				block "empty_visible" {
+					visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') )]"
+				}
 				parentanchor = center
 				autoresize = yes
 				multiline = yes
 				max_width = 420
 				align = hcenter|nobaseline
-				text = "te_hist_empty_state"
+				block "empty_text" {
+					text = "te_hist_empty_state"
+				}
 			}
 		}
 	}

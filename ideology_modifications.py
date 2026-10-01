@@ -723,6 +723,10 @@ modifications = {
         ],
         "lawgroup_language_policy": language_traditionalist,
         "lawgroup_antitrust": antitrust_dirigiste,
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "disapprove"),
+            ("law_communal_administration", "disapprove"),
+        ],
     },
     "ideology_particularist": {
         "lawgroup_navy_model": navy_defensive,
@@ -952,6 +956,9 @@ modifications = {
         "lawgroup_financial_regulation": finreg_market_liberal,
         "lawgroup_language_policy": language_assimilationist,
         "lawgroup_antitrust": antitrust_laissez_faire,
+        "lawgroup_bureaucracy": [
+            ("law_contracted_administration", "approve"),
+        ],
     },
     "ideology_traditionalist": {
         "lawgroup_army_model": pmc_disapprove,
@@ -1017,6 +1024,7 @@ modifications = {
             ("law_algorithmic_governance", "disapprove"),
         ],
         "lawgroup_minority_rights": minority_like,
+        "lawgroup_bureaucracy": [("law_automated_bureaucracy", "disapprove")],
     },
     "ideology_radical": {
         "lawgroup_privacy_rights": pro_privacy_entry,
@@ -1043,6 +1051,9 @@ modifications = {
         ],
         "lawgroup_language_policy": language_pluralist,
         "lawgroup_antitrust": antitrust_ordoliberal,
+        "lawgroup_bureaucracy": [
+            ("law_communal_administration", "approve"),
+        ],
     },
     "ideology_social_democrat": {
         "lawgroup_army_model": pmc_disapprove,
@@ -1095,6 +1106,9 @@ modifications = {
         ],
         "lawgroup_language_policy": language_pluralist,
         "lawgroup_antitrust": antitrust_ordoliberal,
+        "lawgroup_bureaucracy": [
+            ("law_contracted_administration", "disapprove"),
+        ],
     },
     "ideology_vanguardist": {
         "lawgroup_army_model": pmc_strongly_disapprove,
@@ -1138,6 +1152,11 @@ modifications = {
         ],
         "lawgroup_language_policy": language_reformist,
         "lawgroup_antitrust": antitrust_command_coop,
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "approve"),
+            ("law_contracted_administration", "disapprove"),
+            ("law_communal_administration", "disapprove"),
+        ],
     },
     "ideology_fascist": {
         "lawgroup_army_model": pmc_strongly_disapprove,
@@ -1255,6 +1274,11 @@ modifications = {
         ],
         "lawgroup_language_policy": language_technologist,
         "lawgroup_antitrust": antitrust_command_coop,
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "disapprove"),
+            ("law_contracted_administration", "disapprove"),
+            ("law_communal_administration", "strongly_approve"),
+        ],
     },
     "ideology_laissez_faire": {
         "lawgroup_army_model": pmc_strongly_approve,
@@ -1306,6 +1330,9 @@ modifications = {
             ("law_state_sponsored_family_planning", "neutral"),
             ("law_population_control_measures", "disapprove"),
             ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+        "lawgroup_bureaucracy": [
+            ("law_contracted_administration", "approve"),
         ],
     },
     "ideology_moralist": {
@@ -1396,6 +1423,9 @@ modifications = {
         ),
         "lawgroup_inheritance": moderate_inheritance,
         "lawgroup_financial_regulation": finreg_meritocratic,
+        "lawgroup_bureaucracy": [
+            ("law_communal_administration", "disapprove"),
+        ],
     },
     "ideology_jingoist": {
         "lawgroup_army_model": pmc_disapprove,
@@ -1498,6 +1528,10 @@ modifications = {
             ("law_state_eugenics_program", "disapprove"),
         ],
         "lawgroup_financial_regulation": finreg_socialist,
+        "lawgroup_bureaucracy": [
+            ("law_contracted_administration", "disapprove"),
+            ("law_communal_administration", "approve"),
+        ],
     },
     "ideology_communist": {
         "lawgroup_army_model": pmc_strongly_disapprove,
@@ -1530,6 +1564,10 @@ modifications = {
         "lawgroup_financial_regulation": finreg_communist,
         "lawgroup_language_policy": language_reformist,
         "lawgroup_antitrust": antitrust_command_coop,
+        "lawgroup_bureaucracy": [
+            ("law_contracted_administration", "disapprove"),
+            ("law_communal_administration", "approve"),
+        ],
     },
     "ideology_pacifist": {
         "lawgroup_army_model": pmc_disapprove,
@@ -1563,6 +1601,10 @@ modifications = {
             ("law_corporate_genetic_licensing", "strongly_approve"),
             ("law_open_source_genetics", "neutral"),
             ("law_state_eugenics_program", "neutral"),
+        ],
+        "lawgroup_bureaucracy": [
+            ("law_contracted_administration", "approve"),
+            ("law_communal_administration", "disapprove"),
         ],
     },
     "ideology_patriarchal": {
@@ -1782,6 +1824,7 @@ modifications = {
             ("law_population_control_measures", "strongly_disapprove"),
             ("law_communal_child_rearing", "strongly_disapprove"),
         ],
+        "lawgroup_bureaucracy": [("law_automated_bureaucracy", "disapprove")],
     },
     "ideology_socialist": {
         "lawgroup_governance_principles": [
@@ -1811,6 +1854,10 @@ modifications = {
         ],
         "lawgroup_language_policy": language_reformist,
         "lawgroup_antitrust": antitrust_command_coop,
+        "lawgroup_bureaucracy": [
+            ("law_contracted_administration", "disapprove"),
+            ("law_communal_administration", "approve"),
+        ],
     },
     "ideology_scholar_paternalistic": {
         "lawgroup_monetary_policy": simple_currency,
@@ -1847,6 +1894,11 @@ modifications = {
             ("law_state_sponsored_family_planning", "disapprove"),
             ("law_population_control_measures", "strongly_disapprove"),
             ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "strongly_disapprove"),
+            ("law_contracted_administration", "disapprove"),
+            ("law_communal_administration", "strongly_disapprove"),
         ],
     },
     "ideology_junker_paternalistic": {
@@ -1885,6 +1937,10 @@ modifications = {
             ("law_population_control_measures", "strongly_disapprove"),
             ("law_communal_child_rearing", "strongly_disapprove"),
         ],
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "disapprove"),
+            ("law_communal_administration", "disapprove"),
+        ],
     },
     "ideology_papal_paternalistic": {
         "lawgroup_monetary_policy": simple_currency,
@@ -1921,6 +1977,10 @@ modifications = {
             ("law_state_sponsored_family_planning", "disapprove"),
             ("law_population_control_measures", "strongly_disapprove"),
             ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "disapprove"),
+            ("law_communal_administration", "disapprove"),
         ],
     },
     "ideology_papal_moralist": {
@@ -1994,6 +2054,7 @@ modifications = {
             ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
         ],
+        "lawgroup_bureaucracy": [("law_automated_bureaucracy", "disapprove")],
     },
     "ideology_sikh_moralist": {
         "lawgroup_ministry_of_religion": ministry_constructor(
@@ -2081,6 +2142,7 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
         ],
+        "lawgroup_bureaucracy": [("law_automated_bureaucracy", "disapprove")],
     },
     "ideology_positivist": {
         "lawgroup_governance_principles": [
@@ -2096,6 +2158,11 @@ modifications = {
             ("law_state_sponsored_family_planning", "approve"),
             ("law_population_control_measures", "strongly_approve"),
             ("law_communal_child_rearing", "strongly_disapprove"),
+        ],
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "strongly_approve"),
+            ("law_contracted_administration", "disapprove"),
+            ("law_communal_administration", "disapprove"),
         ],
     },
     "ideology_russian_patriarch": {
@@ -2269,6 +2336,7 @@ modifications = {
             ("law_algorithmic_governance", "strongly_approve"),
         ],
         "lawgroup_minority_rights": minority_love,
+        "lawgroup_bureaucracy": [("law_automated_bureaucracy", "approve")],
     },
     "ideology_absolutist_movement": {
         "lawgroup_distribution_of_power": [
@@ -2277,6 +2345,10 @@ modifications = {
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "strongly_disapprove"),
+        ],
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "disapprove"),
+            ("law_communal_administration", "disapprove"),
         ],
     },
     "ideology_royalist_movement": {
@@ -2344,6 +2416,9 @@ modifications = {
         ],
         "lawgroup_language_policy": language_reformist,
         "lawgroup_antitrust": antitrust_command_coop,
+        "lawgroup_bureaucracy": [
+            ("law_contracted_administration", "disapprove"),
+        ],
     },
     "ideology_communist_movement": {
         "lawgroup_governance_principles": [
@@ -2390,6 +2465,9 @@ modifications = {
         "lawgroup_language_policy": language_technologist,
         "lawgroup_antitrust": antitrust_command_coop,
         "lawgroup_criminal_justice": penal_labor_camps_strongly_disapprove,
+        "lawgroup_bureaucracy": [
+            ("law_communal_administration", "strongly_approve"),
+        ],
     },
     "ideology_vanguardist_movement": {
         "lawgroup_governance_principles": [
@@ -2514,6 +2592,9 @@ modifications = {
         "lawgroup_language_policy": language_pluralist,
         "lawgroup_antitrust": antitrust_ordoliberal,
         "lawgroup_criminal_justice": penal_labor_camps_strongly_disapprove,
+        "lawgroup_bureaucracy": [
+            ("law_communal_administration", "approve"),
+        ],
     },
     "ideology_liberal_republican_movement": {
         "lawgroup_criminal_justice": penal_labor_camps_strongly_disapprove,
@@ -2544,6 +2625,11 @@ modifications = {
         "lawgroup_ministry_of_religion": ministry_constructor(
             "ministry_of_religion", "-"
         ),
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "strongly_approve"),
+            ("law_contracted_administration", "disapprove"),
+            ("law_communal_administration", "disapprove"),
+        ],
     },
     "ideology_feminist_movement": {
         "lawgroup_LGBTQ_rights": lgbtq_love,

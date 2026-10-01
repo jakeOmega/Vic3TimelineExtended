@@ -512,6 +512,10 @@ ideology_optimist_transhumanist = {
 		law_algorithmic_governance = strongly_approve
 	}
 
+	lawgroup_bureaucracy = {
+		law_automated_bureaucracy = strongly_approve
+	}
+
 	lawgroup_internet_governance = {
 		law_no_internet_policy = neutral
 		law_unregulated_internet = approve
@@ -644,6 +648,11 @@ ideology_corporate = {
 		law_corporate_genetic_licensing = strongly_approve
 		law_open_source_genetics = disapprove
 		law_state_eugenics_program = strongly_disapprove
+	}
+
+	lawgroup_bureaucracy = {
+		law_contracted_administration = strongly_approve
+		law_communal_administration = disapprove
 	}
 
 	country_trigger = {
@@ -1835,6 +1844,9 @@ ideology_custom_religion_aristocratic_governance = {
 		law_hereditary_bureaucrats = approve
 		law_appointed_bureaucrats = neutral
 		law_elected_bureaucrats = disapprove
+		law_automated_bureaucracy = disapprove
+		law_contracted_administration = disapprove
+		law_communal_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -1908,6 +1920,9 @@ ideology_custom_religion_technocratic_governance = {
 		law_hereditary_bureaucrats = strongly_disapprove
 		law_appointed_bureaucrats = strongly_approve
 		law_elected_bureaucrats = disapprove
+		law_automated_bureaucracy = strongly_approve
+		law_contracted_administration = disapprove
+		law_communal_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -1981,6 +1996,8 @@ ideology_custom_religion_republican_governance = {
 		law_hereditary_bureaucrats = disapprove
 		law_appointed_bureaucrats = neutral
 		law_elected_bureaucrats = approve
+		law_automated_bureaucracy = neutral
+		law_communal_administration = approve
 	}
 
 	lawgroup_privacy_rights = {
@@ -2054,6 +2071,9 @@ ideology_custom_religion_corporate_governance = {
 		law_hereditary_bureaucrats = strongly_disapprove
 		law_appointed_bureaucrats = approve
 		law_elected_bureaucrats = neutral
+		law_automated_bureaucracy = approve
+		law_contracted_administration = strongly_approve
+		law_communal_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -2127,6 +2147,9 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_hereditary_bureaucrats = neutral
 		law_appointed_bureaucrats = strongly_approve
 		law_elected_bureaucrats = disapprove
+		law_automated_bureaucracy = disapprove
+		law_contracted_administration = disapprove
+		law_communal_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -2200,6 +2223,8 @@ ideology_custom_religion_theocratic_governance = {
 		law_hereditary_bureaucrats = disapprove
 		law_appointed_bureaucrats = strongly_approve
 		law_elected_bureaucrats = disapprove
+		law_automated_bureaucracy = disapprove
+		law_communal_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {

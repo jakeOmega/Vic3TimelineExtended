@@ -33,7 +33,64 @@ opposition can hold on; a smaller empire condemned by the big powers usually
 can't. Two era 9 technologies, Knowledge Economy and Globalization, add −0.75
 and −1.5 a month to the drift, so holding on gets harder as the game goes on.
 
-<!-- screenshot: the Colonial Empire journal entry with the Colonial Stability widget open, showing the band headline, the monthly breakdown and the three program rows -->
+### The Colonial Empire panels
+
+The journal entry opens with an overview, and the sections below it hold the
+detail. While the entry runs it has no status line, because the overview shows
+where you stand. An entry that isn't running says why: the empire is secured,
+it collapsed less than ten years ago, or you hold no colony or colonial subject.
+
+The same panels appear on the Colonial Empire tab of the Timeline Extended
+window, which the button under the sidebar's Map List opens, and a change made
+in one shows in the other. The tab is grayed until the journal entry is active; hover
+it for what is still missing. It ends with an Open Journal Entry button.
+
+<!-- screenshot: the Colonial Empire overview with the stability bar showing a red stretch, and Why Stability Is Moving open with its bars and the Eligible Territories list expanded -->
+
+The overview's first row shows your [band](#colonial-stability-bands), as an
+icon and a name (hover it for the band's modifier), and the three programs, lit
+while they run. Below them is the Stability bar. Its solid part and a lighter
+stretch show today's value and where the bar will be in 12 months at this
+month's rate. The stretch is green while stability rises and red while it
+falls, so red is what the next year would cost you. A thin cream line marks
+where the next band begins; hover it for how many months away that is. Beside
+the bar are the value and this month's change, such as "62% (+0.42/mo)", and an
+arrow for its direction. Hover the bar for every term behind the change, and
+the value for the projection. The line under the bar reads "Next band", with
+the band and its threshold.
+
+In the Solidified band, two more bars count toward winning: "Months at 100"
+against 60 and, for a great power, "Months Solidified" against 36, the
+requirement of the Imperial Federation Act and the Civilizing Mission Compact.
+Last comes a pie of great-power prestige, yours included: the condemning powers'
+share in red, the supporters' share in green, the rest in grey. Only the
+condemning share counts toward [the two escalations](#great-power-stances-on-colonialism),
+and an Isolated or Consensus alert shows beside the pie while one applies. Hover
+the pie for every great power's stance.
+
+Every section starts open except the explanations:
+
+| Section | Starts | Shows |
+|---|---|---|
+| Why Stability Is Moving | Open | A bar for each term that moves the bar: red to the left of the center line for a drain, green to the right for a gain, each on its own scale. Then Base decline, Monthly limit and Projected change. Hover a row for what it holds and its bar's scale. Under them is the Eligible Territories list, collapsed. |
+| International Pressure | Open | Your prestige, the condemning and supporting shares, and every great power that condemns or supports you. |
+| Colonial Programmes | Open | The three programs, each with its cost and an Enable or Disable button. |
+| Decolonization | Open | How many territories are eligible, how many a Round Table could accept, and the largest; then the three decisions, each with a Review Options button. |
+| History | Open | Charts of Colonial Stability and the Monthly Stability Change. |
+| How the Colonial Empire Works | Collapsed | The explanations. |
+
+The Eligible Territories list shows the territories the [decolonization
+decisions](#releasing-colonies) can offer, up to eight of them, largest GDP
+first; hover "+N more" for the rest. Each row gives the territory's people, the
+share of them of your primary cultures (Primary), its standard of living (SoL)
+and its GDP. The colony icon at the start of the row is lit when the territory
+counts as a colony for the stability bar, through Imperial Overreach and
+Colonial Acceptance, and dim when it doesn't. A red figure is the test that
+makes it one: a red Primary share means another culture is more than a tenth of
+its people and accepted below 60, and a red SoL means its standard of living is
+below 80% of your national average while some of its people are of other
+cultures. Hover a figure for its threshold. A
+territory with a dim icon can still be released. The list updates monthly.
 
 ### Colonial stability bands
 
@@ -53,21 +110,21 @@ entry, and the lower three also raise your colonial subjects' liberty desire.
 
 ### What moves colonial stability
 
-The widget's Colonial Stability section shows the projected change for the month
-and where it comes from, in the groups below. Hover the bar itself for every
-term with its current value.
+Why Stability Is Moving shows the projected change for the month and where it
+comes from, in the rows below. Hover the bar itself for every term with its
+current value.
 
-| Group | What it contains |
+| Row | What it contains |
 |---|---|
-| Base imperial decline | −0.5 a month, always. |
-| Laws, technologies and recent events | Your Colonization, Minority Rights, Citizenship, Distribution of Power, State Power, Free Speech and Internal Security laws; Knowledge Economy and Globalization; event modifiers such as Positive Colonial Development (+1 a month) and Colonial Crisis (−1 a month) while they last. |
-| Domestic interest groups | Powerful Landowners +0.3 and Armed Forces +0.2; powerful Intelligentsia −0.4 and Trade Unions −0.3. |
-| Rank and standing | +0.3 as a great power, −0.5 as anything else. |
-| Active programs | Whatever your running colonial programs are worth. |
-| War, revolution and turmoil | −0.5 while at war, −1 during a revolution, and a penalty that grows with national turmoil. |
-| Imperial overreach | A penalty once your colonial states outnumber your other states by more than 1.5 to 1. |
-| Great power pressure | Condemnation and support from great powers (see below). |
-| Colonial acceptance | −0.4 for each colony with a severely unaccepted population, +0.5 for each overseas state where everyone is well accepted. |
+| Base decline | −0.5 a month, always. |
+| Laws and events | Your Colonization, Minority Rights, Citizenship, Distribution of Power, State Power, Free Speech and Internal Security laws; Knowledge Economy and Globalization; event modifiers such as Positive Colonial Development (+1 a month) and Colonial Crisis (−1 a month) while they last. |
+| Interest Groups | Powerful Landowners +0.3 and Armed Forces +0.2; powerful Intelligentsia −0.4 and Trade Unions −0.3. |
+| Rank | +0.3 as a great power, −0.5 as anything else. |
+| Programmes | Whatever your running colonial programs are worth. |
+| War and Turmoil | −0.5 while at war, −1 during a revolution, and a penalty that grows with national turmoil. |
+| Imperial Overreach | A penalty once your colonial states outnumber your other states by more than 1.5 to 1. |
+| Great Power pressure | Condemnation and support from great powers (see below). |
+| Colonial Acceptance | −0.4 for each colony with a severely unaccepted population, +0.5 for each overseas state where everyone is well accepted. |
 | Monthly limit | What the ±1.67 cap removed, if anything. |
 
 Colonial Exploitation and Colonial Resettlement raise the bar; No Colonial
@@ -101,12 +158,12 @@ a month; if they hold two thirds, another 2. Two condemning peers that together
 hold a third already cost about 2.2 a month; with the base decline, the rest of
 your terms must add more than +1 just to keep the bar off its fastest monthly
 fall. A dominant empire is hard to isolate; a small one reaches both thresholds
-as soon as a few large powers turn on it. The widget's International Pressure
-section lists who condemns and who supports you.
+as soon as a few large powers turn on it. The International Pressure section
+lists who condemns and who supports you.
 
 ## Colonial programs and decolonization decisions
 
-The Colonial Empire widget is where you act: three programs you switch on and
+The Colonial Empire panels are where you act: three programs you switch on and
 off, and three ways to release colonies. The decisions panel adds the routes to
 a permanent empire.
 
@@ -132,8 +189,8 @@ ends (see [How a colonial empire ends](#how-a-colonial-empire-ends)).
 
 ### Releasing colonies
 
-The widget's Decolonization section offers three decisions. Each one opens an
-event that lists the candidates before anything happens, and each event has a
+The Decolonization section offers three decisions. Each one's Review Options
+button opens an event that lists the candidates before anything happens, and each event has a
 Reconsider option that releases nothing. A territory is a candidate if it isn't
 a homeland of your cultures, has at least 100,000 people and lies overseas by
 the same region test; it doesn't have to be poorly accepted.

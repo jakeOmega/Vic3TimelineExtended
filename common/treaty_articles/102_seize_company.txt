@@ -100,15 +100,13 @@ seize_company = {
 		# to surrender their company to the requesting country (target).
 		article_ai_usage = { request }
 
-		# AI will only consider this when significantly more powerful.
+		# Major powers consider this more often; relative rank is checked in acceptance.
 		evaluation_chance = {
-			value = 0
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			value = 0.01
 			if = {
-				limit = {
-					exists = scope:other_country
-					country_rank > scope:other_country.country_rank
-				}
-				add = 0.05
+				limit = { country_rank >= rank_value:major_power }
+				add = 0.04
 			}
 		}
 
@@ -218,6 +216,11 @@ seize_company = {
 					max = 75
 					min = 10
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.target_country = root country_rank <= scope:article.source_country.country_rank }
+				add = { desc = "DIPLOMATIC_ACCEPTANCE_RANK" value = -1000 }
 			}
 		}
 	}

@@ -21,9 +21,12 @@
 # every contributor it had has gone. A host already at war when the mission
 # opened is not "attacked" until it has known a month of peace; the war
 # stalls a peacekeeping mission instead. A peacekeeping or stabilisation
-# mission nobody has joined within un_mission_unstaffed_months LAPSES, as
-# does any mission after un_mission_max_months. Success is a delivery entry
-# and standing for the contributors; failure is a credibility debit.
+# mission nobody has joined within un_mission_unstaffed_months LAPSES. A
+# mission has no time limit: a host that keeps its contributors (and a
+# contributor that keeps paying) can keep it going for as long as it likes.
+# What time does is wear down the AI's willingness to send a contingent
+# (un_mission_ai_age_penalty). Success is a delivery entry and standing for
+# the contributors; failure is a credibility debit.
 #
 # STRENGTH. Each month a mission's strength is
 #     E x (1 - 0.5 x the share of the members' GDP withholding dues)
@@ -47,9 +50,6 @@
 # missions are never evicted. Also written as the literal 13 (cap + 1) in
 # un_mission_register; change both.
 un_mission_registry_cap = { value = 12 }
-
-# A mission still open after this many months lapses.
-un_mission_max_months = { value = 60 }
 
 # Progress a month, out of 100: peacekeeping over 24 months of peace, a
 # stabilisation over 12 months once the collapse is over (48 while it lasts).
@@ -108,6 +108,13 @@ un_mission_withdraw_standing = { value = 2 }
 # (un_mission_ai_join_score), to at most un_mission_ai_volunteer_cap missions.
 un_mission_ai_join_threshold = { value = 10 }
 
+# A mission's age counts against it in the AI's score: this many points off for
+# every month it has been in the field. At 0.5 a mission is 30 points down at
+# five years and 60 at ten, more than any of the ties the score adds up to, so
+# the AI stops sending contingents to a mission that drags on. A mission that
+# is already staffed keeps the contingents it has.
+un_mission_ai_age_weight = { value = 0.5 }
+
 # Scope: country
 un_mission_ai_volunteer_cap = {
 	value = 2
@@ -162,11 +169,24 @@ un_mission_service_expense_value = {
 	multiply = un_mission_service_count
 }
 
+# How much less the AI wants to join the scoped mission for every month it has
+# run. Scope: mission container
+un_mission_ai_age_penalty = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_months }
+		add = var:un_msn_months
+	}
+	multiply = un_mission_ai_age_weight
+}
+
 # How much the AI member (ROOT) wants to serve in the scoped mission: the ties
-# the lean reads (un_dossier_values.txt), what the mission lacks, and what the
-# member stands for. Scope: mission container; ROOT: the AI member.
+# the lean reads (un_dossier_values.txt), what the mission lacks, what the
+# member stands for, less the mission's age. Scope: mission container; ROOT:
+# the AI member.
 un_mission_ai_join_score = {
 	value = -10
+	subtract = un_mission_ai_age_penalty
 	# The mission needs hands: it is stronger with every contributor up to three.
 	add = {
 		value = 3

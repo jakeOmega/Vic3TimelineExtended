@@ -14,16 +14,41 @@ The game scores every country's cultural pull from the first day of the
 campaign, but the Cultural Hegemony journal entry and everything it does wait
 until some country in the world has researched Mass Media (an era 6 society
 technology) and you have Romanticism. Until then the scores run in the
-background and have no effect. The entry never completes.
+background and have no effect. The entry never completes. Before it opens, the
+entry shows only your tier and cultural share; after that, its panels show the
+rest (see [The Cultural Hegemony panels](#the-cultural-hegemony-panels)).
 
-Its panels show your tier, share and world rank, the cultural programs, and
-collapsible sections for your pull breakdown, the top ten cultural powers, the
-world's political models and a history chart of your share. The same panels
-appear as a Hegemony tab in the Society panel, and a change made in one shows in
-the other. The tab is greyed until the journal entry opens; hover it for what is
-still missing. It ends with an Open Journal Entry button.
+### The Cultural Hegemony panels
 
-![The lower sections of the Cultural Hegemony journal entry: where our pull comes from, the top ten cultural powers with each one's change since the last recount, and the world's political models weighted by cultural pull.](images/cultural_hegemony.png)
+The Cultural Hegemony journal entry and the Hegemony tab in the Society panel
+show the same panels, and a change made in one shows in the other. The tab is
+grayed until the journal entry opens; hover it for what is still missing. It
+ends with an Open Journal Entry button.
+
+![The Hegemony tab of the Society panel: the overview, Top Cultural Powers with each one's change since the last recount, Cultural Programmes, and where our pull comes from.](images/hegemony_tab.png)
+
+The overview at the top is always shown. Its first row is icons with a word
+beneath: your influence tier (a gray sprig for Negligible, then a lyre that
+gains a laurel wreath and turns bronze, silver and gold up to Hegemon), your
+World Rank, the leading power's political model in its pie color, and a red
+Benchmark icon while you carry the Foreign Cultural Benchmark. Below them are a
+pie of your cultural share (amber for yours, gray for the rest of the world),
+with an arrow for the change since last month, and the flags of the three
+Leading Powers, the leader first. Hover a flag for the country and click it to
+open the country. Hover the other icons for the detail: the tier's full name,
+the model's share of world culture and its push abroad, the benchmark's
+strength.
+
+The sections below all start open except the explanations:
+
+| Section | Starts | Shows |
+|---|---|---|
+| Top Cultural Powers | Open | The ten largest cultural shares at the last recount, each with its change since the recount before (green up, red down). An arrow marks your row; hover a row for that country's pull components. When you are outside the top ten, Our Rank below the list gives your place. |
+| Cultural Programmes | Open | Programme Funding with its − and + buttons, then a row for each program with Running or Idle and its button (International Cultural Outreach's row reads International Outreach). Hover a program's name for what it gives while it runs, and a button for what is missing and what it would do. While you lack Ministry of Culture Established, a line above the rows says so. |
+| Where Our Pull Comes From | Open | A bar for each component of your pull, with zero in the middle: gains fill to the right in green, penalties to the left in red, each against that component's usual range. Hover a row for the working behind the number and the bar's range. Cultural Pull from Art sits under Art Production when it is not zero, and Raw Score and Pull Multiplier close the list. |
+| Political Models of the World | Open | The pie of the world's political models and its legend, by short name (hover one for the full name). |
+| History | Open | Each political model's share of world cultural influence, stacked to 100% in one bar per year, over 5, 20 or 100 years. Hover a bar for its date and all fifteen model shares. Every country sees the same history. Existing saves begin collecting at the next cultural recount; up to 100 annual snapshots are kept. |
+| How Cultural Hegemony Works | Collapsed | The explanations: cultural share and tiers, the programs, where pull comes from, the top cultural powers, political models and the Foreign Cultural Benchmark. |
 
 ### Cultural share and influence tiers
 
@@ -47,11 +72,12 @@ hegemon, whatever its tier.
 ### Where cultural pull comes from
 
 Your raw score is the sum of the components below, multiplied by your pull
-multiplier. The breakdown section lists each one for your country.
+multiplier. Where Our Pull Comes From, in the panel, shows each one for your
+country as a bar.
 
 | Component | How it counts |
 |---|---|
-| Art Production | Your fine art output, capped at your percentage share of world production, with diminishing returns above a third of world output. Free Speech, Church and State and LGBTQ+ Rights laws, Romanticism, Realism and Film change your art multiplier. |
+| Art Production | Your fine art output, capped at your percentage share of world production, with diminishing returns above a third of world output. Free Speech, Church and State and LGBTQ+ Rights laws, Romanticism, Realism and Film change it through the Cultural Pull from Art modifier. |
 | Prestige | Your prestige divided by 5, capped at your percentage share of world prestige. Recognized countries only. |
 | Standard of Living | Your average standard of living minus the world average (−5 to +20): in full for great powers, half for major powers, a quarter for minor powers, nothing below. |
 | Tech Leadership | +2 each time you research a technology no other country has yet, up to 30, fading by a tenth at each recount. |
@@ -93,7 +119,8 @@ than about three points carries the Foreign Cultural Benchmark modifier: its
 people measure their government against the leading power's, and legitimacy
 falls. The penalty grows with the gap. With the hegemon at 30% and you at 5%, it
 costs about 4 legitimacy. The hegemon never carries it. Tier V of the Education
-power bloc principle shrinks the penalty.
+power bloc principle shrinks the penalty. While you carry it, the overview shows
+a red Benchmark icon; hover it for the current strength.
 
 ### Political models of the world
 
@@ -107,8 +134,8 @@ The hegemon's model pushes on every country that carries the Foreign Cultural
 Benchmark: the matching political movement there (a liberal movement under a
 liberal hegemon, for example, or a related one if it is absent) grows more
 active and attracts more pops. The push is zero while the model holds less than
-15% of world culture and grows with its share after that; the tooltip on the
-exported model shows its strength. A hegemon with feminist, civil-rights,
+15% of world culture and grows with its share after that; hover the model in
+the overview for its strength. A hegemon with feminist, civil-rights,
 environmental, abolitionist, labor or land-reform laws also feeds those
 movements abroad, and one at peace without Mass Conscription feeds anti-war
 movements. Movements are covered in [Government, laws and
@@ -122,7 +149,7 @@ at the next monthly update.
 
 | Program | Controls | Effect | Cost |
 |---|---|---|---|
-| Cultural Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
+| Programme Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
 | International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media. | The weekly cost of one funding step. |
 | Cultural Institutes | Fund / Defund | +10% pull. | +100 authority cost. |
 | Global Media Campaign | Launch / End | +15% pull, +5% prestige. Needs Mass Media. | +100 authority cost. |
@@ -158,21 +185,53 @@ campaigns, and drop protectionism once their share passes 10%.
 
 ## The Covert Warfare journal entry
 
-The Covert Warfare journal entry is your agency's command center. It becomes
-active when you hold one more covert operation slot than your rank grants for
-free (every country gets one, major powers two, great powers three). The first
-extra slots come from the Ministry of Intelligence and Security Established law
-(unlocked by Mass Surveillance), whose institution adds a slot per level, and
-from the era 7 technology Mainframe Computers. Once active, the entry stays open
-even if you later lose that extra slot. It never completes.
+The Covert Warfare journal entry is where you run your intelligence agency. It
+becomes active when you hold one more covert operation slot than your rank
+grants for free (every country gets one, major powers two, great powers three).
+The first extra slots come from the Ministry of Intelligence and Security
+Established law (unlocked by Mass Surveillance), whose institution adds a slot
+per level, and from the era 7 technology Mainframe Computers. Once active, the
+entry stays open even if you later lose that extra slot. It never completes.
 
 You launch operations from another country's diplomatic actions, listed as
 "Covert: ..." with the operation's name. Everything else is in the journal
-entry: the command center (capacity, slots, the funding stepper, detection
-factors, Tradecraft, covert defense and the last foreign operation you exposed),
-one row per running operation, and one row per agent network.
+entry.
 
-<!-- screenshot: the Covert Warfare command center with two operation rows and a network row visible -->
+The same panels appear as a Covert tab in the Military panel, and a change made
+in one shows in the other. The tab is grayed until the journal entry is active;
+hover it for what is still missing. It ends with an Open Journal Entry button.
+
+![The Covert tab of the Military panel: the overview (Fortress, Funding 2, Veteran, Spy Caught; three of nine operation slots in use; Capacity and Tradecraft), the Operations section with three operation rows, and the start of Funding.](images/covert_tab.png)
+
+The overview at the top is always shown. Its first row is icons with a word
+beneath:
+
+- Your intelligence standing, a shield from gold-rimmed (Fortress) to split in
+  two (Vulnerable); see [Intelligence capacity and operation
+  slots](#intelligence-capacity-and-operation-slots).
+- Your funding level ("Funding 3"), an envelope of banknotes, or an empty grey
+  one at 0.
+- Your Tradecraft tier, a fedora with up to four chevrons.
+- Spy Caught, while your counterintelligence has caught a foreign operation in
+  the last ten years.
+
+Below the icons, Operation Slots shows how many slots you hold and how many are
+in use, as case files lit while an operation fills them. Two bars follow:
+Capacity, your intelligence capacity as a share of the world's best, and
+Tradecraft, with a tick at the next tier and an arrow for which way it last
+moved. Hover any of them for the detail: the standing's meaning, the funding
+level's name and cost, the capacity breakdown, the Tradecraft rules and why it
+last changed.
+
+The sections below are open by default, except the explanations at the foot:
+
+| Section | Starts | Shows |
+|---|---|---|
+| Operations | Open | A warning while funding is 0, or "No operations running" (hover it for how to launch one). Then the Detection Risk every operation shares (base risk, Funding Stealth, Efficiency Factor), and a row for each running operation: its icon, type and target, its phase, its own Detection Risk, the priority stepper and Stand down. |
+| Funding | Open | What your funding level is doing, the Level stepper, and the Funding Levels table: each level's Stealth, Capacity and weekly cost, with your level's row shaded gold. |
+| Agent Networks | Open, once you have a network | A row for each network: the target's flag (hover it for the country, click it to open the country), its strength with a bar and an arrow for growing or decaying, and what it reports. |
+| Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; then Last Caught while a catch stands. |
+| How Covert Warfare Works | Collapsed | The explanations: operations, funding, detection, networks, Tradecraft, counterintelligence and intelligence standing. |
 
 ### Intelligence capacity and operation slots
 
@@ -181,9 +240,9 @@ power +10, major power +5), your literacy (up to 50 at full literacy), your
 share of world GDP (a point per percent, up to 25), and modifiers from
 technologies, laws such as Secret Police and Censorship, and the Ministry of
 Intelligence and Security (+4 per level). Tradecraft then multiplies the total.
-The journal entry rates you against the world's best, from Intelligence Fortress
-(80% of the best or more) through Hardened, Defended and Exposed to Vulnerable
-(below 20%).
+The overview's first icon rates your capacity against the world's best:
+Fortress at 80% of the best or more, Hardened from 60%, Defended from 40%,
+Exposed from 20% and Vulnerable below that.
 
 Capacity cuts both ways. The stronger a target's capacity is against yours, the
 likelier your operations there are caught; the stronger yours, the likelier you
@@ -198,16 +257,21 @@ more of each type with Mainframe Computers, with Cyber Warfare and with a
 
 ### Covert funding levels
 
-The command center's funding stepper sets what the agency spends. Every
+The Level stepper in the Funding section sets what the agency spends. Every
 operation needs funding of at least 1, so stepping down to 0 ends them all; the
-button warns you first. The weekly cost grows with your GDP, the funding level
-and the number of operations (weighted by priority, plus a base share paid even
-with nothing running).
+step's tooltip warns you first. The weekly cost grows with your GDP, the funding
+level and the number of operations (weighted by priority, plus a base share paid
+even with nothing running). The section's Funding Levels table shows what each
+level costs you a week at your current operations, with your level's row shaded
+gold.
 
-| Level | Name | Detection risk | Counterintelligence |
+Funding from level 2 up gives Funding Stealth, points off every operation's
+Detection Risk, and counterintelligence capacity:
+
+| Level | Name | Funding Stealth | Counterintelligence |
 |---|---|---|---|
 | 0 | Dormant | Nothing can run | None |
-| 1 | Operational | Base | None |
+| 1 | Operational | None | None |
 | 2 | Professional | −3 points | +5 intelligence capacity |
 | 3 | Covert Network | −8 points | +10 intelligence capacity |
 | 4 | Black Budget | −13 points | +15 intelligence capacity |
@@ -261,11 +325,13 @@ and the description says how the world will read it if it is exposed.
 An operation does nothing for its first six months (Preparatory). From month 6
 it is Establishing and has its base effect; from month 12 it is Fully
 Operational and its effects double. Each row shows the phase and the months to
-the next one. Ideological Subversion's push on movements is the exception: it
-doesn't double, and stays at its establishing strength.
+the next one; hover the phase for what it does. Ideological Subversion's push on
+movements is the exception: it doesn't double, and stays at its establishing
+strength.
 
-Each row also has a priority stepper from 1 to 3. Priority multiplies what the
-operation does, but costs and exposure rise faster:
+Each row also has a priority stepper from 1 to 3; hover the word Priority for
+what the current level multiplies. Priority multiplies what the operation does,
+but costs and exposure rise faster:
 
 | Priority | Effect | Share of upkeep | Detection risk |
 |---|---|---|---|
@@ -295,7 +361,12 @@ A strong network gives new operations there a head start of up to five months
 50 it reports the target's intelligence capacity and technology count beside
 yours, and from 75 how many covert operations the target runs against you: the
 only way to learn of operations your counterintelligence has not caught, though
-it never says which.
+it never says which. Each network's row shows its strength as a number and a
+bar, with an arrow for growing, decaying or at full strength; hover the strength
+for what the report shows at 50 and at 75. In the space race, the same two tiers
+narrow your estimate of that country's progress on a milestone from ±25% of the
+goal to ±10% and ±5% (see [The space milestone
+panel](15-space.md#the-space-milestone-panel)).
 
 ### Tradecraft
 
@@ -320,14 +391,17 @@ networks grow 15% faster. Falling below a tier never ends a running operation.
 
 ### Detection and exposure
 
-Each operation has its own monthly detection risk, shown on its row. It starts
-at 10%, falls with your funding level and your network in the target, and rises
-with priority and with the target's counterintelligence (its capacity plus its
-defense against that kind of operation, compared to yours; up to +20 points).
-Your covert efficiency, from technologies, laws and the Ministry of Intelligence
-and Security, then cuts it by up to four fifths, within a range of 0.1% to 50%.
-Each operation rolls separately, so three at 10% give about a 27% monthly chance
-of a catch, but at most one is exposed a month.
+Each operation has its own monthly Detection Risk, shown on its row (hover
+it for how it is made up). It starts at 10%, falls with your Funding Stealth and
+your network in the target, and rises with priority and with the target's
+counterintelligence (its capacity plus its defense against that kind of
+operation, compared to yours; up to +20 points). Your Efficiency Factor, from
+the Covert Operation Efficiency modifier that technologies, laws and the
+Ministry of Intelligence and Security give, then cuts it by up to four fifths,
+within a range of 0.1% to 50%. The Operations section lists the base risk, your
+Funding Stealth and your Efficiency Factor above the rows. Each operation rolls
+separately, so three at 10% give about a 27% monthly chance of a catch, but at
+most one is exposed a month.
 
 A caught operation ends in the Operation Compromised event, which also costs its
 network 25 and costs you Tradecraft. Recalling your operatives and apologizing
@@ -357,13 +431,14 @@ event, which names you and the operation. It can shore up its
 counterintelligence (Counterintelligence Alert: +6 intelligence capacity and
 more separatism and coup resistance, fading over five years), retaliate in kind
 (a network of up to 25 inside your country, if it has a Covert Warfare journal
-entry of its own), or make the evidence public (−3 infamy for itself). The event
+entry of its own), or make the evidence public (−1 infamy for itself). The event
 fires at most once every two years per country, whether or not that country has
-a Covert Warfare journal entry. The command center shows the latest catch for
-ten years. Nothing else names the country behind an operation. A target can see
-the effects among its own modifiers, gets an unsigned Election Interference
-Detected notification with each confidence hit, and can count the operations
-against it through a strong network of its own.
+a Covert Warfare journal entry. The Spy Caught icon and the Last Caught line in
+the Counterintelligence section show your latest catch, and who ran it, for ten
+years. Nothing else names the country behind an operation. A target can see the
+effects among its own modifiers, gets an unsigned Election Interference Detected
+notification with each confidence hit, and can count the operations against it
+through a strong network of its own.
 
 ### Covert defense
 

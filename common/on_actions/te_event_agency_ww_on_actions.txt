@@ -15,11 +15,16 @@
 # during the world war; and a capitulation enforces the war goals held against
 # the capitulating country anyway, which lands here. A negotiated peace also
 # enforces war goals without anyone capitulating, and lands here too.
+#
+# A goal that enforces itself mid-war (its occupation timer) fires
+# on_wargoal_enforced_by_timer then, and reaches this hook only at the
+# conclusion of peace, and only if it was not reversed before (1.14.5). That
+# suits the latches: a concession its mirror goal took back is never recorded.
 # ============================================================================
 
 # Root = Country (the one enforcing the war goal)
 # scope:target = the country the war goal was enforced against
-# (game/common/on_actions/00_code_on_actions.txt:6219-6223)
+# (game/common/on_actions/00_code_on_actions.txt:6281-6287)
 on_wargoal_enforced = {
 	on_actions = {
 		ww_on_wargoal_enforced

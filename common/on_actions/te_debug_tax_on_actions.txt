@@ -1,0 +1,31 @@
+﻿# TEMPORARY PR 585 ENGINE PROBES. Remove before release; see docs/testing/tax-code-probes.md.
+# Inert until event te_debug_tax.1 explicitly arms a country. Disposable saves only.
+
+on_monthly_pulse_country = { on_actions = { te_tp_pulse } }
+te_tp_pulse = {
+	effect = {
+		if = { limit = { has_variable = te_tp_armed } trigger_event = { id = te_debug_tax.90 } }
+	}
+}
+on_revolution_start = { on_actions = { te_tp_civil_start } }
+on_secession_start = { on_actions = { te_tp_civil_start } }
+te_tp_civil_start = {
+	effect = {
+		if = {
+			limit = { has_variable = te_tp_armed exists = scope:target }
+			debug_log = "TE_TAX_PROBE uprising start: inspecting original and target without copying"
+			trigger_event = { id = te_debug_tax.91 }
+			scope:target = { trigger_event = { id = te_debug_tax.91 } }
+		}
+	}
+}
+on_civil_war_won = { on_actions = { te_tp_civil_won } }
+te_tp_civil_won = {
+	effect = {
+		if = {
+			limit = { has_variable = te_tp_armed }
+			debug_log = "TE_TAX_PROBE victory: inspect BEFORE manually rebuilding"
+			trigger_event = { id = te_debug_tax.91 }
+		}
+	}
+}

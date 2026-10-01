@@ -47,6 +47,7 @@ request_influence = {
 		treaty_categories = { power_bloc }
 		article_ai_usage = { request }
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.1
 			if = {
 				limit = { is_in_power_bloc = no }
@@ -55,20 +56,6 @@ request_influence = {
 			if = {
 				limit = { country_rank <= rank_value:minor_power }
 				add = 0.05
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = cooperative }
-				}
-				add = 0.05
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = conciliatory }
-				}
-				add = 0.025
 			}
 		}
 
@@ -107,6 +94,15 @@ request_influence = {
 					desc = "AI_CORDIAL_RELATIONS"
 					value = 10
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = cooperative } }
+				add = { desc = "AI_COOPERATIVE_ATTITUDE" value = 10 }
+			}
+			if = {
+				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = conciliatory } }
+				add = { desc = "AI_CONCILIATORY_ATTITUDE" value = 5 }
 			}
 		}
 	}
@@ -1042,14 +1038,8 @@ suppress_subject_liberty = {
 		treaty_categories = { power_bloc }
 		article_ai_usage = { offer request }
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.1
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = domineering }
-				}
-				add = 0.15
-			}
 		}
 		inherent_accept_score = {
 			value = 0
@@ -1111,6 +1101,11 @@ suppress_subject_liberty = {
 						value = 15
 					}
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = domineering } }
+				add = { desc = "AI_DOMINEERING_ATTITUDE" value = 15 }
 			}
 		}
 	}
@@ -1197,60 +1192,11 @@ nuclear_disarmament = {
 		treaty_categories = { other }
 		article_ai_usage = { request }
 		evaluation_chance = {
-			value = 0
-			# Only consider demanding disarmament of hostile/rival countries
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			value = 0.05
 			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = domineering }
-				}
+				limit = { any_rival_country = { always = yes } }
 				add = 0.1
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = belligerent }
-				}
-				add = 0.15
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					any_rival_country = { THIS = scope:other_country }
-				}
-				add = 0.25
-			}
-			# A secession that refused to trade the warheads it took for
-			# guarantees (nuclear_custody.11) is pressed through the article
-			# for ten years (nd_bp_refused).
-			if = {
-				limit = {
-					exists = scope:other_country
-					scope:other_country = { has_variable = nd_bp_refused }
-				}
-				add = 0.25
-			}
-			# Never try to disarm allies or friendly nations
-			if = {
-				limit = {
-					exists = scope:other_country
-					OR = {
-						has_attitude = { who = scope:other_country attitude = genial }
-						has_attitude = { who = scope:other_country attitude = loyal }
-						has_attitude = { who = scope:other_country attitude = protective }
-					}
-				}
-				add = -1.0
-			}
-			# Don't try if we're in the same power bloc
-			if = {
-				limit = {
-					exists = scope:other_country
-					scope:other_country = {
-						is_in_same_power_bloc = root
-					}
-				}
-				add = -0.5
 			}
 		}
 		inherent_accept_score = {
@@ -1383,6 +1329,11 @@ nuclear_disarmament = {
 						value = nd_taboo_ai_accept_taboo_value
 					}
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.target_country = root scope:article.source_country = { has_variable = nd_bp_refused } }
+				add = { desc = "AI_HOSTILE_ATTITUDE" value = 25 }
 			}
 		}
 	}
@@ -1568,21 +1519,8 @@ nuclear_program_aid = {
 		treaty_categories = { other }
 		article_ai_usage = { offer }
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.1
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = genial }
-				}
-				add = 0.1
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					is_in_same_power_bloc = scope:other_country
-				}
-				add = 0.15
-			}
 		}
 		inherent_accept_score = {
 			value = 0
@@ -2060,21 +1998,8 @@ join_united_nations = {
 		treaty_categories = { other }
 		article_ai_usage = { offer demand }
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.1
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = genial }
-				}
-				add = 0.1
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					is_in_same_power_bloc = scope:other_country
-				}
-				add = 0.15
-			}
 		}
 		inherent_accept_score = {
 			value = 0
@@ -2136,6 +2061,15 @@ join_united_nations = {
 						value = -1000
 					}
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.source_country = root has_attitude = { who = scope:article.target_country attitude = genial } }
+				add = { desc = "AI_FRIENDLY_ATTITUDE" value = 10 }
+			}
+			if = {
+				limit = { scope:article.source_country = root is_in_same_power_bloc = scope:article.target_country }
+				add = { desc = "AI_SAME_POWER_BLOC" value = 15 }
 			}
 		}
 	}
@@ -2226,58 +2160,11 @@ nuclear_program_pause = {
 		treaty_categories = { other }
 		article_ai_usage = { request }
 		evaluation_chance = {
-			value = 0
-			# Consider for hostile/rival countries
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			value = 0.1
 			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = domineering }
-				}
+				limit = { any_rival_country = { always = yes } }
 				add = 0.15
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = belligerent }
-				}
-				add = 0.2
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					any_rival_country = { THIS = scope:other_country }
-				}
-				add = 0.3
-			}
-			# More willing to ask for a pause than full disarmament
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = antagonistic }
-				}
-				add = 0.1
-			}
-			# Never try with allies
-			if = {
-				limit = {
-					exists = scope:other_country
-					OR = {
-						has_attitude = { who = scope:other_country attitude = genial }
-						has_attitude = { who = scope:other_country attitude = loyal }
-						has_attitude = { who = scope:other_country attitude = protective }
-					}
-				}
-				add = -1.0
-			}
-			# Don't try within same power bloc
-			if = {
-				limit = {
-					exists = scope:other_country
-					scope:other_country = {
-						is_in_same_power_bloc = root
-					}
-				}
-				add = -0.5
 			}
 		}
 		inherent_accept_score = {
@@ -2556,25 +2443,8 @@ population_transfer = {
 		treaty_categories = { other }
 		article_ai_usage = { request }
 		evaluation_chance = {
-			value = 0
-			# Consider if there's cultural tension
-			if = {
-				limit = {
-					exists = scope:other_country
-					OR = {
-						has_attitude = { who = scope:other_country attitude = belligerent }
-					}
-				}
-				add = 0.05
-			}
-			# More likely after wars or with domineering attitude
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = domineering }
-				}
-				add = 0.08
-			}
+			# Root-only proposal frequency; partner preferences belong in acceptance.
+			value = 0.01
 			# Ethno-nationalists want their people back
 			if = {
 				limit = {
@@ -2587,18 +2457,6 @@ population_transfer = {
 					}
 				}
 				add = 0.08
-			}
-			# Don't impose on friends
-			if = {
-				limit = {
-					exists = scope:other_country
-					OR = {
-						has_attitude = { who = scope:other_country attitude = cooperative }
-						has_attitude = { who = scope:other_country attitude = genial }
-						has_attitude = { who = scope:other_country attitude = loyal }
-					}
-				}
-				add = -0.25
 			}
 		}
 		inherent_accept_score = {
@@ -2760,6 +2618,27 @@ population_transfer = {
 						value = 15
 					}
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = belligerent } }
+				add = { desc = "AI_HOSTILE_ATTITUDE" value = 5 }
+			}
+			if = {
+				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = domineering } }
+				add = { desc = "AI_HOSTILE_ATTITUDE" value = 8 }
+			}
+			if = {
+				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = cooperative } }
+				add = { desc = "AI_FRIENDLY_ATTITUDE" value = -1000 }
+			}
+			if = {
+				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = genial } }
+				add = { desc = "AI_FRIENDLY_ATTITUDE" value = -1000 }
+			}
+			if = {
+				limit = { scope:article.target_country = root has_attitude = { who = scope:article.source_country attitude = loyal } }
+				add = { desc = "AI_FRIENDLY_ATTITUDE" value = -1000 }
 			}
 		}
 	}

@@ -1700,7 +1700,10 @@ extra_law_events.23 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		is_enacting_law = law_type:law_algorithmic_governance
+		OR = {
+			is_enacting_law = law_type:law_algorithmic_governance
+			is_enacting_law = law_type:law_automated_bureaucracy
+		}
 		NOR = {
 			has_modifier = govprin_technocrat_showcase_advance
 			has_modifier = govprin_technocrat_showcase_cautious
@@ -5989,7 +5992,10 @@ extra_law_events.59 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		is_enacting_law = law_type:law_algorithmic_governance
+		OR = {
+			is_enacting_law = law_type:law_algorithmic_governance
+			is_enacting_law = law_type:law_automated_bureaucracy
+		}
 		NOR = {
 			has_modifier = govprin_technocrat_showcase_advance
 			has_modifier = govprin_technocrat_showcase_cautious
@@ -7424,7 +7430,9 @@ extra_law_events.83 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
-		is_enacting_law = law_type:law_algorithmic_governance
+		# Who has the last word over the machines is Automated Bureaucracy's
+		# question: under Algorithmic Governance the machines do.
+		is_enacting_law = law_type:law_automated_bureaucracy
 		NOR = {
 			has_modifier = govprin_tech_first
 			has_modifier = govprin_human_first

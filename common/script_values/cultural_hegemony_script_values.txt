@@ -50,6 +50,10 @@ cultural_pull_civil_war_penalty = -20
 # Hegemony effect scaling (multiplier = cultural_pull_total directly, 0-100)
 cultural_hegemony_modifier_max_mult = 100
 cultural_hegemony_foreign_benchmark_max = 3
+# Legitimacy lost at multiplier 1: keep equal to country_legitimacy_base_add in
+# the cultural_hegemony_foreign_benchmark static modifier (the overview tooltip
+# scales it by the multiplier the pulse actually applied)
+cultural_hegemony_foreign_benchmark_legitimacy = 5
 # Per year decay multiplier for tech leadership bonus (1 = no decay, 0.5 = 50% decay per year)
 cultural_hegemony_tech_firsts_decay_mult = 0.9 # ~6.5 year half-life
 
@@ -513,8 +517,18 @@ cultural_hegemony_modifier_mult = {
 # Uses global_var:ch_top_cultural_pull set by yearly pulse
 cultural_hegemony_benchmark_mult = {
 	value = 0
+	# The leader never pays it. ch_top_cultural_pull is the leader's share as of
+	# the last yearly recount, while cultural_pull_total is this country's live
+	# share, so without this the leader "trails" its own snapshot by whatever its
+	# share has drifted since (a fraction of a point, ×0.01).
 	if = {
-		limit = { has_global_variable = ch_top_cultural_pull }
+		limit = {
+			has_global_variable = ch_top_cultural_pull
+			NOT = {
+				exists = global_var:ch_rank_1
+				this = global_var:ch_rank_1
+			}
+		}
 		# The higher the hegemon's share vs yours, the larger the legitimacy loss
 		add = global_var:ch_top_cultural_pull
 		subtract = cultural_pull_total
@@ -527,6 +541,22 @@ cultural_hegemony_benchmark_mult = {
 		max = cultural_hegemony_foreign_benchmark_max
 		multiply = ch_ideology_resistance_factor
 	}
+}
+
+# The multiplier the last monthly pulse actually applied (0 when none), for the
+# overview tooltip. cultural_hegemony_benchmark_mult is live, so the two differ
+# for up to a month after the gap moves.
+ch_benchmark_applied_display = {
+	value = 0
+	if = {
+		limit = { has_variable = ch_benchmark_applied }
+		add = var:ch_benchmark_applied
+	}
+}
+
+ch_benchmark_legitimacy_display = {
+	value = ch_benchmark_applied_display
+	multiply = cultural_hegemony_foreign_benchmark_legitimacy
 }
 
 # How much of the foreign benchmark still lands: 1 minus
@@ -719,15 +749,233 @@ ch_ranked_total_display = {
 	round = yes
 }
 
-# Fill fraction for the widget's share bar, as a percentage of the bar's length.
-# The bar reads full at a 50% share of global cultural influence: no country has
-# ever come near that, and a raw 0-100 bar would leave a real hegemon's reading
-# looking like a quarter-full sliver. The scale lives here so the .gui stays 0-100.
-ch_share_fill_pct = {
+# ---- The widget's overview (te_ch_overview_panel) ----
+# Display only: nothing but the overview reads these. Every variable read is
+# guarded, so a country whose entry never activated, or a save from before the
+# first monthly pulse, reads 0 instead of logging a missing variable.
+
+# The influence tier, 0 negligible .. 5 hegemon, for the overview's tier icon.
+# ch_set_display_state is the only place the tier is derived.
+ch_disp_tier_code = {
+	value = 0
+	if = {
+		limit = { has_variable = ch_tier }
+		add = var:ch_tier
+	}
+}
+
+# Our share of global cultural influence as a 0-1 fraction, for the overview's
+# pie (a progresspie reads 0-1; gui_modding_guide.md "Pie charts of script-held
+# data"). The same live reading as cultural_pull_display, which labels the pie.
+ch_disp_share_frac = {
 	value = cultural_pull_total
-	multiply = 2
+	divide = 100
 	min = 0
-	max = 100
+	max = 1
+}
+
+# The change in our share since last month, from ch_total and the
+# ch_total_prev snapshot ch_monthly_country_update takes before recomputing it.
+# 0 until both exist (the first month of a new game, or the first month on an
+# older save).
+ch_disp_share_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = ch_total
+			has_variable = ch_total_prev
+		}
+		add = var:ch_total
+		subtract = var:ch_total_prev
+	}
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+# The overview's trend arrow: 1 up, -1 down, 0 level (within 0.05 points).
+ch_disp_share_trend = {
+	value = 0
+	if = {
+		limit = { ch_disp_share_delta > 0.05 }
+		value = 1
+	}
+	else_if = {
+		limit = { ch_disp_share_delta < -0.05 }
+		value = -1
+	}
+}
+
+# How many of the overview's leader flags are filled (ch_leaders_display_write
+# in cultural_hegemony_effects.txt): 0 hides them, N draws flags 1..N.
+ch_disp_leader_count = {
+	value = 0
+	if = {
+		limit = { has_variable = ch_leader_seat_count }
+		add = var:ch_leader_seat_count
+	}
+}
+
+# The world's leading cultural power's political model, 1-15 in
+# ch_set_political_model's codes (0 before the first census), for the overview's
+# exported-model disc.
+ch_disp_model_code = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_rank_1_ideology }
+		add = global_var:ch_rank_1_ideology
+	}
+}
+
+# ---- The breakdown's bars (te_ch_sec_breakdown) ----
+# Each component of cultural pull is drawn as a bar around a centre line at
+# zero, the way the UN draws its authority pillars: a gain fills the right half,
+# scaled by the component's maximum; a penalty fills the left half, scaled by
+# its minimum. A value past its range fills its half and stops. The ranges are
+# the owner's where he gave one (play-test, 2026-09-30); the rest follow from
+# the script, and each says where it comes from. Display only.
+
+# Art 0-100 (owner). The share cap alone tops out at 50, the diminishing-
+# returns curve at a 100% share (cultural_pull_art_dr_steepness); the art
+# multiplier (country_cultural_hegemony_art_mult) can take it past that.
+ch_bar_art_max = {
+	value = 100
+}
+
+# Prestige 0-100 (owner): the lower of prestige / cultural_pull_prestige_divisor
+# and our percentage of world prestige, so at most 100.
+ch_bar_prestige_max = {
+	value = 100
+}
+
+# Standard of living -5 to 20 (owner): cultural_pull_from_sol's own clamp.
+ch_bar_sol_min = {
+	value = cultural_pull_sol_min
+}
+ch_bar_sol_max = {
+	value = cultural_pull_sol_max
+}
+
+# Tech leadership 0-30: ch_tech_firsts_recent is clamped to 30 at every recount
+# (the decay step in ch_yearly_global_update). It can pass 30 between recounts.
+ch_bar_tech_max = {
+	value = 30
+}
+
+# Monuments 0-60: twenty monuments at cultural_pull_monument_bonus (+3) each,
+# the grand-monument bonus (at most +5) included. The mod has some fifty
+# monument buildings, so there is no practical ceiling; the leading power in
+# the owner's test game read 38.
+ch_bar_monuments_max = {
+	value = 20
+	multiply = cultural_pull_monument_bonus
+}
+
+# Megaprojects 0-21: the seven megaproject types cultural_pull_from_megaprojects
+# counts, at cultural_pull_monument_bonus (+3) each. A hard ceiling.
+ch_bar_megaprojects_max = {
+	value = 7
+	multiply = cultural_pull_monument_bonus
+}
+
+# Other modifiers 0-20: the flat country_cultural_pull_add sources are funding
+# steps (+1 each, one per Ministry of Culture level plus Mass Media and
+# Television), event modifiers (+1 to +5, timed), the education power bloc
+# principle (+0.5 / +1) and cultural exchange treaties (+1 each). Rarely past
+# 20; the leading power in the owner's test game read 9.
+ch_bar_modifiers_max = {
+	value = 20
+}
+
+# Infamy -10 to 0: the owner's "about -100" read as infamy points, vanilla's
+# pariah level. At cultural_pull_infamy_factor (-0.1 per point) an infamy of
+# 100 costs 10 pull.
+ch_bar_infamy_min = {
+	value = 100
+	multiply = cultural_pull_infamy_factor
+}
+
+# Instability -30 to 0 (owner): full turmoil (cultural_pull_turmoil_factor, -10)
+# plus a civil war (cultural_pull_civil_war_penalty, -20).
+ch_bar_instability_min = {
+	value = cultural_pull_turmoil_factor
+	add = cultural_pull_civil_war_penalty
+}
+
+# The bar fractions: _pos is the right half (0..1 of the maximum), _neg the left
+# half (-1..0 of the minimum). A component that is never negative has no _neg
+# and one that is never positive no _pos; the bar type's default is 0.
+ch_disp_bar_art_pos = {
+	value = cultural_pull_from_art
+	divide = ch_bar_art_max
+	min = 0
+	max = 1
+}
+
+ch_disp_bar_prestige_pos = {
+	value = cultural_pull_from_prestige
+	divide = ch_bar_prestige_max
+	min = 0
+	max = 1
+}
+
+ch_disp_bar_sol_pos = {
+	value = cultural_pull_from_sol
+	divide = ch_bar_sol_max
+	min = 0
+	max = 1
+}
+
+ch_disp_bar_sol_neg = {
+	value = cultural_pull_from_sol
+	divide = ch_bar_sol_min
+	multiply = -1
+	min = -1
+	max = 0
+}
+
+ch_disp_bar_tech_pos = {
+	value = cultural_pull_from_tech_leadership
+	divide = ch_bar_tech_max
+	min = 0
+	max = 1
+}
+
+ch_disp_bar_monuments_pos = {
+	value = cultural_pull_from_monuments
+	divide = ch_bar_monuments_max
+	min = 0
+	max = 1
+}
+
+ch_disp_bar_megaprojects_pos = {
+	value = cultural_pull_from_megaprojects
+	divide = ch_bar_megaprojects_max
+	min = 0
+	max = 1
+}
+
+ch_disp_bar_modifiers_pos = {
+	value = cultural_pull_from_modifiers
+	divide = ch_bar_modifiers_max
+	min = 0
+	max = 1
+}
+
+ch_disp_bar_infamy_neg = {
+	value = cultural_pull_from_infamy
+	divide = ch_bar_infamy_min
+	multiply = -1
+	min = -1
+	max = 0
+}
+
+ch_disp_bar_instability_neg = {
+	value = cultural_pull_from_stability
+	divide = ch_bar_instability_min
+	multiply = -1
+	min = -1
+	max = 0
 }
 
 ch_prog_count_display = {

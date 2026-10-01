@@ -20,6 +20,11 @@ space_race_on_action = {
 			limit = { sr_space_race_participant = yes }
 			sr_sync_space_race_entries = yes
 			sr_sync_probe_data = yes
+			# The Rivals rows' estimates (space_race_effects.txt): players only.
+			if = {
+				limit = { is_player = yes }
+				sr_rivals_estimate_refresh = yes
+			}
 			# An AI's approach costs stop outside the top three and resume when it
 			# climbs back (sr_<m>_cost reads sr_ai_should_participate). Ranking
 			# moves without any button press, so recalculate when the
@@ -39,6 +44,28 @@ space_race_on_action = {
 						AND = {
 							NOT = { sr_ai_should_participate = yes }
 							var:sr_cost_participation = 1
+						}
+					}
+				}
+				sr_recalculate_cost = yes
+			}
+			# The same for solar colonization's billing, which stops while its
+			# production method is off (sr_milestone_billed_solar_colonization):
+			# the method changes without any button press.
+			else_if = {
+				limit = { NOT = { has_variable = sr_cost_solar_running } }
+				sr_recalculate_cost = yes
+			}
+			else_if = {
+				limit = {
+					OR = {
+						AND = {
+							sr_milestone_billed_solar_colonization = yes
+							var:sr_cost_solar_running = 0
+						}
+						AND = {
+							NOT = { sr_milestone_billed_solar_colonization = yes }
+							var:sr_cost_solar_running = 1
 						}
 					}
 				}

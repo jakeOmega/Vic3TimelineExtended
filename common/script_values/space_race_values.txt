@@ -71,15 +71,11 @@ sr_interstellar_months_left = {
 	min = 0
 }
 
-# Progress a milestone drifts forward each month while NO approach is selected.
-# The monthly pulse's `else` branch and the journal-entry widget's "drifting"
-# line both read this, so the rate the panel quotes is the rate the pulse adds.
-# Selecting an approach switches both over to sr_progress below.
-sr_progress_drift = {
-	value = 0.5
-}
-
-# Monthly progress value (unified for both approaches)
+# Monthly progress value, the same for every running milestone whatever its
+# approach (Standard, Safe or Ambitious; the approach modifiers act through
+# the country-wide multipliers below). Until 2026-09-29 a milestone with no
+# approach chosen drifted at a flat 0.5 instead; the Standard approach
+# replaced that state (owner's play-test, round 2).
 # Base progress from space program PM, techs, buildings, companies, partnerships, AND funding
 # All contribute via country_space_race_progress_add modifier (visible in tooltip breakdown)
 # Funding: sr_funding_progress modifier on each JE (0.5 per funding level and +25% building_space_program throughput per funding level, stacks across JEs)
@@ -241,6 +237,26 @@ sr_funding_solar_colonization_level = {
 # progress (sr_monthly_progress_update_effect), so it pays nothing for the
 # approach it chose (owner ruling, PR #507). space_race_on_action recalculates
 # when that changes; players always pass.
+# Per-JE innovation cost multipliers (scaling with tech era), read by
+# sr_<m>_cost and by the approach-cost lines the panel and the buttons print
+# (sr_disp_cost_*_<m>, space_race_display_values.txt).
+sr_cost_factor_suborbital         = { value = 1   } # Era 6
+sr_cost_factor_orbital            = { value = 1.5 } # Era 7
+sr_cost_factor_moon_landing       = { value = 2   } # Era 7
+sr_cost_factor_probe              = { value = 2   } # Era 7
+sr_cost_factor_moon_base          = { value = 5   } # Era 10
+sr_cost_factor_mars_landing       = { value = 6   } # Era 10
+sr_cost_factor_interstellar_probe = { value = 12  } # Era 12
+sr_cost_factor_solar_colonization = { value = 8   } # Era 11
+
+# The weekly innovation one cost level stands for: the magnitude of
+# sr_space_program_cost's country_weekly_innovation_add, which the entries
+# apply with multiplier = sr_<m>_cost. Display only (the approach-cost lines);
+# test_space_race_approaches.py holds the two equal.
+sr_innovation_per_cost_level = {
+	value = 15
+}
+
 # Per-JE innovation cost multipliers (scaling with tech era)
 # Suborbital=1x, Orbital=1.5x, Moon=2x, Probe=2x, Moon Base=5x, Mars=6x, Solar=8x, Interstellar=12x
 
@@ -251,7 +267,7 @@ sr_suborbital_cost = {
 		if = { limit = { has_variable = sr_safe_suborbital sr_ai_should_participate = yes } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_suborbital sr_ai_should_participate = yes } add = 2 }
 	}
-	# Era 6 baseline - no multiplier
+	multiply = sr_cost_factor_suborbital
 }
 sr_orbital_cost = {
 	value = 0
@@ -260,7 +276,7 @@ sr_orbital_cost = {
 		if = { limit = { has_variable = sr_safe_orbital sr_ai_should_participate = yes } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_orbital sr_ai_should_participate = yes } add = 2 }
 	}
-	multiply = 1.5  # Era 7
+	multiply = sr_cost_factor_orbital
 }
 sr_moon_landing_cost = {
 	value = 0
@@ -269,7 +285,7 @@ sr_moon_landing_cost = {
 		if = { limit = { has_variable = sr_safe_moon_landing sr_ai_should_participate = yes } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_moon_landing sr_ai_should_participate = yes } add = 2 }
 	}
-	multiply = 2  # Era 7
+	multiply = sr_cost_factor_moon_landing
 }
 sr_probe_cost = {
 	value = 0
@@ -278,7 +294,7 @@ sr_probe_cost = {
 		if = { limit = { has_variable = sr_safe_probe sr_ai_should_participate = yes } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_probe sr_ai_should_participate = yes } add = 2 }
 	}
-	multiply = 2  # Era 7
+	multiply = sr_cost_factor_probe
 }
 sr_moon_base_cost = {
 	value = 0
@@ -287,7 +303,7 @@ sr_moon_base_cost = {
 		if = { limit = { has_variable = sr_safe_moon_base sr_ai_should_participate = yes } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_moon_base sr_ai_should_participate = yes } add = 2 }
 	}
-	multiply = 5  # Era 10
+	multiply = sr_cost_factor_moon_base
 }
 sr_mars_landing_cost = {
 	value = 0
@@ -296,7 +312,7 @@ sr_mars_landing_cost = {
 		if = { limit = { has_variable = sr_safe_mars_landing sr_ai_should_participate = yes } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_mars_landing sr_ai_should_participate = yes } add = 2 }
 	}
-	multiply = 6  # Era 10
+	multiply = sr_cost_factor_mars_landing
 }
 sr_interstellar_probe_cost = {
 	value = 0
@@ -305,7 +321,7 @@ sr_interstellar_probe_cost = {
 		if = { limit = { has_variable = sr_safe_interstellar_probe sr_ai_should_participate = yes } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_interstellar_probe sr_ai_should_participate = yes } add = 2 }
 	}
-	multiply = 12  # Era 12
+	multiply = sr_cost_factor_interstellar_probe
 }
 sr_solar_colonization_cost = {
 	value = 0
@@ -314,7 +330,7 @@ sr_solar_colonization_cost = {
 		if = { limit = { has_variable = sr_safe_solar_colonization sr_ai_should_participate = yes } add = 1 }
 		if = { limit = { has_variable = sr_ambitious_solar_colonization sr_ai_should_participate = yes } add = 2 }
 	}
-	multiply = 8  # Era 11
+	multiply = sr_cost_factor_solar_colonization
 }
 
 # Per-JE progress display values (for current_value in each JE)
@@ -429,243 +445,98 @@ sr_total_global_colonies = {
 }
 
 # The monthly rate the panel quotes, and the rate its estimate divides by: the
-# real progress rate once an approach is chosen, the drift rate before that.
-# Keeps the number on screen equal to the number the pulse adds.
+# rate the pulse adds, whatever the approach. Kept per milestone so the panel's
+# keys stay per milestone.
 sr_pace_rate_suborbital = {
-	value = 0
-	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_suborbital
-				has_variable = sr_ambitious_suborbital
-			}
-		}
-		add = sr_progress
-	}
-	else = {
-		add = sr_progress_drift
-	}
+	value = sr_progress
 	min = 0.5
 }
 sr_pace_rate_orbital = {
-	value = 0
-	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_orbital
-				has_variable = sr_ambitious_orbital
-			}
-		}
-		add = sr_progress
-	}
-	else = {
-		add = sr_progress_drift
-	}
+	value = sr_progress
 	min = 0.5
 }
 sr_pace_rate_moon_landing = {
-	value = 0
-	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_moon_landing
-				has_variable = sr_ambitious_moon_landing
-			}
-		}
-		add = sr_progress
-	}
-	else = {
-		add = sr_progress_drift
-	}
+	value = sr_progress
 	min = 0.5
 }
 sr_pace_rate_probe = {
-	value = 0
-	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_probe
-				has_variable = sr_ambitious_probe
-			}
-		}
-		add = sr_progress
-	}
-	else = {
-		add = sr_progress_drift
-	}
+	value = sr_progress
 	min = 0.5
 }
 sr_pace_rate_moon_base = {
-	value = 0
-	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_moon_base
-				has_variable = sr_ambitious_moon_base
-			}
-		}
-		add = sr_progress
-	}
-	else = {
-		add = sr_progress_drift
-	}
+	value = sr_progress
 	min = 0.5
 }
 sr_pace_rate_mars_landing = {
-	value = 0
-	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_mars_landing
-				has_variable = sr_ambitious_mars_landing
-			}
-		}
-		add = sr_progress
-	}
-	else = {
-		add = sr_progress_drift
-	}
+	value = sr_progress
 	min = 0.5
 }
 sr_pace_rate_interstellar_probe = {
-	value = 0
-	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_interstellar_probe
-				has_variable = sr_ambitious_interstellar_probe
-			}
-		}
-		add = sr_progress
-	}
-	else = {
-		add = sr_progress_drift
-	}
+	value = sr_progress
 	min = 0.5
 }
 sr_pace_rate_solar_colonization = {
-	value = 0
-	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_solar_colonization
-				has_variable = sr_ambitious_solar_colonization
-			}
-		}
-		add = sr_progress
-	}
-	else = {
-		add = sr_progress_drift
-	}
+	value = sr_progress
 	min = 0.5
 }
 
 # The setback risk the panel shows. Identical to sr_risk_pct_<m> — the value the
-# roll actually uses — except that it reads zero whenever the monthly pulse
-# skips the roll: while no approach is chosen (the milestone only drifts, see
-# sr_monthly_progress_update_effect) and while the post-setback cooldown runs.
-# Never used for a roll; sr_risk_pct_<m> is.
+# roll actually uses — except that it reads zero while the post-setback
+# cooldown runs, when the monthly pulse skips the roll. Never used for a roll;
+# sr_risk_pct_<m> is.
 sr_risk_shown_suborbital = {
 	value = 0
 	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_suborbital
-				has_variable = sr_ambitious_suborbital
-			}
-			NOT = { sr_has_failure_cooldown = yes }
-		}
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
 		add = sr_risk_pct_suborbital
 	}
 }
 sr_risk_shown_orbital = {
 	value = 0
 	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_orbital
-				has_variable = sr_ambitious_orbital
-			}
-			NOT = { sr_has_failure_cooldown = yes }
-		}
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
 		add = sr_risk_pct_orbital
 	}
 }
 sr_risk_shown_moon_landing = {
 	value = 0
 	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_moon_landing
-				has_variable = sr_ambitious_moon_landing
-			}
-			NOT = { sr_has_failure_cooldown = yes }
-		}
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
 		add = sr_risk_pct_moon_landing
 	}
 }
 sr_risk_shown_probe = {
 	value = 0
 	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_probe
-				has_variable = sr_ambitious_probe
-			}
-			NOT = { sr_has_failure_cooldown = yes }
-		}
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
 		add = sr_risk_pct_probe
 	}
 }
 sr_risk_shown_moon_base = {
 	value = 0
 	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_moon_base
-				has_variable = sr_ambitious_moon_base
-			}
-			NOT = { sr_has_failure_cooldown = yes }
-		}
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
 		add = sr_risk_pct_moon_base
 	}
 }
 sr_risk_shown_mars_landing = {
 	value = 0
 	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_mars_landing
-				has_variable = sr_ambitious_mars_landing
-			}
-			NOT = { sr_has_failure_cooldown = yes }
-		}
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
 		add = sr_risk_pct_mars_landing
 	}
 }
 sr_risk_shown_interstellar_probe = {
 	value = 0
 	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_interstellar_probe
-				has_variable = sr_ambitious_interstellar_probe
-			}
-			NOT = { sr_has_failure_cooldown = yes }
-		}
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
 		add = sr_risk_pct_interstellar_probe
 	}
 }
 sr_risk_shown_solar_colonization = {
 	value = 0
 	if = {
-		limit = {
-			OR = {
-				has_variable = sr_safe_solar_colonization
-				has_variable = sr_ambitious_solar_colonization
-			}
-			NOT = { sr_has_failure_cooldown = yes }
-		}
+		limit = { NOT = { sr_has_failure_cooldown = yes } }
 		add = sr_risk_pct_solar_colonization
 	}
 }
@@ -713,11 +584,10 @@ sr_colony_count_value = {
 }
 
 # Rough months left on a milestone at the CURRENT monthly progress rate, for the
-# widget's "about N months to go" line. Ignores setbacks entirely (a failure
-# multiplies progress down, which is exactly what makes the estimate rough), so
-# the label must stay hedged. Only read while an approach is selected —
-# Divides by sr_pace_rate_<m>, which is floored at 0.5, so the divide is always
-# safe and the estimate follows whichever rate is actually being applied.
+# widget's "Estimate" row. Ignores setbacks entirely (a failure multiplies
+# progress down, which is exactly what makes the estimate rough), so the row's
+# tooltip says so. Divides by sr_pace_rate_<m>, which is floored at 0.5, so the
+# divide is always safe.
 sr_eta_months_suborbital = {
 	value = sr_suborbital_goal
 	if = { limit = { has_variable = sr_progress_suborbital } subtract = var:sr_progress_suborbital }
@@ -765,4 +635,121 @@ sr_eta_months_solar_colonization = {
 	if = { limit = { has_variable = sr_progress_solar_colonization } subtract = var:sr_progress_solar_colonization }
 	min = 0
 	divide = sr_pace_rate_solar_colonization
+}
+
+# ======= Rivals' estimated progress (display) =======
+# How far off a rival's announced progress may be, as a share of the goal: the
+# band the Rivals rows draw around each estimate. The viewer's covert network in
+# the rival narrows it (sr_disp_rival_band, space_race_display_values.txt).
+sr_rival_band_open   = { value = 0.25 }
+sr_rival_band_tier_1 = { value = 0.1  }
+sr_rival_band_tier_2 = { value = 0.05 }
+
+# A rival's estimate with the open band: its progress towards the goal plus
+# its yearly offset (sr_fuzz_<m>, −1 to +1) times the open band, kept within
+# 0-1. What the monthly refresh orders the Rivals rows by, so the order leaks
+# no more than the widest band shows. Scope: the rival.
+sr_rival_est_open_suborbital = {
+	value = sr_progress_suborbital_value
+	divide = sr_suborbital_goal
+	if = {
+		limit = { has_variable = sr_fuzz_suborbital }
+		add = {
+			value = var:sr_fuzz_suborbital
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_orbital = {
+	value = sr_progress_orbital_value
+	divide = sr_orbital_goal
+	if = {
+		limit = { has_variable = sr_fuzz_orbital }
+		add = {
+			value = var:sr_fuzz_orbital
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_moon_landing = {
+	value = sr_progress_moon_landing_value
+	divide = sr_moon_landing_goal
+	if = {
+		limit = { has_variable = sr_fuzz_moon_landing }
+		add = {
+			value = var:sr_fuzz_moon_landing
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_probe = {
+	value = sr_progress_probe_value
+	divide = sr_probe_goal
+	if = {
+		limit = { has_variable = sr_fuzz_probe }
+		add = {
+			value = var:sr_fuzz_probe
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_moon_base = {
+	value = sr_progress_moon_base_value
+	divide = sr_moon_base_goal
+	if = {
+		limit = { has_variable = sr_fuzz_moon_base }
+		add = {
+			value = var:sr_fuzz_moon_base
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_mars_landing = {
+	value = sr_progress_mars_landing_value
+	divide = sr_mars_landing_goal
+	if = {
+		limit = { has_variable = sr_fuzz_mars_landing }
+		add = {
+			value = var:sr_fuzz_mars_landing
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_interstellar_probe = {
+	value = sr_progress_interstellar_probe_value
+	divide = sr_interstellar_probe_goal
+	if = {
+		limit = { has_variable = sr_fuzz_interstellar_probe }
+		add = {
+			value = var:sr_fuzz_interstellar_probe
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_rival_est_open_solar_colonization = {
+	value = sr_progress_solar_colonization_value
+	divide = sr_solar_colonization_goal
+	if = {
+		limit = { has_variable = sr_fuzz_solar_colonization }
+		add = {
+			value = var:sr_fuzz_solar_colonization
+			multiply = sr_rival_band_open
+		}
+	}
+	min = 0
+	max = 1
 }

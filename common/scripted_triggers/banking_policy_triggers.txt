@@ -153,6 +153,13 @@ banking_possible_cb_expand_deposit_guarantee = {
 # Development Banks (country_directed_credit_sectors_add). The cap is
 # banking_directed_credit_slots_free (extra_script_values.txt), and
 # banking_directed_credit_enforce_cap sheds any excess a law change leaves.
+# The sectors are priced apart (2026-09-30): Heavy Industry 4 points,
+# Infrastructure and Armaments 3, Agriculture 2, Electrification 1. The gate
+# below must match each sector's own country_banking_intervention_max_add in
+# extra_modifiers.txt. The AI's buttons share these `possible` triggers and the
+# players' `banking_effect_cb_*`, so a sector costs it the same modifier as a
+# player's click and it can never overspend; how eager it is to press is its
+# ai_chance weight.
 banking_possible_cb_directed_credit_infrastructure = {
 	custom_tooltip = {
 		text = BANKING_POINTS_3
@@ -170,8 +177,8 @@ banking_possible_cb_directed_credit_infrastructure = {
 
 banking_possible_cb_directed_credit_heavy_industry = {
 	custom_tooltip = {
-		text = BANKING_POINTS_3
-		modifier:country_banking_intervention_max_add >= 3
+		text = BANKING_POINTS_4
+		modifier:country_banking_intervention_max_add >= 4
 	}
 	custom_tooltip = {
 		text = banking_button_locked_by_law_tt
@@ -185,8 +192,8 @@ banking_possible_cb_directed_credit_heavy_industry = {
 
 banking_possible_cb_directed_credit_agriculture = {
 	custom_tooltip = {
-		text = BANKING_POINTS_3
-		modifier:country_banking_intervention_max_add >= 3
+		text = BANKING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
 	}
 	custom_tooltip = {
 		text = banking_button_locked_by_law_tt
@@ -216,8 +223,8 @@ banking_possible_cb_directed_credit_armaments = {
 banking_possible_cb_directed_credit_electrification = {
 	modifier:country_can_use_directed_credit_electrification_bool = yes
 	custom_tooltip = {
-		text = BANKING_POINTS_3
-		modifier:country_banking_intervention_max_add >= 3
+		text = BANKING_POINTS_1
+		modifier:country_banking_intervention_max_add >= 1
 	}
 	custom_tooltip = {
 		text = banking_button_locked_by_law_tt
@@ -583,10 +590,15 @@ banking_ai_core_cb_bail_in_regime = {
 # the weight is SPLIT among the sectors the government favours: a new sector is
 # a candidate when it has an affinity below and could be clicked right now; with
 # n candidates each scores weight / n and Infrastructure scores 0, and with none
-# Infrastructure scores the whole weight. So the AI reaches for directed credit
-# exactly as often as it did with one sector (docs/audits/banking_cycle_simulation.md
-# F11: it is the AI's riskiest tool), and picks the sector that suits whoever
-# governs. The one deliberate increase is the Directed Credit law's second slot.
+# Infrastructure scores the whole weight. So the total WEIGHT is the same however
+# many sectors have an affinity, and the AI picks the sector that suits whoever
+# governs. How often it actually presses also depends on what it can afford:
+# with every sector at 3 points that was unchanged, but the cheap sectors
+# (Electrification 1, Agriculture 2) are affordable at budgets a 3-point sector
+# was not, so the AI presses them far more often (docs/audits/banking_cycle_simulation.md
+# §14, F19; F11: directed credit is the AI's riskiest tool). The sectors' disable
+# buttons lift sooner to compensate. The Directed Credit law's second slot is
+# also used.
 # ----------------------------------------------------------------------------
 banking_dc_affinity_heavy_industry = {
 	ig:ig_industrialists ?= { is_in_government = yes }

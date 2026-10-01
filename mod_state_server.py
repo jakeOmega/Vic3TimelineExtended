@@ -155,6 +155,8 @@ mod_paths = {
     "Scripted Effects": os.path.join(_MOD_COMMON, "scripted_effects"),
     "Scripted Triggers": os.path.join(_MOD_COMMON, "scripted_triggers"),
     "Scripted Buttons": os.path.join(_MOD_COMMON, "scripted_buttons"),
+    "Scripted GUIs": os.path.join(_MOD_COMMON, "scripted_guis"),
+    "Scripted Progress Bars": os.path.join(_MOD_COMMON, "scripted_progress_bars"),
     "Ship Types": os.path.join(_MOD_COMMON, "ship_types"),
     "Ship Groups": os.path.join(_MOD_COMMON, "ship_groups"),
     "Ship Modifications": os.path.join(_MOD_COMMON, "ship_modifications"),
@@ -1520,6 +1522,33 @@ def _choose_vanilla_source() -> tuple[dict, list[dict]]:
                   + rebuild,
     })
     return source, warnings
+
+
+def cli_mod_state() -> ModState:
+    """A ModState for an audit run from the command line, with vanilla taken
+    from where a full server load takes it (`_choose_vanilla_source`) and the
+    English loc loaded, vanilla then mod. A bare `ModState(base_game_paths,
+    mod_paths)` has no vanilla at all without a game install, and no loc: the
+    concept audit then flagged every concept reference, the mod's own included
+    (3,522 on 2026-09-29)."""
+    source, warnings = _choose_vanilla_source()
+    for w in warnings:
+        print(f"[vanilla] {w['detail']}", file=sys.stderr)
+    if source["kind"] == "vanilla_parsed":
+        snapshot = vanilla_parsed.load(VANILLA_PARSED_DIR)
+        ms = ModState(base_game_paths, mod_paths, vanilla_data=snapshot.data)
+        ms.parse_failures[:0] = snapshot.parse_failures
+        ms.localization = dict(snapshot.localization)
+    else:
+        ms = ModState(base_game_paths, mod_paths)
+        vanilla_loc_dir = os.path.join(base_game_path, "game", "localization", "english")
+        if os.path.isdir(vanilla_loc_dir):
+            ms.add_localization(vanilla_loc_dir)
+    for loc_dir in (os.path.join(mod_path, "localization", "english"),
+                    os.path.join(mod_path, "localization", "english", "replace")):
+        if os.path.isdir(loc_dir):
+            ms.add_localization(loc_dir)
+    return ms
 
 
 def _engine_docs_source() -> tuple[str, str]:
@@ -8424,6 +8453,7 @@ POST_LOAD_AUDITS = [
     ("modifier_visibility_audit",     "modifier_visibility_audit"),
     ("kill_character_audit",          "kill_character_audit"),
     ("loc_coverage_audit",            "loc_coverage_audit"),
+    ("gui_reference_audit",           "gui_reference_audit"),
     ("concept_reference_audit",       "concept_reference_audit"),
     ("localization_accessor_audit",   "localization_accessor_audit"),
     ("mod_structure_audit",           "mod_structure_audit"),

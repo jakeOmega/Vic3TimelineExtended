@@ -416,7 +416,7 @@ covert_warfare.2 = {
 	option = {
 		name = covert_warfare.2.c
 
-		change_infamy = -3
+		change_infamy = -1
 
 		ai_chance = {
 			base = 5

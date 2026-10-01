@@ -142,6 +142,26 @@ Revolution. It stacks with the technology's bonus once you research it.
 Countries that appear later, through release or formation, receive the bonuses
 already in the world.
 
+### Why some technologies lower education access
+
+Four technologies take 10 points off education access in every state: Public
+Works Programs and Computing Machines in era 6, Digital Education in era 9 and
+Brain-Computer Interfaces in era 11. Literacy drifts toward education access, so
+with nothing else changed each one lowers the level your literacy settles at by
+10 points, and literacy follows down over the next years. All four together take
+40 points off.
+
+This is deliberate. Each of these technologies raises the standard for what
+counts as literate: working with computers, networks and digital systems asks
+more of a person than reading a newspaper, so the same schooling reaches a
+smaller share of the population. The technology tooltip shows the penalty. It
+also keeps education relevant in the late game, because the gain has to be kept
+up as the bar rises.
+
+Each of the four also raises the Schools institution's maximum investment by one
+level. Funding schools and the laws that raise education access are how a
+country holds its literacy against the drop.
+
 ### Technologies that open the mod's systems
 
 Several of the new technologies first bring a system from another chapter into
@@ -415,15 +435,37 @@ Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
 
-<!-- screenshot: the Monuments journal entry with its national lines and a contested monument's row -->
+![The Grand Monuments tab of the Timeline Extended window: the overview's four counts (ten monuments Upheld), National Effects with Interest Group Approval, and the start of Our Monuments.](images/grand_monuments_tab.png)
+
+<!-- screenshot: the Monuments panel with Contested lit in the overview and a contested monument's row with its three buttons -->
 
 ### The Monuments journal entry
 
-The Monuments journal entry appears when you own a Grand Monument. It lists each
-national effect with the grandeur behind it and the grandeur at which its next
-step completes, a red warning while a finished level would cause vanity
-backlash, and one row per monument with its form, dedication, grandeur and
-status.
+The Monuments journal entry appears when you own a Grand Monument. After your
+last monument is gone, it stays until the fading approval and legitimacy it
+shows have run out.
+
+The same panels appear on the Grand Monuments tab of the Timeline Extended
+window, which the button under the sidebar's Map List opens, and a change made
+in one shows in the other. The tab is grayed until the journal entry is active, and it
+ends with an Open Journal Entry button.
+
+The overview at the top is always shown. It has an icon for each status a
+monument can hold, with the number of your monuments in that status beneath:
+Upheld (a gold wreath on the stone), Heritage (a railing in front), Undedicated
+(the bare stone) and Contested (cracked, and its word red while any monument is
+contested). An icon is dimmed while no monument holds its status. Hover an icon
+for what the status means; Heritage and Contested are also terms you can hover.
+While a finished level would cause [vanity backlash](#vanity-backlash), a red
+Hard Times appears under the icons; hover it for why.
+
+Three sections follow:
+
+| Section | Starts | Shows |
+|---|---|---|
+| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull and each dedication's own effect, such as Authority or Max Innovation. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). |
+| Our Monuments | Open | A row for each monument: its status as an icon with the word beneath, its form and dedication, and its state and grandeur. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. |
+| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, and hard times. |
 
 Every monument, whatever it honors, gives:
 
@@ -486,7 +528,8 @@ state, but gives no prestige, legitimacy or approval, and the group that objecte
 to its message resents it every month it stands undecided.
 
 When it happens, a notice lets you decide for all of them at once or one at a
-time. You can also decide later from the monument's row in the journal entry.
+time. You can also decide later from the monument's row under Our Monuments in
+the journal entry.
 
 | Choice | What happens |
 |---|---|
@@ -508,9 +551,9 @@ building panel counts as pulling it down.
 
 Finishing a monument level while the country is in default, in famine or in
 recession angers people: 5% of the state's pops turn radical, and legitimacy
-falls by 3 for each such level, fading over about two years. The journal entry
-shows a red warning while this would happen, so you can pause construction
-first.
+falls by 3 for each such level, fading over about two years. While this would
+happen, the journal entry shows a red Hard Times under its overview, so you can
+pause construction first.
 
 ### Monument anniversaries
 

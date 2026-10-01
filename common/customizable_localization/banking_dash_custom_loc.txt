@@ -71,6 +71,54 @@ banking_dash_bubble_band = {
 }
 
 # ----------------------------------------------------------------------------
+# Cycle phase, as a word
+# ----------------------------------------------------------------------------
+# The phase's coloured word for a tooltip, where the overview's seven
+# visible-gated words cannot go: the top bar's phase icon
+# (te_banking_topbar_readings in banking_dashboard_widget.gui) prints it at the
+# head of the overview's own tooltip. Each branch asks what the matching
+# banking_dash_phase_* scripted GUI asks, through the same banking_cycle_is_*
+# trigger, and names the overview's word for that phase, so the word and the
+# icon cannot disagree (test_topbar_banking.py). No edge is restated here.
+banking_dash_phase_word = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = finance_cycle_value } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { banking_cycle_is_panic = yes }
+		localization_key = banking_dash_phase_panic_value
+	}
+	text = {
+		trigger = { banking_cycle_is_downturn = yes }
+		localization_key = banking_dash_phase_downturn_value
+	}
+	text = {
+		trigger = { banking_cycle_is_stagnation = yes }
+		localization_key = banking_dash_phase_stagnation_value
+	}
+	text = {
+		trigger = { banking_cycle_is_stable = yes }
+		localization_key = banking_dash_phase_stable_value
+	}
+	text = {
+		trigger = { banking_cycle_is_expansion = yes }
+		localization_key = banking_dash_phase_expansion_value
+	}
+	text = {
+		trigger = { banking_cycle_is_boom = yes }
+		localization_key = banking_dash_phase_boom_value
+	}
+	text = {
+		trigger = { banking_cycle_is_frenzy = yes }
+		localization_key = banking_dash_phase_frenzy_value
+	}
+}
+
+# ----------------------------------------------------------------------------
 # Monetary stance band (monetary_policy_design.md §8)
 # ----------------------------------------------------------------------------
 # Returns the NAME of the stance band and nothing else — no gap, no rate, no
@@ -810,5 +858,58 @@ te_mon_union_state = {
 	}
 	text = {
 		localization_key = banking_dash_mon_union_state_coop
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# §0.12 — the bank's virtual rate, under its own purchases
+# ----------------------------------------------------------------------------
+# One clause appended to the Asset Purchases tooltip's own-purchases line: where
+# the bank would have its rate if the floor were not there, which is what sizes
+# its purchases. Only while it is buying. The row also shows for Open-Market Operations alone, when there
+# is no virtual rate under the floor to speak of, and then this is empty.
+te_mon_virtual_rate_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_bank_purchase_display > 0 }
+		localization_key = banking_dash_mon_purchases_virtual
+	}
+	text = {
+		localization_key = banking_dash_mon_purchases_virtual_none
+	}
+}
+
+# §0.12, ruling N1 — one sentence appended to the Delegation tooltip's first
+# paragraph for a dial the player steers by hand, while its rate is on the floor
+# and prices are falling: the moment a delegated bank might be buying assets on
+# its own account, which a hand-steered dial never does. It names the condition
+# rather than promising purchases, because whether a delegated bank would buy
+# depends on its rule's answer, which is hidden state for a dial nobody has
+# delegated (at 1.5% inflation a price-stability bank on the floor would raise
+# its rate, not buy). Empty for every other country, and under independence,
+# which is always mandate-run.
+te_mon_delegation_purchase_hint = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_has_dial = yes
+			te_mon_mandate_binds = no
+			OR = {
+				has_law_or_variant = law_type:law_fiat_currency
+				has_law_or_variant = law_type:law_digital_currency
+			}
+			te_mon_policy_rate_at_floor = yes
+			has_variable = te_inflation
+			var:te_inflation < 0
+		}
+		localization_key = banking_dash_mon_delegation_purchase_hint
+	}
+	text = {
+		localization_key = banking_dash_mon_delegation_purchase_hint_none
 	}
 }

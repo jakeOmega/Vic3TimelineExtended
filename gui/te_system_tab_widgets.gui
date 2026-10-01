@@ -128,6 +128,68 @@ types te_system_tab_widgets
 		}
 	}
 
+	### The entry's goal bar (`progressbar = yes`, from current_value and
+	### goal_add_value), as vanilla's panel draws it (gui/journal_entry.gui, above
+	### custom_widget_container_4), at 480 px like the scripted bars. All four of
+	### vanilla's texts, so an entry whose bar counts time works too. First used
+	### by the Military panel's Nuclear tab: progress toward the next warhead.
+	type te_je_goal_bar = flowcontainer {
+		parentanchor = hcenter
+		visible = "[And( JournalEntry.HasProgressBar, JournalEntry.IsActive )]"
+		margin = { 0 5 }
+
+		default_progressbar_horizontal = {
+			size = { 480 30 }
+			blockoverride "values" {
+				value = "[FixedPointToFloat(JournalEntry.GetGoalProgressPercent)]"
+				min = 0
+				max = 1
+			}
+
+			container = {
+				visible = "[Not(JournalEntry.ShowProgressbarAsTime)]"
+
+				textbox = {
+					visible = "[EqualTo_CFixedPoint(JournalEntry.GetBaselineValue, '(CFixedPoint)0')]"
+					text = "JOURNAL_ENTRY_PROGRESSBAR_FROM_ZERO"
+					size = { 480 30 }
+					align = nobaseline
+					margin_left = 10
+					parentanchor = vcenter
+				}
+				textbox = {
+					visible = "[Not(EqualTo_CFixedPoint(JournalEntry.GetBaselineValue, '(CFixedPoint)0'))]"
+					text = "JOURNAL_ENTRY_PROGRESSBAR_FROM_BASE"
+					size = { 480 30 }
+					align = nobaseline
+					margin_left = 10
+					parentanchor = vcenter
+				}
+			}
+
+			container = {
+				visible = "[JournalEntry.ShowProgressbarAsTime]"
+
+				textbox = {
+					visible = "[JournalEntry.ShowProgressbarAsMonths]"
+					text = "JOURNAL_ENTRY_PROGRESSBAR_MONTHS"
+					size = { 480 30 }
+					align = nobaseline
+					margin_left = 10
+					parentanchor = vcenter
+				}
+				textbox = {
+					visible = "[JournalEntry.ShowProgressbarAsWeeks]"
+					text = "JOURNAL_ENTRY_PROGRESSBAR_WEEKS"
+					size = { 480 30 }
+					align = nobaseline
+					margin_left = 10
+					parentanchor = vcenter
+				}
+			}
+		}
+	}
+
 	### The entry's status description, as vanilla's panel draws it
 	### (gui/journal_entry.gui, the textbox under custom_widget_container_1).
 	type te_je_status_desc = textbox {
@@ -170,8 +232,9 @@ types te_system_tab_widgets
 	}
 
 	### Vanilla's tab_buttons (gui/shared/tab_bars.gui), copied verbatim with a
-	### sixth slot (sixth_button* blocks) before the end divider, for a panel whose
-	### five slots vanilla already fills (diplomatic_overview.gui). Slot 6 has no
+	### sixth slot (sixth_button* blocks) before the end divider, for a strip that
+	### needs six: diplomatic_overview.gui (vanilla's five and the UN) and
+	### market_panel.gui (vanilla's four, Climate and Reserve). Slot 6 has no
 	### input_action: vanilla's input profile defines tab_1 to tab_5 only. Slot 5
 	### keeps vanilla's `block "fourth_button_icon"` slip on its selected icon;
 	### slot 6 uses its own name. Re-copy on a vanilla patch that changes

@@ -1,7 +1,8 @@
 ﻿### A zero-sized MARKER, not content. A journal entry attaches it to
 ### custom_widget_container_7 to tell the mod's gui/journal_entry.gui override
-### "one of my own widgets draws my scripted progress bars, do not draw them
-### again at the bottom of the panel". See common/journal_entries/je_banking.txt.
+### "one of my own widgets draws my scripted progress bars and my goal bar, do
+### not draw them again lower down the panel". See common/journal_entries/je_banking.txt
+### and gotcha #33 in docs/guides/gui_modding_guide.md.
 widget = {
 	name = "widget_te_je_bars_on_top_marker"
 	size = { 0 0 }

@@ -204,11 +204,16 @@ ch_disable_cultural_institutes_button = {
 		je:je_cultural_hegemony = { has_modifier = ch_cultural_institutes_program }
 	}
 
+	# Also scaled back while authority is in deficit: the programme costs 100.
 	ai_chance = {
 		value = 0
 		if = {
 			limit = { NOT = { has_law = law_type:law_ministry_of_culture } }
 			add = 100
+		}
+		if = {
+			limit = { authority < 0 }
+			add = te_ai_authority_deficit_repeal_weight
 		}
 	}
 
@@ -269,11 +274,16 @@ ch_disable_global_media_campaign_button = {
 		je:je_cultural_hegemony = { has_modifier = ch_global_media_campaign }
 	}
 
+	# Also ended while authority is in deficit: the campaign costs 100.
 	ai_chance = {
 		value = 0
 		if = {
 			limit = { NOT = { has_law = law_type:law_ministry_of_culture } }
 			add = 100
+		}
+		if = {
+			limit = { authority < 0 }
+			add = te_ai_authority_deficit_repeal_weight
 		}
 		if = {
 			limit = { has_modifier = cultural_hegemony_foreign_benchmark }

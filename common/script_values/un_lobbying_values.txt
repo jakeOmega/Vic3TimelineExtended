@@ -177,3 +177,46 @@ un_deleg_order = {
 		add = var:un_deleg_key
 	}
 }
+
+# ---- The Delegations' bulk buttons --------------------------------------------
+
+# What a campaign costs in influence: both pacts' literal `cost`
+# (un_lobby_for_action / un_lobby_against_action in un_lobbying.txt; the test
+# pins the three together). Read by the bulk buttons' budget below.
+un_lobby_campaign_cost = { value = 100 }
+
+# How many campaigns our available influence covers at un_lobby_campaign_cost
+# each: one point per hundred the country has. The bulk buttons read it ONCE,
+# before the first pact is made, and spend from that count, never from the
+# live `influence` trigger: whether a pact created earlier in the same effect
+# has reached `influence` by the next row is unverified, and a stale read
+# would let one click spend past what we have. Literals because a trigger
+# comparison cannot be scaled; the test pins each to k x the campaign cost.
+# Scope: country (the viewer)
+un_deleg_bulk_budget = {
+	value = 0
+	if = { limit = { influence >= 100 } add = 1 }
+	if = { limit = { influence >= 200 } add = 1 }
+	if = { limit = { influence >= 300 } add = 1 }
+	if = { limit = { influence >= 400 } add = 1 }
+	if = { limit = { influence >= 500 } add = 1 }
+	if = { limit = { influence >= 600 } add = 1 }
+	if = { limit = { influence >= 700 } add = 1 }
+	if = { limit = { influence >= 800 } add = 1 }
+	if = { limit = { influence >= 900 } add = 1 }
+	if = { limit = { influence >= 1000 } add = 1 }
+	if = { limit = { influence >= 1100 } add = 1 }
+	if = { limit = { influence >= 1200 } add = 1 }
+	if = { limit = { influence >= 1300 } add = 1 }
+	if = { limit = { influence >= 1400 } add = 1 }
+	if = { limit = { influence >= 1500 } add = 1 }
+	if = { limit = { influence >= 1600 } add = 1 }
+	if = { limit = { influence >= 1700 } add = 1 }
+	if = { limit = { influence >= 1800 } add = 1 }
+	if = { limit = { influence >= 1900 } add = 1 }
+	if = { limit = { influence >= 2000 } add = 1 }
+	if = { limit = { influence >= 2100 } add = 1 }
+	if = { limit = { influence >= 2200 } add = 1 }
+	if = { limit = { influence >= 2300 } add = 1 }
+	if = { limit = { influence >= 2400 } add = 1 }
+}

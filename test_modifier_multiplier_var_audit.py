@@ -248,6 +248,114 @@ class SuppressionTests(unittest.TestCase):
         self.assertEqual(flags[0].exemption["rationale"], "deliberate")
 
 
+# The megaproject display bug (2026-10-01): a state pulse re-applied each
+# construction site's progress modifier with `this.var:`, which inside
+# every_scope_building is the building. Buildings hold no variables, so the read
+# returned 'none' and the engine scaled the modifier by 1 (a constant "+100%").
+SPACE_ELEVATOR_BUGGY = """space_elevator_on_action = {
+\teffect = {
+\t\tif = {
+\t\t\tlimit = { has_building = building_space_elevator_construction_site }
+\t\t\tspace_elevator_construction = yes
+\t\t\tevery_scope_building = {
+\t\t\t\tlimit = { is_building_type = building_space_elevator_construction_site }
+\t\t\t\tremove_modifier = space_elevator_progress
+\t\t\t\tadd_modifier = {
+\t\t\t\t\tname = space_elevator_progress
+\t\t\t\t\tmultiplier = this.var:space_elevator_progress_var
+\t\t\t\t}
+\t\t\t}
+\t\t}
+\t}
+}
+"""
+
+
+class BuildingScopeTests(unittest.TestCase):
+    def test_reproduces_megaproject_progress_bug(self):
+        flags = _scan(SPACE_ELEVATOR_BUGGY)
+        self.assertEqual(len(flags), 1)
+        f = flags[0]
+        self.assertEqual(f.check, "building_scope")
+        self.assertEqual(f.variable, "space_elevator_progress_var")
+        self.assertEqual(f.multiplier, "this.var:space_elevator_progress_var")
+        self.assertEqual(f.modifier_name, "space_elevator_progress")
+        self.assertEqual(f.block, "space_elevator_on_action")
+        self.assertEqual(f.add_line, 11)
+        self.assertEqual(f.scope_block, "every_scope_building")
+        self.assertEqual(f.scope_line, 6)
+
+    def test_root_var_is_clean(self):
+        fixed = SPACE_ELEVATOR_BUGGY.replace("this.var:", "root.var:")
+        self.assertEqual(_scan(fixed), [])
+
+    def test_bare_var_in_building_scope_is_flagged(self):
+        flags = _scan(SPACE_ELEVATOR_BUGGY.replace("this.var:", "var:"))
+        self.assertEqual([f.multiplier for f in flags],
+                         ["var:space_elevator_progress_var"])
+
+    def test_timed_modifier_is_still_flagged(self):
+        flags = _scan(
+            "se = {\n"
+            "\trandom_scope_building = {\n"
+            "\t\tadd_modifier = { name = m multiplier = var:x days = 30 }\n"
+            "\t}\n"
+            "}\n"
+        )
+        self.assertEqual([f.check for f in flags], ["building_scope"])
+
+    def test_b_link_opens_a_building_scope(self):
+        flags = _scan(
+            "se = {\n"
+            "\tb:building_university = { add_modifier = { name = m multiplier = var:x } }\n"
+            "}\n"
+        )
+        self.assertEqual([f.scope_block for f in flags], ["b:building_university"])
+
+    def test_control_flow_between_iterator_and_modifier_is_transparent(self):
+        flags = _scan(
+            "se = {\n"
+            "\tevery_scope_building = {\n"
+            "\t\tif = { limit = { level > 1 }\n"
+            "\t\t\trandom_list = { 10 = { add_modifier = { name = m multiplier = var:x } } }\n"
+            "\t\t}\n"
+            "\t}\n"
+            "}\n"
+        )
+        self.assertEqual(len(flags), 1)
+
+    def test_scope_change_inside_the_iterator_ends_the_building_scope(self):
+        # `owner` / `state` leave the building, and they hold variables.
+        for link in ("owner", "state"):
+            text = (
+                "se = {\n"
+                "\tevery_scope_building = {\n"
+                f"\t\t{link} = {{ add_modifier = {{ name = m multiplier = var:x }} }}\n"
+                "\t}\n"
+                "}\n"
+            )
+            self.assertEqual(_scan(text), [], link)
+
+    def test_modifier_outside_any_building_scope_is_clean(self):
+        self.assertEqual(_scan(
+            "se = {\n"
+            "\tevery_scope_state = { add_modifier = { name = m multiplier = var:x } }\n"
+            "}\n"
+        ), [])
+
+    def test_reviewed_on_multiplier_line_suppresses(self):
+        flags = _scan(SPACE_ELEVATOR_BUGGY.replace(
+            "progress_var\n", "progress_var # REVIEWED 2026-10-01: probe\n"))
+        self.assertEqual(len(flags), 1)
+        self.assertEqual(flags[0].exemption["rationale"], "probe")
+
+    def test_report_names_the_building_scope(self):
+        from modifier_multiplier_var_audit import AuditResult
+        report = render_report(AuditResult(flags=_scan(SPACE_ELEVATOR_BUGGY)))
+        self.assertIn("inside `every_scope_building` (line 6)", report)
+        self.assertIn("root.var:space_elevator_progress_var", report)
+
+
 class AuditAndReportTests(unittest.TestCase):
     def test_walks_audit_dirs_and_renders_report(self):
         with tempfile.TemporaryDirectory() as td:

@@ -10,7 +10,8 @@ key leaks into player tooltips silently.
 
 Fix: add the missing key(s) to a `localization/english/*_l_english.yml`
 file. For static modifiers and most simple entities the key is the
-entity name itself; for journal entries and institutions also
+entity name itself (including game concept names, whose `_desc`
+does not substitute for the name); for journal entries and institutions also
 `<name>_desc`; for
 events the keys are whatever `title`/`desc`/`flavor`/option `name`
 fields point at; for messages (`common/messages`) the keys are
@@ -26,12 +27,7 @@ entity's opening line:
 
 ## Unreviewed Flags
 
-### Messages (4)
-
-- `common/messages/extra_messages.txt:94` — `tactical_nuke_fails_attacker` — missing: `notification_tactical_nuke_fails_attacker_name`, `notification_tactical_nuke_fails_attacker_desc`
-- `common/messages/extra_messages.txt:101` — `tactical_nuke_fails_defender` — missing: `notification_tactical_nuke_fails_defender_name`, `notification_tactical_nuke_fails_defender_desc`
-- `common/messages/extra_messages.txt:80` — `tactical_nuke_succeeds_attacker` — missing: `notification_tactical_nuke_succeeds_attacker_name`, `notification_tactical_nuke_succeeds_attacker_desc`
-- `common/messages/extra_messages.txt:87` — `tactical_nuke_succeeds_defender` — missing: `notification_tactical_nuke_succeeds_defender_name`, `notification_tactical_nuke_succeeds_defender_desc`
+_None._
 
 ## Reviewed Exemptions
 
@@ -53,10 +49,9 @@ entity's opening line:
 ## Coverage
 
 - flags by category:
-  - Messages: 4
   - Modifiers: 14
-- total flags: 18
-- unreviewed: 4
+- total flags: 14
+- unreviewed: 0
 - exempted: 14
 
 ## Scope notes

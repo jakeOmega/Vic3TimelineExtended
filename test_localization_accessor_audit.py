@@ -235,6 +235,21 @@ class ValidationTests(unittest.TestCase):
             self._validate("[ROOT.GetName|U]", "events")
         )
 
+    def test_interest_group_accessor_is_gs_prefixed(self):
+        # `sInterestGroup` is not an engine accessor (vanilla uses
+        # `gsInterestGroup` 947 times, `sInterestGroup` never). un_events.34.d
+        # shipped with it and rendered with everything before it missing.
+        self.assertIsNone(
+            self._validate(
+                "[SCOPE.gsInterestGroup('un_sov_ig').GetName]", "events"
+            )
+        )
+        reason = self._validate(
+            "[SCOPE.sInterestGroup('un_sov_ig').GetName]", "events"
+        )
+        self.assertIsNotNone(reason)
+        self.assertIn("sInterestGroup", reason)
+
     # --- issue #149: diplomatic-action notification descs ---
 
     def test_bare_country_denied_in_notification(self):

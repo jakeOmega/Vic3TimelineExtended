@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.14.4). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 # Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a fixed description: the engine dump prints unrelated script there, reshuffled on every dump.
 
 ## active_lens
@@ -6056,11 +6056,11 @@ Scopes: company
 
 Check the prosperity of a company
 
-## completion_date
+## conclusion_date
 Scopes: ai_regional_objective
 
-Compare to the date the scoped AI regional objective was completed
-Uncompleted objectives have no completion date, so check is_completed first
+Compare to the date the scoped AI regional objective was concluded
+Only concluded objectives have a date, so check is_completed or is_failed first
 
 ## construction_queue_duration
 Scopes: country
@@ -6740,7 +6740,7 @@ Check if a state, state region or country owns any potential strait province
 ## has_any_regional_objective
 Scopes: country
 
-Checks if the scoped country's AI has a regional objective in a strategic region, completed or not
+Checks if the scoped country's AI has a regional objective in a strategic region, whatever its status
 Leave out type to match an objective of any type
 Usage:
 	region = sr:some_region
@@ -7205,6 +7205,11 @@ Scopes: pop
 
 Checks if the scoped pop has ongoing religious conversion
 
+## has_or_is_contesting_state_in_state_region
+Scopes: country
+
+Check if country has a state in the state region, or is at war with a country that holds one - i.e. the region has not been settled away from it
+
 ## has_overlapping_interests
 Scopes: country
 Targets: country
@@ -7555,6 +7560,12 @@ Scopes: war
 
 Checks if war has a certain war goal type
 
+## has_war_goal_at_risk_of_being_dropped
+Scopes: war
+Targets: country
+
+Checks if the target country holds a war goal in the scoped war that is at risk of being dropped for having been uncontested for too long
+
 ## has_war_support
 Scopes: war
 
@@ -7730,6 +7741,11 @@ Does the country have this amount of gross income (income before expenses) for i
 Scopes: country
 
 Does the country have this amount of net income (income after expenses) for its investment pool
+
+## is_active
+Scopes: ai_regional_objective
+
+Checks if the scoped AI regional objective is still being pursued, meaning it has neither completed nor failed
 
 ## is_adjacent_to_country
 Scopes: country
@@ -8076,6 +8092,11 @@ Targets: market
 Whether the scoped market goods are being exported to the target market by the local market
 is_exporter = scope:example_market
 
+## is_failed
+Scopes: ai_regional_objective
+
+Checks if the scoped AI regional objective has failed or been invalidated
+
 ## is_female
 Scopes: character
 
@@ -8304,6 +8325,11 @@ Checks if country in scope is in war on the same side as event target
 Scopes: state
 
 Check if state is incorporated = bool
+
+## is_independent_and_not_being_subjugated
+Scopes: country
+
+True if the country is not a subject and no war goal to make it a subject is pending against it in any of its wars
 
 ## is_indirect_subject_of
 Scopes: country
@@ -9567,10 +9593,20 @@ Targets: country
 
 Checks if country in scope owes a obligation to event target
 
+## owns_entire_or_is_contesting_state_region
+Scopes: country
+
+Check if country owns the entire region, or is at war with a country that holds a state in it - i.e. the region has not been settled away from it
+
 ## owns_entire_state_region
 Scopes: country
 
 Check if country owns entire region
+
+## owns_entire_state_region_uncontested
+Scopes: country
+
+Check if country owns the entire region and no war goal in any of its wars is targeting a state in it
 
 ## owns_treaty_port_in
 Scopes: country
@@ -10633,6 +10669,12 @@ How much of their full weight war-goal-driven war support factors currently carr
 Scopes: war
 
 True if the war has a proposed peace deal
+
+## war_may_restore_country
+Scopes: country
+Targets: country_definition
+
+Checks if a war the scoped country is committed to has a war goal that would put the specified country back on the map, such as the mirror goal created when a country is annexed mid-war
 
 ## war_participant_has_war_goal_of_type_against
 Scopes: country

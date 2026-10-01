@@ -9,6 +9,13 @@
 # Scope: Country
 # Caches all display variables and applies/removes CH modifiers.
 ch_monthly_country_update = {
+	# Last month's share, kept for the journal-entry widget's trend arrow
+	# (ch_disp_share_trend). Display bookkeeping: nothing else reads it.
+	if = {
+		limit = { has_variable = ch_total }
+		set_variable = { name = ch_total_prev value = var:ch_total }
+	}
+
 	# Cache variables used by JE triggers (visibility/status conditions)
 	set_variable = { name = ch_total value = cultural_pull_total }
 	set_variable = { name = ch_art value = cultural_pull_from_art }
@@ -29,6 +36,14 @@ ch_monthly_country_update = {
 
 	ch_set_display_state = yes
 
+	# A player's own copy of the overview's leader flags, refreshed monthly so
+	# a new player, an entry that activated between recounts, a moved capital
+	# or an annexed leader show within a month (ch_leaders_display_write).
+	if = {
+		limit = { is_player = yes }
+		ch_leaders_display_write = yes
+	}
+
 	# Foreign benchmark is now applied in JE on_monthly_pulse
 	# (only affects countries that have the journal entry active)
 	# Clean up stale foreign benchmark from countries without the JE
@@ -38,6 +53,46 @@ ch_monthly_country_update = {
 			NOT = { has_journal_entry = je_cultural_hegemony }
 		}
 		remove_modifier = cultural_hegemony_foreign_benchmark
+	}
+}
+
+# ---- OVERVIEW FLAGS ----
+# Scope: a country that views the journal-entry widget (a player).
+# The widget's overview draws the three leading cultural powers as vanilla
+# flags, which name the country on hover and open it on click. The GUI can reach
+# a country only through a stored state (gui_modding_guide.md gotcha #11; the
+# UN council's un_p5_seat_N is the same shape), so the viewer holds the capitals
+# of global_var:ch_rank_1..3 in ch_leader_seat_1..3, and ch_leader_seat_count
+# says how many are filled, so the GUI never reads a seat that is not set
+# (gotcha #23). Seats fill in order and stop at the first rank that is empty,
+# has ceased to exist or has no capital.
+# Written for every player right after the census writes the ranks
+# (ch_yearly_global_update), and monthly by each player's own
+# ch_monthly_country_update. Display only: nothing else reads these variables.
+ch_leaders_display_write = {
+	remove_variable = ch_leader_seat_1
+	remove_variable = ch_leader_seat_2
+	remove_variable = ch_leader_seat_3
+	set_variable = { name = ch_leader_seat_count value = 0 }
+	ch_leaders_display_seat = { N = 1 PREV = 0 }
+	ch_leaders_display_seat = { N = 2 PREV = 1 }
+	ch_leaders_display_seat = { N = 3 PREV = 2 }
+}
+
+# Seat $N$ gets rank $N$'s capital when seats 1..$PREV$ ($N$ - 1) are filled.
+# Scope: the viewer
+ch_leaders_display_seat = {
+	if = {
+		limit = {
+			var:ch_leader_seat_count = $PREV$
+			has_global_variable = ch_rank_$N$
+			global_var:ch_rank_$N$ ?= { exists = capital }
+		}
+		global_var:ch_rank_$N$ = {
+			capital = { save_scope_as = ch_leader_capital }
+		}
+		set_variable = { name = ch_leader_seat_$N$ value = scope:ch_leader_capital }
+		set_variable = { name = ch_leader_seat_count value = $N$ }
 	}
 }
 
@@ -109,13 +164,9 @@ ch_set_display_state = {
 # matching scripted_button's `effect` block. Both the journal-entry button and
 # `ch_policy_sgui` call these, so the two surfaces cannot drift.
 #
-# Three deliberate additions over the original inline bodies:
+# Display additions over the original inline bodies:
 #   * `ch_set_display_state = yes` in the tail, so a click moves the widget's
 #     labels immediately.
-#   * on the four programme toggles, one
-#     `te_history_record_cultural_hegemony_marker` call, so the history chart can
-#     date the change. Both the AI's journal-entry button and the widget reach it
-#     from here.
 #   * on the two funding steppers, one `custom_tooltip` OUTSIDE the
 #     `hidden_effect`: the original body is wholly hidden, so the widget's
 #     composed tooltip would otherwise render an empty "what this does" half.
@@ -169,7 +220,6 @@ ch_effect_world_exposition = {
 	je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition } }
 	je:je_cultural_hegemony ?= { add_modifier = { name = ch_world_exposition_cost multiplier = ch_program_funding_cost_mult_for_je } }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_on_outreach }
 		ch_set_display_state = yes
 	}
 }
@@ -178,7 +228,6 @@ ch_effect_disable_world_exposition = {
 	je:je_cultural_hegemony = { remove_modifier = ch_world_exposition }
 	je:je_cultural_hegemony = { remove_modifier = ch_world_exposition_cost }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_off_outreach }
 		ch_set_display_state = yes
 	}
 }
@@ -186,7 +235,6 @@ ch_effect_disable_world_exposition = {
 ch_effect_cultural_institutes = {
 	je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_institutes_program } }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_on_institutes }
 		ch_set_display_state = yes
 	}
 }
@@ -194,7 +242,6 @@ ch_effect_cultural_institutes = {
 ch_effect_disable_cultural_institutes = {
 	je:je_cultural_hegemony = { remove_modifier = ch_cultural_institutes_program }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_off_institutes }
 		ch_set_display_state = yes
 	}
 }
@@ -202,7 +249,6 @@ ch_effect_disable_cultural_institutes = {
 ch_effect_global_media_campaign = {
 	je:je_cultural_hegemony = { add_modifier = { name = ch_global_media_campaign } }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_on_media }
 		ch_set_display_state = yes
 	}
 }
@@ -210,7 +256,6 @@ ch_effect_global_media_campaign = {
 ch_effect_disable_global_media_campaign = {
 	je:je_cultural_hegemony = { remove_modifier = ch_global_media_campaign }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_off_media }
 		ch_set_display_state = yes
 	}
 }
@@ -218,7 +263,6 @@ ch_effect_disable_global_media_campaign = {
 ch_effect_cultural_protectionism = {
 	je:je_cultural_hegemony = { add_modifier = { name = ch_cultural_protectionism_program } }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_on_protectionism }
 		ch_set_display_state = yes
 	}
 }
@@ -226,7 +270,6 @@ ch_effect_cultural_protectionism = {
 ch_effect_disable_cultural_protectionism = {
 	je:je_cultural_hegemony = { remove_modifier = ch_cultural_protectionism_program }
 	hidden_effect = {
-		te_history_record_cultural_hegemony_marker = { MARK = ch_off_protectionism }
 		ch_set_display_state = yes
 	}
 }
@@ -805,6 +848,12 @@ ch_yearly_global_update = {
 		}
 		set_global_variable = { name = ch_ranked_total value = global_var:ch_ldr_idx }
 
+		# The overview's leader flags, for every player, now the ranks are set.
+		every_country = {
+			limit = { is_player = yes }
+			ch_leaders_display_write = yes
+		}
+
 		# Compute year-over-year deltas. Every slot's delta is zeroed first: the
 		# journal-entry widget's board rows print it unconditionally, and a loc
 		# read of a global that was never set logs "failed to fetch variable"
@@ -890,6 +939,8 @@ ch_yearly_global_update = {
 			ch_add_country_to_model_totals = yes
 		}
 		ch_finish_all_model_buckets = yes
+		# One immutable global snapshot per calendar year, even after wars.
+		te_history_record_cultural_hegemony_models = yes
 		if = {
 			limit = { has_global_variable = ch_rank_1 }
 			global_var:ch_rank_1 = {

@@ -11,6 +11,10 @@
 # cooldown suppresses only the roll. Progress is added above it, so a programme
 # inside its cooldown runs at full speed with zero chance of a setback.
 #
+# Every running milestone moves and rolls, whatever its approach: Standard (no
+# sr_safe_ / sr_ambitious_ variable) is an approach with no modifier and no
+# cost. Until 2026-09-29 that state drifted at a flat 0.5 a month with no roll.
+#
 # Parameters:
 #   $MILESTONE$ — milestone token (suborbital, orbital, moon_landing, probe,
 #                 moon_base, mars_landing, interstellar_probe). Resolves the
@@ -19,33 +23,22 @@
 sr_monthly_progress_update_effect = {
 	if = {
 		limit = { sr_ai_should_participate = yes }
+		change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress }
 		if = {
-			limit = {
-				OR = {
-					has_variable = sr_safe_$MILESTONE$
-					has_variable = sr_ambitious_$MILESTONE$
+			limit = { NOT = { sr_has_failure_cooldown = yes } }
+			random = {
+				chance = sr_risk_pct_$MILESTONE$
+				set_variable = { name = sr_failed_$MILESTONE$ value = yes }
+				sr_count_setback_base = { MILESTONE = $MILESTONE$ }
+				# Ambitious fails big; Safe and Standard suffer the minor setbacks.
+				if = {
+					limit = { has_variable = sr_ambitious_$MILESTONE$ }
+					sr_fire_ambitious_failure_event = { MILESTONE = $MILESTONE$ }
+				}
+				else = {
+					sr_fire_safe_setback_event = { MILESTONE = $MILESTONE$ }
 				}
 			}
-			change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress }
-			if = {
-				limit = { NOT = { sr_has_failure_cooldown = yes } }
-				random = {
-					chance = sr_risk_pct_$MILESTONE$
-					set_variable = { name = sr_failed_$MILESTONE$ value = yes }
-					sr_count_setback_base = { MILESTONE = $MILESTONE$ }
-					if = {
-						limit = { has_variable = sr_ambitious_$MILESTONE$ }
-						sr_fire_ambitious_failure_event = { MILESTONE = $MILESTONE$ }
-					}
-					else = {
-						sr_fire_safe_setback_event = { MILESTONE = $MILESTONE$ }
-					}
-				}
-			}
-		}
-		else = {
-			# Default (no approach selected) — minimal progress drift.
-			change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress_drift }
 		}
 	}
 	sr_set_milestone_status_base = { MILESTONE = $MILESTONE$ }
@@ -82,6 +75,16 @@ sr_recalculate_cost = {
 	}
 	else = {
 		set_variable = { name = sr_cost_participation value = 0 } # REVIEWED 2026-09-26: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+	}
+	# Whether solar colonization was billed (sr_milestone_billed_solar_colonization).
+	# Its production method can be switched off with no button press, so
+	# space_race_on_action recalculates when this is stale.
+	if = {
+		limit = { sr_milestone_billed_solar_colonization = yes }
+		set_variable = { name = sr_cost_solar_running value = 1 } # REVIEWED 2026-09-29: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
+	}
+	else = {
+		set_variable = { name = sr_cost_solar_running value = 0 } # REVIEWED 2026-09-29: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
 	}
 	# Refresh the widget's display state. This effect is the shared tail of every
 	# approach / funding button, every journal entry's `immediate`, milestone
@@ -539,12 +542,13 @@ sr_clear_milestone_cost_modifiers_base = {
 }
 
 # Re-apply the cost and funding-progress modifiers to one milestone's JE,
-# gated on the active flag. Multiplier names interpolate from $MILESTONE$
-# (sr_<X>_cost and sr_funding_<X>_level — verified to exist for all 8 tokens).
-# Country scope.
+# gated on sr_milestone_billed_<X> (the active flag; for solar colonization,
+# its programme actually running). Multiplier names interpolate from
+# $MILESTONE$ (sr_<X>_cost and sr_funding_<X>_level — verified to exist for
+# all 8 tokens). Country scope.
 sr_apply_milestone_cost_modifiers_base = {
 	if = {
-		limit = { has_variable = sr_active_$MILESTONE$ }
+		limit = { sr_milestone_billed_$MILESTONE$ = yes }
 		je:je_space_race_$MILESTONE$ = {
 			add_modifier = { name = sr_space_program_cost multiplier = sr_$MILESTONE$_cost          }
 			add_modifier = { name = sr_funding_progress   multiplier = sr_funding_$MILESTONE$_level }
@@ -581,17 +585,27 @@ sr_cleanup_milestone_if_inactive_base = {
 			if = { limit = { has_variable = sr_$MILESTONE$_last_status } remove_variable = sr_$MILESTONE$_last_status }
 			if = { limit = { has_variable = sr_$MILESTONE$_setbacks    } remove_variable = sr_$MILESTONE$_setbacks    }
 		}
+		# The rivals estimate (display only; sr_rivals_estimate_refresh): this
+		# country's offset as a rival, and its own snapshot as a viewer. Outside
+		# the block above, so it never asks for a cost recalculation.
+		if = { limit = { has_variable = sr_fuzz_$MILESTONE$       } remove_variable = sr_fuzz_$MILESTONE$       }
+		if = { limit = { has_variable = sr_fuzz_until_$MILESTONE$ } remove_variable = sr_fuzz_until_$MILESTONE$ }
+		sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }
 	}
 }
 
 # --- Shared bodies for the milestone controls --------------------------------
-# The four things a player (or the AI) can do to a running milestone. Each of
-# the 32 journal-entry buttons and each op on that milestone's scripted GUI runs
-# the body from here, so the two surfaces cannot drift apart. $MILESTONE$ is one
-# of the eight milestone tokens.
+# The five things a player can do to a running milestone, four of them also the
+# AI's. Each of the 32 journal-entry buttons and each op on that milestone's
+# scripted GUI runs the body from here, so the two surfaces cannot drift apart.
+# $MILESTONE$ is one of the eight milestone tokens. Standard is the player's
+# only (op 4 on the scripted GUI): the AI never had a way back from an approach,
+# and starts on Standard like everyone.
 #
 # The custom_tooltip wrappers are what the button grid and the widget's
 # ExecuteTooltip both render, so they belong here rather than at the call sites.
+# Each approach body ends with its cost line (sr_approach_cost_*_<m>, the weekly
+# innovation from sr_disp_cost_*_<m>), outside the wrapper so it prints.
 
 sr_effect_safe = {
 	custom_tooltip = {
@@ -607,6 +621,7 @@ sr_effect_safe = {
 		}
 		sr_recalculate_cost = yes
 	}
+	custom_tooltip = sr_approach_cost_safe_$MILESTONE$
 }
 
 sr_effect_ambitious = {
@@ -623,6 +638,27 @@ sr_effect_ambitious = {
 		}
 		sr_recalculate_cost = yes
 	}
+	custom_tooltip = sr_approach_cost_ambitious_$MILESTONE$
+}
+
+sr_effect_standard = {
+	custom_tooltip = {
+		text = "SR_STANDARD_APPROACH_EFFECT"
+		if = {
+			limit = { has_variable = sr_safe_$MILESTONE$ }
+			remove_variable = sr_safe_$MILESTONE$
+		}
+		if = {
+			limit = { has_variable = sr_ambitious_$MILESTONE$ }
+			remove_variable = sr_ambitious_$MILESTONE$
+		}
+		je:je_space_race_$MILESTONE$ = {
+			remove_modifier = sr_safe_approach
+			remove_modifier = sr_ambitious_approach
+		}
+		sr_recalculate_cost = yes
+	}
+	custom_tooltip = SR_APPROACH_COST_STANDARD
 }
 
 sr_effect_fund_up = {
@@ -653,14 +689,15 @@ sr_effect_fund_down = {
 # mission-failure effects, which start the cooldown) and the tail of the monthly
 # progress pulse.
 #
-#   (no variable)  the milestone is not running — the panel shows its passive text
-#   0              running, no approach selected yet (drifts at sr_progress_drift)
+#   (no variable)  the milestone is not running — the panel shows it as Idle
+#   0              standard approach (neither variable), exposed to setbacks
 #   1              safe approach, exposed to setbacks
 #   2              ambitious approach, exposed to setbacks
 #   3              safe approach, inside the post-setback cooldown
 #   4              ambitious approach, inside the post-setback cooldown
+#   5              standard approach, inside the post-setback cooldown
 #
-# States 3 and 4 are "shielded, not paused": the cooldown suppresses only the
+# States 3 to 5 are "shielded, not paused": the cooldown suppresses only the
 # failure roll, so progress continues at full rate. The widget says exactly that.
 # Deliberately no "programme incompatible" state — that is the journal entry's
 # own `fail` block, which already explains itself through
@@ -696,7 +733,13 @@ sr_set_milestone_status_base = {
 	}
 	else = {
 		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
-		set_variable = { name = sr_$MILESTONE$_last_status value = 0 }
+		if = {
+			limit = { sr_has_failure_cooldown = yes }
+			set_variable = { name = sr_$MILESTONE$_last_status value = 5 }
+		}
+		else = {
+			set_variable = { name = sr_$MILESTONE$_last_status value = 0 }
+		}
 	}
 }
 
@@ -1244,50 +1287,150 @@ sr_fire_safe_setback_event = {
 # What this does NOT show is how far along a rival is. Programmes are announced;
 # their internal schedules are not, and reading another country's
 # sr_progress_$MILESTONE$ would hand the player omniscience the system has never
-# given. The claim on "the first" is public — it is a global variable — so that
-# is shown.
-sr_rivals_line_base = {
-	sr_rivals_first_line_base = { MILESTONE = $MILESTONE$ }
-	sr_rivals_participants_base = { MILESTONE = $MILESTONE$ }
-}
-
-# Whether "the first" is still on the table. NOT used for solar colonization:
-# that entry has no sr_first_solar_colonization reward and never sets a
-# sr_global_first_ flag (it does not go through sr_complete_milestone_effect_base
-# at all), so telling the player a first is unclaimed there would be a lie — and
-# would contradict this system's own reward preview.
-sr_rivals_first_line_base = {
-	if = {
-		limit = { has_global_variable = sr_global_first_$MILESTONE$ }
-		custom_tooltip_no_bullet = sr_rivals_first_claimed
-	}
-	else = {
-		custom_tooltip_no_bullet = sr_rivals_first_open
-	}
-}
-
+# given. The claim on "the first" is public — it is a global variable — and the
+# panel's overview shows it (sr_disp_first_claimed_<m>). Solar colonization has
+# no first: no sr_first_solar_colonization reward, and no sr_global_first_ flag
+# is ever written for it (it does not go through
+# sr_complete_milestone_effect_base).
 sr_rivals_participants_base = {
 	if = {
 		limit = {
-			any_country = {
-				NOT = { THIS = ROOT }
-				has_variable = sr_active_$MILESTONE$
-				sr_ai_should_participate = yes
-			}
+			any_country = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
 		}
 		custom_tooltip_no_bullet = sr_rivals_intro
 		every_country = {
-			limit = {
-				NOT = { THIS = ROOT }
-				has_variable = sr_active_$MILESTONE$
-				sr_ai_should_participate = yes
-			}
+			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
 			custom_tooltip = sr_rivals_entry
 		}
 	}
 	else = {
 		custom_tooltip_no_bullet = sr_rivals_none
 	}
+}
+
+# --- Display-only: rivals' estimated progress --------------------------------
+# The Rivals rows (space_race_widget.gui, te_sr_rival_row) show up to five
+# rivals, each as an estimate of its progress inside a band. The owner asked for
+# "a bar with some fuzz ... less if you have an intelligence network there".
+#
+# - The fuzz is one random offset per rival and milestone, sr_fuzz_<m> (−1 to
+#   +1 in nine steps), drawn again a year after it was drawn (sr_fuzz_until_<m>,
+#   a month index). Script values cannot roll dice, so it is a variable.
+# - The band around it is the viewer's: ±25% of the goal, ±10% or ±5% with a
+#   covert network of intelligence tier 1 or 2 in the rival
+#   (sr_disp_rival_band). The estimate is progress + offset × band, so the true
+#   figure is always inside the band drawn around it.
+# - The rows' order and names come from here, once a month, into the viewer's
+#   own variables: sr_rival_total_<m> (how many rivals), and
+#   sr_rival_<m>_<1..5>, each rival's capital (gotcha #11: the GUI reaches a
+#   country through a stored state). The numbers are read live, per frame,
+#   through script values with the rival passed in as scope:sr_rival.
+#
+# Players only: nobody else looks, and the draws happen here, on the rivals a
+# player can see, so no AI pulse carries any of it. Several players seeing one
+# rival share its offset, and a month index (not a countdown) dates it, so a
+# second player's pulse cannot age it twice. Everything is a variable, so a
+# revolution's winner keeps it; the snapshot is rebuilt every month anyway.
+# Scope: country (a player); ROOT is the same country (the monthly pulse).
+sr_rivals_estimate_refresh = {
+	sr_rivals_estimate_refresh_base = { MILESTONE = suborbital         }
+	sr_rivals_estimate_refresh_base = { MILESTONE = orbital            }
+	sr_rivals_estimate_refresh_base = { MILESTONE = moon_landing       }
+	sr_rivals_estimate_refresh_base = { MILESTONE = probe              }
+	sr_rivals_estimate_refresh_base = { MILESTONE = moon_base          }
+	sr_rivals_estimate_refresh_base = { MILESTONE = mars_landing       }
+	sr_rivals_estimate_refresh_base = { MILESTONE = interstellar_probe }
+	sr_rivals_estimate_refresh_base = { MILESTONE = solar_colonization }
+}
+
+sr_rivals_estimate_refresh_base = {
+	if = {
+		limit = { has_variable = sr_active_$MILESTONE$ }
+		save_scope_as = sr_rivals_viewer
+		# 1. Each rival's offset: drawn if it has none, again a year after.
+		every_country = {
+			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
+			if = {
+				limit = { NOT = { has_variable = sr_fuzz_until_$MILESTONE$ } }
+				sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
+			}
+			else_if = {
+				limit = { var:sr_fuzz_until_$MILESTONE$ <= te_history_month_index }
+				sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
+			}
+		}
+		# 2. How many rivals, then the first five by the open estimate.
+		set_variable = { name = sr_rival_total_$MILESTONE$ value = 0 } # REVIEWED 2026-09-29: a display snapshot rebuilt every month; nothing a revolution's winner could lose
+		every_country = {
+			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
+			scope:sr_rivals_viewer = { change_variable = { name = sr_rival_total_$MILESTONE$ add = 1 } }
+		}
+		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 1 POS = 0 }
+		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 2 POS = 1 }
+		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 3 POS = 2 }
+		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 4 POS = 3 }
+		sr_rival_slot = { MILESTONE = $MILESTONE$ N = 5 POS = 4 }
+	}
+	else = {
+		sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }
+	}
+}
+
+# Slot $N$ (1-5) gets the rival at position $POS$ ($N$ - 1) of the open
+# estimate's order. An ordered_ position past the end of the list clamps to the
+# last element instead of skipping (un_overview_display_effects.txt), so the
+# count is checked first. Scope: the viewer (scope:sr_rivals_viewer is set).
+sr_rival_slot = {
+	if = {
+		limit = {
+			any_country = {
+				sr_is_rival = { MILESTONE = $MILESTONE$ }
+				count >= $N$
+			}
+		}
+		ordered_country = {
+			limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }
+			order_by = sr_rival_est_open_$MILESTONE$
+			position = $POS$
+			capital = { save_scope_as = sr_rival_capital }
+		}
+		scope:sr_rivals_viewer = {
+			set_variable = { name = sr_rival_$MILESTONE$_$N$ value = scope:sr_rival_capital } # REVIEWED 2026-09-29: a display snapshot rebuilt every month; nothing a revolution's winner could lose
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_rival_$MILESTONE$_$N$ }
+		remove_variable = sr_rival_$MILESTONE$_$N$
+	}
+}
+
+# One draw of a rival's offset, in nine even steps from −1 to +1, dated a year
+# ahead. random_list takes literal weights (scripting_best_practices.md).
+# Scope: the rival.
+sr_roll_rival_fuzz = {
+	random_list = {
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = -1 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = -0.75 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = -0.5 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = -0.25 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = 0 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = 0.25 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = 0.5 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = 0.75 } }
+		1 = { set_variable = { name = sr_fuzz_$MILESTONE$ value = 1 } }
+	}
+	set_variable = { name = sr_fuzz_until_$MILESTONE$ value = te_history_month_index }
+	change_variable = { name = sr_fuzz_until_$MILESTONE$ add = 12 }
+}
+
+# The viewer's snapshot for a milestone it no longer runs. Scope: the viewer.
+sr_clear_rival_slots = {
+	if = { limit = { has_variable = sr_rival_total_$MILESTONE$ } remove_variable = sr_rival_total_$MILESTONE$ }
+	if = { limit = { has_variable = sr_rival_$MILESTONE$_1 } remove_variable = sr_rival_$MILESTONE$_1 }
+	if = { limit = { has_variable = sr_rival_$MILESTONE$_2 } remove_variable = sr_rival_$MILESTONE$_2 }
+	if = { limit = { has_variable = sr_rival_$MILESTONE$_3 } remove_variable = sr_rival_$MILESTONE$_3 }
+	if = { limit = { has_variable = sr_rival_$MILESTONE$_4 } remove_variable = sr_rival_$MILESTONE$_4 }
+	if = { limit = { has_variable = sr_rival_$MILESTONE$_5 } remove_variable = sr_rival_$MILESTONE$_5 }
 }
 
 # --- A launch complex that can no longer carry a milestone -------------------

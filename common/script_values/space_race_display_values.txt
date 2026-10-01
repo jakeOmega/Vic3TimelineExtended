@@ -1,0 +1,1111 @@
+﻿# ============================================================================
+# SPACE RACE — display values
+# ============================================================================
+# Read by the milestone panels' overview and the programme row
+# (gui/journal_entry_widgets/space_race_widget.gui). Rendered every frame an
+# entry's panel is open, so these read the viewer's own variables and the
+# space race's global flags only, and every variable read is guarded: a
+# country that never ran a milestone, or a save from before the overview,
+# reads 0 (test_space_race_layout.py). Display only: no effect, event or
+# trigger reads a sr_disp_* value.
+# Scope: country (the viewer)
+# ============================================================================
+
+# ---- A milestone's state, from its single derivation site -------------------
+# 0 not running · 1 standard · 2 safe · 3 ambitious · 4 inside the
+# post-setback review (any approach; the roll is skipped). Read from
+# sr_<m>_last_status, whose single derivation site is
+# sr_set_milestone_status_base: absent -> 0, then 0 / 1 / 2 / 3-5 -> 1 / 2 / 3 / 4.
+sr_disp_status_suborbital = {
+	value = 0
+	if = { limit = { has_variable = sr_suborbital_last_status } value = 1 add = var:sr_suborbital_last_status }
+	max = 4
+}
+sr_disp_status_orbital = {
+	value = 0
+	if = { limit = { has_variable = sr_orbital_last_status } value = 1 add = var:sr_orbital_last_status }
+	max = 4
+}
+sr_disp_status_moon_landing = {
+	value = 0
+	if = { limit = { has_variable = sr_moon_landing_last_status } value = 1 add = var:sr_moon_landing_last_status }
+	max = 4
+}
+sr_disp_status_probe = {
+	value = 0
+	if = { limit = { has_variable = sr_probe_last_status } value = 1 add = var:sr_probe_last_status }
+	max = 4
+}
+sr_disp_status_moon_base = {
+	value = 0
+	if = { limit = { has_variable = sr_moon_base_last_status } value = 1 add = var:sr_moon_base_last_status }
+	max = 4
+}
+sr_disp_status_mars_landing = {
+	value = 0
+	if = { limit = { has_variable = sr_mars_landing_last_status } value = 1 add = var:sr_mars_landing_last_status }
+	max = 4
+}
+sr_disp_status_interstellar_probe = {
+	value = 0
+	if = { limit = { has_variable = sr_interstellar_probe_last_status } value = 1 add = var:sr_interstellar_probe_last_status }
+	max = 4
+}
+sr_disp_status_solar_colonization = {
+	value = 0
+	if = { limit = { has_variable = sr_solar_colonization_last_status } value = 1 add = var:sr_solar_colonization_last_status }
+	max = 4
+}
+
+# Months left in the post-setback review. The review is the country's, not a
+# milestone's (sr_has_failure_cooldown), so one value serves every panel.
+sr_disp_cooldown_months = {
+	value = 0
+	if = { limit = { has_variable = sr_failure_cooldown } add = var:sr_failure_cooldown }
+	min = 0
+}
+
+# ---- Progress as a 0..1 fraction of the goal, for the overview's bar --------
+# The same numbers the headline beside the bar prints (sr_progress_<m>_value
+# over sr_<m>_goal), so the bar and its text agree even where the journal
+# entry's own bar counts from a baseline (je_space_race.txt, file header).
+# The goals are positive literals, so the divide is safe.
+sr_disp_progress_frac_suborbital = {
+	value = sr_progress_suborbital_value
+	divide = sr_suborbital_goal
+	min = 0
+	max = 1
+}
+sr_disp_progress_frac_orbital = {
+	value = sr_progress_orbital_value
+	divide = sr_orbital_goal
+	min = 0
+	max = 1
+}
+sr_disp_progress_frac_moon_landing = {
+	value = sr_progress_moon_landing_value
+	divide = sr_moon_landing_goal
+	min = 0
+	max = 1
+}
+sr_disp_progress_frac_probe = {
+	value = sr_progress_probe_value
+	divide = sr_probe_goal
+	min = 0
+	max = 1
+}
+sr_disp_progress_frac_moon_base = {
+	value = sr_progress_moon_base_value
+	divide = sr_moon_base_goal
+	min = 0
+	max = 1
+}
+sr_disp_progress_frac_mars_landing = {
+	value = sr_progress_mars_landing_value
+	divide = sr_mars_landing_goal
+	min = 0
+	max = 1
+}
+sr_disp_progress_frac_interstellar_probe = {
+	value = sr_progress_interstellar_probe_value
+	divide = sr_interstellar_probe_goal
+	min = 0
+	max = 1
+}
+# Towards the next colony; the stage's goal is at least 400.
+sr_disp_progress_frac_solar_colonization = {
+	value = sr_progress_solar_colonization_value
+	divide = sr_solar_colonization_goal
+	min = 0
+	max = 1
+}
+# The 132-month transit.
+sr_disp_progress_frac_interstellar_results = {
+	value = sr_interstellar_transit_value
+	divide = 132
+	min = 0
+	max = 1
+}
+
+# ---- Whether another power has claimed "the first" --------------------------
+# 1 once sr_global_first_<m> is set. While our own entry runs we have not
+# finished the milestone, so a set flag is always someone else's. Solar
+# colonization has no first (space_race_effects.txt, sr_rivals_participants_base).
+sr_disp_first_claimed_suborbital = {
+	value = 0
+	if = { limit = { has_global_variable = sr_global_first_suborbital } value = 1 }
+}
+sr_disp_first_claimed_orbital = {
+	value = 0
+	if = { limit = { has_global_variable = sr_global_first_orbital } value = 1 }
+}
+sr_disp_first_claimed_moon_landing = {
+	value = 0
+	if = { limit = { has_global_variable = sr_global_first_moon_landing } value = 1 }
+}
+sr_disp_first_claimed_probe = {
+	value = 0
+	if = { limit = { has_global_variable = sr_global_first_probe } value = 1 }
+}
+sr_disp_first_claimed_moon_base = {
+	value = 0
+	if = { limit = { has_global_variable = sr_global_first_moon_base } value = 1 }
+}
+sr_disp_first_claimed_mars_landing = {
+	value = 0
+	if = { limit = { has_global_variable = sr_global_first_mars_landing } value = 1 }
+}
+sr_disp_first_claimed_interstellar_probe = {
+	value = 0
+	if = { limit = { has_global_variable = sr_global_first_interstellar_probe } value = 1 }
+}
+
+# ---- The programme row: one code per entry -----------------------------------
+# 0 not begun · 1 under way · 2 another power got there first (and we have
+# not finished it) · 3 achieved · 4 achieved, and we were first. Lit from 3 up,
+# so the codes rise with what we hold. The same order of tests as the icon's
+# tooltip, sr_prog_<m> in space_race_custom_loc.txt: first, then done, then
+# running, then taken.
+sr_disp_prog_suborbital = {
+	value = 0
+	if = { limit = { has_variable = sr_was_first_suborbital } value = 4 }
+	else_if = { limit = { has_variable = sr_completed_suborbital } value = 3 }
+	else_if = { limit = { has_variable = sr_active_suborbital } value = 1 }
+	else_if = { limit = { has_global_variable = sr_global_first_suborbital } value = 2 }
+}
+sr_disp_prog_orbital = {
+	value = 0
+	if = { limit = { has_variable = sr_was_first_orbital } value = 4 }
+	else_if = { limit = { has_variable = sr_completed_orbital } value = 3 }
+	else_if = { limit = { has_variable = sr_active_orbital } value = 1 }
+	else_if = { limit = { has_global_variable = sr_global_first_orbital } value = 2 }
+}
+sr_disp_prog_moon_landing = {
+	value = 0
+	if = { limit = { has_variable = sr_was_first_moon_landing } value = 4 }
+	else_if = { limit = { has_variable = sr_completed_moon_landing } value = 3 }
+	else_if = { limit = { has_variable = sr_active_moon_landing } value = 1 }
+	else_if = { limit = { has_global_variable = sr_global_first_moon_landing } value = 2 }
+}
+sr_disp_prog_probe = {
+	value = 0
+	if = { limit = { has_variable = sr_was_first_probe } value = 4 }
+	else_if = { limit = { has_variable = sr_completed_probe } value = 3 }
+	else_if = { limit = { has_variable = sr_active_probe } value = 1 }
+	else_if = { limit = { has_global_variable = sr_global_first_probe } value = 2 }
+}
+sr_disp_prog_moon_base = {
+	value = 0
+	if = { limit = { has_variable = sr_was_first_moon_base } value = 4 }
+	else_if = { limit = { has_variable = sr_completed_moon_base } value = 3 }
+	else_if = { limit = { has_variable = sr_active_moon_base } value = 1 }
+	else_if = { limit = { has_global_variable = sr_global_first_moon_base } value = 2 }
+}
+sr_disp_prog_mars_landing = {
+	value = 0
+	if = { limit = { has_variable = sr_was_first_mars_landing } value = 4 }
+	else_if = { limit = { has_variable = sr_completed_mars_landing } value = 3 }
+	else_if = { limit = { has_variable = sr_active_mars_landing } value = 1 }
+	else_if = { limit = { has_global_variable = sr_global_first_mars_landing } value = 2 }
+}
+sr_disp_prog_interstellar_probe = {
+	value = 0
+	if = { limit = { has_variable = sr_was_first_interstellar_probe } value = 4 }
+	else_if = { limit = { has_variable = sr_completed_interstellar_probe } value = 3 }
+	else_if = { limit = { has_variable = sr_active_interstellar_probe } value = 1 }
+	else_if = { limit = { has_global_variable = sr_global_first_interstellar_probe } value = 2 }
+}
+# The Interstellar Probe and the wait for its data share one cell (owner's
+# play-test, round 3), with four states of its own: 0 not begun (or another
+# power finished it first), 1 under way, 2 launched and awaiting data, 3 the
+# data is in. sr_probe_launched is set when the probe entry completes, before
+# the waiting entry opens, so state 2 has no gap. The cell's first-to-finish
+# flag still reads sr_disp_prog_interstellar_probe above.
+sr_disp_prog_interstellar = {
+	value = 0
+	if = { limit = { has_variable = sr_interstellar_results_received } value = 3 }
+	else_if = { limit = { has_variable = sr_probe_launched } value = 2 }
+	else_if = { limit = { has_variable = sr_active_interstellar_probe } value = 1 }
+}
+# No first and no "taken" for colonization (sr_prog_solar_colonization).
+sr_disp_prog_solar_colonization = {
+	value = 0
+	if = { limit = { has_variable = sr_completed_solar_colonization } value = 3 }
+	else_if = { limit = { has_variable = sr_active_solar_colonization } value = 1 }
+}
+
+# ---- Solar colonization: the worlds claimed, as shares of the 34 -------------
+# The pie stacks all claimed worlds under ours (gui_modding_guide.md, "Pie
+# charts of script-held data"): each layer a 0..1 fraction, largest first.
+sr_disp_worlds_claimed_frac = {
+	value = sr_total_global_colonies
+	divide = 34
+	min = 0
+	max = 1
+}
+sr_disp_worlds_ours_frac = {
+	value = sr_colony_count_value
+	divide = 34
+	min = 0
+	max = 1
+}
+
+# ---- Solar colonization: the colonies we hold ---------------------------------
+# One value per specialization (68, two for each of the 34 worlds, in the order
+# space_race_colony_events.1-34 offer them): 1 while we hold it, else 0. The
+# record is <modifier>_held, which sr_grant_colony_modifier sets with the
+# modifier and sr_sync_colony_modifier_base keeps in step through a revolution.
+# The panel's "Our Colonies" rows each show on one of these; the per-stage
+# counts show the stage headings and their sum the "held" figure. A world holds
+# at most one of its two, so a stage's count is its worlds.
+
+# Stage 1: Mars & Asteroids
+
+sr_disp_colony_valles_marineris_research = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_valles_marineris_research_held } value = 1 }
+}
+
+sr_disp_colony_valles_marineris_mining = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_valles_marineris_mining_held } value = 1 }
+}
+
+sr_disp_colony_olympus_mons_atmospheric = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_olympus_mons_atmospheric_held } value = 1 }
+}
+
+sr_disp_colony_olympus_mons_geothermal = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_olympus_mons_geothermal_held } value = 1 }
+}
+
+sr_disp_colony_hellas_settlement = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_hellas_settlement_held } value = 1 }
+}
+
+sr_disp_colony_hellas_astrobiology = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_hellas_astrobiology_held } value = 1 }
+}
+
+sr_disp_colony_utopia_ice = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_utopia_ice_held } value = 1 }
+}
+
+sr_disp_colony_utopia_agriculture = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_utopia_agriculture_held } value = 1 }
+}
+
+sr_disp_colony_arcadia_civilian = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_arcadia_civilian_held } value = 1 }
+}
+
+sr_disp_colony_arcadia_military = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_arcadia_military_held } value = 1 }
+}
+
+sr_disp_colony_ceres_waystation = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ceres_waystation_held } value = 1 }
+}
+
+sr_disp_colony_ceres_observatory = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ceres_observatory_held } value = 1 }
+}
+
+sr_disp_colony_vesta_mining = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_vesta_mining_held } value = 1 }
+}
+
+sr_disp_colony_vesta_science = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_vesta_science_held } value = 1 }
+}
+
+sr_disp_colony_psyche_industrial = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_psyche_industrial_held } value = 1 }
+}
+
+sr_disp_colony_psyche_careful = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_psyche_careful_held } value = 1 }
+}
+
+sr_disp_colony_pallas_composites = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_pallas_composites_held } value = 1 }
+}
+
+sr_disp_colony_pallas_observatory = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_pallas_observatory_held } value = 1 }
+}
+
+sr_disp_colony_hygiea_volatiles = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_hygiea_volatiles_held } value = 1 }
+}
+
+sr_disp_colony_hygiea_automated = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_hygiea_automated_held } value = 1 }
+}
+
+# Stage 2: Jupiter System & Venus
+
+sr_disp_colony_io_mining = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_io_mining_held } value = 1 }
+}
+
+sr_disp_colony_io_research = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_io_research_held } value = 1 }
+}
+
+sr_disp_colony_europa_drilling = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_europa_drilling_held } value = 1 }
+}
+
+sr_disp_colony_europa_surface = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_europa_surface_held } value = 1 }
+}
+
+sr_disp_colony_ganymede_settlement = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ganymede_settlement_held } value = 1 }
+}
+
+sr_disp_colony_ganymede_command = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ganymede_command_held } value = 1 }
+}
+
+sr_disp_colony_callisto_gateway = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_callisto_gateway_held } value = 1 }
+}
+
+sr_disp_colony_callisto_agricultural = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_callisto_agricultural_held } value = 1 }
+}
+
+sr_disp_colony_himalia_telescope = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_himalia_telescope_held } value = 1 }
+}
+
+sr_disp_colony_himalia_depot = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_himalia_depot_held } value = 1 }
+}
+
+sr_disp_colony_amalthea_physics = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_amalthea_physics_held } value = 1 }
+}
+
+sr_disp_colony_amalthea_rings = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_amalthea_rings_held } value = 1 }
+}
+
+sr_disp_colony_venus_atmospheric = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_venus_atmospheric_held } value = 1 }
+}
+
+sr_disp_colony_venus_extraction = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_venus_extraction_held } value = 1 }
+}
+
+# Stage 3: Mercury & Saturn System
+
+sr_disp_colony_mercury_solar = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_mercury_solar_held } value = 1 }
+}
+
+sr_disp_colony_mercury_ice = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_mercury_ice_held } value = 1 }
+}
+
+sr_disp_colony_titan_hydrocarbons = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_titan_hydrocarbons_held } value = 1 }
+}
+
+sr_disp_colony_titan_prebiotic = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_titan_prebiotic_held } value = 1 }
+}
+
+sr_disp_colony_enceladus_astrobiology = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_enceladus_astrobiology_held } value = 1 }
+}
+
+sr_disp_colony_enceladus_water = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_enceladus_water_held } value = 1 }
+}
+
+sr_disp_colony_rhea_propellant = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_rhea_propellant_held } value = 1 }
+}
+
+sr_disp_colony_rhea_observation = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_rhea_observation_held } value = 1 }
+}
+
+sr_disp_colony_mimas_installation = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_mimas_installation_held } value = 1 }
+}
+
+sr_disp_colony_mimas_gravity = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_mimas_gravity_held } value = 1 }
+}
+
+sr_disp_colony_iapetus_ridge = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_iapetus_ridge_held } value = 1 }
+}
+
+sr_disp_colony_iapetus_organics = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_iapetus_organics_held } value = 1 }
+}
+
+# Stage 4: Uranus & Neptune Systems
+
+sr_disp_colony_titania_mining = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_titania_mining_held } value = 1 }
+}
+
+sr_disp_colony_titania_geophysics = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_titania_geophysics_held } value = 1 }
+}
+
+sr_disp_colony_oberon_relay = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_oberon_relay_held } value = 1 }
+}
+
+sr_disp_colony_oberon_research = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_oberon_research_held } value = 1 }
+}
+
+sr_disp_colony_miranda_rupes = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_miranda_rupes_held } value = 1 }
+}
+
+sr_disp_colony_miranda_drilling = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_miranda_drilling_held } value = 1 }
+}
+
+sr_disp_colony_ariel_cryovolcanic = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ariel_cryovolcanic_held } value = 1 }
+}
+
+sr_disp_colony_ariel_quarrying = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_ariel_quarrying_held } value = 1 }
+}
+
+sr_disp_colony_triton_geyser = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_triton_geyser_held } value = 1 }
+}
+
+sr_disp_colony_triton_gateway = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_triton_gateway_held } value = 1 }
+}
+
+sr_disp_colony_proteus_probe = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_proteus_probe_held } value = 1 }
+}
+
+sr_disp_colony_proteus_extraction = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_proteus_extraction_held } value = 1 }
+}
+
+# Stage 5: Kuiper Belt & Beyond
+
+sr_disp_colony_pluto_research = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_pluto_research_held } value = 1 }
+}
+
+sr_disp_colony_pluto_harvesting = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_pluto_harvesting_held } value = 1 }
+}
+
+sr_disp_colony_eris_selfsufficiency = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_eris_selfsufficiency_held } value = 1 }
+}
+
+sr_disp_colony_eris_monitoring = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_eris_monitoring_held } value = 1 }
+}
+
+sr_disp_colony_makemake_chemistry = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_makemake_chemistry_held } value = 1 }
+}
+
+sr_disp_colony_makemake_solarwind = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_makemake_solarwind_held } value = 1 }
+}
+
+sr_disp_colony_haumea_dynamics = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_haumea_dynamics_held } value = 1 }
+}
+
+sr_disp_colony_haumea_rings = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_haumea_rings_held } value = 1 }
+}
+
+sr_disp_colony_sedna_outpost = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_sedna_outpost_held } value = 1 }
+}
+
+sr_disp_colony_sedna_interstellar = {
+	value = 0
+	if = { limit = { has_variable = sr_colony_sedna_interstellar_held } value = 1 }
+}
+
+sr_disp_colonies_stage_1 = {
+	value = 0
+	add = sr_disp_colony_valles_marineris_research
+	add = sr_disp_colony_valles_marineris_mining
+	add = sr_disp_colony_olympus_mons_atmospheric
+	add = sr_disp_colony_olympus_mons_geothermal
+	add = sr_disp_colony_hellas_settlement
+	add = sr_disp_colony_hellas_astrobiology
+	add = sr_disp_colony_utopia_ice
+	add = sr_disp_colony_utopia_agriculture
+	add = sr_disp_colony_arcadia_civilian
+	add = sr_disp_colony_arcadia_military
+	add = sr_disp_colony_ceres_waystation
+	add = sr_disp_colony_ceres_observatory
+	add = sr_disp_colony_vesta_mining
+	add = sr_disp_colony_vesta_science
+	add = sr_disp_colony_psyche_industrial
+	add = sr_disp_colony_psyche_careful
+	add = sr_disp_colony_pallas_composites
+	add = sr_disp_colony_pallas_observatory
+	add = sr_disp_colony_hygiea_volatiles
+	add = sr_disp_colony_hygiea_automated
+}
+
+sr_disp_colonies_stage_2 = {
+	value = 0
+	add = sr_disp_colony_io_mining
+	add = sr_disp_colony_io_research
+	add = sr_disp_colony_europa_drilling
+	add = sr_disp_colony_europa_surface
+	add = sr_disp_colony_ganymede_settlement
+	add = sr_disp_colony_ganymede_command
+	add = sr_disp_colony_callisto_gateway
+	add = sr_disp_colony_callisto_agricultural
+	add = sr_disp_colony_himalia_telescope
+	add = sr_disp_colony_himalia_depot
+	add = sr_disp_colony_amalthea_physics
+	add = sr_disp_colony_amalthea_rings
+	add = sr_disp_colony_venus_atmospheric
+	add = sr_disp_colony_venus_extraction
+}
+
+sr_disp_colonies_stage_3 = {
+	value = 0
+	add = sr_disp_colony_mercury_solar
+	add = sr_disp_colony_mercury_ice
+	add = sr_disp_colony_titan_hydrocarbons
+	add = sr_disp_colony_titan_prebiotic
+	add = sr_disp_colony_enceladus_astrobiology
+	add = sr_disp_colony_enceladus_water
+	add = sr_disp_colony_rhea_propellant
+	add = sr_disp_colony_rhea_observation
+	add = sr_disp_colony_mimas_installation
+	add = sr_disp_colony_mimas_gravity
+	add = sr_disp_colony_iapetus_ridge
+	add = sr_disp_colony_iapetus_organics
+}
+
+sr_disp_colonies_stage_4 = {
+	value = 0
+	add = sr_disp_colony_titania_mining
+	add = sr_disp_colony_titania_geophysics
+	add = sr_disp_colony_oberon_relay
+	add = sr_disp_colony_oberon_research
+	add = sr_disp_colony_miranda_rupes
+	add = sr_disp_colony_miranda_drilling
+	add = sr_disp_colony_ariel_cryovolcanic
+	add = sr_disp_colony_ariel_quarrying
+	add = sr_disp_colony_triton_geyser
+	add = sr_disp_colony_triton_gateway
+	add = sr_disp_colony_proteus_probe
+	add = sr_disp_colony_proteus_extraction
+}
+
+sr_disp_colonies_stage_5 = {
+	value = 0
+	add = sr_disp_colony_pluto_research
+	add = sr_disp_colony_pluto_harvesting
+	add = sr_disp_colony_eris_selfsufficiency
+	add = sr_disp_colony_eris_monitoring
+	add = sr_disp_colony_makemake_chemistry
+	add = sr_disp_colony_makemake_solarwind
+	add = sr_disp_colony_haumea_dynamics
+	add = sr_disp_colony_haumea_rings
+	add = sr_disp_colony_sedna_outpost
+	add = sr_disp_colony_sedna_interstellar
+}
+
+sr_disp_colonies_held = {
+	value = 0
+	add = sr_disp_colonies_stage_1
+	add = sr_disp_colonies_stage_2
+	add = sr_disp_colonies_stage_3
+	add = sr_disp_colonies_stage_4
+	add = sr_disp_colonies_stage_5
+}
+
+# ---- What an approach costs, for the panel and the approach buttons ----------
+# Weekly innovation on top of funding: Safe one cost level, Ambitious two
+# (sr_<m>_cost), times the milestone's factor. Standard costs nothing. Read by
+# the overview's state labels and the buttons' approach-cost lines
+# (sr_approach_cost_*_<m>, printed by sr_effect_safe / sr_effect_ambitious).
+sr_disp_cost_safe_suborbital = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_suborbital
+}
+sr_disp_cost_ambitious_suborbital = {
+	value = sr_disp_cost_safe_suborbital
+	multiply = 2
+}
+sr_disp_cost_safe_orbital = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_orbital
+}
+sr_disp_cost_ambitious_orbital = {
+	value = sr_disp_cost_safe_orbital
+	multiply = 2
+}
+sr_disp_cost_safe_moon_landing = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_moon_landing
+}
+sr_disp_cost_ambitious_moon_landing = {
+	value = sr_disp_cost_safe_moon_landing
+	multiply = 2
+}
+sr_disp_cost_safe_probe = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_probe
+}
+sr_disp_cost_ambitious_probe = {
+	value = sr_disp_cost_safe_probe
+	multiply = 2
+}
+sr_disp_cost_safe_moon_base = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_moon_base
+}
+sr_disp_cost_ambitious_moon_base = {
+	value = sr_disp_cost_safe_moon_base
+	multiply = 2
+}
+sr_disp_cost_safe_mars_landing = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_mars_landing
+}
+sr_disp_cost_ambitious_mars_landing = {
+	value = sr_disp_cost_safe_mars_landing
+	multiply = 2
+}
+sr_disp_cost_safe_interstellar_probe = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_interstellar_probe
+}
+sr_disp_cost_ambitious_interstellar_probe = {
+	value = sr_disp_cost_safe_interstellar_probe
+	multiply = 2
+}
+sr_disp_cost_safe_solar_colonization = {
+	value = sr_innovation_per_cost_level
+	multiply = sr_cost_factor_solar_colonization
+}
+sr_disp_cost_ambitious_solar_colonization = {
+	value = sr_disp_cost_safe_solar_colonization
+	multiply = 2
+}
+
+# ---- Rivals: the estimate rows ----------------------------------------------
+# Read by the Rivals rows with the rival passed in: GuiScope.SetRoot(viewer)
+# .AddScope('sr_rival', <the rival>).ScriptValue(...), the shape
+# gui/market_panel.gui uses for a trade partner. ROOT is the viewer.
+# The band: ±25% of the goal, ±10% / ±5% with a covert network of
+# intelligence tier 1 / 2 in the rival (sr_has_intel_tier).
+sr_disp_rival_band = {
+	value = sr_rival_band_open
+	if = {
+		limit = { root = { sr_has_intel_tier = { TARGET = scope:sr_rival TIER = 2 } } }
+		value = sr_rival_band_tier_2
+	}
+	else_if = {
+		limit = { root = { sr_has_intel_tier = { TARGET = scope:sr_rival TIER = 1 } } }
+		value = sr_rival_band_tier_1
+	}
+}
+
+# Per milestone: the estimate (the marker), the band's ends, and the viewer's
+# count of rivals (sr_rival_total_<m>, written by sr_rivals_estimate_refresh)
+# with how many there are beyond the five rows.
+sr_disp_rival_est_suborbital = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_suborbital_value
+	}
+	divide = sr_suborbital_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_suborbital }
+			add = {
+				value = var:sr_fuzz_suborbital
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_suborbital = {
+	value = sr_disp_rival_est_suborbital
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_suborbital = {
+	value = sr_disp_rival_est_suborbital
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_suborbital = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_suborbital } value = var:sr_rival_total_suborbital }
+}
+sr_disp_rival_more_suborbital = {
+	value = sr_disp_rival_total_suborbital
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_orbital = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_orbital_value
+	}
+	divide = sr_orbital_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_orbital }
+			add = {
+				value = var:sr_fuzz_orbital
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_orbital = {
+	value = sr_disp_rival_est_orbital
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_orbital = {
+	value = sr_disp_rival_est_orbital
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_orbital = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_orbital } value = var:sr_rival_total_orbital }
+}
+sr_disp_rival_more_orbital = {
+	value = sr_disp_rival_total_orbital
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_moon_landing = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_moon_landing_value
+	}
+	divide = sr_moon_landing_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_moon_landing }
+			add = {
+				value = var:sr_fuzz_moon_landing
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_moon_landing = {
+	value = sr_disp_rival_est_moon_landing
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_moon_landing = {
+	value = sr_disp_rival_est_moon_landing
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_moon_landing = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_moon_landing } value = var:sr_rival_total_moon_landing }
+}
+sr_disp_rival_more_moon_landing = {
+	value = sr_disp_rival_total_moon_landing
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_probe = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_probe_value
+	}
+	divide = sr_probe_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_probe }
+			add = {
+				value = var:sr_fuzz_probe
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_probe = {
+	value = sr_disp_rival_est_probe
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_probe = {
+	value = sr_disp_rival_est_probe
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_probe = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_probe } value = var:sr_rival_total_probe }
+}
+sr_disp_rival_more_probe = {
+	value = sr_disp_rival_total_probe
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_moon_base = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_moon_base_value
+	}
+	divide = sr_moon_base_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_moon_base }
+			add = {
+				value = var:sr_fuzz_moon_base
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_moon_base = {
+	value = sr_disp_rival_est_moon_base
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_moon_base = {
+	value = sr_disp_rival_est_moon_base
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_moon_base = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_moon_base } value = var:sr_rival_total_moon_base }
+}
+sr_disp_rival_more_moon_base = {
+	value = sr_disp_rival_total_moon_base
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_mars_landing = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_mars_landing_value
+	}
+	divide = sr_mars_landing_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_mars_landing }
+			add = {
+				value = var:sr_fuzz_mars_landing
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_mars_landing = {
+	value = sr_disp_rival_est_mars_landing
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_mars_landing = {
+	value = sr_disp_rival_est_mars_landing
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_mars_landing = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_mars_landing } value = var:sr_rival_total_mars_landing }
+}
+sr_disp_rival_more_mars_landing = {
+	value = sr_disp_rival_total_mars_landing
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_interstellar_probe = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_interstellar_probe_value
+	}
+	divide = sr_interstellar_probe_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_interstellar_probe }
+			add = {
+				value = var:sr_fuzz_interstellar_probe
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_interstellar_probe = {
+	value = sr_disp_rival_est_interstellar_probe
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_interstellar_probe = {
+	value = sr_disp_rival_est_interstellar_probe
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_interstellar_probe = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_interstellar_probe } value = var:sr_rival_total_interstellar_probe }
+}
+sr_disp_rival_more_interstellar_probe = {
+	value = sr_disp_rival_total_interstellar_probe
+	subtract = 5
+	min = 0
+}
+sr_disp_rival_est_solar_colonization = {
+	value = 0
+	scope:sr_rival = {
+		add = sr_progress_solar_colonization_value
+	}
+	divide = sr_solar_colonization_goal
+	scope:sr_rival = {
+		if = {
+			limit = { has_variable = sr_fuzz_solar_colonization }
+			add = {
+				value = var:sr_fuzz_solar_colonization
+				multiply = sr_disp_rival_band
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+sr_disp_rival_lo_solar_colonization = {
+	value = sr_disp_rival_est_solar_colonization
+	subtract = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_hi_solar_colonization = {
+	value = sr_disp_rival_est_solar_colonization
+	add = sr_disp_rival_band
+	min = 0
+	max = 1
+}
+sr_disp_rival_total_solar_colonization = {
+	value = 0
+	if = { limit = { has_variable = sr_rival_total_solar_colonization } value = var:sr_rival_total_solar_colonization }
+}
+sr_disp_rival_more_solar_colonization = {
+	value = sr_disp_rival_total_solar_colonization
+	subtract = 5
+	min = 0
+}

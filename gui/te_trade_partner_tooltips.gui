@@ -35,6 +35,15 @@ types TooltipTypes {
 					raw_text = "#tooltip_header [Country.GetFlagTextIcon] [Country.GetNameNoFormatting]#!"
 				}
 
+				# The table's Trade / yr column is yearly at base prices; this breakdown
+				# is the weekly flow at current market prices, so say so.
+				textbox = {
+					autoresize = yes
+					align = nobaseline
+					maximumsize = { 360 -1 }
+					raw_text = "#italic Per week, at current market prices#!"
+				}
+
 				# --- Imports: goods this market imports FROM the partner ---
 				textbox = {
 					autoresize = yes

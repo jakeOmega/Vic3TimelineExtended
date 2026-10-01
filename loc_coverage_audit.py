@@ -15,7 +15,7 @@ entity's opening line:
 
 Coverage: static modifiers, character traits, journal entries, laws, decrees,
 scripted buttons, buildings, production methods, production method groups,
-goods, government types,
+goods, government types, game concepts,
 company types, combat unit types, ship types, ideologies, interest groups,
 institutions, subject types, mobilization options, diplomatic actions (name
 plus the notification family their flags select), pop needs, decisions,
@@ -210,6 +210,18 @@ def _explicit_name_field(name: str, body) -> list[tuple[str, bool, str]]:
     return keys
 
 
+def _progress_bar_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """Bars declare their own name/desc keys, rather than entity autokeys."""
+    if not isinstance(body, dict):
+        return []
+    result = []
+    for field_name in ("name", "desc"):
+        value = _strip_quotes(_unwrap(body.get(field_name, "")))
+        if isinstance(value, str) and re.fullmatch(r"[A-Za-z_][\w.\-]*", value):
+            result.append((value, True, field_name))
+    return result
+
+
 # entity_type → derivation fn(name, body). Categories deliberately absent
 # (code-only or noisy): Scripted Effects/Triggers, On Actions, Script Values.
 #
@@ -227,10 +239,12 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Laws":                   _name_and_desc,
     "Decrees":                _name_and_desc,
     "Scripted Buttons":       _explicit_name_field,
+    "Scripted Progress Bars": _progress_bar_keys,
     "Buildings":              _name_and_desc,
     "PMs":                    _name_and_desc,
     "PM Groups":              _simple_name,
     "Goods":                  _simple_name,
+    "Game Concepts":          _simple_name,
     "Government Types":       _name_and_desc,
     "Company Types":          _name_and_desc,
     "Combat Unit Types":      _simple_name,
@@ -260,10 +274,12 @@ _DIR_MAP: dict[str, str] = {
     "Laws":                   "common/laws",
     "Decrees":                "common/decrees",
     "Scripted Buttons":       "common/scripted_buttons",
+    "Scripted Progress Bars": "common/scripted_progress_bars",
     "Buildings":              "common/buildings",
     "PMs":                    "common/production_methods",
     "PM Groups":              "common/production_method_groups",
     "Goods":                  "common/goods",
+    "Game Concepts":          "common/game_concepts",
     "Government Types":       "common/government_types",
     "Company Types":          "common/company_types",
     "Combat Unit Types":      "common/combat_unit_types",
@@ -460,7 +476,8 @@ def render_report(result: AuditResult) -> str:
         "",
         "Fix: add the missing key(s) to a `localization/english/*_l_english.yml`",
         "file. For static modifiers and most simple entities the key is the",
-        "entity name itself; for journal entries and institutions also",
+        "entity name itself (including game concept names, whose `_desc`",
+        "does not substitute for the name); for journal entries and institutions also",
         "`<name>_desc`; for",
         "events the keys are whatever `title`/`desc`/`flavor`/option `name`",
         "fields point at; for messages (`common/messages`) the keys are",
@@ -571,21 +588,11 @@ if __name__ == "__main__":
     # CLI entry: run against the live mod state.
     import sys
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from mod_state import ModState
-    from path_constants import mod_path, base_game_path
-    import mod_state_server  # for base_game_paths / mod_paths
-    ms = ModState(mod_state_server.base_game_paths, mod_state_server.mod_paths)
-    # ModState starts with empty localization and only fills it via
-    # add_localization() -- the server does this at load time, but a bare
-    # construction does not. Without it has_localization() is always False and
-    # every entity false-flags. Load the same vanilla + mod english dirs the
-    # server feeds it (see mod_state_server.reload) so the CLI matches.
-    for _loc_dir in (
-        os.path.join(base_game_path, "game", "localization", "english"),
-        os.path.join(mod_path, "localization", "english"),
-        os.path.join(mod_path, "localization", "english", "replace"),
-    ):
-        if os.path.isdir(_loc_dir):
-            ms.add_localization(_loc_dir)
+    from path_constants import mod_path
+    import mod_state_server
+    # Vanilla from where a server load takes it (the vanilla_parsed/ snapshot
+    # without a game install), and the English loc loaded, as the server loads
+    # it: a bare ModState has none, so every entity false-flags.
+    ms = mod_state_server.cli_mod_state()
     result = audit(ms, mod_path=mod_path)
     print(render_report(result))

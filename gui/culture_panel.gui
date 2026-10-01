@@ -146,7 +146,7 @@ types society_panel
 					text = "te_society_tab_ch"
 				}
 				blockoverride "fifth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_society_tab_ch_tt', Concatenate( Localize( 'te_society_tab_ch_locked_tt' ), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_society_tab_ch_tt', SelectLocalization( GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_society_tab_ch_locked_tt' ), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "fifth_button_click" {
 					enabled = "[GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -912,13 +912,14 @@ types society_panel
 				}
 
 				### MOD: Hegemony tab (te_ch) ###
-				# The cultural hegemony journal entry's three panels, the same types the
-				# entry shows (gui/journal_entry_widgets/cultural_hegemony_widget.gui),
-				# in the entry's order: summary, programmes, standing. Then a link back
-				# to the entry. The entry's status description and scripted buttons are
-				# not drawn: the summary carries the first, and the programmes panel
-				# the same ten actions as the buttons, which stay in the journal as the
-				# AI's path and the player's fallback. The gate sits on a parent of the
+				# The cultural hegemony journal entry's panels, the same three composers
+				# the entry attaches (gui/journal_entry_widgets/cultural_hegemony_widget.gui),
+				# in the entry's order: the overview, the live sections, then the history
+				# and "How Cultural Hegemony Works". Then a link back to the entry, below
+				# everything else. The entry's status description and scripted buttons
+				# are not drawn: the overview and the funding row carry the first, and
+				# the programmes section the same ten actions as the buttons, which stay
+				# in the journal as the AI's path. The gate sits on a parent of the
 				# GetPlayerJournalEntry datacontext, never on the widget carrying it
 				# (vanilla's shape: states_panel.gui, the Meiji faction button).
 				flowcontainer = {
@@ -948,9 +949,9 @@ types society_panel
 							ignoreinvisible = yes
 							spacing = 10
 
-							te_ch_summary_panel = {}
-							te_ch_programmes_panel = {}
-							te_ch_standing_panel = {}
+							te_ch_overview_panel = {}
+							te_ch_status_sections = {}
+							te_ch_reference_sections = {}
 
 							button = {
 								visible = "[JournalEntry.IsActive]"

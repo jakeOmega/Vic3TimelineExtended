@@ -204,14 +204,8 @@ imposed_currency_peg = {
 		# The pretext is already the gate, so the chance is small and moves
 		# only with the imposer's disposition (103's shape).
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.01
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = domineering }
-				}
-				add = 0.05
-			}
 			# Reduce unsolicited proposals while preserving relative crisis priorities.
 			multiply = 0.25
 		}

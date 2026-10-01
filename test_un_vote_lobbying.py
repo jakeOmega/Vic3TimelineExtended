@@ -549,5 +549,125 @@ class ReviewFixesTest(unittest.TestCase):
         )
 
 
+class BulkLobbyTest(unittest.TestCase):
+    """Lobby Top Members For / Against: one press starts a campaign on each
+    listed member that qualifies, from the top row down, until the influence
+    runs out.
+
+    Nothing in the engine checks that the budget counts what the pacts cost,
+    that the button reads every row in order, or that the For button is not
+    wired to the Against effect: each loads cleanly and misspends in play.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _read(LOBBYING_VALUES)
+        cls.effects = _read(LOBBY_EFFECTS)
+        cls.triggers = _read(LOBBY_TRIGGERS)
+        cls.sguis = _read(SGUIS)
+        cls.widget = _read(WIDGET)
+        cls.loc = _loc_values()
+
+    def test_the_budget_counts_one_campaign_per_hundred_influence(self):
+        cost = int(re.search(r"un_lobby_campaign_cost\s*=\s*\{\s*value\s*=\s*(\d+)", self.values).group(1))
+        for action in ("un_lobby_for_action", "un_lobby_against_action"):
+            pact = _sub_block(_block(_read(LOBBYING_ACTIONS), action), "pact")
+            self.assertEqual(int(re.search(r"\bcost\s*=\s*(\d+)", pact).group(1)), cost, action)
+        budget = _block(self.values, "un_deleg_bulk_budget")
+        steps = re.findall(r"limit\s*=\s*\{\s*influence\s*>=\s*(\d+)\s*\}\s*add\s*=\s*1\s*\}", budget)
+        self.assertEqual(steps, [str(cost * k) for k in range(1, DELEGATION_ROWS + 1)])
+
+    def test_the_run_reads_its_budget_once_before_any_pact_and_cleans_up(self):
+        body = _block(self.effects, "un_deleg_bulk_lobby")
+        first = body.index("set_variable")
+        self.assertRegex(body[first:], r"set_variable\s*=\s*\{\s*name\s*=\s*un_bulk_left\s+value\s*=\s*un_deleg_bulk_budget\s*\}")
+        self.assertLess(first, body.index("un_deleg_bulk_row"))
+        self.assertEqual(body.count("un_deleg_bulk_budget"), 1)
+        self.assertTrue(body.rstrip().endswith("remove_variable = un_bulk_left"))
+
+    def test_the_run_visits_every_row_top_down(self):
+        body = _block(self.effects, "un_deleg_bulk_lobby")
+        calls = re.findall(r"un_deleg_bulk_row\s*=\s*\{\s*N\s*=\s*(\d+)\s+DIR\s*=\s*\$DIR\$\s*\}", body)
+        self.assertEqual(calls, [str(n) for n in range(DELEGATION_ROWS)])
+
+    def test_a_row_spends_one_campaign_from_the_budget_and_starts_the_rows_own(self):
+        row = _block(self.effects, "un_deleg_bulk_row")
+        limit = _sub_block(row, "limit")
+        self.assertIn("var:un_bulk_left > 0", limit)
+        self.assertRegex(limit, r"un_deleg_row_bulk_ok\s*=\s*\{\s*N\s*=\s*\$N\$\s+DIR\s*=\s*\$DIR\$\s*\}")
+        self.assertLess(
+            row.index("un_deleg_row_lobby = { N = $N$ DIR = $DIR$ }"),
+            row.index("change_variable = { name = un_bulk_left add = -1 }"),
+        )
+
+    def test_a_row_qualifies_by_the_band_the_chamber_shows(self):
+        ok = _block(self.triggers, "un_deleg_row_bulk_ok")
+        for needle in (
+            "un_lobby_member_lobbyable = yes",
+            "un_deleg_band_open_$DIR$ = yes",
+            "type = un_lobby_for_action",
+            "type = un_lobby_against_action",
+            "can_send_diplomatic_action",
+        ):
+            self.assertIn(needle, ok)
+        # the engine's own send check is the last word, and affordability is
+        # the budget's, not a live read that a pact made a moment ago may not
+        # have reached
+        self.assertNotIn("can_afford_diplomatic_action", ok)
+        for name, test in (
+            ("un_deleg_band_open_for", r"var:un_lean_shown\s*<\s*un_lean_band_lean\b"),
+            ("un_deleg_band_open_against", r"var:un_lean_shown\s*>\s*un_lean_band_lean_against\b"),
+        ):
+            band = _block(self.triggers, name)
+            with self.subTest(band=name):
+                self.assertRegex(band, test)
+                self.assertNotIn("un_lean_total", band)
+
+    def test_the_button_is_valid_only_with_a_vote_a_campaign_s_influence_and_a_row(self):
+        can = _block(self.triggers, "un_deleg_bulk_can")
+        self.assertIn("un_lobby_campaign_selectable = yes", can)
+        self.assertRegex(can, r"influence\s*>=\s*un_lobby_campaign_cost")
+        self.assertLess(can.index("influence >="), can.index("un_deleg_row_bulk_ok"))
+        calls = re.findall(r"un_deleg_row_bulk_ok\s*=\s*\{\s*N\s*=\s*(\d+)\s+DIR\s*=\s*\$DIR\$\s*\}", can)
+        self.assertEqual(calls, [str(n) for n in range(DELEGATION_ROWS)])
+
+    def test_each_sgui_passes_its_own_direction(self):
+        for d in ("for", "against"):
+            body = _block(self.sguis, f"un_chamber_deleg_bulk_{d}_sgui")
+            with self.subTest(direction=d):
+                self.assertIn(f"un_deleg_bulk_can = {{ DIR = {d} }}", _sub_block(body, "is_valid"))
+                effect = _sub_block(body, "effect")
+                self.assertIn(f"un_deleg_bulk_lobby = {{ DIR = {d} }}", _sub_block(effect, "hidden_effect"))
+                self.assertIn(f"custom_tooltip = un_deleg_bulk_{d}_effect_tt", effect)
+                self.assertIn("ai_is_valid = { always = no }", body)
+                self.assertNotIn("scope:op", body)
+
+    def test_the_widget_wires_each_button_to_its_own_sgui_only(self):
+        buttons = re.findall(r"un_chamber_deleg_bulk_button\s*=\s*\{", self.widget)
+        self.assertEqual(len(buttons), 2)
+        for d, other in (("for", "against"), ("against", "for")):
+            start = self.widget.index(f"je_un_chamber_deleg_bulk_{d}_label")
+            body = _braced(self.widget, self.widget.rindex("un_chamber_deleg_bulk_button", 0, start))
+            with self.subTest(direction=d):
+                self.assertIn(f"un_chamber_deleg_bulk_{d}_sgui", body)
+                self.assertNotIn(f"un_chamber_deleg_bulk_{other}_sgui", body)
+                for accessor in ("IsValid(", "Execute(", "IsValidTooltip(", "ExecuteTooltip("):
+                    self.assertIn(accessor, body)
+
+    def test_the_text_exists(self):
+        for key in (
+            "je_un_chamber_deleg_bulk_for_label",
+            "je_un_chamber_deleg_bulk_against_label",
+            "un_deleg_bulk_for_effect_tt",
+            "un_deleg_bulk_against_effect_tt",
+            "un_deleg_bulk_target_for_tt",
+            "un_deleg_bulk_target_against_tt",
+        ):
+            with self.subTest(key=key):
+                self.assertIn(key, self.loc)
+        for d in ("for", "against"):
+            self.assertIn("un_deleg_bulk_budget", self.loc[f"un_deleg_bulk_{d}_effect_tt"])
+
+
 if __name__ == "__main__":
     unittest.main()

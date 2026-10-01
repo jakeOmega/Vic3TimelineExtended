@@ -120,11 +120,16 @@ ce_remove_military_garrison = {
 		has_modifier = colonial_military_garrison_modifier
 	}
 
+	# Also withdrawn while authority is in deficit: the garrison costs 300.
 	ai_chance = {
 		value = 0
 		if = {
 			limit = { colonial_low_acceptance_count = 0 }
 			add = 30
+		}
+		if = {
+			limit = { authority < 0 }
+			add = te_ai_authority_deficit_repeal_weight
 		}
 	}
 
@@ -177,11 +182,16 @@ ce_remove_cultural_assimilation = {
 		has_modifier = colonial_cultural_assimilation_modifier
 	}
 
+	# Also ended while authority is in deficit: the programme costs 100.
 	ai_chance = {
 		value = 0
 		if = {
 			limit = { colonial_state_count = 0 }
 			add = 30
+		}
+		if = {
+			limit = { authority < 0 }
+			add = te_ai_authority_deficit_repeal_weight
 		}
 	}
 

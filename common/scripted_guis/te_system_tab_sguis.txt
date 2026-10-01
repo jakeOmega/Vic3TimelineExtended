@@ -89,3 +89,322 @@ te_diplomacy_un_tab_unlock_sgui = {
 	is_valid = { un_entry_unlocked = yes }
 	effect = { }
 }
+
+# ---------------------------------------------------------------------------
+# Nuclear Weapons: Military panel (gui/panel_military.gui), je_nuclear_program.
+# The entry is active for a country with a programme, warheads or a part in a
+# crisis, and for every country once the world's first warhead exists, so the
+# tab opens for all of them.
+# ---------------------------------------------------------------------------
+te_military_nuclear_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = nuclear_weapons_enabled
+		has_journal_entry = je_nuclear_program
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_military_nuclear_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = nuclear_weapons_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { nuclear_program_entry_unlocked = yes }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Covert Warfare: Military panel (gui/panel_military.gui, the fifth slot),
+# je_covert_warfare. The entry is active once a country holds one operation
+# slot more than its rank grants, and stays active (can_deactivate = no).
+# ---------------------------------------------------------------------------
+te_military_covert_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = covert_warfare_enabled
+		has_journal_entry = je_covert_warfare
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_military_covert_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = covert_warfare_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { covert_warfare_entry_unlocked = yes }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Global Warming: Market panel (gui/market_panel.gui), je_global_warming. The
+# entry is active for every country once the world has warmed 0.1 C, so the
+# tab opens for all of them. It shows on every market the panel opens: on
+# another market, that market's emissions and policies, read-only.
+# ---------------------------------------------------------------------------
+te_market_global_warming_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = global_warming_enabled
+		has_journal_entry = je_global_warming
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_market_global_warming_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = global_warming_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { gw_entry_unlocked = yes }
+	effect = { }
+}
+
+# Root: the leader of the market the panel shows, when it is not the player's.
+# The Climate tab shows that market's emissions and policies (read-only),
+# reading the leader as a Country datacontext on a child of the widget this
+# gates, once the leader's entry is running: before that its policies and
+# figures mean nothing. (Not the leader's journal entry: another country's
+# entry did not resolve in GUI; gotcha #35 in docs/guides/gui_modding_guide.md.)
+te_market_global_warming_leader_sgui = {
+	scope = country
+	is_shown = { has_journal_entry = je_global_warming }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Strategic Reserve: Market panel (gui/market_panel.gui), je_strategic_reserve.
+# The system has no game rule. Its tab is on the strip from Logistics, when the
+# greyed entry first shows in the journal (its is_shown_when_inactive), and
+# opens once the entry runs, which is once a Strategic Reserve Hub exists. The
+# reserve buys and sells in the player's own market, so the tab shows only
+# while the panel shows that market (the test is in market_panel.gui: it is
+# the panel's, not the country's).
+# ---------------------------------------------------------------------------
+te_market_strategic_reserve_tab_sgui = {
+	scope = country
+	is_shown = { has_journal_entry = je_strategic_reserve }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_market_strategic_reserve_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_technology_researched = logistics }
+	ai_is_valid = { always = no }
+	is_valid = { st_res_entry_unlocked = yes }
+	effect = { }
+}
+# The Timeline Extended window (gui/te_systems_window.gui) uses the same pair
+# per tab, named te_window_<system>_tab_sgui / _tab_unlock_sgui, plus a gate for
+# its launcher and one per Space Race entry (at the foot of this file).
+#
+
+# ===========================================================================
+# THE TIMELINE EXTENDED WINDOW (gui/te_systems_window.gui): the systems with no
+# vanilla home, one tab each (docs/systems/system_panels_feasibility.md §9).
+# ===========================================================================
+
+# The launcher under the sidebar shows while any of the three systems' game
+# rules is on.
+te_window_launcher_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			has_variable = te_tp_armed # TEMPORARY PR 585: developer-only tax tab
+
+			has_game_rule = space_race_enabled
+			has_game_rule = decolonization_enabled
+			gm_system_enabled = yes
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Space Race: the nine je_space_race_* entries (je_space_race.txt). The tab
+# opens while any of them runs; each entry's block has its own gate below,
+# because GetPlayerJournalEntry takes one literal key. The checklist is when
+# the first milestone starts (sr_entry_unlocked).
+# ---------------------------------------------------------------------------
+te_window_space_race_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		OR = {
+			has_journal_entry = je_space_race_suborbital
+			has_journal_entry = je_space_race_orbital
+			has_journal_entry = je_space_race_moon_landing
+			has_journal_entry = je_space_race_probe
+			has_journal_entry = je_space_race_moon_base
+			has_journal_entry = je_space_race_mars_landing
+			has_journal_entry = je_space_race_interstellar_probe
+			has_journal_entry = je_space_race_interstellar_results
+			has_journal_entry = je_space_race_solar_colonization
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = space_race_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { sr_entry_unlocked = yes }
+	effect = { }
+}
+
+te_window_space_race_suborbital_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_suborbital
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_orbital_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_orbital
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_moon_landing_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_moon_landing
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_probe_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_probe
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_moon_base_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_moon_base
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_mars_landing_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_mars_landing
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_interstellar_probe_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_interstellar_probe
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_interstellar_results_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_interstellar_results
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_space_race_solar_colonization_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = space_race_enabled
+		has_journal_entry = je_space_race_solar_colonization
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Colonial Empire: je_colonial_empire.
+# ---------------------------------------------------------------------------
+te_window_colonial_empire_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = decolonization_enabled
+		has_journal_entry = je_colonial_empire
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_colonial_empire_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = decolonization_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { ce_entry_unlocked = yes }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Grand Monuments: je_grand_monuments. The entry stays after the last monument
+# goes while its fading effects run out, so the tab does too.
+# ---------------------------------------------------------------------------
+te_window_grand_monuments_tab_sgui = {
+	scope = country
+	is_shown = {
+		gm_system_enabled = yes
+		has_journal_entry = je_grand_monuments
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_grand_monuments_tab_unlock_sgui = {
+	scope = country
+	is_shown = { gm_system_enabled = yes }
+	ai_is_valid = { always = no }
+	is_valid = { gm_entry_unlocked = yes }
+	effect = { }
+}

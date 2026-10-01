@@ -432,6 +432,64 @@ te_mon_policy_rate_at_floor = {
 	var:te_policy_rate <= te_mon_floor_threshold
 }
 
+# Can this country's central bank buy assets on its own account? (§0.12) Under
+# independence the treasury cannot tell the bank to print (te_mon_can_monetise).
+# But a bank that wants a lower rate than its floor allows has nothing left but
+# its balance sheet, and buying assets is a central-bank act, not a fiscal one.
+# So a bank that runs its mandate — delegated, AI or independent — keeps a
+# VIRTUAL rate that can go under the floor (te_mon_virtual_rate), and buys in
+# proportion to how far under it sits (te_mon_pressure_bank_qe). This trigger
+# says who keeps one; te_mon_bank_may_go_under_floor below says when it may
+# actually go under.
+#
+# THE THREE CONDITIONS, AND WHY EACH:
+#   * te_mon_has_dial: a bank with a rate to be stuck on. Carries the game rule,
+#     the national bank, the command-economy, dollarisation and anchoring tests.
+#   * te_mon_mandate_binds: the mandate is what runs the bank. A manual dial is
+#     the player's own hand and has the monetisation stepper for this job.
+#   * fiat or digital, by LAW, the same pair te_mon_can_monetise reads and for
+#     the same reason: a convertible currency cannot create money to buy bonds,
+#     and a suspended gold standard (§12.3) is a five-year emergency, not a
+#     licence to print (ruling Q4). It is not the declarative
+#     country_can_create_unbacked_money_bool, which gates the OMO TOOL: the
+#     tool is a programme the player buys, this is the bank doing its job.
+# There is no floor test here: whether the bank is buying is whether its virtual
+# rate is under the floor, which only happens once the real rate is on it.
+te_mon_bank_can_buy_assets = {
+	te_mon_has_dial = yes
+	te_mon_mandate_binds = yes
+	OR = {
+		has_law_or_variant = law_type:law_fiat_currency
+		has_law_or_variant = law_type:law_digital_currency
+	}
+}
+
+# May the bank's virtual rate go under the floor this month? (§0.12, ruling N9)
+# The mandate decides. PRICE STABILITY buys only while prices are under its
+# target: last month's headline below te_mon_inflation_anchor (step 2 runs before
+# step 6 writes this month's). A crash with prices on target is not its business.
+# GROWTH has no such condition: when its rule asks for a rate under the floor —
+# in practice a panic or a downturn with inflation low — it buys, with prices on
+# target or not, which is what central banks did in 2008 and 2020.
+#
+# While this is false the virtual target is held at the floor, so a virtual rate
+# already under it climbs back at the ordinary hike speed and the purchases wind
+# down rather than stopping. Mandate 3, peg defence, never reaches here: it is a
+# gold mandate and te_mon_bank_can_buy_assets wants fiat or digital.
+te_mon_bank_may_go_under_floor = {
+	te_mon_bank_can_buy_assets = yes
+	OR = {
+		AND = {
+			has_variable = te_mon_mandate
+			var:te_mon_mandate = 2
+		}
+		AND = {
+			has_variable = te_inflation
+			var:te_inflation < te_mon_inflation_anchor
+		}
+	}
+}
+
 
 # --- Phase 3: the world rate, gold flows and the peg (§12) ------------------
 #

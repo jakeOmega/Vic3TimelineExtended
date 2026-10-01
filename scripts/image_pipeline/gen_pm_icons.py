@@ -279,6 +279,19 @@ def find_texconv() -> Path | None:
     return None
 
 
+def _exe_path(p: Path, texconv: Path) -> str:
+    """A path texconv.exe can open.
+
+    Under WSL, interop passes arguments through untranslated, so a Linux path
+    such as /tmp/x/icon.png means nothing to the Windows program: give it the
+    Windows form (wslpath -w), as convert_event_image.py does.
+    """
+    if str(texconv).lower().endswith(".exe") and shutil.which("wslpath"):
+        return subprocess.run(["wslpath", "-w", str(p)], capture_output=True,
+                              text=True, check=True).stdout.strip()
+    return str(p)
+
+
 def convert_to_dds(png_path: Path, dds_path: Path, texconv: Path) -> None:
     """Convert a PNG to BC7 DDS using texconv."""
     cmd = [
@@ -286,8 +299,8 @@ def convert_to_dds(png_path: Path, dds_path: Path, texconv: Path) -> None:
         "-f", "BC7_UNORM_SRGB",
         "-y",
         "-srgb",
-        "-o", str(dds_path.parent),
-        str(png_path),
+        "-o", _exe_path(dds_path.parent, texconv),
+        _exe_path(png_path, texconv),
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:

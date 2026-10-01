@@ -37999,6 +37999,14 @@
    "possible": [
     "=",
     {
+     "is_diplomatic_play_committed_participant": [
+      "=",
+      "no"
+     ],
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "country_or_subject_owns_entire_state_region": [
       "=",
       "STATE_MEXICO"
@@ -38225,6 +38233,14 @@
    "possible": [
     "=",
     {
+     "is_diplomatic_play_committed_participant": [
+      "=",
+      "no"
+     ],
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "country_or_subject_owns_entire_state_region": [
       "=",
       "STATE_CUNDINAMARCA"
@@ -38455,6 +38471,14 @@
    "possible": [
     "=",
     {
+     "is_diplomatic_play_committed_participant": [
+      "=",
+      "no"
+     ],
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "country_or_subject_owns_entire_state_region": [
       "=",
       "STATE_LIMA"
@@ -38681,6 +38705,14 @@
    "possible": [
     "=",
     {
+     "is_diplomatic_play_committed_participant": [
+      "=",
+      "no"
+     ],
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "OR": [
       "=",
       {
@@ -38951,6 +38983,14 @@
    "possible": [
     "=",
     {
+     "is_diplomatic_play_committed_participant": [
+      "=",
+      "no"
+     ],
+     "is_at_war": [
+      "=",
+      "no"
+     ],
      "c:CUB": [
       "?=",
       {

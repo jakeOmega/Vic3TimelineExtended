@@ -1,47 +1,82 @@
-﻿### Strategic Reserve JE widget — reserve inventory
+﻿### Strategic Reserve — the journal entry's panel.
 ###
-### One row per unlocked reserve good, five lines deep:
-###   1. icon + name, fill bar, status label, decrease / stop / increase
-###   2. stored / capacity, configured signed rate, actual net weekly movement
-###   3. annual decay rate and this week's decay loss
-###   4. reserve policy, price signal, policy flow (gear opens the settings)
-###   5. the policy's plain-language explanation
-### Rows start collapsed to line 1; clicking the good's name (or the chevron
-### beside it) expands lines 2-5 and clicking again collapses them. Replaces the old
-### stand-alone step badge, the seven full-width scripted progress bars and the
-### fourteen per-good journal-entry buttons.
+### je_strategic_reserve.txt attaches the three named roots at the foot of
+### this file:
+###   widget_je_strategic_reserve_overview   container 1   te_st_res_overview_panel
+###   widget_je_strategic_reserve_inventory  container 2   te_st_res_status_sections
+###   widget_je_strategic_reserve_reference  container 3   te_st_res_reference_sections
+### The entry's status text sits between the overview and the inventory, and
+### Cycle Step Size and Reset Reserve Rates are buttons in the inventory,
+### beside the adjustment step; the journal entry's scripted buttons that did
+### the same carry `is_ai = yes`, so the vanilla grid below is empty for a
+### player.
 ###
-### Wired via
-###   widget = { name = "widget_je_strategic_reserve_inventory"
-###              container = "custom_widget_container_2" }
-### in je_strategic_reserve, so the table renders directly under the journal
-### entry's summary text and above the two shared buttons (Cycle Step Size,
-### Reset Reserve Rates), which remain vanilla-rendered journal-entry buttons.
+### Style: docs/guides/gui_style_guide.md. The overview is always shown. The
+### inventory is open until closed (st_res_inventory_closed). How the
+### Strategic Reserve Works is collapsed until opened (st_res_how_open). Each
+### section is a type, and the two composers set their order, so the Market
+### panel's Reserve tab (gui/market_panel.gui) shows the same pieces. Nothing
+### here may read the panel's ambient Market or Country (MarketTabTest).
+### Collapse flags say their default: *_closed is open until closed, *_open
+### collapsed until opened.
+### test_strategic_reserve_layout.py holds the order, the flags and the rows.
 ###
-### Data contract — everything the rows show comes from script, nothing is
+### Icons: the hub cell uses the hub building's own icon; the row's status
+### and policy icons are the panel's own, in gfx/interface/icons/st_res_icons/
+### (PR #586). docs/systems/strategic_reserve_gui_icons.md records each file
+### and what it shows.
+###
+### THE INVENTORY is a table with one te_st_res_good_row per unlocked good:
+###   Good | Stock | status icon | policy icon | decrease / stop / increase
+### Stock is the fill bar, with a marker at the policy's target stockpile while
+### it can buy and at its protected stockpile while it can sell. The policy
+### icon is lit while an automated policy sets the good's rate; clicking it
+### opens or closes the good's Policy Settings. Clicking the good's name
+### expands the row: its figures as label / value rows, its policy and why the
+### policy is doing what it does, and a chart of its fill by month (the owner's
+### exception to "history charts open": it sits in the collapsed row). Policy
+### Settings shows under an expanded row, collapsed until opened, and under a
+### collapsed one while it is open.
+###
+### Data contract. Everything the rows show comes from script; nothing is
 ### re-derived here:
 ###   - row visibility  -> ScriptedGui.IsShown, which delegates to
 ###                        st_res_<good>_unlocked_trigger
 ###                        (common/scripted_triggers/st_res_triggers.txt)
 ###   - button enabled  -> ScriptedGui.IsValid (cap / stockpile-room checks)
-###   - status label    -> GetCustom('st_res_<good>_mode_text'), driven by the
-###                        st_res_<good>_last_status variable written by
-###                        st_res_set_good_status_effect
+###   - status icon     -> ScriptValue('st_res_<good>_disp_status'), the
+###                        st_res_<good>_last_status code (written by
+###                        st_res_set_good_status_effect) grouped as the
+###                        status word groups it; the word, from
+###                        GetCustom('st_res_<good>_mode_text'), and the
+###                        reason are on the icon's hover
+###   - fill bar        -> ScriptValue('st_res_<good>_fill_pct')
+###   - bar markers     -> ScriptValue('st_res_<good>_disp_target') and
+###                        ScriptValue('st_res_<good>_disp_floor'), which sit at
+###                        the bar's ends (and so hide) unless the policy uses
+###                        that bound
+###   - policy icon     -> ScriptValue('st_res_<good>_disp_policy'), the policy
+###                        code
 ###   - net movement    -> ScriptValue('st_res_<good>_last_net'), i.e. the
 ###                        post-clamp delta recorded by the weekly pulse
 ###   - decay rate      -> ScriptValue('st_res_<good>_annual_decay_rate'), the
 ###                        same value the weekly bookkeeping divides by 52,
 ###                        and ScriptValue('st_res_<good>_weekly_decay')
-###   - expanded        -> GetVariableSystem key 'st_res_row_expanded_<good>',
-###                        presentation only (no script reads it); absent,
-###                        and so collapsed, until the player first clicks
+###   - hub icon        -> ScriptValue('st_res_disp_hub_staffed')
+###   - fill history    -> te_hist_v_st_res_<good> on the shared history store's
+###                        monthly containers, recorded by
+###                        te_history_record_strategic_reserve_samples
+###                        (common/scripted_effects/te_history_strategic_reserve_effects.txt)
+### The display values are in the "Panel display values" group of
+### common/script_values/st_res_script_values.txt; no script reads them.
 ###
-### The three controls share one scripted GUI per good and differ only by the
-### 'dir' saved scope (0 = decrease, 1 = stop, 2 = increase). Adding a good
-### means one new row instance here plus two new sguis — see
+### The three rate controls share one scripted GUI per good and differ only by
+### the 'dir' saved scope (0 = decrease, 1 = stop, 2 = increase). Adding a good
+### means one new te_st_res_good_row instance in te_st_res_sec_inventory, plus
+### the script, loc and scripted GUIs listed in
 ### .claude/skills/add-strategic-reserve-good/SKILL.md.
 ###
-### RESERVE POLICIES (lines 4-5 and the collapsible settings panel)
+### RESERVE POLICIES (the expanded figures and the Policy Settings subsection)
 ###   - policy name    -> GetCustom('st_res_<good>_policy_text'), driven by the
 ###                       st_res_<good>_policy variable
 ###   - explanation    -> GetCustom('st_res_<good>_policy_reason_text'), driven
@@ -61,8 +96,8 @@
 ###   0-3   select policy   Manual / Buy When Cheap / Release When Expensive /
 ###                         Stabilize Prices. The four buttons use the SHORT
 ###                         labels (st_res_policy_short_*) so they fit the
-###                         116px button; line 4 and the tooltips carry the
-###                         full names.
+###                         110px button; the expanded figures and the
+###                         tooltips carry the full names.
 ###   10-12 apply preset    Conservative / Standard / Aggressive
 ###   20/21 purchase threshold  - / +      26/27 protected stockpile - / +
 ###   22/23 release threshold   - / +      28/29 target stockpile    - / +
@@ -75,254 +110,283 @@
 ### plain op + 20, ctrl-click the plain op + 40. `enabled` stays bound to the
 ### plain op, whose is_valid branch the modifier ops share.
 ###
-### The expander itself is presentation-only: `GetVariableSystem.Toggle` on a
-### per-good key that no script ever reads. Collapsing a panel cannot change
-### what the reserve does, and policies keep running with the journal entry
-### closed because the evaluator lives on the weekly pulse, not in this file.
+### Every expander is presentation-only: `GetVariableSystem.Toggle` on a key
+### that no script ever reads, not saved. Collapsing a row, its settings or a
+### section cannot change what the reserve does, and policies keep running
+### with the journal entry closed because the evaluator lives on the weekly
+### pulse, not in this file.
 
 types strategic_reserve_widget_types
 {
-	### Shared header: the current adjustment step, which the vanilla-rendered
-	### "Cycle Step Size" journal-entry button changes.
-	type widget_je_st_res_header = flowcontainer {
-		direction = horizontal
-		parentanchor = hcenter
-		ignoreinvisible = yes
+	### ======================================================================
+	### BUILDING BLOCKS. The UN's (un_chamber_widget.gui), copied under this
+	### system's prefix so neither file depends on the other.
+	### ======================================================================
 
-		background = {
-			using = blurry_dark_background
-			alpha = 0.85
-			margin = { 6 4 }
-		}
-
-		textbox = {
-			text = "je_strategic_reserve_widget_step_badge"
-			default_format = "#header"
-			align = center|nobaseline
-			autoresize = yes
-			max_width = 480
-			margin = { 12 6 }
-		}
-	}
-
-	### One inventory row. The instance supplies `datacontext` (the good's
-	### scripted GUI), `visible`, `tooltip`, the six text/value blocks and the
-	### three collapse blocks; everything else — including all three control
-	### buttons — is identical for every good because the buttons read the
-	### inherited ScriptedGui.
-	###
-	### Line 1 is always shown. Lines 2-5 and the settings panel sit in one
-	### container that `row_expanded` shows only once the player expands the
-	### row by clicking the good's name, so every row starts collapsed:
-	### `row_expanded` / `row_collapsed` test the good's
-	### st_res_row_expanded_<good> key, which is absent until the first click.
-	### Like the settings panel, that is presentation only: a GetVariableSystem
-	### key no script reads, not saved, and a collapsed good keeps storing,
-	### releasing and running its policy.
-	type widget_je_st_res_inventory_row = flowcontainer {
+	### A section's body: the dark panel under its header.
+	type st_res_panel = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		parentanchor = hcenter
-		spacing = 2
-		margin = { 8 6 }
+		margin = { 20 8 }
+		spacing = 4
 
 		background = {
 			using = entry_bg_fancy_dark
 			alpha = 0.5
 		}
+	}
 
-		### Line 1 — good (click to expand / collapse), fill bar, status, controls
-		flowcontainer = {
-			direction = horizontal
-			spacing = 4
-
-			### Untextured button: the name reads as plain text, and clicking it
-			### expands or collapses the row. Its tooltip replaces the row tooltip
-			### over the name only.
-			###
-			### The chevron left of the name is vanilla's outliner pair
-			### (gui/outliner_framework.gui, expand_buttons): expand_arrow while
-			### the row is collapsed, expand_arrow_expanded while it is expanded.
-			### Both are alwaystransparent, so the chevron and the name are one
-			### click target. The 20px it takes comes out of the fill bar, so
-			### line 1 still totals 508.
-			button = {
-				size = { 170 30 }
-				parentanchor = vcenter
-				block "row_collapse_toggle" {}
-
-				button = {
-					using = expand_arrow
-					size = { 20 20 }
-					parentanchor = left|vcenter
-					alwaystransparent = yes
-					block "row_collapsed" {}
-				}
-
-				button = {
-					using = expand_arrow_expanded
-					size = { 20 20 }
-					parentanchor = left|vcenter
-					alwaystransparent = yes
-					block "row_expanded" {}
-				}
-
-				textbox = {
-					block "row_name" {}
-					position = { 20 0 }
-					size = { 150 30 }
-					align = left|nobaseline
-					using = fontsize_large
-					elide = right
-				}
-			}
-
-			default_progressbar_horizontal = {
-				size = { 115 16 }
-				parentanchor = vcenter
-
-				blockoverride "values" {
-					block "row_bar_value" {}
-					min = 0
-					max = 100
-				}
-			}
-
-			textbox = {
-				block "row_status" {}
-				size = { 105 30 }
-				align = right|nobaseline
-				using = fontsize_medium
-				parentanchor = vcenter
-				elide = right
-			}
-
-			widget = { size = { 4 1 } }
-
-			### Decrease — dir 0
-			button_icon_minus_action = {
-				size = { 30 30 }
-				parentanchor = vcenter
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				tooltip = "st_res_row_decrease_tooltip"
-			}
-
-			### Stop — dir 1
-			button_icon_cancel = {
-				size = { 30 30 }
-				parentanchor = vcenter
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-				tooltip = "st_res_row_stop_tooltip"
-			}
-
-			### Increase — dir 2
-			button_icon_plus_action = {
-				size = { 30 30 }
-				parentanchor = vcenter
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-				tooltip = "st_res_row_increase_tooltip"
-			}
-		}
-
-		### Lines 2-5 and the settings panel — shown only while the row is
-		### expanded. `row_expanded` is the same block the expanded chevron reads.
-		flowcontainer = {
-			direction = vertical
-			ignoreinvisible = yes
-			spacing = 2
-			block "row_expanded" {}
-
-			### Line 2 — stored vs. capacity, the configured rate and the actual
-			### net change. 170 + 6 + 332 = 508, the width line 1 sets.
-			flowcontainer = {
-				direction = horizontal
-				spacing = 6
-
-				textbox = {
-					block "row_amount" {}
-					size = { 170 22 }
-					align = left|nobaseline
-					using = fontsize_medium
-					parentanchor = vcenter
-					elide = right
-				}
-
-				textbox = {
-					block "row_flow" {}
-					size = { 332 22 }
-					align = left|nobaseline
-					using = fontsize_medium
-					parentanchor = vcenter
-					elide = right
-				}
-			}
-
-			### Line 3 — annual decay rate and what it costs this week.
-			textbox = {
-				block "row_decay" {}
-				size = { 490 22 }
-				align = left|nobaseline
-				using = fontsize_medium
-				elide = right
-			}
-
-			### Line 4 — the good's reserve policy, the market price signal
-			### driving it, and the weekly flow that policy has settled on. The
-			### gear button expands the settings panel below.
-			flowcontainer = {
-				direction = horizontal
-				spacing = 4
-
-				button_icon_settings = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					block "row_policy_toggle" {}
-				}
-
-				textbox = {
-					block "row_policy" {}
-					size = { 462 22 }
-					align = left|nobaseline
-					using = fontsize_medium
-					parentanchor = vcenter
-					elide = right
-				}
-			}
-
-			### Line 5 — the plain-language explanation. Comes straight from
-			### st_res_<good>_policy_status via customizable localization; the
-			### GUI never works out why a lane is paused.
-			textbox = {
-				block "row_policy_reason" {}
-				size = { 490 22 }
-				align = left|nobaseline
-				using = fontsize_small
-				elide = right
-			}
-
-			### Settings panel, collapsed by default.
-			block "row_policy_panel" {}
+	type st_res_section_header = section_header_button {
+		blockoverride "layout" {
+			parentanchor = hcenter
+			size = { 520 38 }
 		}
 	}
+
+	### A collapsible subsection inside a row: narrower, lower and in a
+	### smaller type than a section header, so it reads as part of the row
+	### (un_chamber_subsection_header's shape, gui_modding_guide.md gotcha #26).
+	type st_res_subsection_header = section_header_button {
+		blockoverride "layout" {
+			size = { 430 30 }
+		}
+		blockoverride "fontsize" {
+			using = fontsize_medium
+		}
+		blockoverride "arrow_size" {
+			size = { 20 20 }
+		}
+		blockoverride "left_textbox_margin_left" {
+			margin_left = 32
+		}
+	}
+
+	### A heading over one group of lines, with a faint rule under it.
+	type st_res_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 10
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### Explanatory text under a heading: how a part works, rather than what
+	### it says now. Static keys only.
+	type st_res_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		default_format = "#lore"
+	}
+
+	### A table row: a label on the left, its value on the right. Sized for a
+	### good's expanded figures, set in 24px under the good's name:
+	### 4 + 170 + 270 + 4 = 448 of the 456 left.
+	type st_res_value_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin = { 4 1 }
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 170 -1 }
+			maximumsize = { 170 -1 }
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			block "row_label" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 270 -1 }
+			maximumsize = { 270 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			default_format = "#v"
+			elide = right
+			block "row_value" {}
+		}
+	}
+
+	### A reserve-wide button beside the adjustment step. The instance sets
+	### its datacontext to the scripted GUI and its label; the rest reads the
+	### inherited ScriptedGui, with the composed tooltip of gotcha #16: why it
+	### is greyed (IsValidTooltip), a break, what it does (ExecuteTooltip).
+	type st_res_shared_button = button {
+		using = default_button_action
+		parentanchor = vcenter
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			elide = right
+			using = fontsize_small
+			block "button_label" {}
+		}
+	}
+
+	### A column heading over the inventory: small, and underlined where it
+	### has a tooltip.
+	type st_res_col_heading = textbox {
+		autoresize = no
+		align = left|nobaseline
+		using = fontsize_small
+		elide = right
+		parentanchor = vcenter
+	}
+
+	### ======================================================================
+	### THE OVERVIEW. Always shown, at the top (container 1).
+	### ======================================================================
+
+	### A cell of the overview: its icon or figure on top, its word small
+	### beneath. Fixed width, so a long word cannot push the row wider.
+	type st_res_ov_cell = widget {
+		size = { 130 58 }
+
+		block "cell_top" {}
+
+		textbox = {
+			parentanchor = bottom|hcenter
+			autoresize = yes
+			max_width = 128
+			elide = right
+			align = hcenter|nobaseline
+			using = fontsize_small
+			default_format = "#tooltippable"
+			block "label" {}
+		}
+	}
+
+	### The figure on top of an overview cell.
+	type st_res_ov_figure = textbox {
+		parentanchor = top|hcenter
+		position = { 0 8 }
+		autoresize = yes
+		max_width = 128
+		elide = right
+		align = hcenter|nobaseline
+		using = fontsize_large
+		default_format = "#v"
+	}
+
+	### The hub, the flow cap and the week's sales income: what a returning
+	### player checks before reading the rows. The first two lines of the old
+	### status text (income, flow cap) moved here, their explanations into
+	### the cells' tooltips.
+	type te_st_res_overview_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		visible = "[JournalEntry.IsActive]"
+
+		st_res_panel = {
+			### As wide as the sections below (the UN overview's 480px column),
+			### with the three cells centred in it.
+			flowcontainer = {
+				direction = vertical
+				minimumsize = { 480 -1 }
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 12
+					parentanchor = hcenter
+
+					### The hub: its own icon, at full colour while it is fully
+					### staffed and dimmed below that, when it trades nothing. The
+					### dimmed icon is always drawn; the lit one covers it.
+					st_res_ov_cell = {
+						tooltip = "je_strategic_reserve_ov_hub_tt"
+						blockoverride "cell_top" {
+							icon = {
+								size = { 36 36 }
+								parentanchor = top|hcenter
+								alpha = 0.3
+								texture = "gfx/interface/icons/building_icons/building_strategic_reserve_hub.dds"
+							}
+							icon = {
+								size = { 36 36 }
+								parentanchor = top|hcenter
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_hub_staffed'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/building_icons/building_strategic_reserve_hub.dds"
+							}
+						}
+						blockoverride "label" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_hub_staffed'), '(CFixedPoint)1' ), 'je_strategic_reserve_ov_hub_staffed', 'je_strategic_reserve_ov_hub_understaffed' )]"
+						}
+					}
+
+					### How much of one good the hub may move in a week.
+					st_res_ov_cell = {
+						tooltip = "je_strategic_reserve_ov_cap_tt"
+						blockoverride "cell_top" {
+							st_res_ov_figure = {
+								text = "je_strategic_reserve_ov_cap_value"
+							}
+						}
+						blockoverride "label" {
+							text = "je_strategic_reserve_ov_cap_label"
+						}
+					}
+
+					### What this week's releases earn.
+					st_res_ov_cell = {
+						tooltip = "je_strategic_reserve_ov_income_tt"
+						blockoverride "cell_top" {
+							st_res_ov_figure = {
+								text = "je_strategic_reserve_ov_income_value"
+							}
+						}
+						blockoverride "label" {
+							text = "je_strategic_reserve_ov_income_label"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### ======================================================================
+	### THE INVENTORY (container 2)
+	### ======================================================================
 
 	### One control in the policy selector or the preset row. The op code is the
 	### same for every good, so this template is fully shared: which good a click
 	### lands on comes from the policy panel's datacontext, not from the button.
 	type widget_je_st_res_policy_choice = button {
 		using = default_button_action
-		size = { 116 26 }
+		size = { 110 26 }
 
 		textbox = {
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 106
+			max_width = 102
 			elide = right
 			using = fontsize_small
 			block "choice_label" {}
@@ -334,13 +398,14 @@ types strategic_reserve_widget_types
 	### One settings row: label, minus, current value, plus. `stepper_value` is
 	### the only per-good part; every panel instance overrides it with that
 	### good's variable, and the two op codes stay shared.
+	### 300 + 24 + 90 + 24 and three 3px gaps: 447.
 	type widget_je_st_res_policy_stepper = flowcontainer {
 		direction = horizontal
 		spacing = 3
 
 		textbox = {
 			block "stepper_label" {}
-			size = { 250 24 }
+			size = { 300 24 }
 			align = left|nobaseline
 			using = fontsize_small
 			parentanchor = vcenter
@@ -355,7 +420,7 @@ types strategic_reserve_widget_types
 
 		textbox = {
 			block "stepper_value" {}
-			size = { 140 24 }
+			size = { 90 24 }
 			align = center|nobaseline
 			using = fontsize_small
 			parentanchor = vcenter
@@ -369,16 +434,16 @@ types strategic_reserve_widget_types
 		}
 	}
 
-	### The per-good settings panel behind the row's gear button. Presentation
-	### only: `policy_panel_visible` reads a GetVariableSystem flag that no
-	### script ever sees, so collapsing the panel cannot change what the reserve
-	### does, and the expanded/collapsed state is intentionally not saved.
+	### The per-good settings panel, under a row's Policy Settings subsection.
+	### The row shows it only while that subsection is open (the good's
+	### st_res_policy_<good>_open key).
 	###
 	### Everything inside is shared across goods except the eight value cells:
 	### `policy_panel_context` points the whole subtree at that good's
 	### st_res_policy_<good>_sgui, and every button below addresses it by op
 	### code alone. The op-code table lives in
 	### common/scripted_guis/st_res_scripted_gui.txt — keep the two in sync.
+	### 450 wide inside a 6px margin, set in 24px: 486 of the inventory's 496.
 	type widget_je_st_res_policy_panel = flowcontainer {
 		direction = vertical
 		spacing = 3
@@ -391,11 +456,10 @@ types strategic_reserve_widget_types
 		}
 
 		block "policy_panel_context" {}
-		block "policy_panel_visible" {}
 
 		textbox = {
 			text = "st_res_policy_panel_policy_header"
-			size = { 484 22 }
+			size = { 450 22 }
 			align = left|nobaseline
 			using = fontsize_small
 			elide = right
@@ -442,11 +506,14 @@ types strategic_reserve_widget_types
 			}
 		}
 
+		### What a preset does is on the heading's hover (style rule 3).
 		textbox = {
 			text = "st_res_policy_panel_preset_header"
-			size = { 484 22 }
+			tooltip = "st_res_policy_panel_preset_header_tt"
+			size = { 450 22 }
 			align = left|nobaseline
 			using = fontsize_small
+			default_format = "#tooltippable"
 			elide = right
 		}
 
@@ -485,7 +552,7 @@ types strategic_reserve_widget_types
 
 		textbox = {
 			text = "st_res_policy_panel_settings_header"
-			size = { 484 22 }
+			size = { 450 22 }
 			align = left|nobaseline
 			using = fontsize_small
 			elide = right
@@ -610,7 +677,12 @@ types strategic_reserve_widget_types
 			}
 		}
 		widget_je_st_res_policy_stepper = {
-			blockoverride "stepper_label" { text = "st_res_policy_label_ramp" }
+			### A shortened label; its full meaning is on hover (round 3, rule 1).
+			blockoverride "stepper_label" {
+				text = "st_res_policy_label_ramp"
+				tooltip = "st_res_policy_label_ramp_tt"
+				default_format = "#tooltippable"
+			}
 			blockoverride "stepper_value" { block "policy_value_ramp" {} }
 			blockoverride "stepper_down" {
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
@@ -624,542 +696,1634 @@ types strategic_reserve_widget_types
 			}
 		}
 	}
+
+	### One good's row: the table line, and under it, while the row is
+	### expanded, the good's figures and its Policy Settings. Every good's
+	### instance has the same shape, a copy of another good's with the good's
+	### name swapped (.claude/skills/add-strategic-reserve-good). The instance
+	### supplies:
+	###   datacontext           GetScriptedGui('st_res_adjust_<good>_sgui')
+	###   visible               that scripted GUI's IsShown (the unlock trigger)
+	###   tooltip               st_res_row_<good>_tooltip, the whole breakdown
+	###   row_toggle, row_open, row_closed
+	###                         the row's st_res_row_<good>_open key
+	###   row_name              loc key
+	###   row_status            the status icon's tooltip (loc key)
+	###   row_status_idle, row_status_storing, row_status_withdrawing,
+	###   row_status_blocked    each status icon's visible
+	###   row_fill              the bar's value, st_res_<good>_fill_pct
+	###   row_target_marker, row_floor_marker
+	###                         each marker's value and its visible
+	###   row_auto              the lit policy icon's visible
+	###   row_stored ... row_policy, row_policy_reason
+	###                         the expanded figures (loc keys)
+	###   row_history           the good's te_history_chart
+	###   row_settings_toggle, row_settings_open, row_settings_closed
+	###                         the settings' st_res_policy_<good>_open key
+	###   row_settings_shown    the settings' visible: the row expanded, or the
+	###                         settings open
+	###   row_policy_panel      the good's widget_je_st_res_policy_panel
+	### The three rate buttons read the inherited ScriptedGui, so they are the
+	### same for every good.
+	type te_st_res_good_row = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+
+		### The table line. 170 + 150 + 30 + 30 + 3 x 26, with seven 4px gaps,
+		### is 486 of the inventory's 496; the column headings' widths match.
+		### Every static label fits its cell by the round-3 width budget
+		### (test_strategic_reserve_layout.WidthBudgetTest).
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+
+			### Good: an untextured button, so the name reads as plain text and
+			### a click expands or collapses the row. The chevron left of the
+			### name is vanilla's outliner pair (gui/outliner_framework.gui):
+			### expand_arrow while collapsed, expand_arrow_expanded while
+			### expanded. Both are alwaystransparent, so chevron and name are one
+			### click target. Its tooltip replaces the row's over the name only.
+			button = {
+				size = { 170 28 }
+				parentanchor = vcenter
+				block "row_toggle" {}
+
+				button = {
+					using = expand_arrow
+					size = { 20 20 }
+					parentanchor = left|vcenter
+					alwaystransparent = yes
+					block "row_closed" {}
+				}
+				button = {
+					using = expand_arrow_expanded
+					size = { 20 20 }
+					parentanchor = left|vcenter
+					alwaystransparent = yes
+					block "row_open" {}
+				}
+				textbox = {
+					position = { 20 0 }
+					size = { 150 28 }
+					align = left|nobaseline
+					using = fontsize_medium
+					elide = right
+					block "row_name" {}
+				}
+			}
+
+			### Stock: the fill against capacity (0-100). A marker stands at the
+			### target stockpile while the policy can buy and at the protected
+			### stockpile while it can sell; the instance hides each at its end
+			### of the bar, where st_res_<good>_disp_* put it when the policy
+			### does not use that bound. The marker technique is the UN
+			### authority bar's (un_overview_widget.gui).
+			widget = {
+				size = { 150 28 }
+				parentanchor = vcenter
+
+				default_progressbar_horizontal = {
+					size = { 150 18 }
+					parentanchor = vcenter
+					blockoverride "values" {
+						block "row_fill" {}
+						min = 0
+						max = 100
+					}
+					blockoverride "on_top_of_the_progressbar" {
+						progressbar = {
+							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							size = { 100% 100% }
+							skip_initial_animation = yes
+							direction = horizontal
+							min = 0
+							max = 100
+							block "row_target_marker" {}
+							marker = {
+								icon = {
+									size = { 36 20 }
+									parentanchor = vcenter
+									widgetanchor = center
+									texture = "gfx/interface/progressbar/progressbar_marker.dds"
+								}
+							}
+						}
+						progressbar = {
+							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							size = { 100% 100% }
+							skip_initial_animation = yes
+							direction = horizontal
+							min = 0
+							max = 100
+							block "row_floor_marker" {}
+							marker = {
+								icon = {
+									size = { 36 20 }
+									parentanchor = vcenter
+									widgetanchor = center
+									texture = "gfx/interface/progressbar/progressbar_marker.dds"
+								}
+							}
+						}
+					}
+				}
+			}
+
+			### Status: one icon per status (owner, 2026-09-30), Idle, Storing,
+			### Withdrawing or Blocked, the word and its reason on hover
+			### (`row_status`). The four icons share the cell, and each one's
+			### `visible` tests one value of the good's st_res_<good>_disp_status
+			### code, so exactly one is ever drawn. One crate for all four, the
+			### state a mark in the word's colour:
+			### docs/systems/strategic_reserve_gui_icons.md.
+			widget = {
+				size = { 30 28 }
+				parentanchor = vcenter
+				block "row_status" {}
+
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "row_status_idle" {}
+					texture = "gfx/interface/icons/st_res_icons/status_idle.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "row_status_storing" {}
+					texture = "gfx/interface/icons/st_res_icons/status_storing.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "row_status_withdrawing" {}
+					texture = "gfx/interface/icons/st_res_icons/status_withdrawing.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					block "row_status_blocked" {}
+					texture = "gfx/interface/icons/st_res_icons/status_blocked.dds"
+				}
+			}
+
+			### Policy: lit while an automated reserve policy sets this good's
+			### rate, dimmed on Manual. The dimmed icon is always drawn; the lit
+			### one covers it (`row_auto` is its visible). An untextured button,
+			### like the name: a click opens or closes the good's Policy
+			### Settings (owner, 2026-09-29). Both icons are alwaystransparent,
+			### so the whole cell is the click target.
+			button = {
+				size = { 30 28 }
+				parentanchor = vcenter
+				tooltip = "st_res_row_auto_tooltip"
+				block "row_settings_toggle" {}
+
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					alpha = 0.25
+					alwaystransparent = yes
+					texture = "gfx/interface/icons/st_res_icons/policy_automated.dds"
+				}
+				icon = {
+					size = { 24 24 }
+					parentanchor = center
+					alwaystransparent = yes
+					block "row_auto" {}
+					texture = "gfx/interface/icons/st_res_icons/policy_automated.dds"
+				}
+			}
+
+			### Decrease — dir 0
+			button_icon_minus_action = {
+				size = { 26 26 }
+				parentanchor = vcenter
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				tooltip = "st_res_row_decrease_tooltip"
+			}
+
+			### Stop — dir 1
+			button_icon_cancel = {
+				size = { 26 26 }
+				parentanchor = vcenter
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "st_res_row_stop_tooltip"
+			}
+
+			### Increase — dir 2
+			button_icon_plus_action = {
+				size = { 26 26 }
+				parentanchor = vcenter
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "st_res_row_increase_tooltip"
+			}
+		}
+
+		### The good's figures, while the row is expanded: label and value rows
+		### (style rule 5), set in under the name. `row_open` is the same block
+		### the expanded chevron reads.
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 1
+			margin_left = 24
+			margin_bottom = 4
+			block "row_open" {}
+
+			st_res_value_row = {
+				blockoverride "row_label" { text = "st_res_row_label_stored" }
+				blockoverride "row_value" { block "row_stored" {} }
+			}
+			st_res_value_row = {
+				blockoverride "row_label" { text = "st_res_row_label_rate" }
+				blockoverride "row_value" { block "row_rate" {} }
+			}
+			st_res_value_row = {
+				blockoverride "row_label" { text = "st_res_row_label_last" }
+				blockoverride "row_value" { block "row_last" {} }
+			}
+			st_res_value_row = {
+				blockoverride "row_label" { text = "st_res_row_label_decay" }
+				blockoverride "row_value" { block "row_decay" {} }
+			}
+			st_res_value_row = {
+				blockoverride "row_label" { text = "st_res_row_label_price" }
+				blockoverride "row_value" { block "row_price" {} }
+			}
+			st_res_value_row = {
+				blockoverride "row_label" { text = "st_res_row_label_policy" }
+				blockoverride "row_value" { block "row_policy" {} }
+			}
+
+			### What the policy is doing this week, and why. Straight from
+			### st_res_<good>_policy_status via customizable localization; the
+			### GUI never works out why a lane is paused.
+			textbox = {
+				autoresize = yes
+				multiline = yes
+				minimumsize = { 440 -1 }
+				maximumsize = { 440 -1 }
+				margin = { 4 1 }
+				align = left|nobaseline
+				using = fontsize_small
+				block "row_policy_reason" {}
+			}
+		}
+
+		### The good's fill by month, while the row is expanded: the range
+		### buttons (the te_hist_range GUI variable every history chart shares)
+		### and the good's te_history_chart. Not set in, because the chart's
+		### plot is 496px, the inventory's whole width.
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			margin_bottom = 4
+			block "row_open" {}
+
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+				ignoreinvisible = yes
+				parentanchor = hcenter
+
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_1y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
+					}
+				}
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_5y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
+					}
+				}
+				te_history_range_button = {
+					blockoverride "range_text" {
+						text = "te_hist_range_20y"
+					}
+					blockoverride "range_enabled" {
+						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+					}
+					blockoverride "range_onclick" {
+						onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
+					}
+				}
+			}
+
+			block "row_history" {}
+		}
+
+		### Policy Settings: the policy, the presets and the eight settings.
+		### Shown under an expanded row, where it starts collapsed (a long
+		### subsection, style rule 7), and under a collapsed row while it is
+		### open, since the policy icon opens it from the table line.
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			margin_left = 24
+			margin_bottom = 6
+			block "row_settings_shown" {}
+
+			st_res_subsection_header = {
+				blockoverride "left_text" {
+					text = "st_res_row_settings_header"
+				}
+				blockoverride "onclick" {
+					block "row_settings_toggle" {}
+				}
+				blockoverride "onclick_showmore" {
+					block "row_settings_closed" {}
+				}
+				blockoverride "onclick_showless" {
+					block "row_settings_open" {}
+				}
+			}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				block "row_settings_open" {}
+
+				block "row_policy_panel" {}
+			}
+		}
+	}
+
+	### The inventory: the adjustment step (true of every row's buttons, so
+	### said once above them) with the two reserve-wide buttons beside it, the
+	### column headings, and one row per good. Open until closed.
+	###
+	### 496px wide inside a 12px margin, so the panel is the 520px of the
+	### sections around it and a good's 496px history chart fits without
+	### widening it when a row is expanded.
+	type te_st_res_sec_inventory = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		st_res_section_header = {
+			blockoverride "left_text" {
+				text = "je_strategic_reserve_inv_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('st_res_inventory_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('st_res_inventory_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('st_res_inventory_closed'))]"
+			}
+		}
+
+		st_res_panel = {
+			visible = "[Not(GetVariableSystem.Exists('st_res_inventory_closed'))]"
+			margin = { 12 8 }
+
+			### The step, and the two buttons that act on every good's rate:
+			### 240 + 100 + 110 and two 4px gaps, 458 of 496. They call
+			### st_res_cycle_step_sgui and st_res_reset_rates_sgui, whose
+			### effects are the scripted buttons' effects. The labels are short
+			### ("Cycle Step", "Reset Rates") so they fit; each tooltip opens
+			### with the full name.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+				minimumsize = { 496 -1 }
+
+				textbox = {
+					size = { 240 28 }
+					parentanchor = vcenter
+					align = left|nobaseline
+					using = fontsize_medium
+					elide = right
+					text = "je_strategic_reserve_inv_step"
+				}
+				st_res_shared_button = {
+					datacontext = "[GetScriptedGui('st_res_cycle_step_sgui')]"
+					size = { 100 26 }
+					blockoverride "button_label" {
+						max_width = 92
+						text = "st_res_panel_cycle_step"
+					}
+				}
+				st_res_shared_button = {
+					datacontext = "[GetScriptedGui('st_res_reset_rates_sgui')]"
+					size = { 110 26 }
+					blockoverride "button_label" {
+						max_width = 102
+						text = "st_res_panel_reset_rates"
+					}
+				}
+			}
+
+			### Column headings, at the row's cell widths (te_st_res_good_row).
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+				margin_top = 4
+
+				st_res_col_heading = {
+					size = { 170 20 }
+					margin_left = 20
+					text = "je_strategic_reserve_inv_col_good"
+				}
+				st_res_col_heading = {
+					size = { 150 20 }
+					default_format = "#tooltippable"
+					text = "je_strategic_reserve_inv_col_stock"
+					tooltip = "je_strategic_reserve_inv_col_stock_tt"
+				}
+				### Over the status and policy icons (30 + 4 + 30).
+				st_res_col_heading = {
+					size = { 64 20 }
+					default_format = "#tooltippable"
+					text = "je_strategic_reserve_inv_col_status"
+					tooltip = "je_strategic_reserve_inv_col_status_tt"
+				}
+				### Over the three rate buttons.
+				st_res_col_heading = {
+					size = { 86 20 }
+					default_format = "#tooltippable"
+					text = "je_strategic_reserve_inv_col_rate"
+					tooltip = "je_strategic_reserve_inv_col_rate_tt"
+				}
+			}
+			divider_clean = {
+				blockoverride "size" {
+					size = { 496 2 }
+				}
+			}
+
+			te_st_res_good_row = {
+				datacontext = "[GetScriptedGui('st_res_adjust_grain_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "st_res_row_grain_tooltip"
+
+				blockoverride "row_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_row_grain_open')]"
+					tooltip = "st_res_row_collapse_tooltip"
+				}
+				blockoverride "row_open" {
+					visible = "[GetVariableSystem.Exists('st_res_row_grain_open')]"
+				}
+				blockoverride "row_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_row_grain_open'))]"
+				}
+				blockoverride "row_name" { text = "st_res_row_grain_name" }
+				blockoverride "row_status" { tooltip = "st_res_row_grain_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_status'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "row_fill" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_fill_pct') )]"
+				}
+				blockoverride "row_target_marker" {
+					visible = "[LessThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_target'), '(CFixedPoint)100' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_target') )]"
+				}
+				blockoverride "row_floor_marker" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_floor'), '(CFixedPoint)0' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_floor') )]"
+				}
+				blockoverride "row_auto" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_disp_policy'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_stored" { text = "st_res_row_grain_amount" }
+				blockoverride "row_rate" { text = "st_res_row_grain_flow" }
+				blockoverride "row_last" { text = "st_res_row_grain_last" }
+				blockoverride "row_decay" { text = "st_res_row_grain_decay" }
+				blockoverride "row_price" { text = "st_res_row_grain_price" }
+				blockoverride "row_policy" { text = "st_res_row_grain_policy" }
+				blockoverride "row_policy_reason" { text = "st_res_row_grain_policy_reason" }
+				blockoverride "row_history" {
+					te_history_chart = {
+						blockoverride "chart_title" {
+							text = "st_res_hist_title"
+						}
+						blockoverride "chart_legend" {
+							text = "st_res_hist_legend"
+						}
+						blockoverride "marker_pips" {}
+						blockoverride "bar_tooltip" {
+							tooltip = "st_res_hist_tt_grain"
+						}
+						blockoverride "bar_body" {
+							te_history_bar_unsigned = {
+								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_grain' )]"
+								blockoverride "values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_grain' ) ) )]"
+								}
+								blockoverride "cover_values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_grain' ), '(CFixedPoint)4' ) ) )]"
+								}
+							}
+						}
+					}
+				}
+				blockoverride "row_settings_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_policy_grain_open')]"
+				}
+				blockoverride "row_settings_open" {
+					visible = "[GetVariableSystem.Exists('st_res_policy_grain_open')]"
+				}
+				blockoverride "row_settings_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_policy_grain_open'))]"
+				}
+				blockoverride "row_settings_shown" {
+					visible = "[Or( GetVariableSystem.Exists('st_res_row_grain_open'), GetVariableSystem.Exists('st_res_policy_grain_open') )]"
+				}
+				blockoverride "row_policy_panel" {
+					widget_je_st_res_policy_panel = {
+						blockoverride "policy_panel_context" {
+							datacontext = "[GetScriptedGui('st_res_policy_grain_sgui')]"
+						}
+						blockoverride "policy_value_buy_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_buy_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_sell_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_sell_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_max_flow" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_max_flow').GetValue|0]"
+						}
+						blockoverride "policy_value_floor_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_floor_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_ceil_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_ceil_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_budget" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_budget').GetValue|0]"
+						}
+						blockoverride "policy_value_price_memory" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_price_memory').GetValue|0]"
+						}
+						blockoverride "policy_value_ramp" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_ramp').GetValue|0]"
+						}
+					}
+				}
+			}
+
+			te_st_res_good_row = {
+				datacontext = "[GetScriptedGui('st_res_adjust_ammunition_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "st_res_row_ammunition_tooltip"
+
+				blockoverride "row_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_row_ammunition_open')]"
+					tooltip = "st_res_row_collapse_tooltip"
+				}
+				blockoverride "row_open" {
+					visible = "[GetVariableSystem.Exists('st_res_row_ammunition_open')]"
+				}
+				blockoverride "row_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_row_ammunition_open'))]"
+				}
+				blockoverride "row_name" { text = "st_res_row_ammunition_name" }
+				blockoverride "row_status" { tooltip = "st_res_row_ammunition_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_status'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "row_fill" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_fill_pct') )]"
+				}
+				blockoverride "row_target_marker" {
+					visible = "[LessThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_target'), '(CFixedPoint)100' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_target') )]"
+				}
+				blockoverride "row_floor_marker" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_floor'), '(CFixedPoint)0' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_floor') )]"
+				}
+				blockoverride "row_auto" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_disp_policy'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_stored" { text = "st_res_row_ammunition_amount" }
+				blockoverride "row_rate" { text = "st_res_row_ammunition_flow" }
+				blockoverride "row_last" { text = "st_res_row_ammunition_last" }
+				blockoverride "row_decay" { text = "st_res_row_ammunition_decay" }
+				blockoverride "row_price" { text = "st_res_row_ammunition_price" }
+				blockoverride "row_policy" { text = "st_res_row_ammunition_policy" }
+				blockoverride "row_policy_reason" { text = "st_res_row_ammunition_policy_reason" }
+				blockoverride "row_history" {
+					te_history_chart = {
+						blockoverride "chart_title" {
+							text = "st_res_hist_title"
+						}
+						blockoverride "chart_legend" {
+							text = "st_res_hist_legend"
+						}
+						blockoverride "marker_pips" {}
+						blockoverride "bar_tooltip" {
+							tooltip = "st_res_hist_tt_ammunition"
+						}
+						blockoverride "bar_body" {
+							te_history_bar_unsigned = {
+								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_ammunition' )]"
+								blockoverride "values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_ammunition' ) ) )]"
+								}
+								blockoverride "cover_values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_ammunition' ), '(CFixedPoint)4' ) ) )]"
+								}
+							}
+						}
+					}
+				}
+				blockoverride "row_settings_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_policy_ammunition_open')]"
+				}
+				blockoverride "row_settings_open" {
+					visible = "[GetVariableSystem.Exists('st_res_policy_ammunition_open')]"
+				}
+				blockoverride "row_settings_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_policy_ammunition_open'))]"
+				}
+				blockoverride "row_settings_shown" {
+					visible = "[Or( GetVariableSystem.Exists('st_res_row_ammunition_open'), GetVariableSystem.Exists('st_res_policy_ammunition_open') )]"
+				}
+				blockoverride "row_policy_panel" {
+					widget_je_st_res_policy_panel = {
+						blockoverride "policy_panel_context" {
+							datacontext = "[GetScriptedGui('st_res_policy_ammunition_sgui')]"
+						}
+						blockoverride "policy_value_buy_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_buy_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_sell_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_sell_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_max_flow" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_max_flow').GetValue|0]"
+						}
+						blockoverride "policy_value_floor_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_floor_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_ceil_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_ceil_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_budget" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_budget').GetValue|0]"
+						}
+						blockoverride "policy_value_price_memory" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_price_memory').GetValue|0]"
+						}
+						blockoverride "policy_value_ramp" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_ramp').GetValue|0]"
+						}
+					}
+				}
+			}
+
+			te_st_res_good_row = {
+				datacontext = "[GetScriptedGui('st_res_adjust_oil_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "st_res_row_oil_tooltip"
+
+				blockoverride "row_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_row_oil_open')]"
+					tooltip = "st_res_row_collapse_tooltip"
+				}
+				blockoverride "row_open" {
+					visible = "[GetVariableSystem.Exists('st_res_row_oil_open')]"
+				}
+				blockoverride "row_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_row_oil_open'))]"
+				}
+				blockoverride "row_name" { text = "st_res_row_oil_name" }
+				blockoverride "row_status" { tooltip = "st_res_row_oil_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_status'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "row_fill" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_fill_pct') )]"
+				}
+				blockoverride "row_target_marker" {
+					visible = "[LessThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_target'), '(CFixedPoint)100' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_target') )]"
+				}
+				blockoverride "row_floor_marker" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_floor'), '(CFixedPoint)0' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_floor') )]"
+				}
+				blockoverride "row_auto" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_disp_policy'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_stored" { text = "st_res_row_oil_amount" }
+				blockoverride "row_rate" { text = "st_res_row_oil_flow" }
+				blockoverride "row_last" { text = "st_res_row_oil_last" }
+				blockoverride "row_decay" { text = "st_res_row_oil_decay" }
+				blockoverride "row_price" { text = "st_res_row_oil_price" }
+				blockoverride "row_policy" { text = "st_res_row_oil_policy" }
+				blockoverride "row_policy_reason" { text = "st_res_row_oil_policy_reason" }
+				blockoverride "row_history" {
+					te_history_chart = {
+						blockoverride "chart_title" {
+							text = "st_res_hist_title"
+						}
+						blockoverride "chart_legend" {
+							text = "st_res_hist_legend"
+						}
+						blockoverride "marker_pips" {}
+						blockoverride "bar_tooltip" {
+							tooltip = "st_res_hist_tt_oil"
+						}
+						blockoverride "bar_body" {
+							te_history_bar_unsigned = {
+								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_oil' )]"
+								blockoverride "values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_oil' ) ) )]"
+								}
+								blockoverride "cover_values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_oil' ), '(CFixedPoint)4' ) ) )]"
+								}
+							}
+						}
+					}
+				}
+				blockoverride "row_settings_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_policy_oil_open')]"
+				}
+				blockoverride "row_settings_open" {
+					visible = "[GetVariableSystem.Exists('st_res_policy_oil_open')]"
+				}
+				blockoverride "row_settings_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_policy_oil_open'))]"
+				}
+				blockoverride "row_settings_shown" {
+					visible = "[Or( GetVariableSystem.Exists('st_res_row_oil_open'), GetVariableSystem.Exists('st_res_policy_oil_open') )]"
+				}
+				blockoverride "row_policy_panel" {
+					widget_je_st_res_policy_panel = {
+						blockoverride "policy_panel_context" {
+							datacontext = "[GetScriptedGui('st_res_policy_oil_sgui')]"
+						}
+						blockoverride "policy_value_buy_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_buy_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_sell_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_sell_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_max_flow" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_max_flow').GetValue|0]"
+						}
+						blockoverride "policy_value_floor_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_floor_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_ceil_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_ceil_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_budget" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_budget').GetValue|0]"
+						}
+						blockoverride "policy_value_price_memory" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_price_memory').GetValue|0]"
+						}
+						blockoverride "policy_value_ramp" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_ramp').GetValue|0]"
+						}
+					}
+				}
+			}
+
+			te_st_res_good_row = {
+				datacontext = "[GetScriptedGui('st_res_adjust_small_arms_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "st_res_row_small_arms_tooltip"
+
+				blockoverride "row_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_row_small_arms_open')]"
+					tooltip = "st_res_row_collapse_tooltip"
+				}
+				blockoverride "row_open" {
+					visible = "[GetVariableSystem.Exists('st_res_row_small_arms_open')]"
+				}
+				blockoverride "row_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_row_small_arms_open'))]"
+				}
+				blockoverride "row_name" { text = "st_res_row_small_arms_name" }
+				blockoverride "row_status" { tooltip = "st_res_row_small_arms_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_status'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "row_fill" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_fill_pct') )]"
+				}
+				blockoverride "row_target_marker" {
+					visible = "[LessThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_target'), '(CFixedPoint)100' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_target') )]"
+				}
+				blockoverride "row_floor_marker" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_floor'), '(CFixedPoint)0' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_floor') )]"
+				}
+				blockoverride "row_auto" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_disp_policy'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_stored" { text = "st_res_row_small_arms_amount" }
+				blockoverride "row_rate" { text = "st_res_row_small_arms_flow" }
+				blockoverride "row_last" { text = "st_res_row_small_arms_last" }
+				blockoverride "row_decay" { text = "st_res_row_small_arms_decay" }
+				blockoverride "row_price" { text = "st_res_row_small_arms_price" }
+				blockoverride "row_policy" { text = "st_res_row_small_arms_policy" }
+				blockoverride "row_policy_reason" { text = "st_res_row_small_arms_policy_reason" }
+				blockoverride "row_history" {
+					te_history_chart = {
+						blockoverride "chart_title" {
+							text = "st_res_hist_title"
+						}
+						blockoverride "chart_legend" {
+							text = "st_res_hist_legend"
+						}
+						blockoverride "marker_pips" {}
+						blockoverride "bar_tooltip" {
+							tooltip = "st_res_hist_tt_small_arms"
+						}
+						blockoverride "bar_body" {
+							te_history_bar_unsigned = {
+								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_small_arms' )]"
+								blockoverride "values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_small_arms' ) ) )]"
+								}
+								blockoverride "cover_values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_small_arms' ), '(CFixedPoint)4' ) ) )]"
+								}
+							}
+						}
+					}
+				}
+				blockoverride "row_settings_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_policy_small_arms_open')]"
+				}
+				blockoverride "row_settings_open" {
+					visible = "[GetVariableSystem.Exists('st_res_policy_small_arms_open')]"
+				}
+				blockoverride "row_settings_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_policy_small_arms_open'))]"
+				}
+				blockoverride "row_settings_shown" {
+					visible = "[Or( GetVariableSystem.Exists('st_res_row_small_arms_open'), GetVariableSystem.Exists('st_res_policy_small_arms_open') )]"
+				}
+				blockoverride "row_policy_panel" {
+					widget_je_st_res_policy_panel = {
+						blockoverride "policy_panel_context" {
+							datacontext = "[GetScriptedGui('st_res_policy_small_arms_sgui')]"
+						}
+						blockoverride "policy_value_buy_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_buy_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_sell_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_sell_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_max_flow" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_max_flow').GetValue|0]"
+						}
+						blockoverride "policy_value_floor_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_floor_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_ceil_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_ceil_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_budget" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_budget').GetValue|0]"
+						}
+						blockoverride "policy_value_price_memory" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_price_memory').GetValue|0]"
+						}
+						blockoverride "policy_value_ramp" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_ramp').GetValue|0]"
+						}
+					}
+				}
+			}
+
+			te_st_res_good_row = {
+				datacontext = "[GetScriptedGui('st_res_adjust_artillery_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "st_res_row_artillery_tooltip"
+
+				blockoverride "row_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_row_artillery_open')]"
+					tooltip = "st_res_row_collapse_tooltip"
+				}
+				blockoverride "row_open" {
+					visible = "[GetVariableSystem.Exists('st_res_row_artillery_open')]"
+				}
+				blockoverride "row_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_row_artillery_open'))]"
+				}
+				blockoverride "row_name" { text = "st_res_row_artillery_name" }
+				blockoverride "row_status" { tooltip = "st_res_row_artillery_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_status'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "row_fill" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_fill_pct') )]"
+				}
+				blockoverride "row_target_marker" {
+					visible = "[LessThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_target'), '(CFixedPoint)100' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_target') )]"
+				}
+				blockoverride "row_floor_marker" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_floor'), '(CFixedPoint)0' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_floor') )]"
+				}
+				blockoverride "row_auto" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_disp_policy'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_stored" { text = "st_res_row_artillery_amount" }
+				blockoverride "row_rate" { text = "st_res_row_artillery_flow" }
+				blockoverride "row_last" { text = "st_res_row_artillery_last" }
+				blockoverride "row_decay" { text = "st_res_row_artillery_decay" }
+				blockoverride "row_price" { text = "st_res_row_artillery_price" }
+				blockoverride "row_policy" { text = "st_res_row_artillery_policy" }
+				blockoverride "row_policy_reason" { text = "st_res_row_artillery_policy_reason" }
+				blockoverride "row_history" {
+					te_history_chart = {
+						blockoverride "chart_title" {
+							text = "st_res_hist_title"
+						}
+						blockoverride "chart_legend" {
+							text = "st_res_hist_legend"
+						}
+						blockoverride "marker_pips" {}
+						blockoverride "bar_tooltip" {
+							tooltip = "st_res_hist_tt_artillery"
+						}
+						blockoverride "bar_body" {
+							te_history_bar_unsigned = {
+								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_artillery' )]"
+								blockoverride "values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_artillery' ) ) )]"
+								}
+								blockoverride "cover_values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_artillery' ), '(CFixedPoint)4' ) ) )]"
+								}
+							}
+						}
+					}
+				}
+				blockoverride "row_settings_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_policy_artillery_open')]"
+				}
+				blockoverride "row_settings_open" {
+					visible = "[GetVariableSystem.Exists('st_res_policy_artillery_open')]"
+				}
+				blockoverride "row_settings_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_policy_artillery_open'))]"
+				}
+				blockoverride "row_settings_shown" {
+					visible = "[Or( GetVariableSystem.Exists('st_res_row_artillery_open'), GetVariableSystem.Exists('st_res_policy_artillery_open') )]"
+				}
+				blockoverride "row_policy_panel" {
+					widget_je_st_res_policy_panel = {
+						blockoverride "policy_panel_context" {
+							datacontext = "[GetScriptedGui('st_res_policy_artillery_sgui')]"
+						}
+						blockoverride "policy_value_buy_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_buy_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_sell_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_sell_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_max_flow" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_max_flow').GetValue|0]"
+						}
+						blockoverride "policy_value_floor_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_floor_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_ceil_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_ceil_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_budget" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_budget').GetValue|0]"
+						}
+						blockoverride "policy_value_price_memory" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_price_memory').GetValue|0]"
+						}
+						blockoverride "policy_value_ramp" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_ramp').GetValue|0]"
+						}
+					}
+				}
+			}
+
+			te_st_res_good_row = {
+				datacontext = "[GetScriptedGui('st_res_adjust_aeroplanes_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "st_res_row_aeroplanes_tooltip"
+
+				blockoverride "row_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_row_aeroplanes_open')]"
+					tooltip = "st_res_row_collapse_tooltip"
+				}
+				blockoverride "row_open" {
+					visible = "[GetVariableSystem.Exists('st_res_row_aeroplanes_open')]"
+				}
+				blockoverride "row_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_row_aeroplanes_open'))]"
+				}
+				blockoverride "row_name" { text = "st_res_row_aeroplanes_name" }
+				blockoverride "row_status" { tooltip = "st_res_row_aeroplanes_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_status'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "row_fill" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_fill_pct') )]"
+				}
+				blockoverride "row_target_marker" {
+					visible = "[LessThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_target'), '(CFixedPoint)100' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_target') )]"
+				}
+				blockoverride "row_floor_marker" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_floor'), '(CFixedPoint)0' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_floor') )]"
+				}
+				blockoverride "row_auto" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_disp_policy'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_stored" { text = "st_res_row_aeroplanes_amount" }
+				blockoverride "row_rate" { text = "st_res_row_aeroplanes_flow" }
+				blockoverride "row_last" { text = "st_res_row_aeroplanes_last" }
+				blockoverride "row_decay" { text = "st_res_row_aeroplanes_decay" }
+				blockoverride "row_price" { text = "st_res_row_aeroplanes_price" }
+				blockoverride "row_policy" { text = "st_res_row_aeroplanes_policy" }
+				blockoverride "row_policy_reason" { text = "st_res_row_aeroplanes_policy_reason" }
+				blockoverride "row_history" {
+					te_history_chart = {
+						blockoverride "chart_title" {
+							text = "st_res_hist_title"
+						}
+						blockoverride "chart_legend" {
+							text = "st_res_hist_legend"
+						}
+						blockoverride "marker_pips" {}
+						blockoverride "bar_tooltip" {
+							tooltip = "st_res_hist_tt_aeroplanes"
+						}
+						blockoverride "bar_body" {
+							te_history_bar_unsigned = {
+								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_aeroplanes' )]"
+								blockoverride "values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_aeroplanes' ) ) )]"
+								}
+								blockoverride "cover_values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_aeroplanes' ), '(CFixedPoint)4' ) ) )]"
+								}
+							}
+						}
+					}
+				}
+				blockoverride "row_settings_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_policy_aeroplanes_open')]"
+				}
+				blockoverride "row_settings_open" {
+					visible = "[GetVariableSystem.Exists('st_res_policy_aeroplanes_open')]"
+				}
+				blockoverride "row_settings_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_policy_aeroplanes_open'))]"
+				}
+				blockoverride "row_settings_shown" {
+					visible = "[Or( GetVariableSystem.Exists('st_res_row_aeroplanes_open'), GetVariableSystem.Exists('st_res_policy_aeroplanes_open') )]"
+				}
+				blockoverride "row_policy_panel" {
+					widget_je_st_res_policy_panel = {
+						blockoverride "policy_panel_context" {
+							datacontext = "[GetScriptedGui('st_res_policy_aeroplanes_sgui')]"
+						}
+						blockoverride "policy_value_buy_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_buy_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_sell_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_sell_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_max_flow" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_max_flow').GetValue|0]"
+						}
+						blockoverride "policy_value_floor_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_floor_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_ceil_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_ceil_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_budget" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_budget').GetValue|0]"
+						}
+						blockoverride "policy_value_price_memory" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_price_memory').GetValue|0]"
+						}
+						blockoverride "policy_value_ramp" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_ramp').GetValue|0]"
+						}
+					}
+				}
+			}
+
+			te_st_res_good_row = {
+				datacontext = "[GetScriptedGui('st_res_adjust_tanks_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "st_res_row_tanks_tooltip"
+
+				blockoverride "row_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_row_tanks_open')]"
+					tooltip = "st_res_row_collapse_tooltip"
+				}
+				blockoverride "row_open" {
+					visible = "[GetVariableSystem.Exists('st_res_row_tanks_open')]"
+				}
+				blockoverride "row_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_row_tanks_open'))]"
+				}
+				blockoverride "row_name" { text = "st_res_row_tanks_name" }
+				blockoverride "row_status" { tooltip = "st_res_row_tanks_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_status'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "row_fill" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_fill_pct') )]"
+				}
+				blockoverride "row_target_marker" {
+					visible = "[LessThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_target'), '(CFixedPoint)100' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_target') )]"
+				}
+				blockoverride "row_floor_marker" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_floor'), '(CFixedPoint)0' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_floor') )]"
+				}
+				blockoverride "row_auto" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_disp_policy'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_stored" { text = "st_res_row_tanks_amount" }
+				blockoverride "row_rate" { text = "st_res_row_tanks_flow" }
+				blockoverride "row_last" { text = "st_res_row_tanks_last" }
+				blockoverride "row_decay" { text = "st_res_row_tanks_decay" }
+				blockoverride "row_price" { text = "st_res_row_tanks_price" }
+				blockoverride "row_policy" { text = "st_res_row_tanks_policy" }
+				blockoverride "row_policy_reason" { text = "st_res_row_tanks_policy_reason" }
+				blockoverride "row_history" {
+					te_history_chart = {
+						blockoverride "chart_title" {
+							text = "st_res_hist_title"
+						}
+						blockoverride "chart_legend" {
+							text = "st_res_hist_legend"
+						}
+						blockoverride "marker_pips" {}
+						blockoverride "bar_tooltip" {
+							tooltip = "st_res_hist_tt_tanks"
+						}
+						blockoverride "bar_body" {
+							te_history_bar_unsigned = {
+								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_tanks' )]"
+								blockoverride "values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_tanks' ) ) )]"
+								}
+								blockoverride "cover_values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_tanks' ), '(CFixedPoint)4' ) ) )]"
+								}
+							}
+						}
+					}
+				}
+				blockoverride "row_settings_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_policy_tanks_open')]"
+				}
+				blockoverride "row_settings_open" {
+					visible = "[GetVariableSystem.Exists('st_res_policy_tanks_open')]"
+				}
+				blockoverride "row_settings_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_policy_tanks_open'))]"
+				}
+				blockoverride "row_settings_shown" {
+					visible = "[Or( GetVariableSystem.Exists('st_res_row_tanks_open'), GetVariableSystem.Exists('st_res_policy_tanks_open') )]"
+				}
+				blockoverride "row_policy_panel" {
+					widget_je_st_res_policy_panel = {
+						blockoverride "policy_panel_context" {
+							datacontext = "[GetScriptedGui('st_res_policy_tanks_sgui')]"
+						}
+						blockoverride "policy_value_buy_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_buy_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_sell_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_sell_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_max_flow" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_max_flow').GetValue|0]"
+						}
+						blockoverride "policy_value_floor_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_floor_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_ceil_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_ceil_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_budget" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_budget').GetValue|0]"
+						}
+						blockoverride "policy_value_price_memory" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_price_memory').GetValue|0]"
+						}
+						blockoverride "policy_value_ramp" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_ramp').GetValue|0]"
+						}
+					}
+				}
+			}
+
+			te_st_res_good_row = {
+				datacontext = "[GetScriptedGui('st_res_adjust_fertilizer_sgui')]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "st_res_row_fertilizer_tooltip"
+
+				blockoverride "row_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_row_fertilizer_open')]"
+					tooltip = "st_res_row_collapse_tooltip"
+				}
+				blockoverride "row_open" {
+					visible = "[GetVariableSystem.Exists('st_res_row_fertilizer_open')]"
+				}
+				blockoverride "row_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_row_fertilizer_open'))]"
+				}
+				blockoverride "row_name" { text = "st_res_row_fertilizer_name" }
+				blockoverride "row_status" { tooltip = "st_res_row_fertilizer_status" }
+				blockoverride "row_status_idle" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_status'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_status_storing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_status'), '(CFixedPoint)1' )]"
+				}
+				blockoverride "row_status_withdrawing" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_status'), '(CFixedPoint)2' )]"
+				}
+				blockoverride "row_status_blocked" {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_status'), '(CFixedPoint)3' )]"
+				}
+				blockoverride "row_fill" {
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_fill_pct') )]"
+				}
+				blockoverride "row_target_marker" {
+					visible = "[LessThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_target'), '(CFixedPoint)100' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_target') )]"
+				}
+				blockoverride "row_floor_marker" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_floor'), '(CFixedPoint)0' )]"
+					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_floor') )]"
+				}
+				blockoverride "row_auto" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_disp_policy'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "row_stored" { text = "st_res_row_fertilizer_amount" }
+				blockoverride "row_rate" { text = "st_res_row_fertilizer_flow" }
+				blockoverride "row_last" { text = "st_res_row_fertilizer_last" }
+				blockoverride "row_decay" { text = "st_res_row_fertilizer_decay" }
+				blockoverride "row_price" { text = "st_res_row_fertilizer_price" }
+				blockoverride "row_policy" { text = "st_res_row_fertilizer_policy" }
+				blockoverride "row_policy_reason" { text = "st_res_row_fertilizer_policy_reason" }
+				blockoverride "row_history" {
+					te_history_chart = {
+						blockoverride "chart_title" {
+							text = "st_res_hist_title"
+						}
+						blockoverride "chart_legend" {
+							text = "st_res_hist_legend"
+						}
+						blockoverride "marker_pips" {}
+						blockoverride "bar_tooltip" {
+							tooltip = "st_res_hist_tt_fertilizer"
+						}
+						blockoverride "bar_body" {
+							te_history_bar_unsigned = {
+								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_fertilizer' )]"
+								blockoverride "values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_fertilizer' ) ) )]"
+								}
+								blockoverride "cover_values" {
+									min = 0
+									max = 100
+									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_fertilizer' ), '(CFixedPoint)4' ) ) )]"
+								}
+							}
+						}
+					}
+				}
+				blockoverride "row_settings_toggle" {
+					onclick = "[GetVariableSystem.Toggle('st_res_policy_fertilizer_open')]"
+				}
+				blockoverride "row_settings_open" {
+					visible = "[GetVariableSystem.Exists('st_res_policy_fertilizer_open')]"
+				}
+				blockoverride "row_settings_closed" {
+					visible = "[Not(GetVariableSystem.Exists('st_res_policy_fertilizer_open'))]"
+				}
+				blockoverride "row_settings_shown" {
+					visible = "[Or( GetVariableSystem.Exists('st_res_row_fertilizer_open'), GetVariableSystem.Exists('st_res_policy_fertilizer_open') )]"
+				}
+				blockoverride "row_policy_panel" {
+					widget_je_st_res_policy_panel = {
+						blockoverride "policy_panel_context" {
+							datacontext = "[GetScriptedGui('st_res_policy_fertilizer_sgui')]"
+						}
+						blockoverride "policy_value_buy_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_buy_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_sell_thr" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_sell_thr').GetValue|+0]"
+						}
+						blockoverride "policy_value_max_flow" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_max_flow').GetValue|0]"
+						}
+						blockoverride "policy_value_floor_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_floor_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_ceil_pct" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_ceil_pct').GetValue|0]"
+						}
+						blockoverride "policy_value_budget" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_budget').GetValue|0]"
+						}
+						blockoverride "policy_value_price_memory" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_price_memory').GetValue|0]"
+						}
+						blockoverride "policy_value_ramp" {
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_ramp').GetValue|0]"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### "How the Strategic Reserve Works": every explanation, one heading per
+	### topic, collapsed until opened (style rule 1). The live sections above
+	### say what is happening; this says how it works.
+	type te_st_res_sec_how = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		st_res_section_header = {
+			blockoverride "left_text" {
+				text = "je_strategic_reserve_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('st_res_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('st_res_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('st_res_how_open')]"
+			}
+		}
+
+		st_res_panel = {
+			visible = "[GetVariableSystem.Exists('st_res_how_open')]"
+
+			st_res_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "je_strategic_reserve_how_sub_hub"
+				}
+			}
+			st_res_note = {
+				text = "je_strategic_reserve_how_hub"
+			}
+			st_res_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_strategic_reserve_how_sub_rates"
+				}
+			}
+			st_res_note = {
+				text = "je_strategic_reserve_how_rates"
+			}
+			st_res_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_strategic_reserve_how_sub_status"
+				}
+			}
+			st_res_note = {
+				text = "je_strategic_reserve_how_status"
+			}
+			st_res_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_strategic_reserve_how_sub_decay"
+				}
+			}
+			st_res_note = {
+				text = "je_strategic_reserve_how_decay"
+			}
+			st_res_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_strategic_reserve_how_sub_policies"
+				}
+			}
+			st_res_note = {
+				text = "je_strategic_reserve_how_policies"
+			}
+			st_res_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_strategic_reserve_how_sub_presets"
+				}
+			}
+			st_res_note = {
+				text = "je_strategic_reserve_how_presets"
+			}
+			st_res_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_strategic_reserve_how_sub_income"
+				}
+			}
+			st_res_note = {
+				text = "je_strategic_reserve_how_income"
+			}
+			st_res_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_strategic_reserve_how_sub_history"
+				}
+			}
+			st_res_note = {
+				text = "je_strategic_reserve_how_history"
+			}
+		}
+	}
+
+	### ======================================================================
+	### COMPOSERS. The one order of the sections, for the journal entry's
+	### roots below and for the Market panel's Reserve tab.
+	### ======================================================================
+
+	### What a returning player checks, open by default.
+	type te_st_res_status_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_st_res_sec_inventory = {}
+	}
+
+	### How it all works, collapsed.
+	type te_st_res_reference_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_st_res_sec_how = {}
+	}
 }
 
-
-### WIDGETS
+### ==========================================================================
+### JOURNAL ENTRY ROOTS (je_strategic_reserve.txt). Bare wrappers that repeat
+### the composers' IsActive gate: je_strategic_reserve has
+### is_shown_when_inactive = logistics, so the panel can render for a country
+### that has never built a hub and has none of the reserve's variables
+### (gui_modding_guide.md gotcha #14).
+### ==========================================================================
 flowcontainer = {
-	name = "widget_je_strategic_reserve_inventory"
-	direction = vertical
+	name = "widget_je_strategic_reserve_overview"
+	visible = "[JournalEntry.IsActive]"
 	parentanchor = hcenter
 	ignoreinvisible = yes
-	spacing = 4
 
-	# je_strategic_reserve has is_shown_when_inactive = logistics, so the panel
-	# can render for a country that has never built a hub and therefore has
-	# none of the reserve variables. Only draw the inventory once the journal
-	# entry is actually running.
+	te_st_res_overview_panel = {}
+}
+
+flowcontainer = {
+	name = "widget_je_strategic_reserve_inventory"
 	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
 
-	widget_je_st_res_header = {}
+	te_st_res_status_sections = {}
+}
 
-	widget_je_st_res_inventory_row = {
-		datacontext = "[GetScriptedGui('st_res_adjust_grain_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "st_res_row_grain_tooltip"
+flowcontainer = {
+	name = "widget_je_strategic_reserve_reference"
+	visible = "[JournalEntry.IsActive]"
+	parentanchor = hcenter
+	ignoreinvisible = yes
 
-		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_grain' )]"
-			tooltip = "st_res_row_collapse_tooltip"
-		}
-		blockoverride "row_expanded" {
-			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_grain' )]"
-		}
-		blockoverride "row_collapsed" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_grain' ) )]"
-		}
-		blockoverride "row_name" { text = "st_res_row_grain_name" }
-		blockoverride "row_amount" { text = "st_res_row_grain_amount" }
-		blockoverride "row_status" { text = "st_res_row_grain_status" }
-		blockoverride "row_flow" { text = "st_res_row_grain_flow" }
-		blockoverride "row_decay" { text = "st_res_row_grain_decay" }
-		blockoverride "row_bar_value" {
-			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_grain_fill_pct'))]"
-		}
-		blockoverride "row_policy_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_grain' )]"
-			tooltip = "st_res_row_policy_toggle_tooltip"
-		}
-		blockoverride "row_policy" { text = "st_res_row_grain_policy" }
-		blockoverride "row_policy_reason" { text = "st_res_row_grain_policy_reason" }
-		blockoverride "row_policy_panel" {
-			widget_je_st_res_policy_panel = {
-				blockoverride "policy_panel_context" {
-					datacontext = "[GetScriptedGui('st_res_policy_grain_sgui')]"
-				}
-				blockoverride "policy_panel_visible" {
-					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_grain' )]"
-				}
-				blockoverride "policy_value_buy_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_buy_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_sell_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_sell_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_max_flow" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_max_flow').GetValue|0]"
-				}
-				blockoverride "policy_value_floor_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_floor_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_ceil_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_ceil_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_budget" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_budget').GetValue|0]"
-				}
-				blockoverride "policy_value_price_memory" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_price_memory').GetValue|0]"
-				}
-				blockoverride "policy_value_ramp" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_ramp').GetValue|0]"
-				}
-			}
-		}
-	}
-
-	widget_je_st_res_inventory_row = {
-		datacontext = "[GetScriptedGui('st_res_adjust_ammunition_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "st_res_row_ammunition_tooltip"
-
-		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_ammunition' )]"
-			tooltip = "st_res_row_collapse_tooltip"
-		}
-		blockoverride "row_expanded" {
-			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_ammunition' )]"
-		}
-		blockoverride "row_collapsed" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_ammunition' ) )]"
-		}
-		blockoverride "row_name" { text = "st_res_row_ammunition_name" }
-		blockoverride "row_amount" { text = "st_res_row_ammunition_amount" }
-		blockoverride "row_status" { text = "st_res_row_ammunition_status" }
-		blockoverride "row_flow" { text = "st_res_row_ammunition_flow" }
-		blockoverride "row_decay" { text = "st_res_row_ammunition_decay" }
-		blockoverride "row_bar_value" {
-			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_ammunition_fill_pct'))]"
-		}
-		blockoverride "row_policy_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_ammunition' )]"
-			tooltip = "st_res_row_policy_toggle_tooltip"
-		}
-		blockoverride "row_policy" { text = "st_res_row_ammunition_policy" }
-		blockoverride "row_policy_reason" { text = "st_res_row_ammunition_policy_reason" }
-		blockoverride "row_policy_panel" {
-			widget_je_st_res_policy_panel = {
-				blockoverride "policy_panel_context" {
-					datacontext = "[GetScriptedGui('st_res_policy_ammunition_sgui')]"
-				}
-				blockoverride "policy_panel_visible" {
-					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_ammunition' )]"
-				}
-				blockoverride "policy_value_buy_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_buy_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_sell_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_sell_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_max_flow" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_max_flow').GetValue|0]"
-				}
-				blockoverride "policy_value_floor_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_floor_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_ceil_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_ceil_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_budget" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_budget').GetValue|0]"
-				}
-				blockoverride "policy_value_price_memory" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_price_memory').GetValue|0]"
-				}
-				blockoverride "policy_value_ramp" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_ramp').GetValue|0]"
-				}
-			}
-		}
-	}
-
-	widget_je_st_res_inventory_row = {
-		datacontext = "[GetScriptedGui('st_res_adjust_oil_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "st_res_row_oil_tooltip"
-
-		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_oil' )]"
-			tooltip = "st_res_row_collapse_tooltip"
-		}
-		blockoverride "row_expanded" {
-			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_oil' )]"
-		}
-		blockoverride "row_collapsed" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_oil' ) )]"
-		}
-		blockoverride "row_name" { text = "st_res_row_oil_name" }
-		blockoverride "row_amount" { text = "st_res_row_oil_amount" }
-		blockoverride "row_status" { text = "st_res_row_oil_status" }
-		blockoverride "row_flow" { text = "st_res_row_oil_flow" }
-		blockoverride "row_decay" { text = "st_res_row_oil_decay" }
-		blockoverride "row_bar_value" {
-			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_oil_fill_pct'))]"
-		}
-		blockoverride "row_policy_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_oil' )]"
-			tooltip = "st_res_row_policy_toggle_tooltip"
-		}
-		blockoverride "row_policy" { text = "st_res_row_oil_policy" }
-		blockoverride "row_policy_reason" { text = "st_res_row_oil_policy_reason" }
-		blockoverride "row_policy_panel" {
-			widget_je_st_res_policy_panel = {
-				blockoverride "policy_panel_context" {
-					datacontext = "[GetScriptedGui('st_res_policy_oil_sgui')]"
-				}
-				blockoverride "policy_panel_visible" {
-					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_oil' )]"
-				}
-				blockoverride "policy_value_buy_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_buy_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_sell_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_sell_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_max_flow" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_max_flow').GetValue|0]"
-				}
-				blockoverride "policy_value_floor_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_floor_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_ceil_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_ceil_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_budget" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_budget').GetValue|0]"
-				}
-				blockoverride "policy_value_price_memory" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_price_memory').GetValue|0]"
-				}
-				blockoverride "policy_value_ramp" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_ramp').GetValue|0]"
-				}
-			}
-		}
-	}
-
-	widget_je_st_res_inventory_row = {
-		datacontext = "[GetScriptedGui('st_res_adjust_small_arms_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "st_res_row_small_arms_tooltip"
-
-		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_small_arms' )]"
-			tooltip = "st_res_row_collapse_tooltip"
-		}
-		blockoverride "row_expanded" {
-			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_small_arms' )]"
-		}
-		blockoverride "row_collapsed" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_small_arms' ) )]"
-		}
-		blockoverride "row_name" { text = "st_res_row_small_arms_name" }
-		blockoverride "row_amount" { text = "st_res_row_small_arms_amount" }
-		blockoverride "row_status" { text = "st_res_row_small_arms_status" }
-		blockoverride "row_flow" { text = "st_res_row_small_arms_flow" }
-		blockoverride "row_decay" { text = "st_res_row_small_arms_decay" }
-		blockoverride "row_bar_value" {
-			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_small_arms_fill_pct'))]"
-		}
-		blockoverride "row_policy_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_small_arms' )]"
-			tooltip = "st_res_row_policy_toggle_tooltip"
-		}
-		blockoverride "row_policy" { text = "st_res_row_small_arms_policy" }
-		blockoverride "row_policy_reason" { text = "st_res_row_small_arms_policy_reason" }
-		blockoverride "row_policy_panel" {
-			widget_je_st_res_policy_panel = {
-				blockoverride "policy_panel_context" {
-					datacontext = "[GetScriptedGui('st_res_policy_small_arms_sgui')]"
-				}
-				blockoverride "policy_panel_visible" {
-					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_small_arms' )]"
-				}
-				blockoverride "policy_value_buy_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_buy_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_sell_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_sell_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_max_flow" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_max_flow').GetValue|0]"
-				}
-				blockoverride "policy_value_floor_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_floor_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_ceil_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_ceil_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_budget" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_budget').GetValue|0]"
-				}
-				blockoverride "policy_value_price_memory" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_price_memory').GetValue|0]"
-				}
-				blockoverride "policy_value_ramp" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_ramp').GetValue|0]"
-				}
-			}
-		}
-	}
-
-	widget_je_st_res_inventory_row = {
-		datacontext = "[GetScriptedGui('st_res_adjust_artillery_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "st_res_row_artillery_tooltip"
-
-		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_artillery' )]"
-			tooltip = "st_res_row_collapse_tooltip"
-		}
-		blockoverride "row_expanded" {
-			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_artillery' )]"
-		}
-		blockoverride "row_collapsed" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_artillery' ) )]"
-		}
-		blockoverride "row_name" { text = "st_res_row_artillery_name" }
-		blockoverride "row_amount" { text = "st_res_row_artillery_amount" }
-		blockoverride "row_status" { text = "st_res_row_artillery_status" }
-		blockoverride "row_flow" { text = "st_res_row_artillery_flow" }
-		blockoverride "row_decay" { text = "st_res_row_artillery_decay" }
-		blockoverride "row_bar_value" {
-			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_artillery_fill_pct'))]"
-		}
-		blockoverride "row_policy_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_artillery' )]"
-			tooltip = "st_res_row_policy_toggle_tooltip"
-		}
-		blockoverride "row_policy" { text = "st_res_row_artillery_policy" }
-		blockoverride "row_policy_reason" { text = "st_res_row_artillery_policy_reason" }
-		blockoverride "row_policy_panel" {
-			widget_je_st_res_policy_panel = {
-				blockoverride "policy_panel_context" {
-					datacontext = "[GetScriptedGui('st_res_policy_artillery_sgui')]"
-				}
-				blockoverride "policy_panel_visible" {
-					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_artillery' )]"
-				}
-				blockoverride "policy_value_buy_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_buy_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_sell_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_sell_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_max_flow" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_max_flow').GetValue|0]"
-				}
-				blockoverride "policy_value_floor_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_floor_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_ceil_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_ceil_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_budget" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_budget').GetValue|0]"
-				}
-				blockoverride "policy_value_price_memory" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_price_memory').GetValue|0]"
-				}
-				blockoverride "policy_value_ramp" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_ramp').GetValue|0]"
-				}
-			}
-		}
-	}
-
-	widget_je_st_res_inventory_row = {
-		datacontext = "[GetScriptedGui('st_res_adjust_aeroplanes_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "st_res_row_aeroplanes_tooltip"
-
-		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_aeroplanes' )]"
-			tooltip = "st_res_row_collapse_tooltip"
-		}
-		blockoverride "row_expanded" {
-			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_aeroplanes' )]"
-		}
-		blockoverride "row_collapsed" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_aeroplanes' ) )]"
-		}
-		blockoverride "row_name" { text = "st_res_row_aeroplanes_name" }
-		blockoverride "row_amount" { text = "st_res_row_aeroplanes_amount" }
-		blockoverride "row_status" { text = "st_res_row_aeroplanes_status" }
-		blockoverride "row_flow" { text = "st_res_row_aeroplanes_flow" }
-		blockoverride "row_decay" { text = "st_res_row_aeroplanes_decay" }
-		blockoverride "row_bar_value" {
-			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_aeroplanes_fill_pct'))]"
-		}
-		blockoverride "row_policy_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_aeroplanes' )]"
-			tooltip = "st_res_row_policy_toggle_tooltip"
-		}
-		blockoverride "row_policy" { text = "st_res_row_aeroplanes_policy" }
-		blockoverride "row_policy_reason" { text = "st_res_row_aeroplanes_policy_reason" }
-		blockoverride "row_policy_panel" {
-			widget_je_st_res_policy_panel = {
-				blockoverride "policy_panel_context" {
-					datacontext = "[GetScriptedGui('st_res_policy_aeroplanes_sgui')]"
-				}
-				blockoverride "policy_panel_visible" {
-					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_aeroplanes' )]"
-				}
-				blockoverride "policy_value_buy_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_buy_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_sell_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_sell_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_max_flow" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_max_flow').GetValue|0]"
-				}
-				blockoverride "policy_value_floor_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_floor_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_ceil_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_ceil_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_budget" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_budget').GetValue|0]"
-				}
-				blockoverride "policy_value_price_memory" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_price_memory').GetValue|0]"
-				}
-				blockoverride "policy_value_ramp" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_ramp').GetValue|0]"
-				}
-			}
-		}
-	}
-
-	widget_je_st_res_inventory_row = {
-		datacontext = "[GetScriptedGui('st_res_adjust_tanks_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "st_res_row_tanks_tooltip"
-
-		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_tanks' )]"
-			tooltip = "st_res_row_collapse_tooltip"
-		}
-		blockoverride "row_expanded" {
-			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_tanks' )]"
-		}
-		blockoverride "row_collapsed" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_tanks' ) )]"
-		}
-		blockoverride "row_name" { text = "st_res_row_tanks_name" }
-		blockoverride "row_amount" { text = "st_res_row_tanks_amount" }
-		blockoverride "row_status" { text = "st_res_row_tanks_status" }
-		blockoverride "row_flow" { text = "st_res_row_tanks_flow" }
-		blockoverride "row_decay" { text = "st_res_row_tanks_decay" }
-		blockoverride "row_bar_value" {
-			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_tanks_fill_pct'))]"
-		}
-		blockoverride "row_policy_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_tanks' )]"
-			tooltip = "st_res_row_policy_toggle_tooltip"
-		}
-		blockoverride "row_policy" { text = "st_res_row_tanks_policy" }
-		blockoverride "row_policy_reason" { text = "st_res_row_tanks_policy_reason" }
-		blockoverride "row_policy_panel" {
-			widget_je_st_res_policy_panel = {
-				blockoverride "policy_panel_context" {
-					datacontext = "[GetScriptedGui('st_res_policy_tanks_sgui')]"
-				}
-				blockoverride "policy_panel_visible" {
-					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_tanks' )]"
-				}
-				blockoverride "policy_value_buy_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_buy_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_sell_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_sell_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_max_flow" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_max_flow').GetValue|0]"
-				}
-				blockoverride "policy_value_floor_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_floor_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_ceil_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_ceil_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_budget" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_budget').GetValue|0]"
-				}
-				blockoverride "policy_value_price_memory" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_price_memory').GetValue|0]"
-				}
-				blockoverride "policy_value_ramp" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_ramp').GetValue|0]"
-				}
-			}
-		}
-	}
-
-	widget_je_st_res_inventory_row = {
-		datacontext = "[GetScriptedGui('st_res_adjust_fertilizer_sgui')]"
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "st_res_row_fertilizer_tooltip"
-
-		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_fertilizer' )]"
-			tooltip = "st_res_row_collapse_tooltip"
-		}
-		blockoverride "row_expanded" {
-			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_fertilizer' )]"
-		}
-		blockoverride "row_collapsed" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_fertilizer' ) )]"
-		}
-		blockoverride "row_name" { text = "st_res_row_fertilizer_name" }
-		blockoverride "row_amount" { text = "st_res_row_fertilizer_amount" }
-		blockoverride "row_status" { text = "st_res_row_fertilizer_status" }
-		blockoverride "row_flow" { text = "st_res_row_fertilizer_flow" }
-		blockoverride "row_decay" { text = "st_res_row_fertilizer_decay" }
-		blockoverride "row_bar_value" {
-			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_fertilizer_fill_pct'))]"
-		}
-		blockoverride "row_policy_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_fertilizer' )]"
-			tooltip = "st_res_row_policy_toggle_tooltip"
-		}
-		blockoverride "row_policy" { text = "st_res_row_fertilizer_policy" }
-		blockoverride "row_policy_reason" { text = "st_res_row_fertilizer_policy_reason" }
-		blockoverride "row_policy_panel" {
-			widget_je_st_res_policy_panel = {
-				blockoverride "policy_panel_context" {
-					datacontext = "[GetScriptedGui('st_res_policy_fertilizer_sgui')]"
-				}
-				blockoverride "policy_panel_visible" {
-					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_fertilizer' )]"
-				}
-				blockoverride "policy_value_buy_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_buy_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_sell_thr" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_sell_thr').GetValue|+0]"
-				}
-				blockoverride "policy_value_max_flow" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_max_flow').GetValue|0]"
-				}
-				blockoverride "policy_value_floor_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_floor_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_ceil_pct" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_ceil_pct').GetValue|0]"
-				}
-				blockoverride "policy_value_budget" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_budget').GetValue|0]"
-				}
-				blockoverride "policy_value_price_memory" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_price_memory').GetValue|0]"
-				}
-				blockoverride "policy_value_ramp" {
-					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_ramp').GetValue|0]"
-				}
-			}
-		}
-	}
+	te_st_res_reference_sections = {}
 }

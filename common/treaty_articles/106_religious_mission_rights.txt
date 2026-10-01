@@ -131,15 +131,8 @@ religious_mission_rights = {
 		article_ai_usage = { request }
 
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.05
-			# Don't bother if same religion: no need for missionaries
-			if = {
-				limit = {
-					exists = scope:other_country
-					religion = scope:other_country.religion
-				}
-				add = -1.0
-			}
 			# Secular states don't care about proselytizing
 			if = {
 				limit = {
@@ -161,13 +154,6 @@ religious_mission_rights = {
 					ig:ig_devout = {
 						is_in_government = yes
 					}
-				}
-				add = 0.1
-			}
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = domineering }
 				}
 				add = 0.1
 			}
@@ -321,6 +307,11 @@ religious_mission_rights = {
 						}
 					}
 				}
+			}
+			# Partner preferences are evaluated after the article has parties.
+			if = {
+				limit = { scope:article.target_country = root religion = scope:article.source_country.religion }
+				add = { desc = "AI_SAME_RELIGION" value = -1000 }
 			}
 		}
 	}

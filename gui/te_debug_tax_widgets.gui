@@ -1,0 +1,721 @@
+﻿# TEMPORARY PR 585. Only instantiated under the armed-country tab gate.
+types te_debug_tax_widgets {
+	type te_tp_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		spacing = 8
+		minimumsize = { 500 -1 }
+		maximumsize = { 500 -1 }
+		text_single = { text = "te_tp_heading" parentanchor = hcenter using = fontsize_large }
+		textbox = {
+			text = "te_tp_warning"
+			multiline = yes
+			autoresize = yes
+			maximumsize = { 480 -1 }
+			parentanchor = hcenter
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_snapshot_seq" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_snapshot_seq')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_version" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_version')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_stage" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_stage')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_operative" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_operative')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_due" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_due')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_expiry" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_expiry')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_record_count" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_record_count')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_obs_tax_income" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_tax_income')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_obs_tax_waste" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_tax_waste')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_obs_net_fixed_income" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_net_fixed_income')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_obs_net_total_income" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_net_total_income')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_obs_bureaucracy" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_bureaucracy')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_obs_bureaucracy_usage" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_bureaucracy_usage')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_obs_authority" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_authority')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_obs_tax_level_value" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_tax_level_value')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_obs_military_wage_level_value" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_military_wage_level_value')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_school_level" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_school_level')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_school_expanding" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_school_expanding')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_grain_selected" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_grain_selected')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			textbox = { text = "te_tp_metric_lock" size = { 370 40 } multiline = yes using = fontsize_small }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_lock')|2]" size = { 100 40 } align = right|nobaseline }
+		}
+		hbox = {
+			textbox = { text = "te_tp_live_income" size = { 370 30 } }
+			textbox = { text = "[GetPlayer.GetIncomeTaxIncome|2]" size = { 100 30 } align = right|nobaseline }
+		}
+		hbox = {
+			textbox = { text = "te_tp_live_poll" size = { 370 30 } }
+			textbox = { text = "[GetPlayer.GetPollTaxIncome|2]" size = { 100 30 } align = right|nobaseline }
+		}
+		hbox = {
+			textbox = { text = "te_tp_metric_policy_target" size = { 370 30 } }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_policy_target')|2]" size = { 100 30 } align = right|nobaseline }
+		}
+		hbox = {
+			textbox = { text = "te_tp_metric_policy_actual" size = { 370 30 } }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_policy_actual')|2]" size = { 100 30 } align = right|nobaseline }
+		}
+		hbox = {
+			textbox = { text = "te_tp_metric_controls" size = { 370 30 } }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_controls')|2]" size = { 100 30 } align = right|nobaseline }
+		}
+		hbox = {
+			textbox = { text = "te_tp_metric_controls_actions" size = { 370 30 } }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_controls_actions')|2]" size = { 100 30 } align = right|nobaseline }
+		}
+		hbox = {
+			textbox = { text = "te_tp_metric_public_schools" size = { 370 30 } }
+			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_public_schools')|2]" size = { 100 30 } align = right|nobaseline }
+		}
+		text_single = { text = "te_tp_section_setup" parentanchor = hcenter using = fontsize_large }
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_snapshot"
+				enabled = "[GetScriptedGui('te_tp_snapshot_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_snapshot_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_snapshot_tt'), GetScriptedGui('te_tp_snapshot_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_prepare"
+				enabled = "[GetScriptedGui('te_tp_prepare_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_prepare_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_prepare_tt'), GetScriptedGui('te_tp_prepare_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_clear"
+				enabled = "[GetScriptedGui('te_tp_clear_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_clear_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_clear_tt'), GetScriptedGui('te_tp_clear_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_disarm"
+				enabled = "[GetScriptedGui('te_tp_disarm_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_disarm_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_disarm_tt'), GetScriptedGui('te_tp_disarm_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		text_single = { text = "te_tp_section_domestic" parentanchor = hcenter using = fontsize_large }
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_wage"
+				enabled = "[GetScriptedGui('te_tp_wage_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_wage_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_wage_tt'), GetScriptedGui('te_tp_wage_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_dividend"
+				enabled = "[GetScriptedGui('te_tp_dividend_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_dividend_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_dividend_tt'), GetScriptedGui('te_tp_dividend_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_rural"
+				enabled = "[GetScriptedGui('te_tp_rural_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_rural_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_rural_tt'), GetScriptedGui('te_tp_rural_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_head"
+				enabled = "[GetScriptedGui('te_tp_head_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_head_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_head_tt'), GetScriptedGui('te_tp_head_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_consumption"
+				enabled = "[GetScriptedGui('te_tp_consumption_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_consumption_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_consumption_tt'), GetScriptedGui('te_tp_consumption_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_consumption_high"
+				enabled = "[GetScriptedGui('te_tp_consumption_high_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_consumption_high_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_consumption_high_tt'), GetScriptedGui('te_tp_consumption_high_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_zero"
+				enabled = "[GetScriptedGui('te_tp_zero_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_zero_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_zero_tt'), GetScriptedGui('te_tp_zero_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_grain_add"
+				enabled = "[GetScriptedGui('te_tp_grain_add_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_grain_add_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_grain_add_tt'), GetScriptedGui('te_tp_grain_add_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_grain_remove"
+				enabled = "[GetScriptedGui('te_tp_grain_remove_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_grain_remove_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_grain_remove_tt'), GetScriptedGui('te_tp_grain_remove_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_luxury_add"
+				enabled = "[GetScriptedGui('te_tp_luxury_add_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_luxury_add_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_luxury_add_tt'), GetScriptedGui('te_tp_luxury_add_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		text_single = { text = "te_tp_section_modifiers" parentanchor = hcenter using = fontsize_large }
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_state_relief"
+				enabled = "[GetScriptedGui('te_tp_state_relief_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_state_relief_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_state_relief_tt'), GetScriptedGui('te_tp_state_relief_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_state_exempt"
+				enabled = "[GetScriptedGui('te_tp_state_exempt_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_state_exempt_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_state_exempt_tt'), GetScriptedGui('te_tp_state_exempt_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_capacity"
+				enabled = "[GetScriptedGui('te_tp_capacity_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_capacity_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_capacity_tt'), GetScriptedGui('te_tp_capacity_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_waste"
+				enabled = "[GetScriptedGui('te_tp_waste_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_waste_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_waste_tt'), GetScriptedGui('te_tp_waste_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_agriculture"
+				enabled = "[GetScriptedGui('te_tp_agriculture_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_agriculture_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_agriculture_tt'), GetScriptedGui('te_tp_agriculture_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_manufacturing"
+				enabled = "[GetScriptedGui('te_tp_manufacturing_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_manufacturing_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_manufacturing_tt'), GetScriptedGui('te_tp_manufacturing_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_authority"
+				enabled = "[GetScriptedGui('te_tp_authority_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_authority_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_authority_tt'), GetScriptedGui('te_tp_authority_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_import_rate"
+				enabled = "[GetScriptedGui('te_tp_import_rate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_import_rate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_import_rate_tt'), GetScriptedGui('te_tp_import_rate_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_export_rate"
+				enabled = "[GetScriptedGui('te_tp_export_rate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_export_rate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_export_rate_tt'), GetScriptedGui('te_tp_export_rate_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_grain_import"
+				enabled = "[GetScriptedGui('te_tp_grain_import_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_grain_import_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_grain_import_tt'), GetScriptedGui('te_tp_grain_import_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_grain_export"
+				enabled = "[GetScriptedGui('te_tp_grain_export_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_grain_export_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_grain_export_tt'), GetScriptedGui('te_tp_grain_export_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_grain_max"
+				enabled = "[GetScriptedGui('te_tp_grain_max_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_grain_max_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_grain_max_tt'), GetScriptedGui('te_tp_grain_max_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_grain_min"
+				enabled = "[GetScriptedGui('te_tp_grain_min_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_grain_min_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_grain_min_tt'), GetScriptedGui('te_tp_grain_min_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_static_wage"
+				enabled = "[GetScriptedGui('te_tp_static_wage_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_static_wage_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_static_wage_tt'), GetScriptedGui('te_tp_static_wage_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_bureaucracy"
+				enabled = "[GetScriptedGui('te_tp_bureaucracy_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_bureaucracy_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_bureaucracy_tt'), GetScriptedGui('te_tp_bureaucracy_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		text_single = { text = "te_tp_section_customs" parentanchor = hcenter using = fontsize_large }
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_import_no_tariffs_or_subventions"
+				enabled = "[GetScriptedGui('te_tp_import_no_tariffs_or_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_import_no_tariffs_or_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_import_no_tariffs_or_subventions_tt'), GetScriptedGui('te_tp_import_no_tariffs_or_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_import_low_tariffs"
+				enabled = "[GetScriptedGui('te_tp_import_low_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_import_low_tariffs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_import_low_tariffs_tt'), GetScriptedGui('te_tp_import_low_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_import_max_tariffs"
+				enabled = "[GetScriptedGui('te_tp_import_max_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_import_max_tariffs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_import_max_tariffs_tt'), GetScriptedGui('te_tp_import_max_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_import_low_subventions"
+				enabled = "[GetScriptedGui('te_tp_import_low_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_import_low_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_import_low_subventions_tt'), GetScriptedGui('te_tp_import_low_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_import_max_subventions"
+				enabled = "[GetScriptedGui('te_tp_import_max_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_import_max_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_import_max_subventions_tt'), GetScriptedGui('te_tp_import_max_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_export_no_tariffs_or_subventions"
+				enabled = "[GetScriptedGui('te_tp_export_no_tariffs_or_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_export_no_tariffs_or_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_export_no_tariffs_or_subventions_tt'), GetScriptedGui('te_tp_export_no_tariffs_or_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_export_low_tariffs"
+				enabled = "[GetScriptedGui('te_tp_export_low_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_export_low_tariffs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_export_low_tariffs_tt'), GetScriptedGui('te_tp_export_low_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_export_max_tariffs"
+				enabled = "[GetScriptedGui('te_tp_export_max_tariffs_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_export_max_tariffs_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_export_max_tariffs_tt'), GetScriptedGui('te_tp_export_max_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_export_low_subventions"
+				enabled = "[GetScriptedGui('te_tp_export_low_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_export_low_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_export_low_subventions_tt'), GetScriptedGui('te_tp_export_low_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_export_max_subventions"
+				enabled = "[GetScriptedGui('te_tp_export_max_subventions_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_export_max_subventions_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_export_max_subventions_tt'), GetScriptedGui('te_tp_export_max_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		text_single = { text = "te_tp_section_controls" parentanchor = hcenter using = fontsize_large }
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_level_very_low"
+				enabled = "[GetScriptedGui('te_tp_level_very_low_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_level_very_low_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_level_very_low_tt'), GetScriptedGui('te_tp_level_very_low_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_level_low"
+				enabled = "[GetScriptedGui('te_tp_level_low_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_level_low_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_level_low_tt'), GetScriptedGui('te_tp_level_low_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_level_medium"
+				enabled = "[GetScriptedGui('te_tp_level_medium_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_level_medium_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_level_medium_tt'), GetScriptedGui('te_tp_level_medium_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_level_high"
+				enabled = "[GetScriptedGui('te_tp_level_high_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_level_high_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_level_high_tt'), GetScriptedGui('te_tp_level_high_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_level_very_high"
+				enabled = "[GetScriptedGui('te_tp_level_very_high_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_level_very_high_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_level_very_high_tt'), GetScriptedGui('te_tp_level_very_high_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_military_low"
+				enabled = "[GetScriptedGui('te_tp_military_low_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_military_low_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_military_low_tt'), GetScriptedGui('te_tp_military_low_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_military_medium"
+				enabled = "[GetScriptedGui('te_tp_military_medium_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_military_medium_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_military_medium_tt'), GetScriptedGui('te_tp_military_medium_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_lock"
+				enabled = "[GetScriptedGui('te_tp_lock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_lock_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_lock_tt'), GetScriptedGui('te_tp_lock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_unlock"
+				enabled = "[GetScriptedGui('te_tp_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_unlock_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_unlock_tt'), GetScriptedGui('te_tp_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		text_single = { text = "te_tp_section_lifecycle" parentanchor = hcenter using = fontsize_large }
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_draft"
+				enabled = "[GetScriptedGui('te_tp_draft_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_draft_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_draft_tt'), GetScriptedGui('te_tp_draft_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_approve"
+				enabled = "[GetScriptedGui('te_tp_approve_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_approve_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_approve_tt'), GetScriptedGui('te_tp_approve_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_commence"
+				enabled = "[GetScriptedGui('te_tp_commence_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_commence_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_commence_tt'), GetScriptedGui('te_tp_commence_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_discard"
+				enabled = "[GetScriptedGui('te_tp_discard_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_discard_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_discard_tt'), GetScriptedGui('te_tp_discard_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_conflict"
+				enabled = "[GetScriptedGui('te_tp_conflict_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_conflict_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_conflict_tt'), GetScriptedGui('te_tp_conflict_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_rebuild"
+				enabled = "[GetScriptedGui('te_tp_rebuild_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_rebuild_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_rebuild_tt'), GetScriptedGui('te_tp_rebuild_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_ai"
+				enabled = "[GetScriptedGui('te_tp_ai_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_ai_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_ai_tt'), GetScriptedGui('te_tp_ai_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		text_single = { text = "te_tp_section_storage" parentanchor = hcenter using = fontsize_large }
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_storage"
+				enabled = "[GetScriptedGui('te_tp_storage_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_storage_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_storage_tt'), GetScriptedGui('te_tp_storage_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_iterate"
+				enabled = "[GetScriptedGui('te_tp_iterate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_iterate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_iterate_tt'), GetScriptedGui('te_tp_iterate_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		hbox = {
+			parentanchor = hcenter
+			spacing = 8
+			button = {
+				size = { 230 42 }
+				text = "te_tp_action_timer"
+				enabled = "[GetScriptedGui('te_tp_timer_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tp_timer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				tooltip = "[Concatenate( Localize('te_tp_action_timer_tt'), GetScriptedGui('te_tp_timer_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			}
+		}
+		button = {
+			parentanchor = hcenter
+			size = { 230 42 }
+			text = "te_tp_action_supersede"
+			enabled = "[GetScriptedGui('te_tp_supersede_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_tp_supersede_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			tooltip = "[Concatenate( Localize('te_tp_action_supersede_tt'), GetScriptedGui('te_tp_supersede_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+		}
+		button = {
+			parentanchor = hcenter
+			size = { 230 42 }
+			text = "te_tp_action_customs_clause"
+			enabled = "[GetScriptedGui('te_tp_customs_clause_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_tp_customs_clause_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			tooltip = "[Concatenate( Localize('te_tp_action_customs_clause_tt'), GetScriptedGui('te_tp_customs_clause_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+		}
+		button = {
+			parentanchor = hcenter
+			size = { 230 40 }
+			text = "te_tp_help"
+			icon = {
+				visible = "[Not(GetVariableSystem.Exists('te_tp_help_open'))]"
+				size = { 16 16 }
+				parentanchor = right|vcenter
+				margin_right = 8
+				texture = "gfx/interface/buttons/button_icons/plus.dds"
+			}
+			onclick = "[GetVariableSystem.Toggle('te_tp_help_open')]"
+		}
+		textbox = {
+			visible = "[GetVariableSystem.Exists('te_tp_help_open')]"
+			text = "te_tp_help_text"
+			multiline = yes
+			autoresize = yes
+			maximumsize = { 480 -1 }
+			parentanchor = hcenter
+			using = fontsize_small
+		}
+	}
+}

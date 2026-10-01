@@ -1,0 +1,114 @@
+﻿# TEMPORARY PR 585 ENGINE PROBES. Remove before release; see docs/testing/tax-code-probes.md.
+# Inert until event te_debug_tax.1 explicitly arms a country. Disposable saves only.
+
+te_tp_read_tax_income = { value = tax_income }
+te_tp_read_tax_waste = { value = tax_waste }
+te_tp_read_net_fixed_income = { value = net_fixed_income }
+te_tp_read_net_total_income = { value = net_total_income }
+te_tp_read_bureaucracy = { value = bureaucracy }
+te_tp_read_bureaucracy_usage = { value = bureaucracy_usage }
+te_tp_read_authority = { value = authority }
+te_tp_read_tax_level_value = { value = tax_level_value }
+te_tp_read_military_wage_level_value = { value = military_wage_level_value }
+te_tp_view_version = {
+	value = 0
+	if = { limit = { has_variable = te_tp_version } add = var:te_tp_version }
+}
+te_tp_view_stage = {
+	value = 0
+	if = { limit = { has_variable = te_tp_stage } add = var:te_tp_stage }
+}
+te_tp_view_revision = {
+	value = 0
+	if = { limit = { has_variable = te_tp_revision } add = var:te_tp_revision }
+}
+te_tp_view_operative = {
+	value = 0
+	if = { limit = { has_variable = te_tp_operative } add = var:te_tp_operative }
+}
+te_tp_view_pending = {
+	value = 0
+	if = { limit = { has_variable = te_tp_pending } add = var:te_tp_pending }
+}
+te_tp_view_due = {
+	value = 0
+	if = { limit = { has_variable = te_tp_due } add = var:te_tp_due }
+}
+te_tp_view_expiry = {
+	value = 0
+	if = { limit = { has_variable = te_tp_expiry } add = var:te_tp_expiry }
+}
+te_tp_view_snapshot_seq = {
+	value = 0
+	if = { limit = { has_variable = te_tp_snapshot_seq } add = var:te_tp_snapshot_seq }
+}
+te_tp_view_record_count = {
+	value = 0
+	if = { limit = { has_variable = te_tp_record_count } add = var:te_tp_record_count }
+}
+te_tp_view_school_level = {
+	value = 0
+	if = { limit = { has_variable = te_tp_school_level } add = var:te_tp_school_level }
+}
+te_tp_view_school_expanding = {
+	value = 0
+	if = { limit = { has_variable = te_tp_school_expanding } add = var:te_tp_school_expanding }
+}
+te_tp_view_grain_selected = {
+	value = 0
+	if = { limit = { has_variable = te_tp_grain_selected } add = var:te_tp_grain_selected }
+}
+te_tp_view_lock = {
+	value = 0
+	if = { limit = { has_variable = te_tp_lock } add = var:te_tp_lock }
+}
+te_tp_view_last_month = {
+	value = 0
+	if = { limit = { has_variable = te_tp_last_month } add = var:te_tp_last_month }
+}
+te_tp_view_obs_tax_income = {
+	value = 0
+	if = { limit = { has_variable = te_tp_obs_tax_income } add = var:te_tp_obs_tax_income }
+}
+te_tp_view_obs_tax_waste = {
+	value = 0
+	if = { limit = { has_variable = te_tp_obs_tax_waste } add = var:te_tp_obs_tax_waste }
+}
+te_tp_view_obs_net_fixed_income = {
+	value = 0
+	if = { limit = { has_variable = te_tp_obs_net_fixed_income } add = var:te_tp_obs_net_fixed_income }
+}
+te_tp_view_obs_net_total_income = {
+	value = 0
+	if = { limit = { has_variable = te_tp_obs_net_total_income } add = var:te_tp_obs_net_total_income }
+}
+te_tp_view_obs_bureaucracy = {
+	value = 0
+	if = { limit = { has_variable = te_tp_obs_bureaucracy } add = var:te_tp_obs_bureaucracy }
+}
+te_tp_view_obs_bureaucracy_usage = {
+	value = 0
+	if = { limit = { has_variable = te_tp_obs_bureaucracy_usage } add = var:te_tp_obs_bureaucracy_usage }
+}
+te_tp_view_obs_authority = {
+	value = 0
+	if = { limit = { has_variable = te_tp_obs_authority } add = var:te_tp_obs_authority }
+}
+te_tp_view_obs_tax_level_value = {
+	value = 0
+	if = { limit = { has_variable = te_tp_obs_tax_level_value } add = var:te_tp_obs_tax_level_value }
+}
+te_tp_view_obs_military_wage_level_value = {
+	value = 0
+	if = { limit = { has_variable = te_tp_obs_military_wage_level_value } add = var:te_tp_obs_military_wage_level_value }
+}
+
+te_tp_view_policy_target = { value = 0 if = { limit = { has_variable = te_tp_policy_target } add = var:te_tp_policy_target } }
+
+te_tp_view_policy_actual = { value = 0 if = { limit = { has_variable = te_tp_policy_actual } add = var:te_tp_policy_actual } }
+
+te_tp_view_controls = { value = 0 if = { limit = { has_variable = te_tp_controls } add = var:te_tp_controls } }
+
+te_tp_view_public_schools = { value = 0 if = { limit = { has_variable = te_tp_public_schools } add = var:te_tp_public_schools } }
+
+te_tp_view_controls_actions = { value = 0 if = { limit = { has_variable = te_tp_controls_actions } add = var:te_tp_controls_actions } }

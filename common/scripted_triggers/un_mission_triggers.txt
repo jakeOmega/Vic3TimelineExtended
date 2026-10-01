@@ -55,6 +55,23 @@ un_mission_hosts = {
 	}
 }
 
+# The scoped country hosts an active mission of $TYPE$ that has been in the
+# field for $MONTHS$ months or more. The AI's answer to an appeal weighs it: a
+# member is less willing to put a contingent into a mission that has dragged on
+# (un_mission_ai_age_penalty does the same for contingents sent at will).
+# Scope: country (the host)
+un_mission_hosts_aged = {
+	has_global_variable_list = un_mission_registry
+	any_in_global_list = {
+		variable = un_mission_registry
+		has_tag = un_msn_active
+		has_tag = un_msn_$TYPE$
+		var:un_msn_host ?= PREV
+		has_variable = un_msn_months
+		var:un_msn_months >= $MONTHS$
+	}
+}
+
 # A mission of $TYPE$ can be found or opened for the scoped host: it already
 # hosts one, or it holds a state with no mission (un_mission_join_host). For
 # the tooltips, which are shown before the effect runs.

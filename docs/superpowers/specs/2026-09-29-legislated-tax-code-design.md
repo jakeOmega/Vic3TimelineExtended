@@ -1,7 +1,8 @@
 # Legislated tax code and customs schedule — design specification
 
 **Date:** 2026-09-29 (America/Denver)  
-**Status:** proposed design; no gameplay implementation in this change  
+**Status:** proposed design; temporary opt-in engine probes implemented, no verified runtime results
+**Playtesting:** [runbook](../../testing/tax-code-probes.md) · [results form](../../testing/tax-code-probe-results.md)
 **Scope:** replace the existing tax-law/rate split with one enacted fiscal code
 
 ## 1. Purpose and agreed direction
@@ -790,5 +791,7 @@ instruments must not appear as functional controls.
 - Whether the system ships behind a game rule, as the mod's major systems do, and what the
   disabled mode keeps (section 10 assumes a campaign-setup choice if so).
 
-The repository's current player guide describes implemented systems. This specification alone
-does not change gameplay and does not require rebuilding that guide; implementation PRs do.
+The repository's current player guide describes implemented systems. The opt-in developer harness
+is documented separately in the runbook above; it does not add a
+playable tax-code system or change ordinary campaign behavior. Production implementation PRs
+update the player guide.

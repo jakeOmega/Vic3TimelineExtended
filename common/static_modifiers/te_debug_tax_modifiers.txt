@@ -1,0 +1,77 @@
+﻿# TEMPORARY PR 585 ENGINE PROBES. Remove before release; see docs/testing/tax-code-probes.md.
+# Inert until event te_debug_tax.1 explicitly arms a country. Disposable saves only.
+
+te_tp_state_relief = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	state_tax_collection_mult = -0.5
+}
+
+te_tp_state_exempt = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	state_tax_collection_mult = -1
+}
+
+te_tp_capacity = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	state_tax_capacity_add = 1000
+}
+
+te_tp_waste = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	state_tax_waste_add = 0.25
+}
+
+te_tp_agriculture = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	building_group_bg_agriculture_tax_mult = -0.5
+}
+
+te_tp_manufacturing = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	building_group_bg_manufacturing_tax_mult = -0.5
+}
+
+te_tp_authority = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	country_consumption_tax_cost_mult = -1
+}
+
+te_tp_import_rate = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	state_tariff_import_add = 0.10
+}
+
+te_tp_export_rate = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	state_tariff_export_add = 0.10
+}
+
+te_tp_grain_import = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	country_grain_import_tariffs_rate_add = 0.10
+}
+
+te_tp_grain_export = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	country_grain_export_tariffs_rate_add = 0.10
+}
+
+te_tp_grain_max = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	country_grain_max_import_tariffs_level_add = -1
+}
+
+te_tp_grain_min = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	country_grain_min_import_tariffs_level_add = 1
+}
+
+te_tp_static_wage = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	tax_income_add = 0.05
+}
+
+te_tp_bureaucracy = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	country_bureaucracy_add = -10000
+}

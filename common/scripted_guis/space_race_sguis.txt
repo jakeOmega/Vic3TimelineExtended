@@ -17,6 +17,7 @@
 #   scope:op = 1  ->  select the Ambitious approach
 #   scope:op = 2  ->  decrease this milestone's funding level
 #   scope:op = 3  ->  increase this milestone's funding level
+#   scope:op = 4  ->  select the Standard approach (player only: no AI button)
 #
 # The milestone itself is NOT encoded in the op code: it arrives free through
 # the panel's datacontext, which names one of these eight handlers. Folding it
@@ -59,8 +60,12 @@ sr_milestone_suborbital_sgui = {
 			limit = { scope:op = 2 }
 			sr_possible_fund_down = { MILESTONE = suborbital }
 		}
-		trigger_else = {
+		trigger_else_if = {
+			limit = { scope:op = 3 }
 			sr_possible_fund_up = { MILESTONE = suborbital }
+		}
+		trigger_else = {
+			sr_possible_standard = { MILESTONE = suborbital }
 		}
 	}
 
@@ -77,8 +82,12 @@ sr_milestone_suborbital_sgui = {
 			limit = { scope:op = 2 }
 			sr_effect_fund_down = { MILESTONE = suborbital }
 		}
-		else = {
+		else_if = {
+			limit = { scope:op = 3 }
 			sr_effect_fund_up = { MILESTONE = suborbital }
+		}
+		else = {
+			sr_effect_standard = { MILESTONE = suborbital }
 		}
 	}
 }
@@ -109,8 +118,12 @@ sr_milestone_orbital_sgui = {
 			limit = { scope:op = 2 }
 			sr_possible_fund_down = { MILESTONE = orbital }
 		}
-		trigger_else = {
+		trigger_else_if = {
+			limit = { scope:op = 3 }
 			sr_possible_fund_up = { MILESTONE = orbital }
+		}
+		trigger_else = {
+			sr_possible_standard = { MILESTONE = orbital }
 		}
 	}
 
@@ -127,8 +140,12 @@ sr_milestone_orbital_sgui = {
 			limit = { scope:op = 2 }
 			sr_effect_fund_down = { MILESTONE = orbital }
 		}
-		else = {
+		else_if = {
+			limit = { scope:op = 3 }
 			sr_effect_fund_up = { MILESTONE = orbital }
+		}
+		else = {
+			sr_effect_standard = { MILESTONE = orbital }
 		}
 	}
 }
@@ -159,8 +176,12 @@ sr_milestone_moon_landing_sgui = {
 			limit = { scope:op = 2 }
 			sr_possible_fund_down = { MILESTONE = moon_landing }
 		}
-		trigger_else = {
+		trigger_else_if = {
+			limit = { scope:op = 3 }
 			sr_possible_fund_up = { MILESTONE = moon_landing }
+		}
+		trigger_else = {
+			sr_possible_standard = { MILESTONE = moon_landing }
 		}
 	}
 
@@ -177,8 +198,12 @@ sr_milestone_moon_landing_sgui = {
 			limit = { scope:op = 2 }
 			sr_effect_fund_down = { MILESTONE = moon_landing }
 		}
-		else = {
+		else_if = {
+			limit = { scope:op = 3 }
 			sr_effect_fund_up = { MILESTONE = moon_landing }
+		}
+		else = {
+			sr_effect_standard = { MILESTONE = moon_landing }
 		}
 	}
 }
@@ -209,8 +234,12 @@ sr_milestone_probe_sgui = {
 			limit = { scope:op = 2 }
 			sr_possible_fund_down = { MILESTONE = probe }
 		}
-		trigger_else = {
+		trigger_else_if = {
+			limit = { scope:op = 3 }
 			sr_possible_fund_up = { MILESTONE = probe }
+		}
+		trigger_else = {
+			sr_possible_standard = { MILESTONE = probe }
 		}
 	}
 
@@ -227,8 +256,12 @@ sr_milestone_probe_sgui = {
 			limit = { scope:op = 2 }
 			sr_effect_fund_down = { MILESTONE = probe }
 		}
-		else = {
+		else_if = {
+			limit = { scope:op = 3 }
 			sr_effect_fund_up = { MILESTONE = probe }
+		}
+		else = {
+			sr_effect_standard = { MILESTONE = probe }
 		}
 	}
 }
@@ -259,8 +292,12 @@ sr_milestone_moon_base_sgui = {
 			limit = { scope:op = 2 }
 			sr_possible_fund_down = { MILESTONE = moon_base }
 		}
-		trigger_else = {
+		trigger_else_if = {
+			limit = { scope:op = 3 }
 			sr_possible_fund_up = { MILESTONE = moon_base }
+		}
+		trigger_else = {
+			sr_possible_standard = { MILESTONE = moon_base }
 		}
 	}
 
@@ -277,8 +314,12 @@ sr_milestone_moon_base_sgui = {
 			limit = { scope:op = 2 }
 			sr_effect_fund_down = { MILESTONE = moon_base }
 		}
-		else = {
+		else_if = {
+			limit = { scope:op = 3 }
 			sr_effect_fund_up = { MILESTONE = moon_base }
+		}
+		else = {
+			sr_effect_standard = { MILESTONE = moon_base }
 		}
 	}
 }
@@ -309,8 +350,12 @@ sr_milestone_mars_landing_sgui = {
 			limit = { scope:op = 2 }
 			sr_possible_fund_down = { MILESTONE = mars_landing }
 		}
-		trigger_else = {
+		trigger_else_if = {
+			limit = { scope:op = 3 }
 			sr_possible_fund_up = { MILESTONE = mars_landing }
+		}
+		trigger_else = {
+			sr_possible_standard = { MILESTONE = mars_landing }
 		}
 	}
 
@@ -327,8 +372,12 @@ sr_milestone_mars_landing_sgui = {
 			limit = { scope:op = 2 }
 			sr_effect_fund_down = { MILESTONE = mars_landing }
 		}
-		else = {
+		else_if = {
+			limit = { scope:op = 3 }
 			sr_effect_fund_up = { MILESTONE = mars_landing }
+		}
+		else = {
+			sr_effect_standard = { MILESTONE = mars_landing }
 		}
 	}
 }
@@ -359,8 +408,12 @@ sr_milestone_interstellar_probe_sgui = {
 			limit = { scope:op = 2 }
 			sr_possible_fund_down = { MILESTONE = interstellar_probe }
 		}
-		trigger_else = {
+		trigger_else_if = {
+			limit = { scope:op = 3 }
 			sr_possible_fund_up = { MILESTONE = interstellar_probe }
+		}
+		trigger_else = {
+			sr_possible_standard = { MILESTONE = interstellar_probe }
 		}
 	}
 
@@ -377,8 +430,12 @@ sr_milestone_interstellar_probe_sgui = {
 			limit = { scope:op = 2 }
 			sr_effect_fund_down = { MILESTONE = interstellar_probe }
 		}
-		else = {
+		else_if = {
+			limit = { scope:op = 3 }
 			sr_effect_fund_up = { MILESTONE = interstellar_probe }
+		}
+		else = {
+			sr_effect_standard = { MILESTONE = interstellar_probe }
 		}
 	}
 }
@@ -409,8 +466,12 @@ sr_milestone_solar_colonization_sgui = {
 			limit = { scope:op = 2 }
 			sr_possible_fund_down = { MILESTONE = solar_colonization }
 		}
-		trigger_else = {
+		trigger_else_if = {
+			limit = { scope:op = 3 }
 			sr_possible_fund_up = { MILESTONE = solar_colonization }
+		}
+		trigger_else = {
+			sr_possible_standard = { MILESTONE = solar_colonization }
 		}
 	}
 
@@ -427,16 +488,20 @@ sr_milestone_solar_colonization_sgui = {
 			limit = { scope:op = 2 }
 			sr_effect_fund_down = { MILESTONE = solar_colonization }
 		}
-		else = {
+		else_if = {
+			limit = { scope:op = 3 }
 			sr_effect_fund_up = { MILESTONE = solar_colonization }
+		}
+		else = {
+			sr_effect_standard = { MILESTONE = solar_colonization }
 		}
 	}
 }
 
 # ----------------------------------------------------------------------------
-# Who else is racing. Display only — the widget calls ExecuteTooltip, which
-# renders the effect body without running it, and is_valid is always = no so no
-# control can ever fire it.
+# Who else is racing (the Rivals section). Display only — the widget calls
+# ExecuteTooltip, which renders the effect body without running it, and
+# is_valid is always = no so no control can ever fire it.
 #
 #   scope:op   0 suborbital · 1 orbital · 2 moon_landing · 3 probe
 #              4 moon_base  · 5 mars_landing · 6 interstellar_probe
@@ -446,8 +511,12 @@ sr_milestone_solar_colonization_sgui = {
 # gotchas #11 and #15), so the list is built here and handed over as text. Each
 # entry prints inside a country scope change, which is what gives it a flag and
 # a bullet for free (gotcha #19). Note gotcha #18: every line printed at ROOT
-# scope — the two "first" lines and the intro — renders ABOVE the country
-# entries whatever order the script is in.
+# scope — the intro — renders ABOVE the country entries whatever order the
+# script is in.
+#
+# Whether "the first" is still open is the overview's (sr_disp_first_claimed_<m>
+# in common/script_values/space_race_display_values.txt), so this prints the
+# participants only, for every milestone.
 # ----------------------------------------------------------------------------
 sr_rivals_sgui = {
 	scope = country
@@ -464,36 +533,33 @@ sr_rivals_sgui = {
 	effect = {
 		if = {
 			limit = { scope:op = 0 }
-			sr_rivals_line_base = { MILESTONE = suborbital }
+			sr_rivals_participants_base = { MILESTONE = suborbital }
 		}
 		else_if = {
 			limit = { scope:op = 1 }
-			sr_rivals_line_base = { MILESTONE = orbital }
+			sr_rivals_participants_base = { MILESTONE = orbital }
 		}
 		else_if = {
 			limit = { scope:op = 2 }
-			sr_rivals_line_base = { MILESTONE = moon_landing }
+			sr_rivals_participants_base = { MILESTONE = moon_landing }
 		}
 		else_if = {
 			limit = { scope:op = 3 }
-			sr_rivals_line_base = { MILESTONE = probe }
+			sr_rivals_participants_base = { MILESTONE = probe }
 		}
 		else_if = {
 			limit = { scope:op = 4 }
-			sr_rivals_line_base = { MILESTONE = moon_base }
+			sr_rivals_participants_base = { MILESTONE = moon_base }
 		}
 		else_if = {
 			limit = { scope:op = 5 }
-			sr_rivals_line_base = { MILESTONE = mars_landing }
+			sr_rivals_participants_base = { MILESTONE = mars_landing }
 		}
 		else_if = {
 			limit = { scope:op = 6 }
-			sr_rivals_line_base = { MILESTONE = interstellar_probe }
+			sr_rivals_participants_base = { MILESTONE = interstellar_probe }
 		}
 		else = {
-			# Solar colonization only gets the participation list: there is no
-			# "first" to claim on it (no sr_first_solar_colonization modifier and
-			# no sr_global_first_ flag is ever written for it).
 			sr_rivals_participants_base = { MILESTONE = solar_colonization }
 		}
 	}

@@ -870,6 +870,8 @@ te_monetary_update_anchor_peg = {
 # the clock, so they damp the overvaluation drain and run the fatigue counter
 # exactly as chosen ones do.
 te_mon_effect_anchor_peg_defend = {
+	# TEMPORARY PR 585: observe action-time restraint violations; no policy change.
+	te_tp_observe_controls = { KIND = emergency }
 	set_variable = { name = te_mon_emergency_controls_months value = te_mon_emergency_controls_duration }
 	change_variable = { name = te_peg_confidence add = te_mon_peg_anchor_defend_confidence }
 	clamp_variable = {

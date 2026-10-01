@@ -157,7 +157,7 @@ types budget
 					text = "te_budget_tab_banking"
 				}
 				blockoverride "fourth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_tt', Concatenate( Localize( 'te_budget_tab_banking_locked_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_tt', SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_budget_tab_banking_locked_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "fourth_button_click"
 				{
@@ -347,7 +347,7 @@ types budget
 								name = "tutorial_highlight_add_consumption_tax"
 								size = { 35 35 }
 								onclick = "[BudgetPanel.ToggleAddConsumptionTaxMenu(PdxGuiWidget.AccessSelf)]"
-								enabled = "[BudgetPanel.CanTaxGoods]"
+								enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), BudgetPanel.CanTaxGoods )]"
 								tooltip = "[SelectLocalization( BudgetPanel.CanTaxGoods, 'TAX_GOODS', 'NO_GOODS_TO_TAX' )]"
 							}
 						}
@@ -1509,13 +1509,13 @@ types budget
 			}
 
 			### MOD: Banking tab (te_banking) ###
-			# The banking journal entry's panels, the same types the entry shows
-			# (gui/journal_entry_widgets/banking_dashboard_widget.gui and
-			# banking_history_widget.gui): conditions, policies, then the history
-			# charts, open by default here (te_banking_history_panel_open), and a
-			# link back to the entry at the foot. The entry's scripted buttons are not
-			# drawn: the policy panel carries the same actions, and the buttons stay
-			# in the journal as the AI's path and the player's fallback.
+			# The banking journal entry's panels, composed by the same layout types
+			# the entry attaches (gui/journal_entry_widgets/banking_layout_widget.gui):
+			# the overview, the live sections, then the reference sections (the
+			# history charts, open, and How Banking Works), and a link back to the
+			# entry at the foot. The
+			# entry's scripted buttons are not drawn: they are the AI's (each is
+			# `is_ai = yes`), and the policy sections carry the same actions.
 			#
 			# Three layers, so a failure shows where it is. The header sits outside
 			# the gate, so it appears whenever the tab is selected. The gate
@@ -1551,9 +1551,9 @@ types budget
 						ignoreinvisible = yes
 						spacing = 10
 
-						te_banking_conditions_panel = {}
-						te_banking_policies_panel = {}
-						te_banking_history_panel_open = {}
+						te_banking_overview_panel = {}
+						te_banking_status_sections = {}
+						te_banking_reference_sections = {}
 
 						button = {
 							visible = "[JournalEntry.IsActive]"
@@ -1739,7 +1739,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/max_tariffs.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetExportTariffsMax(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetExportTariffsMax(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetExportTariffsMax(Goods.Self) )]"
 				using = decrease_button_sound
 			}
@@ -1759,7 +1759,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/high_tariffs.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetExportTariffsHigh(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetExportTariffsHigh(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetExportTariffsHigh(Goods.Self) )]"
 				using = decrease_button_sound
 			}
@@ -1779,7 +1779,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/low_tariffs.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetExportTariffsLow(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetExportTariffsLow(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetExportTariffsLow(Goods.Self) )]"
 				using = decrease_button_sound
 			}
@@ -1799,7 +1799,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetExportTariffsNone(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetExportTariffsNone(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetExportTariffsNone(Goods.Self) )]"
 				using = increase_button_sound
 			}
@@ -1819,7 +1819,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/low_subvention.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetExportSubventionsLow(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetExportSubventionsLow(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetExportSubventionsLow(Goods.Self) )]"
 				using = increase_button_sound
 			}
@@ -1839,7 +1839,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/high_subvention.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetExportSubventionsHigh(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetExportSubventionsHigh(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetExportSubventionsHigh(Goods.Self) )]"
 				using = increase_button_sound
 			}
@@ -1860,7 +1860,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/max_subvention.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetExportSubventionsMax(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetExportSubventionsMax(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetExportSubventionsMax(Goods.Self) )]"
 				using = increase_button_sound
 			}
@@ -1885,7 +1885,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/max_tariffs.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetImportTariffsMax(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetImportTariffsMax(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetImportTariffsMax(Goods.Self) )]"
 				using = decrease_button_sound
 			}
@@ -1905,7 +1905,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/high_tariffs.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetImportTariffsHigh(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetImportTariffsHigh(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetImportTariffsHigh(Goods.Self) )]"
 				using = decrease_button_sound
 			}
@@ -1925,7 +1925,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/low_tariffs.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetImportTariffsLow(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetImportTariffsLow(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetImportTariffsLow(Goods.Self) )]"
 				using = decrease_button_sound
 			}
@@ -1945,7 +1945,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetImportTariffsNone(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetImportTariffsNone(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetImportTariffsNone(Goods.Self) )]"
 				using = increase_button_sound
 			}
@@ -1965,7 +1965,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/low_subvention.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetImportSubventionsLow(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetImportSubventionsLow(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetImportSubventionsLow(Goods.Self) )]"
 				using = increase_button_sound
 			}
@@ -1985,7 +1985,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/high_subvention.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetImportSubventionsHigh(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetImportSubventionsHigh(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetImportSubventionsHigh(Goods.Self) )]"
 				using = increase_button_sound
 			}
@@ -2006,7 +2006,7 @@ types budget
 				texture = "gfx/interface/icons/trade_icons/max_subvention.dds"
 			}
 			blockoverride "click" {
-				enabled = "[And(IsValid( GetPlayer.SetImportSubventionsMax(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket))]"
+				enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), And(IsValid( GetPlayer.SetImportSubventionsMax(Goods.Self) ), Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)) )]"
 				onclick = "[Execute( GetPlayer.SetImportSubventionsMax(Goods.Self) )]"
 				using = increase_button_sound
 			}
@@ -2049,7 +2049,7 @@ types budget
 
 				block "button_1_click" {
 					onclick = "[Execute(GetPlayer.SetTaxLevelVeryLow)]"
-					enabled = "[GetPlayer.HasAnyTaxes]"
+					enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetPlayer.HasAnyTaxes )]"
 				}
 			}
 
@@ -2083,7 +2083,7 @@ types budget
 
 				block "button_2_click" {
 					onclick = "[Execute(GetPlayer.SetTaxLevelLow)]"
-					enabled = "[GetPlayer.HasAnyTaxes]"
+					enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetPlayer.HasAnyTaxes )]"
 				}
 			}
 
@@ -2116,7 +2116,7 @@ types budget
 
 				block "button_3_click" {
 					onclick = "[Execute(GetPlayer.SetTaxLevelMedium)]"
-					enabled = "[GetPlayer.HasAnyTaxes]"
+					enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetPlayer.HasAnyTaxes )]"
 				}
 			}
 
@@ -2149,7 +2149,7 @@ types budget
 
 				block "button_4_click" {
 					onclick = "[Execute(GetPlayer.SetTaxLevelHigh)]"
-					enabled = "[GetPlayer.HasAnyTaxes]"
+					enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetPlayer.HasAnyTaxes )]"
 				}
 			}
 
@@ -2182,7 +2182,7 @@ types budget
 
 				block "button_5_click" {
 					onclick = "[Execute(GetPlayer.SetTaxLevelVeryHigh)]"
-					enabled = "[GetPlayer.HasAnyTaxes]"
+					enabled = "[And( GetScriptedGui('te_tp_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetPlayer.HasAnyTaxes )]"
 				}
 			}
 

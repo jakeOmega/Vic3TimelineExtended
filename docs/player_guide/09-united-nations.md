@@ -109,7 +109,7 @@ but with empty ledgers, no champions and no programs its target sits well below
 that, so expect authority to fall in its first years unless great powers
 champion it and run programs.
 
-![The Why UN Authority Is Moving widget. Authority is 58.7 and falling toward a target of 51.0, the sum of the pillars; below come the tier and the charter, the champions and underminers, and the newest ledger entries.](images/un_authority_moving.png)
+![The Why UN Authority Is Moving section in the UN tab of the Diplomacy panel. Authority is 68.1 and rising toward a target of 72.4, the sum of the pillars; below come the tier and the charter and the champions and underminers, with Recent Entries collapsed at the foot.](images/un_authority_moving.png)
 
 ### UN authority tiers
 
@@ -232,7 +232,7 @@ costs 15 relations with the target and voting against gains 15. When a power
 bloc leader's resolution carries, its bloc gains 3 leverage in each of its other
 members that sits in the Assembly; when it falls, the bloc loses 3.
 
-<!-- screenshot: the General Assembly chamber with a resolution in session, showing the grounds, the tally, our lean term by term and the vote buttons -->
+![The General Assembly with a Humanitarian Aid Request in session, in its first month with two votes for and none against: what happens if it carries or falls, how the Assembly reads our position term by term, the vote buttons and the start of Delegations.](images/un_general_assembly.png)
 
 ### General Assembly topics
 
@@ -426,6 +426,13 @@ you can stop it at any time, which frees the influence and loses what it had
 gained. Only AI members can be lobbied, never the resolution's target, and you
 need a vote yourself.
 
+Lobby Top Members For and Lobby Top Members Against, above the Delegations rows,
+start campaigns in bulk. One press puts a campaign on each listed member the
+Assembly doesn't yet read as leaning your way, from the top of the list down,
+until your influence runs out. Members you already lobby are skipped. The
+tooltip says how many campaigns your influence covers. A button is greyed if you
+have no vote, less than 100 influence, or no member on the list left to lobby.
+
 Seek a Vote Commitment: For and Seek a Vote Commitment: Against ask a member to
 pledge its vote. If it accepts, you owe it an obligation and its lean moves 100
 points your way. A member pledges once per resolution, and the first pledge it
@@ -513,6 +520,11 @@ mandate loses less war support to casualties and defeats.
 
 Missions put the UN's work in one state:
 
+Hover the name of a mission (on the state panel, in Missions in the Field or in
+a tooltip) for its Peacekeeping Mission, Aid Mission or Stabilisation Mission
+entry, which sets out how that kind opens, what it does, what its progress
+means and when it succeeds, fails or lapses.
+
 | Mission | Opened by | Effect on its state | Succeeds when |
 |---|---|---|---|
 | Peacekeeping | A peacekeeping request carried in full | Turmoil effects −20%, devastation recovery +50% | The host has 24 months of peace. |
@@ -523,8 +535,12 @@ Effects scale with the UN's enforcement, fall by up to half when members
 withhold dues, and rise with each contributor up to three. A mission fails if
 its host is attacked after it arrived, if every contributor leaves a
 peacekeeping or Stabilisation mission, or if the host expels a Stabilisation
-mission. It lapses after five years, or after six months if nobody has joined a
-peacekeeping or Stabilisation mission. Success adds delivery and gives each
+mission. It lapses after six months if nobody has joined a peacekeeping or
+Stabilisation mission, or if its host or state is gone. A mission has no time
+limit: one that is not done goes on for as long as it keeps contributors, so a
+member that keeps paying for its contingent can keep it in the field. Time
+works on the AI instead, which grows less willing to send a contingent to a
+mission the longer it has run. Success adds delivery and gives each
 contributor 3 standing and 15 relations with the host; failure costs
 credibility. The state panel shows a UN Mission tile, and contributors build
 covert networks in the host faster.
@@ -598,7 +614,7 @@ until the journal entry is active; hover it for what is still missing. The tab
 adds the entry's status text and buttons as Status and Actions sections, and
 ends with an Open Journal Entry button.
 
-<!-- screenshot: the UN tab in the Diplomacy panel, with the overview and the General Assembly in view -->
+![The UN tab of the Diplomacy panel: the overview (membership, tier, standing, the authority bar, the countries, GDP and population pies, the Security Council, the agencies and the headquarters) and Status.](images/un_tab_overview.png)
 
 The overview at the top is always shown. Its first row is icons: your
 membership (a check for a member, a star for a permanent member, a pause mark

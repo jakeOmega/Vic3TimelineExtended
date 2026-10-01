@@ -76,36 +76,110 @@ each need two of those three finished. The Deep-Space Probe and Mars Landing
 show up in the journal as soon as you reach orbit and have their technologies,
 but neither can start before the Moon Landing.
 
-<!-- screenshot: the Moon Landing journal entry with its milestone panel open, showing progress, pace, setback risk, the Safe and Ambitious selector and the funding stepper -->
-
 ### The space milestone panel
 
-Each running milestone has a panel in its journal entry. It shows progress
-against the goal, the pace per month, the current setback risk, the setbacks so
-far and a rough estimate of the months left. Hover the progress line to see the
-reward for finishing first and for finishing later. The controls are an approach
-selector (Safe or Ambitious) and a funding stepper. Two collapsed sections
-follow. Who else is racing lists the other powers running the same milestone and
-whether its "first" is still unclaimed, but not how far along they are. The
-program so far shows how far your own program has come across all nine entries.
+A running milestone's journal entry shows its panel: an overview at the top and
+sections below it. An entry that hasn't started yet shows only its status text.
 
-A new milestone starts with no approach and funding level 1. Until you pick an
-approach it creeps forward at 0.5 a month and never suffers a setback (the
-panel shows its risk as 0%), but its funding level is already billed.
+The same panels appear on the Space Race tab of the Timeline Extended window,
+which the button under the sidebar's Map List opens, and a change made in one
+shows in the other. The tab shows every milestone you have under way, each
+under its own name and followed by an Open Journal Entry button, then How the
+Space Race Works once at the end. It is grayed until your first milestone
+starts; hover it for what is still missing.
 
-### Safe and Ambitious approaches
+![The Space Race tab of the Timeline Extended window, showing Solar System Colonization: the overview and Programme row, Mission Control with the approach buttons and the funding stepper, Rivals and Our Colonies.](images/solar_system_colonization_tab.png)
 
-The approach decides how fast a milestone moves and how often it goes wrong.
+The overview is always shown. Its first row is three icons, each with a label
+under it:
+
+| Icon | Reads | Means |
+|---|---|---|
+| Approach | Standard, Safe −30/wk or Ambitious −60/wk | The approach in force. Safe and Ambitious show their weekly innovation cost. |
+| Approach, during a post-setback review | Shielded: 4 mo | No milestone can suffer a setback for the months shown. The approach itself is unchanged. |
+| Setback risk | Risk: 6%/mo | This month's chance of a setback. The icon is faint while it reads 0%. |
+| The first | First: Open or First: Claimed | Whether the larger reward is still there to win. The icon is faint once another power has claimed it. |
+
+Below them, the Progress bar fills toward the goal. Beside it are your progress,
+the goal and this month's pace, as in "124 / 200 (+3.5/mo)". Hover the bar for
+the reward for finishing first and for finishing later. Hover the pace for where
+it comes from: each source that adds progress every month, each that multiplies
+it, and the pace that results, which is never below 0.5. Every running milestone
+gains the same pace.
+
+At the foot of the overview, the Programme row has an icon for each entry, in
+order. An icon is lit once you have achieved that milestone, with a flag if you
+were first. It is half-lit while under way, and faint if you haven't begun it
+or another power finished it first. The Interstellar Probe and its wait for data
+share one icon with four pictures: the probe greyed (not begun), the probe with
+a wrench (under way), radio dishes with a clock (launched, awaiting data) and
+the dishes with a check (data received). Hover any icon for its state.
+
+Three sections follow the overview:
+
+| Section | Starts | Shows |
+|---|---|---|
+| Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is greyed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), and the Mission Profile. |
+| Rivals | Open | The other powers running the same milestone, each with an estimate of its progress. |
+| How the Space Race Works | Collapsed | The explanations: approach and pace, funding, setbacks, the first, rivals and the programme. |
+
+A rival's progress is an estimate. The first five rivals each show a band
+reaching 25% of the goal to either side of a marker, which always contains the
+true figure, with the band's range in percent beside it. Programs are announced but their schedules are
+not, so where the marker sits in the band is drawn again once a year. An agent
+network in the rival's country narrows the band to ±10% at strength 50 and ±5%
+at 75 (see [Agent networks](10-influence.md#agent-networks)). Hover a rival for
+its figures; any rivals past the fifth are listed when you hover the line below
+them.
+
+Solar System Colonization's overview shows its stage (Stage: 2 of 5) in place
+of the first, and its bar is Next Colony, the progress toward your next colony.
+Under the bar, the Worlds pie counts the 34 worlds: gold for your colonies, red
+for other powers' and grey for the worlds no one holds; hover it for the counts.
+While the program isn't running, because every world is claimed or your Space
+Program no longer runs the method it needs, the approach reads Idle, the risk
+and progress rows are hidden, and Mission Control shows only the Mission
+Profile.
+
+Solar System Colonization also has a fourth section, Our Colonies (open), below
+Rivals. It lists every world you hold, grouped by stage, under the
+specialization you chose for it, with Colonies Held (out of 34) at the top. A
+stage's heading appears once you hold one of its worlds, and hovering a colony
+shows its permanent effects. Each row has a small icon for its kind of world:
+Mars, the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus,
+Mercury, or a dwarf planet. It stays on the panel when the program is Idle, so
+you can always see where your colony modifiers come from.
+
+Interstellar Probe: Awaiting Data has nothing to control, so it has no Mission
+Control or Rivals. Its overview is the Transit bar ("40 / 132 months") and the
+Programme row; hover the bar for the months to go and what the probe might
+find.
+
+A new milestone starts on the Standard approach at funding level 1. It moves at
+your program's pace and rolls against its base setback risk from its first
+month.
+
+### Standard, Safe and Ambitious approaches
+
+The approach decides how fast a milestone moves, how often it goes wrong and what
+it costs on top of funding. You can switch a running milestone between the three
+at any time, back to Standard included.
 
 | Approach | Effect | Innovation cost |
 |---|---|---|
+| Standard | None. | None. |
 | Safe | −50% setback risk. | One extra funding level's worth. |
 | Ambitious | +50% progress. | Two extra funding levels' worth. |
+
+The approach label in the overview shows the weekly innovation cost of the
+approach in force, and each approach button's tooltip gives its own: 15 times
+the milestone's cost factor for Safe and twice that for Ambitious, so 30 and 60
+a week on the Moon Landing.
 
 Approach, funding and mission choices apply to your whole program, not to the
 milestone they sit on. Their modifiers appear on each milestone's journal entry,
 but the game adds them up for your country as a whole: every running milestone
-with an approach moves at the same pace, and every milestone's base risk is
+moves at the same pace, and every milestone's base risk is
 scaled by the same total. A Safe approach on one milestone cuts the risk on all
 of them, including those on Ambitious, and an Ambitious one speeds up all of
 them, including those on Safe. They stack: two Ambitious milestones add +100%
@@ -140,16 +214,16 @@ era 11 raise it by 1 each, and four in era 12 raise it by 2 each. Tier V of the
 Advanced Research power bloc principle, its highest, adds another level.
 
 Every funding level, on any milestone, adds 0.5 to your monthly pace, and so to
-every milestone with an approach. It also raises the Space Program's throughput
+every running milestone. It also raises the Space Program's throughput
 by 25%, which makes the building consume more Launch Capacity. Funding and
-approach cost weekly innovation: 15 for each funding level, plus 15 for a Safe
-approach or 30 for an Ambitious one, multiplied by the milestone's cost factor
+approach cost weekly innovation: 15 for each funding level, plus nothing for
+Standard, 15 for Safe or 30 for Ambitious, multiplied by the milestone's cost factor
 from the table above. A Suborbital Flight at funding 1 on Safe costs 30
 innovation a week; an Interstellar Probe at funding 3 on Ambitious costs 900.
 The Space Program Cost modifier on each journal entry shows the current drain.
 
 Your monthly pace is the sum of your progress sources, raised by your progress
-bonuses, and never less than 0.5 once you have chosen an approach.
+bonuses, and never less than 0.5.
 
 | Progress source | Monthly progress |
 |---|---|
@@ -177,8 +251,7 @@ convention effects do.
 
 ## Space race setbacks
 
-Each month, every running milestone with an approach rolls against its setback
-risk. A hit fires an event about that milestone, and what it costs depends on
+Each month, every running milestone rolls against its setback risk. A hit fires an event about that milestone, and what it costs depends on
 the approach.
 
 On an Ambitious approach you get a mission failure: an explosion on the pad, a
@@ -187,17 +260,17 @@ cost 25% of that milestone's progress, give Space Mission Failure (−2% prestig
 and −25 innovation cap, fading over five years) and radicalize some academics.
 They also start a six-month safety period during which none of your milestones
 can suffer another setback, although they keep moving at full pace; the panel
-says the program is inside its post-setback review and shows the risk as 0%. One
+reads Shielded, with the months left, and shows the risk as 0%. One
 option usually adds a Temporary Safety Review, which fades over ten years, and
 in some events also switches the milestone to Safe. Another usually presses on
 with a further flat loss of progress and more radicals, and no safety period.
 Now and then the roll brings An Unexpected Breakthrough instead: no progress is
 lost, and the Space Program's throughput rises by 15% for 18 or 24 months.
 
-On a Safe approach you get a minor setback: missing parts, bad weather, a
+On a Safe or Standard approach you get a minor setback: missing parts, bad weather, a
 scandal, a quarrel with a foreign supplier. It costs 15% of the milestone's
 progress plus a few points, with no lasting modifier and no safety period. A few
-setbacks, on either approach, also cut the Space Program's throughput for some
+setbacks, on any approach, also cut the Space Program's throughput for some
 months.
 
 A setback never ends a milestone; it only costs time. Two things do: dropping
@@ -278,7 +351,8 @@ the event Beyond the Blue.
 
 The entry stays open for as long as you hold a colony, even if you switch off
 the Solar Colonization method, so your colony modifiers are never lost; the
-program simply stops until the method returns. Once all 34 worlds are claimed,
+program simply stops (its panel reads Idle), and bills no funding or approach
+cost, until the method returns. Once all 34 worlds are claimed,
 Solar System Colonization finishes for the country that took the last one, and
 for any other colony holder whose program is still running when its bar next
 fills. Finishing grants Interplanetary Trade Networks: +10% prestige, +5%
@@ -298,9 +372,11 @@ list](18-appendix-events.md#space-race-event-list).
 
 ## How the AI races
 
-AI great and major powers use the same entries, approaches and funding. Only an
+AI great and major powers use the same entries, approaches and funding, and
+start each milestone on Standard as you do; only you can switch a milestone back
+to Standard. Only an
 AI in the top three of the global ranking makes progress; a weaker one can open
-an entry but its bar doesn't move, and the Who else is racing list leaves it
+an entry but its bar doesn't move, and the Rivals list leaves it
 out. Such an AI winds its funding down to 0 and pays nothing for the approach
 it has chosen until it climbs back into the top three. AI great powers prefer
 the Ambitious approach, more so when another country is running the same
