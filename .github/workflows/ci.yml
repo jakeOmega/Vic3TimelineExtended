@@ -158,6 +158,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 treaty_leverage_side_audit.py --strict
 
+      - name: Audit — treaty AI proposal scope
+        if: ${{ !cancelled() }}
+        run: python3 treaty_evaluation_scope_audit.py --strict
+
       - name: Audit — event context (system gating, unchosen actions)
         if: ${{ !cancelled() }}
         run: python3 event_context_audit.py --strict

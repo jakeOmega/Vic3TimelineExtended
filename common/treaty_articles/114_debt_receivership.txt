@@ -207,16 +207,8 @@ debt_receivership = {
 		article_ai_usage = { request }
 
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0.01
-			if = {
-				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = domineering }
-					exists = scope:source_country.market
-					scope:source_country.market.owner = this
-				}
-				add = 0.08
-			}
 			# Reduce unsolicited proposals while preserving relative crisis priorities.
 			multiply = 0.25
 		}

@@ -121,6 +121,7 @@ free_port_concession = {
 		article_ai_usage = { request offer }
 
 		evaluation_chance = {
+			# Root-only proposal frequency; partner preferences belong in acceptance.
 			value = 0
 			if = {
 				limit = {
@@ -133,27 +134,9 @@ free_port_concession = {
 			}
 			if = {
 				limit = {
-					exists = scope:other_country
-					has_attitude = { who = scope:other_country attitude = domineering }
-				}
-				add = 0.02
-			}
-			if = {
-				limit = {
 					country_rank >= rank_value:great_power
 				}
 				add = 0.01
-			}
-			# Friendly nations don't impose this on friends
-			if = {
-				limit = {
-					exists = scope:other_country
-					OR = {
-						has_attitude = { who = scope:other_country attitude = genial }
-						has_attitude = { who = scope:other_country attitude = cooperative }
-					}
-				}
-				add = -0.05
 			}
 		}
 
