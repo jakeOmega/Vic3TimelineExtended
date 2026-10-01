@@ -266,6 +266,11 @@ te_monetary_monthly_update = {
 		te_monetary_update_monetisation = yes
 	}
 
+	# --- 1d. the virtual rate (§0.12) -----------------------------------------
+	# Before 2 and 3, which read it: the virtual pair is reset to the real one
+	# unless the bank is part-way through buying assets.
+	te_monetary_settle_virtual_rate = yes
+
 	# --- 2/3. the dial: target, then drift toward it ------------------------
 	# --- 4. no dial: the rate is derived, never chosen ----------------------
 	# Under the simplified game rule te_mon_has_dial is false for everybody, so
@@ -669,6 +674,17 @@ te_monetary_init_variables = {
 				round = yes
 			}
 		}
+	}
+	# The virtual pair (§0.12) starts as the real one. te_monetary_settle_virtual_rate
+	# keeps it there every month for a bank that is not buying assets, and a save
+	# from before §0.12 seeds it here on its first pulse.
+	if = {
+		limit = { NOT = { has_variable = te_mon_virtual_target } }
+		set_variable = { name = te_mon_virtual_target value = var:te_policy_rate_target }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_virtual_rate } }
+		set_variable = { name = te_mon_virtual_rate value = var:te_policy_rate }
 	}
 	# DELEGATED BY DEFAULT (2026-09-22). A country's first monetary pulse
 	# starts it with the target following the mandate formula, so a player
@@ -1355,20 +1371,30 @@ te_monetary_update_target = {
 		# Hysteresis (§4): the delegated target only moves when the formula is
 		# at least 0.75pp away from the target it already holds, so a bank does
 		# not flap one pp up and down with the cycle's monthly noise.
-		set_variable = { name = te_mon_work2 value = var:te_mon_work }
-		change_variable = { name = te_mon_work2 subtract = var:te_policy_rate_target }
+		#
+		# A bank that can buy assets runs it on its VIRTUAL target instead
+		# (§0.12), which may sit under the floor; that effect writes the real
+		# target from it, and the clamp below holds the real one at the floor.
 		if = {
-			limit = {
-				OR = {
-					var:te_mon_work2 >= 0.75
-					var:te_mon_work2 <= -0.75
+			limit = { te_mon_bank_can_buy_assets = yes }
+			te_monetary_update_virtual_target = yes
+		}
+		else = {
+			set_variable = { name = te_mon_work2 value = var:te_mon_work }
+			change_variable = { name = te_mon_work2 subtract = var:te_policy_rate_target }
+			if = {
+				limit = {
+					OR = {
+						var:te_mon_work2 >= 0.75
+						var:te_mon_work2 <= -0.75
+					}
 				}
-			}
-			set_variable = {
-				name = te_policy_rate_target
-				value = {
-					value = var:te_mon_work
-					round = yes
+				set_variable = {
+					name = te_policy_rate_target
+					value = {
+						value = var:te_mon_work
+						round = yes
+					}
 				}
 			}
 		}
@@ -1423,6 +1449,96 @@ te_monetary_clamp_target = {
 
 
 # ----------------------------------------------------------------------------
+# STEPS 1d AND 2c — the virtual rate (§0.12)
+# ----------------------------------------------------------------------------
+# Scope: country.
+#
+# A bank that runs its mandate under fiat or digital money
+# (te_mon_bank_can_buy_assets) keeps a second, VIRTUAL pair beside its real
+# target and rate: te_mon_virtual_target and te_mon_virtual_rate, where it would
+# put them if the floor were not there. Above the floor the two pairs are the
+# same numbers. Under it, the real pair is held on the floor while the virtual
+# pair carries on, and te_mon_pressure_bank_qe buys assets in proportion to the
+# gap: the deeper the bank would cut, the more it buys. Because the virtual rate
+# drifts at the real rate's speeds, the purchases grow and shrink a step at a
+# time, and they have wound down to nothing by the month the real rate rises
+# off the floor. Economists call the same idea a shadow rate.
+#
+# The virtual target may go te_mon_virtual_depth_max under the floor — the depth
+# at which the purchases reach their cap — and only while
+# te_mon_bank_may_go_under_floor holds (price stability: prices under target;
+# growth: always).
+
+# STEP 1d, every country, before steps 2 and 3. The virtual pair only means
+# anything UNDER the floor, so it is reset to the real pair unless the bank can
+# buy assets and is part-way through doing so: its real target or rate on the
+# floor and the virtual one under it. That covers a bank that has just become
+# able to buy (delegated, or a law change) starting from where its real rate is,
+# a bank that has just stopped being able to (the player took the dial back)
+# leaving nothing stale behind, and the console-only debug sequences that write
+# te_policy_rate directly.
+te_monetary_settle_virtual_rate = {
+	if = {
+		limit = {
+			OR = {
+				te_mon_bank_can_buy_assets = no
+				var:te_policy_rate_target > te_mon_floor_threshold
+				var:te_mon_virtual_target >= var:te_policy_rate_target
+			}
+		}
+		set_variable = { name = te_mon_virtual_target value = var:te_policy_rate_target }
+	}
+	if = {
+		limit = {
+			OR = {
+				te_mon_bank_can_buy_assets = no
+				te_mon_policy_rate_at_floor = no
+				var:te_mon_virtual_rate >= var:te_policy_rate
+			}
+		}
+		set_variable = { name = te_mon_virtual_rate value = var:te_policy_rate }
+	}
+}
+
+# STEP 2c, from step 2's formula branch for a bank that can buy assets, with the
+# formula's answer in te_mon_work. The same 0.75pp hysteresis and whole-point
+# rounding as the real target, run against the virtual one, then clamped to
+# te_mon_virtual_target_min / te_mon_target_max. The real target is the virtual
+# one: step 2 clamps it to the regime's range straight after, which is what
+# holds it on the floor.
+te_monetary_update_virtual_target = {
+	set_variable = { name = te_mon_work2 value = var:te_mon_work }
+	change_variable = { name = te_mon_work2 subtract = var:te_mon_virtual_target }
+	if = {
+		limit = {
+			OR = {
+				var:te_mon_work2 >= 0.75
+				var:te_mon_work2 <= -0.75
+			}
+		}
+		set_variable = {
+			name = te_mon_virtual_target
+			value = {
+				value = var:te_mon_work
+				round = yes
+			}
+		}
+	}
+	set_variable = { name = te_mon_work2 value = te_mon_virtual_target_min }
+	if = {
+		limit = { var:te_mon_virtual_target < var:te_mon_work2 }
+		set_variable = { name = te_mon_virtual_target value = var:te_mon_work2 }
+	}
+	set_variable = { name = te_mon_work2 value = te_mon_target_max }
+	if = {
+		limit = { var:te_mon_virtual_target > var:te_mon_work2 }
+		set_variable = { name = te_mon_virtual_target value = var:te_mon_work2 }
+	}
+	set_variable = { name = te_policy_rate_target value = var:te_mon_virtual_target }
+}
+
+
+# ----------------------------------------------------------------------------
 # STEP 3 — drift
 # ----------------------------------------------------------------------------
 # Scope: country, dial countries only.
@@ -1457,20 +1573,45 @@ te_monetary_clamp_target = {
 # a year of panic still maximally tight on the way back down
 # (docs/audits/banking_cycle_simulation.md §12).
 te_monetary_drift_policy_rate = {
-	set_variable = { name = te_mon_work value = var:te_policy_rate_target }
-	change_variable = { name = te_mon_work subtract = var:te_policy_rate }
+	if = {
+		# §0.12: a bank that can buy assets drifts its VIRTUAL rate, and the real
+		# rate is the virtual one held at the floor. Above the floor the two are
+		# the same number and this is the ordinary drift; under it, the real
+		# rate sits on the floor while the virtual one carries on toward the
+		# target and te_mon_pressure_bank_qe buys the difference.
+		limit = { te_mon_bank_can_buy_assets = yes }
+		te_monetary_drift_rate_toward = { RATE = te_mon_virtual_rate TARGET = te_mon_virtual_target }
+		set_variable = { name = te_policy_rate value = var:te_mon_virtual_rate }
+		set_variable = { name = te_mon_work value = te_mon_target_min }
+		if = {
+			limit = { var:te_policy_rate < var:te_mon_work }
+			set_variable = { name = te_policy_rate value = var:te_mon_work }
+		}
+	}
+	else = {
+		te_monetary_drift_rate_toward = { RATE = te_policy_rate TARGET = te_policy_rate_target }
+	}
+}
+
+# The drift arithmetic itself, on whichever pair step 3 hands it: $RATE$ moves
+# toward $TARGET$ by one step, or snaps to it once less than a step is left.
+# te_policy_rate / te_policy_rate_target for every bank but one that can buy
+# assets, which drifts te_mon_virtual_rate / te_mon_virtual_target instead.
+te_monetary_drift_rate_toward = {
+	set_variable = { name = te_mon_work value = var:$TARGET$ }
+	change_variable = { name = te_mon_work subtract = var:$RATE$ }
 	set_variable = { name = te_mon_work2 value = te_mon_drift_step }
 	if = {
 		limit = { var:te_mon_work > te_mon_drift_step_threshold }
-		change_variable = { name = te_policy_rate add = var:te_mon_work2 }
+		change_variable = { name = $RATE$ add = var:te_mon_work2 }
 	}
 	else_if = {
 		limit = { var:te_mon_work < te_mon_drift_step_down_threshold_neg }
 		set_variable = { name = te_mon_work2 value = te_mon_drift_step_down }
-		change_variable = { name = te_policy_rate subtract = var:te_mon_work2 }
+		change_variable = { name = $RATE$ subtract = var:te_mon_work2 }
 	}
 	else = {
-		set_variable = { name = te_policy_rate value = var:te_policy_rate_target }
+		set_variable = { name = $RATE$ value = var:$TARGET$ }
 	}
 }
 

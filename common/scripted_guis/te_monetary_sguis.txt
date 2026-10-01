@@ -448,6 +448,18 @@ banking_mon_has_anchoring = {
 	effect = { }
 }
 
+# Is the Asset Purchases row drawn under the anchoring row? Only while something
+# is being bought: the OMO tool is on, or the bank's own purchases are running
+# (§0.12), so nobody is shown a standing 0.0%. Both are counted on their own,
+# outside the modifier the Price Pressure row prints.
+banking_mon_has_purchases = {
+	scope = country
+	is_shown = { te_mon_purchase_pressure_display > 0 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Is the open-market operations row drawn under the rate target? Only where the
 # currency law lets the state create unbacked money — fiat and digital, the
 # declarative country_can_create_unbacked_money_bool — because that is the one

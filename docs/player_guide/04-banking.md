@@ -365,7 +365,9 @@ the cycle twice as fast, at 2.5% of GDP and a standing cost in tax and
 bureaucracy; a bail-in costs the treasury nothing and angers the upper strata
 instead. Open-Market Operations is what is left when you can't cut any further:
 under the full Banking System it needs Fiat Money or Digital Currency with your
-policy rate at its floor.
+policy rate at its floor. A bank running its mandate also buys assets itself at
+the floor (see [When the bank cannot cut](#when-the-bank-cannot-cut)); that adds
+to this tool rather than replacing it.
 
 The AI declares a Bank Holiday and opens Emergency Liquidity in a Panic, or in a
 Downturn that is still falling fast. It expands the deposit guarantee in a
@@ -535,6 +537,46 @@ stance](#monetary-policy-stance)) errs by less. Each level of the National Bank
 institution adds a tenth of a point of Inflation Anchoring, which absorbs that
 much standing wage and price pressure.
 
+### When the bank cannot cut
+
+A rate on its floor can't fall further, and a deflation can hold it there. Both
+mandates ask for far less than the floor allows, and falling prices keep the
+real rate high even at −3%, so the Policy Stance can read Neutral while prices
+fall. A bank that runs its mandate, whether delegated or independent, carries on
+cutting on paper. It works out where it would put the rate if there were no
+floor, and buys assets on its own account for the difference. Each point it
+would cut below the floor adds 1 point of inflation pressure, up to 2.5 points
+at 2.5 points below, on top of Open-Market Operations.
+
+The purchases grow and shrink at the speed the rate moves: a third of a point a
+month, two-thirds under Digital Currency, and three times as fast while the bank
+cuts with the cycle in Stagnation or worse. They never start or stop all at once. When the
+bank's rule asks for a higher rate again, the purchases wind down first, and the
+rate leaves the floor only once they reach zero.
+
+The mandate decides when the bank buys:
+
+| Mandate | Buys assets |
+|---|---|
+| Price Stability | Only while inflation is under its 2% target. Once inflation reaches 2%, it winds the purchases down. |
+| Growth | Whenever its rule asks for a rate below the floor, including a slump with inflation on target. |
+
+The purchases cost no intervention points and no money, and you don't switch
+them on. While there are any, an Asset Purchases row below Price Pressure shows
+how much they add, together with Open-Market Operations, and its tooltip gives
+the rate the bank would set without the floor. They need Fiat Money or Digital
+Currency. A dial you set by hand gets none of them, because you have Monetise
+Deficit instead; while your rate is on its floor and prices are falling, the
+Delegation tooltip reminds you that a delegated bank would buy. AI countries
+are always delegated, so they get the purchases too.
+
+Under Central Bank Independence you can't print for the treasury, so a long
+deflation leaves you the bank's purchases, Open-Market Operations and a budget
+deficit above 1% of GDP, which adds a little pressure of its own. Recovery from
+a deep deflation can still take years. Leaving independence for Monetise Deficit is
+possible but costly: you lose its credit-standing bonus and some of the
+intervention budget.
+
 ### Monetary policy stance
 
 Policy Stance reports your rate as Very Loose, Loose, Neutral, Tight or Very
@@ -623,7 +665,8 @@ treasury. Each level mints about 1% of a year's GDP, adds about 2.5 points of
 inflation pressure and half a point of risk premium. It needs Fiat Money or
 Digital Currency and a bank that takes instructions, so Central Bank
 Independence, Command Economy, dollarization and an anchored currency rule it
-out.
+out. An independent bank still buys assets by itself in a deflation (see [When
+the bank cannot cut](#when-the-bank-cannot-cut)).
 
 ### Currency regimes and the policy rate
 

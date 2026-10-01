@@ -500,11 +500,19 @@ PRE_ANCHORING = {
     "inst_momentum": -0.02,
     "inst_anchoring": 0.0,
 }
+# The mandate bank's own asset purchases at the rate floor (2026-10-01,
+# monetary_policy_design.md §0.12) switched off: `--tune pre_bank_qe`. With
+# `bank_qe` at 0 the virtual target never goes under the floor either, so the
+# real rate's path is exactly the pre-§0.12 one.
+PRE_BANK_QE = {
+    "bank_qe": 0.0,
+}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
     "pre_delegation_fix": PRE_DELEGATION_FIX,
     "pre_anchoring": PRE_ANCHORING,
+    "pre_bank_qe": PRE_BANK_QE,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -610,6 +618,10 @@ class State:
     commodity_centre: float = 3.0
     world_rate: float = 3.0
     pending_recovery: int | None = None
+    # §0.12's virtual pair (te_mon_virtual_rate / te_mon_virtual_target): None
+    # until step 1d first seeds it from the real pair.
+    virtual_rate: float | None = None
+    virtual_target: float | None = None
 
     # gold (te_monetary_update_gold)
     bank_gold: float = 0.0
@@ -876,6 +888,10 @@ def monetary_update(cfg: Config, state: State, rng: random.Random, year_index: i
     if abs(state.commodity_centre - world_rate) >= 0.75:
         state.commodity_centre = round(world_rate)
 
+    # step 1d — the virtual rate (§0.12) is reset to the real one unless the
+    # bank is part-way through buying assets
+    settle_virtual_rate(cfg, state, world_rate)
+
     # steps 2/3 — the dial
     if has_dial(cfg, state):
         monetary_update_target(cfg, state, world_rate)
@@ -958,7 +974,10 @@ def monetary_update_target(cfg: Config, state: State, world_rate: float) -> None
             work = min(work, work2)  # never more hawkish than price stability
 
         # Hysteresis (§4): move only on a 0.75pp miss, then take a whole point.
-        if abs(work - state.policy_rate_target) >= 0.75:
+        # A bank that can buy assets runs it on its virtual target (§0.12).
+        if bank_can_buy_assets(cfg, state):
+            update_virtual_target(cfg, state, world_rate, work)
+        elif abs(work - state.policy_rate_target) >= 0.75:
             state.policy_rate_target = round(work)
 
     clamp_target(cfg, state, world_rate)
@@ -992,20 +1011,34 @@ def emergency_cuts(cfg: Config, state: State) -> bool:
     return mandate_for(cfg, state) is not None and state.finance_cycle_value < 40
 
 
-def monetary_drift_rate(cfg: Config, state: State) -> None:
+def drift_toward(cfg: Config, state: State, rate: float, target: float) -> float:
+    """te_monetary_drift_rate_toward — one month's step of `rate` toward `target`."""
     speed = max(0.1, 1.0 + law_modifier_sum(cfg, "country_policy_rate_drift_speed_mult"))
     step = 0.3333 * speed
     down = step
     if emergency_cuts(cfg, state):
         # te_mon_drift_step_down (§12). `--tune emergency_cut=1` turns it off.
         down *= tuned("emergency_cut", K.sv("te_mon_emergency_cut_factor"))
-    gap = state.policy_rate_target - state.policy_rate
+    gap = target - rate
     if gap > step:
-        state.policy_rate += step
-    elif gap < -down:
-        state.policy_rate -= down
+        return rate + step
+    if gap < -down:
+        return rate - down
+    return target
+
+
+def monetary_drift_rate(cfg: Config, state: State) -> None:
+    """te_monetary_drift_policy_rate (step 3).
+
+    A bank that can buy assets drifts its virtual rate, and the real rate is the
+    virtual one held at the floor (§0.12); everyone else drifts the real rate.
+    """
+    if bank_can_buy_assets(cfg, state):
+        state.virtual_rate = drift_toward(cfg, state, state.virtual_rate, state.virtual_target)
+        lo, _ = target_bounds(cfg, state, state.world_rate)
+        state.policy_rate = max(lo, state.virtual_rate)
     else:
-        state.policy_rate = state.policy_rate_target
+        state.policy_rate = drift_toward(cfg, state, state.policy_rate, state.policy_rate_target)
 
 
 def monetary_update_inflation(
@@ -1124,6 +1157,79 @@ def hyperinflation_crisis(cfg: Config, state: State, rng: random.Random) -> None
         state.inflation_expected = anchor
 
 
+def bank_can_buy_assets(cfg: Config, state: State) -> bool:
+    """te_mon_bank_can_buy_assets — a mandate-run fiat or digital bank (§0.12).
+
+    The mandate must be what runs the dial (delegated, AI or CBI, which
+    `mandate_for` already says) and the currency one a bank can create (the
+    fiat/digital pair `te_mon_can_monetise` reads, so never metal).
+    """
+    if not has_dial(cfg, state) or cfg.currency not in ("fiat", "digital"):
+        return False
+    return mandate_for(cfg, state) is not None
+
+
+def bank_may_go_under_floor(cfg: Config, state: State) -> bool:
+    """te_mon_bank_may_go_under_floor — growth always, price stability under target.
+
+    `state.inflation` is last month's headline here (step 2 runs before step 6),
+    as in the script. `--tune bank_qe=0` keeps the virtual target on the floor.
+    """
+    if not bank_can_buy_assets(cfg, state) or tuned("bank_qe", 1.0) == 0:
+        return False
+    return mandate_for(cfg, state) == MANDATE_GROWTH or state.inflation < 2.0
+
+
+def virtual_depth_max() -> float:
+    """te_mon_virtual_depth_max — how far under the floor the virtual target may go."""
+    return K.sv("te_mon_bank_qe_cap") / K.sv("te_mon_bank_qe_per_pp")
+
+
+def settle_virtual_rate(cfg: Config, state: State, world_rate: float) -> None:
+    """te_monetary_settle_virtual_rate (step 1d): reset unless part-way through buying."""
+    if state.virtual_rate is None:
+        state.virtual_rate = state.policy_rate
+    if state.virtual_target is None:
+        state.virtual_target = state.policy_rate_target
+    can = bank_can_buy_assets(cfg, state)
+    threshold = target_bounds(cfg, state, world_rate)[0] + 0.01
+    if (not can or state.policy_rate_target > threshold
+            or state.virtual_target >= state.policy_rate_target):
+        state.virtual_target = state.policy_rate_target
+    if not can or state.policy_rate > threshold or state.virtual_rate >= state.policy_rate:
+        state.virtual_rate = state.policy_rate
+
+
+def update_virtual_target(cfg: Config, state: State, world_rate: float, work: float) -> None:
+    """te_monetary_update_virtual_target (step 2c): the hysteresis on the virtual target.
+
+    Clamped to te_mon_virtual_target_min (the floor, less the depth while the
+    mandate may go under it) and the regime's ceiling; the real target is the
+    virtual one, which `clamp_target` then holds at the floor.
+    """
+    if abs(work - state.virtual_target) >= 0.75:
+        state.virtual_target = round(work)
+    lo, hi = target_bounds(cfg, state, world_rate)
+    if bank_may_go_under_floor(cfg, state):
+        lo -= virtual_depth_max()
+    state.virtual_target = min(hi, max(lo, state.virtual_target))
+    state.policy_rate_target = state.virtual_target
+
+
+def bank_qe_pressure(cfg: Config, state: State, world_rate: float) -> float:
+    """te_mon_pressure_bank_qe — per_pp x (floor - virtual rate), capped (§0.12).
+
+    `tuned("bank_qe", 1)` scales it, so `--tune bank_qe=0` is the pre-§0.12 world
+    for a before/after read.
+    """
+    if not bank_can_buy_assets(cfg, state) or state.virtual_rate is None:
+        return 0.0
+    lo, _ = target_bounds(cfg, state, world_rate)
+    depth = max(0.0, lo - state.virtual_rate)
+    pressure = min(K.sv("te_mon_bank_qe_cap"), K.sv("te_mon_bank_qe_per_pp") * depth)
+    return pressure * tuned("bank_qe", 1.0)
+
+
 def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     """te_mon_pressure_total — the standing inflation pressure sum (§9.1)."""
     total = 0.0
@@ -1150,6 +1256,9 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     # QE, while open market operations are running
     if "omo" in state.tools:
         total += K.sv("te_mon_qe_pressure")
+
+    # the bank's own purchases at the floor (te_mon_pressure_bank_qe, §0.12)
+    total += bank_qe_pressure(cfg, state, world_rate)
 
     # te_mon_pressure_modifiers: the wage half (the standing labour-law
     # pressure) plus the other half — country_inflation_pressure_add from laws,
@@ -2569,7 +2678,8 @@ def main() -> int:
                          "stood before the 2026-09-22 retune, or --tune "
                          "pre_boom_rescue for the mod as #371 left it (§10), or "
                          "--tune pre_delegation_fix for the delegated bank before §12, or "
-                         "--tune pre_anchoring for independence's institution bonus before §13.")
+                         "--tune pre_anchoring for independence's institution bonus before §13, or "
+                         "--tune pre_bank_qe for a mandate bank with no asset purchases at the floor.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")

@@ -46,9 +46,10 @@
 #       banks' reserves merge into one; so do the two balances owed back.
 #   (b) THE NATION'S STATE, TAKEN FROM THE LOSER: everything the update
 #       INTEGRATES from month to month rather than recomputing — the policy
-#       rate, inflation and its hidden noise walk, the sticky band, the neutral
-#       rate's two walks, the exchange rate, the peg, every clock and cooldown,
-#       the lender-of-last-resort record, and the two yearly caches.
+#       rate and its §0.12 virtual pair, inflation and its hidden noise walk,
+#       the sticky band, the neutral rate's two walks, the exchange rate, the
+#       peg, every clock and cooldown, the lender-of-last-resort record, and
+#       the two yearly caches.
 #   (c) THE PLAYER'S CHOICES, TAKEN FROM THE LOSER: the rate target,
 #       delegation, the mandate, the monetisation level, the bloc-currency
 #       adoption and a bloc leader's pressing. The monetary REGIME is not
@@ -227,6 +228,13 @@ te_monetary_inherit_central_bank = {
 	# --- (b) THE NATION'S STATE ----------------------------------------------
 	# The rate the bank has actually reached (it drifts toward the target).
 	te_mon_cw_take = { VAR = te_policy_rate }
+	# The virtual pair beside it (§0.12): where a mandate bank would have its
+	# target and rate without the floor. Under the floor it is what sizes the
+	# bank's own asset purchases, so a winner that continues a bank part-way
+	# through buying keeps buying and winds down from there, rather than
+	# stopping at once. Anywhere else step 1d resets it to the real pair.
+	te_mon_cw_take = { VAR = te_mon_virtual_rate }
+	te_mon_cw_take = { VAR = te_mon_virtual_target }
 	# Inflation. Headline is recomputed from core next pulse but is what the
 	# dashboard shows until then; the band is STICKY (step 6b reads last
 	# month's to know which way the country is travelling); the hyperinflation

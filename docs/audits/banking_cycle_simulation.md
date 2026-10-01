@@ -1370,3 +1370,96 @@ are unchanged, and §8's targets do not depend on any of this.
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 2,3,4,5,8 [--dc-affinity dc_heavy,dc_agri,dc_arms,dc_elec] [--tune dc_lift_boost=0]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 4,5,6,8 --fin-law law_directed_credit_development_banks --dc-affinity dc_heavy,dc_agri,dc_arms,dc_elec
 ```
+
+---
+
+## 15. The mandate bank's asset purchases at the rate floor (2026-10-01)
+
+**Question (owner).** A player on Central Bank Independence and Digital Currency was stuck in deflation with the
+policy rate on the −3% floor and headline inflation at −6.6%. Central Bank Independence rules out Monetise Deficit, and
+at the floor both mandates ask for less than the floor allows. What can a mandate-run bank do?
+
+### F20 — At the floor the bank has no lever of its own, and without Open-Market Operations the loop has no exit
+
+The model is §9.1's: core moves a tenth of the way to `expected + pressure` each month, and expectations lose their
+anchor once inflation is ten points from target (`c_eff`). At −6.6% an independent bank has `c_eff` of about 0.1, so
+expectations follow headline, and the only upward pressure is Open-Market Operations' flat +1.0, which costs 4 intervention
+points. Started as reported (core −4.2 under a −2.4 cost-push drag that fades as its average catches up, expected −4.9, rate
+−3, 0.9 of wage pressure absorbed by nine National Bank levels, cycle held at 50, no noise), headline reaches 0 after
+five years with Open-Market Operations on. With it off, headline falls to the −10 clamp and stays there.
+
+### What shipped first
+
+`te_mon_pressure_bank_qe`, `min(2.5, 0.5 × (anchor − last month's headline))` pp, while a mandate-run fiat or digital
+bank sat on its rate floor. Measured with the inflation noise held at zero, it got out of the trap, and switched off once
+when the bank's rate left the floor.
+
+### F21 — With the noise on, the first version flickered at the floor
+
+The term was gated on the real rate being on the floor, so the month the rate rose by one drift step (−3.00 → −2.33 under
+digital) it dropped from 2.5 to 0. Inflation stalled, the mandate's target fell back, the rate returned to the floor and
+the term came back. Over 200 seeds, a delegated digital bank switched 3.41 times a run on average (at most 7), every 2–6
+months for about two years, and a month's change in the term reached 2.5.
+
+### What shipped instead: a virtual rate
+
+The bank keeps a virtual target and rate (`te_mon_virtual_target` / `te_mon_virtual_rate`, design doc §0.12) where it would
+put them without the floor: the mandate formula with the real target's hysteresis, drifting at the real rate's speeds, at
+most 2.5 points under the floor. The real rate is the virtual one held at the floor, and the purchases are
+`min(2.5, 1.0 × (floor − virtual rate))`. Price stability may take the virtual target under the floor only while headline
+is under the anchor; growth always may. The simulator ports it as `settle_virtual_rate`, `update_virtual_target`,
+`monetary_drift_rate` and `bank_qe_pressure`; `--tune pre_bank_qe` keeps the virtual target on the floor, which is the
+pre-§0.12 world exactly.
+
+### Result
+
+`scripts/analysis/banking_deflation_trap.py` starts the reported country (core −4.2 under a −2.4 cost-push drag that fades
+as its average catches up, expected −4.9, rate −3, 0.9 of wage pressure absorbed by nine National Bank levels, cycle held at
+50). "First version" is the same script on that version's commit.
+
+| Headline inflation at year, noise held at zero | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| independent, Open-Market Operations on, before | −6.0 | −5.0 | −3.4 | −1.7 | +0.1 | +1.2 |
+| independent, Open-Market Operations on, first version | −3.3 | −2.3 | −0.8 | +0.5 | +1.4 | +1.9 |
+| independent, Open-Market Operations on, virtual rate | −4.0 | −2.7 | −1.1 | +0.3 | +1.3 | +1.8 |
+| independent, no Open-Market Operations, before | −7.1 | −7.6 | −8.3 | −9.3 | −10 | −10 |
+| independent, no Open-Market Operations, first version | −4.3 | −3.1 | −2.2 | −1.0 | 0.0 | +0.7 |
+| independent, no Open-Market Operations, virtual rate | −4.7 | −3.3 | −2.5 | −1.4 | −0.2 | +0.6 |
+| manual dial, Open-Market Operations on, every version | −5.1 | −3.8 | −2.7 | −1.5 | −0.4 | +0.7 |
+
+| Noise on, no Open-Market Operations, 200 seeds | Switches on/off, mean (max): first version → virtual | Largest one-month change | Median month at 0% |
+|---|---|---|---|
+| independent, digital, price stability | 1.82 (5) → 1.04 (3) | 2.50 → 0.67 | 60 → 64 |
+| delegated, digital, price stability | 3.41 (7) → 1.36 (5) | 2.50 → 0.67 | 71 → 75 |
+| delegated, fiat, price stability | 2.18 (5) → 1.04 (3) | 1.87 → 0.33 | 66 → 71 |
+| delegated, fiat, growth | 2.18 (5) → 1.04 (3) | 1.87 → 0.33 | 66 → 71 |
+
+The virtual rate gives up four or five months of the exit and moves the purchases by at most a drift step a month (×3 in
+a Stagnation's emergency cuts, on the way in only). The real rate leaves the floor only once they are at zero.
+
+Ordinary play does not move. With and without independence, 150 fiat runs per cell differ from `--tune pre_bank_qe` by
+at most 0.03 crashes a century, 0.006 points of mean inflation and 0.04 points of recession share, and 60 digital runs per
+cell are identical in every column: a mandate bank is on its floor in at most 0.2% of months under fiat and never under
+digital. Over 40 ordinary centuries per cell, a mandate bank buys in at most 0.05% of months under fiat, about 0.6 points on average while it does, and never under digital. A Growth bank buys with headline at or above target in 0.01% of months, the only place the mandate condition binds.
+
+A delegated bank without independence can monetise beside its own purchases (design doc ruling N1, resolved as intended
+pending playtests). Stacking adds almost nothing: Monetise Deficit's inflation (added by the trap script, since the
+simulator does not model monetisation) lifts the bank's rule off the floor within months.
+
+| Price Stability, noise held at zero | Month at 0%: without / with purchases | Peak inflation: without / with | Months buying |
+|---|---|---|---|
+| Monetise Deficit off | 98 / 76 | 1.3 / 1.9 | 20 |
+| Monetise Deficit 1 | 37 / 35 | 5.4 / 5.4 | 7 |
+| Monetise Deficit 3 | 11 / 11 | 25.6 / 25.8 | 4 |
+
+**Not modelled.** The exchange-rate channel, and the cycle: the Deflation band's momentum drain and the Stagnation phase
+term would make a real recovery slower than the table.
+
+**Reproduce:**
+
+```
+.venv/bin/python scripts/analysis/banking_deflation_trap.py [--runs 200]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 0,8 --seed 1 [--fin-law law_central_bank_independence] [--tune pre_bank_qe]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 60 --only digital --points 0,8 --seed 1 [--fin-law law_central_bank_independence] [--tune pre_bank_qe]
+.venv/bin/python -m unittest test_monetary_bank_qe
+```
