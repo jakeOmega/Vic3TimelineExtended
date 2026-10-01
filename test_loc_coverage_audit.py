@@ -645,6 +645,67 @@ class DiplomaticActionTests(unittest.TestCase):
         self.assertEqual(_DIR_MAP["Diplomatic Actions"], "common/diplomatic_actions")
 
 
+class GameConceptTests(unittest.TestCase):
+    def _run(self, loc_keys, *, base=None, reviewed=False):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        comment = " # REVIEWED 2026-10-01: name inherited from vanilla" if reviewed else ""
+        _write(tmp.name, "common/game_concepts/extra_concepts.txt",
+               f"concept_un_mission_peacekeeping = {{{comment}\n}}\n")
+        ms = FakeMS(
+            mod_data={"Game Concepts": {"concept_un_mission_peacekeeping": {}}},
+            base_data={"Game Concepts": base or {}},
+            loc_keys=loc_keys,
+        )
+        return audit(ms, mod_path=tmp.name)
+
+    def test_desc_does_not_substitute_for_name(self):
+        result = self._run({"concept_un_mission_peacekeeping_desc"})
+        self.assertEqual(len(result.flags), 1)
+        flag = result.flags[0]
+        self.assertEqual(flag.category, "Game Concepts")
+        self.assertEqual(flag.missing_keys, ["concept_un_mission_peacekeeping"])
+        self.assertEqual(flag.file, "common/game_concepts/extra_concepts.txt")
+        self.assertEqual(flag.line, 1)
+        self.assertEqual(result.coverage["by_category"], {"Game Concepts": 1})
+        self.assertIn("### Game Concepts (1)", render_report(result))
+
+    def test_name_alone_is_sufficient(self):
+        self.assertEqual(self._run({"concept_un_mission_peacekeeping"}).flags, [])
+
+    def test_vanilla_override_is_skipped(self):
+        self.assertEqual(self._run(set(), base={"concept_un_mission_peacekeeping": {}}).flags, [])
+
+    def test_vanilla_only_desc_is_not_a_registration(self):
+        ms = FakeMS(mod_data={"Game Concepts": {}},
+                    base_data={"Game Concepts": {"concept_religious_trait": {}}},
+                    loc_keys={"concept_religious_trait_desc"})
+        self.assertEqual(audit(ms, mod_path="/nonexistent").flags, [])
+
+    def test_opening_line_suppression_is_reported(self):
+        result = self._run(set(), reviewed=True)
+        self.assertEqual(result.flags[0].exemption, {
+            "date": "2026-10-01", "rationale": "name inherited from vanilla"})
+        report = render_report(result)
+        self.assertIn("- unreviewed: 0", report)
+        self.assertIn("- exempted: 1", report)
+
+    def test_name_in_miscellaneous_loc_is_loaded(self):
+        from mod_state import ModState
+        with tempfile.TemporaryDirectory() as tmp:
+            _write(tmp, "common/game_concepts/extra_concepts.txt",
+                   "concept_un_mission_peacekeeping = {\n}\n")
+            _write(tmp, "localization/english/te_concepts_l_english.yml",
+                   'l_english:\n concept_un_mission_peacekeeping_desc:0 "Description"\n')
+            _write(tmp, "localization/english/te_miscellaneous_l_english.yml",
+                   'l_english:\n concept_un_mission_peacekeeping:0 "Peacekeeping Mission"\n')
+            ms = FakeMS(mod_data={"Game Concepts": {"concept_un_mission_peacekeeping": {}}})
+            loc = ModState({}, {})
+            loc.add_localization(os.path.join(tmp, "localization/english"))
+            ms.has_localization = loc.has_localization
+            self.assertEqual(audit(ms, mod_path=tmp).flags, [])
+
+
 class RenderTests(unittest.TestCase):
     def test_empty_report_smoke(self):
         from loc_coverage_audit import AuditResult
