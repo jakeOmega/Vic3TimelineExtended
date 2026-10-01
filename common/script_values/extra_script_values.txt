@@ -1916,6 +1916,17 @@ sol_expectations_gap_value = {
 	subtract = average_expected_sol
 }
 
+# Algorithmic Governance's legitimacy (algorithmic_mandate): 5 per point of the
+# cached gap above, capped at 25 either way. The gap returns to zero once
+# expectations catch up, so the mandate rewards living standards that run ahead
+# of expectations and punishes ones that fall behind, not a level of wealth.
+algorithmic_mandate_value = {
+	value = var:sol_expectations_gap_cached
+	multiply = 5
+	min = -25
+	max = 25
+}
+
 # Clamped shift value. Applied after convergence calculation.
 # Floor (min) defaults to 0, raised by country_sol_expectations_shift_min_add.
 # Ceiling (max) defaults to 50, lowered by country_sol_expectations_shift_max_add.

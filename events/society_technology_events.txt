@@ -2381,6 +2381,7 @@ society_technology_events.26 = {
 					OR = {
 						has_modifier = ste_algo_gov_adopt
 						has_law = law_type:law_algorithmic_governance
+						has_law = law_type:law_automated_bureaucracy
 					}
 				}
 				desc = society_technology_events.26.d
@@ -2447,8 +2448,10 @@ society_technology_events.26 = {
 	}
 }
 
-# Event 27: Algorithmic Governance Proposal
-# AI proposes to manage bureaucratic decisions
+# Event 27: Automated Administration Proposal
+# AI proposes to manage bureaucratic decisions. Fires with Generative AI, which
+# unlocks law_automated_bureaucracy; a country that already holds that law
+# (Algorithmic Governance installs it) has made this choice.
 society_technology_events.27 = {
 	type = country_event
 	placement = root
@@ -2465,11 +2468,11 @@ society_technology_events.27 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_technology_researched = artificial_intelligence
+		has_technology_researched = generative_ai
 		NOT = { has_modifier = ste_algo_gov_adopt }
 		NOT = { has_modifier = ste_algo_gov_reject }
 		NOT = { has_variable = ste_event_27_fired }
-		NOT = { has_law = law_type:law_algorithmic_governance }
+		NOT = { has_law = law_type:law_automated_bureaucracy }
 	}
 
 	immediate = {
