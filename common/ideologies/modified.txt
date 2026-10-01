@@ -120,6 +120,7 @@ REPLACE:ideology_paternalistic = {
 		law_technocracy = strongly_disapprove
 	}
 	lawgroup_bureaucracy = {
+		law_communal_administration = disapprove
 		law_automated_bureaucracy = disapprove
 		law_hereditary_bureaucrats = approve
 		law_appointed_bureaucrats = neutral
@@ -673,6 +674,9 @@ REPLACE:ideology_liberal_modern = {
 REPLACE:ideology_market_liberal = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_market_liberal.dds"
 	character_ideology = yes
+	lawgroup_bureaucracy = {
+		law_contracted_administration = approve
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = neutral
 		law_freedom_of_contract = strongly_approve
@@ -1916,6 +1920,9 @@ REPLACE:ideology_populist = {
 REPLACE:ideology_radical = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_radical.dds"
 	character_ideology = yes
+	lawgroup_bureaucracy = {
+		law_communal_administration = approve
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = neutral
@@ -2471,6 +2478,9 @@ REPLACE:ideology_radical = {
 REPLACE:ideology_social_democrat = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_social_democrat.dds"
 	character_ideology = yes
+	lawgroup_bureaucracy = {
+		law_contracted_administration = disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = neutral
@@ -2890,6 +2900,8 @@ REPLACE:ideology_vanguardist = {
 	character_ideology = yes
 	lawgroup_bureaucracy = {
 		law_automated_bureaucracy = approve
+		law_contracted_administration = disapprove
+		law_communal_administration = disapprove
 	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
@@ -4160,6 +4172,8 @@ REPLACE:ideology_anarchist = {
 	character_ideology = yes
 	lawgroup_bureaucracy = {
 		law_automated_bureaucracy = disapprove
+		law_contracted_administration = disapprove
+		law_communal_administration = strongly_approve
 	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
@@ -4699,6 +4713,9 @@ REPLACE:ideology_anarchist = {
 # Forced REPLACE due to existing section(s): lawgroup_navy_model
 REPLACE:ideology_laissez_faire = {
 	icon = "gfx/interface/icons/ideology_icons/laissez_faire.dds"
+	lawgroup_bureaucracy = {
+		law_contracted_administration = approve
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = neutral
 		law_pro_natalist_subsidies = disapprove
@@ -4983,14 +5000,63 @@ REPLACE:ideology_egalitarian_modern = {
 	}
 }
 
-INJECT:ideology_meritocratic = {
-	lawgroup_human_augmentation = {
-		law_no_augmentation = neutral
-		law_unrestricted_augmentation = strongly_approve
-		law_human_purity = strongly_disapprove
-		law_medical_augmentation_only = disapprove
-		law_regulated_augmentation_market = neutral
-		law_mandatory_augmentation = disapprove
+# Forced REPLACE due to existing section(s): lawgroup_bureaucracy
+REPLACE:ideology_meritocratic = {
+	icon = "gfx/interface/icons/ideology_icons/meritocratic.dds"
+	lawgroup_financial_regulation = {
+		law_unregulated_banking = neutral
+		law_free_mutual_banking = neutral
+		law_universal_banking_light_prudence = approve
+		law_prudential_narrow_banking = approve
+		law_directed_credit_development_banks = disapprove
+		law_central_bank_independence = strongly_approve
+		law_state_owned_banking = disapprove
+	}
+	lawgroup_inheritance = {
+		law_primogeniture = disapprove
+		law_partible = approve
+		law_equal_inheritance = neutral
+		law_non_inheritable_usage_rights = strongly_disapprove
+	}
+	lawgroup_ministry_of_urban_planning = {
+		law_no_ministry_of_urban_planning = neutral
+		law_ministry_of_urban_planning = approve
+	}
+	lawgroup_ministry_of_international_aid = {
+		law_no_ministry_of_international_aid = approve
+		law_ministry_of_international_aid = neutral
+	}
+	lawgroup_ministry_of_consumer_protection = {
+		law_no_ministry_of_consumer_protection = approve
+		law_ministry_of_consumer_protection = neutral
+	}
+	lawgroup_ministry_of_science = {
+		law_no_ministry_of_science = neutral
+		law_ministry_of_science = approve
+	}
+	lawgroup_ministry_of_labor = {
+		law_no_ministry_of_labor = neutral
+		law_pro_labor_ministry_of_labor = strongly_disapprove
+		law_pro_capital_ministry_of_labor = disapprove
+	}
+	lawgroup_national_bank = {
+		law_no_national_bank = neutral
+		law_national_bank = approve
+	}
+	lawgroup_ministry_of_commerce = {
+		law_no_ministry_of_commerce = neutral
+		law_ministry_of_commerce = approve
+	}
+	lawgroup_ministry_of_war = {
+		law_no_ministry_of_war = neutral
+		law_ministry_of_war = approve
+	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = disapprove
+		law_gold_standard = neutral
+		law_fiat_currency = approve
+		law_digital_currency = strongly_approve
+		law_decentralized_cryptocurrency = disapprove
 	}
 	lawgroup_intellectual_property = {
 		law_no_ip_protection = disapprove
@@ -5000,60 +5066,48 @@ INJECT:ideology_meritocratic = {
 		law_open_source_innovation = disapprove
 		law_state_intellectual_property = disapprove
 	}
-	lawgroup_monetary_policy = {
-		law_commodity_money = disapprove
-		law_gold_standard = neutral
-		law_fiat_currency = approve
-		law_digital_currency = strongly_approve
-		law_decentralized_cryptocurrency = disapprove
+	lawgroup_human_augmentation = {
+		law_no_augmentation = neutral
+		law_unrestricted_augmentation = strongly_approve
+		law_human_purity = strongly_disapprove
+		law_medical_augmentation_only = disapprove
+		law_regulated_augmentation_market = neutral
+		law_mandatory_augmentation = disapprove
 	}
-	lawgroup_ministry_of_war = {
-		law_no_ministry_of_war = neutral
-		law_ministry_of_war = approve
+	lawgroup_distribution_of_power = {
+		law_universal_suffrage = disapprove
+		law_census_voting = approve
+		law_wealth_voting = neutral
+		law_landed_voting = disapprove
+		law_single_party_state = neutral
+		law_technocracy = disapprove
+		law_oligarchy = disapprove
+		law_autocracy = disapprove
+		law_anarchy = strongly_disapprove
 	}
-	lawgroup_ministry_of_commerce = {
-		law_no_ministry_of_commerce = neutral
-		law_ministry_of_commerce = approve
+	lawgroup_bureaucracy = {
+		law_communal_administration = disapprove
+		law_elected_bureaucrats = approve
+		law_appointed_bureaucrats = neutral
+		law_hereditary_bureaucrats = disapprove
 	}
-	lawgroup_national_bank = {
-		law_no_national_bank = neutral
-		law_national_bank = approve
+	lawgroup_taxation = {
+		law_per_capita_based_taxation = approve
+		law_proportional_taxation = approve
+		law_consumption_based_taxation = neutral
+		law_graduated_taxation = disapprove
+		law_land_based_taxation = disapprove
 	}
-	lawgroup_ministry_of_labor = {
-		law_no_ministry_of_labor = neutral
-		law_pro_labor_ministry_of_labor = strongly_disapprove
-		law_pro_capital_ministry_of_labor = disapprove
+	lawgroup_caste_hegemony = {
+		law_hindu_caste_enforced = disapprove
+		law_hindu_caste_codified = disapprove
+		law_hindu_caste_not_enforced = neutral
+		law_affirmative_action = neutral
 	}
-	lawgroup_ministry_of_science = {
-		law_no_ministry_of_science = neutral
-		law_ministry_of_science = approve
-	}
-	lawgroup_ministry_of_consumer_protection = {
-		law_no_ministry_of_consumer_protection = approve
-		law_ministry_of_consumer_protection = neutral
-	}
-	lawgroup_ministry_of_international_aid = {
-		law_no_ministry_of_international_aid = approve
-		law_ministry_of_international_aid = neutral
-	}
-	lawgroup_ministry_of_urban_planning = {
-		law_no_ministry_of_urban_planning = neutral
-		law_ministry_of_urban_planning = approve
-	}
-	lawgroup_inheritance = {
-		law_primogeniture = disapprove
-		law_partible = approve
-		law_equal_inheritance = neutral
-		law_non_inheritable_usage_rights = strongly_disapprove
-	}
-	lawgroup_financial_regulation = {
-		law_unregulated_banking = neutral
-		law_free_mutual_banking = neutral
-		law_universal_banking_light_prudence = approve
-		law_prudential_narrow_banking = approve
-		law_directed_credit_development_banks = disapprove
-		law_central_bank_independence = strongly_approve
-		law_state_owned_banking = disapprove
+	lawgroup_edo_social_system = {
+		law_strict_edo_system = strongly_disapprove
+		law_intermediate_edo_system = disapprove
+		law_lax_edo_system = approve
 	}
 }
 
@@ -5487,6 +5541,10 @@ REPLACE:ideology_individualist = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare
 REPLACE:ideology_proletarian = {
 	icon = "gfx/interface/icons/ideology_icons/proletarian.dds"
+	lawgroup_bureaucracy = {
+		law_contracted_administration = disapprove
+		law_communal_administration = approve
+	}
 	lawgroup_financial_regulation = {
 		law_unregulated_banking = strongly_disapprove
 		law_free_mutual_banking = approve
@@ -5591,6 +5649,10 @@ REPLACE:ideology_proletarian = {
 REPLACE:ideology_communist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_communist.dds"
 	character_ideology = yes
+	lawgroup_bureaucracy = {
+		law_contracted_administration = disapprove
+		law_communal_administration = approve
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = strongly_disapprove
@@ -6325,6 +6387,10 @@ REPLACE:ideology_pacifist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_colonization, lawgroup_distribution_of_power
 REPLACE:ideology_plutocratic = {
 	icon = "gfx/interface/icons/ideology_icons/plutocratic.dds"
+	lawgroup_bureaucracy = {
+		law_contracted_administration = approve
+		law_communal_administration = disapprove
+	}
 	lawgroup_genetic_rights = {
 		law_traditional_heredity = neutral
 		law_ban_on_genetic_modification = disapprove
@@ -7868,6 +7934,10 @@ REPLACE:ideology_republican_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_socialist = {
 	icon = "gfx/interface/icons/ideology_icons/socialist.dds"
+	lawgroup_bureaucracy = {
+		law_contracted_administration = disapprove
+		law_communal_administration = approve
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = strongly_disapprove
@@ -7997,6 +8067,8 @@ REPLACE:ideology_scholar_paternalistic = {
 		law_technocracy = strongly_disapprove
 	}
 	lawgroup_bureaucracy = {
+		law_communal_administration = strongly_disapprove
+		law_contracted_administration = disapprove
 		law_automated_bureaucracy = strongly_disapprove
 		law_appointed_bureaucrats = approve
 		law_elected_bureaucrats = disapprove
@@ -8084,6 +8156,7 @@ REPLACE:ideology_junker_paternalistic = {
 		law_technocracy = strongly_disapprove
 	}
 	lawgroup_bureaucracy = {
+		law_communal_administration = disapprove
 		law_automated_bureaucracy = disapprove
 		law_hereditary_bureaucrats = approve
 		law_appointed_bureaucrats = approve
@@ -8166,6 +8239,7 @@ REPLACE:ideology_papal_paternalistic = {
 		law_technocracy = strongly_disapprove
 	}
 	lawgroup_bureaucracy = {
+		law_communal_administration = disapprove
 		law_automated_bureaucracy = disapprove
 		law_hereditary_bureaucrats = approve
 		law_appointed_bureaucrats = neutral
@@ -10011,6 +10085,8 @@ REPLACE:ideology_positivist = {
 		law_anarchy = strongly_disapprove
 	}
 	lawgroup_bureaucracy = {
+		law_communal_administration = disapprove
+		law_contracted_administration = disapprove
 		law_automated_bureaucracy = strongly_approve
 		law_appointed_bureaucrats = strongly_approve
 		law_elected_bureaucrats = disapprove
@@ -12335,6 +12411,7 @@ REPLACE:ideology_absolutist_movement = {
 		law_technocracy = strongly_disapprove
 	}
 	lawgroup_bureaucracy = {
+		law_communal_administration = disapprove
 		law_automated_bureaucracy = disapprove
 		law_hereditary_bureaucrats = approve
 		law_appointed_bureaucrats = approve
@@ -12462,6 +12539,9 @@ REPLACE:ideology_proletarian_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare, lawgroup_governance_principles
 REPLACE:ideology_socialist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/socialist.dds"
+	lawgroup_bureaucracy = {
+		law_contracted_administration = disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = strongly_disapprove
@@ -12650,6 +12730,9 @@ REPLACE:ideology_communist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_anarchist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/anarchist.dds"
+	lawgroup_bureaucracy = {
+		law_communal_administration = strongly_approve
+	}
 	lawgroup_criminal_justice = {
 		law_penal_labor_camps = strongly_disapprove
 	}
@@ -13088,6 +13171,9 @@ REPLACE:ideology_liberal_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_governance_principles
 REPLACE:ideology_radical_movement = {
 	icon = "gfx/interface/icons/ideology_icons/radical.dds"
+	lawgroup_bureaucracy = {
+		law_communal_administration = approve
+	}
 	lawgroup_criminal_justice = {
 		law_penal_labor_camps = strongly_disapprove
 	}
@@ -13272,6 +13358,8 @@ REPLACE:ideology_positivist_movement = {
 		law_anarchy = strongly_disapprove
 	}
 	lawgroup_bureaucracy = {
+		law_communal_administration = disapprove
+		law_contracted_administration = disapprove
 		law_automated_bureaucracy = strongly_approve
 		law_appointed_bureaucrats = strongly_approve
 		law_elected_bureaucrats = disapprove

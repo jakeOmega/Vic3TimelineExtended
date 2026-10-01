@@ -282,6 +282,8 @@
  amendment_religious_exemption:0 "Religious Exemption Clause"
  amendment_religious_exemption_desc:0 "An [concept_amendment] exempting religious institutions from LGBTQ protections, a compromise that gets the devout on board but limits the law's reach."
  amendment_small_donor_matching_desc:0 "An [concept_amendment] requiring the government to match small individual campaign donations, boosting grassroots political participation."
+ amendment_spoils_system:0 "Spoils System"
+ amendment_spoils_system_desc:0 "An [concept_amendment] letting the governing faction fill ordinary administrative posts with its own supporters. Loyalty is rewarded, but partisans rather than trained officials run the offices."
  amendment_whistleblower_shield:0 "Whistleblower Protection Act"
  amendment_whistleblower_shield_desc:0 "An [concept_amendment] protecting government employees who expose malfeasance from prosecution, boosting transparency at the cost of state authority."
  anglo_union:0 "Anglosphere"

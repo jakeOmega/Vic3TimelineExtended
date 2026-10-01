@@ -1273,6 +1273,7 @@
 		Unlocking Technologies:
 			Computer Networks
 			Advanced Assembly Lines
+		Unlocks Laws: Contracted Administration
 		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	E-Commerce - Thanks to the internet, we can now buy and sell goods from anywhere in the world. It's a convenient way to shop, and a great way for businesses to reach new customers.
 		Unlocking Technologies:
@@ -1378,12 +1379,13 @@
 			Cloud Computing
 			E-Commerce
 		Unlocks Buildings: FAST Telescope
-		Unlocks Laws: Algorithmic Governance, Ubiquitous Translation
+		Unlocks Laws: Ubiquitous Translation
 		Unlocks Parties: technocratic_party
 		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Generative AI - We now have AI that can create original content, from images to music to text. It's a powerful new tool for creativity, and it's getting better all the time.
 		Unlocking Technologies:
 			Machine Learning
+		Unlocks Laws: Automated Bureaucracy
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Additive Manufacturing - Also known as 3D printing, this process builds objects layer-by-layer. Now we can create complex and customized items on demand, transforming everything from healthcare to making trinkets for the home.
 		Unlocking Technologies:
@@ -1570,6 +1572,7 @@
 			Generative AI
 			Programmable Matter
 			Autonomous Vehicles
+		Unlocks Laws: Algorithmic Governance
 		Unlocks PMs: 17 (listed under their buildings in buildings.txt)
 	Advanced Nanofabrication - We can now create incredibly small and precise structures. This level of control at the nanoscale is set to revolutionize everything from electronics to medicine.
 		Unlocking Technologies:

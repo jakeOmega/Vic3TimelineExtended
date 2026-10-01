@@ -650,6 +650,11 @@ ideology_corporate = {
 		law_state_eugenics_program = strongly_disapprove
 	}
 
+	lawgroup_bureaucracy = {
+		law_contracted_administration = strongly_approve
+		law_communal_administration = disapprove
+	}
+
 	country_trigger = {
 		owner = { has_technology_researched = mutual_funds }
 	}
@@ -1840,6 +1845,8 @@ ideology_custom_religion_aristocratic_governance = {
 		law_appointed_bureaucrats = neutral
 		law_elected_bureaucrats = disapprove
 		law_automated_bureaucracy = disapprove
+		law_contracted_administration = disapprove
+		law_communal_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -1914,6 +1921,8 @@ ideology_custom_religion_technocratic_governance = {
 		law_appointed_bureaucrats = strongly_approve
 		law_elected_bureaucrats = disapprove
 		law_automated_bureaucracy = strongly_approve
+		law_contracted_administration = disapprove
+		law_communal_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -1988,6 +1997,7 @@ ideology_custom_religion_republican_governance = {
 		law_appointed_bureaucrats = neutral
 		law_elected_bureaucrats = approve
 		law_automated_bureaucracy = neutral
+		law_communal_administration = approve
 	}
 
 	lawgroup_privacy_rights = {
@@ -2062,6 +2072,8 @@ ideology_custom_religion_corporate_governance = {
 		law_appointed_bureaucrats = approve
 		law_elected_bureaucrats = neutral
 		law_automated_bureaucracy = approve
+		law_contracted_administration = strongly_approve
+		law_communal_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -2136,6 +2148,8 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_appointed_bureaucrats = strongly_approve
 		law_elected_bureaucrats = disapprove
 		law_automated_bureaucracy = disapprove
+		law_contracted_administration = disapprove
+		law_communal_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -2210,6 +2224,7 @@ ideology_custom_religion_theocratic_governance = {
 		law_appointed_bureaucrats = strongly_approve
 		law_elected_bureaucrats = disapprove
 		law_automated_bureaucracy = disapprove
+		law_communal_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {
