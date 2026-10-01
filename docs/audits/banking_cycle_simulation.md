@@ -1318,10 +1318,13 @@ Armaments.
 
 ### F19 — Cheap sectors at real prices: the AI uses them far more, and holds them too long
 
-The AI pays the same points as a player (its buttons share the sectors' `possible` triggers), so a sector priced
-at 1 or 2 is affordable at budgets and in half-spent budgets where a 3-point sector was not. An earlier draft kept
-the AI's click count constant by making every sector a candidate only above three free points. That is a price only
-the AI pays, and it was rejected: the AI may choose not to buy, but it may not face a different price.
+The AI pays the same points as a player. Its button and the dashboard's run the same `banking_effect_cb_*`, which
+adds the sector's modifier and its `country_banking_intervention_max_add`, so every later `possible` check and
+points-based weight reads the reduced budget. A sector priced at 1 or 2 is therefore affordable at budgets, and in
+half-spent budgets, where a 3-point sector was not. An earlier draft held the AI's click count constant by making
+every sector a candidate only above three free points. That changed when the AI pressed the button and nothing about
+what it cost, so the AI's other decisions saw the full reduction either way; it was rejected (owner) because the AI
+follows the same rules as a player and its restraint belongs in its weights.
 
 At real prices with the AI's lift weights unchanged, directed-credit clicks a century roughly doubled, almost all of
 it in Electrification (1 point) and Agriculture (2): with all four favoured they went from 26.7 / 25.5 to 137 / 72, and

@@ -156,9 +156,10 @@ banking_possible_cb_expand_deposit_guarantee = {
 # The sectors are priced apart (2026-09-30): Heavy Industry 4 points,
 # Infrastructure and Armaments 3, Agriculture 2, Electrification 1. The gate
 # below must match each sector's own country_banking_intervention_max_add in
-# extra_modifiers.txt. The AI pays the same prices as a player (its buttons share
-# these `possible` triggers), so it can never overspend; how eager it is to spend
-# is its ai_chance weight, never a different price.
+# extra_modifiers.txt. The AI's buttons share these `possible` triggers and the
+# players' `banking_effect_cb_*`, so a sector costs it the same modifier as a
+# player's click and it can never overspend; how eager it is to press is its
+# ai_chance weight.
 banking_possible_cb_directed_credit_infrastructure = {
 	custom_tooltip = {
 		text = BANKING_POINTS_3
