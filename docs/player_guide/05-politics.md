@@ -116,12 +116,51 @@ policy](04-banking.md).
 | Protected Class | Rights of Women | Sexual Revolution | Gender discrimination is illegal: more workers and political participation, lower birth rate. |
 | Neocameralism | Governance Principles | Marketing Research, with Laissez-Faire or Interventionism | The state run as a corporation: industrialists and wealth hold power. |
 | Collective Governance | Governance Principles | Political Agitation | No single head of state; see [Collective Governance](#collective-governance). |
+| Contracted Administration | Bureaucracy | Supply Chain Management, with Laissez-Faire or Interventionism | Private firms run the administration under contract; see [Who staffs the administration](#who-staffs-the-administration). |
+| Communal Administration | Bureaucracy | Council Republic, Anarchy or Collective Governance | Local assemblies and recallable delegates run the administration; see [Who staffs the administration](#who-staffs-the-administration). |
 | Automated Bureaucracy | Bureaucracy | Generative AI | Machines run the administration under your government: institutions cost less bureaucracy and change size faster. |
 | Algorithmic Governance | Distribution of Power | Artificial General Intelligence | Machines hold supreme authority and run the administration too. |
 | Neocolonialism | Colonization | Decolonization | See [Colonial empires and decolonization](11-decolonization.md). |
 | Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% dearer military goods and −10% unit offense and defense. |
 | Littoral Defense | Navy Model | Naval Convoy Defense | A coastal navy: ships operate only half as far from port, torpedo craft build faster and capital ships slower, navy goods cost 20% less, and Naval Fortifications get two more levels and resist invasion better. Coastal countries only. |
 | Auxiliary Fleet | Navy Model | Predictive Logistics | A navy that carries the army: ships reach 50% farther from port, naval invasions go better, ships carry 30% more marines and supply ships 30% more supply, supply ships build faster and capital ships slower. Coastal countries only. |
+
+### Who staffs the administration
+
+Three of the mod's Bureaucracy laws decide who does the work of your
+Government Administrations. Each replaces Professional Bureaucrats there with
+its own staffing, and each moves political strength away from bureaucrats.
+Automated Bureaucracy is the third; see [Machine administration and machine
+rule](#machine-administration-and-machine-rule).
+
+| | Contracted Administration | Communal Administration | Automated Bureaucracy |
+|---|---|---|---|
+| Available | From Supply Chain Management, with Laissez-Faire or Interventionism; not in a Council Republic | In a Council Republic, under Anarchy or under Collective Governance; not with Technocracy or Elder Council | From Generative AI |
+| Staffing | Service Contractors: 250 bureaucrats a level, buying 20 Services | Recallable Delegates: 250 bureaucrats and 250 clerks a level | Automated Casework: 150 bureaucrats and 100 engineers a level, buying Digital Access and Software |
+| You gain | Institutions change size 25% faster; capitalists +15% political strength | Movements 5% less radical; Trade Unions and Rural Folk +10% political strength | Institutions cost 20% less bureaucracy and change size 50% faster; engineers +15% political strength; Legislative Override Capacity +1 |
+| You pay | Institutions cost 10% more bureaucracy | Tax capacity −10%; Legislative Override Capacity −2 | Nothing beyond the staffing |
+| Bureaucrats | −25% political strength | −25% political strength | −25% political strength |
+
+Contracted Administration suits a market economy with high wages. Each
+Government Administration level employs half the bureaucrats and buys Services
+from its state in their place, so the switch saves money where wages are high,
+and the bureaucrats it frees can take other jobs. Services are a local good: in
+a state whose Urban Centers make few of them, the price rises and the saving
+shrinks or disappears, and a shortage cuts the building's output. Contracts also run over
+budget, so every institution costs more bureaucracy.
+
+Communal Administration is the bureaucracy for a council republic or an
+anarchist society. Delegates from local assemblies do half the work as clerks,
+who earn less than bureaucrats and qualify at lower literacy, so Government
+Administrations cost less and fill faster. The assemblies meet local needs
+first, which costs tax capacity, and delegates answer to the assembly that can
+recall them, which costs override capacity. If a Council Republic or a country
+under Collective Governance loses Elected Bureaucrats because its Distribution
+of Power stops being a voting law, it moves to Communal Administration rather
+than Appointed Bureaucrats. A country that can no longer hold Contracted
+Administration moves to Appointed Bureaucrats, and one that can no longer hold
+Communal Administration moves to Elected Bureaucrats where it can, otherwise to
+Appointed.
 
 ### Machine administration and machine rule
 
@@ -166,7 +205,8 @@ What it allows depends on your **Legislative Override Capacity**, summed from
 your laws, your institutions and a few technologies and power bloc principles.
 Among the laws, Autocracy and Single-Party State give 3, Algorithmic Governance
 2 and Unitary State 1; Universal Suffrage, Anarchy and Traditional Vassalage
-take away 3, and Guaranteed Liberties and Devolved Administration 2.
+take away 3, and Guaranteed Liberties, Devolved Administration and Communal
+Administration 2.
 Establishing the Ministry of Thought Control adds 2, and the ministries of
 Propaganda and of Intelligence and Security 1 each. The Policing laws count
 too, from −0.5 for No Police to +1 for a Militarized Police Force. Each level of
@@ -231,7 +271,8 @@ bureaucracy, and countries that start with the law begin at level 6.
 ## Amendments to the mod's laws
 
 Interest groups sponsor amendments to the mod's laws as they do for base-game
-laws, and several law events attach them.
+laws, and several law events attach them. One amendment, the Spoils System,
+attaches to base-game laws.
 
 | Amendment | Attaches to | Effect |
 |---|---|---|
@@ -249,6 +290,7 @@ laws, and several law events attach them.
 | Small Donor Matching | Donation Limits, Publicly Funded Elections | +5 legitimacy, higher bureaucracy cost |
 | Religious Exemption Clause | Any LGBTQ+ protection law | Devout approval |
 | Environmental Grandfather Clause | Ministry of the Environment Established | Industrialist approval, 5% more pollution and emissions |
+| Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat |
 
 ### Sunset clauses
 
@@ -316,7 +358,7 @@ many base-game ideologies stances on some of the new law groups.
 | Inclusive Multiculturalist | Leaders | As Multiculturalist, after the Sexual Revolution; adds LGBTQ+ rights |
 | Anti-Colonialist | Leaders; also added to the Trade Unions and Intelligentsia | With the Decolonization technology; opposes colonial laws |
 | Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics, Automated Bureaucracy and Algorithmic Governance |
-| Corpocrat | Leaders | From Mutual Funds, mostly Industrialists; favors Neocameralism |
+| Corpocrat | Leaders | From Mutual Funds, mostly Industrialists; favors Neocameralism and Contracted Administration |
 | Islamic Inheritance | The Devout in Sunni and Shiite countries | From the start; favors Partible and Equal Inheritance |
 
 Interest-group leaders, commanders and politicians are more often women under

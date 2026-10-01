@@ -1966,6 +1966,20 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		else_if = {
 			limit = {
+				OR = {
+					has_law = law_type:law_laissez_faire
+					has_law = law_type:law_interventionism
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+				has_technology_researched = supply_chain_management
+			}
+			activate_law = law_type:law_contracted_administration
+		}
+		else_if = {
+			limit = {
 				NOR = {
 					has_law = law_type:law_algorithmic_governance
 				}
@@ -1987,6 +2001,21 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 				}
 			}
 			activate_law = law_type:law_elected_bureaucrats
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_direct_democracy
+				}
+				NOR = {
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_elder_council
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_communal_administration
 		}
 	}
 
@@ -2016,6 +2045,20 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		else_if = {
 			limit = {
+				OR = {
+					has_law = law_type:law_laissez_faire
+					has_law = law_type:law_interventionism
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+				has_technology_researched = supply_chain_management
+			}
+			activate_law = law_type:law_contracted_administration
+		}
+		else_if = {
+			limit = {
 				NOR = {
 					has_law = law_type:law_algorithmic_governance
 				}
@@ -2038,6 +2081,21 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 			}
 			activate_law = law_type:law_elected_bureaucrats
 		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_direct_democracy
+				}
+				NOR = {
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_elder_council
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_communal_administration
+		}
 	}
 
 	# Active: law_appointed_bureaucrats  ->  detect violation, cascade replacements
@@ -2049,6 +2107,20 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 			}
 		}
 		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_laissez_faire
+					has_law = law_type:law_interventionism
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+				has_technology_researched = supply_chain_management
+			}
+			activate_law = law_type:law_contracted_administration
+		}
+		else_if = {
 			limit = {
 				has_technology_researched = generative_ai
 			}
@@ -2095,6 +2167,21 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 			}
 			activate_law = law_type:law_elected_bureaucrats
 		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_direct_democracy
+				}
+				NOR = {
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_elder_council
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_communal_administration
+		}
 	}
 
 	# Active: law_elected_bureaucrats  ->  detect violation, cascade replacements
@@ -2115,11 +2202,211 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		if = {
 			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_direct_democracy
+				}
+				NOR = {
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_elder_council
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_communal_administration
+		}
+		else_if = {
+			limit = {
 				NOR = {
 					has_law = law_type:law_algorithmic_governance
 				}
 			}
 			activate_law = law_type:law_appointed_bureaucrats
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_laissez_faire
+					has_law = law_type:law_interventionism
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+				has_technology_researched = supply_chain_management
+			}
+			activate_law = law_type:law_contracted_administration
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = generative_ai
+			}
+			activate_law = law_type:law_automated_bureaucracy
+		}
+		else_if = {
+			limit = {
+				OR = {
+					c:AUS ?= this
+					AND = {
+						exists = c:AUS
+						is_subject_of = c:AUS
+					}
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_crownland_diets
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_hereditary_bureaucrats
+		}
+	}
+
+	# Active: law_contracted_administration  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_contracted_administration
+			OR = {
+				NOR = {
+					has_law = law_type:law_laissez_faire
+					has_law = law_type:law_interventionism
+				}
+				has_law = law_type:law_council_republic
+				has_law = law_type:law_algorithmic_governance
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_appointed_bureaucrats
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = generative_ai
+			}
+			activate_law = law_type:law_automated_bureaucracy
+		}
+		else_if = {
+			limit = {
+				OR = {
+					c:AUS ?= this
+					AND = {
+						exists = c:AUS
+						is_subject_of = c:AUS
+					}
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_crownland_diets
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_hereditary_bureaucrats
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_landed_voting
+					has_law = law_type:law_wealth_voting
+					has_law = law_type:law_census_voting
+					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_anarchy
+				}
+				NOR = {
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_elder_council
+				}
+			}
+			activate_law = law_type:law_elected_bureaucrats
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_direct_democracy
+				}
+				NOR = {
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_elder_council
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_communal_administration
+		}
+	}
+
+	# Active: law_communal_administration  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_communal_administration
+			OR = {
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_anarchy
+					has_law = law_type:law_direct_democracy
+				}
+				has_law = law_type:law_technocracy
+				has_law = law_type:law_elder_council
+				has_law = law_type:law_algorithmic_governance
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_landed_voting
+					has_law = law_type:law_wealth_voting
+					has_law = law_type:law_census_voting
+					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_anarchy
+				}
+				NOR = {
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_elder_council
+				}
+			}
+			activate_law = law_type:law_elected_bureaucrats
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_appointed_bureaucrats
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_laissez_faire
+					has_law = law_type:law_interventionism
+				}
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+				has_technology_researched = supply_chain_management
+			}
+			activate_law = law_type:law_contracted_administration
 		}
 		else_if = {
 			limit = {

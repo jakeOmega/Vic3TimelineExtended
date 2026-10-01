@@ -1359,10 +1359,13 @@ Government Administration (bg_bureaucracy):
 		Telephone Switchboards
 		Teletype Communications
 		Internet Communications
-		AI Governance
+		AI Agent Networks
 	Professionalism:
 		Hereditary Bureaucrats
 		Professional Bureaucrats
+		Automated Casework
+		Service Contractors
+		Recallable Delegates
 	Secularism:
 		Administrative Clergy
 		Secular Administration

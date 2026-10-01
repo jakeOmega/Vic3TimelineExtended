@@ -13,8 +13,8 @@ political ones. A democracy that wanted machines to run its offices had to hand 
 government delegate administration to machines without surrendering sovereignty, and reserves Algorithmic Governance for
 the state that does surrender it.
 
-The work lands in two PRs. **PR 1** (this one) adds Automated Bureaucracy and reworks Algorithmic Governance. **PR 2**
-adds the other two bureaucracy laws and the Spoils System amendment (the last section).
+The work lands in two PRs. **PR 1** (#623) adds Automated Bureaucracy and reworks Algorithmic Governance (§1–6).
+**PR 2** adds Contracted and Communal Administration and the Spoils System amendment (§7–12).
 
 ## Decisions (owner, 2026-10-01)
 
@@ -142,7 +142,7 @@ The owner's next `/reload` on a machine with the game should leave all three fil
   any other law the PM is hidden.
 - The Algorithmic Mandate line appears in the legitimacy breakdown, and its size is sensible against the SoL trend.
 
-## PR 2: the remaining bureaucracy laws (scope)
+## PR 2: the remaining bureaucracy laws
 
 Every new bureaucracy law follows PR 1's checklist: `disallowing_laws = { law_algorithmic_governance }` (or
 Algorithmic Governance evicts it); a progressiveness that keeps Appointed as Elected Bureaucrats' fallback, confirmed in
@@ -152,46 +152,116 @@ Each law's identity comes from **who staffs the administration**, through its ow
 clout, not from Devolution's or Neocameralism's levers (decree cost, institution impact, separatism, wealth-based
 clout), so stacking them does not double up.
 
-### Contracted Administration (`law_contracted_administration`)
+### Decisions (PR 2, 2026-10-01)
 
-Private firms run substantial state functions under contract (the New Public Management era).
+PR 1 set this checklist and left the questions below open; PR 2 settles them, for the owner to confirm in review.
 
-- **Staffing PM:** fewer bureaucrats plus a Services input, so the state buys contractors' work and the money flows to
-  private service businesses. That is the dependence on contracted services.
-- **Clout:** industrialists up, bureaucrats down.
-- **Unlock:** an era 8–9 technology (candidates `computer_networks`, `supply_chain_management`), with
-  `unlocking_laws` Laissez-Faire or Interventionism (Neocameralism's pair); disallowed under Command Economy and Council
-  Republic.
-- **Open:** the tradeoff (contract overruns as institution cost, or tax capacity lost to contractor margins);
-  whether Private Military Contractors' barracks-PM TODO uses the same pattern.
+| Question | Decision |
+|---|---|
+| Contracted's technology | **Supply Chain Management** (era 9, 1988–2012): contracting out is supply-chain thinking applied to the state, and New Public Management peaked then (Next Steps 1988, the 1990s). Computer Networks (era 8) was the other candidate |
+| Contracted's tradeoff | **Contract overruns: +10% institution bureaucracy cost.** Tax capacity lost to contractor margins was the alternative, but by era 9–10 a country has spare tax capacity (PR 1's reasoning), so it would not bite |
+| Contracted's clout lever | **Capitalists +15%**, the contracting firms' owners, mostly Industrialists. A pop-type lever like Appointed's bureaucrats and Hereditary's aristocrats; Neocameralism's is the Industrialists IG lever |
+| Contracted's override | **None.** Contractors carry out the terms they were hired on: neither the ruler's appointees (+1) nor officials with their own mandate (−1) |
+| Communal's technology | **None.** Its unlocking laws already need Socialism, Anarchism or Political Agitation (eras 3–4) |
+| Communal's exclusions | **Elected's vanilla `disallowing_laws`** (Technocracy, Elder Council) plus Algorithmic Governance. Council Republic is a Governance Principle, so Council Republic with Technocracy is a legal pair and the exclusion matters |
+| Communal's clout | **Trade Unions and Rural Folk +10% each** (workers' councils in the towns, village assemblies in the countryside); bureaucrats −25% |
+| Spoils System's cost | **−10% tax capacity**: loyalty, not competence, fills the tax offices. Appointed's identity is +25% tax capacity, so it dilutes the parent law's own strength |
+| Spoils System's laws | **Appointed and Elected.** The US starts with Elected (`effect_starting_politics_liberal`), and Jackson's administration is the historical case |
+| Preserved Bureaucratic Caste | **Unchanged.** A preserved caste contradicts contractors, rotating delegates and machines, and joining its `allowed_laws` would mean REPLACEing a vanilla amendment |
+| Private Military Contractors' barracks PM | **Not in this PR.** The pattern (a law-gated PM that swaps staff for a bought good) would fit it; the TODO stays |
 
-### Communal Administration (`law_communal_administration`)
+### 7. Contracted Administration (`law_contracted_administration`)
 
-Local assemblies and recallable delegates administer services and local affairs; communities take part directly rather
-than electing officials to act for them (Elected Bureaucrats).
+Private firms run substantial state functions under contract (New Public Management).
 
-- **Staffing PM:** bureaucrats replaced in part by clerks, the rotating delegates.
-- **Clout and politics:** trade unions or rural folk up, bureaucrats down; lower movement radicalism.
-- **Cost:** weaker central coordination, e.g. lower tax capacity.
-- **Unlock:** `unlocking_laws` Council Republic, Anarchy or Collective Governance (`law_direct_democracy`), the way
-  Elected Bureaucrats needs a voting law; no later than era 4 technology.
-- **Progressiveness:** above Elected's 50 reads right, but then a country losing Elected under Anarchy or a Council
-  Republic falls back here rather than to Appointed. That is probably correct; confirm in the cascade.
+| Field | Value |
+|---|---|
+| Group, unlock | `lawgroup_bureaucracy`, `supply_chain_management`; `unlocking_laws` Laissez-Faire or Interventionism (which excludes Command Economy); `disallowing_laws` Council Republic, Algorithmic Governance |
+| `country_capitalists_pol_str_mult` / `country_bureaucrats_pol_str_mult` | +0.15 / −0.25 |
+| `country_institution_size_change_speed_mult` | +0.25 (half Automated's): contracts are let and ended faster than officials are hired and dismissed |
+| `country_bureaucracy_investment_cost_factor_mult` | +0.1 (overruns) |
+| Progressiveness | −2 (§10) |
+| `on_enact` | Appointed's two IG-shift tooltips |
+| AI weight | 5, +15 while the Industrialists are in government |
+| Icon | `contracted_administration.dds`: a ministry building with a price tag in place of its dome (`draw_building_ministry_tag`) |
 
-### Spoils System amendment (`amendment_spoils_system`)
+**Staffing PM** `pm_service_contractors` ("Service Contractors"): 250 bureaucrats a level instead of 500, plus 20 Services.
+At wage weight 4 the 250 bureaucrats come to about 1,000 wage units against 600 of Services at base price. Services are a
+local good, so where a state's Urban Centers make few the price rises, up to break-even at the shortage price, and a
+shortage cuts output. Urban Center levels make 15–30 Services, which sized the input.
 
-Ordinary administrative posts handed to political supporters. It fits the 1836 start (civil-service reform came in 1883),
-so no technology.
+### 8. Communal Administration (`law_communal_administration`)
 
-- `parent = law_appointed_bureaucrats` (the parent sets IG stances); allowed under Appointed Bureaucrats, possibly
-  Elected.
-- Sponsor gains political strength (+10–15%, Preserved Bureaucratic Caste gives +15%); the country pays in tax capacity
-  or bureaucracy.
-- A name distinct from the existing `decree_political_patronage`.
-- Vanilla has no equivalent: none of its 67 amendments is a spoils system. `amendment_preserved_bureaucratic_caste`
-  (parent Hereditary, allowed under all three vanilla bureaucracy laws, sponsored only by Landowners) is the nearest
-  precedent. Whether the new laws join its `allowed_laws` is open.
-- A party-membership requirement amendment, for stronger party control, stays a later idea.
+Local assemblies and recallable delegates administer services and local affairs.
+
+| Field | Value |
+|---|---|
+| Group, unlock | `lawgroup_bureaucracy`, no technology; `unlocking_laws` Council Republic, Anarchy, Collective Governance (`law_direct_democracy`); `disallowing_laws` Technocracy, Elder Council, Algorithmic Governance |
+| `country_bureaucrats_pol_str_mult` | −0.25 |
+| `interest_group_ig_trade_unions_pol_str_mult` / `interest_group_ig_rural_folk_pol_str_mult` | +0.1 / +0.1 |
+| `political_movement_radicalism_add` | −0.05 (vanilla's internal security laws: −0.03 to −0.05) |
+| `state_tax_capacity_mult` | −0.1 (weaker central coordination) |
+| `country_legislative_override_capacity_add` | −2 (Devolution's value; Elected −1) |
+| Progressiveness | 75 (§10) |
+| `on_enact` | Appointed's two IG-shift tooltips |
+| AI weight | 10 |
+| Icon | `communal_administration.dds`: three figures under a pediment, the people as the building's columns (`draw_people_pediment`) |
+
+**Staffing PM** `pm_recallable_delegates` ("Recallable Delegates"): 250 bureaucrats and 250 clerks a level instead of 500
+bureaucrats. At wage weights 4 and 1.5 that saves about 625 wage units a level, and clerks qualify at lower literacy
+(bureaucrats need more than 20%), so the buildings fill faster. No goods: the law carries the cost.
+
+Both PMs join `pmg_government_administration_bureaucrat_professionalism` through PR 1's INJECT, and PR 1's
+`INJECT:pm_professional_bureaucrats` `disallowing_laws` lists all three laws, so under each law its PM is the group's
+only one. Both have `is_hidden_when_unavailable`.
+
+### 9. Spoils System amendment (`amendment_spoils_system`)
+
+- `parent = law_appointed_bureaucrats`; `allowed_laws` Appointed and Elected Bureaucrats.
+- `modifier`: `state_tax_capacity_mult = -0.1`. `sponsor_modifier`: `interest_group_pol_str_mult = 0.15`.
+- `would_sponsor`: an IG in government, or one led by a Jacksonian Democrat (vanilla's leader ideology for Jackson).
+- `ai_will_revoke = { always = yes }`, `can_repeal` on the legitimacy define, activism multiplier 0.5: all as
+  `amendment_preserved_bureaucratic_caste`.
+- Loc: "Spoils System" (`organize_loc` files both keys in `te_concepts_l_english.yml`).
+
+### 10. The consistency walk with five bureaucracy laws
+
+| Law lost | Falls back to (first valid) |
+|---|---|
+| Elected Bureaucrats (50) | Communal (75) under a Council Republic, Anarchy or Collective Governance; else Appointed (0) |
+| Communal Administration (75) | Elected where a voting law or Anarchy holds; else Appointed |
+| Contracted Administration (−2) | Appointed; Automated under Algorithmic Governance |
+| Appointed, Hereditary | Unchanged from PR 1 (Contracted sits nearer to Appointed but is disallowed wherever Appointed and Hereditary are lost) |
+
+Contracted's window is narrow: below 0 keeps Appointed, not Contracted, as Elected's fallback; above −5 makes Appointed,
+not Automated (−10), Contracted's own; at −5 the two tie and the ideology tiebreak decides. The generated
+`te_fix_inconsistent_lawgroup_bureaucracy` was read block by block to confirm the table.
+
+### 11. Ideology stances and generated files (PR 2)
+
+PR 2 was built on a machine with Victoria 3 1.14.5, the version `vanilla_parsed/` was built from. Before any change,
+`apply_ideologies` and `gen_law_consistency` reproduced the committed `common/ideologies/modified.txt` and
+`extra_law_consistency_generated.txt` byte for byte, so PR 2's stances could go on any vanilla ideology.
+`ideology_meritocratic` flips from INJECT to REPLACE, because vanilla gives it a Bureaucracy block.
+
+| | Contracted Administration | Communal Administration |
+|---|---|---|
+| Strongly approve | Corpocrat, corporate governance | `ideology_anarchist`, `ideology_anarchist_movement` |
+| Approve | `ideology_laissez_faire`, `ideology_plutocratic`, `ideology_market_liberal` | `ideology_radical` (+ movement), `ideology_communist`, `ideology_socialist`, `ideology_proletarian`, republican governance |
+| Disapprove | `ideology_socialist` (+ movement), `ideology_social_democrat`, `ideology_communist`, `ideology_vanguardist`, `ideology_anarchist`, `ideology_proletarian`, `ideology_positivist` (+ movement), `ideology_scholar_paternalistic`; aristocratic, technocratic and imperial-cult governance | `ideology_vanguardist` (the party, not the councils, runs the state), `ideology_positivist` (+ movement), `ideology_meritocratic`, `ideology_paternalistic`, `ideology_junker_paternalistic`, `ideology_papal_paternalistic`, `ideology_plutocratic`, `ideology_absolutist_movement`, Corpocrat; aristocratic, technocratic, corporate, imperial-cult and theocratic governance |
+| Strongly disapprove | | `ideology_scholar_paternalistic` (examination-selected officials replaced by rotation) |
+
+### 12. In-game checks (PR 2)
+
+- A Government Administration under Contracted Administration offers Service Contractors only, and under Communal
+  Administration Recallable Delegates only; the other PMs in the slot are hidden.
+- A state short of Services shows the input shortage on its Government Administration under Contracted Administration.
+- Contracted Administration is greyed out under Command Economy and in a Council Republic; Communal Administration is
+  available in a Council Republic and not under Technocracy.
+- The Spoils System is offered in law negotiation while enacting Appointed or Elected Bureaucrats, and the sponsor's
+  +15% shows on the interest group.
+- A Council Republic that moves from Universal Suffrage to Single-Party State with Elected Bureaucrats lands on Communal
+  Administration the next month.
 
 ### Not planned
 

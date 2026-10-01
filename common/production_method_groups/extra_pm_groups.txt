@@ -572,6 +572,8 @@ INJECT:pmg_base_building_government_administration = {
 INJECT:pmg_government_administration_bureaucrat_professionalism = {
 	production_methods = {
 		pm_automated_casework
+		pm_service_contractors
+		pm_recallable_delegates
 	}
 }
 INJECT:pmg_base_building_university = {

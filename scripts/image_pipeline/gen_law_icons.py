@@ -1731,6 +1731,54 @@ def draw_building_ministry_circuit() -> Image.Image:
     return Image.fromarray(arr)
 
 
+def draw_building_ministry_tag() -> Image.Image:
+    """Ministry building with a price tag in place of the dome — Contracted Administration.
+
+    The state's work is let out for a price: the tag hangs from the roofline
+    on a short cord, its eyelet cut through.
+    """
+    img = draw_building_ministry()
+    arr = np.array(img)
+    arr[0:200, :] = [0, 0, 0, 0]          # clear the dome and flagpole
+    img = Image.fromarray(arr)
+    d = _d(img)
+    d.rectangle([100, 150, 412, 200], fill=W)          # restore the roofline
+    # Tag: a pentagon pointing left, tilted down toward the roof
+    d.polygon([(C - 120, 70), (C - 70, 25), (C + 120, 25),
+               (C + 120, 115), (C - 70, 115)], fill=W)
+    d.rectangle([C + 95, 115, C + 107, 150], fill=W)   # cord to the roof
+    arr = np.array(img)
+    y, x = np.ogrid[:S, :S]
+    eyelet = ((x - (C - 65)) ** 2 + (y - 70) ** 2) < 16 ** 2
+    arr[eyelet] = [0, 0, 0, 0]
+    return Image.fromarray(arr)
+
+
+def draw_people_pediment() -> Image.Image:
+    """Three figures under a pediment roof — Communal Administration.
+
+    The people stand where a government building's columns would be: the
+    assembly is the administration.
+    """
+    img = _new(); d = _d(img)
+    # Pediment and architrave
+    d.polygon([(C, 30), (C + 210, 120), (C - 210, 120)], fill=W)
+    d.rectangle([C - 200, 120, C + 200, 145], fill=W)
+    # Three figures as the columns
+    for cx in (C - 120, C, C + 120):
+        d.ellipse([cx - 32, 165, cx + 32, 229], fill=W)
+        d.polygon([(cx - 38, 235), (cx + 38, 235), (cx + 58, 420), (cx - 58, 420)], fill=W)
+    # Steps
+    d.rectangle([C - 215, 420, C + 215, 445], fill=W)
+    d.rectangle([C - 235, 445, C + 235, 470], fill=W)
+    # Tympanum cut-out so the pediment reads as a frame
+    arr = np.array(img)
+    y, x = np.ogrid[:S, :S]
+    inner = (y > 70) & (y < 112) & (np.abs(x - C) < (y - 70) * 2.0)
+    arr[inner] = [0, 0, 0, 0]
+    return Image.fromarray(arr)
+
+
 def draw_building_ministry_capital() -> Image.Image:
     """Ministry building with coin stack — pro-capital ministry of labor."""
     img = draw_building_ministry()
@@ -1914,6 +1962,8 @@ SHAPES: dict[str, callable] = {
     "building_ministry_labor":   draw_building_ministry_labor,
     "building_ministry_capital": draw_building_ministry_capital,
     "building_ministry_circuit": draw_building_ministry_circuit,
+    "building_ministry_tag":     draw_building_ministry_tag,
+    "people_pediment":           draw_people_pediment,
     # ── prohibition / "no X" overlay variants ───────────────────────────
     "lightbulb_no":           draw_lightbulb_no,
     "wifi_no":                draw_wifi_no,
@@ -2112,6 +2162,8 @@ LAW_ICON_MAP: dict[str, tuple[str, str, str | None]] = {
     "law_neocolonialism":                 ("globe_lines",         "gold",      None),
     "law_algorithmic_governance":         ("circuit_board",       "gold",      None),
     "law_automated_bureaucracy":          ("building_ministry_circuit", "gold", None),
+    "law_contracted_administration":      ("building_ministry_tag", "gold",  None),
+    "law_communal_administration":        ("people_pediment",     "gold",      None),
 
     # ── Ministries (active) ──
     "law_ministry_of_foreign_affairs":             ("building_ministry", "gold", None),
