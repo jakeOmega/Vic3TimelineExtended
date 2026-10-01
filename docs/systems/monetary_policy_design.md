@@ -1661,13 +1661,13 @@ pair is held on the floor and the bank buys assets for the gap.
   the console-only debug sequences that write `te_policy_rate` directly.
 - **Step 2c**, `te_monetary_update_virtual_target`: the mandate formula's answer goes through the
   real target's 0.75pp hysteresis and whole-point rounding, against the *virtual* target, then
-  is clamped to `te_mon_virtual_target_min` (the floor less `te_mon_virtual_depth_max` = 2.5 while
+  is clamped to `te_mon_virtual_target_min` (the floor less `te_mon_virtual_depth_max` = 5 while
   `te_mon_bank_may_go_under_floor` holds, the floor otherwise) and the ceiling. The real target is
   the virtual one, which step 2b's clamp holds at the floor.
 - **Step 3**, `te_monetary_drift_policy_rate`: the virtual rate drifts toward the virtual target
   at the real rate's speeds (the arithmetic is now `te_monetary_drift_rate_toward`, parameterised
   on the pair), and the real rate is the virtual one held at the floor.
-- **Step 6b**, `te_mon_pressure_bank_qe` = `min(te_mon_bank_qe_cap = 2.5,
+- **Step 6b**, `te_mon_pressure_bank_qe` = `min(te_mon_bank_qe_cap = 5,
   te_mon_bank_qe_per_pp = 1.0 × (floor − virtual rate))` pp, in `te_mon_pressure_total` beside
   the OMO term.
 
@@ -1692,37 +1692,39 @@ The switch-on was a step too (2.0 at once under digital).
 | **N3** | **"Under the floor" is against `te_mon_target_min`**, the bound OMO's gate reads | −3 under digital, 0 under fiat. A bank that can still cut cuts: the virtual pair only parts from the real one once the real target is on the floor, and §8's stance push already rewards the cut |
 | **N4** | **The purchases read the virtual rate, not inflation** | the virtual rate is the mandate formula on core, r̂\* and the cycle lean, built exactly as the delegated target is, and the dashboard already prints that target. Printing the purchases (and the virtual rate, in the Asset Purchases tooltip) shows no more of core or r\* than the target does above the floor, and nothing of the stance gap (P7). Supersedes the first version's reading of headline |
 | **N5** | **It touches inflation pressure only** | no points, no treasury cost, none of OMO's momentum, services or bubble lines. It is the bank's balance sheet, and the cycle already has its own deflation drag (the Deflation band) |
-| **N6** | **The pressure is capped at 2.5, reached 2.5 points under the floor, which is also as far as the virtual target goes** | one monetisation level's worth. The cap, not the slope, keeps it a safety net: a bank that bought without limit would be monetisation under another name. Deeper would buy nothing more, and would leave the virtual rate a long climb back before the purchases began to shrink (at −6.6% price stability asks for about −12%) |
+| **N6** | **The pressure is capped at 5, reached 5 points under the floor, which is also as far as the virtual target goes** (2.5 until a playtest; see "The cap" below) | two monetisation levels' worth, and under independence the bank's purchases and OMO are all the money the country can create. The cap, not the slope, keeps it a safety net: a bank that bought without limit would be monetisation under another name. Deeper would buy nothing more, and would leave the virtual rate a long climb back before the purchases began to shrink (at −6.6% price stability asks for about −12%). 2.5 was one level's worth, and a Panic with a strong currency held it on the −10% clamp for years |
 | **N7** | **Neither OMO's point nor the bank's purchases is carried on `country_inflation_pressure_add`**, though that channel is what shows in the Price Pressure row and puts a tool's effect in its own tooltip (`banking_reserve_requirements` does) | `te_mon_pressure_anchoring` nets Inflation Anchoring against the *net positive* sum of that channel and the wage channel. An independent bank would absorb up to its capacity (0.9pp at nine levels) of its own stimulus, in the deflation the term exists for. Monetisation is counted on its own for the same reason (`country_inflation_pressure_add_desc` says so). `te_mon_omo_pressure_display`, `te_mon_bank_purchase_display` and their sum `te_mon_purchase_pressure_display` are what an **Asset Purchases** row of its own prints instead, under the Anchoring row and only while something is bought (`banking_mon_has_purchases`). The Price Pressure row keeps printing the modifier alone, so it cannot disagree with its own breakdown, and its tooltip points at the new row |
 | **N8** | **The virtual rate drifts at the real rate's speeds, and the real rate is the virtual one held at the floor** (owner, 2026-10-01) | the purchases never switch on or off in one step, and they are gone before the rate rises. The owner's design, in place of a taper by distance from the floor, which smooths the switch-off but sizes the purchases by headline and lets them run while the rate is above the floor |
 | **N9** | **The mandate sets the condition** (owner, 2026-10-01): price stability may take the virtual target under the floor only while last month's headline is under the anchor; growth always may (`te_mon_bank_may_go_under_floor`) | price stability with prices on target does not buy its way through a crash; growth buys through any slump its rule asks for, as central banks did in 2008 and 2020. When the condition fails the virtual target is held at the floor, so the purchases wind down at the hike speed rather than stopping |
+| **N10** | **The currency's confidence term is one-sided for a float** (owner, 2026-10-01): `te_mon_fx_term_confidence` = the price-gap term, capped at 0 when the index follows its own target | trust is lost by inflating, not won by deflating; what a deflating currency pays its holders is already the carry term. Read both ways it strengthened a deflating currency twice and imported the result back as deflation. Metal and anchored currencies keep both halves, because their target is only the shadow their overvaluation is judged on, and the specie term keeps reading the whole gap |
 
 **Measured.** `scripts/analysis/banking_cycle_sim.py` ports all four steps (`settle_virtual_rate`,
 `update_virtual_target`, `monetary_drift_rate`, `bank_qe_pressure`); `--tune pre_bank_qe` keeps the
 virtual target on the floor, which is the pre-§0.12 world exactly. `scripts/analysis/banking_deflation_trap.py`
 starts a Digital country as reported (core −4.2 under a −2.4 cost-push drag that fades as its
 average catches up, expected −4.9, rate −3, 0.9 wage pressure absorbed by nine bank levels, cycle
-held at 50) and prints both tables below. "First version" is the same script run on that
-version's commit.
+held at 50) and prints the tables below. "First version" is the same script run on that
+version's commit; "virtual rate" is the shipped cap of 5, which this trap barely reaches (its
+purchases peak at 4 without OMO and 3 with it).
 
 | Headline at year, noise held at zero | 1 | 2 | 3 | 4 | 5 | 6 |
 |---|---|---|---|---|---|---|
 | Independent + OMO, before | −6.0 | −5.0 | −3.4 | −1.7 | +0.1 | +1.2 |
 | Independent + OMO, first version | −3.3 | −2.3 | −0.8 | +0.5 | +1.4 | +1.9 |
-| Independent + OMO, virtual rate | −4.0 | −2.7 | −1.1 | +0.3 | +1.3 | +1.8 |
+| Independent + OMO, virtual rate | −4.1 | −2.7 | −1.1 | +0.3 | +1.3 | +1.8 |
 | Independent, no OMO, before | −7.1 | −7.6 | −8.3 | −9.3 | −10 | −10 (the clamp, for ever) |
 | Independent, no OMO, first version | −4.3 | −3.1 | −2.2 | −1.0 | 0.0 | +0.7 |
-| Independent, no OMO, virtual rate | −4.7 | −3.3 | −2.5 | −1.4 | −0.2 | +0.6 |
+| Independent, no OMO, virtual rate | −4.5 | −3.3 | −2.5 | −1.3 | −0.2 | +0.6 |
 | Manual dial + OMO, every version | −5.1 | −3.8 | −2.7 | −1.5 | −0.4 | +0.7 |
 
 | Noise on, no OMO, 200 seeds | Switches on/off, mean (max): first version → virtual | Largest one-month change in the purchases | Median month headline reaches 0% |
 |---|---|---|---|
-| Independent, digital, price stability | 1.82 (5) → 1.04 (3) | 2.50 → 0.67 | 60 → 64 |
-| Delegated, digital, price stability | 3.41 (7) → 1.36 (5) | 2.50 → 0.67 | 71 → 75 |
-| Delegated, fiat, price stability | 2.18 (5) → 1.04 (3) | 1.87 → 0.33 | 66 → 71 |
-| Delegated, fiat, growth | 2.18 (5) → 1.04 (3) | 1.87 → 0.33 | 66 → 71 |
+| Independent, digital, price stability | 1.82 (5) → 1.05 (3) | 2.50 → 0.67 | 60 → 63 |
+| Delegated, digital, price stability | 3.41 (7) → 1.38 (5) | 2.50 → 0.67 | 71 → 75 |
+| Delegated, fiat, price stability | 2.18 (5) → 1.07 (3) | 1.87 → 0.33 | 66 → 68 |
+| Delegated, fiat, growth | 2.18 (5) → 1.07 (3) | 1.87 → 0.33 | 66 → 68 |
 
-The virtual rate costs four or five months of the exit against the first version, because it
+The virtual rate costs two to four months of the exit against the first version, because it
 builds up over the first year instead of arriving at full size, and buys a smooth path: one
 switch-off in most runs, and no month in which the purchases move by more than a drift step.
 In the trap the real rate leaves the floor only once the purchases are at zero (month 36 without
@@ -1739,25 +1741,95 @@ and leaves out its premium and minting):
 
 | Monetise Deficit | Month headline reaches 0%: without / with the bank's purchases | Peak inflation: without / with | Months the bank buys |
 |---|---|---|---|
-| Off | 98 / 76 | 1.3 / 1.9 | 20 |
-| Level 1 | 37 / 35 | 5.4 / 5.4 | 7 |
+| Off | 98 / 76 | 1.3 / 1.9 | 19 |
+| Level 1 | 37 / 35 | 5.4 / 5.4 | 8 |
 | Level 3 | 11 / 11 | 25.6 / 25.8 | 4 |
+
+#### The cap and the currency: changed after a playtest (2026-10-01)
+
+**The report.** An independent Digital country on Growth sat on the −10% clamp for ten months
+with everything on: Panic, Steady momentum, a Very Tight stance, policy rate −3, expected −9.1, a
+currency at 125.3 importing −2.6 points (exports −31.6%), Open-Market Operations, Credit to
+Electrification and Bail-in, no budget left, and Asset Purchases at +3.5 (OMO's 1 and the bank's
+2.5, its cap). The forces on its prices:
+
+| Pushing prices | pp |
+|---|---|
+| Asset Purchases (OMO 1.0 + the bank's 2.5) | +3.5 |
+| Panic phase (`te_mon_phase_pressure`) | −1.5 |
+| Very Tight stance: the gap's +4 clamp × 0.4 (a −3% rate against −9.1% expected is a real rate of about +6) | −1.6 |
+| Currency (`te_fx_imported`, headline only) | −2.6 |
+
+Core settles near expected + 0.4 while headline, core − 2.6, sits on the clamp, and expectations
+12 points off target have no credibility left (`c_eff` = 0), so they follow headline. It feeds
+itself: the deflation lifts the currency twice (the rate term, up to +20, and the inflation-gap
+term, up to +20), and the tight stance keeps the cycle in Panic.
+
+**Why the measurement above missed it.** `banking_cycle_sim.py` holds the exchange rate at par,
+and the first trap held the cycle at 50. `banking_deflation_trap.py --playtest-only` starts from
+the playtest's screenshot (core, hidden under the pinned headline, assumed −8.5), runs the cycle,
+and adds the script's currency loop (`CurrencyLoop`, after `te_monetary_fx_script_values.txt`;
+cyclical premium held at 4.5, basket neutral). Medians of 60 seeds:
+
+| Playtest start | Leaves −10% (month) | Reaches 0% (month) | Peak in the 3 years after | Mean, years 8–10 |
+|---|---|---|---|---|
+| Growth, before (cap 2.5, two-sided confidence) | 38 | 90 (48 of 60) | 5.7 | 1.7 |
+| Growth, cap 5 alone | 5 | 40 | 5.3 | 5.2 |
+| Growth, one-sided confidence alone (cap 2.5) | 5 | 41 (59 of 60) | 3.9 | 3.8 |
+| **Growth, shipped (cap 5, one-sided)** | **3** | **27** | **4.0** | **3.9** |
+| Price Stability, before | 38 | 90 (48 of 60) | 5.4 | 1.7 |
+| **Price Stability, shipped** | **3** | **27** | **3.7** | **2.8** |
+| Growth, before, Restrict Speculative Inflows in place of Bail-in | 16 | 79 (51 of 60) | 5.3 | 3.8 |
+| Growth, before, no currency loop | 1 | 49 | 3.0 | 3.3 |
+
+**What shipped: the cap.** `te_mon_bank_qe_cap` = 5, with the slope still 1, so the virtual
+target may go 5 under the floor. The rebound peaks no higher, because the purchases still wind
+down a drift step a month as the mandate's answer rises. A save already in the trap picks it up at
+its next pulse: the virtual target moves to the new depth at once, and in Panic the bank cuts at
+three times the drift step, so the virtual rate gets there within two months. Ordinary play is
+unchanged from the cap of 2.5: the century matrix reruns to the same figures (fiat within 0.03
+crashes a century of `--tune pre_bank_qe`, digital identical to the printed digit), because a bank
+that buys at all rarely wants to go more than 2.5 under the floor outside a trap like this one.
+
+**What shipped: the currency (ruling N10).** Half the currency's rise in the playtest was §15.1's
+confidence term rewarding the deflation: +2 points per point of inflation below the world's, on
+top of the carry term, which already pays for the higher real return of holding a deflating
+currency. The rise against its three-year average then came back as imported deflation. Real
+currencies do not do this. A price gap mostly moves the nominal rate, which leaves import prices
+falling only as fast as domestic ones, so only a real appreciation imports anything; and that one
+is what capital chasing a return produces, which the carry term models. The target now reads
+`te_mon_fx_term_confidence`, which drops the below-the-world half for a currency whose index
+follows its own target (`te_mon_fx_floats`, not anchored). Above the world's inflation nothing
+changes. Metal and anchored currencies keep both halves: for them the target is only the shadow
+their overvaluation is judged on, and running below the world under a fixed parity really does
+leave it undervalued. With both changes the playtest leaves the clamp in about three months and
+reaches 0% in about 27, and its rebound settles lower, because the currency no longer overshoots
+and falls back. Outside the trap, ordinary centuries of floating countries with the same currency loop on (`banking_deflation_trap.py --ordinary-runs 30`; the century simulator itself holds the exchange rate at par) spend about half as many months below 0% (a delegated digital bank 1.24% of months → 0.22%), mean inflation moves by at most 0.2 points, and crash rates are unchanged within noise: the two Growth cells, rerun at 100 centuries, differ by −0.2 ± 0.7 and +0.4 ± 0.7 crashes a century.
 
 #### Known roughnesses (§0.12)
 
-- **A slower exit than the first version**, by four or five months in the trap above. Open-Market
+- **The currency loop is only partly fixed.** A deflating float still strengthens through the
+  carry term (up to +20 at a real rate five points over the world's), and three things still
+  make the import side heavier than a real economy's: imports are measured against a three-year
+  average, so one move keeps importing for about three years; expected inflation is built from
+  headline, so once it is ten points off target it follows the imported share too; and a high
+  inflation that weakens a currency imports more inflation the same way, through the half of the
+  confidence term that stays. Each touches every country, so each is its own review.
+- **A slower exit than the first version**, by two to four months in the first trap. Open-Market
   Operations still takes a year and a half off it.
-- **Some re-entries remain under noise** (a mean of 1.04 to 1.36 switches a run, at most 5), but
+- **Some re-entries remain under noise** (a mean of 1.05 to 1.38 switches a run, at most 5), but
   each one ramps in and out a drift step at a time.
 - **In a slump the purchases build faster than they wind down.** A mandate bank cuts at three
   times the drift step in Stagnation or worse (§12), and the virtual rate does the same, so the
   purchases can grow by 2.0 a month under digital. They always wind down at the hike speed.
 - **Taking the dial back stops the purchases at once**, as does a law change that ends
   eligibility: step 1d resets the virtual pair to the real one. That is the player's own act.
-- **The sim has no exchange-rate channel and holds the cycle still**, so the deflation band's
-  momentum drain and the Stagnation phase term (−0.3) that a real trap adds are missing. The real
-  recovery is slower than the table.
-- **The Asset Purchases row is new GUI and nobody has seen it.** It copies the Inflation Anchoring
+- **The first trap's tables hold the exchange rate at par and the cycle still**, so they show the
+  bank's own mechanics and not a real recovery. The playtest table adds both, through an
+  approximation: the currency loop holds the cyclical premium and the basket still, and the core
+  under the pinned headline is assumed.
+- **The Asset Purchases row is new GUI and nobody has seen it.** Its label is a game concept
+  (`concept_banking_asset_purchases`) like its neighbours'. It copies the Inflation Anchoring
   row (a `banking_dash_condition_row` behind a scripted GUI `is_shown`), so the layout should hold,
   but the offline GUI lint only proves the markup is balanced. Its tooltip's virtual-rate clause is
   a custom loc (`te_mon_virtual_rate_note`) of the same shape as the Backstops row's drawn-balance
@@ -1770,15 +1842,17 @@ and leaves out its premium and minting):
 
 | # | Check |
 |---|---|
-| **N-1** | CBI + Digital Currency, policy rate on −3, headline under −2: the Asset Purchases row appears and grows by at most 0.7 a month (faster in Stagnation) to +2.5%, and Inflation on the History chart **rises** month on month, where before it fell or stayed flat |
+| **N-1** | CBI + Digital Currency, policy rate on −3, headline under −2: the Asset Purchases row appears and grows by at most 0.7 a month (faster in Stagnation) to +5%, and Inflation on the History chart **rises** month on month, where before it fell or stayed flat |
 | **N-2** | The same country on a **manual** dial (no CBI, not delegated): no change from before. Inflation does not rise on its own, and `te_debug_monetary.1` shows the virtual pair equal to the real one |
 | **N-3** | Gold standard, commodity money and a suspended gold standard: unaffected (no bank purchases) |
 | **N-4** | On the way out the purchases shrink to zero **before** the policy rate leaves the floor: no month with the rate above the floor and the row still showing the bank's purchases, and no month-by-month on/off in the policy-rate chart |
 | **N-5** | An AI great power pushed into deflation at the floor recovers rather than sitting at −10 |
 | **N-6** | The Mandate tooltip shows the *Out of room* paragraph with both mandates' rules; the Delegation tooltip's CBI paragraph says the bank cannot be asked to print |
-| **N-7** | The **Asset Purchases** row appears under Anchoring (under Price Pressure for a country with none) only while Open-Market Operations is on or the bank is buying: +1.0% with Open-Market Operations alone, up to +2.5% from the bank, up to +3.5% with both, and no row otherwise. Its tooltip lists the two halves, and the bank's line ends "(it would set its rate at X% without the floor)" only while the bank buys. Price Pressure still reads 0.0% with no modifiers. The row renders (no raw key, no data-system error in `debug.log`), lines up with Anchoring's, and shows in both the journal entry and the Budget panel's Banking tab |
+| **N-7** | The **Asset Purchases** row appears under Anchoring (under Price Pressure for a country with none) only while Open-Market Operations is on or the bank is buying: +1.0% with Open-Market Operations alone, up to +5% from the bank, up to +6% with both, and no row otherwise. Its tooltip lists the two halves, and the bank's line ends "(it would set its rate at X% without the floor)" only while the bank buys. Price Pressure still reads 0.0% with no modifiers. The row renders (no raw key, no data-system error in `debug.log`), lines up with Anchoring's, and shows in both the journal entry and the Budget panel's Banking tab |
 | **N-8** | A Price Stability bank buying when headline reaches 2%: the purchases wind down over a few months rather than vanishing. A Growth bank whose target sits on the floor in a panic with inflation at target: it buys |
 | **N-9** | A **manual** fiat or digital dial on its floor with headline below 0: the Delegation tooltip's first paragraph ends "Your rate is on its floor and prices are falling: …". Not shown once delegated, under independence, above the floor or with prices rising. Playtest N1 here too: whether players find the delegate-at-the-floor move, and whether it feels like a trick or a choice |
+| **N-10** | The playtest save (independent, Digital, Growth, Panic, headline on −10%, currency near 125): within two months of the patch the Asset Purchases row reads about +6%, and headline leaves −10% within about half a year |
+| **N-11** | The Exchange Rate Index tooltip on a deflating float shows the inflation line at 0 and the target without it; on a float inflating above the world it is negative as before; on gold the shadow and Peg Confidence behave as before. `te_debug_monetary.9` prints the confidence term beside the whole price gap |
 
 **Not verified in a running game**, like everything else in §0.
 
@@ -2345,7 +2419,7 @@ pressure (pp) =
     + 0.3 × max(0, deficit % of GDP − 1)     ×2 at war
     + 2.5 × monetisation_level               §11
     + 1.0 if QE active                       §11
-    + min(2.5, 1.0 × (floor − virtual rate))   §11, §0.12 — a mandate-run fiat/digital bank whose virtual rate is under its floor
+    + min(5, 1.0 × (floor − virtual rate))     §11, §0.12 — a mandate-run fiat/digital bank whose virtual rate is under its floor
     + 100 × modifier:country_inflation_pressure_add          wage pressure, §9.4; also event modifiers (§11)
     + 0.5 × gold flow in % of GDP per year   phase 3, §12.2 — inflows inflate, outflows deflate
     − 2 × max(0, π_core − π_world − 1)       commodity money only, clamped at −6 — §0.6 R7, the
@@ -2647,8 +2721,8 @@ and treasury cost. Changes:
 
 **The bank's own purchases (2026-10-01, §0.12).** OMO is the tool a *player* buys. A bank that
 runs its mandate — delegated, AI or independent — also buys assets itself when its rule asks
-for a rate under the floor: it keeps a virtual rate that may go 2.5 points under the floor, and
-`te_mon_pressure_bank_qe` = `min(2.5, 1.0 × (floor − virtual rate))` pp of pressure, stacking
+for a rate under the floor: it keeps a virtual rate that may go 5 points under the floor, and
+`te_mon_pressure_bank_qe` = `min(5, 1.0 × (floor − virtual rate))` pp of pressure, stacking
 with OMO's flat +1.0. Price stability takes the virtual rate under the floor only with prices
 under target; growth does in any slump that asks for it. It exists
 because independence forbids monetisation, and at the floor both mandates ask for less than the
@@ -2891,6 +2965,7 @@ goods and assets are to foreigners, never how many francs buy a pound.
 fx_target = 100
           + 4.0 × clamp( own_real_rate − world_rate , −5 , +5 ) × controls_damp     carry / capital flows
           − 2.0 × clamp( expected − world_inflation , −10 , +10 )                   confidence in the currency
+                                                       (0 to +10 for a float since 2026-10-01: §0.12 "The currency")
           − 1.5 × max( 0 , cyclical_premium )                                       flight from a distressed sovereign
           + te_fx_shock                                                             events; decays 1/12 per month
 
@@ -2913,7 +2988,12 @@ te_fx_index += (1/12) × ( fx_target − te_fx_index )          ~1-year adjustme
 - The inflation term looks double-counted against the real-rate term (which already
   subtracts `expected`) and is not: the first is the return on holding the currency, the
   second is whether anyone trusts it. A country at 12% policy and 10% expected inflation has
-  a healthy real rate and a weak currency.
+  a healthy real rate and a weak currency. **The deflation side was double-counted, and is
+  gone for a float** (`te_mon_fx_term_confidence`, 2026-10-01): trust is lost by inflating,
+  not won by deflating, because what a deflating currency pays its holders is the carry term.
+  Metal and anchored currencies keep both sides, since for them the target is only the
+  shadow their overvaluation is judged on, and the commodity-specie term
+  (`te_mon_commodity_specie_gap`) still reads the whole gap.
 - `controls_damp` = **0.25** while `banking_capital_controls_out` is active, else 1 (§15.4).
 - `te_fx_shock` is the only event-writable input: events never `set_variable` the index
   (two documented exceptions: §12.3's *Devalue*, which is *defined* as a jump, and the §18.2
@@ -4534,7 +4614,7 @@ P6-1…13).
 | Rank: decentralized | +10 | 7.3 |
 | Mod techs (structural) | **−0.3 ×4, −0.15** = −1.35 (was −0.4 ×4, −0.2 = −1.8), re-homed 2026-09-20 to `keynesian_economics` (6), `computer_networks` (8), `knowledge_economy` (9), `machine_learning` (10, the −0.15) and `universal_digital_identity` (11); the last two also carry `country_credit_standing_floor_add` −0.1pp each, so the floor goes 0.5 → 0.3 (CBI 0.25 → 0.05) | 7.5 |
 | Delegated target rounding / hysteresis | integer / 0.75 | 4 |
-| Bank's own asset purchases at the floor (`te_mon_bank_qe_per_pp` / `te_mon_bank_qe_cap`) | 1.0pp of pressure per point the virtual rate sits under the floor, capped at 2.5 (reached 2.5 under it, which is also as far as the virtual target goes, `te_mon_virtual_depth_max`); stacks with OMO's +1.0 (`te_mon_qe_pressure`); since 2026-10-01 | 11, 0.12 |
+| Bank's own asset purchases at the floor (`te_mon_bank_qe_per_pp` / `te_mon_bank_qe_cap`) | 1.0pp of pressure per point the virtual rate sits under the floor, capped at 5 (reached 5 under it, which is also as far as the virtual target goes, `te_mon_virtual_depth_max`); stacks with OMO's +1.0 (`te_mon_qe_pressure`); since 2026-10-01, the cap 2.5 until a playtest the same day | 11, 0.12 |
 | Gold / CBI credibility | −1.0 / −0.5 | 5 |
 | CBI inflation anchoring, per National Bank level | 0.1pp of net positive wage + price pressure absorbed (`country_inflation_anchoring_add` 0.001; 0.9pp at nine levels), since 2026-09-25 | 6 |
 | `_mult` → pp conversion | × 20 | 7.5 |

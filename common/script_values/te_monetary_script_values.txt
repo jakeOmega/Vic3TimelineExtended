@@ -28,8 +28,8 @@
 #   te_policy_rate_target   regime range, integer   the dial's setting (§5)
 #   te_policy_rate          regime range, fractional  drifts toward the target
 #                                                   at 1/3 pp per month (2/3 digital)
-#   te_mon_virtual_target   to 2.5 under the floor  §0.12: where a mandate bank would set its
-#   te_mon_virtual_rate     to 2.5 under the floor  target and rate without the floor; equal to
+#   te_mon_virtual_target   to 5 under the floor    §0.12: where a mandate bank would set its
+#   te_mon_virtual_rate     to 5 under the floor    target and rate without the floor; equal to
 #                                                   the real pair except while it buys assets
 #   te_mon_delegated        0 or 1                  1 = the target follows the mandate formula
 #   te_mon_mandate          1-3                     1 price stability, 2 growth, 3 peg defence
@@ -1394,12 +1394,22 @@ te_mon_qe_pressure = {
 # The bank's OWN asset purchases (§0.12), in pp of pressure per point that its
 # VIRTUAL rate (te_mon_virtual_rate) sits under the floor, and the most they can
 # add. te_mon_pressure_bank_qe is min(cap, per_pp x depth), so the cap is reached
-# two and a half points under the floor (-5.5% under digital, -2.5% under fiat).
+# five points under the floor (-8% under digital, -5% under fiat).
 # The mandates move their target about two points per point of core inflation,
 # so per_pp = 1 is about two points of pressure per point of inflation the
 # floor keeps the bank from answering. It stacks with the OMO programme above
 # rather than replacing it: OMO is the player's own escalation and costs points
 # and cash, this is the bank doing its job.
+#
+# THE CAP WAS 2.5 UNTIL A PLAYTEST (§0.12, "The cap"). An independent Digital
+# country in a Panic, with its currency at 125 importing 2.6 points of
+# deflation, sat on the -10% clamp for ten months with the purchases at 2.5:
+# OMO's point and the bank's 2.5 only matched the Panic (-1.5) and the Very
+# Tight stance (-1.6), the currency took the rest, and expectations 12 points
+# off target followed headline down. Simulated from that state, 5 gets off the
+# clamp in about five months where 2.5 took about four years, and the rebound
+# peaks no higher, because the purchases still wind down a drift step a month
+# as the mandate's answer rises.
 #
 # STATED IN WORDS by banking_dash_mon_mandate_tt (see te_mon_qe_pressure for why
 # the tooltips spell the numbers out instead of reading them back).
@@ -1411,7 +1421,7 @@ te_mon_bank_qe_per_pp = {
 }
 
 te_mon_bank_qe_cap = {
-	value = 2.5
+	value = 5
 }
 
 # How far under the floor the virtual target may go: the depth at which the

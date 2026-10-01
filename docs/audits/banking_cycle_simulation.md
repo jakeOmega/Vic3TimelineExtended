@@ -1405,8 +1405,8 @@ months for about two years, and a month's change in the term reached 2.5.
 
 The bank keeps a virtual target and rate (`te_mon_virtual_target` / `te_mon_virtual_rate`, design doc §0.12) where it would
 put them without the floor: the mandate formula with the real target's hysteresis, drifting at the real rate's speeds, at
-most 2.5 points under the floor. The real rate is the virtual one held at the floor, and the purchases are
-`min(2.5, 1.0 × (floor − virtual rate))`. Price stability may take the virtual target under the floor only while headline
+most 5 points under the floor (2.5 until F22 below). The real rate is the virtual one held at the floor, and the
+purchases are `min(5, 1.0 × (floor − virtual rate))`. Price stability may take the virtual target under the floor only while headline
 is under the anchor; growth always may. The simulator ports it as `settle_virtual_rate`, `update_virtual_target`,
 `monetary_drift_rate` and `bank_qe_pressure`; `--tune pre_bank_qe` keeps the virtual target on the floor, which is the
 pre-§0.12 world exactly.
@@ -1415,26 +1415,27 @@ pre-§0.12 world exactly.
 
 `scripts/analysis/banking_deflation_trap.py` starts the reported country (core −4.2 under a −2.4 cost-push drag that fades
 as its average catches up, expected −4.9, rate −3, 0.9 of wage pressure absorbed by nine National Bank levels, cycle held at
-50). "First version" is the same script on that version's commit.
+50). "First version" is the same script on that version's commit; "virtual rate" is the shipped cap of 5, which this trap
+barely reaches (its purchases peak at 4 without Open-Market Operations and 3 with them).
 
 | Headline inflation at year, noise held at zero | 1 | 2 | 3 | 4 | 5 | 6 |
 |---|---|---|---|---|---|---|
 | independent, Open-Market Operations on, before | −6.0 | −5.0 | −3.4 | −1.7 | +0.1 | +1.2 |
 | independent, Open-Market Operations on, first version | −3.3 | −2.3 | −0.8 | +0.5 | +1.4 | +1.9 |
-| independent, Open-Market Operations on, virtual rate | −4.0 | −2.7 | −1.1 | +0.3 | +1.3 | +1.8 |
+| independent, Open-Market Operations on, virtual rate | −4.1 | −2.7 | −1.1 | +0.3 | +1.3 | +1.8 |
 | independent, no Open-Market Operations, before | −7.1 | −7.6 | −8.3 | −9.3 | −10 | −10 |
 | independent, no Open-Market Operations, first version | −4.3 | −3.1 | −2.2 | −1.0 | 0.0 | +0.7 |
-| independent, no Open-Market Operations, virtual rate | −4.7 | −3.3 | −2.5 | −1.4 | −0.2 | +0.6 |
+| independent, no Open-Market Operations, virtual rate | −4.5 | −3.3 | −2.5 | −1.3 | −0.2 | +0.6 |
 | manual dial, Open-Market Operations on, every version | −5.1 | −3.8 | −2.7 | −1.5 | −0.4 | +0.7 |
 
 | Noise on, no Open-Market Operations, 200 seeds | Switches on/off, mean (max): first version → virtual | Largest one-month change | Median month at 0% |
 |---|---|---|---|
-| independent, digital, price stability | 1.82 (5) → 1.04 (3) | 2.50 → 0.67 | 60 → 64 |
-| delegated, digital, price stability | 3.41 (7) → 1.36 (5) | 2.50 → 0.67 | 71 → 75 |
-| delegated, fiat, price stability | 2.18 (5) → 1.04 (3) | 1.87 → 0.33 | 66 → 71 |
-| delegated, fiat, growth | 2.18 (5) → 1.04 (3) | 1.87 → 0.33 | 66 → 71 |
+| independent, digital, price stability | 1.82 (5) → 1.05 (3) | 2.50 → 0.67 | 60 → 63 |
+| delegated, digital, price stability | 3.41 (7) → 1.38 (5) | 2.50 → 0.67 | 71 → 75 |
+| delegated, fiat, price stability | 2.18 (5) → 1.07 (3) | 1.87 → 0.33 | 66 → 68 |
+| delegated, fiat, growth | 2.18 (5) → 1.07 (3) | 1.87 → 0.33 | 66 → 68 |
 
-The virtual rate gives up four or five months of the exit and moves the purchases by at most a drift step a month (×3 in
+The virtual rate gives up two to four months of the exit and moves the purchases by at most a drift step a month (×3 in
 a Stagnation's emergency cuts, on the way in only). The real rate leaves the floor only once they are at zero.
 
 Ordinary play does not move. With and without independence, 150 fiat runs per cell differ from `--tune pre_bank_qe` by
@@ -1448,17 +1449,48 @@ simulator does not model monetisation) lifts the bank's rule off the floor withi
 
 | Price Stability, noise held at zero | Month at 0%: without / with purchases | Peak inflation: without / with | Months buying |
 |---|---|---|---|
-| Monetise Deficit off | 98 / 76 | 1.3 / 1.9 | 20 |
-| Monetise Deficit 1 | 37 / 35 | 5.4 / 5.4 | 7 |
+| Monetise Deficit off | 98 / 76 | 1.3 / 1.9 | 19 |
+| Monetise Deficit 1 | 37 / 35 | 5.4 / 5.4 | 8 |
 | Monetise Deficit 3 | 11 / 11 | 25.6 / 25.8 | 4 |
 
-**Not modelled.** The exchange-rate channel, and the cycle: the Deflation band's momentum drain and the Stagnation phase
-term would make a real recovery slower than the table.
+**Not modelled in the tables above.** The exchange-rate channel, and the cycle: the Deflation band's momentum drain and
+the Stagnation phase term would make a real recovery slower. F22 shows how much slower.
+
+### F22 — A Panic and a strong currency held the first cap on the −10% clamp (playtest, 2026-10-01)
+
+A playtest put an independent Digital country on Growth in Panic, with the policy rate on −3, headline on the −10% clamp for
+ten months, expected −9.1, a currency at 125.3 importing −2.6 points, and the bank's purchases at their cap of 2.5 beside
+Open-Market Operations. Those +3.5 points matched the Panic (−1.5) and the Very Tight stance (−1.6); the currency took the
+rest from headline, and expectations twelve points off target followed it down. The deflation lifts the currency (both its
+real-rate and inflation-gap terms) and the tight stance holds the Panic, so the state feeds itself.
+
+`banking_deflation_trap.py --playtest-only` starts from that screenshot (core, hidden under the pinned headline, assumed
+−8.5), runs the cycle, and adds the script's currency loop (`CurrencyLoop`, after `te_monetary_fx_script_values.txt`, with
+the cyclical premium held at 4.5 and the basket neutral; the simulator itself still imports nothing, through its new
+`fx_imported` hook). Medians of 60 seeds:
+
+| Playtest start | Leaves −10% (month) | Reaches 0% (month) | Peak in the 3 years after | Mean, years 8–10 |
+|---|---|---|---|---|
+| Growth, before (cap 2.5, two-sided confidence) | 38 | 90 (48 of 60) | 5.7 | 1.7 |
+| Growth, cap 5 alone | 5 | 40 | 5.3 | 5.2 |
+| Growth, one-sided confidence alone (cap 2.5) | 5 | 41 (59 of 60) | 3.9 | 3.8 |
+| Growth, shipped (cap 5, one-sided) | 3 | 27 | 4.0 | 3.9 |
+| Price Stability, before | 38 | 90 (48 of 60) | 5.4 | 1.7 |
+| Price Stability, shipped | 3 | 27 | 3.7 | 2.8 |
+| Growth, before, Restrict Speculative Inflows in place of Bail-in | 16 | 79 (51 of 60) | 5.3 | 3.8 |
+| Growth, before, no currency loop | 1 | 49 | 3.0 | 3.3 |
+
+Two changes shipped (design doc §0.12, "The cap and the currency"). The cap went to 5: the century matrix reruns at 5 to
+the same figures as at 2.5 (150 fiat runs per cell, 60 digital, with and without independence). And the exchange rate's
+confidence term is one-sided for a float (ruling N10): half the playtest's currency rise was that term rewarding the
+deflation, on top of the carry term that already pays for holding a currency that gains value, and the rise then came
+back as imported deflation. Together they get the playtest off the clamp in about three months and to 0% in about 27,
+and the rebound settles lower because the currency no longer overshoots and falls back. Outside the trap, ordinary centuries of floating countries with the same currency loop on (`banking_deflation_trap.py --ordinary-runs 30`; the century simulator itself holds the exchange rate at par) spend about half as many months below 0% (a delegated digital bank 1.24% of months → 0.22%), mean inflation moves by at most 0.2 points, and crash rates are unchanged within noise: the two Growth cells, rerun at 100 centuries, differ by −0.2 ± 0.7 and +0.4 ± 0.7 crashes a century.
 
 **Reproduce:**
 
 ```
-.venv/bin/python scripts/analysis/banking_deflation_trap.py [--runs 200]
+.venv/bin/python scripts/analysis/banking_deflation_trap.py [--runs 200] [--playtest-runs 60] [--playtest-only] [--ordinary-runs 30]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 0,8 --seed 1 [--fin-law law_central_bank_independence] [--tune pre_bank_qe]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 60 --only digital --points 0,8 --seed 1 [--fin-law law_central_bank_independence] [--tune pre_bank_qe]
 .venv/bin/python -m unittest test_monetary_bank_qe

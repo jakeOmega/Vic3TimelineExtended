@@ -631,6 +631,7 @@
  concept_antimatter_facility:0 "Antimatter Facility"
  concept_antimatter_facility_desc:0 "A high-energy particle physics complex that produces antimatter for civilian and military use. Each level provides 5 sub-building slots for Antimatter Engines (power generation) and Antimatter Warhead Plants (weapons production)."
  concept_asset_relief_program_desc:0 "Government purchase of distressed financial assets from private banks during a [concept_banking_crash], intended to restore solvency and confidence. Politically toxic — taxpayers fund what is widely perceived as a bailout of the financial sector."
+ concept_banking_asset_purchases_desc:0 "What your central bank adds to inflation by buying assets with money it creates: the [concept_open_market_operations] programme you switch on, and the bank's own purchases when its [concept_banking_mandate] asks for a lower rate than its floor allows. Counted on its own rather than as a modifier, so [concept_banking_inflation_anchoring] does not absorb it."
  concept_banking_backstops:0 "Backstops"
  concept_banking_backstops_desc:0 "Swap lines and guarantees in your monetary treaties move [concept_banking_risk_premium]: they take points off the premium of the country they support, and add points to the premium of the one that extends them."
  concept_banking_bank_gold_desc:0 "The gold your central bank holds against its notes. It is the bank's, not the treasury's: the government cannot spend it, and nothing that happens to it shows in your budget. It is what a gold standard rests on."
