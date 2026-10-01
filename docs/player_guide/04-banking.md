@@ -542,18 +542,32 @@ much standing wage and price pressure.
 A rate on its floor can't fall further, and a deflation can hold it there. Both
 mandates ask for far less than the floor allows, and falling prices keep the
 real rate high even at −3%, so the Policy Stance can read Neutral while prices
-fall. A bank that runs its mandate, whether delegated or independent, then buys
-assets on its own account while its rate sits on the floor and inflation is
-under its 2% target. It adds about half a point of inflation pressure for each
-point under the target, up to 2.5 points, on top of Open-Market Operations.
+fall. A bank that runs its mandate, whether delegated or independent, carries on
+cutting on paper. It works out where it would put the rate if there were no
+floor, and buys assets on its own account for the difference. Each point it
+would cut below the floor adds 1 point of inflation pressure, up to 2.5 points
+at 2.5 points below, on top of Open-Market Operations.
+
+The purchases grow and shrink at the speed the rate moves: a third of a point a
+month, two-thirds under Digital Currency, and three times as fast while the bank
+cuts with the cycle in Stagnation or worse. They never start or stop all at once. When the
+bank's rule asks for a higher rate again, the purchases wind down first, and the
+rate leaves the floor only once they reach zero.
+
+The mandate decides when the bank buys:
+
+| Mandate | Buys assets |
+|---|---|
+| Price Stability | Only while inflation is under its 2% target. Once inflation reaches 2%, it winds the purchases down. |
+| Growth | Whenever its rule asks for a rate below the floor, including a slump with inflation on target. |
 
 The purchases cost no intervention points and no money, and you don't switch
-them on. An Asset Purchases row below Price Pressure shows how much they add, together
-with Open-Market Operations, while there are any. They stop when inflation is back at 2% or the rate
-leaves the floor.
-They need Fiat Money or Digital Currency. A dial you set by hand gets none of
-them, because you have Monetise Deficit instead. AI countries are always
-delegated, so they get the purchases too.
+them on. While there are any, an Asset Purchases row below Price Pressure shows
+how much they add, together with Open-Market Operations, and its tooltip gives
+the rate the bank would set without the floor. They need Fiat Money or Digital
+Currency. A dial you set by hand gets none of them, because you have Monetise
+Deficit instead. AI countries are always delegated, so they get the purchases
+too.
 
 Under Central Bank Independence you can't print for the treasury, so a long
 deflation leaves you the bank's purchases, Open-Market Operations and a budget

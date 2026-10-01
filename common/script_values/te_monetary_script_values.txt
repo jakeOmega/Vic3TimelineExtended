@@ -28,6 +28,9 @@
 #   te_policy_rate_target   regime range, integer   the dial's setting (§5)
 #   te_policy_rate          regime range, fractional  drifts toward the target
 #                                                   at 1/3 pp per month (2/3 digital)
+#   te_mon_virtual_target   to 2.5 under the floor  §0.12: where a mandate bank would set its
+#   te_mon_virtual_rate     to 2.5 under the floor  target and rate without the floor; equal to
+#                                                   the real pair except while it buys assets
 #   te_mon_delegated        0 or 1                  1 = the target follows the mandate formula
 #   te_mon_mandate          1-3                     1 price stability, 2 growth, 3 peg defence
 #   te_premium_structural   floor to 30             what the country *is*; floored
@@ -1388,13 +1391,15 @@ te_mon_qe_pressure = {
 	value = 1.0
 }
 
-# The bank's OWN asset purchases (§0.12), in pp of pressure per point that
-# headline inflation sits under the mandate's anchor, and the most they can add.
-# te_mon_pressure_bank_qe is min(cap, per_pp x shortfall) while
-# te_mon_bank_buys_assets holds, so the cap is reached five points under target
-# (-3% on the 2% anchor). It stacks with the OMO programme above rather than
-# replacing it: OMO is the player's own escalation and costs points and cash,
-# this is the bank doing its job.
+# The bank's OWN asset purchases (§0.12), in pp of pressure per point that its
+# VIRTUAL rate (te_mon_virtual_rate) sits under the floor, and the most they can
+# add. te_mon_pressure_bank_qe is min(cap, per_pp x depth), so the cap is reached
+# two and a half points under the floor (-5.5% under digital, -2.5% under fiat).
+# The mandates move their target about two points per point of core inflation,
+# so per_pp = 1 is about two points of pressure per point of inflation the
+# floor keeps the bank from answering. It stacks with the OMO programme above
+# rather than replacing it: OMO is the player's own escalation and costs points
+# and cash, this is the bank doing its job.
 #
 # STATED IN WORDS by banking_dash_mon_mandate_tt (see te_mon_qe_pressure for why
 # the tooltips spell the numbers out instead of reading them back).
@@ -1402,11 +1407,33 @@ te_mon_qe_pressure = {
 # string, the player guide's "When the bank cannot cut" section and
 # monetary_policy_design.md §0.12.
 te_mon_bank_qe_per_pp = {
-	value = 0.5
+	value = 1.0
 }
 
 te_mon_bank_qe_cap = {
 	value = 2.5
+}
+
+# How far under the floor the virtual target may go: the depth at which the
+# purchases reach their cap. Deeper would buy nothing more, and would leave the
+# virtual rate a long climb back before the purchases even began to shrink —
+# at -6.6% inflation the price-stability rule asks for about -12%.
+te_mon_virtual_depth_max = {
+	value = te_mon_bank_qe_cap
+	divide = te_mon_bank_qe_per_pp
+}
+
+# The lowest the virtual target may sit (§0.12): the regime's own floor, less
+# te_mon_virtual_depth_max while te_mon_bank_may_go_under_floor holds. When the
+# mandate says not to buy — price stability with prices on target — this is the
+# floor itself, so a virtual rate already under it climbs back at the hike speed
+# and the purchases wind down with it.
+te_mon_virtual_target_min = {
+	value = te_mon_target_min
+	if = {
+		limit = { te_mon_bank_may_go_under_floor = yes }
+		subtract = te_mon_virtual_depth_max
+	}
 }
 
 
@@ -2181,36 +2208,38 @@ te_mon_pressure_qe = {
 	}
 }
 
-# The central bank's own purchases when its rate cannot fall further and prices
-# are under its target (§0.12): te_mon_bank_qe_per_pp for every point headline
-# inflation is under the anchor, capped at te_mon_bank_qe_cap. This is the
-# deflation exit for a bank that cannot be told to print — central bank
-# independence forbids monetisation, and at the floor both mandates ask for far
-# less than the floor allows, so without this term the bank's only lever was the
-# flat +1.0 of the OMO tool.
+# The central bank's own purchases when it wants a lower rate than its floor
+# allows (§0.12): te_mon_bank_qe_per_pp for every point its VIRTUAL rate sits
+# under the floor, capped at te_mon_bank_qe_cap. This is the deflation exit for
+# a bank that cannot be told to print — central bank independence forbids
+# monetisation, and at the floor both mandates ask for far less than the floor
+# allows, so without this term the bank's only lever was the flat +1.0 of the
+# OMO tool.
 #
-# IT READS HEADLINE, NOT CORE. The mandates look through cost-push by reading
-# te_inflation_core, but core is hidden state (ruling P7) and this term's size is
-# not: it is te_mon_bank_qe_per_pp x (anchor - core) until the cap, so a term that
-# read core would be core itself the moment anything printed it. Headline is
-# what the player is shown. It is also last month's headline — step 6b sums the
-# pressure before it writes this month's — the same one-month lag the wage
-# spiral's gate has, and the same figure the player last saw.
+# THE VIRTUAL RATE (te_mon_virtual_rate, steps 2 and 3) is where the bank would
+# put its rate if the floor were not there. Its target comes from the mandate
+# formula with the same whole-point hysteresis as the real target, it drifts at
+# the same speeds, and the real rate is the virtual rate held at the floor. So
+# the purchases grow and shrink at the speed the rate moves, and they are gone
+# by the month the real rate leaves the floor: they never switch on or off in
+# one step. That was the first version's flaw — sized by how far headline sat
+# under target and gated on the rate being on the floor, it dropped from 2.5 to
+# 0 the month the rate lifted off by one drift step, and with the inflation
+# noise on the bank went back to the floor and off again every few months.
 #
-# THE ANCHOR is te_mon_inflation_anchor, the mandate's own target (2 on fiat and
-# digital; the term cannot fire on metal), so "under target" means what the
-# mandate means by it. Inflation at or above the anchor adds nothing, and the
-# term is zero the month the rate leaves the floor: it can ease a deflation, not
-# push inflation past the target the bank is set to hold.
+# The floor is te_mon_target_min, which for a bank that can buy assets (fiat or
+# digital) is the plain country_policy_rate_floor_add bound: 0 under fiat, -3
+# under digital. This is step 6b, after step 3 has drifted the virtual rate, so
+# it is this month's.
 te_mon_pressure_bank_qe = {
 	value = 0
 	if = {
 		limit = {
-			te_mon_bank_buys_assets = yes
-			has_variable = te_inflation
+			te_mon_bank_can_buy_assets = yes
+			has_variable = te_mon_virtual_rate
 		}
-		add = te_mon_inflation_anchor
-		subtract = var:te_inflation
+		add = te_mon_target_min
+		subtract = var:te_mon_virtual_rate
 		min = 0
 		multiply = te_mon_bank_qe_per_pp
 		max = te_mon_bank_qe_cap
@@ -2229,9 +2258,12 @@ te_mon_pressure_bank_qe = {
 # prints only the modifier.
 #
 # PRINTABLE DESPITE RULING P7, and only because of what these are built from:
-# OMO is a tool the player bought, and the bank's term is a function of the
-# headline and the floor, both of which the dashboard shows. Neither carries the
-# stance gap or core. Do not widen this to the rest of te_mon_pressure_*.
+# OMO is a tool the player bought, and the bank's term is a function of its
+# virtual rate, which is built exactly as the policy rate target the dashboard
+# already prints for a delegated bank — the same mandate formula and hysteresis,
+# only not stopped at the floor. It shows no more of core or r* than that target
+# does above the floor, and nothing of the stance gap. Do not widen this to the
+# rest of te_mon_pressure_*.
 te_mon_omo_pressure_display = {
 	value = te_mon_pressure_qe
 }

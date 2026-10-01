@@ -860,3 +860,24 @@ te_mon_union_state = {
 		localization_key = banking_dash_mon_union_state_coop
 	}
 }
+
+
+# ----------------------------------------------------------------------------
+# §0.12 — the bank's virtual rate, under its own purchases
+# ----------------------------------------------------------------------------
+# One clause appended to the Asset Purchases tooltip's own-purchases line: where
+# the bank would have its rate if the floor were not there, which is what sizes
+# its purchases. Only while it is buying. The row also shows for Open-Market Operations alone, when there
+# is no virtual rate under the floor to speak of, and then this is empty.
+te_mon_virtual_rate_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_bank_purchase_display > 0 }
+		localization_key = banking_dash_mon_purchases_virtual
+	}
+	text = {
+		localization_key = banking_dash_mon_purchases_virtual_none
+	}
+}
