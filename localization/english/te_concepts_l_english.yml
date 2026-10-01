@@ -166,7 +166,7 @@
  SR_SAFE_APPROACH:0 "Safe Approach"
  SUBJECTS:0 "Subjects"
  TP_GDP_TOOLTIP:0 "#tooltip_header Trade as a Share of GDP#!\nYearly trade with this partner, imports plus exports, as a share of this market owner's yearly [concept_gdp].\n\nTrade is valued at base prices and [concept_gdp] at market prices."
- TP_TRADE_TOOLTIP:0 "#tooltip_header Bilateral Trade#!\nTotal value of goods traded between your market and [Country.GetName]'s market.\n\n#bold Trade Policy:#! [Country.GetActiveLawFromGroup('lawgroup_trade_policy').GetNameNoFormatting]"
+ TP_TRADE_TOOLTIP:0 "#tooltip_header Yearly Trade#!\nTotal [concept_trade] between this market and the partner's market, imports plus exports, at base prices and scaled from the weekly flow to a year (52 weeks).\n\nHover a figure for the goods behind it. That breakdown is per week, at current market prices."
  UN_ARMS_CONTROL:0 "Join Arms Control Treaty"
  UN_CHAMPION_ORDER:0 "Champion International Order"
  UN_DEFUND_DEVELOPMENT:0 "Withdraw Development Funding"
