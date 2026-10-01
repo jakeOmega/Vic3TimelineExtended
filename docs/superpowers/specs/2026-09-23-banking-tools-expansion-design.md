@@ -39,7 +39,9 @@ price, cycle signature and a second effect. Electrification lost "& High Tech" (
 and became the cheap one. Points are now Infrastructure 3, Heavy Industry 4, Agriculture 2, Armaments 3, Electrification 1, and the numbers in B1 and the
 table at the end of this document are superseded by the profile table in
 `docs/audits/banking_cycle_simulation.md` §14 and above `banking_directed_credit_infrastructure` in
-`extra_modifiers.txt`. The AI pays the same prices as a player; see §14 of the simulation study.
+`extra_modifiers.txt`. The AI pays the same prices as a player, so B1's "exactly as often as before" holds for the
+shared weight only: the cheap sectors are affordable at more budgets and the AI presses them more, and B1's lift
+weights (stable 20, expansion 30) are now 40 and 50 (§14, F19 of the simulation study).
 
 ## Constraints the design works inside
 

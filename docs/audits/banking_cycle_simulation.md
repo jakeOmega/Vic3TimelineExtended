@@ -985,6 +985,7 @@ credit is the AI's riskiest tool — is not multiplied by four more of it. Leavi
 (`--exclude-tool dc_heavy`) moves the mean by −0.2, Infrastructure's own small harm. Under the Directed Credit law
 the second slot is used: at 8 points a heavy-industry government adds Infrastructure about 4 times a century,
 and the mean over cells goes 10.7 → 10.2 against the same law before the expansion.
+These clicks and crash rates are with every sector at 3 points; §14 re-measures them once the sectors are priced 1 to 4.
 
 ### Reserve requirements: defer to the buffer
 
@@ -1323,8 +1324,8 @@ adds the sector's modifier and its `country_banking_intervention_max_add`, so ev
 points-based weight reads the reduced budget. A sector priced at 1 or 2 is therefore affordable at budgets, and in
 half-spent budgets, where a 3-point sector was not. An earlier draft held the AI's click count constant by making
 every sector a candidate only above three free points. That changed when the AI pressed the button and nothing about
-what it cost, so the AI's other decisions saw the full reduction either way; it was rejected (owner) because the AI
-follows the same rules as a player and its restraint belongs in its weights.
+what it cost, so the AI's other decisions saw the full reduction either way. It was dropped in favour of adjusting the
+AI's weights.
 
 At real prices with the AI's lift weights unchanged, directed-credit clicks a century roughly doubled, almost all of
 it in Electrification (1 point) and Agriculture (2): with all four favoured they went from 26.7 / 25.5 to 137 / 72, and
@@ -1358,6 +1359,8 @@ electrification alone (8.28 → 8.55) and fiat / growth at 3 points with all fou
 stability 6.3 → 6.5). Raising the lift weights further (stable 55, expansion 65) moved the all-four cells by under
 0.1, so the rest is the cost of the extra months spent in directed credit. The 2-point cells with no sector favoured
 are unchanged, and §8's targets do not depend on any of this.
+
+**Further levers, not tried.** A lower enable weight (`banking_dc_ai_weight`), for every sector or only the cheap ones.
 
 **Not re-run.** The leave-one-out of each new sector, the currency laws other than fiat, and the 400-run matrix.
 

@@ -590,10 +590,15 @@ banking_ai_core_cb_bail_in_regime = {
 # the weight is SPLIT among the sectors the government favours: a new sector is
 # a candidate when it has an affinity below and could be clicked right now; with
 # n candidates each scores weight / n and Infrastructure scores 0, and with none
-# Infrastructure scores the whole weight. So the AI reaches for directed credit
-# exactly as often as it did with one sector (docs/audits/banking_cycle_simulation.md
-# F11: it is the AI's riskiest tool), and picks the sector that suits whoever
-# governs. The one deliberate increase is the Directed Credit law's second slot.
+# Infrastructure scores the whole weight. So the total WEIGHT is the same however
+# many sectors have an affinity, and the AI picks the sector that suits whoever
+# governs. How often it actually presses also depends on what it can afford:
+# with every sector at 3 points that was unchanged, but the cheap sectors
+# (Electrification 1, Agriculture 2) are affordable at budgets a 3-point sector
+# was not, so the AI presses them far more often (docs/audits/banking_cycle_simulation.md
+# §14, F19; F11: directed credit is the AI's riskiest tool). The sectors' disable
+# buttons lift sooner to compensate. The Directed Credit law's second slot is
+# also used.
 # ----------------------------------------------------------------------------
 banking_dc_affinity_heavy_industry = {
 	ig:ig_industrialists ?= { is_in_government = yes }
