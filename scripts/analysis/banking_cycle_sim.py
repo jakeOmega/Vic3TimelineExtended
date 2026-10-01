@@ -82,6 +82,11 @@ DELIBERATELY OUT OF SCOPE (pass 1)
     Foreign-borrowing limits, FX surrender and import financing therefore have
     no AI selection here; actual-script scenarios test their accounting. The
     two flow tools assume funding, since liquid treasury is not modeled.
+    The currency's share of cost-push goes through the `fx_imported` hook, 0
+    here; banking_deflation_trap.py plugs the script's loop into it. A deep
+    deflation with the currency at par misses the loop that kept the §0.12
+    playtest on the -10% clamp (banking_cycle_simulation.md F22), so measure
+    deflation exits through that script.
   * `ce_*` / `cw_*` tools: command economy and cooperative ownership are a
     different economic law, and the question posed was about currency laws.
 
@@ -1041,23 +1046,32 @@ def monetary_drift_rate(cfg: Config, state: State) -> None:
         state.policy_rate = drift_toward(cfg, state, state.policy_rate, state.policy_rate_target)
 
 
+def fx_imported(cfg: Config, state: State, world_rate: float) -> float:
+    """te_fx_imported, the exchange rate's share of cost-push, in pp: 0 here.
+
+    The simulator holds the exchange rate at par (see the module docstring), so a
+    currency imports nothing. scripts/analysis/banking_deflation_trap.py swaps in
+    the script's loop for the playtest scenario of design doc §0.12.
+    """
+    return 0.0
+
+
 def monetary_update_inflation(
     cfg: Config, state: State, rng: random.Random, world_rate: float
 ) -> None:
-    # cost-push from the goods basket
+    # cost-push from the goods basket, plus the currency's share (te_fx_imported),
+    # which the script adds inside the same +/-te_mon_cost_push_clamp
     if not state.basket_seeded:
         state.basket_avg = state.basket_index
         state.basket_seeded = True
-        cost_push = 0.0
+        basket = 0.0
     else:
-        cost_push = max(
-            -K.sv("te_mon_cost_push_clamp"),
-            min(
-                K.sv("te_mon_cost_push_clamp"),
-                (state.basket_index - state.basket_avg) * K.sv("te_mon_basket_k") * 100,
-            ),
-        )
+        basket = (state.basket_index - state.basket_avg) * K.sv("te_mon_basket_k") * 100
         state.basket_avg += (state.basket_index - state.basket_avg) * (1 / 36)
+    cost_push = max(
+        -K.sv("te_mon_cost_push_clamp"),
+        min(K.sv("te_mon_cost_push_clamp"), basket + fx_imported(cfg, state, world_rate)),
+    )
 
     # the noise walk
     state.inflation_noise *= 0.95

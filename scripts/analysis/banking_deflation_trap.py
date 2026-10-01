@@ -15,10 +15,17 @@ docs/audits/banking_cycle_simulation.md §15 quote both tables this prints:
   (ruling N1): what the bank's purchases add on top of Monetise Deficit. The
   simulator does not model monetisation, so its inflation side is added here
   as te_mon_monetisation_pressure per level; its risk premium and minting are
-  not modelled.
+  not modelled;
+* the playtest that raised the cap (§0.12, "The cap"): an independent Digital
+  country on Growth, in a Panic, headline on the -10% clamp, expectations at
+  -9.1, a currency at 125.3 importing -2.6 points, Open-Market Operations,
+  Credit to Electrification and Bail-in on. The cycle RUNS here, and an
+  exchange-rate loop the simulator otherwise leaves out is added (CurrencyLoop
+  below, after te_monetary_fx_script_values.txt). Core under the pinned
+  headline is not shown in game; -8.5 is assumed.
 
 Usage:
-    python3 scripts/analysis/banking_deflation_trap.py [--runs 200]
+    python3 scripts/analysis/banking_deflation_trap.py [--runs 200] [--playtest-runs 60] [--playtest-only]
 """
 import argparse
 import random
@@ -31,6 +38,79 @@ from scripts.analysis import banking_cycle_sim as sim  # noqa: E402
 
 CBI = "law_central_bank_independence"
 DELEGATED = "law_universal_banking_light_prudence"
+PREVIOUS_CAP = 2.5  # te_mon_bank_qe_cap before the playtest
+
+
+class CurrencyLoop:
+    """te_fx_imported for a floating currency, after te_monetary_fx_script_values.txt.
+
+    target = par + rate term + inflation term + premium term. The rate term is
+    4 x clamp(policy - expected - world rate, +-5), its positive side halved by
+    Restrict Speculative Inflows; the inflation term -2 x clamp(expected - world
+    inflation, +-10); the premium term -1.5 x the cyclical premium, held here at
+    the playtest's 4.5. The index closes 1/12 of the gap a month, and imports
+    0.15 x (three-year average - index), the average moving 0.0278 of the gap.
+    `inflation_term=False` drops the inflation term, to show what it does.
+    """
+
+    def __init__(self, index, imported, *, premium=4.5, world_inflation=2.0, inflation_term=True):
+        self.index = index
+        self.avg = index + imported / 0.15  # so that it imports `imported` this month
+        self.premium = premium
+        self.world_inflation = world_inflation
+        self.inflation_term = inflation_term
+
+    def __call__(self, cfg, state, world_rate):
+        rate = max(-5.0, min(5.0, state.policy_rate - state.inflation_expected - world_rate))
+        if rate > 0 and "restrict_inflows" in state.tools:
+            rate *= 0.5
+        target = 100 + 4 * rate - 1.5 * max(0.0, self.premium)
+        if self.inflation_term:
+            target -= 2 * max(-10.0, min(10.0, state.inflation_expected - self.world_inflation))
+        self.index = max(50.0, min(150.0, self.index + (target - self.index) / 12))
+        imported = (self.avg - self.index) * 0.15
+        self.avg += (self.index - self.avg) * 0.0278
+        return imported
+
+
+def playtest(seed, *, mode=sim.MODE_GROWTH, cap=None, tools=("omo", "dc_elec", "bail_in"),
+             currency_loop=True, inflation_term=True, months=120):
+    """The playtest's country from its screenshot, cycle running; `cap` overrides te_mon_bank_qe_cap."""
+    sv, imported = sim.K.sv, sim.fx_imported
+    if cap is not None:
+        sim.K.sv = lambda name: cap if name == "te_mon_bank_qe_cap" else sv(name)
+    if currency_loop:
+        sim.fx_imported = CurrencyLoop(125.3, -2.6, inflation_term=inflation_term)
+    sim.TUNE.clear()
+    try:
+        cfg = sim.Config(currency="digital", mode=mode, points=8, ai_tools=False, fin_law=CBI,
+                         wage_pressure=0.9, bank_level=9)
+        st = sim.State(policy_rate=-3.0, policy_rate_target=-3.0, inflation=-10.0,
+                       inflation_core=-8.5, inflation_expected=-9.1, neutral_rate=3.0,
+                       finance_cycle_value=6.0, bubble_pressure=5.0)
+        st.virtual_rate = st.virtual_target = -5.5  # buying at the old cap, as in the screenshot
+        st.tools = set(tools)
+        st.basket_seeded = True
+        rng = random.Random(seed)
+        off_clamp = at_zero = None
+        peak, late = -100.0, []
+        for month in range(1, months + 1):
+            sim.advance_exogenous(cfg, st, rng, month)
+            st.deficit_pct = 0.0
+            sim.cycle_pulse(cfg, st, rng, month)
+            sim.monetary_update(cfg, st, rng, month // 12)
+            if off_clamp is None and st.inflation > -9.95:
+                off_clamp = month
+            if at_zero is None and st.inflation >= 0:
+                at_zero = month
+            if at_zero is not None and month <= at_zero + 36:
+                peak = max(peak, st.inflation)
+            if month > months - 36:
+                late.append(st.inflation)
+    finally:
+        sim.K.sv, sim.fx_imported = sv, imported
+    return dict(off_clamp=off_clamp, at_zero=at_zero, peak=peak if at_zero else None,
+                late=statistics.mean(late))
 
 
 def run(seed, currency, fin_law, mode, *, noise=True, omo=False, months=120, tune=None, monetise=0):
@@ -80,7 +160,16 @@ def run(seed, currency, fin_law, mode, *, noise=True, omo=False, months=120, tun
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--runs", type=int, default=200, help="seeds per row of the noise table")
+    ap.add_argument("--playtest-runs", type=int, default=60, help="seeds per row of the playtest table")
+    ap.add_argument("--playtest-only", action="store_true", help="print only the playtest table")
     args = ap.parse_args()
+    if not args.playtest_only:
+        first_trap(args)
+    playtest_table(args)
+    return 0
+
+
+def first_trap(args) -> None:
 
     print("Headline inflation at the end of each year, no noise, cycle held at 50:")
     print(f"  {'':40s}" + "".join(f"{y:>7d}" for y in range(1, 7)))
@@ -118,7 +207,33 @@ def main() -> int:
         on = run(0, "digital", DELEGATED, sim.MODE_PRICE, noise=False, monetise=level)
         print(f"  Monetise Deficit {level}    {off['at_zero']!s:>20s} / {on['at_zero']!s:<17s}"
               f"{off['peak']:>8.1f} / {on['peak']:<7.1f}{on['months_buying']:>13d}")
-    return 0
+
+
+def playtest_table(args) -> None:
+    n = args.playtest_runs
+    print(f"\nThe playtest (Panic, strong currency, headline on -10%), cycle running, {n} seeds, medians:")
+    print(f"  {'':52s}{'leaves -10%':>14s}{'reaches 0%':>16s}{'peak after':>12s}{'yrs 8-10':>10s}")
+    cases = [
+        ("Growth, previous cap 2.5", dict(cap=PREVIOUS_CAP)),
+        ("Growth, cap 5 (shipped)", dict()),
+        ("Price Stability, previous cap 2.5", dict(mode=sim.MODE_PRICE, cap=PREVIOUS_CAP)),
+        ("Price Stability, cap 5 (shipped)", dict(mode=sim.MODE_PRICE)),
+        ("Growth, cap 2.5, Restrict Inflows for Bail-in", dict(cap=PREVIOUS_CAP, tools=("omo", "dc_elec", "restrict_inflows"))),
+        ("Growth, cap 2.5, no currency loop", dict(cap=PREVIOUS_CAP, currency_loop=False)),
+        ("Growth, cap 2.5, currency ignores the inflation gap", dict(cap=PREVIOUS_CAP, inflation_term=False)),
+    ]
+    for label, kw in cases:
+        results = [playtest(seed, **kw) for seed in range(n)]
+        off = [r["off_clamp"] for r in results if r["off_clamp"]]
+        zero = [r["at_zero"] for r in results if r["at_zero"]]
+        peaks = [r["peak"] for r in results if r["peak"] is not None]
+
+        def med(values):
+            return f"{statistics.median(values):.0f}" if values else "never"
+        print(f"  {label:52s}{med(off):>6s} ({len(off):>2d}/{n})"
+              f"{med(zero):>8s} ({len(zero):>2d}/{n})"
+              f"{(statistics.median(peaks) if peaks else float('nan')):>12.1f}"
+              f"{statistics.median(r['late'] for r in results):>10.1f}")
 
 
 if __name__ == "__main__":

@@ -50,6 +50,12 @@ def constants():
             float(dict((k, v) for k, _, v in values['te_mon_bank_qe_cap'])['value']))
 
 
+def past_the_cap(floor=DIGITAL_FLOOR):
+    """A virtual rate well past the depth at which the purchases reach their cap."""
+    per_pp, cap = constants()
+    return floor - 2 * cap / per_pp
+
+
 def term(virtual, floor=DIGITAL_FLOOR, can=True):
     """`te_mon_pressure_bank_qe` on the real script, with the gate and floor stubbed."""
     s = Script(te_mon_bank_can_buy_assets=can, te_mon_target_min=floor)
@@ -135,8 +141,9 @@ class ScriptValue(unittest.TestCase):
                 self.assertLess(per_pp * depth, cap)
 
     def test_capped(self):
-        _, cap = constants()
-        for virtual in (-5.5, -6, -12):
+        per_pp, cap = constants()
+        for beyond in (0, 0.5, 7):
+            virtual = DIGITAL_FLOOR - cap / per_pp - beyond
             self.assertEqual(term(virtual), cap, virtual)
 
     def test_the_virtual_target_stops_where_the_cap_is_reached(self):
@@ -289,9 +296,10 @@ class Effects(unittest.TestCase):
 
     def test_price_stability_at_target_winds_the_purchases_down_rather_than_stopping(self):
         per_pp, cap = constants()
-        s = Monetary().seat(-3, -3, -5.5, -5.5)
+        deepest = DIGITAL_FLOOR - cap / per_pp
+        s = Monetary().seat(-3, -3, deepest, deepest)
         s.inputs['te_mon_bank_may_go_under_floor'] = False  # prices back at target
-        bought = [s.month(-12)[0] for _ in range(6)]
+        bought = [s.month(-12)[0] for _ in range(int(cap / (per_pp * DIGITAL_STEP)) + 2)]
         self.assertGreater(bought[0], 0)
         self.assertAlmostEqual(cap - bought[0], per_pp * DIGITAL_STEP, places=3)
         self.assertEqual(bought[-1], 0)
@@ -350,7 +358,7 @@ class SimulatorPort(unittest.TestCase):
     def test_enters_the_pressure_sum(self):
         sim = self.sim
         cfg = self.config()
-        st = self.state(cfg, -6)
+        st = self.state(cfg, past_the_cap())
         on = sim.pressure_total(cfg, st, 3.0)
         sim.TUNE['bank_qe'] = 0.0
         try:
@@ -397,7 +405,8 @@ class SimulatorPort(unittest.TestCase):
         per_pp, cap = constants()
         rows = self.trap({})
         bought = [row[3] for row in rows]
-        self.assertEqual(max(bought), cap)
+        self.assertGreater(max(bought), 0)
+        self.assertLessEqual(max(bought), cap)
         for before, after in zip(bought, bought[1:]):
             self.assertLessEqual(abs(after - before), per_pp * DIGITAL_STEP + 1e-6)
         lifted = [row for row in rows if row[1] > DIGITAL_FLOOR + 0.01]
@@ -407,6 +416,22 @@ class SimulatorPort(unittest.TestCase):
     def test_pre_bank_qe_keeps_the_virtual_rate_on_the_real_one(self):
         for _, rate, virtual, bought in self.trap({'bank_qe': 0.0}, months=60):
             self.assertEqual((virtual, bought), (rate, 0))
+
+    def test_the_currency_loop_imports_what_it_is_seeded_with(self):
+        from scripts.analysis import banking_deflation_trap as trap
+        loop = trap.CurrencyLoop(125.3, -2.6)
+        self.assertAlmostEqual((loop.avg - loop.index) * 0.15, -2.6)
+
+    def test_the_simulator_imports_nothing_unless_asked(self):
+        self.assertEqual(self.sim.fx_imported(self.config(), self.sim.State(), 3.0), 0.0)
+
+    def test_the_playtest_leaves_the_clamp_with_the_shipped_cap(self):
+        """§0.12 "The cap": Panic, a strong currency, headline on -10%. The old cap held it there."""
+        from scripts.analysis import banking_deflation_trap as trap
+        shipped = [trap.playtest(seed, months=24)['off_clamp'] for seed in range(6)]
+        previous = [trap.playtest(seed, months=24, cap=trap.PREVIOUS_CAP)['off_clamp'] for seed in range(6)]
+        self.assertTrue(all(month is not None and month <= 12 for month in shipped), shipped)
+        self.assertGreaterEqual(sum(month is None for month in previous), 4, previous)
 
     def test_a_manual_dial_is_unchanged(self):
         sim = self.sim
@@ -421,7 +446,7 @@ class PurchaseDisplay(unittest.TestCase):
 
     def display(self, omo, buys, name='te_mon_purchase_pressure_display'):
         s = Script(te_mon_bank_can_buy_assets=buys, te_mon_target_min=DIGITAL_FLOOR)
-        s.vars['te_mon_virtual_rate'] = -6
+        s.vars['te_mon_virtual_rate'] = past_the_cap()
         if omo:
             s.tools.add('omo')
         return s.number(name)
@@ -546,9 +571,9 @@ class TooltipNumbers(unittest.TestCase):
         per_pp, cap = constants()
         text = self.loc('banking_dash_mon_mandate_tt')
         self.assertEqual(per_pp, 1.0, 'retuned: edit the tooltip, the player guide and §0.12')
-        self.assertEqual(cap, 2.5, 'retuned: edit the tooltip, the player guide and §0.12')
+        self.assertEqual(cap, 5.0, 'retuned: edit the tooltip, the player guide and §0.12')
         self.assertIn('#b one point#! of upward pressure on prices for every point it would have cut below the floor', text)
-        self.assertIn('two and a half', text)
+        self.assertIn('at most #b five#!', text)
         self.assertIn('$banking_dash_mon_mandate_price$ buys only while prices are under its target', text)
         self.assertIn('$banking_dash_mon_mandate_growth$ also buys through a slump with prices on target', text)
 

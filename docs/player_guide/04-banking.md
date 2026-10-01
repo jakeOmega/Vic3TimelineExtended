@@ -545,8 +545,8 @@ real rate high even at −3%, so the Policy Stance can read Neutral while prices
 fall. A bank that runs its mandate, whether delegated or independent, carries on
 cutting on paper. It works out where it would put the rate if there were no
 floor, and buys assets on its own account for the difference. Each point it
-would cut below the floor adds 1 point of inflation pressure, up to 2.5 points
-at 2.5 points below, on top of Open-Market Operations.
+would cut below the floor adds 1 point of inflation pressure, up to 5 points
+at 5 points below, on top of Open-Market Operations.
 
 The purchases grow and shrink at the speed the rate moves: a third of a point a
 month, two-thirds under Digital Currency, and three times as fast while the bank
