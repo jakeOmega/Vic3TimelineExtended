@@ -12,3 +12,12 @@ sol_expectations_lower_strata_shift = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	state_lower_strata_expected_sol_add = 1
 }
+
+# Algorithmic Governance's legitimacy from results (law_algorithmic_governance).
+# A unit modifier: te_refresh_algorithmic_mandate (sol_expectations_effects.txt)
+# re-applies it each month with multiplier algorithmic_mandate_value, which
+# follows living standards against expectations.
+algorithmic_mandate = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 1
+}

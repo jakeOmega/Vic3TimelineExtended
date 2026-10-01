@@ -40,6 +40,29 @@ INJECT:law_elected_bureaucrats = {
 	}
 }
 
+# Algorithmic Governance installs law_automated_bureaucracy, and the human
+# bureaucracy laws disallow it, so a country under machine rule cannot hand
+# administration back to people. Elected Bureaucrats is already excluded by its
+# voting-law gate above. Hereditary Bureaucrats and Crownland Diets keep
+# vanilla's law_council_republic: an INJECTed list adds to vanilla's.
+INJECT:law_hereditary_bureaucrats = {
+	disallowing_laws = {
+		law_algorithmic_governance
+	}
+}
+
+INJECT:law_crownland_diets = {
+	disallowing_laws = {
+		law_algorithmic_governance
+	}
+}
+
+INJECT:law_appointed_bureaucrats = {
+	disallowing_laws = {
+		law_algorithmic_governance
+	}
+}
+
 REPLACE:law_subjecthood = {
 	group = lawgroup_citizenship
 

@@ -59,6 +59,37 @@ sol_expectations_monthly_update = {
 	sol_expectations_apply_strata_shifts = yes
 }
 
+# Algorithmic Governance's legitimacy from results (law_algorithmic_governance):
+# re-applies algorithmic_mandate with multiplier algorithmic_mandate_value. Its
+# only refresh site: sol_expectations_monthly_on_action calls it right after
+# sol_expectations_monthly_update, so it reads this month's cached gap. The
+# law's on_deactivate removes the modifier at once.
+# Scope: country
+te_refresh_algorithmic_mandate = {
+	if = {
+		limit = { has_modifier = algorithmic_mandate }
+		remove_modifier = algorithmic_mandate
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_algorithmic_governance
+			has_variable = sol_expectations_gap_cached
+		}
+		if = {
+			limit = {
+				OR = {
+					algorithmic_mandate_value >= 0.5
+					algorithmic_mandate_value <= -0.5
+				}
+			}
+			add_modifier = {
+				name = algorithmic_mandate
+				multiplier = algorithmic_mandate_value
+			}
+		}
+	}
+}
+
 # ========== Utility Scripted Effects ==========
 # For events, decisions, and other systems to call.
 

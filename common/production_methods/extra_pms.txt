@@ -4895,6 +4895,52 @@ pm_ai_governance = {
 	required_input_goods = digital_access
 }
 
+# Automated Bureaucracy's staffing (law_automated_bureaucracy), in the
+# bureaucrat-professionalism group. Software handles the casework, so a level
+# employs 150 bureaucrats and 100 engineers instead of Professional
+# Bureaucrats' 500 bureaucrats, and buys Digital Access and Digital Assets
+# (shown as Software). At wage weights 4 and 3 that saves about 1100 wage units
+# a level against about 1100 of goods at base prices: cheaper where wages are
+# high, dearer where they are low, and a shortage of either good cuts the
+# building's output. No required_input_goods: under the law this is the group's
+# only PM. It replaces Professional Bureaucrats while the law holds (INJECT
+# below), as vanilla's Hereditary Bureaucrats PM does under its law.
+pm_automated_casework = {
+	texture = "gfx/interface/icons/production_method_icons/cat_robot_blue_p0.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_laws = {
+		law_automated_bureaucracy
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (54.55%)
+			goods_input_digital_assets_add = 5                   # Price:  100, Total cost:   500.0 (45.45%)
+			# Output goods
+			# Total input cost: 1100.0
+			# Total output cost: 0
+			# Profit: -1100.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 250
+			# Wage breakeven: -4.40
+		}
+
+		level_scaled = {
+			building_employment_bureaucrats_add = 150
+			building_employment_engineers_add = 100
+		}
+	}
+}
+
+INJECT:pm_professional_bureaucrats = {
+	disallowing_laws = {
+		law_automated_bureaucracy
+	}
+}
+
 pm_material_handling_equipment = {
 	texture = "gfx/interface/icons/production_method_icons/diesel_engines.dds"
 	unlocking_technologies = {

@@ -116,18 +116,40 @@ policy](04-banking.md).
 | Protected Class | Rights of Women | Sexual Revolution | Gender discrimination is illegal: more workers and political participation, lower birth rate. |
 | Neocameralism | Governance Principles | Marketing Research, with Laissez-Faire or Interventionism | The state run as a corporation: industrialists and wealth hold power. |
 | Collective Governance | Governance Principles | Political Agitation | No single head of state; see [Collective Governance](#collective-governance). |
-| Algorithmic Governance | Distribution of Power | Machine Learning | Government by algorithm. |
+| Automated Bureaucracy | Bureaucracy | Generative AI | Machines run the administration under your government: institutions cost less bureaucracy and change size faster. |
+| Algorithmic Governance | Distribution of Power | Artificial General Intelligence | Machines hold supreme authority and run the administration too. |
 | Neocolonialism | Colonization | Decolonization | See [Colonial empires and decolonization](11-decolonization.md). |
 | Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% dearer military goods and −10% unit offense and defense. |
 | Littoral Defense | Navy Model | Naval Convoy Defense | A coastal navy: ships operate only half as far from port, torpedo craft build faster and capital ships slower, navy goods cost 20% less, and Naval Fortifications get two more levels and resist invasion better. Coastal countries only. |
 | Auxiliary Fleet | Navy Model | Predictive Logistics | A navy that carries the army: ships reach 50% farther from port, naval invasions go better, ships carry 30% more marines and supply ships 30% more supply, supply ships build faster and capital ships slower. Coastal countries only. |
 
-Algorithmic Governance dissolves your parties, replaces Elected Bureaucrats with
-Appointed Bureaucrats and makes you an Algorithmic Directorate, or an
-Algorithmic Commons under [Collective Governance](#collective-governance). Laws
-pass 50% faster, research runs 10% faster, decrees cost a quarter less and
-institutions change size twice as fast. But radicals and loyalists from changes in living
-standards double, so a falling standard of living turns on you fast.
+### Machine administration and machine rule
+
+Automated Bureaucracy and Algorithmic Governance are two steps. With Automated
+Bureaucracy, machines run your offices while your government keeps the
+authority, so any Distribution of Power can hold it. With Algorithmic
+Governance, the machines rule as well.
+
+Under Automated Bureaucracy your institutions cost 20% less bureaucracy and
+change size 50% faster, and Legislative Override Capacity rises by 1 (see
+[Forceful Legislation](#forceful-legislation)). Bureaucrats lose a quarter of
+their political strength and engineers gain 15%. Government Administrations
+staff Automated Casework in place of Professional Bureaucrats: 150 bureaucrats
+and 100 engineers a level instead of 500 bureaucrats, buying Digital Access and
+Software. Bureaucrats earn the higher wage, so the switch saves money where
+wages are high and costs money where they are low, and a shortage of either good
+cuts the buildings' output.
+
+Algorithmic Governance enacts Automated Bureaucracy, and while it holds you can
+enact no other Bureaucracy law. It dissolves your parties and makes you an
+Algorithmic Directorate, or an Algorithmic Commons under [Collective
+Governance](#collective-governance). Laws pass 50% faster, research runs 10%
+faster, decrees cost a quarter less and you can run two more companies. Its
+legitimacy comes from results: the Algorithmic Mandate adds legitimacy while
+living standards run ahead of what people expect and takes it away while they
+fall behind, up to 25 either way, and it shrinks as expectations catch up.
+Radicals and loyalists from changes in living standards double as well, so a
+falling standard of living turns on you fast.
 
 ### Law enactment events
 
@@ -293,7 +315,7 @@ many base-game ideologies stances on some of the new law groups.
 | Multiculturalist | Leaders; also added to the Intelligentsia | Leaders once a Civil Rights Movement exists; the group ideology with the Civil Rights Movement technology |
 | Inclusive Multiculturalist | Leaders | As Multiculturalist, after the Sexual Revolution; adds LGBTQ+ rights |
 | Anti-Colonialist | Leaders; also added to the Trade Unions and Intelligentsia | With the Decolonization technology; opposes colonial laws |
-| Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics and Algorithmic Governance |
+| Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics, Automated Bureaucracy and Algorithmic Governance |
 | Corpocrat | Leaders | From Mutual Funds, mostly Industrialists; favors Neocameralism |
 | Islamic Inheritance | The Devout in Sunni and Shiite countries | From the start; favors Partible and Equal Inheritance |
 

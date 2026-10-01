@@ -32,7 +32,7 @@ on_law_checkpoint_advance = {
 		10 = extra_law_events.18	# Petitions of the Heart (LGBTQ Rights – sympathetic petitioners)
 		10 = extra_law_events.20	# The Whistleblower (Right to Information – leak builds momentum)
 		10 = extra_law_events.21	# A March for Dignity (Minority Rights – popular momentum)
-		10 = extra_law_events.23	# The Algorithmic Showcase (Governance – impressive demonstration)
+		10 = extra_law_events.23	# The Algorithmic Showcase (Algorithmic Governance or Automated Bureaucracy – impressive demonstration)
 
 		# --- Ministry Law Events ---
 		10 = ministry_law_events.1	# Staffing the New Ministry (Generic – building the institution)
@@ -95,7 +95,7 @@ on_law_checkpoint_debate = {
 		10 = extra_law_events.80	# Transparency First vs Stability First (Right to Information)
 		10 = extra_law_events.81	# Affirmative Action vs Equal Treatment (Minority Rights)
 		10 = extra_law_events.82	# Retraining First vs UBI First (Welfare)
-		10 = extra_law_events.83	# Tech First vs Human Oversight (Algorithmic Governance)
+		10 = extra_law_events.83	# Tech First vs Human Oversight (Automated Bureaucracy)
 		10 = extra_law_events.84	# Direct Voting vs Deliberative Chambers (Direct Democracy)
 
 		# --- Ministry Law Events ---
@@ -175,7 +175,7 @@ on_law_checkpoint_stall = {
 		10 = extra_law_events.56	# State Secrets in Question (Right to Information)
 		10 = extra_law_events.57	# Majority Backlash (Minority Rights)
 		10 = extra_law_events.58	# Capital Flight Threatens (Welfare)
-		10 = extra_law_events.59	# The Algorithm Fails (Algorithmic Governance)
+		10 = extra_law_events.59	# The Algorithm Fails (Algorithmic Governance or Automated Bureaucracy)
 		10 = extra_law_events.60	# Demagogues at the Forum (Direct Democracy)
 
 		# --- Ministry Law Events ---
