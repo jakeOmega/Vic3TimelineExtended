@@ -242,7 +242,7 @@ te_tax_gen_sync_wage = {
 - Consumes: Task 3 writer and schema.
 - Produces:
   - Package slots `a` and `b`. Per slot `s`: `te_tax_p<s>_on` (0/1 token), `te_tax_p<s>_due` (month), `te_tax_p<s>_state` (1 awaiting, 2 held_conflict, 3 held_missed), `te_tax_p<s>_seq` (approval sequence number; lower commences first on a shared date), `te_tax_p<s>_<key>` (new idx or -1), `te_tax_p<s>_<key>_exp` (absolute month or -1), `te_tax_p<s>_<key>_succ` (idx or -1), `te_tax_p<s>_xver_<key>` (the `te_tax_xver_<key>` value at approval), the same for goods (`te_tax_p<s>_g_<good>` -1/0/1, `te_tax_p<s>_xver_goods`) and relief (`te_tax_p<s>_agrel`, `te_tax_p<s>_regrel`, `te_tax_p<s>_regrel_states_set` 0/1 with states held in state vars `te_tax_pending_relief_<s>`, `te_tax_p<s>_xver_relief`).
-  - `te_tax_process_month` — the processor (below). `te_tax_store_package = { SLOT = a|b }` — writes a package from the bill record (Task 6 calls it). `te_tax_apply_package = { SLOT }`, `te_tax_recompute_next_month`.
+  - `te_tax_process_month` — the processor (below). `te_tax_store_package = { SLOT = a|b }` — writes a package from the bill record (Task 6 calls it). `te_tax_recompute_next_month`. (No public apply entry point: commencement calls the generated `te_tax_gen_apply_<s>` directly.)
   - History ring: 8 slots `te_tax_h<n>_*` (`n` 1..8; `te_tax_h_head` points at the newest): `_month`, `_kind` (1 commenced, 2 sunset, 3 held_conflict, 4 held_missed, 5 migrated, 6 approved, 7 civil-war repair, 8 superseded), `_slot`, `_version`.
   - Debug: every processor branch writes one `debug_log` line `TE_TAX <branch> month=[...] date=[GetCurrentDate]` (for the owner's retest; research A §3.9).
 
