@@ -1,0 +1,103 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — THE DISPATCHERS (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12. Phase 7 adds eleven topics to the
+# General Assembly. Two are conventions and run through the convention sites
+# like the other conventions (un_vote_effects.txt and friends). The other nine
+# are decisions, requests and institutions, and each lives in its owner's own
+# files; the shared resolution machinery reaches them only through the hooks
+# below, so the owners never edit the shared files.
+#
+#   owner      topics                          files
+#   justice    court_referral, arms_embargo,   un_justice_*.txt, events/un_court_events.txt
+#              credentials
+#   order      ceasefire, referendum           un_order_*.txt, events/un_ceasefire_events.txt,
+#                                              events/un_referendum_events.txt
+#   economy    development_fund, food_reserve  un_economy_*.txt
+#   missions   standing_force,                 un_mission_*.txt (the mission system
+#              observer_request                itself), un_force_*.txt
+#
+# Each decision topic <key> provides, in its owner's files:
+#   un_<key>_case_exists       trigger, proposer scope: there is something to
+#                              table (the row's "no case" line when it fails)
+#   un_<key>_can_table         trigger, proposer scope: the topic's own gates
+#                              (rank, standing, ...), each with its custom
+#                              tooltip; the shared ones are in
+#                              un_propose_<key>_possible (un_propose_triggers.txt)
+#   un_<key>_select_target     effect, proposer scope (topics naming a country):
+#                              leaves the pick in scope:un_<key>_pick
+#   un_<key>_on_tabled         effect, proposer scope, scope:un_resolution set:
+#                              writes the topic's own fields on the resolution
+#   un_<key>_on_carried        effect, un_vote.2's ROOT (the proposer), with
+#                              scope:un_resolution, scope:un_vote_target and
+#                              scope:un_vote_vetoer: the outcome, vetoed form
+#                              included, with its own custom_tooltip lines
+#   un_<key>_chamber_preview   effect, country scope: what the chamber's row
+#                              previews (who would be named, the odds, ...)
+#   un_lean_interests_<key>    script value, voter scope: the topic's interests
+#                              (un_lean_charter_interests, un_charter_values.txt)
+#   un_<key>_ai_chance         script value, proposer scope: the AI button's
+#                              weight
+# ============================================================================
+
+# The outcome of a carried phase 7 decision. Called from un_vote.2's carried
+# branch, after the per-topic branches of the older topics and before the
+# proposer ratifies (un_vote_apply_treaty_modifier).
+# Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution
+un_charter_on_carried = {
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+		un_court_referral_on_carried = yes
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_arms_embargo } }
+		un_arms_embargo_on_carried = yes
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_credentials } }
+		un_credentials_on_carried = yes
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_standing_force } }
+		un_standing_force_on_carried = yes
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_observer_request } }
+		un_observer_request_on_carried = yes
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_food_reserve } }
+		un_food_reserve_on_carried = yes
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_ceasefire } }
+		un_ceasefire_on_carried = yes
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_development_fund } }
+		un_development_fund_on_carried = yes
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+		un_referendum_on_carried = yes
+	}
+}
+
+# Once a month, from un_global_authority_on_action (no-country scope, the UN
+# founded), after the missions' month: each owner's upkeep.
+# Scope: none
+un_charter_monthly_update = {
+	un_justice_monthly_update = yes
+	un_order_monthly_update = yes
+	un_economy_monthly_update = yes
+}
+
+# The UN dissolves (un_dissolve, step 8b): the institutions lapse and the
+# standing orders end. After every country has left (step 6).
+# Scope: none
+un_charter_on_dissolve = {
+	un_justice_on_dissolve = yes
+	un_order_on_dissolve = yes
+	un_economy_on_dissolve = yes
+	un_force_on_dissolve = yes
+}

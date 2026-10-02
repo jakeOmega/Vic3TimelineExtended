@@ -35,6 +35,9 @@
 #   law_of_sea            - Convention on the Law of the Sea (event 21)
 #   physical_protection   - Convention on the Physical Protection of Nuclear
 #                           Material (event 23)
+#   cultural_diversity    - Convention on Cultural Diversity (event 37)
+#   nuclear_ban           - Treaty on the Prohibition of Nuclear Weapons
+#                           (event 38)
 #   icc                   - International Criminal Court (event 22)
 #   peacekeeping_request  - Peacekeeping deployment (request button)
 #   aid_request           - Humanitarian aid (request button)
@@ -136,6 +139,50 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.t_military_mandate
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_cultural_diversity
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_nuclear_ban
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_court_referral
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_arms_embargo
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_arms_embargo } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_credentials
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_credentials } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_standing_force
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_standing_force } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_observer_request
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_observer_request } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_food_reserve
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_food_reserve } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_ceasefire
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_ceasefire } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_development_fund
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_development_fund } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_referendum
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
 			}
 			desc = un_vote.1.t
 		}
@@ -245,6 +292,87 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.d_military_mandate
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
+			}
+			# Phase 7 (§0.12). The topics that accuse their target read to the
+			# target from its own side first.
+			triggered_desc = {
+				desc = un_vote.1.d_cultural_diversity
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_nuclear_ban
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_court_referral_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_court_referral }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_court_referral
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_arms_embargo_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_arms_embargo }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_arms_embargo
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_arms_embargo } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_credentials_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_credentials }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_credentials
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_credentials } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_standing_force
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_standing_force } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_observer_request
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_observer_request } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_food_reserve
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_food_reserve } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_ceasefire_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_ceasefire }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_ceasefire
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_ceasefire } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_development_fund
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_development_fund } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_referendum_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_referendum }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_referendum
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
 			}
 			desc = un_vote.1.d
 		}
@@ -698,6 +826,145 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
 				desc = un_vote.2.d_expulsion_failed
+			}
+			# Phase 7 (§0.12)
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity has_tag = un_res_passed } }
+				desc = un_vote.2.d_cultural_diversity_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
+				desc = un_vote.2.d_cultural_diversity_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban has_tag = un_res_passed } }
+				desc = un_vote.2.d_nuclear_ban_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban } }
+				desc = un_vote.2.d_nuclear_ban_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_court_referral
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_court_referral_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_court_referral has_tag = un_res_passed } }
+				desc = un_vote.2.d_court_referral_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+				desc = un_vote.2.d_court_referral_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_arms_embargo
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_arms_embargo_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_arms_embargo has_tag = un_res_passed } }
+				desc = un_vote.2.d_arms_embargo_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_arms_embargo } }
+				desc = un_vote.2.d_arms_embargo_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_credentials has_tag = un_res_passed } }
+				desc = un_vote.2.d_credentials_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_credentials } }
+				desc = un_vote.2.d_credentials_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_standing_force
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_standing_force_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_standing_force has_tag = un_res_passed } }
+				desc = un_vote.2.d_standing_force_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_standing_force } }
+				desc = un_vote.2.d_standing_force_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_observer_request has_tag = un_res_passed } }
+				desc = un_vote.2.d_observer_request_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_observer_request } }
+				desc = un_vote.2.d_observer_request_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_food_reserve has_tag = un_res_passed } }
+				desc = un_vote.2.d_food_reserve_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_food_reserve } }
+				desc = un_vote.2.d_food_reserve_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_ceasefire
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_ceasefire_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_ceasefire has_tag = un_res_passed } }
+				desc = un_vote.2.d_ceasefire_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_ceasefire } }
+				desc = un_vote.2.d_ceasefire_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_development_fund has_tag = un_res_passed } }
+				desc = un_vote.2.d_development_fund_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_development_fund } }
+				desc = un_vote.2.d_development_fund_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_referendum
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_referendum_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum has_tag = un_res_passed } }
+				desc = un_vote.2.d_referendum_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+				desc = un_vote.2.d_referendum_failed
 			}
 			# Generic fallback
 			triggered_desc = {
@@ -1398,6 +1665,28 @@ un_vote.2 = {
 				set_global_variable = un_agency_cppnm
 			}
 
+			# ---- Convention on Cultural Diversity (redesign phase 7, §0.12
+			#      item 5): parties' minorities assimilate and lose their
+			#      homelands more slowly, trailing parties feel the hegemon's
+			#      benchmark less, a hegemon party loses pull ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
+				custom_tooltip = un_vote_cultural_diversity_passed_tt
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				set_global_variable = un_agency_ccd
+			}
+
+			# ---- Treaty on the Prohibition of Nuclear Weapons (redesign
+			#      phase 7, §0.12 item 8): armed parties step their arsenals
+			#      down to nothing over 25 years (nd_taboo_refresh_ban_ceiling),
+			#      and the taboo rises (nd_taboo_part_un_value) ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban } }
+				custom_tooltip = un_vote_nuclear_ban_passed_tt
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				set_global_variable = un_agency_tpnw
+			}
+
 			# ---- Military Mandate: authorize one narrow objective ----
 			# Like reform, this binding topic has NO graduated form. There is
 			# no weaker version of a licence to use force, so a veto blocks it
@@ -1466,6 +1755,12 @@ un_vote.2 = {
 					}
 				}
 			}
+
+			# ---- The charter's new business (redesign phase 7, §0.12) ----
+			# The nine decisions, requests and institutions: each topic's
+			# outcome, vetoed form included, is its owner's
+			# (un_charter_effects.txt).
+			un_charter_on_carried = yes
 
 			# The proposer ratifies on passage, like every other member
 			# (redesign phase 5, §5.3): it no longer takes the convention's
@@ -1725,17 +2020,47 @@ un_vote.3 = {
 		# of the deployment, and paying the compliance award on top would make
 		# a no-voter who complies worth twice a yes-voter who does the same
 		# thing. The pledge is the compliance, and it has already been paid.
+		#
+		# court_referral is excluded because the court has not ruled yet: what
+		# binds is its ruling, a month on, and only the holder it names. The
+		# holder answers for that ruling in un_court.2 (un_court_comply pays
+		# the compliance standing, un_court_defy books the defiance), so
+		# accepting the referral here earns nothing, as option C's refusal
+		# costs no standing. A supervised referendum is the same: it binds the
+		# overlord alone, which answers for it in un_referendum.1 (holding the
+		# vote pays standing, refusing books standing and defiance).
 		if = {
 			limit = {
 				scope:un_resolution ?= { un_resolution_is_binding = yes }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
 			}
 			custom_tooltip = {
 				text = un_standing_complied_tt
 				un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
 			}
 		}
-		ai_chance = { base = 50 }
+		ai_chance = {
+			base = 50
+			# Ratifying against itself: an armed power does not accept its own
+			# disarmament, and the cultural hegemon does not give up its pull
+			# (option C's weights).
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_nuclear_ban }
+					nd_is_armed = yes
+				}
+				factor = 0
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_cultural_diversity }
+					un_regime_cultural_hegemon = yes
+				}
+				factor = 0
+			}
+		}
 	}
 
 	# Option C: Vote passed AND you voted no - refuse to comply. What that
@@ -1751,7 +2076,7 @@ un_vote.3 = {
 			text = un_vote.3.c_convention
 		}
 		name = {
-			trigger = { scope:un_resolution ?= { un_resolution_target_is_beneficiary = yes } }
+			trigger = { scope:un_resolution ?= { un_resolution_asks_pledges = yes } }
 			text = un_vote.3.c_pledge
 		}
 		name = {
@@ -1770,7 +2095,7 @@ un_vote.3 = {
 			custom_tooltip = un_vote.3.c_convention_tt
 		}
 		else_if = {
-			limit = { scope:un_resolution ?= { un_resolution_target_is_beneficiary = yes } }
+			limit = { scope:un_resolution ?= { un_resolution_asks_pledges = yes } }
 			custom_tooltip = un_vote.3.c_pledge_tt
 		}
 		else = {
@@ -1789,8 +2114,17 @@ un_vote.3 = {
 		# defiance the brief asks to punish. Refusing a recommendatory one is
 		# legal dissent — the same reasoning that leaves the veto free — so it
 		# costs nothing here.
+		# A court referral is not yet a ruling (option B's note): defying the
+		# court is booked when the holder defies it (un_court_defy), so
+		# denouncing the referral costs only the relations and infamy above.
+		# A supervised referendum likewise: the overlord's refusal is booked
+		# in un_referendum.1.
 		if = {
-			limit = { scope:un_resolution ?= { un_resolution_is_binding = yes } }
+			limit = {
+				scope:un_resolution ?= { un_resolution_is_binding = yes }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+			}
 			custom_tooltip = {
 				text = un_standing_defied_tt
 				un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }
@@ -1851,6 +2185,22 @@ un_vote.3 = {
 					}
 				}
 				add = 25
+			}
+			# The nuclear ban: an armed power will not ratify its own disarmament
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_nuclear_ban }
+					nd_is_armed = yes
+				}
+				add = 80
+			}
+			# Cultural diversity: the hegemon keeps its pull
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_cultural_diversity }
+					un_regime_cultural_hegemon = yes
+				}
+				add = 50
 			}
 		}
 	}

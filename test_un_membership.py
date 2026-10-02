@@ -60,6 +60,17 @@ class EligibilityTests(unittest.TestCase):
         body = _block(_read(TRIGGERS), "un_dues_billed_to_overlord")
         self.assertIn("un_representation_suspended = yes", body)
         self.assertRegex(body, r"overlord\s*\?=\s*\{\s*un_member_represented = yes")
+        # Only a member suspended for want of diplomatic autonomy is billed to
+        # its overlord: one whose credentials are suspended pays its own.
+        self.assertIn("NOT = { un_membership_eligible = yes }", body)
+
+    def test_credentials_suspend_representation(self):
+        # Phase 7 (§0.12): a suspension of credentials is a second cause of a
+        # suspended representation, and represented and suspended stay
+        # complements among the members.
+        text = _read(TRIGGERS)
+        self.assertIn("un_credentials_suspended = yes", _block(text, "un_representation_suspended"))
+        self.assertIn("NOT = { un_credentials_suspended = yes }", _block(text, "un_member_represented"))
 
     def test_every_way_in_asks_eligibility(self):
         cases = [
@@ -163,6 +174,7 @@ class RepresentationGateTests(unittest.TestCase):
 
 
 DUES = _path("common", "script_values", "un_dues_values.txt")
+DUES_TRIGGERS = _path("common", "scripted_triggers", "un_dues_triggers.txt")
 
 
 class DuesTests(unittest.TestCase):
@@ -173,22 +185,34 @@ class DuesTests(unittest.TestCase):
             with self.subTest(value=name):
                 self.assertRegex(_block(text, name), r"value\s*=\s*un_dues_assessed_gdp")
 
-    def test_pillar_and_budget_count_represented_members_once(self):
+    def test_pillar_and_budget_count_paying_members_once(self):
+        # Every member assessed its own dues: the represented members and
+        # (phase 7) a member whose credentials are suspended, which still pays.
         text = _read(DUES)
         for name in ("un_members_gdp_value", "un_withholders_gdp_value", "un_budget_weekly_value"):
             with self.subTest(value=name):
                 body = _block(text, name)
-                self.assertIn("un_member_represented = yes", body)
+                self.assertIn("un_dues_self_assessed = yes", body)
                 self.assertNotIn("has_modifier = un_member_modifier", body)
+
+    def test_self_assessment_is_diplomatic_autonomy(self):
+        # Assessed itself: a member that conducts its own foreign policy,
+        # whatever the Assembly has done to its credentials.
+        body = _block(_read(DUES_TRIGGERS), "un_dues_self_assessed")
+        self.assertIn("un_membership_eligible = yes", body)
+        self.assertNotIn("un_credentials_suspended", body)
+        self.assertNotIn("un_representation_suspended", body)
 
     def test_suspended_member_is_not_assessed(self):
         je = _read(_path("common", "journal_entries", "je_united_nations.txt"))
         call = je.index("un_dues_country_monthly_update = yes")
-        self.assertIn("un_representation_suspended = yes", je[call - 500:call])
+        self.assertIn("NOT = { un_dues_self_assessed = yes }", je[call - 500:call])
         buttons = _read(_path("common", "scripted_buttons", "un_buttons.txt"))
         for name in ("un_withhold_dues_button", "un_pay_dues_button"):
             with self.subTest(button=name):
-                self.assertIn("un_representation_suspended", _block(buttons, name))
+                # Diplomatic autonomy, not representation: a member whose
+                # credentials are suspended (phase 7) still pays its dues.
+                self.assertIn("un_dues_self_assessed = yes", _block(buttons, name))
 
 
 MODIFIERS = _path("common", "static_modifiers", "extra_modifiers.txt")

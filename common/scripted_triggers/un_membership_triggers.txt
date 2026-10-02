@@ -52,34 +52,48 @@ un_membership_eligible = {
 	}
 }
 
-# A member whose seat is active.
+# A member whose seat is active: it conducts its own foreign policy and the
+# Assembly has not suspended its credentials. Exactly the members that are not
+# un_representation_suspended.
 # Scope: country
 un_member_represented = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	un_membership_eligible = yes
+	NOT = { un_credentials_suspended = yes }
 }
 
 # A member whose representation is suspended: it no longer conducts its own
-# foreign policy. It stays a member, keeps its standing and its ratified
-# conventions, and may leave. It casts no ballot, tables nothing, is offered
-# nothing by the docket, is not lobbied, is not asked to comply with or ratify
-# a passed resolution, is not counted in the two-thirds, holds no permanent
-# seat, does not host the headquarters and sends no contingent at will. It sits
-# beside every Article 19 check (un_dues_vote_suspended); test_un_membership.py
-# keeps the two together.
+# foreign policy, or (redesign phase 7, §0.12) the Assembly has suspended its
+# credentials (un_credentials_suspended, un_justice_triggers.txt). It stays a
+# member, keeps its standing and its ratified conventions, and may leave. It
+# casts no ballot, tables nothing, is offered nothing by the docket, is not
+# lobbied, is not asked to comply with or ratify a passed resolution, is not
+# counted in the two-thirds, holds no permanent seat, does not host the
+# headquarters and sends no contingent at will. It sits beside every Article
+# 19 check (un_dues_vote_suspended); test_un_membership.py keeps the two
+# together. The two causes differ only in the dues: a member suspended for
+# want of diplomatic autonomy is billed through its overlord
+# (un_dues_billed_to_overlord), one whose credentials are suspended keeps
+# paying its own (un_dues_self_assessed, un_dues_triggers.txt).
 # Scope: country
 un_representation_suspended = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
-	NOT = { un_membership_eligible = yes }
+	OR = {
+		NOT = { un_membership_eligible = yes }
+		un_credentials_suspended = yes
+	}
 }
 
-# A suspended member whose direct overlord is a represented member: the
-# overlord is assessed dues for it (un_dues_assessed_gdp). Only a represented
-# overlord carries a subject, so a chain of colonies never bills a country
-# that is itself suspended.
+# A member suspended for want of diplomatic autonomy whose direct overlord is
+# a represented member: the overlord is assessed dues for it
+# (un_dues_assessed_gdp). Only a represented overlord carries a subject, so a
+# chain of colonies never bills a country that is itself suspended. A member
+# whose credentials are suspended is never billed to an overlord: it pays its
+# own (un_dues_self_assessed).
 # Scope: country
 un_dues_billed_to_overlord = {
 	un_representation_suspended = yes
+	NOT = { un_membership_eligible = yes }
 	overlord ?= { un_member_represented = yes }
 }
 
@@ -132,7 +146,9 @@ un_rep_convention_missed = {
 }
 
 # Any convention missed. The list is un_apply_ratified_conventions's
-# (un_vote_effects.txt); test_un_membership.py keeps the two in step.
+# (un_vote_effects.txt); test_un_membership.py keeps the two in step. The
+# nuclear ban counts only for an unarmed member, which is the only one
+# un_events.36 would ratify it for.
 # Scope: country
 un_rep_any_convention_missed = {
 	OR = {
@@ -146,5 +162,10 @@ un_rep_any_convention_missed = {
 		un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier }
 		un_rep_convention_missed = { AGENCY = cppnm MODIFIER = un_physical_protection_modifier }
 		un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier }
+		un_rep_convention_missed = { AGENCY = ccd MODIFIER = un_cultural_diversity_modifier }
+		AND = {
+			un_rep_convention_missed = { AGENCY = tpnw MODIFIER = un_nuclear_ban_modifier }
+			nd_is_armed = no
+		}
 	}
 }

@@ -1217,6 +1217,8 @@
  state_homeland_change_speed_mult_desc:0 "Modifies how quickly [concept_homeland] creation and removal occurs. Higher values make demographic shifts happen faster."
  state_homeland_creation_threshold_add:0 "[concept_homeland] Creation Threshold"
  state_homeland_creation_threshold_add_desc:0 "The percentage of a state's population that a primary culture must reach for a new [concept_homeland] to form. Higher values make formation harder. Modified per-state by [Concept('concept_decree', 'decrees')] and buildings."
+ state_homeland_removal_speed_mult:0 "[concept_homeland] Removal Speed"
+ state_homeland_removal_speed_mult_desc:0 "Modifies how quickly a non-primary culture loses its [concept_homeland] here once its share has fallen below the removal threshold. Negative values let minority homelands last longer."
  state_homeland_removal_threshold_add:0 "[concept_homeland] Removal Threshold"
  state_homeland_removal_threshold_add_desc:0 "The percentage of a state's population below which a non-primary culture's [concept_homeland] is removed. Higher values make it easier to lose homelands. Modified per-state by [Concept('concept_decree', 'decrees')] and buildings."
  state_infrastructure_from_aeroplanes_consumption_add:0 "[concept_infrastructure] from [concept_pop] [GetGoods('aeroplanes').GetName] Consumption"

@@ -42,7 +42,13 @@ un_chamber_status_sgui = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			# §0.8: a member whose representation is suspended is told so, and
 			# whether its overlord carries its seat.
+			# Phase 7: the Assembly rejected our credentials, which is not the
+			# subject's case above (un_justice_triggers.txt).
 			if = {
+				limit = { un_credentials_suspended = yes }
+				custom_tooltip_no_bullet = je_un_chamber_status_credentials
+			}
+			else_if = {
 				limit = { un_representation_suspended = yes }
 				if = {
 					limit = { un_seat_carried = yes }
@@ -656,6 +662,9 @@ un_chamber_budget_sgui = {
 
 	effect = {
 		custom_tooltip_no_bullet = je_un_chamber_dues_budget
+		# What the Standing UN Force and the World Development Fund take of it,
+		# and what is left to lend (redesign phase 7, un_economy_effects.txt).
+		un_economy_budget_lines = yes
 	}
 }
 
@@ -1194,7 +1203,7 @@ un_chamber_vote_sgui = {
 #   op 5   request humanitarian aid
 #   op 6   charter reform (redesign phase 2)
 #
-#   The eleven conventions, which the docket also raises (no scripted button):
+#   The thirteen conventions, which the docket also raises (no scripted button):
 #   op 7   Universal Declaration of Human Rights
 #   op 8   International Criminal Court
 #   op 9   Nuclear Non-Proliferation Treaty
@@ -1206,15 +1215,27 @@ un_chamber_vote_sgui = {
 #   op 15  International Space Cooperation
 #   op 16  Convention on the Law of the Sea
 #   op 17  Convention on the Physical Protection of Nuclear Material
+#   op 18  Convention on Cultural Diversity (phase 7, Reform I)
+#   op 19  Treaty on the Prohibition of Nuclear Weapons (phase 7, Reform II)
+#   op 20  Refer a Dispute to the World Court (phase 7, Reform I)
+#   op 21  Arms Embargo (phase 7, Reform I)
+#   op 22  Suspension of Credentials (phase 7, Reform I)
+#   op 23  Establish the Standing UN Force (phase 7, Reform I)
+#   op 24  Request Electoral Observers (phase 7, Reform I)
+#   op 25  Establish the World Food Reserve (phase 7, no reform)
+#   op 26  Binding Ceasefire (phase 7, Reform II)
+#   op 27  Establish the World Development Fund (phase 7, no reform)
+#   op 28  Supervised Self-Determination Referendum (phase 7, Reform II)
 #
 # The op table is repeated in the widget and in the row renderers in
 # common/scripted_effects/un_chamber_display_effects.txt; keep all three in
 # step (test_un_chamber_propose_ops.py checks that they are). Every gate and
 # every effect is shared through common/scripted_triggers/un_propose_triggers.txt
-# and common/scripted_effects/un_propose_effects.txt: ops 0-6 with the
-# journal-entry buttons, so a human proposing here and an AI proposing through
-# the button grid run identical script; ops 7-17 with the docket's proposer
-# events, which call the same un_propose_<key>_table the Propose control does.
+# and common/scripted_effects/un_propose_effects.txt: ops 0-6 and 20-28 with
+# the journal-entry buttons, so a human proposing here and an AI proposing
+# through the button grid run identical script; ops 7-19 with the docket's
+# proposer events, which call the same un_propose_<key>_table the Propose
+# control does.
 #
 # `is_shown` is membership alone, deliberately: a topic we have no case for
 # stays visible and disabled, with the reason in the row and in the button's
@@ -1376,6 +1397,94 @@ un_chamber_propose_sgui = {
 			}
 			un_propose_physical_protection_possible = yes
 		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_cultural_diversity
+				un_propose_cultural_diversity_available = yes
+			}
+			un_propose_cultural_diversity_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_nuclear_ban
+				un_propose_nuclear_ban_available = yes
+			}
+			un_propose_nuclear_ban_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_court_referral
+				un_propose_court_referral_available = yes
+			}
+			un_propose_court_referral_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_arms_embargo
+				un_propose_arms_embargo_available = yes
+			}
+			un_propose_arms_embargo_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_credentials
+				un_propose_credentials_available = yes
+			}
+			un_propose_credentials_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_standing_force
+				un_propose_standing_force_available = yes
+			}
+			un_propose_standing_force_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_observer_request
+				un_propose_observer_request_available = yes
+			}
+			un_propose_observer_request_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_food_reserve
+				un_propose_food_reserve_available = yes
+			}
+			un_propose_food_reserve_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_ceasefire
+				un_propose_ceasefire_available = yes
+			}
+			un_propose_ceasefire_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_development_fund
+				un_propose_development_fund_available = yes
+			}
+			un_propose_development_fund_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_referendum
+				un_propose_referendum_available = yes
+			}
+			un_propose_referendum_possible = yes
+		}
 		trigger_else = {
 			always = no
 		}
@@ -1453,6 +1562,50 @@ un_chamber_propose_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 17 }
 			un_propose_physical_protection_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			un_propose_cultural_diversity_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			un_propose_nuclear_ban_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			un_propose_court_referral_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			un_propose_arms_embargo_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			un_propose_credentials_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			un_propose_standing_force_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			un_propose_observer_request_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			un_propose_food_reserve_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			un_propose_ceasefire_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			un_propose_development_fund_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			un_propose_referendum_effect = yes
 		}
 	}
 }
@@ -1546,6 +1699,50 @@ un_chamber_propose_row_sgui = {
 				limit = { exists = scope:op scope:op = 17 }
 				un_chamber_propose_physical_protection_row = yes
 			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 18 }
+				un_chamber_propose_cultural_diversity_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 19 }
+				un_chamber_propose_nuclear_ban_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 20 }
+				un_chamber_propose_court_referral_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 21 }
+				un_chamber_propose_arms_embargo_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 22 }
+				un_chamber_propose_credentials_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 23 }
+				un_chamber_propose_standing_force_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 24 }
+				un_chamber_propose_observer_request_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 25 }
+				un_chamber_propose_food_reserve_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 26 }
+				un_chamber_propose_ceasefire_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 27 }
+				un_chamber_propose_development_fund_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 28 }
+				un_chamber_propose_referendum_row = yes
+			}
 		}
 	}
 }
@@ -1593,6 +1790,22 @@ un_chamber_nuclear_rule_sgui = {
 	}
 }
 
+# The rows of business Charter Reform II unlocks (ops 19, 26, 28): hidden
+# until Reform I carries, so the list shows only the next reform's business
+# (un_charter_reform_ii_in_view). The World Development Fund (op 27) needs no
+# reform, and is always in view. A root-only yes/no GUI, like the two above.
+un_chamber_reform_ii_in_view_sgui = {
+	scope = country
+
+	is_shown = {
+		un_charter_reform_ii_in_view = yes
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+	}
+}
+
 # Non-members get one line where the proposal list would be, rather than an
 # empty section: the list is meaningless outside the organisation.
 un_chamber_propose_intro_sgui = {
@@ -1603,7 +1816,7 @@ un_chamber_propose_intro_sgui = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			custom_tooltip_no_bullet = je_un_chamber_propose_intro
 			# A held floor greys every row's button; it is said here, once,
-			# rather than on each of the eighteen rows.
+			# rather than on each of the twenty-nine rows.
 			if = {
 				limit = {
 					has_global_variable = un_vote_active

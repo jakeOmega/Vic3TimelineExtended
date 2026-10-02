@@ -1,0 +1,54 @@
+﻿# ============================================================================
+# THE PHASE 7 CONVENTIONS — STATIC MODIFIERS
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 items 5 and 8. Both member modifiers
+# sit on the country (test_un_convention_registry.py's `scope` column), and are
+# re-applied at the UN's enforcement by the regime layer
+# (un_regime_reapply_conventions): the figures below are at x1.
+# ============================================================================
+
+# ---- Convention on Cultural Diversity (un_agency_ccd) ----
+
+# A party. The ideology resistance halves the cultural hegemony system's
+# Foreign Cultural Benchmark at x1 (ch_ideology_resistance_factor, which floors
+# the benchmark at nothing). The removal speed slows the decay of minority
+# homelands in our states (te_homeland_removal_monthly_effect). Minority
+# cultures also assimilate more slowly: the tradeoff.
+un_cultural_diversity_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.02
+	country_ideology_resistance_mult = 0.5
+	state_assimilation_mult = -0.2
+	state_homeland_removal_speed_mult = -0.3
+}
+
+# Decaying penalty for refusing to table it (un_events.37, option C), which
+# bars the refuser from tabling it (un_propose_cultural_diversity_qualifies)
+# while it lasts.
+un_cultural_diversity_refusal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
+}
+
+# Regime term (un_regime_refresh_country): the world's cultural hegemon, if a
+# party, projects less cultural pull. Applied at x E.
+un_regime_cultural_hegemon_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_cultural_pull_mult = -0.1
+}
+
+# ---- Treaty on the Prohibition of Nuclear Weapons (un_agency_tpnw) ----
+
+# A party. Its real terms are not here: an armed party is held to a ceiling
+# that steps down to nothing over 25 years, and an unarmed one may build none
+# (nd_taboo_refresh_ban_ceiling, nuclear_taboo_effects.txt).
+un_nuclear_ban_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.03
+}
+
+# Decaying penalty for refusing to table it (un_events.38, option C).
+un_nuclear_ban_refusal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
+}

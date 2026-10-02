@@ -210,6 +210,13 @@ and −200 authority (five years, or ten after Planned Full Decolonization). Eac
 new country also shakes every other empire: all other countries running the
 Colonial Empire entry take a year of Colonial Crisis, −1 stability a month.
 
+Once the UN charter carries Charter Reform II and the Decolonization Resolution
+is in force, the General Assembly can order a referendum in a direct subject
+whose liberty desire is 50 or more. You hold it, and the subject leaves with a
+chance equal to its liberty desire, or you refuse and pay in standing,
+prestige and the loyalty of every subject (see [Supervised
+referendums](09-united-nations.md#supervised-referendums)).
+
 ### Integrating colonies instead
 
 Common Bonds and two decisions keep colonies for good. The event Common Bonds

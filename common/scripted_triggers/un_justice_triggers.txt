@@ -1,0 +1,242 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — JUSTICE: THE TESTS (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 items 1, 3 and 4. The writers and
+# the state they keep are in common/scripted_effects/un_justice_effects.txt,
+# the figures in common/script_values/un_justice_values.txt.
+#
+# Each topic's un_<key>_case_exists asks the same pool its selector picks
+# from (un_<key>_select_target), so the chamber's "no case" line and the pick
+# cannot disagree. un_<key>_can_table holds the topic's own gates, each with
+# its tooltip; the shared gates (the floor, the cooldown, Charter Reform I)
+# are un_propose_<key>_possible's (un_propose_triggers.txt).
+# ============================================================================
+
+# ---- Refer a Dispute to the World Court --------------------------------------------
+
+# A member ROOT may take to the World Court: represented (both sides of a case
+# sit in the Assembly; ROOT's own seat is un_propose_own_motion_possible's
+# gate), and neither ROOT's overlord nor its subject nor at war with it.
+# Scope: the prospective holder; ROOT = the prospective claimant
+un_court_referral_holder_eligible = {
+	NOT = { this = ROOT }
+	un_member_represented = yes
+	NOT = { is_subject_of = ROOT }
+	NOT = { ROOT = { is_subject_of = PREV } }
+	NOT = { has_war_with = ROOT }
+}
+
+# A state ROOT could refer: it claims the state, the state is not its
+# holder's capital, and its holder is a member ROOT may take to court. The
+# court never hands over a seat of government, and with it a holder's only
+# state (a country's only state is its capital). The selector, the case
+# check, the AI's weight and the chamber's preview all read this, so they
+# agree; un_court_comply and un_court_rule ask again, since a capital may
+# move after the case is tabled.
+# Scope: state; ROOT = the prospective claimant
+un_court_referral_state_open = {
+	has_claim_by = ROOT
+	is_capital = no
+	owner ?= { un_court_referral_holder_eligible = yes }
+}
+
+# There is a case to refer. MIRRORS un_court_referral_select_target.
+# Scope: the prospective proposer
+un_court_referral_case_exists = {
+	any_state = { un_court_referral_state_open = yes }
+}
+
+# The referral's own gates.
+# Scope: the prospective proposer
+un_court_referral_can_table = {
+	custom_tooltip = {
+		text = un_court_referral_case_tt
+		un_court_referral_case_exists = yes
+	}
+	custom_tooltip = {
+		text = un_court_referral_standing_tt
+		un_standing_at_least = { VALUE = un_court_referral_standing_floor }
+	}
+}
+
+# The court's verdict on a referral: 1 for the claimant, 2 for the holder, 3
+# moot (the holder no longer held the state, had made it its capital or no
+# longer existed). Written by un_court_rule; un_court_comply writes 3 when a
+# ruling for the claimant can no longer be carried out.
+# Parameters: $VERDICT$ = 1 | 2 | 3
+# Scope: a court_referral resolution
+un_court_verdict_is = {
+	has_variable = un_res_court_verdict
+	var:un_res_court_verdict = $VERDICT$
+}
+
+# The holder's answer to a binding ruling against it: 1 obeyed, 2 defied.
+# Written by un_court_comply / un_court_defy.
+# Parameters: $RESPONSE$ = 1 | 2
+# Scope: a court_referral resolution
+un_court_response_is = {
+	has_variable = un_res_court_response
+	var:un_res_court_response = $RESPONSE$
+}
+
+# This state's holder defied the World Court in ROOT's case over this state's
+# region, within ten years (un_court_defy): ROOT may move for a military
+# mandate over it without the case of 60 (un_mandate_state_open,
+# un_mandate_triggers.txt). The holder carries the record, so a revolution's
+# winner keeps it (§0.9).
+# Scope: state; ROOT = the prospective proposer of the mandate
+un_court_defiance_opens_mandate = {
+	state_region = { save_temporary_scope_as = un_crt_open_region }
+	owner ?= {
+		has_variable = un_court_defied_claimant
+		has_variable = un_court_defied_region
+		var:un_court_defied_claimant ?= ROOT
+		var:un_court_defied_region ?= scope:un_crt_open_region
+	}
+}
+
+# Whether the scoped country holds a war goal for a single state against
+# $TARGET$ in a diplomatic play. on_wargoal_added does not say which goal was
+# added (scripting_best_practices.md § "Play Lifecycle"), so the barred claim
+# is tested this way: a goal for a state against a country that holds part of
+# the barred region. Its root is the play, so only the play_participant_*
+# form is asked: the war_participant_* form stays true for the whole of a war
+# and would match goals added long before. The test is still approximate: the
+# goal it finds may be for a state outside the region, or in another play.
+# Parameters: $TARGET$ = country scope
+# Scope: country
+un_court_holds_state_goal_against = {
+	OR = {
+		play_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = return_state target = $TARGET$ }
+	}
+}
+
+# The scoped country, which the court found against (un_court_barred_region),
+# holds a goal for a state against a holder of part of that region.
+# Scope: country (the barred claimant)
+un_court_bar_goal_in_region = {
+	save_temporary_scope_as = un_crt_bar_self
+	var:un_court_barred_region ?= {
+		any_scope_state = {
+			NOT = { owner ?= scope:un_crt_bar_self }
+			owner ?= { save_temporary_scope_as = un_crt_bar_owner }
+			scope:un_crt_bar_self = { un_court_holds_state_goal_against = { TARGET = scope:un_crt_bar_owner } }
+		}
+	}
+}
+
+# ---- The proposer's own bloc ----------------------------------------------------------
+
+# The scoped country is not ROOT's subject, its overlord or its ally: a member
+# does not move the Assembly against its own bloc (the arms embargo and the
+# suspension of credentials).
+# Scope: the prospective target; ROOT = the prospective proposer
+un_justice_not_proposer_bloc = {
+	NOT = { is_subject_of = ROOT }
+	NOT = { ROOT = { is_subject_of = PREV } }
+	NOT = { has_treaty_alliance_with = { TARGET = ROOT } }
+}
+
+# ---- Arms Embargo --------------------------------------------------------------------
+
+# The scoped country is under a UN arms embargo, full or voluntary.
+# Scope: country
+un_arms_embargo_in_force = {
+	has_variable = un_arms_embargo_months
+}
+
+# A country ROOT could name: not itself, its subject, its overlord or its
+# ally, not a decentralized people, its record gives grounds (case 40), it is
+# ROOT's rival or at war with a represented member, and no arms embargo is
+# already in force against it. The human's pick, the AI's pick, the case
+# check and the AI's weight all read this, so they agree.
+# Scope: the prospective target; ROOT = the prospective proposer
+un_arms_embargo_candidate = {
+	NOT = { this = ROOT }
+	un_justice_not_proposer_bloc = yes
+	NOT = { is_country_type = decentralized }
+	un_case_supports = { TOPIC = arms_embargo }
+	NOT = { un_arms_embargo_in_force = yes }
+	OR = {
+		has_diplomatic_pact = { who = ROOT type = rivalry }
+		any_country = {
+			un_member_represented = yes
+			has_war_with = PREV
+		}
+	}
+}
+
+# There is a case. MIRRORS un_arms_embargo_select_target.
+# Scope: the prospective proposer
+un_arms_embargo_case_exists = {
+	any_country = { un_arms_embargo_candidate = yes }
+}
+
+# The embargo's own gates.
+# Scope: the prospective proposer
+un_arms_embargo_can_table = {
+	custom_tooltip = {
+		text = un_arms_embargo_grounds_tt
+		un_arms_embargo_case_exists = yes
+	}
+	custom_tooltip = {
+		text = un_arms_embargo_self_tt
+		NOT = { un_arms_embargo_in_force = yes }
+	}
+}
+
+# ---- Suspension of Credentials -------------------------------------------------------
+
+# The Assembly has suspended the scoped member's credentials: its
+# representation is suspended (un_representation_suspended,
+# un_membership_triggers.txt) for five years or until its case falls below
+# 30, but it is still assessed its dues (un_dues_self_assessed).
+# Scope: country
+un_credentials_suspended = {
+	has_variable = un_credentials_months
+}
+
+# A member ROOT could name: not its subject, its overlord or its ally,
+# represented (so not already suspended), its record gives grounds (case 50),
+# and it breaches the human-rights convention's terms or has defied the
+# Assembly's binding decisions (a defiance record of 10 or more). A permanent
+# member only once the charter carries Reform II. The human's pick, the AI's
+# pick and the case check all read this, so they agree.
+# Scope: the prospective target; ROOT = the prospective proposer
+un_credentials_candidate = {
+	NOT = { this = ROOT }
+	un_justice_not_proposer_bloc = yes
+	un_member_represented = yes
+	un_case_supports = { TOPIC = credentials }
+	OR = {
+		un_regime_human_rights_violator = yes
+		AND = {
+			has_variable = un_dos_defiance
+			var:un_dos_defiance >= un_credentials_defiance_min
+		}
+	}
+	OR = {
+		NOT = { is_un_permanent_member = yes }
+		un_charter_has_reform = { LEVEL = 2 }
+	}
+}
+
+# There is a case. MIRRORS un_credentials_select_target.
+# Scope: the prospective proposer
+un_credentials_case_exists = {
+	any_country = { un_credentials_candidate = yes }
+}
+
+# The suspension's own gates.
+# Scope: the prospective proposer
+un_credentials_can_table = {
+	custom_tooltip = {
+		text = un_credentials_grounds_tt
+		un_credentials_case_exists = yes
+	}
+	custom_tooltip = {
+		text = un_credentials_standing_tt
+		un_standing_at_least = { VALUE = un_credentials_standing_floor }
+	}
+}

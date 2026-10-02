@@ -1,0 +1,40 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — ECONOMY: THE MODIFIERS (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 items 7 and 10. Each is a unit
+# value applied with a multiplier from its single refresh site
+# (common/scripted_effects/un_economy_effects.txt).
+# ============================================================================
+
+# The World Development Fund's grant, into the recipient's investment pool:
+# x the weekly grant (var:un_dev_fund_grant), so one point is one pound a week.
+# country_weekly_investment_pool_add is the mod's own (script-only) modifier;
+# the Banking Cycle entry's weekly pulse moves it into the pool
+# (banking_cycle_weekly_effects), which is why the Fund pays it only to a
+# country running that entry (un_dev_fund_pays_into_pool).
+# Refreshed monthly by un_dev_fund_country_refresh (un_economy.1).
+un_dev_fund_pool_grant_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_weekly_investment_pool_add = 1
+}
+
+# The same grant into the treasury, as weekly income, for a recipient whose
+# laws allow no investment pool or that runs no banking system yet. x the
+# weekly grant (var:un_dev_fund_grant). Income rather than a negative
+# country_expenses_add (scripting_best_practices.md, "Expense Scaling with
+# GDP": avoid negative expenses), as the Strategic Reserve's sale profit does
+# (st_res_sell_profit_modifier).
+un_dev_fund_treasury_grant_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_tax_income_add = 1
+}
+
+# The World Food Reserve's grain in a state where a UN aid mission opened, for
+# a year: x the relief's strength (var:un_fr_relief_power, 0..1: the grain
+# drawn against what the mission needs). Refreshed from the state's own monthly
+# pulse by un_food_reserve_state_refresh (un_economy_on_actions.txt).
+un_food_reserve_relief_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_food_security_add = 0.15
+	state_mortality_mult = -0.05
+}

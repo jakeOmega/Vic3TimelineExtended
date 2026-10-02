@@ -1403,15 +1403,30 @@ covert_op_election_confidence_effect = {
 		}
 	}
 
-	# Apply electoral confidence penalty based on worst phase
+	# Apply electoral confidence penalty based on worst phase. Halved while UN
+	# electoral observers are at work in ROOT (UN redesign phase 7, §0.12 item
+	# 11; un_mission_effects.txt): the mission is still active here, since it
+	# closes only at the next monthly update.
 	if = {
 		limit = { var:iw_election_worst_phase >= 3 }
-		add_electoral_confidence = -0.1
+		if = {
+			limit = { un_mission_hosts = { TYPE = electoral } }
+			add_electoral_confidence = -0.05
+		}
+		else = {
+			add_electoral_confidence = -0.1
+		}
 		post_notification = iw_election_interference_confidence
 	}
 	else_if = {
 		limit = { var:iw_election_worst_phase >= 2 }
-		add_electoral_confidence = -0.05
+		if = {
+			limit = { un_mission_hosts = { TYPE = electoral } }
+			add_electoral_confidence = -0.025
+		}
+		else = {
+			add_electoral_confidence = -0.05
+		}
 		post_notification = iw_election_interference_confidence
 	}
 	# Phase 1 (prep): no effect

@@ -12,6 +12,19 @@ un_dues_assessed = {
 	un_dues_rate > 0
 }
 
+# The scoped member is assessed its own dues: a member that conducts its own
+# foreign policy (un_membership_eligible). That is every represented member,
+# and (redesign phase 7, §0.12) a member whose credentials the Assembly has
+# suspended: it loses its voice, not its bill. A member suspended for want of
+# diplomatic autonomy is not: its represented overlord is billed for it
+# (un_dues_billed_to_overlord). The journal entry's monthly assessment, the
+# funding pillar and the budget all ask this.
+# Scope: country
+un_dues_self_assessed = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_membership_eligible = yes
+}
+
 # The scoped member is withholding its dues.
 # Scope: country
 un_dues_is_withholding = {

@@ -341,6 +341,12 @@ nd_taboo_arsenal_status = {
 		trigger = { nd_taboo_is_dismantling = yes }
 		localization_key = nd_taboo_arsenal_dismantling
 	}
+	# The UN Prohibition Treaty's ceiling, when it is the lowest that binds
+	# (redesign phase 7; nd_taboo_refresh_ban_ceiling).
+	text = {
+		trigger = { nd_taboo_ban_ceiling_binds = yes }
+		localization_key = nd_taboo_arsenal_ban
+	}
 	text = {
 		trigger = {
 			has_variable = nd_treaty_ceiling

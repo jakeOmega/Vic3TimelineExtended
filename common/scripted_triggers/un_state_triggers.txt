@@ -49,6 +49,8 @@ un_state_heal_needed = {
 		un_state_country_missing = { MODIFIER = un_law_of_sea_modifier }
 		un_state_country_missing = { MODIFIER = un_icc_member_modifier }
 		un_state_country_missing = { MODIFIER = un_physical_protection_modifier }
+		un_state_country_missing = { MODIFIER = un_cultural_diversity_modifier }
+		un_state_country_missing = { MODIFIER = un_nuclear_ban_modifier }
 	}
 }
 
@@ -63,4 +65,8 @@ un_member_represented_by_record = {
 		has_variable = un_member_modifier_on
 	}
 	un_membership_eligible = yes
+	# A member whose credentials the Assembly rejected (phase 7) is not
+	# represented either, as un_member_represented says; the record of it is a
+	# country variable, which a revolution's winner inherits.
+	NOT = { un_credentials_suspended = yes }
 }

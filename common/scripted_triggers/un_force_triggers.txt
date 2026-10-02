@@ -1,0 +1,183 @@
+﻿# ============================================================================
+# THE STANDING UN FORCE — TRIGGERS (redesign phase 7, §0.12 item 2)
+# ============================================================================
+# The writers are in common/scripted_effects/un_force_effects.txt, the figures
+# in common/script_values/un_force_values.txt. What the Force does to missions
+# is read by the mission system itself (un_mission_force_serves,
+# un_mission_triggers.txt).
+# ============================================================================
+
+# The Standing UN Force has been founded and the UN still stands. An
+# institution, not a convention: nobody ratifies it, so its flag is
+# un_inst_standing_force (§0.12 "Identifiers"), set by
+# un_standing_force_on_carried and cleared by un_force_on_dissolve.
+# Scope: any
+un_force_in_force = {
+	has_global_variable = un_inst_standing_force
+}
+
+# ---- The topic (the hooks un_propose_triggers.txt calls) ------------------------
+
+# There is something to table: the Force has not been founded yet.
+# Scope: the proposing country
+un_standing_force_case_exists = {
+	NOT = { un_force_in_force = yes }
+}
+
+# The topic's own gate: a major power moves it (a force is put together by the
+# powers that can lend it soldiers).
+# Scope: the proposing country
+un_standing_force_can_table = {
+	custom_tooltip = {
+		text = un_standing_force_need_major_power_tt
+		country_rank >= rank_value:major_power
+	}
+}
+
+# ---- War goals against a mission's host -------------------------------------------
+
+# A war goal just added to this play is to be struck rather than charged: the
+# Force stands, the UN is Supranational, the actor is a represented member
+# (un_member_represented: a member whose credentials are suspended is not
+# barred), the play's target hosts an active peacekeeping or stabilisation
+# mission (un_mission_protected), and the actor holds a goal against it that
+# may be struck (un_force_has_strikeable_goal). Where this fails,
+# un_teeth_war_goal_surcharge charges the surcharge instead, doubled against
+# such a host from Strong: so the goal a play opens with, which is never
+# struck, pays it, as a non-member and a suspended member do. Only the play's
+# initiator is looked at, as by the surcharge: its backers are not.
+# Scope: diplomatic play; expects scope:actor (from on_wargoal_added)
+un_force_war_goal_barred = {
+	un_force_in_force = yes
+	un_tier_is_supranational = yes
+	exists = scope:actor
+	scope:actor = { un_member_represented = yes }
+	target ?= { un_mission_protected = yes }
+	un_force_has_strikeable_goal = yes
+}
+
+# This play holds a goal the Force may strike: one of the barred types, held
+# by the actor against the play's target, and not of the type the play opened
+# with. on_wargoal_added fires for the goal a play opens with too and does not
+# say which goal was added, and remove_war_goal takes a side and a type, so a
+# second goal of the opening type cannot be struck without the first; whether
+# striking a play's own goal leaves a working play is unproven. A play opens
+# with the goal its type names (war_goal in common/diplomatic_plays/, vanilla's
+# and the mod's), so the play's type tells the opening goal, and each type is
+# struck only from a play of another type.
+#
+# The types are every type a play opens with in vanilla, the subjugation types
+# of 1.14 and the mod's reunification, less the goals only a subject can hold
+# (the actor is never one: un_teeth_war_goal_surcharge leaves subjects alone)
+# and the UN mandate's own goal (a bound mandate's holder is left alone too).
+# They fall in three groups:
+#   one opening play  struck unless this play is of that type
+#                     (un_force_goal_strikeable)
+#   several           annex_country and humiliation are struck unless this play
+#                     is of one of their types (un_force_play_opens_with_*);
+#                     unification and unification_leadership are never struck,
+#                     since every formable adds a play that opens with one and
+#                     a play missing from such a list would lose its own goal
+#   none              no play opens with them, so they are always struck
+#                     (un_force_goal_held)
+# Keep it in step with un_force_strike_war_goals (un_force_effects.txt) and
+# with the play types, vanilla's after a patch included.
+# Scope: diplomatic play; expects scope:actor
+un_force_has_strikeable_goal = {
+	OR = {
+		# --- one opening play ---
+		un_force_goal_strikeable = { TYPE = conquer_state PLAY = dp_conquer_state }
+		un_force_goal_strikeable = { TYPE = return_state PLAY = dp_return_state }
+		un_force_goal_strikeable = { TYPE = take_treaty_port PLAY = dp_take_treaty_port }
+		un_force_goal_strikeable = { TYPE = liberate_country PLAY = dp_liberate_country }
+		un_force_goal_strikeable = { TYPE = liberate_subject PLAY = dp_liberate_subject }
+		un_force_goal_strikeable = { TYPE = secession PLAY = dp_secession }
+		un_force_goal_strikeable = { TYPE = restore_union PLAY = dp_restore_union }
+		un_force_goal_strikeable = { TYPE = make_protectorate PLAY = dp_make_protectorate }
+		un_force_goal_strikeable = { TYPE = make_tributary PLAY = dp_make_tributary }
+		un_force_goal_strikeable = { TYPE = make_dominion PLAY = dp_make_dominion }
+		un_force_goal_strikeable = { TYPE = release_as_subject PLAY = dp_release_as_subject }
+		un_force_goal_strikeable = { TYPE = transfer_subject PLAY = dp_transfer_subject }
+		un_force_goal_strikeable = { TYPE = reduce_autonomy PLAY = dp_reduce_autonomy }
+		un_force_goal_strikeable = { TYPE = regime_change PLAY = dp_regime_change }
+		un_force_goal_strikeable = { TYPE = contain_threat PLAY = dp_contain_threat }
+		un_force_goal_strikeable = { TYPE = enforce_treaty_article PLAY = dp_default_treaty_article }
+		un_force_goal_strikeable = { TYPE = open_market PLAY = dp_open_market }
+		un_force_goal_strikeable = { TYPE = ban_slavery PLAY = dp_ban_slavery }
+		un_force_goal_strikeable = { TYPE = colonization_rights PLAY = dp_native_uprising }
+		un_force_goal_strikeable = { TYPE = force_nationalization PLAY = dp_force_nationalization }
+		un_force_goal_strikeable = { TYPE = foreign_investment_rights PLAY = dp_give_foreign_investment_rights }
+		un_force_goal_strikeable = { TYPE = join_power_bloc PLAY = dp_join_power_bloc }
+		un_force_goal_strikeable = { TYPE = leave_power_bloc PLAY = dp_leave_power_bloc }
+		un_force_goal_strikeable = { TYPE = demand_strait_access PLAY = dp_demand_strait_access }
+		un_force_goal_strikeable = { TYPE = demand_toll_exemption PLAY = dp_demand_toll_exemption }
+		un_force_goal_strikeable = { TYPE = demand_no_tolls PLAY = dp_demand_no_tolls }
+		un_force_goal_strikeable = { TYPE = demand_no_strait_closure PLAY = dp_demand_no_strait_closure }
+		# --- several opening plays (unification and unification_leadership: never) ---
+		AND = {
+			NOT = { un_force_play_opens_with_annexation = yes }
+			un_force_goal_held = { TYPE = annex_country }
+		}
+		AND = {
+			NOT = { un_force_play_opens_with_humiliation = yes }
+			un_force_goal_held = { TYPE = humiliation }
+		}
+		# --- no opening play ---
+		un_force_goal_held = { TYPE = te_reunify_country }
+		un_force_goal_held = { TYPE = make_personal_union }
+		un_force_goal_held = { TYPE = make_crown_land }
+		un_force_goal_held = { TYPE = make_chartered_company }
+	}
+}
+
+# A goal of $TYPE$ may be struck from this play: the play is not of type
+# $PLAY$, the one that opens with such a goal, and the actor holds one against
+# the play's target.
+# Parameters: $TYPE$ = war goal type; $PLAY$ = the diplomatic play type whose
+# opening goal it is
+# Scope: diplomatic play; expects scope:actor
+un_force_goal_strikeable = {
+	NOT = { is_diplomatic_play_type = $PLAY$ }
+	un_force_goal_held = { TYPE = $TYPE$ }
+}
+
+# This play has a goal of $TYPE$, and the actor holds one against the play's
+# target. has_play_goal reads this play only; the actor's test reads every play
+# it takes part in, so both are asked.
+# Parameters: $TYPE$ = war goal type
+# Scope: diplomatic play; expects scope:actor
+un_force_goal_held = {
+	has_play_goal = $TYPE$
+	target ?= {
+		scope:actor = {
+			play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = prev }
+		}
+	}
+}
+
+# The play opened with annex_country: vanilla's play types whose war_goal it is
+# (00_diplomatic_plays.txt; the mod's te_unification_plays.txt makes
+# dp_unify_china, dp_unify_india and dp_unify_indonesia open with unification).
+# Scope: diplomatic play
+un_force_play_opens_with_annexation = {
+	OR = {
+		is_diplomatic_play_type = dp_annex_war
+		is_diplomatic_play_type = dp_annex_subject
+		is_diplomatic_play_type = dp_revolution
+		is_diplomatic_play_type = dp_taiping_rebellion
+		is_diplomatic_play_type = dp_sepoy_mutiny
+		is_diplomatic_play_type = dp_hungarian_revolution
+		is_diplomatic_play_type = dp_unify_ethiopia
+		is_diplomatic_play_type = dp_unify_arabia
+	}
+}
+
+# The play opened with humiliation: vanilla's play types whose war_goal it is.
+# Scope: diplomatic play
+un_force_play_opens_with_humiliation = {
+	OR = {
+		is_diplomatic_play_type = dp_humiliation
+		is_diplomatic_play_type = dp_balkan_war
+		is_diplomatic_play_type = dp_enforce_trialist_manifesto
+	}
+}

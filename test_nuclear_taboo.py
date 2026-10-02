@@ -986,12 +986,36 @@ class TestUN(unittest.TestCase):
         self.values = strip_comments(read(TABOO_VALUES))
         self.taboo = strip_comments(read(TABOO_EFFECTS))
 
-    def test_un_part_needs_a_un_and_reads_the_two_conventions(self):
+    def test_un_part_needs_a_un_and_reads_the_three_conventions(self):
         body = block(self.values, "nd_taboo_part_un_value")
         for needle in ("has_global_variable = un_founded", "has_global_variable = un_agency_iaea",
-                       "has_global_variable = un_agency_cppnm", "global_var:un_authority",
-                       "max = nd_taboo_un_cap"):
+                       "has_global_variable = un_agency_cppnm", "has_global_variable = un_agency_tpnw",
+                       "global_var:un_authority", "max = nd_taboo_un_cap"):
             self.assertIn(needle, body)
+
+    def test_un_cap_never_binds_the_three_conventions(self):
+        # Owner ruling (§0.12 item 8): the ban adds up to 6 beside the NPT's 8
+        # and the CPPNM's 4, so the cap must leave all three their full weight.
+        import nuclear_taboo_sim as sim
+        c = sim.load_constants(TABOO_VALUES)
+        self.assertEqual(c["nd_taboo_un_tpnw_weight"], 6)
+        full = c["nd_taboo_un_npt_weight"] + c["nd_taboo_un_cppnm_weight"] + c["nd_taboo_un_tpnw_weight"]
+        self.assertGreaterEqual(c["nd_taboo_un_cap"], full)
+        scenario = sim.Scenario("all three at full authority", un_authority=100, npt=True, cppnm=True, tpnw=True)
+        self.assertEqual(sim._un_part(c, scenario), full)
+
+    def test_ban_ceiling_is_its_own_and_the_lowest_binds(self):
+        # The ban never writes nd_treaty_ceiling, which the treaty refresh
+        # rebuilds from the articles every month, and it joins the effective
+        # ceiling and the hold through its own variable.
+        refresh = block(self.taboo, "nd_taboo_refresh_ban_ceiling")
+        self.assertNotIn("nd_treaty_ceiling", refresh)
+        self.assertIn("name = nd_tpnw_ceiling value = nd_taboo_ban_ceiling_now_value", refresh)
+        monthly = block(self.taboo, "nd_taboo_country_monthly")
+        self.assertLess(monthly.index("nd_taboo_refresh_ban_ceiling = yes"), monthly.index("nd_taboo_refresh_held = yes"))
+        self.assertIn("nd_taboo_ban_ceiling_binds = yes", block(self.values, "nd_taboo_effective_ceiling_value"))
+        self.assertIn("has_variable = nd_tpnw_ceiling",
+                      block(strip_comments(read(TABOO_TRIGGERS)), "nd_taboo_has_ceiling"))
 
     def test_verdict_waits_on_a_nuclear_grievance(self):
         docket = strip_comments(read(UN_DOCKET))

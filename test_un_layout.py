@@ -96,7 +96,7 @@ class SessionStripTest(unittest.TestCase):
     def test_every_topic_has_an_icon(self):
         codes = {int(n) for n in re.findall(
             r"ScriptValue\('un_disp_res_topic_code'\), '\(CFixedPoint\)(\d+)'", _read(LAYOUT))}
-        self.assertEqual(codes, set(range(18)))
+        self.assertEqual(codes, set(range(29)))
 
 AUTHORITY = os.path.join(W, "un_authority_widget.gui")
 PILLARS = ("participation", "commitment", "credibility", "funding", "order", "delivery")

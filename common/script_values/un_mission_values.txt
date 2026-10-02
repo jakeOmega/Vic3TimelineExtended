@@ -15,6 +15,25 @@
 #   3 stabilisation a power answering a state collapse         the host is no longer a
 #                   (un_events.4 A)                            failed state (then 12
 #                                                              months to wind down)
+#   4 electoral     a request for electoral observers          an election campaign
+#                   carried (un_vote.2, phase 7: §0.12 item    ends while it runs
+#                   11), in the requester's capital            (on_election_campaign_end)
+#
+# The ELECTORAL mission (redesign phase 7) is paid from the UN's budget: it has
+# no contributors, takes no volunteers, never lapses unstaffed, and counts as a
+# single contributor in its strength (un_mission_electoral_heads). It fails if
+# its host is attacked or stops holding elections, and lapses after
+# un_mission_electoral_lapse_months without an election. While it runs, its
+# host carries un_electoral_observers_modifier x strength (legitimacy, and
+# the ideological covert defence Election Interference is detected by), and the
+# cut Election Interference deals to electoral confidence at the end of a
+# campaign is halved (covert_op_election_confidence_effect,
+# covert_warfare_effects.txt: -0.05 / -0.025 instead of -0.1 / -0.05).
+#
+# THE STANDING UN FORCE (phase 7, §0.12 item 2; un_force_*.txt): while it
+# stands, it counts as one contributor in every peacekeeping and stabilisation
+# mission (un_mission_strength_heads), and such a mission neither lapses
+# unstaffed nor fails for want of contributors.
 #
 # A mission FAILS when its host is attacked (at war and not the war's
 # initiator) after it opened, or, for peacekeeping and stabilisation, when
@@ -34,7 +53,9 @@
 # so a Moribund UN's missions do nothing, withheld dues starve every mission
 # (the budget is what the paying members pay), and a mission with three
 # contributors is half as strong again as one with a single one. The state's
-# modifier is multiplied by it.
+# modifier is multiplied by it. The Standing UN Force counts as a contributor
+# in a peacekeeping or stabilisation mission; an electoral mission counts one,
+# its paid observers, whatever else happens (un_mission_strength_heads).
 #
 # The writers are in common/scripted_effects/un_mission_effects.txt, the tests
 # in common/scripted_triggers/un_mission_triggers.txt. Every figure is here,
@@ -83,6 +104,42 @@ un_mission_success_standing = { value = 3 }
 # The contributors' covert networks in a mission's host grow this much faster
 # (§7.4): accepting help has a price.
 un_mission_net_gain_mult = { value = 1.25 }
+
+# ---- Electoral observers (redesign phase 7, §0.12 item 11) ------------------------
+
+# An electoral mission with no election in this many months lapses.
+un_mission_electoral_lapse_months = { value = 60 }
+
+# The heads an electoral mission counts in its strength: its observers, paid
+# from the budget, as one contributor (0.75 + 0.25 x 1 = 1).
+un_mission_electoral_heads = { value = 1 }
+
+# Its progress while the host is in an election campaign (0 otherwise; 100,
+# and success at the next monthly update, once the campaign has ended:
+# un_mission_electoral_election_held).
+un_mission_electoral_progress_campaign = { value = 50 }
+
+# What its outcome is worth. Success is a delivery entry (half a peacekeeping
+# mission's: an election comes round far sooner than two years of peace) and
+# standing for the host; failure is the usual credibility debit. A host that
+# does away with its elections while the observers are there loses standing
+# (reason 46).
+un_mission_electoral_success_delivery = { value = 1 }
+un_mission_electoral_host_standing = { value = 3 }
+un_mission_electoral_abolished_standing = { value = 2 }
+
+# A mission's success, as a delivery entry: the kind's own figure.
+# Scope: mission container
+un_mission_success_delivery_value = {
+	value = 0
+	if = {
+		limit = { has_tag = un_msn_electoral }
+		add = un_mission_electoral_success_delivery
+	}
+	else = {
+		add = un_mission_success_delivery
+	}
+}
 
 # ---- Joining at will -----------------------------------------------------------
 # A major-power member may send a contingent to any mission in the field, and
@@ -187,10 +244,11 @@ un_mission_ai_age_penalty = {
 un_mission_ai_join_score = {
 	value = -10
 	subtract = un_mission_ai_age_penalty
-	# The mission needs hands: it is stronger with every contributor up to three.
+	# The mission needs hands: it is stronger with every contributor up to
+	# three (the Standing UN Force counts as one).
 	add = {
 		value = 3
-		subtract = un_mission_contributor_count
+		subtract = un_mission_strength_heads
 		min = 0
 		multiply = 5
 	}
@@ -266,9 +324,28 @@ un_mission_contributor_count = {
 	}
 }
 
+# The heads a mission's strength counts: its contributors, and the Standing UN
+# Force in a peacekeeping or stabilisation mission while it stands; an
+# electoral mission's paid observers count as one (phase 7, §0.12).
+# Scope: mission container
+un_mission_strength_heads = {
+	value = 0
+	if = {
+		limit = { has_tag = un_msn_electoral }
+		add = un_mission_electoral_heads
+	}
+	else = {
+		add = un_mission_contributor_count
+		if = {
+			limit = { un_mission_force_serves = yes }
+			add = 1
+		}
+	}
+}
+
 # Scope: mission container
 un_mission_strength_value = {
-	value = un_mission_contributor_count
+	value = un_mission_strength_heads
 	max = 3
 	multiply = 0.25
 	add = 0.75
@@ -398,7 +475,7 @@ un_mission_age_order = {
 # Every value is 0 for a state with no active mission, so the tile can gate on
 # the first and never read a missing variable.
 
-# 0 none, 1 peacekeeping, 2 aid, 3 stabilisation.
+# 0 none, 1 peacekeeping, 2 aid, 3 stabilisation, 4 electoral.
 un_state_mission_type = {
 	value = 0
 	if = {
@@ -438,5 +515,90 @@ un_state_mission_contributors = {
 	if = {
 		limit = { var:un_msn_here ?= { has_tag = un_msn_active } }
 		var:un_msn_here = { add = un_mission_contributor_count }
+	}
+}
+
+# 1 while the state's mission is a peacekeeping or stabilisation mission the
+# Standing UN Force serves in (the tile's tooltip names it beside the
+# contributors).
+un_state_mission_force = {
+	value = 0
+	if = {
+		limit = { var:un_msn_here ?= { has_tag = un_msn_active un_mission_force_serves = yes } }
+		add = 1
+	}
+}
+
+# 1 while, in addition, a member may not make war on this state's owner: the
+# Force stands and the UN is Supranational (un_force_war_goal_barred).
+un_state_mission_barred = {
+	value = 0
+	if = {
+		limit = {
+			un_tier_is_supranational = yes
+			var:un_msn_here ?= { has_tag = un_msn_active un_mission_force_serves = yes }
+		}
+		add = 1
+	}
+}
+
+# ---- Requesting electoral observers: the lean and the AI (phase 7, §0.12 item 11) ----
+
+# OUR INTERESTS on a request for electoral observers (un_lean_charter_interests
+# adds it). Members that hold elections themselves are for it; a single-party
+# state is against the Assembly vouching for elections; a member running
+# Election Interference against the requester is against observers who would
+# make its operation easier to catch and halve its harm.
+# Scope: the voting country; expects scope:un_resolution and scope:un_vote_target
+un_lean_interests_observer_request = {
+	value = 0
+	if = {
+		limit = { un_mission_holds_elections = yes }
+		add = 15
+	}
+	if = {
+		limit = { has_law = law_type:law_single_party_state }
+		add = -25
+	}
+	if = {
+		limit = {
+			exists = scope:un_vote_target
+			any_scope_diplomatic_pact = {
+				is_diplomatic_action_type = covert_election_interference_action
+				first_country = prev
+				second_country = scope:un_vote_target
+			}
+		}
+		add = -40
+	}
+}
+
+# How keen an AI member is to ask for observers (un_propose_observer_request_button):
+# most when a foreign service is interfering in its elections, more when its
+# government's legitimacy is low or a campaign is under way, and more for a
+# smaller country.
+# Scope: the requesting country
+un_observer_request_ai_chance = {
+	value = 0
+	if = {
+		limit = {
+			any_scope_diplomatic_pact = {
+				is_diplomatic_action_type = covert_election_interference_action
+				second_country = prev
+			}
+		}
+		add = 40
+	}
+	if = {
+		limit = { government_legitimacy < 40 }
+		add = 15
+	}
+	if = {
+		limit = { in_election_campaign = yes }
+		add = 10
+	}
+	if = {
+		limit = { NOT = { country_rank >= rank_value:major_power } }
+		add = 10
 	}
 }

@@ -1,0 +1,42 @@
+﻿namespace = un_economy
+
+# ============================================================================
+# THE CHARTER'S NEW BUSINESS — ECONOMY: THE ROOT HOPS (redesign phase 7)
+# ============================================================================
+# Two hidden country events, each fired at one country so that what runs in it
+# has that country as ROOT. The global UN pulse that decides them has no ROOT,
+# and a modifier's multiplier is read against ROOT, not against the scope it is
+# applied in (scripting_best_practices.md, "add_modifier { multiplier = var:X }
+# Resolves Against ROOT"). Neither is shown; both are fired by script only.
+# The writers are in common/scripted_effects/un_economy_effects.txt.
+# ============================================================================
+
+# The World Development Fund's grant to this country, applied or removed
+# (un_dev_fund_monthly_update sends it to every recipient, and to every
+# country whose grant has just stopped).
+un_economy.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		un_dev_fund_country_refresh = yes
+	}
+}
+
+# The World Food Reserve has drawn on this pledger's grain
+# (un_food_reserve_draw_from): the Strategic Reserve's own clamp and hub
+# refresh, as its rate buttons run them, so the hub's market flow follows the
+# smaller stockpile at once instead of at the next weekly tick.
+un_economy.2 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		any_scope_building = { is_building_type = building_strategic_reserve_hub }
+	}
+
+	immediate = {
+		st_res_clamp_stockpiles_effect = yes
+		st_res_refresh_hub_flow_effect = yes
+	}
+}

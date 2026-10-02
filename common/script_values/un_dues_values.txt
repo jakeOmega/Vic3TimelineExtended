@@ -25,7 +25,9 @@
 #
 # A member whose representation is suspended (§0.8) pays nothing itself: its
 # represented direct overlord is assessed on its GDP (un_dues_assessed_gdp),
-# and it neither runs up nor settles arrears until it is restored.
+# and it neither runs up nor settles arrears until it is restored. A member
+# whose credentials the Assembly has suspended (redesign phase 7, §0.12) is
+# the exception: it keeps paying its own (un_dues_self_assessed).
 #
 # The writers are in common/scripted_effects/un_dues_effects.txt, the tests in
 # common/scripted_triggers/un_dues_triggers.txt. Every figure is here, once;
@@ -143,10 +145,13 @@ un_funding_arrears_share_value = {
 	}
 }
 
+# Every member assessed its own dues (un_dues_self_assessed): the represented
+# members, and since redesign phase 7 a member whose credentials are suspended,
+# which still pays.
 un_members_gdp_value = {
 	value = 0
 	every_country = {
-		limit = { un_member_represented = yes }
+		limit = { un_dues_self_assessed = yes }
 		add = un_dues_assessed_gdp
 	}
 }
@@ -155,7 +160,7 @@ un_withholders_gdp_value = {
 	value = 0
 	every_country = {
 		limit = {
-			un_member_represented = yes
+			un_dues_self_assessed = yes
 			has_variable = un_dues_withheld
 		}
 		add = un_dues_assessed_gdp
@@ -169,7 +174,7 @@ un_budget_weekly_value = {
 	value = 0
 	every_country = {
 		limit = {
-			un_member_represented = yes
+			un_dues_self_assessed = yes
 			NOT = { has_variable = un_dues_withheld }
 		}
 		add = un_dues_weekly_value
