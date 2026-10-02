@@ -451,6 +451,7 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_pillar_funding }
 	un_dissolve_remove_global = { NAME = un_pillar_order }
 	un_dissolve_remove_global = { NAME = un_pillar_delivery }
+	un_dissolve_remove_global = { NAME = un_pillar_policy }
 }
 
 # Remove a global variable if it is set.

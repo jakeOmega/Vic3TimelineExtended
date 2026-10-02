@@ -87,27 +87,36 @@ it under Isolationism and refuses it under Total War. See
 
 UN Authority runs from 0 to 100 and is the bar at the top of the UN panels. Each month
 it closes a 48th of the gap to a target, at most 1 point, so a change in the
-world shows over years. The target is the sum of seven pillars:
+world shows over years. The target is the sum of eight pillars:
 
 | Pillar | Range | What moves it |
 |---|---|---|
 | Base | 15 | Constant. |
 | Participation | 0 to +25 | The share of world prestige held by members. |
 | Commitment | −25 to +25 | Members championing (+1) or undermining (−1) the order, weighted by their share of world power. Members of a bloc with Multilateral Institutions count a little in favor. |
-| Credibility | −15 to +15 | Resolutions carried or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, failed missions. |
+| Credibility | −25 to +25 | Resolutions carried or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, failed missions. |
 | Funding | −10 to +10 | The power-weighted share of major and great power members running UN programs, minus up to 15 for dues withheld. |
 | Peace and order | −20 to 0 | Members at war with fellow members, and nuclear use. |
 | Delivery | 0 to +10 | Aid and peacekeepers delivered, emergency loans, mandates discharged, missions accomplished. |
+| Policy | −25 to +25 | The UN Authority Target modifier carried by laws and institutions, with each country's total scaled by its weight. A member that is not undermining the UN counts for or against; any other country counts only against. A negative total pulls authority down. No law or institution carries it yet, so the row reads 0. |
 
 Credibility, delivery and the nuclear half of peace and order are kept as
-ledgers: each act adds or subtracts points, and old entries halve every four
-years. Acts by powerful countries count for more. Each entry is multiplied by
-the actor's **weight**, its share of world prestige against a typical great
-power's 10% (×1), up to ×5. A permanent member walking out and a
+ledgers: each act adds or subtracts points. Credibility entries halve every ten
+years; delivery entries and nuclear use halve every four. Acts by powerful
+countries count for more. Each entry is multiplied by the actor's **weight**,
+its share of world prestige against a typical great power's 10% (×1), up to ×5;
+the Policy row scales each country's modifier the same way. A permanent member walking out and a
 nuclear first strike also knock authority down directly. A new UN starts at 50,
 but with empty ledgers, no champions and no programs its target sits well below
 that, so expect authority to fall in its first years unless great powers
 champion it and run programs.
+
+Policy counts a country's UN Authority Target in full only while the country is
+a member and is not undermining the UN. A non-member, or a member undermining
+it, counts only when its total is negative: its harmful policies pull authority
+down, and its good ones can only offset them. Leaving the UN, or pressing
+Undermine International Order, stops a positive total from counting. Hover the
+Policy row to see your own figure, your weight and what you count for.
 
 ![The Why UN Authority Is Moving section in the UN tab of the Diplomacy panel. Authority is 68.1 and rising toward a target of 72.4, the sum of the pillars; below come the tier and the charter and the champions and underminers, with Recent Entries collapsed at the foot.](images/un_authority_moving.png)
 

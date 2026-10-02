@@ -72,7 +72,7 @@ un_global_authority_on_action = {
 			}
 
 			# The equilibrium model (un_authority_effects.txt): cache every
-			# country's power share, fade the ledgers, snapshot the seven pillars
+			# country's power share, fade the ledgers, snapshot the eight pillars
 			# and the target, and move authority one step toward it. Replaces the
 			# old drift toward 50.
 			un_authority_monthly_update = yes
