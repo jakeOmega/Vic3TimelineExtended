@@ -656,6 +656,9 @@ un_chamber_budget_sgui = {
 
 	effect = {
 		custom_tooltip_no_bullet = je_un_chamber_dues_budget
+		# What the Standing UN Force and the World Development Fund take of it,
+		# and what is left to lend (redesign phase 7, un_economy_effects.txt).
+		un_economy_budget_lines = yes
 	}
 }
 
@@ -1194,7 +1197,7 @@ un_chamber_vote_sgui = {
 #   op 5   request humanitarian aid
 #   op 6   charter reform (redesign phase 2)
 #
-#   The eleven conventions, which the docket also raises (no scripted button):
+#   The thirteen conventions, which the docket also raises (no scripted button):
 #   op 7   Universal Declaration of Human Rights
 #   op 8   International Criminal Court
 #   op 9   Nuclear Non-Proliferation Treaty

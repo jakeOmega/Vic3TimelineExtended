@@ -655,6 +655,56 @@ un_lean_interests = {
 			add = -20
 		}
 	}
+	else_if = {
+		# Cultural diversity (redesign phase 7, §0.12 item 5): pluralist
+		# laws for, assimilationist ones against. The hegemon's loss and the
+		# trailing countries' relief are regime terms (un_lean_regime).
+		limit = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
+		if = { limit = { has_law = law_type:law_multicultural } add = 15 }
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_minority_rights_protection
+					has_law = law_type:law_minority_rights_affirmative_action
+				}
+			}
+			add = 15
+		}
+		if = { limit = { has_law = law_type:law_multilingual_federalism } add = 10 }
+		if = { limit = { has_law = law_type:law_ethnostate } add = -30 }
+		if = { limit = { has_law = law_type:law_linguistic_purity } add = -20 }
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_minority_rights_violent_hostility
+					has_law = law_type:law_minority_rights_cultural_assimilation
+				}
+			}
+			add = -20
+		}
+	}
+	else_if = {
+		# The prohibition of nuclear weapons (redesign phase 7, §0.12 item 8):
+		# a nuclear power would vote away its arsenal, and one that could
+		# build one its option; those that never could, and those that
+		# already renounced it under the NPT, gain a safer world.
+		limit = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban } }
+		if = {
+			limit = { nd_is_armed = yes }
+			add = -60
+		}
+		else_if = {
+			limit = { nuclear_program_has_programme = yes }
+			add = -20
+		}
+		else = {
+			add = 20
+			if = {
+				limit = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+				add = 10
+			}
+		}
+	}
 	# The regime's terms for us (redesign phase 5): un_lean_regime below.
 	add = un_lean_regime
 	# The charter's new business (redesign phase 7, §0.12): each topic weighs
@@ -718,6 +768,20 @@ un_lean_regime = {
 		limit = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
 		if = {
 			limit = { un_regime_heritage_site = yes }
+			add = 10
+		}
+	}
+	else_if = {
+		# Cultural diversity (redesign phase 7): the hegemon would lose
+		# cultural pull and leans hard against; a country the hegemon's
+		# benchmark weighs on would feel it half as much.
+		limit = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
+		if = {
+			limit = { un_regime_cultural_hegemon = yes }
+			add = -50
+		}
+		else_if = {
+			limit = { has_modifier = cultural_hegemony_foreign_benchmark }
 			add = 10
 		}
 	}

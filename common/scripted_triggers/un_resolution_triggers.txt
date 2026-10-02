@@ -229,11 +229,22 @@ un_resolution_kind_is_convention = {
 }
 un_resolution_kind_is_pledge = {
 	NOT = { un_resolution_is_convention = yes }
-	un_resolution_target_is_beneficiary = yes
+	un_resolution_asks_pledges = yes
 }
 un_resolution_kind_is_decision = {
 	NOT = { un_resolution_is_convention = yes }
-	NOT = { un_resolution_target_is_beneficiary = yes }
+	NOT = { un_resolution_asks_pledges = yes }
+}
+
+# Whether the resolution asks the members to take part: a request for aid or
+# peacekeepers, which the members who vote for it staff and pay for. A request
+# for electoral observers (phase 7) names its requester as beneficiary too, but
+# the UN's budget pays the observers and no member is asked for anything, so it
+# is a decision of the Assembly in un_vote.3.
+# Scope: resolution container
+un_resolution_asks_pledges = {
+	un_resolution_target_is_beneficiary = yes
+	NOT = { has_tag = un_topic_observer_request }
 }
 
 # Whether ROOT voted against scope:un_resolution, the resolution carried, and

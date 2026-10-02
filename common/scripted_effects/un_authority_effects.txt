@@ -123,6 +123,11 @@ un_authority_monthly_update = {
 	set_global_variable = { name = un_funding_arrears_share value = un_funding_arrears_share_value }
 	set_global_variable = { name = un_budget_weekly value = un_budget_weekly_value }
 	set_global_variable = { name = un_members_at_war_share value = un_members_at_war_share_value }
+	# Hunger (redesign phase 7, §0.12 item 10; un_economy_effects.txt): the
+	# share of the members' people in famine-struck states, and the term it
+	# gives the delivery pillar while the World Food Reserve stands. Before the
+	# pillars below, which read it.
+	un_food_reserve_hunger_snapshot = yes
 	# Last month's pillars, for the overview's trend icons (a pillar's change
 	# since the previous snapshot; un_overview_display_values.txt).
 	if = {

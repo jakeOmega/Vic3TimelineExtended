@@ -1,0 +1,10 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — JUSTICE: GAME CONCEPTS (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 items 1, 3 and 4. Loc: concept_<name>
+# and concept_<name>_desc.
+# ============================================================================
+
+concept_un_world_court = {}
+concept_un_arms_embargo = {}
+concept_un_credentials = {}

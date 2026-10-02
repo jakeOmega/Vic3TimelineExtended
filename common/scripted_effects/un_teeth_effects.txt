@@ -115,8 +115,10 @@ un_teeth_lift_embargoes = {
 
 # Every war goal the initiator of a play adds without a bound mandate costs it
 # infamy from the Established tier up (un_war_surcharge_value: 2 / 4 / 10).
-# From Strong, a goal against a country under a UN peacekeeping deployment
-# costs twice that. A subject fighting its way out, and a play against a
+# From Strong, a goal against a country under a UN peacekeeping deployment (an
+# active peacekeeping or stabilisation mission) costs twice that. While the
+# Standing UN Force stands (phase 7), at Supranational a member's goal against
+# such a country is struck instead (un_force_war_goal_barred). A subject fighting its way out, and a play against a
 # decentralized people, are left alone; so is the holder of a bound mandate,
 # whose other demands the mandate's own rules already police.
 # The surcharge is the rule (owner decision 2026-09-24): the AI already weighs
@@ -135,30 +137,41 @@ un_teeth_war_goal_surcharge = {
 			}
 			target ?= { NOT = { is_country_type = decentralized } }
 		}
-		scope:actor = {
-			change_infamy = un_war_surcharge_value
-		}
-		# Under UN protection: the host of an active peacekeeping or
-		# stabilisation mission (phase 6), or a country still carrying the
-		# country-wide peacekeeping modifier of old.
+		# The Standing UN Force (phase 7, §0.12 item 2; un_force_effects.txt):
+		# at Supranational a MEMBER may not make war on the host of an active
+		# peacekeeping or stabilisation mission, so its goals against the host
+		# are struck rather than charged. A non-member pays the surcharge below,
+		# doubled (owner decision 2026-10-02: prohibited for members only).
 		if = {
-			limit = {
-				un_tier_at_least_strong = yes
-				target ?= {
-					OR = {
-						un_mission_protected = yes
-						has_modifier = un_peacekeeping_received_modifier
-					}
-				}
-			}
+			limit = { un_force_war_goal_barred = yes }
+			un_force_strike_war_goals = yes
+		}
+		else = {
 			scope:actor = {
 				change_infamy = un_war_surcharge_value
 			}
-		}
-		scope:actor = {
+			# Under UN protection: the host of an active peacekeeping or
+			# stabilisation mission (phase 6), or a country still carrying the
+			# country-wide peacekeeping modifier of old.
 			if = {
-				limit = { is_ai = no }
-				post_notification = un_war_surcharge_notice
+				limit = {
+					un_tier_at_least_strong = yes
+					target ?= {
+						OR = {
+							un_mission_protected = yes
+							has_modifier = un_peacekeeping_received_modifier
+						}
+					}
+				}
+				scope:actor = {
+					change_infamy = un_war_surcharge_value
+				}
+			}
+			scope:actor = {
+				if = {
+					limit = { is_ai = no }
+					post_notification = un_war_surcharge_notice
+				}
 			}
 		}
 	}

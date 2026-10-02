@@ -134,9 +134,6 @@ un_chamber_topic_line = {
 		limit = { has_tag = un_topic_military_mandate }
 		custom_tooltip_no_bullet = je_un_chamber_topic_military_mandate
 	}
-	else = {
-		custom_tooltip_no_bullet = je_un_chamber_topic_unknown
-	}
 	else_if = {
 		limit = { has_tag = un_topic_cultural_diversity }
 		custom_tooltip_no_bullet = je_un_chamber_topic_cultural_diversity
@@ -180,6 +177,9 @@ un_chamber_topic_line = {
 	else_if = {
 		limit = { has_tag = un_topic_referendum }
 		custom_tooltip_no_bullet = je_un_chamber_topic_referendum
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_topic_unknown
 	}
 }
 
@@ -1081,11 +1081,8 @@ un_standing_reason_line = {
 	else_if = { limit = { var:un_standing_last_reason = 40 } custom_tooltip_no_bullet = je_un_standing_reason_40 }
 	else_if = { limit = { var:un_standing_last_reason = 41 } custom_tooltip_no_bullet = je_un_standing_reason_41 }
 	else_if = { limit = { var:un_standing_last_reason = 42 } custom_tooltip_no_bullet = je_un_standing_reason_42 }
-	else_if = { limit = { var:un_standing_last_reason = 43 } custom_tooltip_no_bullet = je_un_standing_reason_43 }
-	else_if = { limit = { var:un_standing_last_reason = 44 } custom_tooltip_no_bullet = je_un_standing_reason_44 }
 	else_if = { limit = { var:un_standing_last_reason = 45 } custom_tooltip_no_bullet = je_un_standing_reason_45 }
 	else_if = { limit = { var:un_standing_last_reason = 46 } custom_tooltip_no_bullet = je_un_standing_reason_46 }
-	else_if = { limit = { var:un_standing_last_reason = 47 } custom_tooltip_no_bullet = je_un_standing_reason_47 }
 	else = { custom_tooltip_no_bullet = je_un_standing_reason_none }
 }
 
@@ -1692,35 +1689,68 @@ un_chamber_propose_physical_protection_row = {
 	}
 }
 
-# Convention on Cultural Diversity (redesign phase 7, §0.12 item 5). Charter
-# Reform I and UNESCO in force are its Propose control's gates
-# (un_docket_topic_open_cultural_diversity), so the row stays in the list
-# before them and the button says what it waits for.
+# The two phase 7 conventions (redesign phase 7, §0.12 items 5 and 8): the
+# shape of un_chamber_propose_convention_row, plus what each waits for while
+# it is not yet in force, as the phase 7 decisions' rows say it — the reform
+# (un_chamber_propose_reform_line) and the convention it builds on. Both are
+# also its Propose control's gates (un_docket_topic_open_<key>), so the row
+# stays in the list before them. The prerequisite convention is read from its
+# agency, not from its un_propose_<key>_in_force: each row names its own
+# convention's triggers only (test_un_convention_registry).
+
+# Convention on Cultural Diversity: Reform I and UNESCO in force.
 # Scope: country
 un_chamber_propose_cultural_diversity_row = {
-	un_chamber_propose_convention_row = {
-		NAME = je_un_chamber_propose_topic_cultural_diversity
-		TOPIC = cultural_diversity
-		BINDING = je_un_chamber_recommendatory
-		IN_FORCE = un_propose_cultural_diversity_in_force
-		AVAILABLE = un_propose_cultural_diversity_available
-		NO_CASE = je_un_chamber_topic_in_force
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_cultural_diversity
+	custom_tooltip_no_bullet = je_un_chamber_recommendatory
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	if = {
+		limit = { un_propose_cultural_diversity_in_force = yes }
+		custom_tooltip_no_bullet = je_un_chamber_topic_in_force
+	}
+	else = {
+		un_chamber_propose_reform_line = { LEVEL = 1 TT = je_un_chamber_propose_needs_reform_1 }
+		if = {
+			limit = { NOT = { has_global_variable = un_agency_unesco } }
+			custom_tooltip_no_bullet = je_un_chamber_propose_needs_unesco
+		}
+		if = {
+			limit = { un_resolution_topic_on_cooldown = { TOPIC = cultural_diversity } }
+			custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown
+		}
+		un_chamber_propose_status_line = {
+			AVAILABLE = un_propose_cultural_diversity_available
+			NO_CASE = je_un_chamber_topic_in_force
+		}
 	}
 }
 
-# Treaty on the Prohibition of Nuclear Weapons (redesign phase 7, §0.12 item 8).
+# Treaty on the Prohibition of Nuclear Weapons: Reform II and the NPT in force.
 # The widget hides this row under the disabled nuclear weapons rule
-# (un_chamber_nuclear_rule_sgui). Charter Reform II and the NPT in force are
-# its Propose control's gates (un_docket_topic_open_nuclear_ban).
+# (un_chamber_nuclear_rule_sgui).
 # Scope: country
 un_chamber_propose_nuclear_ban_row = {
-	un_chamber_propose_convention_row = {
-		NAME = je_un_chamber_propose_topic_nuclear_ban
-		TOPIC = nuclear_ban
-		BINDING = je_un_chamber_recommendatory
-		IN_FORCE = un_propose_nuclear_ban_in_force
-		AVAILABLE = un_propose_nuclear_ban_available
-		NO_CASE = je_un_chamber_topic_in_force
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_nuclear_ban
+	custom_tooltip_no_bullet = je_un_chamber_recommendatory
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	if = {
+		limit = { un_propose_nuclear_ban_in_force = yes }
+		custom_tooltip_no_bullet = je_un_chamber_topic_in_force
+	}
+	else = {
+		un_chamber_propose_reform_line = { LEVEL = 2 TT = je_un_chamber_propose_needs_reform_2 }
+		if = {
+			limit = { NOT = { has_global_variable = un_agency_iaea } }
+			custom_tooltip_no_bullet = je_un_chamber_propose_needs_npt
+		}
+		if = {
+			limit = { un_resolution_topic_on_cooldown = { TOPIC = nuclear_ban } }
+			custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown
+		}
+		un_chamber_propose_status_line = {
+			AVAILABLE = un_propose_nuclear_ban_available
+			NO_CASE = je_un_chamber_topic_in_force
+		}
 	}
 }
 
@@ -2147,6 +2177,12 @@ un_chamber_dues_lines = {
 		limit = { un_carried_seat_count > 0 }
 		custom_tooltip_no_bullet = je_un_chamber_dues_carried
 	}
+	# What the World Development Fund pays us and what we pledge to the World
+	# Food Reserve, while they stand (redesign phase 7, un_economy_effects.txt).
+	un_economy_obligation_lines = yes
+	# A Binding Ceasefire ordered against us, or against our enemy (redesign
+	# phase 7, un_order_effects.txt).
+	un_order_obligation_lines = yes
 }
 
 # The conventions we are party to (§5.3), read straight off the modifiers
@@ -2211,7 +2247,13 @@ un_chamber_regime_lines = {
 			has_modifier = un_nuclear_ban_modifier
 			has_variable = nd_tpnw_ceiling
 		}
-		custom_tooltip_no_bullet = je_un_chamber_regime_nuclear_ban_ceiling
+		if = {
+			limit = { var:nd_tpnw_ceiling > 0 }
+			custom_tooltip_no_bullet = je_un_chamber_regime_nuclear_ban_ceiling
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_regime_nuclear_ban_none
+		}
 	}
 	un_chamber_regime_line = { MODIFIER = un_regime_colonial_pressure_modifier LINE = je_un_chamber_regime_colonial_pressure }
 	un_chamber_regime_line = { MODIFIER = un_regime_colony_liberty_modifier LINE = je_un_chamber_regime_colony }
@@ -2405,6 +2447,10 @@ un_chamber_mission_entry = {
 			limit = { has_tag = un_msn_aid }
 			custom_tooltip_no_bullet = je_un_chamber_mission_aid
 		}
+		else_if = {
+			limit = { has_tag = un_msn_electoral }
+			custom_tooltip_no_bullet = je_un_chamber_mission_electoral
+		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_mission_stabilisation
 		}
@@ -2416,6 +2462,10 @@ un_chamber_mission_entry = {
 	else_if = {
 		limit = { has_tag = un_msn_aid }
 		custom_tooltip_no_bullet = je_un_chamber_mission_aid_gone
+	}
+	else_if = {
+		limit = { has_tag = un_msn_electoral }
+		custom_tooltip_no_bullet = je_un_chamber_mission_electoral_gone
 	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_mission_stabilisation_gone
@@ -2441,23 +2491,49 @@ un_chamber_mission_entry = {
 	# the block, under that country's first appearance, so a country serving
 	# in two missions was listed three times under the first and not at all
 	# under the second (gui_modding_guide.md gotcha #27).
+	# Phase 7 (§0.12): an electoral mission's observers are paid from the
+	# budget and it has no contributors; the Standing UN Force, while it
+	# stands, is listed first in an active peacekeeping or stabilisation
+	# mission, since it counts as one of them.
 	if = {
+		limit = { has_tag = un_msn_electoral }
+		custom_tooltip_no_bullet = je_un_chamber_mission_observers
+	}
+	else_if = {
 		limit = {
-			has_variable_list = un_msn_contributors
-			any_in_list = { variable = un_msn_contributors exists = this }
+			OR = {
+				AND = {
+					has_tag = un_msn_active
+					un_mission_force_serves = yes
+				}
+				AND = {
+					has_variable_list = un_msn_contributors
+					any_in_list = { variable = un_msn_contributors exists = this }
+				}
+			}
 		}
 		custom_tooltip_no_bullet = je_un_chamber_mission_contributors
-		un_chamber_mission_contributor_at = { POSITION = 0 COUNT = 1 }
-		un_chamber_mission_contributor_at = { POSITION = 1 COUNT = 2 }
-		un_chamber_mission_contributor_at = { POSITION = 2 COUNT = 3 }
-		un_chamber_mission_contributor_at = { POSITION = 3 COUNT = 4 }
-		un_chamber_mission_contributor_at = { POSITION = 4 COUNT = 5 }
-		un_chamber_mission_contributor_at = { POSITION = 5 COUNT = 6 }
-		un_chamber_mission_contributor_at = { POSITION = 6 COUNT = 7 }
-		un_chamber_mission_contributor_at = { POSITION = 7 COUNT = 8 }
 		if = {
-			limit = { any_in_list = { variable = un_msn_contributors count >= 9 exists = this } }
-			custom_tooltip_no_bullet = je_un_chamber_mission_contributors_more
+			limit = {
+				has_tag = un_msn_active
+				un_mission_force_serves = yes
+			}
+			custom_tooltip_no_bullet = je_un_chamber_mission_force
+		}
+		if = {
+			limit = { has_variable_list = un_msn_contributors }
+			un_chamber_mission_contributor_at = { POSITION = 0 COUNT = 1 }
+			un_chamber_mission_contributor_at = { POSITION = 1 COUNT = 2 }
+			un_chamber_mission_contributor_at = { POSITION = 2 COUNT = 3 }
+			un_chamber_mission_contributor_at = { POSITION = 3 COUNT = 4 }
+			un_chamber_mission_contributor_at = { POSITION = 4 COUNT = 5 }
+			un_chamber_mission_contributor_at = { POSITION = 5 COUNT = 6 }
+			un_chamber_mission_contributor_at = { POSITION = 6 COUNT = 7 }
+			un_chamber_mission_contributor_at = { POSITION = 7 COUNT = 8 }
+			if = {
+				limit = { any_in_list = { variable = un_msn_contributors count >= 9 exists = this } }
+				custom_tooltip_no_bullet = je_un_chamber_mission_contributors_more
+			}
 		}
 	}
 }

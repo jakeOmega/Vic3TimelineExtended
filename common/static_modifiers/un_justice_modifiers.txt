@@ -1,0 +1,40 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — JUSTICE: MODIFIERS (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 item 3. Both are applied with
+# multiplier = un_enforcement (un_justice_effects.txt), so every field below
+# is the figure at Established (x1).
+#
+# The arms embargo is a trade penalty on every military good: Victoria 3 has
+# one trade advantage per good, so it bites on imports and exports alike
+# (owner, 2026-10-02: it replaces the Strategic Reserve block, which was
+# dropped). The military goods are the base game's seven (category = military
+# in common/goods/): small arms, ammunition, artillery, tanks, aeroplanes,
+# man-o-wars and ironclads. The mod adds none.
+# ============================================================================
+
+un_arms_embargo_target_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds
+	goods_trade_advantage_small_arms_mult = -0.3
+	goods_trade_advantage_ammunition_mult = -0.3
+	goods_trade_advantage_artillery_mult = -0.3
+	goods_trade_advantage_tanks_mult = -0.3
+	goods_trade_advantage_aeroplanes_mult = -0.3
+	goods_trade_advantage_manowars_mult = -0.3
+	goods_trade_advantage_ironclads_mult = -0.3
+	country_military_goods_cost_mult = 0.05
+}
+
+# Half the full embargo: a vetoed resolution's voluntary embargo, or the one a
+# target that voted for its own embargo accepts.
+un_arms_embargo_voluntary_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds
+	goods_trade_advantage_small_arms_mult = -0.15
+	goods_trade_advantage_ammunition_mult = -0.15
+	goods_trade_advantage_artillery_mult = -0.15
+	goods_trade_advantage_tanks_mult = -0.15
+	goods_trade_advantage_aeroplanes_mult = -0.15
+	goods_trade_advantage_manowars_mult = -0.15
+	goods_trade_advantage_ironclads_mult = -0.15
+	country_military_goods_cost_mult = 0.025
+}

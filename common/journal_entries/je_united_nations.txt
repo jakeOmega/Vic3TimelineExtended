@@ -71,6 +71,11 @@
 	scripted_button = un_propose_development_fund_button
 	scripted_button = un_propose_referendum_button
 
+	# ---- The World Food Reserve's pledges (redesign phase 7, §0.12 item 10;
+	# common/scripted_buttons/un_economy_buttons.txt) ----
+	scripted_button = un_food_reserve_pledge_button
+	scripted_button = un_food_reserve_withdraw_button
+
 	# ---- Dues (redesign phase 5) ----
 	scripted_button = un_withhold_dues_button
 	scripted_button = un_pay_dues_button
@@ -302,11 +307,14 @@
 					# This month's assessment, or a month in arrears for a member
 					# withholding its dues (Article 19 after 24 of them). The single
 					# refresh site for un_dues_modifier.
-					# A suspended member is never assessed itself: its represented
-					# overlord is billed for its seat (un_dues_assessed_gdp, §0.8
-					# ruling 4). Its arrears, if any, neither grow nor clear.
+					# A member suspended for want of diplomatic autonomy is never
+					# assessed itself: its represented overlord is billed for its
+					# seat (un_dues_assessed_gdp, §0.8 ruling 4). Its arrears, if
+					# any, neither grow nor clear. A member whose credentials are
+					# suspended (phase 7, §0.12) is still assessed its own
+					# (un_dues_self_assessed).
 					if = {
-						limit = { un_representation_suspended = yes }
+						limit = { NOT = { un_dues_self_assessed = yes } }
 						if = {
 							limit = { has_modifier = un_dues_modifier }
 							remove_modifier = un_dues_modifier

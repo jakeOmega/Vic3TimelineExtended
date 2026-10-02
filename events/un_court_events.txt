@@ -1,0 +1,257 @@
+﻿namespace = un_court
+
+# ============================================================================
+# THE WORLD COURT (redesign phase 7, §0.12 item 1)
+# ============================================================================
+# A dispute the General Assembly referred (topic court_referral) reaches the
+# court about a month after the vote (un_court_referral_on_carried,
+# common/scripted_effects/un_justice_effects.txt). Every event here carries
+# the case as saved scopes:
+#   scope:un_crt_claimant  the member that referred it (un_vote.2's proposer)
+#   scope:un_crt_holder    the member it named, which held the state
+#   scope:un_crt_state     the disputed state
+#   scope:un_crt_region    its state region, which outlives a ceded state that
+#                          merges into the claimant's part of the region
+#   scope:un_resolution    the closed resolution: the verdict and the holder's
+#                          answer are on it (un_justice_effects.txt's header)
+#
+#   un_court.1  hidden, to the claimant: the court rules (un_court_rule)
+#   un_court.2  to the holder, when a binding ruling goes against it: obey or
+#               defy (un_court_comply / un_court_defy)
+#   un_court.3  to either party: what the court found, or what the holder did
+# ============================================================================
+
+# The court sits.
+un_court.1 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_global_variable = un_founded
+		exists = scope:un_resolution
+		exists = scope:un_crt_holder
+		exists = scope:un_crt_state
+		exists = scope:un_crt_region
+	}
+
+	immediate = {
+		un_court_rule = yes
+	}
+}
+
+# The court finds against us: obey or defy.
+un_court.2 = {
+	type = country_event
+	placement = scope:un_crt_state
+
+	event_image = { texture = "gfx/event_pictures/international_court_chamber.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_court.2.t
+	desc = un_court.2.d
+	flavor = un_court.2.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:un_crt_claimant
+		exists = scope:un_crt_state
+		exists = scope:un_crt_region
+		exists = scope:un_resolution
+	}
+
+	# Option A: obey the court and cede the state
+	option = {
+		name = un_court.2.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { has_law = law_type:law_humanitarian_regulations }
+				add = 3
+			}
+			modifier = {
+				trigger = { un_tier_at_least_strong = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					OR = {
+						un_standing_tier_respected = yes
+						un_standing_tier_exemplary = yes
+					}
+				}
+				add = 2
+			}
+		}
+		un_court_comply = yes
+	}
+
+	# Option B: defy the court
+	option = {
+		name = un_court.2.b
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_law = law_type:law_total_war }
+				add = 4
+			}
+			modifier = {
+				trigger = { scope:un_crt_state ?= { is_incorporated = yes } }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					scope:un_crt_state ?= {
+						primary_cultures_percent_state = { target_country = ROOT value >= un_court_odds_culture_majority_share }
+					}
+				}
+				add = 2
+			}
+			modifier = {
+				trigger = { un_tier_at_least_established = no }
+				add = 2
+			}
+		}
+		un_court_defy = yes
+	}
+}
+
+# What the court found, or what the holder did with its ruling: to either
+# party. The verdict (un_res_court_verdict) and the holder's answer
+# (un_res_court_response) are on the resolution; un_res_vetoed makes it an
+# advisory opinion. Whatever changed hands changed when the court ruled
+# (un_court_rule) or when the holder answered (un_court.2): this only tells.
+un_court.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/international_court_chamber.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_court.3.t_moot
+				trigger = { scope:un_resolution ?= { un_court_verdict_is = { VERDICT = 3 } } }
+			}
+			triggered_desc = {
+				desc = un_court.3.t_advisory
+				trigger = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+			}
+			desc = un_court.3.t
+		}
+	}
+	desc = {
+		first_valid = {
+			# The case went nowhere: the holder no longer held the state.
+			triggered_desc = {
+				desc = un_court.3.d_moot_claimant
+				trigger = {
+					scope:un_resolution ?= { un_court_verdict_is = { VERDICT = 3 } }
+					scope:un_crt_claimant ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_court.3.d_moot_holder
+				trigger = { scope:un_resolution ?= { un_court_verdict_is = { VERDICT = 3 } } }
+			}
+			# An advisory opinion (the referral was vetoed).
+			triggered_desc = {
+				desc = un_court.3.d_advisory_claimant_won
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_res_vetoed
+						un_court_verdict_is = { VERDICT = 1 }
+					}
+					scope:un_crt_claimant ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_court.3.d_advisory_holder_lost
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_res_vetoed
+						un_court_verdict_is = { VERDICT = 1 }
+					}
+				}
+			}
+			triggered_desc = {
+				desc = un_court.3.d_advisory_claimant_lost
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_res_vetoed }
+					scope:un_crt_claimant ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_court.3.d_advisory_holder_won
+				trigger = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+			}
+			# A binding ruling for the claimant, and the holder's answer.
+			triggered_desc = {
+				desc = un_court.3.d_obeyed
+				trigger = { scope:un_resolution ?= { un_court_response_is = { RESPONSE = 1 } } }
+			}
+			triggered_desc = {
+				desc = un_court.3.d_defied
+				trigger = { scope:un_resolution ?= { un_court_response_is = { RESPONSE = 2 } } }
+			}
+			# A binding ruling for the holder.
+			triggered_desc = {
+				desc = un_court.3.d_claimant_lost
+				trigger = { scope:un_crt_claimant ?= this }
+			}
+			desc = un_court.3.d_holder_won
+		}
+	}
+	flavor = un_court.3.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:un_resolution
+		exists = scope:un_crt_claimant
+		exists = scope:un_crt_holder
+		exists = scope:un_crt_region
+	}
+
+	option = {
+		name = un_court.3.a
+		default_option = yes
+		if = {
+			limit = {
+				scope:un_resolution ?= {
+					has_tag = un_res_vetoed
+					un_court_verdict_is = { VERDICT = 1 }
+				}
+				scope:un_crt_holder ?= this
+			}
+			custom_tooltip = un_court_advisory_standing_tt
+		}
+		else_if = {
+			limit = {
+				scope:un_resolution ?= {
+					NOT = { has_tag = un_res_vetoed }
+					un_court_verdict_is = { VERDICT = 2 }
+				}
+			}
+			if = {
+				limit = { scope:un_crt_claimant ?= this }
+				custom_tooltip = un_court_claim_withdrawn_tt
+			}
+			else = {
+				custom_tooltip = un_court_claim_struck_tt
+			}
+		}
+		else_if = {
+			limit = { scope:un_resolution ?= { un_court_response_is = { RESPONSE = 2 } } }
+			custom_tooltip = un_court_mandate_open_tt
+		}
+	}
+}

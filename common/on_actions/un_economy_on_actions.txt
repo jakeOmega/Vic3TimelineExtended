@@ -1,0 +1,32 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — ECONOMY: THE STATE PULSE (redesign phase 7)
+# ============================================================================
+# The World Food Reserve's relief lives on the state of the aid mission it
+# answered and scales with the grain that came, so it is applied from the
+# state's own monthly pulse (the CLAUDE.md rule for state-scoped scaling):
+# un_food_reserve_state_refresh, the single refresh site for
+# un_food_reserve_relief_state_modifier (un_economy_effects.txt). The engine
+# unions same-name on_action declarations across files, so declaring
+# on_monthly_pulse_state here leaves the other systems that extend it alone.
+# ============================================================================
+
+on_monthly_pulse_state = {
+	on_actions = {
+		un_food_reserve_state_on_action
+	}
+}
+
+# Root = state. Cheap for the states with no relief: two variable tests.
+un_food_reserve_state_on_action = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_variable = un_fr_relief_months
+					has_variable = un_fr_relief_power
+				}
+			}
+			un_food_reserve_state_refresh = yes
+		}
+	}
+}

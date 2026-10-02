@@ -1,0 +1,441 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — JUSTICE: THE FIGURES (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 items 1, 3 and 4: the referral to
+# the World Court, the arms embargo and the suspension of credentials. The
+# writers are in common/scripted_effects/un_justice_effects.txt (whose header
+# lists the state they keep), the tests in
+# common/scripted_triggers/un_justice_triggers.txt, the court's ruling in
+# events/un_court_events.txt.
+# ============================================================================
+
+# ---- The World Court: the odds ----------------------------------------------------
+# The court finds for the claimant with a probability, never certain: fixed
+# tests on the state and the two parties, moved by their standing and their
+# records (owner, 2026-10-02: "they are less likely to rule that a paragon
+# gives land to a pariah").
+#
+# SCOPE for un_court_claimant_odds and each of its terms: the disputed state,
+# whose owner is the holder; ROOT is the claimant. Every caller runs with the
+# claimant as ROOT: the selector, the tabling, the chamber's preview and the
+# AI's weight run in the proposer's own scope, and the ruling (un_court.1) is
+# fired to the claimant. At the ruling the holder still owns the state, or the
+# case is moot before the odds are read.
+
+un_court_odds_base = { value = 50 }
+un_court_odds_min = { value = 10 }
+un_court_odds_max = { value = 90 }
+# The people of the state: a party whose primary cultures are at least half of
+# them gains (the claimant) or costs (the holder) the larger figure; at least
+# a quarter, the smaller.
+un_court_odds_culture_majority = { value = 20 }
+un_court_odds_culture_minority = { value = 10 }
+un_court_odds_culture_majority_share = { value = 0.5 }
+un_court_odds_culture_minority_share = { value = 0.25 }
+# The state is a homeland of a party's primary culture.
+un_court_odds_homeland = { value = 10 }
+# The holder has incorporated the state.
+un_court_odds_incorporated = { value = 10 }
+# Standing: (the claimant's - the holder's) x 0.3, within +-15.
+un_court_odds_standing_weight = { value = 0.3 }
+un_court_odds_standing_cap = { value = 15 }
+un_court_odds_standing_floor = { value = -15 }
+# Records: the holder's case strength x 0.15 counts for the claimant, the
+# claimant's against it, each up to 15.
+un_court_odds_case_weight = { value = 0.15 }
+un_court_odds_case_cap = { value = 15 }
+
+# The odds the court gives the claimant, 10-90.
+# Scope: the disputed state; ROOT = the claimant
+un_court_claimant_odds = {
+	value = un_court_odds_base
+	add = un_court_odds_culture_term
+	add = un_court_odds_homeland_term
+	add = un_court_odds_incorporation_term
+	add = un_court_odds_standing_term
+	add = un_court_odds_record_term
+	min = un_court_odds_min
+	max = un_court_odds_max
+}
+
+# Scope: the disputed state; ROOT = the claimant
+un_court_odds_culture_term = {
+	value = 0
+	if = {
+		limit = { primary_cultures_percent_state = { target_country = ROOT value >= un_court_odds_culture_majority_share } }
+		add = un_court_odds_culture_majority
+	}
+	else_if = {
+		limit = { primary_cultures_percent_state = { target_country = ROOT value >= un_court_odds_culture_minority_share } }
+		add = un_court_odds_culture_minority
+	}
+	if = {
+		limit = { primary_cultures_percent_state = { target_country = owner value >= un_court_odds_culture_majority_share } }
+		subtract = un_court_odds_culture_majority
+	}
+	else_if = {
+		limit = { primary_cultures_percent_state = { target_country = owner value >= un_court_odds_culture_minority_share } }
+		subtract = un_court_odds_culture_minority
+	}
+}
+
+# Scope: the disputed state; ROOT = the claimant
+un_court_odds_homeland_term = {
+	value = 0
+	if = {
+		limit = { is_homeland_of_country_cultures = ROOT }
+		add = un_court_odds_homeland
+	}
+	if = {
+		limit = { is_homeland_of_country_cultures = owner }
+		subtract = un_court_odds_homeland
+	}
+}
+
+# Scope: the disputed state
+un_court_odds_incorporation_term = {
+	value = 0
+	if = {
+		limit = { is_incorporated = yes }
+		subtract = un_court_odds_incorporated
+	}
+}
+
+# Scope: the disputed state; ROOT = the claimant
+un_court_odds_standing_term = {
+	value = 0
+	root = { add = un_court_standing_value }
+	owner = { subtract = un_court_standing_value }
+	multiply = un_court_odds_standing_weight
+	min = un_court_odds_standing_floor
+	max = un_court_odds_standing_cap
+}
+
+# Scope: the disputed state; ROOT = the claimant
+un_court_odds_record_term = {
+	value = 0
+	owner = { add = un_court_odds_case_value }
+	root = { subtract = un_court_odds_case_value }
+}
+
+# A party's standing, as the court weighs it: the neutral 50 for a country the
+# standing system has not reached.
+# Scope: country
+un_court_standing_value = {
+	value = un_standing_neutral_start
+	if = {
+		limit = { has_variable = un_standing }
+		value = var:un_standing
+	}
+}
+
+# A party's record, as the court weighs it.
+# Scope: country
+un_court_odds_case_value = {
+	value = un_case_strength
+	multiply = un_court_odds_case_weight
+	max = un_court_odds_case_cap
+}
+
+# The odds rounded to the nearest ten, for the chamber's preview (the
+# je_un_chamber_court_odds_* lines; a tooltip can print a band but not a
+# number it has to compute).
+# Scope: the disputed state; ROOT = the claimant
+un_court_odds_decile = {
+	value = un_court_claimant_odds
+	divide = 10
+	round = yes
+	multiply = 10
+}
+
+# The chance the ruling rolls against: the odds as they stood when the court
+# ruled (un_court_rule writes them).
+# Scope: the resolution container
+un_court_ruling_chance = {
+	value = 0
+	if = {
+		limit = { has_variable = un_res_court_odds_ruled }
+		add = var:un_res_court_odds_ruled
+	}
+}
+
+# ---- The World Court: the ruling and after ---------------------------------------
+
+# The court sits about a month after the vote. Written as a literal in
+# un_court_referral_on_carried (trigger_event takes no script value), and in
+# the loc; kept here for the record.
+un_court_ruling_delay_days = { value = 30 }
+# Defied: for ten years the claimant may move for a military mandate over the
+# region against the holder without the case of 60.
+un_court_defiance_days = { value = 3650 }
+# Found for the holder: for twenty years a war goal the claimant adds against
+# a state in the region costs extra infamy, x E.
+un_court_bar_days = { value = 7300 }
+un_court_bar_infamy_base = { value = 10 }
+# At most once in this many days (on_wargoal_added does not say which goal was
+# added, so the charge is per play rather than per goal; un_court_bar_war_goal).
+un_court_bar_charge_days = { value = 180 }
+# Globals only (un_enforcement).
+un_court_bar_infamy = {
+	value = un_court_bar_infamy_base
+	multiply = un_enforcement
+}
+# A vetoed referral: an advisory opinion that goes against the holder costs it
+# a little standing.
+un_court_advisory_standing_loss = { value = 2 }
+un_court_relations_complied = { value = 10 }
+un_court_relations_defied = { value = -20 }
+# A member the Assembly has disgraced cannot bring a case.
+un_court_referral_standing_floor = { value = 20 }
+# The AI tables a referral only on odds of this much or more.
+un_court_ai_min_odds = { value = 60 }
+
+# ---- Arms Embargo ------------------------------------------------------------------
+
+# Months the embargo runs: the full embargo ten years; the voluntary one (a
+# vetoed resolution, or a target that voted for its own embargo) five.
+un_arms_embargo_months_full = { value = 120 }
+un_arms_embargo_months_voluntary = { value = 60 }
+un_standing_arms_embargo_loss = { value = 6 }
+un_standing_arms_embargo_partial_loss = { value = 3 }
+un_arms_embargo_relations = { value = -20 }
+un_arms_embargo_relations_vetoed = { value = -10 }
+
+# ---- Suspension of Credentials -----------------------------------------------------
+
+# Months a suspension runs, unless the member's case falls below the second
+# figure first.
+un_credentials_months_base = { value = 60 }
+un_credentials_restore_case = { value = 30 }
+# The defiance record (un_dos_defiance) that gives grounds without a breach of
+# the human-rights convention's terms.
+un_credentials_defiance_min = { value = 10 }
+un_standing_credentials_loss = { value = 8 }
+un_standing_credentials_accepted_loss = { value = 4 }
+un_credentials_relations = { value = -20 }
+# A member the Assembly has disgraced cannot challenge another's credentials.
+un_credentials_standing_floor = { value = 20 }
+
+# ---- The lean: our interests ---------------------------------------------------------
+# Each topic's term in un_lean_charter_interests (un_charter_values.txt). Voter
+# scope (THIS and ROOT the voter), with scope:un_resolution,
+# scope:un_vote_target and scope:un_vote_proposer. The generic terms (the
+# target, the self, the grounds, the proposer, glass houses) already apply
+# through the resolution's classification, so these weigh only what is
+# particular to the topic, and never for the two parties themselves.
+
+un_lean_court_held_claims = { value = -15 }
+un_lean_court_own_claims = { value = 10 }
+un_lean_court_target_exemplary = { value = -20 }
+un_lean_court_target_respected = { value = -10 }
+un_lean_court_target_poor = { value = 5 }
+un_lean_court_target_disgraced = { value = 15 }
+
+# A referral to the World Court. A member that holds land others claim fears
+# the precedent; one with claims of its own likes a peaceful way to press
+# them; and the holder's standing moves the room: a paragon is defended, a
+# pariah is not.
+un_lean_interests_court_referral = {
+	value = 0
+	if = {
+		limit = {
+			NOT = { scope:un_vote_target ?= this }
+			NOT = { scope:un_vote_proposer ?= this }
+		}
+		if = {
+			limit = {
+				any_country = {
+					NOT = { this = ROOT }
+					has_claim = ROOT
+				}
+			}
+			add = un_lean_court_held_claims
+		}
+		if = {
+			limit = { number_of_claims > 0 }
+			add = un_lean_court_own_claims
+		}
+		if = {
+			limit = { scope:un_vote_target ?= { un_standing_tier_exemplary = yes } }
+			add = un_lean_court_target_exemplary
+		}
+		else_if = {
+			limit = { scope:un_vote_target ?= { un_standing_tier_respected = yes } }
+			add = un_lean_court_target_respected
+		}
+		else_if = {
+			limit = { scope:un_vote_target ?= { un_standing_tier_poor = yes } }
+			add = un_lean_court_target_poor
+		}
+		else_if = {
+			limit = { scope:un_vote_target ?= { un_standing_tier_disgraced = yes } }
+			add = un_lean_court_target_disgraced
+		}
+	}
+}
+
+un_lean_arms_at_war = { value = 25 }
+un_lean_arms_humanitarian = { value = 15 }
+un_lean_arms_great_power = { value = 10 }
+un_lean_arms_isolationist = { value = -20 }
+un_lean_arms_total_war = { value = -15 }
+
+# An arms embargo. A member at war with the target wants its supply cut; the
+# laws of war and great-power policing lean for it; isolationists and
+# militarists lean against.
+un_lean_interests_arms_embargo = {
+	value = 0
+	if = {
+		limit = { NOT = { scope:un_vote_target ?= this } }
+		if = {
+			limit = { scope:un_vote_target ?= { has_war_with = ROOT } }
+			add = un_lean_arms_at_war
+		}
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_humanitarian_regulations
+					has_law = law_type:law_limited_war
+				}
+			}
+			add = un_lean_arms_humanitarian
+		}
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			add = un_lean_arms_great_power
+		}
+		if = {
+			limit = { has_law = law_type:law_isolationism }
+			add = un_lean_arms_isolationist
+		}
+		if = {
+			limit = { has_law = law_type:law_total_war }
+			add = un_lean_arms_total_war
+		}
+	}
+}
+
+un_lean_credentials_champion = { value = 15 }
+un_lean_credentials_violator = { value = -25 }
+un_lean_credentials_permanent = { value = -20 }
+
+# A suspension of credentials. Champions of human rights lean for it; a member
+# that breaches the human-rights convention's terms itself fears the
+# precedent; and a permanent member does not lightly vote another's seat away.
+un_lean_interests_credentials = {
+	value = 0
+	if = {
+		limit = { NOT = { scope:un_vote_target ?= this } }
+		if = {
+			limit = {
+				OR = {
+					je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+					has_law = law_type:law_humanitarian_regulations
+				}
+			}
+			add = un_lean_credentials_champion
+		}
+		if = {
+			limit = { un_regime_human_rights_violator = yes }
+			add = un_lean_credentials_violator
+		}
+		if = {
+			limit = {
+				is_un_permanent_member = yes
+				scope:un_vote_target ?= { is_un_permanent_member = yes }
+			}
+			add = un_lean_credentials_permanent
+		}
+	}
+}
+
+# ---- The AI's weights (the scripted buttons' ai_chance) ------------------------------
+# Proposer scope (ROOT the proposer). Modelled on the sanctions and
+# condemnation buttons (un_buttons.txt).
+
+un_ai_court_base = { value = 20 }
+un_ai_court_authority = { value = 10 }
+un_ai_court_humanitarian = { value = 5 }
+
+# A referral: only on odds of 60 or more for some case we could table (the AI
+# selector then picks among those).
+un_court_referral_ai_chance = {
+	value = 0
+	if = {
+		limit = {
+			any_state = {
+				un_court_referral_state_open = yes
+				un_court_claimant_odds >= un_court_ai_min_odds
+			}
+		}
+		add = un_ai_court_base
+		if = {
+			limit = {
+				has_global_variable = un_authority
+				global_var:un_authority >= 50
+			}
+			add = un_ai_court_authority
+		}
+		if = {
+			limit = { has_law = law_type:law_humanitarian_regulations }
+			add = un_ai_court_humanitarian
+		}
+	}
+}
+
+un_ai_arms_authority = { value = 15 }
+un_ai_arms_at_war = { value = 25 }
+un_ai_arms_great_power = { value = 10 }
+
+# An arms embargo: on the strength of the Assembly, against an enemy above all.
+un_arms_embargo_ai_chance = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_authority
+			global_var:un_authority >= 40
+		}
+		add = un_ai_arms_authority
+	}
+	if = {
+		limit = {
+			any_country = {
+				un_arms_embargo_candidate = yes
+				has_war_with = ROOT
+			}
+		}
+		add = un_ai_arms_at_war
+	}
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		add = un_ai_arms_great_power
+	}
+}
+
+un_ai_credentials_authority = { value = 10 }
+un_ai_credentials_champion = { value = 15 }
+
+# A suspension of credentials: a champion of human rights in a strong Assembly.
+un_credentials_ai_chance = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_authority
+			global_var:un_authority >= 50
+		}
+		add = un_ai_credentials_authority
+	}
+	if = {
+		limit = {
+			OR = {
+				je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+				has_law = law_type:law_humanitarian_regulations
+			}
+		}
+		add = un_ai_credentials_champion
+	}
+	if = {
+		limit = { un_regime_human_rights_violator = yes }
+		value = 0
+	}
+}

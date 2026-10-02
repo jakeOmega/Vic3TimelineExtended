@@ -5,7 +5,9 @@
 # It only announces a suspension or a restoration, once, and strips what a
 # suspended member may not hold. There is no country-scoped on-action for a
 # change of subject type (colony to dominion), so a monthly check is the
-# authoritative one. var:un_rep_suspended exists only to notice the change.
+# authoritative one. var:un_rep_suspended exists only to notice the change,
+# and var:un_rep_by_credentials (redesign phase 7) to say, when it ends,
+# whether it was the Assembly that had suspended our credentials.
 # The headquarters moves by un_hq_monthly_update (un_hq_effects.txt), and the
 # vacated permanent seat is refilled by un_seat_monthly_update.
 # ============================================================================
@@ -22,7 +24,27 @@ un_representation_monthly_update = {
 			# get one chance at those passed meanwhile (un_events.36, ruling 14).
 			un_rep_convention_forget = yes
 			un_rep_convention_snapshot = yes
-			post_notification = un_representation_suspended_notice
+			# Redesign phase 7 (§0.12): a suspension of our credentials is
+			# the Assembly's verdict, not our subjection, and says so.
+			if = {
+				limit = { un_credentials_suspended = yes }
+				post_notification = un_credentials_suspended_notice
+			}
+			else = {
+				post_notification = un_representation_suspended_notice
+			}
+		}
+		# Which cause holds us now, so the restoration names it (phase 7).
+		if = {
+			limit = { un_credentials_suspended = yes }
+			if = {
+				limit = { NOT = { has_variable = un_rep_by_credentials } }
+				set_variable = un_rep_by_credentials
+			}
+		}
+		else_if = {
+			limit = { has_variable = un_rep_by_credentials }
+			remove_variable = un_rep_by_credentials
 		}
 		# A permanent seat is a vote; it goes to the next great power by
 		# prestige (un_seat_monthly_update).
@@ -58,7 +80,13 @@ un_representation_monthly_update = {
 		# nothing here.
 		if = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-			post_notification = un_representation_restored_notice
+			if = {
+				limit = { has_variable = un_rep_by_credentials }
+				post_notification = un_credentials_restored_notice
+			}
+			else = {
+				post_notification = un_representation_restored_notice
+			}
 			# One chance at the conventions passed in our absence; the event
 			# forgets the snapshot whichever way we answer.
 			if = {
@@ -71,6 +99,10 @@ un_representation_monthly_update = {
 		}
 		else = {
 			un_rep_convention_forget = yes
+		}
+		if = {
+			limit = { has_variable = un_rep_by_credentials }
+			remove_variable = un_rep_by_credentials
 		}
 	}
 }
@@ -89,6 +121,8 @@ un_rep_convention_snapshot = {
 	un_rep_convention_mark = { AGENCY = itlos }
 	un_rep_convention_mark = { AGENCY = cppnm }
 	un_rep_convention_mark = { AGENCY = icc }
+	un_rep_convention_mark = { AGENCY = ccd }
+	un_rep_convention_mark = { AGENCY = tpnw }
 }
 
 # Parameters: $AGENCY$. Scope: country
@@ -113,6 +147,8 @@ un_rep_convention_forget = {
 	un_rep_convention_unmark = { AGENCY = itlos }
 	un_rep_convention_unmark = { AGENCY = cppnm }
 	un_rep_convention_unmark = { AGENCY = icc }
+	un_rep_convention_unmark = { AGENCY = ccd }
+	un_rep_convention_unmark = { AGENCY = tpnw }
 }
 
 # Parameters: $AGENCY$. Scope: country

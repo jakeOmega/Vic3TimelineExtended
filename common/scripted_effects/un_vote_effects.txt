@@ -602,6 +602,26 @@ un_vote_apply_treaty_modifier = {
 		}
 		un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
 	}
+	# The phase 7 conventions (§0.12): country-scoped too, so the cultural
+	# hegemony, homeland and nuclear code read them without a je: hop.
+	if = {
+		limit = {
+			scope:un_resolution ?= { has_tag = un_topic_cultural_diversity }
+			NOT = { has_modifier = un_cultural_diversity_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_cultural_diversity_modifier }
+		un_cultural_diversity_terms_tt = yes
+	}
+	# An armed party is held to a ceiling from the nuclear entry's next month
+	# (nd_taboo_refresh_ban_ceiling); the line says so before it ratifies.
+	if = {
+		limit = {
+			scope:un_resolution ?= { has_tag = un_topic_nuclear_ban }
+			NOT = { has_modifier = un_nuclear_ban_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_nuclear_ban_modifier }
+		un_nuclear_ban_terms_tt = yes
+	}
 	# ICC membership: skipped when the resolution was vetoed (graduated form
 	# is symbolic censure only — no court jurisdiction is established).
 	if = {
@@ -704,6 +724,29 @@ un_apply_ratified_conventions = {
 			NOT = { has_modifier = un_physical_protection_modifier }
 		}
 		un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
+	}
+	# Convention on Cultural Diversity (CCD in force).
+	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
+	if = {
+		limit = {
+			has_global_variable = un_agency_ccd
+			NOT = { has_modifier = un_cultural_diversity_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_cultural_diversity_modifier }
+	}
+	# Treaty on the Prohibition of Nuclear Weapons (TPNW in force).
+	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
+	# Not for an armed joiner: it never voted on the ban, and joining the
+	# Assembly is no promise to disarm (it would put its arsenal on a 25-year
+	# schedule, nd_taboo_refresh_ban_ceiling). It stays outside, as a member
+	# that refused to ratify does; an unarmed joiner accedes.
+	if = {
+		limit = {
+			has_global_variable = un_agency_tpnw
+			NOT = { has_modifier = un_nuclear_ban_modifier }
+			nd_is_armed = no
+		}
+		un_convention_country_on = { MODIFIER = un_nuclear_ban_modifier }
 	}
 	# International Criminal Court (ICC established, non-vetoed pass).
 	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.

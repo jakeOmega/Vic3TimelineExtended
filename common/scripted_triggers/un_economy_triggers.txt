@@ -1,0 +1,129 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — ECONOMY: THE TESTS (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 items 7 and 10. The figures are in
+# common/script_values/un_economy_values.txt, the writers in
+# common/scripted_effects/un_economy_effects.txt.
+# ============================================================================
+
+# ---- The Assembly's business ---------------------------------------------------
+# The framework's un_propose_<key>_available asks the case, and
+# un_propose_<key>_possible the shared gates, the reform and the cooldown, then
+# the topic's own gates below (un_propose_triggers.txt).
+
+# There is a Fund to found: none stands.
+# Scope: the proposing country
+un_development_fund_case_exists = {
+	NOT = { has_global_variable = un_inst_development_fund }
+}
+
+# Any member may table it: the Fund is the poorer members' business as much as
+# the great powers'. Its one gate: the UN has a budget to share, which it has
+# only while its members are assessed dues (Contested and above).
+# Scope: the proposing country
+un_development_fund_can_table = {
+	custom_tooltip = {
+		text = un_development_fund_budget_tt
+		un_dues_assessed = yes
+	}
+}
+
+# There is a Reserve to found: none stands.
+# Scope: the proposing country
+un_food_reserve_case_exists = {
+	NOT = { has_global_variable = un_inst_food_reserve }
+}
+
+# Any member may table it, with no gate of its own (owner, 2026-10-02: it needs
+# no charter reform either). The shared gates are the framework's.
+# Scope: the proposing country
+un_food_reserve_can_table = {
+	always = yes
+}
+
+# ---- The World Development Fund -----------------------------------------------------
+
+# Our GDP per head is below the Fund's line (half the represented members'
+# average). Both figures are the monthly snapshot (un_dev_fund_monthly_update),
+# which writes var:un_dev_fund_gdp_ph only on represented members.
+# Scope: country
+un_dev_fund_below_line = {
+	has_variable = un_dev_fund_gdp_ph
+	has_global_variable = un_dev_fund_line
+	var:un_dev_fund_gdp_ph < global_var:un_dev_fund_line
+}
+
+# At or above the members' average GDP per head.
+# Scope: country
+un_dev_fund_above_average = {
+	has_variable = un_dev_fund_gdp_ph
+	has_global_variable = un_dev_fund_avg
+	var:un_dev_fund_gdp_ph >= global_var:un_dev_fund_avg
+}
+
+# Among the richest: at or above twice the members' average.
+# Scope: country
+un_dev_fund_rich = {
+	has_variable = un_dev_fund_gdp_ph
+	has_global_variable = un_dev_fund_rich_line
+	var:un_dev_fund_gdp_ph >= global_var:un_dev_fund_rich_line
+}
+
+# The Fund pays this member (or would, if it stood): a represented member that
+# pays its dues and is below the line. A member withholding its dues draws
+# nothing from the budget it does not pay into.
+# Scope: country
+un_dev_fund_eligible = {
+	un_member_represented = yes
+	NOT = { un_representation_suspended = yes }
+	NOT = { un_dues_is_withholding = yes }
+	un_dev_fund_below_line = yes
+}
+
+# The grant can go into our investment pool: our laws keep one, and the
+# banking system that moves a weekly pool grant into it is running here
+# (country_weekly_investment_pool_add is the mod's own modifier, read only by
+# the Banking Cycle entry's weekly pulse, banking_cycle_weekly_effects).
+# Otherwise the grant goes into the treasury.
+# Scope: country
+un_dev_fund_pays_into_pool = {
+	has_journal_entry = je_banking_cycle
+	NOT = { modifier:country_disable_investment_pool_bool = yes }
+}
+
+# ---- The World Food Reserve -------------------------------------------------------
+
+# Our Strategic Reserve can store grain: a hub stands (the reserve's own
+# `possible`, je_strategic_reserve.txt) and grain is unlocked
+# (st_res_grain_unlocked_trigger, the reserve's single source for that).
+# Scope: country
+un_food_reserve_can_store_grain = {
+	any_scope_building = { is_building_type = building_strategic_reserve_hub }
+	st_res_grain_unlocked_trigger = yes
+}
+
+# May pledge, and keep a pledge: the Reserve stands, we sit in the Assembly
+# and our Strategic Reserve can store grain. A pledge that stops qualifying is
+# dropped by the monthly update.
+# Scope: country
+un_food_reserve_can_pledge = {
+	has_global_variable = un_inst_food_reserve
+	un_member_represented = yes
+	NOT = { un_representation_suspended = yes }
+	un_food_reserve_can_store_grain = yes
+}
+
+# We hold enough grain in our Strategic Reserve to be worth drawing on.
+# Scope: country
+un_food_reserve_holds_grain = {
+	has_variable = st_res_grain_stored
+	var:st_res_grain_stored >= un_fr_min_stock
+}
+
+# A pledger the Reserve can draw on now.
+# Scope: country
+un_food_reserve_can_be_drawn = {
+	has_variable = un_fr_pledged
+	un_food_reserve_can_pledge = yes
+	un_food_reserve_holds_grain = yes
+}

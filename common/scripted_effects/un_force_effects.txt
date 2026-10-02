@@ -1,0 +1,155 @@
+﻿# ============================================================================
+# THE STANDING UN FORCE — THE WRITERS (redesign phase 7, §0.12 item 2)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12. The "Standing Mandate Force" half of
+# Charter Reform I: a one-time founding resolution (topic standing_force,
+# binding, a simple majority, blocked outright if vetoed) tabled by a major
+# power. Its in-force flag is the global un_inst_standing_force (an
+# institution, not a convention: un_force_in_force, un_force_triggers.txt).
+#
+# WHILE IT STANDS
+#   missions   a peacekeeping or stabilisation mission counts the Force as one
+#              contributor in its strength (un_mission_strength_heads), never
+#              lapses for want of volunteers and never fails because its last
+#              contributor went home (un_mission_monthly reads
+#              un_mission_force_serves; un_mission_*.txt)
+#   budget     the Force takes un_force_budget_share of the dues
+#              (un_charter_values.txt; the lending facility lends from what is
+#              left, and the chamber's budget line shows it)
+#   war goals  at Supranational a MEMBER may not add a war goal against a
+#              country hosting an active peacekeeping or stabilisation mission:
+#              it is struck on adding (un_force_strike_war_goals, called by
+#              un_teeth_war_goal_surcharge from on_wargoal_added, after the
+#              mandate's own hooks); a non-member pays the surcharge, doubled
+#              from Strong (owner decision 2026-10-02: prohibited for members
+#              only)
+#
+# WHO WRITES WHAT
+#   un_standing_force_on_carried     un_vote.2's carried branch (through
+#                                     un_charter_on_carried): sets the flag
+#   un_force_on_dissolve              un_dissolve (through un_charter_on_dissolve):
+#                                     clears it
+#   un_force_strike_war_goals         un_teeth_war_goal_surcharge
+#
+# REASON CODES (phase 7, missions block: ledger 37-39, standing 45-47)
+#   The founding books credibility +1 under the resolution code 1, like every
+#   carried decision. The mission codes are the electoral observer mission's
+#   (un_mission_effects.txt): ledger 37 accomplished, 38 failed, each naming
+#   the mission's state; standing 45 (an election held under the observers),
+#   46 (the host did away with its elections while they watched). Ledger 39
+#   and standing 47 are unused.
+# ============================================================================
+
+# ---- The topic ----------------------------------------------------------------------
+
+# The outcome. Carried without a veto (or over one, under veto restraint): the
+# Force is founded. Vetoed: blocked outright; the framework's outcome line
+# already says so, and nothing is booked.
+# Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution
+un_standing_force_on_carried = {
+	if = {
+		limit = { scope:un_resolution ?= { NOT = { has_tag = un_res_vetoed } } }
+		custom_tooltip = un_vote_standing_force_passed_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+		hidden_effect = {
+			if = {
+				limit = { NOT = { un_force_in_force = yes } }
+				set_global_variable = un_inst_standing_force
+			}
+		}
+	}
+	else = {
+		custom_tooltip = un_vote_standing_force_passed_vetoed_tt
+		# No effect: there is no lesser form of a standing force.
+	}
+}
+
+# What the chamber's row previews while the Force can be founded: what it
+# would cost the budget now.
+# Scope: country (the viewer)
+un_standing_force_chamber_preview = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_preview_standing_force
+}
+
+# ---- War goals against a mission's host ------------------------------------------
+
+# Strike every war goal the initiator holds against the play's target, which
+# hosts an active peacekeeping or stabilisation mission, and tell a human
+# initiator why. Called only where un_force_war_goal_barred holds. Like
+# un_mandate_strike_goal_type, remove_war_goal addresses a goal by side and
+# type, so a goal of the same type against another country in the same play
+# would go too. The type list is un_force_holds_goal_against's.
+# Scope: diplomatic play; expects scope:actor, the initiator (on_wargoal_added)
+un_force_strike_war_goals = {
+	target ?= { save_scope_as = un_force_protected }
+	if = {
+		limit = { exists = scope:un_force_protected }
+		un_force_strike_goal_type = { TYPE = annex_country }
+		un_force_strike_goal_type = { TYPE = conquer_state }
+		un_force_strike_goal_type = { TYPE = return_state }
+		un_force_strike_goal_type = { TYPE = take_treaty_port }
+		un_force_strike_goal_type = { TYPE = liberate_country }
+		un_force_strike_goal_type = { TYPE = liberate_subject }
+		un_force_strike_goal_type = { TYPE = secession }
+		un_force_strike_goal_type = { TYPE = unification }
+		un_force_strike_goal_type = { TYPE = unification_leadership }
+		un_force_strike_goal_type = { TYPE = restore_union }
+		un_force_strike_goal_type = { TYPE = te_reunify_country }
+		un_force_strike_goal_type = { TYPE = make_protectorate }
+		un_force_strike_goal_type = { TYPE = make_tributary }
+		un_force_strike_goal_type = { TYPE = make_dominion }
+		un_force_strike_goal_type = { TYPE = make_personal_union }
+		un_force_strike_goal_type = { TYPE = make_crown_land }
+		un_force_strike_goal_type = { TYPE = make_chartered_company }
+		un_force_strike_goal_type = { TYPE = release_as_subject }
+		un_force_strike_goal_type = { TYPE = transfer_subject }
+		un_force_strike_goal_type = { TYPE = reduce_autonomy }
+		un_force_strike_goal_type = { TYPE = regime_change }
+		un_force_strike_goal_type = { TYPE = humiliation }
+		un_force_strike_goal_type = { TYPE = contain_threat }
+		un_force_strike_goal_type = { TYPE = enforce_treaty_article }
+		un_force_strike_goal_type = { TYPE = open_market }
+		un_force_strike_goal_type = { TYPE = ban_slavery }
+		un_force_strike_goal_type = { TYPE = colonization_rights }
+		un_force_strike_goal_type = { TYPE = force_nationalization }
+		un_force_strike_goal_type = { TYPE = foreign_investment_rights }
+		un_force_strike_goal_type = { TYPE = join_power_bloc }
+		un_force_strike_goal_type = { TYPE = leave_power_bloc }
+		un_force_strike_goal_type = { TYPE = demand_strait_access }
+		un_force_strike_goal_type = { TYPE = demand_toll_exemption }
+		un_force_strike_goal_type = { TYPE = demand_no_tolls }
+		un_force_strike_goal_type = { TYPE = demand_no_strait_closure }
+		scope:actor = {
+			if = {
+				limit = { is_ai = no }
+				post_notification = un_force_war_goal_struck_notice
+			}
+		}
+	}
+}
+
+# Parameters: $TYPE$ = war goal type
+# Scope: diplomatic play; expects scope:actor and scope:un_force_protected
+un_force_strike_goal_type = {
+	if = {
+		limit = {
+			scope:actor = {
+				play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = scope:un_force_protected }
+			}
+		}
+		remove_war_goal = { who = initiator type = $TYPE$ }
+	}
+}
+
+# ---- Dissolution ------------------------------------------------------------------
+
+# The UN dissolves (un_charter_on_dissolve, after every country has left and
+# every mission has ended): the Force goes with it. A refounded UN must found
+# it again, under a charter that has been reset.
+# Scope: none
+un_force_on_dissolve = {
+	if = {
+		limit = { un_force_in_force = yes }
+		remove_global_variable = un_inst_standing_force
+	}
+}

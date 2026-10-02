@@ -1,0 +1,38 @@
+﻿# ============================================================================
+# UN MISSIONS — PHASE 7 NOTICES (redesign phase 7, §0.12 items 2 and 11)
+# ============================================================================
+# The electoral observer mission's outcome notices, to its host
+# (un_mission_post_succeeded_notice / un_mission_post_failed_notice /
+# un_mission_outcome_lapsed, un_mission_effects.txt), and the notice to a member
+# whose war goal against a mission's host was struck (un_force_strike_war_goals,
+# un_force_effects.txt). The older mission notices are in extra_messages.txt.
+# Loc: notification_<message>_name / _desc / _tooltip.
+# ============================================================================
+
+un_mission_electoral_succeeded_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+un_mission_electoral_failed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+un_mission_electoral_lapsed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+un_force_war_goal_struck_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}

@@ -1,0 +1,136 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — ORDER: CEASEFIRES AND REFERENDUMS (tests)
+# ============================================================================
+# Redesign phase 7, docs/systems/un_redesign_design.md §0.12 items 6 and 9.
+# The figures are in common/script_values/un_order_values.txt, the writers in
+# common/scripted_effects/un_order_effects.txt. The shared gates of both
+# topics (the floor, the cooldown, Charter Reform II) are
+# un_propose_<key>_possible's (un_propose_triggers.txt); here are the pools
+# the case, the selector and the AI weight all read, and each topic's own
+# gates.
+#
+# The pools compare against the proposer through the temporary scope
+# un_order_proposer, saved by whoever asks (the case, the selector, the AI
+# weight), not through ROOT: the chamber's row and the button reach them from
+# different roots.
+# ============================================================================
+
+# ---- Binding Ceasefire ----------------------------------------------------------
+
+# The scoped war is one the aggressor (scope:un_cf_agg_check) fights on the
+# attacking side against a represented member: the wars a ceasefire order
+# covers. A war it was dragged into as a defender is not one.
+# Scope: war; expects scope:un_cf_agg_check
+un_order_war_against_member = {
+	NOT = { is_on_defending_side = scope:un_cf_agg_check }
+	any_war_participant = {
+		NOT = { this = scope:un_cf_agg_check }
+		un_member_represented = yes
+		has_war_with = scope:un_cf_agg_check
+	}
+}
+
+# The scoped country wages, on the attacking side, a war against a
+# represented member.
+# Scope: country (the aggressor)
+un_order_wages_war_on_member = {
+	is_at_war = yes
+	save_temporary_scope_as = un_cf_agg_check
+	any_scope_war = { un_order_war_against_member = yes }
+}
+
+# A represented member the aggressor (scope:un_cf_agg_check) is at war with:
+# a victim the order names.
+# Scope: country; expects scope:un_cf_agg_check
+un_order_ceasefire_victim = {
+	NOT = { this = scope:un_cf_agg_check }
+	un_member_represented = yes
+	has_war_with = scope:un_cf_agg_check
+}
+
+# The pool: a country, not the proposer, that started a war it is fighting
+# against a represented member (the dossier's and the docket's test for a war
+# of aggression: at war and a play's initiator), whose record gives grounds for
+# a ceasefire (a case of 40), and that is not already under an order.
+# Scope: the prospective aggressor; expects scope:un_order_proposer
+un_ceasefire_target_eligible = {
+	is_at_war = yes
+	is_diplomatic_play_initiator = yes
+	NOT = { this = scope:un_order_proposer }
+	NOT = { has_variable = un_cf_order_months }
+	un_case_supports = { TOPIC = ceasefire }
+	un_order_wages_war_on_member = yes
+}
+
+# There is an aggressor to name.
+# Scope: the proposing country
+un_ceasefire_case_exists = {
+	save_temporary_scope_as = un_order_proposer
+	any_country = { un_ceasefire_target_eligible = yes }
+}
+
+# The topic's own gate: a country under a ceasefire order of its own cannot
+# ask for one against another.
+# Scope: the proposing country
+un_ceasefire_can_table = {
+	custom_tooltip = {
+		text = un_ceasefire_not_ordered_tt
+		NOT = { has_variable = un_cf_order_months }
+	}
+}
+
+# The victim the order names still stands: it exists and is alive. A victim
+# conquered under the order is no war ended by the order.
+# Scope: any; expects scope:un_cf_victim_scope
+un_order_victim_stands = {
+	exists = scope:un_cf_victim_scope
+	scope:un_cf_victim_scope = { is_country_alive = yes }
+}
+
+# ---- Supervised Self-Determination Referendum ----------------------------------
+
+# The pool: a direct subject whose liberty desire has reached the floor, of a
+# represented member that is not the proposer (the proposer may be the subject
+# itself, a dominion asking for its own vote), and not at war with it.
+# Scope: the prospective subject; expects scope:un_order_proposer
+un_referendum_subject_eligible = {
+	is_subject = yes
+	liberty_desire >= un_ref_liberty_desire_floor
+	save_temporary_scope_as = un_ref_subject_check
+	overlord = {
+		NOT = { this = scope:un_order_proposer }
+		un_member_represented = yes
+		NOT = { has_war_with = scope:un_ref_subject_check }
+	}
+}
+
+# The decolonisation declaration stands and there is a subject to name.
+# Scope: the proposing country
+un_referendum_case_exists = {
+	has_global_variable = un_regime_decolonization
+	save_temporary_scope_as = un_order_proposer
+	any_country = { un_referendum_subject_eligible = yes }
+}
+
+# The topic's own gate: a country that refused a supervised referendum may
+# not call one on another while the refusal still counts against it.
+# Scope: the proposing country
+un_referendum_can_table = {
+	custom_tooltip = {
+		text = un_referendum_not_refusing_tt
+		NOT = { has_modifier = un_referendum_refused_modifier }
+	}
+}
+
+# The subject the resolution names (scope:un_ref_subject) is still the direct
+# subject of the overlord (ROOT of un_referendum.1, or the scope it is called
+# in), so there is still a vote to hold.
+# Scope: the overlord; expects scope:un_ref_subject
+un_referendum_still_holds_subject = {
+	exists = scope:un_ref_subject
+	save_temporary_scope_as = un_ref_overlord_check
+	scope:un_ref_subject = {
+		is_country_alive = yes
+		is_direct_subject_of = scope:un_ref_overlord_check
+	}
+}

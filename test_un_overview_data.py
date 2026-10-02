@@ -125,7 +125,7 @@ class DisplayValueTest(unittest.TestCase):
 
     def test_every_counted_agency_has_a_display_value(self):
         agencies = re.findall(r"un_agency_(\w+)", _block(_read(UN_VALUES), "un_agency_count"))
-        self.assertEqual(len(agencies), 11)
+        self.assertEqual(sorted(agencies), sorted(AGENCY_KEYS))
         for a in agencies:
             self.assertRegex(self.display, rf"(?m)^un_disp_agency_{a} = \{{")
 
@@ -278,8 +278,13 @@ TIER_ICONS = ["tier_moribund", "tier_contested", "tier_established", "tier_stron
 TOPIC_ICONS = ["topic_condemn", "topic_sanctions", "topic_expulsion", "topic_mandate", "topic_peacekeepers",
                "topic_aid", "topic_reform", "topic_human_rights", "topic_icc", "topic_npt", "topic_climate",
                "topic_pandemic", "topic_refugee", "topic_heritage", "topic_decolonization", "topic_space",
-               "topic_law_of_sea", "topic_physical_protection"]
-AGENCY_KEYS = ["who", "unesco", "icj", "unhrc", "iaea", "unep", "unhcr", "unoosa", "itlos", "icc", "cppnm"]
+               "topic_law_of_sea", "topic_physical_protection",
+               # Phase 7 (un_redesign_design.md §0.12), codes 18-28.
+               "topic_cultural_diversity", "topic_nuclear_ban", "topic_court_referral", "topic_arms_embargo",
+               "topic_credentials", "topic_standing_force", "topic_observer_request", "topic_food_reserve",
+               "topic_ceasefire", "topic_development_fund", "topic_referendum"]
+AGENCY_KEYS = ["who", "unesco", "icj", "unhrc", "iaea", "unep", "unhcr", "unoosa", "itlos", "icc", "cppnm",
+               "ccd", "tpnw"]
 # Icons the UN GUI uses as they are: vanilla's, used as vanilla uses them, and
 # the headquarters building's own. Everything else is the UN's own art.
 VANILLA_KEPT = {"generic_icons/transparent.dds", "generic_icons/trend_up.dds", "generic_icons/trend_down.dds",

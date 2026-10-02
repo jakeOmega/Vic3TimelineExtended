@@ -181,6 +181,15 @@ un_disp_agency_cppnm = {
 	value = 0
 	if = { limit = { has_global_variable = un_agency_cppnm } value = 1 }
 }
+# The two phase 7 conventions (§0.12).
+un_disp_agency_ccd = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_ccd } value = 1 }
+}
+un_disp_agency_tpnw = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_tpnw } value = 1 }
+}
 
 # ---- Pillars (the bars in "Why authority is moving") ----------------------------
 # Each bar is vanilla's double_direction_progressbar: the left half takes a

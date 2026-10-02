@@ -35,6 +35,9 @@
 #   law_of_sea            - Convention on the Law of the Sea (event 21)
 #   physical_protection   - Convention on the Physical Protection of Nuclear
 #                           Material (event 23)
+#   cultural_diversity    - Convention on Cultural Diversity (event 37)
+#   nuclear_ban           - Treaty on the Prohibition of Nuclear Weapons
+#                           (event 38)
 #   icc                   - International Criminal Court (event 22)
 #   peacekeeping_request  - Peacekeeping deployment (request button)
 #   aid_request           - Humanitarian aid (request button)
@@ -1662,6 +1665,28 @@ un_vote.2 = {
 				set_global_variable = un_agency_cppnm
 			}
 
+			# ---- Convention on Cultural Diversity (redesign phase 7, §0.12
+			#      item 5): parties' minorities assimilate and lose their
+			#      homelands more slowly, trailing parties feel the hegemon's
+			#      benchmark less, a hegemon party loses pull ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
+				custom_tooltip = un_vote_cultural_diversity_passed_tt
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				set_global_variable = un_agency_ccd
+			}
+
+			# ---- Treaty on the Prohibition of Nuclear Weapons (redesign
+			#      phase 7, §0.12 item 8): armed parties step their arsenals
+			#      down to nothing over 25 years (nd_taboo_refresh_ban_ceiling),
+			#      and the taboo rises (nd_taboo_part_un_value) ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban } }
+				custom_tooltip = un_vote_nuclear_ban_passed_tt
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				set_global_variable = un_agency_tpnw
+			}
+
 			# ---- Military Mandate: authorize one narrow objective ----
 			# Like reform, this binding topic has NO graduated form. There is
 			# no weaker version of a licence to use force, so a veto blocks it
@@ -2021,7 +2046,7 @@ un_vote.3 = {
 			text = un_vote.3.c_convention
 		}
 		name = {
-			trigger = { scope:un_resolution ?= { un_resolution_target_is_beneficiary = yes } }
+			trigger = { scope:un_resolution ?= { un_resolution_asks_pledges = yes } }
 			text = un_vote.3.c_pledge
 		}
 		name = {
@@ -2040,7 +2065,7 @@ un_vote.3 = {
 			custom_tooltip = un_vote.3.c_convention_tt
 		}
 		else_if = {
-			limit = { scope:un_resolution ?= { un_resolution_target_is_beneficiary = yes } }
+			limit = { scope:un_resolution ?= { un_resolution_asks_pledges = yes } }
 			custom_tooltip = un_vote.3.c_pledge_tt
 		}
 		else = {
@@ -2121,6 +2146,22 @@ un_vote.3 = {
 					}
 				}
 				add = 25
+			}
+			# The nuclear ban: an armed power will not ratify its own disarmament
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_nuclear_ban }
+					nd_is_armed = yes
+				}
+				add = 80
+			}
+			# Cultural diversity: the hegemon keeps its pull
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_cultural_diversity }
+					un_regime_cultural_hegemon = yes
+				}
+				add = 50
 			}
 		}
 	}

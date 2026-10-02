@@ -1,0 +1,107 @@
+﻿# ============================================================================
+# THE STANDING UN FORCE — TRIGGERS (redesign phase 7, §0.12 item 2)
+# ============================================================================
+# The writers are in common/scripted_effects/un_force_effects.txt, the figures
+# in common/script_values/un_force_values.txt. What the Force does to missions
+# is read by the mission system itself (un_mission_force_serves,
+# un_mission_triggers.txt).
+# ============================================================================
+
+# The Standing UN Force has been founded and the UN still stands. An
+# institution, not a convention: nobody ratifies it, so its flag is
+# un_inst_standing_force (§0.12 "Identifiers"), set by
+# un_standing_force_on_carried and cleared by un_force_on_dissolve.
+# Scope: any
+un_force_in_force = {
+	has_global_variable = un_inst_standing_force
+}
+
+# ---- The topic (the hooks un_propose_triggers.txt calls) ------------------------
+
+# There is something to table: the Force has not been founded yet.
+# Scope: the proposing country
+un_standing_force_case_exists = {
+	NOT = { un_force_in_force = yes }
+}
+
+# The topic's own gate: a major power moves it (a force is put together by the
+# powers that can lend it soldiers).
+# Scope: the proposing country
+un_standing_force_can_table = {
+	custom_tooltip = {
+		text = un_standing_force_need_major_power_tt
+		country_rank >= rank_value:major_power
+	}
+}
+
+# ---- War goals against a mission's host -------------------------------------------
+
+# A war goal just added to this play is barred: the Force stands, the UN is
+# Supranational, the actor is a member, and it holds a war goal against the
+# play's target, which hosts an active peacekeeping or stabilisation mission
+# (un_mission_protected). A non-member is not barred; it pays the surcharge
+# (un_teeth_war_goal_surcharge). The goal types are listed in
+# un_force_holds_goal_against.
+# Scope: diplomatic play; expects scope:actor (from on_wargoal_added)
+un_force_war_goal_barred = {
+	un_force_in_force = yes
+	un_tier_is_supranational = yes
+	exists = scope:actor
+	scope:actor = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+	}
+	target ?= {
+		un_mission_protected = yes
+		scope:actor = { un_force_holds_goal_against = { TARGET = prev } }
+	}
+}
+
+# The scoped country holds, in a diplomatic play, a war goal of one of the
+# types the Force bars against $TARGET$. The list is explicit because the
+# engine names one war goal type at a time (un_mandate_has_prohibited_goal has
+# the same shape); it is every type a play opens with in vanilla, the
+# subjugation types of 1.14 and the mod's reunification, less the goals only a
+# subject can hold (the actor is never one: un_teeth_war_goal_surcharge leaves
+# subjects alone) and the UN mandate's own goal (a bound mandate's holder is
+# left alone too). Keep it in step with un_force_strike_war_goals.
+# Parameters: $TARGET$ = the protected host
+# Scope: country (the actor)
+un_force_holds_goal_against = {
+	OR = {
+		play_participant_has_war_goal_of_type_against = { type = annex_country target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = return_state target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = take_treaty_port target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = liberate_country target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = liberate_subject target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = secession target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = unification_leadership target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = restore_union target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_protectorate target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_tributary target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_dominion target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_personal_union target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_crown_land target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = make_chartered_company target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = release_as_subject target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = transfer_subject target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = reduce_autonomy target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = contain_threat target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = enforce_treaty_article target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = open_market target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = ban_slavery target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = colonization_rights target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = force_nationalization target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = foreign_investment_rights target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = join_power_bloc target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = leave_power_bloc target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = demand_strait_access target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = demand_toll_exemption target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = demand_no_tolls target = $TARGET$ }
+		play_participant_has_war_goal_of_type_against = { type = demand_no_strait_closure target = $TARGET$ }
+	}
+}

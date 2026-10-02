@@ -1,0 +1,710 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — JUSTICE (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 items 1, 3 and 4. Three decisions
+# Charter Reform I opens to the General Assembly:
+#
+#   court_referral  Refer a Dispute to the World Court. Binding; a veto leaves
+#                   an advisory opinion. Simple majority. Names the holder of
+#                   a state the proposer claims, and accuses it without
+#                   grounds from the dossier. The court rules about a month
+#                   after the vote (events/un_court_events.txt).
+#   arms_embargo    Arms Embargo. Binding; a veto leaves a voluntary embargo.
+#                   Simple majority. Punitive, case 40.
+#   credentials     Suspension of Credentials. Recommendatory, decided by two
+#                   thirds of the members with a vote. Punitive, case 50.
+#
+# The shared machinery reaches them only through the hooks
+# common/scripted_effects/un_charter_effects.txt names. The figures are in
+# common/script_values/un_justice_values.txt, the tests in
+# common/scripted_triggers/un_justice_triggers.txt.
+#
+# LEDGER REASON CODES (un_authority_effects.txt's table; the log prints
+# je_un_led_reason_N_on when the entry names its subject, je_un_led_reason_N
+# otherwise):
+#   27  the holder obeyed the World Court and ceded the state
+#       (un_ledger_actor_entry_on, SUBJECT = the state)
+#   28  the holder defied the World Court (un_ledger_actor_entry_on,
+#       SUBJECT = the claimant)
+#   29  allocated to justice, not booked
+# The resolutions themselves book REASON 1 (carried) or 2 (the vetoed form) as
+# every resolution does.
+#
+# STANDING REASON CODES (un_standing_reason_line; je_un_standing_reason_N):
+#   36  placed under a UN arms embargo, full or voluntary
+#   37  our credentials suspended by the Assembly
+#   38  an advisory opinion of the World Court went against us
+# The court's ruling reuses 5 (a binding decision complied with) and 26 (a
+# binding decision defied).
+#
+# STATE. Kept in country variables, so a revolution's winner keeps it (§0.9;
+# the winner inherits the loser's variables but none of its modifiers):
+#   un_arms_embargo_months   months an arms embargo on us has left. Counted
+#                            down, and the embargo's modifier re-applied when
+#                            missing, every month by un_justice_monthly_update
+#   un_arms_embargo_form     1 the full embargo, 2 the voluntary one
+#   un_credentials_months    months our suspended credentials have left
+#                            (un_credentials_suspended); ends early once our
+#                            case falls below un_credentials_restore_case
+#   un_court_defied_claimant, un_court_defied_region (timed, ten years; on the
+#                            holder): we defied the court in that claimant's
+#                            case over that state region. One case at a time:
+#                            a second defiance replaces the first
+#   un_court_barred_region   (timed, twenty years; on the claimant): the court
+#                            found against our claim on that state region. One
+#                            region at a time
+#   un_court_bar_charged     (timed) the surcharge for that bar was charged
+# On a court_referral resolution: un_res_court_odds and un_res_court_state when
+# it is tabled; un_res_court_odds_ruled, un_res_court_verdict (1 for the
+# claimant, 2 for the holder, 3 moot) and un_res_court_response (1 obeyed,
+# 2 defied) when the court rules.
+# Globals, for loc that cannot read a container (the vote events, the court's
+# events): un_court_tabled_odds and un_court_tabled_state, written at tabling,
+# and un_court_ruled_odds, written at the ruling. One referral is before the
+# Assembly or the court at a time (the vote lock, then the topic's cooldown).
+# ============================================================================
+
+# ============================================================================
+# REFER A DISPUTE TO THE WORLD COURT
+# ============================================================================
+
+# Pick the case: a state ROOT claims, held by a represented member ROOT may
+# take to court (un_court_referral_state_open). A human proposer gets the case
+# with the best odds for it, so the chamber previews the case the Propose
+# control will table; the AI picks at random among the cases with odds of 60
+# or more (its button's weight is nothing without one), or among them all.
+# MIRRORS un_court_referral_case_exists (un_justice_triggers.txt).
+# Leaves scope:un_court_referral_state and scope:un_court_referral_pick (its
+# holder), both temporary, so the chamber's preview may call it.
+# Scope: the prospective proposer (ROOT)
+un_court_referral_select_target = {
+	if = {
+		limit = { is_ai = yes }
+		if = {
+			limit = {
+				any_state = {
+					un_court_referral_state_open = yes
+					un_court_claimant_odds >= un_court_ai_min_odds
+				}
+			}
+			random_state = {
+				limit = {
+					un_court_referral_state_open = yes
+					un_court_claimant_odds >= un_court_ai_min_odds
+				}
+				save_temporary_scope_as = un_court_referral_state
+			}
+		}
+		else = {
+			random_state = {
+				limit = { un_court_referral_state_open = yes }
+				save_temporary_scope_as = un_court_referral_state
+			}
+		}
+	}
+	else = {
+		ordered_state = {
+			limit = { un_court_referral_state_open = yes }
+			order_by = un_court_claimant_odds
+			max = 1
+			save_temporary_scope_as = un_court_referral_state
+		}
+	}
+	scope:un_court_referral_state ?= {
+		owner = { save_temporary_scope_as = un_court_referral_pick }
+	}
+}
+
+# The case on the resolution: the state, and the odds as they stand at
+# tabling (the chamber's card and the vote events show them). The ruling reads
+# the odds again when the court sits.
+# Scope: the proposer; expects scope:un_resolution (un_resolution_open) and
+# scope:un_court_referral_state (un_court_referral_select_target)
+un_court_referral_on_tabled = {
+	if = {
+		limit = {
+			exists = scope:un_resolution
+			exists = scope:un_court_referral_state
+		}
+		scope:un_court_referral_state = {
+			set_global_variable = { name = un_court_tabled_odds value = un_court_claimant_odds }
+		}
+		set_global_variable = { name = un_court_tabled_state value = scope:un_court_referral_state }
+		scope:un_resolution = {
+			set_variable = { name = un_res_court_odds value = global_var:un_court_tabled_odds }
+			set_variable = { name = un_res_court_state value = scope:un_court_referral_state }
+		}
+	}
+}
+
+# The referral carried. The court sits about a month later, binding or, if a
+# permanent member vetoed, to give an advisory opinion (un_court.1).
+# Scope: un_vote.2's ROOT (the proposer, the claimant); expects
+# scope:un_resolution and scope:un_vote_target (the holder)
+un_court_referral_on_carried = {
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+		custom_tooltip = un_vote_court_referral_passed_vetoed_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 0.5 REASON = 2 }
+	}
+	else = {
+		custom_tooltip = un_vote_court_referral_passed_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+	}
+	if = {
+		limit = {
+			exists = scope:un_vote_target
+			scope:un_resolution ?= { exists = var:un_res_court_state }
+		}
+		hidden_effect = {
+			save_scope_as = un_crt_claimant
+			scope:un_vote_target = { save_scope_as = un_crt_holder }
+			scope:un_resolution = {
+				var:un_res_court_state ?= {
+					save_scope_as = un_crt_state
+					# The region outlives the state: a state ceded to a country
+					# that holds part of the region already merges into its.
+					state_region = { save_scope_as = un_crt_region }
+				}
+			}
+			# un_court_ruling_delay_days (trigger_event takes no script value).
+			trigger_event = { id = un_court.1 days = 30 }
+		}
+	}
+}
+
+# The court rules. The case is moot if the holder no longer holds the state.
+# Otherwise it rolls against the odds as they stand now: a binding ruling for
+# the claimant goes to the holder to obey or defy (un_court.2); one for the
+# holder withdraws the claimant's claim on the region and, for twenty years,
+# makes a war goal there cost it extra infamy. A vetoed referral is an
+# advisory opinion: the court still rolls, nothing changes hands, and a holder
+# it goes against loses a little standing. Both parties hear (un_court.3).
+# Scope: the claimant (un_court.1's ROOT); expects scope:un_crt_claimant,
+# scope:un_crt_holder, scope:un_crt_state, scope:un_crt_region and
+# scope:un_resolution
+un_court_rule = {
+	if = {
+		limit = {
+			NOT = { scope:un_crt_state = { owner ?= scope:un_crt_holder } }
+		}
+		scope:un_resolution = {
+			set_variable = { name = un_res_court_verdict value = 3 }
+		}
+		un_court_notify_parties = yes
+	}
+	else = {
+		scope:un_crt_state = {
+			set_global_variable = { name = un_court_ruled_odds value = un_court_claimant_odds }
+		}
+		scope:un_resolution = {
+			set_variable = { name = un_res_court_odds_ruled value = global_var:un_court_ruled_odds }
+			set_variable = { name = un_res_court_verdict value = 2 }
+			random = {
+				chance = un_court_ruling_chance
+				set_variable = { name = un_res_court_verdict value = 1 }
+			}
+		}
+		if = {
+			limit = { scope:un_resolution = { has_tag = un_res_vetoed } }
+			if = {
+				limit = { scope:un_resolution = { un_court_verdict_is = { VERDICT = 1 } } }
+				scope:un_crt_holder = {
+					un_standing_loss = { AMOUNT = un_court_advisory_standing_loss REASON = 38 }
+				}
+			}
+			un_court_notify_parties = yes
+		}
+		else_if = {
+			limit = { scope:un_resolution = { un_court_verdict_is = { VERDICT = 1 } } }
+			scope:un_crt_holder = { trigger_event = { id = un_court.2 } }
+		}
+		else = {
+			scope:un_crt_region = { remove_claim = scope:un_crt_claimant }
+			scope:un_crt_claimant = {
+				set_variable = {
+					name = un_court_barred_region
+					value = scope:un_crt_region
+					days = un_court_bar_days
+				}
+			}
+			un_court_notify_parties = yes
+		}
+	}
+}
+
+# Tell both parties what the court did (un_court.3 reads the resolution's
+# verdict to say it).
+# Scope: any; expects scope:un_crt_claimant and scope:un_crt_holder
+un_court_notify_parties = {
+	scope:un_crt_claimant ?= { trigger_event = { id = un_court.3 } }
+	scope:un_crt_holder ?= { trigger_event = { id = un_court.3 } }
+}
+
+# The holder obeys the court: it cedes the state (moot if it no longer holds
+# it), gains standing as for any binding decision complied with, and the UN's
+# credibility grows with its weight. The court's compliance founds the
+# International Court of Justice if nothing has yet (as un_events.8 does).
+# Scope: the holder (un_court.2's ROOT); expects scope:un_crt_claimant,
+# scope:un_crt_state and scope:un_resolution
+un_court_comply = {
+	if = {
+		limit = { scope:un_crt_state ?= { owner = ROOT } }
+		custom_tooltip = un_ledger_tt_credibility_up_1_5
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 1.5 REASON = 27 SUBJECT = scope:un_crt_state }
+		scope:un_crt_state = { set_state_owner = scope:un_crt_claimant }
+	}
+	else = {
+		custom_tooltip = un_court_cede_moot_tt
+	}
+	custom_tooltip = {
+		text = un_standing_complied_tt
+		un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
+	}
+	if = {
+		limit = { NOT = { has_global_variable = un_agency_icj } }
+		set_global_variable = un_agency_icj
+	}
+	change_relations = { country = scope:un_crt_claimant value = un_court_relations_complied }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	hidden_effect = {
+		scope:un_resolution ?= { set_variable = { name = un_res_court_response value = 1 } }
+		scope:un_crt_claimant ?= { trigger_event = { id = un_court.3 } }
+	}
+}
+
+# The holder defies the court: a defiance record, International Court
+# Defied, a standing loss as for any binding decision defied, and a
+# credibility debit weighted by its power. For ten years the claimant may
+# move for a military mandate over the region against it without the case of
+# 60 (un_court_defiance_opens_mandate).
+# Scope: the holder (un_court.2's ROOT); expects scope:un_crt_claimant,
+# scope:un_crt_state, scope:un_crt_region and scope:un_resolution
+un_court_defy = {
+	add_modifier = {
+		name = un_court_defiance_modifier
+		days = normal_modifier_time
+		is_decaying = yes
+	}
+	custom_tooltip = un_ledger_tt_credibility_down_2_5
+	un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -2.5 REASON = 28 SUBJECT = scope:un_crt_claimant }
+	custom_tooltip = un_dossier_tt_court
+	un_dossier_record = { RECORD = defiance POINTS = un_dos_points_court }
+	custom_tooltip = {
+		text = un_standing_defied_tt
+		un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }
+	}
+	custom_tooltip = {
+		text = un_court_defied_mandate_tt
+		set_variable = {
+			name = un_court_defied_claimant
+			value = scope:un_crt_claimant
+			days = un_court_defiance_days
+		}
+		set_variable = {
+			name = un_court_defied_region
+			value = scope:un_crt_region
+			days = un_court_defiance_days
+		}
+	}
+	change_relations = { country = scope:un_crt_claimant value = un_court_relations_defied }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	hidden_effect = {
+		scope:un_resolution ?= { set_variable = { name = un_res_court_response value = 2 } }
+		scope:un_crt_claimant ?= { trigger_event = { id = un_court.3 } }
+	}
+}
+
+# A war goal against the region the court found the claimant has no claim to
+# costs it extra infamy, x E, for twenty years. The engine does not say which
+# goal was added, so the test is a goal for a state against a holder of part
+# of the region (un_court_bar_goal_in_region), and the charge falls at most
+# once in un_court_bar_charge_days: once per play, in practice.
+# Scope: the diplomatic play (on_wargoal_added's root); expects scope:actor
+un_court_bar_war_goal = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			scope:actor ?= {
+				has_variable = un_court_barred_region
+				NOT = { has_variable = un_court_bar_charged }
+				un_court_bar_goal_in_region = yes
+			}
+		}
+		scope:actor = {
+			change_infamy = un_court_bar_infamy
+			set_variable = { name = un_court_bar_charged days = un_court_bar_charge_days }
+			if = {
+				limit = { is_ai = no }
+				post_notification = un_court_bar_notice
+			}
+		}
+	}
+}
+
+# The chamber's preview of a referral: whom and which state it would name,
+# and the odds today, to the nearest ten.
+# Scope: country (the viewer, ROOT)
+un_court_referral_chamber_preview = {
+	un_court_referral_select_target = yes
+	if = {
+		limit = {
+			exists = scope:un_court_referral_pick
+			exists = scope:un_court_referral_state
+		}
+		custom_tooltip_no_bullet = je_un_chamber_propose_target_court_referral
+		if = {
+			limit = { scope:un_court_referral_state = { un_court_odds_decile >= 90 } }
+			custom_tooltip_no_bullet = je_un_chamber_court_odds_90
+		}
+		else_if = {
+			limit = { scope:un_court_referral_state = { un_court_odds_decile >= 80 } }
+			custom_tooltip_no_bullet = je_un_chamber_court_odds_80
+		}
+		else_if = {
+			limit = { scope:un_court_referral_state = { un_court_odds_decile >= 70 } }
+			custom_tooltip_no_bullet = je_un_chamber_court_odds_70
+		}
+		else_if = {
+			limit = { scope:un_court_referral_state = { un_court_odds_decile >= 60 } }
+			custom_tooltip_no_bullet = je_un_chamber_court_odds_60
+		}
+		else_if = {
+			limit = { scope:un_court_referral_state = { un_court_odds_decile >= 50 } }
+			custom_tooltip_no_bullet = je_un_chamber_court_odds_50
+		}
+		else_if = {
+			limit = { scope:un_court_referral_state = { un_court_odds_decile >= 40 } }
+			custom_tooltip_no_bullet = je_un_chamber_court_odds_40
+		}
+		else_if = {
+			limit = { scope:un_court_referral_state = { un_court_odds_decile >= 30 } }
+			custom_tooltip_no_bullet = je_un_chamber_court_odds_30
+		}
+		else_if = {
+			limit = { scope:un_court_referral_state = { un_court_odds_decile >= 20 } }
+			custom_tooltip_no_bullet = je_un_chamber_court_odds_20
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_court_odds_10
+		}
+	}
+}
+
+# ============================================================================
+# ARMS EMBARGO
+# ============================================================================
+
+# Pick the target: deterministic for a human (the strongest case first), so
+# the chamber previews the pick; random for the AI. MIRRORS
+# un_arms_embargo_case_exists. Leaves scope:un_arms_embargo_pick (temporary).
+# Scope: the prospective proposer (ROOT)
+un_arms_embargo_select_target = {
+	if = {
+		limit = { is_ai = yes }
+		random_country = {
+			limit = { un_arms_embargo_candidate = yes }
+			save_temporary_scope_as = un_arms_embargo_pick
+		}
+	}
+	else = {
+		ordered_country = {
+			limit = { un_arms_embargo_candidate = yes }
+			order_by = un_case_strength
+			max = 1
+			save_temporary_scope_as = un_arms_embargo_pick
+		}
+	}
+}
+
+# The embargo carried. In full, for ten years: un_arms_embargo_target_modifier
+# x E. A target that voted for its own embargo gets the voluntary one instead,
+# as a vetoed resolution leaves it: half the penalty, for five years. Either
+# costs standing (36). A target that accepted a vetoed embargo is spared it,
+# as with sanctions.
+# Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution and
+# scope:un_vote_target
+un_arms_embargo_on_carried = {
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+		custom_tooltip = un_vote_arms_embargo_passed_vetoed_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 0.5 REASON = 2 }
+		if = {
+			limit = { exists = scope:un_vote_target }
+			scope:un_vote_target = {
+				if = {
+					limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
+					un_arms_embargo_impose_voluntary = yes
+					custom_tooltip = {
+						text = un_standing_arms_embargo_partial_tt
+						un_standing_loss = { AMOUNT = un_standing_arms_embargo_partial_loss REASON = 36 }
+					}
+				}
+			}
+			change_relations = { country = scope:un_vote_target value = un_arms_embargo_relations_vetoed }
+		}
+	}
+	else = {
+		custom_tooltip = un_vote_arms_embargo_passed_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+		if = {
+			limit = { exists = scope:un_vote_target }
+			scope:un_vote_target = {
+				if = {
+					limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
+					un_arms_embargo_impose_full = yes
+					custom_tooltip = {
+						text = un_standing_arms_embargo_tt
+						un_standing_loss = { AMOUNT = un_standing_arms_embargo_loss REASON = 36 }
+					}
+				}
+				else = {
+					un_arms_embargo_impose_voluntary = yes
+					custom_tooltip = {
+						text = un_standing_arms_embargo_accepted_tt
+						un_standing_loss = { AMOUNT = un_standing_arms_embargo_partial_loss REASON = 36 }
+					}
+				}
+			}
+			change_relations = { country = scope:un_vote_target value = un_arms_embargo_relations }
+		}
+	}
+}
+
+# Impose the full embargo for ten years, replacing any other.
+# un_enforcement reads only globals, so the stored multiplier is sound
+# wherever the engine re-reads it.
+# Scope: the target
+un_arms_embargo_impose_full = {
+	hidden_effect = { un_arms_embargo_clear = yes }
+	add_modifier = {
+		name = un_arms_embargo_target_modifier
+		multiplier = un_enforcement
+	}
+	hidden_effect = {
+		set_variable = { name = un_arms_embargo_months value = un_arms_embargo_months_full }
+		set_variable = { name = un_arms_embargo_form value = 1 }
+	}
+}
+
+# Impose the voluntary embargo (half the penalty) for five years, replacing
+# any other.
+# Scope: the target
+un_arms_embargo_impose_voluntary = {
+	hidden_effect = { un_arms_embargo_clear = yes }
+	add_modifier = {
+		name = un_arms_embargo_voluntary_modifier
+		multiplier = un_enforcement
+	}
+	hidden_effect = {
+		set_variable = { name = un_arms_embargo_months value = un_arms_embargo_months_voluntary }
+		set_variable = { name = un_arms_embargo_form value = 2 }
+	}
+}
+
+# Re-apply the embargo the variables record when its modifier is missing: a
+# revolution's winner inherits the variables but not the modifier (§0.9).
+# Scope: a country under an arms embargo
+un_arms_embargo_restore = {
+	if = {
+		limit = {
+			has_variable = un_arms_embargo_form
+			var:un_arms_embargo_form = 2
+		}
+		if = {
+			limit = { NOT = { has_modifier = un_arms_embargo_voluntary_modifier } }
+			add_modifier = {
+				name = un_arms_embargo_voluntary_modifier
+				multiplier = un_enforcement
+			}
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_modifier = un_arms_embargo_target_modifier } }
+		add_modifier = {
+			name = un_arms_embargo_target_modifier
+			multiplier = un_enforcement
+		}
+	}
+}
+
+# End the embargo, whichever form.
+# Scope: country
+un_arms_embargo_clear = {
+	remove_modifier_if_exists_effect = { MODIFIER = un_arms_embargo_target_modifier }
+	remove_modifier_if_exists_effect = { MODIFIER = un_arms_embargo_voluntary_modifier }
+	if = {
+		limit = { has_variable = un_arms_embargo_months }
+		remove_variable = un_arms_embargo_months
+	}
+	if = {
+		limit = { has_variable = un_arms_embargo_form }
+		remove_variable = un_arms_embargo_form
+	}
+}
+
+# The chamber's preview of an embargo: whom it would name.
+# Scope: country (the viewer, ROOT)
+un_arms_embargo_chamber_preview = {
+	un_arms_embargo_select_target = yes
+	if = {
+		limit = { exists = scope:un_arms_embargo_pick }
+		custom_tooltip_no_bullet = je_un_chamber_propose_target_arms_embargo
+	}
+}
+
+# ============================================================================
+# SUSPENSION OF CREDENTIALS
+# ============================================================================
+
+# Pick the member: deterministic for a human (the strongest case first),
+# random for the AI. MIRRORS un_credentials_case_exists. Leaves
+# scope:un_credentials_pick (temporary).
+# Scope: the prospective proposer (ROOT)
+un_credentials_select_target = {
+	if = {
+		limit = { is_ai = yes }
+		random_country = {
+			limit = { un_credentials_candidate = yes }
+			save_temporary_scope_as = un_credentials_pick
+		}
+	}
+	else = {
+		ordered_country = {
+			limit = { un_credentials_candidate = yes }
+			order_by = un_case_strength
+			max = 1
+			save_temporary_scope_as = un_credentials_pick
+		}
+	}
+}
+
+# The suspension carried. The member's representation is suspended
+# (un_credentials_suspended) for five years or until its case falls below 30:
+# it casts no ballot, tables nothing, draws no benefits and loses any
+# permanent seat (un_representation_monthly_update strips it), but it keeps
+# paying its dues. It loses standing (37); a member that voted for its own
+# suspension loses half as much.
+# Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution and
+# scope:un_vote_target
+un_credentials_on_carried = {
+	custom_tooltip = un_vote_credentials_passed_tt
+	un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+	if = {
+		limit = { exists = scope:un_vote_target }
+		scope:un_vote_target = {
+			hidden_effect = {
+				set_variable = { name = un_credentials_months value = un_credentials_months_base }
+			}
+			if = {
+				limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
+				custom_tooltip = {
+					text = un_standing_credentials_tt
+					un_standing_loss = { AMOUNT = un_standing_credentials_loss REASON = 37 }
+				}
+			}
+			else = {
+				custom_tooltip = {
+					text = un_standing_credentials_accepted_tt
+					un_standing_loss = { AMOUNT = un_standing_credentials_accepted_loss REASON = 37 }
+				}
+			}
+		}
+		change_relations = { country = scope:un_vote_target value = un_credentials_relations }
+	}
+}
+
+# The chamber's preview of a suspension: whom it would name.
+# Scope: country (the viewer, ROOT)
+un_credentials_chamber_preview = {
+	un_credentials_select_target = yes
+	if = {
+		limit = { exists = scope:un_credentials_pick }
+		custom_tooltip_no_bullet = je_un_chamber_propose_target_credentials
+	}
+}
+
+# ============================================================================
+# THE OWNER'S HOOKS (un_charter_effects.txt)
+# ============================================================================
+
+# Once a month, from un_charter_monthly_update (no-country scope, the UN
+# founded). The embargoes count down and are re-applied where a revolution
+# took their modifier; suspended credentials count down and end early once
+# the member's case falls below 30. The member's restoration is announced by
+# un_representation_monthly_update, which notices the change. The court's
+# records on the parties are timed variables and lapse by themselves.
+# Scope: none
+un_justice_monthly_update = {
+	every_country = {
+		limit = { has_variable = un_arms_embargo_months }
+		change_variable = { name = un_arms_embargo_months add = -1 }
+		if = {
+			limit = { var:un_arms_embargo_months <= 0 }
+			un_arms_embargo_clear = yes
+			if = {
+				limit = { is_ai = no }
+				post_notification = un_arms_embargo_lifted_notice
+			}
+		}
+		else = {
+			un_arms_embargo_restore = yes
+		}
+	}
+	every_country = {
+		limit = { has_variable = un_credentials_months }
+		change_variable = { name = un_credentials_months add = -1 }
+		if = {
+			limit = {
+				OR = {
+					var:un_credentials_months <= 0
+					un_case_strength < un_credentials_restore_case
+				}
+			}
+			remove_variable = un_credentials_months
+		}
+	}
+}
+
+# The UN dissolves (un_dissolve, via un_charter_on_dissolve), after every
+# country has left: the embargoes lift, suspensions end, and the court's
+# records lapse with the court.
+# Scope: none
+un_justice_on_dissolve = {
+	every_country = {
+		limit = { has_variable = un_arms_embargo_months }
+		un_arms_embargo_clear = yes
+	}
+	every_country = {
+		limit = { has_variable = un_credentials_months }
+		remove_variable = un_credentials_months
+	}
+	every_country = {
+		limit = {
+			OR = {
+				has_variable = un_court_defied_claimant
+				has_variable = un_court_defied_region
+				has_variable = un_court_barred_region
+				has_variable = un_court_bar_charged
+			}
+		}
+		if = {
+			limit = { has_variable = un_court_defied_claimant }
+			remove_variable = un_court_defied_claimant
+		}
+		if = {
+			limit = { has_variable = un_court_defied_region }
+			remove_variable = un_court_defied_region
+		}
+		if = {
+			limit = { has_variable = un_court_barred_region }
+			remove_variable = un_court_barred_region
+		}
+		if = {
+			limit = { has_variable = un_court_bar_charged }
+			remove_variable = un_court_bar_charged
+		}
+	}
+}

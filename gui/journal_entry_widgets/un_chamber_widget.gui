@@ -18,12 +18,12 @@
 ### The widget is no longer display-only. Two of its scripted GUIs act:
 ###   un_chamber_vote_sgui     casts our ballot on the resolution in session
 ###                            (op 0 favour / 1 against / 2 veto)
-###   un_chamber_propose_sgui  tables one of eighteen topics
+###   un_chamber_propose_sgui  tables one of twenty-nine topics
 ###                            (op 0 condemn / 1 sanctions / 2 expulsion /
 ###                             3 mandate / 4 peacekeepers / 5 aid /
-###                             6 charter reform / 7-17 the eleven conventions)
+###                             6 charter reform / 7-19 the thirteen conventions)
 ### Both run the same script the existing paths run — un_vote.1's option bodies,
-### the journal entry's own proposal buttons, and (ops 7-17) the docket's
+### the journal entry's own proposal buttons, and (ops 7-19) the docket's
 ### proposer events — so the AI, which still votes by event and proposes by
 ### button or on the docket's offer, behaves exactly as before. Every other
 ### scripted GUI here is still called only through ExecuteTooltip, which
@@ -2668,7 +2668,7 @@ types un_chamber_widget_types
 		# ---- Table a Resolution ----
 		# A subsection of the General Assembly, shown when nothing is in session
 		# (every proposal needs the one-vote lock free). Collapsed by default:
-		# eighteen ExecuteTooltip rows re-render every frame the panel is open.
+		# twenty-nine ExecuteTooltip rows re-render every frame the panel is open.
 		#
 		# The rows are the topics a member can put before the Assembly on its own
 		# initiative, in the order the chamber thinks about them — censure and
@@ -2948,7 +2948,7 @@ types un_chamber_widget_types
 				}
 			}
 
-			# The eleven conventions and declarations. The docket also raises each of
+			# The thirteen conventions and declarations. The docket also raises each of
 			# them for everyone (un_docket_effects.txt); these rows let a member
 			# table one on its own motion. The climate accord's row is hidden under
 			# the disabled global warming rule and the physical-protection

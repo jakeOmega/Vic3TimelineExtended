@@ -1,0 +1,237 @@
+﻿namespace = un_ceasefire
+
+# ============================================================================
+# THE BINDING CEASEFIRE — NOTICES (redesign phase 7, §0.12 item 6)
+# ============================================================================
+# Notices only: every consequence is applied where it happens, in
+# common/scripted_effects/un_order_effects.txt (un_vote.2's carried branch,
+# and the order's month), and the options here only say what it was.
+#   .1  the aggressor, when the resolution carries (an order, or the vetoed
+#       call for a ceasefire)
+#   .2  each member the aggressor is fighting, when an order is imposed
+#   .3  the war ended inside the order: the aggressor, the victim and the
+#       proposer
+#   .4  the order ran out with the war still on: the same three
+#   .5  the victim was conquered under the order: the aggressor and the
+#       proposer
+# Saved scopes: un_cf_aggressor (the aggressor), un_cf_victim_scope and
+# un_cf_proposer_scope where they exist; .3 also un_msn_new when a mission
+# opened.
+# ============================================================================
+
+# Ordered to cease fire (or called on to). Fired on the aggressor.
+un_ceasefire.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_ceasefire.1.t_order
+				trigger = { has_variable = un_cf_order_months }
+			}
+			desc = un_ceasefire.1.t_call
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_ceasefire.1.d_accepted
+				trigger = {
+					has_variable = un_cf_order_months
+					has_variable = un_cf_order_accepted
+				}
+			}
+			triggered_desc = {
+				desc = un_ceasefire.1.d_order
+				trigger = { has_variable = un_cf_order_months }
+			}
+			desc = un_ceasefire.1.d_call
+		}
+	}
+	flavor = un_ceasefire.1.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_founded
+	}
+
+	option = {
+		name = un_ceasefire.1.a
+		default_option = yes
+		if = {
+			limit = { has_variable = un_cf_order_months }
+			custom_tooltip = un_ceasefire_order_terms_tt
+			if = {
+				limit = { has_variable = un_cf_order_accepted }
+				custom_tooltip = un_ceasefire_fight_on_accepted_tt
+			}
+			else = {
+				custom_tooltip = un_ceasefire_fight_on_tt
+			}
+		}
+		else = {
+			custom_tooltip = un_ceasefire_call_done_tt
+		}
+	}
+}
+
+# The Assembly orders the country at war with us to cease fire. Fired on each
+# represented member the aggressor is fighting when the order is imposed.
+un_ceasefire.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/un_assembly.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = un_ceasefire.2.t
+	desc = un_ceasefire.2.d
+	flavor = un_ceasefire.2.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_founded
+		exists = scope:un_cf_aggressor
+	}
+
+	option = {
+		name = un_ceasefire.2.a
+		default_option = yes
+		custom_tooltip = un_ceasefire_victim_terms_tt
+	}
+}
+
+# The war ended inside the order.
+un_ceasefire.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/peacekeeping_deployment.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = un_ceasefire.3.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_ceasefire.3.d_aggressor
+				trigger = { scope:un_cf_aggressor ?= this }
+			}
+			triggered_desc = {
+				desc = un_ceasefire.3.d_victim
+				trigger = { scope:un_cf_victim_scope ?= this }
+			}
+			desc = un_ceasefire.3.d_proposer
+		}
+	}
+	flavor = un_ceasefire.3.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_founded
+		exists = scope:un_cf_aggressor
+	}
+
+	option = {
+		name = un_ceasefire.3.a
+		default_option = yes
+		custom_tooltip = un_ceasefire_kept_tt
+		if = {
+			limit = { exists = scope:un_msn_new }
+			custom_tooltip = un_ceasefire_mission_opened_tt
+		}
+	}
+}
+
+# The order ran out with the war still on.
+un_ceasefire.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/war_weariness_homefront.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = un_ceasefire.4.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_ceasefire.4.d_aggressor
+				trigger = { scope:un_cf_aggressor ?= this }
+			}
+			triggered_desc = {
+				desc = un_ceasefire.4.d_victim
+				trigger = { scope:un_cf_victim_scope ?= this }
+			}
+			desc = un_ceasefire.4.d_proposer
+		}
+	}
+	flavor = un_ceasefire.4.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_founded
+		exists = scope:un_cf_aggressor
+	}
+
+	option = {
+		name = un_ceasefire.4.a
+		default_option = yes
+		custom_tooltip = un_ceasefire_defied_tt
+	}
+}
+
+# The victim the order named was conquered under it.
+un_ceasefire.5 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/failed_state_aftermath.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = un_ceasefire.5.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_ceasefire.5.d_aggressor
+				trigger = { scope:un_cf_aggressor ?= this }
+			}
+			desc = un_ceasefire.5.d_proposer
+		}
+	}
+	flavor = un_ceasefire.5.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_founded
+		exists = scope:un_cf_aggressor
+	}
+
+	option = {
+		name = un_ceasefire.5.a
+		default_option = yes
+		custom_tooltip = un_ceasefire_defied_tt
+	}
+}

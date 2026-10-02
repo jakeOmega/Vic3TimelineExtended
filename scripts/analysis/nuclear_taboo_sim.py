@@ -43,6 +43,7 @@ class Scenario:
     un_authority: float = 0.0  # 0 = no UN
     npt: bool = False
     cppnm: bool = False
+    tpnw: bool = False  # the UN Treaty on the Prohibition of Nuclear Weapons
     # month -> ("strategic" | "tactical", retaliation?)
     uses: dict = field(default_factory=dict)
     # month -> ledger points (renunciations, threats, ...)
@@ -56,13 +57,15 @@ def _step(c, score, target):
 
 
 def _un_part(c, s):
-    """nd_taboo_part_un_value, mirrored: the NPT and CPPNM, each in proportion
-    to UN authority, held to the cap."""
+    """nd_taboo_part_un_value, mirrored: the NPT, CPPNM and the nuclear ban
+    (TPNW), each in proportion to UN authority, held to the cap."""
     part = 0.0
     if s.npt:
         part += s.un_authority / 100 * c["nd_taboo_un_npt_weight"]
     if s.cppnm:
         part += s.un_authority / 100 * c["nd_taboo_un_cppnm_weight"]
+    if s.tpnw:
+        part += s.un_authority / 100 * c["nd_taboo_un_tpnw_weight"]
     return min(c["nd_taboo_un_cap"], part)
 
 

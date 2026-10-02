@@ -1,0 +1,31 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — ECONOMY: THE NOTICES (redesign phase 7)
+# ============================================================================
+# The World Food Reserve answers a new UN aid mission
+# (un_food_reserve_on_aid_mission_opened, un_economy_effects.txt): each
+# pledger drawn on hears what was taken; the host hears that grain is coming,
+# or that the Reserve had none to send. scope:un_msn_state names the state.
+# Loc: notification_<message>_name/_desc/_tooltip, which organize_loc files in
+# localization/english/te_notifications_l_english.yml.
+# ============================================================================
+
+un_food_reserve_drawn_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+un_food_reserve_relief_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+un_food_reserve_empty_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}

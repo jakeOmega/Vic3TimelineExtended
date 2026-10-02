@@ -31,6 +31,11 @@
 #                                                      pull and tourism
 #   pandemic (WHO)    (the member modifier only: its winners and losers are a
 #                     nice-to-have, owner decision 2026-09-24)
+#   cultural          the cultural hegemon, if a       (every party: slower
+#   diversity (CCD)   party: cultural pull             assimilation and homeland
+#                                                      decay, half the benchmark)
+#   nuclear ban       armed parties: a ceiling that    (the taboo rises while it
+#   (TPNW)            steps to nothing in 25 years     is in force; no modifier)
 #
 # The ICC's regime is the indictment (un_regime_effects.txt, un_events.33).
 #

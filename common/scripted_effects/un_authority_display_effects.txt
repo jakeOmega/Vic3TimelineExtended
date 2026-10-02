@@ -345,6 +345,8 @@ un_authority_log_reason_line = {
 		un_authority_log_reason_case = { CODE = 1221 KEY = je_un_led_reason_1221 }
 		un_authority_log_reason_case = { CODE = 1231 KEY = je_un_led_reason_1231 }
 		un_authority_log_reason_case = { CODE = 1341 KEY = je_un_led_reason_1341 }
+		un_authority_log_reason_case = { CODE = 1371 KEY = je_un_led_reason_1371 }
+		un_authority_log_reason_case = { CODE = 1381 KEY = je_un_led_reason_1381 }
 	}
 	else_if = {
 		limit = { var:un_led_reason >= 100 }
@@ -411,11 +413,8 @@ un_authority_log_reason_line = {
 		un_authority_log_reason_on = { CODE = 32 KEY = je_un_led_reason_32_on FALLBACK = je_un_led_reason_32 }
 		un_authority_log_reason_on = { CODE = 33 KEY = je_un_led_reason_33_on FALLBACK = je_un_led_reason_33 }
 		un_authority_log_reason_on = { CODE = 34 KEY = je_un_led_reason_34_on FALLBACK = je_un_led_reason_34 }
-		un_authority_log_reason_on = { CODE = 35 KEY = je_un_led_reason_35_on FALLBACK = je_un_led_reason_35 }
-		un_authority_log_reason_on = { CODE = 36 KEY = je_un_led_reason_36_on FALLBACK = je_un_led_reason_36 }
 		un_authority_log_reason_on = { CODE = 37 KEY = je_un_led_reason_37_on FALLBACK = je_un_led_reason_37 }
 		un_authority_log_reason_on = { CODE = 38 KEY = je_un_led_reason_38_on FALLBACK = je_un_led_reason_38 }
-		un_authority_log_reason_on = { CODE = 39 KEY = je_un_led_reason_39_on FALLBACK = je_un_led_reason_39 }
 	}
 }
 

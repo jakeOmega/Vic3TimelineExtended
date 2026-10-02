@@ -1,0 +1,258 @@
+﻿namespace = un_referendum
+
+# ============================================================================
+# THE SUPERVISED SELF-DETERMINATION REFERENDUM (redesign phase 7, §0.12 item 9)
+# ============================================================================
+#   .1  the overlord, when the binding resolution carries: hold the vote or
+#       refuse (an overlord that voted for its own censure may only hold it)
+#   .2  the subject votes to leave: the subject and the proposer
+#   .3  the subject votes to stay: the same two
+#   .4  the overlord refused: the same two
+# Saved scopes: un_ref_overlord, un_ref_subject, un_ref_proposer (from
+# un_referendum_on_carried, common/scripted_effects/un_order_effects.txt), and
+# un_resolution (un_vote.2's). The writers and the figures are
+# un_order_effects.txt's and un_order_values.txt's.
+# ============================================================================
+
+# The Assembly orders a supervised vote in one of our subjects.
+un_referendum.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colonial_flag_lowering.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_referendum.1.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_referendum.1.d_accepted
+				trigger = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
+			}
+			desc = un_referendum.1.d
+		}
+	}
+	flavor = un_referendum.1.f
+
+	duration = 3
+
+	# The subject is still ours: there is still a vote to hold.
+	trigger = {
+		has_global_variable = un_founded
+		exists = scope:un_ref_overlord
+		un_referendum_still_holds_subject = yes
+	}
+
+	immediate = {
+		# The odds the option shows and rolls, fixed when the order arrives.
+		set_variable = { name = un_ref_chance value = scope:un_ref_subject.un_ref_independence_chance }
+	}
+
+	# Option A: hold the vote under the Assembly's supervision.
+	option = {
+		name = un_referendum.1.a
+		default_option = yes
+		custom_tooltip = un_referendum_hold_odds_tt
+		custom_tooltip = {
+			text = un_order_standing_held_tt
+			un_standing_gain = { AMOUNT = un_ref_held_gain REASON = 40 }
+		}
+		custom_tooltip = un_order_ledger_tt_referendum_held
+		un_ledger_entry_on = { PILLAR = delivery POINTS = un_ref_delivery_credit REASON = 33 SUBJECT = scope:un_ref_subject }
+		hidden_effect = {
+			if = {
+				limit = { un_referendum_still_holds_subject = yes }
+				un_referendum_hold = yes
+			}
+		}
+		ai_chance = {
+			base = 60
+			modifier = {
+				trigger = { un_tier_at_least_strong = yes }
+				add = 20
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_humanitarian_regulations }
+				add = 20
+			}
+			modifier = {
+				trigger = {
+					OR = {
+						un_standing_tier_respected = yes
+						un_standing_tier_exemplary = yes
+					}
+				}
+				add = 15
+			}
+		}
+	}
+
+	# Option B: refuse. Not open to an overlord that voted for the resolution.
+	option = {
+		name = un_referendum.1.b
+		trigger = {
+			NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
+		}
+		custom_tooltip = un_referendum_refuse_tt
+		scope:un_ref_subject = { add_liberty_desire = un_ref_refused_liberty_desire }
+		add_modifier = {
+			name = un_referendum_refused_modifier
+			multiplier = un_enforcement
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_dossier_tt_defiance
+		un_dossier_record = { RECORD = defiance POINTS = un_dos_points_defiance }
+		custom_tooltip = {
+			text = un_order_standing_refused_tt
+			un_standing_loss = { AMOUNT = un_ref_refused_loss REASON = 41 }
+		}
+		custom_tooltip = un_order_ledger_tt_referendum_refused
+		un_ledger_entry_on = { PILLAR = credibility POINTS = un_ref_refused_debit REASON = 32 SUBJECT = root }
+		hidden_effect = {
+			if = {
+				limit = { has_variable = un_ref_chance }
+				remove_variable = un_ref_chance
+			}
+			scope:un_ref_subject ?= { trigger_event = { id = un_referendum.4 } }
+			un_referendum_notify_proposer = { EVENT = un_referendum.4 }
+		}
+		ai_chance = {
+			base = 30
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 20
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_total_war }
+				add = 30
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = 30
+			}
+			modifier = {
+				trigger = { scope:un_ref_subject ?= { country_rank >= rank_value:major_power } }
+				add = 20
+			}
+			modifier = {
+				trigger = { un_tier_is_moribund = yes }
+				add = 20
+			}
+		}
+	}
+}
+
+# The subject voted to leave and is independent.
+un_referendum.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_referendum.2.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_referendum.2.d_subject
+				trigger = { scope:un_ref_subject ?= this }
+			}
+			desc = un_referendum.2.d_proposer
+		}
+	}
+	flavor = un_referendum.2.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:un_ref_overlord
+		exists = scope:un_ref_subject
+	}
+
+	option = {
+		name = un_referendum.2.a
+		default_option = yes
+		custom_tooltip = un_referendum_independent_tt
+	}
+}
+
+# The subject voted to stay.
+un_referendum.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/un_assembly.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_referendum.3.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_referendum.3.d_subject
+				trigger = { scope:un_ref_subject ?= this }
+			}
+			desc = un_referendum.3.d_proposer
+		}
+	}
+	flavor = un_referendum.3.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:un_ref_overlord
+		exists = scope:un_ref_subject
+	}
+
+	option = {
+		name = un_referendum.3.a
+		default_option = yes
+		custom_tooltip = un_referendum_stayed_tt
+	}
+}
+
+# The overlord refused the vote.
+un_referendum.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colonial_resistance_fighters.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_referendum.4.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_referendum.4.d_subject
+				trigger = { scope:un_ref_subject ?= this }
+			}
+			desc = un_referendum.4.d_proposer
+		}
+	}
+	flavor = un_referendum.4.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:un_ref_overlord
+		exists = scope:un_ref_subject
+	}
+
+	option = {
+		name = un_referendum.4.a
+		default_option = yes
+		custom_tooltip = un_referendum_refused_notice_tt
+	}
+}

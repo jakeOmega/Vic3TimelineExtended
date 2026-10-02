@@ -7,10 +7,10 @@
 # common/scripted_triggers/un_mission_triggers.txt.
 #
 # A MISSION is a script container, in the mandate pattern:
-#   tags    un_mission, un_msn_<type> (peacekeeping | aid | stabilisation),
-#           un_msn_active, closed as un_msn_succeeded / un_msn_failed /
-#           un_msn_lapsed
-#   vars    un_msn_seq, un_msn_type (1 / 2 / 3), un_msn_host (country),
+#   tags    un_mission, un_msn_<type> (peacekeeping | aid | stabilisation |
+#           electoral), un_msn_active, closed as un_msn_succeeded /
+#           un_msn_failed / un_msn_lapsed
+#   vars    un_msn_seq, un_msn_type (1 / 2 / 3 / 4), un_msn_host (country),
 #           un_msn_requested (the host asked the Assembly for it: it lapses if
 #           the host leaves the UN),
 #           un_msn_state (state), un_msn_months, un_msn_progress (0-100),
@@ -20,7 +20,9 @@
 #           initiator when it opened; cleared by its first month of peace),
 #           un_msn_staffed (a contributor has joined at some point),
 #           un_msn_slot (0-7, the chamber's display slot while active;
-#           un_mission_assign_slot)
+#           un_mission_assign_slot),
+#           un_msn_election_held (electoral: an election campaign ended
+#           while it ran; it succeeds at the next monthly update)
 #   list    un_msn_contributors (countries),
 #           un_msn_volunteers (the contributors that joined at will and pay
 #           for it: un_mission_volunteer, un_mission_charges),
@@ -32,7 +34,9 @@
 #   state   un_msn_here (the state's active mission), un_msn_power (the
 #           strength its modifier is multiplied by)
 #   country un_msn_service_cached (the weekly cost of the missions it serves
-#           in at will: un_mission_service_cost's multiplier)
+#           in at will: un_mission_service_cost's multiplier),
+#           un_msn_electoral_power (the strength of the electoral mission it
+#           hosts: un_electoral_observers_modifier's multiplier)
 #
 # WHO WRITES WHAT
 #   un_mission_open / un_mission_join_host   the openers (un_vote.2, un_events.4 A,
@@ -57,17 +61,32 @@
 #                                             un_mission_service_cost (the JE's
 #                                             monthly pulse, and at once on
 #                                             joining or leaving)
+#   un_mission_open_electoral                 a carried request for electoral
+#                                             observers (un_observer_request_on_carried)
+#   un_mission_electoral_election_held        on_election_campaign_end
+#                                             (un_mission_on_actions.txt): the
+#                                             host's election was observed
+#   un_mission_electoral_host_refresh         the single refresh site for
+#                                             un_electoral_observers_modifier on
+#                                             the host (the country monthly pulse,
+#                                             un_mission_on_actions.txt)
 #
 # REASON CODES: ledger 21/22/23 (a peacekeeping / aid / stabilisation mission
 # accomplished), 24/25/26 (one failed), each naming the mission's state —
 # 19 and 20, the same without the kind or the state, survive only in saves;
 # standing 34 (a mission we contributed to accomplished its work), 35 (we
 # brought a contingent home before the work was done).
+# Phase 7 (§0.12; the missions block is ledger 37-39, standing 45-47): ledger
+# 37 an electoral mission accomplished, 38 one failed, each naming its state;
+# standing 45 (the host: an election held under the observers), 46 (the host
+# did away with its elections while they watched). Ledger 39 and standing 47
+# are unused.
 # ============================================================================
 
 # ---- Opening and joining ------------------------------------------------------------
 
-# Open a mission of $TYPE$ ($CODE$ 1 peacekeeping, 2 aid, 3 stabilisation) for
+# Open a mission of $TYPE$ ($CODE$ 1 peacekeeping, 2 aid, 3 stabilisation,
+# 4 electoral) for
 # scope:un_msn_host in scope:un_msn_state, or, if that state already holds an
 # active mission of the same type, take that one. Leaves scope:un_msn_new
 # pointing at the mission (unset if the state holds a mission of another type).
@@ -345,47 +364,51 @@ un_mission_volunteer_tooltip = {
 		var:un_msn_state ?= { save_temporary_scope_as = un_msn_tt_state }
 		var:un_msn_host ?= { save_temporary_scope_as = un_msn_tt_host }
 	}
+	# An electoral observer mission takes no contingents (the Join control is
+	# greyed for it, but its tooltip still runs this): say so and nothing else.
 	if = {
-		limit = {
-			exists = scope:un_msn_tt_state
-			exists = scope:un_msn_tt_host
+		limit = { scope:un_msn_new ?= { has_tag = un_msn_electoral } }
+		custom_tooltip = un_mission_volunteer_electoral_tt
+	}
+	else = {
+		if = {
+			limit = {
+				exists = scope:un_msn_tt_state
+				exists = scope:un_msn_tt_host
+			}
+			if = {
+				limit = { scope:un_msn_new ?= { has_tag = un_msn_peacekeeping } }
+				custom_tooltip = un_mission_volunteer_peacekeeping_tt
+			}
+			else_if = {
+				limit = { scope:un_msn_new ?= { has_tag = un_msn_aid } }
+				custom_tooltip = un_mission_volunteer_aid_tt
+			}
+			else = {
+				custom_tooltip = un_mission_volunteer_stabilisation_tt
+			}
+			custom_tooltip = un_mission_volunteer_rewards_tt
 		}
 		if = {
-			limit = { scope:un_msn_new ?= { has_tag = un_msn_peacekeeping } }
-			custom_tooltip = un_mission_volunteer_peacekeeping_tt
-		}
-		else_if = {
-			limit = { scope:un_msn_new ?= { has_tag = un_msn_aid } }
-			custom_tooltip = un_mission_volunteer_aid_tt
+			limit = {
+				scope:un_msn_new ?= { un_mission_is_peace_operation = yes }
+				un_standing_program_active_peacekeeping = yes
+			}
+			custom_tooltip = un_mission_volunteer_covered_tt
 		}
 		else = {
-			custom_tooltip = un_mission_volunteer_stabilisation_tt
+			custom_tooltip = un_mission_volunteer_cost_tt
 		}
-		custom_tooltip = un_mission_volunteer_rewards_tt
-	}
-	if = {
-		limit = {
-			scope:un_msn_new ?= {
-				OR = {
-					has_tag = un_msn_peacekeeping
-					has_tag = un_msn_stabilisation
-				}
-			}
-			un_standing_program_active_peacekeeping = yes
+		# The Standing UN Force counts as a contributor (phase 7).
+		if = {
+			limit = { scope:un_msn_new ?= { un_mission_strength_heads >= 3 } }
+			custom_tooltip = un_mission_volunteer_full_tt
 		}
-		custom_tooltip = un_mission_volunteer_covered_tt
+		else = {
+			custom_tooltip = un_mission_volunteer_strength_tt
+		}
+		custom_tooltip = un_mission_volunteer_commitment_tt
 	}
-	else = {
-		custom_tooltip = un_mission_volunteer_cost_tt
-	}
-	if = {
-		limit = { scope:un_msn_new ?= { un_mission_contributor_count >= 3 } }
-		custom_tooltip = un_mission_volunteer_full_tt
-	}
-	else = {
-		custom_tooltip = un_mission_volunteer_strength_tt
-	}
-	custom_tooltip = un_mission_volunteer_commitment_tt
 }
 
 # The scoped country brings its contingent home from scope:un_msn_new. It
@@ -417,10 +440,12 @@ un_mission_withdraw = {
 			}
 		}
 	}
+	# The last to leave a peacekeeping or stabilisation mission fails it,
+	# unless the Standing UN Force serves in it (phase 7).
 	if = {
 		limit = {
 			scope:un_msn_new ?= {
-				NOT = { has_tag = un_msn_aid }
+				un_mission_is_peace_operation = yes
 				NOT = {
 					any_in_list = {
 						variable = un_msn_contributors
@@ -430,7 +455,13 @@ un_mission_withdraw = {
 				}
 			}
 		}
-		custom_tooltip = un_mission_withdraw_last_tt
+		if = {
+			limit = { scope:un_msn_new ?= { un_mission_force_serves = yes } }
+			custom_tooltip = un_mission_withdraw_last_force_tt
+		}
+		else = {
+			custom_tooltip = un_mission_withdraw_last_tt
+		}
 	}
 	custom_tooltip = un_mission_withdraw_final_tt
 	hidden_effect = {
@@ -629,6 +660,20 @@ un_mission_monthly = {
 	un_mission_prune_contributors = yes
 	set_variable = { name = un_msn_strength value = un_mission_strength_value }
 	if = {
+		# Electoral observers saw an election through: an election campaign
+		# in their host ended while they were there
+		# (un_mission_electoral_election_held). Closed here, a month at most
+		# after the vote, rather than in on_election_campaign_end itself, so
+		# Election Interference's cut at that same campaign end still finds the
+		# mission whatever order the two on_actions run in.
+		limit = {
+			has_tag = un_msn_electoral
+			has_variable = un_msn_election_held
+			exists = var:un_msn_host
+		}
+		un_mission_close = { STATUS = succeeded }
+	}
+	else_if = {
 		# The host is gone or no longer holds the state, or it asked the
 		# Assembly for the mission and has since left the UN: the mission has
 		# nothing left to do. (A mission sent to a collapse or a famine the
@@ -645,11 +690,18 @@ un_mission_monthly = {
 						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 					}
 				}
-				# A force nobody sent (peacekeeping and stabilisation).
+				# A force nobody sent (peacekeeping and stabilisation), unless
+				# the Standing UN Force serves in it (phase 7).
 				AND = {
-					NOT = { has_tag = un_msn_aid }
+					un_mission_is_peace_operation = yes
+					NOT = { un_mission_force_serves = yes }
 					NOT = { has_variable = un_msn_staffed }
 					var:un_msn_months >= un_mission_unstaffed_months
+				}
+				# Electoral observers with no election to watch (phase 7).
+				AND = {
+					has_tag = un_msn_electoral
+					var:un_msn_months >= un_mission_electoral_lapse_months
 				}
 			}
 		}
@@ -658,15 +710,32 @@ un_mission_monthly = {
 	else_if = {
 		# The host has been attacked since the mission opened, or
 		# (peacekeeping and stabilisation) every contributor it had has gone
-		# home.
+		# home and the Standing UN Force does not serve in it, or (electoral)
+		# the host no longer holds elections.
 		limit = {
 			OR = {
 				un_mission_attacked_since_open = yes
 				AND = {
-					NOT = { has_tag = un_msn_aid }
+					un_mission_is_peace_operation = yes
+					NOT = { un_mission_force_serves = yes }
 					has_variable = un_msn_staffed
 					NOT = { un_lobby_list_has_entries = { LIST = un_msn_contributors } }
 				}
+				AND = {
+					has_tag = un_msn_electoral
+					scope:un_msn_host_now = { NOT = { un_mission_holds_elections = yes } }
+				}
+			}
+		}
+		# A host that did away with its elections under the observers' eyes
+		# answers for it (phase 7, standing reason 46).
+		if = {
+			limit = {
+				has_tag = un_msn_electoral
+				scope:un_msn_host_now = { NOT = { un_mission_holds_elections = yes } }
+			}
+			scope:un_msn_host_now = {
+				un_standing_loss = { AMOUNT = un_mission_electoral_abolished_standing REASON = 46 }
 			}
 		}
 		un_mission_close = { STATUS = failed }
@@ -698,6 +767,18 @@ un_mission_monthly = {
 					un_mission_aid_recovered = yes
 				}
 				set_variable = { name = un_msn_progress value = 100 }
+			}
+		}
+		else_if = {
+			# Electoral: half-way while the host is in an election campaign;
+			# success comes from the campaign's end (the first branch above).
+			limit = { has_tag = un_msn_electoral }
+			if = {
+				limit = { scope:un_msn_host_now = { in_election_campaign = yes } }
+				set_variable = { name = un_msn_progress value = un_mission_electoral_progress_campaign }
+			}
+			else = {
+				set_variable = { name = un_msn_progress value = 0 }
 			}
 		}
 		# No time limit: a mission that is not done goes on, for as long as its
@@ -766,11 +847,18 @@ un_mission_close = {
 # scope:un_msn_state_done.
 # Scope: mission container
 un_mission_outcome_succeeded = {
-	un_mission_ledger_outcome = { PILLAR = delivery POINTS = un_mission_success_delivery PEACEKEEPING = 21 AID = 22 STABILISATION = 23 }
+	un_mission_ledger_outcome = { PILLAR = delivery POINTS = un_mission_success_delivery_value PEACEKEEPING = 21 AID = 22 STABILISATION = 23 ELECTORAL = 37 }
 	var:un_msn_state ?= { save_scope_as = un_msn_state_done }
 	var:un_msn_host ?= {
 		save_scope_as = un_msn_host_done
 		un_mission_post_succeeded_notice = yes
+		# Electoral observers have no contributors: the host that invited
+		# them, and held its election under their eyes, has the standing
+		# (phase 7, reason 45).
+		if = {
+			limit = { scope:un_msn_closing = { has_tag = un_msn_electoral } }
+			un_standing_gain = { AMOUNT = un_mission_electoral_host_standing REASON = 45 }
+		}
 	}
 	if = {
 		limit = { has_variable_list = un_msn_contributors }
@@ -791,7 +879,7 @@ un_mission_outcome_succeeded = {
 # scope:un_msn_state_done.
 # Scope: mission container
 un_mission_outcome_failed = {
-	un_mission_ledger_outcome = { PILLAR = credibility POINTS = un_mission_failure_credibility PEACEKEEPING = 24 AID = 25 STABILISATION = 26 }
+	un_mission_ledger_outcome = { PILLAR = credibility POINTS = un_mission_failure_credibility PEACEKEEPING = 24 AID = 25 STABILISATION = 26 ELECTORAL = 38 }
 	var:un_msn_state ?= { save_scope_as = un_msn_state_done }
 	var:un_msn_host ?= { un_mission_post_failed_notice = yes }
 	if = {
@@ -817,6 +905,10 @@ un_mission_post_succeeded_notice = {
 		limit = { scope:un_msn_closing = { has_tag = un_msn_aid } }
 		post_notification = un_mission_aid_succeeded_notice
 	}
+	else_if = {
+		limit = { scope:un_msn_closing = { has_tag = un_msn_electoral } }
+		post_notification = un_mission_electoral_succeeded_notice
+	}
 	else = {
 		post_notification = un_mission_stabilisation_succeeded_notice
 	}
@@ -833,6 +925,10 @@ un_mission_post_failed_notice = {
 		limit = { scope:un_msn_closing = { has_tag = un_msn_aid } }
 		post_notification = un_mission_aid_failed_notice
 	}
+	else_if = {
+		limit = { scope:un_msn_closing = { has_tag = un_msn_electoral } }
+		post_notification = un_mission_electoral_failed_notice
+	}
 	else = {
 		post_notification = un_mission_stabilisation_failed_notice
 	}
@@ -842,6 +938,7 @@ un_mission_post_failed_notice = {
 # the mission's state as its subject, so the log reads "the peacekeeping
 # mission in Attica" and the state can be hovered.
 # Parameters: $PILLAR$, $POINTS$, and the code for each kind
+# (PEACEKEEPING, AID, STABILISATION, ELECTORAL)
 # Scope: mission container
 un_mission_ledger_outcome = {
 	if = {
@@ -852,16 +949,27 @@ un_mission_ledger_outcome = {
 		limit = { has_tag = un_msn_aid }
 		un_ledger_entry_on = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $AID$ SUBJECT = var:un_msn_state }
 	}
+	else_if = {
+		limit = { has_tag = un_msn_electoral }
+		un_ledger_entry_on = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $ELECTORAL$ SUBJECT = var:un_msn_state }
+	}
 	else = {
 		un_ledger_entry_on = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $STABILISATION$ SUBJECT = var:un_msn_state }
 	}
 }
 
 # Lapsed: the mission had nothing left to do (its host or state is gone, or
-# nobody joined a force the Assembly voted for). No entry.
+# nobody joined a force the Assembly voted for, or electoral observers waited
+# five years for an election). No entry.
 # Scope: mission container
 un_mission_outcome_lapsed = {
-	var:un_msn_host ?= { post_notification = un_mission_lapsed_notice }
+	if = {
+		limit = { has_tag = un_msn_electoral }
+		var:un_msn_host ?= { post_notification = un_mission_electoral_lapsed_notice }
+	}
+	else = {
+		var:un_msn_host ?= { post_notification = un_mission_lapsed_notice }
+	}
 }
 
 # A dissolution ends every mission, without entries: there is no Assembly
@@ -896,7 +1004,8 @@ un_missions_dissolve = {
 # The mission's effect on its state: the type's modifier, multiplied by the
 # mission's strength. Removed once the state holds no active mission.
 # The single refresh site for un_mission_peacekeeping_state_modifier,
-# un_mission_aid_state_modifier and un_mission_stabilisation_state_modifier.
+# un_mission_aid_state_modifier, un_mission_stabilisation_state_modifier and
+# (phase 7) un_mission_electoral_state_modifier.
 # The multiplier reads var:un_msn_power on the state, which is removed only
 # after the modifiers are.
 # Scope: state (from on_monthly_pulse_state, un_mission_on_actions.txt)
@@ -926,6 +1035,13 @@ un_mission_state_refresh = {
 				multiplier = var:un_msn_power
 			}
 		}
+		else_if = {
+			limit = { var:un_msn_here = { has_tag = un_msn_electoral } }
+			add_modifier = {
+				name = un_mission_electoral_state_modifier
+				multiplier = var:un_msn_power
+			}
+		}
 	}
 	else_if = {
 		limit = {
@@ -948,6 +1064,10 @@ un_mission_state_refresh = {
 		if = {
 			limit = { has_modifier = un_mission_stabilisation_state_modifier }
 			remove_modifier = un_mission_stabilisation_state_modifier
+		}
+		if = {
+			limit = { has_modifier = un_mission_electoral_state_modifier }
+			remove_modifier = un_mission_electoral_state_modifier
 		}
 		if = {
 			limit = { has_variable = un_msn_here }
@@ -973,5 +1093,183 @@ un_mission_state_clear_modifiers = {
 	if = {
 		limit = { has_modifier = un_mission_stabilisation_state_modifier }
 		remove_modifier = un_mission_stabilisation_state_modifier
+	}
+	if = {
+		limit = { has_modifier = un_mission_electoral_state_modifier }
+		remove_modifier = un_mission_electoral_state_modifier
+	}
+}
+
+# ---- Electoral observers (redesign phase 7, §0.12 item 11) ---------------------------
+# A member that holds elections asks the Assembly for observers at its next
+# one (topic observer_request: a request, like aid; recommendatory, a simple
+# majority, Charter Reform I). Carried, it opens the fourth kind of mission,
+# electoral (type 4), in the requester's capital. The observers are paid from
+# the UN's budget: the mission has no contributors, takes no volunteers and
+# never lapses unstaffed. It succeeds when an election campaign in its host
+# ends while it runs, fails if the host is attacked or stops holding
+# elections, and lapses after un_mission_electoral_lapse_months without one.
+# While it runs: un_mission_electoral_state_modifier on its state (through
+# un_mission_state_refresh), un_electoral_observers_modifier on the host
+# (un_mission_electoral_host_refresh), both x strength, and Election
+# Interference's cut to the host's electoral confidence is halved
+# (covert_op_election_confidence_effect).
+
+# Open the electoral mission for scope:un_msn_host: in its capital, or, if the
+# capital already holds another kind of mission, in its most populous state
+# without one. Leaves scope:un_msn_new pointing at the mission (unset if every
+# state of the host already holds another kind).
+# Scope: any; expects scope:un_msn_host
+un_mission_open_electoral = {
+	scope:un_msn_host = {
+		capital ?= {
+			if = {
+				limit = { NOT = { un_mission_state_occupied = yes } }
+				save_scope_as = un_msn_electoral_capital
+			}
+		}
+	}
+	if = {
+		limit = { exists = scope:un_msn_electoral_capital }
+		scope:un_msn_electoral_capital = { save_scope_as = un_msn_state }
+		un_mission_open = { TYPE = electoral CODE = 4 }
+	}
+	else = {
+		un_mission_join_host = { TYPE = electoral CODE = 4 ORDER = un_docket_state_pop_order }
+	}
+}
+
+# An election campaign in the scoped country has ended (on_election_campaign_end,
+# un_mission_on_actions.txt). Its active electoral mission saw it through: it
+# is marked, and succeeds at the next monthly update (un_mission_monthly).
+# Scope: country (the host)
+un_mission_electoral_election_held = {
+	save_scope_as = un_msn_voting_host
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				has_tag = un_msn_active
+				has_tag = un_msn_electoral
+				var:un_msn_host ?= scope:un_msn_voting_host
+			}
+			set_variable = un_msn_election_held
+			set_variable = { name = un_msn_progress value = 100 }
+		}
+	}
+}
+
+# The observers' effect on the host country: un_electoral_observers_modifier x
+# the strength of the electoral mission it hosts. The single refresh site for
+# that modifier, from the country monthly pulse (un_mission_on_actions.txt),
+# whose ROOT is the host, so the multiplier resolves against it. Re-applied
+# every month from the mission register, so a revolution's winner, which
+# inherits no modifiers, has it back within a month (§0.9). The multiplier's
+# variable is removed only after the modifier is.
+# Scope: country (ROOT)
+un_mission_electoral_host_refresh = {
+	save_scope_as = un_msn_observed_host
+	if = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_mission_hosts = { TYPE = electoral }
+		}
+		random_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				has_tag = un_msn_active
+				has_tag = un_msn_electoral
+				var:un_msn_host ?= scope:un_msn_observed_host
+			}
+			save_scope_as = un_msn_observing
+		}
+		set_variable = { name = un_msn_electoral_power value = scope:un_msn_observing.var:un_msn_strength }
+		if = {
+			limit = { has_modifier = un_electoral_observers_modifier }
+			remove_modifier = un_electoral_observers_modifier
+		}
+		add_modifier = {
+			name = un_electoral_observers_modifier
+			multiplier = var:un_msn_electoral_power
+		}
+	}
+	else = {
+		if = {
+			limit = { has_modifier = un_electoral_observers_modifier }
+			remove_modifier = un_electoral_observers_modifier
+		}
+		if = {
+			limit = { has_variable = un_msn_electoral_power }
+			remove_variable = un_msn_electoral_power
+		}
+	}
+}
+
+# ---- The topic (the hooks un_charter_effects.txt and the chamber call) -----------------
+
+# The state the observers would go to, for the chamber's preview: the capital,
+# or the most populous state without a mission. Leaves
+# scope:un_observer_request_state (unset if every state holds another kind).
+# The same choice un_mission_open_electoral makes when the vote carries.
+# Scope: the requesting country
+un_observer_request_select_state = {
+	if = {
+		limit = { capital ?= { NOT = { un_mission_state_occupied = yes } } }
+		capital = { save_temporary_scope_as = un_observer_request_state }
+	}
+	else = {
+		ordered_scope_state = {
+			limit = { NOT = { un_mission_state_occupied = yes } }
+			order_by = un_docket_state_pop_order
+			max = 1
+			save_temporary_scope_as = un_observer_request_state
+		}
+	}
+}
+
+# What the chamber's row previews while a request can be made: where the
+# observers would go.
+# Scope: country (the viewer, the would-be requester)
+un_observer_request_chamber_preview = {
+	un_observer_request_select_state = yes
+	if = {
+		limit = { exists = scope:un_observer_request_state }
+		custom_tooltip_no_bullet = je_un_chamber_propose_preview_observer_request
+	}
+}
+
+# The outcome: the request carried (it cannot be vetoed). Observers go to the
+# requester's capital, unless it no longer holds elections, in which case there
+# is nothing to observe and nothing is sent. Booked as the aid request is: UN
+# delivery +1 under the resolution code.
+# Scope: un_vote.2's ROOT (the proposer, the requester); expects
+# scope:un_resolution and scope:un_vote_proposer
+un_observer_request_on_carried = {
+	custom_tooltip = un_vote_observer_request_passed_tt
+	un_ledger_entry = { PILLAR = delivery POINTS = 1 REASON = 1 }
+	if = {
+		limit = { exists = scope:un_vote_proposer }
+		if = {
+			limit = {
+				scope:un_vote_proposer = {
+					un_mission_holds_elections = yes
+					un_mission_can_join_host = { TYPE = electoral }
+				}
+			}
+			custom_tooltip = un_mission_electoral_opened_tt
+			hidden_effect = {
+				scope:un_vote_proposer = { save_scope_as = un_msn_host }
+				un_mission_open_electoral = yes
+				if = {
+					limit = { exists = scope:un_msn_new }
+					scope:un_resolution ?= { set_variable = { name = un_res_mission value = scope:un_msn_new } }
+					scope:un_msn_new = { set_variable = un_msn_requested }
+				}
+			}
+		}
+		else = {
+			custom_tooltip = un_mission_electoral_fallback_tt
+		}
 	}
 }
