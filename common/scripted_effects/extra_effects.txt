@@ -18,28 +18,35 @@ remove_modifier_if_exists_effect = {
 # wonder-complete notification, and either bumps the wonder one level (capped
 # at $MAX_LEVEL$) or creates the level-1 wonder if none exists yet.
 #
-# What `create_building` does to a building the state already has depends on
-# the building's `ownership_type`, so the level-up has two forms. Seen in game
-# 2026-10-02: a level-3 Nanofabrication Center (`self`) asked for level 4 came
-# out at level 7, while a level-1 Orbital Solar Collector (`no_ownership`) asked
-# for level 2 came out at level 2. An owned building stacks the requested level
-# onto its own; an unowned one keeps the larger of the two. Keep each wonder's
-# $STACKS_LEVELS$ in step with its `ownership_type` in
+# `create_building` on a building the state already has does not give a
+# predictable level, and the two kinds of wonder disagree. Seen in game
+# 2026-10-02 (L = level before, "asked" = the `level` argument):
+#   Space Elevator (`self`)           L=1 asked 2 -> 3     L=3 asked 1 -> 3
+#   Nanofabrication Center (`self`)   L=3 asked 4 -> 7
+#   Orbital Solar Collector (no_ownership)  L=1 asked 2 -> 2
+# So an owned wonder grew by far more than the one level asked for (2L + 1 when
+# asked for L + 1), and asking for less than it already has did nothing, which
+# loses a whole finished site. No `level` value adds exactly one level to an
+# owned wonder, so those are rebuilt: the level is saved, the wonder removed and
+# built again at that level + 1, as gm_state_rededicate does for the Grand
+# Monument. Rebuilding fires the wonder's workers, which is why the unowned
+# wonders, where the chain below was seen to work, keep the chain. Keep each
+# wonder's $REBUILD$ in step with its `ownership_type` in
 # common/buildings/extra_buildings.txt (test_megastructure_level_up.py checks it).
 #
 # Parameters:
-#   $WONDER$        — wonder building base name (e.g. space_elevator). The
-#                     progress variable, construction site, annual-progress
-#                     modifier, and notification key all use this token.
-#   $MAX_LEVEL$     — wonder's level cap. Both level-up forms guard on
-#                     `level < $MAX_LEVEL$`, so a wonder at its cap silently
-#                     no-ops on completion.
-#   $STACKS_LEVELS$ — yes when building_$WONDER$ is an owned building
-#                     (`ownership_type = self`): `create_building` adds the
-#                     level it is given, so ask for exactly 1. no when it is
-#                     `no_ownership`: `create_building` keeps the larger level,
-#                     so ask for the current level + 1 through the 19-branch
-#                     chain below (the level argument takes literals only).
+#   $WONDER$    — wonder building base name (e.g. space_elevator). The
+#                 progress variable, construction site, annual-progress
+#                 modifier, and notification key all use this token.
+#   $MAX_LEVEL$ — wonder's level cap. Both level-up forms guard on
+#                 `level < $MAX_LEVEL$`, so a wonder at its cap silently
+#                 no-ops on completion.
+#   $REBUILD$   — yes when building_$WONDER$ is an owned building
+#                 (`ownership_type = self`): remove it and build it again at
+#                 its level + 1. no when it is `no_ownership`: ask
+#                 `create_building` for the current level + 1 through the
+#                 19-branch chain below (the level argument takes literals
+#                 only).
 generic_wonder_construction_base = {
 	if = {
 		limit = { NOT = { has_variable = $WONDER$_progress_var } }
@@ -73,10 +80,20 @@ generic_wonder_construction_base = {
 		if = {
 			limit = { has_building = building_$WONDER$ }
 			if = {
-				limit = { always = $STACKS_LEVELS$ }
+				limit = { always = $REBUILD$ }
 				if = {
 					limit = { b:building_$WONDER$.level < $MAX_LEVEL$ }
-					create_building = { building = building_$WONDER$ level = 1 }
+					set_variable = {
+						name = wonder_rebuild_level
+						value = b:building_$WONDER$.level
+					}
+					change_variable = { name = wonder_rebuild_level add = 1 }
+					remove_building = building_$WONDER$
+					te_construction_market_build_specified_level = {
+						SPEC_TYPE = building_$WONDER$
+						SPEC_LEVEL = var:wonder_rebuild_level
+					}
+					remove_variable = wonder_rebuild_level
 				}
 			}
 			else = {
@@ -107,13 +124,13 @@ generic_wonder_construction_base = {
 	}
 }
 
-space_elevator_construction            = { generic_wonder_construction_base = { WONDER = space_elevator            MAX_LEVEL = 20 STACKS_LEVELS = yes } }
+space_elevator_construction            = { generic_wonder_construction_base = { WONDER = space_elevator            MAX_LEVEL = 20 REBUILD = yes } }
 
-solar_collector_construction           = { generic_wonder_construction_base = { WONDER = solar_collector           MAX_LEVEL = 10 STACKS_LEVELS = no } }
+solar_collector_construction           = { generic_wonder_construction_base = { WONDER = solar_collector           MAX_LEVEL = 10 REBUILD = no } }
 
-orbital_battlestation_construction     = { generic_wonder_construction_base = { WONDER = orbital_battlestation     MAX_LEVEL =  5 STACKS_LEVELS = no } }
+orbital_battlestation_construction     = { generic_wonder_construction_base = { WONDER = orbital_battlestation     MAX_LEVEL =  5 REBUILD = no } }
 
-mind_upload_nexus_construction         = { generic_wonder_construction_base = { WONDER = mind_upload_nexus         MAX_LEVEL =  5 STACKS_LEVELS = yes } }
+mind_upload_nexus_construction         = { generic_wonder_construction_base = { WONDER = mind_upload_nexus         MAX_LEVEL =  5 REBUILD = yes } }
 
 # State scope, from on_monthly_pulse_state (ROOT is the state). Reads the
 # state's own value, so the national grants (the Ministry of Thought Control)
@@ -1373,7 +1390,7 @@ remove_all_langreform_modifiers = {
 # Antimatter Facility Construction Effect
 #==================================================
 
-antimatter_facility_construction       = { generic_wonder_construction_base = { WONDER = antimatter_facility       MAX_LEVEL = 10 STACKS_LEVELS = no } }
+antimatter_facility_construction       = { generic_wonder_construction_base = { WONDER = antimatter_facility       MAX_LEVEL = 10 REBUILD = no } }
 
 # Population Transfer: Moves primary culture pops of target_country from source_country to target_country
 # Scope: country (either source or target, called from treaty on_entry_into_force)
@@ -1560,13 +1577,13 @@ te_remove_waived_pm_retooling_from_state_buildings = {
 # Nanofabrication Center Construction Effect
 #==================================================
 
-nanofabrication_center_construction    = { generic_wonder_construction_base = { WONDER = nanofabrication_center    MAX_LEVEL = 10 STACKS_LEVELS = yes } }
+nanofabrication_center_construction    = { generic_wonder_construction_base = { WONDER = nanofabrication_center    MAX_LEVEL = 10 REBUILD = yes } }
 
 #==================================================
 # Consciousness Network Construction Effect
 #==================================================
 
-consciousness_network_construction     = { generic_wonder_construction_base = { WONDER = consciousness_network     MAX_LEVEL = 10 STACKS_LEVELS = no } }
+consciousness_network_construction     = { generic_wonder_construction_base = { WONDER = consciousness_network     MAX_LEVEL = 10 REBUILD = no } }
 
 # ============================================================================
 # IRREDENTISM — third-party annexation notification
