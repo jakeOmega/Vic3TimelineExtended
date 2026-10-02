@@ -3,7 +3,7 @@
 # ============================================================================
 # What each of the seven member-initiated topics actually does when tabled:
 # the costs and cooldowns it takes, the target it names, and the
-# un_resolution_open call that opens the vote. The eleven conventions follow at
+# un_resolution_open call that opens the vote. The thirteen conventions follow at
 # the bottom of the file, with their own header.
 #
 # Extracted word for word out of each scripted button's `effect` in
@@ -405,11 +405,12 @@ un_propose_referendum_effect = {
 }
 
 # ============================================================================
-# THE ELEVEN CONVENTIONS
+# THE THIRTEEN CONVENTIONS
 # ============================================================================
 # Human rights, ICC, NPT, climate, pandemic, refugee, heritage,
-# decolonization, space, the law of the sea and the physical protection of
-# nuclear material. Each has two effects:
+# decolonization, space, the law of the sea, the physical protection of
+# nuclear material, cultural diversity and the prohibition of nuclear weapons.
+# Each has two effects:
 #
 #   un_propose_<key>_table   what tabling it does, whoever tables it: the
 #                            domestic reaction and the vote itself. The
@@ -418,7 +419,7 @@ un_propose_referendum_effect = {
 #                            un_propose_<key>_effect calls it too, so the two
 #                            paths cannot drift.
 #   un_propose_<key>_effect  tabling it on our own motion from the chamber
-#                            (ops 7-17 of un_chamber_propose_sgui): _table,
+#                            (ops 7-19 of un_chamber_propose_sgui): _table,
 #                            plus the costs every own-motion proposal takes.
 #
 # Accepting the docket's offer costs nothing extra: the docket paces the floor
@@ -699,4 +700,38 @@ un_propose_physical_protection_effect = {
 	custom_tooltip = un_vote_initiated_tt
 	un_propose_own_motion_costs = yes
 	un_propose_physical_protection_table = yes
+}
+
+# ---- Convention on Cultural Diversity (CCD) — un_events.37 ----
+# Scope: the proposing country
+un_propose_cultural_diversity_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = cultural_diversity }
+	}
+}
+
+# Scope: the proposing country
+un_propose_cultural_diversity_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_cultural_diversity_table = yes
+}
+
+# ---- Treaty on the Prohibition of Nuclear Weapons (TPNW) — un_events.38 ----
+# Scope: the proposing country
+un_propose_nuclear_ban_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = nuclear_ban }
+	}
+}
+
+# Scope: the proposing country
+un_propose_nuclear_ban_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_nuclear_ban_table = yes
 }

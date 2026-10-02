@@ -22,9 +22,10 @@
 # topic, un_propose_reform_*): it is also still raised by its proposer event,
 # un_events.6, under the same gates.
 #
-# THE ELEVEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
+# THE THIRTEEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
 # heritage, decolonization, space, law of the sea, physical protection of
-# nuclear material) are at the bottom of the file. The docket raises them for everyone through the proposer events in
+# nuclear material, cultural diversity, the prohibition of nuclear weapons) are
+# at the bottom of the file. The docket raises them for everyone through the proposer events in
 # events/un_events.txt; a human member may also table one from the chamber on
 # its own motion. They have no scripted button: the AI reaches them only
 # through the docket, which paces the floor (un_docket_effects.txt), and a
@@ -595,9 +596,9 @@ un_propose_referendum_possible = {
 }
 
 # ============================================================================
-# THE ELEVEN CONVENTIONS
+# THE THIRTEEN CONVENTIONS
 # ============================================================================
-# Tabled on our own motion from the chamber (ops 7-17 of
+# Tabled on our own motion from the chamber (ops 7-19 of
 # un_chamber_propose_sgui), or on the docket's offer through the proposer
 # events. Every topic below is recommendatory except the ICC, which is binding
 # and can be vetoed; all pass by simple majority.
@@ -1036,4 +1037,89 @@ un_propose_physical_protection_possible = {
 	un_propose_own_motion_possible = yes
 	un_docket_topic_open_physical_protection = yes
 	un_propose_physical_protection_qualifies = yes
+}
+
+# ---- Convention on Cultural Diversity (CCD) ----
+# Redesign phase 7 (§0.12 item 5). Charter Reform I and UNESCO in force are
+# global gates, so they are the docket's (un_docket_topic_open_cultural_diversity).
+# Its parties' minority cultures assimilate more slowly and their homelands
+# decay more slowly, trailing parties feel the cultural hegemon's benchmark
+# less, and a hegemon that ratifies loses cultural pull.
+# Scope: any
+un_propose_cultural_diversity_in_force = {
+	has_global_variable = un_agency_ccd
+}
+
+# Scope: the prospective proposer: a state that has seen what mass media do to
+# a minority's language, and is not the hegemon the convention restrains.
+un_propose_cultural_diversity_qualifies = {
+	has_technology_researched = mass_media
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_cultural_diversity_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_cultural_diversity_refusal_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_cultural_diversity_not_hegemon_tt
+		NOT = { un_regime_cultural_hegemon = yes }
+	}
+}
+
+# Scope: the proposing country
+un_propose_cultural_diversity_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_cultural_diversity_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_cultural_diversity_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_cultural_diversity = yes
+	un_propose_cultural_diversity_qualifies = yes
+}
+
+# ---- Treaty on the Prohibition of Nuclear Weapons (TPNW) ----
+# Redesign phase 7 (§0.12 item 8). Charter Reform II, the NPT in force and the
+# nuclear weapons rule are global gates (un_docket_topic_open_nuclear_ban).
+# Its armed parties are held to a ceiling that steps down to nothing over 25
+# years, its unarmed parties may build none (nd_taboo_refresh_ban_ceiling),
+# and while it is in force it raises the nuclear taboo.
+# Scope: any
+un_propose_nuclear_ban_in_force = {
+	has_global_variable = un_agency_tpnw
+}
+
+# Scope: the prospective proposer: a state that knows what a warhead is and
+# holds none.
+un_propose_nuclear_ban_qualifies = {
+	has_technology_researched = nuclear_weapons
+	custom_tooltip = {
+		text = un_propose_nuclear_ban_unarmed_tt
+		nd_is_armed = no
+	}
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_nuclear_ban_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_nuclear_ban_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_nuclear_ban_available = {
+	has_game_rule = nuclear_weapons_enabled
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_nuclear_ban_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_nuclear_ban_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_nuclear_ban = yes
+	un_propose_nuclear_ban_qualifies = yes
 }

@@ -1483,7 +1483,7 @@ un_chamber_propose_referendum_row = {
 	}
 }
 
-# The eleven conventions and declarations (ops 7-17). The docket raises them for
+# The thirteen conventions and declarations (ops 7-19). The docket raises them for
 # everyone (redesign phase 4, un_docket_effects.txt), and a member may table
 # one on its own motion. Each row says what the topic is, whether it binds,
 # its passage rule (when the docket raises it anyway is on hover over the
@@ -1688,6 +1688,38 @@ un_chamber_propose_physical_protection_row = {
 		BINDING = je_un_chamber_recommendatory
 		IN_FORCE = un_propose_physical_protection_in_force
 		AVAILABLE = un_propose_physical_protection_available
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# Convention on Cultural Diversity (redesign phase 7, §0.12 item 5). Charter
+# Reform I and UNESCO in force are its Propose control's gates
+# (un_docket_topic_open_cultural_diversity), so the row stays in the list
+# before them and the button says what it waits for.
+# Scope: country
+un_chamber_propose_cultural_diversity_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_cultural_diversity
+		TOPIC = cultural_diversity
+		BINDING = je_un_chamber_recommendatory
+		IN_FORCE = un_propose_cultural_diversity_in_force
+		AVAILABLE = un_propose_cultural_diversity_available
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# Treaty on the Prohibition of Nuclear Weapons (redesign phase 7, §0.12 item 8).
+# The widget hides this row under the disabled nuclear weapons rule
+# (un_chamber_nuclear_rule_sgui). Charter Reform II and the NPT in force are
+# its Propose control's gates (un_docket_topic_open_nuclear_ban).
+# Scope: country
+un_chamber_propose_nuclear_ban_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_nuclear_ban
+		TOPIC = nuclear_ban
+		BINDING = je_un_chamber_recommendatory
+		IN_FORCE = un_propose_nuclear_ban_in_force
+		AVAILABLE = un_propose_nuclear_ban_available
 		NO_CASE = je_un_chamber_topic_in_force
 	}
 }
@@ -2169,6 +2201,18 @@ un_chamber_regime_lines = {
 	un_chamber_convention_line_country = { MODIFIER = un_law_of_sea_modifier LINE = je_un_chamber_conv_law_of_sea }
 	un_chamber_regime_line = { MODIFIER = un_regime_naval_curb_modifier LINE = je_un_chamber_regime_naval_curb }
 	un_chamber_convention_line_country = { MODIFIER = un_physical_protection_modifier LINE = je_un_chamber_conv_physical_protection }
+	un_chamber_convention_line_country = { MODIFIER = un_cultural_diversity_modifier LINE = je_un_chamber_conv_cultural_diversity }
+	un_chamber_regime_line = { MODIFIER = un_regime_cultural_hegemon_modifier LINE = je_un_chamber_regime_cultural_hegemon }
+	un_chamber_convention_line_country = { MODIFIER = un_nuclear_ban_modifier LINE = je_un_chamber_conv_nuclear_ban }
+	# The ban's ceiling on our arsenal (nd_taboo_refresh_ban_ceiling): its
+	# terms are a variable, not a regime modifier, so the line is its own.
+	if = {
+		limit = {
+			has_modifier = un_nuclear_ban_modifier
+			has_variable = nd_tpnw_ceiling
+		}
+		custom_tooltip_no_bullet = je_un_chamber_regime_nuclear_ban_ceiling
+	}
 	un_chamber_regime_line = { MODIFIER = un_regime_colonial_pressure_modifier LINE = je_un_chamber_regime_colonial_pressure }
 	un_chamber_regime_line = { MODIFIER = un_regime_colony_liberty_modifier LINE = je_un_chamber_regime_colony }
 	if = {

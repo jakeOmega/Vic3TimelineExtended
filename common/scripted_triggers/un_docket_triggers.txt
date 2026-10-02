@@ -385,6 +385,58 @@ un_docket_topic_open_physical_protection = {
 	}
 }
 
+# Redesign phase 7 (§0.12 item 5): once the charter carries Reform I and
+# UNESCO is in force.
+un_docket_topic_open_cultural_diversity = {
+	custom_tooltip = {
+		text = un_charter_needs_reform_1_tt
+		un_charter_has_reform = { LEVEL = 1 }
+	}
+	custom_tooltip = {
+		text = un_propose_cultural_diversity_needs_unesco_tt
+		un_propose_heritage_in_force = yes
+	}
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_cultural_diversity_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = cultural_diversity } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_40_tt
+		global_var:un_authority >= 40
+	}
+}
+
+# Redesign phase 7 (§0.12 item 8): once the charter carries Reform II and the
+# Non-Proliferation Treaty is in force. No ban under the disabled nuclear
+# weapons rule.
+un_docket_topic_open_nuclear_ban = {
+	has_game_rule = nuclear_weapons_enabled
+	custom_tooltip = {
+		text = un_charter_needs_reform_2_tt
+		un_charter_has_reform = { LEVEL = 2 }
+	}
+	custom_tooltip = {
+		text = un_propose_nuclear_ban_needs_npt_tt
+		un_propose_npt_in_force = yes
+	}
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_nuclear_ban_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = nuclear_ban } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_40_tt
+		global_var:un_authority >= 40
+	}
+}
+
 un_docket_topic_open_decolonization = {
 	custom_tooltip = {
 		text = un_propose_not_in_force_tt
@@ -464,6 +516,16 @@ un_docket_may_propose_physical_protection = {
 	un_propose_physical_protection_qualifies = yes
 }
 
+un_docket_may_propose_cultural_diversity = {
+	un_docket_can_be_offered = yes
+	un_propose_cultural_diversity_qualifies = yes
+}
+
+un_docket_may_propose_nuclear_ban = {
+	un_docket_can_be_offered = yes
+	un_propose_nuclear_ban_qualifies = yes
+}
+
 un_docket_may_propose_decolonization = {
 	un_docket_can_be_offered = yes
 	un_propose_decolonization_qualifies = yes
@@ -513,6 +575,14 @@ un_docket_agenda_ready = {
 		AND = {
 			un_docket_topic_open_decolonization = yes
 			any_country = { un_docket_may_propose_decolonization = yes }
+		}
+		AND = {
+			un_docket_topic_open_cultural_diversity = yes
+			any_country = { un_docket_may_propose_cultural_diversity = yes }
+		}
+		AND = {
+			un_docket_topic_open_nuclear_ban = yes
+			any_country = { un_docket_may_propose_nuclear_ban = yes }
 		}
 	}
 }

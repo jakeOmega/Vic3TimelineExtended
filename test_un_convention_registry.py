@@ -124,6 +124,13 @@ CONVENTIONS = (
     Convention("physical_protection", "un_agency_cppnm", "un_physical_protection_modifier", "country",
                17, 23, 1231, "un_physical_protection_refusal_modifier",
                (), ("nuclear_weapons_enabled", "un_chamber_nuclear_rule_sgui"), True),
+    # Redesign phase 7 (docs/systems/un_redesign_design.md §0.12 items 5 and 8).
+    Convention("cultural_diversity", "un_agency_ccd", "un_cultural_diversity_modifier", "country",
+               18, 37, 1371, "un_cultural_diversity_refusal_modifier",
+               ("un_regime_cultural_hegemon_modifier",), None, True),
+    Convention("nuclear_ban", "un_agency_tpnw", "un_nuclear_ban_modifier", "country",
+               19, 38, 1381, "un_nuclear_ban_refusal_modifier",
+               (), ("nuclear_weapons_enabled", "un_chamber_nuclear_rule_sgui"), True),
 )
 
 KEYS = tuple(c.key for c in CONVENTIONS)
