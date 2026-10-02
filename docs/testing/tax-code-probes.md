@@ -1,454 +1,179 @@
-# Tax code engine probes — PR #585
+# Tax code probes — architecture risks before implementation
 
-**Status: implemented harness; every engine capability is UNTESTED.** This is disposable
-instrumentation for the [design](../superpowers/specs/2026-09-29-legislated-tax-code-design.md)
-and [plan, packages 0–1](../superpowers/plans/2026-09-30-legislated-tax-code.md), not the tax-code
-feature. Offline parsing/tests cannot establish economic incidence, native validation, or GUI
-behavior. Complete the [results form](tax-code-probe-results.md) for each run. Retain failed and
-inconclusive runs, with logs; do not replace them with an unsupported “works”.
+**Goal: find engine limitations that would change the tax system we build.**
+The [design](../superpowers/specs/2026-09-29-legislated-tax-code-design.md) needs
+payer-backed concessions, useful economic observations, multiple operative clauses,
+and records for approved future changes. Those are the first questions below.
 
-## Load-crash correction (2026-10-01)
+Applying a vanilla wage tax, disabling a Budget button, and saving an ordinary applied
+tax are smoke tests; they do not answer these questions. GUI controls can be edited or
+removed. Custom record references and dates, however, deserve a targeted reload check.
 
-The initial probe commit (`5b47e396`) put two `tab_buttons` instances directly
-inside the window header's `flowcontainer`. The reported load log rejects both
-at `pdx_gui_container.cpp:145`: `tab_buttons` derives from `hbox`, and a
-`container`/`flowcontainer` cannot directly own an `hbox` or `vbox`.
-The probe panel also contained 58 direct `hbox` rows with the same invalid
-structure. Visibility/opt-in gates do not make invalid widget definitions safe.
+Use one suitable country and a disposable save. Aim for a **20–30 minute first pass**;
+report partial results when time runs out. No scenario collection, repeated control runs,
+national reconciliation, hardware inventory, or mandatory attachments. A skipped risk
+remains unresolved for the implementation that depends on it; elapsed time is not a pass.
+Use the [short results form](tax-code-probe-results.md), one observation and decision per row.
 
-The header now uses a `vbox` with expanding width and fixed content height;
-the optional second strip collapses when hidden. Probe metric and button rows
-use horizontal `flowcontainer` layouts with their existing fixed child sizes.
-A regression test checks direct nesting and resolves the inherited tab-strip type.
+## Setup
 
-This corrects the reported GUI errors; a successful game load is still required
-to confirm the crash is resolved. Restart, load the same baseline **before arming**,
-then arm and open Tax Probes. Check both tab rows, metrics, and buttons, and confirm
-the corresponding `pdx_gui_container.cpp:145` errors are gone. Other law-retention
-and cultural-hegemony warnings in the supplied excerpt are outside this correction.
+Use the current mod containing the PR #585 harness, without a duplicate Workshop copy.
+Restart in debug mode and load a **copy** of a quiet save with an incorporated capital,
+another incorporated state, employed wage earners, and preferably profitable private
+agriculture. Keep the original untouched: **Zero carrier replaces the taxation law**.
+Clear bench and Disarm do not restore it; reload the original after testing.
 
-## Start here
+Pause, run `event te_debug_tax.1`, and open **Timeline Extended → Tax Probes**.
+If the tab fails, use the console commands below. Stop on a crash or script error and
+record the affected step; do not spend the session troubleshooting.
 
-1. Use a **copy of a save**, single-player, debug mode, with only this mod enabled. Record the
-   actual game build, DLC, enabled game rules, mod commit, hardware, resolution/UI scale, and
-   the source/version of your generated script docs. The repository vanilla snapshot inspected
-   when building this harness was **1.14.5**, dated **2026-09-30**; that is not your runtime version.
-2. Deploy the full PR branch from a complete checkout. Inspect the deployment dry run; a sparse
-   checkout can delete textures. Do not enable a second Workshop copy. Restart the game after
-   installing the scripts. Archive startup `debug.log` and `error.log` before they rotate.
-3. Load the baseline, pause, select the test country, and run **`event te_debug_tax.1`** in the
-   console. Vic3 has no CK3-style `effect` console command. Arming only records observations;
-   it does **not** change the law, tax level, goods, or rates. Running it again does not reset a run.
-4. Open **Timeline Extended → Tax Probes**. The temporary tab is on a second tab row so the
-   existing three labels retain their width. It and the launcher work even if the three ordinary
-   window systems are disabled. Switching tabs is read-only. All buttons have console equivalents
-   in the appendix; use those if a GUI experiment fails.
-5. Click **Snapshot**, save as `P00-armed`, and record the same numbers from Budget/Institutions
-   and selected pop panels. Snapshots are in country variables beginning `te_tp_` and in
-   `debug.log` lines beginning `TE_TAX_PROBE`. Use debug country → View Variables if logs rotate.
-6. Only for an isolated domestic bench, click **Zero carrier**. This **replaces your taxation law**,
-   including that law's ordinary non-tax effects, and sets native tax level to medium. It does not
-   remove goods selections or modifiers on other laws. Confirm all five *effective* domestic rates
-   are zero in Budget, and record any remaining contributors. Save this as `P01-zero-carrier`.
-   Compare domestic treatments against this carrier save, not against the original economy.
-7. **Reload the appropriate baseline between independent experiments.** Clear bench removes only
-   probe modifiers/amendments, pending dates/records and the lock; it leaves the native law,
-   goods selections, tariffs, military wages and any economic/political consequences in place.
-   Disarm also hides the tab and stops its monthly events. Neither is an undo operation.
+Click **Zero carrier** (`event te_debug_tax.3`), advance about a week, and pause.
+Confirm the effective domestic rates are zero, noting any residual contributors from
+other laws/modifiers. Save this as the **zero bench**. Reload it between independent
+treatments: rate buttons clear other probe tax amendments, but retain relief modifiers.
+Zero carrier does not remove taxed-goods selections, tariffs, or modifiers on other laws.
 
-Stop and mark the affected probe failed/inconclusive if a script fails to load, a button does
-nothing, the country scope is wrong, or the log reports an unknown key/scope/accessor. Capture
-file/line and the complete diagnostic. Some hooks are deliberately candidates: in particular
-**Static wage** tests a tax-scope modifier applied as a country static modifier. A rejection is
-useful evidence for the amendment fallback; a displayed modifier without charged payers is not success.
+For economic observations, compare the same identified pop/state and income source
+after roughly one weekly accounting update. Note rates, payer deductions, and relevant
+receipts; rough figures suffice. A modifier icon or changed rate label alone is insufficient.
+Mark a noisy or missing comparison unclear instead of chasing exact percentages.
 
-## Measurement contract (declare before testing)
+## R1. Do territorial and sector concessions benefit the intended payers?
 
-Use the same paused save for untreated and treated runs. Keep country, dates, game speed,
-construction, trade, mobilization, buildings, institutions and other policy changes the same.
-Record unavoidable AI/market drift. Do not interpret a civil war, price shock or disappearing
-trade flow as a clean tax-rate comparison.
+**Risk:** `state_tax_collection_mult` might reduce collections without reducing household
+liability, and a building-group tax multiplier might affect a different channel or owner
+than its name suggests. This determines which concessions can actually buy political support.
+Existing harness: extended P06.
 
-- First capture the paused state, then the first daily update, then each of four weekly accounting
-  updates. Extend to eight weeks if values are unsettled. Record actual dates; the monthly snapshot
-  pulse is **not** a daily revenue recorder. Use manual Snapshot at each measurement point.
-- Run the control twice. Record the range of its weekly receipts and payer burdens as the noise
-  floor. Predeclare reconciliation tolerance: default **max(£1/week, 1% of gross assessment,
-  measured control noise)**. If noise exceeds 5% of the predicted treatment, mark inconclusive
-  and choose a larger base/change or a quieter scenario. Do not widen tolerance after seeing a failure.
-- Record by channel: effective rate/amount, taxable base and units if obtainable, gross assessment,
-  payer deduction, waste/uncollected amount, net treasury receipts, and authority/bureaucracy cost.
-  `tax_income` is domestic tax income, **excluding tariffs and external transfers**. Do not use it
-  to validate customs receipts. `net_fixed_income` and `net_total_income` are distinct measures;
-  establish their coverage against Budget before using either for a promise.
-- For income/dividends, test the expected rate delta against the applicable observed income base.
-  For rural/head taxes, establish native time conversion and workforce/dependent coverage first;
-  do not assume that 0.1 means a percentage or multiply it by total population.
-- Where full payer aggregates are available, test `gross assessment ≈ payer deduction` and
-  `gross assessment ≈ net receipts + lost/uncollected assessment`, recording the engine's actual
-  definitions. If waste is not deducted from payers, record that instead of forcing the identity.
-  Representative pops alone establish those pops' behavior, **not** national reconciliation.
-  Missing aggregates mean partial evidence/inconclusive, never an invented national base.
-- Save before and after each treatment, export the relevant Budget/pop/state tooltips, and attach
-  logs and save identifiers. Cross-check logged values against country variables; a silent zero
-  from a bad log accessor must not be interpreted as an economic observation.
+1. From the zero bench, click **Wage 0.05** (`event te_debug_tax.10`), settle, and note
+   wage deductions for a capital pop and a noncapital pop, plus capital tax receipts.
+2. Click **State Relief** (`event te_debug_tax.20`, capital collection multiplier −50%).
+   Settle and compare the same payers and receipts. Does the capital payer save money?
+   Is the noncapital payer unaffected? Keep any income changes visible.
+3. Reload the zero bench. Use **Dividend 0.05** (`event te_debug_tax.11`) if a pop has
+   identifiable dividends from profitable agriculture; otherwise use Wage 0.05 with an
+   agricultural worker and record that narrower coverage. Note that payer and a
+   manufacturing comparison, then apply **Agriculture** (`event te_debug_tax.24`, −50%).
+   Settle and identify who, if anyone, saves tax. If an owner lives outside the producing
+   state, note where they live; do not assume the building's location selects the taxpayer.
 
-Performance contract: choose speed and hardware once, run three matched 12-month controls and
-three treatments after a three-month warm-up, and compare medians. Initial rejection budgets:
->5% extra simulation time with the tab closed, >10% open, or repeated >250 ms UI stalls opening
-or clicking Snapshot. Also test 10 deliberately armed countries. Report raw times and country
-counts; these are provisional investigation budgets, not shipping performance claims.
+**Decision:** offer only the demonstrated scope/channel as relief. If receipts fall while
+payer deductions do not, this is a collection loss, not a taxpayer concession. If sector
+relief has no demonstrated beneficiary, omit it initially. One wage test does not establish
+dividend, consumption, selective-instrument, or remote-owner exemptions. Test those only
+before adding the corresponding concession; broad relief is an acceptable reduced scope.
 
-## Scenario saves
+## R2. Can simulation scripts read the inputs estimates and AI need?
 
-| Save | Required properties |
-|---|---|
-| S1 small | Quiet small country; incorporated capital; wage earners, peasants and dependents |
-| S2 industrial | Large country with manufacturing, profitable private ownership and dividend recipients |
-| S3 relief | Incorporated and unincorporated states, poor capacity, remote/foreign ownership; record which state is the capital |
-| S4 customs | Positive grain imports and exports, another traded good as control, separate duty and subsidy baselines |
-| S5 authority | Market leader/member pair, relevant no-tariffs treaty, appropriate DLC; record trade laws and cooldowns |
-| S6 institutions | Available schools, room to expand, enough bureaucracy for a control and a separate deficit treatment |
-| S7 lifecycle | Save immediately before an uprising, plus branches for loyalist victory and rebel victory; independent wartime changes |
-| S8 adapters | Banking policy controls available, one pegged/delegated country, colonial program/release available |
+**Risk:** a number visible in Budget or a pop tooltip may have no simulation-script getter.
+Receipt totals are not taxable bases, especially when the current rate is zero.
+Existing harness: extended P00/P18.
 
-If a scenario cannot be created with the installed DLC or rules, mark it **not run** and state why.
-Do not use the script setters' ability to bypass a restriction as evidence that legislation has
-legal authority to do so.
+1. Reload the zero bench and click **Snapshot** (`event te_debug_tax.2`). Record
+   **Script receipts**, **Fixed balance**, and **Total balance** against the corresponding
+   Budget figures. Script receipts come from `tax_income`: all domestic taxes, excluding
+   tariffs and external transfers. Compare matching totals, not only the wage row.
+2. Apply Wage 0.05, advance a week, pause, and Snapshot again. Do the stored script values
+   respond plausibly? Read `te_tp_obs_tax_income`, `te_tp_obs_net_fixed_income`, and
+   `te_tp_obs_net_total_income` in country variables or `TE_TAX_PROBE` log lines if needed.
+   **Live GUI wage/head receipts** use GUI getters and do not establish script access.
+3. **Developer check before choosing the estimation model:** inspect the installed build's
+   generated trigger/value documentation for pre-tax wage/dividend/consumption bases,
+   payer deductions, and useful state/sector/pop breakdowns. Record each exact getter,
+   scope, units, and coverage. For any candidate, evaluate it into a temporary snapshot
+   variable at zero and nonzero rates and compare with the same pop/state in game.
+   A documentation entry is only a candidate. The existing harness has no taxable-base
+   reader, so this step cannot be passed by pressing Snapshot or viewing a tooltip.
+   If no suitable candidate is found in a bounded source inspection, record
+   **unavailable in inspected docs**, not proven impossible in every engine version.
 
-## Experiment sequence and decision gates
+**Decision:** aggregate receipts/balances support fiscal feedback but cannot establish
+an exact new-tax forecast or household incidence. If bases are unavailable or still untested,
+start with explicitly approximate estimates and documented representative/proxy inputs;
+keep unsupported distribution claims absent. Dividing zero receipts by a zero rate provides
+no base. Do not temporarily enact a draft just to measure it. Choose this fallback before
+building the preview and AI around unavailable data.
 
-### P00 — isolation, GUI, and observations
+## R3. Can independent clauses coexist and rebuild without losing or doubling taxes?
 
-Compare the unarmed save, armed save, open/closed tab, and other tabs. Ordinary controls and game
-rules must behave as before while unarmed. Opening/scrolling/tooltips must not advance stage,
-revision, snapshot sequence, tax selection or rates. Snapshot increments only the sequence and
-observation fields. Toggle countries/observer mode, close/reopen, and test narrow resolution and
-UI scaling. In observer mode the existing outer window gate must prevent player-scope reads.
+**Risk:** native amendment exclusivity/cardinality or application timing could invalidate
+a multi-clause code even though a single tax works. Ordinary lifecycle bookkeeping is
+implementation work; this small combination test establishes the collection mechanism.
+Existing harness: extended P07/P13.
 
-Compare displayed **Live GUI wage/head receipts** against Budget, and cached Script receipts/
-balances against their source fields. Live and snapshot numbers need not update at the same
-instant. The school readout is a threshold-based floor: −1 means absent, 0–4 are integer lower
-bounds, and 5 means at least 5. Compare it against *delivered* and *requested* levels
-while expanding, rather than assuming which the native investment trigger means. UI access is
-not simulation/AI access. At zero rates, inspect pop income and state revenue: determine whether
-an actual script-readable taxable base exists independently of dividing receipts by a rate.
-No such base getter is claimed by this harness. If absent, the fallback is explicit approximation.
+1. Reload the zero bench. Click **Draft two clauses** (`event te_debug_tax.60`) then
+   **Approve draft** (`event te_debug_tax.61`). These propose wage 5% plus dividend 5%.
+   Approval is a developer stand-in. Stage should be 2; rates/collections remain unchanged.
+   Note the displayed **Due** and **Expiry** absolute month indices.
+2. Complete R4's record/reload check now, using this pending package.
+3. Advance to the first country monthly pulse in the due month. Check stage 3 and
+   **both** wage/dividend amendments and effective 5% rates. Observe the first daily and
+   weekly updates: identifiable wage and dividend payers should pay once in their channels,
+   without a missing or doubled collection interval. If there is no dividend-paying pop,
+   record the rate coexistence separately and leave dividend economics unclear.
+4. Click **Rebuild operative** (`event te_debug_tax.65`) twice. Both clauses should remain
+   5%; no accumulation to 10%, missing clause, or changed due/expiry dates. Advance to the
+   expiry month: stage 5 and both rates return to their explicit zero successor.
 
-### P01–P05 — domestic channels and common consumption rates
+**Decision:** use amendments only for the combinations demonstrated. If they cannot coexist,
+investigate a static-modifier/canonical-variable carrier (extended P07) before writing the
+production collection layer; do not split legislation into unrelated free toggles. Monthly
+scheduling is the harness candidate, not proof of day-precise dates or multiple queued bills.
+Conflict/supersession algorithms get their own implementation tests later.
 
-From the zero carrier, run **Wage**, **Dividend**, **Rural**, **Head**, and **Consumption** separately,
-reloading the zero save each time. The rate buttons remove other probe tax amendments, but retain
-state/static modifiers so later stacking experiments remain possible. Confirm there are no
-unintended residual contributions from amendments on other laws, decrees, carbon policy, or events.
+## R4. Are custom records usable, owned, and persistent?
 
-| ID | Treatment | Required observations / reject conditions |
+**Risk:** lists of scripted containers holding country references and absolute dates are
+less established than vanilla's saved tax settings. This chooses the bill/obligation
+representation. Run during R3 so it costs only one reload. Existing harness: extended P12.
+
+1. While R3's package is pending, click **Append record** (`event te_debug_tax.67`) twice,
+   then **Inspect records** (`event te_debug_tax.68`). Owned count should be 2.
+2. Append a third time. Expect the log's **capacity two** rejection and two unchanged
+   existing records, not silent replacement. Inspect `te_tp_records` and its containers:
+   each has `te_tp_record_owner` pointing to this country and `te_tp_record_month`.
+   Count alone cannot verify the references or fields.
+3. Save to a throwaway slot, reload once, Inspect records and Snapshot. Check both
+   references/owners/month fields, stage 2, and the **original** Due/Expiry values.
+   Resume R3 and check that commencement and expiry use those dates.
+
+**Decision:** if container storage fails, use a bounded set of country-variable slots and
+absolute dates, then test that representation before committing to it. A successful count
+does not prove arbitrary nested objects or revolution inheritance. Fixed slots can still
+record approved future bills separately from the active debate; do not make pending
+commencement block all subsequent legislation.
+
+## Targeted checks before adding the corresponding feature
+
+These are high-risk dependencies, not a request to run the extended matrix. Run only the
+selected feature's check before implementing it. Record missing setup as skipped.
+
+| Feature / risk | Small discriminating check | Implementation decision |
 |---|---|---|
-| P01 | Wage 0.05, then Zero rates | +5 percentage points; wage-earner deduction and receipts; dividends and peasants are controls. Reject no payer loss or double application. |
-| P02 | Dividend 0.05, then Zero rates | +5 points on actual distributed dividends; test domestic/remote ownership, cooperatives, and unprofitable owners. Do not call this wealth/profit taxation. |
-| P03 | Rural 0.1, then Zero rates | Monetary assessment: peasants versus farmers/other pops; workforce and dependents; time conversion and incorporation. Do not call it land-value taxation. |
-| P04 | Head 0.1, then Zero rates | Non-peasant payer coverage, workforce/dependents and incorporation. Reconcile using observed eligible counts. |
-| P05 | Tax grain, Consumption 0.05; add luxury clothes; Consumption high 0.10; Untax grain | Selected goods share one candidate rate. Compare grain/luxury deductions and an untaxed good. Record authority before/after scripted selection, manual native selection, Authority modifier, and removal. Script additions that evade costs are a limitation, not a free-tax design. |
+| Customs: do goods/direction modifiers affect actual duties, and who has authority? | On an untouched native trade-policy bench with active grain trade, note grain and another good, both directions, selected levels, effective rates, receipts/subsidy expense, and market owner. Set grain import low (`event te_debug_tax.41`), then Grain Import (+0.10, `event te_debug_tax.29`); exports and the other good are comparisons. Reload; repeat export low (`event te_debug_tax.46`) plus Grain Export (`event te_debug_tax.30`). Before shared-market/treaty integration, compare native UI and the direct setter as a member or under a no-tariffs constraint (extended P08–P10). | Distinguish selected level from effective rate and subsidy costs. A direct setter may bypass legality; it does not establish authority. Add explicit validation where observable. Defer unsupported overrides/partner preferences; keep customs experimental if competent authority cannot be enforced. |
+| Service bargains: is the school observation a delivered level or a requested target? | On the untouched original with schools, arm and Snapshot, request one normal institution expansion, then Snapshot while expansion is incomplete. Compare `te_tp_school_level` and `te_tp_school_expanding` against requested/delivered UI values. Continue to completion only if the early reading is ambiguous (extended P16). | If the trigger reports the target early, it cannot alone verify delivery. Use a verified completion/actual-level source or omit delivery promises; never reward an undelivered service. |
+| Native AI: can automatic fiscal writes be prevented independently of the GUI? | Before integrating AI countries, inspect the installed native AI mutation paths; on one disposable AI country, arm the carrier and observe law, levels, goods and amendments during a fiscal-stress interval. The harness's UI lock leaves native AI/script setters unblocked. Use extended P07/P11/P14 for a targeted intervention and rerun. | A changed setting exposes a path to intercept. No change during a short run proves nothing about prevention. Patch exposed paths and establish a workable control before claiming one authoritative AI schedule; a later periodic reset can hide an illegal interim change. |
+| Civil wars: are records copied, shared, or merged from the loser? | Before choosing a copy/reunification strategy, use an existing near-uprising save with an operative/pending package and two records. Inspect original/target raw fields at outbreak (`event te_debug_tax.91`); do not arm/rebuild the target first. Check owner references and dates (extended P15). Both victory outcomes belong to later lifecycle validation. | Missing inheritance calls for explicit copying. Shared containers require independent records; loser-only merges require ownership/version cleanup. Failure of automatic inheritance is not failure of the tax idea. |
 
-For each, repeat at native very-low through very-high settings. Probe amendments intentionally
-have the **same rate at all five levels**. Any rate difference needs explanation; separately record
-native legitimacy, radicals/loyalists and IG effects that still vary with tax level. Run zero/nonzero
-checks under poor capacity and in unincorporated states, keeping those as separate cohorts.
+## Granularity and exit rule
 
-### P06 — state/sector relief, stacking and collection losses
+The current native hooks and harness cover **flat** wage/dividend rates, rural/head
+monetary assessments, and selected consumption goods at **one common rate**. They do not
+establish marginal brackets, allowances, separate domestic rates per good, wealth,
+inheritance, corporate-profit, land-value taxes, or bilateral tariff preferences.
+Before exposing any of these, identify a real base, payer deduction, and collection hook
+and run one targeted economic experiment; otherwise omit it or choose the design's
+honestly named fallback. The global Consumption High button cannot test per-good rates.
 
-Apply one verified tax channel, settle, then test **State relief** (capital −50%), **State exempt**
-(capital −100%), **Capacity** (+1000 capital capacity), **Waste** (+0.25 capital waste),
-**Agriculture** (−50% agriculture building-group tax multiplier), and **Manufacturing** (−50%).
-Each click replaces that same modifier; it does not clear the other named modifiers. Repeat on
-wage, dividend, rural, head and consumption channels, reloading between cases.
+At the end, record **worked / failed / unclear / skipped**, the demonstrated scope,
+and the architecture or catalog decision. Begin production work on supported mechanisms
+or explicit reduced scope. Resolve a failed/unknown dependency before building the part
+that relies on it; unrelated work can continue.
 
-Record capital versus a matched noncapital state, incorporated versus unincorporated, and worker
-versus owner savings (including an owner living elsewhere). Stack relief + exemption and relief +
-sector once, then click the same button twice: identify additive/multiplicative/clamped behavior
-and verify no duplicate modifier accumulation. Capacity/waste must distinguish lost receipts from
-reduced payer liability. Move the capital or transfer the treated state on a separate save: these
-modifiers stay on the **original state**, because the button targeted it at click time. Production
-must decide whether a privilege follows a named state or the capital designation.
-
-### P07 — application carrier, timing and native politics
-
-Compare Wage via amendment with **Static wage** alone on the zero carrier, and with both together.
-Inspect load-time errors, effective rates, deductions and receipts. Test add/remove on pause, next
-daily tick and next weekly update. Try repeated Rebuild on an operative package. Inspect normal
-amendment repeal UI and let the AI govern for a year; record spontaneous removal or extra adoption.
-The test amendments refuse ordinary sponsorship, but whether this blocks every native path is
-an experiment. Do not infer native tax-level politics are neutral just because all five rates match.
-If country static application fails, retain the amendment route only if its economics/lifecycle pass.
-
-### P08–P10 — customs, goods bounds, treaties, and market authority
-
-Use a **native trade-policy save**, not a domestic carrier save unless explicitly comparing both.
-Pause and record grain import/export level, legal min/max, effective rate, cooldown, quantity,
-Trade Advantage, net receipts/subsidy expense, and relevant treaty/market owner. Reload between
-mutations so cooldown and trade adaptation do not confound a direction comparison.
-
-- **P08:** zero, low and maximum duties; low and maximum subventions in **each direction separately**.
-  Use the corresponding Import/Export buttons. Exports are a control while testing imports and
-  vice versa. Inspect both immediate setting changes and four settled weekly updates. Compare a
-  non-grain good. Use native high settings too to determine intermediate factors (the design's
-  0.25/0.5/1.0 candidates must be measured on your build).
-- **P09:** test Import rate/Export rate (+0.10 maximum rate) separately from Grain import/Grain
-  export (+0.10 good override). Change the selected native level without changing the modifier;
-  determine how level and maximum combine. Grain max (−1 level) and Grain min (+1 level) test
-  numeric level bounds. Try settings outside each bound through native UI and through the probe
-  setter. Stack only in a separate run; test contradictory bounds and log clamp/rejection behavior.
-- **P10:** repeat as a leader, member, and treaty-constrained country, before/after treaty entry,
-  withdrawal and market change. Compare native UI rejection with script setter behavior. Entry
-  effects clearing duties may legitimately supersede the test setting: record it, do not reset it.
-  Record subsidy handling separately. These are goods/direction probes, not a bilateral tariff API.
-
-For incidence, compare a matched Trade Advantage change with the same legal tariff setting;
-record traded amounts, charged amount and receipts. Establish whether Trade Advantage changes the
-base before/after tariff computation, or mark unresolved. A successful level setter alone passes
-neither economic incidence nor treaty/customs-union authority.
-
-### P11 — interception and bypass map
-
-On a save with taxes/trade enabled, capture native controls unlocked, then click **Lock native UI**.
-The prototype gates the five Budget tax-level buttons, the add-consumption-menu button, and the
-14 import/export duty/subvention buttons defined in `budget_panel.gui`. Existing validity checks
-remain in place. **Unlock native UI** must immediately restore ordinary behavior.
-
-Test Budget, Market/goods details, state-goods view, right-click menus, already-open popovers,
-keyboard shortcuts, amendment repeal, law changes, events, treaty entry, native AI and carbon policy.
-Record the exact widget/action and whether a change happened *before* the next tick. Shared widget
-use may extend the gate to other screens; prove it. Consumption-tax removal and menus defined in
-vanilla shared files are intentionally **not claimed covered**. Native AI and script setters remain
-unblocked negative controls. There is no periodic reset to disguise bypasses. Any ordinary bypass
-means the interception architecture is incomplete; keep the feature experimental and identify the
-additional shared control/hook required. The probe tab's direct setters deliberately remain usable.
-
-### P12 — storage, duration, save/load and bounded records
-
-From an armed save click **Append record** twice; **Inspect records** must read 2. A third append
-must log capacity rejection and leave the two existing containers and their month/owner fields
-unchanged. Save/reload; inspect the list/container references in the save or variable inspector.
-Check the owning country, not merely a global count. Clear bench destroys only records owned by
-that country. This tests a bounded representation, not arbitrary objects or inherited native lists.
-
-Start **7-day timer**, save at day 3, inspect days 6/7/8 before/after reload. `te_tp_timer` and the
-Authority modifier should expire after seven days; the modifier uses a computed duration variable.
-A difference distinguishes timed-variable support from computed-modifier-duration support. This
-test temporarily removes consumption authority costs and must use its own baseline. The lifecycle
-queue below deliberately uses absolute calendar-month indices (`year * 12 + month`, January zero)
-so failure of this duration candidate does not invalidate unrelated experiments.
-
-### P13 — two-clause player passage, conflicts and scheduling
-
-Start zero carrier, no other probe treatments. Record receipts and stage 0. Click **Draft two
-clauses**: stage 1, changed revision, *unchanged collections*. Click again to revise. **Discard
-draft**, save/reload, and check no collection changes. Redraft and **Approve draft**: stage 2,
-no collections yet, commencement next calendar month and explicit zero successor one month later.
-Approval is a developer stand-in, not political support or a chamber simulation.
-
-Click **Try commencement** early: unchanged. Save/reload at draft, approval, immediately before
-due month, operative state and before expiry. At the first country monthly pulse in the due month,
-both wage and dividend clauses become operative (stage 3). Observe the first daily/weekly accounting
-updates for a missing/doubled interval. **Rebuild operative** twice must not increase rates, revision,
-receipts or change dates. At expiry both clauses revert to zero once (stage 5).
-
-Repeat with **Inject conflict** after approval: version differs; due month must hold the whole
-package (stage 4) with previous collections intact. There is no silent rescheduling/reapproval;
-Clear bench and explicitly start a new run. From an operative package use **Supersede package**:
-it installs a zero domestic successor with a new version. The old expiry must log “stale expiry
-ignored”, not alter the replacement. Advance across a December/January boundary. Repeat manual
-commencement after the monthly pulse to test double execution. Loading after both deadlines may
-process commencement and expiry in one event: final state must be zero, with both logs and no
-restarted clocks. Calendar-day precision is not implemented or claimed; monthly resolution is the
-candidate fallback. Multiple overlapping approved bills remain a production design question.
-
-After P08–P10 pass for the scenario, start a fresh zero carrier with **grain import level zero**,
-click **Include customs** before drafting, and repeat. It adds grain low import duty at commencement
-and explicit zero duty at expiry. Record all three clauses at the same checkpoints. Native legality
-is still whatever P10 established; these direct setters are not a shipping authority adapter.
-
-### P14 — AI uses the same command path
-
-Select an AI-test country by switching to it in debug mode, arm, prepare the zero carrier, and
-click **Arm AI sequence**. Switch back to your original country before advancing. Only this
-explicitly armed country enters the sequence: first monthly pulse drafts, second approves,
-third commences, fourth expires. Inspect it without taking player control where possible; switching
-to it pauses the AI stages. Logs/variables must match P13 and deductions/receipts must reconcile.
-Repeat with reload between stages, injected conflict, a separate customs-enabled run, and native
-AI fiscal crisis. Native AI may change the law/level: that is evidence about bypasses, not permission
-to give it free revenue. This tests command parity, not autonomous political negotiation.
-
-### P15 — revolution, secession and territorial lifecycle
-
-Use S7 with a pending package and two containers. On uprising start, logs inspect the original and
-uprising countries **without copying anything**. Record whether scalars, dates, amendments,
-modifiers and lists actually transferred. Missing inheritance is a measured limitation, not a
-harness failure to hide. The raw uprising event runs on the target even if it has no armed marker.
-
-Create separate branches for both victories. To test each side's independent schedule, switch to
-that side, arm it if necessary, and explicitly prepare/draft/approve a different-timed package;
-record this as **manual setup, not successful automatic copying**. Leave one side at zero and the
-other operative. At victory inspect before pressing Rebuild; then Rebuild twice. The winner's
-recorded operative value should determine its two clauses and dates should not restart. Native
-missing-variable merges can import loser-only queue fields: record every such field and do not
-claim coherent reconstruction if they survive. If no armed marker survives, invoke `event
-te_debug_tax.91` manually for raw evidence before arming. Repeat secession, country release,
-state transfer and capital move. The harness provides observations and a reconstruction candidate,
-not the production copy/reunification algorithm promised by the design.
-
-### P16 — service and fiscal obligations
-
-With available schools, capture requested and delivered level and the harness investment trigger.
-Request one normal UI expansion, capture immediately, monthly through delivery, and after reload.
-Repeat during a bureaucracy deficit (the **Bureaucracy** modifier forces −10000 for an isolated
-stress case). Observe native costs, tax/dividend waste, service level and expansion availability.
-A deficit by itself must not be classified as failure of a delivered-level promise. If the engine
-trigger reports requested level early, it cannot be the sole delivery verifier.
-
-Use **Military wages: low/medium**, measure salary expense and native political effects, and compare
-script wage-level observations. Independently track fixed and total balances over at least four
-weekly updates; vary construction and one-off income separately to identify accounting coverage.
-A wage cut is an action, not proof of a balanced budget. No extra treasury transfer or duplicate
-institution charge is created by these probes.
-
-### P17 — law, colonial, monetary and restraint adapters
-
-- Enact Public Schools through normal legislation. The snapshot's `public_schools` flag must remain
-  false during debate and change only on actual activation; compare institution availability.
-  Repeal, change government and reload. No harness button force-enacts this promised law.
-- Use an existing colonial program/release action in S8, recording eligibility, authority, costs,
-  program active state, target-state owner/status and stability before/after each monthly tick.
-  Keep target territories fixed in the form. A program purchase is not proof of a stability or
-  release outcome. Test target loss, release, transferred obligations and game rule disabled.
-- In Budget's monetary controls, legally request a target cut. Snapshot target and actual rate are
-  separate (`-999` means unavailable). Compare immediate and monthly values, then test pegged and
-  delegated regimes and loss of authority. Use the existing system's controls and native costs;
-  never write the target variable directly to manufacture permission.
-- With capital controls initially off, activate then deactivate them using the normal policy
-  controls **between monthly snapshots**. The sampled active flag may be zero, but the sticky
-  `controls_actions` count must increase. The temporary observer is in the ordinary activation
-  helper and emergency peg-defence helper; it records **action attempts**, not automatic proof
-  that controls took effect. Capture active state after each action. Exercise player, AI, event,
-  emergency and game-rule-disabled paths. Search for direct modifier/variable writes not covered
-  by those two hooks. Any missed path means continuous restraint is unsupported until instrumented.
-
-These experiments verify candidate adapter inputs and hooks; they do not grant political rewards,
-track production obligations, replace diplomatic consent, or silently execute promised policy.
-
-### P18 — migration contributors, zero bases and performance
-
-Run `python3 scripts/analysis/inventory_tax_probe_sources.py` to inventory candidate tax contributors
-and GUI mutations from the current repo plus its vanilla snapshot. The output is a starting map,
-not a full engine inventory: shared vanilla GUI, hardcoded AI and event files absent from the
-snapshot need an installed-game inspection. Classify each contributor in the results form as
-statutory provision, retained adjustment or obsolete path; flag any that cannot be intercepted.
-Include amendments on non-tax laws, carbon policy/output effects, goods authority and subsidies.
-
-Compare native baselines with a manually equivalent carrier schedule **only where rates match**.
-The harness has a deliberately small rate catalog and cannot faithfully migrate every native code.
-Do not count it as a completed migration. Repeat rate application/removal and test zero-receipt
-bases, as in P00/P07. Run the predeclared performance protocol with GUI closed, open and repeated
-manual snapshots. Automatic work is one constant-size monthly event per armed country; no normal
-country receives containers, snapshots or collection changes, and no GUI frame runs a world/pop sweep.
-
-## Capability ledger and exit rule
-
-The [results form](tax-code-probe-results.md) starts every row UNTESTED. Give each conclusion a
-scenario/save, raw readings, log evidence and its precise scope. PASS requires no unexplained script
-errors and the predicted economic/lifecycle behavior within the declared tolerance. FAIL means a
-reproduced contradiction; INCONCLUSIVE means missing evidence/noise; NOT RUN means unavailable setup.
-A negative capability result may be a successful investigation, but must not be labeled supported.
-
-Amendments instead of static rates, common consumption rates, broad state relief, goods-level
-customs, approximate previews and monthly schedules are candidate fallbacks. Unsupported wealth,
-inheritance, corporate-profit, land-value or partner-specific taxes stay omitted. No production
-architecture is chosen by this PR. Required unresolved interception/authority/persistence gates
-keep the design experimental. Attach the completed form to PR #585; do not merge it as “verified”
-until its evidence is reviewed.
-
-## Removal before release
-
-Delete the dedicated `te_debug_tax*` files under `common/`, `events/`, `gui/` and `localization/`,
-plus `common/laws/zz_te_debug_tax_carrier.txt`. Remove the marked additions in
-`gui/te_systems_window.gui`, `gui/budget_panel.gui`, `common/scripted_guis/te_system_tab_sguis.txt`,
-`common/scripted_effects/banking_policy_effects.txt`, and
-`common/scripted_effects/te_monetary_arrangement_effects.txt`. Remove the probe-specific test file;
-retain this runbook, source inventory tool and filled evidence for design decisions. The
-localization organizer files every `te_tp_`, `amendment_te_tp_` and `law_te_probe_carrier` key
-in `te_debug_tax_l_english.yml`, unreferenced ones included, so deleting that file removes them
-all. Then remove the `DEBUG_TAX` category, its `categorize_key` rule and its `HARNESS_CATEGORIES`
-entry from `organize_loc.py`, with the two tests that use them in `test_organize_loc.py`. Reload an
-unmodified baseline save after removing the carrier definitions. Ordinary player-guide chapters
-and PDF are unchanged because the harness is console-only developer instrumentation.
-
-## Console/button appendix
-
-Every numbered command is `event te_debug_tax.N`. All except `.1` require an armed
-country. The GUI and console invoke the same hidden country event; the event rechecks its
-conditions. Numbers `.90` (monthly dispatcher) and `.91` (raw inheritance inspection) are
-internal, with `.91` also useful manually as described above.
-
-| N | Button | Experiment group |
-|---:|---|---|
-| 1 | Arm probes | Setup |
-| 2 | Snapshot | Setup |
-| 3 | Zero carrier | Setup |
-| 4 | Clear bench | Setup |
-| 5 | Disarm | Setup |
-| 10 | Wage 0.05 | Domestic |
-| 11 | Dividend 0.05 | Domestic |
-| 12 | Rural 0.1 | Domestic |
-| 13 | Head 0.1 | Domestic |
-| 14 | Consumption 0.05 | Domestic |
-| 15 | Consumption High 0.10 | Domestic |
-| 16 | Zero rates | Domestic |
-| 17 | Tax grain | Domestic |
-| 18 | Untax grain | Domestic |
-| 19 | Tax luxuries | Domestic |
-| 20 | State Relief | Modifiers |
-| 21 | State Exempt | Modifiers |
-| 22 | Capacity | Modifiers |
-| 23 | Waste | Modifiers |
-| 24 | Agriculture | Modifiers |
-| 25 | Manufacturing | Modifiers |
-| 26 | Authority | Modifiers |
-| 27 | Import Rate | Modifiers |
-| 28 | Export Rate | Modifiers |
-| 29 | Grain Import | Modifiers |
-| 30 | Grain Export | Modifiers |
-| 31 | Grain Max | Modifiers |
-| 32 | Grain Min | Modifiers |
-| 33 | Static Wage | Modifiers |
-| 34 | Bureaucracy | Modifiers |
-| 40 | Import no | Customs |
-| 41 | Import low tariffs | Customs |
-| 42 | Import max tariffs | Customs |
-| 43 | Import low subventions | Customs |
-| 44 | Import max subventions | Customs |
-| 45 | Export no | Customs |
-| 46 | Export low tariffs | Customs |
-| 47 | Export max tariffs | Customs |
-| 48 | Export low subventions | Customs |
-| 49 | Export max subventions | Customs |
-| 50 | Tax level: very low | Controls |
-| 51 | Tax level: low | Controls |
-| 52 | Tax level: medium | Controls |
-| 53 | Tax level: high | Controls |
-| 54 | Tax level: very high | Controls |
-| 55 | Military wages: low | Controls |
-| 56 | Military wages: medium | Controls |
-| 57 | Lock native UI | Controls |
-| 58 | Unlock native UI | Controls |
-| 60 | Draft two clauses | Lifecycle |
-| 61 | Approve draft | Lifecycle |
-| 62 | Try commencement | Lifecycle |
-| 63 | Discard draft | Lifecycle |
-| 64 | Inject conflict | Lifecycle |
-| 65 | Rebuild operative | Lifecycle |
-| 66 | Arm AI sequence | Lifecycle |
-| 67 | Append record | Storage |
-| 68 | Inspect records | Storage |
-| 69 | Start 7-day timer | Storage |
-| 70 | Supersede package | Lifecycle |
-| 71 | Include customs | Lifecycle |
+Reload the original before normal play. The [extended runbook](tax-code-probes-extended.md)
+and [extended form](tax-code-probe-results-extended.md) preserve detailed follow-ups,
+the command appendix, and removal instructions. They are optional references, not an
+all-at-once prerequisite. Full migration, menu coverage, conflict cases, AI solvency,
+both civil-war outcomes, balancing, and performance remain implementation/release
+validation. Basic loading, Budget locks, and ordinary tax reloads are smoke/regression
+checks if those surfaces change, not the main pre-build feasibility evidence.
