@@ -4,6 +4,8 @@
 
 > **Deflation exit for mandate-run banks (2026-10-01):** a delegated, AI or independent bank that wants a lower rate than its floor allows now buys assets itself, sized by how far under the floor its virtual rate sits (`te_mon_virtual_rate`, `te_mon_pressure_bank_qe`). See [§0.12](#012-the-mandate-banks-own-asset-purchases-at-the-floor--2026-10-01), §9.1 and §11.
 
+> **Slumps disinflate under an inflation target (2026-10-02):** under Fiat Money or Digital Currency (and a suspended gold standard, or a currency anchored to one of those — `te_mon_targets_inflation`) the cycle's slump terms in §9.1 are now stagnation −0.5, downturn −2 and panic −4 (were −0.3 / −0.8 / −1.5). A slump used to move core inflation by about half a point a year, so a price-stability bank held its rate up through it. Metallic, dollarised and crypto money keep the old terms: their prices rest within a point of the Deflation band, and the larger pull held them in it. Measured in `docs/audits/banking_cycle_simulation.md` §16.
+
 > **STATUS: PHASES 1–6 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 6 (§19 rows 6a / 6b /
 > 6c — the swap line as a repayable capped single-provider loan, the guarantee's call counter,
 > `non_fulfillment` on the friendly three, treaty leverage, and the two hostile articles
@@ -2414,7 +2416,9 @@ law accelerate inflation forever.)
 pressure (pp) =
     − 0.4 × stance_gap (clamped −2…+4)       loose money (at most +0.8pp; the loose bound was −4, i.e. +1.6pp, until 2026-09-22 — the clamp is shared with the cycle channel, §8)
     + phase term                             frenzy +1.5 · boom +0.8 · expansion +0.3 · stable 0
-                                             stagnation −0.3 · downturn −0.8 · panic −1.5
+                                             stagnation −0.5 · downturn −2 · panic −4 under an inflation
+                                             target (fiat / digital, te_mon_targets_inflation; 2026-10-02);
+                                             −0.3 · −0.8 · −1.5 on metal, dollarised or crypto money
     + 0.2 if bubble_pressure ≥ 65
     + 0.3 × max(0, deficit % of GDP − 1)     ×2 at war
     + 2.5 × monetisation_level               §11
@@ -4627,7 +4631,7 @@ P6-1…13).
 | Price-stability mandate: inflation weight / target | 1.0 / 2% | 6 |
 | Growth mandate: bias / reaction / threshold | **−0.25** (was −1.0 until 2026-09-22) / **1.0** (was 0.5 until 2026-09-25) / 4% | 6 |
 | Cycle lean's outlook: momentum months | 4.69 × momentum (six months at 0.9 decay; `te_mon_outlook_momentum_factor`, 2026-09-25) | 6 |
-| Inflation pressure (pp): stance per pp / phases / bubble / deficit / monetisation / QE | 0.4 / ±0.3–1.5 / 0.2 / 0.3 / 2.5 / 1.0 | 9.1 |
+| Inflation pressure (pp): stance per pp / phases / bubble / deficit / monetisation / QE | 0.4 / +0.3–1.5 up, −0.5 / −2 / −4 down under an inflation target (−0.3 / −0.8 / −1.5 on metal; was that everywhere until 2026-10-02) / 0.2 / 0.3 / 2.5 / 1.0 | 9.1 |
 | Core adjustment speed | 0.10 per month | 9.1 |
 | Expectation α: manual, delegated (CBI) | 1/24 (1/12) | 9.1 |
 | Credibility anchor c: state-owned banking / manual / delegated / CBI / gold | 0.15 / 0.25 / 0.4 / 0.7 / 1 | 9.1 |

@@ -17,7 +17,8 @@ and the final matrix of #371. §10 is the follow-up that lets a maxed player pul
 frenzy), with `--rescue` and the refreshed matrix. §12 (2026-09-25) is the delegated bank's overshoot under
 standing wage pressure (`--wage-pressure`) and the three changes that answer it; §13 replaces independence's
 crash and momentum bonus with inflation anchoring (`--bank-level`). §14 (2026-09-30) prices and shapes the five
-directed-credit sectors apart (`--tune ai_dc_reserve=off`). Every table states which script
+directed-credit sectors apart (`--tune ai_dc_reserve=off`). §16 (2026-10-02) makes a slump pull inflation down
+harder under an inflation target, and only there (`--tune pre_slump_pressure`). Every table states which script
 it measured.
 
 ---
@@ -1494,4 +1495,108 @@ and the rebound settles lower because the currency no longer overshoots and fall
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 150 --only fiat --points 0,8 --seed 1 [--fin-law law_central_bank_independence] [--tune pre_bank_qe]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 60 --only digital --points 0,8 --seed 1 [--fin-law law_central_bank_independence] [--tune pre_bank_qe]
 .venv/bin/python -m unittest test_monetary_bank_qe
+```
+
+---
+
+## 16. A slump's pull on prices under an inflation target (2026-10-02)
+
+**Report (owner).** A fiat central bank kept raising its rate through a Panic to hold inflation down. A
+slump should be disinflationary enough that the bank can follow it down. The cycle's phase term in
+`te_mon_phase_pressure` (§9.1 of the design doc) was −0.3 / −0.8 / −1.5 for Stagnation, Downturn and Panic,
+the mirror of the boom side, under every currency.
+
+The simulator now reads that value from the mod rather than restating it (`ModConstants.phase_table`), takes
+`--tune pressure_<phase>=X` (inflation-target side) and `pressure_metal_<phase>=X`, and has two new columns:
+**rcHike**, the share of Panic and Downturn months in which the policy rate rose, and **rcCore**, core
+inflation's mean change over those months in pp a year. `--tune pre_slump_pressure` restores the old slump
+side.
+
+### F23 — The slump terms could not move a fiat bank's inflation
+
+Fiat, price stability, no wage pressure: core inflation fell about 0.5pp a year through a recession, and the
+policy rate rose in 27% of recession months. Under +1pp of wage pressure, core sat near 4.7% through slumps
+and the target near 8%. A labour law's wage pressure (+0.2 to +1.4pp across the labor and welfare laws)
+outweighed a Downturn's −0.8 on its own. The phase term is a level, and core closes a tenth of the gap a
+month, so −1.5 through a typical year-long Panic moves core about a point.
+
+### F24 — Metal cannot take a larger pull
+
+Three candidates applied to every currency, 200 runs × 100 years, no wage pressure (old → A → B → C, where A
+is −0.5 / −1.5 / −3, B −0.75 / −2 / −4 and C −1 / −3 / −5):
+
+| cell | crashes | recession % | longest <40, mo | Deflation band % | services % |
+|---|---:|---:|---:|---:|---:|
+| `commodity/nothing/0pt` | 8.2 / 7.6 / 6.4 / 4.2 | 11.7 / 24.2 / 38.3 / 62.7 | 75 / 176 / 277 / 558 | 6.8 / 20.9 / 36.9 / 63.2 | −1.5 / −7.5 / −15.0 / −28.2 |
+| `gold/peg/0pt` | 12.9 / 11.9 / 9.9 / 6.4 | 11.2 / 17.2 / 30.4 / 56.6 | 41 / 82 / 188 / 456 | 3.1 / 11.3 / 26.8 / 55.6 | 2.0 / −1.4 / −8.8 / −23.7 |
+| `commodity/price/0pt` | 9.5 / 9.1 / 8.9 / 7.7 | 6.9 / 8.1 / 10.5 / 15.8 | 33 / 46 / 58 / 96 | 2.4 / 5.0 / 9.1 / 17.9 | 2.5 / 1.7 / 0.6 / −2.8 |
+| `fiat/price/0pt` | 8.8 / 10.3 / 12.1 / 13.6 | 5.7 / 6.4 / 7.9 / 8.7 | 26 / 23 / 21 / 22 | 0.0 / 0.0 / 0.1 / 0.4 | 2.8 / 3.6 / 4.1 / 4.3 |
+| `fiat/growth/0pt` | 16.0 / 17.9 / 19.2 / 20.4 | 9.9 / 10.5 / 11.2 / 11.9 | 21 / 20 / 20 / 20 | 0.0 / 0.0 / 0.0 / 0.1 | 4.2 / 4.9 / 5.1 / 5.2 |
+
+Metallic prices rest at 0%, a point above the Deflation band's −1% edge, and the regime pull settles core at
+half the pressure. A larger slump pull puts a metallic economy into Deflation, whose −0.2 monthly momentum
+drain then holds the slump: a self-sustaining depression. Fiat and digital prices rest near the 2% anchor,
+three points from the edge, and a mandate bank's cell barely enters the band at C.
+
+### What shipped
+
+`te_mon_phase_pressure`'s slump side splits on a new trigger, `te_mon_targets_inflation`: inflation anchor
+above 0 (fiat, digital, a suspended gold standard, or a currency anchored to one of those), not dollarised,
+not decentralized cryptocurrency. There it is **−0.5 / −2 / −4**: B with the milder Stagnation the owner asked
+for. Metal, dollarised and crypto money keep −0.3 / −0.8 / −1.5. The boom side is unchanged everywhere.
+
+### Result — 400 runs × 100 years per cell, `pre_slump_pressure` → shipped
+
+Every metallic cell is identical run for run. Fiat and digital mandate cells:
+
+| cell | crashes | recession % | longest <40, mo | inflation | rate ≥10 % | tight in slump % | rcHike | rcCore | services % |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `fiat/price/0pt` | 8.5 → 11.3 | 5.5 → 7.3 | 26 → 23 | 2.43 → 2.22 | 1.2 → 0.9 | 0.17 → 0.14 | 27.1 → 14.2 | −0.47 → −1.49 | 2.7 → 3.6 |
+| `fiat/price/5pt` | 5.0 → 5.6 | 2.1 → 2.4 | 19 → 19 | 2.37 → 2.28 | 1.1 → 0.8 | 0.21 → 0.15 | 27.3 → 15.2 | −0.37 → −1.45 | 4.8 → 5.4 |
+| `fiat/growth/0pt` | 16.1 → 18.8 | 9.9 → 10.9 | 21 → 20 | 3.22 → 2.82 | 2.1 → 1.2 | 0.02 → 0.01 | 20.8 → 16.4 | −0.83 → −1.94 | 4.3 → 5.0 |
+| `digital/price/0pt` | 8.3 → 10.5 | 4.8 → 5.9 | 23 → 21 | 2.39 → 2.20 | 1.2 → 1.0 | 0.17 → 0.11 | 32.7 → 25.9 | −0.40 → −1.60 | 3.7 → 4.6 |
+| `digital/growth/0pt` | 15.1 → 17.3 | 8.6 → 9.5 | 21 → 20 | 3.15 → 2.80 | 2.1 → 1.5 | 0.03 → 0.02 | 19.8 → 18.5 | −0.82 → −1.98 | 5.0 → 5.5 |
+
+**`--wage-pressure 1.0`**, where §12's F15 left price stability parked near the stagnation line:
+
+| cell | crashes | recession % | longest <40, mo | inflation | rate ≥10 % | tight in slump % | rcHike | rcCore | services % |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `fiat/price/0pt` | 0.8 → 1.0 | 1.3 → 0.9 | 106 → 84 | 3.67 → 3.49 | 11.1 → 8.1 | 3.13 → 1.91 | 20.1 → 19.1 | −0.37 → −1.32 | −5.5 → −4.6 |
+| `fiat/price/5pt` | 0.1 → 0.1 | 0.5 → 0.2 | 80 → 62 | 3.67 → 3.48 | 11.2 → 7.6 | 3.64 → 2.18 | 11.2 → 9.7 | −0.57 → −1.42 | −5.1 → −4.4 |
+| `fiat/growth/0pt` | 3.4 → 4.7 | 6.1 → 4.3 | 71 → 52 | 5.32 → 5.01 | 29.4 → 23.1 | 4.36 → 1.51 | 12.3 → 11.8 | −0.43 → −1.57 | −2.9 → −1.2 |
+| `digital/price/0pt` | 0.4 → 0.5 | 1.0 → 0.5 | 83 → 70 | 3.68 → 3.51 | 11.9 → 9.0 | 3.56 → 2.15 | 17.7 → 20.1 | −0.38 → −1.30 | −5.0 → −4.3 |
+| `digital/growth/0pt` | 3.1 → 4.2 | 5.4 → 3.8 | 62 → 50 | 5.31 → 5.03 | 30.0 → 25.1 | 5.21 → 2.06 | 10.6 → 10.5 | −0.40 → −1.54 | −2.4 → −0.8 |
+
+At +0.5pp (300 runs) the direction is the same: fiat price stability's longest slump 52 → 43, rcHike
+28.6 → 19.2, crashes 2.3 → 3.3, services −2.0 → −1.0.
+
+**Core now falls through a recession**, two to four times as fast, and inflation averages closer to the 2%
+target. Under standing wage pressure the bank spends less time at 10% or more and less time tight in a slump,
+and the longest slump shortens by about a fifth. **Crashes rise** with no wage pressure (fiat price stability
+8.5 → 11.3 a century at 0 points, 5.0 → 5.6 at 5): the bank comes out of each slump looser. Services output
+rises in every fiat and digital mandate cell. The unsteered fiat and digital dials (`*/nothing`, F5) drift
+less (fiat 18.4% → 9.9% mean inflation) and now sit tight in a slump 3% of the time, the cost of holding a
+fixed rate while prices fall.
+
+### F25 — Not fixed: the remaining hikes are the outlook, not inflation
+
+Hikes in Panic nearly vanish (no wage pressure, fiat price stability, 60 runs: 98 Panic months with a hike
+before, 6 now). About 96% of the 708 hike months left falls in a Downturn 6–18 months after a crash, with the outlook already past 25: the lean
+(§12) switches off while the phase line has not yet been crossed, and the target returns to its rule. Core
+then sits below target (about 1.5%), so this is a stimulative rate going back to neutral, not a bank fighting
+inflation. Holding the slump lean until the phase itself leaves Downturn would remove it, at the cost of §12's
+"stop leaning before the line" behaviour, which is an owner decision.
+
+### Deflation trap
+
+`banking_deflation_trap.py`'s playtest start (§15, F22: Panic, headline on −10%, a strong currency), 60 seeds:
+the bank leaves the clamp in month 4 (3 before) and reaches 0% in month 32 (27), with the same peak (4.0 Growth,
+3.8 Price Stability) and a late mean 0.2 lower. Ordinary centuries with the currency loop on, 30 per cell: no months on the
+−10% clamp, months below 0% at most 0.64% (at most 0.41% before), crashes unchanged within noise.
+
+**Reproduce:**
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --points 0,5 [--wage-pressure 1.0] [--tune pre_slump_pressure]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 0,5 --tune pressure_metal_stagnation=-0.75,pressure_metal_downturn=-2,pressure_metal_panic=-4   # F24's B on metal
 ```

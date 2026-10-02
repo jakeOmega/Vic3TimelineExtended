@@ -193,29 +193,40 @@ class ModConstants:
         self._cache[name] = float(m.group(1))
         return self._cache[name]
 
-    def phase_table(self, name: str) -> dict[str, float]:
+    def phase_table(self, name: str, targets_inflation: bool) -> dict[str, float]:
         """A script value that branches on the cycle phase, as {phase: signed pp}.
 
         Reads every `banking_cycle_is_<phase> = yes` limit and the `add` or
         `subtract` that follows it, so `te_mon_phase_pressure` stays one branching
         value in the mod and this still reads its numbers rather than restating
-        them. A phase with no branch is 0.
+        them. A branch that splits on `te_mon_targets_inflation = yes` (the slump
+        side since 2026-10-02) gives its `if` number when `targets_inflation` and
+        its `else` number otherwise. A phase with no branch is 0.
         """
-        if name in self._blocks:
-            return self._blocks[name]
+        key = f"{name}/{targets_inflation}"
+        if key in self._blocks:
+            return self._blocks[key]
         body = _block(self._sv_src, name)
         if body is None:
             raise KeyError(f"script value {name!r} not found in {SCRIPT_VALUE_FILES}")
+        body = _strip_comments(body)
+        op = r"(add|subtract)\s*=\s*(-?[\d.]+)"
+        heads = list(re.finditer(r"banking_cycle_is_(\w+)\s*=\s*yes\s*\}", body))
         out: dict[str, float] = {}
-        for m in re.finditer(
-            r"banking_cycle_is_(\w+)\s*=\s*yes\s*\}\s*(add|subtract)\s*=\s*(-?[\d.]+)",
-            _strip_comments(body),
-        ):
-            sign = -1.0 if m.group(2) == "subtract" else 1.0
-            out[m.group(1)] = sign * float(m.group(3))
+        for i, head in enumerate(heads):
+            branch = body[head.end() : heads[i + 1].start() if i + 1 < len(heads) else len(body)]
+            if "te_mon_targets_inflation" in branch:
+                pick = r"te_mon_targets_inflation\s*=\s*yes\s*\}\s*" if targets_inflation else r"else\s*=\s*\{\s*"
+                m = re.search(pick + op, branch)
+            else:
+                m = re.match(r"\s*" + op, branch)
+            if not m:
+                raise ValueError(f"{name!r}: cannot read the {head.group(1)!r} branch:\n{branch}")
+            sign = -1.0 if m.group(1) == "subtract" else 1.0
+            out[head.group(1)] = sign * float(m.group(2))
         if not out:
             raise ValueError(f"script value {name!r} has no banking_cycle_is_* branches")
-        self._blocks[name] = out
+        self._blocks[key] = out
         return out
 
     def modifier(self, name: str) -> dict[str, float]:
@@ -538,8 +549,8 @@ PRE_BANK_QE = {
     "bank_qe": 0.0,
 }
 # The slump side of te_mon_phase_pressure before 2026-10-02 (§16): a panic,
-# downturn and stagnation pulled prices down by 1.5, 0.8 and 0.3pp, mirroring
-# the boom side. `--tune pre_slump_pressure`.
+# downturn and stagnation pulled prices down by 1.5, 0.8 and 0.3pp under every
+# currency, mirroring the boom side. Metal still does. `--tune pre_slump_pressure`.
 PRE_SLUMP_PRESSURE = {
     "pressure_stagnation": -0.3,
     "pressure_downturn": -0.8,
@@ -884,6 +895,15 @@ def is_on_gold(cfg: Config) -> bool:
 
 def is_metallic(cfg: Config) -> bool:
     return cfg.currency in ("gold", "commodity")
+
+
+def targets_inflation(cfg: Config, state: State) -> bool:
+    """te_mon_targets_inflation: prices rest on the 2% anchor, not on metal (§16).
+
+    The simulator has no crypto, anchoring or suspension, so this is fiat or
+    digital and not dollarised.
+    """
+    return not is_metallic(cfg) and not state.dollarised
 
 
 def is_cbi(cfg: Config) -> bool:
@@ -1291,11 +1311,18 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     # stance: a tight rate is disinflationary
     total += -K.sv("te_mon_stance_pressure_coeff") * clamped_gap(state)
 
-    # phase: te_mon_phase_pressure, read from the mod. `--tune pressure_<phase>=X`
-    # overrides one phase; `--tune pre_slump_pressure` restores the slump side
-    # as it stood before 2026-10-02.
+    # phase: te_mon_phase_pressure, read from the mod, whose slump side splits on
+    # te_mon_targets_inflation (§16). `--tune pressure_<phase>=X` overrides one
+    # phase under an inflation target, `pressure_metal_<phase>=X` on metal or
+    # dollarised; `--tune pre_slump_pressure` restores the slump side as it
+    # stood before 2026-10-02.
     phase = phase_of(state.finance_cycle_value)
-    total += tuned("pressure_" + phase, K.phase_table("te_mon_phase_pressure").get(phase, 0.0))
+    if targets_inflation(cfg, state):
+        total += tuned("pressure_" + phase, K.phase_table("te_mon_phase_pressure", True).get(phase, 0.0))
+    else:
+        total += tuned(
+            "pressure_metal_" + phase, K.phase_table("te_mon_phase_pressure", False).get(phase, 0.0)
+        )
 
     # bubble
     if state.bubble_pressure >= K.sv("te_mon_bubble_threshold"):
