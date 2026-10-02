@@ -271,7 +271,7 @@
 					limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 
 					# Authority moves ONCE globally per month, toward the target computed
-					# from the seven pillars, in un_global_authority_on_action
+					# from the eight pillars, in un_global_authority_on_action
 					# (un_authority_monthly_update, un_authority_effects.txt). Nothing
 					# per-member is applied here.
 

@@ -34,15 +34,19 @@
 
 ## 0.10 The Policy pillar and a slower credibility ledger
 
-Built 2026-10-02 at the mod owner's request. Not yet seen in a running game.
+Built 2026-10-02 at the mod owner's request; the good-standing rule (ruling 2) was added the
+same day, also at the owner's request. Not yet seen in a running game.
 
 **What changed.**
 
 - **An eighth pillar in the target, Policy.** The target is now the sum of eight pillars, the
   constant base (counted as one, as the panel and the player guide do) and seven computed
-  ones: participation, commitment, credibility, funding, order, delivery and policy. Policy is `Σ country_un_authority_target_add × un_actor_weight` over every
-  country, held to **−25 … +25** from all sources together (`un_pillar_policy_value`,
-  `un_policy_cap` / `un_policy_floor`). A negative total takes authority down.
+  ones: participation, commitment, credibility, funding, order, delivery and policy. Policy is
+  `Σ un_policy_contribution` over every country, held to **−25 … +25** from all sources
+  together (`un_pillar_policy_value`, `un_policy_cap` / `un_policy_floor`). A country's
+  contribution is its `country_un_authority_target_add × un_actor_weight`, in full for a member
+  in good standing and held at 0 or below for anyone else (ruling 2). A negative total takes
+  authority down.
 - **Credibility** keeps its design but moves to **−25 … +25** (`un_credibility_cap`, new
   `un_credibility_floor`) and fades with a **ten-year half-life** (`un_credibility_decay_factor`
   0.99424 a month = 0.5^(1/120)). Delivery and order keep the four-year half-life
@@ -58,15 +62,40 @@ Built 2026-10-02 at the mod owner's request. Not yet seen in a running game.
    counts up to five times over and a micro-state rounds to nothing. Raw power share was the
    other candidate; it would have made every grant a number near 25, because the shares sum to
    1 where the weights sum to at most 10.
-2. **Every country counts, not only members.** A power outside the UN can still be its friend
-   or its enemy through its own laws. This differs from participation and commitment, which
-   are members-only; say so before a grant relies on it.
+2. **Only a member in good standing adds; anyone can take away.** A member that is not
+   undermining the organisation (`un_policy_counts_in_full`, `un_membership_triggers.txt`: it
+   carries `un_member_modifier`, represented or suspended, and not `un_undermine_order_cost`)
+   counts in full, for or against. Anyone else, a non-member or an underminer, has its total
+   held at 0 or below (`un_policy_contribution`: `max = 0` before the weight). The reasoning,
+   the owner's: a country that stays out of the UN or works against it, but behaves well
+   (international aid, limited war), runs that conduct through its own channels and
+   strengthens norms, not the institution, so it should not raise the UN's authority; bad
+   conduct from anyone is the challenge the UN exists to meet and makes it look weak when it
+   cannot answer, so it counts. That also gives an anti-UN strategy a lever: its harmful
+   policies wear the UN down, its good ones do not prop it up.
+   - **The clamp is on the total.** The engine exposes only the modifier's sum, so an
+     outsider's good policies offset its own bad ones and add nothing beyond that. Splitting the
+     modifier into a "support" and a "harm" half was the alternative; it would make every grant
+     a classification and show players two similar lines.
+   - **Championing earns nothing extra here.** Commitment already rewards it; counting it again
+     would double one fact.
+   - **Non-members still count**, which differs from participation and commitment (members
+     only); that is how an outsider's harm reaches the target.
+   - The panel's Policy tooltip shows the viewer's own line (`je_un_auth_policy_own`: modifier,
+     weight, what it counts) and, while a positive total is being held at 0, says why
+     (`je_un_auth_policy_own_held`, from `un_disp_policy_own_held`).
 3. **Policy is read from the world, not booked.** It is not a ledger: it does not decay, has no
    log entries and no `un_ledger_policy`. A modifier that is gone stops counting at the next
    monthly update. `un_ledger_record` is never called with `PILLAR = policy`
    (`test_un_policy_pillar.py` fails if anything does).
 4. **Nothing grants the modifier yet.** The first grant, the Ministry of International Aid,
    is a balance decision for its own change. The pillar is a no-op at 0 until then.
+   `test_un_policy_pillar.py` fails when a grant (the modifier given a value) appears anywhere
+   under `common/` or `events/`. Sizing for that change: the weights sum to about 10, so a value
+   every country holds moves the pillar by about 10× that value; keep one country's whole stack
+   within about ±3, and never put the modifier on a modifier applied with
+   `multiplier = un_enforcement` (or `un_convention_multiplier`), whose tier-driven multiplier
+   would feed authority back into its own target.
 5. **Why credibility slows and widens together.** A quiet world feeds the ledger about 0.1 a
    month. On the old four-year half-life that settled near +7, inside the old ±15. On ten years
    it settles near +17 (0.1 / (1 − 0.99424)), which would have pinned the old cap. The ±25 cap
@@ -83,9 +112,11 @@ the target is computed from it.
 
 ### Files
 
-- `common/script_values/un_authority_values.txt`: the tuning values, `un_pillar_policy_value`,
-  the target, `un_disp_pillar_policy`.
-- `common/script_values/un_overview_display_values.txt`: the bar and trend values.
+- `common/script_values/un_authority_values.txt`: the tuning values, `un_policy_contribution`,
+  `un_pillar_policy_value`, the target, `un_disp_pillar_policy`.
+- `common/scripted_triggers/un_membership_triggers.txt`: `un_policy_counts_in_full`.
+- `common/script_values/un_overview_display_values.txt`: the bar and trend values, and the
+  viewer's own line (`un_disp_policy_own_*`).
 - `common/scripted_effects/un_authority_effects.txt`: per-ledger decay, the snapshot and its
   previous-month copy. `un_ladder_effects.txt`: the dissolve.
 - `gui/journal_entry_widgets/un_authority_widget.gui`: the Policy row, after Delivery.
@@ -101,6 +132,12 @@ the target is computed from it.
       scratch law or a debug modifier): its tooltip lists "UN Authority Target +2.0", and at
       the next monthly update the Policy row moves by 2 × that country's weight.
 - [ ] A negative value moves the row left of the centre line, and the trend icon follows.
+- [ ] The Policy tooltip's "Ours" line shows the viewer's modifier, weight and what it counts.
+      As a non-member with +2, it counts +0.0 and the red line explains why; with −2 it counts
+      −2 × weight. Pressing Undermine International Order as a member with +2 drops it to +0.0 at once in
+      the tooltip, and in the row at the next monthly update.
+- [ ] The modifier's own tooltip (on the law or static modifier carrying it) states the
+      good-standing rule.
 - [ ] Credibility's bar and tooltip read −25 to +25, and a reading of +12.5 fills half of the
       right side.
 

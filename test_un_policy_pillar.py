@@ -2,10 +2,12 @@
 
 Policy is read from the world, not booked: every country's
 country_un_authority_target_add modifier, times its weight (un_actor_weight),
-summed and held to -25..+25. Credibility keeps a ten-year half-life and a
--25..+25 range; delivery and order keep the four-year half-life. These checks pin
-the wiring: the modifier is registered and localized, the pillar is in the
-target, snapshotted and shown, and no ledger path can write to it.
+summed and held to -25..+25. Only a member in good standing (in the UN and not
+undermining it) counts in full; anyone else's total counts only when negative.
+Credibility keeps a ten-year half-life and a -25..+25 range; delivery and order
+keep the four-year half-life. These checks pin the wiring: the modifier is
+registered and localized, the pillar is in the target, snapshotted and shown, the
+good-standing rule is applied and explained, and no ledger path can write to it.
 """
 import glob
 import math
@@ -22,7 +24,10 @@ AUTH_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_authority_ef
 LADDER_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_ladder_effects.txt")
 MODIFIER_TYPES = os.path.join(REPO, "common", "modifier_type_definitions", "un_membership_modifier_types.txt")
 WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "un_authority_widget.gui")
+MEMBERSHIP_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "un_membership_triggers.txt")
 MODIFIER = "country_un_authority_target_add"
+# The modifier given a value (a grant), not read (`modifier:...`) or defined (`... = {`).
+GRANT = re.compile(rf"(?<![:\w]){MODIFIER}\s*=(?!\s*\{{)")
 
 _LOC_LINE = re.compile(r'^ ([\w.]+):\d* "(.*)"')
 
@@ -58,14 +63,28 @@ class ModifierTest(unittest.TestCase):
         self.assertIn(f"{MODIFIER}_desc", loc)
 
     def test_nothing_grants_it_yet(self):
-        """This change only adds the hook; a grant is a balance decision of its own."""
+        """This change only adds the hook; a grant is a balance decision of its own.
+
+        A grant is the modifier assigned a value in any modifier block, anywhere a
+        modifier can live: laws, institutions, technologies, static modifiers,
+        production methods, principles, treaty articles, character traits. Reads
+        (`modifier:...`) and the type definition (`... = {`) are not grants."""
         grants = []
-        for folder in ("laws", "static_modifiers", "technology", "institutions", "buildings",
-                       "production_methods", "decrees", "power_bloc_principles"):
-            for path in glob.glob(os.path.join(REPO, "common", folder, "**", "*.txt"), recursive=True):
-                if MODIFIER in _read(path):
-                    grants.append(os.path.relpath(path, REPO))
+        paths = glob.glob(os.path.join(REPO, "common", "**", "*.txt"), recursive=True)
+        paths += glob.glob(os.path.join(REPO, "events", "**", "*.txt"), recursive=True)
+        for path in paths:
+            if GRANT.search(_strip_comments(_read(path))):
+                grants.append(os.path.relpath(path, REPO))
         self.assertEqual(grants, [], "a grant landed; update this test and the docs")
+
+    def test_the_grant_pattern_sees_a_grant(self):
+        """The scan above would catch `country_un_authority_target_add = 1.5` and
+        ignore the reads and the definition."""
+        self.assertRegex(f"modifier = {{\n\t{MODIFIER} = 1.5\n}}", GRANT)
+        self.assertRegex(f"\t\t{MODIFIER} = -0.25", GRANT)
+        self.assertNotRegex(f"value = modifier:{MODIFIER}", GRANT)
+        self.assertNotRegex(f"modifier:{MODIFIER} > 0", GRANT)
+        self.assertNotRegex(f"{MODIFIER} = {{\n\tcolor = good", GRANT)
 
 
 class PillarTest(unittest.TestCase):
@@ -73,10 +92,16 @@ class PillarTest(unittest.TestCase):
     def setUpClass(cls):
         cls.values = _read(VALUES)
 
-    def test_the_pillar_sums_the_modifier_weighted_by_actor_weight(self):
+    def test_the_pillar_sums_each_countrys_contribution(self):
         body = _block(self.values, "un_pillar_policy_value")
         self.assertIn("every_country", body)
-        self.assertIn(f"modifier:{MODIFIER}", body)
+        self.assertIn("add = un_policy_contribution", body)
+        self.assertNotIn(f"modifier:{MODIFIER}", body,
+                         "the pillar must read the gated contribution, not the raw modifier")
+
+    def test_a_contribution_is_the_modifier_times_actor_weight(self):
+        body = _block(self.values, "un_policy_contribution")
+        self.assertIn(f"value = modifier:{MODIFIER}", body)
         self.assertIn("multiply = un_actor_weight", body)
 
     def test_the_pillar_is_held_to_plus_minus_25(self):
@@ -111,6 +136,59 @@ class PillarTest(unittest.TestCase):
         display = _read(DISPLAY)
         for side in ("pos", "neg"):
             self.assertIn("divide = un_policy_cap", _block(display, f"un_disp_pillar_policy_{side}"))
+
+
+class GoodStandingTest(unittest.TestCase):
+    """Only a member in good standing adds to the pillar; anyone else can only
+    take from it. Good conduct from outside the UN, or from a member working
+    against it, does not strengthen it; bad conduct from anyone weakens it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _read(VALUES)
+        cls.trigger = _block(_read(MEMBERSHIP_TRIGGERS), "un_policy_counts_in_full")
+
+    def test_good_standing_is_a_member_not_undermining(self):
+        body = re.sub(r"\s+", " ", self.trigger)
+        self.assertIn("je:je_united_nations ?= {", body)
+        self.assertIn("has_modifier = un_member_modifier", body)
+        self.assertIn("NOT = { has_modifier = un_undermine_order_cost }", body)
+        self.assertNotIn("un_champion_order_cost", body,
+                         "championing is rewarded by commitment; it must not change policy")
+
+    def test_anyone_else_is_held_at_zero_or_below(self):
+        body = re.sub(r"\s+", " ", _block(self.values, "un_policy_contribution"))
+        self.assertIn("if = { limit = { NOT = { un_policy_counts_in_full = yes } } max = 0 }", body)
+        self.assertNotIn("min = 0", body, "a member in good standing must be able to count against")
+
+    def test_the_clamp_comes_before_the_weight(self):
+        """Weight is never negative, so the order does not change the sign, but the
+        clamp is on the country's own total, as the tooltip states it."""
+        body = _block(self.values, "un_policy_contribution")
+        self.assertLess(body.index("max = 0"), body.index("multiply = un_actor_weight"))
+
+    def test_the_rule_as_the_script_states_it(self):
+        """A model of un_policy_contribution, from the rulings in §0.10."""
+        def contribution(modifier, member, undermining, weight):
+            in_full = member and not undermining
+            value = modifier if in_full else min(modifier, 0)
+            return value * weight
+
+        self.assertEqual(contribution(1.5, True, False, 2), 3)        # member: for
+        self.assertEqual(contribution(-2, True, False, 1), -2)        # member: against
+        self.assertEqual(contribution(1.5, False, False, 2), 0)       # outsider: good adds nothing
+        self.assertEqual(contribution(-2, False, False, 1), -2)       # outsider: bad counts
+        self.assertEqual(contribution(1.5, True, True, 2), 0)         # underminer: good adds nothing
+        self.assertEqual(contribution(-0.5, True, True, 2), -1)       # underminer: bad counts
+        self.assertEqual(contribution(1.5 - 2, False, False, 1), -0.5)  # outsider: offsets, no more
+
+    def test_the_viewer_line_uses_the_same_rule(self):
+        display = _read(DISPLAY)
+        self.assertIn("value = un_policy_contribution",
+                      _block(display, "un_disp_policy_own_contribution"))
+        held = re.sub(r"\s+", " ", _block(display, "un_disp_policy_own_held"))
+        self.assertIn("NOT = { un_policy_counts_in_full = yes }", held)
+        self.assertIn(f"modifier:{MODIFIER} > 0", held)
 
 
 class CredibilityTest(unittest.TestCase):
@@ -169,8 +247,26 @@ class GuiAndLocTest(unittest.TestCase):
 
     def test_every_key_the_row_names_exists(self):
         for key in ("je_un_auth_bar_policy_tt", "je_un_auth_tbl_policy_label", "je_un_auth_tbl_policy_tt",
-                    "je_un_auth_tbl_policy_detail", "je_un_auth_tbl_policy_value"):
+                    "je_un_auth_tbl_policy_detail", "je_un_auth_tbl_policy_value",
+                    "je_un_auth_policy_own", "je_un_auth_policy_own_held"):
             self.assertIn(key, self.loc, key)
+
+    def test_the_tooltip_shows_our_own_contribution(self):
+        self.assertIn("$je_un_auth_policy_own$", self.loc["je_un_auth_bar_policy_tt"])
+        own = self.loc["je_un_auth_policy_own"]
+        for v in ("un_disp_policy_own_modifier", "un_actor_weight", "un_disp_policy_own_contribution",
+                  "un_disp_policy_own_held"):
+            self.assertIn(f"ScriptValue('{v}')", own)
+        self.assertIn("'je_un_auth_policy_own_held'", own)
+
+    def test_the_good_standing_rule_is_explained_wherever_policy_is(self):
+        """The pillar's tooltip, the help text and the modifier's own description
+        each say who can add and who can only take away."""
+        self.assertIn("not undermining", self.loc["je_un_auth_tbl_policy_tt"])
+        self.assertIn("only take away", self.loc["je_un_auth_tbl_policy_tt"])
+        self.assertIn("not undermining", self.loc["je_un_auth_help_3"])
+        self.assertIn("not undermining", self.loc[f"{MODIFIER}_desc"])
+        self.assertIn("only a negative total counts", self.loc[f"{MODIFIER}_desc"])
 
     def test_the_tooltips_state_the_new_ranges_and_fade(self):
         self.assertIn("(−25 to +25)", self.loc["je_un_auth_tbl_policy_tt"])
