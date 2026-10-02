@@ -236,34 +236,6 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
         self.assertEqual(cumulative[-1], 100)
         self.assertFalse(any(k in values for k in ("ch_model_hist_total", "ch_model_hist_cumulative")))
 
-    def test_player_view_lists_the_store_oldest_first_and_follows_eviction(self):
-        player = Container()
-        self.h.run("te_history_mirror_ch_models", player)
-        self.assertNotIn("ch_model_hist_view", player.lists)  # no store yet
-        for year in range(1836, 1936):
-            self.h.year = year
-            self.h.sample()
-        self.h.run("te_history_mirror_ch_models", player)
-        view = player.lists["ch_model_hist_view"]
-        self.assertEqual(view, self.h.samples)  # the same containers, not copies
-        self.assertEqual([c.variables["te_hist_y"] for c in view], list(range(1836, 1936)))
-        self.h.year = 1936
-        self.h.sample()  # evicts 1836
-        self.h.run("te_history_mirror_ch_models", player)
-        view = player.lists["ch_model_hist_view"]
-        self.assertEqual([c.variables["te_hist_y"] for c in view], list(range(1837, 1937)))
-        self.assertTrue(all(c in self.h.live for c in view))
-        self.assertNotIn("ch_model_hist_view", self.h.globals["ch_model_hist_store"].lists)
-
-    def test_player_view_is_rebuilt_by_the_census_and_monthly(self):
-        effects = read("common/scripted_effects/cultural_hegemony_effects.txt")
-        record = effects.index("te_history_record_cultural_hegemony_models = yes")
-        census = re.search(r"every_country = \{\s*limit = \{ is_player = yes \}\s*te_history_mirror_ch_models = yes", effects[record:])
-        self.assertIsNotNone(census)
-        monthly = effects[effects.index("ch_monthly_country_update = {"):record]
-        self.assertRegex(monthly, r"limit = \{ is_player = yes \}\s*ch_leaders_display_write = yes\s*te_history_mirror_ch_models = yes")
-        self.assertRegex(monthly, r"else_if = \{\s*limit = \{ has_variable_list = ch_model_hist_view \}\s*clear_variable_list = ch_model_hist_view")
-
     def test_no_history_when_disabled_or_world_pull_is_zero(self):
         self.h.enabled = False
         self.h.sample()
@@ -275,12 +247,18 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
 
     def test_gui_palette_order_shared_binding_and_historical_tooltips(self):
         gui = read("gui/journal_entry_widgets/cultural_hegemony_widget.gui")
-        plot = _type_body(gui, "ch_model_history_plot")
         history = _type_body(gui, "te_ch_sec_history")
-        # GetGlobalVariable(..).GetList(..) loaded cleanly but drew no bars in
-        # game; the player's mirror is read like the te_hist charts.
-        self.assertIn("JournalEntry.GetCountry.MakeScope.GetList('ch_model_hist_view')", plot)
-        self.assertNotIn("GetGlobalVariable", plot)
+        chart = history[history.index("te_history_chart = {"):]
+        plot = chart[chart.index('blockoverride "sample_datamodel"'):chart.index('blockoverride "plot_layouts"')]
+        self.assertIn("GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')", plot)
+        # The plot blocks sit on the te_history_chart instance, as in every
+        # other chart. #633 put them in a type derived from te_history_plot,
+        # which drew nothing in game, even on its own (GUI guide gotcha #37).
+        for block in ("sample_visible", "bar_tooltip", "marker_pips", "bar_body"):
+            self.assertIn(f'blockoverride "{block}"', plot)
+        self.assertEqual(chart.count("te_history_plot = {"), 3)
+        for path in sorted(ROOT.glob("gui/**/*.gui")):
+            self.assertIsNone(re.search(r"\btype\s+\w+\s*=\s*te_history_plot\b", read(path.relative_to(ROOT))), path)
         self.assertEqual(re.findall(r"GetVariableValue\('ch_model_hist_cum_(\w+)'\)", plot), list(reversed(MODELS)))
         colors = re.findall(r"color = \{ ([\d.]+) ([\d.]+) ([\d.]+) 1.0 \}", plot)
         expected = [tuple(int(color[i:i + 2], 16) / 255 for i in (1, 3, 5)) for _, color in reversed(PALETTE)]

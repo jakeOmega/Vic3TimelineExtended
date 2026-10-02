@@ -39,16 +39,9 @@ ch_monthly_country_update = {
 	# A player's own copy of the overview's leader flags, refreshed monthly so
 	# a new player, an entry that activated between recounts, a moved capital
 	# or an annexed leader show within a month (ch_leaders_display_write).
-	# Likewise the history chart's view of the global store (#633): a list
-	# of the same sample containers, which only a player's GUI reads.
 	if = {
 		limit = { is_player = yes }
 		ch_leaders_display_write = yes
-		te_history_mirror_ch_models = yes
-	}
-	else_if = {
-		limit = { has_variable_list = ch_model_hist_view }
-		clear_variable_list = ch_model_hist_view
 	}
 
 	# Foreign benchmark is now applied in JE on_monthly_pulse
@@ -948,12 +941,6 @@ ch_yearly_global_update = {
 		ch_finish_all_model_buckets = yes
 		# One immutable global snapshot per calendar year, even after wars.
 		te_history_record_cultural_hegemony_models = yes
-		# The chart reads each player's view of the store; a new sample or an
-		# eviction shows at once rather than at the next monthly pulse.
-		every_country = {
-			limit = { is_player = yes }
-			te_history_mirror_ch_models = yes
-		}
 		if = {
 			limit = { has_global_variable = ch_rank_1 }
 			global_var:ch_rank_1 = {
