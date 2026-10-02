@@ -1,6 +1,6 @@
 # Drugs phase 2: Healthcare demand and plantation penalties
 
-**Status:** not started. A brief for a local Claude Code session on the owner's machine, which has the game install and saves. Read it whole before starting.
+**Status:** §§ 1–3 done on branch `feat/drugs-phase-2-healthcare-demand`: measurements and the owner's answers to § 5 in [the results](../../testing/drugs-wealth-probe-results-2026-10-02.md). § 4's in-game checks are the owner's. A brief for a local Claude Code session on the owner's machine, which has the game install and saves. Read it whole before starting.
 **Phase 1:** [jakeOmega/Vic3TimelineExtended#652](https://github.com/jakeOmega/Vic3TimelineExtended/pull/652) (branch `claude/youthful-turing-sbvv47`). If it hasn't merged, branch from it and open the phase-2 PR with `--base main` (CLAUDE.md § "Stacked PRs must target `main`").
 **Outcome:** pops from about wealth 25 buy a small amount of Drugs as healthcare, and the amount levels off. Health and consumer-protection institutions shrink opium plantations. Every threshold comes from wealth distributions measured in real saves, not from guesses.
 

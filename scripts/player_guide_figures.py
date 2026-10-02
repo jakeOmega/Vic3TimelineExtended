@@ -42,7 +42,7 @@ GROUPS = [
     ("Luxuries", "#eb6834", ["luxury_food", "luxury_drinks", "luxury_items",
                              "intoxicants", "stimulants"]),
     ("Services and leisure", "#1baf7a", ["services", "leisure", "communication",
-                                          "free_movement"]),
+                                          "free_movement", "healthcare"]),
     ("Convenience", "#eda100", ["convenience"]),
     ("Art", "#e87ba4", ["art"]),
     ("Tourism", "#008300", ["tourism"]),
