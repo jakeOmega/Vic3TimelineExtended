@@ -1,0 +1,111 @@
+﻿# Legislated tax code: the collection writer (docs/systems/tax_code_schema.md).
+#
+# te_tax_sync_collection is the only effect that changes a rule-on country's
+# native fiscal state: the rate amendments on law_te_tax_code, the
+# consumption-taxed goods, the relief modifiers and the native tax level. It
+# reads the enacted code from the country's variables and changes only what
+# differs, so a second call changes nothing. Its per-instrument and per-good
+# parts are generated (te_tax_generated_effects.txt, gen_tax_code.py).
+#
+# Country scope, with ROOT = THIS = the country: call it from a country event
+# or a country hook, never from the global monthly pulse, which has no ROOT.
+# Nothing here reads ROOT; the country and the sponsor are saved scopes.
+# Amendment and modifier changes are not visible later in the same effect, so
+# nothing below re-reads what it has just written.
+
+te_tax_sync_collection = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_law = law_type:law_te_tax_code
+			has_variable = te_tax_schema
+		}
+		# Backfills tokens a newer schema added; never overwrites one.
+		te_tax_init_country = yes
+		save_scope_as = te_tax_country
+		te_tax_pick_sponsor = yes
+		if = {
+			limit = { exists = scope:te_tax_sponsor }
+			te_tax_gen_sync_wage = yes
+			te_tax_gen_sync_div = yes
+			te_tax_gen_sync_land = yes
+			te_tax_gen_sync_head = yes
+			te_tax_gen_sync_cons = yes
+		}
+		else = {
+			debug_log = "TE_TAX sync: no interest group to sponsor an amendment; rate amendments left as they were"
+		}
+		te_tax_gen_sync_goods = yes
+		te_tax_sync_relief = yes
+		# The carrier and its amendments carry the same rates at every native
+		# level, so the level moves only vanilla's political tax_modifier_<level>
+		# statics; pinning it keeps identical codes from differing by them.
+		if = { limit = { NOT = { tax_level = medium } } set_tax_level = medium }
+	}
+}
+
+# Country scope. Saves scope:te_tax_sponsor, the interest group recorded as
+# sponsoring the amendments the sync adds: a group in government, else the
+# group with the most clout. add_amendment needs one; the choice changes no
+# rate. Saved, not read from ROOT, so the sync can run from any country event.
+te_tax_pick_sponsor = {
+	random_interest_group = {
+		limit = { is_in_government = yes }
+		save_scope_as = te_tax_sponsor
+	}
+	if = {
+		limit = { NOT = { exists = scope:te_tax_sponsor } }
+		ordered_interest_group = {
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = te_tax_sponsor
+		}
+	}
+}
+
+# Country scope; needs scope:te_tax_country. Relief bands as static modifiers:
+# agricultural wage relief on the country (te_tax_en_agrel), regional relief
+# on every owned state flagged te_tax_relief_state = 1 (te_tax_en_regrel).
+# A band is added only when missing and removed only when present, so an
+# unchanged code adds and removes nothing.
+te_tax_sync_relief = {
+	if = {
+		limit = { var:te_tax_en_agrel = 1 }
+		if = { limit = { has_modifier = te_tax_relief_ag_2 } remove_modifier = te_tax_relief_ag_2 }
+		if = { limit = { NOT = { has_modifier = te_tax_relief_ag_1 } } add_modifier = { name = te_tax_relief_ag_1 } }
+	}
+	else_if = {
+		limit = { var:te_tax_en_agrel = 2 }
+		if = { limit = { has_modifier = te_tax_relief_ag_1 } remove_modifier = te_tax_relief_ag_1 }
+		if = { limit = { NOT = { has_modifier = te_tax_relief_ag_2 } } add_modifier = { name = te_tax_relief_ag_2 } }
+	}
+	else = {
+		if = { limit = { has_modifier = te_tax_relief_ag_1 } remove_modifier = te_tax_relief_ag_1 }
+		if = { limit = { has_modifier = te_tax_relief_ag_2 } remove_modifier = te_tax_relief_ag_2 }
+	}
+	every_scope_state = {
+		if = {
+			limit = {
+				has_variable = te_tax_relief_state
+				var:te_tax_relief_state = 1
+				scope:te_tax_country.var:te_tax_en_regrel = 1
+			}
+			if = { limit = { has_modifier = te_tax_relief_region_2 } remove_modifier = te_tax_relief_region_2 }
+			if = { limit = { NOT = { has_modifier = te_tax_relief_region_1 } } add_modifier = { name = te_tax_relief_region_1 } }
+		}
+		else_if = {
+			limit = {
+				has_variable = te_tax_relief_state
+				var:te_tax_relief_state = 1
+				scope:te_tax_country.var:te_tax_en_regrel = 2
+			}
+			if = { limit = { has_modifier = te_tax_relief_region_1 } remove_modifier = te_tax_relief_region_1 }
+			if = { limit = { NOT = { has_modifier = te_tax_relief_region_2 } } add_modifier = { name = te_tax_relief_region_2 } }
+		}
+		else = {
+			if = { limit = { has_modifier = te_tax_relief_region_1 } remove_modifier = te_tax_relief_region_1 }
+			if = { limit = { has_modifier = te_tax_relief_region_2 } remove_modifier = te_tax_relief_region_2 }
+		}
+	}
+}

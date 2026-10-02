@@ -1,0 +1,48 @@
+﻿# Legislated tax code: canonical state (docs/systems/tax_code_schema.md).
+#
+# The enacted code lives in plain country variables, one token per schema row,
+# with absolute month indexes (te_history_month_index). Nothing ever removes a
+# token: "empty" is its sentinel (-1 for a month or a successor, 0 for an index,
+# a flag or a counter). A civil war's winner inherits the loser's variables
+# where it holds none of its own, so a removed token would come back with the
+# loser's value; a sentinel cannot.
+#
+# Native fiscal state (the carrier's amendments, taxed goods, relief modifiers,
+# the tax level) is never written here. te_tax_sync_collection
+# (te_tax_collection_effects.txt) derives it from these variables.
+
+# Country scope. Writes every schema token that is absent with its sentinel and
+# never touches one that exists, so it is safe to call any number of times and
+# backfills only what a newer schema added. te_tax_schema is written last: a
+# country with te_tax_schema has every token of that schema version.
+# Per-instrument and per-good tokens: te_tax_gen_init_* (generated,
+# te_tax_generated_effects.txt). The state variable te_tax_relief_state is not
+# written here; a state without it is not named in any relief.
+te_tax_init_country = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		if = { limit = { NOT = { has_variable = te_tax_migrated } } set_variable = { name = te_tax_migrated value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_code_version } } set_variable = { name = te_tax_code_version value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_last_month } } set_variable = { name = te_tax_last_month value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_next_month } } set_variable = { name = te_tax_next_month value = -1 } }
+		te_tax_gen_init_instruments = yes
+		te_tax_gen_init_goods = yes
+		if = { limit = { NOT = { has_variable = te_tax_pver_goods } } set_variable = { name = te_tax_pver_goods value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_xver_goods } } set_variable = { name = te_tax_xver_goods value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_en_agrel } } set_variable = { name = te_tax_en_agrel value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_en_regrel } } set_variable = { name = te_tax_en_regrel value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_pver_relief } } set_variable = { name = te_tax_pver_relief value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_xver_relief } } set_variable = { name = te_tax_xver_relief value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_schema } } set_variable = { name = te_tax_schema value = 1 } }
+	}
+}
+
+# Country scope. Copies one token from scope:te_tax_source onto THIS, when the
+# source holds it; otherwise THIS keeps its own value. For the civil-war
+# outbreak copy, which writes every token on the rebels (plan Task 10).
+te_tax_copy_token = {
+	if = {
+		limit = { scope:te_tax_source = { has_variable = $NAME$ } }
+		set_variable = { name = $NAME$ value = scope:te_tax_source.var:$NAME$ }
+	}
+}

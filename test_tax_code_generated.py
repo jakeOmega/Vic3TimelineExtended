@@ -227,7 +227,9 @@ class GeneratedFileFormatTest(unittest.TestCase):
 
 class ScriptValueTest(unittest.TestCase):
     def test_step_max_and_percent_step_constants(self):
-        values = load(VALUES)
+        # The file also carries the te_tax_view_* display values (pinned in
+        # test_tax_code_state.py); every other entry is one of these constants.
+        values = {k: v for k, v in load(VALUES).items() if not k.startswith("te_tax_view_")}
         want = {}
         for key, (_, step, max_idx, _, _) in TABLE.items():
             want[f"te_tax_step_{key}"] = Decimal(step)
@@ -318,10 +320,14 @@ class GeneratorCliTest(unittest.TestCase):
             self.assertFalse((Path(tmp) / VALUES).exists())
 
     def test_generator_runs_on_system_python_without_third_party_modules(self):
+        # organize_loc and paradox_file_parser are the repo's own, standard-library-only modules.
         source = GENERATOR.read_text(encoding="utf-8")
         imports = set(re.findall(r"^(?:from|import) (\w+)", source, re.M))
-        third_party = imports - set(sys.stdlib_module_names) - {"organize_loc"}
+        third_party = imports - set(sys.stdlib_module_names) - {"organize_loc", "paradox_file_parser"}
         self.assertEqual(third_party, set())
+        parser_source = (ROOT / "paradox_file_parser.py").read_text(encoding="utf-8")
+        parser_imports = set(re.findall(r"^(?:from|import) (\w+)", parser_source, re.M))
+        self.assertEqual(parser_imports - set(sys.stdlib_module_names), set())
 
 
 class OrganizeLocAgreementTest(unittest.TestCase):

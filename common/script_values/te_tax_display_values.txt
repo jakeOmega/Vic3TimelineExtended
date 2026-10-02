@@ -1,0 +1,73 @@
+﻿# Legislated tax code: display values for the code's schema-level tokens
+# (docs/systems/tax_code_schema.md, "Display values"). The per-instrument and
+# per-good ones are generated into te_tax_generated_values.txt.
+#
+# Every te_tax_view_* reads only variables it has just tested with has_variable
+# and returns the schema sentinel when one is absent (0 for a counter, an index
+# or a flag, -1 for a month). They write nothing and iterate nothing, so a GUI
+# can read them on every frame.
+
+# Percentage points per relief band: band 1 = 25%, band 2 = 50%
+# (te_tax_relief_* in common/static_modifiers/te_tax_modifiers.txt).
+te_tax_relief_pct_step = 25
+
+te_tax_view_schema = {
+	value = 0
+	if = { limit = { has_variable = te_tax_schema } value = var:te_tax_schema }
+}
+
+te_tax_view_migrated = {
+	value = 0
+	if = { limit = { has_variable = te_tax_migrated } value = var:te_tax_migrated }
+}
+
+te_tax_view_code_version = {
+	value = 0
+	if = { limit = { has_variable = te_tax_code_version } value = var:te_tax_code_version }
+}
+
+te_tax_view_last_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_last_month } value = var:te_tax_last_month }
+}
+
+te_tax_view_next_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_next_month } value = var:te_tax_next_month }
+}
+
+# Agricultural wage relief band (0 none, 1, 2) and its percentage.
+te_tax_view_agrel = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_agrel } value = var:te_tax_en_agrel }
+}
+
+te_tax_view_agrel_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_agrel }
+		value = var:te_tax_en_agrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+# Regional relief band (0 none, 1, 2) and its percentage.
+te_tax_view_regrel = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_regrel } value = var:te_tax_en_regrel }
+}
+
+te_tax_view_regrel_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_regrel }
+		value = var:te_tax_en_regrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+# State scope: 1 if the state is named in the enacted regional relief.
+te_tax_view_relief_state = {
+	value = 0
+	if = { limit = { has_variable = te_tax_relief_state } value = var:te_tax_relief_state }
+}

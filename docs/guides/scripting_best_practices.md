@@ -2452,6 +2452,7 @@ The pattern Collective Governance uses (`collective_governance_effects.txt`; `do
 - **Ask one trigger in both `possible` and `can_repeal` (negated).** Because `add_amendment` checks `possible` (above), the script can add the amendment exactly when it fits, and the player can't repeal the one that fits.
 - **A law's amendments leave with it** when the law is replaced (vanilla `amendment_geheime_staatskonferenz`: "can be removed by changing Distribution of Power"). The refresh only has to handle changes to the *other* law while the host stays.
 - **Remove by type** with `random_scope_amendment = { limit = { amendment_type:X ?= this.type } remove_amendment = yes }` (vanilla `ep2_tenpo_events.txt`), or `limit = { type = amendment_type:X }` (vanilla `remove_electoral_fraud_effect`).
+- **There is no `is_amendment_type` trigger** (1.14.5 `triggers.log`). Test an amendment's type with `type = amendment_type:X` in amendment scope and a law's with `has_amendment = amendment_type:X`. The legislated tax code's generated family triggers wrap the first form (`te_tax_amendment_is_<key>`, `common/scripted_triggers/te_tax_generated_triggers.txt`).
 
 ## Journal Entry Modifier Scoping
 

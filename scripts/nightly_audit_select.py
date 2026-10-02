@@ -60,6 +60,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/geographic_regions/te_formable_regions_generated.txt",
     "common/amendments/te_tax_amendments_generated.txt",
     "common/script_values/te_tax_generated_values.txt",
+    "common/scripted_effects/te_tax_generated_effects.txt",
+    "common/scripted_triggers/te_tax_generated_triggers.txt",
     "gfx/map/fleet_entities/02_extra_fleet_entities.txt",
     "map_data/state_regions/*.txt",
 ]
@@ -99,6 +101,7 @@ INTENTIONALLY_NOT_EXCLUDED = {
     # Vanilla data referenced as INPUT to generators (not outputs). The registry
     # mentions them in the "Input:" column; the parser can't distinguish.
     "common/goods/*.txt": "input to pm_costs.py — vanilla goods data, not generator output",
+    "common/pop_needs/*.txt": "input to gen_tax_code.py (consumption-goods catalog) — hand-authored pop needs, not generator output",
     "common/ideologies/*.txt": "input to apply_ideologies.py — vanilla ideology data (modified.txt is the actual output)",
     "common/strategic_regions/*.txt": "input to gen_formable_regions.py — vanilla data, not generator output",
     "common/company_types/*.txt": "input to gen_company_building_cleanup.py — hand-authored company definitions",

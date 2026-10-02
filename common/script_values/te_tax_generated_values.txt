@@ -21,3 +21,634 @@ te_tax_max_head = 30
 te_tax_step_cons = 0.05
 te_tax_max_cons = 12
 te_tax_pct_step_cons = 5
+
+# Display values (docs/systems/tax_code_schema.md, "Display values"): guarded reads of
+# the enacted code for the GUI and loc. Each reads only variables it has just tested
+# with has_variable and returns the schema sentinel when one is absent: 0 for an index,
+# a rate or a flag, -1 for a month or a successor. _y/_mo split a month index into a
+# year and a 1-based month, because the GUI cannot divide. They write nothing.
+
+# Wage tax: enacted index, rate (index x step), operative since, sunset, successor.
+te_tax_view_en_wage = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_wage } value = var:te_tax_en_wage }
+}
+te_tax_view_en_wage_rate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_wage }
+		value = var:te_tax_en_wage
+		multiply = te_tax_step_wage
+	}
+}
+te_tax_view_en_wage_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_wage }
+		value = var:te_tax_en_wage
+		multiply = te_tax_pct_step_wage
+	}
+}
+te_tax_view_en_wage_since = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_wage_since } value = var:te_tax_en_wage_since }
+}
+te_tax_view_en_wage_since_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_wage_since var:te_tax_en_wage_since >= 0 }
+		value = var:te_tax_en_wage_since
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_en_wage_since_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_wage_since var:te_tax_en_wage_since >= 0 }
+		value = var:te_tax_en_wage_since
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_en_wage_since
+		add = 1
+	}
+}
+te_tax_view_en_wage_exp = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_wage_exp } value = var:te_tax_en_wage_exp }
+}
+te_tax_view_en_wage_exp_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_wage_exp var:te_tax_en_wage_exp >= 0 }
+		value = var:te_tax_en_wage_exp
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_en_wage_exp_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_wage_exp var:te_tax_en_wage_exp >= 0 }
+		value = var:te_tax_en_wage_exp
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_en_wage_exp
+		add = 1
+	}
+}
+te_tax_view_en_wage_succ = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_wage_succ } value = var:te_tax_en_wage_succ }
+}
+te_tax_view_en_wage_succ_rate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_wage_succ var:te_tax_en_wage_succ >= 0 }
+		value = var:te_tax_en_wage_succ
+		multiply = te_tax_step_wage
+	}
+}
+te_tax_view_en_wage_succ_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_wage_succ var:te_tax_en_wage_succ >= 0 }
+		value = var:te_tax_en_wage_succ
+		multiply = te_tax_pct_step_wage
+	}
+}
+
+# Dividend tax: enacted index, rate (index x step), operative since, sunset, successor.
+te_tax_view_en_div = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_div } value = var:te_tax_en_div }
+}
+te_tax_view_en_div_rate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_div }
+		value = var:te_tax_en_div
+		multiply = te_tax_step_div
+	}
+}
+te_tax_view_en_div_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_div }
+		value = var:te_tax_en_div
+		multiply = te_tax_pct_step_div
+	}
+}
+te_tax_view_en_div_since = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_div_since } value = var:te_tax_en_div_since }
+}
+te_tax_view_en_div_since_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_div_since var:te_tax_en_div_since >= 0 }
+		value = var:te_tax_en_div_since
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_en_div_since_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_div_since var:te_tax_en_div_since >= 0 }
+		value = var:te_tax_en_div_since
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_en_div_since
+		add = 1
+	}
+}
+te_tax_view_en_div_exp = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_div_exp } value = var:te_tax_en_div_exp }
+}
+te_tax_view_en_div_exp_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_div_exp var:te_tax_en_div_exp >= 0 }
+		value = var:te_tax_en_div_exp
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_en_div_exp_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_div_exp var:te_tax_en_div_exp >= 0 }
+		value = var:te_tax_en_div_exp
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_en_div_exp
+		add = 1
+	}
+}
+te_tax_view_en_div_succ = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_div_succ } value = var:te_tax_en_div_succ }
+}
+te_tax_view_en_div_succ_rate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_div_succ var:te_tax_en_div_succ >= 0 }
+		value = var:te_tax_en_div_succ
+		multiply = te_tax_step_div
+	}
+}
+te_tax_view_en_div_succ_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_div_succ var:te_tax_en_div_succ >= 0 }
+		value = var:te_tax_en_div_succ
+		multiply = te_tax_pct_step_div
+	}
+}
+
+# Rural assessment: enacted index, rate (index x step), operative since, sunset, successor.
+te_tax_view_en_land = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_land } value = var:te_tax_en_land }
+}
+te_tax_view_en_land_rate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_land }
+		value = var:te_tax_en_land
+		multiply = te_tax_step_land
+	}
+}
+te_tax_view_en_land_since = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_land_since } value = var:te_tax_en_land_since }
+}
+te_tax_view_en_land_since_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_land_since var:te_tax_en_land_since >= 0 }
+		value = var:te_tax_en_land_since
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_en_land_since_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_land_since var:te_tax_en_land_since >= 0 }
+		value = var:te_tax_en_land_since
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_en_land_since
+		add = 1
+	}
+}
+te_tax_view_en_land_exp = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_land_exp } value = var:te_tax_en_land_exp }
+}
+te_tax_view_en_land_exp_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_land_exp var:te_tax_en_land_exp >= 0 }
+		value = var:te_tax_en_land_exp
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_en_land_exp_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_land_exp var:te_tax_en_land_exp >= 0 }
+		value = var:te_tax_en_land_exp
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_en_land_exp
+		add = 1
+	}
+}
+te_tax_view_en_land_succ = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_land_succ } value = var:te_tax_en_land_succ }
+}
+te_tax_view_en_land_succ_rate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_land_succ var:te_tax_en_land_succ >= 0 }
+		value = var:te_tax_en_land_succ
+		multiply = te_tax_step_land
+	}
+}
+
+# Head tax: enacted index, rate (index x step), operative since, sunset, successor.
+te_tax_view_en_head = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_head } value = var:te_tax_en_head }
+}
+te_tax_view_en_head_rate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_head }
+		value = var:te_tax_en_head
+		multiply = te_tax_step_head
+	}
+}
+te_tax_view_en_head_since = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_head_since } value = var:te_tax_en_head_since }
+}
+te_tax_view_en_head_since_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_head_since var:te_tax_en_head_since >= 0 }
+		value = var:te_tax_en_head_since
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_en_head_since_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_head_since var:te_tax_en_head_since >= 0 }
+		value = var:te_tax_en_head_since
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_en_head_since
+		add = 1
+	}
+}
+te_tax_view_en_head_exp = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_head_exp } value = var:te_tax_en_head_exp }
+}
+te_tax_view_en_head_exp_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_head_exp var:te_tax_en_head_exp >= 0 }
+		value = var:te_tax_en_head_exp
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_en_head_exp_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_head_exp var:te_tax_en_head_exp >= 0 }
+		value = var:te_tax_en_head_exp
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_en_head_exp
+		add = 1
+	}
+}
+te_tax_view_en_head_succ = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_head_succ } value = var:te_tax_en_head_succ }
+}
+te_tax_view_en_head_succ_rate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_head_succ var:te_tax_en_head_succ >= 0 }
+		value = var:te_tax_en_head_succ
+		multiply = te_tax_step_head
+	}
+}
+
+# Consumption tax rate: enacted index, rate (index x step), operative since, sunset, successor.
+te_tax_view_en_cons = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_cons } value = var:te_tax_en_cons }
+}
+te_tax_view_en_cons_rate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_cons }
+		value = var:te_tax_en_cons
+		multiply = te_tax_step_cons
+	}
+}
+te_tax_view_en_cons_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_cons }
+		value = var:te_tax_en_cons
+		multiply = te_tax_pct_step_cons
+	}
+}
+te_tax_view_en_cons_since = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_cons_since } value = var:te_tax_en_cons_since }
+}
+te_tax_view_en_cons_since_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_cons_since var:te_tax_en_cons_since >= 0 }
+		value = var:te_tax_en_cons_since
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_en_cons_since_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_cons_since var:te_tax_en_cons_since >= 0 }
+		value = var:te_tax_en_cons_since
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_en_cons_since
+		add = 1
+	}
+}
+te_tax_view_en_cons_exp = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_cons_exp } value = var:te_tax_en_cons_exp }
+}
+te_tax_view_en_cons_exp_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_cons_exp var:te_tax_en_cons_exp >= 0 }
+		value = var:te_tax_en_cons_exp
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_en_cons_exp_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_en_cons_exp var:te_tax_en_cons_exp >= 0 }
+		value = var:te_tax_en_cons_exp
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_en_cons_exp
+		add = 1
+	}
+}
+te_tax_view_en_cons_succ = {
+	value = -1
+	if = { limit = { has_variable = te_tax_en_cons_succ } value = var:te_tax_en_cons_succ }
+}
+te_tax_view_en_cons_succ_rate = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_cons_succ var:te_tax_en_cons_succ >= 0 }
+		value = var:te_tax_en_cons_succ
+		multiply = te_tax_step_cons
+	}
+}
+te_tax_view_en_cons_succ_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_cons_succ var:te_tax_en_cons_succ >= 0 }
+		value = var:te_tax_en_cons_succ
+		multiply = te_tax_pct_step_cons
+	}
+}
+
+# One per catalog good: 1 if the good is on the enacted taxed-goods list.
+te_tax_view_en_g_aeroplanes = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_aeroplanes } value = var:te_tax_en_g_aeroplanes }
+}
+te_tax_view_en_g_automobiles = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_automobiles } value = var:te_tax_en_g_automobiles }
+}
+te_tax_view_en_g_clippers = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_clippers } value = var:te_tax_en_g_clippers }
+}
+te_tax_view_en_g_clothes = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_clothes } value = var:te_tax_en_g_clothes }
+}
+te_tax_view_en_g_coal = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_coal } value = var:te_tax_en_g_coal }
+}
+te_tax_view_en_g_coffee = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_coffee } value = var:te_tax_en_g_coffee }
+}
+te_tax_view_en_g_consumer_appliances = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_consumer_appliances } value = var:te_tax_en_g_consumer_appliances }
+}
+te_tax_view_en_g_digital_assets = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_digital_assets } value = var:te_tax_en_g_digital_assets }
+}
+te_tax_view_en_g_electricity = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_electricity } value = var:te_tax_en_g_electricity }
+}
+te_tax_view_en_g_fabric = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_fabric } value = var:te_tax_en_g_fabric }
+}
+te_tax_view_en_g_fine_art = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_fine_art } value = var:te_tax_en_g_fine_art }
+}
+te_tax_view_en_g_fish = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_fish } value = var:te_tax_en_g_fish }
+}
+te_tax_view_en_g_fruit = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_fruit } value = var:te_tax_en_g_fruit }
+}
+te_tax_view_en_g_furniture = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_furniture } value = var:te_tax_en_g_furniture }
+}
+te_tax_view_en_g_glass = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_glass } value = var:te_tax_en_g_glass }
+}
+te_tax_view_en_g_grain = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_grain } value = var:te_tax_en_g_grain }
+}
+te_tax_view_en_g_groceries = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_groceries } value = var:te_tax_en_g_groceries }
+}
+te_tax_view_en_g_liquor = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_liquor } value = var:te_tax_en_g_liquor }
+}
+te_tax_view_en_g_luxury_clothes = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_luxury_clothes } value = var:te_tax_en_g_luxury_clothes }
+}
+te_tax_view_en_g_luxury_furniture = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_luxury_furniture } value = var:te_tax_en_g_luxury_furniture }
+}
+te_tax_view_en_g_meat = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_meat } value = var:te_tax_en_g_meat }
+}
+te_tax_view_en_g_oil = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_oil } value = var:te_tax_en_g_oil }
+}
+te_tax_view_en_g_opium = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_opium } value = var:te_tax_en_g_opium }
+}
+te_tax_view_en_g_paper = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_paper } value = var:te_tax_en_g_paper }
+}
+te_tax_view_en_g_porcelain = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_porcelain } value = var:te_tax_en_g_porcelain }
+}
+te_tax_view_en_g_radios = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_radios } value = var:te_tax_en_g_radios }
+}
+te_tax_view_en_g_services = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_services } value = var:te_tax_en_g_services }
+}
+te_tax_view_en_g_silk = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_silk } value = var:te_tax_en_g_silk }
+}
+te_tax_view_en_g_small_arms = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_small_arms } value = var:te_tax_en_g_small_arms }
+}
+te_tax_view_en_g_steamers = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_steamers } value = var:te_tax_en_g_steamers }
+}
+te_tax_view_en_g_sugar = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_sugar } value = var:te_tax_en_g_sugar }
+}
+te_tax_view_en_g_tea = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_tea } value = var:te_tax_en_g_tea }
+}
+te_tax_view_en_g_telephones = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_telephones } value = var:te_tax_en_g_telephones }
+}
+te_tax_view_en_g_tobacco = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_tobacco } value = var:te_tax_en_g_tobacco }
+}
+te_tax_view_en_g_tourism = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_tourism } value = var:te_tax_en_g_tourism }
+}
+te_tax_view_en_g_transportation = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_transportation } value = var:te_tax_en_g_transportation }
+}
+te_tax_view_en_g_wine = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_wine } value = var:te_tax_en_g_wine }
+}
+te_tax_view_en_g_wood = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_wood } value = var:te_tax_en_g_wood }
+}
+
+# How many catalog goods the enacted code taxes.
+te_tax_view_goods_count = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_aeroplanes } add = var:te_tax_en_g_aeroplanes }
+	if = { limit = { has_variable = te_tax_en_g_automobiles } add = var:te_tax_en_g_automobiles }
+	if = { limit = { has_variable = te_tax_en_g_clippers } add = var:te_tax_en_g_clippers }
+	if = { limit = { has_variable = te_tax_en_g_clothes } add = var:te_tax_en_g_clothes }
+	if = { limit = { has_variable = te_tax_en_g_coal } add = var:te_tax_en_g_coal }
+	if = { limit = { has_variable = te_tax_en_g_coffee } add = var:te_tax_en_g_coffee }
+	if = { limit = { has_variable = te_tax_en_g_consumer_appliances } add = var:te_tax_en_g_consumer_appliances }
+	if = { limit = { has_variable = te_tax_en_g_digital_assets } add = var:te_tax_en_g_digital_assets }
+	if = { limit = { has_variable = te_tax_en_g_electricity } add = var:te_tax_en_g_electricity }
+	if = { limit = { has_variable = te_tax_en_g_fabric } add = var:te_tax_en_g_fabric }
+	if = { limit = { has_variable = te_tax_en_g_fine_art } add = var:te_tax_en_g_fine_art }
+	if = { limit = { has_variable = te_tax_en_g_fish } add = var:te_tax_en_g_fish }
+	if = { limit = { has_variable = te_tax_en_g_fruit } add = var:te_tax_en_g_fruit }
+	if = { limit = { has_variable = te_tax_en_g_furniture } add = var:te_tax_en_g_furniture }
+	if = { limit = { has_variable = te_tax_en_g_glass } add = var:te_tax_en_g_glass }
+	if = { limit = { has_variable = te_tax_en_g_grain } add = var:te_tax_en_g_grain }
+	if = { limit = { has_variable = te_tax_en_g_groceries } add = var:te_tax_en_g_groceries }
+	if = { limit = { has_variable = te_tax_en_g_liquor } add = var:te_tax_en_g_liquor }
+	if = { limit = { has_variable = te_tax_en_g_luxury_clothes } add = var:te_tax_en_g_luxury_clothes }
+	if = { limit = { has_variable = te_tax_en_g_luxury_furniture } add = var:te_tax_en_g_luxury_furniture }
+	if = { limit = { has_variable = te_tax_en_g_meat } add = var:te_tax_en_g_meat }
+	if = { limit = { has_variable = te_tax_en_g_oil } add = var:te_tax_en_g_oil }
+	if = { limit = { has_variable = te_tax_en_g_opium } add = var:te_tax_en_g_opium }
+	if = { limit = { has_variable = te_tax_en_g_paper } add = var:te_tax_en_g_paper }
+	if = { limit = { has_variable = te_tax_en_g_porcelain } add = var:te_tax_en_g_porcelain }
+	if = { limit = { has_variable = te_tax_en_g_radios } add = var:te_tax_en_g_radios }
+	if = { limit = { has_variable = te_tax_en_g_services } add = var:te_tax_en_g_services }
+	if = { limit = { has_variable = te_tax_en_g_silk } add = var:te_tax_en_g_silk }
+	if = { limit = { has_variable = te_tax_en_g_small_arms } add = var:te_tax_en_g_small_arms }
+	if = { limit = { has_variable = te_tax_en_g_steamers } add = var:te_tax_en_g_steamers }
+	if = { limit = { has_variable = te_tax_en_g_sugar } add = var:te_tax_en_g_sugar }
+	if = { limit = { has_variable = te_tax_en_g_tea } add = var:te_tax_en_g_tea }
+	if = { limit = { has_variable = te_tax_en_g_telephones } add = var:te_tax_en_g_telephones }
+	if = { limit = { has_variable = te_tax_en_g_tobacco } add = var:te_tax_en_g_tobacco }
+	if = { limit = { has_variable = te_tax_en_g_tourism } add = var:te_tax_en_g_tourism }
+	if = { limit = { has_variable = te_tax_en_g_transportation } add = var:te_tax_en_g_transportation }
+	if = { limit = { has_variable = te_tax_en_g_wine } add = var:te_tax_en_g_wine }
+	if = { limit = { has_variable = te_tax_en_g_wood } add = var:te_tax_en_g_wood }
+}
