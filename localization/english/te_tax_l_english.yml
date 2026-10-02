@@ -1,0 +1,14 @@
+﻿l_english:
+
+#
+# TAX
+#
+ law_te_tax_code:0 "Legislated Tax Code"
+ law_te_tax_code_desc:0 "This law sets no rates itself. Each tax is set by an amendment to it, and a tax with no amendment is not collected."
+ rule_te_tax_code_rule:0 "Legislated Tax Code"
+ setting_te_tax_code_disabled:0 "Tax Code Disabled"
+ setting_te_tax_code_disabled_desc:0 "Taxes work as in the base game. The five taxation laws set the rates and the tax level on the Budget panel is yours to move."
+ setting_te_tax_code_enabled:0 "Tax Code Enabled"
+ setting_te_tax_code_enabled_customs:0 "Tax Code and Customs Enabled"
+ setting_te_tax_code_enabled_customs_desc:0 "As Tax Code Enabled, and tariffs and subsidies are set by legislation as well."
+ setting_te_tax_code_enabled_desc:0 "The five base game taxation laws can no longer be enacted. Every country holds the Legislated Tax Code instead, a law with no rates of its own, and each tax is set by an amendment to it. Tariffs and subsidies stay as in the base game."

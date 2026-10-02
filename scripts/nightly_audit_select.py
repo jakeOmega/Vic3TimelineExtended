@@ -58,6 +58,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/scripted_effects/extra_law_consistency_generated.txt",
     "common/scripted_effects/te_region_area_generated.txt",
     "common/geographic_regions/te_formable_regions_generated.txt",
+    "common/amendments/te_tax_amendments_generated.txt",
+    "common/script_values/te_tax_generated_values.txt",
     "gfx/map/fleet_entities/02_extra_fleet_entities.txt",
     "map_data/state_regions/*.txt",
 ]

@@ -1,0 +1,36 @@
+﻿# Legislated tax code: the five vanilla taxation laws cannot be enacted under
+# the rule (common/game_rules/extra_game_rules.txt, te_tax_code_rule).
+#
+# Vanilla 1.14.5 gives none of them a can_enact or an is_visible, so these INJECTs
+# add the fields rather than extend them. Both gates are the negation of
+# te_tax_code_on, so with the rule off they are always true and the laws behave
+# exactly as before. can_enact closes the player's law panel, the AI's enactment
+# weights, petitions and the law-commitment treaty article. It does NOT close
+# activate_law, which ignores can_enact; those call sites are patched separately.
+# A country already holding one of these laws keeps it until the migration moves
+# it onto law_te_tax_code.
+
+INJECT:law_consumption_based_taxation = {
+	can_enact = { NOT = { te_tax_code_on = yes } }
+	is_visible = { NOT = { te_tax_code_on = yes } }
+}
+
+INJECT:law_land_based_taxation = {
+	can_enact = { NOT = { te_tax_code_on = yes } }
+	is_visible = { NOT = { te_tax_code_on = yes } }
+}
+
+INJECT:law_per_capita_based_taxation = {
+	can_enact = { NOT = { te_tax_code_on = yes } }
+	is_visible = { NOT = { te_tax_code_on = yes } }
+}
+
+INJECT:law_proportional_taxation = {
+	can_enact = { NOT = { te_tax_code_on = yes } }
+	is_visible = { NOT = { te_tax_code_on = yes } }
+}
+
+INJECT:law_graduated_taxation = {
+	can_enact = { NOT = { te_tax_code_on = yes } }
+	is_visible = { NOT = { te_tax_code_on = yes } }
+}

@@ -1,0 +1,24 @@
+﻿# Legislated tax code: game-rule gates (common/game_rules/extra_game_rules.txt,
+# te_tax_code_rule).
+#
+# Both read only a game rule, so they work from any scope. Every hook, pulse,
+# event, effect entry point, GUI root and AI path of the tax code asks
+# te_tax_code_on; customs legislation asks te_tax_customs_on as well.
+#
+# They are written positively on purpose. A save from before the rule existed
+# has no value stored for it, so NOT = { has_game_rule = te_tax_code_disabled }
+# would be true there and migrate the campaign. Do not rewrite these as
+# negations, and do not add a negated check anywhere else.
+
+# True under both enabled settings.
+te_tax_code_on = {
+	OR = {
+		has_game_rule = te_tax_code_enabled
+		has_game_rule = te_tax_code_enabled_customs
+	}
+}
+
+# True only under the setting that also legislates customs.
+te_tax_customs_on = {
+	has_game_rule = te_tax_code_enabled_customs
+}

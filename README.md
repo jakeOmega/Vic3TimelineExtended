@@ -58,7 +58,7 @@ The toggleable subset of these (banking cycle, world war, etc.) is gated on per-
 
 ## Game rules (toggleable systems)
 
-Sixteen mod systems can be turned on or off at game setup. Defaults below; full list in `common/game_rules/extra_game_rules.txt`. Disabled systems hide their journal entry, bypass their on-actions, and skip their events — but baseline content (laws, techs, buildings, modifiers) still applies.
+Seventeen mod systems can be turned on or off at game setup. Defaults below; full list in `common/game_rules/extra_game_rules.txt`. Disabled systems hide their journal entry, bypass their on-actions, and skip their events — but baseline content (laws, techs, buildings, modifiers) still applies.
 
 | Rule | Default | What it gates |
 |---|---|---|
@@ -78,13 +78,15 @@ Sixteen mod systems can be turned on or off at game setup. Defaults below; full 
 | `free_market_construction_rule` | enabled | The construction market: construction as a tradeable good bought by the government and investors, construction maintenance on industry and infrastructure, a private share that follows the purchases. *Without Retooling Costs*: the same, but switching a building's production methods no longer multiplies its construction maintenance. *Without Maintenance*: the market with no construction maintenance at all (and so no retooling cost). *Disabled*: base-game construction — the Construction Site becomes the construction sector (built and expanded by the government, points straight from its production method), no construction good or maintenance, and the economic-system law sets the private share; every country gets a small base of construction (+5 a week), and AI countries can't shed their Construction Sites outside default |
 | `internal_resettlement_rule` | enabled | The Settlement Authority and government resettlement programs. *AI voluntary only*: AI countries run only voluntary programs (penal transportation, special settlements and rustication stay open to players). *Disabled*: no Settlement Authority |
 | `grand_monuments_rule` | enabled | The Grand Monument building, its dedication ceremony, contests and the Monuments journal entry |
+| `te_tax_code_rule` | **disabled** | The legislated tax code (`docs/superpowers/specs/2026-09-29-legislated-tax-code-design.md`). *Tax Code Enabled*: the five vanilla taxation laws can no longer be enacted and every country holds `law_te_tax_code`, a zero-rate carrier whose generated amendments (`amendment_te_tax_<instrument>_<index>`) set each rate. *Tax Code and Customs Enabled*: the same, with tariffs and subsidies legislated too. *Disabled*: base-game taxes, untouched. Every check is positive (`te_tax_code_on`), so a save from before the rule existed is never migrated |
 
-Every rule but `banking_system_rule`, `free_market_construction_rule` and
-`internal_resettlement_rule` is a straight on/off pair; the first has a third, *simplified*
-setting, the second two more market settings, *without retooling costs* and *without
-maintenance*, and the third an *AI voluntary only* setting (see the table above).
+Every rule but `banking_system_rule`, `free_market_construction_rule`,
+`internal_resettlement_rule` and `te_tax_code_rule` is a straight on/off pair; the first has a
+third, *simplified* setting, the second two more market settings, *without retooling costs* and
+*without maintenance*, the third an *AI voluntary only* setting, and the last a second enabled
+setting that adds customs (see the table above).
 
-Loc keys for each rule live in `localization/english/te_game_rules_l_english.yml`. The gating pattern (`is_shown_when_inactive`, on-action `return = yes` guards, etc.) is documented in `docs/systems/mod_systems.md` § Game Rules.
+Loc keys for each rule live in `localization/english/te_game_rules_l_english.yml`, except the tax code's, which sit with the rest of its loc in `te_tax_l_english.yml`. The gating pattern (`is_shown_when_inactive`, on-action `return = yes` guards, etc.) is documented in `docs/systems/mod_systems.md` § Game Rules.
 
 ---
 

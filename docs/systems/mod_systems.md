@@ -1888,7 +1888,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 
 ## Game Rules
 
-Sixteen mod systems can be toggled on/off at game setup via `common/game_rules/extra_game_rules.txt`.
+Seventeen mod systems can be toggled on/off at game setup via `common/game_rules/extra_game_rules.txt`.
 
 | Rule | Flag (enabled) | Default | Systems Gated |
 |---|---|---|---|
@@ -1908,6 +1908,7 @@ Sixteen mod systems can be toggled on/off at game setup via `common/game_rules/e
 | `free_market_construction_rule` | `free_market_construction_enabled` | enabled | The construction market (§ Construction as a Market Good); `_no_retooling` = the market without the retooling surcharge, `_no_maintenance` = the market without construction maintenance (§ Market settings without retooling or maintenance); disabled = base-game-style direct construction (§ Free Market Construction off). Read through `te_free_market_construction_on` / `_off`, which test the *disabled* flag so a save from before the rule keeps the market, and `te_pm_retooling_waived` |
 | `internal_resettlement_rule` | `internal_resettlement_enabled` | enabled | Settlement Authority and resettlement programs; `_ai_voluntary` = AI countries run only voluntary programs |
 | `grand_monuments_rule` | `grand_monuments_enabled` | enabled | Grand Monument building, dedication ceremony, contests, Monuments JE; checked as `NOT = { has_game_rule = grand_monuments_disabled }` |
+| `te_tax_code_rule` | `te_tax_code_enabled`, `te_tax_code_enabled_customs` | **disabled** | The legislated tax code: vanilla taxation laws gated off, `law_te_tax_code` carrier with generated rate amendments (`gen_tax_code.py`); `_enabled_customs` also legislates customs. Checked **positively**, as `te_tax_code_on` / `te_tax_customs_on` (`common/scripted_triggers/te_tax_triggers.txt`), never `NOT = { ...disabled }` |
 
 **`banking_system_rule` has three settings.** `banking_system_enabled`, `banking_system_simplified`
 and `banking_system_disabled`. The middle one keeps the Banking Cycle journal entry — the cycle,
