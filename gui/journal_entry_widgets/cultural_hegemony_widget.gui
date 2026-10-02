@@ -2405,11 +2405,15 @@ types cultural_hegemony_widget_types
 				blockoverride "chart_title" { text = "ch_model_hist_title" }
 				blockoverride "chart_legend" { text = "ch_model_hist_note" }
 				blockoverride "plot_layouts" {
+					### A plain widget has no margin: `margin_right` here made the engine
+					### reject the widget ("Property 'margin_right' not handled", then
+					### "Error setting properties"), and with it every bar. Inset by
+					### position instead.
 					widget = {
 						visible = "[GreaterThan_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
 						parentanchor = right|vcenter
+						position = { -8 0 }
 						size = { 400 84 }
-						margin_right = 8
 						ch_model_history_plot = {
 							visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '5')]"
 							blockoverride "bar_size" { size = { 80 84 } }
