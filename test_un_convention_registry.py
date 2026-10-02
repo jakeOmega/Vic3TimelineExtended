@@ -676,7 +676,10 @@ class RuleGateTests(unittest.TestCase):
     def test_the_widget_row_hides_under_the_rule(self):
         for c in CONVENTIONS:
             body = next(b for ops, b in self.rows if c.op in ops)
-            gates = set(re.findall(r"GetScriptedGui\('(\w+)'\)", body)) - {"un_chamber_propose_row_sgui"}
+            # The Reform II gate is not a rule gate (test_un_charter_business.py
+            # pins which rows carry it).
+            gates = set(re.findall(r"GetScriptedGui\('(\w+)'\)", body)) - {
+                "un_chamber_propose_row_sgui", "un_chamber_reform_ii_in_view_sgui"}
             with self.subTest(key=c.key):
                 self.assertEqual(gates, {c.rule[1]} if c.rule else set())
                 if c.rule:
