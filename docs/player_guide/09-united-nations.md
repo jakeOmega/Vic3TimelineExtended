@@ -174,7 +174,7 @@ Jurisdiction, raises the ceiling to 85. Charter Reform II, Veto Restraint and
 the UN Levy, raises it to 100 and restrains the veto: a binding resolution other
 than a charter reform that two thirds of the members with a vote carry is no
 longer stopped by a veto. Each reform also opens new business before the
-Assembly (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
+Assembly and strengthens the World Development Fund (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
 
 A reform is ripe once authority has held within 5 points of the ceiling for 24
 months running; Why UN Authority Is Moving counts the months. A member of major-power
@@ -502,8 +502,9 @@ and then vetoes has kept its word.
 
 ## Business the reformed charter opens
 
-Nine topics beyond the seven above come before the General Assembly as the
-charter grows. The Propose a Resolution list shows the business of the next
+Nine topics beyond the seven above come before the General Assembly. Seven
+wait for a charter reform; the World Food Reserve and the World Development
+Fund need none, and the Fund grows with each reform. The Propose a Resolution list shows the business of the next
 reform before it is adopted, and says which reform each row waits for.
 Charter Reform II's rows only appear once Reform I has carried. The AI tables
 these topics through the journal entry's buttons, as it does the older ones.
@@ -517,7 +518,7 @@ these topics through the journal entry's buttons, as it does the older ones.
 | Request Electoral Observers | Charter Reform I | No | Majority | An [Electoral Observer Mission](#electoral-observers) goes to your capital. |
 | World Food Reserve | Nothing | No | Majority | The [World Food Reserve](#the-world-food-reserve-and-hunger) is founded. |
 | Binding Ceasefire | Charter Reform II | Yes | Majority | A [ceasefire order](#binding-ceasefires) against the aggressor for two years. |
-| World Development Fund | Charter Reform II | No | Majority | The [World Development Fund](#the-world-development-funds-grants) is founded. |
+| World Development Fund | Nothing (stronger after each reform) | No | Majority | The [World Development Fund](#the-world-development-funds-grants) is founded. |
 | Supervised Self-Determination Referendum | Charter Reform II and the Decolonization Resolution in force | Yes | Majority | The overlord must [hold a referendum or refuse](#supervised-referendums). |
 
 Effects scale with the UN's enforcement like everything else the Assembly
@@ -653,10 +654,21 @@ after five years without an election.
 ### The World Development Fund's grants
 
 Any member can propose the World Development Fund while the UN assesses dues.
-While it stands, a quarter of the UN's budget goes out every week to the
-members whose GDP per head is below half the members' average, shared by
-population. You receive a grant only with a seat in the Assembly and your own
-dues paid. It goes into your investment pool, or into your treasury if your
+While it stands, it pays out every week to the members whose GDP per head is
+below a line, shared by population. What it pays and where the line sits grow
+with the charter:
+
+| Charter | Paid out each week | Members paid |
+|---|---|---|
+| Founding charter | The donations alone | Below a tenth of the members' average GDP per head |
+| Charter Reform I | 5% of the UN's budget, plus the donations | Below a quarter of the average |
+| Charter Reform II | A quarter of the UN's budget, plus the donations | Below half the average |
+
+A reform strengthens a Fund that already stands; nobody votes on it again.
+The donations are the [Fund Development Programs](#un-programs-and-great-power-stances)
+contributions of the major powers: while the Fund stands, a contributor's 0.5%
+of GDP a year pays its grants. You receive a grant only with a seat in the
+Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
 laws allow no investment pool or your banking system has not started. The line
 and the grants are worked out each month. Our Obligations shows your grant, and
 the budget line shows what the Fund and the Standing UN Force take.
@@ -803,7 +815,7 @@ count in full), and every program earns standing after 24 months.
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
 | Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation and prestige; covers peacekeeping contingents |
-| Fund Development Programs | Major power | 0.5% of GDP a year, bureaucracy | Commerce ministry impact |
+| Fund Development Programs | Major power | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; while the World Development Fund stands, the money pays its grants |
 | Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | Bureaucracy | Prestige, refugee ministry impact |
 | Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | Bureaucracy, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 
@@ -825,8 +837,9 @@ owed at once and restores the vote. Arrears survive leaving and rejoining; only
 a dissolution writes them off.
 
 The dues paid are the UN's budget. While they stand, the Standing UN Force takes
-a tenth of it and the World Development Fund a quarter, and the emergency
-lending facility lends only from what is left. Our Obligations shows the split.
+a tenth of it and the World Development Fund 5% after Charter Reform I or a
+quarter after Charter Reform II, and the emergency lending facility lends only
+from what is left. Our Obligations shows the split.
 
 ## International standing
 

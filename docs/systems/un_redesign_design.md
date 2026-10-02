@@ -46,7 +46,8 @@ Reform II "Veto Restraint / UN Levy", but before phase 7 Reform I only raised th
 the levy's budget (`un_budget_weekly`) was spent only by the lending facility. No topic read
 `un_charter_level`. Phase 7 adds eleven topics. Nine are unlocked by a reform, so each reform
 now buys business the Assembly could not take up before; the World Food Reserve needs no
-reform **(decided)**.
+reform **(decided)**. After the first build the owner moved the World Development Fund to no
+reform too, growing with each reform (item 7) **(decided)**.
 
 ### The topics
 
@@ -61,7 +62,7 @@ reform **(decided)**.
 | 24 | `observer_request` | Reform I | no | majority | pledge | — | the requester |
 | 25 | `food_reserve` | — | no | majority | decision | — | — |
 | 26 | `ceasefire` | Reform II | yes: a call for a ceasefire if vetoed | majority | decision | case 40 | the aggressor |
-| 27 | `development_fund` | Reform II | no | majority | decision | — | — |
+| 27 | `development_fund` | none (grows with each reform) | no | majority | decision | — | — |
 | 28 | `referendum` | Reform II, the decolonisation regime | yes: blocked if vetoed | majority | decision | none (accuses) | the overlord |
 
 The tag and the propose key are the same word for every new topic (the old topics differ in
@@ -74,7 +75,7 @@ A reform is the **charter level** (`un_charter_level_value`): the gate is
 the chamber's rows. A row whose reform has not been adopted stays in the list and says
 "Requires Charter Reform I" (or II), so the reform is something a player can see coming
 **(proposed)**. Only the next reform's rows show, though: Reform II's business (rows and
-journal-entry buttons) is hidden until Reform I carries, so the list previews what the next
+journal-entry buttons; the Development Fund is no longer among it) is hidden until Reform I carries, so the list previews what the next
 reform buys and nothing further off **(decided)**. The charter only resets with a dissolution, so nothing rolls back while the UN
 stands; a UN that has slipped back to Contested keeps the business and enforces it weakly,
 because every effect below is multiplied by `E` like the rest of the Assembly's.
@@ -162,7 +163,23 @@ The "Standing Mandate Force" half of Reform I. A one-time founding resolution
   peacekeeping mission opens in the victim's most devastated state when the war ends.
 - **Vetoed.** A call for a ceasefire: a one-time hit to war support and nothing more.
 
-### 7. World Development Fund (`development_fund`, Reform II)
+### 7. World Development Fund (`development_fund`, no reform; tiered)
+
+Revised with the owner after the first build **(decided)**: one topic and one institution,
+tabled at any charter level; its form follows the charter level each month, so a reform
+strengthens a standing Fund without a new vote.
+
+| Charter | Weekly pot | Line (share of the members' average GDP per head) |
+|---|---|---|
+| founding | the voluntary donations alone | a tenth |
+| Reform I | 5% of the budget + donations | a quarter |
+| Reform II | a quarter of the budget + donations | half |
+
+The donations are the existing Fund Development Programs programme
+(`un_fund_development_button`): unchanged in rank, cost (0.5% of GDP a year) and benefits, but
+while the Fund stands each represented, dues-paying contributor's programme expense pays the
+Fund's grants instead of nothing. As first built (below), it needed Reform II and took a quarter
+of the budget:
 
 - A one-time founding resolution (`un_inst_development_fund`). A share of the budget
   (`un_dev_fund_budget_share`, a quarter) is paid out every week to represented members below
@@ -248,7 +265,7 @@ both. Where the build departs from the proposals above, the ruling says so.
 gate. Ops 18–28 are in the chamber's three switches and the widget, grouped under Censure and
 Enforcement (21, 22, 26), Requests for Help (24), Courts and Self-Determination (20, 28),
 Institutions of the United Nations (23, 25, 27) and the conventions (18, 19). Each topic has an
-AI button on the journal entry. Reform II's rows (19, 26, 27, 28) and its three buttons are
+AI button on the journal entry. Reform II's rows (19, 26, 28) and its two buttons are
 hidden until Reform I carries (`un_charter_reform_ii_in_view`, through
 `un_chamber_reform_ii_in_view_sgui` in the widget and the buttons' `visible`); the propose gates
 still ask `un_charter_has_reform`. The resolution triggers sort the topics as the table above
@@ -357,9 +374,11 @@ the classification and the loc.
    × E for five years (prestige −5%, its subjects' liberty desire +0.05 a week), defiance 10,
    standing −5 (code 41), credibility −1 (ledger 32), and no referendum of its own for five
    years. An overlord that voted for it must hold the vote.
-8. **The Development Fund** (`un_economy_*`). Any member while dues are assessed. The members'
-   average GDP per head is weighted by population; the line is half of it. A grant is the
-   recipient's share of the eligible members' people × a quarter of the budget, stored in
+8. **The Development Fund** (`un_economy_*`). Any member while dues are assessed, at any
+   charter level (tiered as item 7 above says: budget share 0 / 0.05 / 0.25 and line 0.1 /
+   0.25 / 0.5 by charter level, plus the Development Programs contributors' expense). The
+   members' average GDP per head is weighted by population. A grant is the
+   recipient's share of the eligible members' people × the weekly pot, stored in
    `var:un_dev_fund_grant` and applied by a hidden event with the recipient as ROOT. It goes
    into the investment pool (`country_weekly_investment_pool_add`, which only the banking
    journal entry's weekly pulse moves into the pool) when the recipient's banking entry is
