@@ -379,10 +379,12 @@ class CommencementTest(unittest.TestCase):
                     self.assertRegex(
                         body,
                         rf"if = \{{\s*limit = \{{ var:te_tax_p{slot}_{key} >= 0 \}}\s*"
+                        rf"if = \{{\s*limit = \{{ var:te_tax_p{slot}_{key}_exp >= 0 \}}\s*"
+                        rf"set_variable = \{{ name = te_tax_en_{key}_succ value = var:te_tax_en_{key} \}}\s*\}}\s*"
+                        rf"else = \{{\s*set_variable = \{{ name = te_tax_en_{key}_succ value = -1 \}}\s*\}}\s*"
                         rf"set_variable = \{{ name = te_tax_en_{key} value = var:te_tax_p{slot}_{key} \}}\s*"
                         rf"set_variable = \{{ name = te_tax_en_{key}_since value = var:te_tax_now \}}\s*"
-                        rf"set_variable = \{{ name = te_tax_en_{key}_exp value = var:te_tax_p{slot}_{key}_exp \}}\s*"
-                        rf"set_variable = \{{ name = te_tax_en_{key}_succ value = var:te_tax_p{slot}_{key}_succ \}}\s*\}}")
+                        rf"set_variable = \{{ name = te_tax_en_{key}_exp value = var:te_tax_p{slot}_{key}_exp \}}\s*\}}")
                 for good in catalog():
                     self.assertIn(f"if = {{ limit = {{ var:te_tax_p{slot}_g_{good} >= 0 }} "
                                   f"set_variable = {{ name = te_tax_en_g_{good} value = var:te_tax_p{slot}_g_{good} }} }}",
@@ -394,6 +396,39 @@ class CommencementTest(unittest.TestCase):
                 self.assertIn(f"set_variable = {{ name = te_tax_pending_relief_{slot} value = 0 }}", body)
                 self.assertNotIn("te_tax_sync_collection", body, "the processor syncs once, after every slot")
 
+    def test_a_sunset_restores_the_rate_in_force_just_before_commencement(self):
+        # Controller ruling (Task 4 fix round 1): the successor is the enacted value apply
+        # overwrites, after this month's sunsets ran; the package's stored _succ is a review
+        # preview and is never read, so a held or never-commenced earlier package cannot
+        # become law through it.
+        for slot in SLOTS:
+            body = block(self.text, f"te_tax_gen_apply_{slot}")
+            for key in KEYS:
+                with self.subTest(slot=slot, key=key):
+                    capture = body.find(f"set_variable = {{ name = te_tax_en_{key}_succ value = var:te_tax_en_{key} }}")
+                    overwrite = body.find(f"set_variable = {{ name = te_tax_en_{key} value = var:te_tax_p{slot}_{key} }}")
+                    self.assertGreater(capture, 0)
+                    self.assertGreater(overwrite, capture, "capture before the overwrite")
+                    captured = [nested for _, nested in branches(body)
+                                if f"name = te_tax_en_{key}_succ value = var:te_tax_en_{key} " in direct(nested)]
+                    self.assertEqual(len(captured), 1)
+                    self.assertEqual(limit_of(captured[0]).strip(), f"var:te_tax_p{slot}_{key}_exp >= 0")
+                    self.assertNotIn(f"te_tax_p{slot}_{key}_succ", body)
+            self.assertNotRegex(body, r"te_tax_p[ab]_\w+_succ")
+
+    def test_commencement_runs_after_the_months_sunsets(self):
+        # The captured successor is the post-sunset value.
+        body = block(read(SCHEDULE), "te_tax_process_month")
+        last_sunset = max(body.find(f"te_tax_gen_sunset_{key} = yes") for key in KEYS)
+        self.assertGreater(body.find("te_tax_gen_commence_"), last_sunset)
+
+    def test_no_public_apply_entry_point(self):
+        # te_tax_gen_apply_<slot> reads te_tax_now, which only the processor sets.
+        self.assertNotIn("te_tax_apply_package", effects())
+        callers = [name for name, body in effects().items()
+                   if re.search(r"te_tax_gen_apply_(a|b|\$SLOT\$) = yes", body)]
+        self.assertEqual(sorted(callers), ["te_tax_gen_commence_a", "te_tax_gen_commence_b"])
+
 
 class WatchdogTest(unittest.TestCase):
     @classmethod
@@ -402,7 +437,7 @@ class WatchdogTest(unittest.TestCase):
         cls.reach = closure({"te_tax_watchdog_month"}, cls.defined)
 
     def test_watchdog_never_commences(self):
-        for forbidden in ("te_tax_process_month", "te_tax_apply_package", "te_tax_store_package",
+        for forbidden in ("te_tax_process_month", "te_tax_store_package",
                           *(f"te_tax_gen_commence_{slot}" for slot in SLOTS),
                           *(f"te_tax_gen_apply_{slot}" for slot in SLOTS)):
             with self.subTest(forbidden=forbidden):
@@ -422,6 +457,15 @@ class WatchdogTest(unittest.TestCase):
         for slot in SLOTS:
             self.assertIn(f"te_tax_gen_hold_missed_{slot} = yes", body)
         self.assertEqual(body.count("te_tax_sync_collection = yes"), 1)
+        # Sync only if a sunset ran: every executed sunset bumps te_tax_code_version, so on
+        # the 1st (country pulse before the global one) the tick is not synced twice.
+        record = body.find("set_local_variable = { name = te_tax_wd_version value = var:te_tax_code_version }")
+        self.assertGreater(record, 0)
+        self.assertLess(record, body.find("te_tax_gen_sunset_wage = yes"))
+        synced = [nested for _, nested in branches(body) if "te_tax_sync_collection = yes" in direct(nested)]
+        self.assertEqual(len(synced), 1)
+        self.assertEqual(limit_of(synced[0]).strip(), "var:te_tax_code_version > local_var:te_tax_wd_version")
+        self.assertGreater(body.find("te_tax_sync_collection = yes"), body.find("te_tax_gen_hold_missed_b = yes"))
         acting = [nested for _, nested in branches(body) if "te_tax_gen_sunset_wage = yes" in direct(nested)]
         self.assertEqual(len(acting), 1)
         for condition in ("var:te_tax_last_month < var:te_tax_now", "var:te_tax_next_month >= 0",
@@ -497,7 +541,8 @@ class StoreTest(unittest.TestCase):
                     self.assertRegex(body, rf"else = \{{\s*set_variable = \{{ name = te_tax_p{slot}_{key}_exp value = -1 \}}"
                                            rf"\s*set_variable = \{{ name = te_tax_p{slot}_{key}_succ value = -1 \}}\s*\}}")
 
-    def test_store_successor_is_the_value_just_before_commencement(self):
+    def test_store_successor_preview_is_the_value_expected_just_before_commencement(self):
+        # A review preview only ("reverts to X"); commencement never reads it.
         for slot, other in (("a", "b"), ("b", "a")):
             body = block(self.generated, f"te_tax_gen_store_{slot}")
             for key in KEYS:

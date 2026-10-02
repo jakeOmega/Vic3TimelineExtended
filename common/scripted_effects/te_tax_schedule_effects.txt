@@ -80,9 +80,11 @@ te_tax_process_month = {
 # the month and never commences: a country's pulse can land on the 1st before
 # the global pulse, and claiming the month there would make the dispatch skip
 # that month's commencements. It runs the sunsets (each runs once, because it
-# clears its own _exp), holds any package whose due month has passed, and syncs.
-# A "TE_TAX watchdog" line on the 1st just before that country's "TE_TAX process"
-# line is that ordering, not a missed dispatch.
+# clears its own _exp), holds any package whose due month has passed, and syncs
+# collection only if a sunset ran (te_tax_code_version moved), so on the 1st it
+# does not sync again in the tick the processor syncs. A "TE_TAX watchdog" line
+# on the 1st just before that country's "TE_TAX process" line is that ordering,
+# not a missed dispatch.
 te_tax_watchdog_month = {
 	if = {
 		limit = {
@@ -98,6 +100,8 @@ te_tax_watchdog_month = {
 				var:te_tax_next_month <= var:te_tax_now
 			}
 			debug_log = "TE_TAX watchdog month not yet processed with a transition due; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			# Every executed sunset bumps the version; nothing else here does.
+			set_local_variable = { name = te_tax_wd_version value = var:te_tax_code_version }
 			te_tax_gen_sunset_wage = yes
 			te_tax_gen_sunset_div = yes
 			te_tax_gen_sunset_land = yes
@@ -105,7 +109,10 @@ te_tax_watchdog_month = {
 			te_tax_gen_sunset_cons = yes
 			te_tax_gen_hold_missed_a = yes
 			te_tax_gen_hold_missed_b = yes
-			te_tax_sync_collection = yes
+			if = {
+				limit = { var:te_tax_code_version > local_var:te_tax_wd_version }
+				te_tax_sync_collection = yes
+			}
 			te_tax_recompute_next_month = yes
 		}
 	}
@@ -128,16 +135,6 @@ te_tax_store_package = {
 	}
 	else = {
 		debug_log = "TE_TAX store_refused the slot is taken, the due month is not in the future or a sunset is under one month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
-	}
-}
-
-# Applies slot SLOT's package to the enacted code. The processor's
-# commencement is its only caller; it reads te_tax_now, which the processor has
-# set, and leaves the collection sync to the processor.
-te_tax_apply_package = {
-	if = {
-		limit = { te_tax_code_on = yes }
-		te_tax_gen_apply_$SLOT$ = yes
 	}
 }
 

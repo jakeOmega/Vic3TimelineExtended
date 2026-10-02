@@ -558,8 +558,13 @@ def _apply(slot):
     lines = [
         "",
         f"# Slot {slot}: copies every field the package touches into the enacted code. Only",
-        "# te_tax_gen_commence_<slot> calls it, inside the processor, which has set te_tax_now",
-        "# and syncs collection once after every slot.",
+        "# te_tax_gen_commence_<slot> calls it, inside the processor, which has set te_tax_now,",
+        "# run this month's sunsets first and syncs collection once after every slot. A",
+        "# provision with a sunset reverts to the rate in force immediately before this",
+        "# package commences: te_tax_en_<key>_succ takes the enacted value before it is",
+        "# overwritten. The stored te_tax_p<slot>_<key>_succ is only the review's preview and",
+        "# is never read here, so a held or never-commenced earlier package cannot become a",
+        "# successor.",
         f"te_tax_gen_apply_{slot} = {{",
     ]
     for instrument in INSTRUMENTS:
@@ -568,10 +573,16 @@ def _apply(slot):
         lines += [
             "\tif = {",
             f"\t\tlimit = {{ var:{p}_{key} >= 0 }}",
+            "\t\tif = {",
+            f"\t\t\tlimit = {{ var:{p}_{key}_exp >= 0 }}",
+            f"\t\t\tset_variable = {{ name = {en}_succ value = var:{en} }}",
+            "\t\t}",
+            "\t\telse = {",
+            f"\t\t\tset_variable = {{ name = {en}_succ value = -1 }}",
+            "\t\t}",
             f"\t\tset_variable = {{ name = {en} value = var:{p}_{key} }}",
             f"\t\tset_variable = {{ name = {en}_since value = var:te_tax_now }}",
             f"\t\tset_variable = {{ name = {en}_exp value = var:{p}_{key}_exp }}",
-            f"\t\tset_variable = {{ name = {en}_succ value = var:{p}_{key}_succ }}",
             "\t}",
         ]
     for good in consumption_catalog():
@@ -608,7 +619,12 @@ def _apply(slot):
 
 
 def _store_successor(slot, key):
-    """Lines setting te_tax_p<slot>_<key>_succ: the provision's value just before the due month."""
+    """Lines setting te_tax_p<slot>_<key>_succ, the review's preview of what the sunset restores.
+
+    A forecast at store time: the value the provision is expected to hold just before
+    the due month. Commencement never reads it; te_tax_gen_apply_<slot> takes the
+    successor from the enacted value at commencement.
+    """
     p, o = f"te_tax_p{slot}", f"te_tax_p{_other(slot)}"
     en = f"te_tax_en_{key}"
     return [
@@ -653,11 +669,12 @@ def _store(slot):
         "# only through te_tax_store_package, after te_tax_can_store_package and with",
         "# scope:te_tax_country saved. Every payload field is written, so nothing stale from an",
         "# earlier package survives. A sunset is due + offset, written only for an offset of at",
-        "# least one month; its successor is the value the provision will hold just before the",
-        "# due month: the other slot's value if that awaiting package touches it earlier (or",
-        "# that package's successor, if its own sunset comes first), else the enacted value",
-        "# (or the enacted successor, if the enacted sunset comes first). seq = one above both",
-        "# slots. The slot is switched on last.",
+        "# least one month. _succ is a preview for the review only (commencement takes the",
+        "# successor from the enacted value then): the value the provision is expected to hold",
+        "# just before the due month, i.e. the other slot's value if that awaiting package",
+        "# touches it earlier (or that package's successor, if its own sunset comes first), else",
+        "# the enacted value (or the enacted successor, if the enacted sunset comes first).",
+        "# seq = one above both slots. The slot is switched on last.",
         f"te_tax_gen_store_{slot} = {{",
         f"\tset_variable = {{ name = {p}_due value = var:te_tax_bl_due }}",
         "\tif = {",
