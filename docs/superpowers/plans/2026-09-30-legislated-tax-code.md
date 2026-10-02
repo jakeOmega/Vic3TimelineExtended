@@ -1,8 +1,9 @@
 # Legislated tax code — implementation plan draft
 
-**Status:** proposed sequencing; an opt-in developer probe harness is implemented, with no runtime results yet.
+**Status:** core implementation can begin with the limited runtime evidence below; automatic scheduling and integration gates remain unresolved.
 **Probe runbook:** [Tax code engine probes](../../testing/tax-code-probes.md).
 **Results form:** [Copy for each playtest run](../../testing/tax-code-probe-results.md).
+**Runtime evidence:** [2026-10-02 UK first pass and follow-ups](../../testing/tax-code-probe-results-2026-10-02.md) (1.14.5, reported revision `77da24c`).
 **Design:** [Legislated tax code and customs schedule](../specs/2026-09-29-legislated-tax-code-design.md).
 **Outcome:** a player and an AI country can draft, negotiate, approve, and commence a fiscal package while existing collections continue until its effective date.
 
@@ -41,6 +42,41 @@ These are reviewable work packages, not a promise of eight fixed-size PRs. Packa
 incrementally behind a campaign-setup experimental rule. None constitutes a released playable
 feature alone. Retain the design's release gate if customs authority or native-control interception
 cannot be made coherent. No mid-save disable switch before a tested reverse migration exists.
+
+### Starting decisions from the 2026-10-02 probes
+
+The linked evidence records the owner's observations and their limits. Start core
+implementation with the amendment carrier: manual commencement collected both flat
+wage/dividend taxes, and two rebuilds preserved rates/dates through another game week.
+State wage relief and agricultural wage relief worked; the tested agricultural
+modifier did not relieve Manor House dividends. Keep other incidence claims unverified.
+
+Use bounded country-variable slots and absolute dates initially; those fields survived
+reload. Container count/overflow observations are encouraging, but nested month fields
+were not printed by the harness. This is incomplete verification, not a container failure.
+Keep approved future changes separate from the active debate even with bounded storage.
+
+Use explicitly approximate estimates. No direct pre-tax pop bases were found in the
+bounded documentation search. Script aggregates respond to taxes, but the zero-bench
+`tax_income` baseline resembles minting; classify its components before displaying it
+as tax receipts. Building `earnings × level` is not a verified tax base.
+
+Begin package 2 on these supported mechanisms; package 0–1 dependencies apply to the
+capability being implemented, not as an all-at-once extended-matrix prerequisite.
+Full package exit gates and every production checkbox remain unfinished.
+
+Early implementation work must:
+
+- Diagnose and fix automatic commencement at the month boundary. The initial log shows
+  commencement and expiry in the same call at 22034, after due month 22033; manual
+  commencement and rebuild subsequently worked. Instrument the clock/dispatch guard,
+  test both boundaries and duplicate calls, and define handling of genuinely late dispatch.
+  Do not change carriers or assume a `>`/`>=` cause from this scheduling failure.
+- Establish control of native AI fiscal writes and competent shared-market/treaty customs
+  authority before substantial dependent integration. Both were skipped, and their
+  invariants remain required before release.
+- Verify actual institution delivery before adding service promises, and copying/ownership
+  behavior before committing to civil-war reconstruction.
 
 ## 2. Proposed file and interface boundaries
 
