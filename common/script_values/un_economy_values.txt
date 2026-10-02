@@ -285,11 +285,17 @@ un_fr_draw_offer_value = {
 	}
 }
 
-# What all the pledgers the Reserve can draw on offer together.
+# What all the pledgers the Reserve can draw on offer together, leaving out
+# the mission's host (scope:un_msn_host): a pledger is not drawn on for its
+# own relief, and earns no standing for it. Mirrors the draw loop's limit in
+# un_food_reserve_on_aid_mission_opened.
 un_fr_draw_potential_value = {
 	value = 0
 	every_country = {
-		limit = { un_food_reserve_can_be_drawn = yes }
+		limit = {
+			un_food_reserve_can_be_drawn = yes
+			NOT = { scope:un_msn_host ?= this }
+		}
 		add = un_fr_draw_offer_value
 	}
 }

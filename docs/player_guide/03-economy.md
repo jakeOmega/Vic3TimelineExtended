@@ -550,8 +550,9 @@ move it to their own capital.
 
 Once the United Nations has founded the World Food Reserve, a member with a
 Strategic Reserve Hub can press Pledge Grain to the World Food Reserve in the
-United Nations journal entry. When a UN aid mission opens, the Reserve takes up
-to a quarter of your grain, at most 2,500 units, if you hold at least 500. The
+United Nations journal entry. When a UN aid mission opens in another country,
+the Reserve takes up to a quarter of your grain, at most 2,500 units, if you
+hold at least 500. The
 grain leaves your reserve through its own bookkeeping, and you gain standing for
 each draw. Withdraw Our Grain Pledge stops it at any time (see [The World Food
 Reserve and hunger](09-united-nations.md#the-world-food-reserve-and-hunger)).

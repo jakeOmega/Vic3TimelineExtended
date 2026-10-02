@@ -304,7 +304,8 @@ un_food_reserve_hunger_snapshot = {
 # ---- The World Food Reserve answers an aid mission ------------------------------------
 
 # A new UN aid mission has opened (un_mission_open, un_mission_effects.txt).
-# While the Reserve stands, it draws grain from the pledgers holding enough:
+# While the Reserve stands, it draws grain from the pledgers holding enough,
+# other than the mission's host (not drawn on for its own relief):
 # from each the same fraction of its offer (a quarter of its stockpile, at most
 # 2,500 units), all of it until the mission's need of 5,000 units is met. The
 # mission's state is fed for a year in proportion to what came; each pledger
@@ -325,8 +326,13 @@ un_food_reserve_on_aid_mission_opened = {
 				limit = { global_var:un_fr_draw_potential > 0 }
 				set_global_variable = { name = un_fr_draw_scale value = un_fr_draw_scale_value }
 				set_global_variable = { name = un_fr_draw_total value = 0 }
+				# Mirrors un_fr_draw_potential_value's limit: the host is
+				# never drawn on for its own relief.
 				every_country = {
-					limit = { un_food_reserve_can_be_drawn = yes }
+					limit = {
+						un_food_reserve_can_be_drawn = yes
+						NOT = { scope:un_msn_host ?= this }
+					}
 					un_food_reserve_draw_from = yes
 				}
 				# The relief, for a year from the state's next monthly pulse:

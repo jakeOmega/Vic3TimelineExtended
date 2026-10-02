@@ -9,11 +9,15 @@
 #   .1  the aggressor, when the resolution carries (an order, or the vetoed
 #       call for a ceasefire)
 #   .2  each member the aggressor is fighting, when an order is imposed
-#   .3  the war ended inside the order: the aggressor, the victim and the
-#       proposer
+#   .3  the war ended inside the order and the aggressor gained nothing from
+#       it: the aggressor, the victim and the proposer
 #   .4  the order ran out with the war still on: the same three
-#   .5  the victim was conquered under the order: the aggressor and the
-#       proposer
+#   .5  the war ended with the aggressor holding gains from the victim (its
+#       former capital, its land, or the victim as its subject;
+#       un_order_ceasefire_aggressor_gained): the aggressor, the victim if it
+#       still stands, and the proposer
+# An order that lapses as moot, or whose victim is gone but not into the
+# aggressor's hands, ends with no notice (un_ceasefire_order_month).
 # Saved scopes: un_cf_aggressor (the aggressor), un_cf_victim_scope and
 # un_cf_proposer_scope where they exist; .3 also un_msn_new when a mission
 # opened.
@@ -199,7 +203,9 @@ un_ceasefire.4 = {
 	}
 }
 
-# The victim the order named was conquered under it.
+# The war ended with the aggressor holding gains from the victim the order
+# named: conquered outright, or still standing but stripped of land or made a
+# subject.
 un_ceasefire.5 = {
 	type = country_event
 	placement = root
@@ -210,17 +216,48 @@ un_ceasefire.5 = {
 
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
-	title = un_ceasefire.5.t
+	title = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_ceasefire.5.t_gained
+				trigger = { un_order_victim_stands = yes }
+			}
+			desc = un_ceasefire.5.t
+		}
+	}
 	desc = {
 		first_valid = {
+			triggered_desc = {
+				desc = un_ceasefire.5.d_aggressor_gained
+				trigger = {
+					scope:un_cf_aggressor ?= this
+					un_order_victim_stands = yes
+				}
+			}
 			triggered_desc = {
 				desc = un_ceasefire.5.d_aggressor
 				trigger = { scope:un_cf_aggressor ?= this }
 			}
+			triggered_desc = {
+				desc = un_ceasefire.5.d_victim
+				trigger = { scope:un_cf_victim_scope ?= this }
+			}
+			triggered_desc = {
+				desc = un_ceasefire.5.d_proposer_gained
+				trigger = { un_order_victim_stands = yes }
+			}
 			desc = un_ceasefire.5.d_proposer
 		}
 	}
-	flavor = un_ceasefire.5.f
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_ceasefire.5.f_gained
+				trigger = { un_order_victim_stands = yes }
+			}
+			desc = un_ceasefire.5.f
+		}
+	}
 
 	duration = 3
 

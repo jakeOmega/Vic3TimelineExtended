@@ -56,16 +56,26 @@ un_referendum.1 = {
 		name = un_referendum.1.a
 		default_option = yes
 		custom_tooltip = un_referendum_hold_odds_tt
-		custom_tooltip = {
-			text = un_order_standing_held_tt
-			un_standing_gain = { AMOUNT = un_ref_held_gain REASON = 40 }
-		}
-		custom_tooltip = un_order_ledger_tt_referendum_held
-		un_ledger_entry_on = { PILLAR = delivery POINTS = un_ref_delivery_credit REASON = 33 SUBJECT = scope:un_ref_subject }
-		hidden_effect = {
-			if = {
-				limit = { un_referendum_still_holds_subject = yes }
+		# Only a vote actually held earns the standing and the delivery: the
+		# subject may have slipped away while the event waited.
+		if = {
+			limit = { un_referendum_still_holds_subject = yes }
+			custom_tooltip = {
+				text = un_order_standing_held_tt
+				un_standing_gain = { AMOUNT = un_ref_held_gain REASON = 40 }
+			}
+			custom_tooltip = un_order_ledger_tt_referendum_held
+			un_ledger_entry_on = { PILLAR = delivery POINTS = un_ref_delivery_credit REASON = 33 SUBJECT = scope:un_ref_subject }
+			hidden_effect = {
 				un_referendum_hold = yes
+			}
+		}
+		else = {
+			hidden_effect = {
+				if = {
+					limit = { has_variable = un_ref_chance }
+					remove_variable = un_ref_chance
+				}
 			}
 		}
 		ai_chance = {
@@ -97,7 +107,10 @@ un_referendum.1 = {
 			NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
 		}
 		custom_tooltip = un_referendum_refuse_tt
-		scope:un_ref_subject = { add_liberty_desire = un_ref_refused_liberty_desire }
+		if = {
+			limit = { un_referendum_still_holds_subject = yes }
+			scope:un_ref_subject = { add_liberty_desire = un_ref_refused_liberty_desire }
+		}
 		add_modifier = {
 			name = un_referendum_refused_modifier
 			multiplier = un_enforcement

@@ -39,13 +39,22 @@ un_order_wages_war_on_member = {
 	any_scope_war = { un_order_war_against_member = yes }
 }
 
-# A represented member the aggressor (scope:un_cf_agg_check) is at war with:
-# a victim the order names.
+# A represented member the aggressor (scope:un_cf_agg_check) attacks: a
+# victim the order names. It must defend in a war the aggressor fights on the
+# attacking side (the same side test as un_order_war_against_member), so a
+# member that attacked the aggressor in a war of its own is not one.
 # Scope: country; expects scope:un_cf_agg_check
 un_order_ceasefire_victim = {
 	NOT = { this = scope:un_cf_agg_check }
 	un_member_represented = yes
 	has_war_with = scope:un_cf_agg_check
+	save_temporary_scope_as = un_cf_victim_check
+	scope:un_cf_agg_check = {
+		any_scope_war = {
+			NOT = { is_on_defending_side = scope:un_cf_agg_check }
+			is_on_defending_side = scope:un_cf_victim_check
+		}
+	}
 }
 
 # The pool: a country, not the proposer, that started a war it is fighting
@@ -79,12 +88,67 @@ un_ceasefire_can_table = {
 	}
 }
 
-# The victim the order names still stands: it exists and is alive. A victim
-# conquered under the order is no war ended by the order.
+# The victim the order names still stands: it exists and is alive.
 # Scope: any; expects scope:un_cf_victim_scope
 un_order_victim_stands = {
 	exists = scope:un_cf_victim_scope
 	scope:un_cf_victim_scope = { is_country_alive = yes }
+}
+
+# The aggressor is still at war with the victim the order names, in any war.
+# The order's war is over only when this and un_order_wages_war_on_member
+# are both false (un_ceasefire_order_month).
+# Scope: the aggressor; expects scope:un_cf_victim_scope where the order names
+# a victim
+un_order_fights_named_victim = {
+	un_order_victim_stands = yes
+	has_war_with = scope:un_cf_victim_scope
+}
+
+# The aggressor holds the named victim's former capital: a state in the region
+# of the victim's capital at imposition (un_cf_victim_capital_region). If the
+# aggressor already held part of that region then (un_cf_capital_region_shared),
+# the victim must also hold none of it now.
+# Scope: the aggressor; expects scope:un_cf_aggressor, and
+# scope:un_cf_victim_scope where the order names a victim
+un_order_ceasefire_holds_victim_capital = {
+	has_variable = un_cf_victim_capital_region
+	var:un_cf_victim_capital_region ?= {
+		any_scope_state = { owner ?= scope:un_cf_aggressor }
+	}
+	OR = {
+		NOT = { has_variable = un_cf_capital_region_shared }
+		NOT = { exists = scope:un_cf_victim_scope }
+		var:un_cf_victim_capital_region ?= {
+			NOT = {
+				any_scope_state = { owner ?= scope:un_cf_victim_scope }
+			}
+		}
+	}
+}
+
+# The aggressor gained from the war the order was imposed over, judged once
+# that war is over against what was stored at imposition: it holds the
+# victim's former capital, or the victim stands but is now its subject or
+# holds fewer states than it did then. Such a war was won, not ceased: the
+# order was defied.
+# Scope: the aggressor; expects scope:un_cf_aggressor, and
+# scope:un_cf_victim_scope where the order names a victim
+un_order_ceasefire_aggressor_gained = {
+	OR = {
+		un_order_ceasefire_holds_victim_capital = yes
+		AND = {
+			un_order_victim_stands = yes
+			scope:un_cf_victim_scope = { is_subject_of = scope:un_cf_aggressor }
+		}
+		AND = {
+			un_order_victim_stands = yes
+			has_variable = un_cf_victim_states
+			scope:un_cf_victim_scope = {
+				un_order_state_count_value < scope:un_cf_aggressor.var:un_cf_victim_states
+			}
+		}
+	}
 }
 
 # ---- Supervised Self-Determination Referendum ----------------------------------

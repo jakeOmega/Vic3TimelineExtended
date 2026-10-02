@@ -576,21 +576,27 @@ standing, or 4 if it voted for its own suspension.
 ### Binding ceasefires
 
 A Binding Ceasefire names a country with a case strength of 40 or more that
-started a war it is fighting against a member. If it carries, the aggressor is
-under a ceasefire order for 24 months. Nobody imposes a peace. Each month it
-fights on against a member:
+started a war it is fighting against a member, and the member it attacked. If
+it carries, the aggressor is under a ceasefire order for 24 months. Nobody
+imposes a peace. Each month it fights on against a member:
 
 - its war support in that war falls by 2.5 × enforcement;
 - its aggression record grows;
 - the UN's peace and order suffers, booked every six months.
 
 After three months of fighting on it loses 5 standing (2 if it voted for its own
-censure); stopping sooner earns it standing for complying. If the war ends while
-the order stands, UN delivery rises and peacekeepers deploy to the victim's most
-devastated state. If the order runs out, or the victim is conquered, UN
-credibility falls. A veto makes it a call for a ceasefire: one drop of 10 ×
-enforcement in war support. Our Obligations shows an order against you, or
-against your enemy.
+censure). How the order ends decides what follows:
+
+| Ending | Result |
+|---|---|
+| The war with the victim ends and the aggressor gained nothing from it | The order is kept. UN delivery rises, peacekeepers deploy to the victim's most devastated state, and an aggressor that stopped within three months gains standing for complying. |
+| The war ends with the victim losing a state, becoming the aggressor's subject or losing its capital region to it | The order is defied. UN credibility falls and the aggressor earns nothing. |
+| The order runs out with the war still on | The order is defied. UN credibility falls. |
+| The victim stops being represented in the Assembly while the war goes on | The order has no effect and lapses quietly. |
+| The victim is destroyed by someone else | The order ends with no penalty. |
+
+A veto makes it a call for a ceasefire: one drop of 10 × enforcement in war
+support. Our Obligations shows an order against you, or against your enemy.
 
 ### Supervised referendums
 
@@ -601,7 +607,7 @@ overlord receives A Referendum Ordered:
 
 | Choice | Result |
 |---|---|
-| Open the polling stations. | The subject becomes independent with a chance equal to its liberty desire, rounded down to 5, between 20% and 90%. Otherwise its liberty desire falls by 20. Either way you gain 4 standing and UN delivery rises. |
+| Open the polling stations. | The subject becomes independent with a chance equal to its liberty desire, rounded down to 5, between 20% and 90%. Otherwise its liberty desire falls by 20. Either way, if the subject is still yours when you choose, you gain 4 standing and UN delivery rises. |
 | We will not put our union to a vote. | The subject's liberty desire rises by 15. For five years you have Referendum Refused (less prestige, and every subject's liberty desire grows faster, × enforcement), you cannot ask for a referendum yourself, and you lose 5 standing and take a defiance record of 10. UN credibility falls. |
 
 An overlord that voted for the referendum must hold it.
@@ -645,7 +651,7 @@ the budget line shows what the Fund and the Standing UN Force take.
 The World Food Reserve needs no charter reform. While it stands, a member with
 a Strategic Reserve Hub can press Pledge Grain to the World Food Reserve, and
 Withdraw Our Grain Pledge at any time. When a UN aid mission opens, the Reserve
-takes grain from the pledgers holding at least 500: up to a quarter of each
+takes grain from the pledgers, other than the mission's host, holding at least 500: up to a quarter of each
 one's grain and no more than 2,500 units from any one, 5,000 in all. The
 mission's state gets up to +0.15 food security and −5% mortality for a year,
 scaled by the grain sent. Each pledger drawn on gains 2 standing, and UN

@@ -313,20 +313,27 @@ the classification and the loc.
    (code 45). It fails if the host is attacked or stops holding elections (ledger 38; abolishing
    elections also costs the host 2 standing, code 46), and lapses after 60 months without one.
 6. **The ceasefire** (`un_order_*`, `events/un_ceasefire_events.txt`). Only wars the aggressor
-   fights on the attacking side against a represented member count. Each such month: war
+   fights on the attacking side against a represented member count, and the named victim must be
+   a member defending in one of them. Each such month: war
    support −2.5 × E in each war, aggression record +1, and an order debit of 0.25 that accrues
    on the aggressor and is booked every six months and when the order ends (ledger 30), so a
    long order does not fill the twelve-entry log. After three months of fighting on, standing
-   −5 once (−2 if it accepted the censure; code 39). The war ending inside the order books
-   delivery +1.5 (ledger 31), standing +2 (code 5) if within the three months, and peacekeepers
-   in the victim's most devastated state; the order running out, or the victim conquered,
-   books credibility −1 (ledger 32). The order is moot if the aggressor fights no member when
-   the vote closes. Vetoed: one war-support hit of 10 × E. Our Obligations shows an order
+   −5 once (−2 if it accepted the censure; code 39). At imposition the aggressor records the
+   victim's state count and capital region. The order then ends one of five ways (the
+   `un_order_effects.txt` header): **kept** when the war with the victim is over, the aggressor
+   fights no other member and gained nothing — delivery +1.5 (ledger 31), standing +2 (code 5) if
+   within the three months, and peacekeepers in the victim's most devastated state; **defied**
+   when it gained (the victim lost a state, became its subject, or lost its capital region to it)
+   or the order ran out with the war on — credibility −1 (ledger 32) and nothing earned;
+   **lapsed quietly** when the victim is no longer represented but the war goes on; and **ended
+   without penalty** when someone other than the aggressor destroys the victim. The order is moot
+   if the aggressor fights no member when the vote closes. An annexed aggressor's unbooked debit
+   is lost. Vetoed: one war-support hit of 10 × E. Our Obligations shows an order
    against us, or against our enemy.
 7. **The referendum** (`events/un_referendum_events.txt`). A subject may table its own. Odds =
    liberty desire rounded down to 5, clamped 20–90. Holding the vote: independence (a colonial
-   subject is first marked a former colony) or liberty desire −20; either way standing +4 (code
-   40) and delivery +1 (ledger 33). Refusing: liberty desire +15, `un_referendum_refused_modifier`
+   subject is first marked a former colony) or liberty desire −20; either way, if the overlord
+   still holds the subject when it answers, standing +4 (code 40) and delivery +1 (ledger 33). Refusing: liberty desire +15, `un_referendum_refused_modifier`
    × E for five years (prestige −5%, its subjects' liberty desire +0.05 a week), defiance 10,
    standing −5 (code 41), credibility −1 (ledger 32), and no referendum of its own for five
    years. An overlord that voted for it must hold the vote.
@@ -340,7 +347,7 @@ the classification and the loc.
    (`country_tax_income_add`). Leaving the UN ends it at once (`un_membership_end_effect`).
 9. **The World Food Reserve.** Pledging needs a seat, a Strategic Reserve Hub and grain
    unlocked; two journal-entry buttons pledge and withdraw. A new aid mission draws from
-   pledgers holding 500 grain or more: each offers the smaller of 25% and 2,500 units, the
+   pledgers other than its host holding 500 grain or more: each offers the smaller of 25% and 2,500 units, the
    mission takes up to 5,000 in proportion, through `st_res_grain_stored` and the reserve's own
    clamp and hub refresh, so no goods are made. Relief = drawn ÷ 5,000 (capped at 1) × (+0.15
    food security, −5% mortality) for twelve months from the state's next pulse; one delivery
@@ -390,6 +397,12 @@ the classification and the loc.
   `return_state` goal against an owner of part of the region counts.
 - One court record per country: a second defiance replaces the first.
 - The ceasefire's grace and standing loss are once per order, not monthly.
+- A ceasefire victim's state count that falls for any reason (another war, a release) counts as
+  the aggressor's gain; and when the aggressor already held part of the victim's capital region,
+  the capital test needs the victim to have lost all of it.
+- The vote events name a ceasefire's victim and a referendum's subject through their capital
+  state's current owner (`Var('…').GetCountry` prints blank here), so a capital lost before a
+  later vote event renders shows the new owner.
 
 ### IN-GAME VERIFICATION CHECKLIST (§0.12)
 
@@ -404,10 +417,12 @@ the classification and the loc.
       unproven).
 - [ ] Electoral mission: closes after a campaign ends; Election Interference's cut halved.
 - [ ] Ceasefire: war support falls monthly and the war ends by capitulation; at most five log
-      entries per order.
+      entries per order. A peace that takes a state gives `.5` and no mission; a white peace
+      gives `.3` and a mission; a victim suspended mid-war lapses quietly; the vote events name
+      the victim and the subject (`SCOPE.sCountry(…).MakeScope.Var(…).GetState`).
 - [ ] Referendum: `make_independent` on a dominion; the roll matches the shown odds.
 - [ ] Fund: the grant shows its weekly amount; pool vs treasury routing.
-- [ ] Food Reserve: a pledger's grain falls by the drawn amount; relief appears within a month;
+- [ ] Food Reserve: a pledger's grain falls by the drawn amount, a host's is never drawn; relief appears within a month;
       the Delivery bar can go negative.
 - [ ] Cultural diversity: the benchmark halves at Established; homeland removal slows.
 - [ ] Nuclear ban: "Held to N by the UN ban" on an armed party; the taboo's UN part rises.

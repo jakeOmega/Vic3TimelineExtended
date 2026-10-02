@@ -54,10 +54,11 @@ un_cf_order_debit_accrued = {
 		multiply = un_cf_order_debit
 	}
 }
-# The war ends inside the order: delivery (code 31).
+# The war ends inside the order, and the aggressor gained nothing from it:
+# delivery (code 31).
 un_cf_delivery_credit = { value = 1.5 }
-# The order runs out with the war still on, or the victim is conquered under
-# it: credibility (code 32).
+# The order runs out with the war still on, or the war ends with the aggressor
+# holding gains from the victim: credibility (code 32).
 un_cf_defied_debit = { value = -1 }
 
 # ---- Binding Ceasefire: derived ----------------------------------------------------
@@ -74,6 +75,17 @@ un_cf_call_war_support_hit = {
 	value = un_cf_call_hit_base
 	multiply = un_enforcement
 	multiply = -1
+}
+
+# The states the scoped country holds. An order stores its victim's at
+# imposition (un_cf_victim_states); a victim that holds fewer once the war is
+# over lost ground under the order (un_order_ceasefire_aggressor_gained).
+# Scope: country
+un_order_state_count_value = {
+	value = 0
+	every_scope_state = {
+		add = 1
+	}
 }
 
 # Display: the months an order against us has left. Scope: country
