@@ -18,6 +18,8 @@ ERROR (exit 1):
     English loc nor vanilla's (vanilla_parsed/localization_english.json)
   - GetScriptedGui('x') with no scripted GUI x; GetPlayerJournalEntry('x') with
     no journal entry x; Concept('x', ..) or [concept_x] with no concept x
+  - margin / margin_<side> directly on a plain widget or icon, which the engine
+    does not handle (a WARN when the same line is already on --base)
 WARN:
   - "unproven": a widget type, property, blockoverride name, data function,
     .Method or texture path that no .gui on --base uses and no .gui here
@@ -91,6 +93,34 @@ def loc_args(expr):
         lead = r"^\s*" if m.group(1) == "Localize" else r",\s*"
         keys += [k for k in re.findall(lead + r"'([^'(][^']*)'", span) if re.fullmatch(r"[\w.\-]+", k)]
     return keys
+
+
+MARGIN_PROPS = {"margin", "margin_left", "margin_right", "margin_top", "margin_bottom"}
+GUI_TOKEN = re.compile(r"\b([A-Za-z_]\w*)\s*=\s*(?:([A-Za-z_]\w*)\s*)?(\{)?|(\{)|(\})")
+
+
+def margin_on_plain_widget(text):
+    """(line, opener, property, source line) for each margin property whose
+    innermost block is a plain `widget = {` or `icon = {` (or a type declared
+    `= widget {`). Takes comment-stripped text. A margin inside a block or
+    blockoverride body is not judged: its widget is not known here."""
+    nostr = re.sub(r'"[^"]*"', '""', text)
+    lines = text.split("\n")
+    stack, hits = [], []
+    for m in GUI_TOKEN.finditer(nostr):
+        name, base, brace, bare_open, close = m.groups()
+        if close:
+            if stack:
+                stack.pop()
+        elif bare_open:
+            stack.append("")
+        elif name:
+            if name in MARGIN_PROPS and stack and stack[-1] in ("widget", "icon"):
+                ln = nostr.count("\n", 0, m.start()) + 1
+                hits.append((ln, stack[-1], name, lines[ln - 1].strip()))
+            if brace:
+                stack.append(base or name)
+    return hits
 
 
 def _read(path):
@@ -248,6 +278,17 @@ class Linter:
         for m in IDENT_PROP.finditer(nostr):
             if m.group(1) not in self.known_prop and m.group(1) not in self.known_brace:
                 self.report("WARN", path, lineno(m.start()), f"unproven property '{m.group(1)}'")
+        base_margins = {(o, p, s) for _, o, p, s in margin_on_plain_widget(strip_comments(
+            self.git("show", f"{self.base}:{path}")))}
+        for ln, opener, prop, src in margin_on_plain_widget(text):
+            # Vanilla's right_click_menu.gui does this too; a hit already on the
+            # base is inherited, not new.
+            sev = "WARN" if (opener, prop, src) in base_margins else "ERROR"
+            self.report(sev, path, ln, f"'{prop}' directly inside {opener} = {{ }}: a plain {opener} has no "
+                                       f"margins. gui.log says \"Property '{prop}' not handled\" then \"Error "
+                                       "setting properties\" for the widget (#633's history chart shipped one). Inset "
+                                       "with position (parentanchor = right + position = { -8 0 }), or put the "
+                                       "margin on a flowcontainer, hbox or vbox")
         for m in BLOCKOVERRIDE.finditer(text):
             if m.group(1) not in self.known_blocks:
                 self.report("WARN", path, lineno(m.start()),
