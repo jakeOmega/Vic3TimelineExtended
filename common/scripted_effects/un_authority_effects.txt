@@ -35,9 +35,14 @@
 # names a country or a state is fixed by its loc key; see the table below.
 #
 # PILLAR is credibility, delivery or order. POINTS may be negative. Each
-# ledger is a global stock (un_ledger_<pillar>) that decays by
-# un_ledger_decay_factor every month, so an entry fades over years rather
-# than sitting in the target forever. The call sites print their own
+# ledger is a global stock (un_ledger_<pillar>) that decays every month, by
+# un_credibility_decay_factor (a ten-year half-life) for credibility and by
+# un_ledger_decay_factor (four years) for delivery and order, so an entry fades
+# over years rather than sitting in the target forever. The policy pillar is
+# NOT a ledger and nothing writes to it: it is read from the world, from the
+# country_un_authority_target_add modifier (un_pillar_policy_value).
+#
+# The call sites print their own
 # custom_tooltip line (un_ledger_tt_*), exactly as they printed the old
 # un_authority_change_* lines; every helper here is wrapped in hidden_effect,
 # because several sites are rendered as button and event tooltips.
@@ -93,10 +98,10 @@ un_authority_monthly_update = {
 		}
 	}
 
-	# 2. The ledgers fade.
+	# 2. The ledgers fade. Credibility is remembered longer than the other two.
 	if = {
 		limit = { has_global_variable = un_ledger_credibility }
-		change_global_variable = { name = un_ledger_credibility multiply = un_ledger_decay_factor }
+		change_global_variable = { name = un_ledger_credibility multiply = un_credibility_decay_factor }
 	}
 	if = {
 		limit = { has_global_variable = un_ledger_delivery }
@@ -141,12 +146,17 @@ un_authority_monthly_update = {
 		limit = { has_global_variable = un_pillar_delivery }
 		set_global_variable = { name = un_pillar_delivery_prev value = global_var:un_pillar_delivery }
 	}
+	if = {
+		limit = { has_global_variable = un_pillar_policy }
+		set_global_variable = { name = un_pillar_policy_prev value = global_var:un_pillar_policy }
+	}
 	set_global_variable = { name = un_pillar_participation value = un_pillar_participation_value }
 	set_global_variable = { name = un_pillar_commitment value = un_pillar_commitment_value }
 	set_global_variable = { name = un_pillar_credibility value = un_pillar_credibility_value }
 	set_global_variable = { name = un_pillar_funding value = un_pillar_funding_value }
 	set_global_variable = { name = un_pillar_order value = un_pillar_order_value }
 	set_global_variable = { name = un_pillar_delivery value = un_pillar_delivery_value }
+	set_global_variable = { name = un_pillar_policy value = un_pillar_policy_value }
 	set_global_variable = { name = un_authority_target value = un_authority_target_value }
 	# The overview's pies, and the tally bar's denominator (the members with a
 	# vote, as un_vote_supermajority_passed counts them).

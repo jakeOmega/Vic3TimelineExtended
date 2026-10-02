@@ -404,6 +404,64 @@ un_disp_pillar_delivery_trend = {
 	}
 }
 
+un_disp_pillar_policy_pos = {
+	value = un_disp_pillar_policy
+	divide = un_policy_cap
+	min = 0
+	max = 1
+}
+un_disp_pillar_policy_neg = {
+	value = un_disp_pillar_policy
+	divide = un_policy_cap
+	min = -1
+	max = 0
+}
+un_disp_pillar_policy_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_pillar_policy
+			has_global_variable = un_pillar_policy_prev
+		}
+		value = global_var:un_pillar_policy
+		subtract = global_var:un_pillar_policy_prev
+	}
+}
+un_disp_pillar_policy_trend = {
+	value = 0
+	if = {
+		limit = { un_disp_pillar_policy_delta > 0.05 }
+		value = 1
+	}
+	else_if = {
+		limit = { un_disp_pillar_policy_delta < -0.05 }
+		value = -1
+	}
+}
+# The viewer's own line in the Policy tooltip (je_un_auth_bar_policy_own):
+# our UN Authority Target modifier, and what it adds to the pillar after the
+# good-standing rule and our weight (un_policy_contribution). Live rather than
+# snapshotted, since each reads one country, not a world sweep; the pillar
+# itself is the monthly snapshot, so the two can differ until the next update.
+un_disp_policy_own_modifier = {
+	value = modifier:country_un_authority_target_add
+}
+un_disp_policy_own_contribution = {
+	value = un_policy_contribution
+}
+# 1 while our positive total counts for nothing, because we are outside the UN
+# or undermining it (un_policy_counts_in_full); 0 otherwise.
+un_disp_policy_own_held = {
+	value = 0
+	if = {
+		limit = {
+			NOT = { un_policy_counts_in_full = yes }
+			modifier:country_un_authority_target_add > 0
+		}
+		value = 1
+	}
+}
+
 # ---- The resolution in session (the General Assembly's tally and time bars) -----
 # The tally bar spans the members with a vote (global_var:un_vote_eligible_count,
 # snapshotted monthly from un_vote_eligible_member_count: the denominator the

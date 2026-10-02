@@ -102,6 +102,19 @@ un_member_draws_benefits = {
 	}
 }
 
+# A member in good standing for the Policy pillar of UN authority: in the UN,
+# represented or suspended, and not undermining it. Its UN Authority Target
+# modifier counts in full, for or against. Anyone else, a non-member or an
+# underminer, can only take from the pillar (un_policy_contribution,
+# un_authority_values.txt; docs/systems/un_redesign_design.md §0.10).
+# Scope: country
+un_policy_counts_in_full = {
+	je:je_united_nations ?= {
+		has_modifier = un_member_modifier
+		NOT = { has_modifier = un_undermine_order_cost }
+	}
+}
+
 # ---- Conventions passed during a suspension (§0.8 ruling 14) -------------------
 
 # A convention in force now that was not in force when our representation was

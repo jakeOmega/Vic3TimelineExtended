@@ -1,7 +1,7 @@
 ﻿### United Nations JE widget — why UN authority is moving.
 ###
 ### The equilibrium model of docs/systems/un_redesign_design.md §3, shown to the
-### player: the target authority is moving toward, its seven pillars, the
+### player: the target authority is moving toward, its eight pillars, the
 ### viewer's own weight in world affairs, the tier and charter (phase 2), the
 ### crisis panel while one is open (phase 2), who is championing or undermining
 ### the organisation, the most recent ledger entries, how the model works, and
@@ -496,6 +496,63 @@ types un_authority_widget_types
 						icon = {
 							size = { 24 24 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_delivery_trend'), '(CFixedPoint)0' )]"
+							texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+						}
+					}
+				}
+				### policy: the bar spans the pillar's own range, zero at the centre line
+				### (un_overview_display_values.txt). Tooltip: what the pillar is,
+				### today's reading, and the change since last month.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 8
+					margin = { 4 2 }
+					tooltip = "je_un_auth_bar_policy_tt"
+
+					textbox = {
+						minimumsize = { 170 -1 }
+						maximumsize = { 170 -1 }
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = fontsize_medium
+						default_format = "#tooltippable"
+						text = "je_un_auth_tbl_policy_label"
+					}
+					double_direction_progressbar = {
+						size = { 170 14 }
+						parentanchor = vcenter
+						blockoverride "value_left" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_policy_neg') )]"
+						}
+						blockoverride "value_right" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_policy_pos') )]"
+						}
+					}
+					textbox = {
+						minimumsize = { 50 -1 }
+						autoresize = yes
+						parentanchor = vcenter
+						align = right|nobaseline
+						text = "je_un_auth_tbl_policy_value"
+					}
+					widget = {
+						size = { 24 24 }
+						parentanchor = vcenter
+
+						icon = {
+							size = { 24 24 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_policy_trend'), '(CFixedPoint)1' )]"
+							texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+						}
+						icon = {
+							size = { 24 24 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_policy_trend'), '(CFixedPoint)-1' )]"
+							texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+						}
+						icon = {
+							size = { 24 24 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_pillar_policy_trend'), '(CFixedPoint)0' )]"
 							texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
 						}
 					}

@@ -3,17 +3,21 @@
 # ============================================================================
 # global_var:un_authority no longer drifts toward 50 or takes flat deltas from
 # whoever acted. Every month it moves toward an equilibrium, the TARGET, which
-# is the sum of seven pillars computed from the state of the world. Design:
+# is the sum of eight pillars computed from the state of the world. Design:
 # docs/systems/un_redesign_design.md §3; what shipped: §0 of the same file.
 #
 #   base            15                          constant
 #   participation   0 .. +25                    power share of the members
 #   commitment      -25 .. +25                  members' stance x power share
-#   credibility     -15 .. +15                  decaying ledger of the Assembly's record
+#   credibility     -25 .. +25                  decaying ledger of the Assembly's record
 #   funding         -10 .. +10                  who pays for the UN's programmes, less
 #                                               the members withholding their dues
 #   order           -20 .. 0                    wars between members, nuclear use
 #   delivery        0 .. +10                    decaying ledger of aid / peacekeeping delivered
+#   policy          -25 .. +25                  what countries' own laws, institutions and
+#                                               decisions add to or take from the UN
+#                                               (country_un_authority_target_add, weighted;
+#                                               only members in good standing add to it)
 #
 # POWER SHARE is a country's share of world prestige, cached monthly as
 # var:un_power_share by un_authority_monthly_update. Every act a country
@@ -28,7 +32,7 @@
 #
 # Scope: the pillar and share values sweep every_country and read globals, so
 # they evaluate in any scope. un_actor_weight / un_member_stance /
-# un_programmes_running are country-scoped.
+# un_programmes_running / un_policy_contribution are country-scoped.
 # ============================================================================
 
 # ---- Tuning ----------------------------------------------------------------
@@ -36,8 +40,15 @@
 un_pillar_base = { value = 15 }
 un_participation_weight = { value = 25 }
 un_commitment_weight = { value = 25 }
-un_credibility_cap = { value = 15 }
+un_credibility_cap = { value = 25 }
+un_credibility_floor = { value = -25 }
 un_delivery_cap = { value = 10 }
+# Policy: the country_un_authority_target_add modifier, summed over countries
+# weighted by un_actor_weight, held to +-25 from every source together. Only a
+# member in good standing adds to it; anyone else can only take from it
+# (un_policy_contribution).
+un_policy_cap = { value = 25 }
+un_policy_floor = { value = -25 }
 un_order_floor = { value = -20 }
 # Order: -40 per unit of world power share at war with a fellow member,
 # floored at -15 before the ledger's nuclear entries are added.
@@ -66,8 +77,12 @@ un_actor_weight_cap = { value = 5 }
 # walkout is held to twice a typical great power's.
 un_shock_weight_cap = { value = 2 }
 
-# Monthly decay of the three ledgers: 0.5^(1/48), a four-year half-life.
+# Monthly decay of the delivery and order ledgers: 0.5^(1/48), a four-year
+# half-life.
 un_ledger_decay_factor = { value = 0.9857 }
+# Credibility fades slower, a ten-year half-life, 0.5^(1/120): the Assembly's
+# record is remembered longer than a season's deliveries.
+un_credibility_decay_factor = { value = 0.99424 }
 
 # Ledger entries smaller than this (after weighting) are applied but not
 # written to the display log, so the log is not buried in micro-states.
@@ -369,7 +384,7 @@ un_pillar_credibility_value = {
 		limit = { has_global_variable = un_ledger_credibility }
 		add = global_var:un_ledger_credibility
 	}
-	min = -15
+	min = un_credibility_floor
 	max = un_credibility_cap
 }
 
@@ -383,6 +398,43 @@ un_pillar_delivery_value = {
 	max = un_delivery_cap
 }
 
+# What one country does for the UN through its own laws, institutions and
+# decisions: its country_un_authority_target_add, times its weight in world
+# affairs (un_actor_weight: its share of world prestige against a typical great
+# power's, up to x5).
+#
+# Only a member in good standing (un_policy_counts_in_full: in the UN and not
+# undermining it) counts in full, for or against. Anyone else, a non-member or
+# a member undermining the organisation, can only take from it: its total is
+# held at 0 or below. Good conduct outside the UN, or against it, goes through
+# the country's own channels and strengthens norms, not the institution, so it
+# adds nothing; bad conduct from anyone is the challenge the UN exists to meet,
+# so it counts. The engine gives only the modifier's total, so the clamp is on
+# the total: an outsider's good policies offset its own bad ones and no more.
+# Scope: country
+un_policy_contribution = {
+	value = modifier:country_un_authority_target_add
+	if = {
+		limit = { NOT = { un_policy_counts_in_full = yes } }
+		max = 0
+	}
+	multiply = un_actor_weight
+}
+
+# The Policy pillar: un_policy_contribution summed over every country, members
+# or not, held to +-25 from all sources together. A negative total takes
+# authority down. Unlike the ledgers it does not decay: it is read from the
+# world as it stands, like participation.
+un_pillar_policy_value = {
+	value = 0
+	every_country = {
+		limit = { has_variable = un_power_share }
+		add = un_policy_contribution
+	}
+	min = un_policy_floor
+	max = un_policy_cap
+}
+
 # The equilibrium, from the snapshots the monthly update has just written.
 # Held under the charter's ceiling (un_charter_cap: 70 under the founding
 # charter, 85 after Reform I, 100 after Reform II; un_ladder_values.txt).
@@ -394,6 +446,7 @@ un_authority_target_value = {
 	add = global_var:un_pillar_funding
 	add = global_var:un_pillar_order
 	add = global_var:un_pillar_delivery
+	add = global_var:un_pillar_policy
 	min = 0
 	max = un_charter_cap
 }
@@ -487,6 +540,14 @@ un_disp_pillar_delivery = {
 	if = {
 		limit = { has_global_variable = un_pillar_delivery }
 		add = global_var:un_pillar_delivery
+	}
+}
+
+un_disp_pillar_policy = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_pillar_policy }
+		add = global_var:un_pillar_policy
 	}
 }
 
