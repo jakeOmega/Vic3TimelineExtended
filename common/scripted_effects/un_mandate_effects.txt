@@ -602,17 +602,35 @@ un_mandates_monthly_update = {
 # where the holder is the play's initiator (`remove_war_goal` addresses a goal
 # by side and type); if nothing is struck, un_mandate_check_prohibited still
 # runs afterwards and the ordinary violation applies.
+#
+# Only in the mandate's own play: a dp_te_un_mandate_restore_state play
+# against the mandate's target. on_wargoal_added fires for every goal the
+# holder adds to any play, so without this gate a bound AI holder that opened
+# an unrelated play (a dp_conquer_state against a third country) had the goal
+# that play opened with struck the moment it was added, and whether a play
+# survives losing its opening goal is unproven. The mandate's play opens with
+# te_un_mandate_restore_state, which is not on the list below, so nothing
+# struck here can be a play's opening goal. A mandate bound in a play of
+# another type (its goal added to a play already open against the target)
+# gets no strike: there the ordinary violation applies, as it does to a holder
+# that is not the initiator. test_un_mandate_strike.py pins the gate and the
+# list.
 # Scope: diplomatic play; expects scope:actor (from on_wargoal_added)
 un_mandate_ai_strike_prohibited = {
 	if = {
 		limit = {
 			exists = scope:actor
 			initiator ?= scope:actor
+			is_diplomatic_play_type = dp_te_un_mandate_restore_state
 			scope:actor = {
 				is_ai = yes
 				has_variable = un_mandate_current
-				var:un_mandate_current ?= { has_tag = un_mandate_bound }
+				var:un_mandate_current ?= {
+					has_tag = un_mandate_bound
+					exists = var:un_mnd_target
+				}
 			}
+			target ?= scope:actor.var:un_mandate_current.var:un_mnd_target
 		}
 		un_mandate_strike_goal_type = { TYPE = annex_country }
 		un_mandate_strike_goal_type = { TYPE = conquer_state }

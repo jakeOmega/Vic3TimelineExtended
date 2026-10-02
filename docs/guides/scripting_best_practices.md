@@ -677,8 +677,9 @@ From `game/common/on_actions/00_code_on_actions.txt` (the header comments there 
 | `on_wargoal_enforced_by_timer` (:6272) | **country** | same scopes | 1.14.5. A goal enforced itself mid-war through its occupation timer (it can still be reversed). `scope:enforced_by_timer` no longer exists on `on_wargoal_enforced`. Do not hook both for one effect: an un-reversed timer goal fires both |
 | `on_war_end` (:7008) | the play | `scope:actor`, `scope:target` | war over |
 
-Two things follow:
+Three things follow:
 
+- **`on_wargoal_added` fires for every goal added to every play, so gate a handler on the play it is about.** `remove_war_goal = { who = initiator|target type = <key> }` (play scope; documented, unused by live vanilla) addresses a side and a type, not one goal, so it removes every goal of that type the side holds in that play. Never strike the type a play opened with (its type's `war_goal`): whether a play survives losing its opening goal is unproven. `un_mandate_ai_strike_prohibited` first ran in any play of a bound AI holder and struck the opening goal of an unrelated `dp_conquer_state`; it now requires `is_diplomatic_play_type = dp_te_un_mandate_restore_state` and the mandate's target (`test_un_mandate_strike.py`).
 - **`on_wargoal_added` does not tell you which goal was added.** There is no war-goal iterator and no trigger that takes a `war_goal` scope (`scope:war_goal_enforced` is declared in `event_scopes.log` but no vanilla script reads it and no trigger declares `Supported Scopes: war_goal`). The only readable form is `{play,war}_participant_has_war_goal_of_type_against = { type = <key> target = <country> }` and `has_play_goal = <key>` (play scope), which name **one type at a time**. Detecting "did they add anything other than X" therefore requires an explicit prohibited-type list, not an enumeration.
 - **Prefer the war goal type's own `on_enforced` over `on_wargoal_enforced`** when you care about one goal type: it can only fire for that type, and it hands you `scope:target_state` as well. Use `on_wargoal_enforced` only when you need to react to *any* goal.
 
