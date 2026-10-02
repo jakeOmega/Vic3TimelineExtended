@@ -1,0 +1,71 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE — monthly dispatch and watchdog
+# ============================================================================
+# Schedule rules: docs/systems/tax_code_schema.md, "Scheduler, package slots
+# and history".
+#
+# Dispatch. The global on_monthly_pulse runs on the 1st of every calendar month
+# (docs/guides/scripting_best_practices.md, "on_monthly_pulse_country Is a
+# 30-Day Timer, Not a Calendar Month"), so a package due in a month commences
+# on its 1st. The global pulse has no ROOT, and the collection writer needs the
+# country as ROOT for its amendment sponsor, so each country gets the hidden
+# country event te_tax.1, whose ROOT is that country. The processor claims the
+# month first, so a second dispatch in the same month does nothing.
+#
+# Watchdog. A country's own on_monthly_pulse_country is a 30-day timer; it only
+# looks for a month the dispatch has not processed while a transition is due,
+# and then runs te_tax.2, which never commences and never claims the month.
+#
+# Both check te_tax_code_on first: with the rule off nothing here runs.
+# The engine unions same-name on_action declarations across files.
+# ============================================================================
+
+on_monthly_pulse = {
+	on_actions = {
+		te_tax_monthly_dispatch
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_tax_watchdog_on_action
+	}
+}
+
+# Global scope (no ROOT). The date only: the month index is printed by each
+# country's te_tax.1, the same day.
+te_tax_monthly_dispatch = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes }
+			debug_log = "TE_TAX dispatch date=[TimeKeeper.GetCurrentDate.GetString]"
+			# Migrated countries: this month's processor.
+			every_country = {
+				limit = {
+					has_variable = te_tax_migrated
+					var:te_tax_migrated > 0
+				}
+				trigger_event = { id = te_tax.1 }
+			}
+		}
+	}
+}
+
+# Country scope (ROOT = the country).
+te_tax_watchdog_on_action = {
+	effect = {
+		if = {
+			limit = {
+				te_tax_code_on = yes
+				has_variable = te_tax_migrated
+				var:te_tax_migrated > 0
+				has_variable = te_tax_last_month
+				var:te_tax_last_month < te_history_month_index
+				has_variable = te_tax_next_month
+				var:te_tax_next_month >= 0
+				var:te_tax_next_month <= te_history_month_index
+			}
+			trigger_event = { id = te_tax.2 }
+		}
+	}
+}

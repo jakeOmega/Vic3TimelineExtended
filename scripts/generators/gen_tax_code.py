@@ -13,17 +13,23 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
   common/amendments/te_tax_amendments_generated.txt
       amendment_te_tax_<key>_<idx> for every instrument and every idx 1..max.
   common/script_values/te_tax_generated_values.txt
-      te_tax_step_<key>, te_tax_max_<key> and te_tax_pct_step_<key> constants.
+      te_tax_step_<key>, te_tax_max_<key> and te_tax_pct_step_<key> constants,
+      and te_tax_slot_id_<slot> for the history ring.
   localization/english/te_tax_generated_l_english.yml
       A name and a _desc per amendment. organize_loc.py files these keys here
       (category TAX_GENERATED) and renders the file itself, so this script
       renders through organize_loc and the two always agree.
   common/scripted_effects/te_tax_generated_effects.txt
       The collection writer's per-instrument and per-good parts
-      (te_tax_gen_sync_<key>, te_tax_gen_sync_goods) and the initialiser's
-      (te_tax_gen_init_instruments, te_tax_gen_init_goods).
+      (te_tax_gen_sync_<key>, te_tax_gen_sync_goods), the initialiser's
+      (te_tax_gen_init_instruments, te_tax_gen_init_goods,
+      te_tax_gen_init_schedule) and the scheduler's (te_tax_gen_sunset_<key>,
+      te_tax_gen_commence/hold_missed/apply/store_<slot>, te_tax_gen_next_month,
+      te_tax_gen_history_write).
   common/scripted_triggers/te_tax_generated_triggers.txt
-      Amendment-scope family and match triggers the syncs filter on.
+      Amendment-scope family and match triggers the syncs filter on, and the
+      scheduler's package and bill checks (te_tax_gen_package_current_<slot>,
+      te_tax_gen_package_touches_goods_<slot>, te_tax_gen_bill_sunsets_valid).
 
 The script-value file also carries the guarded te_tax_view_* display values
 for every instrument and every catalog good. The consumption-goods catalog is
@@ -83,6 +89,27 @@ MOD_GOODS_GLOB = "common/goods/*.txt"
 # sentinels: te_tax_en_<key><suffix>, then the two version tokens.
 INSTRUMENT_TOKENS = (("", 0), ("_since", -1), ("_exp", -1), ("_succ", -1))
 VERSION_TOKENS = (("te_tax_pver_", 0), ("te_tax_xver_", 0))
+
+# Scheduler (docs/systems/tax_code_schema.md, "Scheduler, package slots and
+# history"). Two approved-package slots; a history ring of eight entries.
+SLOTS = ("a", "b")
+SLOT_IDS = (("none", 0), ("a", 1), ("b", 2))    # te_tax_slot_id_<slot>, stored in history
+PACKAGE_HEADER = (("_on", 0), ("_due", -1), ("_state", 0), ("_seq", 0))
+HISTORY_SIZE = 8
+HISTORY_FIELDS = (("month", -1), ("kind", 0), ("slot", 0), ("inst", 0), ("version", -1))
+# History kinds the scheduler writes (the schema doc lists all eight).
+KIND_COMMENCED, KIND_SUNSET, KIND_HELD_CONFLICT, KIND_HELD_MISSED = 1, 2, 3, 4
+# Package state values.
+STATE_EMPTY, STATE_AWAITING, STATE_HELD_CONFLICT, STATE_HELD_MISSED = 0, 1, 2, 3
+# Relief fields a package carries besides the per-instrument and per-good ones.
+PACKAGE_RELIEF_FIELDS = ("agrel", "regrel", "xver_relief")
+# Every scheduler debug line ends with these. In the country events that run the
+# scheduler ROOT = THIS = the country: the tax probe printed month=22032 through
+# this ScriptValue form from a country event, and vanilla 1.14.5's election
+# lines print the date through TimeKeeper. No $PARAM$ may appear in a debug_log.
+LOG_STAMP = ("month=[SCOPE.ScriptValue('te_history_month_index')|0] "
+             "date=[TimeKeeper.GetCurrentDate.GetString] "
+             "country=[THIS.GetCountry.GetNameNoFormatting]")
 
 
 class Instrument(NamedTuple):
@@ -319,6 +346,12 @@ def script_values():
             lines.append(f"te_tax_pct_step_{instrument.key} = {fmt(instrument.step * 100)}")
     lines += [
         "",
+        "# Package slots as the history ring stores them (te_tax_h<n>_slot): none, a, b.",
+        "# te_tax_gen_history_write reads te_tax_slot_id_<SLOT>, so callers pass the letter.",
+    ]
+    lines += [f"te_tax_slot_id_{name} = {value}" for name, value in SLOT_IDS]
+    lines += [
+        "",
         "# Display values (docs/systems/tax_code_schema.md, \"Display values\"): guarded reads of",
         "# the enacted code for the GUI and loc. Each reads only variables it has just tested",
         "# with has_variable and returns the schema sentinel when one is absent: 0 for an index,",
@@ -387,6 +420,441 @@ def _guarded_write(variable, value, indent="\t"):
             f"set_variable = {{ name = {variable} value = {value} }} }}")
 
 
+# ---------------------------------------------------------------------------
+# Scheduler: package slots, sunsets, history (docs/systems/tax_code_schema.md)
+# ---------------------------------------------------------------------------
+
+def schedule_tokens():
+    """[(token, sentinel)] the scheduler initialises: clock, slot headers, history ring."""
+    tokens = [("te_tax_now", -1)]
+    for slot in SLOTS:
+        tokens += [(f"te_tax_p{slot}{suffix}", sentinel) for suffix, sentinel in PACKAGE_HEADER]
+    tokens.append(("te_tax_h_head", 0))
+    for n in range(1, HISTORY_SIZE + 1):
+        tokens += [(f"te_tax_h{n}_{field}", sentinel) for field, sentinel in HISTORY_FIELDS]
+    return tokens
+
+
+def _log(event, detail=""):
+    """A scheduler debug line: `TE_TAX <event> [detail] month=... date=... country=...`."""
+    text = f"TE_TAX {event} {detail}; {LOG_STAMP}" if detail else f"TE_TAX {event} {LOG_STAMP}"
+    return f'debug_log = "{text}"'
+
+
+def _history(kind, slot="none", inst=0):
+    return f"te_tax_gen_history_write = {{ KIND = {kind} SLOT = {slot} INST = {inst} }}"
+
+
+def _other(slot):
+    return SLOTS[1 - SLOTS.index(slot)]
+
+
+def _sunset(instrument, inst):
+    key = instrument.key
+    en = f"te_tax_en_{key}"
+    dropped = _log("sunset_dropped", f"{key}: no successor recorded")
+    executed = _log("sunset", key)
+    deferred = _log("sunset_deferred", f"{key}: operative only since this month")
+    return [
+        "",
+        f"# {instrument.label}: executes the enacted value's sunset once its month has come",
+        "# (rule 2). It runs only when the value has been operative since an earlier month,",
+        "# so a package's own sunset can never share its commencement call; otherwise it",
+        "# waits for next month. A late sunset catches up. One without a successor is",
+        "# dropped, not deferred, so it cannot hold te_tax_next_month in the past.",
+        f"te_tax_gen_sunset_{key} = {{",
+        "\tif = {",
+        "\t\tlimit = {",
+        f"\t\t\tvar:{en}_exp >= 0",
+        f"\t\t\tvar:{en}_exp <= var:te_tax_now",
+        "\t\t}",
+        "\t\tif = {",
+        f"\t\t\tlimit = {{ var:{en}_succ < 0 }}",
+        f"\t\t\tset_variable = {{ name = {en}_exp value = -1 }}",
+        f"\t\t\t{dropped}",
+        "\t\t}",
+        "\t\telse_if = {",
+        f"\t\t\tlimit = {{ var:{en}_since < var:te_tax_now }}",
+        f"\t\t\tset_variable = {{ name = {en} value = var:{en}_succ }}",
+        f"\t\t\tset_variable = {{ name = {en}_since value = var:te_tax_now }}",
+        f"\t\t\tset_variable = {{ name = {en}_exp value = -1 }}",
+        f"\t\t\tset_variable = {{ name = {en}_succ value = -1 }}",
+        "\t\t\tchange_variable = { name = te_tax_code_version add = 1 }",
+        f"\t\t\t{_history(KIND_SUNSET, inst=inst)}",
+        f"\t\t\t{executed}",
+        "\t\t}",
+        "\t\telse = {",
+        f"\t\t\t{deferred}",
+        "\t\t}",
+        "\t}",
+        "}",
+    ]
+
+
+def _commence(slot):
+    p = f"te_tax_p{slot}"
+    commenced = _log("commenced", f"slot={slot}")
+    conflict = _log("held_conflict", f"slot={slot}: a touched provision changed outside legislation")
+    return [
+        "",
+        f"# Slot {slot}: commences in its due month and in no other (rule 3). The processor runs",
+        "# on the 1st, so the package takes effect from the 1st. If a provision it touches was",
+        "# changed outside legislation since approval (te_tax_xver_*), the whole package holds",
+        "# and collections stay as they are. A due month already past holds it as missed.",
+        f"te_tax_gen_commence_{slot} = {{",
+        "\tif = {",
+        "\t\tlimit = {",
+        f"\t\t\tvar:{p}_on = 1",
+        f"\t\t\tvar:{p}_state = {STATE_AWAITING}",
+        f"\t\t\tvar:{p}_due = var:te_tax_now",
+        "\t\t}",
+        "\t\tif = {",
+        f"\t\t\tlimit = {{ te_tax_gen_package_current_{slot} = yes }}",
+        f"\t\t\tte_tax_gen_apply_{slot} = yes",
+        "\t\t\tchange_variable = { name = te_tax_code_version add = 1 }",
+        f"\t\t\tset_variable = {{ name = {p}_on value = 0 }}",
+        f"\t\t\tset_variable = {{ name = {p}_state value = {STATE_EMPTY} }}",
+        f"\t\t\t{_history(KIND_COMMENCED, slot)}",
+        f"\t\t\t{commenced}",
+        "\t\t}",
+        "\t\telse = {",
+        f"\t\t\tset_variable = {{ name = {p}_state value = {STATE_HELD_CONFLICT} }}",
+        f"\t\t\t{_history(KIND_HELD_CONFLICT, slot)}",
+        f"\t\t\t{conflict}",
+        "\t\t}",
+        "\t}",
+        "\telse = {",
+        f"\t\tte_tax_gen_hold_missed_{slot} = yes",
+        "\t}",
+        "}",
+    ]
+
+
+def _hold_missed(slot):
+    p = f"te_tax_p{slot}"
+    missed = _log("held_missed", f"slot={slot}: due month passed without commencement")
+    return [
+        "",
+        f"# Slot {slot}: an awaiting package whose due month has passed holds as missed; it never",
+        "# commences late (spec: missed dates need explicit rescheduling). The watchdog calls",
+        "# this too, because it fires only once the month has passed.",
+        f"te_tax_gen_hold_missed_{slot} = {{",
+        "\tif = {",
+        "\t\tlimit = {",
+        f"\t\t\tvar:{p}_on = 1",
+        f"\t\t\tvar:{p}_state = {STATE_AWAITING}",
+        f"\t\t\tvar:{p}_due < var:te_tax_now",
+        "\t\t}",
+        f"\t\tset_variable = {{ name = {p}_state value = {STATE_HELD_MISSED} }}",
+        f"\t\t{_history(KIND_HELD_MISSED, slot)}",
+        f"\t\t{missed}",
+        "\t}",
+        "}",
+    ]
+
+
+def _apply(slot):
+    p = f"te_tax_p{slot}"
+    lines = [
+        "",
+        f"# Slot {slot}: copies every field the package touches into the enacted code. Only",
+        "# te_tax_gen_commence_<slot> calls it, inside the processor, which has set te_tax_now",
+        "# and syncs collection once after every slot.",
+        f"te_tax_gen_apply_{slot} = {{",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        en = f"te_tax_en_{key}"
+        lines += [
+            "\tif = {",
+            f"\t\tlimit = {{ var:{p}_{key} >= 0 }}",
+            f"\t\tset_variable = {{ name = {en} value = var:{p}_{key} }}",
+            f"\t\tset_variable = {{ name = {en}_since value = var:te_tax_now }}",
+            f"\t\tset_variable = {{ name = {en}_exp value = var:{p}_{key}_exp }}",
+            f"\t\tset_variable = {{ name = {en}_succ value = var:{p}_{key}_succ }}",
+            "\t}",
+        ]
+    for good in consumption_catalog():
+        lines.append(f"\tif = {{ limit = {{ var:{p}_g_{good} >= 0 }} "
+                     f"set_variable = {{ name = te_tax_en_g_{good} value = var:{p}_g_{good} }} }}")
+    for field in ("agrel", "regrel"):
+        lines.append(f"\tif = {{ limit = {{ var:{p}_{field} >= 0 }} "
+                     f"set_variable = {{ name = te_tax_en_{field} value = var:{p}_{field} }} }}")
+    lines += [
+        "\t# A package that restates regional relief names its whole state set.",
+        "\tif = {",
+        f"\t\tlimit = {{ var:{p}_regrel_states_set = 1 }}",
+        "\t\tevery_scope_state = {",
+        "\t\t\tif = {",
+        "\t\t\t\tlimit = {",
+        f"\t\t\t\t\thas_variable = te_tax_pending_relief_{slot}",
+        f"\t\t\t\t\tvar:te_tax_pending_relief_{slot} = 1",
+        "\t\t\t\t}",
+        "\t\t\t\tset_variable = { name = te_tax_relief_state value = 1 }",
+        "\t\t\t}",
+        "\t\t\telse_if = {",
+        "\t\t\t\tlimit = { has_variable = te_tax_relief_state }",
+        "\t\t\t\tset_variable = { name = te_tax_relief_state value = 0 }",
+        "\t\t\t}",
+        "\t\t}",
+        "\t}",
+        "\tevery_scope_state = {",
+        f"\t\tlimit = {{ has_variable = te_tax_pending_relief_{slot} }}",
+        f"\t\tset_variable = {{ name = te_tax_pending_relief_{slot} value = 0 }}",
+        "\t}",
+        "}",
+    ]
+    return lines
+
+
+def _store_successor(slot, key):
+    """Lines setting te_tax_p<slot>_<key>_succ: the provision's value just before the due month."""
+    p, o = f"te_tax_p{slot}", f"te_tax_p{_other(slot)}"
+    en = f"te_tax_en_{key}"
+    return [
+        f"\t\tset_variable = {{ name = {p}_{key}_succ value = var:{en} }}",
+        "\t\tif = {",
+        "\t\t\tlimit = {",
+        f"\t\t\t\tvar:{en}_exp >= 0",
+        f"\t\t\t\tvar:{en}_exp <= var:te_tax_bl_due",
+        f"\t\t\t\tvar:{en}_succ >= 0",
+        "\t\t\t}",
+        f"\t\t\tset_variable = {{ name = {p}_{key}_succ value = var:{en}_succ }}",
+        "\t\t}",
+        "\t\t# The other slot's payload exists only while it is on, so read it nested.",
+        "\t\tif = {",
+        "\t\t\tlimit = {",
+        f"\t\t\t\tvar:{o}_on = 1",
+        f"\t\t\t\tvar:{o}_state = {STATE_AWAITING}",
+        f"\t\t\t\tvar:{o}_due < var:te_tax_bl_due",
+        "\t\t\t}",
+        "\t\t\tif = {",
+        f"\t\t\t\tlimit = {{ var:{o}_{key} >= 0 }}",
+        f"\t\t\t\tset_variable = {{ name = {p}_{key}_succ value = var:{o}_{key} }}",
+        "\t\t\t\tif = {",
+        "\t\t\t\t\tlimit = {",
+        f"\t\t\t\t\t\tvar:{o}_{key}_exp >= 0",
+        f"\t\t\t\t\t\tvar:{o}_{key}_exp <= var:te_tax_bl_due",
+        f"\t\t\t\t\t\tvar:{o}_{key}_succ >= 0",
+        "\t\t\t\t\t}",
+        f"\t\t\t\t\tset_variable = {{ name = {p}_{key}_succ value = var:{o}_{key}_succ }}",
+        "\t\t\t\t}",
+        "\t\t\t}",
+        "\t\t}",
+    ]
+
+
+def _store(slot):
+    p, o = f"te_tax_p{slot}", f"te_tax_p{_other(slot)}"
+    stored = _log("stored", f"slot={slot}")
+    lines = [
+        "",
+        f"# Slot {slot}: writes an approved package from the bill record (te_tax_bl_*). Called",
+        "# only through te_tax_store_package, after te_tax_can_store_package and with",
+        "# scope:te_tax_country saved. Every payload field is written, so nothing stale from an",
+        "# earlier package survives. A sunset is due + offset, written only for an offset of at",
+        "# least one month; its successor is the value the provision will hold just before the",
+        "# due month: the other slot's value if that awaiting package touches it earlier (or",
+        "# that package's successor, if its own sunset comes first), else the enacted value",
+        "# (or the enacted successor, if the enacted sunset comes first). seq = one above both",
+        "# slots. The slot is switched on last.",
+        f"te_tax_gen_store_{slot} = {{",
+        f"\tset_variable = {{ name = {p}_due value = var:te_tax_bl_due }}",
+        "\tif = {",
+        f"\t\tlimit = {{ var:{o}_seq > var:{p}_seq }}",
+        f"\t\tset_variable = {{ name = {p}_seq value = var:{o}_seq }}",
+        "\t}",
+        f"\tchange_variable = {{ name = {p}_seq add = 1 }}",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        lines += [
+            f"\tset_variable = {{ name = {p}_{key} value = var:te_tax_bl_{key} }}",
+            f"\tset_variable = {{ name = {p}_xver_{key} value = var:te_tax_bl_xver_{key} }}",
+            "\tif = {",
+            "\t\tlimit = {",
+            f"\t\t\tvar:te_tax_bl_{key} >= 0",
+            f"\t\t\tvar:te_tax_bl_{key}_sun >= 1",
+            "\t\t}",
+            f"\t\tset_variable = {{ name = {p}_{key}_exp value = var:te_tax_bl_due }}",
+            f"\t\tchange_variable = {{ name = {p}_{key}_exp add = var:te_tax_bl_{key}_sun }}",
+        ]
+        lines += _store_successor(slot, key)
+        lines += [
+            "\t}",
+            "\telse = {",
+            f"\t\tset_variable = {{ name = {p}_{key}_exp value = -1 }}",
+            f"\t\tset_variable = {{ name = {p}_{key}_succ value = -1 }}",
+            "\t}",
+        ]
+    lines += [f"\tset_variable = {{ name = {p}_g_{good} value = var:te_tax_bl_g_{good} }}"
+              for good in consumption_catalog()]
+    lines.append(f"\tset_variable = {{ name = {p}_xver_goods value = var:te_tax_bl_xver_goods }}")
+    lines += [f"\tset_variable = {{ name = {p}_{field} value = var:te_tax_bl_{field} }}"
+              for field in PACKAGE_RELIEF_FIELDS]
+    lines += [
+        "\t# Regional relief: a bill that touches it (te_tax_bl_regrel >= 0) names its whole",
+        "\t# state set in te_tax_bl_relief_states, possibly none; commencement moves the marks",
+        "\t# to te_tax_relief_state.",
+        "\tevery_scope_state = {",
+        f"\t\tlimit = {{ has_variable = te_tax_pending_relief_{slot} }}",
+        f"\t\tset_variable = {{ name = te_tax_pending_relief_{slot} value = 0 }}",
+        "\t}",
+        "\tif = {",
+        "\t\tlimit = { var:te_tax_bl_regrel >= 0 }",
+        f"\t\tset_variable = {{ name = {p}_regrel_states_set value = 1 }}",
+        "\t\tif = {",
+        "\t\t\tlimit = { has_variable_list = te_tax_bl_relief_states }",
+        "\t\t\tevery_in_list = {",
+        "\t\t\t\tvariable = te_tax_bl_relief_states",
+        "\t\t\t\tlimit = { owner = scope:te_tax_country }",
+        f"\t\t\t\tset_variable = {{ name = te_tax_pending_relief_{slot} value = 1 }}",
+        "\t\t\t}",
+        "\t\t}",
+        "\t}",
+        "\telse = {",
+        f"\t\tset_variable = {{ name = {p}_regrel_states_set value = 0 }}",
+        "\t}",
+        f"\t{stored}",
+        f"\tset_variable = {{ name = {p}_state value = {STATE_AWAITING} }}",
+        f"\tset_variable = {{ name = {p}_on value = 1 }}",
+        "}",
+    ]
+    return lines
+
+
+def _next_month():
+    lines = [
+        "",
+        "# te_tax_next_month: the earliest month with a transition due, -1 if none. Enacted",
+        "# sunsets and awaiting packages count; a held package waits for rescheduling and does",
+        "# not. A deferred sunset keeps it at the current month until it runs.",
+        "te_tax_gen_next_month = {",
+        "\tset_variable = { name = te_tax_next_month value = -1 }",
+    ]
+    candidates = [(f"var:te_tax_en_{instrument.key}_exp >= 0", f"var:te_tax_en_{instrument.key}_exp")
+                  for instrument in INSTRUMENTS]
+    candidates += [(f"var:te_tax_p{slot}_on = 1\n\t\t\tvar:te_tax_p{slot}_state = {STATE_AWAITING}",
+                    f"var:te_tax_p{slot}_due") for slot in SLOTS]
+    for condition, month in candidates:
+        lines += [
+            "\tif = {",
+            "\t\tlimit = {",
+            f"\t\t\t{condition}",
+            "\t\t\tOR = {",
+            "\t\t\t\tvar:te_tax_next_month < 0",
+            f"\t\t\t\t{month} < var:te_tax_next_month",
+            "\t\t\t}",
+            "\t\t}",
+            f"\t\tset_variable = {{ name = te_tax_next_month value = {month} }}",
+            "\t}",
+        ]
+    lines.append("}")
+    return lines
+
+
+def _history_write():
+    lines = [
+        "",
+        f"# The history ring: {HISTORY_SIZE} entries te_tax_h<n>_*, te_tax_h_head pointing at the newest",
+        "# (0 = empty). Advances the head, then overwrites that entry. KIND: the schema doc's",
+        "# history kinds; SLOT: none, a or b (stored as te_tax_slot_id_<SLOT>); INST: 1..5 for",
+        "# the instrument a sunset executed (INSTRUMENTS order), else 0. Public entry point:",
+        "# te_tax_history_push = { KIND SLOT }.",
+        "te_tax_gen_history_write = {",
+        "\tif = {",
+        "\t\tlimit = {",
+        "\t\t\tvar:te_tax_h_head >= 1",
+        f"\t\t\tvar:te_tax_h_head < {HISTORY_SIZE}",
+        "\t\t}",
+        "\t\tchange_variable = { name = te_tax_h_head add = 1 }",
+        "\t}",
+        "\telse = {",
+        "\t\tset_variable = { name = te_tax_h_head value = 1 }",
+        "\t}",
+    ]
+    values = (("month", "te_history_month_index"), ("kind", "$KIND$"), ("slot", "te_tax_slot_id_$SLOT$"),
+              ("inst", "$INST$"), ("version", "var:te_tax_code_version"))
+    for n in range(1, HISTORY_SIZE + 1):
+        lines += [f"\t{'if' if n == 1 else 'else_if'} = {{", f"\t\tlimit = {{ var:te_tax_h_head = {n} }}"]
+        lines += [f"\t\tset_variable = {{ name = te_tax_h{n}_{field} value = {value} }}" for field, value in values]
+        lines.append("\t}")
+    lines.append("}")
+    return lines
+
+
+def _scheduler_effects():
+    lines = []
+    for inst, instrument in enumerate(INSTRUMENTS, start=1):
+        lines += _sunset(instrument, inst)
+    for slot in SLOTS:
+        lines += _commence(slot) + _hold_missed(slot) + _apply(slot) + _store(slot)
+    return lines + _next_month() + _history_write()
+
+
+def _scheduler_triggers():
+    lines = []
+    for slot in SLOTS:
+        p = f"te_tax_p{slot}"
+        lines += [
+            "",
+            f"# Slot {slot}, country scope: the package touches at least one catalog good.",
+            f"te_tax_gen_package_touches_goods_{slot} = {{",
+            "\tOR = {",
+        ]
+        lines += [f"\t\tvar:{p}_g_{good} >= 0" for good in consumption_catalog()]
+        lines += [
+            "\t}",
+            "}",
+            "",
+            f"# Slot {slot}, country scope: every provision group the package touches still has the",
+            "# external-change token it had at approval. Only a non-legislative change bumps",
+            "# te_tax_xver_*, so expected sunsets and other packages never make it stale.",
+            f"te_tax_gen_package_current_{slot} = {{",
+        ]
+        for instrument in INSTRUMENTS:
+            key = instrument.key
+            lines += [
+                "\tOR = {",
+                f"\t\tvar:{p}_{key} < 0",
+                f"\t\tvar:{p}_xver_{key} = var:te_tax_xver_{key}",
+                "\t}",
+            ]
+        lines += [
+            "\tOR = {",
+            f"\t\tNOT = {{ te_tax_gen_package_touches_goods_{slot} = yes }}",
+            f"\t\tvar:{p}_xver_goods = var:te_tax_xver_goods",
+            "\t}",
+            "\tOR = {",
+            "\t\tAND = {",
+            f"\t\t\tvar:{p}_agrel < 0",
+            f"\t\t\tvar:{p}_regrel < 0",
+            "\t\t}",
+            f"\t\tvar:{p}_xver_relief = var:te_tax_xver_relief",
+            "\t}",
+            "}",
+        ]
+    lines += [
+        "",
+        "# Country scope: every sunset in the bill falls at least one month after commencement.",
+        "# te_tax_store_package writes _exp = te_tax_bl_due + te_tax_bl_<key>_sun, so _exp >= _due + 1",
+        "# exactly when the offset is at least 1; 0 means no sunset; an untouched provision",
+        "# (-1) has none.",
+        "te_tax_gen_bill_sunsets_valid = {",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        lines += [
+            "\tOR = {",
+            f"\t\tvar:te_tax_bl_{key} < 0",
+            f"\t\tvar:te_tax_bl_{key}_sun = 0",
+            f"\t\tvar:te_tax_bl_{key}_sun >= 1",
+            "\t}",
+        ]
+    lines.append("}")
+    return lines
+
+
 @output(EFFECTS_PATH)
 def scripted_effects():
     lines = [
@@ -403,6 +871,10 @@ def scripted_effects():
         "# goods changes are not visible later in the same effect, so run each at most once",
         "# per effect execution; a call in a later execution then changes nothing. The",
         "# removal loop never touches the enacted amendment, and the add checks only that one.",
+        "# The scheduler's parts follow the syncs: te_tax_gen_sunset_<key>,",
+        "# te_tax_gen_commence_<slot>, te_tax_gen_hold_missed_<slot>, te_tax_gen_apply_<slot>,",
+        "# te_tax_gen_store_<slot>, te_tax_gen_next_month and te_tax_gen_history_write, called",
+        "# by te_tax_schedule_effects.txt.",
         "",
         "# Each instrument's tokens with their sentinels, if absent.",
         "te_tax_gen_init_instruments = {",
@@ -415,6 +887,15 @@ def scripted_effects():
     lines += ["}", "", "# te_tax_en_g_<good> = 0 for every catalog good, if absent.",
               "te_tax_gen_init_goods = {"]
     lines += [_guarded_write(f"te_tax_en_g_{good}", 0) for good in consumption_catalog()]
+    lines.append("}")
+    lines += [
+        "",
+        "# The scheduler's clock, package-slot headers and history ring, if absent. A package's",
+        "# payload is not initialised: te_tax_store_package writes all of it, and nothing reads",
+        "# it while the slot's te_tax_p<slot>_on is 0.",
+        "te_tax_gen_init_schedule = {",
+    ]
+    lines += [_guarded_write(name, sentinel) for name, sentinel in schedule_tokens()]
     lines.append("}")
     for instrument in INSTRUMENTS:
         key = instrument.key
@@ -470,6 +951,7 @@ def scripted_effects():
     lines += [f"\tif = {{ limit = {{ has_consumption_tax = g:{good} }} remove_taxed_goods = g:{good} }}"
               for good in stray_goods()]
     lines.append("}")
+    lines += _scheduler_effects()
     return _txt("\n".join(lines) + "\n")
 
 
@@ -493,6 +975,7 @@ def scripted_triggers():
         lines += [f"\t\tAND = {{ type = amendment_type:{name} scope:te_tax_country.var:te_tax_en_{key} = {idx} }}"
                   for idx, name in enumerate(names, start=1)]
         lines += ["\t}", "}"]
+    lines += _scheduler_triggers()
     return _txt("\n".join(lines) + "\n")
 
 

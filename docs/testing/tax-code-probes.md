@@ -106,8 +106,10 @@ Existing harness: extended P07/P13.
    Approval is a developer stand-in. Stage should be 2; rates/collections remain unchanged.
    Note the displayed **Due** and **Expiry** absolute month indices.
 2. Complete R4's record/reload check now, using this pending package.
-3. Advance to the first country monthly pulse in the due month. Check stage 3 and
-   **both** wage/dividend amendments and effective 5% rates. Observe the first daily and
+3. Advance to the first country monthly pulse in the due month. (Probe only: that pulse is a
+   30-day timer and can skip a month. Production dispatches from the global `on_monthly_pulse`
+   on the 1st; its retest is "Scheduler retest" in `docs/testing/tax-code-capability-ledger.md`.)
+   Check stage 3 and **both** wage/dividend amendments and effective 5% rates. Observe the first daily and
    weekly updates: identifiable wage and dividend payers should pay once in their channels,
    without a missing or doubled collection interval. If there is no dividend-paying pop,
    record the rate coexistence separately and leave dividend economics unclear.

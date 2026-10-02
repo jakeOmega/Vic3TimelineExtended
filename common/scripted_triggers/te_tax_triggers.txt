@@ -22,3 +22,19 @@ te_tax_code_on = {
 te_tax_customs_on = {
 	has_game_rule = te_tax_code_enabled_customs
 }
+
+# Country scope. Slot SLOT (a or b) may take a package from the bill record:
+# the rule is on, the country holds the code's tokens, the slot is free, the
+# bill has a due month after the current one, and every sunset in the bill
+# falls at least one month after commencement (te_tax_gen_bill_sunsets_valid:
+# the store writes _exp = due + offset, so _exp >= _due + 1 exactly when the
+# offset is at least 1). te_tax_store_package checks it; Task 6's passage
+# trigger repeats the sunset and slot checks for the player's tooltip.
+te_tax_can_store_package = {
+	te_tax_code_on = yes
+	has_variable = te_tax_schema
+	var:te_tax_p$SLOT$_on = 0
+	has_variable = te_tax_bl_due
+	var:te_tax_bl_due > te_history_month_index
+	te_tax_gen_bill_sunsets_valid = yes
+}

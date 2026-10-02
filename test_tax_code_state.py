@@ -111,13 +111,22 @@ def catalog():
 
 
 def schema_tokens():
-    """{token: sentinel} from the schema table, <key> and <good> expanded.
+    """{token: sentinel} from the schema tables, every placeholder expanded.
 
-    Sentinel "-" (te_tax_schema, written last with the schema version) is None.
-    State-scope rows ("state var") are returned separately.
+    Placeholders: <key> (instrument), <good> (catalog good), <s> (package slot
+    a, b) and <n> (history slot 1..8), in any combination. Sentinel "—" is
+    None: te_tax_schema (written last with the schema version) and the package
+    payload, which te_tax_store_package writes in full and nothing reads while
+    the slot is off, so neither is initialised. State-scope rows ("state var")
+    are returned separately.
     """
     country, state = {}, {}
-    goods = catalog()
+    placeholders = {
+        "<key>": KEYS,
+        "<good>": catalog(),
+        "<s>": ("a", "b"),
+        "<n>": tuple(str(n) for n in range(1, 9)),
+    }
     text = read(SCHEMA_DOC, strip_comments=False)
     table = text.split("\n## Schema\n", 1)[1].split("\n## ", 1)[0]
     for line in table.splitlines():
@@ -128,12 +137,10 @@ def schema_tokens():
         value = None if sentinel in ("—", "-") else int(sentinel)
         target = state if names.startswith("state var") else country
         for name in re.findall(r"`(te_tax_[\w<>]+)`", names):
-            if "<key>" in name:
-                expanded = [name.replace("<key>", key) for key in KEYS]
-            elif "<good>" in name:
-                expanded = [name.replace("<good>", good) for good in goods]
-            else:
-                expanded = [name]
+            expanded = [name]
+            for placeholder, values in placeholders.items():
+                expanded = [token.replace(placeholder, value_) for token in expanded for value_ in values] \
+                    if placeholder in name else expanded
             for token in expanded:
                 target[token] = value
     return country, state
@@ -155,7 +162,8 @@ class SchemaDocTest(unittest.TestCase):
         self.assertEqual(country["te_tax_last_month"], -1)
         self.assertEqual(country["te_tax_next_month"], -1)
         self.assertIsNone(country["te_tax_schema"])
-        self.assertEqual(state, {"te_tax_relief_state": 0})
+        self.assertEqual(state, {"te_tax_relief_state": 0, "te_tax_pending_relief_a": 0,
+                                 "te_tax_pending_relief_b": 0})
 
     def test_doc_lists_the_consumption_catalog_exactly(self):
         text = read(SCHEMA_DOC, strip_comments=False)
@@ -197,7 +205,7 @@ class InitTest(unittest.TestCase):
 
     def test_every_country_token_is_written_with_its_sentinel_if_absent(self):
         writes = self.guarded_writes(self.init)
-        for name in ("te_tax_gen_init_instruments", "te_tax_gen_init_goods"):
+        for name in ("te_tax_gen_init_instruments", "te_tax_gen_init_goods", "te_tax_gen_init_schedule"):
             for token, value in self.guarded_writes(block(self.generated, name)).items():
                 self.assertNotIn(token, writes, f"{token} written by two init effects")
                 writes[token] = value
@@ -209,7 +217,8 @@ class InitTest(unittest.TestCase):
 
     def test_every_variable_write_in_the_init_effects_is_guarded(self):
         for body in (self.init, block(self.generated, "te_tax_gen_init_instruments"),
-                     block(self.generated, "te_tax_gen_init_goods")):
+                     block(self.generated, "te_tax_gen_init_goods"),
+                     block(self.generated, "te_tax_gen_init_schedule")):
             self.assertEqual(body.count("set_variable"), len(GUARDED_WRITE.findall(body)))
             self.assertNotIn("change_variable", body)
 
@@ -349,7 +358,12 @@ class GeneratedSyncTest(unittest.TestCase):
         want = {f"te_tax_gen_sync_{key}" for key in KEYS} | {
             "te_tax_gen_sync_goods", "te_tax_gen_init_goods", "te_tax_gen_init_instruments",
         }
-        self.assertEqual(names, want)
+        # The scheduler's parts (test_tax_code_scheduler.py).
+        scheduler = {f"te_tax_gen_sunset_{key}" for key in KEYS} | {
+            f"te_tax_gen_{part}_{slot}"
+            for part in ("commence", "hold_missed", "apply", "store") for slot in ("a", "b")
+        } | {"te_tax_gen_init_schedule", "te_tax_gen_next_month", "te_tax_gen_history_write"}
+        self.assertEqual(names, want | scheduler)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
         for key in KEYS:
@@ -390,9 +404,13 @@ class GeneratedSyncTest(unittest.TestCase):
                 self.assertLess(body.find("remove_amendment"), body.find("add_amendment"))
 
     def test_family_triggers_name_exactly_the_generated_amendments(self):
+        # Plus the scheduler's package and bill triggers (test_tax_code_scheduler.py).
+        scheduler = {f"te_tax_gen_package_{part}_{slot}"
+                     for part in ("current", "touches_goods") for slot in ("a", "b")}
         self.assertEqual(
             set(top_level_names(self.triggers)),
-            {f"te_tax_amendment_{kind}_{key}" for kind in ("is", "matches") for key in KEYS},
+            {f"te_tax_amendment_{kind}_{key}" for kind in ("is", "matches") for key in KEYS}
+            | scheduler | {"te_tax_gen_bill_sunsets_valid"},
         )
         for key in KEYS:
             family = amendment_family(key)

@@ -15,9 +15,10 @@
 # never touches one that exists, so it is safe to call any number of times and
 # backfills only what a newer schema added. te_tax_schema is written last: a
 # country with te_tax_schema has every token of that schema version.
-# Per-instrument and per-good tokens: te_tax_gen_init_* (generated,
-# te_tax_generated_effects.txt). The state variable te_tax_relief_state is not
-# written here; a state without it is not named in any relief.
+# Per-instrument, per-good and scheduler tokens (clock, package-slot headers,
+# history ring): te_tax_gen_init_* (generated, te_tax_generated_effects.txt).
+# The state variables te_tax_relief_state and te_tax_pending_relief_<slot> are
+# not written here; a state without them is named in no relief.
 te_tax_init_country = {
 	if = {
 		limit = { te_tax_code_on = yes }
@@ -27,6 +28,7 @@ te_tax_init_country = {
 		if = { limit = { NOT = { has_variable = te_tax_next_month } } set_variable = { name = te_tax_next_month value = -1 } }
 		te_tax_gen_init_instruments = yes
 		te_tax_gen_init_goods = yes
+		te_tax_gen_init_schedule = yes
 		if = { limit = { NOT = { has_variable = te_tax_pver_goods } } set_variable = { name = te_tax_pver_goods value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_xver_goods } } set_variable = { name = te_tax_xver_goods value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_en_agrel } } set_variable = { name = te_tax_en_agrel value = 0 } }

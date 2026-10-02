@@ -22,6 +22,12 @@ te_tax_step_cons = 0.05
 te_tax_max_cons = 12
 te_tax_pct_step_cons = 5
 
+# Package slots as the history ring stores them (te_tax_h<n>_slot): none, a, b.
+# te_tax_gen_history_write reads te_tax_slot_id_<SLOT>, so callers pass the letter.
+te_tax_slot_id_none = 0
+te_tax_slot_id_a = 1
+te_tax_slot_id_b = 2
+
 # Display values (docs/systems/tax_code_schema.md, "Display values"): guarded reads of
 # the enacted code for the GUI and loc. Each reads only variables it has just tested
 # with has_variable and returns the schema sentinel when one is absent: 0 for an index,

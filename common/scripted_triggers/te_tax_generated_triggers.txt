@@ -315,3 +315,199 @@ te_tax_amendment_matches_cons = {
 		AND = { type = amendment_type:amendment_te_tax_cons_12 scope:te_tax_country.var:te_tax_en_cons = 12 }
 	}
 }
+
+# Slot a, country scope: the package touches at least one catalog good.
+te_tax_gen_package_touches_goods_a = {
+	OR = {
+		var:te_tax_pa_g_aeroplanes >= 0
+		var:te_tax_pa_g_automobiles >= 0
+		var:te_tax_pa_g_clippers >= 0
+		var:te_tax_pa_g_clothes >= 0
+		var:te_tax_pa_g_coal >= 0
+		var:te_tax_pa_g_coffee >= 0
+		var:te_tax_pa_g_consumer_appliances >= 0
+		var:te_tax_pa_g_digital_access >= 0
+		var:te_tax_pa_g_digital_assets >= 0
+		var:te_tax_pa_g_electricity >= 0
+		var:te_tax_pa_g_fabric >= 0
+		var:te_tax_pa_g_fine_art >= 0
+		var:te_tax_pa_g_fish >= 0
+		var:te_tax_pa_g_fruit >= 0
+		var:te_tax_pa_g_furniture >= 0
+		var:te_tax_pa_g_glass >= 0
+		var:te_tax_pa_g_grain >= 0
+		var:te_tax_pa_g_groceries >= 0
+		var:te_tax_pa_g_liquor >= 0
+		var:te_tax_pa_g_luxury_clothes >= 0
+		var:te_tax_pa_g_luxury_furniture >= 0
+		var:te_tax_pa_g_meat >= 0
+		var:te_tax_pa_g_oil >= 0
+		var:te_tax_pa_g_opium >= 0
+		var:te_tax_pa_g_paper >= 0
+		var:te_tax_pa_g_porcelain >= 0
+		var:te_tax_pa_g_radios >= 0
+		var:te_tax_pa_g_services >= 0
+		var:te_tax_pa_g_silk >= 0
+		var:te_tax_pa_g_small_arms >= 0
+		var:te_tax_pa_g_steamers >= 0
+		var:te_tax_pa_g_sugar >= 0
+		var:te_tax_pa_g_tea >= 0
+		var:te_tax_pa_g_telephones >= 0
+		var:te_tax_pa_g_tobacco >= 0
+		var:te_tax_pa_g_tourism >= 0
+		var:te_tax_pa_g_transportation >= 0
+		var:te_tax_pa_g_wine >= 0
+		var:te_tax_pa_g_wood >= 0
+	}
+}
+
+# Slot a, country scope: every provision group the package touches still has the
+# external-change token it had at approval. Only a non-legislative change bumps
+# te_tax_xver_*, so expected sunsets and other packages never make it stale.
+te_tax_gen_package_current_a = {
+	OR = {
+		var:te_tax_pa_wage < 0
+		var:te_tax_pa_xver_wage = var:te_tax_xver_wage
+	}
+	OR = {
+		var:te_tax_pa_div < 0
+		var:te_tax_pa_xver_div = var:te_tax_xver_div
+	}
+	OR = {
+		var:te_tax_pa_land < 0
+		var:te_tax_pa_xver_land = var:te_tax_xver_land
+	}
+	OR = {
+		var:te_tax_pa_head < 0
+		var:te_tax_pa_xver_head = var:te_tax_xver_head
+	}
+	OR = {
+		var:te_tax_pa_cons < 0
+		var:te_tax_pa_xver_cons = var:te_tax_xver_cons
+	}
+	OR = {
+		NOT = { te_tax_gen_package_touches_goods_a = yes }
+		var:te_tax_pa_xver_goods = var:te_tax_xver_goods
+	}
+	OR = {
+		AND = {
+			var:te_tax_pa_agrel < 0
+			var:te_tax_pa_regrel < 0
+		}
+		var:te_tax_pa_xver_relief = var:te_tax_xver_relief
+	}
+}
+
+# Slot b, country scope: the package touches at least one catalog good.
+te_tax_gen_package_touches_goods_b = {
+	OR = {
+		var:te_tax_pb_g_aeroplanes >= 0
+		var:te_tax_pb_g_automobiles >= 0
+		var:te_tax_pb_g_clippers >= 0
+		var:te_tax_pb_g_clothes >= 0
+		var:te_tax_pb_g_coal >= 0
+		var:te_tax_pb_g_coffee >= 0
+		var:te_tax_pb_g_consumer_appliances >= 0
+		var:te_tax_pb_g_digital_access >= 0
+		var:te_tax_pb_g_digital_assets >= 0
+		var:te_tax_pb_g_electricity >= 0
+		var:te_tax_pb_g_fabric >= 0
+		var:te_tax_pb_g_fine_art >= 0
+		var:te_tax_pb_g_fish >= 0
+		var:te_tax_pb_g_fruit >= 0
+		var:te_tax_pb_g_furniture >= 0
+		var:te_tax_pb_g_glass >= 0
+		var:te_tax_pb_g_grain >= 0
+		var:te_tax_pb_g_groceries >= 0
+		var:te_tax_pb_g_liquor >= 0
+		var:te_tax_pb_g_luxury_clothes >= 0
+		var:te_tax_pb_g_luxury_furniture >= 0
+		var:te_tax_pb_g_meat >= 0
+		var:te_tax_pb_g_oil >= 0
+		var:te_tax_pb_g_opium >= 0
+		var:te_tax_pb_g_paper >= 0
+		var:te_tax_pb_g_porcelain >= 0
+		var:te_tax_pb_g_radios >= 0
+		var:te_tax_pb_g_services >= 0
+		var:te_tax_pb_g_silk >= 0
+		var:te_tax_pb_g_small_arms >= 0
+		var:te_tax_pb_g_steamers >= 0
+		var:te_tax_pb_g_sugar >= 0
+		var:te_tax_pb_g_tea >= 0
+		var:te_tax_pb_g_telephones >= 0
+		var:te_tax_pb_g_tobacco >= 0
+		var:te_tax_pb_g_tourism >= 0
+		var:te_tax_pb_g_transportation >= 0
+		var:te_tax_pb_g_wine >= 0
+		var:te_tax_pb_g_wood >= 0
+	}
+}
+
+# Slot b, country scope: every provision group the package touches still has the
+# external-change token it had at approval. Only a non-legislative change bumps
+# te_tax_xver_*, so expected sunsets and other packages never make it stale.
+te_tax_gen_package_current_b = {
+	OR = {
+		var:te_tax_pb_wage < 0
+		var:te_tax_pb_xver_wage = var:te_tax_xver_wage
+	}
+	OR = {
+		var:te_tax_pb_div < 0
+		var:te_tax_pb_xver_div = var:te_tax_xver_div
+	}
+	OR = {
+		var:te_tax_pb_land < 0
+		var:te_tax_pb_xver_land = var:te_tax_xver_land
+	}
+	OR = {
+		var:te_tax_pb_head < 0
+		var:te_tax_pb_xver_head = var:te_tax_xver_head
+	}
+	OR = {
+		var:te_tax_pb_cons < 0
+		var:te_tax_pb_xver_cons = var:te_tax_xver_cons
+	}
+	OR = {
+		NOT = { te_tax_gen_package_touches_goods_b = yes }
+		var:te_tax_pb_xver_goods = var:te_tax_xver_goods
+	}
+	OR = {
+		AND = {
+			var:te_tax_pb_agrel < 0
+			var:te_tax_pb_regrel < 0
+		}
+		var:te_tax_pb_xver_relief = var:te_tax_xver_relief
+	}
+}
+
+# Country scope: every sunset in the bill falls at least one month after commencement.
+# te_tax_store_package writes _exp = te_tax_bl_due + te_tax_bl_<key>_sun, so _exp >= _due + 1
+# exactly when the offset is at least 1; 0 means no sunset; an untouched provision
+# (-1) has none.
+te_tax_gen_bill_sunsets_valid = {
+	OR = {
+		var:te_tax_bl_wage < 0
+		var:te_tax_bl_wage_sun = 0
+		var:te_tax_bl_wage_sun >= 1
+	}
+	OR = {
+		var:te_tax_bl_div < 0
+		var:te_tax_bl_div_sun = 0
+		var:te_tax_bl_div_sun >= 1
+	}
+	OR = {
+		var:te_tax_bl_land < 0
+		var:te_tax_bl_land_sun = 0
+		var:te_tax_bl_land_sun >= 1
+	}
+	OR = {
+		var:te_tax_bl_head < 0
+		var:te_tax_bl_head_sun = 0
+		var:te_tax_bl_head_sun >= 1
+	}
+	OR = {
+		var:te_tax_bl_cons < 0
+		var:te_tax_bl_cons_sun = 0
+		var:te_tax_bl_cons_sun >= 1
+	}
+}

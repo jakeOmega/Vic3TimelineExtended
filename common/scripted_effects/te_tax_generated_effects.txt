@@ -11,6 +11,10 @@
 # goods changes are not visible later in the same effect, so run each at most once
 # per effect execution; a call in a later execution then changes nothing. The
 # removal loop never touches the enacted amendment, and the add checks only that one.
+# The scheduler's parts follow the syncs: te_tax_gen_sunset_<key>,
+# te_tax_gen_commence_<slot>, te_tax_gen_hold_missed_<slot>, te_tax_gen_apply_<slot>,
+# te_tax_gen_store_<slot>, te_tax_gen_next_month and te_tax_gen_history_write, called
+# by te_tax_schedule_effects.txt.
 
 # Each instrument's tokens with their sentinels, if absent.
 te_tax_gen_init_instruments = {
@@ -87,6 +91,62 @@ te_tax_gen_init_goods = {
 	if = { limit = { NOT = { has_variable = te_tax_en_g_transportation } } set_variable = { name = te_tax_en_g_transportation value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_wine } } set_variable = { name = te_tax_en_g_wine value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_wood } } set_variable = { name = te_tax_en_g_wood value = 0 } }
+}
+
+# The scheduler's clock, package-slot headers and history ring, if absent. A package's
+# payload is not initialised: te_tax_store_package writes all of it, and nothing reads
+# it while the slot's te_tax_p<slot>_on is 0.
+te_tax_gen_init_schedule = {
+	if = { limit = { NOT = { has_variable = te_tax_now } } set_variable = { name = te_tax_now value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_pa_on } } set_variable = { name = te_tax_pa_on value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_pa_due } } set_variable = { name = te_tax_pa_due value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_pa_state } } set_variable = { name = te_tax_pa_state value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_pa_seq } } set_variable = { name = te_tax_pa_seq value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_pb_on } } set_variable = { name = te_tax_pb_on value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_pb_due } } set_variable = { name = te_tax_pb_due value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_pb_state } } set_variable = { name = te_tax_pb_state value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_pb_seq } } set_variable = { name = te_tax_pb_seq value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h_head } } set_variable = { name = te_tax_h_head value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h1_month } } set_variable = { name = te_tax_h1_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h1_kind } } set_variable = { name = te_tax_h1_kind value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h1_slot } } set_variable = { name = te_tax_h1_slot value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h1_inst } } set_variable = { name = te_tax_h1_inst value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h1_version } } set_variable = { name = te_tax_h1_version value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h2_month } } set_variable = { name = te_tax_h2_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h2_kind } } set_variable = { name = te_tax_h2_kind value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h2_slot } } set_variable = { name = te_tax_h2_slot value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h2_inst } } set_variable = { name = te_tax_h2_inst value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h2_version } } set_variable = { name = te_tax_h2_version value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h3_month } } set_variable = { name = te_tax_h3_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h3_kind } } set_variable = { name = te_tax_h3_kind value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h3_slot } } set_variable = { name = te_tax_h3_slot value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h3_inst } } set_variable = { name = te_tax_h3_inst value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h3_version } } set_variable = { name = te_tax_h3_version value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h4_month } } set_variable = { name = te_tax_h4_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h4_kind } } set_variable = { name = te_tax_h4_kind value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h4_slot } } set_variable = { name = te_tax_h4_slot value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h4_inst } } set_variable = { name = te_tax_h4_inst value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h4_version } } set_variable = { name = te_tax_h4_version value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h5_month } } set_variable = { name = te_tax_h5_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h5_kind } } set_variable = { name = te_tax_h5_kind value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h5_slot } } set_variable = { name = te_tax_h5_slot value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h5_inst } } set_variable = { name = te_tax_h5_inst value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h5_version } } set_variable = { name = te_tax_h5_version value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h6_month } } set_variable = { name = te_tax_h6_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h6_kind } } set_variable = { name = te_tax_h6_kind value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h6_slot } } set_variable = { name = te_tax_h6_slot value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h6_inst } } set_variable = { name = te_tax_h6_inst value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h6_version } } set_variable = { name = te_tax_h6_version value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h7_month } } set_variable = { name = te_tax_h7_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h7_kind } } set_variable = { name = te_tax_h7_kind value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h7_slot } } set_variable = { name = te_tax_h7_slot value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h7_inst } } set_variable = { name = te_tax_h7_inst value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h7_version } } set_variable = { name = te_tax_h7_version value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h8_month } } set_variable = { name = te_tax_h8_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_h8_kind } } set_variable = { name = te_tax_h8_kind value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h8_slot } } set_variable = { name = te_tax_h8_slot value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h8_inst } } set_variable = { name = te_tax_h8_inst value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_h8_version } } set_variable = { name = te_tax_h8_version value = -1 } }
 }
 
 # Wage tax: leaves exactly amendment_te_tax_wage_<te_tax_en_wage> on the
@@ -1672,4 +1732,1227 @@ te_tax_gen_sync_goods = {
 	if = { limit = { has_consumption_tax = g:tanks } remove_taxed_goods = g:tanks }
 	if = { limit = { has_consumption_tax = g:tech_metals } remove_taxed_goods = g:tech_metals }
 	if = { limit = { has_consumption_tax = g:tools } remove_taxed_goods = g:tools }
+}
+
+# Wage tax: executes the enacted value's sunset once its month has come
+# (rule 2). It runs only when the value has been operative since an earlier month,
+# so a package's own sunset can never share its commencement call; otherwise it
+# waits for next month. A late sunset catches up. One without a successor is
+# dropped, not deferred, so it cannot hold te_tax_next_month in the past.
+te_tax_gen_sunset_wage = {
+	if = {
+		limit = {
+			var:te_tax_en_wage_exp >= 0
+			var:te_tax_en_wage_exp <= var:te_tax_now
+		}
+		if = {
+			limit = { var:te_tax_en_wage_succ < 0 }
+			set_variable = { name = te_tax_en_wage_exp value = -1 }
+			debug_log = "TE_TAX sunset_dropped wage: no successor recorded; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else_if = {
+			limit = { var:te_tax_en_wage_since < var:te_tax_now }
+			set_variable = { name = te_tax_en_wage value = var:te_tax_en_wage_succ }
+			set_variable = { name = te_tax_en_wage_since value = var:te_tax_now }
+			set_variable = { name = te_tax_en_wage_exp value = -1 }
+			set_variable = { name = te_tax_en_wage_succ value = -1 }
+			change_variable = { name = te_tax_code_version add = 1 }
+			te_tax_gen_history_write = { KIND = 2 SLOT = none INST = 1 }
+			debug_log = "TE_TAX sunset wage; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_TAX sunset_deferred wage: operative only since this month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Dividend tax: executes the enacted value's sunset once its month has come
+# (rule 2). It runs only when the value has been operative since an earlier month,
+# so a package's own sunset can never share its commencement call; otherwise it
+# waits for next month. A late sunset catches up. One without a successor is
+# dropped, not deferred, so it cannot hold te_tax_next_month in the past.
+te_tax_gen_sunset_div = {
+	if = {
+		limit = {
+			var:te_tax_en_div_exp >= 0
+			var:te_tax_en_div_exp <= var:te_tax_now
+		}
+		if = {
+			limit = { var:te_tax_en_div_succ < 0 }
+			set_variable = { name = te_tax_en_div_exp value = -1 }
+			debug_log = "TE_TAX sunset_dropped div: no successor recorded; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else_if = {
+			limit = { var:te_tax_en_div_since < var:te_tax_now }
+			set_variable = { name = te_tax_en_div value = var:te_tax_en_div_succ }
+			set_variable = { name = te_tax_en_div_since value = var:te_tax_now }
+			set_variable = { name = te_tax_en_div_exp value = -1 }
+			set_variable = { name = te_tax_en_div_succ value = -1 }
+			change_variable = { name = te_tax_code_version add = 1 }
+			te_tax_gen_history_write = { KIND = 2 SLOT = none INST = 2 }
+			debug_log = "TE_TAX sunset div; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_TAX sunset_deferred div: operative only since this month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Rural assessment: executes the enacted value's sunset once its month has come
+# (rule 2). It runs only when the value has been operative since an earlier month,
+# so a package's own sunset can never share its commencement call; otherwise it
+# waits for next month. A late sunset catches up. One without a successor is
+# dropped, not deferred, so it cannot hold te_tax_next_month in the past.
+te_tax_gen_sunset_land = {
+	if = {
+		limit = {
+			var:te_tax_en_land_exp >= 0
+			var:te_tax_en_land_exp <= var:te_tax_now
+		}
+		if = {
+			limit = { var:te_tax_en_land_succ < 0 }
+			set_variable = { name = te_tax_en_land_exp value = -1 }
+			debug_log = "TE_TAX sunset_dropped land: no successor recorded; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else_if = {
+			limit = { var:te_tax_en_land_since < var:te_tax_now }
+			set_variable = { name = te_tax_en_land value = var:te_tax_en_land_succ }
+			set_variable = { name = te_tax_en_land_since value = var:te_tax_now }
+			set_variable = { name = te_tax_en_land_exp value = -1 }
+			set_variable = { name = te_tax_en_land_succ value = -1 }
+			change_variable = { name = te_tax_code_version add = 1 }
+			te_tax_gen_history_write = { KIND = 2 SLOT = none INST = 3 }
+			debug_log = "TE_TAX sunset land; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_TAX sunset_deferred land: operative only since this month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Head tax: executes the enacted value's sunset once its month has come
+# (rule 2). It runs only when the value has been operative since an earlier month,
+# so a package's own sunset can never share its commencement call; otherwise it
+# waits for next month. A late sunset catches up. One without a successor is
+# dropped, not deferred, so it cannot hold te_tax_next_month in the past.
+te_tax_gen_sunset_head = {
+	if = {
+		limit = {
+			var:te_tax_en_head_exp >= 0
+			var:te_tax_en_head_exp <= var:te_tax_now
+		}
+		if = {
+			limit = { var:te_tax_en_head_succ < 0 }
+			set_variable = { name = te_tax_en_head_exp value = -1 }
+			debug_log = "TE_TAX sunset_dropped head: no successor recorded; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else_if = {
+			limit = { var:te_tax_en_head_since < var:te_tax_now }
+			set_variable = { name = te_tax_en_head value = var:te_tax_en_head_succ }
+			set_variable = { name = te_tax_en_head_since value = var:te_tax_now }
+			set_variable = { name = te_tax_en_head_exp value = -1 }
+			set_variable = { name = te_tax_en_head_succ value = -1 }
+			change_variable = { name = te_tax_code_version add = 1 }
+			te_tax_gen_history_write = { KIND = 2 SLOT = none INST = 4 }
+			debug_log = "TE_TAX sunset head; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_TAX sunset_deferred head: operative only since this month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Consumption tax rate: executes the enacted value's sunset once its month has come
+# (rule 2). It runs only when the value has been operative since an earlier month,
+# so a package's own sunset can never share its commencement call; otherwise it
+# waits for next month. A late sunset catches up. One without a successor is
+# dropped, not deferred, so it cannot hold te_tax_next_month in the past.
+te_tax_gen_sunset_cons = {
+	if = {
+		limit = {
+			var:te_tax_en_cons_exp >= 0
+			var:te_tax_en_cons_exp <= var:te_tax_now
+		}
+		if = {
+			limit = { var:te_tax_en_cons_succ < 0 }
+			set_variable = { name = te_tax_en_cons_exp value = -1 }
+			debug_log = "TE_TAX sunset_dropped cons: no successor recorded; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else_if = {
+			limit = { var:te_tax_en_cons_since < var:te_tax_now }
+			set_variable = { name = te_tax_en_cons value = var:te_tax_en_cons_succ }
+			set_variable = { name = te_tax_en_cons_since value = var:te_tax_now }
+			set_variable = { name = te_tax_en_cons_exp value = -1 }
+			set_variable = { name = te_tax_en_cons_succ value = -1 }
+			change_variable = { name = te_tax_code_version add = 1 }
+			te_tax_gen_history_write = { KIND = 2 SLOT = none INST = 5 }
+			debug_log = "TE_TAX sunset cons; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_TAX sunset_deferred cons: operative only since this month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Slot a: commences in its due month and in no other (rule 3). The processor runs
+# on the 1st, so the package takes effect from the 1st. If a provision it touches was
+# changed outside legislation since approval (te_tax_xver_*), the whole package holds
+# and collections stay as they are. A due month already past holds it as missed.
+te_tax_gen_commence_a = {
+	if = {
+		limit = {
+			var:te_tax_pa_on = 1
+			var:te_tax_pa_state = 1
+			var:te_tax_pa_due = var:te_tax_now
+		}
+		if = {
+			limit = { te_tax_gen_package_current_a = yes }
+			te_tax_gen_apply_a = yes
+			change_variable = { name = te_tax_code_version add = 1 }
+			set_variable = { name = te_tax_pa_on value = 0 }
+			set_variable = { name = te_tax_pa_state value = 0 }
+			te_tax_gen_history_write = { KIND = 1 SLOT = a INST = 0 }
+			debug_log = "TE_TAX commenced slot=a; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			set_variable = { name = te_tax_pa_state value = 2 }
+			te_tax_gen_history_write = { KIND = 3 SLOT = a INST = 0 }
+			debug_log = "TE_TAX held_conflict slot=a: a touched provision changed outside legislation; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+	else = {
+		te_tax_gen_hold_missed_a = yes
+	}
+}
+
+# Slot a: an awaiting package whose due month has passed holds as missed; it never
+# commences late (spec: missed dates need explicit rescheduling). The watchdog calls
+# this too, because it fires only once the month has passed.
+te_tax_gen_hold_missed_a = {
+	if = {
+		limit = {
+			var:te_tax_pa_on = 1
+			var:te_tax_pa_state = 1
+			var:te_tax_pa_due < var:te_tax_now
+		}
+		set_variable = { name = te_tax_pa_state value = 3 }
+		te_tax_gen_history_write = { KIND = 4 SLOT = a INST = 0 }
+		debug_log = "TE_TAX held_missed slot=a: due month passed without commencement; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Slot a: copies every field the package touches into the enacted code. Only
+# te_tax_gen_commence_<slot> calls it, inside the processor, which has set te_tax_now
+# and syncs collection once after every slot.
+te_tax_gen_apply_a = {
+	if = {
+		limit = { var:te_tax_pa_wage >= 0 }
+		set_variable = { name = te_tax_en_wage value = var:te_tax_pa_wage }
+		set_variable = { name = te_tax_en_wage_since value = var:te_tax_now }
+		set_variable = { name = te_tax_en_wage_exp value = var:te_tax_pa_wage_exp }
+		set_variable = { name = te_tax_en_wage_succ value = var:te_tax_pa_wage_succ }
+	}
+	if = {
+		limit = { var:te_tax_pa_div >= 0 }
+		set_variable = { name = te_tax_en_div value = var:te_tax_pa_div }
+		set_variable = { name = te_tax_en_div_since value = var:te_tax_now }
+		set_variable = { name = te_tax_en_div_exp value = var:te_tax_pa_div_exp }
+		set_variable = { name = te_tax_en_div_succ value = var:te_tax_pa_div_succ }
+	}
+	if = {
+		limit = { var:te_tax_pa_land >= 0 }
+		set_variable = { name = te_tax_en_land value = var:te_tax_pa_land }
+		set_variable = { name = te_tax_en_land_since value = var:te_tax_now }
+		set_variable = { name = te_tax_en_land_exp value = var:te_tax_pa_land_exp }
+		set_variable = { name = te_tax_en_land_succ value = var:te_tax_pa_land_succ }
+	}
+	if = {
+		limit = { var:te_tax_pa_head >= 0 }
+		set_variable = { name = te_tax_en_head value = var:te_tax_pa_head }
+		set_variable = { name = te_tax_en_head_since value = var:te_tax_now }
+		set_variable = { name = te_tax_en_head_exp value = var:te_tax_pa_head_exp }
+		set_variable = { name = te_tax_en_head_succ value = var:te_tax_pa_head_succ }
+	}
+	if = {
+		limit = { var:te_tax_pa_cons >= 0 }
+		set_variable = { name = te_tax_en_cons value = var:te_tax_pa_cons }
+		set_variable = { name = te_tax_en_cons_since value = var:te_tax_now }
+		set_variable = { name = te_tax_en_cons_exp value = var:te_tax_pa_cons_exp }
+		set_variable = { name = te_tax_en_cons_succ value = var:te_tax_pa_cons_succ }
+	}
+	if = { limit = { var:te_tax_pa_g_aeroplanes >= 0 } set_variable = { name = te_tax_en_g_aeroplanes value = var:te_tax_pa_g_aeroplanes } }
+	if = { limit = { var:te_tax_pa_g_automobiles >= 0 } set_variable = { name = te_tax_en_g_automobiles value = var:te_tax_pa_g_automobiles } }
+	if = { limit = { var:te_tax_pa_g_clippers >= 0 } set_variable = { name = te_tax_en_g_clippers value = var:te_tax_pa_g_clippers } }
+	if = { limit = { var:te_tax_pa_g_clothes >= 0 } set_variable = { name = te_tax_en_g_clothes value = var:te_tax_pa_g_clothes } }
+	if = { limit = { var:te_tax_pa_g_coal >= 0 } set_variable = { name = te_tax_en_g_coal value = var:te_tax_pa_g_coal } }
+	if = { limit = { var:te_tax_pa_g_coffee >= 0 } set_variable = { name = te_tax_en_g_coffee value = var:te_tax_pa_g_coffee } }
+	if = { limit = { var:te_tax_pa_g_consumer_appliances >= 0 } set_variable = { name = te_tax_en_g_consumer_appliances value = var:te_tax_pa_g_consumer_appliances } }
+	if = { limit = { var:te_tax_pa_g_digital_access >= 0 } set_variable = { name = te_tax_en_g_digital_access value = var:te_tax_pa_g_digital_access } }
+	if = { limit = { var:te_tax_pa_g_digital_assets >= 0 } set_variable = { name = te_tax_en_g_digital_assets value = var:te_tax_pa_g_digital_assets } }
+	if = { limit = { var:te_tax_pa_g_electricity >= 0 } set_variable = { name = te_tax_en_g_electricity value = var:te_tax_pa_g_electricity } }
+	if = { limit = { var:te_tax_pa_g_fabric >= 0 } set_variable = { name = te_tax_en_g_fabric value = var:te_tax_pa_g_fabric } }
+	if = { limit = { var:te_tax_pa_g_fine_art >= 0 } set_variable = { name = te_tax_en_g_fine_art value = var:te_tax_pa_g_fine_art } }
+	if = { limit = { var:te_tax_pa_g_fish >= 0 } set_variable = { name = te_tax_en_g_fish value = var:te_tax_pa_g_fish } }
+	if = { limit = { var:te_tax_pa_g_fruit >= 0 } set_variable = { name = te_tax_en_g_fruit value = var:te_tax_pa_g_fruit } }
+	if = { limit = { var:te_tax_pa_g_furniture >= 0 } set_variable = { name = te_tax_en_g_furniture value = var:te_tax_pa_g_furniture } }
+	if = { limit = { var:te_tax_pa_g_glass >= 0 } set_variable = { name = te_tax_en_g_glass value = var:te_tax_pa_g_glass } }
+	if = { limit = { var:te_tax_pa_g_grain >= 0 } set_variable = { name = te_tax_en_g_grain value = var:te_tax_pa_g_grain } }
+	if = { limit = { var:te_tax_pa_g_groceries >= 0 } set_variable = { name = te_tax_en_g_groceries value = var:te_tax_pa_g_groceries } }
+	if = { limit = { var:te_tax_pa_g_liquor >= 0 } set_variable = { name = te_tax_en_g_liquor value = var:te_tax_pa_g_liquor } }
+	if = { limit = { var:te_tax_pa_g_luxury_clothes >= 0 } set_variable = { name = te_tax_en_g_luxury_clothes value = var:te_tax_pa_g_luxury_clothes } }
+	if = { limit = { var:te_tax_pa_g_luxury_furniture >= 0 } set_variable = { name = te_tax_en_g_luxury_furniture value = var:te_tax_pa_g_luxury_furniture } }
+	if = { limit = { var:te_tax_pa_g_meat >= 0 } set_variable = { name = te_tax_en_g_meat value = var:te_tax_pa_g_meat } }
+	if = { limit = { var:te_tax_pa_g_oil >= 0 } set_variable = { name = te_tax_en_g_oil value = var:te_tax_pa_g_oil } }
+	if = { limit = { var:te_tax_pa_g_opium >= 0 } set_variable = { name = te_tax_en_g_opium value = var:te_tax_pa_g_opium } }
+	if = { limit = { var:te_tax_pa_g_paper >= 0 } set_variable = { name = te_tax_en_g_paper value = var:te_tax_pa_g_paper } }
+	if = { limit = { var:te_tax_pa_g_porcelain >= 0 } set_variable = { name = te_tax_en_g_porcelain value = var:te_tax_pa_g_porcelain } }
+	if = { limit = { var:te_tax_pa_g_radios >= 0 } set_variable = { name = te_tax_en_g_radios value = var:te_tax_pa_g_radios } }
+	if = { limit = { var:te_tax_pa_g_services >= 0 } set_variable = { name = te_tax_en_g_services value = var:te_tax_pa_g_services } }
+	if = { limit = { var:te_tax_pa_g_silk >= 0 } set_variable = { name = te_tax_en_g_silk value = var:te_tax_pa_g_silk } }
+	if = { limit = { var:te_tax_pa_g_small_arms >= 0 } set_variable = { name = te_tax_en_g_small_arms value = var:te_tax_pa_g_small_arms } }
+	if = { limit = { var:te_tax_pa_g_steamers >= 0 } set_variable = { name = te_tax_en_g_steamers value = var:te_tax_pa_g_steamers } }
+	if = { limit = { var:te_tax_pa_g_sugar >= 0 } set_variable = { name = te_tax_en_g_sugar value = var:te_tax_pa_g_sugar } }
+	if = { limit = { var:te_tax_pa_g_tea >= 0 } set_variable = { name = te_tax_en_g_tea value = var:te_tax_pa_g_tea } }
+	if = { limit = { var:te_tax_pa_g_telephones >= 0 } set_variable = { name = te_tax_en_g_telephones value = var:te_tax_pa_g_telephones } }
+	if = { limit = { var:te_tax_pa_g_tobacco >= 0 } set_variable = { name = te_tax_en_g_tobacco value = var:te_tax_pa_g_tobacco } }
+	if = { limit = { var:te_tax_pa_g_tourism >= 0 } set_variable = { name = te_tax_en_g_tourism value = var:te_tax_pa_g_tourism } }
+	if = { limit = { var:te_tax_pa_g_transportation >= 0 } set_variable = { name = te_tax_en_g_transportation value = var:te_tax_pa_g_transportation } }
+	if = { limit = { var:te_tax_pa_g_wine >= 0 } set_variable = { name = te_tax_en_g_wine value = var:te_tax_pa_g_wine } }
+	if = { limit = { var:te_tax_pa_g_wood >= 0 } set_variable = { name = te_tax_en_g_wood value = var:te_tax_pa_g_wood } }
+	if = { limit = { var:te_tax_pa_agrel >= 0 } set_variable = { name = te_tax_en_agrel value = var:te_tax_pa_agrel } }
+	if = { limit = { var:te_tax_pa_regrel >= 0 } set_variable = { name = te_tax_en_regrel value = var:te_tax_pa_regrel } }
+	# A package that restates regional relief names its whole state set.
+	if = {
+		limit = { var:te_tax_pa_regrel_states_set = 1 }
+		every_scope_state = {
+			if = {
+				limit = {
+					has_variable = te_tax_pending_relief_a
+					var:te_tax_pending_relief_a = 1
+				}
+				set_variable = { name = te_tax_relief_state value = 1 }
+			}
+			else_if = {
+				limit = { has_variable = te_tax_relief_state }
+				set_variable = { name = te_tax_relief_state value = 0 }
+			}
+		}
+	}
+	every_scope_state = {
+		limit = { has_variable = te_tax_pending_relief_a }
+		set_variable = { name = te_tax_pending_relief_a value = 0 }
+	}
+}
+
+# Slot a: writes an approved package from the bill record (te_tax_bl_*). Called
+# only through te_tax_store_package, after te_tax_can_store_package and with
+# scope:te_tax_country saved. Every payload field is written, so nothing stale from an
+# earlier package survives. A sunset is due + offset, written only for an offset of at
+# least one month; its successor is the value the provision will hold just before the
+# due month: the other slot's value if that awaiting package touches it earlier (or
+# that package's successor, if its own sunset comes first), else the enacted value
+# (or the enacted successor, if the enacted sunset comes first). seq = one above both
+# slots. The slot is switched on last.
+te_tax_gen_store_a = {
+	set_variable = { name = te_tax_pa_due value = var:te_tax_bl_due }
+	if = {
+		limit = { var:te_tax_pb_seq > var:te_tax_pa_seq }
+		set_variable = { name = te_tax_pa_seq value = var:te_tax_pb_seq }
+	}
+	change_variable = { name = te_tax_pa_seq add = 1 }
+	set_variable = { name = te_tax_pa_wage value = var:te_tax_bl_wage }
+	set_variable = { name = te_tax_pa_xver_wage value = var:te_tax_bl_xver_wage }
+	if = {
+		limit = {
+			var:te_tax_bl_wage >= 0
+			var:te_tax_bl_wage_sun >= 1
+		}
+		set_variable = { name = te_tax_pa_wage_exp value = var:te_tax_bl_due }
+		change_variable = { name = te_tax_pa_wage_exp add = var:te_tax_bl_wage_sun }
+		set_variable = { name = te_tax_pa_wage_succ value = var:te_tax_en_wage }
+		if = {
+			limit = {
+				var:te_tax_en_wage_exp >= 0
+				var:te_tax_en_wage_exp <= var:te_tax_bl_due
+				var:te_tax_en_wage_succ >= 0
+			}
+			set_variable = { name = te_tax_pa_wage_succ value = var:te_tax_en_wage_succ }
+		}
+		# The other slot's payload exists only while it is on, so read it nested.
+		if = {
+			limit = {
+				var:te_tax_pb_on = 1
+				var:te_tax_pb_state = 1
+				var:te_tax_pb_due < var:te_tax_bl_due
+			}
+			if = {
+				limit = { var:te_tax_pb_wage >= 0 }
+				set_variable = { name = te_tax_pa_wage_succ value = var:te_tax_pb_wage }
+				if = {
+					limit = {
+						var:te_tax_pb_wage_exp >= 0
+						var:te_tax_pb_wage_exp <= var:te_tax_bl_due
+						var:te_tax_pb_wage_succ >= 0
+					}
+					set_variable = { name = te_tax_pa_wage_succ value = var:te_tax_pb_wage_succ }
+				}
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pa_wage_exp value = -1 }
+		set_variable = { name = te_tax_pa_wage_succ value = -1 }
+	}
+	set_variable = { name = te_tax_pa_div value = var:te_tax_bl_div }
+	set_variable = { name = te_tax_pa_xver_div value = var:te_tax_bl_xver_div }
+	if = {
+		limit = {
+			var:te_tax_bl_div >= 0
+			var:te_tax_bl_div_sun >= 1
+		}
+		set_variable = { name = te_tax_pa_div_exp value = var:te_tax_bl_due }
+		change_variable = { name = te_tax_pa_div_exp add = var:te_tax_bl_div_sun }
+		set_variable = { name = te_tax_pa_div_succ value = var:te_tax_en_div }
+		if = {
+			limit = {
+				var:te_tax_en_div_exp >= 0
+				var:te_tax_en_div_exp <= var:te_tax_bl_due
+				var:te_tax_en_div_succ >= 0
+			}
+			set_variable = { name = te_tax_pa_div_succ value = var:te_tax_en_div_succ }
+		}
+		# The other slot's payload exists only while it is on, so read it nested.
+		if = {
+			limit = {
+				var:te_tax_pb_on = 1
+				var:te_tax_pb_state = 1
+				var:te_tax_pb_due < var:te_tax_bl_due
+			}
+			if = {
+				limit = { var:te_tax_pb_div >= 0 }
+				set_variable = { name = te_tax_pa_div_succ value = var:te_tax_pb_div }
+				if = {
+					limit = {
+						var:te_tax_pb_div_exp >= 0
+						var:te_tax_pb_div_exp <= var:te_tax_bl_due
+						var:te_tax_pb_div_succ >= 0
+					}
+					set_variable = { name = te_tax_pa_div_succ value = var:te_tax_pb_div_succ }
+				}
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pa_div_exp value = -1 }
+		set_variable = { name = te_tax_pa_div_succ value = -1 }
+	}
+	set_variable = { name = te_tax_pa_land value = var:te_tax_bl_land }
+	set_variable = { name = te_tax_pa_xver_land value = var:te_tax_bl_xver_land }
+	if = {
+		limit = {
+			var:te_tax_bl_land >= 0
+			var:te_tax_bl_land_sun >= 1
+		}
+		set_variable = { name = te_tax_pa_land_exp value = var:te_tax_bl_due }
+		change_variable = { name = te_tax_pa_land_exp add = var:te_tax_bl_land_sun }
+		set_variable = { name = te_tax_pa_land_succ value = var:te_tax_en_land }
+		if = {
+			limit = {
+				var:te_tax_en_land_exp >= 0
+				var:te_tax_en_land_exp <= var:te_tax_bl_due
+				var:te_tax_en_land_succ >= 0
+			}
+			set_variable = { name = te_tax_pa_land_succ value = var:te_tax_en_land_succ }
+		}
+		# The other slot's payload exists only while it is on, so read it nested.
+		if = {
+			limit = {
+				var:te_tax_pb_on = 1
+				var:te_tax_pb_state = 1
+				var:te_tax_pb_due < var:te_tax_bl_due
+			}
+			if = {
+				limit = { var:te_tax_pb_land >= 0 }
+				set_variable = { name = te_tax_pa_land_succ value = var:te_tax_pb_land }
+				if = {
+					limit = {
+						var:te_tax_pb_land_exp >= 0
+						var:te_tax_pb_land_exp <= var:te_tax_bl_due
+						var:te_tax_pb_land_succ >= 0
+					}
+					set_variable = { name = te_tax_pa_land_succ value = var:te_tax_pb_land_succ }
+				}
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pa_land_exp value = -1 }
+		set_variable = { name = te_tax_pa_land_succ value = -1 }
+	}
+	set_variable = { name = te_tax_pa_head value = var:te_tax_bl_head }
+	set_variable = { name = te_tax_pa_xver_head value = var:te_tax_bl_xver_head }
+	if = {
+		limit = {
+			var:te_tax_bl_head >= 0
+			var:te_tax_bl_head_sun >= 1
+		}
+		set_variable = { name = te_tax_pa_head_exp value = var:te_tax_bl_due }
+		change_variable = { name = te_tax_pa_head_exp add = var:te_tax_bl_head_sun }
+		set_variable = { name = te_tax_pa_head_succ value = var:te_tax_en_head }
+		if = {
+			limit = {
+				var:te_tax_en_head_exp >= 0
+				var:te_tax_en_head_exp <= var:te_tax_bl_due
+				var:te_tax_en_head_succ >= 0
+			}
+			set_variable = { name = te_tax_pa_head_succ value = var:te_tax_en_head_succ }
+		}
+		# The other slot's payload exists only while it is on, so read it nested.
+		if = {
+			limit = {
+				var:te_tax_pb_on = 1
+				var:te_tax_pb_state = 1
+				var:te_tax_pb_due < var:te_tax_bl_due
+			}
+			if = {
+				limit = { var:te_tax_pb_head >= 0 }
+				set_variable = { name = te_tax_pa_head_succ value = var:te_tax_pb_head }
+				if = {
+					limit = {
+						var:te_tax_pb_head_exp >= 0
+						var:te_tax_pb_head_exp <= var:te_tax_bl_due
+						var:te_tax_pb_head_succ >= 0
+					}
+					set_variable = { name = te_tax_pa_head_succ value = var:te_tax_pb_head_succ }
+				}
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pa_head_exp value = -1 }
+		set_variable = { name = te_tax_pa_head_succ value = -1 }
+	}
+	set_variable = { name = te_tax_pa_cons value = var:te_tax_bl_cons }
+	set_variable = { name = te_tax_pa_xver_cons value = var:te_tax_bl_xver_cons }
+	if = {
+		limit = {
+			var:te_tax_bl_cons >= 0
+			var:te_tax_bl_cons_sun >= 1
+		}
+		set_variable = { name = te_tax_pa_cons_exp value = var:te_tax_bl_due }
+		change_variable = { name = te_tax_pa_cons_exp add = var:te_tax_bl_cons_sun }
+		set_variable = { name = te_tax_pa_cons_succ value = var:te_tax_en_cons }
+		if = {
+			limit = {
+				var:te_tax_en_cons_exp >= 0
+				var:te_tax_en_cons_exp <= var:te_tax_bl_due
+				var:te_tax_en_cons_succ >= 0
+			}
+			set_variable = { name = te_tax_pa_cons_succ value = var:te_tax_en_cons_succ }
+		}
+		# The other slot's payload exists only while it is on, so read it nested.
+		if = {
+			limit = {
+				var:te_tax_pb_on = 1
+				var:te_tax_pb_state = 1
+				var:te_tax_pb_due < var:te_tax_bl_due
+			}
+			if = {
+				limit = { var:te_tax_pb_cons >= 0 }
+				set_variable = { name = te_tax_pa_cons_succ value = var:te_tax_pb_cons }
+				if = {
+					limit = {
+						var:te_tax_pb_cons_exp >= 0
+						var:te_tax_pb_cons_exp <= var:te_tax_bl_due
+						var:te_tax_pb_cons_succ >= 0
+					}
+					set_variable = { name = te_tax_pa_cons_succ value = var:te_tax_pb_cons_succ }
+				}
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pa_cons_exp value = -1 }
+		set_variable = { name = te_tax_pa_cons_succ value = -1 }
+	}
+	set_variable = { name = te_tax_pa_g_aeroplanes value = var:te_tax_bl_g_aeroplanes }
+	set_variable = { name = te_tax_pa_g_automobiles value = var:te_tax_bl_g_automobiles }
+	set_variable = { name = te_tax_pa_g_clippers value = var:te_tax_bl_g_clippers }
+	set_variable = { name = te_tax_pa_g_clothes value = var:te_tax_bl_g_clothes }
+	set_variable = { name = te_tax_pa_g_coal value = var:te_tax_bl_g_coal }
+	set_variable = { name = te_tax_pa_g_coffee value = var:te_tax_bl_g_coffee }
+	set_variable = { name = te_tax_pa_g_consumer_appliances value = var:te_tax_bl_g_consumer_appliances }
+	set_variable = { name = te_tax_pa_g_digital_access value = var:te_tax_bl_g_digital_access }
+	set_variable = { name = te_tax_pa_g_digital_assets value = var:te_tax_bl_g_digital_assets }
+	set_variable = { name = te_tax_pa_g_electricity value = var:te_tax_bl_g_electricity }
+	set_variable = { name = te_tax_pa_g_fabric value = var:te_tax_bl_g_fabric }
+	set_variable = { name = te_tax_pa_g_fine_art value = var:te_tax_bl_g_fine_art }
+	set_variable = { name = te_tax_pa_g_fish value = var:te_tax_bl_g_fish }
+	set_variable = { name = te_tax_pa_g_fruit value = var:te_tax_bl_g_fruit }
+	set_variable = { name = te_tax_pa_g_furniture value = var:te_tax_bl_g_furniture }
+	set_variable = { name = te_tax_pa_g_glass value = var:te_tax_bl_g_glass }
+	set_variable = { name = te_tax_pa_g_grain value = var:te_tax_bl_g_grain }
+	set_variable = { name = te_tax_pa_g_groceries value = var:te_tax_bl_g_groceries }
+	set_variable = { name = te_tax_pa_g_liquor value = var:te_tax_bl_g_liquor }
+	set_variable = { name = te_tax_pa_g_luxury_clothes value = var:te_tax_bl_g_luxury_clothes }
+	set_variable = { name = te_tax_pa_g_luxury_furniture value = var:te_tax_bl_g_luxury_furniture }
+	set_variable = { name = te_tax_pa_g_meat value = var:te_tax_bl_g_meat }
+	set_variable = { name = te_tax_pa_g_oil value = var:te_tax_bl_g_oil }
+	set_variable = { name = te_tax_pa_g_opium value = var:te_tax_bl_g_opium }
+	set_variable = { name = te_tax_pa_g_paper value = var:te_tax_bl_g_paper }
+	set_variable = { name = te_tax_pa_g_porcelain value = var:te_tax_bl_g_porcelain }
+	set_variable = { name = te_tax_pa_g_radios value = var:te_tax_bl_g_radios }
+	set_variable = { name = te_tax_pa_g_services value = var:te_tax_bl_g_services }
+	set_variable = { name = te_tax_pa_g_silk value = var:te_tax_bl_g_silk }
+	set_variable = { name = te_tax_pa_g_small_arms value = var:te_tax_bl_g_small_arms }
+	set_variable = { name = te_tax_pa_g_steamers value = var:te_tax_bl_g_steamers }
+	set_variable = { name = te_tax_pa_g_sugar value = var:te_tax_bl_g_sugar }
+	set_variable = { name = te_tax_pa_g_tea value = var:te_tax_bl_g_tea }
+	set_variable = { name = te_tax_pa_g_telephones value = var:te_tax_bl_g_telephones }
+	set_variable = { name = te_tax_pa_g_tobacco value = var:te_tax_bl_g_tobacco }
+	set_variable = { name = te_tax_pa_g_tourism value = var:te_tax_bl_g_tourism }
+	set_variable = { name = te_tax_pa_g_transportation value = var:te_tax_bl_g_transportation }
+	set_variable = { name = te_tax_pa_g_wine value = var:te_tax_bl_g_wine }
+	set_variable = { name = te_tax_pa_g_wood value = var:te_tax_bl_g_wood }
+	set_variable = { name = te_tax_pa_xver_goods value = var:te_tax_bl_xver_goods }
+	set_variable = { name = te_tax_pa_agrel value = var:te_tax_bl_agrel }
+	set_variable = { name = te_tax_pa_regrel value = var:te_tax_bl_regrel }
+	set_variable = { name = te_tax_pa_xver_relief value = var:te_tax_bl_xver_relief }
+	# Regional relief: a bill that touches it (te_tax_bl_regrel >= 0) names its whole
+	# state set in te_tax_bl_relief_states, possibly none; commencement moves the marks
+	# to te_tax_relief_state.
+	every_scope_state = {
+		limit = { has_variable = te_tax_pending_relief_a }
+		set_variable = { name = te_tax_pending_relief_a value = 0 }
+	}
+	if = {
+		limit = { var:te_tax_bl_regrel >= 0 }
+		set_variable = { name = te_tax_pa_regrel_states_set value = 1 }
+		if = {
+			limit = { has_variable_list = te_tax_bl_relief_states }
+			every_in_list = {
+				variable = te_tax_bl_relief_states
+				limit = { owner = scope:te_tax_country }
+				set_variable = { name = te_tax_pending_relief_a value = 1 }
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pa_regrel_states_set value = 0 }
+	}
+	debug_log = "TE_TAX stored slot=a; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	set_variable = { name = te_tax_pa_state value = 1 }
+	set_variable = { name = te_tax_pa_on value = 1 }
+}
+
+# Slot b: commences in its due month and in no other (rule 3). The processor runs
+# on the 1st, so the package takes effect from the 1st. If a provision it touches was
+# changed outside legislation since approval (te_tax_xver_*), the whole package holds
+# and collections stay as they are. A due month already past holds it as missed.
+te_tax_gen_commence_b = {
+	if = {
+		limit = {
+			var:te_tax_pb_on = 1
+			var:te_tax_pb_state = 1
+			var:te_tax_pb_due = var:te_tax_now
+		}
+		if = {
+			limit = { te_tax_gen_package_current_b = yes }
+			te_tax_gen_apply_b = yes
+			change_variable = { name = te_tax_code_version add = 1 }
+			set_variable = { name = te_tax_pb_on value = 0 }
+			set_variable = { name = te_tax_pb_state value = 0 }
+			te_tax_gen_history_write = { KIND = 1 SLOT = b INST = 0 }
+			debug_log = "TE_TAX commenced slot=b; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			set_variable = { name = te_tax_pb_state value = 2 }
+			te_tax_gen_history_write = { KIND = 3 SLOT = b INST = 0 }
+			debug_log = "TE_TAX held_conflict slot=b: a touched provision changed outside legislation; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+	else = {
+		te_tax_gen_hold_missed_b = yes
+	}
+}
+
+# Slot b: an awaiting package whose due month has passed holds as missed; it never
+# commences late (spec: missed dates need explicit rescheduling). The watchdog calls
+# this too, because it fires only once the month has passed.
+te_tax_gen_hold_missed_b = {
+	if = {
+		limit = {
+			var:te_tax_pb_on = 1
+			var:te_tax_pb_state = 1
+			var:te_tax_pb_due < var:te_tax_now
+		}
+		set_variable = { name = te_tax_pb_state value = 3 }
+		te_tax_gen_history_write = { KIND = 4 SLOT = b INST = 0 }
+		debug_log = "TE_TAX held_missed slot=b: due month passed without commencement; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Slot b: copies every field the package touches into the enacted code. Only
+# te_tax_gen_commence_<slot> calls it, inside the processor, which has set te_tax_now
+# and syncs collection once after every slot.
+te_tax_gen_apply_b = {
+	if = {
+		limit = { var:te_tax_pb_wage >= 0 }
+		set_variable = { name = te_tax_en_wage value = var:te_tax_pb_wage }
+		set_variable = { name = te_tax_en_wage_since value = var:te_tax_now }
+		set_variable = { name = te_tax_en_wage_exp value = var:te_tax_pb_wage_exp }
+		set_variable = { name = te_tax_en_wage_succ value = var:te_tax_pb_wage_succ }
+	}
+	if = {
+		limit = { var:te_tax_pb_div >= 0 }
+		set_variable = { name = te_tax_en_div value = var:te_tax_pb_div }
+		set_variable = { name = te_tax_en_div_since value = var:te_tax_now }
+		set_variable = { name = te_tax_en_div_exp value = var:te_tax_pb_div_exp }
+		set_variable = { name = te_tax_en_div_succ value = var:te_tax_pb_div_succ }
+	}
+	if = {
+		limit = { var:te_tax_pb_land >= 0 }
+		set_variable = { name = te_tax_en_land value = var:te_tax_pb_land }
+		set_variable = { name = te_tax_en_land_since value = var:te_tax_now }
+		set_variable = { name = te_tax_en_land_exp value = var:te_tax_pb_land_exp }
+		set_variable = { name = te_tax_en_land_succ value = var:te_tax_pb_land_succ }
+	}
+	if = {
+		limit = { var:te_tax_pb_head >= 0 }
+		set_variable = { name = te_tax_en_head value = var:te_tax_pb_head }
+		set_variable = { name = te_tax_en_head_since value = var:te_tax_now }
+		set_variable = { name = te_tax_en_head_exp value = var:te_tax_pb_head_exp }
+		set_variable = { name = te_tax_en_head_succ value = var:te_tax_pb_head_succ }
+	}
+	if = {
+		limit = { var:te_tax_pb_cons >= 0 }
+		set_variable = { name = te_tax_en_cons value = var:te_tax_pb_cons }
+		set_variable = { name = te_tax_en_cons_since value = var:te_tax_now }
+		set_variable = { name = te_tax_en_cons_exp value = var:te_tax_pb_cons_exp }
+		set_variable = { name = te_tax_en_cons_succ value = var:te_tax_pb_cons_succ }
+	}
+	if = { limit = { var:te_tax_pb_g_aeroplanes >= 0 } set_variable = { name = te_tax_en_g_aeroplanes value = var:te_tax_pb_g_aeroplanes } }
+	if = { limit = { var:te_tax_pb_g_automobiles >= 0 } set_variable = { name = te_tax_en_g_automobiles value = var:te_tax_pb_g_automobiles } }
+	if = { limit = { var:te_tax_pb_g_clippers >= 0 } set_variable = { name = te_tax_en_g_clippers value = var:te_tax_pb_g_clippers } }
+	if = { limit = { var:te_tax_pb_g_clothes >= 0 } set_variable = { name = te_tax_en_g_clothes value = var:te_tax_pb_g_clothes } }
+	if = { limit = { var:te_tax_pb_g_coal >= 0 } set_variable = { name = te_tax_en_g_coal value = var:te_tax_pb_g_coal } }
+	if = { limit = { var:te_tax_pb_g_coffee >= 0 } set_variable = { name = te_tax_en_g_coffee value = var:te_tax_pb_g_coffee } }
+	if = { limit = { var:te_tax_pb_g_consumer_appliances >= 0 } set_variable = { name = te_tax_en_g_consumer_appliances value = var:te_tax_pb_g_consumer_appliances } }
+	if = { limit = { var:te_tax_pb_g_digital_access >= 0 } set_variable = { name = te_tax_en_g_digital_access value = var:te_tax_pb_g_digital_access } }
+	if = { limit = { var:te_tax_pb_g_digital_assets >= 0 } set_variable = { name = te_tax_en_g_digital_assets value = var:te_tax_pb_g_digital_assets } }
+	if = { limit = { var:te_tax_pb_g_electricity >= 0 } set_variable = { name = te_tax_en_g_electricity value = var:te_tax_pb_g_electricity } }
+	if = { limit = { var:te_tax_pb_g_fabric >= 0 } set_variable = { name = te_tax_en_g_fabric value = var:te_tax_pb_g_fabric } }
+	if = { limit = { var:te_tax_pb_g_fine_art >= 0 } set_variable = { name = te_tax_en_g_fine_art value = var:te_tax_pb_g_fine_art } }
+	if = { limit = { var:te_tax_pb_g_fish >= 0 } set_variable = { name = te_tax_en_g_fish value = var:te_tax_pb_g_fish } }
+	if = { limit = { var:te_tax_pb_g_fruit >= 0 } set_variable = { name = te_tax_en_g_fruit value = var:te_tax_pb_g_fruit } }
+	if = { limit = { var:te_tax_pb_g_furniture >= 0 } set_variable = { name = te_tax_en_g_furniture value = var:te_tax_pb_g_furniture } }
+	if = { limit = { var:te_tax_pb_g_glass >= 0 } set_variable = { name = te_tax_en_g_glass value = var:te_tax_pb_g_glass } }
+	if = { limit = { var:te_tax_pb_g_grain >= 0 } set_variable = { name = te_tax_en_g_grain value = var:te_tax_pb_g_grain } }
+	if = { limit = { var:te_tax_pb_g_groceries >= 0 } set_variable = { name = te_tax_en_g_groceries value = var:te_tax_pb_g_groceries } }
+	if = { limit = { var:te_tax_pb_g_liquor >= 0 } set_variable = { name = te_tax_en_g_liquor value = var:te_tax_pb_g_liquor } }
+	if = { limit = { var:te_tax_pb_g_luxury_clothes >= 0 } set_variable = { name = te_tax_en_g_luxury_clothes value = var:te_tax_pb_g_luxury_clothes } }
+	if = { limit = { var:te_tax_pb_g_luxury_furniture >= 0 } set_variable = { name = te_tax_en_g_luxury_furniture value = var:te_tax_pb_g_luxury_furniture } }
+	if = { limit = { var:te_tax_pb_g_meat >= 0 } set_variable = { name = te_tax_en_g_meat value = var:te_tax_pb_g_meat } }
+	if = { limit = { var:te_tax_pb_g_oil >= 0 } set_variable = { name = te_tax_en_g_oil value = var:te_tax_pb_g_oil } }
+	if = { limit = { var:te_tax_pb_g_opium >= 0 } set_variable = { name = te_tax_en_g_opium value = var:te_tax_pb_g_opium } }
+	if = { limit = { var:te_tax_pb_g_paper >= 0 } set_variable = { name = te_tax_en_g_paper value = var:te_tax_pb_g_paper } }
+	if = { limit = { var:te_tax_pb_g_porcelain >= 0 } set_variable = { name = te_tax_en_g_porcelain value = var:te_tax_pb_g_porcelain } }
+	if = { limit = { var:te_tax_pb_g_radios >= 0 } set_variable = { name = te_tax_en_g_radios value = var:te_tax_pb_g_radios } }
+	if = { limit = { var:te_tax_pb_g_services >= 0 } set_variable = { name = te_tax_en_g_services value = var:te_tax_pb_g_services } }
+	if = { limit = { var:te_tax_pb_g_silk >= 0 } set_variable = { name = te_tax_en_g_silk value = var:te_tax_pb_g_silk } }
+	if = { limit = { var:te_tax_pb_g_small_arms >= 0 } set_variable = { name = te_tax_en_g_small_arms value = var:te_tax_pb_g_small_arms } }
+	if = { limit = { var:te_tax_pb_g_steamers >= 0 } set_variable = { name = te_tax_en_g_steamers value = var:te_tax_pb_g_steamers } }
+	if = { limit = { var:te_tax_pb_g_sugar >= 0 } set_variable = { name = te_tax_en_g_sugar value = var:te_tax_pb_g_sugar } }
+	if = { limit = { var:te_tax_pb_g_tea >= 0 } set_variable = { name = te_tax_en_g_tea value = var:te_tax_pb_g_tea } }
+	if = { limit = { var:te_tax_pb_g_telephones >= 0 } set_variable = { name = te_tax_en_g_telephones value = var:te_tax_pb_g_telephones } }
+	if = { limit = { var:te_tax_pb_g_tobacco >= 0 } set_variable = { name = te_tax_en_g_tobacco value = var:te_tax_pb_g_tobacco } }
+	if = { limit = { var:te_tax_pb_g_tourism >= 0 } set_variable = { name = te_tax_en_g_tourism value = var:te_tax_pb_g_tourism } }
+	if = { limit = { var:te_tax_pb_g_transportation >= 0 } set_variable = { name = te_tax_en_g_transportation value = var:te_tax_pb_g_transportation } }
+	if = { limit = { var:te_tax_pb_g_wine >= 0 } set_variable = { name = te_tax_en_g_wine value = var:te_tax_pb_g_wine } }
+	if = { limit = { var:te_tax_pb_g_wood >= 0 } set_variable = { name = te_tax_en_g_wood value = var:te_tax_pb_g_wood } }
+	if = { limit = { var:te_tax_pb_agrel >= 0 } set_variable = { name = te_tax_en_agrel value = var:te_tax_pb_agrel } }
+	if = { limit = { var:te_tax_pb_regrel >= 0 } set_variable = { name = te_tax_en_regrel value = var:te_tax_pb_regrel } }
+	# A package that restates regional relief names its whole state set.
+	if = {
+		limit = { var:te_tax_pb_regrel_states_set = 1 }
+		every_scope_state = {
+			if = {
+				limit = {
+					has_variable = te_tax_pending_relief_b
+					var:te_tax_pending_relief_b = 1
+				}
+				set_variable = { name = te_tax_relief_state value = 1 }
+			}
+			else_if = {
+				limit = { has_variable = te_tax_relief_state }
+				set_variable = { name = te_tax_relief_state value = 0 }
+			}
+		}
+	}
+	every_scope_state = {
+		limit = { has_variable = te_tax_pending_relief_b }
+		set_variable = { name = te_tax_pending_relief_b value = 0 }
+	}
+}
+
+# Slot b: writes an approved package from the bill record (te_tax_bl_*). Called
+# only through te_tax_store_package, after te_tax_can_store_package and with
+# scope:te_tax_country saved. Every payload field is written, so nothing stale from an
+# earlier package survives. A sunset is due + offset, written only for an offset of at
+# least one month; its successor is the value the provision will hold just before the
+# due month: the other slot's value if that awaiting package touches it earlier (or
+# that package's successor, if its own sunset comes first), else the enacted value
+# (or the enacted successor, if the enacted sunset comes first). seq = one above both
+# slots. The slot is switched on last.
+te_tax_gen_store_b = {
+	set_variable = { name = te_tax_pb_due value = var:te_tax_bl_due }
+	if = {
+		limit = { var:te_tax_pa_seq > var:te_tax_pb_seq }
+		set_variable = { name = te_tax_pb_seq value = var:te_tax_pa_seq }
+	}
+	change_variable = { name = te_tax_pb_seq add = 1 }
+	set_variable = { name = te_tax_pb_wage value = var:te_tax_bl_wage }
+	set_variable = { name = te_tax_pb_xver_wage value = var:te_tax_bl_xver_wage }
+	if = {
+		limit = {
+			var:te_tax_bl_wage >= 0
+			var:te_tax_bl_wage_sun >= 1
+		}
+		set_variable = { name = te_tax_pb_wage_exp value = var:te_tax_bl_due }
+		change_variable = { name = te_tax_pb_wage_exp add = var:te_tax_bl_wage_sun }
+		set_variable = { name = te_tax_pb_wage_succ value = var:te_tax_en_wage }
+		if = {
+			limit = {
+				var:te_tax_en_wage_exp >= 0
+				var:te_tax_en_wage_exp <= var:te_tax_bl_due
+				var:te_tax_en_wage_succ >= 0
+			}
+			set_variable = { name = te_tax_pb_wage_succ value = var:te_tax_en_wage_succ }
+		}
+		# The other slot's payload exists only while it is on, so read it nested.
+		if = {
+			limit = {
+				var:te_tax_pa_on = 1
+				var:te_tax_pa_state = 1
+				var:te_tax_pa_due < var:te_tax_bl_due
+			}
+			if = {
+				limit = { var:te_tax_pa_wage >= 0 }
+				set_variable = { name = te_tax_pb_wage_succ value = var:te_tax_pa_wage }
+				if = {
+					limit = {
+						var:te_tax_pa_wage_exp >= 0
+						var:te_tax_pa_wage_exp <= var:te_tax_bl_due
+						var:te_tax_pa_wage_succ >= 0
+					}
+					set_variable = { name = te_tax_pb_wage_succ value = var:te_tax_pa_wage_succ }
+				}
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pb_wage_exp value = -1 }
+		set_variable = { name = te_tax_pb_wage_succ value = -1 }
+	}
+	set_variable = { name = te_tax_pb_div value = var:te_tax_bl_div }
+	set_variable = { name = te_tax_pb_xver_div value = var:te_tax_bl_xver_div }
+	if = {
+		limit = {
+			var:te_tax_bl_div >= 0
+			var:te_tax_bl_div_sun >= 1
+		}
+		set_variable = { name = te_tax_pb_div_exp value = var:te_tax_bl_due }
+		change_variable = { name = te_tax_pb_div_exp add = var:te_tax_bl_div_sun }
+		set_variable = { name = te_tax_pb_div_succ value = var:te_tax_en_div }
+		if = {
+			limit = {
+				var:te_tax_en_div_exp >= 0
+				var:te_tax_en_div_exp <= var:te_tax_bl_due
+				var:te_tax_en_div_succ >= 0
+			}
+			set_variable = { name = te_tax_pb_div_succ value = var:te_tax_en_div_succ }
+		}
+		# The other slot's payload exists only while it is on, so read it nested.
+		if = {
+			limit = {
+				var:te_tax_pa_on = 1
+				var:te_tax_pa_state = 1
+				var:te_tax_pa_due < var:te_tax_bl_due
+			}
+			if = {
+				limit = { var:te_tax_pa_div >= 0 }
+				set_variable = { name = te_tax_pb_div_succ value = var:te_tax_pa_div }
+				if = {
+					limit = {
+						var:te_tax_pa_div_exp >= 0
+						var:te_tax_pa_div_exp <= var:te_tax_bl_due
+						var:te_tax_pa_div_succ >= 0
+					}
+					set_variable = { name = te_tax_pb_div_succ value = var:te_tax_pa_div_succ }
+				}
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pb_div_exp value = -1 }
+		set_variable = { name = te_tax_pb_div_succ value = -1 }
+	}
+	set_variable = { name = te_tax_pb_land value = var:te_tax_bl_land }
+	set_variable = { name = te_tax_pb_xver_land value = var:te_tax_bl_xver_land }
+	if = {
+		limit = {
+			var:te_tax_bl_land >= 0
+			var:te_tax_bl_land_sun >= 1
+		}
+		set_variable = { name = te_tax_pb_land_exp value = var:te_tax_bl_due }
+		change_variable = { name = te_tax_pb_land_exp add = var:te_tax_bl_land_sun }
+		set_variable = { name = te_tax_pb_land_succ value = var:te_tax_en_land }
+		if = {
+			limit = {
+				var:te_tax_en_land_exp >= 0
+				var:te_tax_en_land_exp <= var:te_tax_bl_due
+				var:te_tax_en_land_succ >= 0
+			}
+			set_variable = { name = te_tax_pb_land_succ value = var:te_tax_en_land_succ }
+		}
+		# The other slot's payload exists only while it is on, so read it nested.
+		if = {
+			limit = {
+				var:te_tax_pa_on = 1
+				var:te_tax_pa_state = 1
+				var:te_tax_pa_due < var:te_tax_bl_due
+			}
+			if = {
+				limit = { var:te_tax_pa_land >= 0 }
+				set_variable = { name = te_tax_pb_land_succ value = var:te_tax_pa_land }
+				if = {
+					limit = {
+						var:te_tax_pa_land_exp >= 0
+						var:te_tax_pa_land_exp <= var:te_tax_bl_due
+						var:te_tax_pa_land_succ >= 0
+					}
+					set_variable = { name = te_tax_pb_land_succ value = var:te_tax_pa_land_succ }
+				}
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pb_land_exp value = -1 }
+		set_variable = { name = te_tax_pb_land_succ value = -1 }
+	}
+	set_variable = { name = te_tax_pb_head value = var:te_tax_bl_head }
+	set_variable = { name = te_tax_pb_xver_head value = var:te_tax_bl_xver_head }
+	if = {
+		limit = {
+			var:te_tax_bl_head >= 0
+			var:te_tax_bl_head_sun >= 1
+		}
+		set_variable = { name = te_tax_pb_head_exp value = var:te_tax_bl_due }
+		change_variable = { name = te_tax_pb_head_exp add = var:te_tax_bl_head_sun }
+		set_variable = { name = te_tax_pb_head_succ value = var:te_tax_en_head }
+		if = {
+			limit = {
+				var:te_tax_en_head_exp >= 0
+				var:te_tax_en_head_exp <= var:te_tax_bl_due
+				var:te_tax_en_head_succ >= 0
+			}
+			set_variable = { name = te_tax_pb_head_succ value = var:te_tax_en_head_succ }
+		}
+		# The other slot's payload exists only while it is on, so read it nested.
+		if = {
+			limit = {
+				var:te_tax_pa_on = 1
+				var:te_tax_pa_state = 1
+				var:te_tax_pa_due < var:te_tax_bl_due
+			}
+			if = {
+				limit = { var:te_tax_pa_head >= 0 }
+				set_variable = { name = te_tax_pb_head_succ value = var:te_tax_pa_head }
+				if = {
+					limit = {
+						var:te_tax_pa_head_exp >= 0
+						var:te_tax_pa_head_exp <= var:te_tax_bl_due
+						var:te_tax_pa_head_succ >= 0
+					}
+					set_variable = { name = te_tax_pb_head_succ value = var:te_tax_pa_head_succ }
+				}
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pb_head_exp value = -1 }
+		set_variable = { name = te_tax_pb_head_succ value = -1 }
+	}
+	set_variable = { name = te_tax_pb_cons value = var:te_tax_bl_cons }
+	set_variable = { name = te_tax_pb_xver_cons value = var:te_tax_bl_xver_cons }
+	if = {
+		limit = {
+			var:te_tax_bl_cons >= 0
+			var:te_tax_bl_cons_sun >= 1
+		}
+		set_variable = { name = te_tax_pb_cons_exp value = var:te_tax_bl_due }
+		change_variable = { name = te_tax_pb_cons_exp add = var:te_tax_bl_cons_sun }
+		set_variable = { name = te_tax_pb_cons_succ value = var:te_tax_en_cons }
+		if = {
+			limit = {
+				var:te_tax_en_cons_exp >= 0
+				var:te_tax_en_cons_exp <= var:te_tax_bl_due
+				var:te_tax_en_cons_succ >= 0
+			}
+			set_variable = { name = te_tax_pb_cons_succ value = var:te_tax_en_cons_succ }
+		}
+		# The other slot's payload exists only while it is on, so read it nested.
+		if = {
+			limit = {
+				var:te_tax_pa_on = 1
+				var:te_tax_pa_state = 1
+				var:te_tax_pa_due < var:te_tax_bl_due
+			}
+			if = {
+				limit = { var:te_tax_pa_cons >= 0 }
+				set_variable = { name = te_tax_pb_cons_succ value = var:te_tax_pa_cons }
+				if = {
+					limit = {
+						var:te_tax_pa_cons_exp >= 0
+						var:te_tax_pa_cons_exp <= var:te_tax_bl_due
+						var:te_tax_pa_cons_succ >= 0
+					}
+					set_variable = { name = te_tax_pb_cons_succ value = var:te_tax_pa_cons_succ }
+				}
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pb_cons_exp value = -1 }
+		set_variable = { name = te_tax_pb_cons_succ value = -1 }
+	}
+	set_variable = { name = te_tax_pb_g_aeroplanes value = var:te_tax_bl_g_aeroplanes }
+	set_variable = { name = te_tax_pb_g_automobiles value = var:te_tax_bl_g_automobiles }
+	set_variable = { name = te_tax_pb_g_clippers value = var:te_tax_bl_g_clippers }
+	set_variable = { name = te_tax_pb_g_clothes value = var:te_tax_bl_g_clothes }
+	set_variable = { name = te_tax_pb_g_coal value = var:te_tax_bl_g_coal }
+	set_variable = { name = te_tax_pb_g_coffee value = var:te_tax_bl_g_coffee }
+	set_variable = { name = te_tax_pb_g_consumer_appliances value = var:te_tax_bl_g_consumer_appliances }
+	set_variable = { name = te_tax_pb_g_digital_access value = var:te_tax_bl_g_digital_access }
+	set_variable = { name = te_tax_pb_g_digital_assets value = var:te_tax_bl_g_digital_assets }
+	set_variable = { name = te_tax_pb_g_electricity value = var:te_tax_bl_g_electricity }
+	set_variable = { name = te_tax_pb_g_fabric value = var:te_tax_bl_g_fabric }
+	set_variable = { name = te_tax_pb_g_fine_art value = var:te_tax_bl_g_fine_art }
+	set_variable = { name = te_tax_pb_g_fish value = var:te_tax_bl_g_fish }
+	set_variable = { name = te_tax_pb_g_fruit value = var:te_tax_bl_g_fruit }
+	set_variable = { name = te_tax_pb_g_furniture value = var:te_tax_bl_g_furniture }
+	set_variable = { name = te_tax_pb_g_glass value = var:te_tax_bl_g_glass }
+	set_variable = { name = te_tax_pb_g_grain value = var:te_tax_bl_g_grain }
+	set_variable = { name = te_tax_pb_g_groceries value = var:te_tax_bl_g_groceries }
+	set_variable = { name = te_tax_pb_g_liquor value = var:te_tax_bl_g_liquor }
+	set_variable = { name = te_tax_pb_g_luxury_clothes value = var:te_tax_bl_g_luxury_clothes }
+	set_variable = { name = te_tax_pb_g_luxury_furniture value = var:te_tax_bl_g_luxury_furniture }
+	set_variable = { name = te_tax_pb_g_meat value = var:te_tax_bl_g_meat }
+	set_variable = { name = te_tax_pb_g_oil value = var:te_tax_bl_g_oil }
+	set_variable = { name = te_tax_pb_g_opium value = var:te_tax_bl_g_opium }
+	set_variable = { name = te_tax_pb_g_paper value = var:te_tax_bl_g_paper }
+	set_variable = { name = te_tax_pb_g_porcelain value = var:te_tax_bl_g_porcelain }
+	set_variable = { name = te_tax_pb_g_radios value = var:te_tax_bl_g_radios }
+	set_variable = { name = te_tax_pb_g_services value = var:te_tax_bl_g_services }
+	set_variable = { name = te_tax_pb_g_silk value = var:te_tax_bl_g_silk }
+	set_variable = { name = te_tax_pb_g_small_arms value = var:te_tax_bl_g_small_arms }
+	set_variable = { name = te_tax_pb_g_steamers value = var:te_tax_bl_g_steamers }
+	set_variable = { name = te_tax_pb_g_sugar value = var:te_tax_bl_g_sugar }
+	set_variable = { name = te_tax_pb_g_tea value = var:te_tax_bl_g_tea }
+	set_variable = { name = te_tax_pb_g_telephones value = var:te_tax_bl_g_telephones }
+	set_variable = { name = te_tax_pb_g_tobacco value = var:te_tax_bl_g_tobacco }
+	set_variable = { name = te_tax_pb_g_tourism value = var:te_tax_bl_g_tourism }
+	set_variable = { name = te_tax_pb_g_transportation value = var:te_tax_bl_g_transportation }
+	set_variable = { name = te_tax_pb_g_wine value = var:te_tax_bl_g_wine }
+	set_variable = { name = te_tax_pb_g_wood value = var:te_tax_bl_g_wood }
+	set_variable = { name = te_tax_pb_xver_goods value = var:te_tax_bl_xver_goods }
+	set_variable = { name = te_tax_pb_agrel value = var:te_tax_bl_agrel }
+	set_variable = { name = te_tax_pb_regrel value = var:te_tax_bl_regrel }
+	set_variable = { name = te_tax_pb_xver_relief value = var:te_tax_bl_xver_relief }
+	# Regional relief: a bill that touches it (te_tax_bl_regrel >= 0) names its whole
+	# state set in te_tax_bl_relief_states, possibly none; commencement moves the marks
+	# to te_tax_relief_state.
+	every_scope_state = {
+		limit = { has_variable = te_tax_pending_relief_b }
+		set_variable = { name = te_tax_pending_relief_b value = 0 }
+	}
+	if = {
+		limit = { var:te_tax_bl_regrel >= 0 }
+		set_variable = { name = te_tax_pb_regrel_states_set value = 1 }
+		if = {
+			limit = { has_variable_list = te_tax_bl_relief_states }
+			every_in_list = {
+				variable = te_tax_bl_relief_states
+				limit = { owner = scope:te_tax_country }
+				set_variable = { name = te_tax_pending_relief_b value = 1 }
+			}
+		}
+	}
+	else = {
+		set_variable = { name = te_tax_pb_regrel_states_set value = 0 }
+	}
+	debug_log = "TE_TAX stored slot=b; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	set_variable = { name = te_tax_pb_state value = 1 }
+	set_variable = { name = te_tax_pb_on value = 1 }
+}
+
+# te_tax_next_month: the earliest month with a transition due, -1 if none. Enacted
+# sunsets and awaiting packages count; a held package waits for rescheduling and does
+# not. A deferred sunset keeps it at the current month until it runs.
+te_tax_gen_next_month = {
+	set_variable = { name = te_tax_next_month value = -1 }
+	if = {
+		limit = {
+			var:te_tax_en_wage_exp >= 0
+			OR = {
+				var:te_tax_next_month < 0
+				var:te_tax_en_wage_exp < var:te_tax_next_month
+			}
+		}
+		set_variable = { name = te_tax_next_month value = var:te_tax_en_wage_exp }
+	}
+	if = {
+		limit = {
+			var:te_tax_en_div_exp >= 0
+			OR = {
+				var:te_tax_next_month < 0
+				var:te_tax_en_div_exp < var:te_tax_next_month
+			}
+		}
+		set_variable = { name = te_tax_next_month value = var:te_tax_en_div_exp }
+	}
+	if = {
+		limit = {
+			var:te_tax_en_land_exp >= 0
+			OR = {
+				var:te_tax_next_month < 0
+				var:te_tax_en_land_exp < var:te_tax_next_month
+			}
+		}
+		set_variable = { name = te_tax_next_month value = var:te_tax_en_land_exp }
+	}
+	if = {
+		limit = {
+			var:te_tax_en_head_exp >= 0
+			OR = {
+				var:te_tax_next_month < 0
+				var:te_tax_en_head_exp < var:te_tax_next_month
+			}
+		}
+		set_variable = { name = te_tax_next_month value = var:te_tax_en_head_exp }
+	}
+	if = {
+		limit = {
+			var:te_tax_en_cons_exp >= 0
+			OR = {
+				var:te_tax_next_month < 0
+				var:te_tax_en_cons_exp < var:te_tax_next_month
+			}
+		}
+		set_variable = { name = te_tax_next_month value = var:te_tax_en_cons_exp }
+	}
+	if = {
+		limit = {
+			var:te_tax_pa_on = 1
+			var:te_tax_pa_state = 1
+			OR = {
+				var:te_tax_next_month < 0
+				var:te_tax_pa_due < var:te_tax_next_month
+			}
+		}
+		set_variable = { name = te_tax_next_month value = var:te_tax_pa_due }
+	}
+	if = {
+		limit = {
+			var:te_tax_pb_on = 1
+			var:te_tax_pb_state = 1
+			OR = {
+				var:te_tax_next_month < 0
+				var:te_tax_pb_due < var:te_tax_next_month
+			}
+		}
+		set_variable = { name = te_tax_next_month value = var:te_tax_pb_due }
+	}
+}
+
+# The history ring: 8 entries te_tax_h<n>_*, te_tax_h_head pointing at the newest
+# (0 = empty). Advances the head, then overwrites that entry. KIND: the schema doc's
+# history kinds; SLOT: none, a or b (stored as te_tax_slot_id_<SLOT>); INST: 1..5 for
+# the instrument a sunset executed (INSTRUMENTS order), else 0. Public entry point:
+# te_tax_history_push = { KIND SLOT }.
+te_tax_gen_history_write = {
+	if = {
+		limit = {
+			var:te_tax_h_head >= 1
+			var:te_tax_h_head < 8
+		}
+		change_variable = { name = te_tax_h_head add = 1 }
+	}
+	else = {
+		set_variable = { name = te_tax_h_head value = 1 }
+	}
+	if = {
+		limit = { var:te_tax_h_head = 1 }
+		set_variable = { name = te_tax_h1_month value = te_history_month_index }
+		set_variable = { name = te_tax_h1_kind value = $KIND$ }
+		set_variable = { name = te_tax_h1_slot value = te_tax_slot_id_$SLOT$ }
+		set_variable = { name = te_tax_h1_inst value = $INST$ }
+		set_variable = { name = te_tax_h1_version value = var:te_tax_code_version }
+	}
+	else_if = {
+		limit = { var:te_tax_h_head = 2 }
+		set_variable = { name = te_tax_h2_month value = te_history_month_index }
+		set_variable = { name = te_tax_h2_kind value = $KIND$ }
+		set_variable = { name = te_tax_h2_slot value = te_tax_slot_id_$SLOT$ }
+		set_variable = { name = te_tax_h2_inst value = $INST$ }
+		set_variable = { name = te_tax_h2_version value = var:te_tax_code_version }
+	}
+	else_if = {
+		limit = { var:te_tax_h_head = 3 }
+		set_variable = { name = te_tax_h3_month value = te_history_month_index }
+		set_variable = { name = te_tax_h3_kind value = $KIND$ }
+		set_variable = { name = te_tax_h3_slot value = te_tax_slot_id_$SLOT$ }
+		set_variable = { name = te_tax_h3_inst value = $INST$ }
+		set_variable = { name = te_tax_h3_version value = var:te_tax_code_version }
+	}
+	else_if = {
+		limit = { var:te_tax_h_head = 4 }
+		set_variable = { name = te_tax_h4_month value = te_history_month_index }
+		set_variable = { name = te_tax_h4_kind value = $KIND$ }
+		set_variable = { name = te_tax_h4_slot value = te_tax_slot_id_$SLOT$ }
+		set_variable = { name = te_tax_h4_inst value = $INST$ }
+		set_variable = { name = te_tax_h4_version value = var:te_tax_code_version }
+	}
+	else_if = {
+		limit = { var:te_tax_h_head = 5 }
+		set_variable = { name = te_tax_h5_month value = te_history_month_index }
+		set_variable = { name = te_tax_h5_kind value = $KIND$ }
+		set_variable = { name = te_tax_h5_slot value = te_tax_slot_id_$SLOT$ }
+		set_variable = { name = te_tax_h5_inst value = $INST$ }
+		set_variable = { name = te_tax_h5_version value = var:te_tax_code_version }
+	}
+	else_if = {
+		limit = { var:te_tax_h_head = 6 }
+		set_variable = { name = te_tax_h6_month value = te_history_month_index }
+		set_variable = { name = te_tax_h6_kind value = $KIND$ }
+		set_variable = { name = te_tax_h6_slot value = te_tax_slot_id_$SLOT$ }
+		set_variable = { name = te_tax_h6_inst value = $INST$ }
+		set_variable = { name = te_tax_h6_version value = var:te_tax_code_version }
+	}
+	else_if = {
+		limit = { var:te_tax_h_head = 7 }
+		set_variable = { name = te_tax_h7_month value = te_history_month_index }
+		set_variable = { name = te_tax_h7_kind value = $KIND$ }
+		set_variable = { name = te_tax_h7_slot value = te_tax_slot_id_$SLOT$ }
+		set_variable = { name = te_tax_h7_inst value = $INST$ }
+		set_variable = { name = te_tax_h7_version value = var:te_tax_code_version }
+	}
+	else_if = {
+		limit = { var:te_tax_h_head = 8 }
+		set_variable = { name = te_tax_h8_month value = te_history_month_index }
+		set_variable = { name = te_tax_h8_kind value = $KIND$ }
+		set_variable = { name = te_tax_h8_slot value = te_tax_slot_id_$SLOT$ }
+		set_variable = { name = te_tax_h8_inst value = $INST$ }
+		set_variable = { name = te_tax_h8_version value = var:te_tax_code_version }
+	}
 }

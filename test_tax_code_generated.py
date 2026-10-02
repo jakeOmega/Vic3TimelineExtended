@@ -236,6 +236,9 @@ class ScriptValueTest(unittest.TestCase):
             want[f"te_tax_max_{key}"] = Decimal(max_idx)
             if key in PERCENT_KEYS:
                 want[f"te_tax_pct_step_{key}"] = Decimal(step) * 100
+        # The scheduler's history-ring slot ids (test_tax_code_scheduler.py).
+        for name, value in (("none", 0), ("a", 1), ("b", 2)):
+            want[f"te_tax_slot_id_{name}"] = Decimal(value)
         self.assertEqual({k: Decimal(v) for k, v in values.items()}, want)
 
 
