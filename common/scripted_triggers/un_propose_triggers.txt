@@ -562,7 +562,7 @@ un_propose_ceasefire_possible = {
 	un_ceasefire_can_table = yes
 }
 
-# Establish the World Development Fund — recommendatory, simple majority; Reform II. An institution: names no one.
+# Establish the World Development Fund — recommendatory, simple majority; needs no reform (owner, 2026-10-02): its form follows the charter level once it stands. An institution: names no one.
 # Scope: the proposing country
 un_propose_development_fund_available = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -572,7 +572,6 @@ un_propose_development_fund_available = {
 # Scope: the proposing country
 un_propose_development_fund_possible = {
 	un_propose_own_motion_possible = yes
-	un_charter_has_reform_tt = { LEVEL = 2 TT = un_charter_needs_reform_2_tt }
 	custom_tooltip = {
 		text = un_no_resolution_cooldown_tt
 		NOT = { un_resolution_topic_on_cooldown = { TOPIC = development_fund } }

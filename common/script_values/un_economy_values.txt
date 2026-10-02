@@ -10,23 +10,54 @@
 # A trigger never puts a script value on its left: every comparison below
 # reads a variable or a global the monthly update wrote, against a value.
 #
-# RE-TUNING CHECKLIST. These figures are also written in words in
-# localization/english/te_un_economy_l_english.yml (the two concepts, the
-# proposal and vote texts, the pledge buttons and the delivery pillar's
-# tooltip): a quarter of the budget, half the members' average, a quarter of
-# the grain and at most 2,500 units, 500 units held, 5,000 units a mission,
-# +0.15 food security and -5% mortality for a year, -10 at 5% and +3 below
-# half a percent. Change both.
+# RE-TUNING CHECKLIST. These figures are also written in words in the loc
+# (te_concepts, te_miscellaneous, te_journal_entries and te_events
+# _l_english.yml: the two concepts, the proposal and vote texts, the charter
+# reforms' texts, the Development Programs and pledge buttons and the delivery
+# pillar's tooltip): the Fund's three forms (the Development Programs
+# contributions only, below a tenth of the members' average; 5% of the budget
+# below a quarter after Reform I; a quarter of the budget below half after
+# Reform II); a quarter of the grain and at most 2,500 units, 500 units held,
+# 5,000 units a mission, +0.15 food security and -5% mortality for a year, -10
+# at 5% and +3 below half a percent. Change both.
 # ============================================================================
 
 # ---- The World Development Fund: tuning ------------------------------------------
 # The Fund's share of the budget is un_dev_fund_budget_share
-# (un_charter_values.txt: a quarter while it stands), shared with the Standing
-# UN Force and the lending facility.
+# (un_charter_values.txt: none under the founding charter, 5% after Reform I,
+# a quarter after Reform II, while it stands), shared with the Standing UN
+# Force and the lending facility. Its form follows the charter level every
+# month: a reform strengthens a standing Fund with no new vote.
 
 # A member below this share of the represented members' GDP per head receives
-# grants (owner, 2026-10-02: half the average).
-un_dev_fund_line_share = { value = 0.5 }
+# grants (owner, 2026-10-02), by charter level: a tenth of the average under
+# the founding charter, a quarter after Reform I, half after Reform II.
+un_dev_fund_line_share_founding = { value = 0.1 }
+un_dev_fund_line_share_reform_1 = { value = 0.25 }
+un_dev_fund_line_share_reform_2 = { value = 0.5 }
+
+# The line's share at the charter's current level. Globals only.
+un_dev_fund_line_share = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_charter_level
+			global_var:un_charter_level >= 2
+		}
+		add = un_dev_fund_line_share_reform_2
+	}
+	else_if = {
+		limit = {
+			has_global_variable = un_charter_level
+			global_var:un_charter_level >= 1
+		}
+		add = un_dev_fund_line_share_reform_1
+	}
+	else = {
+		add = un_dev_fund_line_share_founding
+	}
+}
+
 # At or above this multiple of the average, a member is among the richest:
 # it leans hard against the Fund, which it pays for and never draws on.
 un_dev_fund_rich_share = { value = 2 }
@@ -77,7 +108,8 @@ un_dev_fund_avg_value = {
 	}
 }
 
-# The line a recipient's GDP per head must be under. Globals only.
+# The line a recipient's GDP per head must be under, at the charter's current
+# level. Globals only.
 un_dev_fund_line_value = {
 	value = 0
 	if = {
@@ -118,10 +150,11 @@ un_dev_fund_recipients_value = {
 
 # ---- The World Development Fund: the grants -------------------------------------
 
-# What the Fund pays out a week, all recipients together: its share of the
-# budget the paying members' dues make (un_budget_weekly, snapshotted by
-# un_authority_monthly_update). 0 while it does not stand. Globals only.
-un_dev_fund_pot_weekly_value = {
+# What the Fund takes of the budget a week: its share at the charter's level
+# of what the paying members' dues make (un_budget_weekly, snapshotted by
+# un_authority_monthly_update). 0 while it does not stand, and under the
+# founding charter. Globals only.
+un_dev_fund_budget_weekly_value = {
 	value = 0
 	if = {
 		limit = { has_global_variable = un_budget_weekly }
@@ -130,14 +163,35 @@ un_dev_fund_pot_weekly_value = {
 	}
 }
 
-# What it would pay out a week if it stood today (the chamber's preview).
-# Globals only.
+# What the Fund pays out a week, all recipients together: its share of the
+# budget, and the Development Programs contributions
+# (global_var:un_dev_fund_donations, summed by this month's update before the
+# grants are worked out), so the grants pay out exactly what the budget and
+# the contributors put in. 0 while it does not stand. Globals only.
+un_dev_fund_pot_weekly_value = {
+	value = un_dev_fund_budget_weekly_value
+	if = {
+		limit = {
+			has_global_variable = un_inst_development_fund
+			has_global_variable = un_dev_fund_donations
+		}
+		add = global_var:un_dev_fund_donations
+	}
+}
+
+# What it would pay out a week if it stood today (the chamber's preview): its
+# share of the budget at the current level, and the contributions being paid
+# now (under the founding charter, the contributions alone). Globals only.
 un_dev_fund_pot_preview_value = {
 	value = 0
 	if = {
 		limit = { has_global_variable = un_budget_weekly }
 		add = global_var:un_budget_weekly
-		multiply = un_dev_fund_budget_share_base
+		multiply = un_dev_fund_budget_share_at_level
+	}
+	if = {
+		limit = { has_global_variable = un_dev_fund_donations }
+		add = global_var:un_dev_fund_donations
 	}
 }
 
@@ -172,6 +226,37 @@ un_dev_fund_grant_preview_value = {
 	value = un_dev_fund_pop_share_value
 	multiply = un_dev_fund_pot_preview_value
 	min = 0
+}
+
+# ---- The World Development Fund: the voluntary part --------------------------------
+# The Development Programs programme (un_fund_development_button, un_buttons.txt)
+# is the Fund's voluntary part (owner, 2026-10-02): while the Fund stands,
+# under every charter, each contributor's weekly programme expense pays its
+# grants. The programme is unchanged (its cost is un_program_expense_value,
+# cached on the country as var:un_development_expense_cached by the journal
+# entry's monthly pulse); the Fund only adds it to the pot. Snapshotted monthly
+# whether or not the Fund stands, so the chamber can preview it.
+
+# What the contributors pay a week, together: the represented members that run
+# the programme and pay their dues (un_dev_fund_contributor). Globals only.
+un_dev_fund_donations_value = {
+	value = 0
+	every_country = {
+		limit = {
+			un_dev_fund_contributor = yes
+			has_variable = un_development_expense_cached
+		}
+		add = var:un_development_expense_cached
+	}
+}
+
+# How many they are.
+un_dev_fund_contributors_value = {
+	value = 0
+	every_country = {
+		limit = { un_dev_fund_contributor = yes }
+		add = 1
+	}
 }
 
 # ---- The World Food Reserve: tuning ---------------------------------------------
@@ -353,7 +438,9 @@ un_fr_delivery_points_value = {
 
 # The World Development Fund: the members it would pay are strongly for, the
 # members above the average against (they pay its share of the dues and get
-# nothing back), the richest more so; laissez-faire governments against.
+# nothing back), the richest more so; laissez-faire governments against. "Below
+# the line" reads the line at the charter's current level (the monthly
+# snapshot, un_dev_fund_below_line).
 un_lean_interests_development_fund = {
 	value = 0
 	if = {
@@ -405,6 +492,7 @@ un_lean_interests_food_reserve = {
 # un_<key>_ai_chance: the scripted button's weight (un_buttons.txt). Scope: the
 # proposing country.
 
+# The line read is the one at the charter's current level.
 un_development_fund_ai_chance = {
 	value = 0
 	if = {
@@ -536,14 +624,45 @@ un_disp_dev_fund_pot_preview = {
 	value = un_dev_fund_pot_preview_value
 }
 
+# What the Fund takes of the budget a week (its share at the current level).
+un_disp_dev_fund_budget_weekly = {
+	value = un_dev_fund_budget_weekly_value
+}
+
 un_disp_dev_fund_budget_pct = {
 	value = un_dev_fund_budget_share
 	multiply = 100
 }
 
-un_disp_dev_fund_budget_base_pct = {
-	value = un_dev_fund_budget_share_base
+# The share it would take at the charter's current level (the preview).
+un_disp_dev_fund_budget_level_pct = {
+	value = un_dev_fund_budget_share_at_level
 	multiply = 100
+}
+
+# The line as a share of the members' average GDP per head, at the current
+# level: 10, 25 or 50.
+un_disp_dev_fund_line_pct = {
+	value = un_dev_fund_line_share
+	multiply = 100
+}
+
+# What the Development Programs contributors pay a week, all together, and
+# how many they are (this month's snapshot).
+un_disp_dev_fund_donations = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_dev_fund_donations }
+		add = global_var:un_dev_fund_donations
+	}
+}
+
+un_disp_dev_fund_contributors = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_dev_fund_contributors }
+		add = global_var:un_dev_fund_contributors
+	}
 }
 
 un_disp_force_budget_pct = {
@@ -589,6 +708,22 @@ un_disp_dev_fund_our_grant = {
 # Scope: country
 un_disp_dev_fund_our_grant_preview = {
 	value = un_dev_fund_grant_preview_value
+}
+
+# Our Development Programs contribution a week (the programme's expense).
+# Scope: country
+un_disp_dev_fund_our_contribution = {
+	value = 0
+	if = {
+		limit = { has_variable = un_development_expense_cached }
+		add = var:un_development_expense_cached
+	}
+}
+
+# What a contribution would cost us a week if we started one today: the
+# programme's expense (un_program_expense_value). Scope: country
+un_disp_dev_fund_our_contribution_preview = {
+	value = un_program_expense_value
 }
 
 # The hunger term and the share behind it. Globals only.

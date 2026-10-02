@@ -667,7 +667,7 @@ with the charter:
 A reform strengthens a Fund that already stands; nobody votes on it again.
 The donations are the [Fund Development Programs](#un-programs-and-great-power-stances)
 contributions of the major powers: while the Fund stands, a contributor's 0.5%
-of GDP a year pays its grants. You receive a grant only with a seat in the
+of GDP a year pays its grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
 Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
 laws allow no investment pool or your banking system has not started. The line
 and the grants are worked out each month. Our Obligations shows your grant, and

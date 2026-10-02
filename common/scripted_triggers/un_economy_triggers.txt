@@ -9,7 +9,9 @@
 # ---- The Assembly's business ---------------------------------------------------
 # The framework's un_propose_<key>_available asks the case, and
 # un_propose_<key>_possible the shared gates, the reform and the cooldown, then
-# the topic's own gates below (un_propose_triggers.txt).
+# the topic's own gates below (un_propose_triggers.txt). Neither institution
+# needs a charter reform (owner, 2026-10-02); the Fund's form follows the
+# charter level once it stands.
 
 # There is a Fund to found: none stands.
 # Scope: the proposing country
@@ -17,9 +19,10 @@ un_development_fund_case_exists = {
 	NOT = { has_global_variable = un_inst_development_fund }
 }
 
-# Any member may table it: the Fund is the poorer members' business as much as
-# the great powers'. Its one gate: the UN has a budget to share, which it has
-# only while its members are assessed dues (Contested and above).
+# Any member may table it, under any charter: the Fund is the poorer members'
+# business as much as the great powers'. Its one gate: the UN has a budget to
+# share, which it has only while its members are assessed dues (Contested and
+# above).
 # Scope: the proposing country
 un_development_fund_can_table = {
 	custom_tooltip = {
@@ -43,9 +46,11 @@ un_food_reserve_can_table = {
 
 # ---- The World Development Fund -----------------------------------------------------
 
-# Our GDP per head is below the Fund's line (half the represented members'
-# average). Both figures are the monthly snapshot (un_dev_fund_monthly_update),
-# which writes var:un_dev_fund_gdp_ph only on represented members.
+# Our GDP per head is below the Fund's line (a share of the represented
+# members' average that rises with the charter: a tenth, a quarter, half;
+# un_dev_fund_line_share). Both figures are the monthly snapshot
+# (un_dev_fund_monthly_update), which writes var:un_dev_fund_gdp_ph only on
+# represented members.
 # Scope: country
 un_dev_fund_below_line = {
 	has_variable = un_dev_fund_gdp_ph
@@ -78,6 +83,35 @@ un_dev_fund_eligible = {
 	NOT = { un_representation_suspended = yes }
 	NOT = { un_dues_is_withholding = yes }
 	un_dev_fund_below_line = yes
+}
+
+# A Development Programs contributor whose contribution pays the Fund's
+# grants (owner, 2026-10-02): a represented member that runs the programme
+# (un_standing_program_active_development: both of its modifiers on the
+# journal entry, un_fund_development_button) and pays its dues. Its weekly
+# programme expense (var:un_development_expense_cached) is summed into the pot
+# every month (un_dev_fund_donations_value); one that withholds its dues or
+# loses its seat still pays the programme but not the Fund.
+# Scope: country
+un_dev_fund_contributor = {
+	un_member_represented = yes
+	NOT = { un_dues_is_withholding = yes }
+	un_standing_program_active_development = yes
+}
+
+# No Development Programs contribution reaches the Fund this month (the
+# monthly snapshot of un_dev_fund_donations_value). Under the founding charter,
+# and at Moribund, when no dues are assessed, the contributions are its only
+# money.
+# Scope: any
+un_dev_fund_no_contributions = {
+	OR = {
+		NOT = { has_global_variable = un_dev_fund_donations }
+		AND = {
+			has_global_variable = un_dev_fund_donations
+			global_var:un_dev_fund_donations <= 0
+		}
+	}
 }
 
 # The grant can go into our investment pool: our laws keep one, and the

@@ -375,8 +375,11 @@ the classification and the loc.
    standing −5 (code 41), credibility −1 (ledger 32), and no referendum of its own for five
    years. An overlord that voted for it must hold the vote.
 8. **The Development Fund** (`un_economy_*`). Any member while dues are assessed, at any
-   charter level (tiered as item 7 above says: budget share 0 / 0.05 / 0.25 and line 0.1 /
-   0.25 / 0.5 by charter level, plus the Development Programs contributors' expense). The
+   charter level (tiered as item 7 above says: `un_dev_fund_budget_share_at_level` 0 / 0.05 /
+   0.25 and `un_dev_fund_line_share` 0.1 / 0.25 / 0.5 by charter level, plus
+   `global_var:un_dev_fund_donations`, the monthly sum of `var:un_development_expense_cached`
+   over the programme's contributors that are represented and paying dues,
+   `un_dev_fund_contributor`). Contributions flow even at Moribund, when the budget is 0. The
    members' average GDP per head is weighted by population. A grant is the
    recipient's share of the eligible members' people × the weekly pot, stored in
    `var:un_dev_fund_grant` and applied by a hidden event with the recipient as ROOT. It goes

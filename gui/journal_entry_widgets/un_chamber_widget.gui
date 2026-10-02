@@ -2907,7 +2907,8 @@ types un_chamber_widget_types
 			}
 
 			# Phase 7: the institutions the Assembly can found. The World Food
-			# Reserve needs no reform.
+			# Reserve and the World Development Fund need no reform (a reform
+			# strengthens a standing Fund), so neither row waits for Reform I.
 			un_chamber_subheader = {
 				visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				blockoverride "subheader_text" {
@@ -2939,7 +2940,6 @@ types un_chamber_widget_types
 			}
 
 			un_chamber_propose_row = {
-				visible = "[GetScriptedGui('un_chamber_reform_ii_in_view_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				blockoverride "row_text" {
 					text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)27' ) ).End)]"
 				}

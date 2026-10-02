@@ -389,7 +389,7 @@ un_propose_ceasefire_effect = {
 	}
 }
 
-# Establish the World Development Fund — recommendatory, simple majority; Reform II. An institution: names no one.
+# Establish the World Development Fund — recommendatory, simple majority; needs no reform (its form follows the charter level). An institution: names no one.
 # Scope: the proposing country
 un_propose_development_fund_effect = {
 	custom_tooltip = UN_PROPOSE_DEVELOPMENT_FUND_TT

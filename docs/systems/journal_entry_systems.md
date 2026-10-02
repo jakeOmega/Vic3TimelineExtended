@@ -795,6 +795,7 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
 | `un_court_defied_claimant` / `un_court_defied_region` / `un_court_barred_region` | country | Timed: who may table a mandate over which region after a defied ruling; the region a lost ruling bars a war goal in |
 | `un_cf_order_months` / `un_cf_fought_months` / `un_cf_victim` / `un_cf_debit_months` | country | A ceasefire order's months left, months fought on, its victim and the months of debit not yet booked |
 | `un_dev_fund_grant` | country | This member's weekly Development Fund grant (0 when none) |
+| `un_dev_fund_donations` / `un_dev_fund_contributors` | global | The Development Programs contributors' weekly expense, summed monthly into the Fund's pot, and how many they are |
 | `un_fr_pledged` | country | This member pledges grain to the World Food Reserve |
 | `un_fr_hunger_term` / `un_fr_famine_share` | global | The Delivery pillar's hunger term and the members' share of people in famine states |
 

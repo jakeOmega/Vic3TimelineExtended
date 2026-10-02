@@ -697,6 +697,11 @@ un_end_peacekeeping_button = {
 }
 
 # ---- 4. DEVELOPMENT PROGRAMS ----
+# While the World Development Fund stands (redesign phase 7, owner 2026-10-02),
+# this programme is the Fund's voluntary part: a represented contributor that
+# pays its dues pays the Fund's grants with its programme expense
+# (un_dev_fund_donations_value, un_economy_values.txt). Nothing here changes
+# for it.
 
 un_fund_development_button = {
 	name = "UN_FUND_DEVELOPMENT"
@@ -1078,8 +1083,11 @@ un_stop_undermining_button = {
 # (un_propose_triggers.txt, un_propose_effects.txt), and the weight is the
 # topic owner's (un_<key>_ai_chance; un_charter_effects.txt says who owns
 # what). Like the others, they are not hidden from a human, who sees them only
-# when there is a case to table. The three Reform II buttons also wait until
-# Reform I has carried (un_charter_reform_ii_in_view), as their chamber rows do.
+# when there is a case to table. The two Reform II buttons (the ceasefire and
+# the referendum) also wait until Reform I has carried
+# (un_charter_reform_ii_in_view), as their chamber rows do. The World
+# Development Fund needs no reform (owner, 2026-10-02): each reform strengthens
+# a standing Fund instead.
 
 un_propose_court_referral_button = {
 	name = "UN_PROPOSE_COURT_REFERRAL"
@@ -1193,10 +1201,7 @@ un_propose_development_fund_button = {
 	name = "UN_PROPOSE_DEVELOPMENT_FUND"
 	desc = "UN_PROPOSE_DEVELOPMENT_FUND_DESC"
 
-	visible = {
-		un_charter_reform_ii_in_view = yes
-		un_propose_development_fund_available = yes
-	}
+	visible = { un_propose_development_fund_available = yes }
 
 	possible = { un_propose_development_fund_possible = yes }
 

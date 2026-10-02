@@ -1224,7 +1224,7 @@ un_chamber_vote_sgui = {
 #   op 24  Request Electoral Observers (phase 7, Reform I)
 #   op 25  Establish the World Food Reserve (phase 7, no reform)
 #   op 26  Binding Ceasefire (phase 7, Reform II)
-#   op 27  Establish the World Development Fund (phase 7, Reform II)
+#   op 27  Establish the World Development Fund (phase 7, no reform)
 #   op 28  Supervised Self-Determination Referendum (phase 7, Reform II)
 #
 # The op table is repeated in the widget and in the row renderers in
@@ -1790,9 +1790,10 @@ un_chamber_nuclear_rule_sgui = {
 	}
 }
 
-# The rows of business Charter Reform II unlocks (ops 19, 26, 27, 28): hidden
+# The rows of business Charter Reform II unlocks (ops 19, 26, 28): hidden
 # until Reform I carries, so the list shows only the next reform's business
-# (un_charter_reform_ii_in_view). A root-only yes/no GUI, like the two above.
+# (un_charter_reform_ii_in_view). The World Development Fund (op 27) needs no
+# reform, and is always in view. A root-only yes/no GUI, like the two above.
 un_chamber_reform_ii_in_view_sgui = {
 	scope = country
 

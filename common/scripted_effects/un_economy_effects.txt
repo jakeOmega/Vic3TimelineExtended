@@ -17,15 +17,38 @@
 #                    refresh resolve against the country they are for)
 #   the notices      common/messages/un_economy_messages.txt
 #
-# THE WORLD DEVELOPMENT FUND (development_fund; Charter Reform II)
+# THE WORLD DEVELOPMENT FUND (development_fund; no reform needed)
+#   One topic, one institution (owner, 2026-10-02). It can be founded under
+#   any charter, and once it stands its form follows the charter level
+#   (un_charter_level_value) every month, with no new vote:
+#     founding charter  voluntary: the contributions only; line a tenth of
+#                       the members' average GDP per head
+#     Reform I          assessed: 5% of the budget + the contributions; line a
+#                       quarter of the average
+#     Reform II         full: a quarter of the budget + the contributions; line
+#                       half the average
+#   (un_dev_fund_budget_share_reform_1/_2, un_charter_values.txt;
+#   un_dev_fund_line_share_founding/_reform_1/_reform_2, un_economy_values.txt.)
+#   THE VOLUNTARY PART is the Development Programs programme
+#   (un_fund_development_button, un_buttons.txt; owner, 2026-10-02): while the
+#   Fund stands, every represented member that runs it and pays its dues
+#   (un_dev_fund_contributor) pays the Fund's grants with its programme expense
+#   (var:un_development_expense_cached, the multiplier of
+#   un_development_contributor_cost). The programme itself is untouched: its
+#   rank gate, cost, benefits, standing award and funding-pillar credit stay
+#   as they were; the Fund only counts the expense into its pot.
 #   global   un_inst_development_fund    in force (un_development_fund_on_carried)
 #            un_dev_fund_members_gdp /   the represented members' GDP and people
 #            un_dev_fund_members_pop
 #            un_dev_fund_avg             their GDP per head
-#            un_dev_fund_line            half of it: the recipients' line
+#            un_dev_fund_line            the recipients' line: the level's share
+#                                        of the average
 #            un_dev_fund_rich_line       twice it: the richest (the lean)
 #            un_dev_fund_eligible_pop    the people of the members below the line
 #            un_dev_fund_recipients      how many members they are
+#            un_dev_fund_donations       the contributors' programme expense a
+#                                        week, together (the voluntary part)
+#            un_dev_fund_contributors    how many they are
 #   country  un_dev_fund_gdp_ph          GDP per head (represented members only)
 #            un_dev_fund_grant           this month's weekly grant: the
 #                                        multiplier of the grant modifier. Set
@@ -35,10 +58,12 @@
 #   modifier un_dev_fund_pool_grant_modifier / un_dev_fund_treasury_grant_modifier,
 #            one or the other: un_dev_fund_country_refresh (un_economy.1) is
 #            the single refresh site, removing and re-adding monthly
-#   The snapshot and the grants are written by un_dev_fund_monthly_update
-#   (every month, from un_charter_monthly_update, after the budget snapshot
-#   in un_authority_monthly_update). Leaving the UN, withholding dues or
-#   rising above the line stops the grant at the next month.
+#   The snapshot, the contributions and the grants are written by
+#   un_dev_fund_monthly_update (every month, from un_charter_monthly_update,
+#   after the budget snapshot in un_authority_monthly_update). Leaving the UN,
+#   withholding dues or rising above the line stops the grant at the next
+#   month; a contributor that withholds its dues or loses its seat stops
+#   counting toward the pot then too.
 #
 # THE WORLD FOOD RESERVE (food_reserve; no reform)
 #   global   un_inst_food_reserve        in force (un_food_reserve_on_carried)
@@ -82,9 +107,9 @@
 
 # ---- The Assembly's business ---------------------------------------------------------
 
-# The World Development Fund carried: the Fund stands from now, and its first
-# grants are paid from the next monthly update. Recommendatory, so there is no
-# vetoed form.
+# The World Development Fund carried: the Fund stands from now, in the form
+# the charter's level gives it, and its first grants are paid from the next
+# monthly update. Recommendatory, so there is no vetoed form.
 # Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution
 un_development_fund_on_carried = {
 	custom_tooltip = un_vote_development_fund_passed_tt
@@ -113,12 +138,20 @@ un_food_reserve_on_carried = {
 	}
 }
 
-# What the chamber's row previews while the Fund can be tabled: the pot today,
-# how many members it would pay and below what line, and what it would mean
-# for us. Root-level lines only (the row's lines print in order).
+# What the chamber's row previews while the Fund can be tabled: its form under
+# the charter as it stands (the budget share and the contributions, or the
+# contributions only under the founding charter) and the pot today, how many
+# members it would pay and below what line, and what it would mean for us.
+# Root-level lines only (the row's lines print in order).
 # Scope: country
 un_development_fund_chamber_preview = {
-	custom_tooltip_no_bullet = je_un_chamber_preview_development_fund
+	if = {
+		limit = { un_charter_has_reform = { LEVEL = 1 } }
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_voluntary
+	}
 	if = {
 		limit = { un_dev_fund_eligible = yes }
 		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_ours
@@ -154,9 +187,9 @@ un_economy_monthly_update = {
 	un_food_reserve_monthly_update = yes
 }
 
-# The Fund's line and recipients, snapshotted every month whether or not the
-# Fund stands (the chamber's row and the lean read them), then this month's
-# grants while it stands.
+# The Fund's line, recipients and contributions, snapshotted every month
+# whether or not the Fund stands (the chamber's row and the lean read them), at
+# the charter's current level; then this month's grants while it stands.
 # Scope: none
 un_dev_fund_monthly_update = {
 	# 1. Every represented member's GDP per head; a stale figure is dropped.
@@ -170,7 +203,8 @@ un_dev_fund_monthly_update = {
 			remove_variable = un_dev_fund_gdp_ph
 		}
 	}
-	# 2. The members' average, the line and the rich line.
+	# 2. The members' average, the line (at the charter's current level) and
+	#    the rich line.
 	set_global_variable = { name = un_dev_fund_members_gdp value = un_dev_fund_members_gdp_value }
 	set_global_variable = { name = un_dev_fund_members_pop value = un_dev_fund_members_pop_value }
 	set_global_variable = { name = un_dev_fund_avg value = un_dev_fund_avg_value }
@@ -179,7 +213,13 @@ un_dev_fund_monthly_update = {
 	# 3. Who the Fund pays, and their people.
 	set_global_variable = { name = un_dev_fund_eligible_pop value = un_dev_fund_eligible_pop_value }
 	set_global_variable = { name = un_dev_fund_recipients value = un_dev_fund_recipients_value }
-	# 4. This month's grants. A recipient's grant is stored here and applied
+	# 4. The voluntary part: the Development Programs contributions of the
+	#    represented members that pay their dues, a week, and how many they
+	#    are. The pot adds the sum while the Fund stands, so the grants pay out
+	#    what the contributors pay.
+	set_global_variable = { name = un_dev_fund_donations value = un_dev_fund_donations_value }
+	set_global_variable = { name = un_dev_fund_contributors value = un_dev_fund_contributors_value }
+	# 5. This month's grants. A recipient's grant is stored here and applied
 	#    by un_economy.1, whose ROOT is the recipient: a multiplier read from
 	#    this root-less pulse would resolve against nothing and silently apply
 	#    1 (scripting_best_practices.md, "multiplier = var:X Resolves Against
@@ -438,14 +478,20 @@ un_food_reserve_withdraw_pledge = {
 # ---- The chamber ----------------------------------------------------------------------
 
 # Our part in the two institutions, under Our Obligations' dues (called at the
-# end of un_chamber_dues_lines, un_chamber_display_effects.txt). Root-level
-# lines only.
+# end of un_chamber_dues_lines, un_chamber_display_effects.txt): the Fund's
+# grant to us, or why there is none; what our Development Programs
+# contribution does for it; our grain pledge. Root-level lines only.
 # Scope: country (a member)
 un_economy_obligation_lines = {
 	if = {
 		limit = { has_global_variable = un_inst_development_fund }
+		# At Moribund no dues are assessed, so the budget is empty and only the
+		# contributions are paid out.
 		if = {
-			limit = { NOT = { un_dues_assessed = yes } }
+			limit = {
+				NOT = { un_dues_assessed = yes }
+				un_dev_fund_no_contributions = yes
+			}
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_moribund
 		}
 		else_if = {
@@ -455,6 +501,16 @@ un_economy_obligation_lines = {
 		else_if = {
 			limit = { has_modifier = un_dev_fund_treasury_grant_modifier }
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_treasury
+		}
+		# Under the founding charter the Fund pays out only the contributions:
+		# with none this month, a member below the line has nothing coming.
+		else_if = {
+			limit = {
+				un_dev_fund_eligible = yes
+				NOT = { un_charter_has_reform = { LEVEL = 1 } }
+				un_dev_fund_no_contributions = yes
+			}
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_no_contributors
 		}
 		else_if = {
 			limit = { un_dev_fund_eligible = yes }
@@ -473,6 +529,24 @@ un_economy_obligation_lines = {
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_none
+		}
+		# Our Development Programs contribution: it pays the grants, or it
+		# would if we paid our dues and held our seat, or (a major power that
+		# runs none) it could.
+		if = {
+			limit = { un_dev_fund_contributor = yes }
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor
+		}
+		else_if = {
+			limit = { un_standing_program_active_development = yes }
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_not_counted
+		}
+		else_if = {
+			limit = {
+				un_member_represented = yes
+				country_rank >= rank_value:major_power
+			}
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_could_contribute
 		}
 	}
 	if = {
@@ -509,7 +583,13 @@ un_economy_budget_lines = {
 		}
 		if = {
 			limit = { has_global_variable = un_inst_development_fund }
-			custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund
+			if = {
+				limit = { un_charter_has_reform = { LEVEL = 1 } }
+				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund
+			}
+			else = {
+				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund_voluntary
+			}
 		}
 		custom_tooltip_no_bullet = je_un_chamber_budget_free
 	}
@@ -571,6 +651,8 @@ un_economy_on_dissolve = {
 	un_dissolve_remove_global = { NAME = un_dev_fund_rich_line }
 	un_dissolve_remove_global = { NAME = un_dev_fund_eligible_pop }
 	un_dissolve_remove_global = { NAME = un_dev_fund_recipients }
+	un_dissolve_remove_global = { NAME = un_dev_fund_donations }
+	un_dissolve_remove_global = { NAME = un_dev_fund_contributors }
 	un_dissolve_remove_global = { NAME = un_fr_members_pop }
 	un_dissolve_remove_global = { NAME = un_fr_famine_pop }
 	un_dissolve_remove_global = { NAME = un_fr_famine_share }

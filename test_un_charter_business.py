@@ -41,6 +41,9 @@ WIDGET = _path("gui", "journal_entry_widgets", "un_chamber_widget.gui")
 ON_ACTIONS = _path("common", "on_actions", "un_on_actions.txt")
 LADDER = _path("common", "scripted_effects", "un_ladder_effects.txt")
 LOC_DIR = _path("localization", "english")
+ECONOMY_VALUES = _path("common", "script_values", "un_economy_values.txt")
+ECONOMY_EFFECTS = _path("common", "scripted_effects", "un_economy_effects.txt")
+ECONOMY_TRIGGERS = _path("common", "scripted_triggers", "un_economy_triggers.txt")
 
 # key        the topic: un_topic_<key> and un_propose_<key>_*
 # reform     the charter level it needs (0: none)
@@ -62,7 +65,8 @@ TOPICS = (
     Topic("observer_request", 1, False, False, False, False, False, False, True, False),
     Topic("food_reserve", 0, False, False, False, False, False, False, False, False),
     Topic("ceasefire", 2, True, False, False, True, True, True, False, True),
-    Topic("development_fund", 2, False, False, False, False, False, False, False, False),
+    # No reform since 2026-10-02: a reform strengthens a standing Fund instead.
+    Topic("development_fund", 0, False, False, False, False, False, False, False, False),
     Topic("referendum", 2, True, True, False, False, True, True, False, True),
 )
 KEYS = tuple(t.key for t in TOPICS)
@@ -279,7 +283,7 @@ class ReformInViewTests(unittest.TestCase):
     OPS = {18: ("cultural_diversity", 1), 19: ("nuclear_ban", 2), 20: ("court_referral", 1),
            21: ("arms_embargo", 1), 22: ("credentials", 1), 23: ("standing_force", 1),
            24: ("observer_request", 1), 25: ("food_reserve", 0), 26: ("ceasefire", 2),
-           27: ("development_fund", 2), 28: ("referendum", 2)}
+           27: ("development_fund", 0), 28: ("referendum", 2)}
 
     def _rows(self):
         """{op: the row's own `visible` line, or ""} for the proposal rows."""
@@ -308,6 +312,55 @@ class ReformInViewTests(unittest.TestCase):
             sguis = re.sub(r"#[^\n]*", "", f.read())
         body = _flat(_block(sguis, "un_chamber_reform_ii_in_view_sgui"))
         self.assertIn("is_shown = { un_charter_reform_ii_in_view = yes }", body)
+
+
+class DevelopmentFundTierTests(unittest.TestCase):
+    """The World Development Fund needs no reform; once it stands its form
+    follows the charter level (owner, 2026-10-02): the Development Programs
+    contributions only, below a tenth of the members' average; then 5% of the
+    budget as well, below a quarter; then a quarter of the budget, below half.
+    The contributions are the programme's own expense, counted into the pot at
+    every level."""
+
+    FIGURES = (
+        (CHARTER_VALUES, "un_dev_fund_budget_share_reform_1", "0.05"),
+        (CHARTER_VALUES, "un_dev_fund_budget_share_reform_2", "0.25"),
+        (ECONOMY_VALUES, "un_dev_fund_line_share_founding", "0.1"),
+        (ECONOMY_VALUES, "un_dev_fund_line_share_reform_1", "0.25"),
+        (ECONOMY_VALUES, "un_dev_fund_line_share_reform_2", "0.5"),
+    )
+
+    def test_the_tier_figures(self):
+        for path, name, value in self.FIGURES:
+            with self.subTest(name=name):
+                self.assertRegex(_read(path), rf"(?m)^{name} = \{{ value = {re.escape(value)} \}}")
+
+    def test_the_shares_follow_the_charter_level(self):
+        charter = _read(CHARTER_VALUES)
+        at_level = _flat(_block(charter, "un_dev_fund_budget_share_at_level"))
+        for name in ("un_dev_fund_budget_share_reform_1", "un_dev_fund_budget_share_reform_2"):
+            self.assertIn(f"add = {name}", at_level)
+        self.assertIn("add = un_dev_fund_budget_share_at_level", _flat(_block(charter, "un_dev_fund_budget_share")))
+        line = _flat(_block(_read(ECONOMY_VALUES), "un_dev_fund_line_share"))
+        for level in ("founding", "reform_1", "reform_2"):
+            self.assertIn(f"add = un_dev_fund_line_share_{level}", line)
+
+    def test_the_contributions_fill_the_pot(self):
+        values = _read(ECONOMY_VALUES)
+        donations = _flat(_block(values, "un_dev_fund_donations_value"))
+        self.assertIn("un_dev_fund_contributor = yes", donations)
+        self.assertIn("add = var:un_development_expense_cached", donations)
+        self.assertIn("add = global_var:un_dev_fund_donations", _flat(_block(values, "un_dev_fund_pot_weekly_value")))
+        self.assertIn("add = global_var:un_dev_fund_donations", _flat(_block(values, "un_dev_fund_pot_preview_value")))
+        update = _flat(_block(_read(ECONOMY_EFFECTS), "un_dev_fund_monthly_update"))
+        snapshot = "set_global_variable = { name = un_dev_fund_donations value = un_dev_fund_donations_value }"
+        self.assertIn(snapshot, update)
+        # Summed before the grants that pay it out are worked out.
+        self.assertLess(update.index(snapshot), update.index("un_dev_fund_grant_value"))
+        contributor = _flat(_block(_read(ECONOMY_TRIGGERS), "un_dev_fund_contributor"))
+        for test in ("un_member_represented = yes", "NOT = { un_dues_is_withholding = yes }",
+                     "un_standing_program_active_development = yes"):
+            self.assertIn(test, contributor)
 
 
 class LocTests(unittest.TestCase):

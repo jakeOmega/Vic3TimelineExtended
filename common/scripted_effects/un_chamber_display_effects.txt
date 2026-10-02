@@ -1313,9 +1313,10 @@ un_chamber_propose_reform_row = {
 
 # ---- The charter's new business (redesign phase 7, §0.12; ops 20-28) ----
 # One shape for all nine: the title, whether it binds, its passage rule, the
-# reform it waits for (while the charter lacks it), the owner's preview of what
-# it would name (un_<key>_chamber_preview, only while there is a case: it may
-# run the topic's selector, which ExecuteTooltip leaves no trace of), and the
+# reform it waits for (while the charter lacks it; the World Food Reserve and
+# the World Development Fund wait for none), the owner's preview of what it
+# would name (un_<key>_chamber_preview, only while there is a case: it may run
+# the topic's selector, which ExecuteTooltip leaves no trace of), and the
 # no-case line.
 
 # The reform a phase 7 topic waits for, while the charter does not carry it.
@@ -1446,13 +1447,13 @@ un_chamber_propose_ceasefire_row = {
 	}
 }
 
-# Establish the World Development Fund.
+# Establish the World Development Fund (no reform needed: its form follows the
+# charter level, which the preview shows).
 # Scope: country
 un_chamber_propose_development_fund_row = {
 	custom_tooltip_no_bullet = je_un_chamber_propose_topic_development_fund
 	custom_tooltip_no_bullet = je_un_chamber_recommendatory
 	custom_tooltip_no_bullet = je_un_chamber_rule_majority
-	un_chamber_propose_reform_line = { LEVEL = 2 TT = je_un_chamber_propose_needs_reform_2 }
 	if = {
 		limit = { un_propose_development_fund_available = yes }
 		un_development_fund_chamber_preview = yes
