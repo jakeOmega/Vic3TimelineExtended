@@ -70,8 +70,49 @@ class CategorizeKeyTests(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "CONCEPTS")
 
+    def test_tax_probe_harness_stays_together(self):
+        # Without the rule the carrier law went to LAWS, the `_add` actions to
+        # MODIFIERS, `_desc` and short names to CONCEPTS and the rest to
+        # MISCELLANEOUS, and the dedicated file was deleted on the next run.
+        for key in (
+            "te_tp_tab", "te_tp_help_text", "te_tp_action_grain_add",
+            "te_tp_action_luxury_add", "te_tp_metric_obs_tax_income",
+            "amendment_te_tp_wage", "amendment_te_tp_wage_desc",
+            "law_te_probe_carrier", "law_te_probe_carrier_desc",
+        ):
+            with self.subTest(key=key):
+                self.assertEqual(categorize_key(key, set()), "DEBUG_TAX")
+
 
 class OrganizeAllUnusedTests(unittest.TestCase):
+    def test_harness_keeps_unreferenced_keys_in_its_file(self):
+        # A disposable harness's file must hold its whole family, or deleting
+        # the file leaves strays in te_unused_l_english.yml.
+        loc = (
+            "l_english:\n"
+            " te_tp_action_snapshot:0 \"Snapshot\"\n"
+            " te_tp_action_arm:0 \"Arm probes\"\n"
+            " widget_dead:0 \"never referenced\"\n"
+        )
+        with tempfile.TemporaryDirectory() as td:
+            loc_dir = os.path.join(td, "localization", "english")
+            os.makedirs(loc_dir)
+            with open(os.path.join(loc_dir, "te_debug_tax_l_english.yml"), "w", encoding="utf-8-sig") as fh:
+                fh.write(loc)
+            os.makedirs(os.path.join(td, "gui"))
+            with open(os.path.join(td, "gui", "w.gui"), "w", encoding="utf-8-sig") as fh:
+                fh.write('button = { text = "te_tp_action_snapshot" }\n')
+            with contextlib.redirect_stdout(io.StringIO()):
+                organize_all(td)
+            with open(os.path.join(loc_dir, "te_debug_tax_l_english.yml"), encoding="utf-8-sig") as fh:
+                harness = fh.read()
+            with open(os.path.join(loc_dir, "te_unused_l_english.yml"), encoding="utf-8-sig") as fh:
+                unused = fh.read()
+        self.assertIn(" te_tp_action_snapshot:", harness)
+        self.assertIn(" te_tp_action_arm:", harness)
+        self.assertNotIn(" te_tp_action_arm:", unused)
+        self.assertIn(" widget_dead:", unused)
+
     def test_quoted_argument_keeps_key_out_of_unused(self):
         loc = (
             "l_english:\n"

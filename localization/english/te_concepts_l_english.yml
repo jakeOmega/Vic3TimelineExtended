@@ -53,7 +53,6 @@
  AI_SECULAR_STATE:0 "from being a secular state"
  AI_SHARED_HERITAGE:0 "from shared cultural heritage"
  AI_SHARED_RIVALS:0 "from having shared rivals"
- AI_SOURCE_TRADITIONALIST_ECONOMY:0 "from the source having a traditionalist economy"
  AI_STATE_RELIGION:0 "from having a [concept_state_religion]"
  AI_TARGET_TURMOIL:0 "from [concept_turmoil] in target country"
  AI_TOLERANT_LAWS:0 "from having tolerant religious laws"

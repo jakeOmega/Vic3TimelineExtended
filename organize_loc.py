@@ -499,6 +499,7 @@ CATEGORIES = [
     "COMBAT_UNITS",
     "COMPANIES",
     "CONCEPTS",
+    "DEBUG_TAX",
     "DECREES",
     "DIPLOMACY",
     "EVENTS",
@@ -527,6 +528,13 @@ CATEGORIES = [
     "UNUSED",
 ]
 
+# Disposable developer harnesses. Each owns a dedicated file, and every key it
+# claims files there even when the unused scan finds no reference, so removing
+# the harness is deleting that one file. The tax probes' `te_tp_action_arm` has
+# no button (arming is the console's `event te_debug_tax.1`) and would
+# otherwise split off into te_unused_l_english.yml.
+HARNESS_CATEGORIES = {"DEBUG_TAX"}
+
 
 def categorize_key(key, technology_keys, treaty_article_of=None):
     """Assigns a category to a localization key.
@@ -552,6 +560,12 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # before every substring rule so the whole family stays in one file.
     if key.startswith("gm_"):
         return "MISCELLANEOUS"
+    # Tax-code engine probes (docs/testing/tax-code-probes.md), a temporary
+    # harness kept in te_debug_tax_l_english.yml until it is removed. Tested
+    # before the `law_` and `_add` rules, which would take the carrier law and
+    # `te_tp_action_grain_add` to LAWS and MODIFIERS.
+    if key.startswith(("te_tp_", "amendment_te_tp_", "law_te_probe_carrier")):
+        return "DEBUG_TAX"
     if key.startswith("setting_") or key.startswith("rule_"):
         return "GAME_RULES"
     if key.startswith("EFFECTS_ON_ACCEPTANCE_"):
@@ -899,10 +913,9 @@ def organize_all(project_directory, dry_run=False):
     # ── 3. Categorise every key ───────────────────────────────────────────
     categorized: dict[str, dict[str, str]] = defaultdict(dict)
     for key, value in all_loc.items():
-        cat = (
-            "UNUSED" if key in unused_keys
-            else categorize_key(key, technology_keys, treaty_article_of)
-        )
+        cat = categorize_key(key, technology_keys, treaty_article_of)
+        if key in unused_keys and cat not in HARNESS_CATEGORIES:
+            cat = "UNUSED"
         categorized[cat][key] = value
 
     # ── 4. Sub-sort EVENTS by namespace for readability ───────────────────

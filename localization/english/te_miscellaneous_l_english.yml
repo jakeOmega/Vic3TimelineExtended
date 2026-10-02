@@ -40,6 +40,7 @@
  AI_SMALL_STATE_POPULATION:0 "from small state population"
  AI_SOURCE_ALREADY_GREEN:0 "from source country already being compliant"
  AI_SOURCE_COOPERATIVE_ECONOMY:0 "from source having a cooperative economy"
+ AI_SOURCE_TRADITIONALIST_ECONOMY:0 "from the source having a traditionalist economy"
  AI_STATE_RELIGION_THREATENED:0 "from feeling [concept_state_religion] threatened"
  AI_TRADE_UNIONS_IN_GOVERNMENT:0 "from Trade Unions being [concept_in_government]"
  AI_WANTS_THIS_MORE_IF_ANTAGONISTIC:0 "Antagonistic relations"
