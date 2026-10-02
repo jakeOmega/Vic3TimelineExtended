@@ -1,0 +1,58 @@
+﻿# Legislated tax code: migration from the vanilla taxation law
+# (docs/systems/tax_code_schema.md, "Migration").
+#
+# Turns the country's active vanilla taxation law, its native tax level and its
+# consumption-taxed goods into an enacted code with the same rates, and installs
+# the carrier law_te_tax_code. Until a country is migrated nothing else in the
+# tax code runs for it: the monthly dispatch processes only migrated countries.
+#
+# Raised as the hidden country event te_tax.3 (events/te_tax_internal_events.txt)
+# from common/on_actions/te_tax_on_actions.txt: every country after the lobby,
+# each newly created country, and any rule-on country the monthly dispatch finds
+# still unmigrated. Country scope; the event makes the country ROOT, which the
+# migrated line's ScriptValue reads.
+#
+# Collection is not synced here. Whether activate_law is visible later in the
+# same execution is unverified (amendment and modifier changes are not); if it
+# is not, the writer would still see the vanilla law and attach the amendments
+# to it. The hidden te_tax.4 syncs a day later; te_tax_last_month = -1
+# also hands the country to the next global dispatch, whose te_tax.1 syncs again
+# (a later execution, so that changes nothing).
+
+# Country scope. Runs once: te_tax_migrated (the migration version, 1) is written
+# last, and a country holding it at 1 or more is left alone, so re-running the
+# event changes nothing.
+te_tax_migrate_country = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			OR = { NOT = { has_variable = te_tax_migrated } var:te_tax_migrated < 1 }
+		}
+		# Every schema token, with its sentinel where absent.
+		te_tax_init_country = yes
+		set_variable = { name = te_tax_migration_discrepancy value = 0 }
+		# Rates from the active law and the native level (one generated branch per
+		# pair; any other law migrates as zeros and sets the discrepancy flag).
+		te_tax_gen_migrate_rates = yes
+		# Taxed goods: the catalog goods the country taxes natively.
+		te_tax_gen_migrate_goods = yes
+		# Operative from this month, no sunsets; external-change tokens move.
+		te_tax_gen_migrate_provisions = yes
+		# A country already on the carrier keeps it: activating a held law again
+		# does not behave like a fresh activation.
+		if = {
+			limit = { NOT = { has_law = law_type:law_te_tax_code } }
+			activate_law = law_type:law_te_tax_code
+		}
+		# The next global dispatch processes this country (te_tax.1); only the
+		# processor claims a month.
+		set_variable = { name = te_tax_last_month value = -1 }
+		change_variable = { name = te_tax_code_version add = 1 }
+		te_tax_history_push = { KIND = 5 SLOT = none }
+		debug_log = "TE_TAX migrated wage=[SCOPE.ScriptValue('te_tax_view_en_wage')|0] div=[SCOPE.ScriptValue('te_tax_view_en_div')|0] land=[SCOPE.ScriptValue('te_tax_view_en_land')|0] head=[SCOPE.ScriptValue('te_tax_view_en_head')|0] cons=[SCOPE.ScriptValue('te_tax_view_en_cons')|0] goods=[SCOPE.ScriptValue('te_tax_view_goods_count')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		# The carrier is in place by tomorrow: sync collection then, so the
+		# country does not collect nothing until the 1st of next month.
+		trigger_event = { id = te_tax.4 days = 1 }
+		set_variable = { name = te_tax_migrated value = 1 }
+	}
+}

@@ -1,5 +1,5 @@
 ﻿# ============================================================================
-# LEGISLATED TAX CODE — monthly dispatch and watchdog
+# LEGISLATED TAX CODE — migration, monthly dispatch and watchdog
 # ============================================================================
 # Schedule rules: docs/systems/tax_code_schema.md, "Scheduler, package slots
 # and history".
@@ -16,9 +16,131 @@
 # looks for a month the dispatch has not processed while a transition is due,
 # and then runs te_tax.2, which never commences and never claims the month.
 #
-# Both check te_tax_code_on first: with the rule off nothing here runs.
+# Migration. Nothing in the tax code runs for a country until te_tax.3 has
+# migrated it (docs/systems/tax_code_schema.md, "Migration"): every country
+# once the lobby is over, each new country from its creation hook, and any
+# country the monthly dispatch still finds unmigrated.
+#
+# Every handler checks te_tax_code_on first: with the rule off nothing here runs.
 # The engine unions same-name on_action declarations across files.
 # ============================================================================
+
+# ----------------------------------------------------------------------------
+# Migration at game start
+# ----------------------------------------------------------------------------
+# After the lobby, not on_game_started: that fires while the players are still
+# in the lobby, where the rule can still change (scripting_best_practices.md,
+# "Convert what history placed after the lobby"). Migrating there and turning
+# the rule off in the lobby would leave every country on the carrier law in a
+# rule-off campaign. No scope here; the event makes each country its own ROOT.
+on_game_started_after_lobby = {
+	on_actions = {
+		te_tax_on_game_started
+	}
+}
+
+te_tax_on_game_started = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes }
+			every_country = {
+				trigger_event = { id = te_tax.3 }
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Migration of new countries
+# ----------------------------------------------------------------------------
+# A country already migrated (a formation keeps the forming country's
+# variables) is left alone by te_tax_migrate_country itself.
+
+# The scope is the newly formed country.
+on_country_formed = {
+	on_actions = {
+		te_tax_on_country_formed
+	}
+}
+
+te_tax_on_country_formed = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes }
+			trigger_event = { id = te_tax.3 }
+		}
+	}
+}
+
+# The scope is the releasing country; scope:target is the released one. The
+# event is dispatched to scope:target, never run here, so the migration runs
+# with the new country as its ROOT and never touches the parent (research E,
+# "Dispatch, don't call"; te_monetary_on_actions.txt does the same).
+on_country_released_as_independent = {
+	on_actions = {
+		te_tax_on_country_released
+	}
+}
+
+on_country_released_as_own_subject = {
+	on_actions = {
+		te_tax_on_country_released
+	}
+}
+
+on_country_released_as_overlord_subject = {
+	on_actions = {
+		te_tax_on_country_released
+	}
+}
+
+on_country_released_as_company_subject = {
+	on_actions = {
+		te_tax_on_country_released
+	}
+}
+
+te_tax_on_country_released = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes }
+			scope:target ?= {
+				trigger_event = { id = te_tax.3 }
+			}
+		}
+	}
+}
+
+# The scope is the original country; scope:target is the uprising. Kept apart
+# from the releases: the civil-war task replaces this handler's body with a copy
+# of the original's code (an uprising that inherits the carrier law migrates as
+# zeros until then). Same dispatch for now.
+on_revolution_start = {
+	on_actions = {
+		te_tax_on_uprising_start
+	}
+}
+
+on_secession_start = {
+	on_actions = {
+		te_tax_on_uprising_start
+	}
+}
+
+te_tax_on_uprising_start = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes }
+			scope:target ?= {
+				trigger_event = { id = te_tax.3 }
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Monthly dispatch and watchdog
+# ----------------------------------------------------------------------------
 
 on_monthly_pulse = {
 	on_actions = {
@@ -46,6 +168,15 @@ te_tax_monthly_dispatch = {
 					var:te_tax_migrated > 0
 				}
 				trigger_event = { id = te_tax.1 }
+			}
+			# Self-heal: a country no hook migrated (one created by an effect, or a
+			# game-start dispatch that missed it) migrates now; its first te_tax.1
+			# runs next month.
+			every_country = {
+				limit = {
+					OR = { NOT = { has_variable = te_tax_migrated } var:te_tax_migrated < 1 }
+				}
+				trigger_event = { id = te_tax.3 }
 			}
 		}
 	}

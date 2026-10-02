@@ -1,6 +1,6 @@
 # Legislated tax code: canonical state and the collection writer
 
-The variable schema of the legislated tax code (spec: `docs/superpowers/specs/2026-09-29-legislated-tax-code-design.md`; plan: `docs/superpowers/plans/2026-10-02-legislated-tax-code-tasks.md`), the one effect that turns it into native tax settings, the scheduler that changes it on its dates, and the display values that read it. Later tasks extend the schema tables and the sections below; `test_tax_code_state.py` parses the tables and checks them against the initialiser.
+The variable schema of the legislated tax code (spec: `docs/superpowers/specs/2026-09-29-legislated-tax-code-design.md`; plan: `docs/superpowers/plans/2026-10-02-legislated-tax-code-tasks.md`), the one effect that turns it into native tax settings, the scheduler that changes it on its dates, the migration that creates it from a country's vanilla tax law, and the display values that read it. Later tasks extend the schema tables and the sections below; `test_tax_code_state.py` parses the tables and checks them against the initialiser.
 
 Everything here runs only under `te_tax_code_rule` (`te_tax_code_on = yes`). With the rule off no variable is written and no native setting is touched.
 
@@ -16,7 +16,8 @@ Everything here runs only under `te_tax_code_rule` (`te_tax_code_on = yes`). Wit
 | Variable | Meaning | Sentinel |
 |---|---|---|
 | `te_tax_schema` | schema version, = 1 | — |
-| `te_tax_migrated` | migration version applied (Task 5) | 0 |
+| `te_tax_migrated` | migration version applied ([Migration](#migration)) | 0 |
+| `te_tax_migration_discrepancy` | 1 if the migration found no mapping for the active taxation law (every rate migrated as 0); 0 when the migration was exact | 0 |
 | `te_tax_code_version` | +1 on every enacted change | 0 |
 | `te_tax_last_month` | scheduler once-per-month guard | -1 |
 | `te_tax_next_month` | earliest due transition month (cache) | -1 |
@@ -25,7 +26,7 @@ Everything here runs only under `te_tax_code_rule` (`te_tax_code_on = yes`). Wit
 | `te_tax_en_<key>_exp` | sunset month of the current value | -1 |
 | `te_tax_en_<key>_succ` | successor index at sunset: the underlying permanent rate (scheduler rule 3) | -1 |
 | `te_tax_pver_<key>` | planned-version token: +1 whenever an approval or unexpected change touches the provision | 0 |
-| `te_tax_xver_<key>` | external-change token: +1 only on non-legislative changes (migration re-run, civil-war repair) | 0 |
+| `te_tax_xver_<key>` | external-change token: +1 only on non-legislative changes (migration, civil-war repair) | 0 |
 | `te_tax_en_g_<good>` | 1 if the good is on the enacted taxed-goods list | 0 |
 | `te_tax_pver_goods`, `te_tax_xver_goods` | tokens for the goods group | 0 |
 | `te_tax_en_agrel` | agricultural wage relief index: 0 none, 1 = −25%, 2 = −50% | 0 |
@@ -75,7 +76,7 @@ The [scheduler](#scheduler-package-slots-and-history)'s rows. `<s>` is a package
 
 `te_tax_init_country` (country scope, `common/scripted_effects/te_tax_state_effects.txt`) writes every country row above that is absent, with its sentinel, and never touches one that exists. The per-instrument, per-good and scheduler rows come from the generated `te_tax_gen_init_instruments`, `te_tax_gen_init_goods` and `te_tax_gen_init_schedule` (`common/scripted_effects/te_tax_generated_effects.txt`). `te_tax_schema = 1` is written last, so a country holding `te_tax_schema` holds every token of that schema version. Each write has the shape `if = { limit = { NOT = { has_variable = X } } set_variable = { name = X value = <sentinel> } }`, which `je_immediate_reset_audit` accepts if a journal entry's `immediate` ever calls it. The state variables `te_tax_relief_state` and `te_tax_pending_relief_<s>` are not initialised: a state without them is named in no relief.
 
-Callers: the migration (Task 5) before it maps the vanilla law, and the writer below, which re-runs it each time so a later schema version's new rows are backfilled on old saves. A later schema bumps the version in a guarded `else_if` after the new rows, never by overwriting the old value unconditionally.
+Callers: the [migration](#migration) before it maps the vanilla law, and the writer below, which re-runs it each time so a later schema version's new rows are backfilled on old saves. A later schema bumps the version in a guarded `else_if` after the new rows, never by overwriting the old value unconditionally.
 
 `te_tax_copy_token = { NAME = <token> }` copies one token from `scope:te_tax_source` to THIS when the source holds it, for the civil-war outbreak copy (Task 10).
 
@@ -83,7 +84,7 @@ Callers: the migration (Task 5) before it maps the vanilla law, and the writer b
 
 `te_tax_sync_collection` (`common/scripted_effects/te_tax_collection_effects.txt`) is the **only** effect that changes a rule-on country's native fiscal state. Nothing else in `common/` or `events/` (apart from the temporary probe harness, `te_debug_tax*`) calls `add_amendment` with a tax-code amendment, `add_taxed_goods`, `remove_taxed_goods`, `set_tax_level` or adds a `te_tax_relief_*` modifier; `test_tax_code_state.py` checks this.
 
-- **Scope.** Country, with ROOT = THIS = the country. Call it from a country event or a country hook (Task 4's dispatched monthly event `te_tax.1`, Task 5's migration event), never from the global `on_monthly_pulse`, which has no ROOT. Nothing in it reads ROOT.
+- **Scope.** Country, with ROOT = THIS = the country. Call it from a country event or a country hook (the dispatched monthly event `te_tax.1`, the watchdog `te_tax.2`, the post-migration `te_tax.4`), never from the global `on_monthly_pulse`, which has no ROOT. Nothing in it reads ROOT.
 - **Gate.** `te_tax_code_on = yes`, `has_law = law_type:law_te_tax_code` and `has_variable = te_tax_schema`. A country still on a vanilla law is left alone. One holding the carrier without initialised tokens (a rebel before the outbreak copy) is left alone too, rather than synced to an empty code, and logged (`TE_TAX sync skipped: <country> ...` in `debug.log`).
 - **Order.** `te_tax_init_country` (backfill); `save_scope_as = te_tax_country`; `te_tax_pick_sponsor` (`scope:te_tax_sponsor`: a random interest group in government if `any_interest_group = { is_in_government = yes }`, else the one with the most clout; it branches on THIS country's groups, never on whether the scope already exists, so a sponsor saved for another country in the same execution cannot leak in); the five `te_tax_gen_sync_<key>`, only when the country has an interest group at all (otherwise one `debug_log` and the amendments stay as they were); `te_tax_gen_sync_goods`; `te_tax_sync_relief`; the tax level pinned to `medium` if it is anything else.
 - **Call at most once per effect execution; a second call in a later execution changes nothing.** Amendment, goods and modifier changes are not visible later in the same execution, so a second call there would act on the stale state and could add an amendment twice. Across executions it is idempotent, diff not churn: each part removes only what the code does not hold and adds only what the code holds and is missing. Within the one call no part re-reads what it has just written, and the removal loop never touches the amendment the add step checks.
@@ -119,7 +120,7 @@ An approved package waits in slot `a` or `b` and takes effect on the 1st of its 
 
 ### Dispatch
 
-- **Global `on_monthly_pulse`, the 1st of every month** (`common/on_actions/te_tax_on_actions.txt`, `te_tax_monthly_dispatch`). If `te_tax_code_on = yes`, it raises the hidden country event `te_tax.1` (`events/te_tax_internal_events.txt`) on every country with `te_tax_migrated > 0`; `te_tax.1` runs `te_tax_process_month` with ROOT = that country. The country pulse is not used for this: `on_monthly_pulse_country` is a 30-day timer that can skip a calendar month (`docs/guides/scripting_best_practices.md`, "`on_monthly_pulse_country` Is a 30-Day Timer, Not a Calendar Month"), which is how the tax probe commenced and expired a package in one call. Task 5 adds a second branch to the dispatch for countries not yet migrated.
+- **Global `on_monthly_pulse`, the 1st of every month** (`common/on_actions/te_tax_on_actions.txt`, `te_tax_monthly_dispatch`). If `te_tax_code_on = yes`, it raises the hidden country event `te_tax.1` (`events/te_tax_internal_events.txt`) on every country with `te_tax_migrated > 0`; `te_tax.1` runs `te_tax_process_month` with ROOT = that country. The country pulse is not used for this: `on_monthly_pulse_country` is a 30-day timer that can skip a calendar month (`docs/guides/scripting_best_practices.md`, "`on_monthly_pulse_country` Is a 30-Day Timer, Not a Calendar Month"), which is how the tax probe commenced and expired a package in one call. A second fan-out in the same dispatch raises the migration `te_tax.3` on every country without `te_tax_migrated ≥ 1` ([Migration](#migration), self-heal); such a country's first `te_tax.1` runs the month after.
 - **Watchdog: `on_monthly_pulse_country`** (`te_tax_watchdog_on_action`). When `te_tax_last_month` < the month index and 0 ≤ `te_tax_next_month` ≤ the month index, it raises `te_tax.2`, which runs `te_tax_watchdog_month`: it logs `TE_TAX watchdog`, runs the sunsets, holds as missed any awaiting package whose due month has passed, and syncs collection only if a sunset ran (`te_tax_code_version` moved, compared through a local variable), so on the 1st it does not sync a second time in the tick the processor syncs. It **never commences** and **never claims the month** (`te_tax_last_month`): a country's pulse can land on the 1st before the global pulse, and claiming the month there would make that day's dispatch skip the month's commencements. Sunsets are safe to run twice in one month, because an executed sunset clears its own `_exp`. A due commencement the watchdog sees becomes held_missed only once its month has passed, by the next processor or watchdog run.
 
 ### Processor rules
@@ -159,17 +160,54 @@ An approved package waits in slot `a` or `b` and takes effect on the 1st of its 
 
 The steps are in `docs/testing/tax-code-capability-ledger.md`, "Scheduler retest". Steps 2, 3, 5 and 6 need a stored package, which only Task 6's pass (or a debug command, not built) can create. Step 4 is `event te_tax.1` twice from the console in one month: the second logs `TE_TAX skip`.
 
+## Migration
+
+Nothing in the tax code runs for a country until it is migrated: the monthly dispatch processes only countries with `te_tax_migrated > 0`. `te_tax_migrate_country` (`common/scripted_effects/te_tax_migration_effects.txt`) turns the active vanilla taxation law, the native tax level and the consumption-taxed goods into an enacted code with the same rates, and installs the carrier `law_te_tax_code`. It runs from the hidden country event `te_tax.3`, so ROOT is the country.
+
+**Hooks** (`common/on_actions/te_tax_on_actions.txt`; every handler checks `te_tax_code_on = yes` first):
+
+- **Game start**: `on_game_started_after_lobby` raises `te_tax.3` on `every_country`. Not `on_game_started`: that fires while the players are still in the lobby, where the rule can still change (`docs/guides/scripting_best_practices.md`, "Convert what history placed after the lobby"); a migration there followed by the rule turned off in the lobby would leave every country on the carrier in a rule-off campaign.
+- **Formed country**: `on_country_formed`, whose scope is the new country, raises `te_tax.3` on it. A formation keeps the forming country's variables, so a migrated country is left alone.
+- **Released country**: the four `on_country_released_as_*` hooks (`_independent`, `_own_subject`, `_overlord_subject`, `_company_subject`) run in the releasing country, so `te_tax_on_country_released` dispatches `te_tax.3` to `scope:target` (research E, "Dispatch, don't call").
+- **Uprising**: `on_revolution_start` and `on_secession_start` run in the original country; `te_tax_on_uprising_start`, a separate handler, dispatches `te_tax.3` to `scope:target`. Task 10 replaces this handler's body with a copy of the original's code.
+- **Self-heal**: the monthly dispatch raises `te_tax.3` on any country without `te_tax_migrated ≥ 1`.
+
+**Order inside `te_tax_migrate_country`.** Gate: the rule is on and `te_tax_migrated` is absent or below 1, so a second run changes nothing. Then: `te_tax_init_country`; `te_tax_migration_discrepancy = 0`; `te_tax_gen_migrate_rates` (generated: one branch per law and native level, 25 in all, each writing all five `te_tax_en_<key>`); `te_tax_gen_migrate_goods` (generated: per catalog good, `te_tax_en_g_<good>` = 1 if `has_consumption_tax`, else 0; `te_tax_xver_goods` +1); `te_tax_gen_migrate_provisions` (generated: per instrument, `_since` = the month for a nonzero index and -1 for a zero one, `_exp` and `_succ` -1, `te_tax_xver_<key>` +1); `activate_law = law_type:law_te_tax_code` unless the country already holds it; `te_tax_last_month = -1`; `te_tax_code_version` +1; history kind 5 (`te_tax_history_push = { KIND = 5 SLOT = none }`); one `TE_TAX migrated wage=… div=… land=… head=… cons=… goods=…` line in `debug.log`; `te_tax.4` raised for the next day; `te_tax_migrated = 1` last.
+
+**Collection.** The migration never calls `te_tax_sync_collection`. Whether `activate_law` is visible later in the same execution is not verified in game (amendment and modifier changes are not), and if it is not, the writer would still see the vanilla law and attach the amendments to it. The hidden `te_tax.4`, raised by the migration with `days = 1`, runs the writer the next day, when the carrier is in place; without it the country would collect nothing until the 1st of the next month. `te_tax_last_month = -1` hands the country to the next global dispatch, whose `te_tax.1` syncs again (a later execution, so nothing changes). Migration never raises `te_tax.1` and never claims a month.
+
+**Mapping** (`MIGRATION` in `scripts/generators/gen_tax_code.py`, checked against `vanilla_parsed/common/laws.json` by `test_tax_code_migration.py`; values from 1.14.5 `common/laws/01_taxation.txt`, by level very low / low / medium / high / very high; an instrument a law does not set is 0):
+
+| Law | wage | div | land | head | cons |
+|---|---|---|---|---|---|
+| Consumption-Based | 0 | 0 | 0 | 0 | 0.15/0.20/0.25/0.30/0.35 |
+| Land-Based | 0 | 0 | 0.40/0.55/0.70/0.85/1.00 | 0 | same ladder |
+| Per-Capita | 0.05/0.075/0.10/0.125/0.15 | 0 | 0.20/0.275/0.35/0.425/0.50 | 0.40/0.55/0.70/0.85/1.00 | same ladder |
+| Proportional | 0.10/0.15/0.20/0.25/0.30 | 0.025/0.05/0.10/0.15/0.20 | 0 | 0 | same ladder |
+| Graduated | 0.10/0.125/0.15/0.175/0.20 | 0.10/0.15/0.20/0.25/0.30 | 0 | 0 | same ladder |
+
+Every value is an exact index (rate ÷ step: wage, dividends and rural assessment step 0.025; head tax and consumption 0.05). The level is read with `tax_level = <level>`; the writer then pins it to medium.
+
+**Discrepancies.** A country on any other taxation law (the probe carrier, another mod's law) migrates as all zeros, with `te_tax_migration_discrepancy = 1` and the line `TE_TAX migration_discrepancy no mapping for the active taxation law…`. A country that already holds `law_te_tax_code` without migration tokens (a rebel or released country that inherited the carrier from its parent) migrates the same way with its own line, `…holds law_te_tax_code without migration tokens…`, and the carrier is not activated again; the next sync then removes any amendments it arrived with. Task 10 decides copy or migrate for both creation paths.
+
+## Balance decisions
+
+- **Consumption-Based Taxation's non-rate effects are dropped.** Its `modifier` block (`state_bureaucracy_population_base_cost_factor_mult = -0.25`, `country_consumption_tax_cost_mult = -0.50`) goes with the law. The code has no instrument for either, so a country migrated from Consumption-Based pays full bureaucracy cost for its population and full Authority for its taxed goods.
+- **Millet System and People of the Book keep their heathen tax, and `amendment_redemption_payments` its land tax, outside the code.** They stay native and are not migrated: external adjustments at the pinned medium level (heathen tax 0.50, redemption payments 0.09).
+- **A natively taxed good outside the catalog is not carried.** The migration reads only catalog goods; the first sync removes a consumption tax on any good outside the catalog. Vanilla 1.14.5 history taxes only catalog goods (`coffee`, `grain`, `liquor`, `luxury_clothes`, `luxury_furniture`, `opium`, `tea`, `tobacco`, `wine`; `belle_epoque_events.8` adds `automobiles`, also in the catalog), so this affects only goods a player or the AI taxed before the rule took effect.
+
 ## Files
 
 | File | Holds |
 |---|---|
 | `common/scripted_effects/te_tax_state_effects.txt` | `te_tax_init_country`, `te_tax_copy_token` |
+| `common/scripted_effects/te_tax_migration_effects.txt` | `te_tax_migrate_country` |
 | `common/scripted_effects/te_tax_schedule_effects.txt` | `te_tax_process_month`, `te_tax_watchdog_month`, `te_tax_store_package`, `te_tax_recompute_next_month`, `te_tax_history_push` |
 | `common/scripted_triggers/te_tax_triggers.txt` | the rule gates and `te_tax_can_store_package` |
-| `common/on_actions/te_tax_on_actions.txt` | `te_tax_monthly_dispatch` (global `on_monthly_pulse`), `te_tax_watchdog_on_action` (`on_monthly_pulse_country`) |
-| `events/te_tax_internal_events.txt` | hidden country events `te_tax.1` (processor) and `te_tax.2` (watchdog) |
+| `common/on_actions/te_tax_on_actions.txt` | migration hooks (`te_tax_on_game_started`, `te_tax_on_country_formed`, `te_tax_on_country_released`, `te_tax_on_uprising_start`), `te_tax_monthly_dispatch` (global `on_monthly_pulse`), `te_tax_watchdog_on_action` (`on_monthly_pulse_country`) |
+| `events/te_tax_internal_events.txt` | hidden country events `te_tax.1` (processor), `te_tax.2` (watchdog), `te_tax.3` (migration) and `te_tax.4` (post-migration sync) |
 | `common/scripted_effects/te_tax_collection_effects.txt` | `te_tax_sync_collection`, `te_tax_pick_sponsor`, `te_tax_sync_relief` |
-| `common/scripted_effects/te_tax_generated_effects.txt` | generated: `te_tax_gen_sync_<key>`, `te_tax_gen_sync_goods`, `te_tax_gen_init_instruments`, `te_tax_gen_init_goods`, `te_tax_gen_init_schedule`; the scheduler's `te_tax_gen_sunset_<key>`, `te_tax_gen_commence_<s>`, `te_tax_gen_hold_missed_<s>`, `te_tax_gen_apply_<s>`, `te_tax_gen_store_<s>`, `te_tax_gen_next_month`, `te_tax_gen_history_write` |
+| `common/scripted_effects/te_tax_generated_effects.txt` | generated: `te_tax_gen_sync_<key>`, `te_tax_gen_sync_goods`, `te_tax_gen_init_instruments`, `te_tax_gen_init_goods`, `te_tax_gen_init_schedule`; the scheduler's `te_tax_gen_sunset_<key>`, `te_tax_gen_commence_<s>`, `te_tax_gen_hold_missed_<s>`, `te_tax_gen_apply_<s>`, `te_tax_gen_store_<s>`, `te_tax_gen_next_month`, `te_tax_gen_history_write`; the migration's `te_tax_gen_migrate_rates`, `te_tax_gen_migrate_goods`, `te_tax_gen_migrate_provisions` |
 | `common/scripted_triggers/te_tax_generated_triggers.txt` | generated: `te_tax_amendment_is_<key>`, `te_tax_amendment_matches_<key>` (amendment scope; the match reads `scope:te_tax_country`); `te_tax_gen_package_current_<s>`, `te_tax_gen_package_touches_goods_<s>`, `te_tax_gen_bill_sunsets_valid` (country scope) |
 | `common/static_modifiers/te_tax_modifiers.txt` | `te_tax_relief_ag_1/2` (`building_group_bg_agriculture_tax_mult` −0.25/−0.5), `te_tax_relief_region_1/2` (`state_tax_collection_mult` −0.25/−0.5) |
 | `common/script_values/te_tax_display_values.txt`, `te_tax_generated_values.txt` | display values above; `te_tax_slot_id_<s>` (generated) |

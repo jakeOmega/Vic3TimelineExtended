@@ -139,9 +139,12 @@ class DispatchTest(unittest.TestCase):
         self.assertEqual(set(effect), {"if"})
         gate = effect["if"]
         self.assertEqual(gate["limit"], {"te_tax_code_on": "yes"})
-        fan_out = gate["every_country"]
+        # Two fan-outs: the processor for migrated countries, then the migration
+        # self-heal (te_tax.3, Task 5; test_tax_code_migration.py) for the rest.
+        fan_out, self_heal = gate["every_country"]
         self.assertEqual(fan_out["limit"], {"has_variable": "te_tax_migrated", "var:te_tax_migrated": "0"})
         self.assertEqual(fan_out["trigger_event"], {"id": "te_tax.1"})
+        self.assertEqual(self_heal["trigger_event"], {"id": "te_tax.3"})
         text = read(ON_ACTIONS)
         self.assertRegex(text, r"var:te_tax_migrated > 0")
 

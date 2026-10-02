@@ -363,7 +363,9 @@ class GeneratedSyncTest(unittest.TestCase):
             f"te_tax_gen_{part}_{slot}"
             for part in ("commence", "hold_missed", "apply", "store") for slot in ("a", "b")
         } | {"te_tax_gen_init_schedule", "te_tax_gen_next_month", "te_tax_gen_history_write"}
-        self.assertEqual(names, want | scheduler)
+        # The migration's parts (test_tax_code_migration.py).
+        migration = {"te_tax_gen_migrate_rates", "te_tax_gen_migrate_goods", "te_tax_gen_migrate_provisions"}
+        self.assertEqual(names, want | scheduler | migration)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
         for key in KEYS:

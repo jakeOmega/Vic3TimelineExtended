@@ -26,6 +26,7 @@ te_tax_init_country = {
 		if = { limit = { NOT = { has_variable = te_tax_code_version } } set_variable = { name = te_tax_code_version value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_last_month } } set_variable = { name = te_tax_last_month value = -1 } }
 		if = { limit = { NOT = { has_variable = te_tax_next_month } } set_variable = { name = te_tax_next_month value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_migration_discrepancy } } set_variable = { name = te_tax_migration_discrepancy value = 0 } }
 		te_tax_gen_init_instruments = yes
 		te_tax_gen_init_goods = yes
 		te_tax_gen_init_schedule = yes

@@ -6,7 +6,8 @@ holds each tax instrument as an integer index: rate = index x step. The carrier
 law `law_te_tax_code` collects nothing; one generated amendment per instrument
 and index carries the rate, identical in all five native tax levels so that a
 level change moves only the political static modifier. INSTRUMENTS below is the
-single source of truth for that table.
+single source of truth for that table; MIGRATION, for the rates each vanilla
+taxation law sets at each native level.
 
 Outputs (each is registered in OUTPUTS and written byte for byte):
 
@@ -25,7 +26,9 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       (te_tax_gen_init_instruments, te_tax_gen_init_goods,
       te_tax_gen_init_schedule) and the scheduler's (te_tax_gen_sunset_<key>,
       te_tax_gen_commence/hold_missed/apply/store_<slot>, te_tax_gen_next_month,
-      te_tax_gen_history_write).
+      te_tax_gen_history_write) and the migration's (te_tax_gen_migrate_rates,
+      one branch per vanilla taxation law and native level from MIGRATION;
+      te_tax_gen_migrate_goods; te_tax_gen_migrate_provisions).
   common/scripted_triggers/te_tax_generated_triggers.txt
       Amendment-scope family and match triggers the syncs filter on, and the
       scheduler's package and bill checks (te_tax_gen_package_current_<slot>,
@@ -146,6 +149,55 @@ INSTRUMENTS = (
 )
 
 
+# Migration (docs/systems/tax_code_schema.md, "Migration"): the rates each vanilla
+# 1.14.5 taxation law sets at each native tax level, in NATIVE_LEVELS order. An
+# instrument a law leaves out is 0. test_tax_code_migration.py checks this table
+# against vanilla_parsed/common/laws.json, so a vanilla patch that moves a rate or
+# adds a law to lawgroup_taxation fails until the table is updated.
+NATIVE_LEVELS = ("very_low", "low", "medium", "high", "very_high")
+CONSUMPTION_LADDER = "0.15 0.20 0.25 0.30 0.35"
+MIGRATION = (
+    ("law_consumption_based_taxation", {"cons": CONSUMPTION_LADDER}),
+    ("law_land_based_taxation", {"land": "0.40 0.55 0.70 0.85 1.00", "cons": CONSUMPTION_LADDER}),
+    ("law_per_capita_based_taxation", {"wage": "0.05 0.075 0.10 0.125 0.15",
+                                       "land": "0.20 0.275 0.35 0.425 0.50",
+                                       "head": "0.40 0.55 0.70 0.85 1.00",
+                                       "cons": CONSUMPTION_LADDER}),
+    ("law_proportional_taxation", {"wage": "0.10 0.15 0.20 0.25 0.30",
+                                   "div": "0.025 0.05 0.10 0.15 0.20",
+                                   "cons": CONSUMPTION_LADDER}),
+    ("law_graduated_taxation", {"wage": "0.10 0.125 0.15 0.175 0.20",
+                                "div": "0.10 0.15 0.20 0.25 0.30",
+                                "cons": CONSUMPTION_LADDER}),
+)
+
+
+def migration_indices(instruments=INSTRUMENTS):
+    """[(law, level, {key: index})] for every MIGRATION law and native level, 25 in all.
+
+    Raises ValueError if a rate is not index x step for an index in 0..max or is
+    not one of the instrument's vanilla values.
+    """
+    by_key = {instrument.key: instrument for instrument in instruments}
+    rows = []
+    for law, rates in MIGRATION:
+        unknown = set(rates) - set(by_key)
+        if unknown:
+            raise ValueError(f"{law}: no instrument {sorted(unknown)}")
+        for n, level in enumerate(NATIVE_LEVELS):
+            indices = {}
+            for key, instrument in by_key.items():
+                value = Decimal(rates[key].split()[n]) if key in rates else Decimal(0)
+                index, remainder = divmod(value, instrument.step)
+                if remainder != 0 or not 0 <= index <= instrument.max_idx:
+                    raise ValueError(f"{law} {level}: {key} = {value} is not an index x {instrument.step}")
+                if value and value not in instrument.vanilla:
+                    raise ValueError(f"{law} {level}: {key} = {value} is not a vanilla value of {key}")
+                indices[key] = int(index)
+            rows.append((law, level, indices))
+    return rows
+
+
 def validate(instruments=INSTRUMENTS):
     """Raise ValueError unless every vanilla value is index x step for some index 1..max."""
     for instrument in instruments:
@@ -156,6 +208,7 @@ def validate(instruments=INSTRUMENTS):
                     f"{instrument.key}: vanilla value {value} is not index x {instrument.step} "
                     f"for an index in 1..{instrument.max_idx}"
                 )
+    migration_indices(instruments)
 
 
 def fmt(value):
@@ -820,6 +873,82 @@ def _scheduler_effects():
     return lines + _next_month() + _history_write()
 
 
+# ---------------------------------------------------------------------------
+# Migration from the vanilla taxation law (docs/systems/tax_code_schema.md, "Migration")
+# ---------------------------------------------------------------------------
+
+def _migrate_writes(indices, indent="\t\t"):
+    return [f"{indent}set_variable = {{ name = te_tax_en_{instrument.key} value = {indices[instrument.key]} }}"
+            for instrument in INSTRUMENTS]
+
+
+def _migration_effects():
+    zeros = {instrument.key: 0 for instrument in INSTRUMENTS}
+    carrier = _log("migration_discrepancy",
+                   f"holds {CARRIER_LAW} without migration tokens; every rate migrated as 0")
+    unknown = _log("migration_discrepancy", "no mapping for the active taxation law; every rate migrated as 0")
+    lines = [
+        "",
+        "# Migration, rates: the enacted indices that reproduce the active vanilla taxation law at",
+        "# the country's native tax level, one branch per (law, level) pair (MIGRATION in the",
+        "# generator). Every branch writes all five indices. A country already on the carrier",
+        "# without tokens (a rebel or a released country that inherited it), or on any other law",
+        "# (the probe carrier, another mod's law), migrates as all zeros and is flagged.",
+        "# Called only by te_tax_migrate_country.",
+        "te_tax_gen_migrate_rates = {",
+    ]
+    for n, (law, level, indices) in enumerate(migration_indices()):
+        lines += [f"\t{'if' if n == 0 else 'else_if'} = {{",
+                  f"\t\tlimit = {{ has_law = law_type:{law} tax_level = {level} }}"]
+        lines += _migrate_writes(indices)
+        lines.append("\t}")
+    lines += ["\telse_if = {", f"\t\tlimit = {{ has_law = law_type:{CARRIER_LAW} }}"]
+    lines += _migrate_writes(zeros)
+    lines += ["\t\tset_variable = { name = te_tax_migration_discrepancy value = 1 }", f"\t\t{carrier}", "\t}"]
+    lines.append("\telse = {")
+    lines += _migrate_writes(zeros)
+    lines += ["\t\tset_variable = { name = te_tax_migration_discrepancy value = 1 }", f"\t\t{unknown}", "\t}"]
+    lines += [
+        "}",
+        "",
+        "# Migration, goods: a catalog good is on the enacted list exactly when the country taxes",
+        "# it natively. A good outside the catalog is not carried; the first sync removes it.",
+        "te_tax_gen_migrate_goods = {",
+    ]
+    for good in consumption_catalog():
+        lines += [
+            f"\tif = {{ limit = {{ has_consumption_tax = g:{good} }} "
+            f"set_variable = {{ name = te_tax_en_g_{good} value = 1 }} }}",
+            f"\telse = {{ set_variable = {{ name = te_tax_en_g_{good} value = 0 }} }}",
+        ]
+    lines += [
+        "\t# A migration is a change made outside legislation.",
+        "\tchange_variable = { name = te_tax_xver_goods add = 1 }",
+        "}",
+        "",
+        "# Migration, provisions: a collected instrument is operative from this month; none has",
+        "# a sunset or a successor. A migration is a change made outside legislation, so each",
+        "# instrument's external-change token moves.",
+        "te_tax_gen_migrate_provisions = {",
+    ]
+    for instrument in INSTRUMENTS:
+        en = f"te_tax_en_{instrument.key}"
+        lines += [
+            "\tif = {",
+            f"\t\tlimit = {{ var:{en} > 0 }}",
+            f"\t\tset_variable = {{ name = {en}_since value = te_history_month_index }}",
+            "\t}",
+            "\telse = {",
+            f"\t\tset_variable = {{ name = {en}_since value = -1 }}",
+            "\t}",
+            f"\tset_variable = {{ name = {en}_exp value = -1 }}",
+            f"\tset_variable = {{ name = {en}_succ value = -1 }}",
+            f"\tchange_variable = {{ name = te_tax_xver_{instrument.key} add = 1 }}",
+        ]
+    lines.append("}")
+    return lines
+
+
 def _scheduler_triggers():
     lines = []
     for slot in SLOTS:
@@ -902,7 +1031,9 @@ def scripted_effects():
         "# The scheduler's parts follow the syncs: te_tax_gen_sunset_<key>,",
         "# te_tax_gen_commence_<slot>, te_tax_gen_hold_missed_<slot>, te_tax_gen_apply_<slot>,",
         "# te_tax_gen_store_<slot>, te_tax_gen_next_month and te_tax_gen_history_write, called",
-        "# by te_tax_schedule_effects.txt.",
+        "# by te_tax_schedule_effects.txt. The migration's parts close the file:",
+        "# te_tax_gen_migrate_rates, te_tax_gen_migrate_goods and te_tax_gen_migrate_provisions,",
+        "# called by te_tax_migrate_country (te_tax_migration_effects.txt).",
         "",
         "# Each instrument's tokens with their sentinels, if absent.",
         "te_tax_gen_init_instruments = {",
@@ -979,7 +1110,7 @@ def scripted_effects():
     lines += [f"\tif = {{ limit = {{ has_consumption_tax = g:{good} }} remove_taxed_goods = g:{good} }}"
               for good in stray_goods()]
     lines.append("}")
-    lines += _scheduler_effects()
+    lines += _scheduler_effects() + _migration_effects()
     return _txt("\n".join(lines) + "\n")
 
 

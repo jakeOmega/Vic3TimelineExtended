@@ -1,9 +1,10 @@
 ﻿# ============================================================================
 # LEGISLATED TAX CODE — internal country events
 # ============================================================================
-# Hidden, no loc. Raised only by common/on_actions/te_tax_on_actions.txt, so ROOT
-# is the country the event fires on. Schedule rules:
-# docs/systems/tax_code_schema.md, "Scheduler, package slots and history".
+# Hidden, no loc. Raised only by common/on_actions/te_tax_on_actions.txt, except
+# te_tax.4 (raised by the migration), so ROOT is the country the event fires on.
+# Schedule rules: docs/systems/tax_code_schema.md, "Scheduler, package slots and
+# history"; migration: the same file, "Migration".
 #
 # No `is_triggered_only`: that is a CK3 keyword; vanilla Victoria 3 uses it
 # nowhere, and an event with neither mean_time_to_happen nor a random_events
@@ -37,5 +38,35 @@ te_tax.2 = {
 
 	immediate = {
 		te_tax_watchdog_month = yes
+	}
+}
+
+# Migration: this country's vanilla taxation law, native tax level and taxed
+# goods become an enacted code with the same rates, and the carrier law is
+# installed. Raised for every country after the lobby, for each new country and
+# by the monthly dispatch for any country still unmigrated. Firing it again
+# (console: event te_tax.3) does nothing once the country is migrated.
+te_tax.3 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_migrate_country = yes
+	}
+}
+
+# Post-migration sync: raised by the migration a day after it, when the carrier
+# law it activated is in place. One collection write; the writer does nothing
+# for a country not on the carrier.
+te_tax.4 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_sync_collection = yes
 	}
 }
