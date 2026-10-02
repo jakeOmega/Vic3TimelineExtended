@@ -5,7 +5,8 @@
 # to run script by hand. Nothing in the mod fires this event. It measures pop
 # wealth and Drugs supply for drugs phase 2 § 1 (te_debug_drugs_measure in
 # common/scripted_effects/te_debug_drugs_effects.txt) and shows the world totals.
-# Fire it once per save, paused, then save: the numbers are that save's state.
+# Fire it once per save, paused: the numbers are that save's state. They go to
+# debug.log on TE_DRUGS_PROBE lines, so the game need not be saved afterwards.
 # ============================================================================
 namespace = te_debug_drugs
 
