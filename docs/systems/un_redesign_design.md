@@ -358,7 +358,8 @@ the classification and the loc.
     authority 40. Ceiling (`nd_tpnw_ceiling`, its own variable; the lowest of three ceilings
     binds) = floor(base × (5 − floor(months ÷ 60)) ÷ 5), the base being the arsenal in the
     party's first month; the clock does not run while the UN is Moribund. An unarmed party's
-    ceiling is 0. An armed country joining the UN later is not bound by it. Leaving while it
+    ceiling is 0, so its programme is held: the proposal above named only armed parties, but a
+    party that may not hold the weapon may not build it either, which is the treaty's point. An armed country joining the UN later is not bound by it. Leaving while it
     stands books a walk-out on the taboo ledger. Taboo: + authority ÷ 100 × 6, cap of the UN
     part 20.
 
