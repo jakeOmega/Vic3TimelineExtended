@@ -883,6 +883,31 @@ building_farmers_shares_add={
 	}
 }
 
+# Split synthetics plants used by the biotechnology companies
+building_synthetics_plant_opium_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_synthetics_plant_biomass_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_synthetics_plant_sugar_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
+building_synthetics_plant_meat_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
 
 # === Building employment (per-pop-type employment scaling) ===
 
@@ -2799,6 +2824,55 @@ state_building_noda_shoyu_goyogura_max_level_add = {
 
 # Military Base
 state_building_military_base_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+# Biotechnology company flagships
+state_building_genentech_dna_way_campus_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_monsanto_chesterfield_center_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_novo_nordisk_kalundborg_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_ajinomoto_kawasaki_plant_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_biocon_park_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_bgi_national_genebank_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_biontech_mainz_campus_max_level_add = {
+	color = good
+	percent = no
+	decimals = 0
+}
+
+state_building_rosen_association_hq_max_level_add = {
 	color = good
 	percent = no
 	decimals = 0

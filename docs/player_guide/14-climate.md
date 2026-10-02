@@ -260,6 +260,8 @@ state's buildings produce, recalculated monthly. It is lowered by:
 | Emission Standards policy | −25% |
 | Ministry of the Environment | −5% per level |
 | Biotechnology company, while prosperous | −20% |
+| Novo Nordisk company, while prosperous | −10% |
+| Novo Nordisk Kalundborg Plant, in its own state | Up to −15% |
 | Electric Vehicles technology | −5% |
 
 Each level of the Ministry of the Environment also cuts emissions by 5% and
