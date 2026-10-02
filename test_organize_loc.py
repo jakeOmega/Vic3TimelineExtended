@@ -7,9 +7,9 @@ import tempfile
 import unittest
 
 from organize_loc import (
-    categorize_key, find_diplo_action_keys, find_parameterized_keys,
-    find_quoted_loc_args, find_treaty_article_keys, find_war_goal_keys,
-    organize_all, treaty_article_families,
+    categorize_key, find_diplo_action_keys, find_drift, find_parameterized_keys,
+    find_quoted_loc_args, find_treaty_article_keys, find_used_keys_explicitly,
+    find_war_goal_keys, organize_all, treaty_article_families,
 )
 
 
@@ -70,8 +70,49 @@ class CategorizeKeyTests(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "CONCEPTS")
 
+    def test_tax_probe_harness_stays_together(self):
+        # Without the rule the carrier law went to LAWS, the `_add` actions to
+        # MODIFIERS, `_desc` and short names to CONCEPTS and the rest to
+        # MISCELLANEOUS, and the dedicated file was deleted on the next run.
+        for key in (
+            "te_tp_tab", "te_tp_help_text", "te_tp_action_grain_add",
+            "te_tp_action_luxury_add", "te_tp_metric_obs_tax_income",
+            "amendment_te_tp_wage", "amendment_te_tp_wage_desc",
+            "law_te_probe_carrier", "law_te_probe_carrier_desc",
+        ):
+            with self.subTest(key=key):
+                self.assertEqual(categorize_key(key, set()), "DEBUG_TAX")
+
 
 class OrganizeAllUnusedTests(unittest.TestCase):
+    def test_harness_keeps_unreferenced_keys_in_its_file(self):
+        # A disposable harness's file must hold its whole family, or deleting
+        # the file leaves strays in te_unused_l_english.yml.
+        loc = (
+            "l_english:\n"
+            " te_tp_action_snapshot:0 \"Snapshot\"\n"
+            " te_tp_action_arm:0 \"Arm probes\"\n"
+            " widget_dead:0 \"never referenced\"\n"
+        )
+        with tempfile.TemporaryDirectory() as td:
+            loc_dir = os.path.join(td, "localization", "english")
+            os.makedirs(loc_dir)
+            with open(os.path.join(loc_dir, "te_debug_tax_l_english.yml"), "w", encoding="utf-8-sig") as fh:
+                fh.write(loc)
+            os.makedirs(os.path.join(td, "gui"))
+            with open(os.path.join(td, "gui", "w.gui"), "w", encoding="utf-8-sig") as fh:
+                fh.write('button = { text = "te_tp_action_snapshot" }\n')
+            with contextlib.redirect_stdout(io.StringIO()):
+                organize_all(td)
+            with open(os.path.join(loc_dir, "te_debug_tax_l_english.yml"), encoding="utf-8-sig") as fh:
+                harness = fh.read()
+            with open(os.path.join(loc_dir, "te_unused_l_english.yml"), encoding="utf-8-sig") as fh:
+                unused = fh.read()
+        self.assertIn(" te_tp_action_snapshot:", harness)
+        self.assertIn(" te_tp_action_arm:", harness)
+        self.assertNotIn(" te_tp_action_arm:", unused)
+        self.assertIn(" widget_dead:", unused)
+
     def test_quoted_argument_keeps_key_out_of_unused(self):
         loc = (
             "l_english:\n"
@@ -366,6 +407,92 @@ class FindWarGoalKeysTests(unittest.TestCase):
                     "nd_tt_nd_hardening_add", "nd_tt_nd_hardening_subtract"):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
+
+
+
+class FindUsedKeysExplicitlyTests(unittest.TestCase):
+    def test_only_game_folders_count(self):
+        # A word in a docs dump or a .venv file is not a reference, and a
+        # gitignored one would make a local run disagree with CI's --check.
+        with tempfile.TemporaryDirectory() as td:
+            _write(td, "common/customizable_localization/c.txt", "c = { localization_key = from_common }\n")
+            _write(td, "map_data/state_regions/s.txt", "STATE_FROM_MAP = { id = 1 }\n")
+            _write(td, "docs/engine/technologies.txt", "from_docs\n")
+            _write(td, ".venv/lib/top_level.txt", "from_venv\n")
+            _write(td, "gfx/x.txt", "from_gfx\n")
+            used = find_used_keys_explicitly(td)
+        self.assertIn("from_common", used)
+        self.assertIn("STATE_FROM_MAP", used)
+        for token in ("from_docs", "from_venv", "from_gfx"):
+            self.assertNotIn(token, used)
+
+
+class FindDriftTests(unittest.TestCase):
+    _LOC = (
+        "l_english:\n"
+        " widget_title:0 \"Title\"\n"
+        " building_widget:0 \"Widget Works\"\n"
+        " widget_dead:0 \"never referenced\"\n"
+    )
+
+    def _organized(self, td):
+        _write(td, "localization/english/x_l_english.yml", self._LOC)
+        _write(td, "gui/w.gui", 'textbox = { text = "widget_title" }\ntextbox = { text = "building_widget" }\n')
+        with contextlib.redirect_stdout(io.StringIO()):
+            organize_all(td)
+        return os.path.join(td, "localization", "english")
+
+    def test_organized_tree_has_no_drift(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._organized(td)
+            self.assertEqual(find_drift(td), [])
+
+    def test_hand_placed_file_reports_moves_and_deletion(self):
+        with tempfile.TemporaryDirectory() as td:
+            _write(td, "localization/english/x_l_english.yml", self._LOC)
+            _write(td, "gui/w.gui", 'textbox = { text = "widget_title" }\n')
+            drift = find_drift(td)
+            # Checking writes nothing.
+            self.assertEqual(os.listdir(os.path.join(td, "localization", "english")),
+                             ["x_l_english.yml"])
+        self.assertIn(
+            "1 key(s) would move x_l_english.yml -> te_concepts_l_english.yml: widget_title", drift
+        )
+        self.assertIn(
+            "2 key(s) would move x_l_english.yml -> te_unused_l_english.yml: "
+            "building_widget, widget_dead", drift
+        )
+        self.assertIn("x_l_english.yml: would be deleted", drift)
+        self.assertIn("te_unused_l_english.yml: would be created", drift)
+
+    def test_key_in_the_wrong_category_file(self):
+        with tempfile.TemporaryDirectory() as td:
+            loc_dir = self._organized(td)
+            _write(td, "localization/english/te_concepts_l_english.yml",
+                    "l_english:\n\n#\n# CONCEPTS\n#\n widget_title:0 \"Title\"\n"
+                    " building_widget:0 \"Widget Works\"\n")
+            os.remove(os.path.join(loc_dir, "te_buildings_l_english.yml"))
+            drift = find_drift(td)
+        self.assertIn(
+            "1 key(s) would move te_concepts_l_english.yml -> te_buildings_l_english.yml: "
+            "building_widget", drift
+        )
+        self.assertIn("te_buildings_l_english.yml: would be created", drift)
+
+    def test_unsorted_file_and_duplicate_key(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._organized(td)
+            _write(td, "localization/english/te_unused_l_english.yml",
+                    "l_english:\n widget_dead:0 \"never referenced\"\n")
+            _write(td, "localization/english/zz_l_english.yml",
+                    "l_english:\n widget_title:0 \"Stale\"\n")
+            drift = find_drift(td)
+        self.assertIn("te_unused_l_english.yml: would be re-sorted or reformatted", drift)
+        self.assertIn(
+            "widget_title: in te_concepts_l_english.yml, zz_l_english.yml; a run keeps one "
+            "copy, in te_concepts_l_english.yml, with the text from zz_l_english.yml", drift
+        )
+        self.assertIn("zz_l_english.yml: would be deleted", drift)
 
 
 if __name__ == "__main__":

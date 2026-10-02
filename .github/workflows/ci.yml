@@ -118,6 +118,14 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 scripts/analysis/check_localization_files.py
 
+      # organize_loc.py rewrites localization/english/ on every full /reload.
+      # A key filed where it would not put it (a hand-placed key, a new prefix
+      # with no categorize_key rule) moves on the next reload, and committing
+      # half of that move drops keys (#613, #617). Fix: run it and commit the result.
+      - name: Localization organised (organize_loc.py --check)
+        if: ${{ !cancelled() }}
+        run: python3 organize_loc.py --check
+
       - name: Audit — GUI references and widget mounts
         if: ${{ !cancelled() }}
         run: python3 gui_reference_audit.py --strict
