@@ -24,6 +24,16 @@ Systems using this pattern:
 - The mod adds a `pmg_maintenance` PM group that should be **hidden** from all PM icon displays using `visible = "[Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance'))]"`.
 - PM icon displays use `scrollarea` + `flowcontainer` (not `fixedgridbox`) so hidden items collapse properly and scrollbars appear when > 4 PM groups. Max width: `208` pixels (4 × 52px icons).
 
+### Drugs (vanilla `opium`) and Pharmaceutical Industries
+
+Drugs are vanilla's `opium` good under a new name, so anything that adds Drugs supply or demand also touches vanilla's opium content. `building_synthetics_plant_opium` unlocks at vanilla `pharmaceuticals` (era 2) with a six-method ladder in `pmg_synthetic_opium`. Its design rule and wage-breakeven targets are in the comment above `pm_pharma_alkaloid_extraction` (`extra_pms.txt`): the era-2 method loses to a plantation so it can't undercut the British–Qing trade, and later methods beat the opium Mechanized Farm, trimmed to 55. What vanilla keys off the good, and how the mod handles it:
+
+- **The Opium Trade (`je_opium`)** has no timeout and completes when another country's market imports ≥200 of the good, firing `opium_events.1` against that people. Modern Drugs imports would fire it in the 20th century, so `common/journal_entries/te_vanilla_opium.txt` `REPLACE`s it with a 23 January 1912 cutoff (re-diff on every patch).
+- **Qing's Opium Crisis ban** (`add_banned_goods = g:opium`) also bans medicine. Pharmaceutical Industries carry the plantation's `is_banning_goods` build check.
+- **Cultural obsession** (Han starts with opium) multiplies demand only in needs that declare `obsession_demand_*` (vanilla's intoxicants and leisure do). A new medicine need should leave those fields out.
+- **Field Hospitals** use Drugs as in vanilla; First Aid and Medevac Helicopters use liquor.
+- Companies, prestige goods, Britain's plantation JE, the opium mobilization option and Free Trade's ban removal key off plantations or the good existing, not off demand levels.
+
 ## Global Warming (`je_global_warming`)
 
 > See also: `docs/systems/journal_entry_systems.md` for full JE system documentation.

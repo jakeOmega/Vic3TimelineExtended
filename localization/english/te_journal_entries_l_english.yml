@@ -578,6 +578,7 @@
  je_nuclear_program_widget_taboo_tactical_value:0 "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! infamy · relations #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#!"
  je_nuclear_program_widget_taboo_threat_label:0 "A public ultimatum"
  je_nuclear_program_widget_taboo_threat_value:0 "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! infamy"
+ je_opium_international_opium_convention_tt:0 "The International Opium Convention has been signed (23 January 1912)"
  je_post_scarcity:0 "Post-Scarcity Transition"
  je_post_scarcity_desc:0 "Automation and AI render traditional labor obsolete. Decide what comes next as the old economic order ends."
  je_post_scarcity_reason:0 "Automation and AI are making traditional labor obsolete. Society must decide what comes next as the old economic order crumbles."

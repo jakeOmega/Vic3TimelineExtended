@@ -138,6 +138,24 @@ class TaxProbeSafetyTest(unittest.TestCase):
             self.assertEqual(len(rates), 5)
             self.assertEqual(len(set(rates)), 1, clause)
 
+    def test_carrier_uses_valid_law_gates(self):
+        # `possible` is an amendment/decree field, not a law field: debug.log
+        # 2026-10-02 14:23:48 "Unexpected token: possible" in this file. A law is
+        # gated by can_enact (enactment) and is_visible (law panel).
+        path = ROOT / "common/laws/zz_te_debug_tax_carrier.txt"
+        parser = ParadoxFileParser()
+        parser.parse_file(str(path), apply_directives=False)
+        node = parser.data["law_te_probe_carrier"]
+        body = node[1] if isinstance(node, tuple) else node
+        self.assertNotIn("possible", body)
+        self.assertIn("can_enact", body)
+        self.assertIn("is_visible", body)
+        text = path.read_text(encoding="utf-8-sig")
+        self.assertIn("can_enact = { has_variable = te_tp_armed }", text)
+        self.assertIn("is_visible = { has_variable = te_tp_armed }", text)
+        # The AI must still never pick the carrier by weight.
+        self.assertIn("ai_enact_weight_modifier = { value = -100000 }", text)
+
     def test_normal_entry_points_never_arm_a_country(self):
         hooks = read("common/on_actions/te_debug_tax_on_actions.txt")
         self.assertNotIn("id = te_debug_tax.1 ", hooks)
