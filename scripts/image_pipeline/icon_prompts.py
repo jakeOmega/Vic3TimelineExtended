@@ -179,9 +179,10 @@ CATEGORIES = {
         folder="diplomatic_action_icons", size=100, mode="plinth", fill=0.8,
         entity_dir="common/diplomatic_actions", field="texture", lens_folder="lens_toolbar_icons",
         style=("{subject}, a compact miniature sculpture, simple chunky silhouette, " + PAINTED)),
-    # restyle_strengths: as is, then two repaints (applied in eighths, see icon_render.RESTYLE_STEPS).
+    # restyle_strengths: as is, then repaints (applied in eighths, see icon_render.RESTYLE_STEPS).
+    # Up to 0.5 the repaint adds texture but keeps a flat picture flat; the brushwork shows from 0.625.
     "building": dict(
-        folder="building_icons", size=256, mode="framed", restyle_strengths=(0.0, 0.375, 0.5),
+        folder="building_icons", size=256, mode="framed", restyle_strengths=(0.0, 0.375, 0.5, 0.625, 0.75),
         entity_dir="common/buildings", field="icon",
         style=("aerial three-quarter view of {subject}, detailed painted illustration "
                "of a miniature diorama, warm golden afternoon light, muted earthy "
@@ -761,7 +762,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_antimatter_facility_construction_site": {"subject": "the construction site of a futuristic research complex: a huge ring-shaped tunnel half-dug in an open trench, a round steel dome frame at its centre, scaffolding and tower cranes, loosely hand-painted with visible brush strokes", "seed": None},
         "building_space_program": {"subject": "a national space agency headquarters: a modern glass mission control building with a big white satellite dish on its roof and a tall white rocket standing upright on display in the plaza in front, landscaped grounds, loosely hand-painted with visible brush strokes", "seed": None},
         # Wonders: the landmark alone.
-        "building_wonder_iter": {"subject": "the ITER fusion reactor complex in southern France: a massive grey and silver rectangular reactor hall beside long assembly halls and a giant crane, among green hills and pine woods", "seed": None},
+        # A plain render of ITER is a grey hall that reads as a warehouse; the cutaway shows the reactor.
+        "building_wonder_iter": {"subject": "a cutaway of the ITER fusion reactor building among the green hills of southern France, its roof open to show a giant doughnut-shaped tokamak reactor ring of steel magnet coils glowing with pink-violet plasma inside the concrete hall, cranes and tiny workers around it", "seed": None},
         "building_wonder_international_space_station": {"subject": "the International Space Station in orbit: a long central truss carrying four pairs of huge golden solar panel wings and plain white cylindrical modules, the blue Earth curving below", "seed": None},
         "building_wonder_kennedy_space_center": {"subject": "the Kennedy Space Center: a huge plain grey-white boxy rocket assembly building beside a launch pad where a white rocket stands in its steel gantry tower, flat green Florida marshland, lagoons and the sea", "seed": None},
         # The mod's own icons from before the pipeline (2024-25): kept, refitted to
@@ -773,21 +775,21 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_synthetics_plant_opium": {"restyle": f"{_BI}/drugs.dds", "subject": "a clean pharmaceutical laboratory with a white pill-making machine, a robot arm, blister packs of white pills and brown medicine bottles", "seed": None},
         "building_fusion_plant": {"restyle": f"{_BI}/fusion_plant.dds", "crop": 0.1, "subject": "a futuristic fusion power plant: a tall silver cylindrical reactor with a glowing blue ring at its base, surrounded by white technical buildings and pipes", "seed": None},
         "building_highway": {"restyle": f"{_BI}/highway.dds", "subject": "a wide multi-lane highway full of cars and trucks running toward the horizon under an overpass, green trees on both sides", "seed": None},
-        "building_hydro_plant": {"restyle": f"{_BI}/hydro_plant.dds", "crop": 0.1, "subject": "a hydroelectric dam with turbine wheels and power pylons above churning white water", "seed": None},
+        "building_hydro_plant": {"restyle": f"{_BI}/hydro_plant.dds", "crop": 0.18, "subject": "a hydroelectric dam with turbine wheels and power pylons above churning white water", "seed": None},
         "building_national_park": {"restyle": f"{_BI}/national_park.dds", "subject": "a national park: snowy mountains above pine forests, a winding trail beside a calm blue lake", "seed": None},
         "building_renewable_energy_plant": {"restyle": f"{_BI}/renewable_plant.dds", "crop": 0.1, "subject": "a renewable energy plant: white wind turbines and fields of solar panels around a white power building, green fields", "seed": None},
-        "building_robotics_industry": {"restyle": f"{_BI}/robot.dds", "subject": "a robotics factory floor where yellow robotic arms weld metal parts in showers of sparks", "seed": None},
+        "building_robotics_industry": {"restyle": f"{_BI}/robot.dds", "crop": 0.08, "subject": "a robotics factory floor where yellow robotic arms weld metal parts in showers of sparks", "seed": None},
         "building_electronic_components_and_semiconductor_industry": {"restyle": f"{_BI}/semiconductor.dds", "subject": "a golden-lit electronics workshop where technicians in pale cleanroom suits work at benches of microscopes and circuit trays", "seed": None},
-        "building_software_industry": {"restyle": f"{_BI}/software.dds", "subject": "a modern dark glass office building at night with rows of lit windows and a glowing blue sign on its facade", "seed": None},
+        "building_software_industry": {"restyle": f"{_BI}/software.dds", "crop": 0.06, "subject": "a modern dark glass office building at night with rows of lit windows and a glowing blue sign on its facade", "seed": None},
         "building_tourism_industry": {"restyle": f"{_BI}/tourism.dds", "subject": "a sunny seaside promenade at sunset with palm trees, a cafe table and chairs, colourful hotel buildings and a suitcase, an aeroplane in the sky", "seed": None},
         "building_synthetics_plant_oil": {"restyle": f"{_BI}/synth_oil.dds", "subject": "an old smoky synthetic fuel refinery with tall towers and pipes, workers and a tank train in the foreground, sepia haze", "seed": None},
         "building_synthetics_plant_rubber": {"restyle": f"{_BI}/synth_rubber.dds", "subject": "a synthetic rubber works: workers by a conveyor of rubber sheets in front of a chemical plant with domed tanks and chimneys, olive-green haze", "seed": None},
         "building_network_infrastructure": {"restyle": f"{_BI}/network.dds", "subject": "a dark server room with a rack of blinking servers and glowing blue fibre-optic cables fanning out toward a satellite dish and a radio mast", "seed": None},
         "building_space_mine": {"restyle": f"{_BI}/space_base.dds", "crop": 0.1, "subject": "an extraplanetary base: white domed habitats, solar panels and a small rover on a red rocky planet at dusk, a moon in the sky", "seed": None},
         "building_advanced_material_fabricator": {"restyle": f"{_BI}/advanced_materials.dds", "subject": "a dark high-tech workshop with spools of black carbon fibre, a robot arm and a glowing orange-lit fabrication press", "seed": None},
-        "building_aerospace_industry": {"restyle": f"{_BI}/space.dds", "subject": "a rocket lifting off from its launch tower at night in a burst of orange flame and smoke, a radar dish nearby", "seed": None},
+        "building_aerospace_industry": {"restyle": f"{_BI}/space.dds", "crop": 0.06, "subject": "a rocket lifting off from its launch tower at night in a burst of orange flame and smoke, a radar dish nearby", "seed": None},
         "building_space_elevator": {"restyle": f"{_BI}/space_elevator.dds", "subject": "a space elevator: a single thin tether rising from the Earth's curved horizon up into black starry space, a climber pod on it", "seed": None},
-        "building_space_elevator_construction_site": {"restyle": f"{_BI}/space_elevator_construction_site.dds", "crop": 0.1, "subject": "the construction site of a space elevator's base tower: a tall steel lattice tower in scaffolding with cranes, workers and stacked materials", "seed": None},
+        "building_space_elevator_construction_site": {"restyle": f"{_BI}/space_elevator_construction_site.dds", "crop": 0.15, "subject": "the construction site of a space elevator's base tower: a tall steel lattice tower in scaffolding with cranes, workers and stacked materials", "seed": None},
         "building_nuclear_plant": {"restyle": f"{_BI}/nuclear_plant.dds", "crop": 0.1, "subject": "a nuclear power plant with two large concrete cooling towers releasing white steam, reactor buildings and power lines, green fields and a river", "seed": None},
     },
     "mobilization_option": {

@@ -875,7 +875,7 @@ class RestyleTests(unittest.TestCase):
                                            "strengths": [0.0, 0.375, 0.5, 0.5]},
                 "building_bad_path": {"restyle": "old.dds", "subject": "an airport", "seed": None},
                 "building_bad_crop": {"restyle": src, "subject": "an airport", "seed": None, "crop": 0.4},
-                "building_past_last": {"restyle": src, "subject": "an airport", "seed": 3},
+                "building_past_last": {"restyle": src, "subject": "an airport", "seed": 9},
                 "building_bad_strength": {"restyle": src, "subject": "an airport", "seed": None, "strengths": [1.0]},
             }}
             d = tempfile.mkdtemp()
@@ -892,14 +892,16 @@ class RestyleTests(unittest.TestCase):
         self.assertEqual(r["missing_dds"], [])
 
     def test_candidates_are_the_strengths(self):
-        e = {"restyle": "gfx/interface/icons/building_icons/old.dds", "subject": "an airport", "seed": None}
-        self.assertEqual(ip.restyle_strengths("building", e), ip.CATEGORIES["building"]["restyle_strengths"])
+        bare = {"restyle": "gfx/interface/icons/building_icons/old.dds", "subject": "an airport", "seed": None}
+        self.assertEqual(ip.restyle_strengths("building", bare), ip.CATEGORIES["building"]["restyle_strengths"])
+        e = dict(bare, strengths=[0.0, 0.375, 0.5])                # an entry's own list wins
+        self.assertEqual(ip.restyle_strengths("building", e), (0.0, 0.375, 0.5))
         self.assertEqual(gi.caption("building", e, 0), "s0 as is")
         self.assertEqual(gi.caption("building", e, 2), "s2 repaint 0.5")
         self.assertEqual(gi.caption("building", {"subject": "a mine", "seed": None}, 1), "s1")
         self.assertEqual(gi.restyle_settings("building", dict(e, crop=0.15), 1),
                          {"restyle": e["restyle"], "crop": 0.15, "strength": 0.375})
-        self.assertEqual(gi.restyle_settings("building", e, 0)["crop"], ip.RESTYLE_CROP)
+        self.assertEqual(gi.restyle_settings("building", bare, 0)["crop"], ip.RESTYLE_CROP)
 
     @unittest.skipIf(icon_dds is None, "Pillow is not installed")
     def test_prepare_crops_the_border_and_fills_transparent_corners(self):
@@ -957,7 +959,7 @@ class RestyleTests(unittest.TestCase):
             ip.ICONS = gi.ICONS = {"building": {
                 "building_new": {"subject": "a mine", "seed": None},
                 "building_old": {"restyle": "gfx/interface/icons/building_icons/old.dds", "subject": "an airport",
-                                 "seed": None},
+                                 "seed": None, "strengths": [0.0, 0.375, 0.5]},
             }}
             icon_render.embed = lambda prompts, emb_dir: seen.setdefault("embedded", sorted(prompts))
             icon_render.render = lambda jobs, *a, **k: seen.setdefault("render", [(n, s) for n, _, s in jobs])
