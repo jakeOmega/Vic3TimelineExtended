@@ -30,7 +30,8 @@ United Nations Charter:
 Signing seats nobody on the Security Council; seats go by prestige (see [The UN
 Security Council](#the-un-security-council)). The host may build one United
 Nations Headquarters, which raises influence, prestige and society research
-speed but adds 10% infamy generation. While the UN is above Moribund, the host's
+speed and adds +1 to the UN Authority Target (see [What counts toward
+Policy](#what-counts-toward-policy)), but adds 10% infamy generation. While the UN is above Moribund, the host's
 covert networks in other members grow 25% faster. If the host leaves or loses
 its representation, the headquarters passes to another member and the old
 building is demolished.
@@ -87,27 +88,59 @@ it under Isolationism and refuses it under Total War. See
 
 UN Authority runs from 0 to 100 and is the bar at the top of the UN panels. Each month
 it closes a 48th of the gap to a target, at most 1 point, so a change in the
-world shows over years. The target is the sum of seven pillars:
+world shows over years. The target is the sum of eight pillars:
 
 | Pillar | Range | What moves it |
 |---|---|---|
 | Base | 15 | Constant. |
 | Participation | 0 to +25 | The share of world prestige held by members. |
 | Commitment | −25 to +25 | Members championing (+1) or undermining (−1) the order, weighted by their share of world power. Members of a bloc with Multilateral Institutions count a little in favor. |
-| Credibility | −15 to +15 | Resolutions carried or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, failed missions. |
+| Credibility | −25 to +25 | Resolutions carried or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, failed missions. |
 | Funding | −10 to +10 | The power-weighted share of major and great power members running UN programs, minus up to 15 for dues withheld. |
 | Peace and order | −20 to 0 | Members at war with fellow members, and nuclear use. |
 | Delivery | 0 to +10 | Aid and peacekeepers delivered, emergency loans, mandates discharged, missions accomplished. |
+| Policy | −25 to +25 | The UN Authority Target modifier carried by laws and institutions, with each country's total scaled by its weight. A member that is not undermining the UN counts for or against; any other country counts only against. A negative total pulls authority down. See [What counts toward Policy](#what-counts-toward-policy). |
 
 Credibility, delivery and the nuclear half of peace and order are kept as
-ledgers: each act adds or subtracts points, and old entries halve every four
-years. Acts by powerful countries count for more. Each entry is multiplied by
-the actor's **weight**, its share of world prestige against a typical great
-power's 10% (×1), up to ×5. A permanent member walking out and a
+ledgers: each act adds or subtracts points. Credibility entries halve every ten
+years; delivery entries and nuclear use halve every four. Acts by powerful
+countries count for more. Each entry is multiplied by the actor's **weight**,
+its share of world prestige against a typical great power's 10% (×1), up to ×5;
+the Policy row scales each country's modifier the same way. A permanent member walking out and a
 nuclear first strike also knock authority down directly. A new UN starts at 50,
 but with empty ledgers, no champions and no programs its target sits well below
 that, so expect authority to fall in its first years unless great powers
 champion it and run programs.
+
+Policy counts a country's UN Authority Target in full only while the country is
+a member and is not undermining the UN. A non-member, or a member undermining
+it, counts only when its total is negative: its harmful policies pull authority
+down, and its good ones can only offset them. Leaving the UN, or pressing
+Undermine International Order, stops a positive total from counting. Hover the
+Policy row to see your own figure, your weight and what you count for.
+
+### What counts toward Policy
+
+These carry the UN Authority Target modifier. Your total is multiplied by your
+weight, so for a typical great power each point is one point of target.
+
+| Source | UN Authority Target |
+|---|---|
+| Rules of War law | Total War −2, Traditional Rules of War 0, War Crimes Forbidden +0.5, Humanitarian Regulations +1, Limited War +1.5 |
+| Isolationism (trade policy) | −1.5 |
+| Ministry of International Aid | +0.15 for each level of investment (+1.35 at the cap of 9) |
+| Nuclear doctrine | No First Use +0.5, Existential Deterrence 0, Flexible First Use −0.5, Nuclear Compellence −1, Nuclear Warfighting −1.5 |
+| The Burden of the Bomb | Up to −1, in step with your arsenal's burden |
+| United Nations Headquarters (the host) | +1 |
+| Peace Palace | +0.5 |
+| Palais des Nations | +0.5 |
+
+The positive entries count only while you are a member and are not undermining
+the UN; the negative ones count whatever you do. A member great power under
+Limited War, with a funded Ministry of International Aid and a No First Use
+doctrine, holds about +2.5 to +3.4. A great power under Total War and
+Isolationism holds −3.5 before its nuclear posture. The AI does not weigh this
+modifier when it chooses laws or doctrine.
 
 ![The Why UN Authority Is Moving section in the UN tab of the Diplomacy panel. Authority is 68.1 and rising toward a target of 72.4, the sum of the pillars; below come the tier and the charter and the champions and underminers, with Recent Entries collapsed at the foot.](images/un_authority_moving.png)
 

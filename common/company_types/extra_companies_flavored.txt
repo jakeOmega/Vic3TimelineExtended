@@ -4016,3 +4016,416 @@ company_jardine_matheson = {
 		building_port = { level = 5 }
 	}
 }
+
+# =============================================================================
+# Biotechnology companies
+# Flavored versions of company_basic_biotechnology (extra_companies_generic.txt).
+# Like it, every one needs the Corporate Genetic Licensing law
+# (country_can_use_biotech_companies_bool) in `possible`. Picked for geographic
+# and thematic spread: pharmaceutical biotech (Genentech, Novo Nordisk, Biocon,
+# BioNTech), agricultural biotech (Monsanto), food fermentation (Ajinomoto),
+# genomics (BGI) and one far-future firm (Rosen Association). Six unlock with
+# Biotechnology (era 9), BioNTech with mRNA Therapeutics (era 10) and the Rosen
+# Association with Genetic Engineering (era 11).
+# =============================================================================
+
+# Genentech (1976) - the first biotech company; recombinant human insulin 1978
+company_genentech = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_genentech.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_CALIFORNIA # South San Francisco, Genentech's home base
+	}
+	building_types = {
+		building_synthetics_plant_opium
+		building_chemical_plant
+		building_genentech_dna_way_campus
+	}
+	extension_building_types = {
+		building_synthetics_plant_biomass
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = biotechnology
+	}
+	possible = {
+		modifier:country_can_use_biotech_companies_bool = yes
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_synthetics_plant_opium
+				level >= 5
+			}
+		}
+		"goods_production_rank(g:opium)" <= 5
+		gdp_per_capita_ranking <= 10
+	}
+	prosperity_modifier = {
+		building_synthetics_plant_opium_throughput_add = 0.15
+		country_weekly_innovation_mult = 0.05
+		state_building_genentech_dna_way_campus_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_opium
+	}
+	ai_will_do = {
+		has_technology_researched = biotechnology
+	}
+	ai_construction_targets = {
+		building_synthetics_plant_opium = { level = 10 }
+	}
+}
+
+# Monsanto (1901) - St. Louis chemical maker turned GMO seed giant; Roundup Ready crops 1996
+company_monsanto = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_monsanto.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_farm_corn.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_MISSOURI # St. Louis
+	}
+	building_types = {
+		building_chemical_plant
+		building_maize_farm
+		building_cotton_plantation
+		building_monsanto_chesterfield_center
+	}
+	extension_building_types = {
+		building_wheat_farm
+		building_synthetics_plant_biomass
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = biotechnology
+	}
+	possible = {
+		modifier:country_can_use_biotech_companies_bool = yes
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_chemical_plant
+				level >= 5
+			}
+		}
+		"goods_production_rank(g:grain)" <= 3
+	}
+	prosperity_modifier = {
+		building_maize_farm_throughput_add = 0.15
+		building_cotton_plantation_throughput_add = 0.15
+		building_chemical_plant_throughput_add = 0.05
+		state_building_monsanto_chesterfield_center_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_grain
+		prestige_good_generic_fertilizer
+	}
+	ai_will_do = {
+		has_technology_researched = biotechnology
+	}
+	ai_construction_targets = {
+		building_maize_farm = { level = 10 }
+	}
+}
+
+# Novo Nordisk (1923) - Danish insulin maker; its enzyme arm became Novozymes
+company_novo_nordisk = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/danish_novo_nordisk.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_ZEALAND # Bagsværd, outside Copenhagen
+	}
+	building_types = {
+		building_synthetics_plant_opium
+		building_synthetics_plant_biomass
+		building_novo_nordisk_kalundborg_plant
+	}
+	extension_building_types = {
+		building_synthetics_plant_sugar
+		building_food_industry
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = biotechnology
+	}
+	possible = {
+		modifier:country_can_use_biotech_companies_bool = yes
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_synthetics_plant_opium
+				level >= 5
+			}
+		}
+		gdp_per_capita_ranking <= 15
+	}
+	prosperity_modifier = {
+		state_mortality_mult = -0.05
+		building_synthetics_plant_biomass_throughput_add = 0.15
+		state_pollution_generation_mult = -0.10
+		state_building_novo_nordisk_kalundborg_plant_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_opium
+	}
+	ai_will_do = {
+		has_technology_researched = biotechnology
+	}
+	ai_construction_targets = {
+		building_synthetics_plant_opium = { level = 10 }
+	}
+}
+
+# Ajinomoto (1909) - Japanese fermentation pioneer: MSG, amino acids, aspartame
+company_ajinomoto = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_ajinomoto.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_KANTO # Tokyo; the first factory stood in Kawasaki
+	}
+	building_types = {
+		building_food_industry
+		building_synthetics_plant_sugar
+		building_synthetics_plant_drinks
+		building_ajinomoto_kawasaki_plant
+	}
+	extension_building_types = {
+		building_synthetics_plant_meat # cultured-meat partnerships
+		building_synthetics_plant_opium # amino-acid infusions
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = biotechnology
+	}
+	possible = {
+		modifier:country_can_use_biotech_companies_bool = yes
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_synthetics_plant_sugar
+				level >= 5
+			}
+		}
+		"goods_production_rank(g:groceries)" <= 5
+	}
+	prosperity_modifier = {
+		building_food_industry_throughput_add = 0.10
+		building_synthetics_plant_sugar_throughput_add = 0.15
+		state_building_ajinomoto_kawasaki_plant_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_groceries
+	}
+	ai_will_do = {
+		has_technology_researched = biotechnology
+	}
+	ai_construction_targets = {
+		building_synthetics_plant_sugar = { level = 10 }
+	}
+}
+
+# Biocon (1978) - Bengaluru enzyme maker turned biosimilars giant
+company_biocon = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_biocon.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_MYSORE # Bengaluru
+	}
+	building_types = {
+		building_synthetics_plant_opium
+		building_synthetics_plant_biomass
+		building_biocon_park
+	}
+	extension_building_types = {
+		building_chemical_plant
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = biotechnology
+	}
+	possible = {
+		# No wealth ranking: biosimilars are the poorer country's way into biotech.
+		modifier:country_can_use_biotech_companies_bool = yes
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_synthetics_plant_opium
+				level >= 5
+			}
+		}
+		"goods_production_rank(g:opium)" <= 10
+	}
+	prosperity_modifier = {
+		country_tech_spread_mult = 0.10
+		state_mortality_mult = -0.05
+		state_building_biocon_park_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_opium
+	}
+	ai_will_do = {
+		has_technology_researched = biotechnology
+	}
+	ai_construction_targets = {
+		building_synthetics_plant_opium = { level = 10 }
+	}
+}
+
+# BGI Group (1999) - Beijing-founded, Shenzhen-based genomics firm; sequenced 1% of the Human Genome Project
+company_bgi = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_bgi.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_GUANGDONG # Shenzhen
+	}
+	building_types = {
+		building_synthetics_plant_opium
+		building_synthetics_plant_fruit
+		building_bgi_national_genebank
+	}
+	extension_building_types = {
+		building_software_industry # bioinformatics
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = biotechnology
+	}
+	possible = {
+		modifier:country_can_use_biotech_companies_bool = yes
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_synthetics_plant_opium
+				level >= 5
+			}
+		}
+		literacy_rate >= 0.75
+		gdp_ranking <= 10
+	}
+	prosperity_modifier = {
+		country_weekly_innovation_mult = 0.05
+		building_university_throughput_add = 0.10
+		state_building_bgi_national_genebank_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_opium
+	}
+	ai_will_do = {
+		has_technology_researched = biotechnology
+	}
+	ai_construction_targets = {
+		building_synthetics_plant_opium = { level = 10 }
+	}
+}
+
+# BioNTech (2008) - Mainz mRNA company; with Pfizer, the first approved mRNA vaccine 2020
+company_biontech = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_biontech.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_HESSE # Mainz, in Rhenish Hesse
+	}
+	building_types = {
+		building_synthetics_plant_opium
+		building_biontech_mainz_campus
+	}
+	extension_building_types = {
+		building_chemical_plant
+		building_synthetics_plant_biomass
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = mrna_therapeutics
+	}
+	possible = {
+		modifier:country_can_use_biotech_companies_bool = yes
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_synthetics_plant_opium
+				level >= 5
+			}
+		}
+		"goods_production_rank(g:opium)" <= 5
+		gdp_per_capita_ranking <= 15
+	}
+	prosperity_modifier = {
+		state_mortality_mult = -0.05
+		building_synthetics_plant_opium_throughput_add = 0.10
+		country_society_tech_research_speed_mult = 0.05
+		state_building_biontech_mainz_campus_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_opium
+	}
+	ai_will_do = {
+		has_technology_researched = mrna_therapeutics
+	}
+	ai_construction_targets = {
+		building_synthetics_plant_opium = { level = 10 }
+	}
+}
+
+# Rosen Association
+# Oblique ref: Philip K. Dick's Do Androids Dream of Electric Sheep? (the Tyrell
+# Corporation of Blade Runner), which puts the firm in Seattle
+# Theme: Bioengineered android workers and artificial animals
+company_rosen_association = {
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_rosen_association.dds"
+	background = "gfx/interface/icons/company_icons/company_backgrounds/comp_illu_manufacturing_light.dds"
+	flavored_company = yes
+	preferred_headquarters = {
+		STATE_WASHINGTON # Seattle
+	}
+	building_types = {
+		building_synthetics_plant_meat
+		building_synthetics_plant_biomass
+		building_rosen_association_hq
+	}
+	extension_building_types = {
+		building_synthetics_plant_fruit
+		building_robotics_industry
+	}
+	potential = {
+		always = yes
+	}
+	attainable = {
+		has_technology_researched = genetic_engineering
+	}
+	possible = {
+		modifier:country_can_use_biotech_companies_bool = yes
+		any_scope_state = {
+			any_scope_building = {
+				is_building_type = building_synthetics_plant_biomass
+				level >= 10
+			}
+		}
+		gdp_ranking <= 5
+	}
+	prosperity_modifier = {
+		state_working_adult_ratio_add = 0.03
+		building_synthetics_plant_meat_throughput_add = 0.15
+		state_building_rosen_association_hq_max_level_add = 1
+	}
+	possible_prestige_goods = {
+		prestige_good_generic_meat
+	}
+	ai_will_do = {
+		has_technology_researched = genetic_engineering
+	}
+	ai_construction_targets = {
+		building_synthetics_plant_biomass = { level = 10 }
+	}
+}

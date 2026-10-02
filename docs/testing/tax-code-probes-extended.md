@@ -1,9 +1,10 @@
 # Tax code engine probes — extended reference
 
-**Optional follow-up only.** Start with the [minimal first run](tax-code-probes.md).
-Do not run this whole matrix before prototyping. A developer should pick a specific
-subcase when its answer would change the next implementation decision.
-The measurement and exit rules below apply to that detailed investigation, not the first run.
+**Optional follow-up only.** Start with the [architecture-risk runbook](tax-code-probes.md).
+Do not run this whole matrix before prototyping. Select a specific subcase when its
+answer would change an implementation decision. The measurement and exit rules below
+apply to that detailed investigation, not the focused first pass.
+
 
 **Status: implemented harness; every engine capability is UNTESTED.** This is disposable
 instrumentation for the [design](../superpowers/specs/2026-09-29-legislated-tax-code-design.md)
@@ -379,9 +380,11 @@ plus `common/laws/zz_te_debug_tax_carrier.txt`. Remove the marked additions in
 `gui/te_systems_window.gui`, `gui/budget_panel.gui`, `common/scripted_guis/te_system_tab_sguis.txt`,
 `common/scripted_effects/banking_policy_effects.txt`, and
 `common/scripted_effects/te_monetary_arrangement_effects.txt`. Remove the probe-specific test file;
-retain this runbook, source inventory tool and filled evidence for design decisions. If the
-localization organizer has moved keys, also remove the `te_tp_`, `amendment_te_tp_` and
-`law_te_probe_carrier` keys from their new localization files. Reload an
+retain this runbook, source inventory tool and filled evidence for design decisions. The
+localization organizer files every `te_tp_`, `amendment_te_tp_` and `law_te_probe_carrier` key
+in `te_debug_tax_l_english.yml`, unreferenced ones included, so deleting that file removes them
+all. Then remove the `DEBUG_TAX` category, its `categorize_key` rule and its `HARNESS_CATEGORIES`
+entry from `organize_loc.py`, with the two tests that use them in `test_organize_loc.py`. Reload an
 unmodified baseline save after removing the carrier definitions. Ordinary player-guide chapters
 and PDF are unchanged because the harness is console-only developer instrumentation.
 

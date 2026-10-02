@@ -713,7 +713,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
     #  Robotics/AI/automation 
     (r"^pm_(?:robots|smart_robots|nanobot|nanorobot|self_replicating|drone_delivery|"
      r"robotic_service|generic_robotics|autonomous_network|boston_dynamics|fanuc_forest|"
-     r"advanced_self_replicating|ai_governance|artificial_personalit)", "robot"),
+     r"advanced_self_replicating|ai_governance|artificial_personalit|rosen_association)", "robot"),
 
     #  Agriculture 
     (r"farming|rice_farm|crop|harvest|orchard|potatoes|precision_agri|improved_crop|"
@@ -721,7 +721,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"sugar|plantation|granary|apple_orchard|citrus|natural_nurturing|"
      r"oriental_dev_kunsan|ralli_odessa|bunge_born|moscow_irrigation|"
      r"lee_wilson|perskhlopok|persshelk|opium_ghazipur|"
-     r"generic_granary|generic_cold_storage", "wheat"),
+     r"generic_granary|generic_cold_storage|monsanto_chesterfield", "wheat"),
 
     #  Fishing 
     (r"purse_seine|fishing|fish_market|generic_fish", "wheat"),
@@ -733,7 +733,8 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"continuous_processing|flow_chemistry|electroenzymatic|"
      r"ai_optimized_synthesis|cellulosic|generic_chem|"
      r"food_additive|high_fructose|programmable_sweet|"
-     r"basf_ludwigshafen|chr_hansen|pfizer_rd|roche_tower", "flask"),
+     r"basf_ludwigshafen|chr_hansen|pfizer_rd|roche_tower|"
+     r"genentech_dna_way|novo_nordisk_kalundborg|biocon_park|biontech_mainz", "flask"),
 
     #  Food/beverages 
     (r"wine|liquor|beer|brew|distill|vodka|bodega|vintner|tobacco|"
@@ -743,7 +744,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"argentinian_wine|rod[iÃ­]guez_arguelles|imperial_tobacco|"
      r"sunhwaguk|tobacco_regie|united_tobacco|generic_vintner|"
      r"klanicko_|gavrilovic_|sansinena_|allatini_|elso_budapesti|"
-     r"gran_azucarera", "bottle"),
+     r"gran_azucarera|ajinomoto_kawasaki", "bottle"),
 
     #  Environment/emissions 
     (r"emission|effluent|filtration|scrub|ventilation|tailings|waste_fiber|"
@@ -825,7 +826,7 @@ CATEGORY_RULES: list[tuple[str, str]] = [
      r"ai_mediated_mind|automated_lab|national_lab|"
      r"generic_materials_lab|generic_rd_complex|generic_corporate_univ|"
      r"biotech_dye|quantum_dot_pigment|programmable_paper|"
-     r"openai_research|infosys_mysore|hp_labs|sap_headquarters", "atom"),
+     r"openai_research|infosys_mysore|hp_labs|sap_headquarters|bgi_national_genebank", "atom"),
 
     #  Paper 
     (r"kraft_pulp|calendered|self_growing_paper", "flask"),

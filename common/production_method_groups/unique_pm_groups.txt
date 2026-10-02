@@ -2013,3 +2013,51 @@ pmg_noda_shoyu_goyogura = {
 	ai_selection = most_productive
 	production_methods = { pm_noda_shoyu_goyogura }
 }
+
+pmg_genentech_dna_way_campus = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_genentech_dna_way_campus }
+}
+
+pmg_monsanto_chesterfield_center = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_monsanto_chesterfield_center }
+}
+
+pmg_novo_nordisk_kalundborg_plant = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_novo_nordisk_kalundborg_plant }
+}
+
+pmg_ajinomoto_kawasaki_plant = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_ajinomoto_kawasaki_plant }
+}
+
+pmg_biocon_park = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_biocon_park }
+}
+
+pmg_bgi_national_genebank = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_bgi_national_genebank }
+}
+
+pmg_biontech_mainz_campus = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_biontech_mainz_campus }
+}
+
+pmg_rosen_association_hq = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = { pm_rosen_association_hq }
+}

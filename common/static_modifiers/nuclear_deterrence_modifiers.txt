@@ -21,6 +21,12 @@
 # The international half of each doctrine (§3.1). The domestic half is the
 # nd_posture_approval_* family; the launch permission is
 # nd_doctrine_permits_strike in nuclear_deterrence_triggers.txt.
+# country_un_authority_target_add is the doctrine's weight in the UN authority
+# target's Policy pillar (un_redesign_design.md §0.10): +0.5 for no first use,
+# nothing for existential deterrence, then -0.5 / -1 / -1.5. These sit on
+# je_nuclear_program, whose modifiers count toward the country's own (the
+# banking tools are read back the same way). A positive figure counts only for
+# a member not undermining the UN; a negative one counts for anyone.
 
 # 1 — No first use / assured retaliation: reassures, weak for coercion.
 nd_doctrine_mod_1 = {
@@ -28,6 +34,7 @@ nd_doctrine_mod_1 = {
 	country_infamy_decay_mult = 0.1
 	country_improve_relations_speed_mult = 0.1
 	country_diplomatic_play_maneuvers_mult = -0.1
+	country_un_authority_target_add = 0.5
 }
 
 # 2 — Existential deterrence: the baseline. Carries no international effect;
@@ -43,6 +50,7 @@ nd_doctrine_mod_3 = {
 	country_leverage_resistance_mult = 0.1
 	country_diplomatic_play_maneuvers_mult = 0.05
 	country_infamy_decay_mult = -0.05
+	country_un_authority_target_add = -0.5
 }
 
 # 4 — Nuclear compellence: stronger threats, worse reputation.
@@ -52,6 +60,7 @@ nd_doctrine_mod_4 = {
 	country_leverage_generation_mult = 0.1
 	country_infamy_generation_mult = 0.1
 	country_improve_relations_speed_mult = -0.1
+	country_un_authority_target_add = -1
 }
 
 # 5 — Nuclear warfighting: nuclear weapons as an ordinary instrument.
@@ -62,6 +71,7 @@ nd_doctrine_mod_5 = {
 	country_infamy_generation_mult = 0.2
 	country_infamy_decay_mult = -0.1
 	country_improve_relations_speed_mult = -0.2
+	country_un_authority_target_add = -1.5
 }
 
 # ---- Readiness: how quickly forces can respond ----------------------------

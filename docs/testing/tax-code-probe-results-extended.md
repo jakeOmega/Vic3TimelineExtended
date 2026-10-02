@@ -1,7 +1,8 @@
 # Tax code probe results — extended investigation
 
 **Optional reference, not the first-run form.** Use the [short form](tax-code-probe-results.md)
-for initial feasibility. For a selected follow-up, fill only relevant sections below.
+for architecture risks. For a selected follow-up, fill only relevant sections below.
+
 
 **Run ID:** ___  **Tester/date:** ___  **Overall status:** UNTESTED
 

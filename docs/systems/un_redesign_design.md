@@ -8,6 +8,8 @@
 > representation) and §0.9 (what a revolution's winner keeps) are pending in-game
 > verification.
 > Read
+> [§0.11](#011-the-first-policy-grants),
+> [§0.10](#010-the-policy-pillar-and-a-slower-credibility-ledger),
 > [§0.9](#09-civil-wars-the-state-mirrors),
 > [§0.8](#08-subjects-diplomatic-autonomy-and-suspended-representation),
 > [§0.7](#07-joining-missions-at-will--rulings-and-open-checks),
@@ -28,6 +30,198 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.11 The first Policy grants
+
+Built 2026-10-02 at the mod owner's request, from a review of where
+`country_un_authority_target_add` (§0.10) belongs. Not yet seen in a running game.
+
+**The grants.** Each is a standing choice a country keeps: a law, an institution, a doctrine,
+a building. One-off acts stay in the ledgers. A positive figure counts only for a member in
+good standing; a negative one counts for anyone (§0.10 ruling 2). All are pinned in
+`test_un_policy_pillar.py` (`GRANTS`).
+
+| Source | Value | Where |
+|---|---|---|
+| Total War | −2 | `extra_laws.txt` |
+| Traditional Rules of War | 0 | — |
+| War Crimes Forbidden | +0.5 | `extra_laws.txt` |
+| Humanitarian Regulations | +1 | `extra_laws.txt` |
+| Limited War | +1.5 | `extra_laws.txt` |
+| Isolationism (vanilla) | −1.5 | `INJECT:law_isolationism`, `extra_laws.txt` |
+| Ministry of International Aid | +0.15 a level (+1.35 at the cap of 9) | the institution, `extra_institutions.txt` |
+| Doctrine: No First Use / Existential Deterrence / Flexible First Use / Compellence / Warfighting | +0.5 / 0 / −0.5 / −1 / −1.5 | `nd_doctrine_mod_*`, on `je_nuclear_program` |
+| The Burden of the Bomb | −1 × burden (0..1) | `nd_taboo_possession_cost`, on `je_nuclear_program` |
+| United Nations Headquarters (the host) | +1 | `pm_un_headquarters` |
+| Peace Palace | +0.5 | `pm_wonder_peace_palace` |
+| Palais des Nations | +0.5 | `pm_wonder_palais_des_nations` |
+
+**Rulings.**
+
+1. **Sizing.** The weights sum to about 10, so a value every country held would move Policy by
+   about 10× that value. One country's whole positive stack is +5.35 at weight 1 (Limited War,
+   the aid ministry at 9, No First Use, the HQ and both palaces); a committed member great
+   power without the buildings holds about +2.5 to +3.4. The whole negative stack is −6
+   (Total War, Isolationism, Warfighting, a full burden). The test holds the two stacks to
+   +5.5 and −6.5. A rogue superpower at ×5 can therefore take the pillar to its floor alone;
+   that is intended.
+2. **Nothing rides on the UN's own enforcement.** No grant sits on a modifier applied with
+   `multiplier = un_enforcement` or `un_convention_multiplier`, whose tier-driven multiplier
+   would feed authority back into its own target (tested).
+3. **The taboo loop is accepted.** The nuclear taboo reads UN authority (its "un" part, up to
+   +12 × authority / 100), and Burden of the Bomb scales with the taboo. Authority up, taboo up,
+   burden up, Policy down: a damping loop, with a gain of about 0.01 per point of authority for
+   one armed great power, slowed further by the taboo's 36-month approach.
+4. **Journal-entry modifiers count.** The doctrines and Burden of the Bomb sit on
+   `je_nuclear_program`. A journal entry's modifiers apply to its country and are read back
+   with `modifier:`: the banking tools on `je_banking_cycle` carry
+   `country_banking_intervention_max_add`, which the country reads that way in 44 places.
+   **VERIFY IN-GAME** for this modifier (checklist).
+5. **The palaces are one in the world.** Both are `unique = yes`: one level of the building in
+   the whole world (the engine's definition; `docs/vanilla/wonder_buildings_reference.md`
+   FAQ 1). The HQ is the host's alone. So each building grant is held by one country at most.
+6. **Left out on purpose.**
+   - Technologies: nearly everyone gets them, so they would act as a retuned base.
+   - Human-rights laws: the rights regime already penalises them.
+   - The programme and stance modifiers: funding and commitment already count them.
+   - Modifiers scaled by enforcement: feedback (ruling 2).
+   - Decrees: their modifiers sit on the state.
+   - Bloc principles, colonial laws, treaty articles and the civil-rights buttons: a second
+     tier, for a later change.
+7. **The AI does not weigh it.** It is script-only, so it does not move the AI's law or doctrine
+   choices.
+
+### Files
+
+- `common/laws/extra_laws.txt`: the Rules of War laws and the Isolationism INJECT.
+- `common/institutions/extra_institutions.txt`: the Ministry of International Aid.
+- `common/static_modifiers/nuclear_deterrence_modifiers.txt` (doctrines) and
+  `nuclear_taboo_modifiers.txt` (Burden of the Bomb).
+- `common/production_methods/unique_pms.txt`: the HQ and the two palaces.
+- `common/modifier_type_definitions/un_membership_modifier_types.txt`: two decimals (0.15 a
+  level), and the list of grants.
+- `test_un_policy_pillar.py`: `GRANTS`, the ladders, the stacks, the enforcement guard.
+
+### IN-GAME VERIFICATION CHECKLIST (§0.11)
+
+- [ ] A member under Limited War: the law's tooltip lists "UN Authority Target +1.50", and the
+      Policy tooltip's "Ours" line counts it times our weight.
+- [ ] A member on No First Use: the Nuclear Weapons entry lists the doctrine's +0.50, and the
+      "Ours" line includes it. This confirms journal-entry modifiers reach `modifier:`.
+- [ ] A non-member under Limited War counts +0.00, with the red note; under Total War it counts
+      −2 × its weight.
+- [ ] The Ministry of International Aid at level 3 shows +0.45.
+
+---
+
+## 0.10 The Policy pillar and a slower credibility ledger
+
+Built 2026-10-02 at the mod owner's request; the good-standing rule (ruling 2) was added the
+same day, also at the owner's request. Not yet seen in a running game.
+
+**What changed.**
+
+- **An eighth pillar in the target, Policy.** The target is now the sum of eight pillars, the
+  constant base (counted as one, as the panel and the player guide do) and seven computed
+  ones: participation, commitment, credibility, funding, order, delivery and policy. Policy is
+  `Σ un_policy_contribution` over every country, held to **−25 … +25** from all sources
+  together (`un_pillar_policy_value`, `un_policy_cap` / `un_policy_floor`). A country's
+  contribution is its `country_un_authority_target_add × un_actor_weight`, in full for a member
+  in good standing and held at 0 or below for anyone else (ruling 2). A negative total takes
+  authority down.
+- **Credibility** keeps its design but moves to **−25 … +25** (`un_credibility_cap`, new
+  `un_credibility_floor`) and fades with a **ten-year half-life** (`un_credibility_decay_factor`
+  0.99424 a month = 0.5^(1/120)). Delivery and order keep the four-year half-life
+  (`un_ledger_decay_factor`). The credibility bar divides by `un_credibility_cap`, so it
+  rescales with the range and zero stays the centre line.
+
+**Rulings.**
+
+1. **The modifier is a points figure, scaled by weight.** `country_un_authority_target_add`
+   (`common/modifier_type_definitions/un_membership_modifier_types.txt`, `script_only`) reads
+   as "target points for a typical great power": a country's total is multiplied by its
+   `un_actor_weight` (its share of world prestige against 10%, capped at ×5), so a superpower
+   counts up to five times over and a micro-state rounds to nothing. Raw power share was the
+   other candidate; it would have made every grant a number near 25, because the shares sum to
+   1 where the weights sum to at most 10.
+2. **Only a member in good standing adds; anyone can take away.** A member that is not
+   undermining the organisation (`un_policy_counts_in_full`, `un_membership_triggers.txt`: it
+   carries `un_member_modifier`, represented or suspended, and not `un_undermine_order_cost`)
+   counts in full, for or against. Anyone else, a non-member or an underminer, has its total
+   held at 0 or below (`un_policy_contribution`: `max = 0` before the weight). The reasoning,
+   the owner's: a country that stays out of the UN or works against it, but behaves well
+   (international aid, limited war), runs that conduct through its own channels and
+   strengthens norms, not the institution, so it should not raise the UN's authority; bad
+   conduct from anyone is the challenge the UN exists to meet and makes it look weak when it
+   cannot answer, so it counts. That also gives an anti-UN strategy a lever: its harmful
+   policies wear the UN down, its good ones do not prop it up.
+   - **The clamp is on the total.** The engine exposes only the modifier's sum, so an
+     outsider's good policies offset its own bad ones and add nothing beyond that. Splitting the
+     modifier into a "support" and a "harm" half was the alternative; it would make every grant
+     a classification and show players two similar lines.
+   - **Championing earns nothing extra here.** Commitment already rewards it; counting it again
+     would double one fact.
+   - **Non-members still count**, which differs from participation and commitment (members
+     only); that is how an outsider's harm reaches the target.
+   - The panel's Policy tooltip shows the viewer's own line (`je_un_auth_policy_own`: modifier,
+     weight, what it counts) and, while a positive total is being held at 0, says why
+     (`je_un_auth_policy_own_held`, from `un_disp_policy_own_held`).
+3. **Policy is read from the world, not booked.** It is not a ledger: it does not decay, has no
+   log entries and no `un_ledger_policy`. A modifier that is gone stops counting at the next
+   monthly update. `un_ledger_record` is never called with `PILLAR = policy`
+   (`test_un_policy_pillar.py` fails if anything does).
+4. **The grants were a change of their own** (§0.11). `test_un_policy_pillar.py` pins every grant
+   (the modifier given a value anywhere under `common/` or `events/`) and fails on one that is
+   not in its table. Sizing: the weights sum to about 10, so a value every country holds moves
+   the pillar by about 10× that value. Never put the modifier on a modifier applied with
+   `multiplier = un_enforcement` (or `un_convention_multiplier`), whose tier-driven multiplier
+   would feed authority back into its own target.
+5. **Why credibility slows and widens together.** A quiet world feeds the ledger about 0.1 a
+   month. On the old four-year half-life that settled near +7, inside the old ±15. On ten years
+   it settles near +17 (0.1 / (1 − 0.99424)), which would have pinned the old cap. The ±25 cap
+   leaves room for a good decade without saturating.
+6. **The snapshot, the trend and the dissolve follow the other pillars.** The monthly update
+   copies `un_pillar_policy_prev`, snapshots `un_pillar_policy` before computing the target,
+   and `un_dissolve` removes it.
+
+**Existing saves.** The credibility ledger itself was never clamped, only the pillar read from
+it. A save whose stock had run past ±15 shows the excess at once, up to ±25, so its target can
+jump by up to 10 points in the month after loading. Authority itself still moves at most a
+point a month. The policy snapshot appears at the first monthly update after loading, before
+the target is computed from it.
+
+### Files
+
+- `common/script_values/un_authority_values.txt`: the tuning values, `un_policy_contribution`,
+  `un_pillar_policy_value`, the target, `un_disp_pillar_policy`.
+- `common/scripted_triggers/un_membership_triggers.txt`: `un_policy_counts_in_full`.
+- `common/script_values/un_overview_display_values.txt`: the bar and trend values, and the
+  viewer's own line (`un_disp_policy_own_*`).
+- `common/scripted_effects/un_authority_effects.txt`: per-ledger decay, the snapshot and its
+  previous-month copy. `un_ladder_effects.txt`: the dissolve.
+- `gui/journal_entry_widgets/un_authority_widget.gui`: the Policy row, after Delivery.
+- `localization/english/te_journal_entries_l_english.yml` (`je_un_auth_*policy*`, the
+  credibility and help text) and `te_modifiers_l_english.yml` (the modifier).
+- `test_un_policy_pillar.py`.
+
+### IN-GAME VERIFICATION CHECKLIST (§0.10)
+
+- [ ] The Why UN Authority Is Moving panel shows a Policy row after Delivery, at +0.0 with an
+      empty bar, and the target is the sum of the rows shown.
+- [ ] Give a country a static modifier carrying `country_un_authority_target_add = 2` (a
+      scratch law or a debug modifier): its tooltip lists "UN Authority Target +2.0", and at
+      the next monthly update the Policy row moves by 2 × that country's weight.
+- [ ] A negative value moves the row left of the centre line, and the trend icon follows.
+- [ ] The Policy tooltip's "Ours" line shows the viewer's modifier, weight and what it counts.
+      As a non-member with +2, it counts +0.0 and the red line explains why; with −2 it counts
+      −2 × weight. Pressing Undermine International Order as a member with +2 drops it to +0.0 at once in
+      the tooltip, and in the row at the next monthly update.
+- [ ] The modifier's own tooltip (on the law or static modifier carrying it) states the
+      good-standing rule.
+- [ ] Credibility's bar and tooltip read −25 to +25, and a reading of +12.5 fills half of the
+      right side.
 
 ---
 
@@ -1718,7 +1912,8 @@ pillars, the ledger log and the nuclear hooks work in game.
 4. **No charter cap yet.** The target is clamped to 0..100. The 70 / 85 / 100 caps arrive
    with the reform topics in phase 2, so phase 1 alone cannot make the NPT-at-80 rule
    unreachable. *(Superseded by phase 2, §0.2.)*
-5. **Ledgers decay with a four-year half-life** (`un_ledger_decay_factor` 0.9857 a month),
+5. **Ledgers decay with a four-year half-life** (`un_ledger_decay_factor` 0.9857 a month;
+   credibility alone moved to ten years in §0.10),
    not the fifteen-year entry life of §3.4. At the event rates surveyed in §1.1, the
    credibility and delivery stocks settle around +7 each in a quiet world, rather than
    saturating their caps.
@@ -1930,7 +2125,7 @@ because both the pillars and the display read it. **(proposed)**
 | **Base** | 15 | constant |
 | **Participation** | 0 … +25 | `25 × Σ power_share` of members |
 | **Great-power commitment** | −25 … +25 | `25 × Σ stance × power_share` over **members only**. Stance: champion **+1**, neutral **0**, undermine **−1**. A member's stance also gains `country_un_institutional_alignment` (the Multilateral Institutions bloc principle), so that hook survives |
-| **Credibility** | −15 … +15 | a rolling record of binding decisions enforced vs. defied, vetoed or ignored (§3.4) |
+| **Credibility** | −25 … +25 (was −15 … +15, §0.10) | a rolling record of binding decisions enforced vs. defied, vetoed or ignored (§3.4) |
 | **Funding** | −10 … +10 | the share of assessed dues actually paid, weighted by the size of each assessment (§7.2) |
 | **Peace & order** | −20 … 0 | wars between members weighted by power share (the existing `un_member_wars_weight` shape, made power-weighted); aggression without a mandate; nuclear use. Each decays |
 | **Delivery** | 0 … +10 | missions concluded successfully in the last ten years, minus failed ones, weighted by mission size (§9) |
@@ -2375,7 +2570,11 @@ of this file, as `monetary_policy_design.md` does.
 | `un_authority_approach_months` | 48 | §3.3 |
 | `un_authority_max_step` | 1.0 / month | §3.3 |
 | pillar ranges (base 15, participation 0–25, …) | see §3.2 | §3.2 |
-| ledger decay (credibility, delivery, order) | 4-year half-life, ×0.9857 a month (phase 1; §0.1 ruling 5) | §3.4 |
+| ledger decay (delivery, order) | 4-year half-life, ×0.9857 a month (phase 1; §0.1 ruling 5) | §3.4 |
+| ledger decay (credibility) | 10-year half-life, ×0.99424 a month (§0.10) | §3.4 |
+| credibility range | −25 … +25 (§0.10) | §3.2 |
+| policy pillar | `country_un_authority_target_add` × `un_actor_weight`, summed, −25 … +25 (§0.10) | §3.2 |
+| policy grants | Rules of War −2 … +1.5, Isolationism −1.5, International Aid +0.15 a level, doctrine +0.5 … −1.5, Burden of the Bomb −1 × burden, HQ +1, Peace Palace and Palais des Nations +0.5 (§0.11) | §0.11 |
 | actor weight: reference share / cap | 0.10 of world prestige = ×1 / ×5 | §3.1 |
 | funding proxy until dues | −5 + 15 × programme ratio (§0.1 ruling 1) | §3.2 |
 | tier boundaries | 20 / 45 / 70 / 85 | §4.1 |

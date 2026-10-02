@@ -313,7 +313,7 @@ Launch Systems.
 
 ### Companies added by the mod
 
-The mod adds 85 company types. 74 are flavored companies, mostly real firms of
+The mod adds 93 company types. 82 are flavored companies, mostly real firms of
 the twentieth and twenty-first centuries (Volkswagen, Intel, SpaceX, Pfizer,
 Saudi Aramco and many more) plus a few fictional far-future ones such as
 Tessier-Ashpool S.A. The other eleven are generic companies for the new sectors:
@@ -327,6 +327,33 @@ technology and industrial conditions, such as a high production rank or being
 the leading producer of their good. Japan can found Saudi Aramco and the United
 States can found Volkswagen if they meet those conditions. Generic companies
 need a large enough building of their industry.
+
+### Biotechnology companies
+
+Biotechnology companies need the Corporate Genetic Licensing law ([Economic law
+groups](05-politics.md#economic-law-groups)), which Biotechnology unlocks. Under
+it you can found the generic Biotechnology company and eight flavored ones. Each
+flavored company also needs its technology and a building of its industry at
+level 5 (level 10 for the Rosen Association), and most need a high production
+or wealth rank:
+
+| Company | Unlocked by | Also requires | Prosperity bonus |
+|---|---|---|---|
+| Genentech | Biotechnology | Pharmaceutical Industries, top 5 in Drugs production, top 10 in GDP per capita | +15% Pharmaceutical Industries throughput, +5% innovation |
+| Monsanto | Biotechnology | Chemical Plants, top 3 in Grain production | +15% Maize Farms and Cotton Plantations throughput, +5% Chemical Plants throughput |
+| Novo Nordisk | Biotechnology | Pharmaceutical Industries, top 15 in GDP per capita | −5% mortality, +15% Integrated Biorefinery throughput, −10% Generated Pollution |
+| Ajinomoto | Biotechnology | Artificial Sweeteners Plant, top 5 in Groceries production | +10% Food Industries and +15% Artificial Sweeteners Plant throughput |
+| Biocon | Biotechnology | Pharmaceutical Industries, top 10 in Drugs production | +10% Technology Spread, −5% mortality |
+| BGI Group | Biotechnology | Pharmaceutical Industries, 75% literacy, top 10 in GDP | +5% innovation, +10% University throughput |
+| BioNTech | mRNA Therapeutics | Pharmaceutical Industries, top 5 in Drugs production, top 15 in GDP per capita | −5% mortality, +10% Pharmaceutical Industries throughput, +5% Society Research Speed |
+| Rosen Association | Genetic Engineering | Integrated Biorefinery at level 10, top 5 in GDP | +3% Workforce Ratio, +15% Cultured Meat Plant throughput |
+
+Monsanto, Ajinomoto and Biocon ask for a production rank but no wealth rank,
+so a large but poor economy can found them. Each has a flagship building like
+every other company. The Novo Nordisk Kalundborg
+Plant cuts Generated Pollution in its state by up to 15% ([State
+pollution](14-climate.md#state-pollution)), and the Rosen Association
+Headquarters raises its state's Workforce Ratio by up to 5%.
 
 ## Wonders
 
@@ -354,8 +381,8 @@ country to meet their conditions and finish one claims it:
 
 | Wonder | Unlocked by | Also requires | Main effect |
 |---|---|---|---|
-| Peace Palace | Intergovernmental Organizations | Ministry of Foreign Affairs at level 3 | Foreign affairs ministry impact, prestige |
-| Palais des Nations | (no technology) | Major power or better, Ministry of Foreign Affairs at level 5 | Foreign affairs ministry impact, prestige, Government Administration throughput |
+| Peace Palace | Intergovernmental Organizations | Ministry of Foreign Affairs at level 3 | Foreign affairs ministry impact, prestige, +0.5 UN Authority Target |
+| Palais des Nations | (no technology) | Major power or better, Ministry of Foreign Affairs at level 5 | Foreign affairs ministry impact, prestige, Government Administration throughput, +0.5 UN Authority Target |
 | International Space Station | Satellite Communications | Major power or better, a completed Moon landing ([The space race](15-space.md)) | +200 innovation cap, university throughput, education |
 | LIGO Observatory | Fiber Optics | Great power | +100 innovation cap, university throughput |
 | Large Hadron Collider | World Wide Web | Ministry of Science at level 3 | +200 innovation cap, +50% university throughput |

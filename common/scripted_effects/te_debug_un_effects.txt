@@ -171,7 +171,7 @@ te_debug_un_doom = {
 	if = {
 		limit = { has_global_variable = un_founded }
 		set_global_variable = { name = un_authority value = 1 }
-		set_global_variable = { name = un_ledger_credibility value = -15 }
+		set_global_variable = { name = un_ledger_credibility value = -25 }
 		set_global_variable = { name = un_ledger_order value = -20 }
 	}
 }
