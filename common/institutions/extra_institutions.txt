@@ -159,6 +159,8 @@ institution_ministry_of_consumer_protection = {
 		state_mortality_mult = -0.01
 		country_production_tech_research_speed_mult = 0.05
 		state_standard_of_living_add = 0.5
+		# Drug regulation shrinks opium plantations (drugs phase 2 § 3)
+		building_opium_plantation_throughput_add = -0.1
 	}
 }
 
