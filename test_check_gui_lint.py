@@ -24,6 +24,9 @@ BASE_GUI = BOM + """types base {
 """
 
 NEW_GUI = BOM + """types t {
+	type te_plain_plot = widget {
+		margin_left = 2
+	}
 	type te_new_row = proven_row {
 		direction = vertical
 		fancywidget = {}
@@ -41,7 +44,23 @@ NEW_GUI = BOM + """types t {
 		widget = { datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_x')]" }
 		widget = { datacontext = "[MarketPanel.GetMarket.GetOwner]" }
 		widget = { datacontext = "[GetPlayerJournalEntry('je_x')]" }
+		widget = {
+			size = { 400 84 }
+			margin_right = 8
+		}
+		icon = { margin = { 2 2 } }
+		flowcontainer = { margin_right = 8 }
+		textbox = { margin_left = 4 }
 	}
+"""
+
+INHERITED_GUI = BOM + """types inherited {
+	type inherited_row = flowcontainer {
+		widget = {
+			margin_top = 5
+		}
+	}
+}
 """
 
 
@@ -58,6 +77,8 @@ class LintTest(unittest.TestCase):
             os.makedirs(os.path.join(repo, d))
         with open(os.path.join(repo, "gui", "base.gui"), "w", encoding="utf-8") as f:
             f.write(BASE_GUI)
+        with open(os.path.join(repo, "gui", "inherited.gui"), "w", encoding="utf-8") as f:
+            f.write(INHERITED_GUI)
         with open(os.path.join(repo, "localization", "english", "x_l_english.yml"), "w", encoding="utf-8-sig") as f:
             f.write('l_english:\n known_key: "Known"\n')
         with open(os.path.join(repo, "common", "scripted_guis", "s.txt"), "w", encoding="utf-8-sig") as f:
@@ -67,6 +88,8 @@ class LintTest(unittest.TestCase):
         _git(repo, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "base")
         with open(os.path.join(repo, "gui", "new.gui"), "w", encoding="utf-8") as f:
             f.write(NEW_GUI)
+        with open(os.path.join(repo, "gui", "inherited.gui"), "w", encoding="utf-8") as f:
+            f.write(INHERITED_GUI.replace("margin_top = 5", "margin_top = 5\n\t\t\tsize = { 10 10 }"))
         with open(os.path.join(repo, "gui", "clean.gui"), "w", encoding="utf-8") as f:
             f.write(BASE_GUI.replace("types base", "types clean").replace("proven_row", "clean_row"))
         linter = lint.Linter(repo, "HEAD")
@@ -83,7 +106,7 @@ class LintTest(unittest.TestCase):
         return [m for s, p, _, m in self.findings if p == path and (sev is None or s == sev)]
 
     def test_untracked_files_are_linted(self):
-        self.assertEqual(sorted(self.changed), ["gui/clean.gui", "gui/new.gui"])
+        self.assertEqual(sorted(self.changed), ["gui/clean.gui", "gui/inherited.gui", "gui/new.gui"])
 
     def test_clean_file_has_no_findings(self):
         self.assertEqual(self.msgs("gui/clean.gui"), [])
@@ -99,6 +122,18 @@ class LintTest(unittest.TestCase):
         # Both ways into another country's journal entry failed in game; a Country
         # datacontext and GetPlayerJournalEntry are fine.
         self.assertEqual(errs.count("another country's journal entry (.GetJournalEntry)"), 2)
+
+    def test_margin_on_plain_widget(self):
+        # The engine logs "Property 'margin_right' not handled" for a plain
+        # widget or icon (#633's history chart). Containers take margins.
+        errs = [m for m in self.msgs("gui/new.gui", "ERROR") if "directly inside" in m]
+        self.assertEqual(len(errs), 3, errs)
+        self.assertTrue(any("'margin_left' directly inside widget" in m for m in errs))
+        self.assertTrue(any("'margin_right' directly inside widget" in m for m in errs))
+        self.assertTrue(any("'margin' directly inside icon" in m for m in errs))
+        # Already on the base: inherited (vanilla's right_click_menu.gui), so a warning.
+        self.assertEqual([m for m in self.msgs("gui/inherited.gui", "ERROR") if "directly inside" in m], [])
+        self.assertEqual(len([m for m in self.msgs("gui/inherited.gui", "WARN") if "directly inside" in m]), 1)
 
     def test_unproven_warnings(self):
         warns = " | ".join(self.msgs("gui/new.gui", "WARN"))

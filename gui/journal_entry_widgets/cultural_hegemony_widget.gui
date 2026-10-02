@@ -2125,220 +2125,6 @@ types cultural_hegemony_widget_types
 	### REFERENCE SECTIONS
 	### ==========================================================================
 
-	### Annual world series: Scope.GetList reads the single parentless store.
-	### GetGlobalVariable returns a Scope (data_types_script.txt); unlike a
-	### country-name lookup this chain needs only the documented GetList.
-	### This new GUI binding still needs in-game validation.
-	type ch_model_history_plot = te_history_plot {
-		margin_right = 0
-		blockoverride "sample_datamodel" {
-			datamodel = "[GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')]"
-		}
-		blockoverride "sample_visible" {
-			visible = "[Or( Not( Or( GetVariableSystem.HasValue('ch_model_hist_range', '5'), GetVariableSystem.HasValue('ch_model_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('ch_model_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_y') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('ch_model_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_y') ), '(CFixedPoint)20' ) ) ) )]"
-		}
-		blockoverride "bar_size" { size = { 4 84 } }
-		blockoverride "bar_tooltip" { tooltip = "ch_model_hist_tt" }
-		blockoverride "marker_pips" {} # world models have no policy/crash markers
-		blockoverride "bar_body" {
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_fascist') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.556863 0.298039 0.172549 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_developmentalist_junta') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.305882 0.635294 0.325490 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_reactionary') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.141176 0.376471 0.658824 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_liberal') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.713725 0.545098 0.086275 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_communist') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.768627 0.250980 0.223529 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_royalist_constitutional') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.572549 0.486275 0.803922 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_military_junta') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.333333 0.431373 0.109804 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_socialist') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.831373 0.431373 0.501961 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_religious') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.537255 0.450980 0.066667 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_technocratic') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.000000 0.607843 0.584314 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_royalist_absolutist') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.407843 0.286275 0.670588 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_other') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.486275 0.478431 0.454902 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_anarchist') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.607843 0.219608 0.462745 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_corporatist') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.772549 0.423529 0.129412 1.0 }
-			}
-			progressbar = {
-				size = { 100% 100% }
-				direction = vertical
-				min = 0
-				max = 100
-				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_republican') )]"
-				progresstexture = "gfx/interface/backgrounds/white.dds"
-				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-				texture_density = 2
-				skip_initial_animation = yes
-				alwaystransparent = yes
-				color = { 0.294118 0.607843 0.811765 1.0 }
-			}
-		}
-	}
-
 	### World models, annually. Open by default. Independent range selection
 	### because a monthly banking range and this annual range have different units.
 	type te_ch_sec_history = flowcontainer {
@@ -2404,23 +2190,228 @@ types cultural_hegemony_widget_types
 			te_history_chart = {
 				blockoverride "chart_title" { text = "ch_model_hist_title" }
 				blockoverride "chart_legend" { text = "ch_model_hist_note" }
+				blockoverride "sample_datamodel" {
+					datamodel = "[GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')]"
+				}
+				blockoverride "sample_visible" {
+					visible = "[Or( Not( Or( GetVariableSystem.HasValue('ch_model_hist_range', '5'), GetVariableSystem.HasValue('ch_model_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('ch_model_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_y') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('ch_model_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_y') ), '(CFixedPoint)20' ) ) ) )]"
+				}
+				blockoverride "bar_tooltip" { tooltip = "ch_model_hist_tt" }
+				blockoverride "marker_pips" {} # world models have no policy/crash markers
+				blockoverride "bar_body" {
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_fascist') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.556863 0.298039 0.172549 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_developmentalist_junta') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.305882 0.635294 0.325490 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_reactionary') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.141176 0.376471 0.658824 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_liberal') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.713725 0.545098 0.086275 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_communist') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.768627 0.250980 0.223529 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_royalist_constitutional') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.572549 0.486275 0.803922 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_military_junta') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.333333 0.431373 0.109804 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_socialist') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.831373 0.431373 0.501961 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_religious') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.537255 0.450980 0.066667 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_technocratic') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.000000 0.607843 0.584314 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_royalist_absolutist') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.407843 0.286275 0.670588 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_other') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.486275 0.478431 0.454902 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_anarchist') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.607843 0.219608 0.462745 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_corporatist') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.772549 0.423529 0.129412 1.0 }
+					}
+					progressbar = {
+						size = { 100% 100% }
+						direction = vertical
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_republican') )]"
+						progresstexture = "gfx/interface/backgrounds/white.dds"
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						texture_density = 2
+						skip_initial_animation = yes
+						alwaystransparent = yes
+						color = { 0.294118 0.607843 0.811765 1.0 }
+					}
+				}
+				### The plot blocks (datamodel, range filter, tooltip, bars, markers) are
+				### overridden on this te_history_chart instance and reach the three plain
+				### te_history_plot layouts below, as in every other history chart. #633
+				### set them in a type derived from te_history_plot instead, and that type
+				### drew nothing, even on its own (gui_modding_guide.md gotcha #37).
 				blockoverride "plot_layouts" {
-					widget = {
-						visible = "[GreaterThan_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
-						parentanchor = right|vcenter
-						size = { 400 84 }
-						margin_right = 8
-						ch_model_history_plot = {
-							visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '5')]"
-							blockoverride "bar_size" { size = { 80 84 } }
-						}
-						ch_model_history_plot = {
-							visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '20')]"
-							blockoverride "bar_size" { size = { 20 84 } }
-						}
-						ch_model_history_plot = {
-							visible = "[Not(Or(GetVariableSystem.HasValue('ch_model_hist_range', '5'), GetVariableSystem.HasValue('ch_model_hist_range', '20')))]"
-						}
+					te_history_plot = {
+						visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '5')]"
+						blockoverride "bar_size" { size = { 80 84 } }
+					}
+					te_history_plot = {
+						visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '20')]"
+						blockoverride "bar_size" { size = { 20 84 } }
+					}
+					te_history_plot = {
+						visible = "[Not(Or(GetVariableSystem.HasValue('ch_model_hist_range', '5'), GetVariableSystem.HasValue('ch_model_hist_range', '20')))]"
+						blockoverride "bar_size" { size = { 4 84 } }
 					}
 					textbox = {
 						parentanchor = left|top

@@ -763,7 +763,7 @@ types te_debug_tax_widgets {
 				visible = "[Not(GetVariableSystem.Exists('te_tp_help_open'))]"
 				size = { 16 16 }
 				parentanchor = right|vcenter
-				margin_right = 8
+				position = { -8 0 }
 				texture = "gfx/interface/buttons/button_icons/plus.dds"
 			}
 			onclick = "[GetVariableSystem.Toggle('te_tp_help_open')]"

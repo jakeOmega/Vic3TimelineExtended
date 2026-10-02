@@ -247,9 +247,18 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
 
     def test_gui_palette_order_shared_binding_and_historical_tooltips(self):
         gui = read("gui/journal_entry_widgets/cultural_hegemony_widget.gui")
-        plot = _type_body(gui, "ch_model_history_plot")
         history = _type_body(gui, "te_ch_sec_history")
+        chart = history[history.index("te_history_chart = {"):]
+        plot = chart[chart.index('blockoverride "sample_datamodel"'):chart.index('blockoverride "plot_layouts"')]
         self.assertIn("GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')", plot)
+        # The plot blocks sit on the te_history_chart instance, as in every
+        # other chart. #633 put them in a type derived from te_history_plot,
+        # which drew nothing in game, even on its own (GUI guide gotcha #37).
+        for block in ("sample_visible", "bar_tooltip", "marker_pips", "bar_body"):
+            self.assertIn(f'blockoverride "{block}"', plot)
+        self.assertEqual(chart.count("te_history_plot = {"), 3)
+        for path in sorted(ROOT.glob("gui/**/*.gui")):
+            self.assertIsNone(re.search(r"\btype\s+\w+\s*=\s*te_history_plot\b", read(path.relative_to(ROOT))), path)
         self.assertEqual(re.findall(r"GetVariableValue\('ch_model_hist_cum_(\w+)'\)", plot), list(reversed(MODELS)))
         colors = re.findall(r"color = \{ ([\d.]+) ([\d.]+) ([\d.]+) 1.0 \}", plot)
         expected = [tuple(int(color[i:i + 2], 16) / 255 for i in (1, 3, 5)) for _, color in reversed(PALETTE)]

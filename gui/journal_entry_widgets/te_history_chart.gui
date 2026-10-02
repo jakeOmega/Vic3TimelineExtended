@@ -302,6 +302,10 @@ types te_history_chart_types
 	### Required blockoverrides: "chart_title", "chart_legend", "bar_body",
 	### "bar_tooltip". Optional: "zero_axis" (signed series only) and
 	### "marker_pips" (override to nothing for a series with no markers).
+	### Override them here, on the chart instance; a custom "plot_layouts" holds
+	### plain te_history_plot instances. A type derived from te_history_plot
+	### that carries these blocks drew nothing in game (gui_modding_guide.md
+	### gotcha #37).
 	###
 	### ORDER COMES FROM THE STORE, NOT FROM HERE. A datamodel is drawn in raw
 	### `GetList` order and nothing in the GUI can sort or reverse one
