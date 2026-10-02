@@ -644,7 +644,7 @@ un_lobby_for_action = {
 		}
 		custom_tooltip = {
 			text = un_lobby_campaign_not_both_ways_tt
-			NOT = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_against_action } }
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_against_action is_initiator = yes } }
 		}
 	}
 
@@ -760,7 +760,7 @@ un_lobby_against_action = {
 		}
 		custom_tooltip = {
 			text = un_lobby_campaign_not_both_ways_tt
-			NOT = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_for_action } }
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_for_action is_initiator = yes } }
 		}
 	}
 

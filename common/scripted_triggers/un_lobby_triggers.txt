@@ -206,6 +206,45 @@ un_lobby_campaign_selectable = {
 	NOT = { un_representation_suspended = yes }
 }
 
+# Whether the scoped lobbyist runs a campaign on $MEMBER$, either way: a
+# campaign pact FROM the lobbyist TO the member. Every "do we lobby them
+# already" check asks this, from the lobbyist's side and with
+# `is_initiator = yes`, never from the member's side. The chamber's gates used
+# to ask the member (`has_diplomatic_pact = { who = ROOT … }` in the member's
+# scope), and in play Lobby For stayed clickable on a member already being
+# lobbied, so that check evidently did not see the lobbyist's pact (the same
+# check gated Stop Lobbying); a press restarted the campaign at month 0.
+# `is_initiator = yes` also keeps a pact the other way round (a member
+# lobbying an AI lobbyist) from counting.
+# Callers in the member's scope pass MEMBER = prev from inside
+# `<lobbyist> = { }`, where prev is that member.
+# Parameters: $MEMBER$ = the member (a scope)
+# Scope: the lobbyist
+un_lobby_runs_campaign_on = {
+	OR = {
+		has_diplomatic_pact = { who = $MEMBER$ type = un_lobby_for_action is_initiator = yes }
+		has_diplomatic_pact = { who = $MEMBER$ type = un_lobby_against_action is_initiator = yes }
+	}
+}
+
+# Whether the resolution carries a campaign container tagged $TAG$ by
+# $LOBBYIST$ on $MEMBER$ ($TAG$ = un_lc_for, un_lc_against, or
+# un_lobby_campaign for either way). The containers are the mod's own record
+# of a campaign's months, so this holds whatever the engine says about the
+# pact. $LOBBYIST$ and $MEMBER$ must be saved scopes or ROOT, never `prev`:
+# inside any_in_list `prev` is the resolution.
+# Parameters: $TAG$, $LOBBYIST$, $MEMBER$ (scopes)
+# Scope: resolution container
+un_lobby_has_campaign_container = {
+	has_variable_list = un_res_campaigns
+	any_in_list = {
+		variable = un_res_campaigns
+		has_tag = $TAG$
+		var:un_lc_lobbyist ?= $LOBBYIST$
+		var:un_lc_member ?= $MEMBER$
+	}
+}
+
 # Whether the scoped member can be the object of a campaign on the resolution
 # in session: an AI member with a vote that has not voted and is not the
 # resolution's target. Humans decide for themselves.
@@ -299,17 +338,6 @@ un_deleg_row_filled = {
 	}
 }
 
-# Whether the scoped viewer runs a campaign on $MEMBER$, either way: it then
-# reads the member's true band.
-# Parameters: $MEMBER$ = the member (a scope)
-# Scope: the viewer
-un_deleg_viewer_campaigns_on = {
-	OR = {
-		has_diplomatic_pact = { who = $MEMBER$ type = un_lobby_for_action }
-		has_diplomatic_pact = { who = $MEMBER$ type = un_lobby_against_action }
-	}
-}
-
 # The chamber's Lobby For / Lobby Against button on row $N$: the member can be
 # lobbied, we can lobby, we are not lobbying it already, and the engine would
 # let us send the pact (can_send_diplomatic_action reads the action's own
@@ -335,8 +363,9 @@ un_deleg_row_can_lobby = {
 		global_var:un_active_resolution ?= {
 			has_variable = un_deleg_row_$N$
 			var:un_deleg_row_$N$ ?= {
-				NOT = { has_diplomatic_pact = { who = ROOT type = un_lobby_for_action } }
-				NOT = { has_diplomatic_pact = { who = ROOT type = un_lobby_against_action } }
+				ROOT = {
+					NOT = { un_lobby_runs_campaign_on = { MEMBER = prev } } # REVIEWED 2026-10-02: prev is the row's member (var:un_deleg_row_$N$), deliberately
+				}
 			}
 		}
 	}
@@ -366,6 +395,7 @@ un_deleg_row_can_lobby = {
 
 # Whether we run a campaign on the member in row $N$ (the Stop Lobbying button
 # shows, and Lobby For / Against hide).
+# `prev` below is deliberate, as in un_deleg_row_can_lobby.
 # Parameters: $N$ = 0-23
 # Scope: the viewer (ROOT)
 un_deleg_row_lobbying = {
@@ -373,9 +403,8 @@ un_deleg_row_lobbying = {
 	global_var:un_active_resolution ?= {
 		has_variable = un_deleg_row_$N$
 		var:un_deleg_row_$N$ ?= {
-			OR = {
-				has_diplomatic_pact = { who = ROOT type = un_lobby_for_action }
-				has_diplomatic_pact = { who = ROOT type = un_lobby_against_action }
+			ROOT = {
+				un_lobby_runs_campaign_on = { MEMBER = prev } # REVIEWED 2026-10-02: prev is the row's member (var:un_deleg_row_$N$), deliberately
 			}
 		}
 	}
@@ -474,8 +503,9 @@ un_deleg_row_bulk_ok = {
 		var:un_deleg_row_$N$ ?= {
 			un_lobby_member_lobbyable = yes
 			un_deleg_band_open_$DIR$ = yes
-			NOT = { has_diplomatic_pact = { who = ROOT type = un_lobby_for_action } }
-			NOT = { has_diplomatic_pact = { who = ROOT type = un_lobby_against_action } }
+			ROOT = {
+				NOT = { un_lobby_runs_campaign_on = { MEMBER = prev } } # REVIEWED 2026-10-02: prev is the row's member (var:un_deleg_row_$N$), deliberately
+			}
 		}
 	}
 	global_var:un_active_resolution ?= {

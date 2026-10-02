@@ -456,8 +456,10 @@ lean 3 points its way, up to 15, so it needs five months to reach its full
 effect. Campaigns on the same side stack to 20, and campaigns on opposite sides
 cancel out. A campaign ends when the member votes or the resolution closes, and
 you can stop it at any time, which frees the influence and loses what it had
-gained. Only AI members can be lobbied, never the resolution's target, and you
-need a vote yourself.
+gained. While you lobby a member, its Delegations row shows Stop Lobbying in
+place of Lobby For and Lobby Against, and a campaign you are running never
+starts over. Only AI members can be lobbied, never the resolution's target, and
+you need a vote yourself.
 
 Lobby Top Members For and Lobby Top Members Against, above the Delegations rows,
 start campaigns in bulk. One press puts a campaign on each listed member the
