@@ -25,12 +25,12 @@ Mod-added entities (key not in vanilla) whose icon path resolves only to a vanil
 | Decrees | 15 | 13 on `decree_road_maintenance.dds` |
 | Diplomatic actions | 7 | |
 | Character traits | 6 | |
-| PMs | 100 | already covered by `gen_batch_pm_icons.py` |
+| PMs | 100 | already covered by `gen_batch_pm_icons.py`. Its `cat_*` category glyphs are placeholders too: 794 mod PMs on 218 of them (2026-10-02 audit) |
 | Laws | 3 + 15 | 3 borrowed; 15 ministry laws whose mod-generated icons are byte-identical (`/duplicate-images`, `kind: content`) |
 
 **Shared by design — not placeholders.** Vanilla shares these too: state traits (`resources_ore.dds`), diplomatic plays (`unification.dds` for every unify/leadership play), ship modifications, company `basic_*` icons, ship types, static modifier icons, PM-group textures, building backgrounds, message textures. Mod `gui/` references to `gfx/interface/icons/` are UI glyphs (warning, checkmark, filter icons), also fine. Journal entry icons were on this list until 2026-09-28: vanilla shares its generic `event_*.dds` across ~150 entries, but the mod's 26 shared five icons between them (nine on the gears), and the owner asked for their own (see "Journal entries").
 
-None of the files holding a placeholder reference are generator-owned, so rewriting the references is a plain text edit. One caveat: `common/buildings/company_buildings.txt` (45 building icon references) was bootstrapped by `gen_vanilla_company_buildings.py`. It is hand-editable now, but re-running that generator would put the old icons back.
+None of the files holding a placeholder reference are generator-owned, so rewriting the references is a plain text edit. One caveat: `common/buildings/company_buildings.txt` (45 building icon references) was bootstrapped by `gen_vanilla_company_buildings.py`. It is hand-editable now. The generator only appends (it would declare every building a second time, not restore old icons), so since 2026-10-02 it refuses to run once its Phase 7 section is in the file.
 
 **Totals.** The table first summed to 665 icons, or 683 with the 18 law icons. A later recount of principles (42 → 15) and ideologies (33 → ~9) takes about 51 off. The building row will shrink once its allowlist entries are triaged. A recount on 2026-09-27 matched apart from content added since (31 treaty articles, 316 buildings).
 
@@ -142,7 +142,7 @@ The owner approved all 170 subjects and asked for era 6 first (37 techs) before 
 | Construction Site | 1 | `construction_camp` | keep |
 | Company buildings | 247 | 190 on their company's logo, by design (`docs/vanilla/vanilla_company_buildings_reference.md`); 45 `building_generic_*` on `skyscraper.dds`; 12 on `basic_*` company icons | out of scope for this batch |
 
-Two company-logo problems turned up and belong to a logo pass, not this one: 76 of the mod's own company logos are the `gen_placeholder_company_icons.py` "PLACEHOLDER" card, which the flagship building shows too, and five flagships sit on another company's logo (DuPont on Pfizer's, Shell on ASML's, IG Farben on SAP's, JSR on Fanuc's, Sibur on Gazprom's; `/duplicate-images` flags them).
+Two company-logo problems turned up and belong to a logo pass, not this one: 76 (18 on the 2026-10-02 recount, see "Mod placeholders audit") of the mod's own company logos are the `gen_placeholder_company_icons.py` "PLACEHOLDER" card, which the flagship building shows too, and five flagships sit on another company's logo (DuPont on Pfizer's, Shell on ASML's, IG Farben on SAP's, JSR on Fanuc's, Sibur on Gazprom's; `/duplicate-images` flags them).
 
 **Layout.** The prototype's `framed` style is unchanged: the render fills the frame lifted from vanilla, so the cutout rules for white surfaces and glows don't apply. Subjects follow vanilla's two building layouts. Monuments are the landmark alone. Industrial buildings put the plant behind and its product large in the foreground (vanilla's iron mine has an ingot, its synthetics plant two vials), which is what tells fourteen mines apart at 256 px.
 
@@ -329,6 +329,48 @@ The system-panel style pass (#573–#583) drew about 120 icons and ten pies with
 - **Lettering** came back on a wrench handle, a crate, a tram and a cabinet's dials, and a crescent and eagles on cap badges. Zoom every pick.
 
 **Disc marks and rewrites.** `write` compares recipes, not drawing code, so a change to a drawn mark (the disc's highlight, once a blob that read as a sun) does not rewrite the icons that use it: delete their DDS files and write again.
+
+## Mod placeholders audit (2026-10-02)
+
+The batches so far replaced entities that borrowed a **vanilla** icon. This audit looked for the other kind: an icon the mod made that several entities share, or a placeholder the mod drew itself. `/duplicate-images` could not answer it. It scans six types, each on its own, and its allowlist entries reading "existing reuse - verify intent" hid most of what follows. Issue #550 proposes the tooling to fix this.
+
+A scratch scan read every depth-1 `icon =` / `texture =` gfx path in vanilla's and the mod's `common/`. It grouped the ~15,000 references by the MD5 of the resolved file, across all types at once, and kept the groups that hold a mod-added entity. The install was 1.14.5, fresh against `vanilla_parsed/`.
+
+**Finished.** No technology, decree, institution, journal entry, mobilization option or character trait shares an icon any more, apart from the by-design variants below.
+
+**Buildings: 22 old-style icon files, 7 of them shared.** Before #552 the mod's building icons came from an earlier generator: no gold frame, mostly flat or poster-like. A pixel check against the frame that `vanilla_template()` lifts from vanilla flags 23 of the 90 mod files that non-company buildings use. Vanilla's own icons score 0–14 on its mean colour distance and these score 29–45. The 23 are 22 building icons, all committed in 2024–2025, and the frameless Rocket good. Thirty-eight buildings use them. The shared ones:
+
+| File (what it shows) | Used by |
+|---|---|
+| `network.dds` (fibre-optic cables, server rack) | Network Infrastructure, Consciousness Network, Mind Upload Nexus, and those two's construction sites |
+| `space_base.dds` (domed base and rover on a red planet) | Space Mine, Orbital Battlestation and its site, Antimatter Warhead Plant |
+| `advanced_materials.dds` (cable spools, robot arm, chip) | Advanced Material Fabricator, Nanofabrication Center and its site |
+| `space.dds` (rocket launch at night) | Aerospace Industry, and the wonders ISS and Kennedy Space Center |
+| `space_elevator.dds` (tether rising from Earth) | Space Elevator, Solar Collector |
+| `space_elevator_construction_site.dds` (tower in scaffolding) | the Space Elevator, Solar Collector and Antimatter Facility sites |
+| `nuclear_plant.dds` (cooling towers) | Nuclear Plant, and the wonder ITER |
+| `goods_icons/rocket.dds` (the Launch Capacity good, no frame) | Space Program. A share across types, which `/duplicate-images` cannot see |
+
+The other 15 are unique but in the old style: Airport, Appliances, Ocean Mine, Fusion Plant, Highway, Hydro Plant, National Park, Renewable Energy Plant, Robotics, Semiconductors, Software, Tourism, and the opium, oil and rubber synthetics plants (`drugs.dds`, `synth_oil.dds`, `synth_rubber.dds`). Two calls for the owner: do the megaproject construction sites share their building's icon or get their own (today the Space Elevator's site has its own and lends it to two others, while three sites use their building's), and are the 15 unique ones redone in the same batch?
+
+**Companies.**
+- **18 PLACEHOLDER cards** (`gen_placeholder_company_icons.py`), referenced 35 times: 17 companies and 18 flagships. The building slice's count of 76 was wrong; a contact sheet of all 83 mod logos and the generator's own list both give 18.
+- **12 flagships point at the wrong logo, and their own already exists.** That is a one-line fix each, with no art: Shell on ASML's, IG Farben on SAP's, JSR on Fanuc's, Sibur on Gazprom's, DuPont on Pfizer's, and seven sci-fi HQs on vanilla `basic_*` icons although `gen_company_logos.py` drew their companies' marks (Axiom Space, Hanka Precision, NeuroVault, Rekall, Tessier-Ashpool, Tycho Manufacturing, Yoyodyne). Rewired on 2026-10-02, with their three `basic_*` allowlist entries removed. None of the twelve came from `gen_vanilla_company_buildings.py`.
+- **11 mod company types on a vanilla `basic_*` icon.** The Inventory counts `basic_*` sharing as by design. The vanilla precedent is narrower than that: about six *flavored* companies borrow a basic icon (Sherkat-e Shemali, Ford Motor), while each of vanilla's 24 basic *industries* has an icon of its own. So the nine new basic industries are placeholders: `company_basic_{advanced_materials,aerospace,electronics,entertainment,power,software}` on `basic_electrics`, `company_basic_{autarky,synthetics}` on `basic_chemicals`, and `company_basic_biotechnology` on `company_basic_agriculture_1`. `company_infrastructure` and `company_megastructure_consortium` (with its HQ), both on `basic_construction`, are judgment calls.
+- The 45 `building_generic_*` on `skyscraper.dds`, as before.
+
+**Left over from the Inventory.**
+- **Principles: 15 mod groups (75 tiers) on four vanilla icons.** `food_standardization`: artistic expression, engineering and logistics, environmental sustainability, healthcare, military training, rural, urban planning, welfare. `ideological_truth`: cultural plurality, cultural unity, diplomacy, education. `foreign_investment`: monetary union, multilateral institutions. `dedicated_police`: global security. Tiers 4–5 of vanilla groups share their own group's icon, as vanilla's tiers do.
+- **Laws: one picture under many names.** The 15 `ministry_of_*` files (with `national_bank.dds`) are byte-identical, and so are the 16 `no_ministry_of_*` files (with `no_national_bank.dds`). Six pairs of unrelated laws also have byte-identical files, which looks like a copy slip in the generator rather than a choice: freedom of information and neocolonialism, algorithmic governance and decentralized cryptocurrency, direct democracy and unregulated donations, minority-rights indifference and protected class, informal government secrecy and intrusive surveillance, active persecution and violent hostility. Two more pairs point at one path: state and strict IP protection, and directed credit and state-owned banking.
+- **Treaty articles on law icons**, added with the monetary system after the diplomatic slice: currency peg and imposed currency peg on Gold Standard, debt receivership and lender of last resort on Central Bank Independence, and swap line on the ministry picture.
+
+**Judgment call: production methods.** 794 of the 939 mod-added PMs use one of 218 `cat_*` glyphs, and 677 of them share a glyph with another PM. `gen_batch_pm_icons.py`'s docstring calls these category icons for placeholder PMs, so the Inventory's "100, already covered" undercounts them. The largest groups are 59 flagship PMs on `cat_factory_gold_p0` and 58 system PMs on `cat_star_gold_p0`. Thirty more PMs share across `_building_X` families, which is vanilla's own pattern. About 106 reuse a vanilla PM icon that fits (`pm_te_direct_construction_iron_frame` on `iron_frame_buildings`).
+
+**Shared by design.** The custom-religion variants of ideologies (24), IG traits (3) and religions (7) sit on their base's icon, as vanilla's variants do. Three diplomatic actions are on the deliberate `"use"` picks. The `concept_*` textures reuse goods icons as glyphs. And vanilla shares some types itself (the share of its own entities on a shared file): static modifiers 100%, PM groups 100%, messages 99%, ship modifications 99%, IG traits 99%, state traits 98%, ship types 95%, diplomatic plays 60%, PMs 56%.
+
+**A broken reference.** Three heir-education modifiers (`heir_education_modifiers.txt`) point at `timed_modifier_icons/modifier_administrative.dds`, which exists in neither the mod nor vanilla. This was the case from d56f6cac (2026-03-31) until 2026-10-02, when they moved to vanilla's `modifier_documents_positive.dds`.
+
+**Allowlist.** A batch that takes one of these on deletes its entries from `common/_meta/duplicate_image_allowlist.yml`. Buildings: `advanced_materials`, `network`, `nuclear_plant`, `space`, `space_base`, `space_elevator` and `space_elevator_construction_site` (the three `basic_*` entries went with the rewires). Laws: the 25 "verify intent" entries.
 
 ## Review lessons (2026-09-27)
 
