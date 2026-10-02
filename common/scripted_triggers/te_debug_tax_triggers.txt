@@ -1,0 +1,10 @@
+﻿# TEMPORARY PR 585 ENGINE PROBES. Remove before release; see docs/testing/tax-code-probes.md.
+# Inert until event te_debug_tax.1 explicitly arms a country. Disposable saves only.
+
+te_tp_can_approve = {
+	has_variable = te_tp_armed
+	has_law = law_type:law_te_probe_carrier
+	has_variable = te_tp_draft_revision
+	NOT = { has_variable = te_tp_pending }
+	var:te_tp_draft_base = var:te_tp_version
+}

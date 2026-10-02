@@ -95,6 +95,8 @@ banking_effect_cb_disable_export_credit_facility = {
 }
 
 banking_effect_cb_capital_controls_outflow = {
+	# TEMPORARY PR 585: observe action-time restraint violations; no policy change.
+	te_tp_observe_controls = { KIND = ordinary }
 	te_history_record_banking_marker = { MARK = on_cb_capital_controls_outflow }
 	je:je_banking_cycle = { add_modifier = { name = banking_capital_controls_out } }
 	change_infamy = { value = 1 }

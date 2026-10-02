@@ -1,0 +1,74 @@
+﻿# TEMPORARY PR 585 ENGINE PROBES. Remove before release; see docs/testing/tax-code-probes.md.
+# Inert until event te_debug_tax.1 explicitly arms a country. Disposable saves only.
+
+amendment_te_tp_wage = {
+	parent = law_te_probe_carrier
+	allowed_laws = { law_te_probe_carrier }
+	possible = { has_variable = te_tp_armed }
+	would_sponsor = { always = no }
+	tax_modifier_very_low = { tax_income_add = 0.05 }
+	tax_modifier_low = { tax_income_add = 0.05 }
+	tax_modifier_medium = { tax_income_add = 0.05 }
+	tax_modifier_high = { tax_income_add = 0.05 }
+	tax_modifier_very_high = { tax_income_add = 0.05 }
+}
+
+amendment_te_tp_dividend = {
+	parent = law_te_probe_carrier
+	allowed_laws = { law_te_probe_carrier }
+	possible = { has_variable = te_tp_armed }
+	would_sponsor = { always = no }
+	tax_modifier_very_low = { tax_dividends_add = 0.05 }
+	tax_modifier_low = { tax_dividends_add = 0.05 }
+	tax_modifier_medium = { tax_dividends_add = 0.05 }
+	tax_modifier_high = { tax_dividends_add = 0.05 }
+	tax_modifier_very_high = { tax_dividends_add = 0.05 }
+}
+
+amendment_te_tp_rural = {
+	parent = law_te_probe_carrier
+	allowed_laws = { law_te_probe_carrier }
+	possible = { has_variable = te_tp_armed }
+	would_sponsor = { always = no }
+	tax_modifier_very_low = { tax_land_add = 0.1 }
+	tax_modifier_low = { tax_land_add = 0.1 }
+	tax_modifier_medium = { tax_land_add = 0.1 }
+	tax_modifier_high = { tax_land_add = 0.1 }
+	tax_modifier_very_high = { tax_land_add = 0.1 }
+}
+
+amendment_te_tp_head = {
+	parent = law_te_probe_carrier
+	allowed_laws = { law_te_probe_carrier }
+	possible = { has_variable = te_tp_armed }
+	would_sponsor = { always = no }
+	tax_modifier_very_low = { tax_per_capita_add = 0.1 }
+	tax_modifier_low = { tax_per_capita_add = 0.1 }
+	tax_modifier_medium = { tax_per_capita_add = 0.1 }
+	tax_modifier_high = { tax_per_capita_add = 0.1 }
+	tax_modifier_very_high = { tax_per_capita_add = 0.1 }
+}
+
+amendment_te_tp_consumption = {
+	parent = law_te_probe_carrier
+	allowed_laws = { law_te_probe_carrier }
+	possible = { has_variable = te_tp_armed }
+	would_sponsor = { always = no }
+	tax_modifier_very_low = { tax_consumption_add = 0.05 }
+	tax_modifier_low = { tax_consumption_add = 0.05 }
+	tax_modifier_medium = { tax_consumption_add = 0.05 }
+	tax_modifier_high = { tax_consumption_add = 0.05 }
+	tax_modifier_very_high = { tax_consumption_add = 0.05 }
+}
+
+amendment_te_tp_consumption_high = {
+	parent = law_te_probe_carrier
+	allowed_laws = { law_te_probe_carrier }
+	possible = { has_variable = te_tp_armed }
+	would_sponsor = { always = no }
+	tax_modifier_very_low = { tax_consumption_add = 0.10 }
+	tax_modifier_low = { tax_consumption_add = 0.10 }
+	tax_modifier_medium = { tax_consumption_add = 0.10 }
+	tax_modifier_high = { tax_consumption_add = 0.10 }
+	tax_modifier_very_high = { tax_consumption_add = 0.10 }
+}

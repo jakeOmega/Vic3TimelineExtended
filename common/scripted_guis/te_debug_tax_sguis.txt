@@ -1,0 +1,640 @@
+﻿# TEMPORARY PR 585 ENGINE PROBES. Remove before release; see docs/testing/tax-code-probes.md.
+# Inert until event te_debug_tax.1 explicitly arms a country. Disposable saves only.
+
+te_tp_snapshot_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.2 } }
+}
+
+te_tp_prepare_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.3 } }
+}
+
+te_tp_clear_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.4 } }
+}
+
+te_tp_disarm_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.5 } }
+}
+
+te_tp_wage_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	effect = { trigger_event = { id = te_debug_tax.10 } }
+}
+
+te_tp_dividend_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	effect = { trigger_event = { id = te_debug_tax.11 } }
+}
+
+te_tp_rural_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	effect = { trigger_event = { id = te_debug_tax.12 } }
+}
+
+te_tp_head_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	effect = { trigger_event = { id = te_debug_tax.13 } }
+}
+
+te_tp_consumption_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	effect = { trigger_event = { id = te_debug_tax.14 } }
+}
+
+te_tp_consumption_high_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	effect = { trigger_event = { id = te_debug_tax.15 } }
+}
+
+te_tp_zero_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	effect = { trigger_event = { id = te_debug_tax.16 } }
+}
+
+te_tp_grain_add_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.17 } }
+}
+
+te_tp_grain_remove_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.18 } }
+}
+
+te_tp_luxury_add_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.19 } }
+}
+
+te_tp_state_relief_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		exists = capital
+	}
+	effect = { trigger_event = { id = te_debug_tax.20 } }
+}
+
+te_tp_state_exempt_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		exists = capital
+	}
+	effect = { trigger_event = { id = te_debug_tax.21 } }
+}
+
+te_tp_capacity_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		exists = capital
+	}
+	effect = { trigger_event = { id = te_debug_tax.22 } }
+}
+
+te_tp_waste_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		exists = capital
+	}
+	effect = { trigger_event = { id = te_debug_tax.23 } }
+}
+
+te_tp_agriculture_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.24 } }
+}
+
+te_tp_manufacturing_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.25 } }
+}
+
+te_tp_authority_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.26 } }
+}
+
+te_tp_import_rate_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.27 } }
+}
+
+te_tp_export_rate_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.28 } }
+}
+
+te_tp_grain_import_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.29 } }
+}
+
+te_tp_grain_export_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.30 } }
+}
+
+te_tp_grain_max_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.31 } }
+}
+
+te_tp_grain_min_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.32 } }
+}
+
+te_tp_static_wage_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.33 } }
+}
+
+te_tp_bureaucracy_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.34 } }
+}
+
+te_tp_import_no_tariffs_or_subventions_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.40 } }
+}
+
+te_tp_import_low_tariffs_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.41 } }
+}
+
+te_tp_import_max_tariffs_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.42 } }
+}
+
+te_tp_import_low_subventions_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.43 } }
+}
+
+te_tp_import_max_subventions_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.44 } }
+}
+
+te_tp_export_no_tariffs_or_subventions_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.45 } }
+}
+
+te_tp_export_low_tariffs_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.46 } }
+}
+
+te_tp_export_max_tariffs_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.47 } }
+}
+
+te_tp_export_low_subventions_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.48 } }
+}
+
+te_tp_export_max_subventions_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.49 } }
+}
+
+te_tp_level_very_low_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.50 } }
+}
+
+te_tp_level_low_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.51 } }
+}
+
+te_tp_level_medium_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.52 } }
+}
+
+te_tp_level_high_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.53 } }
+}
+
+te_tp_level_very_high_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.54 } }
+}
+
+te_tp_military_low_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.55 } }
+}
+
+te_tp_military_medium_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.56 } }
+}
+
+te_tp_lock_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.57 } }
+}
+
+te_tp_unlock_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.58 } }
+}
+
+te_tp_draft_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+		NOT = { has_variable = te_tp_pending }
+	}
+	effect = { trigger_event = { id = te_debug_tax.60 } }
+}
+
+te_tp_approve_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		te_tp_can_approve = yes
+	}
+	effect = { trigger_event = { id = te_debug_tax.61 } }
+}
+
+te_tp_commence_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_variable = te_tp_pending
+	}
+	effect = { trigger_event = { id = te_debug_tax.62 } }
+}
+
+te_tp_discard_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_variable = te_tp_draft_revision
+	}
+	effect = { trigger_event = { id = te_debug_tax.63 } }
+}
+
+te_tp_conflict_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_variable = te_tp_pending
+	}
+	effect = { trigger_event = { id = te_debug_tax.64 } }
+}
+
+te_tp_rebuild_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	effect = { trigger_event = { id = te_debug_tax.65 } }
+}
+
+te_tp_ai_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	effect = { trigger_event = { id = te_debug_tax.66 } }
+}
+
+te_tp_storage_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.67 } }
+}
+
+te_tp_iterate_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.68 } }
+}
+
+te_tp_timer_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+	}
+	effect = { trigger_event = { id = te_debug_tax.69 } }
+}
+
+te_tp_tab_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+# Read-only gate; no reset writer masks a bypass. Scope is only ROOT.
+te_tp_native_controls_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { has_variable = te_tp_lock } }
+	effect = { }
+}
+
+te_tp_supersede_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+		NOT = { has_variable = te_tp_pending }
+	}
+	effect = { trigger_event = { id = te_debug_tax.70 } }
+}
+
+te_tp_customs_clause_sgui = {
+	scope = country
+	is_shown = { has_variable = te_tp_armed }
+	ai_is_valid = { always = no }
+	is_valid = {
+		has_variable = te_tp_armed
+		NOT = { has_variable = te_tp_pending }
+	}
+	effect = { trigger_event = { id = te_debug_tax.71 } }
+}

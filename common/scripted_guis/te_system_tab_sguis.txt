@@ -218,6 +218,8 @@ te_window_launcher_sgui = {
 	scope = country
 	is_shown = {
 		OR = {
+			has_variable = te_tp_armed # TEMPORARY PR 585: developer-only tax tab
+
 			has_game_rule = space_race_enabled
 			has_game_rule = decolonization_enabled
 			gm_system_enabled = yes

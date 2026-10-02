@@ -1,0 +1,757 @@
+﻿# TEMPORARY PR 585 ENGINE PROBES. Remove before release; see docs/testing/tax-code-probes.md.
+# Inert until event te_debug_tax.1 explicitly arms a country. Disposable saves only.
+
+namespace = te_debug_tax
+
+te_debug_tax.1 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		always = yes
+	}
+	immediate = {
+		te_tp_arm = yes
+	}
+}
+
+te_debug_tax.2 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		te_tp_snapshot = yes
+	}
+}
+
+te_debug_tax.3 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		te_tp_clear = yes
+		activate_law = law_type:law_te_probe_carrier
+		set_tax_level = medium
+	}
+}
+
+te_debug_tax.4 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		te_tp_clear = yes
+	}
+}
+
+te_debug_tax.5 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		te_tp_clear = yes
+		remove_variable = te_tp_armed
+	}
+}
+
+te_debug_tax.10 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	immediate = {
+		te_tp_clear_rates = yes
+		te_tp_add_clause = { CLAUSE = wage }
+	}
+}
+
+te_debug_tax.11 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	immediate = {
+		te_tp_clear_rates = yes
+		te_tp_add_clause = { CLAUSE = dividend }
+	}
+}
+
+te_debug_tax.12 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	immediate = {
+		te_tp_clear_rates = yes
+		te_tp_add_clause = { CLAUSE = rural }
+	}
+}
+
+te_debug_tax.13 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	immediate = {
+		te_tp_clear_rates = yes
+		te_tp_add_clause = { CLAUSE = head }
+	}
+}
+
+te_debug_tax.14 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	immediate = {
+		te_tp_clear_rates = yes
+		te_tp_add_clause = { CLAUSE = consumption }
+	}
+}
+
+te_debug_tax.15 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	immediate = {
+		te_tp_clear_rates = yes
+		te_tp_add_clause = { CLAUSE = consumption_high }
+	}
+}
+
+te_debug_tax.16 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	immediate = {
+		te_tp_clear_rates = yes
+	}
+}
+
+te_debug_tax.17 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		add_taxed_goods = g:grain
+	}
+}
+
+te_debug_tax.18 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_taxed_goods = g:grain
+	}
+}
+
+te_debug_tax.19 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		add_taxed_goods = g:luxury_clothes
+	}
+}
+
+te_debug_tax.20 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		exists = capital
+	}
+	immediate = {
+		capital = {
+			remove_modifier = te_tp_state_relief
+			add_modifier = { name = te_tp_state_relief }
+		}
+	}
+}
+
+te_debug_tax.21 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		exists = capital
+	}
+	immediate = {
+		capital = {
+			remove_modifier = te_tp_state_exempt
+			add_modifier = { name = te_tp_state_exempt }
+		}
+	}
+}
+
+te_debug_tax.22 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		exists = capital
+	}
+	immediate = {
+		capital = {
+			remove_modifier = te_tp_capacity
+			add_modifier = { name = te_tp_capacity }
+		}
+	}
+}
+
+te_debug_tax.23 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		exists = capital
+	}
+	immediate = {
+		capital = {
+			remove_modifier = te_tp_waste
+			add_modifier = { name = te_tp_waste }
+		}
+	}
+}
+
+te_debug_tax.24 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_agriculture
+		add_modifier = { name = te_tp_agriculture }
+	}
+}
+
+te_debug_tax.25 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_manufacturing
+		add_modifier = { name = te_tp_manufacturing }
+	}
+}
+
+te_debug_tax.26 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_authority
+		add_modifier = { name = te_tp_authority }
+	}
+}
+
+te_debug_tax.27 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_import_rate
+		add_modifier = { name = te_tp_import_rate }
+	}
+}
+
+te_debug_tax.28 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_export_rate
+		add_modifier = { name = te_tp_export_rate }
+	}
+}
+
+te_debug_tax.29 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_grain_import
+		add_modifier = { name = te_tp_grain_import }
+	}
+}
+
+te_debug_tax.30 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_grain_export
+		add_modifier = { name = te_tp_grain_export }
+	}
+}
+
+te_debug_tax.31 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_grain_max
+		add_modifier = { name = te_tp_grain_max }
+	}
+}
+
+te_debug_tax.32 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_grain_min
+		add_modifier = { name = te_tp_grain_min }
+	}
+}
+
+te_debug_tax.33 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_static_wage
+		add_modifier = { name = te_tp_static_wage }
+	}
+}
+
+te_debug_tax.34 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_bureaucracy
+		add_modifier = { name = te_tp_bureaucracy }
+	}
+}
+
+te_debug_tax.40 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_import_tariff_level = { goods = g:grain level = no_tariffs_or_subventions }
+	}
+}
+
+te_debug_tax.41 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_import_tariff_level = { goods = g:grain level = low_tariffs }
+	}
+}
+
+te_debug_tax.42 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_import_tariff_level = { goods = g:grain level = max_tariffs }
+	}
+}
+
+te_debug_tax.43 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_import_tariff_level = { goods = g:grain level = low_subventions }
+	}
+}
+
+te_debug_tax.44 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_import_tariff_level = { goods = g:grain level = max_subventions }
+	}
+}
+
+te_debug_tax.45 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_export_tariff_level = { goods = g:grain level = no_tariffs_or_subventions }
+	}
+}
+
+te_debug_tax.46 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_export_tariff_level = { goods = g:grain level = low_tariffs }
+	}
+}
+
+te_debug_tax.47 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_export_tariff_level = { goods = g:grain level = max_tariffs }
+	}
+}
+
+te_debug_tax.48 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_export_tariff_level = { goods = g:grain level = low_subventions }
+	}
+}
+
+te_debug_tax.49 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_export_tariff_level = { goods = g:grain level = max_subventions }
+	}
+}
+
+te_debug_tax.50 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_tax_level = very_low
+	}
+}
+
+te_debug_tax.51 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_tax_level = low
+	}
+}
+
+te_debug_tax.52 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_tax_level = medium
+	}
+}
+
+te_debug_tax.53 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_tax_level = high
+	}
+}
+
+te_debug_tax.54 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_tax_level = very_high
+	}
+}
+
+te_debug_tax.55 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_military_wage_level = low
+	}
+}
+
+te_debug_tax.56 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_military_wage_level = medium
+	}
+}
+
+te_debug_tax.57 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_variable = { name = te_tp_lock value = 1 }
+	}
+}
+
+te_debug_tax.58 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		if = { limit = { has_variable = te_tp_lock } remove_variable = te_tp_lock }
+	}
+}
+
+te_debug_tax.60 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+		NOT = { has_variable = te_tp_pending }
+	}
+	immediate = {
+		te_tp_draft = yes
+	}
+}
+
+te_debug_tax.61 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		te_tp_can_approve = yes
+	}
+	immediate = {
+		te_tp_approve = yes
+	}
+}
+
+te_debug_tax.62 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_variable = te_tp_pending
+	}
+	immediate = {
+		te_tp_process_queue = yes
+	}
+}
+
+te_debug_tax.63 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_variable = te_tp_draft_revision
+	}
+	immediate = {
+		remove_variable = te_tp_draft_revision
+		if = { limit = { has_variable = te_tp_draft_base } remove_variable = te_tp_draft_base }
+		if = {
+			limit = { NOT = { has_variable = te_tp_pending } }
+			set_variable = { name = te_tp_stage value = 0 }
+			if = { limit = { var:te_tp_operative = 1 } set_variable = { name = te_tp_stage value = 3 } }
+		}
+	}
+}
+
+te_debug_tax.64 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_variable = te_tp_pending
+	}
+	immediate = {
+		change_variable = { name = te_tp_version add = 1 }
+	}
+}
+
+te_debug_tax.65 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	immediate = {
+		te_tp_rebuild = yes
+	}
+}
+
+te_debug_tax.66 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+	}
+	immediate = {
+		set_variable = { name = te_tp_ai_step value = 1 }
+	}
+}
+
+te_debug_tax.67 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		te_tp_append_record = yes
+	}
+}
+
+te_debug_tax.68 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		te_tp_inspect_records = yes
+	}
+}
+
+te_debug_tax.69 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		set_variable = { name = te_tp_timer value = 1 days = 7 }
+		set_variable = { name = te_tp_timer_days value = 7 }
+		add_modifier = { name = te_tp_authority days = var:te_tp_timer_days }
+	}
+}
+
+te_debug_tax.90 = {
+	type = country_event
+	hidden = yes
+	trigger = { has_variable = te_tp_armed }
+	immediate = { te_tp_monthly = yes }
+}
+# Read native inheritance before any reconstruction. Country-rooted logging.
+te_debug_tax.91 = {
+	type = country_event
+	hidden = yes
+	immediate = {
+		debug_log = "TE_TAX_PROBE civil-war raw inheritance country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = { limit = { has_variable = te_tp_armed } te_tp_snapshot = yes }
+		else = { debug_log = "TE_TAX_PROBE armed marker absent" }
+		te_tp_inspect_records = yes
+	}
+}
+
+te_debug_tax.70 = { # REVIEWED 2026-10-01: console/temporary GUI probe
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		has_law = law_type:law_te_probe_carrier
+		NOT = { has_variable = te_tp_pending }
+	}
+	immediate = {
+		change_variable = { name = te_tp_version add = 1 }
+		set_variable = { name = te_tp_operative value = 0 }
+		te_tp_rebuild = yes
+	}
+}
+
+te_debug_tax.71 = { # REVIEWED 2026-10-01: console/temporary GUI probe
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+		NOT = { has_variable = te_tp_pending }
+	}
+	immediate = {
+		set_variable = { name = te_tp_customs_clause value = 1 }
+	}
+}
