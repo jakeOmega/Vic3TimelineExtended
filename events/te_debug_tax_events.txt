@@ -10,7 +10,19 @@ te_debug_tax.1 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hi
 		always = yes
 	}
 	immediate = {
-		te_tp_arm = yes
+		# The harness's carrier and amendments must never run beside the production
+		# tax code. Written inline (te_tax_code_on is defined with the game rule).
+		# The guard sits here, not in the trigger, so a refused arm can say so.
+		if = {
+			limit = {
+				NOT = { has_game_rule = te_tax_code_enabled }
+				NOT = { has_game_rule = te_tax_code_enabled_customs }
+			}
+			te_tp_arm = yes
+		}
+		else = {
+			debug_log = "TE_TAX_PROBE harness disabled under the tax-code game rule, not armed: [THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 
