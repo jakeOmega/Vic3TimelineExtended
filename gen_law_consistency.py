@@ -33,6 +33,9 @@ non-variant, tech-free) is the cascade's unconditional terminal fallback; groups
 lacking such a law get a generation-time WARNING (their cascade may leave a
 violation unresolved until the relevant tech is researched).
 
+Carrier laws (CARRIER_LAW_DENYLIST) hold amendments only: they are never
+replacement candidates, never a group's fallback, and never trigger a cascade.
+
 Output: common/scripted_effects/extra_law_consistency_generated.txt
 Auto-runs via mod_state_server `_run_post_load_generators`.
 
@@ -231,6 +234,17 @@ VARIANT_CANDIDATE_GATES = {
     ],
     "law_colonial_administration": ["country_is_colonial_or_company = yes"],
 }
+
+# ── Carrier laws ─────────────────────────────────────────────────────────────
+#
+# Carrier laws exist only to hold amendments (the tax-code probe harness's debug
+# carrier and the production `law_te_tax_code`). They are constraint-free,
+# tag-free and tech-free, so left in the table the walk would adopt one as the
+# group's unconditional terminal fallback and move every country whose
+# Per-Capita/Proportional/Graduated law is invalid onto a zero-rate law, with the
+# game rule off and no engine warning. Laws in this set are never replacement
+# candidates, never count as a group's fallback, and never trigger a cascade.
+CARRIER_LAW_DENYLIST = {"law_te_probe_carrier", "law_te_tax_code"}
 
 OUTPUT_PATH = os.path.join(
     mod_path, "common", "scripted_effects", "extra_law_consistency_generated.txt"
@@ -475,8 +489,11 @@ def ideology_distance(law_a, law_b, attitudes):
 
 
 def laws_by_group(laws):
+    """Group law ids by lawgroup, leaving out CARRIER_LAW_DENYLIST laws."""
     grouped = {}
     for law_id, law in laws.items():
+        if law_id in CARRIER_LAW_DENYLIST:
+            continue
         grouped.setdefault(law["group"], []).append(law_id)
     return grouped
 
@@ -499,6 +516,8 @@ def candidate_order(active_law_id, group_law_ids, laws, attitudes):
     """Return list of candidate replacement law_ids (excluding active_law_id),
     ordered by progressiveness distance, then ideology distance, then file order.
 
+    Laws in CARRIER_LAW_DENYLIST are never candidates.
+
     Variant laws (`parent = law_X`) are included only if listed in
     VARIANT_CANDIDATE_GATES. Their gate clauses are added to the validity check
     at emit time so the replacement only fires for the country/condition the
@@ -515,6 +534,7 @@ def candidate_order(active_law_id, group_law_ids, laws, attitudes):
     candidates = [
         lid for lid in group_law_ids
         if lid != active_law_id
+        and lid not in CARRIER_LAW_DENYLIST
         and (laws[lid].get("parent") is None or lid in VARIANT_CANDIDATE_GATES)
     ]
     candidates.sort(key=sort_key)
@@ -584,7 +604,10 @@ def emit_lawgroup_helper(group_id, group_law_ids, laws, attitudes):
     name = f"te_fix_inconsistent_lawgroup_{group_id[len('lawgroup_'):]}"
     out = [f"{name} = {{"]
 
-    constrained = [lid for lid in group_law_ids if has_constraints(laws[lid])]
+    constrained = [
+        lid for lid in group_law_ids
+        if lid not in CARRIER_LAW_DENYLIST and has_constraints(laws[lid])
+    ]
     # Stable order for diffability: sort by file_order
     constrained.sort(key=lambda lid: (laws[lid]["file_order"], lid))
 
@@ -669,6 +692,10 @@ def build_output(laws, attitudes):
     # Lawgroups in LAWGROUP_PRIORITY but with no constraint-having laws are
     # silently skipped; print summary so the user sees what's actually emitted.
     print(f"[gen_law_consistency] {len(ordered_groups)} groups emit helpers: {ordered_groups}")
+
+    carriers = sorted(lid for lid in laws if lid in CARRIER_LAW_DENYLIST)
+    if carriers:
+        print(f"[gen_law_consistency] {len(carriers)} carrier laws excluded: {carriers}")
 
     variants = sorted(lid for lid, law in laws.items() if law.get("parent"))
     gated = [lid for lid in variants if lid in VARIANT_CANDIDATE_GATES]
