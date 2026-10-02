@@ -3348,6 +3348,8 @@ factory_farm_building_dye_plantation = {
 	}
 }
 
+# 55 Drugs, not the 75 of coffee and tea (same base price), so it stays well below
+# Pharmaceutical Industries' Antibiotic Fermentation from the same era.
 factory_farm_building_opium_plantation = {
 	texture = "gfx/interface/icons/production_method_icons/factory_farm.dds"
 
@@ -3369,14 +3371,14 @@ factory_farm_building_opium_plantation = {
 			goods_input_automobiles_add = 5                      # Price:  100, Total cost:   500.0 (52.63%)
 			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (15.79%)
 			# Output goods
-			goods_output_opium_add = 75                          # Price:   50, Total cost:  3750.0 (100.00%)
+			goods_output_opium_add = 55                          # Price:   50, Total cost:  2750.0 (100.00%)
 			# Total input cost: 950.0
-			# Total output cost: 3750.0
-			# Profit: 2800.0
-			# Profit margin: 294.74%
-			# Zero profit price multiplier: 0.25
+			# Total output cost: 2750.0
+			# Profit: 1800.0
+			# Profit margin: 189.47%
+			# Zero profit price multiplier: 0.35
 			# Employment: 4250
-			# Wage breakeven: 0.66
+			# Wage breakeven: 0.42
 		}
 
 		level_scaled = {
@@ -7178,9 +7180,120 @@ pm_bioengineered_rubber = {
 	required_input_goods = electricity
 }
 
-pm_synthetic_opium = {
-	texture = "gfx/interface/icons/production_method_icons/chemical_fertilizers.dds"
+# Pharmaceutical Industries ladder (pmg_synthetic_opium). Drugs are vanilla's
+# opium good, so this building competes with opium plantations. The first
+# method must lose to a plantation (default PM: wage breakeven 0.20, 200
+# construction) or it would undercut the 19th-century opium trade to Qing:
+# it pays wages only where Drugs are dear. Synthetic Drug Chemistry about
+# matches the best plantation methods (Automatic Irrigation 0.38, Mechanized
+# Farm 0.42); from Antibiotic Fermentation on, each method clearly beats them
+# and sits near the mod-wide median wage breakeven of its era (0.6 / 1.3 /
+# 1.8 / 2.5 for eras 7 / 8 / 10 / 11). Every method keeps at least the
+# employment that pm_ai_managed_chemical_plant removes, so the automation
+# group can't drive a profession negative.
+pm_pharma_alkaloid_extraction = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
 
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (39.13%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (34.78%)
+			goods_input_sugar_add = 10                           # Price:   30, Total cost:   300.0 (26.09%)
+			# Output goods
+			goods_output_opium_add = 30                          # Price:   50, Total cost:  1500.0 (100.00%)
+			# Total input cost: 1150.0
+			# Total output cost: 1500.0
+			# Profit: 350.0
+			# Profit margin: 30.43%
+			# Zero profit price multiplier: 0.77
+			# Employment: 7000
+			# Wage breakeven: 0.05
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 3500
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 2000
+		}
+	}
+}
+
+pm_pharma_synthetic_chemistry = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p1.dds"
+
+	unlocking_technologies = {
+		antibiotics
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (46.15%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (23.08%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (30.77%)
+			# Output goods
+			goods_output_opium_add = 75                          # Price:   50, Total cost:  3750.0 (100.00%)
+			# Total input cost: 1300.0
+			# Total output cost: 3750.0
+			# Profit: 2450.0
+			# Profit margin: 188.46%
+			# Zero profit price multiplier: 0.35
+			# Employment: 5500
+			# Wage breakeven: 0.45
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 2000
+		}
+	}
+}
+
+pm_pharma_antibiotic_fermentation = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p2.dds"
+
+	unlocking_technologies = {
+		antibiotic_mass_production
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sugar_add = 20                           # Price:   30, Total cost:   600.0 (26.67%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (26.67%)
+			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (20.00%)
+			goods_input_glass_add = 15                           # Price:   40, Total cost:   600.0 (26.67%)
+			# Output goods
+			goods_output_opium_add = 135                         # Price:   50, Total cost:  6750.0 (100.00%)
+			# Total input cost: 2250.0
+			# Total output cost: 6750.0
+			# Profit: 4500.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 5500
+			# Wage breakeven: 0.82
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 2000
+		}
+	}
+}
+
+# Rational Drug Design. The key predates the ladder and stays for saved games.
+pm_synthetic_opium = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p3.dds"
+
+	unlocking_technologies = {
+		modern_pharmaceuticals
+	}
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -7190,14 +7303,82 @@ pm_synthetic_opium = {
 			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (10.00%)
 			goods_input_sulfur_add = 10                          # Price:   50, Total cost:   500.0 (16.67%)
 			# Output goods
-			goods_output_opium_add = 100                         # Price:   50, Total cost:  5000.0 (100.00%)
+			goods_output_opium_add = 190                         # Price:   50, Total cost:  9500.0 (100.00%)
 			# Total input cost: 3000.0
-			# Total output cost: 5000.0
-			# Profit: 2000.0
-			# Profit margin: 66.67%
-			# Zero profit price multiplier: 0.60
+			# Total output cost: 9500.0
+			# Profit: 6500.0
+			# Profit margin: 216.67%
+			# Zero profit price multiplier: 0.32
 			# Employment: 5500
-			# Wage breakeven: 0.36
+			# Wage breakeven: 1.18
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 2000
+		}
+	}
+}
+
+pm_pharma_biologics = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p4.dds"
+
+	unlocking_technologies = {
+		mrna_therapeutics
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 20           # Price:   80, Total cost:  1600.0 (43.24%)
+			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (24.32%)
+			goods_input_sugar_add = 20                           # Price:   30, Total cost:   600.0 (16.22%)
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (16.22%)
+			# Output goods
+			goods_output_opium_add = 265                         # Price:   50, Total cost: 13250.0 (100.00%)
+			# Total input cost: 3700.0
+			# Total output cost: 13250.0
+			# Profit: 9550.0
+			# Profit margin: 258.11%
+			# Zero profit price multiplier: 0.28
+			# Employment: 5500
+			# Wage breakeven: 1.74
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 2000
+		}
+	}
+}
+
+pm_pharma_precision_medicine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p5.dds"
+
+	unlocking_technologies = {
+		personalized_medicine
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_digital_assets_add = 15                  # Price:  100, Total cost:  1500.0 (37.04%)
+			goods_input_electronic_components_add = 15           # Price:   80, Total cost:  1200.0 (29.63%)
+			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (22.22%)
+			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (11.11%)
+			# Output goods
+			goods_output_opium_add = 345                         # Price:   50, Total cost: 17250.0 (100.00%)
+			# Total input cost: 4050.0
+			# Total output cost: 17250.0
+			# Profit: 13200.0
+			# Profit margin: 325.93%
+			# Zero profit price multiplier: 0.23
+			# Employment: 5500
+			# Wage breakeven: 2.40
 		}
 
 		level_scaled = {

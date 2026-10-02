@@ -67,7 +67,9 @@ era.
 
 Era 8 brings computers and automation. Computer Networks unlocks the Software
 Industry and Network Infrastructure, Industrial Robotics the Robotics Industry,
-and Modern Pharmaceuticals the Pharmaceutical Industries. Containerization,
+and Modern Pharmaceuticals the Rational Drug Design method for Pharmaceutical
+Industries ([Pharmaceutical Industries and
+Drugs](#pharmaceutical-industries-and-drugs)). Containerization,
 Fiber Optics, Cellular Networks, Microprocessor, Gene Splicing, Stealth
 Technology and Video Games are also here.
 
@@ -275,6 +277,38 @@ Resort Colony production method, which produces art and tourism instead.
 | Transport | Airport and Highway, both producing Personal and Bulk Transportation. |
 | Leisure | Tourism Industry and National Park ([States and population](07-states.md)). |
 | Government | Space Program ([The space race](15-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Subsidies, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](12-military.md)). |
+
+### Pharmaceutical Industries and Drugs
+
+Pharmaceutical Industries make Drugs, the base game's opium, so they compete
+with opium plantations. The building comes with the base game's Pharmaceuticals
+technology and costs 800 construction per level, four times as much as a
+plantation. You can't build it while your country bans Drugs.
+
+| Method | Unlocked by | Drugs per level | Inputs per level |
+|---|---|---|---|
+| Alkaloid Extraction | Pharmaceuticals | 30 | 15 Chemicals, 10 Glass and Plastics, 10 Sugar |
+| Synthetic Drug Chemistry | Antibiotics | 75 | 20 Chemicals, 10 Energy and Carbon Minerals, 10 Glass and Plastics |
+| Antibiotic Fermentation | Antibiotic Mass Production | 135 | 20 Chemicals, 20 Sugar, 15 Electricity, 15 Glass and Plastics |
+| Rational Drug Design | Modern Pharmaceuticals | 190 | 20 Chemicals, 20 Electronic Components, 10 Electricity, 10 Chemical and Industrial Minerals |
+| Biologics and mRNA | mRNA Therapeutics | 265 | 30 Electricity, 20 Electronic Components, 20 Chemicals, 20 Sugar |
+| Precision Medicine | Personalized Medicine | 345 | 30 Electricity, 15 Software, 15 Electronic Components, 15 Chemicals |
+
+The figures are for a fully staffed level. Every method employs 2,000
+engineers per level; Alkaloid Extraction employs 7,000 workers in all and every
+later method 5,500.
+
+Alkaloid Extraction earns about a quarter as much per worker as an opium
+plantation. It covers its wages only where Drugs sell well above their base
+price, so opium plantations stay the cheaper source of Drugs until Antibiotics.
+Synthetic Drug Chemistry earns about as much per worker as the best plantation
+method, and Antibiotic Fermentation about twice as much. An opium plantation's
+Mechanized Farm makes 55 Drugs per level; a coffee or tea plantation's, whose
+goods have the same base price, makes 75.
+
+The base game's journal entry The Opium Trade is not offered after 23 January
+1912, and an entry still open on that date fails. Field Hospitals take Drugs as
+upkeep, so they need Drugs for sale in your market.
 
 ### Later production methods for existing buildings
 
