@@ -29,6 +29,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_ajinomoto_kawasaki_plant
+			NOT = {
+				owner = {
+					has_company = company_ajinomoto
+				}
+			}
+		}
+		remove_building = building_ajinomoto_kawasaki_plant
+	}
+	if = {
+		limit = {
 			has_building = building_aker_oslo_shipyard
 			NOT = {
 				owner = {
@@ -293,6 +304,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_bgi_national_genebank
+			NOT = {
+				owner = {
+					has_company = company_bgi
+				}
+			}
+		}
+		remove_building = building_bgi_national_genebank
+	}
+	if = {
+		limit = {
 			has_building = building_bhp_broken_hill_mine
 			NOT = {
 				owner = {
@@ -312,6 +334,28 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_bhp_mount_whaleback_mine
+	}
+	if = {
+		limit = {
+			has_building = building_biocon_park
+			NOT = {
+				owner = {
+					has_company = company_biocon
+				}
+			}
+		}
+		remove_building = building_biocon_park
+	}
+	if = {
+		limit = {
+			has_building = building_biontech_mainz_campus
+			NOT = {
+				owner = {
+					has_company = company_biontech
+				}
+			}
+		}
+		remove_building = building_biontech_mainz_campus
 	}
 	if = {
 		limit = {
@@ -961,6 +1005,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_ge_schenectady_works
+	}
+	if = {
+		limit = {
+			has_building = building_genentech_dna_way_campus
+			NOT = {
+				owner = {
+					has_company = company_genentech
+				}
+			}
+		}
+		remove_building = building_genentech_dna_way_campus
 	}
 	if = {
 		limit = {
@@ -2125,6 +2180,17 @@ remove_invalid_company_buildings_effect = {
 	}
 	if = {
 		limit = {
+			has_building = building_monsanto_chesterfield_center
+			NOT = {
+				owner = {
+					has_company = company_monsanto
+				}
+			}
+		}
+		remove_building = building_monsanto_chesterfield_center
+	}
+	if = {
+		limit = {
 			has_building = building_morozov_orekhovo_zuevo_mills
 			NOT = {
 				owner = {
@@ -2287,6 +2353,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_norsk_hydro_rjukan_plant
+	}
+	if = {
+		limit = {
+			has_building = building_novo_nordisk_kalundborg_plant
+			NOT = {
+				owner = {
+					has_company = company_novo_nordisk
+				}
+			}
+		}
+		remove_building = building_novo_nordisk_kalundborg_plant
 	}
 	if = {
 		limit = {
@@ -2705,6 +2782,17 @@ remove_invalid_company_buildings_effect = {
 			}
 		}
 		remove_building = building_roscosmos_vostochny_cosmodrome
+	}
+	if = {
+		limit = {
+			has_building = building_rosen_association_hq
+			NOT = {
+				owner = {
+					has_company = company_rosen_association
+				}
+			}
+		}
+		remove_building = building_rosen_association_hq
 	}
 	if = {
 		limit = {

@@ -100,7 +100,7 @@ actions](13-nuclear.md#strategic-and-tactical-strike-actions).
 |---|---|---|
 | Antitrust & Market Structure | Guilds and Chartered Monopolies, Freedom of Contract, Antitrust Enforcement, Regulated Utilities, Dirigiste Policy, Command/Cooperative Economy | Companies and monopolies. |
 | Intellectual Property | No IP Protection, Creative Commons, Traditional IP Protection, Strict IP Protection, Open Source Innovation, State Intellectual Property | Innovation and technology spread against capitalist investment. |
-| Genetic Rights | Traditional Heredity, Ban on Genetic Modification, Corporate Genetic Licensing, Open-Source Genetics, State Eugenics Program | Biotechnology output, birth rate and authority. |
+| Genetic Rights | Traditional Heredity, Ban on Genetic Modification, Corporate Genetic Licensing, Open-Source Genetics, State Eugenics Program | Biotechnology output and companies ([Biotechnology companies](02-timeline.md#biotechnology-companies)), birth rate and authority. |
 | Monetary Policy | Commodity Money, Gold Standard, Fiat Money, Digital Currency, Decentralized Cryptocurrency | Currency regime. |
 | Financial Regulation | Unregulated Banking, Free & Mutual Banking, Universal Banking (Light Prudence), Prudential / Narrow Banking, Directed Credit & Development Banks, State-Owned Banking, Central Bank Independence | How banks are supervised. |
 
