@@ -18,10 +18,18 @@
 # leverage generation are left as they are; at a full burden this takes a
 # fifty-warhead arsenal to -15 % prestige and no leverage bonus. Its fields are
 # nd_taboo_possession_prestige_pct and _leverage_pct / 100.
+# country_un_authority_target_add: an arsenal held against the world's horror
+# of it wears down the UN authority target's Policy pillar
+# (un_redesign_design.md §0.10), -1 at a full burden. Negative, so it counts
+# for members and non-members alike. The taboo reads UN authority (its "un"
+# part), so this closes a loop, but a damping one with a gain of about 0.01
+# per point of authority: authority up, taboo up a little, burden up a
+# little, Policy down a little.
 nd_taboo_possession_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_mult = -0.45
 	country_leverage_generation_mult = -0.25
+	country_un_authority_target_add = -1
 }
 
 # We renounced the bomb (Dismantle the Arsenal). The disarmament flag makes

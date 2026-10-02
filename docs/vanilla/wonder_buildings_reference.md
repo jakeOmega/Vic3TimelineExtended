@@ -354,6 +354,8 @@ At 5 levels: +25% tech speed, +50% innovation, -10% mortality, +2500 character h
 
 1. **Should wonders be limited to one per country?** No. The cost is the limiting factor, not a hard cap. Only the Ark should be unique (one per world, first to complete wins). (No Ark was built. The seven megaprojects have no per-country cap: the site's level check is per state.)
 
+   **What `unique = yes` means.** One level of the building in the whole world, never built by private investors. That is the engine's own definition (vanilla `_buildings.info`, mirrored in Modding-Digests `documentation/types/buildings.md`). So the 36 real-world wonders in `common/buildings/wonders.txt`, including the build-anywhere ones (Peace Palace, Palais des Nations, LHC, ISS, ITER, Svalbard, LIGO), are one in the world, first to finish wins. Their `building_unique_per_owner_potential` guard adds nothing beyond `unique`. Don't read the guard as the limit: it only bites on the non-unique UN and power-bloc headquarters. A 2026-10-02 review misread it and called the palaces "one per owner".
+
 2. **Should wonders have maintenance concepts?** No. Goods consumption in the operational PM IS the maintenance.
 
 3. **Should there be events tied to each wonder?** Would add flavor but not strictly necessary. Can be added later.
