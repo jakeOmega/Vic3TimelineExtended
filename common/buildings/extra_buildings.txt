@@ -126,8 +126,10 @@ REPLACE_OR_CREATE:building_synthetics_plant_opium = {
 	city_type = city
 	levels_per_mesh = -1
 
+	# Base-game Pharmaceuticals (era 2). The early methods lose to opium
+	# plantations; see the ladder comment in extra_pms.txt.
 	unlocking_technologies = {
-		modern_pharmaceuticals
+		pharmaceuticals
 	}
 
 	production_method_groups = {
@@ -136,10 +138,22 @@ REPLACE_OR_CREATE:building_synthetics_plant_opium = {
 		pmg_maintenance
 	}
 
-	required_construction = construction_cost_mega_high
+	required_construction = construction_cost_very_high
 
 	possible = {
 		is_industrial_production_allowed = yes
+	}
+	# Drugs are the opium good: a ban on it (Qing's Opium Crisis) stops these
+	# as it stops opium plantations.
+	can_build_government = {
+		owner = {
+			NOT = { is_banning_goods = g:opium }
+		}
+	}
+	can_build_private = {
+		owner = {
+			NOT = { is_banning_goods = g:opium }
+		}
 	}
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"

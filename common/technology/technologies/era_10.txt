@@ -125,7 +125,7 @@ internet_of_things = {
 }
 
 mrna_therapeutics = {
-	# To-be-authored mRNA / gene-therapy pharma PM
+	# Biologics and mRNA PM for Pharmaceutical Industries
 	era = era_10
 	texture = "gfx/interface/icons/invention_icons/mrna_therapeutics.dds"
 	category = society

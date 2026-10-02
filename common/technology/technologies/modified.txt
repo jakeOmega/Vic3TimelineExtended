@@ -80,6 +80,7 @@ INJECT:mass_surveillance = {
 }
 
 
+# Base-game era 2 tech; also unlocks Pharmaceutical Industries (Alkaloid Extraction PM).
 INJECT:pharmaceuticals = {
 	modifier = {
 		country_pharmaceuticals_pb_principles_bool = yes

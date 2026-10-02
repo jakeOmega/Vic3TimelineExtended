@@ -710,7 +710,12 @@ REPLACE_OR_CREATE:pmg_synthetic_rubber = {
 REPLACE_OR_CREATE:pmg_synthetic_opium = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
 	production_methods = {
+		pm_pharma_alkaloid_extraction
+		pm_pharma_synthetic_chemistry
+		pm_pharma_antibiotic_fermentation
 		pm_synthetic_opium
+		pm_pharma_biologics
+		pm_pharma_precision_medicine
 	}
 }
 REPLACE_OR_CREATE:pmg_synthetic_coal = {

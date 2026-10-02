@@ -1,0 +1,101 @@
+﻿# ======================================================================
+#  The Opium Trade (je_opium) — closes in 1912
+# ======================================================================
+#
+# Vanilla shows this entry to any country with opium land and never times it
+# out. It completes when the country runs a level-10 opium plantation and
+# another country's market, whose culture isn't already obsessed with opium,
+# imports 200 or more of the good; opium_events.1 ("Opium Barons") then
+# reports that people as addicted. In this mod the good is Drugs, which
+# Pharmaceutical Industries make and modern markets import as medicine, so
+# left open the entry would fire against a 20th-century importer.
+#
+# The mod-only lines are the three game_date checks and on_fail: the entry is
+# neither shown nor started after 23 January 1912 (the International Opium
+# Convention), an active one fails then, and failing sets opium_je_done as
+# completing does, so it never comes back.
+#
+# Everything else is vanilla je_opium, restated from the 1.14.5 snapshot
+# (vanilla_parsed/common/journal_entries.json) — re-diff on every Vic3 patch.
+
+REPLACE:je_opium = {
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	group = je_group_foreign_affairs
+
+	is_shown_when_inactive = {
+		any_market = {
+			owner ?= root
+		}
+		NOT = {
+			has_variable = opium_je_done
+		}
+		any_scope_state = {
+			has_potential_resource = building_opium_plantation
+		}
+		game_date < 1912.1.23
+	}
+
+	possible = {
+		any_scope_building = {
+			is_building_type = building_opium_plantation
+		}
+		NOT = {
+			any_primary_culture = {
+				has_cultural_obsession = opium
+			}
+		}
+		game_date < 1912.1.23
+	}
+
+	complete = {
+		any_scope_building = {
+			is_building_type = building_opium_plantation
+			cash_reserves_ratio > 0.5
+			weekly_profit > 0
+			occupancy >= 0.75
+			level >= 10
+		}
+		any_market = {
+			NOT = {
+				owner ?= root
+			}
+			mg:opium ?= {
+				market_goods_imports >= 200
+			}
+			owner = {
+				any_primary_culture = {
+					NOT = {
+						has_cultural_obsession = opium
+					}
+				}
+			}
+		}
+	}
+
+	on_complete = {
+		trigger_event = {
+			id = opium_events.1
+		}
+		set_variable = {
+			name = opium_je_done
+		}
+	}
+
+	fail = {
+		custom_tooltip = {
+			text = je_opium_international_opium_convention_tt
+			game_date >= 1912.1.23
+		}
+	}
+
+	on_fail = {
+		set_variable = {
+			name = opium_je_done
+		}
+	}
+
+	transferable = no
+
+	weight = 100
+}
