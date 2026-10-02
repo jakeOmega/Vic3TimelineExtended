@@ -110,3 +110,20 @@ popneed_tourism = {
 		min_supply_share = 0.0
 	}
 }
+
+# Medicine, bought from about wealth 21 and capped from wealth 40
+# (pop_needs_curves.py, healthcare_need). Drugs only: doctors and hospitals are
+# already part of Services, and a services entry would split the demand by
+# market share, not by wealth. No obsession_demand_* fields: vanilla's staple
+# needs omit them, so Han's opium obsession should multiply Intoxicants only
+# (not yet confirmed in game; plan § 4).
+popneed_healthcare = {
+	default = opium
+
+	entry = {
+		goods = opium
+		weight = 1
+		max_supply_share = 1.0
+		min_supply_share = 0.0
+	}
+}

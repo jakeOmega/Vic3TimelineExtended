@@ -1,7 +1,7 @@
 """Pop needs curve definitions and buy_packages generator.
 
 Defines mathematical functions for how pop consumption of convenience, services,
-art, and tourism scale with wealth level. Generates modified buy_packages files
+art, tourism and healthcare scale with wealth level. Generates modified buy_packages files
 and can display expenditure tables or plots.
 
 Usage:
@@ -12,7 +12,7 @@ Usage:
     python pop_needs_curves.py --dry-run      # Show what would be written without writing
 
 Functions are importable:
-    from pop_needs_curves import convenience_need, services_need, art_need, tourism_need
+    from pop_needs_curves import convenience_need, services_need, art_need, tourism_need, healthcare_need
 """
 
 import argparse
@@ -95,12 +95,32 @@ def tourism_need(wealth_level: int) -> int:
         return int(base * exp)
 
 
+# Wealth level -> Drugs, chosen by the owner from measured wealth distributions
+# (docs/testing/drugs-wealth-probe-results-2026-10-02.md). Flat from 40 so the
+# ultra-wealthy buy no more medicine than a pop at wealth 40.
+HEALTHCARE_ANCHORS = ((20, 0), (25, 15), (30, 40), (40, 60))
+
+
+def healthcare_need(wealth_level: int) -> int:
+    """Healthcare (Drugs) demand at a given wealth level: linear between the anchors."""
+    (low, _), (high, cap) = HEALTHCARE_ANCHORS[0], HEALTHCARE_ANCHORS[-1]
+    if wealth_level <= low:
+        return 0
+    if wealth_level >= high:
+        return cap
+    for (x0, y0), (x1, y1) in zip(HEALTHCARE_ANCHORS, HEALTHCARE_ANCHORS[1:]):
+        if wealth_level <= x1:
+            return int(y0 + (y1 - y0) * (wealth_level - x0) / (x1 - x0))
+    return cap
+
+
 # All modded need curves
 NEED_CURVES = {
     "popneed_convenience": convenience_need,
     "popneed_services": services_need,
     "popneed_art": art_need,
     "popneed_tourism": tourism_need,
+    "popneed_healthcare": healthcare_need,
 }
 
 
@@ -300,7 +320,12 @@ def generate_buy_packages(dry_run: bool = False, replace_political: bool = False
         x_data = list(range(90, 100))
         y_data = [_get_need_value(need, i) for i in x_data]
         if any(y_data):
-            params = _fit_power_law(x_data, y_data)
+            if len(set(y_data)) == 1:
+                # A need flat over 90-99 stays flat. The fit returns 59.99...
+                # for a flat 60, which int() truncates to 59.
+                params = (y_data[0], 0)
+            else:
+                params = _fit_power_law(x_data, y_data)
             if params is None:
                 continue
             for i in range(100, 201):
