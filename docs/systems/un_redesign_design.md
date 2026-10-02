@@ -8,6 +8,7 @@
 > representation) and §0.9 (what a revolution's winner keeps) are pending in-game
 > verification.
 > Read
+> [§0.10](#010-the-policy-pillar-and-a-slower-credibility-ledger),
 > [§0.9](#09-civil-wars-the-state-mirrors),
 > [§0.8](#08-subjects-diplomatic-autonomy-and-suspended-representation),
 > [§0.7](#07-joining-missions-at-will--rulings-and-open-checks),
@@ -28,6 +29,80 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.10 The Policy pillar and a slower credibility ledger
+
+Built 2026-10-02 at the mod owner's request. Not yet seen in a running game.
+
+**What changed.**
+
+- **An eighth pillar in the target, Policy.** The target is now the sum of eight pillars, the
+  constant base (counted as one, as the panel and the player guide do) and seven computed
+  ones: participation, commitment, credibility, funding, order, delivery and policy. Policy is `Σ country_un_authority_target_add × un_actor_weight` over every
+  country, held to **−25 … +25** from all sources together (`un_pillar_policy_value`,
+  `un_policy_cap` / `un_policy_floor`). A negative total takes authority down.
+- **Credibility** keeps its design but moves to **−25 … +25** (`un_credibility_cap`, new
+  `un_credibility_floor`) and fades with a **ten-year half-life** (`un_credibility_decay_factor`
+  0.99424 a month = 0.5^(1/120)). Delivery and order keep the four-year half-life
+  (`un_ledger_decay_factor`). The credibility bar divides by `un_credibility_cap`, so it
+  rescales with the range and zero stays the centre line.
+
+**Rulings.**
+
+1. **The modifier is a points figure, scaled by weight.** `country_un_authority_target_add`
+   (`common/modifier_type_definitions/un_membership_modifier_types.txt`, `script_only`) reads
+   as "target points for a typical great power": a country's total is multiplied by its
+   `un_actor_weight` (its share of world prestige against 10%, capped at ×5), so a superpower
+   counts up to five times over and a micro-state rounds to nothing. Raw power share was the
+   other candidate; it would have made every grant a number near 25, because the shares sum to
+   1 where the weights sum to at most 10.
+2. **Every country counts, not only members.** A power outside the UN can still be its friend
+   or its enemy through its own laws. This differs from participation and commitment, which
+   are members-only; say so before a grant relies on it.
+3. **Policy is read from the world, not booked.** It is not a ledger: it does not decay, has no
+   log entries and no `un_ledger_policy`. A modifier that is gone stops counting at the next
+   monthly update. `un_ledger_record` is never called with `PILLAR = policy`
+   (`test_un_policy_pillar.py` fails if anything does).
+4. **Nothing grants the modifier yet.** The first grant, the Ministry of International Aid,
+   is a balance decision for its own change. The pillar is a no-op at 0 until then.
+5. **Why credibility slows and widens together.** A quiet world feeds the ledger about 0.1 a
+   month. On the old four-year half-life that settled near +7, inside the old ±15. On ten years
+   it settles near +17 (0.1 / (1 − 0.99424)), which would have pinned the old cap. The ±25 cap
+   leaves room for a good decade without saturating.
+6. **The snapshot, the trend and the dissolve follow the other pillars.** The monthly update
+   copies `un_pillar_policy_prev`, snapshots `un_pillar_policy` before computing the target,
+   and `un_dissolve` removes it.
+
+**Existing saves.** The credibility ledger itself was never clamped, only the pillar read from
+it. A save whose stock had run past ±15 shows the excess at once, up to ±25, so its target can
+jump by up to 10 points in the month after loading. Authority itself still moves at most a
+point a month. The policy snapshot appears at the first monthly update after loading, before
+the target is computed from it.
+
+### Files
+
+- `common/script_values/un_authority_values.txt`: the tuning values, `un_pillar_policy_value`,
+  the target, `un_disp_pillar_policy`.
+- `common/script_values/un_overview_display_values.txt`: the bar and trend values.
+- `common/scripted_effects/un_authority_effects.txt`: per-ledger decay, the snapshot and its
+  previous-month copy. `un_ladder_effects.txt`: the dissolve.
+- `gui/journal_entry_widgets/un_authority_widget.gui`: the Policy row, after Delivery.
+- `localization/english/te_journal_entries_l_english.yml` (`je_un_auth_*policy*`, the
+  credibility and help text) and `te_modifiers_l_english.yml` (the modifier).
+- `test_un_policy_pillar.py`.
+
+### IN-GAME VERIFICATION CHECKLIST (§0.10)
+
+- [ ] The Why UN Authority Is Moving panel shows a Policy row after Delivery, at +0.0 with an
+      empty bar, and the target is the sum of the rows shown.
+- [ ] Give a country a static modifier carrying `country_un_authority_target_add = 2` (a
+      scratch law or a debug modifier): its tooltip lists "UN Authority Target +2.0", and at
+      the next monthly update the Policy row moves by 2 × that country's weight.
+- [ ] A negative value moves the row left of the centre line, and the trend icon follows.
+- [ ] Credibility's bar and tooltip read −25 to +25, and a reading of +12.5 fills half of the
+      right side.
 
 ---
 
@@ -1718,7 +1793,8 @@ pillars, the ledger log and the nuclear hooks work in game.
 4. **No charter cap yet.** The target is clamped to 0..100. The 70 / 85 / 100 caps arrive
    with the reform topics in phase 2, so phase 1 alone cannot make the NPT-at-80 rule
    unreachable. *(Superseded by phase 2, §0.2.)*
-5. **Ledgers decay with a four-year half-life** (`un_ledger_decay_factor` 0.9857 a month),
+5. **Ledgers decay with a four-year half-life** (`un_ledger_decay_factor` 0.9857 a month;
+   credibility alone moved to ten years in §0.10),
    not the fifteen-year entry life of §3.4. At the event rates surveyed in §1.1, the
    credibility and delivery stocks settle around +7 each in a quiet world, rather than
    saturating their caps.
@@ -1930,7 +2006,7 @@ because both the pillars and the display read it. **(proposed)**
 | **Base** | 15 | constant |
 | **Participation** | 0 … +25 | `25 × Σ power_share` of members |
 | **Great-power commitment** | −25 … +25 | `25 × Σ stance × power_share` over **members only**. Stance: champion **+1**, neutral **0**, undermine **−1**. A member's stance also gains `country_un_institutional_alignment` (the Multilateral Institutions bloc principle), so that hook survives |
-| **Credibility** | −15 … +15 | a rolling record of binding decisions enforced vs. defied, vetoed or ignored (§3.4) |
+| **Credibility** | −25 … +25 (was −15 … +15, §0.10) | a rolling record of binding decisions enforced vs. defied, vetoed or ignored (§3.4) |
 | **Funding** | −10 … +10 | the share of assessed dues actually paid, weighted by the size of each assessment (§7.2) |
 | **Peace & order** | −20 … 0 | wars between members weighted by power share (the existing `un_member_wars_weight` shape, made power-weighted); aggression without a mandate; nuclear use. Each decays |
 | **Delivery** | 0 … +10 | missions concluded successfully in the last ten years, minus failed ones, weighted by mission size (§9) |
@@ -2375,7 +2451,10 @@ of this file, as `monetary_policy_design.md` does.
 | `un_authority_approach_months` | 48 | §3.3 |
 | `un_authority_max_step` | 1.0 / month | §3.3 |
 | pillar ranges (base 15, participation 0–25, …) | see §3.2 | §3.2 |
-| ledger decay (credibility, delivery, order) | 4-year half-life, ×0.9857 a month (phase 1; §0.1 ruling 5) | §3.4 |
+| ledger decay (delivery, order) | 4-year half-life, ×0.9857 a month (phase 1; §0.1 ruling 5) | §3.4 |
+| ledger decay (credibility) | 10-year half-life, ×0.99424 a month (§0.10) | §3.4 |
+| credibility range | −25 … +25 (§0.10) | §3.2 |
+| policy pillar | `country_un_authority_target_add` × `un_actor_weight`, summed, −25 … +25 (§0.10) | §3.2 |
 | actor weight: reference share / cap | 0.10 of world prestige = ×1 / ×5 | §3.1 |
 | funding proxy until dues | −5 + 15 × programme ratio (§0.1 ruling 1) | §3.2 |
 | tier boundaries | 20 / 45 / 70 / 85 | §4.1 |

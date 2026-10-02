@@ -404,6 +404,41 @@ un_disp_pillar_delivery_trend = {
 	}
 }
 
+un_disp_pillar_policy_pos = {
+	value = un_disp_pillar_policy
+	divide = un_policy_cap
+	min = 0
+	max = 1
+}
+un_disp_pillar_policy_neg = {
+	value = un_disp_pillar_policy
+	divide = un_policy_cap
+	min = -1
+	max = 0
+}
+un_disp_pillar_policy_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_pillar_policy
+			has_global_variable = un_pillar_policy_prev
+		}
+		value = global_var:un_pillar_policy
+		subtract = global_var:un_pillar_policy_prev
+	}
+}
+un_disp_pillar_policy_trend = {
+	value = 0
+	if = {
+		limit = { un_disp_pillar_policy_delta > 0.05 }
+		value = 1
+	}
+	else_if = {
+		limit = { un_disp_pillar_policy_delta < -0.05 }
+		value = -1
+	}
+}
+
 # ---- The resolution in session (the General Assembly's tally and time bars) -----
 # The tally bar spans the members with a vote (global_var:un_vote_eligible_count,
 # snapshotted monthly from un_vote_eligible_member_count: the denominator the

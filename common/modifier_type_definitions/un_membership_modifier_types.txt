@@ -25,3 +25,19 @@ country_un_institutional_alignment = {
 	percent = no
 	script_only = yes
 }
+
+# What this country's own laws, institutions and decisions do for UN authority.
+# Each country's total is multiplied by its weight in world affairs
+# (un_actor_weight: its share of world prestige against a typical great power's
+# 10%, up to x5) and summed over every country into the Policy pillar of the
+# authority target, held to -25 .. +25 from all sources together. A negative
+# value pulls the target down. Nothing grants it yet; any law, institution,
+# technology or static modifier may carry it.
+# Read by:
+#   - un_authority_values.txt (un_pillar_policy_value), once a month.
+country_un_authority_target_add = {
+	color = good
+	percent = no
+	decimals = 1
+	script_only = yes
+}

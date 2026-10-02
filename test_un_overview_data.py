@@ -11,7 +11,7 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 DISPLAY = os.path.join(REPO, "common", "script_values", "un_overview_display_values.txt")
 AUTH_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_authority_effects.txt")
 UN_VALUES = os.path.join(REPO, "common", "script_values", "un_script_values.txt")
-PILLARS = ("participation", "commitment", "credibility", "funding", "order", "delivery")
+PILLARS = ("participation", "commitment", "credibility", "funding", "order", "delivery", "policy")
 
 # A change the council display can see: the seat's mirror variable
 # (un_permanent_member_modifier_on) set or cleared. un_state_restore and
