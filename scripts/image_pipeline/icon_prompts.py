@@ -15,6 +15,16 @@ Each ICONS entry is {"subject": <phrase>, "seed": <state>}:
 or {"use": "gfx/interface/icons/.../x.dds"}: a different existing icon fits
 better than the borrowed one (vanilla's crossed-out guarantee for withdrawing
 one); never rendered, and `wire` points the entity at it.
+A "restyle": "gfx/.../x.dds" entry keeps an existing mod icon's picture and
+refits it to the category's vanilla look, instead of drawing a new one (the
+mod's pre-pipeline building icons, 2024-25, had no gold frame). Its subject
+describes that picture. Candidate i is the picture repainted by FLUX
+image-to-image at strength i of the category's `restyle_strengths` (or the
+entry's own "strengths"); strength 0 is the picture unpainted. The old icon's
+outline is shrunk past its own rim and the emptied corners filled from the
+picture (icon_render.prepare_restyle); "crop" (default RESTYLE_CROP) then cuts
+that share from each side, 0.1 for a circular badge. The source is read from disk,
+else from git, so the old file can be deleted once nothing points at it.
 In a GUI-hosted category (`gui`: icons a .gui file draws, not an entity's),
 an entry also names the placeholder it replaces, "now": <vanilla path>, and
 may instead be derived: {"from": "<cat>/<key>", "tint": "grey"|"faint",
@@ -96,6 +106,7 @@ Usage:
 from __future__ import annotations
 
 KEEP = "keep"
+RESTYLE_CROP = 0.03
 
 # Style = what makes a category look like its vanilla folder. Subject = the one
 # per-entity phrase a human (or an LLM draft from loc) has to write.
@@ -168,8 +179,9 @@ CATEGORIES = {
         folder="diplomatic_action_icons", size=100, mode="plinth", fill=0.8,
         entity_dir="common/diplomatic_actions", field="texture", lens_folder="lens_toolbar_icons",
         style=("{subject}, a compact miniature sculpture, simple chunky silhouette, " + PAINTED)),
+    # restyle_strengths: as is, then two repaints (applied in eighths, see icon_render.RESTYLE_STEPS).
     "building": dict(
-        folder="building_icons", size=256, mode="framed",
+        folder="building_icons", size=256, mode="framed", restyle_strengths=(0.0, 0.375, 0.5),
         entity_dir="common/buildings", field="icon",
         style=("aerial three-quarter view of {subject}, detailed painted illustration "
                "of a miniature diorama, warm golden afternoon light, muted earthy "
@@ -374,6 +386,11 @@ def prompt_for(cat: str, subject: str) -> str:
     return CATEGORIES[cat]["style"].format(subject=subject) + ", no text, no writing, no letters"
 
 
+def restyle_strengths(cat: str, entry: dict) -> tuple:
+    """A restyle entry's candidates: the img2img strength of each, by candidate number."""
+    return tuple(entry.get("strengths", CATEGORIES[cat].get("restyle_strengths", ())))
+
+
 def icon_path(cat: str, key: str) -> str:
     """The mod path an accepted icon is written to and wired as."""
     spec = CATEGORIES[cat]
@@ -381,6 +398,7 @@ def icon_path(cat: str, key: str) -> str:
 
 
 _GI = "gfx/interface/icons"
+_BI = f"{_GI}/building_icons"
 
 ICONS: dict[str, dict[str, dict]] = {
     "technology": {
@@ -726,6 +744,51 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_phosphate_mine": {"subject": "a wide open-cast mine with pale tan terraces and a long conveyor belt, with a heap of pale grey-tan phosphate rock pellets in the foreground", "seed": 0},
         "building_potash_mine": {"subject": "a mine with a tall headframe beside huge pink salt heaps, with a pile of pink and red potash salt crystals in the foreground", "seed": 0},
         "building_industrial_mineral_salt_mine": {"subject": "shallow salt evaporation pans and white salt heaps with conveyor belts, with a pile of large white salt crystals and grey gypsum chunks in the foreground", "seed": 1},
+        # Mod buildings that shared another mod building's icon (the 2026-10-02 audit).
+        # Each megaproject construction site gets its own: the building's subject,
+        # half-built.
+        "building_consciousness_network": {"subject": "a futuristic government data centre: a low dark glass building with a glowing blue dome of light on its roof, linked by glowing blue fibre-optic lines to small relay nodes across green countryside, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_consciousness_network_construction_site": {"subject": "the construction site of a futuristic data centre: a half-built low glass building in scaffolding with tower cranes, the steel ribs of a dome going up on its roof, cable trenches dug across green countryside, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_mind_upload_nexus": {"subject": "a sleek futuristic white tower clad in glass, rings of glowing teal server racks visible through its walls, a beam of pale light rising from its crown, in a landscaped plaza, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_mind_upload_nexus_construction_site": {"subject": "a half-built sleek white glass tower wrapped in scaffolding with tower cranes, its lower floors already glowing teal, stacks of building materials in a landscaped plaza, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_orbital_battlestation": {"subject": "a large armoured military space station in orbit: a dark grey ring-shaped hull bristling with long gun turrets and missile pods, small craft docking at it, the blue Earth curving below, plain unmarked hull", "seed": None},
+        "building_orbital_battlestation_construction_site": {"subject": "a half-assembled ring-shaped space station in orbit: an open lattice skeleton with only part of its dark grey armour plating fitted, small construction craft and floating girders around it, the blue Earth curving below", "seed": None},
+        "building_antimatter_warhead_plant": {"subject": "a high-security weapons plant in a desert: low windowless concrete bunkers behind double fences and watchtowers, a round armoured reactor dome glowing violet at its centre, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_nanofabrication_center": {"subject": "a modern fabrication campus of white cleanroom halls with sawtooth roofs and rooftop air vents around a glass dome glowing pale blue, green parkland around it, with a heap of shimmering silver-grey metallic powder in the foreground, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_nanofabrication_center_construction_site": {"subject": "the construction site of a modern fabrication campus: half-built white cleanroom halls on bare steel frames, scaffolding and tower cranes, the ribs of a glass dome going up in the middle, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_solar_collector": {"subject": "a huge orbital solar power station: long flat arrays of dark blue solar panels on a lattice truss in orbit, beaming a pale ray of light down to the blue Earth below", "seed": None},
+        "building_solar_collector_construction_site": {"subject": "a half-built orbital solar power station: a long bare lattice truss in orbit with only a few dark blue solar panels fitted, small craft carrying more panels to it, the blue Earth below", "seed": None},
+        "building_antimatter_facility_construction_site": {"subject": "the construction site of a futuristic research complex: a huge ring-shaped tunnel half-dug in an open trench, a round steel dome frame at its centre, scaffolding and tower cranes, loosely hand-painted with visible brush strokes", "seed": None},
+        "building_space_program": {"subject": "a national space agency headquarters: a modern glass mission control building with a big white satellite dish on its roof and a tall white rocket standing upright on display in the plaza in front, landscaped grounds, loosely hand-painted with visible brush strokes", "seed": None},
+        # Wonders: the landmark alone.
+        "building_wonder_iter": {"subject": "the ITER fusion reactor complex in southern France: a massive grey and silver rectangular reactor hall beside long assembly halls and a giant crane, among green hills and pine woods", "seed": None},
+        "building_wonder_international_space_station": {"subject": "the International Space Station in orbit: a long central truss carrying four pairs of huge golden solar panel wings and plain white cylindrical modules, the blue Earth curving below", "seed": None},
+        "building_wonder_kennedy_space_center": {"subject": "the Kennedy Space Center: a huge plain grey-white boxy rocket assembly building beside a launch pad where a white rocket stands in its steel gantry tower, flat green Florida marshland, lagoons and the sea", "seed": None},
+        # The mod's own icons from before the pipeline (2024-25): kept, refitted to
+        # the gold frame (`restyle`). Each subject describes the picture as it is.
+        # The owner of each formerly shared picture keeps it.
+        "building_airport": {"restyle": f"{_BI}/airport.dds", "subject": "an airport terminal with a control tower and a jet airliner on the apron beside a runway, under a blue sky with white clouds", "seed": None},
+        "building_electrics_industry_appliances": {"restyle": f"{_BI}/appliance.dds", "subject": "a bright factory floor where workers in green overalls assemble cream-coloured refrigerators and toasters", "seed": None},
+        "building_ocean_mine": {"restyle": f"{_BI}/deep_sea_mine.dds", "crop": 0.1, "subject": "a deep-sea mining machine with glowing lamps crawling over the dark ocean floor, cables rising toward the surface", "seed": None},
+        "building_synthetics_plant_opium": {"restyle": f"{_BI}/drugs.dds", "subject": "a clean pharmaceutical laboratory with a white pill-making machine, a robot arm, blister packs of white pills and brown medicine bottles", "seed": None},
+        "building_fusion_plant": {"restyle": f"{_BI}/fusion_plant.dds", "crop": 0.1, "subject": "a futuristic fusion power plant: a tall silver cylindrical reactor with a glowing blue ring at its base, surrounded by white technical buildings and pipes", "seed": None},
+        "building_highway": {"restyle": f"{_BI}/highway.dds", "subject": "a wide multi-lane highway full of cars and trucks running toward the horizon under an overpass, green trees on both sides", "seed": None},
+        "building_hydro_plant": {"restyle": f"{_BI}/hydro_plant.dds", "crop": 0.1, "subject": "a hydroelectric dam with turbine wheels and power pylons above churning white water", "seed": None},
+        "building_national_park": {"restyle": f"{_BI}/national_park.dds", "subject": "a national park: snowy mountains above pine forests, a winding trail beside a calm blue lake", "seed": None},
+        "building_renewable_energy_plant": {"restyle": f"{_BI}/renewable_plant.dds", "crop": 0.1, "subject": "a renewable energy plant: white wind turbines and fields of solar panels around a white power building, green fields", "seed": None},
+        "building_robotics_industry": {"restyle": f"{_BI}/robot.dds", "subject": "a robotics factory floor where yellow robotic arms weld metal parts in showers of sparks", "seed": None},
+        "building_electronic_components_and_semiconductor_industry": {"restyle": f"{_BI}/semiconductor.dds", "subject": "a golden-lit electronics workshop where technicians in pale cleanroom suits work at benches of microscopes and circuit trays", "seed": None},
+        "building_software_industry": {"restyle": f"{_BI}/software.dds", "subject": "a modern dark glass office building at night with rows of lit windows and a glowing blue sign on its facade", "seed": None},
+        "building_tourism_industry": {"restyle": f"{_BI}/tourism.dds", "subject": "a sunny seaside promenade at sunset with palm trees, a cafe table and chairs, colourful hotel buildings and a suitcase, an aeroplane in the sky", "seed": None},
+        "building_synthetics_plant_oil": {"restyle": f"{_BI}/synth_oil.dds", "subject": "an old smoky synthetic fuel refinery with tall towers and pipes, workers and a tank train in the foreground, sepia haze", "seed": None},
+        "building_synthetics_plant_rubber": {"restyle": f"{_BI}/synth_rubber.dds", "subject": "a synthetic rubber works: workers by a conveyor of rubber sheets in front of a chemical plant with domed tanks and chimneys, olive-green haze", "seed": None},
+        "building_network_infrastructure": {"restyle": f"{_BI}/network.dds", "subject": "a dark server room with a rack of blinking servers and glowing blue fibre-optic cables fanning out toward a satellite dish and a radio mast", "seed": None},
+        "building_space_mine": {"restyle": f"{_BI}/space_base.dds", "crop": 0.1, "subject": "an extraplanetary base: white domed habitats, solar panels and a small rover on a red rocky planet at dusk, a moon in the sky", "seed": None},
+        "building_advanced_material_fabricator": {"restyle": f"{_BI}/advanced_materials.dds", "subject": "a dark high-tech workshop with spools of black carbon fibre, a robot arm and a glowing orange-lit fabrication press", "seed": None},
+        "building_aerospace_industry": {"restyle": f"{_BI}/space.dds", "subject": "a rocket lifting off from its launch tower at night in a burst of orange flame and smoke, a radar dish nearby", "seed": None},
+        "building_space_elevator": {"restyle": f"{_BI}/space_elevator.dds", "subject": "a space elevator: a single thin tether rising from the Earth's curved horizon up into black starry space, a climber pod on it", "seed": None},
+        "building_space_elevator_construction_site": {"restyle": f"{_BI}/space_elevator_construction_site.dds", "crop": 0.1, "subject": "the construction site of a space elevator's base tower: a tall steel lattice tower in scaffolding with cranes, workers and stacked materials", "seed": None},
+        "building_nuclear_plant": {"restyle": f"{_BI}/nuclear_plant.dds", "crop": 0.1, "subject": "a nuclear power plant with two large concrete cooling towers releasing white steam, reactor buildings and power lines, green fields and a river", "seed": None},
     },
     "mobilization_option": {
         # Mod-added options on a vanilla icon (14 on machinegunners), by group.
@@ -1660,7 +1723,9 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
       unknown     a key with no plain or REPLACE_OR_CREATE: top-level definition
                   in its entity_dir
       bad_entry   an empty subject, a seed that is not None, an int or "keep",
-                  or a "use" that is not a gfx/ .dds path; for a GUI-hosted
+                  or a "use" that is not a gfx/ .dds path; a "restyle" that is
+                  not one, or with a crop outside 0-0.3, no strengths, or a seed
+                  past its last strength; for a GUI-hosted
                   category, a missing `now` placeholder; a malformed mark, or a
                   derived entry whose source is not a rendered entry
       missing_dds an accepted seed whose DDS is not committed (or on disk)
@@ -1727,6 +1792,9 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
                                                 or (isinstance(seed, int) and seed >= 0)):
                 report["bad_entry"].append((cat, key))
                 continue
+            if "restyle" in entry and not _restyle_ok(cat, entry):
+                report["bad_entry"].append((cat, key))
+                continue
             if seed is None:
                 states["unreviewed"] += 1
             elif seed == KEEP:
@@ -1769,6 +1837,17 @@ def _ref(path) -> tuple[str, str] | None:
         return None
     cat, key = path.split("/", 1)
     return (cat, key) if key in ICONS.get(cat, {}) else None
+
+
+def _restyle_ok(cat: str, entry: dict) -> bool:
+    """A gfx .dds source, a crop that leaves most of it, strengths in [0, 1), and a seed among them."""
+    strengths = restyle_strengths(cat, entry)
+    crop = entry.get("crop", RESTYLE_CROP)
+    seed = entry.get("seed")
+    return (_is_gfx_path(entry["restyle"], (".dds",))
+            and isinstance(crop, (int, float)) and 0 <= crop < 0.3
+            and bool(strengths) and all(isinstance(x, (int, float)) and 0 <= x < 1 for x in strengths)
+            and (not isinstance(seed, int) or seed < len(strengths)))
 
 
 def _is_derived(entry: dict) -> bool:

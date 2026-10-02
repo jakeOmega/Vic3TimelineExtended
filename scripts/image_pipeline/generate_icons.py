@@ -7,7 +7,9 @@ Reads the registry (icon_prompts.py) and takes each category through:
   render  embed the subjects and render candidates with FLUX: seeds 0..N-1 for
           an unreviewed entry (seed None), only the chosen seed for an accepted
           one. Cached per prompt, so an edited subject re-renders only itself,
-          and raising --seeds later renders only the new seeds.
+          and raising --seeds later renders only the new seeds. A restyle entry
+          is repainted from its source picture instead, one candidate per
+          strength (--seeds does not apply), candidate 0 usually as it is.
   compose fit each render into the category's vanilla layout (icon_render.py).
           A candidate whose final is newer than its raw is kept, so after a
           layout or spec change move the category's finals aside first.
@@ -62,7 +64,8 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 MOD_ROOT = SCRIPT_DIR.parents[1]
 sys.path.insert(0, str(SCRIPT_DIR))
 sys.path.insert(0, str(MOD_ROOT))
-from icon_prompts import CATEGORIES, ICONS, KEEP, icon_path, prompt_for  # noqa: E402
+from icon_prompts import (CATEGORIES, ICONS, KEEP, RESTYLE_CROP, icon_path, prompt_for,  # noqa: E402
+                          restyle_strengths)
 
 SHEET_ROWS = 20
 
@@ -291,15 +294,74 @@ def rewrite_icon_refs(path: Path, field: str, targets: dict[str, str], dry_run: 
     return changed
 
 
+# ── restyle sources ──────────────────────────────────────────────────────
+
+def restyle_source(path: str, root: Path = MOD_ROOT):
+    """A restyle entry's source picture: on disk, else in git at HEAD, else as it
+    was just before the commit that deleted it (the old file goes once wired)."""
+    import io
+    import subprocess
+
+    from PIL import Image
+
+    if (root / path).exists():
+        return Image.open(root / path)
+
+    def show(rev: str):
+        r = subprocess.run(["git", "-C", str(root), "show", f"{rev}:{path}"], capture_output=True)
+        return r.stdout if r.returncode == 0 else None
+
+    data = show("HEAD")
+    if data is None:
+        gone = subprocess.run(["git", "-C", str(root), "log", "-1", "--format=%H", "--diff-filter=D", "--", path],
+                              capture_output=True, text=True).stdout.strip()
+        data = show(gone + "^") if gone else None
+    if data is None:
+        raise SystemExit(f"restyle source {path} is neither on disk nor in git")
+    return Image.open(io.BytesIO(data))
+
+
+def restyle_settings(cat: str, e: dict, seed: int) -> dict:
+    """What a restyle candidate is made from besides its prompt; a change redoes it."""
+    return {"restyle": e["restyle"], "crop": e.get("crop", RESTYLE_CROP), "strength": restyle_strengths(cat, e)[seed]}
+
+
+def caption(cat: str, e: dict, seed: int) -> str:
+    """A candidate's label on the review sheet; a restyle one names its strength."""
+    if "restyle" not in e:
+        return f"s{seed}"
+    strength = restyle_strengths(cat, e)[seed]
+    return f"s{seed} as is" if strength == 0 else f"s{seed} repaint {strength:g}"
+
+
+def restyle_jobs(cat: str, items: list[tuple[str, dict, str]]) -> list[tuple]:
+    """icon_render.restyle jobs for (key, entry, prompt): every strength, or only the pick."""
+    from icon_render import RESTYLE_STEPS, prepare_restyle
+
+    jobs = []
+    for key, e, prompt in items:
+        crop = e.get("crop", RESTYLE_CROP)
+        source = prepare_restyle(restyle_source(e["restyle"]), crop)
+        for seed in ([e["seed"]] if accepted(e) else range(len(restyle_strengths(cat, e)))):
+            settings = restyle_settings(cat, e, seed)
+            note = (f"{prompt}\n[restyle {settings['restyle']} crop={crop} "
+                    f"strength={settings['strength']} steps={RESTYLE_STEPS}]")
+            jobs.append((name(cat, key), prompt, seed, source, settings["strength"], note))
+    return jobs
+
+
 # ── stages ───────────────────────────────────────────────────────────────
 
 def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str) -> None:
     from icon_render import embed, render
 
-    jobs, prompts = [], {}
+    jobs, prompts, restyles = [], {}, []
     for key, e in generated(cat, only).items():
         prompt = prompt_for(cat, e["subject"])
         prompts[name(cat, key)] = prompt
+        if "restyle" in e:
+            restyles.append((key, e, prompt))
+            continue
         for seed in ([e["seed"]] if accepted(e) else range(seeds)):
             jobs.append((name(cat, key), prompt, seed))
     bd = CATEGORIES[cat].get("backdrop")
@@ -309,7 +371,11 @@ def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str)
             jobs.append((name(cat, BACKDROP), backdrop_prompt(cat), seed))
     embed(prompts, work / "embeds")
     kw = {"size": CATEGORIES[cat]["gen_size"]} if "gen_size" in CATEGORIES[cat] else {}
-    render(jobs, work / "embeds", work / "raw", offload, **kw)
+    if jobs or not restyles:
+        render(jobs, work / "embeds", work / "raw", offload, **kw)
+    if restyles:
+        from icon_render import restyle
+        restyle(restyle_jobs(cat, restyles), work / "embeds", work / "raw", offload)
 
 
 # Per-entry settings that change how an entry's render is composed.
@@ -469,7 +535,7 @@ def stage_sheet(cat: str, only: set[str], work: Path, include_reviewed: bool) ->
         else:
             if e["seed"] is not None and not include_reviewed:
                 continue
-            cands = [(f"s{seed}", finals.get(cat, key, seed)) for seed in finals.seeds(cat, key)]
+            cands = [(caption(cat, e, seed), finals.get(cat, key, seed)) for seed in finals.seeds(cat, key)]
             subject = e["subject"] if len(e["subject"]) <= 60 else e["subject"][:57] + "..."
         cands = [(c, im) for c, im in cands if im is not None]
         now = current.get(key, "")
@@ -565,6 +631,8 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
                 want += [e["marks"]] + part_seeds(e)
             if any(k in e for k in ENTRY_SPEC_KEYS):
                 want += [{k: e[k] for k in ENTRY_SPEC_KEYS if k in e}]
+            if "restyle" in e:
+                want += [restyle_settings(c, e, e["seed"])]
         return json.loads(json.dumps(want))  # tuples as lists, as read back
 
     def _src(e: dict) -> tuple[str, dict]:
