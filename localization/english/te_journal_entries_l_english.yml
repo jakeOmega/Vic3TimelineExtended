@@ -1038,7 +1038,7 @@
  je_un_auth_log_intro:0 "Newest first. An entry fades from its pillar over years: credibility halves every ten years, delivery and nuclear use every four."
  je_un_auth_not_founded:0 "The United Nations has not been founded."
  je_un_auth_pending:0 "The pillars are computed at the start of each month. The breakdown appears after the first monthly update."
- je_un_auth_policy_own:0 "#b Ours:#! a UN Authority Target of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_policy_own_modifier')|+1]#! at weight #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#! counts #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_policy_own_contribution')|+1]#![AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_policy_own_held'), '(CFixedPoint)0' ), 'je_un_auth_policy_own_held' )]"
+ je_un_auth_policy_own:0 "#b Ours:#! a UN Authority Target of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_policy_own_modifier')|+2]#! at weight #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#! counts #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_policy_own_contribution')|+2]#![AddLocalizationIf( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_policy_own_held'), '(CFixedPoint)0' ), 'je_un_auth_policy_own_held' )]"
  je_un_auth_policy_own_held:0 "\n#R We are outside the UN or undermining it, so our positive total counts for nothing.#! It would count in full if we were a member that is not undermining the UN."
  je_un_auth_power_line:0 "[THIS.GetCountry.GetName] (#v [THIS.ScriptValue('un_disp_power_share_pct')|1]%#! of world power)"
  je_un_auth_powers_champions:0 "#G Championing the order#!"

@@ -92,7 +92,11 @@ Intercontinental Ballistic Missiles), cuts devastation by up to 75%, slows
 diplomatic-play escalation, adds reputation and lowers your Ministry of War's
 cap. Humanitarian Regulations and Limited War also restrict nuclear strikes; see
 [Strategic and tactical strike
-actions](13-nuclear.md#strategic-and-tactical-strike-actions).
+actions](13-nuclear.md#strategic-and-tactical-strike-actions). The Rules of War
+laws also count toward UN Authority: Total War −2, War Crimes Forbidden +0.5,
+Humanitarian Regulations +1 and Limited War +1.5 on the UN Authority Target. A
+positive figure counts only while you are a UN member not undermining it; see
+[What counts toward Policy](09-united-nations.md#what-counts-toward-policy).
 
 ### Economic law groups
 
@@ -258,7 +262,7 @@ included, from 5 levels to 9.
 | Ministry of Consumer Protection | Consumer Credit | Regulatory Bodies or Workers' Protections | +0.5 standard of living, lower mortality, production research |
 | Ministry of Urban Planning | Urbanization | | Urban centers produce more and need less urbanization per level; +10% [migration crowding tolerance](07-states.md#raising-crowding-tolerance); faster recovery from devastation |
 | Ministry of Religion | Mass Media | State Religion or Freedom of Conscience | +20% conversion, clergy political strength, acceptance of the state religion |
-| Ministry of International Aid | Intergovernmental Organizations | | Strengthens the Ministry of Foreign Affairs, which also costs more |
+| Ministry of International Aid | Intergovernmental Organizations | | Strengthens the Ministry of Foreign Affairs, which also costs more; +0.15 UN Authority Target a level (see [What counts toward Policy](09-united-nations.md#what-counts-toward-policy)) |
 
 The Environmental Movement radicalizes while your Ministry of the Environment is
 missing or funded below its cap, and the Anti-War Movement does the same over

@@ -381,8 +381,8 @@ country to meet their conditions and finish one claims it:
 
 | Wonder | Unlocked by | Also requires | Main effect |
 |---|---|---|---|
-| Peace Palace | Intergovernmental Organizations | Ministry of Foreign Affairs at level 3 | Foreign affairs ministry impact, prestige |
-| Palais des Nations | (no technology) | Major power or better, Ministry of Foreign Affairs at level 5 | Foreign affairs ministry impact, prestige, Government Administration throughput |
+| Peace Palace | Intergovernmental Organizations | Ministry of Foreign Affairs at level 3 | Foreign affairs ministry impact, prestige, +0.5 UN Authority Target |
+| Palais des Nations | (no technology) | Major power or better, Ministry of Foreign Affairs at level 5 | Foreign affairs ministry impact, prestige, Government Administration throughput, +0.5 UN Authority Target |
 | International Space Station | Satellite Communications | Major power or better, a completed Moon landing ([The space race](15-space.md)) | +200 innovation cap, university throughput, education |
 | LIGO Observatory | Fiber Optics | Great power | +100 innovation cap, university throughput |
 | Large Hadron Collider | World Wide Web | Ministry of Science at level 3 | +200 innovation cap, +50% university throughput |

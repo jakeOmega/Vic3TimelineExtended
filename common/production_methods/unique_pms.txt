@@ -2323,6 +2323,9 @@ pm_un_headquarters = {
 			country_prestige_mult = 0.1
 			country_society_tech_research_speed_mult = 0.1
 			country_infamy_generation_mult = 0.1
+			# Hosting the UN: the Policy pillar of its authority target
+			# (un_redesign_design.md §0.10). One HQ in the world.
+			country_un_authority_target_add = 1
 		}
 	}
 	building_modifiers = {
@@ -3152,6 +3155,9 @@ pm_wonder_peace_palace = {
 		workforce_scaled = {
 			country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.15
 			country_prestige_add = 75
+			# The UN authority target's Policy pillar (un_redesign_design.md §0.10):
+			# the seat of international law. unique = yes, so one in the world.
+			country_un_authority_target_add = 0.5
 		}
 	}
 	building_modifiers = {
@@ -3169,6 +3175,9 @@ pm_wonder_palais_des_nations = {
 		workforce_scaled = {
 			country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.1
 			country_prestige_add = 50
+			# The UN authority target's Policy pillar (un_redesign_design.md §0.10):
+			# the seat of the world's institutions. unique = yes, so one in the world.
+			country_un_authority_target_add = 0.5
 		}
 	}
 	state_modifiers = {

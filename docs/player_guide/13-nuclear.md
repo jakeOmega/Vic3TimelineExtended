@@ -187,11 +187,11 @@ once every two years, and the first choice is free.
 
 | Doctrine | First use allowed when | Standing effect |
 |---|---|---|
-| No First Use | Never | +10% infamy decay and relations improvement, −10% play maneuvers |
+| No First Use | Never | +10% infamy decay and relations improvement, −10% play maneuvers, +0.5 UN Authority Target |
 | Existential Deterrence (default) | The enemy's side means to annex or subjugate you, or holds goals on your incorporated states while you are losing | +5% leverage resistance |
-| Flexible First Use | Also when you are losing to them, or they hold goals on any incorporated state | +10% leverage resistance, +5% maneuvers, −5% infamy decay |
-| Nuclear Compellence | Also when they defied your public ultimatum, or your threat against them has reached [Confrontation](#crisis-stages-danger-and-pressure) | +15% maneuvers, +10% leverage generation, +10% infamy generation, −10% relations improvement |
-| Nuclear Warfighting | In any war | +20% maneuvers, +10% leverage generation, +20% infamy generation, −10% infamy decay, −20% relations improvement |
+| Flexible First Use | Also when you are losing to them, or they hold goals on any incorporated state | +10% leverage resistance, +5% maneuvers, −5% infamy decay, −0.5 UN Authority Target |
+| Nuclear Compellence | Also when they defied your public ultimatum, or your threat against them has reached [Confrontation](#crisis-stages-danger-and-pressure) | +15% maneuvers, +10% leverage generation, +10% infamy generation, −10% relations improvement, −1 UN Authority Target |
+| Nuclear Warfighting | In any war | +20% maneuvers, +10% leverage generation, +20% infamy generation, −10% infamy decay, −20% relations improvement, −1.5 UN Authority Target |
 
 Losing means a quarter of your land occupied, or under 35% of battles won after
 five significant battles. Adopting Compellence or Warfighting costs infamy equal
@@ -720,7 +720,7 @@ from nothing at 40 to full at 100, and with your arsenal, from about a fifth of
 full for a single warhead to all of it at fifty warheads or more. It does two
 things:
 
-- The Burden of the Bomb lowers prestige by up to 45% and leverage generation by up to 25%. At a taboo of 100, a fifty-warhead arsenal turns Nuclear Power's +30% prestige into −15% and cancels its leverage bonus; five warheads in the same world keep about +17% prestige.
+- The Burden of the Bomb lowers prestige by up to 45% and leverage generation by up to 25%, and the UN Authority Target by up to 1 (see [What counts toward Policy](09-united-nations.md#what-counts-toward-policy)). At a taboo of 100, a fifty-warhead arsenal turns Nuclear Power's +30% prestige into −15% and cancels its leverage bonus; five warheads in the same world keep about +17% prestige.
 - Interest groups favoring Limited War over Total War object to the arsenal itself: −1 to their view of your posture from a burden of 33%, −2 from 67% (see [How interest groups judge your posture](#how-interest-groups-judge-your-posture)). The ceiling's tooltip says how many warheads would ease them a step.
 
 ### Reducing or giving up an arsenal
