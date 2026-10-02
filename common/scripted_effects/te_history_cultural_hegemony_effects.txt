@@ -1,8 +1,13 @@
 ﻿# Annual global political-model history (#413).
 # One parentless store, reached through global_var:ch_model_hist_store, owns
 # ch_model_hist: at most 100 parentless sample containers, oldest first.
-# Scope.GetList can read the store through GetGlobalVariable in the GUI; no
-# country has a copy. The local-list pruning/sorting below follows the proven
+# The GUI cannot read it there: GetGlobalVariable('ch_model_hist_store')
+# .GetList('ch_model_hist') loads without an error but drew no bars in game
+# (2026-10-02, a save holding thirteen samples). So each player holds
+# ch_model_hist_view, a list of the same containers in the same order
+# (te_history_mirror_ch_models), and the chart binds that like every other
+# history chart. The samples themselves exist once. The local-list
+# pruning/sorting below follows the proven
 # te_history_effects.txt pattern, with a container instead of a country owner.
 # Old country/monthly ch_share samples are deliberately not migrated: they
 # contain no political-model breakdown. Existing saves start at the next
@@ -160,5 +165,36 @@ te_history_sort_ch_models = {
 	if = {
 		limit = { has_variable_list = ch_model_hist_tmp }
 		clear_variable_list = ch_model_hist_tmp
+	}
+}
+
+# Scope: a country. Rebuilds its ch_model_hist_view, the list the chart reads,
+# from the store, oldest first. The view holds references, not copies, so it
+# must be rebuilt after every eviction (the destroyed sample would linger) and
+# for anyone who becomes a player. Callers: the census, for every player, right
+# after te_history_record_cultural_hegemony_models; ch_monthly_country_update,
+# for each player (existing saves, country switches, a revolution's winner,
+# which inherits no lists). A country that is not a player is cleared there.
+te_history_mirror_ch_models = {
+	if = {
+		limit = { has_variable_list = ch_model_hist_view }
+		clear_variable_list = ch_model_hist_view
+	}
+	if = {
+		limit = { has_global_variable = ch_model_hist_store }
+		save_scope_as = ch_model_hist_viewer
+		global_var:ch_model_hist_store = {
+			ordered_in_list = {
+				variable = ch_model_hist
+				order_by = te_history_sample_order
+				min = 0
+				max = 100
+				check_range_bounds = no
+				save_scope_as = ch_model_hist_viewed
+				scope:ch_model_hist_viewer = {
+					add_to_variable_list = { name = ch_model_hist_view target = scope:ch_model_hist_viewed }
+				}
+			}
+		}
 	}
 }

@@ -2125,14 +2125,15 @@ types cultural_hegemony_widget_types
 	### REFERENCE SECTIONS
 	### ==========================================================================
 
-	### Annual world series: Scope.GetList reads the single parentless store.
-	### GetGlobalVariable returns a Scope (data_types_script.txt); unlike a
-	### country-name lookup this chain needs only the documented GetList.
-	### This new GUI binding still needs in-game validation.
+	### Annual world series. The samples live once, in the global store, but
+	### GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist') loaded
+	### without an error and drew no bars (2026-10-02). The player's
+	### ch_model_hist_view lists the same containers in the same order
+	### (te_history_mirror_ch_models), read the way the te_hist charts are.
 	type ch_model_history_plot = te_history_plot {
 		margin_right = 0
 		blockoverride "sample_datamodel" {
-			datamodel = "[GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')]"
+			datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('ch_model_hist_view')]"
 		}
 		blockoverride "sample_visible" {
 			visible = "[Or( Not( Or( GetVariableSystem.HasValue('ch_model_hist_range', '5'), GetVariableSystem.HasValue('ch_model_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('ch_model_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_y') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('ch_model_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_y') ), '(CFixedPoint)20' ) ) ) )]"
