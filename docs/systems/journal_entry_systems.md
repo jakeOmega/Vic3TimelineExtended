@@ -436,6 +436,7 @@ All four programmes are **persistent toggles**, not timed one-shots — includin
 | Variable | Scope | Written by | Meaning |
 |---|---|---|---|
 | `ch_total`, `ch_art`, `ch_sol`, `ch_monuments`, `ch_megaprojects` | country | `ch_monthly_country_update` | monthly cache of the pull components |
+| `ch_raw_at_census` | country (every country) | `ch_yearly_global_update`, in the census sweep | the country's raw pull at the last census. `ch_world_raw_live` swaps it for the live pull, so a share is measured against everyone else as counted then plus the country as it stands |
 | `ch_tech_firsts_recent` | country | `cultural_hegemony_tech_first_on_action`, decayed yearly | world-first tech bonus |
 | `ch_program_funding_level` | country | the two funding steppers; zeroed by the monthly pulse when the Ministry goes | 0…cap |
 | `ch_tier` | country | **`ch_set_display_state` only** | 0 negligible … 5 hegemon. The 2/5/10/15/25 share thresholds exist nowhere else |
@@ -444,6 +445,7 @@ All four programmes are **persistent toggles**, not timed one-shots — includin
 | `ch_total_prev` | country | `ch_monthly_country_update`, before it recomputes `ch_total` | last month's `ch_total`, for the overview's trend arrow. Display only |
 | `ch_leader_seat_1..3`, `ch_leader_seat_count` | country (players only) | `ch_leaders_display_write`: right after the census writes the ranks, and each player's monthly update | the capitals of `global_var:ch_rank_1..3`, filled in order, for the overview's leader flags. Display only |
 | `ch_ranked_total` | global | end of the same pass | how many countries have any pull |
+| `ch_cached_global_raw`, `ch_census_own_raw` | global | `ch_yearly_global_update` | the world's raw pull at the last census (floored at 1), and the flag that the census stored each country's part. Without the flag (a save from before it) shares divide by the bare total, and the next monthly pulse forces a recount |
 | `ch_rank_N`, `ch_rank_N_{score,delta,prev,art,prs,sol,tech,raw}` | global | `ch_yearly_global_update` | the yearly top-ten snapshot. All ten deltas are zeroed before being computed, so the board never reads an unset global |
 | `ch_model` | country | **`ch_set_political_model` only** | the country's political-model code, 1…15 (table in that effect's header) |
 | `ch_ideology_<model>_{count,raw,share}` | global | `ch_yearly_global_update` via `ch_add_country_to_model_totals` / `ch_finish_model_bucket` | per-model world totals; `share` is the percentage of world raw pull, the fifteen add up to 100 |

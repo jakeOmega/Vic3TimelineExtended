@@ -672,7 +672,22 @@ ch_yearly_global_update = {
 		# Refresh global caches
 		set_global_variable = { name = ch_cached_prestige value = global_prestige_total }
 		set_global_variable = { name = ch_cached_sol_avg value = global_average_sol }
-		set_global_variable = { name = ch_cached_global_raw value = global_raw_cultural_pull }
+		# The world's raw pull, keeping each country's own part: a share is
+		# measured against everyone else as counted here plus its own live
+		# pull (ch_world_raw_live). Summed in a scratch global so the cached
+		# total changes once, after the sweep. Floored at 1, as it always was.
+		set_global_variable = { name = ch_census_raw_sum value = 0 }
+		every_country = {
+			set_variable = { name = ch_raw_at_census value = cultural_pull_raw }
+			change_global_variable = { name = ch_census_raw_sum add = var:ch_raw_at_census }
+		}
+		set_global_variable = { name = ch_cached_global_raw value = global_var:ch_census_raw_sum }
+		remove_global_variable = ch_census_raw_sum
+		if = {
+			limit = { global_var:ch_cached_global_raw < 1 }
+			set_global_variable = { name = ch_cached_global_raw value = 1 }
+		}
+		set_global_variable = { name = ch_census_own_raw value = yes }
 		set_global_variable = { name = ch_cached_global_art value = global_fine_art_production }
 
 		# Save previous rank scores for year-over-year delta
