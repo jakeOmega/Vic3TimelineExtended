@@ -110,11 +110,21 @@ class GateTriggerTest(unittest.TestCase):
             {"has_game_rule": "te_tax_code_enabled_customs"},
         )
 
-    def test_no_negated_rule_check_anywhere_in_the_file(self):
-        text = (ROOT / "common/scripted_triggers/te_tax_triggers.txt").read_text(encoding="utf-8-sig")
-        code = "\n".join(line.split("#", 1)[0] for line in text.splitlines())
-        self.assertNotIn("NOT", code)
-        self.assertNotIn("NOR", code)
+    def test_the_two_gates_contain_no_negation(self):
+        # Scoped to the two gate triggers: later tasks add ordinary triggers to
+        # this file, and an "instrument is unset" check is a NOT by nature.
+        def keys(node):
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    yield key
+                    yield from keys(value)
+            elif isinstance(node, list):
+                for item in node:
+                    yield from keys(item)
+
+        for gate in ("te_tax_code_on", "te_tax_customs_on"):
+            with self.subTest(gate=gate):
+                self.assertFalse({"NOT", "NOR"} & set(keys(self.triggers[gate])))
 
 
 class CarrierLawTest(unittest.TestCase):
