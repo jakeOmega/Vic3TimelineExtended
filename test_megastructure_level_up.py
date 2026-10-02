@@ -1,11 +1,18 @@
 """Guards the level-up a finished megastructure construction site performs.
 
-`create_building` on a building the state already has behaves by the building's
-`ownership_type`: an owned building (`self`) stacks the level it is given onto
-its own, an unowned one (`no_ownership`) keeps the larger of the two. Asking a
-level-3 Nanofabrication Center (`self`) for "level 4" gave level 7. Each
-wonder's wrapper in extra_effects.txt must therefore say which form it needs,
-and that flag must agree with the building's `ownership_type`.
+`create_building` on a building the state already has gives no predictable
+level, and owned and unowned wonders disagree (seen in game, 2026-10-02):
+
+    Space Elevator (self)                    level 1, asked 2 -> 3
+    Space Elevator (self)                    level 3, asked 1 -> 3
+    Nanofabrication Center (self)            level 3, asked 4 -> 7
+    Orbital Solar Collector (no_ownership)   level 1, asked 2 -> 2
+
+An owned wonder is therefore rebuilt at its level + 1 (remove, then build at
+that level) instead of being asked for a level, and an unowned one keeps the
+current-level-plus-one chain. Each wonder's wrapper in extra_effects.txt says
+which form it needs, and that flag must agree with the building's
+`ownership_type`.
 """
 
 import re
@@ -32,7 +39,10 @@ def _read(path):
 
 
 def _block(text, header):
-    """Body of the brace block opened by the first match of `header`."""
+    """Body of the brace block opened by the first match of `header`.
+
+    `header` must end at the block's opening brace, or inside the block.
+    """
     match = re.search(header, text, re.M)
     if match is None:
         return None
@@ -41,6 +51,20 @@ def _block(text, header):
         depth += (text[i] == "{") - (text[i] == "}")
         i += 1
     return text[match.end():i - 1]
+
+
+def _base():
+    body = _block(_read(EFFECTS), r"^generic_wonder_construction_base\s*=\s*\{")
+    assert body is not None, "generic_wonder_construction_base not found"
+    return body
+
+
+def _rebuild_branch():
+    # The `if = { limit = { always = $REBUILD$ } ... }` block: matching up to
+    # the end of its limit leaves the scan inside that `if`.
+    branch = _block(_base(), r"limit\s*=\s*\{\s*always\s*=\s*\$REBUILD\$\s*\}")
+    assert branch is not None, "rebuild branch not found"
+    return branch
 
 
 def _ownership_type(wonder):
@@ -53,7 +77,7 @@ def _ownership_type(wonder):
     return match.group(1) if match else "default"
 
 
-def _stacks_levels_flag(wonder):
+def _rebuild_flag(wonder):
     match = re.search(
         rf"^{wonder}_construction\s*=\s*\{{\s*generic_wonder_construction_base"
         rf"\s*=\s*\{{([^}}]*)\}}\s*\}}",
@@ -61,7 +85,7 @@ def _stacks_levels_flag(wonder):
         re.M,
     )
     assert match is not None, f"{wonder}_construction wrapper not found"
-    flag = re.search(r"STACKS_LEVELS\s*=\s*(\w+)", match.group(1))
+    flag = re.search(r"REBUILD\s*=\s*(\w+)", match.group(1))
     return flag.group(1) if flag else None
 
 
@@ -69,40 +93,58 @@ class MegastructureLevelUpTests(unittest.TestCase):
     def test_every_wrapper_declares_its_level_up_form(self):
         for wonder in WONDERS:
             with self.subTest(wonder=wonder):
-                self.assertIn(_stacks_levels_flag(wonder), ("yes", "no"))
+                self.assertIn(_rebuild_flag(wonder), ("yes", "no"))
 
     def test_flag_agrees_with_ownership_type(self):
         for wonder in WONDERS:
             with self.subTest(wonder=wonder):
                 owned = _ownership_type(wonder) != "no_ownership"
                 self.assertEqual(
-                    _stacks_levels_flag(wonder),
+                    _rebuild_flag(wonder),
                     "yes" if owned else "no",
                     f"building_{wonder} has ownership_type "
-                    f"{_ownership_type(wonder)}: an owned building stacks the "
-                    "level it is given, an unowned one keeps the larger level",
+                    f"{_ownership_type(wonder)}: an owned wonder must be "
+                    "rebuilt, an unowned one asked for level + 1",
                 )
 
-    def test_stacking_form_asks_for_exactly_one_level(self):
-        base = _block(
-            _read(EFFECTS), r"^generic_wonder_construction_base\s*=\s*\{"
+    def test_owned_wonder_is_rebuilt_never_asked_for_a_level(self):
+        branch = _rebuild_branch()
+        self.assertNotIn(
+            "create_building",
+            branch,
+            "create_building on an existing owned wonder over-levels it "
+            "(level 3 asked for 4 gave 7) or does nothing (asked for 1 at "
+            "level 3); rebuild through remove_building instead",
         )
-        stacking = _block(base, r"limit\s*=\s*\{\s*always\s*=\s*\$STACKS_LEVELS\$\s*\}\s*")
-        # `_block` starts after the matched header; the stacking branch is the
-        # `if = { limit = { always = $STACKS_LEVELS$ } ... }` block, whose body
-        # runs on to the closing brace of that `if`.
-        self.assertIsNotNone(stacking)
-        levels = re.findall(r"create_building\s*=\s*\{[^}]*level\s*=\s*(\d+)", stacking)
-        self.assertEqual(levels[:1], ["1"])
+        removed = branch.index("remove_building = building_$WONDER$")
+        rebuilt = branch.index("te_construction_market_build_specified_level")
+        self.assertLess(removed, rebuilt)
+        self.assertIn("SPEC_LEVEL = var:wonder_rebuild_level", branch)
 
-    def test_set_form_asks_for_current_level_plus_one(self):
-        base = _block(
-            _read(EFFECTS), r"^generic_wonder_construction_base\s*=\s*\{"
+    def test_rebuild_level_is_saved_before_removal_and_is_one_higher(self):
+        branch = _rebuild_branch()
+        saved = branch.index("value = b:building_$WONDER$.level")
+        bumped = re.search(
+            r"change_variable\s*=\s*\{\s*name\s*=\s*wonder_rebuild_level\s+add\s*=\s*1\s*\}",
+            branch,
         )
+        self.assertIsNotNone(bumped)
+        removed = branch.index("remove_building = building_$WONDER$")
+        self.assertLess(saved, bumped.start())
+        self.assertLess(bumped.start(), removed)
+
+    def test_rebuild_is_capped_and_clears_its_variable(self):
+        branch = _rebuild_branch()
+        self.assertRegex(
+            branch, r"limit\s*=\s*\{\s*b:building_\$WONDER\$\.level\s*<\s*\$MAX_LEVEL\$\s*\}"
+        )
+        self.assertIn("remove_variable = wonder_rebuild_level", branch)
+
+    def test_unowned_chain_asks_for_current_level_plus_one(self):
         pairs = re.findall(
             r"level\s*=\s*(\d+)\s+b:building_\$WONDER\$\.level\s*<\s*\$MAX_LEVEL\$\s*\}"
             r"\s*create_building\s*=\s*\{[^}]*level\s*=\s*(\d+)",
-            base,
+            _base(),
         )
         self.assertEqual(len(pairs), 19)
         for current, asked in pairs:
