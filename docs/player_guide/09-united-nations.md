@@ -72,7 +72,8 @@ overlord is a represented member, the overlord is assessed on the subject's GDP
 too, and while the overlord pays, the subject keeps its membership benefits.
 Representation returns as soon as the country conducts its own foreign policy
 again, and Conventions Passed in Our Absence then offers it the conventions
-adopted meanwhile, all or none. Countries that cannot join are never treated as
+adopted meanwhile, all or none (the nuclear ban only to a member holding no
+warheads). Countries that cannot join are never treated as
 pariahs, and an annexed member's seat simply ends.
 
 ### The Require UN Membership treaty article
@@ -386,8 +387,12 @@ request (Refuse to take part) means you contribute nothing. Refusing anything
 else (Denounce the decision) is a statement on the record that changes nothing.
 Refusing costs 20 relations with the proposer and 3 infamy, and for a binding
 resolution also 5 standing and 10 case strength. Accepting a binding resolution
-you opposed earns 2 standing. A member that voted in favor, or did not vote,
-ratifies a carried convention without being asked.
+you opposed earns 2 standing, except a peacekeeping request, whose contribution
+is its own reward. A referral to the World Court and a supervised referendum
+bind only the country they name, which answers in its own event, so accepting
+or refusing them here moves no standing or case strength. A member that voted in favor,
+or did not vote, ratifies a carried convention without being asked, except that
+a member holding warheads that did not vote stays outside the nuclear ban.
 
 ### Tabling UN business
 
@@ -523,7 +528,7 @@ weakly. The charter only goes back to the founding one if the UN dissolves.
 
 Any member with 20 standing or more can refer a state it claims to the World
 Court, if the state's holder is a member that is not its overlord, its subject
-or at war with it. The row picks your best case and shows the odds that the
+or at war with it, and the state is not the holder's capital. The row picks your best case and shows the odds that the
 court finds for you, between 10% and 90%. Hover them for the terms:
 
 | Term | Effect on your odds |
@@ -545,19 +550,23 @@ finds for you, the holder chooses in The World Court Rules Against Us:
 | The court has no say over our soil. | The holder keeps the state, loses 5 standing, takes a defiance record of 6 and International Court Defied, and the UN loses credibility. For ten years you may table a military mandate over that region against it without the case of 60. |
 
 If the court finds for the holder, your claim on the region is withdrawn, and
-for twenty years a war goal against it there costs you 10 × enforcement extra
-infamy. A veto turns the ruling into an advisory opinion: the court still
+for twenty years each diplomatic play in which you take a war goal there costs
+you 10 × enforcement extra infamy, once per play. The case is struck off as
+moot, and nothing changes hands, if by the time the court rules or the holder
+answers the holder no longer holds the state, has made it its capital, or
+either party no longer exists. A veto turns the ruling into an advisory opinion: the court still
 rules, nothing changes hands, and a holder it rules against loses 2 standing.
 The AI refers a case only when its odds are 60% or better.
 
 ### UN arms embargoes
 
 An Arms Embargo can name a rival of yours, or a country at war with a member,
-whose case strength is 40 or more. If it carries, the target has a UN Arms
+whose case strength is 40 or more and that is not your ally, overlord or
+subject. If it carries, the target has a UN Arms
 Embargo for ten years: −30% trade advantage in small arms, ammunition,
 artillery, tanks, aeroplanes, man-o'-wars and ironclads, for imports and
 exports alike, and military goods 5% dearer, all × enforcement. It loses 6
-standing. A vetoed embargo, or one the target voted for itself, is a Voluntary
+standing. A vetoed embargo, or one the target voted for itself, or both, is a Voluntary
 UN Arms Embargo at half strength for five years and costs 3 standing. A country
 under an embargo cannot propose one.
 
@@ -565,13 +574,15 @@ under an embargo cannot propose one.
 
 The Assembly can reject the credentials of a member whose case strength is 50
 or more and that breaks the Declaration of Human Rights' terms or has a
-defiance record of 10 or more. A permanent member can be named only after
-Charter Reform II. It needs two thirds of the members with a vote, and no veto
+defiance record of 10 or more, other than your ally, overlord or subject. A
+permanent member can be named only after Charter Reform II. It needs two thirds of the members with a vote, and no veto
 can stop it. For five years, or until its case strength falls below 30, the
 member is treated like a subject with suspended representation: no vote, no
 tabling, no benefits, no UN programs, no headquarters, and its permanent seat
 is gone for good. Unlike a subject, it still pays its own dues. It loses 8
-standing, or 4 if it voted for its own suspension.
+standing, or 4 if it voted for its own suspension. If, when the vote closes, the
+member has left the UN or its case strength has fallen below 30, the motion is
+moot and nothing happens to it.
 
 ### Binding ceasefires
 
@@ -617,23 +628,27 @@ An overlord that voted for the referendum must hold it.
 A major-power member can propose the Standing UN Force once. While it stands it
 serves in every peacekeeping and Stabilisation mission as one more contributor,
 and those missions no longer lapse unstaffed or fail when the last contingent
-goes home. It costs a tenth of the UN's budget. At Supranational no member may
-add a war goal against a country hosting such a mission: the goal is struck as
-soon as it is added. Countries outside the UN can still do it, at the doubled
-infamy surcharge.
+goes home. It costs a tenth of the UN's budget. At Supranational, a war goal a
+member adds against a country hosting such a mission, in a play it started, is
+struck as soon as it is added. Three kinds of goal are not struck but pay the
+doubled infamy surcharge instead: the goal the play opens with, another goal of
+that same kind, and a unification goal. Countries outside the UN, and members
+whose credentials are suspended, pay that surcharge on every such goal.
 
 ### Electoral observers
 
 A member that holds elections and is at peace can Request Electoral Observers.
-It is a request: no veto, and it shares the request cooldown. If it carries, an
-Electoral Observer Mission goes to your capital, paid from the UN's budget, so
+It is a request: no veto, and it shares the request cooldown. If it carries
+while you are still at peace and holding elections, an Electoral Observer
+Mission goes to your capital, paid from the UN's budget, so
 nobody sends a contingent. At strength 1 it gives you +5 legitimacy and makes
 Election Interference against you easier to catch, and its state −10% turmoil
 effects and −10% radicals from political movements. While it is there,
 Election Interference cuts your electoral confidence by half as much. It
-succeeds when an election campaign ends while it is there (UN delivery and 3
-standing for you), fails if you are attacked or stop holding elections (which
-also costs 2 standing), and lapses after five years without an election.
+succeeds when an election campaign ends while it is there and you still hold
+its state and your seat (UN delivery and 3 standing for you), fails if you are
+attacked or stop holding elections (which also costs 2 standing), and lapses
+after five years without an election.
 
 ### The World Development Fund's grants
 
@@ -687,7 +702,7 @@ changes and once a year.
 | Convention on the Law of the Sea (ITLOS) | Authority 30; International Trade | Cheaper port connections, prestige | Great powers gain less prestige from their navies. |
 | Convention on the Physical Protection of Nuclear Material (CPPNM) | Authority 30; warheads missing; a proposer with Nuclear Weapons; the Nuclear Weapons rule | Prestige | Half as many of the parties' warheads go missing, and they may recover lost ones. |
 | Convention on Cultural Diversity | Charter Reform I; authority 40; UNESCO in force; a proposer with Mass Media that is not the cultural hegemon | Prestige; half the Foreign Cultural Benchmark (none at Supranational); minorities assimilate 20% more slowly and their homelands fade 30% more slowly | A cultural hegemon that is a party projects 10% less cultural pull. |
-| Treaty on the Prohibition of Nuclear Weapons (TPNW) | Charter Reform II; authority 40; the NPT in force; a proposer with Nuclear Weapons and no warheads; the Nuclear Weapons rule | Prestige | An armed party is held to its arsenal at ratification, a fifth fewer every five years, none after 25; an unarmed party may build none. |
+| Treaty on the Prohibition of Nuclear Weapons (TPNW) | Charter Reform II; authority 40; the NPT in force; a proposer with Nuclear Weapons and no warheads; the Nuclear Weapons rule | Prestige | An armed party is held to its arsenal at ratification, a fifth fewer every five years, none after 25; an unarmed party may build none. An armed member that cast no ballot on it, or joins later, is not bound. |
 
 Four member modifiers also carry a cost: the NPT raises infamy generation and
 lowers your units' kill rate, the Climate Accord lowers bureaucracy, the ICC

@@ -666,10 +666,22 @@ un_mission_monthly = {
 		# after the vote, rather than in on_election_campaign_end itself, so
 		# Election Interference's cut at that same campaign end still finds the
 		# mission whatever order the two on_actions run in.
+		# Only while the mission has not lapsed meanwhile: the host still holds
+		# its state and, having asked for it, is still in the UN (the lapse
+		# test below, in the same form). Otherwise it lapses there.
 		limit = {
 			has_tag = un_msn_electoral
 			has_variable = un_msn_election_held
 			exists = var:un_msn_host
+			var:un_msn_state ?= { owner ?= scope:un_msn_host_now }
+			NOT = {
+				AND = {
+					has_variable = un_msn_requested
+					scope:un_msn_host_now = {
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					}
+				}
+			}
 		}
 		un_mission_close = { STATUS = succeeded }
 	}
@@ -1241,8 +1253,11 @@ un_observer_request_chamber_preview = {
 
 # The outcome: the request carried (it cannot be vetoed). Observers go to the
 # requester's capital, unless it no longer holds elections, in which case there
-# is nothing to observe and nothing is sent. Booked as the aid request is: UN
-# delivery +1 under the resolution code.
+# is nothing to observe, or it has gone to war since it tabled the request:
+# observers are not sent into a war (un_observer_request_can_table asks the
+# same at tabling), and one they arrived in would never fail them
+# (un_msn_war_at_open). Either way nothing is sent. Booked as the aid request
+# is: UN delivery +1 under the resolution code.
 # Scope: un_vote.2's ROOT (the proposer, the requester); expects
 # scope:un_resolution and scope:un_vote_proposer
 un_observer_request_on_carried = {
@@ -1253,6 +1268,7 @@ un_observer_request_on_carried = {
 		if = {
 			limit = {
 				scope:un_vote_proposer = {
+					is_at_war = no
 					un_mission_holds_elections = yes
 					un_mission_can_join_host = { TYPE = electoral }
 				}

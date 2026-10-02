@@ -614,10 +614,19 @@ un_vote_apply_treaty_modifier = {
 	}
 	# An armed party is held to a ceiling from the nuclear entry's next month
 	# (nd_taboo_refresh_ban_ceiling); the line says so before it ratifies.
+	# An armed member is bound only by a ballot: a yes vote, or a no vote it
+	# gives up in un_vote.3 option B. One that cast none (Article 19, or
+	# joined after the ballot) reaches this through option A's
+	# acknowledgement and stays outside, as an armed joiner does
+	# (un_apply_ratified_conventions); an unarmed one accedes.
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_nuclear_ban }
 			NOT = { has_modifier = un_nuclear_ban_modifier }
+			OR = {
+				nd_is_armed = no
+				scope:un_resolution ?= { un_lobby_has_voted = { COUNTRY = ROOT } }
+			}
 		}
 		un_convention_country_on = { MODIFIER = un_nuclear_ban_modifier }
 		un_nuclear_ban_terms_tt = yes

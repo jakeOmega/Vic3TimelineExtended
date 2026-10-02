@@ -146,7 +146,9 @@ un_rep_convention_missed = {
 }
 
 # Any convention missed. The list is un_apply_ratified_conventions's
-# (un_vote_effects.txt); test_un_membership.py keeps the two in step.
+# (un_vote_effects.txt); test_un_membership.py keeps the two in step. The
+# nuclear ban counts only for an unarmed member, which is the only one
+# un_events.36 would ratify it for.
 # Scope: country
 un_rep_any_convention_missed = {
 	OR = {
@@ -161,6 +163,9 @@ un_rep_any_convention_missed = {
 		un_rep_convention_missed = { AGENCY = cppnm MODIFIER = un_physical_protection_modifier }
 		un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier }
 		un_rep_convention_missed = { AGENCY = ccd MODIFIER = un_cultural_diversity_modifier }
-		un_rep_convention_missed = { AGENCY = tpnw MODIFIER = un_nuclear_ban_modifier }
+		AND = {
+			un_rep_convention_missed = { AGENCY = tpnw MODIFIER = un_nuclear_ban_modifier }
+			nd_is_armed = no
+		}
 	}
 }

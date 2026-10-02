@@ -809,7 +809,8 @@ warheads it had in its first month as a party, a fifth fewer every five years,
 none after 25. The schedule stops while the UN is Moribund. Warheads above it
 are taken apart, each one raising the taboo, and the Nuclear Weapons entry reads
 "Held to N by the UN ban". A party without warheads may build none. An armed
-country that joins the UN later is not bound, and leaving the UN while bound
+member is bound only by its own ballot: one that cast none, or joins the UN
+later, is not bound, and leaving the UN while bound
 counts as walking out of an arms-control treaty. Nuclear powers vote against it
 and refuse to ratify it.
 

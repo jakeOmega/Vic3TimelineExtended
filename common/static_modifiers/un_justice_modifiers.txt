@@ -26,7 +26,7 @@ un_arms_embargo_target_modifier = {
 }
 
 # Half the full embargo: a vetoed resolution's voluntary embargo, or the one a
-# target that voted for its own embargo accepts.
+# target that voted for its own embargo accepts (and both at once).
 un_arms_embargo_voluntary_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds
 	goods_trade_advantage_small_arms_mult = -0.15

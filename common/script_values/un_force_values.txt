@@ -13,11 +13,12 @@
 # OUR INTERESTS on founding the Force (un_lean_charter_interests adds it).
 # Countries that host a peacekeeping or stabilisation mission want it: their
 # missions can no longer lapse unstaffed or fail when the last contributor
-# leaves, and at Supranational no member may make war on them. Members that run
-# the peacekeeping programme want it: it puts a standing contingent beside
-# theirs. Great powers are somewhat against (a force they do not command limits
-# what they may do, and at Supranational it bars their war goals); the
-# isolationist are against.
+# leaves, and at Supranational a member's war goals against them are struck
+# (all but the goal a play opens with, which pays a doubled surcharge). Members
+# that run the peacekeeping programme want it: it puts a standing contingent
+# beside theirs. Great powers are somewhat against (a force they do not command
+# limits what they may do, and at Supranational it strikes their war goals);
+# the isolationist are against.
 # Scope: the voting country; expects scope:un_resolution
 un_lean_interests_standing_force = {
 	value = 0

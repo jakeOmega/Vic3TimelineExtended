@@ -26,11 +26,17 @@ un_court_referral_holder_eligible = {
 	NOT = { has_war_with = ROOT }
 }
 
-# A state ROOT could refer: it claims the state, and its holder is a member
-# ROOT may take to court.
+# A state ROOT could refer: it claims the state, the state is not its
+# holder's capital, and its holder is a member ROOT may take to court. The
+# court never hands over a seat of government, and with it a holder's only
+# state (a country's only state is its capital). The selector, the case
+# check, the AI's weight and the chamber's preview all read this, so they
+# agree; un_court_comply and un_court_rule ask again, since a capital may
+# move after the case is tabled.
 # Scope: state; ROOT = the prospective claimant
 un_court_referral_state_open = {
 	has_claim_by = ROOT
+	is_capital = no
 	owner ?= { un_court_referral_holder_eligible = yes }
 }
 
@@ -54,7 +60,9 @@ un_court_referral_can_table = {
 }
 
 # The court's verdict on a referral: 1 for the claimant, 2 for the holder, 3
-# moot (the holder no longer held the state). Written by un_court_rule.
+# moot (the holder no longer held the state, had made it its capital or no
+# longer existed). Written by un_court_rule; un_court_comply writes 3 when a
+# ruling for the claimant can no longer be carried out.
 # Parameters: $VERDICT$ = 1 | 2 | 3
 # Scope: a court_referral resolution
 un_court_verdict_is = {
@@ -88,18 +96,19 @@ un_court_defiance_opens_mandate = {
 }
 
 # Whether the scoped country holds a war goal for a single state against
-# $TARGET$, in a play or a war. on_wargoal_added does not say which goal was
+# $TARGET$ in a diplomatic play. on_wargoal_added does not say which goal was
 # added (scripting_best_practices.md § "Play Lifecycle"), so the barred claim
 # is tested this way: a goal for a state against a country that holds part of
-# the barred region.
+# the barred region. Its root is the play, so only the play_participant_*
+# form is asked: the war_participant_* form stays true for the whole of a war
+# and would match goals added long before. The test is still approximate: the
+# goal it finds may be for a state outside the region, or in another play.
 # Parameters: $TARGET$ = country scope
 # Scope: country
 un_court_holds_state_goal_against = {
 	OR = {
 		play_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
 		play_participant_has_war_goal_of_type_against = { type = return_state target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = return_state target = $TARGET$ }
 	}
 }
 
@@ -117,6 +126,18 @@ un_court_bar_goal_in_region = {
 	}
 }
 
+# ---- The proposer's own bloc ----------------------------------------------------------
+
+# The scoped country is not ROOT's subject, its overlord or its ally: a member
+# does not move the Assembly against its own bloc (the arms embargo and the
+# suspension of credentials).
+# Scope: the prospective target; ROOT = the prospective proposer
+un_justice_not_proposer_bloc = {
+	NOT = { is_subject_of = ROOT }
+	NOT = { ROOT = { is_subject_of = PREV } }
+	NOT = { has_treaty_alliance_with = { TARGET = ROOT } }
+}
+
 # ---- Arms Embargo --------------------------------------------------------------------
 
 # The scoped country is under a UN arms embargo, full or voluntary.
@@ -125,12 +146,15 @@ un_arms_embargo_in_force = {
 	has_variable = un_arms_embargo_months
 }
 
-# A country ROOT could name: not itself, not a decentralized people, its
-# record gives grounds (case 40), it is ROOT's rival or at war with a
-# represented member, and no arms embargo is already in force against it.
+# A country ROOT could name: not itself, its subject, its overlord or its
+# ally, not a decentralized people, its record gives grounds (case 40), it is
+# ROOT's rival or at war with a represented member, and no arms embargo is
+# already in force against it. The human's pick, the AI's pick, the case
+# check and the AI's weight all read this, so they agree.
 # Scope: the prospective target; ROOT = the prospective proposer
 un_arms_embargo_candidate = {
 	NOT = { this = ROOT }
+	un_justice_not_proposer_bloc = yes
 	NOT = { is_country_type = decentralized }
 	un_case_supports = { TOPIC = arms_embargo }
 	NOT = { un_arms_embargo_in_force = yes }
@@ -173,13 +197,16 @@ un_credentials_suspended = {
 	has_variable = un_credentials_months
 }
 
-# A member ROOT could name: represented (so not already suspended), its record
-# gives grounds (case 50), and it breaches the human-rights convention's terms
-# or has defied the Assembly's binding decisions (a defiance record of 10 or
-# more). A permanent member only once the charter carries Reform II.
+# A member ROOT could name: not its subject, its overlord or its ally,
+# represented (so not already suspended), its record gives grounds (case 50),
+# and it breaches the human-rights convention's terms or has defied the
+# Assembly's binding decisions (a defiance record of 10 or more). A permanent
+# member only once the charter carries Reform II. The human's pick, the AI's
+# pick and the case check all read this, so they agree.
 # Scope: the prospective target; ROOT = the prospective proposer
 un_credentials_candidate = {
 	NOT = { this = ROOT }
+	un_justice_not_proposer_bloc = yes
 	un_member_represented = yes
 	un_case_supports = { TOPIC = credentials }
 	OR = {

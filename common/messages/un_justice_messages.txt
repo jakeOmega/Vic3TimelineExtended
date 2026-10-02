@@ -31,7 +31,8 @@ un_arms_embargo_lifted_notice = {
 }
 
 # We added a war goal against a region the World Court found we have no claim
-# to (un_court_bar_war_goal, un_justice_effects.txt).
+# to, as near as on_wargoal_added lets the test tell; once per diplomatic play
+# (un_court_bar_war_goal, un_justice_effects.txt).
 un_court_bar_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"

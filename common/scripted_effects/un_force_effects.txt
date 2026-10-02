@@ -16,13 +16,16 @@
 #   budget     the Force takes un_force_budget_share of the dues
 #              (un_charter_values.txt; the lending facility lends from what is
 #              left, and the chamber's budget line shows it)
-#   war goals  at Supranational a MEMBER may not add a war goal against a
-#              country hosting an active peacekeeping or stabilisation mission:
-#              it is struck on adding (un_force_strike_war_goals, called by
+#   war goals  at Supranational a represented MEMBER's war goal against a
+#              country hosting an active peacekeeping or stabilisation mission
+#              is struck on adding (un_force_strike_war_goals, called by
 #              un_teeth_war_goal_surcharge from on_wargoal_added, after the
-#              mandate's own hooks); a non-member pays the surcharge, doubled
-#              from Strong (owner decision 2026-10-02: prohibited for members
-#              only)
+#              mandate's own hooks), except a goal of the type its play opened
+#              with, which pays the surcharge doubled, as from Strong; a
+#              non-member, or a member whose credentials are suspended, pays
+#              the doubled surcharge for every goal (owner decision
+#              2026-10-02: prohibited for members only; review 2026-10-02:
+#              the opening goal is charged, never struck)
 #
 # WHO WRITES WHAT
 #   un_standing_force_on_carried     un_vote.2's carried branch (through
@@ -73,52 +76,63 @@ un_standing_force_chamber_preview = {
 
 # ---- War goals against a mission's host ------------------------------------------
 
-# Strike every war goal the initiator holds against the play's target, which
-# hosts an active peacekeeping or stabilisation mission, and tell a human
-# initiator why. Called only where un_force_war_goal_barred holds. Like
-# un_mandate_strike_goal_type, remove_war_goal addresses a goal by side and
-# type, so a goal of the same type against another country in the same play
-# would go too. The type list is un_force_holds_goal_against's.
+# Strike the goals the initiator holds against the play's target, which hosts
+# an active peacekeeping or stabilisation mission, and tell a human initiator
+# why. Called only where un_force_war_goal_barred holds, so at least one goes.
+# Never a goal of the type the play opened with (un_force_has_strikeable_goal
+# says why and lists the types): when that is the goal just added,
+# un_force_war_goal_barred fails and un_teeth_war_goal_surcharge charges it the
+# surcharge, doubled against the host. Like un_mandate_strike_goal_type,
+# remove_war_goal addresses a goal by side and type, so a goal of the same type
+# against another country in the same play would go too.
 # Scope: diplomatic play; expects scope:actor, the initiator (on_wargoal_added)
 un_force_strike_war_goals = {
 	target ?= { save_scope_as = un_force_protected }
 	if = {
 		limit = { exists = scope:un_force_protected }
-		un_force_strike_goal_type = { TYPE = annex_country }
-		un_force_strike_goal_type = { TYPE = conquer_state }
-		un_force_strike_goal_type = { TYPE = return_state }
-		un_force_strike_goal_type = { TYPE = take_treaty_port }
-		un_force_strike_goal_type = { TYPE = liberate_country }
-		un_force_strike_goal_type = { TYPE = liberate_subject }
-		un_force_strike_goal_type = { TYPE = secession }
-		un_force_strike_goal_type = { TYPE = unification }
-		un_force_strike_goal_type = { TYPE = unification_leadership }
-		un_force_strike_goal_type = { TYPE = restore_union }
-		un_force_strike_goal_type = { TYPE = te_reunify_country }
-		un_force_strike_goal_type = { TYPE = make_protectorate }
-		un_force_strike_goal_type = { TYPE = make_tributary }
-		un_force_strike_goal_type = { TYPE = make_dominion }
-		un_force_strike_goal_type = { TYPE = make_personal_union }
-		un_force_strike_goal_type = { TYPE = make_crown_land }
-		un_force_strike_goal_type = { TYPE = make_chartered_company }
-		un_force_strike_goal_type = { TYPE = release_as_subject }
-		un_force_strike_goal_type = { TYPE = transfer_subject }
-		un_force_strike_goal_type = { TYPE = reduce_autonomy }
-		un_force_strike_goal_type = { TYPE = regime_change }
-		un_force_strike_goal_type = { TYPE = humiliation }
-		un_force_strike_goal_type = { TYPE = contain_threat }
-		un_force_strike_goal_type = { TYPE = enforce_treaty_article }
-		un_force_strike_goal_type = { TYPE = open_market }
-		un_force_strike_goal_type = { TYPE = ban_slavery }
-		un_force_strike_goal_type = { TYPE = colonization_rights }
-		un_force_strike_goal_type = { TYPE = force_nationalization }
-		un_force_strike_goal_type = { TYPE = foreign_investment_rights }
-		un_force_strike_goal_type = { TYPE = join_power_bloc }
-		un_force_strike_goal_type = { TYPE = leave_power_bloc }
-		un_force_strike_goal_type = { TYPE = demand_strait_access }
-		un_force_strike_goal_type = { TYPE = demand_toll_exemption }
-		un_force_strike_goal_type = { TYPE = demand_no_tolls }
-		un_force_strike_goal_type = { TYPE = demand_no_strait_closure }
+		# One opening play: struck unless this play is of that type.
+		un_force_strike_goal_type = { TYPE = conquer_state PLAY = dp_conquer_state }
+		un_force_strike_goal_type = { TYPE = return_state PLAY = dp_return_state }
+		un_force_strike_goal_type = { TYPE = take_treaty_port PLAY = dp_take_treaty_port }
+		un_force_strike_goal_type = { TYPE = liberate_country PLAY = dp_liberate_country }
+		un_force_strike_goal_type = { TYPE = liberate_subject PLAY = dp_liberate_subject }
+		un_force_strike_goal_type = { TYPE = secession PLAY = dp_secession }
+		un_force_strike_goal_type = { TYPE = restore_union PLAY = dp_restore_union }
+		un_force_strike_goal_type = { TYPE = make_protectorate PLAY = dp_make_protectorate }
+		un_force_strike_goal_type = { TYPE = make_tributary PLAY = dp_make_tributary }
+		un_force_strike_goal_type = { TYPE = make_dominion PLAY = dp_make_dominion }
+		un_force_strike_goal_type = { TYPE = release_as_subject PLAY = dp_release_as_subject }
+		un_force_strike_goal_type = { TYPE = transfer_subject PLAY = dp_transfer_subject }
+		un_force_strike_goal_type = { TYPE = reduce_autonomy PLAY = dp_reduce_autonomy }
+		un_force_strike_goal_type = { TYPE = regime_change PLAY = dp_regime_change }
+		un_force_strike_goal_type = { TYPE = contain_threat PLAY = dp_contain_threat }
+		un_force_strike_goal_type = { TYPE = enforce_treaty_article PLAY = dp_default_treaty_article }
+		un_force_strike_goal_type = { TYPE = open_market PLAY = dp_open_market }
+		un_force_strike_goal_type = { TYPE = ban_slavery PLAY = dp_ban_slavery }
+		un_force_strike_goal_type = { TYPE = colonization_rights PLAY = dp_native_uprising }
+		un_force_strike_goal_type = { TYPE = force_nationalization PLAY = dp_force_nationalization }
+		un_force_strike_goal_type = { TYPE = foreign_investment_rights PLAY = dp_give_foreign_investment_rights }
+		un_force_strike_goal_type = { TYPE = join_power_bloc PLAY = dp_join_power_bloc }
+		un_force_strike_goal_type = { TYPE = leave_power_bloc PLAY = dp_leave_power_bloc }
+		un_force_strike_goal_type = { TYPE = demand_strait_access PLAY = dp_demand_strait_access }
+		un_force_strike_goal_type = { TYPE = demand_toll_exemption PLAY = dp_demand_toll_exemption }
+		un_force_strike_goal_type = { TYPE = demand_no_tolls PLAY = dp_demand_no_tolls }
+		un_force_strike_goal_type = { TYPE = demand_no_strait_closure PLAY = dp_demand_no_strait_closure }
+		# Several opening plays. unification and unification_leadership are
+		# never struck (un_force_has_strikeable_goal).
+		if = {
+			limit = { NOT = { un_force_play_opens_with_annexation = yes } }
+			un_force_strike_goal = { TYPE = annex_country }
+		}
+		if = {
+			limit = { NOT = { un_force_play_opens_with_humiliation = yes } }
+			un_force_strike_goal = { TYPE = humiliation }
+		}
+		# No opening play.
+		un_force_strike_goal = { TYPE = te_reunify_country }
+		un_force_strike_goal = { TYPE = make_personal_union }
+		un_force_strike_goal = { TYPE = make_crown_land }
+		un_force_strike_goal = { TYPE = make_chartered_company }
 		scope:actor = {
 			if = {
 				limit = { is_ai = no }
@@ -128,15 +142,25 @@ un_force_strike_war_goals = {
 	}
 }
 
-# Parameters: $TYPE$ = war goal type
-# Scope: diplomatic play; expects scope:actor and scope:un_force_protected
+# Strike the initiator's goal of $TYPE$ unless the play is of type $PLAY$, the
+# one that opens with it.
+# Parameters: $TYPE$ = war goal type; $PLAY$ = the diplomatic play type whose
+# opening goal it is
+# Scope: diplomatic play; expects scope:actor
 un_force_strike_goal_type = {
 	if = {
-		limit = {
-			scope:actor = {
-				play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = scope:un_force_protected }
-			}
-		}
+		limit = { un_force_goal_strikeable = { TYPE = $TYPE$ PLAY = $PLAY$ } }
+		remove_war_goal = { who = initiator type = $TYPE$ }
+	}
+}
+
+# Strike the initiator's goal of $TYPE$, which no play opens with (or, for the
+# callers above, not this one).
+# Parameters: $TYPE$ = war goal type
+# Scope: diplomatic play; expects scope:actor
+un_force_strike_goal = {
+	if = {
+		limit = { un_force_goal_held = { TYPE = $TYPE$ } }
 		remove_war_goal = { who = initiator type = $TYPE$ }
 	}
 }

@@ -4052,8 +4052,14 @@ un_events.36 = {
 			limit = { un_rep_convention_missed = { AGENCY = ccd MODIFIER = un_cultural_diversity_modifier } }
 			un_convention_country_on = { MODIFIER = un_cultural_diversity_modifier }
 		}
+		# Not for an armed member: it never voted on the ban, as an armed
+		# joiner never did (un_apply_ratified_conventions), and ratifying the
+		# rest is no promise to disarm. un_rep_any_convention_missed agrees.
 		if = {
-			limit = { un_rep_convention_missed = { AGENCY = tpnw MODIFIER = un_nuclear_ban_modifier } }
+			limit = {
+				un_rep_convention_missed = { AGENCY = tpnw MODIFIER = un_nuclear_ban_modifier }
+				nd_is_armed = no
+			}
 			un_convention_country_on = { MODIFIER = un_nuclear_ban_modifier }
 			un_nuclear_ban_terms_tt = yes
 		}

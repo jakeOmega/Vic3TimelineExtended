@@ -19,8 +19,8 @@
 # whose owner is the holder; ROOT is the claimant. Every caller runs with the
 # claimant as ROOT: the selector, the tabling, the chamber's preview and the
 # AI's weight run in the proposer's own scope, and the ruling (un_court.1) is
-# fired to the claimant. At the ruling the holder still owns the state, or the
-# case is moot before the odds are read.
+# fired to the claimant. At the ruling the holder still owns the state and it
+# is not the holder's capital, or the case is moot before the odds are read.
 
 un_court_odds_base = { value = 50 }
 un_court_odds_min = { value = 10 }
@@ -169,12 +169,11 @@ un_court_ruling_delay_days = { value = 30 }
 # region against the holder without the case of 60.
 un_court_defiance_days = { value = 3650 }
 # Found for the holder: for twenty years a war goal the claimant adds against
-# a state in the region costs extra infamy, x E.
+# a state in the region costs extra infamy, x E. Charged once per diplomatic
+# play (on_wargoal_added does not say which goal was added, so the charge is
+# per play rather than per goal; un_court_bar_war_goal).
 un_court_bar_days = { value = 7300 }
 un_court_bar_infamy_base = { value = 10 }
-# At most once in this many days (on_wargoal_added does not say which goal was
-# added, so the charge is per play rather than per goal; un_court_bar_war_goal).
-un_court_bar_charge_days = { value = 180 }
 # Globals only (un_enforcement).
 un_court_bar_infamy = {
 	value = un_court_bar_infamy_base
@@ -193,7 +192,7 @@ un_court_ai_min_odds = { value = 60 }
 # ---- Arms Embargo ------------------------------------------------------------------
 
 # Months the embargo runs: the full embargo ten years; the voluntary one (a
-# vetoed resolution, or a target that voted for its own embargo) five.
+# vetoed resolution, a target that voted for its own embargo, or both) five.
 un_arms_embargo_months_full = { value = 120 }
 un_arms_embargo_months_voluntary = { value = 60 }
 un_standing_arms_embargo_loss = { value = 6 }
@@ -204,7 +203,8 @@ un_arms_embargo_relations_vetoed = { value = -10 }
 # ---- Suspension of Credentials -----------------------------------------------------
 
 # Months a suspension runs, unless the member's case falls below the second
-# figure first.
+# figure first. A target whose case is already below it when the vote closes
+# is not suspended at all (un_credentials_on_carried).
 un_credentials_months_base = { value = 60 }
 un_credentials_restore_case = { value = 30 }
 # Display: the months our suspension has left. Scope: country

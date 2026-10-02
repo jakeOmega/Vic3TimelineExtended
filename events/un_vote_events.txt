@@ -2020,17 +2020,47 @@ un_vote.3 = {
 		# of the deployment, and paying the compliance award on top would make
 		# a no-voter who complies worth twice a yes-voter who does the same
 		# thing. The pledge is the compliance, and it has already been paid.
+		#
+		# court_referral is excluded because the court has not ruled yet: what
+		# binds is its ruling, a month on, and only the holder it names. The
+		# holder answers for that ruling in un_court.2 (un_court_comply pays
+		# the compliance standing, un_court_defy books the defiance), so
+		# accepting the referral here earns nothing, as option C's refusal
+		# costs no standing. A supervised referendum is the same: it binds the
+		# overlord alone, which answers for it in un_referendum.1 (holding the
+		# vote pays standing, refusing books standing and defiance).
 		if = {
 			limit = {
 				scope:un_resolution ?= { un_resolution_is_binding = yes }
 				NOT = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
 			}
 			custom_tooltip = {
 				text = un_standing_complied_tt
 				un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
 			}
 		}
-		ai_chance = { base = 50 }
+		ai_chance = {
+			base = 50
+			# Ratifying against itself: an armed power does not accept its own
+			# disarmament, and the cultural hegemon does not give up its pull
+			# (option C's weights).
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_nuclear_ban }
+					nd_is_armed = yes
+				}
+				factor = 0
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_cultural_diversity }
+					un_regime_cultural_hegemon = yes
+				}
+				factor = 0
+			}
+		}
 	}
 
 	# Option C: Vote passed AND you voted no - refuse to comply. What that
@@ -2084,8 +2114,17 @@ un_vote.3 = {
 		# defiance the brief asks to punish. Refusing a recommendatory one is
 		# legal dissent — the same reasoning that leaves the veto free — so it
 		# costs nothing here.
+		# A court referral is not yet a ruling (option B's note): defying the
+		# court is booked when the holder defies it (un_court_defy), so
+		# denouncing the referral costs only the relations and infamy above.
+		# A supervised referendum likewise: the overlord's refusal is booked
+		# in un_referendum.1.
 		if = {
-			limit = { scope:un_resolution ?= { un_resolution_is_binding = yes } }
+			limit = {
+				scope:un_resolution ?= { un_resolution_is_binding = yes }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+				NOT = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+			}
 			custom_tooltip = {
 				text = un_standing_defied_tt
 				un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }

@@ -8,12 +8,16 @@
 # common/scripted_effects/un_justice_effects.txt). Every event here carries
 # the case as saved scopes:
 #   scope:un_crt_claimant  the member that referred it (un_vote.2's proposer)
-#   scope:un_crt_holder    the member it named, which held the state
-#   scope:un_crt_state     the disputed state
-#   scope:un_crt_region    its state region, which outlives a ceded state that
-#                          merges into the claimant's part of the region
+#   scope:un_crt_holder    the member it named, which held the state; absent
+#                          if it no longer exists
+#   scope:un_crt_state     the disputed state; absent if it has merged into
+#                          another (it passed to a country that already held
+#                          part of the region)
+#   scope:un_crt_region    its state region, which outlives the state
 #   scope:un_resolution    the closed resolution: the verdict and the holder's
 #                          answer are on it (un_justice_effects.txt's header)
+# The court sits even when the holder or the state is gone, so a case that
+# went nowhere is struck off with a word to the claimant (un_court_rule).
 #
 #   un_court.1  hidden, to the claimant: the court rules (un_court_rule)
 #   un_court.2  to the holder, when a binding ruling goes against it: obey or
@@ -29,8 +33,6 @@ un_court.1 = {
 	trigger = {
 		has_global_variable = un_founded
 		exists = scope:un_resolution
-		exists = scope:un_crt_holder
-		exists = scope:un_crt_state
 		exists = scope:un_crt_region
 	}
 
@@ -150,7 +152,17 @@ un_court.3 = {
 	}
 	desc = {
 		first_valid = {
-			# The case went nowhere: the holder no longer held the state.
+			# The case went nowhere: the holder no longer existed, no longer
+			# held the state or had made it its capital. Only the claimant
+			# hears of a holder that is gone, without its name.
+			triggered_desc = {
+				desc = un_court.3.d_moot_claimant_gone
+				trigger = {
+					scope:un_resolution ?= { un_court_verdict_is = { VERDICT = 3 } }
+					scope:un_crt_claimant ?= this
+					NOT = { exists = scope:un_crt_holder }
+				}
+			}
 			triggered_desc = {
 				desc = un_court.3.d_moot_claimant
 				trigger = {
@@ -214,10 +226,12 @@ un_court.3 = {
 
 	duration = 3
 
+	# No scope:un_crt_holder: a moot case reaches the claimant when the holder
+	# is gone (un_court.3.d_moot_claimant_gone names no one). Every other
+	# branch runs only while the holder exists (un_court_rule, un_court.2).
 	trigger = {
 		exists = scope:un_resolution
 		exists = scope:un_crt_claimant
-		exists = scope:un_crt_holder
 		exists = scope:un_crt_region
 	}
 

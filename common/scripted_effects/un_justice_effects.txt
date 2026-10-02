@@ -53,15 +53,21 @@
 #   un_court_barred_region   (timed, twenty years; on the claimant): the court
 #                            found against our claim on that state region. One
 #                            region at a time
-#   un_court_bar_charged     (timed) the surcharge for that bar was charged
-# On a court_referral resolution: un_res_court_odds and un_res_court_state when
-# it is tabled; un_res_court_odds_ruled, un_res_court_verdict (1 for the
-# claimant, 2 for the holder, 3 moot) and un_res_court_response (1 obeyed,
+#   un_court_bar_charged     (timed, twenty years; on the claimant) the
+#                            diplomatic play the bar's surcharge was last
+#                            charged in, so one play is charged once
+# On a court_referral resolution: un_res_court_odds, un_res_court_state and
+# un_res_court_region (the state's region, which outlives a state that merges
+# away) when it is tabled; un_res_court_odds_ruled, un_res_court_verdict (1 for
+# the claimant, 2 for the holder, 3 moot) and un_res_court_response (1 obeyed,
 # 2 defied) when the court rules.
 # Globals, for loc that cannot read a container (the vote events, the court's
 # events): un_court_tabled_odds and un_court_tabled_state, written at tabling,
 # and un_court_ruled_odds, written at the ruling. One referral is before the
 # Assembly or the court at a time (the vote lock, then the topic's cooldown).
+# A tabled state that merges away while the Assembly votes is re-pointed, on
+# the resolution and in the global, at a living state of its region once a
+# month (un_court_referral_restate), so neither prints a blank name.
 # ============================================================================
 
 # ============================================================================
@@ -115,9 +121,12 @@ un_court_referral_select_target = {
 	}
 }
 
-# The case on the resolution: the state, and the odds as they stand at
-# tabling (the chamber's card and the vote events show them). The ruling reads
-# the odds again when the court sits.
+# The case on the resolution: the state, its region, and the odds as they
+# stand at tabling (the chamber's card and the vote events show them). The
+# ruling reads the odds again when the court sits. The region outlives the
+# state: a state that passes to a country already holding part of the region
+# merges into that country's state there, and the region is how the court
+# still finds the case (un_court_referral_on_carried).
 # Scope: the proposer; expects scope:un_resolution (un_resolution_open) and
 # scope:un_court_referral_state (un_court_referral_select_target)
 un_court_referral_on_tabled = {
@@ -128,19 +137,56 @@ un_court_referral_on_tabled = {
 		}
 		scope:un_court_referral_state = {
 			set_global_variable = { name = un_court_tabled_odds value = un_court_claimant_odds }
+			state_region = { save_temporary_scope_as = un_court_referral_region }
 		}
 		set_global_variable = { name = un_court_tabled_state value = scope:un_court_referral_state }
 		scope:un_resolution = {
 			set_variable = { name = un_res_court_odds value = global_var:un_court_tabled_odds }
 			set_variable = { name = un_res_court_state value = scope:un_court_referral_state }
+			set_variable = { name = un_res_court_region value = scope:un_court_referral_region }
 		}
 	}
 }
 
+# A referral before the Assembly whose state has merged away (it passed to a
+# country that already held part of the region): point the resolution and
+# the vote events' global at a living state of the same region, the holder's
+# if it holds one there again, else any. A state's name is its region's, so
+# the card and the vote events read as before; the ruling then finds the case
+# moot unless the holder owns the state it points at (un_court_rule).
+# Scope: a court_referral resolution
+un_court_referral_restate = {
+	var:un_res_target ?= { save_temporary_scope_as = un_crt_restate_holder }
+	var:un_res_court_region ?= {
+		if = {
+			limit = {
+				exists = scope:un_crt_restate_holder
+				any_scope_state = { owner ?= scope:un_crt_restate_holder }
+			}
+			random_scope_state = {
+				limit = { owner ?= scope:un_crt_restate_holder }
+				save_temporary_scope_as = un_crt_restate_state
+			}
+		}
+		else = {
+			random_scope_state = { save_temporary_scope_as = un_crt_restate_state }
+		}
+	}
+	if = {
+		limit = { exists = scope:un_crt_restate_state }
+		set_variable = { name = un_res_court_state value = scope:un_crt_restate_state }
+		set_global_variable = { name = un_court_tabled_state value = scope:un_crt_restate_state }
+	}
+}
+
 # The referral carried. The court sits about a month later, binding or, if a
-# permanent member vetoed, to give an advisory opinion (un_court.1).
+# permanent member vetoed, to give an advisory opinion (un_court.1). It sits
+# whenever a case was tabled, even if the state has merged away or the holder
+# is gone since: the court then strikes the case off as moot and tells the
+# claimant, instead of letting it vanish without a word.
 # Scope: un_vote.2's ROOT (the proposer, the claimant); expects
-# scope:un_resolution and scope:un_vote_target (the holder)
+# scope:un_resolution and scope:un_vote_target (the holder, if it still
+# exists)
 un_court_referral_on_carried = {
 	if = {
 		limit = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
@@ -153,19 +199,14 @@ un_court_referral_on_carried = {
 	}
 	if = {
 		limit = {
-			exists = scope:un_vote_target
-			scope:un_resolution ?= { exists = var:un_res_court_state }
+			scope:un_resolution ?= { has_variable = un_res_court_region }
 		}
 		hidden_effect = {
 			save_scope_as = un_crt_claimant
-			scope:un_vote_target = { save_scope_as = un_crt_holder }
+			scope:un_vote_target ?= { save_scope_as = un_crt_holder }
 			scope:un_resolution = {
-				var:un_res_court_state ?= {
-					save_scope_as = un_crt_state
-					# The region outlives the state: a state ceded to a country
-					# that holds part of the region already merges into its.
-					state_region = { save_scope_as = un_crt_region }
-				}
+				var:un_res_court_state ?= { save_scope_as = un_crt_state }
+				var:un_res_court_region ?= { save_scope_as = un_crt_region }
 			}
 			# un_court_ruling_delay_days (trigger_event takes no script value).
 			trigger_event = { id = un_court.1 days = 30 }
@@ -173,20 +214,28 @@ un_court_referral_on_carried = {
 	}
 }
 
-# The court rules. The case is moot if the holder no longer holds the state.
-# Otherwise it rolls against the odds as they stand now: a binding ruling for
-# the claimant goes to the holder to obey or defy (un_court.2); one for the
-# holder withdraws the claimant's claim on the region and, for twenty years,
-# makes a war goal there cost it extra infamy. A vetoed referral is an
-# advisory opinion: the court still rolls, nothing changes hands, and a holder
-# it goes against loses a little standing. Both parties hear (un_court.3).
+# The court rules. The case is moot if the holder no longer exists, no longer
+# holds the state (or the state has merged away), or has since made it its
+# capital: the court never hands over a seat of government. Otherwise it rolls
+# against the odds as they stand now: a binding ruling for the claimant goes
+# to the holder to obey or defy (un_court.2); one for the holder withdraws the
+# claimant's claim on the region and, for twenty years, makes a war goal there
+# cost it extra infamy. A vetoed referral is an advisory opinion: the court
+# still rolls, nothing changes hands, and a holder it goes against loses a
+# little standing. Both parties hear (un_court.3); a moot case only the
+# parties that still exist.
 # Scope: the claimant (un_court.1's ROOT); expects scope:un_crt_claimant,
-# scope:un_crt_holder, scope:un_crt_state, scope:un_crt_region and
-# scope:un_resolution
+# scope:un_crt_region and scope:un_resolution, and scope:un_crt_holder and
+# scope:un_crt_state while they exist
 un_court_rule = {
 	if = {
 		limit = {
-			NOT = { scope:un_crt_state = { owner ?= scope:un_crt_holder } }
+			OR = {
+				NOT = { exists = scope:un_crt_holder }
+				NOT = { exists = scope:un_crt_state }
+				NOT = { scope:un_crt_state ?= { owner ?= scope:un_crt_holder } }
+				scope:un_crt_state ?= { is_capital = yes }
+			}
 		}
 		scope:un_resolution = {
 			set_variable = { name = un_res_court_verdict value = 3 }
@@ -241,36 +290,49 @@ un_court_notify_parties = {
 	scope:un_crt_holder ?= { trigger_event = { id = un_court.3 } }
 }
 
-# The holder obeys the court: it cedes the state (moot if it no longer holds
-# it), gains standing as for any binding decision complied with, and the UN's
-# credibility grows with its weight. The court's compliance founds the
-# International Court of Justice if nothing has yet (as un_events.8 does).
+# The holder obeys the court: it cedes the state, gains standing as for any
+# binding decision complied with, and the UN's credibility grows with its
+# weight. The court's compliance founds the International Court of Justice if
+# nothing has yet (as un_events.8 does). The ruling is moot, and nothing is
+# booked, if the transfer can no longer happen: the holder no longer holds the
+# state, it has since become the holder's capital, or the claimant is gone.
+# The verdict then reads moot (3), and the claimant, if it exists, hears so.
 # Scope: the holder (un_court.2's ROOT); expects scope:un_crt_claimant,
-# scope:un_crt_state and scope:un_resolution
+# scope:un_crt_state, scope:un_crt_region and scope:un_resolution
 un_court_comply = {
 	if = {
-		limit = { scope:un_crt_state ?= { owner = ROOT } }
+		limit = {
+			exists = scope:un_crt_claimant
+			scope:un_crt_state ?= {
+				owner = ROOT
+				is_capital = no
+			}
+		}
 		custom_tooltip = un_ledger_tt_credibility_up_1_5
 		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 1.5 REASON = 27 SUBJECT = scope:un_crt_state }
 		scope:un_crt_state = { set_state_owner = scope:un_crt_claimant }
+		custom_tooltip = {
+			text = un_standing_complied_tt
+			un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
+		}
+		if = {
+			limit = { NOT = { has_global_variable = un_agency_icj } }
+			set_global_variable = un_agency_icj
+		}
+		change_relations = { country = scope:un_crt_claimant value = un_court_relations_complied }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		hidden_effect = {
+			scope:un_resolution ?= { set_variable = { name = un_res_court_response value = 1 } }
+			scope:un_crt_claimant ?= { trigger_event = { id = un_court.3 } }
+		}
 	}
 	else = {
 		custom_tooltip = un_court_cede_moot_tt
-	}
-	custom_tooltip = {
-		text = un_standing_complied_tt
-		un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
-	}
-	if = {
-		limit = { NOT = { has_global_variable = un_agency_icj } }
-		set_global_variable = un_agency_icj
-	}
-	change_relations = { country = scope:un_crt_claimant value = un_court_relations_complied }
-	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-	hidden_effect = {
-		scope:un_resolution ?= { set_variable = { name = un_res_court_response value = 1 } }
-		scope:un_crt_claimant ?= { trigger_event = { id = un_court.3 } }
+		hidden_effect = {
+			scope:un_resolution ?= { set_variable = { name = un_res_court_verdict value = 3 } }
+			scope:un_crt_claimant ?= { trigger_event = { id = un_court.3 } }
+		}
 	}
 }
 
@@ -295,20 +357,23 @@ un_court_defy = {
 		text = un_standing_defied_tt
 		un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }
 	}
-	custom_tooltip = {
-		text = un_court_defied_mandate_tt
-		set_variable = {
-			name = un_court_defied_claimant
-			value = scope:un_crt_claimant
-			days = un_court_defiance_days
+	if = {
+		limit = { exists = scope:un_crt_claimant }
+		custom_tooltip = {
+			text = un_court_defied_mandate_tt
+			set_variable = {
+				name = un_court_defied_claimant
+				value = scope:un_crt_claimant
+				days = un_court_defiance_days
+			}
+			set_variable = {
+				name = un_court_defied_region
+				value = scope:un_crt_region
+				days = un_court_defiance_days
+			}
 		}
-		set_variable = {
-			name = un_court_defied_region
-			value = scope:un_crt_region
-			days = un_court_defiance_days
-		}
+		change_relations = { country = scope:un_crt_claimant value = un_court_relations_defied }
 	}
-	change_relations = { country = scope:un_crt_claimant value = un_court_relations_defied }
 	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	hidden_effect = {
@@ -319,23 +384,38 @@ un_court_defy = {
 
 # A war goal against the region the court found the claimant has no claim to
 # costs it extra infamy, x E, for twenty years. The engine does not say which
-# goal was added, so the test is a goal for a state against a holder of part
-# of the region (un_court_bar_goal_in_region), and the charge falls at most
-# once in un_court_bar_charge_days: once per play, in practice.
+# goal was added, so the test is approximate: the play holds a conquer_state
+# or return_state goal, and the claimant holds one in a play against a holder
+# of part of the region (un_court_bar_goal_in_region), which may be a goal
+# for a state outside the region. The charge is keyed to the play
+# (un_court_bar_charged holds it; root is the play, as for
+# un_mandate_on_wargoal_added), so each play is charged once however many
+# goals are added to it.
 # Scope: the diplomatic play (on_wargoal_added's root); expects scope:actor
 un_court_bar_war_goal = {
 	if = {
 		limit = {
 			has_global_variable = un_founded
+			OR = {
+				has_play_goal = conquer_state
+				has_play_goal = return_state
+			}
 			scope:actor ?= {
 				has_variable = un_court_barred_region
-				NOT = { has_variable = un_court_bar_charged }
+				NOT = {
+					has_variable = un_court_bar_charged
+					var:un_court_bar_charged ?= root
+				}
 				un_court_bar_goal_in_region = yes
 			}
 		}
 		scope:actor = {
 			change_infamy = un_court_bar_infamy
-			set_variable = { name = un_court_bar_charged days = un_court_bar_charge_days }
+			set_variable = {
+				name = un_court_bar_charged
+				value = root
+				days = un_court_bar_days
+			}
 			if = {
 				limit = { is_ai = no }
 				post_notification = un_court_bar_notice
@@ -422,8 +502,10 @@ un_arms_embargo_select_target = {
 # The embargo carried. In full, for ten years: un_arms_embargo_target_modifier
 # x E. A target that voted for its own embargo gets the voluntary one instead,
 # as a vetoed resolution leaves it: half the penalty, for five years. Either
-# costs standing (36). A target that accepted a vetoed embargo is spared it,
-# as with sanctions.
+# costs standing (36). A vetoed embargo that the target also voted for is the
+# voluntary one as well, at the same cost: the two do not add up to more, and
+# do not cancel each other out (the loc promises the voluntary embargo in
+# both cases, without exception).
 # Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution and
 # scope:un_vote_target
 un_arms_embargo_on_carried = {
@@ -434,11 +516,17 @@ un_arms_embargo_on_carried = {
 		if = {
 			limit = { exists = scope:un_vote_target }
 			scope:un_vote_target = {
+				un_arms_embargo_impose_voluntary = yes
 				if = {
 					limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
-					un_arms_embargo_impose_voluntary = yes
 					custom_tooltip = {
 						text = un_standing_arms_embargo_partial_tt
+						un_standing_loss = { AMOUNT = un_standing_arms_embargo_partial_loss REASON = 36 }
+					}
+				}
+				else = {
+					custom_tooltip = {
+						text = un_standing_arms_embargo_accepted_tt
 						un_standing_loss = { AMOUNT = un_standing_arms_embargo_partial_loss REASON = 36 }
 					}
 				}
@@ -587,13 +675,25 @@ un_credentials_select_target = {
 # permanent seat (un_representation_monthly_update strips it), but it keeps
 # paying its dues. It loses standing (37); a member that voted for its own
 # suspension loses half as much.
+# The grounds are asked again first, as un_justice_monthly_update asks them
+# every month after: a target that has left the UN, or whose case has fallen
+# below un_credentials_restore_case (the figure that ends a suspension) while
+# the Assembly voted, is not suspended, and the motion is moot. The proposer's
+# event says so; the target is told nothing, as nothing changes for it (the
+# suspension notice comes from un_representation_monthly_update, which only
+# notices a change).
 # Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution and
 # scope:un_vote_target
 un_credentials_on_carried = {
-	custom_tooltip = un_vote_credentials_passed_tt
-	un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 	if = {
-		limit = { exists = scope:un_vote_target }
+		limit = {
+			scope:un_vote_target ?= {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				un_case_strength >= un_credentials_restore_case
+			}
+		}
+		custom_tooltip = un_vote_credentials_passed_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 		scope:un_vote_target = {
 			hidden_effect = {
 				set_variable = { name = un_credentials_months value = un_credentials_months_base }
@@ -613,6 +713,10 @@ un_credentials_on_carried = {
 			}
 		}
 		change_relations = { country = scope:un_vote_target value = un_credentials_relations }
+	}
+	else = {
+		custom_tooltip = un_vote_credentials_moot_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 	}
 }
 
@@ -635,9 +739,23 @@ un_credentials_chamber_preview = {
 # took their modifier; suspended credentials count down and end early once
 # the member's case falls below 30. The member's restoration is announced by
 # un_representation_monthly_update, which notices the change. The court's
-# records on the parties are timed variables and lapse by themselves.
+# records on the parties are timed variables and lapse by themselves. A
+# referral before the Assembly whose state has merged away is pointed at a
+# living state of its region (un_court_referral_restate).
 # Scope: none
 un_justice_monthly_update = {
+	if = {
+		limit = {
+			has_global_variable = un_active_resolution
+			global_var:un_active_resolution ?= {
+				has_tag = un_topic_court_referral
+				has_tag = un_res_voting
+				has_variable = un_res_court_region
+				NOT = { exists = var:un_res_court_state }
+			}
+		}
+		global_var:un_active_resolution = { un_court_referral_restate = yes }
+	}
 	every_country = {
 		limit = { has_variable = un_arms_embargo_months }
 		change_variable = { name = un_arms_embargo_months add = -1 }
@@ -670,9 +788,21 @@ un_justice_monthly_update = {
 
 # The UN dissolves (un_dissolve, via un_charter_on_dissolve), after every
 # country has left: the embargoes lift, suspensions end, and the court's
-# records lapse with the court.
+# records lapse with the court, its globals with them.
 # Scope: none
 un_justice_on_dissolve = {
+	if = {
+		limit = { has_global_variable = un_court_tabled_odds }
+		remove_global_variable = un_court_tabled_odds
+	}
+	if = {
+		limit = { has_global_variable = un_court_tabled_state }
+		remove_global_variable = un_court_tabled_state
+	}
+	if = {
+		limit = { has_global_variable = un_court_ruled_odds }
+		remove_global_variable = un_court_ruled_odds
+	}
 	every_country = {
 		limit = { has_variable = un_arms_embargo_months }
 		un_arms_embargo_clear = yes

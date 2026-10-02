@@ -254,7 +254,9 @@ hidden until Reform I carries (`un_charter_reform_ii_in_view`, through
 still ask `un_charter_has_reform`. The resolution triggers sort the topics as the table above
 says; `un_resolution_veto_blocks` names the four with no graduated form, and
 `un_resolution_asks_pledges` keeps an observer request out of `un_vote.3`'s pledge wording
-(the UN's budget pays the observers, so refusing it only denounces it). The Standing Force and
+(the UN's budget pays the observers, so refusing it only denounces it). `un_vote.3` books no
+standing or defiance for accepting or denouncing a court referral or a supervised referendum:
+only the country each names answers for it, in its own event (`un_court.2`, `un_referendum.1`). The Standing Force and
 the Fund each take a share of the budget (`un_force_budget_share` 0.1,
 `un_dev_fund_budget_share` 0.25, `un_charter_values.txt`), and the lending facility lends from
 what is left (`un_budget_free_weekly_value`). Each topic and each new agency has its own icon
@@ -265,12 +267,18 @@ the classification and the loc.
 
 1. **The World Court** (`un_justice_*`, `events/un_court_events.txt`).
    - Tabled by a member with standing 20 or more against a represented member that holds a
-     state it claims and is not its overlord, its subject or at war with it.
+     state it claims and is not its overlord, its subject or at war with it, the state not
+     being its capital.
    - The odds are computed on the state with the claimant as ROOT, clamped 10–90, from the
      terms above (a missing standing counts as 50). The odds at tabling are kept on the
      resolution and shown on the card and in the vote events; the chamber preview rounds them
      to ten. The court rules 30 days after the vote and **recomputes** the odds then.
-   - Obeying cedes the state (`set_state_owner`; moot if the holder no longer holds it): +1.5
+   - The state's region is stored at tabling (`un_res_court_region`), and a tabled state that
+     merges away during the vote is re-pointed monthly (`un_court_referral_restate`). The court
+     sits whenever a case was tabled; the case is moot, with nothing booked and the claimant
+     told, if the holder no longer holds the state, has made it its capital, or either party is
+     gone.
+   - Obeying cedes the state (`set_state_owner`): +1.5
      credibility × the holder's weight (ledger 27, the state), standing +2 (code 5), and the
      ICJ is founded if it was not. Defying costs −2.5 credibility × weight (ledger 28), standing
      −5 (code 26), the court's defiance record (6) and `un_court_defiance_modifier`, and opens
@@ -280,15 +288,19 @@ the classification and the loc.
      line says why.
    - A ruling for the holder removes the claim and, for twenty years, charges the claimant 10 ×
      E infamy when it holds a `conquer_state` or `return_state` goal against an owner of part of
-     the region (at most once in 180 days: `on_wargoal_added` does not say which goal it was).
+     the region, once per diplomatic play (`un_court_bar_charged` holds the play; only plays
+     holding such a goal, and only `play_participant_*` goals: `on_wargoal_added` does not say
+     which goal it was).
    - Vetoed: the court rolls the same odds as an advisory opinion; nothing changes hands; a
      holder it goes against loses 2 standing (code 38).
 2. **The arms embargo.** Ten years, × E, in seven military goods (small arms, ammunition,
    artillery, tanks, aeroplanes, man-o'-wars, ironclads): trade advantage −30%, military goods
-   +5% dearer; standing −6 (code 36). A target that voted for it, or a vetoed embargo, gets the
-   voluntary form: half strength for five years, −3. A country under an embargo cannot propose
-   one. The embargo lives in variables and the modifier is re-added monthly, for civil wars.
-3. **Credentials.** Proposer standing 20 or more. Sixty months or until the case falls below
+   +5% dearer; standing −6 (code 36). A target that voted for it, a vetoed embargo, or both, gets
+   the voluntary form: half strength for five years, −3. A country under an embargo cannot propose
+   one, and none names the proposer's ally, overlord or subject. The embargo lives in variables and the modifier is re-added monthly, for civil wars.
+3. **Credentials.** Proposer standing 20 or more; not against its ally, overlord or subject. At
+   carry the grounds are asked again: a target that has left the UN or whose case is below 30
+   is not suspended (moot). Sixty months or until the case falls below
    30. `un_credentials_suspended` makes the member unrepresented (`un_member_represented`,
    `un_representation_suspended`, `un_member_represented_by_record`), so every bar a suspended
    subject meets applies, it loses any permanent seat for good and cannot host the
@@ -299,10 +311,15 @@ the classification and the loc.
    peacekeeping and stabilisation mission's strength (`un_mission_strength_heads`), which then
    neither lapses unstaffed nor fails empty. The Strong-tier surcharge already covered
    stabilisation hosts. At Supranational `un_teeth_war_goal_surcharge` strikes, instead of
-   charging, every war goal of a listed type that a represented member initiating the play holds
+   charging, each goal of a listed type that a represented member initiating the play holds
    against a host of an active peacekeeping or stabilisation mission (`remove_war_goal`; a
-   notice to a human). Subjects and holders of a bound mandate are exempt, as from the
-   surcharge.
+   notice to a human), except a goal of the type the play opened with. A play opens with its
+   type's `war_goal`, so `is_diplomatic_play_type` tells which (`un_force_has_strikeable_goal`;
+   `test_un_force_play_types.py` pins the lists to vanilla's and the mod's plays). That goal, a
+   later goal of the same type, and unification goals (never struck: every formable adds such a
+   play) pay the surcharge, doubled, as before the Force; so does a suspended member. Subjects
+   and holders of a bound mandate are exempt, as from the surcharge. Only the initiator is
+   looked at, as by the surcharge.
 5. **Electoral observers** (mission type 4, `un_msn_electoral`). Opened in the requester's
    capital, or its most populous free state. Strength = E × the budget factor × one fixed head;
    no contributors or volunteers. At strength 1: host legitimacy +5 and ideological covert
@@ -312,6 +329,9 @@ the classification and the loc.
    the next monthly update closes it: delivery +1 (ledger 37, the state), host standing +3
    (code 45). It fails if the host is attacked or stops holding elections (ledger 38; abolishing
    elections also costs the host 2 standing, code 46), and lapses after 60 months without one.
+   Not opened if the requester is at war, or no longer holds elections, when the vote carries;
+   a campaign end counts only while the host holds the mission's state and its seat, else the
+   mission lapses.
 6. **The ceasefire** (`un_order_*`, `events/un_ceasefire_events.txt`). Only wars the aggressor
    fights on the attacking side against a represented member count, and the named victim must be
    a member defending in one of them. Each such month: war
@@ -366,7 +386,10 @@ the classification and the loc.
     binds) = floor(base × (5 − floor(months ÷ 60)) ÷ 5), the base being the arsenal in the
     party's first month; the clock does not run while the UN is Moribund. An unarmed party's
     ceiling is 0, so its programme is held: the proposal above named only armed parties, but a
-    party that may not hold the weapon may not build it either, which is the treaty's point. An armed country joining the UN later is not bound by it. Leaving while it
+    party that may not hold the weapon may not build it either, which is the treaty's point. An
+    armed member is bound only by its own ballot: a yes vote, or a no vote it then accepts (the
+    AI never accepts while armed). One that cast no ballot (Article 19, joined mid-vote), joins
+    later, or has its representation restored (`un_events.36`) stays outside. Leaving while it
     stands books a walk-out on the taboo ledger. Taboo: + authority ÷ 100 × 6, cap of the UN
     part 20.
 
@@ -394,7 +417,7 @@ the classification and the loc.
 - The chamber preview shows the court's odds rounded to ten (a tooltip cannot compute them from
   a temporary scope).
 - The court's war-goal surcharge cannot tell which goal was added, so any `conquer_state` or
-  `return_state` goal against an owner of part of the region counts.
+  `return_state` goal against an owner of part of the region counts, once per play.
 - One court record per country: a second defiance replaces the first.
 - The ceasefire's grace and standing loss are once per order, not monthly.
 - A ceasefire victim's state count that falls for any reason (another war, a release) counts as
@@ -409,12 +432,16 @@ the classification and the loc.
 - [ ] Each Reform I/II row reads "Requires Charter Reform I/II" until the reform, then tables;
       the Reform II rows and buttons appear only once Reform I carries.
 - [ ] World Court: odds on the card and in the vote; ruling a month later; obey cedes the state
-      (`set_state_owner`), defy opens the mandate case; `remove_claim` sticks.
+      (`set_state_owner`), defy opens the mandate case; `remove_claim` sticks. A play stored in a
+      country variable compares with `?= root` (the surcharge's once-per-play key); a merged-away
+      state and an annexed holder read as gone, and the case comes out moot.
+- [ ] Embargo and credentials pickers never name the proposer's ally (`has_treaty_alliance_with`).
 - [ ] Arms embargo: the trade-advantage penalty shows on the target's military goods.
 - [ ] Credentials: no ballot, seat stripped next month, dues still billed, notices.
 - [ ] Standing Force: an unstaffed peacekeeping mission does not lapse; at Supranational a
-      member's war goal against a host is struck (`remove_war_goal` on an opening goal is
-      unproven).
+      member's `dp_return_state` play against a host keeps its opening goal and pays double
+      infamy, and a `conquer_state` goal it then adds is struck while the play goes on
+      (the mod's first `is_diplomatic_play_type`).
 - [ ] Electoral mission: closes after a campaign ends; Election Interference's cut halved.
 - [ ] Ceasefire: war support falls monthly and the war ends by capitulation; at most five log
       entries per order. A peace that takes a state gives `.5` and no mission; a white peace
