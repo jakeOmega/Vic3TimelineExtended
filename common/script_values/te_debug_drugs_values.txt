@@ -1,0 +1,270 @@
+﻿# ============================================================================
+# DRUGS WEALTH PROBE — read only by te_debug_drugs_measure (console-only)
+# ============================================================================
+# Measures for drugs phase 2 (docs/superpowers/plans/2026-10-02-drugs-phase-2-
+# healthcare-demand.md § 1): how many people live in pops at each wealth level,
+# and which production methods make the world's Drugs. Nothing in normal play
+# evaluates these.
+# ============================================================================
+
+# ---- Population at or above a wealth level (country scope) -----------------
+te_dbg_drugs_pops_all = {
+	value = 0
+	every_scope_pop = {
+		add = total_size
+	}
+}
+
+te_dbg_drugs_pops_w10 = {
+	value = 0
+	every_scope_pop = {
+		limit = { wealth >= 10 }
+		add = total_size
+	}
+}
+
+te_dbg_drugs_pops_w15 = {
+	value = 0
+	every_scope_pop = {
+		limit = { wealth >= 15 }
+		add = total_size
+	}
+}
+
+te_dbg_drugs_pops_w20 = {
+	value = 0
+	every_scope_pop = {
+		limit = { wealth >= 20 }
+		add = total_size
+	}
+}
+
+te_dbg_drugs_pops_w25 = {
+	value = 0
+	every_scope_pop = {
+		limit = { wealth >= 25 }
+		add = total_size
+	}
+}
+
+te_dbg_drugs_pops_w30 = {
+	value = 0
+	every_scope_pop = {
+		limit = { wealth >= 30 }
+		add = total_size
+	}
+}
+
+te_dbg_drugs_pops_w35 = {
+	value = 0
+	every_scope_pop = {
+		limit = { wealth >= 35 }
+		add = total_size
+	}
+}
+
+te_dbg_drugs_pops_w40 = {
+	value = 0
+	every_scope_pop = {
+		limit = { wealth >= 40 }
+		add = total_size
+	}
+}
+
+te_dbg_drugs_pops_w50 = {
+	value = 0
+	every_scope_pop = {
+		limit = { wealth >= 50 }
+		add = total_size
+	}
+}
+
+# ---- Drugs buildings (country scope) ---------------------------------------
+te_dbg_drugs_lv_plantation = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_opium_plantation }
+		add = level
+	}
+}
+
+te_dbg_drugs_lv_pharma = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_synthetics_plant_opium }
+		add = level
+	}
+}
+
+# Drugs price in this country's market, as a multiple of the base price.
+# Callers check that the market trades Drugs first.
+te_dbg_drugs_market_price = {
+	value = 1
+	market = {
+		mg:opium = {
+			add = market_goods_pricier
+		}
+	}
+}
+
+# ---- World Drugs supply by production method (any scope) -------------------
+# Levels, not output: a plantation makes 20-55 Drugs a level and Pharmaceutical
+# Industries 30-345, so the results table weights each method by its output.
+te_dbg_drugs_world_levels_plantation_default = {
+	value = 0
+	every_country = {
+		every_scope_building = {
+			limit = {
+				is_building_type = building_opium_plantation
+				has_active_production_method = default_building_opium_plantation
+			}
+			add = level
+		}
+	}
+}
+
+te_dbg_drugs_world_levels_plantation_irrigation = {
+	value = 0
+	every_country = {
+		every_scope_building = {
+			limit = {
+				is_building_type = building_opium_plantation
+				has_active_production_method = automatic_irrigation_building_opium_plantation
+			}
+			add = level
+		}
+	}
+}
+
+te_dbg_drugs_world_levels_plantation_factory_farm = {
+	value = 0
+	every_country = {
+		every_scope_building = {
+			limit = {
+				is_building_type = building_opium_plantation
+				has_active_production_method = factory_farm_building_opium_plantation
+			}
+			add = level
+		}
+	}
+}
+
+te_dbg_drugs_world_levels_pharma_alkaloid = {
+	value = 0
+	every_country = {
+		every_scope_building = {
+			limit = {
+				is_building_type = building_synthetics_plant_opium
+				has_active_production_method = pm_pharma_alkaloid_extraction
+			}
+			add = level
+		}
+	}
+}
+
+te_dbg_drugs_world_levels_pharma_synthetic_chemistry = {
+	value = 0
+	every_country = {
+		every_scope_building = {
+			limit = {
+				is_building_type = building_synthetics_plant_opium
+				has_active_production_method = pm_pharma_synthetic_chemistry
+			}
+			add = level
+		}
+	}
+}
+
+te_dbg_drugs_world_levels_pharma_antibiotic = {
+	value = 0
+	every_country = {
+		every_scope_building = {
+			limit = {
+				is_building_type = building_synthetics_plant_opium
+				has_active_production_method = pm_pharma_antibiotic_fermentation
+			}
+			add = level
+		}
+	}
+}
+
+te_dbg_drugs_world_levels_pharma_synthetic_opium = {
+	value = 0
+	every_country = {
+		every_scope_building = {
+			limit = {
+				is_building_type = building_synthetics_plant_opium
+				has_active_production_method = pm_synthetic_opium
+			}
+			add = level
+		}
+	}
+}
+
+te_dbg_drugs_world_levels_pharma_biologics = {
+	value = 0
+	every_country = {
+		every_scope_building = {
+			limit = {
+				is_building_type = building_synthetics_plant_opium
+				has_active_production_method = pm_pharma_biologics
+			}
+			add = level
+		}
+	}
+}
+
+te_dbg_drugs_world_levels_pharma_precision = {
+	value = 0
+	every_country = {
+		every_scope_building = {
+			limit = {
+				is_building_type = building_synthetics_plant_opium
+				has_active_production_method = pm_pharma_precision_medicine
+			}
+			add = level
+		}
+	}
+}
+
+# The seven unique company buildings that make Drugs (unique_pms.txt).
+te_dbg_drugs_world_levels_company = {
+	value = 0
+	every_country = {
+		every_scope_building = {
+			limit = {
+				OR = {
+					has_active_production_method = pm_roche_tower
+					has_active_production_method = pm_pfizer_rd_campus
+					has_active_production_method = pm_genentech_dna_way_campus
+					has_active_production_method = pm_novo_nordisk_kalundborg_plant
+					has_active_production_method = pm_biocon_park
+					has_active_production_method = pm_bgi_national_genebank
+					has_active_production_method = pm_biontech_mainz_campus
+				}
+			}
+			add = level
+		}
+	}
+}
+
+# ---- World Drugs market (any scope) ----------------------------------------
+te_dbg_drugs_world_buy_orders = {
+	value = 0
+	every_market = {
+		limit = { mg:opium ?= { always = yes } }
+		mg:opium = {
+			add = market_goods_buy_orders
+		}
+	}
+}
+
+te_dbg_drugs_world_sell_orders = {
+	value = 0
+	every_market = {
+		limit = { mg:opium ?= { always = yes } }
+		mg:opium = {
+			add = market_goods_sell_orders
+		}
+	}
+}

@@ -1,0 +1,122 @@
+﻿# ============================================================================
+# DRUGS WEALTH PROBE — console-only (`event te_debug_drugs.1`)
+# ============================================================================
+# Drugs phase 2 § 1 (docs/superpowers/plans/2026-10-02-drugs-phase-2-healthcare-
+# demand.md). Every country gets its population and the share of it living in
+# pops at wealth 10, 15, 20, 25, 30, 35, 40 and 50 or more, its Drugs buildings,
+# its market's Drugs price and whether it bans Drugs. The observer (ROOT) also
+# gets the world totals. Read them from a save with
+#   scripts/analysis/save_country_probe.py <save> --var '^te_dbg_drugs_'
+# World totals sit on the observer, not in global variables, because that tool
+# reads country variables only. Re-running overwrites every value.
+# ============================================================================
+
+# THIS = a country, saved as scope:te_dbg_drugs_country. Shares are percentages
+# (0-100): save_country_probe.py rounds to three decimals, which would flatten a
+# 0-1 share of the richest bands in early saves to zero.
+te_debug_drugs_measure_band = {
+	set_variable = { name = te_dbg_drugs_n value = te_dbg_drugs_pops_w$W$ }
+	set_variable = {
+		name = te_dbg_drugs_w$W$
+		value = {
+			value = var:te_dbg_drugs_n
+			multiply = 100
+			divide = {
+				value = var:te_dbg_drugs_pop
+				min = 1
+			}
+		}
+	}
+	root = {
+		change_variable = { name = te_dbg_drugs_world_n$W$ add = scope:te_dbg_drugs_country.var:te_dbg_drugs_n }
+	}
+	remove_variable = te_dbg_drugs_n
+}
+
+# THIS = ROOT, after every country has been counted.
+te_debug_drugs_world_band = {
+	set_variable = {
+		name = te_dbg_drugs_world_w$W$
+		value = {
+			value = var:te_dbg_drugs_world_n$W$
+			multiply = 100
+			divide = {
+				value = var:te_dbg_drugs_world_pop
+				min = 1
+			}
+		}
+	}
+}
+
+te_debug_drugs_measure = {
+	set_variable = { name = te_dbg_drugs_world_pop value = 0 }
+	set_variable = { name = te_dbg_drugs_world_n10 value = 0 }
+	set_variable = { name = te_dbg_drugs_world_n15 value = 0 }
+	set_variable = { name = te_dbg_drugs_world_n20 value = 0 }
+	set_variable = { name = te_dbg_drugs_world_n25 value = 0 }
+	set_variable = { name = te_dbg_drugs_world_n30 value = 0 }
+	set_variable = { name = te_dbg_drugs_world_n35 value = 0 }
+	set_variable = { name = te_dbg_drugs_world_n40 value = 0 }
+	set_variable = { name = te_dbg_drugs_world_n50 value = 0 }
+
+	every_country = {
+		save_temporary_scope_as = te_dbg_drugs_country
+		set_variable = { name = te_dbg_drugs_pop value = te_dbg_drugs_pops_all }
+		root = {
+			change_variable = { name = te_dbg_drugs_world_pop add = scope:te_dbg_drugs_country.var:te_dbg_drugs_pop }
+		}
+		te_debug_drugs_measure_band = { W = 10 }
+		te_debug_drugs_measure_band = { W = 15 }
+		te_debug_drugs_measure_band = { W = 20 }
+		te_debug_drugs_measure_band = { W = 25 }
+		te_debug_drugs_measure_band = { W = 30 }
+		te_debug_drugs_measure_band = { W = 35 }
+		te_debug_drugs_measure_band = { W = 40 }
+		te_debug_drugs_measure_band = { W = 50 }
+
+		set_variable = { name = te_dbg_drugs_plant_lv value = te_dbg_drugs_lv_plantation }
+		set_variable = { name = te_dbg_drugs_pharma_lv value = te_dbg_drugs_lv_pharma }
+		if = {
+			limit = {
+				market ?= {
+					mg:opium ?= { always = yes }
+				}
+			}
+			set_variable = { name = te_dbg_drugs_price value = te_dbg_drugs_market_price }
+		}
+		else_if = {
+			limit = { has_variable = te_dbg_drugs_price }
+			remove_variable = te_dbg_drugs_price
+		}
+		if = {
+			limit = { is_banning_goods = g:opium }
+			set_variable = { name = te_dbg_drugs_banned value = 1 }
+		}
+		else_if = {
+			limit = { has_variable = te_dbg_drugs_banned }
+			remove_variable = te_dbg_drugs_banned
+		}
+	}
+
+	te_debug_drugs_world_band = { W = 10 }
+	te_debug_drugs_world_band = { W = 15 }
+	te_debug_drugs_world_band = { W = 20 }
+	te_debug_drugs_world_band = { W = 25 }
+	te_debug_drugs_world_band = { W = 30 }
+	te_debug_drugs_world_band = { W = 35 }
+	te_debug_drugs_world_band = { W = 40 }
+	te_debug_drugs_world_band = { W = 50 }
+
+	set_variable = { name = te_dbg_drugs_world_lv_plant_default value = te_dbg_drugs_world_levels_plantation_default }
+	set_variable = { name = te_dbg_drugs_world_lv_plant_irrigation value = te_dbg_drugs_world_levels_plantation_irrigation }
+	set_variable = { name = te_dbg_drugs_world_lv_plant_factory_farm value = te_dbg_drugs_world_levels_plantation_factory_farm }
+	set_variable = { name = te_dbg_drugs_world_lv_pharma_alkaloid value = te_dbg_drugs_world_levels_pharma_alkaloid }
+	set_variable = { name = te_dbg_drugs_world_lv_pharma_synth_chem value = te_dbg_drugs_world_levels_pharma_synthetic_chemistry }
+	set_variable = { name = te_dbg_drugs_world_lv_pharma_antibiotic value = te_dbg_drugs_world_levels_pharma_antibiotic }
+	set_variable = { name = te_dbg_drugs_world_lv_pharma_synth_opium value = te_dbg_drugs_world_levels_pharma_synthetic_opium }
+	set_variable = { name = te_dbg_drugs_world_lv_pharma_biologics value = te_dbg_drugs_world_levels_pharma_biologics }
+	set_variable = { name = te_dbg_drugs_world_lv_pharma_precision value = te_dbg_drugs_world_levels_pharma_precision }
+	set_variable = { name = te_dbg_drugs_world_lv_company value = te_dbg_drugs_world_levels_company }
+	set_variable = { name = te_dbg_drugs_world_buy value = te_dbg_drugs_world_buy_orders }
+	set_variable = { name = te_dbg_drugs_world_sell value = te_dbg_drugs_world_sell_orders }
+}
