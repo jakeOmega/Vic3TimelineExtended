@@ -2544,7 +2544,6 @@
  te_open_map_mode_survey_desc:0 "Hijack the [concept_migration_pull] map mode to color the world map by an arbitrary metric.\n\n#b The game must be paused.#! Pick a metric, then switch to the #b Migration Attraction#! map mode to view it. Re-open this decision to pick #b Clear#! before switching to another metric. The overlay self-cleans within 5 in-game days of unpausing."
  te_tt_break:0 "\n\n"
  tech_metals:0 "Tech-Critical Metals"
- telecommunications:0 "Telecommunications"
  terror_crackdown_modifier:0 "Security Crackdown"
  terror_crackdown_modifier_desc:0 "In response to a devastating attack, the government has expanded police powers and tightened security across the nation."
  terror_preempted_modifier:0 "Terrorist Plot Preempted"

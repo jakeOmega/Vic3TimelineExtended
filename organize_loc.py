@@ -14,9 +14,12 @@ It preserves UTF-8 BOM encoding required by the Clausewitz engine.
 Usage:
     python organize_loc.py            # Reorganize all loc files
     python organize_loc.py --dry-run  # Preview changes without writing
+    python organize_loc.py --check    # Write nothing; exit 1 if a run would change a file (CI)
 """
 
 import argparse
+import contextlib
+import io
 import os
 import re
 from collections import defaultdict
@@ -747,46 +750,55 @@ def _read_all_loc_files(loc_dir):
     return merged, files_read
 
 
-def _write_loc_file(path, sections):
-    """Write a categorised loc file with UTF-8 BOM.
+def _render_loc_file(sections):
+    """Return a categorised loc file's bytes: UTF-8 BOM, LF line endings.
 
     *sections* is a list of tuples: [(section_name, {key: value}), …]
     """
-    with open(path, "w", encoding="utf-8-sig") as f:
-        f.write("l_english:\n")
-        for section_name, entries in sections:
-            if not entries:
-                continue
-            f.write(f"\n#\n# {section_name}\n#\n")
-            for key in sorted(entries.keys()):
-                f.write(f" {key}:{entries[key]}\n")
+    lines = ["l_english:\n"]
+    for section_name, entries in sections:
+        if not entries:
+            continue
+        lines.append(f"\n#\n# {section_name}\n#\n")
+        for key in sorted(entries.keys()):
+            lines.append(f" {key}:{entries[key]}\n")
+    return "".join(lines).encode("utf-8-sig")
+
+
+def _write_loc_file(path, sections):
+    """Write a categorised loc file (see `_render_loc_file`)."""
+    with open(path, "wb") as f:
+        f.write(_render_loc_file(sections))
 
 
 # ---------------------------------------------------------------------------
 # Explicit-usage scanner
 # ---------------------------------------------------------------------------
 
+# The game folders whose files can name a loc key (common/customizable_localization/
+# included). The rest of the repo is left out: a word in prose in a docs dump
+# counted as a reference, and gitignored files (a .venv, the generated
+# docs/engine/commented_vanilla_*.txt) would make a local run disagree with CI's
+# `--check`. gfx/ is left out because no file there names a loc key and CI's
+# checks job does not check it out.
+_CONTENT_DIRS = ("common", "events", "gui", "map_data")
+
+
 def find_used_keys_explicitly(directory):
-    """Recursively finds all tokens that appear in .txt / .yml / .gui files."""
+    """Finds every token in the .txt / .yml / .gui files of the game folders."""
     used_keys = set()
-    for root, _, files in os.walk(directory):
-        # Skip the localization YAML folder itself (every key would trivially
-        # reference itself). Match the path COMPONENT "localization", not the
-        # substring — otherwise common/customizable_localization/ is also skipped
-        # and every key referenced there (custom_loc localization_key = X) is
-        # wrongly flagged unused.
-        if "localization" in os.path.relpath(root, directory).split(os.sep):
-            continue
-        for file in files:
-            if file.endswith((".txt", ".yml", ".gui")):
-                try:
-                    with open(
-                        os.path.join(root, file), "r",
-                        encoding="utf-8-sig", errors="ignore",
-                    ) as f:
-                        used_keys.update(re.findall(r"[\w\._-]+", f.read()))
-                except Exception:
-                    continue
+    for content_dir in _CONTENT_DIRS:
+        for root, _, files in os.walk(os.path.join(directory, content_dir)):
+            for file in files:
+                if file.endswith((".txt", ".yml", ".gui")):
+                    try:
+                        with open(
+                            os.path.join(root, file), "r",
+                            encoding="utf-8-sig", errors="ignore",
+                        ) as f:
+                            used_keys.update(re.findall(r"[\w\._-]+", f.read()))
+                    except Exception:
+                        continue
     return used_keys
 
 
@@ -833,8 +845,11 @@ def loc_value_refs(value):
 # Main organiser
 # ---------------------------------------------------------------------------
 
-def organize_all(project_directory, dry_run=False):
-    """Read all loc, categorise, write per-category output files."""
+def build_output_plan(project_directory):
+    """Read all loc and categorise it: `{filename: [(section, {key: value}), …]}`.
+
+    This is what `organize_all` writes and `find_drift` compares against.
+    """
     loc_dir = os.path.join(project_directory, "localization", "english")
 
     # ── 1. Read every .yml in the loc folder (top level only) ─────────────
@@ -945,6 +960,13 @@ def organize_all(project_directory, dry_run=False):
             output_plan[fname] = _event_sections(categorized[cat])
         else:
             output_plan[fname] = [(cat, categorized[cat])]
+    return output_plan
+
+
+def organize_all(project_directory, dry_run=False):
+    """Read all loc, categorise, write per-category output files."""
+    loc_dir = os.path.join(project_directory, "localization", "english")
+    output_plan = build_output_plan(project_directory)
 
     # ── 6. Report ─────────────────────────────────────────────────────────
     total_keys = sum(
@@ -978,14 +1000,70 @@ def organize_all(project_directory, dry_run=False):
     print(f"\nDone. {total_keys} keys across {len(output_plan)} files.")
 
 
+def find_drift(project_directory):
+    """Describe what `organize_all` would change, one line per finding; [] if nothing.
+
+    Writes nothing. Lists the keys a run would move between files (grouped by
+    source and destination), keys held in more than one file, and the files it
+    would create, delete or only re-sort.
+    """
+    loc_dir = os.path.join(project_directory, "localization", "english")
+    with contextlib.redirect_stdout(io.StringIO()):
+        output_plan = build_output_plan(project_directory)
+    expected = {fname: _render_loc_file(secs) for fname, secs in output_plan.items()}
+    target = {
+        key: fname
+        for fname, secs in output_plan.items()
+        for _, entries in secs
+        for key in entries
+    }
+
+    actual = {}
+    homes = defaultdict(list)  # key -> the files holding it now, in read order
+    for fname in sorted(os.listdir(loc_dir)):
+        path = os.path.join(loc_dir, fname)
+        if not (fname.endswith(".yml") and os.path.isfile(path)):
+            continue
+        with open(path, "rb") as f:
+            actual[fname] = f.read()
+        for key in _read_loc_file(path):
+            homes[key].append(fname)
+
+    lines, touched = [], set()
+    moves = defaultdict(list)
+    for key in sorted(target):
+        now = homes[key]
+        if len(now) > 1:
+            # The merge is a dict.update in file-name order, so the last copy wins.
+            lines.append(
+                f"{key}: in {', '.join(now)}; a run keeps one copy, in "
+                f"{target[key]}, with the text from {now[-1]}"
+            )
+            touched.update(now + [target[key]])
+        elif now != [target[key]]:
+            moves[(now[0], target[key])].append(key)
+            touched.update((now[0], target[key]))
+    for (src, dst), keys in sorted(moves.items()):
+        shown = ", ".join(keys[:5])
+        if len(keys) > 5:
+            shown += f", and {len(keys) - 5} more"
+        lines.append(f"{len(keys)} key(s) would move {src} -> {dst}: {shown}")
+    for fname in sorted(set(actual) | set(expected)):
+        if fname not in expected:
+            lines.append(f"{fname}: would be deleted")
+        elif fname not in actual:
+            lines.append(f"{fname}: would be created")
+        elif actual[fname] != expected[fname] and fname not in touched:
+            lines.append(f"{fname}: would be re-sorted or reformatted")
+    return lines
+
+
 # ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
 def regenerate(mod_state=None):
     """Auto-run entrypoint invoked by mod_state_server post-load."""
-    import contextlib
-    import io
     with contextlib.redirect_stdout(io.StringIO()):
         organize_all(mod_path, dry_run=False)
 
@@ -994,14 +1072,35 @@ def main():
     parser = argparse.ArgumentParser(
         description="Organize mod localization into per-category files.",
     )
-    parser.add_argument(
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
         "--dry-run",
         action="store_true",
         help="Preview the output plan without writing any files.",
     )
+    mode.add_argument(
+        "--check",
+        action="store_true",
+        help="Write nothing; exit 1 if a run would change any loc file (CI).",
+    )
     args = parser.parse_args()
+    if args.check:
+        drift = find_drift(mod_path)
+        if not drift:
+            print("localization/english/ matches organize_loc.py's output.")
+            return 0
+        print("localization/english/ does not match organize_loc.py's output:")
+        for line in drift:
+            print(f"  {line}")
+        print(
+            "\nRun `python3 organize_loc.py` and commit every file it changes, "
+            "deletions included. A new key prefix may need a categorize_key rule "
+            "(docs/auto_generated_files.md)."
+        )
+        return 1
     organize_all(mod_path, dry_run=args.dry_run)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
