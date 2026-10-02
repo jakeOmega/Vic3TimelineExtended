@@ -2168,7 +2168,7 @@ un_chamber_deleg_row = {
 # ROOT = the viewer
 un_chamber_deleg_member_lines = {
 	if = {
-		limit = { ROOT = { un_deleg_viewer_campaigns_on = { MEMBER = scope:un_deleg_m } } }
+		limit = { ROOT = { un_lobby_runs_campaign_on = { MEMBER = scope:un_deleg_m } } }
 		un_chamber_deleg_band = { VAR = un_lean_total }
 		custom_tooltip_no_bullet = je_un_chamber_deleg_reading_true
 	}

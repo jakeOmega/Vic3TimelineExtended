@@ -356,6 +356,87 @@ class CampaignTest(unittest.TestCase):
         self.assertIn("un_lobby_member_recompute", end)
 
 
+class CampaignRestartTest(unittest.TestCase):
+    """Lobbying a member we already lobby never restarts its campaign.
+
+    Reported in play: pressing Lobby For in the Delegations rows on a member
+    lobbied for months put the campaign back to month 0. Three things let it
+    happen, and each loads cleanly: the "already lobbying" gates asked the
+    member rather than the lobbyist, the row effect made the pact without
+    asking again, and the start replaced the running container.
+    """
+
+    _PACT_CHECK = re.compile(r"has_diplomatic_pact\s*=\s*\{[^{}]*\}")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _read(LOBBY_EFFECTS)
+        cls.triggers = _read(LOBBY_TRIGGERS)
+
+    def test_a_start_keeps_a_running_campaign(self):
+        start = _block(self.effects, "un_lobby_campaign_start")
+        self.assertNotIn("un_lobby_campaign_drop", start)
+        self.assertNotIn("destroy_container", start)
+        guard = start[: start.index("create_container")]
+        self.assertRegex(
+            guard,
+            r"NOT\s*=\s*\{\s*un_lobby_has_campaign_container\s*=\s*\{\s*TAG\s*=\s*un_lc_\$DIR\$\s+"
+            r"LOBBYIST\s*=\s*scope:un_lc_lobbyist_new\s+MEMBER\s*=\s*scope:un_lc_member_new\s*\}",
+        )
+
+    def test_the_container_check_matches_lobbyist_member_and_tag(self):
+        body = _block(self.triggers, "un_lobby_has_campaign_container")
+        self.assertIn("has_variable_list = un_res_campaigns", body)
+        for needle in ("has_tag = $TAG$", "var:un_lc_lobbyist ?= $LOBBYIST$", "var:un_lc_member ?= $MEMBER$"):
+            self.assertIn(needle, _sub_block(body, "any_in_list"))
+
+    def test_the_row_button_asks_again_before_making_a_pact(self):
+        lobby = _block(self.effects, "un_deleg_row_lobby")
+        guard = lobby[: lobby.index("create_diplomatic_pact")]
+        self.assertIn("NOT = { un_lobby_runs_campaign_on = { MEMBER = scope:target_country } }", guard)
+        self.assertRegex(
+            guard,
+            r"un_lobby_has_campaign_container\s*=\s*\{\s*TAG\s*=\s*un_lobby_campaign\s+"
+            r"LOBBYIST\s*=\s*ROOT\s+MEMBER\s*=\s*scope:target_country\s*\}",
+        )
+
+    def test_we_lobby_them_is_asked_of_the_lobbyist_as_the_initiator(self):
+        runs = _block(self.triggers, "un_lobby_runs_campaign_on")
+        for d in ("for", "against"):
+            with self.subTest(direction=d):
+                self.assertRegex(
+                    runs,
+                    r"has_diplomatic_pact\s*=\s*\{\s*who\s*=\s*\$MEMBER\$\s+type\s*=\s*un_lobby_" + d + r"_action\s+is_initiator\s*=\s*yes\s*\}",
+                )
+
+    def test_every_campaign_pact_check_names_the_initiator(self):
+        for path in (LOBBY_TRIGGERS, LOBBY_EFFECTS, LOBBYING_ACTIONS):
+            for m in self._PACT_CHECK.finditer(_read(path)):
+                if "un_lobby_" not in m.group(0):
+                    continue
+                with self.subTest(file=os.path.basename(path), check=m.group(0)):
+                    self.assertIn("is_initiator = yes", m.group(0))
+                    self.assertNotRegex(m.group(0), r"who\s*=\s*(ROOT|scope:un_lai_lobbyist)\b")
+
+    def test_every_gate_asks_the_lobbyist(self):
+        for name, negated in (
+            ("un_deleg_row_can_lobby", True),
+            ("un_deleg_row_bulk_ok", True),
+            ("un_deleg_row_lobbying", False),
+        ):
+            body = _block(self.triggers, name)
+            call = r"un_lobby_runs_campaign_on\s*=\s*\{\s*MEMBER\s*=\s*prev\s*\}"
+            if negated:
+                call = r"NOT\s*=\s*\{\s*" + call
+            with self.subTest(gate=name):
+                self.assertRegex(body, r"var:un_deleg_row_\$N\$\s*\?=\s*\{[\s\S]*?ROOT\s*=\s*\{\s*" + call)
+        pick = _sub_block(_sub_block(_block(self.effects, "un_lobby_ai_lobby"), "ordered_country"), "limit")
+        self.assertRegex(
+            pick,
+            r"scope:un_lai_lobbyist\s*=\s*\{\s*NOT\s*=\s*\{\s*un_lobby_runs_campaign_on\s*=\s*\{\s*MEMBER\s*=\s*prev\s*\}",
+        )
+
+
 
 class AiLobbyingTest(unittest.TestCase):
     """§5: the proposer lobbies for; the target, its allies and bloc leader against."""
@@ -481,7 +562,7 @@ class DelegationRowTest(unittest.TestCase):
 
     def test_a_campaigner_reads_the_true_band_and_everyone_else_the_estimate(self):
         lines = _block(_read(DISPLAY), "un_chamber_deleg_member_lines")
-        self.assertRegex(lines, r"un_deleg_viewer_campaigns_on[\s\S]*?un_chamber_deleg_band\s*=\s*\{\s*VAR\s*=\s*un_lean_total\s*\}[\s\S]*?else[\s\S]*?un_chamber_deleg_band\s*=\s*\{\s*VAR\s*=\s*un_lean_shown\s*\}")
+        self.assertRegex(lines, r"ROOT\s*=\s*\{\s*un_lobby_runs_campaign_on\s*=\s*\{\s*MEMBER\s*=\s*scope:un_deleg_m\s*\}[\s\S]*?un_chamber_deleg_band\s*=\s*\{\s*VAR\s*=\s*un_lean_total\s*\}[\s\S]*?else[\s\S]*?un_chamber_deleg_band\s*=\s*\{\s*VAR\s*=\s*un_lean_shown\s*\}")
 
 
 
@@ -605,8 +686,7 @@ class BulkLobbyTest(unittest.TestCase):
         for needle in (
             "un_lobby_member_lobbyable = yes",
             "un_deleg_band_open_$DIR$ = yes",
-            "type = un_lobby_for_action",
-            "type = un_lobby_against_action",
+            "NOT = { un_lobby_runs_campaign_on = { MEMBER = prev } }",
             "can_send_diplomatic_action",
         ):
             self.assertIn(needle, ok)

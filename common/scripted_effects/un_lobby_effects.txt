@@ -334,7 +334,8 @@ un_lobby_settle_pledge = {
 # A campaign starts from the pact's accept_effect (the diplomacy panel), from
 # the chamber's Lobby buttons and from the AI (un_lobby_ai_monthly), which
 # create the pact and then call un_lobby_campaign_start themselves; the start
-# is idempotent, so a path that runs both is harmless. It ends when the pact
+# is idempotent and never resets a running campaign, so a path that runs both,
+# or a second press on a member already lobbied, is harmless. It ends when the pact
 # breaks (the break hooks call un_lobby_campaign_end, which drops the
 # campaign's shift at once), when its member votes (un_lobby_campaigns_end_on,
 # from un_resolution_record_vote / _veto) and when the resolution closes
@@ -346,10 +347,16 @@ un_lobby_settle_pledge = {
 # ============================================================================
 
 # Start a $DIR$ campaign by the scoped lobbyist on scope:target_country, on the
-# resolution in session, replacing a container already there for the same
-# lobbyist, member and direction. Leaves scope:un_lc_new at the container.
-# Callers guard any use of scope:un_lc_new with `exists`: when an action's
-# tooltip renders its accept_effect the container is not created.
+# resolution in session. If the lobbyist already runs a $DIR$ campaign on that
+# member, its container is left exactly as it is, months and shift and all:
+# starting a campaign never resets one. Every start comes through here (the
+# chamber's buttons, the pact's accept_effect, the AI, the monthly adoption),
+# so no path can wipe a running campaign's progress, whatever its own gate
+# said. (It used to replace the container, and a press of Lobby For on a
+# member lobbied for months put it back to month 0.) Leaves scope:un_lc_new
+# at the container when it makes one. Callers guard any use of
+# scope:un_lc_new with `exists`: when an action's tooltip renders its
+# accept_effect the container is not created.
 # Parameters: $DIR$ = for | against
 # Scope: the lobbyist; scope:target_country = the member
 un_lobby_campaign_start = {
@@ -359,15 +366,21 @@ un_lobby_campaign_start = {
 		if = {
 			limit = { has_tag = un_res_voting }
 			save_scope_as = un_lc_start_res
-			un_lobby_campaign_drop = {
-				DIR = $DIR$
-				LOBBYIST = scope:un_lc_lobbyist_new
-				MEMBER = scope:un_lc_member_new
-			}
 		}
 	}
 	if = {
-		limit = { scope:un_lc_start_res ?= { has_tag = un_res_voting } }
+		limit = {
+			scope:un_lc_start_res ?= {
+				has_tag = un_res_voting
+				NOT = {
+					un_lobby_has_campaign_container = {
+						TAG = un_lc_$DIR$
+						LOBBYIST = scope:un_lc_lobbyist_new
+						MEMBER = scope:un_lc_member_new
+					}
+				}
+			}
+		}
 		create_container = {
 			tags = { un_lobby_campaign un_lc_$DIR$ }
 			parent = scope:un_lc_lobbyist_new
@@ -395,12 +408,10 @@ un_lobby_campaign_start = {
 un_lobby_campaign_drop = {
 	while = {
 		limit = {
-			has_variable_list = un_res_campaigns
-			any_in_list = {
-				variable = un_res_campaigns
-				has_tag = un_lc_$DIR$
-				var:un_lc_lobbyist ?= $LOBBYIST$
-				var:un_lc_member ?= $MEMBER$
+			un_lobby_has_campaign_container = {
+				TAG = un_lc_$DIR$
+				LOBBYIST = $LOBBYIST$
+				MEMBER = $MEMBER$
 			}
 		}
 		random_in_list = {
@@ -665,14 +676,10 @@ un_lobby_campaign_adopt_one = {
 		limit = {
 			scope:un_lc_res_t = {
 				NOT = {
-					AND = {
-						has_variable_list = un_res_campaigns
-						any_in_list = {
-							variable = un_res_campaigns
-							has_tag = un_lc_$DIR$
-							var:un_lc_lobbyist ?= scope:un_lca_lobbyist
-							var:un_lc_member ?= scope:un_lca_member
-						}
+					un_lobby_has_campaign_container = {
+						TAG = un_lc_$DIR$
+						LOBBYIST = scope:un_lca_lobbyist
+						MEMBER = scope:un_lca_member
 					}
 				}
 			}
@@ -903,8 +910,13 @@ un_lobby_ai_lobby = {
 				un_lobby_member_lobbyable = yes
 				NOT = { this = scope:un_lai_lobbyist }
 				un_lobby_true_lean_in = { LOW = $LOW$ HIGH = $HIGH$ }
-				NOT = { has_diplomatic_pact = { who = scope:un_lai_lobbyist type = un_lobby_for_action } }
-				NOT = { has_diplomatic_pact = { who = scope:un_lai_lobbyist type = un_lobby_against_action } }
+				# Asked from the lobbyist's side (un_lobby_runs_campaign_on). The
+				# member-side form is the one that let the chamber's Lobby button
+				# through on a member already lobbied; here it would let the AI
+				# pick a member it already lobbies again.
+				scope:un_lai_lobbyist = {
+					NOT = { un_lobby_runs_campaign_on = { MEMBER = prev } } # REVIEWED 2026-10-02: prev is the candidate member, the ordered_country scope
+				}
 			}
 			order_by = un_lobby_ai_target_order
 			max = 1
@@ -932,6 +944,11 @@ un_lobby_ai_lobby = {
 
 # Start a $DIR$ campaign on the member in row $N$: create the pact, then the
 # campaign (the pact's accept_effect does not run for a pact made by script).
+# Does nothing if we already campaign on the member, either way, by pact or by
+# a container the monthly reap has yet to collect: a press on a member we
+# already lobby can neither restart its campaign nor make a second pact. The
+# Lobby buttons hide in that case (un_deleg_row_lobbying); this is the check
+# that holds if a gate ever lets one through, and it covers the bulk run too.
 # Parameters: $N$ = 0-23, $DIR$ = for | against
 # Scope: the viewer (ROOT)
 un_deleg_row_lobby = {
@@ -942,7 +959,19 @@ un_deleg_row_lobby = {
 		}
 	}
 	if = {
-		limit = { exists = scope:target_country }
+		limit = {
+			exists = scope:target_country
+			NOT = { un_lobby_runs_campaign_on = { MEMBER = scope:target_country } }
+			NOT = {
+				global_var:un_active_resolution ?= {
+					un_lobby_has_campaign_container = {
+						TAG = un_lobby_campaign
+						LOBBYIST = ROOT
+						MEMBER = scope:target_country
+					}
+				}
+			}
+		}
 		custom_tooltip = un_lobby_campaign_$DIR$_effect_tt
 		custom_tooltip = un_deleg_campaign_cost_tt
 		hidden_effect = {
@@ -969,12 +998,12 @@ un_deleg_row_stop = {
 		custom_tooltip = un_deleg_stop_tt
 		hidden_effect = {
 			if = {
-				limit = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_for_action } }
+				limit = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_for_action is_initiator = yes } }
 				remove_diplomatic_pact = { country = scope:target_country type = un_lobby_for_action }
 				un_lobby_campaign_end = { DIR = for }
 			}
 			if = {
-				limit = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_against_action } }
+				limit = { has_diplomatic_pact = { who = scope:target_country type = un_lobby_against_action is_initiator = yes } }
 				remove_diplomatic_pact = { country = scope:target_country type = un_lobby_against_action }
 				un_lobby_campaign_end = { DIR = against }
 			}
