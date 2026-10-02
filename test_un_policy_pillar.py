@@ -8,6 +8,8 @@ Credibility keeps a ten-year half-life and a -25..+25 range; delivery and order
 keep the four-year half-life. These checks pin the wiring: the modifier is
 registered and localized, the pillar is in the target, snapshotted and shown, the
 good-standing rule is applied and explained, and no ledger path can write to it.
+The grants are pinned in GRANTS: a new one, or a changed value, fails here until
+this table and the docs (un_redesign_design.md §0.10, the player guide) agree.
 """
 import glob
 import math
@@ -28,6 +30,63 @@ MEMBERSHIP_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "un_memb
 MODIFIER = "country_un_authority_target_add"
 # The modifier given a value (a grant), not read (`modifier:...`) or defined (`... = {`).
 GRANT = re.compile(rf"(?<![:\w]){MODIFIER}\s*=(?!\s*\{{)")
+GRANT_VALUE = re.compile(rf"(?<![:\w]){MODIFIER}\s*=\s*(-?[\d.]+)")
+
+# Every grant: (file, top-level entity) -> value. The institution's is per level
+# of investment; the PMs' are workforce-scaled, and each building is one level in
+# the world (the palaces are unique = yes; the HQ is the host's alone);
+# nd_taboo_possession_cost is applied with a multiplier of 0..1.
+GRANTS = {
+    ("common/laws/extra_laws.txt", "law_total_war"): -2,
+    ("common/laws/extra_laws.txt", "law_war_crimes_forbidden"): 0.5,
+    ("common/laws/extra_laws.txt", "law_humanitarian_regulations"): 1,
+    ("common/laws/extra_laws.txt", "law_limited_war"): 1.5,
+    ("common/laws/extra_laws.txt", "INJECT:law_isolationism"): -1.5,
+    ("common/institutions/extra_institutions.txt", "institution_ministry_of_international_aid"): 0.15,
+    ("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_1"): 0.5,
+    ("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_3"): -0.5,
+    ("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_4"): -1,
+    ("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_5"): -1.5,
+    ("common/static_modifiers/nuclear_taboo_modifiers.txt", "nd_taboo_possession_cost"): -1,
+    ("common/production_methods/unique_pms.txt", "pm_un_headquarters"): 1,
+    ("common/production_methods/unique_pms.txt", "pm_wonder_peace_palace"): 0.5,
+    ("common/production_methods/unique_pms.txt", "pm_wonder_palais_des_nations"): 0.5,
+}
+MAX_INSTITUTION_INVESTMENT = 9  # common/defines/extra_defines.txt
+
+
+def _entities(text):
+    """(name, body) for every top-level `name = {`, INJECT:/REPLACE: included."""
+    text = _strip_comments(text)
+    for m in re.finditer(r"^((?:INJECT:|REPLACE:|REPLACE_OR_CREATE:)?[\w.]+)\s*=\s*\{", text, re.M):
+        depth = 0
+        for j in range(m.end() - 1, len(text)):
+            if text[j] == "{":
+                depth += 1
+            elif text[j] == "}":
+                depth -= 1
+                if depth == 0:
+                    yield m.group(1), text[m.end():j]
+                    break
+
+
+def _grants_in_tree():
+    found = {}
+    paths = glob.glob(os.path.join(REPO, "common", "**", "*.txt"), recursive=True)
+    paths += glob.glob(os.path.join(REPO, "events", "**", "*.txt"), recursive=True)
+    for path in paths:
+        text = _read(path)
+        if not GRANT.search(_strip_comments(text)):
+            continue
+        rel = os.path.relpath(path, REPO).replace(os.sep, "/")
+        for name, body in _entities(text):
+            values = GRANT_VALUE.findall(body)
+            if values:
+                assert len(values) == 1, f"{rel}: {name} grants {MODIFIER} twice"
+                found[(rel, name)] = float(values[0])
+            else:
+                assert not GRANT.search(body), f"{rel}: {name} grants {MODIFIER} a non-literal"
+    return found
 
 _LOC_LINE = re.compile(r'^ ([\w.]+):\d* "(.*)"')
 
@@ -62,20 +121,17 @@ class ModifierTest(unittest.TestCase):
         self.assertIn(MODIFIER, loc)
         self.assertIn(f"{MODIFIER}_desc", loc)
 
-    def test_nothing_grants_it_yet(self):
-        """This change only adds the hook; a grant is a balance decision of its own.
-
-        A grant is the modifier assigned a value in any modifier block, anywhere a
+    def test_the_grants_are_exactly_the_table(self):
+        """A grant is the modifier assigned a value in any modifier block, anywhere a
         modifier can live: laws, institutions, technologies, static modifiers,
         production methods, principles, treaty articles, character traits. Reads
-        (`modifier:...`) and the type definition (`... = {`) are not grants."""
-        grants = []
-        paths = glob.glob(os.path.join(REPO, "common", "**", "*.txt"), recursive=True)
-        paths += glob.glob(os.path.join(REPO, "events", "**", "*.txt"), recursive=True)
-        for path in paths:
-            if GRANT.search(_strip_comments(_read(path))):
-                grants.append(os.path.relpath(path, REPO))
-        self.assertEqual(grants, [], "a grant landed; update this test and the docs")
+        (`modifier:...`) and the type definition (`... = {`) are not grants. Each
+        is a balance decision: add it to GRANTS, §0.10's table and the guide."""
+        self.assertEqual(_grants_in_tree(), {k: float(v) for k, v in GRANTS.items()})
+
+    def test_two_decimals_show_a_per_level_grant(self):
+        body = _block(_read(MODIFIER_TYPES), MODIFIER)
+        self.assertIn("decimals = 2", body, "0.15 a level would round in the tooltips")
 
     def test_the_grant_pattern_sees_a_grant(self):
         """The scan above would catch `country_un_authority_target_add = 1.5` and
@@ -85,6 +141,63 @@ class ModifierTest(unittest.TestCase):
         self.assertNotRegex(f"value = modifier:{MODIFIER}", GRANT)
         self.assertNotRegex(f"modifier:{MODIFIER} > 0", GRANT)
         self.assertNotRegex(f"{MODIFIER} = {{\n\tcolor = good", GRANT)
+
+
+class GrantShapeTest(unittest.TestCase):
+    """The grants' internal order and size."""
+
+    def _g(self, path, name):
+        return GRANTS.get((path, name), 0)
+
+    def test_the_rules_of_war_rise_with_restraint(self):
+        laws = "common/laws/extra_laws.txt"
+        ladder = [self._g(laws, law) for law in (
+            "law_total_war", "law_traditional_rules_of_war", "law_war_crimes_forbidden",
+            "law_humanitarian_regulations", "law_limited_war")]
+        self.assertEqual(ladder, sorted(ladder))
+        self.assertLess(ladder[0], 0)
+        self.assertEqual(ladder[1], 0, "traditional rules of war are the neutral rung")
+
+    def test_the_doctrines_fall_with_readiness_to_use(self):
+        mods = "common/static_modifiers/nuclear_deterrence_modifiers.txt"
+        ladder = [self._g(mods, f"nd_doctrine_mod_{n}") for n in range(1, 6)]
+        self.assertEqual(ladder, sorted(ladder, reverse=True))
+        self.assertGreater(ladder[0], 0)
+        self.assertEqual(ladder[1], 0, "existential deterrence is the baseline")
+
+    def test_one_countrys_stack_stays_inside_the_pillar(self):
+        """The weights sum to about 10, so one country holding the whole positive
+        or negative stack at weight 1 must stay well inside +-25 (§0.10 ruling 4).
+        Positive: the best Rules of War law, the aid ministry at the cap, no first
+        use, the HQ and both palaces. Negative: Total War, Isolationism, nuclear
+        warfighting and a full possession burden."""
+        laws = "common/laws/extra_laws.txt"
+        best = (self._g(laws, "law_limited_war")
+                + self._g("common/institutions/extra_institutions.txt",
+                          "institution_ministry_of_international_aid") * MAX_INSTITUTION_INVESTMENT
+                + self._g("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_1")
+                + sum(self._g("common/production_methods/unique_pms.txt", pm) for pm in (
+                    "pm_un_headquarters", "pm_wonder_peace_palace", "pm_wonder_palais_des_nations")))
+        worst = (self._g(laws, "law_total_war") + self._g(laws, "INJECT:law_isolationism")
+                 + self._g("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_5")
+                 + self._g("common/static_modifiers/nuclear_taboo_modifiers.txt", "nd_taboo_possession_cost"))
+        self.assertLessEqual(best, 5.5)
+        self.assertGreaterEqual(worst, -6.5)
+
+    def test_no_grant_rides_on_the_uns_own_enforcement(self):
+        """A modifier applied with multiplier = un_enforcement (or the convention
+        multiplier) scales with authority's tier: a grant on it would feed
+        authority back into its own target."""
+        granted = {name for (_, name) in GRANTS}
+        apply = re.compile(r"add_modifier\s*=\s*\{([^{}]*)\}")
+        for path in glob.glob(os.path.join(REPO, "common", "**", "*.txt"), recursive=True) + \
+                glob.glob(os.path.join(REPO, "events", "*.txt")):
+            for m in apply.finditer(_strip_comments(_read(path))):
+                block = m.group(1)
+                name = re.search(r"name\s*=\s*(\w+)", block)
+                if name and name.group(1) in granted:
+                    self.assertNotRegex(block, r"multiplier\s*=\s*(un_enforcement|un_convention_multiplier)",
+                                        f"{path}: {name.group(1)}")
 
 
 class PillarTest(unittest.TestCase):

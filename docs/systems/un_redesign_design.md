@@ -8,6 +8,7 @@
 > representation) and §0.9 (what a revolution's winner keeps) are pending in-game
 > verification.
 > Read
+> [§0.11](#011-the-first-policy-grants),
 > [§0.10](#010-the-policy-pillar-and-a-slower-credibility-ledger),
 > [§0.9](#09-civil-wars-the-state-mirrors),
 > [§0.8](#08-subjects-diplomatic-autonomy-and-suspended-representation),
@@ -29,6 +30,89 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.11 The first Policy grants
+
+Built 2026-10-02 at the mod owner's request, from a review of where
+`country_un_authority_target_add` (§0.10) belongs. Not yet seen in a running game.
+
+**The grants.** Each is a standing choice a country keeps: a law, an institution, a doctrine,
+a building. One-off acts stay in the ledgers. A positive figure counts only for a member in
+good standing; a negative one counts for anyone (§0.10 ruling 2). All are pinned in
+`test_un_policy_pillar.py` (`GRANTS`).
+
+| Source | Value | Where |
+|---|---|---|
+| Total War | −2 | `extra_laws.txt` |
+| Traditional Rules of War | 0 | — |
+| War Crimes Forbidden | +0.5 | `extra_laws.txt` |
+| Humanitarian Regulations | +1 | `extra_laws.txt` |
+| Limited War | +1.5 | `extra_laws.txt` |
+| Isolationism (vanilla) | −1.5 | `INJECT:law_isolationism`, `extra_laws.txt` |
+| Ministry of International Aid | +0.15 a level (+1.35 at the cap of 9) | the institution, `extra_institutions.txt` |
+| Doctrine: No First Use / Existential Deterrence / Flexible First Use / Compellence / Warfighting | +0.5 / 0 / −0.5 / −1 / −1.5 | `nd_doctrine_mod_*`, on `je_nuclear_program` |
+| The Burden of the Bomb | −1 × burden (0..1) | `nd_taboo_possession_cost`, on `je_nuclear_program` |
+| United Nations Headquarters (the host) | +1 | `pm_un_headquarters` |
+| Peace Palace | +0.5 | `pm_wonder_peace_palace` |
+| Palais des Nations | +0.5 | `pm_wonder_palais_des_nations` |
+
+**Rulings.**
+
+1. **Sizing.** The weights sum to about 10, so a value every country held would move Policy by
+   about 10× that value. One country's whole positive stack is +5.35 at weight 1 (Limited War,
+   the aid ministry at 9, No First Use, the HQ and both palaces); a committed member great
+   power without the buildings holds about +2.5 to +3.4. The whole negative stack is −6
+   (Total War, Isolationism, Warfighting, a full burden). The test holds the two stacks to
+   +5.5 and −6.5. A rogue superpower at ×5 can therefore take the pillar to its floor alone;
+   that is intended.
+2. **Nothing rides on the UN's own enforcement.** No grant sits on a modifier applied with
+   `multiplier = un_enforcement` or `un_convention_multiplier`, whose tier-driven multiplier
+   would feed authority back into its own target (tested).
+3. **The taboo loop is accepted.** The nuclear taboo reads UN authority (its "un" part, up to
+   +12 × authority / 100), and Burden of the Bomb scales with the taboo. Authority up, taboo up,
+   burden up, Policy down: a damping loop, with a gain of about 0.01 per point of authority for
+   one armed great power, slowed further by the taboo's 36-month approach.
+4. **Journal-entry modifiers count.** The doctrines and Burden of the Bomb sit on
+   `je_nuclear_program`. A journal entry's modifiers apply to its country and are read back
+   with `modifier:`: the banking tools on `je_banking_cycle` carry
+   `country_banking_intervention_max_add`, which the country reads that way in 44 places.
+   **VERIFY IN-GAME** for this modifier (checklist).
+5. **The palaces are one in the world.** Both are `unique = yes`: one level of the building in
+   the whole world (the engine's definition; `docs/vanilla/wonder_buildings_reference.md`
+   FAQ 1). The HQ is the host's alone. So each building grant is held by one country at most.
+6. **Left out on purpose.**
+   - Technologies: nearly everyone gets them, so they would act as a retuned base.
+   - Human-rights laws: the rights regime already penalises them.
+   - The programme and stance modifiers: funding and commitment already count them.
+   - Modifiers scaled by enforcement: feedback (ruling 2).
+   - Decrees: their modifiers sit on the state.
+   - Bloc principles, colonial laws, treaty articles and the civil-rights buttons: a second
+     tier, for a later change.
+7. **The AI does not weigh it.** It is script-only, so it does not move the AI's law or doctrine
+   choices.
+
+### Files
+
+- `common/laws/extra_laws.txt`: the Rules of War laws and the Isolationism INJECT.
+- `common/institutions/extra_institutions.txt`: the Ministry of International Aid.
+- `common/static_modifiers/nuclear_deterrence_modifiers.txt` (doctrines) and
+  `nuclear_taboo_modifiers.txt` (Burden of the Bomb).
+- `common/production_methods/unique_pms.txt`: the HQ and the two palaces.
+- `common/modifier_type_definitions/un_membership_modifier_types.txt`: two decimals (0.15 a
+  level), and the list of grants.
+- `test_un_policy_pillar.py`: `GRANTS`, the ladders, the stacks, the enforcement guard.
+
+### IN-GAME VERIFICATION CHECKLIST (§0.11)
+
+- [ ] A member under Limited War: the law's tooltip lists "UN Authority Target +1.50", and the
+      Policy tooltip's "Ours" line counts it times our weight.
+- [ ] A member on No First Use: the Nuclear Weapons entry lists the doctrine's +0.50, and the
+      "Ours" line includes it. This confirms journal-entry modifiers reach `modifier:`.
+- [ ] A non-member under Limited War counts +0.00, with the red note; under Total War it counts
+      −2 × its weight.
+- [ ] The Ministry of International Aid at level 3 shows +0.45.
 
 ---
 
@@ -88,12 +172,10 @@ same day, also at the owner's request. Not yet seen in a running game.
    log entries and no `un_ledger_policy`. A modifier that is gone stops counting at the next
    monthly update. `un_ledger_record` is never called with `PILLAR = policy`
    (`test_un_policy_pillar.py` fails if anything does).
-4. **Nothing grants the modifier yet.** The first grant, the Ministry of International Aid,
-   is a balance decision for its own change. The pillar is a no-op at 0 until then.
-   `test_un_policy_pillar.py` fails when a grant (the modifier given a value) appears anywhere
-   under `common/` or `events/`. Sizing for that change: the weights sum to about 10, so a value
-   every country holds moves the pillar by about 10× that value; keep one country's whole stack
-   within about ±3, and never put the modifier on a modifier applied with
+4. **The grants were a change of their own** (§0.11). `test_un_policy_pillar.py` pins every grant
+   (the modifier given a value anywhere under `common/` or `events/`) and fails on one that is
+   not in its table. Sizing: the weights sum to about 10, so a value every country holds moves
+   the pillar by about 10× that value. Never put the modifier on a modifier applied with
    `multiplier = un_enforcement` (or `un_convention_multiplier`), whose tier-driven multiplier
    would feed authority back into its own target.
 5. **Why credibility slows and widens together.** A quiet world feeds the ledger about 0.1 a
@@ -2492,6 +2574,7 @@ of this file, as `monetary_policy_design.md` does.
 | ledger decay (credibility) | 10-year half-life, ×0.99424 a month (§0.10) | §3.4 |
 | credibility range | −25 … +25 (§0.10) | §3.2 |
 | policy pillar | `country_un_authority_target_add` × `un_actor_weight`, summed, −25 … +25 (§0.10) | §3.2 |
+| policy grants | Rules of War −2 … +1.5, Isolationism −1.5, International Aid +0.15 a level, doctrine +0.5 … −1.5, Burden of the Bomb −1 × burden, HQ +1, Peace Palace and Palais des Nations +0.5 (§0.11) | §0.11 |
 | actor weight: reference share / cap | 0.10 of world prestige = ×1 / ×5 | §3.1 |
 | funding proxy until dues | −5 + 15 × programme ratio (§0.1 ruling 1) | §3.2 |
 | tier boundaries | 20 / 45 / 70 / 85 | §4.1 |

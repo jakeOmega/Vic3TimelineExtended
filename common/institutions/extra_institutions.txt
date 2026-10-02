@@ -193,6 +193,10 @@ institution_ministry_of_international_aid = {
 	modifier = {
 		country_institution_cost_institution_ministry_of_foreign_affairs_mult = 0.2
 		country_institution_impact_institution_ministry_of_foreign_affairs_mult = 0.05
+		# UN authority: the Policy pillar (un_redesign_design.md §0.10), per level
+		# of investment, so +1.35 at the mod's cap of 9. Counts only while we are a
+		# member not undermining the UN: aid outside it goes through our own channels.
+		country_un_authority_target_add = 0.15
 	}
 }
 

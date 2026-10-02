@@ -33,8 +33,17 @@ country_un_institutional_alignment = {
 # authority target, held to -25 .. +25 from all sources together. A negative
 # value pulls the target down. It counts in full only for a member in good
 # standing (un_policy_counts_in_full: in the UN, not undermining it); anyone
-# else's total counts only when negative. Nothing grants it yet; any law,
-# institution, technology or static modifier may carry it.
+# else's total counts only when negative. Two decimals: the Ministry of
+# International Aid grants 0.15 a level and the possession cost is scaled by a
+# burden of 0..1.
+# Granted by (the table in un_redesign_design.md §0.10, pinned by
+# test_un_policy_pillar.py):
+#   - laws: the Rules of War (extra_laws.txt) and Isolationism (INJECT there)
+#   - institution_ministry_of_international_aid (extra_institutions.txt)
+#   - nd_doctrine_mod_1/3/4/5 (nuclear_deterrence_modifiers.txt) and
+#     nd_taboo_possession_cost (nuclear_taboo_modifiers.txt)
+#   - pm_un_headquarters, pm_wonder_peace_palace, pm_wonder_palais_des_nations
+#     (unique_pms.txt)
 # Read by:
 #   - un_authority_values.txt (un_policy_contribution, summed by
 #     un_pillar_policy_value once a month).
@@ -43,6 +52,6 @@ country_un_institutional_alignment = {
 country_un_authority_target_add = {
 	color = good
 	percent = no
-	decimals = 1
+	decimals = 2
 	script_only = yes
 }
