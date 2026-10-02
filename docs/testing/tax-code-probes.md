@@ -7,6 +7,26 @@ feature. Offline parsing/tests cannot establish economic incidence, native valid
 behavior. Complete the [results form](tax-code-probe-results.md) for each run. Retain failed and
 inconclusive runs, with logs; do not replace them with an unsupported “works”.
 
+## Load-crash correction (2026-10-01)
+
+The initial probe commit (`5b47e396`) put two `tab_buttons` instances directly
+inside the window header's `flowcontainer`. The reported load log rejects both
+at `pdx_gui_container.cpp:145`: `tab_buttons` derives from `hbox`, and a
+`container`/`flowcontainer` cannot directly own an `hbox` or `vbox`.
+The probe panel also contained 58 direct `hbox` rows with the same invalid
+structure. Visibility/opt-in gates do not make invalid widget definitions safe.
+
+The header now uses a `vbox` with expanding width and fixed content height;
+the optional second strip collapses when hidden. Probe metric and button rows
+use horizontal `flowcontainer` layouts with their existing fixed child sizes.
+A regression test checks direct nesting and resolves the inherited tab-strip type.
+
+This corrects the reported GUI errors; a successful game load is still required
+to confirm the crash is resolved. Restart, load the same baseline **before arming**,
+then arm and open Tax Probes. Check both tab rows, metrics, and buttons, and confirm
+the corresponding `pdx_gui_container.cpp:145` errors are gone. Other law-retention
+and cultural-hegemony warnings in the supplied excerpt are outside this correction.
+
 ## Start here
 
 1. Use a **copy of a save**, single-player, debug mode, with only this mod enabled. Record the

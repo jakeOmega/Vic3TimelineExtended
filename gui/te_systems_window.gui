@@ -106,8 +106,11 @@ types te_systems_window_types
 		}
 
 		blockoverride "fixed_top" {
-			flowcontainer = {
-				direction = vertical
+			# tab_buttons derives from hbox; a flowcontainer cannot own box layouts.
+			vbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = fixed
+				ignoreinvisible = yes
 				### Vanilla's strip, as the Military panel uses it (panel_military.gui).
 				### Each tab is on the strip while its system's rule is on, greyed
 				### until one of its entries runs; the greyed tab's tooltip lists the

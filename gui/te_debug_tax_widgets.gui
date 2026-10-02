@@ -1,4 +1,6 @@
-﻿# TEMPORARY PR 585. Only instantiated under the armed-country tab gate.
+﻿# TEMPORARY PR 585. Visible only under the armed-country tab gate.
+# Fixed-width rows use horizontal flowcontainers: hbox/vbox cannot be direct
+# children of the panel flowcontainer, even while the panel is hidden.
 types te_debug_tax_widgets {
 	type te_tp_panel = flowcontainer {
 		direction = vertical
@@ -14,136 +16,164 @@ types te_debug_tax_widgets {
 			maximumsize = { 480 -1 }
 			parentanchor = hcenter
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_snapshot_seq" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_snapshot_seq')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_version" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_version')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_stage" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_stage')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_operative" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_operative')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_due" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_due')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_expiry" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_expiry')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_record_count" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_record_count')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_obs_tax_income" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_tax_income')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_obs_tax_waste" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_tax_waste')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_obs_net_fixed_income" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_net_fixed_income')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_obs_net_total_income" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_net_total_income')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_obs_bureaucracy" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_bureaucracy')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_obs_bureaucracy_usage" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_bureaucracy_usage')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_obs_authority" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_authority')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_obs_tax_level_value" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_tax_level_value')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_obs_military_wage_level_value" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_obs_military_wage_level_value')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_school_level" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_school_level')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_school_expanding" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_school_expanding')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_grain_selected" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_grain_selected')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
-			layoutpolicy_horizontal = expanding
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
 			textbox = { text = "te_tp_metric_lock" size = { 370 40 } multiline = yes using = fontsize_small }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_lock')|2]" size = { 100 40 } align = right|nobaseline }
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			textbox = { text = "te_tp_live_income" size = { 370 30 } }
 			textbox = { text = "[GetPlayer.GetIncomeTaxIncome|2]" size = { 100 30 } align = right|nobaseline }
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			textbox = { text = "te_tp_live_poll" size = { 370 30 } }
 			textbox = { text = "[GetPlayer.GetPollTaxIncome|2]" size = { 100 30 } align = right|nobaseline }
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			textbox = { text = "te_tp_metric_policy_target" size = { 370 30 } }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_policy_target')|2]" size = { 100 30 } align = right|nobaseline }
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			textbox = { text = "te_tp_metric_policy_actual" size = { 370 30 } }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_policy_actual')|2]" size = { 100 30 } align = right|nobaseline }
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			textbox = { text = "te_tp_metric_controls" size = { 370 30 } }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_controls')|2]" size = { 100 30 } align = right|nobaseline }
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			textbox = { text = "te_tp_metric_controls_actions" size = { 370 30 } }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_controls_actions')|2]" size = { 100 30 } align = right|nobaseline }
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			textbox = { text = "te_tp_metric_public_schools" size = { 370 30 } }
 			textbox = { text = "[GetPlayer.MakeScope.ScriptValue('te_tp_view_public_schools')|2]" size = { 100 30 } align = right|nobaseline }
 		}
 		text_single = { text = "te_tp_section_setup" parentanchor = hcenter using = fontsize_large }
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -161,7 +191,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_prepare_tt'), GetScriptedGui('te_tp_prepare_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -180,7 +211,8 @@ types te_debug_tax_widgets {
 			}
 		}
 		text_single = { text = "te_tp_section_domestic" parentanchor = hcenter using = fontsize_large }
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -198,7 +230,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_dividend_tt'), GetScriptedGui('te_tp_dividend_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -216,7 +249,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_head_tt'), GetScriptedGui('te_tp_head_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -234,7 +268,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_consumption_high_tt'), GetScriptedGui('te_tp_consumption_high_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -252,7 +287,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_grain_add_tt'), GetScriptedGui('te_tp_grain_add_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -271,7 +307,8 @@ types te_debug_tax_widgets {
 			}
 		}
 		text_single = { text = "te_tp_section_modifiers" parentanchor = hcenter using = fontsize_large }
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -289,7 +326,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_state_exempt_tt'), GetScriptedGui('te_tp_state_exempt_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -307,7 +345,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_waste_tt'), GetScriptedGui('te_tp_waste_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -325,7 +364,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_manufacturing_tt'), GetScriptedGui('te_tp_manufacturing_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -343,7 +383,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_import_rate_tt'), GetScriptedGui('te_tp_import_rate_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -361,7 +402,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_grain_import_tt'), GetScriptedGui('te_tp_grain_import_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -379,7 +421,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_grain_max_tt'), GetScriptedGui('te_tp_grain_max_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -397,7 +440,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_static_wage_tt'), GetScriptedGui('te_tp_static_wage_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -409,7 +453,8 @@ types te_debug_tax_widgets {
 			}
 		}
 		text_single = { text = "te_tp_section_customs" parentanchor = hcenter using = fontsize_large }
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -427,7 +472,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_import_low_tariffs_tt'), GetScriptedGui('te_tp_import_low_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -445,7 +491,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_import_low_subventions_tt'), GetScriptedGui('te_tp_import_low_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -463,7 +510,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_export_no_tariffs_or_subventions_tt'), GetScriptedGui('te_tp_export_no_tariffs_or_subventions_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -481,7 +529,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_export_max_tariffs_tt'), GetScriptedGui('te_tp_export_max_tariffs_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -500,7 +549,8 @@ types te_debug_tax_widgets {
 			}
 		}
 		text_single = { text = "te_tp_section_controls" parentanchor = hcenter using = fontsize_large }
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -518,7 +568,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_level_low_tt'), GetScriptedGui('te_tp_level_low_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -536,7 +587,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_level_high_tt'), GetScriptedGui('te_tp_level_high_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -554,7 +606,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_military_low_tt'), GetScriptedGui('te_tp_military_low_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -572,7 +625,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_lock_tt'), GetScriptedGui('te_tp_lock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -584,7 +638,8 @@ types te_debug_tax_widgets {
 			}
 		}
 		text_single = { text = "te_tp_section_lifecycle" parentanchor = hcenter using = fontsize_large }
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -602,7 +657,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_approve_tt'), GetScriptedGui('te_tp_approve_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -620,7 +676,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_discard_tt'), GetScriptedGui('te_tp_discard_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -638,7 +695,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_rebuild_tt'), GetScriptedGui('te_tp_rebuild_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -650,7 +708,8 @@ types te_debug_tax_widgets {
 			}
 		}
 		text_single = { text = "te_tp_section_storage" parentanchor = hcenter using = fontsize_large }
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {
@@ -668,7 +727,8 @@ types te_debug_tax_widgets {
 				tooltip = "[Concatenate( Localize('te_tp_action_iterate_tt'), GetScriptedGui('te_tp_iterate_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 			}
 		}
-		hbox = {
+		flowcontainer = {
+			direction = horizontal
 			parentanchor = hcenter
 			spacing = 8
 			button = {

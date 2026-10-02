@@ -5,7 +5,7 @@ import re
 import unittest
 
 from paradox_file_parser import ParadoxFileParser
-from test_te_systems_window import _evaluate, _template, _txt_block
+from test_te_systems_window import _evaluate, _strip_comments, _template, _txt_block
 
 ROOT = Path(__file__).resolve().parent
 
@@ -74,6 +74,42 @@ class TaxProbeSafetyTest(unittest.TestCase):
             self.assertTrue(_evaluate(expr, shown, "tax_probes"))
             shown.remove(f"te_window_{tab}_tab_unlock_sgui")
             self.assertFalse(_evaluate(expr, shown, "tax_probes"))
+
+    def test_flowcontainers_never_directly_own_box_layouts(self):
+        # Engine error pdx_gui_container.cpp:145 on PR 585's initial load.
+        # Vanilla tab_buttons is an hbox even though its instance has another name.
+        texts = [read(path) for path in (
+            "gui/te_systems_window.gui", "gui/te_debug_tax_widgets.gui")]
+        bases = {"tab_buttons": "hbox"}
+        for text in texts:
+            bases.update(re.findall(r"\btype\s+(\w+)\s*=\s*(\w+)", _strip_comments(text)))
+
+        def base_type(name):
+            seen = set()
+            while name in bases and name not in seen:
+                seen.add(name)
+                name = bases[name]
+            return name
+
+        for text in texts:
+            # Ignore braces in comments and strings; anonymous blocks still
+            # occupy a stack level, so only direct widget parents are checked.
+            clean = re.sub(r'"(?:\\.|[^"\\])*"', '""', _strip_comments(text))
+            stack = []
+            for token in re.finditer(
+                    r"\b(?:type\s+\w+\s*=\s*)?(\w+)\s*(?:=\s*)?\{|[{}]", clean):
+                if token.group() == "}":
+                    self.assertTrue(stack, "unmatched closing brace")
+                    stack.pop()
+                    continue
+                child = base_type(token.group(1))
+                parent = stack[-1] if stack else None
+                line = clean.count("\n", 0, token.start()) + 1
+                self.assertFalse(
+                    parent in {"container", "flowcontainer"} and child in {"hbox", "vbox"},
+                    f"line {line}: {parent} cannot directly own {child}")
+                stack.append(child)
+            self.assertFalse(stack, "unclosed GUI blocks")
 
     def test_known_native_controls_keep_original_validity_and_add_gate(self):
         gui = read("gui/budget_panel.gui")
