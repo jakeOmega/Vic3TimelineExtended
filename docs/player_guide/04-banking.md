@@ -623,6 +623,15 @@ Wage Pressure of your labor and welfare laws and any other standing Inflationary
 Pressure, such as a devaluation. Above 8% inflation, the wage pressure of your
 labor and welfare laws counts twice.
 
+A slump pulls inflation down. Under Fiat Money or Digital Currency, Stagnation
+pulls it half a point below where it would otherwise settle, a Downturn 2 points
+and a Panic 4, and inflation closes most of that gap within a year. A Downturn
+alone outweighs the wage pressure of all your labor and welfare laws together, so
+prices slow through a recession and your bank can cut instead of holding its rate
+up against inflation. On metallic money, in a dollarized economy and under
+Decentralized Cryptocurrency, prices already rest near zero and the pulls are
+0.3, 0.8 and 1.5 points; more would hold them in Deflation.
+
 Every country starts on metallic money, Commodity Money or the Gold Standard,
 and there expected inflation is fixed at 0%: money redeemable in metal promises
 stable prices, lenders take the promise at face value, and the money itself

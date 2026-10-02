@@ -242,6 +242,25 @@ te_mon_is_metallic = {
 	}
 }
 
+# Do this country's prices rest on a positive inflation target (2026-10-02)?
+# Fiat and digital currency, a suspended gold standard (which acts as fiat, see
+# above), and a currency anchored to one of those: inflation at rest sits around
+# the 2% anchor, three points above the Deflation band. NOT metallic money (the
+# anchor is 0 — te_mon_inflation_anchor is the test), a currency anchored to
+# metal (its anchor is the metal's 0), a dollarised country or decentralized
+# cryptocurrency (te_mon_pressure_regime_pull drags their core to zero or below):
+# their prices rest within a point of the Deflation band.
+#
+# READ BY te_mon_phase_pressure, whose slump terms are larger here and only
+# here. A slump's pull that brings a fiat economy's prices down toward zero puts
+# a metallic one into Deflation, whose momentum drain then holds the slump
+# (docs/audits/banking_cycle_simulation.md §16).
+te_mon_targets_inflation = {
+	te_mon_inflation_anchor > 0
+	NOT = { te_mon_is_dollarised = yes }
+	NOT = { has_law_or_variant = law_type:law_decentralized_cryptocurrency }
+}
+
 # May this country monetise its deficit? (§11) Printing money to pay the
 # government needs a currency the state can create (fiat or digital), a bank to
 # create it through, and a government still able to give that bank the order —
