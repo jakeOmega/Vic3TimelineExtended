@@ -207,6 +207,14 @@ un_arms_embargo_relations_vetoed = { value = -10 }
 # figure first.
 un_credentials_months_base = { value = 60 }
 un_credentials_restore_case = { value = 30 }
+# Display: the months our suspension has left. Scope: country
+un_disp_credentials_months_left = {
+	value = 0
+	if = {
+		limit = { has_variable = un_credentials_months }
+		add = var:un_credentials_months
+	}
+}
 # The defiance record (un_dos_defiance) that gives grounds without a breach of
 # the human-rights convention's terms.
 un_credentials_defiance_min = { value = 10 }

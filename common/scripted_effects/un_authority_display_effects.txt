@@ -402,12 +402,12 @@ un_authority_log_reason_line = {
 		un_authority_log_reason_on = { CODE = 24 KEY = je_un_led_reason_24 FALLBACK = je_un_led_reason_20 }
 		un_authority_log_reason_on = { CODE = 25 KEY = je_un_led_reason_25 FALLBACK = je_un_led_reason_20 }
 		un_authority_log_reason_on = { CODE = 26 KEY = je_un_led_reason_26 FALLBACK = je_un_led_reason_20 }
-		# Redesign phase 7 (§0.12): 27-29 justice, 30-33 order, 34-36 economy,
-		# 37-39 missions (un_charter_effects.txt names the owners). Each names
-		# its subject when the entry has one.
+		# Redesign phase 7 (§0.12): 27-28 the World Court, 30-33 ceasefires and
+		# referendums, 34 the World Food Reserve, 37-38 electoral missions
+		# (un_charter_effects.txt names the owners). Each names its subject when
+		# the entry has one.
 		un_authority_log_reason_on = { CODE = 27 KEY = je_un_led_reason_27_on FALLBACK = je_un_led_reason_27 }
 		un_authority_log_reason_on = { CODE = 28 KEY = je_un_led_reason_28_on FALLBACK = je_un_led_reason_28 }
-		un_authority_log_reason_on = { CODE = 29 KEY = je_un_led_reason_29_on FALLBACK = je_un_led_reason_29 }
 		un_authority_log_reason_on = { CODE = 30 KEY = je_un_led_reason_30_on FALLBACK = je_un_led_reason_30 }
 		un_authority_log_reason_on = { CODE = 31 KEY = je_un_led_reason_31_on FALLBACK = je_un_led_reason_31 }
 		un_authority_log_reason_on = { CODE = 32 KEY = je_un_led_reason_32_on FALLBACK = je_un_led_reason_32 }

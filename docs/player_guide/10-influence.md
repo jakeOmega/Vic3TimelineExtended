@@ -119,7 +119,12 @@ than about three points carries the Foreign Cultural Benchmark modifier: its
 people measure their government against the leading power's, and legitimacy
 falls. The penalty grows with the gap. With the hegemon at 30% and you at 5%, it
 costs about 4 legitimacy. The hegemon never carries it. Tier V of the Education
-power bloc principle shrinks the penalty. While you carry it, the overview shows
+power bloc principle shrinks the penalty, and so does being a party to the UN
+Convention on Cultural Diversity: a quarter off at Contested, half at
+Established, three quarters at Strong and all of it at Supranational. A
+hegemon that ratifies the convention projects 10% less cultural pull, scaled
+the same way (see [UN conventions and
+agencies](09-united-nations.md#un-conventions-and-agencies)). While you carry it, the overview shows
 a red Benchmark icon; hover it for the current strength.
 
 ### Political models of the world
@@ -311,7 +316,9 @@ others have no relations limit.
 
 If you run several espionage operations of one type, your gains come from the
 strongest and don't add up. Election Interference cuts electoral confidence by
-5% once establishing and 10% once fully operational. Bubble pressure is
+5% once establishing and 10% once fully operational, half that against a
+country hosting UN [electoral observers](09-united-nations.md#electoral-observers),
+which also catch it more often. Bubble pressure is
 explained in [Banking and monetary policy](04-banking.md), nuclear programs and
 loose warheads in [Nuclear weapons](13-nuclear.md), and milestones in [The space
 race](15-space.md).

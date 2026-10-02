@@ -42,7 +42,13 @@ un_chamber_status_sgui = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			# §0.8: a member whose representation is suspended is told so, and
 			# whether its overlord carries its seat.
+			# Phase 7: the Assembly rejected our credentials, which is not the
+			# subject's case above (un_justice_triggers.txt).
 			if = {
+				limit = { un_credentials_suspended = yes }
+				custom_tooltip_no_bullet = je_un_chamber_status_credentials
+			}
+			else_if = {
 				limit = { un_representation_suspended = yes }
 				if = {
 					limit = { un_seat_carried = yes }

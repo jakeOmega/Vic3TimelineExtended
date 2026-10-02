@@ -65,4 +65,8 @@ un_member_represented_by_record = {
 		has_variable = un_member_modifier_on
 	}
 	un_membership_eligible = yes
+	# A member whose credentials the Assembly rejected (phase 7) is not
+	# represented either, as un_member_represented says; the record of it is a
+	# country variable, which a revolution's winner inherits.
+	NOT = { un_credentials_suspended = yes }
 }

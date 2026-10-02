@@ -1073,7 +1073,7 @@ un_standing_reason_line = {
 	else_if = { limit = { var:un_standing_last_reason = 33 } custom_tooltip_no_bullet = je_un_standing_reason_33 }
 	else_if = { limit = { var:un_standing_last_reason = 34 } custom_tooltip_no_bullet = je_un_standing_reason_34 }
 	else_if = { limit = { var:un_standing_last_reason = 35 } custom_tooltip_no_bullet = je_un_standing_reason_35 }
-	# Redesign phase 7 (§0.12): 36-38 justice, 39-41 order, 42-44 economy, 45-47 missions.
+	# Redesign phase 7 (§0.12): 36-38 justice, 39-41 order, 42 economy, 45-46 missions.
 	else_if = { limit = { var:un_standing_last_reason = 36 } custom_tooltip_no_bullet = je_un_standing_reason_36 }
 	else_if = { limit = { var:un_standing_last_reason = 37 } custom_tooltip_no_bullet = je_un_standing_reason_37 }
 	else_if = { limit = { var:un_standing_last_reason = 38 } custom_tooltip_no_bullet = je_un_standing_reason_38 }
@@ -1886,7 +1886,13 @@ un_chamber_grounds_line = {
 			un_resolution_is_punitive = yes
 			has_variable = un_res_case
 		}
-		custom_tooltip_no_bullet = je_un_chamber_grounds
+		if = {
+			limit = { has_variable = un_res_court_grounds }
+			custom_tooltip_no_bullet = je_un_chamber_grounds_court
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_grounds
+		}
 		if = {
 			limit = { has_tag = un_res_voting }
 			var:un_res_target ?= { save_temporary_scope_as = un_chamber_grounds_target }
@@ -2146,9 +2152,11 @@ un_chamber_obligations_outside_block = {
 # Our own dues: paying, withholding, or silenced by Article 19.
 # Scope: country (a member)
 un_chamber_dues_lines = {
-	# §0.8: a suspended member pays nothing itself; its overlord is assessed.
+	# §0.8: a suspended subject pays nothing itself; its overlord is assessed.
+	# A member whose credentials are suspended (phase 7) still pays, so it
+	# reads the lines below like any other member.
 	if = {
-		limit = { un_representation_suspended = yes }
+		limit = { NOT = { un_dues_self_assessed = yes } }
 		custom_tooltip_no_bullet = je_un_chamber_dues_suspended
 	}
 	else_if = {

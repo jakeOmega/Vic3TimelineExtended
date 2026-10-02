@@ -210,7 +210,9 @@ class DuesTests(unittest.TestCase):
         buttons = _read(_path("common", "scripted_buttons", "un_buttons.txt"))
         for name in ("un_withhold_dues_button", "un_pay_dues_button"):
             with self.subTest(button=name):
-                self.assertIn("un_representation_suspended", _block(buttons, name))
+                # Diplomatic autonomy, not representation: a member whose
+                # credentials are suspended (phase 7) still pays its dues.
+                self.assertIn("un_dues_self_assessed = yes", _block(buttons, name))
 
 
 MODIFIERS = _path("common", "static_modifiers", "extra_modifiers.txt")

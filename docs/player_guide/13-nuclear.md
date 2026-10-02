@@ -76,8 +76,8 @@ arsenal](#reducing-or-giving-up-an-arsenal)). A United Nations member without
 a bomb can't run one while the UN is at its Strong tier or higher and the IAEA
 exists (see [UN authority tiers](09-united-nations.md#un-authority-tiers)). A
 Nuclear Program Freeze holds funding at zero, and so does an arsenal ceiling,
-your own or a Nuclear Arms Limitation treaty's, while you hold at least that
-many warheads. Losing the rank that qualified you zeroes funding the same week.
+your own, a Nuclear Arms Limitation treaty's or the UN Prohibition Treaty's,
+while you hold at least that many warheads. Losing the rank that qualified you zeroes funding the same week.
 
 ### Program funding and warhead production
 
@@ -662,7 +662,7 @@ target is the sum of six parts, which the breakdown lists:
 | Tradition of non-use | 0 to +35 | One point a year, full after 35 years. A first use halves the years counted; an answer to a strike cuts them by a quarter |
 | Doctrines | −10 to +10 | The doctrines of the countries that hold warheads, averaged with great powers counting most. No First Use and warheads in storage (Recessed) raise it; Flexible First Use, Compellence, Warfighting and High Alert lower it |
 | Restraint | 0 to +15 | Non-use pledges in force (up to +5); countries that gave up an arsenal and have not armed again (up to +10) and countries bound by a Nuclear Arms Limitation treaty, both weighted by rank |
-| United Nations | 0 to +12 | The Non-Proliferation Treaty (up to 8) and the Physical Protection convention (up to 4), in proportion to UN authority |
+| United Nations | 0 to +18 | The Non-Proliferation Treaty (up to 8), the Physical Protection convention (up to 4) and the Treaty on the Prohibition of Nuclear Weapons (up to 6), in proportion to UN authority |
 | Ledger | −30 to +10 | The record of what the world has done lately, which halves every four years |
 
 Base and a full tradition make 55. With no use and nothing else moving it, the
@@ -797,9 +797,21 @@ than the other party.
 ### The United Nations and the taboo
 
 The United Nations can move the taboo, but the taboo works without it. While the
-Non-Proliferation Treaty is in force it adds up to 8 to the target, and the
-Convention on the Physical Protection of Nuclear Material up to 4, both in
-proportion to UN authority (4 and 2 at authority 50).
+Non-Proliferation Treaty is in force it adds up to 8 to the target, the
+Convention on the Physical Protection of Nuclear Material up to 4 and the
+Treaty on the Prohibition of Nuclear Weapons up to 6, all in proportion to UN
+authority (4, 2 and 3 at authority 50).
+
+Once the charter carries Charter Reform II and the Non-Proliferation Treaty is
+in force, a member without warheads can table the Treaty on the Prohibition of
+Nuclear Weapons. A party that holds warheads is held to an arsenal ceiling: the
+warheads it had in its first month as a party, a fifth fewer every five years,
+none after 25. The schedule stops while the UN is Moribund. Warheads above it
+are taken apart, each one raising the taboo, and the Nuclear Weapons entry reads
+"Held to N by the UN ban". A party without warheads may build none. An armed
+country that joins the UN later is not bound, and leaving the UN while bound
+counts as walking out of an arms-control treaty. Nuclear powers vote against it
+and refuse to ratify it.
 
 When the docket takes up a nuclear strike, its appeal can table a condemnation
 even while the condemnation topic is on its five-year cooldown, provided the

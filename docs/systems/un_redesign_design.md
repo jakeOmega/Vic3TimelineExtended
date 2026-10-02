@@ -2,12 +2,13 @@
 
 > **STATUS: PHASES 1 (THE AUTHORITY MODEL), 2 (THE LADDER, THE CEILING AND THE FLOOR),
 > 3 (GROUNDS, THE ITEMISED LEAN, AI VOTING IN SCRIPT, THE RECESS), 4 (THE DOCKET AND THE
-> EVENT REWRITE), 5 (DUES, TEETH, REGIMES, SOVEREIGNTY, INTELLIGENCE) AND 6 (MISSIONS)
-> IMPLEMENTED,** with joining missions at will added after phase 6. Phase 1 has been
-> play-tested; phases 2–6, §0.7, §0.8 (subjects, diplomatic autonomy and suspended
-> representation) and §0.9 (what a revolution's winner keeps) are pending in-game
-> verification.
+> EVENT REWRITE), 5 (DUES, TEETH, REGIMES, SOVEREIGNTY, INTELLIGENCE), 6 (MISSIONS) AND 7
+> (THE CHARTER'S NEW BUSINESS) IMPLEMENTED,** with joining missions at will added after
+> phase 6. Phase 1 has been play-tested; phases 2–7, §0.7, §0.8 (subjects, diplomatic
+> autonomy and suspended representation) and §0.9 (what a revolution's winner keeps) are
+> pending in-game verification.
 > Read
+> [§0.12](#012-phase-7-the-charters-new-business),
 > [§0.11](#011-the-first-policy-grants),
 > [§0.10](#010-the-policy-pillar-and-a-slower-credibility-ledger),
 > [§0.9](#09-civil-wars-the-state-mirrors),
@@ -36,8 +37,9 @@
 ## 0.12 Phase 7: the charter's new business
 
 Designed 2026-10-02 with the mod owner, from a list of proposals the owner reviewed point by
-point. Owner decisions are marked **(decided)**; everything else is **(proposed)**. Not yet
-seen in a running game.
+point. Owner decisions are marked **(decided)**; everything else is **(proposed)**. Shipped
+the same day: [As shipped](#as-shipped-2026-10-02) records where the build departs from the
+proposals. Not yet seen in a running game.
 
 **Why.** Charter Reform I is named "Standing Mandate Force / Compulsory Jurisdiction" and
 Reform II "Veto Restraint / UN Levy", but before phase 7 Reform I only raised the ceiling, and
@@ -233,6 +235,175 @@ The "Standing Mandate Force" half of Reform I. A one-time founding resolution
 | order | `ceasefire`, `referendum` | 30–33 | 39–41 |
 | economy | `development_fund`, `food_reserve` | 34–36 | 42–44 |
 | missions | `standing_force`, `observer_request` | 37–39 | 45–47 |
+
+### As shipped (2026-10-02)
+
+Built the same day by five owners over a shared framework. Every figure below is a named
+script value in the owner's values file; the loc states several of them in words, so change
+both. Where the build departs from the proposals above, the ruling says so.
+
+**Framework.** `un_charter_has_reform = { LEVEL }` (`un_ladder_triggers.txt`) is the one charter
+gate. Ops 18–28 are in the chamber's three switches and the widget, grouped under Censure and
+Enforcement (21, 22, 26), Requests for Help (24), Courts and Self-Determination (20, 28),
+Institutions of the United Nations (23, 25, 27) and the conventions (18, 19). Each topic has an
+AI button on the journal entry. The resolution triggers sort the topics as the table above
+says; `un_resolution_veto_blocks` names the four with no graduated form, and
+`un_resolution_asks_pledges` keeps an observer request out of `un_vote.3`'s pledge wording
+(the UN's budget pays the observers, so refusing it only denounces it). The Standing Force and
+the Fund each take a share of the budget (`un_force_budget_share` 0.1,
+`un_dev_fund_budget_share` 0.25, `un_charter_values.txt`), and the lending facility lends from
+what is left (`un_budget_free_weekly_value`). Each topic and each new agency has its own icon
+file, for now a copy of its nearest older topic's. `test_un_charter_business.py` pins the hooks,
+the classification and the loc.
+
+**Rulings.**
+
+1. **The World Court** (`un_justice_*`, `events/un_court_events.txt`).
+   - Tabled by a member with standing 20 or more against a represented member that holds a
+     state it claims and is not its overlord, its subject or at war with it.
+   - The odds are computed on the state with the claimant as ROOT, clamped 10–90, from the
+     terms above (a missing standing counts as 50). The odds at tabling are kept on the
+     resolution and shown on the card and in the vote events; the chamber preview rounds them
+     to ten. The court rules 30 days after the vote and **recomputes** the odds then.
+   - Obeying cedes the state (`set_state_owner`; moot if the holder no longer holds it): +1.5
+     credibility × the holder's weight (ledger 27, the state), standing +2 (code 5), and the
+     ICJ is founded if it was not. Defying costs −2.5 credibility × weight (ledger 28), standing
+     −5 (code 26), the court's defiance record (6) and `un_court_defiance_modifier`, and opens
+     a mandate case for the claimant over that region for ten years
+     (`un_court_defiance_opens_mandate`, in `un_mandate_state_open`). A mandate tabled on that
+     case carries `un_res_court_grounds`: its case threshold is 0, and the chamber's grounds
+     line says why.
+   - A ruling for the holder removes the claim and, for twenty years, charges the claimant 10 ×
+     E infamy when it holds a `conquer_state` or `return_state` goal against an owner of part of
+     the region (at most once in 180 days: `on_wargoal_added` does not say which goal it was).
+   - Vetoed: the court rolls the same odds as an advisory opinion; nothing changes hands; a
+     holder it goes against loses 2 standing (code 38).
+2. **The arms embargo.** Ten years, × E, in seven military goods (small arms, ammunition,
+   artillery, tanks, aeroplanes, man-o'-wars, ironclads): trade advantage −30%, military goods
+   +5% dearer; standing −6 (code 36). A target that voted for it, or a vetoed embargo, gets the
+   voluntary form: half strength for five years, −3. A country under an embargo cannot propose
+   one. The embargo lives in variables and the modifier is re-added monthly, for civil wars.
+3. **Credentials.** Proposer standing 20 or more. Sixty months or until the case falls below
+   30. `un_credentials_suspended` makes the member unrepresented (`un_member_represented`,
+   `un_representation_suspended`, `un_member_represented_by_record`), so every bar a suspended
+   subject meets applies, it loses any permanent seat for good and cannot host the
+   headquarters; but its own dues stay assessed (`un_dues_self_assessed` = diplomatic autonomy,
+   which also gates the dues buttons and the budget). Standing −8, or −4 if it voted for its own
+   suspension (code 37).
+4. **The Standing UN Force** (`un_force_*`, the mission files). One more head in every
+   peacekeeping and stabilisation mission's strength (`un_mission_strength_heads`), which then
+   neither lapses unstaffed nor fails empty. The Strong-tier surcharge already covered
+   stabilisation hosts. At Supranational `un_teeth_war_goal_surcharge` strikes, instead of
+   charging, every war goal of a listed type that a represented member initiating the play holds
+   against a host of an active peacekeeping or stabilisation mission (`remove_war_goal`; a
+   notice to a human). Subjects and holders of a bound mandate are exempt, as from the
+   surcharge.
+5. **Electoral observers** (mission type 4, `un_msn_electoral`). Opened in the requester's
+   capital, or its most populous free state. Strength = E × the budget factor × one fixed head;
+   no contributors or volunteers. At strength 1: host legitimacy +5 and ideological covert
+   defence +3 (`un_electoral_observers_modifier`, refreshed from the country pulse), state
+   turmoil effects and radicals from movements −10%; Election Interference's confidence cut is
+   halved. Progress reads 50 during a campaign. `on_election_campaign_end` marks the mission and
+   the next monthly update closes it: delivery +1 (ledger 37, the state), host standing +3
+   (code 45). It fails if the host is attacked or stops holding elections (ledger 38; abolishing
+   elections also costs the host 2 standing, code 46), and lapses after 60 months without one.
+6. **The ceasefire** (`un_order_*`, `events/un_ceasefire_events.txt`). Only wars the aggressor
+   fights on the attacking side against a represented member count. Each such month: war
+   support −2.5 × E in each war, aggression record +1, and an order debit of 0.25 that accrues
+   on the aggressor and is booked every six months and when the order ends (ledger 30), so a
+   long order does not fill the twelve-entry log. After three months of fighting on, standing
+   −5 once (−2 if it accepted the censure; code 39). The war ending inside the order books
+   delivery +1.5 (ledger 31), standing +2 (code 5) if within the three months, and peacekeepers
+   in the victim's most devastated state; the order running out, or the victim conquered,
+   books credibility −1 (ledger 32). The order is moot if the aggressor fights no member when
+   the vote closes. Vetoed: one war-support hit of 10 × E. Our Obligations shows an order
+   against us, or against our enemy.
+7. **The referendum** (`events/un_referendum_events.txt`). A subject may table its own. Odds =
+   liberty desire rounded down to 5, clamped 20–90. Holding the vote: independence (a colonial
+   subject is first marked a former colony) or liberty desire −20; either way standing +4 (code
+   40) and delivery +1 (ledger 33). Refusing: liberty desire +15, `un_referendum_refused_modifier`
+   × E for five years (prestige −5%, its subjects' liberty desire +0.05 a week), defiance 10,
+   standing −5 (code 41), credibility −1 (ledger 32), and no referendum of its own for five
+   years. An overlord that voted for it must hold the vote.
+8. **The Development Fund** (`un_economy_*`). Any member while dues are assessed. The members'
+   average GDP per head is weighted by population; the line is half of it. A grant is the
+   recipient's share of the eligible members' people × a quarter of the budget, stored in
+   `var:un_dev_fund_grant` and applied by a hidden event with the recipient as ROOT. It goes
+   into the investment pool (`country_weekly_investment_pool_add`, which only the banking
+   journal entry's weekly pulse moves into the pool) when the recipient's banking entry is
+   active and nothing disables the pool; otherwise into the treasury
+   (`country_tax_income_add`). Leaving the UN ends it at once (`un_membership_end_effect`).
+9. **The World Food Reserve.** Pledging needs a seat, a Strategic Reserve Hub and grain
+   unlocked; two journal-entry buttons pledge and withdraw. A new aid mission draws from
+   pledgers holding 500 grain or more: each offers the smaller of 25% and 2,500 units, the
+   mission takes up to 5,000 in proportion, through `st_res_grain_stored` and the reserve's own
+   clamp and hub refresh, so no goods are made. Relief = drawn ÷ 5,000 (capped at 1) × (+0.15
+   food security, −5% mortality) for twelve months from the state's next pulse; one delivery
+   entry per draw (ledger 34, the state, × the relief); standing +2 per pledger (code 42). Not
+   at Moribund. **Hunger:** the share of all members' people in famine states is snapshotted
+   in authority step 3; while the Reserve stands the delivery pillar takes +3 below 0.5% and
+   −10 × min(1, share ÷ 5%) above it, so delivery now runs −10 to +10.
+10. **Cultural diversity.** Proposer with Mass Media, not the hegemon; UNESCO in force; authority
+    40. Parties, × E: prestige +2%, `country_ideology_resistance_mult` +0.5 (the Foreign
+    Cultural Benchmark already scales by 1 − that, so a trailing party bears half at
+    Established and none at Supranational), assimilation −20% (shown as the cost), and homeland
+    removal 30% slower (`state_homeland_removal_speed_mult`, a new script-only rate on the
+    removal track, `homeland_values.txt`). A hegemon that is a party: cultural pull −10% × E.
+11. **The nuclear ban.** Proposer with Nuclear Weapons and no warheads; the NPT in force;
+    authority 40. Ceiling (`nd_tpnw_ceiling`, its own variable; the lowest of three ceilings
+    binds) = floor(base × (5 − floor(months ÷ 60)) ÷ 5), the base being the arsenal in the
+    party's first month; the clock does not run while the UN is Moribund. An unarmed party's
+    ceiling is 0. An armed country joining the UN later is not bound by it. Leaving while it
+    stands books a walk-out on the taboo ledger. Taboo: + authority ÷ 100 × 6, cap of the UN
+    part 20.
+
+### Files
+
+- Framework: `common/scripted_effects/un_charter_effects.txt`, `common/script_values/un_charter_values.txt`,
+  `test_un_charter_business.py`; edits across the shared UN files listed in the framework
+  commit.
+- Justice: `un_justice_{effects,triggers,values,modifiers}.txt`, `un_justice_on_actions.txt`,
+  `un_justice_messages.txt`, `un_justice_concepts.txt`, `events/un_court_events.txt`.
+- Order: `un_order_{effects,triggers,values,modifiers}.txt`, `events/un_ceasefire_events.txt`,
+  `events/un_referendum_events.txt`.
+- Economy: `un_economy_{effects,triggers,values,modifiers}.txt`, `un_economy_buttons.txt`,
+  `un_economy_on_actions.txt`, `un_economy_messages.txt`, `un_economy_concepts.txt`,
+  `events/un_economy_events.txt`.
+- Missions: `un_force_{effects,triggers,values}.txt`, `un_missions_modifiers.txt`,
+  `un_missions_messages.txt`, `un_missions_concepts.txt`; the mission files; the state panel's
+  UN tile.
+- Conventions: the convention sites, `un_conventions_{effects,modifiers}.txt`, the homeland and
+  nuclear taboo files.
+
+### Known roughnesses
+
+- The new topics' icons are copies of older ones.
+- The chamber preview shows the court's odds rounded to ten (a tooltip cannot compute them from
+  a temporary scope).
+- The court's war-goal surcharge cannot tell which goal was added, so any `conquer_state` or
+  `return_state` goal against an owner of part of the region counts.
+- One court record per country: a second defiance replaces the first.
+- The ceasefire's grace and standing loss are once per order, not monthly.
+
+### IN-GAME VERIFICATION CHECKLIST (§0.12)
+
+- [ ] Each Reform I/II row reads "Requires Charter Reform I/II" until the reform, then tables.
+- [ ] World Court: odds on the card and in the vote; ruling a month later; obey cedes the state
+      (`set_state_owner`), defy opens the mandate case; `remove_claim` sticks.
+- [ ] Arms embargo: the trade-advantage penalty shows on the target's military goods.
+- [ ] Credentials: no ballot, seat stripped next month, dues still billed, notices.
+- [ ] Standing Force: an unstaffed peacekeeping mission does not lapse; at Supranational a
+      member's war goal against a host is struck (`remove_war_goal` on an opening goal is
+      unproven).
+- [ ] Electoral mission: closes after a campaign ends; Election Interference's cut halved.
+- [ ] Ceasefire: war support falls monthly and the war ends by capitulation; at most five log
+      entries per order.
+- [ ] Referendum: `make_independent` on a dominion; the roll matches the shown odds.
+- [ ] Fund: the grant shows its weekly amount; pool vs treasury routing.
+- [ ] Food Reserve: a pledger's grain falls by the drawn amount; relief appears within a month;
+      the Delivery bar can go negative.
+- [ ] Cultural diversity: the benchmark halves at Established; homeland removal slows.
+- [ ] Nuclear ban: "Held to N by the UN ban" on an armed party; the taboo's UN part rises.
 
 ---
 

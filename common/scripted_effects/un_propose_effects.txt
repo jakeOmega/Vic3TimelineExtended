@@ -206,6 +206,14 @@ un_propose_mandate_effect = {
 					value = ROOT
 				}
 			}
+			# A case opened because the holder defied the World Court in our
+			# dispute over this region (redesign phase 7, un_justice_triggers.txt):
+			# the defiance is the grounds, so the topic's case threshold does not
+			# apply to it (un_res_case_threshold, un_chamber_grounds_line).
+			if = {
+				limit = { scope:un_mandate_case_state = { un_court_defiance_opens_mandate = yes } }
+				scope:un_resolution ?= { set_variable = un_res_court_grounds }
+			}
 		}
 	}
 }

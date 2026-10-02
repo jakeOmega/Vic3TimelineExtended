@@ -197,7 +197,12 @@ un_res_case_threshold = {
 	}
 	else_if = {
 		limit = { has_tag = un_topic_military_mandate }
-		add = un_case_threshold_mandate
+		# A holder that defied the World Court over the very region needs no
+		# further case (redesign phase 7; un_propose_mandate_effect).
+		if = {
+			limit = { NOT = { has_variable = un_res_court_grounds } }
+			add = un_case_threshold_mandate
+		}
 	}
 	else_if = {
 		limit = { has_tag = un_topic_arms_embargo }
