@@ -119,7 +119,9 @@ te_tax_watchdog_month = {
 }
 
 # Writes an approved package into slot SLOT (a or b) from the bill record
-# te_tax_bl_* (Task 6's te_tax_cmd_pass calls it, after supersession), if
+# te_tax_bl_* (Task 6's te_tax_cmd_pass calls it, after dropping the bill's
+# provisions from an earlier-approved slot due on or after it; the enacted
+# provision is superseded at commencement, in te_tax_gen_apply_<slot>), if
 # te_tax_can_store_package allows it. It writes the package only: it does not
 # touch the enacted code or collection and does not record history (the pass
 # records kind 6, approved). Bill fields it reads: te_tax_bl_due;

@@ -380,7 +380,9 @@ class CommencementTest(unittest.TestCase):
                         body,
                         rf"if = \{{\s*limit = \{{ var:te_tax_p{slot}_{key} >= 0 \}}\s*"
                         rf"if = \{{\s*limit = \{{ var:te_tax_p{slot}_{key}_exp >= 0 \}}\s*"
-                        rf"set_variable = \{{ name = te_tax_en_{key}_succ value = var:te_tax_en_{key} \}}\s*\}}\s*"
+                        rf"if = \{{\s*limit = \{{\s*OR = \{{\s*var:te_tax_en_{key}_exp < 0\s*"
+                        rf"var:te_tax_en_{key}_succ < 0\s*\}}\s*\}}\s*"
+                        rf"set_variable = \{{ name = te_tax_en_{key}_succ value = var:te_tax_en_{key} \}}\s*\}}\s*\}}\s*"
                         rf"else = \{{\s*set_variable = \{{ name = te_tax_en_{key}_succ value = -1 \}}\s*\}}\s*"
                         rf"set_variable = \{{ name = te_tax_en_{key} value = var:te_tax_p{slot}_{key} \}}\s*"
                         rf"set_variable = \{{ name = te_tax_en_{key}_since value = var:te_tax_now \}}\s*"
@@ -396,23 +398,46 @@ class CommencementTest(unittest.TestCase):
                 self.assertIn(f"set_variable = {{ name = te_tax_pending_relief_{slot} value = 0 }}", body)
                 self.assertNotIn("te_tax_sync_collection", body, "the processor syncs once, after every slot")
 
-    def test_a_sunset_restores_the_rate_in_force_just_before_commencement(self):
-        # Controller ruling (Task 4 fix round 1): the successor is the enacted value apply
-        # overwrites, after this month's sunsets ran; the package's stored _succ is a review
-        # preview and is never read, so a held or never-commenced earlier package cannot
-        # become law through it.
+    def test_supersession_and_successor_happen_at_commencement(self):
+        # Controller ruling (Task 4 fix round 2). The package replaces the enacted value and
+        # its sunset when it commences, never at approval. No sunset in the package: the
+        # change is permanent and clears any pending sunset. A sunset in the package: the
+        # provision reverts to the underlying permanent rate, i.e. a still-pending sunset's
+        # successor (this month's sunsets have run) or else the rate in force, captured
+        # before the overwrite. The package's stored _succ is a review preview, never read.
         for slot in SLOTS:
             body = block(self.text, f"te_tax_gen_apply_{slot}")
             for key in KEYS:
                 with self.subTest(slot=slot, key=key):
-                    capture = body.find(f"set_variable = {{ name = te_tax_en_{key}_succ value = var:te_tax_en_{key} }}")
-                    overwrite = body.find(f"set_variable = {{ name = te_tax_en_{key} value = var:te_tax_p{slot}_{key} }}")
-                    self.assertGreater(capture, 0)
-                    self.assertGreater(overwrite, capture, "capture before the overwrite")
-                    captured = [nested for _, nested in branches(body)
+                    touched = [nested for kind, nested in branches(body)
+                               if kind == "if" and limit_of(nested).strip() == f"var:te_tax_p{slot}_{key} >= 0"]
+                    self.assertEqual(len(touched), 1)
+                    provision = touched[0]
+                    # Sunset or not, the package's own _exp replaces the enacted one,
+                    # unconditionally: -1 when the package has none.
+                    self.assertIn(f"set_variable = {{ name = te_tax_en_{key}_exp value = var:te_tax_p{slot}_{key}_exp }}",
+                                  direct(provision))
+                    # No sunset in the package: _succ cleared too.
+                    cleared = [nested for kind, nested in branches(provision)
+                               if kind == "else" and f"name = te_tax_en_{key}_succ value = -1" in direct(nested)]
+                    self.assertEqual(len(cleared), 1)
+                    # With a package sunset: the rate in force only when no pending sunset
+                    # with a successor exists; otherwise the pending successor stays.
+                    with_sunset = [nested for kind, nested in branches(provision)
+                                   if limit_of(nested).strip() == f"var:te_tax_p{slot}_{key}_exp >= 0"]
+                    self.assertEqual(len(with_sunset), 1)
+                    self.assertNotIn(f"name = te_tax_en_{key}_succ", direct(with_sunset[0]),
+                                     "a pending successor is kept, not rewritten")
+                    fallback = [nested for _, nested in branches(with_sunset[0])
                                 if f"name = te_tax_en_{key}_succ value = var:te_tax_en_{key} " in direct(nested)]
-                    self.assertEqual(len(captured), 1)
-                    self.assertEqual(limit_of(captured[0]).strip(), f"var:te_tax_p{slot}_{key}_exp >= 0")
+                    self.assertEqual(len(fallback), 1)
+                    self.assertRegex(limit_of(fallback[0]), rf"^\s*OR = \{{\s*var:te_tax_en_{key}_exp < 0\s*"
+                                                            rf"var:te_tax_en_{key}_succ < 0\s*\}}\s*$")
+                    self.assertEqual(provision.count(f"name = te_tax_en_{key}_succ"), 2)
+                    # Captured before anything is overwritten.
+                    first_overwrite = min(provision.find(f"name = te_tax_en_{key} value"),
+                                          provision.find(f"name = te_tax_en_{key}_exp value"))
+                    self.assertLess(provision.rfind(f"name = te_tax_en_{key}_succ"), first_overwrite)
                     self.assertNotIn(f"te_tax_p{slot}_{key}_succ", body)
             self.assertNotRegex(body, r"te_tax_p[ab]_\w+_succ")
 
@@ -541,7 +566,7 @@ class StoreTest(unittest.TestCase):
                     self.assertRegex(body, rf"else = \{{\s*set_variable = \{{ name = te_tax_p{slot}_{key}_exp value = -1 \}}"
                                            rf"\s*set_variable = \{{ name = te_tax_p{slot}_{key}_succ value = -1 \}}\s*\}}")
 
-    def test_store_successor_preview_is_the_value_expected_just_before_commencement(self):
+    def test_store_successor_preview_follows_the_commencement_rule(self):
         # A review preview only ("reverts to X"); commencement never reads it.
         for slot, other in (("a", "b"), ("b", "a")):
             body = block(self.generated, f"te_tax_gen_store_{slot}")
@@ -561,6 +586,9 @@ class StoreTest(unittest.TestCase):
                     self.assertNotIn(f"var:te_tax_p{other}_{key} ", limit_of(earlier[0]))
                     self.assertIn(f"name = te_tax_p{slot}_{key}_succ value = var:te_tax_p{other}_{key} ", earlier[0])
                     self.assertIn(f"name = te_tax_p{slot}_{key}_succ value = var:te_tax_p{other}_{key}_succ ", earlier[0])
+            # Apply's rule: a pending sunset keeps its successor whatever its month, so the
+            # preview does not compare sunset months with the due month.
+            self.assertNotIn("_exp <= var:te_tax_bl_due", body)
 
     def test_store_copies_every_bill_field_and_activates_the_slot_last(self):
         for slot in SLOTS:

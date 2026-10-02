@@ -1943,18 +1943,30 @@ te_tax_gen_hold_missed_a = {
 
 # Slot a: copies every field the package touches into the enacted code. Only
 # te_tax_gen_commence_<slot> calls it, inside the processor, which has set te_tax_now,
-# run this month's sunsets first and syncs collection once after every slot. A
-# provision with a sunset reverts to the rate in force immediately before this
-# package commences: te_tax_en_<key>_succ takes the enacted value before it is
+# run this month's sunsets first and syncs collection once after every slot.
+# Supersession of the enacted provision happens here, at commencement, never at
+# approval: the package replaces the value and its sunset. With no sunset of its own
+# the change is permanent and clears any pending sunset (_exp and _succ = -1). With
+# one, the provision reverts to the underlying permanent rate: a sunset still pending
+# now (this month's have run, so it is in the future) keeps its successor; otherwise
+# the rate in force is the successor. Both are captured before anything is
 # overwritten. The stored te_tax_p<slot>_<key>_succ is only the review's preview and
-# is never read here, so a held or never-commenced earlier package cannot become a
-# successor.
+# is never read here.
 te_tax_gen_apply_a = {
 	if = {
 		limit = { var:te_tax_pa_wage >= 0 }
 		if = {
 			limit = { var:te_tax_pa_wage_exp >= 0 }
-			set_variable = { name = te_tax_en_wage_succ value = var:te_tax_en_wage }
+			# A pending sunset with a successor keeps it; otherwise the rate in force.
+			if = {
+				limit = {
+					OR = {
+						var:te_tax_en_wage_exp < 0
+						var:te_tax_en_wage_succ < 0
+					}
+				}
+				set_variable = { name = te_tax_en_wage_succ value = var:te_tax_en_wage }
+			}
 		}
 		else = {
 			set_variable = { name = te_tax_en_wage_succ value = -1 }
@@ -1967,7 +1979,16 @@ te_tax_gen_apply_a = {
 		limit = { var:te_tax_pa_div >= 0 }
 		if = {
 			limit = { var:te_tax_pa_div_exp >= 0 }
-			set_variable = { name = te_tax_en_div_succ value = var:te_tax_en_div }
+			# A pending sunset with a successor keeps it; otherwise the rate in force.
+			if = {
+				limit = {
+					OR = {
+						var:te_tax_en_div_exp < 0
+						var:te_tax_en_div_succ < 0
+					}
+				}
+				set_variable = { name = te_tax_en_div_succ value = var:te_tax_en_div }
+			}
 		}
 		else = {
 			set_variable = { name = te_tax_en_div_succ value = -1 }
@@ -1980,7 +2001,16 @@ te_tax_gen_apply_a = {
 		limit = { var:te_tax_pa_land >= 0 }
 		if = {
 			limit = { var:te_tax_pa_land_exp >= 0 }
-			set_variable = { name = te_tax_en_land_succ value = var:te_tax_en_land }
+			# A pending sunset with a successor keeps it; otherwise the rate in force.
+			if = {
+				limit = {
+					OR = {
+						var:te_tax_en_land_exp < 0
+						var:te_tax_en_land_succ < 0
+					}
+				}
+				set_variable = { name = te_tax_en_land_succ value = var:te_tax_en_land }
+			}
 		}
 		else = {
 			set_variable = { name = te_tax_en_land_succ value = -1 }
@@ -1993,7 +2023,16 @@ te_tax_gen_apply_a = {
 		limit = { var:te_tax_pa_head >= 0 }
 		if = {
 			limit = { var:te_tax_pa_head_exp >= 0 }
-			set_variable = { name = te_tax_en_head_succ value = var:te_tax_en_head }
+			# A pending sunset with a successor keeps it; otherwise the rate in force.
+			if = {
+				limit = {
+					OR = {
+						var:te_tax_en_head_exp < 0
+						var:te_tax_en_head_succ < 0
+					}
+				}
+				set_variable = { name = te_tax_en_head_succ value = var:te_tax_en_head }
+			}
 		}
 		else = {
 			set_variable = { name = te_tax_en_head_succ value = -1 }
@@ -2006,7 +2045,16 @@ te_tax_gen_apply_a = {
 		limit = { var:te_tax_pa_cons >= 0 }
 		if = {
 			limit = { var:te_tax_pa_cons_exp >= 0 }
-			set_variable = { name = te_tax_en_cons_succ value = var:te_tax_en_cons }
+			# A pending sunset with a successor keeps it; otherwise the rate in force.
+			if = {
+				limit = {
+					OR = {
+						var:te_tax_en_cons_exp < 0
+						var:te_tax_en_cons_succ < 0
+					}
+				}
+				set_variable = { name = te_tax_en_cons_succ value = var:te_tax_en_cons }
+			}
 		}
 		else = {
 			set_variable = { name = te_tax_en_cons_succ value = -1 }
@@ -2083,12 +2131,10 @@ te_tax_gen_apply_a = {
 # only through te_tax_store_package, after te_tax_can_store_package and with
 # scope:te_tax_country saved. Every payload field is written, so nothing stale from an
 # earlier package survives. A sunset is due + offset, written only for an offset of at
-# least one month. _succ is a preview for the review only (commencement takes the
-# successor from the enacted value then): the value the provision is expected to hold
-# just before the due month, i.e. the other slot's value if that awaiting package
-# touches it earlier (or that package's successor, if its own sunset comes first), else
-# the enacted value (or the enacted successor, if the enacted sunset comes first).
-# seq = one above both slots. The slot is switched on last.
+# least one month. _succ is a preview for the review only (commencement decides the
+# successor then, by te_tax_gen_apply_<slot>'s rule): the underlying permanent rate,
+# from the other slot's awaiting package if it touches the provision earlier, else
+# from the enacted provision. seq = one above both slots. The slot is switched on last.
 te_tax_gen_store_a = {
 	set_variable = { name = te_tax_pa_due value = var:te_tax_bl_due }
 	if = {
@@ -2109,7 +2155,6 @@ te_tax_gen_store_a = {
 		if = {
 			limit = {
 				var:te_tax_en_wage_exp >= 0
-				var:te_tax_en_wage_exp <= var:te_tax_bl_due
 				var:te_tax_en_wage_succ >= 0
 			}
 			set_variable = { name = te_tax_pa_wage_succ value = var:te_tax_en_wage_succ }
@@ -2127,7 +2172,6 @@ te_tax_gen_store_a = {
 				if = {
 					limit = {
 						var:te_tax_pb_wage_exp >= 0
-						var:te_tax_pb_wage_exp <= var:te_tax_bl_due
 						var:te_tax_pb_wage_succ >= 0
 					}
 					set_variable = { name = te_tax_pa_wage_succ value = var:te_tax_pb_wage_succ }
@@ -2152,7 +2196,6 @@ te_tax_gen_store_a = {
 		if = {
 			limit = {
 				var:te_tax_en_div_exp >= 0
-				var:te_tax_en_div_exp <= var:te_tax_bl_due
 				var:te_tax_en_div_succ >= 0
 			}
 			set_variable = { name = te_tax_pa_div_succ value = var:te_tax_en_div_succ }
@@ -2170,7 +2213,6 @@ te_tax_gen_store_a = {
 				if = {
 					limit = {
 						var:te_tax_pb_div_exp >= 0
-						var:te_tax_pb_div_exp <= var:te_tax_bl_due
 						var:te_tax_pb_div_succ >= 0
 					}
 					set_variable = { name = te_tax_pa_div_succ value = var:te_tax_pb_div_succ }
@@ -2195,7 +2237,6 @@ te_tax_gen_store_a = {
 		if = {
 			limit = {
 				var:te_tax_en_land_exp >= 0
-				var:te_tax_en_land_exp <= var:te_tax_bl_due
 				var:te_tax_en_land_succ >= 0
 			}
 			set_variable = { name = te_tax_pa_land_succ value = var:te_tax_en_land_succ }
@@ -2213,7 +2254,6 @@ te_tax_gen_store_a = {
 				if = {
 					limit = {
 						var:te_tax_pb_land_exp >= 0
-						var:te_tax_pb_land_exp <= var:te_tax_bl_due
 						var:te_tax_pb_land_succ >= 0
 					}
 					set_variable = { name = te_tax_pa_land_succ value = var:te_tax_pb_land_succ }
@@ -2238,7 +2278,6 @@ te_tax_gen_store_a = {
 		if = {
 			limit = {
 				var:te_tax_en_head_exp >= 0
-				var:te_tax_en_head_exp <= var:te_tax_bl_due
 				var:te_tax_en_head_succ >= 0
 			}
 			set_variable = { name = te_tax_pa_head_succ value = var:te_tax_en_head_succ }
@@ -2256,7 +2295,6 @@ te_tax_gen_store_a = {
 				if = {
 					limit = {
 						var:te_tax_pb_head_exp >= 0
-						var:te_tax_pb_head_exp <= var:te_tax_bl_due
 						var:te_tax_pb_head_succ >= 0
 					}
 					set_variable = { name = te_tax_pa_head_succ value = var:te_tax_pb_head_succ }
@@ -2281,7 +2319,6 @@ te_tax_gen_store_a = {
 		if = {
 			limit = {
 				var:te_tax_en_cons_exp >= 0
-				var:te_tax_en_cons_exp <= var:te_tax_bl_due
 				var:te_tax_en_cons_succ >= 0
 			}
 			set_variable = { name = te_tax_pa_cons_succ value = var:te_tax_en_cons_succ }
@@ -2299,7 +2336,6 @@ te_tax_gen_store_a = {
 				if = {
 					limit = {
 						var:te_tax_pb_cons_exp >= 0
-						var:te_tax_pb_cons_exp <= var:te_tax_bl_due
 						var:te_tax_pb_cons_succ >= 0
 					}
 					set_variable = { name = te_tax_pa_cons_succ value = var:te_tax_pb_cons_succ }
@@ -2430,18 +2466,30 @@ te_tax_gen_hold_missed_b = {
 
 # Slot b: copies every field the package touches into the enacted code. Only
 # te_tax_gen_commence_<slot> calls it, inside the processor, which has set te_tax_now,
-# run this month's sunsets first and syncs collection once after every slot. A
-# provision with a sunset reverts to the rate in force immediately before this
-# package commences: te_tax_en_<key>_succ takes the enacted value before it is
+# run this month's sunsets first and syncs collection once after every slot.
+# Supersession of the enacted provision happens here, at commencement, never at
+# approval: the package replaces the value and its sunset. With no sunset of its own
+# the change is permanent and clears any pending sunset (_exp and _succ = -1). With
+# one, the provision reverts to the underlying permanent rate: a sunset still pending
+# now (this month's have run, so it is in the future) keeps its successor; otherwise
+# the rate in force is the successor. Both are captured before anything is
 # overwritten. The stored te_tax_p<slot>_<key>_succ is only the review's preview and
-# is never read here, so a held or never-commenced earlier package cannot become a
-# successor.
+# is never read here.
 te_tax_gen_apply_b = {
 	if = {
 		limit = { var:te_tax_pb_wage >= 0 }
 		if = {
 			limit = { var:te_tax_pb_wage_exp >= 0 }
-			set_variable = { name = te_tax_en_wage_succ value = var:te_tax_en_wage }
+			# A pending sunset with a successor keeps it; otherwise the rate in force.
+			if = {
+				limit = {
+					OR = {
+						var:te_tax_en_wage_exp < 0
+						var:te_tax_en_wage_succ < 0
+					}
+				}
+				set_variable = { name = te_tax_en_wage_succ value = var:te_tax_en_wage }
+			}
 		}
 		else = {
 			set_variable = { name = te_tax_en_wage_succ value = -1 }
@@ -2454,7 +2502,16 @@ te_tax_gen_apply_b = {
 		limit = { var:te_tax_pb_div >= 0 }
 		if = {
 			limit = { var:te_tax_pb_div_exp >= 0 }
-			set_variable = { name = te_tax_en_div_succ value = var:te_tax_en_div }
+			# A pending sunset with a successor keeps it; otherwise the rate in force.
+			if = {
+				limit = {
+					OR = {
+						var:te_tax_en_div_exp < 0
+						var:te_tax_en_div_succ < 0
+					}
+				}
+				set_variable = { name = te_tax_en_div_succ value = var:te_tax_en_div }
+			}
 		}
 		else = {
 			set_variable = { name = te_tax_en_div_succ value = -1 }
@@ -2467,7 +2524,16 @@ te_tax_gen_apply_b = {
 		limit = { var:te_tax_pb_land >= 0 }
 		if = {
 			limit = { var:te_tax_pb_land_exp >= 0 }
-			set_variable = { name = te_tax_en_land_succ value = var:te_tax_en_land }
+			# A pending sunset with a successor keeps it; otherwise the rate in force.
+			if = {
+				limit = {
+					OR = {
+						var:te_tax_en_land_exp < 0
+						var:te_tax_en_land_succ < 0
+					}
+				}
+				set_variable = { name = te_tax_en_land_succ value = var:te_tax_en_land }
+			}
 		}
 		else = {
 			set_variable = { name = te_tax_en_land_succ value = -1 }
@@ -2480,7 +2546,16 @@ te_tax_gen_apply_b = {
 		limit = { var:te_tax_pb_head >= 0 }
 		if = {
 			limit = { var:te_tax_pb_head_exp >= 0 }
-			set_variable = { name = te_tax_en_head_succ value = var:te_tax_en_head }
+			# A pending sunset with a successor keeps it; otherwise the rate in force.
+			if = {
+				limit = {
+					OR = {
+						var:te_tax_en_head_exp < 0
+						var:te_tax_en_head_succ < 0
+					}
+				}
+				set_variable = { name = te_tax_en_head_succ value = var:te_tax_en_head }
+			}
 		}
 		else = {
 			set_variable = { name = te_tax_en_head_succ value = -1 }
@@ -2493,7 +2568,16 @@ te_tax_gen_apply_b = {
 		limit = { var:te_tax_pb_cons >= 0 }
 		if = {
 			limit = { var:te_tax_pb_cons_exp >= 0 }
-			set_variable = { name = te_tax_en_cons_succ value = var:te_tax_en_cons }
+			# A pending sunset with a successor keeps it; otherwise the rate in force.
+			if = {
+				limit = {
+					OR = {
+						var:te_tax_en_cons_exp < 0
+						var:te_tax_en_cons_succ < 0
+					}
+				}
+				set_variable = { name = te_tax_en_cons_succ value = var:te_tax_en_cons }
+			}
 		}
 		else = {
 			set_variable = { name = te_tax_en_cons_succ value = -1 }
@@ -2570,12 +2654,10 @@ te_tax_gen_apply_b = {
 # only through te_tax_store_package, after te_tax_can_store_package and with
 # scope:te_tax_country saved. Every payload field is written, so nothing stale from an
 # earlier package survives. A sunset is due + offset, written only for an offset of at
-# least one month. _succ is a preview for the review only (commencement takes the
-# successor from the enacted value then): the value the provision is expected to hold
-# just before the due month, i.e. the other slot's value if that awaiting package
-# touches it earlier (or that package's successor, if its own sunset comes first), else
-# the enacted value (or the enacted successor, if the enacted sunset comes first).
-# seq = one above both slots. The slot is switched on last.
+# least one month. _succ is a preview for the review only (commencement decides the
+# successor then, by te_tax_gen_apply_<slot>'s rule): the underlying permanent rate,
+# from the other slot's awaiting package if it touches the provision earlier, else
+# from the enacted provision. seq = one above both slots. The slot is switched on last.
 te_tax_gen_store_b = {
 	set_variable = { name = te_tax_pb_due value = var:te_tax_bl_due }
 	if = {
@@ -2596,7 +2678,6 @@ te_tax_gen_store_b = {
 		if = {
 			limit = {
 				var:te_tax_en_wage_exp >= 0
-				var:te_tax_en_wage_exp <= var:te_tax_bl_due
 				var:te_tax_en_wage_succ >= 0
 			}
 			set_variable = { name = te_tax_pb_wage_succ value = var:te_tax_en_wage_succ }
@@ -2614,7 +2695,6 @@ te_tax_gen_store_b = {
 				if = {
 					limit = {
 						var:te_tax_pa_wage_exp >= 0
-						var:te_tax_pa_wage_exp <= var:te_tax_bl_due
 						var:te_tax_pa_wage_succ >= 0
 					}
 					set_variable = { name = te_tax_pb_wage_succ value = var:te_tax_pa_wage_succ }
@@ -2639,7 +2719,6 @@ te_tax_gen_store_b = {
 		if = {
 			limit = {
 				var:te_tax_en_div_exp >= 0
-				var:te_tax_en_div_exp <= var:te_tax_bl_due
 				var:te_tax_en_div_succ >= 0
 			}
 			set_variable = { name = te_tax_pb_div_succ value = var:te_tax_en_div_succ }
@@ -2657,7 +2736,6 @@ te_tax_gen_store_b = {
 				if = {
 					limit = {
 						var:te_tax_pa_div_exp >= 0
-						var:te_tax_pa_div_exp <= var:te_tax_bl_due
 						var:te_tax_pa_div_succ >= 0
 					}
 					set_variable = { name = te_tax_pb_div_succ value = var:te_tax_pa_div_succ }
@@ -2682,7 +2760,6 @@ te_tax_gen_store_b = {
 		if = {
 			limit = {
 				var:te_tax_en_land_exp >= 0
-				var:te_tax_en_land_exp <= var:te_tax_bl_due
 				var:te_tax_en_land_succ >= 0
 			}
 			set_variable = { name = te_tax_pb_land_succ value = var:te_tax_en_land_succ }
@@ -2700,7 +2777,6 @@ te_tax_gen_store_b = {
 				if = {
 					limit = {
 						var:te_tax_pa_land_exp >= 0
-						var:te_tax_pa_land_exp <= var:te_tax_bl_due
 						var:te_tax_pa_land_succ >= 0
 					}
 					set_variable = { name = te_tax_pb_land_succ value = var:te_tax_pa_land_succ }
@@ -2725,7 +2801,6 @@ te_tax_gen_store_b = {
 		if = {
 			limit = {
 				var:te_tax_en_head_exp >= 0
-				var:te_tax_en_head_exp <= var:te_tax_bl_due
 				var:te_tax_en_head_succ >= 0
 			}
 			set_variable = { name = te_tax_pb_head_succ value = var:te_tax_en_head_succ }
@@ -2743,7 +2818,6 @@ te_tax_gen_store_b = {
 				if = {
 					limit = {
 						var:te_tax_pa_head_exp >= 0
-						var:te_tax_pa_head_exp <= var:te_tax_bl_due
 						var:te_tax_pa_head_succ >= 0
 					}
 					set_variable = { name = te_tax_pb_head_succ value = var:te_tax_pa_head_succ }
@@ -2768,7 +2842,6 @@ te_tax_gen_store_b = {
 		if = {
 			limit = {
 				var:te_tax_en_cons_exp >= 0
-				var:te_tax_en_cons_exp <= var:te_tax_bl_due
 				var:te_tax_en_cons_succ >= 0
 			}
 			set_variable = { name = te_tax_pb_cons_succ value = var:te_tax_en_cons_succ }
@@ -2786,7 +2859,6 @@ te_tax_gen_store_b = {
 				if = {
 					limit = {
 						var:te_tax_pa_cons_exp >= 0
-						var:te_tax_pa_cons_exp <= var:te_tax_bl_due
 						var:te_tax_pa_cons_succ >= 0
 					}
 					set_variable = { name = te_tax_pb_cons_succ value = var:te_tax_pa_cons_succ }
