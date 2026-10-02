@@ -53,9 +53,9 @@ The sections below all start open except the explanations:
 ### Cultural share and influence tiers
 
 Your **cultural share** is your raw cultural pull as a percentage of the world's
-total. The world total is recounted about twice a year and after every war, so
-your share can step a little without your own output changing. Your share sets
-your tier:
+total. Other countries' pull is recounted about twice a year and after every
+war, while yours counts as it stands, so your share can step a little without
+your own output changing. Your share sets your tier:
 
 | Cultural share | Tier |
 |---|---|

@@ -1798,7 +1798,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 
 **Country rank does *not* multiply the raw score.** Rank scaling applies to the standard-of-living term alone (`cultural_pull_from_sol`: great power and above full, major ×0.5, minor ×0.25, lesser ×0), which is where a country's weight-class belongs — a small country with a world-leading art industry is not penalised for being small. (An earlier version of this section listed a whole-score rank multiplier; no such multiplier has ever existed in `cultural_hegemony_script_values.txt`.)
 
-**Final Score:** `cultural_pull_total = (cultural_pull_raw / global_raw_cultural_pull) × 100` (0–100% share).
+**Final Score:** `cultural_pull_total = cultural_pull_raw / ch_world_raw_live × 100` (0–100% share). The denominator is every *other* country's raw pull as counted at the last census plus this country's live pull: `ch_cached_global_raw − var:ch_raw_at_census + cultural_pull_raw`, floored at 1. The census (`ch_yearly_global_update`, about every six months and after a war) sums the world and stores each country's part. Dividing live pull by the bare census total let a growing country pass the total between censuses and sit at the 100% cap (a hegemon at 1074.9 "of a world total of 769"); with its own entry swapped in, a share stays at or below 100% and equals the old figure on the day of the census. The tooltip's world total (`ch_global_raw_display`) is the same denominator.
 
 **Effects:**
 - `cultural_hegemony_effect` (dynamic modifier): Migration attraction, tech spread — scaled by `cultural_hegemony_modifier_mult` (0–100×, equals cultural_pull_total share percentage). Note: does NOT add prestige (prestige is an input).

@@ -188,14 +188,9 @@ global_average_sol = {
 	}
 }
 
-# Total raw cultural pull across all countries (for share calculation)
-global_raw_cultural_pull = {
-	value = 0
-	every_country = {
-		add = cultural_pull_raw
-	}
-	min = 1
-}
+# The world's raw cultural pull is summed in the census itself
+# (ch_yearly_global_update), which stores each country's own part as
+# var:ch_raw_at_census on the way; see ch_world_raw_live below.
 
 # ============================================================================
 # SECTION 3: CULTURAL HEGEMONY — PER-COUNTRY COMPONENTS
@@ -486,16 +481,52 @@ cultural_pull_raw = {
 	min = 0
 }
 
-# Final cultural pull: this country's SHARE of global raw cultural pull
+# The world total a country's share is measured against: every OTHER country's
+# raw pull as counted at the last census, plus this country's raw pull now.
+# The census runs about every six months and after a war; our own pull is live.
+# Dividing live pull by the bare census total let a growing country pass the
+# total and sit at the 100% cap (a hegemon at 1074.9 "of a world total of 769").
+# Swapping our census entry for our live pull keeps the share at or below 100%
+# and the total at or above our own pull, and equals raw / census total on the
+# day of the census.
+# A country that did not exist at the census has no ch_raw_at_census and adds
+# its pull to the full total. Saves from before the census kept ch_raw_at_census
+# have no ch_census_own_raw and divide by the census total as it stands, until
+# cultural_hegemony_on_actions.txt forces a recount at the next monthly pulse.
+ch_world_raw_others = {
+	value = global_var:ch_cached_global_raw
+	if = {
+		limit = { has_variable = ch_raw_at_census }
+		subtract = var:ch_raw_at_census
+	}
+	min = 0
+}
+
+ch_world_raw_live = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_census_own_raw }
+		add = ch_world_raw_others
+		add = cultural_pull_raw
+	}
+	else_if = {
+		limit = { has_global_variable = ch_cached_global_raw }
+		add = global_var:ch_cached_global_raw
+	}
+	# The census total's own floor, so a share never divides by zero
+	min = 1
+}
+
+# Final cultural pull: this country's SHARE of the world's raw cultural pull
 # Range: 0–100 (percentage of global cultural influence)
-# Returns 0 before ch_yearly_pulse populates the global cache (avoids 'none'
+# Returns 0 before the first census populates the global cache (avoids 'none'
 # during the first monthly pulse, which can fire before any yearly pulse).
 cultural_pull_total = {
 	value = 0
 	if = {
 		limit = { has_global_variable = ch_cached_global_raw }
 		add = cultural_pull_raw
-		divide = global_var:ch_cached_global_raw
+		divide = ch_world_raw_live
 		multiply = 100
 	}
 	min = 0
@@ -719,11 +750,13 @@ ch_art_mult_pct_display = {
 	round = yes
 }
 
+# The world total our share is shown against (ch_world_raw_live): others as
+# counted at the last census, ourselves as we stand.
 ch_global_raw_display = {
 	value = 0
 	if = {
 		limit = { has_global_variable = ch_cached_global_raw }
-		add = global_var:ch_cached_global_raw
+		add = ch_world_raw_live
 	}
 	round = yes
 }
