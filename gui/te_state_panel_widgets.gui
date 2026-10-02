@@ -672,7 +672,7 @@ types te_state_panel_widget_types
 
 			textbox = {
 				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)5')]"
-				text = "TE_HOMELAND_TRACK_ACTIVE"
+				text = "TE_HOMELAND_REMOVAL_TRACK_ACTIVE"
 				autoresize = yes
 				maximumsize = { 160 -1 }
 				multiline = yes

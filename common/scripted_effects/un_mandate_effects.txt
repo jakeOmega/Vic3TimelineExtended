@@ -62,7 +62,9 @@
 # ============================================================================
 
 # Pick the case a mandate resolution would be tabled about: the highest-scoring
-# eligible target, and within it the largest state whose region we claim.
+# eligible target, and within it the largest state we may name
+# (un_mandate_state_open: a state we claim, held by a notorious country or by
+# one that defied the World Court over its region in our case).
 # MIRRORS un_mandate_case_exists (un_mandate_triggers.txt) — the trigger answers
 # "is there a case", this effect picks which one, and the two limit blocks must
 # be kept identical.
@@ -77,9 +79,8 @@ un_mandate_select_case = {
 			NOT = { THIS = ROOT }
 			NOT = { is_country_type = decentralized }
 			is_subject = no
-			un_mandate_target_is_notorious = yes
 			any_scope_state = {
-				has_claim_by = ROOT
+				un_mandate_state_open = yes
 			}
 		}
 		order_by = un_mandate_case_score
@@ -87,7 +88,7 @@ un_mandate_select_case = {
 		save_temporary_scope_as = un_mandate_case_target
 		ordered_scope_state = {
 			limit = {
-				has_claim_by = ROOT
+				un_mandate_state_open = yes
 			}
 			order_by = state_population
 			max = 1

@@ -391,6 +391,13 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_agency_itlos }
 	un_dissolve_remove_global = { NAME = un_agency_cppnm }
 	un_dissolve_remove_global = { NAME = un_agency_icc }
+	un_dissolve_remove_global = { NAME = un_agency_ccd }
+	un_dissolve_remove_global = { NAME = un_agency_tpnw }
+
+	# 8b. The charter's new business (redesign phase 7, §0.12): its
+	#     institutions lapse and its standing orders end
+	#     (un_charter_effects.txt).
+	un_charter_on_dissolve = yes
 
 	# 9. The organisation's own state. Its record of acts (the ledger log)
 	#    goes with it; the next UN starts with an empty one.
@@ -533,6 +540,9 @@ un_membership_end_effect = {
 		remove_modifier = un_regime_colony_liberty_modifier
 	}
 	je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
+	# The World Development Fund's grant and the World Food Reserve pledge end
+	# with membership (redesign phase 7, un_economy_effects.txt).
+	un_economy_on_membership_end = yes
 	un_state_off = { MODIFIER = un_security_council_modifier }
 	un_state_off = { MODIFIER = un_permanent_member_modifier }
 	un_state_off = { MODIFIER = un_founding_member_modifier }
@@ -558,12 +568,14 @@ un_membership_end_effect = {
 	un_state_off = { MODIFIER = un_pandemic_cooperation_modifier }
 	un_state_off = { MODIFIER = un_refugee_program_modifier }
 	un_state_off = { MODIFIER = un_space_partnership_modifier }
-	# The three conventions that sit on the country rather than the journal
+	# The five conventions that sit on the country rather than the journal
 	# entry. un_apply_ratified_conventions re-adds them on rejoining,
 	# exactly as it does the journal-entry ones above.
 	un_state_country_off = { MODIFIER = un_law_of_sea_modifier }
 	un_state_country_off = { MODIFIER = un_icc_member_modifier }
 	un_state_country_off = { MODIFIER = un_physical_protection_modifier }
+	un_state_country_off = { MODIFIER = un_cultural_diversity_modifier }
+	un_state_country_off = { MODIFIER = un_nuclear_ban_modifier }
 
 	# The overview's Security Council flags (un_overview_display_effects.txt).
 	un_p5_display_refresh = yes

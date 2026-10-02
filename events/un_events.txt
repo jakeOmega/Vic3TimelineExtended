@@ -9,7 +9,7 @@
 # (common/scripted_effects/un_docket_effects.txt) for a real situation and sent
 # to the countries it concerns, or fired where the thing it answers happens:
 #   docket    2 (an appeal: nuclear strike, aggression, covert operation),
-#             3, 6, 9, 12, 14, 16, 17, 18, 19, 21, 22 (topics to table),
+#             3, 6, 9, 12, 14, 16, 17, 18, 19, 21, 22, 23, 37, 38 (topics to table),
 #             4 (a collapsing state), 7 (a famine), 15 (an embargo)
 #   hooks     5 (sanctions adopted), 8 (a court case from event 2),
 #             10 (the crisis opens), 11 (a veto), 20 (a great power leaves),
@@ -3186,6 +3186,221 @@ un_events.23 = {
 }
 
 
+# ---- Convention on Cultural Diversity ----
+# Redesign phase 7 (§0.12 item 5): raised by the docket as Assembly business
+# once the charter carries Reform I and UNESCO is in force
+# (un_docket_topic_open_cultural_diversity), offered to a member with the
+# mass_media technology that is not the world's cultural hegemon.
+un_events.37 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/cultural_festival_revival.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_events.37.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.37.d_benchmark
+				trigger = { has_modifier = cultural_hegemony_foreign_benchmark }
+			}
+			desc = un_events.37.d
+		}
+	}
+	flavor = un_events.37.f
+
+	duration = 3
+
+	trigger = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		global_var:un_authority >= 40
+		un_charter_has_reform = { LEVEL = 1 }
+		has_global_variable = un_agency_unesco
+		has_technology_researched = mass_media
+		# Global ratification gate, as for the law of the sea (un_events.21).
+		NOT = { has_global_variable = un_agency_ccd }
+		NOT = { has_modifier = un_cultural_diversity_modifier }
+		NOT = { has_modifier = un_cultural_diversity_refusal_modifier }
+		NOT = { un_regime_cultural_hegemon = yes }
+		NOT = { has_global_variable = un_vote_active }
+	}
+
+	immediate = {
+		un_vote_reserve = yes
+	}
+
+	# Option A: Propose the Convention to the General Assembly
+	option = {
+		name = un_events.37.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_modifier = cultural_hegemony_foreign_benchmark }
+				add = 3
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_multicultural }
+				add = 2
+			}
+		}
+		custom_tooltip = un_vote_initiated_tt
+		# The proposer ratifies on passage with every other member. What
+		# tabling it does is the chamber's Propose control's script too
+		# (un_propose_cultural_diversity_table, un_propose_effects.txt).
+		un_propose_cultural_diversity_table = yes
+	}
+
+	# Option B: Leave it to another delegation.
+	option = {
+		name = un_docket_option_pass
+		ai_chance = {
+			base = 3
+		}
+		custom_tooltip = un_docket_pass_tt
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = cultural_diversity EVENT = un_events.37 }
+		}
+	}
+
+	# Option C: One nation, one culture
+	option = {
+		name = un_events.37.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_law = law_type:law_ethnostate }
+				add = 4
+			}
+		}
+		add_modifier = {
+			name = un_cultural_diversity_refusal_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_ledger_tt_credibility_down_0_5
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 1371 }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = cultural_diversity EVENT = un_events.37 }
+		}
+	}
+}
+
+# ---- Treaty on the Prohibition of Nuclear Weapons ----
+# Redesign phase 7 (§0.12 item 8): raised by the docket as Assembly business
+# once the charter carries Reform II and the Non-Proliferation Treaty is in
+# force (un_docket_topic_open_nuclear_ban), offered to a member with the
+# nuclear_weapons technology that holds no warheads.
+un_events.38 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/military_disarmament_ceremony.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_events.38.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.38.d_used
+				trigger = { has_global_variable = world_first_nuclear_weapon_used }
+			}
+			desc = un_events.38.d
+		}
+	}
+	flavor = un_events.38.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = nuclear_weapons_enabled
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		global_var:un_authority >= 40
+		un_charter_has_reform = { LEVEL = 2 }
+		has_global_variable = un_agency_iaea
+		has_technology_researched = nuclear_weapons
+		nd_is_armed = no
+		# Global ratification gate, as for the law of the sea (un_events.21).
+		NOT = { has_global_variable = un_agency_tpnw }
+		NOT = { has_modifier = un_nuclear_ban_modifier }
+		NOT = { has_modifier = un_nuclear_ban_refusal_modifier }
+		NOT = { has_global_variable = un_vote_active }
+	}
+
+	immediate = {
+		un_vote_reserve = yes
+	}
+
+	# Option A: Propose the Treaty to the General Assembly
+	option = {
+		name = un_events.38.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_global_variable = world_first_nuclear_weapon_used }
+				add = 3
+			}
+			modifier = {
+				trigger = { nuclear_program_has_programme = no }
+				add = 2
+			}
+		}
+		custom_tooltip = un_vote_initiated_tt
+		# The proposer ratifies on passage with every other member. What
+		# tabling it does is the chamber's Propose control's script too
+		# (un_propose_nuclear_ban_table, un_propose_effects.txt).
+		un_propose_nuclear_ban_table = yes
+	}
+
+	# Option B: Leave it to another delegation.
+	option = {
+		name = un_docket_option_pass
+		ai_chance = {
+			base = 3
+		}
+		custom_tooltip = un_docket_pass_tt
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = nuclear_ban EVENT = un_events.38 }
+		}
+	}
+
+	# Option C: Not while others keep theirs
+	option = {
+		name = un_events.38.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { nuclear_program_has_programme = yes }
+				add = 4
+			}
+		}
+		add_modifier = {
+			name = un_nuclear_ban_refusal_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_ledger_tt_credibility_down_1
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1381 }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = nuclear_ban EVENT = un_events.38 }
+		}
+	}
+}
+
 # ============================================================================
 # THE FLOOR: DISSOLUTION AND REFOUNDING (redesign phase 2)
 # ============================================================================
@@ -3820,7 +4035,7 @@ un_events.36 = {
 			limit = { un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier } }
 			un_convention_on = { MODIFIER = un_space_partnership_modifier }
 		}
-		# The three country-scoped conventions, as un_apply_ratified_conventions has them.
+		# The five country-scoped conventions, as un_apply_ratified_conventions has them.
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier } }
 			un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
@@ -3832,6 +4047,21 @@ un_events.36 = {
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier } }
 			un_convention_country_on = { MODIFIER = un_icc_member_modifier }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = ccd MODIFIER = un_cultural_diversity_modifier } }
+			un_convention_country_on = { MODIFIER = un_cultural_diversity_modifier }
+		}
+		# Not for an armed member: it never voted on the ban, as an armed
+		# joiner never did (un_apply_ratified_conventions), and ratifying the
+		# rest is no promise to disarm. un_rep_any_convention_missed agrees.
+		if = {
+			limit = {
+				un_rep_convention_missed = { AGENCY = tpnw MODIFIER = un_nuclear_ban_modifier }
+				nd_is_armed = no
+			}
+			un_convention_country_on = { MODIFIER = un_nuclear_ban_modifier }
+			un_nuclear_ban_terms_tt = yes
 		}
 		# Our terms under the regimes now in force, as a joiner's.
 		un_regime_refresh_country = yes

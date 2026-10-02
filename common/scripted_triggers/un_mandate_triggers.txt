@@ -25,7 +25,9 @@ un_mandate_target_is_notorious = {
 }
 
 # Whether ROOT could table a mandate resolution at all: some other country
-# holds territory ROOT claims, and is notorious enough to be a licit target.
+# holds territory ROOT claims, and is notorious enough to be a licit target,
+# or defied the World Court over that territory in ROOT's case
+# (un_mandate_state_open).
 # MIRRORS un_mandate_select_case (un_mandate_effects.txt) — the two must be
 # kept in step, the trigger answering "is there a case" and the effect picking
 # which one.
@@ -35,10 +37,26 @@ un_mandate_case_exists = {
 		NOT = { THIS = ROOT }
 		NOT = { is_country_type = decentralized }
 		is_subject = no
-		un_mandate_target_is_notorious = yes
 		any_scope_state = {
-			has_claim_by = ROOT
+			un_mandate_state_open = yes
 		}
+	}
+}
+
+# A state ROOT could name in a mandate case: ROOT claims it, and either its
+# holder is notorious (un_mandate_target_is_notorious, the case of 60) or,
+# within the last ten years, its holder defied the World Court in ROOT's case
+# over this state's region (redesign phase 7, §0.12;
+# un_court_defiance_opens_mandate, un_justice_triggers.txt). The second needs
+# no case: defying the court is the grounds, and only for that region. Both
+# un_mandate_case_exists and un_mandate_select_case ask this, so the two stay
+# mirrored.
+# Scope: state; ROOT = the prospective proposer
+un_mandate_state_open = {
+	has_claim_by = ROOT
+	OR = {
+		owner ?= { un_mandate_target_is_notorious = yes }
+		un_court_defiance_opens_mandate = yes
 	}
 }
 

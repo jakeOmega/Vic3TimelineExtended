@@ -154,6 +154,21 @@ un_regime_heritage_site = {
 	any_scope_building = { is_building_group = bg_monuments }
 }
 
+# ---- Cultural diversity (redesign phase 7) ------------------------------------------------
+
+# The world's cultural hegemon: first in cultural pull at the last recount
+# (global_var:ch_rank_1, cultural_hegemony_effects.txt). Under the disabled
+# cultural hegemony rule there is no recount, and no hegemon.
+# Scope: country
+un_regime_cultural_hegemon = {
+	has_game_rule = cultural_hegemony_enabled
+	has_global_variable = ch_rank_1
+	# The country it names may be gone (cultural_hegemony_triggers.txt guards
+	# the same way).
+	exists = global_var:ch_rank_1
+	this = global_var:ch_rank_1
+}
+
 # ---- Sovereignty (§7.1) -------------------------------------------------------------------
 
 # An interest group that resents the UN's reach: a nationalist, jingoist,
@@ -215,6 +230,8 @@ un_regime_any_convention = {
 		has_global_variable = un_agency_unesco
 		has_global_variable = un_agency_who
 		has_global_variable = un_agency_icc
+		has_global_variable = un_agency_ccd
+		has_global_variable = un_agency_tpnw
 	}
 }
 
@@ -237,6 +254,7 @@ un_regime_has_terms = {
 		has_modifier = un_regime_space_laggard_modifier
 		has_modifier = un_regime_space_weapon_modifier
 		has_modifier = un_regime_heritage_site_modifier
+		has_modifier = un_regime_cultural_hegemon_modifier
 		has_modifier = un_regime_shared_intelligence_modifier
 		has_modifier = un_regime_colony_liberty_modifier
 	}
@@ -264,6 +282,8 @@ un_chamber_party_to_a_convention = {
 		has_modifier = un_law_of_sea_modifier
 		has_modifier = un_icc_member_modifier
 		has_modifier = un_physical_protection_modifier
+		has_modifier = un_cultural_diversity_modifier
+		has_modifier = un_nuclear_ban_modifier
 		has_modifier = un_regime_colonial_pressure_modifier
 		has_modifier = un_regime_colony_liberty_modifier
 	}

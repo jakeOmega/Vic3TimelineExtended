@@ -1,8 +1,9 @@
 ﻿# ============================================================================
-# UN MISSIONS — TRIGGERS (redesign phase 6)
+# UN MISSIONS — TRIGGERS (redesign phase 6; phase 7 added electoral observers)
 # ============================================================================
 # The figures are in common/script_values/un_mission_values.txt, the writers in
-# common/scripted_effects/un_mission_effects.txt.
+# common/scripted_effects/un_mission_effects.txt. Four kinds: peacekeeping,
+# aid, stabilisation and (phase 7, §0.12 item 11) electoral.
 # ============================================================================
 
 # The scoped state already hosts an active mission (one per state at a time).
@@ -28,6 +29,42 @@ un_mission_protected = {
 	}
 }
 
+# The scoped mission is a peacekeeping or stabilisation mission: a force in the
+# field, which contributors staff, which fails when every contributor it had
+# has gone, and which the Standing UN Force reinforces.
+# Scope: mission container
+un_mission_is_peace_operation = {
+	OR = {
+		has_tag = un_msn_peacekeeping
+		has_tag = un_msn_stabilisation
+	}
+}
+
+# The Standing UN Force serves in the scoped mission (redesign phase 7, §0.12
+# item 2): it stands, and the mission is a peacekeeping or stabilisation
+# mission. It counts as one contributor in the mission's strength
+# (un_mission_strength_heads), and the mission neither lapses unstaffed nor
+# fails for want of contributors (un_mission_monthly).
+# Scope: mission container
+un_mission_force_serves = {
+	un_force_in_force = yes
+	un_mission_is_peace_operation = yes
+}
+
+# The scoped country holds elections: the voting laws Election Interference
+# needs of its target ("Target must have some form of elected legislature",
+# covert_operations.txt). An electoral observer mission needs a host that holds
+# them, and fails if it stops.
+# Scope: country
+un_mission_holds_elections = {
+	OR = {
+		has_law = law_type:law_landed_voting
+		has_law = law_type:law_wealth_voting
+		has_law = law_type:law_census_voting
+		has_law = law_type:law_universal_suffrage
+	}
+}
+
 # The scoped country contributes to an active mission hosted by
 # scope:un_msn_intel_host: its covert networks there grow faster
 # (covert_nets_sync; §7.4).
@@ -43,7 +80,8 @@ un_mission_contributes_in = {
 }
 
 # The scoped country hosts an active mission of $TYPE$ (peacekeeping | aid |
-# stabilisation). A country hosting one cannot ask the Assembly for another.
+# stabilisation | electoral). A country hosting one cannot ask the Assembly for
+# another.
 # Scope: country
 un_mission_hosts = {
 	has_global_variable_list = un_mission_registry
@@ -164,10 +202,12 @@ un_mission_withdrawn_by = {
 }
 
 # The scoped mission takes $WHO$ as a volunteer. $WHO$'s own eligibility
-# (un_mission_volunteer_eligible) is asked separately.
+# (un_mission_volunteer_eligible) is asked separately. An electoral observer
+# mission takes none: its observers are paid from the UN's budget.
 # Scope: mission container
 un_mission_accepts_volunteer = {
 	has_tag = un_msn_active
+	NOT = { has_tag = un_msn_electoral }
 	un_mission_not_hosted_by = { WHO = $WHO$ }
 	un_mission_not_at_war_with_host = { WHO = $WHO$ }
 	NOT = { un_mission_served_by = { WHO = $WHO$ } }
@@ -242,6 +282,14 @@ un_mission_slot_can_volunteer = {
 		NOT = { has_modifier = un_sanctions_target_modifier }
 	}
 	custom_tooltip = {
+		text = un_mission_volunteer_need_not_electoral_tt
+		any_in_global_list = {
+			variable = un_mission_registry
+			un_mission_in_slot = { SLOT = $SLOT$ }
+			NOT = { has_tag = un_msn_electoral }
+		}
+	}
+	custom_tooltip = {
 		text = un_mission_volunteer_need_not_host_tt
 		any_in_global_list = {
 			variable = un_mission_registry
@@ -284,5 +332,33 @@ un_mission_slot_served = {
 		variable = un_mission_registry
 		un_mission_in_slot = { SLOT = $SLOT$ }
 		un_mission_served_by = { WHO = ROOT }
+	}
+}
+
+# ---- Requesting electoral observers (redesign phase 7, §0.12 item 11) -------------------
+# The topic observer_request: a member that holds elections asks the Assembly
+# for observers at its next one. A request, like aid: the requester is the
+# resolution's target and its beneficiary. The shared gates (membership, the
+# request cooldown, the recess, Article 19, suspended representation, Charter
+# Reform I, the topic's cooldown) are in un_propose_observer_request_possible
+# (un_propose_triggers.txt).
+
+# There is something to ask for: we hold elections, no UN observers are at work
+# here already, our delegation is seated, and a state of ours can take a
+# mission.
+# Scope: the proposing country
+un_observer_request_case_exists = {
+	un_mission_holds_elections = yes
+	NOT = { un_mission_hosts = { TYPE = electoral } }
+	NOT = { un_representation_suspended = yes }
+	un_mission_can_join_host = { TYPE = electoral }
+}
+
+# The topic's own gate: observers are not sent into a war.
+# Scope: the proposing country
+un_observer_request_can_table = {
+	custom_tooltip = {
+		text = un_observer_request_need_peace_tt
+		is_at_war = no
 	}
 }

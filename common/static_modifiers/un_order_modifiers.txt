@@ -1,0 +1,20 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — ORDER: STATIC MODIFIERS (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 item 9. Unit values: the one site
+# that adds each (common/scripted_effects/un_order_effects.txt and
+# events/un_referendum_events.txt) multiplies it by the UN's enforcement, so
+# it is nothing at Moribund and ×2.5 at Supranational.
+# ============================================================================
+
+# An overlord that refused the referendum the Assembly ordered in one of its
+# subjects. Five years, decaying, times E: its prestige suffers and every
+# subject it holds takes heart. While it stands the overlord may not table a
+# referendum of its own (un_referendum_can_table). Timed, so a revolution's
+# winner does not inherit it (the dossier's defiance record, a variable, it
+# does).
+un_referendum_refused_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.05
+	country_liberty_desire_of_subjects_add = 0.05
+}

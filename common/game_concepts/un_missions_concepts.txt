@@ -1,0 +1,10 @@
+﻿# ============================================================================
+# UN MISSIONS — PHASE 7 CONCEPTS (redesign phase 7, §0.12 items 2 and 11)
+# ============================================================================
+# The fourth kind of mission, and the Standing UN Force. The older mission
+# concepts (concept_un_mission and its three kinds) are in extra_concepts.txt.
+# Loc: concept_<name> and concept_<name>_desc.
+# ============================================================================
+
+concept_un_mission_electoral = {}
+concept_un_standing_force = {}

@@ -1,0 +1,41 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — JUSTICE: NOTICES (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 items 1, 3 and 4. Each goes to the
+# country it concerns.
+# Loc: notification_<message>_name/_desc/_tooltip.
+# ============================================================================
+
+# Our credentials are suspended, or restored (un_representation_monthly_update,
+# un_membership_effects.txt, which notices the change).
+un_credentials_suspended_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+un_credentials_restored_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+# The arms embargo on us has run its course (un_justice_monthly_update).
+un_arms_embargo_lifted_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+# We added a war goal against a region the World Court found we have no claim
+# to, as near as on_wargoal_added lets the test tell; once per diplomatic play
+# (un_court_bar_war_goal, un_justice_effects.txt).
+un_court_bar_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}

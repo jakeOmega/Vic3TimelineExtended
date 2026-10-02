@@ -64,6 +64,41 @@ un_charter_reform_ripe = {
 	global_var:un_charter_pressure_months >= un_charter_reform_months_needed
 }
 
+# The charter carries Reform $LEVEL$ (1 or 2) or more: the business that
+# reform unlocks may come before the Assembly (redesign phase 7, §0.12). Every
+# entrance to that business asks this one trigger: the propose gates, the
+# docket and the chamber's rows. The charter falls back only with a
+# dissolution, so nothing it unlocked is ever withdrawn while the UN stands.
+# Parameters: $LEVEL$ = 1 | 2
+# Scope: any
+un_charter_has_reform = {
+	un_charter_level_value >= $LEVEL$
+}
+
+# The same, as the one line a refusal prints. The key is passed whole, never
+# built from $LEVEL$, so that organize_loc.py can see it is used.
+# Parameters: $LEVEL$ = 1 | 2, $TT$ = un_charter_needs_reform_1_tt | _2_tt
+# Scope: any
+un_charter_has_reform_tt = {
+	custom_tooltip = {
+		text = $TT$
+		un_charter_has_reform = { LEVEL = $LEVEL$ }
+	}
+}
+
+# Business Reform II unlocks is in view: the charter is at most one reform
+# short of it. Before Reform I carries, the chamber's Reform II rows (ops 19,
+# 26, 28: the nuclear ban, the binding ceasefire, the supervised referendum)
+# and their journal-entry buttons are hidden, so the list shows what the next
+# reform would buy and nothing further off (owner's ruling, §0.12). Reform I's
+# rows are always in view, and so is the World Development Fund's, which needs
+# no reform: a reform strengthens a standing Fund (owner, 2026-10-02).
+# Visibility only; the propose gates still ask un_charter_has_reform.
+# Scope: any
+un_charter_reform_ii_in_view = {
+	un_charter_has_reform = { LEVEL = 1 }
+}
+
 # The crisis is open.
 un_crisis_is_open = {
 	has_global_variable = un_founded

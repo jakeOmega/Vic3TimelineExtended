@@ -53,10 +53,11 @@ Terms the mod introduces, or uses in its own sense.
 | Term | Meaning | Chapter |
 |---|---|---|
 | Agent network | Your 0–100 presence inside one target country. It gives operations a head start, cover from detection, and intelligence reports. | [Cultural hegemony and covert warfare](10-influence.md#agent-networks) |
-| Arsenal ceiling | The most warheads you choose to hold, or a Nuclear Arms Limitation treaty holds you to. Warheads above it are taken apart, and your program builds nothing while you are at or above it. | [Nuclear weapons](13-nuclear.md#reducing-or-giving-up-an-arsenal) |
+| Arsenal ceiling | The most warheads you choose to hold, or a Nuclear Arms Limitation treaty or the UN Prohibition Treaty holds you to. Warheads above it are taken apart, and your program builds nothing while you are at or above it. | [Nuclear weapons](13-nuclear.md#reducing-or-giving-up-an-arsenal) |
 | Bubble pressure | Speculation that builds up during a boom. It sets how likely a banking crash is and how hard it hits. | [Banking and monetary policy](04-banking.md#cycle-value-momentum-and-bubble-pressure) |
 | Bulk Transportation | The base game's Merchant Marine good, renamed: freight, produced by transport infrastructure and used by industry. | [Economy and construction](03-economy.md#bulk-transportation-and-freight) |
 | Case strength | A 0–100 score built from a country's record that decides which punitive UN resolutions can be tabled against it. | [The United Nations](09-united-nations.md#grounds-for-un-censure) |
+| Charter reform | One of the two amendments to the UN Charter. Each raises the ceiling on UN Authority and opens new business before the General Assembly. | [The United Nations](09-united-nations.md#un-charter-reforms) |
 | Colonial stability | The 0–100 bar of the Colonial Empire journal entry. Its level and the programs you run decide how the empire ends. | [Colonial empires and decolonization](11-decolonization.md#colonial-stability-bands) |
 | Construction maintenance | The construction good that industry and infrastructure consume each week under the construction market. | [Economy and construction](03-economy.md#construction-maintenance-and-retooling) |
 | Construction Services | The good that Construction Sectors sell and Construction Sites turn into construction points. | [Economy and construction](03-economy.md#from-construction-sector-to-construction-queue) |

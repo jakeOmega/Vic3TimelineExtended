@@ -2347,14 +2347,15 @@ types state_panel_types
 				}
 			}
 
-			### UN MISSION (UN redesign phase 6)
+			### UN MISSION (UN redesign phase 6; phase 7 added the electoral
+			### kind and the Standing UN Force's line in the tooltip)
 			### One tile while an active UN mission works in this state: its
 			### kind, months, strength and progress. Every value reads 0 with no
 			### mission (un_mission_values.txt), so the gate never reads a
 			### missing variable.
 			state_panel_status_item_small = {
 				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)0')]"
-				tooltip = "TE_STATE_UN_TT"
+				tooltip = "TE_STATE_UN_MISSION_TT"
 
 				blockoverride "texture" {
 					texture = "gfx/interface/icons/event_icons/waving_flag.dds"
@@ -2374,7 +2375,7 @@ types state_panel_types
 								text = "TE_STATE_UN_ROW_TYPE"
 							}
 							blockoverride "row_value" {
-								text = "TE_STATE_UN_ROW_TYPE_VALUE"
+								text = "TE_STATE_UN_ROW_KIND_VALUE"
 							}
 						}
 
