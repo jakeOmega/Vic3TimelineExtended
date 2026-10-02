@@ -7,8 +7,9 @@
 # te_tax_gen_sync_*: called by te_tax_sync_collection (te_tax_collection_effects.txt),
 # the only writer of a rule-on country's native tax state, which saves
 # scope:te_tax_country and scope:te_tax_sponsor first. Each sync removes what the
-# enacted code does not hold and adds what it holds and is missing, so a second call
-# changes nothing. Amendment changes are not visible later in the same effect: the
+# enacted code does not hold and adds what it holds and is missing. Amendment and
+# goods changes are not visible later in the same effect, so run each at most once
+# per effect execution; a call in a later execution then changes nothing. The
 # removal loop never touches the enacted amendment, and the add checks only that one.
 
 # Each instrument's tokens with their sentinels, if absent.
@@ -54,6 +55,7 @@ te_tax_gen_init_goods = {
 	if = { limit = { NOT = { has_variable = te_tax_en_g_coal } } set_variable = { name = te_tax_en_g_coal value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_coffee } } set_variable = { name = te_tax_en_g_coffee value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_consumer_appliances } } set_variable = { name = te_tax_en_g_consumer_appliances value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_en_g_digital_access } } set_variable = { name = te_tax_en_g_digital_access value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_digital_assets } } set_variable = { name = te_tax_en_g_digital_assets value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_electricity } } set_variable = { name = te_tax_en_g_electricity value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_g_fabric } } set_variable = { name = te_tax_en_g_fabric value = 0 } }
@@ -1328,7 +1330,8 @@ te_tax_gen_sync_cons = {
 }
 
 # Taxed goods: the native consumption-tax list holds a catalog good exactly when
-# te_tax_en_g_<good> = 1. Goods outside the catalog are not touched here.
+# te_tax_en_g_<good> = 1, and never holds a good outside the catalog, so the native
+# taxed set always equals the enacted one.
 te_tax_gen_sync_goods = {
 	if = {
 		limit = { var:te_tax_en_g_aeroplanes = 1 NOT = { has_consumption_tax = g:aeroplanes } }
@@ -1385,6 +1388,14 @@ te_tax_gen_sync_goods = {
 	else_if = {
 		limit = { NOT = { var:te_tax_en_g_consumer_appliances = 1 } has_consumption_tax = g:consumer_appliances }
 		remove_taxed_goods = g:consumer_appliances
+	}
+	if = {
+		limit = { var:te_tax_en_g_digital_access = 1 NOT = { has_consumption_tax = g:digital_access } }
+		add_taxed_goods = g:digital_access
+	}
+	else_if = {
+		limit = { NOT = { var:te_tax_en_g_digital_access = 1 } has_consumption_tax = g:digital_access }
+		remove_taxed_goods = g:digital_access
 	}
 	if = {
 		limit = { var:te_tax_en_g_digital_assets = 1 NOT = { has_consumption_tax = g:digital_assets } }
@@ -1634,4 +1645,31 @@ te_tax_gen_sync_goods = {
 		limit = { NOT = { var:te_tax_en_g_wood = 1 } has_consumption_tax = g:wood }
 		remove_taxed_goods = g:wood
 	}
+	# Goods no pop buys: never on the enacted list, so never natively taxed.
+	if = { limit = { has_consumption_tax = g:advanced_materials } remove_taxed_goods = g:advanced_materials }
+	if = { limit = { has_consumption_tax = g:ammunition } remove_taxed_goods = g:ammunition }
+	if = { limit = { has_consumption_tax = g:artillery } remove_taxed_goods = g:artillery }
+	if = { limit = { has_consumption_tax = g:construction } remove_taxed_goods = g:construction }
+	if = { limit = { has_consumption_tax = g:dye } remove_taxed_goods = g:dye }
+	if = { limit = { has_consumption_tax = g:electronic_components } remove_taxed_goods = g:electronic_components }
+	if = { limit = { has_consumption_tax = g:engines } remove_taxed_goods = g:engines }
+	if = { limit = { has_consumption_tax = g:explosives } remove_taxed_goods = g:explosives }
+	if = { limit = { has_consumption_tax = g:fertilizer } remove_taxed_goods = g:fertilizer }
+	if = { limit = { has_consumption_tax = g:gold } remove_taxed_goods = g:gold }
+	if = { limit = { has_consumption_tax = g:hardwood } remove_taxed_goods = g:hardwood }
+	if = { limit = { has_consumption_tax = g:iron } remove_taxed_goods = g:iron }
+	if = { limit = { has_consumption_tax = g:ironclads } remove_taxed_goods = g:ironclads }
+	if = { limit = { has_consumption_tax = g:launch_capacity } remove_taxed_goods = g:launch_capacity }
+	if = { limit = { has_consumption_tax = g:lead } remove_taxed_goods = g:lead }
+	if = { limit = { has_consumption_tax = g:magnetic_drive_ships } remove_taxed_goods = g:magnetic_drive_ships }
+	if = { limit = { has_consumption_tax = g:manowars } remove_taxed_goods = g:manowars }
+	if = { limit = { has_consumption_tax = g:merchant_marine } remove_taxed_goods = g:merchant_marine }
+	if = { limit = { has_consumption_tax = g:motor_ships } remove_taxed_goods = g:motor_ships }
+	if = { limit = { has_consumption_tax = g:robotics } remove_taxed_goods = g:robotics }
+	if = { limit = { has_consumption_tax = g:rubber } remove_taxed_goods = g:rubber }
+	if = { limit = { has_consumption_tax = g:steel } remove_taxed_goods = g:steel }
+	if = { limit = { has_consumption_tax = g:sulfur } remove_taxed_goods = g:sulfur }
+	if = { limit = { has_consumption_tax = g:tanks } remove_taxed_goods = g:tanks }
+	if = { limit = { has_consumption_tax = g:tech_metals } remove_taxed_goods = g:tech_metals }
+	if = { limit = { has_consumption_tax = g:tools } remove_taxed_goods = g:tools }
 }

@@ -165,10 +165,10 @@ class SchemaDocTest(unittest.TestCase):
         listed = re.findall(r"`(\w+)`", lines[0])
         self.assertEqual(listed, list(catalog()))
         self.assertIn(f"({len(catalog())} goods)", lines[0])
-        left_out = [line for line in section.splitlines() if line.startswith("**Left out")]
-        self.assertEqual(len(left_out), 1)
-        for good in gen.left_out_goods():
-            self.assertIn(f"`{good}`", left_out[0])
+        outside = [line for line in section.splitlines() if line.startswith("**Outside the catalog")]
+        self.assertEqual(len(outside), 1, "one **Outside the catalog** line")
+        self.assertEqual(re.findall(r"`(\w+)`", outside[0]), list(gen.stray_goods()))
+        self.assertIn(f"({len(gen.stray_goods())} goods", outside[0])
 
 
 class InitTest(unittest.TestCase):
@@ -243,11 +243,21 @@ class WriterTest(unittest.TestCase):
 
     def test_writer_is_one_gated_block(self):
         writer = self.parsed["te_tax_sync_collection"]
-        self.assertEqual(set(writer), {"if"})
+        self.assertEqual(set(writer), {"if", "else_if"})
         limit = writer["if"]["limit"]
         self.assertEqual(limit.get("te_tax_code_on"), "yes")
         self.assertEqual(limit.get("has_law"), "law_type:law_te_tax_code")
         self.assertEqual(limit.get("has_variable"), "te_tax_schema")
+
+    def test_a_carrier_holder_without_tokens_is_logged_not_synced(self):
+        skip = self.parsed["te_tax_sync_collection"]["else_if"]
+        self.assertEqual(set(skip), {"limit", "debug_log"})
+        self.assertEqual(skip["limit"], {
+            "te_tax_code_on": "yes",
+            "has_law": "law_type:law_te_tax_code",
+            "NOT": {"has_variable": "te_tax_schema"},
+        })
+        self.assertIn("[THIS.", skip["debug_log"])
 
     def test_writer_calls_every_part(self):
         for key in KEYS:
@@ -263,7 +273,7 @@ class WriterTest(unittest.TestCase):
         self.assertLess(self.writer.find("te_tax_pick_sponsor = yes"), first_sync)
 
     def test_amendment_syncs_run_only_with_a_sponsor(self):
-        guarded = re.search(r"if = \{\s*limit = \{ exists = scope:te_tax_sponsor \}", self.writer)
+        guarded = re.search(r"if = \{\s*limit = \{ any_interest_group = \{ always = yes \} \}", self.writer)
         self.assertIsNotNone(guarded)
         body = self.writer[guarded.end():close(self.writer, guarded.end() - 1)]
         for key in KEYS:
@@ -277,15 +287,22 @@ class WriterTest(unittest.TestCase):
         self.assertEqual(self.writer.count("set_tax_level"), 1)
 
     def test_sponsor_prefers_a_ruling_group_then_the_strongest(self):
-        sponsor = block(self.text, "te_tax_pick_sponsor")
-        ruling = sponsor.find("random_interest_group")
-        strongest = sponsor.find("ordered_interest_group")
-        self.assertGreaterEqual(ruling, 0)
-        self.assertGreater(strongest, ruling)
-        self.assertIn("is_in_government = yes", sponsor[ruling:strongest])
-        self.assertIn("order_by = ig_clout", sponsor[strongest:])
-        self.assertIn("NOT = { exists = scope:te_tax_sponsor }", sponsor)
-        self.assertEqual(sponsor.count("save_scope_as = te_tax_sponsor"), 2)
+        sponsor = self.parsed["te_tax_pick_sponsor"]
+        self.assertEqual(set(sponsor), {"if", "else"})
+        self.assertEqual(sponsor["if"]["limit"], {"any_interest_group": {"is_in_government": "yes"}})
+        ruling = sponsor["if"]["random_interest_group"]
+        self.assertEqual(ruling["limit"], {"is_in_government": "yes"})
+        self.assertEqual(ruling["save_scope_as"], "te_tax_sponsor")
+        strongest = sponsor["else"]["ordered_interest_group"]
+        self.assertEqual(strongest["order_by"], "ig_clout")
+        self.assertEqual(strongest["save_scope_as"], "te_tax_sponsor")
+
+    def test_no_branch_tests_whether_a_saved_sponsor_exists(self):
+        # A sponsor saved for another country earlier in the same execution
+        # would pass such a test.
+        for path in (COLLECTION, GEN_EFFECTS):
+            with self.subTest(path=path):
+                self.assertNotIn("exists = scope:te_tax_sponsor", read(path))
 
     def test_layer_never_reads_root(self):
         for path in (STATE, COLLECTION, GEN_EFFECTS, GEN_TRIGGERS):
@@ -419,7 +436,25 @@ class GeneratedSyncTest(unittest.TestCase):
         for triple in adds + removes:
             self.assertEqual(len(set(triple)), 1)
         self.assertEqual(body.count("add_taxed_goods"), len(goods))
-        self.assertEqual(body.count("remove_taxed_goods"), len(goods))
+        strays = re.findall(
+            r"if = \{ limit = \{ has_consumption_tax = g:(\w+) \} remove_taxed_goods = g:(\w+) \}", body
+        )
+        self.assertEqual([a for a, _ in strays], list(gen.stray_goods()))
+        self.assertTrue(all(a == b for a, b in strays))
+        self.assertEqual(body.count("remove_taxed_goods"), len(goods) + len(strays))
+
+    def test_native_taxed_set_is_pinned_for_every_good(self):
+        # Catalog goods follow their flag; every other good is removed if taxed.
+        catalog_goods, strays = set(catalog()), set(gen.stray_goods())
+        self.assertFalse(catalog_goods & strays)
+        self.assertEqual(catalog_goods | strays, set(gen.all_goods()))
+        with open(ROOT / "vanilla_parsed" / "common" / "goods.json", encoding="utf-8") as handle:
+            vanilla = set(json.load(handle))
+        self.assertTrue(vanilla <= set(gen.all_goods()))
+        mod_goods = set()
+        for path in sorted((ROOT / "common" / "goods").glob("*.txt")):
+            mod_goods |= {name.split(":")[-1] for name in load(path.relative_to(ROOT).as_posix())}
+        self.assertTrue(mod_goods <= set(gen.all_goods()))
 
 
 class ConsumptionCatalogTest(unittest.TestCase):
@@ -441,13 +476,16 @@ class ConsumptionCatalogTest(unittest.TestCase):
         self.assertTrue({"grain", "services", "transportation", "electricity"} <= costed)
         self.assertTrue(costed <= set(catalog()))
 
-    def test_local_goods_without_a_cost_and_goods_pops_never_buy_are_left_out(self):
+    def test_every_good_pops_buy_is_in_and_nothing_else(self):
         goods = set(catalog())
-        self.assertNotIn("digital_access", goods)   # local, no consumption_tax_cost
-        self.assertNotIn("construction", goods)     # costed, but no pop need buys it
-        self.assertNotIn("ammunition", goods)
+        self.assertEqual(goods, set(gen.pop_need_goods()))
+        self.assertEqual(len(goods), 39)
+        self.assertIn("digital_access", goods)   # local, no consumption_tax_cost: default cost 100
         for good in ("liquor", "coffee", "tobacco", "opium", "tourism", "telephones"):
             self.assertIn(good, goods)
+        self.assertNotIn("construction", goods)  # costed, but no pop need buys it
+        self.assertNotIn("ammunition", goods)
+        self.assertIn("construction", gen.stray_goods())
 
 
 class DisplayValueTest(unittest.TestCase):

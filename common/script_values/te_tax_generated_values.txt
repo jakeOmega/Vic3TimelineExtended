@@ -485,6 +485,10 @@ te_tax_view_en_g_consumer_appliances = {
 	value = 0
 	if = { limit = { has_variable = te_tax_en_g_consumer_appliances } value = var:te_tax_en_g_consumer_appliances }
 }
+te_tax_view_en_g_digital_access = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_digital_access } value = var:te_tax_en_g_digital_access }
+}
 te_tax_view_en_g_digital_assets = {
 	value = 0
 	if = { limit = { has_variable = te_tax_en_g_digital_assets } value = var:te_tax_en_g_digital_assets }
@@ -620,6 +624,7 @@ te_tax_view_goods_count = {
 	if = { limit = { has_variable = te_tax_en_g_coal } add = var:te_tax_en_g_coal }
 	if = { limit = { has_variable = te_tax_en_g_coffee } add = var:te_tax_en_g_coffee }
 	if = { limit = { has_variable = te_tax_en_g_consumer_appliances } add = var:te_tax_en_g_consumer_appliances }
+	if = { limit = { has_variable = te_tax_en_g_digital_access } add = var:te_tax_en_g_digital_access }
 	if = { limit = { has_variable = te_tax_en_g_digital_assets } add = var:te_tax_en_g_digital_assets }
 	if = { limit = { has_variable = te_tax_en_g_electricity } add = var:te_tax_en_g_electricity }
 	if = { limit = { has_variable = te_tax_en_g_fabric } add = var:te_tax_en_g_fabric }

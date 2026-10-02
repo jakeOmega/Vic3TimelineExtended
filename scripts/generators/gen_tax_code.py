@@ -220,29 +220,34 @@ def pop_need_goods():
 
 @functools.lru_cache(maxsize=None)
 def consumption_catalog():
-    """The goods a code can put on the taxed-goods list, sorted.
+    """The goods a code can put on the taxed-goods list: every good a pop need buys, sorted.
 
-    Every good some pop need buys, except a `local` good with no explicit
-    `consumption_tax_cost`: vanilla gives a cost to each local good it lets
-    pops be taxed on (services, transportation, electricity), so a local good
-    without one (the mod's digital_access) is left out until a game confirms
-    the native menu offers it.
+    A good with no `consumption_tax_cost` costs the engine default
+    (DEFAULT_GOODS_TAX_COST = 100, 1.14.5 00_defines.txt) and is still
+    taxable: vanilla history taxes liquor, tobacco, opium and wine, none of
+    which sets one, and the local goods services, transportation and
+    electricity are taxable too.
     """
     goods = goods_definitions()
-    catalog = []
-    for good in sorted(pop_need_goods()):
+    for good in pop_need_goods():
         if good not in goods:
             raise ValueError(f"pop need good {good} has no goods definition")
-        body = goods[good]
-        if body.get("local") == "yes" and "consumption_tax_cost" not in body:
-            continue
-        catalog.append(good)
-    return tuple(catalog)
+    return tuple(sorted(pop_need_goods()))
 
 
-def left_out_goods():
-    """Pop-need goods the catalog drops (local, no consumption_tax_cost)."""
-    return tuple(good for good in sorted(pop_need_goods()) if good not in consumption_catalog())
+def all_goods():
+    """Every good defined by vanilla or the mod, sorted."""
+    return tuple(sorted(goods_definitions()))
+
+
+def stray_goods():
+    """Goods outside the catalog: no pop buys them, so no code taxes them.
+
+    te_tax_gen_sync_goods removes a native consumption tax on any of these,
+    so the native taxed set always equals the enacted one.
+    """
+    catalog = set(consumption_catalog())
+    return tuple(good for good in all_goods() if good not in catalog)
 
 
 # ---------------------------------------------------------------------------
@@ -394,8 +399,9 @@ def scripted_effects():
         "# te_tax_gen_sync_*: called by te_tax_sync_collection (te_tax_collection_effects.txt),",
         "# the only writer of a rule-on country's native tax state, which saves",
         "# scope:te_tax_country and scope:te_tax_sponsor first. Each sync removes what the",
-        "# enacted code does not hold and adds what it holds and is missing, so a second call",
-        "# changes nothing. Amendment changes are not visible later in the same effect: the",
+        "# enacted code does not hold and adds what it holds and is missing. Amendment and",
+        "# goods changes are not visible later in the same effect, so run each at most once",
+        "# per effect execution; a call in a later execution then changes nothing. The",
         "# removal loop never touches the enacted amendment, and the add checks only that one.",
         "",
         "# Each instrument's tokens with their sentinels, if absent.",
@@ -444,7 +450,8 @@ def scripted_effects():
     lines += [
         "",
         "# Taxed goods: the native consumption-tax list holds a catalog good exactly when",
-        "# te_tax_en_g_<good> = 1. Goods outside the catalog are not touched here.",
+        "# te_tax_en_g_<good> = 1, and never holds a good outside the catalog, so the native",
+        "# taxed set always equals the enacted one.",
         "te_tax_gen_sync_goods = {",
     ]
     for good in consumption_catalog():
@@ -459,6 +466,9 @@ def scripted_effects():
             f"\t\tremove_taxed_goods = g:{good}",
             "\t}",
         ]
+    lines.append("\t# Goods no pop buys: never on the enacted list, so never natively taxed.")
+    lines += [f"\tif = {{ limit = {{ has_consumption_tax = g:{good} }} remove_taxed_goods = g:{good} }}"
+              for good in stray_goods()]
     lines.append("}")
     return _txt("\n".join(lines) + "\n")
 

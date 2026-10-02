@@ -4,14 +4,17 @@
 # native fiscal state: the rate amendments on law_te_tax_code, the
 # consumption-taxed goods, the relief modifiers and the native tax level. It
 # reads the enacted code from the country's variables and changes only what
-# differs, so a second call changes nothing. Its per-instrument and per-good
-# parts are generated (te_tax_generated_effects.txt, gen_tax_code.py).
+# differs. Its per-instrument and per-good parts are generated
+# (te_tax_generated_effects.txt, gen_tax_code.py).
+#
+# Call it at most once per effect execution: amendment, goods and modifier
+# changes are not visible later in the same execution, so a second call there
+# would act on stale state. A call in a later execution changes nothing.
 #
 # Country scope, with ROOT = THIS = the country: call it from a country event
 # or a country hook, never from the global monthly pulse, which has no ROOT.
 # Nothing here reads ROOT; the country and the sponsor are saved scopes.
-# Amendment and modifier changes are not visible later in the same effect, so
-# nothing below re-reads what it has just written.
+# Nothing below re-reads what it has just written.
 
 te_tax_sync_collection = {
 	if = {
@@ -25,7 +28,8 @@ te_tax_sync_collection = {
 		save_scope_as = te_tax_country
 		te_tax_pick_sponsor = yes
 		if = {
-			limit = { exists = scope:te_tax_sponsor }
+			# te_tax_pick_sponsor saved one of THIS country's groups exactly when it has one.
+			limit = { any_interest_group = { always = yes } }
 			te_tax_gen_sync_wage = yes
 			te_tax_gen_sync_div = yes
 			te_tax_gen_sync_land = yes
@@ -42,19 +46,32 @@ te_tax_sync_collection = {
 		# statics; pinning it keeps identical codes from differing by them.
 		if = { limit = { NOT = { tax_level = medium } } set_tax_level = medium }
 	}
+	else_if = {
+		limit = {
+			te_tax_code_on = yes
+			has_law = law_type:law_te_tax_code
+			NOT = { has_variable = te_tax_schema }
+		}
+		debug_log = "TE_TAX sync skipped: [THIS.GetCountry.GetNameNoFormatting] holds the tax code law but has no te_tax_schema"
+	}
 }
 
 # Country scope. Saves scope:te_tax_sponsor, the interest group recorded as
 # sponsoring the amendments the sync adds: a group in government, else the
 # group with the most clout. add_amendment needs one; the choice changes no
 # rate. Saved, not read from ROOT, so the sync can run from any country event.
+# Branches on THIS country's groups, never on whether the scope already
+# exists, so a sponsor saved for another country in the same execution
+# cannot leak in.
 te_tax_pick_sponsor = {
-	random_interest_group = {
-		limit = { is_in_government = yes }
-		save_scope_as = te_tax_sponsor
-	}
 	if = {
-		limit = { NOT = { exists = scope:te_tax_sponsor } }
+		limit = { any_interest_group = { is_in_government = yes } }
+		random_interest_group = {
+			limit = { is_in_government = yes }
+			save_scope_as = te_tax_sponsor
+		}
+	}
+	else = {
 		ordered_interest_group = {
 			order_by = ig_clout
 			position = 0
