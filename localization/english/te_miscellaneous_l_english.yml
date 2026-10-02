@@ -46,7 +46,7 @@
  AI_WANTS_THIS_MORE_IF_HOSTILE:0 "Hostile relations"
  AI_WANTS_THIS_MORE_IF_MILITARIZED:0 "State has [Concept('concept_military_building', 'military buildings')]"
  AI_WANTS_THIS_MORE_IF_WARY:0 "Wary relations"
- ALGORITHMIC_GOVERNANCE_TT_INSTALLS_AUTOMATED_BUREAUCRACY:0 "Enacts #b Automated Bureaucracy#!. While this law holds, no other Bureaucracy law can be enacted."
+ ALGORITHMIC_GOVERNANCE_TT_MANDATE:0 "[concept_legitimacy] follows results through the #b Algorithmic Mandate#!: #v +5#! for each point that average [concept_sol] runs ahead of [concept_sol_expectations] and #v -5#! for each point it falls behind, up to #v 40#! either way. The mandate shrinks toward nothing as expectations catch up."
  ANTI_COLONIALIST_COLONIES_HELD:0 "The country still rules colonies"
  ANTI_COLONIALIST_GROUP_IDEOLOGY:0 "The interest group is Anti-Colonialist"
  BANKING_CONTAGION_SPREAD_TT:0 "May spread financial contagion to trade-linked countries (eligibility scales with market integration, customs unions, adjacency, economic dependence, and source-vs-target GDP — a country more than #v 20#! times the crashing economy's size is immune)."

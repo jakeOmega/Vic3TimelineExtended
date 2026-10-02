@@ -1916,15 +1916,18 @@ sol_expectations_gap_value = {
 	subtract = average_expected_sol
 }
 
-# Algorithmic Governance's legitimacy (algorithmic_mandate): 5 per point of the
-# cached gap above, capped at 25 either way. The gap returns to zero once
-# expectations catch up, so the mandate rewards living standards that run ahead
-# of expectations and punishes ones that fall behind, not a level of wealth.
+# Algorithmic Governance's legitimacy from results (algorithmic_mandate): 5 per
+# point of the cached gap above, capped at 40 either way. The gap returns to zero
+# once expectations catch up, so the mandate rewards living standards that run
+# ahead of expectations and punishes ones that fall behind, not a level of
+# wealth. It rides on the law's flat +70 legitimacy base (law_algorithmic_governance),
+# so the 5 and the 40 are quoted in ALGORITHMIC_GOVERNANCE_TT_MANDATE
+# (te_miscellaneous_l_english.yml); test_algorithmic_mandate.py pins them.
 algorithmic_mandate_value = {
 	value = var:sol_expectations_gap_cached
 	multiply = 5
-	min = -25
-	max = 25
+	min = -40
+	max = 40
 }
 
 # Clamped shift value. Applied after convergence calculation.

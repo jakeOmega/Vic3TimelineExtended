@@ -375,6 +375,17 @@ m.ModStateHandler._modifier_search(None, {"q": ["country_banking_lock"]})
 ```
 `/engine-docs` also needs `m._load_engine_docs()`, which rewrites the reference files under `docs/engine/` and creates the gitignored `engine_coverage_report.md` and `error_log_digest.md` there. Check `git status --short docs/engine/` before you start, and afterwards restore only the files the load rewrote (`git checkout -- <file>`), so real uncommitted report changes survive.
 
+**Finding every vanilla source of a modifier with no server and no game** (a cloud container): `/modifier-grants` goes mod-only without the game files (see the list of vanilla-empty endpoints below), but `vanilla_parsed/` has the full vanilla side. Scan it for the modifier or effect name; each entry is an `["=", {...}]` pair, and the quoted match avoids prefix hits:
+```python
+import glob, json
+name = '"country_legitimacy_base_add"'
+for path in sorted(glob.glob("vanilla_parsed/common/*.json")):
+    for key, entry in json.load(open(path)).items():
+        if name in json.dumps(entry):
+            print(path.rsplit("/", 1)[-1], key)
+```
+Static modifiers (including the `tax_modifier_*` set) are in `modifiers.json`. **Search by the effect's name, not by a guessed entity name**: looking for keys containing `tax_level` or `income_tax` found nothing, and "the tax level's legitimacy is engine-defined" went into a PR description (#638) when it was `tax_modifier_very_low` … `_very_high` all along. "Not in the data" needs a scan by effect name first.
+
 ### Vanilla data source: `vanilla_parsed/` or the game files
 
 ModState's vanilla half — every entity type in `mod_state.VANILLA_COMMON_DIRS` (the one list; the server's `base_game_paths` derives from it) plus the English loc dict — can come from two places:

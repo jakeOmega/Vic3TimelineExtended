@@ -4249,8 +4249,10 @@ law_algorithmic_governance = {
 
 	progressiveness = 0
 
+	# Explains the Algorithmic Mandate. The Automated Bureaucracy it installs
+	# already shows as the "enables law" line from on_activate below.
 	on_enact = {
-		custom_tooltip = ALGORITHMIC_GOVERNANCE_TT_INSTALLS_AUTOMATED_BUREAUCRACY
+		custom_tooltip = ALGORITHMIC_GOVERNANCE_TT_MANDATE
 	}
 
 	# Elected Bureaucrats needs a voting law and the other human bureaucracy
@@ -4304,10 +4306,22 @@ law_algorithmic_governance = {
 
 	# Administration comes from the Automated Bureaucracy this law installs, so
 	# none of its effects are repeated here. Legitimacy rests on results:
-	# algorithmic_mandate (sol_expectations_modifiers.txt) replaces the leader's clout and
+	# a flat base plus algorithmic_mandate (sol_expectations_modifiers.txt), which
 	# follows living standards against expectations, and the doubled radicals
 	# and loyalists from SoL change make a falling standard of living costly.
 	modifier = {
+		# Every other Distribution of Power law carries legitimacy of its own
+		# (clout 25-120, votes 40-110, Elder Council a flat 20), and this one
+		# has no clout, votes or head-of-state term, so without a base a country
+		# sat in Unstable Government (25-50) even with the mandate at its +25
+		# cap. The first fix, 50 with the mandate capped at +-25, still topped out
+		# at 92 on very low taxes, where other laws reach 100 with room to spare
+		# for higher taxes. 70 puts the neutral case (mandate 0) at 70 before
+		# taxes (tax_modifier_*: +10 very low, -10 high, -20 very high), the head
+		# of state's group and timed modifiers; with the mandate's +40
+		# (algorithmic_mandate_value) a boom has about 110 to absorb those.
+		country_legitimacy_base_add = 70
+
 		# Vanilla's Technocracy gives one company slot; this goes further.
 		country_max_companies_add = 2
 		country_law_enactment_speed_mult = 0.5
