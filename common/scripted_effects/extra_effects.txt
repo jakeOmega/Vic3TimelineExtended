@@ -18,13 +18,28 @@ remove_modifier_if_exists_effect = {
 # wonder-complete notification, and either bumps the wonder one level (capped
 # at $MAX_LEVEL$) or creates the level-1 wonder if none exists yet.
 #
+# What `create_building` does to a building the state already has depends on
+# the building's `ownership_type`, so the level-up has two forms. Seen in game
+# 2026-10-02: a level-3 Nanofabrication Center (`self`) asked for level 4 came
+# out at level 7, while a level-1 Orbital Solar Collector (`no_ownership`) asked
+# for level 2 came out at level 2. An owned building stacks the requested level
+# onto its own; an unowned one keeps the larger of the two. Keep each wonder's
+# $STACKS_LEVELS$ in step with its `ownership_type` in
+# common/buildings/extra_buildings.txt (test_megastructure_level_up.py checks it).
+#
 # Parameters:
-#   $WONDER$    — wonder building base name (e.g. space_elevator). The
-#                 progress variable, construction site, annual-progress
-#                 modifier, and notification key all use this token.
-#   $MAX_LEVEL$ — wonder's level cap. The single shared 19-branch chain
-#                 below guards each branch on `level < $MAX_LEVEL$`, so a
-#                 wonder at its cap silently no-ops on completion.
+#   $WONDER$        — wonder building base name (e.g. space_elevator). The
+#                     progress variable, construction site, annual-progress
+#                     modifier, and notification key all use this token.
+#   $MAX_LEVEL$     — wonder's level cap. Both level-up forms guard on
+#                     `level < $MAX_LEVEL$`, so a wonder at its cap silently
+#                     no-ops on completion.
+#   $STACKS_LEVELS$ — yes when building_$WONDER$ is an owned building
+#                     (`ownership_type = self`): `create_building` adds the
+#                     level it is given, so ask for exactly 1. no when it is
+#                     `no_ownership`: `create_building` keeps the larger level,
+#                     so ask for the current level + 1 through the 19-branch
+#                     chain below (the level argument takes literals only).
 generic_wonder_construction_base = {
 	if = {
 		limit = { NOT = { has_variable = $WONDER$_progress_var } }
@@ -57,25 +72,34 @@ generic_wonder_construction_base = {
 		owner = { post_notification = wonder_construction_complete_$WONDER$ }
 		if = {
 			limit = { has_building = building_$WONDER$ }
-			if = { limit = { b:building_$WONDER$.level = 19 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 20 } }
-			else_if = { limit = { b:building_$WONDER$.level = 18 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 19 } }
-			else_if = { limit = { b:building_$WONDER$.level = 17 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 18 } }
-			else_if = { limit = { b:building_$WONDER$.level = 16 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 17 } }
-			else_if = { limit = { b:building_$WONDER$.level = 15 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 16 } }
-			else_if = { limit = { b:building_$WONDER$.level = 14 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 15 } }
-			else_if = { limit = { b:building_$WONDER$.level = 13 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 14 } }
-			else_if = { limit = { b:building_$WONDER$.level = 12 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 13 } }
-			else_if = { limit = { b:building_$WONDER$.level = 11 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 12 } }
-			else_if = { limit = { b:building_$WONDER$.level = 10 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 11 } }
-			else_if = { limit = { b:building_$WONDER$.level = 9 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 10 } }
-			else_if = { limit = { b:building_$WONDER$.level = 8 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 9 } }
-			else_if = { limit = { b:building_$WONDER$.level = 7 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 8 } }
-			else_if = { limit = { b:building_$WONDER$.level = 6 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 7 } }
-			else_if = { limit = { b:building_$WONDER$.level = 5 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 6 } }
-			else_if = { limit = { b:building_$WONDER$.level = 4 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 5 } }
-			else_if = { limit = { b:building_$WONDER$.level = 3 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 4 } }
-			else_if = { limit = { b:building_$WONDER$.level = 2 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 3 } }
-			else_if = { limit = { b:building_$WONDER$.level = 1 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 2 } }
+			if = {
+				limit = { always = $STACKS_LEVELS$ }
+				if = {
+					limit = { b:building_$WONDER$.level < $MAX_LEVEL$ }
+					create_building = { building = building_$WONDER$ level = 1 }
+				}
+			}
+			else = {
+				if = { limit = { b:building_$WONDER$.level = 19 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 20 } }
+				else_if = { limit = { b:building_$WONDER$.level = 18 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 19 } }
+				else_if = { limit = { b:building_$WONDER$.level = 17 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 18 } }
+				else_if = { limit = { b:building_$WONDER$.level = 16 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 17 } }
+				else_if = { limit = { b:building_$WONDER$.level = 15 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 16 } }
+				else_if = { limit = { b:building_$WONDER$.level = 14 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 15 } }
+				else_if = { limit = { b:building_$WONDER$.level = 13 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 14 } }
+				else_if = { limit = { b:building_$WONDER$.level = 12 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 13 } }
+				else_if = { limit = { b:building_$WONDER$.level = 11 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 12 } }
+				else_if = { limit = { b:building_$WONDER$.level = 10 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 11 } }
+				else_if = { limit = { b:building_$WONDER$.level = 9 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 10 } }
+				else_if = { limit = { b:building_$WONDER$.level = 8 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 9 } }
+				else_if = { limit = { b:building_$WONDER$.level = 7 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 8 } }
+				else_if = { limit = { b:building_$WONDER$.level = 6 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 7 } }
+				else_if = { limit = { b:building_$WONDER$.level = 5 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 6 } }
+				else_if = { limit = { b:building_$WONDER$.level = 4 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 5 } }
+				else_if = { limit = { b:building_$WONDER$.level = 3 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 4 } }
+				else_if = { limit = { b:building_$WONDER$.level = 2 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 3 } }
+				else_if = { limit = { b:building_$WONDER$.level = 1 b:building_$WONDER$.level < $MAX_LEVEL$ } create_building = { building = building_$WONDER$ level = 2 } }
+			}
 		}
 		else = {
 			create_building = { building = building_$WONDER$ level = 1 }
@@ -83,13 +107,13 @@ generic_wonder_construction_base = {
 	}
 }
 
-space_elevator_construction            = { generic_wonder_construction_base = { WONDER = space_elevator            MAX_LEVEL = 20 } }
+space_elevator_construction            = { generic_wonder_construction_base = { WONDER = space_elevator            MAX_LEVEL = 20 STACKS_LEVELS = yes } }
 
-solar_collector_construction           = { generic_wonder_construction_base = { WONDER = solar_collector           MAX_LEVEL = 10 } }
+solar_collector_construction           = { generic_wonder_construction_base = { WONDER = solar_collector           MAX_LEVEL = 10 STACKS_LEVELS = no } }
 
-orbital_battlestation_construction     = { generic_wonder_construction_base = { WONDER = orbital_battlestation     MAX_LEVEL =  5 } }
+orbital_battlestation_construction     = { generic_wonder_construction_base = { WONDER = orbital_battlestation     MAX_LEVEL =  5 STACKS_LEVELS = no } }
 
-mind_upload_nexus_construction         = { generic_wonder_construction_base = { WONDER = mind_upload_nexus         MAX_LEVEL =  5 } }
+mind_upload_nexus_construction         = { generic_wonder_construction_base = { WONDER = mind_upload_nexus         MAX_LEVEL =  5 STACKS_LEVELS = yes } }
 
 # State scope, from on_monthly_pulse_state (ROOT is the state). Reads the
 # state's own value, so the national grants (the Ministry of Thought Control)
@@ -1349,7 +1373,7 @@ remove_all_langreform_modifiers = {
 # Antimatter Facility Construction Effect
 #==================================================
 
-antimatter_facility_construction       = { generic_wonder_construction_base = { WONDER = antimatter_facility       MAX_LEVEL = 10 } }
+antimatter_facility_construction       = { generic_wonder_construction_base = { WONDER = antimatter_facility       MAX_LEVEL = 10 STACKS_LEVELS = no } }
 
 # Population Transfer: Moves primary culture pops of target_country from source_country to target_country
 # Scope: country (either source or target, called from treaty on_entry_into_force)
@@ -1536,13 +1560,13 @@ te_remove_waived_pm_retooling_from_state_buildings = {
 # Nanofabrication Center Construction Effect
 #==================================================
 
-nanofabrication_center_construction    = { generic_wonder_construction_base = { WONDER = nanofabrication_center    MAX_LEVEL = 10 } }
+nanofabrication_center_construction    = { generic_wonder_construction_base = { WONDER = nanofabrication_center    MAX_LEVEL = 10 STACKS_LEVELS = yes } }
 
 #==================================================
 # Consciousness Network Construction Effect
 #==================================================
 
-consciousness_network_construction     = { generic_wonder_construction_base = { WONDER = consciousness_network     MAX_LEVEL = 10 } }
+consciousness_network_construction     = { generic_wonder_construction_base = { WONDER = consciousness_network     MAX_LEVEL = 10 STACKS_LEVELS = no } }
 
 # ============================================================================
 # IRREDENTISM — third-party annexation notification
