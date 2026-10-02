@@ -315,7 +315,7 @@ Punitive topics need grounds. Every country has a **case strength** from 0 to
 
 | Record | Case |
 |---|---|
-| War begun without a mandate | 10 to 30 (more against a greater power) |
+| War begun, other than a mandate's own | 10 to 30 (more against a greater power) |
 | Binding resolution refused | 10 |
 | Sanctions busted | 8 |
 | Court ruling defied | 6 |
@@ -634,7 +634,8 @@ member adds against a country hosting such a mission, in a play it started, is
 struck as soon as it is added. Three kinds of goal are not struck but pay the
 doubled infamy surcharge instead: the goal the play opens with, another goal of
 that same kind, and a unification goal. Countries outside the UN, and members
-whose credentials are suspended, pay that surcharge on every such goal.
+whose credentials are suspended, pay that surcharge on every such goal. Nothing
+is struck or charged in the play a mandate is used in.
 
 ### Electoral observers
 
@@ -758,10 +759,12 @@ play. Enforcing the goal adds delivery and 6 standing. Adding any other demand
 against that country in that play for territory, subjugation, regime change or
 humiliation abuses the mandate, and so does backing down; reparations and
 similar demands are allowed at their normal price. Demands against that country
-in another play or war do not touch the mandate, and pay the surcharge as usual.
-Abuse ends the mandate, brings a condemnation, costs 12 standing, suspends your
-standing benefits for ten years and adds 20 to your case. From Strong, a holder
-at war under the mandate loses less war support to casualties and defeats.
+in another play or war do not touch the mandate. The mandate covers its own war
+and no other: any other war you begin pays the surcharge, goes on your record
+and can come before the Assembly as usual. Abuse ends the mandate, brings a
+condemnation, costs 12 standing, suspends your standing benefits for ten years
+and adds 20 to your case. From Strong, a holder at war under the mandate loses
+less war support to casualties and defeats.
 
 ## UN missions in the field
 

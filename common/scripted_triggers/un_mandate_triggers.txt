@@ -289,6 +289,28 @@ un_mandate_is_bound_play_of = {
 	has_play_goal = te_un_mandate_restore_state
 }
 
+# Whether the scoped play is a war $AGGRESSOR$ began, other than the one its
+# bound mandate is exercised in. For a country with no bound mandate: any war
+# it began. The UN record (un_dossier_monthly_update) and the docket
+# (un_docket_war_candidate) read a war begun this way, so a bound mandate
+# excuses its own war and no other.
+# Parameters: $AGGRESSOR$ = the country that began it
+# Scope: diplomatic play
+un_mandate_is_other_war_of = {
+	initiator ?= $AGGRESSOR$
+	is_war = yes
+	NOT = { un_mandate_is_bound_play_of = { ACTOR = $AGGRESSOR$ } }
+}
+
+# Whether the scoped country is fighting a war it began, other than the one
+# its bound mandate is exercised in (un_mandate_is_other_war_of).
+# Scope: country
+un_mandate_began_other_war = {
+	any_diplomatic_play = {
+		un_mandate_is_other_war_of = { AGGRESSOR = prev }
+	}
+}
+
 # Whether the mandate a passed resolution calls for can still be created, a
 # year after the vote opened. Expects the three temporary scopes
 # un_mandate_create saves before calling it.

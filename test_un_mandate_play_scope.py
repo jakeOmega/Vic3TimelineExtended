@@ -21,6 +21,14 @@ any play, and each must act only in the mandate's own play:
   (common/scripted_effects/un_teeth_effects.txt). It exempted a bound holder
   in every play, so every other war it began went surcharge-free.
 
+Two monthly readers excused a bound holder's every war the same way, and now
+excuse only the mandate's own (``un_mandate_is_other_war_of``):
+
+* the UN record's war detector in ``un_dossier_monthly_update``
+  (common/scripted_effects/un_dossier_effects.txt);
+* the docket's war item, ``un_docket_war_candidate`` and
+  ``un_docket_war_victim`` (common/scripted_triggers/un_docket_triggers.txt).
+
 The engine checks none of this at load, so these tests pin it.
 
 Run: python3 -m unittest test_un_mandate_play_scope -v
@@ -36,6 +44,8 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_mandate_effects.txt")
 TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "un_mandate_triggers.txt")
 TEETH = os.path.join(REPO, "common", "scripted_effects", "un_teeth_effects.txt")
+DOSSIER = os.path.join(REPO, "common", "scripted_effects", "un_dossier_effects.txt")
+DOCKET = os.path.join(REPO, "common", "scripted_triggers", "un_docket_triggers.txt")
 ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "un_mandate_on_actions.txt")
 PLAY = os.path.join(REPO, "common", "diplomatic_plays", "te_un_mandate_play.txt")
 
@@ -154,6 +164,64 @@ class SurchargeTest(unittest.TestCase):
         self.assertRegex(self.limit, r"\bNOT\s*=\s*\{\s*un_mandate_is_bound_play_of\s*=\s*\{\s*ACTOR\s*=\s*scope:actor\s*\}\s*\}")
         self.assertNotIn("un_mandate_current", self.limit,
                          "the surcharge exempts a bound holder outside its mandate's play")
+
+
+class OtherWarTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        triggers = _read(TRIGGERS)
+        cls.other_war = _block(triggers, "un_mandate_is_other_war_of")
+        cls.began = _block(triggers, "un_mandate_began_other_war")
+
+    def test_a_war_it_began_that_is_not_its_mandates(self):
+        self.assertRegex(self.other_war, r"\binitiator\s*\?=\s*\$AGGRESSOR\$")
+        self.assertRegex(self.other_war, r"\bis_war\s*=\s*yes\b")
+        self.assertRegex(self.other_war, r"\bNOT\s*=\s*\{\s*un_mandate_is_bound_play_of\s*=\s*\{\s*ACTOR\s*=\s*\$AGGRESSOR\$\s*\}\s*\}")
+        play = _sub_block(self.began, "any_diplomatic_play")
+        self.assertRegex(play, r"\bun_mandate_is_other_war_of\s*=\s*\{\s*AGGRESSOR\s*=\s*prev\s*\}")
+
+
+class DossierTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.update = _block(_read(DOSSIER), "un_dossier_monthly_update")
+
+    def test_the_mandates_war_alone_is_logged_unrecorded(self):
+        first = re.search(r"limit\s*=\s*\{\s*var:un_mandate_current\s*\?=\s*\{\s*has_tag\s*=\s*un_mandate_bound\s*\}"
+                          r"\s*NOT\s*=\s*\{\s*un_mandate_began_other_war\s*=\s*yes\s*\}\s*\}\s*set_variable\s*=\s*un_dos_war_mandate_only",
+                          self.update)
+        self.assertIsNotNone(first, "a bound holder's every war is still excused")
+
+    def test_a_war_begun_beside_it_is_recorded(self):
+        later = _sub_block(self.update, "else_if")
+        self.assertRegex(later, r"\bun_mandate_began_other_war\s*=\s*yes\b")
+        self.assertRegex(later, r"\bremove_variable\s*=\s*un_dos_war_mandate_only\b")
+        self.assertRegex(later, r"un_dossier_record\s*=\s*\{\s*RECORD\s*=\s*aggression\b")
+
+    def test_peace_clears_the_marker_with_the_flag(self):
+        clear = re.search(r"remove_variable\s*=\s*un_dos_war_logged\s*remove_variable\s*=\s*un_dos_war_mandate_only", self.update)
+        self.assertIsNotNone(clear)
+
+
+class DocketTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        docket = _read(DOCKET)
+        cls.candidate = _block(docket, "un_docket_war_candidate")
+        cls.victim = _block(docket, "un_docket_war_victim")
+
+    def test_a_holder_is_taken_up_only_for_another_war_it_began(self):
+        play = _sub_block(self.candidate, "any_diplomatic_play")
+        self.assertRegex(play, r"\bun_mandate_is_other_war_of\s*=\s*\{\s*AGGRESSOR\s*=\s*prev\s*\}")
+        self.assertRegex(play, r"\btarget\s*\?=\s*\{\s*un_docket_war_victim_standing\s*=\s*yes\s*\}")
+        country = _sub_block(self.candidate, "AND")
+        self.assertRegex(country, r"\bNOT\s*=\s*\{\s*var:un_mandate_current\s*\?=\s*\{\s*has_tag\s*=\s*un_mandate_bound\s*\}\s*\}")
+        self.assertRegex(country, r"\bany_country\s*=\s*\{")
+
+    def test_the_victim_named_is_that_wars_target(self):
+        play = _sub_block(self.victim, "any_diplomatic_play")
+        self.assertRegex(play, r"\btarget\s*\?=\s*prev\b")
+        self.assertRegex(play, r"\bun_mandate_is_other_war_of\s*=\s*\{\s*AGGRESSOR\s*=\s*scope:condemned_country\s*\}")
 
 
 if __name__ == "__main__":
