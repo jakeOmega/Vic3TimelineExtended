@@ -2800,6 +2800,7 @@ types un_chamber_widget_types
 			}
 
 			un_chamber_propose_row = {
+				visible = "[GetScriptedGui('un_chamber_reform_ii_in_view_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				blockoverride "row_text" {
 					text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)26' ) ).End)]"
 				}
@@ -2893,6 +2894,7 @@ types un_chamber_widget_types
 			}
 
 			un_chamber_propose_row = {
+				visible = "[GetScriptedGui('un_chamber_reform_ii_in_view_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				blockoverride "row_text" {
 					text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)28' ) ).End)]"
 				}
@@ -2937,6 +2939,7 @@ types un_chamber_widget_types
 			}
 
 			un_chamber_propose_row = {
+				visible = "[GetScriptedGui('un_chamber_reform_ii_in_view_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				blockoverride "row_text" {
 					text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)27' ) ).End)]"
 				}
@@ -3109,7 +3112,7 @@ types un_chamber_widget_types
 			}
 
 			un_chamber_propose_row = {
-				visible = "[GetScriptedGui('un_chamber_nuclear_rule_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[And( GetScriptedGui('un_chamber_nuclear_rule_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_chamber_reform_ii_in_view_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 				blockoverride "row_text" {
 					text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)19' ) ).End)]"
 				}

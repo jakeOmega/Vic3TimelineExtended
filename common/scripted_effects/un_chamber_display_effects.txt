@@ -1694,7 +1694,8 @@ un_chamber_propose_physical_protection_row = {
 # it is not yet in force, as the phase 7 decisions' rows say it — the reform
 # (un_chamber_propose_reform_line) and the convention it builds on. Both are
 # also its Propose control's gates (un_docket_topic_open_<key>), so the row
-# stays in the list before them. The prerequisite convention is read from its
+# stays in the list before them (the Reform II row only once Reform I has
+# carried: un_chamber_reform_ii_in_view_sgui). The prerequisite convention is read from its
 # agency, not from its un_propose_<key>_in_force: each row names its own
 # convention's triggers only (test_un_convention_registry).
 

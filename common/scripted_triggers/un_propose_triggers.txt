@@ -415,7 +415,10 @@ un_propose_reform_possible = {
 # gates instead), the topic's cooldown, and the reform it needs
 # (un_charter_has_reform_tt). The reform is a `possible` gate, never an
 # `available` one, so the chamber's row stays in the list before the reform
-# and says what it waits for.
+# and says what it waits for. Only the next reform's rows show, though: a
+# Reform II row and button are hidden until Reform I carries
+# (un_charter_reform_ii_in_view, un_ladder_triggers.txt), in the widget and
+# the button's `visible`, not here.
 
 # Refer a Dispute to the World Court — binding (an advisory opinion if vetoed), simple majority; Reform I. Names the holder of a state we claim.
 # Scope: the proposing country

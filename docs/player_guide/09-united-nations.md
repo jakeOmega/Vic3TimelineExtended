@@ -498,9 +498,10 @@ and then vetoes has kept its word.
 ## Business the reformed charter opens
 
 Nine topics beyond the seven above come before the General Assembly as the
-charter grows. Each Propose a Resolution row stays in the list before its
-reform and says which reform it waits for. The AI tables them through the
-journal entry's buttons, as it does the older topics.
+charter grows. The Propose a Resolution list shows the business of the next
+reform before it is adopted, and says which reform each row waits for.
+Charter Reform II's rows only appear once Reform I has carried. The AI tables
+these topics through the journal entry's buttons, as it does the older ones.
 
 | Topic | Needs | Binding | Passes by | If it carries |
 |---|---|---|---|---|

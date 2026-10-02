@@ -1790,6 +1790,21 @@ un_chamber_nuclear_rule_sgui = {
 	}
 }
 
+# The rows of business Charter Reform II unlocks (ops 19, 26, 27, 28): hidden
+# until Reform I carries, so the list shows only the next reform's business
+# (un_charter_reform_ii_in_view). A root-only yes/no GUI, like the two above.
+un_chamber_reform_ii_in_view_sgui = {
+	scope = country
+
+	is_shown = {
+		un_charter_reform_ii_in_view = yes
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+	}
+}
+
 # Non-members get one line where the proposal list would be, rather than an
 # empty section: the list is meaningless outside the organisation.
 un_chamber_propose_intro_sgui = {

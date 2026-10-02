@@ -37,6 +37,7 @@ DOSSIER = _path("common", "script_values", "un_dossier_values.txt")
 BUTTONS = _path("common", "scripted_buttons", "un_buttons.txt")
 JOURNAL = _path("common", "journal_entries", "je_united_nations.txt")
 VOTE_EVENTS = _path("events", "un_vote_events.txt")
+WIDGET = _path("gui", "journal_entry_widgets", "un_chamber_widget.gui")
 ON_ACTIONS = _path("common", "on_actions", "un_on_actions.txt")
 LADDER = _path("common", "scripted_effects", "un_ladder_effects.txt")
 LOC_DIR = _path("localization", "english")
@@ -258,11 +259,55 @@ class ButtonTests(unittest.TestCase):
         for t in TOPICS:
             with self.subTest(key=t.key):
                 body = _flat(_block(buttons, f"un_propose_{t.key}_button"))
-                self.assertIn(f"visible = {{ un_propose_{t.key}_available = yes }}", body)
+                if t.reform == 2:
+                    # Out of view until Reform I carries, like its chamber row.
+                    self.assertIn(f"visible = {{ un_charter_reform_ii_in_view = yes "
+                                  f"un_propose_{t.key}_available = yes }}", body)
+                else:
+                    self.assertIn(f"visible = {{ un_propose_{t.key}_available = yes }}", body)
                 self.assertIn(f"possible = {{ un_propose_{t.key}_possible = yes }}", body)
                 self.assertIn(f"value = un_{t.key}_ai_chance", body)
                 self.assertIn(f"effect = {{ un_propose_{t.key}_effect = yes }}", body)
                 self.assertRegex(journal, rf"scripted_button\s*=\s*un_propose_{t.key}_button\b")
+
+
+class ReformInViewTests(unittest.TestCase):
+    """Only the next reform's business shows: a Reform II row is hidden until
+    Reform I carries, a Reform I row never is (owner's ruling, §0.12)."""
+
+    # Chamber op of each phase 7 topic, conventions included, and its reform.
+    OPS = {18: ("cultural_diversity", 1), 19: ("nuclear_ban", 2), 20: ("court_referral", 1),
+           21: ("arms_embargo", 1), 22: ("credentials", 1), 23: ("standing_force", 1),
+           24: ("observer_request", 1), 25: ("food_reserve", 0), 26: ("ceasefire", 2),
+           27: ("development_fund", 2), 28: ("referendum", 2)}
+
+    def _rows(self):
+        """{op: the row's own `visible` line, or ""} for the proposal rows."""
+        with open(WIDGET, encoding="utf-8-sig") as f:
+            text = f.read()
+        rows = {}
+        for m in re.finditer(r"un_chamber_propose_row = \{\n(\t+visible = [^\n]*\n)?\t+blockoverride \"row_text\" \{\n"
+                             r"[^\n]*un_chamber_propose_row_sgui[^\n]*CFixedPoint\)(\d+)", text):
+            rows[int(m.group(2))] = m.group(1) or ""
+        return rows
+
+    def test_the_ops_agree_with_the_topic_table(self):
+        for t in TOPICS:
+            with self.subTest(key=t.key):
+                self.assertIn((t.key, t.reform), self.OPS.values())
+
+    def test_only_reform_ii_rows_wait_for_reform_i(self):
+        rows = self._rows()
+        for op, (key, reform) in self.OPS.items():
+            with self.subTest(op=op, key=key):
+                self.assertIn(op, rows)
+                self.assertEqual("un_chamber_reform_ii_in_view_sgui" in rows[op], reform == 2)
+
+    def test_the_gui_asks_the_one_trigger(self):
+        with open(_path("common", "scripted_guis", "un_chamber_sguis.txt"), encoding="utf-8-sig") as f:
+            sguis = re.sub(r"#[^\n]*", "", f.read())
+        body = _flat(_block(sguis, "un_chamber_reform_ii_in_view_sgui"))
+        self.assertIn("is_shown = { un_charter_reform_ii_in_view = yes }", body)
 
 
 class LocTests(unittest.TestCase):

@@ -1078,7 +1078,8 @@ un_stop_undermining_button = {
 # (un_propose_triggers.txt, un_propose_effects.txt), and the weight is the
 # topic owner's (un_<key>_ai_chance; un_charter_effects.txt says who owns
 # what). Like the others, they are not hidden from a human, who sees them only
-# when there is a case to table.
+# when there is a case to table. The three Reform II buttons also wait until
+# Reform I has carried (un_charter_reform_ii_in_view), as their chamber rows do.
 
 un_propose_court_referral_button = {
 	name = "UN_PROPOSE_COURT_REFERRAL"
@@ -1174,7 +1175,10 @@ un_propose_ceasefire_button = {
 	name = "UN_PROPOSE_CEASEFIRE"
 	desc = "UN_PROPOSE_CEASEFIRE_DESC"
 
-	visible = { un_propose_ceasefire_available = yes }
+	visible = {
+		un_charter_reform_ii_in_view = yes
+		un_propose_ceasefire_available = yes
+	}
 
 	possible = { un_propose_ceasefire_possible = yes }
 
@@ -1189,7 +1193,10 @@ un_propose_development_fund_button = {
 	name = "UN_PROPOSE_DEVELOPMENT_FUND"
 	desc = "UN_PROPOSE_DEVELOPMENT_FUND_DESC"
 
-	visible = { un_propose_development_fund_available = yes }
+	visible = {
+		un_charter_reform_ii_in_view = yes
+		un_propose_development_fund_available = yes
+	}
 
 	possible = { un_propose_development_fund_possible = yes }
 
@@ -1204,7 +1211,10 @@ un_propose_referendum_button = {
 	name = "UN_PROPOSE_REFERENDUM"
 	desc = "UN_PROPOSE_REFERENDUM_DESC"
 
-	visible = { un_propose_referendum_available = yes }
+	visible = {
+		un_charter_reform_ii_in_view = yes
+		un_propose_referendum_available = yes
+	}
 
 	possible = { un_propose_referendum_possible = yes }
 

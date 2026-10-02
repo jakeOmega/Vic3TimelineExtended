@@ -73,7 +73,9 @@ A reform is the **charter level** (`un_charter_level_value`): the gate is
 `un_charter_has_reform = { LEVEL = 1 }` (or 2), shared by the propose triggers, the docket and
 the chamber's rows. A row whose reform has not been adopted stays in the list and says
 "Requires Charter Reform I" (or II), so the reform is something a player can see coming
-**(proposed)**. The charter only resets with a dissolution, so nothing rolls back while the UN
+**(proposed)**. Only the next reform's rows show, though: Reform II's business (rows and
+journal-entry buttons) is hidden until Reform I carries, so the list previews what the next
+reform buys and nothing further off **(decided)**. The charter only resets with a dissolution, so nothing rolls back while the UN
 stands; a UN that has slipped back to Contested keeps the business and enforces it weakly,
 because every effect below is multiplied by `E` like the rest of the Assembly's.
 
@@ -246,7 +248,10 @@ both. Where the build departs from the proposals above, the ruling says so.
 gate. Ops 18–28 are in the chamber's three switches and the widget, grouped under Censure and
 Enforcement (21, 22, 26), Requests for Help (24), Courts and Self-Determination (20, 28),
 Institutions of the United Nations (23, 25, 27) and the conventions (18, 19). Each topic has an
-AI button on the journal entry. The resolution triggers sort the topics as the table above
+AI button on the journal entry. Reform II's rows (19, 26, 27, 28) and its three buttons are
+hidden until Reform I carries (`un_charter_reform_ii_in_view`, through
+`un_chamber_reform_ii_in_view_sgui` in the widget and the buttons' `visible`); the propose gates
+still ask `un_charter_has_reform`. The resolution triggers sort the topics as the table above
 says; `un_resolution_veto_blocks` names the four with no graduated form, and
 `un_resolution_asks_pledges` keeps an observer request out of `un_vote.3`'s pledge wording
 (the UN's budget pays the observers, so refusing it only denounces it). The Standing Force and
@@ -387,7 +392,8 @@ the classification and the loc.
 
 ### IN-GAME VERIFICATION CHECKLIST (§0.12)
 
-- [ ] Each Reform I/II row reads "Requires Charter Reform I/II" until the reform, then tables.
+- [ ] Each Reform I/II row reads "Requires Charter Reform I/II" until the reform, then tables;
+      the Reform II rows and buttons appear only once Reform I carries.
 - [ ] World Court: odds on the card and in the vote; ruling a month later; obey cedes the state
       (`set_state_owner`), defy opens the mandate case; `remove_claim` sticks.
 - [ ] Arms embargo: the trade-advantage penalty shows on the target's military goods.
