@@ -11736,3 +11736,307 @@ building_noda_shoyu_goyogura = {
 		}
 	}
 }
+
+# --- Genentech ---
+building_genentech_dna_way_campus = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_genentech.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_genentech_dna_way_campus
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_genentech
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_genentech_dna_way_campus
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_genentech_dna_way_campus
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Monsanto ---
+building_monsanto_chesterfield_center = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_monsanto.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_monsanto_chesterfield_center
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_monsanto
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_monsanto_chesterfield_center
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_monsanto_chesterfield_center
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Novo Nordisk ---
+building_novo_nordisk_kalundborg_plant = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/danish_novo_nordisk.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_novo_nordisk_kalundborg_plant
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_novo_nordisk
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_novo_nordisk_kalundborg_plant
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_novo_nordisk_kalundborg_plant
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Ajinomoto ---
+building_ajinomoto_kawasaki_plant = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_ajinomoto.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_ajinomoto_kawasaki_plant
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_ajinomoto
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_ajinomoto_kawasaki_plant
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_ajinomoto_kawasaki_plant
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Biocon ---
+building_biocon_park = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/indian_biocon.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_biocon_park
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_biocon
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_biocon_park
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_biocon_park
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- BGI Group ---
+building_bgi_national_genebank = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/chinese_bgi.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_bgi_national_genebank
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_bgi
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_bgi_national_genebank
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_bgi_national_genebank
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- BioNTech ---
+building_biontech_mainz_campus = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_biontech.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_biontech_mainz_campus
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_biontech
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_biontech_mainz_campus
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_biontech_mainz_campus
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Rosen Association ---
+building_rosen_association_hq = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_rosen_association.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_rosen_association_hq
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_rosen_association
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_rosen_association_hq
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_rosen_association_hq
+					}
+				}
+			}
+		}
+	}
+}

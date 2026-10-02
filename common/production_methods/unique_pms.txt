@@ -11586,3 +11586,284 @@ pm_noda_shoyu_goyogura = {
 		}
 	}
 }
+
+# --- Genentech ---
+pm_genentech_dna_way_campus = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_synthetics_plant_opium_throughput_add = 0.25
+			building_university_throughput_add = 0.25
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 100
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (72.73%)
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (27.27%)
+			# Output goods
+			goods_output_opium_add = 160                         # Price:   50, Total cost:  8000.0 (100.00%)
+			# Total input cost: 1100.0
+			# Total output cost: 8000.0
+			# Profit: 6900.0
+			# Profit margin: 627.27%
+			# Zero profit price multiplier: 0.14
+			# Employment: 2000
+			# Wage breakeven: 3.45
+		}
+		level_scaled = {
+			building_employment_academics_add = 1000
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 400
+		}
+	}
+}
+
+# --- Monsanto ---
+pm_monsanto_chesterfield_center = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_group_bg_agriculture_throughput_add = 0.15
+			building_chemical_plant_throughput_add = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (60.00%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (40.00%)
+			# Output goods
+			goods_output_grain_add = 250                         # Price:   20, Total cost:  5000.0 (67.57%)
+			goods_output_fertilizer_add = 80                     # Price:   30, Total cost:  2400.0 (32.43%)
+			# Total input cost: 1000.0
+			# Total output cost: 7400.0
+			# Profit: 6400.0
+			# Profit margin: 640.00%
+			# Zero profit price multiplier: 0.14
+			# Employment: 2000
+			# Wage breakeven: 3.20
+		}
+		level_scaled = {
+			building_employment_academics_add = 800
+			building_employment_engineers_add = 500
+			building_employment_laborers_add = 500
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Novo Nordisk ---
+pm_novo_nordisk_kalundborg_plant = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_mortality_mult = -0.05
+			state_pollution_generation_mult = -0.15
+			building_synthetics_plant_biomass_throughput_add = 0.25
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sugar_add = 20                           # Price:   30, Total cost:   600.0 (50.00%)
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (50.00%)
+			# Output goods
+			goods_output_opium_add = 140                         # Price:   50, Total cost:  7000.0 (100.00%)
+			# Total input cost: 1200.0
+			# Total output cost: 7000.0
+			# Profit: 5800.0
+			# Profit margin: 483.33%
+			# Zero profit price multiplier: 0.17
+			# Employment: 2000
+			# Wage breakeven: 2.90
+		}
+		level_scaled = {
+			building_employment_academics_add = 600
+			building_employment_engineers_add = 800
+			building_employment_machinists_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Ajinomoto ---
+pm_ajinomoto_kawasaki_plant = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_food_industry_throughput_add = 0.25
+			building_synthetics_plant_sugar_throughput_add = 0.20
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 30                           # Price:   20, Total cost:   600.0 (57.14%)
+			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (42.86%)
+			# Output goods
+			goods_output_groceries_add = 120                     # Price:   30, Total cost:  3600.0 (60.00%)
+			goods_output_sugar_add = 80                          # Price:   30, Total cost:  2400.0 (40.00%)
+			# Total input cost: 1050.0
+			# Total output cost: 6000.0
+			# Profit: 4950.0
+			# Profit margin: 471.43%
+			# Zero profit price multiplier: 0.17
+			# Employment: 2000
+			# Wage breakeven: 2.48
+		}
+		level_scaled = {
+			building_employment_engineers_add = 700
+			building_employment_machinists_add = 700
+			building_employment_academics_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Biocon ---
+pm_biocon_park = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_mortality_mult = -0.05
+			building_synthetics_plant_opium_throughput_add = 0.20
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (66.67%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (33.33%)
+			# Output goods
+			goods_output_opium_add = 120                         # Price:   50, Total cost:  6000.0 (100.00%)
+			# Total input cost: 900.0
+			# Total output cost: 6000.0
+			# Profit: 5100.0
+			# Profit margin: 566.67%
+			# Zero profit price multiplier: 0.15
+			# Employment: 2000
+			# Wage breakeven: 2.55
+		}
+		level_scaled = {
+			building_employment_academics_add = 600
+			building_employment_engineers_add = 600
+			building_employment_machinists_add = 600
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- BGI Group ---
+pm_bgi_national_genebank = {
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_university_throughput_add = 0.50
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_weekly_innovation_max_add = 150
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (52.94%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (47.06%)
+			# Output goods
+			goods_output_digital_assets_add = 30                 # Price:  100, Total cost:  3000.0 (50.00%)
+			goods_output_opium_add = 60                          # Price:   50, Total cost:  3000.0 (50.00%)
+			# Total input cost: 1700.0
+			# Total output cost: 6000.0
+			# Profit: 4300.0
+			# Profit margin: 252.94%
+			# Zero profit price multiplier: 0.28
+			# Employment: 2000
+			# Wage breakeven: 2.15
+		}
+		level_scaled = {
+			building_employment_academics_add = 1200
+			building_employment_engineers_add = 600
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- BioNTech ---
+pm_biontech_mainz_campus = {
+	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_mortality_mult = -0.10
+			building_synthetics_plant_opium_throughput_add = 0.20
+		}
+	}
+	country_modifiers = {
+		workforce_scaled = {
+			country_society_tech_research_speed_mult = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 15           # Price:   80, Total cost:  1200.0 (80.00%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (20.00%)
+			# Output goods
+			goods_output_opium_add = 140                         # Price:   50, Total cost:  7000.0 (100.00%)
+			# Total input cost: 1500.0
+			# Total output cost: 7000.0
+			# Profit: 5500.0
+			# Profit margin: 366.67%
+			# Zero profit price multiplier: 0.21
+			# Employment: 2000
+			# Wage breakeven: 2.75
+		}
+		level_scaled = {
+			building_employment_academics_add = 1000
+			building_employment_engineers_add = 800
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Rosen Association ---
+pm_rosen_association_hq = {
+	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			state_working_adult_ratio_add = 0.05
+			building_synthetics_plant_meat_throughput_add = 0.25
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 40                           # Price:   20, Total cost:   800.0 (32.00%)
+			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (36.00%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (32.00%)
+			# Output goods
+			goods_output_meat_add = 150                          # Price:   30, Total cost:  4500.0 (60.00%)
+			goods_output_services_add = 100                      # Price:   30, Total cost:  3000.0 (40.00%)
+			# Total input cost: 2500.0
+			# Total output cost: 7500.0
+			# Profit: 5000.0
+			# Profit margin: 200.00%
+			# Zero profit price multiplier: 0.33
+			# Employment: 2000
+			# Wage breakeven: 2.50
+		}
+		level_scaled = {
+			building_employment_engineers_add = 800
+			building_employment_academics_add = 600
+			building_employment_machinists_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
