@@ -154,7 +154,7 @@ effects. A tier is entered at its floor and left 4 points below it.
 |---|---|---|---|---|
 | Moribund | below 20 | ×0 | none | Resolutions are recommendations, vetoes cost only relations, members lose UN Membership Benefits, and power blocs gain cohesion and leverage (Vacuum of World Order). |
 | Contested | 20–45 | ×0.5 | 0.1% | Membership benefits are paid. |
-| Established | 45–70 | ×1 | 0.2% | Countries that could join but stay out become International Pariahs. Each war goal a play's initiator adds without a mandate costs 2 extra infamy. Peacekeeping requests send full deployments. |
+| Established | 45–70 | ×1 | 0.2% | Countries that could join but stay out become International Pariahs. Each war goal a play's initiator adds costs 2 extra infamy, except in the play a mandate is used in. Peacekeeping requests send full deployments. |
 | Strong (needs Charter Reform I) | 70–85 | ×1.5 | 0.4% | Outsiders also lose trade advantage and leverage. Sanctions become embargoes, condemned countries are Shunned, the surcharge rises to 4, members share intelligence, and nationalist interest groups resent the UN. With the IAEA, members without the bomb are held to disarmament. |
 | Supranational (needs Charter Reform II) | 85+ | ×2.5 | 1% | The surcharge rises to 10, condemned countries are also Restrained, and outsiders of major rank or with a nuclear program carry a standing case of 50. |
 
@@ -546,10 +546,11 @@ available against that country, for that state, at no infamy, in one diplomatic
 play. Enforcing the goal adds delivery and 6 standing. Adding any other demand
 against that country in that play for territory, subjugation, regime change or
 humiliation abuses the mandate, and so does backing down; reparations and
-similar demands are allowed at their normal price. Abuse ends the mandate,
-brings a condemnation, costs 12 standing, suspends your standing benefits for
-ten years and adds 20 to your case. From Strong, a holder at war under the
-mandate loses less war support to casualties and defeats.
+similar demands are allowed at their normal price. Demands against that country
+in another play or war do not touch the mandate, and pay the surcharge as usual.
+Abuse ends the mandate, brings a condemnation, costs 12 standing, suspends your
+standing benefits for ten years and adds 20 to your case. From Strong, a holder
+at war under the mandate loses less war support to casualties and defeats.
 
 ## UN missions in the field
 

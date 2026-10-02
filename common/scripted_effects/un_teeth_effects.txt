@@ -117,8 +117,11 @@ un_teeth_lift_embargoes = {
 # infamy from the Established tier up (un_war_surcharge_value: 2 / 4 / 10).
 # From Strong, a goal against a country under a UN peacekeeping deployment
 # costs twice that. A subject fighting its way out, and a play against a
-# decentralized people, are left alone; so is the holder of a bound mandate,
-# whose other demands the mandate's own rules already police.
+# decentralized people, are left alone; so is the play a bound mandate is
+# exercised in, whose other demands the mandate's own rules already police.
+# Only that play (un_mandate_is_bound_play_of): until 2026-10-02 the holder
+# was exempt in every play, so a bound mandate made every other war it began
+# surcharge-free.
 # The surcharge is the rule (owner decision 2026-09-24): the AI already weighs
 # infamy before adding goals and starting wars.
 # Scope: diplomatic play; expects scope:actor (from on_wargoal_added)
@@ -129,10 +132,8 @@ un_teeth_war_goal_surcharge = {
 			un_war_surcharge_value > 0
 			exists = scope:actor
 			initiator ?= scope:actor
-			scope:actor = {
-				is_subject = no
-				NOT = { var:un_mandate_current ?= { has_tag = un_mandate_bound } }
-			}
+			scope:actor = { is_subject = no }
+			NOT = { un_mandate_is_bound_play_of = { ACTOR = scope:actor } }
 			target ?= { NOT = { is_country_type = decentralized } }
 		}
 		scope:actor = {
