@@ -1,8 +1,9 @@
 # Legislated tax code and customs schedule — design specification
 
 **Date:** 2026-09-29 (America/Denver)  
-**Status:** proposed design; temporary opt-in engine probes implemented, no verified runtime results
+**Status:** proposed design; temporary opt-in probes have limited runtime evidence, with scheduling and integration gates unresolved
 **Playtesting:** [runbook](../../testing/tax-code-probes.md) · [results form](../../testing/tax-code-probe-results.md)
+**Runtime evidence:** [2026-10-02 UK first pass and follow-ups](../../testing/tax-code-probe-results-2026-10-02.md); evidence supports starting the core, not full design feasibility.
 **Scope:** replace the existing tax-law/rate split with one enacted fiscal code
 
 ## 1. Purpose and agreed direction
