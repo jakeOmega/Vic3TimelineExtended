@@ -137,6 +137,50 @@ un_vote.1 = {
 				desc = un_vote.1.t_military_mandate
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
 			}
+			triggered_desc = {
+				desc = un_vote.1.t_cultural_diversity
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_nuclear_ban
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_court_referral
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_arms_embargo
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_arms_embargo } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_credentials
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_credentials } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_standing_force
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_standing_force } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_observer_request
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_observer_request } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_food_reserve
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_food_reserve } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_ceasefire
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_ceasefire } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_development_fund
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_development_fund } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_referendum
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+			}
 			desc = un_vote.1.t
 		}
 	}
@@ -245,6 +289,87 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.d_military_mandate
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
+			}
+			# Phase 7 (§0.12). The topics that accuse their target read to the
+			# target from its own side first.
+			triggered_desc = {
+				desc = un_vote.1.d_cultural_diversity
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_nuclear_ban
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_court_referral_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_court_referral }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_court_referral
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_arms_embargo_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_arms_embargo }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_arms_embargo
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_arms_embargo } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_credentials_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_credentials }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_credentials
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_credentials } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_standing_force
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_standing_force } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_observer_request
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_observer_request } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_food_reserve
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_food_reserve } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_ceasefire_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_ceasefire }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_ceasefire
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_ceasefire } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_development_fund
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_development_fund } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_referendum_target
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_referendum }
+					scope:un_vote_target ?= this
+				}
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_referendum
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
 			}
 			desc = un_vote.1.d
 		}
@@ -698,6 +823,145 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
 				desc = un_vote.2.d_expulsion_failed
+			}
+			# Phase 7 (§0.12)
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity has_tag = un_res_passed } }
+				desc = un_vote.2.d_cultural_diversity_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
+				desc = un_vote.2.d_cultural_diversity_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban has_tag = un_res_passed } }
+				desc = un_vote.2.d_nuclear_ban_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_nuclear_ban } }
+				desc = un_vote.2.d_nuclear_ban_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_court_referral
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_court_referral_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_court_referral has_tag = un_res_passed } }
+				desc = un_vote.2.d_court_referral_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+				desc = un_vote.2.d_court_referral_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_arms_embargo
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_arms_embargo_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_arms_embargo has_tag = un_res_passed } }
+				desc = un_vote.2.d_arms_embargo_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_arms_embargo } }
+				desc = un_vote.2.d_arms_embargo_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_credentials has_tag = un_res_passed } }
+				desc = un_vote.2.d_credentials_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_credentials } }
+				desc = un_vote.2.d_credentials_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_standing_force
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_standing_force_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_standing_force has_tag = un_res_passed } }
+				desc = un_vote.2.d_standing_force_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_standing_force } }
+				desc = un_vote.2.d_standing_force_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_observer_request has_tag = un_res_passed } }
+				desc = un_vote.2.d_observer_request_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_observer_request } }
+				desc = un_vote.2.d_observer_request_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_food_reserve has_tag = un_res_passed } }
+				desc = un_vote.2.d_food_reserve_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_food_reserve } }
+				desc = un_vote.2.d_food_reserve_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_ceasefire
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_ceasefire_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_ceasefire has_tag = un_res_passed } }
+				desc = un_vote.2.d_ceasefire_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_ceasefire } }
+				desc = un_vote.2.d_ceasefire_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_development_fund has_tag = un_res_passed } }
+				desc = un_vote.2.d_development_fund_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_development_fund } }
+				desc = un_vote.2.d_development_fund_failed
+			}
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_referendum
+						has_tag = un_res_passed
+						has_tag = un_res_vetoed
+					}
+				}
+				desc = un_vote.2.d_referendum_passed_vetoed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum has_tag = un_res_passed } }
+				desc = un_vote.2.d_referendum_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+				desc = un_vote.2.d_referendum_failed
 			}
 			# Generic fallback
 			triggered_desc = {
@@ -1466,6 +1730,12 @@ un_vote.2 = {
 					}
 				}
 			}
+
+			# ---- The charter's new business (redesign phase 7, §0.12) ----
+			# The nine decisions, requests and institutions: each topic's
+			# outcome, vetoed form included, is its owner's
+			# (un_charter_effects.txt).
+			un_charter_on_carried = yes
 
 			# The proposer ratifies on passage, like every other member
 			# (redesign phase 5, §5.3): it no longer takes the convention's

@@ -66,6 +66,12 @@ un_dos_points_retaliation = { value = 10 }
 un_case_threshold_condemn = { value = 30 }
 un_case_threshold_sanctions = { value = 50 }
 un_case_threshold_mandate = { value = 60 }
+# Redesign phase 7 (§0.12): an arms embargo and a binding ceasefire need a
+# case of 40, between a condemnation's and sanctions'; suspending a member's
+# credentials needs sanctions' 50.
+un_case_threshold_arms_embargo = { value = 40 }
+un_case_threshold_ceasefire = { value = 40 }
+un_case_threshold_credentials = { value = 50 }
 
 # ---- Tuning: the lean ---------------------------------------------------------
 
@@ -192,6 +198,18 @@ un_res_case_threshold = {
 	else_if = {
 		limit = { has_tag = un_topic_military_mandate }
 		add = un_case_threshold_mandate
+	}
+	else_if = {
+		limit = { has_tag = un_topic_arms_embargo }
+		add = un_case_threshold_arms_embargo
+	}
+	else_if = {
+		limit = { has_tag = un_topic_ceasefire }
+		add = un_case_threshold_ceasefire
+	}
+	else_if = {
+		limit = { has_tag = un_topic_credentials }
+		add = un_case_threshold_credentials
 	}
 }
 
@@ -639,6 +657,9 @@ un_lean_interests = {
 	}
 	# The regime's terms for us (redesign phase 5): un_lean_regime below.
 	add = un_lean_regime
+	# The charter's new business (redesign phase 7, §0.12): each topic weighs
+	# its own interests (un_charter_values.txt).
+	add = un_lean_charter_interests
 }
 
 # Part of OUR INTERESTS (un_lean_interests adds it): the regime's terms for us

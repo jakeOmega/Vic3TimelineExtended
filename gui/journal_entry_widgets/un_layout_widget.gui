@@ -144,6 +144,63 @@ types un_layout_widget_types
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)17' )]"
 							texture = "gfx/interface/icons/un_icons/topic_physical_protection.dds"
 						}
+						# Phase 7 (§0.12) has no art of its own yet: each topic borrows
+						# the icon of its nearest older topic.
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)18' )]"
+							texture = "gfx/interface/icons/un_icons/topic_heritage.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)19' )]"
+							texture = "gfx/interface/icons/un_icons/topic_npt.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)20' )]"
+							texture = "gfx/interface/icons/un_icons/topic_icc.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)21' )]"
+							texture = "gfx/interface/icons/un_icons/topic_sanctions.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)22' )]"
+							texture = "gfx/interface/icons/un_icons/topic_expulsion.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)23' )]"
+							texture = "gfx/interface/icons/un_icons/topic_peacekeepers.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)24' )]"
+							texture = "gfx/interface/icons/un_icons/topic_human_rights.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)25' )]"
+							texture = "gfx/interface/icons/un_icons/topic_aid.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)26' )]"
+							texture = "gfx/interface/icons/un_icons/topic_condemn.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)27' )]"
+							texture = "gfx/interface/icons/un_icons/topic_aid.dds"
+						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)28' )]"
+							texture = "gfx/interface/icons/un_icons/topic_decolonization.dds"
+						}
 					}
 
 					flowcontainer = {

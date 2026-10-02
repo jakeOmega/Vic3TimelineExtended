@@ -570,7 +570,10 @@ un_disp_res_supermajority = {
 # 1 sanctions, 2 expulsion, 3 military_mandate, 4 peacekeeping_request,
 # 5 aid_request, 6 reform, 7 human_rights, 8 icc, 9 npt, 10 climate,
 # 11 pandemic, 12 refugee, 13 heritage, 14 decolonization, 15 space,
-# 16 law_of_sea, 17 physical_protection. -1 with nothing in session.
+# 16 law_of_sea, 17 physical_protection, and phase 7's 18 cultural_diversity,
+# 19 nuclear_ban, 20 court_referral, 21 arms_embargo, 22 credentials,
+# 23 standing_force, 24 observer_request, 25 food_reserve, 26 ceasefire,
+# 27 development_fund, 28 referendum. -1 with nothing in session.
 un_disp_res_topic_code = {
 	value = -1
 	if = { limit = { un_session_topic_is = { TOPIC = condemn } } value = 0 }
@@ -591,4 +594,15 @@ un_disp_res_topic_code = {
 	if = { limit = { un_session_topic_is = { TOPIC = space } } value = 15 }
 	if = { limit = { un_session_topic_is = { TOPIC = law_of_sea } } value = 16 }
 	if = { limit = { un_session_topic_is = { TOPIC = physical_protection } } value = 17 }
+	if = { limit = { un_session_topic_is = { TOPIC = cultural_diversity } } value = 18 }
+	if = { limit = { un_session_topic_is = { TOPIC = nuclear_ban } } value = 19 }
+	if = { limit = { un_session_topic_is = { TOPIC = court_referral } } value = 20 }
+	if = { limit = { un_session_topic_is = { TOPIC = arms_embargo } } value = 21 }
+	if = { limit = { un_session_topic_is = { TOPIC = credentials } } value = 22 }
+	if = { limit = { un_session_topic_is = { TOPIC = standing_force } } value = 23 }
+	if = { limit = { un_session_topic_is = { TOPIC = observer_request } } value = 24 }
+	if = { limit = { un_session_topic_is = { TOPIC = food_reserve } } value = 25 }
+	if = { limit = { un_session_topic_is = { TOPIC = ceasefire } } value = 26 }
+	if = { limit = { un_session_topic_is = { TOPIC = development_fund } } value = 27 }
+	if = { limit = { un_session_topic_is = { TOPIC = referendum } } value = 28 }
 }

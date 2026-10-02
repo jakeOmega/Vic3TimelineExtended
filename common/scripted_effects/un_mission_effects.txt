@@ -124,6 +124,13 @@ un_mission_open = {
 			un_mission_register = yes
 			scope:un_msn_new = { un_mission_assign_slot = yes }
 			scope:un_msn_host = { post_notification = un_mission_opened_notice }
+			# The World Food Reserve (redesign phase 7, §0.12): a new aid
+			# mission draws grain from the members' pledges
+			# (un_economy_effects.txt). A no-op while there is no reserve.
+			if = {
+				limit = { scope:un_msn_new = { has_tag = un_msn_aid } }
+				un_food_reserve_on_aid_mission_opened = yes
+			}
 		}
 	}
 }

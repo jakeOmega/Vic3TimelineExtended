@@ -33,6 +33,209 @@
 
 ---
 
+## 0.12 Phase 7: the charter's new business
+
+Designed 2026-10-02 with the mod owner, from a list of proposals the owner reviewed point by
+point. Owner decisions are marked **(decided)**; everything else is **(proposed)**. Not yet
+seen in a running game.
+
+**Why.** Charter Reform I is named "Standing Mandate Force / Compulsory Jurisdiction" and
+Reform II "Veto Restraint / UN Levy", but before phase 7 Reform I only raised the ceiling, and
+the levy's budget (`un_budget_weekly`) was spent only by the lending facility. No topic read
+`un_charter_level`. Phase 7 adds eleven topics. Nine are unlocked by a reform, so each reform
+now buys business the Assembly could not take up before; the World Food Reserve needs no
+reform **(decided)**.
+
+### The topics
+
+| Op | Key (`un_topic_<key>`, `un_propose_<key>_*`) | Needs | Binding | Passes by | Kind | Grounds | Target |
+|---|---|---|---|---|---|---|---|
+| 18 | `cultural_diversity` | Reform I, UNESCO in force | no | majority | convention | — | — |
+| 19 | `nuclear_ban` | Reform II, NPT in force, Nuclear Weapons rule | no | majority | convention | — | — |
+| 20 | `court_referral` | Reform I | yes: an advisory opinion if vetoed | majority | decision | none (accuses) | the holder of a claimed state |
+| 21 | `arms_embargo` | Reform I | yes: a voluntary embargo if vetoed | majority | decision | case 40 | a country |
+| 22 | `credentials` | Reform I | no | two-thirds | decision | case 50 | a represented member |
+| 23 | `standing_force` | Reform I | yes: blocked if vetoed | majority | decision | — | — |
+| 24 | `observer_request` | Reform I | no | majority | pledge | — | the requester |
+| 25 | `food_reserve` | — | no | majority | decision | — | — |
+| 26 | `ceasefire` | Reform II | yes: a call for a ceasefire if vetoed | majority | decision | case 40 | the aggressor |
+| 27 | `development_fund` | Reform II | no | majority | decision | — | — |
+| 28 | `referendum` | Reform II, the decolonisation regime | yes: blocked if vetoed | majority | decision | none (accuses) | the overlord |
+
+The tag and the propose key are the same word for every new topic (the old topics differ in
+three places). Veto restraint (§0.5 ruling 11) applies to the five new binding topics as to
+the old ones: after Reform II a two-thirds supermajority of the members with a vote carries
+each in full over a veto.
+
+A reform is the **charter level** (`un_charter_level_value`): the gate is
+`un_charter_has_reform = { LEVEL = 1 }` (or 2), shared by the propose triggers, the docket and
+the chamber's rows. A row whose reform has not been adopted stays in the list and says
+"Requires Charter Reform I" (or II), so the reform is something a player can see coming
+**(proposed)**. The charter only resets with a dissolution, so nothing rolls back while the UN
+stands; a UN that has slipped back to Contested keeps the business and enforces it weakly,
+because every effect below is multiplied by `E` like the rest of the Assembly's.
+
+### 1. Refer a Dispute to the World Court (`court_referral`, Reform I)
+
+The peaceful counterpart to the military mandate: the same claimed land, with no case needed
+against the holder.
+
+- **Tabling.** A represented member with a claim on a state held by another represented member
+  that is not its overlord or subject and not at war with it. The case picked is previewed;
+  a human proposer gets the case with the best odds, the AI a random one.
+- **The odds (decided: fixed tests plus chance, moved by standing and record).** The court
+  finds for the claimant with a probability `un_court_claimant_odds`, 10–90%, never certain:
+  base 50; the claimant's primary cultures are half the state's people +20 (a quarter +10), the
+  holder's −20 (−10); the region is a homeland of a claimant culture +10, of a holder culture
+  −10; incorporated by the holder −10; (claimant standing − holder standing) × 0.3, ±15; the
+  holder's case strength × 0.15 up to +15, the claimant's × 0.15 up to −15. "They are less
+  likely to rule that a paragon gives land to a pariah." The odds are stored on the resolution
+  when it is tabled (`un_res_court_odds`) and shown on the card, and re-read when the court
+  rules.
+- **Carried.** A month after the vote the court rules (a roll against the odds then).
+  - *For the claimant:* the holder cedes the state (`set_state_owner`; moot if it no longer
+    holds it), +standing (complied with a binding decision), or defies the court: a defiance
+    record, International Court Defied, −standing, a credibility debit, and for ten years the
+    claimant may move for a mandate against it over that region without the case of 60.
+  - *For the holder:* the claimant's claim on the region is removed, and for twenty years a war
+    goal it adds against a state in that region costs extra infamy.
+- **Vetoed.** An advisory opinion: the court still gives its view, nothing changes hands; a
+  holder that the opinion went against loses a little standing.
+
+### 2. Establish the Standing UN Force (`standing_force`, Reform I)
+
+The "Standing Mandate Force" half of Reform I. A one-time founding resolution
+(`un_inst_standing_force`), tabled by a major-power member.
+
+- Peacekeeping and stabilisation missions no longer lapse for want of volunteers: the Force
+  counts as one contributor, so it also adds to a mission's strength.
+- It draws a share of the budget (`un_force_budget_share`), which the budget line shows and the
+  lending facility loses.
+- War goals against a country hosting an active peacekeeping or stabilisation mission: the
+  Strong-tier surcharge (×2) now covers stabilisation hosts too, and at Supranational a
+  **member** may not add such a war goal at all (struck on adding, with a notice);
+  non-members only pay the surcharge **(decided: prohibited for members only)**.
+- Vetoed: blocked outright (there is no weaker version of a standing force).
+
+### 3. Arms Embargo (`arms_embargo`, Reform I)
+
+- **Tabling.** A target with a case of 40 that is a rival of the proposer or at war with a
+  member, and not already under an arms embargo.
+- **Carried.** For ten years, × E: trade advantage −30% in small arms, ammunition, artillery,
+  tanks and aeroplanes (imports and exports alike: Victoria 3 has one trade advantage per
+  good), and military goods +5% dearer. −Standing. **(decided: the trade penalty replaces the
+  strategic-reserve block, which was dropped.)**
+- **Vetoed.** A voluntary embargo: half the penalty, for five years.
+
+### 4. Suspension of Credentials (`credentials`, Reform I)
+
+- **Tabling.** Against a represented member with a case of 50 that violates the human-rights
+  convention's terms or has defied a binding decision (a defiance record of 10 or more). A
+  permanent member only after Reform II.
+- **Two-thirds, cannot be vetoed** (credentials are Assembly business, as in 1974).
+- **Carried.** The member's representation is suspended for five years, or until its case
+  falls below 30: no ballot, no tabling, no benefits, no permanent seat. It keeps paying dues,
+  unlike a subject. −Standing **(decided)**.
+
+### 5. Convention on Cultural Diversity (`cultural_diversity`, Reform I)
+
+- A convention (`un_agency_ccd`), raised once UNESCO is in force.
+- **Parties:** the Foreign Cultural Benchmark pressure on trailing countries is halved × E;
+  minority cultures assimilate more slowly; homelands of their cultures decay more slowly
+  **(decided: tie it to assimilation and homeland decay)**.
+- **Loser:** the cultural hegemon, if a party, loses cultural pull. The hegemon leans hard
+  against it.
+
+### 6. Binding Ceasefire (`ceasefire`, Reform II)
+
+- **Tabling.** Against a country that started a war it is fighting against a member, with a
+  case of 40.
+- **Carried.** A ceasefire order for 24 months: the aggressor's war support in every war
+  against a member falls by 2.5 × E a month, until the war ends through the engine's own
+  capitulation (there is no forced white peace). While the war goes on, the aggressor's
+  dossier gains aggression every month and **UN authority suffers** (an order debit a month);
+  when the war ends inside the order, authority gains (a delivery credit) **(decided)**. A
+  peacekeeping mission opens in the victim's most devastated state when the war ends.
+- **Vetoed.** A call for a ceasefire: a one-time hit to war support and nothing more.
+
+### 7. World Development Fund (`development_fund`, Reform II)
+
+- A one-time founding resolution (`un_inst_development_fund`). A share of the budget
+  (`un_dev_fund_budget_share`, a quarter) is paid out every week to represented members below
+  half the members' average GDP per head, split by population, **into each recipient's
+  investment pool** (`country_weekly_investment_pool_add`) **(decided)**; a recipient whose
+  laws disable the pool receives it in its treasury instead.
+- Poor members gain; rich members pay the levy and get nothing back; the lending facility has
+  less to lend.
+
+### 8. Treaty on the Prohibition of Nuclear Weapons (`nuclear_ban`, Reform II)
+
+- A convention (`un_agency_tpnw`), needing the NPT in force and the Nuclear Weapons rule.
+- **Armed parties** carry a treaty ceiling (`nd_treaty_ceiling`, the Nuclear Arms Limitation
+  treaty's hook) that steps down by a fifth of their arsenal at ratification every five years.
+  Dismantling already raises the taboo.
+- **The taboo:** while in force it raises the nuclear taboo's target by up to 6 points with UN
+  authority, beside the NPT's 8 and the CPPNM's 4 **(decided)**.
+- Nuclear powers lean hard against; at Supranational an outsider with an arsenal already
+  carries a standing case of 50.
+
+### 9. Supervised Self-Determination Referendum (`referendum`, Reform II)
+
+- **Tabling.** Needs the decolonisation declaration in force. Names an overlord member and one
+  of its direct subjects with liberty desire 50 or more.
+- **Carried.** The overlord holds the vote or refuses. Held: independence (`make_independent`)
+  with a chance from the subject's liberty desire (20–90%), or liberty desire falls; +standing.
+  Refused: a defiance record, −standing, and the subject's liberty desire rises.
+- **Vetoed.** Blocked outright.
+
+### 10. The World Food Reserve (`food_reserve`, no reform)
+
+- A one-time founding resolution (`un_inst_food_reserve`) **(decided: no reform needed)**.
+- Members with a Strategic Reserve that stores grain may **pledge** a share of it, and stop
+  pledging, from the journal entry; the AI pledges when it holds grain to spare.
+- When an aid mission opens, the reserve draws grain from the pledgers' stockpiles, and the
+  mission's state gets extra food security for a year; each pledger drawn on gains standing.
+- **Hunger and authority (decided).** While the reserve is in force the UN answers for hunger:
+  the delivery pillar takes a hunger term from the share of the members' people living in
+  famine states, down to −10, and gives +3 when that share falls below half a percent.
+
+### 11. Request Electoral Observers (`observer_request`, Reform I)
+
+- A request, like aid: a member with elections asks for observers; the requester is the
+  target.
+- **Carried.** A fourth mission kind, `electoral` (type 4), in the requester's capital. The
+  observers are paid from the budget, so the mission needs no contributors and never lapses
+  unstaffed. While it runs, Election Interference against the host is easier to detect and its
+  cut to electoral confidence is halved, and the host's legitimacy rises × strength.
+- **Succeeds** when an election campaign ends while it runs; **fails** if the host stops holding
+  elections or is attacked; lapses after five years without an election.
+
+### Identifiers
+
+- **Institutions** are not conventions and are not agencies: nobody ratifies them, so their
+  in-force flags are `un_inst_<key>`, not `un_agency_*`, which the convention registry reads
+  as conventions.
+- **Ledger reason codes** 27–39 and **standing reason codes** 36–47, in blocks per owner
+  (below). Convention refusals use the `1NNk` codes of their proposer events.
+- **Events:** the conventions' proposer events are `un_events.37` (cultural diversity) and
+  `un_events.38` (nuclear ban); everything else is in its own namespace and file
+  (`un_court`, `un_ceasefire`, `un_referendum`, `un_charter`).
+- **Hooks the framework provides** (`common/scripted_effects/un_charter_effects.txt`):
+  `un_charter_monthly_update` from `un_global_authority_on_action`, `un_charter_on_dissolve`
+  from `un_dissolve`, `un_charter_on_carried` from `un_vote.2`'s carried branch (each topic's
+  `un_<key>_on_carried`), and `un_lean_charter_interests` (each topic's
+  `un_lean_interests_<key>`) from `un_lean_interests`.
+
+| Owner | Topics | Ledger codes | Standing codes |
+|---|---|---|---|
+| conventions | `cultural_diversity`, `nuclear_ban` | 1371, 1381 | — |
+| justice | `court_referral`, `arms_embargo`, `credentials` | 27–29 | 36–38 |
+| order | `ceasefire`, `referendum` | 30–33 | 39–41 |
+| economy | `development_fund`, `food_reserve` | 34–36 | 42–44 |
+| missions | `standing_force`, `observer_request` | 37–39 | 45–47 |
+
+---
+
 ## 0.11 The first Policy grants
 
 Built 2026-10-02 at the mod owner's request, from a review of where

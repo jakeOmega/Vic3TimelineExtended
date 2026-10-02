@@ -400,6 +400,22 @@ un_authority_log_reason_line = {
 		un_authority_log_reason_on = { CODE = 24 KEY = je_un_led_reason_24 FALLBACK = je_un_led_reason_20 }
 		un_authority_log_reason_on = { CODE = 25 KEY = je_un_led_reason_25 FALLBACK = je_un_led_reason_20 }
 		un_authority_log_reason_on = { CODE = 26 KEY = je_un_led_reason_26 FALLBACK = je_un_led_reason_20 }
+		# Redesign phase 7 (§0.12): 27-29 justice, 30-33 order, 34-36 economy,
+		# 37-39 missions (un_charter_effects.txt names the owners). Each names
+		# its subject when the entry has one.
+		un_authority_log_reason_on = { CODE = 27 KEY = je_un_led_reason_27_on FALLBACK = je_un_led_reason_27 }
+		un_authority_log_reason_on = { CODE = 28 KEY = je_un_led_reason_28_on FALLBACK = je_un_led_reason_28 }
+		un_authority_log_reason_on = { CODE = 29 KEY = je_un_led_reason_29_on FALLBACK = je_un_led_reason_29 }
+		un_authority_log_reason_on = { CODE = 30 KEY = je_un_led_reason_30_on FALLBACK = je_un_led_reason_30 }
+		un_authority_log_reason_on = { CODE = 31 KEY = je_un_led_reason_31_on FALLBACK = je_un_led_reason_31 }
+		un_authority_log_reason_on = { CODE = 32 KEY = je_un_led_reason_32_on FALLBACK = je_un_led_reason_32 }
+		un_authority_log_reason_on = { CODE = 33 KEY = je_un_led_reason_33_on FALLBACK = je_un_led_reason_33 }
+		un_authority_log_reason_on = { CODE = 34 KEY = je_un_led_reason_34_on FALLBACK = je_un_led_reason_34 }
+		un_authority_log_reason_on = { CODE = 35 KEY = je_un_led_reason_35_on FALLBACK = je_un_led_reason_35 }
+		un_authority_log_reason_on = { CODE = 36 KEY = je_un_led_reason_36_on FALLBACK = je_un_led_reason_36 }
+		un_authority_log_reason_on = { CODE = 37 KEY = je_un_led_reason_37_on FALLBACK = je_un_led_reason_37 }
+		un_authority_log_reason_on = { CODE = 38 KEY = je_un_led_reason_38_on FALLBACK = je_un_led_reason_38 }
+		un_authority_log_reason_on = { CODE = 39 KEY = je_un_led_reason_39_on FALLBACK = je_un_led_reason_39 }
 	}
 }
 
@@ -500,6 +516,18 @@ un_authority_log_resolution_lines = {
 	un_authority_log_topic_case = { TOPIC = sanctions KEY = je_un_led_topic_sanctions }
 	un_authority_log_topic_case = { TOPIC = expulsion KEY = je_un_led_topic_expulsion }
 	un_authority_log_topic_case = { TOPIC = military_mandate KEY = je_un_led_topic_military_mandate }
+	# Phase 7 (§0.12).
+	un_authority_log_topic_case = { TOPIC = cultural_diversity KEY = je_un_led_topic_cultural_diversity }
+	un_authority_log_topic_case = { TOPIC = nuclear_ban KEY = je_un_led_topic_nuclear_ban }
+	un_authority_log_topic_case = { TOPIC = court_referral KEY = je_un_led_topic_court_referral }
+	un_authority_log_topic_case = { TOPIC = arms_embargo KEY = je_un_led_topic_arms_embargo }
+	un_authority_log_topic_case = { TOPIC = credentials KEY = je_un_led_topic_credentials }
+	un_authority_log_topic_case = { TOPIC = standing_force KEY = je_un_led_topic_standing_force }
+	un_authority_log_topic_case = { TOPIC = observer_request KEY = je_un_led_topic_observer_request }
+	un_authority_log_topic_case = { TOPIC = food_reserve KEY = je_un_led_topic_food_reserve }
+	un_authority_log_topic_case = { TOPIC = ceasefire KEY = je_un_led_topic_ceasefire }
+	un_authority_log_topic_case = { TOPIC = development_fund KEY = je_un_led_topic_development_fund }
+	un_authority_log_topic_case = { TOPIC = referendum KEY = je_un_led_topic_referendum }
 }
 
 # One topic, printed if the entry's resolution carries its tag. Exactly one

@@ -4480,6 +4480,8 @@
  un_authority_restored_modifier:0 "[concept_un_authority] Restored"
  un_bloc_vacuum_modifier:0 "Vacuum of World Order"
  un_champion_order_cost:0 "Champion International Order"
+ un_charter_needs_reform_1_tt:0 "The [concept_un_charter] carries Charter Reform I"
+ un_charter_needs_reform_2_tt:0 "The [concept_un_charter] carries Charter Reform II"
  un_charter_reform_ripe_tt:0 "[concept_un_authority] has held within 5 points of the [concept_un_charter]'s ceiling for 24 months running"
  un_climate_binding_modifier:0 "Climate Accords Signatory"
  un_climate_refusal_modifier:0 "Climate Accords Refusal"

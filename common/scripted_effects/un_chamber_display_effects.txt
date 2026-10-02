@@ -137,6 +137,50 @@ un_chamber_topic_line = {
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_topic_unknown
 	}
+	else_if = {
+		limit = { has_tag = un_topic_cultural_diversity }
+		custom_tooltip_no_bullet = je_un_chamber_topic_cultural_diversity
+	}
+	else_if = {
+		limit = { has_tag = un_topic_nuclear_ban }
+		custom_tooltip_no_bullet = je_un_chamber_topic_nuclear_ban
+	}
+	else_if = {
+		limit = { has_tag = un_topic_court_referral }
+		custom_tooltip_no_bullet = je_un_chamber_topic_court_referral
+	}
+	else_if = {
+		limit = { has_tag = un_topic_arms_embargo }
+		custom_tooltip_no_bullet = je_un_chamber_topic_arms_embargo
+	}
+	else_if = {
+		limit = { has_tag = un_topic_credentials }
+		custom_tooltip_no_bullet = je_un_chamber_topic_credentials
+	}
+	else_if = {
+		limit = { has_tag = un_topic_standing_force }
+		custom_tooltip_no_bullet = je_un_chamber_topic_standing_force
+	}
+	else_if = {
+		limit = { has_tag = un_topic_observer_request }
+		custom_tooltip_no_bullet = je_un_chamber_topic_observer_request
+	}
+	else_if = {
+		limit = { has_tag = un_topic_food_reserve }
+		custom_tooltip_no_bullet = je_un_chamber_topic_food_reserve
+	}
+	else_if = {
+		limit = { has_tag = un_topic_ceasefire }
+		custom_tooltip_no_bullet = je_un_chamber_topic_ceasefire
+	}
+	else_if = {
+		limit = { has_tag = un_topic_development_fund }
+		custom_tooltip_no_bullet = je_un_chamber_topic_development_fund
+	}
+	else_if = {
+		limit = { has_tag = un_topic_referendum }
+		custom_tooltip_no_bullet = je_un_chamber_topic_referendum
+	}
 }
 
 # The territory and beneficiary a military_mandate resolution names. Printed
@@ -478,6 +522,80 @@ un_chamber_consequences_line = {
 			custom_tooltip_no_bullet = je_un_chamber_conseq_military_mandate
 		}
 	}
+	else_if = {
+		limit = { has_tag = un_topic_cultural_diversity }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_cultural_diversity
+	}
+	else_if = {
+		limit = { has_tag = un_topic_nuclear_ban }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_nuclear_ban
+	}
+	else_if = {
+		limit = { has_tag = un_topic_court_referral }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_court_referral_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_court_referral
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_topic_arms_embargo }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_arms_embargo_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_arms_embargo
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_topic_credentials }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_credentials
+	}
+	else_if = {
+		limit = { has_tag = un_topic_standing_force }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_standing_force_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_standing_force
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_topic_observer_request }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_observer_request
+	}
+	else_if = {
+		limit = { has_tag = un_topic_food_reserve }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_food_reserve
+	}
+	else_if = {
+		limit = { has_tag = un_topic_ceasefire }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_ceasefire_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_ceasefire
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_topic_development_fund }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_development_fund
+	}
+	else_if = {
+		limit = { has_tag = un_topic_referendum }
+		if = {
+			limit = { has_tag = un_res_vetoed }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_referendum_vetoed
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_conseq_referendum
+		}
+	}
 	if = {
 		limit = { has_tag = un_topic_expulsion }
 		custom_tooltip_no_bullet = je_un_chamber_conseq_fail_expulsion
@@ -516,6 +634,16 @@ un_chamber_outcome_line = {
 			has_tag = un_topic_military_mandate
 		}
 		custom_tooltip_no_bullet = je_un_chamber_outcome_passed_vetoed_mandate
+	}
+	# Phase 7 (§0.12): the Standing Force and a supervised referendum have no
+	# graduated form either.
+	else_if = {
+		limit = {
+			has_tag = un_res_passed
+			has_tag = un_res_vetoed
+			un_resolution_veto_blocks = yes
+		}
+		custom_tooltip_no_bullet = je_un_chamber_outcome_passed_vetoed_blocked
 	}
 	else_if = {
 		limit = {
@@ -945,6 +1073,19 @@ un_standing_reason_line = {
 	else_if = { limit = { var:un_standing_last_reason = 33 } custom_tooltip_no_bullet = je_un_standing_reason_33 }
 	else_if = { limit = { var:un_standing_last_reason = 34 } custom_tooltip_no_bullet = je_un_standing_reason_34 }
 	else_if = { limit = { var:un_standing_last_reason = 35 } custom_tooltip_no_bullet = je_un_standing_reason_35 }
+	# Redesign phase 7 (§0.12): 36-38 justice, 39-41 order, 42-44 economy, 45-47 missions.
+	else_if = { limit = { var:un_standing_last_reason = 36 } custom_tooltip_no_bullet = je_un_standing_reason_36 }
+	else_if = { limit = { var:un_standing_last_reason = 37 } custom_tooltip_no_bullet = je_un_standing_reason_37 }
+	else_if = { limit = { var:un_standing_last_reason = 38 } custom_tooltip_no_bullet = je_un_standing_reason_38 }
+	else_if = { limit = { var:un_standing_last_reason = 39 } custom_tooltip_no_bullet = je_un_standing_reason_39 }
+	else_if = { limit = { var:un_standing_last_reason = 40 } custom_tooltip_no_bullet = je_un_standing_reason_40 }
+	else_if = { limit = { var:un_standing_last_reason = 41 } custom_tooltip_no_bullet = je_un_standing_reason_41 }
+	else_if = { limit = { var:un_standing_last_reason = 42 } custom_tooltip_no_bullet = je_un_standing_reason_42 }
+	else_if = { limit = { var:un_standing_last_reason = 43 } custom_tooltip_no_bullet = je_un_standing_reason_43 }
+	else_if = { limit = { var:un_standing_last_reason = 44 } custom_tooltip_no_bullet = je_un_standing_reason_44 }
+	else_if = { limit = { var:un_standing_last_reason = 45 } custom_tooltip_no_bullet = je_un_standing_reason_45 }
+	else_if = { limit = { var:un_standing_last_reason = 46 } custom_tooltip_no_bullet = je_un_standing_reason_46 }
+	else_if = { limit = { var:un_standing_last_reason = 47 } custom_tooltip_no_bullet = je_un_standing_reason_47 }
 	else = { custom_tooltip_no_bullet = je_un_standing_reason_none }
 }
 
@@ -1170,6 +1311,175 @@ un_chamber_propose_reform_row = {
 	un_chamber_propose_status_line = {
 		AVAILABLE = un_propose_reform_available
 		NO_CASE = je_un_chamber_propose_no_case_reform
+	}
+}
+
+# ---- The charter's new business (redesign phase 7, §0.12; ops 20-28) ----
+# One shape for all nine: the title, whether it binds, its passage rule, the
+# reform it waits for (while the charter lacks it), the owner's preview of what
+# it would name (un_<key>_chamber_preview, only while there is a case: it may
+# run the topic's selector, which ExecuteTooltip leaves no trace of), and the
+# no-case line.
+
+# The reform a phase 7 topic waits for, while the charter does not carry it.
+# Parameters: $LEVEL$ = 1 | 2, $TT$ = je_un_chamber_propose_needs_reform_1 | _2
+# Scope: country
+un_chamber_propose_reform_line = {
+	if = {
+		limit = { NOT = { un_charter_has_reform = { LEVEL = $LEVEL$ } } }
+		custom_tooltip_no_bullet = $TT$
+	}
+}
+
+# Refer a Dispute to the World Court.
+# Scope: country
+un_chamber_propose_court_referral_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_court_referral
+	custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	un_chamber_propose_reform_line = { LEVEL = 1 TT = je_un_chamber_propose_needs_reform_1 }
+	if = {
+		limit = { un_propose_court_referral_available = yes }
+		un_court_referral_chamber_preview = yes
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_court_referral_available
+		NO_CASE = je_un_chamber_propose_no_case_court_referral
+	}
+}
+
+# Arms Embargo.
+# Scope: country
+un_chamber_propose_arms_embargo_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_arms_embargo
+	custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	un_chamber_propose_reform_line = { LEVEL = 1 TT = je_un_chamber_propose_needs_reform_1 }
+	if = {
+		limit = { un_propose_arms_embargo_available = yes }
+		un_arms_embargo_chamber_preview = yes
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_arms_embargo_available
+		NO_CASE = je_un_chamber_propose_no_case_arms_embargo
+	}
+}
+
+# Suspension of Credentials.
+# Scope: country
+un_chamber_propose_credentials_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_credentials
+	custom_tooltip_no_bullet = je_un_chamber_recommendatory
+	custom_tooltip_no_bullet = je_un_chamber_rule_supermajority
+	un_chamber_propose_reform_line = { LEVEL = 1 TT = je_un_chamber_propose_needs_reform_1 }
+	if = {
+		limit = { un_propose_credentials_available = yes }
+		un_credentials_chamber_preview = yes
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_credentials_available
+		NO_CASE = je_un_chamber_propose_no_case_credentials
+	}
+}
+
+# Establish the Standing UN Force.
+# Scope: country
+un_chamber_propose_standing_force_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_standing_force
+	custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	un_chamber_propose_reform_line = { LEVEL = 1 TT = je_un_chamber_propose_needs_reform_1 }
+	if = {
+		limit = { un_propose_standing_force_available = yes }
+		un_standing_force_chamber_preview = yes
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_standing_force_available
+		NO_CASE = je_un_chamber_propose_no_case_standing_force
+	}
+}
+
+# Request Electoral Observers.
+# Scope: country
+un_chamber_propose_observer_request_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_observer_request
+	custom_tooltip_no_bullet = je_un_chamber_recommendatory
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	un_chamber_propose_reform_line = { LEVEL = 1 TT = je_un_chamber_propose_needs_reform_1 }
+	if = {
+		limit = { un_propose_observer_request_available = yes }
+		un_observer_request_chamber_preview = yes
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_observer_request_available
+		NO_CASE = je_un_chamber_propose_no_case_observer_request
+	}
+}
+
+# Establish the World Food Reserve (no reform needed).
+# Scope: country
+un_chamber_propose_food_reserve_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_food_reserve
+	custom_tooltip_no_bullet = je_un_chamber_recommendatory
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	if = {
+		limit = { un_propose_food_reserve_available = yes }
+		un_food_reserve_chamber_preview = yes
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_food_reserve_available
+		NO_CASE = je_un_chamber_propose_no_case_food_reserve
+	}
+}
+
+# Binding Ceasefire.
+# Scope: country
+un_chamber_propose_ceasefire_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_ceasefire
+	custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	un_chamber_propose_reform_line = { LEVEL = 2 TT = je_un_chamber_propose_needs_reform_2 }
+	if = {
+		limit = { un_propose_ceasefire_available = yes }
+		un_ceasefire_chamber_preview = yes
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_ceasefire_available
+		NO_CASE = je_un_chamber_propose_no_case_ceasefire
+	}
+}
+
+# Establish the World Development Fund.
+# Scope: country
+un_chamber_propose_development_fund_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_development_fund
+	custom_tooltip_no_bullet = je_un_chamber_recommendatory
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	un_chamber_propose_reform_line = { LEVEL = 2 TT = je_un_chamber_propose_needs_reform_2 }
+	if = {
+		limit = { un_propose_development_fund_available = yes }
+		un_development_fund_chamber_preview = yes
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_development_fund_available
+		NO_CASE = je_un_chamber_propose_no_case_development_fund
+	}
+}
+
+# Supervised Self-Determination Referendum.
+# Scope: country
+un_chamber_propose_referendum_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_referendum
+	custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	un_chamber_propose_reform_line = { LEVEL = 2 TT = je_un_chamber_propose_needs_reform_2 }
+	if = {
+		limit = { un_propose_referendum_available = yes }
+		un_referendum_chamber_preview = yes
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_referendum_available
+		NO_CASE = je_un_chamber_propose_no_case_referendum
 	}
 }
 

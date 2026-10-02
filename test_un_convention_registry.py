@@ -138,10 +138,29 @@ AGENCIES = {c.key: c.in_force[len("un_agency_"):] for c in RATIFIED}
 # The seven member-initiated topics (ops 0-6), which share many of the same
 # lists. Their tag names (un_topic_<tag>) and their propose keys
 # (un_propose_<key>_*) differ for three of them.
-MEMBER_TOPIC_TAGS = {"condemn", "sanctions", "expulsion", "military_mandate",
-                     "peacekeeping_request", "aid_request", "reform"}
-MEMBER_PROPOSE_KEYS = {"condemn", "sanctions", "expulsion", "mandate", "peacekeepers", "aid", "reform"}
-FIRST_CONVENTION_OP = len(MEMBER_PROPOSE_KEYS)
+FIRST_MEMBER_TOPIC_TAGS = {"condemn", "sanctions", "expulsion", "military_mandate",
+                           "peacekeeping_request", "aid_request", "reform"}
+FIRST_MEMBER_PROPOSE_KEYS = {"condemn", "sanctions", "expulsion", "mandate", "peacekeepers", "aid", "reform"}
+FIRST_CONVENTION_OP = len(FIRST_MEMBER_PROPOSE_KEYS)
+
+# Redesign phase 7 (docs/systems/un_redesign_design.md §0.12): nine more
+# decisions, requests and institutions, at ops 20-28 after the conventions.
+# Tag and propose key are the same word for each.
+CHARTER_DECISION_OPS = {
+    20: "court_referral", 21: "arms_embargo", 22: "credentials", 23: "standing_force",
+    24: "observer_request", 25: "food_reserve", 26: "ceasefire", 27: "development_fund",
+    28: "referendum",
+}
+
+# Every topic that is not a convention: the lists that name every topic name
+# these too.
+MEMBER_TOPIC_TAGS = FIRST_MEMBER_TOPIC_TAGS | set(CHARTER_DECISION_OPS.values())
+MEMBER_PROPOSE_KEYS = FIRST_MEMBER_PROPOSE_KEYS | set(CHARTER_DECISION_OPS.values())
+
+
+def _convention_op(op):
+    """Whether chamber op `op` is a convention's (not a member topic's)."""
+    return op >= FIRST_CONVENTION_OP and op not in CHARTER_DECISION_OPS
 
 # Regime-layer modifiers that belong to no one convention's member terms: the
 # §7.4 intelligence sharing, and the decolonization regime's reach into a
@@ -570,7 +589,7 @@ class ChamberTests(unittest.TestCase):
         ):
             with self.subTest(switch=name):
                 found = {op: set(re.findall(pattern, body)) for op, body in branches.items()
-                         if op >= FIRST_CONVENTION_OP}
+                         if _convention_op(op)}
                 self.assertEqual(found, {c.op: {c.key} for c in CONVENTIONS})
 
     def test_is_valid_names_what_is_missing(self):
@@ -582,7 +601,7 @@ class ChamberTests(unittest.TestCase):
                 self.assertIn(f"un_propose_{c.key}_possible = yes", body)
 
     def test_widget_has_one_row_per_convention(self):
-        ops = sorted(op for row_ops, _ in _widget_rows() for op in row_ops if op >= FIRST_CONVENTION_OP)
+        ops = sorted(op for row_ops, _ in _widget_rows() for op in row_ops if _convention_op(op))
         self.assertEqual(ops, sorted(c.op for c in CONVENTIONS))
 
     def test_row_renderer_is_the_conventions_own(self):

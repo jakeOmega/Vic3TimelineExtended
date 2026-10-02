@@ -1065,3 +1065,149 @@ un_stop_undermining_button = {
 		}
 	}
 }
+
+# ============================================================================
+# THE CHARTER'S NEW BUSINESS (redesign phase 7, §0.12)
+# ============================================================================
+# The AI's path to the nine phase 7 decisions, requests and institutions, as
+# the buttons above are for the older topics. Each button keeps only its name,
+# description and AI weight; the gates and the effect are the chamber's own
+# (un_propose_triggers.txt, un_propose_effects.txt), and the weight is the
+# topic owner's (un_<key>_ai_chance; un_charter_effects.txt says who owns
+# what). Like the others, they are not hidden from a human, who sees them only
+# when there is a case to table.
+
+un_propose_court_referral_button = {
+	name = "UN_PROPOSE_COURT_REFERRAL"
+	desc = "UN_PROPOSE_COURT_REFERRAL_DESC"
+
+	visible = { un_propose_court_referral_available = yes }
+
+	possible = { un_propose_court_referral_possible = yes }
+
+	ai_chance = {
+		value = un_court_referral_ai_chance
+	}
+
+	effect = { un_propose_court_referral_effect = yes }
+}
+
+un_propose_arms_embargo_button = {
+	name = "UN_PROPOSE_ARMS_EMBARGO"
+	desc = "UN_PROPOSE_ARMS_EMBARGO_DESC"
+
+	visible = { un_propose_arms_embargo_available = yes }
+
+	possible = { un_propose_arms_embargo_possible = yes }
+
+	ai_chance = {
+		value = un_arms_embargo_ai_chance
+	}
+
+	effect = { un_propose_arms_embargo_effect = yes }
+}
+
+un_propose_credentials_button = {
+	name = "UN_PROPOSE_CREDENTIALS"
+	desc = "UN_PROPOSE_CREDENTIALS_DESC"
+
+	visible = { un_propose_credentials_available = yes }
+
+	possible = { un_propose_credentials_possible = yes }
+
+	ai_chance = {
+		value = un_credentials_ai_chance
+	}
+
+	effect = { un_propose_credentials_effect = yes }
+}
+
+un_propose_standing_force_button = {
+	name = "UN_PROPOSE_STANDING_FORCE"
+	desc = "UN_PROPOSE_STANDING_FORCE_DESC"
+
+	visible = { un_propose_standing_force_available = yes }
+
+	possible = { un_propose_standing_force_possible = yes }
+
+	ai_chance = {
+		value = un_standing_force_ai_chance
+	}
+
+	effect = { un_propose_standing_force_effect = yes }
+}
+
+un_propose_observer_request_button = {
+	name = "UN_PROPOSE_OBSERVER_REQUEST"
+	desc = "UN_PROPOSE_OBSERVER_REQUEST_DESC"
+
+	visible = { un_propose_observer_request_available = yes }
+
+	possible = { un_propose_observer_request_possible = yes }
+
+	ai_chance = {
+		value = un_observer_request_ai_chance
+	}
+
+	effect = { un_propose_observer_request_effect = yes }
+}
+
+un_propose_food_reserve_button = {
+	name = "UN_PROPOSE_FOOD_RESERVE"
+	desc = "UN_PROPOSE_FOOD_RESERVE_DESC"
+
+	visible = { un_propose_food_reserve_available = yes }
+
+	possible = { un_propose_food_reserve_possible = yes }
+
+	ai_chance = {
+		value = un_food_reserve_ai_chance
+	}
+
+	effect = { un_propose_food_reserve_effect = yes }
+}
+
+un_propose_ceasefire_button = {
+	name = "UN_PROPOSE_CEASEFIRE"
+	desc = "UN_PROPOSE_CEASEFIRE_DESC"
+
+	visible = { un_propose_ceasefire_available = yes }
+
+	possible = { un_propose_ceasefire_possible = yes }
+
+	ai_chance = {
+		value = un_ceasefire_ai_chance
+	}
+
+	effect = { un_propose_ceasefire_effect = yes }
+}
+
+un_propose_development_fund_button = {
+	name = "UN_PROPOSE_DEVELOPMENT_FUND"
+	desc = "UN_PROPOSE_DEVELOPMENT_FUND_DESC"
+
+	visible = { un_propose_development_fund_available = yes }
+
+	possible = { un_propose_development_fund_possible = yes }
+
+	ai_chance = {
+		value = un_development_fund_ai_chance
+	}
+
+	effect = { un_propose_development_fund_effect = yes }
+}
+
+un_propose_referendum_button = {
+	name = "UN_PROPOSE_REFERENDUM"
+	desc = "UN_PROPOSE_REFERENDUM_DESC"
+
+	visible = { un_propose_referendum_available = yes }
+
+	possible = { un_propose_referendum_possible = yes }
+
+	ai_chance = {
+		value = un_referendum_ai_chance
+	}
+
+	effect = { un_propose_referendum_effect = yes }
+}

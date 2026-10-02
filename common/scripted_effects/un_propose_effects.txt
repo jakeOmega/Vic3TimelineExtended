@@ -285,6 +285,126 @@ un_charter_reform_open = {
 }
 
 # ============================================================================
+# THE CHARTER'S NEW BUSINESS (redesign phase 7, §0.12)
+# ============================================================================
+# Nine decisions, requests and institutions; the two phase 7 conventions are
+# with the others below. Tabling one costs what tabling a convention on our own
+# motion costs (un_propose_own_motion_costs, shown), except the request for
+# electoral observers, which takes the request cooldown as the other requests
+# do. The target, if the topic names one, is the owner's pick
+# (un_<key>_select_target, the same selector the chamber's row previews), and
+# un_<key>_on_tabled writes the topic's own fields on the resolution.
+
+# Refer a Dispute to the World Court — binding (an advisory opinion if vetoed), simple majority; Reform I. Names the holder of a state we claim.
+# Scope: the proposing country
+un_propose_court_referral_effect = {
+	custom_tooltip = UN_PROPOSE_COURT_REFERRAL_TT
+	un_propose_own_motion_costs = yes
+	hidden_effect = {
+		un_court_referral_select_target = yes
+		scope:un_court_referral_pick ?= { save_scope_as = un_vote_target }
+		un_resolution_open = { TOPIC = court_referral }
+		un_court_referral_on_tabled = yes
+	}
+}
+
+# Arms Embargo — binding (a voluntary embargo if vetoed), simple majority, grounds of 40; Reform I.
+# Scope: the proposing country
+un_propose_arms_embargo_effect = {
+	custom_tooltip = UN_PROPOSE_ARMS_EMBARGO_TT
+	un_propose_own_motion_costs = yes
+	hidden_effect = {
+		un_arms_embargo_select_target = yes
+		scope:un_arms_embargo_pick ?= { save_scope_as = un_vote_target }
+		un_resolution_open = { TOPIC = arms_embargo }
+	}
+}
+
+# Suspension of Credentials — recommendatory in form, two-thirds of the members with a vote, grounds of 50; Reform I.
+# Scope: the proposing country
+un_propose_credentials_effect = {
+	custom_tooltip = UN_PROPOSE_CREDENTIALS_TT
+	un_propose_own_motion_costs = yes
+	hidden_effect = {
+		un_credentials_select_target = yes
+		scope:un_credentials_pick ?= { save_scope_as = un_vote_target }
+		un_resolution_open = { TOPIC = credentials }
+	}
+}
+
+# Establish the Standing UN Force — binding (blocked if vetoed), simple majority; Reform I. An institution: names no one.
+# Scope: the proposing country
+un_propose_standing_force_effect = {
+	custom_tooltip = UN_PROPOSE_STANDING_FORCE_TT
+	un_propose_own_motion_costs = yes
+	hidden_effect = {
+		un_resolution_open = { TOPIC = standing_force }
+	}
+}
+
+# Request Electoral Observers — recommendatory, simple majority; Reform I. A request, like aid: the requester is the target, and it takes only the request cooldown.
+# Scope: the proposing country
+un_propose_observer_request_effect = {
+	custom_tooltip = UN_PROPOSE_OBSERVER_REQUEST_TT
+	add_modifier = {
+		name = un_request_cooldown
+		days = un_propose_cooldown_days
+		is_decaying = yes
+	}
+	hidden_effect = {
+		# The requester is also the resolution's target.
+		save_scope_as = un_vote_target
+		un_resolution_open = { TOPIC = observer_request }
+	}
+}
+
+# Establish the World Food Reserve — recommendatory, simple majority; needs no reform (owner, 2026-10-02). An institution: names no one.
+# Scope: the proposing country
+un_propose_food_reserve_effect = {
+	custom_tooltip = UN_PROPOSE_FOOD_RESERVE_TT
+	un_propose_own_motion_costs = yes
+	hidden_effect = {
+		un_resolution_open = { TOPIC = food_reserve }
+	}
+}
+
+# Binding Ceasefire — binding (a call for a ceasefire if vetoed), simple majority, grounds of 40; Reform II. Names the aggressor.
+# Scope: the proposing country
+un_propose_ceasefire_effect = {
+	custom_tooltip = UN_PROPOSE_CEASEFIRE_TT
+	un_propose_own_motion_costs = yes
+	hidden_effect = {
+		un_ceasefire_select_target = yes
+		scope:un_ceasefire_pick ?= { save_scope_as = un_vote_target }
+		un_resolution_open = { TOPIC = ceasefire }
+		un_ceasefire_on_tabled = yes
+	}
+}
+
+# Establish the World Development Fund — recommendatory, simple majority; Reform II. An institution: names no one.
+# Scope: the proposing country
+un_propose_development_fund_effect = {
+	custom_tooltip = UN_PROPOSE_DEVELOPMENT_FUND_TT
+	un_propose_own_motion_costs = yes
+	hidden_effect = {
+		un_resolution_open = { TOPIC = development_fund }
+	}
+}
+
+# Supervised Self-Determination Referendum — binding (blocked if vetoed), simple majority; Reform II. Names an overlord; the subject rides on the resolution.
+# Scope: the proposing country
+un_propose_referendum_effect = {
+	custom_tooltip = UN_PROPOSE_REFERENDUM_TT
+	un_propose_own_motion_costs = yes
+	hidden_effect = {
+		un_referendum_select_target = yes
+		scope:un_referendum_pick ?= { save_scope_as = un_vote_target }
+		un_resolution_open = { TOPIC = referendum }
+		un_referendum_on_tabled = yes
+	}
+}
+
+# ============================================================================
 # THE ELEVEN CONVENTIONS
 # ============================================================================
 # Human rights, ICC, NPT, climate, pandemic, refugee, heritage,

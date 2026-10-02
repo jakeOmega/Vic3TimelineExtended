@@ -392,6 +392,11 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_agency_cppnm }
 	un_dissolve_remove_global = { NAME = un_agency_icc }
 
+	# 8b. The charter's new business (redesign phase 7, §0.12): its
+	#     institutions lapse and its standing orders end
+	#     (un_charter_effects.txt).
+	un_charter_on_dissolve = yes
+
 	# 9. The organisation's own state. Its record of acts (the ledger log)
 	#    goes with it; the next UN starts with an empty one.
 	if = {

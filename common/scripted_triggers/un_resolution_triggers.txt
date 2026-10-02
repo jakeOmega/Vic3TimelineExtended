@@ -20,14 +20,17 @@ un_resolution_topic_on_cooldown = {
 	}
 }
 
-# Whether the resolution is *binding* (vetoable). The 6 binding topics are
-# sanctions, peacekeeping_request, icc, condemn, reform and military_mandate;
-# all others are recommendatory and cannot be vetoed.
+# Whether the resolution is *binding* (vetoable). The 11 binding topics are
+# sanctions, peacekeeping_request, icc, condemn, reform and military_mandate,
+# and since redesign phase 7 (§0.12) court_referral, arms_embargo,
+# standing_force, ceasefire and referendum; all others are recommendatory and
+# cannot be vetoed.
 #
-# military_mandate and reform are the two with NO graduated form: a veto on an
-# authorization to use force blocks it outright, because there is no coherent
-# weaker version of "you may go to war over this" (un_vote.2 applies no effect
-# for either). See docs/systems/journal_entry_systems.md § Military mandates.
+# military_mandate, reform, standing_force and referendum are the four with NO
+# graduated form: a veto blocks each outright, because there is no coherent
+# weaker version of "you may go to war over this", of a charter amendment, of
+# a standing force or of a supervised vote (un_vote.2 applies no effect for
+# any of them). See docs/systems/journal_entry_systems.md § Military mandates.
 # Scope: resolution container
 un_resolution_is_binding = {
 	OR = {
@@ -37,45 +40,74 @@ un_resolution_is_binding = {
 		has_tag = un_topic_condemn
 		has_tag = un_topic_reform
 		has_tag = un_topic_military_mandate
+		has_tag = un_topic_court_referral
+		has_tag = un_topic_arms_embargo
+		has_tag = un_topic_standing_force
+		has_tag = un_topic_ceasefire
+		has_tag = un_topic_referendum
+	}
+}
+
+# Whether a veto blocks the resolution outright, with no graduated form: the
+# vetoed-but-carried outcome is a flat block (un_chamber_outcome_line names it).
+# Scope: resolution container
+un_resolution_veto_blocks = {
+	OR = {
+		has_tag = un_topic_reform
+		has_tag = un_topic_military_mandate
+		has_tag = un_topic_standing_force
+		has_tag = un_topic_referendum
 	}
 }
 
 # Whether the resolution is decided by a two-thirds supermajority of ALL
 # current members (un_vote_supermajority_passed) rather than a simple majority
-# of the votes cast: the motion to strip a permanent seat, and (since redesign
-# phase 2) a charter reform. un_resolution_decide and the chamber's tally and
-# projection lines all read this one trigger.
+# of the votes cast: the motion to strip a permanent seat, (since redesign
+# phase 2) a charter reform, and (since phase 7) a suspension of credentials.
+# un_resolution_decide and the chamber's tally and projection lines all read
+# this one trigger.
 # Scope: resolution container
 un_resolution_needs_supermajority = {
 	OR = {
 		has_tag = un_topic_expulsion
 		has_tag = un_topic_reform
+		has_tag = un_topic_credentials
 	}
 }
 
 # Whether the resolution is PUNITIVE: it punishes a named country on the
 # strength of that country's record, so it needs grounds (the target's case
 # strength must reach the topic's threshold, un_res_case_threshold) and it is
-# weighed on the grounds in every member's lean (redesign phase 3).
+# weighed on the grounds in every member's lean (redesign phase 3). Phase 7
+# added the arms embargo, the suspension of credentials and the binding
+# ceasefire.
 # Scope: resolution container
 un_resolution_is_punitive = {
 	OR = {
 		has_tag = un_topic_condemn
 		has_tag = un_topic_sanctions
 		has_tag = un_topic_military_mandate
+		has_tag = un_topic_arms_embargo
+		has_tag = un_topic_credentials
+		has_tag = un_topic_ceasefire
 	}
 }
 
-# Whether the resolution ACCUSES its target: the punitive topics, and the
-# motion to strip a permanent seat. Allies and rivals of the target, and the
-# target itself, weigh these as such (un_lean_target, un_lean_self). The
-# motion needs no grounds from the dossier: its case is the veto abuse its
-# proposal gate already requires.
+# Whether the resolution ACCUSES its target: the punitive topics, the motion
+# to strip a permanent seat, and (phase 7) a referral to the World Court, which
+# names the holder of a claimed state, and a supervised referendum, which
+# names an overlord. Allies and rivals of the target, and the target itself,
+# weigh these as such (un_lean_target, un_lean_self). None of the three needs
+# grounds from the dossier: the motion's case is the veto abuse its proposal
+# gate already requires, the court's is the claim, the referendum's is the
+# subject's wish to leave.
 # Scope: resolution container
 un_resolution_accuses_target = {
 	OR = {
 		un_resolution_is_punitive = yes
 		has_tag = un_topic_expulsion
+		has_tag = un_topic_court_referral
+		has_tag = un_topic_referendum
 	}
 }
 
@@ -146,12 +178,14 @@ un_veto_would_change_outcome = {
 # Whether this resolution's "target" is who it HELPS rather than who it is aimed
 # at: a request for aid or peacekeepers names the requester as its target.
 # Anything that reasons "the target is my rival, so I like this" must exclude
-# these, or a rival of the requester counts as eager to help it.
+# these, or a rival of the requester counts as eager to help it. A request for
+# electoral observers (phase 7) names its requester too.
 # Scope: resolution container
 un_resolution_target_is_beneficiary = {
 	OR = {
 		has_tag = un_topic_aid_request
 		has_tag = un_topic_peacekeeping_request
+		has_tag = un_topic_observer_request
 	}
 }
 
@@ -177,6 +211,8 @@ un_resolution_is_convention = {
 		has_tag = un_topic_space
 		has_tag = un_topic_law_of_sea
 		has_tag = un_topic_physical_protection
+		has_tag = un_topic_cultural_diversity
+		has_tag = un_topic_nuclear_ban
 		AND = {
 			has_tag = un_topic_icc
 			NOT = { has_tag = un_res_vetoed }

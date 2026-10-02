@@ -59,6 +59,17 @@
 	# defined in un_buttons.txt but never registered here, so until redesign
 	# phase 2 only a human could table one (from the chamber).
 	scripted_button = un_propose_expulsion_button
+	# The charter's new business (redesign phase 7, §0.12): the AI's path to
+	# each topic; a human tables them from the chamber.
+	scripted_button = un_propose_court_referral_button
+	scripted_button = un_propose_arms_embargo_button
+	scripted_button = un_propose_credentials_button
+	scripted_button = un_propose_standing_force_button
+	scripted_button = un_propose_observer_request_button
+	scripted_button = un_propose_food_reserve_button
+	scripted_button = un_propose_ceasefire_button
+	scripted_button = un_propose_development_fund_button
+	scripted_button = un_propose_referendum_button
 
 	# ---- Dues (redesign phase 5) ----
 	scripted_button = un_withhold_dues_button
