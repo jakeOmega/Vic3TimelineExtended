@@ -271,6 +271,49 @@ class WriterTest(unittest.TestCase):
         self.assertEqual(limit.get("has_law"), "law_type:law_te_tax_code")
         self.assertEqual(limit.get("has_variable"), "te_tax_schema")
 
+    def test_a_second_sync_in_one_day_defers_to_tomorrow(self):
+        # Final review A-I1: whether one event's add_amendment is visible to a
+        # second event in the same tick is unverified, so a second sync in a day
+        # writes nothing and hands over to te_tax.4 the next day.
+        branch = self.parsed["te_tax_sync_collection"]["if"]
+        self.assertEqual(branch["if"]["limit"], {"te_tax_synced_today": "yes"})
+        self.assertEqual(set(branch["if"]) - {"limit"}, {"te_tax_defer_sync"})
+        full = block(self.text, "te_tax_sync_collection")
+        guard = full.find("te_tax_synced_today = yes")
+        for write in ("te_tax_detect_drift = yes", "te_tax_gen_sync_", "te_tax_sync_relief = yes",
+                      "set_tax_level", "te_tax_sync_customs = yes"):
+            with self.subTest(write=write):
+                self.assertGreater(full.find(write), guard)
+        # The day is stamped once, after every write.
+        stamp = "set_variable = { name = te_tax_sync_day value = te_tax_today }"
+        self.assertEqual(full.count("te_tax_sync_day"), 1)
+        self.assertGreater(full.find(stamp), full.find("set_tax_level"))
+        trigger = block(read("common/scripted_triggers/te_tax_triggers.txt"), "te_tax_synced_today")
+        self.assertEqual(" ".join(trigger.split()),
+                         "has_variable = te_tax_sync_day var:te_tax_sync_day >= te_tax_today")
+        today = block(read("common/script_values/te_tax_support_values.txt"), "te_tax_today")
+        self.assertEqual(" ".join(today.split()), "value = game_date")
+
+    def test_the_deferral_is_one_event_a_day(self):
+        defer = block(self.text, "te_tax_defer_sync")
+        flat = " ".join(defer.split())
+        # Several same-day callers make one deferred sync, not a chain.
+        self.assertIn("if = { limit = { OR = { NOT = { has_variable = te_tax_sync_defer_day } "
+                      "var:te_tax_sync_defer_day < te_tax_today } } "
+                      "set_variable = { name = te_tax_sync_defer_day value = te_tax_today } "
+                      "trigger_event = { id = te_tax.4 days = 1 } }", flat)
+        self.assertEqual(flat.count("trigger_event"), 1)
+        self.assertIn('debug_log = "TE_TAX sync_deferred ', flat)
+        for forbidden in ("add_amendment", "remove_amendment", "taxed_goods", "set_tax_level", "_modifier",
+                          "te_tax.1", "te_tax.2"):
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, defer)
+        # The guard's day variables are not schema tokens (never initialised or copied).
+        country, _ = schema_tokens()
+        for name in ("te_tax_sync_day", "te_tax_sync_defer_day"):
+            with self.subTest(name=name):
+                self.assertNotIn(name, country)
+
     def test_a_carrier_holder_without_tokens_is_logged_not_synced(self):
         skip = self.parsed["te_tax_sync_collection"]["else_if"]
         self.assertEqual(set(skip), {"limit", "debug_log"})

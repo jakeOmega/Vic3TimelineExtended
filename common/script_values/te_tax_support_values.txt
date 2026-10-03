@@ -198,11 +198,15 @@ te_tax_regrel_revenue_levels = 0.25
 # it; in surplus the other way round, half as strongly. The direction is the
 # sign of te_tax_dl_revenue: the bill's summed change in tax rates plus the
 # goods it taxes, less the relief it grants (plan Task 13; it read the rates
-# alone before).
+# alone before). The deficit is the fiscal record of the 1st
+# (te_tax_fisc_rec_deficit, final review A-I2), never the live budget, which a
+# player could tip into deficit for the few days a bill needs to gain every
+# group's commitment; with no record yet (before the country's first processed
+# month) the reason is 0.
 te_tax_fiscal_reason = {
 	value = 0
 	if = {
-		limit = { net_fixed_income < 0 }
+		limit = { te_tax_fisc_rec_deficit = yes }
 		if = {
 			limit = { te_tax_dl_revenue > 0 }
 			value = 8
@@ -212,7 +216,8 @@ te_tax_fiscal_reason = {
 			value = -8
 		}
 	}
-	else = {
+	else_if = {
+		limit = { has_variable = te_tax_fisc_deficit }
 		if = {
 			limit = { te_tax_dl_revenue > 0 }
 			value = -4
@@ -258,6 +263,13 @@ te_tax_debate_days_required = {
 		}
 		value = te_tax_debate_days_minor
 	}
+}
+
+# Today, in days: game_date as a value (a save stored 2069-03-01 as 755244 =
+# 2069 x 365 + 59). The collection writer's same-day guard compares its day
+# stamps with it (te_tax_synced_today, te_tax_defer_sync).
+te_tax_today = {
+	value = game_date
 }
 
 # Days since the bill's last material revision. game_date as a value is the

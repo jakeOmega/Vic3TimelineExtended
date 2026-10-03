@@ -50,7 +50,11 @@ te_tax_process_month = {
 				limit = { is_ai = no }
 				debug_log = "TE_TAX process month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 			}
-			# 0. Customs authority (plan Task 15; customs option only): whether the
+			# 0a. The fiscal record of the 1st (te_tax_snapshot_effects.txt), which
+			# the support model's fiscal reason and the budget promises' maintenance
+			# test read instead of the live budget (final review A-I2).
+			te_tax_record_fiscal_month = yes
+			# 0b. Customs authority (plan Task 15; customs option only): whether the
 			# code holds this country's customs follows whether it owns its market,
 			# before any transition, so a package touching customs holds in the
 			# month the market was lost rather than commencing.

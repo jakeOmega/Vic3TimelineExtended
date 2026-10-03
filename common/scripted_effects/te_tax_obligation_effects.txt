@@ -126,10 +126,11 @@ te_tax_obl_write = {
 	te_tax_obl_record_baseline = { N = $N$ }
 	# Spec §7.2: existing provision may be promised protection, but is labelled
 	# maintenance. What it asks for already holds: it maintains, and keeping it
-	# earns approval but no trust (te_tax_obl_is_maintenance is the same test
-	# before a slot exists).
+	# earns approval but no trust. The offer priced it by the same trigger, which
+	# reads the two budget kinds from the fiscal record of the 1st, not the live
+	# budget (final review A-I2).
 	if = {
-		limit = { te_tax_obl_holds = { N = $N$ } }
+		limit = { te_tax_obl_is_maintenance = { KIND = $KIND$ ARG = $ARG$ TARGET = $TARGET$ } }
 		set_variable = { name = te_tax_o$N$_maint_only value = 1 }
 	}
 	else = {
@@ -143,8 +144,11 @@ te_tax_obl_write = {
 # The measure obligation N is checked against, as it stands now: kind 1 the
 # institution's delivered level (0 without it); kind 2 1 if the bureaucracy
 # has no deficit, else 0; kind 3 the military wage level (1 very low .. 5 very
-# high); kind 4 1 if the fixed budget is in surplus, else 0. A promise whose
-# baseline already meets it is one of maintenance.
+# high); kind 4 1 if the fixed budget is in surplus, else 0. Kinds 2 and 4 read
+# the fiscal record of the 1st (te_tax_fisc_rec_*), as the maintenance test
+# does: at proposal the panel shows what that test saw, and when the clock
+# starts (a commencement, in the processor) the record is the month's own.
+# A promise whose baseline already meets it is one of maintenance.
 te_tax_obl_record_baseline = {
 	set_variable = { name = te_tax_o$N$_baseline value = 0 }
 	if = {
@@ -165,7 +169,7 @@ te_tax_obl_record_baseline = {
 	else_if = {
 		limit = {
 			var:te_tax_o$N$_kind = 2
-			te_tax_obl_holds = { N = $N$ }
+			te_tax_fisc_rec_bur_ok = yes
 		}
 		set_variable = { name = te_tax_o$N$_baseline value = 1 }
 	}
@@ -194,7 +198,7 @@ te_tax_obl_record_baseline = {
 	else_if = {
 		limit = {
 			var:te_tax_o$N$_kind = 4
-			te_tax_obl_holds = { N = $N$ }
+			te_tax_fisc_rec_surplus = yes
 		}
 		set_variable = { name = te_tax_o$N$_baseline value = 1 }
 	}

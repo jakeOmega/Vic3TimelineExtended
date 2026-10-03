@@ -74,6 +74,48 @@ te_tax_can_store_package = {
 	te_tax_gen_bill_sunsets_valid = yes
 }
 
+# Country scope. The collection writer already ran today (te_tax_sync_day, the
+# day te_tax_sync_collection last wrote; final review A-I1): a second sync the
+# same day defers to te_tax.4 the next day (te_tax_defer_sync).
+te_tax_synced_today = {
+	has_variable = te_tax_sync_day
+	var:te_tax_sync_day >= te_tax_today
+}
+
+# ---------------------------------------------------------------------------
+# The fiscal record (final review A-I2; te_tax_record_fiscal_month,
+# te_tax_snapshot_effects.txt): the budget as the monthly processor read it on
+# the 1st, never the live figure, so a budget slider moved for a few days
+# changes neither the fiscal reason (te_tax_fiscal_reason) nor whether a
+# bureaucracy or budget promise only maintains what held (te_tax_obl_is_maintenance_2,
+# _4). Country scope. Before the country's first processed month there is no
+# record: no deficit is recorded, and a promise counts as maintenance.
+# ---------------------------------------------------------------------------
+
+# The fixed budget was in deficit (net_fixed_income below 0) on the 1st.
+te_tax_fisc_rec_deficit = {
+	has_variable = te_tax_fisc_deficit
+	var:te_tax_fisc_deficit = 1
+}
+
+# The fixed budget was in surplus (net_fixed_income above 0) on the 1st, or
+# there is no record yet.
+te_tax_fisc_rec_surplus = {
+	OR = {
+		NOT = { has_variable = te_tax_fisc_surplus }
+		var:te_tax_fisc_surplus = 1
+	}
+}
+
+# The bureaucracy had no deficit (bureaucracy at 0 or above) on the 1st, or
+# there is no record yet.
+te_tax_fisc_rec_bur_ok = {
+	OR = {
+		NOT = { has_variable = te_tax_fisc_bur_ok }
+		var:te_tax_fisc_bur_ok = 1
+	}
+}
+
 # ---------------------------------------------------------------------------
 # Draft, bill and passage (docs/systems/tax_code_schema.md, "Draft, bill and
 # passage"). Country scope. Each command te_tax_cmd_<c>
@@ -1043,8 +1085,11 @@ te_tax_obl_feasible_4 = {
 
 # The promise would only maintain existing provision (spec §7.2: labelled
 # maintenance, not new investment): what it asks for already holds. Task 13
-# prices such an offer lower; te_tax_obl_write records the same test in
+# prices such an offer lower; te_tax_obl_write records this same test in
 # _maint_only, and a kept maintenance promise earns approval but no trust.
+# The two budget kinds read the fiscal record of the 1st, not the live budget
+# (final review A-I2): a deficit has to last over a 1st to make a promise to
+# end it a new one, worth more and earning trust.
 # KIND and ARG literal, TARGET any value (as for the feasibility triggers).
 # The kind helpers take both parameters and use what their kind needs (an
 # unused parameter is passed elsewhere in the mod: st_res_policy_set_by_hand_base).
@@ -1057,7 +1102,7 @@ te_tax_obl_is_maintenance_1 = {
 }
 
 te_tax_obl_is_maintenance_2 = {
-	bureaucracy >= 0
+	te_tax_fisc_rec_bur_ok = yes
 }
 
 te_tax_obl_is_maintenance_3 = {
@@ -1065,7 +1110,7 @@ te_tax_obl_is_maintenance_3 = {
 }
 
 te_tax_obl_is_maintenance_4 = {
-	net_fixed_income > 0
+	te_tax_fisc_rec_surplus = yes
 }
 
 # ---------------------------------------------------------------------------

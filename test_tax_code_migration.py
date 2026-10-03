@@ -42,6 +42,7 @@ STATE = "common/scripted_effects/te_tax_state_effects.txt"
 ON_ACTIONS = "common/on_actions/te_tax_on_actions.txt"
 EVENTS = "events/te_tax_internal_events.txt"
 CIVIL_WAR = "common/scripted_effects/te_tax_civil_war_effects.txt"
+COLLECTION = "common/scripted_effects/te_tax_collection_effects.txt"
 GEN_EFFECTS = "common/scripted_effects/te_tax_generated_effects.txt"
 SCHEMA_DOC = "docs/systems/tax_code_schema.md"
 VANILLA_LAWS = "vanilla_parsed/common/laws.json"
@@ -431,8 +432,11 @@ class EventTest(unittest.TestCase):
                     raisers.append((path.relative_to(ROOT).as_posix(), event))
         # The civil-war effects migrate an uprising or a released country whose
         # parent has no code (te_tax.3) and sync a copied code (te_tax.4, Task 10).
+        # The collection writer defers a second sync in one day to te_tax.4 the
+        # next day (te_tax_defer_sync, final review A-I1).
         self.assertEqual(sorted(set(raisers)), sorted([(CIVIL_WAR, "te_tax.3"), (CIVIL_WAR, "te_tax.4"),
-                                                       (ON_ACTIONS, "te_tax.3"), (MIGRATION, "te_tax.4")]))
+                                                       (ON_ACTIONS, "te_tax.3"), (MIGRATION, "te_tax.4"),
+                                                       (COLLECTION, "te_tax.4")]))
 
 
 class HookTest(unittest.TestCase):

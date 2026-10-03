@@ -691,9 +691,13 @@ class SupportModelTest(unittest.TestCase):
 
     def test_fiscal_and_government_reasons(self):
         fiscal = self.parsed["te_tax_fiscal_reason"]
-        self.assertEqual(fiscal["if"]["limit"], {"net_fixed_income": "0"})
-        self.assertIn("net_fixed_income < 0", block(self.support, "te_tax_fiscal_reason"))
-        deficit, surplus = fiscal["if"], fiscal["else"]
+        # Final review A-I2: the fiscal record of the 1st, never the live budget,
+        # and no reason at all before the first record.
+        self.assertEqual(fiscal["if"]["limit"], {"te_tax_fisc_rec_deficit": "yes"})
+        self.assertEqual(fiscal["else_if"]["limit"], {"has_variable": "te_tax_fisc_deficit"})
+        self.assertNotIn("else", fiscal)
+        self.assertNotIn("net_fixed_income", block(self.support, "te_tax_fiscal_reason"))
+        deficit, surplus = fiscal["if"], fiscal["else_if"]
         self.assertEqual((deficit["if"]["value"], deficit["else_if"]["value"]), ("8", "-8"))
         self.assertEqual((surplus["if"]["value"], surplus["else_if"]["value"]), ("-4", "4"))
         # Task 13: the direction sees the goods taxed and the relief granted

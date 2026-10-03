@@ -281,8 +281,9 @@ class FeasibilityTest(unittest.TestCase):
     def test_is_maintenance_for_task_13(self):
         self.assertEqual(norm(block(self.triggers, "te_tax_obl_is_maintenance")),
                          "te_tax_obl_is_maintenance_$KIND$ = { ARG = $ARG$ TARGET = $TARGET$ }")
-        for kind, body in ((1, "te_tax_obl_inst_level_$ARG$ >= $TARGET$"), (2, "bureaucracy >= 0"),
-                           (3, "NOT = { te_tax_obl_wages_above_$ARG$ = yes }"), (4, "net_fixed_income > 0")):
+        # The two budget kinds read the fiscal record of the 1st (final review A-I2).
+        for kind, body in ((1, "te_tax_obl_inst_level_$ARG$ >= $TARGET$"), (2, "te_tax_fisc_rec_bur_ok = yes"),
+                           (3, "NOT = { te_tax_obl_wages_above_$ARG$ = yes }"), (4, "te_tax_fisc_rec_surplus = yes")):
             with self.subTest(kind=kind):
                 self.assertEqual(norm(block(self.triggers, f"te_tax_obl_is_maintenance_{kind}")), body)
 
@@ -322,8 +323,11 @@ class ProposeTest(unittest.TestCase):
             with self.subTest(field=field):
                 self.assertEqual(fields.get(field), value)
         self.assertIn("te_tax_obl_record_baseline = { N = $N$ }", self.write)
-        # Existing provision is labelled maintenance (spec 7.2): what it asks for already holds.
-        self.assertIn("if = { limit = { te_tax_obl_holds = { N = $N$ } } set_variable = { name = te_tax_o$N$_maint_only "
+        # Existing provision is labelled maintenance (spec 7.2): what it asks for already holds,
+        # by the test the offer was priced with (final review A-I2: the budget kinds read the
+        # fiscal record of the 1st, not the live budget).
+        self.assertIn("if = { limit = { te_tax_obl_is_maintenance = { KIND = $KIND$ ARG = $ARG$ TARGET = $TARGET$ } } "
+                      "set_variable = { name = te_tax_o$N$_maint_only "
                       "value = 1 } } else = { set_variable = { name = te_tax_o$N$_maint_only value = 0 } }",
                       norm(self.write))
         self.assertLess(self.write.find("te_tax_obl_record_baseline"), self.write.find("te_tax_o$N$_maint_only"))
@@ -637,6 +641,74 @@ class ConsequenceTest(unittest.TestCase):
                 reason = norm(block(values, f"te_tax_trust_reason_{ig}"))
                 self.assertEqual(reason, f"value = 0 if = {{ limit = {{ has_variable = te_tax_trust_{ig} }} "
                                          f"value = var:te_tax_trust_{ig} multiply = 10 }} min = -40 max = 40")
+
+
+class FiscalRecordTest(unittest.TestCase):
+    """Final review A-I2: the fiscal reason and the budget promises' maintenance
+    test read the budget as the processor recorded it on the 1st, never the
+    live figure a player can tip into deficit for a few days."""
+
+    RECORD = {"te_tax_fisc_deficit": "net_fixed_income < 0", "te_tax_fisc_surplus": "net_fixed_income > 0",
+              "te_tax_fisc_bur_ok": "bureaucracy >= 0"}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.snapshot = read("common/scripted_effects/te_tax_snapshot_effects.txt")
+        cls.triggers = read(TRIGGERS)
+        cls.effects = effects()
+
+    def test_the_record_writes_each_field_both_ways(self):
+        body = norm(block(self.snapshot, "te_tax_record_fiscal_month"))
+        self.assertTrue(body.startswith("if = { limit = { te_tax_code_on = yes has_variable = te_tax_schema }"))
+        for name, test in self.RECORD.items():
+            with self.subTest(name=name):
+                self.assertIn(f"if = {{ limit = {{ {test} }} set_variable = {{ name = {name} value = 1 }} }} "
+                              f"else = {{ set_variable = {{ name = {name} value = 0 }} }}", body)
+
+    def test_only_the_processor_records_it_once_before_any_transition(self):
+        callers = sorted(name for name, body in self.effects.items() if "te_tax_record_fiscal_month = yes" in body)
+        self.assertEqual(callers, ["te_tax_process_month"])
+        body = self.effects["te_tax_process_month"]
+        self.assertEqual(body.count("te_tax_record_fiscal_month = yes"), 1)
+        at = body.find("te_tax_record_fiscal_month = yes")
+        self.assertGreater(at, body.find("set_variable = { name = te_tax_last_month value = var:te_tax_now }"))
+        for later in ("te_tax_gen_sunset_wage = yes", "te_tax_gen_commence_", "te_tax_obl_check_month = yes",
+                      "te_tax_refresh_support = yes"):
+            with self.subTest(later=later):
+                self.assertLess(at, body.find(later))
+        # Never from a panel.
+        for path in (*(ROOT / "gui").rglob("*.gui"), *(ROOT / "common" / "scripted_guis").glob("*.txt")):
+            with self.subTest(path=path.name):
+                self.assertNotIn("te_tax_record_fiscal_month", path.read_text(encoding="utf-8-sig"))
+
+    def test_readers_use_the_record_never_the_live_budget(self):
+        self.assertEqual(norm(block(self.triggers, "te_tax_fisc_rec_deficit")),
+                         "has_variable = te_tax_fisc_deficit var:te_tax_fisc_deficit = 1")
+        # No record yet: no deficit, and a budget promise counts as maintenance.
+        self.assertEqual(norm(block(self.triggers, "te_tax_fisc_rec_surplus")),
+                         "OR = { NOT = { has_variable = te_tax_fisc_surplus } var:te_tax_fisc_surplus = 1 }")
+        self.assertEqual(norm(block(self.triggers, "te_tax_fisc_rec_bur_ok")),
+                         "OR = { NOT = { has_variable = te_tax_fisc_bur_ok } var:te_tax_fisc_bur_ok = 1 }")
+        support = read("common/script_values/te_tax_support_values.txt")
+        readers = {"te_tax_fiscal_reason": block(support, "te_tax_fiscal_reason"),
+                   "te_tax_obl_is_maintenance_2": block(self.triggers, "te_tax_obl_is_maintenance_2"),
+                   "te_tax_obl_is_maintenance_4": block(self.triggers, "te_tax_obl_is_maintenance_4"),
+                   "te_tax_obl_record_baseline": block(read(OBL_EFFECTS), "te_tax_obl_record_baseline"),
+                   "te_tax_obl_write": block(read(OBL_EFFECTS), "te_tax_obl_write")}
+        for name, body in readers.items():
+            with self.subTest(name=name):
+                self.assertNotIn("net_fixed_income", body)
+                self.assertNotRegex(body, r"\bbureaucracy [<>=]")
+        baseline = norm(readers["te_tax_obl_record_baseline"])
+        self.assertIn("var:te_tax_o$N$_kind = 2 te_tax_fisc_rec_bur_ok = yes", baseline)
+        self.assertIn("var:te_tax_o$N$_kind = 4 te_tax_fisc_rec_surplus = yes", baseline)
+
+    def test_the_record_is_a_cache_not_schema_tokens(self):
+        country, _ = schema_tokens()
+        for name in self.RECORD:
+            with self.subTest(name=name):
+                self.assertNotIn(name, country)
+                self.assertNotRegex("\n".join(all_tax_text().values()), rf"remove_variable = (\{{ name = )?{name}\b")
 
 
 class CivilWarTest(unittest.TestCase):

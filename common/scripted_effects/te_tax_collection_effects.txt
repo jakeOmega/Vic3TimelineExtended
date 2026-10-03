@@ -12,6 +12,21 @@
 # changes are not visible later in the same execution, so a second call there
 # would act on stale state. A call in a later execution changes nothing.
 #
+# At most one sync a day (final review, A-I1). Two events the engine runs in
+# the same daily tick are separate executions, but whether the first one's
+# add_amendment is visible to the second is unverified; if it is not, the
+# second would add the matching rate amendment again, and nothing removes or
+# detects a duplicate of the enacted type. Three callers can land on one day:
+# the watchdog and the processor on the 1st (te_tax_watchdog_month,
+# te_tax_process_month), a te_tax.4 raised the day before (a migration, a
+# re-assert, a copied code) landing on the 1st, and several te_tax.4 from one
+# law cascade. So every sync stamps the day it ran (te_tax_sync_day), and a
+# second call that day writes nothing and hands the sync to te_tax.4 the next
+# day (te_tax_defer_sync), at most one deferral a day. A package's collections
+# then change a day after its commencement on the 1st, when another sync ran
+# first that day. The two day variables are a guard, not schema tokens: read
+# only through has_variable, never copied at an outbreak.
+#
 # Country scope, with ROOT = THIS = the country: call it from a country event
 # or a country hook, never from the global monthly pulse, which has no ROOT.
 # Nothing here reads ROOT; the country and the sponsor are saved scopes.
@@ -29,36 +44,45 @@ te_tax_sync_collection = {
 			has_law = law_type:law_te_tax_code
 			has_variable = te_tax_schema
 		}
-		# Backfills tokens a newer schema added; never overwrites one.
-		te_tax_init_country = yes
-		save_scope_as = te_tax_country
-		# Counters only, before anything below changes the native state.
-		te_tax_detect_drift = yes
-		# Customs (the customs option, a market owner; plan Task 15): before the
-		# amendment block, so a level adopted here moves te_tax_code_version
-		# before the sync mark below records it.
-		te_tax_sync_customs = yes
-		te_tax_pick_sponsor = yes
+		# A sync already ran today: write nothing, sync tomorrow (see above).
 		if = {
-			# te_tax_pick_sponsor saved one of THIS country's groups exactly when it has one.
-			limit = { any_interest_group = { always = yes } }
-			te_tax_gen_sync_wage = yes
-			te_tax_gen_sync_div = yes
-			te_tax_gen_sync_land = yes
-			te_tax_gen_sync_head = yes
-			te_tax_gen_sync_cons = yes
-			# A full sync: from here on, drift is measured against this code.
-			set_variable = { name = te_tax_sync_version value = var:te_tax_code_version }
+			limit = { te_tax_synced_today = yes }
+			te_tax_defer_sync = yes
 		}
 		else = {
-			debug_log = "TE_TAX sync: no interest group to sponsor an amendment; rate amendments left as they were"
+			# Backfills tokens a newer schema added; never overwrites one.
+			te_tax_init_country = yes
+			save_scope_as = te_tax_country
+			# Counters only, before anything below changes the native state.
+			te_tax_detect_drift = yes
+			# Customs (the customs option, a market owner; plan Task 15): before the
+			# amendment block, so a level adopted here moves te_tax_code_version
+			# before the sync mark below records it.
+			te_tax_sync_customs = yes
+			te_tax_pick_sponsor = yes
+			if = {
+				# te_tax_pick_sponsor saved one of THIS country's groups exactly when it has one.
+				limit = { any_interest_group = { always = yes } }
+				te_tax_gen_sync_wage = yes
+				te_tax_gen_sync_div = yes
+				te_tax_gen_sync_land = yes
+				te_tax_gen_sync_head = yes
+				te_tax_gen_sync_cons = yes
+				# A full sync: from here on, drift is measured against this code.
+				set_variable = { name = te_tax_sync_version value = var:te_tax_code_version }
+			}
+			else = {
+				debug_log = "TE_TAX sync: no interest group to sponsor an amendment; rate amendments left as they were"
+			}
+			te_tax_gen_sync_goods = yes
+			te_tax_sync_relief = yes
+			# The carrier and its amendments carry the same rates at every native
+			# level, so the level moves only vanilla's political tax_modifier_<level>
+			# statics; pinning it keeps identical codes from differing by them.
+			if = { limit = { NOT = { tax_level = medium } } set_tax_level = medium }
+			# The day of this sync: a second call today defers (te_tax_synced_today).
+			set_variable = { name = te_tax_sync_day value = te_tax_today }
 		}
-		te_tax_gen_sync_goods = yes
-		te_tax_sync_relief = yes
-		# The carrier and its amendments carry the same rates at every native
-		# level, so the level moves only vanilla's political tax_modifier_<level>
-		# statics; pinning it keeps identical codes from differing by them.
-		if = { limit = { NOT = { tax_level = medium } } set_tax_level = medium }
 	}
 	else_if = {
 		limit = {
@@ -68,6 +92,25 @@ te_tax_sync_collection = {
 		}
 		debug_log = "TE_TAX sync skipped: [THIS.GetCountry.GetNameNoFormatting] holds the tax code law but has no te_tax_schema"
 	}
+}
+
+# Country scope; te_tax_sync_collection calls it instead of syncing when a sync
+# already ran today (te_tax_synced_today). Raises te_tax.4 for tomorrow, which
+# syncs then, unless a deferral raised today is already pending: several
+# same-day callers make one deferred sync, not a chain of them. Writes only the
+# day of the deferral (te_tax_sync_defer_day) and one debug line.
+te_tax_defer_sync = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = te_tax_sync_defer_day }
+				var:te_tax_sync_defer_day < te_tax_today
+			}
+		}
+		set_variable = { name = te_tax_sync_defer_day value = te_tax_today }
+		trigger_event = { id = te_tax.4 days = 1 }
+	}
+	debug_log = "TE_TAX sync_deferred a sync already ran today; the code is synced tomorrow (te_tax.4); month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 }
 
 # Country scope; te_tax_sync_collection calls it once, after te_tax_init_country

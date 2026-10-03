@@ -53,3 +53,48 @@ te_tax_take_snapshot = {
 		}
 	}
 }
+
+# The fiscal record (final review A-I2): the budget as it stood on the 1st,
+# which the support model's fiscal reason (te_tax_fiscal_reason) and the
+# maintenance test of the two budget promises (te_tax_obl_is_maintenance_2,
+# _4; te_tax_fisc_rec_*, te_tax_triggers.txt) read instead of the live figures,
+# so a budget slider moved for a few days moves neither. Called only by the
+# monthly processor (te_tax_process_month), once a month, after it claims the
+# month and before any transition. Like the snapshot, a refreshed cache, not
+# schema tokens: every call writes all three, nothing removes them, and a
+# reader tests has_variable (no record yet reads as no deficit and as
+# maintenance). A civil war's winner may inherit a loser's record for a
+# variable it lacks until its own next 1st.
+#   te_tax_fisc_deficit  1 if net_fixed_income was below 0, else 0
+#   te_tax_fisc_surplus  1 if net_fixed_income was above 0, else 0
+#   te_tax_fisc_bur_ok   1 if bureaucracy was at 0 or above, else 0
+# Country scope; nothing reads ROOT. Variable writes only.
+te_tax_record_fiscal_month = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_schema
+		}
+		if = {
+			limit = { net_fixed_income < 0 }
+			set_variable = { name = te_tax_fisc_deficit value = 1 }
+		}
+		else = {
+			set_variable = { name = te_tax_fisc_deficit value = 0 }
+		}
+		if = {
+			limit = { net_fixed_income > 0 }
+			set_variable = { name = te_tax_fisc_surplus value = 1 }
+		}
+		else = {
+			set_variable = { name = te_tax_fisc_surplus value = 0 }
+		}
+		if = {
+			limit = { bureaucracy >= 0 }
+			set_variable = { name = te_tax_fisc_bur_ok value = 1 }
+		}
+		else = {
+			set_variable = { name = te_tax_fisc_bur_ok value = 0 }
+		}
+	}
+}
