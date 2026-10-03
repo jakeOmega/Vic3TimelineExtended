@@ -81,6 +81,14 @@ country_building_renewable_energy_plant_require_subsidies_bool = {
 	}
 }
 
+country_building_synthetics_plant_coal_require_subsidies_bool = {
+	color = bad
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
 # Vanilla 1.13.9 deregistered these three per-condition harvest modifier types
 # (the hailstorm/torrential_rains harvest conditions themselves still exist).
 # The mod's global-warming static modifiers use them, so re-register with the

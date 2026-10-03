@@ -341,6 +341,31 @@ class DirectAirCaptureTest(unittest.TestCase):
             self.assertNotIn("goods_output_coal_add", text)
             self.assertNotIn(Path("common/production_methods/extra_pms.txt"), outputs)
 
+    def test_support_is_national_and_requires_technology_without_free_emissions_cut(self):
+        triggers = parsed("common/scripted_triggers/global_warming_triggers.txt")
+        possible = body(triggers, "gw_possible_carbon_removal")
+        self.assertEqual(body(possible, "has_technology_researched"), "carbon_capture_and_storage")
+        self.assertNotIn("market_capital.owner", possible)
+        modifier = body(parsed("common/static_modifiers/extra_modifiers.txt"), "carbon_removal_modifier")
+        self.assertEqual(body(modifier, "country_building_synthetics_plant_coal_require_subsidies_bool"), "yes")
+        self.assertEqual(scalar(modifier, "building_synthetics_plant_coal_throughput_add"), Decimal("0.05"))
+        self.assertEqual(scalar(modifier, "country_authority_cost_add"), 100)
+        self.assertNotIn("country_greenhouse_gas_emissions_mult", modifier)
+
+    def test_support_can_be_rebuilt_from_inherited_country_state_and_repealed(self):
+        effects = parsed("common/scripted_effects/global_warming_effects.txt")
+        adopt = body(body(effects, "gw_effect_carbon_removal"), "custom_tooltip")
+        repeal = body(body(effects, "gw_effect_remove_carbon_removal"), "custom_tooltip")
+        flag = body(body(body(adopt, "hidden_effect"), "set_variable"), "name")
+        self.assertEqual(body(body(repeal, "hidden_effect"), "remove_variable"), flag)
+        self.assertNotIn("every_country", adopt)
+        restore = body(body(effects, "gw_restore_carbon_removal_policy_effect"), "if")
+        self.assertEqual(body(body(restore, "limit"), "has_variable"), flag)
+        self.assertEqual(body(body(body(restore, "je:je_global_warming"), "add_modifier"), "name"),
+                         "carbon_removal_modifier")
+        self.assertEqual(body(body(repeal, "je:je_global_warming"), "remove_modifier"),
+                         "carbon_removal_modifier")
+
 
 class DisplayBoundaryTest(unittest.TestCase):
     @classmethod

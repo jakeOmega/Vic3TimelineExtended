@@ -30,8 +30,21 @@
   modifier and hides the state credit. Production capture tiers remain pending.
 - **Phase 2 remains unimplemented.** The probe must settle hidden gating,
   forced fallback, staffing reads and tooltip units before selecting A′ or the
-  B fallback. The actual capture groups, technology, icons and phaseout mandate
+  B fallback. Production capture groups, tier icons and the phaseout mandate
   are not installed. Managed Fossil Phaseout still uses its existing technology.
+- **Atmospheric removal:** Carbon Conversion Works now unlock with the new
+  era-10 Carbon Capture and Storage technology, after Clean Energy Technologies.
+  Direct Air Capture is their default PM; Synthetic Coal keeps an era-11
+  Genetic Engineering gate. The new PM produces no goods, consumes electricity
+  and equipment, and contributes negative workforce-scaled emissions read once
+  by the market capture sum. Its capacity is independently configured in coal
+  equivalents rather than inferred from nonexistent goods output.
+- **Carbon Removal Support:** a ninth climate policy, national, available at
+  0.5 °C with Carbon Capture and Storage. Requires subsidies for these works,
+  adds 5% throughput, costs 100 Authority and gives the Environmental Movement
+  a 5-percentage-point radicalism reduction. Removal still comes from staffed
+  buildings; the policy has no direct market emissions multiplier. Its country
+  flag survives revolution and rebuilds the journal-entry modifier monthly.
 
 Resume instructions and validation results are in
 [`building_emissions_handoff.md`](building_emissions_handoff.md). Section 1

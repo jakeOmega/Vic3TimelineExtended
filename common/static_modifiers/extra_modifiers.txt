@@ -1342,6 +1342,13 @@ emission_standards_modifier = {
 }
 
 # Indirect-effect policies (available to all countries)
+carbon_removal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_building_synthetics_plant_coal_require_subsidies_bool = yes
+	building_synthetics_plant_coal_throughput_add = 0.05
+	country_authority_cost_add = 100
+}
+
 reforestation_subsidies_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	building_group_bg_agriculture_throughput_add = 0.05

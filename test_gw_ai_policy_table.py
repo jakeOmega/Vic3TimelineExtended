@@ -115,9 +115,9 @@ class GwAiPolicyTableTest(unittest.TestCase):
     def setUp(self):
         self.values = _parse(VALUES)
 
-    def test_eight_policies_each_with_a_repeal_button(self):
+    def test_nine_policies_each_with_a_repeal_button(self):
         policies = _policies()
-        self.assertEqual(len(policies), 8, policies)
+        self.assertEqual(len(policies), 9, policies)
         registered = set(re.findall(r"(?m)^\s*scripted_button = (gw_\w+)", _text(JE)))
         for p in policies:
             self.assertIn(f"gw_remove_{p}_button", registered)

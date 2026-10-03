@@ -1012,6 +1012,27 @@ types global_warming_widget_types
 			}
 
 			gw_policy_row = {
+				datacontext = "[GetScriptedGui('gw_active_carbon_removal_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/gw_icons/policy_renewable_investment.dds"
+				}
+				blockoverride "row_label" {
+					text = "GW_CARBON_REMOVAL_ROW"
+					tooltip = "GW_CARBON_REMOVAL_DESC"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('gw_policy_carbon_removal_sgui')]"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('gw_policy_carbon_removal_sgui')]"
+					}
+				}
+			}
+
+			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_public_transit_sgui')]"
 				blockoverride "row_icon" {
 					texture = "gfx/interface/icons/gw_icons/policy_public_transit.dds"
@@ -1142,6 +1163,14 @@ types global_warming_widget_types
 					}
 					blockoverride "row_value" {
 						text = "gw_world_n_reforestation"
+					}
+				}
+				gw_value_row = {
+					blockoverride "row_label" {
+						text = "GW_CARBON_REMOVAL_ROW"
+					}
+					blockoverride "row_value" {
+						text = "gw_world_n_carbon_removal"
 					}
 				}
 				gw_value_row = {

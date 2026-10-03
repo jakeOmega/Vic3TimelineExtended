@@ -148,6 +148,7 @@ gw_policies_active_count_display = {
 	if = { limit = { gw_policy_emission_standards_active = yes } add = 1 }
 	if = { limit = { gw_policy_climate_adaptation_active = yes } add = 1 }
 	if = { limit = { gw_policy_reforestation_active = yes } add = 1 }
+	if = { limit = { gw_policy_carbon_removal_active = yes } add = 1 }
 	if = { limit = { gw_policy_public_transit_active = yes } add = 1 }
 	if = { limit = { gw_policy_fossil_fuel_divestment_active = yes } add = 1 }
 	if = { limit = { gw_policy_green_building_codes_active = yes } add = 1 }
@@ -551,5 +552,13 @@ gw_disp_emitters_own_rank = {
 	if = {
 		limit = { has_variable = gw_emitters_own_rank }
 		add = var:gw_emitters_own_rank
+	}
+}
+
+gw_world_n_carbon_removal_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_carbon_removal }
+		add = global_var:gw_g_n_carbon_removal
 	}
 }

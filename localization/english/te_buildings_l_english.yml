@@ -540,6 +540,8 @@
  building_synthetics_plant_biomass_throughput_add:0 "$building_synthetics_plant_biomass$ [concept_throughput]"
  building_synthetics_plant_biomass_throughput_add_desc:0 "A bonus or penalty to both input and output of $building_synthetics_plant_biomass$"
  building_synthetics_plant_coal:0 "Carbon Conversion Works"
+ building_synthetics_plant_coal_throughput_add:0 "$building_synthetics_plant_coal$ [concept_throughput]"
+ building_synthetics_plant_coal_throughput_add_desc:0 "Increases the throughput of Carbon Conversion Works, including atmospheric removal and their goods inputs."
  building_synthetics_plant_drinks:0 "Beverage Concentrates Plant"
  building_synthetics_plant_drinks_throughput_add:0 "$building_synthetics_plant_drinks$ [concept_throughput]"
  building_synthetics_plant_drinks_throughput_add_desc:0 "A bonus or penalty to both input and output of $building_synthetics_plant_drinks$"

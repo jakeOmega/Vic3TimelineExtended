@@ -171,8 +171,32 @@ Greenhouse Gas Emissions into the removal PM's workforce-scaled block. Inputs:
 modifier once and divides by the display scale; Synthetic Coal's separate
 branch is explicitly gated to avoid double counting.
 
-All 25 emissions tests pass and the guide PDF is rebuilt for this checkpoint.
-Next: finish the owner's requested national Atmospheric Carbon Removal policy
-(required subsidies and a small environmental movement satisfaction bonus).
-Policy work is in progress in separate unstaged files; the removal-only PM
-checkpoint is independently reviewable. Commit and push smaller checkpoints.
+Checkpoint `8a7f55c4` is pushed. Its 25 emissions tests pass and the guide PDF
+was rebuilt. The removal-only PM is independently reviewable.
+
+## Carbon Removal Support policy checkpoint
+
+The owner added a policy request and reiterated frequent commits/pushes. The
+new national policy follows the existing climate policy controls, AI buttons,
+counters and treaty repeal restriction. It needs 0.5 °C warming, Carbon Capture
+and Storage and more than 100 produced Authority. Effects: required subsidies
+for Carbon Conversion Works (both methods), +5% building throughput, 100
+Authority upkeep and −5 percentage points Environmental Movement radicalism.
+It has no direct emissions multiplier. Its AI threshold is 50 with the usual
+15-point repeal band. Existing climate policies retain their effects.
+
+The policy mirrors its state in a country variable and restores its JE
+modifier monthly after a revolution. Player/AI controls, active-state queries,
+national/global counters and movement satisfaction are connected. The row
+reuses the existing Renewable Investment artwork. The guide now covers nine
+policies and explains why an unstaffed works removes nothing.
+
+Focused validation: 156 tests passed (27 emissions tests included), Ruff and
+GUI lint passed. Full suite and offline audits are the next validation step.
+Next engine checks: research the era-10 technology; build a works and verify
+Direct Air Capture is the available default, no coal output, hiring under
+subsidies, and removal scaling with staffing/throughput; adopt/repeal Carbon
+Removal Support and check subsidy requirement, Authority, movement satisfaction
+and January capture totals. Check Synthetic Coal remains unavailable before
+Genetic Engineering and switching PMs never counts both credits. The phase-0
+fuel gating/mandate checks still gate the production capture-tier rollout.

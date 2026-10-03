@@ -144,12 +144,12 @@ they arrive.
 
 Two pies close the overview. Our Share is your market's share of world
 emissions. Emissions Cut is how far your market's emissions are held below what
-its coal and oil use would otherwise produce; hover it for how many of the eight
+its coal and oil use would otherwise produce; hover it for how many of the nine
 policies you run. The cut changes the moment a policy is adopted or repealed.
 
 | Section | Starts | Shows |
 |---|---|---|
-| Mitigation Policies | Open | The eight policies, under Market-Wide and National. Each row has the policy's icon, lit while the policy is in force, its name (hover it for what the policy does), a green check while it is in force, and one control: Adopt while the policy is not in force, Repeal while it is. A grayed control's tooltip lists the conditions and which of them you meet. When one reason grays out every Adopt or every Repeal, a line above the rows says so once: warming below 0.5 °C, an emissions-reduction treaty (only Climate Adaptation can then be repealed), or, for a market member, "Set by our market leader for the whole market" over the market-wide rows. Adoption Around the World, under the rows, counts the nations running each policy. |
+| Mitigation Policies | Open | The nine policies, under Market-Wide and National. Each row has the policy's icon, lit while the policy is in force, its name (hover it for what the policy does), a green check while it is in force, and one control: Adopt while the policy is not in force, Repeal while it is. A grayed control's tooltip lists the conditions and which of them you meet. When one reason grays out every Adopt or every Repeal, a line above the rows says so once: warming below 0.5 °C, an emissions-reduction treaty (only Climate Adaptation can then be repealed), or, for a market member, "Set by our market leader for the whole market" over the market-wide rows. Adoption Around the World, under the rows, counts the nations running each policy. |
 | Top Emitters | Open | The five markets that emit the most, largest first, each named by its leader. Each row shows the leader's flag, the market's annual emissions, its share of world emissions and its cumulative emissions. A treaty icon marks a leader bound by Enforce Emissions Reduction, and your own market's row says "Our market". Hover a row for the market's members and its emissions cut, hover "+N more markets" for every market that emits, and a line gives your market's place when it is not in the five. The figures change each January; the order is redrawn each month. |
 | Fossil Transition | Open | Your Resource Transition law, what is left of your coal mines, oil rigs and power plants with a retirement control for each, and what could replace them. See [The fossil transition](#the-fossil-transition). Shown on your own market only. |
 | History | Open | Charts of global temperature and of your market's share of world emissions. Both step once a year, when the emissions figures update. |
@@ -164,11 +164,12 @@ and a new leader starts from its own total.
 
 ## Climate policies
 
-There are eight policies. Three are market-wide: only a market leader can adopt
+There are nine policies. Three are market-wide: only a market leader can adopt
 or repeal them, and they then apply to every country in its market, which sees
-them in force under "Set by our market leader for the whole market". The other five are national, open to every
+them in force under "Set by our market leader for the whole market". The other six are national, open to every
 country. Every policy needs the anomaly to have reached 0.5 °C, except
-Fossil-Fuel Divestment, which needs 1.0 °C.
+Fossil-Fuel Divestment, which needs 1.0 °C. Carbon Removal Support also needs
+Carbon Capture and Storage.
 
 Members always follow their leader's market-wide policies. A country that joins
 another market takes the ones its new leader has and drops the ones the leader
@@ -188,9 +189,17 @@ Standards charges its cost to every country in the market, members included.
 | Emission Standards | Market | 200 | Emissions −10%; generated pollution −25%; −5% throughput for every building. |
 | Climate Adaptation | National | 250 | Mortality −2.5% and standard of living +0.5 in every state. |
 | Reforestation Subsidies | National | 100 | Farm throughput +5%; droughts and floods 25% weaker and shorter. |
+| Carbon Removal Support | National | 100 | Carbon Conversion Works require subsidies and gain +5% throughput; Environmental Movement radicalism −5 percentage points. Needs Carbon Capture and Storage. |
 | Public Transit | National | 150 | Personal Transportation output +10%; oil input −5%; infrastructure built 10% faster; pops' automobiles add less infrastructure. |
 | Fossil-Fuel Divestment | National | 200 | Taxes on oil extraction +25%; coal and oil input −5%. |
 | Green Building Codes | National | 100 | Construction goods input +5%; electricity input −2.5%. |
+
+Carbon Removal Support funds the works in your own country, whether you lead
+your market or joined it. The policy itself removes no CO₂: staffed works must
+run Direct Air Capture or Synthetic Coal. Its subsidy requirement covers both
+methods. Repealing it ends the requirement and bonus; you can still subsidize
+the buildings yourself. Direct Air Capture has no sales income, so withdrawing
+its funding stops it as its workers leave.
 
 Only the three market-wide policies cut the emissions figure directly. The
 national ones trim oil, coal and electricity use at the margin, protect your
@@ -232,6 +241,7 @@ policy alone, so an election doesn't flip policies back and forth.
 | Renewable Investment | 35 |
 | Public Transit | 40 |
 | Green Building Codes, Emission Standards | 45 |
+| Carbon Removal Support | 50 |
 | Carbon Tax | 55 |
 | Fossil-Fuel Divestment | 70 |
 
@@ -294,7 +304,7 @@ what could take their place:
 | Row | Shows |
 |---|---|
 | Clean Generation | Hydro, nuclear, fusion and renewable plant levels as a share of all generating levels, power plants included. |
-| Synthetic Fuel Plants | Your Synthetic Fuel Works and Carbon Conversion Works levels; hover for whether you have the technologies for oil from grain and electricity (Synthetic Biology) and coal from electricity (Genetic Engineering). |
+| Synthetic Fuel Plants | Your Synthetic Fuel Works and Carbon Conversion Works levels; hover for whether you have the technologies for oil from grain and electricity (Synthetic Biology) and coal from electricity (Genetic Engineering). Carbon Conversion Works unlock earlier for Direct Air Capture with Carbon Capture and Storage, which removes CO₂ without providing replacement fuel. |
 | Coal, Oil | What your whole market makes and burns each week; hover for its imports and exports. |
 | Our Market's Emissions | With the Global Warming rule on, the overview's figure. |
 

@@ -7,7 +7,7 @@
 # (common/scripted_guis/global_warming_sguis.txt) call these, so a click through
 # either surface is gated by exactly the same rules.
 #
-# The eight policy modifiers live on the JOURNAL ENTRY, not the country, so
+# The nine policy modifiers live on the JOURNAL ENTRY, not the country, so
 # "is it active" is always `je:je_global_warming ?= { has_modifier = X }` --
 # a country-scope has_modifier cannot see them.
 #
@@ -21,7 +21,7 @@
 # MARKET LEADERSHIP IS AN ELIGIBILITY RULE, NEVER A VISIBILITY RULE. The three
 # market-wide policies are applied to every market MEMBER's journal entry by the
 # leader, so a member can have a carbon tax in force that it did not choose. The
-# widget therefore shows all eight rows to everyone and lets these triggers grey
+# widget therefore shows all nine rows to everyone and lets these triggers grey
 # the control, instead of hiding the row the way the old button grid did.
 
 # ---------------------------------------------------------------------------
@@ -348,5 +348,34 @@ gw_state_has_staple_farm = {
 			is_building_type = building_millet_farm
 			is_building_type = building_livestock_ranch
 		}
+	}
+}
+
+
+gw_policy_carbon_removal_active = {
+	je:je_global_warming ?= { has_modifier = carbon_removal_modifier }
+}
+
+gw_possible_carbon_removal = {
+	custom_tooltip = {
+		text = gw_cond_not_in_force
+		NOT = { je:je_global_warming = { has_modifier = carbon_removal_modifier } }
+	}
+	custom_tooltip = {
+		text = gw_cond_warming_mild
+		temperature_anomaly_display >= 0.5
+	}
+	has_technology_researched = carbon_capture_and_storage
+	produced_authority > 100
+}
+
+gw_possible_remove_carbon_removal = {
+	custom_tooltip = {
+		text = gw_cond_in_force
+		je:je_global_warming = { has_modifier = carbon_removal_modifier }
+	}
+	custom_tooltip = {
+		text = gw_cond_not_treaty_bound
+		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 }

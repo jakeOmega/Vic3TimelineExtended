@@ -64,6 +64,17 @@ and save a baseline before changing anything.
 
 ## Evidence record
 
+The removal-only building and subsidy policy can also be tested in the normal
+mod (the overlay is only needed for the unfinished source-capture tiers):
+research Carbon Capture and Storage, build Carbon Conversion Works, and select
+Direct Air Capture. At full staffing and base throughput expect −168 Greenhouse
+Gas Emissions per level and no goods output. Subsidize the works and compare
+hiring, a throughput bonus and the next January's Carbon Captured reading.
+Carbon Removal Support needs 0.5 °C warming and the new technology; verify its
+100 Authority cost, required subsidies, +5% throughput and movement radicalism
+bonus, then repeal it. Synthetic Coal must remain gated by Genetic Engineering;
+switching methods must replace the credit, never add both.
+
 The owner supplied nonzero state reads on 2026-10-03 (ROOT Byzantium, country
 88): Bougainville 1.43647, Sicily 1.43647, Abruzzo 1.07660, Apulia 2.87897 and
 Umbria 0.35835. This confirms the state accessor returns varying contributions;
