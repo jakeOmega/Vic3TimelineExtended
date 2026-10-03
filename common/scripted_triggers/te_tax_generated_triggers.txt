@@ -511,3 +511,459 @@ te_tax_gen_bill_sunsets_valid = {
 		var:te_tax_bl_cons_sun >= 1
 	}
 }
+
+# Draft, bill and passage (docs/systems/tax_code_schema.md, "Draft, bill and passage").
+# Country scope. Each reads a record's payload, so callers test te_tax_draft_active /
+# te_tax_bill_active (te_tax_triggers.txt) first.
+
+# The draft changes at least one provision.
+te_tax_gen_draft_touches_any = {
+	OR = {
+		var:te_tax_dr_wage >= 0
+		var:te_tax_dr_div >= 0
+		var:te_tax_dr_land >= 0
+		var:te_tax_dr_head >= 0
+		var:te_tax_dr_cons >= 0
+		te_tax_gen_draft_touches_goods = yes
+		var:te_tax_dr_agrel >= 0
+		var:te_tax_dr_regrel >= 0
+	}
+}
+
+# The draft changes at least one taxed good.
+te_tax_gen_draft_touches_goods = {
+	OR = {
+		var:te_tax_dr_g_aeroplanes >= 0
+		var:te_tax_dr_g_automobiles >= 0
+		var:te_tax_dr_g_clippers >= 0
+		var:te_tax_dr_g_clothes >= 0
+		var:te_tax_dr_g_coal >= 0
+		var:te_tax_dr_g_coffee >= 0
+		var:te_tax_dr_g_consumer_appliances >= 0
+		var:te_tax_dr_g_digital_access >= 0
+		var:te_tax_dr_g_digital_assets >= 0
+		var:te_tax_dr_g_electricity >= 0
+		var:te_tax_dr_g_fabric >= 0
+		var:te_tax_dr_g_fine_art >= 0
+		var:te_tax_dr_g_fish >= 0
+		var:te_tax_dr_g_fruit >= 0
+		var:te_tax_dr_g_furniture >= 0
+		var:te_tax_dr_g_glass >= 0
+		var:te_tax_dr_g_grain >= 0
+		var:te_tax_dr_g_groceries >= 0
+		var:te_tax_dr_g_liquor >= 0
+		var:te_tax_dr_g_luxury_clothes >= 0
+		var:te_tax_dr_g_luxury_furniture >= 0
+		var:te_tax_dr_g_meat >= 0
+		var:te_tax_dr_g_oil >= 0
+		var:te_tax_dr_g_opium >= 0
+		var:te_tax_dr_g_paper >= 0
+		var:te_tax_dr_g_porcelain >= 0
+		var:te_tax_dr_g_radios >= 0
+		var:te_tax_dr_g_services >= 0
+		var:te_tax_dr_g_silk >= 0
+		var:te_tax_dr_g_small_arms >= 0
+		var:te_tax_dr_g_steamers >= 0
+		var:te_tax_dr_g_sugar >= 0
+		var:te_tax_dr_g_tea >= 0
+		var:te_tax_dr_g_telephones >= 0
+		var:te_tax_dr_g_tobacco >= 0
+		var:te_tax_dr_g_tourism >= 0
+		var:te_tax_dr_g_transportation >= 0
+		var:te_tax_dr_g_wine >= 0
+		var:te_tax_dr_g_wood >= 0
+	}
+}
+
+# The bill changes at least one taxed good.
+te_tax_gen_bill_touches_goods = {
+	OR = {
+		var:te_tax_bl_g_aeroplanes >= 0
+		var:te_tax_bl_g_automobiles >= 0
+		var:te_tax_bl_g_clippers >= 0
+		var:te_tax_bl_g_clothes >= 0
+		var:te_tax_bl_g_coal >= 0
+		var:te_tax_bl_g_coffee >= 0
+		var:te_tax_bl_g_consumer_appliances >= 0
+		var:te_tax_bl_g_digital_access >= 0
+		var:te_tax_bl_g_digital_assets >= 0
+		var:te_tax_bl_g_electricity >= 0
+		var:te_tax_bl_g_fabric >= 0
+		var:te_tax_bl_g_fine_art >= 0
+		var:te_tax_bl_g_fish >= 0
+		var:te_tax_bl_g_fruit >= 0
+		var:te_tax_bl_g_furniture >= 0
+		var:te_tax_bl_g_glass >= 0
+		var:te_tax_bl_g_grain >= 0
+		var:te_tax_bl_g_groceries >= 0
+		var:te_tax_bl_g_liquor >= 0
+		var:te_tax_bl_g_luxury_clothes >= 0
+		var:te_tax_bl_g_luxury_furniture >= 0
+		var:te_tax_bl_g_meat >= 0
+		var:te_tax_bl_g_oil >= 0
+		var:te_tax_bl_g_opium >= 0
+		var:te_tax_bl_g_paper >= 0
+		var:te_tax_bl_g_porcelain >= 0
+		var:te_tax_bl_g_radios >= 0
+		var:te_tax_bl_g_services >= 0
+		var:te_tax_bl_g_silk >= 0
+		var:te_tax_bl_g_small_arms >= 0
+		var:te_tax_bl_g_steamers >= 0
+		var:te_tax_bl_g_sugar >= 0
+		var:te_tax_bl_g_tea >= 0
+		var:te_tax_bl_g_telephones >= 0
+		var:te_tax_bl_g_tobacco >= 0
+		var:te_tax_bl_g_tourism >= 0
+		var:te_tax_bl_g_transportation >= 0
+		var:te_tax_bl_g_wine >= 0
+		var:te_tax_bl_g_wood >= 0
+	}
+}
+
+# Every provision the draft changes still has the planned version it had when first
+# touched (te_tax_cmd_draft_rebase acknowledges a change).
+te_tax_gen_draft_baseline_current = {
+	OR = {
+		var:te_tax_dr_wage < 0
+		var:te_tax_dr_wage_pver = var:te_tax_pver_wage
+	}
+	OR = {
+		var:te_tax_dr_div < 0
+		var:te_tax_dr_div_pver = var:te_tax_pver_div
+	}
+	OR = {
+		var:te_tax_dr_land < 0
+		var:te_tax_dr_land_pver = var:te_tax_pver_land
+	}
+	OR = {
+		var:te_tax_dr_head < 0
+		var:te_tax_dr_head_pver = var:te_tax_pver_head
+	}
+	OR = {
+		var:te_tax_dr_cons < 0
+		var:te_tax_dr_cons_pver = var:te_tax_pver_cons
+	}
+	OR = {
+		NOT = { te_tax_gen_draft_touches_goods = yes }
+		var:te_tax_dr_goods_pver = var:te_tax_pver_goods
+	}
+}
+
+# The draft differs from the bill in any field.
+te_tax_gen_draft_differs_from_bill = {
+	OR = {
+		NOT = { var:te_tax_dr_due = var:te_tax_bl_due }
+		NOT = { var:te_tax_dr_wage = var:te_tax_bl_wage }
+		NOT = { var:te_tax_dr_wage_sun = var:te_tax_bl_wage_sun }
+		NOT = { var:te_tax_dr_div = var:te_tax_bl_div }
+		NOT = { var:te_tax_dr_div_sun = var:te_tax_bl_div_sun }
+		NOT = { var:te_tax_dr_land = var:te_tax_bl_land }
+		NOT = { var:te_tax_dr_land_sun = var:te_tax_bl_land_sun }
+		NOT = { var:te_tax_dr_head = var:te_tax_bl_head }
+		NOT = { var:te_tax_dr_head_sun = var:te_tax_bl_head_sun }
+		NOT = { var:te_tax_dr_cons = var:te_tax_bl_cons }
+		NOT = { var:te_tax_dr_cons_sun = var:te_tax_bl_cons_sun }
+		NOT = { var:te_tax_dr_g_aeroplanes = var:te_tax_bl_g_aeroplanes }
+		NOT = { var:te_tax_dr_g_automobiles = var:te_tax_bl_g_automobiles }
+		NOT = { var:te_tax_dr_g_clippers = var:te_tax_bl_g_clippers }
+		NOT = { var:te_tax_dr_g_clothes = var:te_tax_bl_g_clothes }
+		NOT = { var:te_tax_dr_g_coal = var:te_tax_bl_g_coal }
+		NOT = { var:te_tax_dr_g_coffee = var:te_tax_bl_g_coffee }
+		NOT = { var:te_tax_dr_g_consumer_appliances = var:te_tax_bl_g_consumer_appliances }
+		NOT = { var:te_tax_dr_g_digital_access = var:te_tax_bl_g_digital_access }
+		NOT = { var:te_tax_dr_g_digital_assets = var:te_tax_bl_g_digital_assets }
+		NOT = { var:te_tax_dr_g_electricity = var:te_tax_bl_g_electricity }
+		NOT = { var:te_tax_dr_g_fabric = var:te_tax_bl_g_fabric }
+		NOT = { var:te_tax_dr_g_fine_art = var:te_tax_bl_g_fine_art }
+		NOT = { var:te_tax_dr_g_fish = var:te_tax_bl_g_fish }
+		NOT = { var:te_tax_dr_g_fruit = var:te_tax_bl_g_fruit }
+		NOT = { var:te_tax_dr_g_furniture = var:te_tax_bl_g_furniture }
+		NOT = { var:te_tax_dr_g_glass = var:te_tax_bl_g_glass }
+		NOT = { var:te_tax_dr_g_grain = var:te_tax_bl_g_grain }
+		NOT = { var:te_tax_dr_g_groceries = var:te_tax_bl_g_groceries }
+		NOT = { var:te_tax_dr_g_liquor = var:te_tax_bl_g_liquor }
+		NOT = { var:te_tax_dr_g_luxury_clothes = var:te_tax_bl_g_luxury_clothes }
+		NOT = { var:te_tax_dr_g_luxury_furniture = var:te_tax_bl_g_luxury_furniture }
+		NOT = { var:te_tax_dr_g_meat = var:te_tax_bl_g_meat }
+		NOT = { var:te_tax_dr_g_oil = var:te_tax_bl_g_oil }
+		NOT = { var:te_tax_dr_g_opium = var:te_tax_bl_g_opium }
+		NOT = { var:te_tax_dr_g_paper = var:te_tax_bl_g_paper }
+		NOT = { var:te_tax_dr_g_porcelain = var:te_tax_bl_g_porcelain }
+		NOT = { var:te_tax_dr_g_radios = var:te_tax_bl_g_radios }
+		NOT = { var:te_tax_dr_g_services = var:te_tax_bl_g_services }
+		NOT = { var:te_tax_dr_g_silk = var:te_tax_bl_g_silk }
+		NOT = { var:te_tax_dr_g_small_arms = var:te_tax_bl_g_small_arms }
+		NOT = { var:te_tax_dr_g_steamers = var:te_tax_bl_g_steamers }
+		NOT = { var:te_tax_dr_g_sugar = var:te_tax_bl_g_sugar }
+		NOT = { var:te_tax_dr_g_tea = var:te_tax_bl_g_tea }
+		NOT = { var:te_tax_dr_g_telephones = var:te_tax_bl_g_telephones }
+		NOT = { var:te_tax_dr_g_tobacco = var:te_tax_bl_g_tobacco }
+		NOT = { var:te_tax_dr_g_tourism = var:te_tax_bl_g_tourism }
+		NOT = { var:te_tax_dr_g_transportation = var:te_tax_bl_g_transportation }
+		NOT = { var:te_tax_dr_g_wine = var:te_tax_bl_g_wine }
+		NOT = { var:te_tax_dr_g_wood = var:te_tax_bl_g_wood }
+		NOT = { var:te_tax_dr_agrel = var:te_tax_bl_agrel }
+		NOT = { var:te_tax_dr_regrel = var:te_tax_bl_regrel }
+	}
+}
+
+# Every provision group the bill touches still has the external version it had when the
+# bill was introduced: nothing outside legislation changed it since.
+te_tax_gen_bill_current = {
+	OR = {
+		var:te_tax_bl_wage < 0
+		var:te_tax_bl_xver_wage = var:te_tax_xver_wage
+	}
+	OR = {
+		var:te_tax_bl_div < 0
+		var:te_tax_bl_xver_div = var:te_tax_xver_div
+	}
+	OR = {
+		var:te_tax_bl_land < 0
+		var:te_tax_bl_xver_land = var:te_tax_xver_land
+	}
+	OR = {
+		var:te_tax_bl_head < 0
+		var:te_tax_bl_xver_head = var:te_tax_xver_head
+	}
+	OR = {
+		var:te_tax_bl_cons < 0
+		var:te_tax_bl_xver_cons = var:te_tax_xver_cons
+	}
+	OR = {
+		NOT = { te_tax_gen_bill_touches_goods = yes }
+		var:te_tax_bl_xver_goods = var:te_tax_xver_goods
+	}
+	OR = {
+		AND = { var:te_tax_bl_agrel < 0 var:te_tax_bl_regrel < 0 }
+		var:te_tax_bl_xver_relief = var:te_tax_xver_relief
+	}
+}
+
+# Every provision the bill changes moves at most two steps from existing law (minor bill).
+te_tax_gen_bill_small_steps = {
+	OR = {
+		var:te_tax_bl_wage < 0
+		AND = { te_tax_bl_dstep_wage <= 2 te_tax_bl_dstep_wage >= -2 }
+	}
+	OR = {
+		var:te_tax_bl_div < 0
+		AND = { te_tax_bl_dstep_div <= 2 te_tax_bl_dstep_div >= -2 }
+	}
+	OR = {
+		var:te_tax_bl_land < 0
+		AND = { te_tax_bl_dstep_land <= 2 te_tax_bl_dstep_land >= -2 }
+	}
+	OR = {
+		var:te_tax_bl_head < 0
+		AND = { te_tax_bl_dstep_head <= 2 te_tax_bl_dstep_head >= -2 }
+	}
+	OR = {
+		var:te_tax_bl_cons < 0
+		AND = { te_tax_bl_dstep_cons <= 2 te_tax_bl_dstep_cons >= -2 }
+	}
+}
+
+# Slot a's package touches a provision the bill touches. Read only while it is on.
+te_tax_gen_bill_overlaps_a = {
+	OR = {
+		AND = { var:te_tax_bl_wage >= 0 var:te_tax_pa_wage >= 0 }
+		AND = { var:te_tax_bl_div >= 0 var:te_tax_pa_div >= 0 }
+		AND = { var:te_tax_bl_land >= 0 var:te_tax_pa_land >= 0 }
+		AND = { var:te_tax_bl_head >= 0 var:te_tax_pa_head >= 0 }
+		AND = { var:te_tax_bl_cons >= 0 var:te_tax_pa_cons >= 0 }
+		AND = { var:te_tax_bl_g_aeroplanes >= 0 var:te_tax_pa_g_aeroplanes >= 0 }
+		AND = { var:te_tax_bl_g_automobiles >= 0 var:te_tax_pa_g_automobiles >= 0 }
+		AND = { var:te_tax_bl_g_clippers >= 0 var:te_tax_pa_g_clippers >= 0 }
+		AND = { var:te_tax_bl_g_clothes >= 0 var:te_tax_pa_g_clothes >= 0 }
+		AND = { var:te_tax_bl_g_coal >= 0 var:te_tax_pa_g_coal >= 0 }
+		AND = { var:te_tax_bl_g_coffee >= 0 var:te_tax_pa_g_coffee >= 0 }
+		AND = { var:te_tax_bl_g_consumer_appliances >= 0 var:te_tax_pa_g_consumer_appliances >= 0 }
+		AND = { var:te_tax_bl_g_digital_access >= 0 var:te_tax_pa_g_digital_access >= 0 }
+		AND = { var:te_tax_bl_g_digital_assets >= 0 var:te_tax_pa_g_digital_assets >= 0 }
+		AND = { var:te_tax_bl_g_electricity >= 0 var:te_tax_pa_g_electricity >= 0 }
+		AND = { var:te_tax_bl_g_fabric >= 0 var:te_tax_pa_g_fabric >= 0 }
+		AND = { var:te_tax_bl_g_fine_art >= 0 var:te_tax_pa_g_fine_art >= 0 }
+		AND = { var:te_tax_bl_g_fish >= 0 var:te_tax_pa_g_fish >= 0 }
+		AND = { var:te_tax_bl_g_fruit >= 0 var:te_tax_pa_g_fruit >= 0 }
+		AND = { var:te_tax_bl_g_furniture >= 0 var:te_tax_pa_g_furniture >= 0 }
+		AND = { var:te_tax_bl_g_glass >= 0 var:te_tax_pa_g_glass >= 0 }
+		AND = { var:te_tax_bl_g_grain >= 0 var:te_tax_pa_g_grain >= 0 }
+		AND = { var:te_tax_bl_g_groceries >= 0 var:te_tax_pa_g_groceries >= 0 }
+		AND = { var:te_tax_bl_g_liquor >= 0 var:te_tax_pa_g_liquor >= 0 }
+		AND = { var:te_tax_bl_g_luxury_clothes >= 0 var:te_tax_pa_g_luxury_clothes >= 0 }
+		AND = { var:te_tax_bl_g_luxury_furniture >= 0 var:te_tax_pa_g_luxury_furniture >= 0 }
+		AND = { var:te_tax_bl_g_meat >= 0 var:te_tax_pa_g_meat >= 0 }
+		AND = { var:te_tax_bl_g_oil >= 0 var:te_tax_pa_g_oil >= 0 }
+		AND = { var:te_tax_bl_g_opium >= 0 var:te_tax_pa_g_opium >= 0 }
+		AND = { var:te_tax_bl_g_paper >= 0 var:te_tax_pa_g_paper >= 0 }
+		AND = { var:te_tax_bl_g_porcelain >= 0 var:te_tax_pa_g_porcelain >= 0 }
+		AND = { var:te_tax_bl_g_radios >= 0 var:te_tax_pa_g_radios >= 0 }
+		AND = { var:te_tax_bl_g_services >= 0 var:te_tax_pa_g_services >= 0 }
+		AND = { var:te_tax_bl_g_silk >= 0 var:te_tax_pa_g_silk >= 0 }
+		AND = { var:te_tax_bl_g_small_arms >= 0 var:te_tax_pa_g_small_arms >= 0 }
+		AND = { var:te_tax_bl_g_steamers >= 0 var:te_tax_pa_g_steamers >= 0 }
+		AND = { var:te_tax_bl_g_sugar >= 0 var:te_tax_pa_g_sugar >= 0 }
+		AND = { var:te_tax_bl_g_tea >= 0 var:te_tax_pa_g_tea >= 0 }
+		AND = { var:te_tax_bl_g_telephones >= 0 var:te_tax_pa_g_telephones >= 0 }
+		AND = { var:te_tax_bl_g_tobacco >= 0 var:te_tax_pa_g_tobacco >= 0 }
+		AND = { var:te_tax_bl_g_tourism >= 0 var:te_tax_pa_g_tourism >= 0 }
+		AND = { var:te_tax_bl_g_transportation >= 0 var:te_tax_pa_g_transportation >= 0 }
+		AND = { var:te_tax_bl_g_wine >= 0 var:te_tax_pa_g_wine >= 0 }
+		AND = { var:te_tax_bl_g_wood >= 0 var:te_tax_pa_g_wood >= 0 }
+		AND = { var:te_tax_bl_agrel >= 0 var:te_tax_pa_agrel >= 0 }
+		AND = { var:te_tax_bl_regrel >= 0 var:te_tax_pa_regrel >= 0 }
+	}
+}
+
+# Slot a's package touches nothing (every provision superseded).
+te_tax_gen_package_empty_a = {
+	var:te_tax_pa_wage < 0
+	var:te_tax_pa_div < 0
+	var:te_tax_pa_land < 0
+	var:te_tax_pa_head < 0
+	var:te_tax_pa_cons < 0
+	var:te_tax_pa_g_aeroplanes < 0
+	var:te_tax_pa_g_automobiles < 0
+	var:te_tax_pa_g_clippers < 0
+	var:te_tax_pa_g_clothes < 0
+	var:te_tax_pa_g_coal < 0
+	var:te_tax_pa_g_coffee < 0
+	var:te_tax_pa_g_consumer_appliances < 0
+	var:te_tax_pa_g_digital_access < 0
+	var:te_tax_pa_g_digital_assets < 0
+	var:te_tax_pa_g_electricity < 0
+	var:te_tax_pa_g_fabric < 0
+	var:te_tax_pa_g_fine_art < 0
+	var:te_tax_pa_g_fish < 0
+	var:te_tax_pa_g_fruit < 0
+	var:te_tax_pa_g_furniture < 0
+	var:te_tax_pa_g_glass < 0
+	var:te_tax_pa_g_grain < 0
+	var:te_tax_pa_g_groceries < 0
+	var:te_tax_pa_g_liquor < 0
+	var:te_tax_pa_g_luxury_clothes < 0
+	var:te_tax_pa_g_luxury_furniture < 0
+	var:te_tax_pa_g_meat < 0
+	var:te_tax_pa_g_oil < 0
+	var:te_tax_pa_g_opium < 0
+	var:te_tax_pa_g_paper < 0
+	var:te_tax_pa_g_porcelain < 0
+	var:te_tax_pa_g_radios < 0
+	var:te_tax_pa_g_services < 0
+	var:te_tax_pa_g_silk < 0
+	var:te_tax_pa_g_small_arms < 0
+	var:te_tax_pa_g_steamers < 0
+	var:te_tax_pa_g_sugar < 0
+	var:te_tax_pa_g_tea < 0
+	var:te_tax_pa_g_telephones < 0
+	var:te_tax_pa_g_tobacco < 0
+	var:te_tax_pa_g_tourism < 0
+	var:te_tax_pa_g_transportation < 0
+	var:te_tax_pa_g_wine < 0
+	var:te_tax_pa_g_wood < 0
+	var:te_tax_pa_agrel < 0
+	var:te_tax_pa_regrel < 0
+}
+
+# Slot b's package touches a provision the bill touches. Read only while it is on.
+te_tax_gen_bill_overlaps_b = {
+	OR = {
+		AND = { var:te_tax_bl_wage >= 0 var:te_tax_pb_wage >= 0 }
+		AND = { var:te_tax_bl_div >= 0 var:te_tax_pb_div >= 0 }
+		AND = { var:te_tax_bl_land >= 0 var:te_tax_pb_land >= 0 }
+		AND = { var:te_tax_bl_head >= 0 var:te_tax_pb_head >= 0 }
+		AND = { var:te_tax_bl_cons >= 0 var:te_tax_pb_cons >= 0 }
+		AND = { var:te_tax_bl_g_aeroplanes >= 0 var:te_tax_pb_g_aeroplanes >= 0 }
+		AND = { var:te_tax_bl_g_automobiles >= 0 var:te_tax_pb_g_automobiles >= 0 }
+		AND = { var:te_tax_bl_g_clippers >= 0 var:te_tax_pb_g_clippers >= 0 }
+		AND = { var:te_tax_bl_g_clothes >= 0 var:te_tax_pb_g_clothes >= 0 }
+		AND = { var:te_tax_bl_g_coal >= 0 var:te_tax_pb_g_coal >= 0 }
+		AND = { var:te_tax_bl_g_coffee >= 0 var:te_tax_pb_g_coffee >= 0 }
+		AND = { var:te_tax_bl_g_consumer_appliances >= 0 var:te_tax_pb_g_consumer_appliances >= 0 }
+		AND = { var:te_tax_bl_g_digital_access >= 0 var:te_tax_pb_g_digital_access >= 0 }
+		AND = { var:te_tax_bl_g_digital_assets >= 0 var:te_tax_pb_g_digital_assets >= 0 }
+		AND = { var:te_tax_bl_g_electricity >= 0 var:te_tax_pb_g_electricity >= 0 }
+		AND = { var:te_tax_bl_g_fabric >= 0 var:te_tax_pb_g_fabric >= 0 }
+		AND = { var:te_tax_bl_g_fine_art >= 0 var:te_tax_pb_g_fine_art >= 0 }
+		AND = { var:te_tax_bl_g_fish >= 0 var:te_tax_pb_g_fish >= 0 }
+		AND = { var:te_tax_bl_g_fruit >= 0 var:te_tax_pb_g_fruit >= 0 }
+		AND = { var:te_tax_bl_g_furniture >= 0 var:te_tax_pb_g_furniture >= 0 }
+		AND = { var:te_tax_bl_g_glass >= 0 var:te_tax_pb_g_glass >= 0 }
+		AND = { var:te_tax_bl_g_grain >= 0 var:te_tax_pb_g_grain >= 0 }
+		AND = { var:te_tax_bl_g_groceries >= 0 var:te_tax_pb_g_groceries >= 0 }
+		AND = { var:te_tax_bl_g_liquor >= 0 var:te_tax_pb_g_liquor >= 0 }
+		AND = { var:te_tax_bl_g_luxury_clothes >= 0 var:te_tax_pb_g_luxury_clothes >= 0 }
+		AND = { var:te_tax_bl_g_luxury_furniture >= 0 var:te_tax_pb_g_luxury_furniture >= 0 }
+		AND = { var:te_tax_bl_g_meat >= 0 var:te_tax_pb_g_meat >= 0 }
+		AND = { var:te_tax_bl_g_oil >= 0 var:te_tax_pb_g_oil >= 0 }
+		AND = { var:te_tax_bl_g_opium >= 0 var:te_tax_pb_g_opium >= 0 }
+		AND = { var:te_tax_bl_g_paper >= 0 var:te_tax_pb_g_paper >= 0 }
+		AND = { var:te_tax_bl_g_porcelain >= 0 var:te_tax_pb_g_porcelain >= 0 }
+		AND = { var:te_tax_bl_g_radios >= 0 var:te_tax_pb_g_radios >= 0 }
+		AND = { var:te_tax_bl_g_services >= 0 var:te_tax_pb_g_services >= 0 }
+		AND = { var:te_tax_bl_g_silk >= 0 var:te_tax_pb_g_silk >= 0 }
+		AND = { var:te_tax_bl_g_small_arms >= 0 var:te_tax_pb_g_small_arms >= 0 }
+		AND = { var:te_tax_bl_g_steamers >= 0 var:te_tax_pb_g_steamers >= 0 }
+		AND = { var:te_tax_bl_g_sugar >= 0 var:te_tax_pb_g_sugar >= 0 }
+		AND = { var:te_tax_bl_g_tea >= 0 var:te_tax_pb_g_tea >= 0 }
+		AND = { var:te_tax_bl_g_telephones >= 0 var:te_tax_pb_g_telephones >= 0 }
+		AND = { var:te_tax_bl_g_tobacco >= 0 var:te_tax_pb_g_tobacco >= 0 }
+		AND = { var:te_tax_bl_g_tourism >= 0 var:te_tax_pb_g_tourism >= 0 }
+		AND = { var:te_tax_bl_g_transportation >= 0 var:te_tax_pb_g_transportation >= 0 }
+		AND = { var:te_tax_bl_g_wine >= 0 var:te_tax_pb_g_wine >= 0 }
+		AND = { var:te_tax_bl_g_wood >= 0 var:te_tax_pb_g_wood >= 0 }
+		AND = { var:te_tax_bl_agrel >= 0 var:te_tax_pb_agrel >= 0 }
+		AND = { var:te_tax_bl_regrel >= 0 var:te_tax_pb_regrel >= 0 }
+	}
+}
+
+# Slot b's package touches nothing (every provision superseded).
+te_tax_gen_package_empty_b = {
+	var:te_tax_pb_wage < 0
+	var:te_tax_pb_div < 0
+	var:te_tax_pb_land < 0
+	var:te_tax_pb_head < 0
+	var:te_tax_pb_cons < 0
+	var:te_tax_pb_g_aeroplanes < 0
+	var:te_tax_pb_g_automobiles < 0
+	var:te_tax_pb_g_clippers < 0
+	var:te_tax_pb_g_clothes < 0
+	var:te_tax_pb_g_coal < 0
+	var:te_tax_pb_g_coffee < 0
+	var:te_tax_pb_g_consumer_appliances < 0
+	var:te_tax_pb_g_digital_access < 0
+	var:te_tax_pb_g_digital_assets < 0
+	var:te_tax_pb_g_electricity < 0
+	var:te_tax_pb_g_fabric < 0
+	var:te_tax_pb_g_fine_art < 0
+	var:te_tax_pb_g_fish < 0
+	var:te_tax_pb_g_fruit < 0
+	var:te_tax_pb_g_furniture < 0
+	var:te_tax_pb_g_glass < 0
+	var:te_tax_pb_g_grain < 0
+	var:te_tax_pb_g_groceries < 0
+	var:te_tax_pb_g_liquor < 0
+	var:te_tax_pb_g_luxury_clothes < 0
+	var:te_tax_pb_g_luxury_furniture < 0
+	var:te_tax_pb_g_meat < 0
+	var:te_tax_pb_g_oil < 0
+	var:te_tax_pb_g_opium < 0
+	var:te_tax_pb_g_paper < 0
+	var:te_tax_pb_g_porcelain < 0
+	var:te_tax_pb_g_radios < 0
+	var:te_tax_pb_g_services < 0
+	var:te_tax_pb_g_silk < 0
+	var:te_tax_pb_g_small_arms < 0
+	var:te_tax_pb_g_steamers < 0
+	var:te_tax_pb_g_sugar < 0
+	var:te_tax_pb_g_tea < 0
+	var:te_tax_pb_g_telephones < 0
+	var:te_tax_pb_g_tobacco < 0
+	var:te_tax_pb_g_tourism < 0
+	var:te_tax_pb_g_transportation < 0
+	var:te_tax_pb_g_wine < 0
+	var:te_tax_pb_g_wood < 0
+	var:te_tax_pb_agrel < 0
+	var:te_tax_pb_regrel < 0
+}

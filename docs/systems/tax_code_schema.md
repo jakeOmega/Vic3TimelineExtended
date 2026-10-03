@@ -33,6 +33,8 @@ Everything here runs only under `te_tax_code_rule` (`te_tax_code_on = yes`). Wit
 | `te_tax_en_regrel` | regional relief depth: 0 none, 1 = −25%, 2 = −50% | 0 |
 | state var `te_tax_relief_state` | 1 on states named in the enacted regional relief (max 3 per country) | 0 |
 | `te_tax_pver_relief`, `te_tax_xver_relief` | tokens for relief | 0 |
+| `te_tax_dr_on` | 1 while a draft reform is open ([Draft, bill and passage](#draft-bill-and-passage)) | 0 |
+| `te_tax_bl_on` | 1 while a bill is under debate | 0 |
 
 `<key>` is one of `wage div land head cons`; `<good>` is one of the [catalog](#consumption-goods-catalog) goods.
 
@@ -127,7 +129,7 @@ An approved package waits in slot `a` or `b` and takes effect on the 1st of its 
 
 1. `set_variable = { name = te_tax_now value = te_history_month_index }` once; if `te_tax_last_month >= te_tax_now` stop (a second call in a month does nothing); else `te_tax_last_month = te_tax_now`, before any transition.
 2. **Sunsets first** (`te_tax_gen_sunset_<key>`). For each instrument with `te_tax_en_<key>_exp` ≠ -1 and ≤ now: if `te_tax_en_<key>_since < te_tax_now` (`_since < now`), set `te_tax_en_<key> = _succ`, `_since = now`, `_exp = -1`, `_succ = -1`, `te_tax_code_version` +1, history kind 2 with the instrument in `_inst`; otherwise leave it (it runs next month). Late sunsets catch up. A sunset whose `_succ` is -1 is corrupt: its `_exp` is reset to -1 with no version change, so it cannot hold `te_tax_next_month` in the past.
-3. **Commencements** in `seq` order, lower first, slot `a` on a tie (`te_tax_gen_commence_<s>`). For a slot with `_on = 1` and `_state = 1`: if `_due = now` (equality, never `>=`): if every touched provision's `te_tax_p<s>_xver_<key>` equals the current `te_tax_xver_<key>`, and likewise `_xver_goods` when the package touches a good and `_xver_relief` when it touches relief (`te_tax_gen_package_current_<s>`), apply every touched field (`te_tax_gen_apply_<s>`: the successor below, then `te_tax_en_<key> = new`, `_since = now`, `_exp` from the package; goods; relief depths; regional-relief states when `_regrel_states_set = 1`), `te_tax_code_version` +1, history kind 1, `_on = 0`, `_state = 0`; else `_state = 2` (held_conflict), history kind 3, the whole package held and collections unchanged. If `_due < now`: `_state = 3` (held_missed), history kind 4; a package is never applied late. A held package waits for explicit rescheduling (Task 6). **Supersession and successors happen at commencement, never at approval.** Approval (Task 6) leaves the enacted provision and its sunset alone; it only drops the provision from an earlier-approved slot whose due month is on or after the new one. When a package commences, it replaces each provision it touches, value and sunset together, captured before anything is overwritten:
+3. **Commencements** in `seq` order, lower first, slot `a` on a tie (`te_tax_gen_commence_<s>`). For a slot with `_on = 1` and `_state = 1`: if `_due = now` (equality, never `>=`): if every touched provision's `te_tax_p<s>_xver_<key>` equals the current `te_tax_xver_<key>`, and likewise `_xver_goods` when the package touches a good and `_xver_relief` when it touches relief (`te_tax_gen_package_current_<s>`), apply every touched field (`te_tax_gen_apply_<s>`: the successor below, then `te_tax_en_<key> = new`, `_since = now`, `_exp` from the package; goods; relief depths; regional-relief states when `_regrel_states_set = 1`), `te_tax_code_version` +1, history kind 1, `_on = 0`, `_state = 0`; else `_state = 2` (held_conflict), history kind 3, the whole package held and collections unchanged. If `_due < now`: `_state = 3` (held_missed), history kind 4; a package is never applied late. A held package keeps its slot: no command reschedules or releases it yet (Task 6's `te_tax_cmd_reschedule` moves only the bill under debate; see [Draft, bill and passage](#draft-bill-and-passage), Open items). **Supersession and successors happen at commencement, never at approval.** Approval (Task 6) leaves the enacted provision and its sunset alone; it only drops the provision from an earlier-approved slot whose due month is on or after the new one. When a package commences, it replaces each provision it touches, value and sunset together, captured before anything is overwritten:
    - **No sunset in the package** (`te_tax_p<s>_<key>_exp = -1`): the change is permanent; `te_tax_en_<key>_exp` and `_succ` become -1, clearing any pending sunset.
    - **A sunset in the package**: the provision reverts to the underlying permanent rate. If the provision still has a pending sunset with a successor (`te_tax_en_<key>_exp ≥ 0`; one due this month has already run, so it is a later one), that successor is kept; otherwise the rate in force (`te_tax_en_<key>`, after this month's sunsets) becomes the successor.
    - The package's stored `_succ` is never read, so a successor is always a rate that was law; and a held or missed package leaves the enacted sunset as it was.
@@ -158,7 +160,7 @@ An approved package waits in slot `a` or `b` and takes effect on the 1st of its 
 
 ### Scheduler retest (owner, in game)
 
-The steps are in `docs/testing/tax-code-capability-ledger.md`, "Scheduler retest". Steps 2, 3, 5 and 6 need a stored package, which only Task 6's pass (or a debug command, not built) can create. Step 4 is `event te_tax.1` twice from the console in one month: the second logs `TE_TAX skip`.
+The steps are in `docs/testing/tax-code-capability-ledger.md`, "Scheduler retest". Steps 2, 3, 5 and 6 need a stored package, which the pass (`te_tax_cmd_pass`, [Draft, bill and passage](#draft-bill-and-passage)) creates; until the Task 8 panel exists it is reached only from script. Step 4 is `event te_tax.1` twice from the console in one month: the second logs `TE_TAX skip`.
 
 ## Migration
 
@@ -190,6 +192,130 @@ Every value is an exact index (rate ÷ step: wage, dividends and rural assessmen
 
 **Discrepancies.** A country on any other taxation law (the probe carrier, another mod's law) migrates as all zeros, with `te_tax_migration_discrepancy = 1` and the line `TE_TAX migration_discrepancy no mapping for the active taxation law…`. A country that already holds `law_te_tax_code` without migration tokens (a rebel or released country that inherited the carrier from its parent) migrates the same way with its own line, `…holds law_te_tax_code without migration tokens…`, and the carrier is not activated again; the next sync then removes any amendments it arrived with. Task 10 decides copy or migrate for both creation paths.
 
+## Draft, bill and passage
+
+One editable draft and at most one bill under debate per country (spec §3, "one tax bill under debate per country, plus one editable draft"). A draft changes nothing. Introducing it copies it into the bill and starts debate; interest groups commit to the bill's current revision; passing it stores an approved package in a free slot, which the [scheduler](#scheduler-package-slots-and-history) commences on its due month. A withdrawn bill or a discarded draft leaves the enacted code and the approved packages exactly as they were. The passage rule is the spec's fallback (§7.4, §8): IG commitments weighted by clout, legitimacy, and a debate period. It does not simulate seats or chambers.
+
+### Records
+
+`<r>` is `dr` (the draft) or `bl` (the bill). The two tokens are in the [schema table](#schema); everything else here is payload: written in full when the record opens, read only while its token is 1, and removed when it closes (`te_tax_gen_draft_clear`, `te_tax_gen_bill_clear`, the only removals in the tax code). A civil war's winner may inherit a loser's payload for a record it holds closed; it stays unread.
+
+| Variable | Meaning | Untouched |
+|---|---|---|
+| `te_tax_<r>_due` | commencement month | — |
+| `te_tax_<r>_<key>` | target index | -1 |
+| `te_tax_<r>_<key>_sun` | sunset offset in months after commencement: 0 (none), 6, 12, 24, 36 or 60 | 0 |
+| `te_tax_<r>_<key>_pver` | `te_tax_pver_<key>` when the draft first touched the provision | -1 |
+| `te_tax_<r>_g_<good>` | 1 tax the good, 0 stop taxing it | -1 |
+| `te_tax_<r>_goods_pver` | `te_tax_pver_goods` when the draft first touched a good | -1 |
+| `te_tax_<r>_agrel`, `te_tax_<r>_regrel` | relief depth (Task 11 edits them) | -1 |
+| `te_tax_bl_rev` | revision: 1 at introduction, +1 at each revision | — |
+| `te_tax_bl_day` | `game_date` of the last material revision (a day count; [Debate clock](#debate-clock)) | — |
+| `te_tax_bl_minor` | 1 for a minor bill | — |
+| `te_tax_bl_xver_<key>`, `te_tax_bl_xver_goods`, `te_tax_bl_xver_relief` | the external versions when the bill was introduced or last revised | — |
+| list `te_tax_bl_relief_states` | the states the bill names for regional relief (Task 11); emptied at introduction | — |
+
+`te_tax_gen_bill_from_draft` writes every bill field `te_tax_store_package` reads; `test_tax_code_bill.py` compares the two.
+
+**Support snapshot** (country variables, per `<ig>` in `armed_forces devout industrialists intelligentsia landowners petty_bourgeoisie rural_folk trade_unions`): `te_tax_sup_<ig>` (score), `te_tax_sr_<ig>_mat`, `_ideo`, `_fisc`, `_gov`, `_prom`, `_trust` (reasons), `te_tax_com_<ig>` (1 committed, 0 persuadable, -1 red line) and `te_tax_com_<ig>_rev` (the revision it was decided for). `te_tax_refresh_support` writes them; a group the country lacks is zeroed. They are reset, never removed, and a commitment counts only while `te_tax_com_<ig>_rev` equals `te_tax_bl_rev`.
+
+### Commands
+
+Every command `te_tax_cmd_<c>` (`common/scripted_effects/te_tax_bill_effects.txt`) runs only inside `if = { limit = { te_tax_can_<c> ... } }` (`common/scripted_triggers/te_tax_triggers.txt`), the trigger a GUI button uses as its `is_valid`, so the button's tooltip and its click cannot disagree. Each says what it does with a `custom_tooltip` (`te_tax_tt_cmd_*`), because variable writes show nothing in a tooltip, and each condition of its trigger is a `custom_tooltip` line (`te_tax_tt_*`), so a disabled button lists every failing condition. A condition that reads a record's payload sits behind `trigger_if = { limit = { te_tax_draft_active = yes } ... }` (or `te_tax_bill_active`), whose `trigger_else` shows "a draft is open" / "a bill is under debate", so a closed record is never read. Every trigger starts with `te_tax_code_in_force`: the rule is on, the country has `te_tax_schema` and `te_tax_migrated ≥ 1`. Commands are effects for clicks and AI decisions; none runs from a GUI read.
+
+| Command | Valid when | Does |
+|---|---|---|
+| `te_tax_cmd_draft_new` | no draft is open | opens a draft: a copy of the bill if one is under debate, else every field untouched and `due` = now + `te_tax_default_due_offset` (3) |
+| `te_tax_cmd_draft_step = { KEY DIR }` | a draft is open; DIR 0: the target (or baseline) is above 0; 1: below `te_tax_max_<key>`; 2: not already 0; 3: not already the maximum; 4: the draft touches the provision | DIR 0 one step down, 1 one step up, 2 zero, 3 maximum, 4 untouched (`_sun` 0, `_pver` -1). An untouched provision starts from `te_tax_base_dr_<key>`, the rate in force under existing law in the draft's due month. The first touch records `_pver` |
+| `te_tax_cmd_draft_sunset = { KEY DIR }` | the draft touches the provision; DIR 0: it has a sunset; 1: the sunset is under 60 | moves the offset along 0, 6, 12, 24, 36, 60 (DIR 0 shorter, 1 longer) |
+| `te_tax_cmd_draft_due = { DIR }` | DIR 0: `due` > now + 1; 1: `due` < now + 60 | one month earlier or later (a due month already past jumps to now + 1) |
+| `te_tax_cmd_draft_good = { GOOD }` | a draft is open; GOOD is a catalog good | an untouched good flips from its baseline (`te_tax_base_dr_g_<good>`); a touched good becomes untouched. `te_tax_dr_goods_pver` is recorded at the first touched good and cleared with the last |
+| `te_tax_cmd_draft_discard` | a draft is open | closes the draft |
+| `te_tax_cmd_draft_rebase = { KEY }` | the draft touches KEY (an instrument, or `goods`) and its `_pver` differs from `te_tax_pver_<KEY>` | re-records `_pver`: the player accepts the changed baseline; the draft keeps its target |
+| `te_tax_cmd_introduce` | no bill; the draft is ready (`te_tax_draft_ready`: it touches something, `now + 1 ≤ due ≤ now + 60`, and every touched provision's `_pver` is current) | copies the draft into the bill with the current external versions, `rev` = 1, starts debate. The draft stays open |
+| `te_tax_cmd_revise` | a bill; the draft is ready and differs from the bill | copies the draft over the bill, `rev` +1, starts debate again |
+| `te_tax_cmd_withdraw` | a bill | closes the bill |
+| `te_tax_cmd_pass` | `te_tax_can_pass` (below) | stores the bill ([Pass](#pass)) |
+| `te_tax_cmd_reschedule` | a bill whose due month has come or passed | `due` = now + 1; same revision, so commitments stay; the minor class and the support snapshot are recomputed for the new month |
+
+Starting debate (`te_tax_bill_start_debate`, introduction and revision): `te_tax_bl_day = game_date`; the minor class; every commitment released (`te_tax_com_<ig>` 0, `_rev` -1); `te_tax_bl_on` = 1; a support refresh. A **minor** bill (`te_tax_bill_set_minor`) changes at most two provisions, each at most two index steps from its baseline (`te_tax_gen_bill_small_steps`), and no good or relief.
+
+### Passage
+
+`te_tax_can_pass`, one `custom_tooltip` line per condition, the payload lines inside `trigger_if = { limit = { te_tax_bill_active = yes } }`:
+
+1. `te_tax_code_in_force`;
+2. a bill is under debate (`te_tax_bl_on = 1`; the `trigger_else` line);
+3. `te_tax_committed_share > te_tax_passage_share` (0.5);
+4. `legitimacy >= te_tax_passage_legitimacy` (25, the edge of vanilla's Illegitimate tier);
+5. `te_tax_debate_days_left <= 0`: `te_tax_debate_days_major` (30) days since the last material revision, `te_tax_debate_days_minor` (15) for a minor bill;
+6. `te_tax_bl_due > now`, i.e. `due ≥ now + 1`;
+7. a free slot (`te_tax_pa_on = 0` or `te_tax_pb_on = 0`);
+8. `te_tax_gen_bill_current`: every provision group the bill touches still has the external version it had at introduction;
+9. `te_tax_gen_bill_sunsets_valid`: every sunset gives `_exp ≥ _due + 1`;
+10. `te_tax_can_store_package` for slot `a` or `b`, the store's own check, so the two cannot drift apart. It fails only together with an earlier line.
+
+### Pass
+
+`te_tax_cmd_pass`: slot `a` if `te_tax_pa_on = 0`, else `b` (`te_tax_pass_into = { SLOT OTHER }`), in this order:
+
+1. **Supersession at approval** (`te_tax_gen_supersede_<OTHER>`). Only the other approved slot is touched, and only if it is on (any state) and its `_due >= te_tax_bl_due`: every instrument the bill touches is dropped from it (`<key>`, `_exp`, `_succ` = -1), and likewise every good (`_g_<good>` = -1) and relief depth (`_agrel`, `_regrel` = -1, `_regrel_states_set` = 0) the bill touches. One history entry, kind 8. A package left touching nothing is withdrawn (`_on` = 0, `_state` = 0); its `te_tax_pending_relief_<s>` marks stay on the states until the next store into that slot clears them, unread meanwhile. **The enacted provision and its sunset are never touched at approval**; the package supersedes them when it commences (`te_tax_gen_apply_<s>`, [Processor rules](#processor-rules) rule 3). A slot due earlier than the bill is left alone: it commences first and the bill then replaces it.
+2. `te_tax_gen_bump_pver`: `te_tax_pver_<key>` +1 for every instrument the bill touches, `te_tax_pver_goods` if it touches a good, `te_tax_pver_relief` if it touches relief. A draft written against the old baseline then needs a rebase.
+3. `te_tax_store_package = { SLOT }` ([Storing a package](#storing-a-package)): `seq` one above both slots; the review's "reverts to" text reads the stored `te_tax_p<s>_<key>_succ` preview.
+4. History kind 6 for the slot.
+5. `te_tax_gen_oppose_approval`: each group with score below 0 that is not committed to this revision gets `ig_approval_effect = { IG = ig_<ig> MODIFIER = ig_approval_negative_modifier DAYS = te_tax_opposed_approval_days }` (−3 interest-group approval, decaying over 180 days; the mod's shared "Disapproves of Policy" modifier).
+6. A draft identical to the bill (`NOT = { te_tax_gen_draft_differs_from_bill = yes }`) is discarded; a different one stays.
+7. The bill closes: commitments released, payload removed, `te_tax_bl_on` = 0. Each step logs `TE_TAX passed` / `superseded` / `stored` in `debug.log`.
+
+### Support model v1
+
+Refreshed by `te_tax_refresh_support` (rule on and a bill open) on introduction, revision and rescheduling, and monthly by the processor (`te_tax_process_month` step 5, after the month's transitions, while `te_tax_bl_on = 1`). Never from a GUI: opening the panel shows the last snapshot. Each reason is clamped to −40…+40 and the score to −100…+100. The arithmetic is in generated values (`te_tax_generated_support_values.txt`, from `EXPOSURE`, `LEVEL_STEPS` and `TAX_LAW_PROGRESSIVENESS` in `gen_tax_code.py`) and `te_tax_support_values.txt`.
+
+- **Baseline.** Each provision's baseline is the index in force under existing law in the bill's due month (`te_tax_base_bl_<key>`): the enacted value, its successor if its sunset falls in or before that month, then each awaiting package due earlier, in commencement order, with its own sunset preview. A package due on or after the bill is superseded at approval, so it is not part of the baseline. In the spec's example (30% dividends reverting to 15% in January, a bill for 25% from February), the baseline is 15% and the bill is a rise.
+- **Change in tax levels.** `ΔL_<key>` (`te_tax_dl_<key>`) = (bill index − baseline index) × step ÷ level step, 0 if the bill leaves the provision alone. One vanilla tax level: wage 0.05, dividends 0.05, rural assessment 0.15, head tax 0.15, consumption 0.05 (`te_tax_level_step_<key>`).
+- **Material** (`te_tax_mat_<ig>`): −10 × Σ ΔL_channel × exposure(ig, channel).
+- **Ideology** (`te_tax_ideo_<ig>`): 5 × P(ig) × ΔProg. P(ig) (`te_tax_ideo_p_<ig>`) = Σ over the vanilla taxation laws of stance × progressiveness ÷ 100, the stance read with `law_stance = { law = law_type:<law> value > approve }` and so on (strongly approve +2, approve +1, neutral 0, disapprove −1, strongly disapprove −2; strongest bucket first). Per-Capita has progressiveness 0 and is skipped, so P lies in −6…+6. ΔProg (`te_tax_dl_prog`) = (ΔL_wage + ΔL_div) − (ΔL_land + ΔL_head + ΔL_cons).
+- **Fiscal** (`te_tax_fiscal_reason`, the same for every group): with `net_fixed_income < 0`, +8 for a bill that raises revenue (Σ ΔL > 0) and −8 for one that cuts it; otherwise −4 and +4.
+- **Government** (`te_tax_gov_<ig>`): +10 if `is_in_government`.
+- **Promises and trust**: 0 (Tasks 12 and 13).
+- **Commitment.** A group committed to the current revision stays committed whatever its score. Otherwise its score decides: ≥ `te_tax_commit_threshold` (20) commits (`com` 1, `com_rev` = `rev`), ≤ `te_tax_redline_threshold` (−40) is a red line (−1), anything between is persuadable (0).
+- **Committed share** (`te_tax_committed_share`) = Σ `ig_clout` of committed groups ÷ Σ `ig_clout` of all groups, both sums over groups with `ig_counts_as_marginal = no` (vanilla's scripted trigger: clout below the marginal threshold with a voting franchise, else `is_marginal`), unrolled over the eight `ig:ig_<ig>`. A group the country lacks counts in neither; the share is 0 when no group is eligible. A marginal group can hold a commitment, but it counts only once it is no longer marginal. The share is read live (clout moves), the commitments from the snapshot.
+
+| ig | wage | div | land | head | cons |
+|---|---|---|---|---|---|
+| trade_unions | 1.0 | 0.0 | 0.0 | 0.8 | 0.8 |
+| rural_folk | 0.4 | 0.1 | 1.0 | 0.3 | 0.8 |
+| petty_bourgeoisie | 0.6 | 0.4 | 0.1 | 0.5 | 0.6 |
+| intelligentsia | 0.6 | 0.2 | 0.0 | 0.3 | 0.4 |
+| devout | 0.4 | 0.3 | 0.3 | 0.4 | 0.5 |
+| armed_forces | 0.3 | 0.2 | 0.1 | 0.3 | 0.4 |
+| industrialists | 0.2 | 1.0 | 0.0 | 0.1 | 0.2 |
+| landowners | 0.1 | 0.8 | 0.3 | 0.1 | 0.2 |
+
+| Law | Progressiveness |
+|---|---|
+| `law_consumption_based_taxation` | −100 |
+| `law_land_based_taxation` | −50 |
+| `law_per_capita_based_taxation` | 0 |
+| `law_proportional_taxation` | 50 |
+| `law_graduated_taxation` | 100 |
+
+### Debate clock
+
+`game_date` used as a value is the date as a day count with 365-day years: a save made on 1 March 2069 stored the construction market's `te_construction_market_last_pulse_date` (written `value = game_date`) as 755244 = 2069 × 365 + 59, and three consecutive autosaves differ by 28 and 31 days. So `te_tax_debate_days_elapsed` = `game_date` − `te_tax_bl_day` is in days, and `te_tax_debate_days_left` = required − elapsed (never below 0; 0 without a bill). The construction market's day arithmetic (`te_construction_market_pulse_values.txt`) is the precedent.
+
+### Decisions
+
+- **Supersession covers goods and relief** as well as instruments: a bill's good or relief depth replaces a later-approved package's, as an instrument does. A package emptied by supersession frees its slot instead of commencing with nothing.
+- **A new draft copies the bill under debate**, so "revise from draft" starts from the bill; with no bill it starts untouched, commencing in three months (30 days of debate fit before it).
+- **The bill carries `_pver`** (copied from the draft) so a draft reopened from it keeps its baseline marks.
+- **Rescheduling is not a revision**: commitments stay, the debate clock does not restart.
+- **Every revision is material** in v1: all commitments are released and debate restarts. Spec §3's "minor revisions reopen affected commitments" (only some) is not modelled.
+
+### Open items
+
+- **Held packages.** A package held as conflicting or missed (scheduler rule 3) keeps its slot. Task 6 reschedules only the bill under debate; reviewing and rescheduling or releasing a held package needs its own command (proposed: `te_tax_cmd_package_reschedule = { SLOT }`, due = now + 1 with the `xver` re-recorded after review, and `te_tax_cmd_package_release = { SLOT }`). With both slots held, no bill can pass.
+
 ## Balance decisions
 
 - **Consumption-Based Taxation's non-rate effects are dropped.** Its `modifier` block (`state_bureaucracy_population_base_cost_factor_mult = -0.25`, `country_consumption_tax_cost_mult = -0.50`) goes with the law. The code has no instrument for either, so a country migrated from Consumption-Based pays full bureaucracy cost for its population and full Authority for its taxed goods.
@@ -203,11 +329,15 @@ Every value is an exact index (rate ÷ step: wage, dividends and rural assessmen
 | `common/scripted_effects/te_tax_state_effects.txt` | `te_tax_init_country`, `te_tax_copy_token` |
 | `common/scripted_effects/te_tax_migration_effects.txt` | `te_tax_migrate_country` |
 | `common/scripted_effects/te_tax_schedule_effects.txt` | `te_tax_process_month`, `te_tax_watchdog_month`, `te_tax_store_package`, `te_tax_recompute_next_month`, `te_tax_history_push` |
-| `common/scripted_triggers/te_tax_triggers.txt` | the rule gates and `te_tax_can_store_package` |
+| `common/scripted_triggers/te_tax_triggers.txt` | the rule gates, `te_tax_can_store_package`, and the draft and bill triggers: `te_tax_code_in_force`, `te_tax_draft_active`, `te_tax_bill_active`, `te_tax_slot_awaits_before`, `te_tax_slot_b_first`, `te_tax_draft_ready`, every `te_tax_can_<command>` and its `te_tax_dr_*_ok_<dir>` helpers |
+| `common/scripted_effects/te_tax_bill_effects.txt` | the commands `te_tax_cmd_*`, their helpers (`te_tax_dr_step_<dir>`, `te_tax_dr_sunset_<dir>`, `te_tax_dr_due_<dir>`, `te_tax_dr_touch`, `te_tax_draft_close`, `te_tax_bill_start_debate`, `te_tax_bill_set_minor`, `te_tax_bill_close`, `te_tax_pass_into`) and `te_tax_refresh_support` |
+| `common/scripted_effects/te_tax_generated_bill_effects.txt` | generated: `te_tax_gen_draft_init`, `te_tax_gen_draft_from_bill`, `te_tax_gen_draft_clear`, `te_tax_gen_bill_from_draft`, `te_tax_gen_bill_clear`, `te_tax_gen_supersede_<s>`, `te_tax_gen_bump_pver`, `te_tax_gen_reset_commitments`, `te_tax_gen_refresh_support`, `te_tax_gen_oppose_approval` |
+| `common/script_values/te_tax_support_values.txt` | passage values, the fiscal reason, `te_tax_committed_share`, the due-month bounds and the debate clock |
 | `common/on_actions/te_tax_on_actions.txt` | migration hooks (`te_tax_on_game_started`, `te_tax_on_country_formed`, `te_tax_on_country_released`, `te_tax_on_uprising_start`), `te_tax_monthly_dispatch` (global `on_monthly_pulse`), `te_tax_watchdog_on_action` (`on_monthly_pulse_country`) |
 | `events/te_tax_internal_events.txt` | hidden country events `te_tax.1` (processor), `te_tax.2` (watchdog), `te_tax.3` (migration) and `te_tax.4` (post-migration sync) |
 | `common/scripted_effects/te_tax_collection_effects.txt` | `te_tax_sync_collection`, `te_tax_pick_sponsor`, `te_tax_sync_relief` |
 | `common/scripted_effects/te_tax_generated_effects.txt` | generated: `te_tax_gen_sync_<key>`, `te_tax_gen_sync_goods`, `te_tax_gen_init_instruments`, `te_tax_gen_init_goods`, `te_tax_gen_init_schedule`; the scheduler's `te_tax_gen_sunset_<key>`, `te_tax_gen_commence_<s>`, `te_tax_gen_hold_missed_<s>`, `te_tax_gen_apply_<s>`, `te_tax_gen_store_<s>`, `te_tax_gen_next_month`, `te_tax_gen_history_write`; the migration's `te_tax_gen_migrate_rates`, `te_tax_gen_migrate_goods`, `te_tax_gen_migrate_provisions` |
-| `common/scripted_triggers/te_tax_generated_triggers.txt` | generated: `te_tax_amendment_is_<key>`, `te_tax_amendment_matches_<key>` (amendment scope; the match reads `scope:te_tax_country`); `te_tax_gen_package_current_<s>`, `te_tax_gen_package_touches_goods_<s>`, `te_tax_gen_bill_sunsets_valid` (country scope) |
+| `common/scripted_triggers/te_tax_generated_triggers.txt` | generated: `te_tax_amendment_is_<key>`, `te_tax_amendment_matches_<key>` (amendment scope; the match reads `scope:te_tax_country`); `te_tax_gen_package_current_<s>`, `te_tax_gen_package_touches_goods_<s>`, `te_tax_gen_bill_sunsets_valid` (country scope); the draft and bill checks `te_tax_gen_draft_touches_any`, `te_tax_gen_draft_touches_goods`, `te_tax_gen_bill_touches_goods`, `te_tax_gen_draft_baseline_current`, `te_tax_gen_draft_differs_from_bill`, `te_tax_gen_bill_current`, `te_tax_gen_bill_small_steps`, `te_tax_gen_bill_overlaps_<s>`, `te_tax_gen_package_empty_<s>` |
 | `common/static_modifiers/te_tax_modifiers.txt` | `te_tax_relief_ag_1/2` (`building_group_bg_agriculture_tax_mult` −0.25/−0.5), `te_tax_relief_region_1/2` (`state_tax_collection_mult` −0.25/−0.5) |
 | `common/script_values/te_tax_display_values.txt`, `te_tax_generated_values.txt` | display values above; `te_tax_slot_id_<s>` (generated) |
+| `common/script_values/te_tax_generated_support_values.txt` | generated: the draft, bill and support-model values (`te_tax_level_step_<key>`, `te_tax_base_dr_<key>`, `te_tax_base_bl_<key>`, `te_tax_dr_eff_<key>`, `te_tax_base_dr_g_<good>`, `te_tax_bl_dstep_<key>`, `te_tax_dl_<key>`, `te_tax_dl_total`, `te_tax_dl_prog`, `te_tax_bl_provisions`, `te_tax_mat_<ig>`, `te_tax_ideo_p_<ig>`, `te_tax_ideo_<ig>`, `te_tax_gov_<ig>`, `te_tax_eligible_clout`, `te_tax_committed_clout`) |

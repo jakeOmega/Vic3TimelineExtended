@@ -71,6 +71,12 @@ te_tax_process_month = {
 			te_tax_sync_collection = yes
 			# 4. The next due transition.
 			te_tax_recompute_next_month = yes
+			# 5. A bill under debate: refresh the support snapshot once a month
+			# (te_tax_bill_effects.txt), after this month's changes.
+			if = {
+				limit = { var:te_tax_bl_on = 1 }
+				te_tax_refresh_support = yes
+			}
 		}
 	}
 }

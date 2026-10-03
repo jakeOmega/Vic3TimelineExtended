@@ -1,0 +1,128 @@
+﻿# Legislated tax code: passage values and the support model's country-level parts
+# (docs/systems/tax_code_schema.md, "Draft, bill and passage").
+#
+# The per-instrument and per-group parts (baselines, delta-levels, the material,
+# ideology and government reasons, the clout sums) are generated into
+# te_tax_generated_values.txt by scripts/generators/gen_tax_code.py.
+#
+# Passage (fallback rule, spec section 8): interest groups committed to the
+# bill's current revision hold more than te_tax_passage_share of the clout of
+# the non-marginal groups; legitimacy is at least te_tax_passage_legitimacy;
+# the current revision has been debated te_tax_debate_days_major days
+# (te_tax_debate_days_minor for a minor bill). Every value here reads only
+# variables it tests with has_variable first, writes nothing and iterates
+# nothing, so the GUI can read any of them.
+
+# Legitimacy needed to pass a bill: the edge of vanilla's Illegitimate tier.
+te_tax_passage_legitimacy = 25
+# Share of non-marginal clout that must be committed (strictly more than this).
+te_tax_passage_share = 0.5
+# A group whose score reaches this commits to the current revision...
+te_tax_commit_threshold = 20
+# ...and one whose score falls to this draws a red line.
+te_tax_redline_threshold = -40
+# Days of debate on the last material revision before passage.
+te_tax_debate_days_major = 30
+te_tax_debate_days_minor = 15
+# A new draft commences this many months from now; a draft may commence from
+# next month to te_tax_max_due_offset months from now.
+te_tax_default_due_offset = 3
+te_tax_max_due_offset = 60
+# Days a group that opposed a passed bill disapproves (ig_approval_negative_modifier).
+te_tax_opposed_approval_days = 180
+
+# Commencement months, as te_history_month_index values.
+te_tax_due_earliest = {
+	value = te_history_month_index
+	add = 1
+}
+
+te_tax_due_latest = {
+	value = te_history_month_index
+	add = te_tax_max_due_offset
+}
+
+te_tax_due_default = {
+	value = te_history_month_index
+	add = te_tax_default_due_offset
+}
+
+# Fiscal reason, the same for every group: in a deficit (net_fixed_income
+# below 0) a bill that raises revenue gains support and one that cuts it loses
+# it; in surplus the other way round, half as strongly. The direction is the
+# sign of the bill's summed change in tax levels (te_tax_dl_total).
+te_tax_fiscal_reason = {
+	value = 0
+	if = {
+		limit = { net_fixed_income < 0 }
+		if = {
+			limit = { te_tax_dl_total > 0 }
+			value = 8
+		}
+		else_if = {
+			limit = { te_tax_dl_total < 0 }
+			value = -8
+		}
+	}
+	else = {
+		if = {
+			limit = { te_tax_dl_total > 0 }
+			value = -4
+		}
+		else_if = {
+			limit = { te_tax_dl_total < 0 }
+			value = 4
+		}
+	}
+}
+
+# Clout committed to the bill's current revision as a share (0..1) of the clout
+# of every non-marginal interest group; 0 when there is none.
+te_tax_committed_share = {
+	value = 0
+	if = {
+		limit = { te_tax_eligible_clout > 0 }
+		value = te_tax_committed_clout
+		divide = te_tax_eligible_clout
+	}
+}
+
+# Days of debate the bill needs: fewer for a minor bill.
+te_tax_debate_days_required = {
+	value = te_tax_debate_days_major
+	if = {
+		limit = {
+			has_variable = te_tax_bl_minor
+			var:te_tax_bl_minor = 1
+		}
+		value = te_tax_debate_days_minor
+	}
+}
+
+# Days since the bill's last material revision. game_date as a value is the
+# date in days (a save stored 2069-03-01 as 755244 = 2069 x 365 + 59), so the
+# difference is in days.
+te_tax_debate_days_elapsed = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_day }
+		value = game_date
+		subtract = var:te_tax_bl_day
+		min = 0
+	}
+}
+
+# Days of debate still needed; 0 when the bill may pass (or there is no bill).
+te_tax_debate_days_left = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_bl_on
+			var:te_tax_bl_on = 1
+			has_variable = te_tax_bl_day
+		}
+		value = te_tax_debate_days_required
+		subtract = te_tax_debate_days_elapsed
+		min = 0
+	}
+}

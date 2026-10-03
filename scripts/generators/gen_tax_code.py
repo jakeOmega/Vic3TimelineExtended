@@ -30,9 +30,24 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       one branch per vanilla taxation law and native level from MIGRATION;
       te_tax_gen_migrate_goods; te_tax_gen_migrate_provisions).
   common/scripted_triggers/te_tax_generated_triggers.txt
-      Amendment-scope family and match triggers the syncs filter on, and the
+      Amendment-scope family and match triggers the syncs filter on, the
       scheduler's package and bill checks (te_tax_gen_package_current_<slot>,
-      te_tax_gen_package_touches_goods_<slot>, te_tax_gen_bill_sunsets_valid).
+      te_tax_gen_package_touches_goods_<slot>, te_tax_gen_bill_sunsets_valid)
+      and the draft and bill checks (te_tax_gen_draft_touches_any/_goods,
+      te_tax_gen_bill_touches_goods, te_tax_gen_draft_baseline_current,
+      te_tax_gen_draft_differs_from_bill, te_tax_gen_bill_current,
+      te_tax_gen_bill_small_steps, te_tax_gen_bill_overlaps_<slot>,
+      te_tax_gen_package_empty_<slot>).
+  common/scripted_effects/te_tax_generated_bill_effects.txt
+      The draft, bill and passage parts (te_tax_gen_draft_init/_from_bill/
+      _clear, te_tax_gen_bill_from_draft/_clear, te_tax_gen_supersede_<slot>,
+      te_tax_gen_bump_pver, te_tax_gen_reset_commitments,
+      te_tax_gen_refresh_support, te_tax_gen_oppose_approval). The only
+      generated file that removes variables: a closed record's payload.
+  common/script_values/te_tax_generated_support_values.txt
+      The draft, bill and support-model values: the baselines at the due
+      month, delta-levels, the per-group reasons from the EXPOSURE and
+      TAX_LAW_PROGRESSIVENESS tables, and the clout sums.
 
 The script-value file also carries the guarded te_tax_view_* display values
 for every instrument and every catalog good. The consumption-goods catalog is
@@ -113,6 +128,52 @@ PACKAGE_RELIEF_FIELDS = ("agrel", "regrel", "xver_relief")
 LOG_STAMP = ("month=[SCOPE.ScriptValue('te_history_month_index')|0] "
              "date=[TimeKeeper.GetCurrentDate.GetString] "
              "country=[THIS.GetCountry.GetNameNoFormatting]")
+
+# Draft, bill and passage (docs/systems/tax_code_schema.md, "Draft, bill and
+# passage"). The draft is te_tax_dr_*, the bill under debate te_tax_bl_*; both
+# hold, per instrument, the target index (-1 untouched), the sunset offset in
+# months and the planned version recorded when the provision was first touched.
+BILL_EFFECTS_PATH = "common/scripted_effects/te_tax_generated_bill_effects.txt"
+SUPPORT_VALUES_PATH = "common/script_values/te_tax_generated_support_values.txt"
+RECORDS = ("dr", "bl")
+RECORD_KEY_FIELDS = (("", -1), ("_sun", 0), ("_pver", -1))   # te_tax_<rec>_<key><field>, draft sentinel
+KIND_APPROVED, KIND_SUPERSEDED = 6, 8
+# The interest groups the support model scores, by type key (ig_<key>).
+IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
+       "landowners", "petty_bourgeoisie", "rural_folk", "trade_unions")
+# One vanilla tax level per channel: the material and ideology reasons count a
+# change in these units (delta index x step / level step).
+LEVEL_STEPS = {"wage": Decimal("0.05"), "div": Decimal("0.05"), "land": Decimal("0.15"),
+               "head": Decimal("0.15"), "cons": Decimal("0.05")}
+# How exposed each interest group is to each channel (0..1), in INSTRUMENTS order.
+EXPOSURE = {
+    "trade_unions": "1.0 0.0 0.0 0.8 0.8",
+    "rural_folk": "0.4 0.1 1.0 0.3 0.8",
+    "petty_bourgeoisie": "0.6 0.4 0.1 0.5 0.6",
+    "intelligentsia": "0.6 0.2 0.0 0.3 0.4",
+    "devout": "0.4 0.3 0.3 0.4 0.5",
+    "armed_forces": "0.3 0.2 0.1 0.3 0.4",
+    "industrialists": "0.2 1.0 0.0 0.1 0.2",
+    "landowners": "0.1 0.8 0.3 0.1 0.2",
+}
+# Raising these channels makes the code more progressive; raising the others, less.
+PROGRESSIVE_KEYS = ("wage", "div")
+# Vanilla 1.14.5 taxation laws and their progressiveness (checked against
+# vanilla_parsed/common/laws.json by test_tax_code_bill.py). An interest group's
+# fiscal ideology is the sum over these laws of its stance x progressiveness / 100.
+TAX_LAW_PROGRESSIVENESS = (
+    ("law_consumption_based_taxation", -100),
+    ("law_land_based_taxation", -50),
+    ("law_per_capita_based_taxation", 0),
+    ("law_proportional_taxation", 50),
+    ("law_graduated_taxation", 100),
+)
+# law_stance buckets, strongest first so each stance scores once.
+STANCE_BRANCHES = (("value > approve", 2), ("value > neutral", 1),
+                   ("value < disapprove", -2), ("value < neutral", -1))
+MATERIAL_WEIGHT, IDEOLOGY_WEIGHT, GOVERNMENT_BONUS = -10, 5, 10
+REASON_CAP, SCORE_CAP = 40, 100
+SUPPORT_REASONS = ("mat", "ideo", "fisc", "gov", "prom", "trust")
 
 
 class Instrument(NamedTuple):
@@ -1012,6 +1073,493 @@ def _scheduler_triggers():
     return lines
 
 
+# ---------------------------------------------------------------------------
+# Draft, bill and passage (docs/systems/tax_code_schema.md, "Draft, bill and passage")
+# ---------------------------------------------------------------------------
+
+def exposure(ig):
+    """{key: Decimal} exposure of interest group `ig` to each channel."""
+    return dict(zip((instrument.key for instrument in INSTRUMENTS), _values(EXPOSURE[ig])))
+
+
+def _record_payload(record):
+    """[(variable, draft sentinel)] for every per-instrument, per-good and relief field of a record."""
+    fields = []
+    for instrument in INSTRUMENTS:
+        fields += [(f"te_tax_{record}_{instrument.key}{suffix}", sentinel)
+                   for suffix, sentinel in RECORD_KEY_FIELDS]
+    fields += [(f"te_tax_{record}_g_{good}", -1) for good in consumption_catalog()]
+    fields += [(f"te_tax_{record}_goods_pver", -1), (f"te_tax_{record}_agrel", -1),
+               (f"te_tax_{record}_regrel", -1)]
+    return fields
+
+
+def _bill_versions():
+    """[(bill variable, canonical token)]: the external versions a bill records."""
+    pairs = [(f"te_tax_bl_xver_{instrument.key}", f"te_tax_xver_{instrument.key}") for instrument in INSTRUMENTS]
+    return pairs + [("te_tax_bl_xver_goods", "te_tax_xver_goods"), ("te_tax_bl_xver_relief", "te_tax_xver_relief")]
+
+
+def _baseline_slot(record, slot, field, sunsets, indent):
+    """Lines overriding the baseline with slot `slot`'s package if it awaits before the record's due month."""
+    p, due = f"te_tax_p{slot}_{field}", f"te_tax_{record}_due"
+    t = indent
+    if not sunsets:
+        return [f"{t}if = {{ limit = {{ te_tax_slot_awaits_before = {{ SLOT = {slot} DUE = {due} }} "
+                f"has_variable = {p} var:{p} >= 0 }} value = var:{p} }}"]
+    lines = [
+        f"{t}if = {{",
+        f"{t}\tlimit = {{",
+        f"{t}\t\tte_tax_slot_awaits_before = {{ SLOT = {slot} DUE = {due} }}",
+        f"{t}\t\thas_variable = {p}",
+        f"{t}\t\tvar:{p} >= 0",
+        f"{t}\t}}",
+        f"{t}\tvalue = var:{p}",
+    ]
+    if sunsets:
+        lines += [
+            f"{t}\tif = {{",
+            f"{t}\t\tlimit = {{",
+            f"{t}\t\t\thas_variable = {p}_exp",
+            f"{t}\t\t\thas_variable = {p}_succ",
+            f"{t}\t\t\tvar:{p}_exp >= 0",
+            f"{t}\t\t\tvar:{p}_exp <= var:{due}",
+            f"{t}\t\t\tvar:{p}_succ >= 0",
+            f"{t}\t\t}}",
+            f"{t}\t\tvalue = var:{p}_succ",
+            f"{t}\t}}",
+        ]
+    return lines + [f"{t}}}"]
+
+
+def _baseline_value(name, record, field, enacted, sunsets):
+    """A value: the index (or good flag) in force under existing law in the record's due month."""
+    due = f"te_tax_{record}_due"
+    lines = [f"{name} = {{", "\tvalue = 0", f"\tif = {{ limit = {{ has_variable = {enacted} }} value = var:{enacted} }}"]
+    if sunsets:
+        lines += [
+            "\t# An enacted sunset falling on or before the due month has run by then.",
+            "\tif = {",
+            "\t\tlimit = {",
+            f"\t\t\thas_variable = {due}",
+            f"\t\t\thas_variable = {enacted}_exp",
+            f"\t\t\thas_variable = {enacted}_succ",
+            f"\t\t\tvar:{enacted}_exp >= 0",
+            f"\t\t\tvar:{enacted}_exp <= var:{due}",
+            f"\t\t\tvar:{enacted}_succ >= 0",
+            "\t\t}",
+            f"\t\tvalue = var:{enacted}_succ",
+            "\t}",
+        ]
+    lines += ["\t# Awaiting packages due earlier, in the order they commence.", "\tif = {",
+              "\t\tlimit = { te_tax_slot_b_first = yes }"]
+    lines += _baseline_slot(record, "b", field, sunsets, "\t\t") + _baseline_slot(record, "a", field, sunsets, "\t\t")
+    lines += ["\t}", "\telse = {"]
+    lines += _baseline_slot(record, "a", field, sunsets, "\t\t") + _baseline_slot(record, "b", field, sunsets, "\t\t")
+    return lines + ["\t}", "}"]
+
+
+def _clamped(name, terms, weight):
+    return ([f"{name} = {{", "\tvalue = 0"] + terms
+            + [f"\tmultiply = {weight}", f"\tmin = -{REASON_CAP}", f"\tmax = {REASON_CAP}", "}"])
+
+
+def _ideology_value(ig):
+    lines = [f"te_tax_ideo_p_{ig} = {{", "\tvalue = 0"]
+    for law, progressiveness in TAX_LAW_PROGRESSIVENESS:
+        if not progressiveness:
+            continue
+        lines.append(f"\t# {law}, progressiveness {progressiveness}")
+        for n, (comparison, stance) in enumerate(STANCE_BRANCHES):
+            weight = fmt(Decimal(stance * progressiveness) / 100)
+            lines.append(f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ ig:ig_{ig} ?= {{ law_stance = "
+                         f"{{ law = law_type:{law} {comparison} }} }} }} add = {weight} }}")
+    return lines + ["}"]
+
+
+def _clout_sum(name, committed):
+    lines = [f"{name} = {{", "\tvalue = 0"]
+    for ig in IGS:
+        lines += ["\tif = {", "\t\tlimit = {", f"\t\t\texists = ig:ig_{ig}",
+                  f"\t\t\tig:ig_{ig} = {{ ig_counts_as_marginal = no }}"]
+        if committed:
+            lines += [f"\t\t\thas_variable = te_tax_com_{ig}", f"\t\t\tvar:te_tax_com_{ig} = 1",
+                      f"\t\t\thas_variable = te_tax_com_{ig}_rev", "\t\t\thas_variable = te_tax_bl_rev",
+                      f"\t\t\tvar:te_tax_com_{ig}_rev = var:te_tax_bl_rev"]
+        lines += ["\t\t}", f"\t\tadd = ig:ig_{ig}.ig_clout", "\t}"]
+    return lines + ["}"]
+
+
+@output(SUPPORT_VALUES_PATH)
+def support_values():
+    keys = [instrument.key for instrument in INSTRUMENTS]
+    lines = [
+        HEADER,
+        "# The legislated tax code's draft, bill and support-model values. Schema and rules:",
+        "# docs/systems/tax_code_schema.md, \"Draft, bill and passage\". Country scope. Read by",
+        "# te_tax_bill_effects.txt, te_tax_triggers.txt, te_tax_support_values.txt and the support",
+        "# refresh (te_tax_gen_refresh_support); every variable read is guarded with has_variable,",
+        "# and none writes or iterates anything, so a GUI may read them too.",
+        "",
+        "# One vanilla tax level per channel, for the support model's delta-levels.",
+    ]
+    lines += [f"te_tax_level_step_{key} = {fmt(LEVEL_STEPS[key])}" for key in keys]
+    lines += [
+        "",
+        "# te_tax_base_<record>_<key>: the index in force under existing law in the draft's (dr) or",
+        "# the bill's (bl) due month: the enacted value, its successor if its sunset falls by then,",
+        "# then each awaiting package due earlier (one due on or after it is superseded at",
+        "# approval), with that package's own sunset preview. The draft's untouched provisions",
+        "# start from it; the bill's support model measures change against it.",
+    ]
+    for record in RECORDS:
+        for key in keys:
+            lines += _baseline_value(f"te_tax_base_{record}_{key}", record, key, f"te_tax_en_{key}", True)
+    lines += ["", "# te_tax_dr_eff_<key>: the draft's target, or the baseline when the draft leaves it alone."]
+    for key in keys:
+        lines += [f"te_tax_dr_eff_{key} = {{", f"\tvalue = te_tax_base_dr_{key}",
+                  f"\tif = {{ limit = {{ has_variable = te_tax_dr_{key} var:te_tax_dr_{key} >= 0 }} "
+                  f"value = var:te_tax_dr_{key} }}", "}"]
+    lines += ["", "# te_tax_base_dr_g_<good>: 1 if the good is taxed under existing law in the draft's due month."]
+    for good in consumption_catalog():
+        lines += _baseline_value(f"te_tax_base_dr_g_{good}", "dr", f"g_{good}", f"te_tax_en_g_{good}", False)
+    lines += ["", "# The bill's change per instrument: in index steps (0 if untouched), then in vanilla tax levels."]
+    for key in keys:
+        lines += [f"te_tax_bl_dstep_{key} = {{", "\tvalue = 0", "\tif = {",
+                  f"\t\tlimit = {{ has_variable = te_tax_bl_{key} var:te_tax_bl_{key} >= 0 }}",
+                  f"\t\tvalue = var:te_tax_bl_{key}", f"\t\tsubtract = te_tax_base_bl_{key}", "\t}", "}"]
+        lines += [f"te_tax_dl_{key} = {{", f"\tvalue = te_tax_bl_dstep_{key}", f"\tmultiply = te_tax_step_{key}",
+                  f"\tdivide = te_tax_level_step_{key}", "}"]
+    lines += ["", "# Revenue direction: the sum of the changes. Progressivity: income channels minus the rest."]
+    lines += ["te_tax_dl_total = {", f"\tvalue = te_tax_dl_{keys[0]}"]
+    lines += [f"\tadd = te_tax_dl_{key}" for key in keys[1:]] + ["}"]
+    lines += ["te_tax_dl_prog = {", f"\tvalue = te_tax_dl_{keys[0]}"]
+    lines += [f"\t{'add' if key in PROGRESSIVE_KEYS else 'subtract'} = te_tax_dl_{key}" for key in keys[1:]]
+    lines += ["}", "", "# How many provisions the bill changes.", "te_tax_bl_provisions = {", "\tvalue = 0"]
+    lines += [f"\tif = {{ limit = {{ has_variable = te_tax_bl_{key} var:te_tax_bl_{key} >= 0 }} add = 1 }}"
+              for key in keys]
+    lines += [
+        "}",
+        "",
+        f"# Support reasons per interest group, each clamped to -{REASON_CAP}..{REASON_CAP}. Material:",
+        f"# {MATERIAL_WEIGHT} x the exposure-weighted change in tax levels. Ideology: {IDEOLOGY_WEIGHT} x the",
+        "# group's fiscal ideology (its stances on the vanilla taxation laws x their progressiveness",
+        f"# / 100) x the change in progressivity. Government: +{GOVERNMENT_BONUS} in government.",
+    ]
+    for ig in IGS:
+        terms = [f"\tadd = {{ value = te_tax_dl_{key} multiply = {fmt(weight)} }}"
+                 for key, weight in exposure(ig).items() if weight]
+        lines += _clamped(f"te_tax_mat_{ig}", terms, MATERIAL_WEIGHT)
+        lines += _ideology_value(ig)
+        lines += [f"te_tax_ideo_{ig} = {{", f"\tvalue = te_tax_ideo_p_{ig}", "\tmultiply = te_tax_dl_prog",
+                  f"\tmultiply = {IDEOLOGY_WEIGHT}", f"\tmin = -{REASON_CAP}", f"\tmax = {REASON_CAP}", "}"]
+        lines += [f"te_tax_gov_{ig} = {{", "\tvalue = 0",
+                  f"\tif = {{ limit = {{ ig:ig_{ig} ?= {{ is_in_government = yes }} }} value = {GOVERNMENT_BONUS} }}",
+                  "}"]
+    lines += [
+        "",
+        "# Clout of the non-marginal interest groups, and of those among them committed to the",
+        "# bill's current revision (te_tax_committed_share, te_tax_support_values.txt). A marginal",
+        "# group (vanilla's ig_counts_as_marginal) counts in neither; a group the country lacks",
+        "# contributes nothing.",
+    ]
+    lines += _clout_sum("te_tax_eligible_clout", False) + _clout_sum("te_tax_committed_clout", True)
+    return _txt("\n".join(lines) + "\n")
+
+
+def _or_block(conditions, indent="\t"):
+    return [f"{indent}OR = {{"] + [f"{indent}\t{condition}" for condition in conditions] + [f"{indent}}}"]
+
+
+def _bill_triggers():
+    keys = [instrument.key for instrument in INSTRUMENTS]
+    goods = consumption_catalog()
+    lines = [
+        "",
+        "# Draft, bill and passage (docs/systems/tax_code_schema.md, \"Draft, bill and passage\").",
+        "# Country scope. Each reads a record's payload, so callers test te_tax_draft_active /",
+        "# te_tax_bill_active (te_tax_triggers.txt) first.",
+        "",
+        "# The draft changes at least one provision.",
+        "te_tax_gen_draft_touches_any = {",
+    ]
+    lines += _or_block([f"var:te_tax_dr_{key} >= 0" for key in keys]
+                       + ["te_tax_gen_draft_touches_goods = yes", "var:te_tax_dr_agrel >= 0",
+                          "var:te_tax_dr_regrel >= 0"])
+    for record, label in (("dr", "draft"), ("bl", "bill")):
+        lines += ["}", "", f"# The {label} changes at least one taxed good.",
+                  f"te_tax_gen_{label}_touches_goods = {{"]
+        lines += _or_block([f"var:te_tax_{record}_g_{good} >= 0" for good in goods])
+    lines += [
+        "}",
+        "",
+        "# Every provision the draft changes still has the planned version it had when first",
+        "# touched (te_tax_cmd_draft_rebase acknowledges a change).",
+        "te_tax_gen_draft_baseline_current = {",
+    ]
+    for key in keys:
+        lines += _or_block([f"var:te_tax_dr_{key} < 0", f"var:te_tax_dr_{key}_pver = var:te_tax_pver_{key}"])
+    lines += _or_block(["NOT = { te_tax_gen_draft_touches_goods = yes }",
+                        "var:te_tax_dr_goods_pver = var:te_tax_pver_goods"])
+    lines += ["}", "", "# The draft differs from the bill in any field.", "te_tax_gen_draft_differs_from_bill = {"]
+    fields = ["due"] + [f"{key}{suffix}" for key in keys for suffix in ("", "_sun")]
+    fields += [f"g_{good}" for good in goods] + ["agrel", "regrel"]
+    lines += _or_block([f"NOT = {{ var:te_tax_dr_{field} = var:te_tax_bl_{field} }}" for field in fields])
+    lines += [
+        "}",
+        "",
+        "# Every provision group the bill touches still has the external version it had when the",
+        "# bill was introduced: nothing outside legislation changed it since.",
+        "te_tax_gen_bill_current = {",
+    ]
+    for key in keys:
+        lines += _or_block([f"var:te_tax_bl_{key} < 0", f"var:te_tax_bl_xver_{key} = var:te_tax_xver_{key}"])
+    lines += _or_block(["NOT = { te_tax_gen_bill_touches_goods = yes }",
+                        "var:te_tax_bl_xver_goods = var:te_tax_xver_goods"])
+    lines += _or_block(["AND = { var:te_tax_bl_agrel < 0 var:te_tax_bl_regrel < 0 }",
+                        "var:te_tax_bl_xver_relief = var:te_tax_xver_relief"])
+    lines += ["}", "", "# Every provision the bill changes moves at most two steps from existing law (minor bill).",
+              "te_tax_gen_bill_small_steps = {"]
+    for key in keys:
+        lines += _or_block([f"var:te_tax_bl_{key} < 0",
+                            f"AND = {{ te_tax_bl_dstep_{key} <= 2 te_tax_bl_dstep_{key} >= -2 }}"])
+    lines.append("}")
+    for slot in SLOTS:
+        p = f"te_tax_p{slot}"
+        lines += ["", f"# Slot {slot}'s package touches a provision the bill touches. Read only while it is on.",
+                  f"te_tax_gen_bill_overlaps_{slot} = {{"]
+        overlaps = [f"AND = {{ var:te_tax_bl_{key} >= 0 var:{p}_{key} >= 0 }}" for key in keys]
+        overlaps += [f"AND = {{ var:te_tax_bl_g_{good} >= 0 var:{p}_g_{good} >= 0 }}" for good in goods]
+        overlaps += [f"AND = {{ var:te_tax_bl_{field} >= 0 var:{p}_{field} >= 0 }}" for field in ("agrel", "regrel")]
+        lines += _or_block(overlaps)
+        lines += ["}", "", f"# Slot {slot}'s package touches nothing (every provision superseded).",
+                  f"te_tax_gen_package_empty_{slot} = {{"]
+        lines += [f"\tvar:{p}_{key} < 0" for key in keys] + [f"\tvar:{p}_g_{good} < 0" for good in goods]
+        lines += [f"\tvar:{p}_agrel < 0", f"\tvar:{p}_regrel < 0", "}"]
+    return lines
+
+
+def _supersede(slot):
+    p = f"te_tax_p{slot}"
+    superseded = _log("superseded", f"slot={slot}: a later approval replaced provisions due on or after its own")
+    withdrawn = _log("superseded", f"slot={slot}: every provision replaced; the slot is free")
+    lines = [
+        "",
+        f"# Slot {slot}: supersession at approval. Called by te_tax_cmd_pass only when the new package",
+        f"# goes into the other slot. If slot {slot} holds a package (any state) due on or after the",
+        "# bill, every provision, good and relief depth the bill touches is dropped from it, so the",
+        "# later-approved law wins. The enacted code and its sunsets are never touched here: the",
+        "# enacted provision is superseded when the package commences (te_tax_gen_apply_<slot>).",
+        f"# A package left touching nothing is withdrawn. History kind {KIND_SUPERSEDED}.",
+        f"te_tax_gen_supersede_{slot} = {{",
+        "\tif = {",
+        "\t\tlimit = {",
+        f"\t\t\tvar:{p}_on = 1",
+        f"\t\t\tvar:{p}_due >= var:te_tax_bl_due",
+        "\t\t}",
+        "\t\t# The payload exists only while the slot is on, so read it nested.",
+        "\t\tif = {",
+        f"\t\t\tlimit = {{ te_tax_gen_bill_overlaps_{slot} = yes }}",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        lines += [
+            "\t\t\tif = {",
+            "\t\t\t\tlimit = {",
+            f"\t\t\t\t\tvar:te_tax_bl_{key} >= 0",
+            f"\t\t\t\t\tvar:{p}_{key} >= 0",
+            "\t\t\t\t}",
+            f"\t\t\t\tset_variable = {{ name = {p}_{key} value = -1 }}",
+            f"\t\t\t\tset_variable = {{ name = {p}_{key}_exp value = -1 }}",
+            f"\t\t\t\tset_variable = {{ name = {p}_{key}_succ value = -1 }}",
+            "\t\t\t}",
+        ]
+    lines += [f"\t\t\tif = {{ limit = {{ var:te_tax_bl_g_{good} >= 0 var:{p}_g_{good} >= 0 }} "
+              f"set_variable = {{ name = {p}_g_{good} value = -1 }} }}" for good in consumption_catalog()]
+    lines += [
+        f"\t\t\tif = {{ limit = {{ var:te_tax_bl_agrel >= 0 var:{p}_agrel >= 0 }} "
+        f"set_variable = {{ name = {p}_agrel value = -1 }} }}",
+        "\t\t\tif = {",
+        "\t\t\t\tlimit = {",
+        "\t\t\t\t\tvar:te_tax_bl_regrel >= 0",
+        f"\t\t\t\t\tvar:{p}_regrel >= 0",
+        "\t\t\t\t}",
+        f"\t\t\t\tset_variable = {{ name = {p}_regrel value = -1 }}",
+        f"\t\t\t\tset_variable = {{ name = {p}_regrel_states_set value = 0 }}",
+        "\t\t\t}",
+        f"\t\t\tte_tax_history_push = {{ KIND = {KIND_SUPERSEDED} SLOT = {slot} }}",
+        f"\t\t\t{superseded}",
+        "\t\t\tif = {",
+        f"\t\t\t\tlimit = {{ te_tax_gen_package_empty_{slot} = yes }}",
+        f"\t\t\t\tset_variable = {{ name = {p}_on value = 0 }}",
+        f"\t\t\t\tset_variable = {{ name = {p}_state value = {STATE_EMPTY} }}",
+        f"\t\t\t\t{withdrawn}",
+        "\t\t\t}",
+        "\t\t}",
+        "\t}",
+        "}",
+    ]
+    return lines
+
+
+def _refresh_support():
+    lines = [
+        "",
+        "# The support snapshot (te_tax_refresh_support, while a bill is open): each interest group's",
+        "# reasons, its score (their sum, clamped), and its commitment to the bill's current",
+        "# revision. A group committed to this revision stays committed; otherwise it commits at",
+        "# te_tax_commit_threshold, draws a red line at te_tax_redline_threshold, else is",
+        "# persuadable (0). Promises and trust are 0 until Tasks 12-13. A group the country lacks",
+        "# is zeroed.",
+        "te_tax_gen_refresh_support = {",
+    ]
+    for ig in IGS:
+        sup, com = f"te_tax_sup_{ig}", f"te_tax_com_{ig}"
+        sources = {"mat": f"te_tax_mat_{ig}", "ideo": f"te_tax_ideo_{ig}", "fisc": "te_tax_fiscal_reason",
+                   "gov": f"te_tax_gov_{ig}", "prom": "0", "trust": "0"}
+        lines += ["\tif = {", f"\t\tlimit = {{ exists = ig:ig_{ig} }}"]
+        lines += [f"\t\tset_variable = {{ name = te_tax_sr_{ig}_{reason} value = {sources[reason]} }}"
+                  for reason in SUPPORT_REASONS]
+        lines.append(f"\t\tset_variable = {{ name = {sup} value = var:te_tax_sr_{ig}_mat }}")
+        lines += [f"\t\tchange_variable = {{ name = {sup} add = var:te_tax_sr_{ig}_{reason} }}"
+                  for reason in SUPPORT_REASONS[1:]]
+        lines += [
+            f"\t\tclamp_variable = {{ name = {sup} min = -{SCORE_CAP} max = {SCORE_CAP} }}",
+            "\t\tif = {",
+            f"\t\t\tlimit = {{ NOT = {{ has_variable = {com} }} }}",
+            f"\t\t\tset_variable = {{ name = {com} value = 0 }}",
+            f"\t\t\tset_variable = {{ name = {com}_rev value = -1 }}",
+            "\t\t}",
+            "\t\tif = {",
+            "\t\t\tlimit = {",
+            "\t\t\t\tNOT = {",
+            "\t\t\t\t\tAND = {",
+            f"\t\t\t\t\t\tvar:{com} = 1",
+            f"\t\t\t\t\t\tvar:{com}_rev = var:te_tax_bl_rev",
+            "\t\t\t\t\t}",
+            "\t\t\t\t}",
+            "\t\t\t}",
+            f"\t\t\tset_variable = {{ name = {com}_rev value = var:te_tax_bl_rev }}",
+            "\t\t\tif = {",
+            f"\t\t\t\tlimit = {{ var:{sup} >= te_tax_commit_threshold }}",
+            f"\t\t\t\tset_variable = {{ name = {com} value = 1 }}",
+            "\t\t\t}",
+            "\t\t\telse_if = {",
+            f"\t\t\t\tlimit = {{ var:{sup} <= te_tax_redline_threshold }}",
+            f"\t\t\t\tset_variable = {{ name = {com} value = -1 }}",
+            "\t\t\t}",
+            "\t\t\telse = {",
+            f"\t\t\t\tset_variable = {{ name = {com} value = 0 }}",
+            "\t\t\t}",
+            "\t\t}",
+            "\t}",
+            "\telse = {",
+        ]
+        lines += [f"\t\tset_variable = {{ name = te_tax_sr_{ig}_{reason} value = 0 }}" for reason in SUPPORT_REASONS]
+        lines += [f"\t\tset_variable = {{ name = {sup} value = 0 }}", f"\t\tset_variable = {{ name = {com} value = 0 }}",
+                  f"\t\tset_variable = {{ name = {com}_rev value = -1 }}", "\t}"]
+    return lines + ["}"]
+
+
+@output(BILL_EFFECTS_PATH)
+def bill_effects():
+    keys = [instrument.key for instrument in INSTRUMENTS]
+    draft, bill = _record_payload("dr"), _record_payload("bl")
+    lines = [
+        HEADER,
+        "# The legislated tax code's draft and bill records and the passage's per-instrument,",
+        "# per-good and per-group parts. Schema and rules: docs/systems/tax_code_schema.md, \"Draft,",
+        "# bill and passage\". Country scope; called only by te_tax_bill_effects.txt. Payload is",
+        "# removed when its record closes (it is read only while te_tax_dr_on / te_tax_bl_on is 1);",
+        "# the two tokens themselves are never removed.",
+        "",
+        "# A new draft with every field untouched (te_tax_cmd_draft_new sets te_tax_dr_due).",
+        "te_tax_gen_draft_init = {",
+    ]
+    lines += [f"\tset_variable = {{ name = {name} value = {sentinel} }}" for name, sentinel in draft]
+    lines += ["}", "", "# A new draft copied from the bill under debate, for its revision.",
+              "te_tax_gen_draft_from_bill = {", "\tset_variable = { name = te_tax_dr_due value = var:te_tax_bl_due }"]
+    lines += [f"\tset_variable = {{ name = {name} value = var:te_tax_bl_{name[len('te_tax_dr_'):]} }}"
+              for name, _ in draft]
+    lines += ["}", "", "# Closes the draft's payload (te_tax_dr_on is set to 0 by the caller).",
+              "te_tax_gen_draft_clear = {", "\tremove_variable = te_tax_dr_due"]
+    lines += [f"\tremove_variable = {name}" for name, _ in draft]
+    lines += [
+        "}",
+        "",
+        "# Writes the whole bill record from the draft, every field te_tax_store_package reads, and",
+        "# records the external version of each provision group as it stands now. The regional",
+        "# relief state list starts empty (Task 11 fills it).",
+        "te_tax_gen_bill_from_draft = {",
+        "\tset_variable = { name = te_tax_bl_due value = var:te_tax_dr_due }",
+    ]
+    lines += [f"\tset_variable = {{ name = te_tax_bl_{name[len('te_tax_dr_'):]} value = var:{name} }}"
+              for name, _ in draft]
+    lines += [f"\tset_variable = {{ name = {name} value = var:{token} }}" for name, token in _bill_versions()]
+    lines += ["\tclear_variable_list = te_tax_bl_relief_states", "}", "",
+              "# Closes the bill's payload (te_tax_bl_on is set to 0 by the caller).", "te_tax_gen_bill_clear = {"]
+    lines += [f"\tremove_variable = te_tax_bl_{field}" for field in ("due", "rev", "day", "minor")]
+    lines += [f"\tremove_variable = {name}" for name, _ in bill]
+    lines += [f"\tremove_variable = {name}" for name, _ in _bill_versions()]
+    lines += ["\tclear_variable_list = te_tax_bl_relief_states", "}"]
+    for slot in SLOTS:
+        lines += _supersede(slot)
+    lines += [
+        "",
+        "# Planned versions: an approval changes the baseline of every provision group it touches,",
+        "# so a draft written against the old one must be rebased before it is introduced.",
+        "te_tax_gen_bump_pver = {",
+    ]
+    for key in keys:
+        lines += ["\tif = {", f"\t\tlimit = {{ var:te_tax_bl_{key} >= 0 }}",
+                  f"\t\tchange_variable = {{ name = te_tax_pver_{key} add = 1 }}", "\t}"]
+    lines += [
+        "\tif = {",
+        "\t\tlimit = { te_tax_gen_bill_touches_goods = yes }",
+        "\t\tchange_variable = { name = te_tax_pver_goods add = 1 }",
+        "\t}",
+        "\tif = {",
+        "\t\tlimit = {",
+        "\t\t\tOR = {",
+        "\t\t\t\tvar:te_tax_bl_agrel >= 0",
+        "\t\t\t\tvar:te_tax_bl_regrel >= 0",
+        "\t\t\t}",
+        "\t\t}",
+        "\t\tchange_variable = { name = te_tax_pver_relief add = 1 }",
+        "\t}",
+        "}",
+        "",
+        "# Releases every commitment (a new bill or revision; the bill closing).",
+        "te_tax_gen_reset_commitments = {",
+    ]
+    for ig in IGS:
+        lines += [f"\tset_variable = {{ name = te_tax_com_{ig} value = 0 }}",
+                  f"\tset_variable = {{ name = te_tax_com_{ig}_rev value = -1 }}"]
+    lines.append("}")
+    lines += _refresh_support()
+    lines += [
+        "",
+        "# At passage, each group that opposed the bill (score below 0, not committed to this",
+        "# revision) disapproves for six months, through the shared ig_approval_effect.",
+        "te_tax_gen_oppose_approval = {",
+    ]
+    for ig in IGS:
+        lines += [
+            "\tif = {",
+            "\t\tlimit = {",
+            f"\t\t\thas_variable = te_tax_sup_{ig}",
+            f"\t\t\tvar:te_tax_sup_{ig} < 0",
+            f"\t\t\thas_variable = te_tax_com_{ig}",
+            f"\t\t\tNOT = {{ AND = {{ var:te_tax_com_{ig} = 1 var:te_tax_com_{ig}_rev = var:te_tax_bl_rev }} }}",
+            "\t\t}",
+            f"\t\tig_approval_effect = {{ IG = ig_{ig} MODIFIER = ig_approval_negative_modifier "
+            "DAYS = te_tax_opposed_approval_days }",
+            "\t}",
+        ]
+    lines.append("}")
+    return _txt("\n".join(lines) + "\n")
+
+
 @output(EFFECTS_PATH)
 def scripted_effects():
     lines = [
@@ -1134,7 +1682,7 @@ def scripted_triggers():
         lines += [f"\t\tAND = {{ type = amendment_type:{name} scope:te_tax_country.var:te_tax_en_{key} = {idx} }}"
                   for idx, name in enumerate(names, start=1)]
         lines += ["\t}", "}"]
-    lines += _scheduler_triggers()
+    lines += _scheduler_triggers() + _bill_triggers()
     return _txt("\n".join(lines) + "\n")
 
 

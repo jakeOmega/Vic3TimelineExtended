@@ -1,0 +1,339 @@
+﻿# Legislated tax code: drafts, bills and passage (docs/systems/tax_code_schema.md,
+# "Draft, bill and passage").
+#
+# One editable draft (te_tax_dr_*) and at most one bill under debate
+# (te_tax_bl_*) per country. The draft changes nothing; introducing it copies it
+# into the bill and starts debate; interest groups commit to the bill's
+# revision through the support refresh; passing it stores an approved package
+# in a free slot (te_tax_store_package), which the scheduler commences on its
+# due month. Withdrawing a bill or discarding a draft leaves the enacted code
+# and the approved packages exactly as they were.
+#
+# Every command te_tax_cmd_<c> runs only inside
+# `if = { limit = { te_tax_can_<c> ... } }` (te_tax_triggers.txt), the same
+# trigger a GUI button uses as its is_valid, and says what it does with a
+# custom_tooltip, because variable writes show nothing in a tooltip. Country
+# scope; nothing here reads ROOT. Commands are effects for clicks and AI
+# decisions, never for a GUI's is_shown, is_valid or display values.
+#
+# The per-instrument, per-good and per-group parts are generated
+# (te_tax_generated_bill_effects.txt, gen_tax_code.py).
+
+# Opens a draft: a copy of the bill under debate if there is one (to revise
+# it), else every provision untouched and commencement three months on.
+te_tax_cmd_draft_new = {
+	if = {
+		limit = { te_tax_can_draft_new = yes }
+		custom_tooltip = te_tax_tt_cmd_draft_new
+		if = {
+			limit = { te_tax_bill_active = yes }
+			te_tax_gen_draft_from_bill = yes
+		}
+		else = {
+			te_tax_gen_draft_init = yes
+			set_variable = { name = te_tax_dr_due value = te_tax_due_default }
+		}
+		set_variable = { name = te_tax_dr_on value = 1 }
+	}
+}
+
+# Moves one instrument's target in the draft. KEY: wage, div, land, head, cons.
+# DIR: 0 one step down, 1 one step up, 2 zero, 3 the highest index, 4 leave the
+# provision alone. An untouched provision starts from its baseline (the rate in
+# force under existing law in the draft's due month, te_tax_base_dr_<key>).
+te_tax_cmd_draft_step = {
+	if = {
+		limit = { te_tax_can_draft_step = { KEY = $KEY$ DIR = $DIR$ } }
+		te_tax_dr_step_$DIR$ = { KEY = $KEY$ }
+	}
+}
+
+# Records the provision's planned version when the draft first touches it, so
+# a later approval of the same provision shows as a changed baseline.
+te_tax_dr_touch = {
+	if = {
+		limit = { var:te_tax_dr_$KEY$ < 0 }
+		set_variable = { name = te_tax_dr_$KEY$_pver value = var:te_tax_pver_$KEY$ }
+	}
+}
+
+te_tax_dr_step_0 = {
+	custom_tooltip = te_tax_tt_cmd_draft_step_down
+	te_tax_dr_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_dr_eff_$KEY$ }
+	change_variable = { name = te_tax_dr_$KEY$ add = -1 }
+	clamp_variable = { name = te_tax_dr_$KEY$ min = 0 max = te_tax_max_$KEY$ }
+}
+
+te_tax_dr_step_1 = {
+	custom_tooltip = te_tax_tt_cmd_draft_step_up
+	te_tax_dr_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_dr_eff_$KEY$ }
+	change_variable = { name = te_tax_dr_$KEY$ add = 1 }
+	clamp_variable = { name = te_tax_dr_$KEY$ min = 0 max = te_tax_max_$KEY$ }
+}
+
+te_tax_dr_step_2 = {
+	custom_tooltip = te_tax_tt_cmd_draft_step_min
+	te_tax_dr_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = 0 }
+}
+
+te_tax_dr_step_3 = {
+	custom_tooltip = te_tax_tt_cmd_draft_step_max
+	te_tax_dr_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_max_$KEY$ }
+}
+
+te_tax_dr_step_4 = {
+	custom_tooltip = te_tax_tt_cmd_draft_step_revert
+	set_variable = { name = te_tax_dr_$KEY$ value = -1 }
+	set_variable = { name = te_tax_dr_$KEY$_sun value = 0 }
+	set_variable = { name = te_tax_dr_$KEY$_pver value = -1 }
+}
+
+# Moves a changed provision's expiry along the ladder 0 (permanent), 6, 12, 24,
+# 36, 60 months after commencement. DIR: 0 shorter, 1 longer.
+te_tax_cmd_draft_sunset = {
+	if = {
+		limit = { te_tax_can_draft_sunset = { KEY = $KEY$ DIR = $DIR$ } }
+		te_tax_dr_sunset_$DIR$ = { KEY = $KEY$ }
+	}
+}
+
+te_tax_dr_sunset_0 = {
+	custom_tooltip = te_tax_tt_cmd_draft_sunset_down
+	if = { limit = { var:te_tax_dr_$KEY$_sun = 60 } set_variable = { name = te_tax_dr_$KEY$_sun value = 36 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 36 } set_variable = { name = te_tax_dr_$KEY$_sun value = 24 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 24 } set_variable = { name = te_tax_dr_$KEY$_sun value = 12 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 12 } set_variable = { name = te_tax_dr_$KEY$_sun value = 6 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 6 } set_variable = { name = te_tax_dr_$KEY$_sun value = 0 } }
+}
+
+te_tax_dr_sunset_1 = {
+	custom_tooltip = te_tax_tt_cmd_draft_sunset_up
+	if = { limit = { var:te_tax_dr_$KEY$_sun = 0 } set_variable = { name = te_tax_dr_$KEY$_sun value = 6 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 6 } set_variable = { name = te_tax_dr_$KEY$_sun value = 12 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 12 } set_variable = { name = te_tax_dr_$KEY$_sun value = 24 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 24 } set_variable = { name = te_tax_dr_$KEY$_sun value = 36 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 36 } set_variable = { name = te_tax_dr_$KEY$_sun value = 60 } }
+}
+
+# Moves the draft's commencement a month. DIR: 0 earlier, 1 later (a due month
+# already in the past jumps to next month).
+te_tax_cmd_draft_due = {
+	if = {
+		limit = { te_tax_can_draft_due = { DIR = $DIR$ } }
+		te_tax_dr_due_$DIR$ = yes
+	}
+}
+
+te_tax_dr_due_0 = {
+	custom_tooltip = te_tax_tt_cmd_draft_due_earlier
+	change_variable = { name = te_tax_dr_due add = -1 }
+}
+
+te_tax_dr_due_1 = {
+	custom_tooltip = te_tax_tt_cmd_draft_due_later
+	if = {
+		limit = { var:te_tax_dr_due < te_tax_due_earliest }
+		set_variable = { name = te_tax_dr_due value = te_tax_due_earliest }
+	}
+	else = {
+		change_variable = { name = te_tax_dr_due add = 1 }
+	}
+}
+
+# Toggles a catalog good in the draft: an untouched good flips from its
+# baseline (taxed under existing law in the due month, or not); a touched good
+# returns to untouched. The goods' planned version is recorded when the first
+# good is touched and cleared when the last is untouched.
+te_tax_cmd_draft_good = {
+	if = {
+		limit = { te_tax_can_draft_good = { GOOD = $GOOD$ } }
+		custom_tooltip = te_tax_tt_cmd_draft_good
+		if = {
+			limit = { var:te_tax_dr_g_$GOOD$ >= 0 }
+			set_variable = { name = te_tax_dr_g_$GOOD$ value = -1 }
+			if = {
+				limit = { NOT = { te_tax_gen_draft_touches_goods = yes } }
+				set_variable = { name = te_tax_dr_goods_pver value = -1 }
+			}
+		}
+		else = {
+			if = {
+				limit = { NOT = { te_tax_gen_draft_touches_goods = yes } }
+				set_variable = { name = te_tax_dr_goods_pver value = var:te_tax_pver_goods }
+			}
+			if = {
+				limit = { te_tax_base_dr_g_$GOOD$ > 0 }
+				set_variable = { name = te_tax_dr_g_$GOOD$ value = 0 }
+			}
+			else = {
+				set_variable = { name = te_tax_dr_g_$GOOD$ value = 1 }
+			}
+		}
+	}
+}
+
+te_tax_cmd_draft_discard = {
+	if = {
+		limit = { te_tax_can_draft_discard = yes }
+		custom_tooltip = te_tax_tt_cmd_draft_discard
+		te_tax_draft_close = yes
+	}
+}
+
+# Closes the draft. The token stays (0); the payload goes.
+te_tax_draft_close = {
+	te_tax_gen_draft_clear = yes
+	set_variable = { name = te_tax_dr_on value = 0 }
+}
+
+# Acknowledges that an approval or an outside change has moved the baseline of
+# a provision the draft changes (KEY: an instrument, or goods). The draft keeps
+# its own target.
+te_tax_cmd_draft_rebase = {
+	if = {
+		limit = { te_tax_can_draft_rebase = { KEY = $KEY$ } }
+		custom_tooltip = te_tax_tt_cmd_draft_rebase
+		set_variable = { name = te_tax_dr_$KEY$_pver value = var:te_tax_pver_$KEY$ }
+	}
+}
+
+# Introduces the draft as revision 1 of a bill. The draft stays open, for a
+# later revision.
+te_tax_cmd_introduce = {
+	if = {
+		limit = { te_tax_can_introduce = yes }
+		custom_tooltip = te_tax_tt_cmd_introduce
+		te_tax_gen_bill_from_draft = yes
+		set_variable = { name = te_tax_bl_rev value = 1 }
+		te_tax_bill_start_debate = yes
+		debug_log = "TE_TAX introduced; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Replaces the bill with the draft as a new revision: every commitment is
+# released and debate starts again.
+te_tax_cmd_revise = {
+	if = {
+		limit = { te_tax_can_revise = yes }
+		custom_tooltip = te_tax_tt_cmd_revise
+		te_tax_gen_bill_from_draft = yes
+		change_variable = { name = te_tax_bl_rev add = 1 }
+		te_tax_bill_start_debate = yes
+		debug_log = "TE_TAX revised; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Starts the debate on the bill's current revision (introduction or revision):
+# the clock (game_date, in days), the minor/major class, commitments released,
+# the bill opened, then the first support snapshot.
+te_tax_bill_start_debate = {
+	set_variable = { name = te_tax_bl_day value = game_date }
+	te_tax_bill_set_minor = yes
+	te_tax_gen_reset_commitments = yes
+	set_variable = { name = te_tax_bl_on value = 1 }
+	te_tax_refresh_support = yes
+}
+
+# A minor bill changes at most two provisions, each by at most two steps from
+# existing law, and no good or relief: it needs te_tax_debate_days_minor days.
+te_tax_bill_set_minor = {
+	if = {
+		limit = {
+			te_tax_bl_provisions <= 2
+			te_tax_gen_bill_small_steps = yes
+			NOT = { te_tax_gen_bill_touches_goods = yes }
+			var:te_tax_bl_agrel < 0
+			var:te_tax_bl_regrel < 0
+		}
+		set_variable = { name = te_tax_bl_minor value = 1 }
+	}
+	else = {
+		set_variable = { name = te_tax_bl_minor value = 0 }
+	}
+}
+
+te_tax_cmd_withdraw = {
+	if = {
+		limit = { te_tax_can_withdraw = yes }
+		custom_tooltip = te_tax_tt_cmd_withdraw
+		te_tax_bill_close = yes
+		debug_log = "TE_TAX withdrawn; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Closes the bill: commitments released, payload removed, the token kept (0).
+te_tax_bill_close = {
+	te_tax_gen_reset_commitments = yes
+	te_tax_gen_bill_clear = yes
+	set_variable = { name = te_tax_bl_on value = 0 }
+}
+
+# Passes the bill: an approved package in slot a if it is free, else b. Groups
+# that opposed it disapprove; a draft identical to it is discarded with it.
+te_tax_cmd_pass = {
+	if = {
+		limit = { te_tax_can_pass = yes }
+		custom_tooltip = te_tax_tt_cmd_pass
+		if = {
+			limit = { var:te_tax_pa_on = 0 }
+			te_tax_pass_into = { SLOT = a OTHER = b }
+		}
+		else = {
+			te_tax_pass_into = { SLOT = b OTHER = a }
+		}
+		te_tax_gen_oppose_approval = yes
+		if = {
+			limit = {
+				te_tax_draft_active = yes
+				NOT = { te_tax_gen_draft_differs_from_bill = yes }
+			}
+			te_tax_draft_close = yes
+		}
+		te_tax_bill_close = yes
+		debug_log = "TE_TAX passed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Stores the bill in slot SLOT. Supersession at approval touches only the
+# OTHER slot (provisions it would change on or after this bill's due month);
+# the enacted code and its sunsets are left for commencement. Then the planned
+# versions move, the package is stored (te_tax_store_package validates it
+# again) and history records the approval.
+te_tax_pass_into = {
+	te_tax_gen_supersede_$OTHER$ = yes
+	te_tax_gen_bump_pver = yes
+	te_tax_store_package = { SLOT = $SLOT$ }
+	te_tax_history_push = { KIND = 6 SLOT = $SLOT$ }
+}
+
+# Moves the bill's commencement to next month once its due month has come
+# during debate. Same revision: commitments stay; the support snapshot and the
+# minor class follow the new due month.
+te_tax_cmd_reschedule = {
+	if = {
+		limit = { te_tax_can_reschedule = yes }
+		custom_tooltip = te_tax_tt_cmd_reschedule
+		set_variable = { name = te_tax_bl_due value = te_tax_due_earliest }
+		te_tax_bill_set_minor = yes
+		te_tax_refresh_support = yes
+		debug_log = "TE_TAX rescheduled; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Writes the support snapshot: each interest group's reasons, score and
+# commitment (te_tax_gen_refresh_support). Called on introduction, revision and
+# rescheduling, and monthly by the processor (te_tax_process_month) while a
+# bill is open. Never from a GUI.
+te_tax_refresh_support = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			te_tax_bill_active = yes
+		}
+		te_tax_gen_refresh_support = yes
+	}
+}

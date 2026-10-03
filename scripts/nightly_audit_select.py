@@ -61,6 +61,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/amendments/te_tax_amendments_generated.txt",
     "common/script_values/te_tax_generated_values.txt",
     "common/scripted_effects/te_tax_generated_effects.txt",
+    "common/scripted_effects/te_tax_generated_bill_effects.txt",
+    "common/script_values/te_tax_generated_support_values.txt",
     "common/scripted_triggers/te_tax_generated_triggers.txt",
     "gfx/map/fleet_entities/02_extra_fleet_entities.txt",
     "map_data/state_regions/*.txt",

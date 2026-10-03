@@ -36,6 +36,8 @@ te_tax_init_country = {
 		if = { limit = { NOT = { has_variable = te_tax_en_regrel } } set_variable = { name = te_tax_en_regrel value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_pver_relief } } set_variable = { name = te_tax_pver_relief value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_xver_relief } } set_variable = { name = te_tax_xver_relief value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_dr_on } } set_variable = { name = te_tax_dr_on value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_bl_on } } set_variable = { name = te_tax_bl_on value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_schema } } set_variable = { name = te_tax_schema value = 1 } }
 	}
 }

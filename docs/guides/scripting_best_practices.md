@@ -62,6 +62,8 @@ When a scripted effect uses `months = $PARAM$` internally (like `ch_apply_hegemo
 
 The actual failure mode is narrow: a **time field set to a boolean**. `set_variable = { name = X value = 6 months = yes }` fails with `Named value not found: yes: yes` — `months` wants a number or script value, and `yes` is neither. (`value = yes` is perfectly legal; it is the *time* field that must be numeric.) Separately, if your system already decrements the variable itself in an `on_action` monthly pulse (e.g. `space_race_on_actions.txt`'s `change_variable subtract = 1` on `sr_failure_cooldown`), drop the time field entirely and store the months-count in `value` — don't double up engine cleanup and manual decrement.
 
+**`game_date` used as a value is a day count**, so a stored one gives elapsed days by subtraction. `value = game_date` (`set_variable = { name = X value = game_date }`, a script value's `value = game_date subtract = var:X`) is days since year 0 with 365-day years: a save made on 1 March 2069 held the construction market's `te_construction_market_last_pulse_date` as 755244 = 2069 × 365 + 59, and three consecutive autosaves differed by 28 and 31 days (decoded from the binary saves with `scripts/analysis/check_save_history_order.py`'s `read_gamestate`, 2026-10-02). The tax code's debate clock (`te_tax_debate_days_elapsed`, `common/script_values/te_tax_support_values.txt`) relies on it. Where a month is enough, `te_history_month_index` is simpler.
+
 ## Modifier Design: Don't Borrow Modifiers from Other Systems
 
 Each mod system should define its own modifiers. Do NOT reuse modifiers from another system (e.g. using `intelligence_capacity_defense` from covert warfare in a cultural hegemony event). Cross-system modifier sharing:

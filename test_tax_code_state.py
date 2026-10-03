@@ -409,10 +409,16 @@ class GeneratedSyncTest(unittest.TestCase):
         # Plus the scheduler's package and bill triggers (test_tax_code_scheduler.py).
         scheduler = {f"te_tax_gen_package_{part}_{slot}"
                      for part in ("current", "touches_goods") for slot in ("a", "b")}
+        # The draft, bill and passage parts (test_tax_code_bill.py).
+        bill = {"te_tax_gen_draft_touches_any", "te_tax_gen_draft_touches_goods",
+                "te_tax_gen_bill_touches_goods", "te_tax_gen_draft_baseline_current",
+                "te_tax_gen_draft_differs_from_bill", "te_tax_gen_bill_current",
+                "te_tax_gen_bill_small_steps"} | {
+            f"te_tax_gen_{part}_{slot}" for part in ("bill_overlaps", "package_empty") for slot in ("a", "b")}
         self.assertEqual(
             set(top_level_names(self.triggers)),
             {f"te_tax_amendment_{kind}_{key}" for kind in ("is", "matches") for key in KEYS}
-            | scheduler | {"te_tax_gen_bill_sunsets_valid"},
+            | scheduler | bill | {"te_tax_gen_bill_sunsets_valid"},
         )
         for key in KEYS:
             family = amendment_family(key)
