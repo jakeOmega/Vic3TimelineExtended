@@ -3,6 +3,23 @@
 		pmg_depth_oil_rig
 		pmg_maintenance_heavy
 	}
+
+	# Resource Transition (issue #660): a Fossil Expansion Moratorium or a
+	# Managed Fossil Phaseout in the country where the building stands stops
+	# new construction and expansion, by its government, its investors and
+	# foreign investors alike (state scope: `owner` is the state's owner). The
+	# building-level should_auto_expand replaces the group's
+	# `default_auto_expand_rule = yes`, so it repeats that rule.
+	can_build_government = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	can_build_private = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	should_auto_expand = {
+		default_auto_expand_rule = yes
+		state = { rt_fossil_construction_allowed_here = yes }
+	}
 }
 
 INJECT:building_textile_mill = {
@@ -436,6 +453,23 @@ INJECT:building_power_plant = {
 		pmg_power_automation
 		pmg_emissions_control
 		pmg_maintenance_heavy
+	}
+
+	# Resource Transition (issue #660): a Fossil Expansion Moratorium or a
+	# Managed Fossil Phaseout in the country where the building stands stops
+	# new construction and expansion, by its government, its investors and
+	# foreign investors alike (state scope: `owner` is the state's owner). The
+	# building-level should_auto_expand replaces the group's
+	# `default_auto_expand_rule = yes`, so it repeats that rule.
+	can_build_government = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	can_build_private = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	should_auto_expand = {
+		default_auto_expand_rule = yes
+		state = { rt_fossil_construction_allowed_here = yes }
 	}
 }
 
@@ -1648,6 +1682,23 @@ INJECT:building_coal_mine = {
 	production_method_groups = {
 		pmg_tailings_wastewater_management
 		pmg_maintenance_mine
+	}
+
+	# Resource Transition (issue #660): a Fossil Expansion Moratorium or a
+	# Managed Fossil Phaseout in the country where the building stands stops
+	# new construction and expansion, by its government, its investors and
+	# foreign investors alike (state scope: `owner` is the state's owner). The
+	# building-level should_auto_expand replaces the group's
+	# `default_auto_expand_rule = yes`, so it repeats that rule.
+	can_build_government = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	can_build_private = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	should_auto_expand = {
+		default_auto_expand_rule = yes
+		state = { rt_fossil_construction_allowed_here = yes }
 	}
 }
 
