@@ -473,6 +473,22 @@ class SuccessorPreviewTest(unittest.TestCase):
                 self.assertIsNone(WRITES.search(body))
                 self.assertIsNone(WORLD.search(body))
 
+    def test_a_held_passed_bill_says_so_in_the_timeline(self):
+        """A held package (state 2 conflict, 3 missed) will not commence as
+        shown, so its Existing Law line carries the state."""
+        from test_tax_code_layout import loc
+        review, table = gui(REVIEW), loc()
+        for slot in ("a", "b"):
+            state = f"GetPlayer.MakeScope.ScriptValue('te_tax_view_p{slot}_state')"
+            for key in KEYS:
+                with self.subTest(slot=slot, key=key):
+                    self.assertIn(f"SelectLocalization( EqualTo_CFixedPoint( {state}, '(CFixedPoint)2' ), "
+                                  f"'te_tax_pk_{slot}_{key}_conflict', SelectLocalization( EqualTo_CFixedPoint( "
+                                  f"{state}, '(CFixedPoint)3' ), 'te_tax_pk_{slot}_{key}_missed', ", review)
+                    self.assertIn("held: conflict, will not commence; release it",
+                                  table[f"te_tax_pk_{slot}_{key}_conflict"])
+                    self.assertIn("held: missed", table[f"te_tax_pk_{slot}_{key}_missed"])
+
     def test_review_says_then_reverts_and_collections_wait(self):
         from test_tax_code_layout import loc
         table = loc()

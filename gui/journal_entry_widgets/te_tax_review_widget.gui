@@ -10,9 +10,11 @@
 ### "Then reverts to" is te_tax_succ_dr_<key>, the scheduler's rule at the
 ### draft's commencement month: the pending successor if the tax has an
 ### expiry pending then, else the rate in force; commencement decides it again
-### (rule 3), so the line is a preview. Rows read only guarded views of the
-### player's draft and passed bills (te_tax_view_dr_*, te_tax_view_p<s>_*);
-### a package's pending relief marks are never shown.
+### (rule 3), so the line is a preview. A passed bill the scheduler holds
+### (state 2 conflict, 3 missed) says so on its line, as it will not commence
+### as shown. Rows read only guarded views of the player's draft and passed
+### bills (te_tax_view_dr_*, te_tax_view_p<s>_*); a package's pending relief
+### marks are never shown.
 
 types te_tax_review_widget_types
 {
@@ -323,13 +325,13 @@ types te_tax_review_widget_types
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_wage_on'), '(CFixedPoint)0' )]"
 				}
 				blockoverride "law_pa" {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_wage_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_wage', 'te_tax_pk_a_wage_sun' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_pk_a_wage_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_pk_a_wage_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_wage_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_wage', 'te_tax_pk_a_wage_sun' ) ) )]"
 				}
 				blockoverride "law_pb_visible" {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_wage_on'), '(CFixedPoint)0' )]"
 				}
 				blockoverride "law_pb" {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_wage_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_wage', 'te_tax_pk_b_wage_sun' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_pk_b_wage_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_pk_b_wage_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_wage_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_wage', 'te_tax_pk_b_wage_sun' ) ) )]"
 				}
 				blockoverride "bill_value" {
 					text = "te_tax_rv_bill_wage"
@@ -359,13 +361,13 @@ types te_tax_review_widget_types
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_div_on'), '(CFixedPoint)0' )]"
 				}
 				blockoverride "law_pa" {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_div_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_div', 'te_tax_pk_a_div_sun' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_pk_a_div_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_pk_a_div_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_div_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_div', 'te_tax_pk_a_div_sun' ) ) )]"
 				}
 				blockoverride "law_pb_visible" {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_div_on'), '(CFixedPoint)0' )]"
 				}
 				blockoverride "law_pb" {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_div_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_div', 'te_tax_pk_b_div_sun' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_pk_b_div_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_pk_b_div_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_div_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_div', 'te_tax_pk_b_div_sun' ) ) )]"
 				}
 				blockoverride "bill_value" {
 					text = "te_tax_rv_bill_div"
@@ -395,13 +397,13 @@ types te_tax_review_widget_types
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_land_on'), '(CFixedPoint)0' )]"
 				}
 				blockoverride "law_pa" {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_land_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_land', 'te_tax_pk_a_land_sun' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_pk_a_land_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_pk_a_land_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_land_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_land', 'te_tax_pk_a_land_sun' ) ) )]"
 				}
 				blockoverride "law_pb_visible" {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_land_on'), '(CFixedPoint)0' )]"
 				}
 				blockoverride "law_pb" {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_land_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_land', 'te_tax_pk_b_land_sun' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_pk_b_land_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_pk_b_land_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_land_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_land', 'te_tax_pk_b_land_sun' ) ) )]"
 				}
 				blockoverride "bill_value" {
 					text = "te_tax_rv_bill_land"
@@ -431,13 +433,13 @@ types te_tax_review_widget_types
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_head_on'), '(CFixedPoint)0' )]"
 				}
 				blockoverride "law_pa" {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_head_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_head', 'te_tax_pk_a_head_sun' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_pk_a_head_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_pk_a_head_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_head_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_head', 'te_tax_pk_a_head_sun' ) ) )]"
 				}
 				blockoverride "law_pb_visible" {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_head_on'), '(CFixedPoint)0' )]"
 				}
 				blockoverride "law_pb" {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_head_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_head', 'te_tax_pk_b_head_sun' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_pk_b_head_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_pk_b_head_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_head_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_head', 'te_tax_pk_b_head_sun' ) ) )]"
 				}
 				blockoverride "bill_value" {
 					text = "te_tax_rv_bill_head"
@@ -467,13 +469,13 @@ types te_tax_review_widget_types
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_cons_on'), '(CFixedPoint)0' )]"
 				}
 				blockoverride "law_pa" {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_cons_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_cons', 'te_tax_pk_a_cons_sun' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_pk_a_cons_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_pk_a_cons_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_cons_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_cons', 'te_tax_pk_a_cons_sun' ) ) )]"
 				}
 				blockoverride "law_pb_visible" {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_cons_on'), '(CFixedPoint)0' )]"
 				}
 				blockoverride "law_pb" {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_cons_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_cons', 'te_tax_pk_b_cons_sun' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_pk_b_cons_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_pk_b_cons_missed', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_cons_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_cons', 'te_tax_pk_b_cons_sun' ) ) )]"
 				}
 				blockoverride "bill_value" {
 					text = "te_tax_rv_bill_cons"

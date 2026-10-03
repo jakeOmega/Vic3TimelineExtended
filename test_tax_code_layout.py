@@ -804,6 +804,31 @@ class LocTest(unittest.TestCase):
                 self.assertEqual(value.endswith("\\n"), key in joined, key)
                 self.assertNotIn("[b]", value)
 
+    def test_amount_taxes_print_at_their_step_precision(self):
+        """Rural assessment moves in steps of 0.025, so every land amount prints
+        three decimals (two would show 0.425 as 0.43 and one step as +0.03);
+        head tax moves in 0.05 and prints two."""
+        text = "\n".join(f"{key}: {value}" for key, value in tax_loc().items())
+        text += "\n" + "\n".join(gui(path) for path in NEW_GUI)
+        found = {"land": 0, "head": 0}
+        for name, fmt in re.findall(r"ScriptValue\('(\w+)'\)\|([^\]]*)\]", text):
+            for key, digits in (("land", "3"), ("head", "2")):
+                if re.fullmatch(rf"te_tax_view_\w*{key}\w*_rate|te_tax_step_{key}", name):
+                    found[key] += 1
+                    with self.subTest(name=name, fmt=fmt):
+                        self.assertIn(fmt, (digits, "+" + digits))
+        self.assertGreaterEqual(found["land"], 19)  # every land site today (the scan must see them)
+        self.assertGreaterEqual(found["head"], 19)
+
+    def test_destructive_actions_say_what_is_lost(self):
+        keys = tax_loc()
+        withdraw = keys["te_tax_tt_cmd_withdraw"]
+        for phrase in ("commitment", "debate", "lost", "draft is kept"):
+            self.assertIn(phrase, withdraw)
+        discard = keys["te_tax_tt_cmd_draft_discard"]
+        for phrase in ("every change made in it", "cannot be recovered"):
+            self.assertIn(phrase, discard)
+
     def test_the_locked_tooltip_runs_into_the_checklist_on_the_next_line(self):
         tooltip = uncomment(mod_block(raw(BUDGET))[0])
         self.assertIn("Concatenate( Localize( 'te_tax_tab_locked_tt' ), "
