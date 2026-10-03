@@ -191,5 +191,56 @@ class TaxProbeSafetyTest(unittest.TestCase):
                 self.assertNotIn(mutation, body, name)
 
 
+PROBE_TYPES = "common/modifier_type_definitions/te_tax_probe_modifier_types.txt"
+PROBE_GOODS = ("grain", "iron")
+PROBE_FAMILIES = ("import_tariffs_rate_add", "export_tariffs_rate_add",
+                  "max_import_tariffs_level_add", "min_import_tariffs_level_add",
+                  "max_export_tariffs_level_add", "min_export_tariffs_level_add")
+# Where a per-good tariff modifier may be named: the registration, the harness
+# that applies it, and its loc. Anything else would apply it in a real game.
+PROBE_HOMES = {"te_tax_probe_modifier_types.txt", "te_debug_tax_modifiers.txt"}
+
+
+class CustomsProbeTest(unittest.TestCase):
+    """Plan Task 23 (spec 2026-10-03 §2.9): the customs probe registers the
+    per-good tariff families for two goods only, and nothing outside the
+    harness applies them, so the registration changes no rule-off game."""
+
+    def test_registration_names_exactly_the_probe_families(self):
+        names = set(re.findall(r"(?m)^(country_\w+) = \{", read(PROBE_TYPES)))
+        expected = {f"country_{g}_{f}" for g in PROBE_GOODS for f in PROBE_FAMILIES}
+        self.assertEqual(names, expected)
+
+    def test_no_production_file_names_a_per_good_tariff_modifier(self):
+        pattern = re.compile(r"\bcountry_\w+?_(?:import|export)_tariffs_\w+")
+        offenders = []
+        for folder in ("common", "events", "gui"):
+            for path in sorted((ROOT / folder).rglob("*")):
+                if path.suffix not in {".txt", ".gui"} or path.name in PROBE_HOMES:
+                    continue
+                if pattern.search(path.read_text(encoding="utf-8-sig")):
+                    offenders.append(str(path.relative_to(ROOT)))
+        self.assertEqual(offenders, [])
+
+    def test_lock_and_carrier_modifiers_are_applied_only_by_armed_probe_events(self):
+        events = read("events/te_debug_tax_events.txt")
+        for name in ("te_tp_lock_grain_low", "te_tp_cancel_max"):
+            appliers = [m.start() for m in re.finditer(rf"add_modifier = \{{ name = {name} \}}", events)]
+            self.assertTrue(appliers, name)
+            for event_id in ("te_debug_tax.80", "te_debug_tax.81", "te_debug_tax.82"):
+                body = _txt_block(events, event_id)
+                self.assertIn("has_variable = te_tp_armed", body, event_id)
+            for folder in ("common", "events"):
+                for path in sorted((ROOT / folder).rglob("*.txt")):
+                    if path.name in {"te_debug_tax_events.txt", "te_debug_tax_modifiers.txt", "te_debug_tax_effects.txt"}:
+                        continue
+                    self.assertNotIn(name, path.read_text(encoding="utf-8-sig"), str(path))
+
+    def test_clear_removes_the_new_probe_modifiers(self):
+        clear = _txt_block(read("common/scripted_effects/te_debug_tax_effects.txt"), "te_tp_clear")
+        for name in ("te_tp_lock_grain_low", "te_tp_cancel_max"):
+            self.assertIn(f"remove_modifier = {name}", clear)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,122 @@
+﻿# ==========================================================================
+# Tax code customs probe (P09b/P09c) — per-good tariff modifier registrations
+# ==========================================================================
+# TEMPORARY, with the probe harness (docs/testing/tax-code-probes.md). Probe
+# P09 applied country_grain_*_tariffs_* in game and the load rejected each one:
+# "Unknown modifier type ... potential dynamic modifier type definition missing
+# from the database" (docs/testing/tax-code-capability-ledger.md row 14). That
+# is the message for a dynamic pattern with no registration
+# (docs/guides/scripting_best_practices.md), and neither vanilla 1.14.5 nor the
+# mod registered these families. A registration alone changes nothing: only the
+# harness (te_debug_tax*) applies these modifiers, and test_tax_code_probes.py
+# checks that nothing else does. Shape and colour follow vanilla's
+# state_tariff_import_add (common/modifier_type_definitions/00_modifier_types.txt).
+# grain is a staple, iron an industrial good: the two P09b/P09c benches.
+
+country_grain_import_tariffs_rate_add = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_grain_export_tariffs_rate_add = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_grain_max_import_tariffs_level_add = {
+	decimals = 0
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_grain_min_import_tariffs_level_add = {
+	decimals = 0
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_grain_max_export_tariffs_level_add = {
+	decimals = 0
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_grain_min_export_tariffs_level_add = {
+	decimals = 0
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_iron_import_tariffs_rate_add = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_iron_export_tariffs_rate_add = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_iron_max_import_tariffs_level_add = {
+	decimals = 0
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_iron_min_import_tariffs_level_add = {
+	decimals = 0
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_iron_max_export_tariffs_level_add = {
+	decimals = 0
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_iron_min_export_tariffs_level_add = {
+	decimals = 0
+	color = neutral
+	percent = no
+	game_data = {
+		ai_value = 0
+	}
+}
