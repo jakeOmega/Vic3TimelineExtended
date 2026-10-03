@@ -11,11 +11,12 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 
 ## Current checkpoint
 
-- Latest main fetched and pulled; feature branch created.
+- Feature branch contains latest `origin/main` (`c59e8a36`), fetched again before
+  the latest deployment. Implementation `0e2e811b` is pushed and deployed.
 - Repository guidance read (`CLAUDE.md`, docs index, player-guide style).
-- Phase-0 opt-in overlay prepared at `docs/testing/carbon_capture_probe/`.
-  Its README has deployment/removal instructions, exact checks and a pending
-  evidence table. It does not affect normal deployment or market emissions.
+- Phase-0 probe assets remain under `docs/testing/carbon_capture_probe/` for
+  historical evidence. The overlay is removed from deployment; do not restore
+  it alongside production capture because it would duplicate credits.
 - Phase 1 implemented: factors, generated synthetic credits, steel recipes,
   display scale, guide chapter 14 and rebuilt PDF. See design §0 for details.
 - `gen_carbon_capture_pms.py` generates synthetic credits and visible emissions
@@ -25,6 +26,9 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
   future coverage/exceptions alongside `pm_carbon_capture.py`.
 - Era-10 Direct Air Capture and national Carbon Removal Support are implemented;
   see the checkpoints below for recipes, policy effects and pending engine checks.
+- Annual warming now uses state mirrors of building emissions, source capture,
+  household heating and atmospheric removal. The three household policies can
+  eliminate the household component. See the latest checkpoint below.
 - The server on port 8950 did not respond during the initial status check.
 - Shared Python environment: `/home/jakef/src/Vic3TimelineExtended/.venv`.
 - Git operations need sandbox escalation because this managed worktree stores
@@ -32,26 +36,28 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 
 ## Next work
 
-1. Regression-test the generated production methods in a copied save, after
-   restarting on `codex/building-emissions`. The normal deployment removes the
-   old probe; do not restore it now that production uses the same state credit.
-2. Verify 25/50/75% capture on power, steel and chemicals; independently select
-   steel/arms automation capture; check a company site and mine pumps.
-3. Exercise coal/oil/zero-fuel swaps and Managed Fossil Phaseout's Tier II floor.
-   Check plastics/feedstock and mobile excavator methods get valid NA choices.
-   Verify an old save holding phaseout without CCS falls back after a monthly
-   pulse; research CCS and reenact to test automatic mandated selection.
-4. Check January market capture after source/DAC/synthetic PM swaps, staffing
-   and throughput changes. Synthetic methods now display net values and all
-   credits flow through the state sum. No separate building sweeps remain.
-5. Review balance (capture costs, subsidy hiring and warming) before merging.
-   Building-driven gross/household accounting is implemented; see the latest checkpoint below.
+1. Restart on the deployed `codex/building-emissions` branch. The production
+   capture controls replace the old probe; do not restore the overlay.
+2. Verify January warming/market totals use the PM greenhouse-gas values:
+   alter fuel PMs, source capture, staffing and throughput and compare the
+   generated state mirror with the sum of building contributions.
+3. Compare household contributions before/after Green Building Codes (60%),
+   Renewable Investment (25%) and Fossil-Fuel Divestment (15%); all three should
+   eliminate this component without suppressing industry or atmospheric removal.
+   National cuts must not change another country's households in the market.
+4. Check DAC/synthetic PM changes replace their atmospheric credits once.
+   A market with enough atmospheric removal can remain net negative even with
+   industrial policy reductions. Source capture alone must not cause cooling.
+5. Finish expanded production regression: independent automation/company
+   controls; fuel/zero-fuel/feedstock/mobile swaps under the mandate; old-save
+   phaseout fallback without CCS after a monthly pulse. Review balance before
+   merging. Remaining scope gaps are documented in the latest checkpoint.
 
 ## Remaining verification
 
 The owner confirmed all three original in-game test bundles. Generated
-production methods, expanded coverage and the unified credit sum still need
-regression/balance review. Preserve internal snapshot/history/AI/temperature
+production methods, expanded coverage, building-driven warming and household
+policy reductions still need regression/balance review. Preserve internal snapshot/history/AI/temperature
 units; display scaling remains confined to amount readers.
 
 Commit and push each coherent checkpoint, updating this file in that commit.
@@ -60,20 +66,20 @@ publish a finished release before engine verification and balance review.
 
 ## Offline checks
 
-- All 3,636 unit/integration tests passed (58 environment-dependent skips).
-  The 40 emissions/capture tests are in `test_building_emissions.py` and
-  `test_pm_carbon_capture.py`.
+- All 3,647 unit/integration tests passed (58 environment-dependent skips).
+  The 51 emissions/capture/household tests are in `test_building_emissions.py`,
+  `test_pm_carbon_capture.py` and `test_household_emissions.py`.
 - Ruff, player-guide strict style, PDF freshness, post-load roster, localization
   sanity/organization, Paradox tab formatting and diff whitespace checks passed.
 - All 23 offline CI audits passed.
-- Snapshot-backed ModState structure audit: zero unreviewed flags, zero parse
-  failures. Nine new/probe script files have one BOM and parse successfully.
+- Snapshot-backed ModState structure audit: 559 files, zero unreviewed flags
+  and zero parse failures. Modified script files pass BOM/tab checks.
 
 Useful commands (use the shared environment above for Python dependencies):
 
 ```sh
 python3 gen_carbon_capture_pms.py --check
-python3 -m unittest test_building_emissions test_pm_carbon_capture test_resource_transition test_global_warming_layout
+python3 -m unittest test_building_emissions test_pm_carbon_capture test_household_emissions test_resource_transition test_global_warming_layout
 python3 scripts/analysis/check_post_load_rosters.py
 python3 scripts/build_player_guide.py --check
 ```
@@ -318,8 +324,27 @@ floored at zero; national cuts apply to the state's owner, not market neighbors.
 Public Transit targets transport rather than this direct fossil-heating estimate.
 
 79 focused tests pass, including 11 numerical regressions using production
-script-value ASTs. Next: full CI/structure checks, deploy, then engine checks
-for mirrors, January totals, household policy adoption/repeal and cooling.
+script-value ASTs. Full validation and deployment are complete below; engine
+checks for mirrors, January totals, household policy adoption/repeal and cooling
+remain pending.
 Standalone military-unit fuel is outside the building-PM mirror; civil transport
 PMs remain included. Fuel-specific input multipliers are not automatically
 applied to custom PM GHG mirrors. A future extension can model those separately.
+
+
+## Validated building/household deployment (2026-10-03)
+
+Implementation checkpoint `0e2e811b` is pushed. All 3,647 tests pass (58 skips),
+all 23 CI audits pass, and the snapshot-backed structure audit covers 559 files
+with zero flags/parse failures. Generator freshness, Ruff, localization,
+tabs, GUI lint, post-load roster, player-guide style and PDF checks pass.
+
+Before deployment, origin was fetched again and main `c59e8a36` confirmed as an
+ancestor. The dry run had no deletions. Normal deployment completed to the
+Windows mod folder above; SHA-256 matches all 40 feature game files and all
+310 staged language files. The obsolete probe is absent. The shared main
+checkout was not switched. Draft PR #681 describes the current implementation.
+
+Restart Victoria 3 before testing. The five checks in Next work are the current
+continuation plan. No in-game verification of the new building-driven annual
+formula or household estimate is claimed.

@@ -46,7 +46,8 @@ Warming does not wear off. The anomaly falls only in a year when the world as a
 whole captures more carbon than it emits. Cutting your emissions slows the rise;
 it does not undo what is already there.
 
-Only the market leader's reductions count, and they apply to the whole market.
+Industrial policy reductions come from the market leader and apply to every
+member's remaining industrial emissions.
 The leader's Greenhouse Gas Emissions modifier comes mainly from the three
 market-wide climate policies, the Ministry of the Environment (−5% per level)
 and the Environmental Sustainability power bloc principle (−5% to −25% by tier).
@@ -93,7 +94,7 @@ Transport exhaust, dispersed agricultural and logging machinery, mobile mine
 excavators and street lighting have no source capture. Oil used as plastics,
 textile and other chemical feedstock, refinery inventory, and synthetic-fuel
 carbon already credited elsewhere are also exempt. These consumers still show
-emissions and remain in market consumption totals.
+emissions and contribute to the industrial climate total.
 
 ## The Global Warming journal entry
 

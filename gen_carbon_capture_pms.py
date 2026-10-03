@@ -2,7 +2,7 @@
 
 Writes synthetic-fuel credits, covered buildings' fuel emissions and direct
 air capture's removal modifier, plus source-capture methods, groups, building
-membership, localization and a coverage report.
+membership, localization, a coverage report and the household heating curve.
 Synthetic credits use shared factors at runtime. PM display values are derived
 from merged recipes or the independent removal-capacity parameter and shared
 factors/display scale, so their coefficients are never maintained by hand.
