@@ -61,10 +61,12 @@ authority, and nothing a member gains or pays:
 - The Fund's vote lean was a flat +35 for any member under the line, whether its grant would be
   pennies or a tenth of its GDP.
 
-Two of the owner's saves (Byzantium, 2042 at Established; a later autosave at Supranational,
-read with `scripts/analysis/save_country_probe.py`) had **55 of 95** and **67 of 88** members
-withholding. The probe shows no debt, so how many of them were in default rather than toggling
-is not known. The later save also shows how far the Fund's figures can range: one member holds
+Two of the owner's saves (Byzantium in 2042, and a later autosave; read with
+`scripts/analysis/save_country_probe.py`) had **55 of 95** and **67 of 88** members withholding.
+Their tiers, Established and Supranational, are inferred from the dues each member pays against
+its GDP (0.2% and about 1%), not read. The probe shows no debt, so how many withholders were in
+default rather than toggling is not known; and the count is a stock, so some may have begun
+withholding at a higher tier and never paid again. The later save also shows how far the Fund's figures can range: one member holds
 879B of the members' 895B GDP, its GDP per head is about six times the members' average, and every
 other member but one sits under even the founding charter's line (a tenth of that average). At
 Reform II the Fund there would pay several members more than their GDP.
@@ -122,6 +124,27 @@ times **`un_ai_dues_net_cost_factor`**, which is 1 with no grant and 0 when the 
 keeps by paying covers its dues (a member in default whose grant exceeds its dues makes money by
 paying); money; champion +40, underminer −60, isolationism −25, humanitarian regulations +10,
 permanent member +10; and +20 once Article 19 has taken the vote.
+
+Worked examples (no conventions in force, no stance unless named):
+
+| Country | Membership score | Verdict |
+|---------|------------------|---------|
+| Small poor non-member, Established, a state below 8 SoL, no Fund | 30 − 4 + 5 + 10 = 41 | joins (46) |
+| The same at Supranational, no Fund | 30 − 20 + 10 + 10 = 30 | joins (35) |
+| The same at Supranational, a grant of 3% of GDP | 30 + 40 + 10 + 10 = 90 | joins (95) |
+| Major-power non-member, Supranational | 30 + 15 − 20 + 10 + 30 = 65 | joins (70) |
+| Isolationist great-power member, Established | 30 + 35 − 80 − 4 + 5 = −14 | in the band: stays, and stays out once out |
+| Isolationist minor member, Established | 30 − 80 − 4 + 5 = −49 | leaves (24) |
+| Small member, Moribund | 30 − 15 = 15 | stays |
+
+| Member | Dues score | Verdict |
+|--------|------------|---------|
+| Healthy, Supranational, no grant | 30 − 20 = 10 | pays; a withholder pays again (15) |
+| Debt at 0.8 of its ceiling, Supranational, no grant | 30 − 25 − 20 = −15 | in the band: no change |
+| Isolationist, healthy, Supranational | 30 − 25 − 20 = −15 | in the band: no change |
+| In default, Established, no grant | 30 − 60 − 4 = −34 | withholds (9) |
+| In default, Supranational, a grant of 3% of GDP | 30 + 0 + 40 = 70 | pays (60): the grant covers the dues, so the default counts 0 |
+| Underminer, healthy, Strong | 30 − 60 − 8 = −38 | withholds (13) |
 
 **Development Programs** gives for a reason: humanitarian regulations +20, championing +20,
 recipients among its subjects, bloc partners and allies +15, great power +10, interventionism or

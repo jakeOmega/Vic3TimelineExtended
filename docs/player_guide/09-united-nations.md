@@ -942,11 +942,11 @@ most), what staying out costs at the UN's tier, the aid and peacekeepers only
 members can ask for, and the conventions they would have to keep. A country
 whose case is close to the line neither joins nor leaves, so it doesn't walk
 out and back.
-- They pay their dues unless their treasury is in default or near its debt
-ceiling, they are isolationist or undermining the order, or the levy is high. A
-member the Fund pays more than its dues keeps paying even in default, and one
-that has lost its vote under Article 19 pays sooner. A healthy member doesn't
-withhold to save the levy and then pay again.
+- They stop paying their dues when their treasury defaults or they undermine
+the order. Debt near the ceiling, isolationism and a high levy count against
+paying and can add up to it. A member the Fund pays more than its dues keeps
+paying even in default, and one that has lost its vote under Article 19 pays
+sooner. A healthy member doesn't withhold to save the levy and then pay again.
 - Major powers fund Development Programs only with a reason: humanitarian law,
 championing the order, or Fund recipients among their subjects, bloc partners
 and allies. They contribute to peacekeeping for the same kinds of reasons, more
