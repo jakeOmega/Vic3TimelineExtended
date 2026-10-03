@@ -10,6 +10,10 @@
 #   un_dos_<record> (country)     un_dossier_record, and the monthly decay
 #   un_dos_war_logged (country)   un_dossier_monthly_update (a war already
 #                                 recorded, so a long war is recorded once)
+#   un_dos_war_mandate_only (country)
+#                                 un_dossier_monthly_update: the logged war is
+#                                 the holder's bound mandate's own, so a war it
+#                                 begins beside it is still recorded
 #   un_lean_* (country)           un_lean_snapshot, in un_vote.4 only
 #   un_vote_draw_res, un_vote_cast_month, un_lean_misread (country)
 #                                 un_vote_ai_draws, in un_vote.4: an AI member's
@@ -24,7 +28,7 @@
 #                                 un_recess_monthly_update counts it down
 #
 # RECORD CALL SITES (un_dossier_record = { RECORD = x POINTS = n }):
-#   aggression  un_dossier_monthly_update (a war begun without a bound mandate)
+#   aggression  un_dossier_monthly_update (a war begun outside a bound mandate's play)
 #   defiance    un_vote.3 option C (a binding resolution refused),
 #               un_events.5 option C (sanctions busted), un_events.8 option C
 #               (the court defied)
@@ -76,9 +80,13 @@ un_dossier_decay_record = {
 # counts down on every call.
 #   1. Every record fades.
 #   2. A war begun without a mandate is recorded once, when it is first seen:
-#      the initiator of a war it is fighting, unless it holds a mandate bound
-#      to a play. The flag un_dos_war_logged holds the war as recorded until
-#      the country is at peace again.
+#      the initiator of a war it is fighting. The flag un_dos_war_logged holds
+#      the war as recorded until the country is at peace again. A bound
+#      mandate excuses only its own war (un_mandate_began_other_war): when
+#      that is the only war the holder began, the war is logged unrecorded
+#      with un_dos_war_mandate_only, and a war the holder begins beside it
+#      while the mandate is bound is recorded then. Until 2026-10-02 a bound
+#      mandate excused every war its holder began.
 #   3. The recess counts down.
 un_dossier_monthly_update = {
 	every_country = {
@@ -98,18 +106,40 @@ un_dossier_monthly_update = {
 			}
 		}
 		remove_variable = un_dos_war_logged
+		remove_variable = un_dos_war_mandate_only
 	}
 	every_country = {
 		limit = {
 			is_at_war = yes
 			is_diplomatic_play_initiator = yes
-			NOT = { has_variable = un_dos_war_logged }
-		}
-		set_variable = un_dos_war_logged
-		if = {
-			limit = {
-				NOT = { var:un_mandate_current ?= { has_tag = un_mandate_bound } }
+			OR = {
+				NOT = { has_variable = un_dos_war_logged }
+				has_variable = un_dos_war_mandate_only
 			}
+		}
+		if = {
+			limit = { NOT = { has_variable = un_dos_war_logged } }
+			set_variable = un_dos_war_logged
+			if = {
+				limit = {
+					var:un_mandate_current ?= { has_tag = un_mandate_bound }
+					NOT = { un_mandate_began_other_war = yes }
+				}
+				set_variable = un_dos_war_mandate_only
+			}
+			else = {
+				un_dossier_record = { RECORD = aggression POINTS = un_dos_points_aggression }
+			}
+		}
+		# Logged as the mandate's war alone. Only while the mandate is bound:
+		# once it closes (complied mid-war by its goal's timer, say), its own
+		# war no longer reads as the mandate's and would be recorded.
+		else_if = {
+			limit = {
+				var:un_mandate_current ?= { has_tag = un_mandate_bound }
+				un_mandate_began_other_war = yes
+			}
+			remove_variable = un_dos_war_mandate_only
 			un_dossier_record = { RECORD = aggression POINTS = un_dos_points_aggression }
 		}
 	}

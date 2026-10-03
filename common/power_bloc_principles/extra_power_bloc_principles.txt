@@ -56,6 +56,7 @@ principle_internal_trade_4 = {
 	member_modifier = {
 		country_company_throughput_bonus_add = 0.05
 		state_infrastructure_mult = 0.1
+		building_port_throughput_add = 0.1
 		country_port_connection_cost_mult = -0.25
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
@@ -83,6 +84,7 @@ principle_internal_trade_5 = {
 	member_modifier = {
 		country_company_throughput_bonus_add = 0.1
 		state_infrastructure_mult = 0.1
+		building_port_throughput_add = 0.1
 		country_port_connection_cost_mult = -0.25
 		country_enactment_success_chance_law_ministry_of_commerce_add = 0.1
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
@@ -116,6 +118,7 @@ principle_market_unification_4 = {
 	member_modifier = {
 		state_infrastructure_mult = 0.2
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+		country_ship_group_supply_ships_construction_efficiency_add = 0.1
 	}
 
 	power_bloc_modifier = {
@@ -150,6 +153,7 @@ principle_market_unification_5 = {
 	member_modifier = {
 		state_infrastructure_mult = 0.3
 		country_institution_cost_institution_ministry_of_commerce_mult = -0.5
+		country_ship_group_supply_ships_construction_efficiency_add = 0.1
 	}
 
 	power_bloc_modifier = {
@@ -287,6 +291,7 @@ REPLACE:principle_advanced_research_3 = {
 		interest_group_ig_intelligentsia_pop_attraction_mult = 0.2
 		country_tech_group_research_speed_mult = 0.01
 		country_weekly_innovation_max_add = 5
+		country_engineers_pol_str_mult = 0.10
 		country_academics_pol_str_mult = 0.05
 	}
 
@@ -326,6 +331,7 @@ principle_advanced_research_4 = {
 		# Nuclear-gate flavor: military R&D specialization
 		country_military_tech_research_speed_mult = 0.05
 		country_engineers_pol_str_mult = 0.10
+		country_academics_pol_str_mult = 0.05
 
 		# Ministry caps at level 9; multiply its punch instead of trying to extend the ceiling
 		country_institution_impact_institution_ministry_of_science_mult = 0.10
@@ -365,6 +371,11 @@ principle_advanced_research_5 = {
 		country_tech_group_research_speed_mult = 0.01
 		country_weekly_innovation_max_add = 25
 		country_enactment_success_chance_law_ministry_of_science_add = 0.2
+
+		# Tier IV's military R&D and clout, restated (tiers replace, not add)
+		country_military_tech_research_speed_mult = 0.05
+		country_engineers_pol_str_mult = 0.10
+		country_academics_pol_str_mult = 0.05
 
 		# Knowledge-economy gate flavor: civilian frontier R&D
 		country_society_tech_research_speed_mult = 0.10
@@ -855,6 +866,7 @@ principle_colonial_offices_4 = {
 	}
 
 	leader_modifier = {
+		country_can_impose_same_lawgroup_colonization_in_power_bloc_bool = yes
 		country_radicals_from_conquest_mult = -0.25
 	}
 
@@ -863,10 +875,6 @@ principle_colonial_offices_4 = {
 		country_institution_cost_institution_colonial_affairs_mult = -0.5
 		country_disallow_law_no_colonial_affairs_bool = yes
 		country_leader_has_law_enactment_success_mult = 0.05
-	}
-
-	leader_modifier = {
-		country_can_impose_same_lawgroup_colonization_in_power_bloc_bool = yes
 	}
 
 	institution = institution_colonial_affairs
@@ -1186,13 +1194,9 @@ principle_divine_economics_4 = {
 		modifier:country_mass_media_pb_principles_bool = yes
 	}
 
-	power_bloc_modifier = {
-		# Modifiers from previous level(s)
-		state_trade_advantage_same_religion_add = 50
-	}
-
 	member_modifier = {
 		# Modifiers from previous level(s)
+		state_trade_advantage_same_religion_add = 50
 		country_subject_income_transfer_heathen_mult = 0.5
 
 		# Higher wages for state religion pops
@@ -1202,7 +1206,6 @@ principle_divine_economics_4 = {
 
 		state_clergymen_investment_pool_contribution_add = 0.1
 	}
-
 
 	ai_weight = {
 		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
@@ -1217,13 +1220,9 @@ principle_divine_economics_5 = {
 		modifier:country_social_media_pb_principles_bool = yes
 	}
 
-	power_bloc_modifier = {
-		# Modifiers from previous level(s)
-		state_trade_advantage_same_religion_add = 50
-	}
-
 	member_modifier = {
 		# Modifiers from previous level(s)
+		state_trade_advantage_same_religion_add = 50
 		country_subject_income_transfer_heathen_mult = 0.5
 
 		# Higher wages for state religion pops
@@ -1984,6 +1983,7 @@ principle_education_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	member_modifier = {
+		state_education_access_add = 0.05
 		country_institution_size_change_speed_institution_schools_mult = 0.4
 		country_institution_cost_institution_schools_mult = -0.25
 		country_disallow_law_no_schools_bool = yes
@@ -2016,10 +2016,12 @@ principle_education_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	member_modifier = {
+		state_education_access_add = 0.05
 		country_institution_size_change_speed_institution_schools_mult = 0.5
 		country_institution_cost_institution_schools_mult = -0.5
 		country_disallow_law_no_schools_bool = yes
 		country_enactment_success_chance_law_compulsory_primary_school_add = 0.2
+		state_assimilation_mult = 0.05
 
 		# Modest broaden-access lever; weak in well-played countries that shed peasants
 		state_peasants_education_access_add = 0.05
@@ -2069,6 +2071,10 @@ principle_education_4 = {
 		# New PM for Universities, producing art and services, unlocked via trigger
 	}
 
+	leader_modifier = {
+		country_can_impose_same_lawgroup_education_system_in_power_bloc_bool = yes
+	}
+
 	power_bloc_modifier = {
 		power_bloc_can_give_education_aid_bool = yes
 	}
@@ -2110,7 +2116,13 @@ principle_education_5 = {
 		country_acceptance_not_homeland_add = 10
 		country_cultural_pull_add = 1.0
 		country_covert_defense_ideological_add = 2
+
+		state_assimilation_mult = 0.05
 		# New PM for Universities, producing art and services, unlocked via trigger
+	}
+
+	leader_modifier = {
+		country_can_impose_same_lawgroup_education_system_in_power_bloc_bool = yes
 	}
 
 	power_bloc_modifier = {
@@ -2398,6 +2410,7 @@ principle_environmental_sustainability_4 = {
 		goods_input_oil_mult = -0.2
 		goods_input_coal_mult = -0.2
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
+		state_pollution_reduction_health_mult = 0.2
 		country_greenhouse_gas_emissions_mult = -0.2
 	}
 
@@ -2428,6 +2441,7 @@ principle_environmental_sustainability_5 = {
 		goods_input_oil_mult = -0.25
 		goods_input_coal_mult = -0.25
 		country_institution_cost_institution_ministry_of_the_environment_mult = -0.5
+		state_pollution_reduction_health_mult = 0.2
 		country_greenhouse_gas_emissions_mult = -0.25
 	}
 
@@ -2948,6 +2962,7 @@ principle_global_security_3 = {
 
 	leader_modifier = {
 		country_diplomatic_play_maneuvers_add = 20
+		country_infamy_generation_mult = -0.1
 		country_prestige_from_army_power_projection_mult = 0.1
 		country_institution_cost_institution_ministry_of_war_mult = -0.25
 	}

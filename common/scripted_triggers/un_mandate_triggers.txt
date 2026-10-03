@@ -180,10 +180,17 @@ un_mandate_holds_authorized_goal = {
 }
 
 # Whether the scoped country has taken a *prohibited* objective against
-# $TARGET$ — any further TERRITORIAL or SUBJUGATION demand beyond restoring
-# the named region. The Assembly authorized a restoration, not a conquest, a
-# partition, a protectorate or a regime change; taking one of these voids the
-# mandate and calls the violation hook.
+# $TARGET$ in the play its bound mandate is exercised in — any further
+# TERRITORIAL or SUBJUGATION demand beyond restoring the named region. The
+# Assembly authorized a restoration, not a conquest, a partition, a
+# protectorate or a regime change; taking one of these voids the mandate and
+# calls the violation hook.
+#
+# In that play only, as the play's description, un_mandate.2 and the player
+# guide tell the holder. A goal against the same target in another play or war
+# was fought for at full price and is not the licence's business; before this
+# was narrowed, such a goal voided the mandate too (see
+# un_mandate_prohibited_goal_held for how the play is found).
 #
 # `return_state` is on the list on purpose: a second, fully-priced claim
 # recovered from the same state in the same war is still more territory than
@@ -203,53 +210,104 @@ un_mandate_holds_authorized_goal = {
 #
 # The list is explicit rather than "any goal that is not ours" because the
 # engine offers no way to enumerate a play's war goals from script: the only
-# read available is `*_has_war_goal_of_type_against`, which names one type at
-# a time. Keep it in step with common/war_goal_types/ when new territorial or
-# subjugation goals are added.
+# reads available name one type at a time. Keep it in step with
+# common/war_goal_types/ when new territorial or subjugation goals are added,
+# and with un_mandate_ai_strike_prohibited (test_un_mandate_play_scope.py
+# checks the two lists match).
 # Parameters: $TARGET$ = target country scope
 # Scope: the mandate actor
 un_mandate_has_prohibited_goal = {
 	OR = {
 		# --- territorial ---
-		play_participant_has_war_goal_of_type_against = { type = annex_country target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = return_state target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = take_treaty_port target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = liberate_country target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = secession target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = annex_country TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = conquer_state TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = return_state TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = take_treaty_port TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = liberate_country TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = secession TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = unification TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = te_reunify_country TARGET = $TARGET$ }
 		# --- subjugation ---
-		play_participant_has_war_goal_of_type_against = { type = make_protectorate target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = make_tributary target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = make_dominion target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = make_personal_union target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = make_crown_land target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = make_chartered_company target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = release_as_subject target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = transfer_subject target = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = make_protectorate TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = make_tributary TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = make_dominion TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = make_personal_union TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = make_crown_land TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = make_chartered_company TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = release_as_subject TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = transfer_subject TARGET = $TARGET$ }
 		# --- punitive ---
-		play_participant_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
-		play_participant_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = regime_change TARGET = $TARGET$ }
+		un_mandate_prohibited_goal_held = { TYPE = humiliation TARGET = $TARGET$ }
+	}
+}
 
-		war_participant_has_war_goal_of_type_against = { type = annex_country target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = conquer_state target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = return_state target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = take_treaty_port target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = liberate_country target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = secession target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = unification target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = te_reunify_country target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = make_protectorate target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = make_tributary target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = make_dominion target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = make_personal_union target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = make_crown_land target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = make_chartered_company target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = release_as_subject target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = transfer_subject target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = regime_change target = $TARGET$ }
-		war_participant_has_war_goal_of_type_against = { type = humiliation target = $TARGET$ }
+# Whether the scoped country holds a goal of $TYPE$ against $TARGET$, and the
+# play its bound mandate is exercised in carries a goal of $TYPE$. No trigger
+# reads one play's goals by holder and target: the country's test reads every
+# play and war it takes part in, has_play_goal reads one play but any holder
+# and any target, so both are asked. The pair is exact unless the holder also
+# holds a $TYPE$ goal against $TARGET$ elsewhere and some other $TYPE$ goal
+# sits in the mandate's play (the target's own demand, say); that case still
+# counts, as everything did before the check was narrowed.
+#
+# has_play_goal answers for a play that has become a war too (vanilla
+# je_paraguayan_war reads it after `is_war = yes`), and any_diplomatic_play
+# iterates such plays, so this holds through the war.
+# Parameters: $TYPE$ = war goal type; $TARGET$ = target country scope
+# Scope: the mandate actor
+un_mandate_prohibited_goal_held = {
+	OR = {
+		play_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }
+		war_participant_has_war_goal_of_type_against = { type = $TYPE$ target = $TARGET$ }
+	}
+	any_diplomatic_play = {
+		un_mandate_is_bound_play_of = { ACTOR = prev }
+		has_play_goal = $TYPE$
+	}
+}
+
+# Whether the scoped play is the one $ACTOR$'s bound mandate is exercised in:
+# $ACTOR$ holds a bound mandate, is the play's initiator or target, and the
+# play carries the authorized goal. Initiator or target, because the
+# authorized goal has no can_add_for_other_country, so its holder added it
+# itself as a primary participant. One play only: un_mandate_authorizes_new_goal
+# lists the goal in a second play only if that play already carries it. Not
+# the play type: the authorized goal can also be added to a play of another
+# type already open against the target.
+# Parameters: $ACTOR$ = the mandate holder
+# Scope: diplomatic play
+un_mandate_is_bound_play_of = {
+	$ACTOR$ = {
+		has_variable = un_mandate_current
+		var:un_mandate_current ?= { has_tag = un_mandate_bound }
+	}
+	OR = {
+		initiator ?= $ACTOR$
+		target ?= $ACTOR$
+	}
+	has_play_goal = te_un_mandate_restore_state
+}
+
+# Whether the scoped play is a war $AGGRESSOR$ began, other than the one its
+# bound mandate is exercised in. For a country with no bound mandate: any war
+# it began. The UN record (un_dossier_monthly_update) and the docket
+# (un_docket_war_candidate) read a war begun this way, so a bound mandate
+# excuses its own war and no other.
+# Parameters: $AGGRESSOR$ = the country that began it
+# Scope: diplomatic play
+un_mandate_is_other_war_of = {
+	initiator ?= $AGGRESSOR$
+	is_war = yes
+	NOT = { un_mandate_is_bound_play_of = { ACTOR = $AGGRESSOR$ } }
+}
+
+# Whether the scoped country is fighting a war it began, other than the one
+# its bound mandate is exercised in (un_mandate_is_other_war_of).
+# Scope: country
+un_mandate_began_other_war = {
+	any_diplomatic_play = {
+		un_mandate_is_other_war_of = { AGGRESSOR = prev }
 	}
 }
 
