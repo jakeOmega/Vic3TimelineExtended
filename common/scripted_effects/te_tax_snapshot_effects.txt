@@ -10,7 +10,9 @@
 #
 # CALLERS. Each after a collection write or a new revision, at most once per
 # execution: the monthly processor (te_tax_process_month, inside the month it
-# claims, after the collection write: once per month); the watchdog
+# claims, after the collection write: once per month, unless a lost market's
+# customs drop opened a revision earlier in the same run, which took it:
+# te_tax_snapshot_current); the watchdog
 # (te_tax_watchdog_month), only when a sunset made it sync; te_tax.4, the sync
 # the day after a migration, a re-assert or a copied code (a civil-war repair or
 # a release included), after it; and te_tax_bill_open_revision (introduction,

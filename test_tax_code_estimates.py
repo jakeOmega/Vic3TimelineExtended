@@ -190,6 +190,17 @@ class SnapshotEffectTest(unittest.TestCase):
         self.assertGreater(claimed, 0)
         self.assertGreater(at, body.find("te_tax_sync_collection = yes"))
         self.assertGreater(at, claimed)
+        # Final review A-Minor 5: last, unless step 7 opened a revision (a customs drop),
+        # whose debate start took one of this month, code and revision.
+        self.assertIn("if = { limit = { NOT = { te_tax_snapshot_current = yes } } te_tax_take_snapshot = yes }",
+                      norm(body))
+        self.assertGreater(at, body.find("te_tax_customs_drop_records = yes"))
+        self.assertGreater(at, body.find("te_tax_refresh_support = yes"))
+
+    def test_the_current_trigger_is_the_views_test(self):
+        trigger = norm(block(read("common/scripted_triggers/te_tax_triggers.txt"), "te_tax_snapshot_current"))
+        view = norm(block(read(DISPLAY), "te_tax_view_snap_current"))
+        self.assertIn(f"if = {{ limit = {{ {trigger} }} value = 1 }}", view)
 
     def test_a_revision_takes_it_once_the_bill_is_open(self):
         body = block(read(BILL), "te_tax_bill_open_revision")

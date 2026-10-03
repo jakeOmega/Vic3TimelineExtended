@@ -58,6 +58,28 @@ te_tax_customs_authority = {
 	var:te_tax_customs_held = 1
 }
 
+# The market was lost (te_tax_customs_revalidate): under the customs option the
+# code in force no longer holds this country's customs, yet the open draft
+# (_draft) or the bill under debate (_bill) still changes a customs level.
+# te_tax_customs_drop_records drops those levels. Neither record can change a
+# customs level without the authority (te_tax_can_draft_customs), so this
+# holds only after a loss, and only until the drop.
+te_tax_customs_drop_due_draft = {
+	te_tax_customs_on = yes
+	te_tax_code_in_force = yes
+	NOT = { te_tax_customs_authority = yes }
+	te_tax_draft_active = yes
+	te_tax_gen_draft_touches_customs = yes
+}
+
+te_tax_customs_drop_due_bill = {
+	te_tax_customs_on = yes
+	te_tax_code_in_force = yes
+	NOT = { te_tax_customs_authority = yes }
+	te_tax_bill_active = yes
+	te_tax_gen_bill_touches_customs = yes
+}
+
 # Country scope. Slot SLOT (a or b) may take a package from the bill record:
 # the rule is on, the country holds the code's tokens, the slot is free, the
 # bill has a due month after the current one, and every sunset in the bill
@@ -72,6 +94,24 @@ te_tax_can_store_package = {
 	has_variable = te_tax_bl_due
 	var:te_tax_bl_due > te_history_month_index
 	te_tax_gen_bill_sunsets_valid = yes
+}
+
+# Country scope. The economy snapshot (te_tax_take_snapshot) is current: taken
+# this calendar month, under the code in force and, while a bill is open, for
+# its current revision. The processor takes the month's snapshot unless one is
+# (an accepted revision earlier in the same run took it); the views read the
+# same test through te_tax_view_snap_current.
+te_tax_snapshot_current = {
+	has_variable = te_tax_snap_month
+	var:te_tax_snap_month = te_history_month_index
+	has_variable = te_tax_snap_code_version
+	has_variable = te_tax_code_version
+	var:te_tax_snap_code_version = var:te_tax_code_version
+	has_variable = te_tax_snap_bill_rev
+	OR = {
+		NOT = { AND = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 } }
+		AND = { has_variable = te_tax_bl_rev var:te_tax_snap_bill_rev = var:te_tax_bl_rev }
+	}
 }
 
 # Country scope. The collection writer already ran today (te_tax_sync_day, the

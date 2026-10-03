@@ -125,9 +125,10 @@ te_tax.6 = {
 # (te_tax_on_actions.txt). Whether the code holds this country's customs follows
 # whether it owns its market (te_tax_customs_revalidate): a country that gained
 # its market migrates its native levels into the code, one that lost it keeps
-# its records frozen. Nothing is synced here: the code then equals the market,
-# or the market's owner sets the levels. Firing it again (console: event
-# te_tax.7) changes nothing unless the market changed.
+# its records frozen, and then drops the open draft's and bill's customs levels
+# (te_tax_customs_drop_records). Nothing is synced here: the code then equals
+# the market, or the market's owner sets the levels. Firing it again (console:
+# event te_tax.7) changes nothing unless the market changed.
 te_tax.7 = {
 	type = country_event
 	hidden = yes
@@ -136,5 +137,6 @@ te_tax.7 = {
 
 	immediate = {
 		te_tax_customs_revalidate = yes
+		te_tax_customs_drop_records = yes
 	}
 }

@@ -114,11 +114,10 @@ te_tax_migrate_customs = {
 #   - a country that loses it keeps its records frozen, unread
 #     (te_tax_customs_held = 0): its market owner sets the levels now. The
 #     customs external version moves, so a package touching customs holds;
-#     its failed re-assert counts are dropped; history kind 16. An open draft's
-#     and bill's customs levels are dropped (-99), so both stay usable (the
-#     bill opens a new revision, its text having changed), with one debug line
-#     and history kind 18 (controller ruling); the review says why. A bill
-#     that changed only customs is withdrawn instead (fix round 1).
+#     its failed re-assert counts and blocked marks are dropped; history
+#     kind 16. The open draft and bill are left to te_tax_customs_drop_records
+#     (below), which te_tax.7 runs next and the processor after the month's
+#     transitions.
 # Writes nothing for a country whose standing did not change, and nothing at
 # all under the plain rule option.
 te_tax_customs_revalidate = {
@@ -142,26 +141,43 @@ te_tax_customs_revalidate = {
 			te_tax_gen_customs_clear_retries = yes
 			te_tax_history_push = { KIND = 16 SLOT = none }
 			debug_log = "TE_TAX customs_lost the country no longer owns its market; its customs records are frozen; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
-			# The draft and the bill can no longer change customs: their levels are
-			# dropped so both stay usable (te_tax_bill_effects.txt).
-			set_local_variable = { name = te_tax_cu_dropped value = 0 }
-			set_local_variable = { name = te_tax_cu_withdrawn value = 0 }
-			if = {
-				limit = { te_tax_draft_active = yes te_tax_gen_draft_touches_customs = yes }
-				te_tax_draft_drop_customs = yes
-				set_local_variable = { name = te_tax_cu_dropped value = 1 }
-			}
-			if = {
-				limit = { te_tax_bill_active = yes te_tax_gen_bill_touches_customs = yes }
-				te_tax_bill_drop_customs = yes
-				set_local_variable = { name = te_tax_cu_dropped value = 1 }
-			}
-			if = {
-				limit = { local_var:te_tax_cu_dropped = 1 }
-				# _inst 1: the bill changed only customs and was withdrawn.
-				te_tax_gen_history_write = { KIND = 18 SLOT = none INST = local_var:te_tax_cu_withdrawn }
-				debug_log = "TE_TAX customs_dropped the market was lost; the customs changes of the open draft and bill were dropped; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Country scope (te_tax.7 right after te_tax_customs_revalidate; the processor
+# at step 7, after the month's transitions and the sync). The code no longer
+# holds this country's customs (te_tax_customs_drop_due_draft, _bill: the
+# market was lost), yet the open draft or bill still changes a customs level:
+# those levels are dropped (-99) so both stay usable, with one debug line and
+# history kind 18 (controller ruling); the review says why. The bill opens a
+# new revision, its text having changed, whose debate start takes the economy
+# snapshot and refreshes the support snapshot; a bill that changed only
+# customs is withdrawn instead (fix round 1; _inst 1). Read from the records,
+# not from the moment of the loss, so it runs once: afterwards neither touches
+# customs. Split from te_tax_customs_revalidate (final review A-Minor 5) so the
+# processor drops them after the month's transitions, where the new revision's
+# snapshot and support refresh are the month's own and each runs once.
+te_tax_customs_drop_records = {
+	if = {
+		limit = {
+			te_tax_customs_on = yes
+			OR = {
+				te_tax_customs_drop_due_draft = yes
+				te_tax_customs_drop_due_bill = yes
 			}
 		}
+		set_local_variable = { name = te_tax_cu_withdrawn value = 0 }
+		if = {
+			limit = { te_tax_customs_drop_due_draft = yes }
+			te_tax_draft_drop_customs = yes
+		}
+		if = {
+			limit = { te_tax_customs_drop_due_bill = yes }
+			te_tax_bill_drop_customs = yes
+		}
+		# _inst 1: the bill changed only customs and was withdrawn.
+		te_tax_gen_history_write = { KIND = 18 SLOT = none INST = local_var:te_tax_cu_withdrawn }
+		debug_log = "TE_TAX customs_dropped the market was lost; the customs changes of the open draft and bill were dropped; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}
 }

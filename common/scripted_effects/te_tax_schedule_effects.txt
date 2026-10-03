@@ -57,7 +57,8 @@ te_tax_process_month = {
 			# 0b. Customs authority (plan Task 15; customs option only): whether the
 			# code holds this country's customs follows whether it owns its market,
 			# before any transition, so a package touching customs holds in the
-			# month the market was lost rather than commencing.
+			# month the market was lost rather than commencing. What the loss does
+			# to the open draft and bill waits for step 7.
 			te_tax_customs_revalidate = yes
 			# 1. Sunsets of the enacted code first; late ones catch up.
 			te_tax_gen_sunset_wage = yes
@@ -85,17 +86,36 @@ te_tax_process_month = {
 			# 5. One collection write per month, changed or not: it also re-asserts
 			# the code over any native change since last month.
 			te_tax_sync_collection = yes
-			# 6. The economy snapshot the estimates are dated by
-			# (te_tax_snapshot_effects.txt), once a month, of the code just written.
-			te_tax_take_snapshot = yes
-			# 7. The next due transition.
+			# 6. The next due transition.
 			te_tax_recompute_next_month = yes
-			# 8. A bill under debate: refresh the support snapshot once a month
-			# (te_tax_bill_effects.txt), after this month's changes, so a promise
-			# kept or broken this month moves its group's trust reason at once.
+			# 7. The support snapshot, after this month's changes, so a promise kept
+			# or broken this month moves its group's trust reason at once. If the
+			# market was lost (customs option; te_tax_migration_effects.txt) and
+			# the bill under debate still changes a customs level, its customs are
+			# dropped and it opens a new revision, whose debate start takes the
+			# economy snapshot and refreshes the support snapshot itself (or, if it
+			# changed only customs, it is withdrawn). Otherwise only an open
+			# draft's customs can be dropped, and a bill under debate is refreshed
+			# here (te_tax_bill_effects.txt). Either way each snapshot is taken at
+			# most once in this execution (final review A-Minor 5).
 			if = {
-				limit = { te_tax_bill_active = yes }
-				te_tax_refresh_support = yes
+				limit = { te_tax_customs_drop_due_bill = yes }
+				te_tax_customs_drop_records = yes
+			}
+			else = {
+				te_tax_customs_drop_records = yes
+				if = {
+					limit = { te_tax_bill_active = yes }
+					te_tax_refresh_support = yes
+				}
+			}
+			# 8. The economy snapshot the estimates are dated by
+			# (te_tax_snapshot_effects.txt), once a month, of the code just written,
+			# unless step 7 opened a revision, which took one of this month, code
+			# and revision (te_tax_snapshot_current).
+			if = {
+				limit = { NOT = { te_tax_snapshot_current = yes } }
+				te_tax_take_snapshot = yes
 			}
 		}
 	}

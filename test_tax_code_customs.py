@@ -325,7 +325,8 @@ class RevalidationTest(unittest.TestCase):
     def test_the_revalidation_event(self):
         event = squash(block(read(EVENTS), "te_tax.7"))
         for phrase in ("type = country_event", "hidden = yes", "trigger = { te_tax_code_on = yes }",
-                       "immediate = { te_tax_customs_revalidate = yes }"):
+                       # The records the loss leaves, right after (final review A-Minor 5).
+                       "immediate = { te_tax_customs_revalidate = yes te_tax_customs_drop_records = yes }"):
             self.assertIn(phrase, event)
 
 
@@ -1010,20 +1011,46 @@ class MarketLostTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.lost = squash(block(read(MIGRATION), "te_tax_customs_revalidate")).split("else_if = { limit = { NOT = {", 1)[1]
+        cls.drop = squash(block(read(MIGRATION), "te_tax_customs_drop_records"))
+        cls.triggers = read(TRIGGERS)
         cls.bill = read(BILL)
         cls.generated = read(GEN_BILL)
 
-    def test_the_lost_branch_drops_the_drafts_and_the_bills_customs(self):
-        for phrase in ("set_local_variable = { name = te_tax_cu_dropped value = 0 }",
-                       "if = { limit = { te_tax_draft_active = yes te_tax_gen_draft_touches_customs = yes } "
-                       "te_tax_draft_drop_customs = yes set_local_variable = { name = te_tax_cu_dropped value = 1 } }",
-                       "if = { limit = { te_tax_bill_active = yes te_tax_gen_bill_touches_customs = yes } "
-                       "te_tax_bill_drop_customs = yes set_local_variable = { name = te_tax_cu_dropped value = 1 } }",
-                       "set_local_variable = { name = te_tax_cu_withdrawn value = 0 }",
-                       f"if = {{ limit = {{ local_var:te_tax_cu_dropped = 1 }} te_tax_gen_history_write = {{ KIND = "
-                       f"{KIND_DROPPED} SLOT = none INST = local_var:te_tax_cu_withdrawn }} "
+    def test_the_records_the_loss_leaves_are_dropped_once(self):
+        # Final review A-Minor 5: split from the revalidation, read from the records (the
+        # code no longer holds the customs, yet a record changes a level), so it runs once.
+        self.assertTrue(self.drop.startswith("if = { limit = { te_tax_customs_on = yes OR = { "
+                                             "te_tax_customs_drop_due_draft = yes te_tax_customs_drop_due_bill = yes } }"),
+                        self.drop[:200])
+        for phrase in ("set_local_variable = { name = te_tax_cu_withdrawn value = 0 }",
+                       "if = { limit = { te_tax_customs_drop_due_draft = yes } te_tax_draft_drop_customs = yes }",
+                       "if = { limit = { te_tax_customs_drop_due_bill = yes } te_tax_bill_drop_customs = yes }",
+                       f"te_tax_gen_history_write = {{ KIND = {KIND_DROPPED} SLOT = none INST = local_var:te_tax_cu_withdrawn }} "
                        "debug_log = \"TE_TAX customs_dropped"):
-            self.assertIn(phrase, self.lost)
+            self.assertIn(phrase, self.drop)
+        for record, active, touches in (("draft", "te_tax_draft_active", "te_tax_gen_draft_touches_customs"),
+                                        ("bill", "te_tax_bill_active", "te_tax_gen_bill_touches_customs")):
+            with self.subTest(record=record):
+                self.assertEqual(squash(block(self.triggers, f"te_tax_customs_drop_due_{record}")),
+                                 f"te_tax_customs_on = yes te_tax_code_in_force = yes "
+                                 f"NOT = {{ te_tax_customs_authority = yes }} {active} = yes {touches} = yes")
+        # The revalidation's lost branch no longer touches the draft or the bill.
+        for name in ("te_tax_draft_drop_customs", "te_tax_bill_drop_customs", "te_tax_cu_"):
+            self.assertNotIn(name, self.lost)
+        # No customs change without the authority, so the condition holds only after a loss.
+        self.assertIn("custom_tooltip = { text = te_tax_tt_customs_authority te_tax_customs_authority = yes }",
+                      squash(block(self.triggers, "te_tax_can_draft_customs")))
+
+    def test_the_processor_drops_them_after_the_transitions_and_refreshes_once(self):
+        body = squash(block(read(SCHEDULE), "te_tax_process_month"))
+        self.assertEqual(body.count("te_tax_customs_drop_records = yes"), 2)
+        self.assertIn("if = { limit = { te_tax_customs_drop_due_bill = yes } te_tax_customs_drop_records = yes } "
+                      "else = { te_tax_customs_drop_records = yes if = { limit = { te_tax_bill_active = yes } "
+                      "te_tax_refresh_support = yes } }", body)
+        self.assertEqual(body.count("te_tax_refresh_support = yes"), 1)
+        self.assertGreater(body.find("te_tax_customs_drop_due_bill"), body.find("te_tax_sync_collection = yes"))
+        self.assertGreater(body.find("te_tax_customs_drop_due_bill"), body.find("te_tax_obl_check_month = yes"))
+        self.assertLess(body.find("te_tax_customs_revalidate = yes"), body.find("te_tax_gen_sunset_wage = yes"))
 
     def test_the_draft_keeps_every_other_provision(self):
         body = squash(block(self.bill, "te_tax_draft_drop_customs"))
