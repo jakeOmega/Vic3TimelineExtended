@@ -10,16 +10,16 @@
 | Topic | Decision |
 |---|---|
 | Merge gate | Packages 6 and 7 finish on the branch. #680 then merges behind the default-off rule, still labelled experimental, and the owner play-tests from `main`. Fixes come as follow-up PRs. Package 7 delivers the evidence *instrument* (runbook, setup events, save report, docs); no runtime gate is marked passed without the owner's result. |
-| AI promises | The owner asked whether this can follow vanilla's law-negotiation journal entries. §2.8 explains how those steer the AI and gives the equivalent built here. |
-| AI customs | The AI legislates the tariff levels it wants. Adoption after failed re-asserts remains only as the fallback for writes the code cannot undo (treaties, refused setters) (§2.9). |
-| Guide | The Tax Code chapter is chapter 5, right after Banking (§3.6). |
+| AI promises | The owner asked whether this can follow vanilla's law-negotiation journal entries. §2.8 explains how those steer the AI and gives the equivalent built here. Owner follow-up: let the AI try; if it is still short near the deadline, enact the promise for it. Log met or unmet at every deadline (§2.8). |
+| AI customs | The owner first chose "the AI legislates the levels it wants", then asked whether the native tariff controls could be disabled outright: by cancelling the tariff maximum, as Free Trade lacks one, and applying tariffs another way. Decision: **probe first**, bundled with the owner's in-game test. This branch registers the per-good tariff modifier families and extends probe P09 to test both mechanisms. AI customs legislation waits for that result (§2.9). |
+| Guide | The Tax Code chapter is chapter 5, right after Banking. It is filed as `04-tax-code.md` to avoid renaming files while other branches edit the guide; the renumbering is issue #682 (§3.6). |
 
 ## 2. Package 6: AI legislation
 
 ### 2.1 Invariants
 
 1. **One legal path.** The AI calls the same `te_tax_cmd_*` effects, behind the same `te_tax_can_*` triggers, as the player's buttons. Research G found nothing in the command layer that gates on `is_ai`, `GetPlayer` or a GUI scope, apart from `te_tax_cmd_draft_relief_state`'s saved state scope, which the AI does not use. `is_ai = yes` appears only in the AI decision layer and in log verbosity.
-2. **No free money, no bypass.** No collection, approval or obligation outcome is granted to the AI. It never writes a native rate: the collection writer stays the only writer. When no legal package is viable the AI logs why and lives with borrowing and its native spending responses, as spec §10 asks.
+2. **No free money, no bypass.** No collection or approval is granted to the AI. It never writes a native rate: the collection writer stays the only writer. When no legal package is viable the AI logs why and lives with borrowing and its native spending responses, as spec §10 asks. One deliberate exception is the owner's: an institution promise the native AI fails to deliver is enacted for it (§2.8). Every such enactment is logged, and the institution's native costs still apply from then on.
 3. **Rule-off unchanged.** Every new hook checks `te_tax_code_on = yes`, written positively. The AI-strategy hooks (§2.8) read obligation variables that no rule-off country ever holds.
 4. **AI state follows the token rule.** Every `te_tax_ai_*` variable is a schema token: initialised by `te_tax_init_country` (schema version 2, backfilled), never `remove_variable`d, copied at the outbreak with the rest of the code, and reset by the civil-war repair and at release. A loser's cooldown or "AI bill" marker must not block or leak into the winner (research G §10).
 
@@ -53,11 +53,11 @@ Every threshold and count is a named script value in `common/script_values/te_ta
 ### 2.4 What the step does, in order
 
 1. **Held packages.** A conflicting one (state 2) is released. A missed one (state 3) is rescheduled if `te_tax_can_package_reschedule` holds, else released. An AI that ignored held packages would fill both slots and could never pass again.
-2. **Promises in force.** At most one promise is renegotiated per step, and only when the next monthly check would certainly breach it:
-   - a delivering promise whose deadline falls at the next check and whose condition does not hold;
-   - a maintaining promise one failing check short of its grace whose condition still fails.
+2. **Promises in force.** At most one promise is handled per step, and only one the next monthly check would otherwise breach: a delivering promise whose deadline falls at the next check and whose condition does not hold, or a maintaining promise one failing check short of its grace whose condition still fails.
+   - **An institution promise (kind 1) is enacted** (§2.8), and the step logs `ai_obl_enacted`.
+   - **A balance promise (kinds 2 and 4) is renegotiated.** A balance cannot be enacted, so the AI accepts −2 approval and −1 trust rather than the breach's −5.
    
-   This makes AI promises nearly breach-free at −2 approval and −1 trust. **It changes the answer to the PR's owner question 1** (is renegotiation always the cheaper exit?), so the owner rules on both together.
+   AI promises are therefore never breached by neglect. **This changes the answer to the PR's owner question 1** (is renegotiation always the cheaper exit?), so the owner rules on both together.
 3. **An open bill.** Each bill is introduced by this step, because an AI country has no other drafter.
    - Pass if `te_tax_can_pass` holds.
    - If every line holds except legitimacy, and the native tax level is not `medium`, the native AI has raised its level since the last pin and is paying −10/−20 legitimacy for it (research G finding 4). The step logs `reason=legitimacy_native_level`, and the next processor re-raises `te_tax.8` for the 2nd, the day after the pin, instead of the bucket day.
@@ -87,7 +87,8 @@ The set is bounded. Exactly one template is built per initiative, and a template
 | T4 Extend | A raise of the AI's own expires within 6 months and the raise rule still holds | Restates the rate with a new sunset |
 | T5 Cut | Surplus streak ≥ `te_tax_ai_surplus_months` (6), the cut rule holds, and reserves are full | −1 step on the instrument with the largest clout-weighted grievance, never below 0 |
 | T6 Luxury goods | T1's need holds, the consumption rate is above 0, and fewer than `te_tax_ai_max_goods` (4) catalog goods are taxed | Tax 1–2 untaxed `luxury`-category goods (vanilla's AI weights luxury ×2, staple ×0.5). T1 and T6 compete on pre-score |
-| T7 Customs wishes | Customs option only, as market owner, with no fiscal template due, and wishes recorded (§2.9) | Up to 3 goods moved to the wanted level, in a customs-only bill |
+
+No template touches customs until the customs probe decides the mechanism (§2.9).
 
 **Pre-score** (generated, one value per instrument, read only by the step): the clout-weighted political cost of a +1 step. That is Σ over the country's non-marginal groups of `ig_clout` × (10 × ΔL × exposure − 5 × P(ig) × progressivity sign × ΔL), the support model's material and ideology terms for one step, with the same `EXPOSURE` and `te_tax_ideo_p_<ig>` the bill refresh uses.
 
@@ -141,21 +142,38 @@ The journal entry is the record; the script that reads it is what changes the AI
 - **Bureaucracy promises (kind 2):** accepted only when they already hold, and the native AI keeps them by its own thresholds. No hook.
 - **Fiscal promises (kind 4):** the promised-surplus signal (§2.3) keeps the AI legislating revenue until the surplus streak delivers.
 
-A promise the AI cannot keep is renegotiated before it breaches (§2.4 step 2).
+**Enacting a promise the native AI missed** (owner, 2026-10-03). The step checks a promise when the next monthly check would breach it (§2.4 step 2):
+- a delivering kind-1 promise one month before its deadline with the delivered level below the target;
+- a maintaining one whose level has fallen below the target.
 
-### 2.9 Customs: the AI legislates the levels it wants
+For either, the step runs `set_institution_investment_level = { institution = <x> level = <target> }` and logs `TE_TAX ai_obl_enacted kind=1 arg= target= level=`.
+- **No time to deliver if P16 says "target".** If probe P16 shows the effect only sets a target that expands at native speed, one month is too late. The lead is a named value (`te_tax_ai_enact_lead_months`, 1) for the play-test to raise.
+- **Costs and verification are untouched.** The institution's native bureaucracy cost applies from then on, and the monthly check still verifies the delivered level.
+- **Other promises are renegotiated.** Kinds 2 and 4 cannot be enacted; the AI renegotiates them before a breach.
+
+**Deadline logging, for every country.** When a delivering promise reaches its deadline month, the monthly check writes `TE_TAX obl_deadline result=met|unmet kind= arg= target= level= ai=yes|no country=` before it acts. One line is written per promise and deadline, for player and AI countries alike, so the owner can see how often the AI meets its promises on its own. `level` is the measure the verifier read: the delivered institution level, or 1 or 0 for a balance.
+
+### 2.9 Customs: probe first
 
 **Today** (Task 15): on the 1st the customs sync finds the market's level differs from the code's, re-asserts the code's, and counts a retry. After `te_tax_customs_adopt_after` (4) consecutive retries it adopts the market's level into the code. The counter cannot tell "the setter was refused" (a treaty ban, a cooldown) from "the re-assert took and the native AI moved the level again". So a level the native AI keeps choosing becomes law in four months without a bill (research G finding 7).
 
-**Design.** Each re-asserted level is verified on the next day:
-- **`te_tax.9` (verify)** is raised for the next day by the customs sync, only when it re-asserted at least one level. It runs only for a market owner whose code holds its customs, and compares each re-asserted good and direction against the code.
-- **The re-assert did not take** (the market still differs): the setter was refused, so the retry counts. Adoption after 4 consecutive refusals is unchanged; this is the fallback for treaty and script writes the code cannot undo.
-- **The re-assert took:** the setter works, so the mismatch on the 1st was a change made since the last sync. The retry counter resets. For an AI country, the level found on the 1st is recorded as a wish, `te_tax_cwant_<d>_<tg>` (a display-free payload with a month stamp).
-- **For a player country** the same reset applies. The player's native controls are greyed, so such a change was a one-off script or event write, and the code wins.
-- **T7** drafts up to 3 goods whose wish has been recorded on at least 2 consecutive 1sts, moving each to the wanted level with `te_tax_cmd_draft_customs`. A wish is cleared when the code reaches it, when the market is lost, at a migration, at a release and at the civil-war repair.
-- **Depends on probe P10.** If the setters obey vanilla's 3-month tariff cooldown, a re-assert made just after a native AI change is refused, counts as a refusal, and the AI's wish surfaces only when the cooldown ends. The adopt-after value of 4 still covers that. P10 is on the play-test list.
+**The owner's alternative: disable the native control at its source.**
+- **How Free Trade does it.** The other trade laws carry a maximum tariff (`state_tariff_import_add` / `_export_add`, "Maximum Tariffs on Imports/Exports"; mercantilism and protectionism 0.5). The applied tariff is the level's fraction of that maximum: 0.25, 0.5, 1.0 (`TARIFF_LEVEL_EFFECT_*`, `common/defines/00_defines.txt:648-650`). Free Trade has no maximum (`common/laws/01_trade_policy.txt:96-139`), so every level collects nothing.
+- **Why the per-good route is untested.** Probe P09 applied the per-good families `country_grain_{import,export}_tariffs_rate_add` and `country_grain_{min,max}_import_tariffs_level_add`. The load rejected them: "Unknown modifier type … potential dynamic modifier type definition missing from the database" (ledger row 14). That is the message `docs/guides/scripting_best_practices.md` gives for a dynamic pattern with no registration, and neither vanilla's nor the mod's `common/modifier_type_definitions/` registers these families. So their behaviour is untested.
 
-The customs AI is the last task of package 6, so it can be detached without touching the fiscal AI. Research G had advised deferring it to package 8. This design follows the owner's choice and records that alternative.
+Once registered, there are two candidate mechanisms:
+1. **Lock.** The writer pins each good's minimum and maximum level to the enacted level, so the engine refuses the buttons and, if bounds bind it, the native AI.
+2. **Carrier.** A rule-gated static modifier cancels the trade law's maxima on a code country, Free Trade's effect, and per-good rate modifiers collect the legislated tariffs. Whether `_rate_add` raises a good's maximum, still scaled by the level, or its applied rate is unknown.
+
+**Decision: probe first** (owner, 2026-10-03), run with the owner's in-game test after the merge. This branch:
+- registers the six per-good families for the probe's goods (grain, and one industrial good) in a new `common/modifier_type_definitions/te_tax_probe_modifier_types.txt`. A registration alone changes nothing: only the probe applies these modifiers;
+- adds probe options for the lock (min = max on grain at a chosen level) and the carrier (maxima cancelled plus a grain rate);
+- adds runbook steps for what to observe: the tariff buttons, the market's tariff tooltip, the Budget's tariff income, grain trade, and whether an AI market owner's grain level moves.
+
+Until the result is in:
+- **The customs option keeps** re-assert and adoption, documented as experimental.
+- **AI countries legislate no customs.** Their tariff path is the native AI plus adoption, documented as a known limitation in the guide and the ledger.
+- **What follows the probe.** A follow-up PR builds whichever mechanism passes, registered for every tradeable good by `gen_tax_code.py`, and gives the AI its customs template. With the lock there is no native wish to read, so the template uses rules of its own. The next-day verify path in this design's first draft is dropped.
 
 ### 2.10 The native tax level
 
@@ -174,7 +192,7 @@ A rule-gated AI strategy that pins `desired_tax_level` would displace each count
 
 ### 2.12 Logging and debugging
 
-- **One summary line per AI action:** `TE_TAX ai_<verb> tpl= R= D= G= def= sur= country=`, with verbs `introduced`, `passed`, `forced`, `withdrawn`, `accepted`, `released`, `rescheduled`, `renegotiated` and `no_viable`.
+- **One summary line per AI action:** `TE_TAX ai_<verb> tpl= R= D= G= def= sur= country=`, with verbs `introduced`, `passed`, `forced`, `withdrawn`, `accepted`, `released`, `rescheduled`, `renegotiated`, `obl_enacted` and `no_viable`.
 - **Gating.** The commands' own `debug_log` lines become player-only (`is_ai = no`). With about 100 AI countries legislating, `debug.log` would otherwise flood, and the AI summary line replaces them.
 - **Console.** `te_tax_debug` gains options that:
   - run the AI step now on the console's country;
@@ -214,7 +232,7 @@ Vanilla's AI rides out a deficit on 20 weeks (140 d) of reserves (`WAGE_CUT_MIN_
 | `te_tax_ai_fail_cooldown_months` | 6 | `te_tax_ai_bill_patience` | 6 |
 | `te_tax_ai_max_offers` | 3 | `te_tax_ai_levy_sunset` | 24 |
 | `te_tax_ai_reverse_months` | 24 | `te_tax_ai_max_goods` | 4 |
-| `te_tax_ai_promise_institution_score` | 200 | | |
+| `te_tax_ai_promise_institution_score` | 200 | `te_tax_ai_enact_lead_months` | 1 |
 
 ### 2.15 Tests
 
@@ -225,7 +243,10 @@ The new file is `test_tax_code_ai.py`, with additions to the existing files. It 
 - every `te_tax_ai_*` token is initialised, copied at the outbreak, reset at the repair and at release, and never removed;
 - the template table and the threshold pairs are pinned, as `test_gw_ai_policy_table.py` pins the Global Warming AI;
 - the institution hook appears in every strategy that declares `institution_scores`, and reads only obligation variables;
-- the customs verify event raises nothing for a rule-off or non-owner country, and only a refused re-assert counts toward adoption;
+- the enactment of a missed promise runs only for an AI country's kind-1 promise, in `te_tax.8`, and logs `ai_obl_enacted`;
+- the monthly check writes exactly one `obl_deadline` line per delivering promise in its deadline month;
+- the per-good tariff registrations name only the probe's goods, and nothing outside the probe harness applies those modifiers;
+- AI templates never call a customs command;
 - the commands' `debug_log` lines are player-gated.
 
 ## 3. Package 7: release validation and documentation
@@ -243,7 +264,7 @@ The PR body's claim that three of those items are already in the ledger is corre
 
 ### 3.2 Play-test runbook
 
-New file: `docs/testing/tax-code-playtest.md`. It numbers about 45 checks, PT-01 onwards: research H's 37 deduplicated items, plus the AI and customs-verify checks. Each check gives:
+New file: `docs/testing/tax-code-playtest.md`. It numbers about 45 checks, PT-01 onwards: research H's 37 deduplicated items, plus the AI, promise-enactment and customs-probe checks. Each check gives:
 - its setup and console commands;
 - the `TE_TAX` log tags it expects;
 - a save-report command where one applies;
@@ -261,7 +282,7 @@ It adds the scenarios research H found missing: save/load at every lifecycle sta
 - naming a relief state;
 - the AI options of §2.12.
 
-Each is console-only and carries the `REVIEWED` orphan suppression the current event uses.
+Each is console-only and carries the `REVIEWED` orphan suppression the current event uses. The customs probe (§2.9) extends the existing P09 harness (`te_debug_tax*`, the `te_tp_grain_*` probe modifiers), not this namespace.
 
 ### 3.4 Save report
 
@@ -288,7 +309,7 @@ It reads **plain-text** saves with a streaming extractor of `te_tax_*` names and
 
 ### 3.6 Player guide chapter
 
-- **File.** A new chapter `04-tax-code.md`. It sorts after `04-banking.md`, so the PDF, which numbers chapters by position, prints it as chapter 5 with no other file renamed. A full renumber would rewrite about 265 links across the guide and conflict with every open branch that edits it.
+- **File.** A new chapter `04-tax-code.md`. It sorts after `04-banking.md`, so the PDF, which numbers chapters by position, prints it as chapter 5 with no other file renamed. A full renumber would rewrite about 265 links across the guide and conflict with every open branch that edits it. Issue #682 renumbers the files once the guide is quiet.
 - **Index.** The README index lists it as 5 and shifts the later numbers. No chapter refers to another by its number in prose; only links by file name are used.
 - **Outline.** Research H §4b gives the outline, filled with what packages 6 and 7 built, and every UI name is single-sourced from loc (§4c table).
 - **Marked experimental.** The chapter opens with the rule, labelled experimental and off by default. It documents customs as the experimental option, and the carbon levy not at all.
@@ -327,6 +348,6 @@ The harness retirement stays out of this branch. Research H §6's corrected remo
 | `INJECT:` into a strategy's `institution_scores`: does it sum or replace? | §2.8 | `REPLACE:` the strategies with vanilla's body restated |
 | Whether the native AI keeps moving an inert tax level (P14) | §2.10, AI passage | Owner question 2 |
 | Whether `trigger_event` takes a computed `days` | §2.2 | A literal `if` chain (the design's default) |
-| Whether the tariff setters obey the cooldown and treaty bans (P10) | §2.9 | Adopt-after = 4 covers the cooldown |
-| A next-day read of a market level after a script set | §2.9 | Verify two days later instead |
+| Whether the per-good tariff families work once registered, and which of lock or carrier holds | §2.9 | Keep re-assert and adoption; AI customs stays native |
+| Whether `set_institution_investment_level` sets the level at once or a target (P16) | §2.8 enactment | Raise `te_tax_ai_enact_lead_months` |
 | AI pre-score versus real support: does the cheapest instrument usually pass? | §2.5 | Retune the pre-score weights; the withdraw path bounds the cost |
