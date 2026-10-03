@@ -245,12 +245,51 @@ class NumbersTest(unittest.TestCase):
         years = int(_constant("RT_ASSISTANCE_YEARS"))
         retire = _top_level(_read(EFFECTS), "rt_retire_smallest")
         self.assertRegex(retire, rf"years = {years}\s")
-        for key in ("rt_how_programmes", "rt_start_coal_tt"):
+        for key in ("rt_how_programmes", "rt_start_coal_tt", "law_managed_fossil_phaseout_desc"):
             self.assertIn(f"#v {years}#! years", _loc_value(key), key)
 
     def test_compensation_share(self):
         self.assertEqual(_constant("RT_COMPENSATION_SHARE"), 0.25)
-        self.assertIn("a quarter of what it would cost to build", _loc_value("rt_how_programmes"))
+        for key in ("rt_how_programmes", "law_managed_fossil_phaseout_desc"):
+            self.assertIn("a quarter of what it would cost to build", _loc_value(key), key)
+        for key in ("concept_fossil_transition_desc",):
+            self.assertIn(f"#v {int(_constant('RT_RETIRE_INTERVAL_MONTHS'))}#! months", _loc_value(key), key)
+
+
+class InGameTextTest(unittest.TestCase):
+    """What a player reads before deciding (#660 follow-up)."""
+
+    def test_the_laws_say_there_is_no_emissions_cut_by_itself(self):
+        for key in ("law_fossil_expansion_moratorium_desc", "law_managed_fossil_phaseout_desc",
+                    "concept_fossil_transition_desc", "rt_how_emissions"):
+            text = _loc_value(key)
+            self.assertTrue("emissions" in text and ("by itself" in text or "only if" in text), key)
+
+    def test_the_phaseout_says_the_whole_building_goes_whoever_owns_it(self):
+        text = _loc_value("law_managed_fossil_phaseout_desc")
+        for phrase in ("the whole building, every level, whoever owns it", "foreign investors included", "from the treasury"):
+            self.assertIn(phrase, text)
+
+    def test_start_tooltip_carries_the_cost(self):
+        start = _top_level(_read(EFFECTS), "rt_start_programme")
+        self.assertIn("custom_tooltip = rt_start_$KEY$_cost_tt", start)
+        for key in INDUSTRIES:
+            text = _loc_value(f"rt_start_{key}_cost_tt")
+            self.assertIn(f"ScriptValue('rt_disp_next_cost_{key}')", text)
+            self.assertIn(f"ScriptValue('rt_disp_all_cost_{key}')", text)
+
+    def test_the_entry_explains_itself_with_the_rule_off(self):
+        self.assertEqual(_loc_value("je_global_warming_reason"), "[ROOT.GetCountry.GetCustom('gw_reason')]")
+        custom = _top_level(_read(os.path.join(REPO, "common", "customizable_localization",
+                                               "global_warming_custom_loc.txt")), "gw_reason")
+        self.assertRegex(custom, r"has_game_rule = global_warming_enabled \}\s*localization_key = je_global_warming_reason_climate")
+        self.assertIn("localization_key = je_global_warming_reason_transition", custom)
+        self.assertIn("Global Warming game rule is off", _loc_value("je_global_warming_reason_transition"))
+
+    def test_the_concept_exists(self):
+        concepts = _read(os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt"))
+        self.assertRegex(concepts, r"(?m)^concept_fossil_transition = \{\}")
+        self.assertEqual(_loc_value("concept_fossil_transition"), "Fossil Transition")
 
 
 if __name__ == "__main__":

@@ -86,6 +86,9 @@ rt_start_programme = {
 			value = 0
 		}
 	}
+	# The player's snapshot figures (a human's Start is greyed on any country
+	# but their own, so GetPlayer in this line's loc is that country).
+	custom_tooltip = rt_start_$KEY$_cost_tt
 	hidden_effect = {
 		rt_refresh_display_effect = yes
 	}
