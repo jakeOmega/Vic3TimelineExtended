@@ -79,6 +79,12 @@ All are exact: they change no result unless a line says otherwise.
   (owner-approved).
 - **Colonial stability terms.** Each count is computed once, and the pressure
   terms are gated on a condemner existing (owner-approved).
+- **Cultural Hegemony modifiers.** The CH effect and the foreign benchmark use
+  a variable set in the monthly pulse as their `multiplier`
+  (`root.var:ch_effect_mult_cached`, `var:ch_benchmark_applied`), not
+  script values that compute the world's cultural pull. That's one fewer
+  benchmark computation per pulse, and no exposure if the engine
+  re-evaluates multipliers later.
 - **Suit portraits.** The character tests run before the culture triggers.
 - **UN bulk lobbying.** The `has_variable` guard stops 72 error lines per
   tooltip build.
@@ -125,6 +131,20 @@ All are exact: they change no result unless a line says otherwise.
 6. **The Cultural Hegemony panel** reads live `cultural_pull_total` on every
    frame while open. A monthly snapshot would be cheaper, and is an owner
    call.
-7. **The colonial stability bar** still evaluates its 21 terms three times
+7. **Expensive `add_modifier` multipliers.** A quick scan (multipliers whose
+   script-value closure reaches an iterator) found 11 that remain:
+   - `sol_expectations_{upper,middle,lower}_shift_value` (`every_country`)
+   - `global_tech_spread_script_value` (`every_country`)
+   - `un_peacekeeping_benefit_scale` and `un_aid_benefit_scale`
+     (`every_country`)
+   - `total_tourism_throughput_bonus_percent` (buildings)
+   - `migration_crowding_mult` (states)
+   - the covert slot and cost multipliers (pacts)
+   They cost one evaluation per application. They'd cost one per tick if
+   the engine re-evaluated multipliers every tick, which our logs
+   contradict for JE modifiers (see `scripting_best_practices.md`).
+   Settle that with an in-game test, then turn the scan into an audit
+   next to `je_multiplier_scope_audit` (it walks the same graph).
+8. **The colonial stability bar** still evaluates its 21 terms three times
    per read (the bar's lines, `drift_total` and `drift_uncapped` in the cap
    term).
