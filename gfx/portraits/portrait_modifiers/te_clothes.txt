@@ -25,10 +25,6 @@
 			base = 0
 			modifier = {
 				add = 15000
-				OR = {
-					european_clothes_trigger = yes
-					african_diaspora_clothes_trigger = yes
-				}
 				scope:character = {
 					is_female = yes
 					age >= define:NCharacters|ADULT_AGE
@@ -46,6 +42,12 @@
 							is_ruler_of_own_country = no
 						}
 					}
+				}
+				# The cheap character tests run first, so the vanilla culture
+				# triggers are only asked for adult women in a country with the tech.
+				OR = {
+					european_clothes_trigger = yes
+					african_diaspora_clothes_trigger = yes
 				}
 			}
 		}
@@ -71,10 +73,6 @@
 			base = 0
 			modifier = {
 				add = 12000
-				OR = {
-					european_clothes_trigger = yes
-					african_diaspora_clothes_trigger = yes
-				}
 				scope:character = {
 					is_female = yes
 					age >= define:NCharacters|ADULT_AGE
@@ -84,6 +82,12 @@
 						has_technology_researched = second_wave_feminism
 						has_law_or_variant = law_type:law_monarchy
 					}
+				}
+				# The cheap character tests run first, so the vanilla culture
+				# triggers are only asked for adult women in a country with the tech.
+				OR = {
+					european_clothes_trigger = yes
+					african_diaspora_clothes_trigger = yes
 				}
 			}
 		}
