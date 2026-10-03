@@ -661,9 +661,10 @@ types te_tax_review_widget_types
 							margin_left = 24
 							align = left|nobaseline
 							using = fontsize_medium
-							elide = right
+							multiline = yes
 							# A state the draft drops pays its taxes again: its estimate
-							# (plan Task 14). One the draft keeps shows it in the bill's list.
+							# (plan Task 14), wrapped rather than cut off. One the draft
+							# keeps shows it in the bill's list.
 							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_rv_regrel_state_est', 'te_tax_rv_regrel_state' )]"
 						}
 					}
@@ -693,7 +694,7 @@ types te_tax_review_widget_types
 							margin_left = 24
 							align = left|nobaseline
 							using = fontsize_medium
-							elide = right
+							multiline = yes
 							text = "te_tax_rv_regrel_state_est"
 						}
 					}

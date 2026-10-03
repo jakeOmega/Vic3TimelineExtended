@@ -159,14 +159,29 @@ class SnapshotEffectTest(unittest.TestCase):
     def test_logs_for_players_only(self):
         self.assertRegex(self.flat, r"if = \{ limit = \{ is_ai = no \} debug_log = \"TE_TAX snapshot ")
 
-    def test_called_by_the_processor_and_the_opening_of_a_revision_only(self):
+    def test_called_after_a_collection_write_or_at_a_new_revision_only(self):
+        # The processor, the watchdog when it syncs and te_tax.4 (controller rulings,
+        # fix round 1), and the opening of a revision.
         callers = sorted(name for name, body in all_effects().items() if "te_tax_take_snapshot = yes" in body)
-        self.assertEqual(callers, ["te_tax_bill_open_revision", "te_tax_process_month"])
+        self.assertEqual(callers, ["te_tax_bill_open_revision", "te_tax_process_month", "te_tax_watchdog_month"])
         for name, body in all_effects().items():
             with self.subTest(name=name):
                 self.assertLessEqual(body.count("te_tax_take_snapshot"), 1)
-        for path in sorted((ROOT / "events").glob("*.txt")):
-            self.assertNotIn("te_tax_take_snapshot", script_text(path.relative_to(ROOT)), path.name)
+        events = {path.name: script_text(path.relative_to(ROOT)) for path in sorted((ROOT / "events").glob("*.txt"))}
+        self.assertEqual([name for name, text in events.items() if "te_tax_take_snapshot" in text],
+                         ["te_tax_internal_events.txt"])
+        internal = events["te_tax_internal_events.txt"]
+        self.assertEqual(internal.count("te_tax_take_snapshot"), 1)
+        immediate = block(internal, "te_tax.4")
+        at = immediate.find("te_tax_take_snapshot = yes")
+        self.assertGreater(at, immediate.find("te_tax_sync_collection = yes"))
+        self.assertGreater(at, immediate.find("te_tax_refresh_ig_views = yes"))
+
+    def test_watchdog_takes_it_only_when_it_syncs(self):
+        body = block(read(SCHEDULE), "te_tax_watchdog_month")
+        flat = norm(body)
+        self.assertIn("if = { limit = { var:te_tax_code_version > local_var:te_tax_wd_version } "
+                      "te_tax_sync_collection = yes te_tax_take_snapshot = yes }", flat)
 
     def test_processor_takes_it_once_inside_the_claimed_month_after_the_sync(self):
         body = block(read(SCHEDULE), "te_tax_process_month")
@@ -370,6 +385,19 @@ class EstimatePanelTest(unittest.TestCase):
         self.assertNotIn("ScriptValue", self.loc["te_tax_est_none"])
         # the no-base line states no reason, as it also covers the time before the first snapshot
         self.assertEqual(self.loc["te_tax_est_nobase"], "No current base — estimate unavailable.")
+        # the offers' note: the same three-way choice, and the assumptions on its hover (fix round 1)
+        note = re.search(r"te_tax_note = \{[^{}]*'te_tax_pol_est_note'[^{}]*\}", self.politics)
+        self.assertIsNotNone(note)
+        self.assertIn("ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', "
+                      "SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), "
+                      "'(CFixedPoint)1' ), 'te_tax_pol_est_note', 'te_tax_pol_est_note_stale' )", note.group(0))
+        self.assertIn('tooltip = "te_tax_pol_est_tt"', note.group(0))
+        for key in ("te_tax_est_header_tt", "te_tax_pol_est_tt"):
+            with self.subTest(key=key):
+                self.assertIn("Receipts are counted where the law collects them; "
+                              "part of a tax may pass on through prices and wages.", self.loc[key])
+        self.assertIn("bringing in or removing rural assessment or head tax moves some of the other's payers",
+                      self.loc["te_tax_est_header_tt"])
 
     def test_each_channel_row_has_a_no_base_branch_and_the_budget_getter(self):
         for channel, (getter, keys) in CHANNELS.items():
@@ -414,6 +442,15 @@ class EstimatePanelTest(unittest.TestCase):
         self.assertIn('text = "te_tax_rv_regrel_state_est"', self.review)
         self.assertIn("ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_rv_regrel_state_est', "
                       "'te_tax_rv_regrel_state'", self.review)
+        # both rows wrap at their fixed width: elided, the figure would be cut off (fix round 1)
+        textboxes = [box for box in re.findall(r"textbox = \{.*?\n\t*\}", self.review, re.S)
+                     if "te_tax_rv_regrel_state_est" in box]
+        self.assertEqual(len(textboxes), 2)
+        for box in textboxes:
+            with self.subTest(box=box[:80]):
+                self.assertIn("multiline = yes", box)
+                self.assertNotIn("elide", box)
+                self.assertIn("maximumsize = { 480 -1 }", box)
 
     def test_an_offer_shows_its_revenue_change(self):
         self.assertIn("te_tax_disp_ig_offer_arg", self.card)

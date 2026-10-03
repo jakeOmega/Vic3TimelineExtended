@@ -129,6 +129,8 @@ te_tax_watchdog_month = {
 			if = {
 				limit = { var:te_tax_code_version > local_var:te_tax_wd_version }
 				te_tax_sync_collection = yes
+				# The code changed: date the estimates by it now, not on the 1st.
+				te_tax_take_snapshot = yes
 			}
 			te_tax_recompute_next_month = yes
 		}

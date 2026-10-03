@@ -580,9 +580,11 @@ types te_tax_politics_widget_types
 					text = "te_tax_pol_groups_note"
 				}
 				# The offers' revenue figures are static estimates against the economy
-				# snapshot (plan Task 14), marked once it is out of date.
+				# snapshot (plan Task 14): none taken yet, out of date, or current, as
+				# the review's label; the hover gives what they assume (spec §5).
 				te_tax_note = {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_pol_est_note', 'te_tax_pol_est_note_stale' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_pol_est_note', 'te_tax_pol_est_note_stale' ) )]"
+					tooltip = "te_tax_pol_est_tt"
 				}
 				flowcontainer = {
 					direction = vertical

@@ -80,6 +80,10 @@ te_tax.4 = {
 		# approval each took from its stance on the old taxation law carries over
 		# from the start.
 		te_tax_refresh_ig_views = yes
+		# The economy snapshot the estimates are dated by
+		# (te_tax_snapshot_effects.txt), of the code just written, so a new
+		# country's panels need not wait for the 1st.
+		te_tax_take_snapshot = yes
 	}
 }
 

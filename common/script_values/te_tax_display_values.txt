@@ -549,9 +549,10 @@ te_tax_view_snap_gdp = {
 
 # 1 while the snapshot is current: taken this calendar month (the processor
 # retakes it on the 1st, so an older one means a month was missed), under the
-# code in force (a sunset the watchdog ran, a migration or a civil-war repair
-# changes the code without a snapshot), and, while a bill is under debate, for
-# its current revision. 0 otherwise: the panels mark the estimate out of date.
+# code in force (every writer of the code is followed by a snapshot, a migration
+# by te_tax.4's the next day; the test catches the gap and an inherited one),
+# and, while a bill is under debate, for its current revision. 0 otherwise: the
+# panels mark the estimate out of date.
 te_tax_view_snap_current = {
 	value = 0
 	if = {

@@ -8,15 +8,19 @@
 # date once the month, the code or the bill revision has moved on
 # (te_tax_view_snap_current).
 #
-# CALLERS. The monthly processor (te_tax_process_month, inside the month it
-# claims, after the collection write: once per month) and te_tax_bill_open_revision
-# (introduction, revision and an accepted offer, each a new revision; after the
-# bill is open, so the revision is recorded). Never a GUI: opening a panel reads
-# the guarded views only. Its variables are a display cache, not schema tokens:
-# every call writes all of them, nothing removes them, and a view reads them
-# only through has_variable. A civil war's winner may inherit a loser's snapshot
-# for a variable it lacks; the code-version and month tests mark it out of date
-# until the next 1st.
+# CALLERS. Each after a collection write or a new revision, at most once per
+# execution: the monthly processor (te_tax_process_month, inside the month it
+# claims, after the collection write: once per month); the watchdog
+# (te_tax_watchdog_month), only when a sunset made it sync; te_tax.4, the sync
+# the day after a migration, a re-assert or a copied code (a civil-war repair or
+# a release included), after it; and te_tax_bill_open_revision (introduction,
+# revision and an accepted offer, each a new revision; after the bill is open,
+# so the revision is recorded). Never a GUI: opening a panel reads the guarded
+# views only. Its variables are a display cache, not schema tokens: every call
+# writes all of them, nothing removes them, and a view reads them only through
+# has_variable. A civil war's winner may inherit a loser's snapshot for a
+# variable it lacks until the repair's te_tax.4 retakes it the next day; the
+# code-version and month tests mark a stale one out of date meanwhile.
 #
 # Country scope; nothing reads ROOT. Variable writes only: no modifier, no
 # native setting, no tooltip.
