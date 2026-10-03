@@ -14970,7 +14970,7 @@ pm_fusion_ssto_craft = {
 }
 
 pm_space_elevator_construction_paused = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p1.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -14994,7 +14994,7 @@ pm_space_elevator_construction_paused = {
 }
 
 pm_space_elevator_construction_slow = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p2.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -15035,7 +15035,7 @@ pm_space_elevator_construction_slow = {
 }
 
 pm_space_elevator_construction_medium = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p3.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -15076,7 +15076,7 @@ pm_space_elevator_construction_medium = {
 }
 
 pm_space_elevator_construction_fast = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p4.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -15117,7 +15117,7 @@ pm_space_elevator_construction_fast = {
 }
 
 pm_space_elevator = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 
 	state_modifiers = {
 		level_scaled = {
