@@ -59,6 +59,18 @@ One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_cod
 
 Beside the name, a 20 px check shows while the policy is in force (play-test round 3; it replaced the "Active"/"Inactive" word) and nothing shows while it is not. It is vanilla's `gfx/interface/icons/generic_icons/green_checkmark.dds`, kept.
 
+## Fossil Transition: one icon per programme row
+
+No new art (#660). Each retirement programme row shows its building's own vanilla icon, lit while the programme runs and dimmed while it does not, in the `row_icon` blockoverride of each `rt_programme_row` in `te_gw_sec_transition`. `GwIconsTest` holds each row to its file. If the icon pipeline later paints a "retiring" variant, the subject is the building's icon with a red closure mark.
+
+| Programme | Shows | File |
+|---|---|---|
+| Coal mines | vanilla Coal Mine | `gfx/interface/icons/building_icons/coal_mine.dds` |
+| Oil rigs | vanilla Oil Rig | `gfx/interface/icons/building_icons/oil_rig.dds` |
+| Power plants | vanilla Power Plant | `gfx/interface/icons/building_icons/power_plant.dds` |
+
+The same 20 px check as the policy rows shows while a programme runs.
+
 ## Top Emitters: the row marks
 
 No new art. Each row starts with the leader's flag, vanilla's `tiny_flag` widget (a widget, not a texture: its name on hover, the country on click). A 20 px treaty mark shows while an Enforce Emissions Reduction treaty binds the leader; it is the Treaty-Bound cell's vanilla icon above, `gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds`. Our own market's row says "Our market" in words.

@@ -1,0 +1,28 @@
+﻿# ============================================================================
+# RESOURCE TRANSITION — feed notices (issue #660)
+# ============================================================================
+# Posted to a player by rt_retire_smallest
+# (common/scripted_effects/resource_transition_effects.txt) when a retirement
+# programme closes a building. The text reads the saved scope rt_retire_state
+# and its rt_retired_levels / rt_retired_cost variables.
+
+rt_coal_retired_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = neutral
+}
+
+rt_oil_retired_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = neutral
+}
+
+rt_power_retired_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = neutral
+}

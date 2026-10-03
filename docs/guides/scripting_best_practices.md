@@ -1316,6 +1316,10 @@ PY
 
 Output should be `truly missing loc: none`. Two pitfalls the audit accounts for: (1) match `:\d+` not `:0` — vanilla often uses `:1` or higher version suffixes, and a `:0`-only check spuriously flags vanilla-loc'd keys. (2) Check both vanilla and mod loc — if the mod re-defines (or `INJECT:`s) a vanilla modifier type, vanilla already supplies the loc and the mod must NOT re-add it under the same key. Re-run before merging any new modifier-type registrations.
 
+## Company Prestige Goods Need a Roster Building That Makes the Base Good
+
+A company at full prosperity makes the prestige goods in its `possible_prestige_goods` in place of their base good, in the buildings it owns. If none of its `building_types` buildings produces the base good, the prestige good never appears. The engine accepts the definition and logs nothing. An `extension_building_types` building doesn't count. It joins the roster only through an industry charter, a company holds one at a time, and each grant has a cooldown. Google listed Precision Robotics with robotics only in its extensions, and five more mod companies had the same gap. Either move the building that makes the good into `building_types` or drop the prestige good. `prestige_good_roster_audit` catches both cases (`--strict` in CI). Vanilla's named prestige goods (Tailored Suits and the like) aren't in the `vanilla_parsed/` snapshot, so the audit can't check them; it reads base goods from the mod's `common/prestige_goods/` and takes `prestige_good_generic_<good>` to mean `<good>`.
+
 ## Portrait Modifier Files
 
 Portrait modifier files (in `gfx/portraits/portrait_modifiers/`) require a wrapper block:
@@ -4142,6 +4146,10 @@ The fix is a cadence split, not a cache: **snapshot exactly what iterates, and r
 ## A Journal Entry's Goal Is Frozen at Activation — `goal_add_value = TARGET - current`
 
 Vanilla's `common/journal_entries/journal_entries.md` says `current_value` and `goal_add_value` are evaluated **once, when the entry activates**, and added together to form the goal. So a JE that wants a fixed absolute target writes `goal_add_value = { value = TARGET subtract = <the same script value as current_value> }` — which reads like a bug and is not. `je_global_warming` uses `4 - temperature_anomaly_display` so its goal is pinned at exactly 4.0 °C however warm the world was when the entry activated; a flat `value = 4` would make the goal `4 + anomaly_at_activation` and drift between saves. Leave a comment saying so, or the next reader will "fix" it.
+
+## A Second Way to Activate a Journal Entry Changes What `has_journal_entry` Means
+
+A journal entry activates when **both** `is_shown_when_inactive` and `possible` hold (vanilla `journal_entries.md`), so a new activation path goes into both, as an `OR`. That changes the meaning of every `has_journal_entry = je_x` in the mod, which until then also meant "the entry's original condition holds". Before adding the path, list the readers (`git grep -n "has_journal_entry = je_x"`) and check each still needs its original condition. #660 opened `je_global_warming` for a restrictive Resource Transition law with the Global Warming rule **off**; the climate readers turned out to need warming independently (`has_modifier = global_warming`, `temperature_anomaly_display >= 0.5`), so nothing climate fires, but the panel's climate sections had to gate on the rule themselves (`gw_rule_enabled_sgui`), and the Market tab's gates, which read the rule, had to accept the new path. Mirror the change in any one-line copy of `possible` (`gw_entry_unlocked`, pinned word for word by `MarketTabTest`).
 
 ## A Deactivated Journal Entry Can Only Speak Through `status_desc`
 

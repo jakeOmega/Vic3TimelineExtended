@@ -219,6 +219,25 @@ sr_has_running_milestone = {
 	}
 }
 
+# The race is over for this country: every single-goal milestone done, every
+# world claimed by someone, and no programme still running, so nothing is left
+# to spend progress on. Its progress sources then pay the Commercial Space
+# Industry dividend instead (sr_refresh_space_dividend). A country that reaches
+# the end after the last world is gone qualifies as soon as its own milestones
+# are done; it never opens Solar System Colonization, but its sources are just
+# as idle. All variables, so a revolution's winner inherits the state.
+sr_space_race_concluded = {
+	has_variable = sr_completed_suborbital
+	has_variable = sr_completed_orbital
+	has_variable = sr_completed_moon_landing
+	has_variable = sr_completed_probe
+	has_variable = sr_completed_moon_base
+	has_variable = sr_completed_mars_landing
+	has_variable = sr_completed_interstellar_probe
+	has_global_variable = sr_all_colonies_complete
+	NOT = { sr_has_running_milestone = yes }
+}
+
 # We have really claimed at least one colony (sr_establish_colony_effect counts
 # only real claims). The same test society_technology_events.18 uses.
 sr_has_space_colony = {

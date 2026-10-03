@@ -114,7 +114,10 @@ gw_has_yearly_figures = {
 gw_entry_unlocked = {
 	custom_tooltip = {
 		text = gw_entry_unlock_tt
-		temperature_anomaly_display >= 0.1
+		OR = {
+			temperature_anomaly_display >= 0.1
+			rt_restrictive_transition_law = yes
+		}
 	}
 }
 

@@ -4253,6 +4253,40 @@ space_race_events.76 = {
 }
 
 ##############################################
+# AFTER THE RACE (77)
+##############################################
+
+# Event 77: The Commercial Space Age
+# One notice, the first time the Commercial Space Industry dividend applies to
+# a player (sr_refresh_space_dividend, which records it in
+# sr_space_dividend_announced): the race is over for us, and the progress our
+# sources still give each month now pays Extraplanetary Base throughput. The
+# modifier is already on the country when this fires, so the option only
+# explains it.
+space_race_events.77 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colony_psyche.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	title = space_race_events.77.t
+	desc = space_race_events.77.d
+	flavor = space_race_events.77.f
+
+	duration = 3
+
+	trigger = { sr_space_race_concluded = yes }
+
+	option = {
+		name = space_race_events.77.a
+		default_option = yes
+		custom_tooltip = sr_space_dividend_tt
+	}
+}
+
+##############################################
 # MILESTONE CHOICE EVENTS (80-83)
 ##############################################
 

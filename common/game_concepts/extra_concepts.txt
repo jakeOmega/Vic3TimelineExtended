@@ -52,6 +52,8 @@ concept_global_warming_system = {}
 concept_greenhouse_gas_emissions = {}
 concept_temperature_anomaly = {}
 concept_climate_policy = {}
+# Resource Transition (#660): the laws and the retirement programmes.
+concept_fossil_transition = {}
 concept_nuclear_program = {}
 concept_nuclear_strike = {}
 concept_nuclear_stockpile = {}

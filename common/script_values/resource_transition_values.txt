@@ -1,0 +1,545 @@
+﻿# ============================================================================
+# RESOURCE TRANSITION — values (issue #660)
+# ============================================================================
+# Tuning constants, the retirement arithmetic, the panel's readers and the
+# AI's law weights. Triggers: common/scripted_triggers/resource_transition_triggers.txt.
+#
+# THE PANEL READS SNAPSHOTS. Counting a country's mines, rigs and plants walks
+# every building it has, so the Fossil Transition section never does it per
+# frame: rt_refresh_display_effect (common/scripted_effects/
+# resource_transition_effects.txt) writes the rt_d_* country variables monthly
+# for players, and again on a law change and on every Start or Stop. The rt_disp_*
+# values below are guarded O(1) reads of them. The market figures are live
+# reads of the market's own goods (O(1)), as global_warming_ai_values.txt does.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Tuning (first estimates; the PR lists them for the owner)
+# ----------------------------------------------------------------------------
+
+# Months between two retirements in one running programme. One building per
+# industry a quarter: a country with coal mines in 20 states closes them in
+# five years, power plants in 40 states in ten.
+RT_RETIRE_INTERVAL_MONTHS = 3
+
+# Share of a building's construction value its owners are paid when it is
+# retired: construction points per level x the construction good's base price
+# x the country's construction cost scaling, x this. A quarter: a written-down
+# plant, not a new one.
+RT_COMPENSATION_SHARE = 0.25
+
+# How long a state keeps Transition Assistance after a retirement there.
+RT_ASSISTANCE_YEARS = 5
+
+# ----------------------------------------------------------------------------
+# Per state: the building's level, the retirement order, the compensation.
+# Scope: state.
+# ----------------------------------------------------------------------------
+rt_state_level_coal = {
+	value = 0
+	if = {
+		limit = { has_building = building_coal_mine }
+		b:building_coal_mine = { add = this.level }
+	}
+}
+
+rt_state_level_oil = {
+	value = 0
+	if = {
+		limit = { has_building = building_oil_rig }
+		b:building_oil_rig = { add = this.level }
+	}
+}
+
+rt_state_level_power = {
+	value = 0
+	if = {
+		limit = { has_building = building_power_plant }
+		b:building_power_plant = { add = this.level }
+	}
+}
+
+# ordered_scope_state takes the highest first, so the order is the negative
+# level: the smallest building goes first, the least disruptive closure.
+rt_retire_order_coal = {
+	value = rt_state_level_coal
+	multiply = -1
+}
+
+rt_retire_order_oil = {
+	value = rt_state_level_oil
+	multiply = -1
+}
+
+rt_retire_order_power = {
+	value = rt_state_level_power
+	multiply = -1
+}
+
+# Money paid to the owners per construction point retired: the construction
+# good's base price, scaled as the owner's construction costs are
+# (te_construction_market_goods_per_point), times the compensation share. Base
+# price rather than the market price, so a passing spike in the construction
+# market does not double a payout. Scope: state.
+rt_compensation_per_point = {
+	value = TE_CONSTRUCTION_MARKET_SERVICES_PRICE
+	multiply = owner.te_construction_market_goods_per_point
+	multiply = RT_COMPENSATION_SHARE
+}
+
+rt_compensation_coal_here = {
+	value = rt_state_level_coal
+	multiply = bt:building_coal_mine.required_construction
+	multiply = rt_compensation_per_point
+}
+
+rt_compensation_oil_here = {
+	value = rt_state_level_oil
+	multiply = bt:building_oil_rig.required_construction
+	multiply = rt_compensation_per_point
+}
+
+rt_compensation_power_here = {
+	value = rt_state_level_power
+	multiply = bt:building_power_plant.required_construction
+	multiply = rt_compensation_per_point
+}
+
+# ----------------------------------------------------------------------------
+# Per country: what is left. Walks every building, so only the snapshot
+# effect and the AI's occasional reads call these. Scope: country.
+# ----------------------------------------------------------------------------
+rt_levels_coal = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_coal_mine }
+		add = this.level
+	}
+}
+
+rt_levels_oil = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_oil_rig }
+		add = this.level
+	}
+}
+
+rt_levels_power = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_power_plant }
+		add = this.level
+	}
+}
+
+# Clean generation: hydro, nuclear, fusion and renewable plants.
+rt_levels_clean_power = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			OR = {
+				is_building_type = building_hydro_plant
+				is_building_type = building_nuclear_plant
+				is_building_type = building_fusion_plant
+				is_building_type = building_renewable_energy_plant
+			}
+		}
+		add = this.level
+	}
+}
+
+rt_levels_synthetics = {
+	value = 0
+	every_scope_building = {
+		limit = {
+			OR = {
+				is_building_type = building_synthetics_plant_oil
+				is_building_type = building_synthetics_plant_coal
+			}
+		}
+		add = this.level
+	}
+}
+
+rt_states_coal = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_coal_mine }
+		add = 1
+	}
+}
+
+rt_states_oil = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_oil_rig }
+		add = 1
+	}
+}
+
+rt_states_power = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_power_plant }
+		add = 1
+	}
+}
+
+# Compensation for retiring everything that is left, per industry.
+rt_compensation_all_coal = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_coal_mine }
+		add = rt_compensation_coal_here
+	}
+}
+
+rt_compensation_all_oil = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_oil_rig }
+		add = rt_compensation_oil_here
+	}
+}
+
+rt_compensation_all_power = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_power_plant }
+		add = rt_compensation_power_here
+	}
+}
+
+# Clean generation's share of generating levels, 0-1 (0 with neither).
+rt_ai_clean_power_share = {
+	value = rt_levels_clean_power
+	divide = {
+		value = rt_levels_clean_power
+		add = rt_levels_power
+		min = 1
+	}
+}
+
+# ----------------------------------------------------------------------------
+# The market (live, O(1)). Scope: country.
+# ----------------------------------------------------------------------------
+
+# Production over consumption for one good in this country's market: above 1
+# the market has coal (oil) to spare, below it imports or goes short.
+rt_ai_market_surplus_coal = {
+	value = 0
+	market = {
+		mg:coal = { add = market_goods_production }
+	}
+	divide = {
+		value = 0
+		market = {
+			mg:coal = { add = market_goods_consumption }
+		}
+		min = 1
+	}
+}
+
+rt_ai_market_surplus_oil = {
+	value = 0
+	market = {
+		mg:oil = { add = market_goods_production }
+	}
+	divide = {
+		value = 0
+		market = {
+			mg:oil = { add = market_goods_consumption }
+		}
+		min = 1
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Panel readers: guarded reads of the rt_d_* snapshot. Scope: country.
+# ----------------------------------------------------------------------------
+rt_disp_levels_coal = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_lv_coal }
+		add = var:rt_d_lv_coal
+	}
+}
+
+rt_disp_levels_oil = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_lv_oil }
+		add = var:rt_d_lv_oil
+	}
+}
+
+rt_disp_levels_power = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_lv_power }
+		add = var:rt_d_lv_power
+	}
+}
+
+rt_disp_states_coal = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_n_coal }
+		add = var:rt_d_n_coal
+	}
+}
+
+rt_disp_states_oil = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_n_oil }
+		add = var:rt_d_n_oil
+	}
+}
+
+rt_disp_states_power = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_n_power }
+		add = var:rt_d_n_power
+	}
+}
+
+rt_disp_next_cost_coal = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_next_coal }
+		add = var:rt_d_next_coal
+	}
+}
+
+rt_disp_next_cost_oil = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_next_oil }
+		add = var:rt_d_next_oil
+	}
+}
+
+rt_disp_next_cost_power = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_next_power }
+		add = var:rt_d_next_power
+	}
+}
+
+rt_disp_all_cost_coal = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_all_coal }
+		add = var:rt_d_all_coal
+	}
+}
+
+rt_disp_all_cost_oil = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_all_oil }
+		add = var:rt_d_all_oil
+	}
+}
+
+rt_disp_all_cost_power = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_all_power }
+		add = var:rt_d_all_power
+	}
+}
+
+rt_disp_levels_clean_power = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_lv_clean }
+		add = var:rt_d_lv_clean
+	}
+}
+
+rt_disp_levels_synthetics = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_d_lv_synth }
+		add = var:rt_d_lv_synth
+	}
+}
+
+# Clean generation's share of generating levels, in per cent, from the
+# snapshot.
+rt_disp_clean_power_pct = {
+	value = rt_disp_levels_clean_power
+	divide = {
+		value = rt_disp_levels_clean_power
+		add = rt_disp_levels_power
+		min = 1
+	}
+	multiply = 100
+	round = yes
+}
+
+# Months until a running programme's next retirement (0 when not running).
+rt_disp_months_left_coal = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_prog_coal }
+		add = RT_RETIRE_INTERVAL_MONTHS
+		subtract = var:rt_prog_coal
+	}
+	min = 0
+}
+
+rt_disp_months_left_oil = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_prog_oil }
+		add = RT_RETIRE_INTERVAL_MONTHS
+		subtract = var:rt_prog_oil
+	}
+	min = 0
+}
+
+rt_disp_months_left_power = {
+	value = 0
+	if = {
+		limit = { has_variable = rt_prog_power }
+		add = RT_RETIRE_INTERVAL_MONTHS
+		subtract = var:rt_prog_power
+	}
+	min = 0
+}
+
+# The market's weekly coal and oil, live. Scope: country.
+rt_disp_mkt_made_coal = {
+	value = 0
+	market ?= {
+		mg:coal = { add = market_goods_production }
+	}
+	round = yes
+}
+
+rt_disp_mkt_used_coal = {
+	value = 0
+	market ?= {
+		mg:coal = { add = market_goods_consumption }
+	}
+	round = yes
+}
+
+rt_disp_mkt_made_oil = {
+	value = 0
+	market ?= {
+		mg:oil = { add = market_goods_production }
+	}
+	round = yes
+}
+
+rt_disp_mkt_used_oil = {
+	value = 0
+	market ?= {
+		mg:oil = { add = market_goods_consumption }
+	}
+	round = yes
+}
+
+rt_disp_mkt_imports_coal = {
+	value = 0
+	market ?= {
+		mg:coal = { add = market_goods_imports }
+	}
+	round = yes
+}
+
+rt_disp_mkt_exports_coal = {
+	value = 0
+	market ?= {
+		mg:coal = { add = market_goods_exports }
+	}
+	round = yes
+}
+
+rt_disp_mkt_imports_oil = {
+	value = 0
+	market ?= {
+		mg:oil = { add = market_goods_imports }
+	}
+	round = yes
+}
+
+rt_disp_mkt_exports_oil = {
+	value = 0
+	market ?= {
+		mg:oil = { add = market_goods_exports }
+	}
+	round = yes
+}
+
+# ----------------------------------------------------------------------------
+# AI law weights (ai_enact_weight_modifier; base weights run in the low
+# hundreds, so +100 is significant and +1000 very). Scope: country.
+#
+# The will is global warming's divestment will (gw_ai_will_fossil_fuel_divestment,
+# common/script_values/global_warming_ai_values.txt): temperature, the
+# ministry, an environmentalist government, the movement and wealth, with fuel
+# exporters and laissez-faire markets resisting hardest. The moratorium closes
+# nothing, but it stops every new power plant, so it needs a quarter of the
+# power fleet clean already: without that, a growing economy would have no way
+# to add electricity. The phaseout closes what is running, so it needs the
+# market able to do without: clean generation the larger part of the fleet and
+# no fuel shortage. The fleet test walks every building, so it comes last in
+# each limit, after the cheap tests that rule most countries out.
+# ----------------------------------------------------------------------------
+rt_ai_enact_moratorium = {
+	value = 0
+	if = {
+		limit = {
+			# Not a step back from the phaseout.
+			NOT = { has_law = law_type:law_managed_fossil_phaseout }
+			gw_ai_will_fossil_fuel_divestment >= 50
+			rt_ai_fossil_supply_crisis = no
+			rt_ai_clean_power_share >= 0.25
+		}
+		add = {
+			value = gw_ai_will_fossil_fuel_divestment
+			subtract = 50
+			multiply = 15
+		}
+	}
+	max = 600
+}
+
+rt_ai_enact_phaseout = {
+	value = 0
+	if = {
+		limit = {
+			has_law = law_type:law_fossil_expansion_moratorium
+			gw_ai_will_fossil_fuel_divestment >= 65
+			rt_ai_fossil_supply_crisis = no
+			rt_ai_clean_power_share >= 0.5
+		}
+		add = {
+			value = gw_ai_will_fossil_fuel_divestment
+			subtract = 65
+			multiply = 20
+		}
+	}
+	max = 600
+}
+
+# Back to Unrestricted Extraction: a restrictive law in force and the market
+# short of coal, oil or electricity.
+rt_ai_enact_unrestricted = {
+	value = 0
+	if = {
+		limit = {
+			rt_restrictive_transition_law = yes
+			rt_ai_fossil_supply_crisis = yes
+		}
+		add = 400
+	}
+}

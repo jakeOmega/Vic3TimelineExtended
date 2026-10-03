@@ -1,0 +1,163 @@
+﻿# ============================================================================
+# RESOURCE TRANSITION — triggers (issue #660)
+# ============================================================================
+# Laws: common/laws/resource_transition_laws.txt. Effects:
+# common/scripted_effects/resource_transition_effects.txt. The player's
+# controls (common/scripted_guis/resource_transition_sguis.txt) and the AI's
+# scripted buttons (common/scripted_buttons/resource_transition_buttons.txt)
+# both call the rt_possible_* triggers below, so the two surfaces cannot drift.
+#
+# THE THREE INDUSTRIES. Each programme has a short key, used in variable,
+# trigger and loc names, and a building type:
+#
+#   coal    building_coal_mine
+#   oil     building_oil_rig
+#   power   building_power_plant (every fuel method burns coal or oil)
+#
+# Hydro, nuclear, fusion and renewable plants, the synthetics plants, the
+# graphite mine (which runs the coal mine's methods) and every other mine are
+# out of scope, as are the company buildings that dig coal or oil: each is
+# capped at a level or two by its company's prosperity.
+#
+# A running programme is the country variable rt_prog_<key>; its value is the
+# months since its last retirement (rt_country_monthly_update). Country
+# variables, not modifiers or lists: a civil war's winner inherits variables
+# only (docs/guides/scripting_best_practices.md, "What a Civil War's Winner
+# Inherits").
+#
+# Every clause is phrased as a condition, not a complaint: the panel renders
+# them through ScriptedGui.IsValidTooltip, with a tick or a cross.
+# ============================================================================
+
+# Is either restrictive law in force? Also what je_global_warming's activation
+# adds for the transition (its is_shown_when_inactive and possible), whatever
+# the temperature and the game rule. Scope: country.
+rt_restrictive_transition_law = {
+	OR = {
+		has_law = law_type:law_fossil_expansion_moratorium
+		has_law = law_type:law_managed_fossil_phaseout
+	}
+}
+
+# May a coal mine, oil rig or power plant be built or expanded in this state?
+# Read by the three buildings' can_build_government, can_build_private and
+# should_auto_expand (common/buildings/extra_buildings.txt). The law that
+# counts is that of the country the state belongs to, whoever invests. Scope:
+# state.
+rt_fossil_construction_allowed_here = {
+	custom_tooltip = {
+		text = rt_cond_construction_allowed
+		owner ?= {
+			NOT = { rt_restrictive_transition_law = yes }
+		}
+	}
+}
+
+# The phaseout's funding requirement, checked at enactment (its can_enact).
+# Scope: country.
+rt_ministry_funded_for_phaseout = {
+	custom_tooltip = {
+		text = rt_cond_ministry_funded
+		institution_investment_level = {
+			institution = institution_ministry_of_the_environment
+			value >= 3
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Programmes. $KEY$ is coal / oil / power, $BT$ the building type.
+# ---------------------------------------------------------------------------
+
+# Is this programme running? Scope: country.
+rt_programme_running = {
+	has_variable = rt_prog_$KEY$
+}
+
+# Any of the three. Scope: country.
+rt_any_programme_running = {
+	OR = {
+		has_variable = rt_prog_coal
+		has_variable = rt_prog_oil
+		has_variable = rt_prog_power
+	}
+}
+
+# Start a programme. Scope: country.
+rt_possible_start = {
+	custom_tooltip = {
+		text = rt_cond_phaseout_in_force
+		has_law = law_type:law_managed_fossil_phaseout
+	}
+	custom_tooltip = {
+		text = rt_cond_not_running
+		NOT = { has_variable = rt_prog_$KEY$ }
+	}
+	custom_tooltip = {
+		text = rt_cond_has_$KEY$
+		any_scope_state = { has_building = $BT$ }
+	}
+}
+
+# Stop a programme. Scope: country.
+rt_possible_stop = {
+	custom_tooltip = {
+		text = rt_cond_running
+		has_variable = rt_prog_$KEY$
+	}
+}
+
+# ---------------------------------------------------------------------------
+# AI readiness (read by the scripted buttons' ai_chance only). An AI starts a
+# programme only when its market can lose the supply, and stops one when the
+# market runs short. Scope: country.
+# ---------------------------------------------------------------------------
+
+# Coal and oil: the market makes more than it burns (rt_ai_market_surplus_<key>
+# at or above 1.25), and the good is not in shortage.
+rt_ai_ready_extraction = {
+	market ?= {
+		mg:$KEY$ = {
+			market_goods_has_goods_shortage = no
+			market_goods_pricier < 0.1
+		}
+	}
+	rt_ai_market_surplus_$KEY$ >= 1.25
+}
+
+# Power plants: clean generation is at least 60% of generating levels, and
+# electricity is neither short nor dear in the market.
+rt_ai_ready_power = {
+	rt_ai_clean_power_share >= 0.6
+	market ?= {
+		mg:electricity = {
+			market_goods_has_goods_shortage = no
+			market_goods_pricier < 0.1
+		}
+	}
+}
+
+# A running programme is hurting: its good, or electricity for power plants,
+# is short or 40% above base price.
+rt_ai_programme_hurting = {
+	market ?= {
+		mg:$GOOD$ = {
+			OR = {
+				market_goods_has_goods_shortage = yes
+				market_goods_pricier >= 0.4
+			}
+		}
+	}
+}
+
+# The market is short of coal, oil or electricity: the AI's reason to drop a
+# restrictive law (rt_ai_enact_unrestricted).
+rt_ai_fossil_supply_crisis = {
+	market ?= {
+		OR = {
+			mg:coal = { market_goods_has_goods_shortage = yes }
+			mg:oil = { market_goods_has_goods_shortage = yes }
+			mg:electricity = { market_goods_has_goods_shortage = yes }
+		}
+	}
+}
