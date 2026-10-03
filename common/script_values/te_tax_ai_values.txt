@@ -61,6 +61,11 @@ te_tax_ai_max_goods = 4
 te_tax_ai_promise_institution_score = 200
 # Months before its deadline that a missed institution promise is enacted for the AI.
 te_tax_ai_enact_lead_months = 1
+# The highest level an enacted institution promise can name: the mod's
+# MAX_INSTITUTION_INVESTMENT (common/defines/extra_defines.txt). The generated
+# te_tax_gen_ai_enact_<o> has a literal branch per level up to it
+# (gen_tax_code.py OBL_MAX_INSTITUTION_LEVEL). Not a tunable.
+te_tax_ai_enact_level_max = 9
 
 # ---------------------------------------------------------------------------
 # Fiscal reads (spec §2.3), live, in the processor on the 1st or in te_tax.8
@@ -132,6 +137,26 @@ te_tax_ai_cadence_pos = {
 		subtract = var:te_tax_ai_phase
 		modulo = te_tax_ai_cadence_months
 	}
+}
+
+# ---------------------------------------------------------------------------
+# Promises (te_tax_ai_promise_at_risk)
+# ---------------------------------------------------------------------------
+
+# A delivering promise whose deadline is at or before this month is at risk:
+# the month the processor last ran (te_tax_now, this month's in te_tax.8, which
+# runs 1 to 26 days after it), or the live month before it ever ran, plus
+# te_tax_ai_enact_lead_months. With the default lead of 1 that is the month the
+# next monthly check tests (te_tax_obl_check_one breaches a delivering promise
+# at var:te_tax_o<N>_deadline <= var:te_tax_now). A script value on the right
+# of the comparison, never inside a quoted trigger call.
+te_tax_ai_enact_by_month = {
+	value = te_history_month_index
+	if = {
+		limit = { has_variable = te_tax_now var:te_tax_now >= 0 }
+		value = var:te_tax_now
+	}
+	add = te_tax_ai_enact_lead_months
 }
 
 # ---------------------------------------------------------------------------

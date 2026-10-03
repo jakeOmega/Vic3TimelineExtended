@@ -22,7 +22,10 @@ slots (te_tax_o1 .. te_tax_o4). These tests pin, structurally:
   inside a branch guarded by the state they leave, so each consequence applies
   once per transition;
 * nothing in the tax code sets an institution's level
-  (`set_institution_investment_level`, `change_institution_investment_level`);
+  (`set_institution_investment_level`, `change_institution_investment_level`),
+  except the AI's enactment of a kind-1 promise it is about to miss (plan
+  2026-10-03 Task 19, owner-approved): the generated te_tax_gen_ai_enact_<o>,
+  called only by the AI layer;
 * the lifecycle links: proposed (1) obligations belong to the bill and are
   released by a new debate or the bill closing; passage binds them (7) to the
   package slot; commencement starts them (2); a package's release or
@@ -157,13 +160,26 @@ class FilesTest(unittest.TestCase):
 
     def test_nothing_sets_an_institution_level(self):
         """A promise is verified against the delivered level; setting it would
-        bypass native expansion time (research E §C)."""
+        bypass native expansion time (research E §C). The one exception is the
+        owner's (plan 2026-10-03 Task 19): an AI country's kind-1 promise the
+        native AI is about to miss is set to its target, by the generated
+        te_tax_gen_ai_enact_<o> alone, which only the AI layer calls."""
         texts = all_tax_text()
-        texts[GENERATOR] = (ROOT / GENERATOR).read_text(encoding="utf-8")
+        enact = re.compile(r"(?m)^te_tax_gen_ai_enact_\d+ = \{")
+        self.assertEqual(len(enact.findall(texts[GEN_EFFECTS])), len(SLOTS))
         for path, text in texts.items():
             with self.subTest(path=path):
+                if path == GEN_EFFECTS:
+                    for match in enact.finditer(text):
+                        text = text[:match.start()] + " " * (close(text, match.end() - 1) + 1 - match.start()) \
+                            + text[close(text, match.end() - 1) + 1:]
                 self.assertNotIn("set_institution_investment_level", text)
                 self.assertNotIn("change_institution_investment_level", text)
+        generator = (ROOT / GENERATOR).read_text(encoding="utf-8")
+        self.assertNotIn("change_institution_investment_level", generator)
+        self.assertEqual(generator.count("set_institution_investment_level"), 1)
+        emitter = generator.split("set_institution_investment_level", 1)[0].rsplit("\ndef ", 1)[1]
+        self.assertTrue(emitter.startswith("_ai_obligation_effects("), emitter[:40])
 
 
 class VerifierTest(unittest.TestCase):
@@ -518,8 +534,12 @@ class LifecycleTest(unittest.TestCase):
                       "change_variable = { name = te_tax_o$N$_streak add = 1 } } else = { set_variable = "
                       "{ name = te_tax_o$N$_streak value = 0 } }", d)
         self.assertLess(d.find("net_fixed_income"), d.find("te_tax_obl_delivered"))
-        self.assertIn("limit = { te_tax_obl_delivered = { N = $N$ } } te_tax_obl_begin_maintenance = { N = $N$ }", d)
-        self.assertIn("limit = { var:te_tax_o$N$_deadline <= var:te_tax_now } te_tax_obl_breach = { N = $N$ }", d)
+        # The deadline line (plan 2026-10-03 Task 19, obl_deadline met or unmet) is written just before
+        # the delivered promise starts maintenance, and just before the deadline breach.
+        self.assertIn("limit = { te_tax_obl_delivered = { N = $N$ } } te_tax_gen_obl_log_met_$N$ = yes "
+                      "te_tax_obl_begin_maintenance = { N = $N$ }", d)
+        self.assertIn("limit = { var:te_tax_o$N$_deadline <= var:te_tax_now } te_tax_gen_obl_log_unmet_$N$ = yes "
+                      "te_tax_obl_breach = { N = $N$ }", d)
         m = norm(maintaining[0])
         # A month that holds resets the failing count and, at the end of the term, fulfils.
         self.assertIn("if = { limit = { te_tax_obl_holds = { N = $N$ } } set_variable = { name = te_tax_o$N$_fails "

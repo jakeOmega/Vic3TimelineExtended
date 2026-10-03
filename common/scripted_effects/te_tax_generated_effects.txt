@@ -21,6 +21,10 @@
 # countries close the file: te_tax_gen_copy_code, te_tax_gen_copy_slot_<slot> and
 # te_tax_gen_copy_enacted, called by te_tax_civil_war_effects.txt, with the policy
 # obligations' te_tax_gen_copy_obligations and te_tax_gen_clear_obligations (plan Task 12).
+# The promise lines and the AI's enactment end it (plan 2026-10-03 Task 19):
+# te_tax_gen_obl_log_met_<n> and _unmet_<n>, called by te_tax_obl_check_one
+# (te_tax_obligation_effects.txt); te_tax_gen_ai_enact_<n> and te_tax_gen_ai_log_enacted_<n>,
+# called by te_tax_ai_manage_promises (te_tax_ai_effects.txt).
 
 # Each instrument's tokens with their sentinels, if absent: the enacted provision, its
 # version tokens and the AI's marks (te_tax_ai_last_<key>, te_tax_ai_dir_<key>).
@@ -5880,7 +5884,7 @@ te_tax_gen_store_a = {
 		set_variable = { name = te_tax_pa_xver_customs value = var:te_tax_bl_xver_customs }
 		set_variable = { name = te_tax_pa_pver_customs value = var:te_tax_pver_customs }
 	}
-	debug_log = "TE_TAX stored slot=a; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	if = { limit = { is_ai = no } debug_log = "TE_TAX stored slot=a; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]" }
 	set_variable = { name = te_tax_pa_state value = 1 }
 	set_variable = { name = te_tax_pa_on value = 1 }
 }
@@ -6668,7 +6672,7 @@ te_tax_gen_store_b = {
 		set_variable = { name = te_tax_pb_xver_customs value = var:te_tax_bl_xver_customs }
 		set_variable = { name = te_tax_pb_pver_customs value = var:te_tax_pver_customs }
 	}
-	debug_log = "TE_TAX stored slot=b; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	if = { limit = { is_ai = no } debug_log = "TE_TAX stored slot=b; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]" }
 	set_variable = { name = te_tax_pb_state value = 1 }
 	set_variable = { name = te_tax_pb_on value = 1 }
 }
@@ -8169,4 +8173,261 @@ te_tax_gen_copy_enacted = {
 	te_tax_copy_token = { NAME = te_tax_en_g_wood }
 	te_tax_copy_token = { NAME = te_tax_en_agrel }
 	te_tax_copy_token = { NAME = te_tax_en_regrel }
+}
+
+# Policy obligations' deadline line (plan 2026-10-03 Task 19), every country, once per
+# promise as its delivery phase ends: te_tax_obl_check_one calls _met_<n> before a
+# delivered promise starts maintenance and _unmet_<n> before the deadline breach, both
+# while the slot is still on, so the views print its payload. ai=yes|no is literal in
+# two lines, since debug_log cannot print is_ai. An AI's enacted promise (ai_obl_enacted)
+# logs met at the next check; one it renegotiated (ai_renegotiated) logs neither.
+te_tax_gen_obl_log_met_1 = {
+	if = {
+		limit = { is_ai = yes }
+		debug_log = "TE_TAX obl_deadline result=met slot=1 kind=[SCOPE.ScriptValue('te_tax_view_o1_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o1_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o1_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o1_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o1_deadline')|0] ai=yes; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_TAX obl_deadline result=met slot=1 kind=[SCOPE.ScriptValue('te_tax_view_o1_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o1_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o1_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o1_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o1_deadline')|0] ai=no; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+te_tax_gen_obl_log_unmet_1 = {
+	if = {
+		limit = { is_ai = yes }
+		debug_log = "TE_TAX obl_deadline result=unmet slot=1 kind=[SCOPE.ScriptValue('te_tax_view_o1_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o1_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o1_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o1_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o1_deadline')|0] ai=yes; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_TAX obl_deadline result=unmet slot=1 kind=[SCOPE.ScriptValue('te_tax_view_o1_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o1_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o1_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o1_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o1_deadline')|0] ai=no; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+te_tax_gen_obl_log_met_2 = {
+	if = {
+		limit = { is_ai = yes }
+		debug_log = "TE_TAX obl_deadline result=met slot=2 kind=[SCOPE.ScriptValue('te_tax_view_o2_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o2_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o2_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o2_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o2_deadline')|0] ai=yes; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_TAX obl_deadline result=met slot=2 kind=[SCOPE.ScriptValue('te_tax_view_o2_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o2_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o2_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o2_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o2_deadline')|0] ai=no; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+te_tax_gen_obl_log_unmet_2 = {
+	if = {
+		limit = { is_ai = yes }
+		debug_log = "TE_TAX obl_deadline result=unmet slot=2 kind=[SCOPE.ScriptValue('te_tax_view_o2_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o2_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o2_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o2_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o2_deadline')|0] ai=yes; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_TAX obl_deadline result=unmet slot=2 kind=[SCOPE.ScriptValue('te_tax_view_o2_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o2_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o2_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o2_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o2_deadline')|0] ai=no; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+te_tax_gen_obl_log_met_3 = {
+	if = {
+		limit = { is_ai = yes }
+		debug_log = "TE_TAX obl_deadline result=met slot=3 kind=[SCOPE.ScriptValue('te_tax_view_o3_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o3_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o3_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o3_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o3_deadline')|0] ai=yes; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_TAX obl_deadline result=met slot=3 kind=[SCOPE.ScriptValue('te_tax_view_o3_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o3_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o3_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o3_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o3_deadline')|0] ai=no; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+te_tax_gen_obl_log_unmet_3 = {
+	if = {
+		limit = { is_ai = yes }
+		debug_log = "TE_TAX obl_deadline result=unmet slot=3 kind=[SCOPE.ScriptValue('te_tax_view_o3_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o3_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o3_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o3_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o3_deadline')|0] ai=yes; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_TAX obl_deadline result=unmet slot=3 kind=[SCOPE.ScriptValue('te_tax_view_o3_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o3_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o3_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o3_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o3_deadline')|0] ai=no; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+te_tax_gen_obl_log_met_4 = {
+	if = {
+		limit = { is_ai = yes }
+		debug_log = "TE_TAX obl_deadline result=met slot=4 kind=[SCOPE.ScriptValue('te_tax_view_o4_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o4_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o4_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o4_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o4_deadline')|0] ai=yes; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_TAX obl_deadline result=met slot=4 kind=[SCOPE.ScriptValue('te_tax_view_o4_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o4_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o4_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o4_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o4_deadline')|0] ai=no; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+te_tax_gen_obl_log_unmet_4 = {
+	if = {
+		limit = { is_ai = yes }
+		debug_log = "TE_TAX obl_deadline result=unmet slot=4 kind=[SCOPE.ScriptValue('te_tax_view_o4_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o4_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o4_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o4_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o4_deadline')|0] ai=yes; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	else = {
+		debug_log = "TE_TAX obl_deadline result=unmet slot=4 kind=[SCOPE.ScriptValue('te_tax_view_o4_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o4_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o4_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o4_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o4_deadline')|0] ai=no; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# The AI enacts a kind-1 promise it is about to miss (plan 2026-10-03 Task 19, the owner's
+# one exception to "the tax code never sets an institution's level"): called only by
+# te_tax_ai_manage_promises (te_tax_ai_effects.txt), in te_tax.8, behind
+# te_tax_ai_promise_at_risk and te_tax_ai_can_enact. It sets the promised institution to
+# exactly the promised level, never above it; the setter takes a literal level, so there
+# is a branch per level 1 to 9 (the mod's MAX_INSTITUTION_INVESTMENT,
+# common/defines/extra_defines.txt), each inside has_institution. The institution's native
+# costs apply from then on, and the monthly check still verifies the delivered level
+# (capability ledger: pending P16).
+te_tax_gen_ai_enact_1 = {
+	if = {
+		limit = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 var:te_tax_o1_kind = 1 var:te_tax_o1_arg = 1 has_institution = institution_schools }
+		if = { limit = { var:te_tax_o1_target = 1 } set_institution_investment_level = { institution = institution_schools level = 1 } }
+		else_if = { limit = { var:te_tax_o1_target = 2 } set_institution_investment_level = { institution = institution_schools level = 2 } }
+		else_if = { limit = { var:te_tax_o1_target = 3 } set_institution_investment_level = { institution = institution_schools level = 3 } }
+		else_if = { limit = { var:te_tax_o1_target = 4 } set_institution_investment_level = { institution = institution_schools level = 4 } }
+		else_if = { limit = { var:te_tax_o1_target = 5 } set_institution_investment_level = { institution = institution_schools level = 5 } }
+		else_if = { limit = { var:te_tax_o1_target = 6 } set_institution_investment_level = { institution = institution_schools level = 6 } }
+		else_if = { limit = { var:te_tax_o1_target = 7 } set_institution_investment_level = { institution = institution_schools level = 7 } }
+		else_if = { limit = { var:te_tax_o1_target = 8 } set_institution_investment_level = { institution = institution_schools level = 8 } }
+		else_if = { limit = { var:te_tax_o1_target = 9 } set_institution_investment_level = { institution = institution_schools level = 9 } }
+	}
+	else_if = {
+		limit = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 var:te_tax_o1_kind = 1 var:te_tax_o1_arg = 2 has_institution = institution_health_system }
+		if = { limit = { var:te_tax_o1_target = 1 } set_institution_investment_level = { institution = institution_health_system level = 1 } }
+		else_if = { limit = { var:te_tax_o1_target = 2 } set_institution_investment_level = { institution = institution_health_system level = 2 } }
+		else_if = { limit = { var:te_tax_o1_target = 3 } set_institution_investment_level = { institution = institution_health_system level = 3 } }
+		else_if = { limit = { var:te_tax_o1_target = 4 } set_institution_investment_level = { institution = institution_health_system level = 4 } }
+		else_if = { limit = { var:te_tax_o1_target = 5 } set_institution_investment_level = { institution = institution_health_system level = 5 } }
+		else_if = { limit = { var:te_tax_o1_target = 6 } set_institution_investment_level = { institution = institution_health_system level = 6 } }
+		else_if = { limit = { var:te_tax_o1_target = 7 } set_institution_investment_level = { institution = institution_health_system level = 7 } }
+		else_if = { limit = { var:te_tax_o1_target = 8 } set_institution_investment_level = { institution = institution_health_system level = 8 } }
+		else_if = { limit = { var:te_tax_o1_target = 9 } set_institution_investment_level = { institution = institution_health_system level = 9 } }
+	}
+	else_if = {
+		limit = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 var:te_tax_o1_kind = 1 var:te_tax_o1_arg = 3 has_institution = institution_social_security }
+		if = { limit = { var:te_tax_o1_target = 1 } set_institution_investment_level = { institution = institution_social_security level = 1 } }
+		else_if = { limit = { var:te_tax_o1_target = 2 } set_institution_investment_level = { institution = institution_social_security level = 2 } }
+		else_if = { limit = { var:te_tax_o1_target = 3 } set_institution_investment_level = { institution = institution_social_security level = 3 } }
+		else_if = { limit = { var:te_tax_o1_target = 4 } set_institution_investment_level = { institution = institution_social_security level = 4 } }
+		else_if = { limit = { var:te_tax_o1_target = 5 } set_institution_investment_level = { institution = institution_social_security level = 5 } }
+		else_if = { limit = { var:te_tax_o1_target = 6 } set_institution_investment_level = { institution = institution_social_security level = 6 } }
+		else_if = { limit = { var:te_tax_o1_target = 7 } set_institution_investment_level = { institution = institution_social_security level = 7 } }
+		else_if = { limit = { var:te_tax_o1_target = 8 } set_institution_investment_level = { institution = institution_social_security level = 8 } }
+		else_if = { limit = { var:te_tax_o1_target = 9 } set_institution_investment_level = { institution = institution_social_security level = 9 } }
+	}
+}
+te_tax_gen_ai_enact_2 = {
+	if = {
+		limit = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 var:te_tax_o2_kind = 1 var:te_tax_o2_arg = 1 has_institution = institution_schools }
+		if = { limit = { var:te_tax_o2_target = 1 } set_institution_investment_level = { institution = institution_schools level = 1 } }
+		else_if = { limit = { var:te_tax_o2_target = 2 } set_institution_investment_level = { institution = institution_schools level = 2 } }
+		else_if = { limit = { var:te_tax_o2_target = 3 } set_institution_investment_level = { institution = institution_schools level = 3 } }
+		else_if = { limit = { var:te_tax_o2_target = 4 } set_institution_investment_level = { institution = institution_schools level = 4 } }
+		else_if = { limit = { var:te_tax_o2_target = 5 } set_institution_investment_level = { institution = institution_schools level = 5 } }
+		else_if = { limit = { var:te_tax_o2_target = 6 } set_institution_investment_level = { institution = institution_schools level = 6 } }
+		else_if = { limit = { var:te_tax_o2_target = 7 } set_institution_investment_level = { institution = institution_schools level = 7 } }
+		else_if = { limit = { var:te_tax_o2_target = 8 } set_institution_investment_level = { institution = institution_schools level = 8 } }
+		else_if = { limit = { var:te_tax_o2_target = 9 } set_institution_investment_level = { institution = institution_schools level = 9 } }
+	}
+	else_if = {
+		limit = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 var:te_tax_o2_kind = 1 var:te_tax_o2_arg = 2 has_institution = institution_health_system }
+		if = { limit = { var:te_tax_o2_target = 1 } set_institution_investment_level = { institution = institution_health_system level = 1 } }
+		else_if = { limit = { var:te_tax_o2_target = 2 } set_institution_investment_level = { institution = institution_health_system level = 2 } }
+		else_if = { limit = { var:te_tax_o2_target = 3 } set_institution_investment_level = { institution = institution_health_system level = 3 } }
+		else_if = { limit = { var:te_tax_o2_target = 4 } set_institution_investment_level = { institution = institution_health_system level = 4 } }
+		else_if = { limit = { var:te_tax_o2_target = 5 } set_institution_investment_level = { institution = institution_health_system level = 5 } }
+		else_if = { limit = { var:te_tax_o2_target = 6 } set_institution_investment_level = { institution = institution_health_system level = 6 } }
+		else_if = { limit = { var:te_tax_o2_target = 7 } set_institution_investment_level = { institution = institution_health_system level = 7 } }
+		else_if = { limit = { var:te_tax_o2_target = 8 } set_institution_investment_level = { institution = institution_health_system level = 8 } }
+		else_if = { limit = { var:te_tax_o2_target = 9 } set_institution_investment_level = { institution = institution_health_system level = 9 } }
+	}
+	else_if = {
+		limit = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 var:te_tax_o2_kind = 1 var:te_tax_o2_arg = 3 has_institution = institution_social_security }
+		if = { limit = { var:te_tax_o2_target = 1 } set_institution_investment_level = { institution = institution_social_security level = 1 } }
+		else_if = { limit = { var:te_tax_o2_target = 2 } set_institution_investment_level = { institution = institution_social_security level = 2 } }
+		else_if = { limit = { var:te_tax_o2_target = 3 } set_institution_investment_level = { institution = institution_social_security level = 3 } }
+		else_if = { limit = { var:te_tax_o2_target = 4 } set_institution_investment_level = { institution = institution_social_security level = 4 } }
+		else_if = { limit = { var:te_tax_o2_target = 5 } set_institution_investment_level = { institution = institution_social_security level = 5 } }
+		else_if = { limit = { var:te_tax_o2_target = 6 } set_institution_investment_level = { institution = institution_social_security level = 6 } }
+		else_if = { limit = { var:te_tax_o2_target = 7 } set_institution_investment_level = { institution = institution_social_security level = 7 } }
+		else_if = { limit = { var:te_tax_o2_target = 8 } set_institution_investment_level = { institution = institution_social_security level = 8 } }
+		else_if = { limit = { var:te_tax_o2_target = 9 } set_institution_investment_level = { institution = institution_social_security level = 9 } }
+	}
+}
+te_tax_gen_ai_enact_3 = {
+	if = {
+		limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 var:te_tax_o3_kind = 1 var:te_tax_o3_arg = 1 has_institution = institution_schools }
+		if = { limit = { var:te_tax_o3_target = 1 } set_institution_investment_level = { institution = institution_schools level = 1 } }
+		else_if = { limit = { var:te_tax_o3_target = 2 } set_institution_investment_level = { institution = institution_schools level = 2 } }
+		else_if = { limit = { var:te_tax_o3_target = 3 } set_institution_investment_level = { institution = institution_schools level = 3 } }
+		else_if = { limit = { var:te_tax_o3_target = 4 } set_institution_investment_level = { institution = institution_schools level = 4 } }
+		else_if = { limit = { var:te_tax_o3_target = 5 } set_institution_investment_level = { institution = institution_schools level = 5 } }
+		else_if = { limit = { var:te_tax_o3_target = 6 } set_institution_investment_level = { institution = institution_schools level = 6 } }
+		else_if = { limit = { var:te_tax_o3_target = 7 } set_institution_investment_level = { institution = institution_schools level = 7 } }
+		else_if = { limit = { var:te_tax_o3_target = 8 } set_institution_investment_level = { institution = institution_schools level = 8 } }
+		else_if = { limit = { var:te_tax_o3_target = 9 } set_institution_investment_level = { institution = institution_schools level = 9 } }
+	}
+	else_if = {
+		limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 var:te_tax_o3_kind = 1 var:te_tax_o3_arg = 2 has_institution = institution_health_system }
+		if = { limit = { var:te_tax_o3_target = 1 } set_institution_investment_level = { institution = institution_health_system level = 1 } }
+		else_if = { limit = { var:te_tax_o3_target = 2 } set_institution_investment_level = { institution = institution_health_system level = 2 } }
+		else_if = { limit = { var:te_tax_o3_target = 3 } set_institution_investment_level = { institution = institution_health_system level = 3 } }
+		else_if = { limit = { var:te_tax_o3_target = 4 } set_institution_investment_level = { institution = institution_health_system level = 4 } }
+		else_if = { limit = { var:te_tax_o3_target = 5 } set_institution_investment_level = { institution = institution_health_system level = 5 } }
+		else_if = { limit = { var:te_tax_o3_target = 6 } set_institution_investment_level = { institution = institution_health_system level = 6 } }
+		else_if = { limit = { var:te_tax_o3_target = 7 } set_institution_investment_level = { institution = institution_health_system level = 7 } }
+		else_if = { limit = { var:te_tax_o3_target = 8 } set_institution_investment_level = { institution = institution_health_system level = 8 } }
+		else_if = { limit = { var:te_tax_o3_target = 9 } set_institution_investment_level = { institution = institution_health_system level = 9 } }
+	}
+	else_if = {
+		limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 var:te_tax_o3_kind = 1 var:te_tax_o3_arg = 3 has_institution = institution_social_security }
+		if = { limit = { var:te_tax_o3_target = 1 } set_institution_investment_level = { institution = institution_social_security level = 1 } }
+		else_if = { limit = { var:te_tax_o3_target = 2 } set_institution_investment_level = { institution = institution_social_security level = 2 } }
+		else_if = { limit = { var:te_tax_o3_target = 3 } set_institution_investment_level = { institution = institution_social_security level = 3 } }
+		else_if = { limit = { var:te_tax_o3_target = 4 } set_institution_investment_level = { institution = institution_social_security level = 4 } }
+		else_if = { limit = { var:te_tax_o3_target = 5 } set_institution_investment_level = { institution = institution_social_security level = 5 } }
+		else_if = { limit = { var:te_tax_o3_target = 6 } set_institution_investment_level = { institution = institution_social_security level = 6 } }
+		else_if = { limit = { var:te_tax_o3_target = 7 } set_institution_investment_level = { institution = institution_social_security level = 7 } }
+		else_if = { limit = { var:te_tax_o3_target = 8 } set_institution_investment_level = { institution = institution_social_security level = 8 } }
+		else_if = { limit = { var:te_tax_o3_target = 9 } set_institution_investment_level = { institution = institution_social_security level = 9 } }
+	}
+}
+te_tax_gen_ai_enact_4 = {
+	if = {
+		limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 var:te_tax_o4_kind = 1 var:te_tax_o4_arg = 1 has_institution = institution_schools }
+		if = { limit = { var:te_tax_o4_target = 1 } set_institution_investment_level = { institution = institution_schools level = 1 } }
+		else_if = { limit = { var:te_tax_o4_target = 2 } set_institution_investment_level = { institution = institution_schools level = 2 } }
+		else_if = { limit = { var:te_tax_o4_target = 3 } set_institution_investment_level = { institution = institution_schools level = 3 } }
+		else_if = { limit = { var:te_tax_o4_target = 4 } set_institution_investment_level = { institution = institution_schools level = 4 } }
+		else_if = { limit = { var:te_tax_o4_target = 5 } set_institution_investment_level = { institution = institution_schools level = 5 } }
+		else_if = { limit = { var:te_tax_o4_target = 6 } set_institution_investment_level = { institution = institution_schools level = 6 } }
+		else_if = { limit = { var:te_tax_o4_target = 7 } set_institution_investment_level = { institution = institution_schools level = 7 } }
+		else_if = { limit = { var:te_tax_o4_target = 8 } set_institution_investment_level = { institution = institution_schools level = 8 } }
+		else_if = { limit = { var:te_tax_o4_target = 9 } set_institution_investment_level = { institution = institution_schools level = 9 } }
+	}
+	else_if = {
+		limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 var:te_tax_o4_kind = 1 var:te_tax_o4_arg = 2 has_institution = institution_health_system }
+		if = { limit = { var:te_tax_o4_target = 1 } set_institution_investment_level = { institution = institution_health_system level = 1 } }
+		else_if = { limit = { var:te_tax_o4_target = 2 } set_institution_investment_level = { institution = institution_health_system level = 2 } }
+		else_if = { limit = { var:te_tax_o4_target = 3 } set_institution_investment_level = { institution = institution_health_system level = 3 } }
+		else_if = { limit = { var:te_tax_o4_target = 4 } set_institution_investment_level = { institution = institution_health_system level = 4 } }
+		else_if = { limit = { var:te_tax_o4_target = 5 } set_institution_investment_level = { institution = institution_health_system level = 5 } }
+		else_if = { limit = { var:te_tax_o4_target = 6 } set_institution_investment_level = { institution = institution_health_system level = 6 } }
+		else_if = { limit = { var:te_tax_o4_target = 7 } set_institution_investment_level = { institution = institution_health_system level = 7 } }
+		else_if = { limit = { var:te_tax_o4_target = 8 } set_institution_investment_level = { institution = institution_health_system level = 8 } }
+		else_if = { limit = { var:te_tax_o4_target = 9 } set_institution_investment_level = { institution = institution_health_system level = 9 } }
+	}
+	else_if = {
+		limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 var:te_tax_o4_kind = 1 var:te_tax_o4_arg = 3 has_institution = institution_social_security }
+		if = { limit = { var:te_tax_o4_target = 1 } set_institution_investment_level = { institution = institution_social_security level = 1 } }
+		else_if = { limit = { var:te_tax_o4_target = 2 } set_institution_investment_level = { institution = institution_social_security level = 2 } }
+		else_if = { limit = { var:te_tax_o4_target = 3 } set_institution_investment_level = { institution = institution_social_security level = 3 } }
+		else_if = { limit = { var:te_tax_o4_target = 4 } set_institution_investment_level = { institution = institution_social_security level = 4 } }
+		else_if = { limit = { var:te_tax_o4_target = 5 } set_institution_investment_level = { institution = institution_social_security level = 5 } }
+		else_if = { limit = { var:te_tax_o4_target = 6 } set_institution_investment_level = { institution = institution_social_security level = 6 } }
+		else_if = { limit = { var:te_tax_o4_target = 7 } set_institution_investment_level = { institution = institution_social_security level = 7 } }
+		else_if = { limit = { var:te_tax_o4_target = 8 } set_institution_investment_level = { institution = institution_social_security level = 8 } }
+		else_if = { limit = { var:te_tax_o4_target = 9 } set_institution_investment_level = { institution = institution_social_security level = 9 } }
+	}
+}
+
+# The AI's summary line for an enacted promise (te_tax_ai_log_*'s form): the slot, what it
+# promised and when, then the fiscal signals. Called right after te_tax_gen_ai_enact_<n>;
+# ROOT = THIS = the country in te_tax.8.
+te_tax_gen_ai_log_enacted_1 = {
+	debug_log = "TE_TAX ai_obl_enacted slot=1 kind=1 arg=[SCOPE.ScriptValue('te_tax_view_o1_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o1_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o1_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o1_deadline')|0] tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+te_tax_gen_ai_log_enacted_2 = {
+	debug_log = "TE_TAX ai_obl_enacted slot=2 kind=1 arg=[SCOPE.ScriptValue('te_tax_view_o2_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o2_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o2_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o2_deadline')|0] tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+te_tax_gen_ai_log_enacted_3 = {
+	debug_log = "TE_TAX ai_obl_enacted slot=3 kind=1 arg=[SCOPE.ScriptValue('te_tax_view_o3_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o3_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o3_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o3_deadline')|0] tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+te_tax_gen_ai_log_enacted_4 = {
+	debug_log = "TE_TAX ai_obl_enacted slot=4 kind=1 arg=[SCOPE.ScriptValue('te_tax_view_o4_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o4_target')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o4_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o4_deadline')|0] tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 }

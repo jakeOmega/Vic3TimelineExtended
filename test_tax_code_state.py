@@ -445,7 +445,10 @@ class GeneratedSyncTest(unittest.TestCase):
         customs = {f"te_tax_gen_customs_{part}_{d}" for part in ("set_native", "read_native") for d in ("imp", "exp")}
         customs |= {"te_tax_gen_migrate_customs", "te_tax_gen_sync_customs", "te_tax_gen_count_customs_drift",
                     "te_tax_gen_customs_clear_retries"}
-        self.assertEqual(names, want | scheduler | migration | drift | copies | obligations | views | customs)
+        # The promises' deadline lines and the AI's enactment (test_tax_code_ai.py, plan 2026-10-03 Task 19).
+        promises = {f"te_tax_gen_{part}_{n}" for part in ("obl_log_met", "obl_log_unmet", "ai_enact", "ai_log_enacted")
+                    for n in (1, 2, 3, 4)}
+        self.assertEqual(names, want | scheduler | migration | drift | copies | obligations | views | customs | promises)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
         for key in KEYS:

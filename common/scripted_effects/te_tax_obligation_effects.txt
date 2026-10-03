@@ -394,7 +394,11 @@ te_tax_obl_check_month = {
 # condition holds resets the failing count, and at the end of the term
 # fulfils it; a failing month adds one, and te_tax_obl_grace_<kind>
 # consecutive ones breach it. Each transition leaves the state that guards
-# it, so it happens once.
+# it, so it happens once. The delivery phase's end writes one deadline line
+# for every country (plan 2026-10-03 Task 19), while the slot is still on:
+# obl_deadline result=met as the promise starts maintenance, result=unmet as
+# the deadline breaches it (te_tax_gen_obl_log_met_<N>, _unmet_<N>, generated:
+# debug_log cannot print $N$). The maintenance breach writes no deadline line.
 te_tax_obl_check_one = {
 	if = {
 		limit = { var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = 2 }
@@ -410,6 +414,7 @@ te_tax_obl_check_one = {
 		}
 		if = {
 			limit = { te_tax_obl_delivered = { N = $N$ } }
+			te_tax_gen_obl_log_met_$N$ = yes
 			te_tax_obl_begin_maintenance = { N = $N$ }
 		}
 		else_if = {
@@ -422,6 +427,7 @@ te_tax_obl_check_one = {
 		}
 		else_if = {
 			limit = { var:te_tax_o$N$_deadline <= var:te_tax_now }
+			te_tax_gen_obl_log_unmet_$N$ = yes
 			te_tax_obl_breach = { N = $N$ }
 		}
 	}

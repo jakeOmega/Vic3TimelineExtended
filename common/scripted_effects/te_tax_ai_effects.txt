@@ -13,14 +13,18 @@
 #             on the country's bucket day (5, 12, 19 or 26 days on), or the
 #             next day on a retry. The processor itself never drafts.
 #   STEP      te_tax_ai_step, from te_tax.8 only, with ROOT = THIS = the
-#             country. A stub that logs its signals until Tasks 19-21.
+#             country: held packages (te_tax_ai_manage_packages), then promises
+#             at risk (te_tax_ai_manage_promises); Tasks 20-21 add the open
+#             bill and the initiative.
 #   RESET     te_tax_ai_reset_bill_state, at the outbreak (on the rebels),
 #             the win repair and a release (te_tax_civil_war_effects.txt).
 #   LOGS      te_tax_ai_log_*, one summary line per AI action.
 #
 # The AI acts only through the commands the player's buttons run
 # (te_tax_cmd_<c> inside te_tax_can_<c>); nothing here writes native fiscal
-# state. Every te_tax_ai_* variable is a schema token: initialised by
+# state. The one owner-approved exception: a kind-1 promise the native AI is
+# about to miss is enacted, by the generated te_tax_gen_ai_enact_<o> (spec
+# §2.8). Every te_tax_ai_* variable is a schema token: initialised by
 # te_tax_init_country, copied at the outbreak, never removed.
 # ============================================================================
 
@@ -128,12 +132,124 @@ te_tax_ai_dispatch = {
 # ----------------------------------------------------------------------------
 
 # The AI step, run only by te_tax.8 (te_tax_ai_can_act holds), with ROOT = THIS
-# = the country. Tasks 19-21 fill it: held packages, promises at risk, the open
-# bill, then a new initiative (spec §2.4). For now it logs its signals.
+# = the country (spec §2.4): held packages, then a promise at risk; Task 20
+# adds the open bill and Task 21 a new initiative.
 te_tax_ai_step = {
 	if = {
-		limit = { te_tax_code_on = yes }
-		te_tax_ai_log_step = yes
+		limit = {
+			te_tax_code_on = yes
+			te_tax_ai_can_act = yes
+		}
+		te_tax_ai_manage_packages = yes
+		te_tax_ai_manage_promises = yes
+		# Task 20: the open bill. Task 21: the initiative.
+	}
+}
+
+# Step 1, held packages (spec §2.4): slot a, then b. A missed package (state
+# 3) is rescheduled while it may be (te_tax_can_package_reschedule: at most
+# te_tax_reschedule_max_delay months late, and untouched by a later bill);
+# otherwise it, or a conflicting one (state 2), is released, so held packages
+# never fill both slots and block every later bill. Neither command refreshes
+# support. The managers test no is_ai: the step's te_tax_ai_can_act does, and
+# the console (Task 22) runs them on its own country.
+te_tax_ai_manage_packages = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			te_tax_code_in_force = yes
+		}
+		if = {
+			limit = { te_tax_can_package_reschedule = { SLOT = a } }
+			te_tax_cmd_package_reschedule = { SLOT = a }
+			te_tax_ai_log_rescheduled = yes
+		}
+		else_if = {
+			limit = { te_tax_can_package_release = { SLOT = a } }
+			te_tax_cmd_package_release = { SLOT = a }
+			te_tax_ai_log_released = yes
+		}
+		if = {
+			limit = { te_tax_can_package_reschedule = { SLOT = b } }
+			te_tax_cmd_package_reschedule = { SLOT = b }
+			te_tax_ai_log_rescheduled = yes
+		}
+		else_if = {
+			limit = { te_tax_can_package_release = { SLOT = b } }
+			te_tax_cmd_package_release = { SLOT = b }
+			te_tax_ai_log_released = yes
+		}
+	}
+}
+
+# Step 2, promises (spec §2.4, §2.8): at most one a step, the first of slots 1
+# to 4 that the next monthly check would breach (te_tax_ai_promise_at_risk;
+# never a pending or bound one). A kind-1 promise the AI can enact
+# (te_tax_ai_can_enact) is set to exactly its target by the generated
+# te_tax_gen_ai_enact_<o>, the owner's one exception to the institution's
+# native expansion, and logged (ai_obl_enacted); its native costs apply from
+# then on and the monthly check still verifies it. Any other promise, a
+# balance (kinds 2 and 4), a wage cut copied from a player at an outbreak
+# (kind 3) or an institution that can no longer be enacted, is renegotiated:
+# -2 approval and -1 trust instead of the breach's -5.
+te_tax_ai_manage_promises = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			te_tax_code_in_force = yes
+		}
+		if = {
+			limit = { te_tax_ai_promise_at_risk = { N = 1 } }
+			if = {
+				limit = { te_tax_ai_can_enact = { N = 1 } }
+				te_tax_gen_ai_enact_1 = yes
+				te_tax_gen_ai_log_enacted_1 = yes
+			}
+			else_if = {
+				limit = { te_tax_can_obl_renegotiate = { N = 1 } }
+				te_tax_cmd_obl_renegotiate = { N = 1 }
+				te_tax_ai_log_renegotiated = yes
+			}
+		}
+		else_if = {
+			limit = { te_tax_ai_promise_at_risk = { N = 2 } }
+			if = {
+				limit = { te_tax_ai_can_enact = { N = 2 } }
+				te_tax_gen_ai_enact_2 = yes
+				te_tax_gen_ai_log_enacted_2 = yes
+			}
+			else_if = {
+				limit = { te_tax_can_obl_renegotiate = { N = 2 } }
+				te_tax_cmd_obl_renegotiate = { N = 2 }
+				te_tax_ai_log_renegotiated = yes
+			}
+		}
+		else_if = {
+			limit = { te_tax_ai_promise_at_risk = { N = 3 } }
+			if = {
+				limit = { te_tax_ai_can_enact = { N = 3 } }
+				te_tax_gen_ai_enact_3 = yes
+				te_tax_gen_ai_log_enacted_3 = yes
+			}
+			else_if = {
+				limit = { te_tax_can_obl_renegotiate = { N = 3 } }
+				te_tax_cmd_obl_renegotiate = { N = 3 }
+				te_tax_ai_log_renegotiated = yes
+			}
+		}
+		else_if = {
+			limit = { te_tax_ai_promise_at_risk = { N = 4 } }
+			if = {
+				limit = { te_tax_ai_can_enact = { N = 4 } }
+				te_tax_gen_ai_enact_4 = yes
+				te_tax_gen_ai_log_enacted_4 = yes
+			}
+			else_if = {
+				limit = { te_tax_can_obl_renegotiate = { N = 4 } }
+				te_tax_cmd_obl_renegotiate = { N = 4 }
+				te_tax_ai_log_renegotiated = yes
+			}
+		}
 	}
 }
 
@@ -171,7 +287,8 @@ te_tax_ai_reset_bill_state = {
 # te_tax.1. Withdrawal and no-viable reasons: support, legitimacy, slots,
 # authority, patience (open too long) and draft (introduction refused).
 
-# te_tax.8 ran the step (the stub: Tasks 19-21 fill it).
+# The country's signals, for the console (Task 22); the step itself logs only
+# its actions.
 te_tax_ai_log_step = {
 	debug_log = "TE_TAX ai_step tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 }

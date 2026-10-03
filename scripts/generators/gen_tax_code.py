@@ -325,6 +325,18 @@ OBL_BINDING_STATES = (OBL_BOUND, OBL_DELIVERING, OBL_MAINTAINING)
 # Kind 1's institutions by _arg, kind 3's military wage levels by _arg.
 OBL_INSTITUTIONS = ((1, "institution_schools"), (2, "institution_health_system"), (3, "institution_social_security"))
 OBL_WAGE_LEVELS = ((1, "very_low"), (2, "low"), (3, "medium"), (4, "high"), (5, "very_high"))
+# The highest institution level the AI's enactment of a kind-1 promise can set (plan 2026-10-03
+# Task 19): the mod's MAX_INSTITUTION_INVESTMENT (common/defines/extra_defines.txt), and
+# te_tax_ai_enact_level_max (te_tax_ai_values.txt). The setter takes a literal level, so
+# te_tax_gen_ai_enact_<o> has a branch per level up to it.
+OBL_MAX_INSTITUTION_LEVEL = 9
+# The views the promise lines print (te_tax_gen_obl_log_*, te_tax_gen_ai_log_enacted_<o>), and the
+# AI summary line's signals (te_tax_ai_log_*, te_tax_ai_effects.txt; the same text).
+OBL_LOG_VIEWS = ("kind", "arg", "target", "baseline", "deadline")
+AI_LOG_SIGNALS = ("tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] "
+                  "D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] "
+                  "def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] "
+                  "sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]")
 # Trust (te_tax_trust_<ig>): +1 per kept promise, -1 per broken or renegotiated one, within
 # +-TRUST_CAP; te_tax_trust_<ig>_month records the month of its last change, and it moves a step
 # back toward 0 after te_tax_obl_trust_recover_months without one. The support model's trust
@@ -1664,7 +1676,9 @@ def _store_successor(slot, key):
 
 def _store(slot):
     p, o = f"te_tax_p{slot}", f"te_tax_p{_other(slot)}"
-    stored = _log("stored", f"slot={slot}")
+    # Reached only through the Pass and Force through commands (te_tax_pass_into), never a
+    # transition: a player's line (the AI writes ai_passed or ai_forced).
+    stored = _player_log("stored", f"slot={slot}")
     lines = [
         "",
         f"# Slot {slot}: writes an approved package from the bill record (te_tax_bl_*). Called",
@@ -3392,6 +3406,10 @@ def scripted_effects():
         "# countries close the file: te_tax_gen_copy_code, te_tax_gen_copy_slot_<slot> and",
         "# te_tax_gen_copy_enacted, called by te_tax_civil_war_effects.txt, with the policy",
         "# obligations' te_tax_gen_copy_obligations and te_tax_gen_clear_obligations (plan Task 12).",
+        "# The promise lines and the AI's enactment end it (plan 2026-10-03 Task 19):",
+        "# te_tax_gen_obl_log_met_<n> and _unmet_<n>, called by te_tax_obl_check_one",
+        "# (te_tax_obligation_effects.txt); te_tax_gen_ai_enact_<n> and te_tax_gen_ai_log_enacted_<n>,",
+        "# called by te_tax_ai_manage_promises (te_tax_ai_effects.txt).",
         "",
         "# Each instrument's tokens with their sentinels, if absent: the enacted provision, its",
         "# version tokens and the AI's marks (te_tax_ai_last_<key>, te_tax_ai_dir_<key>).",
@@ -3488,8 +3506,82 @@ def scripted_effects():
     lines += [f"\tif = {{ limit = {{ {condition} }} change_variable = {{ name = te_tax_drift_goods add = 1 }} }}"
               for condition in _goods_drift_conditions()]
     lines.append("}")
-    lines += _customs_effects() + _scheduler_effects() + _migration_effects() + _copy_effects()
+    lines += (_customs_effects() + _scheduler_effects() + _migration_effects() + _copy_effects()
+              + _ai_obligation_effects())
     return _txt("\n".join(lines) + "\n")
+
+
+def _obl_log_fields(n, views=OBL_LOG_VIEWS):
+    return " ".join(f"{view}=[SCOPE.ScriptValue('te_tax_view_o{n}_{view}')|0]" for view in views)
+
+
+def _ai_obligation_effects():
+    """The promise lines and the AI's enactment of a kind-1 promise (plan 2026-10-03 Task 19;
+    spec docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md §2.4 step 2, §2.8),
+    per obligation slot: debug_log cannot print a $PARAM$, so each slot has its own lines, which
+    print the slot's guarded views (te_tax_view_o<n>_*, readable while the slot is on)."""
+    lines = [
+        "",
+        "# Policy obligations' deadline line (plan 2026-10-03 Task 19), every country, once per",
+        "# promise as its delivery phase ends: te_tax_obl_check_one calls _met_<n> before a",
+        "# delivered promise starts maintenance and _unmet_<n> before the deadline breach, both",
+        "# while the slot is still on, so the views print its payload. ai=yes|no is literal in",
+        "# two lines, since debug_log cannot print is_ai. An AI's enacted promise (ai_obl_enacted)",
+        "# logs met at the next check; one it renegotiated (ai_renegotiated) logs neither.",
+    ]
+    for n in OBLIGATION_SLOTS:
+        for result in ("met", "unmet"):
+            head = f"result={result} slot={n} {_obl_log_fields(n)}"
+            lines += [
+                f"te_tax_gen_obl_log_{result}_{n} = {{",
+                "\tif = {",
+                "\t\tlimit = { is_ai = yes }",
+                f"\t\t{_log('obl_deadline', head + ' ai=yes')}",
+                "\t}",
+                "\telse = {",
+                f"\t\t{_log('obl_deadline', head + ' ai=no')}",
+                "\t}",
+                "}",
+            ]
+    lines += [
+        "",
+        "# The AI enacts a kind-1 promise it is about to miss (plan 2026-10-03 Task 19, the owner's",
+        "# one exception to \"the tax code never sets an institution's level\"): called only by",
+        "# te_tax_ai_manage_promises (te_tax_ai_effects.txt), in te_tax.8, behind",
+        "# te_tax_ai_promise_at_risk and te_tax_ai_can_enact. It sets the promised institution to",
+        "# exactly the promised level, never above it; the setter takes a literal level, so there",
+        f"# is a branch per level 1 to {OBL_MAX_INSTITUTION_LEVEL} (the mod's MAX_INSTITUTION_INVESTMENT,",
+        "# common/defines/extra_defines.txt), each inside has_institution. The institution's native",
+        "# costs apply from then on, and the monthly check still verifies the delivered level",
+        "# (capability ledger: pending P16).",
+    ]
+    for n in OBLIGATION_SLOTS:
+        lines.append(f"te_tax_gen_ai_enact_{n} = {{")
+        for index, (arg, institution) in enumerate(OBL_INSTITUTIONS):
+            lines += [
+                f"\t{'if' if index == 0 else 'else_if'} = {{",
+                f"\t\tlimit = {{ {_is_open(f'te_tax_o{n}_on')} var:te_tax_o{n}_kind = 1 var:te_tax_o{n}_arg = {arg} "
+                f"has_institution = {institution} }}",
+            ]
+            lines += [f"\t\t{'if' if level == 1 else 'else_if'} = {{ limit = {{ var:te_tax_o{n}_target = {level} }} "
+                      f"set_institution_investment_level = {{ institution = {institution} level = {level} }} }}"
+                      for level in range(1, OBL_MAX_INSTITUTION_LEVEL + 1)]
+            lines.append("\t}")
+        lines.append("}")
+    lines += [
+        "",
+        "# The AI's summary line for an enacted promise (te_tax_ai_log_*'s form): the slot, what it",
+        "# promised and when, then the fiscal signals. Called right after te_tax_gen_ai_enact_<n>;",
+        "# ROOT = THIS = the country in te_tax.8.",
+    ]
+    for n in OBLIGATION_SLOTS:
+        fields = _obl_log_fields(n, tuple(view for view in OBL_LOG_VIEWS if view != "kind"))
+        lines += [
+            f"te_tax_gen_ai_log_enacted_{n} = {{",
+            f'\tdebug_log = "TE_TAX ai_obl_enacted slot={n} kind=1 {fields} {AI_LOG_SIGNALS}; {LOG_STAMP}"',
+            "}",
+        ]
+    return lines
 
 
 def _customs_mismatch(d, good):

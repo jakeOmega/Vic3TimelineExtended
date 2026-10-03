@@ -181,7 +181,8 @@ te_tax_watchdog_month = {
 # records kind 6, approved). Bill fields it reads: te_tax_bl_due;
 # te_tax_bl_<key>, te_tax_bl_<key>_sun, te_tax_bl_xver_<key>; te_tax_bl_g_<good>,
 # te_tax_bl_xver_goods; te_tax_bl_agrel, te_tax_bl_regrel, te_tax_bl_xver_relief;
-# the state list te_tax_bl_relief_states (optional).
+# the state list te_tax_bl_relief_states (optional). Only te_tax_pass_into
+# (Pass, Force through) calls it, so its lines are written for players only.
 te_tax_store_package = {
 	if = {
 		limit = { te_tax_can_store_package = { SLOT = $SLOT$ } }
@@ -190,7 +191,11 @@ te_tax_store_package = {
 		te_tax_recompute_next_month = yes
 	}
 	else = {
-		debug_log = "TE_TAX store_refused the slot is taken, the due month is not in the future or a sunset is under one month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		# Reached only through Pass and Force through: a player's line.
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX store_refused the slot is taken, the due month is not in the future or a sunset is under one month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 

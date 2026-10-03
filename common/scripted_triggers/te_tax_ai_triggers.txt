@@ -104,3 +104,76 @@ te_tax_ai_step_due = {
 		te_tax_ai_has_management = yes
 	}
 }
+
+# ---------------------------------------------------------------------------
+# Promises (plan 2026-10-03, Task 19; spec §2.4 step 2, §2.8). Country scope.
+# N: an obligation slot, 1 to 4. ARG: kind 1's institution, 1 Education, 2
+# Health System, 3 Social Security.
+# ---------------------------------------------------------------------------
+
+# Obligation N is in force and the next monthly check would breach it: it is
+# delivering, its deadline falls by te_tax_ai_enact_by_month (this month plus
+# the lead) and it is not yet delivered; or it is maintaining and its condition
+# fails now. Never a pending (1) or bound (7) promise: the step neither enacts
+# nor renegotiates what has not started.
+te_tax_ai_promise_at_risk = {
+	has_variable = te_tax_o$N$_on
+	var:te_tax_o$N$_on = 1
+	OR = {
+		AND = {
+			var:te_tax_o$N$_state = 2
+			var:te_tax_o$N$_deadline <= te_tax_ai_enact_by_month
+			NOT = { te_tax_obl_delivered = { N = $N$ } }
+		}
+		AND = {
+			var:te_tax_o$N$_state = 3
+			NOT = { te_tax_obl_holds = { N = $N$ } }
+		}
+	}
+}
+
+# Obligation N is a kind-1 promise the AI can enact for itself: its target is a
+# level te_tax_gen_ai_enact_<N> has a branch for (1 to te_tax_ai_enact_level_max),
+# the country has the institution, the target is within the level it may
+# invest in (te_tax_obl_inst_cap_<arg>) and above the level it holds, so the
+# enactment raises the institution to exactly the target and never lowers it.
+# Otherwise the step renegotiates the promise, as for any other kind.
+te_tax_ai_can_enact = {
+	var:te_tax_o$N$_kind = 1
+	var:te_tax_o$N$_target >= 1
+	var:te_tax_o$N$_target <= te_tax_ai_enact_level_max
+	OR = {
+		AND = {
+			var:te_tax_o$N$_arg = 1
+			has_institution = institution_schools
+			var:te_tax_o$N$_target <= te_tax_obl_inst_cap_1
+			var:te_tax_o$N$_target > te_tax_obl_inst_level_1
+		}
+		AND = {
+			var:te_tax_o$N$_arg = 2
+			has_institution = institution_health_system
+			var:te_tax_o$N$_target <= te_tax_obl_inst_cap_2
+			var:te_tax_o$N$_target > te_tax_obl_inst_level_2
+		}
+		AND = {
+			var:te_tax_o$N$_arg = 3
+			has_institution = institution_social_security
+			var:te_tax_o$N$_target <= te_tax_obl_inst_cap_3
+			var:te_tax_o$N$_target > te_tax_obl_inst_level_3
+		}
+	}
+}
+
+# The country owes institution ARG: a kind-1 promise of it binds the country
+# (te_tax_obl_binding: bound, delivering or maintaining). Read by the default
+# AI strategy's institution scores (edited_default_strategy.txt), so the native
+# AI invests in what it promised; false in every rule-off game.
+te_tax_ai_owes_institution = {
+	te_tax_code_on = yes
+	OR = {
+		AND = { te_tax_obl_binding = { N = 1 } var:te_tax_o1_kind = 1 var:te_tax_o1_arg = $ARG$ }
+		AND = { te_tax_obl_binding = { N = 2 } var:te_tax_o2_kind = 1 var:te_tax_o2_arg = $ARG$ }
+		AND = { te_tax_obl_binding = { N = 3 } var:te_tax_o3_kind = 1 var:te_tax_o3_arg = $ARG$ }
+		AND = { te_tax_obl_binding = { N = 4 } var:te_tax_o4_kind = 1 var:te_tax_o4_arg = $ARG$ }
+	}
+}

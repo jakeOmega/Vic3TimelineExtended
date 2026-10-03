@@ -17,6 +17,19 @@ Task 18 lays down the AI's state and signals and the dispatch:
   unless the transitions (processor, watchdog, te_tax.4-7, civil war) also
   reach them; the AI's summary lines replace them.
 
+Task 19 gives the step its first work (spec §2.4 steps 1-2, §2.8):
+
+* held packages: a conflicting one is released, a missed one rescheduled when
+  it may be, else released, each through its command behind its own trigger;
+* promises: at most one at risk a step, slots in order; a kind-1 promise is
+  enacted at exactly its target (the one owner-approved institution setter,
+  generated, only here), any other is renegotiated through the command;
+  never a pending or bound one;
+* every country logs obl_deadline met or unmet once per promise, when its
+  delivery phase ends; the AI logs ai_obl_enacted;
+* the default strategy weights an institution an AI owes, and no political
+  agenda strategy is touched.
+
 Run: python3 -m unittest test_tax_code_ai -v
 """
 
@@ -45,6 +58,13 @@ OBLIGATION = "common/scripted_effects/te_tax_obligation_effects.txt"
 GEN_BILL = "common/scripted_effects/te_tax_generated_bill_effects.txt"
 COMMAND_FILES = (BILL, OFFER, OBLIGATION, GEN_BILL)
 SCHEMA_DOC = "docs/systems/tax_code_schema.md"
+OBLIGATIONS = OBLIGATION
+GEN_VALUES = "common/script_values/te_tax_generated_values.txt"
+OBL_TRIGGERS = "common/scripted_triggers/te_tax_triggers.txt"
+STRATEGY = "common/ai_strategies/edited_default_strategy.txt"
+DEFINES = "common/defines/extra_defines.txt"
+LEDGER = "docs/testing/tax-code-capability-ledger.md"
+GENERATOR = "scripts/generators/gen_tax_code.py"
 
 AI_TOKENS = {
     "te_tax_ai_phase": "-1", "te_tax_ai_def_streak": "0", "te_tax_ai_sur_streak": "0",
@@ -109,6 +129,23 @@ TRANSITION_LOGGED = {
 # customs adoption's first-time-only logging for AI countries), with counts.
 PRE_EXISTING_IS_AI = {"te_tax_collection_effects.txt": 3}
 PLAYER_LOG_GATE = re.compile(r'if = \{ limit = \{ is_ai = no \} debug_log = "[^"]*" \}')
+# Generated effects whose whole body is an is_ai branch between two literal
+# debug_log lines (Task 19): the deadline line, written for every country,
+# prints ai=yes or ai=no, and debug_log cannot print is_ai itself. The only
+# is_ai reads outside the AI files and the player log gates; each body must be
+# exactly AI_FLAG_LOG, so the allowance cannot widen.
+AI_FLAG_LOG_FAMILIES = {
+    "te_tax_gen_obl_log_met_": "obl_deadline result=met, before the delivered promise starts maintenance",
+    "te_tax_gen_obl_log_unmet_": "obl_deadline result=unmet, before the deadline breach",
+}
+AI_FLAG_LOG = re.compile(r'if = \{ limit = \{ is_ai = yes \} debug_log = "[^"]*" \} '
+                         r'else = \{ debug_log = "[^"]*" \}')
+# The levels te_tax_gen_ai_enact_<o> can set, 1 to the mod's
+# MAX_INSTITUTION_INVESTMENT (common/defines/extra_defines.txt).
+MAX_INSTITUTION_LEVEL = 9
+INSTITUTIONS = {1: "institution_schools", 2: "institution_health_system", 3: "institution_social_security"}
+# The views the deadline and enactment lines print, per obligation slot.
+DEADLINE_VIEWS = ("kind", "arg", "target", "baseline", "deadline")
 
 
 def flat(text):
@@ -142,9 +179,25 @@ def enclosing_brace(text, pos):
 def player_gated(text, pos):
     """The innermost block around `pos` is `if = { limit = { is_ai = no } ... }`."""
     brace = enclosing_brace(text, pos)
-    if brace < 0 or not text[:brace].rstrip().endswith("if ="):
+    # A bare `if =`, never `else_if =`.
+    if brace < 0 or not re.search(r"(?<!\w)if =$", text[:brace].rstrip()):
         return False
     return limit_of(text[brace + 1:close(text, brace)]).strip() == "is_ai = no"
+
+
+def strip_ai_flag_logs(text):
+    """`text` without the AI_FLAG_LOG_FAMILIES blocks, each asserted to be
+    exactly an is_ai branch between two debug_log lines."""
+    pattern = r"(?m)^((?:" + "|".join(AI_FLAG_LOG_FAMILIES) + r")\d+) = \{"
+    while True:
+        match = re.search(pattern, text)
+        if match is None:
+            return text
+        end = close(text, match.end() - 1)
+        body = flat(text[match.end():end])
+        if not AI_FLAG_LOG.fullmatch(body):
+            raise AssertionError(f"{match.group(1)} is not an is_ai branch between two debug_log lines: {body[:120]}")
+        text = text[:match.start()] + text[end + 1:]
 
 
 def log_bodies():
@@ -440,10 +493,14 @@ class AiDispatchTest(unittest.TestCase):
                     callers.append(path.name)
         self.assertEqual(callers, ["te_tax_internal_events.txt"])
 
-    def test_the_step_stub_logs_its_signals(self):
+    def test_the_step_manages_packages_then_promises_when_the_ai_can_act(self):
         step = flat(block(self.ai, "te_tax_ai_step"))
-        self.assertTrue(step.startswith("if = { limit = { te_tax_code_on = yes } "))
-        self.assertIn("te_tax_ai_log_step = yes", step)
+        self.assertTrue(step.startswith("if = { limit = { te_tax_code_on = yes te_tax_ai_can_act = yes } "), step[:90])
+        packages = step.index("te_tax_ai_manage_packages = yes")
+        promises = step.index("te_tax_ai_manage_promises = yes")
+        self.assertLess(packages, promises)
+        # The signals line is the console's (Task 22), no longer the step's.
+        self.assertNotIn("te_tax_ai_log_step", step)
 
 
 class AiLogTest(unittest.TestCase):
@@ -483,7 +540,8 @@ class AiGateTest(unittest.TestCase):
     def test_every_ai_trigger_and_effect_entry_starts_from_the_rule(self):
         self.assertIn("te_tax_code_on = yes", block(read(AI_TRIGGERS), "te_tax_ai_can_act"))
         effects_text = read(AI_EFFECTS)
-        for name in ("te_tax_ai_update_streaks", "te_tax_ai_dispatch", "te_tax_ai_step", "te_tax_ai_reset_bill_state"):
+        for name in ("te_tax_ai_update_streaks", "te_tax_ai_dispatch", "te_tax_ai_step", "te_tax_ai_reset_bill_state",
+                     "te_tax_ai_manage_packages", "te_tax_ai_manage_promises"):
             with self.subTest(name=name):
                 head = flat(block(effects_text, name))[:120]
                 self.assertRegex(head, r"^if = \{ limit = \{ te_tax_code_on = yes")
@@ -504,7 +562,7 @@ class AiGateTest(unittest.TestCase):
             for path in sorted((ROOT / directory).rglob("te_tax_*.txt")):
                 if path.name.startswith("te_tax_ai_"):
                     continue
-                text = PLAYER_LOG_GATE.sub("", flat(read(path.relative_to(ROOT).as_posix())))
+                text = PLAYER_LOG_GATE.sub("", flat(strip_ai_flag_logs(read(path.relative_to(ROOT).as_posix()))))
                 count = len(re.findall(r"\bis_ai\b", text))
                 if count:
                     found[path.name] = count
@@ -523,6 +581,328 @@ class AiGateTest(unittest.TestCase):
                     else:
                         self.assertTrue(player_gated(body, match.start()), "a command line is for players only")
 
+    def test_player_gated_accepts_a_bare_if_only(self):
+        for text, expected in (('if = { limit = { is_ai = no } debug_log = "x" }', True),
+                               ('else_if = { limit = { is_ai = no } debug_log = "x" }', False),
+                               ('if = { limit = { is_ai = yes } debug_log = "x" }', False)):
+            with self.subTest(text=text[:20]):
+                self.assertEqual(player_gated(text, text.index("debug_log")), expected)
+
+    def test_the_ai_flag_logs_are_the_only_generated_is_ai_reads(self):
+        text = read(GEN_EFFECTS)
+        for prefix in AI_FLAG_LOG_FAMILIES:
+            for n in gen.OBLIGATION_SLOTS:
+                with self.subTest(effect=f"{prefix}{n}"):
+                    self.assertRegex(flat(block(text, f"{prefix}{n}")), AI_FLAG_LOG)
+        rest = PLAYER_LOG_GATE.sub("", flat(strip_ai_flag_logs(text)))
+        self.assertNotRegex(rest, r"\bis_ai\b")
+
+    def test_the_store_lines_are_player_only_and_reached_only_by_the_pass(self):
+        # te_tax_store_package and te_tax_gen_store_<s> run only from te_tax_pass_into
+        # (Pass and Force through), never from a transition.
+        defined = effects()
+        reached = closure(transition_roots(defined), defined)
+        bodies = {"te_tax_store_package": block(read(SCHEDULE), "te_tax_store_package")}
+        bodies |= {f"te_tax_gen_store_{s}": block(read(GEN_EFFECTS), f"te_tax_gen_store_{s}") for s in gen.SLOTS}
+        for name, body in bodies.items():
+            with self.subTest(effect=name):
+                self.assertNotIn(name, reached)
+                found = list(re.finditer(r"debug_log = ", body))
+                self.assertTrue(found)
+                for match in found:
+                    self.assertTrue(player_gated(body, match.start()))
+
+    def test_every_command_the_ai_calls_sits_inside_its_own_trigger(self):
+        text = read(AI_EFFECTS)
+        calls = list(re.finditer(r"\bte_tax_cmd_(\w+) = (\{[^{}]*\}|yes)", text))
+        self.assertTrue(calls)
+        for match in calls:
+            with self.subTest(call=match.group(0)):
+                brace = enclosing_brace(text, match.start())
+                self.assertRegex(text[:brace].rstrip(), r"(?<!\w)(?:else_)?if =$")
+                self.assertEqual(flat(limit_of(text[brace + 1:close(text, brace)])),
+                                 f"te_tax_can_{match.group(1)} = {flat(match.group(2))}")
+
+
+class AiPromiseTest(unittest.TestCase):
+    def setUp(self):
+        self.ai = read(AI_EFFECTS)
+        self.gen = read(GEN_EFFECTS)
+
+    def test_held_packages_release_conflicts_and_reschedule_missed_when_valid(self):
+        body = block(self.ai, "te_tax_ai_manage_packages")
+        for slot in ("a", "b"):
+            self.assertIn(f"te_tax_can_package_release = {{ SLOT = {slot} }}", body)
+            self.assertIn(f"te_tax_can_package_reschedule = {{ SLOT = {slot} }}", body)
+
+    def test_enactment_is_kind_1_only_and_never_pending_or_bound(self):
+        body = block(self.ai, "te_tax_ai_manage_promises")
+        self.assertIn("te_tax_ai_promise_at_risk", body)
+        risk = block(read(AI_TRIGGERS), "te_tax_ai_promise_at_risk")
+        self.assertNotRegex(risk, r"_state = [17]\b")
+        for o in (1, 2, 3, 4):
+            enact = block(self.gen, f"te_tax_gen_ai_enact_{o}")
+            self.assertIn("set_institution_investment_level", enact)
+            self.assertIn(f"var:te_tax_o{o}_kind = 1", enact)
+
+    def test_enactment_targets_exactly_the_promised_level(self):
+        enact = block(self.gen, "te_tax_gen_ai_enact_1")
+        for level in range(1, 10):
+            self.assertIn(f"var:te_tax_o1_target = {level}", enact)
+            self.assertIn(f"level = {level}", enact)
+
+    def test_balance_promises_are_renegotiated_through_the_command(self):
+        body = block(self.ai, "te_tax_ai_manage_promises")
+        self.assertIn("te_tax_can_obl_renegotiate", body)
+        self.assertIn("te_tax_cmd_obl_renegotiate", body)
+
+    def test_enactment_appears_only_in_the_ai_layer(self):
+        import pathlib
+        for f in pathlib.Path(__file__).parent.glob("common/**/*.txt"):
+            text = f.read_text(encoding="utf-8-sig")
+            if "set_institution_investment_level" in text and "te_tax" in f.name:
+                self.assertIn(f.name, {"te_tax_generated_effects.txt"}, f.name)
+
+    # -- beyond the brief's sample ------------------------------------------
+
+    def test_packages_resolve_slot_a_then_b_each_through_its_commands(self):
+        body = flat(block(self.ai, "te_tax_ai_manage_packages"))
+        self.assertTrue(body.startswith("if = { limit = { te_tax_code_on = yes te_tax_code_in_force = yes } "))
+        for slot in ("a", "b"):
+            with self.subTest(slot=slot):
+                self.assertIn(f"if = {{ limit = {{ te_tax_can_package_reschedule = {{ SLOT = {slot} }} }} "
+                              f"te_tax_cmd_package_reschedule = {{ SLOT = {slot} }} te_tax_ai_log_rescheduled = yes }} "
+                              f"else_if = {{ limit = {{ te_tax_can_package_release = {{ SLOT = {slot} }} }} "
+                              f"te_tax_cmd_package_release = {{ SLOT = {slot} }} te_tax_ai_log_released = yes }}", body)
+        self.assertLess(body.index("SLOT = a"), body.index("SLOT = b"))
+
+    def test_at_risk_is_the_next_check_breaching_a_promise_in_force(self):
+        self.assertEqual(
+            flat(block(read(AI_TRIGGERS), "te_tax_ai_promise_at_risk")),
+            "has_variable = te_tax_o$N$_on var:te_tax_o$N$_on = 1 OR = { "
+            "AND = { var:te_tax_o$N$_state = 2 var:te_tax_o$N$_deadline <= te_tax_ai_enact_by_month "
+            "NOT = { te_tax_obl_delivered = { N = $N$ } } } "
+            "AND = { var:te_tax_o$N$_state = 3 NOT = { te_tax_obl_holds = { N = $N$ } } } }")
+
+    def test_the_lead_month_is_the_processors_month_plus_the_lead(self):
+        self.assertEqual(
+            flat(block(read(AI_VALUES), "te_tax_ai_enact_by_month")),
+            "value = te_history_month_index if = { limit = { has_variable = te_tax_now var:te_tax_now >= 0 } "
+            "value = var:te_tax_now } add = te_tax_ai_enact_lead_months")
+
+    def test_one_promise_a_step_in_slot_order(self):
+        body = flat(block(self.ai, "te_tax_ai_manage_promises"))
+        self.assertTrue(body.startswith("if = { limit = { te_tax_code_on = yes te_tax_code_in_force = yes } "))
+        for n in gen.OBLIGATION_SLOTS:
+            opener = "if" if n == 1 else "else_if"
+            with self.subTest(slot=n):
+                self.assertIn(
+                    f"{opener} = {{ limit = {{ te_tax_ai_promise_at_risk = {{ N = {n} }} }} "
+                    f"if = {{ limit = {{ te_tax_ai_can_enact = {{ N = {n} }} }} "
+                    f"te_tax_gen_ai_enact_{n} = yes te_tax_gen_ai_log_enacted_{n} = yes }} "
+                    f"else_if = {{ limit = {{ te_tax_can_obl_renegotiate = {{ N = {n} }} }} "
+                    f"te_tax_cmd_obl_renegotiate = {{ N = {n} }} te_tax_ai_log_renegotiated = yes }} }}", body)
+        positions = [body.index(f"te_tax_ai_promise_at_risk = {{ N = {n} }}") for n in gen.OBLIGATION_SLOTS]
+        self.assertEqual(positions, sorted(positions))
+        self.assertEqual(body.count("te_tax_ai_promise_at_risk"), len(gen.OBLIGATION_SLOTS))
+
+    def test_only_an_enactable_kind_1_promise_is_enacted(self):
+        body = flat(block(read(AI_TRIGGERS), "te_tax_ai_can_enact"))
+        self.assertTrue(body.startswith("var:te_tax_o$N$_kind = 1 var:te_tax_o$N$_target >= 1 "
+                                        "var:te_tax_o$N$_target <= te_tax_ai_enact_level_max OR = { "), body[:120])
+        for arg, institution in INSTITUTIONS.items():
+            with self.subTest(arg=arg):
+                self.assertIn(f"AND = {{ var:te_tax_o$N$_arg = {arg} has_institution = {institution} "
+                              f"var:te_tax_o$N$_target <= te_tax_obl_inst_cap_{arg} "
+                              f"var:te_tax_o$N$_target > te_tax_obl_inst_level_{arg} }}", body)
+
+    def test_the_level_bound_is_the_mods_maximum_and_the_generators(self):
+        self.assertEqual(load(AI_VALUES)["te_tax_ai_enact_level_max"], str(MAX_INSTITUTION_LEVEL))
+        self.assertEqual(gen.OBL_MAX_INSTITUTION_LEVEL, MAX_INSTITUTION_LEVEL)
+        self.assertRegex(read(DEFINES), rf"\bMAX_INSTITUTION_INVESTMENT = {MAX_INSTITUTION_LEVEL}\b")
+
+    def test_each_enactment_sets_exactly_the_target_behind_the_institution(self):
+        for o in gen.OBLIGATION_SLOTS:
+            body = flat(block(self.gen, f"te_tax_gen_ai_enact_{o}"))
+            for index, (arg, institution) in enumerate(INSTITUTIONS.items()):
+                opener = "if" if index == 0 else "else_if"
+                levels = " ".join(
+                    f"{'if' if level == 1 else 'else_if'} = {{ limit = {{ var:te_tax_o{o}_target = {level} }} "
+                    f"set_institution_investment_level = {{ institution = {institution} level = {level} }} }}"
+                    for level in range(1, MAX_INSTITUTION_LEVEL + 1))
+                with self.subTest(slot=o, arg=arg):
+                    self.assertIn(f"{opener} = {{ limit = {{ has_variable = te_tax_o{o}_on var:te_tax_o{o}_on = 1 "
+                                  f"var:te_tax_o{o}_kind = 1 var:te_tax_o{o}_arg = {arg} "
+                                  f"has_institution = {institution} }} {levels} }}", body)
+            self.assertEqual(body.count("set_institution_investment_level"), MAX_INSTITUTION_LEVEL * len(INSTITUTIONS))
+            self.assertNotIn("change_institution_investment_level", body)
+
+    def test_enactment_is_called_only_by_the_promise_manager(self):
+        callers = {}
+        for directory in ("common", "events"):
+            for path in sorted((ROOT / directory).rglob("*.txt")):
+                text = read(path.relative_to(ROOT).as_posix())
+                for match in re.finditer(r"\bte_tax_gen_ai_enact_\d+ = yes", text):
+                    callers.setdefault(path.name, 0)
+                    callers[path.name] += 1
+        self.assertEqual(callers, {"te_tax_ai_effects.txt": len(gen.OBLIGATION_SLOTS)})
+        for n in gen.OBLIGATION_SLOTS:
+            self.assertIn(f"te_tax_gen_ai_enact_{n} = yes", block(self.ai, "te_tax_ai_manage_promises"))
+        managers = [path.name for path in sorted((ROOT / "common").rglob("*.txt"))
+                    if "te_tax_ai_manage_promises = yes" in read(path.relative_to(ROOT).as_posix())]
+        self.assertEqual(managers, ["te_tax_ai_effects.txt"])
+        self.assertIn("te_tax_ai_manage_promises = yes", block(self.ai, "te_tax_ai_step"))
+
+    def test_the_enactment_line_names_the_promise_and_the_signals(self):
+        views = set(re.findall(r"(?m)^(\w+) = ", read(GEN_VALUES)))
+        step = re.findall(r'debug_log = "([^"]*)"', block(self.ai, "te_tax_ai_log_step"))[0]
+        signals = step[len("TE_TAX ai_step "):]
+        for o in gen.OBLIGATION_SLOTS:
+            lines = re.findall(r'debug_log = "([^"]*)"', block(self.gen, f"te_tax_gen_ai_log_enacted_{o}"))
+            fields = " ".join(f"{view}=[SCOPE.ScriptValue('te_tax_view_o{o}_{view}')|0]"
+                              for view in DEADLINE_VIEWS if view != "kind")
+            with self.subTest(slot=o):
+                self.assertEqual(lines, [f"TE_TAX ai_obl_enacted slot={o} kind=1 {fields} {signals}"])
+                for view in DEADLINE_VIEWS:
+                    self.assertIn(f"te_tax_view_o{o}_{view}", views)
+                self.assertNotIn("is_ai", block(self.gen, f"te_tax_gen_ai_log_enacted_{o}"))
+
+
+class DeadlineLogTest(unittest.TestCase):
+    def test_met_and_unmet_lines_once_per_promise(self):
+        check = block(read(OBLIGATIONS), "te_tax_obl_check_one")
+        self.assertEqual(check.count("te_tax_gen_obl_log_met_$N$ = yes"), 1)
+        self.assertEqual(check.count("te_tax_gen_obl_log_unmet_$N$ = yes"), 1)
+        self.assertLess(check.index("te_tax_gen_obl_log_met_$N$"), check.index("te_tax_obl_begin_maintenance"))
+
+    def test_the_log_line_prints_views_not_params(self):
+        gen_text = read(GEN_EFFECTS)
+        for o in (1, 2, 3, 4):
+            line = block(gen_text, f"te_tax_gen_obl_log_unmet_{o}")
+            self.assertIn("TE_TAX obl_deadline result=unmet", line)
+            self.assertIn(f"te_tax_view_o{o}_kind", line)
+            self.assertNotIn("$", line)
+
+    # -- beyond the brief's sample ------------------------------------------
+
+    def test_met_at_delivery_and_unmet_at_the_deadline_breach_only(self):
+        check = flat(block(read(OBLIGATIONS), "te_tax_obl_check_one"))
+        self.assertIn("if = { limit = { te_tax_obl_delivered = { N = $N$ } } te_tax_gen_obl_log_met_$N$ = yes "
+                      "te_tax_obl_begin_maintenance = { N = $N$ } }", check)
+        self.assertIn("else_if = { limit = { var:te_tax_o$N$_deadline <= var:te_tax_now } "
+                      "te_tax_gen_obl_log_unmet_$N$ = yes te_tax_obl_breach = { N = $N$ } }", check)
+        # The maintenance breach (grace reached) writes no deadline line.
+        maintaining = check[check.index("var:te_tax_o$N$_state = 3"):]
+        self.assertNotIn("te_tax_gen_obl_log_", maintaining)
+        self.assertEqual(read(OBLIGATIONS).count("te_tax_gen_obl_log_"), 2)
+
+    def test_each_slot_writes_one_line_with_its_views_and_the_ai_flag(self):
+        gen_text = read(GEN_EFFECTS)
+        for o in gen.OBLIGATION_SLOTS:
+            fields = " ".join(f"{view}=[SCOPE.ScriptValue('te_tax_view_o{o}_{view}')|0]" for view in DEADLINE_VIEWS)
+            for result in ("met", "unmet"):
+                head = f"TE_TAX obl_deadline result={result} slot={o} {fields}"
+                with self.subTest(slot=o, result=result):
+                    self.assertEqual(
+                        flat(block(gen_text, f"te_tax_gen_obl_log_{result}_{o}")),
+                        f'if = {{ limit = {{ is_ai = yes }} debug_log = "{head} ai=yes; {STAMP}" }} '
+                        f'else = {{ debug_log = "{head} ai=no; {STAMP}" }}')
+
+    def test_the_log_effects_are_called_only_by_the_monthly_check(self):
+        callers = set()
+        for directory in ("common", "events"):
+            for path in sorted((ROOT / directory).rglob("*.txt")):
+                if re.search(r"\bte_tax_gen_obl_log_(?:met|unmet)_", read(path.relative_to(ROOT).as_posix())):
+                    callers.add(path.name)
+        self.assertEqual(callers, {"te_tax_obligation_effects.txt", "te_tax_generated_effects.txt"})
+
+
+class InstitutionHookTest(unittest.TestCase):
+    def test_hook_on_schools_and_health_only_and_rule_gated(self):
+        text = read(STRATEGY)
+        self.assertIn("te_tax_ai_owes_institution = { ARG = 1 }", text)
+        self.assertIn("te_tax_ai_owes_institution = { ARG = 2 }", text)
+        owes = block(read(AI_TRIGGERS), "te_tax_ai_owes_institution")
+        self.assertIn("te_tax_code_on = yes", owes)
+        for o in (1, 2, 3, 4):
+            self.assertIn(f"var:te_tax_o{o}_kind = 1", owes)
+
+    def test_no_political_strategy_is_injected(self):
+        import pathlib
+        for f in pathlib.Path(__file__).parent.glob("common/ai_strategies/*.txt"):
+            self.assertNotRegex(f.read_text(encoding="utf-8-sig"), r"(INJECT|REPLACE):ai_strategy_\w+_agenda")
+
+    # -- beyond the brief's sample ------------------------------------------
+
+    def test_owing_is_a_binding_kind_1_promise_of_that_institution(self):
+        body = flat(block(read(AI_TRIGGERS), "te_tax_ai_owes_institution"))
+        slots = " ".join(f"AND = {{ te_tax_obl_binding = {{ N = {o} }} var:te_tax_o{o}_kind = 1 "
+                         f"var:te_tax_o{o}_arg = $ARG$ }}" for o in gen.OBLIGATION_SLOTS)
+        self.assertEqual(body, f"te_tax_code_on = yes OR = {{ {slots} }}")
+        binding = flat(block(read(OBL_TRIGGERS), "te_tax_obl_binding"))
+        self.assertEqual(binding, "has_variable = te_tax_o$N$_on var:te_tax_o$N$_on = 1 OR = { "
+                                  "var:te_tax_o$N$_state = 7 var:te_tax_o$N$_state = 2 var:te_tax_o$N$_state = 3 }")
+
+    def test_the_boost_adds_the_score_to_the_default_only(self):
+        text = read(STRATEGY)
+        self.assertEqual(re.findall(r"(?m)^(?:INJECT|REPLACE):(\w+)", text), ["ai_strategy_default"])
+        scores = block(text, "INJECT:ai_strategy_default")
+        for arg, institution in ((1, "institution_schools"), (2, "institution_health_system")):
+            body = flat(block(scores.replace("\n\t\t", "\n"), institution))
+            with self.subTest(institution=institution):
+                self.assertEqual(body, f"value = 10 if = {{ limit = {{ te_tax_ai_owes_institution = {{ ARG = {arg} }} }} "
+                                       f"add = te_tax_ai_promise_institution_score }}")
+        self.assertEqual(text.count("te_tax_ai_owes_institution"), 2)
+        for path in sorted((ROOT / "common/ai_strategies").glob("*.txt")):
+            if path.name != "edited_default_strategy.txt":
+                with self.subTest(path=path.name):
+                    self.assertNotIn("te_tax", read(path.relative_to(ROOT).as_posix()))
+
+    def test_the_strategy_file_keeps_bom_tabs_and_formatter_parity(self):
+        import sys
+        sys.path.insert(0, str(ROOT / "scripts"))
+        try:
+            import format_paradox_tabs
+        finally:
+            sys.path.pop(0)
+        raw = (ROOT / STRATEGY).read_bytes()
+        text = raw.decode("utf-8-sig")
+        self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
+        self.assertNotIn(b"\r", raw)
+        self.assertEqual(format_paradox_tabs.format_text(text), text)
+
+
+class PromiseDocTest(unittest.TestCase):
+    def test_schema_doc_describes_the_ai_promise_layer(self):
+        doc = read(SCHEMA_DOC, strip_comments=False)
+        ai = doc.split("\n## Policy obligations\n", 1)[1].split("### Obligations and the AI\n", 1)[1].split("\n### ", 1)[0]
+        for phrase in ("te_tax_ai_manage_promises", "te_tax_gen_ai_enact_", "te_tax_cmd_obl_renegotiate",
+                       "obl_deadline", "edited_default_strategy.txt", "P16", "te_tax_ai_enact_lead_months"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, ai)
+        self.assertNotIn("none holds an obligation yet", ai)
+        section = doc.split("\n## AI legislation\n", 1)[1].split("\n## ", 1)[0]
+        for phrase in ("te_tax_ai_manage_packages", "te_tax_ai_manage_promises", "te_tax_ai_promise_at_risk",
+                       "ai_obl_enacted", "obl_deadline", "te_tax_ai_owes_institution"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, section)
+
+    def test_the_debug_lines_say_command_lines_are_player_only(self):
+        doc = read(SCHEMA_DOC, strip_comments=False)
+        para = [line for line in doc.splitlines() if line.startswith("**Debug lines.**")]
+        self.assertEqual(len(para), 1)
+        self.assertIn("The commands' own lines (`introduced`, `passed`, `withdrawn`, `offer_accepted`, `forced_through`, "
+                      "`obl_bound`, …) are written for player countries only; the AI writes one summary line per action "
+                      "instead", para[0])
+        self.assertNotIn("So are the commands' own lines", para[0])
+        self.assertIn("`snapshot`, `stored` and `store_refused` are written for player countries only", para[0])
+
+    def test_ledger_has_the_ai_promise_delivery_row(self):
+        rows = [line for line in read(LEDGER, strip_comments=False).splitlines()
+                if line.startswith("| ") and "AI promise delivery (default-strategy boost; enactment fallback)" in line]
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0].split(" | ")[2], "static-only")
+        self.assertNotIn("te_tax_obl_inst_met_", rows[0])
 
 class AiFileTest(unittest.TestCase):
     def test_files_have_bom_lf_tabs_and_formatter_parity(self):
@@ -544,7 +924,9 @@ class AiFileTest(unittest.TestCase):
     def test_schema_doc_has_the_ai_section_and_rule_1b(self):
         doc = read(SCHEMA_DOC, strip_comments=False)
         schema = doc.split("\n## Schema\n", 1)[1].split("\n## ", 1)[0]
-        self.assertIn("### AI legislation", schema)
+        self.assertIn("### AI rows", schema)
+        self.assertNotIn("### AI legislation", schema)
+        self.assertNotIn("#ai-legislation-1", doc)
         rules = doc.split("### Processor rules", 1)[1].split("\n### ", 1)[0]
         self.assertIn("1b.", rules)
         self.assertIn("te_tax_ai_dispatch", rules)
