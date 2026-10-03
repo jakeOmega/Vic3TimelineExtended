@@ -5,22 +5,24 @@
 
 # State scope: true if this state is in at least one recognized continental region.
 # States not covered (e.g. Oceania) return false.
-# custom_tooltip wraps the body because `this = prev` inside the `any_state_in_*`
-# iterators is scope-dependent and the engine warns + emits scope-dependent
-# tooltip text per render (state_this_equal warning) without it.
+# custom_tooltip keeps the tooltip to one line. Until 2026-10-03 each test was
+# `any_state_in_<region> = { this = prev }`, a walk over the region's states
+# per test and per call (the Continental Union HQ's potential, 231 us a call in
+# a late-game script profile); is_in_geographic_region is the engine's lookup
+# for the same thing (short_key <region> = geographic_region_<region>).
 state_is_in_recognized_continent = {
 	custom_tooltip = {
 		text = STATE_IS_IN_RECOGNIZED_CONTINENT_TT
 		OR = {
-			any_state_in_africa = { this = prev }
-			any_state_in_europe = { this = prev }
-			any_state_in_north_america = { this = prev }
-			any_state_in_south_america = { this = prev }
-			any_state_in_east_asia = { this = prev }
-			any_state_in_south_east_asia = { this = prev }
-			any_state_in_india = { this = prev }
-			any_state_in_middle_east = { this = prev }
-			any_state_in_central_asia = { this = prev }
+			is_in_geographic_region = geographic_region_africa
+			is_in_geographic_region = geographic_region_europe
+			is_in_geographic_region = geographic_region_north_america
+			is_in_geographic_region = geographic_region_south_america
+			is_in_geographic_region = geographic_region_east_asia
+			is_in_geographic_region = geographic_region_south_east_asia
+			is_in_geographic_region = geographic_region_india
+			is_in_geographic_region = geographic_region_middle_east
+			is_in_geographic_region = geographic_region_central_asia
 		}
 	}
 }
@@ -35,55 +37,55 @@ continent_has_no_building_of_type = {
 		text = CONTINENT_HAS_NO_BUILDING_OF_TYPE_TT
 		NOT = {
 			AND = {
-				any_state_in_africa = { this = prev }
+				is_in_geographic_region = geographic_region_africa
 				any_state_in_africa = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
 			}
 		}
 		NOT = {
 			AND = {
-				any_state_in_europe = { this = prev }
+				is_in_geographic_region = geographic_region_europe
 				any_state_in_europe = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
 			}
 		}
 		NOT = {
 			AND = {
-				any_state_in_north_america = { this = prev }
+				is_in_geographic_region = geographic_region_north_america
 				any_state_in_north_america = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
 			}
 		}
 		NOT = {
 			AND = {
-				any_state_in_south_america = { this = prev }
+				is_in_geographic_region = geographic_region_south_america
 				any_state_in_south_america = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
 			}
 		}
 		NOT = {
 			AND = {
-				any_state_in_east_asia = { this = prev }
+				is_in_geographic_region = geographic_region_east_asia
 				any_state_in_east_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
 			}
 		}
 		NOT = {
 			AND = {
-				any_state_in_south_east_asia = { this = prev }
+				is_in_geographic_region = geographic_region_south_east_asia
 				any_state_in_south_east_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
 			}
 		}
 		NOT = {
 			AND = {
-				any_state_in_india = { this = prev }
+				is_in_geographic_region = geographic_region_india
 				any_state_in_india = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
 			}
 		}
 		NOT = {
 			AND = {
-				any_state_in_middle_east = { this = prev }
+				is_in_geographic_region = geographic_region_middle_east
 				any_state_in_middle_east = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
 			}
 		}
 		NOT = {
 			AND = {
-				any_state_in_central_asia = { this = prev }
+				is_in_geographic_region = geographic_region_central_asia
 				any_state_in_central_asia = { any_scope_building = { is_building_type = $BUILDING_TYPE$ } }
 			}
 		}

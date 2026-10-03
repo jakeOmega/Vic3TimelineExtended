@@ -152,19 +152,26 @@ un_arms_embargo_in_force = {
 # already in force against it. The human's pick, the AI's pick, the case
 # check and the AI's weight all read this, so they agree.
 # Scope: the prospective target; ROOT = the prospective proposer
+# Ordered cheapest first (the AI's propose buttons ask any_country over this
+# often; 2026-10-03 script profile: 1.4 ms a call): the rival-or-war test,
+# which most countries fail, comes before the record, and the war branch
+# only walks the world for a country that is at war at all.
 un_arms_embargo_candidate = {
 	NOT = { this = ROOT }
-	un_justice_not_proposer_bloc = yes
 	NOT = { is_country_type = decentralized }
-	un_case_supports = { TOPIC = arms_embargo }
 	NOT = { un_arms_embargo_in_force = yes }
 	OR = {
 		has_diplomatic_pact = { who = ROOT type = rivalry }
-		any_country = {
-			un_member_represented = yes
-			has_war_with = PREV
+		AND = {
+			is_at_war = yes
+			any_country = {
+				has_war_with = PREV
+				un_member_represented = yes
+			}
 		}
 	}
+	un_justice_not_proposer_bloc = yes
+	un_case_supports = { TOPIC = arms_embargo }
 }
 
 # There is a case. MIRRORS un_arms_embargo_select_target.
@@ -204,11 +211,10 @@ un_credentials_suspended = {
 # member only once the charter carries Reform II. The human's pick, the AI's
 # pick and the case check all read this, so they agree.
 # Scope: the prospective target; ROOT = the prospective proposer
+# Ordered cheapest first: the breach-or-defiance test, which most countries
+# fail, comes before membership and the record (2026-10-03 script profile).
 un_credentials_candidate = {
 	NOT = { this = ROOT }
-	un_justice_not_proposer_bloc = yes
-	un_member_represented = yes
-	un_case_supports = { TOPIC = credentials }
 	OR = {
 		un_regime_human_rights_violator = yes
 		AND = {
@@ -216,6 +222,9 @@ un_credentials_candidate = {
 			var:un_dos_defiance >= un_credentials_defiance_min
 		}
 	}
+	un_justice_not_proposer_bloc = yes
+	un_member_represented = yes
+	un_case_supports = { TOPIC = credentials }
 	OR = {
 		NOT = { is_un_permanent_member = yes }
 		un_charter_has_reform = { LEVEL = 2 }
