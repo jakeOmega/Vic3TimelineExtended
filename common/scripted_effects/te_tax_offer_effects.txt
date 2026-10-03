@@ -7,10 +7,12 @@
 # OFFERS. At each support refresh (te_tax_gen_refresh_support, never a GUI) a
 # group that has not committed to the bill's revision and is not marginal may
 # make one offer for that revision (te_tax_gen_offer_select): a clause that
-# changes the bill (cut the tax it pays most of by one step, a band of
-# agricultural relief, stop taxing the most-taxed staple) or a promise that
-# records a policy obligation (te_tax_obl_propose: schools or health system one
-# level up, no bureaucracy deficit, a fixed-budget surplus). Accepting any
+# softens what the bill changes (lower by one step the raise that weighs most
+# on it, never below existing law; stop taxing a staple the bill adds) or adds
+# a band of agricultural relief, or a promise that records a policy obligation
+# (te_tax_obl_propose: schools or health system one level up, no bureaucracy
+# deficit, a fixed-budget surplus). A grievance the bill did not raise gets a
+# promise or nothing. Accepting any
 # offer (te_tax_cmd_accept_offer) makes a new revision of the bill (spec §8
 # step 3): the revision number moves on, debate starts again, every commitment
 # is released and every pending promise with it, every promise accepted under
@@ -43,11 +45,12 @@
 # button's scripted GUI sets; any other caller must run with the country as
 # ROOT.
 #
-# VIEWS OF THE CODE. Each month the processor (te_tax.1) keeps one band
+# VIEWS OF THE CODE. Each month the processor (te_tax.1) keeps at most one band
 # modifier per group on the country, te_tax_ig_view_<ig>_<band>, from the
-# group's score of the enacted code against the migrated baseline
-# (te_tax_refresh_ig_views): the carrier law has no vanilla stances, so these
-# replace the approval a group took from its stance on the taxation law.
+# group's own stance toward the vanilla taxation law the enacted code is
+# equivalent to (te_tax_refresh_ig_views): the carrier law has no vanilla
+# stances, so these give back the approval a group took from its stance on the
+# taxation law, at vanilla's magnitudes, and the migration changes none.
 #
 # Country scope throughout; every entry point checks the rule (written
 # positively). Nothing here reads ROOT.
@@ -85,23 +88,16 @@ te_tax_cmd_accept_offer = {
 	}
 }
 
-# Cuts instrument KEY one index step in the bill, from the bill's own value or,
-# if the bill leaves it alone, from existing law's in its month
-# (te_tax_bl_eff_<key>), and gives the draft the same value, so a later
-# revision from the draft keeps the concession. A provision the bill takes up
-# here records its planned and external versions as they stand; one cut back
-# to existing law is left alone again. Records that group IG gained the cut.
+# Softens the bill's raise of instrument KEY by one index step, never below
+# existing law in its month (te_tax_base_bl_<key>): the offer is made and
+# accepted only while the bill raises it (te_tax_bl_dstep_<key> above 0), so the
+# bill holds its own value. The draft takes the same value, so a later revision
+# from the draft keeps the concession. A cut back to existing law leaves the
+# provision alone. Records that group IG gained the cut.
 te_tax_offer_cut = {
 	custom_tooltip = te_tax_tt_offer_cut_$KEY$
-	if = {
-		limit = { var:te_tax_bl_$KEY$ < 0 }
-		set_variable = { name = te_tax_bl_$KEY$_pver value = var:te_tax_pver_$KEY$ }
-		set_variable = { name = te_tax_bl_xver_$KEY$ value = var:te_tax_xver_$KEY$ }
-		set_variable = { name = te_tax_bl_$KEY$_sun value = 0 }
-	}
-	set_variable = { name = te_tax_bl_$KEY$ value = te_tax_bl_eff_$KEY$ }
 	change_variable = { name = te_tax_bl_$KEY$ add = -1 }
-	clamp_variable = { name = te_tax_bl_$KEY$ min = 0 max = te_tax_max_$KEY$ }
+	clamp_variable = { name = te_tax_bl_$KEY$ min = te_tax_base_bl_$KEY$ max = te_tax_max_$KEY$ }
 	if = {
 		limit = { var:te_tax_bl_$KEY$ = te_tax_base_bl_$KEY$ }
 		set_variable = { name = te_tax_bl_$KEY$ value = -1 }
@@ -144,25 +140,17 @@ te_tax_offer_agrel = {
 	}
 }
 
-# Stops taxing GOOD in the bill and the draft: 0 where existing law in the
-# record's month taxes it, untouched (-1) where it does not. The goods group's
-# versions are recorded when the bill takes up its first good and its planned
-# version cleared when it touches none, as the draft's toggle does
-# (te_tax_cmd_draft_good). Records that group IG gained it.
+# Takes back a staple GOOD the bill adds to the taxed list: the offer is made
+# and accepted only while the bill taxes it and existing law in its month does
+# not (te_tax_dl_g_<good> above 0), so the bill leaves it alone again (-1). In
+# the draft it stops being taxed: 0 where existing law in the draft's month
+# taxes it, untouched (-1) where it does not, and the goods group's planned
+# version is recorded and cleared as the draft's toggle does
+# (te_tax_cmd_draft_good). The bill's goods planned version is cleared if it
+# touches no good any more. Records that group IG gained it.
 te_tax_offer_untax = {
 	custom_tooltip = te_tax_tt_offer_untax_$GOOD$
-	if = {
-		limit = { NOT = { te_tax_gen_bill_touches_goods = yes } }
-		set_variable = { name = te_tax_bl_goods_pver value = var:te_tax_pver_goods }
-		set_variable = { name = te_tax_bl_xver_goods value = var:te_tax_xver_goods }
-	}
-	if = {
-		limit = { te_tax_base_bl_g_$GOOD$ > 0 }
-		set_variable = { name = te_tax_bl_g_$GOOD$ value = 0 }
-	}
-	else = {
-		set_variable = { name = te_tax_bl_g_$GOOD$ value = -1 }
-	}
+	set_variable = { name = te_tax_bl_g_$GOOD$ value = -1 }
 	if = {
 		limit = { NOT = { te_tax_gen_bill_touches_goods = yes } }
 		set_variable = { name = te_tax_bl_goods_pver value = -1 }
@@ -242,18 +230,15 @@ te_tax_force_into = {
 # Interest-group views of the code (te_tax_process_month, after the obligations
 # and before the sync; nothing else calls it)
 # ----------------------------------------------------------------------------
-# A country migrated before the baseline existed records it now: its groups then
-# judge the code from this month on.
+# A country without the carrier law (a vanilla taxation law activated by script,
+# until te_tax.5 puts the carrier back) has no equivalent law: every band is 0
+# and every view modifier goes, since vanilla counts its stance on the active
+# law itself.
 te_tax_refresh_ig_views = {
 	if = {
 		limit = {
 			te_tax_code_on = yes
 			has_variable = te_tax_schema
-			has_variable = te_tax_mig_on
-		}
-		if = {
-			limit = { var:te_tax_mig_on = 0 }
-			te_tax_gen_record_baseline = yes
 		}
 		te_tax_gen_ig_views = yes
 	}

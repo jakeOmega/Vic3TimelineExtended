@@ -590,6 +590,52 @@ te_tax_code_counts_as_graduated = {
 	var:te_tax_en_div >= var:te_tax_en_wage
 }
 
+# The vanilla taxation law the enacted code is equivalent to (plan Task 13,
+# controller ruling), for the interest groups' views of the code
+# (te_tax_ig_band_<ig>): Graduated if the code counts as Graduated; else
+# Proportional if it counts as Proportional; else Per-Capita if it counts as
+# Per-Capita; else Land-Based if it levies a rural assessment; else
+# Consumption-Based. Exactly one holds for a rule-on country holding the carrier
+# law, none without it. Every migrated row of the vanilla laws maps back to its
+# own law (test_tax_code_offers.py), so the migration changes no group's
+# approval.
+te_tax_code_equivalent_graduated = {
+	te_tax_code_counts_as_graduated = yes
+}
+
+te_tax_code_equivalent_proportional = {
+	NOT = { te_tax_code_counts_as_graduated = yes }
+	te_tax_code_counts_as_proportional = yes
+}
+
+te_tax_code_equivalent_per_capita = {
+	NOT = { te_tax_code_counts_as_graduated = yes }
+	NOT = { te_tax_code_counts_as_proportional = yes }
+	te_tax_code_counts_as_per_capita = yes
+}
+
+te_tax_code_equivalent_land_based = {
+	te_tax_code_on = yes
+	has_law = law_type:law_te_tax_code
+	NOT = { te_tax_code_counts_as_graduated = yes }
+	NOT = { te_tax_code_counts_as_proportional = yes }
+	NOT = { te_tax_code_counts_as_per_capita = yes }
+	has_variable = te_tax_en_land
+	var:te_tax_en_land >= 1
+}
+
+te_tax_code_equivalent_consumption_based = {
+	te_tax_code_on = yes
+	has_law = law_type:law_te_tax_code
+	NOT = { te_tax_code_counts_as_graduated = yes }
+	NOT = { te_tax_code_counts_as_proportional = yes }
+	NOT = { te_tax_code_counts_as_per_capita = yes }
+	NAND = {
+		has_variable = te_tax_en_land
+		var:te_tax_en_land >= 1
+	}
+}
+
 # ---------------------------------------------------------------------------
 # Relief eligibility (docs/systems/tax_code_schema.md, "Civil wars and new
 # countries"). State scope, from te_tax_relief_follow_owner
@@ -1003,6 +1049,29 @@ te_tax_can_accept_offer = {
 	}
 	trigger_else = {
 		custom_tooltip = { text = te_tax_tt_bill_open always = no }
+	}
+}
+
+# A clause offer never empties the bill (plan Task 13): a cut of KEY leaves it
+# changing something (the raise stays above existing law, or the bill changes
+# another provision, a good or relief), and taking back an added staple leaves it
+# changing a provision, relief or another good. Read while a bill is open.
+te_tax_offer_cut_leaves_a_bill = {
+	OR = {
+		te_tax_bl_dstep_$KEY$ >= 2
+		te_tax_bl_provisions >= 2
+		te_tax_bl_goods_touched >= 1
+		var:te_tax_bl_agrel >= 0
+		var:te_tax_bl_regrel >= 0
+	}
+}
+
+te_tax_offer_untax_leaves_a_bill = {
+	OR = {
+		te_tax_bl_provisions >= 1
+		te_tax_bl_goods_touched >= 2
+		var:te_tax_bl_agrel >= 0
+		var:te_tax_bl_regrel >= 0
 	}
 }
 

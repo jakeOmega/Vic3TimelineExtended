@@ -7,9 +7,11 @@ Structural checks on the committed script (no game install needed):
 * offers: one per non-committed, non-marginal interest group per bill
   revision, chosen only at the support refresh (never from a GUI) from the
   group's top negative reason; a group at its red line is offered promises
-  only; the catalog is the brief's (cut the group's most exposed tax by one
-  step, agricultural relief, untax the most-taxed staple; schools, health,
-  bureaucracy balance and fiscal balance promises);
+  only; the catalog is the brief's (schools, health, bureaucracy balance and
+  fiscal balance promises; agricultural relief), with clauses that only soften
+  what the bill changes (controller ruling): a cut lowers by one step the raise
+  that is the group's top grievance, never below existing law; a staple offer
+  takes back a staple the bill adds; neither empties the bill;
 * anti-farming: an offer is recorded for one revision (te_tax_off_<ig>_rev)
   and reset with the commitments; a clause a group gained in this bill is
   never offered to it again (te_tax_bl_got_<ig>_<c>); a promise is offered
@@ -27,11 +29,14 @@ Structural checks on the committed script (no game install needed):
   stances on the institution's "none" law), never accumulated;
 * the fiscal reason sees goods and relief, and the ideology reason counts
   taxing staples as regressive;
-* interest-group views of the enacted code: one static band modifier
-  (te_tax_ig_view_<ig>_<band>, approval -2..+2) per group, swapped only when
-  the band changes, from one refresh site in the monthly processor, scored
-  against the migrated baseline (te_tax_mig_*), which the migration records,
-  the outbreak copies and a release records for itself;
+* interest-group views of the enacted code (controller ruling): a group's band
+  is its own vanilla stance toward the vanilla taxation law the code is
+  equivalent to (graduated, proportional, per-capita, land-based,
+  consumption-based, through the counts-as triggers); at most one static
+  modifier per group (none at band 0) carrying vanilla's approval from a law
+  stance, swapped only when the band changes, from one refresh site in the
+  monthly processor; every migrated row maps back to its own law, so the
+  migration changes no approval;
 * force-through reuses the mod's forced-law modifiers and cost script values
   and invents none, and its trigger lists every condition.
 
@@ -78,8 +83,8 @@ CUT, AGREL, STAPLE = 1, 2, 3
 SCHOOLS, HEALTH, BUREAUCRACY, FISCAL = (1, 1), (1, 2), (2, 0), (4, 0)
 # The brief's catalog, ported by hand: who may be offered what.
 CLAUSES = {
-    "trade_unions": (STAPLE, CUT),
-    "rural_folk": (AGREL, STAPLE, CUT),
+    "trade_unions": (CUT, STAPLE),
+    "rural_folk": (CUT, STAPLE, AGREL),
     "petty_bourgeoisie": (CUT,), "intelligentsia": (CUT,), "devout": (CUT,),
     "armed_forces": (CUT,), "industrialists": (CUT,), "landowners": (CUT,),
 }
@@ -89,14 +94,19 @@ PROMISES = {
     BUREAUCRACY: ("industrialists", "petty_bourgeoisie"),
     FISCAL: ("industrialists", "landowners"),
 }
-# The channel each group pays most of (the support model's exposure table), the
-# one a cut offer lowers.
-MOST_EXPOSED = {"trade_unions": "wage", "rural_folk": "land", "petty_bourgeoisie": "wage",
-                "intelligentsia": "wage", "devout": "cons", "armed_forces": "cons",
-                "industrialists": "div", "landowners": "div"}
+# The support model's exposure table (test_tax_code_bill.py's port): the channels a
+# group pays any of are the ones a cut offer can lower.
+PAYS = {"trade_unions": ("wage", "head", "cons"), "rural_folk": KEYS, "petty_bourgeoisie": KEYS,
+        "intelligentsia": ("wage", "div", "head", "cons"), "devout": KEYS, "armed_forces": KEYS,
+        "industrialists": ("wage", "div", "head", "cons"), "landowners": KEYS}
 STAPLES = {"clothes", "electricity", "fabric", "fish", "furniture", "grain", "groceries", "paper",
            "services", "transportation", "wood"}
-BANDS = {"m2": -2, "m1": -1, "0": 0, "p1": 1, "p2": 2}
+BANDS = {"m2": -2, "m1": -1, "p1": 1, "p2": 2}
+# The vanilla taxation law each equivalence trigger names, in the ruling's order.
+EQUIVALENT = (("graduated", "law_graduated_taxation"), ("proportional", "law_proportional_taxation"),
+              ("per_capita", "law_per_capita_based_taxation"), ("land_based", "law_land_based_taxation"),
+              ("consumption_based", "law_consumption_based_taxation"))
+INSTALLED_DEFINES = Path("/mnt/c/Program Files (x86)/Steam/steamapps/common/Victoria 3/game/common/defines/00_defines.txt")
 
 
 def norm(text):
@@ -202,11 +212,6 @@ class CatalogTest(unittest.TestCase):
         self.assertEqual(set(gen.staple_order()), STAPLES)
         self.assertEqual(gen.staple_order()[0], "grain", "grain carries vanilla's highest tax cost")
 
-    def test_most_exposed_channel(self):
-        for ig in IGS:
-            with self.subTest(ig=ig):
-                self.assertEqual(gen.most_exposed(ig), MOST_EXPOSED[ig])
-
     def test_each_group_is_offered_the_brief_catalog(self):
         for ig in IGS:
             part = selection(ig)
@@ -214,8 +219,79 @@ class CatalogTest(unittest.TestCase):
             want = set(CLAUSES[ig]) | {10 + kind for (kind, _), groups in PROMISES.items() if ig in groups}
             with self.subTest(ig=ig):
                 self.assertEqual(kinds - {0}, want)
-                if CUT in CLAUSES[ig]:
-                    self.assertIn(f"te_tax_bl_eff_{MOST_EXPOSED[ig]} > 0", norm(part))
+                self.assertEqual(tuple(gen.grievance_keys(ig)), PAYS[ig])
+
+
+class ClauseRulingTest(unittest.TestCase):
+    """Controller ruling 3: a clause only softens what the bill changes, or adds relief."""
+
+    def test_a_grievance_is_only_a_raise_above_existing_law(self):
+        values = read(GEN_SUPPORT)
+        for ig in IGS:
+            for key in PAYS[ig]:
+                body = norm(block(values, f"te_tax_bl_grief_{ig}_{key}"))
+                with self.subTest(ig=ig, key=key):
+                    self.assertRegex(body, rf"^value = 0 if = \{{ limit = \{{ te_tax_bl_dstep_{key} > 0 \}} "
+                                           rf"value = te_tax_dl_{key} multiply = [\d.]+ \}}$")
+            if "cons" in PAYS[ig]:
+                goods = norm(block(values, f"te_tax_bl_grief_{ig}_goods"))
+                self.assertRegex(goods, r"^value = 0 if = \{ limit = \{ te_tax_dl_goods > 0 \} "
+                                        r"value = te_tax_dl_goods multiply = [\d.]+ \}$")
+
+    def test_a_cut_targets_the_top_grievance_and_never_empties_the_bill(self):
+        for ig in IGS:
+            part = norm(selection(ig))
+            for key in PAYS[ig]:
+                grief = f"te_tax_bl_grief_{ig}"
+                others = " ".join(f"{grief}_{key} >= {grief}_{other}" for other in PAYS[ig] if other != key)
+                goods = f" {grief}_{key} >= {grief}_goods" if "cons" in PAYS[ig] else ""
+                with self.subTest(ig=ig, key=key):
+                    self.assertIn(f"{grief}_{key} > 0 {others}{goods} te_tax_offer_cut_leaves_a_bill = {{ KEY = {key} }} }} "
+                                  f"set_variable = {{ name = te_tax_off_{ig}_kind value = {CUT} }} "
+                                  f"set_variable = {{ name = te_tax_off_{ig}_arg value = {KEYS.index(key) + 1} }}", part)
+            # No cut of a tax the group pays none of, and no cut from an unchanged rate.
+            for key in set(KEYS) - set(PAYS[ig]):
+                self.assertNotIn(f"te_tax_bl_grief_{ig}_{key}", part)
+            self.assertNotIn("te_tax_bl_eff_", part.replace("te_tax_bl_eff_agrel", "").replace("te_tax_bl_eff_wage", ""))
+        leaves = norm(block(read(TRIGGERS), "te_tax_offer_cut_leaves_a_bill"))
+        self.assertEqual(leaves, "OR = { te_tax_bl_dstep_$KEY$ >= 2 te_tax_bl_provisions >= 2 te_tax_bl_goods_touched >= 1 "
+                                 "var:te_tax_bl_agrel >= 0 var:te_tax_bl_regrel >= 0 }")
+
+    def test_a_cut_never_goes_below_existing_law(self):
+        cut = norm(block(read(OFFERS), "te_tax_offer_cut"))
+        self.assertIn("change_variable = { name = te_tax_bl_$KEY$ add = -1 } "
+                      "clamp_variable = { name = te_tax_bl_$KEY$ min = te_tax_base_bl_$KEY$ max = te_tax_max_$KEY$ }", cut)
+        self.assertNotIn("te_tax_bl_eff_", cut)
+        feasible = norm(block(read(GEN_TRIGGERS), "te_tax_gen_offer_feasible"))
+        for idx, key in enumerate(KEYS, start=1):
+            self.assertIn(f"var:te_tax_off_$IG$_kind = {CUT} var:te_tax_off_$IG$_arg = {idx} }} "
+                          f"te_tax_bl_dstep_{key} > 0 te_tax_offer_cut_leaves_a_bill = {{ KEY = {key} }}", feasible)
+
+    def test_a_staple_offer_takes_back_only_a_staple_the_bill_adds(self):
+        for ig in ("trade_unions", "rural_folk"):
+            part = norm(selection(ig))
+            grief = f"te_tax_bl_grief_{ig}"
+            top = " ".join(f"{grief}_goods > {grief}_{key}" for key in PAYS[ig])
+            added = " ".join(f"te_tax_dl_g_{good} > 0" for good in gen.staple_order())
+            with self.subTest(ig=ig):
+                self.assertIn(f"{grief}_goods > 0 {top} OR = {{ {added} }} te_tax_offer_untax_leaves_a_bill = yes }}", part)
+                self.assertNotIn("te_tax_bl_eff_g_", part)
+        untax = norm(block(read(OFFERS), "te_tax_offer_untax"))
+        self.assertTrue(untax.startswith("custom_tooltip = te_tax_tt_offer_untax_$GOOD$ "
+                                         "set_variable = { name = te_tax_bl_g_$GOOD$ value = -1 }"))
+        feasible = norm(block(read(GEN_TRIGGERS), "te_tax_gen_offer_feasible"))
+        for idx, good in enumerate(gen.staple_order(), start=1):
+            self.assertIn(f"var:te_tax_off_$IG$_kind = {STAPLE} var:te_tax_off_$IG$_arg = {idx} }} "
+                          f"te_tax_dl_g_{good} > 0 te_tax_offer_untax_leaves_a_bill = yes", feasible)
+        leaves = norm(block(read(TRIGGERS), "te_tax_offer_untax_leaves_a_bill"))
+        self.assertEqual(leaves, "OR = { te_tax_bl_provisions >= 1 te_tax_bl_goods_touched >= 2 "
+                                 "var:te_tax_bl_agrel >= 0 var:te_tax_bl_regrel >= 0 }")
+
+    def test_relief_is_added_not_taken(self):
+        part = norm(selection("rural_folk"))
+        self.assertIn("te_tax_bl_eff_agrel < te_tax_max_agrel te_tax_bl_eff_wage > 0 } "
+                      f"set_variable = {{ name = te_tax_off_rural_folk_kind value = {AGREL} }}", part)
+        self.assertIn("change_variable = { name = te_tax_bl_agrel add = 1 }", norm(block(read(OFFERS), "te_tax_offer_agrel")))
 
 
 class SelectionTest(unittest.TestCase):
@@ -344,7 +420,6 @@ class AcceptTest(unittest.TestCase):
 
     def test_clauses_change_the_bill_and_the_draft_and_are_recorded(self):
         cut = block(self.text, "te_tax_offer_cut")
-        self.assertIn("name = te_tax_bl_$KEY$ value = te_tax_bl_eff_$KEY$", cut)
         self.assertIn("change_variable = { name = te_tax_bl_$KEY$ add = -1 }", cut)
         self.assertIn("name = te_tax_dr_$KEY$ value = var:te_tax_bl_$KEY$", cut)
         self.assertIn("set_variable = { name = te_tax_bl_got_$IG$_1 value = 1 }", cut)
@@ -480,32 +555,47 @@ class ReasonsSeeGoodsAndReliefTest(unittest.TestCase):
 
 
 class IgViewTest(unittest.TestCase):
+    """Controller ruling 1 and 2: the band is the group's stance toward the
+    code's equivalent vanilla taxation law; band 0 carries no modifier."""
+
     @classmethod
     def setUpClass(cls):
         cls.modifiers = load(GEN_MODIFIERS)
         cls.views = block(read(GEN_EFFECTS), "te_tax_gen_ig_views")
 
-    def test_five_bands_per_group_carrying_its_approval(self):
+    def test_four_bands_per_group_carrying_vanillas_approval(self):
         expected = {f"te_tax_ig_view_{ig}_{band}" for ig in IGS for band in BANDS}
         self.assertEqual(set(self.modifiers), expected)
+        approval = {-2: -2, -1: -1, 1: 1, 2: 2}
         for ig in IGS:
             for band, value in BANDS.items():
                 body = self.modifiers[f"te_tax_ig_view_{ig}_{band}"]
                 with self.subTest(ig=ig, band=band):
                     self.assertEqual(set(body), {"icon", f"interest_group_ig_{ig}_approval_add"})
-                    self.assertEqual(Decimal(body[f"interest_group_ig_{ig}_approval_add"]), value)
+                    self.assertEqual(Decimal(body[f"interest_group_ig_{ig}_approval_add"]), approval[value])
+        self.assertEqual((gen.VANILLA_APPROVAL_FROM_LAW, gen.VANILLA_APPROVAL_FROM_LAW_STRONG), (1, 2))
 
-    def test_bands_are_swapped_never_stacked(self):
+    def test_the_approval_matches_the_installed_defines_when_present(self):
+        if not INSTALLED_DEFINES.exists():
+            self.skipTest("no installed Victoria 3")
+        defines = INSTALLED_DEFINES.read_text(encoding="utf-8-sig", errors="replace")
+        self.assertRegex(defines, rf"(?m)^\s*IG_APPROVAL_FROM_LAW = {gen.VANILLA_APPROVAL_FROM_LAW}\b")
+        self.assertRegex(defines, rf"(?m)^\s*IG_APPROVAL_FROM_LAW_STRONG_STANCE = {gen.VANILLA_APPROVAL_FROM_LAW_STRONG}\b")
+
+    def test_bands_are_swapped_never_stacked_and_band_0_has_none(self):
         text = norm(self.views)
         for ig in IGS:
+            self.assertIn(f"set_local_variable = {{ name = te_tax_band value = te_tax_ig_band_{ig} }}", text)
             for band, value in BANDS.items():
                 name = f"te_tax_ig_view_{ig}_{band}"
                 with self.subTest(name=name):
                     self.assertEqual(text.count(f"add_modifier = {{ name = {name} }}"), 1)
                     self.assertIn(f"limit = {{ local_var:te_tax_band = {value} NOT = {{ has_modifier = {name} }} }} "
                                   f"add_modifier = {{ name = {name} }}", text)
+                    # At any other band, band 0 included, it goes.
                     self.assertIn(f"limit = {{ NOT = {{ local_var:te_tax_band = {value} }} has_modifier = {name} }} "
                                   f"remove_modifier = {name}", text)
+            self.assertNotIn(f"te_tax_ig_view_{ig}_0", text)
         self.assertNotIn("multiplier", self.views)
 
     def test_one_refresh_site_in_the_monthly_processor(self):
@@ -527,81 +617,95 @@ class IgViewTest(unittest.TestCase):
         self.assertEqual(writers, ["te_tax_generated_effects.txt"])
         self.assertEqual(sorted(callers), ["te_tax_offer_effects.txt", "te_tax_schedule_effects.txt"])
 
-    def test_refresh_is_gated_and_records_a_missing_baseline(self):
+    def test_refresh_is_gated(self):
         refresh = norm(block(read(OFFERS), "te_tax_refresh_ig_views"))
-        self.assertTrue(refresh.startswith("if = { limit = { te_tax_code_on = yes has_variable = te_tax_schema"))
-        self.assertIn("limit = { var:te_tax_mig_on = 0 } te_tax_gen_record_baseline = yes", refresh)
-        self.assertLess(refresh.find("te_tax_gen_record_baseline = yes"), refresh.find("te_tax_gen_ig_views = yes"))
+        self.assertEqual(refresh, "if = { limit = { te_tax_code_on = yes has_variable = te_tax_schema } "
+                                  "te_tax_gen_ig_views = yes }")
 
-    def test_bands_map_the_score_through_named_thresholds(self):
-        support = load(SUPPORT)
-        self.assertEqual(support["te_tax_ig_view_threshold_1"], "10")
-        self.assertEqual(support["te_tax_ig_view_threshold_2"], "30")
-        views = norm(self.views)
-        chain = ("set_local_variable = { name = te_tax_band value = 0 } "
-                 "if = { limit = { local_var:te_tax_score >= te_tax_ig_view_threshold_2 } "
-                 "set_local_variable = { name = te_tax_band value = 2 } } "
-                 "else_if = { limit = { local_var:te_tax_score >= te_tax_ig_view_threshold_1 } "
-                 "set_local_variable = { name = te_tax_band value = 1 } } "
-                 "else_if = { limit = { local_var:te_tax_score <= te_tax_ig_view_threshold_2_neg } "
-                 "set_local_variable = { name = te_tax_band value = -2 } } "
-                 "else_if = { limit = { local_var:te_tax_score <= te_tax_ig_view_threshold_1_neg } "
-                 "set_local_variable = { name = te_tax_band value = -1 } }")
+    def test_the_band_is_the_stance_toward_the_equivalent_law(self):
+        values = read(GEN_SUPPORT)
+        branches = [("value > approve", 2), ("value > neutral", 1), ("value < disapprove", -2), ("value < neutral", -1)]
         for ig in IGS:
-            score = norm(block(read(GEN_SUPPORT), f"te_tax_cv_score_{ig}"))
+            body = norm(block(values, f"te_tax_ig_band_{ig}"))
             with self.subTest(ig=ig):
-                self.assertEqual(score, f"value = te_tax_cv_mat_{ig} add = te_tax_cv_ideo_{ig}")
-                # The score is evaluated once per group, then mapped.
-                self.assertEqual(views.count(f"te_tax_cv_score_{ig}"), 1)
-                self.assertIn(f"set_local_variable = {{ name = te_tax_score value = te_tax_cv_score_{ig} }} {chain}",
-                              views)
+                self.assertTrue(body.startswith("value = 0 if = { limit = { te_tax_code_equivalent_graduated = yes }"))
+                positions = [body.find(f"te_tax_code_equivalent_{short} = yes") for short, _ in EQUIVALENT]
+                self.assertEqual(positions, sorted(positions))
+                self.assertNotIn(-1, positions)
+                for _, law in EQUIVALENT:
+                    chain = " ".join(f"{'if' if n == 0 else 'else_if'} = {{ limit = {{ ig:ig_{ig} ?= {{ law_stance = "
+                                     f"{{ law = law_type:{law} {comparison} }} }} }} value = {stance} }}"
+                                     for n, (comparison, stance) in enumerate(branches))
+                    self.assertIn(chain, body)
+                self.assertNotIn("var:", body)
 
-    def test_the_view_scores_the_enacted_code_against_the_migrated_baseline(self):
-        for key in KEYS:
-            body = norm(block(read(GEN_SUPPORT), f"te_tax_cv_dl_{key}"))
-            with self.subTest(key=key):
-                self.assertIn("var:te_tax_mig_on = 1", body)
-                self.assertIn(f"value = var:te_tax_en_{key} subtract = var:te_tax_mig_{key}", body)
-                for var in set(re.findall(r"var:(\w+)", body)):
-                    self.assertIn(f"has_variable = {var}", body)
-        for good in catalog():
-            body = norm(block(read(GEN_SUPPORT), f"te_tax_cv_dl_g_{good}"))
-            self.assertIn(f"value = var:te_tax_en_g_{good} subtract = var:te_tax_mig_g_{good}", body)
+    def test_the_equivalence_triggers_follow_the_ruling_order(self):
+        triggers = read(TRIGGERS)
+        neg = ("NOT = { te_tax_code_counts_as_graduated = yes }", "NOT = { te_tax_code_counts_as_proportional = yes }",
+               "NOT = { te_tax_code_counts_as_per_capita = yes }")
+        self.assertEqual(norm(block(triggers, "te_tax_code_equivalent_graduated")),
+                         "te_tax_code_counts_as_graduated = yes")
+        self.assertEqual(norm(block(triggers, "te_tax_code_equivalent_proportional")),
+                         f"{neg[0]} te_tax_code_counts_as_proportional = yes")
+        self.assertEqual(norm(block(triggers, "te_tax_code_equivalent_per_capita")),
+                         f"{neg[0]} {neg[1]} te_tax_code_counts_as_per_capita = yes")
+        carrier = "te_tax_code_on = yes has_law = law_type:law_te_tax_code"
+        self.assertEqual(norm(block(triggers, "te_tax_code_equivalent_land_based")),
+                         f"{carrier} {' '.join(neg)} has_variable = te_tax_en_land var:te_tax_en_land >= 1")
+        self.assertEqual(norm(block(triggers, "te_tax_code_equivalent_consumption_based")),
+                         f"{carrier} {' '.join(neg)} NAND = {{ has_variable = te_tax_en_land var:te_tax_en_land >= 1 }}")
+        for kind in ("graduated", "proportional", "per_capita"):
+            counts = norm(block(triggers, f"te_tax_code_counts_as_{kind}"))
+            self.assertIn(carrier, counts)
 
-    def test_no_panel_reads_the_view_values(self):
+    def test_every_migrated_row_maps_back_to_its_own_law(self):
+        """The migration changes no group's approval: each vanilla (law, level) row's
+        enacted indices are classified, by the counts-as triggers' own comparisons,
+        as the law the country had."""
+        triggers = read(TRIGGERS)
+
+        def holds(name, indices):
+            body = norm(block(triggers, name))
+            tests = re.findall(r"var:te_tax_en_(\w+) >= (var:te_tax_en_(\w+)|\d+)", body)
+            self.assertTrue(tests, name)
+            return all(indices[key] >= (indices[other] if other else int(value)) for key, value, other in tests)
+
+        def equivalent(indices):
+            if holds("te_tax_code_counts_as_graduated", indices):
+                return "law_graduated_taxation"
+            if holds("te_tax_code_counts_as_proportional", indices):
+                return "law_proportional_taxation"
+            if holds("te_tax_code_counts_as_per_capita", indices):
+                return "law_per_capita_based_taxation"
+            if indices["land"] >= 1:
+                return "law_land_based_taxation"
+            return "law_consumption_based_taxation"
+
+        rows = gen.migration_indices()
+        self.assertEqual(len(rows), 25)
+        for law, level, indices in rows:
+            with self.subTest(law=law, level=level):
+                self.assertEqual(equivalent(indices), law)
+
+    def test_the_migrated_baseline_is_gone(self):
+        """Added and dropped in this task: no token, value or effect of it remains."""
+        for directory in ("common", "events", "gui", "localization"):
+            for path in sorted((ROOT / directory).rglob("te_tax*")):
+                text = path.read_text(encoding="utf-8-sig", errors="replace")
+                with self.subTest(path=path.name):
+                    self.assertNotIn("te_tax_mig_", text)
+                    self.assertNotIn("te_tax_cv_", text)
+                    self.assertNotIn("te_tax_gen_record_baseline", text)
+                    self.assertNotIn("te_tax_ig_view_threshold", text)
+        country, _ = schema_tokens()
+        self.assertFalse([token for token in country if token.startswith("te_tax_mig_")])
+
+    def test_no_panel_reads_the_band_values(self):
         surfaces = [path.read_text(encoding="utf-8-sig") for path in (ROOT / "gui").rglob("*.gui")]
         surfaces += [read(GEN_VALUES), read(SGUIS), read(GEN_CUSTOM_LOC)]
         surfaces += [(ROOT / "localization/english/te_tax_l_english.yml").read_text(encoding="utf-8-sig")]
         for text in surfaces:
-            self.assertNotIn("te_tax_cv_", text)
-
-
-class BaselineTest(unittest.TestCase):
-    def test_schema_tokens(self):
-        country, _ = schema_tokens()
-        self.assertEqual(country.get("te_tax_mig_on"), 0)
-        for key in KEYS:
-            self.assertEqual(country.get(f"te_tax_mig_{key}"), 0)
-        for good in catalog():
-            self.assertEqual(country.get(f"te_tax_mig_g_{good}"), 0)
-
-    def test_the_migration_records_it(self):
-        body = block(read(MIGRATION), "te_tax_migrate_country")
-        self.assertGreater(body.find("te_tax_gen_record_baseline = yes"), body.find("te_tax_gen_migrate_provisions = yes"))
-        record = block(read(GEN_EFFECTS), "te_tax_gen_record_baseline")
-        for key in KEYS:
-            self.assertIn(f"set_variable = {{ name = te_tax_mig_{key} value = var:te_tax_en_{key} }}", record)
-        for good in catalog():
-            self.assertIn(f"set_variable = {{ name = te_tax_mig_g_{good} value = var:te_tax_en_g_{good} }}", record)
-        self.assertTrue(norm(record).endswith("set_variable = { name = te_tax_mig_on value = 1 }"))
-
-    def test_the_outbreak_copies_it_and_a_release_records_its_own(self):
-        copy_code = block(read(GEN_EFFECTS), "te_tax_gen_copy_code")
-        for key in KEYS:
-            self.assertIn(f"te_tax_copy_token = {{ NAME = te_tax_mig_{key} }}", copy_code)
-        self.assertIn("te_tax_copy_token = { NAME = te_tax_mig_on }", block(read(CIVIL_WAR), "te_tax_copy_code"))
-        release = block(read(CIVIL_WAR), "te_tax_init_released_country")
-        self.assertGreater(release.find("te_tax_gen_record_baseline = yes"), release.find("te_tax_gen_copy_enacted = yes"))
+            self.assertNotIn("te_tax_ig_band_", text)
 
 
 class ForceThroughTest(unittest.TestCase):

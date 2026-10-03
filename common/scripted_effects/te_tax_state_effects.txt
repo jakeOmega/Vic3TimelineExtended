@@ -44,7 +44,6 @@ te_tax_init_country = {
 		if = { limit = { NOT = { has_variable = te_tax_drift_level } } set_variable = { name = te_tax_drift_level value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_drift_goods } } set_variable = { name = te_tax_drift_goods value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_drift_amend } } set_variable = { name = te_tax_drift_amend value = 0 } }
-		if = { limit = { NOT = { has_variable = te_tax_mig_on } } set_variable = { name = te_tax_mig_on value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_schema } } set_variable = { name = te_tax_schema value = 1 } }
 	}
 }

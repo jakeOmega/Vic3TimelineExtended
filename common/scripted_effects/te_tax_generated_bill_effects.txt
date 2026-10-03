@@ -318,14 +318,14 @@ te_tax_gen_bill_from_draft = {
 	set_variable = { name = te_tax_bl_prom_rural_folk_kind value = -1 }
 	set_variable = { name = te_tax_bl_prom_rural_folk_arg value = -1 }
 	set_variable = { name = te_tax_bl_prom_rural_folk_target value = -1 }
-	set_variable = { name = te_tax_bl_got_rural_folk_2 value = 0 }
-	set_variable = { name = te_tax_bl_got_rural_folk_3 value = 0 }
 	set_variable = { name = te_tax_bl_got_rural_folk_1 value = 0 }
+	set_variable = { name = te_tax_bl_got_rural_folk_3 value = 0 }
+	set_variable = { name = te_tax_bl_got_rural_folk_2 value = 0 }
 	set_variable = { name = te_tax_bl_prom_trade_unions_kind value = -1 }
 	set_variable = { name = te_tax_bl_prom_trade_unions_arg value = -1 }
 	set_variable = { name = te_tax_bl_prom_trade_unions_target value = -1 }
-	set_variable = { name = te_tax_bl_got_trade_unions_3 value = 0 }
 	set_variable = { name = te_tax_bl_got_trade_unions_1 value = 0 }
+	set_variable = { name = te_tax_bl_got_trade_unions_3 value = 0 }
 }
 
 # Closes the bill's payload (te_tax_bl_on is set to 0 by the caller).
@@ -426,14 +426,14 @@ te_tax_gen_bill_clear = {
 	remove_variable = te_tax_bl_prom_rural_folk_kind
 	remove_variable = te_tax_bl_prom_rural_folk_arg
 	remove_variable = te_tax_bl_prom_rural_folk_target
-	remove_variable = te_tax_bl_got_rural_folk_2
-	remove_variable = te_tax_bl_got_rural_folk_3
 	remove_variable = te_tax_bl_got_rural_folk_1
+	remove_variable = te_tax_bl_got_rural_folk_3
+	remove_variable = te_tax_bl_got_rural_folk_2
 	remove_variable = te_tax_bl_prom_trade_unions_kind
 	remove_variable = te_tax_bl_prom_trade_unions_arg
 	remove_variable = te_tax_bl_prom_trade_unions_target
-	remove_variable = te_tax_bl_got_trade_unions_3
 	remove_variable = te_tax_bl_got_trade_unions_1
+	remove_variable = te_tax_bl_got_trade_unions_3
 	if = { limit = { has_variable_list = te_tax_bl_relief_states } clear_variable_list = te_tax_bl_relief_states }
 }
 
@@ -1246,7 +1246,81 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_armed_forces_kind = 0
 					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
-					te_tax_bl_eff_cons > 0
+					te_tax_bl_grief_armed_forces_wage > 0
+					te_tax_bl_grief_armed_forces_wage >= te_tax_bl_grief_armed_forces_div
+					te_tax_bl_grief_armed_forces_wage >= te_tax_bl_grief_armed_forces_land
+					te_tax_bl_grief_armed_forces_wage >= te_tax_bl_grief_armed_forces_head
+					te_tax_bl_grief_armed_forces_wage >= te_tax_bl_grief_armed_forces_cons
+					te_tax_bl_grief_armed_forces_wage >= te_tax_bl_grief_armed_forces_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
+				}
+				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_arg value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
+				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_armed_forces_kind = 0
+					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
+					te_tax_bl_grief_armed_forces_div > 0
+					te_tax_bl_grief_armed_forces_div >= te_tax_bl_grief_armed_forces_wage
+					te_tax_bl_grief_armed_forces_div >= te_tax_bl_grief_armed_forces_land
+					te_tax_bl_grief_armed_forces_div >= te_tax_bl_grief_armed_forces_head
+					te_tax_bl_grief_armed_forces_div >= te_tax_bl_grief_armed_forces_cons
+					te_tax_bl_grief_armed_forces_div >= te_tax_bl_grief_armed_forces_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
+				}
+				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_arg value = 2 }
+				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
+				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_armed_forces_kind = 0
+					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
+					te_tax_bl_grief_armed_forces_land > 0
+					te_tax_bl_grief_armed_forces_land >= te_tax_bl_grief_armed_forces_wage
+					te_tax_bl_grief_armed_forces_land >= te_tax_bl_grief_armed_forces_div
+					te_tax_bl_grief_armed_forces_land >= te_tax_bl_grief_armed_forces_head
+					te_tax_bl_grief_armed_forces_land >= te_tax_bl_grief_armed_forces_cons
+					te_tax_bl_grief_armed_forces_land >= te_tax_bl_grief_armed_forces_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = land }
+				}
+				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_arg value = 3 }
+				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
+				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_armed_forces_kind = 0
+					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
+					te_tax_bl_grief_armed_forces_head > 0
+					te_tax_bl_grief_armed_forces_head >= te_tax_bl_grief_armed_forces_wage
+					te_tax_bl_grief_armed_forces_head >= te_tax_bl_grief_armed_forces_div
+					te_tax_bl_grief_armed_forces_head >= te_tax_bl_grief_armed_forces_land
+					te_tax_bl_grief_armed_forces_head >= te_tax_bl_grief_armed_forces_cons
+					te_tax_bl_grief_armed_forces_head >= te_tax_bl_grief_armed_forces_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_arg value = 4 }
+				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
+				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_armed_forces_kind = 0
+					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
+					te_tax_bl_grief_armed_forces_cons > 0
+					te_tax_bl_grief_armed_forces_cons >= te_tax_bl_grief_armed_forces_wage
+					te_tax_bl_grief_armed_forces_cons >= te_tax_bl_grief_armed_forces_div
+					te_tax_bl_grief_armed_forces_cons >= te_tax_bl_grief_armed_forces_land
+					te_tax_bl_grief_armed_forces_cons >= te_tax_bl_grief_armed_forces_head
+					te_tax_bl_grief_armed_forces_cons >= te_tax_bl_grief_armed_forces_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
 				}
 				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
 				set_variable = { name = te_tax_off_armed_forces_arg value = 5 }
@@ -1261,7 +1335,81 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_armed_forces_kind = 0
 					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
-					te_tax_bl_eff_cons > 0
+					te_tax_bl_grief_armed_forces_wage > 0
+					te_tax_bl_grief_armed_forces_wage >= te_tax_bl_grief_armed_forces_div
+					te_tax_bl_grief_armed_forces_wage >= te_tax_bl_grief_armed_forces_land
+					te_tax_bl_grief_armed_forces_wage >= te_tax_bl_grief_armed_forces_head
+					te_tax_bl_grief_armed_forces_wage >= te_tax_bl_grief_armed_forces_cons
+					te_tax_bl_grief_armed_forces_wage >= te_tax_bl_grief_armed_forces_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
+				}
+				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_arg value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
+				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_armed_forces_kind = 0
+					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
+					te_tax_bl_grief_armed_forces_div > 0
+					te_tax_bl_grief_armed_forces_div >= te_tax_bl_grief_armed_forces_wage
+					te_tax_bl_grief_armed_forces_div >= te_tax_bl_grief_armed_forces_land
+					te_tax_bl_grief_armed_forces_div >= te_tax_bl_grief_armed_forces_head
+					te_tax_bl_grief_armed_forces_div >= te_tax_bl_grief_armed_forces_cons
+					te_tax_bl_grief_armed_forces_div >= te_tax_bl_grief_armed_forces_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
+				}
+				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_arg value = 2 }
+				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
+				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_armed_forces_kind = 0
+					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
+					te_tax_bl_grief_armed_forces_land > 0
+					te_tax_bl_grief_armed_forces_land >= te_tax_bl_grief_armed_forces_wage
+					te_tax_bl_grief_armed_forces_land >= te_tax_bl_grief_armed_forces_div
+					te_tax_bl_grief_armed_forces_land >= te_tax_bl_grief_armed_forces_head
+					te_tax_bl_grief_armed_forces_land >= te_tax_bl_grief_armed_forces_cons
+					te_tax_bl_grief_armed_forces_land >= te_tax_bl_grief_armed_forces_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = land }
+				}
+				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_arg value = 3 }
+				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
+				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_armed_forces_kind = 0
+					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
+					te_tax_bl_grief_armed_forces_head > 0
+					te_tax_bl_grief_armed_forces_head >= te_tax_bl_grief_armed_forces_wage
+					te_tax_bl_grief_armed_forces_head >= te_tax_bl_grief_armed_forces_div
+					te_tax_bl_grief_armed_forces_head >= te_tax_bl_grief_armed_forces_land
+					te_tax_bl_grief_armed_forces_head >= te_tax_bl_grief_armed_forces_cons
+					te_tax_bl_grief_armed_forces_head >= te_tax_bl_grief_armed_forces_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_arg value = 4 }
+				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
+				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_armed_forces_kind = 0
+					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
+					te_tax_bl_grief_armed_forces_cons > 0
+					te_tax_bl_grief_armed_forces_cons >= te_tax_bl_grief_armed_forces_wage
+					te_tax_bl_grief_armed_forces_cons >= te_tax_bl_grief_armed_forces_div
+					te_tax_bl_grief_armed_forces_cons >= te_tax_bl_grief_armed_forces_land
+					te_tax_bl_grief_armed_forces_cons >= te_tax_bl_grief_armed_forces_head
+					te_tax_bl_grief_armed_forces_cons >= te_tax_bl_grief_armed_forces_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
 				}
 				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
 				set_variable = { name = te_tax_off_armed_forces_arg value = 5 }
@@ -1302,7 +1450,81 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_devout_kind = 0
 					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
-					te_tax_bl_eff_cons > 0
+					te_tax_bl_grief_devout_wage > 0
+					te_tax_bl_grief_devout_wage >= te_tax_bl_grief_devout_div
+					te_tax_bl_grief_devout_wage >= te_tax_bl_grief_devout_land
+					te_tax_bl_grief_devout_wage >= te_tax_bl_grief_devout_head
+					te_tax_bl_grief_devout_wage >= te_tax_bl_grief_devout_cons
+					te_tax_bl_grief_devout_wage >= te_tax_bl_grief_devout_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 1 }
+				set_variable = { name = te_tax_off_devout_arg value = 1 }
+				set_variable = { name = te_tax_off_devout_target value = 0 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
+					te_tax_bl_grief_devout_div > 0
+					te_tax_bl_grief_devout_div >= te_tax_bl_grief_devout_wage
+					te_tax_bl_grief_devout_div >= te_tax_bl_grief_devout_land
+					te_tax_bl_grief_devout_div >= te_tax_bl_grief_devout_head
+					te_tax_bl_grief_devout_div >= te_tax_bl_grief_devout_cons
+					te_tax_bl_grief_devout_div >= te_tax_bl_grief_devout_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 1 }
+				set_variable = { name = te_tax_off_devout_arg value = 2 }
+				set_variable = { name = te_tax_off_devout_target value = 0 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
+					te_tax_bl_grief_devout_land > 0
+					te_tax_bl_grief_devout_land >= te_tax_bl_grief_devout_wage
+					te_tax_bl_grief_devout_land >= te_tax_bl_grief_devout_div
+					te_tax_bl_grief_devout_land >= te_tax_bl_grief_devout_head
+					te_tax_bl_grief_devout_land >= te_tax_bl_grief_devout_cons
+					te_tax_bl_grief_devout_land >= te_tax_bl_grief_devout_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = land }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 1 }
+				set_variable = { name = te_tax_off_devout_arg value = 3 }
+				set_variable = { name = te_tax_off_devout_target value = 0 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
+					te_tax_bl_grief_devout_head > 0
+					te_tax_bl_grief_devout_head >= te_tax_bl_grief_devout_wage
+					te_tax_bl_grief_devout_head >= te_tax_bl_grief_devout_div
+					te_tax_bl_grief_devout_head >= te_tax_bl_grief_devout_land
+					te_tax_bl_grief_devout_head >= te_tax_bl_grief_devout_cons
+					te_tax_bl_grief_devout_head >= te_tax_bl_grief_devout_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 1 }
+				set_variable = { name = te_tax_off_devout_arg value = 4 }
+				set_variable = { name = te_tax_off_devout_target value = 0 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
+					te_tax_bl_grief_devout_cons > 0
+					te_tax_bl_grief_devout_cons >= te_tax_bl_grief_devout_wage
+					te_tax_bl_grief_devout_cons >= te_tax_bl_grief_devout_div
+					te_tax_bl_grief_devout_cons >= te_tax_bl_grief_devout_land
+					te_tax_bl_grief_devout_cons >= te_tax_bl_grief_devout_head
+					te_tax_bl_grief_devout_cons >= te_tax_bl_grief_devout_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
 				}
 				set_variable = { name = te_tax_off_devout_kind value = 1 }
 				set_variable = { name = te_tax_off_devout_arg value = 5 }
@@ -1349,7 +1571,81 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_devout_kind = 0
 					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
-					te_tax_bl_eff_cons > 0
+					te_tax_bl_grief_devout_wage > 0
+					te_tax_bl_grief_devout_wage >= te_tax_bl_grief_devout_div
+					te_tax_bl_grief_devout_wage >= te_tax_bl_grief_devout_land
+					te_tax_bl_grief_devout_wage >= te_tax_bl_grief_devout_head
+					te_tax_bl_grief_devout_wage >= te_tax_bl_grief_devout_cons
+					te_tax_bl_grief_devout_wage >= te_tax_bl_grief_devout_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 1 }
+				set_variable = { name = te_tax_off_devout_arg value = 1 }
+				set_variable = { name = te_tax_off_devout_target value = 0 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
+					te_tax_bl_grief_devout_div > 0
+					te_tax_bl_grief_devout_div >= te_tax_bl_grief_devout_wage
+					te_tax_bl_grief_devout_div >= te_tax_bl_grief_devout_land
+					te_tax_bl_grief_devout_div >= te_tax_bl_grief_devout_head
+					te_tax_bl_grief_devout_div >= te_tax_bl_grief_devout_cons
+					te_tax_bl_grief_devout_div >= te_tax_bl_grief_devout_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 1 }
+				set_variable = { name = te_tax_off_devout_arg value = 2 }
+				set_variable = { name = te_tax_off_devout_target value = 0 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
+					te_tax_bl_grief_devout_land > 0
+					te_tax_bl_grief_devout_land >= te_tax_bl_grief_devout_wage
+					te_tax_bl_grief_devout_land >= te_tax_bl_grief_devout_div
+					te_tax_bl_grief_devout_land >= te_tax_bl_grief_devout_head
+					te_tax_bl_grief_devout_land >= te_tax_bl_grief_devout_cons
+					te_tax_bl_grief_devout_land >= te_tax_bl_grief_devout_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = land }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 1 }
+				set_variable = { name = te_tax_off_devout_arg value = 3 }
+				set_variable = { name = te_tax_off_devout_target value = 0 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
+					te_tax_bl_grief_devout_head > 0
+					te_tax_bl_grief_devout_head >= te_tax_bl_grief_devout_wage
+					te_tax_bl_grief_devout_head >= te_tax_bl_grief_devout_div
+					te_tax_bl_grief_devout_head >= te_tax_bl_grief_devout_land
+					te_tax_bl_grief_devout_head >= te_tax_bl_grief_devout_cons
+					te_tax_bl_grief_devout_head >= te_tax_bl_grief_devout_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 1 }
+				set_variable = { name = te_tax_off_devout_arg value = 4 }
+				set_variable = { name = te_tax_off_devout_target value = 0 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
+					te_tax_bl_grief_devout_cons > 0
+					te_tax_bl_grief_devout_cons >= te_tax_bl_grief_devout_wage
+					te_tax_bl_grief_devout_cons >= te_tax_bl_grief_devout_div
+					te_tax_bl_grief_devout_cons >= te_tax_bl_grief_devout_land
+					te_tax_bl_grief_devout_cons >= te_tax_bl_grief_devout_head
+					te_tax_bl_grief_devout_cons >= te_tax_bl_grief_devout_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
 				}
 				set_variable = { name = te_tax_off_devout_kind value = 1 }
 				set_variable = { name = te_tax_off_devout_arg value = 5 }
@@ -1406,10 +1702,63 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_industrialists_kind = 0
 					NAND = { has_variable = te_tax_bl_got_industrialists_1 var:te_tax_bl_got_industrialists_1 = 1 }
-					te_tax_bl_eff_div > 0
+					te_tax_bl_grief_industrialists_wage > 0
+					te_tax_bl_grief_industrialists_wage >= te_tax_bl_grief_industrialists_div
+					te_tax_bl_grief_industrialists_wage >= te_tax_bl_grief_industrialists_head
+					te_tax_bl_grief_industrialists_wage >= te_tax_bl_grief_industrialists_cons
+					te_tax_bl_grief_industrialists_wage >= te_tax_bl_grief_industrialists_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 1 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 1 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_got_industrialists_1 var:te_tax_bl_got_industrialists_1 = 1 }
+					te_tax_bl_grief_industrialists_div > 0
+					te_tax_bl_grief_industrialists_div >= te_tax_bl_grief_industrialists_wage
+					te_tax_bl_grief_industrialists_div >= te_tax_bl_grief_industrialists_head
+					te_tax_bl_grief_industrialists_div >= te_tax_bl_grief_industrialists_cons
+					te_tax_bl_grief_industrialists_div >= te_tax_bl_grief_industrialists_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
 				}
 				set_variable = { name = te_tax_off_industrialists_kind value = 1 }
 				set_variable = { name = te_tax_off_industrialists_arg value = 2 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_got_industrialists_1 var:te_tax_bl_got_industrialists_1 = 1 }
+					te_tax_bl_grief_industrialists_head > 0
+					te_tax_bl_grief_industrialists_head >= te_tax_bl_grief_industrialists_wage
+					te_tax_bl_grief_industrialists_head >= te_tax_bl_grief_industrialists_div
+					te_tax_bl_grief_industrialists_head >= te_tax_bl_grief_industrialists_cons
+					te_tax_bl_grief_industrialists_head >= te_tax_bl_grief_industrialists_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 1 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 4 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_got_industrialists_1 var:te_tax_bl_got_industrialists_1 = 1 }
+					te_tax_bl_grief_industrialists_cons > 0
+					te_tax_bl_grief_industrialists_cons >= te_tax_bl_grief_industrialists_wage
+					te_tax_bl_grief_industrialists_cons >= te_tax_bl_grief_industrialists_div
+					te_tax_bl_grief_industrialists_cons >= te_tax_bl_grief_industrialists_head
+					te_tax_bl_grief_industrialists_cons >= te_tax_bl_grief_industrialists_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 1 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 5 }
 				set_variable = { name = te_tax_off_industrialists_target value = 0 }
 				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
 			}
@@ -1485,10 +1834,63 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_industrialists_kind = 0
 					NAND = { has_variable = te_tax_bl_got_industrialists_1 var:te_tax_bl_got_industrialists_1 = 1 }
-					te_tax_bl_eff_div > 0
+					te_tax_bl_grief_industrialists_wage > 0
+					te_tax_bl_grief_industrialists_wage >= te_tax_bl_grief_industrialists_div
+					te_tax_bl_grief_industrialists_wage >= te_tax_bl_grief_industrialists_head
+					te_tax_bl_grief_industrialists_wage >= te_tax_bl_grief_industrialists_cons
+					te_tax_bl_grief_industrialists_wage >= te_tax_bl_grief_industrialists_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 1 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 1 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_got_industrialists_1 var:te_tax_bl_got_industrialists_1 = 1 }
+					te_tax_bl_grief_industrialists_div > 0
+					te_tax_bl_grief_industrialists_div >= te_tax_bl_grief_industrialists_wage
+					te_tax_bl_grief_industrialists_div >= te_tax_bl_grief_industrialists_head
+					te_tax_bl_grief_industrialists_div >= te_tax_bl_grief_industrialists_cons
+					te_tax_bl_grief_industrialists_div >= te_tax_bl_grief_industrialists_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
 				}
 				set_variable = { name = te_tax_off_industrialists_kind value = 1 }
 				set_variable = { name = te_tax_off_industrialists_arg value = 2 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_got_industrialists_1 var:te_tax_bl_got_industrialists_1 = 1 }
+					te_tax_bl_grief_industrialists_head > 0
+					te_tax_bl_grief_industrialists_head >= te_tax_bl_grief_industrialists_wage
+					te_tax_bl_grief_industrialists_head >= te_tax_bl_grief_industrialists_div
+					te_tax_bl_grief_industrialists_head >= te_tax_bl_grief_industrialists_cons
+					te_tax_bl_grief_industrialists_head >= te_tax_bl_grief_industrialists_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 1 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 4 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_got_industrialists_1 var:te_tax_bl_got_industrialists_1 = 1 }
+					te_tax_bl_grief_industrialists_cons > 0
+					te_tax_bl_grief_industrialists_cons >= te_tax_bl_grief_industrialists_wage
+					te_tax_bl_grief_industrialists_cons >= te_tax_bl_grief_industrialists_div
+					te_tax_bl_grief_industrialists_cons >= te_tax_bl_grief_industrialists_head
+					te_tax_bl_grief_industrialists_cons >= te_tax_bl_grief_industrialists_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 1 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 5 }
 				set_variable = { name = te_tax_off_industrialists_target value = 0 }
 				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
 			}
@@ -1558,10 +1960,63 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_intelligentsia_kind = 0
 					NAND = { has_variable = te_tax_bl_got_intelligentsia_1 var:te_tax_bl_got_intelligentsia_1 = 1 }
-					te_tax_bl_eff_wage > 0
+					te_tax_bl_grief_intelligentsia_wage > 0
+					te_tax_bl_grief_intelligentsia_wage >= te_tax_bl_grief_intelligentsia_div
+					te_tax_bl_grief_intelligentsia_wage >= te_tax_bl_grief_intelligentsia_head
+					te_tax_bl_grief_intelligentsia_wage >= te_tax_bl_grief_intelligentsia_cons
+					te_tax_bl_grief_intelligentsia_wage >= te_tax_bl_grief_intelligentsia_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
 				}
 				set_variable = { name = te_tax_off_intelligentsia_kind value = 1 }
 				set_variable = { name = te_tax_off_intelligentsia_arg value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_got_intelligentsia_1 var:te_tax_bl_got_intelligentsia_1 = 1 }
+					te_tax_bl_grief_intelligentsia_div > 0
+					te_tax_bl_grief_intelligentsia_div >= te_tax_bl_grief_intelligentsia_wage
+					te_tax_bl_grief_intelligentsia_div >= te_tax_bl_grief_intelligentsia_head
+					te_tax_bl_grief_intelligentsia_div >= te_tax_bl_grief_intelligentsia_cons
+					te_tax_bl_grief_intelligentsia_div >= te_tax_bl_grief_intelligentsia_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 2 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_got_intelligentsia_1 var:te_tax_bl_got_intelligentsia_1 = 1 }
+					te_tax_bl_grief_intelligentsia_head > 0
+					te_tax_bl_grief_intelligentsia_head >= te_tax_bl_grief_intelligentsia_wage
+					te_tax_bl_grief_intelligentsia_head >= te_tax_bl_grief_intelligentsia_div
+					te_tax_bl_grief_intelligentsia_head >= te_tax_bl_grief_intelligentsia_cons
+					te_tax_bl_grief_intelligentsia_head >= te_tax_bl_grief_intelligentsia_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 4 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_got_intelligentsia_1 var:te_tax_bl_got_intelligentsia_1 = 1 }
+					te_tax_bl_grief_intelligentsia_cons > 0
+					te_tax_bl_grief_intelligentsia_cons >= te_tax_bl_grief_intelligentsia_wage
+					te_tax_bl_grief_intelligentsia_cons >= te_tax_bl_grief_intelligentsia_div
+					te_tax_bl_grief_intelligentsia_cons >= te_tax_bl_grief_intelligentsia_head
+					te_tax_bl_grief_intelligentsia_cons >= te_tax_bl_grief_intelligentsia_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 5 }
 				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
 				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
 			}
@@ -1605,10 +2060,63 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_intelligentsia_kind = 0
 					NAND = { has_variable = te_tax_bl_got_intelligentsia_1 var:te_tax_bl_got_intelligentsia_1 = 1 }
-					te_tax_bl_eff_wage > 0
+					te_tax_bl_grief_intelligentsia_wage > 0
+					te_tax_bl_grief_intelligentsia_wage >= te_tax_bl_grief_intelligentsia_div
+					te_tax_bl_grief_intelligentsia_wage >= te_tax_bl_grief_intelligentsia_head
+					te_tax_bl_grief_intelligentsia_wage >= te_tax_bl_grief_intelligentsia_cons
+					te_tax_bl_grief_intelligentsia_wage >= te_tax_bl_grief_intelligentsia_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
 				}
 				set_variable = { name = te_tax_off_intelligentsia_kind value = 1 }
 				set_variable = { name = te_tax_off_intelligentsia_arg value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_got_intelligentsia_1 var:te_tax_bl_got_intelligentsia_1 = 1 }
+					te_tax_bl_grief_intelligentsia_div > 0
+					te_tax_bl_grief_intelligentsia_div >= te_tax_bl_grief_intelligentsia_wage
+					te_tax_bl_grief_intelligentsia_div >= te_tax_bl_grief_intelligentsia_head
+					te_tax_bl_grief_intelligentsia_div >= te_tax_bl_grief_intelligentsia_cons
+					te_tax_bl_grief_intelligentsia_div >= te_tax_bl_grief_intelligentsia_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 2 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_got_intelligentsia_1 var:te_tax_bl_got_intelligentsia_1 = 1 }
+					te_tax_bl_grief_intelligentsia_head > 0
+					te_tax_bl_grief_intelligentsia_head >= te_tax_bl_grief_intelligentsia_wage
+					te_tax_bl_grief_intelligentsia_head >= te_tax_bl_grief_intelligentsia_div
+					te_tax_bl_grief_intelligentsia_head >= te_tax_bl_grief_intelligentsia_cons
+					te_tax_bl_grief_intelligentsia_head >= te_tax_bl_grief_intelligentsia_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 4 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_got_intelligentsia_1 var:te_tax_bl_got_intelligentsia_1 = 1 }
+					te_tax_bl_grief_intelligentsia_cons > 0
+					te_tax_bl_grief_intelligentsia_cons >= te_tax_bl_grief_intelligentsia_wage
+					te_tax_bl_grief_intelligentsia_cons >= te_tax_bl_grief_intelligentsia_div
+					te_tax_bl_grief_intelligentsia_cons >= te_tax_bl_grief_intelligentsia_head
+					te_tax_bl_grief_intelligentsia_cons >= te_tax_bl_grief_intelligentsia_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 5 }
 				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
 				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
 			}
@@ -1662,10 +2170,84 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_landowners_kind = 0
 					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
-					te_tax_bl_eff_div > 0
+					te_tax_bl_grief_landowners_wage > 0
+					te_tax_bl_grief_landowners_wage >= te_tax_bl_grief_landowners_div
+					te_tax_bl_grief_landowners_wage >= te_tax_bl_grief_landowners_land
+					te_tax_bl_grief_landowners_wage >= te_tax_bl_grief_landowners_head
+					te_tax_bl_grief_landowners_wage >= te_tax_bl_grief_landowners_cons
+					te_tax_bl_grief_landowners_wage >= te_tax_bl_grief_landowners_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 1 }
+				set_variable = { name = te_tax_off_landowners_arg value = 1 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
+					te_tax_bl_grief_landowners_div > 0
+					te_tax_bl_grief_landowners_div >= te_tax_bl_grief_landowners_wage
+					te_tax_bl_grief_landowners_div >= te_tax_bl_grief_landowners_land
+					te_tax_bl_grief_landowners_div >= te_tax_bl_grief_landowners_head
+					te_tax_bl_grief_landowners_div >= te_tax_bl_grief_landowners_cons
+					te_tax_bl_grief_landowners_div >= te_tax_bl_grief_landowners_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
 				}
 				set_variable = { name = te_tax_off_landowners_kind value = 1 }
 				set_variable = { name = te_tax_off_landowners_arg value = 2 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
+					te_tax_bl_grief_landowners_land > 0
+					te_tax_bl_grief_landowners_land >= te_tax_bl_grief_landowners_wage
+					te_tax_bl_grief_landowners_land >= te_tax_bl_grief_landowners_div
+					te_tax_bl_grief_landowners_land >= te_tax_bl_grief_landowners_head
+					te_tax_bl_grief_landowners_land >= te_tax_bl_grief_landowners_cons
+					te_tax_bl_grief_landowners_land >= te_tax_bl_grief_landowners_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = land }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 1 }
+				set_variable = { name = te_tax_off_landowners_arg value = 3 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
+					te_tax_bl_grief_landowners_head > 0
+					te_tax_bl_grief_landowners_head >= te_tax_bl_grief_landowners_wage
+					te_tax_bl_grief_landowners_head >= te_tax_bl_grief_landowners_div
+					te_tax_bl_grief_landowners_head >= te_tax_bl_grief_landowners_land
+					te_tax_bl_grief_landowners_head >= te_tax_bl_grief_landowners_cons
+					te_tax_bl_grief_landowners_head >= te_tax_bl_grief_landowners_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 1 }
+				set_variable = { name = te_tax_off_landowners_arg value = 4 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
+					te_tax_bl_grief_landowners_cons > 0
+					te_tax_bl_grief_landowners_cons >= te_tax_bl_grief_landowners_wage
+					te_tax_bl_grief_landowners_cons >= te_tax_bl_grief_landowners_div
+					te_tax_bl_grief_landowners_cons >= te_tax_bl_grief_landowners_land
+					te_tax_bl_grief_landowners_cons >= te_tax_bl_grief_landowners_head
+					te_tax_bl_grief_landowners_cons >= te_tax_bl_grief_landowners_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 1 }
+				set_variable = { name = te_tax_off_landowners_arg value = 5 }
 				set_variable = { name = te_tax_off_landowners_target value = 0 }
 				set_variable = { name = te_tax_off_landowners_maint value = 0 }
 			}
@@ -1709,10 +2291,84 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_landowners_kind = 0
 					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
-					te_tax_bl_eff_div > 0
+					te_tax_bl_grief_landowners_wage > 0
+					te_tax_bl_grief_landowners_wage >= te_tax_bl_grief_landowners_div
+					te_tax_bl_grief_landowners_wage >= te_tax_bl_grief_landowners_land
+					te_tax_bl_grief_landowners_wage >= te_tax_bl_grief_landowners_head
+					te_tax_bl_grief_landowners_wage >= te_tax_bl_grief_landowners_cons
+					te_tax_bl_grief_landowners_wage >= te_tax_bl_grief_landowners_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 1 }
+				set_variable = { name = te_tax_off_landowners_arg value = 1 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
+					te_tax_bl_grief_landowners_div > 0
+					te_tax_bl_grief_landowners_div >= te_tax_bl_grief_landowners_wage
+					te_tax_bl_grief_landowners_div >= te_tax_bl_grief_landowners_land
+					te_tax_bl_grief_landowners_div >= te_tax_bl_grief_landowners_head
+					te_tax_bl_grief_landowners_div >= te_tax_bl_grief_landowners_cons
+					te_tax_bl_grief_landowners_div >= te_tax_bl_grief_landowners_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
 				}
 				set_variable = { name = te_tax_off_landowners_kind value = 1 }
 				set_variable = { name = te_tax_off_landowners_arg value = 2 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
+					te_tax_bl_grief_landowners_land > 0
+					te_tax_bl_grief_landowners_land >= te_tax_bl_grief_landowners_wage
+					te_tax_bl_grief_landowners_land >= te_tax_bl_grief_landowners_div
+					te_tax_bl_grief_landowners_land >= te_tax_bl_grief_landowners_head
+					te_tax_bl_grief_landowners_land >= te_tax_bl_grief_landowners_cons
+					te_tax_bl_grief_landowners_land >= te_tax_bl_grief_landowners_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = land }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 1 }
+				set_variable = { name = te_tax_off_landowners_arg value = 3 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
+					te_tax_bl_grief_landowners_head > 0
+					te_tax_bl_grief_landowners_head >= te_tax_bl_grief_landowners_wage
+					te_tax_bl_grief_landowners_head >= te_tax_bl_grief_landowners_div
+					te_tax_bl_grief_landowners_head >= te_tax_bl_grief_landowners_land
+					te_tax_bl_grief_landowners_head >= te_tax_bl_grief_landowners_cons
+					te_tax_bl_grief_landowners_head >= te_tax_bl_grief_landowners_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 1 }
+				set_variable = { name = te_tax_off_landowners_arg value = 4 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
+					te_tax_bl_grief_landowners_cons > 0
+					te_tax_bl_grief_landowners_cons >= te_tax_bl_grief_landowners_wage
+					te_tax_bl_grief_landowners_cons >= te_tax_bl_grief_landowners_div
+					te_tax_bl_grief_landowners_cons >= te_tax_bl_grief_landowners_land
+					te_tax_bl_grief_landowners_cons >= te_tax_bl_grief_landowners_head
+					te_tax_bl_grief_landowners_cons >= te_tax_bl_grief_landowners_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 1 }
+				set_variable = { name = te_tax_off_landowners_arg value = 5 }
 				set_variable = { name = te_tax_off_landowners_target value = 0 }
 				set_variable = { name = te_tax_off_landowners_maint value = 0 }
 			}
@@ -1766,10 +2422,84 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_petty_bourgeoisie_kind = 0
 					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
-					te_tax_bl_eff_wage > 0
+					te_tax_bl_grief_petty_bourgeoisie_wage > 0
+					te_tax_bl_grief_petty_bourgeoisie_wage >= te_tax_bl_grief_petty_bourgeoisie_div
+					te_tax_bl_grief_petty_bourgeoisie_wage >= te_tax_bl_grief_petty_bourgeoisie_land
+					te_tax_bl_grief_petty_bourgeoisie_wage >= te_tax_bl_grief_petty_bourgeoisie_head
+					te_tax_bl_grief_petty_bourgeoisie_wage >= te_tax_bl_grief_petty_bourgeoisie_cons
+					te_tax_bl_grief_petty_bourgeoisie_wage >= te_tax_bl_grief_petty_bourgeoisie_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
 				}
 				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
 				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
+					te_tax_bl_grief_petty_bourgeoisie_div > 0
+					te_tax_bl_grief_petty_bourgeoisie_div >= te_tax_bl_grief_petty_bourgeoisie_wage
+					te_tax_bl_grief_petty_bourgeoisie_div >= te_tax_bl_grief_petty_bourgeoisie_land
+					te_tax_bl_grief_petty_bourgeoisie_div >= te_tax_bl_grief_petty_bourgeoisie_head
+					te_tax_bl_grief_petty_bourgeoisie_div >= te_tax_bl_grief_petty_bourgeoisie_cons
+					te_tax_bl_grief_petty_bourgeoisie_div >= te_tax_bl_grief_petty_bourgeoisie_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 2 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
+					te_tax_bl_grief_petty_bourgeoisie_land > 0
+					te_tax_bl_grief_petty_bourgeoisie_land >= te_tax_bl_grief_petty_bourgeoisie_wage
+					te_tax_bl_grief_petty_bourgeoisie_land >= te_tax_bl_grief_petty_bourgeoisie_div
+					te_tax_bl_grief_petty_bourgeoisie_land >= te_tax_bl_grief_petty_bourgeoisie_head
+					te_tax_bl_grief_petty_bourgeoisie_land >= te_tax_bl_grief_petty_bourgeoisie_cons
+					te_tax_bl_grief_petty_bourgeoisie_land >= te_tax_bl_grief_petty_bourgeoisie_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = land }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 3 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
+					te_tax_bl_grief_petty_bourgeoisie_head > 0
+					te_tax_bl_grief_petty_bourgeoisie_head >= te_tax_bl_grief_petty_bourgeoisie_wage
+					te_tax_bl_grief_petty_bourgeoisie_head >= te_tax_bl_grief_petty_bourgeoisie_div
+					te_tax_bl_grief_petty_bourgeoisie_head >= te_tax_bl_grief_petty_bourgeoisie_land
+					te_tax_bl_grief_petty_bourgeoisie_head >= te_tax_bl_grief_petty_bourgeoisie_cons
+					te_tax_bl_grief_petty_bourgeoisie_head >= te_tax_bl_grief_petty_bourgeoisie_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 4 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
+					te_tax_bl_grief_petty_bourgeoisie_cons > 0
+					te_tax_bl_grief_petty_bourgeoisie_cons >= te_tax_bl_grief_petty_bourgeoisie_wage
+					te_tax_bl_grief_petty_bourgeoisie_cons >= te_tax_bl_grief_petty_bourgeoisie_div
+					te_tax_bl_grief_petty_bourgeoisie_cons >= te_tax_bl_grief_petty_bourgeoisie_land
+					te_tax_bl_grief_petty_bourgeoisie_cons >= te_tax_bl_grief_petty_bourgeoisie_head
+					te_tax_bl_grief_petty_bourgeoisie_cons >= te_tax_bl_grief_petty_bourgeoisie_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 5 }
 				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
 				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
 			}
@@ -1813,10 +2543,84 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_petty_bourgeoisie_kind = 0
 					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
-					te_tax_bl_eff_wage > 0
+					te_tax_bl_grief_petty_bourgeoisie_wage > 0
+					te_tax_bl_grief_petty_bourgeoisie_wage >= te_tax_bl_grief_petty_bourgeoisie_div
+					te_tax_bl_grief_petty_bourgeoisie_wage >= te_tax_bl_grief_petty_bourgeoisie_land
+					te_tax_bl_grief_petty_bourgeoisie_wage >= te_tax_bl_grief_petty_bourgeoisie_head
+					te_tax_bl_grief_petty_bourgeoisie_wage >= te_tax_bl_grief_petty_bourgeoisie_cons
+					te_tax_bl_grief_petty_bourgeoisie_wage >= te_tax_bl_grief_petty_bourgeoisie_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
 				}
 				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
 				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
+					te_tax_bl_grief_petty_bourgeoisie_div > 0
+					te_tax_bl_grief_petty_bourgeoisie_div >= te_tax_bl_grief_petty_bourgeoisie_wage
+					te_tax_bl_grief_petty_bourgeoisie_div >= te_tax_bl_grief_petty_bourgeoisie_land
+					te_tax_bl_grief_petty_bourgeoisie_div >= te_tax_bl_grief_petty_bourgeoisie_head
+					te_tax_bl_grief_petty_bourgeoisie_div >= te_tax_bl_grief_petty_bourgeoisie_cons
+					te_tax_bl_grief_petty_bourgeoisie_div >= te_tax_bl_grief_petty_bourgeoisie_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 2 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
+					te_tax_bl_grief_petty_bourgeoisie_land > 0
+					te_tax_bl_grief_petty_bourgeoisie_land >= te_tax_bl_grief_petty_bourgeoisie_wage
+					te_tax_bl_grief_petty_bourgeoisie_land >= te_tax_bl_grief_petty_bourgeoisie_div
+					te_tax_bl_grief_petty_bourgeoisie_land >= te_tax_bl_grief_petty_bourgeoisie_head
+					te_tax_bl_grief_petty_bourgeoisie_land >= te_tax_bl_grief_petty_bourgeoisie_cons
+					te_tax_bl_grief_petty_bourgeoisie_land >= te_tax_bl_grief_petty_bourgeoisie_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = land }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 3 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
+					te_tax_bl_grief_petty_bourgeoisie_head > 0
+					te_tax_bl_grief_petty_bourgeoisie_head >= te_tax_bl_grief_petty_bourgeoisie_wage
+					te_tax_bl_grief_petty_bourgeoisie_head >= te_tax_bl_grief_petty_bourgeoisie_div
+					te_tax_bl_grief_petty_bourgeoisie_head >= te_tax_bl_grief_petty_bourgeoisie_land
+					te_tax_bl_grief_petty_bourgeoisie_head >= te_tax_bl_grief_petty_bourgeoisie_cons
+					te_tax_bl_grief_petty_bourgeoisie_head >= te_tax_bl_grief_petty_bourgeoisie_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 4 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
+					te_tax_bl_grief_petty_bourgeoisie_cons > 0
+					te_tax_bl_grief_petty_bourgeoisie_cons >= te_tax_bl_grief_petty_bourgeoisie_wage
+					te_tax_bl_grief_petty_bourgeoisie_cons >= te_tax_bl_grief_petty_bourgeoisie_div
+					te_tax_bl_grief_petty_bourgeoisie_cons >= te_tax_bl_grief_petty_bourgeoisie_land
+					te_tax_bl_grief_petty_bourgeoisie_cons >= te_tax_bl_grief_petty_bourgeoisie_head
+					te_tax_bl_grief_petty_bourgeoisie_cons >= te_tax_bl_grief_petty_bourgeoisie_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 5 }
 				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
 				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
 			}
@@ -1843,7 +2647,7 @@ te_tax_gen_offer_select = {
 		}
 		if = { limit = { var:te_tax_off_petty_bourgeoisie_kind > 0 } set_variable = { name = te_tax_off_petty_bourgeoisie_rev value = var:te_tax_bl_rev } }
 	}
-	# rural_folk: clauses 2, 3, 1; promises schools.
+	# rural_folk: clauses 1, 3, 2; promises schools.
 	if = { limit = { NOT = { has_variable = te_tax_off_rural_folk_rev } } set_variable = { name = te_tax_off_rural_folk_kind value = 0 } set_variable = { name = te_tax_off_rural_folk_rev value = -1 } }
 	if = {
 		limit = { var:te_tax_com_rural_folk = 1 var:te_tax_com_rural_folk_rev = var:te_tax_bl_rev }
@@ -1869,12 +2673,85 @@ te_tax_gen_offer_select = {
 			if = {
 				limit = {
 					var:te_tax_off_rural_folk_kind = 0
-					NAND = { has_variable = te_tax_bl_got_rural_folk_2 var:te_tax_bl_got_rural_folk_2 = 1 }
-					te_tax_bl_eff_agrel < te_tax_max_agrel
-					te_tax_bl_eff_wage > 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_grief_rural_folk_wage > 0
+					te_tax_bl_grief_rural_folk_wage >= te_tax_bl_grief_rural_folk_div
+					te_tax_bl_grief_rural_folk_wage >= te_tax_bl_grief_rural_folk_land
+					te_tax_bl_grief_rural_folk_wage >= te_tax_bl_grief_rural_folk_head
+					te_tax_bl_grief_rural_folk_wage >= te_tax_bl_grief_rural_folk_cons
+					te_tax_bl_grief_rural_folk_wage >= te_tax_bl_grief_rural_folk_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
 				}
-				set_variable = { name = te_tax_off_rural_folk_kind value = 2 }
-				set_variable = { name = te_tax_off_rural_folk_arg value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_grief_rural_folk_div > 0
+					te_tax_bl_grief_rural_folk_div >= te_tax_bl_grief_rural_folk_wage
+					te_tax_bl_grief_rural_folk_div >= te_tax_bl_grief_rural_folk_land
+					te_tax_bl_grief_rural_folk_div >= te_tax_bl_grief_rural_folk_head
+					te_tax_bl_grief_rural_folk_div >= te_tax_bl_grief_rural_folk_cons
+					te_tax_bl_grief_rural_folk_div >= te_tax_bl_grief_rural_folk_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 2 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_grief_rural_folk_land > 0
+					te_tax_bl_grief_rural_folk_land >= te_tax_bl_grief_rural_folk_wage
+					te_tax_bl_grief_rural_folk_land >= te_tax_bl_grief_rural_folk_div
+					te_tax_bl_grief_rural_folk_land >= te_tax_bl_grief_rural_folk_head
+					te_tax_bl_grief_rural_folk_land >= te_tax_bl_grief_rural_folk_cons
+					te_tax_bl_grief_rural_folk_land >= te_tax_bl_grief_rural_folk_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = land }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 3 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_grief_rural_folk_head > 0
+					te_tax_bl_grief_rural_folk_head >= te_tax_bl_grief_rural_folk_wage
+					te_tax_bl_grief_rural_folk_head >= te_tax_bl_grief_rural_folk_div
+					te_tax_bl_grief_rural_folk_head >= te_tax_bl_grief_rural_folk_land
+					te_tax_bl_grief_rural_folk_head >= te_tax_bl_grief_rural_folk_cons
+					te_tax_bl_grief_rural_folk_head >= te_tax_bl_grief_rural_folk_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 4 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_grief_rural_folk_cons > 0
+					te_tax_bl_grief_rural_folk_cons >= te_tax_bl_grief_rural_folk_wage
+					te_tax_bl_grief_rural_folk_cons >= te_tax_bl_grief_rural_folk_div
+					te_tax_bl_grief_rural_folk_cons >= te_tax_bl_grief_rural_folk_land
+					te_tax_bl_grief_rural_folk_cons >= te_tax_bl_grief_rural_folk_head
+					te_tax_bl_grief_rural_folk_cons >= te_tax_bl_grief_rural_folk_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 5 }
 				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
 			}
@@ -1882,44 +2759,52 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_rural_folk_kind = 0
 					NAND = { has_variable = te_tax_bl_got_rural_folk_3 var:te_tax_bl_got_rural_folk_3 = 1 }
+					te_tax_bl_grief_rural_folk_goods > 0
+					te_tax_bl_grief_rural_folk_goods > te_tax_bl_grief_rural_folk_wage
+					te_tax_bl_grief_rural_folk_goods > te_tax_bl_grief_rural_folk_div
+					te_tax_bl_grief_rural_folk_goods > te_tax_bl_grief_rural_folk_land
+					te_tax_bl_grief_rural_folk_goods > te_tax_bl_grief_rural_folk_head
+					te_tax_bl_grief_rural_folk_goods > te_tax_bl_grief_rural_folk_cons
 					OR = {
-						te_tax_bl_eff_g_grain > 0
-						te_tax_bl_eff_g_clothes > 0
-						te_tax_bl_eff_g_furniture > 0
-						te_tax_bl_eff_g_groceries > 0
-						te_tax_bl_eff_g_fabric > 0
-						te_tax_bl_eff_g_fish > 0
-						te_tax_bl_eff_g_wood > 0
-						te_tax_bl_eff_g_electricity > 0
-						te_tax_bl_eff_g_paper > 0
-						te_tax_bl_eff_g_services > 0
-						te_tax_bl_eff_g_transportation > 0
+						te_tax_dl_g_grain > 0
+						te_tax_dl_g_clothes > 0
+						te_tax_dl_g_furniture > 0
+						te_tax_dl_g_groceries > 0
+						te_tax_dl_g_fabric > 0
+						te_tax_dl_g_fish > 0
+						te_tax_dl_g_wood > 0
+						te_tax_dl_g_electricity > 0
+						te_tax_dl_g_paper > 0
+						te_tax_dl_g_services > 0
+						te_tax_dl_g_transportation > 0
 					}
+					te_tax_offer_untax_leaves_a_bill = yes
 				}
 				set_variable = { name = te_tax_off_rural_folk_kind value = 3 }
 				set_variable = { name = te_tax_off_rural_folk_arg value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
-				if = { limit = { te_tax_bl_eff_g_grain > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 1 } }
-				else_if = { limit = { te_tax_bl_eff_g_clothes > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 2 } }
-				else_if = { limit = { te_tax_bl_eff_g_furniture > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 3 } }
-				else_if = { limit = { te_tax_bl_eff_g_groceries > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 4 } }
-				else_if = { limit = { te_tax_bl_eff_g_fabric > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 5 } }
-				else_if = { limit = { te_tax_bl_eff_g_fish > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 6 } }
-				else_if = { limit = { te_tax_bl_eff_g_wood > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 7 } }
-				else_if = { limit = { te_tax_bl_eff_g_electricity > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 8 } }
-				else_if = { limit = { te_tax_bl_eff_g_paper > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 9 } }
-				else_if = { limit = { te_tax_bl_eff_g_services > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 10 } }
-				else_if = { limit = { te_tax_bl_eff_g_transportation > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 11 } }
+				if = { limit = { te_tax_dl_g_grain > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 1 } }
+				else_if = { limit = { te_tax_dl_g_clothes > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 2 } }
+				else_if = { limit = { te_tax_dl_g_furniture > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 3 } }
+				else_if = { limit = { te_tax_dl_g_groceries > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 4 } }
+				else_if = { limit = { te_tax_dl_g_fabric > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 5 } }
+				else_if = { limit = { te_tax_dl_g_fish > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 6 } }
+				else_if = { limit = { te_tax_dl_g_wood > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 7 } }
+				else_if = { limit = { te_tax_dl_g_electricity > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 8 } }
+				else_if = { limit = { te_tax_dl_g_paper > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 9 } }
+				else_if = { limit = { te_tax_dl_g_services > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 10 } }
+				else_if = { limit = { te_tax_dl_g_transportation > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 11 } }
 			}
 			if = {
 				limit = {
 					var:te_tax_off_rural_folk_kind = 0
-					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
-					te_tax_bl_eff_land > 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_2 var:te_tax_bl_got_rural_folk_2 = 1 }
+					te_tax_bl_eff_agrel < te_tax_max_agrel
+					te_tax_bl_eff_wage > 0
 				}
-				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
-				set_variable = { name = te_tax_off_rural_folk_arg value = 3 }
+				set_variable = { name = te_tax_off_rural_folk_kind value = 2 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
 			}
@@ -1962,12 +2847,85 @@ te_tax_gen_offer_select = {
 			if = {
 				limit = {
 					var:te_tax_off_rural_folk_kind = 0
-					NAND = { has_variable = te_tax_bl_got_rural_folk_2 var:te_tax_bl_got_rural_folk_2 = 1 }
-					te_tax_bl_eff_agrel < te_tax_max_agrel
-					te_tax_bl_eff_wage > 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_grief_rural_folk_wage > 0
+					te_tax_bl_grief_rural_folk_wage >= te_tax_bl_grief_rural_folk_div
+					te_tax_bl_grief_rural_folk_wage >= te_tax_bl_grief_rural_folk_land
+					te_tax_bl_grief_rural_folk_wage >= te_tax_bl_grief_rural_folk_head
+					te_tax_bl_grief_rural_folk_wage >= te_tax_bl_grief_rural_folk_cons
+					te_tax_bl_grief_rural_folk_wage >= te_tax_bl_grief_rural_folk_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
 				}
-				set_variable = { name = te_tax_off_rural_folk_kind value = 2 }
-				set_variable = { name = te_tax_off_rural_folk_arg value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_grief_rural_folk_div > 0
+					te_tax_bl_grief_rural_folk_div >= te_tax_bl_grief_rural_folk_wage
+					te_tax_bl_grief_rural_folk_div >= te_tax_bl_grief_rural_folk_land
+					te_tax_bl_grief_rural_folk_div >= te_tax_bl_grief_rural_folk_head
+					te_tax_bl_grief_rural_folk_div >= te_tax_bl_grief_rural_folk_cons
+					te_tax_bl_grief_rural_folk_div >= te_tax_bl_grief_rural_folk_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = div }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 2 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_grief_rural_folk_land > 0
+					te_tax_bl_grief_rural_folk_land >= te_tax_bl_grief_rural_folk_wage
+					te_tax_bl_grief_rural_folk_land >= te_tax_bl_grief_rural_folk_div
+					te_tax_bl_grief_rural_folk_land >= te_tax_bl_grief_rural_folk_head
+					te_tax_bl_grief_rural_folk_land >= te_tax_bl_grief_rural_folk_cons
+					te_tax_bl_grief_rural_folk_land >= te_tax_bl_grief_rural_folk_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = land }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 3 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_grief_rural_folk_head > 0
+					te_tax_bl_grief_rural_folk_head >= te_tax_bl_grief_rural_folk_wage
+					te_tax_bl_grief_rural_folk_head >= te_tax_bl_grief_rural_folk_div
+					te_tax_bl_grief_rural_folk_head >= te_tax_bl_grief_rural_folk_land
+					te_tax_bl_grief_rural_folk_head >= te_tax_bl_grief_rural_folk_cons
+					te_tax_bl_grief_rural_folk_head >= te_tax_bl_grief_rural_folk_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 4 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_grief_rural_folk_cons > 0
+					te_tax_bl_grief_rural_folk_cons >= te_tax_bl_grief_rural_folk_wage
+					te_tax_bl_grief_rural_folk_cons >= te_tax_bl_grief_rural_folk_div
+					te_tax_bl_grief_rural_folk_cons >= te_tax_bl_grief_rural_folk_land
+					te_tax_bl_grief_rural_folk_cons >= te_tax_bl_grief_rural_folk_head
+					te_tax_bl_grief_rural_folk_cons >= te_tax_bl_grief_rural_folk_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 5 }
 				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
 			}
@@ -1975,44 +2933,52 @@ te_tax_gen_offer_select = {
 				limit = {
 					var:te_tax_off_rural_folk_kind = 0
 					NAND = { has_variable = te_tax_bl_got_rural_folk_3 var:te_tax_bl_got_rural_folk_3 = 1 }
+					te_tax_bl_grief_rural_folk_goods > 0
+					te_tax_bl_grief_rural_folk_goods > te_tax_bl_grief_rural_folk_wage
+					te_tax_bl_grief_rural_folk_goods > te_tax_bl_grief_rural_folk_div
+					te_tax_bl_grief_rural_folk_goods > te_tax_bl_grief_rural_folk_land
+					te_tax_bl_grief_rural_folk_goods > te_tax_bl_grief_rural_folk_head
+					te_tax_bl_grief_rural_folk_goods > te_tax_bl_grief_rural_folk_cons
 					OR = {
-						te_tax_bl_eff_g_grain > 0
-						te_tax_bl_eff_g_clothes > 0
-						te_tax_bl_eff_g_furniture > 0
-						te_tax_bl_eff_g_groceries > 0
-						te_tax_bl_eff_g_fabric > 0
-						te_tax_bl_eff_g_fish > 0
-						te_tax_bl_eff_g_wood > 0
-						te_tax_bl_eff_g_electricity > 0
-						te_tax_bl_eff_g_paper > 0
-						te_tax_bl_eff_g_services > 0
-						te_tax_bl_eff_g_transportation > 0
+						te_tax_dl_g_grain > 0
+						te_tax_dl_g_clothes > 0
+						te_tax_dl_g_furniture > 0
+						te_tax_dl_g_groceries > 0
+						te_tax_dl_g_fabric > 0
+						te_tax_dl_g_fish > 0
+						te_tax_dl_g_wood > 0
+						te_tax_dl_g_electricity > 0
+						te_tax_dl_g_paper > 0
+						te_tax_dl_g_services > 0
+						te_tax_dl_g_transportation > 0
 					}
+					te_tax_offer_untax_leaves_a_bill = yes
 				}
 				set_variable = { name = te_tax_off_rural_folk_kind value = 3 }
 				set_variable = { name = te_tax_off_rural_folk_arg value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
-				if = { limit = { te_tax_bl_eff_g_grain > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 1 } }
-				else_if = { limit = { te_tax_bl_eff_g_clothes > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 2 } }
-				else_if = { limit = { te_tax_bl_eff_g_furniture > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 3 } }
-				else_if = { limit = { te_tax_bl_eff_g_groceries > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 4 } }
-				else_if = { limit = { te_tax_bl_eff_g_fabric > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 5 } }
-				else_if = { limit = { te_tax_bl_eff_g_fish > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 6 } }
-				else_if = { limit = { te_tax_bl_eff_g_wood > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 7 } }
-				else_if = { limit = { te_tax_bl_eff_g_electricity > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 8 } }
-				else_if = { limit = { te_tax_bl_eff_g_paper > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 9 } }
-				else_if = { limit = { te_tax_bl_eff_g_services > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 10 } }
-				else_if = { limit = { te_tax_bl_eff_g_transportation > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 11 } }
+				if = { limit = { te_tax_dl_g_grain > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 1 } }
+				else_if = { limit = { te_tax_dl_g_clothes > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 2 } }
+				else_if = { limit = { te_tax_dl_g_furniture > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 3 } }
+				else_if = { limit = { te_tax_dl_g_groceries > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 4 } }
+				else_if = { limit = { te_tax_dl_g_fabric > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 5 } }
+				else_if = { limit = { te_tax_dl_g_fish > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 6 } }
+				else_if = { limit = { te_tax_dl_g_wood > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 7 } }
+				else_if = { limit = { te_tax_dl_g_electricity > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 8 } }
+				else_if = { limit = { te_tax_dl_g_paper > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 9 } }
+				else_if = { limit = { te_tax_dl_g_services > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 10 } }
+				else_if = { limit = { te_tax_dl_g_transportation > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 11 } }
 			}
 			if = {
 				limit = {
 					var:te_tax_off_rural_folk_kind = 0
-					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
-					te_tax_bl_eff_land > 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_2 var:te_tax_bl_got_rural_folk_2 = 1 }
+					te_tax_bl_eff_agrel < te_tax_max_agrel
+					te_tax_bl_eff_wage > 0
 				}
-				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
-				set_variable = { name = te_tax_off_rural_folk_arg value = 3 }
+				set_variable = { name = te_tax_off_rural_folk_kind value = 2 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
 			}
@@ -2039,7 +3005,7 @@ te_tax_gen_offer_select = {
 		}
 		if = { limit = { var:te_tax_off_rural_folk_kind > 0 } set_variable = { name = te_tax_off_rural_folk_rev value = var:te_tax_bl_rev } }
 	}
-	# trade_unions: clauses 3, 1; promises health.
+	# trade_unions: clauses 1, 3; promises health.
 	if = { limit = { NOT = { has_variable = te_tax_off_trade_unions_rev } } set_variable = { name = te_tax_off_trade_unions_kind value = 0 } set_variable = { name = te_tax_off_trade_unions_rev value = -1 } }
 	if = {
 		limit = { var:te_tax_com_trade_unions = 1 var:te_tax_com_trade_unions_rev = var:te_tax_bl_rev }
@@ -2065,47 +3031,86 @@ te_tax_gen_offer_select = {
 			if = {
 				limit = {
 					var:te_tax_off_trade_unions_kind = 0
-					NAND = { has_variable = te_tax_bl_got_trade_unions_3 var:te_tax_bl_got_trade_unions_3 = 1 }
-					OR = {
-						te_tax_bl_eff_g_grain > 0
-						te_tax_bl_eff_g_clothes > 0
-						te_tax_bl_eff_g_furniture > 0
-						te_tax_bl_eff_g_groceries > 0
-						te_tax_bl_eff_g_fabric > 0
-						te_tax_bl_eff_g_fish > 0
-						te_tax_bl_eff_g_wood > 0
-						te_tax_bl_eff_g_electricity > 0
-						te_tax_bl_eff_g_paper > 0
-						te_tax_bl_eff_g_services > 0
-						te_tax_bl_eff_g_transportation > 0
-					}
-				}
-				set_variable = { name = te_tax_off_trade_unions_kind value = 3 }
-				set_variable = { name = te_tax_off_trade_unions_arg value = 0 }
-				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
-				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
-				if = { limit = { te_tax_bl_eff_g_grain > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 1 } }
-				else_if = { limit = { te_tax_bl_eff_g_clothes > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 2 } }
-				else_if = { limit = { te_tax_bl_eff_g_furniture > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 3 } }
-				else_if = { limit = { te_tax_bl_eff_g_groceries > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 4 } }
-				else_if = { limit = { te_tax_bl_eff_g_fabric > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 5 } }
-				else_if = { limit = { te_tax_bl_eff_g_fish > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 6 } }
-				else_if = { limit = { te_tax_bl_eff_g_wood > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 7 } }
-				else_if = { limit = { te_tax_bl_eff_g_electricity > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 8 } }
-				else_if = { limit = { te_tax_bl_eff_g_paper > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 9 } }
-				else_if = { limit = { te_tax_bl_eff_g_services > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 10 } }
-				else_if = { limit = { te_tax_bl_eff_g_transportation > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 11 } }
-			}
-			if = {
-				limit = {
-					var:te_tax_off_trade_unions_kind = 0
 					NAND = { has_variable = te_tax_bl_got_trade_unions_1 var:te_tax_bl_got_trade_unions_1 = 1 }
-					te_tax_bl_eff_wage > 0
+					te_tax_bl_grief_trade_unions_wage > 0
+					te_tax_bl_grief_trade_unions_wage >= te_tax_bl_grief_trade_unions_head
+					te_tax_bl_grief_trade_unions_wage >= te_tax_bl_grief_trade_unions_cons
+					te_tax_bl_grief_trade_unions_wage >= te_tax_bl_grief_trade_unions_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
 				}
 				set_variable = { name = te_tax_off_trade_unions_kind value = 1 }
 				set_variable = { name = te_tax_off_trade_unions_arg value = 1 }
 				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
 				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_got_trade_unions_1 var:te_tax_bl_got_trade_unions_1 = 1 }
+					te_tax_bl_grief_trade_unions_head > 0
+					te_tax_bl_grief_trade_unions_head >= te_tax_bl_grief_trade_unions_wage
+					te_tax_bl_grief_trade_unions_head >= te_tax_bl_grief_trade_unions_cons
+					te_tax_bl_grief_trade_unions_head >= te_tax_bl_grief_trade_unions_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 1 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 4 }
+				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_got_trade_unions_1 var:te_tax_bl_got_trade_unions_1 = 1 }
+					te_tax_bl_grief_trade_unions_cons > 0
+					te_tax_bl_grief_trade_unions_cons >= te_tax_bl_grief_trade_unions_wage
+					te_tax_bl_grief_trade_unions_cons >= te_tax_bl_grief_trade_unions_head
+					te_tax_bl_grief_trade_unions_cons >= te_tax_bl_grief_trade_unions_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 1 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 5 }
+				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_got_trade_unions_3 var:te_tax_bl_got_trade_unions_3 = 1 }
+					te_tax_bl_grief_trade_unions_goods > 0
+					te_tax_bl_grief_trade_unions_goods > te_tax_bl_grief_trade_unions_wage
+					te_tax_bl_grief_trade_unions_goods > te_tax_bl_grief_trade_unions_head
+					te_tax_bl_grief_trade_unions_goods > te_tax_bl_grief_trade_unions_cons
+					OR = {
+						te_tax_dl_g_grain > 0
+						te_tax_dl_g_clothes > 0
+						te_tax_dl_g_furniture > 0
+						te_tax_dl_g_groceries > 0
+						te_tax_dl_g_fabric > 0
+						te_tax_dl_g_fish > 0
+						te_tax_dl_g_wood > 0
+						te_tax_dl_g_electricity > 0
+						te_tax_dl_g_paper > 0
+						te_tax_dl_g_services > 0
+						te_tax_dl_g_transportation > 0
+					}
+					te_tax_offer_untax_leaves_a_bill = yes
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 3 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+				if = { limit = { te_tax_dl_g_grain > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 1 } }
+				else_if = { limit = { te_tax_dl_g_clothes > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 2 } }
+				else_if = { limit = { te_tax_dl_g_furniture > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 3 } }
+				else_if = { limit = { te_tax_dl_g_groceries > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 4 } }
+				else_if = { limit = { te_tax_dl_g_fabric > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 5 } }
+				else_if = { limit = { te_tax_dl_g_fish > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 6 } }
+				else_if = { limit = { te_tax_dl_g_wood > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 7 } }
+				else_if = { limit = { te_tax_dl_g_electricity > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 8 } }
+				else_if = { limit = { te_tax_dl_g_paper > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 9 } }
+				else_if = { limit = { te_tax_dl_g_services > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 10 } }
+				else_if = { limit = { te_tax_dl_g_transportation > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 11 } }
 			}
 			if = {
 				limit = {
@@ -2146,47 +3151,86 @@ te_tax_gen_offer_select = {
 			if = {
 				limit = {
 					var:te_tax_off_trade_unions_kind = 0
-					NAND = { has_variable = te_tax_bl_got_trade_unions_3 var:te_tax_bl_got_trade_unions_3 = 1 }
-					OR = {
-						te_tax_bl_eff_g_grain > 0
-						te_tax_bl_eff_g_clothes > 0
-						te_tax_bl_eff_g_furniture > 0
-						te_tax_bl_eff_g_groceries > 0
-						te_tax_bl_eff_g_fabric > 0
-						te_tax_bl_eff_g_fish > 0
-						te_tax_bl_eff_g_wood > 0
-						te_tax_bl_eff_g_electricity > 0
-						te_tax_bl_eff_g_paper > 0
-						te_tax_bl_eff_g_services > 0
-						te_tax_bl_eff_g_transportation > 0
-					}
-				}
-				set_variable = { name = te_tax_off_trade_unions_kind value = 3 }
-				set_variable = { name = te_tax_off_trade_unions_arg value = 0 }
-				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
-				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
-				if = { limit = { te_tax_bl_eff_g_grain > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 1 } }
-				else_if = { limit = { te_tax_bl_eff_g_clothes > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 2 } }
-				else_if = { limit = { te_tax_bl_eff_g_furniture > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 3 } }
-				else_if = { limit = { te_tax_bl_eff_g_groceries > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 4 } }
-				else_if = { limit = { te_tax_bl_eff_g_fabric > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 5 } }
-				else_if = { limit = { te_tax_bl_eff_g_fish > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 6 } }
-				else_if = { limit = { te_tax_bl_eff_g_wood > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 7 } }
-				else_if = { limit = { te_tax_bl_eff_g_electricity > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 8 } }
-				else_if = { limit = { te_tax_bl_eff_g_paper > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 9 } }
-				else_if = { limit = { te_tax_bl_eff_g_services > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 10 } }
-				else_if = { limit = { te_tax_bl_eff_g_transportation > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 11 } }
-			}
-			if = {
-				limit = {
-					var:te_tax_off_trade_unions_kind = 0
 					NAND = { has_variable = te_tax_bl_got_trade_unions_1 var:te_tax_bl_got_trade_unions_1 = 1 }
-					te_tax_bl_eff_wage > 0
+					te_tax_bl_grief_trade_unions_wage > 0
+					te_tax_bl_grief_trade_unions_wage >= te_tax_bl_grief_trade_unions_head
+					te_tax_bl_grief_trade_unions_wage >= te_tax_bl_grief_trade_unions_cons
+					te_tax_bl_grief_trade_unions_wage >= te_tax_bl_grief_trade_unions_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = wage }
 				}
 				set_variable = { name = te_tax_off_trade_unions_kind value = 1 }
 				set_variable = { name = te_tax_off_trade_unions_arg value = 1 }
 				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
 				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_got_trade_unions_1 var:te_tax_bl_got_trade_unions_1 = 1 }
+					te_tax_bl_grief_trade_unions_head > 0
+					te_tax_bl_grief_trade_unions_head >= te_tax_bl_grief_trade_unions_wage
+					te_tax_bl_grief_trade_unions_head >= te_tax_bl_grief_trade_unions_cons
+					te_tax_bl_grief_trade_unions_head >= te_tax_bl_grief_trade_unions_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = head }
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 1 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 4 }
+				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_got_trade_unions_1 var:te_tax_bl_got_trade_unions_1 = 1 }
+					te_tax_bl_grief_trade_unions_cons > 0
+					te_tax_bl_grief_trade_unions_cons >= te_tax_bl_grief_trade_unions_wage
+					te_tax_bl_grief_trade_unions_cons >= te_tax_bl_grief_trade_unions_head
+					te_tax_bl_grief_trade_unions_cons >= te_tax_bl_grief_trade_unions_goods
+					te_tax_offer_cut_leaves_a_bill = { KEY = cons }
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 1 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 5 }
+				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_got_trade_unions_3 var:te_tax_bl_got_trade_unions_3 = 1 }
+					te_tax_bl_grief_trade_unions_goods > 0
+					te_tax_bl_grief_trade_unions_goods > te_tax_bl_grief_trade_unions_wage
+					te_tax_bl_grief_trade_unions_goods > te_tax_bl_grief_trade_unions_head
+					te_tax_bl_grief_trade_unions_goods > te_tax_bl_grief_trade_unions_cons
+					OR = {
+						te_tax_dl_g_grain > 0
+						te_tax_dl_g_clothes > 0
+						te_tax_dl_g_furniture > 0
+						te_tax_dl_g_groceries > 0
+						te_tax_dl_g_fabric > 0
+						te_tax_dl_g_fish > 0
+						te_tax_dl_g_wood > 0
+						te_tax_dl_g_electricity > 0
+						te_tax_dl_g_paper > 0
+						te_tax_dl_g_services > 0
+						te_tax_dl_g_transportation > 0
+					}
+					te_tax_offer_untax_leaves_a_bill = yes
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 3 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+				if = { limit = { te_tax_dl_g_grain > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 1 } }
+				else_if = { limit = { te_tax_dl_g_clothes > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 2 } }
+				else_if = { limit = { te_tax_dl_g_furniture > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 3 } }
+				else_if = { limit = { te_tax_dl_g_groceries > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 4 } }
+				else_if = { limit = { te_tax_dl_g_fabric > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 5 } }
+				else_if = { limit = { te_tax_dl_g_fish > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 6 } }
+				else_if = { limit = { te_tax_dl_g_wood > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 7 } }
+				else_if = { limit = { te_tax_dl_g_electricity > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 8 } }
+				else_if = { limit = { te_tax_dl_g_paper > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 9 } }
+				else_if = { limit = { te_tax_dl_g_services > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 10 } }
+				else_if = { limit = { te_tax_dl_g_transportation > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 11 } }
 			}
 			set_variable = { name = te_tax_off_trade_unions_commit value = 1 }
 		}

@@ -296,12 +296,16 @@ TRUST_WEIGHT, TRUST_CAP = 10, 4
 # records of what a group already gained in this bill.
 OFFER_CUT, OFFER_AGREL, OFFER_STAPLE = 1, 2, 3
 OFFER_PROMISE = 10
-# Clause offers per group, preferred first: cut the tax the group pays most of
-# (most_exposed) by one step; add a band of agricultural relief; stop taxing the most-taxed
-# staple the bill taxes (staple_order).
+# Clause offers per group, preferred first. A clause only softens what the bill changes, or
+# adds relief (controller ruling, Task 13 pre-review): OFFER_CUT lowers by one step the tax
+# the bill raises that weighs most on the group (its top grievance, the largest exposure-
+# weighted raise, te_tax_bl_grief_<ig>_<key>), never below existing law; OFFER_STAPLE stops
+# taxing a staple the bill adds, when the goods it taxes are the group's top grievance
+# (the first in staple_order()); OFFER_AGREL adds a band of agricultural relief. A grievance
+# that is not a raised provision or an added good gets a promise instead, or no offer.
 CLAUSE_OFFERS = {
-    "trade_unions": (OFFER_STAPLE, OFFER_CUT),
-    "rural_folk": (OFFER_AGREL, OFFER_STAPLE, OFFER_CUT),
+    "trade_unions": (OFFER_CUT, OFFER_STAPLE),
+    "rural_folk": (OFFER_CUT, OFFER_STAPLE, OFFER_AGREL),
 }
 # Promise offers (Task 12's obligation adapters): (name, obligation kind, arg, TARGET, groups).
 PROMISE_OFFERS = (
@@ -318,13 +322,29 @@ PROMISE_OFFERS = (
 # outcome no ideology takes a stance on, so they have none.
 PROMISE_SIDE_LAWS = {(1, 1): "law_no_schools", (1, 2): "law_no_health_system"}
 PROMISE_SIDE_POINTS = -3
-# Interest-group views of the enacted code (plan Task 13): one static modifier per group and
-# band, te_tax_ig_view_<ig>_<band>, carrying interest_group_ig_<ig>_approval_add = band, the
-# scale of vanilla's approval from a law stance (IG_APPROVAL_FROM_LAW 1, _STRONG_STANCE 2).
-VIEW_BANDS = (("m2", -2), ("m1", -1), ("0", 0), ("p1", 1), ("p2", 2))
+# Interest-group views of the enacted code (plan Task 13, controller ruling): a group's band is
+# its own vanilla stance (law_stance, STANCE_BRANCHES) toward the vanilla taxation law the
+# enacted code is equivalent to (te_tax_code_equivalent_<law>, te_tax_triggers.txt: graduated,
+# else proportional, else per-capita, else land-based with a rural assessment, else
+# consumption-based), -2 strongly opposes .. +2 strongly endorses. One static modifier per
+# group and nonzero band, te_tax_ig_view_<ig>_<band>; band 0 carries none. Each reproduces the
+# approval vanilla gives an interest group for an active law it takes that stance on: 1.14.5
+# defines IG_APPROVAL_FROM_LAW = 1 (approve, disapprove) and IG_APPROVAL_FROM_LAW_STRONG_STANCE
+# = 2 (strongly). lawgroup_taxation's ideological_opinion_impact (0.5) scales the legitimacy
+# friction between governing groups that disagree on a law, not this approval
+# (docs/vanilla/vanilla_politics_reference.md section 2.4; inferred from the defines, not
+# observed in game). At migration the equivalent law is the law the country had, so the
+# migration changes no group's approval (test_tax_code_offers.py round-trips every
+# MIGRATION row).
+EQUIVALENT_LAWS = (("graduated", "law_graduated_taxation"), ("proportional", "law_proportional_taxation"),
+                   ("per_capita", "law_per_capita_based_taxation"), ("land_based", "law_land_based_taxation"),
+                   ("consumption_based", "law_consumption_based_taxation"))
+VANILLA_APPROVAL_FROM_LAW, VANILLA_APPROVAL_FROM_LAW_STRONG = 1, 2
+VIEW_BANDS = (("m2", -2), ("m1", -1), ("p1", 1), ("p2", 2))
+VIEW_APPROVAL = {-2: -VANILLA_APPROVAL_FROM_LAW_STRONG, -1: -VANILLA_APPROVAL_FROM_LAW,
+                 1: VANILLA_APPROVAL_FROM_LAW, 2: VANILLA_APPROVAL_FROM_LAW_STRONG}
 VIEW_ICONS = {-2: "modifier_documents_negative", -1: "modifier_documents_negative",
-              0: "modifier_documents_positive", 1: "modifier_documents_positive",
-              2: "modifier_documents_positive"}
+              1: "modifier_documents_positive", 2: "modifier_documents_positive"}
 MODIFIERS_PATH = "common/static_modifiers/te_tax_generated_modifiers.txt"
 
 
@@ -1090,16 +1110,6 @@ def schedule_tokens():
     return tokens
 
 
-def baseline_tokens():
-    """[(token, sentinel)] of the migrated baseline (plan Task 13): the enacted index of each
-    instrument and the taxed-goods flags as the migration found them, which the interest
-    groups' views of the code are scored against. te_tax_mig_on (hand-written in
-    te_tax_init_country) says whether they hold a recorded baseline. The migration records
-    them (te_tax_gen_record_baseline), the outbreak copies them, a release records its own."""
-    tokens = [(f"te_tax_mig_{instrument.key}", 0) for instrument in INSTRUMENTS]
-    return tokens + [(f"te_tax_mig_g_{good}", 0) for good in consumption_catalog()]
-
-
 def obligation_tokens():
     """[(token, sentinel)] of the policy obligations (plan Task 12): each slot's header and each
     interest group's trust. Initialised, copied at an outbreak and never removed."""
@@ -1540,7 +1550,6 @@ def _copy_effects():
             for suffix, _ in INSTRUMENT_TOKENS]
     code += [f"{prefix}{instrument.key}" for instrument in INSTRUMENTS for prefix, _ in VERSION_TOKENS]
     code += [f"te_tax_en_g_{good}" for good in consumption_catalog()]
-    code += [name for name, _ in baseline_tokens()]
     code += [name for name, _ in schedule_tokens()]
     code += [name for name, _ in obligation_tokens()]
     lines = [
@@ -1548,9 +1557,8 @@ def _copy_effects():
         "# Outbreak copy (te_tax_copy_code, te_tax_civil_war_effects.txt): every token the",
         "# generated initialisers write (te_tax_gen_init_instruments, _goods, _schedule,",
         "# _obligations), from scope:te_tax_source onto the uprising: the enacted provisions with",
-        "# their months, the version tokens, the taxed goods, the migrated baseline (plan Task 13),",
-        "# the clock, the package-slot headers, the history ring, the obligation-slot headers and",
-        "# the groups' trust.",
+        "# their months, the version tokens, the taxed goods, the clock, the package-slot headers,",
+        "# the history ring, the obligation-slot headers and the groups' trust.",
         "te_tax_gen_copy_code = {",
     ]
     lines += [_copy(name) for name in code]
@@ -1691,49 +1699,19 @@ def _migration_effects():
 
 
 def _baseline_effects():
-    """The migrated baseline and the interest groups' views of the code (plan Task 13)."""
+    """The interest groups' views of the enacted code (plan Task 13)."""
     lines = [
         "",
-        "# The migrated baseline: the enacted rates and taxed goods as they stand now, which the",
-        "# interest groups' views of the code (te_tax_gen_ig_views) are scored against; then",
-        "# te_tax_mig_on = 1. Called by te_tax_migrate_country after the provisions are written, by",
-        "# te_tax_init_released_country after the parent's code is copied (a released country's",
-        "# groups judge the code it started with), and by te_tax_refresh_ig_views for a country",
-        "# migrated before the baseline existed. Relief has no baseline token: the migration",
-        "# enacts none, so the baseline relief is none.",
-        "te_tax_gen_record_baseline = {",
-    ]
-    lines += [f"\tset_variable = {{ name = te_tax_mig_{instrument.key} value = var:te_tax_en_{instrument.key} }}"
-              for instrument in INSTRUMENTS]
-    lines += [f"\tset_variable = {{ name = te_tax_mig_g_{good} value = var:te_tax_en_g_{good} }}"
-              for good in consumption_catalog()]
-    lines += [
-        "\tset_variable = { name = te_tax_mig_on value = 1 }",
-        "}",
-        "",
         "# Interest-group views of the enacted code (te_tax_refresh_ig_views, from the monthly",
-        "# processor only): each group's score of the enacted code against the migrated baseline",
-        "# (te_tax_cv_score_<ig>, evaluated once) maps to a band, -2..2, through",
-        "# te_tax_ig_view_threshold_1 and _2, and the band keeps exactly one",
-        "# te_tax_ig_view_<ig>_<band> on the country. A band's modifier is added only where it is",
-        "# missing and the others are removed only where present, so an unchanged band changes",
-        "# nothing. Modifier changes are not visible later in the same effect; nothing here reads",
-        "# one back.",
+        "# processor only): each group's band (te_tax_ig_band_<ig>: its stance toward the vanilla",
+        "# taxation law the code is equivalent to, -2..2) keeps at most one te_tax_ig_view_<ig>_<band>",
+        "# on the country, and none at band 0. A band's modifier is added only where it is missing and",
+        "# the others are removed only where present, so an unchanged band changes nothing. Modifier",
+        "# changes are not visible later in the same effect; nothing here reads one back.",
         "te_tax_gen_ig_views = {",
     ]
     for ig in IGS:
-        lines += [
-            f"\tset_local_variable = {{ name = te_tax_score value = te_tax_cv_score_{ig} }}",
-            "\tset_local_variable = { name = te_tax_band value = 0 }",
-            "\tif = { limit = { local_var:te_tax_score >= te_tax_ig_view_threshold_2 } "
-            "set_local_variable = { name = te_tax_band value = 2 } }",
-            "\telse_if = { limit = { local_var:te_tax_score >= te_tax_ig_view_threshold_1 } "
-            "set_local_variable = { name = te_tax_band value = 1 } }",
-            "\telse_if = { limit = { local_var:te_tax_score <= te_tax_ig_view_threshold_2_neg } "
-            "set_local_variable = { name = te_tax_band value = -2 } }",
-            "\telse_if = { limit = { local_var:te_tax_score <= te_tax_ig_view_threshold_1_neg } "
-            "set_local_variable = { name = te_tax_band value = -1 } }",
-        ]
+        lines.append(f"\tset_local_variable = {{ name = te_tax_band value = te_tax_ig_band_{ig} }}")
         for band, value in VIEW_BANDS:
             name = f"te_tax_ig_view_{ig}_{band}"
             lines += [
@@ -1744,7 +1722,6 @@ def _baseline_effects():
             ]
     lines.append("}")
     return lines
-
 
 def _scheduler_triggers():
     lines = []
@@ -1818,16 +1795,9 @@ def exposure(ig):
     return dict(zip((instrument.key for instrument in INSTRUMENTS), _values(EXPOSURE[ig])))
 
 
-def most_exposed(ig):
-    """The instrument interest group `ig` pays most of (EXPOSURE; the first in INSTRUMENTS
-    order on a tie): the tax its cut offer lowers."""
-    weights = exposure(ig)
-    return max((instrument.key for instrument in INSTRUMENTS), key=lambda key: weights[key])
-
-
 def staple_order():
     """The catalog's staples (goods category `staple`), most-taxed first: the untax offer
-    stops taxing the first one the bill taxes. Most-taxed by vanilla's consumption_tax_cost
+    stops taxing the first one the bill adds. Most-taxed by vanilla's consumption_tax_cost
     (the engine default DEFAULT_GOODS_TAX_COST where a good sets none; vanilla prices the
     Authority a consumption tax costs by the revenue it yields), then by base price, which
     scales the tax per unit, then by name."""
@@ -1842,6 +1812,11 @@ def staple_order():
 def clause_offers(ig):
     """The clause offers interest group `ig` may make, preferred first."""
     return CLAUSE_OFFERS.get(ig, (OFFER_CUT,))
+
+
+def grievance_keys(ig):
+    """The instruments interest group `ig` pays any of (EXPOSURE above 0), INSTRUMENTS order."""
+    return [key for key, weight in exposure(ig).items() if weight]
 
 
 def promise_offers(ig):
@@ -2070,21 +2045,40 @@ def _material_points(ig, agrel, regrel):
 
 def _offer_values():
     """The offers' and promises' support values (plan Task 13)."""
-    keys = [instrument.key for instrument in INSTRUMENTS]
     lines = [
         "",
-        "# Offers (plan Task 13). te_tax_bl_eff_<key>: the bill's index for the instrument, or",
-        "# existing law's in its month when the bill leaves it alone, what a cut offer lowers by a",
-        "# step; the same for agricultural relief and for each staple's taxed flag.",
+        "# Offers (plan Task 13). te_tax_bl_eff_wage and te_tax_bl_eff_agrel: the bill's wage index",
+        "# and agricultural relief band, or existing law's in its month when the bill leaves them",
+        "# alone; the relief offer adds a band to the second while the first leaves a tax to relieve.",
     ]
-    for key in keys + ["agrel"]:
+    for key in ("wage", "agrel"):
         lines += [f"te_tax_bl_eff_{key} = {{", f"\tvalue = te_tax_base_bl_{key}",
                   f"\tif = {{ limit = {{ has_variable = te_tax_bl_{key} var:te_tax_bl_{key} >= 0 }} "
                   f"value = var:te_tax_bl_{key} }}", "}"]
-    for good in staple_order():
-        lines += [f"te_tax_bl_eff_g_{good} = {{", f"\tvalue = te_tax_base_bl_g_{good}",
-                  f"\tif = {{ limit = {{ has_variable = te_tax_bl_g_{good} var:te_tax_bl_g_{good} >= 0 }} "
-                  f"value = var:te_tax_bl_g_{good} }}", "}"]
+    lines += ["", "# How many catalog goods the bill touches (te_tax_offer_untax_leaves_a_bill).",
+              "te_tax_bl_goods_touched = {", "\tvalue = 0"]
+    lines += [f"\tif = {{ limit = {{ has_variable = te_tax_bl_g_{good} var:te_tax_bl_g_{good} >= 0 }} add = 1 }}"
+              for good in consumption_catalog()]
+    lines += [
+        "}",
+        "",
+        "# te_tax_bl_grief_<ig>_<key>: what the bill's raise of an instrument costs the group, in tax",
+        "# levels weighted by its exposure (te_tax_dl_<key> x EXPOSURE), 0 unless the bill raises it",
+        "# above existing law (te_tax_bl_dstep_<key> above 0); te_tax_bl_grief_<ig>_goods the same for",
+        "# the goods the bill taxes on the consumption channel, 0 unless they add to the burden. The",
+        "# largest is the group's top grievance, the one a clause offer softens (controller ruling:",
+        "# a clause only softens what the bill raises).",
+    ]
+    for ig in IGS:
+        weights = exposure(ig)
+        for key in grievance_keys(ig):
+            lines += [f"te_tax_bl_grief_{ig}_{key} = {{", "\tvalue = 0",
+                      f"\tif = {{ limit = {{ te_tax_bl_dstep_{key} > 0 }} value = te_tax_dl_{key} "
+                      f"multiply = {fmt(weights[key])} }}", "}"]
+        if weights["cons"]:
+            lines += [f"te_tax_bl_grief_{ig}_goods = {{", "\tvalue = 0",
+                      f"\tif = {{ limit = {{ te_tax_dl_goods > 0 }} value = te_tax_dl_goods multiply = {fmt(weights['cons'])} }}",
+                      "}"]
     lines += [
         "",
         "# te_tax_prom_<ig>: the group's promises reason, recomputed at every refresh from the",
@@ -2119,79 +2113,27 @@ def _offer_values():
 
 
 def _view_values():
-    """The interest groups' views of the enacted code against the migrated baseline (plan Task 13)."""
-    keys = [instrument.key for instrument in INSTRUMENTS]
-    mig = "has_variable = te_tax_mig_on var:te_tax_mig_on = 1"
+    """The interest groups' views of the enacted code (plan Task 13, controller ruling)."""
     lines = [
         "",
         "# Interest-group views of the enacted code (plan Task 13; te_tax_gen_ig_views, from the",
-        "# monthly processor only, never a panel: the regional coverage iterates the enacted state",
-        "# list). The support model's material and ideology reasons, scored on the enacted code",
-        "# against the migrated baseline (te_tax_mig_*, 0 until te_tax_mig_on is 1) instead of a bill",
-        "# against existing law: te_tax_cv_dl_<key> and te_tax_cv_dl_g_<good> in tax levels; relief",
-        "# against none, the baseline having none. The fiscal, government, promise and trust reasons",
-        "# are left out: they weigh a bill's circumstances (the budget this month, who proposes it,",
-        "# the bargain), not the code.",
-    ]
-    for key in keys:
-        guard = f"{mig} has_variable = te_tax_en_{key} has_variable = te_tax_mig_{key}"
-        lines += [f"te_tax_cv_dl_{key} = {{", "\tvalue = 0", "\tif = {", f"\t\tlimit = {{ {guard} }}",
-                  f"\t\tvalue = var:te_tax_en_{key}", f"\t\tsubtract = var:te_tax_mig_{key}",
-                  f"\t\tmultiply = te_tax_step_{key}", f"\t\tdivide = te_tax_level_step_{key}", "\t}", "}"]
-    for good in consumption_catalog():
-        guard = f"{mig} has_variable = te_tax_en_g_{good} has_variable = te_tax_mig_g_{good}"
-        lines += [f"te_tax_cv_dl_g_{good} = {{", "\tvalue = 0", "\tif = {", f"\t\tlimit = {{ {guard} }}",
-                  f"\t\tvalue = var:te_tax_en_g_{good}", f"\t\tsubtract = var:te_tax_mig_g_{good}",
-                  f"\t\tmultiply = {fmt(goods_weight(good) * GOODS_LEVEL_STEPS)}", "\t}", "}"]
-    lines += ["te_tax_cv_dl_goods = {", "\tvalue = 0"]
-    lines += [f"\tadd = te_tax_cv_dl_g_{good}" for good in consumption_catalog()] + ["}"]
-    lines += _prog_value("te_tax_cv_dl_prog", "te_tax_cv_dl_")
-    lines += [
-        "# Agricultural relief enacted, in bands, scaled by the wage tax it relieves.",
-        "te_tax_cv_agrel_scaled = {",
-        "\tvalue = 0",
-        "\tif = {",
-        "\t\tlimit = { has_variable = te_tax_en_agrel has_variable = te_tax_en_wage }",
-        "\t\tvalue = var:te_tax_en_wage",
-        "\t\tdivide = te_tax_agrel_ref_wage_idx",
-        "\t\tmax = 1",
-        "\t\tmin = 0",
-        "\t\tmultiply = var:te_tax_en_agrel",
-        "\t}",
-        "}",
-        "# Regional relief enacted: its band times the share of the population in the named states",
-        "# the country owns, over te_tax_regrel_ref_share. Inside the list PREV is the country.",
-        "te_tax_cv_regrel_coverage = {",
-        "\tvalue = 0",
-        "\tif = {",
-        "\t\tlimit = {",
-        "\t\t\thas_variable = te_tax_en_regrel",
-        "\t\t\tvar:te_tax_en_regrel > 0",
-        "\t\t\thas_variable_list = te_tax_en_relief_states",
-        "\t\t\ttotal_population > 0",
-        "\t\t}",
-        "\t\tevery_in_list = {",
-        "\t\t\tvariable = te_tax_en_relief_states",
-        "\t\t\tlimit = { exists = owner owner = prev }",
-        "\t\t\tadd = state_population",
-        "\t\t}",
-        "\t\tdivide = total_population",
-        "\t\tmultiply = var:te_tax_en_regrel",
-        "\t\tdivide = te_tax_regrel_ref_share",
-        "\t}",
-        "}",
-        "",
-        "# Per group: material and ideology reasons, each clamped; the score is their sum, which",
-        "# te_tax_gen_ig_views maps to a band through te_tax_ig_view_threshold_1 and _2.",
+        "# monthly processor). te_tax_ig_band_<ig>: the group's own vanilla stance, -2 strongly",
+        "# opposes .. 2 strongly endorses (law_stance, strongest bucket first), toward the vanilla",
+        "# taxation law the enacted code is equivalent to (te_tax_code_equivalent_<law>,",
+        "# te_tax_triggers.txt, which need the rule and the carrier law); 0 without the carrier, or",
+        "# for a neutral stance. Reads no variable and iterates nothing.",
     ]
     for ig in IGS:
-        lines += _clamped(f"te_tax_cv_mat_{ig}", _material_terms(ig, "te_tax_cv_dl_"), MATERIAL_WEIGHT,
-                          _material_points(ig, "te_tax_cv_agrel_scaled", "te_tax_cv_regrel_coverage"))
-        lines += [f"te_tax_cv_ideo_{ig} = {{", f"\tvalue = te_tax_ideo_p_{ig}", "\tmultiply = te_tax_cv_dl_prog",
-                  f"\tmultiply = {IDEOLOGY_WEIGHT}", f"\tmin = -{REASON_CAP}", f"\tmax = {REASON_CAP}", "}"]
-        lines += [f"te_tax_cv_score_{ig} = {{", f"\tvalue = te_tax_cv_mat_{ig}", f"\tadd = te_tax_cv_ideo_{ig}", "}"]
+        lines += [f"te_tax_ig_band_{ig} = {{", "\tvalue = 0"]
+        for n, (short, law) in enumerate(EQUIVALENT_LAWS):
+            lines += [f"\t{'if' if n == 0 else 'else_if'} = {{",
+                      f"\t\tlimit = {{ te_tax_code_equivalent_{short} = yes }}"]
+            for m, (comparison, stance) in enumerate(STANCE_BRANCHES):
+                lines.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ ig:ig_{ig} ?= {{ law_stance = "
+                             f"{{ law = law_type:{law} {comparison} }} }} }} value = {stance} }}")
+            lines.append("\t}")
+        lines.append("}")
     return lines
-
 
 @output(SUPPORT_VALUES_PATH)
 def support_values():
@@ -2536,23 +2478,37 @@ def _clause_candidates(ig, indent):
     """The clause offers group `ig` may make, preferred first, each only while no offer is set."""
     off, t = f"te_tax_off_{ig}", indent
     lines = []
+    keys = [instrument.key for instrument in INSTRUMENTS]
+    grief = f"te_tax_bl_grief_{ig}"
+    goods = exposure(ig)["cons"] != 0
     for code in clause_offers(ig):
-        lines += [f"{t}if = {{", f"{t}\tlimit = {{", f"{t}\t\tvar:{off}_kind = 0", f"{t}\t\t{_not_gained(ig, code)}"]
         if code == OFFER_CUT:
-            key = most_exposed(ig)
-            idx = [instrument.key for instrument in INSTRUMENTS].index(key) + 1
-            lines += [f"{t}\t\tte_tax_bl_eff_{key} > 0", f"{t}\t}}"]
-            lines += _offer_writes(ig, OFFER_CUT, idx, indent=f"{t}\t")
-        elif code == OFFER_AGREL:
+            # One branch per instrument; the conditions make it the group's top grievance (the
+            # first in INSTRUMENTS order on a tie), so at most one can hold.
+            for key in grievance_keys(ig):
+                others = [f"{grief}_{key} >= {grief}_{other}" for other in grievance_keys(ig) if other != key]
+                others += [f"{grief}_{key} >= {grief}_goods"] if goods else []
+                lines += [f"{t}if = {{", f"{t}\tlimit = {{", f"{t}\t\tvar:{off}_kind = 0",
+                          f"{t}\t\t{_not_gained(ig, code)}", f"{t}\t\t{grief}_{key} > 0"]
+                lines += [f"{t}\t\t{condition}" for condition in others]
+                lines += [f"{t}\t\tte_tax_offer_cut_leaves_a_bill = {{ KEY = {key} }}", f"{t}\t}}"]
+                lines += _offer_writes(ig, OFFER_CUT, keys.index(key) + 1, indent=f"{t}\t")
+                lines.append(f"{t}}}")
+            continue
+        lines += [f"{t}if = {{", f"{t}\tlimit = {{", f"{t}\t\tvar:{off}_kind = 0", f"{t}\t\t{_not_gained(ig, code)}"]
+        if code == OFFER_AGREL:
             lines += [f"{t}\t\tte_tax_bl_eff_agrel < te_tax_max_agrel", f"{t}\t\tte_tax_bl_eff_wage > 0", f"{t}\t}}"]
             lines += _offer_writes(ig, OFFER_AGREL, 0, indent=f"{t}\t")
         else:
+            # The goods the bill taxes are the top grievance, and the bill adds a staple.
             staples = staple_order()
-            lines += [f"{t}\t\tOR = {{"] + [f"{t}\t\t\tte_tax_bl_eff_g_{good} > 0" for good in staples]
-            lines += [f"{t}\t\t}}", f"{t}\t}}"]
+            lines += [f"{t}\t\t{grief}_goods > 0"]
+            lines += [f"{t}\t\t{grief}_goods > {grief}_{key}" for key in grievance_keys(ig)]
+            lines += [f"{t}\t\tOR = {{"] + [f"{t}\t\t\tte_tax_dl_g_{good} > 0" for good in staples]
+            lines += [f"{t}\t\t}}", f"{t}\t\tte_tax_offer_untax_leaves_a_bill = yes", f"{t}\t}}"]
             lines += _offer_writes(ig, OFFER_STAPLE, 0, indent=f"{t}\t")
             for n, good in enumerate(staples, start=1):
-                lines.append(f"{t}\t{'if' if n == 1 else 'else_if'} = {{ limit = {{ te_tax_bl_eff_g_{good} > 0 }} "
+                lines.append(f"{t}\t{'if' if n == 1 else 'else_if'} = {{ limit = {{ te_tax_dl_g_{good} > 0 }} "
                              f"set_variable = {{ name = {off}_arg value = {n} }} }}")
         lines.append(f"{t}}}")
     return lines
@@ -2959,11 +2915,9 @@ def scripted_effects():
             lines.append(_guarded_write(f"te_tax_en_{instrument.key}{suffix}", sentinel))
         for prefix, sentinel in VERSION_TOKENS:
             lines.append(_guarded_write(f"{prefix}{instrument.key}", sentinel))
-        lines.append(_guarded_write(f"te_tax_mig_{instrument.key}", 0))
-    lines += ["}", "", "# te_tax_en_g_<good> and the migrated baseline's te_tax_mig_g_<good> = 0 for every",
-              "# catalog good, if absent.", "te_tax_gen_init_goods = {"]
+    lines += ["}", "", "# te_tax_en_g_<good> = 0 for every catalog good, if absent.",
+              "te_tax_gen_init_goods = {"]
     lines += [_guarded_write(f"te_tax_en_g_{good}", 0) for good in consumption_catalog()]
-    lines += [_guarded_write(f"te_tax_mig_g_{good}", 0) for good in consumption_catalog()]
     lines.append("}")
     lines += [
         "",
@@ -3113,8 +3067,9 @@ def scripted_triggers():
 
 
 def _offer_triggers():
-    """Whether group IG's offer can still be accepted (plan Task 13): the clause still has room
-    in the bill, or the promise is still feasible and could be recorded. te_tax_can_accept_offer
+    """Whether group IG's offer can still be accepted (plan Task 13): the bill still raises the
+    tax a cut lowers, still adds the staple, relief still has a band to add, or the promise is
+    still feasible and could be recorded. te_tax_can_accept_offer
     asks it, so the Accept button and the click agree; an unknown offer fails."""
     keys = [instrument.key for instrument in INSTRUMENTS]
     off = "te_tax_off_$IG$"
@@ -3124,10 +3079,12 @@ def _offer_triggers():
         "# bill is under debate and group IG has an offer (te_tax_off_<ig>_kind above 0).",
         "te_tax_gen_offer_feasible = {",
     ]
-    branches = [(f"var:{off}_kind = {OFFER_CUT} var:{off}_arg = {idx}", f"te_tax_bl_eff_{key} > 0")
+    branches = [(f"var:{off}_kind = {OFFER_CUT} var:{off}_arg = {idx}",
+                 f"te_tax_bl_dstep_{key} > 0 te_tax_offer_cut_leaves_a_bill = {{ KEY = {key} }}")
                 for idx, key in enumerate(keys, start=1)]
     branches.append((f"var:{off}_kind = {OFFER_AGREL}", "te_tax_bl_eff_agrel < te_tax_max_agrel te_tax_bl_eff_wage > 0"))
-    branches += [(f"var:{off}_kind = {OFFER_STAPLE} var:{off}_arg = {n}", f"te_tax_bl_eff_g_{good} > 0")
+    branches += [(f"var:{off}_kind = {OFFER_STAPLE} var:{off}_arg = {n}",
+                  f"te_tax_dl_g_{good} > 0 te_tax_offer_untax_leaves_a_bill = yes")
                  for n, good in enumerate(staple_order(), start=1)]
     seen = set()
     for _name, kind, arg, _target, _groups in PROMISE_OFFERS:
@@ -3303,21 +3260,25 @@ def static_modifiers():
     lines = [
         HEADER,
         "# Interest-group views of the enacted tax code (plan Task 13; docs/systems/tax_code_schema.md,",
-        "# \"Interest-group views of the code\"). One band per group, -2 to +2, the scale of vanilla's",
-        "# approval from a law stance; te_tax_gen_ig_views (te_tax_generated_effects.txt), run by the",
-        "# monthly processor, keeps exactly one of each group's five on a country under the rule.",
-        "# Static: no multiplier.",
+        "# \"Interest-group views of the code\"). Per group, one modifier per nonzero stance band toward",
+        "# the vanilla taxation law the code is equivalent to (-2 strongly opposes .. +2 strongly",
+        "# endorses), carrying the approval vanilla gives for an active law the group takes that",
+        f"# stance on (IG_APPROVAL_FROM_LAW = {VANILLA_APPROVAL_FROM_LAW}, IG_APPROVAL_FROM_LAW_STRONG_STANCE = "
+        f"{VANILLA_APPROVAL_FROM_LAW_STRONG}); a neutral",
+        "# group has none. te_tax_gen_ig_views (te_tax_generated_effects.txt), run by the monthly",
+        "# processor, keeps at most one of each group's four on a country under the rule. Static: no",
+        "# multiplier.",
     ]
     for ig in IGS:
         for band, value in VIEW_BANDS:
             lines += ["", f"te_tax_ig_view_{ig}_{band} = {{",
                       f"\ticon = \"gfx/interface/icons/timed_modifier_icons/{VIEW_ICONS[value]}.dds\"",
-                      f"\tinterest_group_ig_{ig}_approval_add = {value}", "}"]
+                      f"\tinterest_group_ig_{ig}_approval_add = {VIEW_APPROVAL[value]}", "}"]
     return _txt("\n".join(lines) + "\n")
 
 
-VIEW_NAMES = {-2: "Resents the Tax Code", -1: "Dislikes the Tax Code", 0: "Accepts the Tax Code",
-              1: "Approves of the Tax Code", 2: "Champions the Tax Code"}
+VIEW_NAMES = {-2: "Strongly Opposes the Tax Code", -1: "Opposes the Tax Code", 1: "Endorses the Tax Code",
+              2: "Strongly Endorses the Tax Code"}
 
 
 @output(LOC_PATH)
@@ -3334,11 +3295,11 @@ def localization():
         for band, value in VIEW_BANDS:
             key = f"te_tax_ig_view_{ig}_{band}"
             entries[key] = f'0 "{VIEW_NAMES[value]}"'
-            entries[f"{key}_desc"] = ('0 "How this group judges the enacted tax code against the code the country '
-                                      'started with: what it costs the group\'s members, and how progressive it is."')
+            entries[f"{key}_desc"] = ('0 "This group\'s stance on the taxation law the enacted tax code comes '
+                                      'closest to, counted as it would be for that law."')
     for good in staple_order():
-        entries[f"te_tax_offer_untax_{good}"] = f'0 "Stop taxing ${good}$."'
-        entries[f"te_tax_tt_offer_untax_{good}"] = f'0 "The bill and the draft stop taxing ${good}$."'
+        entries[f"te_tax_offer_untax_{good}"] = f'0 "Leave ${good}$ untaxed."'
+        entries[f"te_tax_tt_offer_untax_{good}"] = f'0 "The bill and the draft no longer tax ${good}$."'
     return _render_loc_file([(section_label(LOC_CATEGORY), entries)])
 
 

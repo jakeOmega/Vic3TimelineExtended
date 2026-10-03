@@ -237,24 +237,6 @@ te_tax_offer_promise_base = 10
 # needs before legislative override can carry it.
 te_tax_force_share = 0.35
 
-# Interest-group views of the enacted code (plan Task 13): a group's score of
-# the code against the migrated baseline (material plus ideology, each -40..40)
-# maps to an approval band of -2..2 at these magnitudes. One tax level more on
-# a channel a group pays in full is -10 material; a group with a firm view of
-# progressive taxation scores 5 x up to 6 per level of progressivity.
-te_tax_ig_view_threshold_1 = 10
-te_tax_ig_view_threshold_2 = 30
-
-te_tax_ig_view_threshold_1_neg = {
-	value = te_tax_ig_view_threshold_1
-	multiply = -1
-}
-
-te_tax_ig_view_threshold_2_neg = {
-	value = te_tax_ig_view_threshold_2
-	multiply = -1
-}
-
 # Clout committed to the bill's current revision as a share (0..1) of the clout
 # of every non-marginal interest group; 0 when there is none.
 te_tax_committed_share = {
