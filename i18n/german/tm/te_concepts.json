@@ -643,14 +643,6 @@
   "en": "Subjects",
   "de": "Klientelstaaten"
  },
- "TP_EXP_TOOLTIP": {
-  "en": "#tooltip_header Export Reliance#!\\nFraction of your market's [concept_sell_orders] filled by exports to [Country.GetName].\\n\\nHigher values mean this partner absorbs more of your exports.",
-  "de": "#tooltip_header Exportabhängigkeit#!\\nAnteil der [concept_sell_orders] Ihres Marktes, der durch Exporte nach [Country.GetName] gedeckt wird.\\n\\nHöhere Werte bedeuten, dass dieser Partner mehr Ihrer Exporte aufnimmt."
- },
- "TP_IMP_TOOLTIP": {
-  "en": "#tooltip_header Import Reliance#!\\nFraction of your market's [concept_buy_orders] filled by imports from [Country.GetName].\\n\\nHigher values mean greater dependency on this partner for your imports.",
-  "de": "#tooltip_header Importabhängigkeit#!\\nAnteil der [concept_buy_orders] Ihres Marktes, der durch Importe aus [Country.GetName] gedeckt wird.\\n\\nHöhere Werte bedeuten eine größere Abhängigkeit von diesem Partner bei Ihren Importen."
- },
  "UN_ARMS_CONTROL": {
   "en": "Join Arms Control Treaty",
   "de": "Rüstungskontrollvertrag beitreten"
@@ -2467,6 +2459,10 @@
   "en": "The Commonwealth Path",
   "de": "Der Weg des Commonwealth"
  },
+ "concept_agent_network": {
+  "en": "Agent Network",
+  "de": "Agentennetzwerk"
+ },
  "concept_antimatter_facility": {
   "en": "Antimatter Facility",
   "de": "Antimaterie-Eindämmungsanlage"
@@ -2478,6 +2474,10 @@
  "concept_asset_relief_program_desc": {
   "en": "Government purchase of distressed financial assets from private banks during a [concept_banking_crash], intended to restore solvency and confidence. Politically toxic — taxpayers fund what is widely perceived as a bailout of the financial sector.",
   "de": "Staatlicher Aufkauf notleidender Finanzanlagen von Privatbanken während eines [concept_banking_crash], um Solvenz und Vertrauen wiederherzustellen. Politisch hochbrisant — die Steuerzahler finanzieren, was weithin als Rettung des Finanzsektors wahrgenommen wird."
+ },
+ "concept_banking_backstops": {
+  "en": "Backstops",
+  "de": "Sicherheitsnetze"
  },
  "concept_banking_contagion": {
   "en": "Banking Contagion",
@@ -2503,6 +2503,18 @@
   "en": "A financial cycle simulation tracking three key variables: [concept_banking_cycle] value (0–100, representing economic phase from bust to boom), [concept_banking_momentum] (rate and direction of change), and [concept_bubble_pressure]. The cycle drives periodic booms, busts, and crashes that affect the entire economy. Market economies experience this as a traditional financial cycle, while command economies see it as administrative strain and coordination pressure, and cooperative economies track it as overextension of worker commitments. [concept_financial_regulation] laws control volatility and crash risk.",
   "de": "Eine Simulation des Finanzzyklus, die drei Schlüsselvariablen verfolgt: den Wert des [concept_banking_cycle] (0–100, von Flaute bis Boom), die [concept_banking_momentum] (Geschwindigkeit und Richtung der Veränderung) und den [concept_bubble_pressure]. Der Zyklus treibt periodische Booms, Flauten und Crashs an, die die gesamte Wirtschaft betreffen. Marktwirtschaften erleben dies als klassischen Finanzzyklus, während Planwirtschaften es als administrative Belastung und Koordinationsdruck erfahren und genossenschaftliche Wirtschaften es als Überdehnung der Verpflichtungen der Arbeiter verfolgen. Gesetze zur [concept_financial_regulation] steuern Volatilität und Crash-Risiko."
  },
+ "concept_banking_delegation": {
+  "en": "Delegation",
+  "de": "Delegation"
+ },
+ "concept_banking_inflation": {
+  "en": "Inflation",
+  "de": "Inflation"
+ },
+ "concept_banking_mandate": {
+  "en": "Mandate",
+  "de": "Mandat"
+ },
  "concept_banking_momentum": {
   "en": "Banking Momentum",
   "de": "Bankendynamik"
@@ -2510,6 +2522,10 @@
  "concept_banking_momentum_desc": {
   "en": "The rate and direction of change in the [concept_banking_cycle]. Positive momentum pushes the cycle toward expansion, negative momentum toward contraction. Momentum is influenced by random nudges (scaled by banking volatility modifiers), fiscal policy, and mean-reversion forces that pull the cycle back toward equilibrium. In command economies this reflects coordination speed; in cooperative economies, reinvestment pace.",
   "de": "Die Geschwindigkeit und Richtung der Veränderung im [concept_banking_cycle]. Positive Dynamik treibt den Zyklus in Richtung Expansion, negative Dynamik in Richtung Kontraktion. Die Dynamik wird durch zufällige Impulse (skaliert durch Volatilitätsmodifikatoren des Bankwesens), Finanzpolitik und Rückkehrkräfte zum Gleichgewicht beeinflusst. In Planwirtschaften spiegelt dies die Koordinationsgeschwindigkeit wider, in genossenschaftlichen Wirtschaften das Reinvestitionstempo."
+ },
+ "concept_banking_monetisation": {
+  "en": "Monetising the Deficit",
+  "de": "Monetarisierung des Defizits"
  },
  "concept_bubble_pressure": {
   "en": "Bubble Pressure",
@@ -2611,6 +2627,14 @@
   "en": "Actions a country can take to address [concept_global_warming_system], adopted and repealed from the Global Warming [concept_journal_entry]'s dashboard. Three are market-wide — a carbon tax, renewable investment and emission standards: the market leader adopts them for every member, and they cut the market's [concept_greenhouse_gas_emissions] directly. The other five are national: fossil fuel divestment, public transit and green building codes trim fuel and power use, while climate adaptation and reforestation soften the damage. Each has economic trade-offs.",
   "de": "Maßnahmen, die ein Land gegen die [concept_global_warming_system] ergreifen kann, angenommen und aufgehoben über das Dashboard des [concept_journal_entry] Globale Erwärmung. Drei gelten marktweit — eine CO2-Steuer, Investitionen in erneuerbare Energien und Emissionsstandards: Der Marktführer führt sie für alle Mitglieder ein, und sie senken die [concept_greenhouse_gas_emissions] des Marktes direkt. Die übrigen fünf sind national: Der Ausstieg aus fossilen Brennstoffen, öffentlicher Nahverkehr und grüne Bauvorschriften senken den Brennstoff- und Energieverbrauch, während Klimaanpassung und Aufforstung den Schaden abmildern. Jede hat wirtschaftliche Kompromisse."
  },
+ "concept_colonial_band": {
+  "en": "Stability Band",
+  "de": "Stabilitätsband"
+ },
+ "concept_colonial_overreach": {
+  "en": "Imperial Overreach",
+  "de": "Imperiale Überdehnung"
+ },
  "concept_colonial_stability": {
   "en": "Colonial Stability",
   "de": "Koloniale Stabilität"
@@ -2631,6 +2655,10 @@
   "en": "A mechanic where construction costs scale with [Concept('concept_gdp_per_capita', 'GDP per capita')]. Wealthier nations pay more to build, reflecting higher labor costs and land prices. This prevents runaway growth in rich countries and enables catch-up by developing nations.",
   "de": "Ein Mechanismus, bei dem die Baukosten mit dem [Concept('concept_gdp_per_capita', 'Bruttoinlandsprodukt pro Kopf')] skalieren. Wohlhabendere Nationen zahlen mehr fürs Bauen, was höhere Arbeits- und Grundstückskosten widerspiegelt. Das verhindert unkontrolliertes Wachstum in reichen Ländern und ermöglicht Aufholprozesse in Entwicklungsländern."
  },
+ "concept_contested_monument": {
+  "en": "Contested Monument",
+  "de": "Umstrittenes Denkmal"
+ },
  "concept_covert_efficiency": {
   "en": "Efficiency Factor",
   "de": "Effizienzfaktor"
@@ -2638,6 +2666,10 @@
  "concept_covert_efficiency_desc": {
   "en": "Your espionage efficiency reduces the chance of [concept_operation_detection]. A higher [concept_covert_efficiency] means your agents are better trained and harder to detect. Efficiency is determined by the country_covert_operation_efficiency_mult modifier, which can be improved through technologies, laws, and institutional investment. The efficiency percentage shown is the reduction applied to the raw detection chance.",
   "de": "Deine Spionageeffizienz senkt die Wahrscheinlichkeit einer [concept_operation_detection]. Ein höherer [concept_covert_efficiency] bedeutet, dass deine Agenten besser ausgebildet und schwerer zu entdecken sind. Die Effizienz wird durch den Modifikator country_covert_operation_efficiency_mult bestimmt, der durch Technologien, Gesetze und institutionelle Investitionen verbessert werden kann. Der angezeigte Effizienzprozentsatz ist die Reduzierung, die auf die rohe Entdeckungswahrscheinlichkeit angewendet wird."
+ },
+ "concept_covert_funding": {
+  "en": "Covert Funding",
+  "de": "Verdeckte Finanzierung"
  },
  "concept_covert_operations": {
   "en": "Covert Operations",
@@ -2779,6 +2811,14 @@
   "en": "A reinforced defensive position offering significant protection and resistance to attackers.",
   "de": "Eine verstärkte Verteidigungsstellung, die erheblichen Schutz bietet und Angreifern Widerstand entgegensetzt."
  },
+ "concept_fossil_transition": {
+  "en": "Fossil Transition",
+  "de": "Fossilwende"
+ },
+ "concept_funding_stealth": {
+  "en": "Funding Stealth",
+  "de": "Finanzierungstarnung"
+ },
  "concept_fx_swap_lines_desc": {
   "en": "A standing arrangement between central banks: one stands ready to lend its reserves to the other. In this mod it is a [concept_treaty] [concept_article], the $swap_line$ — the recipient's risk premium falls and its peg is steadied, the provider pays a cost scaled to the two economies' sizes, and in a crisis the line is actually drawn.",
   "de": "Eine ständige Vereinbarung zwischen Zentralbanken: Eine steht bereit, der anderen ihre Reserven zu leihen. In dieser Mod ist dies ein [concept_treaty]-[concept_article], der $swap_line$ — die Risikoprämie des Empfängers sinkt und seine Bindung wird stabilisiert, der Geber zahlt einen an die Größe beider Volkswirtschaften angepassten Preis, und in einer Krise wird die Linie tatsächlich gezogen."
@@ -2802,6 +2842,10 @@
  "concept_heir_education_system_desc": {
   "en": "A monthly-pulse education system for monarchies that shapes the future ruler's capabilities. The [concept_heir]'s tutors are chosen on three tracks, one focus per track at a time: aptitude (administrative, diplomatic, or military), ideology (progressive or conservative), and faction (radical, moderate, or regressive mentors). An intelligence system (1–5) determines learning speed. Education resolves into 5-tier aptitude traits when the heir comes of age. A rebel child mechanic can also trigger, creating unpredictable heirs.",
   "de": "Ein monatlich pulsierendes Bildungssystem für Monarchien, das die Fähigkeiten des künftigen Herrschers formt. Die Lehrer des [concept_heir] werden auf drei Schienen ausgewählt, jeweils ein Schwerpunkt pro Schiene: Begabung (administrativ, diplomatisch oder militärisch), Ideologie (progressiv oder konservativ) und Fraktion (radikale, gemäßigte oder reaktionäre Mentoren). Ein Intelligenzwert (1–5) bestimmt die Lerngeschwindigkeit. Die Bildung löst sich bei Volljährigkeit des Erben in fünfstufige Begabungseigenschaften auf. Auch eine Mechanik für rebellische Kinder kann auslösen und unberechenbare Erben hervorbringen."
+ },
+ "concept_heritage_monument": {
+  "en": "Heritage Monument",
+  "de": "Kulturerbe-Denkmal"
  },
  "concept_homeland_dynamics": {
   "en": "Homeland Dynamics",
@@ -2839,6 +2883,10 @@
   "en": "Government-run movement of people from one part of the country to another. A Settlement Authority on a thinly populated frontier recruits across the country under one program (from land grants to deportation), moves the number shown in the state's modifiers each month, and closes when the region fills up. Coercive programs cost lives in transit and breach the Universal Declaration of Human Rights for its parties, and Special Settlements and Rustication anger the people left behind. Settlers press on anyone already living on the frontier who is not at least a second-class citizen.",
   "de": "Staatlich gelenkte Umsiedlung von Menschen von einem Landesteil in einen anderen. Eine Siedlungsbehörde an einer dünn besiedelten Grenze rekrutiert landesweit unter einem Programm (von Landzuteilungen bis zu Deportation), bewegt jeden Monat die in den Modifikatoren des Staates angezeigte Zahl und schließt, sobald die Region gefüllt ist. Zwangsprogramme kosten Menschenleben während des Transports und verletzen für ihre Vertragsparteien die Allgemeine Erklärung der Menschenrechte, und Sondersiedlungen sowie Landverbannung verärgern die Zurückgebliebenen. Siedler bedrängen jeden, der bereits an der Grenze lebt und nicht mindestens Bürger zweiter Klasse ist."
  },
+ "concept_launch_authority": {
+  "en": "Launch Authority",
+  "de": "Einsatzbefugnis"
+ },
  "concept_legislative_override_capacity_desc": {
   "en": "A measure of how readily a regime can bypass the normal legislative process to push laws through over [Concept('concept_interest_group','Interest Group')] resistance. Granted by certain laws, surveillance technologies, state institutions (policing, thought control, propaganda), and power bloc principles — authoritarian governance, suppressive policies, and centralized state structures raise it; democratic suffrage, decentralization, feudal arrangements, and protected liberties lower it.\\n\\nAt 2 or more, the regime can decisively push laws through despite opposition; at 4 or more, it can force them through outright. Each point also trims the [concept_authority] cost — modestly below +5 (about -3% at +2, -9% at +4) and steeply beyond it (about -20% at +5, -50% at +8, -75% at +16). Forcing a law temporarily depletes capacity, recovering over about five years, so headroom above a threshold lets the regime act again sooner.",
   "de": "Ein Maß dafür, wie leicht ein Regime den normalen Gesetzgebungsprozess umgehen kann, um Gesetze gegen den Widerstand der [Concept('concept_interest_group','Interessengruppen')] durchzusetzen. Wird durch bestimmte Gesetze, Überwachungstechnologien, staatliche Institutionen (Polizei, Gedankenkontrolle, Propaganda) und Machtblockprinzipien gewährt — autoritäre Herrschaft, repressive Politik und zentralisierte Staatsstrukturen erhöhen sie; demokratisches Wahlrecht, Dezentralisierung, feudale Ordnungen und geschützte Freiheiten senken sie.\\n\\nAb 2 kann das Regime Gesetze trotz Widerstand entschieden durchsetzen; ab 4 kann es sie regelrecht erzwingen. Jeder Punkt senkt zudem die Kosten an [concept_authority] — moderat unterhalb von +5 (etwa -3% bei +2, -9% bei +4) und stark darüber hinaus (etwa -20% bei +5, -50% bei +8, -75% bei +16). Das Erzwingen eines Gesetzes erschöpft die Kapazität vorübergehend und erholt sich über etwa fünf Jahre, sodass Spielraum oberhalb einer Schwelle dem Regime erlaubt, früher wieder zu handeln."
@@ -2867,6 +2915,10 @@
   "en": "A set of 16 custom [Concept('concept_institution', 'institutions')] representing government ministries: War, Commerce, Foreign Affairs, National Bank, Culture, Labor, Environment, Intelligence and Security, Refugee Affairs, Propaganda, Science, Thought Control, Consumer Protection, Urban Planning, Religion, and International Aid. Each ministry has multiple [Concept('concept_investment_level', 'investment levels')] that provide scaling modifiers. Ministry laws control which ministries are active.",
   "de": "Eine Gruppe von 16 eigenen [Concept('concept_institution', 'Institutionen')], die Regierungsministerien darstellen: Krieg, Handel, Äußere Angelegenheiten, Nationalbank, Kultur, Arbeit, Umwelt, Geheimdienst und Sicherheit, Flüchtlingsangelegenheiten, Propaganda, Wissenschaft, Gedankenkontrolle, Verbraucherschutz, Stadtplanung, Religion und Internationale Hilfe. Jedes Ministerium hat mehrere [Concept('concept_investment_level', 'Investitionsstufen')], die skalierende Modifikatoren bieten. Ministeriumsgesetze bestimmen, welche Ministerien aktiv sind."
  },
+ "concept_nuclear_doctrine": {
+  "en": "Nuclear Doctrine",
+  "de": "Nukleardoktrin"
+ },
  "concept_nuclear_program": {
   "en": "Nuclear Program",
   "de": "Nuklearprogramm"
@@ -2874,6 +2926,10 @@
  "concept_nuclear_program_desc": {
   "en": "A country's nuclear weapons development effort, tracked by a [concept_journal_entry] with a progress bar. Research of the Nuclear Weapons technology and continued funding advances the program. A complete [concept_nuclear_program] enables the use of [Concept('concept_diplomatic_action', 'diplomatic actions')] for strategic and tactical [concept_nuclear_strike]s, and is a major factor in [concept_nuclear_stockpile] size and deterrence.",
   "de": "Das Bestreben eines Landes, Kernwaffen zu entwickeln, verfolgt durch einen [concept_journal_entry] mit Fortschrittsbalken. Die Erforschung der Technologie Nuklearwaffen und fortlaufende Finanzierung treiben das Programm voran. Ein vollständiges [concept_nuclear_program] ermöglicht den Einsatz von [Concept('concept_diplomatic_action', 'Diplomatenaktionen')] für strategische und taktische [Concept('concept_nuclear_strike', 'Nuklearschläge')] und ist ein wesentlicher Faktor für die Größe des [concept_nuclear_stockpile] und die Abschreckung."
+ },
+ "concept_nuclear_readiness": {
+  "en": "Nuclear Readiness",
+  "de": "Nukleare Einsatzbereitschaft"
  },
  "concept_nuclear_stockpile": {
   "en": "Nuclear Stockpile",
@@ -2891,17 +2947,25 @@
   "en": "A devastating attack using nuclear weapons. Success chance is determined by the attacker's nuclear attack modifier (from technologies like Nuclear Weapons, ICBMs, Hypersonic Weapons, and Orbital Weapon Platforms) minus the target's defense modifier (from Military Aviation, Radar, Missile Defense Systems, Directed Energy Defenses, and Orbital Weapon Platforms). The result is clamped between 5% and 100%.",
   "de": "Ein verheerender Angriff mit Kernwaffen. Die Erfolgschance wird durch den nuklearen Angriffsmodifikator des Angreifers bestimmt (aus Technologien wie Nuklearwaffen, ICBMs, Hyperschallwaffen und Orbitale Waffenplattformen) abzüglich des Verteidigungsmodifikators des Ziels (aus Militärflugzeuge, Radar, Raketenabwehrsysteme, Gerichtete-Energie-Abwehr und Orbitale Waffenplattformen). Das Ergebnis wird auf 5% bis 100% begrenzt."
  },
+ "concept_nuclear_taboo": {
+  "en": "Nuclear Taboo",
+  "de": "Nukleares Tabu"
+ },
  "concept_open_market_operations_desc": {
   "en": "A central-bank intervention tool: the bank buys government securities to inject liquidity (expansionary) or sells them to drain liquidity (contractionary). Used to stabilize the [concept_banking_cycle] by countering crash risk in downturns and overheating in booms.",
   "de": "Ein Interventionsinstrument der Zentralbank: Die Bank kauft Staatsanleihen, um Liquidität zuzuführen (expansiv), oder verkauft sie, um Liquidität abzuschöpfen (kontraktiv). Dient der Stabilisierung des [concept_banking_cycle], indem sie dem Crash-Risiko in Abschwüngen und der Überhitzung in Booms entgegenwirkt."
  },
  "concept_operation_detection": {
-  "en": "Operation Detection",
-  "de": "Aufdeckung von Operationen"
+  "en": "Detection Risk",
+  "de": "Entdeckungsrisiko"
  },
  "concept_operation_detection_desc": {
   "en": "Each month, active [concept_covert_operations] have a chance of being detected by the target. Base detection chance is 10%, reduced by higher funding levels (up to -19% at level 5) and increased by the [concept_target_defenses]. Your [concept_covert_efficiency] further modifies the final chance. Detection burns the operation and alerts the target nation. What that exposure costs in [concept_infamy] and [concept_relations] depends on how hostile the operation was and how long it had been running — each operation's own description says which tier it falls in. The target can then choose to bolster defenses or retaliate.",
   "de": "Jeden Monat besteht für aktive [concept_covert_operations] die Chance, vom Ziel entdeckt zu werden. Die Grunderkennungschance liegt bei 10%, wird durch höhere Finanzierungsstufen gesenkt (bis zu -19% bei Stufe 5) und durch die [concept_target_defenses] erhöht. Dein [concept_covert_efficiency] verändert die endgültige Chance zusätzlich. Eine Entdeckung verbraucht die Operation und alarmiert die Zielnation. Was diese Enttarnung an [concept_infamy] und [concept_relations] kostet, hängt davon ab, wie feindselig die Operation war und wie lange sie schon lief — die Beschreibung jeder Operation nennt die jeweilige Stufe. Das Ziel kann daraufhin die Abwehr verstärken oder Vergeltung üben."
+ },
+ "concept_operation_slots": {
+  "en": "Operation Slots",
+  "de": "Operationsplätze"
  },
  "concept_pollution_system": {
   "en": "Pollution",
@@ -2966,6 +3030,14 @@
  "concept_space_race_desc": {
   "en": "A competition between nations to achieve [concept_space_milestone]s, from suborbital flight through orbital flight, Moon landing, Moon base, Mars landing, and ultimately interstellar probes. Each milestone can be pursued with a Safe or Ambitious approach — ambitious is faster but risks failure. Being the first country to achieve a milestone grants bonus [concept_prestige] and technology. A fully developed space program also enables [concept_solar_colonization].",
   "de": "Ein Wettbewerb zwischen Nationen um das Erreichen von [Concept('concept_space_milestone', 'Raumfahrt-Meilensteinen')], von Suborbitalflug über Orbitalflug, Mondlandung, Mondbasis, Marslandung bis hin zu interstellaren Sonden. Jeder Meilenstein kann mit einem sicheren oder einem ehrgeizigen Ansatz verfolgt werden — ehrgeizig ist schneller, riskiert aber Fehlschläge. Das erste Land, das einen Meilenstein erreicht, erhält zusätzliches [concept_prestige] und Technologie. Ein voll entwickeltes Raumfahrtprogramm ermöglicht zudem die [concept_solar_colonization]."
+ },
+ "concept_sr_approach": {
+  "en": "Approach",
+  "de": "Ansatz"
+ },
+ "concept_sr_funding": {
+  "en": "Programme Funding",
+  "de": "Programmfinanzierung"
  },
  "concept_st_res_active_rate_desc": {
   "en": "Gross weekly volume the Strategic Reserve Hub is actually trading on the market — equal to [concept_st_res_rate_setting] plus the current weekly decay loss. Storing at +1/week with 0.4 weekly decay means the hub buys 1.4/week so the stockpile nets +1/week after spoilage. With the rate setting at zero but the stockpile non-empty, Active equals the decay rate (the hub buys just enough to maintain the stockpile against losses). Capped by the Hub Flow Cap and scaled by hub [concept_throughput] modifiers.",
@@ -3075,6 +3147,10 @@
   "en": "Land transportation [concept_infrastructure] — railways and highways — makes a state more accessible to tourists, increasing [concept_throughput]. Airports raise [concept_tourism_output] instead.",
   "de": "Landverkehrs-[concept_infrastructure] — Eisenbahnen und Fernstraßen — macht einen Staat für Touristen leichter zugänglich und steigert den [concept_throughput]. Flughäfen erhöhen stattdessen den [concept_tourism_output]."
  },
+ "concept_tradecraft": {
+  "en": "Tradecraft",
+  "de": "Spionagehandwerk"
+ },
  "concept_un_authority": {
   "en": "UN Authority",
   "de": "UN-Autorität"
@@ -3090,6 +3166,10 @@
  "concept_un_charter_desc": {
   "en": "The founding treaty of the United Nations, which holds the target of [concept_un_authority] under a ceiling: 70 under the founding charter, 85 after Charter Reform I (Standing Mandate Force and Compulsory Jurisdiction), 100 after Charter Reform II (Veto Restraint and the UN Levy). Reform I opens the Strong tier, where sanctions become embargoes. Reform II opens the Supranational tier, where [concept_un_dues] rise to 1% of GDP, and restrains the veto: a resolution a two-thirds supermajority carries is no longer stopped by a [Concept('concept_un_veto','veto')]. A reform may be tabled only once authority has held within 5 points of the ceiling for 24 months running, and not within five years of the last reform vote, carried or not; it needs a two-thirds supermajority of all members and can be [Concept('concept_un_veto','vetoed')] outright by any [concept_un_permanent_member].",
   "de": "Der Gründungsvertrag der Vereinten Nationen, der das Ziel der [concept_un_authority] unter einer Obergrenze hält: 70 unter der Gründungscharta, 85 nach Chartareform I (Ständige Mandatstruppe und Verpflichtende Gerichtsbarkeit), 100 nach Chartareform II (Vetoeinschränkung und UN-Abgabe). Reform I öffnet die Stufe Stark, in der Sanktionen zu Embargos werden. Reform II öffnet die Stufe Supranational, in der die [concept_un_dues] auf 1% des BIP steigen, und schränkt das Veto ein: Eine Resolution, die eine Zweidrittelmehrheit trägt, wird nicht mehr durch ein [Concept('concept_un_veto','Veto')] gestoppt. Eine Reform darf erst zur Abstimmung gestellt werden, wenn die Autorität 24 Monate lang ununterbrochen innerhalb von 5 Punkten der Obergrenze geblieben ist, und nicht innerhalb von fünf Jahren nach der letzten Reformabstimmung, ob angenommen oder nicht; sie erfordert eine Zweidrittelmehrheit aller Mitglieder und kann von jedem [concept_un_permanent_member] direkt [Concept('concept_un_veto','per Veto blockiert')] werden."
+ },
+ "concept_un_credentials": {
+  "en": "Credentials",
+  "de": "Vollmachten"
  },
  "concept_un_dues": {
   "en": "UN Dues",
@@ -3131,6 +3211,10 @@
   "en": "A holder of one of the 5 permanent seats on the [concept_un_security_council]. The founding [concept_great_power] takes one at the founding. The others go to the [Concept('concept_great_power', 'Great Power')] members with the most [concept_prestige] that hold none — when the signing period closes, a year after the founding, and whenever a seat falls vacant — never to whoever joined first. Permanent members carry the [concept_prestige] and leverage of the seat — and the [concept_un_veto] over binding resolutions. The seat is lost by leaving the UN, by sustained sub-Great-Power rank for 10+ years, or by a 2/3 supermajority expulsion vote in the General Assembly.",
   "de": "Ein Inhaber eines der 5 ständigen Sitze im [concept_un_security_council]. Die gründende [concept_great_power] erhält bei der Gründung einen. Die übrigen gehen an die [Concept('concept_great_power', 'Großmacht')]-Mitglieder mit dem meisten [concept_prestige], die noch keinen halten — wenn die Beitrittsfrist endet, ein Jahr nach der Gründung, und immer wenn ein Sitz frei wird — nie an das Land, das zuerst beigetreten ist. Ständige Mitglieder tragen das [concept_prestige] und den Einfluss des Sitzes — sowie das [concept_un_veto] über verbindliche Resolutionen. Der Sitz geht verloren durch Austritt aus der UN, durch anhaltenden Rang unterhalb einer Großmacht über 10 oder mehr Jahre, oder durch eine Ausschlussabstimmung mit Zweidrittelmehrheit in der Generalversammlung."
  },
+ "concept_un_represented": {
+  "en": "Represented",
+  "de": "Vertreten"
+ },
  "concept_un_resolution_binding_desc": {
   "en": "A resolution that compels action: sanctions, peacekeeping deployments, ICC referrals, formal condemnations, and UN charter reforms. Binding resolutions need [concept_un_security_council] consent — any [concept_un_permanent_member] can [concept_un_veto] them. A vetoed binding resolution that still has GA majority passes only in graduated/weak form (voluntary sanctions, observer mission, symbolic censure, non-binding rebuke). UN charter reform is the one binding type with no graduated fallback — a veto blocks it outright.",
   "de": "Eine Resolution, die zum Handeln zwingt: Sanktionen, Entsendungen von Friedenstruppen, IStGH-Verweisungen, förmliche Verurteilungen und Chartareformen der UN. Verbindliche Resolutionen benötigen die Zustimmung des [concept_un_security_council] — jedes [concept_un_permanent_member] kann gegen sie ein [concept_un_veto] einlegen. Eine mit Veto belegte verbindliche Resolution, die dennoch die Mehrheit der GV hat, tritt nur in abgestufter/schwacher Form in Kraft (freiwillige Sanktionen, Beobachtermission, symbolische Rüge, unverbindlicher Tadel). Die UN-Chartareform ist der einzige verbindliche Typ ohne abgestuften Ersatz — ein Veto blockiert sie vollständig."
@@ -3166,6 +3250,10 @@
  "concept_un_veto_desc": {
   "en": "A power held by [concept_un_permanent_member]s to block [concept_un_resolution_binding]. A vote stays open for a year (AI members cast their ballots in its ninth, tenth or eleventh month), and until it closes a permanent member can choose to [concept_un_veto] instead of voting yes/no. The veto kills the full binding form of the resolution — the GA's simple majority can still push through a graduated/weak form, except for charter reform and a military mandate, which are blocked outright. Once the [concept_un_charter] carries both reforms, a two-thirds supermajority of the members with a vote overrides a veto on any binding resolution except charter reform. Every veto is a debit to the UN's credibility, weighted by the vetoer's weight in world affairs, which lowers [concept_un_authority]'s target; it also cuts the vetoer's influence for a time, applies a temporary diplomatic isolation modifier, and adds [concept_infamy] when used to block punitive resolutions (ICC, condemnation, peacekeeping requests). While the UN is Moribund a veto costs none of this.",
   "de": "Eine Befugnis der [Concept('concept_un_permanent_member', 'ständigen Mitglieder')], [concept_un_resolution_binding] zu blockieren. Eine Abstimmung bleibt ein Jahr offen (KI-Mitglieder geben ihre Stimme im neunten, zehnten oder elften Monat ab), und bis sie schließt, kann ein ständiges Mitglied sich statt für Ja/Nein für ein [concept_un_veto] entscheiden. Das Veto tötet die volle verbindliche Form der Resolution — die einfache Mehrheit der GV kann dennoch eine abgestufte/schwache Form durchsetzen, außer bei Chartareform und einem militärischen Mandat, die vollständig blockiert werden. Sobald die [concept_un_charter] beide Reformen trägt, hebt eine Zweidrittelmehrheit der stimmberechtigten Mitglieder ein Veto auf jede verbindliche Resolution außer der Chartareform auf. Jedes Veto belastet die Glaubwürdigkeit der UN, gewichtet nach dem weltpolitischen Gewicht des Vetostellers, was das Ziel der [concept_un_authority] senkt; es verringert außerdem für eine Zeit den Einfluss des Vetostellers, verhängt einen zeitweiligen Modifikator für diplomatische Isolation und fügt [concept_infamy] hinzu, wenn es genutzt wird, um strafende Resolutionen zu blockieren (IStGH, Verurteilung, Friedenssicherungsersuchen). Solange die UN Marode ist, kostet ein Veto nichts davon."
+ },
+ "concept_un_weight": {
+  "en": "Weight",
+  "de": "Stimmgewicht"
  },
  "concept_united_nations_system_desc": {
   "en": "An international organization that can form once certain global conditions are met. Countries can join via treaty article. UN membership provides diplomatic bonuses and access to UN voting topics. The UN also enables cross-system bonuses including space partnerships and joint scientific endeavors like the International Space Station.",
@@ -5094,14 +5182,6 @@
  "gw_btn_repeal": {
   "en": "Repeal",
   "de": "Aufheben"
- },
- "gw_cond_pending": {
-  "en": "#lore Updates each January#!",
-  "de": "#lore Aktualisiert jeden Januar#!"
- },
- "gw_sect_conditions": {
-  "en": "Climate Conditions",
-  "de": "Klimabedingungen"
  },
  "gw_sect_history": {
   "en": "History",
@@ -7057,7 +7137,7 @@
  },
  "outreach_bureaucracy_cost": {
   "en": "Outreach Bureaucracy Cost",
-  "de": "Bürokratiekosten der Öffentlichkeitsarbeit"
+  "de": "Bürokratiekosten der Kulturarbeit"
  },
  "outreach_bureaucracy_cost_desc": {
   "en": "Modifies the [concept_bureaucracy] cost of outreach activities.",
@@ -9750,10 +9830,6 @@
  "tech_metals": {
   "en": "Tech-Critical Metals",
   "de": "Technologiekritische Metalle"
- },
- "telecommunications": {
-  "en": "Telecommunications",
-  "de": "Telekommunikation"
  },
  "terror_crackdown_modifier": {
   "en": "Security Crackdown",

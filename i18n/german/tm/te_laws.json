@@ -43,6 +43,10 @@
   "en": "A system of government where decisions are made by algorithms or artificial intelligence, based on data analysis and predictive modeling.",
   "de": "Ein Regierungssystem, in dem Entscheidungen von Algorithmen oder künstlicher Intelligenz auf Grundlage von Datenanalyse und Vorhersagemodellen getroffen werden."
  },
+ "law_automated_bureaucracy": {
+  "en": "Automated Bureaucracy",
+  "de": "Automatisierte Bürokratie"
+ },
  "law_auxiliary_fleet": {
   "en": "Auxiliary Fleet",
   "de": "Hilfsflotte"
@@ -99,6 +103,10 @@
   "en": "A commodity, such as gold or silver, is used directly as currency. A national bank can set a discount rate on it, but can make credit no more than a point cheaper than the world's, or three points dearer — the coin is the metal, and metal leaves for wherever it earns more.",
   "de": "Eine Ware wie Gold oder Silber dient unmittelbar als Zahlungsmittel. Eine Nationalbank kann darauf einen Diskontsatz festlegen, doch Kredit höchstens einen Punkt günstiger oder drei Punkte teurer machen als anderswo in der Welt — die Münze ist das Metall, und Metall wandert dorthin, wo es mehr einbringt."
  },
+ "law_communal_administration": {
+  "en": "Communal Administration",
+  "de": "Gemeinschaftsverwaltung"
+ },
  "law_communal_child_rearing": {
   "en": "Communal Child-Rearing",
   "de": "Gemeinschaftliche Kindererziehung"
@@ -114,6 +122,10 @@
  "law_comprehensive_rights_desc": {
   "en": "LGBTQ+ individuals have legal rights under [concept_lgbtq_rights_movement] legislation, including anti-[concept_discrimination] laws and protections from hate crimes. However, they may lack some aspects of full social equality, such as marriage equality or adoption rights.",
   "de": "LGBTQ+-Personen besitzen gesetzliche Rechte im Rahmen der [concept_lgbtq_rights_movement]-Gesetzgebung, einschließlich Gesetzen gegen [concept_discrimination] und Schutz vor Hassverbrechen. Es können ihnen jedoch einige Aspekte voller sozialer Gleichheit fehlen, etwa die Ehe für alle oder Adoptionsrechte."
+ },
+ "law_contracted_administration": {
+  "en": "Contracted Administration",
+  "de": "Ausgelagerte Verwaltung"
  },
  "law_corporate_genetic_licensing": {
   "en": "Corporate Genetic Licensing",
@@ -218,6 +230,10 @@
  "law_fiat_currency_desc": {
   "en": "Money that has no intrinsic value and is not backed by a physical commodity. Its value is derived from the trust and confidence of the people who use it.",
   "de": "Geld ohne inneren Wert, das nicht durch eine physische Ware gedeckt ist. Sein Wert ergibt sich aus dem Vertrauen der Menschen, die es verwenden."
+ },
+ "law_fossil_expansion_moratorium": {
+  "en": "Fossil Expansion Moratorium",
+  "de": "Fossiles Ausbaumoratorium"
  },
  "law_free_mutual_banking": {
   "en": "Free & Mutual Banking",
@@ -338,6 +354,10 @@
  "law_local_vernacular_desc": {
   "en": "Administration and schooling follow local custom. The state sets no uniform language standard, producing a patchwork of practices and identities.",
   "de": "Verwaltung und Schulwesen folgen lokalem Brauch. Der Staat legt keinen einheitlichen Sprachstandard fest, wodurch ein Flickenteppich an Praktiken und Identitäten entsteht."
+ },
+ "law_managed_fossil_phaseout": {
+  "en": "Managed Fossil Phaseout",
+  "de": "Gesteuerter Fossilausstieg"
  },
  "law_mandatory_augmentation": {
   "en": "Mandatory Augmentation",
@@ -1091,6 +1111,10 @@
   "en": "[concept_human_augmentation_system] is unregulated, allowing for open development, distribution, and use of enhancement technologies. This fosters rapid advancements but may result in significant ethical, social, and safety concerns.",
   "de": "[concept_human_augmentation_system] ist unreguliert, sodass Verbesserungstechnologien frei entwickelt, verbreitet und genutzt werden können. Das fördert rasche Fortschritte, kann aber erhebliche ethische, soziale und sicherheitstechnische Bedenken aufwerfen."
  },
+ "law_unrestricted_extraction": {
+  "en": "Unrestricted Extraction",
+  "de": "Uneingeschränkte Förderung"
+ },
  "law_war_crimes_forbidden": {
   "en": "War Crimes Forbidden",
   "de": "Kriegsverbrechen verboten"
@@ -1342,6 +1366,10 @@
  "lawgroup_privacy_rights_desc": {
   "en": "The extent to which personal privacy is protected and regulated in society.",
   "de": "Das Ausmaß, in dem die persönliche Privatsphäre in der Gesellschaft geschützt und reguliert wird."
+ },
+ "lawgroup_resource_transition": {
+  "en": "Resource Transition",
+  "de": "Ressourcenwende"
  },
  "lawgroup_right_to_information": {
   "en": "Right to Information",

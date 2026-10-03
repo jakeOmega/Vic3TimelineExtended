@@ -43,6 +43,10 @@
   "en": "Airport [concept_throughput]",
   "de": "[concept_throughput] – Flughafen"
  },
+ "building_ajinomoto_kawasaki_plant": {
+  "en": "Ajinomoto Kawasaki Plant",
+  "de": "Ajinomoto-Werk Kawasaki"
+ },
  "building_aker_oslo_shipyard": {
   "en": "Aker Oslo Shipyard",
   "de": "Aker-Werft Oslo"
@@ -231,6 +235,10 @@
   "en": "Bengal Coal Raniganj Mine",
   "de": "Bengal-Coal-Mine Raniganj"
  },
+ "building_bgi_national_genebank": {
+  "en": "BGI National GeneBank",
+  "de": "BGI Nationale Genbank"
+ },
  "building_bhp_broken_hill_mine": {
   "en": "BHP Broken Hill Mine",
   "de": "BHP-Mine Broken Hill"
@@ -242,6 +250,14 @@
  "building_bhp_mount_whaleback_mine": {
   "en": "Mount Whaleback Mine",
   "de": "Mount-Whaleback-Mine"
+ },
+ "building_biocon_park": {
+  "en": "Biocon Park",
+  "de": "Biocon Park"
+ },
+ "building_biontech_mainz_campus": {
+  "en": "BioNTech Mainz Campus",
+  "de": "BioNTech-Campus Mainz"
  },
  "building_blackberry_rim_campus": {
   "en": "RIM Campus",
@@ -602,6 +618,10 @@
  "building_ge_schenectady_works_desc": {
   "en": "General Electric's sprawling Schenectady complex, where Thomas Edison's vision became an empire of electrical innovation and manufacturing.",
   "de": "Der weitläufige Schenectady-Komplex von General Electric, in dem Thomas Edisons Vision zu einem Imperium elektrischer Innovation und Fertigung wurde."
+ },
+ "building_genentech_dna_way_campus": {
+  "en": "Genentech DNA Way Campus",
+  "de": "Genentech-Campus DNA Way"
  },
  "building_generic_arsenal": {
   "en": "Arsenal",
@@ -1379,6 +1399,10 @@
   "en": "Mokta el Hadid Beni Saf Mine",
   "de": "Mokta-el-Hadid-Mine Beni Saf"
  },
+ "building_monsanto_chesterfield_center": {
+  "en": "Monsanto Chesterfield Research Center",
+  "de": "Monsanto-Forschungszentrum Chesterfield"
+ },
  "building_morozov_orekhovo_zuevo_mills": {
   "en": "Morozov Orekhovo-Zuevo Mills",
   "de": "Morozov-Mühlen Orechowo-Sujewo"
@@ -1486,6 +1510,10 @@
  "building_norsk_hydro_rjukan_plant": {
   "en": "Norsk Hydro Rjukan Plant",
   "de": "Norsk-Hydro-Werk Rjukan"
+ },
+ "building_novo_nordisk_kalundborg_plant": {
+  "en": "Novo Nordisk Kalundborg Plant",
+  "de": "Novo-Nordisk-Werk Kalundborg"
  },
  "building_nuclear_plant": {
   "en": "Nuclear Plant",
@@ -1798,6 +1826,10 @@
  "building_roscosmos_vostochny_cosmodrome": {
   "en": "Vostochny Cosmodrome",
   "de": "Kosmodrom Wostotschny"
+ },
+ "building_rosen_association_hq": {
+  "en": "Rosen Association Headquarters",
+  "de": "Zentrale der Rosen Association"
  },
  "building_rossi_sao_leopoldo_arms_factory": {
   "en": "Rossi São Leopoldo Arms Factory",

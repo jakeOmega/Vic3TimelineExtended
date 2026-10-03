@@ -3351,10 +3351,6 @@
   "en": "Mission",
   "de": "Mission"
  },
- "TE_STATE_UN_TT": {
-  "en": "#header United Nations Mission#!\\nA UN mission is working in this state, with #v [State.MakeScope.ScriptValue('un_state_mission_contributors')|0]#! contributing countries.\\n$TOOLTIP_DELIMITER$\\nIts effect here is multiplied by its #bold strength#!, #v ×[State.MakeScope.ScriptValue('un_state_mission_strength')|2]#!: the UN's [concept_un_enforcement], less what withheld [concept_un_dues] cost the budget, and more for every contributor up to three.\\n$TOOLTIP_DELIMITER$\\nPeacekeeping succeeds after two years of peace for this country; aid when this state has no famine and a standard of living of 10; stabilisation once the collapse is over and a year has passed. A mission fails if this country is attacked or every contributor leaves, and ends after five years. The chamber of the United Nations journal entry lists every mission.",
-  "de": "#header UN-Mission#!\\nEine UN-Mission ist in diesem Staat im Einsatz, mit #v [State.MakeScope.ScriptValue('un_state_mission_contributors')|0]#! beitragenden Ländern.\\n$TOOLTIP_DELIMITER$\\nIhre Wirkung hier wird mit ihrer #bold Stärke#! multipliziert, #v ×[State.MakeScope.ScriptValue('un_state_mission_strength')|2]#!: die [concept_un_enforcement] der UN, abzüglich dessen, was zurückgehaltene [concept_un_dues] das Budget kosten, und mehr für jeden weiteren Beitragenden bis zu drei.\\n$TOOLTIP_DELIMITER$\\nFriedenssicherung gelingt nach zwei Jahren Frieden für dieses Land; Hilfe, wenn dieser Staat keine Hungersnot hat und einen Lebensstandard von 10 aufweist; Stabilisierung, sobald der Zusammenbruch vorüber ist und ein Jahr vergangen ist. Eine Mission scheitert, wenn dieses Land angegriffen wird oder alle Beitragenden abziehen, und endet nach fünf Jahren. Die Kammer des Journaleintrags der Vereinten Nationen listet jede Mission auf."
- },
  "UN_ARMS_CONTROL_DESC": {
   "en": "Join UN arms control agreements. $UN_ARMS_CONTROL_EFFECTS$ Requires Humanitarian Regulations, Limited War, or War Crimes Forbidden law. While it runs, it counts toward the UN's #bold funding#! pillar in proportion to our weight in world affairs ([concept_major_power] members and above).",
   "de": "Tritt UN-Rüstungskontrollabkommen bei. $UN_ARMS_CONTROL_EFFECTS$ Erfordert das Gesetz Humanitäre Vorschriften, Begrenzter Krieg oder Kriegsverbrechen verboten. Während es läuft, zählt es anteilig zu unserem Gewicht in den Weltgeschäften ([concept_major_power]-Mitglieder und höher) zur Säule #bold Finanzierung#! der UN."
@@ -4207,210 +4203,6 @@
   "en": "Emergency Trade Restrictions",
   "de": "Handelsbeschränkungen im Notfall"
  },
- "banking_cycle_status_boom": {
-  "en": "#blue #b Boom#!: widespread optimism and robust lending drive strong growth.\\n\\n#!",
-  "de": "#blue #b Boom#!: weitverbreiteter Optimismus und robuste Kreditvergabe treiben starkes Wachstum an.\\n\\n#!"
- },
- "banking_cycle_status_boom_cmd": {
-  "en": "#blue #b Peak Capacity#!: the economy operates near full coordination; accumulated administrative strain is a growing risk.\\n\\n#!",
-  "de": "#blue #b Spitzenauslastung#!: Die Wirtschaft arbeitet nahe an voller Koordination; die angehäufte administrative Belastung wird zu einem wachsenden Risiko.\\n\\n#!"
- },
- "banking_cycle_status_boom_coop": {
-  "en": "#blue #b Surplus Accumulation#!: strong reinvestment builds capacity; payout demands from workers are rising.\\n\\n#!",
-  "de": "#blue #b Überschussanhäufung#!: starke Reinvestition baut Kapazität auf; die Auszahlungsforderungen der Arbeiter steigen.\\n\\n#!"
- },
- "banking_cycle_status_bubble_expansion": {
-  "en": "#yellow #b Rising [concept_bubble_pressure]#!: speculative flows broaden and leverage climbs.#!\\n",
-  "de": "#yellow #b Steigender [concept_bubble_pressure]#!: spekulative Kapitalflüsse breiten sich aus, und die Verschuldung steigt.#!\\n"
- },
- "banking_cycle_status_bubble_expansion_cmd": {
-  "en": "#yellow #b Significant Strain#!: planning apparatus shows stress; coordination failures become common.#!\\n",
-  "de": "#yellow #b Erhebliche Belastung#!: Der Planungsapparat zeigt Stress; Koordinationsausfälle häufen sich.#!\\n"
- },
- "banking_cycle_status_bubble_expansion_coop": {
-  "en": "#yellow #b Growing Strain#!: unsustainable consumption commitments accumulate; councils must act.#!\\n",
-  "de": "#yellow #b Wachsende Belastung#!: nicht tragfähige Konsumverpflichtungen häufen sich an; die Räte müssen handeln.#!\\n"
- },
- "banking_cycle_status_bubble_extreme": {
-  "en": "#red #b Bubble Extreme#!: severe overvaluation and fragility - correction or crash is likely.#!\\n",
-  "de": "#red #b Extreme Blase#!: schwere Überbewertung und Fragilität - eine Korrektur oder ein Crash ist wahrscheinlich.#!\\n"
- },
- "banking_cycle_status_bubble_extreme_cmd": {
-  "en": "#red #b System Breakdown#!: bureaucratic overload approaches failure; plan enforcement collapses.#!\\n",
-  "de": "#red #b Systemzusammenbruch#!: bürokratische Überlastung nähert sich dem Versagen; die Plandurchsetzung bricht zusammen.#!\\n"
- },
- "banking_cycle_status_bubble_extreme_coop": {
-  "en": "#red #b System Crisis#!: cascading payout [Concept('concept_obligation', 'obligations')] threaten cooperative solvency.#!\\n",
-  "de": "#red #b Systemkrise#!: kaskadierende Auszahlungs-[Concept('concept_obligation', 'Verpflichtungen')] bedrohen die Zahlungsfähigkeit der Genossenschaften.#!\\n"
- },
- "banking_cycle_status_bubble_frenzy": {
-  "en": "#gold #b Bubble Frenzy#!: exuberance dominates; pricing disconnects from fundamentals.#!\\n",
-  "de": "#gold #b Blasenfrenzy#!: Überschwang dominiert; die Preisbildung löst sich von den Fundamentaldaten.#!\\n"
- },
- "banking_cycle_status_bubble_frenzy_cmd": {
-  "en": "#gold #b Critical Strain#!: administrative strain is severe; mass misallocation risks mount.#!\\n",
-  "de": "#gold #b Kritische Belastung#!: die administrative Belastung ist schwerwiegend; die Risiken massiver Fehlallokation wachsen.#!\\n"
- },
- "banking_cycle_status_bubble_frenzy_coop": {
-  "en": "#gold #b Severe Strain#!: cooperative overcommitment is acute; corrective measures are urgent.#!\\n",
-  "de": "#gold #b Schwere Belastung#!: die Überverpflichtung der Genossenschaften ist akut; Korrekturmaßnahmen sind dringend nötig.#!\\n"
- },
- "banking_cycle_status_bubble_stable": {
-  "en": "#white #b Building [concept_bubble_pressure]#!: pockets of speculation emerge, but risks remain manageable.#!\\n",
-  "de": "#white #b Aufbauender [concept_bubble_pressure]#!: vereinzelte Spekulationsblasen entstehen, doch die Risiken bleiben beherrschbar.#!\\n"
- },
- "banking_cycle_status_bubble_stable_cmd": {
-  "en": "#white #b Rising Strain#!: minor bottlenecks accumulate; administrative overhead grows.#!\\n",
-  "de": "#white #b Wachsende Belastung#!: kleinere Engpässe häufen sich an; der administrative Aufwand wächst.#!\\n"
- },
- "banking_cycle_status_bubble_stable_coop": {
-  "en": "#white #b Mild Overextension#!: payout [Concept('concept_obligation', 'obligations')] slightly exceed sustainable levels; manageable for now.#!\\n",
-  "de": "#white #b Leichte Überdehnung#!: Auszahlungs-[Concept('concept_obligation', 'Verpflichtungen')] übersteigen das tragfähige Niveau leicht; vorerst beherrschbar.#!\\n"
- },
- "banking_cycle_status_downturn": {
-  "en": "#gold #b Downturn#!: tight money and weak demand slow investment.\\n\\n#!",
-  "de": "#gold #b Abschwung#!: knappes Geld und schwache Nachfrage bremsen die Investitionen.\\n\\n#!"
- },
- "banking_cycle_status_downturn_cmd": {
-  "en": "#gold #b Allocation Breakdown#!: plan targets go unmet; bottlenecks spread across sectors.\\n\\n#!",
-  "de": "#gold #b Zusammenbruch der Zuteilung#!: Planvorgaben werden verfehlt; Engpässe breiten sich über die Sektoren aus.\\n\\n#!"
- },
- "banking_cycle_status_downturn_coop": {
-  "en": "#gold #b Consumption Shortfall#!: payouts outstrip earnings; cooperatives tighten budgets.\\n\\n#!",
-  "de": "#gold #b Konsumdefizit#!: Auszahlungen übersteigen die Einnahmen; die Genossenschaften straffen ihre Budgets.\\n\\n#!"
- },
- "banking_cycle_status_expansion": {
-  "en": "#green #b Expansion#!: easy credit and rising optimism fuel growth.\\n\\n#!",
-  "de": "#green #b Expansion#!: leichter Kredit und wachsender Optimismus befeuern das Wachstum.\\n\\n#!"
- },
- "banking_cycle_status_expansion_cmd": {
-  "en": "#green #b Accelerated Output#!: synchronisation improves; sectors begin exceeding plan targets.\\n\\n#!",
-  "de": "#green #b Beschleunigte Produktion#!: die Synchronisation verbessert sich; Sektoren beginnen, die Planvorgaben zu übertreffen.\\n\\n#!"
- },
- "banking_cycle_status_expansion_coop": {
-  "en": "#green #b Growing Reinvestment#!: cooperatives accumulate surpluses and reinvestment strengthens.\\n\\n#!",
-  "de": "#green #b Wachsende Reinvestition#!: Genossenschaften häufen Überschüsse an, und die Reinvestition nimmt zu.\\n\\n#!"
- },
- "banking_cycle_status_fast_downturn": {
-  "en": "#red #b Falling Rapidly#!: momentum is strongly negative — conditions are deteriorating fast.\\n\\n#!",
-  "de": "#red #b Rasch fallend#!: die Dynamik ist stark negativ — die Lage verschlechtert sich schnell.\\n\\n#!"
- },
- "banking_cycle_status_fast_downturn_cmd": {
-  "en": "#red #b Falling Rapidly#!: momentum is strongly negative — coordination metrics are deteriorating fast.\\n\\n#!",
-  "de": "#red #b Rasch fallend#!: die Dynamik ist stark negativ — die Koordinationswerte verschlechtern sich schnell.\\n\\n#!"
- },
- "banking_cycle_status_fast_downturn_coop": {
-  "en": "#red #b Falling Rapidly#!: momentum is strongly negative — cooperative capacity is declining fast.\\n\\n#!",
-  "de": "#red #b Rasch fallend#!: die Dynamik ist stark negativ — die Kapazität der Genossenschaften sinkt schnell.\\n\\n#!"
- },
- "banking_cycle_status_fast_expansion": {
-  "en": "#blue #b Rising Rapidly#!: momentum is strongly positive — the cycle is accelerating upward.\\n\\n#!",
-  "de": "#blue #b Rasch steigend#!: die Dynamik ist stark positiv — der Zyklus beschleunigt sich nach oben.\\n\\n#!"
- },
- "banking_cycle_status_fast_expansion_cmd": {
-  "en": "#blue #b Rising Rapidly#!: momentum is strongly positive — output metrics are climbing fast.\\n\\n#!",
-  "de": "#blue #b Rasch steigend#!: die Dynamik ist stark positiv — die Produktionswerte steigen schnell.\\n\\n#!"
- },
- "banking_cycle_status_fast_expansion_coop": {
-  "en": "#blue #b Rising Rapidly#!: momentum is strongly positive — cooperative reinvestment is surging.\\n\\n#!",
-  "de": "#blue #b Rasch steigend#!: die Dynamik ist stark positiv — die Reinvestition der Genossenschaften schnellt in die Höhe.\\n\\n#!"
- },
- "banking_cycle_status_frenzy": {
-  "en": "#red #b Frenzy#!: speculation outpaces fundamentals; risks build.\\n\\n#!#!",
-  "de": "#red #b Frenzy#!: die Spekulation überholt die Fundamentaldaten; die Risiken wachsen.\\n\\n#!#!"
- },
- "banking_cycle_status_frenzy_cmd": {
-  "en": "#red #b Overextension#!: targets push the system past its limits; administrative fragility builds.\\n\\n#!#!",
-  "de": "#red #b Überdehnung#!: Vorgaben treiben das System über seine Grenzen; die administrative Fragilität wächst.\\n\\n#!#!"
- },
- "banking_cycle_status_frenzy_coop": {
-  "en": "#red #b Overinvestment Spiral#!: unchecked reinvestment outpaces distributional needs; imbalances build.\\n\\n#!#!",
-  "de": "#red #b Überinvestitionsspirale#!: ungebremste Reinvestition überholt den Verteilungsbedarf; Ungleichgewichte wachsen.\\n\\n#!#!"
- },
- "banking_cycle_status_neutral": {
-  "en": "#white #b Holding Steady#!: the cycle is neither accelerating nor decelerating significantly.\\n\\n#!",
-  "de": "#white #b Stabil#!: der Zyklus beschleunigt oder verlangsamt sich nicht nennenswert.\\n\\n#!"
- },
- "banking_cycle_status_neutral_cmd": {
-  "en": "#white #b Holding Steady#!: the cycle is neither gaining nor losing ground.\\n\\n#!",
-  "de": "#white #b Stabil#!: der Zyklus gewinnt oder verliert nicht an Boden.\\n\\n#!"
- },
- "banking_cycle_status_neutral_coop": {
-  "en": "#white #b Holding Steady#!: the cycle is neither gaining nor losing ground.\\n\\n#!",
-  "de": "#white #b Stabil#!: der Zyklus gewinnt oder verliert nicht an Boden.\\n\\n#!"
- },
- "banking_cycle_status_no_bubble": {
-  "en": "#green #b No Bubble#!: valuations broadly track fundamentals; speculation is contained.#!\\n",
-  "de": "#green #b Keine Blase#!: die Bewertungen folgen weitgehend den Fundamentaldaten; die Spekulation ist eingedämmt.#!\\n"
- },
- "banking_cycle_status_no_bubble_cmd": {
-  "en": "#green #b Low Administrative Strain#!: the planning apparatus operates without significant pressure.#!\\n",
-  "de": "#green #b Geringe administrative Belastung#!: der Planungsapparat arbeitet ohne nennenswerten Druck.#!\\n"
- },
- "banking_cycle_status_no_bubble_coop": {
-  "en": "#green #b No Overextension#!: cooperative commitments remain within sustainable bounds.#!\\n",
-  "de": "#green #b Keine Überdehnung#!: die Verpflichtungen der Genossenschaften bleiben in tragfähigen Grenzen.#!\\n"
- },
- "banking_cycle_status_panic": {
-  "en": "#red #b Panic#!: credit evaporates, failures cascade, and fear rules.\\n\\n#!",
-  "de": "#red #b Panik#!: Kredit verdunstet, Zusammenbrüche kaskadieren, und die Angst regiert.\\n\\n#!"
- },
- "banking_cycle_status_panic_cmd": {
-  "en": "#red #b Supply Collapse#!: allocation failures cascade; critical shortages disrupt production.\\n\\n#!",
-  "de": "#red #b Versorgungszusammenbruch#!: Zuteilungsausfälle kaskadieren; kritische Engpässe stören die Produktion.\\n\\n#!"
- },
- "banking_cycle_status_panic_coop": {
-  "en": "#red #b Worker Crisis#!: consumption demand collapses and cooperative capital reserves are exhausted.\\n\\n#!",
-  "de": "#red #b Arbeiterkrise#!: die Konsumnachfrage bricht ein, und die Kapitalreserven der Genossenschaften sind erschöpft.\\n\\n#!"
- },
- "banking_cycle_status_slow_downturn": {
-  "en": "#yellow #b Drifting Down#!: momentum is mildly negative — the cycle is gradually losing ground.\\n\\n#!",
-  "de": "#yellow #b Abwärtsdrift#!: die Dynamik ist leicht negativ — der Zyklus verliert allmählich an Boden.\\n\\n#!"
- },
- "banking_cycle_status_slow_downturn_cmd": {
-  "en": "#yellow #b Drifting Down#!: momentum is mildly negative — coordination metrics are slipping.\\n\\n#!",
-  "de": "#yellow #b Abwärtsdrift#!: die Dynamik ist leicht negativ — die Koordinationswerte rutschen ab.\\n\\n#!"
- },
- "banking_cycle_status_slow_downturn_coop": {
-  "en": "#yellow #b Drifting Down#!: momentum is mildly negative — cooperative balance is slipping.\\n\\n#!",
-  "de": "#yellow #b Abwärtsdrift#!: die Dynamik ist leicht negativ — das Gleichgewicht der Genossenschaften rutscht ab.\\n\\n#!"
- },
- "banking_cycle_status_slow_expansion": {
-  "en": "#green #b Drifting Up#!: momentum is mildly positive — the cycle is gradually gaining ground.\\n\\n#!",
-  "de": "#green #b Aufwärtsdrift#!: die Dynamik ist leicht positiv — der Zyklus gewinnt allmählich an Boden.\\n\\n#!"
- },
- "banking_cycle_status_slow_expansion_cmd": {
-  "en": "#green #b Drifting Up#!: momentum is mildly positive — coordination metrics are improving.\\n\\n#!",
-  "de": "#green #b Aufwärtsdrift#!: die Dynamik ist leicht positiv — die Koordinationswerte verbessern sich.\\n\\n#!"
- },
- "banking_cycle_status_slow_expansion_coop": {
-  "en": "#green #b Drifting Up#!: momentum is mildly positive — cooperative reinvestment is picking up.\\n\\n#!",
-  "de": "#green #b Aufwärtsdrift#!: die Dynamik ist leicht positiv — die Reinvestition der Genossenschaften zieht an.\\n\\n#!"
- },
- "banking_cycle_status_stable": {
-  "en": "#white #b Stable#!: conditions are ordinary; watch the horizon.\\n\\n#!",
-  "de": "#white #b Stabil#!: die Lage ist gewöhnlich; den Horizont im Blick behalten.\\n\\n#!"
- },
- "banking_cycle_status_stable_cmd": {
-  "en": "#white #b Coordinated Operations#!: supply chains function reliably within plan parameters.\\n\\n#!",
-  "de": "#white #b Koordinierter Betrieb#!: die Lieferketten funktionieren zuverlässig innerhalb der Planvorgaben.\\n\\n#!"
- },
- "banking_cycle_status_stable_coop": {
-  "en": "#white #b Balanced Operations#!: worker consumption and cooperative capital are in reasonable equilibrium.\\n\\n#!",
-  "de": "#white #b Ausgewogener Betrieb#!: Arbeiterkonsum und Genossenschaftskapital befinden sich in vernünftigem Gleichgewicht.\\n\\n#!"
- },
- "banking_cycle_status_stagnation": {
-  "en": "#yellow #b Stagnation#!: lackluster growth; credit conditions are tight and investment is subdued.\\n\\n#!",
-  "de": "#yellow #b Stagnation#!: mattes Wachstum; die Kreditbedingungen sind angespannt, und die Investitionen sind gedämpft.\\n\\n#!"
- },
- "banking_cycle_status_stagnation_cmd": {
-  "en": "#yellow #b Administrative Bottleneck#!: coordination lags hold back output; [concept_bureaucracy] strains.\\n\\n#!",
-  "de": "#yellow #b Administrativer Engpass#!: Koordinationsverzögerungen bremsen die Produktion; die [concept_bureaucracy] wird strapaziert.\\n\\n#!"
- },
- "banking_cycle_status_stagnation_coop": {
-  "en": "#yellow #b Stagnant Balance#!: reinvestment lags behind distributional needs; output growth is subdued.\\n\\n#!",
-  "de": "#yellow #b Stagnierendes Gleichgewicht#!: die Reinvestition hinkt dem Verteilungsbedarf hinterher; das Produktionswachstum ist gedämpft.\\n\\n#!"
- },
  "banking_cycle_value_bar_name": {
   "en": "[concept_banking_cycle] Value",
   "de": "[concept_banking_cycle]-Wert"
@@ -4466,10 +4258,6 @@
  "banking_dash_bubble_tt": {
   "en": "#header Bubble Pressure#!\\nAccumulated speculative excess. It does not move the cycle by itself, but it is the main input to the monthly crash roll and to how severe a crash is when one happens. Command and cooperative economies are far less exposed to it. Nobody knows exactly how much air is in a bubble: you see a band, not a number.\\n$TOOLTIP_DELIMITER$\\n#title Pushed each month by:#!\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_bubble_monthly_add')|+=1]#! from active policies, laws and events\\nYour policy stance, currently [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')], on your central bank's own estimate of what your economy can bear",
   "de": "#header Blasendruck#!\\nAngehäufter spekulativer Überschuss. Er bewegt den Zyklus nicht von selbst, ist aber der Haupteinflussfaktor für den monatlichen Crash-Wurf und dafür, wie schwer ein Crash ausfällt, wenn einer eintritt. Plan- und Genossenschaftswirtschaften sind ihm weit weniger ausgesetzt. Niemand weiß genau, wie viel Luft in einer Blase steckt: Sie sehen eine Bandbreite, keine Zahl.\\n$TOOLTIP_DELIMITER$\\n#title Wird jeden Monat erhöht durch:#!\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_bubble_monthly_add')|+=1]#! durch aktive Maßnahmen, Gesetze und Ereignisse\\nIhre geldpolitische Haltung, derzeit [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')], nach der eigenen Einschätzung Ihrer Zentralbank, was Ihre Wirtschaft verträgt"
- },
- "banking_dash_bubble_warn_tag": {
-  "en": "#R (crash risk)#!",
-  "de": "#R (Crash-Risiko)#!"
  },
  "banking_dash_budget_label": {
   "en": "Intervention Budget",
@@ -4535,10 +4323,6 @@
   "en": "Surplus & Reserves",
   "de": "Überschuss & Reserven"
  },
- "banking_dash_conditions_header": {
-  "en": "Current Conditions",
-  "de": "Aktuelle Bedingungen"
- },
  "banking_dash_cost_ce_invest_pool_inject": {
   "en": "#lore GDP-scaled#!",
   "de": "#lore BIP-skaliert#!"
@@ -4567,17 +4351,9 @@
   "en": "#Y Surging#!",
   "de": "#Y Sprunghaft steigend#!"
  },
- "banking_dash_momentum_falling_tag": {
-  "en": "#R (contracting)#!",
-  "de": "#R (schrumpfend)#!"
- },
  "banking_dash_momentum_label": {
   "en": "Momentum",
   "de": "Dynamik"
- },
- "banking_dash_momentum_rising_tag": {
-  "en": "#R (overheating)#!",
-  "de": "#R (überhitzend)#!"
  },
  "banking_dash_momentum_tt": {
   "en": "#header Momentum#!\\nAdded to the cycle every month, so it decides how fast conditions are moving rather than where they are. You see its direction and rough strength, not the figure.\\n$TOOLTIP_DELIMITER$\\n#title Pushed each month by:#!\\nA steady decay towards zero (a tenth of current momentum)\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_momentum_monthly_add')|+=1]#! from active policies, laws and events\\nYour policy stance, currently [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')], on your central bank's own estimate of what your economy can bear\\n#lore Plus a monthly random nudge that pulls the cycle back towards the middle of its range; the further from the middle, the stronger the pull.#!",
@@ -4959,10 +4735,6 @@
   "en": "#header Policy Rate#!\\nThe price of short-term credit in your country, and the floor every other borrowing cost is built on.\\nWhere there is a central bank to set it, this is a decision: the rate closes on the chosen target by #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_step')|2]#! of a point a month, so changing course takes seasons rather than weeks. A central bank running its mandate cuts #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! as fast while the financial cycle is in #yellow Stagnation#! or worse, so it is not still leaning on an economy that has already broken. Everywhere else it is simply what credit costs: an administered rate, or the world rate plus the inflation lenders expect of you plus a spread.\\n$TOOLTIP_DELIMITER$\\nA rate below what your economy can bear feeds the financial cycle's momentum and builds bubble pressure; a rate above it leans against both. Which side you are on is reported as your policy stance below.",
   "de": "#header Leitzins#!\\nDer Preis kurzfristigen Kredits in Ihrem Land und die Grundlage, auf der jede andere Kreditaufnahmekosten aufbauen.\\nWo es eine Zentralbank gibt, die ihn festlegt, ist dies eine Entscheidung: Der Zinssatz nähert sich dem gewählten Ziel um #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_step')|2]#! eines Punktes im Monat an, sodass ein Kurswechsel Jahreszeiten statt Wochen braucht. Eine Zentralbank, die ihr Mandat ausführt, senkt #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! so schnell, solange sich der Finanzzyklus in #yellow Stagnation#! oder schlimmer befindet, damit sie sich nicht weiter gegen eine bereits zusammengebrochene Wirtschaft stemmt. Überall sonst ist er einfach das, was Kredit kostet: ein administrierter Zinssatz oder der Weltzins zuzüglich der von Ihnen erwarteten Inflation der Gläubiger zuzüglich eines Aufschlags.\\n$TOOLTIP_DELIMITER$\\nEin Zinssatz unter dem, was Ihre Wirtschaft verträgt, nährt die Dynamik des Finanzzyklus und baut Blasendruck auf; ein Zinssatz darüber stemmt sich gegen beides. Auf welcher Seite Sie stehen, wird unten als Ihre geldpolitische Haltung ausgewiesen."
  },
- "banking_dash_mon_stance_impact_line": {
-  "en": "#lore As your bank reads it, this stance is [JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')], and [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')].#!",
-  "de": "#lore Nach der Einschätzung Ihrer Bank ist diese Haltung [JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')], und [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')].#!"
- },
  "banking_dash_mon_stance_label": {
   "en": "Policy Stance",
   "de": "Geldpolitische Haltung"
@@ -4982,10 +4754,6 @@
  "banking_dash_mon_sub_arrangements": {
   "en": "International Arrangements",
   "de": "Internationale Arrangements"
- },
- "banking_dash_mon_sub_bank": {
-  "en": "THE CENTRAL BANK",
-  "de": "DIE ZENTRALBANK"
  },
  "banking_dash_mon_sub_borrowing": {
   "en": "WHAT BORROWING COSTS",
@@ -5913,7 +5681,7 @@
  },
  "ch_world_exposition_cost": {
   "en": "Cultural Outreach Costs",
-  "de": "Kosten der kulturellen Ausstrahlung"
+  "de": "Kosten der Kulturarbeit"
  },
  "civil_disobedience_concessions_modifier": {
   "en": "Civil Disobedience Concessions",
@@ -6167,6 +5935,90 @@
   "en": "Asset Relief Program",
   "de": "Vermögensentlastungsprogramm"
  },
+ "concept_banking_asset_purchases": {
+  "en": "Asset Purchases",
+  "de": "Wertpapierkäufe"
+ },
+ "concept_banking_bank_gold": {
+  "en": "Bank's Gold",
+  "de": "Bankgold"
+ },
+ "concept_banking_borrowed_gold": {
+  "en": "Borrowed Gold",
+  "de": "Geliehenes Gold"
+ },
+ "concept_banking_credit_standing": {
+  "en": "Credit Standing",
+  "de": "Kreditwürdigkeit"
+ },
+ "concept_banking_exchange_rate": {
+  "en": "Exchange Rate Index",
+  "de": "Wechselkursindex"
+ },
+ "concept_banking_expected_inflation": {
+  "en": "Expected Inflation",
+  "de": "Erwartete Inflation"
+ },
+ "concept_banking_gold_flow": {
+  "en": "Gold Flow",
+  "de": "Goldfluss"
+ },
+ "concept_banking_inflation_anchoring": {
+  "en": "Inflation Anchoring",
+  "de": "Inflationsverankerung"
+ },
+ "concept_banking_intervention_budget": {
+  "en": "Intervention Budget",
+  "de": "Interventionsbudget"
+ },
+ "concept_banking_monetary_anchor": {
+  "en": "Monetary Anchor",
+  "de": "Währungsanker"
+ },
+ "concept_banking_monetary_union": {
+  "en": "Monetary Union",
+  "de": "Währungsunion"
+ },
+ "concept_banking_peg_confidence": {
+  "en": "Peg Confidence",
+  "de": "Bindungsvertrauen"
+ },
+ "concept_banking_policy_rate": {
+  "en": "Policy Rate",
+  "de": "Leitzins"
+ },
+ "concept_banking_policy_stance": {
+  "en": "Policy Stance",
+  "de": "Geldpolitischer Kurs"
+ },
+ "concept_banking_price_pressure": {
+  "en": "Inflationary Pressure",
+  "de": "Inflationsdruck"
+ },
+ "concept_banking_rate_paid": {
+  "en": "Rate You Pay",
+  "de": "Zinssatz, den Sie zahlen"
+ },
+ "concept_banking_rate_target": {
+  "en": "Rate Target",
+  "de": "Zielzins"
+ },
+ "concept_banking_reference_rate": {
+  "en": "World Reference Rate",
+  "de": "Weltreferenzzins"
+ },
+ "concept_banking_risk_premium": {
+  "en": "Risk Premium",
+  "de": "Risikoprämie"
+ },
+ "concept_banking_wage_pressure": {
+  "en": "Wage Pressure",
+  "de": "Lohndruck"
+ },
+ "concept_banking_world_rate": {
+  "en": "World Rate",
+  "de": "Weltzins"
+ },
  "concept_ch_art_diminishing_returns": {
   "en": "Diminishing Returns",
   "de": "Abnehmender Grenzertrag"
@@ -6174,6 +6026,14 @@
  "concept_ch_art_production": {
   "en": "Art Production",
   "de": "Kunstproduktion"
+ },
+ "concept_ch_exported_model": {
+  "en": "Exported Model",
+  "de": "Exportiertes Modell"
+ },
+ "concept_ch_influence_tier": {
+  "en": "Influence Tier",
+  "de": "Einflussstufe"
  },
  "concept_ch_modifier_bonus": {
   "en": "Modifier Bonus",
@@ -6275,9 +6135,25 @@
   "en": "Solar Collector",
   "de": "Sonnenkollektor"
  },
+ "concept_sr_setback_risk": {
+  "en": "Setback Risk",
+  "de": "Rückschlagrisiko"
+ },
  "concept_st_res_active_rate": {
   "en": "Active",
   "de": "Aktiv"
+ },
+ "concept_st_res_adjustment_step": {
+  "en": "Adjustment Step",
+  "de": "Anpassungsschritt"
+ },
+ "concept_st_res_flow_cap": {
+  "en": "Flow Cap",
+  "de": "Flussobergrenze"
+ },
+ "concept_st_res_policy": {
+  "en": "Reserve Policy",
+  "de": "Reserverichtlinie"
  },
  "concept_st_res_rate_setting": {
   "en": "Rate Setting",
@@ -6295,9 +6171,49 @@
   "en": "Base Appeal",
   "de": "Grundattraktivität"
  },
+ "concept_un_arms_embargo": {
+  "en": "UN Arms Embargo",
+  "de": "UN-Waffenembargo"
+ },
+ "concept_un_authority_cap": {
+  "en": "Authority Cap",
+  "de": "Autoritätsobergrenze"
+ },
+ "concept_un_development_fund": {
+  "en": "World Development Fund",
+  "de": "Weltentwicklungsfonds"
+ },
+ "concept_un_food_reserve": {
+  "en": "World Food Reserve",
+  "de": "Welternährungsreserve"
+ },
  "concept_un_general_assembly": {
   "en": "General Assembly",
   "de": "Generalversammlung"
+ },
+ "concept_un_mission_aid": {
+  "en": "Aid Mission",
+  "de": "Hilfsmission"
+ },
+ "concept_un_mission_electoral": {
+  "en": "Electoral Observer Mission",
+  "de": "Wahlbeobachtungsmission"
+ },
+ "concept_un_mission_peacekeeping": {
+  "en": "Peacekeeping Mission",
+  "de": "Friedensmission"
+ },
+ "concept_un_mission_stabilisation": {
+  "en": "Stabilisation Mission",
+  "de": "Stabilisierungsmission"
+ },
+ "concept_un_passage_majority": {
+  "en": "Majority",
+  "de": "Mehrheit"
+ },
+ "concept_un_passage_two_thirds": {
+  "en": "Two-Thirds",
+  "de": "Zweidrittelmehrheit"
  },
  "concept_un_permanent_member": {
   "en": "Permanent Member",
@@ -6319,9 +6235,37 @@
   "en": "UN Specialized Agencies",
   "de": "UN-Sonderorganisationen"
  },
+ "concept_un_standing_force": {
+  "en": "Standing UN Force",
+  "de": "Ständige UN-Streitmacht"
+ },
  "concept_un_suspended_representation": {
   "en": "Suspended Representation",
   "de": "Ausgesetzte Vertretung"
+ },
+ "concept_un_tier_contested": {
+  "en": "Contested",
+  "de": "Umstritten"
+ },
+ "concept_un_tier_established": {
+  "en": "Established",
+  "de": "Etabliert"
+ },
+ "concept_un_tier_moribund": {
+  "en": "Moribund",
+  "de": "Marode"
+ },
+ "concept_un_tier_strong": {
+  "en": "Strong",
+  "de": "Stark"
+ },
+ "concept_un_tier_supranational": {
+  "en": "Supranational",
+  "de": "Supranational"
+ },
+ "concept_un_world_court": {
+  "en": "World Court",
+  "de": "Internationaler Gerichtshof"
  },
  "concept_united_nations_system": {
   "en": "United Nations",
@@ -7755,98 +7699,6 @@
   "en": "Its dedication is carved in revived Old Church Slavonic.",
   "de": "Seine Widmung ist in wiederbelebtem Kirchenslawisch eingemeißelt."
  },
- "gm_je_hard_times": {
-  "en": "#R Hard times: finishing a monument level now radicalizes its state and costs legitimacy for about two years. Pause monument construction until the country recovers.#!",
-  "de": "#R Harte Zeiten: Die Fertigstellung einer Monumentstufe radikalisiert nun ihren Staat und kostet für etwa zwei Jahre Legitimität. Setzen Sie den Monumentbau aus, bis sich das Land erholt hat.#!"
- },
- "gm_je_header_monuments": {
-  "en": "#title Our monuments#!",
-  "de": "#title Unsere Monumente#!"
- },
- "gm_je_header_national": {
-  "en": "#title National effects#!",
-  "de": "#title Landesweite Effekte#!"
- },
- "gm_je_line_artistic": {
-  "en": "#b $interest_group_ig_intelligentsia_pop_attraction_mult$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_artistic')|%0]#! from opera houses, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_artistic')|0]; next step at [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_artistic')|0]",
-  "de": "#b $interest_group_ig_intelligentsia_pop_attraction_mult$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_artistic')|%0]#! durch Opernhäuser, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_artistic')|0]; nächste Stufe bei [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_artistic')|0]"
- },
- "gm_je_line_culture": {
-  "en": "#b Cultural pull#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#! of +5[SelectLocalization(EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture'), '(CFixedPoint)0'), '', 'gm_je_line_culture_next')]",
-  "de": "#b Kulturelle Anziehungskraft#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_culture')|1]#! von +5[SelectLocalization(EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture'), '(CFixedPoint)0'), '', 'gm_je_line_culture_next')]"
- },
- "gm_je_line_culture_next": {
-  "en": "; next step at [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0] [concept_grandeur]",
-  "de": "; nächste Stufe bei [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0] [concept_grandeur]"
- },
- "gm_je_line_ig_armed_forces": {
-  "en": "#b $ig_armed_forces$#! approval [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_armed_forces')|+=1]",
-  "de": "#b $ig_armed_forces$#!-Zustimmung [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_armed_forces')|+=1]"
- },
- "gm_je_line_ig_devout": {
-  "en": "#b $ig_devout$#! approval [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_devout')|+=1]",
-  "de": "#b $ig_devout$#!-Zustimmung [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_devout')|+=1]"
- },
- "gm_je_line_ig_industrialists": {
-  "en": "#b $ig_industrialists$#! approval [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_industrialists')|+=1]",
-  "de": "#b $ig_industrialists$#!-Zustimmung [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_industrialists')|+=1]"
- },
- "gm_je_line_ig_intelligentsia": {
-  "en": "#b $ig_intelligentsia$#! approval [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_intelligentsia')|+=1]",
-  "de": "#b $ig_intelligentsia$#!-Zustimmung [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_intelligentsia')|+=1]"
- },
- "gm_je_line_ig_landowners": {
-  "en": "#b $ig_landowners$#! approval [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_landowners')|+=1]",
-  "de": "#b $ig_landowners$#!-Zustimmung [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_landowners')|+=1]"
- },
- "gm_je_line_ig_petty_bourgeoisie": {
-  "en": "#b $ig_petty_bourgeoisie$#! approval [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_petty_bourgeoisie')|+=1]",
-  "de": "#b $ig_petty_bourgeoisie$#!-Zustimmung [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_petty_bourgeoisie')|+=1]"
- },
- "gm_je_line_ig_rural_folk": {
-  "en": "#b $ig_rural_folk$#! approval [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_rural_folk')|+=1]",
-  "de": "#b $ig_rural_folk$#!-Zustimmung [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_rural_folk')|+=1]"
- },
- "gm_je_line_ig_trade_unions": {
-  "en": "#b $ig_trade_unions$#! approval [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_trade_unions')|+=1]",
-  "de": "#b $ig_trade_unions$#!-Zustimmung [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_ig_trade_unions')|+=1]"
- },
- "gm_je_line_industrial": {
-  "en": "#b $interest_group_ig_industrialists_pop_attraction_mult$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_industrial')|%0]#! from exhibition halls, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_industrial')|0]; next step at [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_industrial')|0]",
-  "de": "#b $interest_group_ig_industrialists_pop_attraction_mult$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_industrial')|%0]#! durch Ausstellungshallen, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_industrial')|0]; nächste Stufe bei [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_industrial')|0]"
- },
- "gm_je_line_leader": {
-  "en": "#b $country_authority_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_leader')|0]#! from monuments to the leader, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_leader')|0]; next step at [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_leader')|0]",
-  "de": "#b $country_authority_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_leader')|0]#! durch Denkmäler für das Staatsoberhaupt, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_leader')|0]; nächste Stufe bei [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_leader')|0]"
- },
- "gm_je_line_legitimacy": {
-  "en": "#b $country_legitimacy_base_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_legitimacy')|1]#! from regime [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_regime')|0]; next step at [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_regime')|0]",
-  "de": "#b $country_legitimacy_base_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_legitimacy')|1]#! durch Regime-[concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_regime')|0]; nächste Stufe bei [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_regime')|0]"
- },
- "gm_je_line_prestige": {
-  "en": "#b Prestige#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige')|0]#! from [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]; next step at [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_standing')|0]",
-  "de": "#b Prestige#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_prestige')|0]#! durch [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_standing')|0]; nächste Stufe bei [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_standing')|0]"
- },
- "gm_je_line_religious": {
-  "en": "#b $interest_group_ig_devout_pop_attraction_mult$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_religious')|%0]#! from grand shrines, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_religious')|0]; next step at [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_religious')|0]",
-  "de": "#b $interest_group_ig_devout_pop_attraction_mult$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_religious')|%0]#! durch große Schreine, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_religious')|0]; nächste Stufe bei [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_religious')|0]"
- },
- "gm_je_line_scientific": {
-  "en": "#b $country_weekly_innovation_max_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_scientific')|1]#! from observatories, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_scientific')|0]; next step at [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_scientific')|0]",
-  "de": "#b $country_weekly_innovation_max_add$#! #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_scientific')|1]#! durch Sternwarten, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_scientific')|0]; nächste Stufe bei [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_scientific')|0]"
- },
- "gm_je_line_teardown": {
-  "en": "#b The Old Order Torn Down#! $country_legitimacy_base_add$ #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown')|1]#!, fading",
-  "de": "#b Die alte Ordnung niedergerissen#! $country_legitimacy_base_add$ #G +[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_teardown')|1]#!, verblassend"
- },
- "gm_je_line_vanity": {
-  "en": "#b Palaces amid Hardship#! $country_legitimacy_base_add$ #R [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity')|1]#!, fading",
-  "de": "#b Paläste inmitten der Not#! $country_legitimacy_base_add$ #R [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_vanity')|1]#!, verblassend"
- },
- "gm_je_line_war_memorial": {
-  "en": "#b $country_war_support_casualties_mult$#! #G [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_war_memorial')|%0]#! from war memorials, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_war_memorial')|0]; next step at [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_war_memorial')|0]",
-  "de": "#b $country_war_support_casualties_mult$#! #G [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_war_memorial')|%0]#! durch Kriegerdenkmäler, [concept_grandeur] [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_g_war_memorial')|0]; nächste Stufe bei [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_war_memorial')|0]"
- },
  "gm_leave_contested_tt": {
   "en": "Decide later, from the monument's row in the Monuments journal entry. While it stands contested it lends nothing but visitors, and #v [THIS.GetState.GetCustom('gm_base_ig_name')]#! resent it.",
   "de": "Später entscheiden, über die Zeile des Monuments im Journaleintrag Monumente. Solange es umstritten bleibt, bringt es nichts außer Besuchern, und #v [THIS.GetState.GetCustom('gm_base_ig_name')]#! nehmen es übel."
@@ -8311,29 +8163,9 @@
   "en": "Green Technology Stimulus",
   "de": "Konjunkturprogramm für grüne Technologie"
  },
- "gw_cond_cut_label": {
-  "en": "Emissions Cut In Force",
-  "de": "Geltende Emissionssenkung"
- },
- "gw_cond_cut_tt": {
-  "en": "How far this market's emissions are being held below what its oil and coal consumption would otherwise produce, from every mitigation policy in force.\\n\\n#lore A live reading: it moves the moment a policy is adopted or repealed, not at the next tick.#!",
-  "de": "Wie weit die Emissionen dieses Marktes unter dem gehalten werden, was sein Öl- und Kohleverbrauch sonst verursachen würde, durch jede geltende Minderungspolitik.\\n\\n#lore Ein Live-Wert: Er ändert sich in dem Moment, in dem eine Politik beschlossen oder aufgehoben wird, nicht erst beim nächsten Tick.#!"
- },
- "gw_cond_cut_value": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]#!% (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_policies_active_count_display')|0]#! of 8 policies)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_emissions_cut_pct_display')|0]#!% (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_policies_active_count_display')|0]#! von 8 Politiken)"
- },
- "gw_cond_emis_label": {
-  "en": "Our Market's Emissions",
-  "de": "Die Emissionen unseres Marktes"
- },
  "gw_cond_emis_tt": {
   "en": "Annual greenhouse-gas output of the whole market this country belongs to, from its oil and coal consumption, less whatever its synthetic-fuel plants capture.\\n\\n#lore Emissions are a property of a market, not of one member: the figure is stored on the market leader and every member reads the same number. Updated each January.#!",
   "de": "Der jährliche Treibhausgasausstoß des gesamten Marktes, dem dieses Land angehört, aus seinem Öl- und Kohleverbrauch, abzüglich dessen, was seine Anlagen für synthetische Kraftstoffe auffangen.\\n\\n#lore Emissionen sind eine Eigenschaft eines Marktes, nicht eines einzelnen Mitglieds: Der Wert wird beim Marktführer gespeichert, und jedes Mitglied liest dieselbe Zahl. Wird jeden Januar aktualisiert.#!"
- },
- "gw_cond_emis_value": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_market_emis_display')|0]#! (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_capture_display')|0]#! captured)",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_market_emis_display')|0]#! (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('gw_capture_display')|0]#! aufgefangen)"
  },
  "gw_cond_in_force": {
   "en": "The policy is currently in force",
@@ -8351,41 +8183,17 @@
   "en": "We are not bound by an emissions-reduction treaty",
   "de": "Wir sind nicht an einen Vertrag zur Emissionssenkung gebunden"
  },
- "gw_cond_penalty_label": {
-  "en": "Warming Penalty Scale",
-  "de": "Erwärmungs-Strafskala"
- },
  "gw_cond_penalty_tt": {
   "en": "The penalties below are applied to this country every month, with every value multiplied by the current temperature anomaly. At the scale shown, multiply each line by that figure.\\n$TOOLTIP_DELIMITER$\\n[GetStaticModifier('global_warming').GetDesc]",
   "de": "Die untenstehenden Strafen werden diesem Land jeden Monat auferlegt, wobei jeder Wert mit der aktuellen Temperaturanomalie multipliziert wird. Bei der gezeigten Skala jede Zeile mit dieser Zahl multiplizieren.\\n$TOOLTIP_DELIMITER$\\n[GetStaticModifier('global_warming').GetDesc]"
- },
- "gw_cond_role_label": {
-  "en": "Our Role",
-  "de": "Unsere Rolle"
  },
  "gw_cond_role_tt": {
   "en": "Only the leader of a market can adopt or repeal the three market-wide policies - a carbon tax, renewable investment and emission standards - and they then bind every member of that market.\\n\\n#lore The other five policies are ours alone, whoever leads the market.#!",
   "de": "Nur der Anführer eines Marktes kann die drei marktweiten Politiken – eine CO2-Steuer, Investitionen in erneuerbare Energien und Emissionsstandards – beschließen oder aufheben, und sie binden dann jedes Mitglied dieses Marktes.\\n\\n#lore Die anderen fünf Politiken gehören uns allein, ganz gleich, wer den Markt anführt.#!"
  },
- "gw_cond_share_label": {
-  "en": "Share of World Emissions",
-  "de": "Anteil an den weltweiten Emissionen"
- },
  "gw_cond_share_tt": {
   "en": "This market's share of world annual emissions - the honest measure of how much of the warming is ours to fix.\\n\\n#lore A market that captures more carbon than it emits reads 0% here and shows its negative figure in the emissions row. Updated each January.#!",
   "de": "Der Anteil dieses Marktes an den weltweiten Jahresemissionen – das ehrliche Maß dafür, wie viel der Erwärmung wir zu verantworten haben.\\n\\n#lore Ein Markt, der mehr Kohlenstoff auffängt, als er ausstößt, zeigt hier 0% und weist seinen negativen Wert in der Emissionszeile aus. Wird jeden Januar aktualisiert.#!"
- },
- "gw_cond_temp_label": {
-  "en": "Global Temperature",
-  "de": "Globale Temperatur"
- },
- "gw_cond_temp_tt": {
-  "en": "The [concept_temperature_anomaly]: how far the planet has warmed above its pre-industrial average. The journal entry's bar runs to #v 4°C#!, the point at which the model treats the damage as unbounded.\\n\\n#lore Every nation carries the same anomaly; what differs is how much of it each economy caused.#!",
-  "de": "Die [concept_temperature_anomaly]: wie weit sich der Planet über seinen vorindustriellen Durchschnitt hinaus erwärmt hat. Der Balken des Journals reicht bis #v 4°C#!, dem Punkt, an dem das Modell den Schaden als unbegrenzt behandelt.\\n\\n#lore Jede Nation trägt dieselbe Anomalie; was sich unterscheidet, ist, wie viel davon jede Volkswirtschaft verursacht hat.#!"
- },
- "gw_cond_trend_label": {
-  "en": "Change Last Year",
-  "de": "Veränderung im letzten Jahr"
  },
  "gw_cond_trend_tt": {
   "en": "Warming added over the last completed calendar year, measured from the change in world cumulative emissions.\\n\\n#lore Re-based every January, so it holds steady through the year rather than flickering monthly.#!",
@@ -8423,17 +8231,9 @@
   "en": "Market Member",
   "de": "Marktmitglied"
  },
- "gw_policies_none_yet": {
-  "en": "#lore No mitigation policy is in force. Every row below is available, or says what it is waiting for.#!",
-  "de": "#lore Keine Minderungspolitik ist in Kraft. Jede Zeile unten ist verfügbar oder zeigt an, worauf sie noch wartet.#!"
- },
  "gw_policy_status_active": {
   "en": "#G Active#!",
   "de": "#G Aktiv#!"
- },
- "gw_policy_status_by_leader": {
-  "en": "#lore set by market leader#!",
-  "de": "#lore vom Marktführer festgelegt#!"
  },
  "gw_policy_status_inactive": {
   "en": "#grey Inactive#!",
@@ -9939,46 +9739,6 @@
   "en": "#Y Uncertain#!",
   "de": "#Y Ungewiss#!"
  },
- "nd_home_line_business": {
-  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — business",
-  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Wirtschaft"
- },
- "nd_home_line_business_hawkish": {
-  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — business, hawkish",
-  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Wirtschaft, falkenhaft"
- },
- "nd_home_line_business_restrained": {
-  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — business, restrained",
-  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Wirtschaft, zurückhaltend"
- },
- "nd_home_line_militarist": {
-  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — militarist",
-  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Militaristen"
- },
- "nd_home_line_militarist_mild": {
-  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — militarist (mild)",
-  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Militaristen (mild)"
- },
- "nd_home_line_officers": {
-  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — officers",
-  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Offiziere"
- },
- "nd_home_line_officers_hawkish": {
-  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — officers, hawkish",
-  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Offiziere, falkenhaft"
- },
- "nd_home_line_officers_restrained": {
-  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — officers, restrained",
-  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Offiziere, zurückhaltend"
- },
- "nd_home_line_restraint": {
-  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — restraint",
-  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Zurückhaltung"
- },
- "nd_home_line_restraint_mild": {
-  "en": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — restraint (mild)",
-  "de": "#v [THIS.Var('nd_ig_stance').GetValue|+0]#!  [THIS.GetInterestGroup.GetName] — Zurückhaltung (mild)"
- },
  "nd_home_list_none": {
   "en": "#lore No interest group holds a view on our posture.#!",
   "de": "#lore Keine Interessengruppe hat eine Meinung zu unserer Haltung.#!"
@@ -9994,26 +9754,6 @@
  "nd_home_list_waiting": {
   "en": "#lore Opinions of our doctrine and readiness start in #v [THIS.ScriptValue('nd_display_stance_months_left')|0]#! months; the Industrialists' business concerns count already.#!",
   "de": "#lore Meinungen zu unserer Doktrin und Bereitschaft beginnen in #v [THIS.ScriptValue('nd_display_stance_months_left')|0]#! Monaten; die wirtschaftlichen Anliegen der Industriellen zählen schon jetzt.#!"
- },
- "nd_home_terms_business": {
-  "en": "#lore       long alerts and open crises [THIS.Var('nd_ig_term_business').GetValue|+0]#!",
-  "de": "#lore       lange Alarmbereitschaft und offene Krisen [THIS.Var('nd_ig_term_business').GetValue|+0]#!"
- },
- "nd_home_terms_business_lean": {
-  "en": "#lore       long alerts and open crises [THIS.Var('nd_ig_term_business').GetValue|+0] · doctrine [THIS.Var('nd_ig_term_doctrine').GetValue|+0]#!",
-  "de": "#lore       lange Alarmbereitschaft und offene Krisen [THIS.Var('nd_ig_term_business').GetValue|+0] · Doktrin [THIS.Var('nd_ig_term_doctrine').GetValue|+0]#!"
- },
- "nd_home_terms_militarist": {
-  "en": "#lore       doctrine [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · readiness [THIS.Var('nd_ig_term_readiness').GetValue|+0]#!",
-  "de": "#lore       Doktrin [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · Bereitschaft [THIS.Var('nd_ig_term_readiness').GetValue|+0]#!"
- },
- "nd_home_terms_officers": {
-  "en": "#lore       doctrine [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · readiness [THIS.Var('nd_ig_term_readiness').GetValue|+0] · crew strain [THIS.Var('nd_ig_term_strain').GetValue|+0]#!",
-  "de": "#lore       Doktrin [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · Bereitschaft [THIS.Var('nd_ig_term_readiness').GetValue|+0] · Belastung der Mannschaft [THIS.Var('nd_ig_term_strain').GetValue|+0]#!"
- },
- "nd_home_terms_restraint": {
-  "en": "#lore       doctrine [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · readiness [THIS.Var('nd_ig_term_readiness').GetValue|+0] · launch authority [THIS.Var('nd_ig_term_authority').GetValue|+0] · the arsenal itself [THIS.Var('nd_ig_term_possession').GetValue|+0]#!",
-  "de": "#lore       Doktrin [THIS.Var('nd_ig_term_doctrine').GetValue|+0] · Bereitschaft [THIS.Var('nd_ig_term_readiness').GetValue|+0] · Startbefugnis [THIS.Var('nd_ig_term_authority').GetValue|+0] · das Arsenal selbst [THIS.Var('nd_ig_term_possession').GetValue|+0]#!"
  },
  "nd_incident_coverup_exposed": {
   "en": "Nuclear Cover-Up Exposed",
@@ -13427,14 +13167,6 @@
   "en": "Aggressive work — much faster, at a real risk of losing months to a failure.",
   "de": "Aggressives Vorgehen — deutlich schneller, mit einem echten Risiko, durch einen Fehlschlag Monate zu verlieren."
  },
- "sr_pace_note_drift": {
-  "en": "No approach has been chosen, so the programme only drifts along. Commit to Safe or Ambitious below to put it on a real schedule.",
-  "de": "Es wurde noch kein Ansatz gewählt, daher treibt das Programm nur so dahin. Die Wahl von Sicher oder Ambitioniert unten setzt es auf einen echten Zeitplan."
- },
- "sr_pace_note_passive": {
-  "en": "This programme is not running, and nothing is being spent on it.",
-  "de": "Dieses Programm läuft nicht, und es wird nichts dafür ausgegeben."
- },
  "sr_pace_note_safe": {
   "en": "Methodical work — slower than it could be, and far less likely to lose months to a failure.",
   "de": "Methodisches Vorgehen — langsamer, als es sein könnte, und weit weniger wahrscheinlich, durch einen Fehlschlag Monate zu verlieren."
@@ -13478,10 +13210,6 @@
  "sr_prog_state_first": {
   "en": "#G achieved, and we were first#!",
   "de": "#G erreicht, und wir waren die Ersten#!"
- },
- "sr_prog_state_in_transit": {
-  "en": "#Y the probe is in transit#!",
-  "de": "#Y die Sonde ist unterwegs#!"
  },
  "sr_prog_state_open": {
   "en": "not begun",
@@ -14115,10 +13843,6 @@
   "en": "#header @oil! Oil Reserve#!\\n#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_oil_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_fill_pct')|1]%)\\n#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_oil_rate').GetValue|+0] / week\\n#bold [concept_st_res_active_rate]:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_actual_rate')|+1] / week\\n#bold Net movement last week:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_last_net')|+=1] / week\\n#bold Decay rate:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_oil_decay_add')] of the stockpile per year\\n#bold Weekly decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_weekly_decay')|1] / week\\n#bold Hub flow cap:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0] / week per good\\n#bold Hub staffing:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_hub_staffing')|%0]\\n\\n#bold Status:#! [JournalEntry.GetCountry.GetCustom('st_res_oil_mode_text')] — [JournalEntry.GetCountry.GetCustom('st_res_oil_reason_text')]\\n\\n#bold Reserve policy:#! [JournalEntry.GetCountry.GetCustom('st_res_oil_policy_text')]\\n[JournalEntry.GetCountry.GetCustom('st_res_oil_policy_reason_text')]\\n#bold National market price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_price_rel')|%0] against base price (this is the market the hub's purchases and sales clear on)\\n#bold Averaged price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_price_signal')|+0]% against base ([JournalEntry.GetCountry.MakeScope.Var('st_res_oil_price_memory').GetValue|0]-week average — the figure the policy acts on)\\n#bold Response ramp:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_oil_ramp').GetValue|0] points past each threshold (0 = full flow at the threshold)\\n#bold Price signal at the last review:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_oil_policy_price').GetValue|+0]%\\n\\n#italic Click the good's name to expand this row for stock, flow, decay and policy details; click it again to collapse it.#!",
   "de": "#header @oil! Ölreserve#!\\n#bold Gelagert:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_oil_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_fill_pct')|1]%)\\n#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_oil_rate').GetValue|+0] / Woche\\n#bold [concept_st_res_active_rate]:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_actual_rate')|+1] / Woche\\n#bold Nettobewegung letzte Woche:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_last_net')|+=1] / Woche\\n#bold Schwundrate:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_oil_decay_add')] des Bestands pro Jahr\\n#bold Wöchentlicher Schwund:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_weekly_decay')|1] / Woche\\n#bold Flussobergrenze des Knotens:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0] / Woche pro Gut\\n#bold Belegung des Knotens:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_hub_staffing')|%0]\\n\\n#bold Status:#! [JournalEntry.GetCountry.GetCustom('st_res_oil_mode_text')] — [JournalEntry.GetCountry.GetCustom('st_res_oil_reason_text')]\\n\\n#bold Reserverichtlinie:#! [JournalEntry.GetCountry.GetCustom('st_res_oil_policy_text')]\\n[JournalEntry.GetCountry.GetCustom('st_res_oil_policy_reason_text')]\\n#bold Nationaler Marktpreis:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_price_rel')|%0] gegenüber dem Grundpreis (auf diesem Markt gleicht der Knoten seine Käufe und Verkäufe aus)\\n#bold Gemittelter Preis:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_price_signal')|+0]% gegenüber dem Grundwert ([JournalEntry.GetCountry.MakeScope.Var('st_res_oil_price_memory').GetValue|0]-Wochen-Durchschnitt — die Kennzahl, nach der sich die Richtlinie richtet)\\n#bold Reaktionsrampe:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_oil_ramp').GetValue|0] Punkte über jedem Schwellenwert (0 = volle Rate ab dem Schwellenwert)\\n#bold Preissignal bei der letzten Überprüfung:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_oil_policy_price').GetValue|+0]%\\n\\n#italic Klicken Sie auf den Namen des Guts, um diese Zeile für Bestand, Fluss, Schwund und Richtliniendetails aufzuklappen; erneutes Klicken schließt sie wieder.#!"
  },
- "st_res_row_policy_toggle_tooltip": {
-  "en": "#bold Reserve Policy Settings#!\\nShow or hide this good's policy selector, presets and settings.\\n#italic Only changes what you see: an automated policy keeps running while this panel is collapsed and while the journal entry is closed.#!",
-  "de": "#bold Einstellungen der Reserverichtlinie#!\\nZeigt oder verbirgt die Richtlinienauswahl, Voreinstellungen und Einstellungen dieses Guts.\\n#italic Ändert nur die Ansicht: Eine automatisierte Richtlinie läuft weiter, während dieses Panel eingeklappt oder das Journal geschlossen ist.#!"
- },
  "st_res_row_small_arms_amount": {
   "en": "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_capacity')|0]",
   "de": "#bold Gelagert:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_capacity')|0]"
@@ -14606,10 +14330,6 @@
  "te_hist_chart_bank_value_title": {
   "en": "Cycle Value",
   "de": "Zykluswert"
- },
- "te_hist_chart_ch_share_legend": {
-  "en": "#lore one bar per month; the world total is recomputed about twice a year and after every war, so a sudden step is a re-basing, not a change in our own output#!",
-  "de": "#lore ein Balken pro Monat; die Weltsumme wird etwa zweimal jährlich und nach jedem Krieg neu berechnet, ein plötzlicher Sprung ist also eine Neubasierung, keine Veränderung unserer eigenen Leistung#!"
  },
  "te_hist_chart_ch_share_title": {
   "en": "Share of Global Influence",

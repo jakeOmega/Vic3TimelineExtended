@@ -13,7 +13,8 @@ The translation memory (`i18n/<language>/tm/*.json`, committed) maps each loc
 key to the English it was translated from and the translation. Keys are looked
 up globally, so a key organize_loc.py moves between files keeps its
 translation. When the English under a translated key changes, the key is
-"stale": it is offered for translation again, and until then the build ships
+"stale": it is offered for translation again, with the English and translation
+it had so the agent edits rather than retranslates. Until then the build ships
 the old translation for a small wording change or English for a larger one
 (`is_minor_change`).
 
@@ -46,6 +47,8 @@ from mod_state import split_loc_line  # noqa: E402
 
 ENGLISH_DIR = os.path.join(REPO_ROOT, "localization", "english")
 SKIP_FILES = {"te_unused_l_english.yml"}  # keys no script references
+# Developer test benches players never see; their loc is removed before release.
+DEV_ONLY_FILES = {"te_debug_tax_l_english.yml"}
 
 # German declines country names with the article baked in; vanilla defines
 # these seven forms for every tag and dynamic name, and German text reaches
@@ -71,11 +74,12 @@ class Entry:
 
 
 def load_english(english_dir: str = ENGLISH_DIR) -> list[Entry]:
-    """Every English key in file order, `replace/` included, te_unused skipped."""
+    """Every English key in file order, `replace/` included, te_unused and the
+    developer test benches skipped."""
     entries = []
     for path in sorted(glob.glob(os.path.join(english_dir, "**", "*.yml"), recursive=True)):
         rel = os.path.relpath(path, english_dir)
-        if os.path.basename(rel) in SKIP_FILES:
+        if os.path.basename(rel) in SKIP_FILES | DEV_ONLY_FILES:
             continue
         with open(path, encoding="utf-8-sig") as fh:
             for line in fh:
@@ -399,6 +403,41 @@ def localize_numbers(en: str, translated: str, language: str) -> str:
 
 
 # --------------------------------------------------------------------------
+# Quotation marks
+
+# (outer open, outer close, inner open, inner close) as the official
+# translation writes them.
+QUOTES = {"german": ("„", "“", "‚", "‘")}
+_QUOTE_TOKEN = re.compile(r'\\"|[„“”‚‘]')
+
+
+def localize_quotes(value: str, language: str) -> str:
+    """Rewrite the English's escaped straight quotes (`\\"…\\"`), and a closing
+    mark of the wrong shape („…” for „…“), as the language's own quotation
+    marks, nesting the inner pair inside an outer one. A value whose quotes
+    don't pair up is returned unchanged."""
+    marks = QUOTES.get(language)
+    if not marks or not _QUOTE_TOKEN.search(value):
+        return value
+    out, stack, pos = [], [], 0
+    for match in _QUOTE_TOKEN.finditer(value):
+        out.append(value[pos:match.start()])
+        pos = match.end()
+        token = match.group(0)
+        closing = (token == '\\"' and stack and stack[-1] == "esc") or (token in "“”‘" and stack)
+        if closing:
+            stack.pop()
+            out.append(marks[1] if not stack else marks[3])
+        elif token in "“”‘":
+            return value  # a closing mark with nothing open
+        else:
+            out.append(marks[0] if not stack else marks[2])
+            stack.append("esc" if token == '\\"' else "typo")
+    out.append(value[pos:])
+    return value if stack else "".join(out)
+
+
+# --------------------------------------------------------------------------
 # Vanilla terms
 
 
@@ -540,7 +579,11 @@ def _loc_line(key: str, value: str) -> str:
 
 
 def write_chunk(path: str, chunk_id: str, chunk: list[Entry], glossary: list[str],
-                country_names: list[Entry], language: str) -> None:
+                country_names: list[Entry], language: str,
+                previous: dict[str, dict] | None = None, lang_field: str = "de") -> None:
+    """`previous` holds the TM records of stale keys: each such line is shown
+    with the English its current translation was made from and that
+    translation, so the agent updates it rather than starting over."""
     lines = [
         f"# CHUNK {chunk_id} — translate into {language}. Instructions: i18n/{language}/BRIEF.md",
         f"# {len(chunk)} lines to translate" + (f", plus the declined forms of {len(country_names)} country names" if country_names else ""),
@@ -554,6 +597,10 @@ def write_chunk(path: str, chunk_id: str, chunk: list[Entry], glossary: list[str
         if entry.file != current_file:
             current_file = entry.file
             lines.append(f"# --- from {entry.file}")
+        record = (previous or {}).get(entry.key)
+        if record:
+            lines.append(f"# PREVIOUS ENGLISH: {record['en']}")
+            lines.append(f"# PREVIOUS TRANSLATION: {record[lang_field]}")
         lines.append(_loc_line(entry.key, entry.en))
     if country_names:
         lines.append("#")
@@ -613,11 +660,14 @@ def cmd_prepare(args) -> int:
         glossary = chunk_glossary(chunk, tm, vanilla, glossary_keys, lang_field,
                                   cap=400 if args.set == "names" else 160, terms=terms)
         names_here = [e for e in country_names if e in chunk]
-        write_chunk(os.path.join(chunk_dir, chunk_id + ".txt"), chunk_id, chunk, glossary, names_here, language)
+        previous = {e.key: tm[e.key] for e in chunk if e.key in tm}
+        write_chunk(os.path.join(chunk_dir, chunk_id + ".txt"), chunk_id, chunk, glossary, names_here, language,
+                    previous, lang_field)
         manifest[chunk_id] = {
             "keys": {e.key: e.en for e in chunk},
             "country_names": [e.key for e in names_here],
             "words": sum(word_count(e.en) for e in chunk),
+            "previous": previous,
         }
         print(f"{chunk_id}: {len(chunk)} keys, {manifest[chunk_id]['words']} words, "
               f"{len(glossary)} glossary lines -> {os.path.relpath(os.path.join(chunk_dir, chunk_id + '.txt'), REPO_ROOT)}")
@@ -642,9 +692,13 @@ def cmd_refresh(args) -> int:
     with open(os.path.join(work, "manifest.json"), encoding="utf-8") as fh:
         manifest = json.load(fh)
     for cid in args.chunks:
-        chunk = [by_key[k] for k in manifest[cid]["keys"] if k in by_key]
-        glossary = chunk_glossary(chunk, tm, vanilla, glossary_keys, lang_field, terms=terms)
-        write_chunk(os.path.join(work, "chunks", cid + ".txt"), cid, chunk, glossary, [], language)
+        info = manifest[cid]
+        chunk = [by_key[k] for k in info["keys"] if k in by_key]
+        names_here = [by_key[k] for k in info.get("country_names", []) if k in by_key]
+        glossary = chunk_glossary(chunk, tm, vanilla, glossary_keys, lang_field, terms=terms,
+                                  cap=400 if cid.startswith("names-") else 160)
+        write_chunk(os.path.join(work, "chunks", cid + ".txt"), cid, chunk, glossary, names_here, language,
+                    info.get("previous"), lang_field)
         print(f"{cid}: {len(chunk)} keys, {len(glossary)} glossary lines")
     return 0
 
@@ -741,7 +795,7 @@ def cmd_merge(args) -> int:
                 continue
             if warnings:
                 warns[key] = warnings
-            record = {"en": en, lang_field: localize_numbers(en, value, language)}
+            record = {"en": en, lang_field: localize_quotes(localize_numbers(en, value, language), language)}
             if key != base:
                 record["base"] = base
             tm[key] = record
@@ -763,7 +817,7 @@ AGENT_PROMPT = """You are translating one chunk of a Victoria 3 mod's localizati
 
 Files (absolute paths):
 - Instructions, read in full first: {brief}
-- Your chunk: {chunk} (a glossary header, then {lines} lines to translate{content})
+- Your chunk: {chunk} (a glossary header, then {lines} lines to translate{content}{updates})
 - Write output to: {out}/ as {cid}.01.txt, {cid}.02.txt, … with at most {part} lines each.
 
 Rules that override anything else:
@@ -772,7 +826,7 @@ Rules that override anything else:
 - Keep the markup exactly as BRIEF.md says; a script rejects any line whose markup differs.
 - Work efficiently. Read the brief and the chunk once (the Read tool returns 2,000 lines at a time), then translate and write one part file at a time, keeping your reasoning before each write short: a single response over 64,000 output tokens fails the whole run. Do at most one quick check of your own output at the end. A merge script re-checks every line, so there's no need for repeated verification passes.
 
-When done, reply with a short report (under 200 words): how many lines you wrote, any terms you coined that the glossary didn't cover (English → {language_title}), and any lines you were unsure about."""
+When done, write a short report (under 200 words) to {out}/{cid}.report.md, then reply with the same report: how many lines you wrote, any terms you coined that the glossary didn't cover (English → {language_title}), and any lines you were unsure about."""
 
 
 def cmd_prompt(args) -> int:
@@ -792,6 +846,8 @@ def cmd_prompt(args) -> int:
             chunk=os.path.join(work, "chunks", cid + ".txt"),
             lines=len(info["keys"]) + 7 * len(info.get("country_names", [])),
             content=", mostly event text" if events else "",
+            updates=(f"; {len(info['previous'])} of them update an existing translation, see BRIEF.md § Updated lines"
+                     if info.get("previous") else ""),
             out=os.path.join(work, "out"),
             cid=cid,
             part=part,

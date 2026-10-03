@@ -293,7 +293,7 @@
  },
  "notification_headlines_tech_aluminum_mass_production_name": {
   "en": "#b FORMER 'JEWELRY METAL' NOW PLENTIFUL #!",
-  "de": "#b EHEMALIGES „SCHMUCKMETALL” JETZT IM ÜBERFLUSS #!"
+  "de": "#b EHEMALIGES „SCHMUCKMETALL“ JETZT IM ÜBERFLUSS #!"
  },
  "notification_headlines_tech_animation_desc": {
   "en": "A new form of entertainment, animation, is being pioneered by artists in [SCOPE.sCountry('headlines_animation_researcher').GetName]. #lore By rapidly displaying a sequence of drawings, a magical illusion of movement is created, opening up a novel medium for storytelling and artistic expression... #!",
@@ -317,7 +317,7 @@
  },
  "notification_headlines_tech_anti_war_movement_name": {
   "en": "#b THOUSANDS MARCH, DEMANDING 'PEACE NOW!' #!",
-  "de": "#b TAUSENDE DEMONSTRIEREN UND FORDERN: „FRIEDEN JETZT!” #!"
+  "de": "#b TAUSENDE DEMONSTRIEREN UND FORDERN: „FRIEDEN JETZT!“ #!"
  },
  "notification_headlines_tech_antibiotic_mass_production_desc": {
   "en": "[SCOPE.sCountry('headlines_antibiotic_mass_production_researcher').GetName] has achieved antibiotic mass production. #lore The ability to produce these miracle drugs in large quantities means that once-fatal bacterial infections can now be treated. This development is expected to have a dramatic positive effect on public health and life expectancy... #!",
@@ -325,7 +325,7 @@
  },
  "notification_headlines_tech_antibiotic_mass_production_name": {
   "en": "#b 'WONDER DRUGS' NOW WIDELY AVAILABLE #!",
-  "de": "#b „WUNDERMITTEL” JETZT WEIT VERBREITET #!"
+  "de": "#b „WUNDERMITTEL“ JETZT WEIT VERBREITET #!"
  },
  "notification_headlines_tech_antimatter_production_desc": {
   "en": "Physicists in [SCOPE.sCountry('headlines_antimatter_production_researcher').GetName] report a breakthrough in antimatter production. #lore With an incredible energy density, this substance promises to revolutionize spacecraft propulsion and power generation, though its volatility remains a significant concern... #!",
@@ -349,7 +349,7 @@
  },
  "notification_headlines_tech_artificial_intelligence_name": {
   "en": "#b A 'THINKING MACHINE' IS BORN #!",
-  "de": "#b EINE „DENKENDE MASCHINE” IST GEBOREN #!"
+  "de": "#b EINE „DENKENDE MASCHINE“ IST GEBOREN #!"
  },
  "notification_headlines_tech_asteroid_mining_desc": {
   "en": "Corporations in [SCOPE.sCountry('headlines_asteroid_mining_researcher').GetName] have announced the first viable plans for asteroid mining. #lore The prospect of extracting valuable metals and minerals from near-earth asteroids could fuel further space exploration and create immense wealth, kicking off a new extra-terrestrial resource race... #!",
@@ -477,7 +477,7 @@
  },
  "notification_headlines_tech_cloud_computing_name": {
   "en": "#b DATA 'IN THE CLOUD' TRANSFORMS TECH #!",
-  "de": "#b DATEN „IN DER CLOUD” VERÄNDERN DIE TECHNIKWELT #!"
+  "de": "#b DATEN „IN DER CLOUD“ VERÄNDERN DIE TECHNIKWELT #!"
  },
  "notification_headlines_tech_combined_arms_desc": {
   "en": "Military theorists in [SCOPE.sCountry('headlines_combined_arms_researcher').GetName] have perfected the doctrine of combined arms. #lore By tightly coordinating infantry, armor, and air power, armed forces can achieve a battlefield effectiveness far greater than the sum of their parts, setting a new standard for military operations... #!",
@@ -517,7 +517,7 @@
  },
  "notification_headlines_tech_computer_networks_name": {
   "en": "#b COMPUTERS BEGIN TO 'TALK' TO ONE ANOTHER #!",
-  "de": "#b COMPUTER BEGINNEN, MITEINANDER ZU „SPRECHEN” #!"
+  "de": "#b COMPUTER BEGINNEN, MITEINANDER ZU „SPRECHEN“ #!"
  },
  "notification_headlines_tech_computing_machines_desc": {
   "en": "Early computing machines developed in [SCOPE.sCountry('headlines_computing_machines_researcher').GetName] are changing information processing. #lore These massive devices can automate complex calculations at speeds no human could match, leading to major advancements in science and engineering... #!",
@@ -525,7 +525,7 @@
  },
  "notification_headlines_tech_computing_machines_name": {
   "en": "#b 'ELECTRONIC BRAINS' TACKLE COMPLEX CALCULATIONS #!",
-  "de": "#b „ELEKTRONISCHE GEHIRNE” BEWÄLTIGEN KOMPLEXE BERECHNUNGEN #!"
+  "de": "#b „ELEKTRONISCHE GEHIRNE“ BEWÄLTIGEN KOMPLEXE BERECHNUNGEN #!"
  },
  "notification_headlines_tech_consumer_credit_desc": {
   "en": "The rise of consumer credit in [SCOPE.sCountry('headlines_consumer_credit_researcher').GetName] has transformed the retail economy. #lore A system that allows people to purchase goods on credit is fueling unprecedented consumer spending, though some economists warn of the potential risks of rising debt... #!",
@@ -533,7 +533,7 @@
  },
  "notification_headlines_tech_consumer_credit_name": {
   "en": "#b 'BUY NOW, PAY LATER' FUELS ECONOMIC GROWTH #!",
-  "de": "#b „JETZT KAUFEN, SPÄTER ZAHLEN” BEFLÜGELT DAS WIRTSCHAFTSWACHSTUM #!"
+  "de": "#b „JETZT KAUFEN, SPÄTER ZAHLEN“ BEFLÜGELT DAS WIRTSCHAFTSWACHSTUM #!"
  },
  "notification_headlines_tech_containerization_desc": {
   "en": "The process of containerization, pioneered in [SCOPE.sCountry('headlines_containerization_researcher').GetName], has revolutionized global trade. #lore By placing goods in standardized containers, ships and ports can operate with incredible efficiency, dramatically lowering the cost of moving goods around the world... #!",
@@ -549,7 +549,7 @@
  },
  "notification_headlines_tech_contraceptive_pill_name": {
   "en": "#b 'THE PILL' SPARKS SOCIAL REVOLUTION #!",
-  "de": "#b „DIE PILLE” LÖST GESELLSCHAFTLICHE REVOLUTION AUS #!"
+  "de": "#b „DIE PILLE“ LÖST GESELLSCHAFTLICHE REVOLUTION AUS #!"
  },
  "notification_headlines_tech_cryptography_desc": {
   "en": "Masters of cryptography in [SCOPE.sCountry('headlines_cryptography_researcher').GetName] are working in secret to gain an edge in the war. #lore The art of writing and solving codes is a crucial tool for securing communications while breaking into the enemy's, providing a vital intelligence advantage... #!",
@@ -629,7 +629,7 @@
  },
  "notification_headlines_tech_directed_energy_weapons_name": {
   "en": "#b 'RAY GUNS' NO LONGER SCIENCE FICTION #!",
-  "de": "#b „STRAHLENWAFFEN” SIND KEINE SCIENCE-FICTION MEHR #!"
+  "de": "#b „STRAHLENWAFFEN“ SIND KEINE SCIENCE-FICTION MEHR #!"
  },
  "notification_headlines_tech_e-commerce_desc": {
   "en": "Thanks to the internet, buying and selling goods from anywhere is now a reality. #lore This system of e-commerce, pioneered by companies in [SCOPE.sCountry('headlines_e-commerce_researcher').GetName], is a convenient new way to shop and a great way for businesses to reach new customers... #!",
@@ -637,7 +637,7 @@
  },
  "notification_headlines_tech_e-commerce_name": {
   "en": "#b SHOPPING FROM HOME WITH 'E-COMMERCE' #!",
-  "de": "#b EINKAUFEN VON ZU HAUSE DURCH „E-COMMERCE” #!"
+  "de": "#b EINKAUFEN VON ZU HAUSE DURCH „E-COMMERCE“ #!"
  },
  "notification_headlines_tech_early_nanotechnology_desc": {
   "en": "Scientists in [SCOPE.sCountry('headlines_early_nanotechnology_researcher').GetName] are making breakthroughs in early nanotechnology. #lore The ability to manipulate materials at the atomic level could lead to incredible breakthroughs in medicine, materials, and computing... #!",
@@ -741,7 +741,7 @@
  },
  "notification_headlines_tech_guided_missiles_name": {
   "en": "#b 'SMART' MISSILES CAN NOW FIND THEIR OWN TARGETS #!",
-  "de": "#b „INTELLIGENTE” RAKETEN FINDEN NUN IHR ZIEL SELBST #!"
+  "de": "#b „INTELLIGENTE“ RAKETEN FINDEN NUN IHR ZIEL SELBST #!"
  },
  "notification_headlines_tech_hydraulic_fracturing_desc": {
   "en": "A controversial but effective way to extract natural gas and oil from underground, hydraulic fracturing is booming in [SCOPE.sCountry('headlines_hydraulic_fracturing_researcher').GetName]. #lore It's a boon for the energy industry and national independence, but not so much for the environment... #!",
@@ -749,7 +749,7 @@
  },
  "notification_headlines_tech_hydraulic_fracturing_name": {
   "en": "#b 'FRACKING' UNLOCKS VAST ENERGY RESERVES #!",
-  "de": "#b „FRACKING” ERSCHLIESST GEWALTIGE ENERGIERESERVEN #!"
+  "de": "#b „FRACKING“ ERSCHLIESST GEWALTIGE ENERGIERESERVEN #!"
  },
  "notification_headlines_tech_hypersonic_weapons_desc": {
   "en": "[SCOPE.sCountry('headlines_hypersonic_weapons_researcher').GetName] has tested new hypersonic weapons. #lore These weapons can travel at more than five times the speed of sound. They're incredibly fast and precise, and a real headache for existing defense systems... #!",
@@ -861,7 +861,7 @@
  },
  "notification_headlines_tech_mainframe_computers_name": {
   "en": "#b 'BIG IRON' COMPUTERS POWER MODERN INDUSTRY #!",
-  "de": "#b „BIG-IRON”-COMPUTER TREIBEN DIE MODERNE INDUSTRIE AN #!"
+  "de": "#b „BIG-IRON“-COMPUTER TREIBEN DIE MODERNE INDUSTRIE AN #!"
  },
  "notification_headlines_tech_marketing_research_desc": {
   "en": "By studying what consumers want, businesses in [SCOPE.sCountry('headlines_marketing_research_researcher').GetName] can create more effective advertising and better products. #lore This new field of marketing research is all about understanding people's desires, and then selling them back to them... #!",
@@ -941,7 +941,7 @@
  },
  "notification_headlines_tech_modern_management_techniques_name": {
   "en": "#b 'SCIENTIFIC MANAGEMENT' BOOSTS PRODUCTIVITY #!",
-  "de": "#b „WISSENSCHAFTLICHE BETRIEBSFÜHRUNG” STEIGERT DIE PRODUKTIVITÄT #!"
+  "de": "#b „WISSENSCHAFTLICHE BETRIEBSFÜHRUNG“ STEIGERT DIE PRODUKTIVITÄT #!"
  },
  "notification_headlines_tech_modern_material_science_desc": {
   "en": "From graphene to metamaterials, scientists in [SCOPE.sCountry('headlines_modern_material_science_researcher').GetName] are creating new substances with unique properties. #lore This advanced modern material science is set to revolutionize everything from electronics to aerospace... #!",
@@ -949,7 +949,7 @@
  },
  "notification_headlines_tech_modern_material_science_name": {
   "en": "#b 'WONDER MATERIALS' TO CHANGE THE FUTURE #!",
-  "de": "#b „WUNDERMATERIALIEN” SOLLEN DIE ZUKUNFT VERÄNDERN #!"
+  "de": "#b „WUNDERMATERIALIEN“ SOLLEN DIE ZUKUNFT VERÄNDERN #!"
  },
  "notification_headlines_tech_modern_materials_desc": {
   "en": "[SCOPE.sCountry('headlines_modern_materials_researcher').GetAdjective] chemists have invented new modern materials. #lore Materials like fiberglass, nylon, and Teflon are stronger, lighter, and more versatile than what came before. They've changed the way things are built and manufactured... #!",
@@ -1149,7 +1149,7 @@
  },
  "notification_headlines_tech_precision_guided_munitions_name": {
   "en": "#b 'SMART BOMBS' CAN HIT A PINPOINT TARGET #!",
-  "de": "#b „INTELLIGENTE BOMBEN” TREFFEN PUNKTGENAU #!"
+  "de": "#b „INTELLIGENTE BOMBEN“ TREFFEN PUNKTGENAU #!"
  },
  "notification_headlines_tech_predictive_logistics_desc": {
   "en": "By using data to forecast supply chain needs, companies in [SCOPE.sCountry('headlines_predictive_logistics_researcher').GetName] can make their logistics more efficient and less costly. #lore This system of predictive logistics is a smarter way to get things where they need to go... #!",
@@ -1509,7 +1509,7 @@
  },
  "notification_headlines_tech_world_wide_web_name": {
   "en": "#b 'WORLD WIDE WEB' CONNECTS THE GLOBE #!",
-  "de": "#b „WORLD WIDE WEB” VERBINDET DEN GLOBUS #!"
+  "de": "#b „WORLD WIDE WEB“ VERBINDET DEN GLOBUS #!"
  },
  "notification_homeland_created_desc": {
   "en": "A new [SCOPE.sCulture('form_culture').GetName] [concept_homeland] has been created in [SCOPE.GetRootScope.GetState.GetName].",
@@ -1703,14 +1703,6 @@
   "en": "Humanitarian Assistance Received",
   "de": "Humanitäre Hilfe erhalten"
  },
- "notification_un_mission_failed_notice_desc": {
-  "en": "A UN mission has failed: its host was attacked, it was sent home, or everyone who served in it left. The Assembly's credibility suffers.",
-  "de": "Eine UN-Mission ist gescheitert: Ihr Gastland wurde angegriffen, sie wurde nach Hause geschickt, oder alle, die in ihr dienten, haben sie verlassen. Die Glaubwürdigkeit der Versammlung leidet darunter."
- },
- "notification_un_mission_failed_notice_name": {
-  "en": "A UN Mission Fails",
-  "de": "Eine UN-Mission scheitert"
- },
  "notification_un_mission_lapsed_notice_desc": {
   "en": "A UN mission in our country has ended with its work unfinished: its time ran out, or it had nothing left to do there.",
   "de": "Eine UN-Mission in unserem Land hat mit unerledigter Arbeit geendet: Ihre Zeit ist abgelaufen, oder es gab dort nichts mehr für sie zu tun."
@@ -1734,14 +1726,6 @@
  "notification_un_mission_reinforced_notice_name": {
   "en": "A UN Mission Reinforced",
   "de": "Eine UN-Mission verstärkt"
- },
- "notification_un_mission_succeeded_notice_desc": {
-  "en": "A UN mission has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
-  "de": "Eine UN-Mission hat ihre Arbeit vollbracht. Die Erfolgsbilanz der Versammlung wächst, und die Länder, die in ihr gedient haben, werden dafür geehrt."
- },
- "notification_un_mission_succeeded_notice_name": {
-  "en": "A UN Mission Accomplished",
-  "de": "Eine UN-Mission vollbracht"
  },
  "notification_un_mission_withdrawn_notice_desc": {
   "en": "A member has brought its contingent home from the UN mission in one of our states. A peacekeeping or stabilisation mission with nobody left to serve in it fails.",

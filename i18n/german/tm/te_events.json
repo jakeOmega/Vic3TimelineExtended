@@ -273,7 +273,7 @@
  },
  "augmentation_events.3.d": {
   "en": "Employers are quietly replacing unaugmented workers with enhanced employees who can work faster, think sharper, and never tire. Unions are furious, warning of a new underclass of 'naturals' locked out of the economy.",
-  "de": "Arbeitgeber ersetzen stillschweigend nicht augmentierte Arbeiter durch verbesserte Angestellte, die schneller arbeiten, klarer denken und nie ermüden. Die Gewerkschaften sind aufgebracht und warnen vor einer neuen Unterschicht von ‚Natürlichen‘, die von der Wirtschaft ausgeschlossen werden."
+  "de": "Arbeitgeber ersetzen stillschweigend nicht augmentierte Arbeiter durch verbesserte Angestellte, die schneller arbeiten, klarer denken und nie ermüden. Die Gewerkschaften sind aufgebracht und warnen vor einer neuen Unterschicht von „Natürlichen“, die von der Wirtschaft ausgeschlossen werden."
  },
  "augmentation_events.3.f": {
   "en": "\\\"The hiring notice read 'enhanced reflexes preferred.'\\\"\\n\\n\\\"And the unaugmented applicants?\\\"\\n\\n\\\"Forty-three of them. None made it past the first screening. The hiring manager did not even bother with the interview slots — the screening rejected them automatically. He told me later that the company's reflex-test cutoff happens to match exactly the threshold no natural human can clear.\\\"",
@@ -1233,7 +1233,7 @@
  },
  "banking_cycle_events.30.d": {
   "en": "Sophisticated investors have discovered they can borrow cheaply in countries with low interest rates and invest the proceeds in countries offering higher returns. These so-called 'carry trades' are generating enormous profits for those who understand them, but they create hidden linkages between national financial systems. If exchange rates shift suddenly, the unraveling could be catastrophic.",
-  "de": "Versierte Investoren haben entdeckt, dass sie sich in Ländern mit niedrigen Zinsen günstig Geld leihen und die Erlöse in Ländern mit höheren Renditen anlegen können. Diese sogenannten ‚Carry Trades‘ bringen jenen, die sie verstehen, gewaltige Gewinne, schaffen aber verborgene Verbindungen zwischen den nationalen Finanzsystemen. Verschieben sich die Wechselkurse plötzlich, könnte die Auflösung katastrophal ausfallen."
+  "de": "Versierte Investoren haben entdeckt, dass sie sich in Ländern mit niedrigen Zinsen günstig Geld leihen und die Erlöse in Ländern mit höheren Renditen anlegen können. Diese sogenannten „Carry Trades“ bringen jenen, die sie verstehen, gewaltige Gewinne, schaffen aber verborgene Verbindungen zwischen den nationalen Finanzsystemen. Verschieben sich die Wechselkurse plötzlich, könnte die Auflösung katastrophal ausfallen."
  },
  "banking_cycle_events.30.f": {
   "en": "\\\"Borrow in Tokyo at one percent, invest in Buenos Aires at eight. The profit is almost effortless.\\\"\\n\\n\\\"And when the exchange rate moves?\\\"\\n\\n\\\"It won't.\\\"\\n\\n\\\"How can you be certain?\\\"\\n\\n\\\"Because if it does, we're all finished.\\\"",
@@ -1257,7 +1257,7 @@
  },
  "banking_cycle_events.31.d": {
   "en": "With public confidence in the banking system collapsing, advisors are urging the government to declare a 'bank holiday' - a temporary, mandatory closure of all financial institutions. The idea is to stop the panic, allow time for inspection and reorganization, and reopen only those banks that are solvent. It's a drastic measure, but the alternative may be a complete meltdown.",
-  "de": "Da das öffentliche Vertrauen in das Bankensystem zusammenbricht, drängen Berater die Regierung, einen ‚Bankfeiertag‘ auszurufen – eine vorübergehende, verpflichtende Schließung aller Finanzinstitute. Ziel ist es, die Panik zu stoppen, Zeit für Prüfung und Neuordnung zu gewinnen und nur die solventen Banken wieder zu öffnen. Es ist eine drastische Maßnahme, doch die Alternative könnte ein vollständiger Zusammenbruch sein."
+  "de": "Da das öffentliche Vertrauen in das Bankensystem zusammenbricht, drängen Berater die Regierung, einen „Bankfeiertag“ auszurufen – eine vorübergehende, verpflichtende Schließung aller Finanzinstitute. Ziel ist es, die Panik zu stoppen, Zeit für Prüfung und Neuordnung zu gewinnen und nur die solventen Banken wieder zu öffnen. Es ist eine drastische Maßnahme, doch die Alternative könnte ein vollständiger Zusammenbruch sein."
  },
  "banking_cycle_events.31.f": {
   "en": "\\\"Close every bank in the country?\\\"\\n\\n\\\"For three days. Perhaps a week.\\\"\\n\\n\\\"The public will riot.\\\"\\n\\n\\\"The public is already rioting. At least this way, when we reopen, they'll have something left to withdraw.\\\"",
@@ -1441,15 +1441,15 @@
  },
  "banking_cycle_events.39.d": {
   "en": "With interest rates already near zero and the economy still contracting, the central bank's economists have proposed an unconventional measure: creating new money to purchase government bonds in massive quantities. The goal is to drive down long-term borrowing costs and force investors into riskier assets, stimulating spending. The idea is controversial - critics call it 'printing money' and warn of inflation.",
-  "de": "Da die Zinsen bereits nahe null liegen und die Wirtschaft weiter schrumpft, haben die Ökonomen der Zentralbank eine unkonventionelle Maßnahme vorgeschlagen: neues Geld zu schaffen, um Staatsanleihen in gewaltigen Mengen aufzukaufen. Ziel ist es, die langfristigen Kreditkosten zu senken und Investoren in riskantere Anlagen zu drängen, um die Ausgaben anzukurbeln. Die Idee ist umstritten – Kritiker nennen es ‚Geld drucken‘ und warnen vor Inflation."
+  "de": "Da die Zinsen bereits nahe null liegen und die Wirtschaft weiter schrumpft, haben die Ökonomen der Zentralbank eine unkonventionelle Maßnahme vorgeschlagen: neues Geld zu schaffen, um Staatsanleihen in gewaltigen Mengen aufzukaufen. Ziel ist es, die langfristigen Kreditkosten zu senken und Investoren in riskantere Anlagen zu drängen, um die Ausgaben anzukurbeln. Die Idee ist umstritten – Kritiker nennen es „Geld drucken“ und warnen vor Inflation."
  },
  "banking_cycle_events.39.d_below_zero": {
   "en": "With the policy rate already cut below zero and the economy still contracting, the central bank's economists have proposed going further: creating new money to purchase government bonds in massive quantities. The goal is to drive down long-term borrowing costs and force investors into riskier assets, stimulating spending. The idea is controversial - critics call it 'printing money' and warn of inflation.",
-  "de": "Da der Leitzins bereits unter null gesenkt wurde und die Wirtschaft weiter schrumpft, haben die Ökonomen der Zentralbank vorgeschlagen, noch weiter zu gehen: neues Geld zu schaffen, um Staatsanleihen in gewaltigen Mengen aufzukaufen. Ziel ist es, die langfristigen Kreditkosten zu senken und Investoren in riskantere Anlagen zu drängen, um die Ausgaben anzukurbeln. Die Idee ist umstritten – Kritiker nennen es ‚Geld drucken‘ und warnen vor Inflation."
+  "de": "Da der Leitzins bereits unter null gesenkt wurde und die Wirtschaft weiter schrumpft, haben die Ökonomen der Zentralbank vorgeschlagen, noch weiter zu gehen: neues Geld zu schaffen, um Staatsanleihen in gewaltigen Mengen aufzukaufen. Ziel ist es, die langfristigen Kreditkosten zu senken und Investoren in riskantere Anlagen zu drängen, um die Ausgaben anzukurbeln. Die Idee ist umstritten – Kritiker nennen es „Geld drucken“ und warnen vor Inflation."
  },
  "banking_cycle_events.39.d_simplified": {
   "en": "With the economy still contracting, the government's economists have proposed an unconventional measure: creating new money to purchase government bonds in massive quantities. The goal is to drive down long-term borrowing costs and force investors into riskier assets, stimulating spending. The idea is controversial - critics call it 'printing money' and warn of inflation.",
-  "de": "Da die Wirtschaft weiter schrumpft, haben die Ökonomen der Regierung eine unkonventionelle Maßnahme vorgeschlagen: neues Geld zu schaffen, um Staatsanleihen in gewaltigen Mengen aufzukaufen. Ziel ist es, die langfristigen Kreditkosten zu senken und Investoren in riskantere Anlagen zu drängen, um die Ausgaben anzukurbeln. Die Idee ist umstritten – Kritiker nennen es ‚Geld drucken‘ und warnen vor Inflation."
+  "de": "Da die Wirtschaft weiter schrumpft, haben die Ökonomen der Regierung eine unkonventionelle Maßnahme vorgeschlagen: neues Geld zu schaffen, um Staatsanleihen in gewaltigen Mengen aufzukaufen. Ziel ist es, die langfristigen Kreditkosten zu senken und Investoren in riskantere Anlagen zu drängen, um die Ausgaben anzukurbeln. Die Idee ist umstritten – Kritiker nennen es „Geld drucken“ und warnen vor Inflation."
  },
  "banking_cycle_events.39.f": {
   "en": "\\\"So let me understand. The central bank creates money out of nothing, uses it to buy government debt, and this is supposed to fix the economy?\\\"\\n\\n\\\"In essence, yes.\\\"\\n\\n\\\"And this isn't just... cheating?\\\"\\n\\n\\\"We prefer the term 'unconventional monetary policy.'\\\"",
@@ -5185,7 +5185,7 @@
  },
  "extra_law_events.25.f": {
   "en": "The three professors sat before the committee like defendants awaiting sentencing. The classicist spoke first: 'Revive the old tongue. It has the weight of centuries behind it.'\\n\\n'Centuries of irrelevance,' the linguist countered. 'Build something new. Something logical. Something a child can learn in a year.'\\n\\nThe pragmatist, who had been cleaning his spectacles, looked up. 'Or we could simply fix what we already have. Fewer revolutions, fewer dictionaries to reprint.'\\n\\nThe committee chair sighed. 'Gentlemen, you were supposed to agree.'",
-  "de": "Die drei Professoren saßen vor dem Ausschuss wie Angeklagte, die auf ihr Urteil warten. Der Altphilologe sprach zuerst: ‚Belebt die alte Sprache wieder. Sie hat das Gewicht der Jahrhunderte hinter sich.‘\\n\\n‚Jahrhunderte der Bedeutungslosigkeit‘, entgegnete der Linguist. ‚Baut etwas Neues. Etwas Logisches. Etwas, das ein Kind in einem Jahr lernen kann.‘\\n\\nDer Pragmatiker, der gerade seine Brille geputzt hatte, blickte auf. ‚Oder wir richten einfach, was wir bereits haben. Weniger Umwälzungen, weniger Wörterbücher, die neu gedruckt werden müssen.‘\\n\\nDer Ausschussvorsitzende seufzte. ‚Meine Herren, Sie sollten sich doch einig werden.‘"
+  "de": "Die drei Professoren saßen vor dem Ausschuss wie Angeklagte, die auf ihr Urteil warten. Der Altphilologe sprach zuerst: „Belebt die alte Sprache wieder. Sie hat das Gewicht der Jahrhunderte hinter sich.“\\n\\n„Jahrhunderte der Bedeutungslosigkeit“, entgegnete der Linguist. „Baut etwas Neues. Etwas Logisches. Etwas, das ein Kind in einem Jahr lernen kann.“\\n\\nDer Pragmatiker, der gerade seine Brille geputzt hatte, blickte auf. „Oder wir richten einfach, was wir bereits haben. Weniger Umwälzungen, weniger Wörterbücher, die neu gedruckt werden müssen.“\\n\\nDer Ausschussvorsitzende seufzte. „Meine Herren, Sie sollten sich doch einig werden.“"
  },
  "extra_law_events.25.t": {
   "en": "The Nature of the Reform",
@@ -5249,7 +5249,7 @@
  },
  "extra_law_events.28.f": {
   "en": "'I have the votes to kill this bill,' the minority delegate said, 'and the inclination to use them. Unless you give us something.'\\n\\n'What do you want?'\\n\\n'Script preservation. Our alphabet in our schools. Official recognition that our language exists.'\\n\\nThe drafter rubbed his temples. 'That wasn't in the original bill.'\\n\\n'Neither was my vote. Shall we negotiate, or shall we both go home empty-handed?'",
-  "de": "‚Ich habe die Stimmen, um dieses Gesetz zu Fall zu bringen‘, sagte der Delegierte der Minderheit, ‚und die Absicht, sie zu nutzen. Es sei denn, Sie geben uns etwas.‘\\n\\n‚Was wollen Sie?‘\\n\\n‚Erhaltung unserer Schrift. Unser Alphabet in unseren Schulen. Die offizielle Anerkennung, dass unsere Sprache existiert.‘\\n\\nDer Verfasser rieb sich die Schläfen. ‚Das stand nicht im ursprünglichen Entwurf.‘\\n\\n‚Meine Stimme auch nicht. Sollen wir verhandeln, oder sollen wir beide mit leeren Händen nach Hause gehen?‘"
+  "de": "„Ich habe die Stimmen, um dieses Gesetz zu Fall zu bringen“, sagte der Delegierte der Minderheit, „und die Absicht, sie zu nutzen. Es sei denn, Sie geben uns etwas.“\\n\\n„Was wollen Sie?“\\n\\n„Erhaltung unserer Schrift. Unser Alphabet in unseren Schulen. Die offizielle Anerkennung, dass unsere Sprache existiert.“\\n\\nDer Verfasser rieb sich die Schläfen. „Das stand nicht im ursprünglichen Entwurf.“\\n\\n„Meine Stimme auch nicht. Sollen wir verhandeln, oder sollen wir beide mit leeren Händen nach Hause gehen?“"
  },
  "extra_law_events.28.t": {
   "en": "The Language Compromise",
@@ -5277,7 +5277,7 @@
  },
  "extra_law_events.29.f": {
   "en": "'You want to break up our largest company,' the industrialist said. 'The one that employs more people than any other. The one that keeps us competitive abroad.'\\n\\n'We want to break up a monopoly that fixes prices and crushes competitors.'\\n\\n'Same thing, from different angles.' He leaned back. 'I'll offer you this: exempt the national champion, and I'll deliver the votes you need for everything else.'\\n\\nThe reformer stared at the ceiling. It was, she reflected, a very ugly ceiling. 'Let me think about it.'",
-  "de": "‚Sie wollen unser größtes Unternehmen zerschlagen‘, sagte der Industrielle. ‚Dasjenige, das mehr Menschen beschäftigt als jedes andere. Dasjenige, das uns im Ausland wettbewerbsfähig hält.‘\\n\\n‚Wir wollen ein Monopol zerschlagen, das Preise festsetzt und Konkurrenten zermalmt.‘\\n\\n‚Dasselbe, nur aus anderem Blickwinkel.‘ Er lehnte sich zurück. ‚Ich biete Ihnen Folgendes an: Nehmen Sie den nationalen Vorzeigekonzern aus, und ich liefere Ihnen die Stimmen, die Sie für alles andere brauchen.‘\\n\\nDie Reformerin starrte an die Decke. Es war, wie sie fand, eine sehr hässliche Decke. ‚Lassen Sie mich darüber nachdenken.‘"
+  "de": "„Sie wollen unser größtes Unternehmen zerschlagen“, sagte der Industrielle. „Dasjenige, das mehr Menschen beschäftigt als jedes andere. Dasjenige, das uns im Ausland wettbewerbsfähig hält.“\\n\\n„Wir wollen ein Monopol zerschlagen, das Preise festsetzt und Konkurrenten zermalmt.“\\n\\n„Dasselbe, nur aus anderem Blickwinkel.“ Er lehnte sich zurück. „Ich biete Ihnen Folgendes an: Nehmen Sie den nationalen Vorzeigekonzern aus, und ich liefere Ihnen die Stimmen, die Sie für alles andere brauchen.“\\n\\nDie Reformerin starrte an die Decke. Es war, wie sie fand, eine sehr hässliche Decke. „Lassen Sie mich darüber nachdenken.“"
  },
  "extra_law_events.29.t": {
   "en": "The Trust Question",
@@ -5321,7 +5321,7 @@
  },
  "extra_law_events.30.f": {
   "en": "The magistrate had seen both systems in practice. 'You want my honest opinion?' he asked the committee.\\n\\n'That is why we invited you.'\\n\\n'Mandatory minimums fill the prisons. Community service empties them. Neither, on its own, reduces crime.' He folded his hands. 'But one costs the treasury a great deal more than the other, and I shall leave it to you to guess which.'\\n\\n'And if we pass the bill without either [concept_amendment]?'\\n\\n'Then you will have a law that everyone admires and no one can enforce.'",
-  "de": "Der Richter hatte beide Systeme in der Praxis erlebt. ‚Wollen Sie meine ehrliche Meinung hören?‘, fragte er den Ausschuss.\\n\\n‚Deshalb haben wir Sie eingeladen.‘\\n\\n‚Mindeststrafen füllen die Gefängnisse. Gemeinnützige Arbeit leert sie. Keines von beidem senkt für sich genommen die Kriminalität.‘ Er faltete die Hände. ‚Aber eines kostet die Staatskasse weit mehr als das andere, und ich überlasse es Ihnen, zu erraten, welches.‘\\n\\n‚Und wenn wir das Gesetz ohne einen der beiden [concept_amendment] verabschieden?‘\\n\\n‚Dann haben Sie ein Gesetz, das alle bewundern und das niemand durchsetzen kann.‘"
+  "de": "Der Richter hatte beide Systeme in der Praxis erlebt. „Wollen Sie meine ehrliche Meinung hören?“, fragte er den Ausschuss.\\n\\n„Deshalb haben wir Sie eingeladen.“\\n\\n„Mindeststrafen füllen die Gefängnisse. Gemeinnützige Arbeit leert sie. Keines von beidem senkt für sich genommen die Kriminalität.“ Er faltete die Hände. „Aber eines kostet die Staatskasse weit mehr als das andere, und ich überlasse es Ihnen, zu erraten, welches.“\\n\\n„Und wenn wir das Gesetz ohne einen der beiden [concept_amendment] verabschieden?“\\n\\n„Dann haben Sie ein Gesetz, das alle bewundern und das niemand durchsetzen kann.“"
  },
  "extra_law_events.30.t": {
   "en": "The Sentencing Debate",
@@ -5349,7 +5349,7 @@
  },
  "extra_law_events.31.f": {
   "en": "'The industrialists want a clause permitting commercial data collection,' the aide said. 'The intelligentsia want whistleblower protections written in.'\\n\\n'And if I give one side what they want?'\\n\\n'The other side kills the bill.'\\n\\nThe legislator rubbed her eyes and looked at the stack of [Concept('concept_amendment', 'amendments')] on her desk. There were forty-seven of them. She had read eleven.\\n\\n'What does the current draft do?'\\n\\n'Nothing that anyone particularly wants, ma'am.'",
-  "de": "‚Die Industriellen wollen eine Klausel, die die kommerzielle Datensammlung erlaubt‘, sagte der Berater. ‚Die Intelligenzija will Schutzbestimmungen für Whistleblower im Text verankert sehen.‘\\n\\n‚Und wenn ich der einen Seite gebe, was sie will?‘\\n\\n‚Dann bringt die andere Seite den Entwurf zu Fall.‘\\n\\nDie Abgeordnete rieb sich die Augen und blickte auf den Stapel [Concept('concept_amendment', 'Nachträge')] auf ihrem Schreibtisch. Es waren siebenundvierzig. Sie hatte elf gelesen.\\n\\n‚Was bewirkt der aktuelle Entwurf?‘\\n\\n‚Nichts, das sich irgendjemand besonders wünscht, Madam.‘"
+  "de": "„Die Industriellen wollen eine Klausel, die die kommerzielle Datensammlung erlaubt“, sagte der Berater. „Die Intelligenzija will Schutzbestimmungen für Whistleblower im Text verankert sehen.“\\n\\n„Und wenn ich der einen Seite gebe, was sie will?“\\n\\n„Dann bringt die andere Seite den Entwurf zu Fall.“\\n\\nDie Abgeordnete rieb sich die Augen und blickte auf den Stapel [Concept('concept_amendment', 'Nachträge')] auf ihrem Schreibtisch. Es waren siebenundvierzig. Sie hatte elf gelesen.\\n\\n„Was bewirkt der aktuelle Entwurf?“\\n\\n„Nichts, das sich irgendjemand besonders wünscht, Madam.“"
  },
  "extra_law_events.31.t": {
   "en": "The Privacy Bargain",
@@ -6257,7 +6257,7 @@
  },
  "extra_law_events.7.d": {
   "en": "The proposed changes to our genetic legislation have sparked a furious moral debate. The [SCOPE.gsInterestGroup('devout_ig').GetName] have organized public sermons denouncing the 'arrogance of man,' while scientists plead for the freedom to pursue breakthroughs that could end hereditary disease.",
-  "de": "Die geplanten Änderungen unserer Gengesetzgebung haben eine erbitterte moralische Debatte entfacht. Die [SCOPE.gsInterestGroup('devout_ig').GetName] haben öffentliche Predigten organisiert, die die ‚Anmaßung des Menschen‘ anprangern, während Wissenschaftler um die Freiheit bitten, Durchbrüche zu verfolgen, die Erbkrankheiten beenden könnten."
+  "de": "Die geplanten Änderungen unserer Gengesetzgebung haben eine erbitterte moralische Debatte entfacht. Die [SCOPE.gsInterestGroup('devout_ig').GetName] haben öffentliche Predigten organisiert, die die „Anmaßung des Menschen“ anprangern, während Wissenschaftler um die Freiheit bitten, Durchbrüche zu verfolgen, die Erbkrankheiten beenden könnten."
  },
  "extra_law_events.7.f": {
   "en": "\\\"To rewrite the very code of life written by the Almighty is to commit the sin of Prometheus. But then, Prometheus did bring us fire, and we have yet to return it.\\\"",
@@ -6301,7 +6301,7 @@
  },
  "extra_law_events.71.f": {
   "en": "\\\"Tell us who watches us and we will tell you what kind of law it really is.\\\"\\n\\n\\\"And what does that tell you?\\\"\\n\\n\\\"Whether the law was written by the people who will have to live under it, or by the people who will live above it. The two groups never produce the same draft.\\\"",
-  "de": "\\\"Sag mir, wer dich überwacht, und ich sage dir, was für ein Gesetz das wirklich ist.\\\"\\n\\n\\\"Und was sagt es dir?\\\"\\n\\n\\\"Ob das Gesetz von denen geschrieben wurde, die darunter leben müssen, oder von denen, die darüber leben werden. Die beiden Gruppen verfassen nie denselben Entwurf.\\\""
+  "de": "„Sag mir, wer dich überwacht, und ich sage dir, was für ein Gesetz das wirklich ist.“\\n\\n„Und was sagt es dir?“\\n\\n„Ob das Gesetz von denen geschrieben wurde, die darunter leben müssen, oder von denen, die darüber leben werden. Die beiden Gruppen verfassen nie denselben Entwurf.“"
  },
  "extra_law_events.71.t": {
   "en": "Civilian Oversight or Military Self-Regulation?",
@@ -6321,7 +6321,7 @@
  },
  "extra_law_events.72.f": {
   "en": "\\\"We can fix the criminal, or we can punish him. The state has the resources to commit to one of these. It does not have the resources to do both half-heartedly.\\\"\\n\\n\\\"The bill funds both.\\\"\\n\\n\\\"The bill funds both for two years. Then the rehabilitation budget will be cut, because punishment makes better campaign material than therapy. We have seen this before.\\\"",
-  "de": "\\\"Wir können den Verbrecher bessern, oder wir können ihn bestrafen. Der Staat hat die Mittel, sich für eines von beidem zu entscheiden. Er hat nicht die Mittel, beides halbherzig zu tun.\\\"\\n\\n\\\"Das Gesetz finanziert beides.\\\"\\n\\n\\\"Das Gesetz finanziert beides für zwei Jahre. Dann wird das Budget für die Resozialisierung gekürzt, weil Strafe sich im Wahlkampf besser macht als Therapie. Das haben wir schon erlebt.\\\""
+  "de": "„Wir können den Verbrecher bessern, oder wir können ihn bestrafen. Der Staat hat die Mittel, sich für eines von beidem zu entscheiden. Er hat nicht die Mittel, beides halbherzig zu tun.“\\n\\n„Das Gesetz finanziert beides.“\\n\\n„Das Gesetz finanziert beides für zwei Jahre. Dann wird das Budget für die Resozialisierung gekürzt, weil Strafe sich im Wahlkampf besser macht als Therapie. Das haben wir schon erlebt.“"
  },
  "extra_law_events.72.t": {
   "en": "Rehabilitation or Retribution?",
@@ -6341,7 +6341,7 @@
  },
  "extra_law_events.73.f": {
   "en": "\\\"A nation is held together by what its people say to each other. The law will determine whether that conversation has one tongue or many.\\\"\\n\\n\\\"And if the conversation has many?\\\"\\n\\n\\\"Then the nation has many sub-conversations, each strong, each distinct, each occasionally talking past the others. That is one kind of strength. The other is to have one conversation, lesser in variety but easier to govern. Both are real choices.\\\"",
-  "de": "\\\"Eine Nation wird durch das zusammengehalten, was ihre Menschen einander sagen. Das Gesetz wird bestimmen, ob dieses Gespräch eine Sprache hat oder viele.\\\"\\n\\n\\\"Und wenn es viele sind?\\\"\\n\\n\\\"Dann hat die Nation viele Nebengespräche, jedes für sich stark, jedes eigenständig, jedes gelegentlich aneinander vorbeiredend. Das ist eine Art von Stärke. Die andere ist ein einziges Gespräch, ärmer an Vielfalt, aber leichter zu regieren. Beides sind echte Optionen.\\\""
+  "de": "„Eine Nation wird durch das zusammengehalten, was ihre Menschen einander sagen. Das Gesetz wird bestimmen, ob dieses Gespräch eine Sprache hat oder viele.“\\n\\n„Und wenn es viele sind?“\\n\\n„Dann hat die Nation viele Nebengespräche, jedes für sich stark, jedes eigenständig, jedes gelegentlich aneinander vorbeiredend. Das ist eine Art von Stärke. Die andere ist ein einziges Gespräch, ärmer an Vielfalt, aber leichter zu regieren. Beides sind echte Optionen.“"
  },
  "extra_law_events.73.t": {
   "en": "Pluralist or Assimilationist?",
@@ -6361,7 +6361,7 @@
  },
  "extra_law_events.74.f": {
   "en": "\\\"Limit me and I will find a way around your limit. Make me disclose, and at least the public will know what I did.\\\"\\n\\n\\\"And if the public does not care?\\\"\\n\\n\\\"Then the public deserves the politics it gets. The disclosure regime is for the public's sake, not mine. I would have preferred no rule at all.\\\"",
-  "de": "\\\"Begrenze mich, und ich finde einen Weg um deine Grenze herum. Lass mich offenlegen, und wenigstens weiß die Öffentlichkeit, was ich getan habe.\\\"\\n\\n\\\"Und wenn es der Öffentlichkeit egal ist?\\\"\\n\\n\\\"Dann verdient die Öffentlichkeit die Politik, die sie bekommt. Die Offenlegungspflicht ist um der Öffentlichkeit willen, nicht um meinetwillen. Am liebsten hätte ich gar keine Regel gehabt.\\\""
+  "de": "„Begrenze mich, und ich finde einen Weg um deine Grenze herum. Lass mich offenlegen, und wenigstens weiß die Öffentlichkeit, was ich getan habe.“\\n\\n„Und wenn es der Öffentlichkeit egal ist?“\\n\\n„Dann verdient die Öffentlichkeit die Politik, die sie bekommt. Die Offenlegungspflicht ist um der Öffentlichkeit willen, nicht um meinetwillen. Am liebsten hätte ich gar keine Regel gehabt.“"
  },
  "extra_law_events.74.t": {
   "en": "Hard Caps or Voluntary Disclosure?",
@@ -6381,7 +6381,7 @@
  },
  "extra_law_events.75.f": {
   "en": "\\\"The provinces have memory. The capital has ambition. The law must decide which to honor — there is no compromise that both will recognize.\\\"\\n\\n\\\"There is always a compromise.\\\"\\n\\n\\\"There is always a compromise written on the page. There is rarely a compromise that survives implementation. The capital will implement. The provinces will remember. The compromise will be neither.\\\"",
-  "de": "\\\"Die Provinzen haben ein Gedächtnis. Die Hauptstadt hat Ehrgeiz. Das Gesetz muss entscheiden, wen es ehrt — einen Kompromiss, den beide anerkennen, gibt es nicht.\\\"\\n\\n\\\"Es gibt immer einen Kompromiss.\\\"\\n\\n\\\"Es gibt immer einen Kompromiss auf dem Papier. Es gibt selten einen Kompromiss, der die Umsetzung überlebt. Die Hauptstadt wird umsetzen. Die Provinzen werden sich erinnern. Der Kompromiss wird keines von beidem sein.\\\""
+  "de": "„Die Provinzen haben ein Gedächtnis. Die Hauptstadt hat Ehrgeiz. Das Gesetz muss entscheiden, wen es ehrt — einen Kompromiss, den beide anerkennen, gibt es nicht.“\\n\\n„Es gibt immer einen Kompromiss.“\\n\\n„Es gibt immer einen Kompromiss auf dem Papier. Es gibt selten einen Kompromiss, der die Umsetzung überlebt. Die Hauptstadt wird umsetzen. Die Provinzen werden sich erinnern. Der Kompromiss wird keines von beidem sein.“"
  },
  "extra_law_events.75.t": {
   "en": "Federal Protections or Centralized?",
@@ -6401,7 +6401,7 @@
  },
  "extra_law_events.76.f": {
   "en": "\\\"Begin with 'yes, except' and you will end up with a society that says yes. Begin with 'no, unless' and you will end up with a society that says no. The first word in the law is the whole law.\\\"\\n\\n\\\"And the exceptions?\\\"\\n\\n\\\"The exceptions narrow over time when the default is permissive. They widen over time when the default is restrictive. The law's centre of gravity is wherever the law's first word puts it. Choose the first word with care.\\\"",
-  "de": "\\\"Beginne mit „ja, außer“, und du endest bei einer Gesellschaft, die Ja sagt. Beginne mit „nein, es sei denn“, und du endest bei einer Gesellschaft, die Nein sagt. Das erste Wort im Gesetz ist das ganze Gesetz.\\\"\\n\\n\\\"Und die Ausnahmen?\\\"\\n\\n\\\"Die Ausnahmen schrumpfen mit der Zeit, wenn die Grundhaltung freizügig ist. Sie wachsen mit der Zeit, wenn die Grundhaltung restriktiv ist. Der Schwerpunkt des Gesetzes liegt dort, wohin ihn das erste Wort setzt. Wähle das erste Wort mit Bedacht.\\\""
+  "de": "„Beginne mit ‚ja, außer‘, und du endest bei einer Gesellschaft, die Ja sagt. Beginne mit ‚nein, es sei denn‘, und du endest bei einer Gesellschaft, die Nein sagt. Das erste Wort im Gesetz ist das ganze Gesetz.“\\n\\n„Und die Ausnahmen?“\\n\\n„Die Ausnahmen schrumpfen mit der Zeit, wenn die Grundhaltung freizügig ist. Sie wachsen mit der Zeit, wenn die Grundhaltung restriktiv ist. Der Schwerpunkt des Gesetzes liegt dort, wohin ihn das erste Wort setzt. Wähle das erste Wort mit Bedacht.“"
  },
  "extra_law_events.76.t": {
   "en": "Permissive or Restrictive Ethics?",
@@ -6421,7 +6421,7 @@
  },
  "extra_law_events.77.f": {
   "en": "\\\"Equal inheritance dissolves the great houses in three generations. Primogeniture preserves them for ten. The state will choose which timeline it lives in.\\\"\\n\\n\\\"And the cadet sons?\\\"\\n\\n\\\"Will become lawyers, soldiers, merchants. They will build the next generation's wealth in places the old houses do not reach. Whether this is progress or loss depends on which side of the great house you are sitting on.\\\"",
-  "de": "\\\"Gleiches Erbe löst die großen Häuser binnen drei Generationen auf. Das Erstgeburtsrecht bewahrt sie für zehn. Der Staat wird wählen, in welcher Zeitlinie er lebt.\\\"\\n\\n\\\"Und die nachgeborenen Söhne?\\\"\\n\\n\\\"Werden Anwälte, Soldaten, Kaufleute. Sie werden den Wohlstand der nächsten Generation an Orten aufbauen, die die alten Häuser nicht erreichen. Ob das Fortschritt oder Verlust ist, hängt davon ab, auf welcher Seite des großen Hauses man sitzt.\\\""
+  "de": "„Gleiches Erbe löst die großen Häuser binnen drei Generationen auf. Das Erstgeburtsrecht bewahrt sie für zehn. Der Staat wird wählen, in welcher Zeitlinie er lebt.“\\n\\n„Und die nachgeborenen Söhne?“\\n\\n„Werden Anwälte, Soldaten, Kaufleute. Sie werden den Wohlstand der nächsten Generation an Orten aufbauen, die die alten Häuser nicht erreichen. Ob das Fortschritt oder Verlust ist, hängt davon ab, auf welcher Seite des großen Hauses man sitzt.“"
  },
  "extra_law_events.77.t": {
   "en": "Equal Split or Primogeniture?",
@@ -6441,7 +6441,7 @@
  },
  "extra_law_events.78.f": {
   "en": "\\\"The wedding ring or the paycheck. Both matter, but the law must lead with one. Which one you lead with tells the country what kind of equality you mean.\\\"\\n\\n\\\"And what kind do we mean?\\\"\\n\\n\\\"If you ask the country, the country will answer in pieces. The lawyer will say marriage; the worker will say wages. Both will be telling you what their own lives need first. The law tells us what the state thinks is most worth fighting for.\\\"",
-  "de": "\\\"Der Ehering oder die Lohntüte. Beides zählt, aber das Gesetz muss mit einem beginnen. Womit man beginnt, sagt dem Land, welche Art von Gleichheit man meint.\\\"\\n\\n\\\"Und welche meinen wir?\\\"\\n\\n\\\"Fragt man das Land, wird das Land in Bruchstücken antworten. Der Jurist wird Ehe sagen; der Arbeiter wird Lohn sagen. Beide werden dir sagen, was ihr eigenes Leben zuerst braucht. Das Gesetz sagt uns, wofür der Staat am meisten zu kämpfen bereit ist.\\\""
+  "de": "„Der Ehering oder die Lohntüte. Beides zählt, aber das Gesetz muss mit einem beginnen. Womit man beginnt, sagt dem Land, welche Art von Gleichheit man meint.“\\n\\n„Und welche meinen wir?“\\n\\n„Fragt man das Land, wird das Land in Bruchstücken antworten. Der Jurist wird Ehe sagen; der Arbeiter wird Lohn sagen. Beide werden dir sagen, was ihr eigenes Leben zuerst braucht. Das Gesetz sagt uns, wofür der Staat am meisten zu kämpfen bereit ist.“"
  },
  "extra_law_events.78.t": {
   "en": "Marriage Rights or Employment Rights First?",
@@ -6461,7 +6461,7 @@
  },
  "extra_law_events.79.f": {
   "en": "\\\"You can subsidize more babies, or you can subsidize choice about babies. The treasury can afford one of these as a flagship. Pick which.\\\"\\n\\n\\\"Both are necessary.\\\"\\n\\n\\\"Both are necessary. Neither will get full funding. The flagship one will be defended in every speech; the other will be defended only by the people who use it. The flagship one wins.\\\"",
-  "de": "\\\"Man kann mehr Kinder subventionieren, oder man kann die Wahlfreiheit bei Kindern subventionieren. Die Staatskasse kann sich eines davon als Vorzeigeprojekt leisten. Wähle, welches.\\\"\\n\\n\\\"Beides ist notwendig.\\\"\\n\\n\\\"Beides ist notwendig. Keines wird voll finanziert werden. Das Vorzeigeprojekt wird in jeder Rede verteidigt; das andere wird nur von denen verteidigt, die es nutzen. Das Vorzeigeprojekt gewinnt.\\\""
+  "de": "„Man kann mehr Kinder subventionieren, oder man kann die Wahlfreiheit bei Kindern subventionieren. Die Staatskasse kann sich eines davon als Vorzeigeprojekt leisten. Wähle, welches.“\\n\\n„Beides ist notwendig.“\\n\\n„Beides ist notwendig. Keines wird voll finanziert werden. Das Vorzeigeprojekt wird in jeder Rede verteidigt; das andere wird nur von denen verteidigt, die es nutzen. Das Vorzeigeprojekt gewinnt.“"
  },
  "extra_law_events.79.t": {
   "en": "Pro-Natalist or Family Planning?",
@@ -6481,7 +6481,7 @@
  },
  "extra_law_events.8.f": {
   "en": "\\\"The great trusts have turned the marketplace into a private fiefdom. Where once a hundred firms competed, now one baron sits upon a throne of steel and oil, and dares to call his extortion 'efficiency.'\\\"",
-  "de": "\\\"Die großen Trusts haben den Markt in ein privates Lehnsgut verwandelt. Wo einst hundert Firmen konkurrierten, sitzt nun ein einzelner Baron auf einem Thron aus Stahl und Öl und wagt es, seine Erpressung „Effizienz“ zu nennen.\\\""
+  "de": "„Die großen Trusts haben den Markt in ein privates Lehnsgut verwandelt. Wo einst hundert Firmen konkurrierten, sitzt nun ein einzelner Baron auf einem Thron aus Stahl und Öl und wagt es, seine Erpressung ‚Effizienz‘ zu nennen.“"
  },
  "extra_law_events.8.t": {
   "en": "The Robber Barons",
@@ -6501,7 +6501,7 @@
  },
  "extra_law_events.80.f": {
   "en": "\\\"Begin with disclosure and you build a state that explains itself. Begin with exemptions and you build a state that need not. The architecture is the policy.\\\"\\n\\n\\\"And we explain ourselves now.\\\"\\n\\n\\\"You explain when asked. The bill decides whether the default is asking or being told. The difference is small in any one case. Over a decade, the difference is the whole posture of the state.\\\"",
-  "de": "\\\"Beginne mit Offenlegung, und du baust einen Staat, der sich erklärt. Beginne mit Ausnahmen, und du baust einen Staat, der das nicht muss. Die Struktur ist die Politik.\\\"\\n\\n\\\"Und wir erklären uns doch schon jetzt.\\\"\\n\\n\\\"Ihr erklärt euch, wenn man fragt. Das Gesetz entscheidet, ob der Regelfall das Fragen ist oder das Mitgeteiltwerden. Der Unterschied ist im Einzelfall klein. Über ein Jahrzehnt ist der Unterschied die ganze Haltung des Staates.\\\""
+  "de": "„Beginne mit Offenlegung, und du baust einen Staat, der sich erklärt. Beginne mit Ausnahmen, und du baust einen Staat, der das nicht muss. Die Struktur ist die Politik.“\\n\\n„Und wir erklären uns doch schon jetzt.“\\n\\n„Ihr erklärt euch, wenn man fragt. Das Gesetz entscheidet, ob der Regelfall das Fragen ist oder das Mitgeteiltwerden. Der Unterschied ist im Einzelfall klein. Über ein Jahrzehnt ist der Unterschied die ganze Haltung des Staates.“"
  },
  "extra_law_events.80.t": {
   "en": "Transparency or Stability First?",
@@ -6521,7 +6521,7 @@
  },
  "extra_law_events.81.f": {
   "en": "\\\"Treat people equally and the old inequalities persist. Treat them differently to fix the old inequalities and you create new ones. Pick your error.\\\"\\n\\n\\\"There is no error-free path.\\\"\\n\\n\\\"There is no error-free path, and the people who tell you there is are selling you the other party's bill. Decide which mistakes you can defend in twenty years, and write the law accordingly.\\\"",
-  "de": "\\\"Behandle die Menschen gleich, und die alten Ungleichheiten bleiben bestehen. Behandle sie unterschiedlich, um die alten Ungleichheiten zu beheben, und du schaffst neue. Wähle deinen Fehler.\\\"\\n\\n\\\"Es gibt keinen fehlerfreien Weg.\\\"\\n\\n\\\"Es gibt keinen fehlerfreien Weg, und wer dir das Gegenteil erzählt, verkauft dir das Programm der anderen Partei. Entscheide, welche Fehler du in zwanzig Jahren verteidigen kannst, und schreibe das Gesetz entsprechend.\\\""
+  "de": "„Behandle die Menschen gleich, und die alten Ungleichheiten bleiben bestehen. Behandle sie unterschiedlich, um die alten Ungleichheiten zu beheben, und du schaffst neue. Wähle deinen Fehler.“\\n\\n„Es gibt keinen fehlerfreien Weg.“\\n\\n„Es gibt keinen fehlerfreien Weg, und wer dir das Gegenteil erzählt, verkauft dir das Programm der anderen Partei. Entscheide, welche Fehler du in zwanzig Jahren verteidigen kannst, und schreibe das Gesetz entsprechend.“"
  },
  "extra_law_events.81.t": {
   "en": "Affirmative Action or Equal Treatment?",
@@ -6541,7 +6541,7 @@
  },
  "extra_law_events.82.f": {
   "en": "\\\"Teach a man to fish, the proverb says. Give a man a fish, the modern reformer answers. Either way, someone pays for the boat. The state must decide which message it wants to send.\\\"\\n\\n\\\"Can we send both?\\\"\\n\\n\\\"You can send both. The message is whichever one gets the larger budget line. The country will read the budget line, not the speech.\\\"",
-  "de": "\\\"Lehre einen Mann das Fischen, sagt das Sprichwort. Gib einem Mann einen Fisch, antwortet der moderne Reformer. So oder so zahlt am Ende jemand für das Boot. Der Staat muss entscheiden, welche Botschaft er senden will.\\\"\\n\\n\\\"Können wir nicht beides senden?\\\"\\n\\n\\\"Man kann beides senden. Die Botschaft ist die, die den größeren Budgetposten bekommt. Das Land wird den Budgetposten lesen, nicht die Rede.\\\""
+  "de": "„Lehre einen Mann das Fischen, sagt das Sprichwort. Gib einem Mann einen Fisch, antwortet der moderne Reformer. So oder so zahlt am Ende jemand für das Boot. Der Staat muss entscheiden, welche Botschaft er senden will.“\\n\\n„Können wir nicht beides senden?“\\n\\n„Man kann beides senden. Die Botschaft ist die, die den größeren Budgetposten bekommt. Das Land wird den Budgetposten lesen, nicht die Rede.“"
  },
  "extra_law_events.82.t": {
   "en": "Retraining or UBI?",
@@ -6561,7 +6561,7 @@
  },
  "extra_law_events.83.f": {
   "en": "\\\"When the algorithm says one thing and the human says another, which one wins by default? That answer is the entire law.\\\"\\n\\n\\\"The human can always override.\\\"\\n\\n\\\"The human can always override on paper. In practice, the override carries a paperwork burden, a review meeting, and a recorded justification. The default wins. It always does.\\\"",
-  "de": "\\\"Wenn der Algorithmus das eine sagt und der Mensch das andere, wer gewinnt dann im Regelfall? Diese Antwort ist das ganze Gesetz.\\\"\\n\\n\\\"Der Mensch kann jederzeit eingreifen.\\\"\\n\\n\\\"Der Mensch kann auf dem Papier jederzeit eingreifen. In der Praxis bedeutet der Eingriff Papierkram, eine Prüfungssitzung und eine dokumentierte Begründung. Der Regelfall gewinnt. Das tut er immer.\\\""
+  "de": "„Wenn der Algorithmus das eine sagt und der Mensch das andere, wer gewinnt dann im Regelfall? Diese Antwort ist das ganze Gesetz.“\\n\\n„Der Mensch kann jederzeit eingreifen.“\\n\\n„Der Mensch kann auf dem Papier jederzeit eingreifen. In der Praxis bedeutet der Eingriff Papierkram, eine Prüfungssitzung und eine dokumentierte Begründung. Der Regelfall gewinnt. Das tut er immer.“"
  },
  "extra_law_events.83.t": {
   "en": "Tech First or Human Oversight First?",
@@ -6581,7 +6581,7 @@
  },
  "extra_law_events.84.f": {
   "en": "\\\"A vote of all the people takes a day. A deliberation by a hundred chosen by lot takes a week and produces a better answer. The state must decide which it values more.\\\"\\n\\n\\\"Better by whose standard?\\\"\\n\\n\\\"By every standard except the speed of the answer. Which is, of course, the standard that wins most arguments in politics. Hence the difficulty of getting the deliberative model adopted.\\\"",
-  "de": "\\\"Eine Abstimmung des ganzen Volkes dauert einen Tag. Eine Beratung von hundert Ausgelosten dauert eine Woche und liefert eine bessere Antwort. Der Staat muss entscheiden, was ihm wichtiger ist.\\\"\\n\\n\\\"Besser nach wessen Maßstab?\\\"\\n\\n\\\"Nach jedem Maßstab außer der Geschwindigkeit der Antwort. Was natürlich der Maßstab ist, der die meisten politischen Debatten gewinnt. Daher die Schwierigkeit, das beratende Modell durchzusetzen.\\\""
+  "de": "„Eine Abstimmung des ganzen Volkes dauert einen Tag. Eine Beratung von hundert Ausgelosten dauert eine Woche und liefert eine bessere Antwort. Der Staat muss entscheiden, was ihm wichtiger ist.“\\n\\n„Besser nach wessen Maßstab?“\\n\\n„Nach jedem Maßstab außer der Geschwindigkeit der Antwort. Was natürlich der Maßstab ist, der die meisten politischen Debatten gewinnt. Daher die Schwierigkeit, das beratende Modell durchzusetzen.“"
  },
  "extra_law_events.84.t": {
   "en": "Direct Voting or Deliberative Chambers?",
@@ -6601,7 +6601,7 @@
  },
  "extra_law_events.85.f": {
   "en": "\\\"Ten years,\\\" the reformer said, sliding the old agreement across the table. \\\"Your own signature. 'Time enough to adjust.'\\\"\\n\\n\\\"Circumstances change,\\\" the industrialist replied. \\\"The foreign competition has only grown.\\\"\\n\\n\\\"So has your company.\\\"\\n\\n\\\"Precisely my point.\\\"",
-  "de": "\\\"Zehn Jahre\\\", sagte der Reformer und schob die alte Vereinbarung über den Tisch. \\\"Ihre eigene Unterschrift. „Zeit genug für die Anpassung.“\\\"\\n\\n\\\"Die Umstände ändern sich\\\", erwiderte der Industrielle. \\\"Die ausländische Konkurrenz ist nur noch gewachsen.\\\"\\n\\n\\\"Genau wie Ihr Unternehmen.\\\"\\n\\n\\\"Genau mein Punkt.\\\""
+  "de": "„Zehn Jahre“, sagte der Reformer und schob die alte Vereinbarung über den Tisch. „Ihre eigene Unterschrift. ‚Zeit genug für die Anpassung.‘“\\n\\n„Die Umstände ändern sich“, erwiderte der Industrielle. „Die ausländische Konkurrenz ist nur noch gewachsen.“\\n\\n„Genau wie Ihr Unternehmen.“\\n\\n„Genau mein Punkt.“"
  },
  "extra_law_events.85.t": {
   "en": "The Champion's Decade Ends",
@@ -6621,7 +6621,7 @@
  },
  "extra_law_events.86.f": {
   "en": "\\\"We asked for time to comply,\\\" the company's counsel said. \\\"Not for a deadline.\\\"\\n\\n\\\"You asked for three years. You were given three years.\\\"\\n\\n\\\"And in those three years we discovered how much of our business depends on the very records the law forbids us to keep.\\\"\\n\\n\\\"Then you have discovered,\\\" the commissioner said, \\\"exactly what the law was written to change.\\\"",
-  "de": "\\\"Wir baten um Zeit zur Einhaltung\\\", sagte der Firmenanwalt. \\\"Nicht um eine Frist.\\\"\\n\\n\\\"Sie baten um drei Jahre. Sie bekamen drei Jahre.\\\"\\n\\n\\\"Und in diesen drei Jahren haben wir entdeckt, wie sehr unser Geschäft von genau den Daten abhängt, die das Gesetz uns zu speichern verbietet.\\\"\\n\\n\\\"Dann haben Sie entdeckt\\\", sagte der Kommissar, \\\"genau das, was das Gesetz ändern sollte.\\\""
+  "de": "„Wir baten um Zeit zur Einhaltung“, sagte der Firmenanwalt. „Nicht um eine Frist.“\\n\\n„Sie baten um drei Jahre. Sie bekamen drei Jahre.“\\n\\n„Und in diesen drei Jahren haben wir entdeckt, wie sehr unser Geschäft von genau den Daten abhängt, die das Gesetz uns zu speichern verbietet.“\\n\\n„Dann haben Sie entdeckt“, sagte der Kommissar, „genau das, was das Gesetz ändern sollte.“"
  },
  "extra_law_events.86.t": {
   "en": "The Grace Period Closes",
@@ -6641,7 +6641,7 @@
  },
  "extra_law_events.9.f": {
   "en": "\\\"If I plant an apple tree, the apples are mine. But if I sing a song, does it not belong to everyone who hears it? The question of who owns an idea is, I suspect, the question that will define this century.\\\"",
-  "de": "\\\"Wenn ich einen Apfelbaum pflanze, gehören mir die Äpfel. Aber wenn ich ein Lied singe, gehört es dann nicht jedem, der es hört? Die Frage, wem eine Idee gehört, wird, so vermute ich, die Frage sein, die dieses Jahrhundert bestimmt.\\\""
+  "de": "„Wenn ich einen Apfelbaum pflanze, gehören mir die Äpfel. Aber wenn ich ein Lied singe, gehört es dann nicht jedem, der es hört? Die Frage, wem eine Idee gehört, wird, so vermute ich, die Frage sein, die dieses Jahrhundert bestimmt.“"
  },
  "extra_law_events.9.t": {
   "en": "The Pirate's Dilemma",
@@ -6781,7 +6781,7 @@
  },
  "heir_education_events.1.f": {
   "en": "\\\"The young one asked a question today that I myself could not answer. I had to consult three volumes before I found it.\\\"\\n\\n\\\"And?\\\"\\n\\n\\\"And it was a question about the limits of royal authority. The volumes were not encouraging. I will need to revise the curriculum before the next lesson.\\\"\\n\\n\\\"You are training a sovereign, not a scholar.\\\"\\n\\n\\\"I had thought so. The young one is making it harder to tell the difference.\\\"",
-  "de": "\\\"Der Kleine hat mir heute eine Frage gestellt, die ich selbst nicht beantworten konnte. Ich musste drei Bände zurate ziehen, bevor ich die Antwort fand.\\\"\\n\\n\\\"Und?\\\"\\n\\n\\\"Und es war eine Frage nach den Grenzen der königlichen Macht. Die Bände machten wenig Mut. Ich werde den Lehrplan vor der nächsten Stunde überarbeiten müssen.\\\"\\n\\n\\\"Ihr bildet einen Herrscher aus, keinen Gelehrten.\\\"\\n\\n\\\"Das dachte ich auch. Der Kleine macht es mir immer schwerer, den Unterschied zu erkennen.\\\""
+  "de": "„Der Kleine hat mir heute eine Frage gestellt, die ich selbst nicht beantworten konnte. Ich musste drei Bände zurate ziehen, bevor ich die Antwort fand.“\\n\\n„Und?“\\n\\n„Und es war eine Frage nach den Grenzen der königlichen Macht. Die Bände machten wenig Mut. Ich werde den Lehrplan vor der nächsten Stunde überarbeiten müssen.“\\n\\n„Ihr bildet einen Herrscher aus, keinen Gelehrten.“\\n\\n„Das dachte ich auch. Der Kleine macht es mir immer schwerer, den Unterschied zu erkennen.“"
  },
  "heir_education_events.1.t": {
   "en": "A Promising Pupil",
@@ -6804,8 +6804,8 @@
   "de": "Der [concept_heir] ist unruhig und lernunwillig geworden, stellt den Sinn des Unterrichts infrage und stellt die Geduld jedes Lehrers im Palast auf die Probe."
  },
  "heir_education_events.2.f": {
-  "en": "\\\"I will not learn another dead language! What use is Attic Greek to a modern sovereign?\\\"\\n\\n\\\"Your grandfather knew six.\\\"\\n\\n\\\"My grandfather lost two wars and the third only just. Perhaps the six languages were not the source of his strength.\\\"\\n\\nThe tutor wrote down the response, sighed, and rewrote it before showing it to the regent. The original phrasing, he judged, would have ended his employment.\\\"",
-  "de": "\\\"Ich werde keine weitere tote Sprache lernen! Was nützt einem modernen Herrscher schon Attisches Griechisch?\\\"\\n\\n\\\"Euer Großvater beherrschte sechs.\\\"\\n\\n\\\"Mein Großvater verlor zwei Kriege und den dritten nur knapp nicht. Vielleicht waren die sechs Sprachen nicht die Quelle seiner Stärke.\\\"\\n\\nDer Lehrer notierte die Antwort, seufzte und schrieb sie um, bevor er sie dem Regenten zeigte. Die ursprüngliche Formulierung, urteilte er, hätte seine Anstellung beendet.\\\""
+  "en": "\\\"I will not learn another dead language! What use is Attic Greek to a modern sovereign?\\\"\\n\\n\\\"Your grandfather knew six.\\\"\\n\\n\\\"My grandfather lost two wars and the third only just. Perhaps the six languages were not the source of his strength.\\\"\\n\\nThe tutor wrote down the response, sighed, and rewrote it before showing it to the regent. The original phrasing, he judged, would have ended his employment.",
+  "de": "„Ich werde keine weitere tote Sprache lernen! Was nützt einem modernen Herrscher schon Attisches Griechisch?“\\n\\n„Euer Großvater beherrschte sechs.“\\n\\n„Mein Großvater verlor zwei Kriege und den dritten nur knapp nicht. Vielleicht waren die sechs Sprachen nicht die Quelle seiner Stärke.“\\n\\nDer Lehrer notierte die Antwort, seufzte und schrieb sie um, bevor er sie dem Regenten zeigte. Die ursprüngliche Formulierung, urteilte er, hätte seine Anstellung beendet."
  },
  "heir_education_events.2.t": {
   "en": "A Difficult Student",
@@ -6821,7 +6821,7 @@
  },
  "heir_education_events.200.f": {
   "en": "\\\"The crown awaits one who may prove worthy of it,\\\" the old tutor said, more to himself than to the regent.\\n\\n\\\"And will the new one?\\\"\\n\\n\\\"That is the question every generation asks of the next. The answer is rarely the one we hoped for. Sometimes it is better. The young one is better in some ways. Worse in others. The total will be a sovereign, which is more than we deserve and less than we asked for.\\\"",
-  "de": "\\\"Die Krone wartet auf jemanden, der ihrer vielleicht würdig sein wird\\\", sagte der alte Lehrer, mehr zu sich selbst als zum Regenten.\\n\\n\\\"Und wird der Neue es sein?\\\"\\n\\n\\\"Das ist die Frage, die jede Generation der nächsten stellt. Die Antwort ist selten die erhoffte. Manchmal ist sie besser. Der Kleine ist in mancher Hinsicht besser. In anderer schlechter. In der Summe wird es ein Herrscher sein, was mehr ist, als wir verdienen, und weniger, als wir erbeten haben.\\\""
+  "de": "„Die Krone wartet auf jemanden, der ihrer vielleicht würdig sein wird“, sagte der alte Lehrer, mehr zu sich selbst als zum Regenten.\\n\\n„Und wird der Neue es sein?“\\n\\n„Das ist die Frage, die jede Generation der nächsten stellt. Die Antwort ist selten die erhoffte. Manchmal ist sie besser. Der Kleine ist in mancher Hinsicht besser. In anderer schlechter. In der Summe wird es ein Herrscher sein, was mehr ist, als wir verdienen, und weniger, als wir erbeten haben.“"
  },
  "heir_education_events.200.t": {
   "en": "A Prince's Education",
@@ -6841,7 +6841,7 @@
  },
  "heir_education_events.3.f": {
   "en": "\\\"To understand the world, one must first leave home.\\\"\\n\\n\\\"And to rule it, one must eventually come back.\\\"\\n\\n\\\"And in the meantime?\\\"\\n\\n\\\"In the meantime, the heir learns three languages, six histories, and the manners of every court in Europe. None of it will be of use here. All of it will shape how the heir thinks about here when they return. That is the value of leaving — not the knowledge brought back, but the change in the eye that returns.\\\"",
-  "de": "\\\"Um die Welt zu verstehen, muss man zuerst die Heimat verlassen.\\\"\\n\\n\\\"Und um sie zu regieren, muss man irgendwann zurückkehren.\\\"\\n\\n\\\"Und in der Zwischenzeit?\\\"\\n\\n\\\"In der Zwischenzeit lernt der Erbe drei Sprachen, sechs Geschichten und die Umgangsformen jedes Hofes Europas. Nichts davon wird hier von Nutzen sein. Aber all das wird prägen, wie der Erbe über dieses Land denkt, wenn er zurückkehrt. Das ist der Wert des Fortgehens — nicht das mitgebrachte Wissen, sondern der veränderte Blick, der zurückkehrt.\\\""
+  "de": "„Um die Welt zu verstehen, muss man zuerst die Heimat verlassen.“\\n\\n„Und um sie zu regieren, muss man irgendwann zurückkehren.“\\n\\n„Und in der Zwischenzeit?“\\n\\n„In der Zwischenzeit lernt der Erbe drei Sprachen, sechs Geschichten und die Umgangsformen jedes Hofes Europas. Nichts davon wird hier von Nutzen sein. Aber all das wird prägen, wie der Erbe über dieses Land denkt, wenn er zurückkehrt. Das ist der Wert des Fortgehens — nicht das mitgebrachte Wissen, sondern der veränderte Blick, der zurückkehrt.“"
  },
  "heir_education_events.3.t": {
   "en": "Foreign Correspondence",
@@ -6865,7 +6865,7 @@
  },
  "international_relations_events.1.f": {
   "en": "\\\"They are building three new divisions a month,\\\" the intelligence chief says, sliding the folder across the desk. \\\"Tanks, aircraft, long-range artillery - all pointed squarely at our borders.\\\"\\n\\nThe defense minister drums his fingers on the table. \\\"And what do our diplomats propose? A sternly worded letter?\\\"\\n\\n\\\"A summit, actually.\\\"\\n\\n\\\"God help us.\\\"",
-  "de": "\\\"Sie stellen drei neue Divisionen im Monat auf\\\", sagt der Geheimdienstchef und schiebt die Akte über den Schreibtisch. \\\"Panzer, Flugzeuge, Fernartillerie - alles direkt auf unsere Grenzen gerichtet.\\\"\\n\\nDer Verteidigungsminister trommelt mit den Fingern auf dem Tisch. \\\"Und was schlagen unsere Diplomaten vor? Einen scharf formulierten Brief?\\\"\\n\\n\\\"Einen Gipfel, tatsächlich.\\\"\\n\\n\\\"Gott steh uns bei.\\\""
+  "de": "„Sie stellen drei neue Divisionen im Monat auf“, sagt der Geheimdienstchef und schiebt die Akte über den Schreibtisch. „Panzer, Flugzeuge, Fernartillerie - alles direkt auf unsere Grenzen gerichtet.“\\n\\nDer Verteidigungsminister trommelt mit den Fingern auf dem Tisch. „Und was schlagen unsere Diplomaten vor? Einen scharf formulierten Brief?“\\n\\n„Einen Gipfel, tatsächlich.“\\n\\n„Gott steh uns bei.“"
  },
  "international_relations_events.1.t": {
   "en": "The Gathering Storm",
@@ -6881,7 +6881,7 @@
  },
  "international_relations_events.101.f": {
   "en": "\\\"The evidence is circumstantial,\\\" the ambassador says carefully, \\\"but the pattern is unmistakable. The money, the training, the weapons - they all trace back to the same source.\\\"\\n\\nHe lays the intercepted communiqués on the desk. The room falls silent.",
-  "de": "\\\"Die Beweise sind indirekt\\\", sagt der Botschafter vorsichtig, \\\"aber das Muster ist unverkennbar. Das Geld, die Ausbildung, die Waffen - alles führt zur selben Quelle zurück.\\\"\\n\\nEr legt die abgefangenen Depeschen auf den Tisch. Im Raum wird es still."
+  "de": "„Die Beweise sind indirekt“, sagt der Botschafter vorsichtig, „aber das Muster ist unverkennbar. Das Geld, die Ausbildung, die Waffen - alles führt zur selben Quelle zurück.“\\n\\nEr legt die abgefangenen Depeschen auf den Tisch. Im Raum wird es still."
  },
  "international_relations_events.101.t": {
   "en": "Foreign Meddling",
@@ -6897,7 +6897,7 @@
  },
  "international_relations_events.102.f": {
   "en": "The harbormasters report ships turned away at port. The exchange halls buzz with panic as commodity prices swing wildly. In the warehouses, goods pile up with nowhere to go.\\n\\n\\\"How long can we sustain this?\\\" the trade minister asks.\\n\\nNo one answers.",
-  "de": "Die Hafenmeister melden Schiffe, die abgewiesen werden. In den Börsensälen herrscht Panik, während die Rohstoffpreise wild schwanken. In den Lagerhäusern stapeln sich die Waren ohne Ziel.\\n\\n\\\"Wie lange können wir das durchhalten?\\\", fragt der Handelsminister.\\n\\nNiemand antwortet."
+  "de": "Die Hafenmeister melden Schiffe, die abgewiesen werden. In den Börsensälen herrscht Panik, während die Rohstoffpreise wild schwanken. In den Lagerhäusern stapeln sich die Waren ohne Ziel.\\n\\n„Wie lange können wir das durchhalten?“, fragt der Handelsminister.\\n\\nNiemand antwortet."
  },
  "international_relations_events.102.t": {
   "en": "Markets Closed",
@@ -6913,7 +6913,7 @@
  },
  "international_relations_events.103.f": {
   "en": "\\\"We've lost contact with Nightingale,\\\" the handler says flatly. \\\"They are making a show of it - press conferences, leaked photographs, the works.\\\"\\n\\nHe stubs out his cigarette. \\\"Our entire network in the region is compromised.\\\"",
-  "de": "\\\"Wir haben den Kontakt zu Nightingale verloren\\\", sagt der Verbindungsoffizier nüchtern. \\\"Sie machen ein Schauspiel daraus - Pressekonferenzen, durchgesickerte Fotos, das volle Programm.\\\"\\n\\nEr drückt die Zigarette aus. \\\"Unser gesamtes Netzwerk in der Region ist kompromittiert.\\\""
+  "de": "„Wir haben den Kontakt zu Nightingale verloren“, sagt der Verbindungsoffizier nüchtern. „Sie machen ein Schauspiel daraus - Pressekonferenzen, durchgesickerte Fotos, das volle Programm.“\\n\\nEr drückt die Zigarette aus. „Unser gesamtes Netzwerk in der Region ist kompromittiert.“"
  },
  "international_relations_events.103.t": {
   "en": "The Burned Agent",
@@ -6957,11 +6957,11 @@
  },
  "international_relations_events.104.f_relief": {
   "en": "\\\"The line is open again,\\\" the aide whispers, one hand still pressed to the receiver. \\\"Not friendly. Not warm. But open.\\\"\\n\\nNo one in the room relaxes. Still, for the first time in days, several people exhale.",
-  "de": "\\\"Die Leitung ist wieder offen\\\", flüstert der Adjutant, eine Hand noch auf dem Hörer. \\\"Nicht freundlich. Nicht warm. Aber offen.\\\"\\n\\nNiemand im Raum entspannt sich. Doch zum ersten Mal seit Tagen atmen mehrere Menschen aus."
+  "de": "„Die Leitung ist wieder offen“, flüstert der Adjutant, eine Hand noch auf dem Hörer. „Nicht freundlich. Nicht warm. Aber offen.“\\n\\nNiemand im Raum entspannt sich. Doch zum ersten Mal seit Tagen atmen mehrere Menschen aus."
  },
  "international_relations_events.104.f_tension": {
   "en": "\\\"They are calling it resolve,\\\" the foreign minister says, staring at the latest broadcast. \\\"The public has another word for it.\\\"\\n\\nIn the streets, queues form outside pharmacies and grocers. No one wants to say why.",
-  "de": "\\\"Sie nennen es Entschlossenheit\\\", sagt der Außenminister und starrt auf die neueste Sendung. \\\"Die Öffentlichkeit hat ein anderes Wort dafür.\\\"\\n\\nIn den Straßen bilden sich Schlangen vor Apotheken und Lebensmittelläden. Niemand sagt, warum."
+  "de": "„Sie nennen es Entschlossenheit“, sagt der Außenminister und starrt auf die neueste Sendung. „Die Öffentlichkeit hat ein anderes Wort dafür.“\\n\\nIn den Straßen bilden sich Schlangen vor Apotheken und Lebensmittelläden. Niemand sagt, warum."
  },
  "international_relations_events.104.f_terror": {
   "en": "Rail stations clog with families heading anywhere that feels farther from the likely targets. Priests, preachers, and party officials all claim certainty. None of them sound convincing.\\n\\nThe radios stay on through the night.",
@@ -6981,7 +6981,7 @@
  },
  "international_relations_events.105.f": {
   "en": "\\\"They are building because we are building,\\\" the defense secretary mutters, scanning the latest procurement figures. \\\"At this rate, both of us will be bankrupt before either of us is secure.\\\"",
-  "de": "\\\"Sie rüsten, weil wir rüsten\\\", murmelt der Verteidigungsminister und überfliegt die neuesten Beschaffungszahlen. \\\"Bei diesem Tempo sind wir beide bankrott, bevor auch nur einer von uns sicher ist.\\\""
+  "de": "„Sie rüsten, weil wir rüsten“, murmelt der Verteidigungsminister und überfliegt die neuesten Beschaffungszahlen. „Bei diesem Tempo sind wir beide bankrott, bevor auch nur einer von uns sicher ist.“"
  },
  "international_relations_events.105.t": {
   "en": "The Rival Rearms",
@@ -6997,7 +6997,7 @@
  },
  "international_relations_events.106.f": {
   "en": "The editor laid the foreign papers out in a neat row across the desk. Every headline was familiar in its hostility, and every phrase sounded suspiciously coordinated.\\n\\n\\\"They are not merely rebutting us,\\\" he said. \\\"They are rewriting the story.\\\"",
-  "de": "Der Redakteur legte die ausländischen Zeitungen in einer ordentlichen Reihe auf dem Schreibtisch aus. Jede Schlagzeile war in ihrer Feindseligkeit vertraut, und jede Formulierung klang verdächtig abgestimmt.\\n\\n\\\"Sie widerlegen uns nicht nur\\\", sagte er. \\\"Sie schreiben die Geschichte um.\\\""
+  "de": "Der Redakteur legte die ausländischen Zeitungen in einer ordentlichen Reihe auf dem Schreibtisch aus. Jede Schlagzeile war in ihrer Feindseligkeit vertraut, und jede Formulierung klang verdächtig abgestimmt.\\n\\n„Sie widerlegen uns nicht nur“, sagte er. „Sie schreiben die Geschichte um.“"
  },
  "international_relations_events.106.t": {
   "en": "The Narrative Turns",
@@ -7013,7 +7013,7 @@
  },
  "international_relations_events.107.f": {
   "en": "\\\"No press conference. No trial. No headlines,\\\" the handler says, guiding the exhausted operative into a waiting car. \\\"That is the good news.\\\"\\n\\n\\\"And the bad news?\\\"\\n\\n\\\"If they were willing to return the agent quietly, they already learned everything they needed.\\\"",
-  "de": "\\\"Keine Pressekonferenz. Kein Prozess. Keine Schlagzeilen\\\", sagt der Verbindungsoffizier und geleitet den erschöpften Agenten zu einem wartenden Wagen. \\\"Das ist die gute Nachricht.\\\"\\n\\n\\\"Und die schlechte?\\\"\\n\\n\\\"Wenn sie bereit waren, den Agenten still zurückzugeben, haben sie bereits alles erfahren, was sie brauchten.\\\""
+  "de": "„Keine Pressekonferenz. Kein Prozess. Keine Schlagzeilen“, sagt der Verbindungsoffizier und geleitet den erschöpften Agenten zu einem wartenden Wagen. „Das ist die gute Nachricht.“\\n\\n„Und die schlechte?“\\n\\n„Wenn sie bereit waren, den Agenten still zurückzugeben, haben sie bereits alles erfahren, was sie brauchten.“"
  },
  "international_relations_events.107.t": {
   "en": "The Quiet Exchange",
@@ -7033,7 +7033,7 @@
  },
  "international_relations_events.2.f": {
   "en": "\\\"The plan is drawn up and the contacts are waiting. All we need is your authorization and the funds.\\\"\\n\\nThe briefing officer pauses.\\n\\n\\\"Of course, if it goes wrong, we will deny everything. And if it goes very wrong - well, they will deny us.\\\"",
-  "de": "\\\"Der Plan steht, und die Kontakte warten. Wir brauchen nur Ihre Genehmigung und die Mittel.\\\"\\n\\nDer Einsatzleiter hält inne.\\n\\n\\\"Geht es natürlich schief, werden wir alles abstreiten. Und geht es sehr schief - nun, dann werden sie uns abstreiten.\\\""
+  "de": "„Der Plan steht, und die Kontakte warten. Wir brauchen nur Ihre Genehmigung und die Mittel.“\\n\\nDer Einsatzleiter hält inne.\\n\\n„Geht es natürlich schief, werden wir alles abstreiten. Und geht es sehr schief - nun, dann werden sie uns abstreiten.“"
  },
  "international_relations_events.2.t": {
   "en": "The Shadow War",
@@ -7053,7 +7053,7 @@
  },
  "international_relations_events.201.f": {
   "en": "The chief of staff unrolls the procurement tables across the cabinet table and weighs the corners down with ashtrays.\\n\\n\\\"If we start now, we hold the advantage for a decade.\\\"\\n\\n\\\"And if they match us?\\\"\\n\\n\\\"Then we will have spent a great deal of money to stand exactly where we stand today,\\\" the finance minister says. \\\"But at least we will be standing there armed.\\\"",
-  "de": "Der Generalstabschef rollt die Beschaffungstabellen über den Kabinettstisch aus und beschwert die Ecken mit Aschenbechern.\\n\\n\\\"Fangen wir jetzt an, halten wir den Vorsprung ein Jahrzehnt.\\\"\\n\\n\\\"Und wenn sie gleichziehen?\\\"\\n\\n\\\"Dann werden wir eine Menge Geld ausgegeben haben, um genau dort zu stehen, wo wir heute stehen\\\", sagt der Finanzminister. \\\"Aber immerhin werden wir bewaffnet dort stehen.\\\""
+  "de": "Der Generalstabschef rollt die Beschaffungstabellen über den Kabinettstisch aus und beschwert die Ecken mit Aschenbechern.\\n\\n„Fangen wir jetzt an, halten wir den Vorsprung ein Jahrzehnt.“\\n\\n„Und wenn sie gleichziehen?“\\n\\n„Dann werden wir eine Menge Geld ausgegeben haben, um genau dort zu stehen, wo wir heute stehen“, sagt der Finanzminister. „Aber immerhin werden wir bewaffnet dort stehen.“"
  },
  "international_relations_events.201.t": {
   "en": "Plans on the Table",
@@ -7073,7 +7073,7 @@
  },
  "international_relations_events.202.f": {
   "en": "\\\"We have the transmitters. We have the writers. We have three editors in their capital who owe us favours.\\\"\\n\\nThe minister turns a page of the draft broadcast schedule. \\\"And when they answer in kind?\\\"\\n\\n\\\"Then, Minister, we will have started a conversation.\\\"",
-  "de": "\\\"Wir haben die Sender. Wir haben die Schreiber. Wir haben drei Redakteure in ihrer Hauptstadt, die uns etwas schulden.\\\"\\n\\nDer Minister blättert eine Seite des Sendeplans um. \\\"Und wenn sie in gleicher Münze antworten?\\\"\\n\\n\\\"Dann, Herr Minister, haben wir ein Gespräch begonnen.\\\""
+  "de": "„Wir haben die Sender. Wir haben die Schreiber. Wir haben drei Redakteure in ihrer Hauptstadt, die uns etwas schulden.“\\n\\nDer Minister blättert eine Seite des Sendeplans um. „Und wenn sie in gleicher Münze antworten?“\\n\\n„Dann, Herr Minister, haben wir ein Gespräch begonnen.“"
  },
  "international_relations_events.202.t": {
   "en": "The War of Words",
@@ -7093,7 +7093,7 @@
  },
  "international_relations_events.203.f": {
   "en": "The photograph shows an unremarkable man in an unremarkable coat, waiting for a tram.\\n\\n\\\"He has been passed over for promotion three times,\\\" the case officer says. \\\"His wife has expensive tastes. He hates his minister.\\\"\\n\\n\\\"And if he is a plant of theirs?\\\"\\n\\n\\\"Then we will find out very quickly, and very publicly.\\\"",
-  "de": "Die Fotografie zeigt einen unauffälligen Mann in einem unauffälligen Mantel, der auf eine Straßenbahn wartet.\\n\\n\\\"Er wurde dreimal bei einer Beförderung übergangen\\\", sagt der Fallführer. \\\"Seine Frau hat teuren Geschmack. Er hasst seinen Minister.\\\"\\n\\n\\\"Und wenn er ein Agent von ihnen ist?\\\"\\n\\n\\\"Dann werden wir das sehr schnell erfahren - und sehr öffentlich.\\\""
+  "de": "Die Fotografie zeigt einen unauffälligen Mann in einem unauffälligen Mantel, der auf eine Straßenbahn wartet.\\n\\n„Er wurde dreimal bei einer Beförderung übergangen“, sagt der Fallführer. „Seine Frau hat teuren Geschmack. Er hasst seinen Minister.“\\n\\n„Und wenn er ein Agent von ihnen ist?“\\n\\n„Dann werden wir das sehr schnell erfahren - und sehr öffentlich.“"
  },
  "international_relations_events.203.t": {
   "en": "An Agent in Place",
@@ -7117,7 +7117,7 @@
  },
  "international_relations_events.3.f": {
   "en": "\\\"The arrangements are elaborate. Each delegation has specific requirements - seating protocols, translation services, dietary restrictions, intelligence concerns...\\\"\\n\\n\\\"And the agenda?\\\"\\n\\n\\\"That, Minister, is the one thing no one can agree upon.\\\"",
-  "de": "\\\"Die Vorbereitungen sind aufwendig. Jede Delegation hat besondere Wünsche - Sitzordnung, Übersetzungsdienste, Ernährungsvorschriften, Sicherheitsbedenken...\\\"\\n\\n\\\"Und die Tagesordnung?\\\"\\n\\n\\\"Das, Herr Minister, ist das Einzige, worauf sich niemand einigen kann.\\\""
+  "de": "„Die Vorbereitungen sind aufwendig. Jede Delegation hat besondere Wünsche - Sitzordnung, Übersetzungsdienste, Ernährungsvorschriften, Sicherheitsbedenken...“\\n\\n„Und die Tagesordnung?“\\n\\n„Das, Herr Minister, ist das Einzige, worauf sich niemand einigen kann.“"
  },
  "international_relations_events.3.t": {
   "en": "International Summit",
@@ -7137,7 +7137,7 @@
  },
  "international_relations_events.4.f": {
   "en": "\\\"Have you read what they are printing about us? That we oppress our workers, starve our children, plot against the peace of the world?\\\"\\n\\n\\\"Lies, of course.\\\"\\n\\n\\\"Of course. But a lie repeated often enough becomes difficult to distinguish from the truth - especially when it is printed on good paper.\\\"",
-  "de": "\\\"Habt ihr gelesen, was sie über uns drucken? Dass wir unsere Arbeiter unterdrücken, unsere Kinder hungern lassen, gegen den Frieden der Welt intrigieren?\\\"\\n\\n\\\"Lügen, natürlich.\\\"\\n\\n\\\"Natürlich. Aber eine oft genug wiederholte Lüge wird schwer von der Wahrheit zu unterscheiden - besonders, wenn sie auf gutem Papier gedruckt ist.\\\""
+  "de": "„Habt ihr gelesen, was sie über uns drucken? Dass wir unsere Arbeiter unterdrücken, unsere Kinder hungern lassen, gegen den Frieden der Welt intrigieren?“\\n\\n„Lügen, natürlich.“\\n\\n„Natürlich. Aber eine oft genug wiederholte Lüge wird schwer von der Wahrheit zu unterscheiden - besonders, wenn sie auf gutem Papier gedruckt ist.“"
  },
  "international_relations_events.4.t": {
   "en": "Hearts and Minds",
@@ -7157,7 +7157,7 @@
  },
  "international_relations_events.5.f": {
   "en": "\\\"Our merchants will howl,\\\" the trade minister warns. \\\"Half the shipping firms in the capital depend on that route.\\\"\\n\\n\\\"Let them howl. Better to lose cargo than lose the peace.\\\"\\n\\n\\\"You assume those are the only two options.\\\"",
-  "de": "\\\"Unsere Kaufleute werden aufschreien\\\", warnt der Handelsminister. \\\"Die Hälfte der Reedereien in der Hauptstadt hängt von dieser Route ab.\\\"\\n\\n\\\"Sollen sie aufschreien. Lieber Ladung verlieren als den Frieden.\\\"\\n\\n\\\"Ihr geht davon aus, dass das die einzigen zwei Möglichkeiten sind.\\\""
+  "de": "„Unsere Kaufleute werden aufschreien“, warnt der Handelsminister. „Die Hälfte der Reedereien in der Hauptstadt hängt von dieser Route ab.“\\n\\n„Sollen sie aufschreien. Lieber Ladung verlieren als den Frieden.“\\n\\n„Ihr geht davon aus, dass das die einzigen zwei Möglichkeiten sind.“"
  },
  "international_relations_events.5.t": {
   "en": "The Iron Purse",
@@ -7225,7 +7225,7 @@
  },
  "international_relations_events.8.f": {
   "en": "The telephone rings at three in the morning. The aide's voice is strained.\\n\\n\\\"Sir, their foreign minister has said it again on the radio. They will not back down.\\\"\\n\\nA long pause.\\n\\n\\\"And our commanders?\\\"\\n\\n\\\"Waiting to hear what we say next, sir. So is the rest of the world.\\\"",
-  "de": "Das Telefon klingelt um drei Uhr morgens. Die Stimme des Adjutanten ist angespannt.\\n\\n\\\"Sir, ihr Außenminister hat es im Radio erneut gesagt. Sie werden nicht nachgeben.\\\"\\n\\nEine lange Pause.\\n\\n\\\"Und unsere Kommandeure?\\\"\\n\\n\\\"Sie warten darauf zu hören, was wir als Nächstes sagen, Sir. Ebenso die restliche Welt.\\\""
+  "de": "Das Telefon klingelt um drei Uhr morgens. Die Stimme des Adjutanten ist angespannt.\\n\\n„Sir, ihr Außenminister hat es im Radio erneut gesagt. Sie werden nicht nachgeben.“\\n\\nEine lange Pause.\\n\\n„Und unsere Kommandeure?“\\n\\n„Sie warten darauf zu hören, was wir als Nächstes sagen, Sir. Ebenso die restliche Welt.“"
  },
  "international_relations_events.8.t": {
   "en": "Nuclear Brinkmanship",
@@ -7261,7 +7261,7 @@
  },
  "irredentism.1.f": {
   "en": "\\\"They are our blood. They live under another flag, but they are our blood.\\\"\\n\\n\\\"And what do they want from us?\\\"\\n\\n\\\"They want what every diaspora wants. To be remembered. To be claimed. To know that the homeland has not forgotten them — and to know what we would do if their flag changed.\\\"",
-  "de": "\\\"Sie sind unser Blut. Sie leben unter einer anderen Flagge, aber sie sind unser Blut.\\\"\\n\\n\\\"Und was wollen sie von uns?\\\"\\n\\n\\\"Sie wollen, was jede Diaspora will. Erinnert zu werden. Beansprucht zu werden. Zu wissen, dass die Heimat sie nicht vergessen hat — und zu wissen, was wir täten, wenn sich ihre Flagge änderte.\\\""
+  "de": "„Sie sind unser Blut. Sie leben unter einer anderen Flagge, aber sie sind unser Blut.“\\n\\n„Und was wollen sie von uns?“\\n\\n„Sie wollen, was jede Diaspora will. Erinnert zu werden. Beansprucht zu werden. Zu wissen, dass die Heimat sie nicht vergessen hat — und zu wissen, was wir täten, wenn sich ihre Flagge änderte.“"
  },
  "irredentism.1.t": {
   "en": "The Diaspora Calls",
@@ -7281,7 +7281,7 @@
  },
  "irredentism.10.f": {
   "en": "\\\"The embassy's reply came this morning. They will not stand in our way.\\\"\\n\\n\\\"Will they stand beside us?\\\"\\n\\n\\\"They did not say. A blessing is not an alliance. It is a promise to look away — which, from a patron, is worth a great deal and costs them nothing.\\\"",
-  "de": "\\\"Die Antwort der Botschaft kam heute Morgen. Sie werden uns nicht im Weg stehen.\\\"\\n\\n\\\"Werden sie an unserer Seite stehen?\\\"\\n\\n\\\"Das haben sie nicht gesagt. Ein Segen ist kein Bündnis. Es ist ein Versprechen wegzusehen — was von einem Schutzherrn viel wert ist und ihn nichts kostet.\\\""
+  "de": "„Die Antwort der Botschaft kam heute Morgen. Sie werden uns nicht im Weg stehen.“\\n\\n„Werden sie an unserer Seite stehen?“\\n\\n„Das haben sie nicht gesagt. Ein Segen ist kein Bündnis. Es ist ein Versprechen wegzusehen — was von einem Schutzherrn viel wert ist und ihn nichts kostet.“"
  },
  "irredentism.10.t": {
   "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] Blesses Our Claim",
@@ -7301,7 +7301,7 @@
  },
  "irredentism.11.f": {
   "en": "\\\"They thanked us for our patience.\\\"\\n\\n\\\"We have been patient for forty years.\\\"",
-  "de": "\\\"Sie dankten uns für unsere Geduld.\\\"\\n\\n\\\"Wir sind seit vierzig Jahren geduldig.\\\""
+  "de": "„Sie dankten uns für unsere Geduld.“\\n\\n„Wir sind seit vierzig Jahren geduldig.“"
  },
  "irredentism.11.t": {
   "en": "[SCOPE.sCountry('irr_bloc_leader').GetName] Withholds Its Blessing",
@@ -7325,7 +7325,7 @@
  },
  "irredentism.2.f": {
   "en": "\\\"They want the state. They want all of it. They cite a treaty signed in seventeen-twenty-eight and a census taken under the second emperor.\\\"\\n\\n\\\"And the people of the state?\\\"\\n\\n\\\"Have not been asked. Both sides are speaking on their behalf. Neither side has noticed.\\\"",
-  "de": "\\\"Sie wollen den Staat. Sie wollen ihn ganz. Sie berufen sich auf einen Vertrag von siebzehnhundertachtundzwanzig und eine Volkszählung unter dem zweiten Kaiser.\\\"\\n\\n\\\"Und die Bevölkerung des Staates?\\\"\\n\\n\\\"Wurde nicht gefragt. Beide Seiten sprechen in ihrem Namen. Keinem von beiden ist das aufgefallen.\\\""
+  "de": "„Sie wollen den Staat. Sie wollen ihn ganz. Sie berufen sich auf einen Vertrag von siebzehnhundertachtundzwanzig und eine Volkszählung unter dem zweiten Kaiser.“\\n\\n„Und die Bevölkerung des Staates?“\\n\\n„Wurde nicht gefragt. Beide Seiten sprechen in ihrem Namen. Keinem von beiden ist das aufgefallen.“"
  },
  "irredentism.2.t": {
   "en": "[SCOPE.sCountry('irr_unifier').GetName] Demands [SCOPE.sState('irr_demanded_state').GetName]",
@@ -7345,7 +7345,7 @@
  },
  "irredentism.3.f": {
   "en": "\\\"They have proposed a union. Freely entered, equal partners, shared parliament.\\\"\\n\\n\\\"And the smaller print?\\\"\\n\\n\\\"They are the larger nation. The shared parliament will be majority theirs. Equal partners is a phrase that survives the signing ceremony and rarely the first decade.\\\"",
-  "de": "\\\"Sie haben eine Union vorgeschlagen. Freiwillig eingegangen, gleichberechtigte Partner, gemeinsames Parlament.\\\"\\n\\n\\\"Und das Kleingedruckte?\\\"\\n\\n\\\"Sie sind die größere Nation. Im gemeinsamen Parlament werden sie die Mehrheit stellen. „Gleichberechtigte Partner“ ist eine Formulierung, die die Unterzeichnungsfeier übersteht und selten das erste Jahrzehnt.\\\""
+  "de": "„Sie haben eine Union vorgeschlagen. Freiwillig eingegangen, gleichberechtigte Partner, gemeinsames Parlament.“\\n\\n„Und das Kleingedruckte?“\\n\\n„Sie sind die größere Nation. Im gemeinsamen Parlament werden sie die Mehrheit stellen. ‚Gleichberechtigte Partner‘ ist eine Formulierung, die die Unterzeichnungsfeier übersteht und selten das erste Jahrzehnt.“"
  },
  "irredentism.3.t": {
   "en": "An Opportunity for Union",
@@ -7365,7 +7365,7 @@
  },
  "irredentism.4.f": {
   "en": "\\\"The formal offer arrived this morning. They are offering union — full citizenship, shared institutions, no border.\\\"\\n\\n\\\"And we are to dissolve ourselves into them?\\\"\\n\\n\\\"That is what union means in the smaller country. The benefits will be real. The flag will be theirs. The question is what is more precious — the prosperity that follows the union, or the name that does not.\\\"",
-  "de": "\\\"Das förmliche Angebot kam heute Morgen. Sie bieten eine Union an — volles Bürgerrecht, gemeinsame Institutionen, keine Grenze.\\\"\\n\\n\\\"Und wir sollen uns in ihnen auflösen?\\\"\\n\\n\\\"Das bedeutet Union für das kleinere Land. Der Nutzen wird real sein. Die Flagge wird ihre sein. Die Frage ist, was kostbarer ist — der Wohlstand, der der Union folgt, oder der Name, der es nicht tut.\\\""
+  "de": "„Das förmliche Angebot kam heute Morgen. Sie bieten eine Union an — volles Bürgerrecht, gemeinsame Institutionen, keine Grenze.“\\n\\n„Und wir sollen uns in ihnen auflösen?“\\n\\n„Das bedeutet Union für das kleinere Land. Der Nutzen wird real sein. Die Flagge wird ihre sein. Die Frage ist, was kostbarer ist — der Wohlstand, der der Union folgt, oder der Name, der es nicht tut.“"
  },
  "irredentism.4.t": {
   "en": "[SCOPE.sCountry('irr_unifier').GetName] Asks Us to Join",
@@ -7385,7 +7385,7 @@
  },
  "irredentism.6.f": {
   "en": "\\\"Two nations became one this morning. Peacefully, in one telling; by force, in another.\\\"\\n\\n\\\"Which is the true version?\\\"\\n\\n\\\"The treaty was signed. The treaty was also signed at gunpoint. Both can be true. The map will record only the result. The remembrance is what the families pass to their grandchildren — and the grandchildren will not agree on what to remember.\\\"",
-  "de": "\\\"Zwei Nationen wurden heute Morgen eine. Friedlich, in der einen Version; mit Gewalt, in der anderen.\\\"\\n\\n\\\"Welche ist die wahre Version?\\\"\\n\\n\\\"Der Vertrag wurde unterzeichnet. Der Vertrag wurde auch mit vorgehaltener Waffe unterzeichnet. Beides kann wahr sein. Die Karte wird nur das Ergebnis festhalten. Die Erinnerung ist das, was die Familien ihren Enkeln weitergeben — und die Enkel werden sich nicht einig sein, woran sie sich erinnern sollen.\\\""
+  "de": "„Zwei Nationen wurden heute Morgen eine. Friedlich, in der einen Version; mit Gewalt, in der anderen.“\\n\\n„Welche ist die wahre Version?“\\n\\n„Der Vertrag wurde unterzeichnet. Der Vertrag wurde auch mit vorgehaltener Waffe unterzeichnet. Beides kann wahr sein. Die Karte wird nur das Ergebnis festhalten. Die Erinnerung ist das, was die Familien ihren Enkeln weitergeben — und die Enkel werden sich nicht einig sein, woran sie sich erinnern sollen.“"
  },
  "irredentism.6.t": {
   "en": "[SCOPE.sCountry('irr_annexed_country').GetName] Absorbed by [SCOPE.sCountry('irr_unifier').GetName]",
@@ -7405,7 +7405,7 @@
  },
  "irredentism.7.f": {
   "en": "\\\"They want our blessing for a war of reunification.\\\"\\n\\n\\\"And if we refuse?\\\"\\n\\n\\\"The bloc fractures. They believed our solidarity meant approval as well as protection. We are about to teach them the difference. The lesson will be expensive.\\\"",
-  "de": "\\\"Sie wollen unseren Segen für einen Wiedervereinigungskrieg.\\\"\\n\\n\\\"Und wenn wir ablehnen?\\\"\\n\\n\\\"Der Block zerbricht. Sie glaubten, unsere Solidarität bedeute Zustimmung ebenso wie Schutz. Wir sind dabei, ihnen den Unterschied beizubringen. Die Lektion wird teuer.\\\""
+  "de": "„Sie wollen unseren Segen für einen Wiedervereinigungskrieg.“\\n\\n„Und wenn wir ablehnen?“\\n\\n„Der Block zerbricht. Sie glaubten, unsere Solidarität bedeute Zustimmung ebenso wie Schutz. Wir sind dabei, ihnen den Unterschied beizubringen. Die Lektion wird teuer.“"
  },
  "irredentism.7.t": {
   "en": "[SCOPE.sCountry('irr_requester').GetName] Asks Us to Bless a War",
@@ -7425,7 +7425,7 @@
  },
  "irredentism.8.f": {
   "en": "\\\"The bloc member has been offered union. They are considering it.\\\"\\n\\n\\\"And we can bless or forbid?\\\"\\n\\n\\\"We can. The blessing strengthens the cause but loses a useful client. The forbid keeps the client and strains the cause. Both decisions are bets on the shape of the next decade. Neither bet is safe.\\\"",
-  "de": "\\\"Dem Blockmitglied wurde eine Union angeboten. Sie erwägen es.\\\"\\n\\n\\\"Und wir können segnen oder untersagen?\\\"\\n\\n\\\"Das können wir. Der Segen stärkt die Sache, kostet aber einen nützlichen Klienten. Das Verbot behält den Klienten, belastet aber die Sache. Beide Entscheidungen sind Wetten auf die Gestalt des nächsten Jahrzehnts. Keine der Wetten ist sicher.\\\""
+  "de": "„Dem Blockmitglied wurde eine Union angeboten. Sie erwägen es.“\\n\\n„Und wir können segnen oder untersagen?“\\n\\n„Das können wir. Der Segen stärkt die Sache, kostet aber einen nützlichen Klienten. Das Verbot behält den Klienten, belastet aber die Sache. Beide Entscheidungen sind Wetten auf die Gestalt des nächsten Jahrzehnts. Keine der Wetten ist sicher.“"
  },
  "irredentism.8.t": {
   "en": "[SCOPE.sCountry('irr_proposed_target').GetName] Considers Voluntary Union",
@@ -7441,7 +7441,7 @@
  },
  "irredentism.9.f": {
   "en": "\\\"The maps gained another color this morning, and the people another capital to petition.\\\"",
-  "de": "\\\"Die Karten gewannen heute Morgen eine weitere Farbe, und die Menschen eine weitere Hauptstadt, an die sie sich wenden können.\\\""
+  "de": "„Die Karten gewannen heute Morgen eine weitere Farbe, und die Menschen eine weitere Hauptstadt, an die sie sich wenden können.“"
  },
  "irredentism.9.t": {
   "en": "[SCOPE.sCountry('irr_dc_target').GetName] Integrated by [SCOPE.sCountry('irr_dc_annexer').GetName]",
@@ -7465,7 +7465,7 @@
  },
  "mental_health_events.1.f": {
   "en": "\\\"How many hours?\\\" the doctor asked.\\n\\n\\\"Sixty a week. Sometimes seventy.\\\"\\n\\nShe did not mention the weekends. The doctor wrote down sixty and added a note that the patient was understating, because everyone understated.\\n\\n\\\"What are you here for?\\\" he asked her.\\n\\n\\\"I can't remember,\\\" she said. \\\"I'm too tired to remember.\\\"",
-  "de": "\\\"Wie viele Stunden?\\\", fragte der Arzt.\\n\\n\\\"Sechzig die Woche. Manchmal siebzig.\\\"\\n\\nSie erwähnte die Wochenenden nicht. Der Arzt notierte sechzig und fügte eine Anmerkung hinzu, dass die Patientin untertreibe, denn das taten alle.\\n\\n\\\"Weswegen sind Sie hier?\\\", fragte er sie.\\n\\n\\\"Ich kann mich nicht erinnern\\\", sagte sie. \\\"Ich bin zu müde, um mich zu erinnern.\\\""
+  "de": "„Wie viele Stunden?“, fragte der Arzt.\\n\\n„Sechzig die Woche. Manchmal siebzig.“\\n\\nSie erwähnte die Wochenenden nicht. Der Arzt notierte sechzig und fügte eine Anmerkung hinzu, dass die Patientin untertreibe, denn das taten alle.\\n\\n„Weswegen sind Sie hier?“, fragte er sie.\\n\\n„Ich kann mich nicht erinnern“, sagte sie. „Ich bin zu müde, um mich zu erinnern.“"
  },
  "mental_health_events.1.t": {
   "en": "The Burnout Epidemic",
@@ -7485,7 +7485,7 @@
  },
  "mental_health_events.100.f": {
   "en": "The funding request was denied for the third consecutive year. The waiting list grew longer.\\n\\nThe minister gave the same speech he had given the last two years. The journalists who had covered both previous speeches did not bother to take notes. The waiting list, as it had been the year before and the year before that, was forty-three names in one school district and counting.\\n\\n\\\"What do we tell the families?\\\" someone asked.\\n\\nThe minister did not answer. He had not been asked, in the end.",
-  "de": "Der Förderantrag wurde das dritte Jahr in Folge abgelehnt. Die Warteliste wurde länger.\\n\\nDer Minister hielt dieselbe Rede, die er in den letzten zwei Jahren gehalten hatte. Die Journalisten, die beide vorherigen Reden begleitet hatten, machten sich nicht die Mühe, Notizen zu machen. Die Warteliste umfasste, wie schon im Vorjahr und im Jahr davor, dreiundvierzig Namen allein in einem Schulbezirk - Tendenz steigend.\\n\\n\\\"Was sagen wir den Familien?\\\", fragte jemand.\\n\\nDer Minister antwortete nicht. Letztlich war er gar nicht gefragt worden."
+  "de": "Der Förderantrag wurde das dritte Jahr in Folge abgelehnt. Die Warteliste wurde länger.\\n\\nDer Minister hielt dieselbe Rede, die er in den letzten zwei Jahren gehalten hatte. Die Journalisten, die beide vorherigen Reden begleitet hatten, machten sich nicht die Mühe, Notizen zu machen. Die Warteliste umfasste, wie schon im Vorjahr und im Jahr davor, dreiundvierzig Namen allein in einem Schulbezirk - Tendenz steigend.\\n\\n„Was sagen wir den Familien?“, fragte jemand.\\n\\nDer Minister antwortete nicht. Letztlich war er gar nicht gefragt worden."
  },
  "mental_health_events.100.t": {
   "en": "A Crisis Ignored",
@@ -7509,7 +7509,7 @@
  },
  "mental_health_events.2.f": {
   "en": "The school counsellor's waiting list had forty-three names on it. She was the only counsellor in the district. The girl who came in on Tuesday had been on the list for six weeks.\\n\\n\\\"It's about my friend,\\\" the girl said, by way of opening. \\\"I'm worried.\\\"\\n\\nThe counsellor wrote this down. She wrote down friend in quotation marks. She had learned, six weeks at a time, that the friend in such conversations was almost never the friend.",
-  "de": "Auf der Warteliste der Schulberaterin standen dreiundvierzig Namen. Sie war die einzige Beraterin im Bezirk. Das Mädchen, das am Dienstag kam, stand seit sechs Wochen auf der Liste.\\n\\n\\\"Es geht um meine Freundin\\\", sagte das Mädchen zur Einleitung. \\\"Ich mache mir Sorgen.\\\"\\n\\nDie Beraterin notierte das. Sie schrieb Freundin in Anführungszeichen. Sie hatte, sechs Wochen um sechs Wochen, gelernt, dass die Freundin in solchen Gesprächen fast nie die Freundin war."
+  "de": "Auf der Warteliste der Schulberaterin standen dreiundvierzig Namen. Sie war die einzige Beraterin im Bezirk. Das Mädchen, das am Dienstag kam, stand seit sechs Wochen auf der Liste.\\n\\n„Es geht um meine Freundin“, sagte das Mädchen zur Einleitung. „Ich mache mir Sorgen.“\\n\\nDie Beraterin notierte das. Sie schrieb Freundin in Anführungszeichen. Sie hatte, sechs Wochen um sechs Wochen, gelernt, dass die Freundin in solchen Gesprächen fast nie die Freundin war."
  },
  "mental_health_events.2.t": {
   "en": "Youth Mental Health Crisis",
@@ -7525,7 +7525,7 @@
  },
  "mental_health_events.200.f": {
   "en": "\\\"It is no measure of health,\\\" the old psychiatrist said, \\\"to be well-adjusted to a profoundly sick society.\\\"\\n\\nHe had been saying this for fifty years, and the profession had treated it as a quiet dissent. He said it at this year's conference and it earned a standing ovation.\\n\\n\\\"The society is not yet healthy. But it is no longer profoundly sick. In our field, that is what counts as progress.\\\"",
-  "de": "\\\"Es ist kein Maß für Gesundheit\\\", sagte der alte Psychiater, \\\"sich an eine zutiefst kranke Gesellschaft anzupassen.\\\"\\n\\nEr sagte das seit fünfzig Jahren, und die Fachwelt hatte es als stillen Widerspruch behandelt. Dieses Jahr sagte er es auf der Konferenz, und es erntete stehende Ovationen.\\n\\n\\\"Die Gesellschaft ist noch nicht gesund. Aber sie ist nicht mehr zutiefst krank. In unserem Fach zählt das als Fortschritt.\\\""
+  "de": "„Es ist kein Maß für Gesundheit“, sagte der alte Psychiater, „sich an eine zutiefst kranke Gesellschaft anzupassen.“\\n\\nEr sagte das seit fünfzig Jahren, und die Fachwelt hatte es als stillen Widerspruch behandelt. Dieses Jahr sagte er es auf der Konferenz, und es erntete stehende Ovationen.\\n\\n„Die Gesellschaft ist noch nicht gesund. Aber sie ist nicht mehr zutiefst krank. In unserem Fach zählt das als Fortschritt.“"
  },
  "mental_health_events.200.t": {
   "en": "A Healthier Nation",
@@ -7573,7 +7573,7 @@
  },
  "mental_health_events.4.f": {
   "en": "The veteran's wife said he hadn't slept through the night since he came home. That was three years ago.\\n\\n\\\"What does he do, when he can't sleep?\\\" the doctor asked.\\n\\n\\\"He goes to the garage. He cleans tools that were already clean. He counts the bolts in his toolbox. Once I found him with a flashlight, walking the perimeter of the house.\\\"\\n\\n\\\"And in the morning?\\\"\\n\\n\\\"In the morning he says nothing, and goes to work.\\\"",
-  "de": "Die Frau des Veteranen sagte, er habe seit seiner Rückkehr keine Nacht mehr durchgeschlafen. Das war vor drei Jahren.\\n\\n\\\"Was macht er, wenn er nicht schlafen kann?\\\", fragte der Arzt.\\n\\n\\\"Er geht in die Garage. Er putzt Werkzeug, das schon sauber ist. Er zählt die Schrauben in seinem Kasten. Einmal fand ich ihn mit einer Taschenlampe, wie er ums Haus lief.\\\"\\n\\n\\\"Und morgens?\\\"\\n\\n\\\"Morgens sagt er nichts und geht zur Arbeit.\\\""
+  "de": "Die Frau des Veteranen sagte, er habe seit seiner Rückkehr keine Nacht mehr durchgeschlafen. Das war vor drei Jahren.\\n\\n„Was macht er, wenn er nicht schlafen kann?“, fragte der Arzt.\\n\\n„Er geht in die Garage. Er putzt Werkzeug, das schon sauber ist. Er zählt die Schrauben in seinem Kasten. Einmal fand ich ihn mit einer Taschenlampe, wie er ums Haus lief.“\\n\\n„Und morgens?“\\n\\n„Morgens sagt er nichts und geht zur Arbeit.“"
  },
  "mental_health_events.4.t": {
   "en": "Veteran PTSD Wave",
@@ -7597,7 +7597,7 @@
  },
  "mental_health_events.5.f": {
   "en": "The photographs showed restraint marks on the patients' wrists. The facility director said conditions were \\\"in line with standard practice.\\\"\\n\\n\\\"Whose standard?\\\" the journalist asked.\\n\\n\\\"The standard of any such facility.\\\"\\n\\n\\\"Show me another facility.\\\"\\n\\nThe director did not, and the photographs ran in the morning edition under the headline the editor had drafted before the interview began.",
-  "de": "Die Fotografien zeigten Fesselspuren an den Handgelenken der Patienten. Der Leiter der Einrichtung sagte, die Zustände entsprächen \\\"der üblichen Praxis\\\".\\n\\n\\\"Wessen üblicher Praxis?\\\", fragte der Journalist.\\n\\n\\\"Der üblichen Praxis jeder solchen Einrichtung.\\\"\\n\\n\\\"Zeigen Sie mir eine andere Einrichtung.\\\"\\n\\nDas tat der Leiter nicht, und die Fotografien erschienen in der Morgenausgabe unter der Schlagzeile, die der Redakteur schon vor dem Interview entworfen hatte."
+  "de": "Die Fotografien zeigten Fesselspuren an den Handgelenken der Patienten. Der Leiter der Einrichtung sagte, die Zustände entsprächen „der üblichen Praxis“.\\n\\n„Wessen üblicher Praxis?“, fragte der Journalist.\\n\\n„Der üblichen Praxis jeder solchen Einrichtung.“\\n\\n„Zeigen Sie mir eine andere Einrichtung.“\\n\\nDas tat der Leiter nicht, und die Fotografien erschienen in der Morgenausgabe unter der Schlagzeile, die der Redakteur schon vor dem Interview entworfen hatte."
  },
  "mental_health_events.5.t": {
   "en": "Institutional Care Scandal",
@@ -7857,7 +7857,7 @@
  },
  "ministry_law_events.20.f": {
   "en": "\\\"We were promised a ministry of experts. What we got was a ministry of cousins. The country deserves better, and so does the institution.\\\"\\n\\n\\\"Names?\\\"\\n\\n\\\"The deputy director is the minister's brother-in-law. The procurement chief is the minister's college roommate. The press secretary is the minister's wife's cousin. We could go on. The list is twelve pages.\\\"",
-  "de": "\\\"Man versprach uns ein Ministerium der Experten. Was wir bekamen, ist ein Ministerium der Cousins. Das Land verdient Besseres, und die Institution auch.\\\"\\n\\n\\\"Namen?\\\"\\n\\n\\\"Der stellvertretende Direktor ist der Schwager des Ministers. Der Beschaffungschef war der Studienkollege des Ministers. Die Pressesprecherin ist die Cousine der Ministergattin. Wir könnten so weitermachen. Die Liste hat zwölf Seiten.\\\""
+  "de": "„Man versprach uns ein Ministerium der Experten. Was wir bekamen, ist ein Ministerium der Cousins. Das Land verdient Besseres, und die Institution auch.“\\n\\n„Namen?“\\n\\n„Der stellvertretende Direktor ist der Schwager des Ministers. Der Beschaffungschef war der Studienkollege des Ministers. Die Pressesprecherin ist die Cousine der Ministergattin. Wir könnten so weitermachen. Die Liste hat zwölf Seiten.“"
  },
  "ministry_law_events.20.t": {
   "en": "Underqualified Hires Exposed",
@@ -7877,7 +7877,7 @@
  },
  "ministry_law_events.21.f": {
   "en": "\\\"Every coin allocated here is a coin taken from elsewhere. The minister has not done the arithmetic. We have, and the answer alarms us.\\\"\\n\\n\\\"What did the arithmetic show?\\\"\\n\\n\\\"A first-year cost the bill claims will be modest, and a five-year cost the bill prefers not to mention. The five-year cost is what bankrupts ministries — and us along with them.\\\"",
-  "de": "\\\"Jede Münze, die hier zugewiesen wird, ist eine Münze, die anderswo fehlt. Der Minister hat nicht nachgerechnet. Wir schon, und das Ergebnis beunruhigt uns.\\\"\\n\\n\\\"Was ergab die Rechnung?\\\"\\n\\n\\\"Kosten im ersten Jahr, die der Gesetzentwurf als bescheiden bezeichnet, und Kosten über fünf Jahre, die der Gesetzentwurf lieber verschweigt. Die Fünfjahreskosten sind es, die Ministerien in den Ruin treiben — und uns mit ihnen.\\\""
+  "de": "„Jede Münze, die hier zugewiesen wird, ist eine Münze, die anderswo fehlt. Der Minister hat nicht nachgerechnet. Wir schon, und das Ergebnis beunruhigt uns.“\\n\\n„Was ergab die Rechnung?“\\n\\n„Kosten im ersten Jahr, die der Gesetzentwurf als bescheiden bezeichnet, und Kosten über fünf Jahre, die der Gesetzentwurf lieber verschweigt. Die Fünfjahreskosten sind es, die Ministerien in den Ruin treiben — und uns mit ihnen.“"
  },
  "ministry_law_events.21.t": {
   "en": "Treasury Pushes Back",
@@ -7897,7 +7897,7 @@
  },
  "ministry_law_events.22.f": {
   "en": "\\\"You cannot create a new river by digging in the desert. You must redirect existing water — and that means quarrelling with everyone whose field went dry.\\\"\\n\\n\\\"And the quarrels are quiet so far.\\\"\\n\\n\\\"The quarrels are private so far. Loud and private are different things. Wait until the budget moves and see how private they remain.\\\"",
-  "de": "\\\"Man schafft keinen neuen Fluss, indem man in der Wüste gräbt. Man muss vorhandenes Wasser umleiten — und das bedeutet Streit mit jedem, dessen Feld dadurch vertrocknet.\\\"\\n\\n\\\"Und die Streitigkeiten sind bisher still.\\\"\\n\\n\\\"Die Streitigkeiten sind bisher privat. Laut und privat sind zwei verschiedene Dinge. Warten Sie, bis das Budget sich bewegt, und sehen Sie, wie privat sie dann noch bleiben.\\\""
+  "de": "„Man schafft keinen neuen Fluss, indem man in der Wüste gräbt. Man muss vorhandenes Wasser umleiten — und das bedeutet Streit mit jedem, dessen Feld dadurch vertrocknet.“\\n\\n„Und die Streitigkeiten sind bisher still.“\\n\\n„Die Streitigkeiten sind bisher privat. Laut und privat sind zwei verschiedene Dinge. Warten Sie, bis das Budget sich bewegt, und sehen Sie, wie privat sie dann noch bleiben.“"
  },
  "ministry_law_events.22.t": {
   "en": "Bureaucratic Sabotage",
@@ -7917,7 +7917,7 @@
  },
  "ministry_law_events.23.f": {
   "en": "\\\"We have served three governments and weathered two reorganizations. We will weather this one too — or we will make the cost of dissolving us memorable.\\\"\\n\\n\\\"What does 'memorable' mean here?\\\"\\n\\n\\\"It means the files that the new ministry will need to do its job. We do not threaten to misplace them. We merely note that the indexing system is something we devised, and not all of us are eager to explain it to our replacements.\\\"",
-  "de": "\\\"Wir haben drei Regierungen gedient und zwei Umstrukturierungen überstanden. Wir werden auch diese überstehen — oder wir sorgen dafür, dass man sich an die Kosten unserer Auflösung erinnert.\\\"\\n\\n\\\"Was bedeutet „erinnert“ hier?\\\"\\n\\n\\\"Es geht um die Akten, die das neue Ministerium für seine Arbeit brauchen wird. Wir drohen nicht damit, sie zu verlegen. Wir merken nur an, dass das Ablagesystem unsere eigene Erfindung ist, und nicht jeder von uns ist erpicht darauf, es unseren Nachfolgern zu erklären.\\\""
+  "de": "„Wir haben drei Regierungen gedient und zwei Umstrukturierungen überstanden. Wir werden auch diese überstehen — oder wir sorgen dafür, dass man sich an die Kosten unserer Auflösung erinnert.“\\n\\n„Was bedeutet ‚erinnert‘ hier?“\\n\\n„Es geht um die Akten, die das neue Ministerium für seine Arbeit brauchen wird. Wir drohen nicht damit, sie zu verlegen. Wir merken nur an, dass das Ablagesystem unsere eigene Erfindung ist, und nicht jeder von uns ist erpicht darauf, es unseren Nachfolgern zu erklären.“"
  },
  "ministry_law_events.23.t": {
   "en": "Final Stand of the Bureau",
@@ -7937,7 +7937,7 @@
  },
  "ministry_law_events.24.f": {
   "en": "\\\"We will obey the law. We will not pretend to like it, and we will not promise to make it work. Those are different things, sir.\\\"\\n\\n\\\"And if it does not work?\\\"\\n\\n\\\"Then someone will say we should have warned them. We are warning them now, in writing, on the record. The decision is still parliament's. We are merely defending our future reputations.\\\"",
-  "de": "\\\"Wir werden dem Gesetz gehorchen. Wir werden nicht so tun, als gefiele es uns, und wir werden nicht versprechen, es zum Erfolg zu führen. Das sind zwei verschiedene Dinge, Sir.\\\"\\n\\n\\\"Und wenn es nicht funktioniert?\\\"\\n\\n\\\"Dann wird jemand sagen, wir hätten warnen sollen. Wir warnen jetzt, schriftlich, für die Akten. Die Entscheidung liegt weiterhin beim Parlament. Wir verteidigen lediglich unseren künftigen Ruf.\\\""
+  "de": "„Wir werden dem Gesetz gehorchen. Wir werden nicht so tun, als gefiele es uns, und wir werden nicht versprechen, es zum Erfolg zu führen. Das sind zwei verschiedene Dinge, Sir.“\\n\\n„Und wenn es nicht funktioniert?“\\n\\n„Dann wird jemand sagen, wir hätten warnen sollen. Wir warnen jetzt, schriftlich, für die Akten. Die Entscheidung liegt weiterhin beim Parlament. Wir verteidigen lediglich unseren künftigen Ruf.“"
  },
  "ministry_law_events.24.t": {
   "en": "The General Staff Withholds Cooperation",
@@ -7957,7 +7957,7 @@
  },
  "ministry_law_events.25.f": {
   "en": "\\\"A nation's foreign policy is read by its rivals as a book of intentions. The current chapter, regrettably, is being read in capitals that have long memories.\\\"\\n\\n\\\"And what does the chapter say?\\\"\\n\\n\\\"It says we are reorganizing our state to project something. They cannot quite decide what. While they decide, their navies move closer to ours, and their ambassadors return our calls more slowly.\\\"",
-  "de": "\\\"Die Außenpolitik einer Nation wird von ihren Rivalen wie ein Buch der Absichten gelesen. Das aktuelle Kapitel wird, leider, in Hauptstädten gelesen, die ein langes Gedächtnis haben.\\\"\\n\\n\\\"Und was besagt das Kapitel?\\\"\\n\\n\\\"Es besagt, dass wir unseren Staat umstrukturieren, um etwas zu demonstrieren. Sie können sich nicht recht entscheiden, was. Während sie sich entscheiden, rücken ihre Flotten näher an unsere heran, und ihre Botschafter erwidern unsere Anrufe langsamer.\\\""
+  "de": "„Die Außenpolitik einer Nation wird von ihren Rivalen wie ein Buch der Absichten gelesen. Das aktuelle Kapitel wird, leider, in Hauptstädten gelesen, die ein langes Gedächtnis haben.“\\n\\n„Und was besagt das Kapitel?“\\n\\n„Es besagt, dass wir unseren Staat umstrukturieren, um etwas zu demonstrieren. Sie können sich nicht recht entscheiden, was. Während sie sich entscheiden, rücken ihre Flotten näher an unsere heran, und ihre Botschafter erwidern unsere Anrufe langsamer.“"
  },
  "ministry_law_events.25.t": {
   "en": "Foreign Capitals Take Note",
@@ -7977,7 +7977,7 @@
  },
  "ministry_law_events.26.f": {
   "en": "\\\"A ministry that meddles in trade is a ministry that learns the value of meddling by costing the country its export markets. We have seen this play before — and it always ends the same way.\\\"\\n\\n\\\"You sound certain.\\\"\\n\\n\\\"I sound experienced. The same speech has been delivered to four previous ministries by four previous lobbies, and each time the ministry won and the markets shrank. We are not yet too tired to give the speech once more.\\\"",
-  "de": "\\\"Ein Ministerium, das sich in den Handel einmischt, ist ein Ministerium, das den Wert der Einmischung dadurch lernt, dass es das Land seine Exportmärkte kostet. Wir haben dieses Stück schon gesehen — und es endet immer gleich.\\\"\\n\\n\\\"Sie klingen sehr sicher.\\\"\\n\\n\\\"Ich klinge erfahren. Dieselbe Rede wurde vier früheren Ministerien von vier früheren Lobbys gehalten, und jedes Mal gewann das Ministerium und die Märkte schrumpften. Wir sind noch nicht zu müde, die Rede noch einmal zu halten.\\\""
+  "de": "„Ein Ministerium, das sich in den Handel einmischt, ist ein Ministerium, das den Wert der Einmischung dadurch lernt, dass es das Land seine Exportmärkte kostet. Wir haben dieses Stück schon gesehen — und es endet immer gleich.“\\n\\n„Sie klingen sehr sicher.“\\n\\n„Ich klinge erfahren. Dieselbe Rede wurde vier früheren Ministerien von vier früheren Lobbys gehalten, und jedes Mal gewann das Ministerium und die Märkte schrumpften. Wir sind noch nicht zu müde, die Rede noch einmal zu halten.“"
  },
  "ministry_law_events.26.t": {
   "en": "Merchants Lobby Against",
@@ -7997,7 +7997,7 @@
  },
  "ministry_law_events.27.f": {
   "en": "\\\"The painter who eats from the state's hand soon paints what the state asks for. We did not become artists to become courtiers.\\\"\\n\\n\\\"And the painter who eats from no hand at all?\\\"\\n\\n\\\"Eats less. We accept it. We knew the terms when we chose the brush. We did not choose the salary, and we will not be told what colour to use because the salary now exists.\\\"",
-  "de": "\\\"Der Maler, der aus der Hand des Staates isst, malt bald, was der Staat verlangt. Wir wurden nicht Künstler, um Höflinge zu werden.\\\"\\n\\n\\\"Und der Maler, der aus gar keiner Hand isst?\\\"\\n\\n\\\"Isst weniger. Das nehmen wir hin. Wir kannten die Bedingungen, als wir den Pinsel wählten. Wir haben nicht das Gehalt gewählt, und wir lassen uns nicht vorschreiben, welche Farbe wir zu benutzen haben, nur weil es das Gehalt nun gibt.\\\""
+  "de": "„Der Maler, der aus der Hand des Staates isst, malt bald, was der Staat verlangt. Wir wurden nicht Künstler, um Höflinge zu werden.“\\n\\n„Und der Maler, der aus gar keiner Hand isst?“\\n\\n„Isst weniger. Das nehmen wir hin. Wir kannten die Bedingungen, als wir den Pinsel wählten. Wir haben nicht das Gehalt gewählt, und wir lassen uns nicht vorschreiben, welche Farbe wir zu benutzen haben, nur weil es das Gehalt nun gibt.“"
  },
  "ministry_law_events.27.t": {
   "en": "Artists Decry State Patronage",
@@ -8017,7 +8017,7 @@
  },
  "ministry_law_events.28.f": {
   "en": "\\\"You wanted a labor ministry. Here is labor's reply — we do not consent to being administered. Govern us, and we will withhold what we alone can give.\\\"\\n\\n\\\"And what is it that you alone can give?\\\"\\n\\n\\\"Our hands. The factories are not industrial machines. They are arrangements between owners and us. The arrangement requires our cooperation. Cooperation has a price, and the price is consultation before legislation.\\\"",
-  "de": "\\\"Ihr wolltet ein Arbeitsministerium. Hier ist die Antwort der Arbeiterschaft — wir stimmen nicht zu, verwaltet zu werden. Regiert uns, und wir verweigern, was nur wir geben können.\\\"\\n\\n\\\"Und was ist es, das nur ihr geben könnt?\\\"\\n\\n\\\"Unsere Hände. Die Fabriken sind keine Industriemaschinen. Sie sind Vereinbarungen zwischen den Eigentümern und uns. Die Vereinbarung erfordert unsere Mitarbeit. Mitarbeit hat einen Preis, und der Preis ist Konsultation vor der Gesetzgebung.\\\""
+  "de": "„Ihr wolltet ein Arbeitsministerium. Hier ist die Antwort der Arbeiterschaft — wir stimmen nicht zu, verwaltet zu werden. Regiert uns, und wir verweigern, was nur wir geben können.“\\n\\n„Und was ist es, das nur ihr geben könnt?“\\n\\n„Unsere Hände. Die Fabriken sind keine Industriemaschinen. Sie sind Vereinbarungen zwischen den Eigentümern und uns. Die Vereinbarung erfordert unsere Mitarbeit. Mitarbeit hat einen Preis, und der Preis ist Konsultation vor der Gesetzgebung.“"
  },
  "ministry_law_events.28.t": {
   "en": "Strikes Threaten the Ministry",
@@ -8037,7 +8037,7 @@
  },
  "ministry_law_events.29.f": {
   "en": "\\\"The smoke from our furnaces is the smell of prosperity. Regulate it away and you will not regulate the smell — only the prosperity.\\\"\\n\\n\\\"And the children with breathing problems?\\\"\\n\\n\\\"Will work in the factories when they are old enough. Their parents would prefer a paycheck and a cough to no paycheck and clean air. We have asked them. The vote was not close.\\\"",
-  "de": "\\\"Der Rauch unserer Öfen ist der Geruch des Wohlstands. Reguliert ihn weg, und ihr reguliert nicht den Geruch — nur den Wohlstand.\\\"\\n\\n\\\"Und die Kinder mit Atemproblemen?\\\"\\n\\n\\\"Werden in den Fabriken arbeiten, wenn sie alt genug sind. Ihre Eltern würden einen Lohn und einen Husten einem fehlenden Lohn und sauberer Luft vorziehen. Wir haben sie gefragt. Die Abstimmung war nicht knapp.\\\""
+  "de": "„Der Rauch unserer Öfen ist der Geruch des Wohlstands. Reguliert ihn weg, und ihr reguliert nicht den Geruch — nur den Wohlstand.“\\n\\n„Und die Kinder mit Atemproblemen?“\\n\\n„Werden in den Fabriken arbeiten, wenn sie alt genug sind. Ihre Eltern würden einen Lohn und einen Husten einem fehlenden Lohn und sauberer Luft vorziehen. Wir haben sie gefragt. Die Abstimmung war nicht knapp.“"
  },
  "ministry_law_events.29.t": {
   "en": "Industry's Counter-Attack",
@@ -8077,7 +8077,7 @@
  },
  "ministry_law_events.30.f": {
   "en": "\\\"The shadows do not consent to be moved. You may legislate the chairs in the room, but the men who sit in them outlast every minister.\\\"\\n\\n\\\"And the minister will outlast the next election?\\\"\\n\\n\\\"The minister might. We will outlast the next four. The arithmetic is on our side. Patience is the bureau's only weapon, and the only one it has ever needed.\\\"",
-  "de": "\\\"Die Schatten stimmen nicht zu, verschoben zu werden. Man kann die Stühle im Raum per Gesetz bestimmen, aber die Männer, die darin sitzen, überdauern jeden Minister.\\\"\\n\\n\\\"Und wird der Minister die nächste Wahl überdauern?\\\"\\n\\n\\\"Der Minister vielleicht. Wir werden die nächsten vier überdauern. Die Arithmetik ist auf unserer Seite. Geduld ist die einzige Waffe der Behörde — und die einzige, die sie je gebraucht hat.\\\""
+  "de": "„Die Schatten stimmen nicht zu, verschoben zu werden. Man kann die Stühle im Raum per Gesetz bestimmen, aber die Männer, die darin sitzen, überdauern jeden Minister.“\\n\\n„Und wird der Minister die nächste Wahl überdauern?“\\n\\n„Der Minister vielleicht. Wir werden die nächsten vier überdauern. Die Arithmetik ist auf unserer Seite. Geduld ist die einzige Waffe der Behörde — und die einzige, die sie je gebraucht hat.“"
  },
  "ministry_law_events.30.t": {
   "en": "The Shadow Bureau Pushes Back",
@@ -8097,7 +8097,7 @@
  },
  "ministry_law_events.31.f": {
   "en": "\\\"You build the ship while the storm is breaking. Either you finish in time, or you watch what you have built so far wash away.\\\"\\n\\n\\\"And if we pause?\\\"\\n\\n\\\"If we pause, we watch the storm without the ship at all. The choice is between a half-built ship and no ship. Neither is good. One is worse.\\\"",
-  "de": "\\\"Man baut das Schiff, während der Sturm losbricht. Entweder man wird rechtzeitig fertig, oder man sieht zu, wie das bisher Gebaute fortgespült wird.\\\"\\n\\n\\\"Und wenn wir innehalten?\\\"\\n\\n\\\"Wenn wir innehalten, erleben wir den Sturm ganz ohne Schiff. Die Wahl steht zwischen einem halbfertigen Schiff und gar keinem Schiff. Keines ist gut. Eines ist schlechter.\\\""
+  "de": "„Man baut das Schiff, während der Sturm losbricht. Entweder man wird rechtzeitig fertig, oder man sieht zu, wie das bisher Gebaute fortgespült wird.“\\n\\n„Und wenn wir innehalten?“\\n\\n„Wenn wir innehalten, erleben wir den Sturm ganz ohne Schiff. Die Wahl steht zwischen einem halbfertigen Schiff und gar keinem Schiff. Keines ist gut. Eines ist schlechter.“"
  },
  "ministry_law_events.31.t": {
   "en": "The Crisis Worsens",
@@ -8117,7 +8117,7 @@
  },
  "ministry_law_events.32.f": {
   "en": "\\\"When the state opens an office of public information, it is to spread information about itself. Where this leads, history has already written.\\\"\\n\\n\\\"And history has examples to the contrary.\\\"\\n\\n\\\"History has exceptions. The rule is what the office becomes in its third minister, not its first. The first minister always promises restraint. The third minister always discovers the rules can be rewritten.\\\"",
-  "de": "\\\"Wenn der Staat ein Amt für öffentliche Information eröffnet, dann, um Informationen über sich selbst zu verbreiten. Wohin das führt, hat die Geschichte bereits geschrieben.\\\"\\n\\n\\\"Und die Geschichte kennt Gegenbeispiele.\\\"\\n\\n\\\"Die Geschichte kennt Ausnahmen. Die Regel ist, was aus dem Amt unter seinem dritten Minister wird, nicht unter seinem ersten. Der erste Minister verspricht immer Zurückhaltung. Der dritte Minister entdeckt immer, dass sich die Regeln neu schreiben lassen.\\\""
+  "de": "„Wenn der Staat ein Amt für öffentliche Information eröffnet, dann, um Informationen über sich selbst zu verbreiten. Wohin das führt, hat die Geschichte bereits geschrieben.“\\n\\n„Und die Geschichte kennt Gegenbeispiele.“\\n\\n„Die Geschichte kennt Ausnahmen. Die Regel ist, was aus dem Amt unter seinem dritten Minister wird, nicht unter seinem ersten. Der erste Minister verspricht immer Zurückhaltung. Der dritte Minister entdeckt immer, dass sich die Regeln neu schreiben lassen.“"
  },
  "ministry_law_events.32.t": {
   "en": "The Press Rebels",
@@ -8137,7 +8137,7 @@
  },
  "ministry_law_events.33.f": {
   "en": "\\\"Science is a slow conversation between honest people. Insert a politician into that conversation and you will get neither science nor honest people.\\\"\\n\\n\\\"The bill includes a research council to insulate the science from the politics.\\\"\\n\\n\\\"The research council is appointed by the minister. The minister is appointed by the party. The party is appointed by the voters. The voters do not vote on physics. They vote on prices. Eventually the physics learns to speak of prices.\\\"",
-  "de": "\\\"Wissenschaft ist ein langsames Gespräch zwischen ehrlichen Menschen. Setzt einen Politiker in dieses Gespräch, und man bekommt weder Wissenschaft noch ehrliche Menschen.\\\"\\n\\n\\\"Der Gesetzentwurf sieht einen Forschungsrat vor, um die Wissenschaft von der Politik abzuschirmen.\\\"\\n\\n\\\"Der Forschungsrat wird vom Minister ernannt. Der Minister wird von der Partei ernannt. Die Partei wird von den Wählern bestimmt. Die Wähler stimmen nicht über Physik ab. Sie stimmen über Preise ab. Irgendwann lernt die Physik, von Preisen zu sprechen.\\\""
+  "de": "„Wissenschaft ist ein langsames Gespräch zwischen ehrlichen Menschen. Setzt einen Politiker in dieses Gespräch, und man bekommt weder Wissenschaft noch ehrliche Menschen.“\\n\\n„Der Gesetzentwurf sieht einen Forschungsrat vor, um die Wissenschaft von der Politik abzuschirmen.“\\n\\n„Der Forschungsrat wird vom Minister ernannt. Der Minister wird von der Partei ernannt. Die Partei wird von den Wählern bestimmt. Die Wähler stimmen nicht über Physik ab. Sie stimmen über Preise ab. Irgendwann lernt die Physik, von Preisen zu sprechen.“"
  },
  "ministry_law_events.33.t": {
   "en": "Academics Walk Out",
@@ -8497,7 +8497,7 @@
  },
  "ministry_law_events.5.f": {
   "en": "The Field Marshal was blunt: 'You may legislate all you wish about the procurement of boot-leather and the allocation of rations. But the moment a clerk in a morning coat presumes to tell me how to deploy a brigade, I shall tender my resignation and advise my officers to do the same.'",
-  "de": "Der Feldmarschall wurde deutlich: ‚Legiferieren Sie, so viel Sie wollen, über die Beschaffung von Stiefelleder und die Zuteilung von Rationen. Doch sobald ein Beamter im Gehrock sich anmaßt, mir zu sagen, wie ich eine Brigade einzusetzen habe, werde ich meinen Rücktritt einreichen und meinen Offizieren raten, dasselbe zu tun.‘"
+  "de": "Der Feldmarschall wurde deutlich: „Legiferieren Sie, so viel Sie wollen, über die Beschaffung von Stiefelleder und die Zuteilung von Rationen. Doch sobald ein Beamter im Gehrock sich anmaßt, mir zu sagen, wie ich eine Brigade einzusetzen habe, werde ich meinen Rücktritt einreichen und meinen Offizieren raten, dasselbe zu tun.“"
  },
  "ministry_law_events.5.t": {
   "en": "The Generals' War Room",
@@ -8677,7 +8677,7 @@
  },
  "ministry_law_events.58.f": {
   "en": "\\\"We are not asking you to abandon the ministry,\\\" the manufacturer said. \\\"We are asking you not to bankrupt every foundry built before its inspectors were born.\\\"\\n\\n\\\"And in ten years?\\\"\\n\\n\\\"In ten years the old foundries will be gone or rebuilt, and your inspectors will find nothing to object to.\\\"\\n\\nThe minister-designate made a note. She had heard the phrase 'in ten years' before, and it had always meant 'not yet.'",
-  "de": "„Wir bitten Sie nicht, das Ministerium aufzugeben“, sagte der Fabrikant. „Wir bitten Sie, nicht jede Gießerei in den Ruin zu treiben, die gebaut wurde, bevor ihre Inspektoren geboren waren.“\\n\\n„Und in zehn Jahren?“\\n\\n„In zehn Jahren werden die alten Gießereien verschwunden oder umgebaut sein, und Ihre Inspektoren werden nichts zu beanstanden finden.“\\n\\nDie designierte Ministerin machte sich eine Notiz. Sie hatte den Satz ‚in zehn Jahren‘ schon einmal gehört, und er hatte immer ‚noch nicht‘ bedeutet."
+  "de": "„Wir bitten Sie nicht, das Ministerium aufzugeben“, sagte der Fabrikant. „Wir bitten Sie, nicht jede Gießerei in den Ruin zu treiben, die gebaut wurde, bevor ihre Inspektoren geboren waren.“\\n\\n„Und in zehn Jahren?“\\n\\n„In zehn Jahren werden die alten Gießereien verschwunden oder umgebaut sein, und Ihre Inspektoren werden nichts zu beanstanden finden.“\\n\\nDie designierte Ministerin machte sich eine Notiz. Sie hatte den Satz „in zehn Jahren“ schon einmal gehört, und er hatte immer „noch nicht“ bedeutet."
  },
  "ministry_law_events.58.t": {
   "en": "The Grandfather Clause",
@@ -8781,7 +8781,7 @@
  },
  "ministry_law_events.9.f": {
   "en": "The factory owner slammed his fist on the table: 'A ministry that coddles workers will bankrupt us all!' The union leader replied without blinking: 'A ministry that coddles owners already exists - it is called the rest of the government.'",
-  "de": "Der Fabrikbesitzer schlug mit der Faust auf den Tisch: ‚Ein Ministerium, das Arbeiter verhätschelt, wird uns alle ruinieren!‘ Der Gewerkschaftsführer entgegnete, ohne mit der Wimper zu zucken: ‚Ein Ministerium, das Besitzer verhätschelt, gibt es bereits – es nennt sich der Rest der Regierung.‘"
+  "de": "Der Fabrikbesitzer schlug mit der Faust auf den Tisch: „Ein Ministerium, das Arbeiter verhätschelt, wird uns alle ruinieren!“ Der Gewerkschaftsführer entgegnete, ohne mit der Wimper zu zucken: „Ein Ministerium, das Besitzer verhätschelt, gibt es bereits – es nennt sich der Rest der Regierung.“"
  },
  "ministry_law_events.9.t": {
   "en": "Capital vs. Labor",
@@ -8973,7 +8973,7 @@
  },
  "minor_events_timelineextended.7.d_cascade_systemic": {
   "en": "The total financial annihilation in [SCOPE.sCountry('banking_crash_origin_country').GetName] has ripped through the global financial system and detonated our own bubble. The interconnected web of credit and speculation that our bankers assured us was 'manageable risk' has unraveled in hours. This is no longer a foreign crisis — it is a systemic collapse.",
-  "de": "Die totale finanzielle Vernichtung [SCOPE.sCountry('banking_crash_origin_country').GetAltName('IN')] hat das globale Finanzsystem zerrissen und unsere eigene Blase zur Explosion gebracht. Das verflochtene Netz aus Krediten und Spekulation, das uns unsere Bankiers als ‚beherrschbares Risiko‘ versicherten, hat sich binnen Stunden aufgelöst. Dies ist keine ausländische Krise mehr – es ist ein systemischer Zusammenbruch."
+  "de": "Die totale finanzielle Vernichtung [SCOPE.sCountry('banking_crash_origin_country').GetAltName('IN')] hat das globale Finanzsystem zerrissen und unsere eigene Blase zur Explosion gebracht. Das verflochtene Netz aus Krediten und Spekulation, das uns unsere Bankiers als „beherrschbares Risiko“ versicherten, hat sich binnen Stunden aufgelöst. Dies ist keine ausländische Krise mehr – es ist ein systemischer Zusammenbruch."
  },
  "minor_events_timelineextended.7.d_crash": {
   "en": "The crash in [SCOPE.sCountry('banking_crash_origin_country').GetName] has spilled across trade and credit networks into our own financial system. Banks with exposure to [SCOPE.sCountry('banking_crash_origin_country').GetAdjectiveNoFormatting] assets are scrambling to assess their losses, and domestic confidence is faltering.",
@@ -10729,7 +10729,7 @@
  },
  "movement_events_te.17.a.tt": {
   "en": "[SCOPE.sCountry('cr_condemned_country').GetName] will have to answer: promise reform, reject our 'interference', or hit back with accusations of its own.",
-  "de": "[SCOPE.sCountry('cr_condemned_country').GetAltName('NOM')|U] wird antworten müssen: Reformen versprechen, unsere ‚Einmischung‘ zurückweisen oder mit eigenen Vorwürfen zurückschlagen."
+  "de": "[SCOPE.sCountry('cr_condemned_country').GetAltName('NOM')|U] wird antworten müssen: Reformen versprechen, unsere „Einmischung“ zurückweisen oder mit eigenen Vorwürfen zurückschlagen."
  },
  "movement_events_te.17.b": {
   "en": "It is not our affair",
@@ -12893,7 +12893,7 @@
  },
  "nuclear_weapon_events.22.f": {
   "en": "\\\"They are carrying photographs of the cities that were hit.\\\"\\n\\n\\\"And how many of them?\\\"\\n\\n\\\"Fifty thousand at the parliament gates this morning. By Friday it will be a hundred thousand at the defense ministry. The photographs do not need arguments. The photographs are the argument. Whatever we say in response will sound clinical, and the clinical sounds like complicity.\\\"",
-  "de": "\\\"Sie tragen Fotografien der getroffenen Städte bei sich.\\\"\\n\\n\\\"Und wie viele sind es?\\\"\\n\\n\\\"Heute Morgen fünfzigtausend vor den Toren des Parlaments. Bis Freitag werden es hunderttausend vor dem Verteidigungsministerium sein. Die Fotografien brauchen keine Argumente. Die Fotografien sind das Argument. Was auch immer wir erwidern, es wird klinisch klingen, und klinisch klingt wie Mittäterschaft.\\\""
+  "de": "„Sie tragen Fotografien der getroffenen Städte bei sich.“\\n\\n„Und wie viele sind es?“\\n\\n„Heute Morgen fünfzigtausend vor den Toren des Parlaments. Bis Freitag werden es hunderttausend vor dem Verteidigungsministerium sein. Die Fotografien brauchen keine Argumente. Die Fotografien sind das Argument. Was auch immer wir erwidern, es wird klinisch klingen, und klinisch klingt wie Mittäterschaft.“"
  },
  "nuclear_weapon_events.22.t": {
   "en": "The Mushroom Cloud's Shadow",
@@ -12909,7 +12909,7 @@
  },
  "nuclear_weapon_events.23.f": {
   "en": "\\\"How long have they known?\\\"\\n\\n\\\"Long enough to brief their allies. The cables went out this week.\\\"\\n\\n\\\"Then we have lost the element of surprise.\\\"\\n\\n\\\"We never had it. A programme this size has a signature: the power draw, the ore purchases, the physicists who stopped publishing. All we have lost is the pretence.\\\"",
-  "de": "\\\"Wie lange wissen sie es schon?\\\"\\n\\n\\\"Lange genug, um ihre Verbündeten zu informieren. Die Depeschen gingen diese Woche raus.\\\"\\n\\n\\\"Dann haben wir das Überraschungsmoment verloren.\\\"\\n\\n\\\"Das hatten wir nie. Ein Programm dieser Größe hinterlässt Spuren: der Stromverbrauch, die Erzkäufe, die Physiker, die aufgehört haben zu publizieren. Verloren haben wir nur den Anschein.\\\""
+  "de": "„Wie lange wissen sie es schon?“\\n\\n„Lange genug, um ihre Verbündeten zu informieren. Die Depeschen gingen diese Woche raus.“\\n\\n„Dann haben wir das Überraschungsmoment verloren.“\\n\\n„Das hatten wir nie. Ein Programm dieser Größe hinterlässt Spuren: der Stromverbrauch, die Erzkäufe, die Physiker, die aufgehört haben zu publizieren. Verloren haben wir nur den Anschein.“"
  },
  "nuclear_weapon_events.23.t": {
   "en": "The World Takes Notice",
@@ -12937,7 +12937,7 @@
  },
  "nuclear_weapon_events.24.f": {
   "en": "\\\"The keys are in. Say the word.\\\"",
-  "de": "\\\"Die Schlüssel sind drin. Sag das Wort.\\\""
+  "de": "„Die Schlüssel sind drin. Sag das Wort.“"
  },
  "nuclear_weapon_events.24.t": {
   "en": "Our Forces Are Ready",
@@ -13109,7 +13109,7 @@
  },
  "post_scarcity_events.1.f": {
   "en": "The factory ran three shifts. None of them required a single human worker. The former employees gathered outside the gates each morning out of habit.\\n\\n\\\"What are they waiting for?\\\" the supervisor asked the security chief.\\n\\n\\\"They are not waiting. They are remembering. The gates open at the same hour every day. The crowd has been gathering at the same hour for thirty years. It will take more than two months of unemployment to change that.\\\"\\n\\n\\\"And when the habit fades?\\\"\\n\\n\\\"When the habit fades, we will discover what they have decided to do instead. So far they have not decided.\\\"",
-  "de": "Die Fabrik lief in drei Schichten. Keine von ihnen brauchte auch nur einen einzigen menschlichen Arbeiter. Die ehemaligen Beschäftigten versammelten sich jeden Morgen aus Gewohnheit vor den Toren.\\n\\n\\\"Worauf warten sie?\\\", fragte der Vorarbeiter den Sicherheitschef.\\n\\n\\\"Sie warten nicht. Sie erinnern sich. Die Tore öffnen jeden Tag zur gleichen Stunde. Die Menge versammelt sich seit dreißig Jahren zur gleichen Stunde. Es braucht mehr als zwei Monate Arbeitslosigkeit, um das zu ändern.\\\"\\n\\n\\\"Und wenn die Gewohnheit verblasst?\\\"\\n\\n\\\"Wenn die Gewohnheit verblasst, werden wir erfahren, was sie stattdessen beschlossen haben zu tun. Bisher haben sie sich noch nicht entschieden.\\\""
+  "de": "Die Fabrik lief in drei Schichten. Keine von ihnen brauchte auch nur einen einzigen menschlichen Arbeiter. Die ehemaligen Beschäftigten versammelten sich jeden Morgen aus Gewohnheit vor den Toren.\\n\\n„Worauf warten sie?“, fragte der Vorarbeiter den Sicherheitschef.\\n\\n„Sie warten nicht. Sie erinnern sich. Die Tore öffnen jeden Tag zur gleichen Stunde. Die Menge versammelt sich seit dreißig Jahren zur gleichen Stunde. Es braucht mehr als zwei Monate Arbeitslosigkeit, um das zu ändern.“\\n\\n„Und wenn die Gewohnheit verblasst?“\\n\\n„Wenn die Gewohnheit verblasst, werden wir erfahren, was sie stattdessen beschlossen haben zu tun. Bisher haben sie sich noch nicht entschieden.“"
  },
  "post_scarcity_events.1.t": {
   "en": "Mass Unemployment Protests",
@@ -13133,7 +13133,7 @@
  },
  "post_scarcity_events.2.f": {
   "en": "The man sat in a comfortable apartment — rent paid, food delivered, nothing required of him — and stared at the ceiling until noon.\\n\\nA caseworker called.\\n\\n\\\"How are you settling in?\\\" she asked.\\n\\n\\\"I am settled. I am settled and I am bored and I am surprised at how heavy boredom feels.\\\"\\n\\n\\\"There are programmes for that. Classes, volunteer placements, community groups.\\\"\\n\\n\\\"I know. I have not yet decided which programme will be the one I am ashamed of having needed.\\\"",
-  "de": "Der Mann saß in einer komfortablen Wohnung — die Miete bezahlt, das Essen geliefert, nichts von ihm verlangt — und starrte bis zum Mittag an die Decke.\\n\\nEine Sachbearbeiterin rief an.\\n\\n\\\"Wie kommen Sie zurecht?\\\", fragte sie.\\n\\n\\\"Ich bin zurechtgekommen. Ich bin zurechtgekommen, und mir ist langweilig, und ich bin überrascht, wie schwer sich Langeweile anfühlt.\\\"\\n\\n\\\"Dafür gibt es Programme. Kurse, Freiwilligenstellen, Gemeinschaftsgruppen.\\\"\\n\\n\\\"Ich weiß. Ich habe mich noch nicht entschieden, für welches Programm ich mich schämen werde, es gebraucht zu haben.\\\""
+  "de": "Der Mann saß in einer komfortablen Wohnung — die Miete bezahlt, das Essen geliefert, nichts von ihm verlangt — und starrte bis zum Mittag an die Decke.\\n\\nEine Sachbearbeiterin rief an.\\n\\n„Wie kommen Sie zurecht?“, fragte sie.\\n\\n„Ich bin zurechtgekommen. Ich bin zurechtgekommen, und mir ist langweilig, und ich bin überrascht, wie schwer sich Langeweile anfühlt.“\\n\\n„Dafür gibt es Programme. Kurse, Freiwilligenstellen, Gemeinschaftsgruppen.“\\n\\n„Ich weiß. Ich habe mich noch nicht entschieden, für welches Programm ich mich schämen werde, es gebraucht zu haben.“"
  },
  "post_scarcity_events.2.t": {
   "en": "The Meaning Crisis",
@@ -13149,7 +13149,7 @@
  },
  "post_scarcity_events.200.f": {
   "en": "\\\"From each according to their ability,\\\" the old economist said. \\\"To each according to their needs.\\\"\\n\\n\\\"And what does that mean, now that it is actually the description rather than the slogan?\\\"\\n\\n\\\"It means we have to be honest about ability. It means we have to be honest about need. Neither category is as obvious as the slogan made it sound. We are about to spend the next century arguing the definitions.\\\"",
-  "de": "\\\"Jeder nach seinen Fähigkeiten\\\", sagte der alte Ökonom, \\\"jedem nach seinen Bedürfnissen.\\\"\\n\\n\\\"Und was bedeutet das jetzt, da es tatsächlich die Beschreibung ist und nicht mehr die Parole?\\\"\\n\\n\\\"Es bedeutet, dass wir ehrlich über Fähigkeit sein müssen. Es bedeutet, dass wir ehrlich über Bedürftigkeit sein müssen. Keine der beiden Kategorien ist so eindeutig, wie es die Parole klingen ließ. Wir werden das nächste Jahrhundert damit verbringen, über die Definitionen zu streiten.\\\""
+  "de": "„Jeder nach seinen Fähigkeiten“, sagte der alte Ökonom, „jedem nach seinen Bedürfnissen.“\\n\\n„Und was bedeutet das jetzt, da es tatsächlich die Beschreibung ist und nicht mehr die Parole?“\\n\\n„Es bedeutet, dass wir ehrlich über Fähigkeit sein müssen. Es bedeutet, dass wir ehrlich über Bedürftigkeit sein müssen. Keine der beiden Kategorien ist so eindeutig, wie es die Parole klingen ließ. Wir werden das nächste Jahrhundert damit verbringen, über die Definitionen zu streiten.“"
  },
  "post_scarcity_events.200.t": {
   "en": "Beyond Scarcity",
@@ -13173,7 +13173,7 @@
  },
  "post_scarcity_events.3.f": {
   "en": "The permit was approved in eleven seconds. The applicant had expected a six-week wait. He wasn't sure whether to be relieved or unsettled.\\n\\nHe asked the clerk who had filed his application.\\n\\n\\\"There is no clerk,\\\" she said. \\\"There is a screen and a server. I am here to direct you to them and to confirm that you spoke to a person at some point in the process. The system has decided you are not a fraud. The system has decided you qualify. The system has decided faster than any human ever could.\\\"\\n\\n\\\"And if it is wrong?\\\"\\n\\n\\\"Then you appeal. To another system. Which will decide that question in twelve seconds.\\\"",
-  "de": "Die Genehmigung wurde binnen elf Sekunden erteilt. Der Antragsteller hatte mit einer sechswöchigen Wartezeit gerechnet. Er wusste nicht recht, ob er erleichtert oder beunruhigt sein sollte.\\n\\nEr fragte die Angestellte, die seinen Antrag bearbeitet hatte.\\n\\n\\\"Es gibt keine Angestellte\\\", sagte sie. \\\"Es gibt einen Bildschirm und einen Server. Ich bin hier, um Sie zu ihnen zu leiten und zu bestätigen, dass Sie irgendwann im Verfahren mit einem Menschen gesprochen haben. Das System hat entschieden, dass Sie kein Betrüger sind. Das System hat entschieden, dass Sie berechtigt sind. Das System hat schneller entschieden, als es je ein Mensch könnte.\\\"\\n\\n\\\"Und wenn es sich irrt?\\\"\\n\\n\\\"Dann legen Sie Widerspruch ein. Bei einem anderen System. Das diese Frage in zwölf Sekunden entscheiden wird.\\\""
+  "de": "Die Genehmigung wurde binnen elf Sekunden erteilt. Der Antragsteller hatte mit einer sechswöchigen Wartezeit gerechnet. Er wusste nicht recht, ob er erleichtert oder beunruhigt sein sollte.\\n\\nEr fragte die Angestellte, die seinen Antrag bearbeitet hatte.\\n\\n„Es gibt keine Angestellte“, sagte sie. „Es gibt einen Bildschirm und einen Server. Ich bin hier, um Sie zu ihnen zu leiten und zu bestätigen, dass Sie irgendwann im Verfahren mit einem Menschen gesprochen haben. Das System hat entschieden, dass Sie kein Betrüger sind. Das System hat entschieden, dass Sie berechtigt sind. Das System hat schneller entschieden, als es je ein Mensch könnte.“\\n\\n„Und wenn es sich irrt?“\\n\\n„Dann legen Sie Widerspruch ein. Bei einem anderen System. Das diese Frage in zwölf Sekunden entscheiden wird.“"
  },
  "post_scarcity_events.3.t": {
   "en": "AI Replaces Bureaucrats",
@@ -13197,7 +13197,7 @@
  },
  "post_scarcity_events.4.f": {
   "en": "They smashed the assembly line with crowbars and set the server room on fire. The company had the replacement units operational within a week.\\n\\n\\\"Was it worth it?\\\" the journalist asked the surviving organizer.\\n\\n\\\"The factory replaced the units. The factory did not replace the conversation. The country is talking about what we did. The country had not been talking about what the factories had done. We are not winning. We are no longer being ignored.\\\"",
-  "de": "Sie zertrümmerten das Fließband mit Brecheisen und setzten den Serverraum in Brand. Innerhalb einer Woche hatte die Firma die Ersatzeinheiten wieder in Betrieb.\\n\\n\\\"Hat es sich gelohnt?\\\", fragte der Journalist den überlebenden Organisator.\\n\\n\\\"Die Fabrik hat die Einheiten ersetzt. Die Fabrik hat das Gespräch nicht ersetzt. Das Land spricht darüber, was wir getan haben. Das Land hatte nicht darüber gesprochen, was die Fabriken getan hatten. Wir gewinnen nicht. Aber wir werden nicht mehr ignoriert.\\\""
+  "de": "Sie zertrümmerten das Fließband mit Brecheisen und setzten den Serverraum in Brand. Innerhalb einer Woche hatte die Firma die Ersatzeinheiten wieder in Betrieb.\\n\\n„Hat es sich gelohnt?“, fragte der Journalist den überlebenden Organisator.\\n\\n„Die Fabrik hat die Einheiten ersetzt. Die Fabrik hat das Gespräch nicht ersetzt. Das Land spricht darüber, was wir getan haben. Das Land hatte nicht darüber gesprochen, was die Fabriken getan hatten. Wir gewinnen nicht. Aber wir werden nicht mehr ignoriert.“"
  },
  "post_scarcity_events.4.t": {
   "en": "Neo-Luddite Terrorism",
@@ -13221,7 +13221,7 @@
  },
  "post_scarcity_events.5.f": {
   "en": "With nothing to earn and nowhere to be, she picked up a paintbrush for the first time in thirty years.\\n\\nHer daughter visited that weekend and stared at the painting on the easel.\\n\\n\\\"Mother. I did not know you painted.\\\"\\n\\n\\\"I did not, for thirty years. The bills came due each month, and the painting did not pay them. The bills no longer come due. The painting still does not pay them. The painting is what is left.\\\"",
-  "de": "Da es nichts mehr zu verdienen und nirgendwo hinzugehen gab, griff sie zum ersten Mal seit dreißig Jahren wieder zum Pinsel.\\n\\nIhre Tochter besuchte sie an jenem Wochenende und starrte auf das Gemälde auf der Staffelei.\\n\\n\\\"Mutter. Ich wusste nicht, dass du malst.\\\"\\n\\n\\\"Das tat ich auch nicht, dreißig Jahre lang. Die Rechnungen wurden jeden Monat fällig, und das Malen bezahlte sie nicht. Die Rechnungen werden nicht mehr fällig. Das Malen bezahlt sie immer noch nicht. Das Malen ist, was übrig bleibt.\\\""
+  "de": "Da es nichts mehr zu verdienen und nirgendwo hinzugehen gab, griff sie zum ersten Mal seit dreißig Jahren wieder zum Pinsel.\\n\\nIhre Tochter besuchte sie an jenem Wochenende und starrte auf das Gemälde auf der Staffelei.\\n\\n„Mutter. Ich wusste nicht, dass du malst.“\\n\\n„Das tat ich auch nicht, dreißig Jahre lang. Die Rechnungen wurden jeden Monat fällig, und das Malen bezahlte sie nicht. Die Rechnungen werden nicht mehr fällig. Das Malen bezahlt sie immer noch nicht. Das Malen ist, was übrig bleibt.“"
  },
  "post_scarcity_events.5.t": {
   "en": "Art Renaissance",
@@ -13253,15 +13253,15 @@
  },
  "religious_revival_events.1.f": {
   "en": "\\\"They told us to stay out of politics. But politics never stayed out of the house of worship.\\\"\\n\\n\\\"Every household with a television is a congregation waiting to be called.\\\"",
-  "de": "\\\"Man sagte uns, wir sollten uns aus der Politik heraushalten. Doch die Politik hielt sich nie aus dem Gotteshaus heraus.\\\"\\n\\n\\\"Jeder Haushalt mit einem Fernseher ist eine Gemeinde, die nur darauf wartet, gerufen zu werden.\\\""
+  "de": "„Man sagte uns, wir sollten uns aus der Politik heraushalten. Doch die Politik hielt sich nie aus dem Gotteshaus heraus.“\\n\\n„Jeder Haushalt mit einem Fernseher ist eine Gemeinde, die nur darauf wartet, gerufen zu werden.“"
  },
  "religious_revival_events.1.f_dharmic": {
   "en": "\\\"For decades they told us that faith was a private matter. Now the private has become the political.\\\"\\n\\n\\\"Every ashram, every temple, every home where the Gita is read — all of them are now voting blocs.\\\"",
-  "de": "\\\"Jahrzehntelang sagte man uns, der Glaube sei Privatsache. Jetzt ist das Private politisch geworden.\\\"\\n\\n\\\"Jeder Ashram, jeder Tempel, jedes Haus, in dem die Gita gelesen wird — sie alle sind jetzt Wählerblöcke.\\\""
+  "de": "„Jahrzehntelang sagte man uns, der Glaube sei Privatsache. Jetzt ist das Private politisch geworden.“\\n\\n„Jeder Ashram, jeder Tempel, jedes Haus, in dem die Gita gelesen wird — sie alle sind jetzt Wählerblöcke.“"
  },
  "religious_revival_events.1.f_islamic": {
   "en": "\\\"They told us the mosque was for prayer, not politics. But when the ummah suffers, silence is not piety — it is complicity.\\\"\\n\\n\\\"Every household with a radio is a congregation waiting for the call.\\\"",
-  "de": "\\\"Man sagte uns, die Moschee sei für das Gebet da, nicht für die Politik. Doch wenn die Umma leidet, ist Schweigen keine Frömmigkeit — es ist Mittäterschaft.\\\"\\n\\n\\\"Jeder Haushalt mit einem Radio ist eine Gemeinde, die auf den Ruf wartet.\\\""
+  "de": "„Man sagte uns, die Moschee sei für das Gebet da, nicht für die Politik. Doch wenn die Umma leidet, ist Schweigen keine Frömmigkeit — es ist Mittäterschaft.“\\n\\n„Jeder Haushalt mit einem Radio ist eine Gemeinde, die auf den Ruf wartet.“"
  },
  "religious_revival_events.1.t": {
   "en": "The Moral Majority",
@@ -13293,15 +13293,15 @@
  },
  "religious_revival_events.2.f": {
   "en": "\\\"Sunday morning used to be a quiet affair. Now there are lights, cameras, a band, and ten thousand souls swaying in unison.\\\"\\n\\n\\\"Critics call it a circus. The faithful call it a miracle.\\\"",
-  "de": "\\\"Der Sonntagmorgen war früher eine ruhige Angelegenheit. Jetzt gibt es Scheinwerfer, Kameras, eine Band und zehntausend Seelen, die sich im Gleichklang wiegen.\\\"\\n\\n\\\"Kritiker nennen es einen Zirkus. Die Gläubigen nennen es ein Wunder.\\\""
+  "de": "„Der Sonntagmorgen war früher eine ruhige Angelegenheit. Jetzt gibt es Scheinwerfer, Kameras, eine Band und zehntausend Seelen, die sich im Gleichklang wiegen.“\\n\\n„Kritiker nennen es einen Zirkus. Die Gläubigen nennen es ein Wunder.“"
  },
  "religious_revival_events.2.f_dharmic": {
   "en": "\\\"My grandfather sat in meditation. I sit in an arena with fifty thousand others, watching the guru on a screen the size of a building.\\\"\\n\\n\\\"Critics call it a personality cult. The devotees call it a darshan for the modern age.\\\"",
-  "de": "\\\"Mein Großvater saß in der Meditation. Ich sitze in einer Arena mit fünfzigtausend anderen und sehe den Guru auf einer Leinwand so groß wie ein Gebäude.\\\"\\n\\n\\\"Kritiker nennen es einen Personenkult. Die Anhänger nennen es ein Darshan für das moderne Zeitalter.\\\""
+  "de": "„Mein Großvater saß in der Meditation. Ich sitze in einer Arena mit fünfzigtausend anderen und sehe den Guru auf einer Leinwand so groß wie ein Gebäude.“\\n\\n„Kritiker nennen es einen Personenkult. Die Anhänger nennen es ein Darshan für das moderne Zeitalter.“"
  },
  "religious_revival_events.2.f_islamic": {
   "en": "\\\"My grandfather listened to the khutba in a mosque of fifty men. I watch a preacher who speaks to fifty million.\\\"\\n\\n\\\"The scholars complain about entertainment. The people complain that the scholars never made them feel anything.\\\"",
-  "de": "\\\"Mein Großvater hörte die Khutba in einer Moschee mit fünfzig Männern. Ich sehe einem Prediger zu, der zu fünfzig Millionen spricht.\\\"\\n\\n\\\"Die Gelehrten beklagen sich über Unterhaltung. Die Menschen beklagen sich, dass die Gelehrten in ihnen nie etwas ausgelöst haben.\\\""
+  "de": "„Mein Großvater hörte die Khutba in einer Moschee mit fünfzig Männern. Ich sehe einem Prediger zu, der zu fünfzig Millionen spricht.“\\n\\n„Die Gelehrten beklagen sich über Unterhaltung. Die Menschen beklagen sich, dass die Gelehrten in ihnen nie etwas ausgelöst haben.“"
  },
  "religious_revival_events.2.t": {
   "en": "The Electronic Pulpit",
@@ -13341,19 +13341,19 @@
  },
  "religious_revival_events.3.f": {
   "en": "\\\"When I gave food to the poor, they called me a saint. When I asked why the poor have no food, they called me a communist.\\\"\\n\\n\\\"The text is clear. The question is whether we have the courage to live it.\\\"",
-  "de": "\\\"Als ich den Armen Essen gab, nannten sie mich einen Heiligen. Als ich fragte, warum die Armen kein Essen haben, nannten sie mich einen Kommunisten.\\\"\\n\\n\\\"Der Text ist eindeutig. Die Frage ist, ob wir den Mut haben, danach zu leben.\\\""
+  "de": "„Als ich den Armen Essen gab, nannten sie mich einen Heiligen. Als ich fragte, warum die Armen kein Essen haben, nannten sie mich einen Kommunisten.“\\n\\n„Der Text ist eindeutig. Die Frage ist, ob wir den Mut haben, danach zu leben.“"
  },
  "religious_revival_events.3.f_atheism": {
   "en": "\\\"They banned our books, shuttered our temples, and called us relics of the past. But they could not ban the hunger in a child's belly or the injustice in a worker's life.\\\"\\n\\n\\\"We meet in basements now. And the prayers have become plans.\\\"",
-  "de": "\\\"Sie verboten unsere Bücher, schlossen unsere Tempel und nannten uns Relikte der Vergangenheit. Doch sie konnten den Hunger im Bauch eines Kindes nicht verbieten, noch die Ungerechtigkeit im Leben eines Arbeiters.\\\"\\n\\n\\\"Wir treffen uns jetzt in Kellern. Und aus den Gebeten sind Pläne geworden.\\\""
+  "de": "„Sie verboten unsere Bücher, schlossen unsere Tempel und nannten uns Relikte der Vergangenheit. Doch sie konnten den Hunger im Bauch eines Kindes nicht verbieten, noch die Ungerechtigkeit im Leben eines Arbeiters.“\\n\\n„Wir treffen uns jetzt in Kellern. Und aus den Gebeten sind Pläne geworden.“"
  },
  "religious_revival_events.3.f_dharmic": {
   "en": "\\\"The Vedas say that in the eyes of the divine there is no high and no low. We have forgotten this for too long.\\\"\\n\\n\\\"When Ambedkar said that social justice was dharma, they dismissed him. Now millions stand behind his words.\\\"",
-  "de": "\\\"Die Veden sagen, dass es in den Augen des Göttlichen kein Hoch und kein Niedrig gibt. Wir haben das viel zu lange vergessen.\\\"\\n\\n\\\"Als Ambedkar sagte, soziale Gerechtigkeit sei Dharma, tat man ihn ab. Jetzt stehen Millionen hinter seinen Worten.\\\""
+  "de": "„Die Veden sagen, dass es in den Augen des Göttlichen kein Hoch und kein Niedrig gibt. Wir haben das viel zu lange vergessen.“\\n\\n„Als Ambedkar sagte, soziale Gerechtigkeit sei Dharma, tat man ihn ab. Jetzt stehen Millionen hinter seinen Worten.“"
  },
  "religious_revival_events.3.f_islamic": {
   "en": "\\\"The Prophet, peace be upon him, said: 'He is not a believer whose stomach is filled while the neighbor beside him goes hungry.'\\\"\\n\\n\\\"They call us radicals. We call ourselves Muslims who have read the Book.\\\"",
-  "de": "\\\"Der Prophet, Friede sei mit ihm, sagte: 'Wer satt schläft, während sein Nachbar hungert, ist kein Gläubiger.'\\\"\\n\\n\\\"Sie nennen uns Radikale. Wir nennen uns Muslime, die das Buch gelesen haben.\\\""
+  "de": "„Der Prophet, Friede sei mit ihm, sagte: 'Wer satt schläft, während sein Nachbar hungert, ist kein Gläubiger.'“\\n\\n„Sie nennen uns Radikale. Wir nennen uns Muslime, die das Buch gelesen haben.“"
  },
  "religious_revival_events.3.t": {
   "en": "The Preferential Option",
@@ -13401,15 +13401,15 @@
  },
  "religious_revival_events.4.f": {
   "en": "\\\"You cannot love this country and hate what made it. Our faith is the soil from which the nation grew.\\\"\\n\\n\\\"They want a homeland, not a hotel. A people, not a marketplace.\\\"",
-  "de": "\\\"Man kann dieses Land nicht lieben und zugleich hassen, was es geschaffen hat. Unser Glaube ist der Boden, aus dem die Nation gewachsen ist.\\\"\\n\\n\\\"Sie wollen ein Heimatland, kein Hotel. Ein Volk, keinen Marktplatz.\\\""
+  "de": "„Man kann dieses Land nicht lieben und zugleich hassen, was es geschaffen hat. Unser Glaube ist der Boden, aus dem die Nation gewachsen ist.“\\n\\n„Sie wollen ein Heimatland, kein Hotel. Ein Volk, keinen Marktplatz.“"
  },
  "religious_revival_events.4.f_dharmic": {
   "en": "\\\"This land is not just territory. It is sacred geography — every river, every mountain, every temple is an expression of the divine.\\\"\\n\\n\\\"Those who call our civilization backward have never read a page of it.\\\"",
-  "de": "\\\"Dieses Land ist nicht bloß Territorium. Es ist heilige Geografie — jeder Fluss, jeder Berg, jeder Tempel ist ein Ausdruck des Göttlichen.\\\"\\n\\n\\\"Wer unsere Zivilisation rückständig nennt, hat nie eine einzige Seite von ihr gelesen.\\\""
+  "de": "„Dieses Land ist nicht bloß Territorium. Es ist heilige Geografie — jeder Fluss, jeder Berg, jeder Tempel ist ein Ausdruck des Göttlichen.“\\n\\n„Wer unsere Zivilisation rückständig nennt, hat nie eine einzige Seite von ihr gelesen.“"
  },
  "religious_revival_events.4.f_islamic": {
   "en": "\\\"Sovereignty belongs to God alone. The laws of men are shadows; the Sharia is the light.\\\"\\n\\n\\\"They offered us democracy. We asked: whose values does it serve?\\\"",
-  "de": "\\\"Die Souveränität gehört allein Gott. Die Gesetze der Menschen sind Schatten; die Scharia ist das Licht.\\\"\\n\\n\\\"Sie boten uns Demokratie an. Wir fragten: Wessen Werten dient sie?\\\""
+  "de": "„Die Souveränität gehört allein Gott. Die Gesetze der Menschen sind Schatten; die Scharia ist das Licht.“\\n\\n„Sie boten uns Demokratie an. Wir fragten: Wessen Werten dient sie?“"
  },
  "religious_revival_events.4.t": {
   "en": "One Nation Under God",
@@ -13457,7 +13457,7 @@
  },
  "religious_revival_events.5.f_islamic": {
   "en": "\\\"The algorithm does not distinguish between the sacred and the profane. It only knows engagement.\\\"\\n\\n\\\"The lecture got forty thousand views overnight. The local masjid cannot fill twenty seats for Fajr.\\\"",
-  "de": "\\\"Der Algorithmus unterscheidet nicht zwischen dem Heiligen und dem Profanen. Er kennt nur Interaktion.\\\"\\n\\n\\\"Der Vortrag erhielt über Nacht vierzigtausend Aufrufe. Die örtliche Masjid bekommt beim Fajr nicht einmal zwanzig Plätze gefüllt.\\\""
+  "de": "„Der Algorithmus unterscheidet nicht zwischen dem Heiligen und dem Profanen. Er kennt nur Interaktion.“\\n\\n„Der Vortrag erhielt über Nacht vierzigtausend Aufrufe. Die örtliche Masjid bekommt beim Fajr nicht einmal zwanzig Plätze gefüllt.“"
  },
  "religious_revival_events.5.t": {
   "en": "The Digital Pulpit",
@@ -13489,15 +13489,15 @@
  },
  "religious_revival_events.6.f": {
   "en": "\\\"They call it progress. We call it the unraveling of everything that matters.\\\"\\n\\n\\\"The family is the bedrock. Remove it, and what remains is only rubble and confusion.\\\"",
-  "de": "\\\"Sie nennen es Fortschritt. Wir nennen es die Auflösung von allem, was zählt.\\\"\\n\\n\\\"Die Familie ist das Fundament. Entfernt man sie, bleiben nur Trümmer und Verwirrung.\\\""
+  "de": "„Sie nennen es Fortschritt. Wir nennen es die Auflösung von allem, was zählt.“\\n\\n„Die Familie ist das Fundament. Entfernt man sie, bleiben nur Trümmer und Verwirrung.“"
  },
  "religious_revival_events.6.f_dharmic": {
   "en": "\\\"They bring their foreign ideas and call our culture backward. We have endured for five thousand years. Let us see how long their experiment lasts.\\\"\\n\\n\\\"Dharma is not a preference. It is the order that sustains the universe.\\\"",
-  "de": "\\\"Sie bringen ihre fremden Ideen und nennen unsere Kultur rückständig. Wir haben fünftausend Jahre überdauert. Mal sehen, wie lange ihr Experiment hält.\\\"\\n\\n\\\"Dharma ist keine Vorliebe. Es ist die Ordnung, die das Universum trägt.\\\""
+  "de": "„Sie bringen ihre fremden Ideen und nennen unsere Kultur rückständig. Wir haben fünftausend Jahre überdauert. Mal sehen, wie lange ihr Experiment hält.“\\n\\n„Dharma ist keine Vorliebe. Es ist die Ordnung, die das Universum trägt.“"
  },
  "religious_revival_events.6.f_islamic": {
   "en": "\\\"They call it liberation. We call it fitna — the trial that tears the ummah apart.\\\"\\n\\n\\\"God did not create the family so that committees could redesign it.\\\"",
-  "de": "\\\"Sie nennen es Befreiung. Wir nennen es Fitna — die Prüfung, die die Umma zerreißt.\\\"\\n\\n\\\"Gott hat die Familie nicht geschaffen, damit Ausschüsse sie umgestalten können.\\\""
+  "de": "„Sie nennen es Befreiung. Wir nennen es Fitna — die Prüfung, die die Umma zerreißt.“\\n\\n„Gott hat die Familie nicht geschaffen, damit Ausschüsse sie umgestalten können.“"
  },
  "religious_revival_events.6.t": {
   "en": "The Culture War",
@@ -13533,15 +13533,15 @@
  },
  "religious_revival_events.7.f": {
   "en": "\\\"The bureaucrats file papers while people starve. The faithful simply cook.\\\"\\n\\n\\\"Every meal served, every wound dressed, every child taught — these are the real sermons.\\\"",
-  "de": "\\\"Die Bürokraten stellen Anträge, während die Menschen verhungern. Die Gläubigen kochen einfach.\\\"\\n\\n\\\"Jede servierte Mahlzeit, jede verbundene Wunde, jedes unterrichtete Kind — das sind die wahren Predigten.\\\""
+  "de": "„Die Bürokraten stellen Anträge, während die Menschen verhungern. Die Gläubigen kochen einfach.“\\n\\n„Jede servierte Mahlzeit, jede verbundene Wunde, jedes unterrichtete Kind — das sind die wahren Predigten.“"
  },
  "religious_revival_events.7.f_atheism": {
   "en": "\\\"They banned us from the public square. So we built the public square underground, one bowl of soup at a time.\\\"\\n\\n\\\"The party feeds the ideology. The faithful feed the people.\\\"",
-  "de": "\\\"Sie verbannten uns vom öffentlichen Platz. Also bauten wir den öffentlichen Platz im Untergrund, eine Schüssel Suppe nach der anderen.\\\"\\n\\n\\\"Die Partei nährt die Ideologie. Die Gläubigen nähren die Menschen.\\\""
+  "de": "„Sie verbannten uns vom öffentlichen Platz. Also bauten wir den öffentlichen Platz im Untergrund, eine Schüssel Suppe nach der anderen.“\\n\\n„Die Partei nährt die Ideologie. Die Gläubigen nähren die Menschen.“"
  },
  "religious_revival_events.7.f_islamic": {
   "en": "\\\"Zakat is not charity. It is a debt the wealthy owe to God, collected through the hands of the poor.\\\"\\n\\n\\\"The state counts its statistics. The faithful count the mouths they have fed.\\\"",
-  "de": "\\\"Zakat ist keine Wohltätigkeit. Es ist eine Schuld, die die Reichen Gott schulden und die durch die Hände der Armen eingesammelt wird.\\\"\\n\\n\\\"Der Staat zählt seine Statistiken. Die Gläubigen zählen die Münder, die sie gefüttert haben.\\\""
+  "de": "„Zakat ist keine Wohltätigkeit. Es ist eine Schuld, die die Reichen Gott schulden und die durch die Hände der Armen eingesammelt wird.“\\n\\n„Der Staat zählt seine Statistiken. Die Gläubigen zählen die Münder, die sie gefüttert haben.“"
  },
  "religious_revival_events.7.t": {
   "en": "The Faithful Hand",
@@ -14269,7 +14269,7 @@
  },
  "social_tensions_events.17.f": {
   "en": "The man across the table speaks our language badly and his own with great passion.\\n\\n\\\"We ask only for what they took from us. Weapons. Money. A safe house or two.\\\"\\n\\nThe case officer writes nothing down. \\\"And if your people are caught?\\\"\\n\\n\\\"Then they will say what patriots say. Nothing.\\\"\\n\\nNo one in the room believes that.",
-  "de": "Der Mann am anderen Ende des Tisches spricht unsere Sprache schlecht und seine eigene mit großer Leidenschaft.\\n\\n\\\"Wir bitten nur um das, was sie uns genommen haben. Waffen. Geld. Ein sicheres Haus oder zwei.\\\"\\n\\nDer Fallführer schreibt nichts auf. \\\"Und wenn Ihre Leute gefasst werden?\\\"\\n\\n\\\"Dann werden sie sagen, was Patrioten sagen. Nichts.\\\"\\n\\nNiemand im Raum glaubt das."
+  "de": "Der Mann am anderen Ende des Tisches spricht unsere Sprache schlecht und seine eigene mit großer Leidenschaft.\\n\\n„Wir bitten nur um das, was sie uns genommen haben. Waffen. Geld. Ein sicheres Haus oder zwei.“\\n\\nDer Fallführer schreibt nichts auf. „Und wenn Ihre Leute gefasst werden?“\\n\\n„Dann werden sie sagen, was Patrioten sagen. Nichts.“\\n\\nNiemand im Raum glaubt das."
  },
  "social_tensions_events.17.t": {
   "en": "Friends in Exile",
@@ -14293,7 +14293,7 @@
  },
  "social_tensions_events.18.f": {
   "en": "The case officer reads the wire twice before he hands it over.\\n\\n\\\"The safe house in the old quarter. All of them.\\\"\\n\\n\\\"Will they talk?\\\"\\n\\n\\\"They already have,\\\" he says. \\\"The question is only who they told.\\\"",
-  "de": "Der Fallführer liest die Depesche zweimal, bevor er sie weiterreicht.\\n\\n\\\"Das sichere Haus im alten Viertel. Alle davon.\\\"\\n\\n\\\"Werden sie reden?\\\"\\n\\n\\\"Das haben sie bereits\\\", sagt er. \\\"Die Frage ist nur, wem sie es erzählt haben.\\\""
+  "de": "Der Fallführer liest die Depesche zweimal, bevor er sie weiterreicht.\\n\\n„Das sichere Haus im alten Viertel. Alle davon.“\\n\\n„Werden sie reden?“\\n\\n„Das haben sie bereits“, sagt er. „Die Frage ist nur, wem sie es erzählt haben.“"
  },
  "social_tensions_events.18.t": {
   "en": "The Cell Is Blown",
@@ -16304,8 +16304,8 @@
   "de": "Die Geschichte wird sich an diesen Tag erinnern!"
  },
  "space_race_events.2.f": {
-  "en": "\\\"I saw continents slide beneath me like countries on a schoolroom globe. Borders meant nothing up there. Just Earth, spinning in the void.",
-  "de": "„Ich sah Kontinente unter mir vorbeigleiten wie Länder auf einem Schulglobus. Grenzen bedeuteten dort oben nichts. Nur die Erde, die sich im Leeren dreht."
+  "en": "\\\"I saw continents slide beneath me like countries on a schoolroom globe. Borders meant nothing up there. Just Earth, spinning in the void.\\\"",
+  "de": "„Ich sah Kontinente unter mir vorbeigleiten wie Länder auf einem Schulglobus. Grenzen bedeuteten dort oben nichts. Nur die Erde, die sich im Leeren dreht.“"
  },
  "space_race_events.2.t": {
   "en": "Around the World",
@@ -17852,8 +17852,8 @@
   "de": "Ein massives Datenleck hat die persönlichen Daten von Millionen Bürgern offengelegt. Private Korrespondenz, Finanzunterlagen und intime Details sind nun öffentlich. Die Regierung steht vor einer Abrechnung."
  },
  "surveillance_events.2.f": {
-  "en": "Names, addresses, medical records, private correspondence — all of it posted on a public server. The government learned about it from the newspapers.\\n\\n\\\"How long was the database exposed?\\\" the journalist asked at the press conference.\\n\\n\\\"We are reviewing the timeline.\\\"\\n\\n\\\"How many citizens were affected?\\\"\\n\\n\\\"We are reviewing the numbers.\\\"\\n\\n\\\"Why are you reviewing things the database itself would record?\\\"\\n\\nThe spokesperson did not answer. The next day, the database stopped recording the things that would have answered.\\\"",
-  "de": "Namen, Adressen, Krankenakten, private Korrespondenz — alles auf einem öffentlichen Server veröffentlicht. Die Regierung erfuhr davon aus den Zeitungen.\\n\\n„Wie lange war die Datenbank offen zugänglich?“, fragte der Journalist auf der Pressekonferenz.\\n\\n„Wir prüfen den Zeitverlauf.“\\n\\n„Wie viele Bürger waren betroffen?“\\n\\n„Wir prüfen die Zahlen.“\\n\\n„Warum prüfen Sie Dinge, die die Datenbank selbst aufgezeichnet hätte?“\\n\\nDie Sprecherin antwortete nicht. Am nächsten Tag hörte die Datenbank auf, die Dinge aufzuzeichnen, die die Antwort gewesen wären.„"
+  "en": "Names, addresses, medical records, private correspondence — all of it posted on a public server. The government learned about it from the newspapers.\\n\\n\\\"How long was the database exposed?\\\" the journalist asked at the press conference.\\n\\n\\\"We are reviewing the timeline.\\\"\\n\\n\\\"How many citizens were affected?\\\"\\n\\n\\\"We are reviewing the numbers.\\\"\\n\\n\\\"Why are you reviewing things the database itself would record?\\\"\\n\\nThe spokesperson did not answer. The next day, the database stopped recording the things that would have answered.",
+  "de": "Namen, Adressen, Krankenakten, private Korrespondenz — alles auf einem öffentlichen Server veröffentlicht. Die Regierung erfuhr davon aus den Zeitungen.\\n\\n„Wie lange war die Datenbank offen zugänglich?“, fragte der Journalist auf der Pressekonferenz.\\n\\n„Wir prüfen den Zeitverlauf.“\\n\\n„Wie viele Bürger waren betroffen?“\\n\\n„Wir prüfen die Zahlen.“\\n\\n„Warum prüfen Sie Dinge, die die Datenbank selbst aufgezeichnet hätte?“\\n\\nDie Sprecherin antwortete nicht. Am nächsten Tag hörte die Datenbank auf, die Dinge aufzuzeichnen, die die Antwort gewesen wären."
  },
  "surveillance_events.2.t": {
   "en": "The Data Breach",
@@ -21125,7 +21125,7 @@
  },
  "wonder_events.1.f": {
   "en": "\\\"Do you see it? That thread coming down from the sky, so thin you can barely make it out?\\\"\\n\\n\\\"I see it. The first real ladder to the stars.\\\"\\n\\n\\\"We'll remember this day. The day gravity became optional.\\\"",
-  "de": "\\\"Siehst du es? Dieser Faden, der vom Himmel herabkommt, so dünn, dass man ihn kaum erkennen kann?\\\"\\n\\n\\\"Ich sehe es. Die erste echte Leiter zu den Sternen.\\\"\\n\\n\\\"Wir werden uns an diesen Tag erinnern. Den Tag, an dem die Schwerkraft optional wurde.\\\""
+  "de": "„Siehst du es? Dieser Faden, der vom Himmel herabkommt, so dünn, dass man ihn kaum erkennen kann?“\\n\\n„Ich sehe es. Die erste echte Leiter zu den Sternen.“\\n\\n„Wir werden uns an diesen Tag erinnern. Den Tag, an dem die Schwerkraft optional wurde.“"
  },
  "wonder_events.1.t": {
   "en": "The Tether Descends",
@@ -21145,7 +21145,7 @@
  },
  "wonder_events.10.f": {
   "en": "\\\"The rectenna is live. Gigawatts, pouring in from orbit: invisible, silent, and continuous. You can't see the beam, but you can see the lights coming on across the grid.\\\"\\n\\n\\\"It doesn't look like much.\\\"\\n\\n\\\"That's the beauty of it. The most powerful energy source in history, and it's invisible.\\\"",
-  "de": "\\\"Die Rectenna ist aktiv. Gigawatt strömen aus dem Orbit herein: unsichtbar, lautlos und ununterbrochen. Man sieht den Strahl nicht, aber man sieht, wie im ganzen Netz die Lichter angehen.\\\"\\n\\n\\\"Sieht nicht nach viel aus.\\\"\\n\\n\\\"Das ist gerade das Schöne daran. Die stärkste Energiequelle der Geschichte, und sie ist unsichtbar.\\\""
+  "de": "„Die Rectenna ist aktiv. Gigawatt strömen aus dem Orbit herein: unsichtbar, lautlos und ununterbrochen. Man sieht den Strahl nicht, aber man sieht, wie im ganzen Netz die Lichter angehen.“\\n\\n„Sieht nicht nach viel aus.“\\n\\n„Das ist gerade das Schöne daran. Die stärkste Energiequelle der Geschichte, und sie ist unsichtbar.“"
  },
  "wonder_events.10.t": {
   "en": "First Light",
@@ -21165,7 +21165,7 @@
  },
  "wonder_events.11.f": {
   "en": "\\\"The beam drifted three degrees off the rectenna. Three degrees! Every electronic device in the zone is dead, and the crops are cooked from microwave exposure.\\\"\\n\\n\\\"Could it have hit a city?\\\"\\n\\n\\\"If the error had been in the other direction? Absolutely.\\\"",
-  "de": "\\\"Der Strahl ist drei Grad von der Rectenna abgedriftet. Drei Grad! Jedes elektronische Gerät in der Zone ist hin, und die Ernten sind durch die Mikrowellenstrahlung verkocht.\\\"\\n\\n\\\"Hätte er eine Stadt treffen können?\\\"\\n\\n\\\"Wenn der Fehler in die andere Richtung gegangen wäre? Absolut.\\\""
+  "de": "„Der Strahl ist drei Grad von der Rectenna abgedriftet. Drei Grad! Jedes elektronische Gerät in der Zone ist hin, und die Ernten sind durch die Mikrowellenstrahlung verkocht.“\\n\\n„Hätte er eine Stadt treffen können?“\\n\\n„Wenn der Fehler in die andere Richtung gegangen wäre? Absolut.“"
  },
  "wonder_events.11.t": {
   "en": "Beam Misalignment",
@@ -21185,7 +21185,7 @@
  },
  "wonder_events.12.f": {
   "en": "\\\"We're generating more power than we can use. Factories that were marginal are now printing money. The smelters alone have tripled output.\\\"\\n\\n\\\"And this is only one collector.\\\"",
-  "de": "\\\"Wir erzeugen mehr Energie, als wir verbrauchen können. Fabriken, die kaum rentabel waren, drucken jetzt Geld. Allein die Hütten haben ihre Produktion verdreifacht.\\\"\\n\\n\\\"Und das ist erst ein einziger Kollektor.\\\""
+  "de": "„Wir erzeugen mehr Energie, als wir verbrauchen können. Fabriken, die kaum rentabel waren, drucken jetzt Geld. Allein die Hütten haben ihre Produktion verdreifacht.“\\n\\n„Und das ist erst ein einziger Kollektor.“"
  },
  "wonder_events.12.t": {
   "en": "The Power Surplus",
@@ -21205,7 +21205,7 @@
  },
  "wonder_events.13.f": {
   "en": "\\\"Do you know what unlimited energy means? Unlimited fresh water. Unlimited agriculture. Unlimited manufacturing. The only constraint on human ambition is human imagination.\\\"\\n\\n\\\"And the other nations?\\\"\\n\\n\\\"They'll either buy our power or build their own.\\\"",
-  "de": "\\\"Wisst ihr, was unbegrenzte Energie bedeutet? Unbegrenztes Frischwasser. Unbegrenzte Landwirtschaft. Unbegrenzte Fertigung. Die einzige Grenze menschlichen Strebens ist die menschliche Vorstellungskraft.\\\"\\n\\n\\\"Und die anderen Nationen?\\\"\\n\\n\\\"Sie werden entweder unseren Strom kaufen oder ihren eigenen bauen.\\\""
+  "de": "„Wisst ihr, was unbegrenzte Energie bedeutet? Unbegrenztes Frischwasser. Unbegrenzte Landwirtschaft. Unbegrenzte Fertigung. Die einzige Grenze menschlichen Strebens ist die menschliche Vorstellungskraft.“\\n\\n„Und die anderen Nationen?“\\n\\n„Sie werden entweder unseren Strom kaufen oder ihren eigenen bauen.“"
  },
  "wonder_events.13.t": {
   "en": "The End of Night",
@@ -21225,7 +21225,7 @@
  },
  "wonder_events.14.f": {
   "en": "\\\"The sun giveth and the sun taketh away. This CME could fry every circuit board in the array if we don't shut down.\\\"\\n\\n\\\"And if we do shut down?\\\"\\n\\n\\\"Half the continent loses power for a month.\\\"",
-  "de": "\\\"Die Sonne gibt, und die Sonne nimmt. Dieser CME könnte jede Platine im Array durchbrennen lassen, wenn wir nicht abschalten.\\\"\\n\\n\\\"Und wenn wir abschalten?\\\"\\n\\n\\\"Dann verliert ein halber Kontinent für einen Monat den Strom.\\\""
+  "de": "„Die Sonne gibt, und die Sonne nimmt. Dieser CME könnte jede Platine im Array durchbrennen lassen, wenn wir nicht abschalten.“\\n\\n„Und wenn wir abschalten?“\\n\\n„Dann verliert ein halber Kontinent für einen Monat den Strom.“"
  },
  "wonder_events.14.t": {
   "en": "Solar Storm Warning",
@@ -21245,7 +21245,7 @@
  },
  "wonder_events.15.f": {
   "en": "\\\"They want our collectors. Publicly they call it fair access. Privately they call it the energy weapon.\\\"\\n\\n\\\"Are they wrong? We could shut off power to half the world's receivers if we chose.\\\"\\n\\n\\\"Which is precisely why we won't give it up.\\\"",
-  "de": "\\\"Sie wollen unsere Kollektoren. Öffentlich nennen sie es fairen Zugang. Privat nennen sie es die Energiewaffe.\\\"\\n\\n\\\"Liegen sie falsch? Wir könnten die halbe Welt vom Strom abschneiden, wenn wir wollten.\\\"\\n\\n\\\"Genau deshalb geben wir es nicht her.\\\""
+  "de": "„Sie wollen unsere Kollektoren. Öffentlich nennen sie es fairen Zugang. Privat nennen sie es die Energiewaffe.“\\n\\n„Liegen sie falsch? Wir könnten die halbe Welt vom Strom abschneiden, wenn wir wollten.“\\n\\n„Genau deshalb geben wir es nicht her.“"
  },
  "wonder_events.15.t": {
   "en": "The Sunlight Monopoly",
@@ -21265,7 +21265,7 @@
  },
  "wonder_events.2.f": {
   "en": "\\\"The readings are off the charts. The tether is singing, and not in a good way.\\\"\\n\\n\\\"How long before it becomes critical?\\\"\\n\\n\\\"If we're lucky? Weeks. If we're not, we find out the hard way.\\\"",
-  "de": "\\\"Die Messwerte sprengen jede Skala. Das Kabel singt, und nicht auf eine gute Art.\\\"\\n\\n\\\"Wie lange, bis es kritisch wird?\\\"\\n\\n\\\"Wenn wir Glück haben? Wochen. Wenn nicht, erfahren wir es auf die harte Tour.\\\""
+  "de": "„Die Messwerte sprengen jede Skala. Das Kabel singt, und nicht auf eine gute Art.“\\n\\n„Wie lange, bis es kritisch wird?“\\n\\n„Wenn wir Glück haben? Wochen. Wenn nicht, erfahren wir es auf die harte Tour.“"
  },
  "wonder_events.2.t": {
   "en": "Structural Anomaly",
@@ -21285,7 +21285,7 @@
  },
  "wonder_events.20.f": {
   "en": "\\\"They're watching us build it. Every spy satellite, every signals intercept. They know what this is.\\\"\\n\\n\\\"Good. Let them watch. By the time it's operational, the balance of power will have shifted permanently.\\\"\\n\\n\\\"Or they try to stop us before it's finished.\\\"\\n\\n\\\"That's why we have the Navy.\\\"",
-  "de": "\\\"Sie beobachten, wie wir es bauen. Jeder Spionagesatellit, jede abgefangene Funkverbindung. Sie wissen, was das ist.\\\"\\n\\n\\\"Gut. Sollen sie zusehen. Bis es einsatzbereit ist, wird sich das Kräftegleichgewicht dauerhaft verschoben haben.\\\"\\n\\n\\\"Oder sie versuchen, uns zu stoppen, bevor es fertig ist.\\\"\\n\\n\\\"Dafür haben wir die Marine.\\\""
+  "de": "„Sie beobachten, wie wir es bauen. Jeder Spionagesatellit, jede abgefangene Funkverbindung. Sie wissen, was das ist.“\\n\\n„Gut. Sollen sie zusehen. Bis es einsatzbereit ist, wird sich das Kräftegleichgewicht dauerhaft verschoben haben.“\\n\\n„Oder sie versuchen, uns zu stoppen, bevor es fertig ist.“\\n\\n„Dafür haben wir die Marine.“"
  },
  "wonder_events.20.t": {
   "en": "The High Ground",
@@ -21305,7 +21305,7 @@
  },
  "wonder_events.21.f": {
   "en": "\\\"We can see their armor columns marshaling. We can track every warship in every ocean. We can watch their missile convoys move in real time.\\\"\\n\\n\\\"And they know we can see them?\\\"\\n\\n\\\"That's the best part. They know, and they can't do a thing about it.\\\"",
-  "de": "\\\"Wir sehen, wie sich ihre Panzerkolonnen sammeln. Wir verfolgen jedes Kriegsschiff auf jedem Ozean. Wir beobachten ihre Raketenkonvois in Echtzeit.\\\"\\n\\n\\\"Und sie wissen, dass wir sie sehen können?\\\"\\n\\n\\\"Das ist das Beste daran. Sie wissen es, und sie können nichts dagegen tun.\\\""
+  "de": "„Wir sehen, wie sich ihre Panzerkolonnen sammeln. Wir verfolgen jedes Kriegsschiff auf jedem Ozean. Wir beobachten ihre Raketenkonvois in Echtzeit.“\\n\\n„Und sie wissen, dass wir sie sehen können?“\\n\\n„Das ist das Beste daran. Sie wissen es, und sie können nichts dagegen tun.“"
  },
  "wonder_events.21.t": {
   "en": "Eye of God",
@@ -21325,7 +21325,7 @@
  },
  "wonder_events.22.f": {
   "en": "\\\"Three border disputes settled this month. Two territorial claims abandoned. One unilateral ceasefire.\\\"\\n\\n\\\"All without firing a shot.\\\"\\n\\n\\\"The best weapons are the ones you never use.\\\"",
-  "de": "\\\"Drei Grenzstreitigkeiten diesen Monat beigelegt. Zwei Gebietsansprüche fallengelassen. Ein einseitiger Waffenstillstand.\\\"\\n\\n\\\"Und das alles, ohne einen Schuss abzufeuern.\\\"\\n\\n\\\"Die besten Waffen sind die, die man nie benutzt.\\\""
+  "de": "„Drei Grenzstreitigkeiten diesen Monat beigelegt. Zwei Gebietsansprüche fallengelassen. Ein einseitiger Waffenstillstand.“\\n\\n„Und das alles, ohne einen Schuss abzufeuern.“\\n\\n„Die besten Waffen sind die, die man nie benutzt.“"
  },
  "wonder_events.22.t": {
   "en": "Peace Through Superior Firepower",
@@ -21345,7 +21345,7 @@
  },
  "wonder_events.23.f": {
   "en": "\\\"The impactor hit water twelve kilometers from the harbor. The shockwave alone did this much damage.\\\"\\n\\n\\\"If it had struck land?\\\"\\n\\n\\\"A crater the size of a city block. And it's on every news feed on the planet.\\\"",
-  "de": "\\\"Der Einschlagskörper hat zwölf Kilometer vor dem Hafen das Wasser getroffen. Allein die Druckwelle hat diesen Schaden angerichtet.\\\"\\n\\n\\\"Und wenn er Land getroffen hätte?\\\"\\n\\n\\\"Ein Krater von der Größe eines Häuserblocks. Und es ist in jedem Nachrichtensender der Welt.\\\""
+  "de": "„Der Einschlagskörper hat zwölf Kilometer vor dem Hafen das Wasser getroffen. Allein die Druckwelle hat diesen Schaden angerichtet.“\\n\\n„Und wenn er Land getroffen hätte?“\\n\\n„Ein Krater von der Größe eines Häuserblocks. Und es ist in jedem Nachrichtensender der Welt.“"
  },
  "wonder_events.23.t": {
   "en": "Misfire from Orbit",
@@ -21365,7 +21365,7 @@
  },
  "wonder_events.24.f": {
   "en": "\\\"They're building their own. Crude, compared to ours, but give them five years.\\\"\\n\\n\\\"Then we need to stay five years ahead.\\\"\\n\\n\\\"That's what they said about nuclear weapons. We ended up with enough to destroy the world twelve times over.\\\"\\n\\n\\\"Thirteen. But who's counting?\\\"",
-  "de": "\\\"Sie bauen ihre eigene. Primitiv im Vergleich zu unserer, aber gebt ihnen fünf Jahre.\\\"\\n\\n\\\"Dann müssen wir fünf Jahre voraus bleiben.\\\"\\n\\n\\\"Das hat man auch bei den Nuklearwaffen gesagt. Am Ende hatten wir genug, um die Welt zwölfmal zu zerstören.\\\"\\n\\n\\\"Dreizehnmal. Aber wer zählt schon mit?\\\""
+  "de": "„Sie bauen ihre eigene. Primitiv im Vergleich zu unserer, aber gebt ihnen fünf Jahre.“\\n\\n„Dann müssen wir fünf Jahre voraus bleiben.“\\n\\n„Das hat man auch bei den Nuklearwaffen gesagt. Am Ende hatten wir genug, um die Welt zwölfmal zu zerstören.“\\n\\n„Dreizehnmal. Aber wer zählt schon mit?“"
  },
  "wonder_events.24.t": {
   "en": "Arms Race in Orbit",
@@ -21385,7 +21385,7 @@
  },
  "wonder_events.25.f": {
   "en": "\\\"Tungsten rods, six meters long and half a meter across, dropped from orbit at eight kilometers per second. No warhead needed. The kinetic energy alone is equivalent to dozens of tons of high explosive.\\\"\\n\\n\\\"And no radiation.\\\"\\n\\n\\\"Clean. Precise. And we can put one through any roof on Earth within thirty minutes.\\\"",
-  "de": "\\\"Wolframstäbe, sechs Meter lang und einen halben Meter im Durchmesser, aus dem Orbit abgeworfen mit acht Kilometern pro Sekunde. Kein Sprengkopf nötig. Allein die kinetische Energie entspricht dutzenden Tonnen hochexplosivem Sprengstoff.\\\"\\n\\n\\\"Und keine Strahlung.\\\"\\n\\n\\\"Sauber. Präzise. Und wir können innerhalb von dreißig Minuten jedes Dach der Erde durchschlagen.\\\""
+  "de": "„Wolframstäbe, sechs Meter lang und einen halben Meter im Durchmesser, aus dem Orbit abgeworfen mit acht Kilometern pro Sekunde. Kein Sprengkopf nötig. Allein die kinetische Energie entspricht dutzenden Tonnen hochexplosivem Sprengstoff.“\\n\\n„Und keine Strahlung.“\\n\\n„Sauber. Präzise. Und wir können innerhalb von dreißig Minuten jedes Dach der Erde durchschlagen.“"
  },
  "wonder_events.25.t": {
   "en": "Rods from God",
@@ -21401,7 +21401,7 @@
  },
  "wonder_events.26.f": {
   "en": "\\\"The irony isn't lost on me. We built a weapon to threaten our enemies, and it just saved us all.\\\"\\n\\n\\\"The asteroid was three hundred meters across. It would have leveled a region the size of a small country.\\\"\\n\\n\\\"Fire the interceptors.\\\"\\n\\n\\\"Interceptors away. God help us all.\\\"",
-  "de": "\\\"Die Ironie entgeht mir nicht. Wir haben eine Waffe gebaut, um unsere Feinde zu bedrohen, und sie hat gerade uns alle gerettet.\\\"\\n\\n\\\"Der Asteroid hatte einen Durchmesser von dreihundert Metern. Er hätte eine Region von der Größe eines kleinen Landes dem Erdboden gleichgemacht.\\\"\\n\\n\\\"Feuert die Abfangraketen.\\\"\\n\\n\\\"Abfangraketen unterwegs. Gott stehe uns bei.\\\""
+  "de": "„Die Ironie entgeht mir nicht. Wir haben eine Waffe gebaut, um unsere Feinde zu bedrohen, und sie hat gerade uns alle gerettet.“\\n\\n„Der Asteroid hatte einen Durchmesser von dreihundert Metern. Er hätte eine Region von der Größe eines kleinen Landes dem Erdboden gleichgemacht.“\\n\\n„Feuert die Abfangraketen.“\\n\\n„Abfangraketen unterwegs. Gott stehe uns bei.“"
  },
  "wonder_events.26.t": {
   "en": "The Shield of Civilization",
@@ -21421,7 +21421,7 @@
  },
  "wonder_events.3.f": {
   "en": "\\\"Thirty hours. That's all it takes to climb from the ground to geostationary orbit. The electromagnetic climbers run day and night. The old rockets seem like covered wagons by comparison.\\\"\\n\\n\\\"And everyone wants a ticket.\\\"",
-  "de": "\\\"Dreißig Stunden. Mehr braucht es nicht, um vom Boden bis in den geostationären Orbit zu klettern. Die elektromagnetischen Kletterkapseln laufen Tag und Nacht. Die alten Raketen wirken im Vergleich wie Planwagen.\\\"\\n\\n\\\"Und jeder will ein Ticket.\\\""
+  "de": "„Dreißig Stunden. Mehr braucht es nicht, um vom Boden bis in den geostationären Orbit zu klettern. Die elektromagnetischen Kletterkapseln laufen Tag und Nacht. Die alten Raketen wirken im Vergleich wie Planwagen.“\\n\\n„Und jeder will ein Ticket.“"
  },
  "wonder_events.3.t": {
   "en": "Gateway to the Stars",
@@ -21441,7 +21441,7 @@
  },
  "wonder_events.30.f": {
   "en": "\\\"One milligram. That's what we have. One milligram of antihydrogen, suspended in a Penning trap.\\\"\\n\\n\\\"One milligram. The energy equivalent of forty-three tons of TNT.\\\"\\n\\n\\\"Imagine what we'll do with a gram.\\\"",
-  "de": "\\\"Ein Milligramm. Das ist alles, was wir haben. Ein Milligramm Antiwasserstoff, gehalten in einer Penning-Falle.\\\"\\n\\n\\\"Ein Milligramm. Das Energieäquivalent von dreiundvierzig Tonnen TNT.\\\"\\n\\n\\\"Stellt euch vor, was wir mit einem Gramm anstellen werden.\\\""
+  "de": "„Ein Milligramm. Das ist alles, was wir haben. Ein Milligramm Antiwasserstoff, gehalten in einer Penning-Falle.“\\n\\n„Ein Milligramm. Das Energieäquivalent von dreiundvierzig Tonnen TNT.“\\n\\n„Stellt euch vor, was wir mit einem Gramm anstellen werden.“"
  },
  "wonder_events.30.t": {
   "en": "Breakthrough at the Collider",
@@ -21461,7 +21461,7 @@
  },
  "wonder_events.31.f": {
   "en": "\\\"The magnetic field fluctuated for less than a nanosecond. That's all it took. The antimatter touched the containment wall and...\\\"\\n\\n\\\"How much was released?\\\"\\n\\n\\\"Micrograms. The blast equivalent of a hundred kilograms of high explosive, concentrated in a point smaller than an atom. The containment wing did its job: barely.\\\"",
-  "de": "\\\"Das Magnetfeld schwankte für weniger als eine Nanosekunde. Mehr brauchte es nicht. Die Antimaterie berührte die Eindämmungswand und...\\\"\\n\\n\\\"Wie viel wurde freigesetzt?\\\"\\n\\n\\\"Mikrogramm. Die Sprengkraft entspricht hundert Kilogramm hochexplosivem Sprengstoff, konzentriert auf einen Punkt kleiner als ein Atom. Der Eindämmungsflügel hat seine Aufgabe erfüllt: gerade so.\\\""
+  "de": "„Das Magnetfeld schwankte für weniger als eine Nanosekunde. Mehr brauchte es nicht. Die Antimaterie berührte die Eindämmungswand und...“\\n\\n„Wie viel wurde freigesetzt?“\\n\\n„Mikrogramm. Die Sprengkraft entspricht hundert Kilogramm hochexplosivem Sprengstoff, konzentriert auf einen Punkt kleiner als ein Atom. Der Eindämmungsflügel hat seine Aufgabe erfüllt: gerade so.“"
  },
  "wonder_events.31.t": {
   "en": "Containment Breach",
@@ -21481,7 +21481,7 @@
  },
  "wonder_events.32.f": {
   "en": "\\\"An antimatter-fueled aircraft never needs to land. A fleet with antimatter propulsion can sustain operations indefinitely at maximum speed.\\\"\\n\\n\\\"And the weapons?\\\"\\n\\n\\\"A warhead with a milligram of antimatter has the yield of a massive conventional bomb. Scale it up from there.\\\"",
-  "de": "\\\"Ein antimateriebetriebenes Flugzeug muss nie landen. Eine Flotte mit Antimaterieantrieb kann unbegrenzt mit Höchstgeschwindigkeit operieren.\\\"\\n\\n\\\"Und die Waffen?\\\"\\n\\n\\\"Ein Sprengkopf mit einem Milligramm Antimaterie hat die Sprengkraft einer gewaltigen konventionellen Bombe. Und das ist erst der Anfang.\\\""
+  "de": "„Ein antimateriebetriebenes Flugzeug muss nie landen. Eine Flotte mit Antimaterieantrieb kann unbegrenzt mit Höchstgeschwindigkeit operieren.“\\n\\n„Und die Waffen?“\\n\\n„Ein Sprengkopf mit einem Milligramm Antimaterie hat die Sprengkraft einer gewaltigen konventionellen Bombe. Und das ist erst der Anfang.“"
  },
  "wonder_events.32.t": {
   "en": "The Power of Annihilation",
@@ -21501,7 +21501,7 @@
  },
  "wonder_events.33.f": {
   "en": "\\\"The ambassadors are very polite now. Have you noticed?\\\"\\n\\n\\\"There's nothing quite like the ability to annihilate a city with a warhead the size of a suitcase to improve diplomatic relations.\\\"\\n\\n\\\"An oversimplification.\\\"\\n\\n\\\"But not an inaccurate one.\\\"",
-  "de": "\\\"Die Botschafter sind jetzt sehr höflich. Ist euch das aufgefallen?\\\"\\n\\n\\\"Nichts verbessert die diplomatischen Beziehungen so sehr wie die Fähigkeit, eine Stadt mit einem koffergroßen Sprengkopf auszulöschen.\\\"\\n\\n\\\"Eine Vereinfachung.\\\"\\n\\n\\\"Aber keine falsche.\\\""
+  "de": "„Die Botschafter sind jetzt sehr höflich. Ist euch das aufgefallen?“\\n\\n„Nichts verbessert die diplomatischen Beziehungen so sehr wie die Fähigkeit, eine Stadt mit einem koffergroßen Sprengkopf auszulöschen.“\\n\\n„Eine Vereinfachung.“\\n\\n„Aber keine falsche.“"
  },
  "wonder_events.33.t": {
   "en": "Antimatter Diplomacy",
@@ -21521,7 +21521,7 @@
  },
  "wonder_events.34.f": {
   "en": "\\\"The seismographs registered it as a 3.5. Except it wasn't an earthquake.\\\"\\n\\n\\\"How many casualties?\\\"\\n\\n\\\"Thirty-seven confirmed. The facility will need months of repair.\\\"\\n\\n\\\"And the international reaction?\\\"\\n\\n\\\"Exactly what you'd expect when an unexplained explosion with the seismic signature of a bomb goes off inside a classified facility.\\\"",
-  "de": "\\\"Die Seismographen haben eine Stärke von 3,5 registriert. Nur war es kein Erdbeben.\\\"\\n\\n\\\"Wie viele Opfer?\\\"\\n\\n\\\"Siebenunddreißig bestätigt. Die Anlage braucht Monate für die Reparatur.\\\"\\n\\n\\\"Und die internationale Reaktion?\\\"\\n\\n\\\"Genau das, was man erwarten würde, wenn in einer geheimen Anlage eine ungeklärte Explosion mit der seismischen Signatur einer Bombe stattfindet.\\\""
+  "de": "„Die Seismographen haben eine Stärke von 3,5 registriert. Nur war es kein Erdbeben.“\\n\\n„Wie viele Opfer?“\\n\\n„Siebenunddreißig bestätigt. Die Anlage braucht Monate für die Reparatur.“\\n\\n„Und die internationale Reaktion?“\\n\\n„Genau das, was man erwarten würde, wenn in einer geheimen Anlage eine ungeklärte Explosion mit der seismischen Signatur einer Bombe stattfindet.“"
  },
  "wonder_events.34.t": {
   "en": "The Annihilation Incident",
@@ -21541,7 +21541,7 @@
  },
  "wonder_events.35.f": {
   "en": "\\\"Earth to Mars in three weeks. Earth to Jupiter in two months. These aren't projections. These are timetables.\\\"\\n\\n\\\"And military applications?\\\"\\n\\n\\\"Any formation, anywhere on Earth, within hours. The concept of distance as a strategic constraint is over.\\\"",
-  "de": "\\\"Erde bis Mars in drei Wochen. Erde bis Jupiter in zwei Monaten. Das sind keine Prognosen. Das sind Fahrpläne.\\\"\\n\\n\\\"Und militärische Anwendungen?\\\"\\n\\n\\\"Jeder Verband, überall auf der Erde, innerhalb von Stunden. Das Konzept der Entfernung als strategische Grenze ist Geschichte.\\\""
+  "de": "„Erde bis Mars in drei Wochen. Erde bis Jupiter in zwei Monaten. Das sind keine Prognosen. Das sind Fahrpläne.“\\n\\n„Und militärische Anwendungen?“\\n\\n„Jeder Verband, überall auf der Erde, innerhalb von Stunden. Das Konzept der Entfernung als strategische Grenze ist Geschichte.“"
  },
  "wonder_events.35.t": {
   "en": "The Annihilation Drive",
@@ -21561,7 +21561,7 @@
  },
  "wonder_events.4.f": {
   "en": "\\\"Silk, spices, gold. Those were the treasures of the old roads. Ours carry advanced materials, processed data, and the hopes of ten billion people.\\\"\\n\\n\\\"And the profits are rather better.\\\"",
-  "de": "\\\"Seide, Gewürze, Gold. Das waren die Schätze der alten Straßen. Unsere transportieren hochentwickelte Materialien, verarbeitete Daten und die Hoffnungen von zehn Milliarden Menschen.\\\"\\n\\n\\\"Und die Gewinne sind erheblich besser.\\\""
+  "de": "„Seide, Gewürze, Gold. Das waren die Schätze der alten Straßen. Unsere transportieren hochentwickelte Materialien, verarbeitete Daten und die Hoffnungen von zehn Milliarden Menschen.“\\n\\n„Und die Gewinne sind erheblich besser.“"
  },
  "wonder_events.4.t": {
   "en": "The New Silk Road",
@@ -21601,7 +21601,7 @@
  },
  "wonder_events.6.f": {
   "en": "\\\"When I was young, space was a dream. For my students, it's a commute. Do you understand what that means?\\\"\\n\\n\\\"It means they'll build things we can't even imagine.\\\"",
-  "de": "\\\"Als ich jung war, war das All ein Traum. Für meine Studenten ist es ein Arbeitsweg. Versteht ihr, was das bedeutet?\\\"\\n\\n\\\"Es bedeutet, dass sie Dinge bauen werden, die wir uns nicht einmal vorstellen können.\\\""
+  "de": "„Als ich jung war, war das All ein Traum. Für meine Studenten ist es ein Arbeitsweg. Versteht ihr, was das bedeutet?“\\n\\n„Es bedeutet, dass sie Dinge bauen werden, die wir uns nicht einmal vorstellen können.“"
  },
  "wonder_events.6.t": {
   "en": "The Astronaut Generation",
@@ -21621,7 +21621,7 @@
  },
  "wonder_events.7.f": {
   "en": "\\\"The elevator was built with our money, our engineers, our vision. And now they want to make it a commons?\\\"\\n\\n\\\"They don't want to share it. They want to control what we do with it.\\\"\\n\\n\\\"Then let them build their own.\\\"",
-  "de": "\\\"Der Aufzug wurde mit unserem Geld, unseren Ingenieuren, unserer Vision gebaut. Und jetzt wollen sie ihn zum Gemeingut machen?\\\"\\n\\n\\\"Sie wollen ihn nicht teilen. Sie wollen kontrollieren, was wir damit tun.\\\"\\n\\n\\\"Dann sollen sie ihren eigenen bauen.\\\""
+  "de": "„Der Aufzug wurde mit unserem Geld, unseren Ingenieuren, unserer Vision gebaut. Und jetzt wollen sie ihn zum Gemeingut machen?“\\n\\n„Sie wollen ihn nicht teilen. Sie wollen kontrollieren, was wir damit tun.“\\n\\n„Dann sollen sie ihren eigenen bauen.“"
  },
  "wonder_events.7.t": {
   "en": "Orbital Sovereignty",

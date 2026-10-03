@@ -3,6 +3,10 @@
   "en": "Convenience",
   "de": "Bequemlichkeit"
  },
+ "popneed_healthcare": {
+  "en": "Healthcare",
+  "de": "Gesundheitsversorgung"
+ },
  "popneed_tourism": {
   "en": "Tourism",
   "de": "Tourismus"

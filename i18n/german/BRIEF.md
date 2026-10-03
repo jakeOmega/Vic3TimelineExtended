@@ -15,6 +15,18 @@ The German ships as "machine-translated, corrections welcome". Nobody on the tea
 
 A script checks every line's markup against the English. A line that fails is sent back, so the rules below are the ones that matter.
 
+## Updated lines
+
+Some lines were translated before, and the English has changed since. Two comments above such a line show the English the current translation was made from, and that translation:
+
+```
+# PREVIOUS ENGLISH: Export tariffs dynamically reduced to zero under free port treaty [Concept('concept_obligation', 'obligations')].
+# PREVIOUS TRANSLATION: Exportzölle wurden aufgrund vertraglicher Freihafen-[Concept('concept_obligation', 'Verpflichtungen')] dynamisch auf null gesenkt.
+ free_port_tariff_export_modifier_desc:0 "Export tariffs dynamically reduced to zero under free port treaty obligations."
+```
+
+Compare the two English versions and change the translation only where the English changed, keeping its wording and terms everywhere else. Here the concept link is gone, so it goes from the German too: „… vertraglicher Freihafen-Verpflichtungen …“. Where the English has been rewritten, translate the new text afresh. Either way, write the line in full, like any other.
+
 ## Keep the markup exactly
 
 Everything that isn't prose passes through unchanged. The checker compares them as counts per line.
@@ -109,7 +121,7 @@ Proper names stay as they are: companies, people, places, historical buildings, 
 ## Voice and style
 
 - **Events** speak for the player's government in the first person plural: „Wir müssen …“, „unsere Regierung …“. Option buttons are short statements or exclamations in that voice. Flavour text (`.f`) may be literary; keep its tone.
-- **Tooltips and descriptions** are impersonal and precise: „Erhöht die …“, „Wirkt sich auf … aus“. Address the player directly (Sie) only where the English does, and sparingly.
+- **Tooltips and descriptions** are impersonal and precise: „Erhöht die …“, „Wirkt sich auf … aus“. Address the player directly (Sie) only where the English does, and sparingly. Never use du or ihr for the player (*deine Nation*, *Tretet bei*); those belong only in quoted dialogue between characters. "Your nation" is *Ihre Nation* or, better, *das eigene Land*.
 - **Names and labels** (modifiers, buildings, laws, buttons, journal entries) stay short. The UI boxes were sized for English, and German runs longer. Prefer a compact noun („Kapitalverkehrskontrollen“) to a paraphrase.
 - Numbers, percentages and dates come from markup. Never write a number the English doesn't have. Where the English writes a number in the prose, use German format: 2,5 for 2.5, and 1.000 for 1,000. Percentages stay closed up as the official German writes them: 10%, not 10 %.
 - Keep the English meaning, including hedges and conditions („bis zu“, „höchstens“, „sofern …“). Don't add explanations the English doesn't give.

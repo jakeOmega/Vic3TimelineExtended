@@ -44,6 +44,7 @@
  "Influence Campaign": "Einflusskampagne",
  "Intelligence Sharing Pact": "Geheimdienst-Kooperationspakt",
  "Intelligentsia": "Intellektuelle",
+ "International Cultural Outreach": "Internationale Kulturarbeit",
  "International Standing": "Internationales Ansehen",
  "Landowners": "Grundbesitzer",
  "Launch on Warning": "Start bei Vorwarnung",
@@ -69,6 +70,7 @@
  "Petite Bourgeoisie": "Kleinbürger",
  "Population Pressure": "Bevölkerungsdruck",
  "Post-Scarcity": "Postknappheit",
+ "Preset": "Voreinstellung",
  "Rural Folk": "Landbewohner",
  "Rustication": "Landverbannung",
  "Seasoned": "Erfahren",
@@ -87,6 +89,8 @@
  "Utility Fog": "Utility-Fog",
  "Veto Restraint": "Vetoeinschränkung",
  "World Court": "Internationaler Gerichtshof",
+ "leverage generation": "Einflusshebel-Erzeugung",
+ "leverage resistance": "Einflusshebel-Widerstand",
  "lingua franca": "Verkehrssprache",
  "national champion": "nationaler Vorzeigekonzern"
 }
