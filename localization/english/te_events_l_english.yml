@@ -953,6 +953,17 @@
  decolonization_events.9.t:0 "Trouble in [SCOPE.sState('unrest_colony').GetName]"
 
 #
+# DRUGS_SHORTAGE
+#
+ drugs_shortage.1.a:0 "Buy abroad at any price"
+ drugs_shortage.1.b:0 "Ration what we have"
+ drugs_shortage.1.c:0 "Put the $building_synthetics_plant_opium$ on a war footing"
+ drugs_shortage.1.d:0 "Our pharmacies have run dry. The market cannot buy enough $opium$ at any price, and hospitals are sending patients home with half a course of treatment or none at all. Doctors already choose whom to treat. We must decide who goes without."
+ drugs_shortage.1.e:0 "Let the poppy growers fill the gap"
+ drugs_shortage.1.f:0 "'Take one in the morning, if you can find one.'"
+ drugs_shortage.1.t:0 "Medicine Shortage"
+
+#
 # ENVIRONMENTALISM_EVENTS
 #
  environmentalism_events.1.a:0 "A natural fluctuation. Nothing to be done."
