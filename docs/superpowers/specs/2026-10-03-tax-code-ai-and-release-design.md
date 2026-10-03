@@ -137,8 +137,9 @@ The journal entry is the record; the script that reads it is what changes the AI
 - **Institution promises (kind 1).** While any obligation of kind 1 with arg *x* is bound, delivering or maintaining (states 7, 2, 3), `institution_scores.<institution x>` gets `+ te_tax_ai_promise_institution_score` (200).
   - Maintenance needs the boost too: its grace is 1, and the native AI degrades institutions at spending ratio 2.0.
   - The native AI then expands the institution at native speed (about one level a year) and native bureaucracy cost. The tax code never calls `change_institution_investment_level`, which also sidesteps the open question of whether that effect sets a level at once (P16).
-  - The boost goes into the mod's existing `INJECT:ai_strategy_default`, and into every strategy that declares its own `institution_scores`: vanilla's five political agenda strategies do (`common/ai_strategies/03_political_strategies.txt:83, 255, 454, 656, …`; the task lists them all).
-  - **Unverified:** whether an `INJECT:` into a strategy's `institution_scores` sums or replaces. If it replaces, the fallback is `REPLACE:` with vanilla's body restated. The play-test watches an AI with a schools promise expand schools.
+  - **Where the boost goes:** only into the mod's existing `INJECT:ai_strategy_default`, whose `institution_schools = { value = 10 }` and `institution_health_system = { value = 10 }` gain the `if`.
+  - **Not into the political agenda strategies,** even though they score schools and health themselves (`common/ai_strategies/03_political_strategies.txt:83, 255, 454, 656, 834`). Whether an `INJECT:` into a strategy's nested `institution_scores` sums or replaces the block is unread. If it replaces, it would drop vanilla's other institution scores in rule-off games too.
+  - **Untested:** whether the default's boost reaches a country whose political strategy declares the same institution. The enactment fallback below covers either case, and the deadline log measures how often the native AI delivered on its own.
 - **Bureaucracy promises (kind 2):** accepted only when they already hold, and the native AI keeps them by its own thresholds. No hook.
 - **Fiscal promises (kind 4):** the promised-surplus signal (§2.3) keeps the AI legislating revenue until the surplus streak delivers.
 
@@ -242,7 +243,7 @@ The new file is `test_tax_code_ai.py`, with additions to the existing files. It 
 - `te_tax.8` is raised only by the processor and the debug event, and force-through is called only from `te_tax.8`;
 - every `te_tax_ai_*` token is initialised, copied at the outbreak, reset at the repair and at release, and never removed;
 - the template table and the threshold pairs are pinned, as `test_gw_ai_policy_table.py` pins the Global Warming AI;
-- the institution hook appears in every strategy that declares `institution_scores`, and reads only obligation variables;
+- the institution hook sits only in `INJECT:ai_strategy_default`, on schools and health, and reads only obligation variables;
 - the enactment of a missed promise runs only for an AI country's kind-1 promise, in `te_tax.8`, and logs `ai_obl_enacted`;
 - the monthly check writes exactly one `obl_deadline` line per delivering promise in its deadline month;
 - the per-good tariff registrations name only the probe's goods, and nothing outside the probe harness applies those modifiers;
@@ -345,7 +346,7 @@ The harness retirement stays out of this branch. Research H §6's corrected remo
 
 | Unknown | Where it matters | Fallback |
 |---|---|---|
-| `INJECT:` into a strategy's `institution_scores`: does it sum or replace? | §2.8 | `REPLACE:` the strategies with vanilla's body restated |
+| Whether the default strategy's institution boost reaches a country whose political strategy scores the same institution | §2.8 | The enactment fallback; the deadline log measures it |
 | Whether the native AI keeps moving an inert tax level (P14) | §2.10, AI passage | Owner question 2 |
 | Whether `trigger_event` takes a computed `days` | §2.2 | A literal `if` chain (the design's default) |
 | Whether the per-good tariff families work once registered, and which of lock or carrier holds | §2.9 | Keep re-assert and adoption; AI customs stays native |
