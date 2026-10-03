@@ -89,7 +89,7 @@
  },
  "power_bloc_can_use_extend_influence_bool_desc": {
   "en": "Can use the Extend Influence [concept_diplomatic_action] to increase the leverage of the [concept_power_bloc] in a [concept_country].",
-  "de": "Kann die [concept_diplomatic_action] „Einfluss ausweiten“ nutzen, um den Einfluss des [concept_power_bloc] in einem [concept_country] zu erhöhen."
+  "de": "Kann die [concept_diplomatic_action] „Einfluss ausweiten“ nutzen, um den Einflusshebel des [concept_power_bloc] in einem [concept_country] zu erhöhen."
  },
  "power_bloc_can_use_join_united_nations_bool": {
   "en": "Leader Can Require UN Membership",

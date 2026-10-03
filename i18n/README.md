@@ -39,6 +39,8 @@ Translation uses Claude Code subagents (on the subscription, not the API). The s
 
 The German run (September 2026): 19,590 keys and 264,000 words: a glossary chunk, 35 content chunks and one correction chunk. It took about three hours with eight Sonnet agents in parallel, and cost at most 8 points of a weekly subscription limit and about a third of one 5-hour session, orchestration included (an upper bound: another session ran alongside). Measure a run by the `/usage` change after the first wave, scaled by the share of the words that wave covered; the agents' own token counts are unreliable. 0.4% of lines were rejected, and 207 were corrected for consistency.
 
+The first update pass (October 2026) covered the five days of English since: 2,300 keys and 41,000 words, 410 of them stale. One glossary chunk, five content chunks and one correction chunk of 76 lines took about an hour with the content agents in parallel, and no line was rejected. Most of what needed fixing came from the agents' reports and from `check-terms`: a vanilla term the glossary had missed because it matched case-sensitively (*Diplomatiespiel*), one name rendered three ways (the Non-Proliferation Treaty), and *du* in tooltips.
+
 Runs are resumable: whatever has merged is done, and `prepare` only offers what is still missing or stale. The merge check passes 97% of the base game's own English/German pairs unchanged; what it rejects there is vanilla German that has drifted from its English.
 
 ## Corrections from players

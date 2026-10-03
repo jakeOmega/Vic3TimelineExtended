@@ -7281,7 +7281,7 @@
  },
  "irredentism.1.c.tt": {
   "en": "[SCOPE.sCountry('target_country').GetName] will be asked to return [SCOPE.sState('irr_demanded_state').GetName]. If they refuse, we will open a diplomatic play to take it by force",
-  "de": "[SCOPE.sCountry('target_country').GetAltName('NOM')|U] wird aufgefordert, [SCOPE.sState('irr_demanded_state').GetName] zurückzugeben. Weigert es sich, eröffnen wir ein diplomatisches Spiel, um es mit Gewalt zu nehmen"
+  "de": "[SCOPE.sCountry('target_country').GetAltName('NOM')|U] wird aufgefordert, [SCOPE.sState('irr_demanded_state').GetName] zurückzugeben. Weigert es sich, eröffnen wir ein Diplomatiespiel, um es mit Gewalt zu nehmen"
  },
  "irredentism.1.d": {
   "en": "[SCOPE.sCulture('irr_shared_culture').GetName] communities in [SCOPE.sCountry('target_country').GetName] are agitating for closer ties with the homeland — some openly, some in whispers. Our diaspora press carries their letters, and our parliament debates whether to answer.",
@@ -7341,7 +7341,7 @@
  },
  "irredentism.2.a.tt": {
   "en": "[SCOPE.sCountry('irr_unifier').GetName] will open a diplomatic play to seize [SCOPE.sState('irr_demanded_state').GetName] by force",
-  "de": "[SCOPE.sCountry('irr_unifier').GetAltName('NOM')|U] wird ein diplomatisches Spiel eröffnen, um [SCOPE.sState('irr_demanded_state').GetName] mit Gewalt zu nehmen"
+  "de": "[SCOPE.sCountry('irr_unifier').GetAltName('NOM')|U] wird ein Diplomatiespiel eröffnen, um [SCOPE.sState('irr_demanded_state').GetName] mit Gewalt zu nehmen"
  },
  "irredentism.2.b": {
   "en": "Cede [SCOPE.sState('irr_demanded_state').GetName] peacefully",
@@ -11565,7 +11565,7 @@
  },
  "nuclear_crisis.7.d": {
   "en": "[SCOPE.sCountry('nd_target').GetName] has answered our public ultimatum with war. The diplomatic play we warned it over has become open fighting, and every government that read our ultimatum is now waiting to see whether we meant it. So is our own general staff.",
-  "de": "[SCOPE.sCountry('nd_target').GetAltName('NOM')|U] hat auf unser öffentliches Ultimatum mit Krieg geantwortet. Das diplomatische Vorgehen, vor dem wir gewarnt hatten, ist zu offenen Kämpfen geworden, und jede Regierung, die unser Ultimatum gelesen hat, wartet nun darauf, ob wir es ernst gemeint haben. Das gilt auch für unseren eigenen Generalstab."
+  "de": "[SCOPE.sCountry('nd_target').GetAltName('NOM')|U] hat auf unser öffentliches Ultimatum mit Krieg geantwortet. Das Diplomatiespiel, vor dem wir gewarnt hatten, ist zu offenen Kämpfen geworden, und jede Regierung, die unser Ultimatum gelesen hat, wartet nun darauf, ob wir es ernst gemeint haben. Das gilt auch für unseren eigenen Generalstab."
  },
  "nuclear_crisis.7.f": {
   "en": "\\\"The ultimatum ran in every newspaper in the world. They mobilised the next morning.\\\"\\n\\n\\\"So the question is what we meant.\\\"\\n\\n\\\"No. The question is what we can live with having meant. Those are different questions, and they do not have the same answer.\\\"\\n\\n\\\"And the army?\\\"\\n\\n\\\"The army will fight whichever war you give it. It would like to know which one before breakfast.\\\"",
@@ -19041,7 +19041,7 @@
  },
  "te_debug_un.1.d": {
   "en": "Console-only shortcuts for testing the United Nations systems. None of these can happen in normal play.\\n\\nFounding seats you and every great and major power as members (run it twice if the chamber still says non-member). The mandate option claims a neighbouring state for you and authorizes its recovery without a vote — open a diplomatic play against its owner to see the authorized war goal. Standing changes show in your modifiers after the next monthly tick.\\n\\nDooming the UN sets its authority to 1 and its credibility and order ledgers to their floors: the crisis opens at the next monthly update, the collapse clock runs, and it dissolves a few months later. Dissolving does it at once. After a dissolution the Found button convenes a founding conference once the cooldown is skipped; skipping again while a conference sits ends its year at the next monthly update.",
-  "de": "Nur für die Konsole: Abkürzungen zum Testen der Systeme der Vereinten Nationen. Nichts davon kann im normalen Spiel vorkommen.\\n\\nDie Gründung nimmt Sie und jede Groß- und Mittelmacht als Mitglieder auf (zweimal ausführen, falls die Kammer weiterhin Nichtmitglied meldet). Die Mandatsoption beansprucht für Sie einen Nachbarstaat und genehmigt seine Rückgewinnung ohne Abstimmung — eröffnen Sie eine diplomatische Aktion gegen seinen Besitzer, um das genehmigte Kriegsziel zu sehen. Ansehensänderungen zeigen sich in Ihren Modifikatoren nach dem nächsten monatlichen Tick.\\n\\nDie UN zum Untergang zu verurteilen setzt ihre Autorität auf 1 und ihre Glaubwürdigkeits- und Ordnungsbücher auf ihre Untergrenzen: Die Krise öffnet sich bei der nächsten monatlichen Aktualisierung, die Zusammenbruchsuhr läuft, und sie löst sich einige Monate später auf. Auflösen tut es sofort. Nach einer Auflösung beruft die Schaltfläche Gründen eine Gründungskonferenz ein, sobald die Abklingzeit übersprungen wird; erneutes Überspringen, während eine Konferenz tagt, beendet ihr Jahr bei der nächsten monatlichen Aktualisierung."
+  "de": "Nur für die Konsole: Abkürzungen zum Testen der Systeme der Vereinten Nationen. Nichts davon kann im normalen Spiel vorkommen.\\n\\nDie Gründung nimmt Sie und jede Groß- und Mittelmacht als Mitglieder auf (zweimal ausführen, falls die Kammer weiterhin Nichtmitglied meldet). Die Mandatsoption beansprucht für Sie einen Nachbarstaat und genehmigt seine Rückgewinnung ohne Abstimmung — eröffnen Sie ein Diplomatiespiel gegen seinen Besitzer, um das genehmigte Kriegsziel zu sehen. Ansehensänderungen zeigen sich in Ihren Modifikatoren nach dem nächsten monatlichen Tick.\\n\\nDie UN zum Untergang zu verurteilen setzt ihre Autorität auf 1 und ihre Glaubwürdigkeits- und Ordnungsbücher auf ihre Untergrenzen: Die Krise öffnet sich bei der nächsten monatlichen Aktualisierung, die Zusammenbruchsuhr läuft, und sie löst sich einige Monate später auf. Auflösen tut es sofort. Nach einer Auflösung beruft die Schaltfläche Gründen eine Gründungskonferenz ein, sobald die Abklingzeit übersprungen wird; erneutes Überspringen, während eine Konferenz tagt, beendet ihr Jahr bei der nächsten monatlichen Aktualisierung."
  },
  "te_debug_un.1.e": {
   "en": "Set my standing to Disgraced (10)",
@@ -20085,11 +20085,11 @@
  },
  "un_events.14.d": {
   "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty - a binding agreement to prevent the spread of nuclear weapons and promote disarmament. Nothing is before the General Assembly yet: we could table it. For [ROOT.GetCountry.GetName], without a nuclear arsenal, the treaty offers protection from proliferation by rival states.",
-  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Vertrag über die Nichtverbreitung von Nuklearwaffen – ein bindendes Abkommen, um die Verbreitung von Nuklearwaffen zu verhindern und Abrüstung zu fördern. Noch liegt nichts vor der Generalversammlung: Wir könnten ihn einbringen. Für [ROOT.GetCountry.GetAltName('AKK')], ohne eigenes Nuklearwaffenarsenal, bietet der Vertrag Schutz vor der Proliferation durch rivalisierende Staaten."
+  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Atomwaffensperrvertrag – ein bindendes Abkommen, um die Verbreitung von Nuklearwaffen zu verhindern und Abrüstung zu fördern. Noch liegt nichts vor der Generalversammlung: Wir könnten ihn einbringen. Für [ROOT.GetCountry.GetAltName('AKK')], ohne eigenes Nuklearwaffenarsenal, bietet der Vertrag Schutz vor der Proliferation durch rivalisierende Staaten."
  },
  "un_events.14.d_aspiring": {
   "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty, and nothing is before the General Assembly yet. The timing could not be worse for [ROOT.GetCountry.GetName] - our [concept_nuclear_program] is underway but not yet complete. Binding ourselves to the treaty would effectively end our pursuit of the ultimate deterrent.",
-  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Vertrag über die Nichtverbreitung von Kernwaffen, und noch liegt nichts vor der Generalversammlung. Der Zeitpunkt könnte für [ROOT.GetCountry.GetAltName('AKK')] kaum ungünstiger sein – unser [concept_nuclear_program] läuft, ist aber noch nicht abgeschlossen. Uns an den Vertrag zu binden würde unser Streben nach der ultimativen Abschreckung faktisch beenden."
+  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Atomwaffensperrvertrag, und noch liegt nichts vor der Generalversammlung. Der Zeitpunkt könnte für [ROOT.GetCountry.GetAltName('AKK')] kaum ungünstiger sein – unser [concept_nuclear_program] läuft, ist aber noch nicht abgeschlossen. Uns an den Vertrag zu binden würde unser Streben nach der ultimativen Abschreckung faktisch beenden."
  },
  "un_events.14.d_cause_other": {
   "en": "[SCOPE.sCountry('un_dkt_subject').GetName] has built its first nuclear weapon, and the Assembly means to stop the next.\\n\\n",
@@ -20101,7 +20101,7 @@
  },
  "un_events.14.d_nuclear": {
   "en": "Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty, and nothing is before the General Assembly yet. As a nuclear-armed state, [ROOT.GetCountry.GetName] occupies a complicated position - the treaty would legitimize our existing arsenal while preventing rivals from developing their own, but commits us to eventual disarmament.",
-  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Vertrag über die Nichtverbreitung von Kernwaffen, und noch liegt nichts vor der Generalversammlung. Als Atommacht befindet sich [ROOT.GetCountry.GetAltName('NOM')] in einer schwierigen Lage – der Vertrag würde unser bestehendes Arsenal legitimieren und zugleich Rivalen daran hindern, ein eigenes aufzubauen, verpflichtet uns aber zur schrittweisen Abrüstung."
+  "de": "Delegationen bei den Vereinten Nationen drängen auf einen Atomwaffensperrvertrag, und noch liegt nichts vor der Generalversammlung. Als Atommacht befindet sich [ROOT.GetCountry.GetAltName('NOM')] in einer schwierigen Lage – der Vertrag würde unser bestehendes Arsenal legitimieren und zugleich Rivalen daran hindern, ein eigenes aufzubauen, verpflichtet uns aber zur schrittweisen Abrüstung."
  },
  "un_events.14.f": {
   "en": "The physicist adjusted his reading glasses and studied the treaty text. 'It is an elegant piece of hypocrisy,' he said. 'Those who have the bomb promise to someday give it up. Those who do not have the bomb promise never to build one. And everyone pretends not to notice the asymmetry.'\\n\\n'Will it work?' his colleague asked.\\n\\n'It will work precisely as long as everyone is more afraid of the alternative.'",
@@ -20109,7 +20109,7 @@
  },
  "un_events.14.t": {
   "en": "Nuclear Non-Proliferation Treaty",
-  "de": "Vertrag über die Nichtverbreitung von Kernwaffen"
+  "de": "Atomwaffensperrvertrag"
  },
  "un_events.15.a": {
   "en": "Accept international arbitration.",
@@ -21185,7 +21185,7 @@
  },
  "un_vote.1.d_npt": {
   "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has brought the Nuclear Non-Proliferation Treaty before the General Assembly. A vote in favor commits [ROOT.GetCountry.GetName] to the treaty's terms - renouncing the pursuit of nuclear weapons and accepting international inspections.",
-  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung den Vertrag über die Nichtverbreitung von Nuklearwaffen vorgelegt. Eine Zustimmung verpflichtet [ROOT.GetCountry.GetAltName('AKK')] zu den Bedingungen des Vertrags – dem Verzicht auf das Streben nach Nuklearwaffen und der Annahme internationaler Inspektionen."
+  "de": "[SCOPE.sCountry('un_vote_proposer').GetAltName('NOM')|U] hat der Generalversammlung den Atomwaffensperrvertrag vorgelegt. Eine Zustimmung verpflichtet [ROOT.GetCountry.GetAltName('AKK')] zu den Bedingungen des Vertrags – dem Verzicht auf das Streben nach Nuklearwaffen und der Annahme internationaler Inspektionen."
  },
  "un_vote.1.d_nuclear_ban": {
   "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has proposed a Treaty on the Prohibition of Nuclear Weapons. A vote in favor commits our country to it: a party that holds warheads keeps a fifth fewer every five years until it holds none, and a party without them may never build one.",
@@ -21209,7 +21209,7 @@
  },
  "un_vote.1.d_referendum": {
   "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to order [SCOPE.sCountry('un_vote_target').GetName] to let [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName] vote on its independence, under the chamber's supervision. The order would bind: the overlord could hold the vote or refuse it, and refusing would cost it dearly. A vote in favour stands with the right of peoples to decide their own future. How shall [ROOT.GetCountry.GetName] vote?",
-  "de": "Auf Antrag [SCOPE.sCountry('un_vote_proposer').GetAltName('GEN')] soll die Generalversammlung [SCOPE.sCountry('un_vote_target').GetAltName('DAT')] befehlen, [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetAltName('AKK')] unter Aufsicht des Plenums über die eigene Unabhängigkeit abstimmen zu lassen. Der Befehl wäre bindend: Der Oberherr könnte die Abstimmung abhalten oder verweigern, und eine Verweigerung käme ihn teuer zu stehen. Ein Ja-Votum steht für das Recht der Völker, über ihre eigene Zukunft zu entscheiden. Wie lautet das Votum [ROOT.GetCountry.GetAltName('GEN')]?"
+  "de": "Auf Antrag [SCOPE.sCountry('un_vote_proposer').GetAltName('GEN')] soll die Generalversammlung [SCOPE.sCountry('un_vote_target').GetAltName('DAT')] befehlen, [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetAltName('AKK')] unter Aufsicht des Plenums über die eigene Unabhängigkeit abstimmen zu lassen. Der Befehl wäre bindend: Der Suzerän könnte die Abstimmung abhalten oder verweigern, und eine Verweigerung käme ihn teuer zu stehen. Ein Ja-Votum steht für das Recht der Völker, über ihre eigene Zukunft zu entscheiden. Wie lautet das Votum [ROOT.GetCountry.GetAltName('GEN')]?"
  },
  "un_vote.1.d_referendum_target": {
   "en": "[SCOPE.sCountry('un_vote_proposer').GetName] has asked the General Assembly to order us to let [ROOT.GetCountry.MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName] vote on its independence. If it carries, we must hold the vote or refuse it before the whole world. To vote in favour is to accept the referendum now, and it will then be held.",
@@ -21321,7 +21321,7 @@
  },
  "un_vote.1.t_npt": {
   "en": "Non-Proliferation Treaty Vote",
-  "de": "Abstimmung über den Nichtverbreitungsvertrag"
+  "de": "Abstimmung über den Atomwaffensperrvertrag"
  },
  "un_vote.1.t_nuclear_ban": {
   "en": "Prohibition of Nuclear Weapons Vote",
@@ -21545,11 +21545,11 @@
  },
  "un_vote.2.d_npt_failed": {
   "en": "The Nuclear Non-Proliferation Treaty has failed to pass the General Assembly. Nuclear powers and aspiring states alike found common cause in rejecting constraints on their arsenals. The atom remains unbound by international law.",
-  "de": "Der Vertrag über die Nichtverbreitung von Kernwaffen fand in der Generalversammlung keine Mehrheit. Atommächte wie auch nach der Bombe strebende Staaten fanden eine gemeinsame Sache darin, Einschränkungen ihrer Arsenale abzulehnen. Das Atom bleibt vom Völkerrecht ungebunden."
+  "de": "Der Atomwaffensperrvertrag fand in der Generalversammlung keine Mehrheit. Atommächte wie auch nach der Bombe strebende Staaten fanden eine gemeinsame Sache darin, Einschränkungen ihrer Arsenale abzulehnen. Das Atom bleibt vom Völkerrecht ungebunden."
  },
  "un_vote.2.d_npt_passed": {
   "en": "The Nuclear Non-Proliferation Treaty has been adopted by the General Assembly with a strong majority. The international community has spoken clearly against the spread of nuclear weapons. The International Atomic Energy Agency is established to enforce the treaty's provisions.",
-  "de": "Der Vertrag über die Nichtverbreitung von Nuklearwaffen wurde von der Generalversammlung mit deutlicher Mehrheit angenommen. Die internationale Gemeinschaft hat sich klar gegen die Verbreitung von Nuklearwaffen ausgesprochen. Die Internationale Atomenergiebehörde wird gegründet, um die Bestimmungen des Vertrags durchzusetzen."
+  "de": "Der Atomwaffensperrvertrag wurde von der Generalversammlung mit deutlicher Mehrheit angenommen. Die internationale Gemeinschaft hat sich klar gegen die Verbreitung von Nuklearwaffen ausgesprochen. Die Internationale Atomenergiebehörde wird gegründet, um die Bestimmungen des Vertrags durchzusetzen."
  },
  "un_vote.2.d_nuclear_ban_failed": {
   "en": "The Treaty on the Prohibition of Nuclear Weapons has failed to pass the General Assembly. The nuclear powers, and those sheltering under their deterrent, carried the vote. The bomb stays legal.",
@@ -21609,7 +21609,7 @@
  },
  "un_vote.2.d_referendum_passed": {
   "en": "The General Assembly has ordered [SCOPE.sCountry('un_vote_target').GetName] to hold a supervised referendum in [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName]. The resolution carried [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] to [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0]. The overlord must now hold the vote or refuse it.",
-  "de": "Die Generalversammlung hat [SCOPE.sCountry('un_vote_target').GetAltName('DAT')] befohlen, in [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetAltName('IN')] ein beaufsichtigtes Referendum abzuhalten. Die Resolution wurde mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] zu [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] Stimmen angenommen. Der Oberherr muss die Abstimmung nun abhalten oder verweigern."
+  "de": "Die Generalversammlung hat [SCOPE.sCountry('un_vote_target').GetAltName('DAT')] befohlen, in [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetAltName('IN')] ein beaufsichtigtes Referendum abzuhalten. Die Resolution wurde mit [ROOT.GetCountry.MakeScope.Var('un_display_support').GetValue|0] zu [ROOT.GetCountry.MakeScope.Var('un_display_oppose').GetValue|0] Stimmen angenommen. Der Suzerän muss die Abstimmung nun abhalten oder verweigern."
  },
  "un_vote.2.d_referendum_passed_vetoed": {
   "en": "The General Assembly voted for a supervised referendum in [SCOPE.sCountry('un_vote_target').MakeScope.Var('un_ref_named_subject_capital').GetState.GetCountry.GetName], and a [concept_un_permanent_member] struck it down. A referendum has no lesser form, so it is blocked outright and no vote is held. The majority is on the record, and nothing else.",

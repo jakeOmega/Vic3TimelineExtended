@@ -29,7 +29,7 @@
  },
  "country_bank_forecast_error_add_desc": {
   "en": "How far your central bank's reading of what the economy can bear may stray from the truth. It is why the policy stance you are shown is a band rather than a figure, and why a bank can hold the rate steady while the ground moves under it. A narrower error means fewer mistakes, not none.",
-  "de": "Wie weit die Einschätzung Ihrer Zentralbank zur Belastbarkeit der Wirtschaft von der Wahrheit abweichen kann. Deshalb wird Ihnen die geldpolitische Ausrichtung als Spanne statt als einzelne Zahl angezeigt, und deshalb kann eine Bank den Zinssatz konstant halten, während sich der Boden unter ihr verschiebt. Ein geringerer Fehler bedeutet weniger Irrtümer, nicht keine."
+  "de": "Wie weit die Einschätzung Ihrer Zentralbank zur Belastbarkeit der Wirtschaft von der Wahrheit abweichen kann. Deshalb wird Ihnen der geldpolitische Kurs als Spanne statt als einzelne Zahl angezeigt, und deshalb kann eine Bank den Zinssatz konstant halten, während sich der Boden unter ihr verschiebt. Ein geringerer Fehler bedeutet weniger Irrtümer, nicht keine."
  },
  "country_banking_crash_chance_mult": {
   "en": "[concept_banking_crash] Likelihood",

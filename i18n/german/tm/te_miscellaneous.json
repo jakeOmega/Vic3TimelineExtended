@@ -3601,7 +3601,7 @@
  },
  "UN_PROPOSE_SANCTIONS_DESC": {
   "en": "Propose [concept_un_sanctions] against a rival. The General Assembly will vote over a year. If passed, the target receives severe trade and diplomatic penalties, and you become the sanctions enforcer. #G UN credibility +1 if passed.#! Requires [concept_major_power] rank and an unsanctioned rival whose record gives the Assembly grounds: a case strength of 50 or more.",
-  "de": "Schlägt [concept_un_sanctions] gegen einen Rivalen vor. Die Generalversammlung stimmt über ein Jahr hinweg ab. Wird sie angenommen, erhält das Ziel schwere Handels- und diplomatische Strafen, und du wirst zum Durchsetzer der Sanktionen. #G UN-Glaubwürdigkeit +1, falls angenommen.#! Erfordert den Rang [concept_major_power] und einen nicht sanktionierten Rivalen, dessen Ansehen der Versammlung genug Grundlage bietet: eine Fallstärke von 50 oder mehr."
+  "de": "Schlägt [concept_un_sanctions] gegen einen Rivalen vor. Die Generalversammlung stimmt über ein Jahr hinweg ab. Wird sie angenommen, erhält das Ziel schwere Handels- und diplomatische Strafen, und Sie werden zum Durchsetzer der Sanktionen. #G UN-Glaubwürdigkeit +1, falls angenommen.#! Erfordert den Rang [concept_major_power] und einen nicht sanktionierten Rivalen, dessen Ansehen der Versammlung genug Grundlage bietet: eine Fallstärke von 50 oder mehr."
  },
  "UN_PROPOSE_SANCTIONS_TT": {
   "en": "Propose [concept_un_sanctions] against a rival nation. The General Assembly votes on the measure over the following year: human members at once, AI members in its ninth to eleventh month.",
@@ -4417,7 +4417,7 @@
  },
  "banking_dash_bubble_tt": {
   "en": "#header Bubble Pressure#!\\nAccumulated speculative excess. It does not move the cycle by itself, but it is the main input to the monthly crash roll and to how severe a crash is when one happens. Command and cooperative economies are far less exposed to it. Nobody knows exactly how much air is in a bubble: you see a band, not a number.\\n$TOOLTIP_DELIMITER$\\n#title Pushed each month by:#!\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_bubble_monthly_add')|+=1]#! from active policies, laws and events\\nYour policy stance, currently [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')], on your central bank's own estimate of what your economy can bear",
-  "de": "#header Blasendruck#!\\nAngehäufter spekulativer Überschuss. Er bewegt den Zyklus nicht von selbst, ist aber der Haupteinflussfaktor für den monatlichen Crash-Wurf und dafür, wie schwer ein Crash ausfällt, wenn einer eintritt. Plan- und Genossenschaftswirtschaften sind ihm weit weniger ausgesetzt. Niemand weiß genau, wie viel Luft in einer Blase steckt: Sie sehen eine Bandbreite, keine Zahl.\\n$TOOLTIP_DELIMITER$\\n#title Wird jeden Monat erhöht durch:#!\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_bubble_monthly_add')|+=1]#! durch aktive Maßnahmen, Gesetze und Ereignisse\\nIhre geldpolitische Haltung, derzeit [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')], nach der eigenen Einschätzung Ihrer Zentralbank, was Ihre Wirtschaft verträgt"
+  "de": "#header Blasendruck#!\\nAngehäufter spekulativer Überschuss. Er bewegt den Zyklus nicht von selbst, ist aber der Haupteinflussfaktor für den monatlichen Crash-Wurf und dafür, wie schwer ein Crash ausfällt, wenn einer eintritt. Plan- und Genossenschaftswirtschaften sind ihm weit weniger ausgesetzt. Niemand weiß genau, wie viel Luft in einer Blase steckt: Sie sehen eine Bandbreite, keine Zahl.\\n$TOOLTIP_DELIMITER$\\n#title Wird jeden Monat erhöht durch:#!\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_bubble_monthly_add')|+=1]#! durch aktive Maßnahmen, Gesetze und Ereignisse\\nIhr geldpolitischer Kurs, derzeit [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')], nach der eigenen Einschätzung Ihrer Zentralbank, was Ihre Wirtschaft verträgt"
  },
  "banking_dash_budget_label": {
   "en": "Intervention Budget",
@@ -4569,7 +4569,7 @@
  },
  "banking_dash_momentum_tt": {
   "en": "#header Momentum#!\\nAdded to the cycle every month, so it decides how fast conditions are moving rather than where they are. You see its direction and rough strength, not the figure.\\n$TOOLTIP_DELIMITER$\\n#title Pushed each month by:#!\\nA steady decay towards zero (a tenth of current momentum)\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_momentum_monthly_add')|+=1]#! from active policies, laws and events\\nYour policy stance, currently [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')], on your central bank's own estimate of what your economy can bear\\n#lore Plus a monthly random nudge that pulls the cycle back towards the middle of its range; the further from the middle, the stronger the pull.#!",
-  "de": "#header Dynamik#!\\nWird dem Zyklus jeden Monat hinzugefügt und bestimmt so, wie schnell sich die Lage verändert, statt wo sie steht. Sie sehen ihre Richtung und ungefähre Stärke, nicht die Zahl.\\n$TOOLTIP_DELIMITER$\\n#title Wird jeden Monat beeinflusst durch:#!\\nEinen stetigen Verfall gegen null (ein Zehntel der aktuellen Dynamik)\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_momentum_monthly_add')|+=1]#! durch aktive Maßnahmen, Gesetze und Ereignisse\\nIhre geldpolitische Haltung, derzeit [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')], nach der eigenen Einschätzung Ihrer Zentralbank, was Ihre Wirtschaft verträgt\\n#lore Zusätzlich ein monatlicher Zufallsanstoß, der den Zyklus zur Mitte seiner Bandbreite zurückzieht; je weiter von der Mitte entfernt, desto stärker der Zug.#!"
+  "de": "#header Dynamik#!\\nWird dem Zyklus jeden Monat hinzugefügt und bestimmt so, wie schnell sich die Lage verändert, statt wo sie steht. Sie sehen ihre Richtung und ungefähre Stärke, nicht die Zahl.\\n$TOOLTIP_DELIMITER$\\n#title Wird jeden Monat beeinflusst durch:#!\\nEinen stetigen Verfall gegen null (ein Zehntel der aktuellen Dynamik)\\n#variable [JournalEntry.GetCountry.MakeScope.ScriptValue('banking_display_momentum_monthly_add')|+=1]#! durch aktive Maßnahmen, Gesetze und Ereignisse\\nIhr geldpolitischer Kurs, derzeit [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] — [JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')], nach der eigenen Einschätzung Ihrer Zentralbank, was Ihre Wirtschaft verträgt\\n#lore Zusätzlich ein monatlicher Zufallsanstoß, der den Zyklus zur Mitte seiner Bandbreite zurückzieht; je weiter von der Mitte entfernt, desto stärker der Zug.#!"
  },
  "banking_dash_mon_anchor_label": {
   "en": "Monetary Anchor",
@@ -4957,15 +4957,15 @@
  },
  "banking_dash_mon_rate_tt": {
   "en": "#header Policy Rate#!\\nThe price of short-term credit in your country, and the floor every other borrowing cost is built on.\\nWhere there is a central bank to set it, this is a decision: the rate closes on the chosen target by #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_step')|2]#! of a point a month, so changing course takes seasons rather than weeks. A central bank running its mandate cuts #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! as fast while the financial cycle is in #yellow Stagnation#! or worse, so it is not still leaning on an economy that has already broken. Everywhere else it is simply what credit costs: an administered rate, or the world rate plus the inflation lenders expect of you plus a spread.\\n$TOOLTIP_DELIMITER$\\nA rate below what your economy can bear feeds the financial cycle's momentum and builds bubble pressure; a rate above it leans against both. Which side you are on is reported as your policy stance below.",
-  "de": "#header Leitzins#!\\nDer Preis kurzfristigen Kredits in Ihrem Land und die Grundlage, auf der jede andere Kreditaufnahmekosten aufbauen.\\nWo es eine Zentralbank gibt, die ihn festlegt, ist dies eine Entscheidung: Der Zinssatz nähert sich dem gewählten Ziel um #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_step')|2]#! eines Punktes im Monat an, sodass ein Kurswechsel Jahreszeiten statt Wochen braucht. Eine Zentralbank, die ihr Mandat ausführt, senkt #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! so schnell, solange sich der Finanzzyklus in #yellow Stagnation#! oder schlimmer befindet, damit sie sich nicht weiter gegen eine bereits zusammengebrochene Wirtschaft stemmt. Überall sonst ist er einfach das, was Kredit kostet: ein administrierter Zinssatz oder der Weltzins zuzüglich der von Ihnen erwarteten Inflation der Gläubiger zuzüglich eines Aufschlags.\\n$TOOLTIP_DELIMITER$\\nEin Zinssatz unter dem, was Ihre Wirtschaft verträgt, nährt die Dynamik des Finanzzyklus und baut Blasendruck auf; ein Zinssatz darüber stemmt sich gegen beides. Auf welcher Seite Sie stehen, wird unten als Ihre geldpolitische Haltung ausgewiesen."
+  "de": "#header Leitzins#!\\nDer Preis kurzfristigen Kredits in Ihrem Land und die Grundlage, auf der jede andere Kreditaufnahmekosten aufbauen.\\nWo es eine Zentralbank gibt, die ihn festlegt, ist dies eine Entscheidung: Der Zinssatz nähert sich dem gewählten Ziel um #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_drift_step')|2]#! eines Punktes im Monat an, sodass ein Kurswechsel Jahreszeiten statt Wochen braucht. Eine Zentralbank, die ihr Mandat ausführt, senkt #v [JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! so schnell, solange sich der Finanzzyklus in #yellow Stagnation#! oder schlimmer befindet, damit sie sich nicht weiter gegen eine bereits zusammengebrochene Wirtschaft stemmt. Überall sonst ist er einfach das, was Kredit kostet: ein administrierter Zinssatz oder der Weltzins zuzüglich der von Ihnen erwarteten Inflation der Gläubiger zuzüglich eines Aufschlags.\\n$TOOLTIP_DELIMITER$\\nEin Zinssatz unter dem, was Ihre Wirtschaft verträgt, nährt die Dynamik des Finanzzyklus und baut Blasendruck auf; ein Zinssatz darüber stemmt sich gegen beides. Auf welcher Seite Sie stehen, wird unten als Ihr geldpolitischer Kurs ausgewiesen."
  },
  "banking_dash_mon_stance_label": {
   "en": "Policy Stance",
-  "de": "Geldpolitische Haltung"
+  "de": "Geldpolitischer Kurs"
  },
  "banking_dash_mon_stance_tt": {
   "en": "#header Policy Stance#!\\nWhether your rate is loose or tight against what your economy can bear right now. A loose stance adds to the financial cycle's momentum and builds bubble pressure; a tight one drains both. This is how the dial reaches the cycle at all.\\n$TOOLTIP_DELIMITER$\\n#title At [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')], your rate is:#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')]\\n[JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')]\\n#lore For scale, the phase of the cycle you are in moves Momentum by 0.05 to 0.2 and Bubble Pressure by 1 to 7 a month.#!\\n$TOOLTIP_DELIMITER$\\nNobody knows what the economy can bear — not you, and not your own central bank, whose reading carries its own error. The band above is that bank's estimate, so the real push can be stronger or weaker than it says, and stepping the dial to hunt for the exact turning point will not find it.",
-  "de": "#header Geldpolitische Haltung#!\\nOb Ihr Zinssatz locker oder straff gegenüber dem ist, was Ihre Wirtschaft gerade verträgt. Eine lockere Haltung verstärkt die Dynamik des Finanzzyklus und baut Blasendruck auf; eine straffe zehrt an beidem. So erreicht das Steuerungsrad den Zyklus überhaupt erst.\\n$TOOLTIP_DELIMITER$\\n#title Bei [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] ist Ihr Zinssatz:#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')]\\n[JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')]\\n#lore Zum Maßstab: Die Phase des Zyklus, in der Sie sich befinden, bewegt die Dynamik um 0,05 bis 0,2 und den Blasendruck um 1 bis 7 im Monat.#!\\n$TOOLTIP_DELIMITER$\\nNiemand weiß, was die Wirtschaft verträgt — nicht Sie, und nicht einmal Ihre eigene Zentralbank, deren Einschätzung ihren eigenen Fehler trägt. Die Bandbreite oben ist die Schätzung dieser Bank, also kann der tatsächliche Effekt stärker oder schwächer sein, als sie sagt, und das Rad zu bewegen, um den genauen Wendepunkt zu suchen, wird ihn nicht finden."
+  "de": "#header Geldpolitischer Kurs#!\\nOb Ihr Zinssatz locker oder straff gegenüber dem ist, was Ihre Wirtschaft gerade verträgt. Ein lockerer Kurs verstärkt die Dynamik des Finanzzyklus und baut Blasendruck auf; ein straffer zehrt an beidem. So erreicht das Steuerungsrad den Zyklus überhaupt erst.\\n$TOOLTIP_DELIMITER$\\n#title Bei [JournalEntry.GetCountry.GetCustom('te_mon_stance_band_name')] ist Ihr Zinssatz:#!\\n[JournalEntry.GetCountry.GetCustom('te_mon_stance_momentum_effect')]\\n[JournalEntry.GetCountry.GetCustom('te_mon_stance_bubble_effect')]\\n#lore Zum Maßstab: Die Phase des Zyklus, in der Sie sich befinden, bewegt die Dynamik um 0,05 bis 0,2 und den Blasendruck um 1 bis 7 im Monat.#!\\n$TOOLTIP_DELIMITER$\\nNiemand weiß, was die Wirtschaft verträgt — nicht Sie, und nicht einmal Ihre eigene Zentralbank, deren Einschätzung ihren eigenen Fehler trägt. Die Bandbreite oben ist die Schätzung dieser Bank, also kann der tatsächliche Effekt stärker oder schwächer sein, als sie sagt, und das Rad zu bewegen, um den genauen Wendepunkt zu suchen, wird ihn nicht finden."
  },
  "banking_dash_mon_standing_label": {
   "en": "Credit Standing",
@@ -5653,7 +5653,7 @@
  },
  "banking_policy_stance_bar_name": {
   "en": "Policy Stance — tight",
-  "de": "Geldpolitische Ausrichtung — straff"
+  "de": "Geldpolitischer Kurs — straff"
  },
  "banking_policy_stance_bar_second": {
   "en": "loose",
@@ -5665,23 +5665,23 @@
  },
  "banking_stance_band_1": {
   "en": "Monetary Stance: Very Loose",
-  "de": "Geldpolitische Ausrichtung: Sehr locker"
+  "de": "Geldpolitischer Kurs: Sehr locker"
  },
  "banking_stance_band_2": {
   "en": "Monetary Stance: Loose",
-  "de": "Geldpolitische Ausrichtung: Locker"
+  "de": "Geldpolitischer Kurs: Locker"
  },
  "banking_stance_band_3": {
   "en": "Monetary Stance: Neutral",
-  "de": "Geldpolitische Ausrichtung: Neutral"
+  "de": "Geldpolitischer Kurs: Neutral"
  },
  "banking_stance_band_4": {
   "en": "Monetary Stance: Tight",
-  "de": "Geldpolitische Ausrichtung: Straff"
+  "de": "Geldpolitischer Kurs: Straff"
  },
  "banking_stance_band_5": {
   "en": "Monetary Stance: Very Tight",
-  "de": "Geldpolitische Ausrichtung: Sehr straff"
+  "de": "Geldpolitischer Kurs: Sehr straff"
  },
  "bg_megastructure_capped_private": {
   "en": "Private Megastructure Facility",
@@ -11737,7 +11737,7 @@
  },
  "nd_tt_has_dispute": {
   "en": "There is a dispute to threaten over: a diplomatic play they lead against us, a war with them, an attack on a country we guarantee, a weapons programme of a rival, or a rival's forces on alert",
-  "de": "Es gibt einen Streitpunkt, mit dem gedroht werden kann: ein diplomatisches Vorhaben, das sie gegen uns führen, ein Krieg mit ihnen, ein Angriff auf ein Land, für das wir bürgen, das Waffenprogramm eines Rivalen oder die Alarmbereitschaft der Streitkräfte eines Rivalen"
+  "de": "Es gibt einen Streitpunkt, mit dem gedroht werden kann: ein Diplomatiespiel, das sie gegen uns führen, ein Krieg mit ihnen, ein Angriff auf ein Land, für das wir bürgen, das Waffenprogramm eines Rivalen oder die Alarmbereitschaft der Streitkräfte eines Rivalen"
  },
  "nd_tt_has_pledge_with_target": {
   "en": "We have pledged not to use nuclear weapons against them",
@@ -11861,7 +11861,7 @@
  },
  "nd_tt_not_disarmed": {
   "en": "Our arsenal is not bound by a disarmament settlement or by the Non-Proliferation Treaty's disarmament terms",
-  "de": "Unser Arsenal ist weder durch ein Abrüstungsabkommen noch durch die Abrüstungsbestimmungen des Nichtverbreitungsvertrags gebunden"
+  "de": "Unser Arsenal ist weder durch ein Abrüstungsabkommen noch durch die Abrüstungsbestimmungen des Atomwaffensperrvertrags gebunden"
  },
  "nd_tt_only_issuer": {
   "en": "We made the threat",
@@ -11953,7 +11953,7 @@
  },
  "nd_tt_open_over_play": {
   "en": "Over: #v the diplomatic play#!. If they concede, they back down and our side wins it",
-  "de": "Worum es geht: #v das diplomatische Vorhaben#!. Geben sie nach, ziehen sie sich zurück, und unsere Seite gewinnt es"
+  "de": "Worum es geht: #v das Diplomatiespiel#!. Geben sie nach, ziehen sie sich zurück, und unsere Seite gewinnt es"
  },
  "nd_tt_open_over_proliferation": {
   "en": "Over: #v their weapons programme#!. If they concede, it is frozen for #v 10#! years",
@@ -12169,7 +12169,7 @@
  },
  "nd_tt_yield_play": {
   "en": "We back down in the diplomatic play: their side wins it",
-  "de": "Wir ziehen uns aus dem diplomatischen Vorhaben zurück: ihre Seite gewinnt es"
+  "de": "Wir ziehen uns aus dem Diplomatiespiel zurück: ihre Seite gewinnt es"
  },
  "nd_tt_yield_war": {
   "en": "Our war support in the war with them falls by #R 35#!, which can force us to capitulate",
@@ -12349,7 +12349,7 @@
  },
  "nd_w_crisis_dispute_tt": {
   "en": "What the threat is about, and what the target would give up if it conceded: backing down in the diplomatic play, a collapse of war support in the war, leaving a guaranteed country alone, a frozen weapons programme, or its forces stood down.\\n\\nA public ultimatum is a stronger signal, and a commitment: abandoning it is noticed at home and abroad.",
-  "de": "Worum die Drohung geht, und was das Ziel aufgeben würde, wenn es nachgäbe: der Rückzug aus dem diplomatischen Vorhaben, ein Einbruch der Kriegsunterstützung in dem Krieg, ein garantiertes Land in Ruhe zu lassen, ein eingefrorenes Waffenprogramm oder die Herabstufung seiner Streitkräfte.\\n\\nEin öffentliches Ultimatum ist ein stärkeres Signal und eine Verpflichtung: Es fallen zu lassen wird im In- und Ausland bemerkt."
+  "de": "Worum die Drohung geht, und was das Ziel aufgeben würde, wenn es nachgäbe: der Rückzug aus dem Diplomatiespiel, ein Einbruch der Kriegsunterstützung in dem Krieg, ein garantiertes Land in Ruhe zu lassen, ein eingefrorenes Waffenprogramm oder die Herabstufung seiner Streitkräfte.\\n\\nEin öffentliches Ultimatum ist ein stärkeres Signal und eine Verpflichtung: Es fallen zu lassen wird im In- und Ausland bemerkt."
  },
  "nd_w_crisis_ft_label_them": {
   "en": "Can they carry it out?",
@@ -12761,7 +12761,7 @@
  },
  "nuclear_aid_blocked_by_npt_tt": {
   "en": "[concept_nuclear_program] aid is #R forbidden#! while the IAEA exists and [concept_un_authority] is 60 or above (Non-Proliferation Treaty enforcement).",
-  "de": "Hilfe für das [concept_nuclear_program] ist #R verboten#!, solange die IAEO besteht und [concept_un_authority] bei 60 oder darüber liegt (Durchsetzung des Nichtverbreitungsvertrags)."
+  "de": "Hilfe für das [concept_nuclear_program] ist #R verboten#!, solange die IAEO besteht und [concept_un_authority] bei 60 oder darüber liegt (Durchsetzung des Atomwaffensperrvertrags)."
  },
  "nuclear_article_conflicts_with_aid_tt": {
   "en": "A country cannot receive $nuclear_program_aid$ in the same treaty that disarms it or freezes its [concept_nuclear_program]",
@@ -12885,7 +12885,7 @@
  },
  "nuclear_program_status_disarmed": {
   "en": "#R Our nuclear programme has been dismantled#! — under the terms of a disarmament settlement, or of the Non-Proliferation Treaty.",
-  "de": "#R Unser Nuklearprogramm wurde demontiert#! — gemäß den Bedingungen eines Abrüstungsabkommens oder des Nichtverbreitungsvertrags."
+  "de": "#R Unser Nuklearprogramm wurde demontiert#! — gemäß den Bedingungen eines Abrüstungsabkommens oder des Atomwaffensperrvertrags."
  },
  "nuclear_program_status_dismantling": {
   "en": "#R Our arsenal is being dismantled#! — the programme builds nothing.",
@@ -16205,7 +16205,7 @@
  },
  "te_mon_board_wrong_stance_desc": {
   "en": "For half a year and more the interest rate we are made to use has been plainly wrong for us — far too tight, or far too loose — because it is set for somebody else's economy. It lasts until our policy stance leaves the extreme.",
-  "de": "Seit einem halben Jahr oder länger ist der Zinssatz, den wir übernehmen müssen, eindeutig falsch für uns — viel zu straff oder viel zu locker —, weil er für die Wirtschaft eines anderen festgelegt wird. Es dauert an, bis unsere geldpolitische Haltung das Extrem verlässt."
+  "de": "Seit einem halben Jahr oder länger ist der Zinssatz, den wir übernehmen müssen, eindeutig falsch für uns — viel zu straff oder viel zu locker —, weil er für die Wirtschaft eines anderen festgelegt wird. Es dauert an, bis unser geldpolitischer Kurs das Extrem verlässt."
  },
  "te_mon_currency_reform_premium": {
   "en": "Currency Reform",
@@ -16609,7 +16609,7 @@
  },
  "te_window_tab_space_race_tt": {
   "en": "Each milestone under way, with its overview, Mission Control and rivals. These are the journal entries' own panels: a change made here shows there too.",
-  "de": "Jeder laufende Meilenstein mit Übersicht, Missionskontrolle und Rivalen. Dies sind die eigenen Bereiche der Tagebucheinträge: Eine Änderung hier erscheint auch dort."
+  "de": "Jeder laufende Meilenstein mit Übersicht, Missionskontrolle und Rivalen. Dies sind die eigenen Bereiche der Journaleinträge: Eine Änderung hier erscheint auch dort."
  },
  "too_much_private_construction": {
   "en": "Excess [concept_private_construction]",
@@ -16949,7 +16949,7 @@
  },
  "un_court_claim_withdrawn_tt": {
   "en": "Our [concept_claim] on [SCOPE.sStateRegion('un_crt_region').GetName] is withdrawn. For twenty years each diplomatic play in which we add a [concept_war_goal] against a state there costs 10 extra [concept_infamy], once per play, scaled by the UN's [concept_un_enforcement].",
-  "de": "Unser [concept_claim] auf [SCOPE.sStateRegion('un_crt_region').GetName] wird zurückgezogen. Zwanzig Jahre lang kostet jedes diplomatische Spiel, in dem wir ein [concept_war_goal] gegen einen dortigen Staat hinzufügen, 10 zusätzliche [concept_infamy], einmal pro Spiel, skaliert mit der [concept_un_enforcement]."
+  "de": "Unser [concept_claim] auf [SCOPE.sStateRegion('un_crt_region').GetName] wird zurückgezogen. Zwanzig Jahre lang kostet jedes Diplomatiespiel, in dem wir ein [concept_war_goal] gegen einen dortigen Staat hinzufügen, 10 zusätzliche [concept_infamy], einmal pro Diplomatiespiel, skaliert mit der [concept_un_enforcement]."
  },
  "un_court_compliance_modifier": {
   "en": "ICJ Ruling Compliance",
@@ -17777,7 +17777,7 @@
  },
  "un_propose_nuclear_ban_needs_npt_tt": {
   "en": "The Non-Proliferation Treaty (IAEA) is in force",
-  "de": "Der Nichtverbreitungsvertrag (IAEO) ist in Kraft"
+  "de": "Der Atomwaffensperrvertrag (IAEO) ist in Kraft"
  },
  "un_propose_nuclear_ban_unarmed_tt": {
   "en": "We hold no nuclear weapons",

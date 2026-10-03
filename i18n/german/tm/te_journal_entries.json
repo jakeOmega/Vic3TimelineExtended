@@ -77,7 +77,7 @@
  },
  "je_ch_how_share": {
   "en": "Our [concept_cultural_pull_share] is our raw [concept_cultural_pull] as a percentage of every country's raw pull added together, so it stays meaningful as the world grows. Other countries' pull is recounted about twice a year and after every war, while ours counts as it stands, so the share can step without our own output changing. The share sets our [concept_ch_influence_tier] and the strength of the Cultural Hegemony modifier. The arrow beside it compares this month's reading with last month's.",
-  "de": "Unser [concept_cultural_pull_share] ist unsere rohe [concept_cultural_pull] als Prozentsatz der Summe der rohen Anziehungskraft aller Länder, sodass er aussagekräftig bleibt, während die Welt wächst. Die Anziehungskraft anderer Länder wird etwa zweimal im Jahr und nach jedem Krieg neu gezählt, unsere dagegen zählt, wie sie gerade steht, sodass sich der Anteil verschieben kann, ohne dass sich unsere eigene Leistung ändert. Der Anteil bestimmt unsere [concept_ch_influence_tier] und die Stärke des Modifikators Kulturelle Hegemonie. Der Pfeil daneben vergleicht den Wert dieses Monats mit dem des Vormonats."
+  "de": "Unser [concept_cultural_pull_share] ist unsere rohe [Concept('concept_cultural_pull', 'kulturelle Anziehungskraft')] als Prozentsatz der Summe der rohen Anziehungskraft aller Länder, sodass er aussagekräftig bleibt, während die Welt wächst. Die Anziehungskraft anderer Länder wird etwa zweimal im Jahr und nach jedem Krieg neu gezählt, unsere dagegen zählt, wie sie gerade steht, sodass sich der Anteil verschieben kann, ohne dass sich unsere eigene Leistung ändert. Der Anteil bestimmt unsere [concept_ch_influence_tier] und die Stärke des Modifikators Kulturelle Hegemonie. Der Pfeil daneben vergleicht den Wert dieses Monats mit dem des Vormonats."
  },
  "je_ch_how_sub_benchmark": {
   "en": "Foreign Cultural Benchmark",
@@ -1829,11 +1829,11 @@
  },
  "je_nuclear_program_widget_taboo_burden_tt": {
   "en": "#tooltip_header The Burden of the Bomb#!\\n$TOOLTIP_DELIMITER$\\nThe world holds nuclear weapons in horror, and holds it against those who keep them: from a taboo of 40 up, the larger our arsenal (up to fifty warheads), the heavier the burden. It turns the bomb's prestige against us, takes away the leverage it brought, and sets our restraint-minded interest groups against the arsenal itself. Hold the arsenal to a ceiling, or give it up, to lighten it. Ours is #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_burden_pct')|0]%#! now.",
-  "de": "#tooltip_header Die Last der Bombe#!\\n$TOOLTIP_DELIMITER$\\nDie Welt begegnet Nuklearwaffen mit Entsetzen und hält es denen vor, die sie besitzen: ab einem Tabu von 40 gilt, je größer unser Arsenal (bis zu fünfzig Sprengköpfe), desto schwerer die Last. Sie kehrt das Prestige der Bombe gegen uns, nimmt uns den Verhandlungsvorteil, den sie brachte, und wendet unsere zurückhaltungsorientierten Interessengruppen gegen das Arsenal selbst. Begrenzen Sie das Arsenal auf eine Obergrenze, oder geben Sie es auf, um die Last zu verringern. Die Last beträgt bei uns derzeit #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_burden_pct')|0]%#!."
+  "de": "#tooltip_header Die Last der Bombe#!\\n$TOOLTIP_DELIMITER$\\nDie Welt begegnet Nuklearwaffen mit Entsetzen und hält es denen vor, die sie besitzen: ab einem Tabu von 40 gilt, je größer unser Arsenal (bis zu fünfzig Sprengköpfe), desto schwerer die Last. Sie kehrt das Prestige der Bombe gegen uns, nimmt uns den Einflusshebel, den sie brachte, und wendet unsere zurückhaltungsorientierten Interessengruppen gegen das Arsenal selbst. Begrenzen Sie das Arsenal auf eine Obergrenze, oder geben Sie es auf, um die Last zu verringern. Die Last beträgt bei uns derzeit #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_burden_pct')|0]%#!."
  },
  "je_nuclear_program_widget_taboo_burden_value": {
   "en": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! prestige · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! leverage",
-  "de": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! Prestige · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! Verhandlungsvorteil"
+  "de": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! Prestige · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! Einflusshebel"
  },
  "je_nuclear_program_widget_taboo_costs_tt": {
   "en": "#tooltip_header What the Taboo Costs#!\\n$TOOLTIP_DELIMITER$\\nWhat a nuclear act costs us today. Every figure moves with the taboo: at zero, nothing; at its height, a first use makes a state a pariah. An answer to a strike on us, or on a country we protect, costs no infamy.",
@@ -4821,7 +4821,7 @@
  },
  "je_un_chamber_propose_no_case_observer_request_tt": {
   "en": "Either we hold no elections (no landed, wealth or census voting and no universal suffrage), or UN electoral observers are already at work here, or our delegation is not seated, or every one of our states already holds another UN mission.",
-  "de": "Entweder halten wir keine Wahlen ab (weder Grundbesitz-, Vermögens- oder Zensuswahlrecht noch allgemeines Wahlrecht), oder UN-Wahlbeobachter sind bereits bei uns tätig, oder unsere Delegation ist nicht zugelassen, oder jeder unserer Staaten beherbergt bereits eine andere UN-Mission."
+  "de": "Entweder halten wir keine Wahlen ab (weder Grundbesitzerwahlen, Klassenwahl oder Zensuswahlrecht noch Allgemeines Wahlrecht), oder UN-Wahlbeobachter sind bereits bei uns tätig, oder unsere Delegation ist nicht zugelassen, oder jeder unserer Staaten beherbergt bereits eine andere UN-Mission."
  },
  "je_un_chamber_propose_no_case_peacekeepers": {
   "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_peacekeepers_tt #Y No Case#!#!",
@@ -6653,7 +6653,7 @@
  },
  "je_un_preview_pariah_tt": {
   "en": "From the Established tier ([concept_un_authority] 45+) a country outside the UN is a pariah; from the Strong tier it also loses trade and leverage. Joining at any time clears both.",
-  "de": "Ab der Stufe Etabliert ([concept_un_authority] 45+) ist ein Land außerhalb der UN ein Paria; ab der Stufe Stark verliert es zudem Handel und Druckmittel. Ein Beitritt zu jedem Zeitpunkt beseitigt beides."
+  "de": "Ab der Stufe Etabliert ([concept_un_authority] 45+) ist ein Land außerhalb der UN ein Paria; ab der Stufe Stark verliert es zudem Handel und Einflusshebel. Ein Beitritt zu jedem Zeitpunkt beseitigt beides."
  },
  "je_un_preview_war_surcharge_header": {
   "en": "If we go to war without a mandate",
@@ -6661,7 +6661,7 @@
  },
  "je_un_preview_war_surcharge_tt": {
   "en": "From the Established tier, every war goal the initiator of a diplomatic play adds without a military mandate bound to that play costs it extra [concept_infamy]: #v 2#! at Established, #v 4#! at Strong, #v 10#! at Supranational, and twice that from Strong against a country under a UN peacekeeping deployment. Members and non-members alike.",
-  "de": "Ab der Stufe Etabliert kostet jedes Kriegsziel, das der Initiator eines diplomatischen Spiels ohne ein an dieses Spiel gebundenes Militärmandat hinzufügt, zusätzliche [concept_infamy]: #v 2#! bei Etabliert, #v 4#! bei Stark, #v 10#! bei Supranational, und das Doppelte davon ab Stark gegen ein Land unter einem UN-Friedenseinsatz. Für Mitglieder wie Nichtmitglieder gleichermaßen."
+  "de": "Ab der Stufe Etabliert kostet jedes Kriegsziel, das der Initiator eines Diplomatiespiels ohne ein an dieses Diplomatiespiel gebundenes Militärmandat hinzufügt, zusätzliche [concept_infamy]: #v 2#! bei Etabliert, #v 4#! bei Stark, #v 10#! bei Supranational, und das Doppelte davon ab Stark gegen ein Land unter einem UN-Friedenseinsatz. Für Mitglieder wie Nichtmitglieder gleichermaßen."
  },
  "je_un_prog_arms": {
   "en": "Signed arms control",
@@ -7065,7 +7065,7 @@
  },
  "je_un_status_not_member": {
   "en": "#v Not a member.#! Join to gain #bold +5 Leverage#!, #bold +10% relations improvement speed#!, #bold +3% Prestige#!, #bold +3% Influence#!, and access to UN programs.",
-  "de": "#v Kein Mitglied.#! Treten Sie bei, um #bold +5 Druckmittel#!, #bold +10% Tempo der Beziehungsverbesserung#!, #bold +3% Prestige#!, #bold +3% Einfluss#! und Zugang zu UN-Programmen zu erhalten."
+  "de": "#v Kein Mitglied.#! Treten Sie bei, um #bold +5 Einflusshebel#!, #bold +10% Tempo der Beziehungsverbesserung#!, #bold +3% Prestige#!, #bold +3% Einfluss#! und Zugang zu UN-Programmen zu erhalten."
  },
  "je_un_tally_counts": {
   "en": "#G [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_yes')|0] for#! · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_no')|0] against#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_eligible')|0]",
@@ -7097,7 +7097,7 @@
  },
  "je_un_tier_line_strong": {
   "en": "#G [concept_un_authority]: Strong#! (70–85). Resolutions bite at ×1.5 ([concept_un_enforcement]), and outsiders also lose trade and leverage. Reached only under [Concept('concept_un_charter','Charter Reform I')].",
-  "de": "#G [concept_un_authority]: Stark#! (70–85). Resolutionen wirken mit ×1,5 ([concept_un_enforcement]), und Außenstehende verlieren zudem Handel und Druckmittel. Nur erreichbar unter [Concept('concept_un_charter','Charta-Reform I')]."
+  "de": "#G [concept_un_authority]: Stark#! (70–85). Resolutionen wirken mit ×1,5 ([concept_un_enforcement]), und Außenstehende verlieren zudem Handel und Einflusshebel. Nur erreichbar unter [Concept('concept_un_charter','Charta-Reform I')]."
  },
  "je_un_tier_line_supranational": {
   "en": "#B [concept_un_authority]: Supranational#! (85+). Resolutions bite at ×2.5 ([concept_un_enforcement]). Reached only under [Concept('concept_un_charter','Charter Reform II')].",
@@ -7121,7 +7121,7 @@
  },
  "je_world_war_desc": {
   "en": "Ideological tensions are pushing the [Concept('concept_great_power', 'great powers')] toward a global war. Pick a side, prepare, or try to stop it.",
-  "de": "Ideologische Spannungen treiben die [Concept('concept_great_power', 'Großmächte')] auf einen globalen Krieg zu. Wählt eine Seite, rüstet euch, oder versucht, ihn zu verhindern."
+  "de": "Ideologische Spannungen treiben die [Concept('concept_great_power', 'Großmächte')] auf einen globalen Krieg zu. Wählen Sie eine Seite, rüsten Sie sich, oder versuchen Sie, ihn zu verhindern."
  },
  "je_world_war_ideology_authoritarian": {
   "en": "\\n#bold Our Ideology:#! Authoritarian",
