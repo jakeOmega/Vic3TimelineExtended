@@ -672,8 +672,8 @@ least one member.
 
 A reform strengthens a Fund that already stands; nobody votes on it again.
 The donations are the [Fund Development Programs](#un-programs-and-great-power-stances)
-contributions of the major powers: while the Fund stands, a contributor's 0.5%
-of GDP a year pays its grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
+contributions of the major powers, which open only once the Fund stands: a
+contributor's 0.5% of GDP a year pays its grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
 Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
 laws allow no investment pool or your banking system has not started. The line
 and the grants are worked out each month. Our Obligations shows your grant, and
@@ -828,7 +828,7 @@ count in full), and every program earns standing after 24 months.
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
 | Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation and prestige; covers peacekeeping contingents |
-| Fund Development Programs | Major power | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; while the World Development Fund stands, the money pays its grants |
+| Fund Development Programs | Major power, and the World Development Fund founded | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; the money pays the Fund's grants |
 | Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | Bureaucracy | Prestige, refugee ministry impact |
 | Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | Bureaucracy, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 

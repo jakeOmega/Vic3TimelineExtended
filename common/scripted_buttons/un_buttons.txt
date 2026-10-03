@@ -697,11 +697,13 @@ un_end_peacekeeping_button = {
 }
 
 # ---- 4. DEVELOPMENT PROGRAMS ----
-# While the World Development Fund stands (redesign phase 7, owner 2026-10-02),
-# this programme is the Fund's voluntary part: a represented contributor that
-# pays its dues pays the Fund's grants with its programme expense
-# (un_dev_fund_donations_value, un_economy_values.txt). Nothing here changes
-# for it.
+# This programme is the World Development Fund's voluntary part (redesign
+# phase 7, owner 2026-10-02): a represented contributor that pays its dues pays
+# the Fund's grants with its programme expense (un_dev_fund_donations_value,
+# un_economy_values.txt). It opens only once the Assembly has founded the Fund
+# (owner, 2026-10-03): before that its money would reach nobody. A contribution
+# running with no Fund lapses at the next monthly update
+# (un_dev_fund_lapse_contributions, un_economy_effects.txt).
 
 un_fund_development_button = {
 	name = "UN_FUND_DEVELOPMENT"
@@ -721,6 +723,10 @@ un_fund_development_button = {
 			NOT = { un_representation_suspended = yes }
 		}
 		country_rank >= rank_value:major_power
+		custom_tooltip = {
+			text = un_fund_development_needs_fund_tt
+			has_global_variable = un_inst_development_fund
+		}
 		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
 	}
 

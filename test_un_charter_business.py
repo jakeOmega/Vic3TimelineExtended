@@ -417,6 +417,36 @@ class DevelopmentFundFloorTests(unittest.TestCase):
             self.assertIn(key, loc)
 
 
+class DevelopmentProgramsGateTests(unittest.TestCase):
+    """Fund Development Programs opens only while the World Development Fund
+    stands (owner, 2026-10-03): before the Assembly founds it the programme's
+    money would reach nobody. A contribution running with no Fund (an old save)
+    lapses at the monthly update, through the same mirror helper leaving the UN
+    uses, so the civil-war state reconciler cannot bring it back."""
+
+    def test_the_button_needs_the_fund(self):
+        button = _flat(_block(_read(BUTTONS), "un_fund_development_button"))
+        possible = button[button.index("possible ="):button.index("ai_chance")]
+        self.assertIn("custom_tooltip = { text = un_fund_development_needs_fund_tt "
+                      "has_global_variable = un_inst_development_fund }", possible)
+        self.assertIn("un_fund_development_needs_fund_tt", _loc())
+
+    def test_a_contribution_without_a_fund_lapses(self):
+        effects = _read(ECONOMY_EFFECTS)
+        lapse = _flat(_block(effects, "un_dev_fund_lapse_contributions"))
+        self.assertIn("limit = { NOT = { has_global_variable = un_inst_development_fund } }", lapse)
+        for modifier in ("un_development_contributor_modifier", "un_development_contributor_cost"):
+            self.assertIn(f"un_state_off = {{ MODIFIER = {modifier} }}", lapse)
+        self.assertIn("post_notification = un_dev_fund_contribution_lapsed_notice", lapse)
+        # It runs first, so the month's contributions never count a lapsed one.
+        update = _flat(_block(effects, "un_dev_fund_monthly_update"))
+        self.assertLess(update.index("un_dev_fund_lapse_contributions = yes"),
+                        update.index("un_dev_fund_donations_value"))
+        loc = _loc()
+        for suffix in ("name", "desc", "tooltip"):
+            self.assertIn(f"notification_un_dev_fund_contribution_lapsed_notice_{suffix}", loc)
+
+
 class LocTests(unittest.TestCase):
     def test_every_key_the_framework_names_exists(self):
         loc = _loc()
