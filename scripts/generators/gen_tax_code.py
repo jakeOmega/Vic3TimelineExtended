@@ -130,10 +130,18 @@ KIND_COMMENCED, KIND_SUNSET, KIND_HELD_CONFLICT, KIND_HELD_MISSED = 1, 2, 3, 4
 STATE_EMPTY, STATE_AWAITING, STATE_HELD_CONFLICT, STATE_HELD_MISSED = 0, 1, 2, 3
 # Relief fields a package carries besides the per-instrument and per-good ones.
 PACKAGE_RELIEF_FIELDS = ("agrel", "regrel", "xver_relief")
-# Wherever a state is named for regional relief (te_tax_relief_state) or marked for a
-# package's (te_tax_pending_relief_<slot>), it is stamped with the naming country, saved
-# as scope:te_tax_country (docs/systems/tax_code_schema.md, "Civil wars and new countries").
-RELIEF_STAMP = "set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }"
+
+
+def slot_relief_list(slot):
+    """The country list naming the states slot `slot`'s package restates regional relief
+    for (controller ruling, Task 11 fix round 1). A list, not per-state marks: a civil
+    war's winner keeps no loser's list, so only its own packages' states can commence."""
+    return f"te_tax_p{slot}_relief_states"
+
+
+def _clear_list(name, indent="\t"):
+    """Clears the country list `name` if it exists."""
+    return f"{indent}if = {{ limit = {{ has_variable_list = {name} }} clear_variable_list = {name} }}"
 # Every scheduler debug line ends with these. In the country events that run the
 # scheduler ROOT = THIS = the country: the tax probe printed month=22032 through
 # this ScriptValue form from a country event, and vanilla 1.14.5's election
@@ -235,10 +243,12 @@ RELIEF_OPS = (0, 1, 2, 3, 4)
 GOODS_LEVEL_STEPS = Decimal("0.2")
 GOODS_CATEGORY_WEIGHT = {"staple": Decimal("1.0"), "industrial": Decimal("0.3"),
                          "luxury": Decimal("0.2"), "military": Decimal("0.2")}
-# Relief, in support points per band the bill moves it from existing law (after the
-# x MATERIAL_WEIGHT of the tax channels): agricultural relief for the workers it
-# relieves and the landowners whose estates employ them; regional relief diffusely for
-# every group, less for the two whose members worry most about the revenue lost.
+# Relief, in support points (after the x MATERIAL_WEIGHT of the tax channels):
+# agricultural relief for the workers it relieves and the landowners whose estates
+# employ them, per band, scaled by the wage tax it relieves (te_tax_bl_agrel_scaled);
+# regional relief diffusely for every group, less for the two whose members worry most
+# about the revenue lost, per band and quarter of the population named
+# (te_tax_bl_regrel_coverage; spec 7.2: coverage matters, not just nominal rates).
 AGREL_POINTS = {"rural_folk": 8, "landowners": 3}
 REGREL_POINTS_ALL = 4
 REGREL_POINTS_CONCERN = {"industrialists": -2, "petty_bourgeoisie": -2}
@@ -1037,27 +1047,29 @@ def _apply(slot):
     for field in ("agrel", "regrel"):
         lines.append(f"\tif = {{ limit = {{ var:{p}_{field} >= 0 }} "
                      f"set_variable = {{ name = te_tax_en_{field} value = var:{p}_{field} }} }}")
+    plist = slot_relief_list(slot)
     lines += [
-        "\t# A package that restates regional relief names its whole state set: it replaces the",
-        "\t# enacted list te_tax_en_relief_states (at most three states), the canonical set.",
-        "\t# The state marks (te_tax_relief_state) and their stamps follow from the list in the",
-        "\t# writer's relief sync (te_tax_rebuild_relief_marks), which the processor runs after",
-        "\t# this month's commencements.",
+        "\t# A package that restates regional relief names its whole state set, its own list",
+        f"\t# {plist}: it replaces the enacted list te_tax_en_relief_states (the canonical set,",
+        "\t# at most three) with the states in it that this code keeps (te_tax_relief_listed_state_kept:",
+        "\t# its own, or its civil-war counterpart's while a war lasts). The state marks",
+        "\t# (te_tax_relief_state) follow from the list in the writer's relief sync",
+        "\t# (te_tax_rebuild_relief_marks), which the processor runs after this month's",
+        "\t# commencements. The slot's list is consumed either way.",
         "\tif = {",
         f"\t\tlimit = {{ var:{p}_regrel_states_set = 1 }}",
-        "\t\tclear_variable_list = te_tax_en_relief_states",
-        "\t\tevery_scope_state = {",
-        "\t\t\tlimit = {",
-        f"\t\t\t\thas_variable = te_tax_pending_relief_{slot}",
-        f"\t\t\t\tvar:te_tax_pending_relief_{slot} = 1",
+        "\t\tsave_scope_as = te_tax_country",
+        _clear_list("te_tax_en_relief_states", "\t\t"),
+        "\t\tif = {",
+        f"\t\t\tlimit = {{ has_variable_list = {plist} }}",
+        "\t\t\tevery_in_list = {",
+        f"\t\t\t\tvariable = {plist}",
+        "\t\t\t\tlimit = { te_tax_relief_listed_state_kept = yes }",
+        "\t\t\t\tscope:te_tax_country = { add_to_variable_list = { name = te_tax_en_relief_states target = PREV } }",
         "\t\t\t}",
-        "\t\t\towner = { add_to_variable_list = { name = te_tax_en_relief_states target = prev } }",
         "\t\t}",
         "\t}",
-        "\tevery_scope_state = {",
-        f"\t\tlimit = {{ has_variable = te_tax_pending_relief_{slot} }}",
-        f"\t\tset_variable = {{ name = te_tax_pending_relief_{slot} value = 0 }}",
-        "\t}",
+        _clear_list(plist),
         "}",
     ]
     return lines
@@ -1159,14 +1171,12 @@ def _store(slot):
     lines += [f"\tset_variable = {{ name = {p}_pver_{group} value = var:te_tax_pver_{group} }}" for group in groups]
     lines += [f"\tset_variable = {{ name = {p}_{field} value = var:te_tax_bl_{field} }}"
               for field in PACKAGE_RELIEF_FIELDS]
+    plist = slot_relief_list(slot)
     lines += [
         "\t# Regional relief: a bill that touches it (te_tax_bl_regrel >= 0) names its whole",
-        "\t# state set in te_tax_bl_relief_states, possibly none; commencement moves the marks",
-        "\t# to te_tax_relief_state. Each marked state is stamped with this country.",
-        "\tevery_scope_state = {",
-        f"\t\tlimit = {{ has_variable = te_tax_pending_relief_{slot} }}",
-        f"\t\tset_variable = {{ name = te_tax_pending_relief_{slot} value = 0 }}",
-        "\t}",
+        f"\t# state set in te_tax_bl_relief_states, possibly none, copied into the slot's {plist};",
+        "\t# commencement replaces the enacted list with it.",
+        _clear_list(plist),
         "\tif = {",
         "\t\tlimit = { var:te_tax_bl_regrel >= 0 }",
         f"\t\tset_variable = {{ name = {p}_regrel_states_set value = 1 }}",
@@ -1174,9 +1184,7 @@ def _store(slot):
         "\t\t\tlimit = { has_variable_list = te_tax_bl_relief_states }",
         "\t\t\tevery_in_list = {",
         "\t\t\t\tvariable = te_tax_bl_relief_states",
-        "\t\t\t\tlimit = { owner = scope:te_tax_country }",
-        f"\t\t\t\tset_variable = {{ name = te_tax_pending_relief_{slot} value = 1 }}",
-        f"\t\t\t\t{RELIEF_STAMP}",
+        f"\t\t\t\tscope:te_tax_country = {{ add_to_variable_list = {{ name = {plist} target = PREV }} }}",
         "\t\t\t}",
         "\t\t}",
         "\t}",
@@ -1321,6 +1329,21 @@ def _copy_effects():
             f"te_tax_gen_copy_slot_{slot} = {{",
         ]
         lines += [_copy(name) for name in slot_payload(slot)]
+        plist = slot_relief_list(slot)
+        lines += [
+            f"\t# The package's regional-relief states ({plist}), whole.",
+            "\tsave_scope_as = te_tax_country",
+            _clear_list(plist),
+            "\tif = {",
+            f"\t\tlimit = {{ scope:te_tax_source = {{ has_variable_list = {plist} }} }}",
+            "\t\tscope:te_tax_source = {",
+            "\t\t\tevery_in_list = {",
+            f"\t\t\t\tvariable = {plist}",
+            f"\t\t\t\tscope:te_tax_country = {{ add_to_variable_list = {{ name = {plist} target = PREV }} }}",
+            "\t\t\t}",
+            "\t\t}",
+            "\t}",
+        ]
         lines.append("}")
     lines += [
         "",
@@ -1499,7 +1522,7 @@ def _copy_state_list(source, target, indent="\t"):
     iteration PREV is the country, inside `scope:te_tax_country = { }` the state."""
     t = indent
     return [
-        f"{t}clear_variable_list = {target}",
+        _clear_list(target, t),
         f"{t}if = {{",
         f"{t}\tlimit = {{ has_variable_list = {source} }}",
         f"{t}\tsave_scope_as = te_tax_country",
@@ -1722,9 +1745,11 @@ def support_values():
         lines += _dstep("bl", key)
         lines += [f"te_tax_dl_{key} = {{", f"\tvalue = te_tax_bl_dstep_{key}", f"\tmultiply = te_tax_step_{key}",
                   f"\tdivide = te_tax_level_step_{key}", "}"]
-    lines += ["", "# The bill's change per relief, in bands from existing law (0 if untouched)."]
-    for key in RELIEF_KEYS:
-        lines += _dstep("bl", key)
+    lines += ["", "# The bill's change in agricultural relief, in bands from existing law (0 if untouched); the",
+              "# support model scales it by the wage tax it relieves (te_tax_bl_agrel_scaled,",
+              "# te_tax_support_values.txt). Regional relief is scored by coverage instead",
+              "# (te_tax_bl_regrel_coverage)."]
+    lines += _dstep("bl", "agrel")
     lines += [
         "",
         f"# The bill's goods, in tax levels on the consumption channel: {fmt(GOODS_LEVEL_STEPS)} per good it puts on",
@@ -1750,8 +1775,10 @@ def support_values():
         "",
         f"# Support reasons per interest group, each clamped to -{REASON_CAP}..{REASON_CAP}. Material:",
         f"# {MATERIAL_WEIGHT} x the exposure-weighted change in tax levels, the bill's goods counted on the",
-        "# consumption channel (te_tax_dl_goods); then relief in points per band the bill moves it:",
-        f"# agricultural {', '.join(f'{ig} +{n}' for ig, n in AGREL_POINTS.items())}; regional +{REGREL_POINTS_ALL} for every group,",
+        "# consumption channel (te_tax_dl_goods); then relief in points: agricultural, per band the",
+        "# bill moves it scaled by the wage tax relieved (te_tax_bl_agrel_scaled),",
+        f"# {', '.join(f'{ig} +{n}' for ig, n in AGREL_POINTS.items())}; regional, per band x share of the population",
+        f"# named over te_tax_regrel_ref_share (te_tax_bl_regrel_coverage), +{REGREL_POINTS_ALL} for every group,",
         f"# {', '.join(f'{ig} {n}' for ig, n in REGREL_POINTS_CONCERN.items())} on top. Ideology: {IDEOLOGY_WEIGHT} x the",
         "# group's fiscal ideology (its stances on the vanilla taxation laws x their progressiveness",
         f"# / 100) x the change in progressivity. Government: +{GOVERNMENT_BONUS} in government.",
@@ -1762,10 +1789,10 @@ def support_values():
         cons = exposure(ig)["cons"]
         if cons:
             terms.append(f"\tadd = {{ value = te_tax_dl_goods multiply = {fmt(cons)} }}")
-        points = [f"\tadd = {{ value = te_tax_bl_dstep_agrel multiply = {AGREL_POINTS[ig]} }}"] if ig in AGREL_POINTS else []
-        points.append(f"\tadd = {{ value = te_tax_bl_dstep_regrel multiply = {REGREL_POINTS_ALL} }}")
+        points = [f"\tadd = {{ value = te_tax_bl_agrel_scaled multiply = {AGREL_POINTS[ig]} }}"] if ig in AGREL_POINTS else []
+        points.append(f"\tadd = {{ value = te_tax_bl_regrel_coverage multiply = {REGREL_POINTS_ALL} }}")
         if ig in REGREL_POINTS_CONCERN:
-            points.append(f"\tadd = {{ value = te_tax_bl_dstep_regrel multiply = {REGREL_POINTS_CONCERN[ig]} }}")
+            points.append(f"\tadd = {{ value = te_tax_bl_regrel_coverage multiply = {REGREL_POINTS_CONCERN[ig]} }}")
         lines += _clamped(f"te_tax_mat_{ig}", terms, MATERIAL_WEIGHT, points)
         lines += _ideology_value(ig)
         lines += [f"te_tax_ideo_{ig} = {{", f"\tvalue = te_tax_ideo_p_{ig}", "\tmultiply = te_tax_dl_prog",
@@ -1946,6 +1973,7 @@ def _supersede(slot):
         "\t\t\t\t}",
         f"\t\t\t\tset_variable = {{ name = {p}_regrel value = -1 }}",
         f"\t\t\t\tset_variable = {{ name = {p}_regrel_states_set value = 0 }}",
+        _clear_list(slot_relief_list(slot), "\t\t\t\t"),
         "\t\t\t}",
         f"\t\t\tte_tax_history_push = {{ KIND = {KIND_SUPERSEDED} SLOT = {slot} }}",
         f"\t\t\t{superseded}",
@@ -1953,6 +1981,7 @@ def _supersede(slot):
         f"\t\t\t\tlimit = {{ te_tax_gen_package_empty_{slot} = yes }}",
         f"\t\t\t\tset_variable = {{ name = {p}_on value = 0 }}",
         f"\t\t\t\tset_variable = {{ name = {p}_state value = {STATE_EMPTY} }}",
+        _clear_list(slot_relief_list(slot), "\t\t\t\t"),
         f"\t\t\t\t{withdrawn}",
         "\t\t\t}",
         "\t\t}",
@@ -2039,18 +2068,18 @@ def bill_effects():
         "te_tax_gen_draft_init = {",
     ]
     lines += [f"\tset_variable = {{ name = {name} value = {sentinel} }}" for name, sentinel in draft]
-    lines += [f"\tclear_variable_list = {name}" for name in DRAFT_LISTS]
+    lines += [_clear_list(name) for name in DRAFT_LISTS]
     lines += ["}", "", "# A new draft copied from the bill under debate, for its revision, with the bill's",
               "# regional-relief states.",
               "te_tax_gen_draft_from_bill = {", "\tset_variable = { name = te_tax_dr_due value = var:te_tax_bl_due }"]
     lines += [f"\tset_variable = {{ name = {name} value = var:te_tax_bl_{name[len('te_tax_dr_'):]} }}"
               for name, _ in draft]
     lines += _copy_state_list("te_tax_bl_relief_states", "te_tax_dr_relief_states")
-    lines += ["\tclear_variable_list = te_tax_dr_relief_candidates"]
+    lines.append(_clear_list("te_tax_dr_relief_candidates"))
     lines += ["}", "", "# Closes the draft's payload and its lists (te_tax_dr_on is set to 0 by the caller).",
               "te_tax_gen_draft_clear = {", "\tremove_variable = te_tax_dr_due"]
     lines += [f"\tremove_variable = {name}" for name, _ in draft]
-    lines += [f"\tclear_variable_list = {name}" for name in DRAFT_LISTS]
+    lines += [_clear_list(name) for name in DRAFT_LISTS]
     lines += [
         "}",
         "",
@@ -2069,7 +2098,7 @@ def bill_effects():
     lines += [f"\tremove_variable = te_tax_bl_{field}" for field in ("due", "rev", "day", "minor")]
     lines += [f"\tremove_variable = {name}" for name, _ in bill]
     lines += [f"\tremove_variable = {name}" for name, _ in _bill_versions()]
-    lines += ["\tclear_variable_list = te_tax_bl_relief_states", "}"]
+    lines += [_clear_list("te_tax_bl_relief_states"), "}"]
     for slot in SLOTS:
         lines += _supersede(slot)
     lines += [

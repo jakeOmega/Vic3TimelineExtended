@@ -50,6 +50,7 @@ GEN_TRIGGERS = "common/scripted_triggers/te_tax_generated_triggers.txt"
 GEN_SUPPORT = "common/script_values/te_tax_generated_support_values.txt"
 GEN_VALUES = "common/script_values/te_tax_generated_values.txt"
 DISPLAY = "common/script_values/te_tax_display_values.txt"
+SUPPORT = "common/script_values/te_tax_support_values.txt"
 SGUIS = "common/scripted_guis/te_tax_sguis.txt"
 GEN_SGUIS = "common/scripted_guis/te_tax_generated_sguis.txt"
 WORKBENCH = "gui/journal_entry_widgets/te_tax_workbench_widget.gui"
@@ -138,19 +139,20 @@ class MaterialReasonTest(unittest.TestCase):
                 taxes, points = flat.split("multiply = -10", 1)
                 self.assertIn("te_tax_dl_goods", taxes)
                 agrel = [int(v) for v in re.findall(
-                    r"add = \{ value = te_tax_bl_dstep_agrel multiply = (-?\d+) \}", points)]
+                    r"add = \{ value = te_tax_bl_agrel_scaled multiply = (-?\d+) \}", points)]
                 self.assertEqual(sum(agrel), AGREL.get(ig, 0))
                 regrel = [int(v) for v in re.findall(
-                    r"add = \{ value = te_tax_bl_dstep_regrel multiply = (-?\d+) \}", points)]
+                    r"add = \{ value = te_tax_bl_regrel_coverage multiply = (-?\d+) \}", points)]
                 self.assertEqual(sum(regrel), REGREL_ALL + REGREL_CONCERN.get(ig, 0))
                 self.assertRegex(flat, r"min = -40 max = 40$")
 
     def test_relief_changes_are_measured_in_bands_from_existing_law(self):
+        body = squash(block(self.values, "te_tax_bl_dstep_agrel"))
+        self.assertIn("has_variable = te_tax_bl_agrel var:te_tax_bl_agrel >= 0", body)
+        self.assertIn("value = var:te_tax_bl_agrel subtract = te_tax_base_bl_agrel", body)
+        self.assertNotIn("te_tax_bl_dstep_regrel", self.values)    # regional relief scores by coverage
         for key in RELIEF_KEYS:
-            body = squash(block(self.values, f"te_tax_bl_dstep_{key}"))
             with self.subTest(key=key):
-                self.assertIn(f"has_variable = te_tax_bl_{key} var:te_tax_bl_{key} >= 0", body)
-                self.assertIn(f"value = var:te_tax_bl_{key} subtract = te_tax_base_bl_{key}", body)
                 for record in ("dr", "bl"):
                     base = squash(block(self.values, f"te_tax_base_{record}_{key}"))
                     self.assertIn(f"value = var:te_tax_en_{key}", base)
@@ -185,18 +187,23 @@ class DraftReliefTest(unittest.TestCase):
         self.assertIn("te_tax_dr_$KEY$_touch = yes", touch)
         settle = squash(block(self.bill, "te_tax_dr_relief_settle"))
         self.assertIn("set_variable = { name = te_tax_dr_relief_pver value = -1 }", settle)
-        self.assertIn("limit = { var:te_tax_dr_regrel < 1 } clear_variable_list = te_tax_dr_relief_states", settle)
+        self.assertIn("limit = { var:te_tax_dr_regrel < 1 has_variable_list = te_tax_dr_relief_states } "
+                      "clear_variable_list = te_tax_dr_relief_states", settle)
 
     def test_the_first_regional_change_copies_existing_laws_states(self):
         touch = squash(block(self.bill, "te_tax_dr_regrel_touch"))
         self.assertIn("set_variable = { name = te_tax_dr_regrel value = te_tax_base_dr_regrel }", touch)
         self.assertIn("clear_variable_list = te_tax_dr_relief_states", touch)
         # A package that commences before the draft and restates the states wins,
-        # in commencement order; else the enacted list.
+        # in commencement order (its own slot list); else the enacted list.
         for slot in SLOTS:
-            self.assertIn(f"te_tax_relief_base_from_{slot} = {{ DUE = te_tax_dr_due }}", touch)
-            self.assertIn(f"var:te_tax_pending_relief_{slot} = 1", touch)
-        self.assertIn("variable = te_tax_en_relief_states", touch)
+            self.assertIn(f"limit = {{ te_tax_relief_base_from_{slot} = {{ DUE = te_tax_dr_due }} }} "
+                          f"te_tax_dr_copy_relief_states = {{ LIST = te_tax_p{slot}_relief_states }}", touch)
+        self.assertIn("else = { te_tax_dr_copy_relief_states = { LIST = te_tax_en_relief_states } }", touch)
+        copy = squash(block(self.bill, "te_tax_dr_copy_relief_states"))
+        self.assertIn("limit = { has_variable_list = $LIST$ }", copy)
+        self.assertIn("limit = { owner ?= scope:te_tax_country } scope:te_tax_country = { add_to_variable_list = { "
+                      "name = te_tax_dr_relief_states target = PREV } }", copy)
         for slot in SLOTS:
             base = squash(block(self.triggers, f"te_tax_relief_base_from_{slot}"))
             with self.subTest(slot=slot):
@@ -232,13 +239,14 @@ class DraftReliefTest(unittest.TestCase):
         trigger = squash(block(self.triggers, "te_tax_can_draft_relief_state"))
         self.assertIn("exists = scope:te_tax_st", trigger)
         self.assertIn("var:te_tax_dr_regrel >= 0", trigger)
-        self.assertIn(f"custom_tooltip = {{ text = te_tax_tt_relief_states_max NOT = {{ any_in_list = {{ "
-                      f"variable = te_tax_dr_relief_states count >= {MAX_STATES} exists = this }} }} }}", trigger)
+        self.assertIn(f"custom_tooltip = {{ text = te_tax_tt_relief_states_max NAND = {{ has_variable_list = "
+                      f"te_tax_dr_relief_states any_in_list = {{ variable = te_tax_dr_relief_states count >= {MAX_STATES} "
+                      f"exists = this }} }} }}", trigger)
         self.assertIn("scope:te_tax_st = { is_incorporated = yes owner = prev }", trigger)
         self.assertNotIn("variable_list_size", trigger)
         # Dropping a named state is always allowed; naming one is checked.
-        self.assertIn("NOT = { is_target_in_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st } }",
-                      trigger)
+        self.assertIn("NAND = { has_variable_list = te_tax_dr_relief_states is_target_in_variable_list = { "
+                      "name = te_tax_dr_relief_states target = scope:te_tax_st } }", trigger)
         toggle = squash(block(self.bill, "te_tax_cmd_draft_relief_state"))
         self.assertTrue(toggle.startswith("if = { limit = { te_tax_can_draft_relief_state = yes }"))
         self.assertIn("remove_list_variable = { name = te_tax_dr_relief_states target = scope:te_tax_st }", toggle)
@@ -247,8 +255,19 @@ class DraftReliefTest(unittest.TestCase):
     def test_a_relief_that_relieves_names_a_state(self):
         ready = squash(block(self.triggers, "te_tax_draft_ready"))
         self.assertIn("trigger_if = { limit = { var:te_tax_dr_regrel >= 1 } custom_tooltip = { "
-                      "text = te_tax_tt_relief_states_named any_in_list = { variable = te_tax_dr_relief_states "
-                      "exists = this } } }", ready)
+                      "text = te_tax_tt_relief_states_named has_variable_list = te_tax_dr_relief_states "
+                      "any_in_list = { variable = te_tax_dr_relief_states exists = this } } }", ready)
+
+    def test_the_bill_names_at_most_three_states_all_its_own(self):
+        """Fix round 1: the readiness guard repeats the toggle's limit, and a named
+        state lost since it was named forces a revision (NAND, never a multi-child NOT)."""
+        ready = squash(block(self.triggers, "te_tax_draft_ready"))
+        self.assertIn("trigger_if = { limit = { has_variable_list = te_tax_dr_relief_states } "
+                      "custom_tooltip = { text = te_tax_tt_relief_states_at_most NOT = { any_in_list = { "
+                      f"variable = te_tax_dr_relief_states count >= {MAX_STATES + 1} exists = this }} }} }} "
+                      "custom_tooltip = { text = te_tax_tt_relief_states_own NOT = { any_in_list = { "
+                      "variable = te_tax_dr_relief_states NAND = { is_incorporated = yes owner = PREV } } } } }",
+                      ready)
 
     def test_relief_can_be_rebased(self):
         current = squash(block(read(GEN_TRIGGERS), "te_tax_gen_draft_baseline_current"))
@@ -308,14 +327,19 @@ class CanonicalListTest(unittest.TestCase):
         cls.triggers = read(TRIGGERS)
 
     def test_commencement_replaces_the_list_and_leaves_the_marks_to_the_sync(self):
+        """Fix round 1: from the slot's own list, kept states only, the list consumed."""
         for slot in SLOTS:
             apply = squash(block(self.generated, f"te_tax_gen_apply_{slot}"))
+            plist = f"te_tax_p{slot}_relief_states"
             with self.subTest(slot=slot):
-                self.assertIn(f"limit = {{ var:te_tax_p{slot}_regrel_states_set = 1 }} "
-                              "clear_variable_list = te_tax_en_relief_states", apply)
-                self.assertIn(f"var:te_tax_pending_relief_{slot} = 1", apply)
-                self.assertIn("owner = { add_to_variable_list = { name = te_tax_en_relief_states target = prev } }",
-                              apply)
+                self.assertIn(f"limit = {{ var:te_tax_p{slot}_regrel_states_set = 1 }} save_scope_as = te_tax_country "
+                              "if = { limit = { has_variable_list = te_tax_en_relief_states } "
+                              "clear_variable_list = te_tax_en_relief_states }", apply)
+                self.assertIn(f"every_in_list = {{ variable = {plist} limit = {{ te_tax_relief_listed_state_kept = yes }} "
+                              "scope:te_tax_country = { add_to_variable_list = { name = te_tax_en_relief_states "
+                              "target = PREV } } }", apply)
+                self.assertTrue(apply.endswith(f"if = {{ limit = {{ has_variable_list = {plist} }} "
+                                               f"clear_variable_list = {plist} }}"))
                 self.assertNotIn("name = te_tax_relief_state value = 1", apply)
 
     def test_the_sync_rebuilds_the_marks_before_the_modifiers(self):
@@ -329,14 +353,15 @@ class CanonicalListTest(unittest.TestCase):
         self.assertIn("every_in_list = { variable = te_tax_en_relief_states limit = { NOT = { "
                       "te_tax_relief_listed_state_kept = yes } } add_to_temporary_list = te_tax_relief_dropped }",
                       rebuild)
-        self.assertIn("every_in_list = { list = te_tax_relief_dropped scope:te_tax_country = { "
+        # The temporary list lives for the whole top-level effect: test each again.
+        self.assertIn("every_in_list = { list = te_tax_relief_dropped limit = { NOT = { "
+                      "te_tax_relief_listed_state_kept = yes } } scope:te_tax_country = { "
                       "remove_list_variable = { name = te_tax_en_relief_states target = PREV } } }", rebuild)
         self.assertLess(rebuild.index("te_tax_relief_dropped"), rebuild.index("every_scope_state"))
         self.assertIn("set_variable = { name = te_tax_relief_state value = 0 }", rebuild)
         self.assertIn("set_variable = { name = te_tax_relief_state value = 1 } "
                       "set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }", rebuild)
-        for slot in SLOTS:
-            self.assertIn(f"has_variable = te_tax_pending_relief_{slot} var:te_tax_pending_relief_{slot} = 1", rebuild)
+        self.assertNotIn("pending_relief", rebuild)
         self.assertNotIn("te_tax_restamp_relief", self.civil)
 
     def test_the_list_keeps_a_state_by_the_hooks_rule(self):
@@ -376,6 +401,130 @@ class CanonicalListTest(unittest.TestCase):
         self.assertNotIn("Known limit, for Task 11", doc)
         country, _ = schema_tokens()
         self.assertNotIn("te_tax_en_relief_states", country, "a list is not a token")
+
+
+class SlotListTest(unittest.TestCase):
+    """Fix round 1 (controller ruling): a package's regional-relief states are its
+    slot's country list te_tax_p<slot>_relief_states, never marks on the states, so a
+    civil war's winner (which inherits no list) commences only its own packages'."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.generated = read(GEN_EFFECTS)
+        cls.bill_generated = read(GEN_BILL)
+
+    def test_no_package_marks_remain(self):
+        for path in sorted((ROOT / "common").rglob("*.txt")) + sorted((ROOT / "events").rglob("*.txt")) + \
+                sorted((ROOT / "gui").rglob("*.gui")):
+            with self.subTest(path=path.name):
+                self.assertNotIn("pending_relief", path.read_text(encoding="utf-8-sig"))
+
+    def test_the_store_copies_the_bills_states_into_the_slot_list(self):
+        for slot in SLOTS:
+            store = squash(block(self.generated, f"te_tax_gen_store_{slot}"))
+            plist = f"te_tax_p{slot}_relief_states"
+            with self.subTest(slot=slot):
+                self.assertLess(store.index(f"clear_variable_list = {plist}"),
+                                store.index("variable = te_tax_bl_relief_states"))
+                self.assertIn(f"every_in_list = {{ variable = te_tax_bl_relief_states scope:te_tax_country = "
+                              f"{{ add_to_variable_list = {{ name = {plist} target = PREV }} }} }}", store)
+
+    def test_every_way_a_slot_frees_empties_its_list(self):
+        for slot in SLOTS:
+            plist = f"te_tax_p{slot}_relief_states"
+            clear = f"if = {{ limit = {{ has_variable_list = {plist} }} clear_variable_list = {plist} }}"
+            supersede = squash(block(self.bill_generated, f"te_tax_gen_supersede_{slot}"))
+            with self.subTest(slot=slot):
+                # Dropping the package's regional relief, and emptying the package.
+                self.assertEqual(supersede.count(clear), 2)
+                self.assertIn(clear, squash(block(self.generated, f"te_tax_gen_apply_{slot}")))
+        release = squash(block(read(BILL), "te_tax_cmd_package_release"))
+        self.assertIn("if = { limit = { has_variable_list = te_tax_p$SLOT$_relief_states } "
+                      "clear_variable_list = te_tax_p$SLOT$_relief_states }", release)
+
+    def test_existing_laws_states_come_from_the_slot_list(self):
+        view = squash(block(read(DISPLAY), "te_tax_view_dr_relief_base_state"))
+        for slot in SLOTS:
+            self.assertIn(f"owner = {{ te_tax_relief_base_from_{slot} = {{ DUE = te_tax_dr_due }} }}", view)
+            self.assertIn(f"is_target_in_variable_list = {{ name = te_tax_p{slot}_relief_states target = PREV }}", view)
+        self.assertIn("is_target_in_variable_list = { name = te_tax_en_relief_states target = PREV }", view)
+
+    def test_list_operations_test_the_list_first(self):
+        """Fix round 1 minor 6: clear_variable_list and list reads behind has_variable_list."""
+        for path in (BILL, CIVIL_WAR, GEN_BILL, GEN_EFFECTS):
+            text = squash(read(path))
+            for match in re.finditer(r"clear_variable_list = ([\w$]+)", text):
+                with self.subTest(path=path, at=match.start()):
+                    self.assertTrue(text[:match.start()].endswith(f"has_variable_list = {match.group(1)} }} "),
+                                    text[max(0, match.start() - 80):match.end()])
+
+
+class CoverageTest(unittest.TestCase):
+    """Fix round 1 (controller ruling; spec 7.2, coverage matters): regional relief
+    scores per band and share of the population named, agricultural relief per band
+    and the wage tax it relieves. Read only by the support refresh."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.support = read(SUPPORT)
+
+    def test_reference_constants(self):
+        self.assertRegex(self.support, r"(?m)^te_tax_regrel_ref_share = 0\.25$")
+        self.assertRegex(self.support, r"(?m)^te_tax_agrel_ref_wage_idx = 4$")
+
+    def test_the_bills_population_share(self):
+        share = squash(block(self.support, "te_tax_bl_relief_pop_share"))
+        self.assertIn("limit = { has_variable_list = te_tax_bl_relief_states total_population > 0 }", share)
+        self.assertIn("every_in_list = { variable = te_tax_bl_relief_states limit = { exists = owner owner = prev } "
+                      "add = state_population }", share)
+        self.assertIn("divide = total_population", share)
+
+    def test_existing_laws_population_share_follows_the_slot_precedence(self):
+        base = squash(block(self.support, "te_tax_base_bl_relief_pop_share"))
+        self.assertIn("total_population > 0", base)
+        order = [base.index(f"te_tax_relief_base_from_{slot} = {{ DUE = te_tax_bl_due }}") for slot in SLOTS]
+        order.append(base.index("variable = te_tax_en_relief_states"))
+        self.assertEqual(order, sorted(order))
+        for slot in SLOTS:
+            self.assertIn(f"every_in_list = {{ variable = te_tax_p{slot}_relief_states limit = {{ exists = owner "
+                          "owner = prev } add = state_population }", base)
+
+    def test_regional_coverage_formula(self):
+        body = squash(block(self.support, "te_tax_bl_regrel_coverage"))
+        self.assertEqual(body, "value = 0 if = { limit = { has_variable = te_tax_bl_regrel var:te_tax_bl_regrel >= 0 } "
+                               "add = { value = var:te_tax_bl_regrel multiply = te_tax_bl_relief_pop_share } "
+                               "subtract = { value = te_tax_base_bl_regrel multiply = te_tax_base_bl_relief_pop_share } "
+                               "divide = te_tax_regrel_ref_share }")
+        # One band over a quarter of the population, where there was none: the full points.
+        self.assertEqual((Decimal(1) * Decimal("0.25") - 0) / Decimal("0.25"), 1)
+
+    def test_agricultural_relief_scales_with_the_wage_tax(self):
+        factor = squash(block(self.support, "te_tax_bl_agrel_wage_factor"))
+        self.assertEqual(factor, "value = te_tax_base_bl_wage if = { limit = { has_variable = te_tax_bl_wage "
+                                 "var:te_tax_bl_wage >= 0 } value = var:te_tax_bl_wage } "
+                                 "divide = te_tax_agrel_ref_wage_idx max = 1 min = 0")
+        scaled = squash(block(self.support, "te_tax_bl_agrel_scaled"))
+        self.assertEqual(scaled, "value = te_tax_bl_dstep_agrel multiply = te_tax_bl_agrel_wage_factor")
+        for wage, expected in ((0, 0), (2, Decimal("0.5")), (4, 1), (12, 1)):
+            self.assertEqual(max(0, min(1, Decimal(wage) / 4)), expected)
+
+    def test_no_panel_reaches_the_list_iterations(self):
+        """The shares iterate a list: only the material reason (the refresh) reads them."""
+        hidden = ("te_tax_bl_relief_pop_share", "te_tax_base_bl_relief_pop_share", "te_tax_bl_regrel_coverage",
+                  "te_tax_bl_agrel_scaled", "te_tax_mat_")
+        surfaces = [path.read_text(encoding="utf-8-sig") for path in (ROOT / "gui").rglob("*.gui")]
+        surfaces += [read(TAX_LOC, strip_comments=False), read(DISPLAY), read(GEN_VALUES), read(SGUIS),
+                     read(GEN_SGUIS)]
+        for name in hidden:
+            for text in surfaces:
+                with self.subTest(name=name):
+                    self.assertNotIn(name, text)
+        readers = {name for name in top_level_names(read(GEN_SUPPORT))
+                   if "te_tax_bl_regrel_coverage" in block(read(GEN_SUPPORT), name)}
+        self.assertEqual(readers, {f"te_tax_mat_{ig}" for ig in IGS})
+        refresh = block(read(GEN_BILL), "te_tax_gen_refresh_support")
+        for ig in IGS:
+            self.assertIn(f"set_variable = {{ name = te_tax_sr_{ig}_mat value = te_tax_mat_{ig} }}", refresh)
 
 
 class IndexComparisonTest(unittest.TestCase):
@@ -472,6 +621,13 @@ class WorkbenchTest(unittest.TestCase):
         self.assertIn("datamodel = \"[GetPlayer.MakeScope.GetList('te_tax_dr_relief_candidates')]\"", self.workbench)
         self.assertIn("datacontext = \"[Scope.GetState]\"", self.workbench)
         self.assertIn("AddScope( 'te_tax_st', State.MakeScope )", self.workbench)
+        # Fix round 1 minor 3: the draft's own rows are the draft's by construction.
+        draft_rows = self.workbench[self.workbench.index("GetList('te_tax_dr_relief_states')"):]
+        draft_rows = squash(draft_rows[:draft_rows.index("te_tax_cmd_draft_relief_choose_sgui")])
+        self.assertIn("blockoverride \"state_status\" { text = \"te_tax_wb_relief_state_named\" }", draft_rows)
+        self.assertIn("blockoverride \"state_button_text\" { text = \"te_tax_wb_relief_state_drop\" }", draft_rows)
+        # Fix round 1 minor 7: no standing explanation in the live section.
+        self.assertNotIn("te_tax_wb_relief_note", self.workbench)
         handler = squash(block(read(SGUIS), "te_tax_relief_state_sgui"))
         self.assertIn("saved_scopes = { te_tax_st }", handler)
         self.assertIn("is_valid = { te_tax_can_draft_relief_state = yes }", handler)

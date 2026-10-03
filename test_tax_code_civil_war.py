@@ -52,7 +52,9 @@ LEDGER = "docs/testing/tax-code-capability-ledger.md"
 
 SLOTS = ("a", "b")
 HEADER_SUFFIXES = tuple(suffix for suffix, _ in gen.PACKAGE_HEADER)
-STATE_MARKS = ("te_tax_relief_state", "te_tax_pending_relief_a", "te_tax_pending_relief_b")
+# The state-level relief mark. A package's states are its slot's country list
+# (te_tax_p<slot>_relief_states, Task 11 fix round 1), not marks on the states.
+STATE_MARKS = ("te_tax_relief_state",)
 # What the outbreak copy sets on the rebels instead of copying (spec §10: no
 # unfinished bill or draft; the rebels' carrier has never been synced by their
 # own writer; the copy is the migration).
@@ -195,10 +197,17 @@ class OutbreakTest(unittest.TestCase):
         for slot in SLOTS:
             with self.subTest(slot=slot):
                 header = {f"te_tax_p{slot}{suffix}" for suffix in HEADER_SUFFIXES}
+                plist = f"te_tax_p{slot}_relief_states"
                 store = set(re.findall(r"name = (te_tax_p" + slot + r"_\w+)",
                                        block(generated, f"te_tax_gen_store_{slot}")))
-                copy = set(COPY.findall(block(generated, f"te_tax_gen_copy_slot_{slot}")))
-                self.assertEqual(copy, store - header)
+                copy_slot = block(generated, f"te_tax_gen_copy_slot_{slot}")
+                copy = set(COPY.findall(copy_slot))
+                # The slot's state list is a list, copied whole beside the tokens.
+                self.assertEqual(copy, store - header - {plist})
+                self.assertIn(plist, store)
+                self.assertIn(f"scope:te_tax_source = {{ every_in_list = {{ variable = {plist} scope:te_tax_country = "
+                              f"{{ add_to_variable_list = {{ name = {plist} target = PREV }} }} }} }}",
+                              " ".join(copy_slot.split()))
 
     def test_the_copy_activates_nothing_and_syncs_nothing_inline(self):
         reach = closure({"te_tax_on_uprising"}, self.defined)
@@ -350,10 +359,13 @@ class ReleaseTest(unittest.TestCase):
         self.assertLess(copy_branch.index("set_variable = { name = te_tax_migrated value = 1 }"),
                         copy_branch.index("trigger_event = { id = te_tax.6 }"))
 
-    def test_the_parents_pending_relief_marks_are_dropped(self):
+    def test_the_released_countrys_package_lists_are_emptied(self):
+        # The packages stayed with the parent (Task 11 fix round 1: a slot's states
+        # are its own country list).
         for slot in SLOTS:
             with self.subTest(slot=slot):
-                self.assertIn(f"set_variable = {{ name = te_tax_pending_relief_{slot} value = 0 }}", self.release)
+                self.assertIn(f"if = {{ limit = {{ has_variable_list = te_tax_p{slot}_relief_states }} "
+                              f"clear_variable_list = te_tax_p{slot}_relief_states }}", self.release)
 
     def test_no_history_and_no_version_change(self):
         self.assertNotIn("te_tax_history_push", self.release)
@@ -407,8 +419,7 @@ class ReliefEligibilityTest(unittest.TestCase):
                 self.assertNotIn("name = te_tax_relief_state value = 1", apply)
                 self.assertIn("te_tax_en_relief_states", apply)
                 store = block(generated, f"te_tax_gen_store_{slot}")
-                mark = store.index(f"set_variable = {{ name = te_tax_pending_relief_{slot} value = 1 }}")
-                self.assertEqual(store[mark:].split("}", 1)[1].strip().split("\n")[0].strip(), stamp)
+                self.assertNotIn("te_tax_relief_holder", store)    # a package's states carry no mark
 
     def test_the_copies_and_the_repair_rebuild(self):
         restamp = block(self.text, "te_tax_rebuild_relief_marks")
@@ -417,6 +428,7 @@ class ReliefEligibilityTest(unittest.TestCase):
         for mark in STATE_MARKS:
             with self.subTest(mark=mark):
                 self.assertIn(f"has_variable = {mark} var:{mark} = 1", " ".join(restamp.split()))
+        self.assertNotIn("pending_relief", restamp)
 
     def test_the_stamp_is_a_schema_state_variable(self):
         _, state = schema_tokens()

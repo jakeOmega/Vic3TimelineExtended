@@ -233,8 +233,8 @@ te_tax_repair_after_civil_war = {
 # commitments stay with it. Its named states: the parent's list is copied and
 # the rebuild keeps those it now owns (te_tax_relief_listed_state_kept), marks
 # and stamps them as its own; the parent's own rebuild drops them from the
-# parent's list. The parent's package marks are dropped, since the packages
-# stayed behind. Nothing changed in the code, so no history is
+# parent's list. Its package slots' state lists are emptied, since the
+# packages stayed behind (a revived tag may hold old ones). Nothing changed in the code, so no history is
 # recorded and te_tax_code_version stays at its sentinel. Any other parent's
 # released country migrates from its own law (te_tax.3).
 te_tax_init_released_country = {
@@ -256,16 +256,8 @@ te_tax_init_released_country = {
 		set_variable = { name = te_tax_pa_state value = 0 }
 		set_variable = { name = te_tax_pb_on value = 0 }
 		set_variable = { name = te_tax_pb_state value = 0 }
-		every_scope_state = {
-			limit = {
-				OR = {
-					has_variable = te_tax_pending_relief_a
-					has_variable = te_tax_pending_relief_b
-				}
-			}
-			if = { limit = { has_variable = te_tax_pending_relief_a } set_variable = { name = te_tax_pending_relief_a value = 0 } }
-			if = { limit = { has_variable = te_tax_pending_relief_b } set_variable = { name = te_tax_pending_relief_b value = 0 } }
-		}
+		if = { limit = { has_variable_list = te_tax_pa_relief_states } clear_variable_list = te_tax_pa_relief_states }
+		if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
 		te_tax_copy_relief_states = yes
 		te_tax_rebuild_relief_marks = yes
 		set_variable = { name = te_tax_last_month value = -1 }
@@ -297,9 +289,10 @@ te_tax_init_released_country = {
 #      first: the persistent list is never changed while it is iterated;
 #   2. every owned state with a mark the list does not name loses it;
 #   3. every owned state the list names is marked and stamped with this
-#      country (te_tax_relief_holder);
-#   4. every owned state a package marks (te_tax_pending_relief_<slot>) is
-#      stamped too, so a later change of owner can tell whose code named it.
+#      country (te_tax_relief_holder), so a later change of owner can tell
+#      whose code named it.
+# A package's states are its slot's own list (te_tax_p<slot>_relief_states),
+# filtered by the same keep rule when it commences; they carry no mark.
 # Writes state variables and the list only; the modifiers are the sync's.
 te_tax_rebuild_relief_marks = {
 	save_scope_as = te_tax_country
@@ -310,8 +303,11 @@ te_tax_rebuild_relief_marks = {
 			limit = { NOT = { te_tax_relief_listed_state_kept = yes } }
 			add_to_temporary_list = te_tax_relief_dropped
 		}
+		# The temporary list lives for the whole top-level effect, so an earlier
+		# rebuild in it may have left states there: test each again.
 		every_in_list = {
 			list = te_tax_relief_dropped
+			limit = { NOT = { te_tax_relief_listed_state_kept = yes } }
 			scope:te_tax_country = { remove_list_variable = { name = te_tax_en_relief_states target = PREV } }
 		}
 	}
@@ -331,15 +327,6 @@ te_tax_rebuild_relief_marks = {
 			set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
 		}
 	}
-	every_scope_state = {
-		limit = {
-			OR = {
-				AND = { has_variable = te_tax_pending_relief_a var:te_tax_pending_relief_a = 1 }
-				AND = { has_variable = te_tax_pending_relief_b var:te_tax_pending_relief_b = 1 }
-			}
-		}
-		set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
-	}
 }
 
 # Country scope; scope:te_tax_source = the country whose code THIS takes (the
@@ -350,7 +337,7 @@ te_tax_rebuild_relief_marks = {
 # state).
 te_tax_copy_relief_states = {
 	save_scope_as = te_tax_country
-	clear_variable_list = te_tax_en_relief_states
+	if = { limit = { has_variable_list = te_tax_en_relief_states } clear_variable_list = te_tax_en_relief_states }
 	if = {
 		limit = { scope:te_tax_source = { has_variable_list = te_tax_en_relief_states } }
 		scope:te_tax_source = {
@@ -365,11 +352,11 @@ te_tax_copy_relief_states = {
 # State scope (on_state_owner_change, through te_tax_on_state_owner_change; the
 # hook gives the state and its new owner, never the old one, so the country
 # that named the state was stamped on it beforehand). A state named for
-# regional relief, or marked for a package's, keeps its marks only while the
-# code that named it went with it (te_tax_relief_stays_with_code,
-# te_tax_triggers.txt): to a new tag that is about to receive a copy, to the
-# stamped holder, or across the two sides of a civil war. Otherwise the new
-# owner's code never named it: every mark is reset to 0 and the state leaves
+# regional relief keeps its mark only while the code that named it went with
+# it (te_tax_relief_stays_with_code, te_tax_triggers.txt): to a new tag that is
+# about to receive a copy, to the stamped holder, or across the two sides of a
+# civil war. Otherwise the new owner's code never named it: the mark is reset
+# to 0 and the state leaves
 # the holder's list of named states (te_tax_en_relief_states; the holder's own
 # rebuild would drop it at its next sync too). The relief modifier itself is
 # left to the new owner's next sync, which removes it from a state without the
@@ -378,11 +365,8 @@ te_tax_relief_follow_owner = {
 	if = {
 		limit = {
 			exists = owner
-			OR = {
-				AND = { has_variable = te_tax_relief_state var:te_tax_relief_state = 1 }
-				AND = { has_variable = te_tax_pending_relief_a var:te_tax_pending_relief_a = 1 }
-				AND = { has_variable = te_tax_pending_relief_b var:te_tax_pending_relief_b = 1 }
-			}
+			has_variable = te_tax_relief_state
+			var:te_tax_relief_state = 1
 		}
 		save_scope_as = te_tax_relief_moved
 		owner = { save_scope_as = te_tax_owner_new }
@@ -390,12 +374,13 @@ te_tax_relief_follow_owner = {
 		if = {
 			limit = { NOT = { te_tax_relief_stays_with_code = yes } }
 			if = {
-				limit = { exists = scope:te_tax_owner_holder }
+				limit = {
+					exists = scope:te_tax_owner_holder
+					scope:te_tax_owner_holder = { has_variable_list = te_tax_en_relief_states }
+				}
 				scope:te_tax_owner_holder = { remove_list_variable = { name = te_tax_en_relief_states target = scope:te_tax_relief_moved } }
 			}
-			if = { limit = { has_variable = te_tax_relief_state } set_variable = { name = te_tax_relief_state value = 0 } }
-			if = { limit = { has_variable = te_tax_pending_relief_a } set_variable = { name = te_tax_pending_relief_a value = 0 } }
-			if = { limit = { has_variable = te_tax_pending_relief_b } set_variable = { name = te_tax_pending_relief_b value = 0 } }
+			set_variable = { name = te_tax_relief_state value = 0 }
 			debug_log = "TE_TAX relief_cleared a state changed owner and the new owner's code did not name it for relief; date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}

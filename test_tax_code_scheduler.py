@@ -398,8 +398,11 @@ class CommencementTest(unittest.TestCase):
                 self.assertIn(f"name = te_tax_en_agrel value = var:te_tax_p{slot}_agrel", body)
                 self.assertIn(f"name = te_tax_en_regrel value = var:te_tax_p{slot}_regrel", body)
                 self.assertIn(f"var:te_tax_p{slot}_regrel_states_set = 1", body)
-                self.assertIn(f"var:te_tax_pending_relief_{slot} = 1", body)
-                self.assertIn(f"set_variable = {{ name = te_tax_pending_relief_{slot} value = 0 }}", body)
+                # The slot's own list replaces the enacted one, filtered by the keep
+                # rule, and is consumed (Task 11 fix round 1).
+                self.assertIn(f"variable = te_tax_p{slot}_relief_states", body)
+                self.assertIn("limit = { te_tax_relief_listed_state_kept = yes }", body)
+                self.assertIn(f"clear_variable_list = te_tax_p{slot}_relief_states", body)
                 self.assertNotIn("te_tax_sync_collection", body, "the processor syncs once, after every slot")
 
     def test_supersession_and_successor_happen_at_commencement(self):
@@ -609,7 +612,8 @@ class StoreTest(unittest.TestCase):
                     self.assertIn(f"set_variable = {{ name = te_tax_p{slot}_{field} value = var:te_tax_bl_{field} }}", body)
                 self.assertIn("has_variable_list = te_tax_bl_relief_states", body)
                 self.assertIn("variable = te_tax_bl_relief_states", body)
-                self.assertIn("owner = scope:te_tax_country", body)
+                self.assertIn(f"scope:te_tax_country = {{ add_to_variable_list = {{ name = te_tax_p{slot}_relief_states "
+                              "target = PREV } }", body)
                 self.assertIn(f'debug_log = "TE_TAX stored slot={slot};', body)
                 last = body.rstrip().splitlines()[-1].strip()
                 self.assertEqual(last, f"set_variable = {{ name = te_tax_p{slot}_on value = 1 }}")
@@ -685,7 +689,7 @@ class SchemaTest(unittest.TestCase):
             with self.subTest(token=token):
                 self.assertEqual(country.get(token, "missing"), sentinel)
         for slot in SLOTS:
-            self.assertEqual(state.get(f"te_tax_pending_relief_{slot}"), 0)
+            self.assertNotIn(f"te_tax_pending_relief_{slot}", state)    # Task 11 fix round 1: a slot list
             # Package payload: written in full by the store, read only while _on = 1.
             for key in KEYS:
                 for suffix in ("", "_exp", "_succ"):

@@ -2180,26 +2180,27 @@ te_tax_gen_apply_a = {
 	if = { limit = { var:te_tax_pa_g_wood >= 0 } set_variable = { name = te_tax_en_g_wood value = var:te_tax_pa_g_wood } }
 	if = { limit = { var:te_tax_pa_agrel >= 0 } set_variable = { name = te_tax_en_agrel value = var:te_tax_pa_agrel } }
 	if = { limit = { var:te_tax_pa_regrel >= 0 } set_variable = { name = te_tax_en_regrel value = var:te_tax_pa_regrel } }
-	# A package that restates regional relief names its whole state set: it replaces the
-	# enacted list te_tax_en_relief_states (at most three states), the canonical set.
-	# The state marks (te_tax_relief_state) and their stamps follow from the list in the
-	# writer's relief sync (te_tax_rebuild_relief_marks), which the processor runs after
-	# this month's commencements.
+	# A package that restates regional relief names its whole state set, its own list
+	# te_tax_pa_relief_states: it replaces the enacted list te_tax_en_relief_states (the canonical set,
+	# at most three) with the states in it that this code keeps (te_tax_relief_listed_state_kept:
+	# its own, or its civil-war counterpart's while a war lasts). The state marks
+	# (te_tax_relief_state) follow from the list in the writer's relief sync
+	# (te_tax_rebuild_relief_marks), which the processor runs after this month's
+	# commencements. The slot's list is consumed either way.
 	if = {
 		limit = { var:te_tax_pa_regrel_states_set = 1 }
-		clear_variable_list = te_tax_en_relief_states
-		every_scope_state = {
-			limit = {
-				has_variable = te_tax_pending_relief_a
-				var:te_tax_pending_relief_a = 1
+		save_scope_as = te_tax_country
+		if = { limit = { has_variable_list = te_tax_en_relief_states } clear_variable_list = te_tax_en_relief_states }
+		if = {
+			limit = { has_variable_list = te_tax_pa_relief_states }
+			every_in_list = {
+				variable = te_tax_pa_relief_states
+				limit = { te_tax_relief_listed_state_kept = yes }
+				scope:te_tax_country = { add_to_variable_list = { name = te_tax_en_relief_states target = PREV } }
 			}
-			owner = { add_to_variable_list = { name = te_tax_en_relief_states target = prev } }
 		}
 	}
-	every_scope_state = {
-		limit = { has_variable = te_tax_pending_relief_a }
-		set_variable = { name = te_tax_pending_relief_a value = 0 }
-	}
+	if = { limit = { has_variable_list = te_tax_pa_relief_states } clear_variable_list = te_tax_pa_relief_states }
 }
 
 # Slot a: writes an approved package from the bill record (te_tax_bl_*). Called
@@ -2477,12 +2478,9 @@ te_tax_gen_store_a = {
 	set_variable = { name = te_tax_pa_regrel value = var:te_tax_bl_regrel }
 	set_variable = { name = te_tax_pa_xver_relief value = var:te_tax_bl_xver_relief }
 	# Regional relief: a bill that touches it (te_tax_bl_regrel >= 0) names its whole
-	# state set in te_tax_bl_relief_states, possibly none; commencement moves the marks
-	# to te_tax_relief_state. Each marked state is stamped with this country.
-	every_scope_state = {
-		limit = { has_variable = te_tax_pending_relief_a }
-		set_variable = { name = te_tax_pending_relief_a value = 0 }
-	}
+	# state set in te_tax_bl_relief_states, possibly none, copied into the slot's te_tax_pa_relief_states;
+	# commencement replaces the enacted list with it.
+	if = { limit = { has_variable_list = te_tax_pa_relief_states } clear_variable_list = te_tax_pa_relief_states }
 	if = {
 		limit = { var:te_tax_bl_regrel >= 0 }
 		set_variable = { name = te_tax_pa_regrel_states_set value = 1 }
@@ -2490,9 +2488,7 @@ te_tax_gen_store_a = {
 			limit = { has_variable_list = te_tax_bl_relief_states }
 			every_in_list = {
 				variable = te_tax_bl_relief_states
-				limit = { owner = scope:te_tax_country }
-				set_variable = { name = te_tax_pending_relief_a value = 1 }
-				set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
+				scope:te_tax_country = { add_to_variable_list = { name = te_tax_pa_relief_states target = PREV } }
 			}
 		}
 	}
@@ -2714,26 +2710,27 @@ te_tax_gen_apply_b = {
 	if = { limit = { var:te_tax_pb_g_wood >= 0 } set_variable = { name = te_tax_en_g_wood value = var:te_tax_pb_g_wood } }
 	if = { limit = { var:te_tax_pb_agrel >= 0 } set_variable = { name = te_tax_en_agrel value = var:te_tax_pb_agrel } }
 	if = { limit = { var:te_tax_pb_regrel >= 0 } set_variable = { name = te_tax_en_regrel value = var:te_tax_pb_regrel } }
-	# A package that restates regional relief names its whole state set: it replaces the
-	# enacted list te_tax_en_relief_states (at most three states), the canonical set.
-	# The state marks (te_tax_relief_state) and their stamps follow from the list in the
-	# writer's relief sync (te_tax_rebuild_relief_marks), which the processor runs after
-	# this month's commencements.
+	# A package that restates regional relief names its whole state set, its own list
+	# te_tax_pb_relief_states: it replaces the enacted list te_tax_en_relief_states (the canonical set,
+	# at most three) with the states in it that this code keeps (te_tax_relief_listed_state_kept:
+	# its own, or its civil-war counterpart's while a war lasts). The state marks
+	# (te_tax_relief_state) follow from the list in the writer's relief sync
+	# (te_tax_rebuild_relief_marks), which the processor runs after this month's
+	# commencements. The slot's list is consumed either way.
 	if = {
 		limit = { var:te_tax_pb_regrel_states_set = 1 }
-		clear_variable_list = te_tax_en_relief_states
-		every_scope_state = {
-			limit = {
-				has_variable = te_tax_pending_relief_b
-				var:te_tax_pending_relief_b = 1
+		save_scope_as = te_tax_country
+		if = { limit = { has_variable_list = te_tax_en_relief_states } clear_variable_list = te_tax_en_relief_states }
+		if = {
+			limit = { has_variable_list = te_tax_pb_relief_states }
+			every_in_list = {
+				variable = te_tax_pb_relief_states
+				limit = { te_tax_relief_listed_state_kept = yes }
+				scope:te_tax_country = { add_to_variable_list = { name = te_tax_en_relief_states target = PREV } }
 			}
-			owner = { add_to_variable_list = { name = te_tax_en_relief_states target = prev } }
 		}
 	}
-	every_scope_state = {
-		limit = { has_variable = te_tax_pending_relief_b }
-		set_variable = { name = te_tax_pending_relief_b value = 0 }
-	}
+	if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
 }
 
 # Slot b: writes an approved package from the bill record (te_tax_bl_*). Called
@@ -3011,12 +3008,9 @@ te_tax_gen_store_b = {
 	set_variable = { name = te_tax_pb_regrel value = var:te_tax_bl_regrel }
 	set_variable = { name = te_tax_pb_xver_relief value = var:te_tax_bl_xver_relief }
 	# Regional relief: a bill that touches it (te_tax_bl_regrel >= 0) names its whole
-	# state set in te_tax_bl_relief_states, possibly none; commencement moves the marks
-	# to te_tax_relief_state. Each marked state is stamped with this country.
-	every_scope_state = {
-		limit = { has_variable = te_tax_pending_relief_b }
-		set_variable = { name = te_tax_pending_relief_b value = 0 }
-	}
+	# state set in te_tax_bl_relief_states, possibly none, copied into the slot's te_tax_pb_relief_states;
+	# commencement replaces the enacted list with it.
+	if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
 	if = {
 		limit = { var:te_tax_bl_regrel >= 0 }
 		set_variable = { name = te_tax_pb_regrel_states_set value = 1 }
@@ -3024,9 +3018,7 @@ te_tax_gen_store_b = {
 			limit = { has_variable_list = te_tax_bl_relief_states }
 			every_in_list = {
 				variable = te_tax_bl_relief_states
-				limit = { owner = scope:te_tax_country }
-				set_variable = { name = te_tax_pending_relief_b value = 1 }
-				set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
+				scope:te_tax_country = { add_to_variable_list = { name = te_tax_pb_relief_states target = PREV } }
 			}
 		}
 	}
@@ -3771,6 +3763,18 @@ te_tax_gen_copy_slot_a = {
 	te_tax_copy_token = { NAME = te_tax_pa_regrel }
 	te_tax_copy_token = { NAME = te_tax_pa_xver_relief }
 	te_tax_copy_token = { NAME = te_tax_pa_regrel_states_set }
+	# The package's regional-relief states (te_tax_pa_relief_states), whole.
+	save_scope_as = te_tax_country
+	if = { limit = { has_variable_list = te_tax_pa_relief_states } clear_variable_list = te_tax_pa_relief_states }
+	if = {
+		limit = { scope:te_tax_source = { has_variable_list = te_tax_pa_relief_states } }
+		scope:te_tax_source = {
+			every_in_list = {
+				variable = te_tax_pa_relief_states
+				scope:te_tax_country = { add_to_variable_list = { name = te_tax_pa_relief_states target = PREV } }
+			}
+		}
+	}
 }
 
 # Outbreak copy of slot b's package: every payload field te_tax_gen_store_b
@@ -3849,6 +3853,18 @@ te_tax_gen_copy_slot_b = {
 	te_tax_copy_token = { NAME = te_tax_pb_regrel }
 	te_tax_copy_token = { NAME = te_tax_pb_xver_relief }
 	te_tax_copy_token = { NAME = te_tax_pb_regrel_states_set }
+	# The package's regional-relief states (te_tax_pb_relief_states), whole.
+	save_scope_as = te_tax_country
+	if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
+	if = {
+		limit = { scope:te_tax_source = { has_variable_list = te_tax_pb_relief_states } }
+		scope:te_tax_source = {
+			every_in_list = {
+				variable = te_tax_pb_relief_states
+				scope:te_tax_country = { add_to_variable_list = { name = te_tax_pb_relief_states target = PREV } }
+			}
+		}
+	}
 }
 
 # Release copy (te_tax_init_released_country): the parent's enacted provisions only;

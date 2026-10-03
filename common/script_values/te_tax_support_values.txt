@@ -59,6 +59,130 @@ te_tax_package_reschedule_floor = {
 	subtract = te_tax_reschedule_max_delay
 }
 
+# Relief in the support model (plan Task 11, fix round 1; spec 7.2: coverage
+# matters, not just nominal rates). The material reason (te_tax_mat_<ig>,
+# generated) adds relief points scaled by what the relief reaches. Read only
+# through the support refresh (te_tax_gen_refresh_support): the two population
+# shares iterate a state list, so no panel value may reach them.
+#
+# A regional relief naming this share of the population at one band scores
+# the full regional points (+4, and -2 more for industrialists and the petty
+# bourgeoisie): a quarter.
+te_tax_regrel_ref_share = 0.25
+# Agricultural relief scores in full once the wage tax it relieves is at least
+# this index (4 = 10%); less below, nothing with no wage tax.
+te_tax_agrel_ref_wage_idx = 4
+
+# Share (0..1) of the country's population living in the states the bill names
+# for regional relief that the country still owns. Inside the list, PREV is the
+# country.
+te_tax_bl_relief_pop_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable_list = te_tax_bl_relief_states
+			total_population > 0
+		}
+		every_in_list = {
+			variable = te_tax_bl_relief_states
+			limit = { exists = owner owner = prev }
+			add = state_population
+		}
+		divide = total_population
+	}
+}
+
+# The same share for existing law's named states in the bill's month: the
+# states of an awaiting package that commences before it and restates them
+# (the last in commencement order, te_tax_relief_base_from_<slot>), else the
+# enacted list.
+te_tax_base_bl_relief_pop_share = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_bl_due
+			total_population > 0
+		}
+		if = {
+			limit = { te_tax_relief_base_from_a = { DUE = te_tax_bl_due } }
+			if = {
+				limit = { has_variable_list = te_tax_pa_relief_states }
+				every_in_list = {
+					variable = te_tax_pa_relief_states
+					limit = { exists = owner owner = prev }
+					add = state_population
+				}
+			}
+		}
+		else_if = {
+			limit = { te_tax_relief_base_from_b = { DUE = te_tax_bl_due } }
+			if = {
+				limit = { has_variable_list = te_tax_pb_relief_states }
+				every_in_list = {
+					variable = te_tax_pb_relief_states
+					limit = { exists = owner owner = prev }
+					add = state_population
+				}
+			}
+		}
+		else_if = {
+			limit = { has_variable_list = te_tax_en_relief_states }
+			every_in_list = {
+				variable = te_tax_en_relief_states
+				limit = { exists = owner owner = prev }
+				add = state_population
+			}
+		}
+		divide = total_population
+	}
+}
+
+# Regional relief's coverage change, in reference units: (the bill's band x its
+# population share - existing law's band x its share) / te_tax_regrel_ref_share.
+# 0 if the bill leaves regional relief alone. One band over a quarter of the
+# population, where existing law had none, is 1.
+te_tax_bl_regrel_coverage = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_bl_regrel
+			var:te_tax_bl_regrel >= 0
+		}
+		add = {
+			value = var:te_tax_bl_regrel
+			multiply = te_tax_bl_relief_pop_share
+		}
+		subtract = {
+			value = te_tax_base_bl_regrel
+			multiply = te_tax_base_bl_relief_pop_share
+		}
+		divide = te_tax_regrel_ref_share
+	}
+}
+
+# The wage tax agricultural relief would relieve, as a fraction (0..1) of
+# te_tax_agrel_ref_wage_idx: the bill's wage index if it changes it, else
+# existing law's in the bill's month (te_tax_base_bl_wage).
+te_tax_bl_agrel_wage_factor = {
+	value = te_tax_base_bl_wage
+	if = {
+		limit = {
+			has_variable = te_tax_bl_wage
+			var:te_tax_bl_wage >= 0
+		}
+		value = var:te_tax_bl_wage
+	}
+	divide = te_tax_agrel_ref_wage_idx
+	max = 1
+	min = 0
+}
+
+# The bill's change in agricultural relief bands, scaled by that factor.
+te_tax_bl_agrel_scaled = {
+	value = te_tax_bl_dstep_agrel
+	multiply = te_tax_bl_agrel_wage_factor
+}
+
 # Fiscal reason, the same for every group: in a deficit (net_fixed_income
 # below 0) a bill that raises revenue gains support and one that cuts it loses
 # it; in surplus the other way round, half as strongly. The direction is the

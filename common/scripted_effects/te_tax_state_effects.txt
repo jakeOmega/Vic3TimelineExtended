@@ -17,8 +17,8 @@
 # country with te_tax_schema has every token of that schema version.
 # Per-instrument, per-good and scheduler tokens (clock, package-slot headers,
 # history ring): te_tax_gen_init_* (generated, te_tax_generated_effects.txt).
-# The state variables te_tax_relief_state and te_tax_pending_relief_<slot> are
-# not written here; a state without them is named in no relief.
+# The state variable te_tax_relief_state is not written here (a state without
+# it is named in no relief), nor are the relief lists (a missing list is empty).
 te_tax_init_country = {
 	if = {
 		limit = { te_tax_code_on = yes }

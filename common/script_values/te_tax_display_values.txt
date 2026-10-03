@@ -368,9 +368,10 @@ te_tax_view_dr_relief_state = {
 }
 
 # State scope: 1 if existing law in the owner's draft's commencement month
-# names the state for regional relief: the states of an awaiting package that
-# commences before it and restates them (the last in commencement order, by its
-# pending mark), else the owner's enacted list. 0 without an open draft.
+# names the state for regional relief: the list of an awaiting package that
+# commences before it and restates the states (the last in commencement order,
+# te_tax_p<slot>_relief_states), else the owner's enacted list. 0 without an
+# open draft. Inside owner = { }, PREV is the state.
 te_tax_view_dr_relief_base_state = {
 	value = 0
 	if = {
@@ -383,11 +384,27 @@ te_tax_view_dr_relief_base_state = {
 		}
 		if = {
 			limit = { owner = { te_tax_relief_base_from_a = { DUE = te_tax_dr_due } } }
-			if = { limit = { has_variable = te_tax_pending_relief_a var:te_tax_pending_relief_a = 1 } value = 1 }
+			if = {
+				limit = {
+					owner = {
+						has_variable_list = te_tax_pa_relief_states
+						is_target_in_variable_list = { name = te_tax_pa_relief_states target = PREV }
+					}
+				}
+				value = 1
+			}
 		}
 		else_if = {
 			limit = { owner = { te_tax_relief_base_from_b = { DUE = te_tax_dr_due } } }
-			if = { limit = { has_variable = te_tax_pending_relief_b var:te_tax_pending_relief_b = 1 } value = 1 }
+			if = {
+				limit = {
+					owner = {
+						has_variable_list = te_tax_pb_relief_states
+						is_target_in_variable_list = { name = te_tax_pb_relief_states target = PREV }
+					}
+				}
+				value = 1
+			}
 		}
 		else_if = {
 			limit = {

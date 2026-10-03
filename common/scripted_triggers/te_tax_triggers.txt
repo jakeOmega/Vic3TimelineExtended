@@ -271,14 +271,23 @@ te_tax_can_draft_relief_state = {
 		trigger_if = {
 			limit = {
 				exists = scope:te_tax_st
-				NOT = { is_target_in_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st } }
+				NAND = {
+					has_variable_list = te_tax_dr_relief_states
+					is_target_in_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st }
+				}
 			}
 			custom_tooltip = { text = te_tax_tt_relief_depth_set var:te_tax_dr_regrel >= 1 }
 			custom_tooltip = {
 				text = te_tax_tt_relief_state_eligible
 				scope:te_tax_st = { is_incorporated = yes owner = prev }
 			}
-			custom_tooltip = { text = te_tax_tt_relief_states_max NOT = { any_in_list = { variable = te_tax_dr_relief_states count >= 3 exists = this } } }
+			custom_tooltip = {
+				text = te_tax_tt_relief_states_max
+				NAND = {
+					has_variable_list = te_tax_dr_relief_states
+					any_in_list = { variable = te_tax_dr_relief_states count >= 3 exists = this }
+				}
+			}
 		}
 	}
 	trigger_else = {
@@ -287,8 +296,8 @@ te_tax_can_draft_relief_state = {
 }
 
 # Slot SLOT's package awaits commencement before the month in the variable DUE
-# and restates the regional-relief states (its te_tax_pending_relief_<slot>
-# marks name them).
+# and restates the regional-relief states (its own list,
+# te_tax_p<slot>_relief_states, names them).
 te_tax_slot_restates_relief_before = {
 	te_tax_slot_awaits_before = { SLOT = $SLOT$ DUE = $DUE$ }
 	has_variable = te_tax_p$SLOT$_regrel_states_set
@@ -366,13 +375,33 @@ te_tax_draft_ready = {
 				OR = { var:te_tax_dr_div = 0 var:te_tax_dr_div <= te_tax_dr_zero_limit_div }
 			}
 		}
-		# A regional relief that relieves names at least one state (the toggle
-		# allows at most three); a relief of none names none (te_tax_dr_relief_settle).
+		# A regional relief that relieves names at least one state; a relief of
+		# none names none (te_tax_dr_relief_settle). The toggle allows at most
+		# three, checked again here. Every named state must still be the
+		# country's own and incorporated (one lost since it was named forces a
+		# revision; inside the list PREV is the country).
 		trigger_if = {
 			limit = { var:te_tax_dr_regrel >= 1 }
 			custom_tooltip = {
 				text = te_tax_tt_relief_states_named
+				has_variable_list = te_tax_dr_relief_states
 				any_in_list = { variable = te_tax_dr_relief_states exists = this }
+			}
+		}
+		trigger_if = {
+			limit = { has_variable_list = te_tax_dr_relief_states }
+			custom_tooltip = {
+				text = te_tax_tt_relief_states_at_most
+				NOT = { any_in_list = { variable = te_tax_dr_relief_states count >= 4 exists = this } }
+			}
+			custom_tooltip = {
+				text = te_tax_tt_relief_states_own
+				NOT = {
+					any_in_list = {
+						variable = te_tax_dr_relief_states
+						NAND = { is_incorporated = yes owner = PREV }
+					}
+				}
 			}
 		}
 	}

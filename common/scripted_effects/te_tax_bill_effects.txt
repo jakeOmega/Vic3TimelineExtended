@@ -217,37 +217,41 @@ te_tax_dr_agrel_touch = {
 # band restates the same states. Existing law is the enacted list
 # (te_tax_en_relief_states), unless an awaiting package that commences before
 # the draft restates the states: the last of them in commencement order
-# (te_tax_relief_base_from_<slot>), whose states carry its pending marks.
+# (te_tax_relief_base_from_<slot>), whose own list (te_tax_p<slot>_relief_states)
+# names them. Only the country's own states are copied.
 te_tax_dr_regrel_touch = {
 	if = {
 		limit = { var:te_tax_dr_regrel < 0 }
 		set_variable = { name = te_tax_dr_regrel value = te_tax_base_dr_regrel }
-		clear_variable_list = te_tax_dr_relief_states
+		if = { limit = { has_variable_list = te_tax_dr_relief_states } clear_variable_list = te_tax_dr_relief_states }
 		if = {
 			limit = { var:te_tax_dr_regrel >= 1 }
 			save_scope_as = te_tax_country
 			if = {
 				limit = { te_tax_relief_base_from_a = { DUE = te_tax_dr_due } }
-				every_scope_state = {
-					limit = { has_variable = te_tax_pending_relief_a var:te_tax_pending_relief_a = 1 }
-					owner = { add_to_variable_list = { name = te_tax_dr_relief_states target = prev } }
-				}
+				te_tax_dr_copy_relief_states = { LIST = te_tax_pa_relief_states }
 			}
 			else_if = {
 				limit = { te_tax_relief_base_from_b = { DUE = te_tax_dr_due } }
-				every_scope_state = {
-					limit = { has_variable = te_tax_pending_relief_b var:te_tax_pending_relief_b = 1 }
-					owner = { add_to_variable_list = { name = te_tax_dr_relief_states target = prev } }
-				}
+				te_tax_dr_copy_relief_states = { LIST = te_tax_pb_relief_states }
 			}
-			else_if = {
-				limit = { has_variable_list = te_tax_en_relief_states }
-				every_in_list = {
-					variable = te_tax_en_relief_states
-					limit = { owner ?= scope:te_tax_country }
-					scope:te_tax_country = { add_to_variable_list = { name = te_tax_dr_relief_states target = PREV } }
-				}
+			else = {
+				te_tax_dr_copy_relief_states = { LIST = te_tax_en_relief_states }
 			}
+		}
+	}
+}
+
+# Adds the country's own states in the country list LIST to the draft's named
+# states. Needs scope:te_tax_country (THIS); inside the list PREV is the
+# country, inside scope:te_tax_country the state.
+te_tax_dr_copy_relief_states = {
+	if = {
+		limit = { has_variable_list = $LIST$ }
+		every_in_list = {
+			variable = $LIST$
+			limit = { owner ?= scope:te_tax_country }
+			scope:te_tax_country = { add_to_variable_list = { name = te_tax_dr_relief_states target = PREV } }
 		}
 	}
 }
@@ -256,7 +260,10 @@ te_tax_dr_regrel_touch = {
 # draft that changes neither relief drops the relief group's planned version.
 te_tax_dr_relief_settle = {
 	if = {
-		limit = { var:te_tax_dr_regrel < 1 }
+		limit = {
+			var:te_tax_dr_regrel < 1
+			has_variable_list = te_tax_dr_relief_states
+		}
 		clear_variable_list = te_tax_dr_relief_states
 	}
 	if = {
@@ -313,7 +320,7 @@ te_tax_cmd_draft_relief_choose = {
 		limit = { te_tax_can_draft_relief_choose = yes }
 		custom_tooltip = te_tax_tt_cmd_draft_relief_choose
 		te_tax_dr_relief_touch = { KEY = regrel }
-		clear_variable_list = te_tax_dr_relief_candidates
+		if = { limit = { has_variable_list = te_tax_dr_relief_candidates } clear_variable_list = te_tax_dr_relief_candidates }
 		every_scope_state = {
 			limit = { is_incorporated = yes }
 			owner = { add_to_variable_list = { name = te_tax_dr_relief_candidates target = prev } }
@@ -330,7 +337,10 @@ te_tax_cmd_draft_relief_state = {
 		limit = { te_tax_can_draft_relief_state = yes }
 		custom_tooltip = te_tax_tt_cmd_draft_relief_state
 		if = {
-			limit = { is_target_in_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st } }
+			limit = {
+				has_variable_list = te_tax_dr_relief_states
+				is_target_in_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st }
+			}
 			remove_list_variable = { name = te_tax_dr_relief_states target = scope:te_tax_st }
 		}
 		else = {
@@ -530,10 +540,7 @@ te_tax_cmd_package_release = {
 		custom_tooltip = te_tax_tt_cmd_package_release
 		set_variable = { name = te_tax_p$SLOT$_on value = 0 }
 		set_variable = { name = te_tax_p$SLOT$_state value = 0 }
-		every_scope_state = {
-			limit = { has_variable = te_tax_pending_relief_$SLOT$ }
-			set_variable = { name = te_tax_pending_relief_$SLOT$ value = 0 }
-		}
+		if = { limit = { has_variable_list = te_tax_p$SLOT$_relief_states } clear_variable_list = te_tax_p$SLOT$_relief_states }
 		te_tax_history_push = { KIND = 10 SLOT = $SLOT$ }
 		te_tax_recompute_next_month = yes
 		debug_log = "TE_TAX package_released; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"

@@ -67,8 +67,8 @@ te_tax_gen_draft_init = {
 	set_variable = { name = te_tax_dr_agrel value = -1 }
 	set_variable = { name = te_tax_dr_regrel value = -1 }
 	set_variable = { name = te_tax_dr_relief_pver value = -1 }
-	clear_variable_list = te_tax_dr_relief_states
-	clear_variable_list = te_tax_dr_relief_candidates
+	if = { limit = { has_variable_list = te_tax_dr_relief_states } clear_variable_list = te_tax_dr_relief_states }
+	if = { limit = { has_variable_list = te_tax_dr_relief_candidates } clear_variable_list = te_tax_dr_relief_candidates }
 }
 
 # A new draft copied from the bill under debate, for its revision, with the bill's
@@ -133,7 +133,7 @@ te_tax_gen_draft_from_bill = {
 	set_variable = { name = te_tax_dr_agrel value = var:te_tax_bl_agrel }
 	set_variable = { name = te_tax_dr_regrel value = var:te_tax_bl_regrel }
 	set_variable = { name = te_tax_dr_relief_pver value = var:te_tax_bl_relief_pver }
-	clear_variable_list = te_tax_dr_relief_states
+	if = { limit = { has_variable_list = te_tax_dr_relief_states } clear_variable_list = te_tax_dr_relief_states }
 	if = {
 		limit = { has_variable_list = te_tax_bl_relief_states }
 		save_scope_as = te_tax_country
@@ -142,7 +142,7 @@ te_tax_gen_draft_from_bill = {
 			scope:te_tax_country = { add_to_variable_list = { name = te_tax_dr_relief_states target = PREV } }
 		}
 	}
-	clear_variable_list = te_tax_dr_relief_candidates
+	if = { limit = { has_variable_list = te_tax_dr_relief_candidates } clear_variable_list = te_tax_dr_relief_candidates }
 }
 
 # Closes the draft's payload and its lists (te_tax_dr_on is set to 0 by the caller).
@@ -206,8 +206,8 @@ te_tax_gen_draft_clear = {
 	remove_variable = te_tax_dr_agrel
 	remove_variable = te_tax_dr_regrel
 	remove_variable = te_tax_dr_relief_pver
-	clear_variable_list = te_tax_dr_relief_states
-	clear_variable_list = te_tax_dr_relief_candidates
+	if = { limit = { has_variable_list = te_tax_dr_relief_states } clear_variable_list = te_tax_dr_relief_states }
+	if = { limit = { has_variable_list = te_tax_dr_relief_candidates } clear_variable_list = te_tax_dr_relief_candidates }
 }
 
 # Writes the whole bill record from the draft, every field te_tax_store_package reads, and
@@ -280,7 +280,7 @@ te_tax_gen_bill_from_draft = {
 	set_variable = { name = te_tax_bl_xver_cons value = var:te_tax_xver_cons }
 	set_variable = { name = te_tax_bl_xver_goods value = var:te_tax_xver_goods }
 	set_variable = { name = te_tax_bl_xver_relief value = var:te_tax_xver_relief }
-	clear_variable_list = te_tax_bl_relief_states
+	if = { limit = { has_variable_list = te_tax_bl_relief_states } clear_variable_list = te_tax_bl_relief_states }
 	if = {
 		limit = { has_variable_list = te_tax_dr_relief_states }
 		save_scope_as = te_tax_country
@@ -362,7 +362,7 @@ te_tax_gen_bill_clear = {
 	remove_variable = te_tax_bl_xver_cons
 	remove_variable = te_tax_bl_xver_goods
 	remove_variable = te_tax_bl_xver_relief
-	clear_variable_list = te_tax_bl_relief_states
+	if = { limit = { has_variable_list = te_tax_bl_relief_states } clear_variable_list = te_tax_bl_relief_states }
 }
 
 # Slot a: supersession at approval. Called by te_tax_cmd_pass only when the new package
@@ -472,6 +472,7 @@ te_tax_gen_supersede_a = {
 				}
 				set_variable = { name = te_tax_pa_regrel value = -1 }
 				set_variable = { name = te_tax_pa_regrel_states_set value = 0 }
+				if = { limit = { has_variable_list = te_tax_pa_relief_states } clear_variable_list = te_tax_pa_relief_states }
 			}
 			te_tax_history_push = { KIND = 8 SLOT = a }
 			debug_log = "TE_TAX superseded slot=a: a later approval replaced provisions due on or after its own; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
@@ -479,6 +480,7 @@ te_tax_gen_supersede_a = {
 				limit = { te_tax_gen_package_empty_a = yes }
 				set_variable = { name = te_tax_pa_on value = 0 }
 				set_variable = { name = te_tax_pa_state value = 0 }
+				if = { limit = { has_variable_list = te_tax_pa_relief_states } clear_variable_list = te_tax_pa_relief_states }
 				debug_log = "TE_TAX superseded slot=a: every provision replaced; the slot is free; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 			}
 		}
@@ -592,6 +594,7 @@ te_tax_gen_supersede_b = {
 				}
 				set_variable = { name = te_tax_pb_regrel value = -1 }
 				set_variable = { name = te_tax_pb_regrel_states_set value = 0 }
+				if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
 			}
 			te_tax_history_push = { KIND = 8 SLOT = b }
 			debug_log = "TE_TAX superseded slot=b: a later approval replaced provisions due on or after its own; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
@@ -599,6 +602,7 @@ te_tax_gen_supersede_b = {
 				limit = { te_tax_gen_package_empty_b = yes }
 				set_variable = { name = te_tax_pb_on value = 0 }
 				set_variable = { name = te_tax_pb_state value = 0 }
+				if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
 				debug_log = "TE_TAX superseded slot=b: every provision replaced; the slot is free; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 			}
 		}

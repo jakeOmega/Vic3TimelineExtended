@@ -330,7 +330,10 @@ types te_tax_workbench_widget_types
 	### list, both datamodels over a country list whose items set datacontext =
 	### "[Scope.GetState]"): its name, population and the tax collected from its
 	### pops (what a relief forgoes a share of), whether the draft names it, and
-	### Name / Drop. The button passes the row's state as the saved scope te_tax_st
+	### Name / Drop (the draft's own list overrides both blocks: its rows are the
+	### draft's by construction, even a state lost since it was named, whose
+	### views read 0 once another country owns it). The button passes the row's
+	### state as the saved scope te_tax_st
 	### to te_tax_relief_state_sgui, the Grand Monuments rows' shape
 	### (gm_choice_button). Tooltips read only GetPlayer (a datamodel item).
 	### 4 + 150 + 4 + 70 + 4 + 90 + 4 + 60 + 4 + 80 + 4 = 474.
@@ -389,7 +392,9 @@ types te_tax_workbench_widget_types
 				elide = right
 				align = right|nobaseline
 				using = fontsize_medium
-				text = "[SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_named', SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_base_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_dropped', 'te_tax_wb_relief_state_none' ) )]"
+				block "state_status" {
+					text = "[SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_named', SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_base_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_dropped', 'te_tax_wb_relief_state_none' ) )]"
+				}
 			}
 		}
 		button = {
@@ -397,7 +402,9 @@ types te_tax_workbench_widget_types
 			size = { 80 26 }
 			parentanchor = vcenter
 			datacontext = "[GetScriptedGui('te_tax_relief_state_sgui')]"
-			text = "[SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_drop', 'te_tax_wb_relief_state_name_it' )]"
+			block "state_button_text" {
+				text = "[SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_drop', 'te_tax_wb_relief_state_name_it' )]"
+			}
 			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_st', State.MakeScope ).End )]"
 			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_st', State.MakeScope ).End )]"
 			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_st', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_st', State.MakeScope ).End ) ) )]"
@@ -740,6 +747,12 @@ types te_tax_workbench_widget_types
 						item = {
 							te_tax_relief_state_row = {
 								datacontext = "[Scope.GetState]"
+								blockoverride "state_status" {
+									text = "te_tax_wb_relief_state_named"
+								}
+								blockoverride "state_button_text" {
+									text = "te_tax_wb_relief_state_drop"
+								}
 							}
 						}
 					}
@@ -786,9 +799,6 @@ types te_tax_workbench_widget_types
 								datacontext = "[Scope.GetState]"
 							}
 						}
-					}
-					te_tax_note = {
-						text = "te_tax_wb_relief_note"
 					}
 				}
 

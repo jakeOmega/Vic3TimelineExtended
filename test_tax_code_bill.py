@@ -520,8 +520,8 @@ class PackageCommandTest(unittest.TestCase):
                      f"te_tax_history_push = {{ KIND = {KIND_RELEASED} SLOT = $SLOT$ }}",
                      "te_tax_recompute_next_month = yes"):
             self.assertIn(line, body)
-        self.assertRegex(body, r"every_scope_state = \{\s*limit = \{ has_variable = te_tax_pending_relief_\$SLOT\$ \}"
-                               r"\s*set_variable = \{ name = te_tax_pending_relief_\$SLOT\$ value = 0 \}")
+        self.assertIn("if = { limit = { has_variable_list = te_tax_p$SLOT$_relief_states } "
+                      "clear_variable_list = te_tax_p$SLOT$_relief_states }", body)
 
     def test_neither_touches_the_enacted_code_or_the_writer(self):
         for name in ("package_reschedule", "package_release"):
@@ -644,7 +644,7 @@ class SupportModelTest(unittest.TestCase):
                                  {k: Decimal(v) for k, v in expected.items()})
                 # Relief points (test_tax_code_goods_relief.py) sit between the
                 # weight and the clamp.
-                self.assertRegex(body, r"multiply = -10\s*(add = \{ value = te_tax_bl_dstep_(agrel|regrel) "
+                self.assertRegex(body, r"multiply = -10\s*(add = \{ value = te_tax_bl_(agrel_scaled|regrel_coverage) "
                                        r"multiply = -?\d+ \}\s*)+min = -40\s*max = 40\s*$")
 
     def test_progressiveness_matches_vanilla(self):
@@ -758,10 +758,14 @@ class SupportModelTest(unittest.TestCase):
         self.assertTrue(names)
         bodies = [block(self.values, name) for name in names] + [block(self.support, name)
                                                                   for name in top_level_names(self.support)]
+        # No world sweep. The relief population shares (Task 11 fix round 1) iterate
+        # a country's own state list of at most three, read only by the refresh.
         forbidden = re.compile(r"\b(set_variable|change_variable|remove_variable|save_scope_as|"
-                               r"every_\w+|random_\w+|ordered_\w+)\b")
+                               r"every_(?!in_list\b)\w+|random_\w+|ordered_\w+)\b")
         for body in bodies:
             self.assertIsNone(forbidden.search(body))
+        listers = {name for name in top_level_names(self.support) if "every_in_list" in block(self.support, name)}
+        self.assertEqual(listers, {"te_tax_bl_relief_pop_share", "te_tax_base_bl_relief_pop_share"})
 
     def test_every_variable_read_in_a_support_value_is_guarded(self):
         for path in (SUPPORT, GEN_VALUES):

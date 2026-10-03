@@ -167,8 +167,8 @@ class SchemaDocTest(unittest.TestCase):
         self.assertIsNone(country["te_tax_schema"])
         # te_tax_relief_holder: the country stamped where a mark is set (Task 10,
         # relief eligibility); a country value, so no sentinel.
-        self.assertEqual(state, {"te_tax_relief_state": 0, "te_tax_pending_relief_a": 0,
-                                 "te_tax_pending_relief_b": 0, "te_tax_relief_holder": None})
+        # A package's states are its slot's country list (Task 11 fix round 1).
+        self.assertEqual(state, {"te_tax_relief_state": 0, "te_tax_relief_holder": None})
 
     def test_doc_lists_the_consumption_catalog_exactly(self):
         text = read(SCHEMA_DOC, strip_comments=False)

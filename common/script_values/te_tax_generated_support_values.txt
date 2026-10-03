@@ -2228,21 +2228,16 @@ te_tax_dl_cons = {
 	divide = te_tax_level_step_cons
 }
 
-# The bill's change per relief, in bands from existing law (0 if untouched).
+# The bill's change in agricultural relief, in bands from existing law (0 if untouched); the
+# support model scales it by the wage tax it relieves (te_tax_bl_agrel_scaled,
+# te_tax_support_values.txt). Regional relief is scored by coverage instead
+# (te_tax_bl_regrel_coverage).
 te_tax_bl_dstep_agrel = {
 	value = 0
 	if = {
 		limit = { has_variable = te_tax_bl_agrel var:te_tax_bl_agrel >= 0 }
 		value = var:te_tax_bl_agrel
 		subtract = te_tax_base_bl_agrel
-	}
-}
-te_tax_bl_dstep_regrel = {
-	value = 0
-	if = {
-		limit = { has_variable = te_tax_bl_regrel var:te_tax_bl_regrel >= 0 }
-		value = var:te_tax_bl_regrel
-		subtract = te_tax_base_bl_regrel
 	}
 }
 
@@ -2672,8 +2667,10 @@ te_tax_bl_provisions = {
 
 # Support reasons per interest group, each clamped to -40..40. Material:
 # -10 x the exposure-weighted change in tax levels, the bill's goods counted on the
-# consumption channel (te_tax_dl_goods); then relief in points per band the bill moves it:
-# agricultural rural_folk +8, landowners +3; regional +4 for every group,
+# consumption channel (te_tax_dl_goods); then relief in points: agricultural, per band the
+# bill moves it scaled by the wage tax relieved (te_tax_bl_agrel_scaled),
+# rural_folk +8, landowners +3; regional, per band x share of the population
+# named over te_tax_regrel_ref_share (te_tax_bl_regrel_coverage), +4 for every group,
 # industrialists -2, petty_bourgeoisie -2 on top. Ideology: 5 x the
 # group's fiscal ideology (its stances on the vanilla taxation laws x their progressiveness
 # / 100) x the change in progressivity. Government: +10 in government.
@@ -2686,7 +2683,7 @@ te_tax_mat_armed_forces = {
 	add = { value = te_tax_dl_cons multiply = 0.4 }
 	add = { value = te_tax_dl_goods multiply = 0.4 }
 	multiply = -10
-	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
+	add = { value = te_tax_bl_regrel_coverage multiply = 4 }
 	min = -40
 	max = 40
 }
@@ -2733,7 +2730,7 @@ te_tax_mat_devout = {
 	add = { value = te_tax_dl_cons multiply = 0.5 }
 	add = { value = te_tax_dl_goods multiply = 0.5 }
 	multiply = -10
-	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
+	add = { value = te_tax_bl_regrel_coverage multiply = 4 }
 	min = -40
 	max = 40
 }
@@ -2779,8 +2776,8 @@ te_tax_mat_industrialists = {
 	add = { value = te_tax_dl_cons multiply = 0.2 }
 	add = { value = te_tax_dl_goods multiply = 0.2 }
 	multiply = -10
-	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
-	add = { value = te_tax_bl_dstep_regrel multiply = -2 }
+	add = { value = te_tax_bl_regrel_coverage multiply = 4 }
+	add = { value = te_tax_bl_regrel_coverage multiply = -2 }
 	min = -40
 	max = 40
 }
@@ -2826,7 +2823,7 @@ te_tax_mat_intelligentsia = {
 	add = { value = te_tax_dl_cons multiply = 0.4 }
 	add = { value = te_tax_dl_goods multiply = 0.4 }
 	multiply = -10
-	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
+	add = { value = te_tax_bl_regrel_coverage multiply = 4 }
 	min = -40
 	max = 40
 }
@@ -2873,8 +2870,8 @@ te_tax_mat_landowners = {
 	add = { value = te_tax_dl_cons multiply = 0.2 }
 	add = { value = te_tax_dl_goods multiply = 0.2 }
 	multiply = -10
-	add = { value = te_tax_bl_dstep_agrel multiply = 3 }
-	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
+	add = { value = te_tax_bl_agrel_scaled multiply = 3 }
+	add = { value = te_tax_bl_regrel_coverage multiply = 4 }
 	min = -40
 	max = 40
 }
@@ -2921,8 +2918,8 @@ te_tax_mat_petty_bourgeoisie = {
 	add = { value = te_tax_dl_cons multiply = 0.6 }
 	add = { value = te_tax_dl_goods multiply = 0.6 }
 	multiply = -10
-	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
-	add = { value = te_tax_bl_dstep_regrel multiply = -2 }
+	add = { value = te_tax_bl_regrel_coverage multiply = 4 }
+	add = { value = te_tax_bl_regrel_coverage multiply = -2 }
 	min = -40
 	max = 40
 }
@@ -2969,8 +2966,8 @@ te_tax_mat_rural_folk = {
 	add = { value = te_tax_dl_cons multiply = 0.8 }
 	add = { value = te_tax_dl_goods multiply = 0.8 }
 	multiply = -10
-	add = { value = te_tax_bl_dstep_agrel multiply = 8 }
-	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
+	add = { value = te_tax_bl_agrel_scaled multiply = 8 }
+	add = { value = te_tax_bl_regrel_coverage multiply = 4 }
 	min = -40
 	max = 40
 }
@@ -3015,7 +3012,7 @@ te_tax_mat_trade_unions = {
 	add = { value = te_tax_dl_cons multiply = 0.8 }
 	add = { value = te_tax_dl_goods multiply = 0.8 }
 	multiply = -10
-	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
+	add = { value = te_tax_bl_regrel_coverage multiply = 4 }
 	min = -40
 	max = 40
 }
