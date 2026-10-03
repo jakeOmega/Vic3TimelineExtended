@@ -102,7 +102,7 @@ class LawTest(unittest.TestCase):
         laws = _read(LAWS)
         self.assertNotIn("unlocking_technologies", _top_level(laws, "law_unrestricted_extraction"))
         for law, tech in (("law_fossil_expansion_moratorium", "environmental_movement"),
-                          ("law_managed_fossil_phaseout", "clean_energy_technologies")):
+                          ("law_managed_fossil_phaseout", "carbon_capture_and_storage")):
             body = _top_level(laws, law)
             self.assertEqual(_sub(body, "unlocking_technologies").split(), [tech], law)
             self.assertEqual(_sub(body, "unlocking_laws").split(), ["law_ministry_of_the_environment"], law)
@@ -119,7 +119,7 @@ class LawTest(unittest.TestCase):
             code = re.sub(r"custom_tooltip = \w+", "", _code(_read(path)))
             self.assertNotIn("greenhouse_gas", code, path)
             self.assertNotIn("emission", code, path)
-            self.assertNotIn("carbon", code, path)
+            self.assertNotRegex(code, r"carbon_\w+_(?:add|mult)\s*=", path)
 
     def test_leaving_the_phaseout_stops_the_programmes(self):
         laws = _read(LAWS)
@@ -312,7 +312,7 @@ class InGameTextTest(unittest.TestCase):
         expected = {
             "law_unrestricted_extraction": [],
             "law_fossil_expansion_moratorium": ["rt_law_moratorium_tt", "rt_law_emissions_tt"],
-            "law_managed_fossil_phaseout": ["rt_law_moratorium_tt", "rt_law_phaseout_tt",
+            "law_managed_fossil_phaseout": ["rt_law_moratorium_tt", "rt_law_phaseout_tt", "rt_law_capture_tt",
                                             "rt_law_phaseout_rule_tt", "rt_law_emissions_tt"],
         }
         for law, lines in expected.items():

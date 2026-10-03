@@ -788,12 +788,20 @@ market_greenhouse_gas_emissions_script_value = {
 
 market_carbon_capture_script_value = {
 	# Evaluated in the country scope
-	# Returns negative atmospheric removal from synthetic fuels and direct air capture.
+	# Returns negative capture from stationary sources, synthetic fuels and direct air capture.
 	# Legacy synthetic credits use base output and occupancy. Direct air capture
 	# reads the workforce-scaled modifier, including throughput and staffing.
 	value = 0
 	market = {
 		every_scope_country = {
+			# State modifiers follow staffing/throughput and belong to this
+			# location's market, including foreign-owned buildings. Read once.
+			every_scope_state = {
+				subtract = {
+					value = modifier:state_carbon_capture_add
+					divide = gw_emission_display_scale
+				}
+			}
 			# Carbon capture: subtract synthetic oil/coal production (not fossil extraction)
 			# Split into two iterations to avoid the nested if/limit pattern that
 			# confuses the engine's static scope analyzer (false "market vs. building"

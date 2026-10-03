@@ -119,7 +119,7 @@ law_managed_fossil_phaseout = {
 	progressiveness = 50
 
 	unlocking_technologies = {
-		clean_energy_technologies
+		carbon_capture_and_storage
 	}
 
 	unlocking_laws = {
@@ -133,6 +133,7 @@ law_managed_fossil_phaseout = {
 	on_enact = {
 		custom_tooltip = rt_law_moratorium_tt
 		custom_tooltip = rt_law_phaseout_tt
+		custom_tooltip = rt_law_capture_tt
 		custom_tooltip = rt_law_phaseout_rule_tt
 		custom_tooltip = rt_law_emissions_tt
 	}

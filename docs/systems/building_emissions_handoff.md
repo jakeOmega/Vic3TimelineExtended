@@ -230,3 +230,24 @@ Emissions display now discovers every building PM group, including companies:
 245 fuel-consuming PMs across 117 building types. Market gross is still based
 on consumption. Capture will use a separate group per fuel-consuming source
 group to cover automation without a Cartesian product of PM selections.
+
+Production capture now generates 74 building types, 70 source groups and 342
+tier variants. `pm_carbon_capture.py` owns explicit exceptions and cost anchors;
+its coverage report lists every inclusion/exception. Automation uses separate
+controls, including steel boilers; no Cartesian-product gating. Three existing
+shield icons serve as tier artwork. State credits are subtracted once per
+location's market and divided by the display scale. No new yearly building sweep.
+Tiny sources retain fractional operating costs and capture values to avoid free
+capture from rounding. Modern coal Tier II uses 12 electricity rather than the
+probe's approximate 11: it rounds the design's 0.30 MWh/t × 3.07 t/coal anchor.
+
+Managed Fossil Phaseout now unlocks with Carbon Capture and Storage. No capture
+and Tier I are disallowed; no-fuel/feedstock/mobile exemptions have a valid
+not-applicable method. `gen_law_consistency` explicitly rechecks technology for
+this held law, leaving other legacy laws' behavior unchanged. The existing
+monthly/law-change cleanup handles old saves lacking the new technology.
+74 focused tests passed before the production checkpoint. The guide is updated.
+Pending: full CI checks, production regression in game (especially independent
+automation, company-site controls, NA exceptions and January state subtraction).
+Normal production deployment must remove the probe overlay: keeping it could
+duplicate state credits and modifier-type definitions. Do not restore it.

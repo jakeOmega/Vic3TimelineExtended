@@ -119,3 +119,11 @@ state_harvest_condition_hailstorm_impact_mult = {
 		ai_value = 0
 	}
 }
+
+# Positive source-capture credit, aggregated by location and hidden from tooltips.
+state_carbon_capture_add = {
+	color = good
+	percent = no
+	decimals = 2
+	script_only = yes
+}

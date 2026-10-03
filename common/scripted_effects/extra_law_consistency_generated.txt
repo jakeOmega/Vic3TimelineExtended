@@ -5235,7 +5235,7 @@ te_fix_inconsistent_lawgroup_resource_transition = {
 				OR = {
 					has_law = law_type:law_ministry_of_the_environment
 				}
-				has_technology_researched = clean_energy_technologies
+				has_technology_researched = carbon_capture_and_storage
 			}
 			activate_law = law_type:law_managed_fossil_phaseout
 		}
@@ -5253,6 +5253,7 @@ te_fix_inconsistent_lawgroup_resource_transition = {
 				NOR = {
 					has_law = law_type:law_ministry_of_the_environment
 				}
+				NOT = { has_technology_researched = carbon_capture_and_storage }
 			}
 		}
 		if = {

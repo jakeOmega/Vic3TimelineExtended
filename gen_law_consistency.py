@@ -49,6 +49,11 @@ import os
 import re
 import sys
 
+# These laws make PM defaults unavailable. A held law without its technology
+# must be repaired on old saves/revolutions to keep a valid mandated PM.
+# Other legacy laws intentionally retain the usual enactment-only tech gate.
+ACTIVE_TECH_REQUIRED_LAWS = {"law_managed_fossil_phaseout"}
+
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 if _THIS_DIR not in sys.path:
     sys.path.insert(0, _THIS_DIR)
@@ -546,7 +551,7 @@ def candidate_order(active_law_id, group_law_ids, laws, attitudes):
 # ── Emission ────────────────────────────────────────────────────────────────
 
 
-def _violation_clause(law, indent):
+def _violation_clause(law, indent, law_id=None):
     """Emit the trigger clauses that detect law's own constraints being violated.
 
     The full violation predicate (used inside a `limit = { has_law=...; OR={...} }`
@@ -561,6 +566,9 @@ def _violation_clause(law, indent):
         parts.append(f"{indent}\tNOR = {{\n{unlocking}\n{indent}\t}}")
     for d_law in law["disallowing_laws"]:
         parts.append(f"{indent}\thas_law = law_type:{d_law}")
+    if law_id in ACTIVE_TECH_REQUIRED_LAWS:
+        for tech in law.get("unlocking_technologies", []):
+            parts.append(f"{indent}\tNOT = {{ has_technology_researched = {tech} }}")
     if not parts:
         return ""
     return f"{indent}OR = {{\n" + "\n".join(parts) + f"\n{indent}}}"
@@ -615,7 +623,7 @@ def emit_lawgroup_helper(group_id, group_law_ids, laws, attitudes):
 
     for active_id in constrained:
         active = laws[active_id]
-        violation_clause = _violation_clause(active, "\t\t\t")
+        violation_clause = _violation_clause(active, "\t\t\t", active_id)
         # Sanity: should always be non-empty since `has_constraints(active)` was True
         if not violation_clause:
             continue

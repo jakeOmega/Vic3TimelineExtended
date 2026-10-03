@@ -13,7 +13,7 @@ event work under either setting.
 Emissions belong to a market, not a country. Each year a market emits in
 proportion to the coal and oil consumed anywhere in it, cut by the emission
 reductions of its market leader and reduced by the carbon captured by Synthetic
-Fuel Works and Carbon Conversion Works in the market. (The mod renames the base
+Fuel Works, Carbon Conversion Works and equipped stationary sources in the market. (The mod renames the base
 game's coal good Energy and Carbon Minerals; this chapter calls it coal for
 short.) The year's emissions of every market are added to the world's cumulative
 total. In the dashboard's units, a market that emits one million a year warms
@@ -21,8 +21,8 @@ the world by 0.1 °C a year. Figures use K for thousands and M for millions.
 A unit of oil produces 13% less warming than a unit of coal.
 
 Buildings that consume coal or oil show Greenhouse Gas Emissions
-from their fuel use. Fuel methods add to the building's figure, including coal
-used by steel mill automation. The figure uses the dashboard's units and grows
+from their fuel use. Fuel methods add to the building's figure; capture methods subtract from it.
+Process fuel and automation both contribute. The figure uses the dashboard's units and grows
 with the building's staffing and throughput. Market-wide policy reductions
 apply to the market total.
 
@@ -53,6 +53,38 @@ Removal follows staffing and throughput. Subsidize the works to keep them
 staffed; a fossil-powered grid adds emissions from the electricity they use.
 Genetic Engineering in era 11 unlocks their Synthetic Coal alternative, which
 produces fuel while capturing carbon.
+
+## Capturing carbon at the source
+
+Stationary coal and oil consumers have Carbon Capture controls, including
+industrial plants, mine pumps, steam-powered automation and eligible company
+sites. Each fuel-consuming production group has its own control. A Steel Mill
+can capture its furnace emissions and its automation emissions independently.
+Only the variants matching the group's current fuel use appear.
+
+| Method | Needs | Captures |
+|---|---|---|
+| Partial Carbon Capture | Clean Energy Technologies, era 9 | 25% |
+| Carbon Capture and Storage | Carbon Capture and Storage, era 10 | 50% |
+| Advanced Carbon Capture | Modern Material Science, era 11 | 75% |
+
+Capture uses engines and steel, plus chemicals for most sources. Power plants
+lose electricity output to run capture equipment; other buildings buy
+additional electricity. Costs follow the fuel used by that production group.
+The tooltips show the reduction and goods cost. Capturing a fossil power
+plant's emissions can make it unprofitable, so subsidies may be needed.
+
+Switching fuel can reset your capture choice. Under Managed Fossil Phaseout,
+eligible sources must use at least the middle tier. Without that law, select
+the tier yourself; the AI generally prefers the cheaper option without capture.
+A method with no eligible fuel use has Capture Not Applicable and stays valid
+under the mandate.
+
+Transport exhaust, dispersed agricultural and logging machinery, mobile mine
+excavators and street lighting have no source capture. Oil used as plastics,
+textile and other chemical feedstock, refinery inventory, and synthetic-fuel
+carbon already credited elsewhere are also exempt. These consumers still show
+emissions and remain in market consumption totals.
 
 ## The Global Warming journal entry
 
@@ -260,7 +292,7 @@ Environment, and both restrictive laws need that ministry:
 |---|---|---|
 | Unrestricted Extraction | | The default. Nothing changes. |
 | Fossil Expansion Moratorium | Environmental Movement, Ministry of the Environment | No new Coal Mine, Oil Rig or Power Plant can be built or expanded in your states, by your government, your investors or foreign investors. Those already running carry on. |
-| Managed Fossil Phaseout | Clean Energy Technologies, Ministry of the Environment funded to level 3 | The moratorium, and retirement programmes for what is already running. |
+| Managed Fossil Phaseout | Carbon Capture and Storage, Ministry of the Environment funded to level 3 | The moratorium, retirement programmes, and at least 50% capture for eligible stationary sources. |
 
 Hydro, nuclear, fusion and renewable plants, Synthetic Fuel Works, Carbon
 Conversion Works and every other mine stay buildable. If you abolish the

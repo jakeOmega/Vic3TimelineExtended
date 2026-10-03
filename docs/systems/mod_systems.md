@@ -43,6 +43,8 @@ Drugs are vanilla's `opium` good under a new name, so anything that adds Drugs s
 
 > See also: `docs/systems/journal_entry_systems.md` for full JE system documentation.
 
+- **Source capture:** `gen_carbon_capture_pms.py`, via `pm_carbon_capture.py`, discovers all coal/oil-consuming source groups. Eligible stationary groups get independent 25/50/75% controls (including automation and company sites), with explicit transport/feedstock/synthetic-credit exceptions in `carbon_capture_coverage.md`. Workforce-scaled negative building emissions mirror a hidden positive state credit; the market capture sum subtracts each location's state credit once. Managed Fossil Phaseout requires era-10 Carbon Capture and Storage and at least Tier II on eligible sources. The monthly law-consistency walk repairs a held phaseout law without its required technology.
+
 - A persistent journal entry (never completes: `complete = { always = no }`, `can_deactivate = no`).
 - Tracks `temperature_anomaly_display` script value against a 4°C progress bar. The goal is frozen at activation, which is why `goal_add_value` is `4 - temperature_anomaly_display` and not a flat `4` — see `journal_entry_systems.md` before touching it.
 - Auto-activates from `is_shown_when_inactive` (game rule) + `possible` (anomaly ≥ 0.1°C), or, for a country holding a restrictive Resource Transition law, from that law alone, with the rule on or off (§ Resource Transition). There is **no** `should_be_involved` block; an earlier version of this line claimed one.
