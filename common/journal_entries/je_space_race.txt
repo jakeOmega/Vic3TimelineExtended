@@ -1459,29 +1459,36 @@ je_space_race_solar_colonization = {
 						# Reset progress (preserve overflow using the pre-advancement goal)
 						change_variable = { name = sr_progress_solar_colonization subtract = var:sr_goal_before_colony }
 						remove_variable = sr_goal_before_colony
-						# If all stages exhausted, mark complete but keep JE alive for modifiers.
-						# Only a country that holds a colony earns the all-colonies reward.
-						# One that holds none fails `possible` the moment the last site is
-						# claimed, and `can_deactivate = yes` drops the entry back to
-						# inactive; sr_cleanup_inactive_space_race_milestones then clears
-						# its variables. It is not paid, and not pinned open.
-						if = {
-							limit = {
-								has_global_variable = sr_all_colonies_complete
-								has_variable = sr_colony_count
-								var:sr_colony_count >= 1
-							}
-							set_variable = { name = sr_completed_solar_colonization value = yes }
-							je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
-							remove_variable = sr_active_solar_colonization
-							if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
-							if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
-							if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
-							if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
-							sr_complete_milestone_effect = yes
-						}
 					}
 				}
+			}
+			# Once every world is claimed, the programme is over for every colony
+			# holder, not only the one that took the last world: mark it complete
+			# and keep the entry open for the modifiers. Checked every month, not
+			# on a bar fill, so another holder does not go on paying its funding
+			# and approach for a bar that can found nothing (until 2026-10-03 it
+			# finished only when that bar next filled, years later), and one with
+			# its production method off finishes too. A finished programme is what
+			# lets the Commercial Space Industry dividend start
+			# (sr_space_race_concluded). A country that holds no colony fails
+			# `possible` the moment the last site is claimed, and
+			# `can_deactivate = yes` drops the entry back to inactive;
+			# sr_cleanup_inactive_space_race_milestones then clears its
+			# variables. It is not paid, and not pinned open.
+			if = {
+				limit = {
+					has_variable = sr_active_solar_colonization
+					has_global_variable = sr_all_colonies_complete
+					sr_has_space_colony = yes
+				}
+				set_variable = { name = sr_completed_solar_colonization value = yes }
+				je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
+				remove_variable = sr_active_solar_colonization
+				if = { limit = { has_variable = sr_funding_solar_colonization } remove_variable = sr_funding_solar_colonization }
+				if = { limit = { has_variable = sr_safe_solar_colonization } remove_variable = sr_safe_solar_colonization }
+				if = { limit = { has_variable = sr_ambitious_solar_colonization } remove_variable = sr_ambitious_solar_colonization }
+				if = { limit = { has_variable = sr_progress_solar_colonization } remove_variable = sr_progress_solar_colonization }
+				sr_complete_milestone_effect = yes
 			}
 			sr_set_milestone_status_base = { MILESTONE = solar_colonization }
 		}

@@ -352,11 +352,40 @@ the event Beyond the Blue.
 The entry stays open for as long as you hold a colony, even if you switch off
 the Solar Colonization method, so your colony modifiers are never lost; the
 program simply stops (its panel reads Idle), and bills no funding or approach
-cost, until the method returns. Once all 34 worlds are claimed,
-Solar System Colonization finishes for the country that took the last one, and
-for any other colony holder whose program is still running when its bar next
-fills. Finishing grants Interplanetary Trade Networks: +10% prestige, +5%
-research speed, +10% influence and +15% cultural pull.
+cost, until the method returns. Once all 34 worlds are claimed, Solar System
+Colonization finishes within a month for every country that holds a colony,
+whoever took the last world and whether or not its program is running.
+Finishing grants Interplanetary Trade Networks: +10% prestige, +5% research
+speed, +10% influence and +15% cultural pull.
+
+## After the space race
+
+The race is over for you once you have finished all seven single-goal
+milestones, all 34 worlds have been claimed by anyone, and no program of yours is
+still running. A power that gets there after the last world is gone qualifies as
+soon as its own seven milestones are done. From then on, the progress your
+sources still give each month goes into your Extraplanetary Bases as
+Commercial Space Industry: each point of monthly progress adds +5%
+Extraplanetary Base throughput, up to +50% at 10 points. The first time it
+applies, the event The Commercial Space Age tells you.
+
+Only the flat sources in the table under [Space race funding and
+cost](#space-race-funding-and-cost) count: the Space Program's method, the
+Space Elevator, the space companies, the International Space Partnership, the
+two technologies, and any mission choice, probe target or colony specialization
+that adds progress. Funding adds nothing, since no milestone is left to fund,
+and neither do progress bonuses such as Antimatter Engines. The figure is
+recalculated every month, so a new Space Elevator level or a space company
+losing its prosperity shows in the next one.
+
+Commercial Space Industry does nothing until you build Extraplanetary Bases
+(Asteroid Mining). A Space Elevator of 10 levels reaches the cap on its own. The
+Space Program's method counts for at most one point, so once the race is over
+you can switch it to Earth Orbit, which uses 500 Launch Capacity instead of up to
+100,000, and give up only half a point. When you choose a colony's
+specialization, an option that adds progress keeps some value after the race:
+below the cap, it is worth about a quarter of what the mining options give.
+AI powers gain Commercial Space Industry in the same way.
 
 ## Space race events
 
