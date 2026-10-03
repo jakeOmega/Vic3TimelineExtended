@@ -1,5 +1,6 @@
 # Building emissions implementation handoff
 
+Draft PR: [#681](https://github.com/jakeOmega/Vic3TimelineExtended/pull/681).
 Branch: `codex/building-emissions`. Base: `ba906c2b` from `origin/main`,
 pulled on 2026-10-03. The working tree was clean when work began.
 
@@ -74,7 +75,8 @@ probe textures reuse existing modern plant icons.
 
 - `a1e1ec1b`: initial branch/handoff.
 - `e8e1be31`: opt-in phase-0 engine probe.
-- Phase-1 commit follows those two; use `git log -3 --oneline` for its ID.
+- `1dc9d7f1`: validated phase-1 implementation and guide.
+- A final documentation commit records the draft PR link.
   The working tree should be clean at handoff.
 
 Phase 1 is deliberately reviewable separately from capture's additional
