@@ -11,6 +11,7 @@
 # goods changes are not visible later in the same effect, so run each at most once
 # per effect execution; a call in a later execution then changes nothing. The
 # removal loop never touches the enacted amendment, and the add checks only that one.
+# te_tax_gen_count_goods_drift: the writer's drift count of goods (te_tax_detect_drift).
 # The scheduler's parts follow the syncs: te_tax_gen_sunset_<key>,
 # te_tax_gen_commence_<slot>, te_tax_gen_hold_missed_<slot>, te_tax_gen_apply_<slot>,
 # te_tax_gen_store_<slot>, te_tax_gen_next_month and te_tax_gen_history_write, called
@@ -1734,6 +1735,77 @@ te_tax_gen_sync_goods = {
 	if = { limit = { has_consumption_tax = g:tanks } remove_taxed_goods = g:tanks }
 	if = { limit = { has_consumption_tax = g:tech_metals } remove_taxed_goods = g:tech_metals }
 	if = { limit = { has_consumption_tax = g:tools } remove_taxed_goods = g:tools }
+}
+
+# Drift (te_tax_detect_drift, te_tax_collection_effects.txt): +1 to te_tax_drift_goods for
+# each good whose native consumption tax differs from the enacted list, counted before
+# the sync puts it back. Reads native state; writes only the counter.
+te_tax_gen_count_goods_drift = {
+	if = { limit = { OR = { AND = { var:te_tax_en_g_aeroplanes = 1 NOT = { has_consumption_tax = g:aeroplanes } } AND = { NOT = { var:te_tax_en_g_aeroplanes = 1 } has_consumption_tax = g:aeroplanes } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_automobiles = 1 NOT = { has_consumption_tax = g:automobiles } } AND = { NOT = { var:te_tax_en_g_automobiles = 1 } has_consumption_tax = g:automobiles } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_clippers = 1 NOT = { has_consumption_tax = g:clippers } } AND = { NOT = { var:te_tax_en_g_clippers = 1 } has_consumption_tax = g:clippers } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_clothes = 1 NOT = { has_consumption_tax = g:clothes } } AND = { NOT = { var:te_tax_en_g_clothes = 1 } has_consumption_tax = g:clothes } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_coal = 1 NOT = { has_consumption_tax = g:coal } } AND = { NOT = { var:te_tax_en_g_coal = 1 } has_consumption_tax = g:coal } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_coffee = 1 NOT = { has_consumption_tax = g:coffee } } AND = { NOT = { var:te_tax_en_g_coffee = 1 } has_consumption_tax = g:coffee } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_consumer_appliances = 1 NOT = { has_consumption_tax = g:consumer_appliances } } AND = { NOT = { var:te_tax_en_g_consumer_appliances = 1 } has_consumption_tax = g:consumer_appliances } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_digital_access = 1 NOT = { has_consumption_tax = g:digital_access } } AND = { NOT = { var:te_tax_en_g_digital_access = 1 } has_consumption_tax = g:digital_access } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_digital_assets = 1 NOT = { has_consumption_tax = g:digital_assets } } AND = { NOT = { var:te_tax_en_g_digital_assets = 1 } has_consumption_tax = g:digital_assets } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_electricity = 1 NOT = { has_consumption_tax = g:electricity } } AND = { NOT = { var:te_tax_en_g_electricity = 1 } has_consumption_tax = g:electricity } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_fabric = 1 NOT = { has_consumption_tax = g:fabric } } AND = { NOT = { var:te_tax_en_g_fabric = 1 } has_consumption_tax = g:fabric } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_fine_art = 1 NOT = { has_consumption_tax = g:fine_art } } AND = { NOT = { var:te_tax_en_g_fine_art = 1 } has_consumption_tax = g:fine_art } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_fish = 1 NOT = { has_consumption_tax = g:fish } } AND = { NOT = { var:te_tax_en_g_fish = 1 } has_consumption_tax = g:fish } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_fruit = 1 NOT = { has_consumption_tax = g:fruit } } AND = { NOT = { var:te_tax_en_g_fruit = 1 } has_consumption_tax = g:fruit } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_furniture = 1 NOT = { has_consumption_tax = g:furniture } } AND = { NOT = { var:te_tax_en_g_furniture = 1 } has_consumption_tax = g:furniture } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_glass = 1 NOT = { has_consumption_tax = g:glass } } AND = { NOT = { var:te_tax_en_g_glass = 1 } has_consumption_tax = g:glass } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_grain = 1 NOT = { has_consumption_tax = g:grain } } AND = { NOT = { var:te_tax_en_g_grain = 1 } has_consumption_tax = g:grain } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_groceries = 1 NOT = { has_consumption_tax = g:groceries } } AND = { NOT = { var:te_tax_en_g_groceries = 1 } has_consumption_tax = g:groceries } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_liquor = 1 NOT = { has_consumption_tax = g:liquor } } AND = { NOT = { var:te_tax_en_g_liquor = 1 } has_consumption_tax = g:liquor } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_luxury_clothes = 1 NOT = { has_consumption_tax = g:luxury_clothes } } AND = { NOT = { var:te_tax_en_g_luxury_clothes = 1 } has_consumption_tax = g:luxury_clothes } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_luxury_furniture = 1 NOT = { has_consumption_tax = g:luxury_furniture } } AND = { NOT = { var:te_tax_en_g_luxury_furniture = 1 } has_consumption_tax = g:luxury_furniture } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_meat = 1 NOT = { has_consumption_tax = g:meat } } AND = { NOT = { var:te_tax_en_g_meat = 1 } has_consumption_tax = g:meat } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_oil = 1 NOT = { has_consumption_tax = g:oil } } AND = { NOT = { var:te_tax_en_g_oil = 1 } has_consumption_tax = g:oil } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_opium = 1 NOT = { has_consumption_tax = g:opium } } AND = { NOT = { var:te_tax_en_g_opium = 1 } has_consumption_tax = g:opium } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_paper = 1 NOT = { has_consumption_tax = g:paper } } AND = { NOT = { var:te_tax_en_g_paper = 1 } has_consumption_tax = g:paper } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_porcelain = 1 NOT = { has_consumption_tax = g:porcelain } } AND = { NOT = { var:te_tax_en_g_porcelain = 1 } has_consumption_tax = g:porcelain } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_radios = 1 NOT = { has_consumption_tax = g:radios } } AND = { NOT = { var:te_tax_en_g_radios = 1 } has_consumption_tax = g:radios } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_services = 1 NOT = { has_consumption_tax = g:services } } AND = { NOT = { var:te_tax_en_g_services = 1 } has_consumption_tax = g:services } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_silk = 1 NOT = { has_consumption_tax = g:silk } } AND = { NOT = { var:te_tax_en_g_silk = 1 } has_consumption_tax = g:silk } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_small_arms = 1 NOT = { has_consumption_tax = g:small_arms } } AND = { NOT = { var:te_tax_en_g_small_arms = 1 } has_consumption_tax = g:small_arms } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_steamers = 1 NOT = { has_consumption_tax = g:steamers } } AND = { NOT = { var:te_tax_en_g_steamers = 1 } has_consumption_tax = g:steamers } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_sugar = 1 NOT = { has_consumption_tax = g:sugar } } AND = { NOT = { var:te_tax_en_g_sugar = 1 } has_consumption_tax = g:sugar } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_tea = 1 NOT = { has_consumption_tax = g:tea } } AND = { NOT = { var:te_tax_en_g_tea = 1 } has_consumption_tax = g:tea } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_telephones = 1 NOT = { has_consumption_tax = g:telephones } } AND = { NOT = { var:te_tax_en_g_telephones = 1 } has_consumption_tax = g:telephones } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_tobacco = 1 NOT = { has_consumption_tax = g:tobacco } } AND = { NOT = { var:te_tax_en_g_tobacco = 1 } has_consumption_tax = g:tobacco } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_tourism = 1 NOT = { has_consumption_tax = g:tourism } } AND = { NOT = { var:te_tax_en_g_tourism = 1 } has_consumption_tax = g:tourism } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_transportation = 1 NOT = { has_consumption_tax = g:transportation } } AND = { NOT = { var:te_tax_en_g_transportation = 1 } has_consumption_tax = g:transportation } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_wine = 1 NOT = { has_consumption_tax = g:wine } } AND = { NOT = { var:te_tax_en_g_wine = 1 } has_consumption_tax = g:wine } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { OR = { AND = { var:te_tax_en_g_wood = 1 NOT = { has_consumption_tax = g:wood } } AND = { NOT = { var:te_tax_en_g_wood = 1 } has_consumption_tax = g:wood } } } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:advanced_materials } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:ammunition } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:artillery } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:construction } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:dye } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:electronic_components } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:engines } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:explosives } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:fertilizer } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:gold } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:hardwood } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:iron } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:ironclads } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:launch_capacity } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:lead } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:magnetic_drive_ships } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:manowars } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:merchant_marine } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:motor_ships } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:robotics } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:rubber } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:steel } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:sulfur } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:tanks } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:tech_metals } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:tools } change_variable = { name = te_tax_drift_goods add = 1 } }
 }
 
 # Wage tax: executes the enacted value's sunset once its month has come

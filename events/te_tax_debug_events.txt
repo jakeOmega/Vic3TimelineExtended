@@ -1,0 +1,28 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE TEST CONSOLE — fired only from the console:
+#   event te_tax_debug.1
+# ============================================================================
+# Vic3's console has no `effect` command; `event <id>` is the way to run script
+# by hand. Nothing in the mod fires this event.
+#
+# te_tax_debug.1 activates Per-Capita Taxation over the tax code's carrier law,
+# as a vanilla event or button would (activate_law ignores can_enact), to test
+# the re-assert (docs/systems/tax_code_schema.md, "Native controls and drift").
+# Expected in debug.log, the same day: "TE_TAX reasserted" (te_tax.5, from
+# on_law_activated) with the carrier back in the law panel; the next day the
+# sync (te_tax.4) and a "TE_TAX drift ... amend=" line for each tax the code
+# collects, whose amendment the swap dropped; collection back as before.
+# ============================================================================
+namespace = te_tax_debug
+
+te_tax_debug.1 = { # REVIEWED 2026-10-02: console-only test event (`event te_tax_debug.1`); never fired by script on purpose
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		debug_log = "TE_TAX debug: activating Per-Capita Taxation over the tax code law; country=[THIS.GetCountry.GetNameNoFormatting]"
+		activate_law = law_type:law_per_capita_based_taxation
+	}
+}

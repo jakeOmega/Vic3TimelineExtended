@@ -607,14 +607,8 @@ te_tp_tab_sgui = {
 	is_valid = { always = no }
 	effect = { }
 }
-# Read-only gate; no reset writer masks a bypass. Scope is only ROOT.
-te_tp_native_controls_sgui = {
-	scope = country
-	is_shown = { always = yes }
-	ai_is_valid = { always = no }
-	is_valid = { NOT = { has_variable = te_tp_lock } }
-	effect = { }
-}
+# The native-control lock (te_tp_lock) is honoured by the production gates in
+# te_tax_native_sguis.txt, which replaced the probe's own native-control gate.
 
 te_tp_supersede_sgui = {
 	scope = country

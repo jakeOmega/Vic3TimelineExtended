@@ -114,6 +114,21 @@ re_spectrum_auction = {
 	tax_dividends_add = 0.01
 	country_legitimacy_base_add = -5
 }
+# Under the legislated tax code (te_tax_code_on) only the code sets tax rates,
+# so repeatable_events.60.a grants these two instead of re_spectrum_auction:
+# its legitimacy cost, and the auction's yield as flat income, applied with
+# multiplier = sv_money_flow_event_small (0.01% of GDP a week, about 0.5% a
+# year: the order of a one-point dividend tax). docs/systems/tax_code_schema.md,
+# "Native controls and drift".
+te_tax_spectrum_auction = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_legitimacy_base_add = -5
+}
+te_tax_spectrum_auction_proceeds = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	# Base 1: applied with multiplier = sv_money_flow_event_small (GDP-scaled flat income).
+	country_tax_income_add = 1
+}
 re_spectrum_public_grid = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	building_electrics_industry_radio_throughput_add = -0.1

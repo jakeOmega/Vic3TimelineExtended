@@ -316,6 +316,374 @@ te_tax_amendment_matches_cons = {
 	}
 }
 
+# Drift (te_tax_detect_drift, te_tax_collection_effects.txt). Country scope; read the
+# native state against the enacted code before the sync puts it back.
+# te_tax_gen_goods_drift: some good's native consumption tax differs from the enacted list.
+te_tax_gen_goods_drift = {
+	OR = {
+		OR = { AND = { var:te_tax_en_g_aeroplanes = 1 NOT = { has_consumption_tax = g:aeroplanes } } AND = { NOT = { var:te_tax_en_g_aeroplanes = 1 } has_consumption_tax = g:aeroplanes } }
+		OR = { AND = { var:te_tax_en_g_automobiles = 1 NOT = { has_consumption_tax = g:automobiles } } AND = { NOT = { var:te_tax_en_g_automobiles = 1 } has_consumption_tax = g:automobiles } }
+		OR = { AND = { var:te_tax_en_g_clippers = 1 NOT = { has_consumption_tax = g:clippers } } AND = { NOT = { var:te_tax_en_g_clippers = 1 } has_consumption_tax = g:clippers } }
+		OR = { AND = { var:te_tax_en_g_clothes = 1 NOT = { has_consumption_tax = g:clothes } } AND = { NOT = { var:te_tax_en_g_clothes = 1 } has_consumption_tax = g:clothes } }
+		OR = { AND = { var:te_tax_en_g_coal = 1 NOT = { has_consumption_tax = g:coal } } AND = { NOT = { var:te_tax_en_g_coal = 1 } has_consumption_tax = g:coal } }
+		OR = { AND = { var:te_tax_en_g_coffee = 1 NOT = { has_consumption_tax = g:coffee } } AND = { NOT = { var:te_tax_en_g_coffee = 1 } has_consumption_tax = g:coffee } }
+		OR = { AND = { var:te_tax_en_g_consumer_appliances = 1 NOT = { has_consumption_tax = g:consumer_appliances } } AND = { NOT = { var:te_tax_en_g_consumer_appliances = 1 } has_consumption_tax = g:consumer_appliances } }
+		OR = { AND = { var:te_tax_en_g_digital_access = 1 NOT = { has_consumption_tax = g:digital_access } } AND = { NOT = { var:te_tax_en_g_digital_access = 1 } has_consumption_tax = g:digital_access } }
+		OR = { AND = { var:te_tax_en_g_digital_assets = 1 NOT = { has_consumption_tax = g:digital_assets } } AND = { NOT = { var:te_tax_en_g_digital_assets = 1 } has_consumption_tax = g:digital_assets } }
+		OR = { AND = { var:te_tax_en_g_electricity = 1 NOT = { has_consumption_tax = g:electricity } } AND = { NOT = { var:te_tax_en_g_electricity = 1 } has_consumption_tax = g:electricity } }
+		OR = { AND = { var:te_tax_en_g_fabric = 1 NOT = { has_consumption_tax = g:fabric } } AND = { NOT = { var:te_tax_en_g_fabric = 1 } has_consumption_tax = g:fabric } }
+		OR = { AND = { var:te_tax_en_g_fine_art = 1 NOT = { has_consumption_tax = g:fine_art } } AND = { NOT = { var:te_tax_en_g_fine_art = 1 } has_consumption_tax = g:fine_art } }
+		OR = { AND = { var:te_tax_en_g_fish = 1 NOT = { has_consumption_tax = g:fish } } AND = { NOT = { var:te_tax_en_g_fish = 1 } has_consumption_tax = g:fish } }
+		OR = { AND = { var:te_tax_en_g_fruit = 1 NOT = { has_consumption_tax = g:fruit } } AND = { NOT = { var:te_tax_en_g_fruit = 1 } has_consumption_tax = g:fruit } }
+		OR = { AND = { var:te_tax_en_g_furniture = 1 NOT = { has_consumption_tax = g:furniture } } AND = { NOT = { var:te_tax_en_g_furniture = 1 } has_consumption_tax = g:furniture } }
+		OR = { AND = { var:te_tax_en_g_glass = 1 NOT = { has_consumption_tax = g:glass } } AND = { NOT = { var:te_tax_en_g_glass = 1 } has_consumption_tax = g:glass } }
+		OR = { AND = { var:te_tax_en_g_grain = 1 NOT = { has_consumption_tax = g:grain } } AND = { NOT = { var:te_tax_en_g_grain = 1 } has_consumption_tax = g:grain } }
+		OR = { AND = { var:te_tax_en_g_groceries = 1 NOT = { has_consumption_tax = g:groceries } } AND = { NOT = { var:te_tax_en_g_groceries = 1 } has_consumption_tax = g:groceries } }
+		OR = { AND = { var:te_tax_en_g_liquor = 1 NOT = { has_consumption_tax = g:liquor } } AND = { NOT = { var:te_tax_en_g_liquor = 1 } has_consumption_tax = g:liquor } }
+		OR = { AND = { var:te_tax_en_g_luxury_clothes = 1 NOT = { has_consumption_tax = g:luxury_clothes } } AND = { NOT = { var:te_tax_en_g_luxury_clothes = 1 } has_consumption_tax = g:luxury_clothes } }
+		OR = { AND = { var:te_tax_en_g_luxury_furniture = 1 NOT = { has_consumption_tax = g:luxury_furniture } } AND = { NOT = { var:te_tax_en_g_luxury_furniture = 1 } has_consumption_tax = g:luxury_furniture } }
+		OR = { AND = { var:te_tax_en_g_meat = 1 NOT = { has_consumption_tax = g:meat } } AND = { NOT = { var:te_tax_en_g_meat = 1 } has_consumption_tax = g:meat } }
+		OR = { AND = { var:te_tax_en_g_oil = 1 NOT = { has_consumption_tax = g:oil } } AND = { NOT = { var:te_tax_en_g_oil = 1 } has_consumption_tax = g:oil } }
+		OR = { AND = { var:te_tax_en_g_opium = 1 NOT = { has_consumption_tax = g:opium } } AND = { NOT = { var:te_tax_en_g_opium = 1 } has_consumption_tax = g:opium } }
+		OR = { AND = { var:te_tax_en_g_paper = 1 NOT = { has_consumption_tax = g:paper } } AND = { NOT = { var:te_tax_en_g_paper = 1 } has_consumption_tax = g:paper } }
+		OR = { AND = { var:te_tax_en_g_porcelain = 1 NOT = { has_consumption_tax = g:porcelain } } AND = { NOT = { var:te_tax_en_g_porcelain = 1 } has_consumption_tax = g:porcelain } }
+		OR = { AND = { var:te_tax_en_g_radios = 1 NOT = { has_consumption_tax = g:radios } } AND = { NOT = { var:te_tax_en_g_radios = 1 } has_consumption_tax = g:radios } }
+		OR = { AND = { var:te_tax_en_g_services = 1 NOT = { has_consumption_tax = g:services } } AND = { NOT = { var:te_tax_en_g_services = 1 } has_consumption_tax = g:services } }
+		OR = { AND = { var:te_tax_en_g_silk = 1 NOT = { has_consumption_tax = g:silk } } AND = { NOT = { var:te_tax_en_g_silk = 1 } has_consumption_tax = g:silk } }
+		OR = { AND = { var:te_tax_en_g_small_arms = 1 NOT = { has_consumption_tax = g:small_arms } } AND = { NOT = { var:te_tax_en_g_small_arms = 1 } has_consumption_tax = g:small_arms } }
+		OR = { AND = { var:te_tax_en_g_steamers = 1 NOT = { has_consumption_tax = g:steamers } } AND = { NOT = { var:te_tax_en_g_steamers = 1 } has_consumption_tax = g:steamers } }
+		OR = { AND = { var:te_tax_en_g_sugar = 1 NOT = { has_consumption_tax = g:sugar } } AND = { NOT = { var:te_tax_en_g_sugar = 1 } has_consumption_tax = g:sugar } }
+		OR = { AND = { var:te_tax_en_g_tea = 1 NOT = { has_consumption_tax = g:tea } } AND = { NOT = { var:te_tax_en_g_tea = 1 } has_consumption_tax = g:tea } }
+		OR = { AND = { var:te_tax_en_g_telephones = 1 NOT = { has_consumption_tax = g:telephones } } AND = { NOT = { var:te_tax_en_g_telephones = 1 } has_consumption_tax = g:telephones } }
+		OR = { AND = { var:te_tax_en_g_tobacco = 1 NOT = { has_consumption_tax = g:tobacco } } AND = { NOT = { var:te_tax_en_g_tobacco = 1 } has_consumption_tax = g:tobacco } }
+		OR = { AND = { var:te_tax_en_g_tourism = 1 NOT = { has_consumption_tax = g:tourism } } AND = { NOT = { var:te_tax_en_g_tourism = 1 } has_consumption_tax = g:tourism } }
+		OR = { AND = { var:te_tax_en_g_transportation = 1 NOT = { has_consumption_tax = g:transportation } } AND = { NOT = { var:te_tax_en_g_transportation = 1 } has_consumption_tax = g:transportation } }
+		OR = { AND = { var:te_tax_en_g_wine = 1 NOT = { has_consumption_tax = g:wine } } AND = { NOT = { var:te_tax_en_g_wine = 1 } has_consumption_tax = g:wine } }
+		OR = { AND = { var:te_tax_en_g_wood = 1 NOT = { has_consumption_tax = g:wood } } AND = { NOT = { var:te_tax_en_g_wood = 1 } has_consumption_tax = g:wood } }
+		has_consumption_tax = g:advanced_materials
+		has_consumption_tax = g:ammunition
+		has_consumption_tax = g:artillery
+		has_consumption_tax = g:construction
+		has_consumption_tax = g:dye
+		has_consumption_tax = g:electronic_components
+		has_consumption_tax = g:engines
+		has_consumption_tax = g:explosives
+		has_consumption_tax = g:fertilizer
+		has_consumption_tax = g:gold
+		has_consumption_tax = g:hardwood
+		has_consumption_tax = g:iron
+		has_consumption_tax = g:ironclads
+		has_consumption_tax = g:launch_capacity
+		has_consumption_tax = g:lead
+		has_consumption_tax = g:magnetic_drive_ships
+		has_consumption_tax = g:manowars
+		has_consumption_tax = g:merchant_marine
+		has_consumption_tax = g:motor_ships
+		has_consumption_tax = g:robotics
+		has_consumption_tax = g:rubber
+		has_consumption_tax = g:steel
+		has_consumption_tax = g:sulfur
+		has_consumption_tax = g:tanks
+		has_consumption_tax = g:tech_metals
+		has_consumption_tax = g:tools
+	}
+}
+
+# te_tax_gen_amend_drift_wage: the carrier's wage tax amendments differ from
+# te_tax_en_wage: the enacted one is missing, or another of the family is on the law.
+te_tax_gen_amend_drift_wage = {
+	OR = {
+		AND = { var:te_tax_en_wage = 1 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_1 } } }
+		AND = { NOT = { var:te_tax_en_wage = 1 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_1 } }
+		AND = { var:te_tax_en_wage = 2 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_2 } } }
+		AND = { NOT = { var:te_tax_en_wage = 2 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_2 } }
+		AND = { var:te_tax_en_wage = 3 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_3 } } }
+		AND = { NOT = { var:te_tax_en_wage = 3 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_3 } }
+		AND = { var:te_tax_en_wage = 4 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_4 } } }
+		AND = { NOT = { var:te_tax_en_wage = 4 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_4 } }
+		AND = { var:te_tax_en_wage = 5 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_5 } } }
+		AND = { NOT = { var:te_tax_en_wage = 5 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_5 } }
+		AND = { var:te_tax_en_wage = 6 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_6 } } }
+		AND = { NOT = { var:te_tax_en_wage = 6 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_6 } }
+		AND = { var:te_tax_en_wage = 7 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_7 } } }
+		AND = { NOT = { var:te_tax_en_wage = 7 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_7 } }
+		AND = { var:te_tax_en_wage = 8 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_8 } } }
+		AND = { NOT = { var:te_tax_en_wage = 8 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_8 } }
+		AND = { var:te_tax_en_wage = 9 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_9 } } }
+		AND = { NOT = { var:te_tax_en_wage = 9 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_9 } }
+		AND = { var:te_tax_en_wage = 10 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_10 } } }
+		AND = { NOT = { var:te_tax_en_wage = 10 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_10 } }
+		AND = { var:te_tax_en_wage = 11 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_11 } } }
+		AND = { NOT = { var:te_tax_en_wage = 11 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_11 } }
+		AND = { var:te_tax_en_wage = 12 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_12 } } }
+		AND = { NOT = { var:te_tax_en_wage = 12 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_12 } }
+		AND = { var:te_tax_en_wage = 13 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_13 } } }
+		AND = { NOT = { var:te_tax_en_wage = 13 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_13 } }
+		AND = { var:te_tax_en_wage = 14 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_14 } } }
+		AND = { NOT = { var:te_tax_en_wage = 14 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_14 } }
+		AND = { var:te_tax_en_wage = 15 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_15 } } }
+		AND = { NOT = { var:te_tax_en_wage = 15 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_15 } }
+		AND = { var:te_tax_en_wage = 16 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_16 } } }
+		AND = { NOT = { var:te_tax_en_wage = 16 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_16 } }
+		AND = { var:te_tax_en_wage = 17 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_17 } } }
+		AND = { NOT = { var:te_tax_en_wage = 17 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_17 } }
+		AND = { var:te_tax_en_wage = 18 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_18 } } }
+		AND = { NOT = { var:te_tax_en_wage = 18 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_18 } }
+		AND = { var:te_tax_en_wage = 19 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_19 } } }
+		AND = { NOT = { var:te_tax_en_wage = 19 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_19 } }
+		AND = { var:te_tax_en_wage = 20 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_20 } } }
+		AND = { NOT = { var:te_tax_en_wage = 20 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_wage_20 } }
+	}
+}
+
+# te_tax_gen_amend_drift_div: the carrier's dividend tax amendments differ from
+# te_tax_en_div: the enacted one is missing, or another of the family is on the law.
+te_tax_gen_amend_drift_div = {
+	OR = {
+		AND = { var:te_tax_en_div = 1 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_1 } } }
+		AND = { NOT = { var:te_tax_en_div = 1 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_1 } }
+		AND = { var:te_tax_en_div = 2 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_2 } } }
+		AND = { NOT = { var:te_tax_en_div = 2 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_2 } }
+		AND = { var:te_tax_en_div = 3 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_3 } } }
+		AND = { NOT = { var:te_tax_en_div = 3 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_3 } }
+		AND = { var:te_tax_en_div = 4 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_4 } } }
+		AND = { NOT = { var:te_tax_en_div = 4 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_4 } }
+		AND = { var:te_tax_en_div = 5 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_5 } } }
+		AND = { NOT = { var:te_tax_en_div = 5 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_5 } }
+		AND = { var:te_tax_en_div = 6 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_6 } } }
+		AND = { NOT = { var:te_tax_en_div = 6 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_6 } }
+		AND = { var:te_tax_en_div = 7 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_7 } } }
+		AND = { NOT = { var:te_tax_en_div = 7 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_7 } }
+		AND = { var:te_tax_en_div = 8 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_8 } } }
+		AND = { NOT = { var:te_tax_en_div = 8 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_8 } }
+		AND = { var:te_tax_en_div = 9 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_9 } } }
+		AND = { NOT = { var:te_tax_en_div = 9 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_9 } }
+		AND = { var:te_tax_en_div = 10 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_10 } } }
+		AND = { NOT = { var:te_tax_en_div = 10 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_10 } }
+		AND = { var:te_tax_en_div = 11 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_11 } } }
+		AND = { NOT = { var:te_tax_en_div = 11 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_11 } }
+		AND = { var:te_tax_en_div = 12 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_12 } } }
+		AND = { NOT = { var:te_tax_en_div = 12 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_12 } }
+		AND = { var:te_tax_en_div = 13 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_13 } } }
+		AND = { NOT = { var:te_tax_en_div = 13 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_13 } }
+		AND = { var:te_tax_en_div = 14 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_14 } } }
+		AND = { NOT = { var:te_tax_en_div = 14 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_14 } }
+		AND = { var:te_tax_en_div = 15 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_15 } } }
+		AND = { NOT = { var:te_tax_en_div = 15 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_15 } }
+		AND = { var:te_tax_en_div = 16 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_16 } } }
+		AND = { NOT = { var:te_tax_en_div = 16 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_16 } }
+		AND = { var:te_tax_en_div = 17 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_17 } } }
+		AND = { NOT = { var:te_tax_en_div = 17 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_17 } }
+		AND = { var:te_tax_en_div = 18 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_18 } } }
+		AND = { NOT = { var:te_tax_en_div = 18 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_18 } }
+		AND = { var:te_tax_en_div = 19 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_19 } } }
+		AND = { NOT = { var:te_tax_en_div = 19 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_19 } }
+		AND = { var:te_tax_en_div = 20 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_20 } } }
+		AND = { NOT = { var:te_tax_en_div = 20 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_div_20 } }
+	}
+}
+
+# te_tax_gen_amend_drift_land: the carrier's rural assessment amendments differ from
+# te_tax_en_land: the enacted one is missing, or another of the family is on the law.
+te_tax_gen_amend_drift_land = {
+	OR = {
+		AND = { var:te_tax_en_land = 1 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_1 } } }
+		AND = { NOT = { var:te_tax_en_land = 1 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_1 } }
+		AND = { var:te_tax_en_land = 2 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_2 } } }
+		AND = { NOT = { var:te_tax_en_land = 2 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_2 } }
+		AND = { var:te_tax_en_land = 3 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_3 } } }
+		AND = { NOT = { var:te_tax_en_land = 3 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_3 } }
+		AND = { var:te_tax_en_land = 4 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_4 } } }
+		AND = { NOT = { var:te_tax_en_land = 4 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_4 } }
+		AND = { var:te_tax_en_land = 5 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_5 } } }
+		AND = { NOT = { var:te_tax_en_land = 5 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_5 } }
+		AND = { var:te_tax_en_land = 6 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_6 } } }
+		AND = { NOT = { var:te_tax_en_land = 6 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_6 } }
+		AND = { var:te_tax_en_land = 7 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_7 } } }
+		AND = { NOT = { var:te_tax_en_land = 7 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_7 } }
+		AND = { var:te_tax_en_land = 8 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_8 } } }
+		AND = { NOT = { var:te_tax_en_land = 8 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_8 } }
+		AND = { var:te_tax_en_land = 9 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_9 } } }
+		AND = { NOT = { var:te_tax_en_land = 9 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_9 } }
+		AND = { var:te_tax_en_land = 10 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_10 } } }
+		AND = { NOT = { var:te_tax_en_land = 10 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_10 } }
+		AND = { var:te_tax_en_land = 11 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_11 } } }
+		AND = { NOT = { var:te_tax_en_land = 11 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_11 } }
+		AND = { var:te_tax_en_land = 12 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_12 } } }
+		AND = { NOT = { var:te_tax_en_land = 12 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_12 } }
+		AND = { var:te_tax_en_land = 13 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_13 } } }
+		AND = { NOT = { var:te_tax_en_land = 13 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_13 } }
+		AND = { var:te_tax_en_land = 14 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_14 } } }
+		AND = { NOT = { var:te_tax_en_land = 14 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_14 } }
+		AND = { var:te_tax_en_land = 15 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_15 } } }
+		AND = { NOT = { var:te_tax_en_land = 15 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_15 } }
+		AND = { var:te_tax_en_land = 16 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_16 } } }
+		AND = { NOT = { var:te_tax_en_land = 16 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_16 } }
+		AND = { var:te_tax_en_land = 17 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_17 } } }
+		AND = { NOT = { var:te_tax_en_land = 17 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_17 } }
+		AND = { var:te_tax_en_land = 18 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_18 } } }
+		AND = { NOT = { var:te_tax_en_land = 18 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_18 } }
+		AND = { var:te_tax_en_land = 19 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_19 } } }
+		AND = { NOT = { var:te_tax_en_land = 19 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_19 } }
+		AND = { var:te_tax_en_land = 20 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_20 } } }
+		AND = { NOT = { var:te_tax_en_land = 20 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_20 } }
+		AND = { var:te_tax_en_land = 21 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_21 } } }
+		AND = { NOT = { var:te_tax_en_land = 21 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_21 } }
+		AND = { var:te_tax_en_land = 22 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_22 } } }
+		AND = { NOT = { var:te_tax_en_land = 22 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_22 } }
+		AND = { var:te_tax_en_land = 23 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_23 } } }
+		AND = { NOT = { var:te_tax_en_land = 23 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_23 } }
+		AND = { var:te_tax_en_land = 24 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_24 } } }
+		AND = { NOT = { var:te_tax_en_land = 24 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_24 } }
+		AND = { var:te_tax_en_land = 25 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_25 } } }
+		AND = { NOT = { var:te_tax_en_land = 25 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_25 } }
+		AND = { var:te_tax_en_land = 26 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_26 } } }
+		AND = { NOT = { var:te_tax_en_land = 26 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_26 } }
+		AND = { var:te_tax_en_land = 27 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_27 } } }
+		AND = { NOT = { var:te_tax_en_land = 27 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_27 } }
+		AND = { var:te_tax_en_land = 28 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_28 } } }
+		AND = { NOT = { var:te_tax_en_land = 28 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_28 } }
+		AND = { var:te_tax_en_land = 29 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_29 } } }
+		AND = { NOT = { var:te_tax_en_land = 29 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_29 } }
+		AND = { var:te_tax_en_land = 30 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_30 } } }
+		AND = { NOT = { var:te_tax_en_land = 30 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_30 } }
+		AND = { var:te_tax_en_land = 31 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_31 } } }
+		AND = { NOT = { var:te_tax_en_land = 31 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_31 } }
+		AND = { var:te_tax_en_land = 32 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_32 } } }
+		AND = { NOT = { var:te_tax_en_land = 32 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_32 } }
+		AND = { var:te_tax_en_land = 33 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_33 } } }
+		AND = { NOT = { var:te_tax_en_land = 33 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_33 } }
+		AND = { var:te_tax_en_land = 34 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_34 } } }
+		AND = { NOT = { var:te_tax_en_land = 34 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_34 } }
+		AND = { var:te_tax_en_land = 35 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_35 } } }
+		AND = { NOT = { var:te_tax_en_land = 35 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_35 } }
+		AND = { var:te_tax_en_land = 36 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_36 } } }
+		AND = { NOT = { var:te_tax_en_land = 36 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_36 } }
+		AND = { var:te_tax_en_land = 37 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_37 } } }
+		AND = { NOT = { var:te_tax_en_land = 37 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_37 } }
+		AND = { var:te_tax_en_land = 38 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_38 } } }
+		AND = { NOT = { var:te_tax_en_land = 38 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_38 } }
+		AND = { var:te_tax_en_land = 39 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_39 } } }
+		AND = { NOT = { var:te_tax_en_land = 39 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_39 } }
+		AND = { var:te_tax_en_land = 40 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_40 } } }
+		AND = { NOT = { var:te_tax_en_land = 40 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_40 } }
+		AND = { var:te_tax_en_land = 41 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_41 } } }
+		AND = { NOT = { var:te_tax_en_land = 41 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_41 } }
+		AND = { var:te_tax_en_land = 42 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_42 } } }
+		AND = { NOT = { var:te_tax_en_land = 42 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_42 } }
+		AND = { var:te_tax_en_land = 43 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_43 } } }
+		AND = { NOT = { var:te_tax_en_land = 43 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_43 } }
+		AND = { var:te_tax_en_land = 44 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_44 } } }
+		AND = { NOT = { var:te_tax_en_land = 44 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_44 } }
+		AND = { var:te_tax_en_land = 45 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_45 } } }
+		AND = { NOT = { var:te_tax_en_land = 45 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_45 } }
+		AND = { var:te_tax_en_land = 46 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_46 } } }
+		AND = { NOT = { var:te_tax_en_land = 46 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_46 } }
+		AND = { var:te_tax_en_land = 47 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_47 } } }
+		AND = { NOT = { var:te_tax_en_land = 47 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_47 } }
+		AND = { var:te_tax_en_land = 48 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_48 } } }
+		AND = { NOT = { var:te_tax_en_land = 48 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_land_48 } }
+	}
+}
+
+# te_tax_gen_amend_drift_head: the carrier's head tax amendments differ from
+# te_tax_en_head: the enacted one is missing, or another of the family is on the law.
+te_tax_gen_amend_drift_head = {
+	OR = {
+		AND = { var:te_tax_en_head = 1 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_1 } } }
+		AND = { NOT = { var:te_tax_en_head = 1 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_1 } }
+		AND = { var:te_tax_en_head = 2 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_2 } } }
+		AND = { NOT = { var:te_tax_en_head = 2 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_2 } }
+		AND = { var:te_tax_en_head = 3 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_3 } } }
+		AND = { NOT = { var:te_tax_en_head = 3 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_3 } }
+		AND = { var:te_tax_en_head = 4 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_4 } } }
+		AND = { NOT = { var:te_tax_en_head = 4 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_4 } }
+		AND = { var:te_tax_en_head = 5 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_5 } } }
+		AND = { NOT = { var:te_tax_en_head = 5 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_5 } }
+		AND = { var:te_tax_en_head = 6 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_6 } } }
+		AND = { NOT = { var:te_tax_en_head = 6 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_6 } }
+		AND = { var:te_tax_en_head = 7 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_7 } } }
+		AND = { NOT = { var:te_tax_en_head = 7 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_7 } }
+		AND = { var:te_tax_en_head = 8 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_8 } } }
+		AND = { NOT = { var:te_tax_en_head = 8 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_8 } }
+		AND = { var:te_tax_en_head = 9 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_9 } } }
+		AND = { NOT = { var:te_tax_en_head = 9 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_9 } }
+		AND = { var:te_tax_en_head = 10 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_10 } } }
+		AND = { NOT = { var:te_tax_en_head = 10 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_10 } }
+		AND = { var:te_tax_en_head = 11 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_11 } } }
+		AND = { NOT = { var:te_tax_en_head = 11 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_11 } }
+		AND = { var:te_tax_en_head = 12 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_12 } } }
+		AND = { NOT = { var:te_tax_en_head = 12 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_12 } }
+		AND = { var:te_tax_en_head = 13 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_13 } } }
+		AND = { NOT = { var:te_tax_en_head = 13 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_13 } }
+		AND = { var:te_tax_en_head = 14 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_14 } } }
+		AND = { NOT = { var:te_tax_en_head = 14 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_14 } }
+		AND = { var:te_tax_en_head = 15 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_15 } } }
+		AND = { NOT = { var:te_tax_en_head = 15 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_15 } }
+		AND = { var:te_tax_en_head = 16 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_16 } } }
+		AND = { NOT = { var:te_tax_en_head = 16 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_16 } }
+		AND = { var:te_tax_en_head = 17 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_17 } } }
+		AND = { NOT = { var:te_tax_en_head = 17 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_17 } }
+		AND = { var:te_tax_en_head = 18 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_18 } } }
+		AND = { NOT = { var:te_tax_en_head = 18 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_18 } }
+		AND = { var:te_tax_en_head = 19 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_19 } } }
+		AND = { NOT = { var:te_tax_en_head = 19 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_19 } }
+		AND = { var:te_tax_en_head = 20 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_20 } } }
+		AND = { NOT = { var:te_tax_en_head = 20 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_20 } }
+		AND = { var:te_tax_en_head = 21 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_21 } } }
+		AND = { NOT = { var:te_tax_en_head = 21 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_21 } }
+		AND = { var:te_tax_en_head = 22 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_22 } } }
+		AND = { NOT = { var:te_tax_en_head = 22 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_22 } }
+		AND = { var:te_tax_en_head = 23 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_23 } } }
+		AND = { NOT = { var:te_tax_en_head = 23 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_23 } }
+		AND = { var:te_tax_en_head = 24 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_24 } } }
+		AND = { NOT = { var:te_tax_en_head = 24 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_24 } }
+		AND = { var:te_tax_en_head = 25 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_25 } } }
+		AND = { NOT = { var:te_tax_en_head = 25 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_25 } }
+		AND = { var:te_tax_en_head = 26 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_26 } } }
+		AND = { NOT = { var:te_tax_en_head = 26 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_26 } }
+		AND = { var:te_tax_en_head = 27 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_27 } } }
+		AND = { NOT = { var:te_tax_en_head = 27 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_27 } }
+		AND = { var:te_tax_en_head = 28 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_28 } } }
+		AND = { NOT = { var:te_tax_en_head = 28 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_28 } }
+		AND = { var:te_tax_en_head = 29 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_29 } } }
+		AND = { NOT = { var:te_tax_en_head = 29 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_29 } }
+		AND = { var:te_tax_en_head = 30 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_30 } } }
+		AND = { NOT = { var:te_tax_en_head = 30 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_head_30 } }
+	}
+}
+
+# te_tax_gen_amend_drift_cons: the carrier's consumption tax rate amendments differ from
+# te_tax_en_cons: the enacted one is missing, or another of the family is on the law.
+te_tax_gen_amend_drift_cons = {
+	OR = {
+		AND = { var:te_tax_en_cons = 1 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_1 } } }
+		AND = { NOT = { var:te_tax_en_cons = 1 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_1 } }
+		AND = { var:te_tax_en_cons = 2 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_2 } } }
+		AND = { NOT = { var:te_tax_en_cons = 2 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_2 } }
+		AND = { var:te_tax_en_cons = 3 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_3 } } }
+		AND = { NOT = { var:te_tax_en_cons = 3 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_3 } }
+		AND = { var:te_tax_en_cons = 4 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_4 } } }
+		AND = { NOT = { var:te_tax_en_cons = 4 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_4 } }
+		AND = { var:te_tax_en_cons = 5 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_5 } } }
+		AND = { NOT = { var:te_tax_en_cons = 5 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_5 } }
+		AND = { var:te_tax_en_cons = 6 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_6 } } }
+		AND = { NOT = { var:te_tax_en_cons = 6 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_6 } }
+		AND = { var:te_tax_en_cons = 7 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_7 } } }
+		AND = { NOT = { var:te_tax_en_cons = 7 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_7 } }
+		AND = { var:te_tax_en_cons = 8 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_8 } } }
+		AND = { NOT = { var:te_tax_en_cons = 8 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_8 } }
+		AND = { var:te_tax_en_cons = 9 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_9 } } }
+		AND = { NOT = { var:te_tax_en_cons = 9 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_9 } }
+		AND = { var:te_tax_en_cons = 10 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_10 } } }
+		AND = { NOT = { var:te_tax_en_cons = 10 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_10 } }
+		AND = { var:te_tax_en_cons = 11 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_11 } } }
+		AND = { NOT = { var:te_tax_en_cons = 11 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_11 } }
+		AND = { var:te_tax_en_cons = 12 NOT = { active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_12 } } }
+		AND = { NOT = { var:te_tax_en_cons = 12 } active_law:lawgroup_taxation = { has_amendment = amendment_type:amendment_te_tax_cons_12 } }
+	}
+}
+
 # Slot a, country scope: the package touches at least one catalog good.
 te_tax_gen_package_touches_goods_a = {
 	OR = {

@@ -1694,16 +1694,18 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 29 GUI files at the top of `gui/`: 24 full-file replacements of vanilla panels plus 5 additive files (marked below):
+Currently 32 GUI files at the top of `gui/`: 26 full-file replacements of vanilla panels plus 6 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
+| `add_consumption_tax_menu.gui` | Budget's add-consumption-tax menu | The legislated tax code: one `### MOD: Tax Code` block ANDs `te_tax_native_controls_sgui` into the item's `enabled`, so the menu cannot tax a good while the code sets the taxed goods. Otherwise vanilla 1.14.5; its copy is `test_fixtures/vanilla_gui/add_consumption_tax_menu.gui`, and `test_tax_code_bypass.py` fails on any other change |
 | `budget_panel.gui` | Budget | A fourth tab, Banking: the banking journal entry's panel types under `GetPlayerJournalEntry('je_banking_cycle')` (gotcha #29). Prototype for `docs/systems/system_panels_feasibility.md`. A fifth tab, Tax Code (`te_tax_code`, the legislated tax code rule only): the `je_tax_code` entry's panel types, which read the player's country (`GetPlayer`), under the same gate and datacontext, greyed until the entry runs; while a draft is open, the draft summary in a `fixed_bottom` footer (Budget had none; `te_tax_status_sections` there empties its `draft_summary` block) |
 | `building_browser_panel.gui` | Building browser | Custom building display |
 | `building_details_panel.gui` | Building details | Enhanced building info |
 | `construction_panel.gui` | Construction queue | Construction-market section: government purchase stepper, live read-out, collapsible explainer |
 | `culture_panel.gui` | Society | A fifth tab, Hegemony: the cultural hegemony journal entry's panel types under `GetPlayerJournalEntry('je_cultural_hegemony')`. CMF redefines this file's `society_panel` type (`system_panels_feasibility.md` § 7.4) |
 | `diplomatic_overview.gui` | Diplomacy | A sixth tab, UN: the strip becomes `te_tab_buttons_six` (vanilla's five slots are full), and the tab shows the United Nations journal entry's panel types plus its bar, status description and scripted buttons under `GetPlayerJournalEntry('je_united_nations')` |
+| `goods_panel.gui` | Goods panel | The legislated tax code: one `### MOD: Tax Code` block ANDs `te_tax_native_controls_sgui` into the `enabled` of the type `consumption_tax_button_toggle`, which vanilla's `goods_state_panel.gui` and `custom_tooltip.gui` also instantiate, so the one edit greys the consumption-tax toggle in every goods view. Otherwise vanilla 1.14.5; its copy is `test_fixtures/vanilla_gui/goods_panel.gui`, and `test_tax_code_bypass.py` fails on any other change |
 | `goods_state_panel.gui` | Goods by state | Modified goods display |
 | `journal_entry.gui` | Journal entry panel | Hides the bottom bar block and the goal bar for an entry that draws its own (`custom_widget_container_7` marker) |
 | `market_panel.gui` | Market panel | Widened panel; Top Trade Partners table and import/export partner charts; a fifth and sixth tab, Climate and Reserve: the Global Warming and Strategic Reserve journal entries' panel types under `GetPlayerJournalEntry` (gotcha #29), greyed until each entry runs, Reserve on the player's own market only. The strip becomes `te_tab_buttons_six` |
@@ -1718,6 +1720,7 @@ Currently 29 GUI files at the top of `gui/`: 24 full-file replacements of vanill
 | `right_click_menu.gui` | Right-click menu | Additional menu options |
 | `states_panel.gui` | States list | Modified state display; instances the state-view types below |
 | `states_panel_buildings.gui` | State buildings tab | Enhanced building display |
+| `te_debug_tax_widgets.gui` | (additive, temporary) | The tax probe harness's panel (`te_tp_panel`), shown only under the armed-country tab of the Timeline Extended window; removed before release (`docs/testing/tax-code-probes.md`) |
 | `te_state_panel_widgets.gui` | (additive, type library) | State-view types: aligned label/value rows, headroom bars, the tourism card |
 | `te_system_tab_widgets.gui` | (additive, type library) | For system tabs in vanilla panels: a journal entry's bars, goal bar, status description and button grid (`te_je_*`), and `te_tab_buttons_six`, vanilla's tab strip with a sixth slot (the Diplomacy and Market panels) |
 | `te_systems_window.gui` | (additive, scripted widget) | The Timeline Extended window, the mod's own, with a tab each for the Space Race, the Colonial Empire and Grand Monuments (the entries' composers under `GetPlayerJournalEntry`), and its launcher, a small sidebar button under Map List. Registered in `gui/scripted_widgets/te_systems_window.txt`, so it replaces nothing; see [Creating Standalone Panels](#creating-standalone-panels) |
@@ -1784,7 +1787,7 @@ git merge-file -p /tmp/<file>.work /tmp/<file>.old /tmp/<file>.new > /tmp/<file>
 echo "Conflicts: $(grep -c '<<<<<<<' /tmp/<file>.merged)"
 ```
 
-`gui/topbar.gui` also has its base committed, as `test_fixtures/vanilla_gui/topbar.gui`: after merging a patch into it, replace that file with the new vanilla copy (BOM kept), or `test_topbar_banking.py` fails.
+`gui/topbar.gui` also has its base committed, as `test_fixtures/vanilla_gui/topbar.gui`: after merging a patch into it, replace that file with the new vanilla copy (BOM kept), or `test_topbar_banking.py` fails. `gui/goods_panel.gui` and `gui/add_consumption_tax_menu.gui` have theirs too, as `test_fixtures/vanilla_gui/goods_panel.gui` and `add_consumption_tax_menu.gui`, byte-for-byte vanilla (no BOM, unlike the overrides): `test_tax_code_bypass.py` fails when the installed game no longer matches them, so merge the patch into the override and replace the fixture together.
 
 For the 1.13 migration this resolved 14 of 17 GUI overrides cleanly; the giants (`right_click_menu.gui` 4845-line vanilla diff, `military_formation_panel.gui` 5012-line) had only 0 and 4 conflicts respectively.
 

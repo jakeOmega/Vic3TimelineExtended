@@ -246,10 +246,15 @@ class TabStripTest(unittest.TestCase):
         self.assertIn("GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValidTooltip(", tooltip)
         self.assertIn("'te_tax_tab_locked_tt'", tooltip)
 
-    def test_the_probe_lock_sites_are_untouched(self):
-        self.assertEqual(self.text.count("te_tp_native_controls_sgui"), 20)
+    def test_the_native_control_gates_stay_outside_the_tab(self):
+        # The 20 native-control gates (plan Task 9, test_tax_code_bypass.py) sit on
+        # vanilla's buttons, never in the Tax Code tab's MOD blocks.
+        self.assertEqual(self.text.count("te_tax_native_controls_sgui"), 6)
+        self.assertEqual(self.text.count("te_tax_native_tariff_controls_sgui"), 14)
+        self.assertNotIn("te_tp_native_controls_sgui", self.text)
         for region in self.regions:
             self.assertNotIn("te_tp_", region)
+            self.assertNotIn("te_tax_native_", region)
 
 
 class TabContentTest(unittest.TestCase):

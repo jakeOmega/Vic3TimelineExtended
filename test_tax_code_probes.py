@@ -112,15 +112,25 @@ class TaxProbeSafetyTest(unittest.TestCase):
             self.assertFalse(stack, "unclosed GUI blocks")
 
     def test_known_native_controls_keep_original_validity_and_add_gate(self):
+        # The probe's lock now rides on the tax code's production gates (plan Task 9;
+        # every native site is listed in test_tax_code_bypass.py): six tax-level and
+        # consumption controls on te_tax_native_controls_sgui, the 14 tariff and
+        # subvention buttons on te_tax_native_tariff_controls_sgui.
         gui = read("gui/budget_panel.gui")
         matches = [line for line in gui.splitlines() if 'enabled = "[' in line and any(
             x in line for x in ("GetPlayer.SetExport", "GetPlayer.SetImport", "GetPlayer.HasAnyTaxes", "BudgetPanel.CanTaxGoods"))]
         self.assertEqual(len(matches), 20)
+        tariff = [line for line in matches if "GetPlayer.SetExport" in line or "GetPlayer.SetImport" in line]
+        self.assertEqual(len(tariff), 14)
         for line in matches:
-            self.assertIn("te_tp_native_controls_sgui", line)
-        gate = _txt_block(read("common/scripted_guis/te_debug_tax_sguis.txt"), "te_tp_native_controls_sgui")
-        self.assertIn("NOT = { has_variable = te_tp_lock }", gate)
-        self.assertNotIn("set_tax_level", gate)
+            gate = "te_tax_native_tariff_controls_sgui" if line in tariff else "te_tax_native_controls_sgui"
+            self.assertIn(f"GetScriptedGui('{gate}').IsValid(", line)
+        self.assertNotIn("te_tp_native_controls_sgui", gui)
+        sguis = read("common/scripted_guis/te_tax_native_sguis.txt")
+        for name in ("te_tax_native_controls_sgui", "te_tax_native_tariff_controls_sgui"):
+            gate = _txt_block(sguis, name)
+            self.assertIn("NOT = { has_variable = te_tp_lock }", gate)
+            self.assertNotIn("set_tax_level", gate)
 
     def test_probe_files_parse_and_domestic_rates_use_tax_namespace(self):
         paths = list((ROOT / "common").rglob("*te_debug_tax*.txt"))

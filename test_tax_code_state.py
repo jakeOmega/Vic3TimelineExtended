@@ -365,7 +365,9 @@ class GeneratedSyncTest(unittest.TestCase):
         } | {"te_tax_gen_init_schedule", "te_tax_gen_next_month", "te_tax_gen_history_write"}
         # The migration's parts (test_tax_code_migration.py).
         migration = {"te_tax_gen_migrate_rates", "te_tax_gen_migrate_goods", "te_tax_gen_migrate_provisions"}
-        self.assertEqual(names, want | scheduler | migration)
+        # The writer's drift count of goods (test_tax_code_bypass.py).
+        drift = {"te_tax_gen_count_goods_drift"}
+        self.assertEqual(names, want | scheduler | migration | drift)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
         for key in KEYS:
@@ -419,7 +421,9 @@ class GeneratedSyncTest(unittest.TestCase):
         self.assertEqual(
             set(top_level_names(self.triggers)),
             {f"te_tax_amendment_{kind}_{key}" for kind in ("is", "matches") for key in KEYS}
-            | scheduler | bill | {"te_tax_gen_bill_sunsets_valid"},
+            | scheduler | bill | {"te_tax_gen_bill_sunsets_valid"}
+            # The writer's drift checks (test_tax_code_bypass.py).
+            | {"te_tax_gen_goods_drift"} | {f"te_tax_gen_amend_drift_{key}" for key in KEYS},
         )
         for key in KEYS:
             family = amendment_family(key)
@@ -590,6 +594,8 @@ class DisplayValueTest(unittest.TestCase):
                  "te_tax_view_dr_earliest_month_mo", "te_tax_view_dr_agrel_on", "te_tax_view_dr_agrel_pct",
                  "te_tax_view_dr_regrel_on", "te_tax_view_dr_regrel_pct", "te_tax_view_committed_share",
                  "te_tax_view_open_share", "te_tax_view_passage_share", "te_tax_view_legitimacy"}
+        # The writer's native-drift counters (Task 9).
+        want |= {"te_tax_view_drift_level", "te_tax_view_drift_goods", "te_tax_view_drift_amend"}
         self.assertEqual(set(self.views), want)
 
     def test_defaults_are_the_schema_sentinels(self):

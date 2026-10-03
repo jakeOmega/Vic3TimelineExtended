@@ -1937,6 +1937,7 @@ def scripted_effects():
         "# goods changes are not visible later in the same effect, so run each at most once",
         "# per effect execution; a call in a later execution then changes nothing. The",
         "# removal loop never touches the enacted amendment, and the add checks only that one.",
+        "# te_tax_gen_count_goods_drift: the writer's drift count of goods (te_tax_detect_drift).",
         "# The scheduler's parts follow the syncs: te_tax_gen_sunset_<key>,",
         "# te_tax_gen_commence_<slot>, te_tax_gen_hold_missed_<slot>, te_tax_gen_apply_<slot>,",
         "# te_tax_gen_store_<slot>, te_tax_gen_next_month and te_tax_gen_history_write, called",
@@ -2019,8 +2020,31 @@ def scripted_effects():
     lines += [f"\tif = {{ limit = {{ has_consumption_tax = g:{good} }} remove_taxed_goods = g:{good} }}"
               for good in stray_goods()]
     lines.append("}")
+    lines += [
+        "",
+        "# Drift (te_tax_detect_drift, te_tax_collection_effects.txt): +1 to te_tax_drift_goods for",
+        "# each good whose native consumption tax differs from the enacted list, counted before",
+        "# the sync puts it back. Reads native state; writes only the counter.",
+        "te_tax_gen_count_goods_drift = {",
+    ]
+    lines += [f"\tif = {{ limit = {{ {condition} }} change_variable = {{ name = te_tax_drift_goods add = 1 }} }}"
+              for condition in _goods_drift_conditions()]
+    lines.append("}")
     lines += _scheduler_effects() + _migration_effects()
     return _txt("\n".join(lines) + "\n")
+
+
+def _goods_drift_conditions():
+    """Per good, the condition that its native consumption tax differs from the
+    enacted list: a catalog good taxed or untaxed against te_tax_en_g_<good>,
+    any other good taxed at all."""
+    out = []
+    for good in consumption_catalog():
+        variable = f"var:te_tax_en_g_{good}"
+        out.append(f"OR = {{ AND = {{ {variable} = 1 NOT = {{ has_consumption_tax = g:{good} }} }} "
+                   f"AND = {{ NOT = {{ {variable} = 1 }} has_consumption_tax = g:{good} }} }}")
+    out += [f"has_consumption_tax = g:{good}" for good in stray_goods()]
+    return out
 
 
 @output(TRIGGERS_PATH)
@@ -2042,6 +2066,30 @@ def scripted_triggers():
         lines += ["\t}", "}", "", f"te_tax_amendment_matches_{key} = {{", "\tOR = {"]
         lines += [f"\t\tAND = {{ type = amendment_type:{name} scope:te_tax_country.var:te_tax_en_{key} = {idx} }}"
                   for idx, name in enumerate(names, start=1)]
+        lines += ["\t}", "}"]
+    lines += [
+        "",
+        "# Drift (te_tax_detect_drift, te_tax_collection_effects.txt). Country scope; read the",
+        "# native state against the enacted code before the sync puts it back.",
+        "# te_tax_gen_goods_drift: some good's native consumption tax differs from the enacted list.",
+        "te_tax_gen_goods_drift = {",
+        "\tOR = {",
+    ]
+    lines += [f"\t\t{condition}" for condition in _goods_drift_conditions()]
+    lines += ["\t}", "}"]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        lines += [
+            "",
+            f"# te_tax_gen_amend_drift_{key}: the carrier's {instrument.label.lower()} amendments differ from",
+            f"# te_tax_en_{key}: the enacted one is missing, or another of the family is on the law.",
+            f"te_tax_gen_amend_drift_{key} = {{",
+            "\tOR = {",
+        ]
+        for idx in range(1, instrument.max_idx + 1):
+            law = f"active_law:lawgroup_taxation = {{ has_amendment = amendment_type:{amendment_key(instrument, idx)} }}"
+            lines += [f"\t\tAND = {{ var:te_tax_en_{key} = {idx} NOT = {{ {law} }} }}",
+                      f"\t\tAND = {{ NOT = {{ var:te_tax_en_{key} = {idx} }} {law} }}"]
         lines += ["\t}", "}"]
     lines += _scheduler_triggers() + _bill_triggers()
     return _txt("\n".join(lines) + "\n")

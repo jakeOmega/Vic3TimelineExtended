@@ -2,7 +2,8 @@
 # LEGISLATED TAX CODE — internal country events
 # ============================================================================
 # Hidden, no loc. Raised only by common/on_actions/te_tax_on_actions.txt, except
-# te_tax.4 (raised by the migration), so ROOT is the country the event fires on.
+# te_tax.4 (raised by the migration and by the re-assert te_tax.5), so ROOT is
+# the country the event fires on.
 # Schedule rules: docs/systems/tax_code_schema.md, "Scheduler, package slots and
 # history"; migration: the same file, "Migration".
 #
@@ -58,8 +59,9 @@ te_tax.3 = {
 }
 
 # Post-migration sync: raised by the migration a day after it, when the carrier
-# law it activated is in place. One collection write; the writer does nothing
-# for a country not on the carrier.
+# law it activated is in place, and by the re-assert (te_tax.5) the same way.
+# One collection write; the writer does nothing for a country not on the
+# carrier.
 te_tax.4 = {
 	type = country_event
 	hidden = yes
@@ -68,5 +70,21 @@ te_tax.4 = {
 
 	immediate = {
 		te_tax_sync_collection = yes
+	}
+}
+
+# Re-assert: another taxation law was activated in this migrated country (from
+# te_tax_on_law_activated, on_law_activated). The carrier comes back the way the
+# migration installed it; the amendments did not survive the swap, so te_tax.4
+# writes collection a day later. Firing it again (console: event te_tax.5) on a
+# country holding the carrier does nothing.
+te_tax.5 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_reassert_carrier = yes
 	}
 }

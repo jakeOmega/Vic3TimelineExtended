@@ -344,8 +344,10 @@ class MigrationEffectTest(unittest.TestCase):
 
     def test_the_month_is_handed_to_the_dispatch_not_claimed(self):
         # te_tax_last_month = -1: the next global dispatch processes this country.
-        writes = re.findall(r"name = te_tax_last_month value = (\S+) \}", self.text)
+        writes = re.findall(r"name = te_tax_last_month value = (\S+) \}", self.body)
         self.assertEqual(writes, ["-1"])
+        # The file's other writer, the re-assert (test_tax_code_bypass.py), hands it back too.
+        self.assertEqual(set(re.findall(r"name = te_tax_last_month value = (\S+) \}", self.text)), {"-1"})
 
     def test_logs_each_migration(self):
         lines = re.findall(r'debug_log = "([^"]*)"', self.branch)

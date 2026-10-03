@@ -21,6 +21,11 @@
 # once the lobby is over, each new country from its creation hook, and any
 # country the monthly dispatch still finds unmigrated.
 #
+# Re-assertion. A taxation law other than law_te_tax_code activated in a
+# migrated country (activate_law from an event, a button or the law-consistency
+# cascade) is replaced by the carrier again through te_tax.5
+# (docs/systems/tax_code_schema.md, "Native controls and drift").
+#
 # Every handler checks te_tax_code_on first: with the rule off nothing here runs.
 # The engine unions same-name on_action declarations across files.
 # ============================================================================
@@ -197,6 +202,49 @@ te_tax_watchdog_on_action = {
 				var:te_tax_next_month <= te_history_month_index
 			}
 			trigger_event = { id = te_tax.2 }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Re-assertion of the carrier
+# ----------------------------------------------------------------------------
+# on_law_activated fires for a law activated for any reason, script included
+# (vanilla 00_code_on_actions.txt, the note on the hook), so it catches every
+# activate_law of a vanilla taxation law: Hungary's Per-Capita button,
+# restore_peruvian_constitution, the law-consistency cascade
+# (extra_law_consistency_generated.txt) and anything else. The five vanilla
+# taxation laws cannot be enacted under the rule (te_tax_vanilla_law_gates.txt),
+# so script is the only way in. The vanilla files are left alone.
+#
+# ROOT is the law just activated; its owner is the country. The re-assert is
+# dispatched as te_tax.5, a country event, never run here, so it sees the law
+# this activation installed (precedent: te_collective_governance_from_law_scope,
+# extra_on_actions.txt). Only a migrated country: at game start history and the
+# political setup activate vanilla laws before the migration. The carrier's own
+# activation (the migration's, or te_tax.5's) is not another taxation law, so it
+# never re-dispatches.
+on_law_activated = {
+	on_actions = {
+		te_tax_on_law_activated
+	}
+}
+
+te_tax_on_law_activated = {
+	effect = {
+		if = {
+			limit = {
+				te_tax_code_on = yes
+				law_type = { is_same_law_group_as = law_type:law_te_tax_code }
+				NOT = { law_type = law_type:law_te_tax_code }
+				owner = {
+					has_variable = te_tax_migrated
+					var:te_tax_migrated > 0
+				}
+			}
+			owner = {
+				trigger_event = { id = te_tax.5 }
+			}
 		}
 	}
 }

@@ -243,6 +243,17 @@ te_tax_draft_ready = {
 			var:te_tax_dr_due <= te_tax_due_latest
 		}
 		custom_tooltip = { text = te_tax_tt_draft_baseline te_tax_gen_draft_baseline_current = yes }
+		# Traditionalism disallows the vanilla laws that tax wages and dividends
+		# (Per-Capita, Proportional, Graduated); under it a bill may not either.
+		# Here, so a revision is held to it as well as an introduction.
+		trigger_if = {
+			limit = { has_law = law_type:law_traditionalism }
+			custom_tooltip = {
+				text = te_tax_tt_draft_traditionalism
+				te_tax_dr_eff_wage < 1
+				te_tax_dr_eff_div < 1
+			}
+		}
 	}
 	trigger_else = {
 		custom_tooltip = { text = te_tax_tt_draft_open always = no }
@@ -380,4 +391,41 @@ te_tax_can_package_release = {
 		var:te_tax_p$SLOT$_on = 1
 		OR = { var:te_tax_p$SLOT$_state = 2 var:te_tax_p$SLOT$_state = 3 }
 	}
+}
+
+# ---------------------------------------------------------------------------
+# Vanilla objectives (docs/systems/tax_code_schema.md, "Native controls and
+# drift"). Country scope. Under the rule every country holds law_te_tax_code,
+# so an objective that needs Per-Capita, Proportional or Graduated taxation
+# could never be met; each of these says the code collects what that law
+# would. The three vanilla journal entries that need one
+# (te_tax_vanilla_je_overrides.txt) accept them in a custom_tooltip; the AI can
+# read them too. Only the rule and the carrier gate them: a country still on a
+# vanilla law answers with its law.
+# ---------------------------------------------------------------------------
+
+# Per-Capita: a wage tax and a head tax, as the law levies both.
+te_tax_code_counts_as_per_capita = {
+	te_tax_code_on = yes
+	has_law = law_type:law_te_tax_code
+	te_tax_view_en_head >= 1
+	te_tax_view_en_wage >= 1
+}
+
+# Proportional: a wage tax of at least 10% and a dividend tax (the law's
+# lowest level taxes wages at 10% and dividends at 2.5%).
+te_tax_code_counts_as_proportional = {
+	te_tax_code_on = yes
+	has_law = law_type:law_te_tax_code
+	te_tax_view_en_wage_rate >= 0.1
+	te_tax_view_en_div_rate >= 0.025
+}
+
+# Graduated: a wage tax of at least 10% and dividends taxed at least as
+# heavily as wages (the law's levels tax dividends at or above wages).
+te_tax_code_counts_as_graduated = {
+	te_tax_code_on = yes
+	has_law = law_type:law_te_tax_code
+	te_tax_view_en_wage_rate >= 0.1
+	te_tax_view_en_div_rate >= te_tax_view_en_wage_rate
 }

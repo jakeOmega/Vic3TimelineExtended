@@ -15,6 +15,11 @@
 # or a country hook, never from the global monthly pulse, which has no ROOT.
 # Nothing here reads ROOT; the country and the sponsor are saved scopes.
 # Nothing below re-reads what it has just written.
+#
+# Before it writes, it counts native drift (te_tax_detect_drift): what changed
+# the native state outside the code since the last full sync, such as the AI
+# moving the tax level or toggling a taxed good, or a vanilla taxation law
+# activated over the carrier. The count reads and never writes native state.
 
 te_tax_sync_collection = {
 	if = {
@@ -26,6 +31,8 @@ te_tax_sync_collection = {
 		# Backfills tokens a newer schema added; never overwrites one.
 		te_tax_init_country = yes
 		save_scope_as = te_tax_country
+		# Counters only, before anything below changes the native state.
+		te_tax_detect_drift = yes
 		te_tax_pick_sponsor = yes
 		if = {
 			# te_tax_pick_sponsor saved one of THIS country's groups exactly when it has one.
@@ -35,6 +42,8 @@ te_tax_sync_collection = {
 			te_tax_gen_sync_land = yes
 			te_tax_gen_sync_head = yes
 			te_tax_gen_sync_cons = yes
+			# A full sync: from here on, drift is measured against this code.
+			set_variable = { name = te_tax_sync_version value = var:te_tax_code_version }
 		}
 		else = {
 			debug_log = "TE_TAX sync: no interest group to sponsor an amendment; rate amendments left as they were"
@@ -54,6 +63,69 @@ te_tax_sync_collection = {
 		}
 		debug_log = "TE_TAX sync skipped: [THIS.GetCountry.GetNameNoFormatting] holds the tax code law but has no te_tax_schema"
 	}
+}
+
+# Country scope; te_tax_sync_collection calls it once, after te_tax_init_country
+# and before any part of the sync. Counts the native state that differs from the
+# enacted code, and logs one line when anything does:
+#   te_tax_drift_level +1 if the native tax level is not medium (the AI's
+#     tax-level changes, vanilla's negotiation option 7);
+#   te_tax_drift_goods +1 per good taxed or untaxed against the enacted list;
+#   te_tax_drift_amend +1 per instrument whose carrier amendments differ from
+#     its enacted index (a vanilla law activated over the carrier drops them).
+# Only while te_tax_sync_version equals te_tax_code_version: the code has not
+# changed since the last full sync. A sunset or a commencement changes the code
+# before the processor's sync, and the migration before te_tax.4's, so the
+# native state then differs by law, not by drift; whatever else drifted that
+# month is put back by the same sync uncounted. Reads native state and writes
+# only the three counters, so the sync sees what it would have seen without it.
+# One debug line per drift for a player's country, the first only for an AI's.
+te_tax_detect_drift = {
+	if = {
+		limit = {
+			var:te_tax_sync_version = var:te_tax_code_version
+			OR = {
+				NOT = { tax_level = medium }
+				te_tax_gen_goods_drift = yes
+				te_tax_gen_amend_drift_wage = yes
+				te_tax_gen_amend_drift_div = yes
+				te_tax_gen_amend_drift_land = yes
+				te_tax_gen_amend_drift_head = yes
+				te_tax_gen_amend_drift_cons = yes
+			}
+		}
+		# A player's country logs every time. An AI country logs its first drift
+		# only: the AI may move the level every month the code pins it back, and
+		# its counters keep the rest.
+		if = {
+			limit = {
+				OR = {
+					is_ai = no
+					AND = {
+						var:te_tax_drift_level = 0
+						var:te_tax_drift_goods = 0
+						var:te_tax_drift_amend = 0
+					}
+				}
+			}
+			te_tax_count_drift = yes
+			debug_log = "TE_TAX drift native state differed from the code before the sync; totals level=[SCOPE.ScriptValue('te_tax_view_drift_level')|0] goods=[SCOPE.ScriptValue('te_tax_view_drift_goods')|0] amend=[SCOPE.ScriptValue('te_tax_view_drift_amend')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			te_tax_count_drift = yes
+		}
+	}
+}
+
+# Country scope; te_tax_detect_drift's counts, once it has found drift.
+te_tax_count_drift = {
+	if = { limit = { NOT = { tax_level = medium } } change_variable = { name = te_tax_drift_level add = 1 } }
+	te_tax_gen_count_goods_drift = yes
+	if = { limit = { te_tax_gen_amend_drift_wage = yes } change_variable = { name = te_tax_drift_amend add = 1 } }
+	if = { limit = { te_tax_gen_amend_drift_div = yes } change_variable = { name = te_tax_drift_amend add = 1 } }
+	if = { limit = { te_tax_gen_amend_drift_land = yes } change_variable = { name = te_tax_drift_amend add = 1 } }
+	if = { limit = { te_tax_gen_amend_drift_head = yes } change_variable = { name = te_tax_drift_amend add = 1 } }
+	if = { limit = { te_tax_gen_amend_drift_cons = yes } change_variable = { name = te_tax_drift_amend add = 1 } }
 }
 
 # Country scope. Saves scope:te_tax_sponsor, the interest group recorded as

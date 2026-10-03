@@ -309,3 +309,21 @@ te_tax_view_legitimacy = {
 		value = legitimacy
 	}
 }
+
+# Native drift counters (te_tax_detect_drift, te_tax_collection_effects.txt):
+# syncs that found the tax level off medium, goods found taxed or untaxed
+# against the enacted list, instruments found with the wrong amendments.
+te_tax_view_drift_level = {
+	value = 0
+	if = { limit = { has_variable = te_tax_drift_level } value = var:te_tax_drift_level }
+}
+
+te_tax_view_drift_goods = {
+	value = 0
+	if = { limit = { has_variable = te_tax_drift_goods } value = var:te_tax_drift_goods }
+}
+
+te_tax_view_drift_amend = {
+	value = 0
+	if = { limit = { has_variable = te_tax_drift_amend } value = var:te_tax_drift_amend }
+}
