@@ -1,0 +1,149 @@
+﻿# ============================================================================
+# RESOURCE TRANSITION (issue #660)
+# ============================================================================
+# Three laws in lawgroup_resource_transition (Economy), beside the Ministry of
+# the Environment:
+#
+#   law_unrestricted_extraction       the default; nothing changes
+#   law_fossil_expansion_moratorium   no new coal mines, oil rigs or power plants
+#   law_managed_fossil_phaseout       the moratorium, plus retirement programmes
+#
+# ORDER MATTERS. law_unrestricted_extraction comes first in this file: the
+# engine gives any country that history leaves without a law in a group the
+# group's first law in file order, which is also what an old save loading this
+# group for the first time gets (docs/guides/scripting_best_practices.md,
+# "First Law in a Lawgroup File Is the Unseeded Default").
+#
+# One technology per law (the issue's agreed progression): the moratorium needs
+# Environmental Movement, the phaseout Clean Energy Technologies only. Both need
+# the Ministry of the Environment (`unlocking_laws`, so the engine greys the law
+# with its own tooltip). gen_law_consistency enforces `unlocking_laws` after
+# enactment too: abolishing the ministry drops a restrictive law back to the
+# closest valid one, Unrestricted Extraction (te_fix_inconsistent_laws, monthly
+# and on every law change). The phaseout also needs the ministry funded to
+# level 3 or more, checked at enactment only (`can_enact`): a later cut in
+# funding does not repeal it.
+#
+# WHAT ENFORCES THE LAWS. Not a modifier: the construction ban is
+# can_build_government / can_build_private / should_auto_expand on the three
+# buildings (common/buildings/extra_buildings.txt), reading the law of the
+# country the building stands in, so foreign investment is covered. The
+# retirement programmes run from a country pulse
+# (common/on_actions/resource_transition_on_actions.txt). Neither depends on
+# je_global_warming being active or on the Global Warming game rule.
+#
+# NO EMISSIONS BONUS, on purpose. The laws work through the economy: fewer
+# mines and rigs mean less supply and dearer fuel, and the market's emissions
+# (market_greenhouse_gas_emissions_script_value) fall only if the market burns
+# less. A country that closes its mines and imports the same coal emits as
+# much as before.
+#
+# WHERE THE TEXT LIVES. A law's description is flavor: the enactment popup
+# prints it in a box that does not scroll, and the 650-character version that
+# listed the rules ran over the law's name and art. The rules are effect lines
+# in each restrictive law's on_enact (what the enactment preview shows, as
+# law_direct_democracy does for Collective Governance), and the hover on the
+# Fossil Transition section's law line repeats them (rt_law_effects). The
+# concept [concept_fossil_transition] explains the whole.
+#
+# The AI's enactment weights live in common/script_values/resource_transition_values.txt.
+# ============================================================================
+
+law_unrestricted_extraction = {
+	group = lawgroup_resource_transition
+
+	# Placeholder art (vanilla Extraction Economy); the icon pipeline should
+	# give the three laws their own.
+	icon = "gfx/interface/icons/law_icons/extraction_economy.dds"
+
+	progressiveness = 0
+
+	# Leaving the phaseout stops its retirement programmes. The monthly pulse
+	# (rt_country_monthly_update) does the same for a law change that skips
+	# on_activate.
+	on_activate = {
+		hidden_effect = {
+			rt_stop_all_programmes = yes
+			rt_refresh_display_effect = yes
+		}
+	}
+
+	# Leaving a restrictive law: an AI whose market has run short of coal, oil
+	# or electricity under it goes back (rt_ai_enact_unrestricted).
+	ai_enact_weight_modifier = {
+		value = rt_ai_enact_unrestricted
+	}
+}
+
+law_fossil_expansion_moratorium = {
+	group = lawgroup_resource_transition
+
+	# Placeholder art (vanilla Regulatory Bodies).
+	icon = "gfx/interface/icons/law_icons/regulatory_bodies.dds"
+
+	progressiveness = 25
+
+	unlocking_technologies = {
+		environmental_movement
+	}
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	# The rules, as effect lines in the enactment preview. The description is
+	# flavor (scripting_best_practices.md, "Law enactment preview").
+	on_enact = {
+		custom_tooltip = rt_law_moratorium_tt
+		custom_tooltip = rt_law_emissions_tt
+	}
+
+	on_activate = {
+		hidden_effect = {
+			rt_stop_all_programmes = yes
+			rt_refresh_display_effect = yes
+		}
+	}
+
+	ai_enact_weight_modifier = {
+		value = rt_ai_enact_moratorium
+	}
+}
+
+law_managed_fossil_phaseout = {
+	group = lawgroup_resource_transition
+
+	# Placeholder art (vanilla Industry Banned).
+	icon = "gfx/interface/icons/law_icons/industry_banned.dds"
+
+	progressiveness = 50
+
+	unlocking_technologies = {
+		clean_energy_technologies
+	}
+
+	unlocking_laws = {
+		law_ministry_of_the_environment
+	}
+
+	can_enact = {
+		rt_ministry_funded_for_phaseout = yes
+	}
+
+	on_enact = {
+		custom_tooltip = rt_law_moratorium_tt
+		custom_tooltip = rt_law_phaseout_tt
+		custom_tooltip = rt_law_phaseout_rule_tt
+		custom_tooltip = rt_law_emissions_tt
+	}
+
+	on_activate = {
+		hidden_effect = {
+			rt_refresh_display_effect = yes
+		}
+	}
+
+	ai_enact_weight_modifier = {
+		value = rt_ai_enact_phaseout
+	}
+}

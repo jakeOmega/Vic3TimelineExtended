@@ -83,6 +83,10 @@ te_homeland_creation_monthly_effect = {
 
 # ROOT and current scope = state.
 te_homeland_removal_monthly_effect = {
+	# This month's rate on the removal track: the shared rate, slowed where the
+	# owner is party to the UN Convention on Cultural Diversity
+	# (te_homeland_removal_annual_progress, homeland_values.txt).
+	set_variable = { name = te_homeland_removal_units value = te_homeland_removal_annual_progress }
 	# Discover new candidates; existing containers keep their own progress.
 	if = {
 		limit = {
@@ -141,7 +145,7 @@ te_homeland_removal_monthly_effect = {
 					}
 				}
 				# Twelfths of a percentage point: 10 units/month = 120 months.
-				change_variable = { name = te_homeland_progress add = ROOT.var:te_homeland_monthly_units }
+				change_variable = { name = te_homeland_progress add = ROOT.var:te_homeland_removal_units }
 				if = {
 					limit = { var:te_homeland_progress >= 1200 }
 					var:te_homeland_culture = { save_scope_as = removal_culture }
@@ -160,4 +164,5 @@ te_homeland_removal_monthly_effect = {
 			destroy_container = yes
 		}
 	}
+	remove_variable = te_homeland_removal_units
 }

@@ -228,6 +228,20 @@ sr_solar_system_trade = {
 	country_cultural_pull_mult = 0.15
 }
 
+# ======= Space Race - After the race: Commercial Space Industry
+# Once a country has nothing left to race for (sr_space_race_concluded), the
+# flat progress its sources still give each month (Space Elevator, companies,
+# technologies, colony specialisations, ...) would feed nothing. It goes into
+# Extraplanetary Base throughput instead. Unit value per point of progress:
+# sr_refresh_space_dividend (space_race_effects.txt) re-applies it monthly
+# with multiplier = sr_space_dividend_points (space_race_values.txt), which is
+# capped. The display value sr_space_dividend_pct assumes this 0.05; keep the
+# two equal (test_space_race_dividend.py).
+sr_commercial_space_dividend = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_space_mine_throughput_add = 0.05
+}
+
 # ======= Space Race - Funding Cost (legacy, kept for migration)
 sr_space_program_funding = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds

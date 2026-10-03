@@ -1,0 +1,29 @@
+﻿# ============================================================================
+# UN MISSIONS — PHASE 7 MODIFIERS (redesign phase 7, §0.12 item 11)
+# ============================================================================
+# The electoral observer mission's two modifiers. The older missions' state
+# modifiers stay in extra_modifiers.txt. Both are unit values applied x the
+# mission's strength (E x the budget x 1: un_mission_strength_value).
+# ============================================================================
+
+# On the mission's state (the host's capital, as a rule), applied with
+# multiplier = var:un_msn_power by un_mission_state_refresh, the single refresh
+# site, from the state pulse. Removed at the state's next pulse after the
+# mission ends.
+un_mission_electoral_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_turmoil_effects_mult = -0.1
+	state_radicals_from_political_movements_mult = -0.1
+}
+
+# On the host country, applied with multiplier = var:un_msn_electoral_power by
+# un_mission_electoral_host_refresh, the single refresh site, from the country
+# pulse; re-applied every month from the mission register (§0.9). The covert
+# defence is the one Election Interference is detected by
+# (covert_ops_sync_all: DEFENSE_MOD = country_covert_defense_ideological_add);
+# it also guards against the other ideological operations.
+un_electoral_observers_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_legitimacy_base_add = 5
+	country_covert_defense_ideological_add = 3
+}

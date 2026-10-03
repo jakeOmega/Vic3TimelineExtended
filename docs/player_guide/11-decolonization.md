@@ -9,6 +9,15 @@ go on your own terms before they break away. The Decolonization game rule
 controls the system; with it off, the journal entry and its events never appear,
 and tiny countries never [collapse](#colonial-collapse-of-tiny-countries).
 
+Decolonization also ends your claims on decentralized nations. Within a month of
+researching it, you lose every claim you hold on a state of a decentralized
+nation, and a Colonial Claims Renounced notice tells you so. Stake Colonial
+Claim is no longer open to you, and a claim that reaches you some other way is
+dropped within the month. AI countries lose their claims and stop staking them
+too. Claims on other countries' states, such as the ones a conquest leaves you
+with or the ones behind
+[reunification](08-diplomacy.md#irredentism-and-reunification), stay.
+
 ## The Colonial Empire journal entry
 
 Decolonization is a society technology in era 6, the first of the mod's eras.
@@ -209,6 +218,13 @@ release grants Peaceful Decolonization, a decaying +15% prestige, +50 influence
 and −200 authority (five years, or ten after Planned Full Decolonization). Each
 new country also shakes every other empire: all other countries running the
 Colonial Empire entry take a year of Colonial Crisis, −1 stability a month.
+
+Once the UN charter carries Charter Reform II and the Decolonization Resolution
+is in force, the General Assembly can order a referendum in a direct subject
+whose liberty desire is 50 or more. You hold it, and the subject leaves with a
+chance equal to its liberty desire, or you refuse and pay in standing,
+prestige and the loyalty of every subject (see [Supervised
+referendums](09-united-nations.md#supervised-referendums)).
 
 ### Integrating colonies instead
 

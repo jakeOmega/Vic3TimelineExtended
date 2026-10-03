@@ -49,3 +49,17 @@ state_homeland_change_speed_mult = {
 	}
 	script_only = yes
 }
+
+# Percentage multiplier on the REMOVAL track only (te_homeland_removal_monthly_effect),
+# on top of state_homeland_change_speed_mult: -0.3 = minority homelands here
+# decay 30% more slowly. The UN Convention on Cultural Diversity carries it
+# (un_cultural_diversity_modifier, scaled by the UN's enforcement); the track
+# never runs below a tenth of its speed.
+state_homeland_removal_speed_mult = {
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}

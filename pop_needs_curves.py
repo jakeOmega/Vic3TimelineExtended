@@ -1,7 +1,7 @@
 """Pop needs curve definitions and buy_packages generator.
 
 Defines mathematical functions for how pop consumption of convenience, services,
-art, and tourism scale with wealth level. Generates modified buy_packages files
+art, tourism and healthcare scale with wealth level. Generates modified buy_packages files
 and can display expenditure tables or plots.
 
 Usage:
@@ -12,7 +12,7 @@ Usage:
     python pop_needs_curves.py --dry-run      # Show what would be written without writing
 
 Functions are importable:
-    from pop_needs_curves import convenience_need, services_need, art_need, tourism_need
+    from pop_needs_curves import convenience_need, services_need, art_need, tourism_need, healthcare_need
 """
 
 import argparse
@@ -95,13 +95,41 @@ def tourism_need(wealth_level: int) -> int:
         return int(base * exp)
 
 
+# Wealth level -> Drugs. The owner's target (2026-10-02): Pharmaceutical
+# Industries are 1.5-2% of GDP in a modern rich country, which is about 3% of
+# consumption. A buy-package value is a cost at base prices, so these anchors
+# hold Healthcare at about 3% of the package from wealth 29 to 50, after a ramp
+# through middle incomes. Past the last anchor the last segment's slope (76 a
+# level) continues: the share falls (1.8% at 60, 0.05% at 99), but a richer pop
+# still buys more.
+HEALTHCARE_ANCHORS = ((15, 0), (20, 10), (25, 30), (30, 85), (35, 160), (40, 290), (45, 520), (50, 900))
+
+
+def healthcare_need(wealth_level: int) -> int:
+    """Healthcare (Drugs) demand at a given wealth level: linear between the
+    anchors, and along the last segment's line past the last anchor."""
+    if wealth_level <= HEALTHCARE_ANCHORS[0][0]:
+        return 0
+    for (x0, y0), (x1, y1) in zip(HEALTHCARE_ANCHORS, HEALTHCARE_ANCHORS[1:]):
+        if wealth_level <= x1:
+            return int(y0 + (y1 - y0) * (wealth_level - x0) / (x1 - x0))
+    (x0, y0), (x1, y1) = HEALTHCARE_ANCHORS[-2:]
+    return int(y1 + (y1 - y0) * (wealth_level - x1) / (x1 - x0))
+
+
 # All modded need curves
 NEED_CURVES = {
     "popneed_convenience": convenience_need,
     "popneed_services": services_need,
     "popneed_art": art_need,
     "popneed_tourism": tourism_need,
+    "popneed_healthcare": healthcare_need,
 }
+
+# Needs whose curve also sets wealth 100-200. The others are extrapolated there
+# by a power-law fit over wealth 90-99, which would bend healthcare's straight
+# line upward.
+CURVES_PAST_99 = {"popneed_healthcare"}
 
 
 def political_strength(wealth_level: int) -> int:
@@ -210,6 +238,15 @@ def _extrapolate_power_law(x, a, b):
     return a * (x ** b)
 
 
+def _extrapolation_params(x_data, y_data):
+    """(a, b) for y = a * x**b over x_data, or None if no fit. A need flat over
+    x_data stays flat: the fit returns 59.99... for a flat 60, which int()
+    truncates to 59."""
+    if len(set(y_data)) == 1:
+        return y_data[0], 0
+    return _fit_power_law(x_data, y_data)
+
+
 def generate_buy_packages(dry_run: bool = False, replace_political: bool = False) -> str:
     """Read vanilla buy_packages, apply modded need curves, optionally replace
     political strength values, and write output.
@@ -300,11 +337,14 @@ def generate_buy_packages(dry_run: bool = False, replace_political: bool = False
         x_data = list(range(90, 100))
         y_data = [_get_need_value(need, i) for i in x_data]
         if any(y_data):
-            params = _fit_power_law(x_data, y_data)
+            params = _extrapolation_params(x_data, y_data)
             if params is None:
                 continue
             for i in range(100, 201):
-                extrapolated = max(0, int(_extrapolate_power_law(i, *params)))
+                if need in CURVES_PAST_99:
+                    extrapolated = int(NEED_CURVES[need](i))
+                else:
+                    extrapolated = max(0, int(_extrapolate_power_law(i, *params)))
                 if i in blocks:
                     block = blocks[i]
                     if re.search(rf"{need}\s*=\s*[-+]?[0-9]+(?:\.[0-9]+)?", block):
@@ -380,14 +420,6 @@ def generate_buy_packages(dry_run: bool = False, replace_political: bool = False
 
 # ── Expenditure Analysis ──────────────────────────────────────────────────────
 
-def _read_and_combine(file_paths):
-    combined = ""
-    for fp in file_paths:
-        with open(fp, "r", encoding="utf-8-sig") as f:
-            combined += f.read() + "\n"
-    return combined
-
-
 def _extract_buy_packages(content):
     """Robustly extract goods dict for each wealth level using brace matching."""
     pkgs = {}
@@ -411,10 +443,12 @@ def _extract_buy_packages(content):
                 pos += 1
             goods_content = block[goods_start+1:pos-1]
             for line in goods_content.strip().splitlines():
-                parts = line.split("=")
+                # Drop comments first: `goods = { # Sum = 2428` would
+                # otherwise parse as a need called "# Sum".
+                parts = line.split("#")[0].split("=")
                 if len(parts) >= 2:
                     key = parts[0].strip()
-                    val = parts[1].split("#")[0].strip()
+                    val = parts[1].strip()
                     try:
                         goods[key] = int(val)
                     except Exception:
@@ -424,34 +458,19 @@ def _extract_buy_packages(content):
     return pkgs
 
 
-def _extract_pop_needs_defaults(content):
-    pattern = re.compile(r"popneed_(\w+) = {.*?default = (\w+)", re.DOTALL)
-    return {m.group(1): m.group(2) for m in pattern.finditer(content)}
-
-
-def _extract_goods_cost(content):
-    pattern = re.compile(r"(\w+) = {.*?cost = (\d+)", re.DOTALL)
-    return {m.group(1): int(m.group(2)) for m in pattern.finditer(content)}
+def _package_cost(pkg):
+    """Weekly cost of a buy package at base prices, per 10,000 working adults.
+    A need's value already is that cost: units bought = value / the good's base
+    price (Paradox wiki, "Buy packages"). Multiplying by a base price again
+    overstates the needs whose default good is dear, Art (200) and Tourism (100)."""
+    return sum(pkg.values())
 
 
 def print_expenditure_table():
-    """Print a text table comparing vanilla vs modded weekly expenditure per wealth level."""
+    """Print a text table comparing vanilla vs modded weekly expenditure per wealth
+    level, at base prices per 10,000 working adults."""
     vanilla_path = os.path.join(base_game_path, "game", "common", "buy_packages", "00_buy_packages.txt")
     modded_path = os.path.join(mod_path, "common", "buy_packages", "00_buy_packages.txt")
-    pop_needs_paths = [
-        os.path.join(base_game_path, "game", "common", "pop_needs", "00_pop_needs.txt"),
-        os.path.join(mod_path, "common", "pop_needs", "extra_pop_needs.txt"),
-    ]
-    goods_paths = [
-        os.path.join(base_game_path, "game", "common", "goods", "00_goods.txt"),
-        os.path.join(mod_path, "common", "goods", "timeline_extended_extra_goods.txt"),
-    ]
-
-    pop_needs_content = _read_and_combine(pop_needs_paths)
-    goods_content = _read_and_combine(goods_paths)
-    defaults = _extract_pop_needs_defaults(pop_needs_content)
-    goods_cost = _extract_goods_cost(goods_content)
-
     with open(vanilla_path, "r", encoding="utf-8-sig") as f:
         vanilla_pkgs = _extract_buy_packages(f.read())
 
@@ -462,21 +481,12 @@ def print_expenditure_table():
     with open(modded_path, "r", encoding="utf-8-sig") as f:
         modded_pkgs = _extract_buy_packages(f.read())
 
-    def _cost(pkgs, wl):
-        pkg = pkgs.get(wl, {})
-        total = 0
-        for need, amount in pkg.items():
-            good = defaults.get(need.replace("popneed_", ""))
-            if good and good in goods_cost:
-                total += amount * goods_cost[good]
-        return total / 10000  # per 10k working adults
-
     max_wl = max(max(vanilla_pkgs.keys(), default=0), max(modded_pkgs.keys(), default=0))
     print(f"{'WL':>4}  {'Vanilla':>10}  {'Modded':>10}  {'Diff':>10}  {'Diff%':>8}")
     print(f"{'---':>4}  {'----------':>10}  {'----------':>10}  {'----------':>10}  {'--------':>8}")
     for wl in range(1, min(max_wl + 1, 101)):
-        v = _cost(vanilla_pkgs, wl)
-        m = _cost(modded_pkgs, wl)
+        v = _package_cost(vanilla_pkgs.get(wl, {}))
+        m = _package_cost(modded_pkgs.get(wl, {}))
         d = m - v
         pct = (d / v * 100) if v else 0
         print(f"{wl:>4}  {v:>10.1f}  {m:>10.1f}  {d:>+10.1f}  {pct:>+7.1f}%")
@@ -491,44 +501,21 @@ def plot_expenditure():
 
     vanilla_path = os.path.join(base_game_path, "game", "common", "buy_packages", "00_buy_packages.txt")
     modded_path = os.path.join(mod_path, "common", "buy_packages", "00_buy_packages.txt")
-    pop_needs_paths = [
-        os.path.join(base_game_path, "game", "common", "pop_needs", "00_pop_needs.txt"),
-        os.path.join(mod_path, "common", "pop_needs", "extra_pop_needs.txt"),
-    ]
-    goods_paths = [
-        os.path.join(base_game_path, "game", "common", "goods", "00_goods.txt"),
-        os.path.join(mod_path, "common", "goods", "timeline_extended_extra_goods.txt"),
-    ]
-
-    pop_needs_content = _read_and_combine(pop_needs_paths)
-    goods_content = _read_and_combine(goods_paths)
-    defaults = _extract_pop_needs_defaults(pop_needs_content)
-    goods_cost = _extract_goods_cost(goods_content)
-
     with open(vanilla_path, "r", encoding="utf-8-sig") as f:
         vanilla_pkgs = _extract_buy_packages(f.read())
     with open(modded_path, "r", encoding="utf-8-sig") as f:
         modded_pkgs = _extract_buy_packages(f.read())
 
-    def _pkg_cost(pkgs, wl):
-        pkg = pkgs.get(wl, {})
-        total = 0
-        for need, amount in pkg.items():
-            good = defaults.get(need.replace("popneed_", ""))
-            if good and good in goods_cost:
-                total += amount * goods_cost[good]
-        return total / 10000
-
     max_wl = max(max(vanilla_pkgs.keys(), default=0), max(modded_pkgs.keys(), default=0))
     wl_range = list(range(1, max_wl + 1))
-    vanilla_costs = [_pkg_cost(vanilla_pkgs, wl) for wl in wl_range]
-    modded_costs = [_pkg_cost(modded_pkgs, wl) for wl in wl_range]
+    vanilla_costs = [_package_cost(vanilla_pkgs.get(wl, {})) for wl in wl_range]
+    modded_costs = [_package_cost(modded_pkgs.get(wl, {})) for wl in wl_range]
 
     fig, ax = plt.subplots(figsize=(12, 8))
     ax.plot(vanilla_costs, wl_range, marker="o", markersize=2, label="Vanilla")
     ax.plot(modded_costs, wl_range, marker="x", markersize=2, label="Modified")
-    ax.set_title("Wealth Level vs. Annual Pop Need Expenditure", fontsize=16)
-    ax.set_xlabel("Annual Expenditure (pounds)", fontsize=12)
+    ax.set_title("Wealth Level vs. Weekly Pop Need Expenditure", fontsize=16)
+    ax.set_xlabel("Weekly cost per 10,000 working adults (base prices)", fontsize=12)
     ax.set_ylabel("Wealth Level", fontsize=12)
     ax.legend()
     ax.grid(True)

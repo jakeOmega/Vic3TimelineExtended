@@ -10354,7 +10354,7 @@ building_megastructure_consortium_hq = {
 # --- Axiom Space ---
 building_axiom_space_hq = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/basic_motors.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_axiom_space.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10392,7 +10392,7 @@ building_axiom_space_hq = {
 # --- Neurovault ---
 building_neurovault_hq = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_neurovault.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10430,7 +10430,7 @@ building_neurovault_hq = {
 # --- Tycho Manufacturing ---
 building_tycho_manufacturing_hq = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/basic_construction.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_tycho_manufacturing.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10468,7 +10468,7 @@ building_tycho_manufacturing_hq = {
 # --- Tessier-Ashpool ---
 building_tessier_ashpool_hq = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_tessier_ashpool.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10506,7 +10506,7 @@ building_tessier_ashpool_hq = {
 # --- Hanka Precision ---
 building_hanka_precision_hq = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_hanka_precision.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10544,7 +10544,7 @@ building_hanka_precision_hq = {
 # --- Yoyodyne Propulsion ---
 building_yoyodyne_propulsion_hq = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/basic_motors.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_yoyodyne_propulsion.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10582,7 +10582,7 @@ building_yoyodyne_propulsion_hq = {
 # --- Rekal ---
 building_rekal_hq = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/basic_electrics.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/scifi_rekal.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10620,7 +10620,7 @@ building_rekal_hq = {
 # --- DuPont ---
 building_dupont_experimental_station = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_pfizer.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/american_dupont.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10658,7 +10658,7 @@ building_dupont_experimental_station = {
 # --- IG Farben ---
 building_ig_farben_buna_werke = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_sap.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/german_ig_farben.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10696,7 +10696,7 @@ building_ig_farben_buna_werke = {
 # --- Shell ---
 building_shell_pernis_refinery = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/dutch_asml.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/dutch_shell.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10734,7 +10734,7 @@ building_shell_pernis_refinery = {
 # --- JSR ---
 building_jsr_yokkaichi_complex = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_fanuc.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/japanese_jsr.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes
@@ -10772,7 +10772,7 @@ building_jsr_yokkaichi_complex = {
 # --- Sibur ---
 building_sibur_tobolsk_complex = {
 	building_group = bg_company_buildings
-	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_gazprom.dds"
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/russian_sibur.dds"
 	expandable = yes
 	downsizeable = yes
 	has_max_level = yes

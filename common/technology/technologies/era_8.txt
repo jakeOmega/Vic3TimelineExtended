@@ -58,8 +58,8 @@ advanced_assembly_lines = {
 }
 
 modern_pharmaceuticals = {
-	# Synthetic Drug Plants, Neodymium Catalyzation SBR PMs for Rubber Industries,
-	# and Antibiotic Growth Promoters PMs for Livestock Ranches
+	# Rational Drug Design PM for Pharmaceutical Industries, Neodymium Catalyzation
+	# SBR PMs for Rubber Industries, and Antibiotic Growth Promoters PMs for Livestock Ranches
 	era = era_8
 	texture = "gfx/interface/icons/invention_icons/modern_pharmaceuticals.dds"
 	category = society

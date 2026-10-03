@@ -1,0 +1,840 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — ORDER: CEASEFIRES AND REFERENDUMS (writers)
+# ============================================================================
+# Redesign phase 7, docs/systems/un_redesign_design.md §0.12 items 6 and 9: the
+# Binding Ceasefire (`ceasefire`) and the Supervised Self-Determination
+# Referendum (`referendum`), both waiting on Charter Reform II. The shared
+# machinery reaches them only through the hooks un_charter_effects.txt names.
+# The figures are in common/script_values/un_order_values.txt, the tests in
+# common/scripted_triggers/un_order_triggers.txt, the notices in
+# events/un_ceasefire_events.txt and events/un_referendum_events.txt.
+#
+# LEDGER REASON CODES (un_authority_effects.txt's table: 30-33 are order's).
+# All four are institutional entries (un_ledger_entry_on), booked as written:
+#   30  peace and order   a war going on under a ceasefire order: the
+#                         monthly debit accrues on the aggressor
+#                         (un_cf_debit_months) and is booked every
+#                         un_cf_order_debit_batch_months months and when the
+#                         order ends, so a long order does not fill the
+#                         twelve-entry log; subject: the aggressor
+#   31  delivery          the war ended inside a ceasefire order, the
+#                         aggressor holding no gains from it; subject: the
+#                         aggressor
+#   32  credibility       a binding order of the Assembly defied: a ceasefire
+#                         order run out with the war still on, or the war
+#                         ended with the aggressor holding gains from the
+#                         victim (subject: the aggressor); a supervised
+#                         referendum refused (subject: the overlord)
+#   33  delivery          a supervised referendum held; subject: the subject
+#                         country
+#
+# STANDING REASON CODES (un_standing_effects.txt's table: 39-41 are order's):
+#   39  loss   fought on under a ceasefire order past its grace months
+#   40  gain   held the supervised referendum the Assembly ordered
+#   41  loss   refused the supervised referendum the Assembly ordered
+#   and reuses 5 (complied with a binding decision): an ordered war ended
+#   within the grace months.
+#
+# HOW A CEASEFIRE ORDER ENDS (un_ceasefire_order_month; owner's ruling,
+# 2026-10-02: the UN is credited only when the war with the named victim
+# ends without the aggressor gaining from it).
+#   - Still fighting a represented member on the attacking side: the monthly
+#     drain, debit and grace; run out, the order was defied (.4).
+#   - Still at war with the named victim, but in no war the order covers (the
+#     victim left the UN, was suspended or lost its diplomatic autonomy; or
+#     the aggressor now defends against it): nothing happens, the months run
+#     down, and the order lapses as moot, quietly. Should the victim be
+#     represented again, the drain resumes.
+#   - The war is over (neither of the above) and the aggressor gained from it
+#     (un_order_ceasefire_aggressor_gained: it holds the victim's former
+#     capital region, or the victim is now its subject or holds fewer states
+#     than at imposition): defied (.5), with no compliance, delivery or
+#     mission.
+#   - The war is over, the victim stands and the aggressor gained nothing:
+#     kept (.3).
+#   - The war is over and the victim is gone, not into the aggressor's hands
+#     (it does not hold the former capital): the order ends quietly, with no
+#     debit beyond what accrued.
+#   The accrued debit (ledger 30) is booked on every ending. An aggressor that
+#   is itself annexed takes its order with it: the debit accrued since the
+#   last booking is never booked, and no one is told.
+#
+# STATE. Durable state is in country variables, which a revolution's winner
+# inherits (§0.9): the order passes to the regime that continues the nation.
+#   aggressor (country)
+#     un_cf_order_months      months the order has left (24 down to 0). Its
+#                             presence IS the order.
+#     un_cf_fought_months     months it has fought on under the order
+#     un_cf_debit_months      months of order debit accrued but not yet
+#                             booked (ledger 30)
+#     un_cf_order_accepted    flag: it voted for its own censure
+#     un_cf_fight_on_charged  flag: its standing has paid for fighting on
+#     un_cf_victim            the victim the order names (the mission's host)
+#     un_cf_victim_states     the victim's state count at imposition
+#     un_cf_victim_capital_region
+#                             the state region of the victim's capital at
+#                             imposition (a region survives a change of owner;
+#                             a state may not)
+#     un_cf_capital_region_shared
+#                             flag: the aggressor already held part of that
+#                             region at imposition
+#     un_cf_proposer          the member that tabled it (told the outcome)
+#     un_cf_named_victim_capital
+#                             display: the capital (a state) of the victim
+#                             named when it was tabled, read by the vote
+#                             events' text as .GetState.GetCountry.GetName
+#                             (a country in a variable prints blank here)
+#   overlord (country)
+#     un_ref_named_subject_capital
+#                             display: the capital (a state) of the subject a
+#                             referendum names, read the same way
+#     un_ref_chance           the odds un_referendum.1 shows and rolls
+#     un_ref_won              one roll's result, removed at once
+#   resolution container
+#     un_res_ceasefire_victim     the victim when tabled
+#     un_res_referendum_subject   the subject the referendum names
+# ============================================================================
+
+# ---- Helpers ------------------------------------------------------------------------
+
+# What a ceasefire order asks of us, or does for us: the chamber's Our
+# Obligations (un_chamber_dues_lines). An aggressor under an order sees how
+# long it runs and what each month of fighting costs; a victim sees that an
+# order stands against its enemy (the most powerful, if several). A tooltip
+# builder (ExecuteTooltip) does not pick at random, so the aggressor is chosen
+# with ordered_country, as the chamber's proposal previews choose theirs, and
+# the line prints in our own scope (gui_modding_guide.md gotcha #27).
+# Scope: country
+un_order_obligation_lines = {
+	if = {
+		limit = { has_variable = un_cf_order_months }
+		custom_tooltip_no_bullet = je_un_chamber_ceasefire_bound
+	}
+	if = {
+		limit = {
+			any_country = {
+				has_variable = un_cf_order_months
+				var:un_cf_victim ?= ROOT
+			}
+		}
+		ordered_country = {
+			limit = {
+				has_variable = un_cf_order_months
+				var:un_cf_victim ?= ROOT
+			}
+			order_by = un_docket_share_order
+			max = 1
+			save_temporary_scope_as = un_cf_obligation_aggressor
+		}
+		custom_tooltip_no_bullet = je_un_chamber_ceasefire_protected
+	}
+}
+
+# Clear a saved scope if it is set. The monthly pass saves the same names for
+# every order it visits, and an order without one must not read the last one's.
+# Parameters: $NAME$ = the saved scope
+# Scope: any
+un_order_clear_scope = {
+	if = {
+		limit = { exists = scope:$NAME$ }
+		clear_saved_scope = $NAME$
+	}
+}
+
+# ============================================================================
+# BINDING CEASEFIRE (§0.12 item 6)
+# ============================================================================
+
+# ---- Tabling --------------------------------------------------------------------
+
+# The victim an order against the scoped aggressor names: the represented
+# member at war with it with the most power. Leaves the temporary scope
+# un_ceasefire_victim_pick (unset if there is none).
+# Scope: the aggressor
+un_ceasefire_find_victim = {
+	save_temporary_scope_as = un_cf_agg_check
+	ordered_country = {
+		limit = { un_order_ceasefire_victim = yes }
+		order_by = un_docket_share_order
+		max = 1
+		save_temporary_scope_as = un_ceasefire_victim_pick
+	}
+}
+
+# The aggressor a ceasefire would name, in scope:un_ceasefire_pick, and its
+# victim in scope:un_ceasefire_victim_pick. A human proposer, who sees the pick
+# previewed in the chamber, gets the most powerful aggressor; the AI names the
+# aggressor it is fighting itself if there is one, and any other at random.
+# Scope: the proposing country
+un_ceasefire_select_target = {
+	save_temporary_scope_as = un_order_proposer
+	if = {
+		limit = { is_ai = yes }
+		random_country = {
+			limit = {
+				has_war_with = scope:un_order_proposer
+				un_ceasefire_target_eligible = yes
+			}
+			save_temporary_scope_as = un_ceasefire_pick
+		}
+		if = {
+			limit = { NOT = { exists = scope:un_ceasefire_pick } }
+			random_country = {
+				limit = { un_ceasefire_target_eligible = yes }
+				save_temporary_scope_as = un_ceasefire_pick
+			}
+		}
+	}
+	else = {
+		ordered_country = {
+			limit = { un_ceasefire_target_eligible = yes }
+			order_by = un_docket_share_order
+			max = 1
+			save_temporary_scope_as = un_ceasefire_pick
+		}
+	}
+	scope:un_ceasefire_pick ?= { un_ceasefire_find_victim = yes }
+}
+
+# The resolution records the victim it was tabled over, and the aggressor
+# carries the victim's capital (a state) for the vote events' text.
+# Scope: the proposing country; expects scope:un_resolution, scope:un_vote_target
+un_ceasefire_on_tabled = {
+	scope:un_vote_target ?= {
+		if = {
+			limit = { has_variable = un_cf_named_victim_capital }
+			remove_variable = un_cf_named_victim_capital
+		}
+		un_ceasefire_find_victim = yes
+		if = {
+			limit = { exists = scope:un_ceasefire_victim_pick }
+			scope:un_ceasefire_victim_pick = {
+				capital ?= {
+					save_temporary_scope_as = un_cf_named_victim_capital_pick
+					scope:un_vote_target = {
+						set_variable = { name = un_cf_named_victim_capital value = scope:un_cf_named_victim_capital_pick }
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = scope:un_resolution
+			exists = scope:un_ceasefire_victim_pick
+		}
+		scope:un_resolution = {
+			set_variable = { name = un_res_ceasefire_victim value = scope:un_ceasefire_victim_pick }
+		}
+	}
+}
+
+# The chamber's row: who would be named, and the war it is named for. The same
+# selector the proposal runs, so the preview cannot drift from it.
+# Scope: country
+un_ceasefire_chamber_preview = {
+	un_ceasefire_select_target = yes
+	if = {
+		limit = { exists = scope:un_ceasefire_pick }
+		custom_tooltip_no_bullet = je_un_chamber_propose_target_ceasefire
+	}
+}
+
+# ---- Carried ------------------------------------------------------------------
+
+# The outcome, from un_vote.2's carried branch. Binding: a ceasefire order for
+# 24 months. Vetoed: a call for a ceasefire, one hit to war support. Either way
+# moot if the aggressor no longer fights a member.
+# Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution,
+# scope:un_vote_target
+un_ceasefire_on_carried = {
+	if = {
+		limit = { scope:un_resolution ?= { NOT = { has_tag = un_res_vetoed } } }
+		custom_tooltip = un_vote_ceasefire_passed_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+		if = {
+			limit = {
+				scope:un_vote_target ?= {
+					NOT = { has_variable = un_cf_order_months }
+					un_order_wages_war_on_member = yes
+				}
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
+				custom_tooltip = un_ceasefire_order_accepted_tt
+			}
+			else = {
+				custom_tooltip = un_ceasefire_order_tt
+			}
+			hidden_effect = {
+				scope:un_vote_target = { un_ceasefire_order_impose = yes }
+			}
+		}
+		else = {
+			custom_tooltip = un_ceasefire_moot_tt
+		}
+	}
+	else = {
+		custom_tooltip = un_vote_ceasefire_passed_vetoed_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 0.5 REASON = 2 }
+		if = {
+			limit = { scope:un_vote_target ?= { un_order_wages_war_on_member = yes } }
+			custom_tooltip = un_ceasefire_call_tt
+			hidden_effect = {
+				scope:un_vote_target = { un_ceasefire_call = yes }
+			}
+		}
+		else = {
+			custom_tooltip = un_ceasefire_call_moot_tt
+		}
+	}
+}
+
+# Place the scoped aggressor under a ceasefire order, and tell it and every
+# member it is fighting.
+# Scope: the aggressor; ROOT is the proposer; expects scope:un_resolution
+un_ceasefire_order_impose = {
+	save_scope_as = un_cf_aggressor
+	save_temporary_scope_as = un_cf_agg_check
+	set_variable = { name = un_cf_order_months value = un_cf_order_length }
+	set_variable = { name = un_cf_fought_months value = 0 }
+	if = {
+		limit = { has_variable = un_cf_fight_on_charged }
+		remove_variable = un_cf_fight_on_charged
+	}
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
+		set_variable = un_cf_order_accepted
+	}
+	else_if = {
+		limit = { has_variable = un_cf_order_accepted }
+		remove_variable = un_cf_order_accepted
+	}
+	set_variable = { name = un_cf_proposer value = ROOT }
+	if = {
+		limit = { has_variable = un_cf_capital_region_shared }
+		remove_variable = un_cf_capital_region_shared
+	}
+	# The victim: the one the resolution was tabled over, if we still attack
+	# it; else the strongest member we attack now.
+	if = {
+		limit = {
+			scope:un_resolution ?= {
+				var:un_res_ceasefire_victim ?= { un_order_ceasefire_victim = yes }
+			}
+		}
+		scope:un_resolution = {
+			var:un_res_ceasefire_victim = { save_scope_as = un_cf_victim_scope }
+		}
+	}
+	else = {
+		ordered_country = {
+			limit = { un_order_ceasefire_victim = yes }
+			order_by = un_docket_share_order
+			max = 1
+			save_scope_as = un_cf_victim_scope
+		}
+	}
+	# What the victim holds now, to tell at the end whether the aggressor
+	# gained from the war (un_order_ceasefire_aggressor_gained).
+	if = {
+		limit = { exists = scope:un_cf_victim_scope }
+		set_variable = { name = un_cf_victim value = scope:un_cf_victim_scope }
+		# Counted state by state rather than read as
+		# scope:….un_order_state_count_value: a script value reached through a
+		# scope link is unproven here.
+		set_variable = { name = un_cf_victim_states value = 0 }
+		scope:un_cf_victim_scope = {
+			every_scope_state = {
+				scope:un_cf_aggressor = { change_variable = { name = un_cf_victim_states add = 1 } }
+			}
+			capital ?= {
+				state_region = { save_temporary_scope_as = un_cf_victim_capital_region_pick }
+				scope:un_cf_aggressor = {
+					set_variable = { name = un_cf_victim_capital_region value = scope:un_cf_victim_capital_region_pick }
+				}
+			}
+		}
+		if = {
+			limit = {
+				var:un_cf_victim_capital_region ?= {
+					any_scope_state = { owner ?= scope:un_cf_aggressor }
+				}
+			}
+			set_variable = un_cf_capital_region_shared
+		}
+	}
+	trigger_event = { id = un_ceasefire.1 }
+	every_country = {
+		limit = { un_order_ceasefire_victim = yes }
+		trigger_event = { id = un_ceasefire.2 }
+	}
+}
+
+# The vetoed form: a call for a ceasefire. One hit to the aggressor's war
+# support in every war it fights against a member, and nothing more.
+# Scope: the aggressor
+un_ceasefire_call = {
+	save_scope_as = un_cf_aggressor
+	save_temporary_scope_as = un_cf_agg_check
+	every_scope_war = {
+		limit = { un_order_war_against_member = yes }
+		add_war_war_support = {
+			target = scope:un_cf_aggressor
+			value = un_cf_call_war_support_hit
+		}
+	}
+	trigger_event = { id = un_ceasefire.1 }
+}
+
+# ---- The month ---------------------------------------------------------------------
+
+# One month of a ceasefire order (the header's "How a ceasefire order ends").
+# While the aggressor fights a member on the attacking side: its war support
+# falls in every such war, its dossier takes an aggression record, the UN's
+# peace and order suffers, and once the grace months are gone its standing
+# pays (once). If the order then runs out, it was defied. While it is still at
+# war with the named victim in no war the order covers, the months only run
+# down, and at the end the order lapses as moot. Once the war is over: defied
+# if the aggressor gained from it, kept if the victim stands and it did not,
+# and ended quietly if the victim is gone and not into the aggressor's hands.
+# Scope: the aggressor (un_order_monthly_update; no ROOT)
+un_ceasefire_order_month = {
+	save_scope_as = un_cf_aggressor
+	save_temporary_scope_as = un_cf_agg_check
+	un_order_clear_scope = { NAME = un_cf_victim_scope }
+	un_order_clear_scope = { NAME = un_cf_proposer_scope }
+	var:un_cf_victim ?= { save_scope_as = un_cf_victim_scope }
+	var:un_cf_proposer ?= { save_scope_as = un_cf_proposer_scope }
+	change_variable = { name = un_cf_order_months add = -1 }
+	if = {
+		limit = { un_order_wages_war_on_member = yes }
+		change_variable = { name = un_cf_fought_months add = 1 }
+		every_scope_war = {
+			limit = { un_order_war_against_member = yes }
+			add_war_war_support = {
+				target = scope:un_cf_aggressor
+				value = un_cf_war_support_drain
+			}
+		}
+		un_dossier_record = { RECORD = aggression POINTS = un_cf_dossier_monthly }
+		# The UN's peace and order suffers each month; booked in batches.
+		change_variable = { name = un_cf_debit_months add = 1 }
+		if = {
+			limit = { var:un_cf_debit_months >= un_cf_order_debit_batch_months }
+			un_ceasefire_book_accrued_debit = yes
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = un_cf_fight_on_charged }
+				var:un_cf_fought_months >= un_cf_grace_months
+			}
+			set_variable = un_cf_fight_on_charged
+			if = {
+				limit = { has_variable = un_cf_order_accepted }
+				un_standing_loss = { AMOUNT = un_cf_fight_on_accepted_loss REASON = 39 }
+			}
+			else = {
+				un_standing_loss = { AMOUNT = un_cf_fight_on_loss REASON = 39 }
+			}
+		}
+		if = {
+			limit = { var:un_cf_order_months <= 0 }
+			un_ceasefire_book_accrued_debit = yes
+			un_ceasefire_order_defied = yes
+			trigger_event = { id = un_ceasefire.4 }
+			un_ceasefire_order_notify_others = { EVENT = un_ceasefire.4 }
+			un_ceasefire_order_clear = yes
+		}
+	}
+	else_if = {
+		# Still at war with the named victim, in no war the order covers: no
+		# reward and no penalty. Run out, the order lapses as moot.
+		limit = { un_order_fights_named_victim = yes }
+		if = {
+			limit = { var:un_cf_order_months <= 0 }
+			un_ceasefire_book_accrued_debit = yes
+			un_ceasefire_order_clear = yes
+		}
+	}
+	# The war is over.
+	else_if = {
+		limit = { un_order_ceasefire_aggressor_gained = yes }
+		un_ceasefire_book_accrued_debit = yes
+		un_ceasefire_order_defied = yes
+		trigger_event = { id = un_ceasefire.5 }
+		un_ceasefire_order_notify_others = { EVENT = un_ceasefire.5 }
+		un_ceasefire_order_clear = yes
+	}
+	else_if = {
+		limit = { un_order_victim_stands = yes }
+		un_ceasefire_book_accrued_debit = yes
+		un_ceasefire_order_kept = yes
+		trigger_event = { id = un_ceasefire.3 }
+		un_ceasefire_order_notify_others = { EVENT = un_ceasefire.3 }
+		un_ceasefire_order_clear = yes
+	}
+	else = {
+		# The victim is gone, and not into the aggressor's hands: no one to
+		# credit or blame.
+		un_ceasefire_book_accrued_debit = yes
+		un_ceasefire_order_clear = yes
+	}
+}
+
+# Book the order debit accrued since the last booking (ledger 30), as one
+# entry. A no-op when nothing has accrued.
+# Scope: the aggressor; expects scope:un_cf_aggressor
+un_ceasefire_book_accrued_debit = {
+	if = {
+		limit = {
+			has_variable = un_cf_debit_months
+			var:un_cf_debit_months > 0
+		}
+		un_ledger_entry_on = { PILLAR = order POINTS = un_cf_order_debit_accrued REASON = 30 SUBJECT = scope:un_cf_aggressor }
+		set_variable = { name = un_cf_debit_months value = 0 }
+	}
+}
+
+# The war ended inside the order and the aggressor gained nothing from it:
+# authority gains (a delivery credit), an
+# aggressor that made peace within its grace months is credited with
+# compliance, and peacekeepers deploy to the victim's most devastated state
+# (the peacekeeping request's own opener, un_vote.2). No mission if the victim
+# has left the UN or every state of its already holds another kind.
+# Scope: the aggressor; expects scope:un_cf_aggressor, scope:un_cf_victim_scope
+un_ceasefire_order_kept = {
+	un_ledger_entry_on = { PILLAR = delivery POINTS = un_cf_delivery_credit REASON = 31 SUBJECT = scope:un_cf_aggressor }
+	if = {
+		limit = { NOT = { has_variable = un_cf_fight_on_charged } }
+		un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
+	}
+	un_order_clear_scope = { NAME = un_msn_state }
+	un_order_clear_scope = { NAME = un_msn_new }
+	if = {
+		limit = {
+			scope:un_cf_victim_scope = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				un_mission_can_join_host = { TYPE = peacekeeping }
+			}
+		}
+		scope:un_cf_victim_scope = { save_scope_as = un_msn_host }
+		un_mission_join_host = { TYPE = peacekeeping CODE = 1 ORDER = un_docket_devastation_order }
+	}
+}
+
+# The order was defied: it ran out with the war still on, or the war ended
+# with the aggressor holding gains from the victim. A credibility debit.
+# Scope: the aggressor; expects scope:un_cf_aggressor
+un_ceasefire_order_defied = {
+	un_ledger_entry_on = { PILLAR = credibility POINTS = un_cf_defied_debit REASON = 32 SUBJECT = scope:un_cf_aggressor }
+}
+
+# Tell the victim (if it still stands) and the proposer (if it is neither the
+# aggressor nor the victim) how the order ended. The aggressor is told by the
+# caller.
+# Parameters: $EVENT$ = un_ceasefire.3 | .4 | .5
+# Scope: the aggressor; expects scope:un_cf_aggressor, and
+# scope:un_cf_victim_scope / scope:un_cf_proposer_scope when they exist
+un_ceasefire_order_notify_others = {
+	if = {
+		limit = { un_order_victim_stands = yes }
+		scope:un_cf_victim_scope = { trigger_event = { id = $EVENT$ } }
+	}
+	if = {
+		limit = {
+			scope:un_cf_proposer_scope ?= {
+				is_country_alive = yes
+				NOT = { this = scope:un_cf_aggressor }
+				NOT = { scope:un_cf_victim_scope ?= this }
+			}
+		}
+		scope:un_cf_proposer_scope = { trigger_event = { id = $EVENT$ } }
+	}
+}
+
+# End the order: every variable it keeps on the aggressor.
+# Scope: the aggressor
+un_ceasefire_order_clear = {
+	if = {
+		limit = { has_variable = un_cf_order_months }
+		remove_variable = un_cf_order_months
+	}
+	if = {
+		limit = { has_variable = un_cf_fought_months }
+		remove_variable = un_cf_fought_months
+	}
+	if = {
+		limit = { has_variable = un_cf_debit_months }
+		remove_variable = un_cf_debit_months
+	}
+	if = {
+		limit = { has_variable = un_cf_order_accepted }
+		remove_variable = un_cf_order_accepted
+	}
+	if = {
+		limit = { has_variable = un_cf_fight_on_charged }
+		remove_variable = un_cf_fight_on_charged
+	}
+	if = {
+		limit = { has_variable = un_cf_victim }
+		remove_variable = un_cf_victim
+	}
+	if = {
+		limit = { has_variable = un_cf_victim_states }
+		remove_variable = un_cf_victim_states
+	}
+	if = {
+		limit = { has_variable = un_cf_victim_capital_region }
+		remove_variable = un_cf_victim_capital_region
+	}
+	if = {
+		limit = { has_variable = un_cf_capital_region_shared }
+		remove_variable = un_cf_capital_region_shared
+	}
+	if = {
+		limit = { has_variable = un_cf_proposer }
+		remove_variable = un_cf_proposer
+	}
+	if = {
+		limit = { has_variable = un_cf_named_victim_capital }
+		remove_variable = un_cf_named_victim_capital
+	}
+}
+
+# ============================================================================
+# SUPERVISED SELF-DETERMINATION REFERENDUM (§0.12 item 9)
+# ============================================================================
+
+# ---- Tabling --------------------------------------------------------------------
+
+# The subject a referendum would name, in scope:un_referendum_subject_pick, and
+# its overlord in scope:un_referendum_pick. A proposer that is itself an
+# eligible subject names itself (a dominion asking for its own vote); else a
+# human proposer, who sees the pick previewed, gets the subject with the
+# highest liberty desire, and the AI a rival's subject if it can, any other
+# at random.
+# Scope: the proposing country
+un_referendum_select_target = {
+	save_temporary_scope_as = un_order_proposer
+	if = {
+		limit = { un_referendum_subject_eligible = yes }
+		save_temporary_scope_as = un_referendum_subject_pick
+	}
+	else_if = {
+		limit = { is_ai = yes }
+		random_country = {
+			limit = {
+				un_referendum_subject_eligible = yes
+				overlord = { has_diplomatic_pact = { who = scope:un_order_proposer type = rivalry } }
+			}
+			save_temporary_scope_as = un_referendum_subject_pick
+		}
+		if = {
+			limit = { NOT = { exists = scope:un_referendum_subject_pick } }
+			random_country = {
+				limit = { un_referendum_subject_eligible = yes }
+				save_temporary_scope_as = un_referendum_subject_pick
+			}
+		}
+	}
+	else = {
+		ordered_country = {
+			limit = { un_referendum_subject_eligible = yes }
+			order_by = un_ref_liberty_desire_band
+			max = 1
+			save_temporary_scope_as = un_referendum_subject_pick
+		}
+	}
+	scope:un_referendum_subject_pick ?= {
+		overlord = { save_temporary_scope_as = un_referendum_pick }
+	}
+}
+
+# The subject rides on the resolution, and on the overlord for the vote
+# events' text (its capital, a state: un_ref_named_subject_capital).
+# Scope: the proposing country; expects scope:un_resolution, scope:un_vote_target
+un_referendum_on_tabled = {
+	scope:un_vote_target ?= {
+		if = {
+			limit = { has_variable = un_ref_named_subject_capital }
+			remove_variable = un_ref_named_subject_capital
+		}
+	}
+	if = {
+		limit = {
+			exists = scope:un_resolution
+			exists = scope:un_referendum_subject_pick
+		}
+		scope:un_resolution = {
+			set_variable = { name = un_res_referendum_subject value = scope:un_referendum_subject_pick }
+		}
+		scope:un_referendum_subject_pick = {
+			capital ?= {
+				save_temporary_scope_as = un_ref_named_subject_capital_pick
+				scope:un_vote_target ?= {
+					set_variable = { name = un_ref_named_subject_capital value = scope:un_ref_named_subject_capital_pick }
+				}
+			}
+		}
+	}
+}
+
+# The chamber's row: the overlord, the subject and the odds a vote would carry.
+# Scope: country
+un_referendum_chamber_preview = {
+	un_referendum_select_target = yes
+	if = {
+		limit = {
+			exists = scope:un_referendum_pick
+			exists = scope:un_referendum_subject_pick
+		}
+		custom_tooltip_no_bullet = je_un_chamber_propose_target_referendum
+	}
+}
+
+# ---- Carried ------------------------------------------------------------------
+
+# The outcome, from un_vote.2's carried branch. Binding: the overlord must hold
+# the vote or refuse (un_referendum.1). Vetoed: blocked outright, with no
+# ledger entry, as a vetoed mandate. Moot if the overlord no longer holds the
+# subject.
+# Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution,
+# scope:un_vote_target
+un_referendum_on_carried = {
+	if = {
+		limit = { scope:un_resolution ?= { NOT = { has_tag = un_res_vetoed } } }
+		custom_tooltip = un_vote_referendum_passed_tt
+		un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+		if = {
+			limit = {
+				scope:un_vote_target ?= {
+					save_temporary_scope_as = un_ref_overlord_check
+					scope:un_resolution ?= {
+						var:un_res_referendum_subject ?= {
+							is_country_alive = yes
+							is_direct_subject_of = scope:un_ref_overlord_check
+						}
+					}
+				}
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
+				custom_tooltip = un_referendum_ordered_accepted_tt
+			}
+			else = {
+				custom_tooltip = un_referendum_ordered_tt
+			}
+			hidden_effect = {
+				save_scope_as = un_ref_proposer
+				scope:un_resolution = {
+					var:un_res_referendum_subject = { save_scope_as = un_ref_subject }
+				}
+				scope:un_vote_target = {
+					save_scope_as = un_ref_overlord
+					trigger_event = { id = un_referendum.1 }
+				}
+			}
+		}
+		else = {
+			custom_tooltip = un_referendum_moot_tt
+		}
+	}
+	else = {
+		custom_tooltip = un_vote_referendum_passed_vetoed_tt
+	}
+}
+
+# ---- The overlord's answer (un_referendum.1) ---------------------------------------
+
+# Hold the vote: independence with the stored odds, else the subject's liberty
+# desire falls. The option prints the outcomes; this does them.
+# Scope: the overlord (un_referendum.1's ROOT); expects scope:un_ref_subject,
+# scope:un_ref_overlord, scope:un_ref_proposer
+un_referendum_hold = {
+	if = {
+		limit = { has_variable = un_ref_won }
+		remove_variable = un_ref_won
+	}
+	random = {
+		chance = un_ref_roll_chance
+		set_variable = un_ref_won
+	}
+	if = {
+		limit = { has_variable = un_ref_won }
+		remove_variable = un_ref_won
+		# A freed colony is a former colony (decol_mark_former_colony), as on
+		# every other path that frees one, and an overlord that runs the
+		# colonial-empire entry counts a release by choice.
+		if = {
+			limit = { scope:un_ref_subject = { is_qualifying_colonial_subject = yes } }
+			scope:un_ref_subject = { decol_mark_former_colony = { OVERLORD = scope:un_ref_overlord } }
+			if = {
+				limit = { has_journal_entry = je_colonial_empire }
+				decol_record_chosen_release = yes
+			}
+		}
+		scope:un_ref_subject = { make_independent = yes }
+		scope:un_ref_subject = { trigger_event = { id = un_referendum.2 } }
+		un_referendum_notify_proposer = { EVENT = un_referendum.2 }
+	}
+	else = {
+		scope:un_ref_subject = { add_liberty_desire = un_ref_stay_liberty_desire }
+		scope:un_ref_subject = { trigger_event = { id = un_referendum.3 } }
+		un_referendum_notify_proposer = { EVENT = un_referendum.3 }
+	}
+	if = {
+		limit = { has_variable = un_ref_chance }
+		remove_variable = un_ref_chance
+	}
+}
+
+# Tell the proposer the result, unless it is the overlord or the subject (the
+# subject is told by the caller).
+# Parameters: $EVENT$ = un_referendum.2 | .3 | .4
+# Scope: any; expects scope:un_ref_overlord, scope:un_ref_subject,
+# scope:un_ref_proposer
+un_referendum_notify_proposer = {
+	if = {
+		limit = {
+			scope:un_ref_proposer ?= {
+				is_country_alive = yes
+				NOT = { scope:un_ref_overlord ?= this }
+				NOT = { scope:un_ref_subject ?= this }
+			}
+		}
+		scope:un_ref_proposer = { trigger_event = { id = $EVENT$ } }
+	}
+}
+
+# ---- Owner hooks (un_charter_effects.txt) ------------------------------------------
+
+# Once a month, from un_charter_monthly_update (no-country scope, the UN
+# founded): every ceasefire order runs its month. A referendum keeps no
+# running state.
+# Scope: none
+un_order_monthly_update = {
+	every_country = {
+		limit = { has_variable = un_cf_order_months }
+		un_ceasefire_order_month = yes
+	}
+}
+
+# The UN dissolves (un_charter_on_dissolve): every standing ceasefire order
+# ends, with no reckoning, and the vote events' display variables go.
+# Scope: none
+un_order_on_dissolve = {
+	every_country = {
+		limit = {
+			OR = {
+				has_variable = un_cf_order_months
+				has_variable = un_cf_named_victim_capital
+			}
+		}
+		un_ceasefire_order_clear = yes
+	}
+	every_country = {
+		limit = { has_variable = un_ref_named_subject_capital }
+		remove_variable = un_ref_named_subject_capital
+	}
+}

@@ -170,11 +170,16 @@ te_military_covert_tab_unlock_sgui = {
 # entry is active for every country once the world has warmed 0.1 C, so the
 # tab opens for all of them. It shows on every market the panel opens: on
 # another market, that market's emissions and policies, read-only.
+#
+# With the Global Warming game rule off, the entry opens only for a country
+# holding a restrictive Resource Transition law (#660), and the tab then shows
+# its Fossil Transition section alone. So the tab is shown under the rule, or
+# for such a country, or for one whose entry already runs (a repealed law
+# leaves the entry active: can_deactivate = no).
 # ---------------------------------------------------------------------------
 te_market_global_warming_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = global_warming_enabled
 		has_journal_entry = je_global_warming
 	}
 	ai_is_valid = { always = no }
@@ -184,7 +189,13 @@ te_market_global_warming_tab_sgui = {
 
 te_market_global_warming_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = global_warming_enabled }
+	is_shown = {
+		OR = {
+			has_game_rule = global_warming_enabled
+			rt_restrictive_transition_law = yes
+			has_journal_entry = je_global_warming
+		}
+	}
 	ai_is_valid = { always = no }
 	is_valid = { gw_entry_unlocked = yes }
 	effect = { }

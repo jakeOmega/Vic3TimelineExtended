@@ -144,6 +144,13 @@ ideology_anti_colonialist_added = {
 	color = good
 }
 
+decentralized_claims_renounced = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = neutral
+}
+
 violence_against_minorities = {
 	type = state
 	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"

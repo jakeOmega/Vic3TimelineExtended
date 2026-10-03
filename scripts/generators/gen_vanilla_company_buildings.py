@@ -822,6 +822,16 @@ def get_company_icon(company_id):
 
 
 def main():
+    # One-shot bootstrap: every output below is appended, not regenerated, and the
+    # appended files have been hand-edited since (icons, PMs). A second run would
+    # declare each building, PM and INJECT twice, so refuse once Phase 7 is in.
+    buildings_path = os.path.join(mod_path, "common", "buildings", "company_buildings.txt")
+    with open(buildings_path, 'r', encoding='utf-8-sig') as f:
+        if "# Phase 7: Remaining Vanilla Flavored Company Buildings" in f.read():
+            sys.exit("company_buildings.txt already holds the Phase 7 buildings; this "
+                     "generator only appends, so a rerun would duplicate them. Edit the "
+                     "files directly.")
+
     print(f"Generating unique buildings for {len(COMPANY_BUILDINGS)} vanilla companies...")
 
     # Collect all outputs
@@ -846,7 +856,6 @@ def main():
         all_loc.append(f' {building_key}:0 "{clean_name}"')
 
     # Write buildings
-    buildings_path = os.path.join(mod_path, "common", "buildings", "company_buildings.txt")
     # Read existing content
     with open(buildings_path, 'r', encoding='utf-8-sig') as f:
         existing = f.read()

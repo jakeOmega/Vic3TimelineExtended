@@ -1,0 +1,862 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — ECONOMY: THE ONLY WRITERS (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 items 7 and 10: two institutions
+# the General Assembly may found. Both are recommendatory, pass by a simple
+# majority and name no one. Their in-force flags are un_inst_<key>, not
+# un_agency_*: nobody ratifies an institution, and the convention registry
+# reads un_agency_* as conventions.
+#
+#   the figures      common/script_values/un_economy_values.txt
+#   the tests        common/scripted_triggers/un_economy_triggers.txt
+#   the modifiers    common/static_modifiers/un_economy_modifiers.txt
+#   the pledges      common/scripted_buttons/un_economy_buttons.txt
+#   the state pulse  common/on_actions/un_economy_on_actions.txt
+#   the ROOT hops    events/un_economy_events.txt (hidden country events, so a
+#                    modifier's multiplier and the Strategic Reserve's own
+#                    refresh resolve against the country they are for)
+#   the notices      common/messages/un_economy_messages.txt
+#
+# THE WORLD DEVELOPMENT FUND (development_fund; no reform needed)
+#   One topic, one institution (owner, 2026-10-02). It can be founded under
+#   any charter, and once it stands its form follows the charter level
+#   (un_charter_level_value) every month, with no new vote:
+#     founding charter  voluntary: the contributions only; line a tenth of
+#                       the members' average GDP per head
+#     Reform I          assessed: 5% of the budget + the contributions; line a
+#                       quarter of the average
+#     Reform II         full: a quarter of the budget + the contributions; line
+#                       half the average
+#   (un_dev_fund_budget_share_reform_1/_2, un_charter_values.txt;
+#   un_dev_fund_line_share_founding/_reform_1/_reform_2, un_economy_values.txt.)
+#   THE VOLUNTARY PART is the Development Programs programme
+#   (un_fund_development_button, un_buttons.txt; owner, 2026-10-02): while the
+#   Fund stands, every represented member that runs it and pays its dues
+#   (un_dev_fund_contributor) pays the Fund's grants with its programme expense
+#   (var:un_development_expense_cached, the multiplier of
+#   un_development_contributor_cost). The programme itself is untouched: its
+#   rank gate, cost, benefits, standing award and funding-pillar credit stay
+#   as they were; the Fund only counts the expense into its pot.
+#   global   un_inst_development_fund    in force (un_development_fund_on_carried)
+#            un_dev_fund_members_gdp /   the represented members' GDP and people
+#            un_dev_fund_members_pop
+#            un_dev_fund_avg             their GDP per head
+#            un_dev_fund_line_floor      the poorest member in good standing's
+#                                        GDP per head (un_dev_fund_good_standing);
+#                                        absent while there is none
+#            un_dev_fund_line_base       the level's share of the average
+#            un_dev_fund_line            the recipients' line: the base, raised
+#                                        to the floor when no member in good
+#                                        standing is under it (owner,
+#                                        2026-10-03), so one always qualifies
+#            un_dev_fund_rich_line       twice it: the richest (the lean)
+#            un_dev_fund_eligible_pop    the people of the members below the line
+#            un_dev_fund_recipients      how many members they are
+#            un_dev_fund_donations       the contributors' programme expense a
+#                                        week, together (the voluntary part)
+#            un_dev_fund_contributors    how many they are
+#   country  un_dev_fund_gdp_ph          GDP per head (represented members only)
+#            un_dev_fund_grant           this month's weekly grant: the
+#                                        multiplier of the grant modifier. Set
+#                                        to 0 when the grant stops, never removed
+#                                        while the UN stands (the engine re-reads
+#                                        a stored multiplier)
+#   modifier un_dev_fund_pool_grant_modifier / un_dev_fund_treasury_grant_modifier,
+#            one or the other: un_dev_fund_country_refresh (un_economy.1) is
+#            the single refresh site, removing and re-adding monthly
+#   Fund Development Programs opens only while the Fund stands (owner,
+#   2026-10-03), and a contribution running with no Fund lapses at the next
+#   monthly update (un_dev_fund_lapse_contributions).
+#   The snapshot, the contributions and the grants are written by
+#   un_dev_fund_monthly_update (every month, from un_charter_monthly_update,
+#   after the budget snapshot in un_authority_monthly_update). Leaving the UN,
+#   withholding dues or rising above the line stops the grant at the next
+#   month; a contributor that withholds its dues or loses its seat stops
+#   counting toward the pot then too.
+#
+# THE WORLD FOOD RESERVE (food_reserve; no reform)
+#   global   un_inst_food_reserve        in force (un_food_reserve_on_carried)
+#            un_fr_members_pop /         the members' people, those of them in
+#            un_fr_famine_pop            famine-struck states, and the share
+#            un_fr_famine_share          (un_food_reserve_hunger_snapshot, from
+#                                        un_authority_monthly_update step 3)
+#            un_fr_hunger_term_potential what hunger would give delivery
+#            un_fr_hunger_term           what it gives: the potential while the
+#                                        Reserve stands, else 0
+#            un_fr_pledgers / un_fr_pledged_grain
+#                                        pledgers and the grain they hold
+#            un_fr_holders / un_fr_holders_grain
+#                                        members holding grain worth drawing
+#            un_fr_draw_potential / un_fr_draw_scale / un_fr_draw_total
+#                                        one draw's bookkeeping, removed after it
+#   country  un_fr_pledged               we pledge (the pledge buttons)
+#            un_fr_last_draw             grain the last draw took from us
+#            un_fr_drawn_total           grain the Reserve has taken from us
+#   state    un_fr_relief_power          the relief modifier's multiplier, 0..1
+#            un_fr_relief_months         pulses of relief left
+#   modifier un_food_reserve_relief_state_modifier: un_food_reserve_state_refresh
+#            (the state's monthly pulse) is the single refresh site
+#
+#   THE STRATEGIC RESERVE. A draw lowers the pledger's st_res_grain_stored
+#   (never below zero: a draw is at most a quarter of what it holds) and then
+#   hands the pledger to un_economy.2, which runs the Strategic Reserve's own
+#   clamp and hub refresh with the pledger as ROOT, as the reserve's rate
+#   buttons do (st_res_clamp_stockpiles_effect, st_res_refresh_hub_flow_effect).
+#   No goods are created: the grain leaves the stockpile the pledger bought,
+#   and the relief is a modifier on the state. No Strategic Reserve file is
+#   touched.
+#
+# REASON CODES (allocated 34-36 ledger, 42-44 standing)
+#   ledger   34  the World Food Reserve sent grain to <state> (delivery,
+#                institutional; subject: the aid mission's state)
+#            35, 36  allocated, unused
+#   standing 42  the World Food Reserve drew on the grain we pledged
+#            43, 44  allocated, unused
+# ============================================================================
+
+# ---- The Assembly's business ---------------------------------------------------------
+
+# The World Development Fund carried: the Fund stands from now, in the form
+# the charter's level gives it, and its first grants are paid from the next
+# monthly update. Recommendatory, so there is no vetoed form.
+# Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution
+un_development_fund_on_carried = {
+	custom_tooltip = un_vote_development_fund_passed_tt
+	un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_global_variable = un_inst_development_fund } }
+			set_global_variable = un_inst_development_fund
+		}
+	}
+}
+
+# The World Food Reserve carried: the Reserve stands from now. Members may
+# pledge grain from the journal entry, every new aid mission draws on the
+# pledges, and the delivery pillar takes the hunger term from the next monthly
+# update.
+# Scope: un_vote.2's ROOT (the proposer); expects scope:un_resolution
+un_food_reserve_on_carried = {
+	custom_tooltip = un_vote_food_reserve_passed_tt
+	un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_global_variable = un_inst_food_reserve } }
+			set_global_variable = un_inst_food_reserve
+		}
+	}
+}
+
+# What the chamber's row previews while the Fund can be tabled: its form under
+# the charter as it stands (the budget share and the contributions, or the
+# contributions only under the founding charter, which can start only once it
+# stands) and the budget share today, how many members it would pay and below
+# what line, and what it would mean for us.
+# Root-level lines only (the row's lines print in order).
+# Scope: country
+un_development_fund_chamber_preview = {
+	# The line is the level's share of the average, or, when that is below
+	# every member in good standing, the poorest one's GDP per head
+	# (un_dev_fund_line_floored): the _floored lines say which.
+	if = {
+		limit = {
+			un_charter_has_reform = { LEVEL = 1 }
+			un_dev_fund_line_floored = yes
+		}
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_floored
+	}
+	else_if = {
+		limit = { un_charter_has_reform = { LEVEL = 1 } }
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund
+	}
+	else_if = {
+		limit = { un_dev_fund_line_floored = yes }
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_voluntary_floored
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_voluntary
+	}
+	# Under the founding charter the Fund would pay out only the contributions,
+	# and none can run before it stands (un_fund_development_button), so there
+	# is no sum to preview: the line says we would share in them.
+	if = {
+		limit = {
+			un_dev_fund_eligible = yes
+			un_charter_has_reform = { LEVEL = 1 }
+		}
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_ours
+	}
+	else_if = {
+		limit = { un_dev_fund_eligible = yes }
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_ours_voluntary
+	}
+	else_if = {
+		limit = {
+			un_dev_fund_below_line = yes
+			un_dues_is_withholding = yes
+		}
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_withholding
+	}
+	else_if = {
+		limit = { has_variable = un_dev_fund_gdp_ph }
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_not_ours
+	}
+}
+
+# What the chamber's row previews while the Reserve can be tabled: the grain
+# the members hold, and what hunger among them would do to the delivery pillar.
+# Scope: country
+un_food_reserve_chamber_preview = {
+	custom_tooltip_no_bullet = je_un_chamber_preview_food_reserve
+	custom_tooltip_no_bullet = je_un_chamber_preview_food_reserve_hunger
+}
+
+# ---- The month ---------------------------------------------------------------------
+
+# Once a month, from un_charter_monthly_update (un_global_authority_on_action,
+# the UN founded), after the authority update has snapshotted the budget.
+# Scope: none
+un_economy_monthly_update = {
+	un_dev_fund_monthly_update = yes
+	un_food_reserve_monthly_update = yes
+}
+
+# The Fund's line, recipients and contributions, snapshotted every month
+# whether or not the Fund stands (the chamber's row and the lean read them), at
+# the charter's current level; then this month's grants while it stands.
+# Scope: none
+un_dev_fund_monthly_update = {
+	# 0. A Development Programs contribution running with no Fund lapses.
+	un_dev_fund_lapse_contributions = yes
+	# 1. Every represented member's GDP per head; a stale figure is dropped.
+	every_country = {
+		if = {
+			limit = { un_member_represented = yes }
+			set_variable = { name = un_dev_fund_gdp_ph value = un_dev_fund_gdp_per_head }
+		}
+		else_if = {
+			limit = { has_variable = un_dev_fund_gdp_ph }
+			remove_variable = un_dev_fund_gdp_ph
+		}
+	}
+	# 2. The members' average, the line (at the charter's current level, never
+	#    below the poorest member in good standing: owner, 2026-10-03) and the
+	#    rich line. The floor reads step 1's figures and goes before the line.
+	set_global_variable = { name = un_dev_fund_members_gdp value = un_dev_fund_members_gdp_value }
+	set_global_variable = { name = un_dev_fund_members_pop value = un_dev_fund_members_pop_value }
+	set_global_variable = { name = un_dev_fund_avg value = un_dev_fund_avg_value }
+	if = {
+		limit = {
+			any_country = {
+				un_dev_fund_good_standing = yes
+				has_variable = un_dev_fund_gdp_ph
+			}
+		}
+		ordered_country = {
+			limit = {
+				un_dev_fund_good_standing = yes
+				has_variable = un_dev_fund_gdp_ph
+			}
+			order_by = un_dev_fund_poverty_order
+			position = 0
+			set_global_variable = { name = un_dev_fund_line_floor value = var:un_dev_fund_gdp_ph }
+		}
+	}
+	else_if = {
+		limit = { has_global_variable = un_dev_fund_line_floor }
+		remove_global_variable = un_dev_fund_line_floor
+	}
+	set_global_variable = { name = un_dev_fund_line_base value = un_dev_fund_line_base_value }
+	set_global_variable = { name = un_dev_fund_line value = un_dev_fund_line_value }
+	set_global_variable = { name = un_dev_fund_rich_line value = un_dev_fund_rich_line_value }
+	# 3. Who the Fund pays, and their people.
+	set_global_variable = { name = un_dev_fund_eligible_pop value = un_dev_fund_eligible_pop_value }
+	set_global_variable = { name = un_dev_fund_recipients value = un_dev_fund_recipients_value }
+	# 4. The voluntary part: the Development Programs contributions of the
+	#    represented members that pay their dues, a week, and how many they
+	#    are. The pot adds the sum while the Fund stands, so the grants pay out
+	#    what the contributors pay.
+	set_global_variable = { name = un_dev_fund_donations value = un_dev_fund_donations_value }
+	set_global_variable = { name = un_dev_fund_contributors value = un_dev_fund_contributors_value }
+	# 5. This month's grants. A recipient's grant is stored here and applied
+	#    by un_economy.1, whose ROOT is the recipient: a multiplier read from
+	#    this root-less pulse would resolve against nothing and silently apply
+	#    1 (scripting_best_practices.md, "multiplier = var:X Resolves Against
+	#    ROOT"). A country whose grant has stopped is sent the same event, which
+	#    removes its modifier.
+	every_country = {
+		limit = {
+			OR = {
+				AND = {
+					has_global_variable = un_inst_development_fund
+					un_dev_fund_eligible = yes
+				}
+				AND = {
+					has_variable = un_dev_fund_grant
+					var:un_dev_fund_grant > 0
+				}
+				has_modifier = un_dev_fund_pool_grant_modifier
+				has_modifier = un_dev_fund_treasury_grant_modifier
+			}
+		}
+		if = {
+			limit = {
+				has_global_variable = un_inst_development_fund
+				un_dev_fund_eligible = yes
+			}
+			set_variable = { name = un_dev_fund_grant value = un_dev_fund_grant_value }
+		}
+		else = {
+			set_variable = { name = un_dev_fund_grant value = 0 }
+		}
+		trigger_event = { id = un_economy.1 }
+	}
+}
+
+# Fund Development Programs opens only while the Fund stands (owner,
+# 2026-10-03; un_fund_development_button's possible): before the Assembly
+# founds it, the programme's money would reach nobody. A contribution that
+# runs with no Fund (one from a save before the gate) ends here, exactly as
+# Stop Contributing ends it: both journal-entry modifiers and their mirrors go
+# (un_state_off, as leaving the UN does), and the contributor is told why.
+# Scope: none
+un_dev_fund_lapse_contributions = {
+	if = {
+		limit = { NOT = { has_global_variable = un_inst_development_fund } }
+		every_country = {
+			limit = {
+				je:je_united_nations ?= {
+					OR = {
+						has_modifier = un_development_contributor_modifier
+						has_modifier = un_development_contributor_cost
+					}
+				}
+			}
+			un_state_off = { MODIFIER = un_development_contributor_modifier }
+			un_state_off = { MODIFIER = un_development_contributor_cost }
+			post_notification = un_dev_fund_contribution_lapsed_notice
+		}
+	}
+}
+
+# One country's grant, from its own hidden event (un_economy.1): the single
+# refresh site for both grant modifiers. Into the investment pool where the
+# pool can take it, into the treasury otherwise.
+# Scope: the country (and ROOT)
+un_dev_fund_country_refresh = {
+	if = {
+		limit = { has_modifier = un_dev_fund_pool_grant_modifier }
+		remove_modifier = un_dev_fund_pool_grant_modifier
+	}
+	if = {
+		limit = { has_modifier = un_dev_fund_treasury_grant_modifier }
+		remove_modifier = un_dev_fund_treasury_grant_modifier
+	}
+	if = {
+		limit = {
+			has_global_variable = un_inst_development_fund
+			has_variable = un_dev_fund_grant
+			var:un_dev_fund_grant > 0
+		}
+		if = {
+			limit = { un_dev_fund_pays_into_pool = yes }
+			add_modifier = {
+				name = un_dev_fund_pool_grant_modifier
+				multiplier = var:un_dev_fund_grant
+			}
+		}
+		else = {
+			add_modifier = {
+				name = un_dev_fund_treasury_grant_modifier
+				multiplier = var:un_dev_fund_grant
+			}
+		}
+	}
+}
+
+# The Reserve's month: pledges that no longer qualify lapse, and the chamber's
+# figures for the pledgers and for everyone holding grain.
+# Scope: none
+un_food_reserve_monthly_update = {
+	every_country = {
+		limit = {
+			has_variable = un_fr_pledged
+			NOT = { un_food_reserve_can_pledge = yes }
+		}
+		remove_variable = un_fr_pledged
+	}
+	set_global_variable = { name = un_fr_pledgers value = 0 }
+	set_global_variable = { name = un_fr_pledged_grain value = 0 }
+	set_global_variable = { name = un_fr_holders value = 0 }
+	set_global_variable = { name = un_fr_holders_grain value = 0 }
+	every_country = {
+		limit = {
+			un_member_represented = yes
+			un_food_reserve_can_store_grain = yes
+			un_food_reserve_holds_grain = yes
+		}
+		change_global_variable = { name = un_fr_holders add = 1 }
+		change_global_variable = { name = un_fr_holders_grain add = var:st_res_grain_stored }
+		if = {
+			limit = { has_variable = un_fr_pledged }
+			change_global_variable = { name = un_fr_pledgers add = 1 }
+			change_global_variable = { name = un_fr_pledged_grain add = var:st_res_grain_stored }
+		}
+	}
+}
+
+# The hunger term of the delivery pillar (owner, 2026-10-02): the share of the
+# members' people living in famine-struck states, and what it does to the
+# pillar while the Reserve stands. Called from un_authority_monthly_update
+# step 3, before the pillars are snapshotted, so the delivery pillar reads this
+# month's figure. The share is taken whether or not the Reserve stands: the
+# chamber's row previews it.
+# Scope: none
+un_food_reserve_hunger_snapshot = {
+	set_global_variable = { name = un_fr_members_pop value = un_member_pop_value }
+	set_global_variable = { name = un_fr_famine_pop value = un_fr_members_famine_pop_value }
+	set_global_variable = { name = un_fr_famine_share value = un_fr_famine_share_value }
+	set_global_variable = { name = un_fr_hunger_term_potential value = un_fr_hunger_term_potential_value }
+	if = {
+		limit = { has_global_variable = un_inst_food_reserve }
+		set_global_variable = { name = un_fr_hunger_term value = global_var:un_fr_hunger_term_potential }
+	}
+	else = {
+		set_global_variable = { name = un_fr_hunger_term value = 0 }
+	}
+}
+
+# ---- The World Food Reserve answers an aid mission ------------------------------------
+
+# A new UN aid mission has opened (un_mission_open, un_mission_effects.txt).
+# While the Reserve stands, it draws grain from the pledgers holding enough,
+# other than the mission's host (not drawn on for its own relief):
+# from each the same fraction of its offer (a quarter of its stockpile, at most
+# 2,500 units), all of it until the mission's need of 5,000 units is met. The
+# mission's state is fed for a year in proportion to what came; each pledger
+# drawn on gains standing; the UN books the delivery. With nothing to draw the
+# host is told so, and nothing else happens. A Moribund UN cannot call on it.
+# Scope: any; expects scope:un_msn_new (the mission), scope:un_msn_state and
+# scope:un_msn_host
+un_food_reserve_on_aid_mission_opened = {
+	hidden_effect = {
+		if = {
+			limit = {
+				has_global_variable = un_inst_food_reserve
+				exists = scope:un_msn_state
+				un_tier_at_least_contested = yes
+			}
+			set_global_variable = { name = un_fr_draw_potential value = un_fr_draw_potential_value }
+			if = {
+				limit = { global_var:un_fr_draw_potential > 0 }
+				set_global_variable = { name = un_fr_draw_scale value = un_fr_draw_scale_value }
+				set_global_variable = { name = un_fr_draw_total value = 0 }
+				# Mirrors un_fr_draw_potential_value's limit: the host is
+				# never drawn on for its own relief.
+				every_country = {
+					limit = {
+						un_food_reserve_can_be_drawn = yes
+						NOT = { scope:un_msn_host ?= this }
+					}
+					un_food_reserve_draw_from = yes
+				}
+				# The relief, for a year from the state's next monthly pulse:
+				# its strength is what came against what the mission needs.
+				scope:un_msn_state = {
+					set_variable = { name = un_fr_relief_power value = un_fr_relief_power_value }
+					set_variable = { name = un_fr_relief_months value = un_fr_relief_duration }
+				}
+				un_ledger_entry_on = { PILLAR = delivery POINTS = un_fr_delivery_points_value REASON = 34 SUBJECT = scope:un_msn_state }
+				scope:un_msn_host ?= { post_notification = un_food_reserve_relief_notice }
+				remove_global_variable = un_fr_draw_scale
+				remove_global_variable = un_fr_draw_total
+			}
+			else = {
+				scope:un_msn_host ?= { post_notification = un_food_reserve_empty_notice }
+			}
+			remove_global_variable = un_fr_draw_potential
+		}
+	}
+}
+
+# One pledger's part in a draw: the grain leaves its Strategic Reserve, the
+# Reserve's own clamp and hub refresh follow from its own hidden event, it is
+# told, and its standing rises.
+# Scope: the pledger; expects global_var:un_fr_draw_scale and
+# global_var:un_fr_draw_total, and scope:un_msn_state for the notice
+un_food_reserve_draw_from = {
+	set_variable = { name = un_fr_last_draw value = un_fr_draw_value }
+	change_variable = { name = st_res_grain_stored subtract = var:un_fr_last_draw }
+	# A draw is at most a quarter of the stockpile, so this never bites; it
+	# is the floor the Strategic Reserve's bookkeeping assumes.
+	if = {
+		limit = { var:st_res_grain_stored < 0 }
+		set_variable = { name = st_res_grain_stored value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = un_fr_drawn_total } }
+		set_variable = { name = un_fr_drawn_total value = 0 }
+	}
+	change_variable = { name = un_fr_drawn_total add = var:un_fr_last_draw }
+	change_global_variable = { name = un_fr_draw_total add = var:un_fr_last_draw }
+	un_standing_gain = { AMOUNT = un_fr_pledger_standing_gain REASON = 42 }
+	post_notification = un_food_reserve_drawn_notice
+	trigger_event = { id = un_economy.2 }
+}
+
+# One state's relief, from its own monthly pulse (un_economy_on_actions.txt):
+# the single refresh site for un_food_reserve_relief_state_modifier. Applied
+# while pulses of relief are left, then removed with its variables.
+# Scope: state (and ROOT)
+un_food_reserve_state_refresh = {
+	if = {
+		limit = {
+			has_variable = un_fr_relief_power
+			has_variable = un_fr_relief_months
+			var:un_fr_relief_months > 0
+		}
+		if = {
+			limit = { has_modifier = un_food_reserve_relief_state_modifier }
+			remove_modifier = un_food_reserve_relief_state_modifier
+		}
+		add_modifier = {
+			name = un_food_reserve_relief_state_modifier
+			multiplier = var:un_fr_relief_power
+		}
+		change_variable = { name = un_fr_relief_months subtract = 1 }
+	}
+	else = {
+		# The modifier goes before the variable its multiplier reads.
+		if = {
+			limit = { has_modifier = un_food_reserve_relief_state_modifier }
+			remove_modifier = un_food_reserve_relief_state_modifier
+		}
+		if = {
+			limit = { has_variable = un_fr_relief_power }
+			remove_variable = un_fr_relief_power
+		}
+		if = {
+			limit = { has_variable = un_fr_relief_months }
+			remove_variable = un_fr_relief_months
+		}
+	}
+}
+
+# ---- Pledging (un_economy_buttons.txt) -------------------------------------------------
+
+# Scope: country
+un_food_reserve_pledge = {
+	custom_tooltip = {
+		text = un_food_reserve_pledge_effect_tt
+		set_variable = un_fr_pledged
+	}
+}
+
+# Scope: country
+un_food_reserve_withdraw_pledge = {
+	custom_tooltip = {
+		text = un_food_reserve_withdraw_effect_tt
+		remove_variable = un_fr_pledged
+	}
+}
+
+# ---- The chamber ----------------------------------------------------------------------
+
+# Our part in the two institutions, under Our Obligations' dues (called at the
+# end of un_chamber_dues_lines, un_chamber_display_effects.txt): the Fund's
+# grant to us, or why there is none; what our Development Programs
+# contribution does for it; our grain pledge. Root-level lines only.
+# Scope: country (a member)
+un_economy_obligation_lines = {
+	if = {
+		limit = { has_global_variable = un_inst_development_fund }
+		# At Moribund no dues are assessed, so the budget is empty and only the
+		# contributions are paid out.
+		if = {
+			limit = {
+				NOT = { un_dues_assessed = yes }
+				un_dev_fund_no_contributions = yes
+			}
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_moribund
+		}
+		else_if = {
+			limit = { has_modifier = un_dev_fund_pool_grant_modifier }
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_pool
+		}
+		else_if = {
+			limit = { has_modifier = un_dev_fund_treasury_grant_modifier }
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_treasury
+		}
+		# Under the founding charter the Fund pays out only the contributions:
+		# with none this month, a member below the line has nothing coming.
+		else_if = {
+			limit = {
+				un_dev_fund_eligible = yes
+				NOT = { un_charter_has_reform = { LEVEL = 1 } }
+				un_dev_fund_no_contributions = yes
+			}
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_no_contributors
+		}
+		else_if = {
+			limit = { un_dev_fund_eligible = yes }
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_next_month
+		}
+		else_if = {
+			limit = {
+				un_dev_fund_below_line = yes
+				un_dues_is_withholding = yes
+			}
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_withholding
+		}
+		else_if = {
+			limit = { has_variable = un_dev_fund_gdp_ph }
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_above_line
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_none
+		}
+		# Our Development Programs contribution: it pays the grants, or it
+		# would if we paid our dues and held our seat, or (a major power that
+		# runs none) it could.
+		if = {
+			limit = { un_dev_fund_contributor = yes }
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor
+		}
+		else_if = {
+			limit = { un_standing_program_active_development = yes }
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_contributor_not_counted
+		}
+		else_if = {
+			limit = {
+				un_member_represented = yes
+				country_rank >= rank_value:major_power
+			}
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_could_contribute
+		}
+	}
+	if = {
+		limit = { has_global_variable = un_inst_food_reserve }
+		if = {
+			limit = { has_variable = un_fr_pledged }
+			custom_tooltip_no_bullet = je_un_chamber_food_reserve_pledged
+		}
+		else_if = {
+			limit = { un_food_reserve_can_pledge = yes }
+			custom_tooltip_no_bullet = je_un_chamber_food_reserve_can_pledge
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_food_reserve_cannot_pledge
+		}
+	}
+}
+
+# What the institutions take of the budget, and what is left to lend, after
+# the line with all members' dues (un_chamber_budget_sgui, un_chamber_sguis.txt).
+# Shown to everyone while the Standing UN Force or the Fund stands.
+# Scope: country
+un_economy_budget_lines = {
+	if = {
+		limit = {
+			OR = {
+				has_global_variable = un_inst_standing_force
+				has_global_variable = un_inst_development_fund
+			}
+		}
+		if = {
+			limit = { has_global_variable = un_inst_standing_force }
+			custom_tooltip_no_bullet = je_un_chamber_budget_force
+		}
+		if = {
+			limit = { has_global_variable = un_inst_development_fund }
+			if = {
+				limit = {
+					un_charter_has_reform = { LEVEL = 1 }
+					un_dev_fund_line_floored = yes
+				}
+				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund_floored
+			}
+			else_if = {
+				limit = { un_charter_has_reform = { LEVEL = 1 } }
+				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund
+			}
+			else_if = {
+				limit = { un_dev_fund_line_floored = yes }
+				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund_voluntary_floored
+			}
+			else = {
+				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund_voluntary
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_budget_free
+	}
+}
+
+# The World Development Fund's section (te_un_sec_dev_fund, shown while the
+# Fund stands; un_chamber_dev_fund_sgui): every member it pays this month,
+# largest grant first, with the grant and its GDP per head; or, with nobody
+# paid, why. Each recipient prints one line, in its own scope, once (gotcha
+# #27 needs a country to recur before it bites). The reasons mirror
+# un_economy_obligation_lines.
+# Scope: country (the viewer)
+un_dev_fund_recipient_lines = {
+	if = {
+		limit = { any_country = { un_dev_fund_receiving = yes } }
+		ordered_country = {
+			limit = { un_dev_fund_receiving = yes }
+			order_by = un_dev_fund_grant_order
+			min = 0
+			max = 999
+			check_range_bounds = no
+			if = {
+				limit = { this = root }
+				custom_tooltip = je_un_dev_fund_recipient_us
+			}
+			else = {
+				custom_tooltip = je_un_dev_fund_recipient
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { any_country = { un_dev_fund_eligible = yes } }
+		}
+		custom_tooltip_no_bullet = je_un_dev_fund_none_eligible
+	}
+	else_if = {
+		limit = {
+			NOT = { un_dues_assessed = yes }
+			un_dev_fund_no_contributions = yes
+		}
+		custom_tooltip_no_bullet = je_un_dev_fund_none_moribund
+	}
+	else_if = {
+		limit = {
+			NOT = { un_charter_has_reform = { LEVEL = 1 } }
+			un_dev_fund_no_contributions = yes
+		}
+		custom_tooltip_no_bullet = je_un_dev_fund_none_no_contributors
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_dev_fund_none_next_month
+	}
+}
+
+# How this month's line was set: the level's share of the members' average,
+# or the poorest member in good standing's GDP per head when the share is
+# below every such member. The section's cutoff row's tooltip
+# (un_chamber_dev_fund_line_sgui). Root-level lines only.
+# Scope: country (the viewer)
+un_dev_fund_line_lines = {
+	if = {
+		limit = { un_dev_fund_line_floored = yes }
+		custom_tooltip_no_bullet = je_un_dev_fund_line_floored_tt
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_dev_fund_line_share_tt
+	}
+}
+
+# ---- Leaving and dissolution -----------------------------------------------------------
+
+# Leaving the UN: the Fund's grant stops and the pledge to the Reserve is
+# released at once. Meant for un_membership_end_effect (un_ladder_effects.txt)
+# to call; until it does, the monthly update ends both within a month (a
+# non-member is neither a recipient nor a pledger). The grant variable is set
+# to 0, not removed: a stored multiplier may still be read.
+# Scope: country
+un_economy_on_membership_end = {
+	if = {
+		limit = { has_modifier = un_dev_fund_pool_grant_modifier }
+		remove_modifier = un_dev_fund_pool_grant_modifier
+	}
+	if = {
+		limit = { has_modifier = un_dev_fund_treasury_grant_modifier }
+		remove_modifier = un_dev_fund_treasury_grant_modifier
+	}
+	if = {
+		limit = { has_variable = un_dev_fund_grant }
+		set_variable = { name = un_dev_fund_grant value = 0 }
+	}
+	if = {
+		limit = { has_variable = un_fr_pledged }
+		remove_variable = un_fr_pledged
+	}
+}
+
+# The UN dissolves (un_dissolve step 8b, after every country has left): both
+# institutions lapse, every grant stops at once and every pledge is released.
+# A state already fed by the Reserve keeps its relief to the end of its year:
+# the grain was delivered.
+# Scope: none
+un_economy_on_dissolve = {
+	every_country = {
+		limit = {
+			OR = {
+				has_modifier = un_dev_fund_pool_grant_modifier
+				has_modifier = un_dev_fund_treasury_grant_modifier
+				has_variable = un_dev_fund_grant
+				has_variable = un_dev_fund_gdp_ph
+				has_variable = un_fr_pledged
+				has_variable = un_fr_last_draw
+				has_variable = un_fr_drawn_total
+			}
+		}
+		un_economy_country_clear = yes
+	}
+	un_dissolve_remove_global = { NAME = un_inst_development_fund }
+	un_dissolve_remove_global = { NAME = un_inst_food_reserve }
+	un_dissolve_remove_global = { NAME = un_dev_fund_members_gdp }
+	un_dissolve_remove_global = { NAME = un_dev_fund_members_pop }
+	un_dissolve_remove_global = { NAME = un_dev_fund_avg }
+	un_dissolve_remove_global = { NAME = un_dev_fund_line_floor }
+	un_dissolve_remove_global = { NAME = un_dev_fund_line_base }
+	un_dissolve_remove_global = { NAME = un_dev_fund_line }
+	un_dissolve_remove_global = { NAME = un_dev_fund_rich_line }
+	un_dissolve_remove_global = { NAME = un_dev_fund_eligible_pop }
+	un_dissolve_remove_global = { NAME = un_dev_fund_recipients }
+	un_dissolve_remove_global = { NAME = un_dev_fund_donations }
+	un_dissolve_remove_global = { NAME = un_dev_fund_contributors }
+	un_dissolve_remove_global = { NAME = un_fr_members_pop }
+	un_dissolve_remove_global = { NAME = un_fr_famine_pop }
+	un_dissolve_remove_global = { NAME = un_fr_famine_share }
+	un_dissolve_remove_global = { NAME = un_fr_hunger_term_potential }
+	un_dissolve_remove_global = { NAME = un_fr_hunger_term }
+	un_dissolve_remove_global = { NAME = un_fr_pledgers }
+	un_dissolve_remove_global = { NAME = un_fr_pledged_grain }
+	un_dissolve_remove_global = { NAME = un_fr_holders }
+	un_dissolve_remove_global = { NAME = un_fr_holders_grain }
+}
+
+# One country's share of the institutions, gone. The grant modifiers go
+# before the variable their multiplier reads.
+# Scope: country
+un_economy_country_clear = {
+	if = {
+		limit = { has_modifier = un_dev_fund_pool_grant_modifier }
+		remove_modifier = un_dev_fund_pool_grant_modifier
+	}
+	if = {
+		limit = { has_modifier = un_dev_fund_treasury_grant_modifier }
+		remove_modifier = un_dev_fund_treasury_grant_modifier
+	}
+	if = {
+		limit = { has_variable = un_dev_fund_grant }
+		remove_variable = un_dev_fund_grant
+	}
+	if = {
+		limit = { has_variable = un_dev_fund_gdp_ph }
+		remove_variable = un_dev_fund_gdp_ph
+	}
+	if = {
+		limit = { has_variable = un_fr_pledged }
+		remove_variable = un_fr_pledged
+	}
+	if = {
+		limit = { has_variable = un_fr_last_draw }
+		remove_variable = un_fr_last_draw
+	}
+	if = {
+		limit = { has_variable = un_fr_drawn_total }
+		remove_variable = un_fr_drawn_total
+	}
+}

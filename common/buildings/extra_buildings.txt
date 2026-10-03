@@ -3,6 +3,23 @@
 		pmg_depth_oil_rig
 		pmg_maintenance_heavy
 	}
+
+	# Resource Transition (issue #660): a Fossil Expansion Moratorium or a
+	# Managed Fossil Phaseout in the country where the building stands stops
+	# new construction and expansion, by its government, its investors and
+	# foreign investors alike (state scope: `owner` is the state's owner). The
+	# building-level should_auto_expand replaces the group's
+	# `default_auto_expand_rule = yes`, so it repeats that rule.
+	can_build_government = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	can_build_private = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	should_auto_expand = {
+		default_auto_expand_rule = yes
+		state = { rt_fossil_construction_allowed_here = yes }
+	}
 }
 
 INJECT:building_textile_mill = {
@@ -72,7 +89,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_silk = {
 
 REPLACE_OR_CREATE:building_synthetics_plant_oil = {
 	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/building_icons/synth_oil.dds"
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_oil.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -97,7 +114,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_oil = {
 
 REPLACE_OR_CREATE:building_synthetics_plant_rubber = {
 	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/building_icons/synth_rubber.dds"
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_rubber.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -122,12 +139,14 @@ REPLACE_OR_CREATE:building_synthetics_plant_rubber = {
 
 REPLACE_OR_CREATE:building_synthetics_plant_opium = {
 	building_group = bg_biotechnology
-	icon = "gfx/interface/icons/building_icons/drugs.dds"
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_opium.dds"
 	city_type = city
 	levels_per_mesh = -1
 
+	# Base-game Pharmaceuticals (era 2). The early methods lose to opium
+	# plantations; see the ladder comment in extra_pms.txt.
 	unlocking_technologies = {
-		modern_pharmaceuticals
+		pharmaceuticals
 	}
 
 	production_method_groups = {
@@ -136,10 +155,22 @@ REPLACE_OR_CREATE:building_synthetics_plant_opium = {
 		pmg_maintenance
 	}
 
-	required_construction = construction_cost_mega_high
+	required_construction = construction_cost_very_high
 
 	possible = {
 		is_industrial_production_allowed = yes
+	}
+	# Drugs are the opium good: a ban on it (Qing's Opium Crisis) stops these
+	# as it stops opium plantations.
+	can_build_government = {
+		owner = {
+			NOT = { is_banning_goods = g:opium }
+		}
+	}
+	can_build_private = {
+		owner = {
+			NOT = { is_banning_goods = g:opium }
+		}
 	}
 	ownership_type = self
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
@@ -393,7 +424,7 @@ REPLACE_OR_CREATE:building_electrics_industry_radio = {
 
 REPLACE_OR_CREATE:building_electrics_industry_appliances = {
 	building_group = bg_high_tech
-	icon = "gfx/interface/icons/building_icons/appliance.dds"
+	icon = "gfx/interface/icons/building_icons/building_electrics_industry_appliances.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -422,6 +453,23 @@ INJECT:building_power_plant = {
 		pmg_power_automation
 		pmg_emissions_control
 		pmg_maintenance_heavy
+	}
+
+	# Resource Transition (issue #660): a Fossil Expansion Moratorium or a
+	# Managed Fossil Phaseout in the country where the building stands stops
+	# new construction and expansion, by its government, its investors and
+	# foreign investors alike (state scope: `owner` is the state's owner). The
+	# building-level should_auto_expand replaces the group's
+	# `default_auto_expand_rule = yes`, so it repeats that rule.
+	can_build_government = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	can_build_private = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	should_auto_expand = {
+		default_auto_expand_rule = yes
+		state = { rt_fossil_construction_allowed_here = yes }
 	}
 }
 
@@ -455,7 +503,7 @@ REPLACE:building_automotive_industry = {
 
 REPLACE_OR_CREATE:building_airport = {
 	building_group = bg_private_infrastructure
-	icon = "gfx/interface/icons/building_icons/airport.dds"
+	icon = "gfx/interface/icons/building_icons/building_airport.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -482,7 +530,7 @@ REPLACE_OR_CREATE:building_airport = {
 
 REPLACE_OR_CREATE:building_highway = {
 	building_group = bg_private_infrastructure
-	icon = "gfx/interface/icons/building_icons/highway.dds"
+	icon = "gfx/interface/icons/building_icons/building_highway.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -508,7 +556,7 @@ REPLACE_OR_CREATE:building_highway = {
 
 REPLACE_OR_CREATE:building_software_industry = {
 	building_group = bg_high_tech
-	icon = "gfx/interface/icons/building_icons/software.dds"
+	icon = "gfx/interface/icons/building_icons/building_software_industry.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -529,7 +577,7 @@ REPLACE_OR_CREATE:building_software_industry = {
 
 REPLACE_OR_CREATE:building_network_infrastructure = {
 	building_group = bg_private_infrastructure
-	icon = "gfx/interface/icons/building_icons/network.dds"
+	icon = "gfx/interface/icons/building_icons/building_network_infrastructure.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -559,7 +607,7 @@ REPLACE_OR_CREATE:building_network_infrastructure = {
 
 REPLACE_OR_CREATE:building_hydro_plant = {
 	building_group = bg_power
-	icon = "gfx/interface/icons/building_icons/hydro_plant.dds"
+	icon = "gfx/interface/icons/building_icons/building_hydro_plant.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -586,7 +634,7 @@ REPLACE_OR_CREATE:building_hydro_plant = {
 
 REPLACE_OR_CREATE:building_nuclear_plant = {
 	building_group = bg_power
-	icon = "gfx/interface/icons/building_icons/nuclear_plant.dds"
+	icon = "gfx/interface/icons/building_icons/building_nuclear_plant.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -607,7 +655,7 @@ REPLACE_OR_CREATE:building_nuclear_plant = {
 
 REPLACE_OR_CREATE:building_fusion_plant = {
 	building_group = bg_power
-	icon = "gfx/interface/icons/building_icons/fusion_plant.dds"
+	icon = "gfx/interface/icons/building_icons/building_fusion_plant.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -628,7 +676,7 @@ REPLACE_OR_CREATE:building_fusion_plant = {
 
 REPLACE_OR_CREATE:building_renewable_energy_plant = {
 	building_group = bg_power
-	icon = "gfx/interface/icons/building_icons/renewable_plant.dds"
+	icon = "gfx/interface/icons/building_icons/building_renewable_energy_plant.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -649,7 +697,7 @@ REPLACE_OR_CREATE:building_renewable_energy_plant = {
 
 REPLACE_OR_CREATE:building_electronic_components_and_semiconductor_industry = {
 	building_group = bg_high_tech
-	icon = "gfx/interface/icons/building_icons/semiconductor.dds"
+	icon = "gfx/interface/icons/building_icons/building_electronic_components_and_semiconductor_industry.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -674,7 +722,7 @@ REPLACE_OR_CREATE:building_electronic_components_and_semiconductor_industry = {
 
 REPLACE_OR_CREATE:building_robotics_industry = {
 	building_group = bg_high_tech
-	icon = "gfx/interface/icons/building_icons/robot.dds"
+	icon = "gfx/interface/icons/building_icons/building_robotics_industry.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -699,7 +747,7 @@ REPLACE_OR_CREATE:building_robotics_industry = {
 
 REPLACE_OR_CREATE:building_advanced_material_fabricator = {
 	building_group = bg_high_tech
-	icon = "gfx/interface/icons/building_icons/advanced_materials.dds"
+	icon = "gfx/interface/icons/building_icons/building_advanced_material_fabricator.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -725,7 +773,7 @@ REPLACE_OR_CREATE:building_advanced_material_fabricator = {
 
 REPLACE_OR_CREATE:building_aerospace_industry = {
 	building_group = bg_high_tech
-	icon = "gfx/interface/icons/building_icons/space.dds"
+	icon = "gfx/interface/icons/building_icons/building_aerospace_industry.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -747,7 +795,7 @@ REPLACE_OR_CREATE:building_aerospace_industry = {
 
 REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/space_elevator_construction_site.dds"
+	icon = "gfx/interface/icons/building_icons/building_space_elevator_construction_site.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -874,7 +922,7 @@ REPLACE_OR_CREATE:building_space_elevator_construction_site = {
 
 REPLACE_OR_CREATE:building_space_elevator = {
 	building_group = bg_private_infrastructure
-	icon = "gfx/interface/icons/building_icons/space_elevator.dds"
+	icon = "gfx/interface/icons/building_icons/building_space_elevator.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -897,7 +945,7 @@ REPLACE_OR_CREATE:building_space_elevator = {
 
 REPLACE_OR_CREATE:building_space_mine = {
 	building_group = bg_exotic
-	icon = "gfx/interface/icons/building_icons/space_base.dds"
+	icon = "gfx/interface/icons/building_icons/building_space_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -917,7 +965,7 @@ REPLACE_OR_CREATE:building_space_mine = {
 
 REPLACE_OR_CREATE:building_ocean_mine = {
 	building_group = bg_exotic
-	icon = "gfx/interface/icons/building_icons/deep_sea_mine.dds"
+	icon = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -949,7 +997,7 @@ INJECT:building_university = {
 
 REPLACE_OR_CREATE:building_space_program = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/goods_icons/rocket.dds"
+	icon = "gfx/interface/icons/building_icons/building_space_program.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -983,7 +1031,7 @@ REPLACE_OR_CREATE:building_space_program = {
 
 REPLACE_OR_CREATE:building_national_park = {
 	building_group = bg_parks
-	icon = "gfx/interface/icons/building_icons/national_park.dds"
+	icon = "gfx/interface/icons/building_icons/building_national_park.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -1151,7 +1199,7 @@ INJECT:building_munition_plant = {
 
 REPLACE_OR_CREATE:building_tourism_industry = {
 	building_group = bg_arts
-	icon = "gfx/interface/icons/building_icons/tourism.dds"
+	icon = "gfx/interface/icons/building_icons/building_tourism_industry.dds"
 	city_type = city
 
 	ai_nationalization_desire = 0.5 # AI generally does not want to privatize tourism industries
@@ -1635,6 +1683,23 @@ INJECT:building_coal_mine = {
 		pmg_tailings_wastewater_management
 		pmg_maintenance_mine
 	}
+
+	# Resource Transition (issue #660): a Fossil Expansion Moratorium or a
+	# Managed Fossil Phaseout in the country where the building stands stops
+	# new construction and expansion, by its government, its investors and
+	# foreign investors alike (state scope: `owner` is the state's owner). The
+	# building-level should_auto_expand replaces the group's
+	# `default_auto_expand_rule = yes`, so it repeats that rule.
+	can_build_government = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	can_build_private = {
+		rt_fossil_construction_allowed_here = yes
+	}
+	should_auto_expand = {
+		default_auto_expand_rule = yes
+		state = { rt_fossil_construction_allowed_here = yes }
+	}
 }
 
 INJECT:building_iron_mine = {
@@ -1698,7 +1763,7 @@ INJECT:building_millet_farm = {
 
 REPLACE_OR_CREATE:building_solar_collector_construction_site = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/space_elevator_construction_site.dds"
+	icon = "gfx/interface/icons/building_icons/building_solar_collector_construction_site.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -1731,7 +1796,7 @@ REPLACE_OR_CREATE:building_solar_collector_construction_site = {
 
 REPLACE_OR_CREATE:building_solar_collector = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/space_elevator.dds"
+	icon = "gfx/interface/icons/building_icons/building_solar_collector.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -1798,7 +1863,7 @@ REPLACE_OR_CREATE:building_solar_receiver = {
 
 REPLACE_OR_CREATE:building_orbital_battlestation_construction_site = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/space_base.dds"
+	icon = "gfx/interface/icons/building_icons/building_orbital_battlestation_construction_site.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -1831,7 +1896,7 @@ REPLACE_OR_CREATE:building_orbital_battlestation_construction_site = {
 
 REPLACE_OR_CREATE:building_orbital_battlestation = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/space_base.dds"
+	icon = "gfx/interface/icons/building_icons/building_orbital_battlestation.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -1858,7 +1923,7 @@ REPLACE_OR_CREATE:building_orbital_battlestation = {
 
 REPLACE_OR_CREATE:building_mind_upload_nexus_construction_site = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/network.dds"
+	icon = "gfx/interface/icons/building_icons/building_mind_upload_nexus_construction_site.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -1891,7 +1956,7 @@ REPLACE_OR_CREATE:building_mind_upload_nexus_construction_site = {
 
 REPLACE_OR_CREATE:building_mind_upload_nexus = {
 	building_group = bg_private_infrastructure
-	icon = "gfx/interface/icons/building_icons/network.dds"
+	icon = "gfx/interface/icons/building_icons/building_mind_upload_nexus.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -1917,7 +1982,7 @@ REPLACE_OR_CREATE:building_mind_upload_nexus = {
 
 REPLACE_OR_CREATE:building_antimatter_facility_construction_site = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/space_elevator_construction_site.dds"
+	icon = "gfx/interface/icons/building_icons/building_antimatter_facility_construction_site.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -2011,7 +2076,7 @@ REPLACE_OR_CREATE:building_antimatter_engine = {
 
 REPLACE_OR_CREATE:building_antimatter_warhead_plant = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/space_base.dds"
+	icon = "gfx/interface/icons/building_icons/building_antimatter_warhead_plant.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -2049,7 +2114,7 @@ REPLACE_OR_CREATE:building_antimatter_warhead_plant = {
 
 REPLACE_OR_CREATE:building_nanofabrication_center_construction_site = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/advanced_materials.dds"
+	icon = "gfx/interface/icons/building_icons/building_nanofabrication_center_construction_site.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -2082,7 +2147,7 @@ REPLACE_OR_CREATE:building_nanofabrication_center_construction_site = {
 
 REPLACE_OR_CREATE:building_nanofabrication_center = {
 	building_group = bg_private_infrastructure
-	icon = "gfx/interface/icons/building_icons/advanced_materials.dds"
+	icon = "gfx/interface/icons/building_icons/building_nanofabrication_center.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -2109,7 +2174,7 @@ REPLACE_OR_CREATE:building_nanofabrication_center = {
 
 REPLACE_OR_CREATE:building_consciousness_network_construction_site = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/network.dds"
+	icon = "gfx/interface/icons/building_icons/building_consciousness_network_construction_site.dds"
 	city_type = city
 	levels_per_mesh = -1
 
@@ -2142,7 +2207,7 @@ REPLACE_OR_CREATE:building_consciousness_network_construction_site = {
 
 REPLACE_OR_CREATE:building_consciousness_network = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/network.dds"
+	icon = "gfx/interface/icons/building_icons/building_consciousness_network.dds"
 	city_type = city
 	levels_per_mesh = -1
 

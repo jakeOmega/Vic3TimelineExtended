@@ -22,9 +22,10 @@
 # topic, un_propose_reform_*): it is also still raised by its proposer event,
 # un_events.6, under the same gates.
 #
-# THE ELEVEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
+# THE THIRTEEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
 # heritage, decolonization, space, law of the sea, physical protection of
-# nuclear material) are at the bottom of the file. The docket raises them for everyone through the proposer events in
+# nuclear material, cultural diversity, the prohibition of nuclear weapons) are
+# at the bottom of the file. The docket raises them for everyone through the proposer events in
 # events/un_events.txt; a human member may also table one from the chamber on
 # its own motion. They have no scripted button: the AI reaches them only
 # through the docket, which paces the floor (un_docket_effects.txt), and a
@@ -403,9 +404,203 @@ un_propose_reform_possible = {
 }
 
 # ============================================================================
-# THE ELEVEN CONVENTIONS
+# THE CHARTER'S NEW BUSINESS (redesign phase 7, §0.12)
 # ============================================================================
-# Tabled on our own motion from the chamber (ops 7-17 of
+# Nine decisions, requests and institutions; the two phase 7 conventions are
+# with the others below. Each topic's own conditions belong to its owner
+# (common/scripted_effects/un_charter_effects.txt says who): un_<key>_case_exists
+# says there is something to table now, and un_<key>_can_table holds the
+# topic's own gates, each with its tooltip. The gates every topic shares are
+# here: the own-motion gates the conventions use (a request uses the request
+# gates instead), the topic's cooldown, and the reform it needs
+# (un_charter_has_reform_tt). The reform is a `possible` gate, never an
+# `available` one, so the chamber's row stays in the list before the reform
+# and says what it waits for. Only the next reform's rows show, though: a
+# Reform II row and button are hidden until Reform I carries
+# (un_charter_reform_ii_in_view, un_ladder_triggers.txt), in the widget and
+# the button's `visible`, not here.
+
+# Refer a Dispute to the World Court — binding (an advisory opinion if vetoed), simple majority; Reform I. Names the holder of a state we claim.
+# Scope: the proposing country
+un_propose_court_referral_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_court_referral_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_court_referral_possible = {
+	un_propose_own_motion_possible = yes
+	un_charter_has_reform_tt = { LEVEL = 1 TT = un_charter_needs_reform_1_tt }
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = court_referral } }
+	}
+	un_court_referral_can_table = yes
+}
+
+# Arms Embargo — binding (a voluntary embargo if vetoed), simple majority, grounds of 40; Reform I.
+# Scope: the proposing country
+un_propose_arms_embargo_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_arms_embargo_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_arms_embargo_possible = {
+	un_propose_own_motion_possible = yes
+	un_charter_has_reform_tt = { LEVEL = 1 TT = un_charter_needs_reform_1_tt }
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = arms_embargo } }
+	}
+	un_arms_embargo_can_table = yes
+}
+
+# Suspension of Credentials — recommendatory in form, two-thirds of the members with a vote, grounds of 50; Reform I.
+# Scope: the proposing country
+un_propose_credentials_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_credentials_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_credentials_possible = {
+	un_propose_own_motion_possible = yes
+	un_charter_has_reform_tt = { LEVEL = 1 TT = un_charter_needs_reform_1_tt }
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = credentials } }
+	}
+	un_credentials_can_table = yes
+}
+
+# Establish the Standing UN Force — binding (blocked if vetoed), simple majority; Reform I. An institution: names no one.
+# Scope: the proposing country
+un_propose_standing_force_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_standing_force_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_standing_force_possible = {
+	un_propose_own_motion_possible = yes
+	un_charter_has_reform_tt = { LEVEL = 1 TT = un_charter_needs_reform_1_tt }
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = standing_force } }
+	}
+	un_standing_force_can_table = yes
+}
+
+# Request Electoral Observers — recommendatory, simple majority; Reform I. A request, like aid: the requester is the target, and it takes only the request cooldown.
+# Scope: the proposing country
+un_propose_observer_request_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_observer_request_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_observer_request_possible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	custom_tooltip = {
+		text = un_no_active_vote_tt
+		NOT = { has_global_variable = un_vote_active }
+	}
+	NOT = { has_modifier = un_request_cooldown }
+	custom_tooltip = {
+		text = un_recess_ai_tt
+		un_may_table_now = yes
+	}
+	custom_tooltip = {
+		text = un_article_19_table_tt
+		NOT = { un_dues_vote_suspended = yes }
+	}
+	custom_tooltip = {
+		text = un_representation_table_tt
+		NOT = { un_representation_suspended = yes }
+	}
+	un_charter_has_reform_tt = { LEVEL = 1 TT = un_charter_needs_reform_1_tt }
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = observer_request } }
+	}
+	un_observer_request_can_table = yes
+}
+
+# Establish the World Food Reserve — recommendatory, simple majority; needs no reform (owner, 2026-10-02). An institution: names no one.
+# Scope: the proposing country
+un_propose_food_reserve_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_food_reserve_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_food_reserve_possible = {
+	un_propose_own_motion_possible = yes
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = food_reserve } }
+	}
+	un_food_reserve_can_table = yes
+}
+
+# Binding Ceasefire — binding (a call for a ceasefire if vetoed), simple majority, grounds of 40; Reform II. Names the aggressor.
+# Scope: the proposing country
+un_propose_ceasefire_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_ceasefire_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_ceasefire_possible = {
+	un_propose_own_motion_possible = yes
+	un_charter_has_reform_tt = { LEVEL = 2 TT = un_charter_needs_reform_2_tt }
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = ceasefire } }
+	}
+	un_ceasefire_can_table = yes
+}
+
+# Establish the World Development Fund — recommendatory, simple majority; needs no reform (owner, 2026-10-02): its form follows the charter level once it stands. An institution: names no one.
+# Scope: the proposing country
+un_propose_development_fund_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_development_fund_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_development_fund_possible = {
+	un_propose_own_motion_possible = yes
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = development_fund } }
+	}
+	un_development_fund_can_table = yes
+}
+
+# Supervised Self-Determination Referendum — binding (blocked if vetoed), simple majority; Reform II. Names an overlord; the subject rides on the resolution.
+# Scope: the proposing country
+un_propose_referendum_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_referendum_case_exists = yes
+}
+
+# Scope: the proposing country
+un_propose_referendum_possible = {
+	un_propose_own_motion_possible = yes
+	un_charter_has_reform_tt = { LEVEL = 2 TT = un_charter_needs_reform_2_tt }
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = referendum } }
+	}
+	un_referendum_can_table = yes
+}
+
+# ============================================================================
+# THE THIRTEEN CONVENTIONS
+# ============================================================================
+# Tabled on our own motion from the chamber (ops 7-19 of
 # un_chamber_propose_sgui), or on the docket's offer through the proposer
 # events. Every topic below is recommendatory except the ICC, which is binding
 # and can be vetoed; all pass by simple majority.
@@ -844,4 +1039,89 @@ un_propose_physical_protection_possible = {
 	un_propose_own_motion_possible = yes
 	un_docket_topic_open_physical_protection = yes
 	un_propose_physical_protection_qualifies = yes
+}
+
+# ---- Convention on Cultural Diversity (CCD) ----
+# Redesign phase 7 (§0.12 item 5). Charter Reform I and UNESCO in force are
+# global gates, so they are the docket's (un_docket_topic_open_cultural_diversity).
+# Its parties' minority cultures assimilate more slowly and their homelands
+# decay more slowly, trailing parties feel the cultural hegemon's benchmark
+# less, and a hegemon that ratifies loses cultural pull.
+# Scope: any
+un_propose_cultural_diversity_in_force = {
+	has_global_variable = un_agency_ccd
+}
+
+# Scope: the prospective proposer: a state that has seen what mass media do to
+# a minority's language, and is not the hegemon the convention restrains.
+un_propose_cultural_diversity_qualifies = {
+	has_technology_researched = mass_media
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_cultural_diversity_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_cultural_diversity_refusal_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_cultural_diversity_not_hegemon_tt
+		NOT = { un_regime_cultural_hegemon = yes }
+	}
+}
+
+# Scope: the proposing country
+un_propose_cultural_diversity_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_cultural_diversity_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_cultural_diversity_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_cultural_diversity = yes
+	un_propose_cultural_diversity_qualifies = yes
+}
+
+# ---- Treaty on the Prohibition of Nuclear Weapons (TPNW) ----
+# Redesign phase 7 (§0.12 item 8). Charter Reform II, the NPT in force and the
+# nuclear weapons rule are global gates (un_docket_topic_open_nuclear_ban).
+# Its armed parties are held to a ceiling that steps down to nothing over 25
+# years, its unarmed parties may build none (nd_taboo_refresh_ban_ceiling),
+# and while it is in force it raises the nuclear taboo.
+# Scope: any
+un_propose_nuclear_ban_in_force = {
+	has_global_variable = un_agency_tpnw
+}
+
+# Scope: the prospective proposer: a state that knows what a warhead is and
+# holds none.
+un_propose_nuclear_ban_qualifies = {
+	has_technology_researched = nuclear_weapons
+	custom_tooltip = {
+		text = un_propose_nuclear_ban_unarmed_tt
+		nd_is_armed = no
+	}
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_nuclear_ban_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_nuclear_ban_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_nuclear_ban_available = {
+	has_game_rule = nuclear_weapons_enabled
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_nuclear_ban_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_nuclear_ban_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_nuclear_ban = yes
+	un_propose_nuclear_ban_qualifies = yes
 }

@@ -105,6 +105,12 @@ un_global_authority_on_action = {
 			# (un_mission_on_actions.txt).
 			un_missions_monthly_update = yes
 
+			# The charter's new business (redesign phase 7, §0.12,
+			# un_charter_effects.txt): credentials, court rulings, ceasefire
+			# orders, referendums, the Development Fund's grants and the World
+			# Food Reserve's pledges.
+			un_charter_monthly_update = yes
+
 			# Headquarters upkeep: a live member hosts, and exactly one HQ
 			# building stands, in the host's territory (un_hq_effects.txt).
 			un_hq_monthly_update = yes

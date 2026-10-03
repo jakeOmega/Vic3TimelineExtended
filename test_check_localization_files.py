@@ -1,7 +1,8 @@
 """Unit tests for scripts/analysis/check_localization_files.py (issue #247).
 
 The loc loader fails silently on a missing BOM, a missing `l_english:` header, or
-a key defined twice, so these are exactly the cases CI has to catch.
+a key defined twice, so these are exactly the cases CI has to catch. Quote marks
+are checked because the repo's own loc tools misread a bare inner quote.
 """
 from __future__ import annotations
 
@@ -124,6 +125,46 @@ class DuplicateKeyTests(unittest.TestCase):
         problems = _check(text)
         self.assertEqual(len(problems), 1)
         self.assertIn("duplicate key 'TE_ALPHA'", problems[0])
+
+
+class QuoteTests(unittest.TestCase):
+    """The game reads a value to the line's last quote; the repo's loc tools
+    (split_loc_line) stop at the first bare one, so literal quotes are `\\"`."""
+
+    def test_escaped_quotes_in_pairs_pass(self):
+        text = BOM + 'l_english:\n TE_ALPHA:0 "\\"Go,\\" he said. \\"Now.\\""\n'
+        self.assertEqual(_check(text), [])
+
+    def test_bare_inner_quote_is_flagged(self):
+        text = BOM + 'l_english:\n TE_ALPHA:0 "A "Held" row"\n'
+        problems = _check(text)
+        self.assertEqual(len(problems), 1)
+        self.assertIn(":2:", problems[0])
+        self.assertIn("bare", problems[0])
+
+    def test_bare_quote_before_a_format_code_is_flagged(self):
+        # Parses as an empty value plus a "comment" that is really the text.
+        text = BOM + 'l_english:\n TE_ALPHA:0 ""#bold I accuse#! them.""\n'
+        self.assertEqual(len(_check(text)), 1)
+
+    def test_trailing_comment_after_the_value_is_allowed(self):
+        text = BOM + 'l_english:\n TE_ALPHA:0 "Alpha" # REVIEWED 2026-10-03: checked\n'
+        self.assertEqual(_check(text), [])
+
+    def test_quote_in_a_trailing_comment_is_flagged(self):
+        # The game would read the comment up to its quote as part of the value.
+        text = BOM + 'l_english:\n TE_ALPHA:0 "Alpha" # REVIEWED 2026-10-03: "quoted"\n'
+        self.assertEqual(len(_check(text)), 1)
+
+    def test_unpaired_escaped_quote_is_flagged(self):
+        text = BOM + 'l_english:\n TE_ALPHA:0 "\\"Opened and never closed."\n'
+        problems = _check(text)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("unpaired", problems[0])
+
+    def test_escaped_backslash_before_a_quote_is_not_an_escaped_quote(self):
+        text = BOM + 'l_english:\n TE_ALPHA:0 "C:\\\\"\n'
+        self.assertEqual(_check(text), [])
 
 
 class MainTests(unittest.TestCase):

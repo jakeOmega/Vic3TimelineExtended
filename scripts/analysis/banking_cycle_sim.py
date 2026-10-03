@@ -193,6 +193,42 @@ class ModConstants:
         self._cache[name] = float(m.group(1))
         return self._cache[name]
 
+    def phase_table(self, name: str, targets_inflation: bool) -> dict[str, float]:
+        """A script value that branches on the cycle phase, as {phase: signed pp}.
+
+        Reads every `banking_cycle_is_<phase> = yes` limit and the `add` or
+        `subtract` that follows it, so `te_mon_phase_pressure` stays one branching
+        value in the mod and this still reads its numbers rather than restating
+        them. A branch that splits on `te_mon_targets_inflation = yes` (the slump
+        side since 2026-10-02) gives its `if` number when `targets_inflation` and
+        its `else` number otherwise. A phase with no branch is 0.
+        """
+        key = f"{name}/{targets_inflation}"
+        if key in self._blocks:
+            return self._blocks[key]
+        body = _block(self._sv_src, name)
+        if body is None:
+            raise KeyError(f"script value {name!r} not found in {SCRIPT_VALUE_FILES}")
+        body = _strip_comments(body)
+        op = r"(add|subtract)\s*=\s*(-?[\d.]+)"
+        heads = list(re.finditer(r"banking_cycle_is_(\w+)\s*=\s*yes\s*\}", body))
+        out: dict[str, float] = {}
+        for i, head in enumerate(heads):
+            branch = body[head.end() : heads[i + 1].start() if i + 1 < len(heads) else len(body)]
+            if "te_mon_targets_inflation" in branch:
+                pick = r"te_mon_targets_inflation\s*=\s*yes\s*\}\s*" if targets_inflation else r"else\s*=\s*\{\s*"
+                m = re.search(pick + op, branch)
+            else:
+                m = re.match(r"\s*" + op, branch)
+            if not m:
+                raise ValueError(f"{name!r}: cannot read the {head.group(1)!r} branch:\n{branch}")
+            sign = -1.0 if m.group(1) == "subtract" else 1.0
+            out[head.group(1)] = sign * float(m.group(2))
+        if not out:
+            raise ValueError(f"script value {name!r} has no banking_cycle_is_* branches")
+        self._blocks[key] = out
+        return out
+
     def modifier(self, name: str) -> dict[str, float]:
         """Every numeric field of a static modifier, as {key: value}."""
         body = _block(self._mod_src, name)
@@ -512,12 +548,21 @@ PRE_ANCHORING = {
 PRE_BANK_QE = {
     "bank_qe": 0.0,
 }
+# The slump side of te_mon_phase_pressure before 2026-10-02 (§16): a panic,
+# downturn and stagnation pulled prices down by 1.5, 0.8 and 0.3pp under every
+# currency, mirroring the boom side. Metal still does. `--tune pre_slump_pressure`.
+PRE_SLUMP_PRESSURE = {
+    "pressure_stagnation": -0.3,
+    "pressure_downturn": -0.8,
+    "pressure_panic": -1.5,
+}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
     "pre_delegation_fix": PRE_DELEGATION_FIX,
     "pre_anchoring": PRE_ANCHORING,
     "pre_bank_qe": PRE_BANK_QE,
+    "pre_slump_pressure": PRE_SLUMP_PRESSURE,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -686,6 +731,12 @@ class State:
     policy_downturns: int = 0
     post_crash_gaps: list[float] = field(default_factory=list)
     gap_series: list[float] = field(default_factory=list)
+    # A slump's pull on prices (§16): of the months in panic or downturn, how
+    # many the policy rate went UP in, and the sum of core inflation's monthly
+    # change over them — so a bank still hiking through a recession, and core
+    # inflation that does not fall in one, both show.
+    recession_hike_months: int = 0
+    recession_core_change: float = 0.0
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -844,6 +895,15 @@ def is_on_gold(cfg: Config) -> bool:
 
 def is_metallic(cfg: Config) -> bool:
     return cfg.currency in ("gold", "commodity")
+
+
+def targets_inflation(cfg: Config, state: State) -> bool:
+    """te_mon_targets_inflation: prices rest on the 2% anchor, not on metal (§16).
+
+    The simulator has no crypto, anchoring or suspension, so this is fiat or
+    digital and not dollarised.
+    """
+    return not is_metallic(cfg) and not state.dollarised
 
 
 def is_cbi(cfg: Config) -> bool:
@@ -1251,10 +1311,18 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     # stance: a tight rate is disinflationary
     total += -K.sv("te_mon_stance_pressure_coeff") * clamped_gap(state)
 
-    # phase
-    total += {FRENZY: 1.5, BOOM: 0.8, EXPANSION: 0.3, STAGNATION: -0.3, DOWNTURN: -0.8, PANIC: -1.5}.get(
-        phase_of(state.finance_cycle_value), 0.0
-    )
+    # phase: te_mon_phase_pressure, read from the mod, whose slump side splits on
+    # te_mon_targets_inflation (§16). `--tune pressure_<phase>=X` overrides one
+    # phase under an inflation target, `pressure_metal_<phase>=X` on metal or
+    # dollarised; `--tune pre_slump_pressure` restores the slump side as it
+    # stood before 2026-10-02.
+    phase = phase_of(state.finance_cycle_value)
+    if targets_inflation(cfg, state):
+        total += tuned("pressure_" + phase, K.phase_table("te_mon_phase_pressure", True).get(phase, 0.0))
+    else:
+        total += tuned(
+            "pressure_metal_" + phase, K.phase_table("te_mon_phase_pressure", False).get(phase, 0.0)
+        )
 
     # bubble
     if state.bubble_pressure >= K.sv("te_mon_bubble_threshold"):
@@ -2242,6 +2310,8 @@ def run_once(cfg: Config, seed: int) -> State:
         advance_exogenous(cfg, state, rng, month)
         value_before = state.finance_cycle_value
         crashes_before = len(state.crashes)
+        rate_before = state.policy_rate
+        core_before = state.inflation_core
 
         if cfg.pulse_order == "monetary_first":
             monetary_update(cfg, state, rng, year_index)
@@ -2259,6 +2329,10 @@ def run_once(cfg: Config, seed: int) -> State:
         state.gap_series.append(gap)
         if gap >= 3 and state.finance_cycle_value < 40:
             state.tight_slump_months += 1
+        if state.finance_cycle_value < 25:
+            if state.policy_rate > rate_before + 0.01:
+                state.recession_hike_months += 1
+            state.recession_core_change += state.inflation_core - core_before
 
         if state.pending_recovery is not None and state.finance_cycle_value >= 40:
             state.recovery_months.append(month - state.pending_recovery)
@@ -2377,6 +2451,19 @@ def summarise(cfg: Config, states: list[State]) -> dict:
             s.policy_downturns / cfg.years * 100 for s in states
         ),
         "post_crash_stance_mean": statistics.mean(post_crash) if post_crash else float("nan"),
+        # §16: pooled over every recession month of every run. hike = % of them
+        # with the policy rate rising; core = core inflation's mean change over
+        # them, annualised (pp a year; negative = prices decelerating).
+        "recession_hike_pct": (
+            sum(s.recession_hike_months for s in states)
+            / max(1, sum(s.phase_months[PANIC] + s.phase_months[DOWNTURN] for s in states))
+            * 100
+        ),
+        "recession_core_pp_a_year": (
+            sum(s.recession_core_change for s in states)
+            / max(1, sum(s.phase_months[PANIC] + s.phase_months[DOWNTURN] for s in states))
+            * 12
+        ),
         "months_at_floor_pct": statistics.mean(s.months_at_floor / months * 100 for s in states),
         "months_at_ceiling_pct": statistics.mean(
             s.months_at_ceiling / months * 100 for s in states
@@ -2693,7 +2780,8 @@ def main() -> int:
                          "pre_boom_rescue for the mod as #371 left it (§10), or "
                          "--tune pre_delegation_fix for the delegated bank before §12, or "
                          "--tune pre_anchoring for independence's institution bonus before §13, or "
-                         "--tune pre_bank_qe for a mandate bank with no asset purchases at the floor.")
+                         "--tune pre_bank_qe for a mandate bank with no asset purchases at the floor, or "
+                         "--tune pre_slump_pressure for the slump phases' inflation pull before §16.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")
@@ -2811,6 +2899,7 @@ def print_table(rows: list[dict], args) -> None:
         f"{'rate':>6}{'floor%':>8}{'slots':>7}{'cyc':>6}{'reform':>7}{'$ised%':>8}"
         f"{'thru':>7}{'serv':>7}{'pool':>7}{'prem':>6}"
         f"{'peak':>6}{'pk90':>6}{'r>=10%':>7}{'tight%':>7}{'polDn':>6}{'pcGap':>7}"
+        f"{'rcHike':>7}{'rcCore':>7}"
     )
     print(head)
     print("-" * len(head))
@@ -2842,6 +2931,8 @@ def print_table(rows: list[dict], args) -> None:
             f"{r['tight_slump_pct']:>7.2f}"
             f"{r['policy_downturns_per_century']:>6.1f}"
             f"{r['post_crash_stance_mean']:>7.2f}"
+            f"{r['recession_hike_pct']:>7.1f}"
+            f"{r['recession_core_pp_a_year']:>7.2f}"
         )
     print()
     print("crash/100y = mean crashes per century   yrs btwn = median gap between crashes")
@@ -2861,6 +2952,8 @@ def print_table(rows: list[dict], args) -> None:
     print("tight% = months with the stance at +3 or tighter while the cycle is below 40")
     print("polDn = entries into downturn per century with no crash in the year before")
     print("pcGap = mean clamped stance gap over the 12 months after a crash (+ = tight)")
+    print("rcHike = % of panic+downturn months in which the policy rate rose")
+    print("rcCore = core inflation's mean change over panic+downturn months, pp a year")
 
 
 if __name__ == "__main__":

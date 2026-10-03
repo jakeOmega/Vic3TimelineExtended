@@ -1230,10 +1230,30 @@ te_mon_stance_pressure_coeff = {
 }
 
 # The financial cycle's contribution to pressure, in pp (§9.1): frenzy +1.5,
-# boom +0.8, expansion +0.3, stable 0, stagnation -0.3, downturn -0.8,
-# panic -1.5. THE SEVEN PHASE TERMS OF §21 LIVE HERE AND NOWHERE ELSE — one
-# branching value rather than seven named constants, because every consumer
-# wants "the phase term", never one particular phase's number.
+# boom +0.8, expansion +0.3, stable 0, and on the slump side
+#
+#                  inflation target   metal / dollarised / crypto
+#   stagnation          -0.5                 -0.3
+#   downturn            -2                   -0.8
+#   panic               -4                   -1.5
+#
+# THE PHASE TERMS OF §21 LIVE HERE AND NOWHERE ELSE — one branching value
+# rather than named constants, because every consumer wants "the phase term",
+# never one particular phase's number. scripts/analysis/banking_cycle_sim.py
+# parses the branches, so keep each one's shape.
+#
+# THE SLUMP SIDE IS LARGER UNDER AN INFLATION TARGET (2026-10-02,
+# docs/audits/banking_cycle_simulation.md §16). At the old -0.3 / -0.8 / -1.5
+# a slump barely moved a fiat economy's core inflation (-0.5pp a year through
+# a downturn or panic), so a price-stability bank's target stayed up, and the
+# rate rose in over a quarter of recession months once the outlook turned. A
+# labour law's wage pressure alone outweighed a downturn. At -0.5 / -2 / -4 a
+# slump is disinflationary enough that the bank can follow it down. METAL KEEPS
+# THE OLD TERMS: its prices rest at 0, a point above the Deflation band, so the
+# same pull puts it into Deflation, whose momentum drain then holds the slump
+# (an untouched metallic dial spent 12% of months in recession at the old
+# terms and 38% at the new). te_mon_targets_inflation owns that test. The boom
+# side is unchanged everywhere.
 #
 # GUARDED the same way te_mon_cycle_lean is: finance_cycle_value is owned by
 # je_banking_cycle's `immediate`, so a country without the journal entry has no
@@ -1267,21 +1287,39 @@ te_mon_phase_pressure = {
 			has_variable = finance_cycle_value
 			banking_cycle_is_stagnation = yes
 		}
-		subtract = 0.3
+		if = {
+			limit = { te_mon_targets_inflation = yes }
+			subtract = 0.5
+		}
+		else = {
+			subtract = 0.3
+		}
 	}
 	else_if = {
 		limit = {
 			has_variable = finance_cycle_value
 			banking_cycle_is_downturn = yes
 		}
-		subtract = 0.8
+		if = {
+			limit = { te_mon_targets_inflation = yes }
+			subtract = 2
+		}
+		else = {
+			subtract = 0.8
+		}
 	}
 	else_if = {
 		limit = {
 			has_variable = finance_cycle_value
 			banking_cycle_is_panic = yes
 		}
-		subtract = 1.5
+		if = {
+			limit = { te_mon_targets_inflation = yes }
+			subtract = 4
+		}
+		else = {
+			subtract = 1.5
+		}
 	}
 }
 

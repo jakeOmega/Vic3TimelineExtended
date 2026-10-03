@@ -371,6 +371,7 @@ brain_computer_interfaces = {
 }
 
 personalized_medicine = {
+	# Precision Medicine PM for Pharmaceutical Industries
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/personalized_medicine.dds"
 	category = society

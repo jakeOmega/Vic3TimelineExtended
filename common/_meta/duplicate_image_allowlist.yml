@@ -19,30 +19,11 @@
 # delete the entry.
 
 buildings:
-- image: gfx/interface/icons/building_icons/advanced_materials.dds
-  entities:
-  - building_advanced_material_fabricator
-  - building_nanofabrication_center
-  - building_nanofabrication_center_construction_site
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - image: gfx/interface/icons/building_icons/construction_camp.dds
   entities:
   - building_construction_sector
   - te_construction_market_site
   reason: the Construction Site is a construction camp; kept in the building icon review (2026-09-27)
-- image: gfx/interface/icons/building_icons/network.dds
-  entities:
-  - building_consciousness_network
-  - building_consciousness_network_construction_site
-  - building_mind_upload_nexus
-  - building_mind_upload_nexus_construction_site
-  - building_network_infrastructure
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/nuclear_plant.dds
-  entities:
-  - building_nuclear_plant
-  - building_wonder_iter
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - image: gfx/interface/icons/building_icons/skyscraper.dds
   entities:
   - building_generic_arsenal
@@ -92,52 +73,11 @@ buildings:
   - building_generic_vintner_hall
   - building_skyscraper
   reason: placeholder - the generic company buildings borrow vanilla's skyscraper until a company-building icon pass; the 2026-09-27 building icon batch covered non-company buildings only
-- image: gfx/interface/icons/building_icons/space.dds
-  entities:
-  - building_aerospace_industry
-  - building_wonder_international_space_station
-  - building_wonder_kennedy_space_center
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/space_base.dds
-  entities:
-  - building_antimatter_warhead_plant
-  - building_orbital_battlestation
-  - building_orbital_battlestation_construction_site
-  - building_space_mine
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/space_elevator.dds
-  entities:
-  - building_solar_collector
-  - building_space_elevator
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/building_icons/space_elevator_construction_site.dds
-  entities:
-  - building_antimatter_facility_construction_site
-  - building_solar_collector_construction_site
-  - building_space_elevator_construction_site
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 - image: gfx/interface/icons/building_icons/synthetics_plants.dds
   entities:
   - building_synthetics_plant
   - building_synthetics_plant_silk
   reason: Synthetic Clothes Industries is a synthetics-plant variant; vanilla's art fits, kept in the building icon review (2026-09-27)
-- image: gfx/interface/icons/company_icons/basic_construction.dds
-  entities:
-  - building_megastructure_consortium_hq
-  - building_tycho_manufacturing_hq
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/company_icons/basic_electrics.dds
-  entities:
-  - building_hanka_precision_hq
-  - building_neurovault_hq
-  - building_rekal_hq
-  - building_tessier_ashpool_hq
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/company_icons/basic_motors.dds
-  entities:
-  - building_axiom_space_hq
-  - building_yoyodyne_propulsion_hq
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 technologies:
 - image: gfx/interface/icons/invention_icons/aniline.dds
   entities:

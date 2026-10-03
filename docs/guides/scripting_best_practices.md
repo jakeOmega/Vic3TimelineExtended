@@ -233,6 +233,10 @@ Pick a representative vanilla number, then size your value relative to it. The `
 
 `/validate/engine-coverage` does NOT catch this — values pass validation as long as the modifier name is registered. The bug surfaces only at runtime in the player's tooltip, so it can sit undetected for a long time.
 
+## Power Bloc Principle Tiers Replace the Tier Below — They Don't Stack
+
+A principle group's tiers are mutually exclusive. When a bloc moves a group from tier III to tier IV, tier III's `member_modifier`, `leader_modifier`, `non_leader_modifier`, `power_bloc_modifier` and `institution_modifier` all stop applying, and only tier IV's blocks are live. So every tier restates each modifier the tier below carried, at its full value (vanilla marks the restated lines `# Modifiers from previous level(s)`), and a ramp writes the absolute value at each tier, never the step. A tier written as a delta ("tier IV adds X") is engine-silent: the upgrade just takes the missing modifier away. 62aa550 shipped the education ladder that way (tier III lost tier II's assimilation) and the advanced research one (tier V lost tier IV's military research speed); five other mod ladders had the same kind of gap. The rule covers an `INJECT:` into a vanilla tier too: the mod's tiers IV and V must restate what it injected into tier III, as `common/power_bloc_principles/modified.txt` notes for External Trade and Creative Legislature. Two related slips: moving a key from a flat `member_modifier` to a per-level `institution_modifier` changes what it gives at institution level 0, and a `power_bloc_*` key outside `power_bloc_modifier` does nothing, because modifiers flow down (bloc → country → state), never up. `principle_tier_audit` catches all of these on every `/reload`, and `--strict` in CI.
+
 ## Dynamic Modifier Type Definitions
 
 Many modifiers follow **naming patterns** where the engine recognizes a common prefix/suffix but requires a **per-entity registration** in `common/modifier_type_definitions/` before the modifier works. Vanilla pre-registers these for base game buildings and goods; **modded buildings and goods need their own registrations.**
@@ -679,9 +683,10 @@ From `game/common/on_actions/00_code_on_actions.txt` (the header comments there 
 | `on_wargoal_enforced_by_timer` (:6272) | **country** | same scopes | 1.14.5. A goal enforced itself mid-war through its occupation timer (it can still be reversed). `scope:enforced_by_timer` no longer exists on `on_wargoal_enforced`. Do not hook both for one effect: an un-reversed timer goal fires both |
 | `on_war_end` (:7008) | the play | `scope:actor`, `scope:target` | war over |
 
-Two things follow:
+Three things follow:
 
-- **`on_wargoal_added` does not tell you which goal was added.** There is no war-goal iterator and no trigger that takes a `war_goal` scope (`scope:war_goal_enforced` is declared in `event_scopes.log` but no vanilla script reads it and no trigger declares `Supported Scopes: war_goal`). The only readable form is `{play,war}_participant_has_war_goal_of_type_against = { type = <key> target = <country> }` and `has_play_goal = <key>` (play scope), which name **one type at a time**. Detecting "did they add anything other than X" therefore requires an explicit prohibited-type list, not an enumeration.
+- **`on_wargoal_added` fires for every goal added to every play, so gate a handler on the play it is about.** `remove_war_goal = { who = initiator|target type = <key> }` (play scope; documented, unused by live vanilla) addresses a side and a type, not one goal, so it removes every goal of that type the side holds in that play. Never strike the type a play opened with (its type's `war_goal`): whether a play survives losing its opening goal is unproven. `un_mandate_ai_strike_prohibited` first ran in any play of a bound AI holder and struck the opening goal of an unrelated `dp_conquer_state`; it now requires `is_diplomatic_play_type = dp_te_un_mandate_restore_state` and the mandate's target (`test_un_mandate_play_scope.py`).
+- **`on_wargoal_added` does not tell you which goal was added.** There is no war-goal iterator and no trigger that takes a `war_goal` scope (`scope:war_goal_enforced` is declared in `event_scopes.log` but no vanilla script reads it and no trigger declares `Supported Scopes: war_goal`). The only readable form is `{play,war}_participant_has_war_goal_of_type_against = { type = <key> target = <country> }` and `has_play_goal = <key>` (play scope), which name **one type at a time**. Detecting "did they add anything other than X" therefore requires an explicit prohibited-type list, not an enumeration. To ask whether a country holds a type against a target **in one play**, pair the country test (every play and war it is in) with `has_play_goal` on that play, found from country scope with `any_diplomatic_play = { … }` (`prev` is the country). That iterator includes plays that became wars, and `has_play_goal` answers for them: vanilla `je_paraguayan_war` reads `has_play_goal` after `is_war = yes`. The pair over-counts only when the country holds the type elsewhere too and another goal of it sits in this play (`un_mandate_prohibited_goal_held`).
 - **Prefer the war goal type's own `on_enforced` over `on_wargoal_enforced`** when you care about one goal type: it can only fire for that type, and it hands you `scope:target_state` as well. Use `on_wargoal_enforced` only when you need to react to *any* goal.
 
 Pair each on_action hook with a monthly sweep doing the same work. The hooks make the state right *immediately* (closing windows where a stale flag is exploitable); the sweep is what survives an on_action that does not fire for some path.
@@ -1316,6 +1321,10 @@ PY
 ```
 
 Output should be `truly missing loc: none`. Two pitfalls the audit accounts for: (1) match `:\d+` not `:0` — vanilla often uses `:1` or higher version suffixes, and a `:0`-only check spuriously flags vanilla-loc'd keys. (2) Check both vanilla and mod loc — if the mod re-defines (or `INJECT:`s) a vanilla modifier type, vanilla already supplies the loc and the mod must NOT re-add it under the same key. Re-run before merging any new modifier-type registrations.
+
+## Company Prestige Goods Need a Roster Building That Makes the Base Good
+
+A company at full prosperity makes the prestige goods in its `possible_prestige_goods` in place of their base good, in the buildings it owns. If none of its `building_types` buildings produces the base good, the prestige good never appears. The engine accepts the definition and logs nothing. An `extension_building_types` building doesn't count. It joins the roster only through an industry charter, a company holds one at a time, and each grant has a cooldown. Google listed Precision Robotics with robotics only in its extensions, and five more mod companies had the same gap. Either move the building that makes the good into `building_types` or drop the prestige good. `prestige_good_roster_audit` catches both cases (`--strict` in CI). Vanilla's named prestige goods (Tailored Suits and the like) aren't in the `vanilla_parsed/` snapshot, so the audit can't check them; it reads base goods from the mod's `common/prestige_goods/` and takes `prestige_good_generic_<good>` to mean `<good>`.
 
 ## Portrait Modifier Files
 
@@ -2825,6 +2834,8 @@ Merge semantics are documented to vary by entity type, so a **new** entity type 
 
 **Pending read (2026-09-26, wartime munitions):** two more entity types now rely on summing, but neither has been read in play yet. They are nested `upkeep_modifier` on COMBAT UNIT TYPES (`extra_combat_units.txt`: skirmish, trench, squad, mechanized infantry, shrapnel and siege artillery, light tanks and two marine tiers) and nested `upkeep_modifier_unscaled` on MOBILIZATION OPTIONS (`te_wartime_munitions_injections.txt`). The tells: a squad-infantry barracks buys 1.5 ammunition per battalion in peace, not 3 (unread) or none; basic supplies' tooltip reads +300% Ammunition beside +50% for the other goods, not +250% alone. If either type turns out to be last-wins, the unit loses its small arms and radios or the option loses its other goods. `REPLACE:` is then the fallback, and `test_wartime_munitions.py` keeps the numbers.
 
+**Pending read (2026-10-03, stake colonial claim):** `common/diplomatic_actions/te_stake_colonial_claim_injection.txt` INJECTs a second `possible` block into vanilla `da_stake_colonial_claim` to close the action to a country with `country_remove_decentralized_claims_bool` (Decolonization's marker). Vanilla declares all four trigger blocks of that action (`selectable`, `potential`, `possible`, `second_state_trigger`), so there is no empty field to use, and whether the engine ANDs the two `possible` blocks, keeps the last or keeps the first has not been read. The tell is the action's tooltip on a decentralized state in a strategic region the actor has interest in: vanilla's cooldown and interest-tier lines plus the new "Has not renounced claims ... through Decolonization" line means it merged; only the new line means last-wins (vanilla's gates are gone for every country: delete the file and `REPLACE:` the action from the installed game's copy, as `te_force_become_subject.txt` does; the parsed `vanilla_parsed/` copy loses statement order in effects, so it is not a safe source); only vanilla's lines means first-wins and the injection is ignored. `tech_marker_grants_on_action`'s monthly sweep enforces the rule either way. Record the result here.
+
 ### `INJECT:` silently fails on mod-only or REPLACEd entities
 
 `INJECT:<name>` only merges when `<name>` is a **vanilla-defined entity that nothing in the mod has REPLACEd**. Two failure modes both produce zero error and zero log line:
@@ -4159,6 +4170,10 @@ The fix is a cadence split, not a cache: **snapshot exactly what iterates, and r
 
 Vanilla's `common/journal_entries/journal_entries.md` says `current_value` and `goal_add_value` are evaluated **once, when the entry activates**, and added together to form the goal. So a JE that wants a fixed absolute target writes `goal_add_value = { value = TARGET subtract = <the same script value as current_value> }` — which reads like a bug and is not. `je_global_warming` uses `4 - temperature_anomaly_display` so its goal is pinned at exactly 4.0 °C however warm the world was when the entry activated; a flat `value = 4` would make the goal `4 + anomaly_at_activation` and drift between saves. Leave a comment saying so, or the next reader will "fix" it.
 
+## A Second Way to Activate a Journal Entry Changes What `has_journal_entry` Means
+
+A journal entry activates when **both** `is_shown_when_inactive` and `possible` hold (vanilla `journal_entries.md`), so a new activation path goes into both, as an `OR`. That changes the meaning of every `has_journal_entry = je_x` in the mod, which until then also meant "the entry's original condition holds". Before adding the path, list the readers (`git grep -n "has_journal_entry = je_x"`) and check each still needs its original condition. #660 opened `je_global_warming` for a restrictive Resource Transition law with the Global Warming rule **off**; the climate readers turned out to need warming independently (`has_modifier = global_warming`, `temperature_anomaly_display >= 0.5`), so nothing climate fires, but the panel's climate sections had to gate on the rule themselves (`gw_rule_enabled_sgui`), and the Market tab's gates, which read the rule, had to accept the new path. Mirror the change in any one-line copy of `possible` (`gw_entry_unlocked`, pinned word for word by `MarketTabTest`).
+
 ## A Deactivated Journal Entry Can Only Speak Through `status_desc`
 
 `gui/journal_entry.gui` gates the native progress bar on `[And(JournalEntry.HasProgressBar, JournalEntry.IsActive)]` (line 670) but gates the `status_desc` textbox on nothing but emptiness (line 188). A custom widget should be gated on `JournalEntry.IsActive` — gotcha #14 — so on any JE with `can_deactivate = yes`, **`status_desc` is the only surface left when the entry's `possible` goes false.** Any "here is why this system is stopped" text therefore belongs in `status_desc`, not in the widget, and the widget can assume the system is running. `je_nuclear_program` is the worked case: a disarmament settlement makes its `possible` fail the same tick, so the panel is gone and the one-line status is all that speaks.
@@ -4491,6 +4506,15 @@ tests `has_claim_by = root` in the same direction. When script names a region ta
 claim, say which part and whose it is, and whether the other side claims ours
 (`un_chamber_mandate_split_lines`).
 
+There is no iterator over a country's claims (`number_of_claims` counts them, nothing lists them), and
+`remove_claim` is a *state region* effect taking the claimant. To drop claims in bulk, walk the states that
+carry them and switch scope: `every_scope_state = { limit = { has_claim_by = ROOT } state_region = {
+remove_claim = ROOT } }`. Bound the walk by who holds the states (`every_country` filtered to
+`is_country_type = decentralized`, a few hundred states) rather than `every_state`, which is the whole
+world on every pulse. `tech_marker_grants_on_action` does this for the Decolonization marker
+`country_remove_decentralized_claims_bool`; vanilla `da_stake_colonial_claim` adds a colonial claim the
+same way, `scope:second_state = { state_region = { add_claim = root } }`.
+
 ## The Embargo Pact Needs Both Sides Allowed Aggressive Plays
 
 The vanilla `embargo` diplomatic pact (`common/diplomatic_actions/13_embargo.txt`) lists
@@ -4587,3 +4611,9 @@ Legitimacy is a sum of additive sources clamped at 100, so a law that supplies i
 - **A law's standing legitimacy belongs in its own `modifier` block** as a flat `country_legitimacy_base_add`: it needs no scripted refresh, unlike a timed modifier. How the breakdown labels it is not yet play-tested.
 - **`custom_tooltip` in `on_enact` is for what the engine can't show.** `activate_law` already prints "<country> enables law X in Y", so a custom line saying the same is redundant (#623's "Enacts Automated Bureaucracy"); use the slot to explain a scripted system the player can't read off a modifier, as `ALGORITHMIC_GOVERNANCE_TT_MANDATE` does.
 - **Pin the numbers a tooltip quotes.** Loc quoting a script value's rate or cap drifts silently; `test_algorithmic_mandate.py` reads both sides, and also asserts base + cap ≥ 110 so the headroom, not just the constants, is tested.
+
+## A Law's Description Is Flavor: the Enactment Popup Prints It in a Box That Does Not Scroll
+
+The "We now have <law>!" popup prints `<law>_desc` in a box that does not scroll or grow (about nine lines, going by a screenshot). Past that the text runs over the law's name and the art. `law_managed_fossil_phaseout_desc` shipped as 650 characters of rules over two paragraphs and did exactly that. The longest vanilla law description is 294 characters, and most are flavor: what the law is, not what it does.
+
+Keep a description to one short paragraph with no figures, and show the rules as the law's effects: `custom_tooltip` lines in `on_enact` (see "Law enactment preview" above; `law_direct_democracy`, Collective Governance, names the amendment its Distribution of Power will give that way), with `[concept_x]` links for the longer explanation. Panels that quote the law should show the same lines so the rules read the same before and after enactment (`rt_law_effects`, the hover on the Fossil Transition law line, is the description followed by the law's `on_enact` lines). `test_resource_transition.py` pins the three Resource Transition laws: one paragraph, at most `MAX_LAW_DESC_CHARS`, no digits, rules in `on_enact`, hover matching the preview; copy it for a law that needs the same. When you rewrite a description, edit the German translation memory (`i18n/german/tm/`) too: a rewrite ships English there until retranslated.

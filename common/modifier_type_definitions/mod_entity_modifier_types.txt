@@ -908,6 +908,12 @@ building_synthetics_plant_meat_throughput_add = {
 	decimals = 0
 }
 
+building_synthetics_plant_drinks_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
 
 # === Building employment (per-pop-type employment scaling) ===
 
@@ -3654,6 +3660,15 @@ country_add_anticolonial_ideology_to_igs_bool = {
 }
 
 country_unrecognized_become_recognized_bool = {
+	color = neutral
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
+country_remove_decentralized_claims_bool = {
 	color = neutral
 	boolean = yes
 	game_data = {

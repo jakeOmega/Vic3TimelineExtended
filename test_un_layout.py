@@ -12,7 +12,7 @@ UN_GUI = [os.path.join(W, f) for f in ("un_chamber_widget.gui", "un_authority_wi
 UN_GUI.append(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
 
 STATUS = ["te_un_sec_assembly", "te_un_sec_why", "te_un_sec_missions", "te_un_sec_programmes",
-          "te_un_sec_mandates", "te_un_sec_obligations", "te_un_sec_exposure"]
+          "te_un_sec_mandates", "te_un_sec_obligations", "te_un_sec_dev_fund", "te_un_sec_exposure"]
 REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]
 OLD_FLAGS = ["un_chamber_delegations", "un_chamber_standing", "un_chamber_exposure",
              "un_chamber_missions", "un_chamber_obligations", "un_chamber_votes",
@@ -96,7 +96,7 @@ class SessionStripTest(unittest.TestCase):
     def test_every_topic_has_an_icon(self):
         codes = {int(n) for n in re.findall(
             r"ScriptValue\('un_disp_res_topic_code'\), '\(CFixedPoint\)(\d+)'", _read(LAYOUT))}
-        self.assertEqual(codes, set(range(18)))
+        self.assertEqual(codes, set(range(29)))
 
 AUTHORITY = os.path.join(W, "un_authority_widget.gui")
 PILLARS = ("participation", "commitment", "credibility", "funding", "order", "delivery")

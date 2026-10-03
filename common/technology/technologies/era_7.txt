@@ -469,6 +469,7 @@ television_broadcasting = {
 }
 
 antibiotic_mass_production = {
+	# Antibiotic Fermentation PM for Pharmaceutical Industries
 	era = era_7
 	texture = "gfx/interface/icons/invention_icons/antibiotic_mass_production.dds"
 	category = society

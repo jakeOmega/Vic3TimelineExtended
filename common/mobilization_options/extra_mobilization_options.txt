@@ -1185,6 +1185,7 @@ REPLACE:mobilization_option_first_aid = {
 	group = medic_support
 }
 
+# Upkeep takes Drugs (opium) as in the base game; First Aid keeps liquor.
 REPLACE:mobilization_option_field_hospitals = {
 	texture = "gfx/interface/icons/mobilization_options/field_hospitals.dds"
 
@@ -1202,7 +1203,7 @@ REPLACE:mobilization_option_field_hospitals = {
 			mg:fabric = {
 				market_goods_sell_orders > 0
 			}
-			mg:liquor = {
+			mg:opium = {
 				market_goods_sell_orders > 0
 			}
 			mg:tools = {
@@ -1236,10 +1237,10 @@ REPLACE:mobilization_option_field_hospitals = {
 		}
 	}
 	upkeep_modifier = {
-		goods_input_fabric_add = 1                            # Price:   20, Total cost:    20.0 (16.67%)
-		goods_input_liquor_add = 2                            # Price:   30, Total cost:    60.0 (50.00%)
-		goods_input_tools_add = 1                             # Price:   40, Total cost:    40.0 (33.33%)
-		# Total cost: 120.0
+		goods_input_fabric_add = 1                            # Price:   20, Total cost:    20.0 (12.50%)
+		goods_input_opium_add = 2                             # Price:   50, Total cost:   100.0 (62.50%)
+		goods_input_tools_add = 1                             # Price:   40, Total cost:    40.0 (25.00%)
+		# Total cost: 160.0
 	}
 	unit_modifier = {
 		unit_recovery_rate_add = 0.40

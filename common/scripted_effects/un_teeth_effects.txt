@@ -113,12 +113,19 @@ un_teeth_lift_embargoes = {
 
 # ---- War without a mandate: the surcharge ---------------------------------------
 
-# Every war goal the initiator of a play adds without a bound mandate costs it
-# infamy from the Established tier up (un_war_surcharge_value: 2 / 4 / 10).
-# From Strong, a goal against a country under a UN peacekeeping deployment
-# costs twice that. A subject fighting its way out, and a play against a
-# decentralized people, are left alone; so is the holder of a bound mandate,
-# whose other demands the mandate's own rules already police.
+# Every war goal the initiator of a play adds costs it infamy from the
+# Established tier up (un_war_surcharge_value: 2 / 4 / 10).
+# From Strong, a goal against a country under a UN peacekeeping deployment (an
+# active peacekeeping or stabilisation mission) costs twice that. While the
+# Standing UN Force stands (phase 7), at Supranational a represented member's
+# goal against such a country is struck instead (un_force_war_goal_barred),
+# except a goal of the type its play opened with, which is still charged here.
+# A subject fighting its way out, and a play against a decentralized people,
+# are left alone; so is the play a bound mandate is exercised in, whose other
+# demands the mandate's own rules already police. Only that play
+# (un_mandate_is_bound_play_of): until 2026-10-02 the holder was exempt in
+# every play, so a bound mandate made every other war it began surcharge-free
+# (and, once the Force stood, unstruck).
 # The surcharge is the rule (owner decision 2026-09-24): the AI already weighs
 # infamy before adding goals and starting wars.
 # Scope: diplomatic play; expects scope:actor (from on_wargoal_added)
@@ -129,36 +136,47 @@ un_teeth_war_goal_surcharge = {
 			un_war_surcharge_value > 0
 			exists = scope:actor
 			initiator ?= scope:actor
-			scope:actor = {
-				is_subject = no
-				NOT = { var:un_mandate_current ?= { has_tag = un_mandate_bound } }
-			}
+			scope:actor = { is_subject = no }
+			NOT = { un_mandate_is_bound_play_of = { ACTOR = scope:actor } }
 			target ?= { NOT = { is_country_type = decentralized } }
 		}
-		scope:actor = {
-			change_infamy = un_war_surcharge_value
-		}
-		# Under UN protection: the host of an active peacekeeping or
-		# stabilisation mission (phase 6), or a country still carrying the
-		# country-wide peacekeeping modifier of old.
+		# The Standing UN Force (phase 7, §0.12 item 2; un_force_effects.txt):
+		# at Supranational a MEMBER may not make war on the host of an active
+		# peacekeeping or stabilisation mission, so its goals against the host
+		# are struck rather than charged, all but a goal of the type the play
+		# opened with, which un_force_war_goal_barred leaves to the surcharge
+		# below. A non-member pays the surcharge below, doubled (owner decision
+		# 2026-10-02: prohibited for members only).
 		if = {
-			limit = {
-				un_tier_at_least_strong = yes
-				target ?= {
-					OR = {
-						un_mission_protected = yes
-						has_modifier = un_peacekeeping_received_modifier
-					}
-				}
-			}
+			limit = { un_force_war_goal_barred = yes }
+			un_force_strike_war_goals = yes
+		}
+		else = {
 			scope:actor = {
 				change_infamy = un_war_surcharge_value
 			}
-		}
-		scope:actor = {
+			# Under UN protection: the host of an active peacekeeping or
+			# stabilisation mission (phase 6), or a country still carrying the
+			# country-wide peacekeeping modifier of old.
 			if = {
-				limit = { is_ai = no }
-				post_notification = un_war_surcharge_notice
+				limit = {
+					un_tier_at_least_strong = yes
+					target ?= {
+						OR = {
+							un_mission_protected = yes
+							has_modifier = un_peacekeeping_received_modifier
+						}
+					}
+				}
+				scope:actor = {
+					change_infamy = un_war_surcharge_value
+				}
+			}
+			scope:actor = {
+				if = {
+					limit = { is_ai = no }
+					post_notification = un_war_surcharge_notice
+				}
 			}
 		}
 	}

@@ -3,6 +3,10 @@
   "en": "Airbus",
   "de": "Airbus"
  },
+ "company_ajinomoto": {
+  "en": "Ajinomoto",
+  "de": "Ajinomoto"
+ },
  "company_alibaba": {
   "en": "Alibaba",
   "de": "Alibaba"
@@ -139,9 +143,21 @@
   "en": "Bayer",
   "de": "Bayer"
  },
+ "company_bgi": {
+  "en": "BGI Group",
+  "de": "BGI Group"
+ },
  "company_bhp_group": {
   "en": "BHP Group",
   "de": "BHP Group"
+ },
+ "company_biocon": {
+  "en": "Biocon",
+  "de": "Biocon"
+ },
+ "company_biontech": {
+  "en": "BioNTech",
+  "de": "BioNTech"
  },
  "company_blackberry": {
   "en": "BlackBerry",
@@ -198,6 +214,10 @@
  "company_gazprom": {
   "en": "Gazprom",
   "de": "Gazprom"
+ },
+ "company_genentech": {
+  "en": "Genentech",
+  "de": "Genentech"
  },
  "company_google": {
   "en": "Google",
@@ -283,6 +303,10 @@
   "en": "Microsoft",
   "de": "Microsoft"
  },
+ "company_monsanto": {
+  "en": "Monsanto",
+  "de": "Monsanto"
+ },
  "company_netflix": {
   "en": "Netflix",
   "de": "Netflix"
@@ -294,6 +318,10 @@
  "company_nintendo": {
   "en": "Nintendo",
   "de": "Nintendo"
+ },
+ "company_novo_nordisk": {
+  "en": "Novo Nordisk",
+  "de": "Novo Nordisk"
  },
  "company_nvidia": {
   "en": "Nvidia",
@@ -346,6 +374,10 @@
  "company_roscosmos": {
   "en": "Roscosmos",
   "de": "Roscosmos"
+ },
+ "company_rosen_association": {
+  "en": "Rosen Association",
+  "de": "Rosen Association"
  },
  "company_samsung": {
   "en": "Samsung",

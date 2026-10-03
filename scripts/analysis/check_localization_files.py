@@ -1,4 +1,4 @@
-"""CI sanity check for the mod's localization YAML files.
+r"""CI sanity check for the mod's localization YAML files.
 
 The Clausewitz loc loader is silently unforgiving: a file without the UTF-8 BOM,
 or whose first line is not `l_<language>:` for the language its name ends in, is
@@ -12,6 +12,14 @@ Checks, per `localization/**/*.yml`:
   3. the name ends in `_l_<language>.yml` and the first non-blank, non-comment
      line is the matching `l_<language>:` (so `x_l_german.yml` needs `l_german:`)
   4. no localization key is defined twice within the same file
+  5. no bare `"` inside a value or in a trailing comment. The game reads a
+     value to the line's last quote, so it shows one as a quote mark (vanilla
+     English has ~1,800), but `mod_state.split_loc_line`, which every loc tool
+     here uses, stops at it: the translation harness, the audits and the
+     deploy-time language build all see the value cut short, and the build
+     splices the English tail back in after the translated half. Write a
+     literal quote as `\"`.
+  6. every `\"` in a value is paired, or the line shows a dangling quote mark
 
 Pass a directory to check other trees too, e.g. the deploy-time language copies
 `scripts/generators/gen_non_english_loc.py` stages under `build/localization/`.
@@ -30,6 +38,9 @@ import re
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, REPO_ROOT)
+
+from mod_state import split_loc_line  # noqa: E402
 
 BOM = b"\xef\xbb\xbf"
 
@@ -38,6 +49,9 @@ _KEY_RE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\s*\d*\s*"')
 
 # The loader takes a file's language from its `_l_<language>.yml` suffix.
 _LANGUAGE_SUFFIX_RE = re.compile(r"_l_([a-z_]+)\.yml$")
+
+# An escaped quote whose backslash is not itself escaped.
+_ESCAPED_QUOTE_RE = re.compile(r'(?<!\\)(?:\\\\)*\\"')
 
 
 def iter_loc_files(roots: list[str]) -> list[str]:
@@ -116,6 +130,27 @@ def check_file(path: str) -> list[str]:
             )
         else:
             seen[key] = index
+
+    for index, line in enumerate(lines, start=1):
+        parsed = split_loc_line(line)
+        if parsed is None:
+            continue
+        key, value, trailing = parsed
+        # A comment follows the value only if no quote does: `""#bold x#!""`
+        # parses as an empty value and a "comment" that is really the text.
+        rest = trailing.strip()
+        if '"' in rest or (rest and not rest.startswith("#")):
+            problems.append(
+                f"{rel}:{index}: bare `\"` inside the value of '{key}' (or in a "
+                f"trailing comment): the game reads to the line's last quote, the "
+                f"repo's loc tools (translation, audits, the language build) stop "
+                f"at this one; write a literal quote as `\\\"`"
+            )
+        elif len(_ESCAPED_QUOTE_RE.findall(value)) % 2:
+            problems.append(
+                f"{rel}:{index}: unpaired `\\\"` in '{key}': the game shows a "
+                f"dangling quote mark"
+            )
 
     return problems
 

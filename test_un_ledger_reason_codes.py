@@ -37,9 +37,10 @@ _BOOK = re.compile(
 _REASON = re.compile(r"\bREASON\s*=\s*(\d+)\b")
 _SUBJECT = re.compile(r"\bSUBJECT\s*=")
 # un_mission_ledger_outcome (un_mission_effects.txt) books one code per kind of
-# mission, always with the mission's state as the subject.
+# mission, always with the mission's state as the subject. Electoral observers
+# are the fourth kind (redesign phase 7).
 _MISSION = re.compile(r"\bun_mission_ledger_outcome\s*=\s*\{([^{}]*)\}")
-_MISSION_CODE = re.compile(r"\b(?:PEACEKEEPING|AID|STABILISATION)\s*=\s*(\d+)\b")
+_MISSION_CODE = re.compile(r"\b(?:PEACEKEEPING|AID|STABILISATION|ELECTORAL)\s*=\s*(\d+)\b")
 
 _CASE = re.compile(
     r"\bun_authority_log_reason_(case|on)\s*=\s*\{\s*CODE\s*=\s*(\d+)\s+KEY\s*=\s*(\S+)"

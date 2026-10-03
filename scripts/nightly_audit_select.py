@@ -103,7 +103,7 @@ INTENTIONALLY_NOT_EXCLUDED = {
     "localization/english/extra_law_events_l_english.yml": "bootstrap dump, hand-edited freely after",
     "localization/english/ministry_law_events_l_english.yml": "bootstrap dump, hand-edited freely after",
     "common/production_method_groups/unique_pm_groups.txt": "one-shot bootstrap, hand-edited after",
-    "common/prestige_goods/extra_prestige_goods.txt": "only `texture =` lines auto-managed by gen_prestige_icons.py; rest hand-authored",
+    "common/prestige_goods/extra_prestige_goods.txt": "only `texture =` lines managed by generate_icons.py (wire); rest hand-authored",
     # Vanilla data referenced as INPUT to generators (not outputs). The registry
     # mentions them in the "Input:" column; the parser can't distinguish.
     "common/goods/*.txt": "input to pm_costs.py — vanilla goods data, not generator output",

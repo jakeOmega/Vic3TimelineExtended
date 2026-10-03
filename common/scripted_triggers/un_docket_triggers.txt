@@ -60,9 +60,15 @@ un_docket_loan_candidate = {
 }
 
 # A war of aggression the docket should take up, seen from the aggressor: it
-# began the war (the dossier's test), has fought it un_docket_war_months, holds
-# no bound mandate for it, has not been docketed for it, and some member it is
-# at war with has a state devastated past un_docket_war_devastation.
+# began the war (the dossier's test), has fought it un_docket_war_months, has
+# not been docketed for it, and some member it is at war with has a state
+# devastated past un_docket_war_devastation (un_docket_war_victim_standing).
+# A bound mandate excuses only its own war: its holder is taken up for a war
+# it began other than the mandate's (un_mandate_is_other_war_of), with that
+# war's target as the victim, and un_docket_war_victim names the same one.
+# Until 2026-10-02 a bound mandate excused every war its holder began. The
+# month count is still the holder's months at war in any war, as it is for
+# every country.
 # Scope: the prospective aggressor
 un_docket_war_candidate = {
 	is_at_war = yes
@@ -70,20 +76,45 @@ un_docket_war_candidate = {
 	has_variable = un_dkt_war_months
 	var:un_dkt_war_months >= un_docket_war_months
 	NOT = { has_variable = un_dkt_war_raised }
-	NOT = { var:un_mandate_current ?= { has_tag = un_mandate_bound } }
-	any_country = {
-		has_war_with = PREV
-		is_diplomatic_play_initiator = no
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		any_scope_state = { devastation > un_docket_war_devastation }
+	OR = {
+		AND = {
+			NOT = { var:un_mandate_current ?= { has_tag = un_mandate_bound } }
+			any_country = {
+				has_war_with = PREV
+				un_docket_war_victim_standing = yes
+			}
+		}
+		any_diplomatic_play = {
+			un_mandate_is_other_war_of = { AGGRESSOR = prev }
+			target ?= { un_docket_war_victim_standing = yes }
+		}
 	}
 }
 
 # A member attacked by scope:condemned_country, with a state devastated past
-# the threshold: a victim the war item can name.
+# the threshold: a victim the war item can name. If the aggressor holds a bound
+# mandate, only the target of a war it began other than the mandate's, as
+# un_docket_war_candidate reads it.
 # Scope: the prospective victim
 un_docket_war_victim = {
 	has_war_with = scope:condemned_country
+	un_docket_war_victim_standing = yes
+	OR = {
+		scope:condemned_country = {
+			NOT = { var:un_mandate_current ?= { has_tag = un_mandate_bound } }
+		}
+		any_diplomatic_play = {
+			target ?= prev
+			un_mandate_is_other_war_of = { AGGRESSOR = scope:condemned_country }
+		}
+	}
+}
+
+# A member that did not begin a play, with a state devastated past
+# un_docket_war_devastation: what makes a country at war with an aggressor a
+# victim the war item can name.
+# Scope: the prospective victim
+un_docket_war_victim_standing = {
 	is_diplomatic_play_initiator = no
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	any_scope_state = { devastation > un_docket_war_devastation }
@@ -385,6 +416,58 @@ un_docket_topic_open_physical_protection = {
 	}
 }
 
+# Redesign phase 7 (§0.12 item 5): once the charter carries Reform I and
+# UNESCO is in force.
+un_docket_topic_open_cultural_diversity = {
+	custom_tooltip = {
+		text = un_charter_needs_reform_1_tt
+		un_charter_has_reform = { LEVEL = 1 }
+	}
+	custom_tooltip = {
+		text = un_propose_cultural_diversity_needs_unesco_tt
+		un_propose_heritage_in_force = yes
+	}
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_cultural_diversity_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = cultural_diversity } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_40_tt
+		global_var:un_authority >= 40
+	}
+}
+
+# Redesign phase 7 (§0.12 item 8): once the charter carries Reform II and the
+# Non-Proliferation Treaty is in force. No ban under the disabled nuclear
+# weapons rule.
+un_docket_topic_open_nuclear_ban = {
+	has_game_rule = nuclear_weapons_enabled
+	custom_tooltip = {
+		text = un_charter_needs_reform_2_tt
+		un_charter_has_reform = { LEVEL = 2 }
+	}
+	custom_tooltip = {
+		text = un_propose_nuclear_ban_needs_npt_tt
+		un_propose_npt_in_force = yes
+	}
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_nuclear_ban_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = nuclear_ban } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_40_tt
+		global_var:un_authority >= 40
+	}
+}
+
 un_docket_topic_open_decolonization = {
 	custom_tooltip = {
 		text = un_propose_not_in_force_tt
@@ -464,6 +547,16 @@ un_docket_may_propose_physical_protection = {
 	un_propose_physical_protection_qualifies = yes
 }
 
+un_docket_may_propose_cultural_diversity = {
+	un_docket_can_be_offered = yes
+	un_propose_cultural_diversity_qualifies = yes
+}
+
+un_docket_may_propose_nuclear_ban = {
+	un_docket_can_be_offered = yes
+	un_propose_nuclear_ban_qualifies = yes
+}
+
 un_docket_may_propose_decolonization = {
 	un_docket_can_be_offered = yes
 	un_propose_decolonization_qualifies = yes
@@ -513,6 +606,14 @@ un_docket_agenda_ready = {
 		AND = {
 			un_docket_topic_open_decolonization = yes
 			any_country = { un_docket_may_propose_decolonization = yes }
+		}
+		AND = {
+			un_docket_topic_open_cultural_diversity = yes
+			any_country = { un_docket_may_propose_cultural_diversity = yes }
+		}
+		AND = {
+			un_docket_topic_open_nuclear_ban = yes
+			any_country = { un_docket_may_propose_nuclear_ban = yes }
 		}
 	}
 }

@@ -141,6 +141,13 @@ lawgroup_ministry_of_the_environment = {
 	ideological_opinion_impact = 0.5
 }
 
+# Resource Transition (issue #660): Unrestricted Extraction, Fossil Expansion
+# Moratorium, Managed Fossil Phaseout. common/laws/resource_transition_laws.txt.
+lawgroup_resource_transition = {
+	law_group_category = economy
+	ideological_opinion_impact = 0.5
+}
+
 lawgroup_ministry_of_culture = {
 	law_group_category = human_rights
 	ideological_opinion_impact = 0

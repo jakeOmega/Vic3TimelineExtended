@@ -377,6 +377,55 @@ nd_taboo_refresh_treaty_ceiling = {
 	}
 }
 
+# The UN Treaty on the Prohibition of Nuclear Weapons (redesign phase 7,
+# docs/systems/un_redesign_design.md §0.12 item 8). A party is held to its
+# arsenal at ratification, a fifth less every five years and nothing after 25
+# (nd_taboo_ban_ceiling_now_value); a party that held none may build none.
+# The ceiling is its own variable, nd_tpnw_ceiling, never nd_treaty_ceiling,
+# which nd_taboo_refresh_treaty_ceiling rebuilds from the treaty articles every
+# month: the lowest of the three binds (nd_taboo_effective_ceiling_value), so
+# the ban never lifts a lower ceiling another treaty or our own set. The
+# arsenal is recorded the first month we are a party, and the clock counts
+# from then, while the UN is above Moribund. Leaving the treaty while it
+# stands (leaving the UN) is a walk-out, as leaving an arms-control treaty
+# is; its lapse with the UN's dissolution is not.
+# Scope: country (nd_taboo_country_monthly).
+nd_taboo_refresh_ban_ceiling = {
+	if = {
+		limit = { nd_taboo_is_ban_party = yes }
+		if = {
+			limit = { NOT = { has_variable = nd_tpnw_base } }
+			set_variable = { name = nd_tpnw_base value = nd_stockpile }
+			set_variable = { name = nd_tpnw_months value = 0 }
+		}
+		# The clock stands still while the UN is Moribund, where every
+		# convention is dormant (un_convention_multiplier): the ceiling holds
+		# but does not step down.
+		else_if = {
+			limit = { NOT = { un_tier_is_moribund = yes } }
+			change_variable = { name = nd_tpnw_months add = 1 }
+		}
+		set_variable = { name = nd_tpnw_ceiling value = nd_taboo_ban_ceiling_now_value }
+	}
+	else_if = {
+		limit = { has_variable = nd_tpnw_base }
+		if = {
+			limit = { has_global_variable = un_agency_tpnw }
+			nd_taboo_ledger_add_weighted = { POINTS = nd_taboo_ledger_walkout }
+			debug_log = "TE_TABOO: a party left the Prohibition Treaty"
+		}
+		remove_variable = nd_tpnw_base
+		if = {
+			limit = { has_variable = nd_tpnw_months }
+			remove_variable = nd_tpnw_months
+		}
+		if = {
+			limit = { has_variable = nd_tpnw_ceiling }
+			remove_variable = nd_tpnw_ceiling
+		}
+	}
+}
+
 # Puts the programme hold on or takes it off. Decides from has_modifier, so
 # call it at most once per effect block: the monthly half calls it last, and
 # each panel action once.
@@ -750,6 +799,8 @@ nd_taboo_country_monthly = {
 		}
 		# ---- the ceiling an arms-control treaty sets us, and walk-outs ----
 		nd_taboo_refresh_treaty_ceiling = yes
+		# ---- the UN Prohibition Treaty's ceiling (redesign phase 7) ----
+		nd_taboo_refresh_ban_ceiling = yes
 		# ---- dismantling, or warheads above the ceiling that binds ----
 		if = {
 			limit = { nd_taboo_is_dismantling = yes }

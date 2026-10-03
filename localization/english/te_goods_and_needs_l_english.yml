@@ -4,4 +4,5 @@
 # GOODS_AND_NEEDS
 #
  popneed_convenience:0 "Convenience"
+ popneed_healthcare:0 "Healthcare"
  popneed_tourism:0 "Tourism"

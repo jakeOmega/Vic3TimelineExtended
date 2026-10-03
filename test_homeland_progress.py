@@ -342,6 +342,19 @@ class HomelandProgressTests(unittest.TestCase):
         sim.root["owner"]["modifiers"]["country_homelands_can_change_bool"] = False
         self.assertEqual(sim.value(sim.values["te_homeland_creation_status"], sim.root), 1)
 
+    def test_removal_speed_slows_only_the_removal_track(self):
+        # The UN Convention on Cultural Diversity (state_homeland_removal_speed_mult)
+        # slows minority homelands' decay, not the primary culture's gain, and
+        # never below a tenth of the shared rate.
+        sim = self.make()
+        sim.root["modifiers"]["state_homeland_removal_speed_mult"] = Decimal("-.5")
+        sim.month()
+        self.assertEqual([p["variables"]["te_homeland_progress"] for p in sim.projects("removal")], [5, 5])
+        self.assertEqual(sim.projects("creation")[0]["variables"]["te_homeland_progress"], 10)
+        sim.root["modifiers"]["state_homeland_removal_speed_mult"] = Decimal(-5)
+        self.assertEqual(sim.value(sim.values["te_homeland_removal_annual_progress"], sim.root), 1)
+        self.assertNotIn("te_homeland_removal_units", sim.root["variables"])
+
     def test_multiple_creation_candidates_progress_together(self):
         sim = self.make(shares={"a": ".5", "b": ".4", "c": ".05"}, homelands={"c"}, primary=("a", "b"))
         sim.root["modifiers"]["state_homeland_creation_threshold_add"] = Decimal(".3")
