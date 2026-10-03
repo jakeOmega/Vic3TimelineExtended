@@ -349,8 +349,8 @@ the Recorded Ballot shows every voter's lean and why the members voted as they d
 | The proposer's standing | Exemplary +5, Respected +2, Poor −2, Disgraced −5 |
 | A pledged vote | +100 for, −100 against |
 | The target accepted the verdict | +15 |
-| The cost to us, on aid and peacekeeping requests | −15 per earlier contribution, up to three; more for aid to a great, major or richer country |
-| Our interests on this topic | Laws, technologies and what the convention's terms would do to us |
+| The cost to us, on aid and peacekeeping requests | −15 per earlier contribution, up to three; more for aid to a great, major or richer country; −30 for a major power in default or near its debt ceiling, which a carried request would bill |
+| Our interests on this topic | Laws, technologies and what the convention's terms would do to us; on the World Development Fund, +30 below its line and up to +30 more for the grant it would pay us |
 | Lobbying campaigns on us (AI members only) | 3 a month per campaign, up to 15; at most 20 each way |
 
 An AI member votes in favor when its lean, plus a random −20 to +20, is above
@@ -935,8 +935,24 @@ the docket, so a qualifying human is offered convention business first. They
 refer a dispute to the World Court only on odds of 60% or better.
 - They pledge grain to the World Food Reserve when they hold 2,000 units or
 more, and withdraw the pledge when famine strikes at home.
-- They join readily unless isolationist, and withhold dues when isolationist,
-undermining the order, in default or facing a high levy.
+- They join or leave by what a seat is worth to them: their laws and rank, the
+dues against the grant the World Development Fund would pay them (both as a
+share of their GDP, so a poor country that would draw a large grant wants in
+most), what staying out costs at the UN's tier, the aid and peacekeepers only
+members can ask for, and the conventions they would have to keep. A country
+whose case is close to the line neither joins nor leaves, so it doesn't walk
+out and back.
+- They pay their dues unless their treasury is in default or near its debt
+ceiling, they are isolationist or undermining the order, or the levy is high. A
+member the Fund pays more than its dues keeps paying even in default, and one
+that has lost its vote under Article 19 pays sooner. A healthy member doesn't
+withhold to save the levy and then pay again.
+- Major powers fund Development Programs only with a reason: humanitarian law,
+championing the order, or Fund recipients among their subjects, bloc partners
+and allies. They contribute to peacekeeping for the same kinds of reasons, more
+when missions are in the field. They stop either one when their treasury fails
+or their laws turn against it, and stop peacekeeping at war; peacekeeping only
+once its ten years have run.
 - They send contingents to missions hosted by allies, bloc partners and
 subjects, and bring them home when attacked or short of money. A country holding
 a mandate is steered toward the target and the authorized goal.
