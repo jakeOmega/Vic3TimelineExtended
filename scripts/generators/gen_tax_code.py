@@ -273,7 +273,8 @@ TRADITIONALISM_KEYS = ("wage", "div")
 # and read only while the slot's _on is 1.
 OBLIGATION_SLOTS = (1, 2, 3, 4)
 OBLIGATION_HEADER = (("_on", 0), ("_state", 0))
-OBLIGATION_PAYLOAD = ("kind", "arg", "target", "baseline", "ig", "deadline", "maint_end", "streak", "slot", "rev")
+OBLIGATION_PAYLOAD = ("kind", "arg", "target", "baseline", "ig", "deadline", "maint_end", "streak", "fails",
+                      "maint_only", "slot", "rev")
 # Obligation states: 1 pending passage (attached to the bill), 7 bound to a passed bill's
 # slot and awaiting its commencement, 2 delivering, 3 maintaining; 4 fulfilled, 5 breached,
 # 6 renegotiated are outcomes, recorded when the slot is freed.
@@ -282,9 +283,10 @@ OBL_BINDING_STATES = (OBL_BOUND, OBL_DELIVERING, OBL_MAINTAINING)
 # Kind 1's institutions by _arg, kind 3's military wage levels by _arg.
 OBL_INSTITUTIONS = ((1, "institution_schools"), (2, "institution_health_system"), (3, "institution_social_security"))
 OBL_WAGE_LEVELS = ((1, "very_low"), (2, "low"), (3, "medium"), (4, "high"), (5, "very_high"))
-# Trust (te_tax_trust_<ig>): +1 per kept promise, -1 per broken one, within +-TRUST_CAP; the
-# support model's trust reason is TRUST_WEIGHT points per step, so the cap keeps the reason
-# inside +-REASON_CAP.
+# Trust (te_tax_trust_<ig>): +1 per kept promise, -1 per broken or renegotiated one, within
+# +-TRUST_CAP; te_tax_trust_<ig>_month records the month of its last change, and it moves a step
+# back toward 0 after te_tax_obl_trust_recover_months without one. The support model's trust
+# reason is TRUST_WEIGHT points per step, so the cap keeps the reason inside +-REASON_CAP.
 TRUST_WEIGHT, TRUST_CAP = 10, 4
 
 
@@ -651,16 +653,23 @@ def _obligation_views():
     lines = [
         "",
         "# Policy obligations (plan Task 12): per slot <n>, on; state (1 pending, 7 bound, 2",
-        "# delivering, 3 maintaining), kind, arg, target, beneficiary group, baseline and the kind-4",
-        "# surplus streak; the deadline and the end of maintenance as months with their year and",
-        "# month. A payload view reads only while the slot is on: a freed slot's payload stays,",
-        "# and a civil war's winner may hold a loser's.",
+        "# delivering, 3 maintaining), kind, arg, target, beneficiary group, baseline, the kind-4",
+        "# surplus streak, the failing maintenance checks and their limit (grace), whether it",
+        "# maintains existing provision; the deadline and the end of maintenance as months with",
+        "# their year and month. A payload view reads only while the slot is on: a freed slot's",
+        "# payload stays, and a civil war's winner may hold a loser's.",
     ]
     for n in OBLIGATION_SLOTS:
         token = f"te_tax_o{n}_on"
         lines += _guarded_view(f"te_tax_view_o{n}_on", token, 0)
-        for field in ("state", "kind", "arg", "target", "ig", "baseline", "streak"):
+        for field in ("state", "kind", "arg", "target", "ig", "baseline", "streak", "fails", "maint_only"):
             lines += _guarded_view(f"te_tax_view_o{n}_{field}", f"te_tax_o{n}_{field}", 0, condition=_is_open(token))
+        # The failing checks a maintained obligation may reach before it breaches
+        # (te_tax_obl_grace_<kind>).
+        lines += [f"te_tax_view_o{n}_grace = {{", "\tvalue = 0"]
+        lines += [f"\tif = {{ limit = {{ {_is_open(token)} has_variable = te_tax_o{n}_kind var:te_tax_o{n}_kind = {kind} }} "
+                  f"value = te_tax_obl_grace_{kind} }}" for kind in (1, 2, 3, 4)]
+        lines.append("}")
         for field in ("deadline", "maint_end"):
             lines += _month_views(f"te_tax_view_o{n}_{field}", f"te_tax_o{n}_{field}", _is_open(token))
     for name, states in (("binding", OBL_BINDING_STATES), ("pending", (OBL_PENDING,))):
@@ -894,8 +903,9 @@ def _custom_loc(name, entries, fallback):
 
 def _obligation_custom_loc():
     """The promise rows' text (te_tax_obligations_section, te_tax_politics_widget.gui), per
-    obligation slot <n>: whose promise it is (te_tax_obl_ig_<n>, the group's own name), what
-    it promises (te_tax_obl_what_<n>; te_tax_obl_inst_<n>, kind 1's institution) and where it
+    obligation slot <n>: whose promise it is (te_tax_obl_ig_<n>, the group's own name), whether
+    it reaches new provision or maintains existing provision (te_tax_obl_mode_<n>), what it
+    promises (te_tax_obl_what_<n>; te_tax_obl_inst_<n>, kind 1's institution) and where it
     stands (te_tax_obl_state_<n>). The keys that print a slot's numbers are per slot
     (te_tax_l_english.yml); the rest are shared. The triggers read only the guarded views."""
     lines = [
@@ -909,6 +919,8 @@ def _obligation_custom_loc():
         view = f"te_tax_view_o{n}"
         lines += _custom_loc(f"te_tax_obl_ig_{n}", [(f"{view}_ig = {idx}", f"ig_{ig}")
                                                     for idx, ig in enumerate(IGS, start=1)], "te_tax_obl_ig_none")
+        lines += _custom_loc(f"te_tax_obl_mode_{n}", [(f"{view}_maint_only = 1", "te_tax_obl_mode_maintain")],
+                             "te_tax_obl_mode_reach")
         what = [(f"{view}_kind = 1", f"te_tax_obl_what_inst_{n}"), (f"{view}_kind = 2", "te_tax_obl_what_bureaucracy")]
         what += [(f"{view}_kind = 3 {view}_arg = {arg}", f"te_tax_obl_what_wages_{level}")
                  for arg, level in OBL_WAGE_LEVELS]
@@ -920,6 +932,7 @@ def _obligation_custom_loc():
                   (f"{view}_state = {OBL_BOUND}", "te_tax_obl_st_bound"),
                   (f"{view}_state = {OBL_DELIVERING} {view}_kind = 4", f"te_tax_obl_st_surplus_{n}"),
                   (f"{view}_state = {OBL_DELIVERING}", f"te_tax_obl_st_due_{n}"),
+                  (f"{view}_state = {OBL_MAINTAINING} {view}_fails > 0", f"te_tax_obl_st_failing_{n}"),
                   (f"{view}_state = {OBL_MAINTAINING}", f"te_tax_obl_st_maint_{n}")]
         lines += _custom_loc(f"te_tax_obl_state_{n}", states, "te_tax_obl_st_none")
     return lines
@@ -993,7 +1006,8 @@ def obligation_tokens():
     """[(token, sentinel)] of the policy obligations (plan Task 12): each slot's header and each
     interest group's trust. Initialised, copied at an outbreak and never removed."""
     tokens = [(f"te_tax_o{n}{suffix}", sentinel) for n in OBLIGATION_SLOTS for suffix, sentinel in OBLIGATION_HEADER]
-    return tokens + [(f"te_tax_trust_{ig}", 0) for ig in IGS]
+    tokens += [(f"te_tax_trust_{ig}", 0) for ig in IGS]
+    return tokens + [(f"te_tax_trust_{ig}_month", -1) for ig in IGS]
 
 
 def _log(event, detail=""):
@@ -2319,9 +2333,9 @@ def _obligation_outcome_effects():
         "",
         "# Policy obligations (plan Task 12; te_tax_obligation_effects.txt): the beneficiary group of",
         "# obligation slot N (te_tax_o<N>_ig, te_tax_ig_id_<ig>) reacts once per transition. Approval",
-        "# goes through the shared ig_approval_effect with MODIFIER (fulfilled",
-        "# ig_approval_positive_modifier +3, breached ig_approval_very_negative_modifier -5,",
-        "# renegotiated te_tax_obl_renegotiated_modifier -2), decaying over te_tax_obl_approval_days.",
+        "# goes through the shared ig_approval_effect with MODIFIER (fulfilled te_tax_obl_kept_modifier",
+        "# +3, breached te_tax_obl_broken_modifier -5, renegotiated te_tax_obl_renegotiated_modifier",
+        "# -2; te_tax_obligation_modifiers.txt), decaying over te_tax_obl_approval_days.",
         "te_tax_gen_obl_approval = {",
     ]
     for idx, ig in enumerate(IGS, start=1):
@@ -2332,8 +2346,9 @@ def _obligation_outcome_effects():
     lines += [
         "}",
         "",
-        f"# Trust (te_tax_trust_<ig>): DELTA (+1 kept, -1 broken), held within -{TRUST_CAP}..{TRUST_CAP}; the",
-        f"# support model's trust reason is {TRUST_WEIGHT} points a step (te_tax_trust_reason_<ig>).",
+        "# Trust (te_tax_trust_<ig>): DELTA (+1 kept, -1 broken or renegotiated), held within",
+        f"# -{TRUST_CAP}..{TRUST_CAP}, and the month of the change (te_tax_trust_<ig>_month); the support model's",
+        f"# trust reason is {TRUST_WEIGHT} points a step (te_tax_trust_reason_<ig>).",
         "te_tax_gen_obl_trust = {",
     ]
     for idx, ig in enumerate(IGS, start=1):
@@ -2341,7 +2356,26 @@ def _obligation_outcome_effects():
                   f"\t\tlimit = {{ var:te_tax_o$N$_ig = {idx} }}",
                   f"\t\tchange_variable = {{ name = te_tax_trust_{ig} add = $DELTA$ }}",
                   f"\t\tclamp_variable = {{ name = te_tax_trust_{ig} min = -{TRUST_CAP} max = {TRUST_CAP} }}",
+                  f"\t\tset_variable = {{ name = te_tax_trust_{ig}_month value = te_history_month_index }}",
                   "\t}"]
+    lines += [
+        "}",
+        "",
+        "# Trust recovers (te_tax_obl_check_month, monthly): a group's trust that has not changed for",
+        "# te_tax_obl_trust_recover_months moves one step toward 0, and the step counts as its change.",
+        "te_tax_gen_trust_recover = {",
+    ]
+    for ig in IGS:
+        trust, month = f"te_tax_trust_{ig}", f"te_tax_trust_{ig}_month"
+        lines += [
+            "\tif = {",
+            f"\t\tlimit = {{ has_variable = {trust} has_variable = {month} var:{month} <= te_tax_obl_trust_recover_before }}",
+            f"\t\tif = {{ limit = {{ var:{trust} > 0 }} change_variable = {{ name = {trust} add = -1 }} "
+            f"set_variable = {{ name = {month} value = te_history_month_index }} }}",
+            f"\t\telse_if = {{ limit = {{ var:{trust} < 0 }} change_variable = {{ name = {trust} add = 1 }} "
+            f"set_variable = {{ name = {month} value = te_history_month_index }} }}",
+            "\t}",
+        ]
     lines.append("}")
     return lines
 

@@ -653,9 +653,11 @@ te_tax_relief_listed_state_kept = {
 # (te_tax_o<N>_*); its payload is read only while its _on is 1, which the
 # callers test first. Each kind's monthly condition reads the measure the
 # promise names, never a value requested or scheduled:
-#   1  an institution level: the delivered level, institution:<x>.investment,
-#      while the country has the institution (capability ledger row 28,
-#      pending P16). A bureaucracy deficit is not a condition of it;
+#   1  an institution level: the delivered level (te_tax_obl_inst_level_<arg>,
+#      institution:<x>.investment, 0 without the institution) reaches the
+#      target, while the country has the institution (capability ledger row
+#      28, pending P16). A bureaucracy deficit is not a condition of it: it
+#      pauses the deadline (te_tax_obl_check_one);
 #   2  the bureaucracy balance: no deficit (bureaucracy >= 0);
 #   3  military wages: the level set now, sampled each month (no hook fires
 #      on a change), at or below the promised one;
@@ -663,6 +665,41 @@ te_tax_relief_listed_state_kept = {
 #      of a healthy budget: construction is not a fixed expense, loan interest
 #      is), delivered after te_tax_obl_surplus_months consecutive checks.
 # ---------------------------------------------------------------------------
+
+# Obligation slot N is in force: its bill has taken effect and it is being
+# delivered (2) or maintained (3). Only such a promise can be renegotiated.
+te_tax_obl_active = {
+	has_variable = te_tax_o$N$_on
+	var:te_tax_o$N$_on = 1
+	OR = {
+		var:te_tax_o$N$_state = 2
+		var:te_tax_o$N$_state = 3
+	}
+}
+
+# A maintained obligation N has failed as many consecutive monthly checks
+# as its kind allows (te_tax_obl_grace_<kind>): it is breached. An outcome
+# (kinds 2 and 4) gets a few months to recover; a level or an action (kinds 1
+# and 3) none.
+te_tax_obl_grace_reached = {
+	trigger_if = {
+		limit = { var:te_tax_o$N$_kind = 1 }
+		var:te_tax_o$N$_fails >= te_tax_obl_grace_1
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_kind = 2 }
+		var:te_tax_o$N$_fails >= te_tax_obl_grace_2
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_kind = 3 }
+		var:te_tax_o$N$_fails >= te_tax_obl_grace_3
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_kind = 4 }
+		var:te_tax_o$N$_fails >= te_tax_obl_grace_4
+	}
+	trigger_else = { always = yes }
+}
 
 # Obligation slot N binds the country: bound to a passed bill (7), delivering
 # (2) or maintaining (3). A pending one (1) belongs to the bill under debate.
@@ -730,12 +767,14 @@ te_tax_obl_delivered = {
 
 # Kind 1, per institution (_arg 1 Education, 2 Health System, 3 Social
 # Security): the delivered level reaches the target, while the country has
-# the institution. Never NOT = { expanding_institution }: a country at its
-# target that starts growing further still holds it.
+# the institution. The variable leads the comparison and the guarded level
+# value follows it (the je_space_race.txt form). Never NOT = {
+# expanding_institution }: a country at its target that starts growing
+# further still holds it.
 te_tax_obl_inst_met_1 = {
 	trigger_if = {
 		limit = { has_institution = institution_schools }
-		institution:institution_schools.investment >= var:te_tax_o$N$_target
+		var:te_tax_o$N$_target <= te_tax_obl_inst_level_1
 	}
 	trigger_else = { always = no }
 }
@@ -743,7 +782,7 @@ te_tax_obl_inst_met_1 = {
 te_tax_obl_inst_met_2 = {
 	trigger_if = {
 		limit = { has_institution = institution_health_system }
-		institution:institution_health_system.investment >= var:te_tax_o$N$_target
+		var:te_tax_o$N$_target <= te_tax_obl_inst_level_2
 	}
 	trigger_else = { always = no }
 }
@@ -751,7 +790,7 @@ te_tax_obl_inst_met_2 = {
 te_tax_obl_inst_met_3 = {
 	trigger_if = {
 		limit = { has_institution = institution_social_security }
-		institution:institution_social_security.investment >= var:te_tax_o$N$_target
+		var:te_tax_o$N$_target <= te_tax_obl_inst_level_3
 	}
 	trigger_else = { always = no }
 }
@@ -859,6 +898,33 @@ te_tax_obl_feasible_4 = {
 	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
 }
 
+# The promise would only maintain existing provision (spec §7.2: labelled
+# maintenance, not new investment): what it asks for already holds. Task 13
+# prices such an offer lower; te_tax_obl_write records the same test in
+# _maint_only, and a kept maintenance promise earns approval but no trust.
+# KIND and ARG literal, TARGET any value (as for the feasibility triggers).
+# The kind helpers take both parameters and use what their kind needs (an
+# unused parameter is passed elsewhere in the mod: st_res_policy_set_by_hand_base).
+te_tax_obl_is_maintenance = {
+	te_tax_obl_is_maintenance_$KIND$ = { ARG = $ARG$ TARGET = $TARGET$ }
+}
+
+te_tax_obl_is_maintenance_1 = {
+	te_tax_obl_inst_level_$ARG$ >= $TARGET$
+}
+
+te_tax_obl_is_maintenance_2 = {
+	bureaucracy >= 0
+}
+
+te_tax_obl_is_maintenance_3 = {
+	NOT = { te_tax_obl_wages_above_$ARG$ = yes }
+}
+
+te_tax_obl_is_maintenance_4 = {
+	net_fixed_income > 0
+}
+
 # ---------------------------------------------------------------------------
 # Commands (te_tax_obligation_effects.txt), one custom_tooltip line per
 # condition.
@@ -866,17 +932,18 @@ te_tax_obl_feasible_4 = {
 
 # te_tax_obl_propose = { KIND ARG TARGET IG } may record a promise: a bill is
 # under debate, no pending or binding obligation has the same kind and
-# argument (one promise cannot buy support twice), and a slot is free.
+# argument (one promise cannot buy support twice; two military wage promises
+# never coexist, whatever their levels), and a slot is free.
 te_tax_can_obl_propose = {
 	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
 	custom_tooltip = { text = te_tax_tt_bill_open te_tax_bill_active = yes }
 	custom_tooltip = {
 		text = te_tax_tt_obl_not_duplicate
 		NOR = {
-			AND = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 has_variable = te_tax_o1_kind var:te_tax_o1_kind = $KIND$ var:te_tax_o1_arg = $ARG$ }
-			AND = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 has_variable = te_tax_o2_kind var:te_tax_o2_kind = $KIND$ var:te_tax_o2_arg = $ARG$ }
-			AND = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_kind var:te_tax_o3_kind = $KIND$ var:te_tax_o3_arg = $ARG$ }
-			AND = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_kind var:te_tax_o4_kind = $KIND$ var:te_tax_o4_arg = $ARG$ }
+			AND = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 has_variable = te_tax_o1_kind var:te_tax_o1_kind = $KIND$ OR = { var:te_tax_o1_arg = $ARG$ var:te_tax_o1_kind = 3 } }
+			AND = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 has_variable = te_tax_o2_kind var:te_tax_o2_kind = $KIND$ OR = { var:te_tax_o2_arg = $ARG$ var:te_tax_o2_kind = 3 } }
+			AND = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_kind var:te_tax_o3_kind = $KIND$ OR = { var:te_tax_o3_arg = $ARG$ var:te_tax_o3_kind = 3 } }
+			AND = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_kind var:te_tax_o4_kind = $KIND$ OR = { var:te_tax_o4_arg = $ARG$ var:te_tax_o4_kind = 3 } }
 		}
 	}
 	custom_tooltip = {
@@ -890,10 +957,10 @@ te_tax_can_obl_propose = {
 	}
 }
 
-# Obligation N may be renegotiated: it binds the country (bound to a passed
-# bill, delivering or maintaining). A pending one is renegotiated by revising
-# the bill.
+# Obligation N may be renegotiated: it is in force (delivering or
+# maintaining). A pending one changes with the bill; a bound one waiting for
+# its bill's commencement lapses only if that package is dropped.
 te_tax_can_obl_renegotiate = {
 	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
-	custom_tooltip = { text = te_tax_tt_obl_binding te_tax_obl_binding = { N = $N$ } }
+	custom_tooltip = { text = te_tax_tt_obl_active te_tax_obl_active = { N = $N$ } }
 }

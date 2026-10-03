@@ -24,6 +24,9 @@
 #   _deadline  the month by which it must be delivered (-1 until it starts)
 #   _maint_end the month its maintenance ends (-1 until delivered)
 #   _streak    kind 4: consecutive monthly checks in surplus
+#   _fails     consecutive failing checks during maintenance
+#   _maint_only 1 if what it asks for already held when it was proposed: it
+#              maintains existing provision (labelled so) and earns no trust
 #   _slot      the package slot a bound obligation waits on
 #              (te_tax_slot_id_<slot>); 0 while pending
 #   _rev       the bill revision it was proposed under
@@ -45,17 +48,23 @@
 #              (te_tax_gen_supersede_<slot>) releases its bound obligations,
 #              with no breach and one history entry (kind 14).
 #   monthly    te_tax_obl_check_month, from the processor (te_tax.1) only,
-#              after the month's commencements and before the sync:
-#              delivering -> maintaining once delivered, breached once the
-#              deadline month passes undelivered; maintaining -> breached the
-#              month its condition fails, fulfilled at the end of its term.
+#              after the month's commencements and before the sync. Trust
+#              that has not changed for 24 months moves a step toward 0.
+#              Delivering -> maintaining once delivered; a kind-1 promise's
+#              deadline moves a month later for each month of bureaucracy
+#              deficit (a deficit never breaches it); otherwise breached once
+#              the deadline month passes undelivered. Maintaining -> breached
+#              after te_tax_obl_grace_<kind> consecutive failing checks (1 for
+#              kinds 1 and 3, 3 for kinds 2 and 4), fulfilled at the end of
+#              its term.
 #   outcomes   each applied once, by the transition out of the state that
-#              guards it: fulfilled +3 approval (ig_approval_positive_modifier)
-#              and trust +1; breached -5 (ig_approval_very_negative_modifier)
-#              and trust -1; renegotiated (te_tax_cmd_obl_renegotiate, a
-#              button) -2 (te_tax_obl_renegotiated_modifier), no trust change.
-#              Trust feeds the support model's trust reason
-#              (te_tax_trust_reason_<ig>, 10 points a step, clamped).
+#              guards it: fulfilled +3 approval (te_tax_obl_kept_modifier) and
+#              trust +1 (none for a maintenance promise); breached -5
+#              (te_tax_obl_broken_modifier) and trust -1; renegotiated
+#              (te_tax_cmd_obl_renegotiate, a button, only once in force)
+#              -2 (te_tax_obl_renegotiated_modifier) and trust -1. Trust feeds
+#              the support model's trust reason (te_tax_trust_reason_<ig>, 10
+#              points a step, clamped).
 #
 # Nothing here sets an institution's level, a wage level or a budget: an
 # obligation records what was promised and checks what happened. Every entry
@@ -111,9 +120,21 @@ te_tax_obl_write = {
 	set_variable = { name = te_tax_o$N$_deadline value = -1 }
 	set_variable = { name = te_tax_o$N$_maint_end value = -1 }
 	set_variable = { name = te_tax_o$N$_streak value = 0 }
+	set_variable = { name = te_tax_o$N$_fails value = 0 }
 	# What the promise starts from, for the panel while it is pending; recorded
 	# again when its clock starts.
 	te_tax_obl_record_baseline = { N = $N$ }
+	# Spec §7.2: existing provision may be promised protection, but is labelled
+	# maintenance. What it asks for already holds: it maintains, and keeping it
+	# earns approval but no trust (te_tax_obl_is_maintenance is the same test
+	# before a slot exists).
+	if = {
+		limit = { te_tax_obl_holds = { N = $N$ } }
+		set_variable = { name = te_tax_o$N$_maint_only value = 1 }
+	}
+	else = {
+		set_variable = { name = te_tax_o$N$_maint_only value = 0 }
+	}
 	set_variable = { name = te_tax_o$N$_state value = 1 }
 	debug_log = "TE_TAX obl_proposed a promise was recorded on the bill under debate; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	set_variable = { name = te_tax_o$N$_on value = 1 }
@@ -327,6 +348,7 @@ te_tax_obl_start_one = {
 		change_variable = { name = te_tax_o$N$_deadline add = var:te_tax_now }
 		set_variable = { name = te_tax_o$N$_maint_end value = -1 }
 		set_variable = { name = te_tax_o$N$_streak value = 0 }
+		set_variable = { name = te_tax_o$N$_fails value = 0 }
 		set_variable = { name = te_tax_o$N$_state value = 2 }
 		debug_log = "TE_TAX obl_started a promise's delivery clock started with its bill; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}
@@ -343,6 +365,9 @@ te_tax_obl_check_month = {
 			has_variable = te_tax_schema
 			has_variable = te_tax_now
 		}
+		# An old record fades: trust unchanged for te_tax_obl_trust_recover_months
+		# moves a step toward 0.
+		te_tax_gen_trust_recover = yes
 		te_tax_obl_check_one = { N = 1 }
 		te_tax_obl_check_one = { N = 2 }
 		te_tax_obl_check_one = { N = 3 }
@@ -351,10 +376,15 @@ te_tax_obl_check_month = {
 }
 
 # Delivering: kind 4 first counts its surplus streak (a deficit month resets
-# it). Delivered -> maintaining; otherwise, from its deadline month on, a
-# breach. Maintaining: a month whose condition fails is a breach; the end of
-# the term, with the condition still met, fulfils it. Each transition leaves
-# the state that guards it, so it happens once.
+# it). Delivered -> maintaining. Otherwise a kind-1 promise in a month of
+# bureaucracy deficit has its deadline moved a month later, before the
+# deadline is tested: an institution does not grow during a deficit, so the
+# deficit pauses the clock and can never breach it (spec §8 step 6).
+# Otherwise, from its deadline month on, a breach. Maintaining: a month whose
+# condition holds resets the failing count, and at the end of the term
+# fulfils it; a failing month adds one, and te_tax_obl_grace_<kind>
+# consecutive ones breach it. Each transition leaves the state that guards
+# it, so it happens once.
 te_tax_obl_check_one = {
 	if = {
 		limit = { var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = 2 }
@@ -373,6 +403,14 @@ te_tax_obl_check_one = {
 			te_tax_obl_begin_maintenance = { N = $N$ }
 		}
 		else_if = {
+			limit = {
+				var:te_tax_o$N$_kind = 1
+				bureaucracy < 0
+			}
+			change_variable = { name = te_tax_o$N$_deadline add = 1 }
+			debug_log = "TE_TAX obl_paused a bureaucracy deficit moved an institution promise's deadline a month later; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else_if = {
 			limit = { var:te_tax_o$N$_deadline <= var:te_tax_now }
 			te_tax_obl_breach = { N = $N$ }
 		}
@@ -380,12 +418,22 @@ te_tax_obl_check_one = {
 	else_if = {
 		limit = { var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = 3 }
 		if = {
-			limit = { NOT = { te_tax_obl_holds = { N = $N$ } } }
-			te_tax_obl_breach = { N = $N$ }
+			limit = { te_tax_obl_holds = { N = $N$ } }
+			set_variable = { name = te_tax_o$N$_fails value = 0 }
+			if = {
+				limit = { var:te_tax_o$N$_maint_end <= var:te_tax_now }
+				te_tax_obl_fulfil = { N = $N$ }
+			}
 		}
-		else_if = {
-			limit = { var:te_tax_o$N$_maint_end <= var:te_tax_now }
-			te_tax_obl_fulfil = { N = $N$ }
+		else = {
+			change_variable = { name = te_tax_o$N$_fails add = 1 }
+			if = {
+				limit = { te_tax_obl_grace_reached = { N = $N$ } }
+				te_tax_obl_breach = { N = $N$ }
+			}
+			else = {
+				debug_log = "TE_TAX obl_failing a maintained promise failed this month's check, within its grace; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
 		}
 	}
 }
@@ -394,6 +442,7 @@ te_tax_obl_check_one = {
 # month.
 te_tax_obl_begin_maintenance = {
 	set_variable = { name = te_tax_o$N$_state value = 3 }
+	set_variable = { name = te_tax_o$N$_fails value = 0 }
 	if = {
 		limit = { var:te_tax_o$N$_kind = 4 }
 		set_variable = { name = te_tax_o$N$_maint_end value = te_tax_obl_maint_months_fiscal }
@@ -406,28 +455,36 @@ te_tax_obl_begin_maintenance = {
 }
 
 # Kept for its whole term: the slot is freed, the beneficiary approves
-# (+3, ig_approval_positive_modifier) and trusts the government a step more.
+# (+3, te_tax_obl_kept_modifier) and, unless the promise only maintained what
+# already held, trusts the government a step more.
 te_tax_obl_fulfil = {
 	if = {
 		limit = { var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = 3 }
 		set_variable = { name = te_tax_o$N$_state value = 4 }
 		set_variable = { name = te_tax_o$N$_on value = 0 }
-		te_tax_gen_obl_approval = { N = $N$ MODIFIER = ig_approval_positive_modifier }
-		te_tax_gen_obl_trust = { N = $N$ DELTA = 1 }
+		te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_kept_modifier }
+		if = {
+			limit = {
+				has_variable = te_tax_o$N$_maint_only
+				var:te_tax_o$N$_maint_only = 0
+			}
+			te_tax_gen_obl_trust = { N = $N$ DELTA = 1 }
+		}
 		te_tax_history_push = { KIND = 11 SLOT = none }
 		debug_log = "TE_TAX obl_fulfilled a promise was kept for its whole term; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}
 }
 
-# Missed its deadline, or failed during its term: the slot is freed, the
-# beneficiary disapproves (-5, ig_approval_very_negative_modifier) and trusts
-# the government a step less. The tax package stays in force (spec §8 step 6).
+# Missed its deadline, or failed during its term beyond its grace: the slot is
+# freed, the beneficiary disapproves (-5, te_tax_obl_broken_modifier) and
+# trusts the government a step less. The tax package stays in force (spec §8
+# step 6).
 te_tax_obl_breach = {
 	if = {
 		limit = { var:te_tax_o$N$_on = 1 OR = { var:te_tax_o$N$_state = 2 var:te_tax_o$N$_state = 3 } }
 		set_variable = { name = te_tax_o$N$_state value = 5 }
 		set_variable = { name = te_tax_o$N$_on value = 0 }
-		te_tax_gen_obl_approval = { N = $N$ MODIFIER = ig_approval_very_negative_modifier }
+		te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_broken_modifier }
 		te_tax_gen_obl_trust = { N = $N$ DELTA = -1 }
 		te_tax_history_push = { KIND = 12 SLOT = none }
 		debug_log = "TE_TAX obl_breached a promise missed its deadline or failed during its term; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
@@ -437,10 +494,12 @@ te_tax_obl_breach = {
 # ----------------------------------------------------------------------------
 # Renegotiation (a button on the promise's row; the AI may call it too)
 # ----------------------------------------------------------------------------
-# An openly renegotiated promise instead of a breach: the slot is freed and
-# the beneficiary disapproves a little (-2, te_tax_obl_renegotiated_modifier);
-# its trust is unchanged. N: the slot, 1 to 4 (te_tax_cmd_obl_renegotiate_sgui's
-# op).
+# An openly renegotiated promise instead of a breach, only once it is in force
+# (delivering or maintaining): the slot is freed, the beneficiary disapproves
+# less than for a breach (-2, te_tax_obl_renegotiated_modifier) and trusts the
+# government a step less, as for a breach. A bound promise waiting for its
+# bill's commencement cannot be renegotiated: it lapses only if its package is
+# dropped. N: the slot, 1 to 4 (te_tax_cmd_obl_renegotiate_sgui's op).
 te_tax_cmd_obl_renegotiate = {
 	if = {
 		limit = { te_tax_can_obl_renegotiate = { N = $N$ } }
@@ -448,6 +507,7 @@ te_tax_cmd_obl_renegotiate = {
 		set_variable = { name = te_tax_o$N$_state value = 6 }
 		set_variable = { name = te_tax_o$N$_on value = 0 }
 		te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_renegotiated_modifier }
+		te_tax_gen_obl_trust = { N = $N$ DELTA = -1 }
 		te_tax_history_push = { KIND = 13 SLOT = none }
 		debug_log = "TE_TAX obl_renegotiated a promise was renegotiated and its slot freed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}

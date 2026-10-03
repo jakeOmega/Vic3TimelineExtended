@@ -34,15 +34,37 @@ te_tax_obl_deadline_wages = 1
 te_tax_obl_deadline_fiscal = 24
 te_tax_obl_surplus_months = 6
 
-# Once delivered, kinds 1 to 3 are kept for 24 months and kind 4 for 12; a
-# month in which the condition fails during that time is a breach.
+# Once delivered, kinds 1 to 3 are kept for 24 months and kind 4 for 12.
 te_tax_obl_maint_months = 24
 te_tax_obl_maint_months_fiscal = 12
+
+# During that term a promise is breached once its condition has failed this
+# many consecutive monthly checks (te_tax_o<n>_fails; a month that holds
+# resets the count). A level or an action (kinds 1 and 3) is the government's
+# own doing: the first failing check breaches it. An outcome (kinds 2 and 4,
+# the bureaucracy and the fixed budget) can slip for reasons outside its
+# control: it breaches at the third consecutive failing check (spec §7.2:
+# "beyond their grace period"; §8: "sustained failure").
+te_tax_obl_grace_1 = 1
+te_tax_obl_grace_2 = 3
+te_tax_obl_grace_3 = 1
+te_tax_obl_grace_4 = 3
 
 # Days an interest group's reaction to a kept, broken or renegotiated promise
 # lasts, decaying (ig_approval_effect): the same 180 days as the reaction of a
 # group that opposed a passed bill (te_tax_opposed_approval_days).
 te_tax_obl_approval_days = 180
+
+# A group's trust in the government's word (te_tax_trust_<ig>) moves one step
+# back toward 0 after this many months without a kept, broken or renegotiated
+# promise (te_tax_gen_trust_recover, from the monthly obligations pass): an
+# old record fades.
+te_tax_obl_trust_recover_months = 24
+# The latest month of a trust's last change from which it recovers now.
+te_tax_obl_trust_recover_before = {
+	value = te_history_month_index
+	subtract = te_tax_obl_trust_recover_months
+}
 
 # ---------------------------------------------------------------------------
 # Kind 1: the institution an obligation's _arg names (1 Education, 2 Health

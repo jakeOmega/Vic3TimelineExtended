@@ -3571,10 +3571,11 @@ te_tax_disp_ig_trust = {
 }
 
 # Policy obligations (plan Task 12): per slot <n>, on; state (1 pending, 7 bound, 2
-# delivering, 3 maintaining), kind, arg, target, beneficiary group, baseline and the kind-4
-# surplus streak; the deadline and the end of maintenance as months with their year and
-# month. A payload view reads only while the slot is on: a freed slot's payload stays,
-# and a civil war's winner may hold a loser's.
+# delivering, 3 maintaining), kind, arg, target, beneficiary group, baseline, the kind-4
+# surplus streak, the failing maintenance checks and their limit (grace), whether it
+# maintains existing provision; the deadline and the end of maintenance as months with
+# their year and month. A payload view reads only while the slot is on: a freed slot's
+# payload stays, and a civil war's winner may hold a loser's.
 te_tax_view_o1_on = {
 	value = 0
 	if = { limit = { has_variable = te_tax_o1_on } value = var:te_tax_o1_on }
@@ -3606,6 +3607,21 @@ te_tax_view_o1_baseline = {
 te_tax_view_o1_streak = {
 	value = 0
 	if = { limit = { has_variable = te_tax_o1_streak has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_streak }
+}
+te_tax_view_o1_fails = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_fails has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_fails }
+}
+te_tax_view_o1_maint_only = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_maint_only has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_maint_only }
+}
+te_tax_view_o1_grace = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 has_variable = te_tax_o1_kind var:te_tax_o1_kind = 1 } value = te_tax_obl_grace_1 }
+	if = { limit = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 has_variable = te_tax_o1_kind var:te_tax_o1_kind = 2 } value = te_tax_obl_grace_2 }
+	if = { limit = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 has_variable = te_tax_o1_kind var:te_tax_o1_kind = 3 } value = te_tax_obl_grace_3 }
+	if = { limit = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 has_variable = te_tax_o1_kind var:te_tax_o1_kind = 4 } value = te_tax_obl_grace_4 }
 }
 te_tax_view_o1_deadline = {
 	value = -1
@@ -3689,6 +3705,21 @@ te_tax_view_o2_streak = {
 	value = 0
 	if = { limit = { has_variable = te_tax_o2_streak has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_streak }
 }
+te_tax_view_o2_fails = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_fails has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_fails }
+}
+te_tax_view_o2_maint_only = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_maint_only has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_maint_only }
+}
+te_tax_view_o2_grace = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 has_variable = te_tax_o2_kind var:te_tax_o2_kind = 1 } value = te_tax_obl_grace_1 }
+	if = { limit = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 has_variable = te_tax_o2_kind var:te_tax_o2_kind = 2 } value = te_tax_obl_grace_2 }
+	if = { limit = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 has_variable = te_tax_o2_kind var:te_tax_o2_kind = 3 } value = te_tax_obl_grace_3 }
+	if = { limit = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 has_variable = te_tax_o2_kind var:te_tax_o2_kind = 4 } value = te_tax_obl_grace_4 }
+}
 te_tax_view_o2_deadline = {
 	value = -1
 	if = { limit = { has_variable = te_tax_o2_deadline has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_deadline }
@@ -3771,6 +3802,21 @@ te_tax_view_o3_streak = {
 	value = 0
 	if = { limit = { has_variable = te_tax_o3_streak has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_streak }
 }
+te_tax_view_o3_fails = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_fails has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_fails }
+}
+te_tax_view_o3_maint_only = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_maint_only has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_maint_only }
+}
+te_tax_view_o3_grace = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_kind var:te_tax_o3_kind = 1 } value = te_tax_obl_grace_1 }
+	if = { limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_kind var:te_tax_o3_kind = 2 } value = te_tax_obl_grace_2 }
+	if = { limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_kind var:te_tax_o3_kind = 3 } value = te_tax_obl_grace_3 }
+	if = { limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_kind var:te_tax_o3_kind = 4 } value = te_tax_obl_grace_4 }
+}
 te_tax_view_o3_deadline = {
 	value = -1
 	if = { limit = { has_variable = te_tax_o3_deadline has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_deadline }
@@ -3852,6 +3898,21 @@ te_tax_view_o4_baseline = {
 te_tax_view_o4_streak = {
 	value = 0
 	if = { limit = { has_variable = te_tax_o4_streak has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_streak }
+}
+te_tax_view_o4_fails = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_fails has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_fails }
+}
+te_tax_view_o4_maint_only = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_maint_only has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_maint_only }
+}
+te_tax_view_o4_grace = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_kind var:te_tax_o4_kind = 1 } value = te_tax_obl_grace_1 }
+	if = { limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_kind var:te_tax_o4_kind = 2 } value = te_tax_obl_grace_2 }
+	if = { limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_kind var:te_tax_o4_kind = 3 } value = te_tax_obl_grace_3 }
+	if = { limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_kind var:te_tax_o4_kind = 4 } value = te_tax_obl_grace_4 }
 }
 te_tax_view_o4_deadline = {
 	value = -1

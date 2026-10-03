@@ -690,6 +690,18 @@ te_tax_obl_ig_1 = {
 	}
 }
 
+te_tax_obl_mode_1 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o1_maint_only = 1 }
+		localization_key = te_tax_obl_mode_maintain
+	}
+	text = {
+		localization_key = te_tax_obl_mode_reach
+	}
+}
+
 te_tax_obl_what_1 = {
 	type = country
 	random_valid = no
@@ -770,6 +782,10 @@ te_tax_obl_state_1 = {
 		localization_key = te_tax_obl_st_due_1
 	}
 	text = {
+		trigger = { te_tax_view_o1_state = 3 te_tax_view_o1_fails > 0 }
+		localization_key = te_tax_obl_st_failing_1
+	}
+	text = {
 		trigger = { te_tax_view_o1_state = 3 }
 		localization_key = te_tax_obl_st_maint_1
 	}
@@ -815,6 +831,18 @@ te_tax_obl_ig_2 = {
 	}
 	text = {
 		localization_key = te_tax_obl_ig_none
+	}
+}
+
+te_tax_obl_mode_2 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o2_maint_only = 1 }
+		localization_key = te_tax_obl_mode_maintain
+	}
+	text = {
+		localization_key = te_tax_obl_mode_reach
 	}
 }
 
@@ -898,6 +926,10 @@ te_tax_obl_state_2 = {
 		localization_key = te_tax_obl_st_due_2
 	}
 	text = {
+		trigger = { te_tax_view_o2_state = 3 te_tax_view_o2_fails > 0 }
+		localization_key = te_tax_obl_st_failing_2
+	}
+	text = {
 		trigger = { te_tax_view_o2_state = 3 }
 		localization_key = te_tax_obl_st_maint_2
 	}
@@ -943,6 +975,18 @@ te_tax_obl_ig_3 = {
 	}
 	text = {
 		localization_key = te_tax_obl_ig_none
+	}
+}
+
+te_tax_obl_mode_3 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o3_maint_only = 1 }
+		localization_key = te_tax_obl_mode_maintain
+	}
+	text = {
+		localization_key = te_tax_obl_mode_reach
 	}
 }
 
@@ -1026,6 +1070,10 @@ te_tax_obl_state_3 = {
 		localization_key = te_tax_obl_st_due_3
 	}
 	text = {
+		trigger = { te_tax_view_o3_state = 3 te_tax_view_o3_fails > 0 }
+		localization_key = te_tax_obl_st_failing_3
+	}
+	text = {
 		trigger = { te_tax_view_o3_state = 3 }
 		localization_key = te_tax_obl_st_maint_3
 	}
@@ -1071,6 +1119,18 @@ te_tax_obl_ig_4 = {
 	}
 	text = {
 		localization_key = te_tax_obl_ig_none
+	}
+}
+
+te_tax_obl_mode_4 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o4_maint_only = 1 }
+		localization_key = te_tax_obl_mode_maintain
+	}
+	text = {
+		localization_key = te_tax_obl_mode_reach
 	}
 }
 
@@ -1152,6 +1212,10 @@ te_tax_obl_state_4 = {
 	text = {
 		trigger = { te_tax_view_o4_state = 2 }
 		localization_key = te_tax_obl_st_due_4
+	}
+	text = {
+		trigger = { te_tax_view_o4_state = 3 te_tax_view_o4_fails > 0 }
+		localization_key = te_tax_obl_st_failing_4
 	}
 	text = {
 		trigger = { te_tax_view_o4_state = 3 }

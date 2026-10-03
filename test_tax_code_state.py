@@ -623,8 +623,8 @@ class DisplayValueTest(unittest.TestCase):
         # The policy obligations (Task 12): per slot, and the overview's counts.
         for n in gen.OBLIGATION_SLOTS:
             want |= {f"te_tax_view_o{n}_{field}" for field in (
-                "on", "state", "kind", "arg", "target", "ig", "baseline", "streak", "deadline", "deadline_y",
-                "deadline_mo", "maint_end", "maint_end_y", "maint_end_mo")}
+                "on", "state", "kind", "arg", "target", "ig", "baseline", "streak", "fails", "maint_only", "grace",
+                "deadline", "deadline_y", "deadline_mo", "maint_end", "maint_end_y", "maint_end_mo")}
         want |= {"te_tax_view_obl_binding", "te_tax_view_obl_pending"}
         self.assertEqual(set(self.views), want)
 

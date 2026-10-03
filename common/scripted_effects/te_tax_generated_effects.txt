@@ -175,6 +175,14 @@ te_tax_gen_init_obligations = {
 	if = { limit = { NOT = { has_variable = te_tax_trust_petty_bourgeoisie } } set_variable = { name = te_tax_trust_petty_bourgeoisie value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_trust_rural_folk } } set_variable = { name = te_tax_trust_rural_folk value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_trust_trade_unions } } set_variable = { name = te_tax_trust_trade_unions value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_armed_forces_month } } set_variable = { name = te_tax_trust_armed_forces_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_devout_month } } set_variable = { name = te_tax_trust_devout_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_industrialists_month } } set_variable = { name = te_tax_trust_industrialists_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_intelligentsia_month } } set_variable = { name = te_tax_trust_intelligentsia_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_landowners_month } } set_variable = { name = te_tax_trust_landowners_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_petty_bourgeoisie_month } } set_variable = { name = te_tax_trust_petty_bourgeoisie_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_rural_folk_month } } set_variable = { name = te_tax_trust_rural_folk_month value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_trade_unions_month } } set_variable = { name = te_tax_trust_trade_unions_month value = -1 } }
 }
 
 # Wage tax: leaves exactly amendment_te_tax_wage_<te_tax_en_wage> on the
@@ -3730,6 +3738,14 @@ te_tax_gen_copy_code = {
 	te_tax_copy_token = { NAME = te_tax_trust_petty_bourgeoisie }
 	te_tax_copy_token = { NAME = te_tax_trust_rural_folk }
 	te_tax_copy_token = { NAME = te_tax_trust_trade_unions }
+	te_tax_copy_token = { NAME = te_tax_trust_armed_forces_month }
+	te_tax_copy_token = { NAME = te_tax_trust_devout_month }
+	te_tax_copy_token = { NAME = te_tax_trust_industrialists_month }
+	te_tax_copy_token = { NAME = te_tax_trust_intelligentsia_month }
+	te_tax_copy_token = { NAME = te_tax_trust_landowners_month }
+	te_tax_copy_token = { NAME = te_tax_trust_petty_bourgeoisie_month }
+	te_tax_copy_token = { NAME = te_tax_trust_rural_folk_month }
+	te_tax_copy_token = { NAME = te_tax_trust_trade_unions_month }
 }
 
 # Outbreak copy of the policy obligations (plan Task 12): the payload of every slot whose
@@ -3748,6 +3764,8 @@ te_tax_gen_copy_obligations = {
 		te_tax_copy_token = { NAME = te_tax_o1_deadline }
 		te_tax_copy_token = { NAME = te_tax_o1_maint_end }
 		te_tax_copy_token = { NAME = te_tax_o1_streak }
+		te_tax_copy_token = { NAME = te_tax_o1_fails }
+		te_tax_copy_token = { NAME = te_tax_o1_maint_only }
 		te_tax_copy_token = { NAME = te_tax_o1_slot }
 		te_tax_copy_token = { NAME = te_tax_o1_rev }
 	}
@@ -3761,6 +3779,8 @@ te_tax_gen_copy_obligations = {
 		te_tax_copy_token = { NAME = te_tax_o2_deadline }
 		te_tax_copy_token = { NAME = te_tax_o2_maint_end }
 		te_tax_copy_token = { NAME = te_tax_o2_streak }
+		te_tax_copy_token = { NAME = te_tax_o2_fails }
+		te_tax_copy_token = { NAME = te_tax_o2_maint_only }
 		te_tax_copy_token = { NAME = te_tax_o2_slot }
 		te_tax_copy_token = { NAME = te_tax_o2_rev }
 	}
@@ -3774,6 +3794,8 @@ te_tax_gen_copy_obligations = {
 		te_tax_copy_token = { NAME = te_tax_o3_deadline }
 		te_tax_copy_token = { NAME = te_tax_o3_maint_end }
 		te_tax_copy_token = { NAME = te_tax_o3_streak }
+		te_tax_copy_token = { NAME = te_tax_o3_fails }
+		te_tax_copy_token = { NAME = te_tax_o3_maint_only }
 		te_tax_copy_token = { NAME = te_tax_o3_slot }
 		te_tax_copy_token = { NAME = te_tax_o3_rev }
 	}
@@ -3787,6 +3809,8 @@ te_tax_gen_copy_obligations = {
 		te_tax_copy_token = { NAME = te_tax_o4_deadline }
 		te_tax_copy_token = { NAME = te_tax_o4_maint_end }
 		te_tax_copy_token = { NAME = te_tax_o4_streak }
+		te_tax_copy_token = { NAME = te_tax_o4_fails }
+		te_tax_copy_token = { NAME = te_tax_o4_maint_only }
 		te_tax_copy_token = { NAME = te_tax_o4_slot }
 		te_tax_copy_token = { NAME = te_tax_o4_rev }
 	}
@@ -3812,6 +3836,14 @@ te_tax_gen_clear_obligations = {
 	set_variable = { name = te_tax_trust_petty_bourgeoisie value = 0 }
 	set_variable = { name = te_tax_trust_rural_folk value = 0 }
 	set_variable = { name = te_tax_trust_trade_unions value = 0 }
+	set_variable = { name = te_tax_trust_armed_forces_month value = -1 }
+	set_variable = { name = te_tax_trust_devout_month value = -1 }
+	set_variable = { name = te_tax_trust_industrialists_month value = -1 }
+	set_variable = { name = te_tax_trust_intelligentsia_month value = -1 }
+	set_variable = { name = te_tax_trust_landowners_month value = -1 }
+	set_variable = { name = te_tax_trust_petty_bourgeoisie_month value = -1 }
+	set_variable = { name = te_tax_trust_rural_folk_month value = -1 }
+	set_variable = { name = te_tax_trust_trade_unions_month value = -1 }
 }
 
 # Outbreak copy of slot a's package: every payload field te_tax_gen_store_a

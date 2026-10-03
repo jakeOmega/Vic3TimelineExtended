@@ -1194,9 +1194,9 @@ te_tax_gen_oppose_approval = {
 
 # Policy obligations (plan Task 12; te_tax_obligation_effects.txt): the beneficiary group of
 # obligation slot N (te_tax_o<N>_ig, te_tax_ig_id_<ig>) reacts once per transition. Approval
-# goes through the shared ig_approval_effect with MODIFIER (fulfilled
-# ig_approval_positive_modifier +3, breached ig_approval_very_negative_modifier -5,
-# renegotiated te_tax_obl_renegotiated_modifier -2), decaying over te_tax_obl_approval_days.
+# goes through the shared ig_approval_effect with MODIFIER (fulfilled te_tax_obl_kept_modifier
+# +3, breached te_tax_obl_broken_modifier -5, renegotiated te_tax_obl_renegotiated_modifier
+# -2; te_tax_obligation_modifiers.txt), decaying over te_tax_obl_approval_days.
 te_tax_gen_obl_approval = {
 	if = {
 		limit = { var:te_tax_o$N$_ig = 1 }
@@ -1232,47 +1232,101 @@ te_tax_gen_obl_approval = {
 	}
 }
 
-# Trust (te_tax_trust_<ig>): DELTA (+1 kept, -1 broken), held within -4..4; the
-# support model's trust reason is 10 points a step (te_tax_trust_reason_<ig>).
+# Trust (te_tax_trust_<ig>): DELTA (+1 kept, -1 broken or renegotiated), held within
+# -4..4, and the month of the change (te_tax_trust_<ig>_month); the support model's
+# trust reason is 10 points a step (te_tax_trust_reason_<ig>).
 te_tax_gen_obl_trust = {
 	if = {
 		limit = { var:te_tax_o$N$_ig = 1 }
 		change_variable = { name = te_tax_trust_armed_forces add = $DELTA$ }
 		clamp_variable = { name = te_tax_trust_armed_forces min = -4 max = 4 }
+		set_variable = { name = te_tax_trust_armed_forces_month value = te_history_month_index }
 	}
 	else_if = {
 		limit = { var:te_tax_o$N$_ig = 2 }
 		change_variable = { name = te_tax_trust_devout add = $DELTA$ }
 		clamp_variable = { name = te_tax_trust_devout min = -4 max = 4 }
+		set_variable = { name = te_tax_trust_devout_month value = te_history_month_index }
 	}
 	else_if = {
 		limit = { var:te_tax_o$N$_ig = 3 }
 		change_variable = { name = te_tax_trust_industrialists add = $DELTA$ }
 		clamp_variable = { name = te_tax_trust_industrialists min = -4 max = 4 }
+		set_variable = { name = te_tax_trust_industrialists_month value = te_history_month_index }
 	}
 	else_if = {
 		limit = { var:te_tax_o$N$_ig = 4 }
 		change_variable = { name = te_tax_trust_intelligentsia add = $DELTA$ }
 		clamp_variable = { name = te_tax_trust_intelligentsia min = -4 max = 4 }
+		set_variable = { name = te_tax_trust_intelligentsia_month value = te_history_month_index }
 	}
 	else_if = {
 		limit = { var:te_tax_o$N$_ig = 5 }
 		change_variable = { name = te_tax_trust_landowners add = $DELTA$ }
 		clamp_variable = { name = te_tax_trust_landowners min = -4 max = 4 }
+		set_variable = { name = te_tax_trust_landowners_month value = te_history_month_index }
 	}
 	else_if = {
 		limit = { var:te_tax_o$N$_ig = 6 }
 		change_variable = { name = te_tax_trust_petty_bourgeoisie add = $DELTA$ }
 		clamp_variable = { name = te_tax_trust_petty_bourgeoisie min = -4 max = 4 }
+		set_variable = { name = te_tax_trust_petty_bourgeoisie_month value = te_history_month_index }
 	}
 	else_if = {
 		limit = { var:te_tax_o$N$_ig = 7 }
 		change_variable = { name = te_tax_trust_rural_folk add = $DELTA$ }
 		clamp_variable = { name = te_tax_trust_rural_folk min = -4 max = 4 }
+		set_variable = { name = te_tax_trust_rural_folk_month value = te_history_month_index }
 	}
 	else_if = {
 		limit = { var:te_tax_o$N$_ig = 8 }
 		change_variable = { name = te_tax_trust_trade_unions add = $DELTA$ }
 		clamp_variable = { name = te_tax_trust_trade_unions min = -4 max = 4 }
+		set_variable = { name = te_tax_trust_trade_unions_month value = te_history_month_index }
+	}
+}
+
+# Trust recovers (te_tax_obl_check_month, monthly): a group's trust that has not changed for
+# te_tax_obl_trust_recover_months moves one step toward 0, and the step counts as its change.
+te_tax_gen_trust_recover = {
+	if = {
+		limit = { has_variable = te_tax_trust_armed_forces has_variable = te_tax_trust_armed_forces_month var:te_tax_trust_armed_forces_month <= te_tax_obl_trust_recover_before }
+		if = { limit = { var:te_tax_trust_armed_forces > 0 } change_variable = { name = te_tax_trust_armed_forces add = -1 } set_variable = { name = te_tax_trust_armed_forces_month value = te_history_month_index } }
+		else_if = { limit = { var:te_tax_trust_armed_forces < 0 } change_variable = { name = te_tax_trust_armed_forces add = 1 } set_variable = { name = te_tax_trust_armed_forces_month value = te_history_month_index } }
+	}
+	if = {
+		limit = { has_variable = te_tax_trust_devout has_variable = te_tax_trust_devout_month var:te_tax_trust_devout_month <= te_tax_obl_trust_recover_before }
+		if = { limit = { var:te_tax_trust_devout > 0 } change_variable = { name = te_tax_trust_devout add = -1 } set_variable = { name = te_tax_trust_devout_month value = te_history_month_index } }
+		else_if = { limit = { var:te_tax_trust_devout < 0 } change_variable = { name = te_tax_trust_devout add = 1 } set_variable = { name = te_tax_trust_devout_month value = te_history_month_index } }
+	}
+	if = {
+		limit = { has_variable = te_tax_trust_industrialists has_variable = te_tax_trust_industrialists_month var:te_tax_trust_industrialists_month <= te_tax_obl_trust_recover_before }
+		if = { limit = { var:te_tax_trust_industrialists > 0 } change_variable = { name = te_tax_trust_industrialists add = -1 } set_variable = { name = te_tax_trust_industrialists_month value = te_history_month_index } }
+		else_if = { limit = { var:te_tax_trust_industrialists < 0 } change_variable = { name = te_tax_trust_industrialists add = 1 } set_variable = { name = te_tax_trust_industrialists_month value = te_history_month_index } }
+	}
+	if = {
+		limit = { has_variable = te_tax_trust_intelligentsia has_variable = te_tax_trust_intelligentsia_month var:te_tax_trust_intelligentsia_month <= te_tax_obl_trust_recover_before }
+		if = { limit = { var:te_tax_trust_intelligentsia > 0 } change_variable = { name = te_tax_trust_intelligentsia add = -1 } set_variable = { name = te_tax_trust_intelligentsia_month value = te_history_month_index } }
+		else_if = { limit = { var:te_tax_trust_intelligentsia < 0 } change_variable = { name = te_tax_trust_intelligentsia add = 1 } set_variable = { name = te_tax_trust_intelligentsia_month value = te_history_month_index } }
+	}
+	if = {
+		limit = { has_variable = te_tax_trust_landowners has_variable = te_tax_trust_landowners_month var:te_tax_trust_landowners_month <= te_tax_obl_trust_recover_before }
+		if = { limit = { var:te_tax_trust_landowners > 0 } change_variable = { name = te_tax_trust_landowners add = -1 } set_variable = { name = te_tax_trust_landowners_month value = te_history_month_index } }
+		else_if = { limit = { var:te_tax_trust_landowners < 0 } change_variable = { name = te_tax_trust_landowners add = 1 } set_variable = { name = te_tax_trust_landowners_month value = te_history_month_index } }
+	}
+	if = {
+		limit = { has_variable = te_tax_trust_petty_bourgeoisie has_variable = te_tax_trust_petty_bourgeoisie_month var:te_tax_trust_petty_bourgeoisie_month <= te_tax_obl_trust_recover_before }
+		if = { limit = { var:te_tax_trust_petty_bourgeoisie > 0 } change_variable = { name = te_tax_trust_petty_bourgeoisie add = -1 } set_variable = { name = te_tax_trust_petty_bourgeoisie_month value = te_history_month_index } }
+		else_if = { limit = { var:te_tax_trust_petty_bourgeoisie < 0 } change_variable = { name = te_tax_trust_petty_bourgeoisie add = 1 } set_variable = { name = te_tax_trust_petty_bourgeoisie_month value = te_history_month_index } }
+	}
+	if = {
+		limit = { has_variable = te_tax_trust_rural_folk has_variable = te_tax_trust_rural_folk_month var:te_tax_trust_rural_folk_month <= te_tax_obl_trust_recover_before }
+		if = { limit = { var:te_tax_trust_rural_folk > 0 } change_variable = { name = te_tax_trust_rural_folk add = -1 } set_variable = { name = te_tax_trust_rural_folk_month value = te_history_month_index } }
+		else_if = { limit = { var:te_tax_trust_rural_folk < 0 } change_variable = { name = te_tax_trust_rural_folk add = 1 } set_variable = { name = te_tax_trust_rural_folk_month value = te_history_month_index } }
+	}
+	if = {
+		limit = { has_variable = te_tax_trust_trade_unions has_variable = te_tax_trust_trade_unions_month var:te_tax_trust_trade_unions_month <= te_tax_obl_trust_recover_before }
+		if = { limit = { var:te_tax_trust_trade_unions > 0 } change_variable = { name = te_tax_trust_trade_unions add = -1 } set_variable = { name = te_tax_trust_trade_unions_month value = te_history_month_index } }
+		else_if = { limit = { var:te_tax_trust_trade_unions < 0 } change_variable = { name = te_tax_trust_trade_unions add = 1 } set_variable = { name = te_tax_trust_trade_unions_month value = te_history_month_index } }
 	}
 }

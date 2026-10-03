@@ -6,12 +6,18 @@ A promise accepted in a bargain becomes a typed obligation in one of four
 slots (te_tax_o1 .. te_tax_o4). These tests pin, structurally:
 
 * each kind's verifier reads the measure the brief names: (1) the delivered
-  institution level, `institution:<x>.investment >= target`, behind
+  institution level, `institution:<x>.investment` through the guarded
+  te_tax_obl_inst_level_<arg>, compared as `var:target <= level` behind
   `has_institution` (capability ledger: pending P16); (2) `bureaucracy >= 0`;
   (3) `military_wage_level` at or below the promised level; (4)
   `net_fixed_income > 0` for six consecutive monthly checks;
 * a bureaucracy deficit never breaches an institution promise: no kind-1
-  verifier reads `bureaucracy`;
+  verifier reads `bureaucracy`, and a deficit month moves a delivering kind-1
+  promise's deadline a month later before the deadline is tested;
+* maintenance breaches only after te_tax_obl_grace_<kind> consecutive failing
+  checks (1 for kinds 1 and 3, 3 for kinds 2 and 4);
+* renegotiation is open only once a promise is in force and costs trust;
+  a maintenance promise earns no trust when kept; trust fades toward 0;
 * fulfilment, breach and renegotiation each write their state exactly once,
   inside a branch guarded by the state they leave, so each consequence applies
   once per transition;
@@ -172,7 +178,8 @@ class VerifierTest(unittest.TestCase):
             body = norm(block(self.triggers, f"te_tax_obl_inst_met_{arg}"))
             with self.subTest(institution=institution):
                 self.assertIn(f"trigger_if = {{ limit = {{ has_institution = {institution} }} "
-                              f"institution:{institution}.investment >= var:te_tax_o$N$_target }}", body)
+                              f"var:te_tax_o$N$_target <= te_tax_obl_inst_level_{arg} }}", body)
+                self.assertNotIn(".investment", body)
                 self.assertTrue(body.endswith("trigger_else = { always = no }"))
                 self.assertNotIn("expanding_institution", body)
         # The kind-1 branch of the monthly condition dispatches on the institution.
@@ -216,8 +223,10 @@ class VerifierTest(unittest.TestCase):
             self.assertNotIn("bureaucracy", block(self.triggers, f"te_tax_obl_inst_met_{arg}"))
         kind_1 = [rest for lim, rest in trigger_branches(self.holds) if lim == "var:te_tax_o$N$_kind = 1"]
         self.assertNotIn("bureaucracy", kind_1[0])
-        # The check never reads bureaucracy itself: only through te_tax_obl_holds' kind-2 branch.
-        self.assertNotIn("bureaucracy", read(OBL_EFFECTS).replace("te_tax_obl_deadline_bureaucracy", ""))
+        # The check reads bureaucracy only to pause a kind-1 deadline (LifecycleTest), and through
+        # te_tax_obl_holds' kind-2 branch; never to breach.
+        effects = read(OBL_EFFECTS).replace("te_tax_obl_deadline_bureaucracy", "")
+        self.assertEqual(re.findall(r"bureaucracy [<>=]+ \d+", effects), ["bureaucracy < 0"])
 
     def test_never_trigger_if_inside_an_or(self):
         for name in ("te_tax_obl_holds", "te_tax_obl_delivered", "te_tax_obl_wages_met",
@@ -269,6 +278,14 @@ class FeasibilityTest(unittest.TestCase):
         self.assertEqual(body, "value = te_tax_obl_horizon subtract = te_tax_obl_inst_grace "
                                "divide = te_tax_obl_months_per_level floor = yes")
 
+    def test_is_maintenance_for_task_13(self):
+        self.assertEqual(norm(block(self.triggers, "te_tax_obl_is_maintenance")),
+                         "te_tax_obl_is_maintenance_$KIND$ = { ARG = $ARG$ TARGET = $TARGET$ }")
+        for kind, body in ((1, "te_tax_obl_inst_level_$ARG$ >= $TARGET$"), (2, "bureaucracy >= 0"),
+                           (3, "NOT = { te_tax_obl_wages_above_$ARG$ = yes }"), (4, "net_fixed_income > 0")):
+            with self.subTest(kind=kind):
+                self.assertEqual(norm(block(self.triggers, f"te_tax_obl_is_maintenance_{kind}")), body)
+
     def test_kind_3_is_a_cut_not_a_restraint(self):
         body = norm(block(self.triggers, "te_tax_obl_feasible_3"))
         self.assertIn("te_tax_obl_wages_above_$ARG$ = yes", body)
@@ -300,10 +317,16 @@ class ProposeTest(unittest.TestCase):
         fields = dict(names)
         for field, value in (("kind", "$KIND$"), ("arg", "$ARG$"), ("target", "$TARGET$"), ("ig", "$IG$"),
                              ("rev", "var:te_tax_bl_rev"), ("slot", "0"), ("deadline", "-1"),
-                             ("maint_end", "-1"), ("streak", "0"), ("state", str(PENDING)), ("on", "1")):
+                             ("maint_end", "-1"), ("streak", "0"), ("fails", "0"), ("state", str(PENDING)),
+                             ("on", "1")):
             with self.subTest(field=field):
                 self.assertEqual(fields.get(field), value)
         self.assertIn("te_tax_obl_record_baseline = { N = $N$ }", self.write)
+        # Existing provision is labelled maintenance (spec 7.2): what it asks for already holds.
+        self.assertIn("if = { limit = { te_tax_obl_holds = { N = $N$ } } set_variable = { name = te_tax_o$N$_maint_only "
+                      "value = 1 } } else = { set_variable = { name = te_tax_o$N$_maint_only value = 0 } }",
+                      norm(self.write))
+        self.assertLess(self.write.find("te_tax_obl_record_baseline"), self.write.find("te_tax_o$N$_maint_only"))
         last = self.write[self.write.rfind("set_variable"):]
         self.assertTrue(last.startswith("set_variable = { name = te_tax_o$N$_on value = 1 }"))
 
@@ -313,9 +336,10 @@ class ProposeTest(unittest.TestCase):
         self.assertIn("custom_tooltip = { text = te_tax_tt_bill_open te_tax_bill_active = yes }", body)
         self.assertIn("text = te_tax_tt_obl_not_duplicate NOR = {", body)
         for n in SLOTS:
+            # The same kind and argument; two military wage promises never coexist.
             self.assertIn(f"AND = {{ has_variable = te_tax_o{n}_on var:te_tax_o{n}_on = 1 "
                           f"has_variable = te_tax_o{n}_kind var:te_tax_o{n}_kind = $KIND$ "
-                          f"var:te_tax_o{n}_arg = $ARG$ }}", body)
+                          f"OR = {{ var:te_tax_o{n}_arg = $ARG$ var:te_tax_o{n}_kind = 3 }} }}", body)
         self.assertIn("text = te_tax_tt_obl_slot_free OR = { " + " ".join(
             f"var:te_tax_o{n}_on = 0" for n in SLOTS) + " }", body)
 
@@ -431,6 +455,50 @@ class LifecycleTest(unittest.TestCase):
         for n in SLOTS:
             self.assertIn(f"te_tax_obl_check_one = {{ N = {n} }}", month)
 
+    def test_a_deficit_pauses_an_institution_deadline_before_it_is_tested(self):
+        one = block(self.text, "te_tax_obl_check_one")
+        delivering = [nested for kind, nested in branches(one)
+                      if norm(limit_of(nested)) == f"var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = {DELIVERING}"][0]
+        pauses = [nested for kind, nested in branches(delivering)
+                  if norm(limit_of(nested)) == "var:te_tax_o$N$_kind = 1 bureaucracy < 0"]
+        self.assertEqual(len(pauses), 1)
+        self.assertIn("change_variable = { name = te_tax_o$N$_deadline add = 1 }", pauses[0])
+        self.assertNotIn("te_tax_obl_breach", pauses[0])
+        self.assertTrue(any(line.startswith("TE_TAX obl_paused") for line in re.findall(r'debug_log = "([^"]*)"',
+                                                                                         pauses[0])))
+        d = norm(delivering)
+        self.assertLess(d.find("te_tax_obl_delivered"), d.find("bureaucracy < 0"))
+        self.assertLess(d.find("bureaucracy < 0"), d.find("var:te_tax_o$N$_deadline <= var:te_tax_now"))
+        self.assertRegex(d, r"else_if = \{ limit = \{ var:te_tax_o\$N\$_kind = 1 bureaucracy < 0 \} .*"
+                            r"\} else_if = \{ limit = \{ var:te_tax_o\$N\$_deadline <= var:te_tax_now \}")
+
+    def test_maintenance_grace_by_kind(self):
+        values = read(OBL_VALUES)
+        for kind, grace in ((1, 1), (2, 3), (3, 1), (4, 3)):
+            self.assertIn(f"te_tax_obl_grace_{kind} = {grace}", values)
+        reached = {lim: rest for lim, rest in trigger_branches(read(TRIGGERS).split("te_tax_obl_grace_reached = {", 1)[1]
+                                                              .split("\n}\n", 1)[0])}
+        for kind in (1, 2, 3, 4):
+            self.assertEqual(reached[f"var:te_tax_o$N$_kind = {kind}"],
+                             f"var:te_tax_o$N$_fails >= te_tax_obl_grace_{kind}")
+
+    def test_trust_fades_toward_zero_after_24_months(self):
+        month = block(self.text, "te_tax_obl_check_month")
+        self.assertLess(month.find("te_tax_gen_trust_recover = yes"), month.find("te_tax_obl_check_one"))
+        self.assertIn("te_tax_obl_trust_recover_months = 24", read(OBL_VALUES))
+        recover = norm(block(read(GEN_BILL), "te_tax_gen_trust_recover"))
+        trust = norm(block(read(GEN_BILL), "te_tax_gen_obl_trust"))
+        for ig in IGS:
+            with self.subTest(ig=ig):
+                self.assertIn(f"limit = {{ has_variable = te_tax_trust_{ig} has_variable = te_tax_trust_{ig}_month "
+                              f"var:te_tax_trust_{ig}_month <= te_tax_obl_trust_recover_before }}", recover)
+                self.assertIn(f"if = {{ limit = {{ var:te_tax_trust_{ig} > 0 }} change_variable = {{ name = "
+                              f"te_tax_trust_{ig} add = -1 }}", recover)
+                self.assertIn(f"else_if = {{ limit = {{ var:te_tax_trust_{ig} < 0 }} change_variable = {{ name = "
+                              f"te_tax_trust_{ig} add = 1 }}", recover)
+                self.assertIn(f"set_variable = {{ name = te_tax_trust_{ig}_month value = te_history_month_index }}",
+                              trust)
+
     def test_check_delivers_maintains_fulfils_or_breaches(self):
         one = block(self.text, "te_tax_obl_check_one")
         delivering = [nested for kind, nested in branches(one)
@@ -447,11 +515,16 @@ class LifecycleTest(unittest.TestCase):
         self.assertIn("limit = { te_tax_obl_delivered = { N = $N$ } } te_tax_obl_begin_maintenance = { N = $N$ }", d)
         self.assertIn("limit = { var:te_tax_o$N$_deadline <= var:te_tax_now } te_tax_obl_breach = { N = $N$ }", d)
         m = norm(maintaining[0])
-        self.assertIn("limit = { NOT = { te_tax_obl_holds = { N = $N$ } } } te_tax_obl_breach = { N = $N$ }", m)
-        self.assertIn("limit = { var:te_tax_o$N$_maint_end <= var:te_tax_now } te_tax_obl_fulfil = { N = $N$ }", m)
-        self.assertLess(m.find("te_tax_obl_breach"), m.find("te_tax_obl_fulfil"))
+        # A month that holds resets the failing count and, at the end of the term, fulfils.
+        self.assertIn("if = { limit = { te_tax_obl_holds = { N = $N$ } } set_variable = { name = te_tax_o$N$_fails "
+                      "value = 0 } if = { limit = { var:te_tax_o$N$_maint_end <= var:te_tax_now } "
+                      "te_tax_obl_fulfil = { N = $N$ } } }", m)
+        # A failing month counts; the kind's grace in consecutive failures breaches.
+        self.assertIn("else = { change_variable = { name = te_tax_o$N$_fails add = 1 } if = { limit = { "
+                      "te_tax_obl_grace_reached = { N = $N$ } } te_tax_obl_breach = { N = $N$ } }", m)
         begin = norm(block(self.text, "te_tax_obl_begin_maintenance"))
         self.assertIn(f"set_variable = {{ name = te_tax_o$N$_state value = {MAINTAINING} }}", begin)
+        self.assertIn("set_variable = { name = te_tax_o$N$_fails value = 0 }", begin)
         self.assertIn("value = te_tax_obl_maint_months_fiscal", begin)
         self.assertIn("value = te_tax_obl_maint_months", begin)
 
@@ -482,8 +555,10 @@ class ConsequenceTest(unittest.TestCase):
         body = norm(self.guarded("te_tax_obl_fulfil", f"var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = {MAINTAINING}"))
         self.assertIn(f"set_variable = {{ name = te_tax_o$N$_state value = {FULFILLED} }}", body)
         self.assertIn("set_variable = { name = te_tax_o$N$_on value = 0 }", body)
-        self.assertIn("te_tax_gen_obl_approval = { N = $N$ MODIFIER = ig_approval_positive_modifier }", body)
-        self.assertIn("te_tax_gen_obl_trust = { N = $N$ DELTA = 1 }", body)
+        self.assertIn("te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_kept_modifier }", body)
+        # A maintenance promise kept earns approval only.
+        self.assertIn("if = { limit = { has_variable = te_tax_o$N$_maint_only var:te_tax_o$N$_maint_only = 0 } "
+                      "te_tax_gen_obl_trust = { N = $N$ DELTA = 1 } }", body)
         self.assertIn(f"te_tax_history_push = {{ KIND = {KIND_FULFILLED} SLOT = none }}", body)
         self.assertLess(body.find(f"value = {FULFILLED}"), body.find("te_tax_gen_obl_approval"))
 
@@ -494,36 +569,46 @@ class ConsequenceTest(unittest.TestCase):
             f"var:te_tax_o$N$_state = {MAINTAINING} }}"))
         self.assertIn(f"set_variable = {{ name = te_tax_o$N$_state value = {BREACHED} }}", body)
         self.assertIn("set_variable = { name = te_tax_o$N$_on value = 0 }", body)
-        self.assertIn("te_tax_gen_obl_approval = { N = $N$ MODIFIER = ig_approval_very_negative_modifier }", body)
+        self.assertIn("te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_broken_modifier }", body)
         self.assertIn("te_tax_gen_obl_trust = { N = $N$ DELTA = -1 }", body)
         self.assertIn(f"te_tax_history_push = {{ KIND = {KIND_BREACHED} SLOT = none }}", body)
 
-    def test_renegotiation_is_a_command_costing_two_approval_without_trust(self):
+    def test_renegotiation_is_a_command_costing_two_approval_and_trust(self):
         body = norm(self.guarded("te_tax_cmd_obl_renegotiate", "te_tax_can_obl_renegotiate = { N = $N$ }"))
         self.assertIn("custom_tooltip = te_tax_tt_cmd_obl_renegotiate", body)
         self.assertIn(f"set_variable = {{ name = te_tax_o$N$_state value = {RENEGOTIATED} }}", body)
         self.assertIn("set_variable = { name = te_tax_o$N$_on value = 0 }", body)
         self.assertIn("te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_renegotiated_modifier }", body)
-        self.assertNotIn("te_tax_gen_obl_trust", body)
+        self.assertIn("te_tax_gen_obl_trust = { N = $N$ DELTA = -1 }", body)
         self.assertIn(f"te_tax_history_push = {{ KIND = {KIND_RENEGOTIATED} SLOT = none }}", body)
         trigger = norm(block(read(TRIGGERS), "te_tax_can_obl_renegotiate"))
         self.assertIn("custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }", trigger)
-        self.assertIn("custom_tooltip = { text = te_tax_tt_obl_binding te_tax_obl_binding = { N = $N$ } }", trigger)
+        # Only once in force: a bound promise lapses only with its package.
+        self.assertIn("custom_tooltip = { text = te_tax_tt_obl_active te_tax_obl_active = { N = $N$ } }", trigger)
+        self.assertNotIn("te_tax_obl_binding", trigger)
+        active = norm(block(read(TRIGGERS), "te_tax_obl_active"))
+        self.assertEqual(active, f"has_variable = te_tax_o$N$_on var:te_tax_o$N$_on = 1 OR = {{ "
+                                 f"var:te_tax_o$N$_state = {DELIVERING} var:te_tax_o$N$_state = {MAINTAINING} }}")
         binding = norm(block(read(TRIGGERS), "te_tax_obl_binding"))
         self.assertEqual(binding, f"has_variable = te_tax_o$N$_on var:te_tax_o$N$_on = 1 OR = {{ "
                                   f"var:te_tax_o$N$_state = {BOUND} var:te_tax_o$N$_state = {DELIVERING} "
                                   f"var:te_tax_o$N$_state = {MAINTAINING} }}")
 
-    def test_the_renegotiation_modifier_is_minus_two_approval(self):
+    def test_dedicated_modifiers_kept_broken_renegotiated(self):
         from test_tax_code_rule import load
         modifiers = load(OBL_MODIFIERS)
-        self.assertEqual(set(modifiers), {"te_tax_obl_renegotiated_modifier"})
-        body = modifiers["te_tax_obl_renegotiated_modifier"]
-        self.assertEqual(body["interest_group_approval_add"], "-2")
-        self.assertIn("icon", body)
+        want = {"te_tax_obl_kept_modifier": ("3", "Kept Tax Promise"),
+                "te_tax_obl_broken_modifier": ("-5", "Broken Tax Promise"),
+                "te_tax_obl_renegotiated_modifier": ("-2", "Renegotiated Tax Promise")}
+        self.assertEqual(set(modifiers), set(want))
         table = loc()
-        self.assertTrue(table.get("te_tax_obl_renegotiated_modifier"))
-        self.assertTrue(table.get("te_tax_obl_renegotiated_modifier_desc"))
+        for name, (value, label) in want.items():
+            with self.subTest(name=name):
+                self.assertEqual(modifiers[name]["interest_group_approval_add"], value)
+                self.assertIn("icon", modifiers[name])
+                self.assertEqual(table.get(name), label)
+                self.assertTrue(table.get(f"{name}_desc"))
+        self.assertNotRegex(read(OBL_EFFECTS), r"ig_approval_(positive|very_negative)_modifier")
 
     def test_approval_goes_through_the_shared_macro_for_the_beneficiary(self):
         body = block(read(GEN_BILL), "te_tax_gen_obl_approval")
@@ -567,6 +652,9 @@ class CivilWarTest(unittest.TestCase):
             self.assertIsNone(country[f"te_tax_o{n}_kind"])
         for ig in IGS:
             self.assertEqual(country[f"te_tax_trust_{ig}"], 0)
+            self.assertEqual(country[f"te_tax_trust_{ig}_month"], -1)
+        for field in ("fails", "maint_only"):
+            self.assertIsNone(country[f"te_tax_o1_{field}"])
 
     def test_the_outbreak_copies_binding_promises_never_pending_ones(self):
         copy = block(self.civil, "te_tax_copy_code")
@@ -623,7 +711,7 @@ class DisplayTest(unittest.TestCase):
                 with self.subTest(name=name):
                     self.assertIn(f"var:te_tax_o{n}_on = 1", block(text, name))
         for field in ("state", "kind", "arg", "target", "ig", "deadline_y", "deadline_mo", "maint_end_y",
-                      "maint_end_mo", "streak"):
+                      "maint_end_mo", "streak", "fails", "maint_only", "grace"):
             self.assertIn(f"te_tax_view_o1_{field}", top_level_names(text))
 
     def test_the_panels_show_a_row_per_slot_with_renegotiate(self):
@@ -633,7 +721,13 @@ class DisplayTest(unittest.TestCase):
         for n in SLOTS:
             with self.subTest(slot=n):
                 self.assertIn(f"GetPlayer.GetCustom('te_tax_obl_state_{n}')", politics)
-                self.assertIn(f"GetPlayer.GetCustom('te_tax_obl_what_{n}')", politics)
+                self.assertIn(f"[GetPlayer.GetCustom('te_tax_obl_mode_{n}')] [GetPlayer.GetCustom('te_tax_obl_what_{n}')]",
+                              politics)
+                # Renegotiate only once the promise is in force (state 2 or 3).
+                self.assertIn(f"visible = \"[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue("
+                              f"'te_tax_view_o{n}_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( "
+                              f"GetPlayer.MakeScope.ScriptValue('te_tax_view_o{n}_state'), '(CFixedPoint)3' ) )]\"",
+                              politics)
                 self.assertIn(f"GetPlayer.GetCustom('te_tax_obl_ig_{n}')", politics)
                 self.assertIn(f"GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').Execute( GuiScope.SetRoot( "
                               f"GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) ).End )",
@@ -649,7 +743,7 @@ class DisplayTest(unittest.TestCase):
         vanilla = json.loads((ROOT / "vanilla_parsed/localization_english.json").read_text(encoding="utf-8"))
         for n in SLOTS:
             for name in (f"te_tax_obl_ig_{n}", f"te_tax_obl_what_{n}", f"te_tax_obl_inst_{n}",
-                         f"te_tax_obl_state_{n}"):
+                         f"te_tax_obl_state_{n}", f"te_tax_obl_mode_{n}"):
                 body = block(custom, name)
                 with self.subTest(name=name):
                     self.assertNotRegex(body, r"var:|has_variable")
@@ -658,6 +752,11 @@ class DisplayTest(unittest.TestCase):
             state = block(custom, f"te_tax_obl_state_{n}")
             for value in (PENDING, BOUND, DELIVERING, MAINTAINING):
                 self.assertIn(f"te_tax_view_o{n}_state = {value}", state)
+            self.assertLess(state.find(f"te_tax_view_o{n}_fails > 0"), state.find(f"te_tax_obl_st_maint_{n}"))
+            self.assertIn(f"localization_key = te_tax_obl_st_failing_{n}", state)
+            mode = norm(block(custom, f"te_tax_obl_mode_{n}"))
+            self.assertIn(f"trigger = {{ te_tax_view_o{n}_maint_only = 1 }} localization_key = te_tax_obl_mode_maintain", mode)
+            self.assertIn("localization_key = te_tax_obl_mode_reach", mode)
             for n_ig, ig in enumerate(IGS, start=1):
                 self.assertIn(f"te_tax_view_o{n}_ig = {n_ig} }}\n\t\tlocalization_key = ig_{ig}",
                               block(read(GEN_CUSTOM_LOC, strip_comments=False), f"te_tax_obl_ig_{n}"))
@@ -679,8 +778,9 @@ class DocTest(unittest.TestCase):
         for phrase in ("te_tax_obl_propose", "te_tax_obl_start", "te_tax_obl_feasible_1", "te_tax_obl_bind",
                        "te_tax_obl_release_slot", "te_tax_obl_check_month", "te_tax_cmd_obl_renegotiate",
                        "te_tax_repair_obligations_after_civil_war", "institution:", "P16",
-                       "ig_approval_positive_modifier", "ig_approval_very_negative_modifier",
-                       "te_tax_obl_renegotiated_modifier", "te_tax_trust_"):
+                       "te_tax_obl_kept_modifier", "te_tax_obl_broken_modifier",
+                       "te_tax_obl_renegotiated_modifier", "te_tax_trust_", "te_tax_obl_grace_",
+                       "_maint_only", "te_tax_obl_is_maintenance", "te_tax_gen_trust_recover", "obl_paused"):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, section)
 
