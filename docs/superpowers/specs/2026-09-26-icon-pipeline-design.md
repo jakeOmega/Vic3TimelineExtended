@@ -405,3 +405,23 @@ The retouching went beyond the row fill:
 - **Some flaws are in the cutout, not the render, so fix the composed icon.** White highlights on glass came out as holes, and a glow as grey blobs. Fill enclosed alpha holes, or clear the blobs, in `final/<name>.png`, then delete the DDS and run `write`. `write` reuses a composed file that is newer than its raw.
 - **A hand repaint is sometimes quicker than a reroll.** A laser turret's beam, a pale rod that read as a missile, was erased and redrawn as a glowing line.
 
+
+## Buildings batch 2 (2026-10-02)
+
+This batch followed the mod-placeholders audit: buildings that borrowed another mod building's icon, and the 22 icons the mod drew before the pipeline. All 38 are in the building section of `icon_prompts.py`.
+
+- **16 new icons.** Each megaproject construction site got its own icon, as the owner asked: the finished building's subject, half-built. Four orbital buildings and ITER needed a second subject:
+  - **Orbital buildings.** The building style asks for an aerial view of a miniature diorama with surrounding landscape. It drew the solar collector, its site, the ISS and the battlestation as small models over a map. An entry may now carry its own `style`, and `ORBIT` draws the station close up above the Earth's curved edge, with black space behind.
+  - **ITER.** A plain render was a grey hall that read as a warehouse. A cutaway shows the reactor.
+  - **The Antimatter Facility site.** "A trench" drew an open pit. The finished facility's ring, half-built, reads better.
+- **The `restyle` entry kind.** It keeps an old icon's picture and refits it to the gold frame:
+  - It erodes the old outline, fills the emptied corners from the picture, then offers img2img repaints at a few strengths.
+  - schnell keeps the input's style even at 0.75. A flat vector icon stays flat, so for those a restyle only adds the frame.
+  - From 0.625, the repaints write lettering onto signs and devices.
+- **The owner's calls on the 22 old icons.** Nine were redrawn in the building style: the flat vectors (airport, hydro plant, national park), the interiors (robotics, semiconductors) and the still lifes (pharmaceuticals, advanced materials, network infrastructure, tourism). The other 13 kept their pictures:
+  - the redraws of the appliances factory were warehouses of crates;
+  - the owner preferred the old ocean floor for the deep-sea mine;
+  - the redrawn highway interchanges made no sense.
+  Each redrawn entry's comment names the restyle it replaced, so the old picture is one edit away.
+- **Blank a lettered sign with its own colour.** Inpainting the whole board from its edges pulled the letters' cream into it. Fitting a smooth gradient to the board's darker pixels, and filling the panel with it plus matching grain, left a plain teal sign (the appliances factory's QUALITY TESTED).
+- **Two concepts and a state-panel row moved to the new icons.** The solar collector concept and row had shown the space elevator's icon, and the antimatter concept vanilla's power plant. The 22 old files and the 7 allowlist entries for their shared pictures are gone.

@@ -209,7 +209,7 @@ building_wonder_pentagon = {
 
 building_wonder_kennedy_space_center = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/space.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_kennedy_space_center.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -807,7 +807,7 @@ building_wonder_large_hadron_collider = {
 
 building_wonder_international_space_station = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/space.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_international_space_station.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
@@ -838,7 +838,7 @@ building_wonder_international_space_station = {
 
 building_wonder_iter = {
 	building_group = bg_monuments
-	icon = "gfx/interface/icons/building_icons/nuclear_plant.dds"
+	icon = "gfx/interface/icons/building_icons/building_wonder_iter.dds"
 	expandable = no
 	downsizeable = no
 	unique = yes
