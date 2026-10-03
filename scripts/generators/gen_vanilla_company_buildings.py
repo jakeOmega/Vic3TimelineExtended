@@ -769,10 +769,17 @@ def generate_building(building_suffix, company_id, icon_path):
 \t\t\tany_scope_building = {{
 \t\t\t\tis_building_type = {building_name}
 \t\t\t}}
-\t\t\tNOT = {{
-\t\t\t\tany_state = {{
-\t\t\t\t\tany_scope_building = {{
-\t\t\t\t\t\tis_building_type = {building_name}
+\t\t\towner = {{
+\t\t\t\tNOT = {{
+\t\t\t\t\tany_scope_state = {{
+\t\t\t\t\t\thas_building = {building_name}
+\t\t\t\t\t}}
+\t\t\t\t}}
+\t\t\t\tNOT = {{
+\t\t\t\t\tany_scope_state = {{
+\t\t\t\t\t\tany_scope_building = {{
+\t\t\t\t\t\t\tis_building_type = {building_name}
+\t\t\t\t\t\t}}
 \t\t\t\t\t}}
 \t\t\t\t}}
 \t\t\t}}

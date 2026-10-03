@@ -3748,6 +3748,8 @@ potential = {
 
 Intent: "this state already has the HQ, OR no state anywhere has one." Reality: the `NOT { any_state ... }` only checked the owning country's states, so another country's HQ never disqualified you. Combined with a leaky permission flag, anyone who signed the UN charter could build a second HQ.
 
+**Unconfirmed: the engine's own `triggers.log` says the opposite.** It documents `any_state` as "Iterate through all states globally" with no supported scopes, and the HQ duplication above had other causes too (the permission flag, the per-state max levels below). So don't rely on either reading. Write the scope you mean: `owner = { any_scope_state = { ... } }` for the owner's states, `any_country = { any_scope_state = { ... } }` for the world. The 312 company-building `potential` blocks did this on 2026-10-03, and also put a `has_building` check ahead of the full building scan. The scan is a per-building script loop that the build list and the AI construction planner re-run for every state, so it showed up in a late-game script profile at 10–14 ms a tick per block. `has_building` probably misses a site that is queued but not finished, so keep the scan behind it when that case matters.
+
 **For genuinely global checks**, use a single source of truth (a global variable identifying the unique holder, e.g. `owner = { this = global_var:un_hq_country }`) or wrap the iterator: `any_country = { any_state = { ... } }`. Single-source-of-truth comparisons also self-heal in saves where stale per-country flags exist.
 
 **A holder check is still not "one per world"** — the HQ kept duplicating after the global-variable fix, for two reasons:
