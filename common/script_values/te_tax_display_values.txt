@@ -492,6 +492,17 @@ te_tax_view_customs_held = {
 	if = { limit = { has_variable = te_tax_customs_held } value = var:te_tax_customs_held }
 }
 
+# What the workbench's Customs section shows (plan Task 15): 0 under the plain
+# rule option (tariffs stay in the Market panel), 1 while the code sets this
+# country's customs (the editor), 2 under the customs option otherwise: a
+# customs-union member, a subject in its overlord's market, or a country that
+# lost its market (its market owner's levels, read only).
+te_tax_view_customs_mode = {
+	value = 0
+	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_customs_held } value = 1 }
+	else_if = { limit = { te_tax_customs_on = yes } value = 2 }
+}
+
 # ---------------------------------------------------------------------------
 # The economy snapshot and the estimates (plan Task 14;
 # docs/systems/tax_code_schema.md, "Economy snapshot and estimates").

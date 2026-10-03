@@ -1149,6 +1149,8 @@ te_tax_offer_cut_leaves_a_bill = {
 		te_tax_bl_goods_changed >= 1
 		NOT = { te_tax_bl_dstep_agrel = 0 }
 		te_tax_bl_regrel_differs = yes
+		# A customs level the bill changes (plan Task 15; 0 under the plain option).
+		te_tax_bl_customs_changed >= 1
 	}
 }
 
@@ -1158,6 +1160,8 @@ te_tax_offer_untax_leaves_a_bill = {
 		te_tax_bl_goods_changed >= 2
 		NOT = { te_tax_bl_dstep_agrel = 0 }
 		te_tax_bl_regrel_differs = yes
+		# A customs level the bill changes (plan Task 15; 0 under the plain option).
+		te_tax_bl_customs_changed >= 1
 	}
 }
 

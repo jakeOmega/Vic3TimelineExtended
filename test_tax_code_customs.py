@@ -56,6 +56,10 @@ DISPLAY = "common/script_values/te_tax_display_values.txt"
 ON_ACTIONS = "common/on_actions/te_tax_on_actions.txt"
 EVENTS = "events/te_tax_internal_events.txt"
 NATIVE_SGUIS = "common/scripted_guis/te_tax_native_sguis.txt"
+GEN_SGUIS = "common/scripted_guis/te_tax_generated_sguis.txt"
+WORKBENCH = "gui/journal_entry_widgets/te_tax_workbench_widget.gui"
+REVIEW = "gui/journal_entry_widgets/te_tax_review_widget.gui"
+GEN_ROWS = "gui/journal_entry_widgets/te_tax_generated_rows.gui"
 TAX_LOC = "localization/english/te_tax_l_english.yml"
 SCHEMA_DOC = "docs/systems/tax_code_schema.md"
 
@@ -66,6 +70,19 @@ DIRS = {"imp": "import", "exp": "export"}
 UNTOUCHED = -99
 CATEGORIES = ("staple", "industrial", "luxury", "military")
 KIND_ADOPTED, KIND_LOST, KIND_GAINED = 15, 16, 17
+LEVEL_KEYS = {-3: "m3", -2: "m2", -1: "m1", 0: "0", 1: "p1", 2: "p2", 3: "p3"}
+IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
+       "landowners", "petty_bourgeoisie", "rural_folk", "trade_unions")
+# The brief's support points per level step raised, in the material reason
+# (subventions mirror the signs: a step down scores the opposite).
+POINTS = {
+    ("imp", "staple"): {"rural_folk": 4, "landowners": 4, "trade_unions": -4, "petty_bourgeoisie": -2},
+    ("imp", "industrial"): {"industrialists": 3, "trade_unions": -1},
+    ("imp", "luxury"): {"petty_bourgeoisie": -1, "intelligentsia": -1},
+    ("exp", "staple"): {"trade_unions": 2, "landowners": -4},
+}
+# te_tax_customs_<good>_sgui's ops: op -> (direction, DIR).
+OPS = {0: ("imp", 0), 1: ("imp", 1), 2: ("imp", 2), 10: ("exp", 0), 11: ("exp", 1), 12: ("exp", 2)}
 # A customs write is reachable only behind one of these: the customs option or
 # a trigger that needs it, or a record's customs marker, which only a write
 # behind one of them creates (te_tax_<r>_customs_pver, te_tax_p<s>_pver_customs).
@@ -717,6 +734,209 @@ class CommandTest(unittest.TestCase):
     def test_the_draft_rebase_accepts_customs(self):
         body = squash(block(self.triggers, "te_tax_can_draft_rebase"))
         self.assertIn("has_variable = te_tax_pver_$KEY$", body)
+
+
+class SupportTest(unittest.TestCase):
+    """Support v1 for customs (the brief's points, ported by hand): reasons in the
+    material component, clamped with it; and no affordability bonus for a good
+    the bill exempts while raising its import level (spec 6)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = read(GEN_SUPPORT)
+        cls.triggers = read(TRIGGERS)
+
+    def test_each_good_and_direction_moves_from_existing_law(self):
+        for good in catalog():
+            for d in DIRS:
+                field = f"te_tax_bl_{d}_{good}"
+                body = squash(block(self.values, f"te_tax_bl_dstep_{d}_{good}"))
+                with self.subTest(good=good, d=d):
+                    self.assertEqual(body, f"value = 0 if = {{ limit = {{ has_variable = {field} var:{field} >= "
+                                           f"{gen.CUSTOMS_MIN} }} value = var:{field} subtract = te_tax_base_bl_{d}_{good} }}")
+
+    def test_category_sums(self):
+        by_category = gen.customs_by_category()
+        for (d, category) in POINTS:
+            body = block(self.values, f"te_tax_bl_dcu_{d}_{category}")
+            with self.subTest(d=d, category=category):
+                self.assertEqual(sorted(re.findall(rf"add = te_tax_bl_dstep_{d}_(\w+)", body)),
+                                 sorted(by_category[category]))
+
+    def test_the_material_reason_takes_the_brief_points_before_the_clamp(self):
+        for ig in IGS:
+            body = block(self.values, f"te_tax_mat_{ig}")
+            found = {(d, category): int(points) for d, category, points in
+                     re.findall(r"add = \{ value = te_tax_bl_dcu_(imp|exp)_(\w+) multiply = (-?\d+) \}", body)}
+            expected = {key: table[ig] for key, table in POINTS.items() if ig in table}
+            with self.subTest(ig=ig):
+                self.assertEqual(found, expected)
+                self.assertRegex(body, r"multiply = -10\s*(add = \{ value = te_tax_bl_\w+ multiply = -?\d+ \}\s*)+"
+                                       r"min = -40\s*max = 40\s*$")
+
+    def test_no_affordability_bonus_for_a_good_whose_import_level_rises(self):
+        both = set(gen.consumption_catalog()) & set(catalog())
+        self.assertTrue(both)
+        for good in gen.consumption_catalog():
+            body = squash(block(self.values, f"te_tax_dl_g_{good}"))
+            zero = f"if = {{ limit = {{ te_tax_bl_dstep_imp_{good} > 0 }} min = 0 }}"
+            with self.subTest(good=good):
+                if good in both:
+                    self.assertIn(zero, body)
+                    # Inside the bill's branch, after the weight: only a negative term (an exemption) is zeroed.
+                    self.assertGreater(body.find(zero), body.find("multiply ="))
+                else:
+                    self.assertNotIn("te_tax_bl_dstep_imp_", body)
+
+    def test_a_customs_change_keeps_a_bill_for_the_offers(self):
+        changed = squash(block(self.values, "te_tax_bl_customs_changed"))
+        for good in catalog():
+            for d in DIRS:
+                self.assertIn(f"if = {{ limit = {{ NOT = {{ te_tax_bl_dstep_{d}_{good} = 0 }} }} add = 1 }}", changed)
+        for name in ("te_tax_offer_cut_leaves_a_bill", "te_tax_offer_untax_leaves_a_bill"):
+            self.assertIn("te_tax_bl_customs_changed >= 1", block(self.triggers, name))
+
+
+class SguiTest(unittest.TestCase):
+    """One op-coded handler per tradeable good: 0 import down, 1 import up, 2 import
+    out of the draft; 10, 11, 12 the same for exports."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = read(GEN_SGUIS)
+
+    def test_one_handler_per_good_with_the_op_table(self):
+        for good in catalog():
+            body = squash(block(self.text, f"te_tax_customs_{good}_sgui"))
+            with self.subTest(good=good):
+                for phrase in ("scope = country", "saved_scopes = { op }", "is_shown = { te_tax_code_in_force = yes }",
+                               "ai_is_valid = { always = no }", "trigger_else = { always = no }"):
+                    self.assertIn(phrase, body)
+                for op, (d, direction) in OPS.items():
+                    self.assertIn(f"limit = {{ exists = scope:op scope:op = {op} }} te_tax_can_draft_customs = "
+                                  f"{{ GOOD = {good} D = {d} DIR = {direction} }}", body)
+                    self.assertIn(f"limit = {{ exists = scope:op scope:op = {op} }} te_tax_cmd_draft_customs = "
+                                  f"{{ GOOD = {good} D = {d} DIR = {direction} }}", body)
+                self.assertNotRegex(block(self.text, f"te_tax_customs_{good}_sgui").split("effect = {", 1)[1],
+                                    r"\belse = \{")
+
+
+class ViewTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.values = read(GEN_VALUES)
+        cls.display = read(DISPLAY)
+
+    def test_the_market_level_one_branch_per_level(self):
+        for good in catalog():
+            for d, direction in DIRS.items():
+                body = squash(block(self.values, f"te_tax_cu_native_{d}_{good}"))
+                with self.subTest(good=good, d=d):
+                    self.assertTrue(body.startswith(f"value = {gen.CUSTOMS_DEFAULT_LEVEL} "))
+                    for idx, key in LEVELS.items():
+                        self.assertIn(f"if = {{ limit = {{ capital ?= {{ sg:{good} = {{ {direction}_tariff_level = "
+                                      f"{key} }} }} }} value = {idx} }}", body)
+                    self.assertNotIn("var:", body)
+
+    def test_a_row_shows_the_draft_for_the_owner_and_the_market_for_a_member(self):
+        for good in catalog():
+            for d in DIRS:
+                body = squash(block(self.values, f"te_tax_view_cu_{d}_{good}"))
+                with self.subTest(good=good, d=d):
+                    self.assertIn("if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on "
+                                  f"var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }} value = te_tax_dr_eff_{d}_{good} }}",
+                                  body)
+                    self.assertIn(f"else_if = {{ limit = {{ te_tax_customs_on = yes }} value = te_tax_cu_native_{d}_{good} }}",
+                                  body)
+
+    def test_the_customs_mode(self):
+        body = squash(block(self.display, "te_tax_view_customs_mode"))
+        self.assertEqual(body, "value = 0 if = { limit = { te_tax_customs_authority = yes has_variable = "
+                               "te_tax_customs_held } value = 1 } else_if = { limit = { te_tax_customs_on = yes } "
+                               "value = 2 }")
+
+
+class GuiTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.workbench = read(WORKBENCH, strip_comments=False)
+        cls.rows = read(GEN_ROWS, strip_comments=False)
+        cls.review = read(REVIEW, strip_comments=False)
+        cls.loc = read(TAX_LOC, strip_comments=False)
+
+    def loc_value(self, key):
+        match = re.search(rf'(?m)^ {key}:0 "(.*)"$', self.loc)
+        self.assertIsNotNone(match, key)
+        return match.group(1)
+
+    def test_the_workbench_has_a_collapsed_customs_accordion(self):
+        self.assertIn("GetVariableSystem.Toggle('te_tax_wb_customs_open')", self.workbench)
+        for mode, key in ((0, "te_tax_wb_customs_native"), (2, "te_tax_wb_customs_member"),
+                          (1, "te_tax_wb_customs_intro")):
+            with self.subTest(mode=mode):
+                self.assertRegex(squash(self.workbench),
+                                 r"visible = \"\[And\( GetVariableSystem\.Exists\('te_tax_wb_customs_open'\), "
+                                 r"EqualTo_CFixedPoint\( GetPlayer\.MakeScope\.ScriptValue\('te_tax_view_customs_mode'\), "
+                                 rf"'\(CFixedPoint\){mode}' \) \)\]\" text = \"{key}\"")
+        for category in CATEGORIES:
+            with self.subTest(category=category):
+                self.assertIn(f"te_tax_wb_customs_rows_{category} = {{", self.workbench)
+                self.assertIn(f"text = \"te_tax_wb_cu_cat_{category}\"", self.workbench)
+
+    def test_the_plain_option_and_a_member_say_who_sets_tariffs(self):
+        self.assertIn("Market panel", self.loc_value("te_tax_wb_customs_native"))
+        self.assertIn("[GetPlayer.GetMarket.GetOwner.GetName]", self.loc_value("te_tax_wb_customs_member"))
+        self.assertTrue(self.loc_value("te_tax_wb_customs_member").startswith("Set by "))
+
+    def test_level_names_say_subsidy_below_zero_and_tariff_above(self):
+        for idx, suffix in LEVEL_KEYS.items():
+            text = self.loc_value(f"te_tax_cu_lv_{suffix}").lower()
+            with self.subTest(idx=idx):
+                if idx < 0:
+                    self.assertIn("subsidy", text)
+                elif idx > 0:
+                    self.assertIn("tariff", text)
+
+    def test_the_steppers_are_the_editors_only(self):
+        row = squash(self.workbench.split("type te_tax_customs_row = flowcontainer {", 1)[1].split("\n\ttype ", 1)[0])
+        editor = ("EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), "
+                  "'(CFixedPoint)1' )")
+        self.assertEqual(row.count("button_icon_minus_action = {"), 2)
+        self.assertEqual(row.count("button_icon_plus_action = {"), 2)
+        self.assertEqual(row.count(f"visible = \"[{editor}]\""), 4)
+        for op in OPS:
+            self.assertIn(f"MakeScopeValue( '(CFixedPoint){op}' )", row)
+
+    def test_generated_rows_per_category(self):
+        for category, goods in gen.customs_by_category().items():
+            body = squash(self.rows.split(f"type te_tax_wb_customs_rows_{category} = flowcontainer {{", 1)[1]
+                          .split("\n\ttype ", 1)[0])
+            with self.subTest(category=category):
+                self.assertEqual(re.findall(r"GetScriptedGui\('te_tax_customs_(\w+)_sgui'\)", body), list(goods))
+                for good in goods:
+                    for d in DIRS:
+                        for idx, suffix in LEVEL_KEYS.items():
+                            self.assertIn(f"visible = \"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue("
+                                          f"'te_tax_view_cu_{d}_{good}'), '(CFixedPoint){idx}' )]\" "
+                                          f"text = \"te_tax_cu_lv_{suffix}\"", body)
+
+    def test_the_review_lists_each_changed_level_and_a_blocked_good(self):
+        self.assertIn("te_tax_rv_customs_rows = {}", self.review)
+        self.assertIn("ScriptValue('te_tax_view_dr_customs_changed')", self.review)
+        body = squash(self.rows.split("type te_tax_rv_customs_rows = flowcontainer {", 1)[1].split("\n\ttype ", 1)[0])
+        for good in catalog():
+            for d in DIRS:
+                self.assertIn(f"visible = \"[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue("
+                              f"'te_tax_view_cu_{d}_{good}_on'), '(CFixedPoint)0' )]\"", body)
+                self.assertIn(f"ScriptValue('te_tax_view_cu_{d}_{good}_base')", body)
+            self.assertIn(f"ScriptValue('te_tax_view_cu_{good}_blocked')", body)
+        self.assertIn("treaty", self.loc_value("te_tax_rv_cu_blocked"))
+        self.assertIn("cooldown", self.loc_value("te_tax_rv_cu_blocked"))
+
+    def test_the_estimate_says_customs_are_not_estimated(self):
+        self.assertIn("text = \"te_tax_est_customs\"", self.review)
+        self.assertIn("no estimate", self.loc_value("te_tax_est_customs"))
+        self.assertIn("trade volumes", self.loc_value("te_tax_est_customs"))
 
 
 class HistoryKindTest(unittest.TestCase):

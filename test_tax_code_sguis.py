@@ -61,6 +61,8 @@ SIMPLE = ("draft_new", "draft_discard", "introduce", "revise", "withdraw", "pass
 # Handlers whose saved scope is an object, not an op (Task 11): sgui -> (command, saved scope).
 SCOPED = {"te_tax_relief_state_sgui": ("draft_relief_state", "te_tax_st")}
 RELIEF_KEYS = ("agrel", "regrel")
+# te_tax_customs_<good>_sgui's ops (Task 15): op -> (direction, DIR).
+CUSTOMS_OPS = {0: ("imp", 0), 1: ("imp", 1), 2: ("imp", 2), 10: ("exp", 0), 11: ("exp", 1), 12: ("exp", 2)}
 # Instrument codes as the history ring stores them (te_tax_h<n>_inst): 1 wage ... 5 cons.
 INST = {idx: key for idx, key in enumerate(KEYS, start=1)}
 
@@ -70,7 +72,8 @@ def op_tables():
     tables = {
         "te_tax_due_sgui": {0: ("draft_due", "DIR = 0"), 1: ("draft_due", "DIR = 1")},
         "te_tax_cmd_draft_rebase_sgui": {**{idx: ("draft_rebase", f"KEY = {key}") for idx, key in INST.items()},
-                                         6: ("draft_rebase", "KEY = goods"), 7: ("draft_rebase", "KEY = relief")},
+                                         6: ("draft_rebase", "KEY = goods"), 7: ("draft_rebase", "KEY = relief"),
+                                         8: ("draft_rebase", "KEY = customs")},
         "te_tax_cmd_package_reschedule_sgui": {1: ("package_reschedule", "SLOT = a"),
                                                2: ("package_reschedule", "SLOT = b")},
         "te_tax_cmd_package_release_sgui": {1: ("package_release", "SLOT = a"),
@@ -85,6 +88,10 @@ def op_tables():
         tables[f"te_tax_step_{key}_sgui"] = ops
     for key in RELIEF_KEYS:
         tables[f"te_tax_relief_{key}_sgui"] = {op: ("draft_relief", f"KEY = {key} DIR = {op}") for op in range(5)}
+    # Customs (Task 15): per customs-catalog good, imports ops 0-2, exports 10-12.
+    for good in gen.customs_catalog():
+        tables[f"te_tax_customs_{good}_sgui"] = {op: ("draft_customs", f"GOOD = {good} D = {d} DIR = {direction}")
+                                                 for op, (d, direction) in CUSTOMS_OPS.items()}
     return tables
 
 
@@ -197,7 +204,9 @@ class HandlerTest(unittest.TestCase):
         wanted |= {call("draft_sunset", f"KEY = {k} DIR = {d}", "cmd") for k in KEYS for d in (0, 1)}
         wanted |= {call("draft_due", f"DIR = {d}", "cmd") for d in (0, 1)}
         wanted |= {call("draft_good", f"GOOD = {g}", "cmd") for g in gen.consumption_catalog()}
-        wanted |= {call("draft_rebase", f"KEY = {k}", "cmd") for k in KEYS + ("goods", "relief")}
+        wanted |= {call("draft_rebase", f"KEY = {k}", "cmd") for k in KEYS + ("goods", "relief", "customs")}
+        wanted |= {call("draft_customs", f"GOOD = {g} D = {d} DIR = {direction}", "cmd")
+                   for g in gen.customs_catalog() for d in ("imp", "exp") for direction in (0, 1, 2)}
         wanted |= {call("draft_relief", f"KEY = {k} DIR = {d}", "cmd") for k in RELIEF_KEYS for d in range(5)}
         wanted |= {call("draft_relief_state", "", "cmd")}
         wanted |= {call(c, f"SLOT = {s}", "cmd") for c in ("package_reschedule", "package_release")
@@ -209,7 +218,8 @@ class HandlerTest(unittest.TestCase):
         generated = set(top_level_names(read(GEN_SGUIS)))
         self.assertEqual(generated, {f"te_tax_step_{key}_sgui" for key in KEYS}
                          | {f"te_tax_good_{good}_sgui" for good in gen.consumption_catalog()}
-                         | {f"te_tax_relief_{key}_sgui" for key in RELIEF_KEYS})
+                         | {f"te_tax_relief_{key}_sgui" for key in RELIEF_KEYS}
+                         | {f"te_tax_customs_{good}_sgui" for good in gen.customs_catalog()})
         self.assertEqual(len(gen.consumption_catalog()), 39)
         self.assertIn(gen.HEADER, raw(GEN_SGUIS).splitlines()[:3])
 

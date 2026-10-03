@@ -73,6 +73,15 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       chosen by the entry's kind and, for a sunset, its instrument; and the
       promise rows' parts, te_tax_obl_ig_/what_/inst_/state_<n>.
 
+The customs schedule (plan Task 15, the experimental customs option) adds, from
+CUSTOMS_LEVELS, CUSTOMS_POINTS, CUSTOMS_OPS and customs_catalog(): the support
+model's per-good level steps and category sums (te_tax_bl_dstep_<d>_<good>,
+te_tax_bl_dcu_<d>_<category>, te_tax_bl_customs_changed) and the baselines
+(te_tax_base_<record>_<d>_<good>, te_tax_dr_eff_<d>_<good>); the market reads and
+views (te_tax_cu_native_<d>_<good>, te_tax_view_cu_*); the handlers
+te_tax_customs_<good>_sgui; and the workbench's and review's customs rows
+(te_tax_wb_customs_rows_<category>, te_tax_rv_customs_rows).
+
 The script-value file also carries the guarded te_tax_view_* display values
 for every instrument and every catalog good, and the panels' views: the open
 draft and bill, the package slots, the last change and the history ring
@@ -388,6 +397,25 @@ CUSTOMS_CATEGORIES = ("staple", "industrial", "luxury", "military")
 # only while it is 1), the customs group's planned and external versions, and its drift count.
 CUSTOMS_TOKENS = (("te_tax_customs_held", 0), ("te_tax_pver_customs", 0), ("te_tax_xver_customs", 0),
                   ("te_tax_drift_customs", 0))
+# Support v1 for customs (plan Task 15), in support points per level step the bill raises a good's
+# level from existing law, summed over the goods of a category: a reason in the material
+# component, clamped with it. Raising an import level on a staple helps its domestic producers
+# (rural folk, landowners) and costs its consumers (trade unions, petty bourgeoisie); on an
+# industrial good it helps the industrialists and costs the workers a little; on a luxury it
+# costs the consumers who buy luxuries. Raising an export tariff on a staple keeps it at home:
+# cheaper food for the workers, a smaller market for the landowners. Subventions are the same
+# scale below zero, so a step down mirrors the signs.
+CUSTOMS_POINTS = {
+    ("imp", "staple"): {"rural_folk": 4, "landowners": 4, "trade_unions": -4, "petty_bourgeoisie": -2},
+    ("imp", "industrial"): {"industrialists": 3, "trade_unions": -1},
+    ("imp", "luxury"): {"petty_bourgeoisie": -1, "intelligentsia": -1},
+    ("exp", "staple"): {"trade_unions": 2, "landowners": -4},
+}
+# te_tax_customs_<good>_sgui's op table: op -> (direction, DIR of te_tax_cmd_draft_customs): imports
+# 0 one level lower, 1 one level higher, 2 out of the draft; exports 10, 11, 12 the same.
+CUSTOMS_OPS = ((0, "imp", 0), (1, "imp", 1), (2, "imp", 2), (10, "exp", 0), (11, "exp", 1), (12, "exp", 2))
+# The level names the panels print (te_tax_cu_lv_<suffix>).
+CUSTOMS_LEVEL_SUFFIX = {-3: "m3", -2: "m2", -1: "m1", 0: "0", 1: "p1", 2: "p2", 3: "p3"}
 
 
 class Instrument(NamedTuple):
@@ -995,6 +1023,57 @@ def _workbench_views():
         lines += _view(f"te_tax_view_p{slot}_goods_changed", 0, on,
                        [f"if = {{ limit = {{ has_variable = {p}_g_{good} var:{p}_g_{good} >= 0 }} add = 1 }}"
                         for good in goods])
+        marker = customs_marker(f"p{slot}")
+        lines += _view(f"te_tax_view_p{slot}_customs_changed", 0, f"{on} has_variable = {marker}",
+                       [f"if = {{ limit = {{ has_variable = {field} {_customs_touched(field)} }} add = 1 }}"
+                        for field in customs_fields(f"p{slot}")])
+    return lines + _customs_views()
+
+
+def _customs_views():
+    """The customs schedule's views (plan Task 15): what the workbench's Customs rows and the review
+    print. A row shows the draft's level while the code holds the country's customs and a draft is
+    open, and otherwise, under the customs option, the market's level (a member reads its market
+    owner's). Every view reads only guarded variables; the market's level reads no variable."""
+    lines = [
+        "",
+        "# Customs (plan Task 15). te_tax_cu_native_<d>_<good>: the market's level of the good, read",
+        "# through the capital's state goods, one branch per level (vanilla's default when none can be",
+        "# read). te_tax_view_cu_<d>_<good>: the level a Customs row shows. _on: the draft changes it.",
+        "# _base: existing law's in the draft's month. te_tax_view_cu_<good>_blocked: a treaty or the",
+        "# tariff cooldown kept the market's level, which the code adopted (te_tax_cblock_<good>).",
+    ]
+    for good in customs_catalog():
+        for d, direction in CUSTOMS_DIRS:
+            lines += [f"te_tax_cu_native_{d}_{good} = {{", f"\tvalue = {CUSTOMS_DEFAULT_LEVEL}"]
+            lines += [f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ capital ?= {{ sg:{good} = {{ "
+                      f"{direction}_tariff_level = {key} }} }} }} value = {idx} }}"
+                      for n, (idx, key) in enumerate(CUSTOMS_LEVELS)]
+            lines.append("}")
+    for good in customs_catalog():
+        for d, _ in CUSTOMS_DIRS:
+            field = f"te_tax_dr_{d}_{good}"
+            lines += [f"te_tax_view_cu_{d}_{good} = {{", "\tvalue = 0",
+                      f"\tif = {{ limit = {{ te_tax_customs_authority = yes {DRAFT_OPEN} }} value = te_tax_dr_eff_{d}_{good} }}",
+                      f"\telse_if = {{ limit = {{ te_tax_customs_on = yes }} value = te_tax_cu_native_{d}_{good} }}", "}"]
+            lines += _view(f"te_tax_view_cu_{d}_{good}_on", 0, f"{DRAFT_OPEN} has_variable = {field} {_customs_touched(field)}",
+                           ["value = 1"])
+            lines += _view(f"te_tax_view_cu_{d}_{good}_base", 0, DRAFT_OPEN, [f"value = te_tax_base_dr_{d}_{good}"])
+        lines += _view(f"te_tax_view_cu_{good}_blocked", 0,
+                       f"te_tax_customs_authority = yes has_variable = te_tax_cblock_{good} var:te_tax_cblock_{good} = 1",
+                       ["value = 1"])
+    marker = customs_marker("dr")
+    lines += [
+        "",
+        "# How many customs levels the draft changes, and whether a passed bill or an adopted market",
+        "# level moved the customs baseline since the draft first changed one (a rebase is needed).",
+    ]
+    lines += _view("te_tax_view_dr_customs_changed", 0, f"{DRAFT_OPEN} has_variable = {marker}",
+                   [f"if = {{ limit = {{ has_variable = {field} {_customs_touched(field)} }} add = 1 }}"
+                    for field in customs_fields("dr")])
+    lines += _view("te_tax_view_dr_customs_rebase", 0,
+                   f"{DRAFT_OPEN} has_variable = {marker} has_variable = te_tax_pver_customs var:{marker} >= 0 "
+                   f"NOT = {{ var:{marker} = var:te_tax_pver_customs }}", ["value = 1"])
     return lines
 
 
@@ -2258,11 +2337,14 @@ def _material_terms(ig, prefix):
 
 
 def _material_points(ig, agrel, regrel):
-    """The material reason's relief points for interest group `ig`."""
+    """The material reason's relief points for interest group `ig`, then its customs points
+    (CUSTOMS_POINTS; 0 without a customs bill, as every level step is then 0)."""
     points = [f"\tadd = {{ value = {agrel} multiply = {AGREL_POINTS[ig]} }}"] if ig in AGREL_POINTS else []
     points.append(f"\tadd = {{ value = {regrel} multiply = {REGREL_POINTS_ALL} }}")
     if ig in REGREL_POINTS_CONCERN:
         points.append(f"\tadd = {{ value = {regrel} multiply = {REGREL_POINTS_CONCERN[ig]} }}")
+    points += [f"\tadd = {{ value = te_tax_bl_dcu_{d}_{category} multiply = {table[ig]} }}"
+               for (d, category), table in CUSTOMS_POINTS.items() if ig in table]
     return points
 
 
@@ -2301,7 +2383,27 @@ def _customs_values():
             field = f"te_tax_dr_{d}_{good}"
             lines += [f"te_tax_dr_eff_{d}_{good} = {{", f"\tvalue = te_tax_base_dr_{d}_{good}",
                       f"\tif = {{ limit = {{ has_variable = {field} {_customs_touched(field)} }} value = var:{field} }}", "}"]
-    return lines
+    lines += [
+        "",
+        "# The bill's change of each customs level, in level steps from existing law in its month (0 if it",
+        "# leaves the level alone); per category and direction the support model reads their sum",
+        "# (te_tax_bl_dcu_<d>_<category>, CUSTOMS_POINTS), and the offers how many it changes",
+        "# (te_tax_bl_customs_changed).",
+    ]
+    for good in customs_catalog():
+        for d, _ in CUSTOMS_DIRS:
+            field = f"te_tax_bl_{d}_{good}"
+            lines += [f"te_tax_bl_dstep_{d}_{good} = {{", "\tvalue = 0",
+                      f"\tif = {{ limit = {{ has_variable = {field} {_customs_touched(field)} }} value = var:{field} "
+                      f"subtract = te_tax_base_bl_{d}_{good} }}", "}"]
+    groups = customs_by_category()
+    for d, category in CUSTOMS_POINTS:
+        lines += [f"te_tax_bl_dcu_{d}_{category} = {{", "\tvalue = 0"]
+        lines += [f"\tadd = te_tax_bl_dstep_{d}_{good}" for good in groups[category]] + ["}"]
+    lines += ["te_tax_bl_customs_changed = {", "\tvalue = 0"]
+    lines += [f"\tif = {{ limit = {{ NOT = {{ te_tax_bl_dstep_{d}_{good} = 0 }} }} add = 1 }}"
+              for good in customs_catalog() for d, _ in CUSTOMS_DIRS]
+    return lines + ["}"]
 
 
 def _offer_values():
@@ -2469,13 +2571,19 @@ def support_values():
         "# the taxed list (negative for one it takes off), times the good's category weight",
         "# (GOODS_CATEGORY_WEIGHT in the generator, from the goods file's category). One value per",
         "# good, so a later provision can zero a single good's term; te_tax_dl_goods is their sum.",
+        "# Customs (plan Task 15; spec 6, combined incidence): a good the bill takes off the taxed list",
+        "# while raising its import level earns no affordability bonus, so its negative term is",
+        "# held at 0 (min = 0); a tax the bill adds is never zeroed.",
     ]
     for good in consumption_catalog():
         flag = f"te_tax_bl_g_{good}"
         lines += [f"te_tax_dl_g_{good} = {{", "\tvalue = 0", "\tif = {",
                   f"\t\tlimit = {{ has_variable = {flag} var:{flag} >= 0 }}",
                   f"\t\tvalue = var:{flag}", f"\t\tsubtract = te_tax_base_bl_g_{good}",
-                  f"\t\tmultiply = {fmt(goods_weight(good) * GOODS_LEVEL_STEPS)}", "\t}", "}"]
+                  f"\t\tmultiply = {fmt(goods_weight(good) * GOODS_LEVEL_STEPS)}"]
+        if good in customs_catalog():
+            lines.append(f"\t\tif = {{ limit = {{ te_tax_bl_dstep_imp_{good} > 0 }} min = 0 }}")
+        lines += ["\t}", "}"]
     lines += ["te_tax_dl_goods = {", "\tvalue = 0"]
     lines += [f"\tadd = te_tax_dl_g_{good}" for good in consumption_catalog()] + ["}"]
     lines += [
@@ -2502,7 +2610,9 @@ def support_values():
         "# bill moves it scaled by the wage tax relieved (te_tax_bl_agrel_scaled),",
         f"# {', '.join(f'{ig} +{n}' for ig, n in AGREL_POINTS.items())}; regional, per band x share of the population",
         f"# named over te_tax_regrel_ref_share (te_tax_bl_regrel_coverage), +{REGREL_POINTS_ALL} for every group,",
-        f"# {', '.join(f'{ig} {n}' for ig, n in REGREL_POINTS_CONCERN.items())} on top. Ideology: {IDEOLOGY_WEIGHT} x the",
+        f"# {', '.join(f'{ig} {n}' for ig, n in REGREL_POINTS_CONCERN.items())} on top; customs (plan Task 15), per level step of a",
+        "# category's goods (te_tax_bl_dcu_<d>_<category>, CUSTOMS_POINTS in the generator). Ideology: "
+        f"{IDEOLOGY_WEIGHT} x the",
         "# group's fiscal ideology (its stances on the vanilla taxation laws x their progressiveness",
         f"# / 100) x the change in progressivity. Government: +{GOVERNMENT_BONUS} in government. Trust",
         f"# (plan Task 12): {TRUST_WEIGHT} x the group's te_tax_trust_<ig>, +1 per promise kept and -1 per",
@@ -3600,7 +3710,9 @@ def generated_sguis():
         "# te_tax_relief_<key>_sgui, one per relief (agrel, regrel), op-coded like the step handlers:",
         "#   op 0 one band less, 1 one band more, 2 none, 3 the deepest band, 4 out of the draft",
         "#   (te_tax_cmd_draft_relief DIR = op).",
+        "# te_tax_customs_<good>_sgui, one per customs-catalog good (plan Task 15), op-coded:",
     ]
+    lines += [f"#   {op:>2}  te_tax_cmd_draft_customs D = {d} DIR = {direction}" for op, d, direction in CUSTOMS_OPS]
     for instrument in INSTRUMENTS:
         key = instrument.key
         lines += ["", f"te_tax_step_{key}_sgui = {{", "\tscope = country", "\tsaved_scopes = { op }",
@@ -3632,6 +3744,19 @@ def generated_sguis():
                       f"\t\t\tlimit = {{ exists = scope:op scope:op = {op} }}",
                       f"\t\t\tte_tax_cmd_draft_relief = {{ KEY = {key} DIR = {op} }}", "\t\t}"]
         lines += ["\t}", "}"]
+    for good in customs_catalog():
+        lines += ["", f"te_tax_customs_{good}_sgui = {{", "\tscope = country", "\tsaved_scopes = { op }",
+                  "\tis_shown = { te_tax_code_in_force = yes }", "\tai_is_valid = { always = no }", "\tis_valid = {"]
+        for n, (op, d, direction) in enumerate(CUSTOMS_OPS):
+            lines += [f"\t\t{'trigger_if' if n == 0 else 'trigger_else_if'} = {{",
+                      f"\t\t\tlimit = {{ exists = scope:op scope:op = {op} }}",
+                      f"\t\t\tte_tax_can_draft_customs = {{ GOOD = {good} D = {d} DIR = {direction} }}", "\t\t}"]
+        lines += ["\t\ttrigger_else = { always = no }", "\t}", "\teffect = {"]
+        for n, (op, d, direction) in enumerate(CUSTOMS_OPS):
+            lines += [f"\t\t{'if' if n == 0 else 'else_if'} = {{",
+                      f"\t\t\tlimit = {{ exists = scope:op scope:op = {op} }}",
+                      f"\t\t\tte_tax_cmd_draft_customs = {{ GOOD = {good} D = {d} DIR = {direction} }}", "\t\t}"]
+        lines += ["\t}", "}"]
     return _txt("\n".join(lines) + "\n")
 
 
@@ -3648,6 +3773,9 @@ def generated_rows():
         "### types, te_tax_good_row and te_tax_review_good_line, are in te_tax_workbench_widget.gui",
         "### and te_tax_review_widget.gui; the goods' names are their own loc keys. Every value is a",
         "### guarded view of the player's draft (te_tax_view_dr_g_<good>*), shown as a 0/1 code.",
+        "### Then the customs schedule's rows (plan Task 15): the workbench's per category and the",
+        "### review's, one per customs-catalog good (te_tax_customs_row, te_tax_review_customs_line,",
+        "### te_tax_cu_level_text; te_tax_view_cu_*).",
         "",
         "types te_tax_generated_rows_types",
         "{",
@@ -3707,8 +3835,74 @@ def generated_rows():
             "\t\t\t}",
             "\t\t}",
         ]
-    lines += ["\t}", "}"]
+    lines.append("\t}")
+    lines += _customs_rows()
+    lines.append("}")
     return _txt("\n".join(lines) + "\n")
+
+
+def _level_texts(view, indent):
+    """One te_tax_cu_level_text per level, each shown while the view `view` holds that level."""
+    return [f"{indent}te_tax_cu_level_text = {{ visible = \"[{_gui_view(view, 'EqualTo_CFixedPoint', idx)}]\" "
+            f"text = \"te_tax_cu_lv_{CUSTOMS_LEVEL_SUFFIX[idx]}\" }}" for idx, _ in CUSTOMS_LEVELS]
+
+
+def _customs_rows():
+    """The customs schedule's generated rows (plan Task 15): the workbench's Customs rows, one type per
+    goods category (te_tax_wb_customs_rows_<category>) with a te_tax_customs_row per good, and the
+    review's lines (te_tax_rv_customs_rows), one per good and direction the draft changes and one
+    per good a treaty or the tariff cooldown blocked. A level prints as one of seven loc keys, each
+    a te_tax_cu_level_text shown while the guarded view holds its level."""
+    lines = []
+    for category, goods in customs_by_category().items():
+        lines += [
+            "",
+            f"\t### Customs, {category} goods: each good's import and export level and their steppers",
+            "\t### (te_tax_customs_<good>_sgui; te_tax_customs_row, te_tax_workbench_widget.gui).",
+            f"\ttype te_tax_wb_customs_rows_{category} = flowcontainer {{",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 1",
+        ]
+        for good in goods:
+            lines += ["", "\t\tte_tax_customs_row = {", f"\t\t\tdatacontext = \"[GetScriptedGui('te_tax_customs_{good}_sgui')]\"",
+                      "\t\t\tblockoverride \"good_name\" {", f"\t\t\t\ttext = \"{good}\"", "\t\t\t}"]
+            for d, _ in CUSTOMS_DIRS:
+                view = f"te_tax_view_cu_{d}_{good}"
+                lines += [f"\t\t\tblockoverride \"{d}_level\" {{"] + _level_texts(view, "\t\t\t\t") + ["\t\t\t}",
+                          f"\t\t\tblockoverride \"{d}_changed\" {{",
+                          f"\t\t\t\tvisible = \"[{_gui_view(f'{view}_on', 'NotEqualTo_CFixedPoint', 0)}]\"", "\t\t\t}"]
+            lines.append("\t\t}")
+        lines.append("\t}")
+    lines += [
+        "",
+        "\t### The review's customs lines: each level the draft changes, existing law's level in the",
+        "\t### draft's month and the bill's; then each good whose level a treaty or the tariff",
+        "\t### cooldown kept, which the code adopted (te_tax_view_cu_<good>_blocked).",
+        "\ttype te_tax_rv_customs_rows = flowcontainer {",
+        "\t\tdirection = vertical",
+        "\t\tignoreinvisible = yes",
+    ]
+    for good in customs_catalog():
+        for d, _ in CUSTOMS_DIRS:
+            view = f"te_tax_view_cu_{d}_{good}"
+            lines += ["", "\t\tte_tax_review_customs_line = {",
+                      f"\t\t\tvisible = \"[{_gui_view(f'{view}_on', 'NotEqualTo_CFixedPoint', 0)}]\"",
+                      "\t\t\tblockoverride \"good_name\" {", f"\t\t\t\ttext = \"{good}\"", "\t\t\t}",
+                      "\t\t\tblockoverride \"direction\" {", f"\t\t\t\ttext = \"te_tax_rv_cu_{d}\"", "\t\t\t}",
+                      "\t\t\tblockoverride \"law_level\" {"] + _level_texts(f"{view}_base", "\t\t\t\t") + [
+                      "\t\t\t}", "\t\t\tblockoverride \"bill_level\" {"] + _level_texts(view, "\t\t\t\t") + [
+                      "\t\t\t}", "\t\t}"]
+        touched = ", ".join(_gui_view(f"te_tax_view_cu_{d}_{good}_on", "NotEqualTo_CFixedPoint", 0)
+                            for d, _ in CUSTOMS_DIRS)
+        blocked = _gui_view(f"te_tax_view_cu_{good}_blocked", "NotEqualTo_CFixedPoint", 0)
+        lines += ["", "\t\tte_tax_review_line = {",
+                  f"\t\t\tvisible = \"[And( {blocked}, Or( {touched} ) )]\"",
+                  "\t\t\tblockoverride \"line_label\" {", f"\t\t\t\ttext = \"{good}\"", "\t\t\t}",
+                  "\t\t\tblockoverride \"line_value\" {", "\t\t\t\ttext = \"te_tax_rv_cu_blocked\"", "\t\t\t}",
+                  "\t\t}"]
+    lines.append("\t}")
+    return lines
 
 
 @output(MODIFIERS_PATH)

@@ -63,7 +63,7 @@ STATUS = ["te_tax_enacted_table", "te_tax_workbench_section", "te_tax_review_sec
 # Collapse flags, each named for its default (style guide rule 7).
 FLAGS = {"te_tax_enacted_closed", "te_tax_history_open", "te_tax_how_open",
          "te_tax_workbench_closed", "te_tax_wb_income_closed", "te_tax_wb_land_closed",
-         "te_tax_wb_cons_closed", "te_tax_wb_goods_open", "te_tax_wb_relief_closed",
+         "te_tax_wb_cons_closed", "te_tax_wb_goods_open", "te_tax_wb_relief_closed", "te_tax_wb_customs_open",
          "te_tax_wb_relief_states_closed", "te_tax_wb_dates_closed", "te_tax_review_open", "te_tax_politics_closed",
          "te_tax_pending_closed", "te_tax_obligations_closed"}
 REFERENCE = ["te_tax_history_section", "te_tax_how_section"]
@@ -625,10 +625,11 @@ class DisplayValueTest(unittest.TestCase):
 
     def test_every_loc_key_the_panels_name_exists(self):
         """In the mod's loc, or vanilla's for a good's own name (the goods
-        catalog rows print each good by its key)."""
+        catalog rows and the customs rows, Task 15, print each good by its key;
+        a mod good's name is in the mod's loc)."""
         import json
         vanilla = json.loads((ROOT / "vanilla_parsed/localization_english.json").read_text(encoding="utf-8"))
-        catalog = set(gen.consumption_catalog())
+        catalog = set(gen.consumption_catalog()) | set(gen.customs_catalog())
         for key in loc_keys_named_in(self.gui_text):
             with self.subTest(key=key):
                 self.assertTrue(key in self.loc or (key in catalog and key in vanilla), key)

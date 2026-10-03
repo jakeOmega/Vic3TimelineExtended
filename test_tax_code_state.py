@@ -635,8 +635,17 @@ class DisplayValueTest(unittest.TestCase):
                  "te_tax_view_open_share", "te_tax_view_passage_share", "te_tax_view_legitimacy"}
         # The writer's native-drift counters (Task 9).
         want |= {"te_tax_view_drift_level", "te_tax_view_drift_goods", "te_tax_view_drift_amend"}
-        # The customs schedule (Task 15): its drift count and whether the code holds customs.
-        want |= {"te_tax_view_drift_customs", "te_tax_view_customs_held"}
+        # The customs schedule (Task 15): its drift count, whether the code holds customs and
+        # the workbench's mode; per good and direction the row's level, whether the draft
+        # changes it and existing law's; per good whether a treaty or the cooldown blocked it;
+        # the draft's count and rebase flag, and each passed bill's count.
+        want |= {"te_tax_view_drift_customs", "te_tax_view_customs_held", "te_tax_view_customs_mode",
+                 "te_tax_view_dr_customs_changed", "te_tax_view_dr_customs_rebase",
+                 "te_tax_view_pa_customs_changed", "te_tax_view_pb_customs_changed"}
+        for good in gen.customs_catalog():
+            want.add(f"te_tax_view_cu_{good}_blocked")
+            for d in ("imp", "exp"):
+                want |= {f"te_tax_view_cu_{d}_{good}", f"te_tax_view_cu_{d}_{good}_on", f"te_tax_view_cu_{d}_{good}_base"}
         # The policy obligations (Task 12): per slot, and the overview's counts.
         for n in gen.OBLIGATION_SLOTS:
             want |= {f"te_tax_view_o{n}_{field}" for field in (

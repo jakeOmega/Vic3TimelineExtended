@@ -19,6 +19,10 @@
 ### (agricultural relief: the wage tax of agricultural workers; regional
 ### relief: every tax collected from the named states' pops).
 ###
+### Customs levels (plan Task 15) come after the goods: each changed level
+### and each good a treaty or the tariff cooldown blocked. They have no
+### revenue estimate (tariff receipts depend on trade volumes).
+###
 ### The revenue estimate (plan Task 14) closes the review: per Budget line the
 ### draft changes, today's receipts scaled by the draft's and existing law's
 ### rates against the economy snapshot's (te_tax_take_snapshot, never run from
@@ -57,6 +61,60 @@ types te_tax_review_widget_types
 
 	### A good the draft changes (the generated te_tax_rv_goods_rows).
 	type te_tax_review_good_line = te_tax_review_line {}
+
+	### A customs level the draft changes (the generated te_tax_rv_customs_rows,
+	### plan Task 15): the good, imports or exports, existing law's level in the
+	### commencement month, and the bill's. Each level cell holds seven
+	### te_tax_cu_level_text, one shown. 4 + 130 + 4 + 70 + 4 + 100 + 4 + 18 + 4 + 100 + 4 = 442.
+	type te_tax_review_customs_line = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		widget = {
+			size = { 130 24 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 130
+				elide = right
+				align = left|nobaseline
+				using = fontsize_medium
+				block "good_name" {}
+			}
+		}
+		widget = {
+			size = { 70 24 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 70
+				elide = right
+				align = left|nobaseline
+				using = fontsize_medium
+				block "direction" {}
+			}
+		}
+		widget = {
+			size = { 100 24 }
+			block "law_level" {}
+		}
+		widget = {
+			size = { 18 24 }
+			textbox = {
+				parentanchor = center
+				autoresize = yes
+				align = center|nobaseline
+				using = fontsize_medium
+				text = "te_tax_wb_arrow"
+			}
+		}
+		widget = {
+			size = { 100 24 }
+			block "bill_level" {}
+		}
+	}
 
 	### One provision: its name, then the existing law's timeline and the
 	### bill's. The instance fills the blocks and gates the optional lines
@@ -323,11 +381,28 @@ types te_tax_review_widget_types
 						}
 					}
 				}
+				te_tax_rebase_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_rebase'), '(CFixedPoint)0' )]"
+					blockoverride "rebase_text" {
+						text = "te_tax_rv_rebase_customs"
+					}
+					blockoverride "rebase_button" {
+						button = {
+							using = default_button
+							size = { 96 28 }
+							parentanchor = vcenter
+							text = "te_tax_rv_accept"
+							enabled = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+							onclick = "[GetScriptedGui('te_tax_cmd_draft_rebase_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_rebase_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_rebase_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+						}
+					}
+				}
 			}
 
 			# Nothing changed yet.
 			te_tax_text = {
-				visible = "[And( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_changed'), '(CFixedPoint)0' ) )]"
+				visible = "[And( And( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_changed'), '(CFixedPoint)0' ) )]"
 				text = "te_tax_rv_nothing"
 			}
 
@@ -568,6 +643,31 @@ types te_tax_review_widget_types
 				}
 			}
 
+			# Customs levels the draft changes (plan Task 15): each level, existing
+			# law's in the commencement month and the bill's, and each good whose
+			# level a treaty or the tariff cooldown kept (adopted into the code).
+			flowcontainer = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_changed'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+				margin_top = 6
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					align = left|nobaseline
+					using = fontsize_large
+					default_format = "#title"
+					text = "te_tax_rv_customs_header"
+				}
+				te_tax_text = {
+					text = "te_tax_rv_customs_intro"
+				}
+				te_tax_rv_customs_rows = {}
+			}
+
 			# Relief the draft changes: existing law in the commencement month,
 			# the bill, who benefits and what the relief forgoes.
 			flowcontainer = {
@@ -726,7 +826,7 @@ types te_tax_review_widget_types
 			# snapshot has no base and no figure. Goods and relief are labelled;
 			# regional relief's figures are on its state lines above.
 			flowcontainer = {
-				visible = "[Not( And( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_changed'), '(CFixedPoint)0' ) ) )]"
+				visible = "[Not( And( And( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_changed'), '(CFixedPoint)0' ) ) )]"
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 1
@@ -786,6 +886,10 @@ types te_tax_review_widget_types
 				te_tax_text = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' )]"
 					text = "te_tax_est_goods"
+				}
+				te_tax_text = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_changed'), '(CFixedPoint)0' )]"
+					text = "te_tax_est_customs"
 				}
 				te_tax_text = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_agrel_on'), '(CFixedPoint)0' )]"

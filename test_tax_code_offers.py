@@ -255,9 +255,10 @@ class ClauseRulingTest(unittest.TestCase):
                 self.assertNotIn(f"te_tax_bl_grief_{ig}_{key}", part)
             self.assertNotIn("te_tax_bl_eff_", part.replace("te_tax_bl_eff_agrel", "").replace("te_tax_bl_eff_wage", ""))
         leaves = norm(block(read(TRIGGERS), "te_tax_offer_cut_leaves_a_bill"))
+        # A customs level the bill changes keeps a bill too (Task 15).
         self.assertEqual(leaves, "OR = { te_tax_bl_dstep_$KEY$ >= 2 te_tax_bl_changed_provisions >= 2 "
                                  "te_tax_bl_goods_changed >= 1 NOT = { te_tax_bl_dstep_agrel = 0 } "
-                                 "te_tax_bl_regrel_differs = yes }")
+                                 "te_tax_bl_regrel_differs = yes te_tax_bl_customs_changed >= 1 }")
 
     def test_only_changes_from_existing_law_keep_a_bill(self):
         """Fix round 1: a restatement of existing law is not a change."""
@@ -317,7 +318,8 @@ class ClauseRulingTest(unittest.TestCase):
                           f"te_tax_dl_g_{good} > 0 te_tax_offer_untax_leaves_a_bill = yes", feasible)
         leaves = norm(block(read(TRIGGERS), "te_tax_offer_untax_leaves_a_bill"))
         self.assertEqual(leaves, "OR = { te_tax_bl_changed_provisions >= 1 te_tax_bl_goods_changed >= 2 "
-                                 "NOT = { te_tax_bl_dstep_agrel = 0 } te_tax_bl_regrel_differs = yes }")
+                                 "NOT = { te_tax_bl_dstep_agrel = 0 } te_tax_bl_regrel_differs = yes "
+                                 "te_tax_bl_customs_changed >= 1 }")
 
     def test_relief_is_added_not_taken(self):
         part = norm(selection("rural_folk"))

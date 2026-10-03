@@ -649,10 +649,10 @@ class SupportModelTest(unittest.TestCase):
             with self.subTest(ig=ig):
                 self.assertEqual({k: Decimal(v) for k, v in terms.items()},
                                  {k: Decimal(v) for k, v in expected.items()})
-                # Relief points (test_tax_code_goods_relief.py) sit between the
-                # weight and the clamp.
-                self.assertRegex(body, r"multiply = -10\s*(add = \{ value = te_tax_bl_(agrel_scaled|regrel_coverage) "
-                                       r"multiply = -?\d+ \}\s*)+min = -40\s*max = 40\s*$")
+                # Relief points (test_tax_code_goods_relief.py) and customs points
+                # (test_tax_code_customs.py) sit between the weight and the clamp.
+                self.assertRegex(body, r"multiply = -10\s*(add = \{ value = te_tax_bl_(agrel_scaled|regrel_coverage|"
+                                       r"dcu_(imp|exp)_\w+) multiply = -?\d+ \}\s*)+min = -40\s*max = 40\s*$")
 
     def test_progressiveness_matches_vanilla(self):
         with open(ROOT / "vanilla_parsed" / "common" / "laws.json", encoding="utf-8") as handle:

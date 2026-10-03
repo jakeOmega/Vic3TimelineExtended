@@ -19,6 +19,13 @@
 # te_tax_relief_<key>_sgui, one per relief (agrel, regrel), op-coded like the step handlers:
 #   op 0 one band less, 1 one band more, 2 none, 3 the deepest band, 4 out of the draft
 #   (te_tax_cmd_draft_relief DIR = op).
+# te_tax_customs_<good>_sgui, one per customs-catalog good (plan Task 15), op-coded:
+#    0  te_tax_cmd_draft_customs D = imp DIR = 0
+#    1  te_tax_cmd_draft_customs D = imp DIR = 1
+#    2  te_tax_cmd_draft_customs D = imp DIR = 2
+#   10  te_tax_cmd_draft_customs D = exp DIR = 0
+#   11  te_tax_cmd_draft_customs D = exp DIR = 1
+#   12  te_tax_cmd_draft_customs D = exp DIR = 2
 
 te_tax_step_wage_sgui = {
 	scope = country
@@ -772,6 +779,3606 @@ te_tax_relief_regrel_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 4 }
 			te_tax_cmd_draft_relief = { KEY = regrel DIR = 4 }
+		}
+	}
+}
+
+te_tax_customs_advanced_materials_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = advanced_materials D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = advanced_materials D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = advanced_materials D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = advanced_materials D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = advanced_materials D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = advanced_materials D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = advanced_materials D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = advanced_materials D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = advanced_materials D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = advanced_materials D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = advanced_materials D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = advanced_materials D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_aeroplanes_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = aeroplanes D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = aeroplanes D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = aeroplanes D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = aeroplanes D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = aeroplanes D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = aeroplanes D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = aeroplanes D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = aeroplanes D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = aeroplanes D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = aeroplanes D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = aeroplanes D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = aeroplanes D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_ammunition_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = ammunition D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = ammunition D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = ammunition D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = ammunition D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = ammunition D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = ammunition D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = ammunition D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = ammunition D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = ammunition D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = ammunition D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = ammunition D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = ammunition D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_artillery_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = artillery D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = artillery D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = artillery D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = artillery D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = artillery D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = artillery D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = artillery D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = artillery D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = artillery D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = artillery D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = artillery D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = artillery D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_automobiles_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = automobiles D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = automobiles D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = automobiles D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = automobiles D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = automobiles D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = automobiles D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = automobiles D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = automobiles D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = automobiles D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = automobiles D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = automobiles D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = automobiles D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_clippers_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = clippers D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = clippers D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = clippers D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = clippers D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = clippers D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = clippers D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = clippers D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = clippers D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = clippers D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = clippers D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = clippers D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = clippers D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_clothes_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = clothes D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = clothes D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = clothes D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = clothes D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = clothes D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = clothes D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = clothes D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = clothes D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = clothes D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = clothes D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = clothes D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = clothes D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_coal_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = coal D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = coal D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = coal D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = coal D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = coal D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = coal D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = coal D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = coal D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = coal D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = coal D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = coal D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = coal D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_coffee_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = coffee D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = coffee D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = coffee D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = coffee D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = coffee D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = coffee D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = coffee D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = coffee D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = coffee D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = coffee D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = coffee D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = coffee D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_construction_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = construction D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = construction D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = construction D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = construction D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = construction D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = construction D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = construction D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = construction D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = construction D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = construction D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = construction D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = construction D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_consumer_appliances_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = consumer_appliances D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = consumer_appliances D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = consumer_appliances D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = consumer_appliances D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = consumer_appliances D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = consumer_appliances D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = consumer_appliances D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = consumer_appliances D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = consumer_appliances D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = consumer_appliances D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = consumer_appliances D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = consumer_appliances D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_digital_assets_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = digital_assets D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = digital_assets D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = digital_assets D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = digital_assets D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = digital_assets D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = digital_assets D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = digital_assets D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = digital_assets D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = digital_assets D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = digital_assets D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = digital_assets D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = digital_assets D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_dye_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = dye D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = dye D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = dye D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = dye D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = dye D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = dye D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = dye D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = dye D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = dye D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = dye D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = dye D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = dye D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_electronic_components_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = electronic_components D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = electronic_components D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = electronic_components D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = electronic_components D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = electronic_components D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = electronic_components D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = electronic_components D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = electronic_components D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = electronic_components D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = electronic_components D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = electronic_components D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = electronic_components D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_engines_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = engines D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = engines D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = engines D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = engines D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = engines D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = engines D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = engines D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = engines D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = engines D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = engines D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = engines D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = engines D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_explosives_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = explosives D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = explosives D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = explosives D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = explosives D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = explosives D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = explosives D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = explosives D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = explosives D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = explosives D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = explosives D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = explosives D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = explosives D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_fabric_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = fabric D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = fabric D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = fabric D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = fabric D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = fabric D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = fabric D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = fabric D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = fabric D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = fabric D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = fabric D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = fabric D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = fabric D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_fertilizer_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = fertilizer D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = fertilizer D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = fertilizer D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = fertilizer D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = fertilizer D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = fertilizer D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = fertilizer D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = fertilizer D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = fertilizer D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = fertilizer D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = fertilizer D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = fertilizer D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_fine_art_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = fine_art D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = fine_art D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = fine_art D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = fine_art D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = fine_art D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = fine_art D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = fine_art D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = fine_art D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = fine_art D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = fine_art D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = fine_art D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = fine_art D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_fish_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = fish D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = fish D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = fish D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = fish D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = fish D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = fish D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = fish D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = fish D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = fish D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = fish D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = fish D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = fish D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_fruit_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = fruit D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = fruit D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = fruit D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = fruit D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = fruit D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = fruit D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = fruit D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = fruit D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = fruit D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = fruit D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = fruit D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = fruit D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_furniture_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = furniture D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = furniture D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = furniture D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = furniture D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = furniture D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = furniture D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = furniture D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = furniture D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = furniture D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = furniture D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = furniture D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = furniture D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_glass_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = glass D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = glass D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = glass D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = glass D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = glass D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = glass D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = glass D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = glass D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = glass D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = glass D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = glass D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = glass D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_grain_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = grain D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = grain D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = grain D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = grain D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = grain D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = grain D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = grain D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = grain D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = grain D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = grain D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = grain D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = grain D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_groceries_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = groceries D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = groceries D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = groceries D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = groceries D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = groceries D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = groceries D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = groceries D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = groceries D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = groceries D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = groceries D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = groceries D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = groceries D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_hardwood_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = hardwood D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = hardwood D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = hardwood D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = hardwood D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = hardwood D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = hardwood D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = hardwood D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = hardwood D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = hardwood D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = hardwood D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = hardwood D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = hardwood D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_iron_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = iron D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = iron D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = iron D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = iron D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = iron D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = iron D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = iron D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = iron D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = iron D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = iron D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = iron D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = iron D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_ironclads_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = ironclads D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = ironclads D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = ironclads D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = ironclads D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = ironclads D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = ironclads D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = ironclads D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = ironclads D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = ironclads D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = ironclads D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = ironclads D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = ironclads D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_launch_capacity_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = launch_capacity D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = launch_capacity D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = launch_capacity D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = launch_capacity D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = launch_capacity D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = launch_capacity D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = launch_capacity D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = launch_capacity D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = launch_capacity D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = launch_capacity D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = launch_capacity D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = launch_capacity D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_lead_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = lead D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = lead D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = lead D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = lead D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = lead D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = lead D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = lead D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = lead D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = lead D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = lead D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = lead D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = lead D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_liquor_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = liquor D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = liquor D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = liquor D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = liquor D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = liquor D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = liquor D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = liquor D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = liquor D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = liquor D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = liquor D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = liquor D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = liquor D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_luxury_clothes_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = luxury_clothes D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = luxury_clothes D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = luxury_clothes D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = luxury_clothes D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = luxury_clothes D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = luxury_clothes D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_clothes D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_clothes D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_clothes D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_clothes D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_clothes D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_clothes D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_luxury_furniture_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = luxury_furniture D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = luxury_furniture D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = luxury_furniture D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = luxury_furniture D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = luxury_furniture D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = luxury_furniture D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_furniture D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_furniture D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_furniture D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_furniture D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_furniture D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = luxury_furniture D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_magnetic_drive_ships_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = magnetic_drive_ships D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = magnetic_drive_ships D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = magnetic_drive_ships D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = magnetic_drive_ships D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = magnetic_drive_ships D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = magnetic_drive_ships D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = magnetic_drive_ships D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = magnetic_drive_ships D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = magnetic_drive_ships D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = magnetic_drive_ships D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = magnetic_drive_ships D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = magnetic_drive_ships D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_manowars_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = manowars D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = manowars D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = manowars D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = manowars D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = manowars D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = manowars D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = manowars D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = manowars D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = manowars D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = manowars D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = manowars D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = manowars D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_meat_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = meat D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = meat D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = meat D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = meat D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = meat D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = meat D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = meat D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = meat D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = meat D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = meat D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = meat D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = meat D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_merchant_marine_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = merchant_marine D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = merchant_marine D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = merchant_marine D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = merchant_marine D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = merchant_marine D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = merchant_marine D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = merchant_marine D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = merchant_marine D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = merchant_marine D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = merchant_marine D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = merchant_marine D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = merchant_marine D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_motor_ships_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = motor_ships D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = motor_ships D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = motor_ships D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = motor_ships D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = motor_ships D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = motor_ships D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = motor_ships D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = motor_ships D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = motor_ships D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = motor_ships D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = motor_ships D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = motor_ships D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_oil_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = oil D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = oil D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = oil D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = oil D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = oil D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = oil D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = oil D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = oil D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = oil D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = oil D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = oil D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = oil D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_opium_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = opium D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = opium D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = opium D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = opium D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = opium D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = opium D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = opium D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = opium D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = opium D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = opium D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = opium D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = opium D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_paper_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = paper D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = paper D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = paper D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = paper D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = paper D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = paper D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = paper D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = paper D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = paper D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = paper D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = paper D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = paper D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_porcelain_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = porcelain D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = porcelain D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = porcelain D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = porcelain D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = porcelain D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = porcelain D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = porcelain D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = porcelain D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = porcelain D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = porcelain D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = porcelain D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = porcelain D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_radios_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = radios D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = radios D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = radios D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = radios D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = radios D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = radios D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = radios D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = radios D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = radios D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = radios D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = radios D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = radios D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_robotics_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = robotics D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = robotics D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = robotics D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = robotics D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = robotics D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = robotics D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = robotics D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = robotics D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = robotics D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = robotics D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = robotics D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = robotics D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_rubber_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = rubber D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = rubber D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = rubber D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = rubber D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = rubber D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = rubber D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = rubber D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = rubber D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = rubber D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = rubber D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = rubber D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = rubber D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_silk_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = silk D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = silk D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = silk D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = silk D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = silk D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = silk D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = silk D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = silk D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = silk D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = silk D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = silk D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = silk D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_small_arms_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = small_arms D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = small_arms D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = small_arms D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = small_arms D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = small_arms D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = small_arms D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = small_arms D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = small_arms D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = small_arms D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = small_arms D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = small_arms D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = small_arms D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_steamers_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = steamers D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = steamers D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = steamers D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = steamers D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = steamers D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = steamers D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = steamers D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = steamers D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = steamers D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = steamers D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = steamers D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = steamers D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_steel_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = steel D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = steel D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = steel D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = steel D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = steel D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = steel D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = steel D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = steel D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = steel D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = steel D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = steel D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = steel D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_sugar_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = sugar D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = sugar D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = sugar D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = sugar D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = sugar D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = sugar D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = sugar D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = sugar D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = sugar D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = sugar D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = sugar D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = sugar D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_sulfur_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = sulfur D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = sulfur D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = sulfur D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = sulfur D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = sulfur D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = sulfur D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = sulfur D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = sulfur D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = sulfur D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = sulfur D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = sulfur D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = sulfur D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_tanks_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = tanks D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = tanks D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = tanks D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = tanks D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = tanks D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = tanks D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = tanks D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = tanks D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = tanks D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = tanks D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = tanks D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = tanks D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_tea_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = tea D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = tea D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = tea D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = tea D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = tea D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = tea D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = tea D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = tea D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = tea D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = tea D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = tea D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = tea D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_tech_metals_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = tech_metals D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = tech_metals D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = tech_metals D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = tech_metals D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = tech_metals D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = tech_metals D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = tech_metals D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = tech_metals D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = tech_metals D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = tech_metals D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = tech_metals D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = tech_metals D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_telephones_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = telephones D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = telephones D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = telephones D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = telephones D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = telephones D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = telephones D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = telephones D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = telephones D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = telephones D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = telephones D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = telephones D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = telephones D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_tobacco_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = tobacco D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = tobacco D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = tobacco D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = tobacco D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = tobacco D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = tobacco D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = tobacco D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = tobacco D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = tobacco D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = tobacco D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = tobacco D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = tobacco D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_tools_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = tools D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = tools D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = tools D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = tools D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = tools D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = tools D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = tools D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = tools D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = tools D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = tools D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = tools D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = tools D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_tourism_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = tourism D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = tourism D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = tourism D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = tourism D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = tourism D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = tourism D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = tourism D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = tourism D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = tourism D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = tourism D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = tourism D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = tourism D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_wine_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = wine D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = wine D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = wine D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = wine D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = wine D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = wine D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = wine D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = wine D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = wine D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = wine D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = wine D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = wine D = exp DIR = 2 }
+		}
+	}
+}
+
+te_tax_customs_wood_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_customs = { GOOD = wood D = imp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_customs = { GOOD = wood D = imp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_customs = { GOOD = wood D = imp DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_can_draft_customs = { GOOD = wood D = exp DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_can_draft_customs = { GOOD = wood D = exp DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_can_draft_customs = { GOOD = wood D = exp DIR = 2 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_customs = { GOOD = wood D = imp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_customs = { GOOD = wood D = imp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_customs = { GOOD = wood D = imp DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			te_tax_cmd_draft_customs = { GOOD = wood D = exp DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			te_tax_cmd_draft_customs = { GOOD = wood D = exp DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			te_tax_cmd_draft_customs = { GOOD = wood D = exp DIR = 2 }
 		}
 	}
 }

@@ -763,6 +763,16 @@ types te_tax_politics_widget_types
 						text = "te_tax_pk_a_goods"
 					}
 				}
+				# Customs levels it changes (plan Task 15; customs option only).
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_customs_changed'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_wb_sub_customs"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_pk_a_customs"
+					}
+				}
 				# Held: Reschedule | Release. 237 + 6 + 237 = 480.
 				flowcontainer = {
 					visible = "[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ) )]"
@@ -860,6 +870,16 @@ types te_tax_politics_widget_types
 					}
 					blockoverride "line_value" {
 						text = "te_tax_pk_b_goods"
+					}
+				}
+				# Customs levels it changes (plan Task 15; customs option only).
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_customs_changed'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_wb_sub_customs"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_pk_b_customs"
 					}
 				}
 				flowcontainer = {
