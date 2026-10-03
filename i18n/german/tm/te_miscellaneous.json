@@ -13755,13 +13755,21 @@
   "en": "Retirement Programmes",
   "de": "Stilllegungsprogramme"
  },
+ "rt_law_emissions_tt": {
+  "en": "Closing supply cuts the market's [concept_greenhouse_gas_emissions] only if the market then burns less coal and oil, not if it imports them",
+  "de": "Die Schließung des Angebots senkt die [concept_greenhouse_gas_emissions] des Marktes nur, wenn der Markt danach weniger Kohle und Öl verbrennt, nicht, wenn er sie importiert"
+ },
  "rt_law_line": {
   "en": "Transition Law: #v [Country.GetCustom('rt_law_name')]#!",
   "de": "Wendegesetz: #v [Country.GetCustom('rt_law_name')]#!"
  },
  "rt_law_moratorium_tt": {
-  "en": "It will no longer be possible to build or expand #bold $building_coal_mine$#!, #bold $building_oil_rig$#! or #bold $building_power_plant$#! buildings in this country",
-  "de": "In diesem Land wird es nicht mehr möglich sein, #bold $building_coal_mine$#!, #bold $building_oil_rig$#! oder #bold $building_power_plant$#! zu bauen oder auszubauen"
+  "en": "No new #bold $building_coal_mine$#!, #bold $building_oil_rig$#! or #bold $building_power_plant$#! can be built or expanded in this country, whoever invests, foreign investors included. Those already running carry on",
+  "de": "In diesem Land ist es nicht mehr möglich, #bold $building_coal_mine$#!, #bold $building_oil_rig$#! oder #bold $building_power_plant$#! zu bauen oder auszubauen, gleich wer investiert, ausländische Investoren eingeschlossen. Bereits laufende bleiben bestehen"
+ },
+ "rt_law_phaseout_rule_tt": {
+  "en": "A running programme closes the smallest building of its kind left in our states every #v 3#! months, whoever owns it, foreign investors included. The whole building goes, every level of it. Its owners are paid a quarter of what it would cost to build today, from the treasury, and its state gets [GetStaticModifier('rt_transition_assistance').GetName] for #v 5#! years. Repealing this law stops every programme",
+  "de": "Ein laufendes Programm schließt alle #v 3#! Monate das kleinste noch vorhandene Gebäude seiner Art in unseren Staaten, wem auch immer es gehört, ausländische Investoren eingeschlossen. Das ganze Gebäude verschwindet, jede Stufe davon. Seine Eigentümer erhalten ein Viertel dessen, was der Bau heute kosten würde, aus der Landeskasse, und sein Staat erhält [GetStaticModifier('rt_transition_assistance').GetName] für #v 5#! Jahre. Die Aufhebung dieses Gesetzes stoppt jedes Programm"
  },
  "rt_law_phaseout_tt": {
   "en": "Retirement programmes for these buildings can be started from the #bold [concept_fossil_transition]#! section of the #bold $je_global_warming$#! journal entry",

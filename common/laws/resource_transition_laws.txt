@@ -38,6 +38,14 @@
 # less. A country that closes its mines and imports the same coal emits as
 # much as before.
 #
+# WHERE THE TEXT LIVES. A law's description is flavor: the enactment popup
+# prints it in a box that does not scroll, and the 650-character version that
+# listed the rules ran over the law's name and art. The rules are effect lines
+# in each restrictive law's on_enact (what the enactment preview shows, as
+# law_direct_democracy does for Collective Governance), and the hover on the
+# Fossil Transition section's law line repeats them (rt_law_effects). The
+# concept [concept_fossil_transition] explains the whole.
+#
 # The AI's enactment weights live in common/script_values/resource_transition_values.txt.
 # ============================================================================
 
@@ -83,8 +91,14 @@ law_fossil_expansion_moratorium = {
 		law_ministry_of_the_environment
 	}
 
-	on_activate = {
+	# The rules, as effect lines in the enactment preview. The description is
+	# flavor (scripting_best_practices.md, "Law enactment preview").
+	on_enact = {
 		custom_tooltip = rt_law_moratorium_tt
+		custom_tooltip = rt_law_emissions_tt
+	}
+
+	on_activate = {
 		hidden_effect = {
 			rt_stop_all_programmes = yes
 			rt_refresh_display_effect = yes
@@ -116,9 +130,14 @@ law_managed_fossil_phaseout = {
 		rt_ministry_funded_for_phaseout = yes
 	}
 
-	on_activate = {
+	on_enact = {
 		custom_tooltip = rt_law_moratorium_tt
 		custom_tooltip = rt_law_phaseout_tt
+		custom_tooltip = rt_law_phaseout_rule_tt
+		custom_tooltip = rt_law_emissions_tt
+	}
+
+	on_activate = {
 		hidden_effect = {
 			rt_refresh_display_effect = yes
 		}

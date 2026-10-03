@@ -248,8 +248,8 @@
   "de": "Fossiles Ausbaumoratorium"
  },
  "law_fossil_expansion_moratorium_desc": {
-  "en": "No new $building_coal_mine$, $building_oil_rig$ or $building_power_plant$ may be built or expanded here, whoever invests, foreign investors included. Those already running carry on. The ban earns no emissions cut by itself: our market's [concept_greenhouse_gas_emissions] follow the coal and oil it burns, wherever mined. Part of the [concept_fossil_transition].",
-  "de": "Keine neuen $building_coal_mine$, $building_oil_rig$ oder $building_power_plant$ dürfen hier gebaut oder erweitert werden, gleich wer investiert, ausländische Investoren eingeschlossen. Bereits laufende bleiben bestehen. Das Verbot bringt für sich allein keine Emissionssenkung: Die [concept_greenhouse_gas_emissions] unseres Marktes folgen der Kohle und dem Öl, die er verbrennt, gleichgültig wo sie gefördert wurden. Teil der [concept_fossil_transition]."
+  "en": "The country draws a line under the fossil economy's growth. What already burns may go on burning, but the age of new mines, rigs and plants is over.",
+  "de": "Das Land zieht einen Schlussstrich unter das Wachstum der fossilen Wirtschaft. Was bereits brennt, darf weiterbrennen, doch das Zeitalter neuer Minen, Bohranlagen und Kraftwerke ist vorbei."
  },
  "law_free_mutual_banking": {
   "en": "Free & Mutual Banking",
@@ -376,8 +376,8 @@
   "de": "Gesteuerter Fossilausstieg"
  },
  "law_managed_fossil_phaseout_desc": {
-  "en": "The moratorium, and the state may retire what already runs: a programme per industry closes the smallest building of its kind every #v 3#! months, whoever owns it, and the treasury compensates its owners. Closing supply cuts [concept_greenhouse_gas_emissions] only if the market burns less. Part of the [concept_fossil_transition].",
-  "de": "Das Moratorium gilt, und der Staat darf stilllegen, was bereits läuft: Ein Programm je Branche schließt alle #v 3#! Monate das kleinste noch vorhandene Gebäude seiner Art, gleich wem es gehört, und die Landeskasse entschädigt seine Eigentümer. Die Schließung des Angebots senkt die [concept_greenhouse_gas_emissions] nur, wenn der Markt weniger verbrennt. Teil der [concept_fossil_transition]."
+  "en": "The state takes charge of the fossil economy's decline. Rather than wait for the market or the climate to force the issue, it buys out the mines, rigs and plants and closes them in an orderly retreat.",
+  "de": "Der Staat nimmt den Niedergang der fossilen Wirtschaft selbst in die Hand. Statt abzuwarten, bis Markt oder Klima die Entscheidung erzwingen, kauft er Minen, Bohranlagen und Kraftwerke auf und schließt sie in geordnetem Rückzug."
  },
  "law_mandatory_augmentation": {
   "en": "Mandatory Augmentation",
