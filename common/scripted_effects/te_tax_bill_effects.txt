@@ -416,8 +416,8 @@ te_tax_bill_start_debate = {
 }
 
 # Opens the bill's current revision: the clock (game_date, in days), the
-# minor/major class, commitments released and offers withdrawn, and the bill
-# opened.
+# minor/major class, commitments released and offers withdrawn, the bill
+# opened, and the economy snapshot its estimates are dated by.
 te_tax_bill_open_revision = {
 	set_variable = { name = te_tax_bl_day value = game_date }
 	te_tax_bill_set_minor = yes
@@ -427,6 +427,10 @@ te_tax_bill_open_revision = {
 	# accepted under this bill are proposed again after it.
 	te_tax_obl_release_pending = yes
 	set_variable = { name = te_tax_bl_on value = 1 }
+	# Every caller (introduction, revision, an accepted offer) has moved the
+	# revision on and the bill is open, so the snapshot records this revision
+	# (te_tax_snapshot_effects.txt).
+	te_tax_take_snapshot = yes
 }
 
 # Records whether the bill is minor (te_tax_bill_is_minor, te_tax_triggers.txt):

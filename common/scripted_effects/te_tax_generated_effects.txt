@@ -3598,8 +3598,9 @@ te_tax_gen_migrate_provisions = {
 }
 
 # Interest-group views of the enacted code (te_tax_refresh_ig_views, from the monthly
-# processor only): each group's band (te_tax_ig_band_<ig>: its stance toward the vanilla
-# taxation law the code is equivalent to, -2..2) keeps at most one te_tax_ig_view_<ig>_<band>
+# processor and from te_tax.4, the sync after a migration, a re-assert or a copied code):
+# each group's band (te_tax_ig_band_<ig>: its stance toward the vanilla taxation law the
+# code is equivalent to, -2..2) keeps at most one te_tax_ig_view_<ig>_<band>
 # on the country, and none at band 0. A band's modifier is added only where it is missing and
 # the others are removed only where present, so an unchanged band changes nothing. Modifier
 # changes are not visible later in the same effect; nothing here reads one back.

@@ -4122,3 +4122,383 @@ te_tax_view_obl_pending = {
 	if = { limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_state OR = { var:te_tax_o3_state = 1 } } add = 1 }
 	if = { limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_state OR = { var:te_tax_o4_state = 1 } } add = 1 }
 }
+
+# Estimates (plan Task 14). Per instrument: the index in force at the economy snapshot
+# (te_tax_snap_<key>, written by te_tax_take_snapshot); te_tax_est_r_<key>_law and _bill, the
+# index existing law and the draft give in the draft's month over the snapshot's (0 when the
+# tax was not collected at the snapshot: no base to scale); te_tax_est_d_<key>, the draft's
+# change. The helpers are read only through the views below, which need an open draft.
+te_tax_view_snap_wage = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_wage } value = var:te_tax_snap_wage }
+}
+te_tax_est_r_wage_law = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_wage var:te_tax_snap_wage > 0 }
+		value = te_tax_base_dr_wage
+		divide = var:te_tax_snap_wage
+	}
+}
+te_tax_est_r_wage_bill = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_wage var:te_tax_snap_wage > 0 }
+		value = te_tax_dr_eff_wage
+		divide = var:te_tax_snap_wage
+	}
+}
+te_tax_est_d_wage = {
+	value = te_tax_est_r_wage_bill
+	subtract = te_tax_est_r_wage_law
+}
+te_tax_view_snap_div = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_div } value = var:te_tax_snap_div }
+}
+te_tax_est_r_div_law = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_div var:te_tax_snap_div > 0 }
+		value = te_tax_base_dr_div
+		divide = var:te_tax_snap_div
+	}
+}
+te_tax_est_r_div_bill = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_div var:te_tax_snap_div > 0 }
+		value = te_tax_dr_eff_div
+		divide = var:te_tax_snap_div
+	}
+}
+te_tax_est_d_div = {
+	value = te_tax_est_r_div_bill
+	subtract = te_tax_est_r_div_law
+}
+te_tax_view_snap_land = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_land } value = var:te_tax_snap_land }
+}
+te_tax_est_r_land_law = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_land var:te_tax_snap_land > 0 }
+		value = te_tax_base_dr_land
+		divide = var:te_tax_snap_land
+	}
+}
+te_tax_est_r_land_bill = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_land var:te_tax_snap_land > 0 }
+		value = te_tax_dr_eff_land
+		divide = var:te_tax_snap_land
+	}
+}
+te_tax_est_d_land = {
+	value = te_tax_est_r_land_bill
+	subtract = te_tax_est_r_land_law
+}
+te_tax_view_snap_head = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_head } value = var:te_tax_snap_head }
+}
+te_tax_est_r_head_law = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_head var:te_tax_snap_head > 0 }
+		value = te_tax_base_dr_head
+		divide = var:te_tax_snap_head
+	}
+}
+te_tax_est_r_head_bill = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_head var:te_tax_snap_head > 0 }
+		value = te_tax_dr_eff_head
+		divide = var:te_tax_snap_head
+	}
+}
+te_tax_est_d_head = {
+	value = te_tax_est_r_head_bill
+	subtract = te_tax_est_r_head_law
+}
+te_tax_view_snap_cons = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_cons } value = var:te_tax_snap_cons }
+}
+te_tax_est_r_cons_law = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_cons var:te_tax_snap_cons > 0 }
+		value = te_tax_base_dr_cons
+		divide = var:te_tax_snap_cons
+	}
+}
+te_tax_est_r_cons_bill = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_cons var:te_tax_snap_cons > 0 }
+		value = te_tax_dr_eff_cons
+		divide = var:te_tax_snap_cons
+	}
+}
+te_tax_est_d_cons = {
+	value = te_tax_est_r_cons_bill
+	subtract = te_tax_est_r_cons_law
+}
+
+# Per Budget line (CHANNELS): whether the draft changes a tax it collects (_on); whether a
+# tax it collects under existing law or the draft was not collected at the snapshot, so
+# today's receipts give no base (_nobase); and the line's receipts under existing law and
+# the draft, and the change, as multiples of today's. A line of two taxes (Poll) gives the
+# lower and the higher of the two taxes' multiples while both collect (_lo, _hi: any split
+# of today's receipts between them falls in between), and their sum while at most one does
+# (the other's helper is 0).
+te_tax_view_est_income_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due has_variable = te_tax_dr_wage var:te_tax_dr_wage >= 0 }
+		value = 1
+	}
+}
+te_tax_view_est_income_nobase = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = {
+			limit = { NOT = { AND = { has_variable = te_tax_snap_wage var:te_tax_snap_wage > 0 } } }
+			add = te_tax_base_dr_wage
+			add = te_tax_dr_eff_wage
+		}
+	}
+	max = 1
+}
+te_tax_view_est_income_law = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_est_r_wage_law
+	}
+}
+te_tax_view_est_income_bill = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_est_r_wage_bill
+	}
+}
+te_tax_view_est_income_delta = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_est_r_wage_bill
+		subtract = te_tax_est_r_wage_law
+	}
+}
+te_tax_view_est_dividends_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due has_variable = te_tax_dr_div var:te_tax_dr_div >= 0 }
+		value = 1
+	}
+}
+te_tax_view_est_dividends_nobase = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = {
+			limit = { NOT = { AND = { has_variable = te_tax_snap_div var:te_tax_snap_div > 0 } } }
+			add = te_tax_base_dr_div
+			add = te_tax_dr_eff_div
+		}
+	}
+	max = 1
+}
+te_tax_view_est_dividends_law = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_est_r_div_law
+	}
+}
+te_tax_view_est_dividends_bill = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_est_r_div_bill
+	}
+}
+te_tax_view_est_dividends_delta = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_est_r_div_bill
+		subtract = te_tax_est_r_div_law
+	}
+}
+te_tax_view_est_poll_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due OR = { AND = { has_variable = te_tax_dr_land var:te_tax_dr_land >= 0 } AND = { has_variable = te_tax_dr_head var:te_tax_dr_head >= 0 } } }
+		value = 1
+	}
+}
+te_tax_view_est_poll_nobase = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = {
+			limit = { NOT = { AND = { has_variable = te_tax_snap_land var:te_tax_snap_land > 0 } } }
+			add = te_tax_base_dr_land
+			add = te_tax_dr_eff_land
+		}
+		if = {
+			limit = { NOT = { AND = { has_variable = te_tax_snap_head var:te_tax_snap_head > 0 } } }
+			add = te_tax_base_dr_head
+			add = te_tax_dr_eff_head
+		}
+	}
+	max = 1
+}
+te_tax_view_est_poll_law_lo = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = { limit = { has_variable = te_tax_snap_land var:te_tax_snap_land > 0 has_variable = te_tax_snap_head var:te_tax_snap_head > 0 } value = te_tax_est_r_land_law max = te_tax_est_r_head_law }
+		else = { value = te_tax_est_r_land_law add = te_tax_est_r_head_law }
+	}
+}
+te_tax_view_est_poll_law_hi = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = { limit = { has_variable = te_tax_snap_land var:te_tax_snap_land > 0 has_variable = te_tax_snap_head var:te_tax_snap_head > 0 } value = te_tax_est_r_land_law min = te_tax_est_r_head_law }
+		else = { value = te_tax_est_r_land_law add = te_tax_est_r_head_law }
+	}
+}
+te_tax_view_est_poll_bill_lo = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = { limit = { has_variable = te_tax_snap_land var:te_tax_snap_land > 0 has_variable = te_tax_snap_head var:te_tax_snap_head > 0 } value = te_tax_est_r_land_bill max = te_tax_est_r_head_bill }
+		else = { value = te_tax_est_r_land_bill add = te_tax_est_r_head_bill }
+	}
+}
+te_tax_view_est_poll_bill_hi = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = { limit = { has_variable = te_tax_snap_land var:te_tax_snap_land > 0 has_variable = te_tax_snap_head var:te_tax_snap_head > 0 } value = te_tax_est_r_land_bill min = te_tax_est_r_head_bill }
+		else = { value = te_tax_est_r_land_bill add = te_tax_est_r_head_bill }
+	}
+}
+te_tax_view_est_poll_delta_lo = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = { limit = { has_variable = te_tax_snap_land var:te_tax_snap_land > 0 has_variable = te_tax_snap_head var:te_tax_snap_head > 0 } value = te_tax_est_d_land max = te_tax_est_d_head }
+		else = { value = te_tax_est_d_land add = te_tax_est_d_head }
+	}
+}
+te_tax_view_est_poll_delta_hi = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = { limit = { has_variable = te_tax_snap_land var:te_tax_snap_land > 0 has_variable = te_tax_snap_head var:te_tax_snap_head > 0 } value = te_tax_est_d_land min = te_tax_est_d_head }
+		else = { value = te_tax_est_d_land add = te_tax_est_d_head }
+	}
+}
+te_tax_view_est_poll_shared = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_snap_land var:te_tax_snap_land > 0 has_variable = te_tax_snap_head var:te_tax_snap_head > 0 }
+		value = 1
+	}
+}
+te_tax_view_est_consumption_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due has_variable = te_tax_dr_cons var:te_tax_dr_cons >= 0 }
+		value = 1
+	}
+}
+te_tax_view_est_consumption_nobase = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = {
+			limit = { NOT = { AND = { has_variable = te_tax_snap_cons var:te_tax_snap_cons > 0 } } }
+			add = te_tax_base_dr_cons
+			add = te_tax_dr_eff_cons
+		}
+	}
+	max = 1
+}
+te_tax_view_est_consumption_law = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_est_r_cons_law
+	}
+}
+te_tax_view_est_consumption_bill = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_est_r_cons_bill
+	}
+}
+te_tax_view_est_consumption_delta = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_est_r_cons_bill
+		subtract = te_tax_est_r_cons_law
+	}
+}
+
+# An offer to cut a tax (te_tax_off_<ig>_kind 1) lowers the bill's index by one step: as a
+# multiple of today's receipts, -1 over the snapshot's index (0 when it was not collected).
+# Read while a bill is open, as offers exist only then.
+te_tax_view_est_cut_wage = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_snap_wage var:te_tax_snap_wage > 0 }
+		value = -1
+		divide = var:te_tax_snap_wage
+	}
+}
+te_tax_view_est_cut_div = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_snap_div var:te_tax_snap_div > 0 }
+		value = -1
+		divide = var:te_tax_snap_div
+	}
+}
+te_tax_view_est_cut_land = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_snap_land var:te_tax_snap_land > 0 }
+		value = -1
+		divide = var:te_tax_snap_land
+	}
+}
+te_tax_view_est_cut_head = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_snap_head var:te_tax_snap_head > 0 }
+		value = -1
+		divide = var:te_tax_snap_head
+	}
+}
+te_tax_view_est_cut_cons = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_snap_cons var:te_tax_snap_cons > 0 }
+		value = -1
+		divide = var:te_tax_snap_cons
+	}
+}

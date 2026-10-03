@@ -5,8 +5,8 @@
 # endorses), carrying the approval vanilla gives for an active law the group takes that
 # stance on (IG_APPROVAL_FROM_LAW = 1, IG_APPROVAL_FROM_LAW_STRONG_STANCE = 2); a neutral
 # group has none. te_tax_gen_ig_views (te_tax_generated_effects.txt), run by the monthly
-# processor, keeps at most one of each group's four on a country under the rule. Static: no
-# multiplier.
+# processor and by te_tax.4 (the sync after a migration, a re-assert or a copied code), keeps
+# at most one of each group's four on a country under the rule. Static: no multiplier.
 
 te_tax_ig_view_armed_forces_m2 = {
 	icon = "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"

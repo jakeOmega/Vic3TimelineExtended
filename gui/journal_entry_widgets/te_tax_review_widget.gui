@@ -18,6 +18,11 @@
 ### revenue the relief forgoes, in the words the capability ledger verified
 ### (agricultural relief: the wage tax of agricultural workers; regional
 ### relief: every tax collected from the named states' pops).
+###
+### The revenue estimate (plan Task 14) closes the review: per Budget line the
+### draft changes, today's receipts scaled by the draft's and existing law's
+### rates against the economy snapshot's (te_tax_take_snapshot, never run from
+### a panel), labelled a static estimate and marked once out of date.
 
 types te_tax_review_widget_types
 {
@@ -657,7 +662,9 @@ types te_tax_review_widget_types
 							align = left|nobaseline
 							using = fontsize_medium
 							elide = right
-							text = "te_tax_rv_regrel_state"
+							# A state the draft drops pays its taxes again: its estimate
+							# (plan Task 14). One the draft keeps shows it in the bill's list.
+							text = "[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_rv_regrel_state_est', 'te_tax_rv_regrel_state' )]"
 						}
 					}
 				}
@@ -670,7 +677,8 @@ types te_tax_review_widget_types
 						text = "te_tax_rv_regrel"
 					}
 				}
-				# The states the bill names, with what each collects now.
+				# The states the bill names, with what each collects now and the
+				# change the bill makes to it (plan Task 14).
 				flowcontainer = {
 					direction = vertical
 					ignoreinvisible = yes
@@ -686,7 +694,7 @@ types te_tax_review_widget_types
 							align = left|nobaseline
 							using = fontsize_medium
 							elide = right
-							text = "te_tax_rv_regrel_state"
+							text = "te_tax_rv_regrel_state_est"
 						}
 					}
 				}
@@ -705,6 +713,84 @@ types te_tax_review_widget_types
 					blockoverride "line_value" {
 						text = "te_tax_rv_regrel_forgoes"
 					}
+				}
+			}
+
+			# The revenue estimate (plan Task 14; tax_code_schema.md, "Economy
+			# snapshot and estimates"): each Budget line the draft changes, as
+			# today's receipts (the Budget's own getter) scaled by existing law's
+			# and the draft's rates in its month against the rates at the economy
+			# snapshot (te_tax_view_est_<line>_*), dated, and marked out of date once
+			# the snapshot is (te_tax_view_snap_current). A tax not collected at the
+			# snapshot has no base and no figure. Goods and relief are labelled;
+			# regional relief's figures are on its state lines above.
+			flowcontainer = {
+				visible = "[Not( And( And( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_provisions'), '(CFixedPoint)0' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_relief_changed'), '(CFixedPoint)0' ) ) )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+
+				te_tax_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_tax_est_header"
+						tooltip = "te_tax_est_header_tt"
+					}
+				}
+				te_tax_text = {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_est_static', 'te_tax_est_stale' )]"
+					tooltip = "te_tax_est_header_tt"
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_est_ch_income"
+						tooltip = "te_tax_est_ch_income_tt"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_income' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_est_ch_dividends"
+						tooltip = "te_tax_est_ch_dividends_tt"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_dividends' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_est_ch_poll"
+						tooltip = "te_tax_est_ch_poll_tt"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ), 'te_tax_est_poll_range', 'te_tax_est_poll' ) )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_est_ch_consumption"
+						tooltip = "te_tax_est_ch_consumption_tt"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_nobase'), '(CFixedPoint)1' ), 'te_tax_est_nobase', 'te_tax_est_consumption' )]"
+					}
+				}
+				te_tax_text = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_goods_changed'), '(CFixedPoint)0' )]"
+					text = "te_tax_est_goods"
+				}
+				te_tax_text = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_agrel_on'), '(CFixedPoint)0' )]"
+					text = "te_tax_est_agrel"
+				}
+				te_tax_text = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
+					text = "te_tax_est_regrel"
 				}
 			}
 		}

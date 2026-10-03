@@ -49,7 +49,8 @@ TAX_GUI = (OVERVIEW, LAYOUT, WORKBENCH, REVIEW, POLITICS, GEN_ROWS)
 
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
        "landowners", "petty_bourgeoisie", "rural_folk", "trade_unions")
-IG_VALUES = ("stance", "score", "mat", "ideo", "fisc", "gov", "trust", "prom", "offer")
+# "offer_arg": the card's revenue line picks the instrument an offer cuts (Task 14).
+IG_VALUES = ("stance", "score", "mat", "ideo", "fisc", "gov", "trust", "prom", "offer", "offer_arg")
 WORLD = re.compile(r"\b(every_\w+|any_\w+|random_\w+|ordered_\w+)\b")
 WRITES = re.compile(r"\b(set_variable|change_variable|remove_variable|clamp_variable|save_scope_as|"
                     r"save_temporary_scope_as|add_modifier|remove_modifier|trigger_event|set_local_variable)\b")

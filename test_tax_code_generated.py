@@ -228,10 +228,12 @@ class GeneratedFileFormatTest(unittest.TestCase):
 class ScriptValueTest(unittest.TestCase):
     def test_step_max_and_percent_step_constants(self):
         # The file also carries the te_tax_view_* display values (pinned in
-        # test_tax_code_state.py) and the interest-group cards' te_tax_disp_ig_*
-        # values (test_tax_code_sguis.py); every other entry is one of these
+        # test_tax_code_state.py), the interest-group cards' te_tax_disp_ig_*
+        # values (test_tax_code_sguis.py) and the estimates' te_tax_est_* helpers
+        # (test_tax_code_estimates.py); every other entry is one of these
         # constants.
-        values = {k: v for k, v in load(VALUES).items() if not k.startswith(("te_tax_view_", "te_tax_disp_ig_"))}
+        values = {k: v for k, v in load(VALUES).items()
+                  if not k.startswith(("te_tax_view_", "te_tax_disp_ig_", "te_tax_est_"))}
         want = {}
         for key, (_, step, max_idx, _, _) in TABLE.items():
             want[f"te_tax_step_{key}"] = Decimal(step)

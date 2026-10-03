@@ -238,6 +238,24 @@ types te_tax_politics_widget_types
 				tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_accept_offer_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_ig', InterestGroup.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_accept_offer_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_ig', InterestGroup.MakeScope ).End ) ) )]"
 			}
 		}
+		### What the offer does to the bill's revenue (plan Task 14): a cut (kind 1),
+		### the Budget line's receipts today times te_tax_view_est_cut_<key> (one
+		### step over the snapshot's index; arg = the instrument, 1 wage .. 5
+		### consumption), or no figure for a tax not collected at the snapshot and a
+		### range for rural assessment and head tax while both collect; relief
+		### (kind 2) and a staple (kind 3) carry a label. No line for a promise,
+		### which changes no tax. 4 + 472 + 4 = 480.
+		textbox = {
+			visible = "[And( GreaterThan_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer'), '(CFixedPoint)0' ), LessThan_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer'), '(CFixedPoint)4' ) )]"
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 472 -1 }
+			maximumsize = { 472 -1 }
+			margin_left = 4
+			align = left|nobaseline
+			using = fontsize_medium
+			text = "[SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer'), '(CFixedPoint)2' ), 'te_tax_ig_offer_est_agrel', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer'), '(CFixedPoint)3' ), 'te_tax_ig_offer_est_untax', SelectLocalization( And( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer_arg'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_wage'), '(CFixedPoint)0' ) ), 'te_tax_ig_offer_est_nobase', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer_arg'), '(CFixedPoint)1' ), 'te_tax_ig_offer_est_wage', SelectLocalization( And( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer_arg'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_div'), '(CFixedPoint)0' ) ), 'te_tax_ig_offer_est_nobase', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer_arg'), '(CFixedPoint)2' ), 'te_tax_ig_offer_est_div', SelectLocalization( And( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer_arg'), '(CFixedPoint)3' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_land'), '(CFixedPoint)0' ) ), 'te_tax_ig_offer_est_nobase', SelectLocalization( And( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer_arg'), '(CFixedPoint)3' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ) ), 'te_tax_ig_offer_est_land_shared', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer_arg'), '(CFixedPoint)3' ), 'te_tax_ig_offer_est_land', SelectLocalization( And( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer_arg'), '(CFixedPoint)4' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_head'), '(CFixedPoint)0' ) ), 'te_tax_ig_offer_est_nobase', SelectLocalization( And( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer_arg'), '(CFixedPoint)4' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_shared'), '(CFixedPoint)1' ) ), 'te_tax_ig_offer_est_head_shared', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer_arg'), '(CFixedPoint)4' ), 'te_tax_ig_offer_est_head', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_cons'), '(CFixedPoint)0' ), 'te_tax_ig_offer_est_nobase', 'te_tax_ig_offer_est_cons' ) ) ) ) ) ) ) ) ) ) ) ) )]"
+		}
 	}
 
 	### One promise (plan Task 12): the group it was made to and what it
@@ -560,6 +578,11 @@ types te_tax_politics_widget_types
 				}
 				te_tax_note = {
 					text = "te_tax_pol_groups_note"
+				}
+				# The offers' revenue figures are static estimates against the economy
+				# snapshot (plan Task 14), marked once it is out of date.
+				te_tax_note = {
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_pol_est_note', 'te_tax_pol_est_note_stale' )]"
 				}
 				flowcontainer = {
 					direction = vertical

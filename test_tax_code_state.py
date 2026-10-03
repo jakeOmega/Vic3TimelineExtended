@@ -630,6 +630,19 @@ class DisplayValueTest(unittest.TestCase):
                 "on", "state", "kind", "arg", "target", "ig", "baseline", "streak", "fails", "maint_only", "grace",
                 "deadline", "deadline_y", "deadline_mo", "maint_end", "maint_end_y", "maint_end_mo")}
         want |= {"te_tax_view_obl_binding", "te_tax_view_obl_pending"}
+        # The economy snapshot and the estimates (Task 14): the snapshot's date, its
+        # aggregates and whether it is current; per instrument its index at the
+        # snapshot and an offer's cut; per Budget line the estimate's parts.
+        want |= {"te_tax_view_snap_month", "te_tax_view_snap_month_y", "te_tax_view_snap_month_mo",
+                 "te_tax_view_snap_tax_income", "te_tax_view_snap_net_fixed", "te_tax_view_snap_net_total",
+                 "te_tax_view_snap_gdp", "te_tax_view_snap_current", "te_tax_view_est_regrel_state",
+                 "te_tax_view_est_poll_shared"}
+        want |= {f"te_tax_view_snap_{key}" for key in KEYS} | {f"te_tax_view_est_cut_{key}" for key in KEYS}
+        for channel, _, keys in gen.CHANNELS:
+            want |= {f"te_tax_view_est_{channel}_on", f"te_tax_view_est_{channel}_nobase"}
+            parts = ("law", "bill", "delta")
+            want |= ({f"te_tax_view_est_{channel}_{part}" for part in parts} if len(keys) == 1 else
+                     {f"te_tax_view_est_{channel}_{part}_{end}" for part in parts for end in ("lo", "hi")})
         self.assertEqual(set(self.views), want)
 
     def test_defaults_are_the_schema_sentinels(self):

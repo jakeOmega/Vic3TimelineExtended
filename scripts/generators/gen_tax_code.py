@@ -66,7 +66,10 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
 The script-value file also carries the guarded te_tax_view_* display values
 for every instrument and every catalog good, and the panels' views: the open
 draft and bill, the package slots, the last change and the history ring
-newest first (te_tax_view_hist_<i>_*). The consumption-goods catalog is
+newest first (te_tax_view_hist_<i>_*), and the estimates' values (plan Task
+14, from CHANNELS: te_tax_view_snap_<key>, te_tax_est_r_<key>_law/_bill,
+te_tax_est_d_<key>, te_tax_view_est_<line>_*, te_tax_view_est_cut_<key>). The
+consumption-goods catalog is
 derived from the pop needs (vanilla_parsed/common/pop_needs.json plus the mod's
 common/pop_needs/*.txt) and the goods definitions (vanilla_parsed/common/
 goods.json plus common/goods/*.txt), always read from this repo, never --root.
@@ -379,6 +382,20 @@ INSTRUMENTS = (
     Instrument("cons", "tax_consumption_add", Decimal("0.05"), 12, "Consumption tax rate",
                "goods on the taxed-goods list when pops buy them", True,
                _values("0.15 0.20 0.25 0.30 0.35")),
+)
+
+
+# Estimates (plan Task 14; docs/systems/tax_code_schema.md, "Economy snapshot and
+# estimates"): the Budget's receipt lines, the Budget's own getter for each
+# (gui/budget_panel.gui, the Taxes column) and the instruments it collects. Rural
+# assessment and head tax share the Poll line, so its estimate is a range while both
+# collect. The getters are printed by the hand-written loc (te_tax_est_<line>);
+# test_tax_code_estimates.py checks the two agree.
+CHANNELS = (
+    ("income", "GetIncomeTaxIncome", ("wage",)),
+    ("dividends", "PredictDividendsTaxes", ("div",)),
+    ("poll", "GetPollTaxIncome", ("land", "head")),
+    ("consumption", "PredictConsumptionTaxes", ("cons",)),
 )
 
 
@@ -702,7 +719,7 @@ def _panel_views():
                                condition=_is_open(token))
         lines += _month_views(f"te_tax_view_p{slot}_due", f"te_tax_p{slot}_due", _is_open(token))
     return (lines + _last_change_views() + _history_views() + _workbench_views() + _ig_values()
-            + _obligation_views())
+            + _obligation_views() + _estimate_views())
 
 
 def _obligation_views():
@@ -737,6 +754,82 @@ def _obligation_views():
             lines.append(f"\tif = {{ limit = {{ {_is_open(f'te_tax_o{n}_on')} has_variable = te_tax_o{n}_state "
                          f"OR = {{ {matches} }} }} add = 1 }}")
         lines.append("}")
+    return lines
+
+
+def _estimate_views():
+    """The review's and the offers' revenue estimates (plan Task 14): today's Budget
+    receipts scaled by each schedule's index against the index in force at the economy
+    snapshot (te_tax_take_snapshot). The GUI multiplies a Budget getter by these
+    ratios; every division by a snapshot index sits behind a test that it is above 0."""
+    lines = [
+        "",
+        "# Estimates (plan Task 14). Per instrument: the index in force at the economy snapshot",
+        "# (te_tax_snap_<key>, written by te_tax_take_snapshot); te_tax_est_r_<key>_law and _bill, the",
+        "# index existing law and the draft give in the draft's month over the snapshot's (0 when the",
+        "# tax was not collected at the snapshot: no base to scale); te_tax_est_d_<key>, the draft's",
+        "# change. The helpers are read only through the views below, which need an open draft.",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        snap = f"te_tax_snap_{key}"
+        lines += _guarded_view(f"te_tax_view_snap_{key}", snap, 0)
+        for schedule, source in (("law", f"te_tax_base_dr_{key}"), ("bill", f"te_tax_dr_eff_{key}")):
+            lines += _view(f"te_tax_est_r_{key}_{schedule}", 0, f"has_variable = {snap} var:{snap} > 0",
+                           [f"value = {source}", f"divide = var:{snap}"])
+        lines += [f"te_tax_est_d_{key} = {{", f"\tvalue = te_tax_est_r_{key}_bill",
+                  f"\tsubtract = te_tax_est_r_{key}_law", "}"]
+    lines += [
+        "",
+        "# Per Budget line (CHANNELS): whether the draft changes a tax it collects (_on); whether a",
+        "# tax it collects under existing law or the draft was not collected at the snapshot, so",
+        "# today's receipts give no base (_nobase); and the line's receipts under existing law and",
+        "# the draft, and the change, as multiples of today's. A line of two taxes (Poll) gives the",
+        "# lower and the higher of the two taxes' multiples while both collect (_lo, _hi: any split",
+        "# of today's receipts between them falls in between), and their sum while at most one does",
+        "# (the other's helper is 0).",
+    ]
+    for channel, _, keys in CHANNELS:
+        prefix = f"te_tax_view_est_{channel}"
+        touched = [f"has_variable = te_tax_dr_{key} var:te_tax_dr_{key} >= 0" for key in keys]
+        changes = touched[0] if len(keys) == 1 else "OR = { " + " ".join(f"AND = {{ {t} }}" for t in touched) + " }"
+        lines += _view(f"{prefix}_on", 0, f"{DRAFT_OPEN} {changes}", ["value = 1"])
+        lines += [f"{prefix}_nobase = {{", "\tvalue = 0", "\tif = {", f"\t\tlimit = {{ {DRAFT_OPEN} }}"]
+        for key in keys:
+            snap = f"te_tax_snap_{key}"
+            lines += ["\t\tif = {", f"\t\t\tlimit = {{ NOT = {{ AND = {{ has_variable = {snap} var:{snap} > 0 }} }} }}",
+                      f"\t\t\tadd = te_tax_base_dr_{key}", f"\t\t\tadd = te_tax_dr_eff_{key}", "\t\t}"]
+        lines += ["\t}", "\tmax = 1", "}"]
+        parts = (("law", "te_tax_est_r_{key}_law"), ("bill", "te_tax_est_r_{key}_bill"),
+                 ("delta", "te_tax_est_d_{key}"))
+        if len(keys) == 1:
+            key = keys[0]
+            lines += _view(f"{prefix}_law", 0, DRAFT_OPEN, [f"value = te_tax_est_r_{key}_law"])
+            lines += _view(f"{prefix}_bill", 0, DRAFT_OPEN, [f"value = te_tax_est_r_{key}_bill"])
+            lines += _view(f"{prefix}_delta", 0, DRAFT_OPEN,
+                           [f"value = te_tax_est_r_{key}_bill", f"subtract = te_tax_est_r_{key}_law"])
+            continue
+        all_collect = " ".join(f"has_variable = te_tax_snap_{key} var:te_tax_snap_{key} > 0" for key in keys)
+        for part, helper in parts:
+            first, rest = helper.format(key=keys[0]), [helper.format(key=key) for key in keys[1:]]
+            for end, clamp in (("lo", "max"), ("hi", "min")):
+                lines += _view(f"{prefix}_{part}_{end}", 0, DRAFT_OPEN, [
+                    f"if = {{ limit = {{ {all_collect} }} value = {first} "
+                    + " ".join(f"{clamp} = {other}" for other in rest) + " }",
+                    f"else = {{ value = {first} " + " ".join(f"add = {other}" for other in rest) + " }",
+                ])
+        lines += _view(f"{prefix}_shared", 0, all_collect, ["value = 1"])
+    lines += [
+        "",
+        "# An offer to cut a tax (te_tax_off_<ig>_kind 1) lowers the bill's index by one step: as a",
+        "# multiple of today's receipts, -1 over the snapshot's index (0 when it was not collected).",
+        "# Read while a bill is open, as offers exist only then.",
+    ]
+    for instrument in INSTRUMENTS:
+        snap = f"te_tax_snap_{instrument.key}"
+        lines += _view(f"te_tax_view_est_cut_{instrument.key}", 0,
+                       f"has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = {snap} var:{snap} > 0",
+                       ["value = -1", f"divide = var:{snap}"])
     return lines
 
 
@@ -1703,8 +1796,9 @@ def _baseline_effects():
     lines = [
         "",
         "# Interest-group views of the enacted code (te_tax_refresh_ig_views, from the monthly",
-        "# processor only): each group's band (te_tax_ig_band_<ig>: its stance toward the vanilla",
-        "# taxation law the code is equivalent to, -2..2) keeps at most one te_tax_ig_view_<ig>_<band>",
+        "# processor and from te_tax.4, the sync after a migration, a re-assert or a copied code):",
+        "# each group's band (te_tax_ig_band_<ig>: its stance toward the vanilla taxation law the",
+        "# code is equivalent to, -2..2) keeps at most one te_tax_ig_view_<ig>_<band>",
         "# on the country, and none at band 0. A band's modifier is added only where it is missing and",
         "# the others are removed only where present, so an unchanged band changes nothing. Modifier",
         "# changes are not visible later in the same effect; nothing here reads one back.",
@@ -2120,7 +2214,7 @@ def _view_values():
     lines = [
         "",
         "# Interest-group views of the enacted code (plan Task 13; te_tax_gen_ig_views, from the",
-        "# monthly processor). te_tax_ig_band_<ig>: the group's own vanilla stance, -2 strongly",
+        "# monthly processor and te_tax.4). te_tax_ig_band_<ig>: the group's own vanilla stance, -2 strongly",
         "# opposes .. 2 strongly endorses (law_stance, strongest bucket first), toward the vanilla",
         "# taxation law the enacted code is equivalent to (te_tax_code_equivalent_<law>,",
         "# te_tax_triggers.txt, which need the rule and the carrier law); 0 without the carrier, or",
@@ -3272,8 +3366,8 @@ def static_modifiers():
         f"# stance on (IG_APPROVAL_FROM_LAW = {VANILLA_APPROVAL_FROM_LAW}, IG_APPROVAL_FROM_LAW_STRONG_STANCE = "
         f"{VANILLA_APPROVAL_FROM_LAW_STRONG}); a neutral",
         "# group has none. te_tax_gen_ig_views (te_tax_generated_effects.txt), run by the monthly",
-        "# processor, keeps at most one of each group's four on a country under the rule. Static: no",
-        "# multiplier.",
+        "# processor and by te_tax.4 (the sync after a migration, a re-assert or a copied code), keeps",
+        "# at most one of each group's four on a country under the rule. Static: no multiplier.",
     ]
     for ig in IGS:
         for band, value in VIEW_BANDS:

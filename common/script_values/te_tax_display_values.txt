@@ -476,3 +476,154 @@ te_tax_view_drift_amend = {
 	value = 0
 	if = { limit = { has_variable = te_tax_drift_amend } value = var:te_tax_drift_amend }
 }
+
+# ---------------------------------------------------------------------------
+# The economy snapshot and the estimates (plan Task 14;
+# docs/systems/tax_code_schema.md, "Economy snapshot and estimates").
+# te_tax_take_snapshot (te_tax_snapshot_effects.txt) writes the snapshot from the
+# monthly processor and when a bill revision opens, never from a GUI. The
+# per-instrument and per-Budget-line estimate values are generated
+# (te_tax_generated_values.txt).
+# ---------------------------------------------------------------------------
+
+# The engine's own aggregates, read as values the way the tax probe read them
+# (te_tp_read_*, te_debug_tax_values.txt). tax_income is "weekly income from
+# taxation, excluding tariffs, pacts, transfers and other external sources"
+# (triggers.log), but the probe read about 32k a week with no tax collected, so
+# it is shown only as the domestic tax aggregate (unclassified), never as
+# receipts (docs/testing/tax-code-capability-ledger.md, row 11).
+te_tax_read_tax_income = { value = tax_income }
+te_tax_read_net_fixed_income = { value = net_fixed_income }
+te_tax_read_net_total_income = { value = net_total_income }
+te_tax_read_gdp = { value = gdp }
+
+# The month of the snapshot (-1 before the first), and its year and 1-based month.
+te_tax_view_snap_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_snap_month } value = var:te_tax_snap_month }
+}
+
+te_tax_view_snap_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_snap_month var:te_tax_snap_month >= 0 }
+		value = var:te_tax_snap_month
+		divide = 12
+		floor = yes
+	}
+}
+
+te_tax_view_snap_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_snap_month var:te_tax_snap_month >= 0 }
+		value = var:te_tax_snap_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_snap_month
+		add = 1
+	}
+}
+
+# The aggregates at the snapshot, weekly except GDP.
+te_tax_view_snap_tax_income = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_tax_income } value = var:te_tax_snap_tax_income }
+}
+
+te_tax_view_snap_net_fixed = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_net_fixed } value = var:te_tax_snap_net_fixed }
+}
+
+te_tax_view_snap_net_total = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_net_total } value = var:te_tax_snap_net_total }
+}
+
+te_tax_view_snap_gdp = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_gdp } value = var:te_tax_snap_gdp }
+}
+
+# 1 while the snapshot is current: taken this calendar month (the processor
+# retakes it on the 1st, so an older one means a month was missed), under the
+# code in force (a sunset the watchdog ran, a migration or a civil-war repair
+# changes the code without a snapshot), and, while a bill is under debate, for
+# its current revision. 0 otherwise: the panels mark the estimate out of date.
+te_tax_view_snap_current = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_snap_month
+			var:te_tax_snap_month = te_history_month_index
+			has_variable = te_tax_snap_code_version
+			has_variable = te_tax_code_version
+			var:te_tax_snap_code_version = var:te_tax_code_version
+			has_variable = te_tax_snap_bill_rev
+			OR = {
+				NOT = { AND = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 } }
+				AND = { has_variable = te_tax_bl_rev var:te_tax_snap_bill_rev = var:te_tax_bl_rev }
+			}
+		}
+		value = 1
+	}
+}
+
+# State scope, the review's regional relief rows: the change in the state's taxes
+# the draft makes against existing law in its month, as a multiple of what the
+# state collects now (State.GetTaxationRevenue in the GUI). A band n is
+# state_tax_collection_mult -0.25 n (te_tax_relief_region_<n>), so a state keeps
+# (4 - n) / 4 of its taxes; other collection modifiers are taken as unchanged.
+# 0 without a draft that changes regional relief.
+te_tax_view_est_regrel_state = {
+	value = 0
+	if = {
+		limit = {
+			owner ?= {
+				has_variable = te_tax_dr_on
+				var:te_tax_dr_on = 1
+				has_variable = te_tax_dr_due
+				has_variable = te_tax_dr_regrel
+				var:te_tax_dr_regrel >= 0
+			}
+		}
+		value = te_tax_est_regrel_keep_bill
+		subtract = te_tax_est_regrel_keep_law
+		divide = te_tax_est_regrel_keep_now
+	}
+}
+
+# State scope: 4 - the band the state has now (its mark, te_tax_relief_state,
+# with the owner's enacted band); at least 1, so never a zero divisor.
+te_tax_est_regrel_keep_now = {
+	value = 4
+	if = {
+		limit = {
+			has_variable = te_tax_relief_state
+			var:te_tax_relief_state = 1
+			owner ?= { has_variable = te_tax_en_regrel }
+		}
+		subtract = owner.var:te_tax_en_regrel
+	}
+	min = 1
+}
+
+# State scope: 4 - the band existing law gives the state in the draft's month
+# (te_tax_view_dr_relief_base_state names it, at te_tax_base_dr_regrel).
+te_tax_est_regrel_keep_law = {
+	value = te_tax_view_dr_relief_base_state
+	multiply = owner.te_tax_base_dr_regrel
+	multiply = -1
+	add = 4
+}
+
+# State scope: 4 - the band the draft gives the state (te_tax_view_dr_relief_state
+# names it, at the draft's band te_tax_dr_eff_regrel).
+te_tax_est_regrel_keep_bill = {
+	value = te_tax_view_dr_relief_state
+	multiply = owner.te_tax_dr_eff_regrel
+	multiply = -1
+	add = 4
+}

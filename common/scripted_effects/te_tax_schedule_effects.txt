@@ -76,9 +76,12 @@ te_tax_process_month = {
 			# 5. One collection write per month, changed or not: it also re-asserts
 			# the code over any native change since last month.
 			te_tax_sync_collection = yes
-			# 6. The next due transition.
+			# 6. The economy snapshot the estimates are dated by
+			# (te_tax_snapshot_effects.txt), once a month, of the code just written.
+			te_tax_take_snapshot = yes
+			# 7. The next due transition.
 			te_tax_recompute_next_month = yes
-			# 7. A bill under debate: refresh the support snapshot once a month
+			# 8. A bill under debate: refresh the support snapshot once a month
 			# (te_tax_bill_effects.txt), after this month's changes, so a promise
 			# kept or broken this month moves its group's trust reason at once.
 			if = {

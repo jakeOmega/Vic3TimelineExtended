@@ -4,9 +4,9 @@
 ### (gui/budget_panel.gui, tab te_tax_code), through the composers there.
 ###
 ###   te_tax_overview_panel   always shown: the code and its version, the last
-###                           and next change, and what is in progress (the
-###                           draft, the bill under debate, passed bills,
-###                           promises)
+###                           and next change, the economy snapshot's month,
+###                           and what is in progress (the draft, the bill
+###                           under debate, passed bills, promises)
 ###   te_tax_enacted_table    open: one row per tax with its rate and any
 ###                           expiry, the taxed goods, the two reliefs
 ###   te_tax_history_section  collapsed: the last eight entries of the
@@ -254,6 +254,20 @@ types te_tax_overview_widget_types
 					}
 					blockoverride "row_value" {
 						text = "[SelectLocalization( GetScriptedGui('te_tax_show_next_change_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_ov_next_change_value', 'te_tax_ov_next_change_none' )]"
+					}
+				}
+				# The economy snapshot the estimates are measured against (plan Task 14):
+				# its month, marked once out of date; the engine's aggregates at the
+				# snapshot on the hover. Shown once one has been taken.
+				te_tax_value_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' )]"
+					blockoverride "row_label" {
+						text = "te_tax_ov_snapshot"
+						tooltip = "te_tax_ov_snapshot_tt"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_ov_snapshot_value', 'te_tax_ov_snapshot_value_stale' )]"
+						tooltip = "te_tax_ov_snapshot_value_tt"
 					}
 				}
 

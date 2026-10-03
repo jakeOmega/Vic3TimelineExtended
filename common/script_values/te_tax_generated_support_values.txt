@@ -4383,7 +4383,7 @@ te_tax_prom_trade_unions = {
 }
 
 # Interest-group views of the enacted code (plan Task 13; te_tax_gen_ig_views, from the
-# monthly processor). te_tax_ig_band_<ig>: the group's own vanilla stance, -2 strongly
+# monthly processor and te_tax.4). te_tax_ig_band_<ig>: the group's own vanilla stance, -2 strongly
 # opposes .. 2 strongly endorses (law_stance, strongest bucket first), toward the vanilla
 # taxation law the enacted code is equivalent to (te_tax_code_equivalent_<law>,
 # te_tax_triggers.txt, which need the rule and the carrier law); 0 without the carrier, or
