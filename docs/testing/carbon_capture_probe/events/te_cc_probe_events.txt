@@ -1,0 +1,41 @@
+﻿# Console only: event te_cc_probe.1. No normal on-action calls this.
+namespace = te_cc_probe
+te_cc_probe.1 = { # REVIEWED 2026-10-03: opt-in console probe; deliberately unreferenced
+	type = country_event
+	placement = ROOT
+	event_image = { texture = "gfx/event_pictures/factory_pollution_protest.dds" }
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+	title = te_cc_probe.1.t
+	desc = te_cc_probe.1.desc
+	option = {
+		name = te_cc_probe.1.log
+		default_option = yes
+		market = {
+			every_scope_country = {
+				every_scope_state = {
+					limit = { any_scope_building = { is_building_type = building_power_plant } }
+					save_scope_as = te_cc_probe_state
+					set_variable = { name = te_cc_probe_read value = te_cc_probe_state_capture }
+					debug_log = "CC_PROBE: state=[SCOPE.sState('te_cc_probe_state').GetName] capture=[SCOPE.sState('te_cc_probe_state').GetVariable('te_cc_probe_read').GetValue]"
+					remove_variable = te_cc_probe_read
+				}
+			}
+		}
+		save_scope_as = te_cc_probe_country
+		set_variable = { name = te_cc_probe_read value = te_cc_probe_market_capture }
+		debug_log = "CC_PROBE: country=[SCOPE.sCountry('te_cc_probe_country').GetName] market_capture_internal=[SCOPE.sCountry('te_cc_probe_country').GetVariable('te_cc_probe_read').GetValue]"
+		remove_variable = te_cc_probe_read
+	}
+	option = {
+		name = te_cc_probe.1.mandate
+		# Probe only: alters the test country's laws and research. Use a copied save.
+		add_technology_researched = environmental_movement
+		add_technology_researched = clean_energy_technologies
+		activate_law = law_type:law_ministry_of_the_environment
+		activate_law = law_type:law_managed_fossil_phaseout
+	}
+	option = {
+		name = te_cc_probe.1.clear
+		activate_law = law_type:law_unrestricted_extraction
+	}
+}

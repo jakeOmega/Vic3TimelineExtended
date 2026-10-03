@@ -1,0 +1,12 @@
+﻿# State scope: read exactly the custom PM-fed modifier.
+te_cc_probe_state_capture = { value = modifier:state_carbon_capture_add }
+# Country scope: exercise the proposed market -> countries -> states sweep.
+te_cc_probe_market_capture = {
+	value = 0
+	market = {
+		every_scope_country = {
+			every_scope_state = { add = te_cc_probe_state_capture }
+		}
+	}
+	divide = 1000
+}

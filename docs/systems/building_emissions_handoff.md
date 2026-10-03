@@ -12,7 +12,10 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 
 - Latest main fetched and pulled; feature branch created.
 - Repository guidance read (`CLAUDE.md`, docs index, player-guide style).
-- No gameplay implementation yet.
+- Phase-0 opt-in overlay prepared at `docs/testing/carbon_capture_probe/`.
+  Its README has deployment/removal instructions, exact checks and a pending
+  evidence table. It does not affect normal deployment or market emissions.
+- No phase-1 gameplay changes yet.
 - The server on port 8950 did not respond during the initial status check.
 - Shared Python environment: `/home/jakef/src/Vic3TimelineExtended/.venv`.
 - Git operations need sandbox escalation because this managed worktree stores
@@ -20,9 +23,9 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 
 ## Next work
 
-1. Prepare an opt-in phase-0 engine probe, with an explicit test procedure and
-   results table. Do not claim staffing reads or PM fallback were verified by
-   offline Python tests. Keep the prototype out of normal gameplay.
+1. Run the opt-in phase-0 engine probe and record results in its README.
+   All six fixture script files parse offline. This does not verify staffing
+   reads, tooltips or forced fallback in Victoria 3.
 2. Implement phase 1 independently: shared factors, synthetic credits derived
    from PM outputs, steel input changes, display units, guide and PDF.
 3. After recording the engine checks, implement phase 2's generator and capture

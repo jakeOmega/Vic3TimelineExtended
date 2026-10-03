@@ -1,0 +1,4 @@
+﻿state_carbon_capture_add = {
+	color = good
+	decimals = 2
+}
