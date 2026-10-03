@@ -238,6 +238,15 @@ class ChunkFileTests(unittest.TestCase):
             self.assertEqual([e.file for e in t.load_english(tmp)], ["te_x_l_english.yml"])
 
 
+class GlossaryMatchTests(unittest.TestCase):
+    def test_multiword_terms_match_in_any_case_lone_words_as_written(self):
+        chunk = [t.Entry("te_x_l_english.yml", "a", "Escalates the diplomatic play over green fields.")]
+        lines = t.chunk_glossary(chunk, {}, None, set(), "de",
+                                 terms={"Diplomatic Play": "Diplomatiespiel", "Green": "Grüne"})
+        self.assertIn("#   Diplomatic Play => Diplomatiespiel", lines)
+        self.assertFalse(any("Grüne" in line for line in lines))
+
+
 class RoundTripTests(unittest.TestCase):
     """prepare-free: a manifest and agent output on disk, then merge and save."""
 

@@ -4517,7 +4517,7 @@
  te_debug_ch.1.d:0 "#lore Console-only. Nothing in the mod fires this event; it exists so the Cultural Hegemony journal entry's widget can be driven into its awkward states by hand.#!\n\nPick one effect per firing, then re-run #v event te_debug_ch.1#! for the next. The next yearly cultural-hegemony pulse recomputes the real leaderboard over anything set here."
  te_debug_ch.1.d_option:0 "D — Empty board slot 5 (the annexed case)"
  te_debug_ch.1.e:0 "E — Repeal the Ministry of Culture and watch all four programmes stop"
- te_debug_ch.1.f:0 ""Every ministry keeps a drawer of numbers it would rather no one saw.""
+ te_debug_ch.1.f:0 "\"Every ministry keeps a drawer of numbers it would rather no one saw.\""
  te_debug_ch.1.g:0 "F — Recount now: leaderboard, political-model census and baseline movement pressure"
  te_debug_ch.1.h:0 "G — Stage Our Model Abroad: make us rank 1 and fire it"
  te_debug_ch.1.i:0 "H — Stage Rival Models, The Model Falters and Domino for us as a follower"

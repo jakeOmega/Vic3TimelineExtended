@@ -112,8 +112,8 @@
   "de": "KI-gestützte Forschung"
  },
  "pm_ai_governance": {
-  "en": "AI Governance",
-  "de": "KI-Steuerung"
+  "en": "AI Agent Networks",
+  "de": "KI-Agentennetzwerke"
  },
  "pm_ai_managed_building_arms_industry": {
   "en": "AI-Managed Arms Industry",
@@ -170,6 +170,10 @@
  "pm_airport": {
   "en": "Airport",
   "de": "Flughafen"
+ },
+ "pm_ajinomoto_kawasaki_plant": {
+  "en": "Ajinomoto Kawasaki Plant",
+  "de": "Ajinomoto-Werk Kawasaki"
  },
  "pm_aker_oslo_shipyard": {
   "en": "Aker Oslo Shipyard",
@@ -319,6 +323,10 @@
   "en": "Automated Assembly Lines",
   "de": "Automatisierte Montagebänder"
  },
+ "pm_automated_casework": {
+  "en": "Automated Casework",
+  "de": "Automatisierte Fallbearbeitung"
+ },
  "pm_automated_chemical_reactors": {
   "en": "Automated Chemical Reactors",
   "de": "Automatisierte Chemiereaktoren"
@@ -455,6 +463,10 @@
   "en": "Bespoke Alloys",
   "de": "Maßgeschneiderte Legierungen"
  },
+ "pm_bgi_national_genebank": {
+  "en": "BGI National GeneBank",
+  "de": "BGI Nationale Genbank"
+ },
  "pm_bhp_broken_hill_mine": {
   "en": "BHP Broken Hill Mine",
   "de": "BHP-Mine Broken Hill"
@@ -463,6 +475,10 @@
   "en": "Mount Whaleback Mine",
   "de": "Mount-Whaleback-Mine"
  },
+ "pm_biocon_park": {
+  "en": "Biocon Park",
+  "de": "Biocon Park"
+ },
  "pm_bioelectronic_implants": {
   "en": "Bioelectronic Implants",
   "de": "Bioelektronische Implantate"
@@ -470,6 +486,10 @@
  "pm_bioengineered_rubber": {
   "en": "Bioengineered Rubber",
   "de": "Biotechnisch hergestellter Kautschuk"
+ },
+ "pm_biontech_mainz_campus": {
+  "en": "BioNTech Mainz Campus",
+  "de": "BioNTech-Campus Mainz"
  },
  "pm_bioplastics": {
   "en": "Bioplastics",
@@ -1151,6 +1171,10 @@
   "en": "GE Schenectady Works",
   "de": "GE-Werke Schenectady"
  },
+ "pm_genentech_dna_way_campus": {
+  "en": "Genentech DNA Way Campus",
+  "de": "Genentech-Campus DNA Way"
+ },
  "pm_generic_arsenal": {
   "en": "Arsenal",
   "de": "Arsenal"
@@ -1796,8 +1820,8 @@
   "de": "Magnetantrieb-Häfen"
  },
  "pm_magnetic_drive_ports_desc": {
-  "en": "Magnetically-driven ships docking at automated terminals push [concept_throughput] far past containerization-era levels. Heavy electronic and digital [concept_infrastructure] required.",
-  "de": "Magnetisch angetriebene Schiffe, die an automatisierten Terminals anlegen, treiben den [concept_throughput] weit über das Niveau des Container-Zeitalters hinaus. Umfangreiche elektronische und digitale [concept_infrastructure] erforderlich."
+  "en": "Magnetically-driven ships docking at automated terminals push [concept_throughput] far past containerization-era levels. Heavy electronic and digital infrastructure required.",
+  "de": "Magnetisch angetriebene Schiffe, die an automatisierten Terminals anlegen, treiben den [concept_throughput] weit über das Niveau des Container-Zeitalters hinaus. Umfangreiche elektronische und digitale Infrastruktur erforderlich."
  },
  "pm_magnetic_drive_trawlers": {
   "en": "Magnetic Drive Trawlers",
@@ -1814,6 +1838,46 @@
  "pm_magnetic_drive_whaling_ships_desc": {
   "en": "Late-era whalers with electronic prey [concept_detection] and magnetic drive propulsion outproduce diesel fleets at the cost of meaningful [concept_pollution_system] and fuel demand.",
   "de": "Walfänger der Spätzeit mit elektronischer Beute-[concept_detection] und Magnetantrieb übertreffen Dieselflotten in der Ausbeute, allerdings auf Kosten spürbarer [concept_pollution_system] und eines hohen Treibstoffbedarfs."
+ },
+ "pm_maintenance_heavy": {
+  "en": "Heavy Maintenance",
+  "de": "Schwere Instandhaltung"
+ },
+ "pm_maintenance_heavy_desc": {
+  "en": "Upkeep at one and a half times the standard rate of [concept_construction] per level, for railways, ports, roads, airports, networks, power stations and oil rigs: plant that wears out as it is used.",
+  "de": "Unterhalt zum Eineinhalbfachen des Standardsatzes an [concept_construction] pro Stufe, für Eisenbahnen, Häfen, Straßen, Flughäfen, Netze, Kraftwerke und Ölbohranlagen: Anlagen, die sich durch Gebrauch abnutzen."
+ },
+ "pm_maintenance_intensive": {
+  "en": "Intensive Maintenance",
+  "de": "Intensive Instandhaltung"
+ },
+ "pm_maintenance_intensive_desc": {
+  "en": "Upkeep at twice the standard rate of [concept_construction] per level, for nuclear and fusion plants and for mines in the deep sea and in space, where nothing can be left to run down.",
+  "de": "Unterhalt zum Doppelten des Standardsatzes an [concept_construction] pro Stufe, für Kern- und Fusionskraftwerke sowie für Minen in der Tiefsee und im Weltraum, wo nichts verfallen darf."
+ },
+ "pm_maintenance_light": {
+  "en": "Light Maintenance",
+  "de": "Leichte Instandhaltung"
+ },
+ "pm_maintenance_light_desc": {
+  "en": "Upkeep at half the standard rate of [concept_construction] per level, for buildings with little plant to keep up: exchanges, academies, offices and the modern mines.",
+  "de": "Unterhalt zur Hälfte des Standardsatzes an [concept_construction] pro Stufe, für Gebäude mit wenig instand zu haltenden Anlagen: Börsen, Akademien, Büros und die modernen Minen."
+ },
+ "pm_maintenance_mechanized_mine": {
+  "en": "Mechanized Workings",
+  "de": "Mechanisierter Abbau"
+ },
+ "pm_maintenance_mechanized_mine_desc": {
+  "en": "Mines with powered drainage and haulage need upkeep at half the standard rate of [concept_construction] per level. Switching back to picks and shovels or the atmospheric engine pump ends it.",
+  "de": "Minen mit angetriebener Entwässerung und Förderung brauchen Unterhalt zur Hälfte des Standardsatzes an [concept_construction] pro Stufe. Die Rückkehr zu Spitzhacke und Schaufel oder zur atmosphärischen Dampfpumpe beendet das."
+ },
+ "pm_maintenance_traditional": {
+  "en": "Traditional Workings",
+  "de": "Traditioneller Abbau"
+ },
+ "pm_maintenance_traditional_desc": {
+  "en": "Hand-worked and simply pumped mines need no [concept_construction] for upkeep. A mine that runs a condensing engine pump or anything later pays mechanized upkeep instead.",
+  "de": "Von Hand betriebene und einfach entwässerte Minen benötigen keinen [concept_construction] für den Unterhalt. Eine Mine mit Kondensationsdampfpumpe oder etwas Späterem zahlt stattdessen den mechanisierten Unterhalt."
  },
  "pm_manfred_weiss_csepel_works": {
   "en": "Manfred Weiss Csepel Works",
@@ -2082,6 +2146,10 @@
  "pm_molecular_foundry": {
   "en": "Molecular Foundry",
   "de": "Molekulargießerei"
+ },
+ "pm_monsanto_chesterfield_center": {
+  "en": "Monsanto Chesterfield Research Center",
+  "de": "Monsanto-Forschungszentrum Chesterfield"
  },
  "pm_monument_artistic": {
   "en": "Grand Opera House",
@@ -2427,6 +2495,10 @@
   "en": "Norsk Hydro Rjukan Plant",
   "de": "Norsk-Hydro-Werk Rjukan"
  },
+ "pm_novo_nordisk_kalundborg_plant": {
+  "en": "Novo Nordisk Kalundborg Plant",
+  "de": "Novo-Nordisk-Werk Kalundborg"
+ },
  "pm_nvidia_endeavor_campus": {
   "en": "Nvidia Endeavor Campus",
   "de": "Nvidia-Campus Endeavor"
@@ -2582,6 +2654,26 @@
  "pm_pfizer_rd_campus": {
   "en": "Pfizer Global R&D Campus",
   "de": "Pfizer Global R&D Campus"
+ },
+ "pm_pharma_alkaloid_extraction": {
+  "en": "Alkaloid Extraction",
+  "de": "Alkaloidgewinnung"
+ },
+ "pm_pharma_antibiotic_fermentation": {
+  "en": "Antibiotic Fermentation",
+  "de": "Antibiotika-Fermentation"
+ },
+ "pm_pharma_biologics": {
+  "en": "Biologics and mRNA",
+  "de": "Biologika und mRNA"
+ },
+ "pm_pharma_precision_medicine": {
+  "en": "Precision Medicine",
+  "de": "Präzisionsmedizin"
+ },
+ "pm_pharma_synthetic_chemistry": {
+  "en": "Synthetic Drug Chemistry",
+  "de": "Synthetische Arzneimittelchemie"
  },
  "pm_philips_eindhoven_natlab": {
   "en": "Philips Eindhoven NatLab",
@@ -2746,6 +2838,10 @@
  "pm_ramirez_vila_real_cannery": {
   "en": "Ramirez Vila Real Cannery",
   "de": "Ramirez-Konservenfabrik Vila Real"
+ },
+ "pm_recallable_delegates": {
+  "en": "Recallable Delegates",
+  "de": "Abrufbare Delegierte"
  },
  "pm_regional_branding_building_furniture_manufactory": {
   "en": "Regional Marketing",
@@ -2971,6 +3067,10 @@
   "en": "Vostochny Cosmodrome",
   "de": "Kosmodrom Wostotschny"
  },
+ "pm_rosen_association_hq": {
+  "en": "Rosen Association Headquarters",
+  "de": "Zentrale der Rosen Association"
+ },
  "pm_rossi_sao_leopoldo_arms_factory": {
   "en": "Rossi São Leopoldo Arms Factory",
   "de": "Rossi-Waffenfabrik São Leopoldo"
@@ -3062,6 +3162,10 @@
  "pm_semiinfinite_bandwidth": {
   "en": "Semi-Infinite Bandwidth",
   "de": "Nahezu unendliche Bandbreite"
+ },
+ "pm_service_contractors": {
+  "en": "Service Contractors",
+  "de": "Dienstleistungsunternehmen"
  },
  "pm_settling_ponds": {
   "en": "Settling Ponds",
@@ -3348,8 +3452,8 @@
   "de": "Ölproduzierende Bakterien"
  },
  "pm_synthetic_opium": {
-  "en": "Pharmaceuticals",
-  "de": "Pharmazeutika"
+  "en": "Rational Drug Design",
+  "de": "Rationales Wirkstoffdesign"
  },
  "pm_synthetic_wood": {
   "en": "Synthetic Wood",
@@ -3743,6 +3847,10 @@
   "en": "Jean-Luc Lagardère Plant",
   "de": "Jean-Luc-Lagardère-Werk"
  },
+ "pmg_ajinomoto_kawasaki_plant": {
+  "en": "Ajinomoto Kawasaki Plant",
+  "de": "Ajinomoto-Werk Kawasaki"
+ },
  "pmg_aker_oslo_shipyard": {
   "en": "Aker Oslo Shipyard",
   "de": "Aker-Werft Oslo"
@@ -4007,6 +4115,10 @@
   "en": "Bengal Coal Raniganj Mine",
   "de": "Bengal-Coal-Mine Raniganj"
  },
+ "pmg_bgi_national_genebank": {
+  "en": "BGI National GeneBank",
+  "de": "BGI Nationale Genbank"
+ },
  "pmg_bhp_broken_hill_mine": {
   "en": "BHP Broken Hill Mine",
   "de": "BHP-Mine Broken Hill"
@@ -4014,6 +4126,14 @@
  "pmg_bhp_mount_whaleback_mine": {
   "en": "Mount Whaleback Mine",
   "de": "Mount-Whaleback-Mine"
+ },
+ "pmg_biocon_park": {
+  "en": "Biocon Park",
+  "de": "Biocon Park"
+ },
+ "pmg_biontech_mainz_campus": {
+  "en": "BioNTech Mainz Campus",
+  "de": "BioNTech-Campus Mainz"
  },
  "pmg_blackberry_rim_campus": {
   "en": "RIM Campus",
@@ -4306,6 +4426,10 @@
  "pmg_ge_schenectady_works": {
   "en": "GE Schenectady Works",
   "de": "GE-Werke Schenectady"
+ },
+ "pmg_genentech_dna_way_campus": {
+  "en": "Genentech DNA Way Campus",
+  "de": "Genentech-Campus DNA Way"
  },
  "pmg_generic_arsenal": {
   "en": "Arsenal",
@@ -4699,6 +4823,22 @@
   "en": "Maintenance",
   "de": "Wartung"
  },
+ "pmg_maintenance_heavy": {
+  "en": "Maintenance",
+  "de": "Instandhaltung"
+ },
+ "pmg_maintenance_intensive": {
+  "en": "Maintenance",
+  "de": "Instandhaltung"
+ },
+ "pmg_maintenance_light": {
+  "en": "Maintenance",
+  "de": "Instandhaltung"
+ },
+ "pmg_maintenance_mine": {
+  "en": "Maintenance",
+  "de": "Instandhaltung"
+ },
  "pmg_manfred_weiss_csepel_works": {
   "en": "Manfred Weiss Csepel Works",
   "de": "Manfred-Weiss-Werke Csepel"
@@ -4775,6 +4915,10 @@
   "en": "Mokta el Hadid Beni Saf Mine",
   "de": "Mokta-el-Hadid-Mine Beni Saf"
  },
+ "pmg_monsanto_chesterfield_center": {
+  "en": "Monsanto Chesterfield Research Center",
+  "de": "Monsanto-Forschungszentrum Chesterfield"
+ },
  "pmg_monument_dedication": {
   "en": "Dedication",
   "de": "Widmung"
@@ -4838,6 +4982,10 @@
  "pmg_norsk_hydro_rjukan_plant": {
   "en": "Norsk Hydro Rjukan Plant",
   "de": "Norsk-Hydro-Werk Rjukan"
+ },
+ "pmg_novo_nordisk_kalundborg_plant": {
+  "en": "Novo Nordisk Kalundborg Plant",
+  "de": "Novo-Nordisk-Werk Kalundborg"
  },
  "pmg_nvidia_endeavor_campus": {
   "en": "Nvidia Endeavor Campus",
@@ -5030,6 +5178,10 @@
  "pmg_roscosmos_vostochny_cosmodrome": {
   "en": "Vostochny Cosmodrome",
   "de": "Kosmodrom Wostotschny"
+ },
+ "pmg_rosen_association_hq": {
+  "en": "Rosen Association Headquarters",
+  "de": "Zentrale der Rosen Association"
  },
  "pmg_rossi_sao_leopoldo_arms_factory": {
   "en": "Rossi São Leopoldo Arms Factory",

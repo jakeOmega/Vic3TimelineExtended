@@ -502,6 +502,14 @@ def load_terms(language: str) -> dict[str, str]:
         return json.load(fh)
 
 
+def _mentions(term: str, text: str) -> bool:
+    """Whether `text` uses `term` as a whole word. A term of several words
+    matches in any case ("diplomatic play" is the "Diplomatic Play"); a lone
+    word only as written, since its lowercase form is often another word."""
+    flags = re.IGNORECASE if " " in term else 0
+    return bool(re.search(r"(?<!\w)" + re.escape(term) + r"(?!\w)", text, flags))
+
+
 def chunk_glossary(chunk: list[Entry], tm: dict[str, dict], vanilla: VanillaTerms | None,
                    glossary_keys: set[str], lang_field: str, cap: int = 160,
                    terms: dict[str, str] | None = None) -> list[str]:
@@ -525,16 +533,17 @@ def chunk_glossary(chunk: list[Entry], tm: dict[str, dict], vanilla: VanillaTerm
         record = tm.get(key)
         if record and " " not in record["en"].strip():
             continue  # a lone word ("Green", a veterancy level) is too ambiguous
-        if record and record["en"] and re.search(r"(?<!\w)" + re.escape(record["en"]) + r"(?!\w)", text):
+        if record and record["en"] and _mentions(record["en"], text):
             mod_terms.append(f"#   {record['en']} => {record[lang_field]}")
     for en, tr in (terms or {}).items():
-        if re.search(r"(?<!\w)" + re.escape(en) + r"(?!\w)", text):
+        if _mentions(en, text):
             mod_terms.append(f"#   {en} => {tr}")
     if mod_terms:
         lines.append("# MOD TERMS — the mod's names, already fixed; use them wherever the English means that thing:")
         lines.extend(sorted(set(mod_terms), key=len, reverse=True)[:cap])
     if vanilla:
-        hits = [t for t in vanilla.terms if t in text and re.search(r"(?<!\w)" + re.escape(t) + r"(?!\w)", text)]
+        folded = text.casefold()
+        hits = [t for t in vanilla.terms if t.casefold() in folded and _mentions(t, text)]
         hits.sort(key=lambda t: (-len(t.split()), t))
         if hits:
             lines.append("# VANILLA TERMS — official German game terms; use them wherever the English means that thing:")
@@ -863,11 +872,9 @@ def term_mismatches(tm: dict[str, dict], terms: dict[str, str], field: str) -> l
     stem (all but its last three letters, at least four)."""
     out = []
     for en_term, rendering in terms.items():
-        flags = re.IGNORECASE if " " in en_term else 0  # "Cultural pull" is "Cultural Pull"
-        pattern = re.compile(r"(?<!\w)" + re.escape(en_term) + r"(?!\w)", flags)
         stems = [w[: max(4, len(w) - 3)].casefold() for w in re.findall(r"\w+", rendering) if len(w) >= 4]
         for key, record in tm.items():
-            if "base" in record or not pattern.search(record["en"]):
+            if "base" in record or not _mentions(en_term, record["en"]):
                 continue
             text = record[field].casefold()
             if not all(stem in text for stem in stems):

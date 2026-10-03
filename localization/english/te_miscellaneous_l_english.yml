@@ -2950,7 +2950,7 @@
  nd_home_list_reviewed:0 "#lore Reviewed monthly.#!"
  nd_home_list_waiting:0 "#lore Opinions of our doctrine and readiness start in #v [THIS.ScriptValue('nd_display_stance_months_left')|0]#! months; the Industrialists' business concerns count already.#!"
  nd_home_row_approval:0 "[concept_approval]"
- nd_home_row_approval_tt:0 "#tooltip_header Approval#!\n$TOOLTIP_DELIMITER$\nWhat our posture adds to this group's approval or takes from it: the rows below added up, capped at 2 (1 for a mild group). A "Held to the cap" row shows what the cap cut. The group's approval breakdown shows the same number."
+ nd_home_row_approval_tt:0 "#tooltip_header Approval#!\n$TOOLTIP_DELIMITER$\nWhat our posture adds to this group's approval or takes from it: the rows below added up, capped at 2 (1 for a mild group). A \"Held to the cap\" row shows what the cap cut. The group's approval breakdown shows the same number."
  nd_home_row_approval_value:0 "#bold [InterestGroup.MakeScope.ScriptValue('nd_disp_ig_stance')|+0]#!"
  nd_home_row_authority:0 "Launch authority"
  nd_home_row_authority_tt:0 "#tooltip_header Launch Authority#!\n$TOOLTIP_DELIMITER$\nRestraint-minded groups object to Launch on Warning and to Automatic Retaliation. Counted once the groups have had time to judge our doctrine."

@@ -399,6 +399,30 @@
   "en": "Launch a tactical [concept_nuclear_strike] on a military target.",
   "de": "Führt einen taktischen [concept_nuclear_strike] gegen ein militärisches Ziel aus."
  },
+ "te_diplomacy_tab_un": {
+  "en": "UN",
+  "de": "UN"
+ },
+ "te_diplomacy_tab_un_locked_tt": {
+  "en": "#b $je_united_nations$#!\\nNot open yet. It opens once:\\n",
+  "de": "#b $je_united_nations$#!\\nNoch nicht freigeschaltet. Der Reiter wird freigeschaltet, sobald:\\n"
+ },
+ "te_diplomacy_tab_un_tt": {
+  "en": "The General Assembly, your standing and the UN's authority, with every action the journal entry offers. These are the journal entry's own panels: a change made here shows there too.",
+  "de": "Die Generalversammlung, Ihr Ansehen und die Autorität der UN, mit allen Aktionen, die der Journaleintrag bietet. Dies sind die eigenen Bereiche des Journaleintrags: Eine hier vorgenommene Änderung erscheint auch dort."
+ },
+ "te_diplomacy_un_open_journal_tt": {
+  "en": "Opens $je_united_nations$ in the journal.",
+  "de": "Öffnet $je_united_nations$ im Journal."
+ },
+ "te_diplomacy_un_tab_actions_header": {
+  "en": "Actions",
+  "de": "Aktionen"
+ },
+ "te_diplomacy_un_tab_status_header": {
+  "en": "Status",
+  "de": "Status"
+ },
  "te_diplomatic_relations_boost": {
   "en": "Diplomatic Goodwill",
   "de": "Diplomatischer Wohlwille"
