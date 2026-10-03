@@ -617,6 +617,15 @@ un_events.4 = {
 				trigger = { un_standing_program_active_peacekeeping = yes }
 				add = 5
 			}
+			# Anyone else pays the deployment's cost, which a treasury in
+			# default or near its ceiling cannot carry.
+			modifier = {
+				trigger = {
+					OR = { in_default = yes scaled_debt >= 0.75 }
+					NOT = { un_standing_program_active_peacekeeping = yes }
+				}
+				factor = 0.2
+			}
 			# Less willing to join a mission that has dragged on.
 			modifier = {
 				trigger = { scope:peacekeeping_target = { un_mission_hosts_aged = { TYPE = stabilisation MONTHS = 36 } } }
@@ -635,6 +644,20 @@ un_events.4 = {
 			name = un_peacekeeping_deployed_modifier
 			days = long_modifier_time
 			is_decaying = yes
+		}
+		# A full force is not free (owner, 2026-10-03): the peacekeeping
+		# programme's weekly cost, fading over five years, as the famine
+		# appeal's aid costs (un_events.7 A). The mission bills only contingents
+		# sent at will (un_mission_charges), and a member running the programme
+		# already pays for a deployment.
+		if = {
+			limit = { NOT = { un_standing_program_active_peacekeeping = yes } }
+			add_modifier = {
+				name = un_peacekeeping_deployment_cost
+				multiplier = un_program_expense_value
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		# Booked below, once the mission shows which state the force went to.
 		custom_tooltip = un_ledger_tt_delivery_up_1_5

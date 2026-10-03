@@ -1,9 +1,10 @@
 ﻿# ============================================================================
 # THE UNITED NATIONS — HOW THE AI DECIDES TO JOIN, PAY AND CONTRIBUTE
 # ============================================================================
-# Read ONLY by the `ai_chance` blocks of eight buttons in
+# Read ONLY by the `ai_chance` blocks of twelve buttons in
 # common/scripted_buttons/un_buttons.txt: Join / Leave, Withhold / Pay dues,
-# Fund / Stop funding Development Programs, Contribute to / End peacekeeping.
+# Fund / Stop funding Development Programs, Contribute to / End peacekeeping,
+# Champion / Stop championing and Undermine / Stop undermining the order.
 # Nothing here gates a player control. docs/systems/un_redesign_design.md §0.13
 # has the review behind it, with every other AI decision point and its verdict.
 #
@@ -24,6 +25,11 @@
 #     authority passed 40 and stopped only on laissez-faire, war or a collapsing
 #     UN: ratchets (scripting_best_practices.md, "An Adopt Weight With No Repeal
 #     Counterweight Is a Ratchet"), blind to a treasury in default.
+#   - Any great power scored +20 to champion the order below authority 30 and
+#     +15 to undermine it at 60, and stopped only at 80 and below 20, so a power
+#     with every reason to back the UN undermined it once it grew strong. The
+#     owner (2026-10-03): a mild pull from authority is fine, but a power with
+#     good reasons either way should not switch on authority alone.
 #
 # Now each pair reads ONE score per country, and a line on it: the "on" button
 # scores only at or above the line, the "off" button only a band below it.
@@ -53,6 +59,12 @@
 #   withhold / pay     un_ai_dues_will               0         -25   pay: will + 5 (60)  withhold: -25 - will (50)
 #   development        un_ai_development_will       20          -5   will - 10 (50)  -5 - will (50)
 #   peacekeeping       un_ai_peacekeeping_will      20          -5   will - 10 (50)  -5 - will (50)
+#   champion           un_ai_order_will             20          -5   will - 10 (50)  -5 - will (50)
+#   undermine          un_ai_dissent_will           20          -5   will - 10 (50)  -5 - will (50)
+#
+# The order and dissent scores are one stance, signed: un_ai_dissent_will is
+# minus un_ai_order_will. A power champions at +20 or more, undermines at -20
+# or less, and does neither in between; each stops 25 past its own line.
 #
 # test_un_ai_values.py checks that each pair reads its own score and line, that
 # the off line sits the band below the on line, and that the band is wider than
@@ -72,10 +84,24 @@ un_ai_money_cap = { value = 40 }
 
 # The largest yes/no term that flips without anyone deciding: debt crossing a
 # line (10 and 15), devastation or poverty (10), famine (10), rank slipping a
-# step (20 and 15), a climate emitter's share (20). Every band below must be
+# step (20 and 15), a climate emitter's share (20), UN sanctions on us (20), a
+# record crossing the condemnation line (10), authority's whole pull on the
+# order stance (15). Every band below must be
 # wider (test_un_ai_values.py reads this figure and each band). War on the
 # peacekeeping score is the one exception (see the header).
 un_ai_self_flipping_terms = { value = 20 }
+
+# The UN's authority, 50 when there is none to read. Globals only.
+un_ai_authority = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_authority }
+		add = global_var:un_authority
+	}
+	else = {
+		add = 50
+	}
+}
 
 # ---- Money: the levy and the Fund ------------------------------------------------
 
@@ -130,6 +156,13 @@ un_ai_treasury_penalty = {
 
 un_ai_membership_join_line = { value = 0 }
 un_ai_membership_band = { value = 25 }
+
+# The crisis term: where it starts, and how much each point of authority
+# below it costs. A typical small member (a score of about 40) leaves near
+# authority 8, one with weak reasons (about 25) near 13, a great power or a
+# humanitarian member (60 and more) only as the UN dies.
+un_ai_membership_crisis_start = { value = 30 }
+un_ai_membership_crisis_per_point = { value = 3 }
 
 # What a seat is worth to us, member or not: the same reasons on both sides of
 # the door, so joining and leaving read one figure.
@@ -188,10 +221,18 @@ un_ai_membership_will = {
 		}
 		add = 30
 	}
-	# A UN in name only is worth little.
+	# A failing UN: from authority un_ai_membership_crisis_start down,
+	# un_ai_membership_crisis_per_point off for every point it falls (-30 at
+	# 20, -60 at 10, -90 at 0). Members leave as the crisis deepens, those
+	# with the weakest reasons first, rather than all at once at a cliff
+	# (owner, 2026-10-03).
 	if = {
-		limit = { un_tier_is_moribund = yes }
-		add = -15
+		limit = { un_ai_authority < un_ai_membership_crisis_start }
+		subtract = {
+			value = un_ai_membership_crisis_start
+			subtract = un_ai_authority
+			multiply = un_ai_membership_crisis_per_point
+		}
 	}
 	# Help we could ask for: only a member requests aid or peacekeepers
 	# (un_propose_aid_available, un_propose_peacekeepers_available), and the
@@ -438,9 +479,13 @@ un_withhold_dues_ai_chance = {
 # ---- Development Programs (the Fund's voluntary part) ------------------------------------
 # A contribution costs 0.5% of GDP a year and pays the Fund's grants
 # (un_dev_fund_contributor). It opens only while the Fund stands, to a major
-# power (un_fund_development_button). A power gives for a reason: a
-# humanitarian law, championing the order, or recipients among its subjects,
-# bloc partners and allies, whose goodwill the grants buy.
+# power (un_fund_development_button). The owner (2026-10-03): most of the time
+# the AI should not give money without hope of larger gains, with humanitarian
+# leaders the exception. So a power gives for a humanitarian law, for
+# championing the order, or for recipients among its subjects, bloc partners
+# and allies, whose goodwill the grants buy; rank, a state-led economy and a
+# working UN only add to one of those, and fall short of the line alone
+# (5 + 5 + 5 = 15).
 
 un_ai_development_line = { value = 20 }
 un_ai_development_band = { value = 25 }
@@ -472,7 +517,7 @@ un_ai_development_will = {
 	}
 	if = {
 		limit = { country_rank >= rank_value:great_power }
-		add = 10
+		add = 5
 	}
 	if = {
 		limit = {
@@ -481,7 +526,7 @@ un_ai_development_will = {
 				has_law = law_type:law_command_economy
 			}
 		}
-		add = 10
+		add = 5
 	}
 	if = {
 		limit = { un_tier_at_least_established = yes }
@@ -619,6 +664,125 @@ un_end_peacekeeping_ai_chance = {
 		limit = { un_ai_peacekeeping_will < un_ai_peacekeeping_stop_line }
 		add = un_ai_peacekeeping_stop_line
 		subtract = un_ai_peacekeeping_will
+		max = 50
+	}
+}
+
+# ---- Champion / undermine the order ------------------------------------------------------
+# A great power's stance on the order (un_champion_order_button and the
+# undermine button: the commitment pillar's +1 / -1, at a cost in Authority and
+# influence). Its reasons are its laws, its seat, its bloc's commitment to the
+# institution, what the conventions ask of it and whether the Assembly has
+# turned on it. Authority adds a mild pull, at most 7.5 either way: a weak UN
+# draws a would-be champion in, a strong one makes a sovereign power wary. It is
+# smaller than the band, so authority alone never moves a power across
+# (owner, 2026-10-03).
+
+un_ai_order_line = { value = 20 }
+un_ai_order_band = { value = 25 }
+
+# The mild pull: 0.15 a point from 50, so +7.5 at 0 and -7.5 at 100.
+un_ai_order_authority_weight = { value = 0.15 }
+
+un_ai_order_will = {
+	value = 0
+	if = {
+		limit = { has_law = law_type:law_humanitarian_regulations }
+		add = 25
+	}
+	if = {
+		limit = { has_law = law_type:law_limited_war }
+		add = 15
+	}
+	if = {
+		limit = { has_law_or_variant = law_type:law_isolationism }
+		add = -30
+	}
+	if = {
+		limit = { has_law = law_type:law_total_war }
+		add = -25
+	}
+	# The order's architecture seats us at its top table.
+	if = {
+		limit = { is_un_permanent_member = yes }
+		add = 10
+	}
+	# The Multilateral Institutions principle (0.25 to 0.5): +10 to +20.
+	add = {
+		value = modifier:country_un_institutional_alignment
+		multiply = 40
+	}
+	# Half of what the conventions in force ask of us (-20 to +7.5).
+	add = {
+		value = un_ai_convention_terms
+		multiply = 0.5
+	}
+	# The Assembly against us: its sanctions, or a record it could act on.
+	if = {
+		limit = { has_modifier = un_sanctions_target_modifier }
+		add = -20
+	}
+	if = {
+		limit = { un_case_strength >= un_case_threshold_condemn }
+		add = -10
+	}
+	add = {
+		value = 50
+		subtract = un_ai_authority
+		multiply = un_ai_order_authority_weight
+	}
+}
+
+# The same stance, read from the other side: undermining scores where
+# championing would score below zero.
+un_ai_dissent_will = {
+	value = 0
+	subtract = un_ai_order_will
+}
+
+un_ai_order_stop_line = {
+	value = un_ai_order_line
+	subtract = un_ai_order_band
+}
+
+un_champion_order_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_order_will >= un_ai_order_line }
+		add = un_ai_order_will
+		subtract = un_ai_order_line
+		add = 10
+		max = 50
+	}
+}
+
+un_stop_championing_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_order_will < un_ai_order_stop_line }
+		add = un_ai_order_stop_line
+		subtract = un_ai_order_will
+		max = 50
+	}
+}
+
+un_undermine_order_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_dissent_will >= un_ai_order_line }
+		add = un_ai_dissent_will
+		subtract = un_ai_order_line
+		add = 10
+		max = 50
+	}
+}
+
+un_stop_undermining_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_dissent_will < un_ai_order_stop_line }
+		add = un_ai_order_stop_line
+		subtract = un_ai_dissent_will
 		max = 50
 	}
 }

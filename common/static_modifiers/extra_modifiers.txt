@@ -4184,6 +4184,15 @@ un_observer_mission_cost = {
 	country_expenses_add = 1
 }
 
+# A full peacekeeping force sent to a collapsing state (un_events.4 A), by a
+# member not already paying the peacekeeping programme: the programme's weekly
+# cost (multiplier = un_program_expense_value), fading over five years, as the
+# famine appeal's aid does (un_humanitarian_aid_cost, un_events.7 A).
+un_peacekeeping_deployment_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
 # The contingents a member sends to UN missions at will (un_mission_volunteer).
 # Applied with multiplier = var:un_msn_service_cached (the week's cost of
 # every mission it pays to serve in, un_mission_service_expense_value) by

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """The UN's AI pairs: each on/off button pair reads one score and one line.
 
-common/script_values/un_ai_values.txt gives four button pairs (Join / Leave,
+common/script_values/un_ai_values.txt gives six button pairs (Join / Leave,
 Pay / Withhold dues, Fund / Stop funding Development Programs, Contribute to /
-End peacekeeping) one score per country. The "on" button scores only at or
+End peacekeeping, Champion / Stop championing and Undermine / Stop undermining
+the order) one score per country. The "on" button scores only at or
 above a line, the "off" button only a band below it, so a country does not
 toggle (docs/systems/un_redesign_design.md §0.13; the same shape as
 test_gw_ai_policy_table.py). Nothing in the engine notices when a pair drifts
@@ -43,6 +44,12 @@ PAIRS = (
     ("un_peacekeeping_mission_button", "un_end_peacekeeping_button", "un_ai_peacekeeping_will",
      "un_ai_peacekeeping_line", "un_ai_peacekeeping_stop_line", "un_ai_peacekeeping_band",
      "un_peacekeeping_ai_chance", "un_end_peacekeeping_ai_chance"),
+    ("un_champion_order_button", "un_stop_championing_button", "un_ai_order_will",
+     "un_ai_order_line", "un_ai_order_stop_line", "un_ai_order_band",
+     "un_champion_order_ai_chance", "un_stop_championing_ai_chance"),
+    ("un_undermine_order_button", "un_stop_undermining_button", "un_ai_dissent_will",
+     "un_ai_order_line", "un_ai_order_stop_line", "un_ai_order_band",
+     "un_undermine_order_ai_chance", "un_stop_undermining_ai_chance"),
 )
 
 # The header table's score column, by pair.
@@ -145,6 +152,51 @@ class UnAiPairsTest(unittest.TestCase):
             with self.subTest(score=score):
                 on = _constant(self.values, on_line)
                 self.assertEqual(rows[score], (on, on - _constant(self.values, band)))
+
+
+class UnAiStanceTest(unittest.TestCase):
+    """Champion and undermine read one signed stance; authority only nudges it."""
+
+    def setUp(self):
+        self.values = _read(VALUES)
+
+    def test_dissent_is_minus_the_order_stance(self):
+        self.assertRegex(_block(self.values, "un_ai_dissent_will"),
+                         r"^\s*value\s*=\s*0\s+subtract\s*=\s*un_ai_order_will\s*$")
+
+    def test_authority_alone_never_crosses_the_band(self):
+        # The owner (2026-10-03): a mild pull from authority, but a power with
+        # good reasons either way must not switch on authority alone. Its whole
+        # swing (authority 0 to 100) stays inside the band.
+        will = _block(self.values, "un_ai_order_will")
+        self.assertRegex(will, r"value\s*=\s*50\s+subtract\s*=\s*un_ai_authority\s+multiply\s*=\s*un_ai_order_authority_weight")
+        swing = 100 * _constant(self.values, "un_ai_order_authority_weight")
+        self.assertLess(swing, _constant(self.values, "un_ai_order_band"))
+        self.assertLessEqual(swing, _constant(self.values, "un_ai_self_flipping_terms"))
+        # No step on authority anywhere else in the stance.
+        self.assertNotIn("global_var:un_authority", will)
+
+
+class UnAiMembershipCrisisTest(unittest.TestCase):
+    def test_a_failing_un_costs_membership_gradually(self):
+        # Gradual, not the old cliff (owner, 2026-10-03): a continuous term
+        # below a start line, no step on the Moribund tier.
+        values = _read(VALUES)
+        will = _block(values, "un_ai_membership_will")
+        self.assertIn("un_ai_authority < un_ai_membership_crisis_start", will)
+        self.assertIn("multiply = un_ai_membership_crisis_per_point", will)
+        self.assertNotIn("un_tier_is_moribund", will)
+
+
+class UnPeacekeepingDeploymentCostTest(unittest.TestCase):
+    def test_a_full_force_costs_money_unless_the_programme_pays(self):
+        # Owner, 2026-10-03: un_events.4 A should charge the programme's cost.
+        events = _read(_path("events", "un_events.txt"))
+        option = _block(events, "un_events.4")
+        a = option[option.index("name = un_events.4.a"):option.index("name = un_events.4.b")]
+        self.assertRegex(a, r"NOT\s*=\s*\{\s*un_standing_program_active_peacekeeping\s*=\s*yes\s*\}\s*\}\s*add_modifier\s*=\s*\{\s*name\s*=\s*un_peacekeeping_deployment_cost\s+multiplier\s*=\s*un_program_expense_value")
+        modifiers = _read(_path("common", "static_modifiers", "extra_modifiers.txt"))
+        self.assertIn("country_expenses_add = 1", _block(modifiers, "un_peacekeeping_deployment_cost"))
 
 
 class UnAiMoneyTest(unittest.TestCase):

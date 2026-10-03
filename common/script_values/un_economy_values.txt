@@ -544,9 +544,11 @@ un_fr_delivery_points_value = {
 # scope:un_resolution. Sizes as in un_lean_interests (un_dossier_values.txt).
 
 # The World Development Fund: the members it would pay are strongly for, and
-# the more so the larger the grant it would bring them, the members above the
-# average against (they pay its share of the dues and get nothing back), the
-# richest more so; laissez-faire governments against. "Below the line" reads
+# the more so the larger the grant it would bring them; once a reformed charter
+# gives it a share of the budget, the members above the average against (they
+# pay its share of the dues and get nothing back), the richest more so, and
+# laissez-faire governments against. Under the founding charter it costs them
+# nothing, and they lean against it only a little. "Below the line" reads
 # the line at the charter's current level (the monthly snapshot,
 # un_dev_fund_below_line). The grant is today's preview as a share of our GDP
 # (un_dev_fund_grant_preview_share), at un_ai_points_per_gdp_share points: 20
@@ -568,17 +570,35 @@ un_lean_interests_development_fund = {
 			max = un_lean_dev_fund_grant_cap
 		}
 	}
+	# What the richer members give up. Under the founding charter the Fund
+	# takes nothing from the budget and pays out the voluntary contributions
+	# alone, so they lose nothing by it and it should pass easily (owner,
+	# 2026-10-03); only the richest and laissez-faire governments grumble. From
+	# Charter Reform I it takes a share of the dues they pay.
 	else_if = {
-		limit = { un_dev_fund_rich = yes }
-		add = -25
+		limit = { un_dev_fund_budget_share_at_level > 0 }
+		if = {
+			limit = { un_dev_fund_rich = yes }
+			add = -25
+		}
+		else_if = {
+			limit = { un_dev_fund_above_average = yes }
+			add = -10
+		}
 	}
 	else_if = {
-		limit = { un_dev_fund_above_average = yes }
-		add = -10
+		limit = { un_dev_fund_rich = yes }
+		add = -5
 	}
 	if = {
 		limit = { has_law_or_variant = law_type:law_laissez_faire }
-		add = -15
+		if = {
+			limit = { un_dev_fund_budget_share_at_level > 0 }
+			add = -15
+		}
+		else = {
+			add = -5
+		}
 	}
 	if = {
 		limit = { has_law = law_type:law_humanitarian_regulations }

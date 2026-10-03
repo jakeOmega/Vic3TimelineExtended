@@ -4844,6 +4844,7 @@
  un_peacekeeping_contributor_cost:0 "Peacekeeping Contribution Expenses"
  un_peacekeeping_contributor_modifier:0 "[concept_un_peacekeeping] Contributor"
  un_peacekeeping_deployed_modifier:0 "Peacekeeping Force Deployed"
+ un_peacekeeping_deployment_cost:0 "Peacekeeping Deployment Expenses"
  un_peacekeeping_received_modifier:0 "[concept_un_peacekeeping] Deployed"
  un_peacekeeping_resented_modifier:0 "Peacekeepers Resented"
  un_peacekeeping_welcomed_modifier:0 "Peacekeepers Welcomed"
