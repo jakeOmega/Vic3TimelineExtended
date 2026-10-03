@@ -222,24 +222,44 @@ te_tax_sync_relief = {
 # option, the country owns its market and has taken its customs up), so a
 # customs-union member, a subject in its overlord's market and every country
 # under the plain rule option are left alone. Per tradeable good and direction
-# (te_tax_gen_sync_customs, generated): a level the market lacks is set; one a
-# re-assert last month could not restore (a treaty forbids it, or the tariff
-# cooldown refused it) is adopted into the code. Any adoption moves the
-# customs external version once (a change made outside legislation: a bill or
-# a package touching customs then holds), te_tax_code_version once, and writes
-# one history entry (kind 15), however many goods it took. The per-good marks
-# (te_tax_cpend_<d>_<good>, te_tax_cblock_<good>) are transient flags.
+# (te_tax_gen_sync_customs, generated): a level the market lacks is set again,
+# and a failed re-assert is counted (te_tax_cretry_<d>_<good>) on the month's
+# first customs sync only (te_tax_customs_month: te_tax.4 and the watchdog may
+# sync again in the month), so the count is of consecutive monthly syncs.
+# Once te_tax_customs_adopt_after (4) monthly re-asserts in a row have not
+# taken (a treaty forbids the level, or the 3-month tariff cooldown kept
+# refusing it; controller ruling), the market's level is adopted into the code.
+# Adoptions happen only on that first sync, so at most once a month they move
+# the customs external version once (a change made outside legislation: a bill
+# or a package touching customs then holds), te_tax_code_version once, and write
+# one history entry (kind 15) carrying how many levels were adopted in its _inst;
+# the drift counter keeps the per-good detail. The per-good counter and blocked
+# mark (te_tax_cretry_<d>_<good>, te_tax_cblock_<good>) and the month guard
+# (te_tax_customs_month) are transient: not schema tokens and not copied at an
+# outbreak, so the rebels count afresh; te_tax_gen_customs_clear_retries drops
+# the counters when the market is lost, at a release and at reunification.
 te_tax_sync_customs = {
 	if = {
 		limit = { te_tax_customs_authority = yes }
+		set_local_variable = { name = te_tax_cu_counts value = 0 }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = te_tax_customs_month }
+					var:te_tax_customs_month < te_history_month_index
+				}
+			}
+			set_local_variable = { name = te_tax_cu_counts value = 1 }
+			set_variable = { name = te_tax_customs_month value = te_history_month_index }
+		}
 		set_local_variable = { name = te_tax_cu_adopted value = 0 }
 		te_tax_gen_sync_customs = yes
 		if = {
-			limit = { local_var:te_tax_cu_adopted = 1 }
+			limit = { local_var:te_tax_cu_adopted > 0 }
 			change_variable = { name = te_tax_xver_customs add = 1 }
 			change_variable = { name = te_tax_code_version add = 1 }
-			te_tax_history_push = { KIND = 15 SLOT = none }
-			debug_log = "TE_TAX customs_adopted a tariff level the code re-asserted last month did not take (a treaty or the cooldown); the market's level was adopted into the code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			te_tax_gen_history_write = { KIND = 15 SLOT = none INST = local_var:te_tax_cu_adopted }
+			debug_log = "TE_TAX customs_adopted tariff levels the code re-asserted for te_tax_customs_adopt_after months in a row did not take (a treaty or the cooldown); the market's levels were adopted into the code (count: the newest history entry); month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		}
 	}
 }

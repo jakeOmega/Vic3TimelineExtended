@@ -113,9 +113,11 @@ te_tax_migrate_customs = {
 #     from the market's native levels (te_tax_migrate_customs), history kind 17;
 #   - a country that loses it keeps its records frozen, unread
 #     (te_tax_customs_held = 0): its market owner sets the levels now. The
-#     customs external version moves, so a bill touching customs cannot pass
-#     and a package touching customs holds; its pending re-asserts are
-#     dropped; history kind 16.
+#     customs external version moves, so a package touching customs holds;
+#     its failed re-assert counts are dropped; history kind 16. An open draft's
+#     and bill's customs levels are dropped (-99), so both stay usable (the
+#     bill opens a new revision, its text having changed), with one debug line
+#     and history kind 18 (controller ruling); the review says why.
 # Writes nothing for a country whose standing did not change, and nothing at
 # all under the plain rule option.
 te_tax_customs_revalidate = {
@@ -127,6 +129,8 @@ te_tax_customs_revalidate = {
 			limit = { te_tax_customs_eligible = yes NOT = { var:te_tax_customs_held = 1 } }
 			te_tax_migrate_customs = yes
 			change_variable = { name = te_tax_code_version add = 1 }
+			# A draft's note that its customs changes were dropped with the market no longer holds.
+			if = { limit = { has_variable = te_tax_dr_customs_dropped } set_variable = { name = te_tax_dr_customs_dropped value = 0 } }
 			te_tax_history_push = { KIND = 17 SLOT = none }
 			debug_log = "TE_TAX customs_gained the country owns its market; its tariff levels were carried over into the tax code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		}
@@ -134,9 +138,27 @@ te_tax_customs_revalidate = {
 			limit = { NOT = { te_tax_customs_eligible = yes } var:te_tax_customs_held = 1 }
 			set_variable = { name = te_tax_customs_held value = 0 }
 			change_variable = { name = te_tax_xver_customs add = 1 }
-			te_tax_gen_customs_clear_pending = yes
+			te_tax_gen_customs_clear_retries = yes
 			te_tax_history_push = { KIND = 16 SLOT = none }
 			debug_log = "TE_TAX customs_lost the country no longer owns its market; its customs records are frozen; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			# The draft and the bill can no longer change customs: their levels are
+			# dropped so both stay usable (te_tax_bill_effects.txt).
+			set_local_variable = { name = te_tax_cu_dropped value = 0 }
+			if = {
+				limit = { te_tax_draft_active = yes te_tax_gen_draft_touches_customs = yes }
+				te_tax_draft_drop_customs = yes
+				set_local_variable = { name = te_tax_cu_dropped value = 1 }
+			}
+			if = {
+				limit = { te_tax_bill_active = yes te_tax_gen_bill_touches_customs = yes }
+				te_tax_bill_drop_customs = yes
+				set_local_variable = { name = te_tax_cu_dropped value = 1 }
+			}
+			if = {
+				limit = { local_var:te_tax_cu_dropped = 1 }
+				te_tax_history_push = { KIND = 18 SLOT = none }
+				debug_log = "TE_TAX customs_dropped the market was lost; the customs changes of the open draft and bill were dropped; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
 		}
 	}
 }

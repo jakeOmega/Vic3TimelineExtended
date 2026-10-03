@@ -361,6 +361,22 @@ te_tax_dr_customs_2 = {
 	}
 }
 
+# The market was lost (te_tax_customs_revalidate, controller ruling): the open
+# draft's customs levels are left alone again (-99), every other provision
+# kept, and te_tax_dr_customs_dropped = 1 tells the review why.
+te_tax_draft_drop_customs = {
+	te_tax_gen_customs_drop_draft = yes
+}
+
+# The same for the bill under debate: its customs levels are dropped, and since
+# its text changed it opens a new revision, as an accepted offer does
+# (commitments released, promises proposed again, support refreshed).
+te_tax_bill_drop_customs = {
+	te_tax_gen_customs_drop_bill = yes
+	change_variable = { name = te_tax_bl_rev add = 1 }
+	te_tax_bill_start_debate = yes
+}
+
 # Takes regional relief into the draft as existing law has it (if the draft
 # does not change it yet) and lists the country's incorporated states to name
 # from (te_tax_dr_relief_candidates), the list the workbench shows. The only

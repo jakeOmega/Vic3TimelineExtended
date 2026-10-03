@@ -643,6 +643,13 @@ types te_tax_review_widget_types
 				}
 			}
 
+			# The draft's customs changes were dropped when the market was lost
+			# (plan Task 15, controller ruling).
+			te_tax_text = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_customs_dropped'), '(CFixedPoint)0' )]"
+				text = "te_tax_rv_customs_dropped"
+			}
+
 			# Customs levels the draft changes (plan Task 15): each level, existing
 			# law's in the commencement month and the bill's, and each good whose
 			# level a treaty or the tariff cooldown kept (adopted into the code).

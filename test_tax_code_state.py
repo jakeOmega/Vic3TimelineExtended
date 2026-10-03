@@ -390,7 +390,7 @@ class GeneratedSyncTest(unittest.TestCase):
         # The customs schedule (test_tax_code_customs.py).
         customs = {f"te_tax_gen_customs_{part}_{d}" for part in ("set_native", "read_native") for d in ("imp", "exp")}
         customs |= {"te_tax_gen_migrate_customs", "te_tax_gen_sync_customs", "te_tax_gen_count_customs_drift",
-                    "te_tax_gen_customs_clear_pending"}
+                    "te_tax_gen_customs_clear_retries"}
         self.assertEqual(names, want | scheduler | migration | drift | copies | obligations | views | customs)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
@@ -640,7 +640,7 @@ class DisplayValueTest(unittest.TestCase):
         # changes it and existing law's; per good whether a treaty or the cooldown blocked it;
         # the draft's count and rebase flag, and each passed bill's count.
         want |= {"te_tax_view_drift_customs", "te_tax_view_customs_held", "te_tax_view_customs_mode",
-                 "te_tax_view_dr_customs_changed", "te_tax_view_dr_customs_rebase",
+                 "te_tax_view_dr_customs_changed", "te_tax_view_dr_customs_rebase", "te_tax_view_dr_customs_dropped",
                  "te_tax_view_pa_customs_changed", "te_tax_view_pb_customs_changed"}
         for good in gen.customs_catalog():
             want.add(f"te_tax_view_cu_{good}_blocked")

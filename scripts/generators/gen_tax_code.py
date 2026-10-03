@@ -37,7 +37,7 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       CUSTOMS_LEVELS and customs_catalog(): te_tax_gen_customs_set_native_<d>,
       te_tax_gen_customs_read_native_<d>, te_tax_gen_migrate_customs,
       te_tax_gen_sync_customs, te_tax_gen_count_customs_drift,
-      te_tax_gen_customs_clear_pending).
+      te_tax_gen_customs_clear_retries).
   common/scripted_triggers/te_tax_generated_triggers.txt
       Amendment-scope family and match triggers the syncs filter on, the
       scheduler's package and bill checks (te_tax_gen_package_current_<slot>,
@@ -198,10 +198,11 @@ CUSTOM_LOC_PATH = "common/customizable_localization/te_tax_generated_custom_loc.
 KIND_MIGRATED, KIND_REPAIRED = 5, 7
 # History kinds the policy obligations write (plan Task 12; te_tax_obligation_effects.txt).
 KIND_OBL_FULFILLED, KIND_OBL_BREACHED, KIND_OBL_RENEGOTIATED, KIND_OBL_RELEASED = 11, 12, 13, 14
-# History kinds of the customs schedule (plan Task 15): a level a re-assert could not
-# restore (a treaty or the tariff cooldown) adopted into the code; the market lost (the
-# records frozen); a market gained (its native levels migrated into the code).
-KIND_CUSTOMS_ADOPTED, KIND_CUSTOMS_LOST, KIND_CUSTOMS_GAINED = 15, 16, 17
+# History kinds of the customs schedule (plan Task 15): levels the re-asserts could not restore
+# (a treaty or the tariff cooldown) adopted into the code, one entry a month carrying the count in
+# its _inst; the market lost (the records frozen); a market gained (its native levels migrated into
+# the code); a draft's or bill's customs changes dropped with the market.
+KIND_CUSTOMS_ADOPTED, KIND_CUSTOMS_LOST, KIND_CUSTOMS_GAINED, KIND_CUSTOMS_DROPPED = 15, 16, 17, 18
 # Kinds that changed the enacted code (te_tax_code_version moved); the
 # overview's last change is the newest of them.
 CODE_CHANGE_KINDS = (KIND_COMMENCED, KIND_SUNSET, KIND_MIGRATED, KIND_REPAIRED, KIND_CUSTOMS_ADOPTED,
@@ -225,6 +226,7 @@ HISTORY_KIND_KEYS = {
     KIND_CUSTOMS_ADOPTED: "te_tax_hist_kind_customs_adopted",
     KIND_CUSTOMS_LOST: "te_tax_hist_kind_customs_lost",
     KIND_CUSTOMS_GAINED: "te_tax_hist_kind_customs_gained",
+    KIND_CUSTOMS_DROPPED: "te_tax_hist_kind_customs_dropped",
 }
 HISTORY_KIND_FALLBACK = "te_tax_hist_kind_other"
 # The workbench (plan Task 8): the per-instrument step handlers and per-good
@@ -1071,6 +1073,9 @@ def _customs_views():
     lines += _view("te_tax_view_dr_customs_changed", 0, f"{DRAFT_OPEN} has_variable = {marker}",
                    [f"if = {{ limit = {{ has_variable = {field} {_customs_touched(field)} }} add = 1 }}"
                     for field in customs_fields("dr")])
+    lines += _view("te_tax_view_dr_customs_dropped", 0,
+                   f"{DRAFT_OPEN} has_variable = te_tax_dr_customs_dropped var:te_tax_dr_customs_dropped = 1",
+                   ["value = 1"])
     lines += _view("te_tax_view_dr_customs_rebase", 0,
                    f"{DRAFT_OPEN} has_variable = {marker} has_variable = te_tax_pver_customs var:{marker} >= 0 "
                    f"NOT = {{ var:{marker} = var:te_tax_pver_customs }}", ["value = 1"])
@@ -1219,6 +1224,9 @@ def custom_localization():
             if value == KIND_SUNSET:
                 entries += [(f"{kind} = {KIND_SUNSET} {inst} = {idx}", f"te_tax_hist_kind_sunset_{instrument.key}")
                             for idx, instrument in enumerate(INSTRUMENTS, start=1)]
+            elif value == KIND_CUSTOMS_ADOPTED:
+                # The row prints how many levels were adopted, carried in the entry's _inst.
+                entries.append((f"{kind} = {value}", f"{HISTORY_KIND_KEYS[value]}_{i}"))
             else:
                 entries.append((f"{kind} = {value}", HISTORY_KIND_KEYS[value]))
         lines += ["", f"te_tax_hist_event_{i} = {{", "\ttype = country", "\trandom_valid = no"]
@@ -1548,8 +1556,8 @@ def _apply(slot):
     lines += [
         "\t# Customs (plan Task 15), only while the code holds the country's customs (a package",
         "\t# that touches them is current only if no market change moved te_tax_xver_customs since",
-        "\t# approval): each level the package sets becomes the enacted one, with any pending",
-        "\t# re-assert and blocked mark of the good dropped; the sync then sets the market's level.",
+        "\t# approval): each level the package sets becomes the enacted one, with the good's failed",
+        "\t# re-assert count and blocked mark dropped; the sync then sets the market's level.",
         "\tif = {",
         f"\t\tlimit = {{ te_tax_customs_authority = yes has_variable = {customs_marker(f'p{slot}')} }}",
     ]
@@ -1557,7 +1565,7 @@ def _apply(slot):
         for d, _ in CUSTOMS_DIRS:
             field = f"{p}_{d}_{good}"
             lines.append(f"\t\tif = {{ limit = {{ {_customs_touched(field)} }} set_variable = {{ name = te_tax_en_{d}_{good} "
-                         f"value = var:{field} }} {_remove_if_set(f'te_tax_cpend_{d}_{good}', '')} "
+                         f"value = var:{field} }} {_remove_if_set(f'te_tax_cretry_{d}_{good}', '')} "
                          f"{_remove_if_set(f'te_tax_cblock_{good}', '')} }}")
     lines.append("\t}")
     plist = slot_relief_list(slot)
@@ -3141,7 +3149,8 @@ def bill_effects():
     ]
     lines += [f"\tset_variable = {{ name = {name} value = {sentinel} }}" for name, sentinel in draft]
     lines += [_clear_list(name) for name in DRAFT_LISTS]
-    untouched = _customs_writes("dr", [CUSTOMS_UNTOUCHED] * len(customs_fields("dr")), -1)
+    untouched = _customs_writes("dr", [CUSTOMS_UNTOUCHED] * len(customs_fields("dr")), -1) + [
+        "\tset_variable = { name = te_tax_dr_customs_dropped value = 0 }"]
     lines += ["\t# Customs (plan Task 15): under the customs option only, every level left alone."]
     lines += _customs_block("te_tax_customs_on = yes", untouched)
     lines += ["}", "", "# A new draft copied from the bill under debate, for its revision, with the bill's",
@@ -3152,7 +3161,8 @@ def bill_effects():
     lines += _copy_state_list("te_tax_bl_relief_states", "te_tax_dr_relief_states")
     lines.append(_clear_list("te_tax_dr_relief_candidates"))
     lines += _customs_block(f"has_variable = {customs_marker('bl')}", _customs_writes(
-        "dr", [f"var:{field}" for field in customs_fields("bl")], f"var:{customs_marker('bl')}"))
+        "dr", [f"var:{field}" for field in customs_fields("bl")], f"var:{customs_marker('bl')}")
+        + ["\tset_variable = { name = te_tax_dr_customs_dropped value = 0 }"])
     lines += ["\telse_if = {", "\t\tlimit = { te_tax_customs_on = yes }"] + [
         f"\t{line}" for line in untouched] + ["\t}"]
     lines += ["}", "", "# Closes the draft's payload and its lists (te_tax_dr_on is set to 0 by the caller).",
@@ -3160,7 +3170,7 @@ def bill_effects():
     lines += [f"\tremove_variable = {name}" for name, _ in draft]
     lines += [_clear_list(name) for name in DRAFT_LISTS]
     lines += _customs_block(f"has_variable = {customs_marker('dr')}", [
-        f"\tremove_variable = {name}" for name in customs_fields("dr") + [customs_marker("dr")]])
+        f"\tremove_variable = {name}" for name in customs_fields("dr") + [customs_marker("dr"), "te_tax_dr_customs_dropped"]])
     lines += [
         "}",
         "",
@@ -3190,6 +3200,20 @@ def bill_effects():
     lines += [_clear_list("te_tax_bl_relief_states")]
     lines += _customs_block(f"has_variable = {customs_marker('bl')}", [
         f"\tremove_variable = {name}" for name in customs_fields("bl") + [customs_marker("bl"), "te_tax_bl_xver_customs"]])
+    lines.append("}")
+    lines += [
+        "",
+        "# The market was lost (te_tax_customs_revalidate; plan Task 15, controller ruling): the draft and the",
+        "# bill can no longer change customs, so their levels are left alone again (-99) and both stay",
+        "# usable. The draft's planned-version mark goes with them and its dropped mark is set, for the",
+        "# review. Called only behind te_tax_draft_drop_customs / te_tax_bill_drop_customs.",
+        "te_tax_gen_customs_drop_draft = {",
+    ]
+    lines += [f"\tset_variable = {{ name = {field} value = {CUSTOMS_UNTOUCHED} }}" for field in customs_fields("dr")]
+    lines += [f"\tset_variable = {{ name = {customs_marker('dr')} value = -1 }}",
+              "\tset_variable = { name = te_tax_dr_customs_dropped value = 1 }", "}", "",
+              "te_tax_gen_customs_drop_bill = {"]
+    lines += [f"\tset_variable = {{ name = {field} value = {CUSTOMS_UNTOUCHED} }}" for field in customs_fields("bl")]
     lines.append("}")
     for slot in SLOTS:
         lines += _supersede(slot)
@@ -3481,40 +3505,46 @@ def _customs_effects():
     ]
     for good in customs_catalog():
         lines += [f"\tte_tax_gen_customs_read_native_{d} = {{ GOOD = {good} }}" for d, _ in CUSTOMS_DIRS]
-        lines += [_remove_if_set(f"te_tax_cpend_{d}_{good}") for d, _ in CUSTOMS_DIRS]
+        lines += [_remove_if_set(f"te_tax_cretry_{d}_{good}") for d, _ in CUSTOMS_DIRS]
         lines.append(_remove_if_set(f"te_tax_cblock_{good}"))
     lines += [
         "}",
         "",
         "# Customs sync (te_tax_sync_customs, te_tax_collection_effects.txt, only while the code holds the",
         "# country's customs). Per tradeable good and direction, when the market's level differs from the",
-        "# code's: if last month's sync re-asserted it (te_tax_cpend_<d>_<good>) and it did not take (a",
-        "# treaty forbids the level, or the tariff cooldown refused it), the market's level is adopted",
-        "# into the code, the good is marked blocked (te_tax_cblock_<good>, for the review) and the caller",
-        "# moves the customs external version once (local te_tax_cu_adopted); otherwise the code's level",
-        "# is set and the re-assert is marked pending. A level that matches clears the pending mark. The",
-        "# two marks are transient flags, not schema tokens: written when set, removed when cleared.",
+        "# code's, the code's level is set again and, on the month's first customs sync (local",
+        "# te_tax_cu_counts = 1), the failed re-asserts are counted (te_tax_cretry_<d>_<good>). Once",
+        "# te_tax_customs_adopt_after monthly re-asserts in a row have not taken (a treaty forbids the",
+        "# level, or the 3-month tariff cooldown kept refusing it), the market's level is adopted into the",
+        "# code instead, the good is marked blocked (te_tax_cblock_<good>, for the review) and counted",
+        "# (local te_tax_cu_adopted), so the caller moves the customs external version once and writes one",
+        "# history entry with the count. A level that matches clears the count. The counter and the",
+        "# blocked mark are transient flags, not schema tokens: written when set, removed when cleared.",
         "te_tax_gen_sync_customs = {",
     ]
     for good in customs_catalog():
         for d, _ in CUSTOMS_DIRS:
-            pend = f"te_tax_cpend_{d}_{good}"
+            retry = f"te_tax_cretry_{d}_{good}"
             lines += [
                 "\tif = {",
                 f"\t\tlimit = {{ {_customs_mismatch(d, good)} }}",
                 "\t\tif = {",
-                f"\t\t\tlimit = {{ has_variable = {pend} }}",
+                f"\t\t\tlimit = {{ local_var:te_tax_cu_counts = 1 has_variable = {retry} var:{retry} >= te_tax_customs_adopt_after }}",
                 f"\t\t\tte_tax_gen_customs_read_native_{d} = {{ GOOD = {good} }}",
-                f"\t\t\tremove_variable = {pend}",
+                f"\t\t\tremove_variable = {retry}",
                 f"\t\t\tset_variable = {{ name = te_tax_cblock_{good} value = 1 }}",
-                "\t\t\tset_local_variable = { name = te_tax_cu_adopted value = 1 }",
+                "\t\t\tchange_local_variable = { name = te_tax_cu_adopted add = 1 }",
                 "\t\t}",
                 "\t\telse = {",
                 f"\t\t\tte_tax_gen_customs_set_native_{d} = {{ GOOD = {good} }}",
-                f"\t\t\tset_variable = {{ name = {pend} value = 1 }}",
+                "\t\t\tif = {",
+                "\t\t\t\tlimit = { local_var:te_tax_cu_counts = 1 }",
+                f"\t\t\t\tif = {{ limit = {{ has_variable = {retry} }} change_variable = {{ name = {retry} add = 1 }} }}",
+                f"\t\t\t\telse = {{ set_variable = {{ name = {retry} value = 1 }} }}",
+                "\t\t\t}",
                 "\t\t}",
                 "\t}",
-                f"\telse_if = {{ limit = {{ has_variable = {pend} }} remove_variable = {pend} }}",
+                f"\telse_if = {{ limit = {{ has_variable = {retry} }} remove_variable = {retry} }}",
             ]
     lines += [
         "}",
@@ -3530,12 +3560,12 @@ def _customs_effects():
     lines += [
         "}",
         "",
-        "# Drops every pending re-assert (customs authority lost, a release, a civil war's reunification):",
-        "# the next sync that holds the customs re-asserts afresh instead of adopting.",
-        "te_tax_gen_customs_clear_pending = {",
+        "# Drops every failed re-assert count (customs authority lost, a release, a civil war's",
+        "# reunification): the next sync that holds the customs re-asserts afresh, counting from 0.",
+        "te_tax_gen_customs_clear_retries = {",
     ]
     for good in customs_catalog():
-        lines += [_remove_if_set(f"te_tax_cpend_{d}_{good}") for d, _ in CUSTOMS_DIRS]
+        lines += [_remove_if_set(f"te_tax_cretry_{d}_{good}") for d, _ in CUSTOMS_DIRS]
     lines.append("}")
     return lines
 

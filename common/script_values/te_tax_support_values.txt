@@ -287,3 +287,10 @@ te_tax_debate_days_left = {
 		min = 0
 	}
 }
+
+# Customs (plan Task 15, controller ruling): a tariff level the code re-asserts
+# is adopted from the market only after this many consecutive monthly
+# re-asserts have not taken (te_tax_gen_sync_customs), longer than the 3-month
+# tariff cooldown (TARIFF_LEVEL_COOLDOWN_MONTHS, 1.14.5 00_defines.txt), so a
+# refused re-assert after a recent change is retried rather than adopted.
+te_tax_customs_adopt_after = 4

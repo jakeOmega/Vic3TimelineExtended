@@ -69,7 +69,11 @@ LEVELS = {-3: "max_subventions", -2: "high_subventions", -1: "low_subventions", 
 DIRS = {"imp": "import", "exp": "export"}
 UNTOUCHED = -99
 CATEGORIES = ("staple", "industrial", "luxury", "military")
-KIND_ADOPTED, KIND_LOST, KIND_GAINED = 15, 16, 17
+KIND_ADOPTED, KIND_LOST, KIND_GAINED, KIND_DROPPED = 15, 16, 17, 18
+# Controller ruling (pre-review): a refused re-assert is retried monthly and the market's level
+# adopted only after this many consecutive failed monthly re-asserts (covers the 3-month
+# TARIFF_LEVEL_COOLDOWN_MONTHS).
+ADOPT_AFTER = 4
 LEVEL_KEYS = {-3: "m3", -2: "m2", -1: "m1", 0: "0", 1: "p1", 2: "p2", 3: "p3"}
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
        "landowners", "petty_bourgeoisie", "rural_folk", "trade_unions")
@@ -92,7 +96,7 @@ CUSTOMS_GATES = ("te_tax_customs_on = yes", "te_tax_customs_eligible = yes", "te
                  "has_variable = te_tax_pb_pver_customs")
 CUSTOMS_WRITE = re.compile(
     r"\bset_(?:import|export)_tariff_level\b"
-    r"|name = te_tax_(?:en_(?:imp|exp)_[\w$]+|customs_held|pver_customs|xver_customs|drift_customs|cpend_[\w$]+"
+    r"|name = te_tax_(?:en_(?:imp|exp)_[\w$]+|customs_held|pver_customs|xver_customs|drift_customs|cretry_[\w$]+|customs_month|dr_customs_dropped"
     r"|cblock_[\w$]+|(?:dr|bl|pa|pb)_(?:imp|exp)_[\w$]+|(?:dr|bl)_customs_pver|bl_xver_customs"
     r"|p[ab]_(?:pver|xver)_customs) (?:value|add)\b")
 BRANCH = re.compile(r"\b(if|else_if|else|trigger_if|trigger_else_if) = \{")
@@ -245,8 +249,8 @@ class MigrationTest(unittest.TestCase):
             for d in DIRS:
                 with self.subTest(good=good, d=d):
                     self.assertIn(f"te_tax_gen_customs_read_native_{d} = {{ GOOD = {good} }}", body)
-                    self.assertIn(f"if = {{ limit = {{ has_variable = te_tax_cpend_{d}_{good} }} "
-                                  f"remove_variable = te_tax_cpend_{d}_{good} }}", body)
+                    self.assertIn(f"if = {{ limit = {{ has_variable = te_tax_cretry_{d}_{good} }} "
+                                  f"remove_variable = te_tax_cretry_{d}_{good} }}", body)
             self.assertIn(f"if = {{ limit = {{ has_variable = te_tax_cblock_{good} }} "
                           f"remove_variable = te_tax_cblock_{good} }}", body)
 
@@ -287,7 +291,7 @@ class RevalidationTest(unittest.TestCase):
         self.assertIsNotNone(lost)
         for phrase in ("set_variable = { name = te_tax_customs_held value = 0 }",
                        "change_variable = { name = te_tax_xver_customs add = 1 }",
-                       "te_tax_gen_customs_clear_pending = yes",
+                       "te_tax_gen_customs_clear_retries = yes",
                        f"te_tax_history_push = {{ KIND = {KIND_LOST} SLOT = none }}"):
             self.assertIn(phrase, lost.group(1))
         # Frozen, not removed: no record is written or removed.
@@ -353,28 +357,56 @@ class SyncTest(unittest.TestCase):
                     self.assertIn(differs, self.generated)
                     branch = self.generated[self.generated.find(differs):]
                     branch = branch[:close(branch, branch.find("{")) + 1]
-                    adopt = (f"if = {{ limit = {{ has_variable = te_tax_cpend_{d}_{good} }} "
+                    retry = f"te_tax_cretry_{d}_{good}"
+                    # Adopt only on the month's counting sync, after te_tax_customs_adopt_after failed
+                    # monthly re-asserts in a row (controller ruling).
+                    adopt = (f"if = {{ limit = {{ local_var:te_tax_cu_counts = 1 has_variable = {retry} "
+                             f"var:{retry} >= te_tax_customs_adopt_after }} "
                              f"te_tax_gen_customs_read_native_{d} = {{ GOOD = {good} }} "
-                             f"remove_variable = te_tax_cpend_{d}_{good} "
+                             f"remove_variable = {retry} "
                              f"set_variable = {{ name = te_tax_cblock_{good} value = 1 }} "
-                             "set_local_variable = { name = te_tax_cu_adopted value = 1 } }")
+                             "change_local_variable = { name = te_tax_cu_adopted add = 1 } }")
                     reassert = (f"else = {{ te_tax_gen_customs_set_native_{d} = {{ GOOD = {good} }} "
-                                f"set_variable = {{ name = te_tax_cpend_{d}_{good} value = 1 }} }}")
+                                f"if = {{ limit = {{ local_var:te_tax_cu_counts = 1 }} "
+                                f"if = {{ limit = {{ has_variable = {retry} }} change_variable = {{ name = {retry} add = 1 }} }} "
+                                f"else = {{ set_variable = {{ name = {retry} value = 1 }} }} }} }}")
                     self.assertIn(adopt, branch)
                     self.assertIn(reassert, branch)
-                    self.assertIn(f"else_if = {{ limit = {{ has_variable = te_tax_cpend_{d}_{good} }} "
-                                  f"remove_variable = te_tax_cpend_{d}_{good} }}", self.generated)
+                    self.assertIn(f"else_if = {{ limit = {{ has_variable = {retry} }} remove_variable = {retry} }}",
+                                  self.generated)
+        self.assertNotIn("cpend", self.generated)
 
-    def test_an_adoption_moves_the_external_version_once_per_sync(self):
+    def test_the_threshold_and_the_monthly_count(self):
+        support = load("common/script_values/te_tax_support_values.txt")
+        self.assertEqual(support["te_tax_customs_adopt_after"], str(ADOPT_AFTER))
+        # Only the first customs sync of a calendar month counts a failed re-assert or adopts:
+        # te_tax.4 and the watchdog may sync again in the month.
+        self.assertIn("set_local_variable = { name = te_tax_cu_counts value = 0 } if = { limit = { OR = { NOT = { "
+                      "has_variable = te_tax_customs_month } var:te_tax_customs_month < te_history_month_index } } "
+                      "set_local_variable = { name = te_tax_cu_counts value = 1 } set_variable = { name = "
+                      "te_tax_customs_month value = te_history_month_index } }", self.sync)
+
+    def test_an_adoption_writes_one_entry_a_month_with_the_count(self):
         self.assertIn("set_local_variable = { name = te_tax_cu_adopted value = 0 } te_tax_gen_sync_customs = yes",
                       self.sync)
-        adopted = re.search(r"if = \{ limit = \{ local_var:te_tax_cu_adopted = 1 \}(.*)\}", self.sync)
+        adopted = re.search(r"if = \{ limit = \{ local_var:te_tax_cu_adopted > 0 \}(.*)\}", self.sync)
         self.assertIsNotNone(adopted)
         for phrase in ("change_variable = { name = te_tax_xver_customs add = 1 }",
                        "change_variable = { name = te_tax_code_version add = 1 }",
-                       f"te_tax_history_push = {{ KIND = {KIND_ADOPTED} SLOT = none }}"):
+                       f"te_tax_gen_history_write = {{ KIND = {KIND_ADOPTED} SLOT = none INST = local_var:te_tax_cu_adopted }}"):
             self.assertIn(phrase, adopted.group(1))
-        self.assertEqual(self.sync.count("te_tax_history_push"), 1)
+        self.assertEqual(self.sync.count("te_tax_gen_history_write"), 1)
+        self.assertNotIn("te_tax_history_push", self.sync)
+        # Each history row prints the count it carries in _inst.
+        custom = read("common/customizable_localization/te_tax_generated_custom_loc.txt")
+        loc = read(TAX_LOC, strip_comments=False)
+        for i in range(1, 9):
+            body = squash(block(custom, f"te_tax_hist_event_{i}"))
+            with self.subTest(position=i):
+                self.assertIn(f"trigger = {{ te_tax_view_hist_{i}_kind = {KIND_ADOPTED} }} "
+                              f"localization_key = te_tax_hist_kind_customs_adopted_{i}", body)
+                self.assertRegex(loc, rf"(?m)^ te_tax_hist_kind_customs_adopted_{i}:0 \".*"
+                                      rf"ScriptValue\('te_tax_view_hist_{i}_inst'\)")
 
     def test_drift_is_counted_against_the_code_for_a_market_owner_only(self):
         detect = squash(block(self.collection, "te_tax_detect_drift"))
@@ -433,18 +465,18 @@ class TokenTest(unittest.TestCase):
     def test_a_released_country_takes_up_its_own_market(self):
         release = squash(block(read(CIVIL_WAR), "te_tax_init_released_country"))
         self.assertIn("if = { limit = { te_tax_customs_on = yes } set_variable = { name = te_tax_customs_held value = 0 } "
-                      "te_tax_gen_customs_clear_pending = yes }", release)
+                      "te_tax_gen_customs_clear_retries = yes }", release)
         enacted = set(re.findall(r"NAME = (\w+)", block(read(GEN_EFFECTS), "te_tax_gen_copy_enacted")))
         self.assertFalse({name for name in enacted if "_imp_" in name or "_exp_" in name or "customs" in name})
 
     def test_the_win_repair_drops_pending_reasserts(self):
         repair = block(read(CIVIL_WAR), "te_tax_repair_after_civil_war")
-        self.assertIn("te_tax_gen_customs_clear_pending = yes", repair)
-        clear = squash(block(read(GEN_EFFECTS), "te_tax_gen_customs_clear_pending"))
+        self.assertIn("te_tax_gen_customs_clear_retries = yes", repair)
+        clear = squash(block(read(GEN_EFFECTS), "te_tax_gen_customs_clear_retries"))
         for good in catalog():
             for d in DIRS:
-                self.assertIn(f"if = {{ limit = {{ has_variable = te_tax_cpend_{d}_{good} }} "
-                              f"remove_variable = te_tax_cpend_{d}_{good} }}", clear)
+                self.assertIn(f"if = {{ limit = {{ has_variable = te_tax_cretry_{d}_{good} }} "
+                              f"remove_variable = te_tax_cretry_{d}_{good} }}", clear)
 
 
 class BothModesTest(unittest.TestCase):
@@ -580,8 +612,8 @@ class PackageTest(unittest.TestCase):
                     with self.subTest(slot=slot, good=good, d=d):
                         self.assertIn(f"if = {{ limit = {{ var:te_tax_p{slot}_{d}_{good} >= {gen.CUSTOMS_MIN} }} "
                                       f"set_variable = {{ name = te_tax_en_{d}_{good} value = var:te_tax_p{slot}_{d}_{good} }} "
-                                      f"if = {{ limit = {{ has_variable = te_tax_cpend_{d}_{good} }} "
-                                      f"remove_variable = te_tax_cpend_{d}_{good} }} "
+                                      f"if = {{ limit = {{ has_variable = te_tax_cretry_{d}_{good} }} "
+                                      f"remove_variable = te_tax_cretry_{d}_{good} }} "
                                       f"if = {{ limit = {{ has_variable = te_tax_cblock_{good} }} "
                                       f"remove_variable = te_tax_cblock_{good} }} }}", body)
 
@@ -939,19 +971,82 @@ class GuiTest(unittest.TestCase):
         self.assertIn("trade volumes", self.loc_value("te_tax_est_customs"))
 
 
+class MarketLostTest(unittest.TestCase):
+    """Controller ruling (pre-review): when the market is lost, an open draft's and bill's
+    customs levels are dropped (-99), so both stay usable; the bill, whose text changed,
+    opens a new revision; one debug line and one history entry (kind 18); the review says why."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.lost = squash(block(read(MIGRATION), "te_tax_customs_revalidate")).split("else_if = { limit = { NOT = {", 1)[1]
+        cls.bill = read(BILL)
+        cls.generated = read(GEN_BILL)
+
+    def test_the_lost_branch_drops_the_drafts_and_the_bills_customs(self):
+        for phrase in ("set_local_variable = { name = te_tax_cu_dropped value = 0 }",
+                       "if = { limit = { te_tax_draft_active = yes te_tax_gen_draft_touches_customs = yes } "
+                       "te_tax_draft_drop_customs = yes set_local_variable = { name = te_tax_cu_dropped value = 1 } }",
+                       "if = { limit = { te_tax_bill_active = yes te_tax_gen_bill_touches_customs = yes } "
+                       "te_tax_bill_drop_customs = yes set_local_variable = { name = te_tax_cu_dropped value = 1 } }",
+                       f"if = {{ limit = {{ local_var:te_tax_cu_dropped = 1 }} te_tax_history_push = {{ KIND = {KIND_DROPPED} "
+                       "SLOT = none } debug_log = \"TE_TAX customs_dropped"):
+            self.assertIn(phrase, self.lost)
+
+    def test_the_draft_keeps_every_other_provision(self):
+        body = squash(block(self.bill, "te_tax_draft_drop_customs"))
+        self.assertIn("te_tax_gen_customs_drop_draft = yes", body)
+        drop = squash(block(self.generated, "te_tax_gen_customs_drop_draft"))
+        for good in catalog():
+            for d in DIRS:
+                self.assertIn(f"set_variable = {{ name = te_tax_dr_{d}_{good} value = {UNTOUCHED} }}", drop)
+        self.assertIn("set_variable = { name = te_tax_dr_customs_pver value = -1 }", drop)
+        self.assertIn("set_variable = { name = te_tax_dr_customs_dropped value = 1 }", drop)
+        self.assertNotRegex(drop, r"name = te_tax_dr_(wage|div|land|head|cons|g_|agrel|regrel|due)")
+
+    def test_the_bill_opens_a_new_revision_without_its_customs(self):
+        body = squash(block(self.bill, "te_tax_bill_drop_customs"))
+        self.assertEqual(body, "te_tax_gen_customs_drop_bill = yes change_variable = { name = te_tax_bl_rev add = 1 } "
+                               "te_tax_bill_start_debate = yes")
+        drop = squash(block(self.generated, "te_tax_gen_customs_drop_bill"))
+        for good in catalog():
+            for d in DIRS:
+                self.assertIn(f"set_variable = {{ name = te_tax_bl_{d}_{good} value = {UNTOUCHED} }}", drop)
+
+    def test_the_drafts_dropped_mark_is_payload_and_cleared_on_a_gain(self):
+        init = squash(block(self.generated, "te_tax_gen_draft_init"))
+        self.assertIn("set_variable = { name = te_tax_dr_customs_dropped value = 0 }", init)
+        gained = squash(block(read(MIGRATION), "te_tax_customs_revalidate")).split("else_if", 1)[0]
+        self.assertIn("if = { limit = { has_variable = te_tax_dr_customs_dropped } "
+                      "set_variable = { name = te_tax_dr_customs_dropped value = 0 } }", gained)
+
+    def test_the_review_says_why(self):
+        review = read(REVIEW, strip_comments=False)
+        self.assertIn("ScriptValue('te_tax_view_dr_customs_dropped')", review)
+        self.assertIn("text = \"te_tax_rv_customs_dropped\"", review)
+        text = re.search(r'(?m)^ te_tax_rv_customs_dropped:0 "(.*)"$', read(TAX_LOC, strip_comments=False)).group(1)
+        self.assertIn("dropped", text)
+        self.assertIn("market", text)
+        view = squash(block(read(GEN_VALUES), "te_tax_view_dr_customs_dropped"))
+        self.assertIn("has_variable = te_tax_dr_customs_dropped var:te_tax_dr_customs_dropped = 1", view)
+
+
 class HistoryKindTest(unittest.TestCase):
     def test_kinds_and_their_lines(self):
         loc = read(TAX_LOC, strip_comments=False)
         for kind, key in ((KIND_ADOPTED, "te_tax_hist_kind_customs_adopted"),
                           (KIND_LOST, "te_tax_hist_kind_customs_lost"),
+                          (KIND_DROPPED, "te_tax_hist_kind_customs_dropped"),
                           (KIND_GAINED, "te_tax_hist_kind_customs_gained")):
             with self.subTest(kind=kind):
                 self.assertEqual(gen.HISTORY_KIND_KEYS[kind], key)
-                self.assertRegex(loc, rf"(?m)^ {key}:0 \"")
+                # An adoption's line prints its count, so each row has its own key (key_<i>).
+                for name in ([f"{key}_{i}" for i in range(1, 9)] if kind == KIND_ADOPTED else [key]):
+                    self.assertRegex(loc, rf"(?m)^ {name}:0 \"")
         # Adoption and a market gained change the code; losing the market freezes it.
         self.assertIn(KIND_ADOPTED, gen.CODE_CHANGE_KINDS)
         self.assertIn(KIND_GAINED, gen.CODE_CHANGE_KINDS)
         self.assertNotIn(KIND_LOST, gen.CODE_CHANGE_KINDS)
+        self.assertNotIn(KIND_DROPPED, gen.CODE_CHANGE_KINDS)
 
 
 class SchemaDocTest(unittest.TestCase):
@@ -963,7 +1058,8 @@ class SchemaDocTest(unittest.TestCase):
         self.assertEqual(len(line), 1)
         self.assertEqual(re.findall(r"`(\w+)`", line[0]), list(catalog()))
         self.assertIn(f"({len(catalog())} goods)", line[0])
-        for phrase in ("te_tax_customs_revalidate", "te_tax_sync_customs", "te_tax_cpend_", "te_tax_cblock_",
+        for phrase in ("te_tax_customs_revalidate", "te_tax_sync_customs", "te_tax_cretry_", "te_tax_cblock_",
+                       "te_tax_customs_adopt_after", "te_tax_customs_month", "te_tax_dr_customs_dropped",
                        "on_merge_markets", "te_tax.7"):
             self.assertIn(phrase, section)
 

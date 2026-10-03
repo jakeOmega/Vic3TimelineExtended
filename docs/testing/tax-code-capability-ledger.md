@@ -102,22 +102,25 @@ result yet.
   2. A bill raising one good's import level from Low to High tariff passes and commences: the Budget
      and goods panels show High on the 1st, no `TE_TAX customs_adopted` line follows on the next 1st,
      and the import duty collected for the good rises (P08's level factor).
-  3. Cooldown: a second bill on the same good commencing within 3 months of the first. Expected
-     risk: the setter is refused, and on the next 1st the code adopts the market's level
-     (`TE_TAX customs_adopted`, history "a tariff level a treaty or the tariff cooldown kept…", the
-     review's "Blocked" line), which reverts the second bill's level. If so, the mitigation is to
-     count re-asserts up to the cooldown's 3 months before adopting.
-  4. Treaty: a `no_tariffs` article on a good the code taxes; the entry sets both levels to none, the
-     next sync re-asserts, the following one adopts if the ban holds (as 3).
+  3. Cooldown: a second bill on the same good commencing within 3 months of the first. If the setter
+     is refused, the monthly sync re-asserts (`te_tax_cretry_<d>_<good>` counts up) and the level
+     takes once the cooldown ends; the market's level is adopted only after 4 failed monthly
+     re-asserts (`te_tax_customs_adopt_after`, controller ruling): no `TE_TAX customs_adopted` line
+     for a plain cooldown.
+  4. Treaty: a `no_tariffs` article on a good the code taxes; the entry sets both levels to none,
+     the sync re-asserts each month, and the fifth month adopts the market's level if the ban holds
+     (`TE_TAX customs_adopted`, one history entry with the count, the review's "Blocked" line).
   5. Whether `set_*_tariff_level` is refused, silently ignored or obeyed for a junior partner (the
      sync never calls it for one; console only).
   6. Union entry and exit: join a customs union (Market Unification) as junior, then leave it.
      `TE_TAX customs_lost` a day after the merge (te_tax.7), the records unchanged; on leaving,
      `TE_TAX customs_gained` with the new market's levels carried over. A package touching customs
-     approved before the merge holds as held_conflict.
-  7. AI market owners: their tariff changes are re-asserted the next 1st and, if changed again by the
-     following 1st, read as blocked and adopted (one history entry per sync). Check the drift
-     counters (`te_tax_drift_customs`) and the debug log volume over ten years.
+     approved before the merge holds as held_conflict. With a draft and a bill that change customs
+     open at the merge: `TE_TAX customs_dropped`, both keep their other changes, the bill restarts
+     debate as a new revision, and the review shows "Customs changes dropped".
+  7. AI market owners: their tariff changes are re-asserted each 1st; one that the AI keeps changing
+     for four months in a row reads as blocked and is adopted (at most one history entry a month).
+     Check the drift counters (`te_tax_drift_customs`) and the debug log volume over ten years.
   8. Per-frame cost of the Customs section open (120 levels, up to seven tests each) and of the
      review's customs lines.
 - **P11**: the interception and bypass map: Budget, goods panel, right-click menus, popovers, events,

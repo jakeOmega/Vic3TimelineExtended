@@ -724,7 +724,7 @@ class SafetyTest(unittest.TestCase):
         # Except the customs schedule's two transient marks (plan Task 15), which
         # are flags, not schema tokens or payload: a pending re-assert and a
         # good a treaty or the cooldown blocked, removed when cleared.
-        transient = re.compile(r"^te_tax_(cpend_(imp|exp)|cblock)_\w+$")
+        transient = re.compile(r"^te_tax_(cretry_(imp|exp)|cblock)_\w+$")
         for path in SCHEDULER_FILES:
             with self.subTest(path=path):
                 removed = re.findall(r"remove_variable = ([\w$]+)", read(path))

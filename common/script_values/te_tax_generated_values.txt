@@ -7574,6 +7574,13 @@ te_tax_view_dr_customs_changed = {
 		if = { limit = { has_variable = te_tax_dr_exp_wood var:te_tax_dr_exp_wood >= -3 } add = 1 }
 	}
 }
+te_tax_view_dr_customs_dropped = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due has_variable = te_tax_dr_customs_dropped var:te_tax_dr_customs_dropped = 1 }
+		value = 1
+	}
+}
 te_tax_view_dr_customs_rebase = {
 	value = 0
 	if = {
