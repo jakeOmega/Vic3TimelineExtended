@@ -1505,6 +1505,7 @@ company_hyundai = {
 	possible_prestige_goods = {
 		prestige_good_luxury_automobiles
 		prestige_good_brunn_type_engines
+		prestige_good_advanced_weaponry # Hyundai Rotem's K2 tank
 	}
 	ai_will_do = {
 		has_technology_researched = modern_automotive_technology

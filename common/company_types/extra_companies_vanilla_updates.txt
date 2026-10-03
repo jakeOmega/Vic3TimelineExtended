@@ -202,10 +202,13 @@ INJECT:company_saint_etienne = {
 	}
 }
 
-# FCM (France) - shipyard/automotive → aerospace extension
+# FCM (France) - shipyard/automotive → aerospace extension; tanks prestige good (it built the Char 2C)
 INJECT:company_fcm = {
 	extension_building_types = {
 		building_aerospace_industry
+	}
+	possible_prestige_goods = {
+		prestige_good_advanced_weaponry
 	}
 }
 

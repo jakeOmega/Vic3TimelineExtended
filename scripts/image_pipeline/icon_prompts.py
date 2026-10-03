@@ -1027,7 +1027,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "prestige_good_luxury_automobiles": {"subject": "a long sleek glossy deep-red 1930s grand touring car with flowing curved fenders, chrome trim and chrome wire wheels", "seed": None},
         # [aeroplanes] Superior Airframes: Airbus, Boeing, Dassault, Lockheed Martin.
         "prestige_good_advanced_aircraft": {"subject": "a gleaming polished-silver supersonic airliner with a long pointed needle nose and slim delta wings, in flight", "seed": None},
-        # [tanks] Cutting-Edge Armaments. No company holds it (2026-10-02).
+        # [tanks] Cutting-Edge Armaments: FCM (the Char 2C), Hyundai (Hyundai Rotem's K2).
         "prestige_good_advanced_weaponry": {"subject": "a modern angular main battle tank in dark olive green with a long smooth gun barrel and wide tracks", "seed": None},
         # [robotics, Industrial Robotics] Advanced Automation: Boston Dynamics, Fanuc, Toyota.
         "prestige_good_precision_robotics": {"subject": "a sleek polished-silver humanoid robot standing upright, its head a smooth rounded dark glass visor with no face", "seed": None},
