@@ -243,6 +243,8 @@
  building_graphite_mine_throughput_add:0 "$building_graphite_mine$ building [concept_throughput]"
  building_graphite_mine_throughput_add_desc:0 "$building_graphite_mine$ building [concept_throughput]"
  building_great_indian_railway_jamalpur_works:0 "Great Indian Railway Jamalpur Works"
+ building_greenhouse_gas_emissions_add:0 "Greenhouse Gas Emissions"
+ building_greenhouse_gas_emissions_add_desc:0 "Greenhouse gas emissions from this building's fuel use, less carbon capture. Market totals also include other fuel users and environmental policy reductions."
  building_group_bg_arts_standard_of_living_add:0 "$bg_arts$ Employee [concept_sol]"
  building_group_bg_arts_standard_of_living_add_desc:0 "A bonus or penalty to the [concept_sol] of employees in $bg_arts$"
  building_group_bg_biotechnology_throughput_add:0 "Biotechnology [concept_throughput]"

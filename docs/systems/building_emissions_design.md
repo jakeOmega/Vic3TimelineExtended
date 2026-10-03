@@ -8,10 +8,11 @@
   [`../testing/carbon_capture_probe/`](../testing/carbon_capture_probe/README.md).
   It includes instructions, a console event, a state-modifier read, a market
   state sweep, and a pending evidence table. Normal deployments exclude it.
-  Its scripts parse offline; none of the three engine checks has been run.
+  Its scripts parse offline. The owner's first logs confirm nonzero state
+  reads; exact staffing/throughput scaling, tooltips and fallback remain pending.
 - **Phase 1:** `greenhouse_gas_factors.txt` is the source for coal (2), oil
   (1.74), and the display scale (1000). The market consumption formula reads
-  those factors. `gen_carbon_capture_pms.py` currently generates only synthetic
+  those factors. `gen_carbon_capture_pms.py` generates synthetic
   credits from PM outputs; the shared factors are applied at runtime rather
   than copied into generated coefficients. The old three constants are gone.
 - **Steel:** Electric Arc Process uses a delta INJECT; the two mod substitution
@@ -21,6 +22,12 @@
   Separate raw snapshot readers feed shares and temperature; stored snapshots,
   history, AI, thresholds and the console's live world-total calculation keep
   internal units. Chapter 14 and its PDF describe the new figures.
+- **Building display (owner's follow-up):** 18 fuel methods across power,
+  steel and chemicals now add `building_greenhouse_gas_emissions_add` in their
+  workforce-scaled blocks. This includes fuel burned by automation. Vanilla
+  methods use generated INJECTs; mod-owned/REPLACEd recipes carry a generated
+  field in place. The updated probe subtracts capture from this same visible
+  modifier and hides the state credit. Production capture tiers remain pending.
 - **Phase 2 remains unimplemented.** The probe must settle hidden gating,
   forced fallback, staffing reads and tooltip units before selecting A′ or the
   B fallback. The actual capture groups, technology, icons and phaseout mandate
@@ -72,7 +79,7 @@ Fuel burned per level at full staffing (mod values, `/production-methods/`):
 
 ## 3. Engine facts the design rests on
 
-- **PM modifier blocks** (`game/common/production_methods/production_methods.md`): `country_modifiers`, `state_modifiers` and `building_modifiers`, each with `workforce_scaled` (scaled by staffing, 0 to the building's level), `level_scaled` and `unscaled`. Workforce scaling follows staffing, not throughput: economy of scale, throughput modifiers and `goods_input_*_mult` (Fossil-Fuel Divestment's −5% coal and oil input, for one) change fuel burned but not a workforce-scaled modifier. Script can't read a building's throughput.
+- **PM modifier blocks** (`game/common/production_methods/production_methods.md`): `country_modifiers`, `state_modifiers` and `building_modifiers`, each with `workforce_scaled`, `level_scaled` and `unscaled`. Workforce-scaled modifiers follow staffing and throughput (owner correction, consistent with `scripting_best_practices.md`'s scaling table). The earlier claim that throughput was ignored was incorrect. Fuel-specific `goods_input_*_mult` is separate; whether it also adjusts a custom emissions value is not established. The probe records staffing and throughput together.
 - **A custom modifier type in a PM, read from script, is shipped practice for countries and buildings.** Country: `country_cultural_pull_add` (university PMs' `country_modifiers.workforce_scaled`, read as `modifier:country_cultural_pull_add`). Building: `b:<type>.modifier:building_annual_<wonder>_progress` (`common/scripted_effects/extra_effects.txt`), and `modifier:building_throughput_add` in `st_res_effects.txt`. State: `state_fortification_level_add` (a mod type, fed by `pm_earthwork_fortifications`' `state_modifiers.workforce_scaled`) has been read by script since 2026-04, in the `weight` of `common/battle_conditions/extra_battle_conditions.txt` (`modifier:state_fortification_level_add >= 1`). A weight's effect is invisible in play, so that the read returns the staffed value is unconfirmed (phase 0, check 1). The `modifier` link takes country, building, state and market scopes (`event_targets.log`).
 - **Country modifiers from a PM go to "the country"** (the doc's wording). For government buildings that is the state's owner; for a foreign-owned plant, whether it is the location's owner or the owning country is **unverified**. State modifiers go to the building's state, which is always in the market where its fuel is burned.
 - **Hidden, method-gated methods are the mod's practice, not vanilla's.** `is_hidden_when_unavailable = yes` hides a method whose unlock fails; vanilla uses it for technology- and principle-locked variants (`pm_vacuum_canning_principle_3`), and the field is missing from `production_methods.md`. Vanilla gates only five methods on other methods (`pm_bone_china`, `pm_precision_tools` and three more) and never hides those. The mod pairs the two fields in 16 methods: `pm_rail_transport_mine_infrastructure_4` and `pm_construction_principle_2` since 2024, `pm_maintenance_mechanized_mine` and the monument dedications since 2026-09. `unlocking_production_methods` is an **any-of** over methods in the same building's current selection, so a method can follow one group's choice but never two groups' at once.
@@ -83,7 +90,7 @@ Fuel burned per level at full staffing (mod values, `/production-methods/`):
 - **Negative outputs and same-good loops are shipped.** `pm_tank_production` outputs −20 automobiles from a second group of the same building; Basic Emissions Control on a power plant takes electricity, the plant's own output.
 - **The AI picks methods by profit.** `ai_weight` is documented ("base AI weight, default 1.0") and used nowhere in vanilla, so how it weighs against profit is unknown. A method that only costs is never picked voluntarily.
 - **Modifiers add; a custom `_mult` scales nothing by itself.** The engine applies only its own pairs. A custom `building_..._mult` is a number script must apply.
-- **`INJECT:` sums nested modifier blocks** (confirmed in game for ranks, techs, laws and static modifiers; `scripting_best_practices.md`), and the mod already INJECTs `building_modifiers` into vanilla PMs (`INJECT:pm_market_stalls`). **It silently fails on a mod-only or `REPLACE`d entity**, and many fuel PMs are one or the other (`pm_coal-fired_plant` and `pm_oil-fired_plant` are `REPLACE`d; the modern plants are mod PMs). The design below writes new methods only, so it needs no INJECT into fuel methods; option B (§8) would.
+- **`INJECT:` sums nested modifier blocks** (confirmed in game for ranks, techs, laws and static modifiers; `scripting_best_practices.md`), and the mod already INJECTs `building_modifiers` into vanilla PMs (`INJECT:pm_market_stalls`). **It silently fails on a mod-only or `REPLACE`d entity**, and many fuel PMs are one or the other (`pm_coal-fired_plant` and `pm_oil-fired_plant` are `REPLACE`d; the modern plants are mod PMs). The fuel-emissions generator therefore amends these definitions in place and INJECTs only into untouched vanilla methods.
 
 ## 4. Owner decisions (2026-10-03)
 
@@ -119,6 +126,18 @@ Third round (2026-10-03):
 | Phaseout's technology | (a): Managed Fossil Phaseout's technology becomes Carbon Capture and Storage. | §5.6 |
 | Panel | Capture shows only as a lower emissions figure; no row, no tooltip and no pie change. | §5.4 |
 
+Follow-up after the first engine logs (2026-10-03):
+
+- The visible modifier must show **net greenhouse gas emissions per building**:
+  fuel methods add emissions and capture methods subtract from the same value.
+  The state capture credit becomes script-only accounting data.
+- Workforce scaling includes throughput; remove the former approximation claim.
+- Household coal/oil use is small enough to omit if that simplifies a future
+  building-based total. Alternatively, estimate household use from population
+  and average wealth using a hardcoded curve derived from buy packages, with
+  appropriate climate policies reducing it. This is a future accounting option;
+  the current consumption formula already includes households directly.
+
 ## 5. Design: generated carbon-capture methods (A′)
 
 **Answer to question 4: yes, it is feasible.** A generator writes, for each covered building, one capture method per tier per fuel class. Each method is gated on that fuel class's methods and hidden otherwise. The player sees "No Carbon Capture" and the researched tiers for the fuel the building burns now. Each tier states the absolute cut it makes in this building and pays a cost sized to that fuel. That is option A without its flaw: one flat credit had to fit buildings burning 10 to 80 units a level, and now every method is sized to one burn.
@@ -146,6 +165,7 @@ pm_carbon_capture_2_power_plant_coal25 = {	# AUTO-GENERATED by gen_carbon_captur
 	}
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = -2.5 # subtract from the fuel method's +5.0
 			goods_output_electricity_add = -11	# energy penalty: 13% of 90
 			goods_input_engines_add = 5
 			goods_input_steel_add = 6
@@ -198,9 +218,10 @@ On a clean grid, net is the headline. Each tier costs less per tonne than the on
 
 ### 5.4 Accounting and display
 
-- **New modifier type `state_carbon_capture_add`** (`common/modifier_type_definitions/global_warming_modifier_types.txt`; `color = good`; `decimals = 2`). It is state-scoped, not country-scoped. A state modifier from a method lands on the building's state, so the cut counts in the market where the fuel burns, whoever owns the building; for country modifiers that is unverified (§3).
+- **Visible net emissions:** `building_greenhouse_gas_emissions_add` is building-scoped, `color = bad`, `percent = no`, `decimals = 2`. Every fuel method in a covered building's groups contributes `(coal × factor + oil × factor) / 10` in `building_modifiers.workforce_scaled`. Capture variants contribute the negative cut in the same block. The building therefore shows the sum after capture. The generator derives gross values from merged recipes and shared factors, including automation fuel.
+- **Hidden accounting credit:** `state_carbon_capture_add` (`common/modifier_type_definitions/global_warming_modifier_types.txt`; `color = good`; `decimals = 2`; `script_only = yes`). It is state-scoped. A state modifier from a method lands on the building's state, so the cut counts in the market where the fuel burns, whoever owns the building; for country modifiers that is unverified (§3).
 - **Display units, 1000× (owner, third round).** Today a capture figure in the panel's units is tiny: one level of a Modern Coal-Fired Plant at Tier II captures 0.0025, against a market shown as, say, 45.3/yr. So every *displayed* emission amount is multiplied by 1000, and the modifier is written in the same units:
-  - The modifier is captured fuel × factor / 10 per level, rounded to two decimals by the generator. Tier II on that plant reads "+2.5 Carbon Captured" a level, against a market shown as 45.3K/yr; a 20-level plant captures 50. The smallest covered value is 0.25 (an Early Power Plant at Tier I).
+  - Gross emissions and capture are fuel × factor / 10 per level, rounded to two decimals by the generator. Modern Coal-Fired adds +5.00 Greenhouse Gas Emissions and Tier II subtracts −2.50, so the building shows 2.50 net per staffed level at base throughput. A 20-level plant at those conditions shows 50 net. The hidden state credit has the same positive captured amount for the market subtraction.
   - The scale is display-only. `global_var:greenhouse_gas_emissions`, the per-market snapshots, temperature, thresholds, the AI values and saves keep their units. Seven display values gain a `multiply = 1000`: `gw_market_emis_display`, `gw_global_emis_display`, `gw_disp_own_emis`, `gw_disp_own_cum`, `gw_disp_captured`, `market_greenhouse_gas_emissions_script_value_display` (treaty 109's text) and the Top Emitters rows. Shares, percentages and temperature are ratios and stay. `gw_emis_world_tt`'s "Every 1,000 a year" becomes "Every million a year".
   - The scaled figures render with the `|K` format (12.3K, 4.2M; `gui_modding_guide.md` § Format Specifiers), which the mod already uses 28 times (`je_colonial_empire_territory_gdp`, for one). That replaces today's `|1` and `|0` on those values, so the panel cells stay as narrow as now.
 - **Script:**
@@ -214,7 +235,7 @@ net      = max(0, gross − captured) × leader multiplier + synthetic capture
   `captured` is a yearly sweep, `market → every_scope_country → every_scope_state`, O(states). Verify it reaches exactly the market's states; treaty ports are the edge case.
 - **Panel: nothing new (owner).** Capture shows only as a lower emissions figure: Our Market's Emissions, the world total and every reader of the market figure already have it subtracted. The "Carbon Captured" row stays the synthetic plants' alone, and its tooltip stays true: stack capture can't take a market below zero. The Emissions Cut pie stays the policies' cut.
 - **Each variant's generated description names its burn**: "Captures 50% of the carbon from this plant's 25 coal a week, per level." The loc is generated before `organize_loc` runs, as `gen_un_button_descs.py` does.
-- **The credit follows staffing, not throughput.** A plant at +30% throughput burns more than it is credited for, which is conservative. Fossil-Fuel Divestment's −5% input lowers the burn but not the credit. The floor at 0 catches any overshoot.
+- **Gross and capture follow staffing and throughput.** Both use workforce-scaled blocks; do not apply occupancy again when reading their modifiers. Fuel-specific input reductions need separate verification. The market floor at 0 catches any capture-credit overshoot.
 
 ### 5.5 Cost (answer 2)
 
@@ -328,8 +349,8 @@ The fuel methods carry a generated `building_greenhouse_gas_emissions_add` (2 ×
 
 Make the market's gross Σ of a per-building add, read through a state mirror. Every unit of emissions would then have a visible source, and per-state climate damage would get an input. It is parked for the scoping's reasons, which still stand:
 
-- Pops' heating is not a building.
-- Workforce scaling ignores throughput and input modifiers, so the building sum drifts from the real burn.
+- Pops' heating is not a building; the owner accepts omission or a population/wealth estimate derived from buy packages with policy reductions.
+- Workforce scaling includes throughput; fuel-specific input modifiers still need verification before claiming an exact match to consumption.
 - Ships are not buildings.
 - Feedstock needs its own factor.
 - About 194 methods would have to be kept in step.
@@ -341,7 +362,8 @@ Make the market's gross Σ of a per-building add, read through a state mirror. E
 | 0 | **Engine checks**, on a test branch with one hand-written variant: (1) `modifier:state_carbon_capture_add` read from a script value in state scope returns the staffed value (a half-staffed plant gives half); (2) whether the PM tooltip shows the state modifier per level or per building, and at which `decimals`; (3) where a building lands when a fuel swap invalidates its variant, with and without the mandate law, and that a law-disallowed "No Carbon Capture" swaps by itself. | small |
 | 1 | **Factors, steel and display units:** the two script values (2 and 1.74), the market formula and regenerated synthetic constants; the steel furnace change (§7); the 1000× display scale (§5.4). The first two move world emissions, so they land and get judged before capture adds its own shift. Player guide ch. 14 for the new figures. | small |
 | 2 | **Capture (A′):** the modifier type; `gen_carbon_capture_pms.py` (config: buildings, fuel group, cost class; tiers; goods mix) writing methods, groups and loc; the groups added to the three buildings; the Carbon Capture and Storage technology and its tech-tree place; three tier icons; the market formula; the Tier II mandate and the phaseout's technology (§5.6); player guide ch. 14 (How emissions become warming; the control-method table; Resource Transition's law requirements). | medium–large |
-| later | **Deferred (question 5).** Gross per building on every fuel method (the draft's phase 2) is display only and independent of capture: under A′ the method already states its cut, so it isn't needed. Building-sum gross (C, the draft's phase 3) is unchanged and parked. Revisit both with per-state climate damage, for which state-level capture is already a building block. | — |
+| display checkpoint | **Owner's follow-up:** visible gross fuel contributions and negative capture contributions form net emissions per building. Implemented for the three covered buildings (18 fuel methods); probe capture uses the same visible modifier. | small |
+| later | Building-sum market accounting (C), household omission or a buy-package/wealth estimate, and emissions display across all fuel-burning buildings. Current market consumption remains authoritative. | — |
 
 **Phase 2 hygiene:**
 - The new regenerator goes in `POST_LOAD_REGENERATORS` and the two docs rosters, or `check_post_load_rosters.py` fails CI.

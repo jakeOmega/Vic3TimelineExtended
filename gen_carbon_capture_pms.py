@@ -1,6 +1,7 @@
 """Regenerate carbon-accounting data from production-method recipes.
 
-Phase 1 writes synthetic-fuel credits; phase 2 will add the capture variants.
+Writes synthetic-fuel credits and the covered buildings' fuel emissions;
+phase 2 will add the capture variants.
 Credits use the shared script-value factors at runtime, so only recipe outputs
 are generated here. No copied emission coefficients or outputs live in script.
 
@@ -15,6 +16,7 @@ from decimal import Decimal
 from pathlib import Path
 
 from paradox_file_parser import ParadoxFileParser
+import pm_emissions
 
 ROOT = Path(__file__).resolve().parent
 OUTPUT = Path("common/script_values/carbon_capture_generated_values.txt")
@@ -81,17 +83,22 @@ def build_synthetic_values(methods: dict) -> str:
 
 def regenerate(mod_state=None, *, root: Path = ROOT, dry_run: bool = False):
     if mod_state is None:
-        methods = load_synthetic_methods(root)
-    else:
-        methods = mod_state.mod_parsers["PMs"].data
+        mod_state = pm_emissions.load_state(root)
+    methods = mod_state.mod_parsers["PMs"].data
     content = build_synthetic_values(methods)
-    target = root / OUTPUT
-    expected = content.encode("utf-8-sig")
-    changed = not target.exists() or target.read_bytes() != expected
-    if changed and not dry_run:
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(expected)
-    return {"changed": changed, "output": str(OUTPUT)}
+    outputs, fuel_methods = pm_emissions.plan_outputs(mod_state, root)
+    outputs[OUTPUT] = content
+    changed_files = []
+    for relative, text in outputs.items():
+        target = root / relative
+        expected = text.encode("utf-8-sig")
+        if not target.exists() or target.read_bytes() != expected:
+            changed_files.append(str(relative))
+            if not dry_run:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(expected)
+    return {"changed": bool(changed_files), "output": str(OUTPUT),
+            "changed_files": changed_files, "fuel_methods": fuel_methods}
 
 
 def main():
@@ -103,6 +110,7 @@ def main():
     args = parser.parse_args()
     result = regenerate(root=args.root, dry_run=args.dry_run or args.check)
     print(f"{result['output']}: {'changed' if result['changed'] else 'current'}")
+    print(f"{result['fuel_methods']} fuel methods; {len(result['changed_files'])} files need updating")
     return int(args.check and result["changed"])
 
 

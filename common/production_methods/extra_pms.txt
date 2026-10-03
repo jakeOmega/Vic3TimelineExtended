@@ -5715,6 +5715,7 @@ pm_aluminum_substitution = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_iron_add = 100                           # Price:   40, Total cost:  4000.0 (42.55%)
 			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (3.19%)
@@ -5757,6 +5758,7 @@ pm_chromium_substitution = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_iron_add = 150                           # Price:   40, Total cost:  6000.0 (52.63%)
 			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (2.63%)
@@ -10913,6 +10915,7 @@ REPLACE:pm_coal-fired_plant = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 4.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (37.50%)
 			goods_input_coal_add = 20                            # Price:   30, Total cost:   600.0 (62.50%)
@@ -10950,6 +10953,7 @@ REPLACE:pm_oil-fired_plant = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 4.35 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (37.50%)
 			goods_input_oil_add = 25                             # Price:   40, Total cost:  1000.0 (62.50%)
@@ -10987,6 +10991,7 @@ pm_modern_coal-fired_plant = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 5.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (20.69%)
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.59%)
@@ -11025,6 +11030,7 @@ pm_modern_oil-fired_plant = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 6.09 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (25.00%)
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (16.67%)
@@ -12904,6 +12910,7 @@ REPLACE:pm_nitrogen_fixation = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_sulfur_add = 40                          # Price:   50, Total cost:  2000.0 (50.00%)
 			goods_input_oil_add = 20                             # Price:   40, Total cost:   800.0 (20.00%)
@@ -12943,6 +12950,7 @@ pm_catalytic_cracking = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 20.88 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_sulfur_add = 50                          # Price:   50, Total cost:  2500.0 (30.12%)
 			goods_input_oil_add = 120                            # Price:   40, Total cost:  4800.0 (57.83%)
@@ -12985,6 +12993,7 @@ pm_polymerization_processes = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 27.84 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_sulfur_add = 100                         # Price:   50, Total cost:  5000.0 (38.02%)
 			goods_input_oil_add = 160                            # Price:   40, Total cost:  6400.0 (48.67%)
@@ -13028,6 +13037,7 @@ pm_automated_chemical_reactors = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 31.32 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_sulfur_add = 120                         # Price:   50, Total cost:  6000.0 (35.71%)
 			goods_input_oil_add = 180                            # Price:   40, Total cost:  7200.0 (42.86%)
@@ -13069,6 +13079,7 @@ pm_flow_chemistry_production = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 38.28 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_sulfur_add = 150                         # Price:   50, Total cost:  7500.0 (33.63%)
 			goods_input_oil_add = 220                            # Price:   40, Total cost:  8800.0 (39.46%)

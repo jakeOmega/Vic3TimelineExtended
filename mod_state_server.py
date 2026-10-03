@@ -5757,6 +5757,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         return {
             "auto_generated": [
                 {
+                    "pattern": "common/production_methods/greenhouse_gas_generated_injects.txt",
+                    "owner": "gen_carbon_capture_pms.py",
+                    "input": "merged PM coal/oil inputs + shared greenhouse-gas factors",
+                    "header_marker": True,
+                },
+                {
                     "pattern": "common/script_values/carbon_capture_generated_values.txt",
                     "owner": "gen_carbon_capture_pms.py",
                     "input": "synthetic PM outputs + shared greenhouse-gas factors",

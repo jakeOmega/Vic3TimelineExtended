@@ -29,13 +29,19 @@ and save a baseline before changing anything.
 
 1. On a Modern Coal-Fired Plant, choose Probe: Coal Capture (50%). Record the
    method tooltip and building tooltip at level 1 and at level 2 or higher:
-   does the method line show 2.50 per level or the staffed building total?
-   Record decimal formatting, including a small fraction during hiring.
+   the fuel method adds 5.00 Greenhouse Gas Emissions and capture subtracts
+   2.50 per level, giving 2.50 net at full staffing and base throughput.
+   Modern oil adds 6.09 and capture subtracts 3.05, giving 3.04 net.
+   The state capture credit is hidden; only the building's net emissions should
+   be visible. Record decimal formatting during hiring and with throughput
+   bonuses, comparing the building's total with the method's per-level figure.
 2. Run `event te_cc_probe.1`, choose **Log staffed capture**. `CC_PROBE:` lines
    in `debug.log`, paired with scope dumps identifying each state, contain
    each market state with a power plant and the market
    sum in internal units. In a state with only one probe-equipped plant, full
-   staffing should read `2.5 × level`; half staffing should read half that.
+   staffing at base throughput should read `2.5 × level`; half staffing should
+   read half that. Record throughput too, since workforce-scaled contributions
+   follow it.
    Record level, staffing and actual read together. The market sum should be
    the state's total divided by 1000. Let a tick pass after each PM change.
 3. With Unrestricted Extraction, switch coal to Modern Oil-Fired Plant while
@@ -58,7 +64,11 @@ and save a baseline before changing anything.
 
 ## Evidence record
 
-All checks below are pending. Offline parsing does not verify engine behavior.
+The owner supplied nonzero state reads on 2026-10-03 (ROOT Byzantium, country
+88): Bougainville 1.43647, Sicily 1.43647, Abruzzo 1.07660, Apulia 2.87897 and
+Umbria 0.35835. This confirms the state accessor returns varying contributions;
+levels, staffing and throughput were not supplied, so exact scaling is pending.
+Offline parsing does not verify the remaining engine behavior.
 Fill in game version, save/date, country, state, level, staffing, screenshots or
 log excerpts, selected fallback, and elapsed game time for each observation.
 
@@ -66,7 +76,8 @@ log excerpts, selected fallback, and elapsed game time for each observation.
 |---|---|---|
 | State read, fully staffed | 2.5 per coal plant level | Pending |
 | State read, half staffed | Half the fully staffed total | Pending |
-| Tooltip units and decimals | Readable 2.50; determine per-level vs total | Pending |
+| Net emissions tooltip | Coal +5.00 −2.50 = 2.50; oil +6.09 −3.05 = 3.04, scaled by staffing and throughput | Pending updated overlay |
+| Throughput scaling | Fuel emissions and capture grow together with throughput | Pending |
 | Hidden fuel gating | Only the matching modern fuel's variant | Pending |
 | Fuel swap without mandate | Drops invalid variant; record fallback | Pending |
 | Law applied to default | Automatically selects a valid variant | Pending |

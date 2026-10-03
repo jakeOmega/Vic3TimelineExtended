@@ -33,6 +33,15 @@ country_institution_impact_institution_ministry_of_the_environment_mult = {
 }
 
 # ----- Global Warming -----
+building_greenhouse_gas_emissions_add = {
+	color = bad
+	percent = no
+	decimals = 2
+	game_data = {
+		ai_value = 0
+	}
+}
+
 country_greenhouse_gas_emissions_mult = {
 	color = bad
 	percent = yes

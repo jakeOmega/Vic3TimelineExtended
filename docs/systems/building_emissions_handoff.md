@@ -18,8 +18,11 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
   evidence table. It does not affect normal deployment or market emissions.
 - Phase 1 implemented: factors, generated synthetic credits, steel recipes,
   display scale, guide chapter 14 and rebuilt PDF. See design §0 for details.
-- `gen_carbon_capture_pms.py` currently generates only synthetic credits and
-  is registered before organize_loc. Extend it for capture variants in phase 2.
+- `gen_carbon_capture_pms.py` generates synthetic credits and visible emissions
+  for 18 fuel methods across power/steel/chemical buildings. `pm_emissions.py`
+  derives values from merged recipes and factors, amends mod-owned/REPLACEd PMs
+  in place and emits INJECTs for untouched vanilla methods. Extend it for
+  production capture variants in phase 2.
 - The server on port 8950 did not respond during the initial status check.
 - Shared Python environment: `/home/jakef/src/Vic3TimelineExtended/.venv`.
 - Git operations need sandbox escalation because this managed worktree stores
@@ -28,8 +31,8 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 ## Next work
 
 1. Run the opt-in phase-0 engine probe and record results in its README.
-   All six fixture script files parse offline. This does not verify staffing
-   reads, tooltips or forced fallback in Victoria 3.
+   First owner logs confirm nonzero state reads (see probe README). This does
+   not yet verify exact staffing/throughput scaling, tooltips or forced fallback.
 2. Judge phase 1 in a real save: oil-heavy markets should emit less, electric
    furnaces should show 10 coal and 50/170 electricity, shares and temperature
    must keep their scale, and displayed amounts should render in K/M units.
@@ -38,7 +41,8 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 
 ## Remaining verification
 
-All three phase-0 in-game checks and phase-1 balance review are pending.
+Exact phase-0 scaling, revised net-emissions tooltips, forced fallback and
+phase-1 balance review are pending; nonzero state reads have been observed.
 No game save has been changed; the test deployment is recorded below. Preserve internal snapshot/history/AI/temperature units when
 scaling display values; the live world-emissions script value also feeds the
 debug snapshot helper, so do not scale that internal calculation.
@@ -102,8 +106,34 @@ while deployment was being prepared, so testing uses an isolated full checkout:
   deletions. The shared checkout's seven modified generated docs were preserved.
 
 Restart Victoria 3 and use a copied save. Console: `event te_cc_probe.1`.
-The probe README's results table is still pending; deployment does not verify
-engine behavior.
+The probe README records the first state-read evidence; remaining checks are
+pending. The revised net-emissions overlay needs a new deploy and game restart.
 
 Deployment verification: 27 deployed source/probe files matched by SHA-256;
 the company-building single-BOM fix was retained. The apply steps completed.
+
+## Owner follow-up: net emissions display
+
+The owner chose net emissions per building: fuel PMs add a positive
+`building_greenhouse_gas_emissions_add`, capture PMs add a negative value.
+The state credit is hidden and retained for market accounting. At base
+throughput and full staffing, the probe's modern coal plant shows 5.00 − 2.50
+= 2.50 per level; modern oil shows 6.09 − 3.05 = 3.04. Include automation fuel.
+
+The owner corrected the design's throughput claim: workforce-scaled modifiers
+include throughput, consistent with the repository's scripting guidance.
+No throughput caveat belongs in the building tooltip. The current market
+consumption formula is retained; fuel-specific input multipliers still need
+verification before a building total can replace it.
+
+Households may be omitted if useful, or estimated using population and average
+wealth with a hardcoded curve based on buy packages, reduced by appropriate
+policies. Record this as an option for future building-based accounting; no
+household approximation has been added to the live consumption formula.
+
+Validation of this checkpoint: full suite 3,613 tests passed (58 skips), then
+all 21 emissions tests passed after adding recipe-change and cost-annotation
+checks. All 23 offline CI audits, Ruff, generator freshness, localization,
+player-guide style/PDF freshness, post-load rosters and tab checks passed.
+Snapshot-backed structure audit: 552 files, zero unreviewed flags and zero
+parse failures. Generator dry run reports 18 fuel methods and no pending writes.

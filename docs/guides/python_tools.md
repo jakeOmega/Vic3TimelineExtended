@@ -29,7 +29,7 @@ Only `mod_path` and `doc_path` are computed at import; every per-machine path (`
 | `resources` | `map_data/state_regions/*.txt` |
 | `gen_pb_principle_unlock_descs` | `*_pb_principles_bool_desc` keys in `localization/english/te_power_bloc_unlocks_l_english.yml` |
 | `gen_un_button_descs` | `localization/english/te_un_button_effects_l_english.yml` |
-| `gen_carbon_capture_pms` | `common/script_values/carbon_capture_generated_values.txt` |
+| `gen_carbon_capture_pms` | `common/script_values/carbon_capture_generated_values.txt`, `common/production_methods/greenhouse_gas_generated_injects.txt`, positive `building_greenhouse_gas_emissions_add` lines in mod-owned/REPLACEd covered PMs |
 | `gen_law_consistency` | `common/scripted_effects/extra_law_consistency_generated.txt` |
 | `gen_company_building_cleanup` | `common/scripted_effects/company_building_cleanup_effects.txt` — one `remove_building` guard per company building plus `remove_disbanded_company_buildings_effect`. The only roster entry that lives under `scripts/generators/`; it is imported by dotted path (`scripts.generators.gen_company_building_cleanup`), see § "Adding a new post-load generator". |
 | `organize_loc` | `localization/english/te_*_l_english.yml` (30 category files) |

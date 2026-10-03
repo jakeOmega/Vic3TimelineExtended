@@ -20,6 +20,12 @@ total. In the dashboard's units, a market that emits one million a year warms
 the world by 0.1 °C a year. Figures use K for thousands and M for millions.
 A unit of oil produces 13% less warming than a unit of coal.
 
+Power Plants, Steel Mills and Chemical Plants show Greenhouse Gas Emissions
+from their fuel use. Fuel methods add to the building's figure, including coal
+used by steel mill automation. The figure uses the dashboard's units and grows
+with the building's staffing and throughput. Market-wide policy reductions
+apply to the market total.
+
 Electric Arc Process, Aluminum Substitution and Chromium Substitution in Steel
 Mills use 10 coal per level. Electric Arc Process also uses 50 electricity;
 the two substitution methods use 170 electricity. Their lower coal use cuts
