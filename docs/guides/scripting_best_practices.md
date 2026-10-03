@@ -776,7 +776,7 @@ Use the `market = { mg:<good> = { add = … } }` **block** form rather than a `t
 
 ## A trigger needs a `var:` on its LEFT side — script values only go on the right
 
-`var:my_variable > my_script_value` is a valid trigger. `my_script_value > 20` is **not** — a bare script value is not a trigger, so a comparison that starts with one is silently not the check you wrote. This bites whenever validation is naturally phrased as "is this derived quantity big enough": *"the gap between these two variables must stay ≥ 15"* has no direct form.
+`var:my_variable > my_script_value` is a valid trigger. `my_script_value > 20` is **not** — a bare script value is not a trigger, so a comparison that starts with one is silently not the check you wrote. (Caution, 2026-10-02: vanilla 1.14.5 does put a script value on the left in journal-entry triggers, even against another script value: `07_zaibatsu.txt` has `country_levels_owned_by_zaibatsu >= je_zaibatsu_possible_levels_threshold`, `05_danubian_federation.txt` `danubian_federation_remaining_cultures_to_integrate > 0`, `07_tenpo_crisis.txt` `tenpo_total_agenda_goals_completed >= 8`. The failure above was seen in a scripted GUI's `is_valid`; whether the form fails there or the cause was elsewhere is not established. Prefer `var:` on the left where it is natural.) This bites whenever validation is naturally phrased as "is this derived quantity big enough": *"the gap between these two variables must stay ≥ 15"* has no direct form.
 
 Invert it. Define the script value as **the limit the variable may not pass**, and compare the variable to it:
 
@@ -1172,6 +1172,10 @@ The player UI lets you target a `decentralized` country with a country-targeted 
 Symptom: the action works when the player takes it (so `possible` passes and the effect is sound), but AI countries never use it despite always-evaluate + `will_propose = always` + a competitive score + no log errors. By elimination, the target simply never reaches AI evaluation.
 
 Fix pattern: drive the AI path from a pulse on-action (e.g. `on_yearly_pulse_country`) gated `is_ai = yes`, reusing the *same* eligibility triggers as the action's `possible` block, and perform the effect (`annex`, etc.) directly. The player keeps the diplomatic action; the `is_ai` split is forced by the engine limitation, not a design choice. Notify third parties **before** the annex (saved scopes propagate to events fired on observers; the annexed country's name still resolves for the tick) — the engine's `should_notify_third_parties` only fires for the actual player action, not for an on-action `annex`. See `te_ai_decentralized_absorption_effect` + `irredentism.9`.
+
+## A `trigger_if` Whose Limit Fails Passes: Never Put One Inside an `OR`
+
+`trigger_if = { limit = { … } <triggers> }` "evaluates the triggers if the display_triggers of the limit are met" (`triggers.log`); when the limit fails, nothing is evaluated and the `trigger_if` passes. Inside an `OR` that makes the whole `OR` true whenever the limit is false. To add a branch that exists only under a condition (a game rule), branch at the block's own level instead: `trigger_if = { limit = { <rule> } OR = { <original> <extra> } } trigger_else = { OR = { <original> } }`, with the `trigger_else` straight after its `trigger_if`. The rule-off branch is then the original condition, tooltip included. Worked example: `common/journal_entries/te_tax_vanilla_je_overrides.txt` (three vanilla journal entries that accept the legislated tax code in place of a vanilla taxation law).
 
 ## Write `NOR` or `NAND`, Never a Multi-Child `NOT`
 
