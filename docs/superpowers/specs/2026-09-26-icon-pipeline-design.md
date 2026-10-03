@@ -351,7 +351,7 @@ A scratch scan read every depth-1 `icon =` / `texture =` gfx path in vanilla's a
 | `nuclear_plant.dds` (cooling towers) | Nuclear Plant, and the wonder ITER |
 | `goods_icons/rocket.dds` (the Launch Capacity good, no frame) | Space Program. A share across types, which `/duplicate-images` cannot see |
 
-The other 15 are unique but in the old style: Airport, Appliances, Ocean Mine, Fusion Plant, Highway, Hydro Plant, National Park, Renewable Energy Plant, Robotics, Semiconductors, Software, Tourism, and the opium, oil and rubber synthetics plants (`drugs.dds`, `synth_oil.dds`, `synth_rubber.dds`). Two calls for the owner: do the megaproject construction sites share their building's icon or get their own (today the Space Elevator's site has its own and lends it to two others, while three sites use their building's), and are the 15 unique ones redone in the same batch?
+The other 15 are unique but in the old style: Airport, Appliances, Ocean Mine, Fusion Plant, Highway, Hydro Plant, National Park, Renewable Energy Plant, Robotics, Semiconductors, Software, Tourism, and the opium, oil and rubber synthetics plants (`drugs.dds`, `synth_oil.dds`, `synth_rubber.dds`). The owner gave every megaproject construction site an icon of its own (the Space Elevator's site had lent its icon to two others, and three sites used their building's) and had the 15 unique ones done in the same batch. "Buildings batch 2" below covers all 38.
 
 **Companies.**
 - **18 PLACEHOLDER cards** (`gen_placeholder_company_icons.py`), referenced 35 times: 17 companies and 18 flagships. The building slice's count of 76 was wrong; a contact sheet of all 83 mod logos and the generator's own list both give 18.
@@ -370,7 +370,7 @@ The other 15 are unique but in the old style: Airport, Appliances, Ocean Mine, F
 
 **A broken reference.** Three heir-education modifiers (`heir_education_modifiers.txt`) point at `timed_modifier_icons/modifier_administrative.dds`, which exists in neither the mod nor vanilla. This was the case from d56f6cac (2026-03-31) until 2026-10-02, when they moved to vanilla's `modifier_documents_positive.dds`.
 
-**Allowlist.** A batch that takes one of these on deletes its entries from `common/_meta/duplicate_image_allowlist.yml`. Buildings: `advanced_materials`, `network`, `nuclear_plant`, `space`, `space_base`, `space_elevator` and `space_elevator_construction_site` (the three `basic_*` entries went with the rewires). Laws: the 25 "verify intent" entries.
+**Allowlist.** A batch that takes one of these on deletes its entries from `common/_meta/duplicate_image_allowlist.yml`. Buildings: `advanced_materials`, `network`, `nuclear_plant`, `space`, `space_base`, `space_elevator` and `space_elevator_construction_site`, deleted with batch 2 (the three `basic_*` entries went with the rewires). Laws: the 25 "verify intent" entries.
 
 ## Review lessons (2026-09-27)
 
