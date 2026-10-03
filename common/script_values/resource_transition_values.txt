@@ -486,17 +486,23 @@ rt_disp_mkt_exports_oil = {
 # The will is global warming's divestment will (gw_ai_will_fossil_fuel_divestment,
 # common/script_values/global_warming_ai_values.txt): temperature, the
 # ministry, an environmentalist government, the movement and wealth, with fuel
-# exporters and laissez-faire markets resisting hardest. The moratorium costs
-# nothing today, so it needs only the will. The phaseout closes what is
-# running, so it also needs the market able to do without: clean generation
-# already the larger part of the power fleet and no fuel shortage.
+# exporters and laissez-faire markets resisting hardest. The moratorium closes
+# nothing, but it stops every new power plant, so it needs a quarter of the
+# power fleet clean already: without that, a growing economy would have no way
+# to add electricity. The phaseout closes what is running, so it needs the
+# market able to do without: clean generation the larger part of the fleet and
+# no fuel shortage. The fleet test walks every building, so it comes last in
+# each limit, after the cheap tests that rule most countries out.
 # ----------------------------------------------------------------------------
 rt_ai_enact_moratorium = {
 	value = 0
 	if = {
 		limit = {
+			# Not a step back from the phaseout.
+			NOT = { has_law = law_type:law_managed_fossil_phaseout }
 			gw_ai_will_fossil_fuel_divestment >= 50
 			rt_ai_fossil_supply_crisis = no
+			rt_ai_clean_power_share >= 0.25
 		}
 		add = {
 			value = gw_ai_will_fossil_fuel_divestment

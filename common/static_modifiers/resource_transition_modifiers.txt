@@ -7,7 +7,10 @@
 # (rt_retire_smallest, common/scripted_effects/resource_transition_effects.txt).
 # The closure lays off its workers; the programme pays for income support,
 # which halves the radicals a fall in their standard of living would make, and
-# for retraining, which speeds their way into other work. First estimates.
+# for retraining, which speeds their way into other work. First estimates:
+# the qualifications figure is the Promote Social Mobility decree's, for one
+# state and five years; halving SoL radicals has no close precedent (the
+# other uses of the modifier raise it).
 rt_transition_assistance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	state_radicals_and_loyalists_from_sol_change_mult = -0.5

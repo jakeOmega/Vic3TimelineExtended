@@ -192,7 +192,7 @@ rt_refresh_next_target = {
 		ordered_scope_state = {
 			limit = { has_building = $BT$ }
 			order_by = rt_retire_order_$KEY$
-			save_temporary_scope_as = rt_next_state
+			save_scope_as = rt_next_state
 		}
 		set_variable = {
 			name = rt_d_next_$KEY$
@@ -206,6 +206,7 @@ rt_refresh_next_target = {
 			name = rt_d_next_state_$KEY$
 			value = scope:rt_next_state
 		}
+		clear_saved_scope = rt_next_state
 	}
 	else = {
 		if = {

@@ -1965,6 +1965,15 @@ types global_warming_widget_types
 					text = "rt_synth_value"
 				}
 			}
+			# The two fuel rows' column heading: the market's week, made / burned.
+			gw_value_row = {
+				blockoverride "row_label" {
+					text = "rt_mkt_head_label"
+				}
+				blockoverride "row_value" {
+					text = "rt_mkt_head_value"
+				}
+			}
 			gw_value_row = {
 				tooltip = "rt_mkt_coal_tt"
 				blockoverride "row_label" {
