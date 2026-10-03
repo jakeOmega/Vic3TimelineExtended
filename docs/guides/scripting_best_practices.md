@@ -4473,6 +4473,15 @@ tests `has_claim_by = root` in the same direction. When script names a region ta
 claim, say which part and whose it is, and whether the other side claims ours
 (`un_chamber_mandate_split_lines`).
 
+There is no iterator over a country's claims (`number_of_claims` counts them, nothing lists them), and
+`remove_claim` is a *state region* effect taking the claimant. To drop claims in bulk, walk the states that
+carry them and switch scope: `every_scope_state = { limit = { has_claim_by = ROOT } state_region = {
+remove_claim = ROOT } }`. Bound the walk by who holds the states (`every_country` filtered to
+`is_country_type = decentralized`, a few hundred states) rather than `every_state`, which is the whole
+world on every pulse. `tech_marker_grants_on_action` does this for the Decolonization marker
+`country_remove_decentralized_claims_bool`; vanilla `da_stake_colonial_claim` adds a colonial claim the
+same way, `scope:second_state = { state_region = { add_claim = root } }`.
+
 ## The Embargo Pact Needs Both Sides Allowed Aggressive Plays
 
 The vanilla `embargo` diplomatic pact (`common/diplomatic_actions/13_embargo.txt`) lists

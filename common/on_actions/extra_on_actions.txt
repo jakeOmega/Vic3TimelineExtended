@@ -1177,7 +1177,8 @@ tech_spread_on_action = {
 # the bool triggers the same result, and it also catches any path to the tech
 # that skips its on_researched. Monthly, so a grant lands within a month of the
 # research. The bools are defined in era_6.txt (decolonization) and era_7.txt
-# (civil_rights_movement).
+# (civil_rights_movement). Decolonization's three: recognition, the
+# anti-colonialist ideology, and dropping claims on decentralized states.
 tech_marker_grants_on_action = {
 	effect = {
 		# decolonization
@@ -1214,6 +1215,31 @@ tech_marker_grants_on_action = {
 				}
 				post_notification = ideology_anti_colonialist_added
 			}
+		}
+		# Renounce our claims on decentralized states. Claims sit on state
+		# regions, and the only way to name them from country scope is by their
+		# holder's states, so the sweep walks the decentralized countries' states
+		# (a few hundred) rather than every state in the world. It runs every
+		# month, not once: a claim staked later (da_stake_colonial_claim, the AI's
+		# colonial push) is dropped within the month too. number_of_claims > 0
+		# keeps a country with none off the scan.
+		if = {
+			limit = {
+				modifier:country_remove_decentralized_claims_bool = yes
+				number_of_claims > 0
+				any_country = {
+					is_country_type = decentralized
+					any_scope_state = { has_claim_by = ROOT }
+				}
+			}
+			every_country = {
+				limit = { is_country_type = decentralized }
+				every_scope_state = {
+					limit = { has_claim_by = ROOT }
+					state_region = { remove_claim = ROOT }
+				}
+			}
+			post_notification = decentralized_claims_renounced
 		}
 		# civil_rights_movement
 		if = {

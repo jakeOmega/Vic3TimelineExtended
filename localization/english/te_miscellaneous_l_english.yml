@@ -1923,6 +1923,7 @@
  country_nuclear_disarmament_bool:0 "Nuclear Disarmament"
  country_nuclear_program_pause_bool:0 "Nuclear Program Freeze"
  country_receiving_nuclear_program_aid_bool:0 "Receiving [concept_nuclear_program] Aid"
+ country_remove_decentralized_claims_bool:0 "Renounce [Concept('concept_claim', 'Claims')] on Decentralized States"
  country_sr_deep_space_exploration_program_bool:0 "Deep Space Exploration Program Active"
  country_sr_earth_orbit_program_bool:0 "Earth Orbit Program Active"
  country_sr_interstellar_mission_program_bool:0 "Interstellar Mission Program Active"
