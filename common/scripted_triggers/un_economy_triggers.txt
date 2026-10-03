@@ -46,16 +46,28 @@ un_food_reserve_can_table = {
 
 # ---- The World Development Fund -----------------------------------------------------
 
-# Our GDP per head is below the Fund's line (a share of the represented
+# Our GDP per head is at or below the Fund's line (a share of the represented
 # members' average that rises with the charter: a tenth, a quarter, half;
-# un_dev_fund_line_share). Both figures are the monthly snapshot
+# un_dev_fund_line_share), never below the poorest member in good standing's
+# GDP per head (owner, 2026-10-03): when no such member is under the share,
+# the line is that member's own figure, so the test is "at or below" and the
+# Fund always has someone to pay. Both figures are the monthly snapshot
 # (un_dev_fund_monthly_update), which writes var:un_dev_fund_gdp_ph only on
 # represented members.
 # Scope: country
 un_dev_fund_below_line = {
 	has_variable = un_dev_fund_gdp_ph
 	has_global_variable = un_dev_fund_line
-	var:un_dev_fund_gdp_ph < global_var:un_dev_fund_line
+	var:un_dev_fund_gdp_ph <= global_var:un_dev_fund_line
+}
+
+# The line was raised to the poorest member in good standing: the level's
+# share of the average (un_dev_fund_line_base) is below every such member.
+# Scope: any
+un_dev_fund_line_floored = {
+	has_global_variable = un_dev_fund_line_base
+	has_global_variable = un_dev_fund_line_floor
+	global_var:un_dev_fund_line_floor > global_var:un_dev_fund_line_base
 }
 
 # At or above the members' average GDP per head.
@@ -74,15 +86,32 @@ un_dev_fund_rich = {
 	var:un_dev_fund_gdp_ph >= global_var:un_dev_fund_rich_line
 }
 
-# The Fund pays this member (or would, if it stood): a represented member that
-# pays its dues and is below the line. A member withholding its dues draws
-# nothing from the budget it does not pay into.
+# A member the Fund could pay: represented, its representation not suspended,
+# and paying its dues. A member withholding its dues draws nothing from the
+# budget it does not pay into. The line's floor is the poorest of these, so
+# the floor and the eligibility test cannot drift apart.
 # Scope: country
-un_dev_fund_eligible = {
+un_dev_fund_good_standing = {
 	un_member_represented = yes
 	NOT = { un_representation_suspended = yes }
 	NOT = { un_dues_is_withholding = yes }
+}
+
+# The Fund pays this member (or would, if it stood): a member in good standing
+# at or below the line.
+# Scope: country
+un_dev_fund_eligible = {
+	un_dev_fund_good_standing = yes
 	un_dev_fund_below_line = yes
+}
+
+# The Fund pays this member a grant this month (var:un_dev_fund_grant, set by
+# the monthly update while the Fund stands; 0 once it stops).
+# Scope: country
+un_dev_fund_receiving = {
+	has_global_variable = un_inst_development_fund
+	has_variable = un_dev_fund_grant
+	var:un_dev_fund_grant > 0
 }
 
 # A Development Programs contributor whose contribution pays the Fund's

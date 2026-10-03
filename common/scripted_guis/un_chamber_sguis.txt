@@ -668,6 +668,33 @@ un_chamber_budget_sgui = {
 	}
 }
 
+# The World Development Fund's section (te_un_sec_dev_fund): is_shown gates the
+# whole section on the Fund standing; the effect renders who it pays and how
+# much, or why nobody is paid (un_dev_fund_recipient_lines,
+# un_economy_effects.txt). Never executed.
+un_chamber_dev_fund_sgui = {
+	scope = country
+
+	is_shown = {
+		has_global_variable = un_inst_development_fund
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+		un_dev_fund_recipient_lines = yes
+	}
+}
+
+# The section's cutoff row's tooltip: how this month's line was set
+# (un_dev_fund_line_lines).
+un_chamber_dev_fund_line_sgui = {
+	scope = country
+
+	effect = {
+		un_dev_fund_line_lines = yes
+	}
+}
+
 # Yes/no questions the widget asks to show or hide a heading and the group
 # under it. Never executed; is_shown reads only the root, never a saved scope
 # (gui_modding_guide.md gotcha #22).

@@ -17,7 +17,9 @@
 # pillar's tooltip): the Fund's three forms (the Development Programs
 # contributions only, below a tenth of the members' average; 5% of the budget
 # below a quarter after Reform I; a quarter of the budget below half after
-# Reform II); a quarter of the grain and at most 2,500 units, 500 units held,
+# Reform II), and the line's floor at the poorest member in good standing
+# (te_concepts' concept_un_development_fund_desc and the chamber's
+# _floored lines); a quarter of the grain and at most 2,500 units, 500 units held,
 # 5,000 units a mission, +0.15 food security and -5% mortality for a year, -10
 # at 5% and +3 below half a percent. Change both.
 # ============================================================================
@@ -108,14 +110,46 @@ un_dev_fund_avg_value = {
 	}
 }
 
-# The line a recipient's GDP per head must be under, at the charter's current
-# level. Globals only.
-un_dev_fund_line_value = {
+# The level's share of the members' average: the line before its floor.
+# Globals only.
+un_dev_fund_line_base_value = {
 	value = 0
 	if = {
 		limit = { has_global_variable = un_dev_fund_avg }
 		add = global_var:un_dev_fund_avg
 		multiply = un_dev_fund_line_share
+	}
+}
+
+# The line a recipient's GDP per head must be at or under: the level's share
+# of the average, never below the poorest member in good standing's GDP per
+# head (global_var:un_dev_fund_line_floor, snapshotted just before; owner,
+# 2026-10-03), so at least one member always qualifies. Globals only.
+un_dev_fund_line_value = {
+	value = un_dev_fund_line_base_value
+	if = {
+		limit = { has_global_variable = un_dev_fund_line_floor }
+		min = global_var:un_dev_fund_line_floor
+	}
+}
+
+# Orders the members poorest first: ordered_* iterators sort descending, so
+# the key is the negated GDP per head (scripting_best_practices.md).
+# Scope: country
+un_dev_fund_poverty_order = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dev_fund_gdp_ph }
+		subtract = var:un_dev_fund_gdp_ph
+	}
+}
+
+# Orders the recipients largest grant first. Scope: country
+un_dev_fund_grant_order = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dev_fund_grant }
+		add = var:un_dev_fund_grant
 	}
 }
 
@@ -645,6 +679,24 @@ un_disp_dev_fund_budget_level_pct = {
 un_disp_dev_fund_line_pct = {
 	value = un_dev_fund_line_share
 	multiply = 100
+}
+
+# The level's share of the average before the floor, and the floor: the
+# poorest member in good standing's GDP per head (this month's snapshot).
+un_disp_dev_fund_line_base = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_dev_fund_line_base }
+		add = global_var:un_dev_fund_line_base
+	}
+}
+
+un_disp_dev_fund_line_floor = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_dev_fund_line_floor }
+		add = global_var:un_dev_fund_line_floor
+	}
 }
 
 # What the Development Programs contributors pay a week, all together, and
