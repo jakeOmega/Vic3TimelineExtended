@@ -3,9 +3,13 @@
 # ============================================================================
 
 # Percentage (0-100) of this country's population living in pops at wealth 25
-# or more: the pops whose Healthcare need (popneed_healthcare) buys a real
-# amount of Drugs. Gates drugs_shortage.1, so a Drugs shortage in a country of
-# poor pops is not told as a medicine shortage. Country scope.
+# or more. Gates drugs_shortage.1 at 3, so a Drugs shortage is told as a
+# medicine shortage only where medicine is a large part of the country's Drugs.
+# From wealth 25 Healthcare (popneed_healthcare) is about half of what a pop
+# spends on Drugs, and in the drugs wealth probe's saves 3% of people at 25+
+# matched "Healthcare is a third or more of the country's Drugs demand" in 57
+# of 63 country-saves (docs/testing/drugs-wealth-probe-results-2026-10-02.md).
+# Country scope.
 drugs_healthcare_population_share = {
 	value = 0
 	every_scope_pop = {

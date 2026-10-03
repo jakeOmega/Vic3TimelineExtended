@@ -322,10 +322,13 @@ plantations' other throughput bonuses. Pharmaceutical Industries are not affecte
 neither are other countries' plantations, which can go on selling Drugs into
 your market.
 
-When your market is short of Drugs (the base game's goods-shortage alert) and at
-least 3% of your people live in pops at wealth 25 or more, a Medicine Shortage
-event comes in about three years out of four, then not again for two and a half
-years. You choose how to get through it:
+A Medicine Shortage event can come when your market is short of Drugs (the base
+game's goods-shortage alert) and at least 3% of your people live in pops at
+wealth 25 or more, which is about where medicine becomes a third of what your
+country spends on Drugs. While the shortage lasts, the event comes in about
+three years out of four, then not again for two and a half years. You choose how
+to get through it; buying abroad keeps patients treated but doesn't end the
+shortage in your market.
 
 | Option | Effect for two and a half years |
 |---|---|
