@@ -157,6 +157,44 @@ selected feature's check before implementing it. Record missing setup as skipped
 | Native AI: can automatic fiscal writes be prevented independently of the GUI? | Before integrating AI countries, inspect the installed native AI mutation paths; on one disposable AI country, arm the carrier and observe law, levels, goods and amendments during a fiscal-stress interval. The harness's UI lock leaves native AI/script setters unblocked. Use extended P07/P11/P14 for a targeted intervention and rerun. | A changed setting exposes a path to intercept. No change during a short run proves nothing about prevention. Patch exposed paths and establish a workable control before claiming one authoritative AI schedule; a later periodic reset can hide an illegal interim change. |
 | Civil wars: are records copied, shared, or merged from the loser? | Before choosing a copy/reunification strategy, use an existing near-uprising save with an operative/pending package and two records. Inspect original/target raw fields at outbreak (`event te_debug_tax.91`); do not arm/rebuild the target first. Check owner references and dates (extended P15). Both victory outcomes belong to later lifecycle validation. | Missing inheritance calls for explicit copying. Shared containers require independent records; loser-only merges require ownership/version cleanup. Failure of automatic inheritance is not failure of the tax idea. |
 
+## Customs: lock or carrier (P09b, P09c)
+
+**Question** (spec `docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md` §2.9):
+- Can the tax code switch off the native tariff controls at their source and apply legislated tariffs itself?
+- Or must it keep re-asserting levels the native AI and treaties also write?
+
+P09 applied the per-good families (`country_grain_import_tariffs_rate_add` and the min/max level bounds), and the load rejected them as unknown types (capability ledger row 14). `common/modifier_type_definitions/te_tax_probe_modifier_types.txt` now registers all six families for `grain` (a staple) and `iron` (industrial). It is temporary, with the harness.
+
+**Setup.** A disposable rule-**off** game (the harness refuses to arm under the tax-code rule). Arm (`event te_debug_tax.1`).
+- P09b needs a country that owns its market.
+- P09c needs one with **Protectionism**: `te_tp_cancel_max` is sized for its four 0.50 maxima.
+
+Note grain's and iron's import and export levels, the Budget's tariff income and subvention expense, and grain's market price and imports.
+
+1. **Load.** Start the game and grep `debug.log` for `Unknown modifier type: country_grain`.
+   - **None:** the registration fixed the rejection; continue.
+   - **Still there:** the families cannot be used. Stop; customs keeps re-asserting levels.
+2. **P09b, the lock** (`event te_debug_tax.80`): bounds grain's import level to low tariffs (max −2, min +4, assuming bounds −3..3). Pause and open Budget → Trade (or the grain market goods panel) and record:
+   - **Which grain import buttons are enabled.** Only Low Tariffs means the bounds bind the player. Record the actual range if it differs; the assumed base bounds may be wrong.
+   - **Whether the level moved** to low by itself, if it started elsewhere.
+   - **Whether the native AI is blocked.** On an AI market owner, apply the same modifier through the console (`event te_debug_tax.80` with that country selected, after arming it), advance 3–6 months, and check whether its grain import level ever leaves low.
+   - **Whether the setter is bounded:** `event te_debug_tax.42` sets grain import to max tariffs and `event te_debug_tax.44` to max subventions, both through the setter; does the level stay at low?
+3. **Undo** (`event te_debug_tax.82`). Check that the buttons are back.
+4. **P09c, the carrier** (`event te_debug_tax.81`): cancels the trade law's maxima and adds +0.10 to grain's import rate. Advance a week and record:
+   - **The tariff buttons:** whether they are greyed or say tariffs are unavailable, as under Free Trade.
+   - **The Budget's tariff income** with the maxima cancelled.
+   - **Whether grain still pays an import tariff:** the market goods panel's tariff line, and the income change against step 1.
+   - **Whether grain's import level still changes the collected tariff,** or the +0.10 applies whatever the level. Set grain import to max tariffs (`event te_debug_tax.42`) and to no tariffs or subventions (`event te_debug_tax.40`) and compare.
+   - The same for iron, with no rate modifier, as the control.
+5. **Undo** (`event te_debug_tax.82`), and save the `debug.log` lines tagged `TE_TAX_PROBE p09`.
+
+**Decision.**
+- **The lock binds both the GUI and the native AI:** a follow-up PR replaces re-assert and adoption under the customs option with level locks, registered for every tradeable good by `gen_tax_code.py`, and the AI gets a customs template of its own.
+- **The carrier collects a per-good rate with the maxima cancelled, and the level no longer matters:** the follow-up applies legislated rates instead of levels. Subventions need their own answer: the rate families are tariffs only.
+- **Neither:** keep re-assert and adoption, and AI customs stays native.
+
+Record the result in the capability ledger, row 14.
+
 ## Granularity and exit rule
 
 The current native hooks and harness cover **flat** wage/dividend rates, rural/head
