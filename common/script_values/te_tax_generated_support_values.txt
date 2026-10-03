@@ -2673,7 +2673,9 @@ te_tax_bl_provisions = {
 # named over te_tax_regrel_ref_share (te_tax_bl_regrel_coverage), +4 for every group,
 # industrialists -2, petty_bourgeoisie -2 on top. Ideology: 5 x the
 # group's fiscal ideology (its stances on the vanilla taxation laws x their progressiveness
-# / 100) x the change in progressivity. Government: +10 in government.
+# / 100) x the change in progressivity. Government: +10 in government. Trust
+# (plan Task 12): 10 x the group's te_tax_trust_<ig>, +1 per promise kept and -1 per
+# promise broken.
 te_tax_mat_armed_forces = {
 	value = 0
 	add = { value = te_tax_dl_wage multiply = 0.3 }
@@ -2720,6 +2722,12 @@ te_tax_ideo_armed_forces = {
 te_tax_gov_armed_forces = {
 	value = 0
 	if = { limit = { ig:ig_armed_forces ?= { is_in_government = yes } } value = 10 }
+}
+te_tax_trust_reason_armed_forces = {
+	value = 0
+	if = { limit = { has_variable = te_tax_trust_armed_forces } value = var:te_tax_trust_armed_forces multiply = 10 }
+	min = -40
+	max = 40
 }
 te_tax_mat_devout = {
 	value = 0
@@ -2768,6 +2776,12 @@ te_tax_gov_devout = {
 	value = 0
 	if = { limit = { ig:ig_devout ?= { is_in_government = yes } } value = 10 }
 }
+te_tax_trust_reason_devout = {
+	value = 0
+	if = { limit = { has_variable = te_tax_trust_devout } value = var:te_tax_trust_devout multiply = 10 }
+	min = -40
+	max = 40
+}
 te_tax_mat_industrialists = {
 	value = 0
 	add = { value = te_tax_dl_wage multiply = 0.2 }
@@ -2815,6 +2829,12 @@ te_tax_gov_industrialists = {
 	value = 0
 	if = { limit = { ig:ig_industrialists ?= { is_in_government = yes } } value = 10 }
 }
+te_tax_trust_reason_industrialists = {
+	value = 0
+	if = { limit = { has_variable = te_tax_trust_industrialists } value = var:te_tax_trust_industrialists multiply = 10 }
+	min = -40
+	max = 40
+}
 te_tax_mat_intelligentsia = {
 	value = 0
 	add = { value = te_tax_dl_wage multiply = 0.6 }
@@ -2860,6 +2880,12 @@ te_tax_ideo_intelligentsia = {
 te_tax_gov_intelligentsia = {
 	value = 0
 	if = { limit = { ig:ig_intelligentsia ?= { is_in_government = yes } } value = 10 }
+}
+te_tax_trust_reason_intelligentsia = {
+	value = 0
+	if = { limit = { has_variable = te_tax_trust_intelligentsia } value = var:te_tax_trust_intelligentsia multiply = 10 }
+	min = -40
+	max = 40
 }
 te_tax_mat_landowners = {
 	value = 0
@@ -2909,6 +2935,12 @@ te_tax_gov_landowners = {
 	value = 0
 	if = { limit = { ig:ig_landowners ?= { is_in_government = yes } } value = 10 }
 }
+te_tax_trust_reason_landowners = {
+	value = 0
+	if = { limit = { has_variable = te_tax_trust_landowners } value = var:te_tax_trust_landowners multiply = 10 }
+	min = -40
+	max = 40
+}
 te_tax_mat_petty_bourgeoisie = {
 	value = 0
 	add = { value = te_tax_dl_wage multiply = 0.6 }
@@ -2956,6 +2988,12 @@ te_tax_ideo_petty_bourgeoisie = {
 te_tax_gov_petty_bourgeoisie = {
 	value = 0
 	if = { limit = { ig:ig_petty_bourgeoisie ?= { is_in_government = yes } } value = 10 }
+}
+te_tax_trust_reason_petty_bourgeoisie = {
+	value = 0
+	if = { limit = { has_variable = te_tax_trust_petty_bourgeoisie } value = var:te_tax_trust_petty_bourgeoisie multiply = 10 }
+	min = -40
+	max = 40
 }
 te_tax_mat_rural_folk = {
 	value = 0
@@ -3005,6 +3043,12 @@ te_tax_gov_rural_folk = {
 	value = 0
 	if = { limit = { ig:ig_rural_folk ?= { is_in_government = yes } } value = 10 }
 }
+te_tax_trust_reason_rural_folk = {
+	value = 0
+	if = { limit = { has_variable = te_tax_trust_rural_folk } value = var:te_tax_trust_rural_folk multiply = 10 }
+	min = -40
+	max = 40
+}
 te_tax_mat_trade_unions = {
 	value = 0
 	add = { value = te_tax_dl_wage multiply = 1 }
@@ -3049,6 +3093,12 @@ te_tax_ideo_trade_unions = {
 te_tax_gov_trade_unions = {
 	value = 0
 	if = { limit = { ig:ig_trade_unions ?= { is_in_government = yes } } value = 10 }
+}
+te_tax_trust_reason_trade_unions = {
+	value = 0
+	if = { limit = { has_variable = te_tax_trust_trade_unions } value = var:te_tax_trust_trade_unions multiply = 10 }
+	min = -40
+	max = 40
 }
 
 # Clout of the non-marginal interest groups, and of those among them committed to the

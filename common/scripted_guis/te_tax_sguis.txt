@@ -221,6 +221,27 @@ te_tax_show_history_sgui = {
 }
 
 # ---------------------------------------------------------------------------
+# Policy obligations (plan Task 12): a slot holds a pending or binding promise.
+# A slot's test is "the token exists and is 1"; the row of each slot tests its
+# own view (te_tax_view_o<n>_on) in the .gui.
+# ---------------------------------------------------------------------------
+te_tax_show_obligations_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		OR = {
+			AND = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 }
+			AND = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 }
+			AND = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 }
+			AND = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 }
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
 # Passage conditions: one gate per condition row of the passage panel
 # (te_tax_politics_widget.gui), true while it is met. Each repeats one line of
 # te_tax_can_pass verbatim (test_tax_code_sguis.PassageGateTest), so a row and
@@ -578,6 +599,51 @@ te_tax_cmd_package_release_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 2 }
 			te_tax_cmd_package_release = { SLOT = b }
+		}
+	}
+}
+
+# Renegotiates a binding promise (plan Task 12). op: the obligation slot, 1 to 4.
+te_tax_cmd_obl_renegotiate_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_obl_renegotiate = { N = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_obl_renegotiate = { N = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			te_tax_can_obl_renegotiate = { N = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			te_tax_can_obl_renegotiate = { N = 4 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_obl_renegotiate = { N = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_obl_renegotiate = { N = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			te_tax_cmd_obl_renegotiate = { N = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			te_tax_cmd_obl_renegotiate = { N = 4 }
 		}
 	}
 }

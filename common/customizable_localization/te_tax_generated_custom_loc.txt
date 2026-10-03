@@ -65,6 +65,22 @@ te_tax_hist_event_1 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_1_kind = 11 }
+		localization_key = te_tax_hist_kind_obl_fulfilled
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 12 }
+		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 13 }
+		localization_key = te_tax_hist_kind_obl_renegotiated
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 14 }
+		localization_key = te_tax_hist_kind_obl_released
+	}
+	text = {
 		localization_key = te_tax_hist_kind_other
 	}
 }
@@ -127,6 +143,22 @@ te_tax_hist_event_2 = {
 	text = {
 		trigger = { te_tax_view_hist_2_kind = 10 }
 		localization_key = te_tax_hist_kind_released
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 11 }
+		localization_key = te_tax_hist_kind_obl_fulfilled
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 12 }
+		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 13 }
+		localization_key = te_tax_hist_kind_obl_renegotiated
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 14 }
+		localization_key = te_tax_hist_kind_obl_released
 	}
 	text = {
 		localization_key = te_tax_hist_kind_other
@@ -193,6 +225,22 @@ te_tax_hist_event_3 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_3_kind = 11 }
+		localization_key = te_tax_hist_kind_obl_fulfilled
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 12 }
+		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 13 }
+		localization_key = te_tax_hist_kind_obl_renegotiated
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 14 }
+		localization_key = te_tax_hist_kind_obl_released
+	}
+	text = {
 		localization_key = te_tax_hist_kind_other
 	}
 }
@@ -255,6 +303,22 @@ te_tax_hist_event_4 = {
 	text = {
 		trigger = { te_tax_view_hist_4_kind = 10 }
 		localization_key = te_tax_hist_kind_released
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 11 }
+		localization_key = te_tax_hist_kind_obl_fulfilled
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 12 }
+		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 13 }
+		localization_key = te_tax_hist_kind_obl_renegotiated
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 14 }
+		localization_key = te_tax_hist_kind_obl_released
 	}
 	text = {
 		localization_key = te_tax_hist_kind_other
@@ -321,6 +385,22 @@ te_tax_hist_event_5 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_5_kind = 11 }
+		localization_key = te_tax_hist_kind_obl_fulfilled
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 12 }
+		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 13 }
+		localization_key = te_tax_hist_kind_obl_renegotiated
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 14 }
+		localization_key = te_tax_hist_kind_obl_released
+	}
+	text = {
 		localization_key = te_tax_hist_kind_other
 	}
 }
@@ -383,6 +463,22 @@ te_tax_hist_event_6 = {
 	text = {
 		trigger = { te_tax_view_hist_6_kind = 10 }
 		localization_key = te_tax_hist_kind_released
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 11 }
+		localization_key = te_tax_hist_kind_obl_fulfilled
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 12 }
+		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 13 }
+		localization_key = te_tax_hist_kind_obl_renegotiated
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 14 }
+		localization_key = te_tax_hist_kind_obl_released
 	}
 	text = {
 		localization_key = te_tax_hist_kind_other
@@ -449,6 +545,22 @@ te_tax_hist_event_7 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_7_kind = 11 }
+		localization_key = te_tax_hist_kind_obl_fulfilled
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 12 }
+		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 13 }
+		localization_key = te_tax_hist_kind_obl_renegotiated
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 14 }
+		localization_key = te_tax_hist_kind_obl_released
+	}
+	text = {
 		localization_key = te_tax_hist_kind_other
 	}
 }
@@ -513,6 +625,539 @@ te_tax_hist_event_8 = {
 		localization_key = te_tax_hist_kind_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_8_kind = 11 }
+		localization_key = te_tax_hist_kind_obl_fulfilled
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 12 }
+		localization_key = te_tax_hist_kind_obl_breached
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 13 }
+		localization_key = te_tax_hist_kind_obl_renegotiated
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 14 }
+		localization_key = te_tax_hist_kind_obl_released
+	}
+	text = {
 		localization_key = te_tax_hist_kind_other
+	}
+}
+
+# The promise rows (plan Task 12; te_tax_obligations_section): per obligation slot <n>,
+# the beneficiary group's name, the promise and its state, read as
+# GetPlayer.GetCustom('te_tax_obl_<part>_<n>'). The triggers read only the guarded
+# te_tax_view_o<n>_* views, which are 0 while the slot is free.
+
+te_tax_obl_ig_1 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o1_ig = 1 }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_o1_ig = 2 }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { te_tax_view_o1_ig = 3 }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_o1_ig = 4 }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_o1_ig = 5 }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { te_tax_view_o1_ig = 6 }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_o1_ig = 7 }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_o1_ig = 8 }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = te_tax_obl_ig_none
+	}
+}
+
+te_tax_obl_what_1 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o1_kind = 1 }
+		localization_key = te_tax_obl_what_inst_1
+	}
+	text = {
+		trigger = { te_tax_view_o1_kind = 2 }
+		localization_key = te_tax_obl_what_bureaucracy
+	}
+	text = {
+		trigger = { te_tax_view_o1_kind = 3 te_tax_view_o1_arg = 1 }
+		localization_key = te_tax_obl_what_wages_very_low
+	}
+	text = {
+		trigger = { te_tax_view_o1_kind = 3 te_tax_view_o1_arg = 2 }
+		localization_key = te_tax_obl_what_wages_low
+	}
+	text = {
+		trigger = { te_tax_view_o1_kind = 3 te_tax_view_o1_arg = 3 }
+		localization_key = te_tax_obl_what_wages_medium
+	}
+	text = {
+		trigger = { te_tax_view_o1_kind = 3 te_tax_view_o1_arg = 4 }
+		localization_key = te_tax_obl_what_wages_high
+	}
+	text = {
+		trigger = { te_tax_view_o1_kind = 3 te_tax_view_o1_arg = 5 }
+		localization_key = te_tax_obl_what_wages_very_high
+	}
+	text = {
+		trigger = { te_tax_view_o1_kind = 4 }
+		localization_key = te_tax_obl_what_fiscal
+	}
+	text = {
+		localization_key = te_tax_obl_what_none
+	}
+}
+
+te_tax_obl_inst_1 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o1_arg = 1 }
+		localization_key = institution_schools
+	}
+	text = {
+		trigger = { te_tax_view_o1_arg = 2 }
+		localization_key = institution_health_system
+	}
+	text = {
+		trigger = { te_tax_view_o1_arg = 3 }
+		localization_key = institution_social_security
+	}
+	text = {
+		localization_key = te_tax_obl_what_none
+	}
+}
+
+te_tax_obl_state_1 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o1_state = 1 }
+		localization_key = te_tax_obl_st_pending
+	}
+	text = {
+		trigger = { te_tax_view_o1_state = 7 }
+		localization_key = te_tax_obl_st_bound
+	}
+	text = {
+		trigger = { te_tax_view_o1_state = 2 te_tax_view_o1_kind = 4 }
+		localization_key = te_tax_obl_st_surplus_1
+	}
+	text = {
+		trigger = { te_tax_view_o1_state = 2 }
+		localization_key = te_tax_obl_st_due_1
+	}
+	text = {
+		trigger = { te_tax_view_o1_state = 3 }
+		localization_key = te_tax_obl_st_maint_1
+	}
+	text = {
+		localization_key = te_tax_obl_st_none
+	}
+}
+
+te_tax_obl_ig_2 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o2_ig = 1 }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_o2_ig = 2 }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { te_tax_view_o2_ig = 3 }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_o2_ig = 4 }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_o2_ig = 5 }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { te_tax_view_o2_ig = 6 }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_o2_ig = 7 }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_o2_ig = 8 }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = te_tax_obl_ig_none
+	}
+}
+
+te_tax_obl_what_2 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o2_kind = 1 }
+		localization_key = te_tax_obl_what_inst_2
+	}
+	text = {
+		trigger = { te_tax_view_o2_kind = 2 }
+		localization_key = te_tax_obl_what_bureaucracy
+	}
+	text = {
+		trigger = { te_tax_view_o2_kind = 3 te_tax_view_o2_arg = 1 }
+		localization_key = te_tax_obl_what_wages_very_low
+	}
+	text = {
+		trigger = { te_tax_view_o2_kind = 3 te_tax_view_o2_arg = 2 }
+		localization_key = te_tax_obl_what_wages_low
+	}
+	text = {
+		trigger = { te_tax_view_o2_kind = 3 te_tax_view_o2_arg = 3 }
+		localization_key = te_tax_obl_what_wages_medium
+	}
+	text = {
+		trigger = { te_tax_view_o2_kind = 3 te_tax_view_o2_arg = 4 }
+		localization_key = te_tax_obl_what_wages_high
+	}
+	text = {
+		trigger = { te_tax_view_o2_kind = 3 te_tax_view_o2_arg = 5 }
+		localization_key = te_tax_obl_what_wages_very_high
+	}
+	text = {
+		trigger = { te_tax_view_o2_kind = 4 }
+		localization_key = te_tax_obl_what_fiscal
+	}
+	text = {
+		localization_key = te_tax_obl_what_none
+	}
+}
+
+te_tax_obl_inst_2 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o2_arg = 1 }
+		localization_key = institution_schools
+	}
+	text = {
+		trigger = { te_tax_view_o2_arg = 2 }
+		localization_key = institution_health_system
+	}
+	text = {
+		trigger = { te_tax_view_o2_arg = 3 }
+		localization_key = institution_social_security
+	}
+	text = {
+		localization_key = te_tax_obl_what_none
+	}
+}
+
+te_tax_obl_state_2 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o2_state = 1 }
+		localization_key = te_tax_obl_st_pending
+	}
+	text = {
+		trigger = { te_tax_view_o2_state = 7 }
+		localization_key = te_tax_obl_st_bound
+	}
+	text = {
+		trigger = { te_tax_view_o2_state = 2 te_tax_view_o2_kind = 4 }
+		localization_key = te_tax_obl_st_surplus_2
+	}
+	text = {
+		trigger = { te_tax_view_o2_state = 2 }
+		localization_key = te_tax_obl_st_due_2
+	}
+	text = {
+		trigger = { te_tax_view_o2_state = 3 }
+		localization_key = te_tax_obl_st_maint_2
+	}
+	text = {
+		localization_key = te_tax_obl_st_none
+	}
+}
+
+te_tax_obl_ig_3 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o3_ig = 1 }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_o3_ig = 2 }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { te_tax_view_o3_ig = 3 }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_o3_ig = 4 }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_o3_ig = 5 }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { te_tax_view_o3_ig = 6 }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_o3_ig = 7 }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_o3_ig = 8 }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = te_tax_obl_ig_none
+	}
+}
+
+te_tax_obl_what_3 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o3_kind = 1 }
+		localization_key = te_tax_obl_what_inst_3
+	}
+	text = {
+		trigger = { te_tax_view_o3_kind = 2 }
+		localization_key = te_tax_obl_what_bureaucracy
+	}
+	text = {
+		trigger = { te_tax_view_o3_kind = 3 te_tax_view_o3_arg = 1 }
+		localization_key = te_tax_obl_what_wages_very_low
+	}
+	text = {
+		trigger = { te_tax_view_o3_kind = 3 te_tax_view_o3_arg = 2 }
+		localization_key = te_tax_obl_what_wages_low
+	}
+	text = {
+		trigger = { te_tax_view_o3_kind = 3 te_tax_view_o3_arg = 3 }
+		localization_key = te_tax_obl_what_wages_medium
+	}
+	text = {
+		trigger = { te_tax_view_o3_kind = 3 te_tax_view_o3_arg = 4 }
+		localization_key = te_tax_obl_what_wages_high
+	}
+	text = {
+		trigger = { te_tax_view_o3_kind = 3 te_tax_view_o3_arg = 5 }
+		localization_key = te_tax_obl_what_wages_very_high
+	}
+	text = {
+		trigger = { te_tax_view_o3_kind = 4 }
+		localization_key = te_tax_obl_what_fiscal
+	}
+	text = {
+		localization_key = te_tax_obl_what_none
+	}
+}
+
+te_tax_obl_inst_3 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o3_arg = 1 }
+		localization_key = institution_schools
+	}
+	text = {
+		trigger = { te_tax_view_o3_arg = 2 }
+		localization_key = institution_health_system
+	}
+	text = {
+		trigger = { te_tax_view_o3_arg = 3 }
+		localization_key = institution_social_security
+	}
+	text = {
+		localization_key = te_tax_obl_what_none
+	}
+}
+
+te_tax_obl_state_3 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o3_state = 1 }
+		localization_key = te_tax_obl_st_pending
+	}
+	text = {
+		trigger = { te_tax_view_o3_state = 7 }
+		localization_key = te_tax_obl_st_bound
+	}
+	text = {
+		trigger = { te_tax_view_o3_state = 2 te_tax_view_o3_kind = 4 }
+		localization_key = te_tax_obl_st_surplus_3
+	}
+	text = {
+		trigger = { te_tax_view_o3_state = 2 }
+		localization_key = te_tax_obl_st_due_3
+	}
+	text = {
+		trigger = { te_tax_view_o3_state = 3 }
+		localization_key = te_tax_obl_st_maint_3
+	}
+	text = {
+		localization_key = te_tax_obl_st_none
+	}
+}
+
+te_tax_obl_ig_4 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o4_ig = 1 }
+		localization_key = ig_armed_forces
+	}
+	text = {
+		trigger = { te_tax_view_o4_ig = 2 }
+		localization_key = ig_devout
+	}
+	text = {
+		trigger = { te_tax_view_o4_ig = 3 }
+		localization_key = ig_industrialists
+	}
+	text = {
+		trigger = { te_tax_view_o4_ig = 4 }
+		localization_key = ig_intelligentsia
+	}
+	text = {
+		trigger = { te_tax_view_o4_ig = 5 }
+		localization_key = ig_landowners
+	}
+	text = {
+		trigger = { te_tax_view_o4_ig = 6 }
+		localization_key = ig_petty_bourgeoisie
+	}
+	text = {
+		trigger = { te_tax_view_o4_ig = 7 }
+		localization_key = ig_rural_folk
+	}
+	text = {
+		trigger = { te_tax_view_o4_ig = 8 }
+		localization_key = ig_trade_unions
+	}
+	text = {
+		localization_key = te_tax_obl_ig_none
+	}
+}
+
+te_tax_obl_what_4 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o4_kind = 1 }
+		localization_key = te_tax_obl_what_inst_4
+	}
+	text = {
+		trigger = { te_tax_view_o4_kind = 2 }
+		localization_key = te_tax_obl_what_bureaucracy
+	}
+	text = {
+		trigger = { te_tax_view_o4_kind = 3 te_tax_view_o4_arg = 1 }
+		localization_key = te_tax_obl_what_wages_very_low
+	}
+	text = {
+		trigger = { te_tax_view_o4_kind = 3 te_tax_view_o4_arg = 2 }
+		localization_key = te_tax_obl_what_wages_low
+	}
+	text = {
+		trigger = { te_tax_view_o4_kind = 3 te_tax_view_o4_arg = 3 }
+		localization_key = te_tax_obl_what_wages_medium
+	}
+	text = {
+		trigger = { te_tax_view_o4_kind = 3 te_tax_view_o4_arg = 4 }
+		localization_key = te_tax_obl_what_wages_high
+	}
+	text = {
+		trigger = { te_tax_view_o4_kind = 3 te_tax_view_o4_arg = 5 }
+		localization_key = te_tax_obl_what_wages_very_high
+	}
+	text = {
+		trigger = { te_tax_view_o4_kind = 4 }
+		localization_key = te_tax_obl_what_fiscal
+	}
+	text = {
+		localization_key = te_tax_obl_what_none
+	}
+}
+
+te_tax_obl_inst_4 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o4_arg = 1 }
+		localization_key = institution_schools
+	}
+	text = {
+		trigger = { te_tax_view_o4_arg = 2 }
+		localization_key = institution_health_system
+	}
+	text = {
+		trigger = { te_tax_view_o4_arg = 3 }
+		localization_key = institution_social_security
+	}
+	text = {
+		localization_key = te_tax_obl_what_none
+	}
+}
+
+te_tax_obl_state_4 = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { te_tax_view_o4_state = 1 }
+		localization_key = te_tax_obl_st_pending
+	}
+	text = {
+		trigger = { te_tax_view_o4_state = 7 }
+		localization_key = te_tax_obl_st_bound
+	}
+	text = {
+		trigger = { te_tax_view_o4_state = 2 te_tax_view_o4_kind = 4 }
+		localization_key = te_tax_obl_st_surplus_4
+	}
+	text = {
+		trigger = { te_tax_view_o4_state = 2 }
+		localization_key = te_tax_obl_st_due_4
+	}
+	text = {
+		trigger = { te_tax_view_o4_state = 3 }
+		localization_key = te_tax_obl_st_maint_4
+	}
+	text = {
+		localization_key = te_tax_obl_st_none
 	}
 }

@@ -32,6 +32,17 @@ te_tax_slot_id_none = 0
 te_tax_slot_id_a = 1
 te_tax_slot_id_b = 2
 
+# Interest groups as an obligation stores its beneficiary (te_tax_o<n>_ig): te_tax_obl_propose
+# takes IG = te_tax_ig_id_<ig> (plan Task 12; the support model's IGS order).
+te_tax_ig_id_armed_forces = 1
+te_tax_ig_id_devout = 2
+te_tax_ig_id_industrialists = 3
+te_tax_ig_id_intelligentsia = 4
+te_tax_ig_id_landowners = 5
+te_tax_ig_id_petty_bourgeoisie = 6
+te_tax_ig_id_rural_folk = 7
+te_tax_ig_id_trade_unions = 8
+
 # Display values (docs/systems/tax_code_schema.md, "Display values"): guarded reads of
 # the enacted code for the GUI and loc. Each reads only variables it has just tested
 # with has_variable and returns the schema sentinel when one is absent: 0 for an index,
@@ -3279,7 +3290,7 @@ te_tax_view_pb_goods_changed = {
 
 # The passage panel's interest-group cards (interest-group scope; plan Task 8): the
 # group's stance on the bill under debate (0 none, 1 committed, 2 persuadable, 3 opposed,
-# 4 red line, 5 marginal and not counted), its score and four of its reasons, read from
+# 4 red line, 5 marginal and not counted), its score and five of its reasons (trust, Task 12), from
 # its owner's support snapshot through its type. 0 while no bill is open.
 te_tax_disp_ig_stance = {
 	value = 0
@@ -3522,4 +3533,387 @@ te_tax_disp_ig_gov = {
 		limit = { is_interest_group_type = ig_trade_unions owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_trade_unions_gov } }
 		owner = { add = var:te_tax_sr_trade_unions_gov }
 	}
+}
+te_tax_disp_ig_trust = {
+	value = 0
+	if = {
+		limit = { is_interest_group_type = ig_armed_forces owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_armed_forces_trust } }
+		owner = { add = var:te_tax_sr_armed_forces_trust }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_devout owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_devout_trust } }
+		owner = { add = var:te_tax_sr_devout_trust }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_industrialists owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_industrialists_trust } }
+		owner = { add = var:te_tax_sr_industrialists_trust }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_intelligentsia owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_intelligentsia_trust } }
+		owner = { add = var:te_tax_sr_intelligentsia_trust }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_landowners owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_landowners_trust } }
+		owner = { add = var:te_tax_sr_landowners_trust }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_petty_bourgeoisie owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_petty_bourgeoisie_trust } }
+		owner = { add = var:te_tax_sr_petty_bourgeoisie_trust }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_rural_folk owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_rural_folk_trust } }
+		owner = { add = var:te_tax_sr_rural_folk_trust }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_trade_unions owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_trade_unions_trust } }
+		owner = { add = var:te_tax_sr_trade_unions_trust }
+	}
+}
+
+# Policy obligations (plan Task 12): per slot <n>, on; state (1 pending, 7 bound, 2
+# delivering, 3 maintaining), kind, arg, target, beneficiary group, baseline and the kind-4
+# surplus streak; the deadline and the end of maintenance as months with their year and
+# month. A payload view reads only while the slot is on: a freed slot's payload stays,
+# and a civil war's winner may hold a loser's.
+te_tax_view_o1_on = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_on } value = var:te_tax_o1_on }
+}
+te_tax_view_o1_state = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_state has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_state }
+}
+te_tax_view_o1_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_kind has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_kind }
+}
+te_tax_view_o1_arg = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_arg has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_arg }
+}
+te_tax_view_o1_target = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_target has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_target }
+}
+te_tax_view_o1_ig = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_ig has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_ig }
+}
+te_tax_view_o1_baseline = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_baseline has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_baseline }
+}
+te_tax_view_o1_streak = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_streak has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_streak }
+}
+te_tax_view_o1_deadline = {
+	value = -1
+	if = { limit = { has_variable = te_tax_o1_deadline has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_deadline }
+}
+te_tax_view_o1_deadline_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o1_deadline has_variable = te_tax_o1_on var:te_tax_o1_on = 1 var:te_tax_o1_deadline >= 0 }
+		value = var:te_tax_o1_deadline
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_o1_deadline_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o1_deadline has_variable = te_tax_o1_on var:te_tax_o1_on = 1 var:te_tax_o1_deadline >= 0 }
+		value = var:te_tax_o1_deadline
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_o1_deadline
+		add = 1
+	}
+}
+te_tax_view_o1_maint_end = {
+	value = -1
+	if = { limit = { has_variable = te_tax_o1_maint_end has_variable = te_tax_o1_on var:te_tax_o1_on = 1 } value = var:te_tax_o1_maint_end }
+}
+te_tax_view_o1_maint_end_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o1_maint_end has_variable = te_tax_o1_on var:te_tax_o1_on = 1 var:te_tax_o1_maint_end >= 0 }
+		value = var:te_tax_o1_maint_end
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_o1_maint_end_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o1_maint_end has_variable = te_tax_o1_on var:te_tax_o1_on = 1 var:te_tax_o1_maint_end >= 0 }
+		value = var:te_tax_o1_maint_end
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_o1_maint_end
+		add = 1
+	}
+}
+te_tax_view_o2_on = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_on } value = var:te_tax_o2_on }
+}
+te_tax_view_o2_state = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_state has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_state }
+}
+te_tax_view_o2_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_kind has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_kind }
+}
+te_tax_view_o2_arg = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_arg has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_arg }
+}
+te_tax_view_o2_target = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_target has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_target }
+}
+te_tax_view_o2_ig = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_ig has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_ig }
+}
+te_tax_view_o2_baseline = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_baseline has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_baseline }
+}
+te_tax_view_o2_streak = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o2_streak has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_streak }
+}
+te_tax_view_o2_deadline = {
+	value = -1
+	if = { limit = { has_variable = te_tax_o2_deadline has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_deadline }
+}
+te_tax_view_o2_deadline_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o2_deadline has_variable = te_tax_o2_on var:te_tax_o2_on = 1 var:te_tax_o2_deadline >= 0 }
+		value = var:te_tax_o2_deadline
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_o2_deadline_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o2_deadline has_variable = te_tax_o2_on var:te_tax_o2_on = 1 var:te_tax_o2_deadline >= 0 }
+		value = var:te_tax_o2_deadline
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_o2_deadline
+		add = 1
+	}
+}
+te_tax_view_o2_maint_end = {
+	value = -1
+	if = { limit = { has_variable = te_tax_o2_maint_end has_variable = te_tax_o2_on var:te_tax_o2_on = 1 } value = var:te_tax_o2_maint_end }
+}
+te_tax_view_o2_maint_end_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o2_maint_end has_variable = te_tax_o2_on var:te_tax_o2_on = 1 var:te_tax_o2_maint_end >= 0 }
+		value = var:te_tax_o2_maint_end
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_o2_maint_end_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o2_maint_end has_variable = te_tax_o2_on var:te_tax_o2_on = 1 var:te_tax_o2_maint_end >= 0 }
+		value = var:te_tax_o2_maint_end
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_o2_maint_end
+		add = 1
+	}
+}
+te_tax_view_o3_on = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_on } value = var:te_tax_o3_on }
+}
+te_tax_view_o3_state = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_state has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_state }
+}
+te_tax_view_o3_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_kind has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_kind }
+}
+te_tax_view_o3_arg = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_arg has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_arg }
+}
+te_tax_view_o3_target = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_target has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_target }
+}
+te_tax_view_o3_ig = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_ig has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_ig }
+}
+te_tax_view_o3_baseline = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_baseline has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_baseline }
+}
+te_tax_view_o3_streak = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o3_streak has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_streak }
+}
+te_tax_view_o3_deadline = {
+	value = -1
+	if = { limit = { has_variable = te_tax_o3_deadline has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_deadline }
+}
+te_tax_view_o3_deadline_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o3_deadline has_variable = te_tax_o3_on var:te_tax_o3_on = 1 var:te_tax_o3_deadline >= 0 }
+		value = var:te_tax_o3_deadline
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_o3_deadline_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o3_deadline has_variable = te_tax_o3_on var:te_tax_o3_on = 1 var:te_tax_o3_deadline >= 0 }
+		value = var:te_tax_o3_deadline
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_o3_deadline
+		add = 1
+	}
+}
+te_tax_view_o3_maint_end = {
+	value = -1
+	if = { limit = { has_variable = te_tax_o3_maint_end has_variable = te_tax_o3_on var:te_tax_o3_on = 1 } value = var:te_tax_o3_maint_end }
+}
+te_tax_view_o3_maint_end_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o3_maint_end has_variable = te_tax_o3_on var:te_tax_o3_on = 1 var:te_tax_o3_maint_end >= 0 }
+		value = var:te_tax_o3_maint_end
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_o3_maint_end_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o3_maint_end has_variable = te_tax_o3_on var:te_tax_o3_on = 1 var:te_tax_o3_maint_end >= 0 }
+		value = var:te_tax_o3_maint_end
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_o3_maint_end
+		add = 1
+	}
+}
+te_tax_view_o4_on = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_on } value = var:te_tax_o4_on }
+}
+te_tax_view_o4_state = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_state has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_state }
+}
+te_tax_view_o4_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_kind has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_kind }
+}
+te_tax_view_o4_arg = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_arg has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_arg }
+}
+te_tax_view_o4_target = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_target has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_target }
+}
+te_tax_view_o4_ig = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_ig has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_ig }
+}
+te_tax_view_o4_baseline = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_baseline has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_baseline }
+}
+te_tax_view_o4_streak = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o4_streak has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_streak }
+}
+te_tax_view_o4_deadline = {
+	value = -1
+	if = { limit = { has_variable = te_tax_o4_deadline has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_deadline }
+}
+te_tax_view_o4_deadline_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o4_deadline has_variable = te_tax_o4_on var:te_tax_o4_on = 1 var:te_tax_o4_deadline >= 0 }
+		value = var:te_tax_o4_deadline
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_o4_deadline_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o4_deadline has_variable = te_tax_o4_on var:te_tax_o4_on = 1 var:te_tax_o4_deadline >= 0 }
+		value = var:te_tax_o4_deadline
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_o4_deadline
+		add = 1
+	}
+}
+te_tax_view_o4_maint_end = {
+	value = -1
+	if = { limit = { has_variable = te_tax_o4_maint_end has_variable = te_tax_o4_on var:te_tax_o4_on = 1 } value = var:te_tax_o4_maint_end }
+}
+te_tax_view_o4_maint_end_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o4_maint_end has_variable = te_tax_o4_on var:te_tax_o4_on = 1 var:te_tax_o4_maint_end >= 0 }
+		value = var:te_tax_o4_maint_end
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_o4_maint_end_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_o4_maint_end has_variable = te_tax_o4_on var:te_tax_o4_on = 1 var:te_tax_o4_maint_end >= 0 }
+		value = var:te_tax_o4_maint_end
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_o4_maint_end
+		add = 1
+	}
+}
+te_tax_view_obl_binding = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 has_variable = te_tax_o1_state OR = { var:te_tax_o1_state = 7 var:te_tax_o1_state = 2 var:te_tax_o1_state = 3 } } add = 1 }
+	if = { limit = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 has_variable = te_tax_o2_state OR = { var:te_tax_o2_state = 7 var:te_tax_o2_state = 2 var:te_tax_o2_state = 3 } } add = 1 }
+	if = { limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_state OR = { var:te_tax_o3_state = 7 var:te_tax_o3_state = 2 var:te_tax_o3_state = 3 } } add = 1 }
+	if = { limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_state OR = { var:te_tax_o4_state = 7 var:te_tax_o4_state = 2 var:te_tax_o4_state = 3 } } add = 1 }
+}
+te_tax_view_obl_pending = {
+	value = 0
+	if = { limit = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 has_variable = te_tax_o1_state OR = { var:te_tax_o1_state = 1 } } add = 1 }
+	if = { limit = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 has_variable = te_tax_o2_state OR = { var:te_tax_o2_state = 1 } } add = 1 }
+	if = { limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_state OR = { var:te_tax_o3_state = 1 } } add = 1 }
+	if = { limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_state OR = { var:te_tax_o4_state = 1 } } add = 1 }
 }

@@ -243,6 +243,9 @@ class ScriptValueTest(unittest.TestCase):
         # The scheduler's history-ring slot ids (test_tax_code_scheduler.py).
         for name, value in (("none", 0), ("a", 1), ("b", 2)):
             want[f"te_tax_slot_id_{name}"] = Decimal(value)
+        # The interest groups as an obligation stores its beneficiary (Task 12).
+        for idx, ig in enumerate(gen.IGS, start=1):
+            want[f"te_tax_ig_id_{ig}"] = Decimal(idx)
         self.assertEqual({k: Decimal(v) for k, v in values.items()}, want)
 
 

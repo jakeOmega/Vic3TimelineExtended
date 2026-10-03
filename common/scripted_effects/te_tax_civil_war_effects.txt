@@ -86,6 +86,8 @@ te_tax_on_uprising = {
 #   te_tax_bl_on, te_tax_dr_on = 0  unfinished bills and drafts stay with the
 #                                    government that wrote them (spec §10)
 #   commitments                      released (te_tax_gen_reset_commitments)
+#   pending promises                 released (te_tax_obl_release_pending);
+#                                    binding ones are copied with their clocks
 #   te_tax_sync_version = -1         the rebels' writer has never synced their
 #                                    carrier, so its first sync is a fresh one
 #                                    and whatever the carrier arrived with is
@@ -114,12 +116,18 @@ te_tax_copy_code = {
 	# Approved packages, held ones included, with their original dates.
 	if = { limit = { scope:te_tax_source = { var:te_tax_pa_on = 1 } } te_tax_gen_copy_slot_a = yes }
 	if = { limit = { scope:te_tax_source = { var:te_tax_pb_on = 1 } } te_tax_gen_copy_slot_b = yes }
+	# Binding policy obligations (bound to a passed bill, delivering or
+	# maintaining) with their terms and clocks; the obligation-slot headers and
+	# the groups' trust came with te_tax_gen_copy_code.
+	te_tax_gen_copy_obligations = yes
 	# Any token the original lacked, with its sentinel (none, for a country
 	# holding te_tax_schema).
 	te_tax_init_country = yes
 	set_variable = { name = te_tax_bl_on value = 0 }
 	set_variable = { name = te_tax_dr_on value = 0 }
 	te_tax_gen_reset_commitments = yes
+	# A pending promise belongs to the bill, which stays with the government.
+	te_tax_obl_release_pending = yes
 	set_variable = { name = te_tax_sync_version value = -1 }
 	te_tax_copy_relief_states = yes
 	te_tax_rebuild_relief_marks = yes
@@ -179,11 +187,11 @@ te_tax_adopt_copied_code = {
 #     the processor claims a month;
 #   - history kind 7 (civil-war repair);
 #   - te_tax.6: the carrier if missing, and collection rebuilt from the
-#     winner's variables the next day (modifiers do not survive the merge).
-# Policy obligations do not exist yet. Plan Task 12 adds
-# te_tax_repair_obligations_after_civil_war and calls it here, after the bill
-# is closed, to reassess the winner's obligations for deliverability (spec
-# §10: never marked fulfilled because the responsible country changed).
+#     winner's variables the next day (modifiers do not survive the merge);
+#   - te_tax_repair_obligations_after_civil_war (te_tax_obligation_effects.txt),
+#     after the bill is closed: the winner's obligations are reassessed for
+#     deliverability, never marked fulfilled because the responsible country
+#     changed (spec §10), and their clocks are kept.
 te_tax_repair_after_civil_war = {
 	if = {
 		limit = {
@@ -208,6 +216,7 @@ te_tax_repair_after_civil_war = {
 		else = {
 			set_variable = { name = te_tax_dr_on value = 0 }
 		}
+		te_tax_repair_obligations_after_civil_war = yes
 		te_tax_rebuild_relief_marks = yes
 		set_variable = { name = te_tax_last_month value = -1 }
 		te_tax_history_push = { KIND = 7 SLOT = none }
@@ -229,8 +238,8 @@ te_tax_repair_after_civil_war = {
 # the migration would then record all zeros (te_tax_migrate_country, the
 # carrier-holder branch), so a parent holding the carrier passes on its enacted
 # provisions: every instrument with its operative month, sunset and successor,
-# the taxed goods and the relief depths. Its packages, bill, draft and
-# commitments stay with it. Its named states: the parent's list is copied and
+# the taxed goods and the relief depths. Its packages, bill, draft,
+# commitments and policy obligations stay with it. Its named states: the parent's list is copied and
 # the rebuild keeps those it now owns (te_tax_relief_listed_state_kept), marks
 # and stamps them as its own; the parent's own rebuild drops them from the
 # parent's list. Its package slots' state lists are emptied, since the
@@ -258,6 +267,8 @@ te_tax_init_released_country = {
 		set_variable = { name = te_tax_pb_state value = 0 }
 		if = { limit = { has_variable_list = te_tax_pa_relief_states } clear_variable_list = te_tax_pa_relief_states }
 		if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
+		# No promise and no record of kept or broken ones: those are the parent's.
+		te_tax_gen_clear_obligations = yes
 		te_tax_copy_relief_states = yes
 		te_tax_rebuild_relief_marks = yes
 		set_variable = { name = te_tax_last_month value = -1 }

@@ -45,6 +45,7 @@ cited by its time stamp and quoted text, never by file name. Other paths are rep
 | 25 | Vanilla objectives that need Per-Capita, Proportional or Graduated taxation | static-only | `REPLACE:je_great_reforms_bureaucratic`, `REPLACE:je_portugal_regeneration` and `REPLACE:je_imperialism_of_promise` (`common/journal_entries/te_tax_vanilla_je_overrides.txt`; vanilla 1.14.5 entries, the mod's precedent `te_vanilla_turtle_island.txt`). Under the rule each `complete` also accepts `te_tax_code_counts_as_per_capita` (head and wage tax), `_proportional` (wage ≥ 10%, dividends ≥ 2.5%) or `_graduated` (wage ≥ 10%, dividends ≥ wages); with the rule off a `trigger_else` holds vanilla's condition. `test_tax_code_bypass.py` compares the rest of each entry with `vanilla_parsed/`. | The three objectives stay reachable through the code. | In game: Russia (Great Reforms), Portugal (Regeneration), BIC (Imperialism of Promise) with a qualifying code; the entry's tooltip shows the counts-as line. |
 | 26 | Traditionalism under the code | static-only | V:`common/laws/01_economic_system.txt:12-17`: Traditionalism disallows Per-Capita, Proportional and Graduated by name; the carrier is in neither list, so the law alone does not stop a code that taxes wages or dividends. | `te_tax_draft_ready` (introduce and revise) adds "no wage or dividend tax" while `law_traditionalism` is enacted. Enacting Traditionalism while the code taxes wages is not blocked; the next bill must zero them. | In game: under Traditionalism a draft with a wage or dividend tax cannot be introduced, and its tooltip says why. |
 | 27 | Regional-relief states chosen in the workbench and kept in country lists | static-only | The candidate list `te_tax_dr_relief_candidates` is built by `te_tax_cmd_draft_relief_choose` (never on opening a panel) and shown by a datamodel over `GetPlayer.MakeScope.GetList(...)` (the mod's other list datamodels root on `JournalEntry.GetCountry`); each row passes its state to `te_tax_relief_state_sgui` as the saved scope `te_tax_st`, the Grand Monuments rows' shape (`gm_sguis.txt`: a State object in `saved_scopes` has no vanilla precedent). The enacted states are the list `te_tax_en_relief_states`; the writer's relief sync derives the state marks from it (`te_tax_rebuild_relief_marks`, pruned by `add_to_temporary_list` and a second pass). Max three, by `any_in_list = { count >= 3 }` (`variable_list_size`'s `target` fails to load in 1.14). | The bill names at most three states; the state rows are the only way to choose them. | In game: Choose States lists the incorporated states; Name and Drop change the draft and their tooltips list what fails; a passed bill's states get `te_tax_relief_region_<n>` on the 1st of its month; a captured named state loses it within a month. |
+| 28 | Policy-obligation verification against delivered values | static-only (kind 1: pending P16) | Kind 1 (institution level) is checked by `te_tax_obl_inst_met_<arg>` (`common/scripted_triggers/te_tax_triggers.txt`): `institution:<x>.investment >= var:te_tax_o<N>_target` behind `has_institution`, the delivered level by the engine doc and row 18's evidence, and nothing in the tax code sets an institution's level. Kind 2 reads `bureaucracy >= 0`; kind 3 samples `military_wage_level` each month (no on-action fires on a wage change, ENG:on_actions.log); kind 4 reads `net_fixed_income > 0`, the read `te_construction_market_ai_values.txt` already uses as a value. The checks run once a month from the processor (`te_tax_obl_check_month`). | Institution promises verify the delivered level and are **pending P16**: until it settles that `investment` is not the requested level, they stay in the experimental catalog. A bureaucracy deficit alone never breaches one. | P16 gate (row 18); in game, the spec §8 education promise end to end: a breach applied once at a missed deadline, a fulfilment after the term. |
 
 ## First-playable catalog
 
@@ -54,14 +55,15 @@ What the first playable may offer, with the row that limits each item.
   (per-capita) tax (row 4), consumption rate plus selected goods (rows 4 and 17).
 - **Relief provisions:** agricultural wage relief, wages only (row 9); regional (state) relief, which
   relieves every pop tax in the state (row 8).
-- **Obligations:** institution level (row 18), bureaucracy balance, military wage action and the
-  fiscal-balance outcome (rows 11 and 18). Every obligation is checked against a delivered value, not
+- **Obligations:** institution level (rows 18 and 28, pending P16), bureaucracy balance, military wage
+  action and the fiscal-balance outcome (rows 11, 18 and 28). Every obligation is checked against a delivered value, not
   a request, and the fiscal outcome is a direction, not a reconciliation.
 - **Customs schedule:** only under the `te_tax_code_enabled_customs` rule option, labelled
   experimental (rows 14 to 16). The `te_tax_code_enabled` option leaves tariffs native.
 - **Not offered:** per-good duty rates or level bounds (row 14), any claim that a state relief spares
-  dividends or that agricultural relief reaches them (rows 8 and 9), service promises on schools
-  before P16 (row 18), and any copy of amendments across a civil war (row 19).
+  dividends or that agricultural relief reaches them (rows 8 and 9), a service promise checked against
+  anything but the delivered level (rows 18 and 28: such promises exist from Task 12 and stay
+  experimental until P16 confirms the reading), and any copy of amendments across a civil war (row 19).
 
 ## Vanilla content under the rule
 

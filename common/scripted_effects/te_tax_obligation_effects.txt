@@ -1,0 +1,508 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE — policy obligations
+# ============================================================================
+# docs/systems/tax_code_schema.md, "Policy obligations"; spec §7.2, "Policy
+# commitment catalog and lifecycle", and §8 steps 2-6; plan Task 12.
+#
+# A promise an interest group extracts in a bargain (plan Task 13 makes the
+# offers) becomes an obligation in one of four slots, te_tax_o1 .. te_tax_o4:
+#
+#   _on        1 while the slot holds a pending or binding obligation; 0 free
+#   _state     1 pending passage (attached to the bill under debate)
+#              7 bound: the bill passed; waits for its package's commencement
+#              2 delivering   3 maintaining
+#              4 fulfilled    5 breached    6 renegotiated (outcomes: the
+#              slot is freed, _on 0, and the outcome stays in _state)
+#   _kind      1 institution level, 2 bureaucracy balance, 3 military wage
+#              action, 4 fiscal balance outcome
+#   _arg       kind 1: 1 Education, 2 Health System, 3 Social Security;
+#              kind 3: the promised wage level, 1 very low .. 5 very high;
+#              kinds 2 and 4: 0
+#   _target    kind 1: the institution level promised; otherwise as given
+#   _baseline  the measure when the clock starts (te_tax_obl_record_baseline)
+#   _ig        the beneficiary group, te_tax_ig_id_<ig> (1..8)
+#   _deadline  the month by which it must be delivered (-1 until it starts)
+#   _maint_end the month its maintenance ends (-1 until delivered)
+#   _streak    kind 4: consecutive monthly checks in surplus
+#   _slot      the package slot a bound obligation waits on
+#              (te_tax_slot_id_<slot>); 0 while pending
+#   _rev       the bill revision it was proposed under
+#
+# LIFECYCLE
+#   propose    te_tax_obl_propose (Task 13's accepted promise): state 1, in the
+#              lowest free slot, for the bill's current revision.
+#   debate     a new debate (te_tax_bill_start_debate: introduction and every
+#              revision) and the bill closing (withdrawal, passage, the
+#              civil-war repair) release every pending obligation: a promise
+#              belongs to the text it was made for, and Task 13 offers again.
+#   pass       te_tax_obl_bind (te_tax_pass_into): this revision's pending
+#              obligations bind to the package slot the bill is stored in
+#              (state 7).
+#   commence   te_tax_obl_start (te_tax_gen_commence_<slot>): the package's
+#              bound obligations start their clocks this month (state 2).
+#   lapse      te_tax_obl_release_slot: a package released while held
+#              (te_tax_cmd_package_release) or emptied by supersession
+#              (te_tax_gen_supersede_<slot>) releases its bound obligations,
+#              with no breach and one history entry (kind 14).
+#   monthly    te_tax_obl_check_month, from the processor (te_tax.1) only,
+#              after the month's commencements and before the sync:
+#              delivering -> maintaining once delivered, breached once the
+#              deadline month passes undelivered; maintaining -> breached the
+#              month its condition fails, fulfilled at the end of its term.
+#   outcomes   each applied once, by the transition out of the state that
+#              guards it: fulfilled +3 approval (ig_approval_positive_modifier)
+#              and trust +1; breached -5 (ig_approval_very_negative_modifier)
+#              and trust -1; renegotiated (te_tax_cmd_obl_renegotiate, a
+#              button) -2 (te_tax_obl_renegotiated_modifier), no trust change.
+#              Trust feeds the support model's trust reason
+#              (te_tax_trust_reason_<ig>, 10 points a step, clamped).
+#
+# Nothing here sets an institution's level, a wage level or a budget: an
+# obligation records what was promised and checks what happened. Every entry
+# point checks te_tax_code_on (written positively); nothing reads ROOT.
+# Tokens are never removed: a freed slot is _on 0. The trust tokens and the
+# slot headers are schema tokens (te_tax_gen_init_obligations).
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Propose (plan Task 13 calls it when the government accepts a promise)
+# ----------------------------------------------------------------------------
+# KIND, ARG: literal (see above). TARGET: a number, a variable or a script
+# value (kind 1: the level; otherwise 0). IG: the beneficiary,
+# te_tax_ig_id_<ig>. Records a pending obligation on the bill under debate in
+# the lowest free slot, unless te_tax_can_obl_propose refuses it (no bill, the
+# same kind and argument already pending or binding, or four slots taken).
+# Whether the promise can be delivered at all is the offer's question
+# (te_tax_obl_feasible_<kind>, asked by Task 13 before it offers one).
+te_tax_obl_propose = {
+	if = {
+		limit = { te_tax_can_obl_propose = { KIND = $KIND$ ARG = $ARG$ } }
+		if = {
+			limit = { var:te_tax_o1_on = 0 }
+			te_tax_obl_write = { N = 1 KIND = $KIND$ ARG = $ARG$ TARGET = $TARGET$ IG = $IG$ }
+		}
+		else_if = {
+			limit = { var:te_tax_o2_on = 0 }
+			te_tax_obl_write = { N = 2 KIND = $KIND$ ARG = $ARG$ TARGET = $TARGET$ IG = $IG$ }
+		}
+		else_if = {
+			limit = { var:te_tax_o3_on = 0 }
+			te_tax_obl_write = { N = 3 KIND = $KIND$ ARG = $ARG$ TARGET = $TARGET$ IG = $IG$ }
+		}
+		else_if = {
+			limit = { var:te_tax_o4_on = 0 }
+			te_tax_obl_write = { N = 4 KIND = $KIND$ ARG = $ARG$ TARGET = $TARGET$ IG = $IG$ }
+		}
+	}
+	else_if = {
+		limit = { te_tax_code_on = yes }
+		debug_log = "TE_TAX obl_propose_refused no bill, the same promise is already recorded or every slot is taken; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Writes the whole payload of slot N, the slot's state, and _on last.
+te_tax_obl_write = {
+	set_variable = { name = te_tax_o$N$_kind value = $KIND$ }
+	set_variable = { name = te_tax_o$N$_arg value = $ARG$ }
+	set_variable = { name = te_tax_o$N$_target value = $TARGET$ }
+	set_variable = { name = te_tax_o$N$_ig value = $IG$ }
+	set_variable = { name = te_tax_o$N$_rev value = var:te_tax_bl_rev }
+	set_variable = { name = te_tax_o$N$_slot value = 0 }
+	set_variable = { name = te_tax_o$N$_deadline value = -1 }
+	set_variable = { name = te_tax_o$N$_maint_end value = -1 }
+	set_variable = { name = te_tax_o$N$_streak value = 0 }
+	# What the promise starts from, for the panel while it is pending; recorded
+	# again when its clock starts.
+	te_tax_obl_record_baseline = { N = $N$ }
+	set_variable = { name = te_tax_o$N$_state value = 1 }
+	debug_log = "TE_TAX obl_proposed a promise was recorded on the bill under debate; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	set_variable = { name = te_tax_o$N$_on value = 1 }
+}
+
+# The measure obligation N is checked against, as it stands now: kind 1 the
+# institution's delivered level (0 without it); kind 2 1 if the bureaucracy
+# has no deficit, else 0; kind 3 the military wage level (1 very low .. 5 very
+# high); kind 4 1 if the fixed budget is in surplus, else 0. A promise whose
+# baseline already meets it is one of maintenance.
+te_tax_obl_record_baseline = {
+	set_variable = { name = te_tax_o$N$_baseline value = 0 }
+	if = {
+		limit = { var:te_tax_o$N$_kind = 1 }
+		if = {
+			limit = { var:te_tax_o$N$_arg = 1 }
+			set_variable = { name = te_tax_o$N$_baseline value = te_tax_obl_inst_level_1 }
+		}
+		else_if = {
+			limit = { var:te_tax_o$N$_arg = 2 }
+			set_variable = { name = te_tax_o$N$_baseline value = te_tax_obl_inst_level_2 }
+		}
+		else_if = {
+			limit = { var:te_tax_o$N$_arg = 3 }
+			set_variable = { name = te_tax_o$N$_baseline value = te_tax_obl_inst_level_3 }
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_tax_o$N$_kind = 2
+			te_tax_obl_holds = { N = $N$ }
+		}
+		set_variable = { name = te_tax_o$N$_baseline value = 1 }
+	}
+	else_if = {
+		limit = { var:te_tax_o$N$_kind = 3 }
+		if = {
+			limit = { military_wage_level = very_low }
+			set_variable = { name = te_tax_o$N$_baseline value = 1 }
+		}
+		else_if = {
+			limit = { military_wage_level = low }
+			set_variable = { name = te_tax_o$N$_baseline value = 2 }
+		}
+		else_if = {
+			limit = { military_wage_level = medium }
+			set_variable = { name = te_tax_o$N$_baseline value = 3 }
+		}
+		else_if = {
+			limit = { military_wage_level = high }
+			set_variable = { name = te_tax_o$N$_baseline value = 4 }
+		}
+		else = {
+			set_variable = { name = te_tax_o$N$_baseline value = 5 }
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_tax_o$N$_kind = 4
+			te_tax_obl_holds = { N = $N$ }
+		}
+		set_variable = { name = te_tax_o$N$_baseline value = 1 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Releasing (no consequence: the promise lapsed with its bill or package)
+# ----------------------------------------------------------------------------
+
+# Frees slot N: the obligation never bound, or lapsed with its package.
+te_tax_obl_release_one = {
+	set_variable = { name = te_tax_o$N$_on value = 0 }
+	set_variable = { name = te_tax_o$N$_state value = 0 }
+}
+
+# Every pending obligation goes with the text it was promised for: called when
+# a debate starts (te_tax_bill_start_debate: introduction and each revision)
+# and when the bill closes (te_tax_bill_close: withdrawal, passage after the
+# binding, the civil-war repair), and on the rebels at an outbreak (the bill
+# stays with the government that wrote it). No history entry: the bill's own
+# record says what happened.
+te_tax_obl_release_pending = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		te_tax_obl_release_pending_one = { N = 1 }
+		te_tax_obl_release_pending_one = { N = 2 }
+		te_tax_obl_release_pending_one = { N = 3 }
+		te_tax_obl_release_pending_one = { N = 4 }
+	}
+}
+
+te_tax_obl_release_pending_one = {
+	if = {
+		limit = {
+			has_variable = te_tax_o$N$_on
+			var:te_tax_o$N$_on = 1
+			var:te_tax_o$N$_state = 1
+		}
+		te_tax_obl_release_one = { N = $N$ }
+	}
+}
+
+# A passed bill's package in slot SLOT (a or b) will not commence: released
+# while held, or emptied by a later bill's supersession. Its bound obligations
+# lapse with it, unbreached; one history entry (kind 14) if any did.
+te_tax_obl_release_slot = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		set_local_variable = { name = te_tax_obl_released value = 0 }
+		te_tax_obl_release_bound = { N = 1 SLOT = $SLOT$ }
+		te_tax_obl_release_bound = { N = 2 SLOT = $SLOT$ }
+		te_tax_obl_release_bound = { N = 3 SLOT = $SLOT$ }
+		te_tax_obl_release_bound = { N = 4 SLOT = $SLOT$ }
+		if = {
+			limit = { local_var:te_tax_obl_released = 1 }
+			te_tax_history_push = { KIND = 14 SLOT = $SLOT$ }
+			debug_log = "TE_TAX obl_released the promises bound to a passed bill lapsed with it; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+te_tax_obl_release_bound = {
+	if = {
+		limit = {
+			has_variable = te_tax_o$N$_on
+			var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = 7 var:te_tax_o$N$_slot = te_tax_slot_id_$SLOT$
+		}
+		te_tax_obl_release_one = { N = $N$ }
+		set_local_variable = { name = te_tax_obl_released value = 1 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Passage and commencement
+# ----------------------------------------------------------------------------
+
+# Called by te_tax_pass_into after the package is stored in slot SLOT, while
+# the bill is still open: the pending obligations of the revision that passed
+# bind to that package (state 7). One recorded for an earlier revision (a
+# revision normally releases them) is released instead.
+te_tax_obl_bind = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		te_tax_obl_bind_one = { N = 1 SLOT = $SLOT$ }
+		te_tax_obl_bind_one = { N = 2 SLOT = $SLOT$ }
+		te_tax_obl_bind_one = { N = 3 SLOT = $SLOT$ }
+		te_tax_obl_bind_one = { N = 4 SLOT = $SLOT$ }
+	}
+}
+
+te_tax_obl_bind_one = {
+	if = {
+		limit = {
+			has_variable = te_tax_o$N$_on
+			var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = 1
+		}
+		if = {
+			limit = { var:te_tax_o$N$_rev = var:te_tax_bl_rev }
+			set_variable = { name = te_tax_o$N$_slot value = te_tax_slot_id_$SLOT$ }
+			set_variable = { name = te_tax_o$N$_state value = 7 }
+			debug_log = "TE_TAX obl_bound a promise binds from the passed bill's commencement; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			te_tax_obl_release_one = { N = $N$ }
+		}
+	}
+}
+
+# Called by te_tax_gen_commence_<slot> when the package in slot SLOT
+# commences, inside the processor, which has set te_tax_now: its bound
+# obligations start delivering, their deadlines counted from this month
+# (spec §8 step 5: "the education delivery clock starts").
+te_tax_obl_start = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		te_tax_obl_start_one = { N = 1 SLOT = $SLOT$ }
+		te_tax_obl_start_one = { N = 2 SLOT = $SLOT$ }
+		te_tax_obl_start_one = { N = 3 SLOT = $SLOT$ }
+		te_tax_obl_start_one = { N = 4 SLOT = $SLOT$ }
+	}
+}
+
+# Deadlines: kind 1, now + 12 x (target - delivered level, at least 0) + 6;
+# kind 2 now + 12; kind 3 now + 1; kind 4 now + 24 (te_tax_obligation_values.txt).
+te_tax_obl_start_one = {
+	if = {
+		limit = {
+			has_variable = te_tax_o$N$_on
+			var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = 7 var:te_tax_o$N$_slot = te_tax_slot_id_$SLOT$
+		}
+		te_tax_obl_record_baseline = { N = $N$ }
+		if = {
+			limit = { var:te_tax_o$N$_kind = 1 }
+			set_variable = { name = te_tax_o$N$_deadline value = var:te_tax_o$N$_target }
+			change_variable = { name = te_tax_o$N$_deadline subtract = var:te_tax_o$N$_baseline }
+			if = { limit = { var:te_tax_o$N$_deadline < 0 } set_variable = { name = te_tax_o$N$_deadline value = 0 } }
+			change_variable = { name = te_tax_o$N$_deadline multiply = te_tax_obl_months_per_level }
+			change_variable = { name = te_tax_o$N$_deadline add = te_tax_obl_inst_grace }
+		}
+		else_if = {
+			limit = { var:te_tax_o$N$_kind = 2 }
+			set_variable = { name = te_tax_o$N$_deadline value = te_tax_obl_deadline_bureaucracy }
+		}
+		else_if = {
+			limit = { var:te_tax_o$N$_kind = 3 }
+			set_variable = { name = te_tax_o$N$_deadline value = te_tax_obl_deadline_wages }
+		}
+		else = {
+			set_variable = { name = te_tax_o$N$_deadline value = te_tax_obl_deadline_fiscal }
+		}
+		change_variable = { name = te_tax_o$N$_deadline add = var:te_tax_now }
+		set_variable = { name = te_tax_o$N$_maint_end value = -1 }
+		set_variable = { name = te_tax_o$N$_streak value = 0 }
+		set_variable = { name = te_tax_o$N$_state value = 2 }
+		debug_log = "TE_TAX obl_started a promise's delivery clock started with its bill; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# ----------------------------------------------------------------------------
+# The monthly check (te_tax_process_month, after commencements, before the
+# sync; once per calendar month because the processor claims the month first)
+# ----------------------------------------------------------------------------
+te_tax_obl_check_month = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_schema
+			has_variable = te_tax_now
+		}
+		te_tax_obl_check_one = { N = 1 }
+		te_tax_obl_check_one = { N = 2 }
+		te_tax_obl_check_one = { N = 3 }
+		te_tax_obl_check_one = { N = 4 }
+	}
+}
+
+# Delivering: kind 4 first counts its surplus streak (a deficit month resets
+# it). Delivered -> maintaining; otherwise, from its deadline month on, a
+# breach. Maintaining: a month whose condition fails is a breach; the end of
+# the term, with the condition still met, fulfils it. Each transition leaves
+# the state that guards it, so it happens once.
+te_tax_obl_check_one = {
+	if = {
+		limit = { var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = 2 }
+		if = {
+			limit = { var:te_tax_o$N$_kind = 4 }
+			if = {
+				limit = { net_fixed_income > 0 }
+				change_variable = { name = te_tax_o$N$_streak add = 1 }
+			}
+			else = {
+				set_variable = { name = te_tax_o$N$_streak value = 0 }
+			}
+		}
+		if = {
+			limit = { te_tax_obl_delivered = { N = $N$ } }
+			te_tax_obl_begin_maintenance = { N = $N$ }
+		}
+		else_if = {
+			limit = { var:te_tax_o$N$_deadline <= var:te_tax_now }
+			te_tax_obl_breach = { N = $N$ }
+		}
+	}
+	else_if = {
+		limit = { var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = 3 }
+		if = {
+			limit = { NOT = { te_tax_obl_holds = { N = $N$ } } }
+			te_tax_obl_breach = { N = $N$ }
+		}
+		else_if = {
+			limit = { var:te_tax_o$N$_maint_end <= var:te_tax_now }
+			te_tax_obl_fulfil = { N = $N$ }
+		}
+	}
+}
+
+# Delivered: kept for te_tax_obl_maint_months (kind 4: _fiscal) from this
+# month.
+te_tax_obl_begin_maintenance = {
+	set_variable = { name = te_tax_o$N$_state value = 3 }
+	if = {
+		limit = { var:te_tax_o$N$_kind = 4 }
+		set_variable = { name = te_tax_o$N$_maint_end value = te_tax_obl_maint_months_fiscal }
+	}
+	else = {
+		set_variable = { name = te_tax_o$N$_maint_end value = te_tax_obl_maint_months }
+	}
+	change_variable = { name = te_tax_o$N$_maint_end add = var:te_tax_now }
+	debug_log = "TE_TAX obl_maintaining a promise was delivered; its maintenance term started; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# Kept for its whole term: the slot is freed, the beneficiary approves
+# (+3, ig_approval_positive_modifier) and trusts the government a step more.
+te_tax_obl_fulfil = {
+	if = {
+		limit = { var:te_tax_o$N$_on = 1 var:te_tax_o$N$_state = 3 }
+		set_variable = { name = te_tax_o$N$_state value = 4 }
+		set_variable = { name = te_tax_o$N$_on value = 0 }
+		te_tax_gen_obl_approval = { N = $N$ MODIFIER = ig_approval_positive_modifier }
+		te_tax_gen_obl_trust = { N = $N$ DELTA = 1 }
+		te_tax_history_push = { KIND = 11 SLOT = none }
+		debug_log = "TE_TAX obl_fulfilled a promise was kept for its whole term; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Missed its deadline, or failed during its term: the slot is freed, the
+# beneficiary disapproves (-5, ig_approval_very_negative_modifier) and trusts
+# the government a step less. The tax package stays in force (spec §8 step 6).
+te_tax_obl_breach = {
+	if = {
+		limit = { var:te_tax_o$N$_on = 1 OR = { var:te_tax_o$N$_state = 2 var:te_tax_o$N$_state = 3 } }
+		set_variable = { name = te_tax_o$N$_state value = 5 }
+		set_variable = { name = te_tax_o$N$_on value = 0 }
+		te_tax_gen_obl_approval = { N = $N$ MODIFIER = ig_approval_very_negative_modifier }
+		te_tax_gen_obl_trust = { N = $N$ DELTA = -1 }
+		te_tax_history_push = { KIND = 12 SLOT = none }
+		debug_log = "TE_TAX obl_breached a promise missed its deadline or failed during its term; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Renegotiation (a button on the promise's row; the AI may call it too)
+# ----------------------------------------------------------------------------
+# An openly renegotiated promise instead of a breach: the slot is freed and
+# the beneficiary disapproves a little (-2, te_tax_obl_renegotiated_modifier);
+# its trust is unchanged. N: the slot, 1 to 4 (te_tax_cmd_obl_renegotiate_sgui's
+# op).
+te_tax_cmd_obl_renegotiate = {
+	if = {
+		limit = { te_tax_can_obl_renegotiate = { N = $N$ } }
+		custom_tooltip = te_tax_tt_cmd_obl_renegotiate
+		set_variable = { name = te_tax_o$N$_state value = 6 }
+		set_variable = { name = te_tax_o$N$_on value = 0 }
+		te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_renegotiated_modifier }
+		te_tax_history_push = { KIND = 13 SLOT = none }
+		debug_log = "TE_TAX obl_renegotiated a promise was renegotiated and its slot freed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Civil war (te_tax_civil_war_effects.txt)
+# ----------------------------------------------------------------------------
+# Called by te_tax_repair_after_civil_war with THIS = the winner, after the
+# bill is closed (which releases pending obligations). Both sides held every
+# obligation token from the outbreak, so the merge kept the winner's own; this
+# reassesses whether each can still be performed and never marks one
+# fulfilled (spec §10: never fulfilled because the responsible country
+# changed), never breaches one and never resets a clock. Released: a pending
+# one (defensively; the bill is closed); a bound one whose package no longer
+# waits in its slot; a delivering or maintaining one whose beneficiary group
+# the reunited country no longer has. Every other one keeps its terms and
+# dates, and the next monthly check verifies it.
+te_tax_repair_obligations_after_civil_war = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		set_local_variable = { name = te_tax_obl_released value = 0 }
+		te_tax_obl_reassess_one = { N = 1 }
+		te_tax_obl_reassess_one = { N = 2 }
+		te_tax_obl_reassess_one = { N = 3 }
+		te_tax_obl_reassess_one = { N = 4 }
+		if = {
+			limit = { local_var:te_tax_obl_released = 1 }
+			te_tax_history_push = { KIND = 14 SLOT = none }
+		}
+		debug_log = "TE_TAX obl_repair the winner's promises were reassessed after the civil war; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+te_tax_obl_reassess_one = {
+	if = {
+		limit = {
+			has_variable = te_tax_o$N$_on
+			var:te_tax_o$N$_on = 1
+			OR = {
+				var:te_tax_o$N$_state = 1
+				AND = {
+					var:te_tax_o$N$_state = 7
+					te_tax_gen_obl_slot_gone = { N = $N$ }
+				}
+				AND = {
+					OR = {
+						var:te_tax_o$N$_state = 2
+						var:te_tax_o$N$_state = 3
+					}
+					NOT = { te_tax_gen_obl_ig_exists = { N = $N$ } }
+				}
+			}
+		}
+		te_tax_obl_release_one = { N = $N$ }
+		set_local_variable = { name = te_tax_obl_released value = 1 }
+	}
+}

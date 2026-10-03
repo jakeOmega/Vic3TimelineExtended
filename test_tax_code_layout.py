@@ -59,13 +59,13 @@ TAB = "te_tax_code"
 # workbench; the Budget tab empties that block and shows the summary in its
 # fixed_bottom instead.
 STATUS = ["te_tax_enacted_table", "te_tax_workbench_section", "te_tax_review_section",
-          "te_tax_politics_section", "te_tax_pending_section"]
+          "te_tax_politics_section", "te_tax_pending_section", "te_tax_obligations_section"]
 # Collapse flags, each named for its default (style guide rule 7).
 FLAGS = {"te_tax_enacted_closed", "te_tax_history_open", "te_tax_how_open",
          "te_tax_workbench_closed", "te_tax_wb_income_closed", "te_tax_wb_land_closed",
          "te_tax_wb_cons_closed", "te_tax_wb_goods_open", "te_tax_wb_relief_closed",
          "te_tax_wb_relief_states_closed", "te_tax_wb_dates_closed", "te_tax_review_open", "te_tax_politics_closed",
-         "te_tax_pending_closed"}
+         "te_tax_pending_closed", "te_tax_obligations_closed"}
 REFERENCE = ["te_tax_history_section", "te_tax_how_section"]
 ROOTS = [("widget_je_tax_code_overview", "custom_widget_container_1"),
          ("widget_je_tax_code_status", "custom_widget_container_2"),
@@ -73,8 +73,9 @@ ROOTS = [("widget_je_tax_code_overview", "custom_widget_container_1"),
 FIFTH = ("fifth_button", "fifth_button_tooltip", "fifth_button_click", "fifth_button_visibility",
          "fifth_button_visibility_checked", "fifth_button_selected")
 HISTORY_SIZE = 8
-# History kinds (docs/systems/tax_code_schema.md, te_tax_h<n>_kind).
-KINDS = range(1, 11)
+# History kinds (docs/systems/tax_code_schema.md, te_tax_h<n>_kind): 1-10 the code's,
+# 11-14 the policy obligations' (Task 12).
+KINDS = range(1, 15)
 SUNSET_KIND = 2
 FORBIDDEN_IN_VALUES = re.compile(
     r"\b(set_variable|change_variable|remove_variable|save_scope_as|save_temporary_scope_as|"
@@ -185,7 +186,8 @@ def reachable_loc(keys, table):
 def value_bodies():
     """{name: body or None} for the tax code's script values; None = a constant."""
     values = {}
-    for path in (DISPLAY, GEN_VALUES, SUPPORT, "common/script_values/te_tax_generated_support_values.txt"):
+    for path in (DISPLAY, GEN_VALUES, SUPPORT, "common/script_values/te_tax_generated_support_values.txt",
+                 "common/script_values/te_tax_obligation_values.txt"):
         text = script(path)
         for match in re.finditer(r"(?m)^(\w+) = (\{|-?[\d.]+)", text):
             name = match.group(1)
@@ -365,7 +367,8 @@ class LayoutTest(unittest.TestCase):
                      "te_tax_workbench_section", "te_tax_instrument_row", "te_tax_sunset_row",
                      "te_tax_good_row", "te_tax_draft_summary", "te_tax_review_section",
                      "te_tax_politics_section", "te_tax_ig_card", "te_tax_pending_section",
-                     "te_tax_wb_goods_rows", "te_tax_rv_goods_rows"):
+                     "te_tax_wb_goods_rows", "te_tax_rv_goods_rows", "te_tax_obligations_section",
+                     "te_tax_obligation_row"):
             with self.subTest(name=name):
                 type_body(self.all, name)
 
@@ -542,10 +545,10 @@ class FlagTest(unittest.TestCase):
         body = type_body(gui(LAYOUT), "te_tax_how_section")
         subs = re.findall(r'text = "(te_tax_how_sub_\w+)"', body)
         self.assertEqual(subs, ["te_tax_how_sub_drafting", "te_tax_how_sub_passage",
-                                "te_tax_how_sub_commencement", "te_tax_how_sub_replaces"])
+                                "te_tax_how_sub_commencement", "te_tax_how_sub_promises", "te_tax_how_sub_replaces"])
         table = loc()
         self.assertEqual([table[key] for key in subs],
-                         ["Drafting", "Passage", "Commencement", "What the Code Replaces"])
+                         ["Drafting", "Passage", "Commencement", "Promises", "What the Code Replaces"])
         notes = re.findall(r'text = "(te_tax_how_(?!sub_|header)\w+)"', body)
         self.assertGreaterEqual(len(notes), 4)
         for key in notes:
@@ -634,7 +637,8 @@ class DisplayValueTest(unittest.TestCase):
         """A closed record's payload is removed (or, after a civil war, may be
         a loser's stale copy): a view of it must test the record's own token."""
         for record, token in (("dr", "te_tax_dr_on"), ("bl", "te_tax_bl_on"),
-                              ("pa", "te_tax_pa_on"), ("pb", "te_tax_pb_on")):
+                              ("pa", "te_tax_pa_on"), ("pb", "te_tax_pb_on"),
+                              *((f"o{n}", f"te_tax_o{n}_on") for n in gen.OBLIGATION_SLOTS)):
             for name, body in self.values.items():
                 if not name.startswith(f"te_tax_view_{record}_") or name == f"te_tax_view_{record}_on":
                     continue

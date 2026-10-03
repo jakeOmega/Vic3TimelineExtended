@@ -49,7 +49,7 @@ TAX_GUI = (OVERVIEW, LAYOUT, WORKBENCH, REVIEW, POLITICS, GEN_ROWS)
 
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
        "landowners", "petty_bourgeoisie", "rural_folk", "trade_unions")
-IG_VALUES = ("stance", "score", "mat", "ideo", "fisc", "gov")
+IG_VALUES = ("stance", "score", "mat", "ideo", "fisc", "gov", "trust")
 WORLD = re.compile(r"\b(every_\w+|any_\w+|random_\w+|ordered_\w+)\b")
 WRITES = re.compile(r"\b(set_variable|change_variable|remove_variable|clamp_variable|save_scope_as|"
                     r"save_temporary_scope_as|add_modifier|remove_modifier|trigger_event|set_local_variable)\b")
@@ -74,6 +74,8 @@ def op_tables():
                                                2: ("package_reschedule", "SLOT = b")},
         "te_tax_cmd_package_release_sgui": {1: ("package_release", "SLOT = a"),
                                             2: ("package_release", "SLOT = b")},
+        # Policy obligations (Task 12): op = the obligation slot.
+        "te_tax_cmd_obl_renegotiate_sgui": {n: ("obl_renegotiate", f"N = {n}") for n in (1, 2, 3, 4)},
     }
     for key in KEYS:
         ops = {op: ("draft_step", f"KEY = {key} DIR = {op}") for op in range(5)}
@@ -197,6 +199,7 @@ class HandlerTest(unittest.TestCase):
         wanted |= {call("draft_relief_state", "", "cmd")}
         wanted |= {call(c, f"SLOT = {s}", "cmd") for c in ("package_reschedule", "package_release")
                    for s in ("a", "b")}
+        wanted |= {call("obl_renegotiate", f"N = {n}", "cmd") for n in (1, 2, 3, 4)}
         self.assertEqual(reached, wanted)
 
     def test_generated_handlers_cover_instruments_and_catalog(self):
@@ -419,7 +422,7 @@ class InterestGroupValueTest(unittest.TestCase):
                 self.assertIn("var:te_tax_bl_on = 1", body)
 
     def test_reasons_read_their_snapshot_variable(self):
-        for value in ("mat", "ideo", "fisc", "gov"):
+        for value in ("mat", "ideo", "fisc", "gov", "trust"):
             body = self.values[f"te_tax_disp_ig_{value}"]
             for ig in IGS:
                 with self.subTest(value=value, ig=ig):

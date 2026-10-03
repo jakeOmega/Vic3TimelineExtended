@@ -10,6 +10,10 @@
 ###   te_tax_pending_section   open while a passed bill waits: each one's month
 ###                            and state, what it changes, and for a held one
 ###                            Reschedule and Release
+###   te_tax_obligations_section  open while a promise is pending or binding
+###                            (plan Task 12): one row per obligation slot, the
+###                            group it was made to, what it promises and where
+###                            it stands, and Renegotiate for a binding one
 ###
 ### The support snapshot (te_tax_sup_*, te_tax_sr_*, te_tax_com_*) outlives the
 ### bill it was taken for, so every view of it requires an open bill
@@ -92,7 +96,7 @@ types te_tax_politics_widget_types
 	}
 
 	### One interest group's card: its name, clout, stance and score, then the
-	### four reasons behind the score. Drawn only for a group the bill has a
+	### five reasons behind the score. Drawn only for a group the bill has a
 	### stance for (code 0 without a bill, or for a group outside the eight
 	### the support model scores). 4 + 160 + 64 + 176 + 72 + 4 = 480.
 	type te_tax_ig_card = flowcontainer {
@@ -179,6 +183,82 @@ types te_tax_politics_widget_types
 			}
 			blockoverride "row_value" {
 				text = "te_tax_ig_gov_value"
+			}
+		}
+		te_tax_ig_reason_row = {
+			blockoverride "row_label" {
+				text = "te_tax_ig_trust"
+				tooltip = "te_tax_ig_trust_tt"
+			}
+			blockoverride "row_value" {
+				text = "te_tax_ig_trust_value"
+			}
+		}
+	}
+
+	### One promise (plan Task 12): the group it was made to and what it
+	### promises, then where it stands and, for a binding one, Renegotiate.
+	### 4 + 160 + 4 + 308 + 4 = 480; 4 + 336 + 4 + 132 + 4 = 480. Each instance
+	### sets the row's visibility and the three texts (per slot customizable
+	### localizations, te_tax_generated_custom_loc.txt) and the button's op.
+	type te_tax_obligation_row = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+			margin = { 4 1 }
+
+			textbox = {
+				minimumsize = { 160 -1 }
+				maximumsize = { 160 -1 }
+				autoresize = yes
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "te_tax_obl_ig_tt"
+				block "obl_ig" {}
+			}
+			textbox = {
+				minimumsize = { 308 -1 }
+				maximumsize = { 308 -1 }
+				autoresize = yes
+				align = left|nobaseline
+				using = fontsize_medium
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "te_tax_obl_what_tt"
+				block "obl_what" {}
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+			margin = { 4 1 }
+
+			textbox = {
+				minimumsize = { 336 -1 }
+				maximumsize = { 336 -1 }
+				autoresize = yes
+				align = left|nobaseline
+				parentanchor = vcenter
+				using = fontsize_medium
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "te_tax_obl_state_tt"
+				block "obl_state" {}
+			}
+			button = {
+				using = default_button
+				size = { 132 28 }
+				parentanchor = vcenter
+				text = "te_tax_obl_renegotiate"
+				block "obl_renegotiate" {}
 			}
 		}
 	}
@@ -722,6 +802,115 @@ types te_tax_politics_widget_types
 						onclick = "[GetScriptedGui('te_tax_cmd_package_release_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_package_release_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_package_release_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 					}
+				}
+			}
+		}
+	}
+
+	### ======================================================================
+	### PROMISES (open while one is pending or binding; plan Task 12)
+	### ======================================================================
+	### One row per obligation slot, shown while the slot is on: pending on the
+	### bill under debate, bound to a passed bill, being delivered or being
+	### kept. Renegotiate (te_tax_cmd_obl_renegotiate_sgui, op = the slot) only
+	### for a binding one (state 7, 2 or 3); a pending one changes with the
+	### bill. Kept, broken and renegotiated promises leave their row and go to
+	### the history.
+	type te_tax_obligations_section = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[GetScriptedGui('te_tax_show_obligations_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+		te_tax_section_header = {
+			blockoverride "left_text" {
+				text = "te_tax_obl_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_tax_obligations_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_tax_obligations_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_tax_obligations_closed'))]"
+			}
+		}
+
+		te_tax_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_tax_obligations_closed'))]"
+
+			te_tax_obligation_row = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o1_on'), '(CFixedPoint)0' )]"
+				blockoverride "obl_ig" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_ig_1')]"
+				}
+				blockoverride "obl_what" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_what_1')]"
+				}
+				blockoverride "obl_state" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_state_1')]"
+				}
+				blockoverride "obl_renegotiate" {
+					visible = "[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o1_state'), '(CFixedPoint)7' ), Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o1_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o1_state'), '(CFixedPoint)3' ) ) )]"
+					enabled = "[GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onclick = "[GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				}
+			}
+			te_tax_obligation_row = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o2_on'), '(CFixedPoint)0' )]"
+				blockoverride "obl_ig" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_ig_2')]"
+				}
+				blockoverride "obl_what" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_what_2')]"
+				}
+				blockoverride "obl_state" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_state_2')]"
+				}
+				blockoverride "obl_renegotiate" {
+					visible = "[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o2_state'), '(CFixedPoint)7' ), Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o2_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o2_state'), '(CFixedPoint)3' ) ) )]"
+					enabled = "[GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onclick = "[GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+				}
+			}
+			te_tax_obligation_row = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o3_on'), '(CFixedPoint)0' )]"
+				blockoverride "obl_ig" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_ig_3')]"
+				}
+				blockoverride "obl_what" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_what_3')]"
+				}
+				blockoverride "obl_state" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_state_3')]"
+				}
+				blockoverride "obl_renegotiate" {
+					visible = "[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o3_state'), '(CFixedPoint)7' ), Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o3_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o3_state'), '(CFixedPoint)3' ) ) )]"
+					enabled = "[GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+					onclick = "[GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+					tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+				}
+			}
+			te_tax_obligation_row = {
+				visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o4_on'), '(CFixedPoint)0' )]"
+				blockoverride "obl_ig" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_ig_4')]"
+				}
+				blockoverride "obl_what" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_what_4')]"
+				}
+				blockoverride "obl_state" {
+					text = "[GetPlayer.GetCustom('te_tax_obl_state_4')]"
+				}
+				blockoverride "obl_renegotiate" {
+					visible = "[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o4_state'), '(CFixedPoint)7' ), Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o4_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_o4_state'), '(CFixedPoint)3' ) ) )]"
+					enabled = "[GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					onclick = "[GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 				}
 			}
 		}

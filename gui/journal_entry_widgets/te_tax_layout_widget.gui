@@ -26,7 +26,8 @@ types te_tax_layout_widget_types
 	### The live sections, open by default: the code in force; the draft (or
 	### Draft a Reform) and its summary; the review of the draft (collapsed
 	### until opened); the bill under debate; the passed bills waiting to take
-	### effect. Each hides itself when its record is closed. The summary sits
+	### effect; the promises made to pass them (plan Task 12). Each hides
+	### itself when its record is closed. The summary sits
 	### in the "draft_summary" block so the Budget tab, which draws it in its
 	### fixed_bottom, can leave this copy out.
 	type te_tax_status_sections = flowcontainer {
@@ -44,6 +45,7 @@ types te_tax_layout_widget_types
 		te_tax_review_section = {}
 		te_tax_politics_section = {}
 		te_tax_pending_section = {}
+		te_tax_obligations_section = {}
 	}
 
 	### "How Tax Legislation Works": every explanation, collapsed by default,
@@ -120,6 +122,21 @@ types te_tax_layout_widget_types
 			}
 			te_tax_note = {
 				text = "te_tax_how_commencement_held"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_how_sub_promises"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_how_promises"
+			}
+			te_tax_note = {
+				text = "te_tax_how_promises_kinds"
+			}
+			te_tax_note = {
+				text = "te_tax_how_promises_outcomes"
 			}
 
 			te_tax_subheader = {

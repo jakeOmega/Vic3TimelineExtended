@@ -19,7 +19,8 @@
 # te_tax_gen_migrate_rates, te_tax_gen_migrate_goods and te_tax_gen_migrate_provisions,
 # called by te_tax_migrate_country (te_tax_migration_effects.txt). The copies for new
 # countries close the file: te_tax_gen_copy_code, te_tax_gen_copy_slot_<slot> and
-# te_tax_gen_copy_enacted, called by te_tax_civil_war_effects.txt.
+# te_tax_gen_copy_enacted, called by te_tax_civil_war_effects.txt, with the policy
+# obligations' te_tax_gen_copy_obligations and te_tax_gen_clear_obligations (plan Task 12).
 
 # Each instrument's tokens with their sentinels, if absent.
 te_tax_gen_init_instruments = {
@@ -152,6 +153,28 @@ te_tax_gen_init_schedule = {
 	if = { limit = { NOT = { has_variable = te_tax_h8_slot } } set_variable = { name = te_tax_h8_slot value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_h8_inst } } set_variable = { name = te_tax_h8_inst value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_h8_version } } set_variable = { name = te_tax_h8_version value = -1 } }
+}
+
+# The policy obligations' slot headers and each interest group's trust, if absent (plan
+# Task 12). An obligation's payload is not initialised: te_tax_obl_write writes all of it,
+# and nothing reads it while the slot's te_tax_o<n>_on is 0.
+te_tax_gen_init_obligations = {
+	if = { limit = { NOT = { has_variable = te_tax_o1_on } } set_variable = { name = te_tax_o1_on value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_o1_state } } set_variable = { name = te_tax_o1_state value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_o2_on } } set_variable = { name = te_tax_o2_on value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_o2_state } } set_variable = { name = te_tax_o2_state value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_o3_on } } set_variable = { name = te_tax_o3_on value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_o3_state } } set_variable = { name = te_tax_o3_state value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_o4_on } } set_variable = { name = te_tax_o4_on value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_o4_state } } set_variable = { name = te_tax_o4_state value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_armed_forces } } set_variable = { name = te_tax_trust_armed_forces value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_devout } } set_variable = { name = te_tax_trust_devout value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_industrialists } } set_variable = { name = te_tax_trust_industrialists value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_intelligentsia } } set_variable = { name = te_tax_trust_intelligentsia value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_landowners } } set_variable = { name = te_tax_trust_landowners value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_petty_bourgeoisie } } set_variable = { name = te_tax_trust_petty_bourgeoisie value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_rural_folk } } set_variable = { name = te_tax_trust_rural_folk value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_trust_trade_unions } } set_variable = { name = te_tax_trust_trade_unions value = 0 } }
 }
 
 # Wage tax: leaves exactly amendment_te_tax_wage_<te_tax_en_wage> on the
@@ -1973,7 +1996,8 @@ te_tax_gen_sunset_cons = {
 # Slot a: commences in its due month and in no other (rule 3). The processor runs
 # on the 1st, so the package takes effect from the 1st. If a provision it touches was
 # changed outside legislation since approval (te_tax_xver_*), the whole package holds
-# and collections stay as they are. A due month already past holds it as missed.
+# and collections stay as they are. A due month already past holds it as missed. The
+# obligations bound to it start with it (te_tax_obl_start), and wait while it is held.
 te_tax_gen_commence_a = {
 	if = {
 		limit = {
@@ -1985,6 +2009,8 @@ te_tax_gen_commence_a = {
 			limit = { te_tax_gen_package_current_a = yes }
 			te_tax_gen_apply_a = yes
 			change_variable = { name = te_tax_code_version add = 1 }
+			# The obligations bound to this package start their clocks this month (plan Task 12).
+			te_tax_obl_start = { SLOT = a }
 			set_variable = { name = te_tax_pa_on value = 0 }
 			set_variable = { name = te_tax_pa_state value = 0 }
 			te_tax_gen_history_write = { KIND = 1 SLOT = a INST = 0 }
@@ -2503,7 +2529,8 @@ te_tax_gen_store_a = {
 # Slot b: commences in its due month and in no other (rule 3). The processor runs
 # on the 1st, so the package takes effect from the 1st. If a provision it touches was
 # changed outside legislation since approval (te_tax_xver_*), the whole package holds
-# and collections stay as they are. A due month already past holds it as missed.
+# and collections stay as they are. A due month already past holds it as missed. The
+# obligations bound to it start with it (te_tax_obl_start), and wait while it is held.
 te_tax_gen_commence_b = {
 	if = {
 		limit = {
@@ -2515,6 +2542,8 @@ te_tax_gen_commence_b = {
 			limit = { te_tax_gen_package_current_b = yes }
 			te_tax_gen_apply_b = yes
 			change_variable = { name = te_tax_code_version add = 1 }
+			# The obligations bound to this package start their clocks this month (plan Task 12).
+			te_tax_obl_start = { SLOT = b }
 			set_variable = { name = te_tax_pb_on value = 0 }
 			set_variable = { name = te_tax_pb_state value = 0 }
 			te_tax_gen_history_write = { KIND = 1 SLOT = b INST = 0 }
@@ -3561,10 +3590,10 @@ te_tax_gen_migrate_provisions = {
 }
 
 # Outbreak copy (te_tax_copy_code, te_tax_civil_war_effects.txt): every token the
-# generated initialisers write (te_tax_gen_init_instruments, _goods, _schedule), from
-# scope:te_tax_source onto the uprising: the enacted provisions with their months,
-# the version tokens, the taxed goods, the clock, the package-slot headers and the
-# history ring.
+# generated initialisers write (te_tax_gen_init_instruments, _goods, _schedule,
+# _obligations), from scope:te_tax_source onto the uprising: the enacted provisions with
+# their months, the version tokens, the taxed goods, the clock, the package-slot headers,
+# the history ring, the obligation-slot headers and the groups' trust.
 te_tax_gen_copy_code = {
 	te_tax_copy_token = { NAME = te_tax_en_wage }
 	te_tax_copy_token = { NAME = te_tax_en_wage_since }
@@ -3685,6 +3714,104 @@ te_tax_gen_copy_code = {
 	te_tax_copy_token = { NAME = te_tax_h8_slot }
 	te_tax_copy_token = { NAME = te_tax_h8_inst }
 	te_tax_copy_token = { NAME = te_tax_h8_version }
+	te_tax_copy_token = { NAME = te_tax_o1_on }
+	te_tax_copy_token = { NAME = te_tax_o1_state }
+	te_tax_copy_token = { NAME = te_tax_o2_on }
+	te_tax_copy_token = { NAME = te_tax_o2_state }
+	te_tax_copy_token = { NAME = te_tax_o3_on }
+	te_tax_copy_token = { NAME = te_tax_o3_state }
+	te_tax_copy_token = { NAME = te_tax_o4_on }
+	te_tax_copy_token = { NAME = te_tax_o4_state }
+	te_tax_copy_token = { NAME = te_tax_trust_armed_forces }
+	te_tax_copy_token = { NAME = te_tax_trust_devout }
+	te_tax_copy_token = { NAME = te_tax_trust_industrialists }
+	te_tax_copy_token = { NAME = te_tax_trust_intelligentsia }
+	te_tax_copy_token = { NAME = te_tax_trust_landowners }
+	te_tax_copy_token = { NAME = te_tax_trust_petty_bourgeoisie }
+	te_tax_copy_token = { NAME = te_tax_trust_rural_folk }
+	te_tax_copy_token = { NAME = te_tax_trust_trade_unions }
+}
+
+# Outbreak copy of the policy obligations (plan Task 12): the payload of every slot whose
+# obligation binds the original (te_tax_obl_binding: bound to a passed bill, delivering or
+# maintaining), with its clocks, so it binds the rebels on the same terms (spec 10: binding
+# obligations follow the copied code). A pending one belongs to the bill, which stays with
+# the government that wrote it: te_tax_copy_code releases it on the rebels afterwards.
+te_tax_gen_copy_obligations = {
+	if = {
+		limit = { scope:te_tax_source = { te_tax_obl_binding = { N = 1 } } }
+		te_tax_copy_token = { NAME = te_tax_o1_kind }
+		te_tax_copy_token = { NAME = te_tax_o1_arg }
+		te_tax_copy_token = { NAME = te_tax_o1_target }
+		te_tax_copy_token = { NAME = te_tax_o1_baseline }
+		te_tax_copy_token = { NAME = te_tax_o1_ig }
+		te_tax_copy_token = { NAME = te_tax_o1_deadline }
+		te_tax_copy_token = { NAME = te_tax_o1_maint_end }
+		te_tax_copy_token = { NAME = te_tax_o1_streak }
+		te_tax_copy_token = { NAME = te_tax_o1_slot }
+		te_tax_copy_token = { NAME = te_tax_o1_rev }
+	}
+	if = {
+		limit = { scope:te_tax_source = { te_tax_obl_binding = { N = 2 } } }
+		te_tax_copy_token = { NAME = te_tax_o2_kind }
+		te_tax_copy_token = { NAME = te_tax_o2_arg }
+		te_tax_copy_token = { NAME = te_tax_o2_target }
+		te_tax_copy_token = { NAME = te_tax_o2_baseline }
+		te_tax_copy_token = { NAME = te_tax_o2_ig }
+		te_tax_copy_token = { NAME = te_tax_o2_deadline }
+		te_tax_copy_token = { NAME = te_tax_o2_maint_end }
+		te_tax_copy_token = { NAME = te_tax_o2_streak }
+		te_tax_copy_token = { NAME = te_tax_o2_slot }
+		te_tax_copy_token = { NAME = te_tax_o2_rev }
+	}
+	if = {
+		limit = { scope:te_tax_source = { te_tax_obl_binding = { N = 3 } } }
+		te_tax_copy_token = { NAME = te_tax_o3_kind }
+		te_tax_copy_token = { NAME = te_tax_o3_arg }
+		te_tax_copy_token = { NAME = te_tax_o3_target }
+		te_tax_copy_token = { NAME = te_tax_o3_baseline }
+		te_tax_copy_token = { NAME = te_tax_o3_ig }
+		te_tax_copy_token = { NAME = te_tax_o3_deadline }
+		te_tax_copy_token = { NAME = te_tax_o3_maint_end }
+		te_tax_copy_token = { NAME = te_tax_o3_streak }
+		te_tax_copy_token = { NAME = te_tax_o3_slot }
+		te_tax_copy_token = { NAME = te_tax_o3_rev }
+	}
+	if = {
+		limit = { scope:te_tax_source = { te_tax_obl_binding = { N = 4 } } }
+		te_tax_copy_token = { NAME = te_tax_o4_kind }
+		te_tax_copy_token = { NAME = te_tax_o4_arg }
+		te_tax_copy_token = { NAME = te_tax_o4_target }
+		te_tax_copy_token = { NAME = te_tax_o4_baseline }
+		te_tax_copy_token = { NAME = te_tax_o4_ig }
+		te_tax_copy_token = { NAME = te_tax_o4_deadline }
+		te_tax_copy_token = { NAME = te_tax_o4_maint_end }
+		te_tax_copy_token = { NAME = te_tax_o4_streak }
+		te_tax_copy_token = { NAME = te_tax_o4_slot }
+		te_tax_copy_token = { NAME = te_tax_o4_rev }
+	}
+}
+
+# A released country starts with no obligation and no record of kept or broken promises
+# (te_tax_init_released_country; a revived tag may carry them from an earlier life). The
+# parent's obligations stay with the parent.
+te_tax_gen_clear_obligations = {
+	set_variable = { name = te_tax_o1_on value = 0 }
+	set_variable = { name = te_tax_o1_state value = 0 }
+	set_variable = { name = te_tax_o2_on value = 0 }
+	set_variable = { name = te_tax_o2_state value = 0 }
+	set_variable = { name = te_tax_o3_on value = 0 }
+	set_variable = { name = te_tax_o3_state value = 0 }
+	set_variable = { name = te_tax_o4_on value = 0 }
+	set_variable = { name = te_tax_o4_state value = 0 }
+	set_variable = { name = te_tax_trust_armed_forces value = 0 }
+	set_variable = { name = te_tax_trust_devout value = 0 }
+	set_variable = { name = te_tax_trust_industrialists value = 0 }
+	set_variable = { name = te_tax_trust_intelligentsia value = 0 }
+	set_variable = { name = te_tax_trust_landowners value = 0 }
+	set_variable = { name = te_tax_trust_petty_bourgeoisie value = 0 }
+	set_variable = { name = te_tax_trust_rural_folk value = 0 }
+	set_variable = { name = te_tax_trust_trade_unions value = 0 }
 }
 
 # Outbreak copy of slot a's package: every payload field te_tax_gen_store_a

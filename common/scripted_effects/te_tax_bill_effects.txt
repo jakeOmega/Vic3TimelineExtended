@@ -407,6 +407,9 @@ te_tax_bill_start_debate = {
 	set_variable = { name = te_tax_bl_day value = game_date }
 	te_tax_bill_set_minor = yes
 	te_tax_gen_reset_commitments = yes
+	# Promises are made for one text: a new revision releases the pending ones
+	# (te_tax_obligation_effects.txt), as it releases the commitments.
+	te_tax_obl_release_pending = yes
 	set_variable = { name = te_tax_bl_on value = 1 }
 	te_tax_refresh_support = yes
 }
@@ -432,9 +435,12 @@ te_tax_cmd_withdraw = {
 	}
 }
 
-# Closes the bill: commitments released, payload removed, the token kept (0).
+# Closes the bill: commitments and pending promises released, payload removed,
+# the token kept (0). On passage the promises have already bound to the
+# package (te_tax_obl_bind), so only a withdrawn or repaired bill's lapse here.
 te_tax_bill_close = {
 	te_tax_gen_reset_commitments = yes
+	te_tax_obl_release_pending = yes
 	te_tax_gen_bill_clear = yes
 	set_variable = { name = te_tax_bl_on value = 0 }
 }
@@ -471,6 +477,8 @@ te_tax_pass_into = {
 		te_tax_gen_supersede_$OTHER$ = yes
 		te_tax_gen_bump_pver = yes
 		te_tax_store_package = { SLOT = $SLOT$ }
+		# The promises recorded on this revision bind to the stored package.
+		te_tax_obl_bind = { SLOT = $SLOT$ }
 		te_tax_history_push = { KIND = 6 SLOT = $SLOT$ }
 		te_tax_gen_oppose_approval = yes
 		if = {
@@ -532,7 +540,8 @@ te_tax_cmd_package_reschedule = {
 }
 
 # Releases a held package (SLOT: a or b): the slot frees and nothing the
-# package would have changed takes effect. A held_conflict package is resolved
+# package would have changed takes effect, and the promises bound to it lapse
+# unbreached (te_tax_obl_release_slot). A held_conflict package is resolved
 # only this way; its terms come back as a new bill.
 te_tax_cmd_package_release = {
 	if = {
@@ -542,6 +551,7 @@ te_tax_cmd_package_release = {
 		set_variable = { name = te_tax_p$SLOT$_state value = 0 }
 		if = { limit = { has_variable_list = te_tax_p$SLOT$_relief_states } clear_variable_list = te_tax_p$SLOT$_relief_states }
 		te_tax_history_push = { KIND = 10 SLOT = $SLOT$ }
+		te_tax_obl_release_slot = { SLOT = $SLOT$ }
 		te_tax_recompute_next_month = yes
 		debug_log = "TE_TAX package_released; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}

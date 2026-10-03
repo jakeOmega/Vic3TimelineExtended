@@ -1,0 +1,136 @@
+﻿# Legislated tax code: policy obligations (plan Task 12; docs/systems/tax_code_schema.md,
+# "Policy obligations"; spec §7.2, "Policy commitment catalog and lifecycle").
+#
+# The terms of the four obligation kinds, and the reads a kind-1 (institution)
+# promise is offered and checked against. Every month is a te_history_month_index
+# count; every term is counted from the month the obligation starts (its
+# package's commencement). Nothing here writes or iterates anything.
+
+# ---------------------------------------------------------------------------
+# Terms
+# ---------------------------------------------------------------------------
+
+# Kind 1, an institution level: due 12 months per level the institution has to
+# grow from the level it has at commencement, plus 6 months' grace (about a
+# level a year at the base expansion speed, DAILY_INSTITUTION_SIZE_CHANGE). A
+# promise is offered only if that deadline falls within te_tax_obl_horizon
+# months, i.e. at most te_tax_obl_max_levels levels above the present one.
+te_tax_obl_months_per_level = 12
+te_tax_obl_inst_grace = 6
+te_tax_obl_horizon = 60
+te_tax_obl_max_levels = {
+	value = te_tax_obl_horizon
+	subtract = te_tax_obl_inst_grace
+	divide = te_tax_obl_months_per_level
+	floor = yes
+}
+
+# Kind 2, the bureaucracy balance: no deficit within 12 months.
+te_tax_obl_deadline_bureaucracy = 12
+# Kind 3, military wages: at or below the promised level within a month.
+te_tax_obl_deadline_wages = 1
+# Kind 4, the fixed budget: a surplus (net_fixed_income > 0) at
+# te_tax_obl_surplus_months consecutive monthly checks within 24 months.
+te_tax_obl_deadline_fiscal = 24
+te_tax_obl_surplus_months = 6
+
+# Once delivered, kinds 1 to 3 are kept for 24 months and kind 4 for 12; a
+# month in which the condition fails during that time is a breach.
+te_tax_obl_maint_months = 24
+te_tax_obl_maint_months_fiscal = 12
+
+# Days an interest group's reaction to a kept, broken or renegotiated promise
+# lasts, decaying (ig_approval_effect): the same 180 days as the reaction of a
+# group that opposed a passed bill (te_tax_opposed_approval_days).
+te_tax_obl_approval_days = 180
+
+# ---------------------------------------------------------------------------
+# Kind 1: the institution an obligation's _arg names (1 Education, 2 Health
+# System, 3 Social Security). The delivered level, investment, is what the
+# promise is checked against (capability ledger: pending P16), never the level
+# requested. 0 when the country does not have the institution.
+# ---------------------------------------------------------------------------
+
+te_tax_obl_inst_level_1 = {
+	value = 0
+	if = {
+		limit = { has_institution = institution_schools }
+		institution:institution_schools = { add = investment }
+	}
+}
+
+te_tax_obl_inst_level_2 = {
+	value = 0
+	if = {
+		limit = { has_institution = institution_health_system }
+		institution:institution_health_system = { add = investment }
+	}
+}
+
+te_tax_obl_inst_level_3 = {
+	value = 0
+	if = {
+		limit = { has_institution = institution_social_security }
+		institution:institution_social_security = { add = investment }
+	}
+}
+
+# The highest level the country may invest in now (investment_max: the base
+# cap with its modifiers).
+te_tax_obl_inst_cap_1 = {
+	value = 0
+	if = {
+		limit = { has_institution = institution_schools }
+		institution:institution_schools = { add = investment_max }
+	}
+}
+
+te_tax_obl_inst_cap_2 = {
+	value = 0
+	if = {
+		limit = { has_institution = institution_health_system }
+		institution:institution_health_system = { add = investment_max }
+	}
+}
+
+te_tax_obl_inst_cap_3 = {
+	value = 0
+	if = {
+		limit = { has_institution = institution_social_security }
+		institution:institution_social_security = { add = investment_max }
+	}
+}
+
+# The highest target whose deadline would fall within te_tax_obl_horizon months
+# of commencement, at today's level.
+te_tax_obl_inst_reach_1 = {
+	value = te_tax_obl_inst_level_1
+	add = te_tax_obl_max_levels
+}
+
+te_tax_obl_inst_reach_2 = {
+	value = te_tax_obl_inst_level_2
+	add = te_tax_obl_max_levels
+}
+
+te_tax_obl_inst_reach_3 = {
+	value = te_tax_obl_inst_level_3
+	add = te_tax_obl_max_levels
+}
+
+# The next level up, the target of a "one level more" promise (plan Task 13's
+# offers pass it as TARGET).
+te_tax_obl_inst_next_1 = {
+	value = te_tax_obl_inst_level_1
+	add = 1
+}
+
+te_tax_obl_inst_next_2 = {
+	value = te_tax_obl_inst_level_2
+	add = 1
+}
+
+te_tax_obl_inst_next_3 = {
+	value = te_tax_obl_inst_level_3
+	add = 1
+}

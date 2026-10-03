@@ -28,9 +28,11 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       te_tax_gen_commence/hold_missed/apply/store_<slot>, te_tax_gen_next_month,
       te_tax_gen_history_write) and the migration's (te_tax_gen_migrate_rates,
       one branch per vanilla taxation law and native level from MIGRATION;
-      te_tax_gen_migrate_goods; te_tax_gen_migrate_provisions), and the copies
+      te_tax_gen_migrate_goods; te_tax_gen_migrate_provisions), the copies
       for new countries (te_tax_gen_copy_code, te_tax_gen_copy_slot_<slot>,
-      te_tax_gen_copy_enacted).
+      te_tax_gen_copy_enacted), and the policy obligations' init, outbreak
+      copy and release reset (te_tax_gen_init_obligations,
+      te_tax_gen_copy_obligations, te_tax_gen_clear_obligations).
   common/scripted_triggers/te_tax_generated_triggers.txt
       Amendment-scope family and match triggers the syncs filter on, the
       scheduler's package and bill checks (te_tax_gen_package_current_<slot>,
@@ -39,22 +41,27 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       te_tax_gen_bill_touches_goods, te_tax_gen_draft_baseline_current,
       te_tax_gen_draft_differs_from_bill, te_tax_gen_bill_current,
       te_tax_gen_bill_small_steps, te_tax_gen_bill_overlaps_<slot>,
-      te_tax_gen_package_empty_<slot>, te_tax_gen_package_unsuperseded_<slot>).
+      te_tax_gen_package_empty_<slot>, te_tax_gen_package_unsuperseded_<slot>)
+      and the civil-war repair's obligation checks (te_tax_gen_obl_ig_exists,
+      te_tax_gen_obl_slot_gone).
   common/scripted_effects/te_tax_generated_bill_effects.txt
       The draft, bill and passage parts (te_tax_gen_draft_init/_from_bill/
       _clear, te_tax_gen_bill_from_draft/_clear, te_tax_gen_supersede_<slot>,
       te_tax_gen_bump_pver, te_tax_gen_reset_commitments,
-      te_tax_gen_refresh_support, te_tax_gen_oppose_approval). The only
-      generated file that removes variables: a closed record's payload.
+      te_tax_gen_refresh_support, te_tax_gen_oppose_approval) and the policy
+      obligations' per-group consequences (te_tax_gen_obl_approval,
+      te_tax_gen_obl_trust). The only generated file that removes variables:
+      a closed record's payload.
   common/script_values/te_tax_generated_support_values.txt
       The draft, bill and support-model values: the baselines at the due
       month (instruments, relief bands, goods), delta-levels, the per-good
       goods terms (GOODS_CATEGORY_WEIGHT), the per-group reasons from the
-      EXPOSURE, TAX_LAW_PROGRESSIVENESS and relief-points tables, and the
-      clout sums.
+      EXPOSURE, TAX_LAW_PROGRESSIVENESS and relief-points tables, the trust
+      reasons (te_tax_trust_reason_<ig>) and the clout sums.
   common/customizable_localization/te_tax_generated_custom_loc.txt
       te_tax_hist_event_<i>: the line each history row prints (newest first),
-      chosen by the entry's kind and, for a sunset, its instrument.
+      chosen by the entry's kind and, for a sunset, its instrument; and the
+      promise rows' parts, te_tax_obl_ig_/what_/inst_/state_<n>.
 
 The script-value file also carries the guarded te_tax_view_* display values
 for every instrument and every catalog good, and the panels' views: the open
@@ -167,6 +174,8 @@ KIND_APPROVED, KIND_SUPERSEDED, KIND_RESCHEDULED, KIND_RELEASED = 6, 8, 9, 10
 # The history rows' text is one customizable localization per row.
 CUSTOM_LOC_PATH = "common/customizable_localization/te_tax_generated_custom_loc.txt"
 KIND_MIGRATED, KIND_REPAIRED = 5, 7
+# History kinds the policy obligations write (plan Task 12; te_tax_obligation_effects.txt).
+KIND_OBL_FULFILLED, KIND_OBL_BREACHED, KIND_OBL_RENEGOTIATED, KIND_OBL_RELEASED = 11, 12, 13, 14
 # Kinds that changed the enacted code (te_tax_code_version moved); the
 # overview's last change is the newest of them.
 CODE_CHANGE_KINDS = (KIND_COMMENCED, KIND_SUNSET, KIND_MIGRATED, KIND_REPAIRED)
@@ -182,6 +191,10 @@ HISTORY_KIND_KEYS = {
     KIND_SUPERSEDED: "te_tax_hist_kind_superseded",
     KIND_RESCHEDULED: "te_tax_hist_kind_rescheduled",
     KIND_RELEASED: "te_tax_hist_kind_released",
+    KIND_OBL_FULFILLED: "te_tax_hist_kind_obl_fulfilled",
+    KIND_OBL_BREACHED: "te_tax_hist_kind_obl_breached",
+    KIND_OBL_RENEGOTIATED: "te_tax_hist_kind_obl_renegotiated",
+    KIND_OBL_RELEASED: "te_tax_hist_kind_obl_released",
 }
 HISTORY_KIND_FALLBACK = "te_tax_hist_kind_other"
 # The workbench (plan Task 8): the per-instrument step handlers and per-good
@@ -254,6 +267,25 @@ REGREL_POINTS_ALL = 4
 REGREL_POINTS_CONCERN = {"industrialists": -2, "petty_bourgeoisie": -2}
 # Traditionalism holds a bill to no tax on these (te_tax_draft_ready).
 TRADITIONALISM_KEYS = ("wage", "div")
+# Policy obligations (plan Task 12; docs/systems/tax_code_schema.md, "Policy obligations"):
+# four slots te_tax_o<n>_*. The header tokens are initialised and copied like a package
+# slot's; the payload is written whole by te_tax_obl_write (te_tax_obligation_effects.txt)
+# and read only while the slot's _on is 1.
+OBLIGATION_SLOTS = (1, 2, 3, 4)
+OBLIGATION_HEADER = (("_on", 0), ("_state", 0))
+OBLIGATION_PAYLOAD = ("kind", "arg", "target", "baseline", "ig", "deadline", "maint_end", "streak", "slot", "rev")
+# Obligation states: 1 pending passage (attached to the bill), 7 bound to a passed bill's
+# slot and awaiting its commencement, 2 delivering, 3 maintaining; 4 fulfilled, 5 breached,
+# 6 renegotiated are outcomes, recorded when the slot is freed.
+OBL_PENDING, OBL_DELIVERING, OBL_MAINTAINING, OBL_BOUND = 1, 2, 3, 7
+OBL_BINDING_STATES = (OBL_BOUND, OBL_DELIVERING, OBL_MAINTAINING)
+# Kind 1's institutions by _arg, kind 3's military wage levels by _arg.
+OBL_INSTITUTIONS = ((1, "institution_schools"), (2, "institution_health_system"), (3, "institution_social_security"))
+OBL_WAGE_LEVELS = ((1, "very_low"), (2, "low"), (3, "medium"), (4, "high"), (5, "very_high"))
+# Trust (te_tax_trust_<ig>): +1 per kept promise, -1 per broken one, within +-TRUST_CAP; the
+# support model's trust reason is TRUST_WEIGHT points per step, so the cap keeps the reason
+# inside +-REASON_CAP.
+TRUST_WEIGHT, TRUST_CAP = 10, 4
 
 
 class Instrument(NamedTuple):
@@ -353,6 +385,8 @@ def validate(instruments=INSTRUMENTS):
     migration_indices(instruments)
     for good in consumption_catalog():
         goods_weight(good)
+    if TRUST_CAP * TRUST_WEIGHT > REASON_CAP:
+        raise ValueError(f"trust {TRUST_CAP} x {TRUST_WEIGHT} points would pass the reason cap {REASON_CAP}")
 
 
 def fmt(value):
@@ -560,6 +594,12 @@ def script_values():
     lines += [f"te_tax_slot_id_{name} = {value}" for name, value in SLOT_IDS]
     lines += [
         "",
+        "# Interest groups as an obligation stores its beneficiary (te_tax_o<n>_ig): te_tax_obl_propose",
+        "# takes IG = te_tax_ig_id_<ig> (plan Task 12; the support model's IGS order).",
+    ]
+    lines += [f"te_tax_ig_id_{ig} = {idx}" for idx, ig in enumerate(IGS, start=1)]
+    lines += [
+        "",
         "# Display values (docs/systems/tax_code_schema.md, \"Display values\"): guarded reads of",
         "# the enacted code for the GUI and loc. Each reads only variables it has just tested",
         "# with has_variable and returns the schema sentinel when one is absent: 0 for an index,",
@@ -601,7 +641,36 @@ def _panel_views():
         lines += _guarded_view(f"te_tax_view_p{slot}_state", f"te_tax_p{slot}_state", 0,
                                condition=_is_open(token))
         lines += _month_views(f"te_tax_view_p{slot}_due", f"te_tax_p{slot}_due", _is_open(token))
-    return lines + _last_change_views() + _history_views() + _workbench_views() + _ig_values()
+    return (lines + _last_change_views() + _history_views() + _workbench_views() + _ig_values()
+            + _obligation_views())
+
+
+def _obligation_views():
+    """The promise rows' views (plan Task 12): per obligation slot, its token, and its
+    payload only while the slot is on (_on = 1); then how many are binding and pending."""
+    lines = [
+        "",
+        "# Policy obligations (plan Task 12): per slot <n>, on; state (1 pending, 7 bound, 2",
+        "# delivering, 3 maintaining), kind, arg, target, beneficiary group, baseline and the kind-4",
+        "# surplus streak; the deadline and the end of maintenance as months with their year and",
+        "# month. A payload view reads only while the slot is on: a freed slot's payload stays,",
+        "# and a civil war's winner may hold a loser's.",
+    ]
+    for n in OBLIGATION_SLOTS:
+        token = f"te_tax_o{n}_on"
+        lines += _guarded_view(f"te_tax_view_o{n}_on", token, 0)
+        for field in ("state", "kind", "arg", "target", "ig", "baseline", "streak"):
+            lines += _guarded_view(f"te_tax_view_o{n}_{field}", f"te_tax_o{n}_{field}", 0, condition=_is_open(token))
+        for field in ("deadline", "maint_end"):
+            lines += _month_views(f"te_tax_view_o{n}_{field}", f"te_tax_o{n}_{field}", _is_open(token))
+    for name, states in (("binding", OBL_BINDING_STATES), ("pending", (OBL_PENDING,))):
+        lines += [f"te_tax_view_obl_{name} = {{", "\tvalue = 0"]
+        for n in OBLIGATION_SLOTS:
+            matches = " ".join(f"var:te_tax_o{n}_state = {state}" for state in states)
+            lines.append(f"\tif = {{ limit = {{ {_is_open(f'te_tax_o{n}_on')} has_variable = te_tax_o{n}_state "
+                         f"OR = {{ {matches} }} }} add = 1 }}")
+        lines.append("}")
+    return lines
 
 
 def _view(name, default, limit, body):
@@ -700,7 +769,7 @@ def _ig_values():
         "",
         "# The passage panel's interest-group cards (interest-group scope; plan Task 8): the",
         "# group's stance on the bill under debate (0 none, 1 committed, 2 persuadable, 3 opposed,",
-        "# 4 red line, 5 marginal and not counted), its score and four of its reasons, read from",
+        "# 4 red line, 5 marginal and not counted), its score and five of its reasons (trust, Task 12), from",
         "# its owner's support snapshot through its type. 0 while no bill is open.",
     ]
     lines += ["te_tax_disp_ig_stance = {", "\tvalue = 0"]
@@ -722,7 +791,7 @@ def _ig_values():
     lines.append("}")
     for value, variable in (("score", "te_tax_sup_{ig}"), ("mat", "te_tax_sr_{ig}_mat"),
                             ("ideo", "te_tax_sr_{ig}_ideo"), ("fisc", "te_tax_sr_{ig}_fisc"),
-                            ("gov", "te_tax_sr_{ig}_gov")):
+                            ("gov", "te_tax_sr_{ig}_gov"), ("trust", "te_tax_sr_{ig}_trust")):
         lines += [f"te_tax_disp_ig_{value} = {{", "\tvalue = 0"]
         for n, ig in enumerate(IGS):
             var = variable.format(ig=ig)
@@ -802,7 +871,7 @@ def custom_localization():
     for i in range(1, HISTORY_SIZE + 1):
         kind, inst = f"te_tax_view_hist_{i}_kind", f"te_tax_view_hist_{i}_inst"
         entries = []
-        for value in range(1, KIND_RELEASED + 1):
+        for value in range(1, max(HISTORY_KIND_KEYS) + 1):
             if value == KIND_SUNSET:
                 entries += [(f"{kind} = {KIND_SUNSET} {inst} = {idx}", f"te_tax_hist_kind_sunset_{instrument.key}")
                             for idx, instrument in enumerate(INSTRUMENTS, start=1)]
@@ -812,7 +881,48 @@ def custom_localization():
         for trigger, key in entries:
             lines += ["\ttext = {", f"\t\ttrigger = {{ {trigger} }}", f"\t\tlocalization_key = {key}", "\t}"]
         lines += ["\ttext = {", f"\t\tlocalization_key = {HISTORY_KIND_FALLBACK}", "\t}", "}"]
-    return _txt("\n".join(lines) + "\n")
+    return _txt("\n".join(lines + _obligation_custom_loc()) + "\n")
+
+
+def _custom_loc(name, entries, fallback):
+    """A country-scope customizable localization: the first (trigger, key) that holds, else `fallback`."""
+    lines = ["", f"{name} = {{", "\ttype = country", "\trandom_valid = no"]
+    for trigger, key in entries:
+        lines += ["\ttext = {", f"\t\ttrigger = {{ {trigger} }}", f"\t\tlocalization_key = {key}", "\t}"]
+    return lines + ["\ttext = {", f"\t\tlocalization_key = {fallback}", "\t}", "}"]
+
+
+def _obligation_custom_loc():
+    """The promise rows' text (te_tax_obligations_section, te_tax_politics_widget.gui), per
+    obligation slot <n>: whose promise it is (te_tax_obl_ig_<n>, the group's own name), what
+    it promises (te_tax_obl_what_<n>; te_tax_obl_inst_<n>, kind 1's institution) and where it
+    stands (te_tax_obl_state_<n>). The keys that print a slot's numbers are per slot
+    (te_tax_l_english.yml); the rest are shared. The triggers read only the guarded views."""
+    lines = [
+        "",
+        "# The promise rows (plan Task 12; te_tax_obligations_section): per obligation slot <n>,",
+        "# the beneficiary group's name, the promise and its state, read as",
+        "# GetPlayer.GetCustom('te_tax_obl_<part>_<n>'). The triggers read only the guarded",
+        "# te_tax_view_o<n>_* views, which are 0 while the slot is free.",
+    ]
+    for n in OBLIGATION_SLOTS:
+        view = f"te_tax_view_o{n}"
+        lines += _custom_loc(f"te_tax_obl_ig_{n}", [(f"{view}_ig = {idx}", f"ig_{ig}")
+                                                    for idx, ig in enumerate(IGS, start=1)], "te_tax_obl_ig_none")
+        what = [(f"{view}_kind = 1", f"te_tax_obl_what_inst_{n}"), (f"{view}_kind = 2", "te_tax_obl_what_bureaucracy")]
+        what += [(f"{view}_kind = 3 {view}_arg = {arg}", f"te_tax_obl_what_wages_{level}")
+                 for arg, level in OBL_WAGE_LEVELS]
+        what.append((f"{view}_kind = 4", "te_tax_obl_what_fiscal"))
+        lines += _custom_loc(f"te_tax_obl_what_{n}", what, "te_tax_obl_what_none")
+        lines += _custom_loc(f"te_tax_obl_inst_{n}", [(f"{view}_arg = {arg}", institution)
+                                                      for arg, institution in OBL_INSTITUTIONS], "te_tax_obl_what_none")
+        states = [(f"{view}_state = {OBL_PENDING}", "te_tax_obl_st_pending"),
+                  (f"{view}_state = {OBL_BOUND}", "te_tax_obl_st_bound"),
+                  (f"{view}_state = {OBL_DELIVERING} {view}_kind = 4", f"te_tax_obl_st_surplus_{n}"),
+                  (f"{view}_state = {OBL_DELIVERING}", f"te_tax_obl_st_due_{n}"),
+                  (f"{view}_state = {OBL_MAINTAINING}", f"te_tax_obl_st_maint_{n}")]
+        lines += _custom_loc(f"te_tax_obl_state_{n}", states, "te_tax_obl_st_none")
+    return lines
 
 
 def _guarded_view(name, variable, default, ops=(), condition=""):
@@ -877,6 +987,13 @@ def schedule_tokens():
     for n in range(1, HISTORY_SIZE + 1):
         tokens += [(f"te_tax_h{n}_{field}", sentinel) for field, sentinel in HISTORY_FIELDS]
     return tokens
+
+
+def obligation_tokens():
+    """[(token, sentinel)] of the policy obligations (plan Task 12): each slot's header and each
+    interest group's trust. Initialised, copied at an outbreak and never removed."""
+    tokens = [(f"te_tax_o{n}{suffix}", sentinel) for n in OBLIGATION_SLOTS for suffix, sentinel in OBLIGATION_HEADER]
+    return tokens + [(f"te_tax_trust_{ig}", 0) for ig in IGS]
 
 
 def _log(event, detail=""):
@@ -944,7 +1061,8 @@ def _commence(slot):
         f"# Slot {slot}: commences in its due month and in no other (rule 3). The processor runs",
         "# on the 1st, so the package takes effect from the 1st. If a provision it touches was",
         "# changed outside legislation since approval (te_tax_xver_*), the whole package holds",
-        "# and collections stay as they are. A due month already past holds it as missed.",
+        "# and collections stay as they are. A due month already past holds it as missed. The",
+        "# obligations bound to it start with it (te_tax_obl_start), and wait while it is held.",
         f"te_tax_gen_commence_{slot} = {{",
         "\tif = {",
         "\t\tlimit = {",
@@ -956,6 +1074,8 @@ def _commence(slot):
         f"\t\t\tlimit = {{ te_tax_gen_package_current_{slot} = yes }}",
         f"\t\t\tte_tax_gen_apply_{slot} = yes",
         "\t\t\tchange_variable = { name = te_tax_code_version add = 1 }",
+        "\t\t\t# The obligations bound to this package start their clocks this month (plan Task 12).",
+        f"\t\t\tte_tax_obl_start = {{ SLOT = {slot} }}",
         f"\t\t\tset_variable = {{ name = {p}_on value = 0 }}",
         f"\t\t\tset_variable = {{ name = {p}_state value = {STATE_EMPTY} }}",
         f"\t\t\t{_history(KIND_COMMENCED, slot)}",
@@ -1309,16 +1429,40 @@ def _copy_effects():
     code += [f"{prefix}{instrument.key}" for instrument in INSTRUMENTS for prefix, _ in VERSION_TOKENS]
     code += [f"te_tax_en_g_{good}" for good in consumption_catalog()]
     code += [name for name, _ in schedule_tokens()]
+    code += [name for name, _ in obligation_tokens()]
     lines = [
         "",
         "# Outbreak copy (te_tax_copy_code, te_tax_civil_war_effects.txt): every token the",
-        "# generated initialisers write (te_tax_gen_init_instruments, _goods, _schedule), from",
-        "# scope:te_tax_source onto the uprising: the enacted provisions with their months,",
-        "# the version tokens, the taxed goods, the clock, the package-slot headers and the",
-        "# history ring.",
+        "# generated initialisers write (te_tax_gen_init_instruments, _goods, _schedule,",
+        "# _obligations), from scope:te_tax_source onto the uprising: the enacted provisions with",
+        "# their months, the version tokens, the taxed goods, the clock, the package-slot headers,",
+        "# the history ring, the obligation-slot headers and the groups' trust.",
         "te_tax_gen_copy_code = {",
     ]
     lines += [_copy(name) for name in code]
+    lines += [
+        "}",
+        "",
+        "# Outbreak copy of the policy obligations (plan Task 12): the payload of every slot whose",
+        "# obligation binds the original (te_tax_obl_binding: bound to a passed bill, delivering or",
+        "# maintaining), with its clocks, so it binds the rebels on the same terms (spec 10: binding",
+        "# obligations follow the copied code). A pending one belongs to the bill, which stays with",
+        "# the government that wrote it: te_tax_copy_code releases it on the rebels afterwards.",
+        "te_tax_gen_copy_obligations = {",
+    ]
+    for n in OBLIGATION_SLOTS:
+        lines += ["\tif = {", f"\t\tlimit = {{ scope:te_tax_source = {{ te_tax_obl_binding = {{ N = {n} }} }} }}"]
+        lines += [f"\t\tte_tax_copy_token = {{ NAME = te_tax_o{n}_{field} }}" for field in OBLIGATION_PAYLOAD]
+        lines.append("\t}")
+    lines += [
+        "}",
+        "",
+        "# A released country starts with no obligation and no record of kept or broken promises",
+        "# (te_tax_init_released_country; a revived tag may carry them from an earlier life). The",
+        "# parent's obligations stay with the parent.",
+        "te_tax_gen_clear_obligations = {",
+    ]
+    lines += [f"\tset_variable = {{ name = {name} value = {sentinel} }}" for name, sentinel in obligation_tokens()]
     lines.append("}")
     for slot in SLOTS:
         lines += [
@@ -1781,7 +1925,9 @@ def support_values():
         f"# named over te_tax_regrel_ref_share (te_tax_bl_regrel_coverage), +{REGREL_POINTS_ALL} for every group,",
         f"# {', '.join(f'{ig} {n}' for ig, n in REGREL_POINTS_CONCERN.items())} on top. Ideology: {IDEOLOGY_WEIGHT} x the",
         "# group's fiscal ideology (its stances on the vanilla taxation laws x their progressiveness",
-        f"# / 100) x the change in progressivity. Government: +{GOVERNMENT_BONUS} in government.",
+        f"# / 100) x the change in progressivity. Government: +{GOVERNMENT_BONUS} in government. Trust",
+        f"# (plan Task 12): {TRUST_WEIGHT} x the group's te_tax_trust_<ig>, +1 per promise kept and -1 per",
+        "# promise broken.",
     ]
     for ig in IGS:
         terms = [f"\tadd = {{ value = te_tax_dl_{key} multiply = {fmt(weight)} }}"
@@ -1800,6 +1946,10 @@ def support_values():
         lines += [f"te_tax_gov_{ig} = {{", "\tvalue = 0",
                   f"\tif = {{ limit = {{ ig:ig_{ig} ?= {{ is_in_government = yes }} }} value = {GOVERNMENT_BONUS} }}",
                   "}"]
+        lines += [f"te_tax_trust_reason_{ig} = {{", "\tvalue = 0",
+                  f"\tif = {{ limit = {{ has_variable = te_tax_trust_{ig} }} value = var:te_tax_trust_{ig} "
+                  f"multiply = {TRUST_WEIGHT} }}",
+                  f"\tmin = -{REASON_CAP}", f"\tmax = {REASON_CAP}", "}"]
     lines += [
         "",
         "# Clout of the non-marginal interest groups, and of those among them committed to the",
@@ -1937,7 +2087,8 @@ def _supersede(slot):
         "# bill, every provision, good and relief depth the bill touches is dropped from it, so the",
         "# later-approved law wins. The enacted code and its sunsets are never touched here: the",
         "# enacted provision is superseded when the package commences (te_tax_gen_apply_<slot>).",
-        f"# A package left touching nothing is withdrawn. History kind {KIND_SUPERSEDED}.",
+        "# A package left touching nothing is withdrawn, and the obligations bound to it are",
+        f"# released (te_tax_obl_release_slot). History kind {KIND_SUPERSEDED}.",
         f"te_tax_gen_supersede_{slot} = {{",
         "\tif = {",
         "\t\tlimit = {",
@@ -1982,6 +2133,8 @@ def _supersede(slot):
         f"\t\t\t\tset_variable = {{ name = {p}_on value = 0 }}",
         f"\t\t\t\tset_variable = {{ name = {p}_state value = {STATE_EMPTY} }}",
         _clear_list(slot_relief_list(slot), "\t\t\t\t"),
+        "\t\t\t\t# Its bound obligations lapse with it, unbreached (plan Task 12).",
+        f"\t\t\t\tte_tax_obl_release_slot = {{ SLOT = {slot} }}",
         f"\t\t\t\t{withdrawn}",
         "\t\t\t}",
         "\t\t}",
@@ -1998,14 +2151,15 @@ def _refresh_support():
         "# reasons, its score (their sum, clamped), and its commitment to the bill's current",
         "# revision. A group committed to this revision stays committed; otherwise it commits at",
         "# te_tax_commit_threshold, draws a red line at te_tax_redline_threshold, else is",
-        "# persuadable (0). Promises and trust are 0 until Tasks 12-13. A group the country lacks",
-        "# is zeroed.",
+        "# persuadable (0). Trust is the group's record of kept and broken promises",
+        "# (te_tax_trust_reason_<ig>, plan Task 12); promises are 0 until Task 13. A group the",
+        "# country lacks is zeroed.",
         "te_tax_gen_refresh_support = {",
     ]
     for ig in IGS:
         sup, com = f"te_tax_sup_{ig}", f"te_tax_com_{ig}"
         sources = {"mat": f"te_tax_mat_{ig}", "ideo": f"te_tax_ideo_{ig}", "fisc": "te_tax_fiscal_reason",
-                   "gov": f"te_tax_gov_{ig}", "prom": "0", "trust": "0"}
+                   "gov": f"te_tax_gov_{ig}", "prom": "0", "trust": f"te_tax_trust_reason_{ig}"}
         lines += ["\tif = {", f"\t\tlimit = {{ exists = ig:ig_{ig} }}"]
         lines += [f"\t\tset_variable = {{ name = te_tax_sr_{ig}_{reason} value = {sources[reason]} }}"
                   for reason in SUPPORT_REASONS]
@@ -2154,7 +2308,42 @@ def bill_effects():
             "\t}",
         ]
     lines.append("}")
+    lines += _obligation_outcome_effects()
     return _txt("\n".join(lines) + "\n")
+
+
+def _obligation_outcome_effects():
+    """An obligation's consequences for its beneficiary group (te_tax_o<N>_ig, IGS order), per
+    group: approval through the shared ig_approval_effect, and trust +-1 within +-TRUST_CAP."""
+    lines = [
+        "",
+        "# Policy obligations (plan Task 12; te_tax_obligation_effects.txt): the beneficiary group of",
+        "# obligation slot N (te_tax_o<N>_ig, te_tax_ig_id_<ig>) reacts once per transition. Approval",
+        "# goes through the shared ig_approval_effect with MODIFIER (fulfilled",
+        "# ig_approval_positive_modifier +3, breached ig_approval_very_negative_modifier -5,",
+        "# renegotiated te_tax_obl_renegotiated_modifier -2), decaying over te_tax_obl_approval_days.",
+        "te_tax_gen_obl_approval = {",
+    ]
+    for idx, ig in enumerate(IGS, start=1):
+        lines += [f"\t{'if' if idx == 1 else 'else_if'} = {{",
+                  f"\t\tlimit = {{ var:te_tax_o$N$_ig = {idx} }}",
+                  f"\t\tig_approval_effect = {{ IG = ig_{ig} MODIFIER = $MODIFIER$ DAYS = te_tax_obl_approval_days }}",
+                  "\t}"]
+    lines += [
+        "}",
+        "",
+        f"# Trust (te_tax_trust_<ig>): DELTA (+1 kept, -1 broken), held within -{TRUST_CAP}..{TRUST_CAP}; the",
+        f"# support model's trust reason is {TRUST_WEIGHT} points a step (te_tax_trust_reason_<ig>).",
+        "te_tax_gen_obl_trust = {",
+    ]
+    for idx, ig in enumerate(IGS, start=1):
+        lines += [f"\t{'if' if idx == 1 else 'else_if'} = {{",
+                  f"\t\tlimit = {{ var:te_tax_o$N$_ig = {idx} }}",
+                  f"\t\tchange_variable = {{ name = te_tax_trust_{ig} add = $DELTA$ }}",
+                  f"\t\tclamp_variable = {{ name = te_tax_trust_{ig} min = -{TRUST_CAP} max = {TRUST_CAP} }}",
+                  "\t}"]
+    lines.append("}")
+    return lines
 
 
 @output(EFFECTS_PATH)
@@ -2181,7 +2370,8 @@ def scripted_effects():
         "# te_tax_gen_migrate_rates, te_tax_gen_migrate_goods and te_tax_gen_migrate_provisions,",
         "# called by te_tax_migrate_country (te_tax_migration_effects.txt). The copies for new",
         "# countries close the file: te_tax_gen_copy_code, te_tax_gen_copy_slot_<slot> and",
-        "# te_tax_gen_copy_enacted, called by te_tax_civil_war_effects.txt.",
+        "# te_tax_gen_copy_enacted, called by te_tax_civil_war_effects.txt, with the policy",
+        "# obligations' te_tax_gen_copy_obligations and te_tax_gen_clear_obligations (plan Task 12).",
         "",
         "# Each instrument's tokens with their sentinels, if absent.",
         "te_tax_gen_init_instruments = {",
@@ -2203,6 +2393,15 @@ def scripted_effects():
         "te_tax_gen_init_schedule = {",
     ]
     lines += [_guarded_write(name, sentinel) for name, sentinel in schedule_tokens()]
+    lines += [
+        "}",
+        "",
+        "# The policy obligations' slot headers and each interest group's trust, if absent (plan",
+        "# Task 12). An obligation's payload is not initialised: te_tax_obl_write writes all of it,",
+        "# and nothing reads it while the slot's te_tax_o<n>_on is 0.",
+        "te_tax_gen_init_obligations = {",
+    ]
+    lines += [_guarded_write(name, sentinel) for name, sentinel in obligation_tokens()]
     lines.append("}")
     for instrument in INSTRUMENTS:
         key = instrument.key
@@ -2329,8 +2528,33 @@ def scripted_triggers():
             lines += [f"\t\tAND = {{ var:te_tax_en_{key} = {idx} NOT = {{ {law} }} }}",
                       f"\t\tAND = {{ NOT = {{ var:te_tax_en_{key} = {idx} }} {law} }}"]
         lines += ["\t}", "}"]
-    lines += _scheduler_triggers() + _bill_triggers()
+    lines += _scheduler_triggers() + _bill_triggers() + _obligation_triggers()
     return _txt("\n".join(lines) + "\n")
+
+
+def _obligation_triggers():
+    """The civil-war repair's reassessment of obligation slot N (plan Task 12)."""
+    lines = [
+        "",
+        "# Policy obligations (plan Task 12; te_tax_repair_obligations_after_civil_war). Country scope.",
+        "# te_tax_gen_obl_ig_exists: the country still has obligation slot N's beneficiary group.",
+        "te_tax_gen_obl_ig_exists = {",
+        "\tOR = {",
+    ]
+    lines += [f"\t\tAND = {{ var:te_tax_o$N$_ig = {idx} exists = ig:ig_{ig} }}" for idx, ig in enumerate(IGS, start=1)]
+    lines += [
+        "\t}",
+        "}",
+        "",
+        "# te_tax_gen_obl_slot_gone: the passed bill obligation slot N is bound to no longer waits",
+        "# in its package slot (te_tax_o<N>_slot as te_tax_slot_id_<slot> codes it).",
+        "te_tax_gen_obl_slot_gone = {",
+        "\tNOR = {",
+    ]
+    lines += [f"\t\tAND = {{ var:te_tax_o$N$_slot = te_tax_slot_id_{slot} var:te_tax_p{slot}_on = 1 }}"
+              for slot in SLOTS]
+    lines += ["\t}", "}"]
+    return lines
 
 
 @output(SGUIS_PATH)

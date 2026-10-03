@@ -114,7 +114,8 @@ def schema_tokens():
     """{token: sentinel} from the schema tables, every placeholder expanded.
 
     Placeholders: <key> (instrument), <good> (catalog good), <s> (package slot
-    a, b) and <n> (history slot 1..8), in any combination. Sentinel "—" is
+    a, b), <n> (history slot 1..8), <o> (obligation slot 1..4) and <ig> (the
+    support model's interest groups), in any combination. Sentinel "—" is
     None: te_tax_schema (written last with the schema version) and the package
     payload, which te_tax_store_package writes in full and nothing reads while
     the slot is off, so neither is initialised. State-scope rows ("state var")
@@ -127,6 +128,8 @@ def schema_tokens():
         "<good>": catalog(),
         "<s>": ("a", "b"),
         "<n>": tuple(str(n) for n in range(1, 9)),
+        "<o>": tuple(str(n) for n in gen.OBLIGATION_SLOTS),
+        "<ig>": gen.IGS,
     }
     text = read(SCHEMA_DOC, strip_comments=False)
     table = text.split("\n## Schema\n", 1)[1].split("\n## ", 1)[0]
@@ -207,10 +210,12 @@ class InitTest(unittest.TestCase):
     def test_init_calls_the_generated_instrument_and_goods_inits(self):
         self.assertIn("te_tax_gen_init_instruments = yes", self.init)
         self.assertIn("te_tax_gen_init_goods = yes", self.init)
+        self.assertIn("te_tax_gen_init_obligations = yes", self.init)
 
     def test_every_country_token_is_written_with_its_sentinel_if_absent(self):
         writes = self.guarded_writes(self.init)
-        for name in ("te_tax_gen_init_instruments", "te_tax_gen_init_goods", "te_tax_gen_init_schedule"):
+        for name in ("te_tax_gen_init_instruments", "te_tax_gen_init_goods", "te_tax_gen_init_schedule",
+                     "te_tax_gen_init_obligations"):
             for token, value in self.guarded_writes(block(self.generated, name)).items():
                 self.assertNotIn(token, writes, f"{token} written by two init effects")
                 writes[token] = value
@@ -223,7 +228,8 @@ class InitTest(unittest.TestCase):
     def test_every_variable_write_in_the_init_effects_is_guarded(self):
         for body in (self.init, block(self.generated, "te_tax_gen_init_instruments"),
                      block(self.generated, "te_tax_gen_init_goods"),
-                     block(self.generated, "te_tax_gen_init_schedule")):
+                     block(self.generated, "te_tax_gen_init_schedule"),
+                     block(self.generated, "te_tax_gen_init_obligations")):
             self.assertEqual(body.count("set_variable"), len(GUARDED_WRITE.findall(body)))
             self.assertNotIn("change_variable", body)
 
@@ -375,7 +381,9 @@ class GeneratedSyncTest(unittest.TestCase):
         # The copies for new countries (test_tax_code_civil_war.py).
         copies = {"te_tax_gen_copy_code", "te_tax_gen_copy_enacted"} | {
             f"te_tax_gen_copy_slot_{slot}" for slot in ("a", "b")}
-        self.assertEqual(names, want | scheduler | migration | drift | copies)
+        # The policy obligations' init and copies (test_tax_code_obligations.py).
+        obligations = {"te_tax_gen_init_obligations", "te_tax_gen_copy_obligations", "te_tax_gen_clear_obligations"}
+        self.assertEqual(names, want | scheduler | migration | drift | copies | obligations)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
         for key in KEYS:
@@ -431,7 +439,9 @@ class GeneratedSyncTest(unittest.TestCase):
             {f"te_tax_amendment_{kind}_{key}" for kind in ("is", "matches") for key in KEYS}
             | scheduler | bill | {"te_tax_gen_bill_sunsets_valid"}
             # The writer's drift checks (test_tax_code_bypass.py).
-            | {"te_tax_gen_goods_drift"} | {f"te_tax_gen_amend_drift_{key}" for key in KEYS},
+            | {"te_tax_gen_goods_drift"} | {f"te_tax_gen_amend_drift_{key}" for key in KEYS}
+            # The civil-war repair's obligation checks (test_tax_code_obligations.py).
+            | {"te_tax_gen_obl_ig_exists", "te_tax_gen_obl_slot_gone"},
         )
         for key in KEYS:
             family = amendment_family(key)
@@ -610,12 +620,18 @@ class DisplayValueTest(unittest.TestCase):
                  "te_tax_view_open_share", "te_tax_view_passage_share", "te_tax_view_legitimacy"}
         # The writer's native-drift counters (Task 9).
         want |= {"te_tax_view_drift_level", "te_tax_view_drift_goods", "te_tax_view_drift_amend"}
+        # The policy obligations (Task 12): per slot, and the overview's counts.
+        for n in gen.OBLIGATION_SLOTS:
+            want |= {f"te_tax_view_o{n}_{field}" for field in (
+                "on", "state", "kind", "arg", "target", "ig", "baseline", "streak", "deadline", "deadline_y",
+                "deadline_mo", "maint_end", "maint_end_y", "maint_end_mo")}
+        want |= {"te_tax_view_obl_binding", "te_tax_view_obl_pending"}
         self.assertEqual(set(self.views), want)
 
     def test_defaults_are_the_schema_sentinels(self):
         for name in self.views:
             sentinel_minus_one = re.search(
-                r"_(since|exp|succ|last_month|next_month|month|due|last_change)(_y|_mo)?$", name) \
+                r"_(since|exp|succ|last_month|next_month|month|due|last_change|deadline|maint_end)(_y|_mo)?$", name) \
                 and not name.endswith(("_rate", "_pct"))
             with self.subTest(name=name):
                 self.assertEqual(self.parsed[name]["value"], "-1" if sentinel_minus_one else "0")

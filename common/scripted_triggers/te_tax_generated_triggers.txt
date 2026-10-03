@@ -1434,3 +1434,27 @@ te_tax_gen_package_empty_b = {
 	var:te_tax_pb_agrel < 0
 	var:te_tax_pb_regrel < 0
 }
+
+# Policy obligations (plan Task 12; te_tax_repair_obligations_after_civil_war). Country scope.
+# te_tax_gen_obl_ig_exists: the country still has obligation slot N's beneficiary group.
+te_tax_gen_obl_ig_exists = {
+	OR = {
+		AND = { var:te_tax_o$N$_ig = 1 exists = ig:ig_armed_forces }
+		AND = { var:te_tax_o$N$_ig = 2 exists = ig:ig_devout }
+		AND = { var:te_tax_o$N$_ig = 3 exists = ig:ig_industrialists }
+		AND = { var:te_tax_o$N$_ig = 4 exists = ig:ig_intelligentsia }
+		AND = { var:te_tax_o$N$_ig = 5 exists = ig:ig_landowners }
+		AND = { var:te_tax_o$N$_ig = 6 exists = ig:ig_petty_bourgeoisie }
+		AND = { var:te_tax_o$N$_ig = 7 exists = ig:ig_rural_folk }
+		AND = { var:te_tax_o$N$_ig = 8 exists = ig:ig_trade_unions }
+	}
+}
+
+# te_tax_gen_obl_slot_gone: the passed bill obligation slot N is bound to no longer waits
+# in its package slot (te_tax_o<N>_slot as te_tax_slot_id_<slot> codes it).
+te_tax_gen_obl_slot_gone = {
+	NOR = {
+		AND = { var:te_tax_o$N$_slot = te_tax_slot_id_a var:te_tax_pa_on = 1 }
+		AND = { var:te_tax_o$N$_slot = te_tax_slot_id_b var:te_tax_pb_on = 1 }
+	}
+}

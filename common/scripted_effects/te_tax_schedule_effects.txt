@@ -66,13 +66,18 @@ te_tax_process_month = {
 				te_tax_gen_commence_a = yes
 				te_tax_gen_commence_b = yes
 			}
-			# 3. One collection write per month, changed or not: it also re-asserts
+			# 3. Policy obligations (te_tax_obligation_effects.txt): those a
+			# commencement above has just started, and every other binding one,
+			# checked once this month.
+			te_tax_obl_check_month = yes
+			# 4. One collection write per month, changed or not: it also re-asserts
 			# the code over any native change since last month.
 			te_tax_sync_collection = yes
-			# 4. The next due transition.
+			# 5. The next due transition.
 			te_tax_recompute_next_month = yes
-			# 5. A bill under debate: refresh the support snapshot once a month
-			# (te_tax_bill_effects.txt), after this month's changes.
+			# 6. A bill under debate: refresh the support snapshot once a month
+			# (te_tax_bill_effects.txt), after this month's changes, so a promise
+			# kept or broken this month moves its group's trust reason at once.
 			if = {
 				limit = { te_tax_bill_active = yes }
 				te_tax_refresh_support = yes

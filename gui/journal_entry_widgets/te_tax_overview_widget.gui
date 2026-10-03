@@ -5,7 +5,8 @@
 ###
 ###   te_tax_overview_panel   always shown: the code and its version, the last
 ###                           and next change, and what is in progress (the
-###                           draft, the bill under debate, passed bills)
+###                           draft, the bill under debate, passed bills,
+###                           promises)
 ###   te_tax_enacted_table    open: one row per tax with its rate and any
 ###                           expiry, the taxed goods, the two reliefs
 ###   te_tax_history_section  collapsed: the last eight entries of the
@@ -308,6 +309,18 @@ types te_tax_overview_widget_types
 					}
 					blockoverride "row_value" {
 						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_b_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_b_missed', 'te_tax_ov_package_b_awaiting' ) )]"
+					}
+				}
+				# Promises (plan Task 12): how many bind the country and how many
+				# wait on the bill under debate; the Promises section lists them.
+				te_tax_value_row = {
+					visible = "[GetScriptedGui('te_tax_show_obligations_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "te_tax_ov_obligations"
+						tooltip = "te_tax_ov_obligations_tt"
+					}
+					blockoverride "row_value" {
+						text = "te_tax_ov_obligations_value"
 					}
 				}
 			}
