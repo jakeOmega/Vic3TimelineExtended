@@ -294,7 +294,9 @@ class DirectAirCaptureTest(unittest.TestCase):
         technology = body(parsed("common/technology/technologies/carbon_capture.txt"), "carbon_capture_and_storage")
         self.assertEqual(body(technology, "era"), "era_10")
         self.assertEqual(body(technology, "unlocking_technologies"), ["clean_energy_technologies"])
-        self.assertEqual(body(gen.unwrap(self.pm), "unlocking_technologies"), ["carbon_capture_and_storage"])
+        # A captured works must retain a valid default even if its new owner
+        # lacks the building's technology.
+        self.assertNotIn("unlocking_technologies", gen.unwrap(self.pm))
 
     def test_removal_only_recipe_has_costs_workers_and_no_goods_output(self):
         inputs = workforce(self.pm)
@@ -365,6 +367,12 @@ class DirectAirCaptureTest(unittest.TestCase):
                          "carbon_removal_modifier")
         self.assertEqual(body(body(repeal, "je:je_global_warming"), "remove_modifier"),
                          "carbon_removal_modifier")
+        je = body(parsed("common/journal_entries/je_global_warming.txt"), "je_global_warming")
+        pulse = body(body(je, "on_monthly_pulse"), "effect")
+        self.assertEqual(body(pulse, "gw_restore_carbon_removal_policy_effect"), "yes")
+        debug = parsed("common/scripted_effects/te_debug_gw_effects.txt")
+        self.assertEqual(body(body(debug, "te_debug_gw_adopt_all"), "gw_effect_carbon_removal"), "yes")
+        self.assertEqual(body(body(debug, "te_debug_gw_repeal_all"), "gw_effect_remove_carbon_removal"), "yes")
 
 
 class DisplayBoundaryTest(unittest.TestCase):

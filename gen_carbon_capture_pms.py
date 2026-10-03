@@ -1,9 +1,10 @@
 """Regenerate carbon-accounting data from production-method recipes.
 
-Writes synthetic-fuel credits and the covered buildings' fuel emissions;
-phase 2 will add the capture variants.
-Credits use the shared script-value factors at runtime, so only recipe outputs
-are generated here. No copied emission coefficients or outputs live in script.
+Writes synthetic-fuel credits, covered buildings' fuel emissions and direct
+air capture's removal modifier; phase 2 will add the source-capture variants.
+Synthetic credits use shared factors at runtime. PM display values are derived
+from merged recipes or the independent removal-capacity parameter and shared
+factors/display scale, so their coefficients are never maintained by hand.
 
 Run ``python3 gen_carbon_capture_pms.py [--dry-run | --check]``. No game install
 or running server is required. Full server reloads call ``regenerate``.

@@ -23,6 +23,8 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
   derives values from merged recipes and factors, amends mod-owned/REPLACEd PMs
   in place and emits INJECTs for untouched vanilla methods. Extend it for
   production capture variants in phase 2.
+- Era-10 Direct Air Capture and national Carbon Removal Support are implemented;
+  see the checkpoints below for recipes, policy effects and pending engine checks.
 - The server on port 8950 did not respond during the initial status check.
 - Shared Python environment: `/home/jakef/src/Vic3TimelineExtended/.venv`.
 - Git operations need sandbox escalation because this managed worktree stores
@@ -192,7 +194,11 @@ reuses the existing Renewable Investment artwork. The guide now covers nine
 policies and explains why an unstaffed works removes nothing.
 
 Focused validation: 156 tests passed (27 emissions tests included), Ruff and
-GUI lint passed. Full suite and offline audits are the next validation step.
+GUI lint passed. The full suite then passed: 3,623 tests, 58 skips. All 23
+offline CI audits passed. Snapshot-backed structure audit: 554 files, no parse
+failures or unreviewed flags. Localization, guide freshness/style, generator
+freshness and post-load rosters passed. Checkpoints `8a7f55c4` and `22a672b0`
+are pushed. The PM group's label is Carbon Processing, covering both methods.
 Next engine checks: research the era-10 technology; build a works and verify
 Direct Air Capture is the available default, no coal output, hiring under
 subsidies, and removal scaling with staffing/throughput; adopt/repeal Carbon
@@ -200,3 +206,16 @@ Removal Support and check subsidy requirement, Authority, movement satisfaction
 and January capture totals. Check Synthetic Coal remains unavailable before
 Genetic Engineering and switching PMs never counts both credits. The phase-0
 fuel gating/mandate checks still gate the production capture-tier rollout.
+
+## Review corrections
+
+Direct Air Capture has no PM-level technology gate: the building itself requires
+Carbon Capture and Storage, and captured works must retain a valid default PM
+when their new owner lacks that technology. Synthetic Coal retains its era-11
+gate. Carbon Removal Support now spells out "carbon dioxide" because the
+subscript in CO₂ failed to render in its in-game description. The debug adopt/
+repeal-all helpers and AI will logger now include the ninth policy.
+
+After these corrections, 156 focused tests passed, including the 27 emissions
+tests; Ruff, localization organization, generator freshness and diff checks
+passed. The earlier full-suite result above predates these small corrections.

@@ -345,7 +345,7 @@
  GP_ACCEPT_NATIONALIZATION_TT:0 "Publicly accept the nationalization. Other [Concept('concept_great_power', 'Great Powers')] will remember our restraint."
  GP_MILITARY_INTERVENTION_NOTIFY_TT:0 "All other [concept_great_power]s will be notified of our military intervention."
  GP_NEUTRAL_STANCE_TT:0 "Reset our colonial policy stance to neutral."
- GW_CARBON_REMOVAL_DESC:0 "Requires subsidies for $building_synthetics_plant_coal$ and gives them +5% throughput. Costs 100 Authority while active. Reduces Environmental Movement radicalism by 5 percentage points. CO₂ removal comes from staffed buildings; electricity generation still adds emissions."
+ GW_CARBON_REMOVAL_DESC:0 "Requires subsidies for $building_synthetics_plant_coal$ and gives them +5% throughput. Costs 100 Authority while active. Reduces Environmental Movement radicalism by 5 percentage points. Carbon dioxide removal comes from staffed buildings; electricity generation still adds emissions."
  GW_CARBON_REMOVAL_ROW:0 "Carbon Removal Support"
  GW_CARBON_TAX_DESC:0 "Levy a carbon tax on coal and oil industries across your market.\n[GetStaticModifier('carbon_tax_modifier').GetDesc]\nApplies to every country in your market. Available once global warming reaches mild levels. #bold Market leaders only#!."
  GW_CARBON_TAX_ROW:0 "Carbon Tax"
