@@ -2060,6 +2060,24 @@ un_vote.3 = {
 				}
 				factor = 0
 			}
+			# Complying with a request for aid, or for a full deployment, bills
+			# a major power a programme's cost (un_vote_apply_resolution_compliance);
+			# a member already running the peacekeeping programme keeps the
+			# cost it has.
+			modifier = {
+				trigger = {
+					country_rank >= rank_value:major_power
+					OR = { in_default = yes scaled_debt >= 0.75 }
+					OR = {
+						scope:un_resolution ?= { has_tag = un_topic_aid_request }
+						AND = {
+							scope:un_resolution ?= { un_resolution_peacekeeping_full = yes }
+							NOT = { un_standing_program_active_peacekeeping = yes }
+						}
+					}
+				}
+				factor = 0.2
+			}
 		}
 	}
 
@@ -2173,6 +2191,15 @@ un_vote.3 = {
 					scope:un_resolution ?= { has_tag = un_topic_npt }
 					has_variable = nuclear_weapon_stockpile
 					var:nuclear_weapon_stockpile >= 1
+				}
+				add = 50
+			}
+			# ...and a threshold state, whose programme the inspections slow
+			# (un_regime_npt_inspection_modifier), refuses too.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_npt }
+					un_regime_npt_threshold = yes
 				}
 				add = 50
 			}

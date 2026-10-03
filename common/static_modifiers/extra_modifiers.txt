@@ -3535,19 +3535,32 @@ un_human_rights_champion_modifier = {
 
 # ---- Peacekeeping Modifiers ----
 
+# The peacekeeping programme (un_peacekeeping_mission_button). Troops sent
+# abroad cost more to keep (+5% military goods), and come home with more
+# experience than a garrison that never left (+10% army experience gain;
+# owner, 2026-10-03). A unit modifier on the journal entry, as arms control's
+# are: whether it reaches the army is an in-game check (un_redesign_design.md
+# §0.13).
 un_peacekeeping_contributor_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_leverage_generation_mult = 0.05
 	country_prestige_mult = 0.05
 	country_military_goods_cost_mult = 0.05
+	unit_experience_gain_mult = 0.1
 	country_bureaucracy_cost_add = 25
 }
 
+# A full force sent to a collapsing state (un_events.4 A). What it costs is
+# un_peacekeeping_deployment_cost, money, as a contingent sent at will from the
+# chamber pays money alone (un_mission_service_cost); the +5% military goods
+# cost it once carried went with that (owner, 2026-10-03). The peacekeeping
+# programme's own modifier keeps its +5%. Both give the troops' experience
+# (+10% army experience gain).
 un_peacekeeping_deployed_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_leverage_generation_mult = 0.10
 	country_prestige_mult = 0.05
-	country_military_goods_cost_mult = 0.05
+	unit_experience_gain_mult = 0.1
 }
 
 un_observer_mission_modifier = {
@@ -4178,6 +4191,15 @@ un_humanitarian_token_cost = {
 }
 
 un_observer_mission_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+# A full peacekeeping force sent to a collapsing state (un_events.4 A), by a
+# member not already paying the peacekeeping programme: the programme's weekly
+# cost (multiplier = un_program_expense_value), fading over five years, as the
+# famine appeal's aid does (un_humanitarian_aid_cost, un_events.7 A).
+un_peacekeeping_deployment_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
 }

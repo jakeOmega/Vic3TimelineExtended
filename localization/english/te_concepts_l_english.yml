@@ -2701,6 +2701,7 @@
  un_peacekeeping_cooldown:0 "Peacekeeping Commitment Active"
  un_peacekeeping_cooldown_desc:0 "A peacekeeping commitment is already in effect."
  un_peacekeeping_deployed_modifier_desc:0 "A full peacekeeping contingent has been deployed under our flag, significantly boosting our international standing."
+ un_peacekeeping_deployment_cost_desc:0 "The cost of the peacekeeping force this country sent to a collapsing state for the UN."
  un_peacekeeping_received_modifier_desc:0 "International peacekeeping forces are deployed in our territory, reducing [concept_turmoil] and helping restore order."
  un_peacekeeping_resented_modifier_desc:0 "Foreign peacekeeping forces are viewed as an imposition on national sovereignty, rallying domestic authority but damaging diplomatic standing."
  un_peacekeeping_welcomed_modifier_desc:0 "[concept_un_peacekeeping] forces have been welcomed, reducing [concept_devastation] but at the cost of national [concept_prestige]."

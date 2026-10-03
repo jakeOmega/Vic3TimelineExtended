@@ -245,6 +245,12 @@ te_debug_un.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 		te_debug_un_wipe_entry = yes
 	}
 
+	# The UN AI's scores for every country, to debug.log (un_ai_values.txt).
+	option = {
+		name = te_debug_un.1.x
+		te_debug_un_log_ai_scores = yes
+	}
+
 	option = {
 		name = te_debug_un.1.z
 	}

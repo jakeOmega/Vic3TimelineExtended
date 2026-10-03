@@ -1332,6 +1332,8 @@ Appended after `|` in data binding expressions. Combinable.
 | `\|Kv` | Abbreviated | `12.3K` |
 | `\|0+=` | Signed integer | `+42` |
 
+**Prefer `|K` for money and other large amounts, in tooltips above all.** A bare `|0` or `|D` amount (`1,234,567`) takes reading digit by digit, and a tooltip full of them is hard to take in; `|K` reads at a glance (`1.23M`). Use it for money, GDP, treasury and investment figures and for scaled indices such as emissions. Keep `|D` or `|0` where the exact figure matters: a count the player plans around, or a quantity the player sets. The mod uses `|D` in 102 loc values and `|K` in 28 (2026-10-03). Convert the money amounts among the `|D` ones when their file is next touched.
+
 ---
 
 ## GetVariableSystem (UI State)
