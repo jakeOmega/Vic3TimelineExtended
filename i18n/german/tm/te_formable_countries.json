@@ -446,8 +446,12 @@
   "de": "Führung Chinas anfechten"
  },
  "dp_leadership_china_desc": {
-  "en": "Wrest the leadership of the unification effort from [SCOPE.sGetEnemy.GetName].",
-  "de": "[SCOPE.sGetEnemy.GetAltName('DAT')] die Führung des Vereinigungsbestrebens entreißen."
+  "en": "Start a $dp_leadership_china$ [concept_diplomatic_play]\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_china_tooltip_desc$",
+  "de": "Ein [concept_diplomatic_play] „$dp_leadership_china$“ starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_china_tooltip_desc$"
+ },
+ "dp_leadership_china_tooltip_desc": {
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Chinese [Concept('concept_unification', '$concept_major_unification$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der chinesischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
  },
  "dp_leadership_dar_al_islam": {
   "en": "Caliphal Leadership",

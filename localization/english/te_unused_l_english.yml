@@ -238,7 +238,6 @@
  deportee_desc:0 "Deportees are people who have been forcibly removed from their homes and are being held in a camp pending deportation."
  deportee_no_icon:0 "Deportees"
  dp_leadership_china_tooltip:0 "Contest Leadership of China"
- dp_leadership_china_tooltip_desc:0 "Compete with [SCOPE.sGetEnemy.GetName] for the leadership of a unified China."
  dp_te_un_mandate_restore_state_tooltip:0 "#header Start a $dp_te_un_mandate_restore_state$ [concept_diplomatic_play]#!\n$TOOLTIP_DELIMITER$\n$dp_te_un_mandate_restore_state_desc$"
  dp_unify_african_union_tooltip:0 "#header Start a $dp_unify_african_union$ [concept_diplomatic_play]#!\n$TOOLTIP_DELIMITER$\n$dp_unify_african_union_desc$"
  dp_unify_european_union_tooltip:0 "#header Start a $dp_unify_european_union$ [concept_diplomatic_play]#!\n$TOOLTIP_DELIMITER$\n$dp_unify_european_union_desc$"

@@ -458,7 +458,6 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "sInvasion": "value",
         "sBattle": "value",
         # Mod-introduced patterns (used in Vic3TimelineExtended pre-existing loc).
-        "sGetEnemy": "country",
         "sArticleOption": "value",
         "sTreaty": "treaty",
         "sTreatyArticle": "treaty_article",
