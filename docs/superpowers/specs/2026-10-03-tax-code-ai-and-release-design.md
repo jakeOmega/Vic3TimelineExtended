@@ -84,11 +84,10 @@ The set is bounded. Exactly one template is built per initiative, and a template
 | T1 Raise | Deficit streak ≥ `te_tax_ai_need_months` (3), the raise rule of §2.3 holds, and no emergency | +1 index step on the one or two cheapest instruments (pre-score below), due now + 3 |
 | T2 Emergency | Emergency | A minor bill: at most 2 provisions, each at most 2 steps, on the cheapest instruments, due now + 2 (15-day debate) |
 | T3 War levy | At war, and T1's or T2's need holds | +2 steps on the cheapest instrument, with a 24-month sunset, so the levy reverts by itself |
-| T4 Extend | A raise of the AI's own expires within 6 months and the raise rule still holds | Restates the rate with a new sunset |
 | T5 Cut | Surplus streak ≥ `te_tax_ai_surplus_months` (6), the cut rule holds, and reserves are full | −1 step on the instrument with the largest clout-weighted grievance, never below 0 |
 | T6 Luxury goods | T1's need holds, the consumption rate is above 0, and fewer than `te_tax_ai_max_goods` (4) catalog goods are taxed | Tax 1–2 untaxed `luxury`-category goods (vanilla's AI weights luxury ×2, staple ×0.5). T1 and T6 compete on pre-score |
 
-No template touches customs until the customs probe decides the mechanism (§2.9).
+No template touches customs until the customs probe decides the mechanism (§2.9). There is no extension template: restating a rate at its own baseline needs a draft operation the code lacks. A war levy that expires while the need persists is raised again by T1 or T3.
 
 **Pre-score** (generated, one value per instrument, read only by the step): the clout-weighted political cost of a +1 step. That is Σ over the country's non-marginal groups of `ig_clout` × (10 × ΔL × exposure − 5 × P(ig) × progressivity sign × ΔL), the support model's material and ideology terms for one step, with the same `EXPOSURE` and `te_tax_ideo_p_<ig>` the bill refresh uses.
 
