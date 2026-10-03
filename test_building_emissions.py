@@ -156,7 +156,7 @@ class BuildingEmissionsTest(unittest.TestCase):
 
     def test_covered_fuel_methods_use_merged_inputs(self):
         outputs, count = emissions.plan_outputs(self.state, ROOT)
-        self.assertEqual(count, 18)
+        self.assertEqual(count, 245)
         self.assertEqual(set(outputs), {emissions.OUTPUT})
         pms = self.state.mod_parsers["PMs"].data
         for name, expected in (("pm_modern_coal-fired_plant", "5.00"),
@@ -168,9 +168,20 @@ class BuildingEmissionsTest(unittest.TestCase):
                 self.assertEqual(scalar(workforce(pms[name]), emissions.MODIFIER), Decimal(expected))
         self.assertNotIn(emissions.MODIFIER, workforce(pms["pm_molecular_foundry"]))
 
+    def test_every_reachable_fuel_recipe_has_a_visible_contribution(self):
+        methods = self.state.mod_parsers["PMs"].data
+        groups = self.state.mod_parsers["PM Groups"].data
+        for building in self.state.mod_parsers["Buildings"].data.values():
+            for group in body(gen.unwrap(building), "production_method_groups"):
+                for name in body(gen.unwrap(groups[group]), "production_methods"):
+                    amount = emissions.recipe_emissions(methods[name], {"coal": Decimal(2), "oil": Decimal("1.74")})
+                    if amount and name not in emissions.REMOVALS:
+                        with self.subTest(method=name):
+                            self.assertEqual(scalar(workforce(methods[name]), emissions.MODIFIER), amount)
+
     def test_generated_injects_target_only_untouched_vanilla(self):
         injects = parsed(emissions.OUTPUT)
-        self.assertEqual(len(injects), 7)
+        self.assertGreater(len(injects), 7)
         for key in injects:
             self.assertTrue(key.startswith("INJECT:"))
             self.assertIn(key[7:], self.state.base_parsers["PMs"].data)
@@ -222,13 +233,12 @@ class BuildingEmissionsTest(unittest.TestCase):
         method = workforce(state.mod_parsers["PMs"].data["pm_modern_coal-fired_plant"])
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
-            for relative in (emissions.FACTORS, Path("common/production_methods/extra_pms.txt"),
-                             Path("common/production_methods/direct_air_capture.txt")):
+            for relative in [emissions.FACTORS, *[p.relative_to(ROOT) for p in (ROOT / "common/production_methods").glob("*.txt")]]:
                 (root / relative).parent.mkdir(parents=True, exist_ok=True)
                 (root / relative).write_bytes((ROOT / relative).read_bytes())
             method["goods_input_coal_add"] = ("=", "30")
             output, count = emissions.plan_outputs(state, root)
-            self.assertEqual(count, 18)
+            self.assertEqual(count, 245)
             rewritten = output[Path("common/production_methods/extra_pms.txt")]
             parser = ParadoxFileParser()
             parsed_path = root / "result.txt"
@@ -237,7 +247,7 @@ class BuildingEmissionsTest(unittest.TestCase):
             self.assertEqual(scalar(workforce(parser.data["pm_modern_coal-fired_plant"]), emissions.MODIFIER), 6)
             method["goods_input_coal_add"] = ("=", "0")
             output, count = emissions.plan_outputs(state, root)
-            self.assertEqual(count, 17)
+            self.assertEqual(count, 244)
             parser = ParadoxFileParser()
             parsed_path.write_text(output[Path("common/production_methods/extra_pms.txt")], encoding="utf-8-sig")
             parser.parse_file(str(parsed_path), apply_directives=False)
@@ -328,8 +338,7 @@ class DirectAirCaptureTest(unittest.TestCase):
     def test_removal_capacity_changes_independently_of_coal_output(self):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
-            for relative in (emissions.FACTORS, Path("common/production_methods/direct_air_capture.txt"),
-                             Path("common/production_methods/extra_pms.txt")):
+            for relative in [emissions.FACTORS, *[p.relative_to(ROOT) for p in (ROOT / "common/production_methods").glob("*.txt")]]:
                 (root / relative).parent.mkdir(parents=True, exist_ok=True)
                 (root / relative).write_bytes((ROOT / relative).read_bytes())
             path = root / emissions.FACTORS
@@ -337,7 +346,7 @@ class DirectAirCaptureTest(unittest.TestCase):
                 "gw_direct_air_capture_coal_equivalent = 840", "gw_direct_air_capture_coal_equivalent = 420"),
                 encoding="utf-8-sig")
             outputs, count = emissions.plan_outputs(self.state, root)
-            self.assertEqual(count, 18)
+            self.assertEqual(count, 245)
             text = outputs[Path("common/production_methods/direct_air_capture.txt")]
             self.assertIn(f"{emissions.MODIFIER} = -84.00", text)
             self.assertNotIn("goods_output_coal_add", text)

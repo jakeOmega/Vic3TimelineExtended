@@ -99,3 +99,11 @@ If hidden gating or forced fallback fails, do not build A′ unchanged. Record
 the failure and use the building-percentage fallback in design §8. If the
 state read fails, investigate scope and modifier registration before choosing
 an accounting mechanism.
+
+## Owner verification (2026-10-03)
+
+The owner confirmed the fuel-gating/fallback and mandate checks, reported that
+net tooltips and logged scaling look right, and confirmed the Direct Air Capture
+and Carbon Removal Support checks. This clears the phase-0 gate for production
+source-capture tiers. The remaining production regression test must exercise
+the generated methods, additional building groups, and market subtraction.

@@ -112,8 +112,8 @@ def plan_outputs(state, root):
     groups = state.mod_parsers["PM Groups"].data
     buildings = state.mod_parsers["Buildings"].data
     covered = set()
-    for name in BUILDINGS:
-        for group in unwrap(unwrap(buildings[name])["production_method_groups"]):
+    for building in buildings.values():
+        for group in unwrap(unwrap(building).get("production_method_groups", [])):
             covered.update(unwrap(unwrap(groups[group])["production_methods"]))
     amounts = {name: recipe_emissions(methods[name], factors, display_scale) for name in covered}
     fuel_methods = sum(bool(amount) for amount in amounts.values())

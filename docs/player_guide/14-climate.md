@@ -20,7 +20,7 @@ total. In the dashboard's units, a market that emits one million a year warms
 the world by 0.1 °C a year. Figures use K for thousands and M for millions.
 A unit of oil produces 13% less warming than a unit of coal.
 
-Power Plants, Steel Mills and Chemical Plants show Greenhouse Gas Emissions
+Buildings that consume coal or oil show Greenhouse Gas Emissions
 from their fuel use. Fuel methods add to the building's figure, including coal
 used by steel mill automation. The figure uses the dashboard's units and grows
 with the building's staffing and throughput. Market-wide policy reductions

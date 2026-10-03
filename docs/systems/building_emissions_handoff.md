@@ -219,3 +219,14 @@ repeal-all helpers and AI will logger now include the ninth policy.
 After these corrections, 156 focused tests passed, including the 27 emissions
 tests; Ruff, localization organization, generator freshness and diff checks
 passed. The earlier full-suite result above predates these small corrections.
+
+## Production capture continuation
+
+The owner confirmed all three requested engine-check bundles: fuel gating and
+forced fallback with/without the mandate; displayed and logged totals; Direct
+Air Capture and Carbon Removal Support. Production source capture is authorized.
+The owner also requested coverage of all coal/oil users with deliberate exceptions.
+Emissions display now discovers every building PM group, including companies:
+245 fuel-consuming PMs across 117 building types. Market gross is still based
+on consumption. Capture will use a separate group per fuel-consuming source
+group to cover automation without a Cartesian product of PM selections.
