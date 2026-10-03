@@ -836,9 +836,6 @@ company_megastructure_consortium = {
 	possible_prestige_goods = {
 		prestige_good_generic_advanced_materials
 		prestige_good_heavy_lift_launch
-		prestige_good_generic_software
-		prestige_good_entertainment
-		prestige_good_resort_travel
 	}
 
 	flavored_company = no

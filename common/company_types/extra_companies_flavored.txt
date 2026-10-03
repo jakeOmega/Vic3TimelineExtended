@@ -558,6 +558,7 @@ company_huawei = {
 	building_types = {
 		building_network_infrastructure # Digital Access
 		building_electrics_industry_appliances # Consumer Appliances
+		building_electrics_industry # Telephones: a top-two smartphone maker by 2019
 		building_huawei_ox_horn_campus # Represents Huawei's headquarters
 	}
 	extension_building_types = {
@@ -668,10 +669,10 @@ company_nvidia = {
 	}
 	building_types = {
 		building_electronic_components_and_semiconductor_industry
+		building_software_industry # For CUDA and AI software
 		building_nvidia_endeavor_campus
 	}
 	extension_building_types = {
-		building_software_industry # For CUDA and AI software
 		building_robotics_industry
 		building_mind_upload_nexus
 		building_glassworks
@@ -752,14 +753,13 @@ company_google = {
 		}
 	}
 	prosperity_modifier = {
-		goods_output_digital_assets_mult = 0.15
-		goods_output_digital_access_mult = 0.05
+		goods_output_digital_assets_mult = 0.20
+		goods_output_digital_access_mult = 0.10
 
 		state_building_googleplex_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
-		prestige_good_precision_robotics
 	}
 	ai_will_do = {
 		has_technology_researched = world_wide_web
@@ -978,13 +978,12 @@ company_openai = {
 	prosperity_modifier = {
 		country_tech_research_speed_mult = 0.10
 		country_weekly_innovation_mult = 0.10
-		goods_output_digital_assets_mult = 0.1
+		goods_output_digital_assets_mult = 0.15
 		goods_output_robotics_mult = 0.1
 		state_building_openai_research_lab_max_level_add = 1
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_software
-		prestige_good_precision_robotics
 	}
 	ai_will_do = {
 		has_technology_researched = machine_learning
@@ -3039,10 +3038,10 @@ company_neurovault = {
 	building_types = {
 		building_software_industry
 		building_electronic_components_and_semiconductor_industry
+		building_mind_upload_nexus
 		building_neurovault_hq
 	}
 	extension_building_types = {
-		building_mind_upload_nexus
 		building_nanofabrication_center
 		building_robotics_industry
 		building_network_infrastructure
@@ -4042,10 +4041,8 @@ company_genentech = {
 	building_types = {
 		building_synthetics_plant_opium
 		building_chemical_plant
+		building_synthetics_plant_biomass # Vacaville, one of the largest cell-culture plants
 		building_genentech_dna_way_campus
-	}
-	extension_building_types = {
-		building_synthetics_plant_biomass
 	}
 	potential = {
 		always = yes
@@ -4094,6 +4091,7 @@ company_monsanto = {
 		building_maize_farm
 		building_cotton_plantation
 		building_sugar_plantation # Roundup Ready sugar beet, 2008
+		building_synthetics_plant_sugar # saccharin, its first product (1901); NutraSweet from 1985
 		building_monsanto_chesterfield_center
 	}
 	extension_building_types = {
@@ -4198,12 +4196,12 @@ company_ajinomoto = {
 		building_food_industry
 		building_synthetics_plant_sugar
 		building_synthetics_plant_drinks
+		building_electronic_components_and_semiconductor_industry # Ajinomoto Build-up Film, the insulator in high-end chip packages
 		building_ajinomoto_kawasaki_plant
 	}
 	extension_building_types = {
 		building_synthetics_plant_meat # cultured-meat partnerships
 		building_synthetics_plant_opium # amino-acid infusions
-		building_electronic_components_and_semiconductor_industry # Ajinomoto Build-up Film, the insulator in high-end chip packages
 	}
 	potential = {
 		always = yes
@@ -4229,6 +4227,7 @@ company_ajinomoto = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_groceries
+		prestige_good_generic_coffee # AGF's Blendy and Maxim instant coffee
 	}
 	ai_will_do = {
 		has_technology_researched = biotechnology
@@ -4251,6 +4250,9 @@ company_biocon = {
 		building_synthetics_plant_biomass
 		building_chemical_plant # statin and immunosuppressant APIs
 		building_biocon_park
+	}
+	extension_building_types = {
+		building_synthetics_plant_drinks # papain and isinglass for brewers, its first products (1978)
 	}
 	potential = {
 		always = yes
@@ -4328,6 +4330,7 @@ company_bgi = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_opium
+		prestige_good_generic_software # its public genome databases
 	}
 	ai_will_do = {
 		has_technology_researched = biotechnology
@@ -4352,6 +4355,7 @@ company_biontech = {
 	}
 	extension_building_types = {
 		building_synthetics_plant_biomass
+		building_software_industry # InstaDeep, the AI firm it bought in 2023
 	}
 	potential = {
 		always = yes
@@ -4402,6 +4406,7 @@ company_rosen_association = {
 		building_synthetics_plant_meat
 		building_synthetics_plant_biomass
 		building_robotics_industry # the android workers themselves
+		building_livestock_ranch # artificial animals: the electric sheep
 		building_rosen_association_hq
 	}
 	extension_building_types = {
@@ -4431,6 +4436,7 @@ company_rosen_association = {
 	}
 	possible_prestige_goods = {
 		prestige_good_generic_meat
+		prestige_good_precision_robotics # Nexus-grade androids
 	}
 	ai_will_do = {
 		has_technology_researched = genetic_engineering
