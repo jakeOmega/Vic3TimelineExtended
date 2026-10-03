@@ -137,3 +137,23 @@ checks. All 23 offline CI audits, Ruff, generator freshness, localization,
 player-guide style/PDF freshness, post-load rosters and tab checks passed.
 Snapshot-backed structure audit: 552 files, zero unreviewed flags and zero
 parse failures. Generator dry run reports 18 fuel methods and no pending writes.
+
+Net-display checkpoint `5adca6df` is pushed. Local test integration `78b9d21a`
+included it and performance tip `fd5f0c35`; 142 focused tests passed. A concurrent
+deployment replaced the first deployment before verification. Performance PR
+#683 then landed on main (`c59e8a36`); feature merge `42ae0f63` includes that
+latest main. The same 142 focused tests and generator freshness passed there.
+
+The successful redeploy used `codex/building-emissions` itself, which now
+contains the merged performance work. Its dry run had no deletions. Normal
+deploy and the revised probe overlay (including all language copies) completed
+on 2026-10-03; subsequent SHA-256 verification matched 24 deployed source/probe
+files and the company-building single-BOM fix. Restart Victoria 3 before
+checking the new Greenhouse Gas Emissions tooltip. The agent checkout remains
+on the feature branch; the shared main checkout was not changed by this task.
+
+Final push status: `5adca6df` is on origin. The latest-main merge and this
+deployment handoff are committed locally; three final push attempts failed
+with `Could not resolve host: github.com`. Retry `git push origin
+codex/building-emissions` when DNS recovers. The deployed files were verified
+after the successful redeploy, independent of this network failure.
