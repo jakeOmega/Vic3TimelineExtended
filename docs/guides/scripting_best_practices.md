@@ -1316,6 +1316,10 @@ PY
 
 Output should be `truly missing loc: none`. Two pitfalls the audit accounts for: (1) match `:\d+` not `:0` — vanilla often uses `:1` or higher version suffixes, and a `:0`-only check spuriously flags vanilla-loc'd keys. (2) Check both vanilla and mod loc — if the mod re-defines (or `INJECT:`s) a vanilla modifier type, vanilla already supplies the loc and the mod must NOT re-add it under the same key. Re-run before merging any new modifier-type registrations.
 
+## Company Prestige Goods Need a Roster Building That Makes the Base Good
+
+A company at full prosperity makes the prestige goods in its `possible_prestige_goods` in place of their base good, in the buildings it owns. If none of its `building_types` buildings produces the base good, the prestige good never appears. The engine accepts the definition and logs nothing. An `extension_building_types` building doesn't count. It joins the roster only through an industry charter, a company holds one at a time, and each grant has a cooldown. Google listed Precision Robotics with robotics only in its extensions, and five more mod companies had the same gap. Either move the building that makes the good into `building_types` or drop the prestige good. `prestige_good_roster_audit` catches both cases (`--strict` in CI). Vanilla's named prestige goods (Tailored Suits and the like) aren't in the `vanilla_parsed/` snapshot, so the audit can't check them; it reads base goods from the mod's `common/prestige_goods/` and takes `prestige_good_generic_<good>` to mean `<good>`.
+
 ## Portrait Modifier Files
 
 Portrait modifier files (in `gfx/portraits/portrait_modifiers/`) require a wrapper block:
