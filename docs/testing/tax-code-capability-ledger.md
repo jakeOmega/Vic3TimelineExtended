@@ -117,12 +117,22 @@ result yet.
      `TE_TAX customs_gained` with the new market's levels carried over. A package touching customs
      approved before the merge holds as held_conflict. With a draft and a bill that change customs
      open at the merge: `TE_TAX customs_dropped`, both keep their other changes, the bill restarts
-     debate as a new revision, and the review shows "Customs changes dropped".
+     debate as a new revision, and the review shows "Customs changes dropped". A bill that changed
+     only customs is withdrawn instead (`TE_TAX customs_bill_withdrawn`, the history's withdrawn
+     line). While the country owns a market whose customs the code has not yet taken up, the
+     Customs section says they come under the code next month, never "Set by" its own name.
   7. AI market owners: their tariff changes are re-asserted each 1st; one that the AI keeps changing
      for four months in a row reads as blocked and is adopted (at most one history entry a month).
      Check the drift counters (`te_tax_drift_customs`) and the debug log volume over ten years.
-  8. Per-frame cost of the Customs section open (120 levels, up to seven tests each) and of the
-     review's customs lines.
+  8. Per-frame cost of the Customs section open. Each level cell holds seven level texts, each its
+     own `ScriptValue` of the cell's view (no proven single-read form: a customizable localization or
+     a `SelectLocalization` chain over one view still evaluates the view once per tested level), so
+     120 cells make 840 view evaluations a frame. A member's view (mode 2) runs
+     `te_tax_customs_authority` and up to seven state-goods tests: about 5.9k trigger evaluations a
+     frame. The owner's (mode 1) runs the draft's baseline with two package-slot checks: about 20k.
+     The review's customs lines add two cells per changed level. If it stutters, the next step is a
+     collapse flag per goods category (only the open category's rows evaluate) or a snapshot of the
+     levels taken on the 1st.
 - **P11**: the interception and bypass map: Budget, goods panel, right-click menus, popovers, events,
   treaty entry and the native AI (row 13).
 - **P14**: an explicitly armed AI uses the same command path and constraints as a player (row 13).

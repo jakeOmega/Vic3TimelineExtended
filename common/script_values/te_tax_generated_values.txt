@@ -3543,8 +3543,8 @@ te_tax_view_pb_customs_changed = {
 # Customs (plan Task 15). te_tax_cu_native_<d>_<good>: the market's level of the good, read
 # through the capital's state goods, one branch per level (vanilla's default when none can be
 # read). te_tax_view_cu_<d>_<good>: the level a Customs row shows. _on: the draft changes it.
-# _base: existing law's in the draft's month. te_tax_view_cu_<good>_blocked: a treaty or the
-# tariff cooldown kept the market's level, which the code adopted (te_tax_cblock_<good>).
+# _base: existing law's in the draft's month. _blocked: a treaty or the tariff cooldown kept the
+# market's level in that direction, which the code adopted (te_tax_cblock_<d>_<good>).
 te_tax_cu_native_imp_advanced_materials = {
 	value = 1
 	if = { limit = { capital ?= { sg:advanced_materials = { import_tariff_level = max_subventions } } } value = -3 }
@@ -4764,6 +4764,13 @@ te_tax_view_cu_imp_advanced_materials_base = {
 		value = te_tax_base_dr_imp_advanced_materials
 	}
 }
+te_tax_view_cu_imp_advanced_materials_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_advanced_materials var:te_tax_cblock_imp_advanced_materials = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_advanced_materials = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_advanced_materials }
@@ -4783,10 +4790,10 @@ te_tax_view_cu_exp_advanced_materials_base = {
 		value = te_tax_base_dr_exp_advanced_materials
 	}
 }
-te_tax_view_cu_advanced_materials_blocked = {
+te_tax_view_cu_exp_advanced_materials_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_advanced_materials var:te_tax_cblock_advanced_materials = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_advanced_materials var:te_tax_cblock_exp_advanced_materials = 1 }
 		value = 1
 	}
 }
@@ -4809,6 +4816,13 @@ te_tax_view_cu_imp_aeroplanes_base = {
 		value = te_tax_base_dr_imp_aeroplanes
 	}
 }
+te_tax_view_cu_imp_aeroplanes_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_aeroplanes var:te_tax_cblock_imp_aeroplanes = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_aeroplanes = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_aeroplanes }
@@ -4828,10 +4842,10 @@ te_tax_view_cu_exp_aeroplanes_base = {
 		value = te_tax_base_dr_exp_aeroplanes
 	}
 }
-te_tax_view_cu_aeroplanes_blocked = {
+te_tax_view_cu_exp_aeroplanes_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_aeroplanes var:te_tax_cblock_aeroplanes = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_aeroplanes var:te_tax_cblock_exp_aeroplanes = 1 }
 		value = 1
 	}
 }
@@ -4854,6 +4868,13 @@ te_tax_view_cu_imp_ammunition_base = {
 		value = te_tax_base_dr_imp_ammunition
 	}
 }
+te_tax_view_cu_imp_ammunition_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_ammunition var:te_tax_cblock_imp_ammunition = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_ammunition = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_ammunition }
@@ -4873,10 +4894,10 @@ te_tax_view_cu_exp_ammunition_base = {
 		value = te_tax_base_dr_exp_ammunition
 	}
 }
-te_tax_view_cu_ammunition_blocked = {
+te_tax_view_cu_exp_ammunition_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_ammunition var:te_tax_cblock_ammunition = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_ammunition var:te_tax_cblock_exp_ammunition = 1 }
 		value = 1
 	}
 }
@@ -4899,6 +4920,13 @@ te_tax_view_cu_imp_artillery_base = {
 		value = te_tax_base_dr_imp_artillery
 	}
 }
+te_tax_view_cu_imp_artillery_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_artillery var:te_tax_cblock_imp_artillery = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_artillery = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_artillery }
@@ -4918,10 +4946,10 @@ te_tax_view_cu_exp_artillery_base = {
 		value = te_tax_base_dr_exp_artillery
 	}
 }
-te_tax_view_cu_artillery_blocked = {
+te_tax_view_cu_exp_artillery_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_artillery var:te_tax_cblock_artillery = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_artillery var:te_tax_cblock_exp_artillery = 1 }
 		value = 1
 	}
 }
@@ -4944,6 +4972,13 @@ te_tax_view_cu_imp_automobiles_base = {
 		value = te_tax_base_dr_imp_automobiles
 	}
 }
+te_tax_view_cu_imp_automobiles_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_automobiles var:te_tax_cblock_imp_automobiles = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_automobiles = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_automobiles }
@@ -4963,10 +4998,10 @@ te_tax_view_cu_exp_automobiles_base = {
 		value = te_tax_base_dr_exp_automobiles
 	}
 }
-te_tax_view_cu_automobiles_blocked = {
+te_tax_view_cu_exp_automobiles_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_automobiles var:te_tax_cblock_automobiles = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_automobiles var:te_tax_cblock_exp_automobiles = 1 }
 		value = 1
 	}
 }
@@ -4989,6 +5024,13 @@ te_tax_view_cu_imp_clippers_base = {
 		value = te_tax_base_dr_imp_clippers
 	}
 }
+te_tax_view_cu_imp_clippers_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_clippers var:te_tax_cblock_imp_clippers = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_clippers = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_clippers }
@@ -5008,10 +5050,10 @@ te_tax_view_cu_exp_clippers_base = {
 		value = te_tax_base_dr_exp_clippers
 	}
 }
-te_tax_view_cu_clippers_blocked = {
+te_tax_view_cu_exp_clippers_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_clippers var:te_tax_cblock_clippers = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_clippers var:te_tax_cblock_exp_clippers = 1 }
 		value = 1
 	}
 }
@@ -5034,6 +5076,13 @@ te_tax_view_cu_imp_clothes_base = {
 		value = te_tax_base_dr_imp_clothes
 	}
 }
+te_tax_view_cu_imp_clothes_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_clothes var:te_tax_cblock_imp_clothes = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_clothes = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_clothes }
@@ -5053,10 +5102,10 @@ te_tax_view_cu_exp_clothes_base = {
 		value = te_tax_base_dr_exp_clothes
 	}
 }
-te_tax_view_cu_clothes_blocked = {
+te_tax_view_cu_exp_clothes_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_clothes var:te_tax_cblock_clothes = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_clothes var:te_tax_cblock_exp_clothes = 1 }
 		value = 1
 	}
 }
@@ -5079,6 +5128,13 @@ te_tax_view_cu_imp_coal_base = {
 		value = te_tax_base_dr_imp_coal
 	}
 }
+te_tax_view_cu_imp_coal_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_coal var:te_tax_cblock_imp_coal = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_coal = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_coal }
@@ -5098,10 +5154,10 @@ te_tax_view_cu_exp_coal_base = {
 		value = te_tax_base_dr_exp_coal
 	}
 }
-te_tax_view_cu_coal_blocked = {
+te_tax_view_cu_exp_coal_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_coal var:te_tax_cblock_coal = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_coal var:te_tax_cblock_exp_coal = 1 }
 		value = 1
 	}
 }
@@ -5124,6 +5180,13 @@ te_tax_view_cu_imp_coffee_base = {
 		value = te_tax_base_dr_imp_coffee
 	}
 }
+te_tax_view_cu_imp_coffee_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_coffee var:te_tax_cblock_imp_coffee = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_coffee = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_coffee }
@@ -5143,10 +5206,10 @@ te_tax_view_cu_exp_coffee_base = {
 		value = te_tax_base_dr_exp_coffee
 	}
 }
-te_tax_view_cu_coffee_blocked = {
+te_tax_view_cu_exp_coffee_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_coffee var:te_tax_cblock_coffee = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_coffee var:te_tax_cblock_exp_coffee = 1 }
 		value = 1
 	}
 }
@@ -5169,6 +5232,13 @@ te_tax_view_cu_imp_construction_base = {
 		value = te_tax_base_dr_imp_construction
 	}
 }
+te_tax_view_cu_imp_construction_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_construction var:te_tax_cblock_imp_construction = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_construction = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_construction }
@@ -5188,10 +5258,10 @@ te_tax_view_cu_exp_construction_base = {
 		value = te_tax_base_dr_exp_construction
 	}
 }
-te_tax_view_cu_construction_blocked = {
+te_tax_view_cu_exp_construction_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_construction var:te_tax_cblock_construction = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_construction var:te_tax_cblock_exp_construction = 1 }
 		value = 1
 	}
 }
@@ -5214,6 +5284,13 @@ te_tax_view_cu_imp_consumer_appliances_base = {
 		value = te_tax_base_dr_imp_consumer_appliances
 	}
 }
+te_tax_view_cu_imp_consumer_appliances_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_consumer_appliances var:te_tax_cblock_imp_consumer_appliances = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_consumer_appliances = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_consumer_appliances }
@@ -5233,10 +5310,10 @@ te_tax_view_cu_exp_consumer_appliances_base = {
 		value = te_tax_base_dr_exp_consumer_appliances
 	}
 }
-te_tax_view_cu_consumer_appliances_blocked = {
+te_tax_view_cu_exp_consumer_appliances_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_consumer_appliances var:te_tax_cblock_consumer_appliances = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_consumer_appliances var:te_tax_cblock_exp_consumer_appliances = 1 }
 		value = 1
 	}
 }
@@ -5259,6 +5336,13 @@ te_tax_view_cu_imp_digital_assets_base = {
 		value = te_tax_base_dr_imp_digital_assets
 	}
 }
+te_tax_view_cu_imp_digital_assets_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_digital_assets var:te_tax_cblock_imp_digital_assets = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_digital_assets = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_digital_assets }
@@ -5278,10 +5362,10 @@ te_tax_view_cu_exp_digital_assets_base = {
 		value = te_tax_base_dr_exp_digital_assets
 	}
 }
-te_tax_view_cu_digital_assets_blocked = {
+te_tax_view_cu_exp_digital_assets_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_digital_assets var:te_tax_cblock_digital_assets = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_digital_assets var:te_tax_cblock_exp_digital_assets = 1 }
 		value = 1
 	}
 }
@@ -5304,6 +5388,13 @@ te_tax_view_cu_imp_dye_base = {
 		value = te_tax_base_dr_imp_dye
 	}
 }
+te_tax_view_cu_imp_dye_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_dye var:te_tax_cblock_imp_dye = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_dye = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_dye }
@@ -5323,10 +5414,10 @@ te_tax_view_cu_exp_dye_base = {
 		value = te_tax_base_dr_exp_dye
 	}
 }
-te_tax_view_cu_dye_blocked = {
+te_tax_view_cu_exp_dye_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_dye var:te_tax_cblock_dye = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_dye var:te_tax_cblock_exp_dye = 1 }
 		value = 1
 	}
 }
@@ -5349,6 +5440,13 @@ te_tax_view_cu_imp_electronic_components_base = {
 		value = te_tax_base_dr_imp_electronic_components
 	}
 }
+te_tax_view_cu_imp_electronic_components_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_electronic_components var:te_tax_cblock_imp_electronic_components = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_electronic_components = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_electronic_components }
@@ -5368,10 +5466,10 @@ te_tax_view_cu_exp_electronic_components_base = {
 		value = te_tax_base_dr_exp_electronic_components
 	}
 }
-te_tax_view_cu_electronic_components_blocked = {
+te_tax_view_cu_exp_electronic_components_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_electronic_components var:te_tax_cblock_electronic_components = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_electronic_components var:te_tax_cblock_exp_electronic_components = 1 }
 		value = 1
 	}
 }
@@ -5394,6 +5492,13 @@ te_tax_view_cu_imp_engines_base = {
 		value = te_tax_base_dr_imp_engines
 	}
 }
+te_tax_view_cu_imp_engines_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_engines var:te_tax_cblock_imp_engines = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_engines = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_engines }
@@ -5413,10 +5518,10 @@ te_tax_view_cu_exp_engines_base = {
 		value = te_tax_base_dr_exp_engines
 	}
 }
-te_tax_view_cu_engines_blocked = {
+te_tax_view_cu_exp_engines_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_engines var:te_tax_cblock_engines = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_engines var:te_tax_cblock_exp_engines = 1 }
 		value = 1
 	}
 }
@@ -5439,6 +5544,13 @@ te_tax_view_cu_imp_explosives_base = {
 		value = te_tax_base_dr_imp_explosives
 	}
 }
+te_tax_view_cu_imp_explosives_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_explosives var:te_tax_cblock_imp_explosives = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_explosives = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_explosives }
@@ -5458,10 +5570,10 @@ te_tax_view_cu_exp_explosives_base = {
 		value = te_tax_base_dr_exp_explosives
 	}
 }
-te_tax_view_cu_explosives_blocked = {
+te_tax_view_cu_exp_explosives_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_explosives var:te_tax_cblock_explosives = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_explosives var:te_tax_cblock_exp_explosives = 1 }
 		value = 1
 	}
 }
@@ -5484,6 +5596,13 @@ te_tax_view_cu_imp_fabric_base = {
 		value = te_tax_base_dr_imp_fabric
 	}
 }
+te_tax_view_cu_imp_fabric_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_fabric var:te_tax_cblock_imp_fabric = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_fabric = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_fabric }
@@ -5503,10 +5622,10 @@ te_tax_view_cu_exp_fabric_base = {
 		value = te_tax_base_dr_exp_fabric
 	}
 }
-te_tax_view_cu_fabric_blocked = {
+te_tax_view_cu_exp_fabric_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_fabric var:te_tax_cblock_fabric = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_fabric var:te_tax_cblock_exp_fabric = 1 }
 		value = 1
 	}
 }
@@ -5529,6 +5648,13 @@ te_tax_view_cu_imp_fertilizer_base = {
 		value = te_tax_base_dr_imp_fertilizer
 	}
 }
+te_tax_view_cu_imp_fertilizer_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_fertilizer var:te_tax_cblock_imp_fertilizer = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_fertilizer = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_fertilizer }
@@ -5548,10 +5674,10 @@ te_tax_view_cu_exp_fertilizer_base = {
 		value = te_tax_base_dr_exp_fertilizer
 	}
 }
-te_tax_view_cu_fertilizer_blocked = {
+te_tax_view_cu_exp_fertilizer_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_fertilizer var:te_tax_cblock_fertilizer = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_fertilizer var:te_tax_cblock_exp_fertilizer = 1 }
 		value = 1
 	}
 }
@@ -5574,6 +5700,13 @@ te_tax_view_cu_imp_fine_art_base = {
 		value = te_tax_base_dr_imp_fine_art
 	}
 }
+te_tax_view_cu_imp_fine_art_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_fine_art var:te_tax_cblock_imp_fine_art = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_fine_art = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_fine_art }
@@ -5593,10 +5726,10 @@ te_tax_view_cu_exp_fine_art_base = {
 		value = te_tax_base_dr_exp_fine_art
 	}
 }
-te_tax_view_cu_fine_art_blocked = {
+te_tax_view_cu_exp_fine_art_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_fine_art var:te_tax_cblock_fine_art = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_fine_art var:te_tax_cblock_exp_fine_art = 1 }
 		value = 1
 	}
 }
@@ -5619,6 +5752,13 @@ te_tax_view_cu_imp_fish_base = {
 		value = te_tax_base_dr_imp_fish
 	}
 }
+te_tax_view_cu_imp_fish_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_fish var:te_tax_cblock_imp_fish = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_fish = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_fish }
@@ -5638,10 +5778,10 @@ te_tax_view_cu_exp_fish_base = {
 		value = te_tax_base_dr_exp_fish
 	}
 }
-te_tax_view_cu_fish_blocked = {
+te_tax_view_cu_exp_fish_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_fish var:te_tax_cblock_fish = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_fish var:te_tax_cblock_exp_fish = 1 }
 		value = 1
 	}
 }
@@ -5664,6 +5804,13 @@ te_tax_view_cu_imp_fruit_base = {
 		value = te_tax_base_dr_imp_fruit
 	}
 }
+te_tax_view_cu_imp_fruit_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_fruit var:te_tax_cblock_imp_fruit = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_fruit = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_fruit }
@@ -5683,10 +5830,10 @@ te_tax_view_cu_exp_fruit_base = {
 		value = te_tax_base_dr_exp_fruit
 	}
 }
-te_tax_view_cu_fruit_blocked = {
+te_tax_view_cu_exp_fruit_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_fruit var:te_tax_cblock_fruit = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_fruit var:te_tax_cblock_exp_fruit = 1 }
 		value = 1
 	}
 }
@@ -5709,6 +5856,13 @@ te_tax_view_cu_imp_furniture_base = {
 		value = te_tax_base_dr_imp_furniture
 	}
 }
+te_tax_view_cu_imp_furniture_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_furniture var:te_tax_cblock_imp_furniture = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_furniture = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_furniture }
@@ -5728,10 +5882,10 @@ te_tax_view_cu_exp_furniture_base = {
 		value = te_tax_base_dr_exp_furniture
 	}
 }
-te_tax_view_cu_furniture_blocked = {
+te_tax_view_cu_exp_furniture_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_furniture var:te_tax_cblock_furniture = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_furniture var:te_tax_cblock_exp_furniture = 1 }
 		value = 1
 	}
 }
@@ -5754,6 +5908,13 @@ te_tax_view_cu_imp_glass_base = {
 		value = te_tax_base_dr_imp_glass
 	}
 }
+te_tax_view_cu_imp_glass_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_glass var:te_tax_cblock_imp_glass = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_glass = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_glass }
@@ -5773,10 +5934,10 @@ te_tax_view_cu_exp_glass_base = {
 		value = te_tax_base_dr_exp_glass
 	}
 }
-te_tax_view_cu_glass_blocked = {
+te_tax_view_cu_exp_glass_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_glass var:te_tax_cblock_glass = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_glass var:te_tax_cblock_exp_glass = 1 }
 		value = 1
 	}
 }
@@ -5799,6 +5960,13 @@ te_tax_view_cu_imp_grain_base = {
 		value = te_tax_base_dr_imp_grain
 	}
 }
+te_tax_view_cu_imp_grain_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_grain var:te_tax_cblock_imp_grain = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_grain = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_grain }
@@ -5818,10 +5986,10 @@ te_tax_view_cu_exp_grain_base = {
 		value = te_tax_base_dr_exp_grain
 	}
 }
-te_tax_view_cu_grain_blocked = {
+te_tax_view_cu_exp_grain_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_grain var:te_tax_cblock_grain = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_grain var:te_tax_cblock_exp_grain = 1 }
 		value = 1
 	}
 }
@@ -5844,6 +6012,13 @@ te_tax_view_cu_imp_groceries_base = {
 		value = te_tax_base_dr_imp_groceries
 	}
 }
+te_tax_view_cu_imp_groceries_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_groceries var:te_tax_cblock_imp_groceries = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_groceries = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_groceries }
@@ -5863,10 +6038,10 @@ te_tax_view_cu_exp_groceries_base = {
 		value = te_tax_base_dr_exp_groceries
 	}
 }
-te_tax_view_cu_groceries_blocked = {
+te_tax_view_cu_exp_groceries_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_groceries var:te_tax_cblock_groceries = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_groceries var:te_tax_cblock_exp_groceries = 1 }
 		value = 1
 	}
 }
@@ -5889,6 +6064,13 @@ te_tax_view_cu_imp_hardwood_base = {
 		value = te_tax_base_dr_imp_hardwood
 	}
 }
+te_tax_view_cu_imp_hardwood_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_hardwood var:te_tax_cblock_imp_hardwood = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_hardwood = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_hardwood }
@@ -5908,10 +6090,10 @@ te_tax_view_cu_exp_hardwood_base = {
 		value = te_tax_base_dr_exp_hardwood
 	}
 }
-te_tax_view_cu_hardwood_blocked = {
+te_tax_view_cu_exp_hardwood_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_hardwood var:te_tax_cblock_hardwood = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_hardwood var:te_tax_cblock_exp_hardwood = 1 }
 		value = 1
 	}
 }
@@ -5934,6 +6116,13 @@ te_tax_view_cu_imp_iron_base = {
 		value = te_tax_base_dr_imp_iron
 	}
 }
+te_tax_view_cu_imp_iron_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_iron var:te_tax_cblock_imp_iron = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_iron = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_iron }
@@ -5953,10 +6142,10 @@ te_tax_view_cu_exp_iron_base = {
 		value = te_tax_base_dr_exp_iron
 	}
 }
-te_tax_view_cu_iron_blocked = {
+te_tax_view_cu_exp_iron_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_iron var:te_tax_cblock_iron = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_iron var:te_tax_cblock_exp_iron = 1 }
 		value = 1
 	}
 }
@@ -5979,6 +6168,13 @@ te_tax_view_cu_imp_ironclads_base = {
 		value = te_tax_base_dr_imp_ironclads
 	}
 }
+te_tax_view_cu_imp_ironclads_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_ironclads var:te_tax_cblock_imp_ironclads = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_ironclads = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_ironclads }
@@ -5998,10 +6194,10 @@ te_tax_view_cu_exp_ironclads_base = {
 		value = te_tax_base_dr_exp_ironclads
 	}
 }
-te_tax_view_cu_ironclads_blocked = {
+te_tax_view_cu_exp_ironclads_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_ironclads var:te_tax_cblock_ironclads = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_ironclads var:te_tax_cblock_exp_ironclads = 1 }
 		value = 1
 	}
 }
@@ -6024,6 +6220,13 @@ te_tax_view_cu_imp_launch_capacity_base = {
 		value = te_tax_base_dr_imp_launch_capacity
 	}
 }
+te_tax_view_cu_imp_launch_capacity_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_launch_capacity var:te_tax_cblock_imp_launch_capacity = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_launch_capacity = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_launch_capacity }
@@ -6043,10 +6246,10 @@ te_tax_view_cu_exp_launch_capacity_base = {
 		value = te_tax_base_dr_exp_launch_capacity
 	}
 }
-te_tax_view_cu_launch_capacity_blocked = {
+te_tax_view_cu_exp_launch_capacity_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_launch_capacity var:te_tax_cblock_launch_capacity = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_launch_capacity var:te_tax_cblock_exp_launch_capacity = 1 }
 		value = 1
 	}
 }
@@ -6069,6 +6272,13 @@ te_tax_view_cu_imp_lead_base = {
 		value = te_tax_base_dr_imp_lead
 	}
 }
+te_tax_view_cu_imp_lead_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_lead var:te_tax_cblock_imp_lead = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_lead = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_lead }
@@ -6088,10 +6298,10 @@ te_tax_view_cu_exp_lead_base = {
 		value = te_tax_base_dr_exp_lead
 	}
 }
-te_tax_view_cu_lead_blocked = {
+te_tax_view_cu_exp_lead_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_lead var:te_tax_cblock_lead = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_lead var:te_tax_cblock_exp_lead = 1 }
 		value = 1
 	}
 }
@@ -6114,6 +6324,13 @@ te_tax_view_cu_imp_liquor_base = {
 		value = te_tax_base_dr_imp_liquor
 	}
 }
+te_tax_view_cu_imp_liquor_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_liquor var:te_tax_cblock_imp_liquor = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_liquor = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_liquor }
@@ -6133,10 +6350,10 @@ te_tax_view_cu_exp_liquor_base = {
 		value = te_tax_base_dr_exp_liquor
 	}
 }
-te_tax_view_cu_liquor_blocked = {
+te_tax_view_cu_exp_liquor_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_liquor var:te_tax_cblock_liquor = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_liquor var:te_tax_cblock_exp_liquor = 1 }
 		value = 1
 	}
 }
@@ -6159,6 +6376,13 @@ te_tax_view_cu_imp_luxury_clothes_base = {
 		value = te_tax_base_dr_imp_luxury_clothes
 	}
 }
+te_tax_view_cu_imp_luxury_clothes_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_luxury_clothes var:te_tax_cblock_imp_luxury_clothes = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_luxury_clothes = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_luxury_clothes }
@@ -6178,10 +6402,10 @@ te_tax_view_cu_exp_luxury_clothes_base = {
 		value = te_tax_base_dr_exp_luxury_clothes
 	}
 }
-te_tax_view_cu_luxury_clothes_blocked = {
+te_tax_view_cu_exp_luxury_clothes_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_luxury_clothes var:te_tax_cblock_luxury_clothes = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_luxury_clothes var:te_tax_cblock_exp_luxury_clothes = 1 }
 		value = 1
 	}
 }
@@ -6204,6 +6428,13 @@ te_tax_view_cu_imp_luxury_furniture_base = {
 		value = te_tax_base_dr_imp_luxury_furniture
 	}
 }
+te_tax_view_cu_imp_luxury_furniture_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_luxury_furniture var:te_tax_cblock_imp_luxury_furniture = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_luxury_furniture = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_luxury_furniture }
@@ -6223,10 +6454,10 @@ te_tax_view_cu_exp_luxury_furniture_base = {
 		value = te_tax_base_dr_exp_luxury_furniture
 	}
 }
-te_tax_view_cu_luxury_furniture_blocked = {
+te_tax_view_cu_exp_luxury_furniture_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_luxury_furniture var:te_tax_cblock_luxury_furniture = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_luxury_furniture var:te_tax_cblock_exp_luxury_furniture = 1 }
 		value = 1
 	}
 }
@@ -6249,6 +6480,13 @@ te_tax_view_cu_imp_magnetic_drive_ships_base = {
 		value = te_tax_base_dr_imp_magnetic_drive_ships
 	}
 }
+te_tax_view_cu_imp_magnetic_drive_ships_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_magnetic_drive_ships var:te_tax_cblock_imp_magnetic_drive_ships = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_magnetic_drive_ships = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_magnetic_drive_ships }
@@ -6268,10 +6506,10 @@ te_tax_view_cu_exp_magnetic_drive_ships_base = {
 		value = te_tax_base_dr_exp_magnetic_drive_ships
 	}
 }
-te_tax_view_cu_magnetic_drive_ships_blocked = {
+te_tax_view_cu_exp_magnetic_drive_ships_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_magnetic_drive_ships var:te_tax_cblock_magnetic_drive_ships = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_magnetic_drive_ships var:te_tax_cblock_exp_magnetic_drive_ships = 1 }
 		value = 1
 	}
 }
@@ -6294,6 +6532,13 @@ te_tax_view_cu_imp_manowars_base = {
 		value = te_tax_base_dr_imp_manowars
 	}
 }
+te_tax_view_cu_imp_manowars_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_manowars var:te_tax_cblock_imp_manowars = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_manowars = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_manowars }
@@ -6313,10 +6558,10 @@ te_tax_view_cu_exp_manowars_base = {
 		value = te_tax_base_dr_exp_manowars
 	}
 }
-te_tax_view_cu_manowars_blocked = {
+te_tax_view_cu_exp_manowars_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_manowars var:te_tax_cblock_manowars = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_manowars var:te_tax_cblock_exp_manowars = 1 }
 		value = 1
 	}
 }
@@ -6339,6 +6584,13 @@ te_tax_view_cu_imp_meat_base = {
 		value = te_tax_base_dr_imp_meat
 	}
 }
+te_tax_view_cu_imp_meat_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_meat var:te_tax_cblock_imp_meat = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_meat = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_meat }
@@ -6358,10 +6610,10 @@ te_tax_view_cu_exp_meat_base = {
 		value = te_tax_base_dr_exp_meat
 	}
 }
-te_tax_view_cu_meat_blocked = {
+te_tax_view_cu_exp_meat_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_meat var:te_tax_cblock_meat = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_meat var:te_tax_cblock_exp_meat = 1 }
 		value = 1
 	}
 }
@@ -6384,6 +6636,13 @@ te_tax_view_cu_imp_merchant_marine_base = {
 		value = te_tax_base_dr_imp_merchant_marine
 	}
 }
+te_tax_view_cu_imp_merchant_marine_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_merchant_marine var:te_tax_cblock_imp_merchant_marine = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_merchant_marine = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_merchant_marine }
@@ -6403,10 +6662,10 @@ te_tax_view_cu_exp_merchant_marine_base = {
 		value = te_tax_base_dr_exp_merchant_marine
 	}
 }
-te_tax_view_cu_merchant_marine_blocked = {
+te_tax_view_cu_exp_merchant_marine_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_merchant_marine var:te_tax_cblock_merchant_marine = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_merchant_marine var:te_tax_cblock_exp_merchant_marine = 1 }
 		value = 1
 	}
 }
@@ -6429,6 +6688,13 @@ te_tax_view_cu_imp_motor_ships_base = {
 		value = te_tax_base_dr_imp_motor_ships
 	}
 }
+te_tax_view_cu_imp_motor_ships_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_motor_ships var:te_tax_cblock_imp_motor_ships = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_motor_ships = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_motor_ships }
@@ -6448,10 +6714,10 @@ te_tax_view_cu_exp_motor_ships_base = {
 		value = te_tax_base_dr_exp_motor_ships
 	}
 }
-te_tax_view_cu_motor_ships_blocked = {
+te_tax_view_cu_exp_motor_ships_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_motor_ships var:te_tax_cblock_motor_ships = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_motor_ships var:te_tax_cblock_exp_motor_ships = 1 }
 		value = 1
 	}
 }
@@ -6474,6 +6740,13 @@ te_tax_view_cu_imp_oil_base = {
 		value = te_tax_base_dr_imp_oil
 	}
 }
+te_tax_view_cu_imp_oil_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_oil var:te_tax_cblock_imp_oil = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_oil = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_oil }
@@ -6493,10 +6766,10 @@ te_tax_view_cu_exp_oil_base = {
 		value = te_tax_base_dr_exp_oil
 	}
 }
-te_tax_view_cu_oil_blocked = {
+te_tax_view_cu_exp_oil_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_oil var:te_tax_cblock_oil = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_oil var:te_tax_cblock_exp_oil = 1 }
 		value = 1
 	}
 }
@@ -6519,6 +6792,13 @@ te_tax_view_cu_imp_opium_base = {
 		value = te_tax_base_dr_imp_opium
 	}
 }
+te_tax_view_cu_imp_opium_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_opium var:te_tax_cblock_imp_opium = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_opium = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_opium }
@@ -6538,10 +6818,10 @@ te_tax_view_cu_exp_opium_base = {
 		value = te_tax_base_dr_exp_opium
 	}
 }
-te_tax_view_cu_opium_blocked = {
+te_tax_view_cu_exp_opium_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_opium var:te_tax_cblock_opium = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_opium var:te_tax_cblock_exp_opium = 1 }
 		value = 1
 	}
 }
@@ -6564,6 +6844,13 @@ te_tax_view_cu_imp_paper_base = {
 		value = te_tax_base_dr_imp_paper
 	}
 }
+te_tax_view_cu_imp_paper_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_paper var:te_tax_cblock_imp_paper = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_paper = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_paper }
@@ -6583,10 +6870,10 @@ te_tax_view_cu_exp_paper_base = {
 		value = te_tax_base_dr_exp_paper
 	}
 }
-te_tax_view_cu_paper_blocked = {
+te_tax_view_cu_exp_paper_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_paper var:te_tax_cblock_paper = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_paper var:te_tax_cblock_exp_paper = 1 }
 		value = 1
 	}
 }
@@ -6609,6 +6896,13 @@ te_tax_view_cu_imp_porcelain_base = {
 		value = te_tax_base_dr_imp_porcelain
 	}
 }
+te_tax_view_cu_imp_porcelain_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_porcelain var:te_tax_cblock_imp_porcelain = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_porcelain = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_porcelain }
@@ -6628,10 +6922,10 @@ te_tax_view_cu_exp_porcelain_base = {
 		value = te_tax_base_dr_exp_porcelain
 	}
 }
-te_tax_view_cu_porcelain_blocked = {
+te_tax_view_cu_exp_porcelain_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_porcelain var:te_tax_cblock_porcelain = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_porcelain var:te_tax_cblock_exp_porcelain = 1 }
 		value = 1
 	}
 }
@@ -6654,6 +6948,13 @@ te_tax_view_cu_imp_radios_base = {
 		value = te_tax_base_dr_imp_radios
 	}
 }
+te_tax_view_cu_imp_radios_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_radios var:te_tax_cblock_imp_radios = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_radios = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_radios }
@@ -6673,10 +6974,10 @@ te_tax_view_cu_exp_radios_base = {
 		value = te_tax_base_dr_exp_radios
 	}
 }
-te_tax_view_cu_radios_blocked = {
+te_tax_view_cu_exp_radios_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_radios var:te_tax_cblock_radios = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_radios var:te_tax_cblock_exp_radios = 1 }
 		value = 1
 	}
 }
@@ -6699,6 +7000,13 @@ te_tax_view_cu_imp_robotics_base = {
 		value = te_tax_base_dr_imp_robotics
 	}
 }
+te_tax_view_cu_imp_robotics_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_robotics var:te_tax_cblock_imp_robotics = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_robotics = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_robotics }
@@ -6718,10 +7026,10 @@ te_tax_view_cu_exp_robotics_base = {
 		value = te_tax_base_dr_exp_robotics
 	}
 }
-te_tax_view_cu_robotics_blocked = {
+te_tax_view_cu_exp_robotics_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_robotics var:te_tax_cblock_robotics = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_robotics var:te_tax_cblock_exp_robotics = 1 }
 		value = 1
 	}
 }
@@ -6744,6 +7052,13 @@ te_tax_view_cu_imp_rubber_base = {
 		value = te_tax_base_dr_imp_rubber
 	}
 }
+te_tax_view_cu_imp_rubber_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_rubber var:te_tax_cblock_imp_rubber = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_rubber = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_rubber }
@@ -6763,10 +7078,10 @@ te_tax_view_cu_exp_rubber_base = {
 		value = te_tax_base_dr_exp_rubber
 	}
 }
-te_tax_view_cu_rubber_blocked = {
+te_tax_view_cu_exp_rubber_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_rubber var:te_tax_cblock_rubber = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_rubber var:te_tax_cblock_exp_rubber = 1 }
 		value = 1
 	}
 }
@@ -6789,6 +7104,13 @@ te_tax_view_cu_imp_silk_base = {
 		value = te_tax_base_dr_imp_silk
 	}
 }
+te_tax_view_cu_imp_silk_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_silk var:te_tax_cblock_imp_silk = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_silk = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_silk }
@@ -6808,10 +7130,10 @@ te_tax_view_cu_exp_silk_base = {
 		value = te_tax_base_dr_exp_silk
 	}
 }
-te_tax_view_cu_silk_blocked = {
+te_tax_view_cu_exp_silk_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_silk var:te_tax_cblock_silk = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_silk var:te_tax_cblock_exp_silk = 1 }
 		value = 1
 	}
 }
@@ -6834,6 +7156,13 @@ te_tax_view_cu_imp_small_arms_base = {
 		value = te_tax_base_dr_imp_small_arms
 	}
 }
+te_tax_view_cu_imp_small_arms_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_small_arms var:te_tax_cblock_imp_small_arms = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_small_arms = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_small_arms }
@@ -6853,10 +7182,10 @@ te_tax_view_cu_exp_small_arms_base = {
 		value = te_tax_base_dr_exp_small_arms
 	}
 }
-te_tax_view_cu_small_arms_blocked = {
+te_tax_view_cu_exp_small_arms_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_small_arms var:te_tax_cblock_small_arms = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_small_arms var:te_tax_cblock_exp_small_arms = 1 }
 		value = 1
 	}
 }
@@ -6879,6 +7208,13 @@ te_tax_view_cu_imp_steamers_base = {
 		value = te_tax_base_dr_imp_steamers
 	}
 }
+te_tax_view_cu_imp_steamers_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_steamers var:te_tax_cblock_imp_steamers = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_steamers = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_steamers }
@@ -6898,10 +7234,10 @@ te_tax_view_cu_exp_steamers_base = {
 		value = te_tax_base_dr_exp_steamers
 	}
 }
-te_tax_view_cu_steamers_blocked = {
+te_tax_view_cu_exp_steamers_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_steamers var:te_tax_cblock_steamers = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_steamers var:te_tax_cblock_exp_steamers = 1 }
 		value = 1
 	}
 }
@@ -6924,6 +7260,13 @@ te_tax_view_cu_imp_steel_base = {
 		value = te_tax_base_dr_imp_steel
 	}
 }
+te_tax_view_cu_imp_steel_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_steel var:te_tax_cblock_imp_steel = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_steel = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_steel }
@@ -6943,10 +7286,10 @@ te_tax_view_cu_exp_steel_base = {
 		value = te_tax_base_dr_exp_steel
 	}
 }
-te_tax_view_cu_steel_blocked = {
+te_tax_view_cu_exp_steel_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_steel var:te_tax_cblock_steel = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_steel var:te_tax_cblock_exp_steel = 1 }
 		value = 1
 	}
 }
@@ -6969,6 +7312,13 @@ te_tax_view_cu_imp_sugar_base = {
 		value = te_tax_base_dr_imp_sugar
 	}
 }
+te_tax_view_cu_imp_sugar_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_sugar var:te_tax_cblock_imp_sugar = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_sugar = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_sugar }
@@ -6988,10 +7338,10 @@ te_tax_view_cu_exp_sugar_base = {
 		value = te_tax_base_dr_exp_sugar
 	}
 }
-te_tax_view_cu_sugar_blocked = {
+te_tax_view_cu_exp_sugar_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_sugar var:te_tax_cblock_sugar = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_sugar var:te_tax_cblock_exp_sugar = 1 }
 		value = 1
 	}
 }
@@ -7014,6 +7364,13 @@ te_tax_view_cu_imp_sulfur_base = {
 		value = te_tax_base_dr_imp_sulfur
 	}
 }
+te_tax_view_cu_imp_sulfur_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_sulfur var:te_tax_cblock_imp_sulfur = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_sulfur = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_sulfur }
@@ -7033,10 +7390,10 @@ te_tax_view_cu_exp_sulfur_base = {
 		value = te_tax_base_dr_exp_sulfur
 	}
 }
-te_tax_view_cu_sulfur_blocked = {
+te_tax_view_cu_exp_sulfur_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_sulfur var:te_tax_cblock_sulfur = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_sulfur var:te_tax_cblock_exp_sulfur = 1 }
 		value = 1
 	}
 }
@@ -7059,6 +7416,13 @@ te_tax_view_cu_imp_tanks_base = {
 		value = te_tax_base_dr_imp_tanks
 	}
 }
+te_tax_view_cu_imp_tanks_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_tanks var:te_tax_cblock_imp_tanks = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_tanks = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_tanks }
@@ -7078,10 +7442,10 @@ te_tax_view_cu_exp_tanks_base = {
 		value = te_tax_base_dr_exp_tanks
 	}
 }
-te_tax_view_cu_tanks_blocked = {
+te_tax_view_cu_exp_tanks_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_tanks var:te_tax_cblock_tanks = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_tanks var:te_tax_cblock_exp_tanks = 1 }
 		value = 1
 	}
 }
@@ -7104,6 +7468,13 @@ te_tax_view_cu_imp_tea_base = {
 		value = te_tax_base_dr_imp_tea
 	}
 }
+te_tax_view_cu_imp_tea_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_tea var:te_tax_cblock_imp_tea = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_tea = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_tea }
@@ -7123,10 +7494,10 @@ te_tax_view_cu_exp_tea_base = {
 		value = te_tax_base_dr_exp_tea
 	}
 }
-te_tax_view_cu_tea_blocked = {
+te_tax_view_cu_exp_tea_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_tea var:te_tax_cblock_tea = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_tea var:te_tax_cblock_exp_tea = 1 }
 		value = 1
 	}
 }
@@ -7149,6 +7520,13 @@ te_tax_view_cu_imp_tech_metals_base = {
 		value = te_tax_base_dr_imp_tech_metals
 	}
 }
+te_tax_view_cu_imp_tech_metals_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_tech_metals var:te_tax_cblock_imp_tech_metals = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_tech_metals = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_tech_metals }
@@ -7168,10 +7546,10 @@ te_tax_view_cu_exp_tech_metals_base = {
 		value = te_tax_base_dr_exp_tech_metals
 	}
 }
-te_tax_view_cu_tech_metals_blocked = {
+te_tax_view_cu_exp_tech_metals_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_tech_metals var:te_tax_cblock_tech_metals = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_tech_metals var:te_tax_cblock_exp_tech_metals = 1 }
 		value = 1
 	}
 }
@@ -7194,6 +7572,13 @@ te_tax_view_cu_imp_telephones_base = {
 		value = te_tax_base_dr_imp_telephones
 	}
 }
+te_tax_view_cu_imp_telephones_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_telephones var:te_tax_cblock_imp_telephones = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_telephones = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_telephones }
@@ -7213,10 +7598,10 @@ te_tax_view_cu_exp_telephones_base = {
 		value = te_tax_base_dr_exp_telephones
 	}
 }
-te_tax_view_cu_telephones_blocked = {
+te_tax_view_cu_exp_telephones_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_telephones var:te_tax_cblock_telephones = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_telephones var:te_tax_cblock_exp_telephones = 1 }
 		value = 1
 	}
 }
@@ -7239,6 +7624,13 @@ te_tax_view_cu_imp_tobacco_base = {
 		value = te_tax_base_dr_imp_tobacco
 	}
 }
+te_tax_view_cu_imp_tobacco_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_tobacco var:te_tax_cblock_imp_tobacco = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_tobacco = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_tobacco }
@@ -7258,10 +7650,10 @@ te_tax_view_cu_exp_tobacco_base = {
 		value = te_tax_base_dr_exp_tobacco
 	}
 }
-te_tax_view_cu_tobacco_blocked = {
+te_tax_view_cu_exp_tobacco_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_tobacco var:te_tax_cblock_tobacco = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_tobacco var:te_tax_cblock_exp_tobacco = 1 }
 		value = 1
 	}
 }
@@ -7284,6 +7676,13 @@ te_tax_view_cu_imp_tools_base = {
 		value = te_tax_base_dr_imp_tools
 	}
 }
+te_tax_view_cu_imp_tools_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_tools var:te_tax_cblock_imp_tools = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_tools = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_tools }
@@ -7303,10 +7702,10 @@ te_tax_view_cu_exp_tools_base = {
 		value = te_tax_base_dr_exp_tools
 	}
 }
-te_tax_view_cu_tools_blocked = {
+te_tax_view_cu_exp_tools_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_tools var:te_tax_cblock_tools = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_tools var:te_tax_cblock_exp_tools = 1 }
 		value = 1
 	}
 }
@@ -7329,6 +7728,13 @@ te_tax_view_cu_imp_tourism_base = {
 		value = te_tax_base_dr_imp_tourism
 	}
 }
+te_tax_view_cu_imp_tourism_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_tourism var:te_tax_cblock_imp_tourism = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_tourism = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_tourism }
@@ -7348,10 +7754,10 @@ te_tax_view_cu_exp_tourism_base = {
 		value = te_tax_base_dr_exp_tourism
 	}
 }
-te_tax_view_cu_tourism_blocked = {
+te_tax_view_cu_exp_tourism_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_tourism var:te_tax_cblock_tourism = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_tourism var:te_tax_cblock_exp_tourism = 1 }
 		value = 1
 	}
 }
@@ -7374,6 +7780,13 @@ te_tax_view_cu_imp_wine_base = {
 		value = te_tax_base_dr_imp_wine
 	}
 }
+te_tax_view_cu_imp_wine_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_wine var:te_tax_cblock_imp_wine = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_wine = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_wine }
@@ -7393,10 +7806,10 @@ te_tax_view_cu_exp_wine_base = {
 		value = te_tax_base_dr_exp_wine
 	}
 }
-te_tax_view_cu_wine_blocked = {
+te_tax_view_cu_exp_wine_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_wine var:te_tax_cblock_wine = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_wine var:te_tax_cblock_exp_wine = 1 }
 		value = 1
 	}
 }
@@ -7419,6 +7832,13 @@ te_tax_view_cu_imp_wood_base = {
 		value = te_tax_base_dr_imp_wood
 	}
 }
+te_tax_view_cu_imp_wood_blocked = {
+	value = 0
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_imp_wood var:te_tax_cblock_imp_wood = 1 }
+		value = 1
+	}
+}
 te_tax_view_cu_exp_wood = {
 	value = 0
 	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due } value = te_tax_dr_eff_exp_wood }
@@ -7438,10 +7858,10 @@ te_tax_view_cu_exp_wood_base = {
 		value = te_tax_base_dr_exp_wood
 	}
 }
-te_tax_view_cu_wood_blocked = {
+te_tax_view_cu_exp_wood_blocked = {
 	value = 0
 	if = {
-		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_wood var:te_tax_cblock_wood = 1 }
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_cblock_exp_wood var:te_tax_cblock_exp_wood = 1 }
 		value = 1
 	}
 }

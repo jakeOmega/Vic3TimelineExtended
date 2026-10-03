@@ -368,13 +368,26 @@ te_tax_draft_drop_customs = {
 	te_tax_gen_customs_drop_draft = yes
 }
 
-# The same for the bill under debate: its customs levels are dropped, and since
-# its text changed it opens a new revision, as an accepted offer does
-# (commitments released, promises proposed again, support refreshed).
+# The same for the bill under debate: its customs levels are dropped. A bill
+# that still changes something from existing law (te_tax_bill_changes_something)
+# opens a new revision, since its text changed, as an accepted offer does
+# (commitments released, promises proposed again, support refreshed). One that
+# changed only customs would now change nothing, so it is withdrawn as
+# te_tax_cmd_withdraw withdraws (te_tax_bill_close: commitments and pending
+# promises released, payload removed); the caller's history entry says so
+# (local te_tax_cu_withdrawn; fix round 1).
 te_tax_bill_drop_customs = {
 	te_tax_gen_customs_drop_bill = yes
-	change_variable = { name = te_tax_bl_rev add = 1 }
-	te_tax_bill_start_debate = yes
+	if = {
+		limit = { te_tax_bill_changes_something = yes }
+		change_variable = { name = te_tax_bl_rev add = 1 }
+		te_tax_bill_start_debate = yes
+	}
+	else = {
+		te_tax_bill_close = yes
+		set_local_variable = { name = te_tax_cu_withdrawn value = 1 }
+		debug_log = "TE_TAX customs_bill_withdrawn the market was lost and the bill changed only customs; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
 }
 
 # Takes regional relief into the draft as existing law has it (if the draft

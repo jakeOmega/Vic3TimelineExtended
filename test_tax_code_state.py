@@ -456,7 +456,9 @@ class GeneratedSyncTest(unittest.TestCase):
             # touches customs (test_tax_code_customs.py).
             | {"te_tax_gen_customs_matches_imp", "te_tax_gen_customs_matches_exp", "te_tax_gen_customs_drift",
                "te_tax_gen_draft_touches_customs", "te_tax_gen_bill_touches_customs",
-               "te_tax_gen_package_touches_customs_a", "te_tax_gen_package_touches_customs_b"},
+               "te_tax_gen_package_touches_customs_a", "te_tax_gen_package_touches_customs_b",
+               # Whether the bill changes an instrument from existing law (Task 15 fix round 1).
+               "te_tax_gen_bill_changes_instruments"},
         )
         for key in KEYS:
             family = amendment_family(key)
@@ -643,9 +645,9 @@ class DisplayValueTest(unittest.TestCase):
                  "te_tax_view_dr_customs_changed", "te_tax_view_dr_customs_rebase", "te_tax_view_dr_customs_dropped",
                  "te_tax_view_pa_customs_changed", "te_tax_view_pb_customs_changed"}
         for good in gen.customs_catalog():
-            want.add(f"te_tax_view_cu_{good}_blocked")
             for d in ("imp", "exp"):
-                want |= {f"te_tax_view_cu_{d}_{good}", f"te_tax_view_cu_{d}_{good}_on", f"te_tax_view_cu_{d}_{good}_base"}
+                want |= {f"te_tax_view_cu_{d}_{good}", f"te_tax_view_cu_{d}_{good}_on", f"te_tax_view_cu_{d}_{good}_base",
+                         f"te_tax_view_cu_{d}_{good}_blocked"}
         # The policy obligations (Task 12): per slot, and the overview's counts.
         for n in gen.OBLIGATION_SLOTS:
             want |= {f"te_tax_view_o{n}_{field}" for field in (

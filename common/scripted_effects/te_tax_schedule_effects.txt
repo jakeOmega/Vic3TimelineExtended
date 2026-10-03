@@ -179,7 +179,9 @@ te_tax_recompute_next_month = {
 # Records one event in the history ring. KIND: 1 commenced, 2 sunset,
 # 3 held_conflict, 4 held_missed, 5 migrated, 6 approved, 7 civil-war repair,
 # 8 superseded, 9 rescheduled, 10 released; the obligations' 11-14; customs
-# (plan Task 15) 15 a level adopted, 16 the market lost, 17 the market gained.
+# (plan Task 15) 15 levels adopted (one a month, the count in _inst), 16 the
+# market lost, 17 the market gained, 18 a draft's and bill's customs dropped
+# with the market (_inst 1: the bill was withdrawn).
 # SLOT: a, b or none. Sunsets record their instrument through
 # te_tax_gen_history_write directly; this entry point records INST = 0.
 te_tax_history_push = {

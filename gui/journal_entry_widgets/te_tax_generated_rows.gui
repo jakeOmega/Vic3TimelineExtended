@@ -2932,8 +2932,8 @@ types te_tax_generated_rows_types
 	}
 
 	### The review's customs lines: each level the draft changes, existing law's level in the
-	### draft's month and the bill's; then each good whose level a treaty or the tariff
-	### cooldown kept, which the code adopted (te_tax_view_cu_<good>_blocked).
+	### draft's month and the bill's, and under it, if a treaty or the tariff cooldown kept the
+	### market's level in that direction, which the code adopted (te_tax_view_cu_<d>_<good>_blocked).
 	type te_tax_rv_customs_rows = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -2966,6 +2966,16 @@ types te_tax_generated_rows_types
 			}
 		}
 
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_advanced_materials_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_advanced_materials_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "advanced_materials"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
+			}
+		}
+
 		te_tax_review_customs_line = {
 			visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_advanced_materials_on'), '(CFixedPoint)0' )]"
 			blockoverride "good_name" {
@@ -2995,12 +3005,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_advanced_materials_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_advanced_materials_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_advanced_materials_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_advanced_materials_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_advanced_materials_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "advanced_materials"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3029,6 +3039,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_aeroplanes'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_aeroplanes'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_aeroplanes'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_aeroplanes_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_aeroplanes_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "aeroplanes"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3061,12 +3081,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_aeroplanes_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_aeroplanes_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_aeroplanes_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_aeroplanes_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_aeroplanes_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "aeroplanes"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3095,6 +3115,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ammunition'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ammunition'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ammunition'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ammunition_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ammunition_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "ammunition"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3127,12 +3157,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_ammunition_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ammunition_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_ammunition_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_ammunition_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_ammunition_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "ammunition"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3161,6 +3191,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_artillery'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_artillery'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_artillery'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_artillery_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_artillery_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "artillery"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3193,12 +3233,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_artillery_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_artillery_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_artillery_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_artillery_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_artillery_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "artillery"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3227,6 +3267,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_automobiles'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_automobiles'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_automobiles'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_automobiles_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_automobiles_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "automobiles"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3259,12 +3309,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_automobiles_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_automobiles_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_automobiles_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_automobiles_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_automobiles_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "automobiles"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3293,6 +3343,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clippers'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clippers'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clippers'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clippers_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clippers_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "clippers"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3325,12 +3385,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_clippers_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clippers_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_clippers_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_clippers_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_clippers_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "clippers"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3359,6 +3419,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clothes'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clothes'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clothes'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clothes_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clothes_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "clothes"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3391,12 +3461,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_clothes_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_clothes_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_clothes_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_clothes_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_clothes_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "clothes"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3425,6 +3495,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coal'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coal'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coal'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coal_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coal_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "coal"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3457,12 +3537,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_coal_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coal_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_coal_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_coal_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_coal_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "coal"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3491,6 +3571,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coffee'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coffee'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coffee'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coffee_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coffee_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "coffee"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3523,12 +3613,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_coffee_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_coffee_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_coffee_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_coffee_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_coffee_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "coffee"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3557,6 +3647,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_construction'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_construction'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_construction'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_construction_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_construction_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "construction"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3589,12 +3689,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_construction_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_construction_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_construction_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_construction_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_construction_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "construction"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3623,6 +3723,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_consumer_appliances'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_consumer_appliances'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_consumer_appliances'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_consumer_appliances_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_consumer_appliances_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "consumer_appliances"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3655,12 +3765,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_consumer_appliances_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_consumer_appliances_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_consumer_appliances_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_consumer_appliances_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_consumer_appliances_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "consumer_appliances"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3689,6 +3799,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_digital_assets'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_digital_assets'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_digital_assets'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_digital_assets_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_digital_assets_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "digital_assets"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3721,12 +3841,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_digital_assets_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_digital_assets_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_digital_assets_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_digital_assets_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_digital_assets_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "digital_assets"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3755,6 +3875,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_dye'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_dye'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_dye'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_dye_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_dye_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "dye"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3787,12 +3917,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_dye_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_dye_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_dye_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_dye_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_dye_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "dye"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3821,6 +3951,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_electronic_components'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_electronic_components'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_electronic_components'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_electronic_components_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_electronic_components_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "electronic_components"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3853,12 +3993,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_electronic_components_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_electronic_components_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_electronic_components_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_electronic_components_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_electronic_components_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "electronic_components"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3887,6 +4027,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_engines'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_engines'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_engines'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_engines_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_engines_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "engines"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3919,12 +4069,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_engines_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_engines_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_engines_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_engines_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_engines_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "engines"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -3953,6 +4103,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_explosives'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_explosives'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_explosives'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_explosives_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_explosives_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "explosives"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -3985,12 +4145,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_explosives_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_explosives_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_explosives_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_explosives_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_explosives_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "explosives"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4019,6 +4179,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fabric'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fabric'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fabric'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fabric_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fabric_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "fabric"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4051,12 +4221,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_fabric_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fabric_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fabric_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fabric_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fabric_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "fabric"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4085,6 +4255,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fertilizer'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fertilizer'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fertilizer'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fertilizer_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fertilizer_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "fertilizer"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4117,12 +4297,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_fertilizer_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fertilizer_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fertilizer_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fertilizer_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fertilizer_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "fertilizer"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4151,6 +4331,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fine_art'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fine_art'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fine_art'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fine_art_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fine_art_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "fine_art"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4183,12 +4373,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_fine_art_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fine_art_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fine_art_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fine_art_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fine_art_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "fine_art"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4217,6 +4407,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fish'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fish'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fish'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fish_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fish_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "fish"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4249,12 +4449,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_fish_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fish_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fish_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fish_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fish_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "fish"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4283,6 +4483,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fruit'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fruit'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fruit'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fruit_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fruit_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "fruit"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4315,12 +4525,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_fruit_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_fruit_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fruit_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fruit_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_fruit_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "fruit"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4349,6 +4559,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_furniture'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_furniture'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_furniture'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_furniture_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_furniture_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "furniture"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4381,12 +4601,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_furniture_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_furniture_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_furniture_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_furniture_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_furniture_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "furniture"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4415,6 +4635,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_glass'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_glass'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_glass'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_glass_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_glass_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "glass"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4447,12 +4677,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_glass_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_glass_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_glass_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_glass_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_glass_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "glass"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4481,6 +4711,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_grain'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_grain'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_grain'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_grain_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_grain_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "grain"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4513,12 +4753,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_grain_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_grain_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_grain_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_grain_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_grain_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "grain"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4547,6 +4787,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_groceries'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_groceries'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_groceries'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_groceries_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_groceries_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "groceries"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4579,12 +4829,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_groceries_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_groceries_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_groceries_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_groceries_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_groceries_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "groceries"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4613,6 +4863,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_hardwood'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_hardwood'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_hardwood'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_hardwood_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_hardwood_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "hardwood"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4645,12 +4905,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_hardwood_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_hardwood_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_hardwood_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_hardwood_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_hardwood_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "hardwood"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4679,6 +4939,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_iron'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_iron'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_iron'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_iron_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_iron_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "iron"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4711,12 +4981,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_iron_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_iron_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_iron_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_iron_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_iron_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "iron"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4745,6 +5015,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ironclads'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ironclads'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ironclads'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ironclads_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ironclads_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "ironclads"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4777,12 +5057,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_ironclads_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_ironclads_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_ironclads_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_ironclads_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_ironclads_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "ironclads"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4811,6 +5091,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_launch_capacity'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_launch_capacity'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_launch_capacity'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_launch_capacity_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_launch_capacity_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "launch_capacity"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4843,12 +5133,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_launch_capacity_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_launch_capacity_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_launch_capacity_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_launch_capacity_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_launch_capacity_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "launch_capacity"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4877,6 +5167,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_lead'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_lead'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_lead'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_lead_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_lead_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "lead"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4909,12 +5209,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_lead_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_lead_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_lead_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_lead_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_lead_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "lead"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -4943,6 +5243,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_liquor'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_liquor'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_liquor'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_liquor_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_liquor_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "liquor"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -4975,12 +5285,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_liquor_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_liquor_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_liquor_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_liquor_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_liquor_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "liquor"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5009,6 +5319,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_clothes'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_clothes'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_clothes'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_clothes_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_clothes_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "luxury_clothes"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5041,12 +5361,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_luxury_clothes_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_clothes_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_luxury_clothes_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_luxury_clothes_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_luxury_clothes_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "luxury_clothes"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5075,6 +5395,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_furniture'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_furniture'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_furniture'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_furniture_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_furniture_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "luxury_furniture"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5107,12 +5437,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_luxury_furniture_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_luxury_furniture_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_luxury_furniture_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_luxury_furniture_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_luxury_furniture_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "luxury_furniture"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5141,6 +5471,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_magnetic_drive_ships'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_magnetic_drive_ships'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_magnetic_drive_ships'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_magnetic_drive_ships_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_magnetic_drive_ships_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "magnetic_drive_ships"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5173,12 +5513,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_magnetic_drive_ships_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_magnetic_drive_ships_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_magnetic_drive_ships_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_magnetic_drive_ships_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_magnetic_drive_ships_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "magnetic_drive_ships"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5207,6 +5547,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_manowars'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_manowars'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_manowars'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_manowars_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_manowars_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "manowars"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5239,12 +5589,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_manowars_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_manowars_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_manowars_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_manowars_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_manowars_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "manowars"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5273,6 +5623,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_meat'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_meat'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_meat'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_meat_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_meat_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "meat"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5305,12 +5665,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_meat_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_meat_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_meat_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_meat_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_meat_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "meat"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5339,6 +5699,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_merchant_marine'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_merchant_marine'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_merchant_marine'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_merchant_marine_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_merchant_marine_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "merchant_marine"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5371,12 +5741,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_merchant_marine_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_merchant_marine_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_merchant_marine_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_merchant_marine_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_merchant_marine_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "merchant_marine"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5405,6 +5775,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_motor_ships'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_motor_ships'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_motor_ships'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_motor_ships_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_motor_ships_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "motor_ships"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5437,12 +5817,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_motor_ships_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_motor_ships_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_motor_ships_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_motor_ships_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_motor_ships_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "motor_ships"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5471,6 +5851,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_oil'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_oil'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_oil'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_oil_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_oil_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "oil"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5503,12 +5893,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_oil_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_oil_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_oil_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_oil_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_oil_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "oil"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5537,6 +5927,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_opium'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_opium'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_opium'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_opium_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_opium_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "opium"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5569,12 +5969,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_opium_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_opium_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_opium_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_opium_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_opium_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "opium"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5603,6 +6003,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_paper'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_paper'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_paper'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_paper_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_paper_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "paper"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5635,12 +6045,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_paper_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_paper_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_paper_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_paper_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_paper_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "paper"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5669,6 +6079,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_porcelain'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_porcelain'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_porcelain'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_porcelain_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_porcelain_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "porcelain"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5701,12 +6121,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_porcelain_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_porcelain_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_porcelain_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_porcelain_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_porcelain_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "porcelain"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5735,6 +6155,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_radios'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_radios'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_radios'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_radios_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_radios_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "radios"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5767,12 +6197,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_radios_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_radios_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_radios_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_radios_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_radios_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "radios"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5801,6 +6231,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_robotics'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_robotics'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_robotics'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_robotics_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_robotics_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "robotics"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5833,12 +6273,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_robotics_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_robotics_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_robotics_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_robotics_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_robotics_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "robotics"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5867,6 +6307,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_rubber'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_rubber'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_rubber'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_rubber_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_rubber_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "rubber"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5899,12 +6349,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_rubber_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_rubber_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_rubber_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_rubber_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_rubber_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "rubber"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5933,6 +6383,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_silk'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_silk'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_silk'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_silk_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_silk_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "silk"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -5965,12 +6425,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_silk_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_silk_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_silk_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_silk_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_silk_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "silk"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -5999,6 +6459,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_small_arms'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_small_arms'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_small_arms'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_small_arms_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_small_arms_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "small_arms"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6031,12 +6501,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_small_arms_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_small_arms_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_small_arms_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_small_arms_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_small_arms_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "small_arms"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6065,6 +6535,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steamers'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steamers'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steamers'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steamers_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steamers_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "steamers"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6097,12 +6577,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_steamers_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steamers_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_steamers_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_steamers_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_steamers_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "steamers"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6131,6 +6611,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steel'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steel'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steel'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steel_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steel_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "steel"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6163,12 +6653,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_steel_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_steel_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_steel_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_steel_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_steel_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "steel"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6197,6 +6687,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sugar'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sugar'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sugar'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sugar_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sugar_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "sugar"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6229,12 +6729,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_sugar_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sugar_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_sugar_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_sugar_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_sugar_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "sugar"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6263,6 +6763,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sulfur'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sulfur'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sulfur'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sulfur_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sulfur_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "sulfur"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6295,12 +6805,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_sulfur_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_sulfur_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_sulfur_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_sulfur_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_sulfur_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "sulfur"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6329,6 +6839,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tanks'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tanks'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tanks'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tanks_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tanks_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "tanks"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6361,12 +6881,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_tanks_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tanks_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tanks_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tanks_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tanks_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "tanks"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6395,6 +6915,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tea'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tea'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tea'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tea_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tea_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "tea"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6427,12 +6957,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_tea_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tea_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tea_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tea_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tea_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "tea"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6461,6 +6991,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tech_metals'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tech_metals'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tech_metals'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tech_metals_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tech_metals_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "tech_metals"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6493,12 +7033,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_tech_metals_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tech_metals_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tech_metals_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tech_metals_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tech_metals_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "tech_metals"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6527,6 +7067,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_telephones'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_telephones'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_telephones'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_telephones_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_telephones_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "telephones"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6559,12 +7109,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_telephones_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_telephones_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_telephones_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_telephones_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_telephones_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "telephones"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6593,6 +7143,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tobacco'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tobacco'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tobacco'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tobacco_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tobacco_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "tobacco"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6625,12 +7185,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_tobacco_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tobacco_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tobacco_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tobacco_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tobacco_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "tobacco"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6659,6 +7219,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tools'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tools'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tools'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tools_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tools_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "tools"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6691,12 +7261,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_tools_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tools_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tools_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tools_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tools_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "tools"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6725,6 +7295,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tourism'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tourism'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tourism'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tourism_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tourism_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "tourism"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6757,12 +7337,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_tourism_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_tourism_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tourism_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tourism_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_tourism_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "tourism"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6791,6 +7371,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wine'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wine'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wine'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wine_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wine_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "wine"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6823,12 +7413,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_wine_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wine_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_wine_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_wine_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_wine_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "wine"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 
@@ -6857,6 +7447,16 @@ types te_tax_generated_rows_types
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wood'), '(CFixedPoint)1' )]" text = "te_tax_cu_lv_p1" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wood'), '(CFixedPoint)2' )]" text = "te_tax_cu_lv_p2" }
 				te_tax_cu_level_text = { visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wood'), '(CFixedPoint)3' )]" text = "te_tax_cu_lv_p3" }
+			}
+		}
+
+		te_tax_review_line = {
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wood_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wood_on'), '(CFixedPoint)0' ) )]"
+			blockoverride "line_label" {
+				text = "wood"
+			}
+			blockoverride "line_value" {
+				text = "te_tax_rv_cu_blocked_imp"
 			}
 		}
 
@@ -6889,12 +7489,12 @@ types te_tax_generated_rows_types
 		}
 
 		te_tax_review_line = {
-			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_wood_blocked'), '(CFixedPoint)0' ), Or( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_imp_wood_on'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_wood_on'), '(CFixedPoint)0' ) ) )]"
+			visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_wood_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_exp_wood_on'), '(CFixedPoint)0' ) )]"
 			blockoverride "line_label" {
 				text = "wood"
 			}
 			blockoverride "line_value" {
-				text = "te_tax_rv_cu_blocked"
+				text = "te_tax_rv_cu_blocked_exp"
 			}
 		}
 	}

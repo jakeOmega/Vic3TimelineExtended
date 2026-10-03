@@ -567,6 +567,7 @@ te_tax_can_pass = {
 		custom_tooltip = { text = te_tax_tt_pass_slot OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 } }
 		custom_tooltip = { text = te_tax_tt_pass_current te_tax_gen_bill_current = yes }
 		custom_tooltip = { text = te_tax_tt_pass_sunsets te_tax_gen_bill_sunsets_valid = yes }
+		custom_tooltip = { text = te_tax_tt_pass_changes te_tax_bill_changes_something = yes }
 		custom_tooltip = {
 			text = te_tax_tt_pass_store
 			OR = {
@@ -577,6 +578,23 @@ te_tax_can_pass = {
 	}
 	trigger_else = {
 		custom_tooltip = { text = te_tax_tt_bill_open always = no }
+	}
+}
+
+# The bill under debate changes something from existing law in its month
+# (Task 15 fix round 1; Task 13's change counts, never a mere restatement): an
+# instrument (its rate, an expiry it sets or a pending one it replaces,
+# te_tax_gen_bill_changes_instruments), a taxed good, agricultural relief,
+# regional relief's band or states, or a customs level. Passage requires it,
+# defensively, and a bill whose customs a lost market dropped is withdrawn
+# without it (te_tax_bill_drop_customs). Read only while a bill is open.
+te_tax_bill_changes_something = {
+	OR = {
+		te_tax_gen_bill_changes_instruments = yes
+		te_tax_bl_goods_changed >= 1
+		NOT = { te_tax_bl_dstep_agrel = 0 }
+		te_tax_bl_regrel_differs = yes
+		te_tax_bl_customs_changed >= 1
 	}
 }
 
@@ -1302,6 +1320,7 @@ te_tax_can_force_through = {
 		custom_tooltip = { text = te_tax_tt_pass_slot OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 } }
 		custom_tooltip = { text = te_tax_tt_pass_current te_tax_gen_bill_current = yes }
 		custom_tooltip = { text = te_tax_tt_pass_sunsets te_tax_gen_bill_sunsets_valid = yes }
+		custom_tooltip = { text = te_tax_tt_pass_changes te_tax_bill_changes_something = yes }
 		custom_tooltip = {
 			text = te_tax_tt_pass_store
 			OR = {

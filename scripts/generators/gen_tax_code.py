@@ -1042,8 +1042,8 @@ def _customs_views():
         "# Customs (plan Task 15). te_tax_cu_native_<d>_<good>: the market's level of the good, read",
         "# through the capital's state goods, one branch per level (vanilla's default when none can be",
         "# read). te_tax_view_cu_<d>_<good>: the level a Customs row shows. _on: the draft changes it.",
-        "# _base: existing law's in the draft's month. te_tax_view_cu_<good>_blocked: a treaty or the",
-        "# tariff cooldown kept the market's level, which the code adopted (te_tax_cblock_<good>).",
+        "# _base: existing law's in the draft's month. _blocked: a treaty or the tariff cooldown kept the",
+        "# market's level in that direction, which the code adopted (te_tax_cblock_<d>_<good>).",
     ]
     for good in customs_catalog():
         for d, direction in CUSTOMS_DIRS:
@@ -1061,9 +1061,9 @@ def _customs_views():
             lines += _view(f"te_tax_view_cu_{d}_{good}_on", 0, f"{DRAFT_OPEN} has_variable = {field} {_customs_touched(field)}",
                            ["value = 1"])
             lines += _view(f"te_tax_view_cu_{d}_{good}_base", 0, DRAFT_OPEN, [f"value = te_tax_base_dr_{d}_{good}"])
-        lines += _view(f"te_tax_view_cu_{good}_blocked", 0,
-                       f"te_tax_customs_authority = yes has_variable = te_tax_cblock_{good} var:te_tax_cblock_{good} = 1",
-                       ["value = 1"])
+            block_mark = f"te_tax_cblock_{d}_{good}"
+            lines += _view(f"te_tax_view_cu_{d}_{good}_blocked", 0,
+                           f"te_tax_customs_authority = yes has_variable = {block_mark} var:{block_mark} = 1", ["value = 1"])
     marker = customs_marker("dr")
     lines += [
         "",
@@ -1227,6 +1227,10 @@ def custom_localization():
             elif value == KIND_CUSTOMS_ADOPTED:
                 # The row prints how many levels were adopted, carried in the entry's _inst.
                 entries.append((f"{kind} = {value}", f"{HISTORY_KIND_KEYS[value]}_{i}"))
+            elif value == KIND_CUSTOMS_DROPPED:
+                # _inst 1: the bill changed nothing else and was withdrawn.
+                entries.append((f"{kind} = {value} {inst} = 1", f"{HISTORY_KIND_KEYS[value]}_withdrawn"))
+                entries.append((f"{kind} = {value}", HISTORY_KIND_KEYS[value]))
             else:
                 entries.append((f"{kind} = {value}", HISTORY_KIND_KEYS[value]))
         lines += ["", f"te_tax_hist_event_{i} = {{", "\ttype = country", "\trandom_valid = no"]
@@ -1566,7 +1570,7 @@ def _apply(slot):
             field = f"{p}_{d}_{good}"
             lines.append(f"\t\tif = {{ limit = {{ {_customs_touched(field)} }} set_variable = {{ name = te_tax_en_{d}_{good} "
                          f"value = var:{field} }} {_remove_if_set(f'te_tax_cretry_{d}_{good}', '')} "
-                         f"{_remove_if_set(f'te_tax_cblock_{good}', '')} }}")
+                         f"{_remove_if_set(f'te_tax_cblock_{d}_{good}', '')} }}")
     lines.append("\t}")
     plist = slot_relief_list(slot)
     lines += [
@@ -2738,6 +2742,13 @@ def _bill_triggers():
                         "var:te_tax_bl_xver_relief = var:te_tax_xver_relief"])
     lines += _or_block(["NOT = { te_tax_gen_bill_touches_customs = yes }",
                         "AND = { has_variable = te_tax_xver_customs var:te_tax_bl_xver_customs = var:te_tax_xver_customs }"])
+    lines += ["}", "", "# The bill changes an instrument from existing law in its month (fix round 1, Task 15): it",
+              "# moves the rate, sets an expiry, or replaces a pending one (an extension restates the rate and",
+              "# changes its expiry, spec 3). A provision merely restated with neither changes nothing.",
+              "te_tax_gen_bill_changes_instruments = {"]
+    lines += _or_block([f"AND = {{ var:te_tax_bl_{key} >= 0 OR = {{ NOT = {{ te_tax_bl_dstep_{key} = 0 }} "
+                        f"var:te_tax_bl_{key}_sun > 0 AND = {{ has_variable = te_tax_en_{key}_exp "
+                        f"var:te_tax_en_{key}_exp >= 0 }} }} }}" for key in keys])
     for record, label in (("bl", "bill"), ("dr", "draft")):
         lines += ["}", "", f"# Every provision the {label} changes moves at most two steps from existing law"
                            f" ({'minor bill' if record == 'bl' else 'its class on the panels'}).",
@@ -3506,7 +3517,7 @@ def _customs_effects():
     for good in customs_catalog():
         lines += [f"\tte_tax_gen_customs_read_native_{d} = {{ GOOD = {good} }}" for d, _ in CUSTOMS_DIRS]
         lines += [_remove_if_set(f"te_tax_cretry_{d}_{good}") for d, _ in CUSTOMS_DIRS]
-        lines.append(_remove_if_set(f"te_tax_cblock_{good}"))
+        lines += [_remove_if_set(f"te_tax_cblock_{d}_{good}") for d, _ in CUSTOMS_DIRS]
     lines += [
         "}",
         "",
@@ -3516,10 +3527,11 @@ def _customs_effects():
         "# te_tax_cu_counts = 1), the failed re-asserts are counted (te_tax_cretry_<d>_<good>). Once",
         "# te_tax_customs_adopt_after monthly re-asserts in a row have not taken (a treaty forbids the",
         "# level, or the 3-month tariff cooldown kept refusing it), the market's level is adopted into the",
-        "# code instead, the good is marked blocked (te_tax_cblock_<good>, for the review) and counted",
-        "# (local te_tax_cu_adopted), so the caller moves the customs external version once and writes one",
-        "# history entry with the count. A level that matches clears the count. The counter and the",
-        "# blocked mark are transient flags, not schema tokens: written when set, removed when cleared.",
+        "# code instead, the direction is marked blocked (te_tax_cblock_<d>_<good>, for the review) and",
+        "# counted (local te_tax_cu_adopted), so the caller moves the customs external version once and",
+        "# writes one history entry with the count. A re-assert that took (the level matches again while a",
+        "# count stands) clears the count and the direction's blocked mark. The counter and the blocked",
+        "# mark are transient flags, not schema tokens: written when set, removed when cleared.",
         "te_tax_gen_sync_customs = {",
     ]
     for good in customs_catalog():
@@ -3532,7 +3544,7 @@ def _customs_effects():
                 f"\t\t\tlimit = {{ local_var:te_tax_cu_counts = 1 has_variable = {retry} var:{retry} >= te_tax_customs_adopt_after }}",
                 f"\t\t\tte_tax_gen_customs_read_native_{d} = {{ GOOD = {good} }}",
                 f"\t\t\tremove_variable = {retry}",
-                f"\t\t\tset_variable = {{ name = te_tax_cblock_{good} value = 1 }}",
+                f"\t\t\tset_variable = {{ name = te_tax_cblock_{d}_{good} value = 1 }}",
                 "\t\t\tchange_local_variable = { name = te_tax_cu_adopted add = 1 }",
                 "\t\t}",
                 "\t\telse = {",
@@ -3544,7 +3556,8 @@ def _customs_effects():
                 "\t\t\t}",
                 "\t\t}",
                 "\t}",
-                f"\telse_if = {{ limit = {{ has_variable = {retry} }} remove_variable = {retry} }}",
+                f"\telse_if = {{ limit = {{ has_variable = {retry} }} remove_variable = {retry} "
+                f"{_remove_if_set(f'te_tax_cblock_{d}_{good}', '')} }}",
             ]
     lines += [
         "}",
@@ -3907,8 +3920,8 @@ def _customs_rows():
     lines += [
         "",
         "\t### The review's customs lines: each level the draft changes, existing law's level in the",
-        "\t### draft's month and the bill's; then each good whose level a treaty or the tariff",
-        "\t### cooldown kept, which the code adopted (te_tax_view_cu_<good>_blocked).",
+        "\t### draft's month and the bill's, and under it, if a treaty or the tariff cooldown kept the",
+        "\t### market's level in that direction, which the code adopted (te_tax_view_cu_<d>_<good>_blocked).",
         "\ttype te_tax_rv_customs_rows = flowcontainer {",
         "\t\tdirection = vertical",
         "\t\tignoreinvisible = yes",
@@ -3923,14 +3936,13 @@ def _customs_rows():
                       "\t\t\tblockoverride \"law_level\" {"] + _level_texts(f"{view}_base", "\t\t\t\t") + [
                       "\t\t\t}", "\t\t\tblockoverride \"bill_level\" {"] + _level_texts(view, "\t\t\t\t") + [
                       "\t\t\t}", "\t\t}"]
-        touched = ", ".join(_gui_view(f"te_tax_view_cu_{d}_{good}_on", "NotEqualTo_CFixedPoint", 0)
-                            for d, _ in CUSTOMS_DIRS)
-        blocked = _gui_view(f"te_tax_view_cu_{good}_blocked", "NotEqualTo_CFixedPoint", 0)
-        lines += ["", "\t\tte_tax_review_line = {",
-                  f"\t\t\tvisible = \"[And( {blocked}, Or( {touched} ) )]\"",
-                  "\t\t\tblockoverride \"line_label\" {", f"\t\t\t\ttext = \"{good}\"", "\t\t\t}",
-                  "\t\t\tblockoverride \"line_value\" {", "\t\t\t\ttext = \"te_tax_rv_cu_blocked\"", "\t\t\t}",
-                  "\t\t}"]
+            blocked = _gui_view(f"{view}_blocked", "NotEqualTo_CFixedPoint", 0)
+            touched = _gui_view(f"{view}_on", "NotEqualTo_CFixedPoint", 0)
+            lines += ["", "\t\tte_tax_review_line = {",
+                      f"\t\t\tvisible = \"[And( {blocked}, {touched} )]\"",
+                      "\t\t\tblockoverride \"line_label\" {", f"\t\t\t\ttext = \"{good}\"", "\t\t\t}",
+                      "\t\t\tblockoverride \"line_value\" {", f"\t\t\t\ttext = \"te_tax_rv_cu_blocked_{d}\"",
+                      "\t\t\t}", "\t\t}"]
     lines.append("\t}")
     return lines
 

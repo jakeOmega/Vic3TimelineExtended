@@ -234,7 +234,7 @@ te_tax_sync_relief = {
 # or a package touching customs then holds), te_tax_code_version once, and write
 # one history entry (kind 15) carrying how many levels were adopted in its _inst;
 # the drift counter keeps the per-good detail. The per-good counter and blocked
-# mark (te_tax_cretry_<d>_<good>, te_tax_cblock_<good>) and the month guard
+# mark (te_tax_cretry_<d>_<good>, te_tax_cblock_<d>_<good>) and the month guard
 # (te_tax_customs_month) are transient: not schema tokens and not copied at an
 # outbreak, so the rebels count afresh; te_tax_gen_customs_clear_retries drops
 # the counters when the market is lost, at a release and at reunification.
@@ -259,7 +259,13 @@ te_tax_sync_customs = {
 			change_variable = { name = te_tax_xver_customs add = 1 }
 			change_variable = { name = te_tax_code_version add = 1 }
 			te_tax_gen_history_write = { KIND = 15 SLOT = none INST = local_var:te_tax_cu_adopted }
-			debug_log = "TE_TAX customs_adopted tariff levels the code re-asserted for te_tax_customs_adopt_after months in a row did not take (a treaty or the cooldown); the market's levels were adopted into the code (count: the newest history entry); month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			# Every time for a player's country, the first time only for an AI's
+			# (te_tax_detect_drift's rule): the AI may keep moving its tariffs.
+			if = {
+				limit = { OR = { is_ai = no NOT = { has_variable = te_tax_customs_logged } } }
+				debug_log = "TE_TAX customs_adopted tariff levels the code re-asserted for te_tax_customs_adopt_after months in a row did not take (a treaty or the cooldown); the market's levels were adopted into the code (count: the newest history entry); month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+				if = { limit = { is_ai = yes } set_variable = { name = te_tax_customs_logged value = 1 } }
+			}
 		}
 	}
 }

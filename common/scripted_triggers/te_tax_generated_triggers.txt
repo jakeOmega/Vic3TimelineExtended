@@ -1800,6 +1800,19 @@ te_tax_gen_bill_current = {
 	}
 }
 
+# The bill changes an instrument from existing law in its month (fix round 1, Task 15): it
+# moves the rate, sets an expiry, or replaces a pending one (an extension restates the rate and
+# changes its expiry, spec 3). A provision merely restated with neither changes nothing.
+te_tax_gen_bill_changes_instruments = {
+	OR = {
+		AND = { var:te_tax_bl_wage >= 0 OR = { NOT = { te_tax_bl_dstep_wage = 0 } var:te_tax_bl_wage_sun > 0 AND = { has_variable = te_tax_en_wage_exp var:te_tax_en_wage_exp >= 0 } } }
+		AND = { var:te_tax_bl_div >= 0 OR = { NOT = { te_tax_bl_dstep_div = 0 } var:te_tax_bl_div_sun > 0 AND = { has_variable = te_tax_en_div_exp var:te_tax_en_div_exp >= 0 } } }
+		AND = { var:te_tax_bl_land >= 0 OR = { NOT = { te_tax_bl_dstep_land = 0 } var:te_tax_bl_land_sun > 0 AND = { has_variable = te_tax_en_land_exp var:te_tax_en_land_exp >= 0 } } }
+		AND = { var:te_tax_bl_head >= 0 OR = { NOT = { te_tax_bl_dstep_head = 0 } var:te_tax_bl_head_sun > 0 AND = { has_variable = te_tax_en_head_exp var:te_tax_en_head_exp >= 0 } } }
+		AND = { var:te_tax_bl_cons >= 0 OR = { NOT = { te_tax_bl_dstep_cons = 0 } var:te_tax_bl_cons_sun > 0 AND = { has_variable = te_tax_en_cons_exp var:te_tax_en_cons_exp >= 0 } } }
+	}
+}
+
 # Every provision the bill changes moves at most two steps from existing law (minor bill).
 te_tax_gen_bill_small_steps = {
 	OR = {

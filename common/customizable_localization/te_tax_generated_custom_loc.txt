@@ -93,6 +93,10 @@ te_tax_hist_event_1 = {
 		localization_key = te_tax_hist_kind_customs_gained
 	}
 	text = {
+		trigger = { te_tax_view_hist_1_kind = 18 te_tax_view_hist_1_inst = 1 }
+		localization_key = te_tax_hist_kind_customs_dropped_withdrawn
+	}
+	text = {
 		trigger = { te_tax_view_hist_1_kind = 18 }
 		localization_key = te_tax_hist_kind_customs_dropped
 	}
@@ -187,6 +191,10 @@ te_tax_hist_event_2 = {
 	text = {
 		trigger = { te_tax_view_hist_2_kind = 17 }
 		localization_key = te_tax_hist_kind_customs_gained
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 18 te_tax_view_hist_2_inst = 1 }
+		localization_key = te_tax_hist_kind_customs_dropped_withdrawn
 	}
 	text = {
 		trigger = { te_tax_view_hist_2_kind = 18 }
@@ -285,6 +293,10 @@ te_tax_hist_event_3 = {
 		localization_key = te_tax_hist_kind_customs_gained
 	}
 	text = {
+		trigger = { te_tax_view_hist_3_kind = 18 te_tax_view_hist_3_inst = 1 }
+		localization_key = te_tax_hist_kind_customs_dropped_withdrawn
+	}
+	text = {
 		trigger = { te_tax_view_hist_3_kind = 18 }
 		localization_key = te_tax_hist_kind_customs_dropped
 	}
@@ -379,6 +391,10 @@ te_tax_hist_event_4 = {
 	text = {
 		trigger = { te_tax_view_hist_4_kind = 17 }
 		localization_key = te_tax_hist_kind_customs_gained
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 18 te_tax_view_hist_4_inst = 1 }
+		localization_key = te_tax_hist_kind_customs_dropped_withdrawn
 	}
 	text = {
 		trigger = { te_tax_view_hist_4_kind = 18 }
@@ -477,6 +493,10 @@ te_tax_hist_event_5 = {
 		localization_key = te_tax_hist_kind_customs_gained
 	}
 	text = {
+		trigger = { te_tax_view_hist_5_kind = 18 te_tax_view_hist_5_inst = 1 }
+		localization_key = te_tax_hist_kind_customs_dropped_withdrawn
+	}
+	text = {
 		trigger = { te_tax_view_hist_5_kind = 18 }
 		localization_key = te_tax_hist_kind_customs_dropped
 	}
@@ -571,6 +591,10 @@ te_tax_hist_event_6 = {
 	text = {
 		trigger = { te_tax_view_hist_6_kind = 17 }
 		localization_key = te_tax_hist_kind_customs_gained
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 18 te_tax_view_hist_6_inst = 1 }
+		localization_key = te_tax_hist_kind_customs_dropped_withdrawn
 	}
 	text = {
 		trigger = { te_tax_view_hist_6_kind = 18 }
@@ -669,6 +693,10 @@ te_tax_hist_event_7 = {
 		localization_key = te_tax_hist_kind_customs_gained
 	}
 	text = {
+		trigger = { te_tax_view_hist_7_kind = 18 te_tax_view_hist_7_inst = 1 }
+		localization_key = te_tax_hist_kind_customs_dropped_withdrawn
+	}
+	text = {
 		trigger = { te_tax_view_hist_7_kind = 18 }
 		localization_key = te_tax_hist_kind_customs_dropped
 	}
@@ -763,6 +791,10 @@ te_tax_hist_event_8 = {
 	text = {
 		trigger = { te_tax_view_hist_8_kind = 17 }
 		localization_key = te_tax_hist_kind_customs_gained
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 18 te_tax_view_hist_8_inst = 1 }
+		localization_key = te_tax_hist_kind_customs_dropped_withdrawn
 	}
 	text = {
 		trigger = { te_tax_view_hist_8_kind = 18 }
