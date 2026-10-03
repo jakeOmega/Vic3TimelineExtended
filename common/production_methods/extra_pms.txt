@@ -5717,8 +5717,8 @@ pm_aluminum_substitution = {
 		workforce_scaled = {
 			# Input goods
 			goods_input_iron_add = 100                           # Price:   40, Total cost:  4000.0 (42.55%)
-			goods_input_coal_add = 30                            # Price:   30, Total cost:   900.0 (9.57%)
-			goods_input_electricity_add = 150                    # Price:   30, Total cost:  4500.0 (47.87%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (3.19%)
+			goods_input_electricity_add = 170                    # Price:   30, Total cost:  5100.0 (54.26%)
 			# Output goods
 			goods_output_steel_add = 250                         # Price:   50, Total cost: 12500.0 (100.00%)
 			# Total input cost: 9400.0
@@ -5759,8 +5759,8 @@ pm_chromium_substitution = {
 		workforce_scaled = {
 			# Input goods
 			goods_input_iron_add = 150                           # Price:   40, Total cost:  6000.0 (52.63%)
-			goods_input_coal_add = 30                            # Price:   30, Total cost:   900.0 (7.89%)
-			goods_input_electricity_add = 150                    # Price:   30, Total cost:  4500.0 (39.47%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (2.63%)
+			goods_input_electricity_add = 170                    # Price:   30, Total cost:  5100.0 (44.74%)
 			# Output goods
 			goods_output_steel_add = 300                         # Price:   50, Total cost: 15000.0 (100.00%)
 			# Total input cost: 11400.0

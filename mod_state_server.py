@@ -5757,6 +5757,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         return {
             "auto_generated": [
                 {
+                    "pattern": "common/script_values/carbon_capture_generated_values.txt",
+                    "owner": "gen_carbon_capture_pms.py",
+                    "input": "synthetic PM outputs + shared greenhouse-gas factors",
+                    "header_marker": True,
+                },
+                {
                     "pattern": "common/ideologies/modified.txt",
                     "owner": "apply_ideologies.py",
                     "input": "ideology_modifications.py",
@@ -8435,6 +8441,7 @@ POST_LOAD_REGENERATORS = [
     ("resources",                     "resources"),
     ("gen_pb_principle_unlock_descs", "gen_pb_principle_unlock_descs"),
     ("gen_un_button_descs",           "gen_un_button_descs"),
+    ("gen_carbon_capture_pms",        "gen_carbon_capture_pms"),
     ("gen_law_consistency",           "gen_law_consistency"),
     ("gen_company_building_cleanup",  "scripts.generators.gen_company_building_cleanup"),
     ("organize_loc",                  "organize_loc"),

@@ -26,7 +26,7 @@
 # ============================================================================
 
 # ----------------------------------------------------------------------------
-# Emissions — all read from the yearly snapshots
+# Emissions — snapshots retain internal units; formatted amounts scale ×1000
 # ----------------------------------------------------------------------------
 
 # This country's MARKET's annual emissions. Stored on the market leader, because
@@ -34,7 +34,7 @@
 # There is no per-country emissions figure in this system -- emissions are a
 # property of a market's oil and coal consumption, not of one member.
 # Scope: country
-gw_market_emis_display = {
+gw_market_emis_raw = {
 	value = 0
 	market_capital ?= {
 		owner ?= {
@@ -44,6 +44,12 @@ gw_market_emis_display = {
 			}
 		}
 	}
+}
+
+# Formatted emission amount only; raw readers above retain internal units.
+gw_market_emis_display = {
+	value = gw_market_emis_raw
+	multiply = gw_emission_display_scale
 }
 
 # The negative part of the above: carbon captured by synthetic fuel plants.
@@ -63,12 +69,18 @@ gw_capture_display = {
 # World annual emissions, measured as the change in the cumulative global
 # variable over the last calendar year rather than re-summed from every market.
 # Scope: any
-gw_global_emis_display = {
+gw_global_emis_raw = {
 	value = 0
 	if = {
 		limit = { has_global_variable = gw_g_global_emis }
 		add = global_var:gw_g_global_emis
 	}
+}
+
+# Formatted emission amount only; raw readers above retain internal units.
+gw_global_emis_display = {
+	value = gw_global_emis_raw
+	multiply = gw_emission_display_scale
 }
 
 # This market's share of world annual emissions, in per cent. Clamped to 0-100
@@ -83,7 +95,7 @@ gw_share_pct_display = {
 			has_global_variable = gw_g_global_emis
 			global_var:gw_g_global_emis > 0
 		}
-		add = gw_market_emis_display
+		add = gw_market_emis_raw
 		divide = global_var:gw_g_global_emis
 		multiply = 100
 	}
@@ -96,7 +108,7 @@ gw_share_pct_display = {
 # moves it by that year's emissions / 10000.
 # Scope: any
 gw_yearly_change_display = {
-	value = gw_global_emis_display
+	value = gw_global_emis_raw
 	divide = 10000
 }
 
@@ -421,6 +433,7 @@ gw_disp_cut_frac = {
 gw_disp_captured = {
 	value = gw_capture_display
 	multiply = -1
+	multiply = gw_emission_display_scale
 }
 
 # ----------------------------------------------------------------------------
@@ -441,6 +454,7 @@ gw_disp_own_emis = {
 		limit = { has_variable = gw_disp_market_emis }
 		add = var:gw_disp_market_emis
 	}
+	multiply = gw_emission_display_scale
 }
 
 # Its share of the world's annual emissions, in per cent (0-100, as the
@@ -469,6 +483,7 @@ gw_disp_own_cum = {
 		limit = { has_variable = gw_disp_market_emis_cum }
 		add = var:gw_disp_market_emis_cum
 	}
+	multiply = gw_emission_display_scale
 }
 
 # 1 while an Enforce Emissions Reduction treaty binds this leader.

@@ -1,0 +1,26 @@
+﻿# Hand-written 50% variants, matching design phase 0. The oil variant
+# supplies a valid mandated fallback when the fuel class changes.
+pm_te_cc_probe_none = {
+	texture = "gfx/interface/icons/production_method_icons/coal_fired_plant.dds"
+	disallowing_laws = { law_managed_fossil_phaseout }
+}
+pm_te_cc_probe_coal = {
+	texture = "gfx/interface/icons/production_method_icons/coal_fired_plant.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_modern_coal-fired_plant }
+	state_modifiers = { workforce_scaled = { state_carbon_capture_add = 2.5 } }
+	building_modifiers = {
+		workforce_scaled = {
+			goods_output_electricity_add = -11
+			goods_input_engines_add = 5
+			goods_input_steel_add = 6
+			goods_input_fertilizer_add = 7
+		}
+	}
+}
+pm_te_cc_probe_oil = {
+	texture = "gfx/interface/icons/production_method_icons/oil_fired_plant.dds"
+	is_hidden_when_unavailable = yes
+	unlocking_production_methods = { pm_modern_oil-fired_plant }
+	state_modifiers = { workforce_scaled = { state_carbon_capture_add = 3.05 } }
+}

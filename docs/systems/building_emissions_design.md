@@ -1,6 +1,34 @@
 # Per-Building Greenhouse-Gas Emissions and Carbon Capture: Design
 
-**Status: design, nothing built (2026-10-03).** Follows issue #660 (Resource Transition), which deliberately left emissions accounting unchanged. The request: make the emissions-control production methods cut CO₂, ideally through a modifier such as `country_emissions_add`, and, if possible, replace the market-wide "sum of coal and oil consumption" with something visible per building. The scoping draft (2026-10-02, PR #663) put six questions to the owner, and two versions of this design put eleven more. §4 records all three rounds of answers, and §5–§7 the design that follows from them. Three engine behaviours the design rests on are unverified in game, so they come first in the plan (§9, phase 0). Every design question is settled; §10 lists what waits for later.
+**Status: phase-0 probe prepared; phase 1 implemented, pending in-game verification (2026-10-03).** Follows issue #660 (Resource Transition), which deliberately left emissions accounting unchanged. The request: make the emissions-control production methods cut CO₂, ideally through a modifier such as `country_emissions_add`, and, if possible, replace the market-wide "sum of coal and oil consumption" with something visible per building. The scoping draft (2026-10-02, PR #663) put six questions to the owner, and two versions of this design put eleven more. §4 records all three rounds of answers, and §5–§7 the design that follows from them. Three engine behaviours the design rests on are unverified in game, so they come first in the plan (§9, phase 0). Every design question is settled; §10 lists what waits for later.
+
+## 0. Implementation checkpoint
+
+- **Phase 0:** an opt-in, handwritten power-plant probe lives in
+  [`../testing/carbon_capture_probe/`](../testing/carbon_capture_probe/README.md).
+  It includes instructions, a console event, a state-modifier read, a market
+  state sweep, and a pending evidence table. Normal deployments exclude it.
+  Its scripts parse offline; none of the three engine checks has been run.
+- **Phase 1:** `greenhouse_gas_factors.txt` is the source for coal (2), oil
+  (1.74), and the display scale (1000). The market consumption formula reads
+  those factors. `gen_carbon_capture_pms.py` currently generates only synthetic
+  credits from PM outputs; the shared factors are applied at runtime rather
+  than copied into generated coefficients. The old three constants are gone.
+- **Steel:** Electric Arc Process uses a delta INJECT; the two mod substitution
+  methods are edited in place. Merged recipes read 10 coal and 50/170
+  electricity, with unchanged goods cost at base prices.
+- **Display:** amount readers and treaty 109's text scale by 1000 and use `|K`.
+  Separate raw snapshot readers feed shares and temperature; stored snapshots,
+  history, AI, thresholds and the console's live world-total calculation keep
+  internal units. Chapter 14 and its PDF describe the new figures.
+- **Phase 2 remains unimplemented.** The probe must settle hidden gating,
+  forced fallback, staffing reads and tooltip units before selecting A′ or the
+  B fallback. The actual capture groups, technology, icons and phaseout mandate
+  are not installed. Managed Fossil Phaseout still uses its existing technology.
+
+Resume instructions and validation results are in
+[`building_emissions_handoff.md`](building_emissions_handoff.md). Section 1
+records the pre-implementation baseline; §5–§9 remain the intended full design.
 
 ## 1. How emissions work today
 

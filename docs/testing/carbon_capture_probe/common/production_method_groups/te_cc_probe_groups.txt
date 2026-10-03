@@ -1,0 +1,7 @@
+﻿pmg_te_cc_probe = {
+	production_methods = {
+		pm_te_cc_probe_none
+		pm_te_cc_probe_coal
+		pm_te_cc_probe_oil
+	}
+}
