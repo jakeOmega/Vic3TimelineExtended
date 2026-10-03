@@ -56,6 +56,7 @@ ROOT = Path(__file__).resolve().parent
 OFFERS = "common/scripted_effects/te_tax_offer_effects.txt"
 BILL = "common/scripted_effects/te_tax_bill_effects.txt"
 SCHEDULE = "common/scripted_effects/te_tax_schedule_effects.txt"
+EVENTS = "events/te_tax_internal_events.txt"
 MIGRATION = "common/scripted_effects/te_tax_migration_effects.txt"
 CIVIL_WAR = "common/scripted_effects/te_tax_civil_war_effects.txt"
 STATE = "common/scripted_effects/te_tax_state_effects.txt"
@@ -254,8 +255,39 @@ class ClauseRulingTest(unittest.TestCase):
                 self.assertNotIn(f"te_tax_bl_grief_{ig}_{key}", part)
             self.assertNotIn("te_tax_bl_eff_", part.replace("te_tax_bl_eff_agrel", "").replace("te_tax_bl_eff_wage", ""))
         leaves = norm(block(read(TRIGGERS), "te_tax_offer_cut_leaves_a_bill"))
-        self.assertEqual(leaves, "OR = { te_tax_bl_dstep_$KEY$ >= 2 te_tax_bl_provisions >= 2 te_tax_bl_goods_touched >= 1 "
-                                 "var:te_tax_bl_agrel >= 0 var:te_tax_bl_regrel >= 0 }")
+        self.assertEqual(leaves, "OR = { te_tax_bl_dstep_$KEY$ >= 2 te_tax_bl_changed_provisions >= 2 "
+                                 "te_tax_bl_goods_changed >= 1 NOT = { te_tax_bl_dstep_agrel = 0 } "
+                                 "te_tax_bl_regrel_differs = yes }")
+
+    def test_only_changes_from_existing_law_keep_a_bill(self):
+        """Fix round 1: a restatement of existing law is not a change."""
+        values = read(GEN_SUPPORT)
+        changed = norm(block(values, "te_tax_bl_changed_provisions"))
+        for key in KEYS:
+            self.assertIn(f"if = {{ limit = {{ NOT = {{ te_tax_bl_dstep_{key} = 0 }} }} add = 1 }}", changed)
+        goods = norm(block(values, "te_tax_bl_goods_changed"))
+        for good in catalog():
+            self.assertIn(f"if = {{ limit = {{ NOT = {{ te_tax_dl_g_{good} = 0 }} }} add = 1 }}", goods)
+        self.assertNotIn("te_tax_bl_goods_touched", values)
+        triggers = read(TRIGGERS)
+        differs = norm(block(triggers, "te_tax_bl_regrel_differs"))
+        self.assertEqual(differs, "has_variable = te_tax_bl_regrel var:te_tax_bl_regrel >= 0 OR = { NOT = { "
+                                  "var:te_tax_bl_regrel = te_tax_base_bl_regrel } AND = { var:te_tax_bl_regrel >= 1 "
+                                  "NOT = { te_tax_bl_relief_states_match = yes } } }")
+        match = norm(block(triggers, "te_tax_bl_relief_states_match"))
+        for slot in ("a", "b"):
+            self.assertIn(f"te_tax_relief_base_from_{slot} = {{ DUE = te_tax_bl_due }} }} "
+                          f"te_tax_relief_lists_match = {{ BASE = te_tax_p{slot}_relief_states }}", match)
+        self.assertIn("trigger_else = { te_tax_relief_lists_match = { BASE = te_tax_en_relief_states } }", match)
+        lists = norm(block(triggers, "te_tax_relief_lists_match"))
+        self.assertIn("is_target_in_variable_list = { name = $BASE$ target = PREV }", lists)
+        self.assertIn("is_target_in_variable_list = { name = te_tax_bl_relief_states target = PREV }", lists)
+        self.assertNotRegex(lists, r"\bROOT\b")
+        for name in ("te_tax_offer_cut_leaves_a_bill", "te_tax_offer_untax_leaves_a_bill"):
+            body = block(triggers, name)
+            self.assertNotIn("te_tax_bl_provisions", body)
+            self.assertNotIn("var:te_tax_bl_agrel >= 0", body)
+            self.assertNotIn("var:te_tax_bl_regrel >= 0", body)
 
     def test_a_cut_never_goes_below_existing_law(self):
         cut = norm(block(read(OFFERS), "te_tax_offer_cut"))
@@ -284,8 +316,8 @@ class ClauseRulingTest(unittest.TestCase):
             self.assertIn(f"var:te_tax_off_$IG$_kind = {STAPLE} var:te_tax_off_$IG$_arg = {idx} }} "
                           f"te_tax_dl_g_{good} > 0 te_tax_offer_untax_leaves_a_bill = yes", feasible)
         leaves = norm(block(read(TRIGGERS), "te_tax_offer_untax_leaves_a_bill"))
-        self.assertEqual(leaves, "OR = { te_tax_bl_provisions >= 1 te_tax_bl_goods_touched >= 2 "
-                                 "var:te_tax_bl_agrel >= 0 var:te_tax_bl_regrel >= 0 }")
+        self.assertEqual(leaves, "OR = { te_tax_bl_changed_provisions >= 1 te_tax_bl_goods_changed >= 2 "
+                                 "NOT = { te_tax_bl_dstep_agrel = 0 } te_tax_bl_regrel_differs = yes }")
 
     def test_relief_is_added_not_taken(self):
         part = norm(selection("rural_folk"))
@@ -328,13 +360,15 @@ class SelectionTest(unittest.TestCase):
     def test_a_red_line_group_is_offered_promises_only(self):
         for ig in IGS:
             part = selection(ig)
-            red = [b for b in blocks_of(part, "else") if "te_tax_off_" in b]
+            red = blocks_of(part, "else")
+            promises = {10 + kind for (kind, _), groups in PROMISES.items() if ig in groups}
             with self.subTest(ig=ig):
-                self.assertTrue(red, "no red-line branch")
-                kinds = {int(k) for k in re.findall(rf"name = te_tax_off_{ig}_kind value = (\d+)", red[-1])}
-                self.assertFalse(kinds & {CUT, AGREL, STAPLE}, "a clause offered at the red line")
-                # Accepting at the red line commits only through the threshold.
-                self.assertIn(f"name = te_tax_off_{ig}_commit value = 0", norm(red[-1]))
+                if not promises:
+                    self.assertEqual(red, [], "an empty red-line branch")
+                    continue
+                self.assertEqual(len(red), 1)
+                kinds = {int(k) for k in re.findall(rf"name = te_tax_off_{ig}_kind value = (\d+)", red[0])}
+                self.assertEqual(kinds, promises, "a clause offered at the red line")
 
     def test_a_clause_gained_in_this_bill_is_not_offered_again(self):
         for ig in IGS:
@@ -382,7 +416,7 @@ class AcceptTest(unittest.TestCase):
 
     def test_accepting_is_a_new_revision_in_order(self):
         order = [
-            "set_local_variable = { name = te_tax_acc_commit value = var:te_tax_off_$IG$_commit }",
+            "set_local_variable = { name = te_tax_acc_commit value = 0 }",
             "te_tax_gen_offer_apply = { IG = $IG$ }",
             "change_variable = { name = te_tax_bl_rev add = 1 }",
             "te_tax_bill_open_revision = yes",
@@ -397,6 +431,26 @@ class AcceptTest(unittest.TestCase):
                 self.assertGreater(position, 0)
         self.assertEqual(positions, sorted(positions))
         self.assertIn("limit = { local_var:te_tax_acc_commit = 1 }", self.accept)
+
+    def test_only_a_persuadable_acceptor_commits(self):
+        """Fix round 1 (spec §7.3): the offer carries a commitment only for a group
+        scoring 0 or more when it is accepted, read live; an opposed or red-lined
+        acceptor commits only through the refreshed score (the refresh's own rule)."""
+        accept = norm(self.accept)
+        self.assertIn("set_local_variable = { name = te_tax_acc_commit value = 0 } if = { limit = { "
+                      "has_variable = te_tax_sup_$IG$ var:te_tax_sup_$IG$ >= 0 } custom_tooltip = te_tax_tt_offer_commits "
+                      "set_local_variable = { name = te_tax_acc_commit value = 1 } } else = { custom_tooltip = "
+                      "te_tax_tt_offer_no_commit }", accept)
+        self.assertEqual(accept.count("te_tax_acc_commit value = 1"), 1)
+        # Nothing stores a commitment flag on the offer.
+        for path in (OFFERS, GEN_BILL, GEN_VALUES, TRIGGERS, GEN_CUSTOM_LOC, POLITICS):
+            text = (ROOT / path).read_text(encoding="utf-8-sig")
+            self.assertNotRegex(text, r"te_tax_off_\w+_commit|te_tax_disp_ig_offer_commit", path)
+        # The refresh keeps a committed group and commits any other only at the threshold.
+        refresh = norm(block(read(GEN_BILL), "te_tax_gen_refresh_support"))
+        for ig in IGS:
+            self.assertIn(f"limit = {{ var:te_tax_sup_{ig} >= te_tax_commit_threshold }} "
+                          f"set_variable = {{ name = te_tax_com_{ig} value = 1 }}", refresh)
 
     def test_the_debate_opens_reproposes_then_refreshes(self):
         start = block(read(BILL), "te_tax_bill_start_debate")
@@ -414,9 +468,19 @@ class AcceptTest(unittest.TestCase):
         trigger = norm(block(read(TRIGGERS), "te_tax_can_accept_offer"))
         self.assertTrue(trigger.startswith("custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }"))
         self.assertIn("var:te_tax_off_$IG$_rev = var:te_tax_bl_rev", trigger)
-        self.assertIn("NOT = { AND = { var:te_tax_com_$IG$ = 1 var:te_tax_com_$IG$_rev = var:te_tax_bl_rev } }", trigger)
-        self.assertIn("te_tax_gen_offer_feasible = { IG = $IG$ }", trigger)
+        self.assertIn("custom_tooltip = { text = te_tax_tt_offer_not_marginal ig:ig_$IG$ ?= { ig_counts_as_marginal = no } }",
+                      trigger)
+        self.assertIn("NAND = { has_variable = te_tax_com_$IG$ has_variable = te_tax_com_$IG$_rev "
+                      "var:te_tax_com_$IG$ = 1 var:te_tax_com_$IG$_rev = var:te_tax_bl_rev }", trigger)
+        self.assertIn("custom_tooltip = { text = te_tax_tt_offer_feasible te_tax_gen_offer_feasible = { IG = $IG$ } }",
+                      trigger)
         self.assertIn("trigger_else = { custom_tooltip = { text = te_tax_tt_bill_open always = no } }", trigger)
+        # One trigger_if (the open bill): no line can pass for want of an offer.
+        self.assertEqual(trigger.count("trigger_if"), 1)
+        feasible = norm(block(read(GEN_TRIGGERS), "te_tax_gen_offer_feasible"))
+        self.assertTrue(feasible.startswith("has_variable = te_tax_off_$IG$_kind has_variable = te_tax_off_$IG$_arg "
+                                            "var:te_tax_off_$IG$_kind > 0 trigger_if = {"))
+        self.assertTrue(feasible.endswith("trigger_else = { always = no }"))
 
     def test_clauses_change_the_bill_and_the_draft_and_are_recorded(self):
         cut = block(self.text, "te_tax_offer_cut")
@@ -431,6 +495,11 @@ class AcceptTest(unittest.TestCase):
         self.assertIn("te_tax_bl_g_$GOOD$", untax)
         self.assertIn("te_tax_dr_g_$GOOD$", untax)
         self.assertIn("set_variable = { name = te_tax_bl_got_$IG$_3 value = 1 }", untax)
+        # Fix round 1: the tooltip says a clause replaces the draft's own edit.
+        for helper in ("te_tax_offer_cut", "te_tax_offer_agrel", "te_tax_offer_untax"):
+            self.assertRegex(norm(block(self.text, helper)),
+                             r"if = \{ limit = \{ te_tax_draft_active = yes \} custom_tooltip = te_tax_tt_offer_draft ")
+        self.assertIn("draft takes the same value", loc()["te_tax_tt_offer_draft"])
         record = block(self.text, "te_tax_offer_record_promise")
         for field in ("kind", "arg", "target"):
             self.assertIn(f"name = te_tax_bl_prom_$IG$_{field}", record)
@@ -598,12 +667,18 @@ class IgViewTest(unittest.TestCase):
             self.assertNotIn(f"te_tax_ig_view_{ig}_0", text)
         self.assertNotIn("multiplier", self.views)
 
-    def test_one_refresh_site_in_the_monthly_processor(self):
+    def test_two_refresh_sites_the_processor_and_the_post_migration_sync(self):
         process = block(read(SCHEDULE), "te_tax_process_month")
         at = process.find("te_tax_refresh_ig_views = yes")
         self.assertGreater(at, process.find("te_tax_obl_check_month = yes"))
         self.assertLess(at, process.find("te_tax_sync_collection = yes"))
         self.assertEqual(process.count("te_tax_refresh_ig_views = yes"), 1)
+        # Fix round 1: te_tax.4, after its sync, once.
+        immediate = sub_block(block(read(EVENTS), "te_tax.4"), "immediate")
+        self.assertEqual(immediate.count("te_tax_refresh_ig_views = yes"), 1)
+        self.assertGreater(immediate.find("te_tax_refresh_ig_views = yes"), immediate.find("te_tax_sync_collection = yes"))
+        events = re.sub(r"#[^\n]*", "", (ROOT / EVENTS).read_text(encoding="utf-8-sig"))
+        self.assertEqual(events.count("te_tax_refresh_ig_views = yes"), 1)
         writers, callers = [], []
         for directory in ("common", "events", "gui"):
             for path in sorted((ROOT / directory).rglob("*.*")):
@@ -615,7 +690,8 @@ class IgViewTest(unittest.TestCase):
                 if "te_tax_refresh_ig_views = yes" in text or "te_tax_gen_ig_views = yes" in text:
                     callers.append(path.name)
         self.assertEqual(writers, ["te_tax_generated_effects.txt"])
-        self.assertEqual(sorted(callers), ["te_tax_offer_effects.txt", "te_tax_schedule_effects.txt"])
+        self.assertEqual(sorted(callers), ["te_tax_internal_events.txt", "te_tax_offer_effects.txt",
+                                           "te_tax_schedule_effects.txt"])
 
     def test_refresh_is_gated(self):
         refresh = norm(block(read(OFFERS), "te_tax_refresh_ig_views"))
@@ -775,6 +851,11 @@ class CardTest(unittest.TestCase):
                       ".AddScope( 'te_tax_ig', InterestGroup.MakeScope ).End )", politics)
         self.assertIn("InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer')", politics)
         self.assertIn('text = "te_tax_ig_prom"', politics)
+        # Fix round 1: what accepting gives follows the group's stance (2 persuadable, 4 red line).
+        line = loc()["te_tax_ig_offer_line"]
+        self.assertIn("ScriptValue('te_tax_disp_ig_stance'), '(CFixedPoint)2' ), 'te_tax_ig_offer_commits'", line)
+        self.assertIn("'te_tax_ig_offer_lifts', 'te_tax_ig_offer_less'", line)
+        self.assertIn("oppose the bill less", loc()["te_tax_ig_offer_less"])
 
     def test_the_offer_text_covers_every_kind(self):
         text = read(GEN_CUSTOM_LOC)

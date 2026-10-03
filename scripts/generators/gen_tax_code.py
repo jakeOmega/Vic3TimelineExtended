@@ -875,9 +875,9 @@ def _ig_values():
         "",
         "# The group's offer for the bill's current revision (plan Task 13): its kind (0 none; 1 cut a",
         "# tax, 2 agricultural relief, 3 untax a staple, 10 + an obligation kind for a promise), arg,",
-        "# whether accepting commits it, and whether a promise only maintains what holds.",
+        "# and whether a promise only maintains what holds.",
     ]
-    for value in ("", "_arg", "_commit", "_maint"):
+    for value in ("", "_arg", "_maint"):
         lines += [f"te_tax_disp_ig_offer{value} = {{", "\tvalue = 0"]
         for n, ig in enumerate(IGS):
             off = f"te_tax_off_{ig}"
@@ -2055,10 +2055,13 @@ def _offer_values():
         lines += [f"te_tax_bl_eff_{key} = {{", f"\tvalue = te_tax_base_bl_{key}",
                   f"\tif = {{ limit = {{ has_variable = te_tax_bl_{key} var:te_tax_bl_{key} >= 0 }} "
                   f"value = var:te_tax_bl_{key} }}", "}"]
-    lines += ["", "# How many catalog goods the bill touches (te_tax_offer_untax_leaves_a_bill).",
-              "te_tax_bl_goods_touched = {", "\tvalue = 0"]
-    lines += [f"\tif = {{ limit = {{ has_variable = te_tax_bl_g_{good} var:te_tax_bl_g_{good} >= 0 }} add = 1 }}"
-              for good in consumption_catalog()]
+    lines += ["", "# How many instruments and catalog goods the bill changes from existing law in its month,",
+              "# not merely restates (te_tax_offer_cut_leaves_a_bill, te_tax_offer_untax_leaves_a_bill).",
+              "te_tax_bl_changed_provisions = {", "\tvalue = 0"]
+    lines += [f"\tif = {{ limit = {{ NOT = {{ te_tax_bl_dstep_{instrument.key} = 0 }} }} add = 1 }}"
+              for instrument in INSTRUMENTS]
+    lines += ["}", "te_tax_bl_goods_changed = {", "\tvalue = 0"]
+    lines += [f"\tif = {{ limit = {{ NOT = {{ te_tax_dl_g_{good} = 0 }} }} add = 1 }}" for good in consumption_catalog()]
     lines += [
         "}",
         "",
@@ -2556,8 +2559,8 @@ def _offer_effects():
         "# group that is not marginal and has made no offer for this revision makes at most one,",
         "# from its top negative reason: material first means a clause (its catalog order, then a",
         "# promise); any other reason, or none, a promise first. A group at its red line is offered",
-        "# promises only, and accepting one commits it only if the promise lifts its score to the",
-        "# threshold (te_tax_off_<ig>_commit = 0). An offer is recorded for this revision",
+        "# promises only. Whether accepting commits the group is decided at acceptance, from its",
+        "# score then (te_tax_cmd_accept_offer: only a persuadable group). An offer is recorded for this revision",
         "# (te_tax_off_<ig>_rev), so a group offers once a revision; a clause it gained in this bill",
         "# (te_tax_bl_got_<ig>_<code>) and a second promise are never offered again; a promise is",
         "# offered only when it could be recorded (te_tax_can_obl_propose: no identical pending or",
@@ -2592,13 +2595,12 @@ def _offer_effects():
         lines += [f"\t\t\t\tvar:{sr}_mat <= var:{sr}_{reason}" for reason in reasons]
         lines += ["\t\t\t}"]
         lines += _clause_candidates(ig, "\t\t\t") + _promise_candidates(ig, "\t\t\t")
-        lines += [f"\t\t\tset_variable = {{ name = {off}_commit value = 1 }}", "\t\t}",
-                  "\t\telse_if = {", f"\t\t\tlimit = {{ var:{com} = 0 }}"]
+        lines += ["\t\t}", "\t\telse_if = {", f"\t\t\tlimit = {{ var:{com} = 0 }}"]
         lines += _promise_candidates(ig, "\t\t\t") + _clause_candidates(ig, "\t\t\t")
-        lines += [f"\t\t\tset_variable = {{ name = {off}_commit value = 1 }}", "\t\t}", "\t\telse = {"]
-        lines += _promise_candidates(ig, "\t\t\t")
-        lines += [f"\t\t\tset_variable = {{ name = {off}_commit value = 0 }}", "\t\t}",
-                  f"\t\tif = {{ limit = {{ var:{off}_kind > 0 }} set_variable = {{ name = {off}_rev value = var:te_tax_bl_rev }} }}",
+        lines.append("\t\t}")
+        if promise_offers(ig):
+            lines += ["\t\telse = {"] + _promise_candidates(ig, "\t\t\t") + ["\t\t}"]
+        lines += [f"\t\tif = {{ limit = {{ var:{off}_kind > 0 }} set_variable = {{ name = {off}_rev value = var:te_tax_bl_rev }} }}",
                   "\t}"]
     keys = [instrument.key for instrument in INSTRUMENTS]
     lines += [
@@ -3076,8 +3078,12 @@ def _offer_triggers():
     lines = [
         "",
         "# Offers (plan Task 13; te_tax_can_accept_offer, te_tax_triggers.txt). Country scope, while a",
-        "# bill is under debate and group IG has an offer (te_tax_off_<ig>_kind above 0).",
+        "# bill is under debate. False without an offer (te_tax_off_<ig>_kind above 0), and for an",
+        "# unknown one.",
         "te_tax_gen_offer_feasible = {",
+        f"\thas_variable = {off}_kind",
+        f"\thas_variable = {off}_arg",
+        f"\tvar:{off}_kind > 0",
     ]
     branches = [(f"var:{off}_kind = {OFFER_CUT} var:{off}_arg = {idx}",
                  f"te_tax_bl_dstep_{key} > 0 te_tax_offer_cut_leaves_a_bill = {{ KEY = {key} }}")

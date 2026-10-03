@@ -3607,7 +3607,7 @@ te_tax_disp_ig_prom = {
 
 # The group's offer for the bill's current revision (plan Task 13): its kind (0 none; 1 cut a
 # tax, 2 agricultural relief, 3 untax a staple, 10 + an obligation kind for a promise), arg,
-# whether accepting commits it, and whether a promise only maintains what holds.
+# and whether a promise only maintains what holds.
 te_tax_disp_ig_offer = {
 	value = 0
 	if = {
@@ -3676,41 +3676,6 @@ te_tax_disp_ig_offer_arg = {
 	else_if = {
 		limit = { is_interest_group_type = ig_trade_unions owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_trade_unions_kind has_variable = te_tax_off_trade_unions_rev has_variable = te_tax_off_trade_unions_arg var:te_tax_off_trade_unions_rev = var:te_tax_bl_rev var:te_tax_off_trade_unions_kind > 0 } }
 		owner = { add = var:te_tax_off_trade_unions_arg }
-	}
-}
-te_tax_disp_ig_offer_commit = {
-	value = 0
-	if = {
-		limit = { is_interest_group_type = ig_armed_forces owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_armed_forces_kind has_variable = te_tax_off_armed_forces_rev has_variable = te_tax_off_armed_forces_commit var:te_tax_off_armed_forces_rev = var:te_tax_bl_rev var:te_tax_off_armed_forces_kind > 0 } }
-		owner = { add = var:te_tax_off_armed_forces_commit }
-	}
-	else_if = {
-		limit = { is_interest_group_type = ig_devout owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_devout_kind has_variable = te_tax_off_devout_rev has_variable = te_tax_off_devout_commit var:te_tax_off_devout_rev = var:te_tax_bl_rev var:te_tax_off_devout_kind > 0 } }
-		owner = { add = var:te_tax_off_devout_commit }
-	}
-	else_if = {
-		limit = { is_interest_group_type = ig_industrialists owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_industrialists_kind has_variable = te_tax_off_industrialists_rev has_variable = te_tax_off_industrialists_commit var:te_tax_off_industrialists_rev = var:te_tax_bl_rev var:te_tax_off_industrialists_kind > 0 } }
-		owner = { add = var:te_tax_off_industrialists_commit }
-	}
-	else_if = {
-		limit = { is_interest_group_type = ig_intelligentsia owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_intelligentsia_kind has_variable = te_tax_off_intelligentsia_rev has_variable = te_tax_off_intelligentsia_commit var:te_tax_off_intelligentsia_rev = var:te_tax_bl_rev var:te_tax_off_intelligentsia_kind > 0 } }
-		owner = { add = var:te_tax_off_intelligentsia_commit }
-	}
-	else_if = {
-		limit = { is_interest_group_type = ig_landowners owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_landowners_kind has_variable = te_tax_off_landowners_rev has_variable = te_tax_off_landowners_commit var:te_tax_off_landowners_rev = var:te_tax_bl_rev var:te_tax_off_landowners_kind > 0 } }
-		owner = { add = var:te_tax_off_landowners_commit }
-	}
-	else_if = {
-		limit = { is_interest_group_type = ig_petty_bourgeoisie owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_petty_bourgeoisie_kind has_variable = te_tax_off_petty_bourgeoisie_rev has_variable = te_tax_off_petty_bourgeoisie_commit var:te_tax_off_petty_bourgeoisie_rev = var:te_tax_bl_rev var:te_tax_off_petty_bourgeoisie_kind > 0 } }
-		owner = { add = var:te_tax_off_petty_bourgeoisie_commit }
-	}
-	else_if = {
-		limit = { is_interest_group_type = ig_rural_folk owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_rural_folk_kind has_variable = te_tax_off_rural_folk_rev has_variable = te_tax_off_rural_folk_commit var:te_tax_off_rural_folk_rev = var:te_tax_bl_rev var:te_tax_off_rural_folk_kind > 0 } }
-		owner = { add = var:te_tax_off_rural_folk_commit }
-	}
-	else_if = {
-		limit = { is_interest_group_type = ig_trade_unions owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_trade_unions_kind has_variable = te_tax_off_trade_unions_rev has_variable = te_tax_off_trade_unions_commit var:te_tax_off_trade_unions_rev = var:te_tax_bl_rev var:te_tax_off_trade_unions_kind > 0 } }
-		owner = { add = var:te_tax_off_trade_unions_commit }
 	}
 }
 te_tax_disp_ig_offer_maint = {

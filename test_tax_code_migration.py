@@ -408,8 +408,11 @@ class EventTest(unittest.TestCase):
                 self.assertEqual(body["hidden"], "yes")
                 self.assertEqual(body["trigger"], {"te_tax_code_on": "yes"})
                 immediate = dict(body["immediate"])
-                # te_tax.4 logs each post-migration sync (Task 10).
+                # te_tax.4 logs each post-migration sync (Task 10), and then refreshes
+                # the interest groups' views of the code (Task 13 fix round 1).
                 log = immediate.pop("debug_log", None)
+                if event == "te_tax.4":
+                    self.assertEqual(immediate.pop("te_tax_refresh_ig_views", None), "yes")
                 self.assertEqual(immediate, {effect: "yes"})
                 if event == "te_tax.4":
                     self.assertTrue(log.strip('"').startswith("TE_TAX post-migration sync"))

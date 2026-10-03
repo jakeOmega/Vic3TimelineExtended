@@ -17,9 +17,11 @@
 # step 3): the revision number moves on, debate starts again, every commitment
 # is released and every pending promise with it, every promise accepted under
 # this bill is proposed again (te_tax_gen_offer_repropose), the accepting group
-# commits to the new revision (a group offered a promise at its red line
-# commits only if the promise lifts its score to the threshold), and support is
-# refreshed, so the others reconfirm or not.
+# commits to the new revision if it was persuadable when it accepted (a score
+# of 0 or more; spec §7.3, an offer is its condition for commitment), and
+# support is refreshed, so the others reconfirm or not. An opposed or
+# red-lined group takes the concession and opposes the bill less: it commits
+# only if its refreshed score reaches the threshold.
 #
 # ANTI-FARMING. One offer per group per revision (te_tax_off_<ig>_rev); a clause
 # a group gained in this bill is never offered to it again
@@ -45,7 +47,8 @@
 # button's scripted GUI sets; any other caller must run with the country as
 # ROOT.
 #
-# VIEWS OF THE CODE. Each month the processor (te_tax.1) keeps at most one band
+# VIEWS OF THE CODE. Each month the processor (te_tax.1), and the day after a
+# migration, a re-assert or a copied code (te_tax.4), keeps at most one band
 # modifier per group on the country, te_tax_ig_view_<ig>_<band>, from the
 # group's own stance toward the vanilla taxation law the enacted code is
 # equivalent to (te_tax_refresh_ig_views): the carrier law has no vanilla
@@ -64,16 +67,20 @@ te_tax_cmd_accept_offer = {
 	if = {
 		limit = { te_tax_can_accept_offer = { IG = $IG$ } }
 		custom_tooltip = te_tax_tt_cmd_accept_offer
+		# Whether accepting commits the group: only if it is persuadable now (its
+		# score, 0 or more), read before the new revision resets the snapshot.
+		set_local_variable = { name = te_tax_acc_commit value = 0 }
 		if = {
-			limit = { var:te_tax_off_$IG$_commit = 1 }
+			limit = {
+				has_variable = te_tax_sup_$IG$
+				var:te_tax_sup_$IG$ >= 0
+			}
 			custom_tooltip = te_tax_tt_offer_commits
+			set_local_variable = { name = te_tax_acc_commit value = 1 }
 		}
 		else = {
-			custom_tooltip = te_tax_tt_offer_redline
+			custom_tooltip = te_tax_tt_offer_no_commit
 		}
-		# Whether accepting commits the group, read before the new revision
-		# withdraws every offer.
-		set_local_variable = { name = te_tax_acc_commit value = var:te_tax_off_$IG$_commit }
 		te_tax_gen_offer_apply = { IG = $IG$ }
 		change_variable = { name = te_tax_bl_rev add = 1 }
 		te_tax_bill_open_revision = yes
@@ -107,6 +114,7 @@ te_tax_offer_cut = {
 	set_variable = { name = te_tax_bl_got_$IG$_1 value = 1 }
 	if = {
 		limit = { te_tax_draft_active = yes }
+		custom_tooltip = te_tax_tt_offer_draft
 		te_tax_dr_touch = { KEY = $KEY$ }
 		set_variable = { name = te_tax_dr_$KEY$ value = var:te_tax_bl_$KEY$ }
 		set_variable = { name = te_tax_dr_$KEY$_sun value = var:te_tax_bl_$KEY$_sun }
@@ -134,6 +142,7 @@ te_tax_offer_agrel = {
 	set_variable = { name = te_tax_bl_got_$IG$_2 value = 1 }
 	if = {
 		limit = { te_tax_draft_active = yes }
+		custom_tooltip = te_tax_tt_offer_draft
 		te_tax_dr_relief_touch = { KEY = agrel }
 		set_variable = { name = te_tax_dr_agrel value = var:te_tax_bl_agrel }
 		te_tax_dr_relief_settle = yes
@@ -158,6 +167,7 @@ te_tax_offer_untax = {
 	set_variable = { name = te_tax_bl_got_$IG$_3 value = 1 }
 	if = {
 		limit = { te_tax_draft_active = yes }
+		custom_tooltip = te_tax_tt_offer_draft
 		if = {
 			limit = { NOT = { te_tax_gen_draft_touches_goods = yes } }
 			set_variable = { name = te_tax_dr_goods_pver value = var:te_tax_pver_goods }
@@ -228,7 +238,8 @@ te_tax_force_into = {
 
 # ----------------------------------------------------------------------------
 # Interest-group views of the code (te_tax_process_month, after the obligations
-# and before the sync; nothing else calls it)
+# and before the sync, and te_tax.4 after its sync; nothing else calls it; once
+# per execution)
 # ----------------------------------------------------------------------------
 # A country without the carrier law (a vanilla taxation law activated by script,
 # until te_tax.5 puts the carrier back) has no equivalent law: every band is 0

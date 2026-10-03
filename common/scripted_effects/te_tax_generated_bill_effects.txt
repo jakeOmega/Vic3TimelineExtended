@@ -1212,8 +1212,8 @@ te_tax_gen_refresh_support = {
 # group that is not marginal and has made no offer for this revision makes at most one,
 # from its top negative reason: material first means a clause (its catalog order, then a
 # promise); any other reason, or none, a promise first. A group at its red line is offered
-# promises only, and accepting one commits it only if the promise lifts its score to the
-# threshold (te_tax_off_<ig>_commit = 0). An offer is recorded for this revision
+# promises only. Whether accepting commits the group is decided at acceptance, from its
+# score then (te_tax_cmd_accept_offer: only a persuadable group). An offer is recorded for this revision
 # (te_tax_off_<ig>_rev), so a group offers once a revision; a clause it gained in this bill
 # (te_tax_bl_got_<ig>_<code>) and a second promise are never offered again; a promise is
 # offered only when it could be recorded (te_tax_can_obl_propose: no identical pending or
@@ -1327,7 +1327,6 @@ te_tax_gen_offer_select = {
 				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
 				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
 			}
-			set_variable = { name = te_tax_off_armed_forces_commit value = 1 }
 		}
 		else_if = {
 			limit = { var:te_tax_com_armed_forces = 0 }
@@ -1416,10 +1415,6 @@ te_tax_gen_offer_select = {
 				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
 				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
 			}
-			set_variable = { name = te_tax_off_armed_forces_commit value = 1 }
-		}
-		else = {
-			set_variable = { name = te_tax_off_armed_forces_commit value = 0 }
 		}
 		if = { limit = { var:te_tax_off_armed_forces_kind > 0 } set_variable = { name = te_tax_off_armed_forces_rev value = var:te_tax_bl_rev } }
 	}
@@ -1547,7 +1542,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_devout_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_devout_commit value = 1 }
 		}
 		else_if = {
 			limit = { var:te_tax_com_devout = 0 }
@@ -1652,7 +1646,6 @@ te_tax_gen_offer_select = {
 				set_variable = { name = te_tax_off_devout_target value = 0 }
 				set_variable = { name = te_tax_off_devout_maint value = 0 }
 			}
-			set_variable = { name = te_tax_off_devout_commit value = 1 }
 		}
 		else = {
 			if = {
@@ -1671,7 +1664,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_devout_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_devout_commit value = 0 }
 		}
 		if = { limit = { var:te_tax_off_devout_kind > 0 } set_variable = { name = te_tax_off_devout_rev value = var:te_tax_bl_rev } }
 	}
@@ -1794,7 +1786,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_industrialists_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_industrialists_commit value = 1 }
 		}
 		else_if = {
 			limit = { var:te_tax_com_industrialists = 0 }
@@ -1894,7 +1885,6 @@ te_tax_gen_offer_select = {
 				set_variable = { name = te_tax_off_industrialists_target value = 0 }
 				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
 			}
-			set_variable = { name = te_tax_off_industrialists_commit value = 1 }
 		}
 		else = {
 			if = {
@@ -1929,7 +1919,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_industrialists_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_industrialists_commit value = 0 }
 		}
 		if = { limit = { var:te_tax_off_industrialists_kind > 0 } set_variable = { name = te_tax_off_industrialists_rev value = var:te_tax_bl_rev } }
 	}
@@ -2036,7 +2025,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_intelligentsia_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_intelligentsia_commit value = 1 }
 		}
 		else_if = {
 			limit = { var:te_tax_com_intelligentsia = 0 }
@@ -2120,7 +2108,6 @@ te_tax_gen_offer_select = {
 				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
 				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
 			}
-			set_variable = { name = te_tax_off_intelligentsia_commit value = 1 }
 		}
 		else = {
 			if = {
@@ -2139,7 +2126,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_intelligentsia_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_intelligentsia_commit value = 0 }
 		}
 		if = { limit = { var:te_tax_off_intelligentsia_kind > 0 } set_variable = { name = te_tax_off_intelligentsia_rev value = var:te_tax_bl_rev } }
 	}
@@ -2267,7 +2253,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_landowners_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_landowners_commit value = 1 }
 		}
 		else_if = {
 			limit = { var:te_tax_com_landowners = 0 }
@@ -2372,7 +2357,6 @@ te_tax_gen_offer_select = {
 				set_variable = { name = te_tax_off_landowners_target value = 0 }
 				set_variable = { name = te_tax_off_landowners_maint value = 0 }
 			}
-			set_variable = { name = te_tax_off_landowners_commit value = 1 }
 		}
 		else = {
 			if = {
@@ -2391,7 +2375,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_landowners_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_landowners_commit value = 0 }
 		}
 		if = { limit = { var:te_tax_off_landowners_kind > 0 } set_variable = { name = te_tax_off_landowners_rev value = var:te_tax_bl_rev } }
 	}
@@ -2519,7 +2502,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_petty_bourgeoisie_commit value = 1 }
 		}
 		else_if = {
 			limit = { var:te_tax_com_petty_bourgeoisie = 0 }
@@ -2624,7 +2606,6 @@ te_tax_gen_offer_select = {
 				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
 				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
 			}
-			set_variable = { name = te_tax_off_petty_bourgeoisie_commit value = 1 }
 		}
 		else = {
 			if = {
@@ -2643,7 +2624,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_petty_bourgeoisie_commit value = 0 }
 		}
 		if = { limit = { var:te_tax_off_petty_bourgeoisie_kind > 0 } set_variable = { name = te_tax_off_petty_bourgeoisie_rev value = var:te_tax_bl_rev } }
 	}
@@ -2824,7 +2804,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_rural_folk_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_rural_folk_commit value = 1 }
 		}
 		else_if = {
 			limit = { var:te_tax_com_rural_folk = 0 }
@@ -2982,7 +2961,6 @@ te_tax_gen_offer_select = {
 				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
 				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
 			}
-			set_variable = { name = te_tax_off_rural_folk_commit value = 1 }
 		}
 		else = {
 			if = {
@@ -3001,7 +2979,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_rural_folk_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_rural_folk_commit value = 0 }
 		}
 		if = { limit = { var:te_tax_off_rural_folk_kind > 0 } set_variable = { name = te_tax_off_rural_folk_rev value = var:te_tax_bl_rev } }
 	}
@@ -3128,7 +3105,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_trade_unions_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_trade_unions_commit value = 1 }
 		}
 		else_if = {
 			limit = { var:te_tax_com_trade_unions = 0 }
@@ -3232,7 +3208,6 @@ te_tax_gen_offer_select = {
 				else_if = { limit = { te_tax_dl_g_services > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 10 } }
 				else_if = { limit = { te_tax_dl_g_transportation > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 11 } }
 			}
-			set_variable = { name = te_tax_off_trade_unions_commit value = 1 }
 		}
 		else = {
 			if = {
@@ -3251,7 +3226,6 @@ te_tax_gen_offer_select = {
 					set_variable = { name = te_tax_off_trade_unions_maint value = 1 }
 				}
 			}
-			set_variable = { name = te_tax_off_trade_unions_commit value = 0 }
 		}
 		if = { limit = { var:te_tax_off_trade_unions_kind > 0 } set_variable = { name = te_tax_off_trade_unions_rev value = var:te_tax_bl_rev } }
 	}

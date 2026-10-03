@@ -3888,48 +3888,57 @@ te_tax_bl_eff_agrel = {
 	if = { limit = { has_variable = te_tax_bl_agrel var:te_tax_bl_agrel >= 0 } value = var:te_tax_bl_agrel }
 }
 
-# How many catalog goods the bill touches (te_tax_offer_untax_leaves_a_bill).
-te_tax_bl_goods_touched = {
+# How many instruments and catalog goods the bill changes from existing law in its month,
+# not merely restates (te_tax_offer_cut_leaves_a_bill, te_tax_offer_untax_leaves_a_bill).
+te_tax_bl_changed_provisions = {
 	value = 0
-	if = { limit = { has_variable = te_tax_bl_g_aeroplanes var:te_tax_bl_g_aeroplanes >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_automobiles var:te_tax_bl_g_automobiles >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_clippers var:te_tax_bl_g_clippers >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_clothes var:te_tax_bl_g_clothes >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_coal var:te_tax_bl_g_coal >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_coffee var:te_tax_bl_g_coffee >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_consumer_appliances var:te_tax_bl_g_consumer_appliances >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_digital_access var:te_tax_bl_g_digital_access >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_digital_assets var:te_tax_bl_g_digital_assets >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_electricity var:te_tax_bl_g_electricity >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_fabric var:te_tax_bl_g_fabric >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_fine_art var:te_tax_bl_g_fine_art >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_fish var:te_tax_bl_g_fish >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_fruit var:te_tax_bl_g_fruit >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_furniture var:te_tax_bl_g_furniture >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_glass var:te_tax_bl_g_glass >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_grain var:te_tax_bl_g_grain >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_groceries var:te_tax_bl_g_groceries >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_liquor var:te_tax_bl_g_liquor >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_luxury_clothes var:te_tax_bl_g_luxury_clothes >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_luxury_furniture var:te_tax_bl_g_luxury_furniture >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_meat var:te_tax_bl_g_meat >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_oil var:te_tax_bl_g_oil >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_opium var:te_tax_bl_g_opium >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_paper var:te_tax_bl_g_paper >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_porcelain var:te_tax_bl_g_porcelain >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_radios var:te_tax_bl_g_radios >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_services var:te_tax_bl_g_services >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_silk var:te_tax_bl_g_silk >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_small_arms var:te_tax_bl_g_small_arms >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_steamers var:te_tax_bl_g_steamers >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_sugar var:te_tax_bl_g_sugar >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_tea var:te_tax_bl_g_tea >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_telephones var:te_tax_bl_g_telephones >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_tobacco var:te_tax_bl_g_tobacco >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_tourism var:te_tax_bl_g_tourism >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_transportation var:te_tax_bl_g_transportation >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_wine var:te_tax_bl_g_wine >= 0 } add = 1 }
-	if = { limit = { has_variable = te_tax_bl_g_wood var:te_tax_bl_g_wood >= 0 } add = 1 }
+	if = { limit = { NOT = { te_tax_bl_dstep_wage = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_bl_dstep_div = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_bl_dstep_land = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_bl_dstep_head = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_bl_dstep_cons = 0 } } add = 1 }
+}
+te_tax_bl_goods_changed = {
+	value = 0
+	if = { limit = { NOT = { te_tax_dl_g_aeroplanes = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_automobiles = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_clippers = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_clothes = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_coal = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_coffee = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_consumer_appliances = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_digital_access = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_digital_assets = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_electricity = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_fabric = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_fine_art = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_fish = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_fruit = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_furniture = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_glass = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_grain = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_groceries = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_liquor = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_luxury_clothes = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_luxury_furniture = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_meat = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_oil = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_opium = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_paper = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_porcelain = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_radios = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_services = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_silk = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_small_arms = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_steamers = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_sugar = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_tea = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_telephones = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_tobacco = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_tourism = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_transportation = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_wine = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_dl_g_wood = 0 } } add = 1 }
 }
 
 # te_tax_bl_grief_<ig>_<key>: what the bill's raise of an instrument costs the group, in tax

@@ -1460,8 +1460,12 @@ te_tax_gen_obl_slot_gone = {
 }
 
 # Offers (plan Task 13; te_tax_can_accept_offer, te_tax_triggers.txt). Country scope, while a
-# bill is under debate and group IG has an offer (te_tax_off_<ig>_kind above 0).
+# bill is under debate. False without an offer (te_tax_off_<ig>_kind above 0), and for an
+# unknown one.
 te_tax_gen_offer_feasible = {
+	has_variable = te_tax_off_$IG$_kind
+	has_variable = te_tax_off_$IG$_arg
+	var:te_tax_off_$IG$_kind > 0
 	trigger_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 1 } te_tax_bl_dstep_wage > 0 te_tax_offer_cut_leaves_a_bill = { KEY = wage } }
 	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 2 } te_tax_bl_dstep_div > 0 te_tax_offer_cut_leaves_a_bill = { KEY = div } }
 	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 3 } te_tax_bl_dstep_land > 0 te_tax_offer_cut_leaves_a_bill = { KEY = land } }

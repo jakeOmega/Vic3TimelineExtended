@@ -1019,9 +1019,11 @@ te_tax_can_obl_renegotiate = {
 # ---------------------------------------------------------------------------
 
 # Group IG's offer can be accepted: a bill is under debate, the group made an
-# offer for this revision, it has not committed since, and the offer can still
-# be carried out (te_tax_gen_offer_feasible: the clause still has room in the
-# bill, or the promise is still feasible and could be recorded).
+# offer for this revision, it is not marginal and has not committed since, and
+# the offer can still be carried out (te_tax_gen_offer_feasible: the bill still
+# raises the tax a cut softens or adds the staple, relief has a band to add, or
+# the promise is still feasible and could be recorded; false without an offer).
+# No line sits inside a trigger_if that could pass for want of an offer.
 te_tax_can_accept_offer = {
 	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
 	trigger_if = {
@@ -1033,19 +1035,20 @@ te_tax_can_accept_offer = {
 			var:te_tax_off_$IG$_kind > 0
 			var:te_tax_off_$IG$_rev = var:te_tax_bl_rev
 		}
-		trigger_if = {
-			limit = {
-				has_variable = te_tax_off_$IG$_kind
-				var:te_tax_off_$IG$_kind > 0
+		custom_tooltip = {
+			text = te_tax_tt_offer_not_marginal
+			ig:ig_$IG$ ?= { ig_counts_as_marginal = no }
+		}
+		custom_tooltip = {
+			text = te_tax_tt_offer_not_committed
+			NAND = {
 				has_variable = te_tax_com_$IG$
 				has_variable = te_tax_com_$IG$_rev
+				var:te_tax_com_$IG$ = 1
+				var:te_tax_com_$IG$_rev = var:te_tax_bl_rev
 			}
-			custom_tooltip = {
-				text = te_tax_tt_offer_not_committed
-				NOT = { AND = { var:te_tax_com_$IG$ = 1 var:te_tax_com_$IG$_rev = var:te_tax_bl_rev } }
-			}
-			custom_tooltip = { text = te_tax_tt_offer_feasible te_tax_gen_offer_feasible = { IG = $IG$ } }
 		}
+		custom_tooltip = { text = te_tax_tt_offer_feasible te_tax_gen_offer_feasible = { IG = $IG$ } }
 	}
 	trigger_else = {
 		custom_tooltip = { text = te_tax_tt_bill_open always = no }
@@ -1053,25 +1056,98 @@ te_tax_can_accept_offer = {
 }
 
 # A clause offer never empties the bill (plan Task 13): a cut of KEY leaves it
-# changing something (the raise stays above existing law, or the bill changes
-# another provision, a good or relief), and taking back an added staple leaves it
-# changing a provision, relief or another good. Read while a bill is open.
+# changing something from existing law (the raise stays above it, or the bill
+# changes another provision, a good or relief), and taking back an added staple
+# leaves it changing a provision, relief or another good. Only real changes
+# count, never a restatement of existing law: instruments and goods by their
+# change from the baseline (te_tax_bl_changed_provisions, te_tax_bl_goods_changed),
+# agricultural relief by its band change, regional relief by
+# te_tax_bl_regrel_differs. Read while a bill is open.
 te_tax_offer_cut_leaves_a_bill = {
 	OR = {
 		te_tax_bl_dstep_$KEY$ >= 2
-		te_tax_bl_provisions >= 2
-		te_tax_bl_goods_touched >= 1
-		var:te_tax_bl_agrel >= 0
-		var:te_tax_bl_regrel >= 0
+		te_tax_bl_changed_provisions >= 2
+		te_tax_bl_goods_changed >= 1
+		NOT = { te_tax_bl_dstep_agrel = 0 }
+		te_tax_bl_regrel_differs = yes
 	}
 }
 
 te_tax_offer_untax_leaves_a_bill = {
 	OR = {
-		te_tax_bl_provisions >= 1
-		te_tax_bl_goods_touched >= 2
-		var:te_tax_bl_agrel >= 0
-		var:te_tax_bl_regrel >= 0
+		te_tax_bl_changed_provisions >= 1
+		te_tax_bl_goods_changed >= 2
+		NOT = { te_tax_bl_dstep_agrel = 0 }
+		te_tax_bl_regrel_differs = yes
+	}
+}
+
+# The bill's regional relief differs from existing law's in its month: another
+# band, or at a band of 1 or more another set of named states.
+te_tax_bl_regrel_differs = {
+	has_variable = te_tax_bl_regrel
+	var:te_tax_bl_regrel >= 0
+	OR = {
+		NOT = { var:te_tax_bl_regrel = te_tax_base_bl_regrel }
+		AND = {
+			var:te_tax_bl_regrel >= 1
+			NOT = { te_tax_bl_relief_states_match = yes }
+		}
+	}
+}
+
+# The bill names the same regional-relief states as existing law in its month:
+# an awaiting package's list that restates them before then (the last in
+# commencement order), else the enacted list.
+te_tax_bl_relief_states_match = {
+	trigger_if = {
+		limit = { te_tax_relief_base_from_a = { DUE = te_tax_bl_due } }
+		te_tax_relief_lists_match = { BASE = te_tax_pa_relief_states }
+	}
+	trigger_else_if = {
+		limit = { te_tax_relief_base_from_b = { DUE = te_tax_bl_due } }
+		te_tax_relief_lists_match = { BASE = te_tax_pb_relief_states }
+	}
+	trigger_else = {
+		te_tax_relief_lists_match = { BASE = te_tax_en_relief_states }
+	}
+}
+
+# Every state on the bill's list te_tax_bl_relief_states is on the country list
+# BASE, and every one on BASE that the country owns is on the bill's (the bill
+# names only the country's own states, te_tax_draft_ready). A missing list is an
+# empty one. Inside a list PREV is the country (te_tax_draft_ready's
+# `owner = PREV`); inside owner = { } from there, PREV is the state (the
+# te_tax_view_dr_relief_state form). A bill state another country has taken
+# since counts as a difference.
+te_tax_relief_lists_match = {
+	NAND = {
+		has_variable_list = te_tax_bl_relief_states
+		any_in_list = {
+			variable = te_tax_bl_relief_states
+			NAND = {
+				exists = owner
+				owner = PREV
+				owner = {
+					has_variable_list = $BASE$
+					is_target_in_variable_list = { name = $BASE$ target = PREV }
+				}
+			}
+		}
+	}
+	NAND = {
+		has_variable_list = $BASE$
+		any_in_list = {
+			variable = $BASE$
+			exists = owner
+			owner = PREV
+			NOT = {
+				owner = {
+					has_variable_list = te_tax_bl_relief_states
+					is_target_in_variable_list = { name = te_tax_bl_relief_states target = PREV }
+				}
+			}
+		}
 	}
 }
 

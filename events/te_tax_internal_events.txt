@@ -63,7 +63,9 @@ te_tax.3 = {
 # Post-migration sync: raised by the migration a day after it, when the carrier
 # law it activated is in place, by the re-assert (te_tax.5) and by te_tax.6 the
 # same way. One collection write; the writer does nothing for a country not on
-# the carrier.
+# the carrier. Then the interest groups' views of the code, so they hold their
+# taxation-law approval from the day the carrier is in place (the processor,
+# te_tax.1, refreshes them monthly; these are the two call sites).
 te_tax.4 = {
 	type = country_event
 	hidden = yes
@@ -73,6 +75,11 @@ te_tax.4 = {
 	immediate = {
 		debug_log = "TE_TAX post-migration sync month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		te_tax_sync_collection = yes
+		# The groups' views of the code (te_tax_offer_effects.txt), now that the
+		# carrier is in place, rather than at the next 1st of the month: the
+		# approval each took from its stance on the old taxation law carries over
+		# from the start.
+		te_tax_refresh_ig_views = yes
 	}
 }
 
