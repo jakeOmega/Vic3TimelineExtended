@@ -3895,6 +3895,8 @@ je:my_je ?= { add_modifier = { name = X multiplier = my_country_sv_for_je } }
 
 Keep country-scope callers (display loc reads via `MakeScope.ScriptValue`, button-effect `limit` checks, etc.) on the bare `my_country_sv` — those don't need the wrapper.
 
+`je_multiplier_scope_audit.py --strict` guards this in CI and on server reload (#677). It checks explicit `je:` targets, following inline arithmetic and named script values or scripted triggers transitively. Country-only triggers come from `triggers_parsed.txt`; numeric accessors such as GDP and income come from `event_targets_summary.txt` (GDP supports several scopes, but not journal entries). It also checks `modifier:country_*` reads. Scope links such as `owner` protect the reads they enclose; variable persistence remains the separate `modifier_multiplier_var_audit` check. A deliberate case needs `# REVIEWED YYYY-MM-DD: rationale` on the multiplier line.
+
 ## Stellaris/EU4 Idioms That Silently Fail in Vic3
 
 Several Paradox-Clausewitz idioms common in Stellaris and EU4 mod scripts do NOT exist in Vic3 1.13.x. The engine reports them as "Unknown trigger type" / "Unknown effect" / "Unexpected token" at runtime parse — the script doesn't compile and the gated logic silently never fires. If you're porting concepts from another Paradox game, check vanilla Vic3 first:
