@@ -951,6 +951,7 @@ class RestyleTests(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, "neither on disk nor in git"):
             gi.restyle_source("gfx/never.png", root)
 
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
     def test_render_sends_restyle_entries_to_img2img(self):
         import icon_render
         saved = (ip.ICONS, icon_render.embed, icon_render.render, getattr(icon_render, "restyle"), gi.restyle_jobs)
@@ -1007,6 +1008,7 @@ class StyleOverrideTests(unittest.TestCase):
         self.assertEqual(sorted(k for _, k in r["bad_entry"]),
                          ["building_no_subject", "building_not_text", "building_stray_field"])
 
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
     def test_render_uses_the_entry_style(self):
         import icon_render
         saved = (ip.ICONS, icon_render.embed, icon_render.render)
