@@ -160,13 +160,13 @@ Standards charges its cost to every country in the market, members included.
 
 | Policy | Scope | Authority | Effects |
 |---|---|---|---|
-| Carbon Tax | Market | none | Emissions −20%; coal and oil output −10%; taxes on coal mining and oil extraction doubled, manufacturing taxes +10%. |
+| Carbon Tax | Market | none | Emissions −20%; coal and oil output −10%; taxes on oil extraction doubled, manufacturing taxes +10%. |
 | Renewable Investment | Market | none | Emissions −15%; Renewable Energy Plants +10% throughput but need subsidies; conventional power plants −10% throughput; power buildings built 25% faster. |
 | Emission Standards | Market | 200 | Emissions −10%; generated pollution −25%; −5% throughput for every building. |
 | Climate Adaptation | National | 250 | Mortality −2.5% and standard of living +0.5 in every state. |
 | Reforestation Subsidies | National | 100 | Farm throughput +5%; droughts and floods 25% weaker and shorter. |
 | Public Transit | National | 150 | Personal Transportation output +10%; oil input −5%; infrastructure built 10% faster; pops' automobiles add less infrastructure. |
-| Fossil-Fuel Divestment | National | 200 | Taxes on coal mining and oil extraction +25%; coal and oil input −5%. |
+| Fossil-Fuel Divestment | National | 200 | Taxes on oil extraction +25%; coal and oil input −5%. |
 | Green Building Codes | National | 100 | Construction goods input +5%; electricity input −2.5%. |
 
 Only the three market-wide policies cut the emissions figure directly. The
@@ -304,12 +304,13 @@ in a treaty.
 On entry into force, the bound country adopts the three market-wide policies for
 its whole market and the other four national policies for itself. While the
 treaty holds, it can't repeal them, and it also suffers −20% power plant
-throughput, −10% coal mining and oil extraction throughput and +300 Authority
-Cost on top of the policies' own costs. The demanding side gains +2% prestige
-and pays the article's upkeep. If the bound country loses one of the policies
-anyway, the treaty freezes. Treaty mechanics are in
-[Diplomacy](08-diplomacy.md); while a United Nations exists, it also negotiates
-climate accords ([The United Nations](09-united-nations.md)).
+throughput, −10% Coal Mine and oil extraction throughput and −2 Industrialists
+approval. The treaty also waives the Authority Cost of the five forced policies
+that charge one (−750 in all), since the country can no longer repeal them. The
+demanding side gains +2% prestige and pays the article's upkeep. If the bound
+country loses one of the policies anyway, the treaty freezes. Treaty mechanics
+are in [Diplomacy](08-diplomacy.md); while a United Nations exists, it also
+negotiates climate accords ([The United Nations](09-united-nations.md)).
 
 ## Climate events
 

@@ -51,7 +51,7 @@ enforce_emissions_reduction = {
 	# forced to cut their own emissions.
 	source_modifier = {
 		building_power_plant_throughput_add = -0.20
-		building_group_bg_coal_mining_throughput_add = -0.10
+		building_coal_mine_throughput_add = -0.10
 		building_group_bg_oil_extraction_throughput_add = -0.10
 		country_authority_cost_add = -750
 		interest_group_ig_industrialists_approval_add = -2
