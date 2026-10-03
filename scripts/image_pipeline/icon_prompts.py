@@ -1038,8 +1038,10 @@ ICONS: dict[str, dict[str, dict]] = {
         # "A sleek polished-silver humanoid robot" drew cute white toy robots.
         "prestige_good_precision_robotics": {"subject": "a sleek precision robotic arm of polished chrome steel with black joints and a slim three-fingered gripper, mounted on a round black base", "seed": 0},
         # [launch_capacity] Heavy-Lift Launch Systems: SpaceX, Roscosmos, Lockheed Martin.
-        # "A tall gleaming stainless-steel super-heavy rocket with small black fins" drew retro toy rockets.
-        "prestige_good_heavy_lift_launch": {"subject": "a towering multi-stage heavy-lift rocket with a plain dark grey body and four strap-on boosters, lifting off on a thick column of bright orange flame", "seed": 2},
+        # "A tall gleaming stainless-steel super-heavy rocket with small black fins" drew retro toy rockets;
+        # "... with a plain dark grey body and four strap-on boosters, lifting off" a dark upright
+        # sliver, lost on the dark UI at 32 px. Light, and at a slant to fill the square.
+        "prestige_good_heavy_lift_launch": {"subject": "a huge realistic multi-stage heavy-lift rocket with a light silver-grey body, thin black bands and four strap-on boosters, climbing at a steep diagonal slant on a long plume of bright orange flame", "seed": 2},
         # [oil] Refined Petrochemicals: Aramco, Shell, BP, Petrobras.
         "prestige_good_refined_petrochemicals": {"subject": "a glossy dark-blue steel oil drum with polished brass bands, beside a tall glass laboratory flask of clear amber liquid", "seed": 2},
         # [merchant_marine, Bulk Transportation] Integrated Logistics Solutions: Amazon, SAP, Shopify.
