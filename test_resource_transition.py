@@ -31,6 +31,7 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 
 INDUSTRIES = {"coal": "building_coal_mine", "oil": "building_oil_rig", "power": "building_power_plant"}
 LAW_ORDER = ["law_unrestricted_extraction", "law_fossil_expansion_moratorium", "law_managed_fossil_phaseout"]
+MAX_LAW_DESC_CHARS = 300
 
 
 def _read(path):
@@ -114,7 +115,8 @@ class LawTest(unittest.TestCase):
     def test_no_law_carries_an_emissions_modifier(self):
         """The issue: no arbitrary emissions bonus. The laws work through supply."""
         for path in (LAWS, EFFECTS, MODIFIERS, VALUES, TRIGGERS):
-            code = _code(_read(path))
+            # A custom_tooltip names a loc key, not an effect (rt_law_emissions_tt).
+            code = re.sub(r"custom_tooltip = \w+", "", _code(_read(path)))
             self.assertNotIn("greenhouse_gas", code, path)
             self.assertNotIn("emission", code, path)
             self.assertNotIn("carbon", code, path)
@@ -237,7 +239,7 @@ class NumbersTest(unittest.TestCase):
 
     def test_interval(self):
         months = int(_constant("RT_RETIRE_INTERVAL_MONTHS"))
-        for key in ("law_managed_fossil_phaseout_desc", "rt_how_programmes", "rt_start_coal_tt",
+        for key in ("rt_law_phaseout_rule_tt", "rt_how_programmes", "rt_start_coal_tt",
                     "rt_start_oil_tt", "rt_start_power_tt", "rt_start_coal_button_desc"):
             self.assertIn(f"#v {months}#! months", _loc_value(key), key)
 
@@ -245,12 +247,12 @@ class NumbersTest(unittest.TestCase):
         years = int(_constant("RT_ASSISTANCE_YEARS"))
         retire = _top_level(_read(EFFECTS), "rt_retire_smallest")
         self.assertRegex(retire, rf"years = {years}\s")
-        for key in ("rt_how_programmes", "rt_start_coal_tt", "law_managed_fossil_phaseout_desc"):
+        for key in ("rt_how_programmes", "rt_start_coal_tt", "rt_law_phaseout_rule_tt"):
             self.assertIn(f"#v {years}#! years", _loc_value(key), key)
 
     def test_compensation_share(self):
         self.assertEqual(_constant("RT_COMPENSATION_SHARE"), 0.25)
-        for key in ("rt_how_programmes", "law_managed_fossil_phaseout_desc"):
+        for key in ("rt_how_programmes", "rt_law_phaseout_rule_tt"):
             self.assertIn("a quarter of what it would cost to build", _loc_value(key), key)
         for key in ("concept_fossil_transition_desc",):
             self.assertIn(f"#v {int(_constant('RT_RETIRE_INTERVAL_MONTHS'))}#! months", _loc_value(key), key)
@@ -260,15 +262,81 @@ class InGameTextTest(unittest.TestCase):
     """What a player reads before deciding (#660 follow-up)."""
 
     def test_the_laws_say_there_is_no_emissions_cut_by_itself(self):
-        for key in ("law_fossil_expansion_moratorium_desc", "law_managed_fossil_phaseout_desc",
-                    "concept_fossil_transition_desc", "rt_how_emissions"):
+        for key in ("rt_law_emissions_tt", "concept_fossil_transition_desc", "rt_how_emissions"):
             text = _loc_value(key)
             self.assertTrue("emissions" in text and ("by itself" in text or "only if" in text), key)
 
     def test_the_phaseout_says_the_whole_building_goes_whoever_owns_it(self):
-        text = _loc_value("law_managed_fossil_phaseout_desc")
-        for phrase in ("the whole building, every level, whoever owns it", "foreign investors included", "from the treasury"):
+        for key in ("rt_law_phaseout_rule_tt", "rt_how_programmes"):
+            text = _loc_value(key).lower()
+            for phrase in ("whoever owns it, foreign investors included", "the whole building goes, every level",
+                           "from the treasury"):
+                self.assertIn(phrase, text, key)
+
+    def test_the_moratorium_line_names_foreign_investors_and_what_carries_on(self):
+        text = _loc_value("rt_law_moratorium_tt")
+        for phrase in ("whoever invests, foreign investors included", "Those already running carry on"):
             self.assertIn(phrase, text)
+
+    def test_law_descriptions_are_flavor_and_fit_the_enactment_popup(self):
+        """The 'We now have <law>!' popup prints the description in a box that
+        holds roughly nine lines and does not scroll. The phaseout's 650-character
+        text of rules, in two paragraphs, ran over the law's name and art; the
+        longest vanilla law description is 294 characters. A description is one
+        short paragraph of flavor, with no figures: the rules are effect lines in
+        the law's on_enact (and the hover on the Fossil Transition law line),
+        as Collective Governance does it."""
+        concept_names = {
+            "[concept_greenhouse_gas_emissions]": "Greenhouse Gas Emissions",
+            "[concept_fossil_transition]": "Fossil Transition",
+            "$building_coal_mine$": "Coal Mine",
+            "$building_oil_rig$": "Oil Rig",
+            "$building_power_plant$": "Power Plant",
+            "$je_global_warming$": "Global Warming",
+        }
+        for law in LAW_ORDER:
+            raw = _loc_value(f"{law}_desc")
+            text = raw
+            for markup, name in concept_names.items():
+                text = text.replace(markup, name)
+            self.assertNotIn("\\n", raw, f"{law}: one paragraph, a break costs a line of the box")
+            self.assertNotIn("#v", raw, f"{law}: figures belong in the effect lines")
+            self.assertNotRegex(raw, r"\d", f"{law}: figures belong in the effect lines")
+            self.assertNotRegex(text, r"\[|\$", f"{law}: unrendered markup left in the measure")
+            self.assertLessEqual(len(text), MAX_LAW_DESC_CHARS, f"{law}: {len(text)} characters")
+
+    def test_the_rules_are_effect_lines_in_on_enact(self):
+        """Text in on_enact, work in on_activate (scripting_best_practices.md,
+        'Law enactment preview'). Every effect line has loc."""
+        laws = _read(LAWS)
+        expected = {
+            "law_unrestricted_extraction": [],
+            "law_fossil_expansion_moratorium": ["rt_law_moratorium_tt", "rt_law_emissions_tt"],
+            "law_managed_fossil_phaseout": ["rt_law_moratorium_tt", "rt_law_phaseout_tt",
+                                            "rt_law_phaseout_rule_tt", "rt_law_emissions_tt"],
+        }
+        for law, lines in expected.items():
+            body = _top_level(laws, law)
+            self.assertEqual(re.findall(r"custom_tooltip = (\w+)", _code(body)), lines, law)
+            if lines:
+                self.assertEqual(re.findall(r"custom_tooltip = (\w+)", _sub(body, "on_enact")), lines, law)
+                self.assertNotIn("custom_tooltip", _sub(body, "on_activate"), law)
+            for key in lines:
+                _loc_value(key)
+
+    def test_the_hover_on_the_law_line_matches_the_enactment_preview(self):
+        """rt_law_effects: the description, then the same effect lines, in order."""
+        self.assertEqual(_loc_value("rt_law_line_tt"), "[Country.GetCustom('rt_law_effects')]")
+        custom = _read(os.path.join(REPO, "common", "customizable_localization", "resource_transition_custom_loc.txt"))
+        block = _top_level(custom, "rt_law_effects")
+        laws = _read(LAWS)
+        for law, composite in (("law_managed_fossil_phaseout", "rt_law_effects_phaseout"),
+                               ("law_fossil_expansion_moratorium", "rt_law_effects_moratorium")):
+            self.assertRegex(block, rf"has_law = law_type:{law} \}}\s*localization_key = {composite}\b")
+            refs = re.findall(r"\$(\w+)\$", _loc_value(composite))
+            lines = re.findall(r"custom_tooltip = (\w+)", _sub(_top_level(laws, law), "on_enact"))
+            self.assertEqual(refs, [f"{law}_desc"] + lines, composite)
+        self.assertRegex(block, r"always = yes \}\s*localization_key = law_unrestricted_extraction_desc")
 
     def test_start_tooltip_carries_the_cost(self):
         start = _top_level(_read(EFFECTS), "rt_start_programme")

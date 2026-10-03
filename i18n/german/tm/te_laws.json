@@ -248,8 +248,8 @@
   "de": "Fossiles Ausbaumoratorium"
  },
  "law_fossil_expansion_moratorium_desc": {
-  "en": "No new $building_coal_mine$, $building_oil_rig$ or $building_power_plant$ may be built or expanded here, whoever invests, foreign investors included. Those already running carry on.\\n\\nThe ban earns no emissions cut by itself: our market's [concept_greenhouse_gas_emissions] come from the coal and oil it burns, wherever they were mined. Part of the [concept_fossil_transition].",
-  "de": "Keine neuen $building_coal_mine$, $building_oil_rig$ oder $building_power_plant$ dürfen hier gebaut oder erweitert werden, gleich wer investiert, ausländische Investoren eingeschlossen. Bereits laufende bleiben bestehen.\\n\\nDas Verbot bringt für sich allein keine Emissionssenkung: Die [concept_greenhouse_gas_emissions] unseres Marktes stammen aus der Kohle und dem Öl, die er verbrennt, gleichgültig wo sie gefördert wurden. Teil der [concept_fossil_transition]."
+  "en": "The country draws a line under the fossil economy's growth. What already burns may go on burning, but the age of new mines, rigs and plants is over.",
+  "de": "Das Land zieht einen Schlussstrich unter das Wachstum der fossilen Wirtschaft. Was bereits brennt, darf weiterbrennen, doch das Zeitalter neuer Minen, Bohranlagen und Kraftwerke ist vorbei."
  },
  "law_free_mutual_banking": {
   "en": "Free & Mutual Banking",
@@ -376,8 +376,8 @@
   "de": "Gesteuerter Fossilausstieg"
  },
  "law_managed_fossil_phaseout_desc": {
-  "en": "The moratorium, and the state may retire what is already running. A programme for each industry closes the smallest building of its kind left in our states every #v 3#! months: the whole building, every level, whoever owns it, foreign investors included. We pay its owners a quarter of what it would cost to build today, from the treasury, and its state gets [GetStaticModifier('rt_transition_assistance').GetName] for #v 5#! years.\\n\\nClosing supply cuts our market's [concept_greenhouse_gas_emissions] only if the market then burns less coal and oil, not if it imports them. Programmes are started from the [concept_fossil_transition] section of the $je_global_warming$ journal entry, and stop if this law is repealed.",
-  "de": "Das Moratorium gilt, und der Staat darf stilllegen, was bereits läuft. Ein Programm für jede Branche schließt alle #v 3#! Monate das kleinste noch vorhandene Gebäude seiner Art in unseren Staaten: das ganze Gebäude, jede Stufe, gleich wem es gehört, ausländische Investoren eingeschlossen. Wir zahlen seinen Eigentümern ein Viertel dessen, was der Bau heute kosten würde, aus der Landeskasse, und sein Staat erhält [GetStaticModifier('rt_transition_assistance').GetName] für #v 5#! Jahre.\\n\\nDie Schließung des Angebots senkt die [concept_greenhouse_gas_emissions] unseres Marktes nur, wenn der Markt danach weniger Kohle und Öl verbrennt, nicht, wenn er sie importiert. Programme werden im Abschnitt [concept_fossil_transition] des Journaleintrags $je_global_warming$ gestartet und enden, wenn dieses Gesetz aufgehoben wird."
+  "en": "The state takes charge of the fossil economy's decline. Rather than wait for the market or the climate to force the issue, it buys out the mines, rigs and plants and closes them in an orderly retreat.",
+  "de": "Der Staat nimmt den Niedergang der fossilen Wirtschaft selbst in die Hand. Statt abzuwarten, bis Markt oder Klima die Entscheidung erzwingen, kauft er Minen, Bohranlagen und Kraftwerke auf und schließt sie in geordnetem Rückzug."
  },
  "law_mandatory_augmentation": {
   "en": "Mandatory Augmentation",
