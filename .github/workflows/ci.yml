@@ -162,6 +162,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 modifier_multiplier_var_audit.py --strict
 
+      - name: Audit — journal-entry multiplier scope
+        if: ${{ !cancelled() }}
+        run: python3 je_multiplier_scope_audit.py --strict
+
       - name: Audit — event images
         if: ${{ !cancelled() }}
         run: python3 event_image_audit.py --strict

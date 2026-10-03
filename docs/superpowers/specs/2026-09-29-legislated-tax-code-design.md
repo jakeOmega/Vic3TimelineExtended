@@ -514,7 +514,7 @@ reconstruction must not restart sunsets or replay political rewards.
 The existing carbon-tax control must become an entry into this process or reflect an authorized
 shared-market policy. Audit its market-wide scope before migration; do not silently convert another
 country's imposed policy into domestic discretion. Retire duplicate fiscal effects explicitly. The current
-`carbon_tax_modifier` combines manufacturing/oil/coal tax multipliers, coal/oil output reductions,
+`carbon_tax_modifier` combines manufacturing/oil tax multipliers, coal/oil output reductions,
 and a direct emissions reduction. Separate the fiscal and environmental components during migration
 so removing duplicate taxes does not accidentally remove output/emissions policy. Preserve the
 existing market-wide application and emissions-treaty restrictions.

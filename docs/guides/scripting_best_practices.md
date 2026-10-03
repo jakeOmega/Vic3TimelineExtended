@@ -2714,7 +2714,7 @@ Deleting a player-facing toggle whose modifier reserved a resource is the third 
 
 ## Goods-Keyed Modifier Labels Splice the Good's Name
 
-Write a goods modifier's label as `"@iron! $iron$ input"`, never `"@iron! Iron input"`. A spelled-out name survives a rename: the mod called `iron` Structural Metals, `lead` Conductive and Base Metals and so on for months while most of their modifier labels still said Iron, Lead and Coal, and the mod's own `goods_*_mult` labels repeated the base-game names. Vanilla already splices in some labels (`goods_iron_output_mult:0 "$iron$ Goods Output"`, `goods_output_merchant_marine_add`). When the mod renames a good, every vanilla label that spells it out needs a spliced override in `replace/`. `scripts/analysis/check_goods_label_splices.py` enforces both (it runs in the unit suite; `--fix` repairs). Labels of buildings and building groups (`building_coal_mine_*`, `building_group_bg_coal_mining_*`) name the building, not the good, and are out of its scope.
+Write a goods modifier's label as `"@iron! $iron$ input"`, never `"@iron! Iron input"`. A spelled-out name survives a rename: the mod called `iron` Structural Metals, `lead` Conductive and Base Metals and so on for months while most of their modifier labels still said Iron, Lead and Coal, and the mod's own `goods_*_mult` labels repeated the base-game names. Vanilla already splices in some labels (`goods_iron_output_mult:0 "$iron$ Goods Output"`, `goods_output_merchant_marine_add`). When the mod renames a good, every vanilla label that spells it out needs a spliced override in `replace/`. `scripts/analysis/check_goods_label_splices.py` enforces both (it runs in the unit suite; `--fix` repairs). Labels of buildings and building groups (`building_coal_mine_*`, `building_group_bg_mining_*`) name the building, not the good, and are out of its scope.
 
 ## Localization Validation
 
@@ -3903,6 +3903,8 @@ je:my_je ?= { add_modifier = { name = X multiplier = my_country_sv_for_je } }
 ```
 
 Keep country-scope callers (display loc reads via `MakeScope.ScriptValue`, button-effect `limit` checks, etc.) on the bare `my_country_sv` — those don't need the wrapper.
+
+`je_multiplier_scope_audit.py --strict` guards this in CI and on server reload (#677). It checks explicit `je:` targets, following inline arithmetic and named script values or scripted triggers transitively. Country-only triggers come from `triggers_parsed.txt`; numeric accessors such as GDP and income come from `event_targets_summary.txt` (GDP supports several scopes, but not journal entries). It also checks `modifier:country_*` reads. Scope links such as `owner` protect the reads they enclose; variable persistence remains the separate `modifier_multiplier_var_audit` check. A deliberate case needs `# REVIEWED YYYY-MM-DD: rationale` on the multiplier line.
 
 ## Stellaris/EU4 Idioms That Silently Fail in Vic3
 

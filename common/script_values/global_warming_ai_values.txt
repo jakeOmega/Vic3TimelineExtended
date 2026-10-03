@@ -51,9 +51,9 @@
 #                       infrastructure, which laissez-faire minds least.
 #   green_building_codes  +5% construction input: a cost on builders.
 #   emission_standards  -5% throughput in EVERY building: industry pays.
-#   carbon_tax          oil and coal extraction taxed double, -10% fuel output,
+#   carbon_tax          oil extraction taxed double, -10% fuel output,
 #                       +10% manufacturing tax: exporters and industry pay.
-#   fossil_fuel_divestment  +25% extraction tax: aimed at the fuel sector.
+#   fossil_fuel_divestment  +25% oil extraction tax: aimed at the fuel sector.
 #
 # THE BAND MUST STAY WIDER THAN ANY ONE POLITICAL SWING. Interest groups change
 # at every election, and both IG terms are yes/no; with a band narrower than an
