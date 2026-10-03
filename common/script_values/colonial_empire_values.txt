@@ -375,14 +375,11 @@ colonial_stability_term_ig_unions = {
 
 # --- Imperial overreach (colonies vs metropole size) ---
 colonial_stability_term_overreach = {
-	value = 0
-	if = {
-		limit = { colonial_overreach_ratio > 0 }
-		add = {
-			value = colonial_overreach_ratio
-			multiply = -0.4
-		}
-	}
+	# The ratio once (it walks the states twice), scaled, then capped at 0:
+	# the same as the former `if ratio > 0` (2026-10-03 script profile).
+	value = colonial_overreach_ratio
+	multiply = -0.4
+	max = 0
 }
 
 # --- Rank standing ---
@@ -418,7 +415,17 @@ colonial_stability_term_gp_condemnation = {
 colonial_stability_term_gp_high_pressure = {
 	value = 0
 	if = {
-		limit = { colonial_gp_condemner_prestige_share >= 0.333 }
+		limit = {
+			# A share of a third needs at least one condemner; this stops at the
+			# first and spares the share's two walks over every country when
+			# nobody condemns (2026-10-03 script profile).
+			any_country = {
+				has_variable = gp_anti_colonial_stance
+				country_rank >= rank_value:great_power
+				NOT = { this = prev }
+			}
+			colonial_gp_condemner_prestige_share >= 0.333
+		}
 		add = -1.0
 	}
 }
@@ -426,7 +433,15 @@ colonial_stability_term_gp_high_pressure = {
 colonial_stability_term_gp_extreme_pressure = {
 	value = 0
 	if = {
-		limit = { colonial_gp_condemner_prestige_share >= 0.667 }
+		limit = {
+			# See colonial_stability_term_gp_high_pressure.
+			any_country = {
+				has_variable = gp_anti_colonial_stance
+				country_rank >= rank_value:great_power
+				NOT = { this = prev }
+			}
+			colonial_gp_condemner_prestige_share >= 0.667
+		}
 		add = -2.0
 	}
 }
@@ -464,25 +479,16 @@ colonial_stability_term_invest = {
 
 # --- Colonial acceptance ---
 colonial_stability_term_low_acceptance = {
-	value = 0
-	if = {
-		limit = { colonial_low_acceptance_count > 0 }
-		add = {
-			value = colonial_low_acceptance_count
-			multiply = -0.4
-		}
-	}
+	# A count is never negative, so no `> 0` test: it walked every state's
+	# pops a second time (2026-10-03 script profile).
+	value = colonial_low_acceptance_count
+	multiply = -0.4
 }
 
 colonial_stability_term_high_acceptance = {
-	value = 0
-	if = {
-		limit = { colonial_high_acceptance_count > 0 }
-		add = {
-			value = colonial_high_acceptance_count
-			multiply = 0.5
-		}
-	}
+	# See colonial_stability_term_low_acceptance.
+	value = colonial_high_acceptance_count
+	multiply = 0.5
 }
 
 # --- Domestic disruption ---

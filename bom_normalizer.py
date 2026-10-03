@@ -3,7 +3,9 @@
 The Clausewitz engine warns once per mod script file that lacks a leading
 UTF-8 BOM (`should be in utf8-bom encoding`). These accumulate as permanent
 debug.log triage noise, and every new hand-authored file reintroduces them.
-This module prepends `\\xef\\xbb\\xbf` to any in-scope file missing it.
+This module prepends `\\xef\\xbb\\xbf` to any in-scope file missing it, and
+collapses a doubled leading BOM to one (the engine reads the second as part of
+the first token, which shifts every key after it).
 
 Design (see issue #148):
 - **File-rewriting** → registered in `POST_LOAD_REGENERATORS`, NOT
@@ -18,7 +20,7 @@ Design (see issue #148):
   (issue #255: three GUI overrides shipped without one). Never YAML / JSON /
   Python / `.metadata/`. A BOM on any of these is harmless and is exactly what
   the engine wants.
-- **Idempotent** — only files that don't already start with the BOM are
+- **Idempotent** — only files that don't already start with exactly one BOM are
   rewritten, so a clean tree stays clean across reloads.
 """
 
@@ -62,11 +64,19 @@ def normalize_bom(mod_path: str) -> dict:
                 data = fh.read()
         except OSError:
             continue
-        if data.startswith(BOM):
+        # Exactly one BOM. A doubled one is worse than none: the engine strips
+        # one and reads the other as part of the first token, so a leading
+        # comment stops being a comment and every key after it shifts
+        # ("Duplicated key = will not be created"; 2026-10-03 it dropped all
+        # 323 company buildings).
+        body = data
+        while body.startswith(BOM):
+            body = body[len(BOM):]
+        if data == BOM + body:
             continue
         try:
             with open(path, "wb") as fh:
-                fh.write(BOM + data)
+                fh.write(BOM + body)
         except OSError:
             continue
         normalized.append(os.path.relpath(path, mod_path))
