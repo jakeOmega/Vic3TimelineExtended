@@ -231,6 +231,10 @@ Pick a representative vanilla number, then size your value relative to it. The `
 
 `/validate/engine-coverage` does NOT catch this — values pass validation as long as the modifier name is registered. The bug surfaces only at runtime in the player's tooltip, so it can sit undetected for a long time.
 
+## Power Bloc Principle Tiers Replace the Tier Below — They Don't Stack
+
+A principle group's tiers are mutually exclusive. When a bloc moves a group from tier III to tier IV, tier III's `member_modifier`, `leader_modifier`, `non_leader_modifier`, `power_bloc_modifier` and `institution_modifier` all stop applying, and only tier IV's blocks are live. So every tier restates each modifier the tier below carried, at its full value (vanilla marks the restated lines `# Modifiers from previous level(s)`), and a ramp writes the absolute value at each tier, never the step. A tier written as a delta ("tier IV adds X") is engine-silent: the upgrade just takes the missing modifier away. 62aa550 shipped the education ladder that way (tier III lost tier II's assimilation) and the advanced research one (tier V lost tier IV's military research speed); five other mod ladders had the same kind of gap. The rule covers an `INJECT:` into a vanilla tier too: the mod's tiers IV and V must restate what it injected into tier III, as `common/power_bloc_principles/modified.txt` notes for External Trade and Creative Legislature. Two related slips: moving a key from a flat `member_modifier` to a per-level `institution_modifier` changes what it gives at institution level 0, and a `power_bloc_*` key outside `power_bloc_modifier` does nothing, because modifiers flow down (bloc → country → state), never up. `principle_tier_audit` catches all of these on every `/reload`, and `--strict` in CI.
+
 ## Dynamic Modifier Type Definitions
 
 Many modifiers follow **naming patterns** where the engine recognizes a common prefix/suffix but requires a **per-entity registration** in `common/modifier_type_definitions/` before the modifier works. Vanilla pre-registers these for base game buildings and goods; **modded buildings and goods need their own registrations.**
