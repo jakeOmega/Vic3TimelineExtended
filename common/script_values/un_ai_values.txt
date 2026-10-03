@@ -1,0 +1,624 @@
+﻿# ============================================================================
+# THE UNITED NATIONS — HOW THE AI DECIDES TO JOIN, PAY AND CONTRIBUTE
+# ============================================================================
+# Read ONLY by the `ai_chance` blocks of eight buttons in
+# common/scripted_buttons/un_buttons.txt: Join / Leave, Withhold / Pay dues,
+# Fund / Stop funding Development Programs, Contribute to / End peacekeeping.
+# Nothing here gates a player control. docs/systems/un_redesign_design.md §0.13
+# has the review behind it, with every other AI decision point and its verdict.
+#
+# WHY A SCORE AND NOT PER-BUTTON TERMS. Each pair used to weigh a few laws and
+# the UN's authority, and nothing a member gains or pays:
+#   - Join scored 50 for nearly everyone, whatever the dues or the World
+#     Development Fund were worth to it. An isolationist great power scored 15
+#     to join and 20 to leave, so it joined, walked out, sat out the five-year
+#     lockout and joined again. Every member scored 10 to leave below authority
+#     20.
+#   - At Strong and Supranational every member scored 5 / 15 to withhold its
+#     dues from the tier alone, against 20 to pay again when healthy, so healthy
+#     members toggled. Withholding ignored the Fund: a member it paid gave up a
+#     grant larger than its dues to save them. Two of the owner's saves (2042
+#     at Established, a later one at Supranational) had 55 of 95 and 67 of 88
+#     members withholding.
+#   - Development Programs and peacekeeping scored for any great power once
+#     authority passed 40 and stopped only on laissez-faire, war or a collapsing
+#     UN: ratchets (scripting_best_practices.md, "An Adopt Weight With No Repeal
+#     Counterweight Is a Ratchet"), blind to a treasury in default.
+#
+# Now each pair reads ONE score per country, and a line on it: the "on" button
+# scores only at or above the line, the "off" button only a band below it.
+# Between the two neither scores, so a country sits where its conditions put
+# it, and how often the engine lets the AI click only sets how fast it gets
+# there. The band is wider than any yes/no term that flips on its own (debt
+# crossing 0.5 or 0.75, a state's devastation, rank slipping a step): a law, a
+# default or the Fund's founding is meant to move a country across. One
+# exception is deliberate: war ends peacekeeping (-30 against a band of 25), as
+# it did before, and the programme's ten-year cooldown, which both its buttons
+# respect, holds that to one round a decade.
+#
+# MONEY IN ONE UNIT. Every money term is a share of GDP a year, at
+# un_ai_points_per_gdp_share points: 20 points for 1% of GDP. The levy is
+# 0.1% / 0.2% / 0.4% / 1% of GDP at Contested / Established / Strong /
+# Supranational (un_dues_values.txt), so -2 / -4 / -8 / -20. The Fund's grant
+# (un_dev_fund_prospect_share, un_economy_values.txt) counts the same way, so a
+# grant the size of the dues cancels them, and the term stops at +40: a grant of
+# 2% of GDP a year is already a large part of a poor government's income, and
+# past it the score would only drown every other reason. In the Supranational
+# save nearly every member sits under the Fund's line, because one member holds
+# almost all of the members' GDP; at Reform II the Fund there would pay several
+# members more than their GDP, which is why the term is capped.
+#
+#   pair               score                     on at   off below   on weight      off weight
+#   join / leave       un_ai_membership_will         0         -25   will + 5 (100)  -25 - will (50)
+#   withhold / pay     un_ai_dues_will               0         -25   pay: will + 5 (60)  withhold: -25 - will (50)
+#   development        un_ai_development_will       20          -5   will - 10 (50)  -5 - will (50)
+#   peacekeeping       un_ai_peacekeeping_will      20          -5   will - 10 (50)  -5 - will (50)
+#
+# test_un_ai_values.py checks that each pair reads its own score and line, that
+# the off line sits the band below the on line, and that the band is wider than
+# every term listed in un_ai_self_flipping_terms below.
+#
+# Scope: country, throughout (the country the button belongs to; no term reads
+# ROOT, so the debug dump can evaluate them for every country).
+# ============================================================================
+
+# ---- Shared tuning ----------------------------------------------------------
+
+# 20 points for each 1% of GDP a year (a share of 0.01).
+un_ai_points_per_gdp_share = { value = 2000 }
+
+# The money term stops here: a grant of 2% of GDP a year.
+un_ai_money_cap = { value = 40 }
+
+# The largest yes/no term that flips without anyone deciding: debt crossing a
+# line (10 and 15), devastation or poverty (10), famine (10), rank slipping a
+# step (20 and 15), a climate emitter's share (20). Every band below must be
+# wider (test_un_ai_values.py reads this figure and each band). War on the
+# peacekeeping score is the one exception (see the header).
+un_ai_self_flipping_terms = { value = 20 }
+
+# ---- Money: the levy and the Fund ------------------------------------------------
+
+# What membership's money does for us: the Fund's grant (our own, or what we
+# would draw as a paying member) less the levy, both as a share of GDP a year,
+# at un_ai_points_per_gdp_share. At most un_ai_money_cap; at least the
+# Supranational levy (-20).
+un_ai_money_points = {
+	value = un_dev_fund_prospect_share
+	subtract = un_dues_rate
+	multiply = un_ai_points_per_gdp_share
+	max = un_ai_money_cap
+}
+
+# How much of the treasury's case against paying dues still stands once the
+# Fund is counted: 1 with no grant, 0 when the grant we would keep by paying
+# covers the dues. A member in default whose grant exceeds its dues makes money
+# by paying, so its debt is no reason to withhold. Scope: country
+un_ai_dues_net_cost_factor = {
+	value = 1
+	if = {
+		limit = { un_dues_weekly_value > 0 }
+		subtract = {
+			value = un_dev_fund_prospect_value
+			divide = un_dues_weekly_value
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# A treasury in trouble, as a penalty: default, then debt against the ceiling.
+# Shared by the dues, Development Programs and peacekeeping scores; the dues
+# score scales it by un_ai_dues_net_cost_factor.
+un_ai_treasury_penalty = {
+	value = 0
+	if = {
+		limit = { in_default = yes }
+		add = -60
+	}
+	else_if = {
+		limit = { scaled_debt >= 0.75 }
+		add = -25
+	}
+	else_if = {
+		limit = { scaled_debt >= 0.5 }
+		add = -10
+	}
+}
+
+# ---- Membership ---------------------------------------------------------------------
+
+un_ai_membership_join_line = { value = 0 }
+un_ai_membership_band = { value = 25 }
+
+# What a seat is worth to us, member or not: the same reasons on both sides of
+# the door, so joining and leaving read one figure.
+un_ai_membership_will = {
+	# The habit of membership: a seat, its privileges, a voice in the Assembly.
+	value = 30
+	# A great power stands for a permanent seat; a major power is heard. The
+	# old Join weight gave a great power +30 here; rank can slip and return on
+	# its own, so the step down from great power stays inside the band.
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		add = 20
+	}
+	if = {
+		limit = { country_rank >= rank_value:major_power }
+		add = 15
+	}
+	if = {
+		limit = { has_law_or_variant = law_type:law_isolationism }
+		add = -80
+	}
+	if = {
+		limit = { has_law = law_type:law_humanitarian_regulations }
+		add = 20
+	}
+	if = {
+		limit = { has_law = law_type:law_limited_war }
+		add = 20
+	}
+	if = {
+		limit = { has_law = law_type:law_total_war }
+		add = -40
+	}
+	# The levy, and the Fund's grant against it.
+	add = un_ai_money_points
+	# What staying out costs: the pariah modifiers from Established and from
+	# Strong, and at Supranational a standing sanctions case against a
+	# non-member of major-power rank or with a nuclear programme or arsenal
+	# (un_case_standing_applies, read here as "would apply if we were out").
+	if = {
+		limit = { un_tier_at_least_established = yes }
+		add = 5
+	}
+	if = {
+		limit = { un_tier_at_least_strong = yes }
+		add = 5
+	}
+	if = {
+		limit = {
+			un_tier_is_supranational = yes
+			OR = {
+				country_rank >= rank_value:major_power
+				has_modifier = nuclear_power
+				nuclear_program_has_programme = yes
+			}
+		}
+		add = 30
+	}
+	# A UN in name only is worth little.
+	if = {
+		limit = { un_tier_is_moribund = yes }
+		add = -15
+	}
+	# Help we could ask for: only a member requests aid or peacekeepers
+	# (un_propose_aid_available, un_propose_peacekeepers_available), and the
+	# World Food Reserve relieves members' famines.
+	if = {
+		limit = {
+			any_scope_state = {
+				OR = {
+					average_sol < 8
+					devastation > 5
+				}
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = {
+			has_global_variable = un_inst_food_reserve
+			has_famine = yes
+		}
+		add = 10
+	}
+	# The conventions in force bind every member, a joiner at once
+	# (un_apply_ratified_conventions).
+	add = un_ai_convention_terms
+	# A member's stance on the order, and an outsider's rejection of it.
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		add = 20
+	}
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		add = -30
+	}
+	if = {
+		limit = { has_modifier = un_rejectionist_modifier }
+		add = -20
+	}
+}
+
+# What the conventions in force would ask of us, by the regime's own tests
+# (un_regime_triggers.txt): a loser leans out, a winner in. Smaller than the
+# vote's regime terms (un_lean_regime): a seat is a bundle, and these are one
+# part of it. Between -40 and +15.
+un_ai_convention_terms = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_agency_unep }
+		if = {
+			limit = { un_regime_climate_emitter = yes }
+			add = -15
+		}
+		else_if = {
+			limit = { un_regime_climate_low_emitter = yes }
+			add = 5
+		}
+	}
+	if = {
+		limit = { has_global_variable = un_agency_iaea }
+		if = {
+			limit = { un_regime_npt_threshold = yes }
+			add = -15
+		}
+		else_if = {
+			limit = { un_regime_npt_guaranteed = yes }
+			add = 5
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = un_agency_unhrc
+			un_regime_human_rights_violator = yes
+		}
+		add = -15
+	}
+	if = {
+		limit = {
+			has_global_variable = un_regime_decolonization
+			un_regime_colonial_power = yes
+		}
+		add = -15
+	}
+	if = {
+		limit = { has_global_variable = un_agency_unhcr }
+		if = {
+			limit = { un_regime_refugee_host = yes }
+			add = -5
+		}
+		else_if = {
+			limit = { un_regime_refugee_source = yes }
+			add = 5
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = un_agency_itlos
+			un_regime_naval_power = yes
+		}
+		add = -5
+	}
+	if = {
+		limit = { has_global_variable = un_agency_unoosa }
+		if = {
+			limit = { un_regime_space_leader = yes }
+			add = -10
+		}
+		else_if = {
+			limit = { un_regime_space_laggard = yes }
+			add = 5
+		}
+		if = {
+			limit = { un_regime_space_weaponized = yes }
+			add = -15
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = un_agency_unesco
+			un_regime_heritage_site = yes
+		}
+		add = 5
+	}
+	if = {
+		limit = {
+			has_global_variable = un_agency_ccd
+			un_regime_cultural_hegemon = yes
+		}
+		add = -25
+	}
+	# The prohibition treaty caps an arsenal and forbids building one.
+	if = {
+		limit = { has_global_variable = un_agency_tpnw }
+		if = {
+			limit = { nd_is_armed = yes }
+			add = -30
+		}
+		else_if = {
+			limit = { nuclear_program_has_programme = yes }
+			add = -10
+		}
+	}
+	min = -40
+	max = 15
+}
+
+# Join: only at or above the line, faster the higher the will.
+un_join_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_membership_will >= un_ai_membership_join_line }
+		add = un_ai_membership_will
+		subtract = un_ai_membership_join_line
+		add = 5
+		max = 100
+	}
+}
+
+# Leave: only a band below the line.
+un_ai_membership_leave_line = {
+	value = un_ai_membership_join_line
+	subtract = un_ai_membership_band
+}
+
+un_leave_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_membership_will < un_ai_membership_leave_line }
+		add = un_ai_membership_leave_line
+		subtract = un_ai_membership_will
+		max = 50
+	}
+}
+
+# ---- Dues -----------------------------------------------------------------------------
+
+un_ai_dues_pay_line = { value = 0 }
+un_ai_dues_band = { value = 25 }
+
+# How willing we are to pay our assessment.
+un_ai_dues_will = {
+	# Paying is the norm.
+	value = 30
+	# A treasury in trouble looks for savings, unless paying earns more back.
+	add = {
+		value = un_ai_treasury_penalty
+		multiply = un_ai_dues_net_cost_factor
+	}
+	# The levy, and the grant we keep only while we pay (un_dev_fund_good_standing).
+	add = un_ai_money_points
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		add = 40
+	}
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		add = -60
+	}
+	if = {
+		limit = { has_law_or_variant = law_type:law_isolationism }
+		add = -25
+	}
+	if = {
+		limit = { has_law = law_type:law_humanitarian_regulations }
+		add = 10
+	}
+	# A permanent member values its vote and its seat.
+	if = {
+		limit = { is_un_permanent_member = yes }
+		add = 10
+	}
+	# Article 19: after 24 months in arrears the vote is gone until we pay.
+	if = {
+		limit = { un_dues_vote_suspended = yes }
+		add = 20
+	}
+}
+
+un_ai_dues_withhold_line = {
+	value = un_ai_dues_pay_line
+	subtract = un_ai_dues_band
+}
+
+un_pay_dues_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_dues_will >= un_ai_dues_pay_line }
+		add = un_ai_dues_will
+		subtract = un_ai_dues_pay_line
+		add = 5
+		max = 60
+	}
+}
+
+un_withhold_dues_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_dues_will < un_ai_dues_withhold_line }
+		add = un_ai_dues_withhold_line
+		subtract = un_ai_dues_will
+		max = 50
+	}
+}
+
+# ---- Development Programs (the Fund's voluntary part) ------------------------------------
+# A contribution costs 0.5% of GDP a year and pays the Fund's grants
+# (un_dev_fund_contributor). It opens only while the Fund stands, to a major
+# power (un_fund_development_button). A power gives for a reason: a
+# humanitarian law, championing the order, or recipients among its subjects,
+# bloc partners and allies, whose goodwill the grants buy.
+
+un_ai_development_line = { value = 20 }
+un_ai_development_band = { value = 25 }
+
+un_ai_development_will = {
+	value = 0
+	if = {
+		limit = { has_law = law_type:law_humanitarian_regulations }
+		add = 20
+	}
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		add = 20
+	}
+	# PREV, not ROOT: the country whose will this is, also when the debug
+	# dump reads it from inside every_country (te_debug_un_log_ai_scores).
+	if = {
+		limit = {
+			any_country = {
+				un_dev_fund_receiving = yes
+				OR = {
+					is_subject_of = PREV # REVIEWED 2026-10-03: PREV is the country whose will this is (the script value's scope before any_country)
+					is_in_same_power_bloc = PREV # REVIEWED 2026-10-03: as above
+					has_treaty_alliance_with = { TARGET = PREV } # REVIEWED 2026-10-03: as above
+				}
+			}
+		}
+		add = 15
+	}
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		add = 10
+	}
+	if = {
+		limit = {
+			OR = {
+				has_law = law_type:law_interventionism
+				has_law = law_type:law_command_economy
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = { un_tier_at_least_established = yes }
+		add = 5
+	}
+	if = {
+		limit = { has_law_or_variant = law_type:law_laissez_faire }
+		add = -25
+	}
+	if = {
+		limit = { has_law_or_variant = law_type:law_isolationism }
+		add = -30
+	}
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		add = -40
+	}
+	# Paying into a fund that pays us is half a circle.
+	if = {
+		limit = { un_dev_fund_receiving = yes }
+		add = -15
+	}
+	add = un_ai_treasury_penalty
+}
+
+un_ai_development_stop_line = {
+	value = un_ai_development_line
+	subtract = un_ai_development_band
+}
+
+un_fund_development_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_development_will >= un_ai_development_line }
+		add = un_ai_development_will
+		subtract = un_ai_development_line
+		add = 10
+		max = 50
+	}
+}
+
+un_defund_development_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_development_will < un_ai_development_stop_line }
+		add = un_ai_development_stop_line
+		subtract = un_ai_development_will
+		max = 50
+	}
+}
+
+# ---- Peacekeeping programme ---------------------------------------------------------------
+# 0.5% of GDP a year, bureaucracy and dearer military goods, for leverage,
+# prestige and the missions it staffs (un_peacekeeping_mission_button; a
+# major power). Ending it waits out the ten-year cooldown its start set.
+
+un_ai_peacekeeping_line = { value = 20 }
+un_ai_peacekeeping_band = { value = 25 }
+
+un_ai_peacekeeping_will = {
+	value = 0
+	if = {
+		limit = { has_law = law_type:law_humanitarian_regulations }
+		add = 20
+	}
+	if = {
+		limit = { has_law = law_type:law_limited_war }
+		add = 15
+	}
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		add = 15
+	}
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		add = 15
+	}
+	if = {
+		limit = { un_tier_at_least_established = yes }
+		add = 5
+	}
+	# Blue helmets in the field to staff.
+	if = {
+		limit = {
+			has_global_variable_list = un_mission_registry
+			any_in_global_list = {
+				variable = un_mission_registry
+				has_tag = un_msn_active
+				OR = {
+					has_tag = un_msn_peacekeeping
+					has_tag = un_msn_stabilisation
+				}
+			}
+		}
+		add = 10
+	}
+	if = {
+		limit = { is_at_war = yes }
+		add = -30
+	}
+	if = {
+		limit = { has_law = law_type:law_total_war }
+		add = -20
+	}
+	if = {
+		limit = { has_law_or_variant = law_type:law_isolationism }
+		add = -30
+	}
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		add = -40
+	}
+	add = un_ai_treasury_penalty
+}
+
+un_ai_peacekeeping_stop_line = {
+	value = un_ai_peacekeeping_line
+	subtract = un_ai_peacekeeping_band
+}
+
+un_peacekeeping_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_peacekeeping_will >= un_ai_peacekeeping_line }
+		add = un_ai_peacekeeping_will
+		subtract = un_ai_peacekeeping_line
+		add = 10
+		max = 50
+	}
+}
+
+un_end_peacekeeping_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_ai_peacekeeping_will < un_ai_peacekeeping_stop_line }
+		add = un_ai_peacekeeping_stop_line
+		subtract = un_ai_peacekeeping_will
+		max = 50
+	}
+}

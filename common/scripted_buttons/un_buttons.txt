@@ -130,13 +130,8 @@ un_join_button = {
 	}
 
 	ai_chance = {
-		value = 50
-		if = { limit = { country_rank >= rank_value:great_power } add = 30 }
-		if = { limit = { country_rank >= rank_value:major_power } add = 15 }
-		if = { limit = { has_law = law_type:law_isolationism } add = -80 }
-		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 20 }
-		if = { limit = { has_law = law_type:law_limited_war } add = 20 }
-		if = { limit = { has_law = law_type:law_total_war } add = -40 }
+		# common/script_values/un_ai_values.txt
+		value = un_join_ai_chance
 	}
 
 	effect = {
@@ -235,10 +230,8 @@ un_leave_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { has_law = law_type:law_isolationism } add = 20 }
-		if = { limit = { has_law = law_type:law_total_war } add = 15 }
-		if = { limit = { global_var:un_authority < 20 } add = 10 }
+		# common/script_values/un_ai_values.txt
+		value = un_leave_ai_chance
 	}
 
 	effect = {
@@ -278,26 +271,8 @@ un_withhold_dues_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		# An isolationist or an underminer has no wish to pay for the order.
-		if = { limit = { has_law = law_type:law_isolationism } add = 15 }
-		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
-			add = 20
-		}
-		# The levy bites: 0.4% of GDP at Strong, 1% at Supranational.
-		if = { limit = { un_tier_at_least_strong = yes } add = 5 }
-		if = { limit = { un_tier_is_supranational = yes } add = 10 }
-		# A treasury in trouble looks for savings.
-		if = { limit = { in_default = yes } add = 25 }
-		else_if = { limit = { scaled_debt > 0.75 } add = 10 }
-		# A champion of the order pays; so does anyone who values the vote.
-		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
-			add = -50
-		}
-		if = { limit = { is_un_permanent_member = yes } add = -10 }
-		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = -10 }
+		# common/script_values/un_ai_values.txt
+		value = un_withhold_dues_ai_chance
 	}
 
 	effect = {
@@ -328,27 +303,8 @@ un_pay_dues_button = {
 	}
 
 	ai_chance = {
-		value = 5
-		# Settle when the treasury can carry it...
-		if = {
-			limit = {
-				NOT = { in_default = yes }
-				scaled_debt < 0.25
-			}
-			add = 15
-		}
-		# ...and above all once the vote is gone.
-		if = { limit = { un_dues_vote_suspended = yes } add = 20 }
-		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
-			add = 30
-		}
-		if = { limit = { has_law = law_type:law_isolationism } add = -15 }
-		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
-			add = -20
-		}
-		if = { limit = { in_default = yes } add = -30 }
+		# common/script_values/un_ai_values.txt
+		value = un_pay_dues_ai_chance
 	}
 
 	effect = {
@@ -633,11 +589,8 @@ un_peacekeeping_mission_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { global_var:un_authority >= 40 } add = 15 }
-		if = { limit = { country_rank >= rank_value:great_power } add = 20 }
-		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 15 }
-		if = { limit = { has_law = law_type:law_limited_war } add = 15 }
+		# common/script_values/un_ai_values.txt
+		value = un_peacekeeping_ai_chance
 	}
 
 	effect = {
@@ -680,9 +633,8 @@ un_end_peacekeeping_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { global_var:un_authority < 20 } add = 15 }
-		if = { limit = { is_at_war = yes } add = 25 }
+		# common/script_values/un_ai_values.txt
+		value = un_end_peacekeeping_ai_chance
 	}
 
 	effect = {
@@ -731,18 +683,8 @@ un_fund_development_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { global_var:un_authority >= 40 } add = 10 }
-		if = { limit = { country_rank >= rank_value:great_power } add = 15 }
-		if = {
-			limit = {
-				OR = {
-					has_law = law_type:law_interventionism
-					has_law = law_type:law_command_economy
-				}
-			}
-			add = 10
-		}
+		# common/script_values/un_ai_values.txt
+		value = un_fund_development_ai_chance
 	}
 
 	effect = {
@@ -774,9 +716,8 @@ un_defund_development_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { has_law = law_type:law_laissez_faire } add = 15 }
-		if = { limit = { global_var:un_authority < 25 } add = 10 }
+		# common/script_values/un_ai_values.txt
+		value = un_defund_development_ai_chance
 	}
 
 	effect = {
