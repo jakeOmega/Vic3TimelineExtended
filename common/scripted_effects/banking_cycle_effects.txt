@@ -1865,7 +1865,7 @@ banking_cycle_update_fiscal_policy = {
 	je:je_banking_cycle = { remove_modifier = financial_cycle_government_fiscal_policy_effect }
 	je:je_banking_cycle = { add_modifier = {
 			name = financial_cycle_government_fiscal_policy_effect
-			multiplier = financial_cycle_government_fiscal_policy_effect_size
+			multiplier = financial_cycle_government_fiscal_policy_effect_size_for_je
 		} }
 }
 
@@ -2543,7 +2543,7 @@ banking_cycle_update_ce_pool_balance = {
 			}
 			add_modifier = {
 				name = planning_treasury_pool_balance
-				multiplier = ce_treasury_pool_balance_multiplier
+				multiplier = ce_treasury_pool_balance_multiplier_for_je
 			}
 		}
 	}
