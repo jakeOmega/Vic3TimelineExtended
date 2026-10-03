@@ -1751,6 +1751,14 @@
   "en": "The United Nations in Crisis",
   "de": "Die Vereinten Nationen in der Krise"
  },
+ "notification_un_dev_fund_contribution_lapsed_notice_desc": {
+  "en": "Our contribution to UN development programs has ended: no [concept_un_development_fund] stands to pay its grants, so the money reached no one. We can contribute again once the [concept_un_general_assembly] founds the Fund.",
+  "de": "Unser Beitrag zu den Entwicklungsprogrammen der UN ist beendet: Es besteht kein [concept_un_development_fund], der seine Zuschüsse auszahlt, daher erreichte das Geld niemanden. Wir können wieder beitragen, sobald die [concept_un_general_assembly] den Fonds gründet."
+ },
+ "notification_un_dev_fund_contribution_lapsed_notice_name": {
+  "en": "Development Programs Contribution Ended",
+  "de": "Beitrag zu Entwicklungsprogrammen beendet"
+ },
  "notification_un_floor_open_notice_desc": {
   "en": "The General Assembly's recess is over. Every member may table business again.",
   "de": "Die Sitzungspause der Generalversammlung ist vorbei. Jedes Mitglied kann wieder Anträge einbringen."

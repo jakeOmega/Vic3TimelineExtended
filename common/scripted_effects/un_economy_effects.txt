@@ -64,6 +64,9 @@
 #   modifier un_dev_fund_pool_grant_modifier / un_dev_fund_treasury_grant_modifier,
 #            one or the other: un_dev_fund_country_refresh (un_economy.1) is
 #            the single refresh site, removing and re-adding monthly
+#   Fund Development Programs opens only while the Fund stands (owner,
+#   2026-10-03), and a contribution running with no Fund lapses at the next
+#   monthly update (un_dev_fund_lapse_contributions).
 #   The snapshot, the contributions and the grants are written by
 #   un_dev_fund_monthly_update (every month, from un_charter_monthly_update,
 #   after the budget snapshot in un_authority_monthly_update). Leaving the UN,
@@ -146,8 +149,9 @@ un_food_reserve_on_carried = {
 
 # What the chamber's row previews while the Fund can be tabled: its form under
 # the charter as it stands (the budget share and the contributions, or the
-# contributions only under the founding charter) and the pot today, how many
-# members it would pay and below what line, and what it would mean for us.
+# contributions only under the founding charter, which can start only once it
+# stands) and the budget share today, how many members it would pay and below
+# what line, and what it would mean for us.
 # Root-level lines only (the row's lines print in order).
 # Scope: country
 un_development_fund_chamber_preview = {
@@ -172,9 +176,19 @@ un_development_fund_chamber_preview = {
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_voluntary
 	}
+	# Under the founding charter the Fund would pay out only the contributions,
+	# and none can run before it stands (un_fund_development_button), so there
+	# is no sum to preview: the line says we would share in them.
 	if = {
-		limit = { un_dev_fund_eligible = yes }
+		limit = {
+			un_dev_fund_eligible = yes
+			un_charter_has_reform = { LEVEL = 1 }
+		}
 		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_ours
+	}
+	else_if = {
+		limit = { un_dev_fund_eligible = yes }
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_ours_voluntary
 	}
 	else_if = {
 		limit = {
@@ -212,6 +226,8 @@ un_economy_monthly_update = {
 # the charter's current level; then this month's grants while it stands.
 # Scope: none
 un_dev_fund_monthly_update = {
+	# 0. A Development Programs contribution running with no Fund lapses.
+	un_dev_fund_lapse_contributions = yes
 	# 1. Every represented member's GDP per head; a stale figure is dropped.
 	every_country = {
 		if = {
@@ -294,6 +310,32 @@ un_dev_fund_monthly_update = {
 			set_variable = { name = un_dev_fund_grant value = 0 }
 		}
 		trigger_event = { id = un_economy.1 }
+	}
+}
+
+# Fund Development Programs opens only while the Fund stands (owner,
+# 2026-10-03; un_fund_development_button's possible): before the Assembly
+# founds it, the programme's money would reach nobody. A contribution that
+# runs with no Fund (one from a save before the gate) ends here, exactly as
+# Stop Contributing ends it: both journal-entry modifiers and their mirrors go
+# (un_state_off, as leaving the UN does), and the contributor is told why.
+# Scope: none
+un_dev_fund_lapse_contributions = {
+	if = {
+		limit = { NOT = { has_global_variable = un_inst_development_fund } }
+		every_country = {
+			limit = {
+				je:je_united_nations ?= {
+					OR = {
+						has_modifier = un_development_contributor_modifier
+						has_modifier = un_development_contributor_cost
+					}
+				}
+			}
+			un_state_off = { MODIFIER = un_development_contributor_modifier }
+			un_state_off = { MODIFIER = un_development_contributor_cost }
+			post_notification = un_dev_fund_contribution_lapsed_notice
+		}
 	}
 }
 

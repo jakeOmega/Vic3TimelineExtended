@@ -181,6 +181,11 @@ qualifies, so the Fund always has at least one recipient **(owner, 2026-10-03)**
 snapshotted as `un_dev_fund_line_floor` before the line each month. The UN panel's World
 Development Fund section lists who it pays, how much and the line, while it stands.
 
+Fund Development Programs opens only once the Fund stands **(owner, 2026-10-03)**: before the
+Assembly founds it, the programme's money would reach nobody. A contribution running with no Fund
+(a save from before the gate) lapses at the next monthly update (`un_dev_fund_lapse_contributions`,
+through `un_state_off`, as leaving the UN does) with a notice to the contributor.
+
 The donations are the existing Fund Development Programs programme
 (`un_fund_development_button`): unchanged in rank, cost (0.5% of GDP a year) and benefits, but
 while the Fund stands each represented, dues-paying contributor's programme expense pays the

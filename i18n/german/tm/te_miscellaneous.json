@@ -3432,8 +3432,8 @@
   "de": "Zieht unsere Zusage an die [concept_un_food_reserve] zurück. Die Reserve entnimmt unserer Strategischen Reserve nichts mehr; was sie bereits genommen hat, bleibt gegeben."
  },
  "UN_FUND_DEVELOPMENT_DESC": {
-  "en": "Contribute to UN development programs. $UN_FUND_DEVELOPMENT_EFFECTS$ A recurring expense scaled to [Concept('concept_gdp', 'GDP')] applies while the contribution is active. While the [concept_un_development_fund] stands, that expense pays its grants to the poorest members, as long as we pay our [concept_un_dues]. Requires [concept_major_power] rank. While it runs, it counts toward the UN's #bold funding#! pillar in proportion to our weight in world affairs ([concept_major_power] members and above).",
-  "de": "Trägt zu UN-Entwicklungsprogrammen bei. $UN_FUND_DEVELOPMENT_EFFECTS$ Solange der Beitrag aktiv ist, fällt eine wiederkehrende, am [Concept('concept_gdp', 'BIP')] bemessene Ausgabe an. Solange der [concept_un_development_fund] besteht, zahlt diese Ausgabe dessen Zuschüsse an die ärmsten Mitglieder, sofern wir unsere [concept_un_dues] zahlen. Erfordert den Rang [concept_major_power]. Während es läuft, zählt es anteilig zu unserem Gewicht in den Weltgeschäften ([concept_major_power]-Mitglieder und höher) zur Säule #bold Finanzierung#! der UN."
+  "en": "Contribute to UN development programs. $UN_FUND_DEVELOPMENT_EFFECTS$ A recurring expense scaled to [Concept('concept_gdp', 'GDP')] applies while the contribution is active. That expense pays the [concept_un_development_fund]'s grants to the poorest members, as long as we pay our [concept_un_dues]. Requires [concept_major_power] rank, and a [concept_un_development_fund] the [concept_un_general_assembly] has founded. While it runs, it counts toward the UN's #bold funding#! pillar in proportion to our weight in world affairs ([concept_major_power] members and above).",
+  "de": "Trägt zu UN-Entwicklungsprogrammen bei. $UN_FUND_DEVELOPMENT_EFFECTS$ Solange der Beitrag aktiv ist, fällt eine wiederkehrende, am [Concept('concept_gdp', 'BIP')] bemessene Ausgabe an. Diese Ausgabe zahlt die Zuschüsse des [concept_un_development_fund] an die ärmsten Mitglieder, sofern wir unsere [concept_un_dues] zahlen. Erfordert den Rang [concept_major_power] und einen von der [concept_un_general_assembly] gegründeten [concept_un_development_fund]. Während es läuft, zählt es anteilig zu unserem Gewicht in den Weltgeschäften ([concept_major_power]-Mitglieder und höher) zur Säule #bold Finanzierung#! der UN."
  },
  "UN_HUMAN_RIGHTS_DESC": {
   "en": "Champion a human rights resolution at the UN. $UN_HUMAN_RIGHTS_EFFECTS$ Requires Multiculturalism, Universal Suffrage, or Protected Speech. While it runs, it counts toward the UN's #bold funding#! pillar in proportion to our weight in world affairs ([concept_major_power] members and above).",
@@ -17150,6 +17150,10 @@
  "un_founding_member_modifier": {
   "en": "UN Founding Member",
   "de": "UN-Gründungsmitglied"
+ },
+ "un_fund_development_needs_fund_tt": {
+  "en": "The [concept_un_general_assembly] has founded the [concept_un_development_fund]: until then, a contribution's money would reach no one",
+  "de": "Die [concept_un_general_assembly] hat den [concept_un_development_fund] gegründet: Bis dahin würde das Geld eines Beitrags niemanden erreichen"
  },
  "un_ga_resolution_modifier": {
   "en": "General Assembly Resolution Participant",
