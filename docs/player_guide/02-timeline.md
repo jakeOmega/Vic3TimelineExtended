@@ -319,6 +319,18 @@ plantations' other throughput bonuses. Pharmaceutical Industries are not affecte
 neither are other countries' plantations, which can go on selling Drugs into
 your market.
 
+When your market is short of Drugs (the base game's goods-shortage alert) and at
+least 3% of your people live in pops at wealth 25 or more, a Medicine Shortage
+event comes in about three years out of four, then not again for two and a half
+years. You choose how to get through it:
+
+| Option | Effect for two and a half years |
+|---|---|
+| Buy abroad at any price | A weekly cost of about 0.02% of GDP |
+| Ration what we have | +3% mortality, fading |
+| Put the Pharmaceutical Industries on a war footing (needs one) | A weekly cost of about 0.04% of GDP and +25% throughput for your Pharmaceutical Industries, fading |
+| Let the poppy growers fill the gap (needs an opium plantation) | +30% throughput for your opium plantations, fading; the Intelligentsia and the Devout disapprove, the Landowners approve |
+
 The base game's journal entry The Opium Trade is not offered after 23 January
 1912, and an entry still open on that date fails. Field Hospitals take Drugs as
 upkeep, so they need Drugs for sale in your market.
