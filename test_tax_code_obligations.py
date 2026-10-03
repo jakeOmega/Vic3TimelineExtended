@@ -140,6 +140,15 @@ class FilesTest(unittest.TestCase):
     def test_never_reads_root(self):
         self.assertNotRegex(read(OBL_EFFECTS), r"\bROOT\b|\broot\b")
 
+    def test_every_tooltip_key_is_localised(self):
+        table = loc()
+        keys = set(re.findall(r"custom_tooltip = (te_tax_tt_\w+)", read(OBL_EFFECTS)))
+        keys |= set(re.findall(r"text = (te_tax_tt_obl_\w+)", read(TRIGGERS)))
+        self.assertIn("te_tax_tt_cmd_obl_renegotiate", keys)
+        for key in sorted(keys):
+            with self.subTest(key=key):
+                self.assertTrue(table.get(key), key)
+
     def test_nothing_sets_an_institution_level(self):
         """A promise is verified against the delivered level; setting it would
         bypass native expansion time (research E §C)."""
