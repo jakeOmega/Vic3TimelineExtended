@@ -93,6 +93,8 @@ class CategorizeKeyTests(unittest.TestCase):
             "rule_te_tax_code_rule",
             "setting_te_tax_code_enabled", "setting_te_tax_code_enabled_customs_desc",
             "law_te_tax_code", "law_te_tax_code_desc",
+            # the journal entry's keys stay with the family, not in te_journal_entries
+            "je_tax_code", "je_tax_code_desc", "je_tax_code_reason", "je_tax_code_status_none",
         ):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "TAX")

@@ -595,10 +595,12 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # generator writes. A later generator-owned key family adds its prefix to
     # the second rule. Both are tested before the `setting_`/`rule_`, `law_`,
     # `_add` and `_desc` rules, which would scatter the family over
-    # te_game_rules, te_laws, te_modifiers and te_concepts.
+    # te_game_rules, te_laws, te_modifiers and te_concepts. Its journal entry's
+    # name, description and status keys (`je_tax_code*`) file here too, ahead of
+    # the `je_` rule.
     if key.startswith("amendment_te_tax_"):
         return "TAX_GENERATED"
-    if key.startswith(("te_tax_", "rule_te_tax_", "setting_te_tax_", "law_te_tax_code")):
+    if key.startswith(("te_tax_", "rule_te_tax_", "setting_te_tax_", "law_te_tax_code", "je_tax_code")):
         return "TAX"
     if key.startswith("setting_") or key.startswith("rule_"):
         return "GAME_RULES"

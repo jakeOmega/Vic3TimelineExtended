@@ -663,3 +663,609 @@ te_tax_view_goods_count = {
 	if = { limit = { has_variable = te_tax_en_g_wine } add = var:te_tax_en_g_wine }
 	if = { limit = { has_variable = te_tax_en_g_wood } add = var:te_tax_en_g_wood }
 }
+
+# The panels' views: the open draft and the bill under debate, the two package
+# slots, the newest change to the code and the history ring newest first. A record's
+# payload is read only while its own token says it is open: a closed record's payload
+# is removed, and a civil war's winner may hold a loser's stale copy.
+te_tax_view_dr_on = {
+	value = 0
+	if = { limit = { has_variable = te_tax_dr_on } value = var:te_tax_dr_on }
+}
+te_tax_view_dr_due = {
+	value = -1
+	if = { limit = { has_variable = te_tax_dr_due has_variable = te_tax_dr_on var:te_tax_dr_on = 1 } value = var:te_tax_dr_due }
+}
+te_tax_view_dr_due_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_dr_due has_variable = te_tax_dr_on var:te_tax_dr_on = 1 var:te_tax_dr_due >= 0 }
+		value = var:te_tax_dr_due
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_dr_due_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_dr_due has_variable = te_tax_dr_on var:te_tax_dr_on = 1 var:te_tax_dr_due >= 0 }
+		value = var:te_tax_dr_due
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_dr_due
+		add = 1
+	}
+}
+te_tax_view_bl_on = {
+	value = 0
+	if = { limit = { has_variable = te_tax_bl_on } value = var:te_tax_bl_on }
+}
+te_tax_view_bl_due = {
+	value = -1
+	if = { limit = { has_variable = te_tax_bl_due has_variable = te_tax_bl_on var:te_tax_bl_on = 1 } value = var:te_tax_bl_due }
+}
+te_tax_view_bl_due_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_bl_due has_variable = te_tax_bl_on var:te_tax_bl_on = 1 var:te_tax_bl_due >= 0 }
+		value = var:te_tax_bl_due
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_bl_due_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_bl_due has_variable = te_tax_bl_on var:te_tax_bl_on = 1 var:te_tax_bl_due >= 0 }
+		value = var:te_tax_bl_due
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_bl_due
+		add = 1
+	}
+}
+
+# Package slots: on, state (1 awaiting, 2 held_conflict, 3 held_missed), due month.
+te_tax_view_pa_on = {
+	value = 0
+	if = { limit = { has_variable = te_tax_pa_on } value = var:te_tax_pa_on }
+}
+te_tax_view_pa_state = {
+	value = 0
+	if = { limit = { has_variable = te_tax_pa_state has_variable = te_tax_pa_on var:te_tax_pa_on = 1 } value = var:te_tax_pa_state }
+}
+te_tax_view_pa_due = {
+	value = -1
+	if = { limit = { has_variable = te_tax_pa_due has_variable = te_tax_pa_on var:te_tax_pa_on = 1 } value = var:te_tax_pa_due }
+}
+te_tax_view_pa_due_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_pa_due has_variable = te_tax_pa_on var:te_tax_pa_on = 1 var:te_tax_pa_due >= 0 }
+		value = var:te_tax_pa_due
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_pa_due_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_pa_due has_variable = te_tax_pa_on var:te_tax_pa_on = 1 var:te_tax_pa_due >= 0 }
+		value = var:te_tax_pa_due
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_pa_due
+		add = 1
+	}
+}
+te_tax_view_pb_on = {
+	value = 0
+	if = { limit = { has_variable = te_tax_pb_on } value = var:te_tax_pb_on }
+}
+te_tax_view_pb_state = {
+	value = 0
+	if = { limit = { has_variable = te_tax_pb_state has_variable = te_tax_pb_on var:te_tax_pb_on = 1 } value = var:te_tax_pb_state }
+}
+te_tax_view_pb_due = {
+	value = -1
+	if = { limit = { has_variable = te_tax_pb_due has_variable = te_tax_pb_on var:te_tax_pb_on = 1 } value = var:te_tax_pb_due }
+}
+te_tax_view_pb_due_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_pb_due has_variable = te_tax_pb_on var:te_tax_pb_on = 1 var:te_tax_pb_due >= 0 }
+		value = var:te_tax_pb_due
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_pb_due_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_pb_due has_variable = te_tax_pb_on var:te_tax_pb_on = 1 var:te_tax_pb_due >= 0 }
+		value = var:te_tax_pb_due
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_pb_due
+		add = 1
+	}
+}
+
+# The newest change to the enacted code (-1 if none is known), and its year and month.
+te_tax_view_last_change = {
+	value = -1
+	if = { limit = { has_variable = te_tax_h1_kind has_variable = te_tax_h1_month OR = { var:te_tax_h1_kind = 1 var:te_tax_h1_kind = 2 var:te_tax_h1_kind = 5 var:te_tax_h1_kind = 7 } } min = var:te_tax_h1_month }
+	if = { limit = { has_variable = te_tax_h2_kind has_variable = te_tax_h2_month OR = { var:te_tax_h2_kind = 1 var:te_tax_h2_kind = 2 var:te_tax_h2_kind = 5 var:te_tax_h2_kind = 7 } } min = var:te_tax_h2_month }
+	if = { limit = { has_variable = te_tax_h3_kind has_variable = te_tax_h3_month OR = { var:te_tax_h3_kind = 1 var:te_tax_h3_kind = 2 var:te_tax_h3_kind = 5 var:te_tax_h3_kind = 7 } } min = var:te_tax_h3_month }
+	if = { limit = { has_variable = te_tax_h4_kind has_variable = te_tax_h4_month OR = { var:te_tax_h4_kind = 1 var:te_tax_h4_kind = 2 var:te_tax_h4_kind = 5 var:te_tax_h4_kind = 7 } } min = var:te_tax_h4_month }
+	if = { limit = { has_variable = te_tax_h5_kind has_variable = te_tax_h5_month OR = { var:te_tax_h5_kind = 1 var:te_tax_h5_kind = 2 var:te_tax_h5_kind = 5 var:te_tax_h5_kind = 7 } } min = var:te_tax_h5_month }
+	if = { limit = { has_variable = te_tax_h6_kind has_variable = te_tax_h6_month OR = { var:te_tax_h6_kind = 1 var:te_tax_h6_kind = 2 var:te_tax_h6_kind = 5 var:te_tax_h6_kind = 7 } } min = var:te_tax_h6_month }
+	if = { limit = { has_variable = te_tax_h7_kind has_variable = te_tax_h7_month OR = { var:te_tax_h7_kind = 1 var:te_tax_h7_kind = 2 var:te_tax_h7_kind = 5 var:te_tax_h7_kind = 7 } } min = var:te_tax_h7_month }
+	if = { limit = { has_variable = te_tax_h8_kind has_variable = te_tax_h8_month OR = { var:te_tax_h8_kind = 1 var:te_tax_h8_kind = 2 var:te_tax_h8_kind = 5 var:te_tax_h8_kind = 7 } } min = var:te_tax_h8_month }
+	if = { limit = { has_variable = te_tax_en_wage_since } min = var:te_tax_en_wage_since }
+	if = { limit = { has_variable = te_tax_en_div_since } min = var:te_tax_en_div_since }
+	if = { limit = { has_variable = te_tax_en_land_since } min = var:te_tax_en_land_since }
+	if = { limit = { has_variable = te_tax_en_head_since } min = var:te_tax_en_head_since }
+	if = { limit = { has_variable = te_tax_en_cons_since } min = var:te_tax_en_cons_since }
+}
+te_tax_view_last_change_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_schema te_tax_view_last_change >= 0 }
+		value = te_tax_view_last_change
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_last_change_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_schema te_tax_view_last_change >= 0 }
+		value = te_tax_view_last_change
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_last_change
+		add = 1
+	}
+}
+
+# The history ring newest first: position <i> reads entry te_tax_h<n>_* with
+# n = te_tax_h_head - i + 1, wrapping past 1 to 8. kind 0 and month -1 while the
+# position is empty. _inst is the instrument a sunset changed (INSTRUMENTS order).
+te_tax_view_hist_1_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h1_kind } value = var:te_tax_h1_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h2_kind } value = var:te_tax_h2_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h3_kind } value = var:te_tax_h3_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h4_kind } value = var:te_tax_h4_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h5_kind } value = var:te_tax_h5_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h6_kind } value = var:te_tax_h6_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h7_kind } value = var:te_tax_h7_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h8_kind } value = var:te_tax_h8_kind }
+}
+te_tax_view_hist_1_inst = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h1_inst } value = var:te_tax_h1_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h2_inst } value = var:te_tax_h2_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h3_inst } value = var:te_tax_h3_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h4_inst } value = var:te_tax_h4_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h5_inst } value = var:te_tax_h5_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h6_inst } value = var:te_tax_h6_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h7_inst } value = var:te_tax_h7_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h8_inst } value = var:te_tax_h8_inst }
+}
+te_tax_view_hist_1_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h1_month } value = var:te_tax_h1_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h2_month } value = var:te_tax_h2_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h3_month } value = var:te_tax_h3_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h4_month } value = var:te_tax_h4_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h5_month } value = var:te_tax_h5_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h6_month } value = var:te_tax_h6_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h7_month } value = var:te_tax_h7_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h8_month } value = var:te_tax_h8_month }
+}
+te_tax_view_hist_1_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_1_month >= 0 }
+		value = te_tax_view_hist_1_month
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_hist_1_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_1_month >= 0 }
+		value = te_tax_view_hist_1_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_hist_1_month
+		add = 1
+	}
+}
+te_tax_view_hist_2_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h8_kind } value = var:te_tax_h8_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h1_kind } value = var:te_tax_h1_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h2_kind } value = var:te_tax_h2_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h3_kind } value = var:te_tax_h3_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h4_kind } value = var:te_tax_h4_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h5_kind } value = var:te_tax_h5_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h6_kind } value = var:te_tax_h6_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h7_kind } value = var:te_tax_h7_kind }
+}
+te_tax_view_hist_2_inst = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h8_inst } value = var:te_tax_h8_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h1_inst } value = var:te_tax_h1_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h2_inst } value = var:te_tax_h2_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h3_inst } value = var:te_tax_h3_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h4_inst } value = var:te_tax_h4_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h5_inst } value = var:te_tax_h5_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h6_inst } value = var:te_tax_h6_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h7_inst } value = var:te_tax_h7_inst }
+}
+te_tax_view_hist_2_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h8_month } value = var:te_tax_h8_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h1_month } value = var:te_tax_h1_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h2_month } value = var:te_tax_h2_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h3_month } value = var:te_tax_h3_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h4_month } value = var:te_tax_h4_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h5_month } value = var:te_tax_h5_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h6_month } value = var:te_tax_h6_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h7_month } value = var:te_tax_h7_month }
+}
+te_tax_view_hist_2_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_2_month >= 0 }
+		value = te_tax_view_hist_2_month
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_hist_2_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_2_month >= 0 }
+		value = te_tax_view_hist_2_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_hist_2_month
+		add = 1
+	}
+}
+te_tax_view_hist_3_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h7_kind } value = var:te_tax_h7_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h8_kind } value = var:te_tax_h8_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h1_kind } value = var:te_tax_h1_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h2_kind } value = var:te_tax_h2_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h3_kind } value = var:te_tax_h3_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h4_kind } value = var:te_tax_h4_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h5_kind } value = var:te_tax_h5_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h6_kind } value = var:te_tax_h6_kind }
+}
+te_tax_view_hist_3_inst = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h7_inst } value = var:te_tax_h7_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h8_inst } value = var:te_tax_h8_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h1_inst } value = var:te_tax_h1_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h2_inst } value = var:te_tax_h2_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h3_inst } value = var:te_tax_h3_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h4_inst } value = var:te_tax_h4_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h5_inst } value = var:te_tax_h5_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h6_inst } value = var:te_tax_h6_inst }
+}
+te_tax_view_hist_3_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h7_month } value = var:te_tax_h7_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h8_month } value = var:te_tax_h8_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h1_month } value = var:te_tax_h1_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h2_month } value = var:te_tax_h2_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h3_month } value = var:te_tax_h3_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h4_month } value = var:te_tax_h4_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h5_month } value = var:te_tax_h5_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h6_month } value = var:te_tax_h6_month }
+}
+te_tax_view_hist_3_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_3_month >= 0 }
+		value = te_tax_view_hist_3_month
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_hist_3_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_3_month >= 0 }
+		value = te_tax_view_hist_3_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_hist_3_month
+		add = 1
+	}
+}
+te_tax_view_hist_4_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h6_kind } value = var:te_tax_h6_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h7_kind } value = var:te_tax_h7_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h8_kind } value = var:te_tax_h8_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h1_kind } value = var:te_tax_h1_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h2_kind } value = var:te_tax_h2_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h3_kind } value = var:te_tax_h3_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h4_kind } value = var:te_tax_h4_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h5_kind } value = var:te_tax_h5_kind }
+}
+te_tax_view_hist_4_inst = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h6_inst } value = var:te_tax_h6_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h7_inst } value = var:te_tax_h7_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h8_inst } value = var:te_tax_h8_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h1_inst } value = var:te_tax_h1_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h2_inst } value = var:te_tax_h2_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h3_inst } value = var:te_tax_h3_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h4_inst } value = var:te_tax_h4_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h5_inst } value = var:te_tax_h5_inst }
+}
+te_tax_view_hist_4_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h6_month } value = var:te_tax_h6_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h7_month } value = var:te_tax_h7_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h8_month } value = var:te_tax_h8_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h1_month } value = var:te_tax_h1_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h2_month } value = var:te_tax_h2_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h3_month } value = var:te_tax_h3_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h4_month } value = var:te_tax_h4_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h5_month } value = var:te_tax_h5_month }
+}
+te_tax_view_hist_4_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_4_month >= 0 }
+		value = te_tax_view_hist_4_month
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_hist_4_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_4_month >= 0 }
+		value = te_tax_view_hist_4_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_hist_4_month
+		add = 1
+	}
+}
+te_tax_view_hist_5_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h5_kind } value = var:te_tax_h5_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h6_kind } value = var:te_tax_h6_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h7_kind } value = var:te_tax_h7_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h8_kind } value = var:te_tax_h8_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h1_kind } value = var:te_tax_h1_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h2_kind } value = var:te_tax_h2_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h3_kind } value = var:te_tax_h3_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h4_kind } value = var:te_tax_h4_kind }
+}
+te_tax_view_hist_5_inst = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h5_inst } value = var:te_tax_h5_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h6_inst } value = var:te_tax_h6_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h7_inst } value = var:te_tax_h7_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h8_inst } value = var:te_tax_h8_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h1_inst } value = var:te_tax_h1_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h2_inst } value = var:te_tax_h2_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h3_inst } value = var:te_tax_h3_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h4_inst } value = var:te_tax_h4_inst }
+}
+te_tax_view_hist_5_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h5_month } value = var:te_tax_h5_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h6_month } value = var:te_tax_h6_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h7_month } value = var:te_tax_h7_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h8_month } value = var:te_tax_h8_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h1_month } value = var:te_tax_h1_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h2_month } value = var:te_tax_h2_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h3_month } value = var:te_tax_h3_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h4_month } value = var:te_tax_h4_month }
+}
+te_tax_view_hist_5_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_5_month >= 0 }
+		value = te_tax_view_hist_5_month
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_hist_5_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_5_month >= 0 }
+		value = te_tax_view_hist_5_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_hist_5_month
+		add = 1
+	}
+}
+te_tax_view_hist_6_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h4_kind } value = var:te_tax_h4_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h5_kind } value = var:te_tax_h5_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h6_kind } value = var:te_tax_h6_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h7_kind } value = var:te_tax_h7_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h8_kind } value = var:te_tax_h8_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h1_kind } value = var:te_tax_h1_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h2_kind } value = var:te_tax_h2_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h3_kind } value = var:te_tax_h3_kind }
+}
+te_tax_view_hist_6_inst = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h4_inst } value = var:te_tax_h4_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h5_inst } value = var:te_tax_h5_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h6_inst } value = var:te_tax_h6_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h7_inst } value = var:te_tax_h7_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h8_inst } value = var:te_tax_h8_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h1_inst } value = var:te_tax_h1_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h2_inst } value = var:te_tax_h2_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h3_inst } value = var:te_tax_h3_inst }
+}
+te_tax_view_hist_6_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h4_month } value = var:te_tax_h4_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h5_month } value = var:te_tax_h5_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h6_month } value = var:te_tax_h6_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h7_month } value = var:te_tax_h7_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h8_month } value = var:te_tax_h8_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h1_month } value = var:te_tax_h1_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h2_month } value = var:te_tax_h2_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h3_month } value = var:te_tax_h3_month }
+}
+te_tax_view_hist_6_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_6_month >= 0 }
+		value = te_tax_view_hist_6_month
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_hist_6_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_6_month >= 0 }
+		value = te_tax_view_hist_6_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_hist_6_month
+		add = 1
+	}
+}
+te_tax_view_hist_7_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h3_kind } value = var:te_tax_h3_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h4_kind } value = var:te_tax_h4_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h5_kind } value = var:te_tax_h5_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h6_kind } value = var:te_tax_h6_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h7_kind } value = var:te_tax_h7_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h8_kind } value = var:te_tax_h8_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h1_kind } value = var:te_tax_h1_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h2_kind } value = var:te_tax_h2_kind }
+}
+te_tax_view_hist_7_inst = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h3_inst } value = var:te_tax_h3_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h4_inst } value = var:te_tax_h4_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h5_inst } value = var:te_tax_h5_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h6_inst } value = var:te_tax_h6_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h7_inst } value = var:te_tax_h7_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h8_inst } value = var:te_tax_h8_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h1_inst } value = var:te_tax_h1_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h2_inst } value = var:te_tax_h2_inst }
+}
+te_tax_view_hist_7_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h3_month } value = var:te_tax_h3_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h4_month } value = var:te_tax_h4_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h5_month } value = var:te_tax_h5_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h6_month } value = var:te_tax_h6_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h7_month } value = var:te_tax_h7_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h8_month } value = var:te_tax_h8_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h1_month } value = var:te_tax_h1_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h2_month } value = var:te_tax_h2_month }
+}
+te_tax_view_hist_7_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_7_month >= 0 }
+		value = te_tax_view_hist_7_month
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_hist_7_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_7_month >= 0 }
+		value = te_tax_view_hist_7_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_hist_7_month
+		add = 1
+	}
+}
+te_tax_view_hist_8_kind = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h2_kind } value = var:te_tax_h2_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h3_kind } value = var:te_tax_h3_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h4_kind } value = var:te_tax_h4_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h5_kind } value = var:te_tax_h5_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h6_kind } value = var:te_tax_h6_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h7_kind } value = var:te_tax_h7_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h8_kind } value = var:te_tax_h8_kind }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h1_kind } value = var:te_tax_h1_kind }
+}
+te_tax_view_hist_8_inst = {
+	value = 0
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h2_inst } value = var:te_tax_h2_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h3_inst } value = var:te_tax_h3_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h4_inst } value = var:te_tax_h4_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h5_inst } value = var:te_tax_h5_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h6_inst } value = var:te_tax_h6_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h7_inst } value = var:te_tax_h7_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h8_inst } value = var:te_tax_h8_inst }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h1_inst } value = var:te_tax_h1_inst }
+}
+te_tax_view_hist_8_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 1 has_variable = te_tax_h2_month } value = var:te_tax_h2_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 2 has_variable = te_tax_h3_month } value = var:te_tax_h3_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 3 has_variable = te_tax_h4_month } value = var:te_tax_h4_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 4 has_variable = te_tax_h5_month } value = var:te_tax_h5_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 5 has_variable = te_tax_h6_month } value = var:te_tax_h6_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 6 has_variable = te_tax_h7_month } value = var:te_tax_h7_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 7 has_variable = te_tax_h8_month } value = var:te_tax_h8_month }
+	else_if = { limit = { has_variable = te_tax_h_head var:te_tax_h_head = 8 has_variable = te_tax_h1_month } value = var:te_tax_h1_month }
+}
+te_tax_view_hist_8_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_8_month >= 0 }
+		value = te_tax_view_hist_8_month
+		divide = 12
+		floor = yes
+	}
+}
+te_tax_view_hist_8_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_h_head te_tax_view_hist_8_month >= 0 }
+		value = te_tax_view_hist_8_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_hist_8_month
+		add = 1
+	}
+}

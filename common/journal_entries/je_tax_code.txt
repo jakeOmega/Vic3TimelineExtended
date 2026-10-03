@@ -1,0 +1,74 @@
+﻿# ============================================================================
+# The Tax Code journal entry (legislated tax code, plan Task 7)
+# ============================================================================
+# Exists only under the tax code rule (te_tax_code_on, written positively, so
+# a save from before the rule existed never shows it) and runs for a country
+# once its taxation law has been carried over into a code (te_tax_entry_unlocked:
+# te_tax_code_in_force, the migration marker te_tax_migrated >= 1). The engine
+# activates it on its next check once both `is_shown_when_inactive` and
+# `possible` hold, as it does je_banking_cycle; nothing adds it by effect, so
+# the migration flow (te_tax.3) is unchanged. It never completes, fails or
+# times out: the code is permanent.
+#
+# Display only. It holds no state, writes nothing and has no `immediate`: the
+# code lives in the country's te_tax_* variables (docs/systems/
+# tax_code_schema.md), which a revolution's winner inherits, and an inherited
+# copy of the entry re-running an `immediate` would have nothing to repair.
+# It has no scripted buttons and no progress bar, so no bars-on-top marker.
+#
+# A save started before this entry existed does not get it: auto-activation
+# reaches only new games (scripting_best_practices.md, "JE Auto-Activation
+# Requires BOTH"). The rule is new on this branch, so only a development save
+# from before Task 7 is affected.
+#
+# The widgets (gui/journal_entry_widgets/te_tax_layout_widget.gui) are the
+# Budget panel's Tax Code tab's own types: the overview with an Open Budget
+# button above the status text, the enacted code below it, the history and How
+# Tax Legislation Works at the foot.
+
+je_tax_code = {
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+	group = je_group_internal_affairs
+
+	widget = {
+		gui = "gui/journal_entry_widgets/te_tax_layout_widget.gui"
+		name = "widget_je_tax_code_overview"
+		container = "custom_widget_container_1"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/te_tax_layout_widget.gui"
+		name = "widget_je_tax_code_status"
+		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/te_tax_layout_widget.gui"
+		name = "widget_je_tax_code_reference"
+		container = "custom_widget_container_3"
+	}
+
+	is_shown_when_inactive = {
+		te_tax_code_on = yes
+	}
+
+	possible = {
+		te_tax_entry_unlocked = yes
+	}
+
+	# Empty while the entry runs: the overview says everything (style guide
+	# rule 1). The inactive entry draws no overview, so it keeps one line.
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_tax_code_status_inactive
+				trigger = { NOT = { has_journal_entry = je_tax_code } }
+			}
+			triggered_desc = {
+				desc = je_tax_code_status_none
+				trigger = { always = yes }
+			}
+		}
+	}
+
+	can_revolution_inherit = yes
+	should_update_on_player_command = yes
+}

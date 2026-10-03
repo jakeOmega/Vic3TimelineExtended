@@ -1,0 +1,210 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE — scripted GUIs (docs/systems/tax_code_schema.md, "Panels")
+# ============================================================================
+# Display gates for the Budget panel's Tax Code tab and je_tax_code
+# (gui/journal_entry_widgets/te_tax_overview_widget.gui). Each answers one
+# yes/no question about the player's country through `is_shown` alone: no
+# saved scope (gotcha #22 in docs/guides/gui_modding_guide.md), `is_valid`
+# always no, an empty effect, nothing for the AI. They read only the code's
+# own tokens, each behind has_variable, and a record's payload only through
+# the record's own token (te_tax_draft_active, te_tax_bill_active), so opening
+# the panel writes nothing and reads no stale payload.
+#
+# The GUI calls them as
+#   GetScriptedGui('<name>').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )
+# rooted on the player, as every tax code panel reads its numbers.
+#
+# Task 8 adds the workbench's action handlers to this file.
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# Overview: what is in progress.
+# ---------------------------------------------------------------------------
+
+# A draft reform is open.
+te_tax_show_draft_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		te_tax_draft_active = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# A bill is under debate.
+te_tax_show_bill_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		te_tax_bill_active = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Package slot a holds a passed bill (awaiting or held).
+te_tax_show_package_a_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		has_variable = te_tax_pa_on
+		var:te_tax_pa_on = 1
+		has_variable = te_tax_pa_due
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Package slot b holds a passed bill (awaiting or held).
+te_tax_show_package_b_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		has_variable = te_tax_pb_on
+		var:te_tax_pb_on = 1
+		has_variable = te_tax_pb_due
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Nothing is in progress: no draft, no bill, no passed bill waiting.
+te_tax_show_no_bill_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		NOT = { te_tax_draft_active = yes }
+		NOT = { te_tax_bill_active = yes }
+		NOT = {
+			has_variable = te_tax_pa_on
+			var:te_tax_pa_on = 1
+		}
+		NOT = {
+			has_variable = te_tax_pb_on
+			var:te_tax_pb_on = 1
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# A transition is scheduled (te_tax_next_month, the scheduler's cache).
+te_tax_show_next_change_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		has_variable = te_tax_next_month
+		var:te_tax_next_month >= 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The month the code last changed is known (te_tax_view_last_change).
+te_tax_show_last_change_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		te_tax_view_last_change >= 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Enacted code: an instrument's enacted value has a sunset, with the rate it
+# reverts to. One per instrument (INSTRUMENTS order in gen_tax_code.py).
+# ---------------------------------------------------------------------------
+
+te_tax_show_sunset_wage_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		has_variable = te_tax_en_wage_exp
+		var:te_tax_en_wage_exp >= 0
+		has_variable = te_tax_en_wage_succ
+		var:te_tax_en_wage_succ >= 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_tax_show_sunset_div_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		has_variable = te_tax_en_div_exp
+		var:te_tax_en_div_exp >= 0
+		has_variable = te_tax_en_div_succ
+		var:te_tax_en_div_succ >= 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_tax_show_sunset_land_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		has_variable = te_tax_en_land_exp
+		var:te_tax_en_land_exp >= 0
+		has_variable = te_tax_en_land_succ
+		var:te_tax_en_land_succ >= 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_tax_show_sunset_head_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		has_variable = te_tax_en_head_exp
+		var:te_tax_en_head_exp >= 0
+		has_variable = te_tax_en_head_succ
+		var:te_tax_en_head_succ >= 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_tax_show_sunset_cons_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		has_variable = te_tax_en_cons_exp
+		var:te_tax_en_cons_exp >= 0
+		has_variable = te_tax_en_cons_succ
+		var:te_tax_en_cons_succ >= 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# History: the ring holds at least one entry.
+# ---------------------------------------------------------------------------
+te_tax_show_history_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		has_variable = te_tax_h_head
+		var:te_tax_h_head >= 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

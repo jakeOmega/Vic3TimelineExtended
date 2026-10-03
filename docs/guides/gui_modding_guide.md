@@ -1698,7 +1698,7 @@ Currently 29 GUI files at the top of `gui/`: 24 full-file replacements of vanill
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
-| `budget_panel.gui` | Budget | A fourth tab, Banking: the banking journal entry's panel types under `GetPlayerJournalEntry('je_banking_cycle')` (gotcha #29). Prototype for `docs/systems/system_panels_feasibility.md` |
+| `budget_panel.gui` | Budget | A fourth tab, Banking: the banking journal entry's panel types under `GetPlayerJournalEntry('je_banking_cycle')` (gotcha #29). Prototype for `docs/systems/system_panels_feasibility.md`. A fifth tab, Tax Code (`te_tax_code`, the legislated tax code rule only): the `je_tax_code` entry's panel types, which read the player's country (`GetPlayer`), under the same gate and datacontext, greyed until the entry runs |
 | `building_browser_panel.gui` | Building browser | Custom building display |
 | `building_details_panel.gui` | Building details | Enhanced building info |
 | `construction_panel.gui` | Construction queue | Construction-market section: government purchase stepper, live read-out, collapsible explainer |
@@ -1753,6 +1753,8 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 | `nuclear_layout_widget.gui` | `je_nuclear_program` | the one order of the nuclear sections for both the journal entry and the Military panel's Nuclear tab, and the entry's named roots (overview in container 1, programme above the native bar in container 3, live and reference sections in container 4); How Nuclear Weapons Work |
 | `te_history_chart.gui` | (type library) | reusable `te_history_chart` column-chart types, usable from any JE widget |
 | `grand_monuments_widget.gui` | `je_grand_monuments` | also instanced by the Timeline Extended window's Grand Monuments tab: the overview (monuments by status as lit or dimmed icons, Hard Times while it holds), National Effects (a step bar per stepped total, approval and fading-legitimacy tables), Our Monuments (one row per monument: status icon, grandeur, the three choices while contested) and a collapsed How Grand Monuments Work; the sections are types (`te_gm_sec_*`) composed by `te_gm_status_sections` / `te_gm_reference_sections` behind three named roots |
+| `te_tax_overview_widget.gui` | `je_tax_code` | the legislated tax code's sections as types, also instanced by the Budget panel's Tax Code tab: the overview (the code and its version, the last and next change, the draft, the bill under debate and up to two passed bills, each a row only while it exists), the enacted code (a row per tax with its rate and any expiry, the taxed goods, the two reliefs) and the history (the ring's eight entries newest first, collapsed); every number a guarded `te_tax_view_*` value read from `GetPlayer`, every state-dependent row gated by a scope-free `te_tax_show_*_sgui` |
+| `te_tax_layout_widget.gui` | `je_tax_code` | the one order of the tax code's sections for both the journal entry (its three named roots; the overview root adds Open Budget) and the Budget panel's Tax Code tab (`te_tax_status_sections`, `te_tax_reference_sections`); also How Tax Legislation Works |
 
 **The state view uses the same idiom, from its own type library.** `gui/te_state_panel_widgets.gui` holds the types; `states_panel.gui`, a full-file override re-merged every vanilla patch, holds only instances.
 - Rows root on `State.MakeScope.ScriptValue(...)`: the JE widgets' `JournalEntry.GetCountry.MakeScope` doesn't exist in the state view.

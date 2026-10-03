@@ -558,11 +558,23 @@ class DisplayValueTest(unittest.TestCase):
             if key in PERCENT_KEYS:
                 want |= {f"te_tax_view_en_{key}_pct", f"te_tax_view_en_{key}_succ_pct"}
         want |= {f"te_tax_view_en_g_{good}" for good in catalog()}
+        # The panels' views (Task 7): the next and last change, the open draft and
+        # bill, the two package slots, and the history ring newest first.
+        want |= {"te_tax_view_next_month_y", "te_tax_view_next_month_mo", "te_tax_view_bl_rev",
+                 "te_tax_view_debate_days_left", "te_tax_view_last_change", "te_tax_view_last_change_y",
+                 "te_tax_view_last_change_mo"}
+        for record in ("dr", "bl", "pa", "pb"):
+            want |= {f"te_tax_view_{record}_{suffix}" for suffix in ("on", "due", "due_y", "due_mo")}
+        want |= {"te_tax_view_pa_state", "te_tax_view_pb_state"}
+        for position in range(1, 9):
+            want |= {f"te_tax_view_hist_{position}_{suffix}"
+                     for suffix in ("kind", "inst", "month", "month_y", "month_mo")}
         self.assertEqual(set(self.views), want)
 
     def test_defaults_are_the_schema_sentinels(self):
         for name in self.views:
-            sentinel_minus_one = re.search(r"_(since|exp|succ|last_month|next_month)(_y|_mo)?$", name) \
+            sentinel_minus_one = re.search(
+                r"_(since|exp|succ|last_month|next_month|month|due|last_change)(_y|_mo)?$", name) \
                 and not name.endswith(("_rate", "_pct"))
             with self.subTest(name=name):
                 self.assertEqual(self.parsed[name]["value"], "-1" if sentinel_minus_one else "0")

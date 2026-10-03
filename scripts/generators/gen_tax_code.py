@@ -48,9 +48,14 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       The draft, bill and support-model values: the baselines at the due
       month, delta-levels, the per-group reasons from the EXPOSURE and
       TAX_LAW_PROGRESSIVENESS tables, and the clout sums.
+  common/customizable_localization/te_tax_generated_custom_loc.txt
+      te_tax_hist_event_<i>: the line each history row prints (newest first),
+      chosen by the entry's kind and, for a sunset, its instrument.
 
 The script-value file also carries the guarded te_tax_view_* display values
-for every instrument and every catalog good. The consumption-goods catalog is
+for every instrument and every catalog good, and the panels' views: the open
+draft and bill, the package slots, the last change and the history ring
+newest first (te_tax_view_hist_<i>_*). The consumption-goods catalog is
 derived from the pop needs (vanilla_parsed/common/pop_needs.json plus the mod's
 common/pop_needs/*.txt) and the goods definitions (vanilla_parsed/common/
 goods.json plus common/goods/*.txt), always read from this repo, never --root.
@@ -138,6 +143,28 @@ SUPPORT_VALUES_PATH = "common/script_values/te_tax_generated_support_values.txt"
 RECORDS = ("dr", "bl")
 RECORD_KEY_FIELDS = (("", -1), ("_sun", 0), ("_pver", -1))   # te_tax_<rec>_<key><field>, draft sentinel
 KIND_APPROVED, KIND_SUPERSEDED, KIND_RESCHEDULED, KIND_RELEASED = 6, 8, 9, 10
+
+# The panels (plan Task 7): the Budget > Tax Code tab and the journal entry.
+# The history rows' text is one customizable localization per row.
+CUSTOM_LOC_PATH = "common/customizable_localization/te_tax_generated_custom_loc.txt"
+KIND_MIGRATED, KIND_REPAIRED = 5, 7
+# Kinds that changed the enacted code (te_tax_code_version moved); the
+# overview's last change is the newest of them.
+CODE_CHANGE_KINDS = (KIND_COMMENCED, KIND_SUNSET, KIND_MIGRATED, KIND_REPAIRED)
+# The line each history kind prints (te_tax_l_english.yml). A sunset prints
+# te_tax_hist_kind_sunset_<key> for the instrument in its _inst.
+HISTORY_KIND_KEYS = {
+    KIND_COMMENCED: "te_tax_hist_kind_commenced",
+    KIND_HELD_CONFLICT: "te_tax_hist_kind_held_conflict",
+    KIND_HELD_MISSED: "te_tax_hist_kind_held_missed",
+    KIND_MIGRATED: "te_tax_hist_kind_migrated",
+    KIND_APPROVED: "te_tax_hist_kind_approved",
+    KIND_REPAIRED: "te_tax_hist_kind_repaired",
+    KIND_SUPERSEDED: "te_tax_hist_kind_superseded",
+    KIND_RESCHEDULED: "te_tax_hist_kind_rescheduled",
+    KIND_RELEASED: "te_tax_hist_kind_released",
+}
+HISTORY_KIND_FALLBACK = "te_tax_hist_kind_other"
 # The interest groups the support model scores, by type key (ig_<key>).
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
        "landowners", "petty_bourgeoisie", "rural_folk", "trade_unions")
@@ -483,6 +510,108 @@ def script_values():
         variable = f"te_tax_en_g_{good}"
         lines.append(f"\tif = {{ limit = {{ has_variable = {variable} }} add = var:{variable} }}")
     lines.append("}")
+    lines += _panel_views()
+    return _txt("\n".join(lines) + "\n")
+
+
+def _panel_views():
+    """The views the Budget > Tax Code tab and the journal entry read (plan Task 7)."""
+    lines = [
+        "",
+        "# The panels' views: the open draft and the bill under debate, the two package",
+        "# slots, the newest change to the code and the history ring newest first. A record's",
+        "# payload is read only while its own token says it is open: a closed record's payload",
+        "# is removed, and a civil war's winner may hold a loser's stale copy.",
+    ]
+    for record in RECORDS:
+        token = f"te_tax_{record}_on"
+        lines += _guarded_view(f"te_tax_view_{record}_on", token, 0)
+        lines += _month_views(f"te_tax_view_{record}_due", f"te_tax_{record}_due", _is_open(token))
+    lines += ["", "# Package slots: on, state (1 awaiting, 2 held_conflict, 3 held_missed), due month."]
+    for slot in SLOTS:
+        token = f"te_tax_p{slot}_on"
+        lines += _guarded_view(f"te_tax_view_p{slot}_on", token, 0)
+        lines += _guarded_view(f"te_tax_view_p{slot}_state", f"te_tax_p{slot}_state", 0,
+                               condition=_is_open(token))
+        lines += _month_views(f"te_tax_view_p{slot}_due", f"te_tax_p{slot}_due", _is_open(token))
+    return lines + _last_change_views() + _history_views()
+
+
+def _is_open(token):
+    return f"has_variable = {token} var:{token} = 1"
+
+
+def _split_month(name, month, guard):
+    """`name`_y and `name`_mo: the year and 1-based month of the script value `month`."""
+    limit = f"{guard} {month} >= 0"
+    return ([f"{name}_y = {{", "\tvalue = -1", "\tif = {", f"\t\tlimit = {{ {limit} }}",
+             f"\t\tvalue = {month}", "\t\tdivide = 12", "\t\tfloor = yes", "\t}", "}"]
+            + [f"{name}_mo = {{", "\tvalue = -1", "\tif = {", f"\t\tlimit = {{ {limit} }}",
+               f"\t\tvalue = {month}", "\t\tdivide = 12", "\t\tfloor = yes", "\t\tmultiply = -12",
+               f"\t\tadd = {month}", "\t\tadd = 1", "\t}", "}"])
+
+
+def _last_change_views():
+    """The month the enacted code last changed: the newest history entry of a kind
+    that moves te_tax_code_version, or an instrument's operative-since month if the
+    ring has rolled past it (`min =` keeps the larger)."""
+    kinds = " ".join(f"var:te_tax_h{{n}}_kind = {kind}" for kind in CODE_CHANGE_KINDS)
+    lines = ["", "# The newest change to the enacted code (-1 if none is known), and its year and month.",
+             "te_tax_view_last_change = {", "\tvalue = -1"]
+    for n in range(1, HISTORY_SIZE + 1):
+        lines.append(f"\tif = {{ limit = {{ has_variable = te_tax_h{n}_kind has_variable = te_tax_h{n}_month "
+                     f"OR = {{ {kinds.format(n=n)} }} }} min = var:te_tax_h{n}_month }}")
+    for instrument in INSTRUMENTS:
+        since = f"te_tax_en_{instrument.key}_since"
+        lines.append(f"\tif = {{ limit = {{ has_variable = {since} }} min = var:{since} }}")
+    lines.append("}")
+    return lines + _split_month("te_tax_view_last_change", "te_tax_view_last_change",
+                                "has_variable = te_tax_schema")
+
+
+def _history_views():
+    """Position i (1 = newest) of the ring is entry n = te_tax_h_head - i + 1, wrapping
+    from 1 back to HISTORY_SIZE."""
+    lines = ["", "# The history ring newest first: position <i> reads entry te_tax_h<n>_* with",
+             "# n = te_tax_h_head - i + 1, wrapping past 1 to 8. kind 0 and month -1 while the",
+             "# position is empty. _inst is the instrument a sunset changed (INSTRUMENTS order)."]
+    for i in range(1, HISTORY_SIZE + 1):
+        for field, default in (("kind", 0), ("inst", 0), ("month", -1)):
+            lines += [f"te_tax_view_hist_{i}_{field} = {{", f"\tvalue = {default}"]
+            for head in range(1, HISTORY_SIZE + 1):
+                variable = f"te_tax_h{(head - i) % HISTORY_SIZE + 1}_{field}"
+                opener = "if" if head == 1 else "else_if"
+                lines.append(f"\t{opener} = {{ limit = {{ has_variable = te_tax_h_head var:te_tax_h_head = {head} "
+                             f"has_variable = {variable} }} value = var:{variable} }}")
+            lines.append("}")
+        month = f"te_tax_view_hist_{i}_month"
+        lines += _split_month(month, month, "has_variable = te_tax_h_head")
+    return lines
+
+
+@output(CUSTOM_LOC_PATH)
+def custom_localization():
+    lines = [
+        HEADER,
+        "# The history rows' text (gui/journal_entry_widgets/te_tax_overview_widget.gui,",
+        "# te_tax_history_section): one customizable localization per row, newest first, read as",
+        "# GetPlayer.GetCustom('te_tax_hist_event_<i>'). Each picks the line for the entry's kind",
+        "# (te_tax_view_hist_<i>_kind) and, for a sunset, its instrument (_inst). The triggers read",
+        "# only the guarded views, never a variable.",
+    ]
+    for i in range(1, HISTORY_SIZE + 1):
+        kind, inst = f"te_tax_view_hist_{i}_kind", f"te_tax_view_hist_{i}_inst"
+        entries = []
+        for value in range(1, KIND_RELEASED + 1):
+            if value == KIND_SUNSET:
+                entries += [(f"{kind} = {KIND_SUNSET} {inst} = {idx}", f"te_tax_hist_kind_sunset_{instrument.key}")
+                            for idx, instrument in enumerate(INSTRUMENTS, start=1)]
+            else:
+                entries.append((f"{kind} = {value}", HISTORY_KIND_KEYS[value]))
+        lines += ["", f"te_tax_hist_event_{i} = {{", "\ttype = country", "\trandom_valid = no"]
+        for trigger, key in entries:
+            lines += ["\ttext = {", f"\t\ttrigger = {{ {trigger} }}", f"\t\tlocalization_key = {key}", "\t}"]
+        lines += ["\ttext = {", f"\t\tlocalization_key = {HISTORY_KIND_FALLBACK}", "\t}", "}"]
     return _txt("\n".join(lines) + "\n")
 
 
@@ -497,10 +626,11 @@ def _guarded_view(name, variable, default, ops=(), condition=""):
             + [f"\t\t{op}" for op in ops] + ["\t}", "}"])
 
 
-def _month_views(name, variable):
-    """The month, its year and its 1-based calendar month (all -1 when unset)."""
-    started = f"var:{variable} >= 0"
-    return (_guarded_view(name, variable, -1)
+def _month_views(name, variable, condition=""):
+    """The month, its year and its 1-based calendar month (all -1 when unset, or
+    when `condition`, a further guard, fails)."""
+    started = " ".join(part for part in (condition, f"var:{variable} >= 0") if part)
+    return (_guarded_view(name, variable, -1, condition=condition)
             + _guarded_view(f"{name}_y", variable, -1, ("divide = 12", "floor = yes"), started)
             + _guarded_view(f"{name}_mo", variable, -1,
                             ("divide = 12", "floor = yes", "multiply = -12",

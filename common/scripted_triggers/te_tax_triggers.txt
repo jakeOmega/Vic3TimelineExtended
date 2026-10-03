@@ -57,6 +57,18 @@ te_tax_code_in_force = {
 	var:te_tax_migrated >= 1
 }
 
+# The journal entry (je_tax_code's `possible`) and the Budget panel's Tax Code
+# tab (te_budget_tax_tab_unlock_sgui's `is_valid`) open once the code is in
+# force, so the greyed tab's checklist and the entry cannot disagree. One
+# custom_tooltip line: the checklist is IsValidTooltip, which would print the
+# conditions inside te_tax_code_in_force without a heading of their own.
+te_tax_entry_unlocked = {
+	custom_tooltip = {
+		text = te_tax_tt_code_in_force
+		te_tax_code_in_force = yes
+	}
+}
+
 # A draft is open (its payload exists exactly while it is).
 te_tax_draft_active = {
 	has_variable = te_tax_dr_on

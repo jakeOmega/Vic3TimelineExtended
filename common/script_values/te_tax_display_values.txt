@@ -1,6 +1,7 @@
 ﻿# Legislated tax code: display values for the code's schema-level tokens
 # (docs/systems/tax_code_schema.md, "Display values"). The per-instrument and
-# per-good ones are generated into te_tax_generated_values.txt.
+# per-good ones, and the panels' per-record, per-slot, last-change and history
+# views, are generated into te_tax_generated_values.txt.
 #
 # Every te_tax_view_* reads only variables it has just tested with has_variable
 # and returns the schema sentinel when one is absent (0 for a counter, an index
@@ -70,4 +71,56 @@ te_tax_view_regrel_pct = {
 te_tax_view_relief_state = {
 	value = 0
 	if = { limit = { has_variable = te_tax_relief_state } value = var:te_tax_relief_state }
+}
+
+# The next scheduled change's year and 1-based month (-1 when none is scheduled).
+te_tax_view_next_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_next_month var:te_tax_next_month >= 0 }
+		value = var:te_tax_next_month
+		divide = 12
+		floor = yes
+	}
+}
+
+te_tax_view_next_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_next_month var:te_tax_next_month >= 0 }
+		value = var:te_tax_next_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_next_month
+		add = 1
+	}
+}
+
+# The bill under debate's revision (0 without a bill): read only while the
+# bill is open, as its payload is removed when it closes.
+te_tax_view_bl_rev = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_bl_on
+			var:te_tax_bl_on = 1
+			has_variable = te_tax_bl_rev
+		}
+		value = var:te_tax_bl_rev
+	}
+}
+
+# Days of debate the bill still needs (te_tax_support_values.txt), 0 without a
+# bill. The wrapper repeats the bill's guard so the panels read one value.
+te_tax_view_debate_days_left = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_bl_on
+			var:te_tax_bl_on = 1
+			has_variable = te_tax_bl_day
+		}
+		value = te_tax_debate_days_left
+	}
 }

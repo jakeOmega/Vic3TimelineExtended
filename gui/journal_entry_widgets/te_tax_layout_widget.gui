@@ -1,0 +1,188 @@
+﻿### Legislated Tax Code — layout (plan Task 7). The one place that sets the
+### order of the tax code's sections, for both hosts: je_tax_code attaches the
+### named roots at the foot of this file, and the Budget panel's Tax Code tab
+### (gui/budget_panel.gui, tab te_tax_code) instances the overview and the two
+### composers. The sections are types in te_tax_overview_widget.gui (the
+### overview, the enacted code, the history) and here (How Tax Legislation
+### Works), in the shape of banking_layout_widget.gui. Task 8 adds the
+### workbench, review and passage sections to te_tax_status_sections.
+###
+### The journal entry, top to bottom (gui/journal_entry.gui draws container_1,
+### the status desc, container_2, the button grid, container_3):
+###   container_1  widget_je_tax_code_overview   the overview, always shown,
+###                and Open Budget, which opens the tab on these panels
+###   status desc  empty while the entry runs (the overview says it all); one
+###                line for the inactive entry, which draws nothing else
+###   container_2  widget_je_tax_code_status     the live sections, open
+###   container_3  widget_je_tax_code_reference  the history and How Tax
+###                Legislation Works, collapsed
+###
+### Collapse flags say their default: *_closed sections are open until closed,
+### *_open ones collapsed until opened (test_tax_code_layout.py).
+
+types te_tax_layout_widget_types
+{
+	### What a returning player checks, open by default: the code in force.
+	type te_tax_status_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_tax_enacted_table = {}
+	}
+
+	### "How Tax Legislation Works": every explanation, collapsed by default,
+	### one heading per topic (style guide rule 1). The live sections say what
+	### is in force; this says how it got there and how it changes. Its numbers
+	### are the passage rule's own script values (te_tax_support_values.txt), so
+	### the text cannot drift from the rule.
+	type te_tax_how_section = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_tax_section_header = {
+			blockoverride "left_text" {
+				text = "te_tax_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_tax_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_tax_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_tax_how_open')]"
+			}
+		}
+
+		te_tax_panel = {
+			visible = "[GetVariableSystem.Exists('te_tax_how_open')]"
+
+			te_tax_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "te_tax_how_sub_drafting"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_how_drafting"
+			}
+			te_tax_note = {
+				text = "te_tax_how_drafting_baseline"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_how_sub_passage"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_how_passage"
+			}
+			te_tax_note = {
+				text = "te_tax_how_passage_rule"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_how_sub_commencement"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_how_commencement"
+			}
+			te_tax_note = {
+				text = "te_tax_how_commencement_sunset"
+			}
+			te_tax_note = {
+				text = "te_tax_how_commencement_held"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_how_sub_replaces"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_how_replaces"
+			}
+			te_tax_note = {
+				text = "te_tax_how_replaces_monthly"
+			}
+		}
+	}
+
+	### The record, then how it all works: the history, collapsed (a list of
+	### past items), and How Tax Legislation Works, collapsed, last.
+	type te_tax_reference_sections = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[JournalEntry.IsActive]"
+
+		te_tax_history_section = {}
+		te_tax_how_section = {}
+	}
+}
+
+### ==========================================================================
+### JOURNAL ENTRY ROOTS (je_tax_code.txt). Bare wrappers that repeat the
+### composers' IsActive gate: je_tax_code has is_shown_when_inactive, so the
+### panel can open for a country whose entry has not activated yet and so has
+### none of the code's variables, and an inactive entry's containers must
+### collapse (gotcha #14). Each root is exactly a section's width (520): a
+### wrapper sized by its content is centred at its first width and drifts
+### once a hidden row appears (style guide rule 8).
+### ==========================================================================
+flowcontainer = {
+	name = "widget_je_tax_code_overview"
+	visible = "[JournalEntry.IsActive]"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	minimumsize = { 520 -1 }
+	spacing = 6
+
+	te_tax_overview_panel = {}
+
+	# The tab carries the same panels, and later the workbench, so the entry
+	# links to it. OpenPanelTab with a mod tab name is the top bar's Banking
+	# phase icon's shape (banking_dashboard_widget.gui, 'te_banking'); if it
+	# does not select the tab in game, the fallback is OpenPanel('budget'),
+	# which opens Budget and leaves the player to click the tab.
+	button = {
+		using = default_button
+		parentanchor = hcenter
+		size = { 480 32 }
+		text = "te_tax_open_budget"
+		tooltip = "te_tax_open_budget_tt"
+		onclick = "[InformationPanelBar.OpenPanelTab('budget', 'te_tax_code')]"
+	}
+}
+
+flowcontainer = {
+	name = "widget_je_tax_code_status"
+	visible = "[JournalEntry.IsActive]"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	minimumsize = { 520 -1 }
+
+	te_tax_status_sections = {}
+}
+
+flowcontainer = {
+	name = "widget_je_tax_code_reference"
+	visible = "[JournalEntry.IsActive]"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	minimumsize = { 520 -1 }
+
+	te_tax_reference_sections = {}
+}
