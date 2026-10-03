@@ -166,3 +166,21 @@ gw_market_role_text = {
 		localization_key = gw_market_role_member
 	}
 }
+
+# The entry's description (je_global_warming_reason). With the Global Warming
+# game rule off the entry opens only for a country holding a restrictive
+# Resource Transition law (#660), so it says why it is open and that there is
+# no climate, instead of describing penalties that never apply.
+gw_reason = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_game_rule = global_warming_enabled }
+		localization_key = je_global_warming_reason_climate
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = je_global_warming_reason_transition
+	}
+}

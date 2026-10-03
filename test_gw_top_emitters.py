@@ -226,7 +226,8 @@ class RowTest(unittest.TestCase):
 
     def test_the_section_follows_mitigation_policies(self):
         composer = _body(self.gui, "te_gw_status_sections", prefix=r"\ttype ")
-        self.assertEqual(re.findall(r"^\t\t(te_gw_sec_\w+) = \{", composer, re.M),
+        # Fossil Transition (#660) comes after the two.
+        self.assertEqual(re.findall(r"^\t\t(te_gw_sec_\w+) = \{", composer, re.M)[:2],
                          ["te_gw_sec_policies", "te_gw_sec_emitters"])
 
     def test_the_row_reads_its_slot_only_when_shown(self):

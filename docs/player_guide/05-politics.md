@@ -1,6 +1,6 @@
 # Government, laws and characters
 
-The mod adds 133 laws, most of them in 34 new law groups, with the institutions,
+The mod adds 136 laws, most of them in 35 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
@@ -12,7 +12,7 @@ default) and State Collapse, which has no rule.
 ## The mod's new laws
 
 The new law groups sit beside the base game's in the laws panel. Sixteen of them
-are ministries, covered in [Ministries](#ministries). The other eighteen are
+are ministries, covered in [Ministries](#ministries). The other nineteen are
 grouped here by theme, and ten further laws join base-game law groups.
 
 ### Rights and society laws
@@ -107,6 +107,7 @@ positive figure counts only while you are a UN member not undermining it; see
 | Genetic Rights | Traditional Heredity, Ban on Genetic Modification, Corporate Genetic Licensing, Open-Source Genetics, State Eugenics Program | Biotechnology output and companies ([Biotechnology companies](02-timeline.md#biotechnology-companies)), birth rate and authority. |
 | Monetary Policy | Commodity Money, Gold Standard, Fiat Money, Digital Currency, Decentralized Cryptocurrency | Currency regime. |
 | Financial Regulation | Unregulated Banking, Free & Mutual Banking, Universal Banking (Light Prudence), Prudential / Narrow Banking, Directed Credit & Development Banks, State-Owned Banking, Central Bank Independence | How banks are supervised. |
+| Resource Transition | Unrestricted Extraction, Fossil Expansion Moratorium, Managed Fossil Phaseout | Whether coal mines, oil rigs and power plants may be built, and retiring them ([The fossil transition](14-climate.md#the-fossil-transition)). |
 
 Monetary Policy and Financial Regulation are explained in [Banking and monetary
 policy](04-banking.md).

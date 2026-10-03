@@ -1,0 +1,22 @@
+﻿# ============================================================================
+# RESOURCE TRANSITION — country pulse (issue #660)
+# ============================================================================
+# Runs the retirement programmes and refreshes a player's Fossil Transition
+# snapshot (rt_country_monthly_update,
+# common/scripted_effects/resource_transition_effects.txt). A country pulse,
+# not je_global_warming's: the laws are enforced whether or not the entry is
+# active and whatever the Global Warming game rule says. For a country with no
+# programme running and no player it is two variable checks a month.
+# ============================================================================
+
+on_monthly_pulse_country = {
+	on_actions = {
+		rt_country_monthly_on_action
+	}
+}
+
+rt_country_monthly_on_action = {
+	effect = {
+		rt_country_monthly_update = yes
+	}
+}

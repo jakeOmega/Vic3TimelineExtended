@@ -121,6 +121,8 @@ LAWGROUP_PRIORITY = [
     "lawgroup_ministry_of_commerce",
     "lawgroup_national_bank",
     "lawgroup_ministry_of_the_environment",
+    # Depends on the environment ministry (unlocking_laws), so after it.
+    "lawgroup_resource_transition",
     "lawgroup_ministry_of_culture",
     "lawgroup_ministry_of_labor",
     "lawgroup_ministry_of_refugee_affairs",
