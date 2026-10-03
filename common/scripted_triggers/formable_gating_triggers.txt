@@ -84,15 +84,20 @@ is_at_friction_with_root = {
 	}
 }
 
+# Performance (2026-10-03 script profile: the AFU formation's possible cost
+# 0.29 ms a call): each any_country below drops `count >= 1`, which means the
+# same as a bare any_country and may make the engine count every country
+# instead of stopping at the first match, and the external-pressure tests
+# check the global top 3 before great-power rank.
+
 # === EU (European Union) ======================================================
 
 eu_formation_external_pressure = {
 	# At least one non-European great power sits in the global top-3.
 	any_country = {
-		country_rank >= rank_value:great_power
 		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
 		NOT = { is_major_european_power = yes }
-		count >= 1
 	}
 }
 
@@ -101,7 +106,6 @@ eu_formation_bloc_aligned = {
 		any_country = {
 			is_major_european_power = yes
 			NOT = { is_aligned_with_root = yes }
-			count >= 1
 		}
 	}
 }
@@ -111,7 +115,6 @@ eu_formation_no_internal_rivalry = {
 		any_country = {
 			is_major_european_power = yes
 			is_at_friction_with_root = yes
-			count >= 1
 		}
 	}
 }
@@ -120,10 +123,9 @@ eu_formation_no_internal_rivalry = {
 
 afu_formation_external_pressure = {
 	any_country = {
-		country_rank >= rank_value:great_power
 		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
 		NOT = { is_major_african_power = yes }
-		count >= 1
 	}
 }
 
@@ -132,7 +134,6 @@ afu_formation_bloc_aligned = {
 		any_country = {
 			is_major_african_power = yes
 			NOT = { is_aligned_with_root = yes }
-			count >= 1
 		}
 	}
 }
@@ -142,7 +143,6 @@ afu_formation_no_internal_rivalry = {
 		any_country = {
 			is_major_african_power = yes
 			is_at_friction_with_root = yes
-			count >= 1
 		}
 	}
 }
@@ -151,10 +151,9 @@ afu_formation_no_internal_rivalry = {
 
 una_formation_external_pressure = {
 	any_country = {
-		country_rank >= rank_value:great_power
 		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
 		NOT = { is_major_north_american_power = yes }
-		count >= 1
 	}
 }
 
@@ -163,7 +162,6 @@ una_formation_bloc_aligned = {
 		any_country = {
 			is_major_north_american_power = yes
 			NOT = { is_aligned_with_root = yes }
-			count >= 1
 		}
 	}
 }
@@ -173,7 +171,6 @@ una_formation_no_internal_rivalry = {
 		any_country = {
 			is_major_north_american_power = yes
 			is_at_friction_with_root = yes
-			count >= 1
 		}
 	}
 }
@@ -182,10 +179,9 @@ una_formation_no_internal_rivalry = {
 
 inm_formation_external_pressure = {
 	any_country = {
-		country_rank >= rank_value:great_power
 		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
 		NOT = { is_major_intermarium_power = yes }
-		count >= 1
 	}
 }
 
@@ -194,7 +190,6 @@ inm_formation_bloc_aligned = {
 		any_country = {
 			is_major_intermarium_power = yes
 			NOT = { is_aligned_with_root = yes }
-			count >= 1
 		}
 	}
 }
@@ -204,7 +199,6 @@ inm_formation_no_internal_rivalry = {
 		any_country = {
 			is_major_intermarium_power = yes
 			is_at_friction_with_root = yes
-			count >= 1
 		}
 	}
 }
@@ -213,10 +207,9 @@ inm_formation_no_internal_rivalry = {
 
 eaf_formation_external_pressure = {
 	any_country = {
-		country_rank >= rank_value:great_power
 		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
 		NOT = { is_major_east_african_power = yes }
-		count >= 1
 	}
 }
 
@@ -225,7 +218,6 @@ eaf_formation_bloc_aligned = {
 		any_country = {
 			is_major_east_african_power = yes
 			NOT = { is_aligned_with_root = yes }
-			count >= 1
 		}
 	}
 }
@@ -235,7 +227,6 @@ eaf_formation_no_internal_rivalry = {
 		any_country = {
 			is_major_east_african_power = yes
 			is_at_friction_with_root = yes
-			count >= 1
 		}
 	}
 }
@@ -249,10 +240,9 @@ eaf_formation_no_internal_rivalry = {
 
 dar_formation_external_pressure = {
 	any_country = {
-		country_rank >= rank_value:great_power
 		global_country_ranking <= 3
+		country_rank >= rank_value:great_power
 		NOT = { is_major_dar_al_islam_power = yes }
-		count >= 1
 	}
 }
 
@@ -261,7 +251,6 @@ dar_formation_bloc_aligned = {
 		any_country = {
 			is_major_dar_al_islam_power = yes
 			NOT = { is_aligned_with_root = yes }
-			count >= 1
 		}
 	}
 }
@@ -271,7 +260,6 @@ dar_formation_no_internal_rivalry = {
 		any_country = {
 			is_major_dar_al_islam_power = yes
 			is_at_friction_with_root = yes
-			count >= 1
 		}
 	}
 }
@@ -303,7 +291,6 @@ une_formation_bloc_aligned = {
 			NOT = { this = ROOT }
 			NOT = { is_in_same_power_bloc = ROOT }
 			NOT = { is_aligned_with_root = yes }
-			count >= 1
 		}
 	}
 }
@@ -314,7 +301,6 @@ une_formation_no_internal_rivalry = {
 			country_rank >= rank_value:great_power
 			NOT = { this = ROOT }
 			is_at_friction_with_root = yes
-			count >= 1
 		}
 	}
 }
