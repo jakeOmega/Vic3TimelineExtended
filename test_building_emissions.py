@@ -85,7 +85,9 @@ class SyntheticCreditsTest(unittest.TestCase):
     def test_post_load_entrypoint_and_idempotent_write(self):
         # Exercise the actual ModState entity key, not only the standalone CLI.
         ms = SimpleNamespace(
-            mod_parsers={"PMs": SimpleNamespace(data=self.methods),
+            mod_parsers={"PMs": SimpleNamespace(data={
+                             **self.methods,
+                             "pm_direct_air_capture": parsed("common/production_methods/direct_air_capture.txt")["pm_direct_air_capture"]}),
                          "PM Groups": SimpleNamespace(data={}),
                          "Buildings": SimpleNamespace(data={
                              name: {"production_method_groups": ("=", [])}
@@ -96,6 +98,9 @@ class SyntheticCreditsTest(unittest.TestCase):
             root = Path(tmp)
             (root / emissions.FACTORS).parent.mkdir(parents=True)
             (root / emissions.FACTORS).write_bytes((ROOT / emissions.FACTORS).read_bytes())
+            removal_path = Path("common/production_methods/direct_air_capture.txt")
+            (root / removal_path).parent.mkdir(parents=True, exist_ok=True)
+            (root / removal_path).write_bytes((ROOT / removal_path).read_bytes())
             self.assertTrue(gen.regenerate(ms, root=root, dry_run=True)["changed"])
             self.assertFalse((root / gen.OUTPUT).exists())
             self.assertTrue(gen.regenerate(ms, root=root)["changed"])
@@ -217,7 +222,8 @@ class BuildingEmissionsTest(unittest.TestCase):
         method = workforce(state.mod_parsers["PMs"].data["pm_modern_coal-fired_plant"])
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
-            for relative in (emissions.FACTORS, Path("common/production_methods/extra_pms.txt")):
+            for relative in (emissions.FACTORS, Path("common/production_methods/extra_pms.txt"),
+                             Path("common/production_methods/direct_air_capture.txt")):
                 (root / relative).parent.mkdir(parents=True, exist_ok=True)
                 (root / relative).write_bytes((ROOT / relative).read_bytes())
             method["goods_input_coal_add"] = ("=", "30")
@@ -270,6 +276,70 @@ class BuildingEmissionsTest(unittest.TestCase):
         self.assertNotIn("script_only", display)
         hidden = parsed("docs/testing/carbon_capture_probe/common/modifier_type_definitions/te_cc_probe_types.txt")
         self.assertEqual(body(body(hidden, "state_carbon_capture_add"), "script_only"), "yes")
+
+
+class DirectAirCaptureTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.pm = parsed("common/production_methods/direct_air_capture.txt")["pm_direct_air_capture"]
+        cls.state = emissions.load_state(ROOT)
+
+    def test_building_unlock_and_default_precede_synthetic_coal(self):
+        building = body(self.state.mod_parsers["Buildings"].data, "building_synthetics_plant_coal")
+        self.assertEqual(body(building, "unlocking_technologies"), ["carbon_capture_and_storage"])
+        group = body(self.state.mod_parsers["PM Groups"].data, "pmg_synthetic_coal")
+        self.assertEqual(body(group, "production_methods"), ["pm_direct_air_capture", "pm_synthetic_coal"])
+        coal = body(self.state.mod_parsers["PMs"].data, "pm_synthetic_coal")
+        self.assertEqual(body(coal, "unlocking_technologies"), ["genetic_engineering"])
+        technology = body(parsed("common/technology/technologies/carbon_capture.txt"), "carbon_capture_and_storage")
+        self.assertEqual(body(technology, "era"), "era_10")
+        self.assertEqual(body(technology, "unlocking_technologies"), ["clean_energy_technologies"])
+        self.assertEqual(body(gen.unwrap(self.pm), "unlocking_technologies"), ["carbon_capture_and_storage"])
+
+    def test_removal_only_recipe_has_costs_workers_and_no_goods_output(self):
+        inputs = workforce(self.pm)
+        self.assertFalse(any(key.startswith("goods_output_") for key in inputs))
+        self.assertEqual(scalar(inputs, "goods_input_electricity_add"), 1200)
+        for key in ("goods_input_engines_add", "goods_input_steel_add", "goods_input_fertilizer_add"):
+            self.assertGreater(scalar(inputs, key), 0)
+        jobs = body(body(gen.unwrap(self.pm), "building_modifiers"), "level_scaled")
+        self.assertEqual(sum(Decimal(gen.unwrap(value)) for value in jobs.values()), 5500)
+        self.assertEqual(scalar(inputs, emissions.MODIFIER), -168)
+
+    def test_market_reads_staffed_removal_once_without_double_scaling(self):
+        value = body(parsed("common/script_values/extra_script_values.txt"), "market_carbon_capture_script_value")
+        iterations = body(body(value, "market"), "every_scope_country")["every_scope_building"]
+        coal_methods = {}
+        for iteration in iterations:
+            iteration = gen.unwrap(iteration)
+            limit = body(iteration, "limit")
+            if body(limit, "is_building_type") == "building_synthetics_plant_coal":
+                coal_methods[body(limit, "has_active_production_method")] = body(iteration, "add")
+        self.assertEqual(set(coal_methods), {"pm_synthetic_coal", "pm_direct_air_capture"})
+        removal = coal_methods["pm_direct_air_capture"]
+        self.assertEqual(body(removal, "value"), f"modifier:{emissions.MODIFIER}")
+        self.assertEqual(body(removal, "divide"), "gw_emission_display_scale")
+        self.assertNotIn("multiply", removal)
+        self.assertEqual(body(coal_methods["pm_synthetic_coal"], "multiply")[-1],
+                         ("=", "gw_synthetic_coal_capture_per_level"))
+
+    def test_removal_capacity_changes_independently_of_coal_output(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for relative in (emissions.FACTORS, Path("common/production_methods/direct_air_capture.txt"),
+                             Path("common/production_methods/extra_pms.txt")):
+                (root / relative).parent.mkdir(parents=True, exist_ok=True)
+                (root / relative).write_bytes((ROOT / relative).read_bytes())
+            path = root / emissions.FACTORS
+            path.write_text(path.read_text(encoding="utf-8-sig").replace(
+                "gw_direct_air_capture_coal_equivalent = 840", "gw_direct_air_capture_coal_equivalent = 420"),
+                encoding="utf-8-sig")
+            outputs, count = emissions.plan_outputs(self.state, root)
+            self.assertEqual(count, 18)
+            text = outputs[Path("common/production_methods/direct_air_capture.txt")]
+            self.assertIn(f"{emissions.MODIFIER} = -84.00", text)
+            self.assertNotIn("goods_output_coal_add", text)
+            self.assertNotIn(Path("common/production_methods/extra_pms.txt"), outputs)
 
 
 class DisplayBoundaryTest(unittest.TestCase):

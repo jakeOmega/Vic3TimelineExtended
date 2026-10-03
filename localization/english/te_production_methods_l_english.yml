@@ -219,6 +219,8 @@
  pm_digital_creation_tools:0 "Digital Creation Tools"
  pm_digital_streaming:0 "Digital Streaming"
  pm_digital_trading:0 "Digital Trading"
+ pm_direct_air_capture:0 "Direct Air Capture"
+ pm_direct_air_capture_desc:0 "Removes carbon dioxide from the atmosphere and stores it permanently. Produces no saleable goods and needs subsidies to operate. Electricity generation still contributes to the market's emissions."
  pm_directed_energy_point_defense:0 "Directed Energy Point Defense"
  pm_directed_energy_point_defense_desc:0 "High-energy lasers that burn incoming warheads out of the sky, raising this [Concept('concept_state','$concept_state$')]'s chance of stopping a [concept_nuclear_strike] further than interceptor missiles can."
  pm_directional_drilling_rigs:0 "Directional Drilling Rigs"

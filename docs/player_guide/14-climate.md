@@ -44,6 +44,16 @@ A member's own ministry does nothing for the market's emissions. The cuts add
 together, but however far they go they only bring a market's emissions down to
 zero; only carbon capture takes a market below it.
 
+Carbon Conversion Works unlock with Carbon Capture and Storage in era 10,
+after Clean Energy Technologies. Their Direct Air Capture method removes CO₂
+from the atmosphere without producing goods to sell. At full staffing and base
+throughput, each level removes 168 a year in the dashboard's units and uses
+1,200 electricity, plus engines, steel, chemicals and electronic components.
+Removal follows staffing and throughput. Subsidize the works to keep them
+staffed; a fossil-powered grid adds emissions from the electricity they use.
+Genetic Engineering in era 11 unlocks their Synthetic Coal alternative, which
+produces fuel while capturing carbon.
+
 ## The Global Warming journal entry
 
 The entry is listed, grayed out, for every country from the start of the game,

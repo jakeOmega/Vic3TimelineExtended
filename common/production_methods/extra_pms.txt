@@ -7394,6 +7394,7 @@ pm_pharma_precision_medicine = {
 
 pm_synthetic_coal = {
 	texture = "gfx/interface/icons/production_method_icons/chemical_fertilizers.dds"
+	unlocking_technologies = { genetic_engineering }
 
 
 	building_modifiers = {

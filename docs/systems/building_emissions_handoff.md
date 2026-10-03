@@ -152,8 +152,27 @@ files and the company-building single-BOM fix. Restart Victoria 3 before
 checking the new Greenhouse Gas Emissions tooltip. The agent checkout remains
 on the feature branch; the shared main checkout was not changed by this task.
 
-Final push status: `5adca6df` is on origin. The latest-main merge and this
-deployment handoff are committed locally; three final push attempts failed
-with `Could not resolve host: github.com`. Retry `git push origin
-codex/building-emissions` when DNS recovers. The deployed files were verified
-after the successful redeploy, independent of this network failure.
+The final push DNS outage recovered on the next turn; `c9bdc78f` and the
+latest-main merge are now on origin.
+
+## Era-10 removal-only checkpoint
+
+The owner requested a Carbon Conversion Works method that stores atmospheric
+CO₂ without producing coal. The building now unlocks with the new era-10 Carbon
+Capture and Storage technology (prerequisite Clean Energy Technologies), with
+Direct Air Capture first in its group. Synthetic Coal remains era 11 through
+an explicit Genetic Engineering gate on the PM.
+
+Initial capacity is 840 coal-equivalent units, configured separately from
+goods output in `greenhouse_gas_factors.txt`. The generator writes −168.00
+Greenhouse Gas Emissions into the removal PM's workforce-scaled block. Inputs:
+1,200 electricity, 5 engines, 6 steel, 7 chemicals, 1 electronic component;
+5,500 jobs. No goods output. Market accounting reads this staffed/throughput
+modifier once and divides by the display scale; Synthetic Coal's separate
+branch is explicitly gated to avoid double counting.
+
+All 25 emissions tests pass and the guide PDF is rebuilt for this checkpoint.
+Next: finish the owner's requested national Atmospheric Carbon Removal policy
+(required subsidies and a small environmental movement satisfaction bonus).
+Policy work is in progress in separate unstaged files; the removal-only PM
+checkpoint is independently reviewable. Commit and push smaller checkpoints.

@@ -7,3 +7,7 @@ gw_emission_factor_oil = 1.74
 # Display only. Snapshots, saves, AI, history ratios and temperature stay in
 # their existing units. Capture modifiers use these displayed units as well.
 gw_emission_display_scale = 1000
+
+# Removal-only capacity, measured in coal-equivalent fuel units per level.
+# Independent of Synthetic Coal output: no fuel is produced or sold.
+gw_direct_air_capture_coal_equivalent = 840

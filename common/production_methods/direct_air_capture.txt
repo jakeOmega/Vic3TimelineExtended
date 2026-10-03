@@ -1,0 +1,22 @@
+﻿# Atmospheric removal without selling captured carbon as fuel.
+# The emissions field is generated from greenhouse_gas_factors.txt.
+pm_direct_air_capture = {
+	texture = "gfx/interface/icons/production_method_icons/chemical_fertilizers.dds"
+	unlocking_technologies = { carbon_capture_and_storage }
+	building_modifiers = {
+		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = -168.00 # AUTO-GENERATED: carbon removal
+			goods_input_electricity_add = 1200
+			goods_input_engines_add = 5
+			goods_input_steel_add = 6
+			goods_input_fertilizer_add = 7
+			goods_input_electronic_components_add = 1
+		}
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 2000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 2000
+		}
+	}
+}

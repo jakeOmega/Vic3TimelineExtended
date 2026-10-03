@@ -721,6 +721,7 @@ REPLACE_OR_CREATE:pmg_synthetic_opium = {
 REPLACE_OR_CREATE:pmg_synthetic_coal = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_refining.dds"
 	production_methods = {
+		pm_direct_air_capture
 		pm_synthetic_coal
 	}
 }
