@@ -41,8 +41,14 @@
 #            un_dev_fund_members_gdp /   the represented members' GDP and people
 #            un_dev_fund_members_pop
 #            un_dev_fund_avg             their GDP per head
-#            un_dev_fund_line            the recipients' line: the level's share
-#                                        of the average
+#            un_dev_fund_line_floor      the poorest member in good standing's
+#                                        GDP per head (un_dev_fund_good_standing);
+#                                        absent while there is none
+#            un_dev_fund_line_base       the level's share of the average
+#            un_dev_fund_line            the recipients' line: the base, raised
+#                                        to the floor when no member in good
+#                                        standing is under it (owner,
+#                                        2026-10-03), so one always qualifies
 #            un_dev_fund_rich_line       twice it: the richest (the lean)
 #            un_dev_fund_eligible_pop    the people of the members below the line
 #            un_dev_fund_recipients      how many members they are
@@ -145,9 +151,23 @@ un_food_reserve_on_carried = {
 # Root-level lines only (the row's lines print in order).
 # Scope: country
 un_development_fund_chamber_preview = {
+	# The line is the level's share of the average, or, when that is below
+	# every member in good standing, the poorest one's GDP per head
+	# (un_dev_fund_line_floored): the _floored lines say which.
 	if = {
+		limit = {
+			un_charter_has_reform = { LEVEL = 1 }
+			un_dev_fund_line_floored = yes
+		}
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_floored
+	}
+	else_if = {
 		limit = { un_charter_has_reform = { LEVEL = 1 } }
 		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund
+	}
+	else_if = {
+		limit = { un_dev_fund_line_floored = yes }
+		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_voluntary_floored
 	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_preview_development_fund_voluntary
@@ -203,11 +223,34 @@ un_dev_fund_monthly_update = {
 			remove_variable = un_dev_fund_gdp_ph
 		}
 	}
-	# 2. The members' average, the line (at the charter's current level) and
-	#    the rich line.
+	# 2. The members' average, the line (at the charter's current level, never
+	#    below the poorest member in good standing: owner, 2026-10-03) and the
+	#    rich line. The floor reads step 1's figures and goes before the line.
 	set_global_variable = { name = un_dev_fund_members_gdp value = un_dev_fund_members_gdp_value }
 	set_global_variable = { name = un_dev_fund_members_pop value = un_dev_fund_members_pop_value }
 	set_global_variable = { name = un_dev_fund_avg value = un_dev_fund_avg_value }
+	if = {
+		limit = {
+			any_country = {
+				un_dev_fund_good_standing = yes
+				has_variable = un_dev_fund_gdp_ph
+			}
+		}
+		ordered_country = {
+			limit = {
+				un_dev_fund_good_standing = yes
+				has_variable = un_dev_fund_gdp_ph
+			}
+			order_by = un_dev_fund_poverty_order
+			position = 0
+			set_global_variable = { name = un_dev_fund_line_floor value = var:un_dev_fund_gdp_ph }
+		}
+	}
+	else_if = {
+		limit = { has_global_variable = un_dev_fund_line_floor }
+		remove_global_variable = un_dev_fund_line_floor
+	}
+	set_global_variable = { name = un_dev_fund_line_base value = un_dev_fund_line_base_value }
 	set_global_variable = { name = un_dev_fund_line value = un_dev_fund_line_value }
 	set_global_variable = { name = un_dev_fund_rich_line value = un_dev_fund_rich_line_value }
 	# 3. Who the Fund pays, and their people.
@@ -584,14 +627,90 @@ un_economy_budget_lines = {
 		if = {
 			limit = { has_global_variable = un_inst_development_fund }
 			if = {
+				limit = {
+					un_charter_has_reform = { LEVEL = 1 }
+					un_dev_fund_line_floored = yes
+				}
+				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund_floored
+			}
+			else_if = {
 				limit = { un_charter_has_reform = { LEVEL = 1 } }
 				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund
+			}
+			else_if = {
+				limit = { un_dev_fund_line_floored = yes }
+				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund_voluntary_floored
 			}
 			else = {
 				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund_voluntary
 			}
 		}
 		custom_tooltip_no_bullet = je_un_chamber_budget_free
+	}
+}
+
+# The World Development Fund's section (te_un_sec_dev_fund, shown while the
+# Fund stands; un_chamber_dev_fund_sgui): every member it pays this month,
+# largest grant first, with the grant and its GDP per head; or, with nobody
+# paid, why. Each recipient prints one line, in its own scope, once (gotcha
+# #27 needs a country to recur before it bites). The reasons mirror
+# un_economy_obligation_lines.
+# Scope: country (the viewer)
+un_dev_fund_recipient_lines = {
+	if = {
+		limit = { any_country = { un_dev_fund_receiving = yes } }
+		ordered_country = {
+			limit = { un_dev_fund_receiving = yes }
+			order_by = un_dev_fund_grant_order
+			min = 0
+			max = 999
+			check_range_bounds = no
+			if = {
+				limit = { this = root }
+				custom_tooltip = je_un_dev_fund_recipient_us
+			}
+			else = {
+				custom_tooltip = je_un_dev_fund_recipient
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { any_country = { un_dev_fund_eligible = yes } }
+		}
+		custom_tooltip_no_bullet = je_un_dev_fund_none_eligible
+	}
+	else_if = {
+		limit = {
+			NOT = { un_dues_assessed = yes }
+			un_dev_fund_no_contributions = yes
+		}
+		custom_tooltip_no_bullet = je_un_dev_fund_none_moribund
+	}
+	else_if = {
+		limit = {
+			NOT = { un_charter_has_reform = { LEVEL = 1 } }
+			un_dev_fund_no_contributions = yes
+		}
+		custom_tooltip_no_bullet = je_un_dev_fund_none_no_contributors
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_dev_fund_none_next_month
+	}
+}
+
+# How this month's line was set: the level's share of the members' average,
+# or the poorest member in good standing's GDP per head when the share is
+# below every such member. The section's cutoff row's tooltip
+# (un_chamber_dev_fund_line_sgui). Root-level lines only.
+# Scope: country (the viewer)
+un_dev_fund_line_lines = {
+	if = {
+		limit = { un_dev_fund_line_floored = yes }
+		custom_tooltip_no_bullet = je_un_dev_fund_line_floored_tt
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_dev_fund_line_share_tt
 	}
 }
 
@@ -647,6 +766,8 @@ un_economy_on_dissolve = {
 	un_dissolve_remove_global = { NAME = un_dev_fund_members_gdp }
 	un_dissolve_remove_global = { NAME = un_dev_fund_members_pop }
 	un_dissolve_remove_global = { NAME = un_dev_fund_avg }
+	un_dissolve_remove_global = { NAME = un_dev_fund_line_floor }
+	un_dissolve_remove_global = { NAME = un_dev_fund_line_base }
 	un_dissolve_remove_global = { NAME = un_dev_fund_line }
 	un_dissolve_remove_global = { NAME = un_dev_fund_rich_line }
 	un_dissolve_remove_global = { NAME = un_dev_fund_eligible_pop }

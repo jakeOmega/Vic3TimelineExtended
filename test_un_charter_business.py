@@ -363,6 +363,60 @@ class DevelopmentFundTierTests(unittest.TestCase):
             self.assertIn(test, contributor)
 
 
+class DevelopmentFundFloorTests(unittest.TestCase):
+    """The line never falls below the poorest member in good standing's GDP per
+    head (owner, 2026-10-03), so at least one member always qualifies. The
+    floor is that member's own figure, so the test against the line must be
+    "at or below", and the floor must be taken over the same members the
+    eligibility test accepts."""
+
+    def test_the_line_is_floored_at_the_poorest_member_in_good_standing(self):
+        values = _read(ECONOMY_VALUES)
+        line = _flat(_block(values, "un_dev_fund_line_value"))
+        self.assertIn("value = un_dev_fund_line_base_value", line)
+        self.assertIn("min = global_var:un_dev_fund_line_floor", line)
+        # ordered_* sorts descending: the poorest comes first only on a negated key.
+        self.assertIn("subtract = var:un_dev_fund_gdp_ph", _flat(_block(values, "un_dev_fund_poverty_order")))
+        update = _flat(_block(_read(ECONOMY_EFFECTS), "un_dev_fund_monthly_update"))
+        gdp_ph = "set_variable = { name = un_dev_fund_gdp_ph value = un_dev_fund_gdp_per_head }"
+        floor = "set_global_variable = { name = un_dev_fund_line_floor value = var:un_dev_fund_gdp_ph }"
+        line_set = "set_global_variable = { name = un_dev_fund_line value = un_dev_fund_line_value }"
+        eligible = "set_global_variable = { name = un_dev_fund_recipients value = un_dev_fund_recipients_value }"
+        for snippet in (gdp_ph, floor, line_set, eligible):
+            self.assertIn(snippet, update)
+        # Each month's GDP per head, then the floor, then the line, then who is under it.
+        self.assertLess(update.index(gdp_ph), update.index(floor))
+        self.assertLess(update.index(floor), update.index(line_set))
+        self.assertLess(update.index(line_set), update.index(eligible))
+        self.assertIn("order_by = un_dev_fund_poverty_order", update)
+
+    def test_the_floor_and_eligibility_read_the_same_members(self):
+        triggers = _read(ECONOMY_TRIGGERS)
+        self.assertIn("var:un_dev_fund_gdp_ph <= global_var:un_dev_fund_line",
+                      _flat(_block(triggers, "un_dev_fund_below_line")))
+        self.assertIn("un_dev_fund_good_standing = yes", _flat(_block(triggers, "un_dev_fund_eligible")))
+        update = _flat(_block(_read(ECONOMY_EFFECTS), "un_dev_fund_monthly_update"))
+        self.assertIn("ordered_country = { limit = { un_dev_fund_good_standing = yes", update)
+
+    def test_the_section_lists_the_recipients_while_the_fund_stands(self):
+        widget = _read(WIDGET)
+        start = widget.index("type te_un_sec_dev_fund = flowcontainer {")
+        section = _flat(_block(widget[start:].replace("type te_un_sec_dev_fund = flowcontainer", "te_un_sec_dev_fund =", 1),
+                               "te_un_sec_dev_fund"))
+        self.assertIn("GetScriptedGui('un_chamber_dev_fund_sgui').IsShown", section.split("un_chamber_section_header")[0])
+        self.assertIn("GetScriptedGui('un_chamber_dev_fund_sgui').ExecuteTooltip", section)
+        self.assertIn("GetScriptedGui('un_chamber_dev_fund_line_sgui').ExecuteTooltip", section)
+        lines = _flat(_block(_read(ECONOMY_EFFECTS), "un_dev_fund_recipient_lines"))
+        self.assertIn("limit = { un_dev_fund_receiving = yes } order_by = un_dev_fund_grant_order", lines)
+        loc = _loc()
+        for key in ("je_un_dev_fund_header", "je_un_dev_fund_recipient", "je_un_dev_fund_recipient_us",
+                    "je_un_dev_fund_line_floored_tt", "je_un_dev_fund_line_share_tt",
+                    "je_un_chamber_budget_dev_fund_floored", "je_un_chamber_budget_dev_fund_voluntary_floored",
+                    "je_un_chamber_preview_development_fund_floored",
+                    "je_un_chamber_preview_development_fund_voluntary_floored"):
+            self.assertIn(key, loc)
+
+
 class LocTests(unittest.TestCase):
     def test_every_key_the_framework_names_exists(self):
         loc = _loc()

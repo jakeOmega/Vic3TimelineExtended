@@ -665,6 +665,11 @@ with the charter:
 | Charter Reform I | 5% of the UN's budget, plus the donations | Below a quarter of the average |
 | Charter Reform II | A quarter of the UN's budget, plus the donations | Below half the average |
 
+The line never falls below the GDP per head of the poorest member that holds
+its seat and pays its dues. When no such member is under the charter's share of
+the average, the line rises to that member's figure, so the Fund always pays at
+least one member.
+
 A reform strengthens a Fund that already stands; nobody votes on it again.
 The donations are the [Fund Development Programs](#un-programs-and-great-power-stances)
 contributions of the major powers: while the Fund stands, a contributor's 0.5%
@@ -672,7 +677,11 @@ of GDP a year pays its grants, as long as it holds its seat and pays its dues. Y
 Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
 laws allow no investment pool or your banking system has not started. The line
 and the grants are worked out each month. Our Obligations shows your grant, and
-the budget line shows what the Fund and the Standing UN Force take.
+the budget line shows what the Fund and the Standing UN Force take. The World
+Development Fund section of the UN panel lists every member the Fund pays this
+month, largest grant first, with its weekly grant and GDP per head, under the
+cutoff, the members' average and what the Fund pays out a week. Hover the cutoff
+to see how it was set.
 
 ### The World Food Reserve and hunger
 
@@ -903,6 +912,7 @@ collapsed when they are reference:
 | Programmes and Conventions | Collapsed | How many countries take part in each program and convention, and how many are under sanctions. |
 | Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take. |
 | Our Obligations | Open | Your dues beside the whole budget and what the Standing UN Force and the World Development Fund take from it, your grant from the Fund, your pledge to the World Food Reserve, any ceasefire order against you or your enemy, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
+| World Development Fund | Open | While the Fund stands: the cutoff GDP per head (hover it for how it was set), the members' average, how many members qualify (at or below the cutoff, seated and paying their dues) and what the Fund pays out a week, then each member it pays this month and how much, or why nobody is paid. |
 | Our Record | Open | Your case strength and its parts, and whether it would support a condemnation, sanctions or a mandate. |
 | UN Authority History | Open | A chart of authority over time. |
 | Resolutions on the Record | Collapsed | Closed resolutions, with how each member voted. |

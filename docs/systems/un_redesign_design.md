@@ -175,6 +175,12 @@ strengthens a standing Fund without a new vote.
 | Reform I | 5% of the budget + donations | a quarter |
 | Reform II | a quarter of the budget + donations | half |
 
+The line never falls below the GDP per head of the poorest member in good standing (represented,
+not suspended, paying its dues: `un_dev_fund_good_standing`), and a member at or below it
+qualifies, so the Fund always has at least one recipient **(owner, 2026-10-03)**. The floor is
+snapshotted as `un_dev_fund_line_floor` before the line each month. The UN panel's World
+Development Fund section lists who it pays, how much and the line, while it stands.
+
 The donations are the existing Fund Development Programs programme
 (`un_fund_development_button`): unchanged in rank, cost (0.5% of GDP a year) and benefits, but
 while the Fund stands each represented, dues-paying contributor's programme expense pays the

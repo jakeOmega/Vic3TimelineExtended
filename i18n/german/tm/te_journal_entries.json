@@ -3527,9 +3527,17 @@
   "en": "The [concept_un_development_fund] takes #v [THIS.ScriptValue('un_disp_dev_fund_budget_pct')|0]%#! of it, @money!#v [THIS.ScriptValue('un_disp_dev_fund_budget_weekly')|D]#! a week, and the #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! members funding Development Programs add @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot')|D]#! a week, shared by #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average).",
   "de": "Der [concept_un_development_fund] erhält #v [THIS.ScriptValue('un_disp_dev_fund_budget_pct')|0]%#! davon, @money!#v [THIS.ScriptValue('un_disp_dev_fund_budget_weekly')|D]#! pro Woche, und die #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! Mitglieder, die Entwicklungsprogramme finanzieren, steuern @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#! bei: @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot')|D]#! pro Woche, aufgeteilt auf #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! Mitglieder unterhalb von @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! BIP pro Kopf (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des Durchschnitts der Mitglieder)."
  },
+ "je_un_chamber_budget_dev_fund_floored": {
+  "en": "The [concept_un_development_fund] takes #v [THIS.ScriptValue('un_disp_dev_fund_budget_pct')|0]%#! of it, @money!#v [THIS.ScriptValue('un_disp_dev_fund_budget_weekly')|D]#! a week, and the #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! members funding Development Programs add @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#!: @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot')|D]#! a week, shared by #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members at or below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head, the poorest dues-paying member's (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average is below every one).",
+  "de": "Der [concept_un_development_fund] erhält #v [THIS.ScriptValue('un_disp_dev_fund_budget_pct')|0]%#! davon, @money!#v [THIS.ScriptValue('un_disp_dev_fund_budget_weekly')|D]#! pro Woche, und die #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! Mitglieder, die Entwicklungsprogramme finanzieren, steuern @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#! bei: @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot')|D]#! pro Woche, aufgeteilt auf #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! Mitglieder mit höchstens @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! BIP pro Kopf, dem Wert des ärmsten Mitglieds, das seine Beiträge zahlt (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des Durchschnitts der Mitglieder liegen unter allen)."
+ },
  "je_un_chamber_budget_dev_fund_voluntary": {
   "en": "The [concept_un_development_fund] takes none of it under the founding charter: it pays out only what the #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! members funding Development Programs contribute, @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#! a week, shared by #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average).",
   "de": "Der [concept_un_development_fund] erhält unter der Gründungscharta nichts davon: Er zahlt nur aus, was die #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! Mitglieder beisteuern, die Entwicklungsprogramme finanzieren, @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#! pro Woche, aufgeteilt auf #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! Mitglieder unterhalb von @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! BIP pro Kopf (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des Durchschnitts der Mitglieder)."
+ },
+ "je_un_chamber_budget_dev_fund_voluntary_floored": {
+  "en": "The [concept_un_development_fund] takes none of it under the founding charter: it pays out only what the #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! members funding Development Programs contribute, @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#! a week, shared by #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members at or below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head, the poorest dues-paying member's (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average is below every one).",
+  "de": "Der [concept_un_development_fund] erhält unter der Gründungscharta nichts davon: Er zahlt nur aus, was die #v [THIS.ScriptValue('un_disp_dev_fund_contributors')|0]#! Mitglieder beisteuern, die Entwicklungsprogramme finanzieren, @money!#v [THIS.ScriptValue('un_disp_dev_fund_donations')|D]#! pro Woche, aufgeteilt auf #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! Mitglieder mit höchstens @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! BIP pro Kopf, dem Wert des ärmsten Mitglieds, das seine Beiträge zahlt (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des Durchschnitts der Mitglieder liegen unter allen)."
  },
  "je_un_chamber_budget_force": {
   "en": "The Standing UN Force takes #v [THIS.ScriptValue('un_disp_force_budget_pct')|0]%#! of it: @money!#v [THIS.ScriptValue('un_disp_force_budget_weekly')|D]#! a week.",
@@ -4539,6 +4547,10 @@
   "en": "#bold Grants:#! #v [THIS.ScriptValue('un_disp_dev_fund_budget_level_pct')|0]%#! of the budget and the Development Programs contributions, @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot_preview')|D]#! a week today, for #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average)",
   "de": "#bold Zuschüsse:#! #v [THIS.ScriptValue('un_disp_dev_fund_budget_level_pct')|0]%#! des Haushalts und die Beiträge der Entwicklungsprogramme, heute @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot_preview')|D]#! pro Woche, für #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! Mitglieder unterhalb von @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! BIP pro Kopf (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des Durchschnitts der Mitglieder)"
  },
+ "je_un_chamber_preview_development_fund_floored": {
+  "en": "#bold Grants:#! #v [THIS.ScriptValue('un_disp_dev_fund_budget_level_pct')|0]%#! of the budget and the Development Programs contributions, @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot_preview')|D]#! a week today, for #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members at or below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head, the poorest dues-paying member's (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average is below every one)",
+  "de": "#bold Zuschüsse:#! #v [THIS.ScriptValue('un_disp_dev_fund_budget_level_pct')|0]%#! des Haushalts und die Beiträge der Entwicklungsprogramme, heute @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot_preview')|D]#! pro Woche, für #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! Mitglieder mit höchstens @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! BIP pro Kopf, dem Wert des ärmsten Mitglieds, das seine Beiträge zahlt (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des Durchschnitts der Mitglieder liegen unter allen)"
+ },
  "je_un_chamber_preview_development_fund_not_ours": {
   "en": "Our GDP per head is @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1]#!, above the line: we would receive nothing.",
   "de": "Unser BIP pro Kopf beträgt @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1]#!, über der Grenze: Wir würden nichts erhalten."
@@ -4550,6 +4562,10 @@
  "je_un_chamber_preview_development_fund_voluntary": {
   "en": "#bold Grants:#! under the founding charter, only the major powers' Development Programs contributions, @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot_preview')|D]#! a week today, for #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average)",
   "de": "#bold Zuschüsse:#! unter der Gründungscharta nur die Beiträge der Mittelmächte aus den Entwicklungsprogrammen, heute @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot_preview')|D]#! pro Woche, für #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! Mitglieder unterhalb von @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! BIP pro Kopf (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des Durchschnitts der Mitglieder)"
+ },
+ "je_un_chamber_preview_development_fund_voluntary_floored": {
+  "en": "#bold Grants:#! under the founding charter, only the major powers' Development Programs contributions, @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot_preview')|D]#! a week today, for #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! members at or below @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! of GDP per head, the poorest dues-paying member's (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average is below every one)",
+  "de": "#bold Zuschüsse:#! unter der Gründungscharta nur die Beiträge der Mittelmächte aus den Entwicklungsprogrammen, heute @money!#v [THIS.ScriptValue('un_disp_dev_fund_pot_preview')|D]#! pro Woche, für #v [THIS.ScriptValue('un_disp_dev_fund_recipients')|0]#! Mitglieder mit höchstens @money!#v [THIS.ScriptValue('un_disp_dev_fund_line')|1]#! BIP pro Kopf, dem Wert des ärmsten Mitglieds, das seine Beiträge zahlt (#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des Durchschnitts der Mitglieder liegen unter allen)"
  },
  "je_un_chamber_preview_development_fund_withholding": {
   "en": "We are below the line, but a member withholding its [concept_un_dues] receives nothing.",
@@ -5770,6 +5786,62 @@
  "je_un_conv_name_space": {
   "en": "International Space Cooperation",
   "de": "Internationale Raumfahrtkooperation"
+ },
+ "je_un_dev_fund_avg_label": {
+  "en": "Members' average (GDP per head)",
+  "de": "Durchschnitt der Mitglieder (BIP pro Kopf)"
+ },
+ "je_un_dev_fund_eligible_label": {
+  "en": "#tooltippable Members qualifying#!",
+  "de": "#tooltippable Berechtigte Mitglieder#!"
+ },
+ "je_un_dev_fund_eligible_tt": {
+  "en": "Members at or below the cutoff that hold their seat in the Assembly and pay their [concept_un_dues]. A member withholding its dues is not paid, however poor.",
+  "de": "Mitglieder bis zur Grenze, die einen Sitz in der Versammlung haben und ihre [concept_un_dues] zahlen. Ein Mitglied, das seine Beiträge einbehält, erhält nichts, wie arm es auch ist."
+ },
+ "je_un_dev_fund_line_floored_tt": {
+  "en": "#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average [concept_gdp_per_capita] would be @money!#v [THIS.ScriptValue('un_disp_dev_fund_line_base')|1]#!, below every member that holds its seat and pays its [concept_un_dues]. So the cutoff rises to the poorest such member's, @money!#v [THIS.ScriptValue('un_disp_dev_fund_line_floor')|1]#!, and the Fund always pays at least one member. The grants are shared by population among the members at or below it, and worked out again each month.",
+  "de": "#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des durchschnittlichen [Concept('concept_gdp_per_capita','Bruttoinlandsprodukts pro Kopf')] der Mitglieder wären @money!#v [THIS.ScriptValue('un_disp_dev_fund_line_base')|1]#! und lägen damit unter jedem Mitglied, das einen Sitz in der Versammlung hat und seine [concept_un_dues] zahlt. Daher steigt die Grenze auf den Wert des ärmsten solchen Mitglieds, @money!#v [THIS.ScriptValue('un_disp_dev_fund_line_floor')|1]#!, und der Fonds zahlt immer an mindestens ein Mitglied. Die Zuschüsse werden nach Bevölkerung auf die Mitglieder bis zur Grenze aufgeteilt und jeden Monat neu berechnet."
+ },
+ "je_un_dev_fund_line_label": {
+  "en": "#tooltippable Cutoff (GDP per head)#!",
+  "de": "#tooltippable Grenze (BIP pro Kopf)#!"
+ },
+ "je_un_dev_fund_line_share_tt": {
+  "en": "The cutoff is #v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average [concept_gdp_per_capita], @money!#v [THIS.ScriptValue('un_disp_dev_fund_avg')|1]#!: a tenth under the founding charter, a quarter after Charter Reform I and half after Charter Reform II. It never falls below the poorest member that holds its seat and pays its [concept_un_dues], so the Fund always pays at least one member. A member at or below it with its seat and its dues paid receives a grant. The grants are shared by population and worked out again each month.",
+  "de": "Die Grenze liegt bei #v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! des durchschnittlichen [Concept('concept_gdp_per_capita','Bruttoinlandsprodukts pro Kopf')] der Mitglieder (@money!#v [THIS.ScriptValue('un_disp_dev_fund_avg')|1]#!): einem Zehntel unter der Gründungscharta, einem Viertel nach Charta-Reform I und der Hälfte nach Charta-Reform II. Sie fällt nie unter den Wert des ärmsten Mitglieds, das einen Sitz in der Versammlung hat und seine [concept_un_dues] zahlt, sodass der Fonds immer an mindestens ein Mitglied zahlt. Ein Mitglied bis zur Grenze, das seinen Sitz hat und seine Beiträge zahlt, erhält einen Zuschuss. Die Zuschüsse werden nach Bevölkerung aufgeteilt und jeden Monat neu berechnet."
+ },
+ "je_un_dev_fund_none_eligible": {
+  "en": "#R Nobody is paid:#! no member both holds its seat in the Assembly and pays its [concept_un_dues].",
+  "de": "#R Niemand erhält Zahlungen:#! Kein Mitglied hat zugleich einen Sitz in der Versammlung und zahlt seine [concept_un_dues]."
+ },
+ "je_un_dev_fund_none_moribund": {
+  "en": "Nobody is paid while the UN is [concept_un_tier_moribund]: its members are assessed no dues, and no member funds Development Programs.",
+  "de": "Niemand erhält Zahlungen, solange die UN [Concept('concept_un_tier_moribund','marode')] ist: Ihren Mitgliedern werden keine Beiträge veranlagt, und kein Mitglied finanziert Entwicklungsprogramme."
+ },
+ "je_un_dev_fund_none_next_month": {
+  "en": "Nobody is paid yet: the first grants come at the start of next month.",
+  "de": "Noch erhält niemand Zahlungen: Die ersten Zuschüsse kommen zu Beginn des nächsten Monats."
+ },
+ "je_un_dev_fund_none_no_contributors": {
+  "en": "Nobody is paid: under the founding charter the Fund pays out only what the major powers contribute through Development Programs, and none does.",
+  "de": "Niemand erhält Zahlungen: Unter der Gründungscharta zahlt der Fonds nur aus, was die Mittelmächte über Entwicklungsprogramme beisteuern, und keine tut es."
+ },
+ "je_un_dev_fund_paid_label": {
+  "en": "Paid out a week",
+  "de": "Auszahlung pro Woche"
+ },
+ "je_un_dev_fund_recipient": {
+  "en": "[THIS.GetCountry.GetName]: @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] a head)",
+  "de": "[THIS.GetCountry.GetAltName('NOM')|U]: @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! pro Woche (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] pro Kopf)"
+ },
+ "je_un_dev_fund_recipient_us": {
+  "en": "#bold [THIS.GetCountry.GetName] (us):#! @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] a head)",
+  "de": "#bold [THIS.GetCountry.GetAltName('NOM')|U] (wir):#! @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! pro Woche (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] pro Kopf)"
+ },
+ "je_un_dev_fund_sub_recipients": {
+  "en": "Recipients",
+  "de": "Empfänger"
  },
  "je_un_how_header": {
   "en": "How the UN Works",
