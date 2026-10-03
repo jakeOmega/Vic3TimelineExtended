@@ -185,13 +185,11 @@ Observations the owner chose the curve from (decisions below).
   healthcare demand. Pharmaceutical Industries made at most 3% of supply in any save; #652's
   earlier unlock is what changes that, and § 4 checks it.
 - **Qing banned Drugs only in the 1883 save.**
-- **Leisure buys Drugs too (found after the decisions; open question).** Vanilla's Leisure need
-  lists Drugs (weight 0.5 of 10.1, at most half the need) and declares the obsession fields.
-  In the buy packages Leisure is 394 at wealth 40, 9,648 at 60 and 442,526 at 100, so a rich
-  pop's Drugs demand keeps growing long after Healthcare's cap of 60. That works against the
-  goal that the ultra-wealthy don't buy orders of magnitude more, and it may be part of the
-  2069 shortage, when Byzantium had 97% of its people at wealth 40 or more. Whether to cut or
-  cap Drugs in Leisure (`REPLACE:popneed_leisure`) is the owner's call.
+- **Leisure buys Drugs too (found after the decisions).** Vanilla's Leisure need lists Drugs
+  (weight 0.5, `max_supply_share` 0.5) and declares the obsession fields. In the buy packages
+  Leisure is 394 at wealth 40, 9,648 at 60 and 442,526 at 100, so a rich pop's Drugs demand
+  keeps growing with wealth. It may be part of the 2069 shortage, when Byzantium had 97% of
+  its people at wealth 40 or more. The owner removed it; see the revised decisions below.
 
 ## Saving a pre-#500 save
 
@@ -206,7 +204,8 @@ the same save, save it without firing the probe, and see whether it crashes.
 ## Decisions (owner, 2026-10-02)
 
 - **Curve:** the plan's starting curve. No Healthcare demand below wealth 20, about 15 at
-  wealth 25, about 40 at 30, and the cap of 60 from wealth 40 up.
+  wealth 25, about 40 at 30, and the cap of 60 from wealth 40 up. *Revised the same day;
+  see below.*
 - **Intoxicants:** Drugs keep their weight of 0.75 for now, so the § 4 play-forward shows
   Healthcare's own effect on the price. It can come down afterwards.
 - **Plantation penalties:** on `building_opium_plantation_throughput_add`, the only
@@ -218,3 +217,39 @@ the same save, save it without firing the probe, and see whether it crashes.
 - **Follow-ups, each in its own PR:** a UN drug convention modelled on the 1961 Single
   Convention, and a random event with a high chance of firing while Drugs are short, in
   place of a scaled mortality modifier.
+
+## Revised decisions (owner, 2026-10-02)
+
+The first curve was too small for a real pharmaceutical industry. Against these saves'
+world buy orders it added only 4–19% to Drugs demand, and it came to 1.0%, 1.4% and 0.6% of
+a pop's spending at wealth 25, 30 and 40 (0.2% at 50).
+
+- **The target is the industry's size in a rich country, not how many countries get
+  rich.** Pharmaceutical Industries should be 1.5–2% of GDP in a modern rich country, and
+  overwhelmingly healthcare. That is about 3% of consumption.
+- **A buy-package value is a cost at base prices** (Paradox wiki, "Buy packages": units
+  bought = value / base price, per 10,000 working adults, dependents counting half). So a
+  need's share of spending is its value over the package total. The plan's "Total spending"
+  column multiplied each value by a base price again and is wrong. So were the player guide's
+  spending chart and `pop_needs_curves.py`'s expenditure table and plot; all are fixed.
+- **Curve:** 0 at wealth 15, 10 at 20, 30 at 25, 85 at 30, 160 at 35, 290 at 40, 520 at 45
+  and 900 at 50: 2.9–3.2% of the package from wealth 29 to 50. Past 50 it rises linearly by
+  76 a level (1,660 at 60, 4,624 at 99), so the share falls well below 3% while a richer pop
+  still buys more. Against the saves above it would have added 31–76% to world Drugs
+  demand from 1949 on (a floor: pops above wealth 50 are counted at 50), and a third in
+  1868, from the few rich pops of the time, which plantations would supply.
+- **Leisure loses Drugs** (`REPLACE:popneed_leisure`). A need splits among its goods by
+  their share of market sell orders, so a market full of Pharmaceutical Industries' output
+  would pull ever more of an unbounded Leisure into Drugs, making the industry a
+  recreational one.
+- **Intoxicants keeps Drugs at 0.75.** Cutting it would weaken the British Indian opium
+  exports to Qing that the early game's balance relies on.
+
+**Open: construction cost.** The owner asked whether the earlier unlock calls for a different
+cost. Recommendation: keep 800 (owner to confirm). #652 already cut it from 5,000 when it
+moved the unlock to era 2, and 800 is the tier of the base game's other industries
+(chemical plants, synthetics plants, motor and electrics industries, steel mills). The
+era-2 method loses to plantations on wage breakeven whatever the cost. Per construction
+point, a plantation's Mechanized Farm makes 55 Drugs for 200 (0.28) and Pharmaceutical
+Industries 135 to 345 for 800 (0.17 to 0.43), so pharma overtakes plantations per point
+from Biologics and mRNA on.

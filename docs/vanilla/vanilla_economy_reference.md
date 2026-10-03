@@ -134,20 +134,23 @@ There are several engine-side breakpoints in `common/defines/00_defines.txt` whe
 Pop needs (`common/pop_needs/00_pop_needs.txt`) are *categories* — basic food, simple clothing, heating, crude items, household items, standard clothing, services, intoxicants, stimulants, several luxury tiers, leisure, free movement, communication, and others. Each category lists multiple **substitutable goods** with three parameters per entry:
 
 - `weight` — the engine's preference weight for that good within the category.
-- `max_supply_share` — cap on the fraction of this category's demand that one good can fulfill.
-- `min_supply_share` — floor below which this good will always supply at least a slice (used to keep niche-but-cheap goods relevant).
+- `max_supply_share` — cap on the *market share* the engine counts for this good. It is not a cap on the good's slice of the need.
+- `min_supply_share` — floor on the market share counted, so a good with a floor above zero is bought even when nothing sells it (used to keep niche-but-cheap goods relevant).
 
 How the substitution actually resolves (this is the part that catches mod authors out):
 
-- The total *value* a pop spends on a need each week is set by its buy package — the `popneed_X = N` numbers in `common/buy_packages/` are amounts of money, expressed in base-price units, not units of any specific good.
-- Within that budget, the split across substitutable goods is driven by **market sell-order share × the good's defined weight**, capped between `min_supply_share` and `max_supply_share`.
-- If only one good in the category is available on the market, pops buy that one exclusively (subject to max-share caps).
+- The total *value* a pop spends on a need each week is set by its buy package — the `popneed_X = N` numbers in `common/buy_packages/` are amounts of money, expressed in base-price units, not units of any specific good. Units bought = value ÷ the good's base price. So a need's share of a pop's spending is its value over the package total; never multiply the values by base prices when totalling spending (the mod's spending chart and `pop_needs_curves.py`'s expenditure table once did, overstating Art and Tourism about fourfold).
+- Within that budget, each good's **purchase weight** is its defined `weight` × its market share, with the market share clamped between `min_supply_share` and `max_supply_share`; each good's slice is its purchase weight over the sum of all the need's purchase weights. Market share is the good's sell orders minus half its non-pop buy orders, over the same for every good in the need (per the Paradox wiki's "Buy packages" page; not confirmed in this repo). So more supply of a good raises its slice of every need that lists it.
+- If only one good in the category is available on the market, pops buy that one exclusively.
 - If *no* good in the category is on the market, pops fall back to the category's `default` good (e.g. `popneed_simple_clothing` defaults to fabric).
 - Goods with a `min_supply_share > 0` are always purchased even if not sold on the market — the engine forces a slice through.
 - Higher-base-price goods convert spending into fewer *units* (e.g. oil costs 2× wood, so 1.3 wood worth of heating buys 0.65 oil instead).
 - Substitution shifts are throttled — relative shares change between 1% and 10% per week, so a sudden market-share swing doesn't immediately rewrite consumption.
 
-The buy-package weighting math is the reason a mod can't just assume "if I produce more clothes, pops will buy clothes". They will buy clothes *in proportion to the clothes-vs-fabric sell-order ratio × clothes' 2× weight*, capped at `max_supply_share`.
+The buy-package weighting math is the reason a mod can't just assume "if I produce more clothes, pops will buy clothes". They will buy clothes *in proportion to the clothes-vs-fabric sell-order ratio × clothes' 2× weight*, with each good's counted market share clamped by its `max_supply_share`/`min_supply_share`.
+
+- **Obsessions and taboos** raise or lower the weight of a good, and also shift spending toward or away from *every* need that lists the good (`OBSESSION_POP_NEED_EXPENSE_MULT` / `TABOO_POP_NEED_EXPENSE_MULT`, taken from or given to the pop's other needs). A need's `obsession_demand_min`/`_mult` only override `DEFAULT_OBSESSION_DEMAND_MIN`/`_MULT`; leaving them out does not exempt the need.
+- **Peasants buy only a small fraction of their buy package** (`consumption_mult` in `common/pop_types/peasants.txt`); subsistence output covers the rest. A model of a good's world demand that ignores this overstates early-game demand, when much of the world is peasants.
 
 ### 5.3 Buy packages
 

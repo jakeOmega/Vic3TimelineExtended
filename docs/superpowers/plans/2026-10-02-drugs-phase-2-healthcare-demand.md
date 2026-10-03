@@ -45,6 +45,8 @@ None of the numbers in § 2 should be fixed until this step is done. Nothing in 
 - Localization: `popneed_healthcare` in `localization/english/te_goods_and_needs_l_english.yml`. Vanilla localizes each need with its name key only, and the mod's Convenience and Tourism needs are the precedent.
 - `common/buy_packages/00_buy_packages.txt` is generated. Never hand-edit it; it comes from the full `/reload` in § 4.
 
+> **Superseded (2026-10-02).** The owner revised the curve to about 3% of a rich pop's spending, and took Drugs out of Leisure: see "Revised decisions" in [the results](../../testing/drugs-wealth-probe-results-2026-10-02.md). The table below also misvalues spending: a buy-package value is already a cost at base prices, so multiplying it by a base price again is wrong.
+
 **Starting curve** (rescale it from § 1's measurements). Totals are from the committed buy packages, valuing each need at its default good's base price:
 
 | Wealth | Total spending | Intoxicants | Proposed healthcare | Share of spending |
