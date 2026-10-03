@@ -554,9 +554,9 @@ company_basic_biotechnology = {
 		"dynamic_company_type_conglomerate"
 	}
 
+	# Carbon Conversion Works and Phenolic Resin Panels are chemistry rather
+	# than biology, so they are charter-only extensions here.
 	building_types = {
-		building_synthetics_plant_coal
-		building_synthetics_plant_wood
 		building_synthetics_plant_sugar
 		building_synthetics_plant_meat
 		building_synthetics_plant_fruit
@@ -565,7 +565,6 @@ company_basic_biotechnology = {
 		building_generic_rd_complex
 	}
 
-
 	potential = {
 		always = yes
 	}
@@ -573,8 +572,6 @@ company_basic_biotechnology = {
 		any_scope_state = {
 			any_scope_building = {
 				OR = {
-					is_building_type = building_synthetics_plant_coal
-					is_building_type = building_synthetics_plant_wood
 					is_building_type = building_synthetics_plant_sugar
 					is_building_type = building_synthetics_plant_meat
 					is_building_type = building_synthetics_plant_fruit
@@ -586,16 +583,20 @@ company_basic_biotechnology = {
 		modifier:country_can_use_biotech_companies_bool = yes
 	}
 
+	# Kept lean so the flavored biotech firms (extra_companies_flavored.txt)
+	# are worth a company slot: research speed lives on Genentech, BGI and
+	# BioNTech, training rate on the Rosen Association, and the larger
+	# pollution cut on Novo Nordisk.
 	prosperity_modifier = {
 		state_birth_rate_mult = 0.05
-		building_training_rate_mult = 0.5
-		country_tech_research_speed_mult = 0.05
-		state_pollution_generation_mult = -0.2
+		state_pollution_generation_mult = -0.05
 		state_building_generic_rd_complex_max_level_add = 1
 	}
 
 	flavored_company = no
 	extension_building_types = {
+		building_synthetics_plant_coal
+		building_synthetics_plant_wood
 		building_synthetics_plant_rubber
 		building_synthetics_plant_oil
 		building_chemical_plant
@@ -605,8 +606,6 @@ company_basic_biotechnology = {
 		any_scope_state = {
 			any_scope_building = {
 				OR = {
-					is_building_type = building_synthetics_plant_coal
-					is_building_type = building_synthetics_plant_wood
 					is_building_type = building_synthetics_plant_sugar
 					is_building_type = building_synthetics_plant_meat
 					is_building_type = building_synthetics_plant_fruit

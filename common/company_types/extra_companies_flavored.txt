@@ -4026,7 +4026,9 @@ company_jardine_matheson = {
 # BioNTech), agricultural biotech (Monsanto), food fermentation (Ajinomoto),
 # genomics (BGI) and one far-future firm (Rosen Association). Six unlock with
 # Biotechnology (era 9), BioNTech with mRNA Therapeutics (era 10) and the Rosen
-# Association with Genetic Engineering (era 11).
+# Association with Genetic Engineering (era 11). Their prosperity bonuses sit at
+# about Pfizer's and Roche's level, well above the deliberately lean generic, so
+# meeting a flavored firm's rank gate is worth spending the company slot on.
 # =============================================================================
 
 # Genentech (1976) - the first biotech company; recombinant human insulin 1978
@@ -4063,8 +4065,9 @@ company_genentech = {
 		gdp_per_capita_ranking <= 10
 	}
 	prosperity_modifier = {
-		building_synthetics_plant_opium_throughput_add = 0.15
-		country_weekly_innovation_mult = 0.05
+		building_synthetics_plant_opium_throughput_add = 0.20
+		country_weekly_innovation_mult = 0.10
+		country_society_tech_research_speed_mult = 0.05
 		state_building_genentech_dna_way_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -4090,6 +4093,7 @@ company_monsanto = {
 		building_chemical_plant
 		building_maize_farm
 		building_cotton_plantation
+		building_sugar_plantation # Roundup Ready sugar beet, 2008
 		building_monsanto_chesterfield_center
 	}
 	extension_building_types = {
@@ -4113,9 +4117,10 @@ company_monsanto = {
 		"goods_production_rank(g:grain)" <= 3
 	}
 	prosperity_modifier = {
-		building_maize_farm_throughput_add = 0.15
-		building_cotton_plantation_throughput_add = 0.15
-		building_chemical_plant_throughput_add = 0.05
+		building_maize_farm_throughput_add = 0.20
+		building_cotton_plantation_throughput_add = 0.20
+		building_chemical_plant_throughput_add = 0.10
+		building_group_bg_agriculture_throughput_add = 0.05
 		state_building_monsanto_chesterfield_center_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -4141,10 +4146,10 @@ company_novo_nordisk = {
 	building_types = {
 		building_synthetics_plant_opium
 		building_synthetics_plant_biomass
+		building_synthetics_plant_sugar # Novozymes enzymes turn starch into glucose syrups
 		building_novo_nordisk_kalundborg_plant
 	}
 	extension_building_types = {
-		building_synthetics_plant_sugar
 		building_food_industry
 	}
 	potential = {
@@ -4165,8 +4170,9 @@ company_novo_nordisk = {
 	}
 	prosperity_modifier = {
 		state_mortality_mult = -0.05
-		building_synthetics_plant_biomass_throughput_add = 0.15
-		state_pollution_generation_mult = -0.10
+		building_synthetics_plant_opium_throughput_add = 0.10
+		building_synthetics_plant_biomass_throughput_add = 0.20
+		state_pollution_generation_mult = -0.15
 		state_building_novo_nordisk_kalundborg_plant_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -4197,6 +4203,7 @@ company_ajinomoto = {
 	extension_building_types = {
 		building_synthetics_plant_meat # cultured-meat partnerships
 		building_synthetics_plant_opium # amino-acid infusions
+		building_electronic_components_and_semiconductor_industry # Ajinomoto Build-up Film, the insulator in high-end chip packages
 	}
 	potential = {
 		always = yes
@@ -4215,8 +4222,9 @@ company_ajinomoto = {
 		"goods_production_rank(g:groceries)" <= 5
 	}
 	prosperity_modifier = {
-		building_food_industry_throughput_add = 0.10
-		building_synthetics_plant_sugar_throughput_add = 0.15
+		building_food_industry_throughput_add = 0.15
+		building_synthetics_plant_sugar_throughput_add = 0.20
+		building_synthetics_plant_drinks_throughput_add = 0.15
 		state_building_ajinomoto_kawasaki_plant_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -4241,10 +4249,8 @@ company_biocon = {
 	building_types = {
 		building_synthetics_plant_opium
 		building_synthetics_plant_biomass
+		building_chemical_plant # statin and immunosuppressant APIs
 		building_biocon_park
-	}
-	extension_building_types = {
-		building_chemical_plant
 	}
 	potential = {
 		always = yes
@@ -4264,8 +4270,9 @@ company_biocon = {
 		"goods_production_rank(g:opium)" <= 10
 	}
 	prosperity_modifier = {
-		country_tech_spread_mult = 0.10
+		country_tech_spread_mult = 0.20
 		state_mortality_mult = -0.05
+		building_synthetics_plant_opium_throughput_add = 0.10
 		state_building_biocon_park_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -4290,10 +4297,11 @@ company_bgi = {
 	building_types = {
 		building_synthetics_plant_opium
 		building_synthetics_plant_fruit
+		building_software_industry # bioinformatics
 		building_bgi_national_genebank
 	}
 	extension_building_types = {
-		building_software_industry # bioinformatics
+		building_electronic_components_and_semiconductor_industry # MGI's in-house DNA sequencers
 	}
 	potential = {
 		always = yes
@@ -4313,8 +4321,9 @@ company_bgi = {
 		gdp_ranking <= 10
 	}
 	prosperity_modifier = {
-		country_weekly_innovation_mult = 0.05
-		building_university_throughput_add = 0.10
+		country_weekly_innovation_mult = 0.10
+		country_society_tech_research_speed_mult = 0.05
+		building_university_throughput_add = 0.15
 		state_building_bgi_national_genebank_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -4338,10 +4347,10 @@ company_biontech = {
 	}
 	building_types = {
 		building_synthetics_plant_opium
+		building_chemical_plant # lipid nanoparticles that carry the mRNA
 		building_biontech_mainz_campus
 	}
 	extension_building_types = {
-		building_chemical_plant
 		building_synthetics_plant_biomass
 	}
 	potential = {
@@ -4362,9 +4371,9 @@ company_biontech = {
 		gdp_per_capita_ranking <= 15
 	}
 	prosperity_modifier = {
-		state_mortality_mult = -0.05
-		building_synthetics_plant_opium_throughput_add = 0.10
-		country_society_tech_research_speed_mult = 0.05
+		state_mortality_mult = -0.10
+		building_synthetics_plant_opium_throughput_add = 0.15
+		country_society_tech_research_speed_mult = 0.10
 		state_building_biontech_mainz_campus_max_level_add = 1
 	}
 	possible_prestige_goods = {
@@ -4392,11 +4401,11 @@ company_rosen_association = {
 	building_types = {
 		building_synthetics_plant_meat
 		building_synthetics_plant_biomass
+		building_robotics_industry # the android workers themselves
 		building_rosen_association_hq
 	}
 	extension_building_types = {
 		building_synthetics_plant_fruit
-		building_robotics_industry
 	}
 	potential = {
 		always = yes
@@ -4416,7 +4425,8 @@ company_rosen_association = {
 	}
 	prosperity_modifier = {
 		state_working_adult_ratio_add = 0.03
-		building_synthetics_plant_meat_throughput_add = 0.15
+		building_synthetics_plant_meat_throughput_add = 0.25
+		building_training_rate_mult = 0.5 # androids arrive trained
 		state_building_rosen_association_hq_max_level_add = 1
 	}
 	possible_prestige_goods = {
