@@ -17,7 +17,7 @@ CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "global_w
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "global_warming_gui_icons.md")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-STATUS = ["te_gw_sec_policies", "te_gw_sec_transition", "te_gw_sec_emitters"]
+STATUS = ["te_gw_sec_policies", "te_gw_sec_emitters", "te_gw_sec_transition"]
 # National, the player's own (#660): the Market tab shows it on our market only.
 OWN_MARKET_ONLY = {"te_gw_sec_transition"}
 REFERENCE = ["te_gw_sec_history", "te_gw_sec_how"]
