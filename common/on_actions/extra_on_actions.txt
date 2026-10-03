@@ -1217,8 +1217,10 @@ tech_marker_grants_on_action = {
 			}
 		}
 		# Renounce our claims on decentralized states. Claims sit on state
-		# regions, and the only way to name them from country scope is by their
-		# holder's states, so the sweep walks the decentralized countries' states
+		# regions, so test the claimer's has_claim against each state's region,
+		# not has_claim_by on the decentralized owner's portion of a split state
+		# (e.g. Equateur shared with Sudan). Use the dedicated decentralized
+		# country iterators and walk only those countries' states
 		# (a few hundred) rather than every state in the world. It runs every
 		# month, not once: a claim that reaches us after the first sweep is dropped
 		# within the month too. The stake action itself (da_stake_colonial_claim) is
@@ -1229,15 +1231,17 @@ tech_marker_grants_on_action = {
 			limit = {
 				modifier:country_remove_decentralized_claims_bool = yes
 				number_of_claims > 0
-				any_country = {
-					is_country_type = decentralized
-					any_scope_state = { has_claim_by = ROOT }
+				any_decentralized_country = {
+					any_scope_state = {
+						state_region = { ROOT = { has_claim = PREV } }
+					}
 				}
 			}
-			every_country = {
-				limit = { is_country_type = decentralized }
+			every_decentralized_country = {
 				every_scope_state = {
-					limit = { has_claim_by = ROOT }
+					limit = {
+						state_region = { ROOT = { has_claim = PREV } }
+					}
 					state_region = { remove_claim = ROOT }
 				}
 			}
