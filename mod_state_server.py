@@ -8477,6 +8477,7 @@ POST_LOAD_AUDITS = [
     ("empty_effect_audit",            "empty_effect_audit"),
     ("change_variable_clamp_audit",   "change_variable_clamp_audit"),
     ("building_scope_variable_audit", "building_scope_variable_audit"),
+    ("principle_tier_audit",          "principle_tier_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
