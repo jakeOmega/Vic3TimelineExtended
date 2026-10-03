@@ -787,65 +787,15 @@ market_greenhouse_gas_emissions_script_value = {
 }
 
 market_carbon_capture_script_value = {
-	# Evaluated in the country scope
-	# Returns negative capture from stationary sources, synthetic fuels and direct air capture.
-	# Legacy synthetic credits use base output and occupancy. Direct air capture
-	# reads the workforce-scaled modifier, including throughput and staffing.
+	# Country scope. All capture/removal PMs feed the same positive state credit.
+	# Workforce scaling includes levels, staffing and throughput. Read once in
+	# each location's market, including foreign-owned sites; never rescale staffing.
 	value = 0
 	market = {
 		every_scope_country = {
-			# State modifiers follow staffing/throughput and belong to this
-			# location's market, including foreign-owned buildings. Read once.
 			every_scope_state = {
 				subtract = {
 					value = modifier:state_carbon_capture_add
-					divide = gw_emission_display_scale
-				}
-			}
-			# Carbon capture: subtract synthetic oil/coal production (not fossil extraction)
-			# Split into two iterations to avoid the nested if/limit pattern that
-			# confuses the engine's static scope analyzer (false "market vs. building"
-			# scope warning) inside script values.
-			every_scope_building = {
-				limit = {
-					is_building_type = building_synthetics_plant_oil
-					has_active_production_method = pm_synthetic_oil_2
-				}
-				add = {
-					value = this.level
-					multiply = occupancy
-					multiply = gw_synthetic_oil_2_capture_per_level
-				}
-			}
-			every_scope_building = {
-				limit = {
-					is_building_type = building_synthetics_plant_oil
-					NOT = { has_active_production_method = pm_synthetic_oil_2 }
-				}
-				add = {
-					value = this.level
-					multiply = occupancy
-					multiply = gw_synthetic_oil_1_capture_per_level
-				}
-			}
-			every_scope_building = {
-				limit = {
-					is_building_type = building_synthetics_plant_coal
-					has_active_production_method = pm_synthetic_coal
-				}
-				add = {
-					value = this.level
-					multiply = occupancy
-					multiply = gw_synthetic_coal_capture_per_level
-				}
-			}
-			every_scope_building = {
-				limit = {
-					is_building_type = building_synthetics_plant_coal
-					has_active_production_method = pm_direct_air_capture
-				}
-				add = {
-					value = modifier:building_greenhouse_gas_emissions_add
 					divide = gw_emission_display_scale
 				}
 			}

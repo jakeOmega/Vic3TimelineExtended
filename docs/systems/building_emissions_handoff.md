@@ -251,3 +251,19 @@ Pending: full CI checks, production regression in game (especially independent
 automation, company-site controls, NA exceptions and January state subtraction).
 Normal production deployment must remove the probe overlay: keeping it could
 duplicate state credits and modifier-type definitions. Do not restore it.
+
+Unified accounting follow-up: synthetic methods now show net emissions after
+their existing output credits (coal-to-liquids +4.68, synthetic oil −52.20,
+synthetic coal −168 per full level). Synthetic methods and Direct Air Capture
+feed `state_carbon_capture_add` too. Live market capture is now one market →
+countries → states sweep, with no synthetic/DAC building iterations or manual
+level/occupancy multipliers. All capture follows staffing and throughput. Legacy
+generated synthetic script values remain for compatibility, but are no longer
+read by live market accounting. 74 focused tests pass after this change.
+
+Full-suite invocation needs the CI dummy VIC3_* paths documented in CLAUDE.md:
+without them, this worktree cannot resolve vanilla_docs_path for server imports.
+The first full run therefore had environment import errors; rerun with CI env.
+Similarly GUI reference audit against the local installation reports unresolved
+engine-library types; the CI (vanilla-unavailable) invocation passes, and the
+other 22 CI audits passed. Structure audit: 557 files, zero flags/parse failures.

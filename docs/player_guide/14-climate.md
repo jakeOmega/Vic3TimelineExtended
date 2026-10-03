@@ -49,7 +49,7 @@ after Clean Energy Technologies. Their Direct Air Capture method removes CO₂
 from the atmosphere without producing goods to sell. At full staffing and base
 throughput, each level removes 168 a year in the dashboard's units and uses
 1,200 electricity, plus engines, steel, chemicals and electronic components.
-Removal follows staffing and throughput. Subsidize the works to keep them
+Removal, including synthetic-fuel credits, follows staffing and throughput. Subsidize the works to keep them
 staffed; a fossil-powered grid adds emissions from the electricity they use.
 Genetic Engineering in era 11 unlocks their Synthetic Coal alternative, which
 produces fuel while capturing carbon.

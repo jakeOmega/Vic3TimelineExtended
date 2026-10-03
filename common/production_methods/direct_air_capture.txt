@@ -1,6 +1,12 @@
 ﻿# Atmospheric removal without selling captured carbon as fuel.
 # The emissions field is generated from greenhouse_gas_factors.txt.
 pm_direct_air_capture = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_carbon_capture_add = 168.00 # AUTO-GENERATED: carbon credit
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/chemical_fertilizers.dds"
 	building_modifiers = {
 		workforce_scaled = {

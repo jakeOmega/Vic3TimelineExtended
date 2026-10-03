@@ -17,6 +17,7 @@ MODIFIER = "building_greenhouse_gas_emissions_add"
 OUTPUT = Path("common/production_methods/greenhouse_gas_generated_injects.txt")
 FACTORS = Path("common/script_values/greenhouse_gas_factors.txt")
 REMOVALS = {"pm_direct_air_capture": ("coal", "gw_direct_air_capture_coal_equivalent")}
+SYNTHETIC_CREDITS = {"pm_synthetic_oil_1": "oil", "pm_synthetic_oil_2": "oil", "pm_synthetic_coal": "coal"}
 _DEFINITION = re.compile(r"(?m)^((?:INJECT:|REPLACE:|REPLACE_OR_CREATE:)?[\w-]+)\s*=\s*\{")
 _LINE = re.compile(r"(?m)^([\t ]*)" + MODIFIER + r"\s*=\s*([\d.]+)[^\n]*\n")
 _SIGNED_LINE = re.compile(r"(?m)^([\t ]*)" + MODIFIER + r"\s*=\s*(-?[\d.]+)[^\n]*\n")
@@ -71,9 +72,9 @@ def _end(text, opening):
     raise ValueError("Unbalanced production method")
 
 
-def _with_emission(block, amount, *, removal=False):
+def _with_emission(block, amount, *, removal=False, label=None):
     matches = list((_SIGNED_LINE if removal else _LINE).finditer(block))
-    label = "carbon removal" if removal else "fuel emissions"
+    label = label or ("carbon removal" if removal else "fuel emissions")
     if len(matches) > 1:
         raise ValueError("Duplicate generated emissions lines")
     if matches:
@@ -98,6 +99,33 @@ def _with_emission(block, amount, *, removal=False):
             f" # AUTO-GENERATED: {label}" + block[index:])
 
 
+def _with_state_credit(block, amount):
+    pattern = re.compile(r"(?m)^([\t ]*)state_carbon_capture_add\s*=\s*([\d.]+)[^\n]*\n")
+    matches = list(pattern.finditer(block))
+    if len(matches) > 1:
+        raise ValueError("Duplicate generated state credits")
+    if matches:
+        match = matches[0]
+        if Decimal(match[2]) == amount:
+            return block
+        return (block[:match.start()] + f"{match[1]}state_carbon_capture_add = {amount:.2f}"
+                " # AUTO-GENERATED: carbon credit\n" + block[match.end():])
+    masked = _mask(block)
+    state = re.search(r"\bstate_modifiers\s*=\s*\{", masked)
+    if state:
+        end = _end(masked, state.end() - 1)
+        workforce = re.search(r"\bworkforce_scaled\s*=\s*\{", masked[state.end():end])
+        if workforce is None:
+            raise ValueError("Carbon-credit PM has no workforce_scaled state block")
+        index = state.end() + workforce.end()
+        return (block[:index] + f"\n\t\t\tstate_carbon_capture_add = {amount:.2f}"
+                " # AUTO-GENERATED: carbon credit" + block[index:])
+    index = block.index("{") + 1
+    return (block[:index] + "\n\tstate_modifiers = {\n\t\tworkforce_scaled = {\n"
+            f"\t\t\tstate_carbon_capture_add = {amount:.2f} # AUTO-GENERATED: carbon credit\n"
+            "\t\t}\n\t}\n" + block[index:])
+
+
 def plan_outputs(state, root):
     parser = ParadoxFileParser()
     parser.parse_file(str(root / FACTORS))
@@ -117,6 +145,15 @@ def plan_outputs(state, root):
             covered.update(unwrap(unwrap(groups[group])["production_methods"]))
     amounts = {name: recipe_emissions(methods[name], factors, display_scale) for name in covered}
     fuel_methods = sum(bool(amount) for amount in amounts.values())
+    credits = {}
+    for name, fuel in SYNTHETIC_CREDITS.items():
+        workforce = unwrap(unwrap(unwrap(methods[name])["building_modifiers"])["workforce_scaled"])
+        output = Decimal(unwrap(workforce[f"goods_output_{fuel}_add"]))
+        if not output.is_finite() or output <= 0:
+            raise ValueError(f"Invalid synthetic {fuel} output: {output}")
+        credits[name] = (output * factors[fuel] * display_scale / 10000).quantize(
+            Decimal("0.01"), rounding=ROUND_HALF_UP)
+        amounts[name] = recipe_emissions(methods[name], factors, display_scale) - credits[name]
     for name, (fuel, parameter) in REMOVALS.items():
         if name not in methods:
             raise ValueError(f"Missing removal method: {name}")
@@ -125,6 +162,7 @@ def plan_outputs(state, root):
             raise ValueError(f"Invalid carbon removal capacity: {capacity}")
         amounts[name] = (-capacity * factors[fuel] * display_scale / 10000).quantize(
             Decimal("0.01"), rounding=ROUND_HALF_UP)
+        credits[name] = -amounts[name]
     outputs, owned = {}, set()
     for path in sorted((root / "common/production_methods").rglob("*.txt")):
         if path == root / OUTPUT:
@@ -141,7 +179,10 @@ def plan_outputs(state, root):
             owned.add(name)
             end = _end(masked, match.end() - 1)
             block = original[match.start():end]
-            replacement = _with_emission(block, amounts.get(name, Decimal(0)), removal=name in REMOVALS)
+            replacement = _with_emission(block, amounts.get(name, Decimal(0)), removal=name in credits,
+                                         label="net synthetic emissions" if name in SYNTHETIC_CREDITS else None)
+            if name in credits:
+                replacement = _with_state_credit(replacement, credits[name])
             if replacement != block:
                 edits.append((match.start(), end, replacement))
         result = original
@@ -149,7 +190,7 @@ def plan_outputs(state, root):
             result = result[:start] + replacement + result[end:]
         if result != original:
             outputs[path.relative_to(root)] = result
-    if missing := REMOVALS.keys() - owned:
+    if missing := credits.keys() - owned:
         raise ValueError(f"Removal methods must have owned definitions: {sorted(missing)}")
     lines = ["# AUTO-GENERATED by gen_carbon_capture_pms.py; do not edit.",
              "# Workforce-scaled fuel emissions, in display units, for covered vanilla PMs.",

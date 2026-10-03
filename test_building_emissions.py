@@ -101,6 +101,8 @@ class SyntheticCreditsTest(unittest.TestCase):
             removal_path = Path("common/production_methods/direct_air_capture.txt")
             (root / removal_path).parent.mkdir(parents=True, exist_ok=True)
             (root / removal_path).write_bytes((ROOT / removal_path).read_bytes())
+            extra = Path("common/production_methods/extra_pms.txt")
+            (root / extra).write_bytes((ROOT / extra).read_bytes())
             self.assertTrue(gen.regenerate(ms, root=root, dry_run=True)["changed"])
             self.assertFalse((root / gen.OUTPUT).exists())
             self.assertTrue(gen.regenerate(ms, root=root)["changed"])
@@ -175,7 +177,7 @@ class BuildingEmissionsTest(unittest.TestCase):
             for group in body(gen.unwrap(building), "production_method_groups"):
                 for name in body(gen.unwrap(groups[group]), "production_methods"):
                     amount = emissions.recipe_emissions(methods[name], {"coal": Decimal(2), "oil": Decimal("1.74")})
-                    if amount and name not in emissions.REMOVALS:
+                    if amount and name not in emissions.REMOVALS and name not in emissions.SYNTHETIC_CREDITS:
                         with self.subTest(method=name):
                             self.assertEqual(scalar(workforce(methods[name]), emissions.MODIFIER), amount)
 
@@ -320,20 +322,15 @@ class DirectAirCaptureTest(unittest.TestCase):
 
     def test_market_reads_staffed_removal_once_without_double_scaling(self):
         value = body(parsed("common/script_values/extra_script_values.txt"), "market_carbon_capture_script_value")
-        iterations = body(body(value, "market"), "every_scope_country")["every_scope_building"]
-        coal_methods = {}
-        for iteration in iterations:
-            iteration = gen.unwrap(iteration)
-            limit = body(iteration, "limit")
-            if body(limit, "is_building_type") == "building_synthetics_plant_coal":
-                coal_methods[body(limit, "has_active_production_method")] = body(iteration, "add")
-        self.assertEqual(set(coal_methods), {"pm_synthetic_coal", "pm_direct_air_capture"})
-        removal = coal_methods["pm_direct_air_capture"]
-        self.assertEqual(body(removal, "value"), f"modifier:{emissions.MODIFIER}")
-        self.assertEqual(body(removal, "divide"), "gw_emission_display_scale")
-        self.assertNotIn("multiply", removal)
-        self.assertEqual(body(coal_methods["pm_synthetic_coal"], "multiply")[-1],
-                         ("=", "gw_synthetic_coal_capture_per_level"))
+        countries = body(body(value, "market"), "every_scope_country")
+        credit = body(body(countries, "every_scope_state"), "subtract")
+        self.assertEqual(body(credit, "value"), "modifier:state_carbon_capture_add")
+        self.assertEqual(body(credit, "divide"), "gw_emission_display_scale")
+        self.assertNotIn("multiply", credit)
+        self.assertNotIn("every_scope_building", countries)
+        state = body(body(gen.unwrap(self.pm), "state_modifiers"), "workforce_scaled")
+        self.assertEqual(scalar(state, "state_carbon_capture_add"), 168)
+        self.assertEqual(scalar(workforce(self.pm), emissions.MODIFIER), -168)
 
     def test_removal_capacity_changes_independently_of_coal_output(self):
         with TemporaryDirectory() as tmp:
@@ -414,14 +411,20 @@ class DisplayBoundaryTest(unittest.TestCase):
         live = live.split("global_greenhouse_gas_emissions_script_value_display = {", 1)[1].split("temperature_anomaly_display = {", 1)[0]
         self.assertNotIn("gw_emission_display_scale", live)
 
-    def test_synthetic_sweep_uses_generated_values_and_staffing(self):
-        text = (ROOT / "common/script_values/extra_script_values.txt").read_text(encoding="utf-8-sig")
-        capture = text.split("market_carbon_capture_script_value = {", 1)[1].split("market_greenhouse_gas_emissions_script_value_display = {", 1)[0]
-        for pm in gen.SYNTHETIC_METHODS:
-            self.assertIn(f"multiply = gw_{pm[3:]}_capture_per_level", capture)
-        self.assertEqual(capture.count("multiply = occupancy"), 3)
-        for old in ("multiply = -0.06", "multiply = -0.036", "multiply = -0.168"):
-            self.assertNotIn(old, capture)
+    def test_all_capture_uses_one_staffed_state_sweep(self):
+        countries = body(body(body(self.extra, "market_carbon_capture_script_value"), "market"), "every_scope_country")
+        credit = body(body(countries, "every_scope_state"), "subtract")
+        self.assertEqual(body(credit, "value"), "modifier:state_carbon_capture_add")
+        self.assertNotIn("every_scope_building", countries)
+        methods = gen.load_synthetic_methods(ROOT)
+        factors = parsed("common/script_values/greenhouse_gas_factors.txt")
+        for name, fuel in gen.SYNTHETIC_METHODS.items():
+            pm = gen.unwrap(methods[name])
+            state = body(body(pm, "state_modifiers"), "workforce_scaled")
+            expected = scalar(workforce(pm), f"goods_output_{fuel}_add") * scalar(factors, f"gw_emission_factor_{fuel}") / 10
+            self.assertEqual(scalar(state, "state_carbon_capture_add"), expected)
+            gross = emissions.recipe_emissions(pm, {"coal": Decimal(2), "oil": Decimal("1.74")})
+            self.assertEqual(scalar(workforce(pm), emissions.MODIFIER), gross - expected)
 
     def test_market_consumption_uses_shared_weights_without_rescaling(self):
         value = body(self.extra, "market_greenhouse_gas_emissions_script_value")

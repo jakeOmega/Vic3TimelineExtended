@@ -6958,13 +6958,14 @@ pm_synthetic_oil_1 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_carbon_capture_add = 31.32 # AUTO-GENERATED: carbon credit
 			state_pollution_generation_add = 50
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 36.00 # AUTO-GENERATED: fuel emissions
+			building_greenhouse_gas_emissions_add = 4.68 # AUTO-GENERATED: net synthetic emissions
 			# Input goods
 			goods_input_electricity_add = 45                     # Price:   30, Total cost:  1350.0 (18.75%)
 			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (6.25%)
@@ -6992,6 +6993,12 @@ pm_synthetic_oil_1 = {
 }
 
 pm_synthetic_oil_2 = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_carbon_capture_add = 52.20 # AUTO-GENERATED: carbon credit
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 
 	unlocking_technologies = {
@@ -7000,6 +7007,7 @@ pm_synthetic_oil_2 = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = -52.20 # AUTO-GENERATED: net synthetic emissions
 			# Input goods
 			goods_input_grain_add = 180                          # Price:   20, Total cost:  3600.0 (34.78%)
 			goods_input_engines_add = 15                         # Price:   60, Total cost:   900.0 (8.70%)
@@ -7453,12 +7461,19 @@ pm_pharma_precision_medicine = {
 }
 
 pm_synthetic_coal = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_carbon_capture_add = 168.00 # AUTO-GENERATED: carbon credit
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/chemical_fertilizers.dds"
 	unlocking_technologies = { genetic_engineering }
 
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = -168.00 # AUTO-GENERATED: net synthetic emissions
 			# Input goods
 			goods_input_grain_add = 5                            # Price:   20, Total cost:   100.0 (0.28%)
 			goods_input_electronic_components_add = 1            # Price:   80, Total cost:    80.0 (0.22%)

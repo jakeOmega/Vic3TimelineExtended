@@ -16,7 +16,8 @@
   (1.74), and the display scale (1000). The market consumption formula reads
   those factors. `gen_carbon_capture_pms.py` generates synthetic
   credits from PM outputs; the shared factors are applied at runtime rather
-  than copied into generated coefficients. The old three constants are gone.
+  than copied into generated coefficients. The old three constants are gone. The generated compatibility values remain,
+  while live accounting now reads workforce-scaled synthetic state credits.
 - **Steel:** Electric Arc Process uses a delta INJECT; the two mod substitution
   methods are edited in place. Merged recipes read 10 coal and 50/170
   electricity, with unchanged goods cost at base prices.
@@ -45,8 +46,8 @@
   era-10 Carbon Capture and Storage technology, after Clean Energy Technologies.
   Direct Air Capture is their default PM; Synthetic Coal keeps an era-11
   Genetic Engineering gate. The new PM produces no goods, consumes electricity
-  and equipment, and contributes negative workforce-scaled emissions read once
-  by the market capture sum. Its capacity is independently configured in coal
+  and equipment, and contributes negative workforce-scaled building emissions mirrored as a
+  state capture credit read once by the market sum. Its capacity is independently configured in coal
   equivalents rather than inferred from nonexistent goods output.
 - **Carbon Removal Support:** a ninth climate policy, national, available at
   0.5 °C with Carbon Capture and Storage. Requires subsidies for these works,

@@ -23,11 +23,7 @@ import pm_carbon_capture
 
 ROOT = Path(__file__).resolve().parent
 OUTPUT = Path("common/script_values/carbon_capture_generated_values.txt")
-SYNTHETIC_METHODS = {
-    "pm_synthetic_oil_1": "oil",
-    "pm_synthetic_oil_2": "oil",
-    "pm_synthetic_coal": "coal",
-}
+SYNTHETIC_METHODS = pm_emissions.SYNTHETIC_CREDITS
 
 
 def unwrap(value):
