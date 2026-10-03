@@ -4,9 +4,10 @@
 ###   te_tax_politics_section  open while a bill is under debate: the committed
 ###                            share against the threshold, every passage
 ###                            condition as an open row, one card per interest
-###                            group, and Pass / Revise from Draft / Withdraw
-###                            (and Move to Next Month once the bill's month has
-###                            come)
+###                            group with its offer and Accept (plan Task 13),
+###                            and Pass / Revise from Draft / Withdraw, Force
+###                            Through (and Move to Next Month once the bill's
+###                            month has come)
 ###   te_tax_pending_section   open while a passed bill waits: each one's month
 ###                            and state, what it changes, and for a held one
 ###                            Reschedule and Release
@@ -96,9 +97,10 @@ types te_tax_politics_widget_types
 	}
 
 	### One interest group's card: its name, clout, stance and score, then the
-	### five reasons behind the score. Drawn only for a group the bill has a
-	### stance for (code 0 without a bill, or for a group outside the eight
-	### the support model scores). 4 + 160 + 64 + 176 + 72 + 4 = 480.
+	### six reasons behind the score, then its offer if it makes one. Drawn
+	### only for a group the bill has a stance for (code 0 without a bill, or
+	### for a group outside the eight the support model scores).
+	### 4 + 160 + 64 + 176 + 72 + 4 = 480.
 	type te_tax_ig_card = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -192,6 +194,48 @@ types te_tax_politics_widget_types
 			}
 			blockoverride "row_value" {
 				text = "te_tax_ig_trust_value"
+			}
+		}
+		te_tax_ig_reason_row = {
+			blockoverride "row_label" {
+				text = "te_tax_ig_prom"
+				tooltip = "te_tax_ig_prom_tt"
+			}
+			blockoverride "row_value" {
+				text = "te_tax_ig_prom_value"
+			}
+		}
+		### The group's offer for this revision (plan Task 13): what it asks
+		### for and what accepting gives, and Accept, whose handler takes the
+		### card's group as a saved scope (the relief rows' AddScope form).
+		### 4 + 340 + 4 + 128 + 4 = 480.
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+			margin = { 4 2 }
+			visible = "[NotEqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_offer'), '(CFixedPoint)0' )]"
+
+			textbox = {
+				minimumsize = { 340 -1 }
+				maximumsize = { 340 -1 }
+				autoresize = yes
+				multiline = yes
+				align = left|nobaseline
+				parentanchor = vcenter
+				using = fontsize_medium
+				default_format = "#tooltippable"
+				text = "te_tax_ig_offer_line"
+				tooltip = "te_tax_ig_offer_tt"
+			}
+			button = {
+				using = default_button
+				size = { 128 28 }
+				parentanchor = vcenter
+				text = "te_tax_ig_accept"
+				enabled = "[GetScriptedGui('te_tax_cmd_accept_offer_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_ig', InterestGroup.MakeScope ).End )]"
+				onclick = "[GetScriptedGui('te_tax_cmd_accept_offer_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_ig', InterestGroup.MakeScope ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_accept_offer_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_ig', InterestGroup.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_accept_offer_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_ig', InterestGroup.MakeScope ).End ) ) )]"
 			}
 		}
 	}
@@ -560,6 +604,18 @@ types te_tax_politics_widget_types
 						onclick = "[GetScriptedGui('te_tax_cmd_withdraw_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_withdraw_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_withdraw_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 					}
+				}
+				# Short of a majority: legislative override, at the forced-law
+				# event's medium costs (plan Task 13). Its tooltip lists every
+				# condition and the modifiers it adds.
+				button = {
+					using = default_button
+					parentanchor = hcenter
+					size = { 480 32 }
+					text = "te_tax_pol_force"
+					enabled = "[GetScriptedGui('te_tax_cmd_force_through_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[GetScriptedGui('te_tax_cmd_force_through_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_force_through_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_force_through_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				# Once the bill's month has come it can only pass if moved.
 				button = {

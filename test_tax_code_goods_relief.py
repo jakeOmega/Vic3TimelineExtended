@@ -521,7 +521,8 @@ class CoverageTest(unittest.TestCase):
                     self.assertNotIn(name, text)
         readers = {name for name in top_level_names(read(GEN_SUPPORT))
                    if "te_tax_bl_regrel_coverage" in block(read(GEN_SUPPORT), name)}
-        self.assertEqual(readers, {f"te_tax_mat_{ig}" for ig in IGS})
+        # Task 13: the fiscal reason's revenue direction subtracts relief granted.
+        self.assertEqual(readers, {f"te_tax_mat_{ig}" for ig in IGS} | {"te_tax_dl_revenue"})
         refresh = block(read(GEN_BILL), "te_tax_gen_refresh_support")
         for ig in IGS:
             self.assertIn(f"set_variable = {{ name = te_tax_sr_{ig}_mat value = te_tax_mat_{ig} }}", refresh)

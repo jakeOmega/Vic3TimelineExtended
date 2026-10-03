@@ -49,14 +49,15 @@ TAX_GUI = (OVERVIEW, LAYOUT, WORKBENCH, REVIEW, POLITICS, GEN_ROWS)
 
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
        "landowners", "petty_bourgeoisie", "rural_folk", "trade_unions")
-IG_VALUES = ("stance", "score", "mat", "ideo", "fisc", "gov", "trust")
+IG_VALUES = ("stance", "score", "mat", "ideo", "fisc", "gov", "trust", "prom",
+             "offer", "offer_commit")
 WORLD = re.compile(r"\b(every_\w+|any_\w+|random_\w+|ordered_\w+)\b")
 WRITES = re.compile(r"\b(set_variable|change_variable|remove_variable|clamp_variable|save_scope_as|"
                     r"save_temporary_scope_as|add_modifier|remove_modifier|trigger_event|set_local_variable)\b")
 
 # Handlers with no saved scope: te_tax_cmd_<c>_sgui runs te_tax_cmd_<c> when te_tax_can_<c> holds.
 SIMPLE = ("draft_new", "draft_discard", "introduce", "revise", "withdraw", "pass", "reschedule",
-          "draft_relief_choose")
+          "draft_relief_choose", "force_through")
 # Handlers whose saved scope is an object, not an op (Task 11): sgui -> (command, saved scope).
 SCOPED = {"te_tax_relief_state_sgui": ("draft_relief_state", "te_tax_st")}
 RELIEF_KEYS = ("agrel", "regrel")
@@ -134,7 +135,9 @@ class HandlerTest(unittest.TestCase):
         cls.actions = [name for name in cls.names if not name.startswith("te_tax_show_")]
 
     def test_the_handler_set(self):
-        self.assertEqual(sorted(self.actions), sorted(set(op_tables()) | set(plain_handlers()) | set(SCOPED)))
+        # Task 13: the offer handler dispatches on its group's type (test_tax_code_offers.py).
+        self.assertEqual(sorted(self.actions), sorted(set(op_tables()) | set(plain_handlers()) | set(SCOPED)
+                                                      | {"te_tax_cmd_accept_offer_sgui"}))
         self.assertEqual(len(self.names), len(set(self.names)), "a handler is defined twice")
 
     def test_every_handler_is_for_the_player_only_and_scope_free_when_shown(self):

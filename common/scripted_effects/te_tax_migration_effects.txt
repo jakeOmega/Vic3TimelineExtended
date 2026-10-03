@@ -38,6 +38,8 @@ te_tax_migrate_country = {
 		te_tax_gen_migrate_goods = yes
 		# Operative from this month, no sunsets; external-change tokens move.
 		te_tax_gen_migrate_provisions = yes
+		# The baseline the interest groups judge the code against (plan Task 13).
+		te_tax_gen_record_baseline = yes
 		# A country already on the carrier keeps it: activating a held law again
 		# does not behave like a fresh activation.
 		if = {

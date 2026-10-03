@@ -383,7 +383,9 @@ class GeneratedSyncTest(unittest.TestCase):
             f"te_tax_gen_copy_slot_{slot}" for slot in ("a", "b")}
         # The policy obligations' init and copies (test_tax_code_obligations.py).
         obligations = {"te_tax_gen_init_obligations", "te_tax_gen_copy_obligations", "te_tax_gen_clear_obligations"}
-        self.assertEqual(names, want | scheduler | migration | drift | copies | obligations)
+        # The migrated baseline and the views of the code (test_tax_code_offers.py).
+        views = {"te_tax_gen_record_baseline", "te_tax_gen_ig_views"}
+        self.assertEqual(names, want | scheduler | migration | drift | copies | obligations | views)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
         for key in KEYS:
@@ -441,7 +443,9 @@ class GeneratedSyncTest(unittest.TestCase):
             # The writer's drift checks (test_tax_code_bypass.py).
             | {"te_tax_gen_goods_drift"} | {f"te_tax_gen_amend_drift_{key}" for key in KEYS}
             # The civil-war repair's obligation checks (test_tax_code_obligations.py).
-            | {"te_tax_gen_obl_ig_exists", "te_tax_gen_obl_slot_gone"},
+            | {"te_tax_gen_obl_ig_exists", "te_tax_gen_obl_slot_gone"}
+            # The offers' feasibility (test_tax_code_offers.py).
+            | {"te_tax_gen_offer_feasible"},
         )
         for key in KEYS:
             family = amendment_family(key)

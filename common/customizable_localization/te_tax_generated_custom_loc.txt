@@ -1225,3 +1225,115 @@ te_tax_obl_state_4 = {
 		localization_key = te_tax_obl_st_none
 	}
 }
+
+# The interest-group cards' offers (plan Task 13; te_tax_ig_card, te_tax_politics_widget.gui):
+# what the group asks for in return for its support, read as
+# InterestGroup.GetCustom('te_tax_ig_offer'). Interest-group scope.
+
+te_tax_ig_offer = {
+	type = interest_group
+	random_valid = no
+	text = {
+		trigger = { te_tax_disp_ig_offer = 1 te_tax_disp_ig_offer_arg = 1 }
+		localization_key = te_tax_offer_cut_wage
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 1 te_tax_disp_ig_offer_arg = 2 }
+		localization_key = te_tax_offer_cut_div
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 1 te_tax_disp_ig_offer_arg = 3 }
+		localization_key = te_tax_offer_cut_land
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 1 te_tax_disp_ig_offer_arg = 4 }
+		localization_key = te_tax_offer_cut_head
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 1 te_tax_disp_ig_offer_arg = 5 }
+		localization_key = te_tax_offer_cut_cons
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 2 }
+		localization_key = te_tax_offer_agrel
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 1 }
+		localization_key = te_tax_offer_untax_grain
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 2 }
+		localization_key = te_tax_offer_untax_clothes
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 3 }
+		localization_key = te_tax_offer_untax_furniture
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 4 }
+		localization_key = te_tax_offer_untax_groceries
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 5 }
+		localization_key = te_tax_offer_untax_fabric
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 6 }
+		localization_key = te_tax_offer_untax_fish
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 7 }
+		localization_key = te_tax_offer_untax_wood
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 8 }
+		localization_key = te_tax_offer_untax_electricity
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 9 }
+		localization_key = te_tax_offer_untax_paper
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 10 }
+		localization_key = te_tax_offer_untax_services
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 3 te_tax_disp_ig_offer_arg = 11 }
+		localization_key = te_tax_offer_untax_transportation
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 11 te_tax_disp_ig_offer_arg = 1 te_tax_disp_ig_offer_maint = 1 }
+		localization_key = te_tax_offer_prom_schools_maint
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 11 te_tax_disp_ig_offer_arg = 1 }
+		localization_key = te_tax_offer_prom_schools
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 11 te_tax_disp_ig_offer_arg = 2 te_tax_disp_ig_offer_maint = 1 }
+		localization_key = te_tax_offer_prom_health_maint
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 11 te_tax_disp_ig_offer_arg = 2 }
+		localization_key = te_tax_offer_prom_health
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 12 te_tax_disp_ig_offer_arg = 0 te_tax_disp_ig_offer_maint = 1 }
+		localization_key = te_tax_offer_prom_bureaucracy_maint
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 12 te_tax_disp_ig_offer_arg = 0 }
+		localization_key = te_tax_offer_prom_bureaucracy
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 14 te_tax_disp_ig_offer_arg = 0 te_tax_disp_ig_offer_maint = 1 }
+		localization_key = te_tax_offer_prom_fiscal_maint
+	}
+	text = {
+		trigger = { te_tax_disp_ig_offer = 14 te_tax_disp_ig_offer_arg = 0 }
+		localization_key = te_tax_offer_prom_fiscal
+	}
+	text = {
+		localization_key = te_tax_offer_none
+	}
+}

@@ -108,6 +108,12 @@ types te_tax_layout_widget_types
 			te_tax_note = {
 				text = "te_tax_how_passage_rule"
 			}
+			te_tax_note = {
+				text = "te_tax_how_passage_offers"
+			}
+			te_tax_note = {
+				text = "te_tax_how_passage_force"
+			}
 
 			te_tax_subheader = {
 				blockoverride "subheader_text" {
@@ -149,6 +155,9 @@ types te_tax_layout_widget_types
 			}
 			te_tax_note = {
 				text = "te_tax_how_replaces_monthly"
+			}
+			te_tax_note = {
+				text = "te_tax_how_replaces_views"
 			}
 		}
 	}

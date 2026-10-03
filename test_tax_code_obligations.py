@@ -352,7 +352,9 @@ class LifecycleTest(unittest.TestCase):
 
     def test_a_new_debate_and_a_closing_bill_release_pending_promises(self):
         bill = read(BILL)
-        self.assertIn("te_tax_obl_release_pending = yes", block(bill, "te_tax_bill_start_debate"))
+        # Task 13: a new debate opens its revision first (te_tax_bill_open_revision).
+        self.assertIn("te_tax_bill_open_revision = yes", block(bill, "te_tax_bill_start_debate"))
+        self.assertIn("te_tax_obl_release_pending = yes", block(bill, "te_tax_bill_open_revision"))
         self.assertIn("te_tax_obl_release_pending = yes", block(bill, "te_tax_bill_close"))
         release = block(self.text, "te_tax_obl_release_pending")
         for n in SLOTS:

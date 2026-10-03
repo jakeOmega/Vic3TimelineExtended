@@ -257,7 +257,11 @@ class LocTest(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertTrue(loc.get(name), "no name")
                 self.assertTrue(loc.get(f"{name}_desc"), "no desc")
-        self.assertEqual(set(loc), set(amendments) | {f"{n}_desc" for n in amendments})
+        # Plus Task 13's view bands and staple offer lines (test_tax_code_offers.py).
+        task13 = {f"te_tax_ig_view_{ig}_{band}{suffix}" for ig in gen.IGS for band, _ in gen.VIEW_BANDS
+                  for suffix in ("", "_desc")}
+        task13 |= {f"te_tax{tt}_offer_untax_{good}" for good in gen.staple_order() for tt in ("", "_tt")}
+        self.assertEqual(set(loc), set(amendments) | {f"{n}_desc" for n in amendments} | task13)
 
     def test_names_and_descs(self):
         loc = read_loc(ROOT / LOC)

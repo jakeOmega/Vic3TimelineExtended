@@ -307,12 +307,15 @@ class CommandTest(unittest.TestCase):
         for body in (introduce, revise):
             self.assertGreater(body.find("te_tax_bill_start_debate = yes"), body.find("te_tax_bl_rev"))
         start = self.defined["te_tax_bill_start_debate"]
-        self.assertIn("set_variable = { name = te_tax_bl_day value = game_date }", start)
-        reset = start.find("te_tax_gen_reset_commitments = yes")
-        on = start.find("set_variable = { name = te_tax_bl_on value = 1 }")
-        refresh = start.find("te_tax_refresh_support = yes")
-        self.assertTrue(0 <= reset < refresh and 0 <= on < refresh)
-        self.assertLess(start.find("te_tax_bill_set_minor = yes"), refresh)
+        # Task 13: the revision opens (te_tax_bill_open_revision), the bill's accepted
+        # promises are proposed again, then support is refreshed.
+        opened = self.defined["te_tax_bill_open_revision"]
+        self.assertLess(start.find("te_tax_bill_open_revision = yes"), start.find("te_tax_refresh_support = yes"))
+        self.assertIn("set_variable = { name = te_tax_bl_day value = game_date }", opened)
+        self.assertIn("te_tax_gen_reset_commitments = yes", opened)
+        self.assertIn("set_variable = { name = te_tax_bl_on value = 1 }", opened)
+        self.assertIn("te_tax_bill_set_minor = yes", opened)
+        self.assertNotIn("te_tax_refresh_support", opened)
 
     def test_a_draft_must_be_reconciled_before_it_becomes_the_bill(self):
         ready = block(self.triggers, "te_tax_draft_ready")
@@ -679,6 +682,8 @@ class SupportModelTest(unittest.TestCase):
         prog = block(self.values, "te_tax_dl_prog")
         self.assertRegex(prog, r"value = te_tax_dl_wage\s*add = te_tax_dl_div\s*subtract = te_tax_dl_land\s*"
                                r"subtract = te_tax_dl_head\s*subtract = te_tax_dl_cons")
+        # Task 13: taxing a staple is regressive (test_tax_code_offers.py).
+        self.assertIn("subtract = te_tax_dl_g_grain", prog)
 
     def test_fiscal_and_government_reasons(self):
         fiscal = self.parsed["te_tax_fiscal_reason"]
@@ -687,7 +692,9 @@ class SupportModelTest(unittest.TestCase):
         deficit, surplus = fiscal["if"], fiscal["else"]
         self.assertEqual((deficit["if"]["value"], deficit["else_if"]["value"]), ("8", "-8"))
         self.assertEqual((surplus["if"]["value"], surplus["else_if"]["value"]), ("-4", "4"))
-        self.assertIn("te_tax_dl_total > 0", block(self.support, "te_tax_fiscal_reason"))
+        # Task 13: the direction sees the goods taxed and the relief granted
+        # (te_tax_dl_revenue, test_tax_code_offers.py).
+        self.assertIn("te_tax_dl_revenue > 0", block(self.support, "te_tax_fiscal_reason"))
         for ig in IGS:
             gov = block(self.values, f"te_tax_gov_{ig}")
             self.assertRegex(gov, rf"ig:ig_{ig} \?= \{{ is_in_government = yes \}} \}}\s*value = 10")
@@ -860,7 +867,9 @@ class RefreshWiringTest(unittest.TestCase):
                 with self.subTest(path=path.name):
                     self.assertNotIn("te_tax_refresh_support", path.read_text(encoding="utf-8-sig", errors="replace"))
         callers = [name for name, text in all_effects().items() if "te_tax_refresh_support = yes" in text]
-        self.assertEqual(sorted(callers), ["te_tax_bill_start_debate", "te_tax_cmd_reschedule", "te_tax_process_month"])
+        # Task 13: accepting an offer refreshes after it commits the accepting group.
+        self.assertEqual(sorted(callers), ["te_tax_bill_start_debate", "te_tax_cmd_accept_offer",
+                                           "te_tax_cmd_reschedule", "te_tax_process_month"])
 
 
 class LocTest(unittest.TestCase):

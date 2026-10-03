@@ -412,6 +412,16 @@ te_tax_cmd_pass_sgui = {
 	effect = { te_tax_cmd_pass = yes }
 }
 
+# Passes the bill by legislative override (plan Task 13): short of a majority,
+# with the override's Authority cost and consequences.
+te_tax_cmd_force_through_sgui = {
+	scope = country
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_tax_can_force_through = yes }
+	effect = { te_tax_cmd_force_through = yes }
+}
+
 # Moves the bill's commencement to next month once its month has come.
 te_tax_cmd_reschedule_sgui = {
 	scope = country
@@ -644,6 +654,87 @@ te_tax_cmd_obl_renegotiate_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 4 }
 			te_tax_cmd_obl_renegotiate = { N = 4 }
+		}
+	}
+}
+
+# Accepts an interest group's offer (plan Task 13), from the group's card. The saved
+# scope te_tax_ig is the card's group (AddScope( 'te_tax_ig', InterestGroup.MakeScope ),
+# the relief rows' shape); the handler finds its type and asks te_tax_can_accept_offer for
+# it. Without the scope, or for a group outside the eight the support model scores, it
+# fails closed and runs nothing.
+te_tax_cmd_accept_offer_sgui = {
+	scope = country
+	saved_scopes = { te_tax_ig }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_armed_forces } }
+			te_tax_can_accept_offer = { IG = armed_forces }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_devout } }
+			te_tax_can_accept_offer = { IG = devout }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_industrialists } }
+			te_tax_can_accept_offer = { IG = industrialists }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_intelligentsia } }
+			te_tax_can_accept_offer = { IG = intelligentsia }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_landowners } }
+			te_tax_can_accept_offer = { IG = landowners }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_petty_bourgeoisie } }
+			te_tax_can_accept_offer = { IG = petty_bourgeoisie }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_rural_folk } }
+			te_tax_can_accept_offer = { IG = rural_folk }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_trade_unions } }
+			te_tax_can_accept_offer = { IG = trade_unions }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_armed_forces } }
+			te_tax_cmd_accept_offer = { IG = armed_forces }
+		}
+		else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_devout } }
+			te_tax_cmd_accept_offer = { IG = devout }
+		}
+		else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_industrialists } }
+			te_tax_cmd_accept_offer = { IG = industrialists }
+		}
+		else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_intelligentsia } }
+			te_tax_cmd_accept_offer = { IG = intelligentsia }
+		}
+		else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_landowners } }
+			te_tax_cmd_accept_offer = { IG = landowners }
+		}
+		else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_petty_bourgeoisie } }
+			te_tax_cmd_accept_offer = { IG = petty_bourgeoisie }
+		}
+		else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_rural_folk } }
+			te_tax_cmd_accept_offer = { IG = rural_folk }
+		}
+		else_if = {
+			limit = { exists = scope:te_tax_ig scope:te_tax_ig = { is_interest_group_type = ig_trade_unions } }
+			te_tax_cmd_accept_offer = { IG = trade_unions }
 		}
 	}
 }

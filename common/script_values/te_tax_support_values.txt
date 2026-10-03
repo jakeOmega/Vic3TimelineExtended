@@ -183,33 +183,76 @@ te_tax_bl_agrel_scaled = {
 	multiply = te_tax_bl_agrel_wage_factor
 }
 
+# The relief a bill grants, in tax levels of revenue forgone, for the fiscal
+# reason's direction (te_tax_dl_revenue, plan Task 13): a sign heuristic, not an
+# estimate. One band of agricultural relief at full scale cuts a quarter of the
+# wage tax of agricultural workers, about a quarter of a level of a 10% wage
+# tax where they are some two-fifths of the wage base; one band over a quarter
+# of the population cuts a quarter of the taxes of a quarter of the pops, about
+# a quarter of a level of a code collecting four to six levels in all.
+te_tax_agrel_revenue_levels = 0.25
+te_tax_regrel_revenue_levels = 0.25
+
 # Fiscal reason, the same for every group: in a deficit (net_fixed_income
 # below 0) a bill that raises revenue gains support and one that cuts it loses
 # it; in surplus the other way round, half as strongly. The direction is the
-# sign of the bill's summed change in tax levels (te_tax_dl_total).
+# sign of te_tax_dl_revenue: the bill's summed change in tax rates plus the
+# goods it taxes, less the relief it grants (plan Task 13; it read the rates
+# alone before).
 te_tax_fiscal_reason = {
 	value = 0
 	if = {
 		limit = { net_fixed_income < 0 }
 		if = {
-			limit = { te_tax_dl_total > 0 }
+			limit = { te_tax_dl_revenue > 0 }
 			value = 8
 		}
 		else_if = {
-			limit = { te_tax_dl_total < 0 }
+			limit = { te_tax_dl_revenue < 0 }
 			value = -8
 		}
 	}
 	else = {
 		if = {
-			limit = { te_tax_dl_total > 0 }
+			limit = { te_tax_dl_revenue > 0 }
 			value = -4
 		}
 		else_if = {
-			limit = { te_tax_dl_total < 0 }
+			limit = { te_tax_dl_revenue < 0 }
 			value = 4
 		}
 	}
+}
+
+# Offers (plan Task 13; docs/systems/tax_code_schema.md, "Offers"). A promise
+# accepted under the bill adds this much to its group's promises reason, or the
+# lower figure if it only maintains what already held (spec 7.2: existing
+# provision may be promised, labelled maintenance; it is worth less). A
+# promise offer's kind is this base plus the obligation kind.
+te_tax_offer_points = 20
+te_tax_offer_points_maint = 8
+te_tax_offer_promise_base = 10
+
+# Force through (plan Task 13): the committed share a bill short of a majority
+# needs before legislative override can carry it.
+te_tax_force_share = 0.35
+
+# Interest-group views of the enacted code (plan Task 13): a group's score of
+# the code against the migrated baseline (material plus ideology, each -40..40)
+# maps to an approval band of -2..2 at these magnitudes. One tax level more on
+# a channel a group pays in full is -10 material; a group with a firm view of
+# progressive taxation scores 5 x up to 6 per level of progressivity.
+te_tax_ig_view_threshold_1 = 10
+te_tax_ig_view_threshold_2 = 30
+
+te_tax_ig_view_threshold_1_neg = {
+	value = te_tax_ig_view_threshold_1
+	multiply = -1
+}
+
+te_tax_ig_view_threshold_2_neg = {
+	value = te_tax_ig_view_threshold_2
+	multiply = -1
 }
 
 # Clout committed to the bill's current revision as a share (0..1) of the clout

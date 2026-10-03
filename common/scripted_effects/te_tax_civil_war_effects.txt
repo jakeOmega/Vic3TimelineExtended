@@ -113,6 +113,9 @@ te_tax_copy_code = {
 	te_tax_copy_token = { NAME = te_tax_drift_level }
 	te_tax_copy_token = { NAME = te_tax_drift_goods }
 	te_tax_copy_token = { NAME = te_tax_drift_amend }
+	# The migrated baseline the groups judge the code against (plan Task 13); its
+	# per-instrument and per-good values came with te_tax_gen_copy_code.
+	te_tax_copy_token = { NAME = te_tax_mig_on }
 	# Approved packages, held ones included, with their original dates.
 	if = { limit = { scope:te_tax_source = { var:te_tax_pa_on = 1 } } te_tax_gen_copy_slot_a = yes }
 	if = { limit = { scope:te_tax_source = { var:te_tax_pb_on = 1 } } te_tax_gen_copy_slot_b = yes }
@@ -258,6 +261,9 @@ te_tax_init_released_country = {
 		}
 		te_tax_gen_copy_enacted = yes
 		te_tax_init_country = yes
+		# Its groups judge the code it starts with (plan Task 13): the parent's
+		# migrated baseline is not copied.
+		te_tax_gen_record_baseline = yes
 		# Explicit, in case a revived tag still carries tokens from an earlier life.
 		set_variable = { name = te_tax_bl_on value = 0 }
 		set_variable = { name = te_tax_dr_on value = 0 }

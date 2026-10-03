@@ -289,6 +289,43 @@ te_tax_gen_bill_from_draft = {
 			scope:te_tax_country = { add_to_variable_list = { name = te_tax_bl_relief_states target = PREV } }
 		}
 	}
+	# A text from the draft (introduction or a revision) carries no accepted promise and no
+	# gained clause (plan Task 13): the offers start again.
+	set_variable = { name = te_tax_bl_prom_armed_forces_kind value = -1 }
+	set_variable = { name = te_tax_bl_prom_armed_forces_arg value = -1 }
+	set_variable = { name = te_tax_bl_prom_armed_forces_target value = -1 }
+	set_variable = { name = te_tax_bl_got_armed_forces_1 value = 0 }
+	set_variable = { name = te_tax_bl_prom_devout_kind value = -1 }
+	set_variable = { name = te_tax_bl_prom_devout_arg value = -1 }
+	set_variable = { name = te_tax_bl_prom_devout_target value = -1 }
+	set_variable = { name = te_tax_bl_got_devout_1 value = 0 }
+	set_variable = { name = te_tax_bl_prom_industrialists_kind value = -1 }
+	set_variable = { name = te_tax_bl_prom_industrialists_arg value = -1 }
+	set_variable = { name = te_tax_bl_prom_industrialists_target value = -1 }
+	set_variable = { name = te_tax_bl_got_industrialists_1 value = 0 }
+	set_variable = { name = te_tax_bl_prom_intelligentsia_kind value = -1 }
+	set_variable = { name = te_tax_bl_prom_intelligentsia_arg value = -1 }
+	set_variable = { name = te_tax_bl_prom_intelligentsia_target value = -1 }
+	set_variable = { name = te_tax_bl_got_intelligentsia_1 value = 0 }
+	set_variable = { name = te_tax_bl_prom_landowners_kind value = -1 }
+	set_variable = { name = te_tax_bl_prom_landowners_arg value = -1 }
+	set_variable = { name = te_tax_bl_prom_landowners_target value = -1 }
+	set_variable = { name = te_tax_bl_got_landowners_1 value = 0 }
+	set_variable = { name = te_tax_bl_prom_petty_bourgeoisie_kind value = -1 }
+	set_variable = { name = te_tax_bl_prom_petty_bourgeoisie_arg value = -1 }
+	set_variable = { name = te_tax_bl_prom_petty_bourgeoisie_target value = -1 }
+	set_variable = { name = te_tax_bl_got_petty_bourgeoisie_1 value = 0 }
+	set_variable = { name = te_tax_bl_prom_rural_folk_kind value = -1 }
+	set_variable = { name = te_tax_bl_prom_rural_folk_arg value = -1 }
+	set_variable = { name = te_tax_bl_prom_rural_folk_target value = -1 }
+	set_variable = { name = te_tax_bl_got_rural_folk_2 value = 0 }
+	set_variable = { name = te_tax_bl_got_rural_folk_3 value = 0 }
+	set_variable = { name = te_tax_bl_got_rural_folk_1 value = 0 }
+	set_variable = { name = te_tax_bl_prom_trade_unions_kind value = -1 }
+	set_variable = { name = te_tax_bl_prom_trade_unions_arg value = -1 }
+	set_variable = { name = te_tax_bl_prom_trade_unions_target value = -1 }
+	set_variable = { name = te_tax_bl_got_trade_unions_3 value = 0 }
+	set_variable = { name = te_tax_bl_got_trade_unions_1 value = 0 }
 }
 
 # Closes the bill's payload (te_tax_bl_on is set to 0 by the caller).
@@ -362,6 +399,41 @@ te_tax_gen_bill_clear = {
 	remove_variable = te_tax_bl_xver_cons
 	remove_variable = te_tax_bl_xver_goods
 	remove_variable = te_tax_bl_xver_relief
+	remove_variable = te_tax_bl_prom_armed_forces_kind
+	remove_variable = te_tax_bl_prom_armed_forces_arg
+	remove_variable = te_tax_bl_prom_armed_forces_target
+	remove_variable = te_tax_bl_got_armed_forces_1
+	remove_variable = te_tax_bl_prom_devout_kind
+	remove_variable = te_tax_bl_prom_devout_arg
+	remove_variable = te_tax_bl_prom_devout_target
+	remove_variable = te_tax_bl_got_devout_1
+	remove_variable = te_tax_bl_prom_industrialists_kind
+	remove_variable = te_tax_bl_prom_industrialists_arg
+	remove_variable = te_tax_bl_prom_industrialists_target
+	remove_variable = te_tax_bl_got_industrialists_1
+	remove_variable = te_tax_bl_prom_intelligentsia_kind
+	remove_variable = te_tax_bl_prom_intelligentsia_arg
+	remove_variable = te_tax_bl_prom_intelligentsia_target
+	remove_variable = te_tax_bl_got_intelligentsia_1
+	remove_variable = te_tax_bl_prom_landowners_kind
+	remove_variable = te_tax_bl_prom_landowners_arg
+	remove_variable = te_tax_bl_prom_landowners_target
+	remove_variable = te_tax_bl_got_landowners_1
+	remove_variable = te_tax_bl_prom_petty_bourgeoisie_kind
+	remove_variable = te_tax_bl_prom_petty_bourgeoisie_arg
+	remove_variable = te_tax_bl_prom_petty_bourgeoisie_target
+	remove_variable = te_tax_bl_got_petty_bourgeoisie_1
+	remove_variable = te_tax_bl_prom_rural_folk_kind
+	remove_variable = te_tax_bl_prom_rural_folk_arg
+	remove_variable = te_tax_bl_prom_rural_folk_target
+	remove_variable = te_tax_bl_got_rural_folk_2
+	remove_variable = te_tax_bl_got_rural_folk_3
+	remove_variable = te_tax_bl_got_rural_folk_1
+	remove_variable = te_tax_bl_prom_trade_unions_kind
+	remove_variable = te_tax_bl_prom_trade_unions_arg
+	remove_variable = te_tax_bl_prom_trade_unions_target
+	remove_variable = te_tax_bl_got_trade_unions_3
+	remove_variable = te_tax_bl_got_trade_unions_1
 	if = { limit = { has_variable_list = te_tax_bl_relief_states } clear_variable_list = te_tax_bl_relief_states }
 }
 
@@ -653,24 +725,41 @@ te_tax_gen_bump_pver = {
 	}
 }
 
-# Releases every commitment (a new bill or revision; the bill closing).
+# Releases every commitment and withdraws every offer (a new bill or revision, an accepted
+# offer; the bill closing). An offer's payload is read only while its kind is above 0.
 te_tax_gen_reset_commitments = {
 	set_variable = { name = te_tax_com_armed_forces value = 0 }
 	set_variable = { name = te_tax_com_armed_forces_rev value = -1 }
+	set_variable = { name = te_tax_off_armed_forces_kind value = 0 }
+	set_variable = { name = te_tax_off_armed_forces_rev value = -1 }
 	set_variable = { name = te_tax_com_devout value = 0 }
 	set_variable = { name = te_tax_com_devout_rev value = -1 }
+	set_variable = { name = te_tax_off_devout_kind value = 0 }
+	set_variable = { name = te_tax_off_devout_rev value = -1 }
 	set_variable = { name = te_tax_com_industrialists value = 0 }
 	set_variable = { name = te_tax_com_industrialists_rev value = -1 }
+	set_variable = { name = te_tax_off_industrialists_kind value = 0 }
+	set_variable = { name = te_tax_off_industrialists_rev value = -1 }
 	set_variable = { name = te_tax_com_intelligentsia value = 0 }
 	set_variable = { name = te_tax_com_intelligentsia_rev value = -1 }
+	set_variable = { name = te_tax_off_intelligentsia_kind value = 0 }
+	set_variable = { name = te_tax_off_intelligentsia_rev value = -1 }
 	set_variable = { name = te_tax_com_landowners value = 0 }
 	set_variable = { name = te_tax_com_landowners_rev value = -1 }
+	set_variable = { name = te_tax_off_landowners_kind value = 0 }
+	set_variable = { name = te_tax_off_landowners_rev value = -1 }
 	set_variable = { name = te_tax_com_petty_bourgeoisie value = 0 }
 	set_variable = { name = te_tax_com_petty_bourgeoisie_rev value = -1 }
+	set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 0 }
+	set_variable = { name = te_tax_off_petty_bourgeoisie_rev value = -1 }
 	set_variable = { name = te_tax_com_rural_folk value = 0 }
 	set_variable = { name = te_tax_com_rural_folk_rev value = -1 }
+	set_variable = { name = te_tax_off_rural_folk_kind value = 0 }
+	set_variable = { name = te_tax_off_rural_folk_rev value = -1 }
 	set_variable = { name = te_tax_com_trade_unions value = 0 }
 	set_variable = { name = te_tax_com_trade_unions_rev value = -1 }
+	set_variable = { name = te_tax_off_trade_unions_kind value = 0 }
+	set_variable = { name = te_tax_off_trade_unions_rev value = -1 }
 }
 
 # The support snapshot (te_tax_refresh_support, while a bill is open): each interest group's
@@ -678,8 +767,9 @@ te_tax_gen_reset_commitments = {
 # revision. A group committed to this revision stays committed; otherwise it commits at
 # te_tax_commit_threshold, draws a red line at te_tax_redline_threshold, else is
 # persuadable (0). Trust is the group's record of kept and broken promises
-# (te_tax_trust_reason_<ig>, plan Task 12); promises are 0 until Task 13. A group the
-# country lacks is zeroed.
+# (te_tax_trust_reason_<ig>, plan Task 12); promises are the promises accepted under this
+# bill (te_tax_prom_<ig>, plan Task 13), recomputed each time. A group the country lacks is
+# zeroed. Last, each group that has not committed may make an offer (te_tax_gen_offer_select).
 te_tax_gen_refresh_support = {
 	if = {
 		limit = { exists = ig:ig_armed_forces }
@@ -687,7 +777,7 @@ te_tax_gen_refresh_support = {
 		set_variable = { name = te_tax_sr_armed_forces_ideo value = te_tax_ideo_armed_forces }
 		set_variable = { name = te_tax_sr_armed_forces_fisc value = te_tax_fiscal_reason }
 		set_variable = { name = te_tax_sr_armed_forces_gov value = te_tax_gov_armed_forces }
-		set_variable = { name = te_tax_sr_armed_forces_prom value = 0 }
+		set_variable = { name = te_tax_sr_armed_forces_prom value = te_tax_prom_armed_forces }
 		set_variable = { name = te_tax_sr_armed_forces_trust value = te_tax_trust_reason_armed_forces }
 		set_variable = { name = te_tax_sup_armed_forces value = var:te_tax_sr_armed_forces_mat }
 		change_variable = { name = te_tax_sup_armed_forces add = var:te_tax_sr_armed_forces_ideo }
@@ -741,7 +831,7 @@ te_tax_gen_refresh_support = {
 		set_variable = { name = te_tax_sr_devout_ideo value = te_tax_ideo_devout }
 		set_variable = { name = te_tax_sr_devout_fisc value = te_tax_fiscal_reason }
 		set_variable = { name = te_tax_sr_devout_gov value = te_tax_gov_devout }
-		set_variable = { name = te_tax_sr_devout_prom value = 0 }
+		set_variable = { name = te_tax_sr_devout_prom value = te_tax_prom_devout }
 		set_variable = { name = te_tax_sr_devout_trust value = te_tax_trust_reason_devout }
 		set_variable = { name = te_tax_sup_devout value = var:te_tax_sr_devout_mat }
 		change_variable = { name = te_tax_sup_devout add = var:te_tax_sr_devout_ideo }
@@ -795,7 +885,7 @@ te_tax_gen_refresh_support = {
 		set_variable = { name = te_tax_sr_industrialists_ideo value = te_tax_ideo_industrialists }
 		set_variable = { name = te_tax_sr_industrialists_fisc value = te_tax_fiscal_reason }
 		set_variable = { name = te_tax_sr_industrialists_gov value = te_tax_gov_industrialists }
-		set_variable = { name = te_tax_sr_industrialists_prom value = 0 }
+		set_variable = { name = te_tax_sr_industrialists_prom value = te_tax_prom_industrialists }
 		set_variable = { name = te_tax_sr_industrialists_trust value = te_tax_trust_reason_industrialists }
 		set_variable = { name = te_tax_sup_industrialists value = var:te_tax_sr_industrialists_mat }
 		change_variable = { name = te_tax_sup_industrialists add = var:te_tax_sr_industrialists_ideo }
@@ -849,7 +939,7 @@ te_tax_gen_refresh_support = {
 		set_variable = { name = te_tax_sr_intelligentsia_ideo value = te_tax_ideo_intelligentsia }
 		set_variable = { name = te_tax_sr_intelligentsia_fisc value = te_tax_fiscal_reason }
 		set_variable = { name = te_tax_sr_intelligentsia_gov value = te_tax_gov_intelligentsia }
-		set_variable = { name = te_tax_sr_intelligentsia_prom value = 0 }
+		set_variable = { name = te_tax_sr_intelligentsia_prom value = te_tax_prom_intelligentsia }
 		set_variable = { name = te_tax_sr_intelligentsia_trust value = te_tax_trust_reason_intelligentsia }
 		set_variable = { name = te_tax_sup_intelligentsia value = var:te_tax_sr_intelligentsia_mat }
 		change_variable = { name = te_tax_sup_intelligentsia add = var:te_tax_sr_intelligentsia_ideo }
@@ -903,7 +993,7 @@ te_tax_gen_refresh_support = {
 		set_variable = { name = te_tax_sr_landowners_ideo value = te_tax_ideo_landowners }
 		set_variable = { name = te_tax_sr_landowners_fisc value = te_tax_fiscal_reason }
 		set_variable = { name = te_tax_sr_landowners_gov value = te_tax_gov_landowners }
-		set_variable = { name = te_tax_sr_landowners_prom value = 0 }
+		set_variable = { name = te_tax_sr_landowners_prom value = te_tax_prom_landowners }
 		set_variable = { name = te_tax_sr_landowners_trust value = te_tax_trust_reason_landowners }
 		set_variable = { name = te_tax_sup_landowners value = var:te_tax_sr_landowners_mat }
 		change_variable = { name = te_tax_sup_landowners add = var:te_tax_sr_landowners_ideo }
@@ -957,7 +1047,7 @@ te_tax_gen_refresh_support = {
 		set_variable = { name = te_tax_sr_petty_bourgeoisie_ideo value = te_tax_ideo_petty_bourgeoisie }
 		set_variable = { name = te_tax_sr_petty_bourgeoisie_fisc value = te_tax_fiscal_reason }
 		set_variable = { name = te_tax_sr_petty_bourgeoisie_gov value = te_tax_gov_petty_bourgeoisie }
-		set_variable = { name = te_tax_sr_petty_bourgeoisie_prom value = 0 }
+		set_variable = { name = te_tax_sr_petty_bourgeoisie_prom value = te_tax_prom_petty_bourgeoisie }
 		set_variable = { name = te_tax_sr_petty_bourgeoisie_trust value = te_tax_trust_reason_petty_bourgeoisie }
 		set_variable = { name = te_tax_sup_petty_bourgeoisie value = var:te_tax_sr_petty_bourgeoisie_mat }
 		change_variable = { name = te_tax_sup_petty_bourgeoisie add = var:te_tax_sr_petty_bourgeoisie_ideo }
@@ -1011,7 +1101,7 @@ te_tax_gen_refresh_support = {
 		set_variable = { name = te_tax_sr_rural_folk_ideo value = te_tax_ideo_rural_folk }
 		set_variable = { name = te_tax_sr_rural_folk_fisc value = te_tax_fiscal_reason }
 		set_variable = { name = te_tax_sr_rural_folk_gov value = te_tax_gov_rural_folk }
-		set_variable = { name = te_tax_sr_rural_folk_prom value = 0 }
+		set_variable = { name = te_tax_sr_rural_folk_prom value = te_tax_prom_rural_folk }
 		set_variable = { name = te_tax_sr_rural_folk_trust value = te_tax_trust_reason_rural_folk }
 		set_variable = { name = te_tax_sup_rural_folk value = var:te_tax_sr_rural_folk_mat }
 		change_variable = { name = te_tax_sup_rural_folk add = var:te_tax_sr_rural_folk_ideo }
@@ -1065,7 +1155,7 @@ te_tax_gen_refresh_support = {
 		set_variable = { name = te_tax_sr_trade_unions_ideo value = te_tax_ideo_trade_unions }
 		set_variable = { name = te_tax_sr_trade_unions_fisc value = te_tax_fiscal_reason }
 		set_variable = { name = te_tax_sr_trade_unions_gov value = te_tax_gov_trade_unions }
-		set_variable = { name = te_tax_sr_trade_unions_prom value = 0 }
+		set_variable = { name = te_tax_sr_trade_unions_prom value = te_tax_prom_trade_unions }
 		set_variable = { name = te_tax_sr_trade_unions_trust value = te_tax_trust_reason_trade_unions }
 		set_variable = { name = te_tax_sup_trade_unions value = var:te_tax_sr_trade_unions_mat }
 		change_variable = { name = te_tax_sup_trade_unions add = var:te_tax_sr_trade_unions_ideo }
@@ -1112,6 +1202,1104 @@ te_tax_gen_refresh_support = {
 		set_variable = { name = te_tax_sup_trade_unions value = 0 }
 		set_variable = { name = te_tax_com_trade_unions value = 0 }
 		set_variable = { name = te_tax_com_trade_unions_rev value = -1 }
+	}
+	# Then the offers of the groups that have not committed (plan Task 13).
+	te_tax_gen_offer_select = yes
+}
+
+# Offers (plan Task 13; docs/systems/tax_code_schema.md, "Offers"), the last step of the support
+# refresh, never a panel. A group committed to this revision withdraws any offer. Any other
+# group that is not marginal and has made no offer for this revision makes at most one,
+# from its top negative reason: material first means a clause (its catalog order, then a
+# promise); any other reason, or none, a promise first. A group at its red line is offered
+# promises only, and accepting one commits it only if the promise lifts its score to the
+# threshold (te_tax_off_<ig>_commit = 0). An offer is recorded for this revision
+# (te_tax_off_<ig>_rev), so a group offers once a revision; a clause it gained in this bill
+# (te_tax_bl_got_<ig>_<code>) and a second promise are never offered again; a promise is
+# offered only when it could be recorded (te_tax_can_obl_propose: no identical pending or
+# binding obligation). te_tax_off_<ig>_maint marks a promise that only maintains what holds.
+te_tax_gen_offer_select = {
+	# armed_forces: clauses 1; promises none.
+	if = { limit = { NOT = { has_variable = te_tax_off_armed_forces_rev } } set_variable = { name = te_tax_off_armed_forces_kind value = 0 } set_variable = { name = te_tax_off_armed_forces_rev value = -1 } }
+	if = {
+		limit = { var:te_tax_com_armed_forces = 1 var:te_tax_com_armed_forces_rev = var:te_tax_bl_rev }
+		set_variable = { name = te_tax_off_armed_forces_kind value = 0 }
+	}
+	else_if = {
+		limit = {
+			exists = ig:ig_armed_forces
+			ig:ig_armed_forces = { ig_counts_as_marginal = no }
+			NOT = { AND = { var:te_tax_com_armed_forces = 1 var:te_tax_com_armed_forces_rev = var:te_tax_bl_rev } }
+			NOT = { var:te_tax_off_armed_forces_rev = var:te_tax_bl_rev }
+		}
+		set_variable = { name = te_tax_off_armed_forces_kind value = 0 }
+		if = {
+			limit = {
+				var:te_tax_com_armed_forces = 0
+				var:te_tax_sr_armed_forces_mat < 0
+				var:te_tax_sr_armed_forces_mat <= var:te_tax_sr_armed_forces_ideo
+				var:te_tax_sr_armed_forces_mat <= var:te_tax_sr_armed_forces_fisc
+				var:te_tax_sr_armed_forces_mat <= var:te_tax_sr_armed_forces_prom
+				var:te_tax_sr_armed_forces_mat <= var:te_tax_sr_armed_forces_trust
+			}
+			if = {
+				limit = {
+					var:te_tax_off_armed_forces_kind = 0
+					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
+					te_tax_bl_eff_cons > 0
+				}
+				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_arg value = 5 }
+				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
+				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
+			}
+			set_variable = { name = te_tax_off_armed_forces_commit value = 1 }
+		}
+		else_if = {
+			limit = { var:te_tax_com_armed_forces = 0 }
+			if = {
+				limit = {
+					var:te_tax_off_armed_forces_kind = 0
+					NAND = { has_variable = te_tax_bl_got_armed_forces_1 var:te_tax_bl_got_armed_forces_1 = 1 }
+					te_tax_bl_eff_cons > 0
+				}
+				set_variable = { name = te_tax_off_armed_forces_kind value = 1 }
+				set_variable = { name = te_tax_off_armed_forces_arg value = 5 }
+				set_variable = { name = te_tax_off_armed_forces_target value = 0 }
+				set_variable = { name = te_tax_off_armed_forces_maint value = 0 }
+			}
+			set_variable = { name = te_tax_off_armed_forces_commit value = 1 }
+		}
+		else = {
+			set_variable = { name = te_tax_off_armed_forces_commit value = 0 }
+		}
+		if = { limit = { var:te_tax_off_armed_forces_kind > 0 } set_variable = { name = te_tax_off_armed_forces_rev value = var:te_tax_bl_rev } }
+	}
+	# devout: clauses 1; promises schools.
+	if = { limit = { NOT = { has_variable = te_tax_off_devout_rev } } set_variable = { name = te_tax_off_devout_kind value = 0 } set_variable = { name = te_tax_off_devout_rev value = -1 } }
+	if = {
+		limit = { var:te_tax_com_devout = 1 var:te_tax_com_devout_rev = var:te_tax_bl_rev }
+		set_variable = { name = te_tax_off_devout_kind value = 0 }
+	}
+	else_if = {
+		limit = {
+			exists = ig:ig_devout
+			ig:ig_devout = { ig_counts_as_marginal = no }
+			NOT = { AND = { var:te_tax_com_devout = 1 var:te_tax_com_devout_rev = var:te_tax_bl_rev } }
+			NOT = { var:te_tax_off_devout_rev = var:te_tax_bl_rev }
+		}
+		set_variable = { name = te_tax_off_devout_kind value = 0 }
+		if = {
+			limit = {
+				var:te_tax_com_devout = 0
+				var:te_tax_sr_devout_mat < 0
+				var:te_tax_sr_devout_mat <= var:te_tax_sr_devout_ideo
+				var:te_tax_sr_devout_mat <= var:te_tax_sr_devout_fisc
+				var:te_tax_sr_devout_mat <= var:te_tax_sr_devout_prom
+				var:te_tax_sr_devout_mat <= var:te_tax_sr_devout_trust
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
+					te_tax_bl_eff_cons > 0
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 1 }
+				set_variable = { name = te_tax_off_devout_arg value = 5 }
+				set_variable = { name = te_tax_off_devout_target value = 0 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_devout_kind var:te_tax_bl_prom_devout_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 1 TARGET = te_tax_obl_inst_next_1 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 1 }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 11 }
+				set_variable = { name = te_tax_off_devout_arg value = 1 }
+				set_variable = { name = te_tax_off_devout_target value = te_tax_obl_inst_next_1 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 1 TARGET = var:te_tax_off_devout_target } }
+					set_variable = { name = te_tax_off_devout_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_devout_commit value = 1 }
+		}
+		else_if = {
+			limit = { var:te_tax_com_devout = 0 }
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_devout_kind var:te_tax_bl_prom_devout_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 1 TARGET = te_tax_obl_inst_next_1 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 1 }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 11 }
+				set_variable = { name = te_tax_off_devout_arg value = 1 }
+				set_variable = { name = te_tax_off_devout_target value = te_tax_obl_inst_next_1 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 1 TARGET = var:te_tax_off_devout_target } }
+					set_variable = { name = te_tax_off_devout_maint value = 1 }
+				}
+			}
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_got_devout_1 var:te_tax_bl_got_devout_1 = 1 }
+					te_tax_bl_eff_cons > 0
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 1 }
+				set_variable = { name = te_tax_off_devout_arg value = 5 }
+				set_variable = { name = te_tax_off_devout_target value = 0 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+			}
+			set_variable = { name = te_tax_off_devout_commit value = 1 }
+		}
+		else = {
+			if = {
+				limit = {
+					var:te_tax_off_devout_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_devout_kind var:te_tax_bl_prom_devout_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 1 TARGET = te_tax_obl_inst_next_1 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 1 }
+				}
+				set_variable = { name = te_tax_off_devout_kind value = 11 }
+				set_variable = { name = te_tax_off_devout_arg value = 1 }
+				set_variable = { name = te_tax_off_devout_target value = te_tax_obl_inst_next_1 }
+				set_variable = { name = te_tax_off_devout_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 1 TARGET = var:te_tax_off_devout_target } }
+					set_variable = { name = te_tax_off_devout_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_devout_commit value = 0 }
+		}
+		if = { limit = { var:te_tax_off_devout_kind > 0 } set_variable = { name = te_tax_off_devout_rev value = var:te_tax_bl_rev } }
+	}
+	# industrialists: clauses 1; promises bureaucracy, fiscal.
+	if = { limit = { NOT = { has_variable = te_tax_off_industrialists_rev } } set_variable = { name = te_tax_off_industrialists_kind value = 0 } set_variable = { name = te_tax_off_industrialists_rev value = -1 } }
+	if = {
+		limit = { var:te_tax_com_industrialists = 1 var:te_tax_com_industrialists_rev = var:te_tax_bl_rev }
+		set_variable = { name = te_tax_off_industrialists_kind value = 0 }
+	}
+	else_if = {
+		limit = {
+			exists = ig:ig_industrialists
+			ig:ig_industrialists = { ig_counts_as_marginal = no }
+			NOT = { AND = { var:te_tax_com_industrialists = 1 var:te_tax_com_industrialists_rev = var:te_tax_bl_rev } }
+			NOT = { var:te_tax_off_industrialists_rev = var:te_tax_bl_rev }
+		}
+		set_variable = { name = te_tax_off_industrialists_kind value = 0 }
+		if = {
+			limit = {
+				var:te_tax_com_industrialists = 0
+				var:te_tax_sr_industrialists_mat < 0
+				var:te_tax_sr_industrialists_mat <= var:te_tax_sr_industrialists_ideo
+				var:te_tax_sr_industrialists_mat <= var:te_tax_sr_industrialists_fisc
+				var:te_tax_sr_industrialists_mat <= var:te_tax_sr_industrialists_prom
+				var:te_tax_sr_industrialists_mat <= var:te_tax_sr_industrialists_trust
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_got_industrialists_1 var:te_tax_bl_got_industrialists_1 = 1 }
+					te_tax_bl_eff_div > 0
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 1 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 2 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_industrialists_kind var:te_tax_bl_prom_industrialists_kind > 0 }
+					te_tax_obl_feasible_2 = yes
+					te_tax_can_obl_propose = { KIND = 2 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 12 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 0 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 2 ARG = 0 TARGET = var:te_tax_off_industrialists_target } }
+					set_variable = { name = te_tax_off_industrialists_maint value = 1 }
+				}
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_industrialists_kind var:te_tax_bl_prom_industrialists_kind > 0 }
+					te_tax_obl_feasible_4 = yes
+					te_tax_can_obl_propose = { KIND = 4 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 14 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 0 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 4 ARG = 0 TARGET = var:te_tax_off_industrialists_target } }
+					set_variable = { name = te_tax_off_industrialists_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_industrialists_commit value = 1 }
+		}
+		else_if = {
+			limit = { var:te_tax_com_industrialists = 0 }
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_industrialists_kind var:te_tax_bl_prom_industrialists_kind > 0 }
+					te_tax_obl_feasible_2 = yes
+					te_tax_can_obl_propose = { KIND = 2 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 12 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 0 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 2 ARG = 0 TARGET = var:te_tax_off_industrialists_target } }
+					set_variable = { name = te_tax_off_industrialists_maint value = 1 }
+				}
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_industrialists_kind var:te_tax_bl_prom_industrialists_kind > 0 }
+					te_tax_obl_feasible_4 = yes
+					te_tax_can_obl_propose = { KIND = 4 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 14 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 0 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 4 ARG = 0 TARGET = var:te_tax_off_industrialists_target } }
+					set_variable = { name = te_tax_off_industrialists_maint value = 1 }
+				}
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_got_industrialists_1 var:te_tax_bl_got_industrialists_1 = 1 }
+					te_tax_bl_eff_div > 0
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 1 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 2 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+			}
+			set_variable = { name = te_tax_off_industrialists_commit value = 1 }
+		}
+		else = {
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_industrialists_kind var:te_tax_bl_prom_industrialists_kind > 0 }
+					te_tax_obl_feasible_2 = yes
+					te_tax_can_obl_propose = { KIND = 2 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 12 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 0 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 2 ARG = 0 TARGET = var:te_tax_off_industrialists_target } }
+					set_variable = { name = te_tax_off_industrialists_maint value = 1 }
+				}
+			}
+			if = {
+				limit = {
+					var:te_tax_off_industrialists_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_industrialists_kind var:te_tax_bl_prom_industrialists_kind > 0 }
+					te_tax_obl_feasible_4 = yes
+					te_tax_can_obl_propose = { KIND = 4 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_industrialists_kind value = 14 }
+				set_variable = { name = te_tax_off_industrialists_arg value = 0 }
+				set_variable = { name = te_tax_off_industrialists_target value = 0 }
+				set_variable = { name = te_tax_off_industrialists_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 4 ARG = 0 TARGET = var:te_tax_off_industrialists_target } }
+					set_variable = { name = te_tax_off_industrialists_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_industrialists_commit value = 0 }
+		}
+		if = { limit = { var:te_tax_off_industrialists_kind > 0 } set_variable = { name = te_tax_off_industrialists_rev value = var:te_tax_bl_rev } }
+	}
+	# intelligentsia: clauses 1; promises schools.
+	if = { limit = { NOT = { has_variable = te_tax_off_intelligentsia_rev } } set_variable = { name = te_tax_off_intelligentsia_kind value = 0 } set_variable = { name = te_tax_off_intelligentsia_rev value = -1 } }
+	if = {
+		limit = { var:te_tax_com_intelligentsia = 1 var:te_tax_com_intelligentsia_rev = var:te_tax_bl_rev }
+		set_variable = { name = te_tax_off_intelligentsia_kind value = 0 }
+	}
+	else_if = {
+		limit = {
+			exists = ig:ig_intelligentsia
+			ig:ig_intelligentsia = { ig_counts_as_marginal = no }
+			NOT = { AND = { var:te_tax_com_intelligentsia = 1 var:te_tax_com_intelligentsia_rev = var:te_tax_bl_rev } }
+			NOT = { var:te_tax_off_intelligentsia_rev = var:te_tax_bl_rev }
+		}
+		set_variable = { name = te_tax_off_intelligentsia_kind value = 0 }
+		if = {
+			limit = {
+				var:te_tax_com_intelligentsia = 0
+				var:te_tax_sr_intelligentsia_mat < 0
+				var:te_tax_sr_intelligentsia_mat <= var:te_tax_sr_intelligentsia_ideo
+				var:te_tax_sr_intelligentsia_mat <= var:te_tax_sr_intelligentsia_fisc
+				var:te_tax_sr_intelligentsia_mat <= var:te_tax_sr_intelligentsia_prom
+				var:te_tax_sr_intelligentsia_mat <= var:te_tax_sr_intelligentsia_trust
+			}
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_got_intelligentsia_1 var:te_tax_bl_got_intelligentsia_1 = 1 }
+					te_tax_bl_eff_wage > 0
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_intelligentsia_kind var:te_tax_bl_prom_intelligentsia_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 1 TARGET = te_tax_obl_inst_next_1 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 1 }
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 11 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = te_tax_obl_inst_next_1 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 1 TARGET = var:te_tax_off_intelligentsia_target } }
+					set_variable = { name = te_tax_off_intelligentsia_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_intelligentsia_commit value = 1 }
+		}
+		else_if = {
+			limit = { var:te_tax_com_intelligentsia = 0 }
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_intelligentsia_kind var:te_tax_bl_prom_intelligentsia_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 1 TARGET = te_tax_obl_inst_next_1 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 1 }
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 11 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = te_tax_obl_inst_next_1 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 1 TARGET = var:te_tax_off_intelligentsia_target } }
+					set_variable = { name = te_tax_off_intelligentsia_maint value = 1 }
+				}
+			}
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_got_intelligentsia_1 var:te_tax_bl_got_intelligentsia_1 = 1 }
+					te_tax_bl_eff_wage > 0
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = 0 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+			}
+			set_variable = { name = te_tax_off_intelligentsia_commit value = 1 }
+		}
+		else = {
+			if = {
+				limit = {
+					var:te_tax_off_intelligentsia_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_intelligentsia_kind var:te_tax_bl_prom_intelligentsia_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 1 TARGET = te_tax_obl_inst_next_1 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 1 }
+				}
+				set_variable = { name = te_tax_off_intelligentsia_kind value = 11 }
+				set_variable = { name = te_tax_off_intelligentsia_arg value = 1 }
+				set_variable = { name = te_tax_off_intelligentsia_target value = te_tax_obl_inst_next_1 }
+				set_variable = { name = te_tax_off_intelligentsia_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 1 TARGET = var:te_tax_off_intelligentsia_target } }
+					set_variable = { name = te_tax_off_intelligentsia_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_intelligentsia_commit value = 0 }
+		}
+		if = { limit = { var:te_tax_off_intelligentsia_kind > 0 } set_variable = { name = te_tax_off_intelligentsia_rev value = var:te_tax_bl_rev } }
+	}
+	# landowners: clauses 1; promises fiscal.
+	if = { limit = { NOT = { has_variable = te_tax_off_landowners_rev } } set_variable = { name = te_tax_off_landowners_kind value = 0 } set_variable = { name = te_tax_off_landowners_rev value = -1 } }
+	if = {
+		limit = { var:te_tax_com_landowners = 1 var:te_tax_com_landowners_rev = var:te_tax_bl_rev }
+		set_variable = { name = te_tax_off_landowners_kind value = 0 }
+	}
+	else_if = {
+		limit = {
+			exists = ig:ig_landowners
+			ig:ig_landowners = { ig_counts_as_marginal = no }
+			NOT = { AND = { var:te_tax_com_landowners = 1 var:te_tax_com_landowners_rev = var:te_tax_bl_rev } }
+			NOT = { var:te_tax_off_landowners_rev = var:te_tax_bl_rev }
+		}
+		set_variable = { name = te_tax_off_landowners_kind value = 0 }
+		if = {
+			limit = {
+				var:te_tax_com_landowners = 0
+				var:te_tax_sr_landowners_mat < 0
+				var:te_tax_sr_landowners_mat <= var:te_tax_sr_landowners_ideo
+				var:te_tax_sr_landowners_mat <= var:te_tax_sr_landowners_fisc
+				var:te_tax_sr_landowners_mat <= var:te_tax_sr_landowners_prom
+				var:te_tax_sr_landowners_mat <= var:te_tax_sr_landowners_trust
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
+					te_tax_bl_eff_div > 0
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 1 }
+				set_variable = { name = te_tax_off_landowners_arg value = 2 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_landowners_kind var:te_tax_bl_prom_landowners_kind > 0 }
+					te_tax_obl_feasible_4 = yes
+					te_tax_can_obl_propose = { KIND = 4 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 14 }
+				set_variable = { name = te_tax_off_landowners_arg value = 0 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 4 ARG = 0 TARGET = var:te_tax_off_landowners_target } }
+					set_variable = { name = te_tax_off_landowners_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_landowners_commit value = 1 }
+		}
+		else_if = {
+			limit = { var:te_tax_com_landowners = 0 }
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_landowners_kind var:te_tax_bl_prom_landowners_kind > 0 }
+					te_tax_obl_feasible_4 = yes
+					te_tax_can_obl_propose = { KIND = 4 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 14 }
+				set_variable = { name = te_tax_off_landowners_arg value = 0 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 4 ARG = 0 TARGET = var:te_tax_off_landowners_target } }
+					set_variable = { name = te_tax_off_landowners_maint value = 1 }
+				}
+			}
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_got_landowners_1 var:te_tax_bl_got_landowners_1 = 1 }
+					te_tax_bl_eff_div > 0
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 1 }
+				set_variable = { name = te_tax_off_landowners_arg value = 2 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+			}
+			set_variable = { name = te_tax_off_landowners_commit value = 1 }
+		}
+		else = {
+			if = {
+				limit = {
+					var:te_tax_off_landowners_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_landowners_kind var:te_tax_bl_prom_landowners_kind > 0 }
+					te_tax_obl_feasible_4 = yes
+					te_tax_can_obl_propose = { KIND = 4 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_landowners_kind value = 14 }
+				set_variable = { name = te_tax_off_landowners_arg value = 0 }
+				set_variable = { name = te_tax_off_landowners_target value = 0 }
+				set_variable = { name = te_tax_off_landowners_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 4 ARG = 0 TARGET = var:te_tax_off_landowners_target } }
+					set_variable = { name = te_tax_off_landowners_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_landowners_commit value = 0 }
+		}
+		if = { limit = { var:te_tax_off_landowners_kind > 0 } set_variable = { name = te_tax_off_landowners_rev value = var:te_tax_bl_rev } }
+	}
+	# petty_bourgeoisie: clauses 1; promises bureaucracy.
+	if = { limit = { NOT = { has_variable = te_tax_off_petty_bourgeoisie_rev } } set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 0 } set_variable = { name = te_tax_off_petty_bourgeoisie_rev value = -1 } }
+	if = {
+		limit = { var:te_tax_com_petty_bourgeoisie = 1 var:te_tax_com_petty_bourgeoisie_rev = var:te_tax_bl_rev }
+		set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 0 }
+	}
+	else_if = {
+		limit = {
+			exists = ig:ig_petty_bourgeoisie
+			ig:ig_petty_bourgeoisie = { ig_counts_as_marginal = no }
+			NOT = { AND = { var:te_tax_com_petty_bourgeoisie = 1 var:te_tax_com_petty_bourgeoisie_rev = var:te_tax_bl_rev } }
+			NOT = { var:te_tax_off_petty_bourgeoisie_rev = var:te_tax_bl_rev }
+		}
+		set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 0 }
+		if = {
+			limit = {
+				var:te_tax_com_petty_bourgeoisie = 0
+				var:te_tax_sr_petty_bourgeoisie_mat < 0
+				var:te_tax_sr_petty_bourgeoisie_mat <= var:te_tax_sr_petty_bourgeoisie_ideo
+				var:te_tax_sr_petty_bourgeoisie_mat <= var:te_tax_sr_petty_bourgeoisie_fisc
+				var:te_tax_sr_petty_bourgeoisie_mat <= var:te_tax_sr_petty_bourgeoisie_prom
+				var:te_tax_sr_petty_bourgeoisie_mat <= var:te_tax_sr_petty_bourgeoisie_trust
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
+					te_tax_bl_eff_wage > 0
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_petty_bourgeoisie_kind var:te_tax_bl_prom_petty_bourgeoisie_kind > 0 }
+					te_tax_obl_feasible_2 = yes
+					te_tax_can_obl_propose = { KIND = 2 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 12 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 2 ARG = 0 TARGET = var:te_tax_off_petty_bourgeoisie_target } }
+					set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_petty_bourgeoisie_commit value = 1 }
+		}
+		else_if = {
+			limit = { var:te_tax_com_petty_bourgeoisie = 0 }
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_petty_bourgeoisie_kind var:te_tax_bl_prom_petty_bourgeoisie_kind > 0 }
+					te_tax_obl_feasible_2 = yes
+					te_tax_can_obl_propose = { KIND = 2 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 12 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 2 ARG = 0 TARGET = var:te_tax_off_petty_bourgeoisie_target } }
+					set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 1 }
+				}
+			}
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_got_petty_bourgeoisie_1 var:te_tax_bl_got_petty_bourgeoisie_1 = 1 }
+					te_tax_bl_eff_wage > 0
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 1 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+			}
+			set_variable = { name = te_tax_off_petty_bourgeoisie_commit value = 1 }
+		}
+		else = {
+			if = {
+				limit = {
+					var:te_tax_off_petty_bourgeoisie_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_petty_bourgeoisie_kind var:te_tax_bl_prom_petty_bourgeoisie_kind > 0 }
+					te_tax_obl_feasible_2 = yes
+					te_tax_can_obl_propose = { KIND = 2 ARG = 0 }
+				}
+				set_variable = { name = te_tax_off_petty_bourgeoisie_kind value = 12 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_arg value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_target value = 0 }
+				set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 2 ARG = 0 TARGET = var:te_tax_off_petty_bourgeoisie_target } }
+					set_variable = { name = te_tax_off_petty_bourgeoisie_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_petty_bourgeoisie_commit value = 0 }
+		}
+		if = { limit = { var:te_tax_off_petty_bourgeoisie_kind > 0 } set_variable = { name = te_tax_off_petty_bourgeoisie_rev value = var:te_tax_bl_rev } }
+	}
+	# rural_folk: clauses 2, 3, 1; promises schools.
+	if = { limit = { NOT = { has_variable = te_tax_off_rural_folk_rev } } set_variable = { name = te_tax_off_rural_folk_kind value = 0 } set_variable = { name = te_tax_off_rural_folk_rev value = -1 } }
+	if = {
+		limit = { var:te_tax_com_rural_folk = 1 var:te_tax_com_rural_folk_rev = var:te_tax_bl_rev }
+		set_variable = { name = te_tax_off_rural_folk_kind value = 0 }
+	}
+	else_if = {
+		limit = {
+			exists = ig:ig_rural_folk
+			ig:ig_rural_folk = { ig_counts_as_marginal = no }
+			NOT = { AND = { var:te_tax_com_rural_folk = 1 var:te_tax_com_rural_folk_rev = var:te_tax_bl_rev } }
+			NOT = { var:te_tax_off_rural_folk_rev = var:te_tax_bl_rev }
+		}
+		set_variable = { name = te_tax_off_rural_folk_kind value = 0 }
+		if = {
+			limit = {
+				var:te_tax_com_rural_folk = 0
+				var:te_tax_sr_rural_folk_mat < 0
+				var:te_tax_sr_rural_folk_mat <= var:te_tax_sr_rural_folk_ideo
+				var:te_tax_sr_rural_folk_mat <= var:te_tax_sr_rural_folk_fisc
+				var:te_tax_sr_rural_folk_mat <= var:te_tax_sr_rural_folk_prom
+				var:te_tax_sr_rural_folk_mat <= var:te_tax_sr_rural_folk_trust
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_2 var:te_tax_bl_got_rural_folk_2 = 1 }
+					te_tax_bl_eff_agrel < te_tax_max_agrel
+					te_tax_bl_eff_wage > 0
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 2 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_3 var:te_tax_bl_got_rural_folk_3 = 1 }
+					OR = {
+						te_tax_bl_eff_g_grain > 0
+						te_tax_bl_eff_g_clothes > 0
+						te_tax_bl_eff_g_furniture > 0
+						te_tax_bl_eff_g_groceries > 0
+						te_tax_bl_eff_g_fabric > 0
+						te_tax_bl_eff_g_fish > 0
+						te_tax_bl_eff_g_wood > 0
+						te_tax_bl_eff_g_electricity > 0
+						te_tax_bl_eff_g_paper > 0
+						te_tax_bl_eff_g_services > 0
+						te_tax_bl_eff_g_transportation > 0
+					}
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 3 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+				if = { limit = { te_tax_bl_eff_g_grain > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 1 } }
+				else_if = { limit = { te_tax_bl_eff_g_clothes > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 2 } }
+				else_if = { limit = { te_tax_bl_eff_g_furniture > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 3 } }
+				else_if = { limit = { te_tax_bl_eff_g_groceries > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 4 } }
+				else_if = { limit = { te_tax_bl_eff_g_fabric > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 5 } }
+				else_if = { limit = { te_tax_bl_eff_g_fish > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 6 } }
+				else_if = { limit = { te_tax_bl_eff_g_wood > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 7 } }
+				else_if = { limit = { te_tax_bl_eff_g_electricity > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 8 } }
+				else_if = { limit = { te_tax_bl_eff_g_paper > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 9 } }
+				else_if = { limit = { te_tax_bl_eff_g_services > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 10 } }
+				else_if = { limit = { te_tax_bl_eff_g_transportation > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 11 } }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_eff_land > 0
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 3 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_rural_folk_kind var:te_tax_bl_prom_rural_folk_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 1 TARGET = te_tax_obl_inst_next_1 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 1 }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 11 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_target value = te_tax_obl_inst_next_1 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 1 TARGET = var:te_tax_off_rural_folk_target } }
+					set_variable = { name = te_tax_off_rural_folk_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_rural_folk_commit value = 1 }
+		}
+		else_if = {
+			limit = { var:te_tax_com_rural_folk = 0 }
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_rural_folk_kind var:te_tax_bl_prom_rural_folk_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 1 TARGET = te_tax_obl_inst_next_1 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 1 }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 11 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_target value = te_tax_obl_inst_next_1 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 1 TARGET = var:te_tax_off_rural_folk_target } }
+					set_variable = { name = te_tax_off_rural_folk_maint value = 1 }
+				}
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_2 var:te_tax_bl_got_rural_folk_2 = 1 }
+					te_tax_bl_eff_agrel < te_tax_max_agrel
+					te_tax_bl_eff_wage > 0
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 2 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_3 var:te_tax_bl_got_rural_folk_3 = 1 }
+					OR = {
+						te_tax_bl_eff_g_grain > 0
+						te_tax_bl_eff_g_clothes > 0
+						te_tax_bl_eff_g_furniture > 0
+						te_tax_bl_eff_g_groceries > 0
+						te_tax_bl_eff_g_fabric > 0
+						te_tax_bl_eff_g_fish > 0
+						te_tax_bl_eff_g_wood > 0
+						te_tax_bl_eff_g_electricity > 0
+						te_tax_bl_eff_g_paper > 0
+						te_tax_bl_eff_g_services > 0
+						te_tax_bl_eff_g_transportation > 0
+					}
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 3 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+				if = { limit = { te_tax_bl_eff_g_grain > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 1 } }
+				else_if = { limit = { te_tax_bl_eff_g_clothes > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 2 } }
+				else_if = { limit = { te_tax_bl_eff_g_furniture > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 3 } }
+				else_if = { limit = { te_tax_bl_eff_g_groceries > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 4 } }
+				else_if = { limit = { te_tax_bl_eff_g_fabric > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 5 } }
+				else_if = { limit = { te_tax_bl_eff_g_fish > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 6 } }
+				else_if = { limit = { te_tax_bl_eff_g_wood > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 7 } }
+				else_if = { limit = { te_tax_bl_eff_g_electricity > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 8 } }
+				else_if = { limit = { te_tax_bl_eff_g_paper > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 9 } }
+				else_if = { limit = { te_tax_bl_eff_g_services > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 10 } }
+				else_if = { limit = { te_tax_bl_eff_g_transportation > 0 } set_variable = { name = te_tax_off_rural_folk_arg value = 11 } }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_got_rural_folk_1 var:te_tax_bl_got_rural_folk_1 = 1 }
+					te_tax_bl_eff_land > 0
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 3 }
+				set_variable = { name = te_tax_off_rural_folk_target value = 0 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+			}
+			set_variable = { name = te_tax_off_rural_folk_commit value = 1 }
+		}
+		else = {
+			if = {
+				limit = {
+					var:te_tax_off_rural_folk_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_rural_folk_kind var:te_tax_bl_prom_rural_folk_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 1 TARGET = te_tax_obl_inst_next_1 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 1 }
+				}
+				set_variable = { name = te_tax_off_rural_folk_kind value = 11 }
+				set_variable = { name = te_tax_off_rural_folk_arg value = 1 }
+				set_variable = { name = te_tax_off_rural_folk_target value = te_tax_obl_inst_next_1 }
+				set_variable = { name = te_tax_off_rural_folk_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 1 TARGET = var:te_tax_off_rural_folk_target } }
+					set_variable = { name = te_tax_off_rural_folk_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_rural_folk_commit value = 0 }
+		}
+		if = { limit = { var:te_tax_off_rural_folk_kind > 0 } set_variable = { name = te_tax_off_rural_folk_rev value = var:te_tax_bl_rev } }
+	}
+	# trade_unions: clauses 3, 1; promises health.
+	if = { limit = { NOT = { has_variable = te_tax_off_trade_unions_rev } } set_variable = { name = te_tax_off_trade_unions_kind value = 0 } set_variable = { name = te_tax_off_trade_unions_rev value = -1 } }
+	if = {
+		limit = { var:te_tax_com_trade_unions = 1 var:te_tax_com_trade_unions_rev = var:te_tax_bl_rev }
+		set_variable = { name = te_tax_off_trade_unions_kind value = 0 }
+	}
+	else_if = {
+		limit = {
+			exists = ig:ig_trade_unions
+			ig:ig_trade_unions = { ig_counts_as_marginal = no }
+			NOT = { AND = { var:te_tax_com_trade_unions = 1 var:te_tax_com_trade_unions_rev = var:te_tax_bl_rev } }
+			NOT = { var:te_tax_off_trade_unions_rev = var:te_tax_bl_rev }
+		}
+		set_variable = { name = te_tax_off_trade_unions_kind value = 0 }
+		if = {
+			limit = {
+				var:te_tax_com_trade_unions = 0
+				var:te_tax_sr_trade_unions_mat < 0
+				var:te_tax_sr_trade_unions_mat <= var:te_tax_sr_trade_unions_ideo
+				var:te_tax_sr_trade_unions_mat <= var:te_tax_sr_trade_unions_fisc
+				var:te_tax_sr_trade_unions_mat <= var:te_tax_sr_trade_unions_prom
+				var:te_tax_sr_trade_unions_mat <= var:te_tax_sr_trade_unions_trust
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_got_trade_unions_3 var:te_tax_bl_got_trade_unions_3 = 1 }
+					OR = {
+						te_tax_bl_eff_g_grain > 0
+						te_tax_bl_eff_g_clothes > 0
+						te_tax_bl_eff_g_furniture > 0
+						te_tax_bl_eff_g_groceries > 0
+						te_tax_bl_eff_g_fabric > 0
+						te_tax_bl_eff_g_fish > 0
+						te_tax_bl_eff_g_wood > 0
+						te_tax_bl_eff_g_electricity > 0
+						te_tax_bl_eff_g_paper > 0
+						te_tax_bl_eff_g_services > 0
+						te_tax_bl_eff_g_transportation > 0
+					}
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 3 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+				if = { limit = { te_tax_bl_eff_g_grain > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 1 } }
+				else_if = { limit = { te_tax_bl_eff_g_clothes > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 2 } }
+				else_if = { limit = { te_tax_bl_eff_g_furniture > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 3 } }
+				else_if = { limit = { te_tax_bl_eff_g_groceries > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 4 } }
+				else_if = { limit = { te_tax_bl_eff_g_fabric > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 5 } }
+				else_if = { limit = { te_tax_bl_eff_g_fish > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 6 } }
+				else_if = { limit = { te_tax_bl_eff_g_wood > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 7 } }
+				else_if = { limit = { te_tax_bl_eff_g_electricity > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 8 } }
+				else_if = { limit = { te_tax_bl_eff_g_paper > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 9 } }
+				else_if = { limit = { te_tax_bl_eff_g_services > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 10 } }
+				else_if = { limit = { te_tax_bl_eff_g_transportation > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 11 } }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_got_trade_unions_1 var:te_tax_bl_got_trade_unions_1 = 1 }
+					te_tax_bl_eff_wage > 0
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 1 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 1 }
+				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_trade_unions_kind var:te_tax_bl_prom_trade_unions_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 2 TARGET = te_tax_obl_inst_next_2 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 2 }
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 11 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 2 }
+				set_variable = { name = te_tax_off_trade_unions_target value = te_tax_obl_inst_next_2 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 2 TARGET = var:te_tax_off_trade_unions_target } }
+					set_variable = { name = te_tax_off_trade_unions_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_trade_unions_commit value = 1 }
+		}
+		else_if = {
+			limit = { var:te_tax_com_trade_unions = 0 }
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_trade_unions_kind var:te_tax_bl_prom_trade_unions_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 2 TARGET = te_tax_obl_inst_next_2 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 2 }
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 11 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 2 }
+				set_variable = { name = te_tax_off_trade_unions_target value = te_tax_obl_inst_next_2 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 2 TARGET = var:te_tax_off_trade_unions_target } }
+					set_variable = { name = te_tax_off_trade_unions_maint value = 1 }
+				}
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_got_trade_unions_3 var:te_tax_bl_got_trade_unions_3 = 1 }
+					OR = {
+						te_tax_bl_eff_g_grain > 0
+						te_tax_bl_eff_g_clothes > 0
+						te_tax_bl_eff_g_furniture > 0
+						te_tax_bl_eff_g_groceries > 0
+						te_tax_bl_eff_g_fabric > 0
+						te_tax_bl_eff_g_fish > 0
+						te_tax_bl_eff_g_wood > 0
+						te_tax_bl_eff_g_electricity > 0
+						te_tax_bl_eff_g_paper > 0
+						te_tax_bl_eff_g_services > 0
+						te_tax_bl_eff_g_transportation > 0
+					}
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 3 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+				if = { limit = { te_tax_bl_eff_g_grain > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 1 } }
+				else_if = { limit = { te_tax_bl_eff_g_clothes > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 2 } }
+				else_if = { limit = { te_tax_bl_eff_g_furniture > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 3 } }
+				else_if = { limit = { te_tax_bl_eff_g_groceries > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 4 } }
+				else_if = { limit = { te_tax_bl_eff_g_fabric > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 5 } }
+				else_if = { limit = { te_tax_bl_eff_g_fish > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 6 } }
+				else_if = { limit = { te_tax_bl_eff_g_wood > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 7 } }
+				else_if = { limit = { te_tax_bl_eff_g_electricity > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 8 } }
+				else_if = { limit = { te_tax_bl_eff_g_paper > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 9 } }
+				else_if = { limit = { te_tax_bl_eff_g_services > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 10 } }
+				else_if = { limit = { te_tax_bl_eff_g_transportation > 0 } set_variable = { name = te_tax_off_trade_unions_arg value = 11 } }
+			}
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_got_trade_unions_1 var:te_tax_bl_got_trade_unions_1 = 1 }
+					te_tax_bl_eff_wage > 0
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 1 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 1 }
+				set_variable = { name = te_tax_off_trade_unions_target value = 0 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+			}
+			set_variable = { name = te_tax_off_trade_unions_commit value = 1 }
+		}
+		else = {
+			if = {
+				limit = {
+					var:te_tax_off_trade_unions_kind = 0
+					NAND = { has_variable = te_tax_bl_prom_trade_unions_kind var:te_tax_bl_prom_trade_unions_kind > 0 }
+					te_tax_obl_feasible_1 = { ARG = 2 TARGET = te_tax_obl_inst_next_2 }
+					te_tax_can_obl_propose = { KIND = 1 ARG = 2 }
+				}
+				set_variable = { name = te_tax_off_trade_unions_kind value = 11 }
+				set_variable = { name = te_tax_off_trade_unions_arg value = 2 }
+				set_variable = { name = te_tax_off_trade_unions_target value = te_tax_obl_inst_next_2 }
+				set_variable = { name = te_tax_off_trade_unions_maint value = 0 }
+				if = {
+					limit = { te_tax_obl_is_maintenance = { KIND = 1 ARG = 2 TARGET = var:te_tax_off_trade_unions_target } }
+					set_variable = { name = te_tax_off_trade_unions_maint value = 1 }
+				}
+			}
+			set_variable = { name = te_tax_off_trade_unions_commit value = 0 }
+		}
+		if = { limit = { var:te_tax_off_trade_unions_kind > 0 } set_variable = { name = te_tax_off_trade_unions_rev value = var:te_tax_bl_rev } }
+	}
+}
+
+# Applies group IG's offer to the bill (te_tax_cmd_accept_offer, te_tax_offer_effects.txt,
+# which has checked it with te_tax_can_accept_offer): a clause through its helper, a promise
+# recorded on the bill for te_tax_gen_offer_repropose.
+te_tax_gen_offer_apply = {
+	if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 1 } te_tax_offer_cut = { IG = $IG$ KEY = wage } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 2 } te_tax_offer_cut = { IG = $IG$ KEY = div } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 3 } te_tax_offer_cut = { IG = $IG$ KEY = land } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 4 } te_tax_offer_cut = { IG = $IG$ KEY = head } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 5 } te_tax_offer_cut = { IG = $IG$ KEY = cons } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 2 } te_tax_offer_agrel = { IG = $IG$ } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 1 } te_tax_offer_untax = { IG = $IG$ GOOD = grain } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 2 } te_tax_offer_untax = { IG = $IG$ GOOD = clothes } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 3 } te_tax_offer_untax = { IG = $IG$ GOOD = furniture } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 4 } te_tax_offer_untax = { IG = $IG$ GOOD = groceries } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 5 } te_tax_offer_untax = { IG = $IG$ GOOD = fabric } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 6 } te_tax_offer_untax = { IG = $IG$ GOOD = fish } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 7 } te_tax_offer_untax = { IG = $IG$ GOOD = wood } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 8 } te_tax_offer_untax = { IG = $IG$ GOOD = electricity } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 9 } te_tax_offer_untax = { IG = $IG$ GOOD = paper } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 10 } te_tax_offer_untax = { IG = $IG$ GOOD = services } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 11 } te_tax_offer_untax = { IG = $IG$ GOOD = transportation } }
+	else_if = { limit = { var:te_tax_off_$IG$_kind > 10 } te_tax_offer_record_promise = { IG = $IG$ } }
+}
+
+# Proposes again every promise accepted under this bill (te_tax_bl_prom_<ig>_*), after a new
+# revision has released the pending ones (te_tax_bill_start_debate, te_tax_cmd_accept_offer):
+# a promise belongs to the text, and accepting an offer makes a new text that keeps the
+# earlier bargains. KIND and ARG name helper triggers, so each catalog promise has its own
+# branch. A record that could not be proposed again (the same promise already binding, or no
+# free slot) is dropped, so it never counts.
+te_tax_gen_offer_repropose = {
+	if = { limit = { has_variable = te_tax_bl_prom_devout_kind var:te_tax_bl_prom_devout_kind = 1 var:te_tax_bl_prom_devout_arg = 1 } te_tax_obl_propose = { KIND = 1 ARG = 1 TARGET = var:te_tax_bl_prom_devout_target IG = te_tax_ig_id_devout } }
+	if = { limit = { has_variable = te_tax_bl_prom_industrialists_kind var:te_tax_bl_prom_industrialists_kind = 2 var:te_tax_bl_prom_industrialists_arg = 0 } te_tax_obl_propose = { KIND = 2 ARG = 0 TARGET = var:te_tax_bl_prom_industrialists_target IG = te_tax_ig_id_industrialists } }
+	if = { limit = { has_variable = te_tax_bl_prom_industrialists_kind var:te_tax_bl_prom_industrialists_kind = 4 var:te_tax_bl_prom_industrialists_arg = 0 } te_tax_obl_propose = { KIND = 4 ARG = 0 TARGET = var:te_tax_bl_prom_industrialists_target IG = te_tax_ig_id_industrialists } }
+	if = { limit = { has_variable = te_tax_bl_prom_intelligentsia_kind var:te_tax_bl_prom_intelligentsia_kind = 1 var:te_tax_bl_prom_intelligentsia_arg = 1 } te_tax_obl_propose = { KIND = 1 ARG = 1 TARGET = var:te_tax_bl_prom_intelligentsia_target IG = te_tax_ig_id_intelligentsia } }
+	if = { limit = { has_variable = te_tax_bl_prom_landowners_kind var:te_tax_bl_prom_landowners_kind = 4 var:te_tax_bl_prom_landowners_arg = 0 } te_tax_obl_propose = { KIND = 4 ARG = 0 TARGET = var:te_tax_bl_prom_landowners_target IG = te_tax_ig_id_landowners } }
+	if = { limit = { has_variable = te_tax_bl_prom_petty_bourgeoisie_kind var:te_tax_bl_prom_petty_bourgeoisie_kind = 2 var:te_tax_bl_prom_petty_bourgeoisie_arg = 0 } te_tax_obl_propose = { KIND = 2 ARG = 0 TARGET = var:te_tax_bl_prom_petty_bourgeoisie_target IG = te_tax_ig_id_petty_bourgeoisie } }
+	if = { limit = { has_variable = te_tax_bl_prom_rural_folk_kind var:te_tax_bl_prom_rural_folk_kind = 1 var:te_tax_bl_prom_rural_folk_arg = 1 } te_tax_obl_propose = { KIND = 1 ARG = 1 TARGET = var:te_tax_bl_prom_rural_folk_target IG = te_tax_ig_id_rural_folk } }
+	if = { limit = { has_variable = te_tax_bl_prom_trade_unions_kind var:te_tax_bl_prom_trade_unions_kind = 1 var:te_tax_bl_prom_trade_unions_arg = 2 } te_tax_obl_propose = { KIND = 1 ARG = 2 TARGET = var:te_tax_bl_prom_trade_unions_target IG = te_tax_ig_id_trade_unions } }
+	if = {
+		limit = { has_variable = te_tax_bl_prom_devout_kind var:te_tax_bl_prom_devout_kind > 0 NOT = { te_tax_offer_prom_live = { IG = devout } } }
+		set_variable = { name = te_tax_bl_prom_devout_kind value = -1 }
+		set_variable = { name = te_tax_bl_prom_devout_arg value = -1 }
+		set_variable = { name = te_tax_bl_prom_devout_target value = -1 }
+		debug_log = "TE_TAX offer_promise_dropped an accepted promise could not be recorded again on the new revision; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	if = {
+		limit = { has_variable = te_tax_bl_prom_industrialists_kind var:te_tax_bl_prom_industrialists_kind > 0 NOT = { te_tax_offer_prom_live = { IG = industrialists } } }
+		set_variable = { name = te_tax_bl_prom_industrialists_kind value = -1 }
+		set_variable = { name = te_tax_bl_prom_industrialists_arg value = -1 }
+		set_variable = { name = te_tax_bl_prom_industrialists_target value = -1 }
+		debug_log = "TE_TAX offer_promise_dropped an accepted promise could not be recorded again on the new revision; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	if = {
+		limit = { has_variable = te_tax_bl_prom_intelligentsia_kind var:te_tax_bl_prom_intelligentsia_kind > 0 NOT = { te_tax_offer_prom_live = { IG = intelligentsia } } }
+		set_variable = { name = te_tax_bl_prom_intelligentsia_kind value = -1 }
+		set_variable = { name = te_tax_bl_prom_intelligentsia_arg value = -1 }
+		set_variable = { name = te_tax_bl_prom_intelligentsia_target value = -1 }
+		debug_log = "TE_TAX offer_promise_dropped an accepted promise could not be recorded again on the new revision; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	if = {
+		limit = { has_variable = te_tax_bl_prom_landowners_kind var:te_tax_bl_prom_landowners_kind > 0 NOT = { te_tax_offer_prom_live = { IG = landowners } } }
+		set_variable = { name = te_tax_bl_prom_landowners_kind value = -1 }
+		set_variable = { name = te_tax_bl_prom_landowners_arg value = -1 }
+		set_variable = { name = te_tax_bl_prom_landowners_target value = -1 }
+		debug_log = "TE_TAX offer_promise_dropped an accepted promise could not be recorded again on the new revision; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	if = {
+		limit = { has_variable = te_tax_bl_prom_petty_bourgeoisie_kind var:te_tax_bl_prom_petty_bourgeoisie_kind > 0 NOT = { te_tax_offer_prom_live = { IG = petty_bourgeoisie } } }
+		set_variable = { name = te_tax_bl_prom_petty_bourgeoisie_kind value = -1 }
+		set_variable = { name = te_tax_bl_prom_petty_bourgeoisie_arg value = -1 }
+		set_variable = { name = te_tax_bl_prom_petty_bourgeoisie_target value = -1 }
+		debug_log = "TE_TAX offer_promise_dropped an accepted promise could not be recorded again on the new revision; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	if = {
+		limit = { has_variable = te_tax_bl_prom_rural_folk_kind var:te_tax_bl_prom_rural_folk_kind > 0 NOT = { te_tax_offer_prom_live = { IG = rural_folk } } }
+		set_variable = { name = te_tax_bl_prom_rural_folk_kind value = -1 }
+		set_variable = { name = te_tax_bl_prom_rural_folk_arg value = -1 }
+		set_variable = { name = te_tax_bl_prom_rural_folk_target value = -1 }
+		debug_log = "TE_TAX offer_promise_dropped an accepted promise could not be recorded again on the new revision; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+	if = {
+		limit = { has_variable = te_tax_bl_prom_trade_unions_kind var:te_tax_bl_prom_trade_unions_kind > 0 NOT = { te_tax_offer_prom_live = { IG = trade_unions } } }
+		set_variable = { name = te_tax_bl_prom_trade_unions_kind value = -1 }
+		set_variable = { name = te_tax_bl_prom_trade_unions_arg value = -1 }
+		set_variable = { name = te_tax_bl_prom_trade_unions_target value = -1 }
+		debug_log = "TE_TAX offer_promise_dropped an accepted promise could not be recorded again on the new revision; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}
 }
 

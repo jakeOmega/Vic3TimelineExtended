@@ -388,7 +388,9 @@ te_tax_cmd_introduce = {
 }
 
 # Replaces the bill with the draft as a new revision: every commitment is
-# released and debate starts again.
+# released and debate starts again. The player rewrote the bill, so the
+# promises accepted under it and the clauses groups gained are dropped
+# (te_tax_gen_bill_from_draft writes the records empty); the groups offer again.
 te_tax_cmd_revise = {
 	if = {
 		limit = { te_tax_can_revise = yes }
@@ -401,17 +403,30 @@ te_tax_cmd_revise = {
 }
 
 # Starts the debate on the bill's current revision (introduction or revision):
-# the clock (game_date, in days), the minor/major class, commitments released,
-# the bill opened, then the first support snapshot.
+# the revision opened (te_tax_bill_open_revision), every promise accepted under
+# this bill proposed again (none after an introduction or a revision from the
+# draft, which write the records empty; te_tax_gen_offer_repropose), then the
+# first support snapshot. Accepting an offer (te_tax_cmd_accept_offer,
+# te_tax_offer_effects.txt) runs the same steps with the accepting group's
+# commitment between the last two.
 te_tax_bill_start_debate = {
+	te_tax_bill_open_revision = yes
+	te_tax_gen_offer_repropose = yes
+	te_tax_refresh_support = yes
+}
+
+# Opens the bill's current revision: the clock (game_date, in days), the
+# minor/major class, commitments released and offers withdrawn, and the bill
+# opened.
+te_tax_bill_open_revision = {
 	set_variable = { name = te_tax_bl_day value = game_date }
 	te_tax_bill_set_minor = yes
 	te_tax_gen_reset_commitments = yes
 	# Promises are made for one text: a new revision releases the pending ones
-	# (te_tax_obligation_effects.txt), as it releases the commitments.
+	# (te_tax_obligation_effects.txt), as it releases the commitments; the ones
+	# accepted under this bill are proposed again after it.
 	te_tax_obl_release_pending = yes
 	set_variable = { name = te_tax_bl_on value = 1 }
-	te_tax_refresh_support = yes
 }
 
 # Records whether the bill is minor (te_tax_bill_is_minor, te_tax_triggers.txt):

@@ -1458,3 +1458,30 @@ te_tax_gen_obl_slot_gone = {
 		AND = { var:te_tax_o$N$_slot = te_tax_slot_id_b var:te_tax_pb_on = 1 }
 	}
 }
+
+# Offers (plan Task 13; te_tax_can_accept_offer, te_tax_triggers.txt). Country scope, while a
+# bill is under debate and group IG has an offer (te_tax_off_<ig>_kind above 0).
+te_tax_gen_offer_feasible = {
+	trigger_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 1 } te_tax_bl_eff_wage > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 2 } te_tax_bl_eff_div > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 3 } te_tax_bl_eff_land > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 4 } te_tax_bl_eff_head > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 1 var:te_tax_off_$IG$_arg = 5 } te_tax_bl_eff_cons > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 2 } te_tax_bl_eff_agrel < te_tax_max_agrel te_tax_bl_eff_wage > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 1 } te_tax_bl_eff_g_grain > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 2 } te_tax_bl_eff_g_clothes > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 3 } te_tax_bl_eff_g_furniture > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 4 } te_tax_bl_eff_g_groceries > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 5 } te_tax_bl_eff_g_fabric > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 6 } te_tax_bl_eff_g_fish > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 7 } te_tax_bl_eff_g_wood > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 8 } te_tax_bl_eff_g_electricity > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 9 } te_tax_bl_eff_g_paper > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 10 } te_tax_bl_eff_g_services > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 3 var:te_tax_off_$IG$_arg = 11 } te_tax_bl_eff_g_transportation > 0 }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 11 var:te_tax_off_$IG$_arg = 1 } te_tax_obl_feasible_1 = { ARG = 1 TARGET = var:te_tax_off_$IG$_target } te_tax_can_obl_propose = { KIND = 1 ARG = 1 } }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 11 var:te_tax_off_$IG$_arg = 2 } te_tax_obl_feasible_1 = { ARG = 2 TARGET = var:te_tax_off_$IG$_target } te_tax_can_obl_propose = { KIND = 1 ARG = 2 } }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 12 var:te_tax_off_$IG$_arg = 0 } te_tax_obl_feasible_2 = yes te_tax_can_obl_propose = { KIND = 2 ARG = 0 } }
+	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 14 var:te_tax_off_$IG$_arg = 0 } te_tax_obl_feasible_4 = yes te_tax_can_obl_propose = { KIND = 4 ARG = 0 } }
+	trigger_else = { always = no }
+}

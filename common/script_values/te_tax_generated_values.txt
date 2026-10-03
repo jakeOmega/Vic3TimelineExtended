@@ -3569,6 +3569,185 @@ te_tax_disp_ig_trust = {
 		owner = { add = var:te_tax_sr_trade_unions_trust }
 	}
 }
+te_tax_disp_ig_prom = {
+	value = 0
+	if = {
+		limit = { is_interest_group_type = ig_armed_forces owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_armed_forces_prom } }
+		owner = { add = var:te_tax_sr_armed_forces_prom }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_devout owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_devout_prom } }
+		owner = { add = var:te_tax_sr_devout_prom }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_industrialists owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_industrialists_prom } }
+		owner = { add = var:te_tax_sr_industrialists_prom }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_intelligentsia owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_intelligentsia_prom } }
+		owner = { add = var:te_tax_sr_intelligentsia_prom }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_landowners owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_landowners_prom } }
+		owner = { add = var:te_tax_sr_landowners_prom }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_petty_bourgeoisie owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_petty_bourgeoisie_prom } }
+		owner = { add = var:te_tax_sr_petty_bourgeoisie_prom }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_rural_folk owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_rural_folk_prom } }
+		owner = { add = var:te_tax_sr_rural_folk_prom }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_trade_unions owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_sr_trade_unions_prom } }
+		owner = { add = var:te_tax_sr_trade_unions_prom }
+	}
+}
+
+# The group's offer for the bill's current revision (plan Task 13): its kind (0 none; 1 cut a
+# tax, 2 agricultural relief, 3 untax a staple, 10 + an obligation kind for a promise), arg,
+# whether accepting commits it, and whether a promise only maintains what holds.
+te_tax_disp_ig_offer = {
+	value = 0
+	if = {
+		limit = { is_interest_group_type = ig_armed_forces owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_armed_forces_kind has_variable = te_tax_off_armed_forces_rev has_variable = te_tax_off_armed_forces_kind var:te_tax_off_armed_forces_rev = var:te_tax_bl_rev var:te_tax_off_armed_forces_kind > 0 } }
+		owner = { add = var:te_tax_off_armed_forces_kind }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_devout owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_devout_kind has_variable = te_tax_off_devout_rev has_variable = te_tax_off_devout_kind var:te_tax_off_devout_rev = var:te_tax_bl_rev var:te_tax_off_devout_kind > 0 } }
+		owner = { add = var:te_tax_off_devout_kind }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_industrialists owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_industrialists_kind has_variable = te_tax_off_industrialists_rev has_variable = te_tax_off_industrialists_kind var:te_tax_off_industrialists_rev = var:te_tax_bl_rev var:te_tax_off_industrialists_kind > 0 } }
+		owner = { add = var:te_tax_off_industrialists_kind }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_intelligentsia owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_intelligentsia_kind has_variable = te_tax_off_intelligentsia_rev has_variable = te_tax_off_intelligentsia_kind var:te_tax_off_intelligentsia_rev = var:te_tax_bl_rev var:te_tax_off_intelligentsia_kind > 0 } }
+		owner = { add = var:te_tax_off_intelligentsia_kind }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_landowners owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_landowners_kind has_variable = te_tax_off_landowners_rev has_variable = te_tax_off_landowners_kind var:te_tax_off_landowners_rev = var:te_tax_bl_rev var:te_tax_off_landowners_kind > 0 } }
+		owner = { add = var:te_tax_off_landowners_kind }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_petty_bourgeoisie owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_petty_bourgeoisie_kind has_variable = te_tax_off_petty_bourgeoisie_rev has_variable = te_tax_off_petty_bourgeoisie_kind var:te_tax_off_petty_bourgeoisie_rev = var:te_tax_bl_rev var:te_tax_off_petty_bourgeoisie_kind > 0 } }
+		owner = { add = var:te_tax_off_petty_bourgeoisie_kind }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_rural_folk owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_rural_folk_kind has_variable = te_tax_off_rural_folk_rev has_variable = te_tax_off_rural_folk_kind var:te_tax_off_rural_folk_rev = var:te_tax_bl_rev var:te_tax_off_rural_folk_kind > 0 } }
+		owner = { add = var:te_tax_off_rural_folk_kind }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_trade_unions owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_trade_unions_kind has_variable = te_tax_off_trade_unions_rev has_variable = te_tax_off_trade_unions_kind var:te_tax_off_trade_unions_rev = var:te_tax_bl_rev var:te_tax_off_trade_unions_kind > 0 } }
+		owner = { add = var:te_tax_off_trade_unions_kind }
+	}
+}
+te_tax_disp_ig_offer_arg = {
+	value = 0
+	if = {
+		limit = { is_interest_group_type = ig_armed_forces owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_armed_forces_kind has_variable = te_tax_off_armed_forces_rev has_variable = te_tax_off_armed_forces_arg var:te_tax_off_armed_forces_rev = var:te_tax_bl_rev var:te_tax_off_armed_forces_kind > 0 } }
+		owner = { add = var:te_tax_off_armed_forces_arg }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_devout owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_devout_kind has_variable = te_tax_off_devout_rev has_variable = te_tax_off_devout_arg var:te_tax_off_devout_rev = var:te_tax_bl_rev var:te_tax_off_devout_kind > 0 } }
+		owner = { add = var:te_tax_off_devout_arg }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_industrialists owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_industrialists_kind has_variable = te_tax_off_industrialists_rev has_variable = te_tax_off_industrialists_arg var:te_tax_off_industrialists_rev = var:te_tax_bl_rev var:te_tax_off_industrialists_kind > 0 } }
+		owner = { add = var:te_tax_off_industrialists_arg }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_intelligentsia owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_intelligentsia_kind has_variable = te_tax_off_intelligentsia_rev has_variable = te_tax_off_intelligentsia_arg var:te_tax_off_intelligentsia_rev = var:te_tax_bl_rev var:te_tax_off_intelligentsia_kind > 0 } }
+		owner = { add = var:te_tax_off_intelligentsia_arg }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_landowners owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_landowners_kind has_variable = te_tax_off_landowners_rev has_variable = te_tax_off_landowners_arg var:te_tax_off_landowners_rev = var:te_tax_bl_rev var:te_tax_off_landowners_kind > 0 } }
+		owner = { add = var:te_tax_off_landowners_arg }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_petty_bourgeoisie owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_petty_bourgeoisie_kind has_variable = te_tax_off_petty_bourgeoisie_rev has_variable = te_tax_off_petty_bourgeoisie_arg var:te_tax_off_petty_bourgeoisie_rev = var:te_tax_bl_rev var:te_tax_off_petty_bourgeoisie_kind > 0 } }
+		owner = { add = var:te_tax_off_petty_bourgeoisie_arg }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_rural_folk owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_rural_folk_kind has_variable = te_tax_off_rural_folk_rev has_variable = te_tax_off_rural_folk_arg var:te_tax_off_rural_folk_rev = var:te_tax_bl_rev var:te_tax_off_rural_folk_kind > 0 } }
+		owner = { add = var:te_tax_off_rural_folk_arg }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_trade_unions owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_trade_unions_kind has_variable = te_tax_off_trade_unions_rev has_variable = te_tax_off_trade_unions_arg var:te_tax_off_trade_unions_rev = var:te_tax_bl_rev var:te_tax_off_trade_unions_kind > 0 } }
+		owner = { add = var:te_tax_off_trade_unions_arg }
+	}
+}
+te_tax_disp_ig_offer_commit = {
+	value = 0
+	if = {
+		limit = { is_interest_group_type = ig_armed_forces owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_armed_forces_kind has_variable = te_tax_off_armed_forces_rev has_variable = te_tax_off_armed_forces_commit var:te_tax_off_armed_forces_rev = var:te_tax_bl_rev var:te_tax_off_armed_forces_kind > 0 } }
+		owner = { add = var:te_tax_off_armed_forces_commit }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_devout owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_devout_kind has_variable = te_tax_off_devout_rev has_variable = te_tax_off_devout_commit var:te_tax_off_devout_rev = var:te_tax_bl_rev var:te_tax_off_devout_kind > 0 } }
+		owner = { add = var:te_tax_off_devout_commit }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_industrialists owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_industrialists_kind has_variable = te_tax_off_industrialists_rev has_variable = te_tax_off_industrialists_commit var:te_tax_off_industrialists_rev = var:te_tax_bl_rev var:te_tax_off_industrialists_kind > 0 } }
+		owner = { add = var:te_tax_off_industrialists_commit }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_intelligentsia owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_intelligentsia_kind has_variable = te_tax_off_intelligentsia_rev has_variable = te_tax_off_intelligentsia_commit var:te_tax_off_intelligentsia_rev = var:te_tax_bl_rev var:te_tax_off_intelligentsia_kind > 0 } }
+		owner = { add = var:te_tax_off_intelligentsia_commit }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_landowners owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_landowners_kind has_variable = te_tax_off_landowners_rev has_variable = te_tax_off_landowners_commit var:te_tax_off_landowners_rev = var:te_tax_bl_rev var:te_tax_off_landowners_kind > 0 } }
+		owner = { add = var:te_tax_off_landowners_commit }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_petty_bourgeoisie owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_petty_bourgeoisie_kind has_variable = te_tax_off_petty_bourgeoisie_rev has_variable = te_tax_off_petty_bourgeoisie_commit var:te_tax_off_petty_bourgeoisie_rev = var:te_tax_bl_rev var:te_tax_off_petty_bourgeoisie_kind > 0 } }
+		owner = { add = var:te_tax_off_petty_bourgeoisie_commit }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_rural_folk owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_rural_folk_kind has_variable = te_tax_off_rural_folk_rev has_variable = te_tax_off_rural_folk_commit var:te_tax_off_rural_folk_rev = var:te_tax_bl_rev var:te_tax_off_rural_folk_kind > 0 } }
+		owner = { add = var:te_tax_off_rural_folk_commit }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_trade_unions owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_trade_unions_kind has_variable = te_tax_off_trade_unions_rev has_variable = te_tax_off_trade_unions_commit var:te_tax_off_trade_unions_rev = var:te_tax_bl_rev var:te_tax_off_trade_unions_kind > 0 } }
+		owner = { add = var:te_tax_off_trade_unions_commit }
+	}
+}
+te_tax_disp_ig_offer_maint = {
+	value = 0
+	if = {
+		limit = { is_interest_group_type = ig_armed_forces owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_armed_forces_kind has_variable = te_tax_off_armed_forces_rev has_variable = te_tax_off_armed_forces_maint var:te_tax_off_armed_forces_rev = var:te_tax_bl_rev var:te_tax_off_armed_forces_kind > 0 } }
+		owner = { add = var:te_tax_off_armed_forces_maint }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_devout owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_devout_kind has_variable = te_tax_off_devout_rev has_variable = te_tax_off_devout_maint var:te_tax_off_devout_rev = var:te_tax_bl_rev var:te_tax_off_devout_kind > 0 } }
+		owner = { add = var:te_tax_off_devout_maint }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_industrialists owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_industrialists_kind has_variable = te_tax_off_industrialists_rev has_variable = te_tax_off_industrialists_maint var:te_tax_off_industrialists_rev = var:te_tax_bl_rev var:te_tax_off_industrialists_kind > 0 } }
+		owner = { add = var:te_tax_off_industrialists_maint }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_intelligentsia owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_intelligentsia_kind has_variable = te_tax_off_intelligentsia_rev has_variable = te_tax_off_intelligentsia_maint var:te_tax_off_intelligentsia_rev = var:te_tax_bl_rev var:te_tax_off_intelligentsia_kind > 0 } }
+		owner = { add = var:te_tax_off_intelligentsia_maint }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_landowners owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_landowners_kind has_variable = te_tax_off_landowners_rev has_variable = te_tax_off_landowners_maint var:te_tax_off_landowners_rev = var:te_tax_bl_rev var:te_tax_off_landowners_kind > 0 } }
+		owner = { add = var:te_tax_off_landowners_maint }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_petty_bourgeoisie owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_petty_bourgeoisie_kind has_variable = te_tax_off_petty_bourgeoisie_rev has_variable = te_tax_off_petty_bourgeoisie_maint var:te_tax_off_petty_bourgeoisie_rev = var:te_tax_bl_rev var:te_tax_off_petty_bourgeoisie_kind > 0 } }
+		owner = { add = var:te_tax_off_petty_bourgeoisie_maint }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_rural_folk owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_rural_folk_kind has_variable = te_tax_off_rural_folk_rev has_variable = te_tax_off_rural_folk_maint var:te_tax_off_rural_folk_rev = var:te_tax_bl_rev var:te_tax_off_rural_folk_kind > 0 } }
+		owner = { add = var:te_tax_off_rural_folk_maint }
+	}
+	else_if = {
+		limit = { is_interest_group_type = ig_trade_unions owner = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev has_variable = te_tax_off_trade_unions_kind has_variable = te_tax_off_trade_unions_rev has_variable = te_tax_off_trade_unions_maint var:te_tax_off_trade_unions_rev = var:te_tax_bl_rev var:te_tax_off_trade_unions_kind > 0 } }
+		owner = { add = var:te_tax_off_trade_unions_maint }
+	}
+}
 
 # Policy obligations (plan Task 12): per slot <n>, on; state (1 pending, 7 bound, 2
 # delivering, 3 maintaining), kind, arg, target, beneficiary group, baseline, the kind-4
