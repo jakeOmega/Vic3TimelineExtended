@@ -1,0 +1,729 @@
+﻿### Legislated Tax Code — passage and passed bills (plan Task 8;
+### docs/systems/tax_code_schema.md, "Passage" and "Held packages").
+###
+###   te_tax_politics_section  open while a bill is under debate: the committed
+###                            share against the threshold, every passage
+###                            condition as an open row, one card per interest
+###                            group, and Pass / Revise from Draft / Withdraw
+###                            (and Move to Next Month once the bill's month has
+###                            come)
+###   te_tax_pending_section   open while a passed bill waits: each one's month
+###                            and state, what it changes, and for a held one
+###                            Reschedule and Release
+###
+### The support snapshot (te_tax_sup_*, te_tax_sr_*, te_tax_com_*) outlives the
+### bill it was taken for, so every view of it requires an open bill
+### (te_tax_bl_on = 1): no stale stance or score is ever drawn. The passage
+### rows test the same lines as te_tax_can_pass (te_tax_show_pass_*_sgui,
+### checked by test_tax_code_sguis.py), so a row and the Pass button agree.
+###
+### THE INTEREST GROUP CARDS are the items of a datamodel over the player's
+### groups (AccessPlayer.AccessAllInterestGroups, vanilla's politics panel
+### datamodel and nd_home_ig_table's), so an item's datacontext is the
+### InterestGroup: every number is InterestGroup.MakeScope.ScriptValue(
+### 'te_tax_disp_ig_*'), an interest-group value that finds the group's type
+### and reads its owner's snapshot (te_tax_generated_values.txt). A tooltip on
+### a datamodel item renders with that item's context alone (gotcha #24), so
+### the cards' tooltips are static text.
+
+types te_tax_politics_widget_types
+{
+	### A passage condition: what it is, where it stands, and whether it is met.
+	### 4 + 150 + 4 + 246 + 4 + 68 + 4 = 480.
+	type te_tax_condition_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		textbox = {
+			minimumsize = { 150 -1 }
+			maximumsize = { 150 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			default_format = "#tooltippable"
+			block "row_label" {}
+		}
+		textbox = {
+			minimumsize = { 246 -1 }
+			maximumsize = { 246 -1 }
+			autoresize = yes
+			align = left|nobaseline
+			using = fontsize_medium
+			elide = right
+			block "row_value" {}
+		}
+		textbox = {
+			minimumsize = { 68 -1 }
+			maximumsize = { 68 -1 }
+			autoresize = yes
+			align = right|nobaseline
+			using = fontsize_medium
+			block "row_mark" {}
+		}
+	}
+
+	### One of a group's reasons, indented under its name (nd_home_term_row's
+	### cells): 24 + 220 + 60 = 304.
+	type te_tax_ig_reason_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin_left = 24
+
+		textbox = {
+			size = { 220 22 }
+			align = left|nobaseline
+			using = fontsize_medium
+			parentanchor = vcenter
+			elide = right
+			default_format = "#tooltippable"
+			block "row_label" {}
+		}
+		textbox = {
+			size = { 60 22 }
+			align = right|nobaseline
+			using = fontsize_medium
+			parentanchor = vcenter
+			elide = right
+			block "row_value" {}
+		}
+	}
+
+	### One interest group's card: its name, clout, stance and score, then the
+	### four reasons behind the score. Drawn only for a group the bill has a
+	### stance for (code 0 without a bill, or for a group outside the eight
+	### the support model scores). 4 + 160 + 64 + 176 + 72 + 4 = 480.
+	type te_tax_ig_card = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		visible = "[NotEqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_stance'), '(CFixedPoint)0' )]"
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			margin = { 4 1 }
+
+			textbox = {
+				size = { 160 24 }
+				align = left|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+				text = "te_tax_ig_name"
+			}
+			textbox = {
+				size = { 64 24 }
+				align = right|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+				default_format = "#tooltippable"
+				text = "te_tax_ig_clout"
+				tooltip = "te_tax_ig_clout_tt"
+			}
+			textbox = {
+				size = { 176 24 }
+				align = right|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+				default_format = "#tooltippable"
+				tooltip = "te_tax_ig_stance_tt"
+				text = "[SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_stance'), '(CFixedPoint)1' ), 'te_tax_ig_stance_1', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_stance'), '(CFixedPoint)2' ), 'te_tax_ig_stance_2', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_stance'), '(CFixedPoint)3' ), 'te_tax_ig_stance_3', SelectLocalization( EqualTo_CFixedPoint( InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_stance'), '(CFixedPoint)4' ), 'te_tax_ig_stance_4', 'te_tax_ig_stance_5' ) ) ) )]"
+			}
+			textbox = {
+				size = { 72 24 }
+				align = right|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+				default_format = "#tooltippable"
+				text = "te_tax_ig_score"
+				tooltip = "te_tax_ig_score_tt"
+			}
+		}
+		te_tax_ig_reason_row = {
+			blockoverride "row_label" {
+				text = "te_tax_ig_mat"
+				tooltip = "te_tax_ig_mat_tt"
+			}
+			blockoverride "row_value" {
+				text = "te_tax_ig_mat_value"
+			}
+		}
+		te_tax_ig_reason_row = {
+			blockoverride "row_label" {
+				text = "te_tax_ig_ideo"
+				tooltip = "te_tax_ig_ideo_tt"
+			}
+			blockoverride "row_value" {
+				text = "te_tax_ig_ideo_value"
+			}
+		}
+		te_tax_ig_reason_row = {
+			blockoverride "row_label" {
+				text = "te_tax_ig_fisc"
+				tooltip = "te_tax_ig_fisc_tt"
+			}
+			blockoverride "row_value" {
+				text = "te_tax_ig_fisc_value"
+			}
+		}
+		te_tax_ig_reason_row = {
+			blockoverride "row_label" {
+				text = "te_tax_ig_gov"
+				tooltip = "te_tax_ig_gov_tt"
+			}
+			blockoverride "row_value" {
+				text = "te_tax_ig_gov_value"
+			}
+		}
+	}
+
+	### ======================================================================
+	### PASSAGE (open while a bill is under debate)
+	### ======================================================================
+	type te_tax_politics_section = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+		te_tax_section_header = {
+			blockoverride "left_text" {
+				text = "te_tax_pol_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_tax_politics_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_tax_politics_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_tax_politics_closed'))]"
+			}
+		}
+
+		te_tax_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_tax_politics_closed'))]"
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				minimumsize = { 480 -1 }
+
+				### The committed share against the threshold, five layers from
+				### the bottom (global_warming_widget.gui's temperature bar):
+				###   1. default_progressbar_horizontal at value 0: background
+				###      and frame.
+				###   2. bad_progressbar_horizontal's red at 40% opacity across
+				###      the whole bar: the clout of groups opposed or drawing a
+				###      red line is what layers 3 and 4 leave uncovered.
+				###   3. green_progressbar_horizontal's green at 50% opacity to
+				###      the committed share plus the persuadable groups' share.
+				###   4. default_progressbar_horizontal's own fill, background
+				###      and frame blanked, to the committed share: solid.
+				###   5. The share passage needs, a thin 3 px cream line with its
+				###      own hover. Passage needs MORE than it.
+				### Shares are of the clout of non-marginal groups (0..1).
+				### 120 + 8 + 200 + 8 + 136 = 472.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 8
+					margin = { 4 2 }
+					tooltip = "te_tax_pol_bar_tt"
+
+					widget = {
+						size = { 120 24 }
+						parentanchor = vcenter
+
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 120
+							elide = right
+							align = left|nobaseline
+							using = fontsize_medium
+							text = "te_tax_pol_bar_label"
+						}
+					}
+					widget = {
+						size = { 200 18 }
+						parentanchor = vcenter
+
+						# 1. Background and frame.
+						default_progressbar_horizontal = {
+							size = { 100% 100% }
+							blockoverride "values" {
+								value = 0
+								min = 0
+								max = 1
+							}
+						}
+						# 2. Opposed and red-line clout: pale red under everything.
+						widget = {
+							size = { 100% 100% }
+							alpha = 0.4
+
+							bad_progressbar_horizontal = {
+								size = { 100% 100% }
+								blockoverride "background" {}
+								blockoverride "frame" {}
+								blockoverride "values" {
+									value = 1
+									min = 0
+									max = 1
+								}
+							}
+						}
+						# 3. Persuadable clout: pale green up to committed + persuadable.
+						widget = {
+							size = { 100% 100% }
+							alpha = 0.5
+
+							green_progressbar_horizontal = {
+								size = { 100% 100% }
+								blockoverride "background" {}
+								blockoverride "frame" {}
+								blockoverride "values" {
+									value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_tax_view_open_share') )]"
+									min = 0
+									max = 1
+								}
+							}
+						}
+						# 4. Committed clout: solid.
+						default_progressbar_horizontal = {
+							size = { 100% 100% }
+							blockoverride "background" {}
+							blockoverride "frame" {}
+							blockoverride "values" {
+								value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_tax_view_committed_share') )]"
+								min = 0
+								max = 1
+							}
+						}
+						# 5. The threshold: a thin line with its own hover.
+						progressbar = {
+							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							size = { 100% 100% }
+							skip_initial_animation = yes
+							direction = horizontal
+							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_tax_view_passage_share') )]"
+							min = 0
+							max = 1
+							marker = {
+								icon = {
+									size = { 3 24 }
+									parentanchor = vcenter
+									widgetanchor = center
+									texture = "gfx/interface/backgrounds/white.dds"
+									color = { 0.96 0.90 0.72 0.95 }
+									tooltip = "te_tax_pol_threshold_tt"
+								}
+							}
+						}
+					}
+					widget = {
+						size = { 136 24 }
+						parentanchor = vcenter
+
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 136
+							elide = right
+							align = left|nobaseline
+							using = fontsize_medium
+							text = "te_tax_pol_bar_value"
+						}
+					}
+				}
+
+				### Every passage condition, open (spec §8: show all unmet
+				### conditions). Each mark tests the condition's own gate.
+				te_tax_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_tax_pol_conditions"
+					}
+				}
+				te_tax_condition_row = {
+					blockoverride "row_label" {
+						text = "te_tax_pol_support"
+						tooltip = "te_tax_pol_support_tt"
+					}
+					blockoverride "row_value" {
+						text = "te_tax_pol_support_value"
+					}
+					blockoverride "row_mark" {
+						text = "[SelectLocalization( GetScriptedGui('te_tax_show_pass_support_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_pol_met', 'te_tax_pol_unmet' )]"
+					}
+				}
+				te_tax_condition_row = {
+					blockoverride "row_label" {
+						text = "te_tax_pol_legitimacy"
+						tooltip = "te_tax_pol_legitimacy_tt"
+					}
+					blockoverride "row_value" {
+						text = "te_tax_pol_legitimacy_value"
+					}
+					blockoverride "row_mark" {
+						text = "[SelectLocalization( GetScriptedGui('te_tax_show_pass_legitimacy_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_pol_met', 'te_tax_pol_unmet' )]"
+					}
+				}
+				te_tax_condition_row = {
+					blockoverride "row_label" {
+						text = "te_tax_pol_debate"
+						tooltip = "te_tax_pol_debate_tt"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_debate_days_left'), '(CFixedPoint)0' ), 'te_tax_pol_debate_done', 'te_tax_pol_debate_value' )]"
+					}
+					blockoverride "row_mark" {
+						text = "[SelectLocalization( GetScriptedGui('te_tax_show_pass_debate_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_pol_met', 'te_tax_pol_unmet' )]"
+					}
+				}
+				te_tax_condition_row = {
+					blockoverride "row_label" {
+						text = "te_tax_pol_due"
+						tooltip = "te_tax_pol_due_tt"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( GetScriptedGui('te_tax_show_pass_due_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_pol_due_value', 'te_tax_pol_due_passed' )]"
+					}
+					blockoverride "row_mark" {
+						text = "[SelectLocalization( GetScriptedGui('te_tax_show_pass_due_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_pol_met', 'te_tax_pol_unmet' )]"
+					}
+				}
+				te_tax_condition_row = {
+					blockoverride "row_label" {
+						text = "te_tax_pol_slot"
+						tooltip = "te_tax_pol_slot_tt"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( GetScriptedGui('te_tax_show_pass_slot_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_pol_slot_free', 'te_tax_pol_slot_full' )]"
+					}
+					blockoverride "row_mark" {
+						text = "[SelectLocalization( GetScriptedGui('te_tax_show_pass_slot_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_pol_met', 'te_tax_pol_unmet' )]"
+					}
+				}
+				te_tax_condition_row = {
+					blockoverride "row_label" {
+						text = "te_tax_pol_current"
+						tooltip = "te_tax_pol_current_tt"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( GetScriptedGui('te_tax_show_pass_current_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_pol_current_ok', 'te_tax_pol_current_changed' )]"
+					}
+					blockoverride "row_mark" {
+						text = "[SelectLocalization( GetScriptedGui('te_tax_show_pass_current_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_pol_met', 'te_tax_pol_unmet' )]"
+					}
+				}
+
+				### One card per interest group.
+				te_tax_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_tax_pol_groups"
+					}
+				}
+				te_tax_note = {
+					text = "te_tax_pol_groups_note"
+				}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 8
+					margin_top = 4
+					datamodel = "[AccessPlayer.AccessAllInterestGroups]"
+
+					item = {
+						te_tax_ig_card = {}
+					}
+				}
+
+				### Pass | Revise from Draft | Withdraw. 156 + 6 + 156 + 6 + 156 = 480.
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 6
+					margin_top = 8
+
+					button = {
+						using = default_button
+						size = { 156 32 }
+						text = "te_tax_pol_pass"
+						enabled = "[GetScriptedGui('te_tax_cmd_pass_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_pass_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_pass_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_pass_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					}
+					button = {
+						using = default_button
+						size = { 156 32 }
+						text = "te_tax_pol_revise"
+						enabled = "[GetScriptedGui('te_tax_cmd_revise_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_revise_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_revise_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_revise_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					}
+					button = {
+						using = default_button
+						size = { 156 32 }
+						text = "te_tax_pol_withdraw"
+						enabled = "[GetScriptedGui('te_tax_cmd_withdraw_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_withdraw_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_withdraw_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_withdraw_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					}
+				}
+				# Once the bill's month has come it can only pass if moved.
+				button = {
+					visible = "[Not( GetScriptedGui('te_tax_show_pass_due_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					using = default_button
+					parentanchor = hcenter
+					size = { 480 32 }
+					text = "te_tax_pol_reschedule"
+					enabled = "[GetScriptedGui('te_tax_cmd_reschedule_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[GetScriptedGui('te_tax_cmd_reschedule_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_reschedule_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_reschedule_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				}
+			}
+		}
+	}
+
+	### ======================================================================
+	### PASSED BILLS (open while one waits to take effect)
+	### ======================================================================
+	### Per slot (never named to the player): the month and state, as the
+	### overview's row; one line per tax it changes, "20% from 1843.4, until
+	### 1845.4, then reverts to 15%" (the stored preview, te_tax_p<s>_<key>_succ);
+	### the goods it changes; and for a held one, Reschedule and Release
+	### (te_tax_cmd_package_reschedule_sgui / _release_sgui, op 1 slot a, 2
+	### slot b), whose disabled tooltips say why: a missed one may be moved only
+	### a few months, a conflicting one only released.
+	type te_tax_pending_section = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[Or( GetScriptedGui('te_tax_show_package_a_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_package_b_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+
+		te_tax_section_header = {
+			blockoverride "left_text" {
+				text = "te_tax_pk_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_tax_pending_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_tax_pending_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_tax_pending_closed'))]"
+			}
+		}
+
+		te_tax_panel = {
+			visible = "[Not(GetVariableSystem.Exists('te_tax_pending_closed'))]"
+
+			### Slot a.
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_tax_show_package_a_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+				minimumsize = { 480 -1 }
+
+				te_tax_value_row = {
+					blockoverride "row_label" {
+						text = "te_tax_ov_package"
+						tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_conflict_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_missed_tt', 'te_tax_ov_package_awaiting_tt' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_a_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_a_missed', 'te_tax_ov_package_a_awaiting' ) )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_wage_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_inst_wage"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_wage_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_wage', 'te_tax_pk_a_wage_sun' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_div_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_inst_div"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_div_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_div', 'te_tax_pk_a_div_sun' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_land_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_inst_land"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_land_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_land', 'te_tax_pk_a_land_sun' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_head_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_inst_head"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_head_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_head', 'te_tax_pk_a_head_sun' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_cons_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_inst_cons"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_cons_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_a_cons', 'te_tax_pk_a_cons_sun' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_goods_changed'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_en_goods"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_pk_a_goods"
+					}
+				}
+				# Held: Reschedule | Release. 237 + 6 + 237 = 480.
+				flowcontainer = {
+					visible = "[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pa_state'), '(CFixedPoint)3' ) )]"
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 6
+					margin_top = 4
+
+					button = {
+						using = default_button
+						size = { 237 32 }
+						text = "te_tax_pk_reschedule"
+						enabled = "[GetScriptedGui('te_tax_cmd_package_reschedule_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_package_reschedule_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_package_reschedule_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_package_reschedule_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+					}
+					button = {
+						using = default_button
+						size = { 237 32 }
+						text = "te_tax_pk_release"
+						enabled = "[GetScriptedGui('te_tax_cmd_package_release_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_package_release_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_package_release_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_package_release_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+					}
+				}
+			}
+
+			### Slot b.
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_tax_show_package_b_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+				minimumsize = { 480 -1 }
+				margin_top = 6
+
+				te_tax_value_row = {
+					blockoverride "row_label" {
+						text = "te_tax_ov_package"
+						tooltip = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_conflict_tt', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_missed_tt', 'te_tax_ov_package_awaiting_tt' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), 'te_tax_ov_package_b_conflict', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ), 'te_tax_ov_package_b_missed', 'te_tax_ov_package_b_awaiting' ) )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_wage_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_inst_wage"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_wage_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_wage', 'te_tax_pk_b_wage_sun' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_div_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_inst_div"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_div_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_div', 'te_tax_pk_b_div_sun' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_land_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_inst_land"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_land_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_land', 'te_tax_pk_b_land_sun' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_head_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_inst_head"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_head_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_head', 'te_tax_pk_b_head_sun' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_cons_on'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_inst_cons"
+					}
+					blockoverride "line_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_cons_exp'), '(CFixedPoint)-1' ), 'te_tax_pk_b_cons', 'te_tax_pk_b_cons_sun' )]"
+					}
+				}
+				te_tax_review_line = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_goods_changed'), '(CFixedPoint)0' )]"
+					blockoverride "line_label" {
+						text = "te_tax_en_goods"
+					}
+					blockoverride "line_value" {
+						text = "te_tax_pk_b_goods"
+					}
+				}
+				flowcontainer = {
+					visible = "[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_pb_state'), '(CFixedPoint)3' ) )]"
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 6
+					margin_top = 4
+
+					button = {
+						using = default_button
+						size = { 237 32 }
+						text = "te_tax_pk_reschedule"
+						enabled = "[GetScriptedGui('te_tax_cmd_package_reschedule_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_package_reschedule_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_package_reschedule_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_package_reschedule_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+					}
+					button = {
+						using = default_button
+						size = { 237 32 }
+						text = "te_tax_pk_release"
+						enabled = "[GetScriptedGui('te_tax_cmd_package_release_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_package_release_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_package_release_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_package_release_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+					}
+				}
+			}
+		}
+	}
+}

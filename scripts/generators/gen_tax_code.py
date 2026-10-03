@@ -165,6 +165,14 @@ HISTORY_KIND_KEYS = {
     KIND_RELEASED: "te_tax_hist_kind_released",
 }
 HISTORY_KIND_FALLBACK = "te_tax_hist_kind_other"
+# The workbench (plan Task 8): the per-instrument step handlers and per-good
+# toggles, and the per-good rows of the workbench and the review.
+SGUIS_PATH = "common/scripted_guis/te_tax_generated_sguis.txt"
+ROWS_PATH = "gui/journal_entry_widgets/te_tax_generated_rows.gui"
+# te_tax_step_<key>_sgui's op table: op -> (command, DIR). Ops 0-4 move the
+# draft's target (te_tax_cmd_draft_step), 10-11 its expiry (te_tax_cmd_draft_sunset).
+STEP_OPS = ((0, "draft_step", 0), (1, "draft_step", 1), (2, "draft_step", 2), (3, "draft_step", 3),
+            (4, "draft_step", 4), (10, "draft_sunset", 0), (11, "draft_sunset", 1))
 # The interest groups the support model scores, by type key (ig_<key>).
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
        "landowners", "petty_bourgeoisie", "rural_folk", "trade_unions")
@@ -534,7 +542,140 @@ def _panel_views():
         lines += _guarded_view(f"te_tax_view_p{slot}_state", f"te_tax_p{slot}_state", 0,
                                condition=_is_open(token))
         lines += _month_views(f"te_tax_view_p{slot}_due", f"te_tax_p{slot}_due", _is_open(token))
-    return lines + _last_change_views() + _history_views()
+    return lines + _last_change_views() + _history_views() + _workbench_views() + _ig_values()
+
+
+def _view(name, default, limit, body):
+    """A te_tax_view_*: `default`, or the `body` lines when `limit` holds."""
+    return [f"{name} = {{", f"\tvalue = {default}", "\tif = {", f"\t\tlimit = {{ {limit} }}"] + [
+        f"\t\t{line}" for line in body] + ["\t}", "}"]
+
+
+DRAFT_OPEN = "has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due"
+
+
+def _workbench_views():
+    """The workbench, review and pending panels' views (plan Task 8). A draft's
+    payload is read only while te_tax_dr_on is 1, a package's only while its slot
+    is on. The "law" values are the baseline in the draft's due month
+    (te_tax_base_dr_*), the value an untouched provision starts from and the one
+    the bill's class and support measure change against."""
+    lines = [
+        "",
+        "# The workbench and review (plan Task 8), per instrument: whether the draft changes it,",
+        "# the rate in force under existing law in the draft's due month, the draft's rate and the",
+        "# change, its expiry offset and month, the rate it would revert to, and whether a passed bill",
+        "# or an outside change moved its baseline since the draft changed it (a rebase is needed).",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        dr, step = f"te_tax_dr_{key}", f"multiply = te_tax_step_{key}"
+        touched = f"{DRAFT_OPEN} has_variable = {dr} var:{dr} >= 0"
+        lines += _view(f"te_tax_view_dr_{key}_on", 0, touched, ["value = 1"])
+        lines += _view(f"te_tax_view_dr_{key}_base_rate", 0, DRAFT_OPEN, [f"value = te_tax_base_dr_{key}", step])
+        lines += _view(f"te_tax_view_dr_{key}_rate", 0, DRAFT_OPEN, [f"value = te_tax_dr_eff_{key}", step])
+        lines += _view(f"te_tax_view_dr_{key}_delta_rate", 0, DRAFT_OPEN,
+                       [f"value = te_tax_dr_eff_{key}", f"subtract = te_tax_base_dr_{key}", step])
+        lines += _view(f"te_tax_view_dr_{key}_sun", 0, f"{touched} has_variable = {dr}_sun",
+                       [f"value = var:{dr}_sun"])
+        expiry = f"te_tax_view_dr_{key}_exp"
+        lines += _view(expiry, -1, f"{touched} has_variable = {dr}_sun var:{dr}_sun > 0",
+                       ["value = var:te_tax_dr_due", f"add = var:{dr}_sun"])
+        lines += _split_month(expiry, expiry, "has_variable = te_tax_dr_on var:te_tax_dr_on = 1")
+        lines += _view(f"te_tax_view_dr_{key}_succ_rate", 0, DRAFT_OPEN, [f"value = te_tax_succ_dr_{key}", step])
+        pver, mark = f"te_tax_pver_{key}", f"{dr}_pver"
+        lines += _view(f"te_tax_view_dr_{key}_rebase", 0,
+                       f"{DRAFT_OPEN} has_variable = {mark} has_variable = {pver} var:{mark} >= 0 "
+                       f"NOT = {{ var:{mark} = var:{pver} }}", ["value = 1"])
+    lines += ["", "# Per catalog good: taxed under existing law in the draft's due month, taxed in the draft,",
+              "# and whether the draft touches it; then the counts and the goods' rebase flag."]
+    goods = consumption_catalog()
+    for good in goods:
+        flag = f"te_tax_dr_g_{good}"
+        lines += _view(f"te_tax_view_dr_g_{good}_base", 0, DRAFT_OPEN, [f"value = te_tax_base_dr_g_{good}"])
+        lines += _view(f"te_tax_view_dr_g_{good}", 0, f"{DRAFT_OPEN} has_variable = {flag}",
+                       [f"value = te_tax_base_dr_g_{good}", f"if = {{ limit = {{ var:{flag} >= 0 }} value = var:{flag} }}"])
+        lines += _view(f"te_tax_view_dr_g_{good}_on", 0, f"{DRAFT_OPEN} has_variable = {flag} var:{flag} >= 0",
+                       ["value = 1"])
+    for name, suffix in (("te_tax_view_dr_goods_count", ""), ("te_tax_view_dr_goods_base_count", "_base"),
+                         ("te_tax_view_dr_goods_changed", "_on")):
+        lines += _view(name, 0, DRAFT_OPEN, [f"add = te_tax_view_dr_g_{good}{suffix}" for good in goods])
+    lines += _view("te_tax_view_dr_goods_rebase", 0,
+                   f"{DRAFT_OPEN} has_variable = te_tax_dr_goods_pver has_variable = te_tax_pver_goods "
+                   "var:te_tax_dr_goods_pver >= 0 NOT = { var:te_tax_dr_goods_pver = var:te_tax_pver_goods }",
+                   ["value = 1"])
+    lines += _view("te_tax_view_dr_provisions", 0, DRAFT_OPEN, ["value = te_tax_dr_provisions"])
+    lines += ["", "# Per package slot and instrument: whether the passed bill changes it, its rate, its expiry",
+              "# and the stored \"reverts to\" preview; and how many goods it changes."]
+    for slot in SLOTS:
+        p = f"te_tax_p{slot}"
+        on = _is_open(f"{p}_on")
+        for instrument in INSTRUMENTS:
+            key = instrument.key
+            touched = f"{on} has_variable = {p}_{key} var:{p}_{key} >= 0"
+            lines += _view(f"te_tax_view_p{slot}_{key}_on", 0, touched, ["value = 1"])
+            lines += _view(f"te_tax_view_p{slot}_{key}_rate", 0, touched,
+                           [f"value = var:{p}_{key}", f"multiply = te_tax_step_{key}"])
+            lines += _month_views(f"te_tax_view_p{slot}_{key}_exp", f"{p}_{key}_exp", on)
+            lines += _view(f"te_tax_view_p{slot}_{key}_succ_rate", 0,
+                           f"{on} has_variable = {p}_{key}_succ var:{p}_{key}_succ >= 0",
+                           [f"value = var:{p}_{key}_succ", f"multiply = te_tax_step_{key}"])
+        lines += _view(f"te_tax_view_p{slot}_goods_changed", 0, on,
+                       [f"if = {{ limit = {{ has_variable = {p}_g_{good} var:{p}_g_{good} >= 0 }} add = 1 }}"
+                        for good in goods])
+    return lines
+
+
+# The interest-group cards' stance codes (te_tax_disp_ig_stance).
+STANCE_COMMITTED, STANCE_PERSUADABLE, STANCE_OPPOSED, STANCE_RED_LINE, STANCE_MARGINAL = 1, 2, 3, 4, 5
+
+
+def _ig_values():
+    """Interest-group scope values for the passage panel's actor cards, read as
+    InterestGroup.MakeScope.ScriptValue('te_tax_disp_ig_*') under a datamodel over
+    the player's groups. Commitments and reasons are country variables per group
+    type (te_tax_com_<ig>, te_tax_sup_<ig>, te_tax_sr_<ig>_<reason>), so each value
+    finds the group's type through an is_interest_group_type chain and reads its
+    owner's snapshot, only while a bill is open: the snapshot outlives the bill."""
+    lines = [
+        "",
+        "# The passage panel's interest-group cards (interest-group scope; plan Task 8): the",
+        "# group's stance on the bill under debate (0 none, 1 committed, 2 persuadable, 3 opposed,",
+        "# 4 red line, 5 marginal and not counted), its score and four of its reasons, read from",
+        "# its owner's support snapshot through its type. 0 while no bill is open.",
+    ]
+    lines += ["te_tax_disp_ig_stance = {", "\tvalue = 0"]
+    for n, ig in enumerate(IGS):
+        com, sup = f"te_tax_com_{ig}", f"te_tax_sup_{ig}"
+        guard = (f"has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_rev "
+                 f"has_variable = {com} has_variable = {com}_rev has_variable = {sup}")
+        lines += [
+            f"\t{'if' if n == 0 else 'else_if'} = {{",
+            f"\t\tlimit = {{ is_interest_group_type = ig_{ig} owner = {{ {guard} }} }}",
+            f"\t\tif = {{ limit = {{ ig_counts_as_marginal = yes }} value = {STANCE_MARGINAL} }}",
+            f"\t\telse_if = {{ limit = {{ owner = {{ var:{com} = 1 var:{com}_rev = var:te_tax_bl_rev }} }} "
+            f"value = {STANCE_COMMITTED} }}",
+            f"\t\telse_if = {{ limit = {{ owner = {{ var:{com} = -1 }} }} value = {STANCE_RED_LINE} }}",
+            f"\t\telse_if = {{ limit = {{ owner = {{ var:{sup} < 0 }} }} value = {STANCE_OPPOSED} }}",
+            f"\t\telse = {{ value = {STANCE_PERSUADABLE} }}",
+            "\t}",
+        ]
+    lines.append("}")
+    for value, variable in (("score", "te_tax_sup_{ig}"), ("mat", "te_tax_sr_{ig}_mat"),
+                            ("ideo", "te_tax_sr_{ig}_ideo"), ("fisc", "te_tax_sr_{ig}_fisc"),
+                            ("gov", "te_tax_sr_{ig}_gov")):
+        lines += [f"te_tax_disp_ig_{value} = {{", "\tvalue = 0"]
+        for n, ig in enumerate(IGS):
+            var = variable.format(ig=ig)
+            lines += [
+                f"\t{'if' if n == 0 else 'else_if'} = {{",
+                f"\t\tlimit = {{ is_interest_group_type = ig_{ig} owner = {{ has_variable = te_tax_bl_on "
+                f"var:te_tax_bl_on = 1 has_variable = {var} }} }}",
+                f"\t\towner = {{ add = var:{var} }}",
+                "\t}",
+            ]
+        lines.append("}")
+    return lines
 
 
 def _is_open(token):
@@ -1236,8 +1377,12 @@ def _bill_versions():
     return pairs + [("te_tax_bl_xver_goods", "te_tax_xver_goods"), ("te_tax_bl_xver_relief", "te_tax_xver_relief")]
 
 
-def _baseline_slot(record, slot, field, sunsets, indent):
-    """Lines overriding the baseline with slot `slot`'s package if it awaits before the record's due month."""
+def _baseline_slot(record, slot, field, sunsets, indent, by_due=True):
+    """Lines overriding the baseline with slot `slot`'s package if it awaits before the record's due month.
+
+    With `sunsets`, a package's own sunset preview replaces its value: only one
+    falling by the due month (`by_due`, the baseline), or any (the successor
+    preview, te_tax_succ_<record>_<key>)."""
     p, due = f"te_tax_p{slot}_{field}", f"te_tax_{record}_due"
     t = indent
     if not sunsets:
@@ -1259,7 +1404,7 @@ def _baseline_slot(record, slot, field, sunsets, indent):
             f"{t}\t\t\thas_variable = {p}_exp",
             f"{t}\t\t\thas_variable = {p}_succ",
             f"{t}\t\t\tvar:{p}_exp >= 0",
-            f"{t}\t\t\tvar:{p}_exp <= var:{due}",
+        ] + ([f"{t}\t\t\tvar:{p}_exp <= var:{due}"] if by_due else []) + [
             f"{t}\t\t\tvar:{p}_succ >= 0",
             f"{t}\t\t}}",
             f"{t}\t\tvalue = var:{p}_succ",
@@ -1295,6 +1440,54 @@ def _baseline_value(name, record, field, enacted, sunsets):
     return lines + ["\t}", "}"]
 
 
+def _successor_value(name, record, key):
+    """The index a sunset in the record would revert to: the scheduler's rule 3
+    (te_tax_gen_apply_<slot>) applied at the record's due month, as
+    te_tax_gen_store_<slot> previews it for a passed bill. The enacted provision's
+    pending successor if it has any sunset (one falling before the due month will
+    have run, a later one is still pending; either way it names the underlying
+    rate), else its value; then each awaiting package due earlier, in commencement
+    order, the same way (a package due on or after the record's month is
+    superseded at approval). A display preview: commencement decides."""
+    enacted = f"te_tax_en_{key}"
+    lines = [
+        f"{name} = {{", "\tvalue = 0", f"\tif = {{ limit = {{ has_variable = {enacted} }} value = var:{enacted} }}",
+        "\t# Any pending enacted sunset: its successor is the underlying rate.",
+        "\tif = {",
+        "\t\tlimit = {",
+        f"\t\t\thas_variable = {enacted}_exp",
+        f"\t\t\thas_variable = {enacted}_succ",
+        f"\t\t\tvar:{enacted}_exp >= 0",
+        f"\t\t\tvar:{enacted}_succ >= 0",
+        "\t\t}",
+        f"\t\tvalue = var:{enacted}_succ",
+        "\t}",
+        "\t# Awaiting packages due earlier, in the order they commence.", "\tif = {",
+        "\t\tlimit = { te_tax_slot_b_first = yes }",
+    ]
+    for first, second in (("b", "a"), ("a", "b")):
+        lines += _baseline_slot(record, first, key, True, "\t\t", by_due=False)
+        lines += _baseline_slot(record, second, key, True, "\t\t", by_due=False)
+        lines += ["\t}", "\telse = {"] if first == "b" else []
+    return lines + ["\t}", "}"]
+
+
+def _dstep(record, key):
+    """te_tax_<record>_dstep_<key>: the record's change in index steps from the law
+    in force in its due month (0 if it leaves the provision alone)."""
+    return [f"te_tax_{record}_dstep_{key} = {{", "\tvalue = 0", "\tif = {",
+            f"\t\tlimit = {{ has_variable = te_tax_{record}_{key} var:te_tax_{record}_{key} >= 0 }}",
+            f"\t\tvalue = var:te_tax_{record}_{key}", f"\t\tsubtract = te_tax_base_{record}_{key}", "\t}", "}"]
+
+
+def _provisions(record, keys):
+    """te_tax_<record>_provisions: how many instruments the record changes."""
+    lines = [f"te_tax_{record}_provisions = {{", "\tvalue = 0"]
+    lines += [f"\tif = {{ limit = {{ has_variable = te_tax_{record}_{key} var:te_tax_{record}_{key} >= 0 }} add = 1 }}"
+              for key in keys]
+    return lines + ["}"]
+
+
 def _clamped(name, terms, weight):
     return ([f"{name} = {{", "\tvalue = 0"] + terms
             + [f"\tmultiply = {weight}", f"\tmin = -{REASON_CAP}", f"\tmax = {REASON_CAP}", "}"])
@@ -1318,7 +1511,10 @@ def _clout_sum(name, committed):
     for ig in IGS:
         lines += ["\tif = {", "\t\tlimit = {", f"\t\t\texists = ig:ig_{ig}",
                   f"\t\t\tig:ig_{ig} = {{ ig_counts_as_marginal = no }}"]
-        if committed:
+        if committed == "open":
+            lines += [f"\t\t\thas_variable = te_tax_com_{ig}", f"\t\t\tvar:te_tax_com_{ig} = 0",
+                      f"\t\t\thas_variable = te_tax_sup_{ig}", f"\t\t\tvar:te_tax_sup_{ig} >= 0"]
+        elif committed:
             lines += [f"\t\t\thas_variable = te_tax_com_{ig}", f"\t\t\tvar:te_tax_com_{ig} = 1",
                       f"\t\t\thas_variable = te_tax_com_{ig}_rev", "\t\t\thas_variable = te_tax_bl_rev",
                       f"\t\t\tvar:te_tax_com_{ig}_rev = var:te_tax_bl_rev"]
@@ -1361,9 +1557,7 @@ def support_values():
         lines += _baseline_value(f"te_tax_base_dr_g_{good}", "dr", f"g_{good}", f"te_tax_en_g_{good}", False)
     lines += ["", "# The bill's change per instrument: in index steps (0 if untouched), then in vanilla tax levels."]
     for key in keys:
-        lines += [f"te_tax_bl_dstep_{key} = {{", "\tvalue = 0", "\tif = {",
-                  f"\t\tlimit = {{ has_variable = te_tax_bl_{key} var:te_tax_bl_{key} >= 0 }}",
-                  f"\t\tvalue = var:te_tax_bl_{key}", f"\t\tsubtract = te_tax_base_bl_{key}", "\t}", "}"]
+        lines += _dstep("bl", key)
         lines += [f"te_tax_dl_{key} = {{", f"\tvalue = te_tax_bl_dstep_{key}", f"\tmultiply = te_tax_step_{key}",
                   f"\tdivide = te_tax_level_step_{key}", "}"]
     lines += ["", "# Revenue direction: the sum of the changes. Progressivity: income channels minus the rest."]
@@ -1371,11 +1565,8 @@ def support_values():
     lines += [f"\tadd = te_tax_dl_{key}" for key in keys[1:]] + ["}"]
     lines += ["te_tax_dl_prog = {", f"\tvalue = te_tax_dl_{keys[0]}"]
     lines += [f"\t{'add' if key in PROGRESSIVE_KEYS else 'subtract'} = te_tax_dl_{key}" for key in keys[1:]]
-    lines += ["}", "", "# How many provisions the bill changes.", "te_tax_bl_provisions = {", "\tvalue = 0"]
-    lines += [f"\tif = {{ limit = {{ has_variable = te_tax_bl_{key} var:te_tax_bl_{key} >= 0 }} add = 1 }}"
-              for key in keys]
+    lines += ["}", "", "# How many provisions the bill changes."] + _provisions("bl", keys)
     lines += [
-        "}",
         "",
         f"# Support reasons per interest group, each clamped to -{REASON_CAP}..{REASON_CAP}. Material:",
         f"# {MATERIAL_WEIGHT} x the exposure-weighted change in tax levels. Ideology: {IDEOLOGY_WEIGHT} x the",
@@ -1400,6 +1591,22 @@ def support_values():
         "# contributes nothing.",
     ]
     lines += _clout_sum("te_tax_eligible_clout", False) + _clout_sum("te_tax_committed_clout", True)
+    lines += ["", "# Clout of the non-marginal groups that are persuadable (not committed, no red line, a",
+              "# score of 0 or more): the passage bar's pale segment (te_tax_view_open_share)."]
+    lines += _clout_sum("te_tax_open_clout", "open")
+    lines += [
+        "",
+        "# The panels' draft class and \"reverts to\" preview (plan Task 8). te_tax_dr_dstep_<key>",
+        "# and te_tax_dr_provisions are the bill's values for the draft, so the workbench can show",
+        "# the class the bill would have (te_tax_draft_is_minor, te_tax_triggers.txt).",
+    ]
+    for key in keys:
+        lines += _dstep("dr", key)
+    lines += _provisions("dr", keys)
+    lines += ["", "# te_tax_succ_dr_<key>: the index a sunset in the draft would revert to (scheduler rule 3",
+              "# at the draft's due month; the review's \"then reverts to\")."]
+    for key in keys:
+        lines += _successor_value(f"te_tax_succ_dr_{key}", "dr", key)
     return _txt("\n".join(lines) + "\n")
 
 
@@ -1454,11 +1661,13 @@ def _bill_triggers():
                         "var:te_tax_bl_xver_goods = var:te_tax_xver_goods"])
     lines += _or_block(["AND = { var:te_tax_bl_agrel < 0 var:te_tax_bl_regrel < 0 }",
                         "var:te_tax_bl_xver_relief = var:te_tax_xver_relief"])
-    lines += ["}", "", "# Every provision the bill changes moves at most two steps from existing law (minor bill).",
-              "te_tax_gen_bill_small_steps = {"]
-    for key in keys:
-        lines += _or_block([f"var:te_tax_bl_{key} < 0",
-                            f"AND = {{ te_tax_bl_dstep_{key} <= 2 te_tax_bl_dstep_{key} >= -2 }}"])
+    for record, label in (("bl", "bill"), ("dr", "draft")):
+        lines += ["}", "", f"# Every provision the {label} changes moves at most two steps from existing law"
+                           f" ({'minor bill' if record == 'bl' else 'its class on the panels'}).",
+                  f"te_tax_gen_{label}_small_steps = {{"]
+        for key in keys:
+            lines += _or_block([f"var:te_tax_{record}_{key} < 0",
+                                f"AND = {{ te_tax_{record}_dstep_{key} <= 2 te_tax_{record}_dstep_{key} >= -2 }}"])
     lines.append("}")
     for slot in SLOTS:
         p = f"te_tax_p{slot}"
@@ -1835,6 +2044,121 @@ def scripted_triggers():
                   for idx, name in enumerate(names, start=1)]
         lines += ["\t}", "}"]
     lines += _scheduler_triggers() + _bill_triggers()
+    return _txt("\n".join(lines) + "\n")
+
+
+@output(SGUIS_PATH)
+def generated_sguis():
+    lines = [
+        HEADER,
+        "# The legislated tax code's workbench handlers (plan Task 8; docs/systems/tax_code_schema.md,",
+        "# \"Panels\"). Hand-written ones (commands, the commencement stepper, display gates) are in",
+        "# te_tax_sguis.txt. Each handler's is_valid is a Task 6 trigger te_tax_can_<command> and its",
+        "# effect the matching te_tax_cmd_<command> with the same parameters, so a button's tooltip and",
+        "# its click cannot disagree. Country scope, rooted on the player; never the AI's.",
+        "#",
+        "# te_tax_step_<key>_sgui, one per instrument (INSTRUMENTS), op-coded by one saved scope:",
+    ]
+    lines += [f"#   {op:>2}  te_tax_cmd_{command} DIR = {direction}" for op, command, direction in STEP_OPS]
+    lines += [
+        "# Every branch tests `exists = scope:op`; an unknown or missing op fails closed",
+        "# (trigger_else = { always = no }) and runs nothing.",
+        "# te_tax_good_<good>_sgui, one per catalog good: te_tax_cmd_draft_good.",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        lines += ["", f"te_tax_step_{key}_sgui = {{", "\tscope = country", "\tsaved_scopes = { op }",
+                  "\tis_shown = { te_tax_code_in_force = yes }", "\tai_is_valid = { always = no }", "\tis_valid = {"]
+        for n, (op, command, direction) in enumerate(STEP_OPS):
+            lines += [f"\t\t{'trigger_if' if n == 0 else 'trigger_else_if'} = {{",
+                      f"\t\t\tlimit = {{ exists = scope:op scope:op = {op} }}",
+                      f"\t\t\tte_tax_can_{command} = {{ KEY = {key} DIR = {direction} }}", "\t\t}"]
+        lines += ["\t\ttrigger_else = { always = no }", "\t}", "\teffect = {"]
+        for n, (op, command, direction) in enumerate(STEP_OPS):
+            lines += [f"\t\t{'if' if n == 0 else 'else_if'} = {{",
+                      f"\t\t\tlimit = {{ exists = scope:op scope:op = {op} }}",
+                      f"\t\t\tte_tax_cmd_{command} = {{ KEY = {key} DIR = {direction} }}", "\t\t}"]
+        lines += ["\t}", "}"]
+    for good in consumption_catalog():
+        lines += ["", f"te_tax_good_{good}_sgui = {{", "\tscope = country", "\tis_shown = { te_tax_code_in_force = yes }",
+                  "\tai_is_valid = { always = no }", f"\tis_valid = {{ te_tax_can_draft_good = {{ GOOD = {good} }} }}",
+                  f"\teffect = {{ te_tax_cmd_draft_good = {{ GOOD = {good} }} }}", "}"]
+    return _txt("\n".join(lines) + "\n")
+
+
+def _gui_view(name, op, value):
+    return (f"{op}( GetPlayer.MakeScope.ScriptValue('{name}'), '(CFixedPoint){value}' )")
+
+
+@output(ROWS_PATH)
+def generated_rows():
+    lines = [
+        HEADER,
+        "### The legislated tax code's per-good rows (plan Task 8): the workbench's goods catalog and",
+        "### the review's goods lines, one per consumption-catalog good, in catalog order. The row",
+        "### types, te_tax_good_row and te_tax_review_good_line, are in te_tax_workbench_widget.gui",
+        "### and te_tax_review_widget.gui; the goods' names are their own loc keys. Every value is a",
+        "### guarded view of the player's draft (te_tax_view_dr_g_<good>*), shown as a 0/1 code.",
+        "",
+        "types te_tax_generated_rows_types",
+        "{",
+        "\t### The goods catalog: the good, taxed or not under existing law in the draft's month,",
+        "\t### taxed or not in the draft, and its toggle (te_tax_good_<good>_sgui).",
+        "\ttype te_tax_wb_goods_rows = flowcontainer {",
+        "\t\tdirection = vertical",
+        "\t\tignoreinvisible = yes",
+        "\t\tspacing = 1",
+    ]
+    for good in consumption_catalog():
+        law = _gui_view(f"te_tax_view_dr_g_{good}_base", "EqualTo_CFixedPoint", 1)
+        draft = _gui_view(f"te_tax_view_dr_g_{good}", "EqualTo_CFixedPoint", 1)
+        touched = _gui_view(f"te_tax_view_dr_g_{good}_on", "NotEqualTo_CFixedPoint", 0)
+        lines += [
+            "",
+            "\t\tte_tax_good_row = {",
+            f"\t\t\tdatacontext = \"[GetScriptedGui('te_tax_good_{good}_sgui')]\"",
+            "\t\t\tblockoverride \"good_name\" {",
+            f"\t\t\t\ttext = \"{good}\"",
+            "\t\t\t}",
+            "\t\t\tblockoverride \"good_law\" {",
+            f"\t\t\t\ttext = \"[SelectLocalization( {law}, 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' )]\"",
+            "\t\t\t}",
+            "\t\t\tblockoverride \"good_draft\" {",
+            f"\t\t\t\ttext = \"[SelectLocalization( {touched}, SelectLocalization( {draft}, "
+            "'te_tax_wb_good_taxed_changed', 'te_tax_wb_good_untaxed_changed' ), "
+            f"SelectLocalization( {draft}, 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' ) )]\"",
+            "\t\t\t}",
+            "\t\t\tblockoverride \"good_button_text\" {",
+            f"\t\t\t\ttext = \"[SelectLocalization( {touched}, 'te_tax_wb_good_undo', "
+            f"SelectLocalization( {law}, 'te_tax_wb_good_untax', 'te_tax_wb_good_tax' ) )]\"",
+            "\t\t\t}",
+            "\t\t}",
+        ]
+    lines += [
+        "\t}",
+        "",
+        "\t### The review's goods lines: each good the draft changes, and whether it is taxed from the",
+        "\t### draft's commencement.",
+        "\ttype te_tax_rv_goods_rows = flowcontainer {",
+        "\t\tdirection = vertical",
+        "\t\tignoreinvisible = yes",
+    ]
+    for good in consumption_catalog():
+        draft = _gui_view(f"te_tax_view_dr_g_{good}", "EqualTo_CFixedPoint", 1)
+        touched = _gui_view(f"te_tax_view_dr_g_{good}_on", "NotEqualTo_CFixedPoint", 0)
+        lines += [
+            "",
+            "\t\tte_tax_review_good_line = {",
+            f"\t\t\tvisible = \"[{touched}]\"",
+            "\t\t\tblockoverride \"line_label\" {",
+            f"\t\t\t\ttext = \"{good}\"",
+            "\t\t\t}",
+            "\t\t\tblockoverride \"line_value\" {",
+            f"\t\t\t\ttext = \"[SelectLocalization( {draft}, 'te_tax_rv_good_taxed', 'te_tax_rv_good_untaxed' )]\"",
+            "\t\t\t}",
+            "\t\t}",
+        ]
+    lines += ["\t}", "}"]
     return _txt("\n".join(lines) + "\n")
 
 

@@ -3,9 +3,10 @@
 ### named roots at the foot of this file, and the Budget panel's Tax Code tab
 ### (gui/budget_panel.gui, tab te_tax_code) instances the overview and the two
 ### composers. The sections are types in te_tax_overview_widget.gui (the
-### overview, the enacted code, the history) and here (How Tax Legislation
-### Works), in the shape of banking_layout_widget.gui. Task 8 adds the
-### workbench, review and passage sections to te_tax_status_sections.
+### overview, the enacted code, the history), te_tax_workbench_widget.gui
+### (the workbench and the draft summary), te_tax_review_widget.gui (the
+### review), te_tax_politics_widget.gui (passage and passed bills) and here
+### (How Tax Legislation Works), in the shape of banking_layout_widget.gui.
 ###
 ### The journal entry, top to bottom (gui/journal_entry.gui draws container_1,
 ### the status desc, container_2, the button grid, container_3):
@@ -22,7 +23,12 @@
 
 types te_tax_layout_widget_types
 {
-	### What a returning player checks, open by default: the code in force.
+	### The live sections, open by default: the code in force; the draft (or
+	### Draft a Reform) and its summary; the review of the draft (collapsed
+	### until opened); the bill under debate; the passed bills waiting to take
+	### effect. Each hides itself when its record is closed. The summary sits
+	### in the "draft_summary" block so the Budget tab, which draws it in its
+	### fixed_bottom, can leave this copy out.
 	type te_tax_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -31,6 +37,13 @@ types te_tax_layout_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_tax_enacted_table = {}
+		te_tax_workbench_section = {}
+		block "draft_summary" {
+			te_tax_draft_summary = {}
+		}
+		te_tax_review_section = {}
+		te_tax_politics_section = {}
+		te_tax_pending_section = {}
 	}
 
 	### "How Tax Legislation Works": every explanation, collapsed by default,

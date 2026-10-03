@@ -2144,3 +2144,592 @@ te_tax_committed_clout = {
 		add = ig:ig_trade_unions.ig_clout
 	}
 }
+
+# Clout of the non-marginal groups that are persuadable (not committed, no red line, a
+# score of 0 or more): the passage bar's pale segment (te_tax_view_open_share).
+te_tax_open_clout = {
+	value = 0
+	if = {
+		limit = {
+			exists = ig:ig_armed_forces
+			ig:ig_armed_forces = { ig_counts_as_marginal = no }
+			has_variable = te_tax_com_armed_forces
+			var:te_tax_com_armed_forces = 0
+			has_variable = te_tax_sup_armed_forces
+			var:te_tax_sup_armed_forces >= 0
+		}
+		add = ig:ig_armed_forces.ig_clout
+	}
+	if = {
+		limit = {
+			exists = ig:ig_devout
+			ig:ig_devout = { ig_counts_as_marginal = no }
+			has_variable = te_tax_com_devout
+			var:te_tax_com_devout = 0
+			has_variable = te_tax_sup_devout
+			var:te_tax_sup_devout >= 0
+		}
+		add = ig:ig_devout.ig_clout
+	}
+	if = {
+		limit = {
+			exists = ig:ig_industrialists
+			ig:ig_industrialists = { ig_counts_as_marginal = no }
+			has_variable = te_tax_com_industrialists
+			var:te_tax_com_industrialists = 0
+			has_variable = te_tax_sup_industrialists
+			var:te_tax_sup_industrialists >= 0
+		}
+		add = ig:ig_industrialists.ig_clout
+	}
+	if = {
+		limit = {
+			exists = ig:ig_intelligentsia
+			ig:ig_intelligentsia = { ig_counts_as_marginal = no }
+			has_variable = te_tax_com_intelligentsia
+			var:te_tax_com_intelligentsia = 0
+			has_variable = te_tax_sup_intelligentsia
+			var:te_tax_sup_intelligentsia >= 0
+		}
+		add = ig:ig_intelligentsia.ig_clout
+	}
+	if = {
+		limit = {
+			exists = ig:ig_landowners
+			ig:ig_landowners = { ig_counts_as_marginal = no }
+			has_variable = te_tax_com_landowners
+			var:te_tax_com_landowners = 0
+			has_variable = te_tax_sup_landowners
+			var:te_tax_sup_landowners >= 0
+		}
+		add = ig:ig_landowners.ig_clout
+	}
+	if = {
+		limit = {
+			exists = ig:ig_petty_bourgeoisie
+			ig:ig_petty_bourgeoisie = { ig_counts_as_marginal = no }
+			has_variable = te_tax_com_petty_bourgeoisie
+			var:te_tax_com_petty_bourgeoisie = 0
+			has_variable = te_tax_sup_petty_bourgeoisie
+			var:te_tax_sup_petty_bourgeoisie >= 0
+		}
+		add = ig:ig_petty_bourgeoisie.ig_clout
+	}
+	if = {
+		limit = {
+			exists = ig:ig_rural_folk
+			ig:ig_rural_folk = { ig_counts_as_marginal = no }
+			has_variable = te_tax_com_rural_folk
+			var:te_tax_com_rural_folk = 0
+			has_variable = te_tax_sup_rural_folk
+			var:te_tax_sup_rural_folk >= 0
+		}
+		add = ig:ig_rural_folk.ig_clout
+	}
+	if = {
+		limit = {
+			exists = ig:ig_trade_unions
+			ig:ig_trade_unions = { ig_counts_as_marginal = no }
+			has_variable = te_tax_com_trade_unions
+			var:te_tax_com_trade_unions = 0
+			has_variable = te_tax_sup_trade_unions
+			var:te_tax_sup_trade_unions >= 0
+		}
+		add = ig:ig_trade_unions.ig_clout
+	}
+}
+
+# The panels' draft class and "reverts to" preview (plan Task 8). te_tax_dr_dstep_<key>
+# and te_tax_dr_provisions are the bill's values for the draft, so the workbench can show
+# the class the bill would have (te_tax_draft_is_minor, te_tax_triggers.txt).
+te_tax_dr_dstep_wage = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_wage var:te_tax_dr_wage >= 0 }
+		value = var:te_tax_dr_wage
+		subtract = te_tax_base_dr_wage
+	}
+}
+te_tax_dr_dstep_div = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_div var:te_tax_dr_div >= 0 }
+		value = var:te_tax_dr_div
+		subtract = te_tax_base_dr_div
+	}
+}
+te_tax_dr_dstep_land = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_land var:te_tax_dr_land >= 0 }
+		value = var:te_tax_dr_land
+		subtract = te_tax_base_dr_land
+	}
+}
+te_tax_dr_dstep_head = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_head var:te_tax_dr_head >= 0 }
+		value = var:te_tax_dr_head
+		subtract = te_tax_base_dr_head
+	}
+}
+te_tax_dr_dstep_cons = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_cons var:te_tax_dr_cons >= 0 }
+		value = var:te_tax_dr_cons
+		subtract = te_tax_base_dr_cons
+	}
+}
+te_tax_dr_provisions = {
+	value = 0
+	if = { limit = { has_variable = te_tax_dr_wage var:te_tax_dr_wage >= 0 } add = 1 }
+	if = { limit = { has_variable = te_tax_dr_div var:te_tax_dr_div >= 0 } add = 1 }
+	if = { limit = { has_variable = te_tax_dr_land var:te_tax_dr_land >= 0 } add = 1 }
+	if = { limit = { has_variable = te_tax_dr_head var:te_tax_dr_head >= 0 } add = 1 }
+	if = { limit = { has_variable = te_tax_dr_cons var:te_tax_dr_cons >= 0 } add = 1 }
+}
+
+# te_tax_succ_dr_<key>: the index a sunset in the draft would revert to (scheduler rule 3
+# at the draft's due month; the review's "then reverts to").
+te_tax_succ_dr_wage = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_wage } value = var:te_tax_en_wage }
+	# Any pending enacted sunset: its successor is the underlying rate.
+	if = {
+		limit = {
+			has_variable = te_tax_en_wage_exp
+			has_variable = te_tax_en_wage_succ
+			var:te_tax_en_wage_exp >= 0
+			var:te_tax_en_wage_succ >= 0
+		}
+		value = var:te_tax_en_wage_succ
+	}
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due }
+				has_variable = te_tax_pb_wage
+				var:te_tax_pb_wage >= 0
+			}
+			value = var:te_tax_pb_wage
+			if = {
+				limit = {
+					has_variable = te_tax_pb_wage_exp
+					has_variable = te_tax_pb_wage_succ
+					var:te_tax_pb_wage_exp >= 0
+					var:te_tax_pb_wage_succ >= 0
+				}
+				value = var:te_tax_pb_wage_succ
+			}
+		}
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due }
+				has_variable = te_tax_pa_wage
+				var:te_tax_pa_wage >= 0
+			}
+			value = var:te_tax_pa_wage
+			if = {
+				limit = {
+					has_variable = te_tax_pa_wage_exp
+					has_variable = te_tax_pa_wage_succ
+					var:te_tax_pa_wage_exp >= 0
+					var:te_tax_pa_wage_succ >= 0
+				}
+				value = var:te_tax_pa_wage_succ
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due }
+				has_variable = te_tax_pa_wage
+				var:te_tax_pa_wage >= 0
+			}
+			value = var:te_tax_pa_wage
+			if = {
+				limit = {
+					has_variable = te_tax_pa_wage_exp
+					has_variable = te_tax_pa_wage_succ
+					var:te_tax_pa_wage_exp >= 0
+					var:te_tax_pa_wage_succ >= 0
+				}
+				value = var:te_tax_pa_wage_succ
+			}
+		}
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due }
+				has_variable = te_tax_pb_wage
+				var:te_tax_pb_wage >= 0
+			}
+			value = var:te_tax_pb_wage
+			if = {
+				limit = {
+					has_variable = te_tax_pb_wage_exp
+					has_variable = te_tax_pb_wage_succ
+					var:te_tax_pb_wage_exp >= 0
+					var:te_tax_pb_wage_succ >= 0
+				}
+				value = var:te_tax_pb_wage_succ
+			}
+		}
+	}
+}
+te_tax_succ_dr_div = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_div } value = var:te_tax_en_div }
+	# Any pending enacted sunset: its successor is the underlying rate.
+	if = {
+		limit = {
+			has_variable = te_tax_en_div_exp
+			has_variable = te_tax_en_div_succ
+			var:te_tax_en_div_exp >= 0
+			var:te_tax_en_div_succ >= 0
+		}
+		value = var:te_tax_en_div_succ
+	}
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due }
+				has_variable = te_tax_pb_div
+				var:te_tax_pb_div >= 0
+			}
+			value = var:te_tax_pb_div
+			if = {
+				limit = {
+					has_variable = te_tax_pb_div_exp
+					has_variable = te_tax_pb_div_succ
+					var:te_tax_pb_div_exp >= 0
+					var:te_tax_pb_div_succ >= 0
+				}
+				value = var:te_tax_pb_div_succ
+			}
+		}
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due }
+				has_variable = te_tax_pa_div
+				var:te_tax_pa_div >= 0
+			}
+			value = var:te_tax_pa_div
+			if = {
+				limit = {
+					has_variable = te_tax_pa_div_exp
+					has_variable = te_tax_pa_div_succ
+					var:te_tax_pa_div_exp >= 0
+					var:te_tax_pa_div_succ >= 0
+				}
+				value = var:te_tax_pa_div_succ
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due }
+				has_variable = te_tax_pa_div
+				var:te_tax_pa_div >= 0
+			}
+			value = var:te_tax_pa_div
+			if = {
+				limit = {
+					has_variable = te_tax_pa_div_exp
+					has_variable = te_tax_pa_div_succ
+					var:te_tax_pa_div_exp >= 0
+					var:te_tax_pa_div_succ >= 0
+				}
+				value = var:te_tax_pa_div_succ
+			}
+		}
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due }
+				has_variable = te_tax_pb_div
+				var:te_tax_pb_div >= 0
+			}
+			value = var:te_tax_pb_div
+			if = {
+				limit = {
+					has_variable = te_tax_pb_div_exp
+					has_variable = te_tax_pb_div_succ
+					var:te_tax_pb_div_exp >= 0
+					var:te_tax_pb_div_succ >= 0
+				}
+				value = var:te_tax_pb_div_succ
+			}
+		}
+	}
+}
+te_tax_succ_dr_land = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_land } value = var:te_tax_en_land }
+	# Any pending enacted sunset: its successor is the underlying rate.
+	if = {
+		limit = {
+			has_variable = te_tax_en_land_exp
+			has_variable = te_tax_en_land_succ
+			var:te_tax_en_land_exp >= 0
+			var:te_tax_en_land_succ >= 0
+		}
+		value = var:te_tax_en_land_succ
+	}
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due }
+				has_variable = te_tax_pb_land
+				var:te_tax_pb_land >= 0
+			}
+			value = var:te_tax_pb_land
+			if = {
+				limit = {
+					has_variable = te_tax_pb_land_exp
+					has_variable = te_tax_pb_land_succ
+					var:te_tax_pb_land_exp >= 0
+					var:te_tax_pb_land_succ >= 0
+				}
+				value = var:te_tax_pb_land_succ
+			}
+		}
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due }
+				has_variable = te_tax_pa_land
+				var:te_tax_pa_land >= 0
+			}
+			value = var:te_tax_pa_land
+			if = {
+				limit = {
+					has_variable = te_tax_pa_land_exp
+					has_variable = te_tax_pa_land_succ
+					var:te_tax_pa_land_exp >= 0
+					var:te_tax_pa_land_succ >= 0
+				}
+				value = var:te_tax_pa_land_succ
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due }
+				has_variable = te_tax_pa_land
+				var:te_tax_pa_land >= 0
+			}
+			value = var:te_tax_pa_land
+			if = {
+				limit = {
+					has_variable = te_tax_pa_land_exp
+					has_variable = te_tax_pa_land_succ
+					var:te_tax_pa_land_exp >= 0
+					var:te_tax_pa_land_succ >= 0
+				}
+				value = var:te_tax_pa_land_succ
+			}
+		}
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due }
+				has_variable = te_tax_pb_land
+				var:te_tax_pb_land >= 0
+			}
+			value = var:te_tax_pb_land
+			if = {
+				limit = {
+					has_variable = te_tax_pb_land_exp
+					has_variable = te_tax_pb_land_succ
+					var:te_tax_pb_land_exp >= 0
+					var:te_tax_pb_land_succ >= 0
+				}
+				value = var:te_tax_pb_land_succ
+			}
+		}
+	}
+}
+te_tax_succ_dr_head = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_head } value = var:te_tax_en_head }
+	# Any pending enacted sunset: its successor is the underlying rate.
+	if = {
+		limit = {
+			has_variable = te_tax_en_head_exp
+			has_variable = te_tax_en_head_succ
+			var:te_tax_en_head_exp >= 0
+			var:te_tax_en_head_succ >= 0
+		}
+		value = var:te_tax_en_head_succ
+	}
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due }
+				has_variable = te_tax_pb_head
+				var:te_tax_pb_head >= 0
+			}
+			value = var:te_tax_pb_head
+			if = {
+				limit = {
+					has_variable = te_tax_pb_head_exp
+					has_variable = te_tax_pb_head_succ
+					var:te_tax_pb_head_exp >= 0
+					var:te_tax_pb_head_succ >= 0
+				}
+				value = var:te_tax_pb_head_succ
+			}
+		}
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due }
+				has_variable = te_tax_pa_head
+				var:te_tax_pa_head >= 0
+			}
+			value = var:te_tax_pa_head
+			if = {
+				limit = {
+					has_variable = te_tax_pa_head_exp
+					has_variable = te_tax_pa_head_succ
+					var:te_tax_pa_head_exp >= 0
+					var:te_tax_pa_head_succ >= 0
+				}
+				value = var:te_tax_pa_head_succ
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due }
+				has_variable = te_tax_pa_head
+				var:te_tax_pa_head >= 0
+			}
+			value = var:te_tax_pa_head
+			if = {
+				limit = {
+					has_variable = te_tax_pa_head_exp
+					has_variable = te_tax_pa_head_succ
+					var:te_tax_pa_head_exp >= 0
+					var:te_tax_pa_head_succ >= 0
+				}
+				value = var:te_tax_pa_head_succ
+			}
+		}
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due }
+				has_variable = te_tax_pb_head
+				var:te_tax_pb_head >= 0
+			}
+			value = var:te_tax_pb_head
+			if = {
+				limit = {
+					has_variable = te_tax_pb_head_exp
+					has_variable = te_tax_pb_head_succ
+					var:te_tax_pb_head_exp >= 0
+					var:te_tax_pb_head_succ >= 0
+				}
+				value = var:te_tax_pb_head_succ
+			}
+		}
+	}
+}
+te_tax_succ_dr_cons = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_cons } value = var:te_tax_en_cons }
+	# Any pending enacted sunset: its successor is the underlying rate.
+	if = {
+		limit = {
+			has_variable = te_tax_en_cons_exp
+			has_variable = te_tax_en_cons_succ
+			var:te_tax_en_cons_exp >= 0
+			var:te_tax_en_cons_succ >= 0
+		}
+		value = var:te_tax_en_cons_succ
+	}
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due }
+				has_variable = te_tax_pb_cons
+				var:te_tax_pb_cons >= 0
+			}
+			value = var:te_tax_pb_cons
+			if = {
+				limit = {
+					has_variable = te_tax_pb_cons_exp
+					has_variable = te_tax_pb_cons_succ
+					var:te_tax_pb_cons_exp >= 0
+					var:te_tax_pb_cons_succ >= 0
+				}
+				value = var:te_tax_pb_cons_succ
+			}
+		}
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due }
+				has_variable = te_tax_pa_cons
+				var:te_tax_pa_cons >= 0
+			}
+			value = var:te_tax_pa_cons
+			if = {
+				limit = {
+					has_variable = te_tax_pa_cons_exp
+					has_variable = te_tax_pa_cons_succ
+					var:te_tax_pa_cons_exp >= 0
+					var:te_tax_pa_cons_succ >= 0
+				}
+				value = var:te_tax_pa_cons_succ
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due }
+				has_variable = te_tax_pa_cons
+				var:te_tax_pa_cons >= 0
+			}
+			value = var:te_tax_pa_cons
+			if = {
+				limit = {
+					has_variable = te_tax_pa_cons_exp
+					has_variable = te_tax_pa_cons_succ
+					var:te_tax_pa_cons_exp >= 0
+					var:te_tax_pa_cons_succ >= 0
+				}
+				value = var:te_tax_pa_cons_succ
+			}
+		}
+		if = {
+			limit = {
+				te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due }
+				has_variable = te_tax_pb_cons
+				var:te_tax_pb_cons >= 0
+			}
+			value = var:te_tax_pb_cons
+			if = {
+				limit = {
+					has_variable = te_tax_pb_cons_exp
+					has_variable = te_tax_pb_cons_succ
+					var:te_tax_pb_cons_exp >= 0
+					var:te_tax_pb_cons_succ >= 0
+				}
+				value = var:te_tax_pb_cons_succ
+			}
+		}
+	}
+}

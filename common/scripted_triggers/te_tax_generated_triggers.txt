@@ -764,6 +764,30 @@ te_tax_gen_bill_small_steps = {
 	}
 }
 
+# Every provision the draft changes moves at most two steps from existing law (its class on the panels).
+te_tax_gen_draft_small_steps = {
+	OR = {
+		var:te_tax_dr_wage < 0
+		AND = { te_tax_dr_dstep_wage <= 2 te_tax_dr_dstep_wage >= -2 }
+	}
+	OR = {
+		var:te_tax_dr_div < 0
+		AND = { te_tax_dr_dstep_div <= 2 te_tax_dr_dstep_div >= -2 }
+	}
+	OR = {
+		var:te_tax_dr_land < 0
+		AND = { te_tax_dr_dstep_land <= 2 te_tax_dr_dstep_land >= -2 }
+	}
+	OR = {
+		var:te_tax_dr_head < 0
+		AND = { te_tax_dr_dstep_head <= 2 te_tax_dr_dstep_head >= -2 }
+	}
+	OR = {
+		var:te_tax_dr_cons < 0
+		AND = { te_tax_dr_dstep_cons <= 2 te_tax_dr_dstep_cons >= -2 }
+	}
+}
+
 # Slot a's package touches a provision the bill touches. Read only while it is on.
 te_tax_gen_bill_overlaps_a = {
 	OR = {

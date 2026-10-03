@@ -286,6 +286,18 @@ te_tax_bill_is_minor = {
 	var:te_tax_bl_regrel < 0
 }
 
+# The open draft would make a minor bill: te_tax_bill_is_minor's rule on the
+# draft's fields, so the workbench shows the class the bill would get
+# (test_tax_code_sguis.py checks the two read the same). Read only while a draft
+# is open (te_tax_draft_active), as it reads the draft's payload.
+te_tax_draft_is_minor = {
+	te_tax_dr_provisions <= 2
+	te_tax_gen_draft_small_steps = yes
+	NOT = { te_tax_gen_draft_touches_goods = yes }
+	var:te_tax_dr_agrel < 0
+	var:te_tax_dr_regrel < 0
+}
+
 # The bill's commencement month has come or passed during debate.
 te_tax_can_reschedule = {
 	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }

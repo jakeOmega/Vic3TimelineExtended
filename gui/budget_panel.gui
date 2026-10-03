@@ -1645,7 +1645,9 @@ types budget
 						minimumsize = { 520 -1 }
 
 						te_tax_overview_panel = {}
-						te_tax_status_sections = {}
+						te_tax_status_sections = {
+							blockoverride "draft_summary" {}
+						}
 						te_tax_reference_sections = {}
 
 						button = {
@@ -1662,6 +1664,35 @@ types budget
 			}
 			### END MOD ###
 		}
+
+		### MOD: Tax Code tab (te_tax_code) ###
+		# The draft summary (te_tax_draft_summary, te_tax_workbench_widget.gui)
+		# below the scrolling content, so Review, Discard and Introduce stay on
+		# screen while the player works through the workbench (the Diplomacy
+		# overview's footer, diplomatic_overview.gui). Only on the Tax Code tab,
+		# only while the tab is open and a draft is. Budget had no fixed_bottom
+		# before; the summary reads GetPlayer only, as there is no journal
+		# entry datacontext here, and the tab's content leaves its own copy out
+		# (te_tax_status_sections' "draft_summary" block).
+		blockoverride "fixed_bottom"
+		{
+			flowcontainer = {
+				direction = vertical
+				visible = "[And( InformationPanel.IsTabSelected('te_tax_code'), And( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				margin_bottom = 4
+
+				divider_clean = {
+					size = { @panel_width_plus_14 4 }
+				}
+
+				background = {
+					using = dark_area
+				}
+
+				te_tax_draft_summary = {}
+			}
+		}
+		### END MOD ###
 	}
 
 	type tax_exp_frame_coin = container {

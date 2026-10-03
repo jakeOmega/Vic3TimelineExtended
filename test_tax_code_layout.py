@@ -32,11 +32,16 @@ ROOT = Path(__file__).resolve().parent
 
 OVERVIEW = "gui/journal_entry_widgets/te_tax_overview_widget.gui"
 LAYOUT = "gui/journal_entry_widgets/te_tax_layout_widget.gui"
+WORKBENCH = "gui/journal_entry_widgets/te_tax_workbench_widget.gui"
+REVIEW = "gui/journal_entry_widgets/te_tax_review_widget.gui"
+POLITICS = "gui/journal_entry_widgets/te_tax_politics_widget.gui"
+GEN_ROWS = "gui/journal_entry_widgets/te_tax_generated_rows.gui"
 BUDGET = "gui/budget_panel.gui"
-NEW_GUI = (OVERVIEW, LAYOUT)
+NEW_GUI = (OVERVIEW, LAYOUT, WORKBENCH, REVIEW, POLITICS, GEN_ROWS)
 JE = "common/journal_entries/je_tax_code.txt"
 TAB_SGUIS = "common/scripted_guis/te_system_tab_sguis.txt"
 TAX_SGUIS = "common/scripted_guis/te_tax_sguis.txt"
+GEN_SGUIS = "common/scripted_guis/te_tax_generated_sguis.txt"
 TRIGGERS = "common/scripted_triggers/te_tax_triggers.txt"
 DISPLAY = "common/script_values/te_tax_display_values.txt"
 GEN_VALUES = "common/script_values/te_tax_generated_values.txt"
@@ -49,7 +54,18 @@ GUIDE = "docs/guides/gui_modding_guide.md"
 SCHEMA_DOC = "docs/systems/tax_code_schema.md"
 
 TAB = "te_tax_code"
-STATUS = ["te_tax_enacted_table"]
+# The live sections, in order (plan Task 8 adds all but the first). The
+# draft's summary sits in the composer's "draft_summary" block after the
+# workbench; the Budget tab empties that block and shows the summary in its
+# fixed_bottom instead.
+STATUS = ["te_tax_enacted_table", "te_tax_workbench_section", "te_tax_review_section",
+          "te_tax_politics_section", "te_tax_pending_section"]
+# Collapse flags, each named for its default (style guide rule 7).
+FLAGS = {"te_tax_enacted_closed", "te_tax_history_open", "te_tax_how_open",
+         "te_tax_workbench_closed", "te_tax_wb_income_closed", "te_tax_wb_land_closed",
+         "te_tax_wb_cons_closed", "te_tax_wb_goods_open", "te_tax_wb_relief_closed",
+         "te_tax_wb_dates_closed", "te_tax_review_open", "te_tax_politics_closed",
+         "te_tax_pending_closed"}
 REFERENCE = ["te_tax_history_section", "te_tax_how_section"]
 ROOTS = [("widget_je_tax_code_overview", "custom_widget_container_1"),
          ("widget_je_tax_code_status", "custom_widget_container_2"),
@@ -185,8 +201,9 @@ class TabStripTest(unittest.TestCase):
         cls.text = gui(BUDGET)
         cls.regions = mod_block(raw(BUDGET))
 
-    def test_two_marked_blocks(self):
-        self.assertEqual(len(self.regions), 2)
+    def test_three_marked_blocks(self):
+        """The tab strip, the tab's content and the draft summary's footer."""
+        self.assertEqual(len(self.regions), 3)
 
     def test_strip_block_follows_banking_inside_tab_buttons(self):
         text = raw(BUDGET)
@@ -277,17 +294,61 @@ class TabContentTest(unittest.TestCase):
             "flowcontainer = {", 0, self.region.index("GetPlayerJournalEntry('je_tax_code')")))
         self.assertIn("minimumsize = { 520 -1 }", context)
 
+    def test_the_summary_moves_to_the_footer(self):
+        """The tab draws the draft summary in fixed_bottom, so the live sections
+        it composes leave their own copy out."""
+        status = brace_block(self.region, self.region.index("te_tax_status_sections = {"))
+        self.assertRegex(status, r'^\{\s*blockoverride "draft_summary" \{\s*\}\s*\}$')
+
+
+class FooterTest(unittest.TestCase):
+    """Budget's fixed_bottom: the draft summary, only on the Tax Code tab, only
+    while the tab is open and a draft is."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.region = uncomment(mod_block(raw(BUDGET))[2])
+
+    def test_is_the_fixed_bottom_block_after_the_content(self):
+        text = raw(BUDGET)
+        footer = text.index('blockoverride "fixed_bottom"')
+        scroll = text.index('blockoverride "scrollarea_content"')
+        self.assertGreater(footer, close(text, text.index("{", scroll)))
+        self.assertLess(text.rindex("### MOD: Tax Code tab", 0, footer), footer)
+        self.assertEqual(text.count('blockoverride "fixed_bottom"'), 1)
+
+    def test_gate_and_contents(self):
+        self.assertIn("InformationPanel.IsTabSelected('te_tax_code')", self.region)
+        self.assertIn("GetScriptedGui('te_budget_tax_tab_sgui').IsShown(", self.region)
+        self.assertIn("GetScriptedGui('te_tax_show_draft_sgui').IsShown(", self.region)
+        self.assertEqual(re.findall(r"\b(te_tax_\w+) = \{", self.region), ["te_tax_draft_summary"])
+        self.assertNotIn("JournalEntry", self.region)
+
+    def test_the_summary_type_needs_no_journal_entry(self):
+        body = type_body(gui(WORKBENCH), "te_tax_draft_summary")
+        self.assertNotIn("JournalEntry", body)
+        for name in ("te_tax_cmd_draft_discard_sgui", "te_tax_cmd_introduce_sgui", "te_tax_cmd_revise_sgui"):
+            self.assertIn(f"GetScriptedGui('{name}')", body)
+        self.assertIn("GetVariableSystem.Toggle('te_tax_review_open')", body)
+
 
 class LayoutTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.layout = gui(LAYOUT)
         cls.overview = gui(OVERVIEW)
-        cls.all = cls.layout + "\n" + cls.overview
+        cls.all = "\n".join(gui(path) for path in NEW_GUI)
 
     def test_status_sections(self):
         body = type_body(self.layout, "te_tax_status_sections")
         self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), STATUS)
+
+    def test_status_sections_carry_the_summary_after_the_workbench(self):
+        body = type_body(self.layout, "te_tax_status_sections")
+        summary = body.index('block "draft_summary"')
+        self.assertLess(body.index("te_tax_workbench_section = {}"), summary)
+        self.assertLess(summary, body.index("te_tax_review_section = {}"))
+        self.assertRegex(body, r'block "draft_summary" \{\s*te_tax_draft_summary = \{\}\s*\}')
 
     def test_reference_sections_history_then_how(self):
         body = type_body(self.layout, "te_tax_reference_sections")
@@ -295,7 +356,11 @@ class LayoutTest(unittest.TestCase):
 
     def test_the_brief_types_exist(self):
         for name in ("te_tax_overview_panel", "te_tax_enacted_table", "te_tax_how_section",
-                     "te_tax_history_section", "te_tax_status_sections", "te_tax_reference_sections"):
+                     "te_tax_history_section", "te_tax_status_sections", "te_tax_reference_sections",
+                     "te_tax_workbench_section", "te_tax_instrument_row", "te_tax_sunset_row",
+                     "te_tax_good_row", "te_tax_draft_summary", "te_tax_review_section",
+                     "te_tax_politics_section", "te_tax_ig_card", "te_tax_pending_section",
+                     "te_tax_wb_goods_rows", "te_tax_rv_goods_rows"):
             with self.subTest(name=name):
                 type_body(self.all, name)
 
@@ -328,6 +393,14 @@ class LayoutTest(unittest.TestCase):
         self.assertIn('tooltip = "te_tax_open_budget_tt"', overview_root)
         # the Budget tab never shows a button that opens itself
         self.assertNotIn("OpenPanelTab", type_body(self.overview, "te_tax_overview_panel"))
+        self.assertEqual(self.all.count("OpenPanelTab"), 1)
+
+    def test_draft_and_bill_sections_are_gated_on_their_record(self):
+        """Opening the panel shows a record's rows only while it is open."""
+        workbench = gui(WORKBENCH)
+        self.assertIn("GetScriptedGui('te_tax_show_draft_sgui').IsShown(", type_body(workbench, "te_tax_draft_summary"))
+        self.assertIn("GetScriptedGui('te_tax_show_draft_sgui').IsShown(", type_body(gui(REVIEW), "te_tax_review_section"))
+        self.assertIn("GetScriptedGui('te_tax_show_bill_sgui').IsShown(", type_body(gui(POLITICS), "te_tax_politics_section"))
 
     def test_one_root_for_every_type_reader(self):
         """Every number the shared types read comes from the player's country
@@ -407,8 +480,10 @@ class SguiTest(unittest.TestCase):
         self.assertRegex(unlock, r"effect = \{ \}")
 
     def test_display_gates_are_scope_free_and_inert(self):
-        names = top_level_names(self.tax)
-        self.assertTrue(names)
+        """The te_tax_show_* gates (the action handlers beside them are checked
+        in test_tax_code_sguis.py)."""
+        names = [name for name in top_level_names(self.tax) if name.startswith("te_tax_show_")]
+        self.assertGreaterEqual(len(names), 14)
         for name in names:
             body = block(self.tax, name)
             with self.subTest(name=name):
@@ -424,7 +499,8 @@ class SguiTest(unittest.TestCase):
                 self.assertIsNone(FORBIDDEN_IN_VALUES.search(body))
 
     def test_every_scripted_gui_named_by_the_panels_exists(self):
-        defined = set(top_level_names(self.tab)) | set(top_level_names(self.tax))
+        defined = set(top_level_names(self.tab)) | set(top_level_names(self.tax)) | set(
+            top_level_names(script(GEN_SGUIS)))
         text = "\n".join(gui(path) for path in NEW_GUI) + "\n".join(uncomment(r) for r in mod_block(raw(BUDGET)))
         for name in set(re.findall(r"GetScriptedGui\('(\w+)'\)", text)):
             with self.subTest(name=name):
@@ -438,7 +514,7 @@ class FlagTest(unittest.TestCase):
 
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
-        self.assertEqual(flags, {"te_tax_enacted_closed", "te_tax_history_open", "te_tax_how_open"})
+        self.assertEqual(flags, FLAGS)
         for flag in flags:
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{flag}'\)\s*\)", self.text))
             bare = len(re.findall(rf"GetVariableSystem\.Exists\('{flag}'\)", self.text)) - negated
@@ -500,9 +576,18 @@ class DisplayValueTest(unittest.TestCase):
             self.assert_guarded(ref, seen)
 
     def test_every_script_value_in_the_gui_is_a_guarded_view(self):
+        """Country views (te_tax_view_*), plus the interest-group cards' values
+        (te_tax_disp_ig_*), which only an InterestGroup scope reads."""
         names = set(re.findall(r"ScriptValue\('(\w+)'\)", self.gui_text))
         self.assertTrue(names)
-        for name in names:
+        group = set(re.findall(r"InterestGroup\.MakeScope\.ScriptValue\('(\w+)'\)", self.gui_text))
+        self.assertTrue(group)
+        for name in group:
+            with self.subTest(name=name):
+                self.assertTrue(name.startswith("te_tax_disp_ig_"), name)
+                self.assert_guarded(name)
+        self.assertNotRegex(self.gui_text, r"(GetPlayer|State)\.MakeScope\.ScriptValue\('te_tax_disp_ig_")
+        for name in names - group:
             with self.subTest(name=name):
                 self.assertTrue(name.startswith("te_tax_view_"), name)
                 self.assertTrue(name in self.values and self.values[name] is not None, name)
@@ -517,8 +602,12 @@ class DisplayValueTest(unittest.TestCase):
         for name in names:
             with self.subTest(name=name):
                 if self.values.get(name) is not None:
-                    self.assertTrue(name.startswith("te_tax_view_"), name)
+                    self.assertTrue(name.startswith(("te_tax_view_", "te_tax_disp_ig_")), name)
                 self.assert_guarded(name)
+        # an interest-group card's value is read only through the group
+        for key in self.printed:
+            with self.subTest(key=key):
+                self.assertNotRegex(self.loc[key], r"(GetPlayer|State)\.MakeScope\.ScriptValue\('te_tax_disp_ig_")
 
     def test_printed_loc_reads_the_player_never_the_entry(self):
         for key in self.printed:
@@ -527,9 +616,14 @@ class DisplayValueTest(unittest.TestCase):
                 self.assertNotIn("[b]", self.loc[key])
 
     def test_every_loc_key_the_panels_name_exists(self):
+        """In the mod's loc, or vanilla's for a good's own name (the goods
+        catalog rows print each good by its key)."""
+        import json
+        vanilla = json.loads((ROOT / "vanilla_parsed/localization_english.json").read_text(encoding="utf-8"))
+        catalog = set(gen.consumption_catalog())
         for key in loc_keys_named_in(self.gui_text):
             with self.subTest(key=key):
-                self.assertIn(key, self.loc)
+                self.assertTrue(key in self.loc or (key in catalog and key in vanilla), key)
 
     def test_record_views_read_their_payload_only_while_the_record_is_open(self):
         """A closed record's payload is removed (or, after a civil war, may be
@@ -721,7 +815,8 @@ class GuideTest(unittest.TestCase):
     def test_tables_list_the_tab_and_the_widgets(self):
         text = raw(GUIDE)
         self.assertRegex(text, r"\| `budget_panel\.gui` \| Budget \|[^\n]*Tax Code[^\n]*je_tax_code")
-        for name in ("te_tax_overview_widget.gui", "te_tax_layout_widget.gui"):
+        for name in ("te_tax_overview_widget.gui", "te_tax_layout_widget.gui", "te_tax_workbench_widget.gui",
+                     "te_tax_review_widget.gui", "te_tax_politics_widget.gui", "te_tax_generated_rows.gui"):
             self.assertRegex(text, rf"\| `{name}` \| `je_tax_code` \|")
 
     def test_guide_keeps_crlf(self):

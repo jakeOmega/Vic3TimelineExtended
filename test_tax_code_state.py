@@ -413,7 +413,7 @@ class GeneratedSyncTest(unittest.TestCase):
         bill = {"te_tax_gen_draft_touches_any", "te_tax_gen_draft_touches_goods",
                 "te_tax_gen_bill_touches_goods", "te_tax_gen_draft_baseline_current",
                 "te_tax_gen_draft_differs_from_bill", "te_tax_gen_bill_current",
-                "te_tax_gen_bill_small_steps"} | {
+                "te_tax_gen_bill_small_steps", "te_tax_gen_draft_small_steps"} | {
             f"te_tax_gen_{part}_{slot}" for part in ("bill_overlaps", "package_empty", "package_unsuperseded")
             for slot in ("a", "b")}
         self.assertEqual(
@@ -569,6 +569,27 @@ class DisplayValueTest(unittest.TestCase):
         for position in range(1, 9):
             want |= {f"te_tax_view_hist_{position}_{suffix}"
                      for suffix in ("kind", "inst", "month", "month_y", "month_mo")}
+        # The workbench, review and passage panels' views (Task 8): per instrument,
+        # the draft's change against the law in its due month, its expiry and the
+        # rate it reverts to, and a passed bill's change in each slot; per catalog
+        # good, the draft's flag against the law's; the draft's summary; the
+        # passage panel's shares and legitimacy.
+        for key in KEYS:
+            want |= {f"te_tax_view_dr_{key}{suffix}" for suffix in (
+                "_on", "_base_rate", "_rate", "_delta_rate", "_sun", "_exp", "_exp_y", "_exp_mo",
+                "_succ_rate", "_rebase")}
+            for slot in ("a", "b"):
+                want |= {f"te_tax_view_p{slot}_{key}{suffix}" for suffix in (
+                    "_on", "_rate", "_exp", "_exp_y", "_exp_mo", "_succ_rate")}
+        for good in catalog():
+            want |= {f"te_tax_view_dr_g_{good}", f"te_tax_view_dr_g_{good}_base", f"te_tax_view_dr_g_{good}_on"}
+        want |= {f"te_tax_view_p{slot}_goods_changed" for slot in ("a", "b")}
+        want |= {"te_tax_view_dr_goods_count", "te_tax_view_dr_goods_base_count", "te_tax_view_dr_goods_changed",
+                 "te_tax_view_dr_goods_rebase", "te_tax_view_dr_provisions", "te_tax_view_dr_minor",
+                 "te_tax_view_dr_debate_days", "te_tax_view_dr_earliest_month", "te_tax_view_dr_earliest_month_y",
+                 "te_tax_view_dr_earliest_month_mo", "te_tax_view_dr_agrel_on", "te_tax_view_dr_agrel_pct",
+                 "te_tax_view_dr_regrel_on", "te_tax_view_dr_regrel_pct", "te_tax_view_committed_share",
+                 "te_tax_view_open_share", "te_tax_view_passage_share", "te_tax_view_legitimacy"}
         self.assertEqual(set(self.views), want)
 
     def test_defaults_are_the_schema_sentinels(self):

@@ -124,3 +124,188 @@ te_tax_view_debate_days_left = {
 		value = te_tax_debate_days_left
 	}
 }
+
+# ---------------------------------------------------------------------------
+# The workbench, review and passage panels (plan Task 8). The per-instrument,
+# per-good, per-slot and interest-group views are generated
+# (te_tax_generated_values.txt). A draft view reads the draft only while
+# te_tax_dr_on is 1, a bill view the bill only while te_tax_bl_on is 1: the
+# support snapshot (te_tax_sup_*, te_tax_com_*) outlives the bill it was for.
+# ---------------------------------------------------------------------------
+
+# 1 if the open draft would make a minor bill (te_tax_draft_is_minor), else 0.
+te_tax_view_dr_minor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = {
+			limit = { te_tax_draft_is_minor = yes }
+			value = 1
+		}
+	}
+}
+
+# Days of debate a bill made from the open draft would need.
+te_tax_view_dr_debate_days = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_debate_days_major
+		if = {
+			limit = { te_tax_draft_is_minor = yes }
+			value = te_tax_debate_days_minor
+		}
+	}
+}
+
+# The day a bill introduced today could pass (game_date counts days in 365-day
+# years from day 0, 1 January: te_tax_support_values.txt, "Debate clock"), and
+# that day's month as a te_history_month_index value.
+te_tax_dr_pass_day = {
+	value = game_date
+	add = te_tax_view_dr_debate_days
+}
+
+te_tax_dr_pass_year = {
+	value = te_tax_dr_pass_day
+	divide = 365
+	floor = yes
+}
+
+te_tax_dr_pass_day_of_year = {
+	value = te_tax_dr_pass_year
+	multiply = -365
+	add = te_tax_dr_pass_day
+}
+
+te_tax_dr_pass_month = {
+	value = te_tax_dr_pass_year
+	multiply = 12
+	# The first day of each month after January, counted from 1 January.
+	if = { limit = { te_tax_dr_pass_day_of_year >= 334 } add = 11 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 304 } add = 10 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 273 } add = 9 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 243 } add = 8 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 212 } add = 7 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 181 } add = 6 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 151 } add = 5 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 120 } add = 4 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 90 } add = 3 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 59 } add = 2 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 31 } add = 1 }
+}
+
+# The earliest commencement month the open draft can have and still pass in
+# time if it is introduced today: the month after the one its debate ends in
+# (a bill passes only before its commencement month, te_tax_can_pass). -1
+# without a draft.
+te_tax_view_dr_earliest_month = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_dr_pass_month
+		add = 1
+	}
+}
+
+te_tax_view_dr_earliest_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 te_tax_view_dr_earliest_month >= 0 }
+		value = te_tax_view_dr_earliest_month
+		divide = 12
+		floor = yes
+	}
+}
+
+te_tax_view_dr_earliest_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 te_tax_view_dr_earliest_month >= 0 }
+		value = te_tax_view_dr_earliest_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_dr_earliest_month
+		add = 1
+	}
+}
+
+# Relief in the draft: 1 if the draft changes it, and its percentage (the
+# enacted band where the draft leaves it alone). Task 11 makes them editable.
+te_tax_view_dr_agrel_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_agrel var:te_tax_dr_agrel >= 0 }
+		value = 1
+	}
+}
+
+te_tax_view_dr_agrel_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_agrel }
+		value = te_tax_view_agrel
+		if = { limit = { var:te_tax_dr_agrel >= 0 } value = var:te_tax_dr_agrel }
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+te_tax_view_dr_regrel_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_regrel var:te_tax_dr_regrel >= 0 }
+		value = 1
+	}
+}
+
+te_tax_view_dr_regrel_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_regrel }
+		value = te_tax_view_regrel
+		if = { limit = { var:te_tax_dr_regrel >= 0 } value = var:te_tax_dr_regrel }
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+# The passage panel, while a bill is under debate: the clout share committed to
+# its current revision (te_tax_committed_share), that share plus the
+# persuadable groups' (te_tax_open_clout), the share passage needs, and the
+# country's legitimacy.
+te_tax_view_committed_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_due }
+		value = te_tax_committed_share
+	}
+}
+
+te_tax_view_open_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_due }
+		if = {
+			limit = { te_tax_eligible_clout > 0 }
+			value = te_tax_committed_clout
+			add = te_tax_open_clout
+			divide = te_tax_eligible_clout
+		}
+	}
+}
+
+te_tax_view_passage_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 }
+		value = te_tax_passage_share
+	}
+}
+
+te_tax_view_legitimacy = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 }
+		value = legitimacy
+	}
+}
