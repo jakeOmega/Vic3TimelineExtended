@@ -3707,6 +3707,17 @@ Where a given modifier or trigger can be used:
 - **Static modifiers (`common/static_modifiers/`)**: any scope's modifiers — but the static modifier must be applied at a matching scope (country / state / character).
 - **`INJECT:` / `REPLACE:` / `REPLACE_OR_CREATE:` directive prefixes** on entity keys (e.g. `INJECT:building_shipyard = { ... }`) are **engine-native** in Vic3 (Clausewitz). The mod uses them throughout. They merge or replace into the matching vanilla entity at load time. Don't try to "expand" them in tooling.
 
+## Script Performance: the Profiler and Hot Patterns
+
+**Running the profiler.** In the in-game console (all confirmed in the owner's `console_history.txt`): `Script.Profiling.Gui` opens the profiler, and `Script.Profiling.Start` / `Stop` / `Restart` control capture. For a text dump, the game binary also carries `ScriptProfiling.Enable` and `ScriptProfiling.Dump`. The dump writes `logs/script_profiling.txt`, one line per location under the header `# type, location, time (seconds), call count`. Those two are unverified as of 2026-10-03, so confirm that they write before relying on them. The call count is what the GUI's screenshots lack. Without it you can't tell a block evaluated once per tick from one evaluated per state per frame.
+
+**Reading it.** The profiler names only the file's basename, so check that no vanilla file has the same name. A trigger's line is its block's opening line (`potential = {`). A journal entry's `on_monthly_pulse` is listed as `event (immediate) @ je_x.txt:<line>`, where the line is the pulse's closing brace, under `on_actions (effect) @ <unknown>`. Scripted GUI `is_shown` blocks and display-only script values appear only while their panel is open, so ask which panels were open during the capture. For a wall-clock reading of the month boundary, see the log-triage skill (2026-10-03 lesson).
+
+**Patterns that showed up hot (2026-10-03, fixed on `perf/late-game-script-hotspots`):**
+- A per-building script scan (`any_scope_building`, `every_scope_building`) re-run for every state. Building `potential` blocks run that often, because the build list and the AI construction planner evaluate them per state. Put an engine lookup ahead of it: `has_building`, `country_has_building_group_levels`, `state_has_building_group_levels`. A lookup like this is exact only when it implies the scan's own condition. `has_building` probably misses a queued, unfinished site, so keep the scan behind it when that case matters.
+- A monthly `random_list` whose entries each scan for the same few building types. One shared check in the on_action's `trigger` replaces them, since a country that fails it can only roll the do-nothing entry.
+- An expensive script value read several times in one pulse, or on every frame of a panel. `cultural_pull_raw` was evaluated twice per `cultural_pull_total`, and that ran several times per country per month.
+
 ## Audit and Research Workflow
 
 When researching mod content (auditing for bugs, inventorying which PMs produce/consume a good, mapping a system across files), a few patterns are reliable and a few are surprisingly broken.
