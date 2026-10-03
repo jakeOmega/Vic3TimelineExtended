@@ -795,6 +795,7 @@ decolonization = {
 		country_liberty_desire_of_subjects_add = 0.05
 		country_add_anticolonial_ideology_to_igs_bool = yes
 		country_unrecognized_become_recognized_bool = yes
+		country_remove_decentralized_claims_bool = yes
 		country_voting_power_mult = 0.1
 
 		# Homeland system: decolonization protects indigenous homelands from erasure
