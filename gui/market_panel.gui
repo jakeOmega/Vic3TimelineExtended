@@ -1475,59 +1475,78 @@ types market_panel
 								ignoreinvisible = yes
 								spacing = 10
 
+								### With the Global Warming game rule off, another
+								### market has no climate to show, and the Fossil
+								### Transition section is national, so it shows on
+								### our own market only (#660). One line says so,
+								### in place of everything below.
 								gw_text = {
-									visible = "[Not( GetScriptedGui('te_market_global_warming_leader_sgui').IsShown( GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).End ) )]"
+									visible = "[Not( GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 									align = hcenter|nobaseline
-									text = "te_market_gw_foreign_pending"
+									text = "te_market_gw_foreign_rule_off"
 								}
 
 								flowcontainer = {
-									visible = "[GetScriptedGui('te_market_global_warming_leader_sgui').IsShown( GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).End )]"
+									visible = "[GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 									parentanchor = hcenter
 									direction = vertical
 									ignoreinvisible = yes
 									spacing = 10
 
-									flowcontainer = {
-										datacontext = "[MarketPanel.GetMarket.GetOwner]"
-										parentanchor = hcenter
-
-										gw_text = {
-											align = hcenter|nobaseline
-											text = "te_market_gw_foreign_intro"
-										}
+									gw_text = {
+										visible = "[Not( GetScriptedGui('te_market_global_warming_leader_sgui').IsShown( GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).End ) )]"
+										align = hcenter|nobaseline
+										text = "te_market_gw_foreign_pending"
 									}
-
-									te_gw_overview_panel = {
-										blockoverride "gw_market_country" {
-											datacontext = "[MarketPanel.GetMarket.GetOwner]"
-										}
-									}
-								}
-
-								### te_gw_status_sections' two sections: the
-								### policies read the leader, Top Emitters the
-								### player's entry.
-								flowcontainer = {
-									parentanchor = hcenter
-									direction = vertical
-									ignoreinvisible = yes
-									spacing = 4
 
 									flowcontainer = {
 										visible = "[GetScriptedGui('te_market_global_warming_leader_sgui').IsShown( GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).End )]"
 										parentanchor = hcenter
 										direction = vertical
 										ignoreinvisible = yes
+										spacing = 10
 
-										te_gw_sec_policies = {
+										flowcontainer = {
+											datacontext = "[MarketPanel.GetMarket.GetOwner]"
+											parentanchor = hcenter
+
+											gw_text = {
+												align = hcenter|nobaseline
+												text = "te_market_gw_foreign_intro"
+											}
+										}
+
+										te_gw_overview_panel = {
 											blockoverride "gw_market_country" {
 												datacontext = "[MarketPanel.GetMarket.GetOwner]"
 											}
 										}
 									}
 
-									te_gw_sec_emitters = {}
+									### te_gw_status_sections' two sections: the
+									### policies read the leader, Top Emitters the
+									### player's entry.
+									flowcontainer = {
+										parentanchor = hcenter
+										direction = vertical
+										ignoreinvisible = yes
+										spacing = 4
+
+										flowcontainer = {
+											visible = "[GetScriptedGui('te_market_global_warming_leader_sgui').IsShown( GuiScope.SetRoot( MarketPanel.GetMarket.GetOwner.MakeScope ).End )]"
+											parentanchor = hcenter
+											direction = vertical
+											ignoreinvisible = yes
+
+											te_gw_sec_policies = {
+												blockoverride "gw_market_country" {
+													datacontext = "[MarketPanel.GetMarket.GetOwner]"
+												}
+											}
+										}
+
+										te_gw_sec_emitters = {}
+									}
 								}
 							}
 

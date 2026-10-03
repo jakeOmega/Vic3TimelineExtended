@@ -19,6 +19,12 @@
 		law_ministry_of_the_environment = strongly_approve
 	}
 
+	lawgroup_resource_transition = {
+		law_unrestricted_extraction = disapprove
+		law_fossil_expansion_moratorium = approve
+		law_managed_fossil_phaseout = strongly_approve
+	}
+
 	lawgroup_ministry_of_commerce = {
 		law_no_ministry_of_commerce = neutral
 		law_ministry_of_commerce = disapprove
@@ -616,6 +622,12 @@ ideology_corporate = {
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = approve
 		law_ministry_of_the_environment = strongly_disapprove
+	}
+
+	lawgroup_resource_transition = {
+		law_unrestricted_extraction = approve
+		law_fossil_expansion_moratorium = disapprove
+		law_managed_fossil_phaseout = strongly_disapprove
 	}
 
 	lawgroup_financial_regulation = {

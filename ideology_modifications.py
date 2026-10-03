@@ -42,6 +42,25 @@ def ministry_constructor_typed(ministry_name, types, attitudes):
     return attitude_list
 
 
+
+def transition_constructor(attitude):
+    """Stances on lawgroup_resource_transition (#660), set beside each
+    ideology's Ministry of the Environment stance: "+" backs the whole
+    transition, "+0" the moratorium but not closing what runs, "-" and "--"
+    oppose it, "--" the phaseout strongly."""
+    stances = {
+        "+": ("neutral", "approve", "approve"),
+        "+0": ("neutral", "approve", "neutral"),
+        "-": ("approve", "neutral", "disapprove"),
+        "--": ("approve", "disapprove", "strongly_disapprove"),
+    }
+    unrestricted, moratorium, phaseout = stances[attitude]
+    return [
+        ("law_unrestricted_extraction", unrestricted),
+        ("law_fossil_expansion_moratorium", moratorium),
+        ("law_managed_fossil_phaseout", phaseout),
+    ]
+
 anti_privacy_entry = [
     ("law_minimal_privacy_protection", "neutral"),
     ("law_moderate_data_privacy", "disapprove"),
@@ -934,6 +953,7 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "-"
         ),
+        "lawgroup_resource_transition": transition_constructor("-"),
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "-"
         ),
@@ -1069,6 +1089,7 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "+"
         ),
+        "lawgroup_resource_transition": transition_constructor("+"),
         "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
             "ministry_of_refugee_affairs", "+"
         ),
@@ -1172,6 +1193,7 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "-"
         ),
+        "lawgroup_resource_transition": transition_constructor("-"),
         "lawgroup_ministry_of_refugee_affairs": ministry_constructor(
             "ministry_of_refugee_affairs", "--"
         ),
@@ -1290,6 +1312,7 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "--"
         ),
+        "lawgroup_resource_transition": transition_constructor("--"),
         "lawgroup_ministry_of_labor": ministry_constructor_typed(
             "ministry_of_labor", ["pro_labor", "pro_capital"], ["--", "+"]
         ),
@@ -1719,6 +1742,7 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "-"
         ),
+        "lawgroup_resource_transition": transition_constructor("-"),
         "lawgroup_ministry_of_culture": ministry_constructor(
             "ministry_of_culture", "+"
         ),
@@ -2260,6 +2284,7 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "+"
         ),
+        "lawgroup_resource_transition": transition_constructor("+0"),
         "lawgroup_ministry_of_labor": ministry_constructor_typed(
             "ministry_of_labor", ["pro_labor", "pro_capital"], ["+", "-"]
         ),
@@ -2308,6 +2333,7 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "+"
         ),
+        "lawgroup_resource_transition": transition_constructor("+0"),
         "lawgroup_ministry_of_labor": ministry_constructor_typed(
             "ministry_of_labor", ["pro_labor", "pro_capital"], ["+", "-"]
         ),
@@ -2657,6 +2683,7 @@ modifications = {
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "-"
         ),
+        "lawgroup_resource_transition": transition_constructor("-"),
         "lawgroup_ministry_of_culture": ministry_constructor(
             "ministry_of_culture", "+"
         ),

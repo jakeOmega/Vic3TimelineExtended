@@ -428,7 +428,11 @@ types global_warming_widget_types
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
-		visible = "[JournalEntry.IsActive]"
+		# The climate sections need the Global Warming game rule: with it off
+		# the entry opens only for a restrictive transition law (#660) and shows
+		# the Fossil Transition section alone. The rule is global, so any
+		# country answers it; the entry's own is the one every type can read.
+		visible = "[And( JournalEntry.IsActive, GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 
 		gw_panel = {
 			### One 480 px column, so the panel is as wide as the sections below
@@ -844,7 +848,11 @@ types global_warming_widget_types
 			datacontext = "[JournalEntry.GetCountry]"
 		}
 
+		# Climate only: hidden with the Global Warming game rule off (#660). On
+		# the header and the panel rather than the root, which carries the
+		# gw_market_country datacontext.
 		gw_section_header = {
+			visible = "[GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			blockoverride "left_text" {
 				text = "gw_sect_policies"
 			}
@@ -860,7 +868,7 @@ types global_warming_widget_types
 		}
 
 		gw_panel = {
-			visible = "[Not(GetVariableSystem.Exists('gw_policies_closed'))]"
+			visible = "[And( GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not(GetVariableSystem.Exists('gw_policies_closed')) )]"
 
 			# Below 0.5 C every Adopt is greyed for the same reason.
 			gw_text = {
@@ -1358,6 +1366,8 @@ types global_warming_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
+		# Climate only: hidden with the Global Warming game rule off (#660).
+		visible = "[GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 		gw_section_header = {
 			blockoverride "left_text" {
@@ -1709,6 +1719,346 @@ types global_warming_widget_types
 	}
 
 	### ======================================================================
+	### FOSSIL TRANSITION (issue #660): the Resource Transition law in force,
+	### what is left of the three fossil industries with a retirement
+	### programme row each, and what could replace them. National, so the
+	### Market panel's Climate tab shows it on the player's own market only.
+	### With the Global Warming game rule off, the entry still opens for a
+	### country holding a restrictive transition law, and this is then its
+	### only section (the climate sections gate on gw_rule_enabled_sgui).
+	###
+	### Every figure is a guarded read of the monthly snapshot
+	### (rt_disp_* in common/script_values/resource_transition_values.txt) or a
+	### live read of the market's own goods. Controls: the climate policies'
+	### Adopt and Repeal types relabelled Start and Stop, on
+	### rt_programme_<key>_sgui (op 0 start, 1 stop;
+	### common/scripted_guis/resource_transition_sguis.txt).
+	### ======================================================================
+
+	### One programme: the building's icon, lit while its programme runs and
+	### dimmed while not, the industry and what is left of it (hover: the next
+	### building to close and the compensation), a green check while running,
+	### and exactly one of Start / Stop. gw_policy_row's cells and widths
+	### (26 + 276 + 24 + 110), its datacontext the programme's
+	### rt_active_<key>_sgui, so ScriptedGui.IsShown is "is it running?".
+	type rt_programme_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 6
+		margin = { 6 3 }
+		parentanchor = hcenter
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.35
+		}
+
+		widget = {
+			size = { 26 26 }
+			parentanchor = vcenter
+			tooltip = "[SelectLocalization( ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'rt_programme_status_running', 'rt_programme_status_idle' )]"
+
+			icon = {
+				size = { 26 26 }
+				parentanchor = center
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				block "row_icon" {}
+			}
+			icon = {
+				size = { 26 26 }
+				parentanchor = center
+				alpha = 0.25
+				visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+				block "row_icon" {}
+			}
+		}
+
+		widget = {
+			size = { 276 26 }
+			parentanchor = vcenter
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 276
+				elide = right
+				align = nobaseline
+				using = fontsize_large
+				default_format = "#tooltippable"
+				block "row_label" {}
+			}
+		}
+
+		widget = {
+			size = { 24 26 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 20 20 }
+				parentanchor = center
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+				tooltip = "rt_programme_status_running"
+			}
+		}
+
+		widget = {
+			size = { 110 30 }
+			parentanchor = vcenter
+
+			widget = {
+				size = { 100% 100% }
+				visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+				block "adopt_action" {}
+			}
+
+			widget = {
+				size = { 100% 100% }
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				block "repeal_action" {}
+			}
+		}
+	}
+
+	type te_gw_sec_transition = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		datacontext = "[JournalEntry.GetCountry]"
+
+		gw_section_header = {
+			blockoverride "left_text" {
+				text = "rt_sect_transition"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('rt_transition_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('rt_transition_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('rt_transition_closed'))]"
+			}
+		}
+
+		gw_panel = {
+			visible = "[Not(GetVariableSystem.Exists('rt_transition_closed'))]"
+
+			# The law in force; hover: what it does.
+			gw_text = {
+				text = "rt_law_line"
+				tooltip = "rt_law_line_tt"
+				default_format = "#tooltippable"
+			}
+			# Until the first monthly snapshot (a save from before #660).
+			gw_text = {
+				visible = "[Not( GetScriptedGui('rt_has_snapshot_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+				text = "rt_figures_pending"
+			}
+
+			### ---- What is left, one retirement programme per industry ----
+			gw_subheader = {
+				blockoverride "subheader_text" {
+					text = "rt_sub_capacity"
+				}
+			}
+			# Without the phaseout every Start is greyed for the same reason;
+			# say it once.
+			gw_text = {
+				visible = "[Not( GetScriptedGui('rt_phaseout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+				text = "rt_programmes_need_phaseout"
+			}
+
+			rt_programme_row = {
+				datacontext = "[GetScriptedGui('rt_active_coal_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/coal_mine.dds"
+				}
+				blockoverride "row_label" {
+					text = "rt_row_coal"
+					tooltip = "rt_row_coal_tt"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('rt_programme_coal_sgui')]"
+						text = "rt_btn_start"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('rt_programme_coal_sgui')]"
+						text = "rt_btn_stop"
+					}
+				}
+			}
+
+			rt_programme_row = {
+				datacontext = "[GetScriptedGui('rt_active_oil_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/oil_rig.dds"
+				}
+				blockoverride "row_label" {
+					text = "rt_row_oil"
+					tooltip = "rt_row_oil_tt"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('rt_programme_oil_sgui')]"
+						text = "rt_btn_start"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('rt_programme_oil_sgui')]"
+						text = "rt_btn_stop"
+					}
+				}
+			}
+
+			rt_programme_row = {
+				datacontext = "[GetScriptedGui('rt_active_power_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/building_icons/power_plant.dds"
+				}
+				blockoverride "row_label" {
+					text = "rt_row_power"
+					tooltip = "rt_row_power_tt"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('rt_programme_power_sgui')]"
+						text = "rt_btn_start"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('rt_programme_power_sgui')]"
+						text = "rt_btn_stop"
+					}
+				}
+			}
+
+			### ---- What could replace them ----
+			gw_subheader = {
+				blockoverride "subheader_text" {
+					text = "rt_sub_readiness"
+				}
+			}
+			gw_value_row = {
+				tooltip = "rt_clean_tt"
+				blockoverride "row_label" {
+					text = "rt_clean_label"
+					default_format = "#tooltippable"
+				}
+				blockoverride "row_value" {
+					text = "rt_clean_value"
+				}
+			}
+			gw_value_row = {
+				tooltip = "rt_synth_tt"
+				blockoverride "row_label" {
+					text = "rt_synth_label"
+					default_format = "#tooltippable"
+				}
+				blockoverride "row_value" {
+					text = "rt_synth_value"
+				}
+			}
+			gw_value_row = {
+				tooltip = "rt_mkt_coal_tt"
+				blockoverride "row_label" {
+					text = "rt_mkt_coal_label"
+					default_format = "#tooltippable"
+				}
+				blockoverride "row_value" {
+					text = "rt_mkt_coal_value"
+				}
+			}
+			gw_value_row = {
+				tooltip = "rt_mkt_oil_tt"
+				blockoverride "row_label" {
+					text = "rt_mkt_oil_label"
+					default_format = "#tooltippable"
+				}
+				blockoverride "row_value" {
+					text = "rt_mkt_oil_value"
+				}
+			}
+
+			# The emissions this all feeds: the overview's market figure, said
+			# here too because it is the outcome the transition is for. Climate
+			# only, so not with the rule off.
+			gw_value_row = {
+				visible = "[And( GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('gw_has_yearly_figures_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+				tooltip = "rt_emis_tt"
+				blockoverride "row_label" {
+					text = "gw_emis_market_label"
+					default_format = "#tooltippable"
+				}
+				blockoverride "row_value" {
+					text = "gw_emis_market_value"
+				}
+			}
+
+			### ---- How the Fossil Transition Works: collapsed, nested (style
+			### rule 1: with the rule off this section is the entry's only one,
+			### so its explanation cannot live in How Global Warming Works).
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				margin_left = 20
+				margin_top = 6
+
+				gw_subsection_header = {
+					blockoverride "left_text" {
+						text = "rt_how_header"
+					}
+					blockoverride "onclick" {
+						onclick = "[GetVariableSystem.Toggle('rt_how_open')]"
+					}
+					blockoverride "onclick_showmore" {
+						visible = "[Not(GetVariableSystem.Exists('rt_how_open'))]"
+					}
+					blockoverride "onclick_showless" {
+						visible = "[GetVariableSystem.Exists('rt_how_open')]"
+					}
+				}
+			}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				visible = "[GetVariableSystem.Exists('rt_how_open')]"
+
+				gw_subheader = {
+					blockoverride "subheader_text" {
+						text = "rt_how_laws_head"
+					}
+				}
+				gw_note = {
+					text = "rt_how_laws"
+				}
+				gw_subheader = {
+					blockoverride "subheader_text" {
+						text = "rt_how_programmes_head"
+					}
+				}
+				gw_note = {
+					text = "rt_how_programmes"
+				}
+				gw_subheader = {
+					blockoverride "subheader_text" {
+						text = "rt_how_emissions_head"
+					}
+				}
+				gw_note = {
+					text = "rt_how_emissions"
+				}
+			}
+		}
+	}
+
+	### ======================================================================
 	### COMPOSERS: the one order of the sections.
 	### ======================================================================
 
@@ -1721,6 +2071,7 @@ types global_warming_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_gw_sec_policies = {}
+		te_gw_sec_transition = {}
 		te_gw_sec_emitters = {}
 	}
 
@@ -1730,7 +2081,9 @@ types global_warming_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[JournalEntry.IsActive]"
+		# Climate only (#660): the Fossil Transition section carries its own
+		# explanation, so nothing here shows with the Global Warming rule off.
+		visible = "[And( JournalEntry.IsActive, GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 
 		te_gw_sec_history = {}
 		te_gw_sec_how = {}

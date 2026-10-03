@@ -693,6 +693,12 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # ones would all fall to CONCEPTS, away from the rest of the family.
     if key.startswith("resettlement_"):
         return "MISCELLANEOUS"
+    # Resource Transition (#660): the Fossil Transition section, its
+    # triggers and effects, and the Transition Assistance modifier. Short keys
+    # (`rt_btn_start`, `rt_sect_transition`) and `_desc` halves would go to
+    # CONCEPTS and the rest to MISCELLANEOUS; keep the family together.
+    if key.startswith("rt_"):
+        return "MISCELLANEOUS"
     # Collective Governance government types and amendments (law_direct_democracy):
     # four-token bases (`gov_collective_noble_commonwealth`,
     # `amendment_collective_direct_democracy`) would otherwise split, the name
