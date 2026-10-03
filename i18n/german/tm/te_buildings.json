@@ -43,6 +43,14 @@
   "en": "Airport [concept_throughput]",
   "de": "[concept_throughput] – Flughafen"
  },
+ "building_ajinomoto_kawasaki_plant": {
+  "en": "Ajinomoto Kawasaki Plant",
+  "de": "Ajinomoto-Werk Kawasaki"
+ },
+ "building_ajinomoto_kawasaki_plant_desc": {
+  "en": "Ajinomoto's works on the Kawasaki waterfront, opened in 1914 to make monosodium glutamate. Its fermentation tanks now turn out amino acids, sweeteners and seasonings by the shipload.",
+  "de": "Ajinomotos Werk am Hafen von Kawasaki, 1914 eröffnet, um Mononatriumglutamat herzustellen. In seinen Gärtanks entstehen heute Aminosäuren, Süßstoffe und Würzmittel in Schiffsladungen."
+ },
  "building_aker_oslo_shipyard": {
   "en": "Aker Oslo Shipyard",
   "de": "Aker-Werft Oslo"
@@ -231,6 +239,14 @@
   "en": "Bengal Coal Raniganj Mine",
   "de": "Bengal-Coal-Mine Raniganj"
  },
+ "building_bgi_national_genebank": {
+  "en": "BGI National GeneBank",
+  "de": "BGI Nationale Genbank"
+ },
+ "building_bgi_national_genebank_desc": {
+  "en": "The China National GeneBank, which BGI runs for the state in Shenzhen: banks of sequencers, a bioinformatics data center, and frozen vaults of seeds, cells and DNA from across the living world.",
+  "de": "Die China National GeneBank, die BGI im Auftrag des Staates in Shenzhen betreibt: Reihen von Sequenziergeräten, ein Rechenzentrum für Bioinformatik und Tiefkühlgewölbe voller Samen, Zellen und DNA aus der gesamten lebenden Welt."
+ },
  "building_bhp_broken_hill_mine": {
   "en": "BHP Broken Hill Mine",
   "de": "BHP-Mine Broken Hill"
@@ -242,6 +258,22 @@
  "building_bhp_mount_whaleback_mine": {
   "en": "Mount Whaleback Mine",
   "de": "Mount-Whaleback-Mine"
+ },
+ "building_biocon_park": {
+  "en": "Biocon Park",
+  "de": "Biocon Park"
+ },
+ "building_biocon_park_desc": {
+  "en": "Biocon's campus at Bommasandra, outside Bengaluru, where biosimilar insulins and antibodies are made for a fraction of the price of the branded drugs they copy.",
+  "de": "Biocons Campus in Bommasandra außerhalb von Bengaluru, wo Biosimilar-Insuline und -Antikörper zu einem Bruchteil des Preises der Markenpräparate hergestellt werden, die sie nachbilden."
+ },
+ "building_biontech_mainz_campus": {
+  "en": "BioNTech Mainz Campus",
+  "de": "BioNTech-Campus Mainz"
+ },
+ "building_biontech_mainz_campus_desc": {
+  "en": "BioNTech's headquarters and plant on An der Goldgrube in Mainz. The company writes messenger RNA to order: a vaccine against a new virus in weeks, or a cancer therapy matched to one patient's tumor.",
+  "de": "Firmensitz und Werk von BioNTech An der Goldgrube in Mainz. Das Unternehmen schreibt Boten-RNA nach Bestellung: einen Impfstoff gegen ein neues Virus in wenigen Wochen oder eine Krebstherapie, die auf den Tumor eines einzelnen Patienten abgestimmt ist."
  },
  "building_blackberry_rim_campus": {
   "en": "RIM Campus",
@@ -602,6 +634,14 @@
  "building_ge_schenectady_works_desc": {
   "en": "General Electric's sprawling Schenectady complex, where Thomas Edison's vision became an empire of electrical innovation and manufacturing.",
   "de": "Der weitläufige Schenectady-Komplex von General Electric, in dem Thomas Edisons Vision zu einem Imperium elektrischer Innovation und Fertigung wurde."
+ },
+ "building_genentech_dna_way_campus": {
+  "en": "Genentech DNA Way Campus",
+  "de": "Genentech-Campus DNA Way"
+ },
+ "building_genentech_dna_way_campus_desc": {
+  "en": "Genentech's laboratories at 1 DNA Way in South San Francisco. In 1978, two years after its founding, the company made human insulin in bacteria and turned recombinant DNA into an industry.",
+  "de": "Genentechs Labore in der 1 DNA Way in South San Francisco. 1978, zwei Jahre nach der Gründung, stellte das Unternehmen menschliches Insulin in Bakterien her und machte aus rekombinanter DNA eine Industrie."
  },
  "building_generic_arsenal": {
   "en": "Arsenal",
@@ -1379,6 +1419,14 @@
   "en": "Mokta el Hadid Beni Saf Mine",
   "de": "Mokta-el-Hadid-Mine Beni Saf"
  },
+ "building_monsanto_chesterfield_center": {
+  "en": "Monsanto Chesterfield Research Center",
+  "de": "Monsanto-Forschungszentrum Chesterfield"
+ },
+ "building_monsanto_chesterfield_center_desc": {
+  "en": "Monsanto's life-sciences laboratories at Chesterfield, outside St. Louis. Its plant biologists bred the herbicide-tolerant and insect-resistant crops that by the 2010s made up most of the soy, maize and cotton grown in the United States.",
+  "de": "Monsantos Biowissenschaftslabore in Chesterfield bei St. Louis. Seine Pflanzenbiologen züchteten die herbizidtoleranten und insektenresistenten Nutzpflanzen, die in den 2010er-Jahren den größten Teil von Soja, Mais und Baumwolle ausmachten, die in den Vereinigten Staaten angebaut wurden."
+ },
  "building_morozov_orekhovo_zuevo_mills": {
   "en": "Morozov Orekhovo-Zuevo Mills",
   "de": "Morozov-Mühlen Orechowo-Sujewo"
@@ -1486,6 +1534,14 @@
  "building_norsk_hydro_rjukan_plant": {
   "en": "Norsk Hydro Rjukan Plant",
   "de": "Norsk-Hydro-Werk Rjukan"
+ },
+ "building_novo_nordisk_kalundborg_plant": {
+  "en": "Novo Nordisk Kalundborg Plant",
+  "de": "Novo-Nordisk-Werk Kalundborg"
+ },
+ "building_novo_nordisk_kalundborg_plant_desc": {
+  "en": "Novo Nordisk's insulin works at Kalundborg on Zealand, the largest in the world. It belongs to the Kalundborg Symbiosis, in which the town's power station, refinery and factories trade steam, water and by-products, so that one plant's waste is another's feedstock.",
+  "de": "Novo Nordisks Insulinwerk in Kalundborg auf Seeland, das größte der Welt. Es gehört zur Kalundborg-Symbiose, in der Kraftwerk, Raffinerie und Fabriken der Stadt Dampf, Wasser und Nebenprodukte austauschen, sodass der Abfall des einen Betriebs der Rohstoff des anderen ist."
  },
  "building_nuclear_plant": {
   "en": "Nuclear Plant",
@@ -1799,6 +1855,14 @@
   "en": "Vostochny Cosmodrome",
   "de": "Kosmodrom Wostotschny"
  },
+ "building_rosen_association_hq": {
+  "en": "Rosen Association Headquarters",
+  "de": "Zentrale der Rosen Association"
+ },
+ "building_rosen_association_hq_desc": {
+  "en": "The Rosen Association's Seattle headquarters. Its vats grow android workers who can pass for human, and artificial animals for households that can no longer find real ones.",
+  "de": "Der Hauptsitz der Rosen Association in Seattle. In seinen Tanks wachsen Android-Arbeiter heran, die als Menschen durchgehen können, und künstliche Tiere für Haushalte, die keine echten mehr finden."
+ },
  "building_rossi_sao_leopoldo_arms_factory": {
   "en": "Rossi São Leopoldo Arms Factory",
   "de": "Rossi-Waffenfabrik São Leopoldo"
@@ -1964,8 +2028,8 @@
   "de": "[concept_throughput] – Weltraummine"
  },
  "building_space_mine_throughput_add_desc": {
-  "en": "A bonus or penalty to both input and output of Space Mine buildings",
-  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe der Weltraumminen-Gebäude"
+  "en": "A bonus or penalty to both input and output of $building_space_mine$ buildings",
+  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe der Gebäude vom Typ $building_space_mine$"
  },
  "building_space_program": {
   "en": "Space Program",
@@ -2059,6 +2123,10 @@
   "en": "Integrated Biorefinery",
   "de": "Integrierte Bioraffinerie"
  },
+ "building_synthetics_plant_biomass_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_biomass$",
+  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe des Gebäudes $building_synthetics_plant_biomass$"
+ },
  "building_synthetics_plant_coal": {
   "en": "Carbon Conversion Works",
   "de": "Kohleverflüssigungswerk"
@@ -2067,6 +2135,10 @@
   "en": "Beverage Concentrates Plant",
   "de": "Getränkekonzentratwerk"
  },
+ "building_synthetics_plant_drinks_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_drinks$",
+  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe des Gebäudes $building_synthetics_plant_drinks$"
+ },
  "building_synthetics_plant_fruit": {
   "en": "Cultured Produce Facility",
   "de": "Anlage für kultivierte Erzeugnisse"
@@ -2074,6 +2146,10 @@
  "building_synthetics_plant_meat": {
   "en": "Cultured Meat Plant",
   "de": "Kultiviertes-Fleisch-Werk"
+ },
+ "building_synthetics_plant_meat_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_meat$",
+  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe des Gebäudes $building_synthetics_plant_meat$"
  },
  "building_synthetics_plant_oil": {
   "en": "Synthetic Fuel Works",
@@ -2090,6 +2166,10 @@
  "building_synthetics_plant_opium": {
   "en": "Pharmaceutical Industries",
   "de": "Pharmazeutische Industrie"
+ },
+ "building_synthetics_plant_opium_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_opium$",
+  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe des Gebäudes $building_synthetics_plant_opium$"
  },
  "building_synthetics_plant_rubber": {
   "en": "Synthetic Rubber Works",
@@ -2118,6 +2198,10 @@
  "building_synthetics_plant_sugar": {
   "en": "Artificial Sweeteners Plant",
   "de": "Werk für künstliche Süßstoffe"
+ },
+ "building_synthetics_plant_sugar_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_synthetics_plant_sugar$",
+  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe des Gebäudes $building_synthetics_plant_sugar$"
  },
  "building_synthetics_plant_wood": {
   "en": "Phenolic Resin Panels Plant",

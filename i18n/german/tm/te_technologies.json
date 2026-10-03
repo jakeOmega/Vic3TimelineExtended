@@ -464,8 +464,8 @@
   "de": "Elektrofahrzeuge"
  },
  "electric_vehicles_desc": {
-  "en": "Battery-electric powertrains overtake internal combustion for passenger transport. Charging [concept_infrastructure], regenerative braking, and rare-earth supply chains reshape automotive manufacturing.",
-  "de": "Batterieelektrische Antriebe überholen den Verbrennungsmotor im Personenverkehr. Lade-[concept_infrastructure], Rekuperationsbremsen und Lieferketten für Seltene Erden formen die Automobilfertigung neu."
+  "en": "Battery-electric powertrains overtake internal combustion for passenger transport. Charging infrastructure, regenerative braking, and rare-earth supply chains reshape automotive manufacturing.",
+  "de": "Batterieelektrische Antriebe überholen den Verbrennungsmotor im Personenverkehr. Ladeinfrastruktur, Rekuperationsbremsen und Lieferketten für Seltene Erden formen die Automobilfertigung neu."
  },
  "electronic_warfare": {
   "en": "Electronic Warfare",

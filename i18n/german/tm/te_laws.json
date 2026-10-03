@@ -40,8 +40,16 @@
   "de": "Algorithmische Regierungsführung"
  },
  "law_algorithmic_governance_desc": {
-  "en": "A system of government where decisions are made by algorithms or artificial intelligence, based on data analysis and predictive modeling.",
-  "de": "Ein Regierungssystem, in dem Entscheidungen von Algorithmen oder künstlicher Intelligenz auf Grundlage von Datenanalyse und Vorhersagemodellen getroffen werden."
+  "en": "Supreme political authority is vested in artificial intelligence, which determines the state's objectives and directs their implementation. Human institutions serve in advisory and executive capacities.",
+  "de": "Die oberste politische Gewalt liegt bei einer künstlichen Intelligenz, die die Ziele des Staates festlegt und ihre Umsetzung lenkt. Menschliche Institutionen dienen in beratender und ausführender Funktion."
+ },
+ "law_automated_bureaucracy": {
+  "en": "Automated Bureaucracy",
+  "de": "Automatisierte Bürokratie"
+ },
+ "law_automated_bureaucracy_desc": {
+  "en": "Autonomous systems administer the state's institutions within mandates established by its political authorities. Human officials retain oversight, but routine administration and operational decisions are entrusted to machines.",
+  "de": "Autonome Systeme verwalten die Institutionen des Staates im Rahmen von Mandaten, die seine politischen Autoritäten festgelegt haben. Menschliche Beamte behalten die Aufsicht, doch die Routineverwaltung und operative Entscheidungen werden Maschinen anvertraut."
  },
  "law_auxiliary_fleet": {
   "en": "Auxiliary Fleet",
@@ -99,6 +107,14 @@
   "en": "A commodity, such as gold or silver, is used directly as currency. A national bank can set a discount rate on it, but can make credit no more than a point cheaper than the world's, or three points dearer — the coin is the metal, and metal leaves for wherever it earns more.",
   "de": "Eine Ware wie Gold oder Silber dient unmittelbar als Zahlungsmittel. Eine Nationalbank kann darauf einen Diskontsatz festlegen, doch Kredit höchstens einen Punkt günstiger oder drei Punkte teurer machen als anderswo in der Welt — die Münze ist das Metall, und Metall wandert dorthin, wo es mehr einbringt."
  },
+ "law_communal_administration": {
+  "en": "Communal Administration",
+  "de": "Gemeinschaftsverwaltung"
+ },
+ "law_communal_administration_desc": {
+  "en": "Local assemblies run public services and local affairs through delegates who serve short terms and can be recalled at any time. Citizens take part in administration directly rather than electing officials to act for them.",
+  "de": "Örtliche Versammlungen führen öffentliche Dienste und lokale Angelegenheiten durch Delegierte, die nur kurze Amtszeiten haben und jederzeit abberufen werden können. Die Bürger nehmen unmittelbar an der Verwaltung teil, statt Beamte zu wählen, die für sie handeln."
+ },
  "law_communal_child_rearing": {
   "en": "Communal Child-Rearing",
   "de": "Gemeinschaftliche Kindererziehung"
@@ -114,6 +130,14 @@
  "law_comprehensive_rights_desc": {
   "en": "LGBTQ+ individuals have legal rights under [concept_lgbtq_rights_movement] legislation, including anti-[concept_discrimination] laws and protections from hate crimes. However, they may lack some aspects of full social equality, such as marriage equality or adoption rights.",
   "de": "LGBTQ+-Personen besitzen gesetzliche Rechte im Rahmen der [concept_lgbtq_rights_movement]-Gesetzgebung, einschließlich Gesetzen gegen [concept_discrimination] und Schutz vor Hassverbrechen. Es können ihnen jedoch einige Aspekte voller sozialer Gleichheit fehlen, etwa die Ehe für alle oder Adoptionsrechte."
+ },
+ "law_contracted_administration": {
+  "en": "Contracted Administration",
+  "de": "Ausgelagerte Verwaltung"
+ },
+ "law_contracted_administration_desc": {
+  "en": "Private firms carry out much of the state's administration under contract. A smaller civil service writes and oversees the contracts, and the firms that win them answer for results rather than procedure.",
+  "de": "Private Firmen führen einen großen Teil der staatlichen Verwaltung im Auftrag aus. Ein kleinerer öffentlicher Dienst verfasst und überwacht die Verträge, und die Firmen, die sie gewinnen, stehen für Ergebnisse ein statt für Verfahren."
  },
  "law_corporate_genetic_licensing": {
   "en": "Corporate Genetic Licensing",
@@ -208,8 +232,8 @@
   "de": "Traditionelle Vasallität"
  },
  "law_feudal_contracts_desc": {
-  "en": "The state is a tapestry of personal oaths and traditional [Concept('concept_obligation', 'obligations')].",
-  "de": "Der Staat ist ein Geflecht aus persönlichen Eiden und traditionellen [Concept('concept_obligation', 'Verpflichtungen')]."
+  "en": "The state is a tapestry of personal oaths and traditional obligations.",
+  "de": "Der Staat ist ein Geflecht aus persönlichen Eiden und traditionellen Verpflichtungen."
  },
  "law_fiat_currency": {
   "en": "Fiat Money",
@@ -218,6 +242,14 @@
  "law_fiat_currency_desc": {
   "en": "Money that has no intrinsic value and is not backed by a physical commodity. Its value is derived from the trust and confidence of the people who use it.",
   "de": "Geld ohne inneren Wert, das nicht durch eine physische Ware gedeckt ist. Sein Wert ergibt sich aus dem Vertrauen der Menschen, die es verwenden."
+ },
+ "law_fossil_expansion_moratorium": {
+  "en": "Fossil Expansion Moratorium",
+  "de": "Fossiles Ausbaumoratorium"
+ },
+ "law_fossil_expansion_moratorium_desc": {
+  "en": "No new $building_coal_mine$, $building_oil_rig$ or $building_power_plant$ may be built or expanded here, whoever invests, foreign investors included. Those already running carry on.\\n\\nThe ban earns no emissions cut by itself: our market's [concept_greenhouse_gas_emissions] come from the coal and oil it burns, wherever they were mined. Part of the [concept_fossil_transition].",
+  "de": "Keine neuen $building_coal_mine$, $building_oil_rig$ oder $building_power_plant$ dürfen hier gebaut oder erweitert werden, gleich wer investiert, ausländische Investoren eingeschlossen. Bereits laufende bleiben bestehen.\\n\\nDas Verbot bringt für sich allein keine Emissionssenkung: Die [concept_greenhouse_gas_emissions] unseres Marktes stammen aus der Kohle und dem Öl, die er verbrennt, gleichgültig wo sie gefördert wurden. Teil der [concept_fossil_transition]."
  },
  "law_free_mutual_banking": {
   "en": "Free & Mutual Banking",
@@ -338,6 +370,14 @@
  "law_local_vernacular_desc": {
   "en": "Administration and schooling follow local custom. The state sets no uniform language standard, producing a patchwork of practices and identities.",
   "de": "Verwaltung und Schulwesen folgen lokalem Brauch. Der Staat legt keinen einheitlichen Sprachstandard fest, wodurch ein Flickenteppich an Praktiken und Identitäten entsteht."
+ },
+ "law_managed_fossil_phaseout": {
+  "en": "Managed Fossil Phaseout",
+  "de": "Gesteuerter Fossilausstieg"
+ },
+ "law_managed_fossil_phaseout_desc": {
+  "en": "The moratorium, and the state may retire what is already running. A programme for each industry closes the smallest building of its kind left in our states every #v 3#! months: the whole building, every level, whoever owns it, foreign investors included. We pay its owners a quarter of what it would cost to build today, from the treasury, and its state gets [GetStaticModifier('rt_transition_assistance').GetName] for #v 5#! years.\\n\\nClosing supply cuts our market's [concept_greenhouse_gas_emissions] only if the market then burns less coal and oil, not if it imports them. Programmes are started from the [concept_fossil_transition] section of the $je_global_warming$ journal entry, and stop if this law is repealed.",
+  "de": "Das Moratorium gilt, und der Staat darf stilllegen, was bereits läuft. Ein Programm für jede Branche schließt alle #v 3#! Monate das kleinste noch vorhandene Gebäude seiner Art in unseren Staaten: das ganze Gebäude, jede Stufe, gleich wem es gehört, ausländische Investoren eingeschlossen. Wir zahlen seinen Eigentümern ein Viertel dessen, was der Bau heute kosten würde, aus der Landeskasse, und sein Staat erhält [GetStaticModifier('rt_transition_assistance').GetName] für #v 5#! Jahre.\\n\\nDie Schließung des Angebots senkt die [concept_greenhouse_gas_emissions] unseres Marktes nur, wenn der Markt danach weniger Kohle und Öl verbrennt, nicht, wenn er sie importiert. Programme werden im Abschnitt [concept_fossil_transition] des Journaleintrags $je_global_warming$ gestartet und enden, wenn dieses Gesetz aufgehoben wird."
  },
  "law_mandatory_augmentation": {
   "en": "Mandatory Augmentation",
@@ -1091,6 +1131,14 @@
   "en": "[concept_human_augmentation_system] is unregulated, allowing for open development, distribution, and use of enhancement technologies. This fosters rapid advancements but may result in significant ethical, social, and safety concerns.",
   "de": "[concept_human_augmentation_system] ist unreguliert, sodass Verbesserungstechnologien frei entwickelt, verbreitet und genutzt werden können. Das fördert rasche Fortschritte, kann aber erhebliche ethische, soziale und sicherheitstechnische Bedenken aufwerfen."
  },
+ "law_unrestricted_extraction": {
+  "en": "Unrestricted Extraction",
+  "de": "Uneingeschränkte Förderung"
+ },
+ "law_unrestricted_extraction_desc": {
+  "en": "Coal mines, oil rigs and power plants are built, expanded and kept as their owners see fit.",
+  "de": "Kohleminen, Ölbohranlagen und Kraftwerke werden so gebaut, erweitert und betrieben, wie ihre Eigentümer es für richtig halten."
+ },
  "law_war_crimes_forbidden": {
   "en": "War Crimes Forbidden",
   "de": "Kriegsverbrechen verboten"
@@ -1342,6 +1390,14 @@
  "lawgroup_privacy_rights_desc": {
   "en": "The extent to which personal privacy is protected and regulated in society.",
   "de": "Das Ausmaß, in dem die persönliche Privatsphäre in der Gesellschaft geschützt und reguliert wird."
+ },
+ "lawgroup_resource_transition": {
+  "en": "Resource Transition",
+  "de": "Ressourcenwende"
+ },
+ "lawgroup_resource_transition_desc": {
+  "en": "Whether the state lets coal mines, oil rigs and power plants keep growing, freezes them, or retires them: the [concept_fossil_transition]. Part of the [concept_ministry_system]'s environmental agenda: both restrictive laws need a Ministry of the Environment, and lapse if it is abolished.",
+  "de": "Ob der Staat Kohleminen, Ölbohranlagen und Kraftwerke weiterwachsen lässt, sie einfriert oder stilllegt: die [concept_fossil_transition]. Teil der Umweltagenda des [Concept('concept_ministry_system','Ministerialsystems')]: Beide restriktiven Gesetze setzen ein Umweltministerium voraus und erlöschen, wenn es abgeschafft wird."
  },
  "lawgroup_right_to_information": {
   "en": "Right to Information",
