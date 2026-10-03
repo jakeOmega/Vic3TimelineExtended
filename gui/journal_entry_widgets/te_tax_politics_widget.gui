@@ -100,7 +100,11 @@ types te_tax_politics_widget_types
 	### six reasons behind the score, then its offer if it makes one. Drawn
 	### only for a group the bill has a stance for (code 0 without a bill, or
 	### for a group outside the eight the support model scores).
-	### 4 + 160 + 64 + 176 + 72 + 4 = 480.
+	### 4 + 216 + 64 + 120 + 72 + 4 = 480. Within the style budget (8.6 px a
+	### character plus 10%; final review B-Minor 7): the name holds 22
+	### characters ("Petite Bourgeoisie" is 18), the stance the longest of
+	### its five words ("Persuadable"; "Marginal" alone, the hover says it is
+	### not counted).
 	type te_tax_ig_card = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -113,7 +117,7 @@ types te_tax_politics_widget_types
 			margin = { 4 1 }
 
 			textbox = {
-				size = { 160 24 }
+				size = { 216 24 }
 				align = left|nobaseline
 				using = fontsize_medium
 				parentanchor = vcenter
@@ -131,7 +135,7 @@ types te_tax_politics_widget_types
 				tooltip = "te_tax_ig_clout_tt"
 			}
 			textbox = {
-				size = { 176 24 }
+				size = { 120 24 }
 				align = right|nobaseline
 				using = fontsize_medium
 				parentanchor = vcenter

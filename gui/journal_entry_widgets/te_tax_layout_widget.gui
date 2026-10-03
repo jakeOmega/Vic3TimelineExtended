@@ -53,7 +53,9 @@ types te_tax_layout_widget_types
 	### is in force; this says how it got there and how it changes. The passage
 	### rule's numbers (share, legitimacy, debate days, thresholds, due-month
 	### range, reschedule delay) are read from its own script values
-	### (te_tax_support_values.txt), so those follow the rule. Three facts are
+	### (te_tax_support_values.txt), so those follow the rule. The Customs
+	### topic and the customs half of the monthly line show only under the
+	### customs option (te_tax_show_customs_option_sgui). Three facts are
 	### written out in both the loc and the script and CAN drift: the sunset
 	### offsets 6/12/24/36/60 (te_tax_dr_sunset_*), a minor bill's "two taxes,
 	### two steps" (te_tax_bill_set_minor, te_tax_gen_bill_small_steps) and
@@ -153,11 +155,28 @@ types te_tax_layout_widget_types
 			te_tax_note = {
 				text = "te_tax_how_replaces"
 			}
+			# Under the customs option the monthly sync sets tariffs too.
 			te_tax_note = {
-				text = "te_tax_how_replaces_monthly"
+				text = "[SelectLocalization( GetScriptedGui('te_tax_show_customs_option_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_how_replaces_monthly_customs', 'te_tax_how_replaces_monthly' )]"
 			}
 			te_tax_note = {
 				text = "te_tax_how_replaces_views"
+			}
+
+			# Customs, under the customs option only (final review B-I1).
+			te_tax_subheader = {
+				visible = "[GetScriptedGui('te_tax_show_customs_option_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				blockoverride "subheader_text" {
+					text = "te_tax_how_sub_customs"
+				}
+			}
+			te_tax_note = {
+				visible = "[GetScriptedGui('te_tax_show_customs_option_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				text = "te_tax_how_customs"
+			}
+			te_tax_note = {
+				visible = "[GetScriptedGui('te_tax_show_customs_option_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				text = "te_tax_how_customs_sync"
 			}
 		}
 	}

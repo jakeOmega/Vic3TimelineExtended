@@ -3826,7 +3826,8 @@ def generated_rows():
         "### the review's goods lines, one per consumption-catalog good, in catalog order. The row",
         "### types, te_tax_good_row and te_tax_review_good_line, are in te_tax_workbench_widget.gui",
         "### and te_tax_review_widget.gui; the goods' names are their own loc keys. Every value is a",
-        "### guarded view of the player's draft (te_tax_view_dr_g_<good>*), shown as a 0/1 code.",
+        "### guarded view of the player's draft (te_tax_view_dr_g_<good>*), shown as a 0/1 code. Each",
+        "### good's name carries itself as a hover, in case a font draws it wider than its cell.",
         "### Then the customs schedule's rows (plan Task 15): the workbench's per category and the",
         "### review's, one per customs-catalog good (te_tax_customs_row, te_tax_review_customs_line,",
         "### te_tax_cu_level_text; te_tax_view_cu_*).",
@@ -3850,6 +3851,7 @@ def generated_rows():
             f"\t\t\tdatacontext = \"[GetScriptedGui('te_tax_good_{good}_sgui')]\"",
             "\t\t\tblockoverride \"good_name\" {",
             f"\t\t\t\ttext = \"{good}\"",
+            f"\t\t\t\ttooltip = \"{good}\"",
             "\t\t\t}",
             "\t\t\tblockoverride \"good_law\" {",
             f"\t\t\t\ttext = \"[SelectLocalization( {law}, 'te_tax_wb_good_taxed', 'te_tax_wb_good_untaxed' )]\"",
@@ -3883,6 +3885,7 @@ def generated_rows():
             f"\t\t\tvisible = \"[{touched}]\"",
             "\t\t\tblockoverride \"line_label\" {",
             f"\t\t\t\ttext = \"{good}\"",
+            f"\t\t\t\ttooltip = \"{good}\"",
             "\t\t\t}",
             "\t\t\tblockoverride \"line_value\" {",
             f"\t\t\t\ttext = \"[SelectLocalization( {draft}, 'te_tax_rv_good_taxed', 'te_tax_rv_good_untaxed' )]\"",
@@ -3920,7 +3923,8 @@ def _customs_rows():
         ]
         for good in goods:
             lines += ["", "\t\tte_tax_customs_row = {", f"\t\t\tdatacontext = \"[GetScriptedGui('te_tax_customs_{good}_sgui')]\"",
-                      "\t\t\tblockoverride \"good_name\" {", f"\t\t\t\ttext = \"{good}\"", "\t\t\t}"]
+                      "\t\t\tblockoverride \"good_name\" {", f"\t\t\t\ttext = \"{good}\"",
+                      f"\t\t\t\ttooltip = \"{good}\"", "\t\t\t}"]
             for d, _ in CUSTOMS_DIRS:
                 view = f"te_tax_view_cu_{d}_{good}"
                 lines += [f"\t\t\tblockoverride \"{d}_level\" {{"] + _level_texts(view, "\t\t\t\t") + ["\t\t\t}",
@@ -3942,7 +3946,8 @@ def _customs_rows():
             view = f"te_tax_view_cu_{d}_{good}"
             lines += ["", "\t\tte_tax_review_customs_line = {",
                       f"\t\t\tvisible = \"[{_gui_view(f'{view}_on', 'NotEqualTo_CFixedPoint', 0)}]\"",
-                      "\t\t\tblockoverride \"good_name\" {", f"\t\t\t\ttext = \"{good}\"", "\t\t\t}",
+                      "\t\t\tblockoverride \"good_name\" {", f"\t\t\t\ttext = \"{good}\"",
+                      f"\t\t\t\ttooltip = \"{good}\"", "\t\t\t}",
                       "\t\t\tblockoverride \"direction\" {", f"\t\t\t\ttext = \"te_tax_rv_cu_{d}\"", "\t\t\t}",
                       "\t\t\tblockoverride \"law_level\" {"] + _level_texts(f"{view}_base", "\t\t\t\t") + [
                       "\t\t\t}", "\t\t\tblockoverride \"bill_level\" {"] + _level_texts(view, "\t\t\t\t") + [
@@ -3951,7 +3956,8 @@ def _customs_rows():
             touched = _gui_view(f"{view}_on", "NotEqualTo_CFixedPoint", 0)
             lines += ["", "\t\tte_tax_review_line = {",
                       f"\t\t\tvisible = \"[And( {blocked}, {touched} )]\"",
-                      "\t\t\tblockoverride \"line_label\" {", f"\t\t\t\ttext = \"{good}\"", "\t\t\t}",
+                      "\t\t\tblockoverride \"line_label\" {", f"\t\t\t\ttext = \"{good}\"",
+                      f"\t\t\t\ttooltip = \"{good}\"", "\t\t\t}",
                       "\t\t\tblockoverride \"line_value\" {", f"\t\t\t\ttext = \"te_tax_rv_cu_blocked_{d}\"",
                       "\t\t\t}", "\t\t}"]
     lines.append("\t}")

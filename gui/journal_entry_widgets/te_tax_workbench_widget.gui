@@ -328,18 +328,19 @@ types te_tax_workbench_widget_types
 	}
 
 	### A customs level (the generated rows): seven of these share one cell, and
-	### the one whose level the row's view holds is shown.
+	### the one whose level the row's view holds is shown. 88 wide: the longest
+	### level name at 7 px a character ("High subsidy", 84; final review B-I2).
 	type te_tax_cu_level_text = textbox {
 		parentanchor = right|vcenter
 		autoresize = yes
-		max_width = 100
+		max_width = 88
 		elide = right
 		align = right|nobaseline
 		using = fontsize_medium
 	}
 
 	### The Customs rows' column heads, in their cells (plan Task 15).
-	### 4 + 120 + 4 + 166 + 4 + 166 + 4 = 468.
+	### 4 + 156 + 4 + 154 + 4 + 154 + 4 = 480.
 	type te_tax_customs_head = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -347,13 +348,13 @@ types te_tax_workbench_widget_types
 		margin = { 4 1 }
 
 		widget = {
-			size = { 120 20 }
+			size = { 156 20 }
 		}
 		widget = {
-			size = { 166 20 }
+			size = { 154 20 }
 			textbox = {
 				position = { 0 0 }
-				size = { 100 20 }
+				size = { 88 20 }
 				align = right|nobaseline
 				elide = right
 				using = fontsize_small
@@ -363,10 +364,10 @@ types te_tax_workbench_widget_types
 			}
 		}
 		widget = {
-			size = { 166 20 }
+			size = { 154 20 }
 			textbox = {
 				position = { 0 0 }
-				size = { 100 20 }
+				size = { 88 20 }
 				align = right|nobaseline
 				elide = right
 				using = fontsize_small
@@ -385,7 +386,9 @@ types te_tax_workbench_widget_types
 	### customs (te_tax_view_customs_mode 1); a customs-union member sees its
 	### market owner's levels with no editor. Each direction sits in a fixed
 	### cell, so the columns line up with or without steppers.
-	### 4 + 120 + 4 + 166 + 4 + 166 + 4 = 468; a direction's cell 100 + 4 + 10 + 4 + 22 + 4 + 22 = 166.
+	### 4 + 156 + 4 + 154 + 4 + 154 + 4 = 480; a direction's cell 88 + 4 + 10 + 4 + 22 + 4 + 22 = 154.
+	### The name cell holds the longest customs good at 7 px a character
+	### ("Electronic Components", 147; final review B-I2), with the name on hover.
 	type te_tax_customs_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -393,11 +396,11 @@ types te_tax_workbench_widget_types
 		margin = { 4 1 }
 
 		widget = {
-			size = { 120 26 }
+			size = { 156 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 120
+				max_width = 156
 				elide = right
 				align = left|nobaseline
 				using = fontsize_medium
@@ -408,14 +411,14 @@ types te_tax_workbench_widget_types
 		# code that sets this country's customs only, the steppers (ops 0, 1;
 		# right-click either: 2, out of the draft).
 		widget = {
-			size = { 166 26 }
+			size = { 154 26 }
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = yes
 				spacing = 4
 
 				widget = {
-					size = { 100 26 }
+					size = { 88 26 }
 					block "imp_level" {}
 				}
 				widget = {
@@ -455,14 +458,14 @@ types te_tax_workbench_widget_types
 		# code that sets this country's customs only, the steppers (ops 10, 11;
 		# right-click either: 12, out of the draft).
 		widget = {
-			size = { 166 26 }
+			size = { 154 26 }
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = yes
 				spacing = 4
 
 				widget = {
-					size = { 100 26 }
+					size = { 88 26 }
 					block "exp_level" {}
 				}
 				widget = {

@@ -90,6 +90,64 @@ class RuleLocTest(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertNotIn("[b]", text)
 
+    def test_the_enabled_options_say_experimental_and_what_the_ai_does(self):
+        # Final review B-I4: a player enabling the rule must know AI countries do not
+        # legislate yet, and the customs option that tariffs become legislated.
+        for option in ("te_tax_code_enabled", "te_tax_code_enabled_customs"):
+            text = self.loc[f"setting_{option}_desc"]
+            with self.subTest(option=option):
+                self.assertTrue(text.startswith("Experimental. "), text)
+                self.assertIn("AI countries do not legislate yet", text)
+        self.assertIn("tariffs and subsidies are set by legislation", self.loc["setting_te_tax_code_enabled_customs_desc"])
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        row = next(line for line in readme.splitlines() if line.startswith(f"| `{RULE}` |"))
+        for phrase in ("**Experimental.**", "AI countries do not legislate yet", "tariffs and subsidies"):
+            self.assertIn(phrase, row)
+
+
+class OnActionGateSweepTest(unittest.TestCase):
+    """Final review B-Minor 13: every tax-code on_action handler, and every tax-code
+    effect a shared hook calls, does nothing unless te_tax_code_on holds, written
+    positively. Each task's tests pin its own hooks; this pins the invariant for the
+    next one."""
+
+    ON_ACTIONS = "common/on_actions/te_tax_on_actions.txt"
+
+    def test_every_handler_is_one_positively_gated_block(self):
+        parsed = load(self.ON_ACTIONS)
+        handlers = {name: body for name, body in parsed.items()
+                    if name.startswith("te_tax_") and isinstance(body, dict) and "effect" in body}
+        self.assertGreaterEqual(len(handlers), 11)
+        for name, body in handlers.items():
+            with self.subTest(handler=name):
+                effect = body["effect"]
+                self.assertEqual(set(effect), {"if"}, "nothing outside the gate")
+                self.assertEqual(effect["if"]["limit"].get("te_tax_code_on"), "yes")
+        # Every hook this file extends runs only handlers of its own.
+        for name, body in parsed.items():
+            if isinstance(body, dict) and "on_actions" in body:
+                with self.subTest(hook=name):
+                    listed = body["on_actions"]
+                    listed = listed if isinstance(listed, list) else [listed]
+                    self.assertTrue(all(handler in handlers for handler in listed), listed)
+
+    def test_shared_hooks_call_gated_tax_effects(self):
+        shared = (ROOT / "common/on_actions/te_civil_war_on_actions.txt").read_text(encoding="utf-8-sig")
+        called = set(re.findall(r"\b(te_tax_\w+) = yes", re.sub(r"#[^\n]*", "", shared)))
+        self.assertEqual(called, {"te_tax_on_uprising", "te_tax_repair_after_civil_war"})
+        effects = load("common/scripted_effects/te_tax_civil_war_effects.txt")
+        # te_tax_code_in_force holds only under the rule (its first line).
+        in_force = load("common/scripted_triggers/te_tax_triggers.txt")["te_tax_code_in_force"]
+        self.assertEqual(in_force["te_tax_code_on"], "yes")
+        gates = {"te_tax_code_on", "te_tax_code_in_force"}
+        for name in called:
+            with self.subTest(effect=name):
+                self.assertLessEqual(set(effects[name]), {"if", "else_if"}, "nothing outside the gate")
+                for branch in ("if", "else_if"):
+                    if branch in effects[name]:
+                        limit = effects[name][branch]["limit"]
+                        self.assertTrue(any(limit.get(gate) == "yes" for gate in gates), (branch, limit))
+
 
 class GateTriggerTest(unittest.TestCase):
     def setUp(self):

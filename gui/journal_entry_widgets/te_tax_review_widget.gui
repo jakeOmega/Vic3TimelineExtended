@@ -31,7 +31,11 @@
 types te_tax_review_widget_types
 {
 	### A line of an entry: a label, then its text, which may wrap.
-	### 4 + 130 + 342 + 4 = 480.
+	### 4 + 160 + 312 + 4 = 480. The label holds the longest catalog good name
+	### at 7 px a character ("Electronic Components", 147; final review B-I2,
+	### test_tax_code_layout.py); an instance whose label has a hover sets
+	### default_format = "#tooltippable" itself, so a label without one is
+	### never drawn as hoverable.
 	type te_tax_review_line = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -39,18 +43,17 @@ types te_tax_review_widget_types
 		block "line_visible" {}
 
 		textbox = {
-			minimumsize = { 130 -1 }
-			maximumsize = { 130 -1 }
+			minimumsize = { 160 -1 }
+			maximumsize = { 160 -1 }
 			autoresize = yes
 			align = left|nobaseline
 			using = fontsize_medium
 			elide = right
-			default_format = "#tooltippable"
 			block "line_label" {}
 		}
 		textbox = {
-			minimumsize = { 342 -1 }
-			maximumsize = { 342 -1 }
+			minimumsize = { 312 -1 }
+			maximumsize = { 312 -1 }
 			autoresize = yes
 			multiline = yes
 			align = left|nobaseline
@@ -65,7 +68,9 @@ types te_tax_review_widget_types
 	### A customs level the draft changes (the generated te_tax_rv_customs_rows,
 	### plan Task 15): the good, imports or exports, existing law's level in the
 	### commencement month, and the bill's. Each level cell holds seven
-	### te_tax_cu_level_text, one shown. 4 + 130 + 4 + 70 + 4 + 100 + 4 + 18 + 4 + 100 + 4 = 442.
+	### te_tax_cu_level_text, one shown. 4 + 160 + 4 + 70 + 4 + 88 + 4 + 18 + 4 + 88 + 4 = 448;
+	### the name cell holds the longest customs good at 7 px a character and the
+	### level cells the longest level name (final review B-I2).
 	type te_tax_review_customs_line = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -73,11 +78,11 @@ types te_tax_review_widget_types
 		margin = { 4 1 }
 
 		widget = {
-			size = { 130 24 }
+			size = { 160 24 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 130
+				max_width = 160
 				elide = right
 				align = left|nobaseline
 				using = fontsize_medium
@@ -97,7 +102,7 @@ types te_tax_review_widget_types
 			}
 		}
 		widget = {
-			size = { 100 24 }
+			size = { 88 24 }
 			block "law_level" {}
 		}
 		widget = {
@@ -111,7 +116,7 @@ types te_tax_review_widget_types
 			}
 		}
 		widget = {
-			size = { 100 24 }
+			size = { 88 24 }
 			block "bill_level" {}
 		}
 	}
@@ -137,6 +142,7 @@ types te_tax_review_widget_types
 		}
 		te_tax_review_line = {
 			blockoverride "line_label" {
+				default_format = "#tooltippable"
 				text = "te_tax_rv_law"
 				tooltip = "te_tax_rv_law_tt"
 			}
@@ -157,6 +163,7 @@ types te_tax_review_widget_types
 				block "law_pa_visible" {}
 			}
 			blockoverride "line_label" {
+				default_format = "#tooltippable"
 				text = "te_tax_rv_passed"
 				tooltip = "te_tax_rv_passed_tt"
 			}
@@ -169,6 +176,7 @@ types te_tax_review_widget_types
 				block "law_pb_visible" {}
 			}
 			blockoverride "line_label" {
+				default_format = "#tooltippable"
 				text = "te_tax_rv_passed"
 				tooltip = "te_tax_rv_passed_tt"
 			}
@@ -178,6 +186,7 @@ types te_tax_review_widget_types
 		}
 		te_tax_review_line = {
 			blockoverride "line_label" {
+				default_format = "#tooltippable"
 				text = "te_tax_rv_bill"
 				tooltip = "te_tax_rv_bill_tt"
 			}
@@ -608,6 +617,7 @@ types te_tax_review_widget_types
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
+						default_format = "#tooltippable"
 						text = "te_tax_rv_law"
 						tooltip = "te_tax_rv_law_tt"
 					}
@@ -617,6 +627,7 @@ types te_tax_review_widget_types
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
+						default_format = "#tooltippable"
 						text = "te_tax_rv_bill"
 						tooltip = "te_tax_rv_bill_tt"
 					}
@@ -695,6 +706,7 @@ types te_tax_review_widget_types
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
+						default_format = "#tooltippable"
 						text = "te_tax_rv_law"
 						tooltip = "te_tax_rv_law_tt"
 					}
@@ -704,6 +716,7 @@ types te_tax_review_widget_types
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
+						default_format = "#tooltippable"
 						text = "te_tax_rv_bill"
 						tooltip = "te_tax_rv_bill_tt"
 					}
@@ -746,6 +759,7 @@ types te_tax_review_widget_types
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
+						default_format = "#tooltippable"
 						text = "te_tax_rv_law"
 						tooltip = "te_tax_rv_law_tt"
 					}
@@ -778,6 +792,7 @@ types te_tax_review_widget_types
 				}
 				te_tax_review_line = {
 					blockoverride "line_label" {
+						default_format = "#tooltippable"
 						text = "te_tax_rv_bill"
 						tooltip = "te_tax_rv_bill_tt"
 					}
@@ -853,6 +868,7 @@ types te_tax_review_widget_types
 				te_tax_review_line = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_income_on'), '(CFixedPoint)0' )]"
 					blockoverride "line_label" {
+						default_format = "#tooltippable"
 						text = "te_tax_est_ch_income"
 						tooltip = "te_tax_est_ch_income_tt"
 					}
@@ -863,6 +879,7 @@ types te_tax_review_widget_types
 				te_tax_review_line = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_dividends_on'), '(CFixedPoint)0' )]"
 					blockoverride "line_label" {
+						default_format = "#tooltippable"
 						text = "te_tax_est_ch_dividends"
 						tooltip = "te_tax_est_ch_dividends_tt"
 					}
@@ -873,6 +890,7 @@ types te_tax_review_widget_types
 				te_tax_review_line = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_poll_on'), '(CFixedPoint)0' )]"
 					blockoverride "line_label" {
+						default_format = "#tooltippable"
 						text = "te_tax_est_ch_poll"
 						tooltip = "te_tax_est_ch_poll_tt"
 					}
@@ -883,6 +901,7 @@ types te_tax_review_widget_types
 				te_tax_review_line = {
 					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_est_consumption_on'), '(CFixedPoint)0' )]"
 					blockoverride "line_label" {
+						default_format = "#tooltippable"
 						text = "te_tax_est_ch_consumption"
 						tooltip = "te_tax_est_ch_consumption_tt"
 					}

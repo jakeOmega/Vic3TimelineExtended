@@ -22,6 +22,7 @@ the spirit of test_banking_layout.py:
 Run: python3 -m unittest test_tax_code_layout -v
 """
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -515,6 +516,83 @@ class SguiTest(unittest.TestCase):
                 self.assertIn(name, defined)
 
 
+class NameWidthTest(unittest.TestCase):
+    """Final review B-I2: no catalog good name and no customs level name elides in its cell
+    at 7 px a character, and every good-name cell carries the name as a hover in case a font
+    draws it wider. Measured against the names the game prints: the mod's loc, then the
+    committed vanilla 1.14.5 snapshot."""
+
+    PX = 7
+
+    @classmethod
+    def setUpClass(cls):
+        vanilla = json.loads((ROOT / "vanilla_parsed" / "localization_english.json").read_text(encoding="utf-8"))
+        mod = loc()
+
+        def name(key):
+            text = mod.get(key, vanilla.get(key))
+            for _ in range(3):
+                text = re.sub(r"\$(\w+)\$", lambda m: str(mod.get(m.group(1), vanilla.get(m.group(1), ""))), text)
+            return text
+
+        cls.name = staticmethod(name)
+        cls.workbench = gui(WORKBENCH)
+        cls.review = gui(REVIEW)
+
+    def width(self, body, pattern):
+        match = re.search(pattern, body)
+        self.assertIsNotNone(match, pattern)
+        return int(match.group(1))
+
+    def assert_fits(self, goods, cell):
+        for good in goods:
+            with self.subTest(good=good, cell=cell):
+                self.assertLessEqual(len(self.name(good)) * self.PX, cell, self.name(good))
+
+    def test_goods_names_fit_their_cells(self):
+        goods_row = type_body(self.workbench, "te_tax_good_row")
+        self.assert_fits(gen.consumption_catalog(), self.width(goods_row, r"max_width = (\d+)"))
+        customs_row = type_body(self.workbench, "te_tax_customs_row")
+        self.assert_fits(gen.customs_catalog(), self.width(customs_row, r"max_width = (\d+)"))
+        label = type_body(self.review, "te_tax_review_line")
+        cell = self.width(label, r"maximumsize = \{ (\d+) -1 \}")
+        self.assert_fits(gen.consumption_catalog(), cell)
+        self.assert_fits(gen.customs_catalog(), cell)
+        customs_line = type_body(self.review, "te_tax_review_customs_line")
+        self.assert_fits(gen.customs_catalog(), self.width(customs_line, r"max_width = (\d+)"))
+
+    def test_level_names_fit_their_cell(self):
+        cell = self.width(type_body(self.workbench, "te_tax_cu_level_text"), r"max_width = (\d+)")
+        for suffix in gen.CUSTOMS_LEVEL_SUFFIX.values():
+            with self.subTest(suffix=suffix):
+                self.assertLessEqual(len(self.name(f"te_tax_cu_lv_{suffix}")) * self.PX, cell)
+        # Each direction's level cell is the text's width, in the row and in the review.
+        self.assertEqual(type_body(self.workbench, "te_tax_customs_row").count(f"size = {{ {cell} 26 }}"), 2)
+        self.assertEqual(type_body(self.review, "te_tax_review_customs_line").count(f"size = {{ {cell} 24 }}"), 2)
+
+    def test_every_good_name_cell_has_the_name_as_its_hover(self):
+        rows = gui(GEN_ROWS)
+        names = re.findall(r'blockoverride "(?:good_name|line_label)" \{\s*text = "(\w+)"\s*tooltip = "(\w+)"', rows)
+        expected = 2 * len(gen.consumption_catalog()) + 5 * len(gen.customs_catalog())
+        self.assertEqual(len(names), expected)
+        self.assertTrue(all(text == tooltip for text, tooltip in names))
+
+    def test_a_label_without_a_hover_is_not_drawn_hoverable(self):
+        self.assertNotIn("#tooltippable", type_body(self.review, "te_tax_review_line"))
+        for path in (REVIEW, POLITICS):
+            for body in re.findall(r'blockoverride "line_label" \{([^}]*)\}', gui(path)):
+                with self.subTest(path=path, body=" ".join(body.split())):
+                    self.assertEqual("tooltip =" in body, '#tooltippable' in body)
+
+    def test_rows_fit_the_section(self):
+        # 4 + 156 + 4 + 154 + 4 + 154 + 4 = 480, the heads in the same cells.
+        for name in ("te_tax_customs_row", "te_tax_customs_head"):
+            body = type_body(self.workbench, name)
+            with self.subTest(name=name):
+                cells = [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\s*size = \{ (\d+) ", body)]
+                self.assertEqual(sum(cells) + 4 * (len(cells) + 1), 480, cells)
+
+
 class FlagTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -545,15 +623,37 @@ class FlagTest(unittest.TestCase):
         body = type_body(gui(LAYOUT), "te_tax_how_section")
         subs = re.findall(r'text = "(te_tax_how_sub_\w+)"', body)
         self.assertEqual(subs, ["te_tax_how_sub_drafting", "te_tax_how_sub_passage",
-                                "te_tax_how_sub_commencement", "te_tax_how_sub_promises", "te_tax_how_sub_replaces"])
+                                "te_tax_how_sub_commencement", "te_tax_how_sub_promises", "te_tax_how_sub_replaces",
+                                "te_tax_how_sub_customs"])
         table = loc()
         self.assertEqual([table[key] for key in subs],
-                         ["Drafting", "Passage", "Commencement", "Promises", "What the Code Replaces"])
+                         ["Drafting", "Passage", "Commencement", "Promises", "What the Code Replaces", "Customs"])
         notes = re.findall(r'text = "(te_tax_how_(?!sub_|header)\w+)"', body)
         self.assertGreaterEqual(len(notes), 4)
         for key in notes:
             with self.subTest(key=key):
                 self.assertFalse(table[key].startswith("\\n") or table[key].endswith("\\n"))
+
+
+    def test_customs_is_explained_only_under_the_customs_option(self):
+        # Final review B-I1: under the customs option the monthly sync sets tariffs too, so
+        # the line that says it does not is swapped, and a Customs topic shows.
+        body = type_body(gui(LAYOUT), "te_tax_how_section")
+        gate = "GetScriptedGui('te_tax_show_customs_option_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+        self.assertIn(f"text = \"[SelectLocalization( {gate}, 'te_tax_how_replaces_monthly_customs', "
+                      "'te_tax_how_replaces_monthly' )]\"", body)
+        customs = body[body.index('text = "te_tax_how_sub_customs"') - 300:]
+        self.assertEqual(customs.count(f'visible = "[{gate}]"'), 3)
+        for key in ("te_tax_how_customs", "te_tax_how_customs_sync"):
+            self.assertIn(f'text = "{key}"', customs)
+        sgui = block(script(TAX_SGUIS), "te_tax_show_customs_option_sgui")
+        self.assertIn("te_tax_customs_on = yes", brace_block(sgui, sgui.index("is_shown")))
+        table = loc()
+        self.assertIn("Tariffs and subsidies are not part of these rates", table["te_tax_how_replaces_monthly"])
+        self.assertIn("tariffs and subsidies", table["te_tax_how_replaces_monthly_customs"])
+        self.assertNotIn("not part", table["te_tax_how_replaces_monthly_customs"])
+        self.assertIn("te_tax_customs_adopt_after", table["te_tax_how_customs_sync"])
+        self.assertIn("tariffs and subsidies", table["concept_tax_code_desc"])
 
 
 class DisplayValueTest(unittest.TestCase):

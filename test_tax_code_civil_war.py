@@ -484,7 +484,10 @@ class DocTest(unittest.TestCase):
         section = self.doc.split("\n## Civil wars and new countries\n", 1)[1].split("\n## ", 1)[0]
         for phrase in ("te_tax_on_uprising", "te_tax_repair_after_civil_war", "te_tax_init_released_country",
                        "te_tax.6", "te_tax_relief_holder", "on_state_owner_change", "te_tax_sync_version",
-                       "kind 7", "on_law_activated", "country_definition", "Task 11", "Task 12"):
+                       "kind 7", "on_law_activated", "country_definition",
+                       # Pinned by identifier, not by plan task number (final review B-Minor 12):
+                       # the enacted relief list (Task 11) and the obligations' repair (Task 12).
+                       "te_tax_en_relief_states", "te_tax_repair_obligations_after_civil_war"):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, section)
 

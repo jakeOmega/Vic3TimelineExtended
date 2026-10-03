@@ -355,6 +355,20 @@ te_tax_show_draft_due_soon_sgui = {
 	effect = { }
 }
 
+# The game rule also legislates customs (te_tax_code_enabled_customs): How Tax
+# Legislation Works says the monthly sync sets tariffs too, and shows its
+# Customs topic (final review B-I1).
+te_tax_show_customs_option_sgui = {
+	scope = country
+	is_shown = {
+		te_tax_code_in_force = yes
+		te_tax_customs_on = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # ===========================================================================
 # ACTION HANDLERS. Never the AI's. is_shown is scope-free; a handler with a
 # saved scope branches on it only in is_valid and effect, the two places a
