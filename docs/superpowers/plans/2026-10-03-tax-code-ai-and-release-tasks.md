@@ -75,7 +75,7 @@
   Co-Authored-By: <your model> <noreply@anthropic.com>
   Claude-Session: https://claude.ai/code/session_01XQHDYfpKLJ77xwyxNQ8MHp
   ```
-  Write your report file (`.superpowers/sdd/2026-10-02-legislated-tax-code-tasks/task-<N>-report.md`) before returning.
+  Write your report file (the path your dispatch names, in `.superpowers/sdd/2026-10-03-tax-code-ai-and-release-tasks/`) before returning.
 - **Player guide** edits happen in Task 28 only.
 - **Lessons learned** that apply generally go into `docs/guides/scripting_best_practices.md` in the same task, one paragraph each (CLAUDE.md "Recording lessons learned").
 
