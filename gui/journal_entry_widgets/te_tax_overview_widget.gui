@@ -103,8 +103,9 @@ types te_tax_overview_widget_types
 	}
 
 	### A table row: a label on the left, its value on the right; each cell
-	### carries its own hover. 4 + 190 + 286 = 480: the label holds about 20
-	### characters of the medium font, the value about 30.
+	### carries its own hover. 4 + 190 + 282 + 4 = 480 (the margin counts on both
+	### sides): the label holds about 20 characters of the medium font, the value
+	### about 29.
 	type te_tax_value_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -121,8 +122,8 @@ types te_tax_overview_widget_types
 			block "row_label" {}
 		}
 		textbox = {
-			minimumsize = { 286 -1 }
-			maximumsize = { 286 -1 }
+			minimumsize = { 282 -1 }
+			maximumsize = { 282 -1 }
 			autoresize = yes
 			align = right|nobaseline
 			using = fontsize_medium
@@ -132,9 +133,11 @@ types te_tax_overview_widget_types
 	}
 
 	### A tax: its name, the enacted rate, and where it has one, its expiry
-	### ("→ 15% from 1840.1"). 4 + 170 + 8 + 90 + 8 + 196 + 4 = 480. The expiry
-	### cell is gated by the instance; the two cells before it keep their
-	### columns either way.
+	### ("→ 15% from 1840.1"). 4 + 170 + 8 + 80 + 8 + 206 + 4 = 480. The rate
+	### is at most "@money!1.50" or "12.5%"; the expiry is the widest cell, as an
+	### amount tax's carries the money icon too ("→ @money!0.43 from 1842.12").
+	### The expiry cell is gated by the instance; the two cells before it keep
+	### their columns either way.
 	type te_tax_rate_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -152,16 +155,16 @@ types te_tax_overview_widget_types
 			block "row_label" {}
 		}
 		textbox = {
-			minimumsize = { 90 -1 }
-			maximumsize = { 90 -1 }
+			minimumsize = { 80 -1 }
+			maximumsize = { 80 -1 }
 			autoresize = yes
 			align = right|nobaseline
 			using = fontsize_medium
 			block "row_rate" {}
 		}
 		textbox = {
-			minimumsize = { 196 -1 }
-			maximumsize = { 196 -1 }
+			minimumsize = { 206 -1 }
+			maximumsize = { 206 -1 }
 			autoresize = yes
 			align = left|nobaseline
 			using = fontsize_medium

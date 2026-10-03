@@ -618,6 +618,69 @@ class HistoryTest(unittest.TestCase):
         self.assertIn(f'"{GEN_CUSTOM_LOC}"', raw("scripts/nightly_audit_select.py"))
 
 
+_TOKEN = re.compile(r'"[^"]*"|[{}]|[<>!?]=|==|[=<>]|[^\s{}=<>!?"]+')
+_OPERATORS = {"=", "<", ">", "<=", ">=", "!=", "?=", "=="}
+
+
+def multi_child_nots(text):
+    """Line numbers of every `NOT = { ... }` holding more than one condition.
+
+    What a multi-child NOT means is untested (NAND or NOR;
+    docs/guides/scripting_best_practices.md, "Write NOR or NAND, Never a
+    Multi-Child NOT"). A child is one operator at the block's own depth, so
+    `NOT = { AND = { a = 1 b = 2 } }` has one."""
+    text = uncomment(text)
+    tokens = [(m.group(0), m.start()) for m in _TOKEN.finditer(text)]
+    found = []
+    for i in range(len(tokens) - 2):
+        if [t for t, _ in tokens[i:i + 3]] != ["NOT", "=", "{"]:
+            continue
+        depth, children = 1, 0
+        for token, _ in tokens[i + 3:]:
+            if token == "{":
+                depth += 1
+            elif token == "}":
+                depth -= 1
+                if depth == 0:
+                    break
+            elif depth == 1 and token in _OPERATORS:
+                children += 1
+        if children > 1:
+            found.append(text.count("\n", 0, tokens[i][1]) + 1)
+    return found
+
+
+class NoMultiChildNotTest(unittest.TestCase):
+    """Every tax code script writes NOR = { } ("none of these") or NAND = { }
+    ("not all of these"), never a NOT with several children."""
+
+    def test_the_scanner(self):
+        self.assertEqual(multi_child_nots("x = {\n\tNOT = { a = 1 b = 2 }\n}"), [2])
+        self.assertEqual(multi_child_nots("NOT = {\n\thas_variable = v\n\tvar:v = 1\n}"), [1])
+        self.assertEqual(multi_child_nots("NOT = { AND = { a = 1 b = 2 } }"), [])
+        self.assertEqual(multi_child_nots("NOT = { a = { b = 1 c = 2 } }"), [])
+        self.assertEqual(multi_child_nots("NAND = { a = 1 b = 2 } NOR = { c = 1 d = 2 }"), [])
+        self.assertEqual(multi_child_nots("NOT = { a = 1 } # NOT = { b = 1 c = 2 }"), [])
+
+    def test_no_tax_code_script_has_one(self):
+        paths = sorted({str(p.relative_to(ROOT)) for pattern in ("common/**/te_tax_*.txt", "events/te_tax_*.txt")
+                        for p in ROOT.glob(pattern)} | {JE})
+        self.assertIn(TAX_SGUIS, paths)
+        for path in paths:
+            with self.subTest(path=path):
+                self.assertEqual(multi_child_nots(raw(path)), [])
+
+    def test_no_generator_output_has_one(self):
+        """The generator's templates, rendered (so a template change is caught
+        before the committed files are regenerated)."""
+        rendered = gen.render_all()
+        self.assertTrue(rendered)
+        for path, data in rendered.items():
+            if path.endswith(".txt"):
+                with self.subTest(path=path):
+                    self.assertEqual(multi_child_nots(data.decode("utf-8-sig")), [])
+
+
 class LocTest(unittest.TestCase):
     def test_new_keys_live_in_the_tax_file(self):
         """organize_loc files je_tax_code* with the te_tax_ family (TAX)."""
@@ -638,10 +701,20 @@ class LocTest(unittest.TestCase):
                 self.assertTrue(table.get(f"{name}_desc"))
 
     def test_no_new_tax_loc_ends_in_a_line_break_or_uses_brackets_for_bold(self):
+        # The locked tab tooltip's header is concatenated straight onto the
+        # unlock checklist (IsValidTooltip), so its trailing break separates
+        # the two lines, as te_budget_tab_banking_locked_tt's does.
+        joined = {"te_tax_tab_locked_tt"}
         for key, value in tax_loc().items():
             with self.subTest(key=key):
-                self.assertFalse(value.endswith("\\n"), key)
+                self.assertEqual(value.endswith("\\n"), key in joined, key)
                 self.assertNotIn("[b]", value)
+
+    def test_the_locked_tooltip_runs_into_the_checklist_on_the_next_line(self):
+        tooltip = uncomment(mod_block(raw(BUDGET))[0])
+        self.assertIn("Concatenate( Localize( 'te_tax_tab_locked_tt' ), "
+                      "GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValidTooltip(", tooltip)
+        self.assertNotIn("te_tt_break", tooltip)
 
 
 class GuideTest(unittest.TestCase):

@@ -35,9 +35,16 @@ types te_tax_layout_widget_types
 
 	### "How Tax Legislation Works": every explanation, collapsed by default,
 	### one heading per topic (style guide rule 1). The live sections say what
-	### is in force; this says how it got there and how it changes. Its numbers
-	### are the passage rule's own script values (te_tax_support_values.txt), so
-	### the text cannot drift from the rule.
+	### is in force; this says how it got there and how it changes. The passage
+	### rule's numbers (share, legitimacy, debate days, thresholds, due-month
+	### range, reschedule delay) are read from its own script values
+	### (te_tax_support_values.txt), so those follow the rule. Three facts are
+	### written out in both the loc and the script and CAN drift: the sunset
+	### offsets 6/12/24/36/60 (te_tax_dr_sunset_*), a minor bill's "two taxes,
+	### two steps" (te_tax_bill_set_minor, te_tax_gen_bill_small_steps) and
+	### regional relief's "at most three" states (the schema's cap, which Task
+	### 11's state selection enforces; the Enacted Code's relief hover says it
+	### too). Change the loc with them.
 	type te_tax_how_section = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter

@@ -129,7 +129,7 @@
  te_tax_relief_region_2:0 "Regional Tax Relief 50%"
  te_tax_relief_region_2_desc:0 "The tax code names this state for regional relief. Every tax collected from its pops is halved."
  te_tax_tab:0 "Tax Code"
- te_tax_tab_locked_tt:0 "#b Tax Code#!\nNot open yet. It opens once:"
+ te_tax_tab_locked_tt:0 "#b Tax Code#!\nNot open yet. It opens once:\n"
  te_tax_tab_tt:0 "The enacted tax code, the bills that would change it and its history. These are the journal entry's own panels."
  te_tax_tt_bill_open:0 "A tax bill is under debate."
  te_tax_tt_cmd_draft_discard:0 "Discards the draft. The tax code does not change."

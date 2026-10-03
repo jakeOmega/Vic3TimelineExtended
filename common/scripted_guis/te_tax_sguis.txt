@@ -73,18 +73,22 @@ te_tax_show_package_b_sgui = {
 	effect = { }
 }
 
-# Nothing is in progress: no draft, no bill, no passed bill waiting.
+# Nothing is in progress: no draft, no bill, no passed bill waiting. A slot's
+# test is NAND ("not both: the token exists and is 1"), never a multi-child
+# NOT, whose meaning is untested (scripting_best_practices.md, "Write NOR or
+# NAND, Never a Multi-Child NOT"): read as NOR it would hide this row for
+# every migrated country, which always holds te_tax_p<s>_on.
 te_tax_show_no_bill_sgui = {
 	scope = country
 	is_shown = {
 		te_tax_code_in_force = yes
 		NOT = { te_tax_draft_active = yes }
 		NOT = { te_tax_bill_active = yes }
-		NOT = {
+		NAND = {
 			has_variable = te_tax_pa_on
 			var:te_tax_pa_on = 1
 		}
-		NOT = {
+		NAND = {
 			has_variable = te_tax_pb_on
 			var:te_tax_pb_on = 1
 		}

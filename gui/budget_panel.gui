@@ -192,7 +192,7 @@ types budget
 					text = "te_tax_tab"
 				}
 				blockoverride "fifth_button_tooltip" {
-					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_tab_tt', SelectLocalization( GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_tax_tab_locked_tt' ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_tab_tt', SelectLocalization( GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_tax_tab_locked_tt' ), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				}
 				blockoverride "fifth_button_click"
 				{
