@@ -310,6 +310,57 @@ te_tax_dr_relief_4 = {
 	te_tax_dr_relief_settle = yes
 }
 
+# ---------------------------------------------------------------------------
+# Customs (plan Task 15; docs/systems/tax_code_schema.md, "Customs schedule").
+# One level per tradeable good and direction, -3 (maximum subventions) to 3
+# (maximum tariffs); -99 leaves it alone. The customs group's planned version
+# (te_tax_dr_customs_pver) is recorded when the draft first changes a level
+# and cleared when it changes none again.
+# ---------------------------------------------------------------------------
+
+# Moves one customs level in the draft. GOOD: a customs-catalog good. D: imp or
+# exp. DIR: 0 one level lower, 1 one level higher, 2 leave it as existing law
+# has it. An untouched level starts from existing law in the draft's month
+# (te_tax_base_dr_<d>_<good>).
+te_tax_cmd_draft_customs = {
+	if = {
+		limit = { te_tax_can_draft_customs = { GOOD = $GOOD$ D = $D$ DIR = $DIR$ } }
+		te_tax_dr_customs_$DIR$ = { GOOD = $GOOD$ D = $D$ }
+	}
+}
+
+te_tax_customs_dr_touch = {
+	if = {
+		limit = { NOT = { te_tax_gen_draft_touches_customs = yes } }
+		set_variable = { name = te_tax_dr_customs_pver value = var:te_tax_pver_customs }
+	}
+}
+
+te_tax_dr_customs_0 = {
+	custom_tooltip = te_tax_tt_cmd_draft_customs_down
+	te_tax_customs_dr_touch = yes
+	set_variable = { name = te_tax_dr_$D$_$GOOD$ value = te_tax_dr_eff_$D$_$GOOD$ }
+	change_variable = { name = te_tax_dr_$D$_$GOOD$ add = -1 }
+	clamp_variable = { name = te_tax_dr_$D$_$GOOD$ min = -3 max = 3 }
+}
+
+te_tax_dr_customs_1 = {
+	custom_tooltip = te_tax_tt_cmd_draft_customs_up
+	te_tax_customs_dr_touch = yes
+	set_variable = { name = te_tax_dr_$D$_$GOOD$ value = te_tax_dr_eff_$D$_$GOOD$ }
+	change_variable = { name = te_tax_dr_$D$_$GOOD$ add = 1 }
+	clamp_variable = { name = te_tax_dr_$D$_$GOOD$ min = -3 max = 3 }
+}
+
+te_tax_dr_customs_2 = {
+	custom_tooltip = te_tax_tt_cmd_draft_customs_revert
+	set_variable = { name = te_tax_dr_$D$_$GOOD$ value = -99 }
+	if = {
+		limit = { NOT = { te_tax_gen_draft_touches_customs = yes } }
+		set_variable = { name = te_tax_dr_customs_pver value = -1 }
+	}
+}
+
 # Takes regional relief into the draft as existing law has it (if the draft
 # does not change it yet) and lists the country's incorporated states to name
 # from (te_tax_dr_relief_candidates), the list the workbench shows. The only

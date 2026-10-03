@@ -452,8 +452,11 @@ class GeneratedSyncTest(unittest.TestCase):
             | {"te_tax_gen_obl_ig_exists", "te_tax_gen_obl_slot_gone"}
             # The offers' feasibility (test_tax_code_offers.py).
             | {"te_tax_gen_offer_feasible"}
-            # The customs schedule's level match and drift (test_tax_code_customs.py).
-            | {"te_tax_gen_customs_matches_imp", "te_tax_gen_customs_matches_exp", "te_tax_gen_customs_drift"},
+            # The customs schedule's level match and drift, and whether a record or a package
+            # touches customs (test_tax_code_customs.py).
+            | {"te_tax_gen_customs_matches_imp", "te_tax_gen_customs_matches_exp", "te_tax_gen_customs_drift",
+               "te_tax_gen_draft_touches_customs", "te_tax_gen_bill_touches_customs",
+               "te_tax_gen_package_touches_customs_a", "te_tax_gen_package_touches_customs_b"},
         )
         for key in KEYS:
             family = amendment_family(key)

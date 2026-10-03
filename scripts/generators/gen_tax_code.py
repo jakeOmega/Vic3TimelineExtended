@@ -49,7 +49,11 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       te_tax_gen_package_empty_<slot>, te_tax_gen_package_unsuperseded_<slot>)
       and the civil-war repair's obligation checks (te_tax_gen_obl_ig_exists,
       te_tax_gen_obl_slot_gone), and the customs schedule's level match and
-      drift (te_tax_gen_customs_matches_<d>, te_tax_gen_customs_drift).
+      drift (te_tax_gen_customs_matches_<d>, te_tax_gen_customs_drift) and
+      whether a record touches customs (te_tax_gen_draft/bill_touches_customs,
+      te_tax_gen_package_touches_customs_<slot>). The draft, bill, store,
+      apply, supersession and copy parts carry the customs fields (-99 to
+      leave a level alone) behind each record's customs marker.
   common/scripted_effects/te_tax_generated_bill_effects.txt
       The draft, bill and passage parts (te_tax_gen_draft_init/_from_bill/
       _clear, te_tax_gen_bill_from_draft/_clear, te_tax_gen_supersede_<slot>,
@@ -654,6 +658,24 @@ def customs_by_category():
 def customs_enacted():
     """The enacted customs records: te_tax_en_<d>_<good> per tradeable good and direction."""
     return [f"te_tax_en_{d}_{good}" for good in customs_catalog() for d, _ in CUSTOMS_DIRS]
+
+
+def customs_fields(record):
+    """A record's customs fields, te_tax_<record>_<d>_<good> per tradeable good and direction:
+    the draft (dr), the bill (bl) or a package slot (pa, pb)."""
+    return [f"te_tax_{record}_{d}_{good}" for good in customs_catalog() for d, _ in CUSTOMS_DIRS]
+
+
+def customs_marker(record):
+    """The variable a record's customs payload exists with: written, under the customs option
+    only, with the fields. Every customs read of the record tests it first (the plain option
+    writes none), as a draft's or bill's other fields need no test because they are always
+    written in full."""
+    return f"te_tax_{record}_customs_pver" if record in RECORDS else f"te_tax_{record}_pver_customs"
+
+
+def _customs_touched(field):
+    return f"var:{field} >= {CUSTOMS_MIN}"
 
 
 # ---------------------------------------------------------------------------
@@ -1444,6 +1466,21 @@ def _apply(slot):
     for field in ("agrel", "regrel"):
         lines.append(f"\tif = {{ limit = {{ var:{p}_{field} >= 0 }} "
                      f"set_variable = {{ name = te_tax_en_{field} value = var:{p}_{field} }} }}")
+    lines += [
+        "\t# Customs (plan Task 15), only while the code holds the country's customs (a package",
+        "\t# that touches them is current only if no market change moved te_tax_xver_customs since",
+        "\t# approval): each level the package sets becomes the enacted one, with any pending",
+        "\t# re-assert and blocked mark of the good dropped; the sync then sets the market's level.",
+        "\tif = {",
+        f"\t\tlimit = {{ te_tax_customs_authority = yes has_variable = {customs_marker(f'p{slot}')} }}",
+    ]
+    for good in customs_catalog():
+        for d, _ in CUSTOMS_DIRS:
+            field = f"{p}_{d}_{good}"
+            lines.append(f"\t\tif = {{ limit = {{ {_customs_touched(field)} }} set_variable = {{ name = te_tax_en_{d}_{good} "
+                         f"value = var:{field} }} {_remove_if_set(f'te_tax_cpend_{d}_{good}', '')} "
+                         f"{_remove_if_set(f'te_tax_cblock_{good}', '')} }}")
+    lines.append("\t}")
     plist = slot_relief_list(slot)
     lines += [
         "\t# A package that restates regional relief names its whole state set, its own list",
@@ -1588,6 +1625,16 @@ def _store(slot):
         "\telse = {",
         f"\t\tset_variable = {{ name = {p}_regrel_states_set value = 0 }}",
         "\t}",
+        "\t# Customs (plan Task 15): a bill under the customs option carries a field per tradeable",
+        "\t# good and direction (-99 to leave it alone), its external version and, as for every",
+        "\t# group, the planned version after this approval.",
+        "\tif = {",
+        f"\t\tlimit = {{ has_variable = {customs_marker('bl')} }}",
+    ] + [f"\t\tset_variable = {{ name = {mine} value = var:{theirs} }}"
+         for mine, theirs in zip(customs_fields(f"p{slot}"), customs_fields("bl"))] + [
+        f"\t\tset_variable = {{ name = {p}_xver_customs value = var:te_tax_bl_xver_customs }}",
+        f"\t\tset_variable = {{ name = {p}_pver_customs value = var:te_tax_pver_customs }}",
+        "\t}",
         f"\t{stored}",
         f"\tset_variable = {{ name = {p}_state value = {STATE_AWAITING} }}",
         f"\tset_variable = {{ name = {p}_on value = 1 }}",
@@ -1683,6 +1730,8 @@ def slot_payload(slot):
     names += [f"{p}_pver_{group}" for group in [i.key for i in INSTRUMENTS] + ["goods", "relief"]]
     names += [f"{p}_{field}" for field in PACKAGE_RELIEF_FIELDS]
     names.append(f"{p}_regrel_states_set")
+    # The customs schedule's (plan Task 15), written under the customs option only.
+    names += customs_fields(f"p{slot}") + [f"{p}_xver_customs", f"{p}_pver_customs"]
     return names
 
 
@@ -1897,6 +1946,17 @@ def _scheduler_triggers():
             "\t}",
             "}",
             "",
+            f"# Slot {slot}, country scope: the package touches at least one customs provision (plan Task",
+            "# 15; under the customs option only, the fields exist with the slot's customs marker).",
+            f"te_tax_gen_package_touches_customs_{slot} = {{",
+            f"\thas_variable = {customs_marker(f'p{slot}')}",
+            "\tOR = {",
+        ]
+        lines += [f"\t\t{_customs_touched(field)}" for field in customs_fields(f"p{slot}")]
+        lines += [
+            "\t}",
+            "}",
+            "",
             f"# Slot {slot}, country scope: every provision group the package touches still has the",
             "# external-change token it had at approval. Only a non-legislative change bumps",
             "# te_tax_xver_*, so expected sunsets and other packages never make it stale.",
@@ -1921,6 +1981,10 @@ def _scheduler_triggers():
             f"\t\t\tvar:{p}_regrel < 0",
             "\t\t}",
             f"\t\tvar:{p}_xver_relief = var:te_tax_xver_relief",
+            "\t}",
+            "\tOR = {",
+            f"\t\tNOT = {{ te_tax_gen_package_touches_customs_{slot} = yes }}",
+            f"\t\tAND = {{ has_variable = te_tax_xver_customs var:{p}_xver_customs = var:te_tax_xver_customs }}",
             "\t}",
             "}",
         ]
@@ -2202,6 +2266,44 @@ def _material_points(ig, agrel, regrel):
     return points
 
 
+def _customs_baseline(name, record, field):
+    """te_tax_base_<record>_<field>: a customs level in force under existing law in the record's due
+    month. The enacted record while the code holds the country's customs (else vanilla's default
+    level), then each awaiting package due earlier that sets it, in commencement order."""
+    def slot_line(slot):
+        p = f"te_tax_p{slot}_{field}"
+        return (f"if = {{ limit = {{ te_tax_slot_awaits_before = {{ SLOT = {slot} DUE = te_tax_{record}_due }} "
+                f"has_variable = {customs_marker(f'p{slot}')} has_variable = {p} {_customs_touched(p)} }} value = var:{p} }}")
+    enacted = f"te_tax_en_{field}"
+    return [f"{name} = {{", f"\tvalue = {CUSTOMS_DEFAULT_LEVEL}",
+            f"\tif = {{ limit = {{ has_variable = te_tax_customs_held var:te_tax_customs_held = 1 has_variable = {enacted} }} "
+            f"value = var:{enacted} }}",
+            "\tif = {", "\t\tlimit = { te_tax_slot_b_first = yes }", f"\t\t{slot_line('b')}", f"\t\t{slot_line('a')}",
+            "\t}", "\telse = {", f"\t\t{slot_line('a')}", f"\t\t{slot_line('b')}", "\t}", "}"]
+
+
+def _customs_values():
+    """The customs schedule's baselines and the draft's effective levels (plan Task 15)."""
+    lines = [
+        "",
+        "# Customs (plan Task 15): te_tax_base_<record>_<d>_<good>, the level in force under existing law",
+        "# in the draft's (dr) or the bill's (bl) due month: the enacted record while the code holds the",
+        f"# country's customs, else vanilla's default ({CUSTOMS_DEFAULT_LEVEL}, low tariffs), then each awaiting package due",
+        f"# earlier that sets it (a package field of {CUSTOMS_MIN} or more; {CUSTOMS_UNTOUCHED} leaves a level alone).",
+        "# te_tax_dr_eff_<d>_<good>: the draft's level, or that baseline while the draft leaves it alone.",
+    ]
+    for record in RECORDS:
+        for good in customs_catalog():
+            for d, _ in CUSTOMS_DIRS:
+                lines += _customs_baseline(f"te_tax_base_{record}_{d}_{good}", record, f"{d}_{good}")
+    for good in customs_catalog():
+        for d, _ in CUSTOMS_DIRS:
+            field = f"te_tax_dr_{d}_{good}"
+            lines += [f"te_tax_dr_eff_{d}_{good} = {{", f"\tvalue = te_tax_base_dr_{d}_{good}",
+                      f"\tif = {{ limit = {{ has_variable = {field} {_customs_touched(field)} }} value = var:{field} }}", "}"]
+    return lines
+
+
 def _offer_values():
     """The offers' and promises' support values (plan Task 13)."""
     lines = [
@@ -2350,6 +2452,7 @@ def support_values():
         for good in consumption_catalog():
             lines += _baseline_value(f"te_tax_base_{record}_g_{good}", record, f"g_{good}",
                                      f"te_tax_en_g_{good}", False)
+    lines += _customs_values()
     lines += ["", "# The bill's change per instrument: in index steps (0 if untouched), then in vanilla tax levels."]
     for key in keys:
         lines += _dstep("bl", key)
@@ -2464,11 +2567,15 @@ def _bill_triggers():
     ]
     lines += _or_block([f"var:te_tax_dr_{key} >= 0" for key in keys]
                        + ["te_tax_gen_draft_touches_goods = yes", "var:te_tax_dr_agrel >= 0",
-                          "var:te_tax_dr_regrel >= 0"])
+                          "var:te_tax_dr_regrel >= 0", "te_tax_gen_draft_touches_customs = yes"])
     for record, label in (("dr", "draft"), ("bl", "bill")):
         lines += ["}", "", f"# The {label} changes at least one taxed good.",
                   f"te_tax_gen_{label}_touches_goods = {{"]
         lines += _or_block([f"var:te_tax_{record}_g_{good} >= 0" for good in goods])
+        lines += ["}", "", f"# The {label} changes at least one customs level (plan Task 15): its customs fields exist",
+                  "# under the customs option only, with the record's customs marker; -99 leaves a level alone.",
+                  f"te_tax_gen_{label}_touches_customs = {{", f"\thas_variable = {customs_marker(record)}"]
+        lines += _or_block([_customs_touched(field) for field in customs_fields(record)])
     lines += [
         "}",
         "",
@@ -2482,6 +2589,8 @@ def _bill_triggers():
                         "var:te_tax_dr_goods_pver = var:te_tax_pver_goods"])
     lines += _or_block(["AND = { var:te_tax_dr_agrel < 0 var:te_tax_dr_regrel < 0 }",
                         "var:te_tax_dr_relief_pver = var:te_tax_pver_relief"])
+    lines += _or_block(["NOT = { te_tax_gen_draft_touches_customs = yes }",
+                        "AND = { has_variable = te_tax_pver_customs var:te_tax_dr_customs_pver = var:te_tax_pver_customs }"])
     lines += ["}", "", "# The draft differs from the bill in any field, or one names a state for regional relief",
               "# that the other does not (inside any_in_list PREV is the country, inside PREV = { } the state).",
               "te_tax_gen_draft_differs_from_bill = {"]
@@ -2492,6 +2601,9 @@ def _bill_triggers():
                 f"variable = te_tax_{mine}_relief_states PREV = {{ NOT = {{ "
                 f"is_target_in_variable_list = {{ name = te_tax_{theirs}_relief_states target = PREV }} }} }} }} }}"
                 for mine, theirs in (("dr", "bl"), ("bl", "dr"))]
+    customs = [f"NOT = {{ var:{mine} = var:{theirs} }}" for mine, theirs in zip(customs_fields("dr"), customs_fields("bl"))]
+    differs.append(f"AND = {{ has_variable = {customs_marker('dr')} has_variable = {customs_marker('bl')} "
+                   f"OR = {{ {' '.join(customs)} }} }}")
     lines += _or_block(differs)
     lines += [
         "}",
@@ -2506,6 +2618,8 @@ def _bill_triggers():
                         "var:te_tax_bl_xver_goods = var:te_tax_xver_goods"])
     lines += _or_block(["AND = { var:te_tax_bl_agrel < 0 var:te_tax_bl_regrel < 0 }",
                         "var:te_tax_bl_xver_relief = var:te_tax_xver_relief"])
+    lines += _or_block(["NOT = { te_tax_gen_bill_touches_customs = yes }",
+                        "AND = { has_variable = te_tax_xver_customs var:te_tax_bl_xver_customs = var:te_tax_xver_customs }"])
     for record, label in (("bl", "bill"), ("dr", "draft")):
         lines += ["}", "", f"# Every provision the {label} changes moves at most two steps from existing law"
                            f" ({'minor bill' if record == 'bl' else 'its class on the panels'}).",
@@ -2521,6 +2635,10 @@ def _bill_triggers():
         overlaps = [f"AND = {{ var:te_tax_bl_{key} >= 0 var:{p}_{key} >= 0 }}" for key in keys]
         overlaps += [f"AND = {{ var:te_tax_bl_g_{good} >= 0 var:{p}_g_{good} >= 0 }}" for good in goods]
         overlaps += [f"AND = {{ var:te_tax_bl_{field} >= 0 var:{p}_{field} >= 0 }}" for field in ("agrel", "regrel")]
+        both = [f"AND = {{ {_customs_touched(mine)} {_customs_touched(theirs)} }}"
+                for mine, theirs in zip(customs_fields("bl"), customs_fields(f"p{slot}"))]
+        overlaps.append(f"AND = {{ has_variable = {customs_marker('bl')} has_variable = {customs_marker(f'p{slot}')} "
+                        f"OR = {{ {' '.join(both)} }} }}")
         lines += _or_block(overlaps)
         lines += [
             "}",
@@ -2538,10 +2656,13 @@ def _bill_triggers():
                             f"AND = {{ has_variable = {p}_pver_goods var:{p}_pver_goods = var:te_tax_pver_goods }}"])
         lines += _or_block([f"AND = {{ var:{p}_agrel < 0 var:{p}_regrel < 0 }}",
                             f"AND = {{ has_variable = {p}_pver_relief var:{p}_pver_relief = var:te_tax_pver_relief }}"])
+        lines += _or_block([f"NOT = {{ te_tax_gen_package_touches_customs_{slot} = yes }}",
+                            f"AND = {{ has_variable = te_tax_pver_customs var:{p}_pver_customs = var:te_tax_pver_customs }}"])
         lines += ["}", "", f"# Slot {slot}'s package touches nothing (every provision superseded).",
                   f"te_tax_gen_package_empty_{slot} = {{"]
         lines += [f"\tvar:{p}_{key} < 0" for key in keys] + [f"\tvar:{p}_g_{good} < 0" for good in goods]
-        lines += [f"\tvar:{p}_agrel < 0", f"\tvar:{p}_regrel < 0", "}"]
+        lines += [f"\tvar:{p}_agrel < 0", f"\tvar:{p}_regrel < 0",
+                  f"\tNOT = {{ te_tax_gen_package_touches_customs_{slot} = yes }}", "}"]
     return lines
 
 
@@ -2595,6 +2716,13 @@ def _supersede(slot):
         f"\t\t\t\tset_variable = {{ name = {p}_regrel_states_set value = 0 }}",
         _clear_list(slot_relief_list(slot), "\t\t\t\t"),
         "\t\t\t}",
+        "\t\t\t# Customs (plan Task 15): each level the bill sets is dropped from the later package.",
+        "\t\t\tif = {",
+        f"\t\t\t\tlimit = {{ has_variable = {customs_marker('bl')} has_variable = {customs_marker(f'p{slot}')} }}",
+    ] + [f"\t\t\t\tif = {{ limit = {{ {_customs_touched(mine)} {_customs_touched(theirs)} }} "
+         f"set_variable = {{ name = {theirs} value = {CUSTOMS_UNTOUCHED} }} }}"
+         for mine, theirs in zip(customs_fields("bl"), customs_fields(f"p{slot}"))] + [
+        "\t\t\t}",
         f"\t\t\tte_tax_history_push = {{ KIND = {KIND_SUPERSEDED} SLOT = {slot} }}",
         f"\t\t\t{superseded}",
         "\t\t\tif = {",
@@ -2611,6 +2739,18 @@ def _supersede(slot):
         "}",
     ]
     return lines
+
+
+def _customs_writes(record, values, marker):
+    """Lines writing record `record`'s customs fields from `values` (in customs_fields order) and its
+    customs marker from `marker`."""
+    lines = [f"\tset_variable = {{ name = {field} value = {value} }}" for field, value in zip(customs_fields(record), values)]
+    return lines + [f"\tset_variable = {{ name = {customs_marker(record)} value = {marker} }}"]
+
+
+def _customs_block(limit, body):
+    """An `if` holding the customs lines `body` (each one tab deep) under `limit`, one tab deep."""
+    return ["\tif = {", f"\t\tlimit = {{ {limit} }}"] + [f"\t{line}" for line in body] + ["\t}"]
 
 
 def offer_records():
@@ -2891,17 +3031,26 @@ def bill_effects():
     ]
     lines += [f"\tset_variable = {{ name = {name} value = {sentinel} }}" for name, sentinel in draft]
     lines += [_clear_list(name) for name in DRAFT_LISTS]
+    untouched = _customs_writes("dr", [CUSTOMS_UNTOUCHED] * len(customs_fields("dr")), -1)
+    lines += ["\t# Customs (plan Task 15): under the customs option only, every level left alone."]
+    lines += _customs_block("te_tax_customs_on = yes", untouched)
     lines += ["}", "", "# A new draft copied from the bill under debate, for its revision, with the bill's",
-              "# regional-relief states.",
+              "# regional-relief states and, under the customs option, its customs levels.",
               "te_tax_gen_draft_from_bill = {", "\tset_variable = { name = te_tax_dr_due value = var:te_tax_bl_due }"]
     lines += [f"\tset_variable = {{ name = {name} value = var:te_tax_bl_{name[len('te_tax_dr_'):]} }}"
               for name, _ in draft]
     lines += _copy_state_list("te_tax_bl_relief_states", "te_tax_dr_relief_states")
     lines.append(_clear_list("te_tax_dr_relief_candidates"))
+    lines += _customs_block(f"has_variable = {customs_marker('bl')}", _customs_writes(
+        "dr", [f"var:{field}" for field in customs_fields("bl")], f"var:{customs_marker('bl')}"))
+    lines += ["\telse_if = {", "\t\tlimit = { te_tax_customs_on = yes }"] + [
+        f"\t{line}" for line in untouched] + ["\t}"]
     lines += ["}", "", "# Closes the draft's payload and its lists (te_tax_dr_on is set to 0 by the caller).",
               "te_tax_gen_draft_clear = {", "\tremove_variable = te_tax_dr_due"]
     lines += [f"\tremove_variable = {name}" for name, _ in draft]
     lines += [_clear_list(name) for name in DRAFT_LISTS]
+    lines += _customs_block(f"has_variable = {customs_marker('dr')}", [
+        f"\tremove_variable = {name}" for name in customs_fields("dr") + [customs_marker("dr")]])
     lines += [
         "}",
         "",
@@ -2915,6 +3064,10 @@ def bill_effects():
               for name, _ in draft]
     lines += [f"\tset_variable = {{ name = {name} value = var:{token} }}" for name, token in _bill_versions()]
     lines += _copy_state_list("te_tax_dr_relief_states", "te_tax_bl_relief_states")
+    lines.append("\t# Customs (plan Task 15): the draft's levels and the customs external version, when it has them.")
+    lines += _customs_block(f"has_variable = {customs_marker('dr')} has_variable = te_tax_xver_customs", _customs_writes(
+        "bl", [f"var:{field}" for field in customs_fields("dr")], f"var:{customs_marker('dr')}")
+        + ["\tset_variable = { name = te_tax_bl_xver_customs value = var:te_tax_xver_customs }"])
     lines.append("\t# A text from the draft (introduction or a revision) carries no accepted promise and no")
     lines.append("\t# gained clause (plan Task 13): the offers start again.")
     lines += [f"\tset_variable = {{ name = {name} value = {sentinel} }}" for name, sentinel in offer_records()]
@@ -2924,7 +3077,10 @@ def bill_effects():
     lines += [f"\tremove_variable = {name}" for name, _ in bill]
     lines += [f"\tremove_variable = {name}" for name, _ in _bill_versions()]
     lines += [f"\tremove_variable = {name}" for name, _ in offer_records()]
-    lines += [_clear_list("te_tax_bl_relief_states"), "}"]
+    lines += [_clear_list("te_tax_bl_relief_states")]
+    lines += _customs_block(f"has_variable = {customs_marker('bl')}", [
+        f"\tremove_variable = {name}" for name in customs_fields("bl") + [customs_marker("bl"), "te_tax_bl_xver_customs"]])
+    lines.append("}")
     for slot in SLOTS:
         lines += _supersede(slot)
     lines += [
@@ -2950,6 +3106,8 @@ def bill_effects():
         "\t\t}",
         "\t\tchange_variable = { name = te_tax_pver_relief add = 1 }",
         "\t}",
+        "\tif = { limit = { te_tax_customs_on = yes te_tax_gen_bill_touches_customs = yes } "
+        "change_variable = { name = te_tax_pver_customs add = 1 } }",
         "}",
         "",
         "# Releases every commitment and withdraws every offer (a new bill or revision, an accepted",

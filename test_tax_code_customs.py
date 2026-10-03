@@ -119,8 +119,10 @@ def ungated_paths(name, defined, seen=None):
     if name in seen:
         return []
     seen.add(name)
+    # A call may be parameterised (te_tax_dr_customs_$DIR$ = { ... }): its $P$ stands for any name part.
     callers = [(caller, match.start()) for caller, body in defined.items()
-               for match in re.finditer(rf"\b{re.escape(name)} = (?:yes|\{{)", body)]
+               for match in re.finditer(r"\b(te_tax_[\w$]+) = (?:yes|\{)", body)
+               if re.fullmatch(re.sub(r"\\\$\w+\\\$", r"\\w+", re.escape(match.group(1))), name)]
     if not callers:
         return [name]
     missing = []
@@ -467,6 +469,254 @@ class BothModesTest(unittest.TestCase):
                 text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig", errors="replace"))
                 with self.subTest(path=rel):
                     self.assertNotRegex(text, r"\bset_(import|export)_tariff_level\b")
+
+
+class RecordTest(unittest.TestCase):
+    """The draft and the bill carry a customs field per good and direction, -99
+    when they leave it alone, under the customs option only."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.generated = read(GEN_BILL)
+
+    def fields(self, record):
+        return [f"te_tax_{record}_{d}_{good}" for good in catalog() for d in DIRS]
+
+    def test_a_new_draft_leaves_every_customs_provision_alone(self):
+        init = squash(block(self.generated, "te_tax_gen_draft_init"))
+        gate = re.search(r"if = \{ limit = \{ te_tax_customs_on = yes \}(.*?)\}$", init)
+        self.assertIsNotNone(gate)
+        for name in self.fields("dr"):
+            with self.subTest(name=name):
+                self.assertIn(f"set_variable = {{ name = {name} value = {UNTOUCHED} }}", gate.group(1))
+                self.assertEqual(init.count(f"name = {name} "), 1)
+        self.assertIn("set_variable = { name = te_tax_dr_customs_pver value = -1 }", gate.group(1))
+
+    def test_the_bill_copies_the_drafts_customs_with_the_external_version(self):
+        copy = squash(block(self.generated, "te_tax_gen_bill_from_draft"))
+        gate = "if = { limit = { has_variable = te_tax_dr_customs_pver has_variable = te_tax_xver_customs }"
+        self.assertIn(gate, copy)
+        body = copy[copy.find(gate):]
+        for good in catalog():
+            for d in DIRS:
+                self.assertIn(f"set_variable = {{ name = te_tax_bl_{d}_{good} value = var:te_tax_dr_{d}_{good} }}", body)
+        self.assertIn("set_variable = { name = te_tax_bl_customs_pver value = var:te_tax_dr_customs_pver }", body)
+        self.assertIn("set_variable = { name = te_tax_bl_xver_customs value = var:te_tax_xver_customs }", body)
+
+    def test_a_revision_draft_copies_the_bills_customs(self):
+        copy = squash(block(self.generated, "te_tax_gen_draft_from_bill"))
+        self.assertIn("if = { limit = { has_variable = te_tax_bl_customs_pver }", copy)
+        for good in catalog():
+            for d in DIRS:
+                self.assertIn(f"set_variable = {{ name = te_tax_dr_{d}_{good} value = var:te_tax_bl_{d}_{good} }}", copy)
+
+    def test_closing_removes_the_customs_payload_only_where_it_was_written(self):
+        for record, clear, extra in (("dr", "te_tax_gen_draft_clear", ("te_tax_dr_customs_pver",)),
+                                     ("bl", "te_tax_gen_bill_clear", ("te_tax_bl_customs_pver",
+                                                                      "te_tax_bl_xver_customs"))):
+            body = squash(block(self.generated, clear))
+            gate = f"if = {{ limit = {{ has_variable = te_tax_{record}_customs_pver }}"
+            self.assertIn(gate, body)
+            guarded = body[body.find(gate):]
+            for name in self.fields(record) + list(extra):
+                with self.subTest(name=name):
+                    self.assertIn(f"remove_variable = {name}", guarded)
+
+    def test_untouched_is_minus_99_everywhere(self):
+        # -1 is a level: a customs field is touched at -3 or more, never ">= 0".
+        for path in (GEN_EFFECTS, GEN_BILL, GEN_TRIGGERS, GEN_SUPPORT, GEN_VALUES):
+            text = read(path)
+            with self.subTest(path=path):
+                self.assertNotRegex(text, r"var:te_tax_(?:dr|bl|pa|pb)_(?:imp|exp)_\w+ (?:>= 0|< 0|> -1)\b")
+                self.assertNotRegex(text, r"name = te_tax_(?:dr|bl|pa|pb)_(?:imp|exp)_\w+ value = -1 \}")
+
+
+class PackageTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = read(GEN_EFFECTS)
+        cls.triggers = read(GEN_TRIGGERS)
+        cls.bill = read(GEN_BILL)
+
+    def test_the_store_writes_the_customs_payload_from_the_bill(self):
+        for slot in ("a", "b"):
+            store = squash(block(self.effects, f"te_tax_gen_store_{slot}"))
+            gate = "if = { limit = { has_variable = te_tax_bl_customs_pver }"
+            self.assertIn(gate, store)
+            body = store[store.find(gate):]
+            for good in catalog():
+                for d in DIRS:
+                    self.assertIn(f"set_variable = {{ name = te_tax_p{slot}_{d}_{good} value = var:te_tax_bl_{d}_{good} }}",
+                                  body)
+            self.assertIn(f"set_variable = {{ name = te_tax_p{slot}_xver_customs value = var:te_tax_bl_xver_customs }}",
+                          body)
+            self.assertIn(f"set_variable = {{ name = te_tax_p{slot}_pver_customs value = var:te_tax_pver_customs }}", body)
+
+    def test_commencement_enacts_the_customs_while_the_code_holds_them(self):
+        for slot in ("a", "b"):
+            apply = squash(block(self.effects, f"te_tax_gen_apply_{slot}"))
+            gate = f"if = {{ limit = {{ te_tax_customs_authority = yes has_variable = te_tax_p{slot}_pver_customs }}"
+            self.assertIn(gate, apply)
+            body = apply[apply.find(gate):]
+            for good in catalog():
+                for d in DIRS:
+                    with self.subTest(slot=slot, good=good, d=d):
+                        self.assertIn(f"if = {{ limit = {{ var:te_tax_p{slot}_{d}_{good} >= {gen.CUSTOMS_MIN} }} "
+                                      f"set_variable = {{ name = te_tax_en_{d}_{good} value = var:te_tax_p{slot}_{d}_{good} }} "
+                                      f"if = {{ limit = {{ has_variable = te_tax_cpend_{d}_{good} }} "
+                                      f"remove_variable = te_tax_cpend_{d}_{good} }} "
+                                      f"if = {{ limit = {{ has_variable = te_tax_cblock_{good} }} "
+                                      f"remove_variable = te_tax_cblock_{good} }} }}", body)
+
+    def test_a_package_touching_customs_needs_the_customs_external_version(self):
+        for slot in ("a", "b"):
+            touches = squash(block(self.triggers, f"te_tax_gen_package_touches_customs_{slot}"))
+            self.assertTrue(touches.startswith(f"has_variable = te_tax_p{slot}_pver_customs OR = {{"))
+            for good in catalog():
+                for d in DIRS:
+                    self.assertIn(f"var:te_tax_p{slot}_{d}_{good} >= {gen.CUSTOMS_MIN}", touches)
+            current = squash(block(self.triggers, f"te_tax_gen_package_current_{slot}"))
+            self.assertIn(f"OR = {{ NOT = {{ te_tax_gen_package_touches_customs_{slot} = yes }} AND = {{ "
+                          f"has_variable = te_tax_xver_customs var:te_tax_p{slot}_xver_customs = var:te_tax_xver_customs }} }}",
+                          current)
+            unsuperseded = squash(block(self.triggers, f"te_tax_gen_package_unsuperseded_{slot}"))
+            self.assertIn(f"OR = {{ NOT = {{ te_tax_gen_package_touches_customs_{slot} = yes }} AND = {{ "
+                          f"has_variable = te_tax_pver_customs var:te_tax_p{slot}_pver_customs = var:te_tax_pver_customs }} }}",
+                          unsuperseded)
+            empty = squash(block(self.triggers, f"te_tax_gen_package_empty_{slot}"))
+            self.assertIn(f"NOT = {{ te_tax_gen_package_touches_customs_{slot} = yes }}", empty)
+
+    def test_supersession_drops_the_bills_customs_from_a_later_package(self):
+        for slot in ("a", "b"):
+            supersede = squash(block(self.bill, f"te_tax_gen_supersede_{slot}"))
+            gate = f"if = {{ limit = {{ has_variable = te_tax_bl_customs_pver has_variable = te_tax_p{slot}_pver_customs }}"
+            self.assertIn(gate, supersede)
+            for good in catalog():
+                for d in DIRS:
+                    self.assertIn(f"if = {{ limit = {{ var:te_tax_bl_{d}_{good} >= {gen.CUSTOMS_MIN} "
+                                  f"var:te_tax_p{slot}_{d}_{good} >= {gen.CUSTOMS_MIN} }} set_variable = {{ name = "
+                                  f"te_tax_p{slot}_{d}_{good} value = {UNTOUCHED} }} }}", supersede)
+            overlaps = squash(block(self.triggers, f"te_tax_gen_bill_overlaps_{slot}"))
+            self.assertIn(f"AND = {{ has_variable = te_tax_bl_customs_pver has_variable = te_tax_p{slot}_pver_customs "
+                          f"OR = {{ AND = {{ var:te_tax_bl_imp_{catalog()[0]} >= {gen.CUSTOMS_MIN}", overlaps)
+
+    def test_an_approval_moves_the_customs_planned_version(self):
+        bump = squash(block(self.bill, "te_tax_gen_bump_pver"))
+        self.assertIn("if = { limit = { te_tax_customs_on = yes te_tax_gen_bill_touches_customs = yes } "
+                      "change_variable = { name = te_tax_pver_customs add = 1 } }", bump)
+
+    def test_the_outbreak_copies_a_packages_customs(self):
+        for slot in ("a", "b"):
+            payload = set(gen.slot_payload(slot))
+            for good in catalog():
+                for d in DIRS:
+                    self.assertIn(f"te_tax_p{slot}_{d}_{good}", payload)
+            self.assertLessEqual({f"te_tax_p{slot}_xver_customs", f"te_tax_p{slot}_pver_customs"}, payload)
+
+
+class DraftTriggerTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.generated = read(GEN_TRIGGERS)
+        cls.triggers = read(TRIGGERS)
+
+    def test_touches_customs_reads_the_fields_behind_the_marker(self):
+        for record, label in (("dr", "draft"), ("bl", "bill")):
+            body = squash(block(self.generated, f"te_tax_gen_{label}_touches_customs"))
+            self.assertTrue(body.startswith(f"has_variable = te_tax_{record}_customs_pver OR = {{"), body[:80])
+            for good in catalog():
+                for d in DIRS:
+                    self.assertIn(f"var:te_tax_{record}_{d}_{good} >= {gen.CUSTOMS_MIN}", body)
+
+    def test_the_draft_and_bill_checks_cover_customs(self):
+        self.assertIn("te_tax_gen_draft_touches_customs = yes", block(self.generated, "te_tax_gen_draft_touches_any"))
+        baseline = squash(block(self.generated, "te_tax_gen_draft_baseline_current"))
+        self.assertIn("OR = { NOT = { te_tax_gen_draft_touches_customs = yes } AND = { has_variable = "
+                      "te_tax_pver_customs var:te_tax_dr_customs_pver = var:te_tax_pver_customs } }", baseline)
+        current = squash(block(self.generated, "te_tax_gen_bill_current"))
+        self.assertIn("OR = { NOT = { te_tax_gen_bill_touches_customs = yes } AND = { has_variable = "
+                      "te_tax_xver_customs var:te_tax_bl_xver_customs = var:te_tax_xver_customs } }", current)
+        differs = squash(block(self.generated, "te_tax_gen_draft_differs_from_bill"))
+        self.assertIn("AND = { has_variable = te_tax_dr_customs_pver has_variable = te_tax_bl_customs_pver OR = {", differs)
+        for good in catalog():
+            for d in DIRS:
+                self.assertIn(f"NOT = {{ var:te_tax_dr_{d}_{good} = var:te_tax_bl_{d}_{good} }}", differs)
+
+    def test_a_customs_bill_is_never_minor(self):
+        for name, label in (("te_tax_bill_is_minor", "bill"), ("te_tax_draft_is_minor", "draft")):
+            self.assertIn(f"NOT = {{ te_tax_gen_{label}_touches_customs = yes }}", block(self.triggers, name))
+
+    def test_a_draft_touching_customs_needs_the_authority_to_become_a_bill(self):
+        ready = squash(block(self.triggers, "te_tax_draft_ready"))
+        self.assertIn("trigger_if = { limit = { te_tax_gen_draft_touches_customs = yes } custom_tooltip = { "
+                      "text = te_tax_tt_customs_authority te_tax_customs_authority = yes } }", ready)
+
+
+class CommandTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.triggers = read(TRIGGERS)
+        cls.bill = read(BILL)
+        cls.support = read(GEN_SUPPORT)
+
+    def test_the_step_trigger(self):
+        body = squash(block(self.triggers, "te_tax_can_draft_customs"))
+        for phrase in ("custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }",
+                       "custom_tooltip = { text = te_tax_tt_customs_authority te_tax_customs_authority = yes }",
+                       "trigger_if = { limit = { te_tax_draft_active = yes has_variable = te_tax_dr_$D$_$GOOD$ } "
+                       "te_tax_dr_customs_ok_$DIR$ = { D = $D$ GOOD = $GOOD$ } }",
+                       "trigger_else = { custom_tooltip = { text = te_tax_tt_draft_open always = no } }"):
+            self.assertIn(phrase, body)
+        oks = {"0": f"te_tax_dr_eff_$D$_$GOOD$ > {gen.CUSTOMS_MIN}", "1": f"te_tax_dr_eff_$D$_$GOOD$ < {gen.CUSTOMS_MAX}",
+               "2": f"var:te_tax_dr_$D$_$GOOD$ >= {gen.CUSTOMS_MIN}"}
+        for direction, condition in oks.items():
+            with self.subTest(direction=direction):
+                self.assertIn(condition, squash(block(self.triggers, f"te_tax_dr_customs_ok_{direction}")))
+
+    def test_the_step_command(self):
+        cmd = squash(block(self.bill, "te_tax_cmd_draft_customs"))
+        self.assertEqual(cmd, "if = { limit = { te_tax_can_draft_customs = { GOOD = $GOOD$ D = $D$ DIR = $DIR$ } } "
+                              "te_tax_dr_customs_$DIR$ = { GOOD = $GOOD$ D = $D$ } }")
+        touch = squash(block(self.bill, "te_tax_customs_dr_touch"))
+        self.assertEqual(touch, "if = { limit = { NOT = { te_tax_gen_draft_touches_customs = yes } } set_variable = { "
+                                "name = te_tax_dr_customs_pver value = var:te_tax_pver_customs } }")
+        for direction, delta in (("0", -1), ("1", 1)):
+            body = squash(block(self.bill, f"te_tax_dr_customs_{direction}"))
+            with self.subTest(direction=direction):
+                self.assertRegex(body, r"^custom_tooltip = te_tax_tt_cmd_draft_customs_\w+ te_tax_customs_dr_touch = yes ")
+                self.assertIn("set_variable = { name = te_tax_dr_$D$_$GOOD$ value = te_tax_dr_eff_$D$_$GOOD$ } "
+                              f"change_variable = {{ name = te_tax_dr_$D$_$GOOD$ add = {delta} }} clamp_variable = {{ "
+                              f"name = te_tax_dr_$D$_$GOOD$ min = {gen.CUSTOMS_MIN} max = {gen.CUSTOMS_MAX} }}", body)
+        revert = squash(block(self.bill, "te_tax_dr_customs_2"))
+        self.assertIn(f"set_variable = {{ name = te_tax_dr_$D$_$GOOD$ value = {UNTOUCHED} }}", revert)
+        self.assertIn("if = { limit = { NOT = { te_tax_gen_draft_touches_customs = yes } } set_variable = { "
+                      "name = te_tax_dr_customs_pver value = -1 } }", revert)
+
+    def test_existing_law_in_the_records_month(self):
+        for record in ("dr", "bl"):
+            for good in catalog()[:3]:
+                for d in DIRS:
+                    body = squash(block(self.support, f"te_tax_base_{record}_{d}_{good}"))
+                    with self.subTest(record=record, good=good, d=d):
+                        self.assertTrue(body.startswith(
+                            f"value = {gen.CUSTOMS_DEFAULT_LEVEL} if = {{ limit = {{ has_variable = te_tax_customs_held "
+                            f"var:te_tax_customs_held = 1 has_variable = te_tax_en_{d}_{good} }} "
+                            f"value = var:te_tax_en_{d}_{good} }}"), body[:200])
+                        for slot in ("a", "b"):
+                            self.assertIn(f"if = {{ limit = {{ te_tax_slot_awaits_before = {{ SLOT = {slot} DUE = "
+                                          f"te_tax_{record}_due }} has_variable = te_tax_p{slot}_pver_customs "
+                                          f"has_variable = te_tax_p{slot}_{d}_{good} var:te_tax_p{slot}_{d}_{good} >= "
+                                          f"{gen.CUSTOMS_MIN} }} value = var:te_tax_p{slot}_{d}_{good} }}", body)
+        for good in catalog():
+            for d in DIRS:
+                eff = squash(block(self.support, f"te_tax_dr_eff_{d}_{good}"))
+                self.assertEqual(eff, f"value = te_tax_base_dr_{d}_{good} if = {{ limit = {{ has_variable = "
+                                      f"te_tax_dr_{d}_{good} var:te_tax_dr_{d}_{good} >= {gen.CUSTOMS_MIN} }} "
+                                      f"value = var:te_tax_dr_{d}_{good} }}")
+
+    def test_the_draft_rebase_accepts_customs(self):
+        body = squash(block(self.triggers, "te_tax_can_draft_rebase"))
+        self.assertIn("has_variable = te_tax_pver_$KEY$", body)
 
 
 class HistoryKindTest(unittest.TestCase):

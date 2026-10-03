@@ -4633,6 +4633,133 @@ te_tax_gen_apply_a = {
 	if = { limit = { var:te_tax_pa_g_wood >= 0 } set_variable = { name = te_tax_en_g_wood value = var:te_tax_pa_g_wood } }
 	if = { limit = { var:te_tax_pa_agrel >= 0 } set_variable = { name = te_tax_en_agrel value = var:te_tax_pa_agrel } }
 	if = { limit = { var:te_tax_pa_regrel >= 0 } set_variable = { name = te_tax_en_regrel value = var:te_tax_pa_regrel } }
+	# Customs (plan Task 15), only while the code holds the country's customs (a package
+	# that touches them is current only if no market change moved te_tax_xver_customs since
+	# approval): each level the package sets becomes the enacted one, with any pending
+	# re-assert and blocked mark of the good dropped; the sync then sets the market's level.
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_pa_pver_customs }
+		if = { limit = { var:te_tax_pa_imp_advanced_materials >= -3 } set_variable = { name = te_tax_en_imp_advanced_materials value = var:te_tax_pa_imp_advanced_materials } if = { limit = { has_variable = te_tax_cpend_imp_advanced_materials } remove_variable = te_tax_cpend_imp_advanced_materials } if = { limit = { has_variable = te_tax_cblock_advanced_materials } remove_variable = te_tax_cblock_advanced_materials } }
+		if = { limit = { var:te_tax_pa_exp_advanced_materials >= -3 } set_variable = { name = te_tax_en_exp_advanced_materials value = var:te_tax_pa_exp_advanced_materials } if = { limit = { has_variable = te_tax_cpend_exp_advanced_materials } remove_variable = te_tax_cpend_exp_advanced_materials } if = { limit = { has_variable = te_tax_cblock_advanced_materials } remove_variable = te_tax_cblock_advanced_materials } }
+		if = { limit = { var:te_tax_pa_imp_aeroplanes >= -3 } set_variable = { name = te_tax_en_imp_aeroplanes value = var:te_tax_pa_imp_aeroplanes } if = { limit = { has_variable = te_tax_cpend_imp_aeroplanes } remove_variable = te_tax_cpend_imp_aeroplanes } if = { limit = { has_variable = te_tax_cblock_aeroplanes } remove_variable = te_tax_cblock_aeroplanes } }
+		if = { limit = { var:te_tax_pa_exp_aeroplanes >= -3 } set_variable = { name = te_tax_en_exp_aeroplanes value = var:te_tax_pa_exp_aeroplanes } if = { limit = { has_variable = te_tax_cpend_exp_aeroplanes } remove_variable = te_tax_cpend_exp_aeroplanes } if = { limit = { has_variable = te_tax_cblock_aeroplanes } remove_variable = te_tax_cblock_aeroplanes } }
+		if = { limit = { var:te_tax_pa_imp_ammunition >= -3 } set_variable = { name = te_tax_en_imp_ammunition value = var:te_tax_pa_imp_ammunition } if = { limit = { has_variable = te_tax_cpend_imp_ammunition } remove_variable = te_tax_cpend_imp_ammunition } if = { limit = { has_variable = te_tax_cblock_ammunition } remove_variable = te_tax_cblock_ammunition } }
+		if = { limit = { var:te_tax_pa_exp_ammunition >= -3 } set_variable = { name = te_tax_en_exp_ammunition value = var:te_tax_pa_exp_ammunition } if = { limit = { has_variable = te_tax_cpend_exp_ammunition } remove_variable = te_tax_cpend_exp_ammunition } if = { limit = { has_variable = te_tax_cblock_ammunition } remove_variable = te_tax_cblock_ammunition } }
+		if = { limit = { var:te_tax_pa_imp_artillery >= -3 } set_variable = { name = te_tax_en_imp_artillery value = var:te_tax_pa_imp_artillery } if = { limit = { has_variable = te_tax_cpend_imp_artillery } remove_variable = te_tax_cpend_imp_artillery } if = { limit = { has_variable = te_tax_cblock_artillery } remove_variable = te_tax_cblock_artillery } }
+		if = { limit = { var:te_tax_pa_exp_artillery >= -3 } set_variable = { name = te_tax_en_exp_artillery value = var:te_tax_pa_exp_artillery } if = { limit = { has_variable = te_tax_cpend_exp_artillery } remove_variable = te_tax_cpend_exp_artillery } if = { limit = { has_variable = te_tax_cblock_artillery } remove_variable = te_tax_cblock_artillery } }
+		if = { limit = { var:te_tax_pa_imp_automobiles >= -3 } set_variable = { name = te_tax_en_imp_automobiles value = var:te_tax_pa_imp_automobiles } if = { limit = { has_variable = te_tax_cpend_imp_automobiles } remove_variable = te_tax_cpend_imp_automobiles } if = { limit = { has_variable = te_tax_cblock_automobiles } remove_variable = te_tax_cblock_automobiles } }
+		if = { limit = { var:te_tax_pa_exp_automobiles >= -3 } set_variable = { name = te_tax_en_exp_automobiles value = var:te_tax_pa_exp_automobiles } if = { limit = { has_variable = te_tax_cpend_exp_automobiles } remove_variable = te_tax_cpend_exp_automobiles } if = { limit = { has_variable = te_tax_cblock_automobiles } remove_variable = te_tax_cblock_automobiles } }
+		if = { limit = { var:te_tax_pa_imp_clippers >= -3 } set_variable = { name = te_tax_en_imp_clippers value = var:te_tax_pa_imp_clippers } if = { limit = { has_variable = te_tax_cpend_imp_clippers } remove_variable = te_tax_cpend_imp_clippers } if = { limit = { has_variable = te_tax_cblock_clippers } remove_variable = te_tax_cblock_clippers } }
+		if = { limit = { var:te_tax_pa_exp_clippers >= -3 } set_variable = { name = te_tax_en_exp_clippers value = var:te_tax_pa_exp_clippers } if = { limit = { has_variable = te_tax_cpend_exp_clippers } remove_variable = te_tax_cpend_exp_clippers } if = { limit = { has_variable = te_tax_cblock_clippers } remove_variable = te_tax_cblock_clippers } }
+		if = { limit = { var:te_tax_pa_imp_clothes >= -3 } set_variable = { name = te_tax_en_imp_clothes value = var:te_tax_pa_imp_clothes } if = { limit = { has_variable = te_tax_cpend_imp_clothes } remove_variable = te_tax_cpend_imp_clothes } if = { limit = { has_variable = te_tax_cblock_clothes } remove_variable = te_tax_cblock_clothes } }
+		if = { limit = { var:te_tax_pa_exp_clothes >= -3 } set_variable = { name = te_tax_en_exp_clothes value = var:te_tax_pa_exp_clothes } if = { limit = { has_variable = te_tax_cpend_exp_clothes } remove_variable = te_tax_cpend_exp_clothes } if = { limit = { has_variable = te_tax_cblock_clothes } remove_variable = te_tax_cblock_clothes } }
+		if = { limit = { var:te_tax_pa_imp_coal >= -3 } set_variable = { name = te_tax_en_imp_coal value = var:te_tax_pa_imp_coal } if = { limit = { has_variable = te_tax_cpend_imp_coal } remove_variable = te_tax_cpend_imp_coal } if = { limit = { has_variable = te_tax_cblock_coal } remove_variable = te_tax_cblock_coal } }
+		if = { limit = { var:te_tax_pa_exp_coal >= -3 } set_variable = { name = te_tax_en_exp_coal value = var:te_tax_pa_exp_coal } if = { limit = { has_variable = te_tax_cpend_exp_coal } remove_variable = te_tax_cpend_exp_coal } if = { limit = { has_variable = te_tax_cblock_coal } remove_variable = te_tax_cblock_coal } }
+		if = { limit = { var:te_tax_pa_imp_coffee >= -3 } set_variable = { name = te_tax_en_imp_coffee value = var:te_tax_pa_imp_coffee } if = { limit = { has_variable = te_tax_cpend_imp_coffee } remove_variable = te_tax_cpend_imp_coffee } if = { limit = { has_variable = te_tax_cblock_coffee } remove_variable = te_tax_cblock_coffee } }
+		if = { limit = { var:te_tax_pa_exp_coffee >= -3 } set_variable = { name = te_tax_en_exp_coffee value = var:te_tax_pa_exp_coffee } if = { limit = { has_variable = te_tax_cpend_exp_coffee } remove_variable = te_tax_cpend_exp_coffee } if = { limit = { has_variable = te_tax_cblock_coffee } remove_variable = te_tax_cblock_coffee } }
+		if = { limit = { var:te_tax_pa_imp_construction >= -3 } set_variable = { name = te_tax_en_imp_construction value = var:te_tax_pa_imp_construction } if = { limit = { has_variable = te_tax_cpend_imp_construction } remove_variable = te_tax_cpend_imp_construction } if = { limit = { has_variable = te_tax_cblock_construction } remove_variable = te_tax_cblock_construction } }
+		if = { limit = { var:te_tax_pa_exp_construction >= -3 } set_variable = { name = te_tax_en_exp_construction value = var:te_tax_pa_exp_construction } if = { limit = { has_variable = te_tax_cpend_exp_construction } remove_variable = te_tax_cpend_exp_construction } if = { limit = { has_variable = te_tax_cblock_construction } remove_variable = te_tax_cblock_construction } }
+		if = { limit = { var:te_tax_pa_imp_consumer_appliances >= -3 } set_variable = { name = te_tax_en_imp_consumer_appliances value = var:te_tax_pa_imp_consumer_appliances } if = { limit = { has_variable = te_tax_cpend_imp_consumer_appliances } remove_variable = te_tax_cpend_imp_consumer_appliances } if = { limit = { has_variable = te_tax_cblock_consumer_appliances } remove_variable = te_tax_cblock_consumer_appliances } }
+		if = { limit = { var:te_tax_pa_exp_consumer_appliances >= -3 } set_variable = { name = te_tax_en_exp_consumer_appliances value = var:te_tax_pa_exp_consumer_appliances } if = { limit = { has_variable = te_tax_cpend_exp_consumer_appliances } remove_variable = te_tax_cpend_exp_consumer_appliances } if = { limit = { has_variable = te_tax_cblock_consumer_appliances } remove_variable = te_tax_cblock_consumer_appliances } }
+		if = { limit = { var:te_tax_pa_imp_digital_assets >= -3 } set_variable = { name = te_tax_en_imp_digital_assets value = var:te_tax_pa_imp_digital_assets } if = { limit = { has_variable = te_tax_cpend_imp_digital_assets } remove_variable = te_tax_cpend_imp_digital_assets } if = { limit = { has_variable = te_tax_cblock_digital_assets } remove_variable = te_tax_cblock_digital_assets } }
+		if = { limit = { var:te_tax_pa_exp_digital_assets >= -3 } set_variable = { name = te_tax_en_exp_digital_assets value = var:te_tax_pa_exp_digital_assets } if = { limit = { has_variable = te_tax_cpend_exp_digital_assets } remove_variable = te_tax_cpend_exp_digital_assets } if = { limit = { has_variable = te_tax_cblock_digital_assets } remove_variable = te_tax_cblock_digital_assets } }
+		if = { limit = { var:te_tax_pa_imp_dye >= -3 } set_variable = { name = te_tax_en_imp_dye value = var:te_tax_pa_imp_dye } if = { limit = { has_variable = te_tax_cpend_imp_dye } remove_variable = te_tax_cpend_imp_dye } if = { limit = { has_variable = te_tax_cblock_dye } remove_variable = te_tax_cblock_dye } }
+		if = { limit = { var:te_tax_pa_exp_dye >= -3 } set_variable = { name = te_tax_en_exp_dye value = var:te_tax_pa_exp_dye } if = { limit = { has_variable = te_tax_cpend_exp_dye } remove_variable = te_tax_cpend_exp_dye } if = { limit = { has_variable = te_tax_cblock_dye } remove_variable = te_tax_cblock_dye } }
+		if = { limit = { var:te_tax_pa_imp_electronic_components >= -3 } set_variable = { name = te_tax_en_imp_electronic_components value = var:te_tax_pa_imp_electronic_components } if = { limit = { has_variable = te_tax_cpend_imp_electronic_components } remove_variable = te_tax_cpend_imp_electronic_components } if = { limit = { has_variable = te_tax_cblock_electronic_components } remove_variable = te_tax_cblock_electronic_components } }
+		if = { limit = { var:te_tax_pa_exp_electronic_components >= -3 } set_variable = { name = te_tax_en_exp_electronic_components value = var:te_tax_pa_exp_electronic_components } if = { limit = { has_variable = te_tax_cpend_exp_electronic_components } remove_variable = te_tax_cpend_exp_electronic_components } if = { limit = { has_variable = te_tax_cblock_electronic_components } remove_variable = te_tax_cblock_electronic_components } }
+		if = { limit = { var:te_tax_pa_imp_engines >= -3 } set_variable = { name = te_tax_en_imp_engines value = var:te_tax_pa_imp_engines } if = { limit = { has_variable = te_tax_cpend_imp_engines } remove_variable = te_tax_cpend_imp_engines } if = { limit = { has_variable = te_tax_cblock_engines } remove_variable = te_tax_cblock_engines } }
+		if = { limit = { var:te_tax_pa_exp_engines >= -3 } set_variable = { name = te_tax_en_exp_engines value = var:te_tax_pa_exp_engines } if = { limit = { has_variable = te_tax_cpend_exp_engines } remove_variable = te_tax_cpend_exp_engines } if = { limit = { has_variable = te_tax_cblock_engines } remove_variable = te_tax_cblock_engines } }
+		if = { limit = { var:te_tax_pa_imp_explosives >= -3 } set_variable = { name = te_tax_en_imp_explosives value = var:te_tax_pa_imp_explosives } if = { limit = { has_variable = te_tax_cpend_imp_explosives } remove_variable = te_tax_cpend_imp_explosives } if = { limit = { has_variable = te_tax_cblock_explosives } remove_variable = te_tax_cblock_explosives } }
+		if = { limit = { var:te_tax_pa_exp_explosives >= -3 } set_variable = { name = te_tax_en_exp_explosives value = var:te_tax_pa_exp_explosives } if = { limit = { has_variable = te_tax_cpend_exp_explosives } remove_variable = te_tax_cpend_exp_explosives } if = { limit = { has_variable = te_tax_cblock_explosives } remove_variable = te_tax_cblock_explosives } }
+		if = { limit = { var:te_tax_pa_imp_fabric >= -3 } set_variable = { name = te_tax_en_imp_fabric value = var:te_tax_pa_imp_fabric } if = { limit = { has_variable = te_tax_cpend_imp_fabric } remove_variable = te_tax_cpend_imp_fabric } if = { limit = { has_variable = te_tax_cblock_fabric } remove_variable = te_tax_cblock_fabric } }
+		if = { limit = { var:te_tax_pa_exp_fabric >= -3 } set_variable = { name = te_tax_en_exp_fabric value = var:te_tax_pa_exp_fabric } if = { limit = { has_variable = te_tax_cpend_exp_fabric } remove_variable = te_tax_cpend_exp_fabric } if = { limit = { has_variable = te_tax_cblock_fabric } remove_variable = te_tax_cblock_fabric } }
+		if = { limit = { var:te_tax_pa_imp_fertilizer >= -3 } set_variable = { name = te_tax_en_imp_fertilizer value = var:te_tax_pa_imp_fertilizer } if = { limit = { has_variable = te_tax_cpend_imp_fertilizer } remove_variable = te_tax_cpend_imp_fertilizer } if = { limit = { has_variable = te_tax_cblock_fertilizer } remove_variable = te_tax_cblock_fertilizer } }
+		if = { limit = { var:te_tax_pa_exp_fertilizer >= -3 } set_variable = { name = te_tax_en_exp_fertilizer value = var:te_tax_pa_exp_fertilizer } if = { limit = { has_variable = te_tax_cpend_exp_fertilizer } remove_variable = te_tax_cpend_exp_fertilizer } if = { limit = { has_variable = te_tax_cblock_fertilizer } remove_variable = te_tax_cblock_fertilizer } }
+		if = { limit = { var:te_tax_pa_imp_fine_art >= -3 } set_variable = { name = te_tax_en_imp_fine_art value = var:te_tax_pa_imp_fine_art } if = { limit = { has_variable = te_tax_cpend_imp_fine_art } remove_variable = te_tax_cpend_imp_fine_art } if = { limit = { has_variable = te_tax_cblock_fine_art } remove_variable = te_tax_cblock_fine_art } }
+		if = { limit = { var:te_tax_pa_exp_fine_art >= -3 } set_variable = { name = te_tax_en_exp_fine_art value = var:te_tax_pa_exp_fine_art } if = { limit = { has_variable = te_tax_cpend_exp_fine_art } remove_variable = te_tax_cpend_exp_fine_art } if = { limit = { has_variable = te_tax_cblock_fine_art } remove_variable = te_tax_cblock_fine_art } }
+		if = { limit = { var:te_tax_pa_imp_fish >= -3 } set_variable = { name = te_tax_en_imp_fish value = var:te_tax_pa_imp_fish } if = { limit = { has_variable = te_tax_cpend_imp_fish } remove_variable = te_tax_cpend_imp_fish } if = { limit = { has_variable = te_tax_cblock_fish } remove_variable = te_tax_cblock_fish } }
+		if = { limit = { var:te_tax_pa_exp_fish >= -3 } set_variable = { name = te_tax_en_exp_fish value = var:te_tax_pa_exp_fish } if = { limit = { has_variable = te_tax_cpend_exp_fish } remove_variable = te_tax_cpend_exp_fish } if = { limit = { has_variable = te_tax_cblock_fish } remove_variable = te_tax_cblock_fish } }
+		if = { limit = { var:te_tax_pa_imp_fruit >= -3 } set_variable = { name = te_tax_en_imp_fruit value = var:te_tax_pa_imp_fruit } if = { limit = { has_variable = te_tax_cpend_imp_fruit } remove_variable = te_tax_cpend_imp_fruit } if = { limit = { has_variable = te_tax_cblock_fruit } remove_variable = te_tax_cblock_fruit } }
+		if = { limit = { var:te_tax_pa_exp_fruit >= -3 } set_variable = { name = te_tax_en_exp_fruit value = var:te_tax_pa_exp_fruit } if = { limit = { has_variable = te_tax_cpend_exp_fruit } remove_variable = te_tax_cpend_exp_fruit } if = { limit = { has_variable = te_tax_cblock_fruit } remove_variable = te_tax_cblock_fruit } }
+		if = { limit = { var:te_tax_pa_imp_furniture >= -3 } set_variable = { name = te_tax_en_imp_furniture value = var:te_tax_pa_imp_furniture } if = { limit = { has_variable = te_tax_cpend_imp_furniture } remove_variable = te_tax_cpend_imp_furniture } if = { limit = { has_variable = te_tax_cblock_furniture } remove_variable = te_tax_cblock_furniture } }
+		if = { limit = { var:te_tax_pa_exp_furniture >= -3 } set_variable = { name = te_tax_en_exp_furniture value = var:te_tax_pa_exp_furniture } if = { limit = { has_variable = te_tax_cpend_exp_furniture } remove_variable = te_tax_cpend_exp_furniture } if = { limit = { has_variable = te_tax_cblock_furniture } remove_variable = te_tax_cblock_furniture } }
+		if = { limit = { var:te_tax_pa_imp_glass >= -3 } set_variable = { name = te_tax_en_imp_glass value = var:te_tax_pa_imp_glass } if = { limit = { has_variable = te_tax_cpend_imp_glass } remove_variable = te_tax_cpend_imp_glass } if = { limit = { has_variable = te_tax_cblock_glass } remove_variable = te_tax_cblock_glass } }
+		if = { limit = { var:te_tax_pa_exp_glass >= -3 } set_variable = { name = te_tax_en_exp_glass value = var:te_tax_pa_exp_glass } if = { limit = { has_variable = te_tax_cpend_exp_glass } remove_variable = te_tax_cpend_exp_glass } if = { limit = { has_variable = te_tax_cblock_glass } remove_variable = te_tax_cblock_glass } }
+		if = { limit = { var:te_tax_pa_imp_grain >= -3 } set_variable = { name = te_tax_en_imp_grain value = var:te_tax_pa_imp_grain } if = { limit = { has_variable = te_tax_cpend_imp_grain } remove_variable = te_tax_cpend_imp_grain } if = { limit = { has_variable = te_tax_cblock_grain } remove_variable = te_tax_cblock_grain } }
+		if = { limit = { var:te_tax_pa_exp_grain >= -3 } set_variable = { name = te_tax_en_exp_grain value = var:te_tax_pa_exp_grain } if = { limit = { has_variable = te_tax_cpend_exp_grain } remove_variable = te_tax_cpend_exp_grain } if = { limit = { has_variable = te_tax_cblock_grain } remove_variable = te_tax_cblock_grain } }
+		if = { limit = { var:te_tax_pa_imp_groceries >= -3 } set_variable = { name = te_tax_en_imp_groceries value = var:te_tax_pa_imp_groceries } if = { limit = { has_variable = te_tax_cpend_imp_groceries } remove_variable = te_tax_cpend_imp_groceries } if = { limit = { has_variable = te_tax_cblock_groceries } remove_variable = te_tax_cblock_groceries } }
+		if = { limit = { var:te_tax_pa_exp_groceries >= -3 } set_variable = { name = te_tax_en_exp_groceries value = var:te_tax_pa_exp_groceries } if = { limit = { has_variable = te_tax_cpend_exp_groceries } remove_variable = te_tax_cpend_exp_groceries } if = { limit = { has_variable = te_tax_cblock_groceries } remove_variable = te_tax_cblock_groceries } }
+		if = { limit = { var:te_tax_pa_imp_hardwood >= -3 } set_variable = { name = te_tax_en_imp_hardwood value = var:te_tax_pa_imp_hardwood } if = { limit = { has_variable = te_tax_cpend_imp_hardwood } remove_variable = te_tax_cpend_imp_hardwood } if = { limit = { has_variable = te_tax_cblock_hardwood } remove_variable = te_tax_cblock_hardwood } }
+		if = { limit = { var:te_tax_pa_exp_hardwood >= -3 } set_variable = { name = te_tax_en_exp_hardwood value = var:te_tax_pa_exp_hardwood } if = { limit = { has_variable = te_tax_cpend_exp_hardwood } remove_variable = te_tax_cpend_exp_hardwood } if = { limit = { has_variable = te_tax_cblock_hardwood } remove_variable = te_tax_cblock_hardwood } }
+		if = { limit = { var:te_tax_pa_imp_iron >= -3 } set_variable = { name = te_tax_en_imp_iron value = var:te_tax_pa_imp_iron } if = { limit = { has_variable = te_tax_cpend_imp_iron } remove_variable = te_tax_cpend_imp_iron } if = { limit = { has_variable = te_tax_cblock_iron } remove_variable = te_tax_cblock_iron } }
+		if = { limit = { var:te_tax_pa_exp_iron >= -3 } set_variable = { name = te_tax_en_exp_iron value = var:te_tax_pa_exp_iron } if = { limit = { has_variable = te_tax_cpend_exp_iron } remove_variable = te_tax_cpend_exp_iron } if = { limit = { has_variable = te_tax_cblock_iron } remove_variable = te_tax_cblock_iron } }
+		if = { limit = { var:te_tax_pa_imp_ironclads >= -3 } set_variable = { name = te_tax_en_imp_ironclads value = var:te_tax_pa_imp_ironclads } if = { limit = { has_variable = te_tax_cpend_imp_ironclads } remove_variable = te_tax_cpend_imp_ironclads } if = { limit = { has_variable = te_tax_cblock_ironclads } remove_variable = te_tax_cblock_ironclads } }
+		if = { limit = { var:te_tax_pa_exp_ironclads >= -3 } set_variable = { name = te_tax_en_exp_ironclads value = var:te_tax_pa_exp_ironclads } if = { limit = { has_variable = te_tax_cpend_exp_ironclads } remove_variable = te_tax_cpend_exp_ironclads } if = { limit = { has_variable = te_tax_cblock_ironclads } remove_variable = te_tax_cblock_ironclads } }
+		if = { limit = { var:te_tax_pa_imp_launch_capacity >= -3 } set_variable = { name = te_tax_en_imp_launch_capacity value = var:te_tax_pa_imp_launch_capacity } if = { limit = { has_variable = te_tax_cpend_imp_launch_capacity } remove_variable = te_tax_cpend_imp_launch_capacity } if = { limit = { has_variable = te_tax_cblock_launch_capacity } remove_variable = te_tax_cblock_launch_capacity } }
+		if = { limit = { var:te_tax_pa_exp_launch_capacity >= -3 } set_variable = { name = te_tax_en_exp_launch_capacity value = var:te_tax_pa_exp_launch_capacity } if = { limit = { has_variable = te_tax_cpend_exp_launch_capacity } remove_variable = te_tax_cpend_exp_launch_capacity } if = { limit = { has_variable = te_tax_cblock_launch_capacity } remove_variable = te_tax_cblock_launch_capacity } }
+		if = { limit = { var:te_tax_pa_imp_lead >= -3 } set_variable = { name = te_tax_en_imp_lead value = var:te_tax_pa_imp_lead } if = { limit = { has_variable = te_tax_cpend_imp_lead } remove_variable = te_tax_cpend_imp_lead } if = { limit = { has_variable = te_tax_cblock_lead } remove_variable = te_tax_cblock_lead } }
+		if = { limit = { var:te_tax_pa_exp_lead >= -3 } set_variable = { name = te_tax_en_exp_lead value = var:te_tax_pa_exp_lead } if = { limit = { has_variable = te_tax_cpend_exp_lead } remove_variable = te_tax_cpend_exp_lead } if = { limit = { has_variable = te_tax_cblock_lead } remove_variable = te_tax_cblock_lead } }
+		if = { limit = { var:te_tax_pa_imp_liquor >= -3 } set_variable = { name = te_tax_en_imp_liquor value = var:te_tax_pa_imp_liquor } if = { limit = { has_variable = te_tax_cpend_imp_liquor } remove_variable = te_tax_cpend_imp_liquor } if = { limit = { has_variable = te_tax_cblock_liquor } remove_variable = te_tax_cblock_liquor } }
+		if = { limit = { var:te_tax_pa_exp_liquor >= -3 } set_variable = { name = te_tax_en_exp_liquor value = var:te_tax_pa_exp_liquor } if = { limit = { has_variable = te_tax_cpend_exp_liquor } remove_variable = te_tax_cpend_exp_liquor } if = { limit = { has_variable = te_tax_cblock_liquor } remove_variable = te_tax_cblock_liquor } }
+		if = { limit = { var:te_tax_pa_imp_luxury_clothes >= -3 } set_variable = { name = te_tax_en_imp_luxury_clothes value = var:te_tax_pa_imp_luxury_clothes } if = { limit = { has_variable = te_tax_cpend_imp_luxury_clothes } remove_variable = te_tax_cpend_imp_luxury_clothes } if = { limit = { has_variable = te_tax_cblock_luxury_clothes } remove_variable = te_tax_cblock_luxury_clothes } }
+		if = { limit = { var:te_tax_pa_exp_luxury_clothes >= -3 } set_variable = { name = te_tax_en_exp_luxury_clothes value = var:te_tax_pa_exp_luxury_clothes } if = { limit = { has_variable = te_tax_cpend_exp_luxury_clothes } remove_variable = te_tax_cpend_exp_luxury_clothes } if = { limit = { has_variable = te_tax_cblock_luxury_clothes } remove_variable = te_tax_cblock_luxury_clothes } }
+		if = { limit = { var:te_tax_pa_imp_luxury_furniture >= -3 } set_variable = { name = te_tax_en_imp_luxury_furniture value = var:te_tax_pa_imp_luxury_furniture } if = { limit = { has_variable = te_tax_cpend_imp_luxury_furniture } remove_variable = te_tax_cpend_imp_luxury_furniture } if = { limit = { has_variable = te_tax_cblock_luxury_furniture } remove_variable = te_tax_cblock_luxury_furniture } }
+		if = { limit = { var:te_tax_pa_exp_luxury_furniture >= -3 } set_variable = { name = te_tax_en_exp_luxury_furniture value = var:te_tax_pa_exp_luxury_furniture } if = { limit = { has_variable = te_tax_cpend_exp_luxury_furniture } remove_variable = te_tax_cpend_exp_luxury_furniture } if = { limit = { has_variable = te_tax_cblock_luxury_furniture } remove_variable = te_tax_cblock_luxury_furniture } }
+		if = { limit = { var:te_tax_pa_imp_magnetic_drive_ships >= -3 } set_variable = { name = te_tax_en_imp_magnetic_drive_ships value = var:te_tax_pa_imp_magnetic_drive_ships } if = { limit = { has_variable = te_tax_cpend_imp_magnetic_drive_ships } remove_variable = te_tax_cpend_imp_magnetic_drive_ships } if = { limit = { has_variable = te_tax_cblock_magnetic_drive_ships } remove_variable = te_tax_cblock_magnetic_drive_ships } }
+		if = { limit = { var:te_tax_pa_exp_magnetic_drive_ships >= -3 } set_variable = { name = te_tax_en_exp_magnetic_drive_ships value = var:te_tax_pa_exp_magnetic_drive_ships } if = { limit = { has_variable = te_tax_cpend_exp_magnetic_drive_ships } remove_variable = te_tax_cpend_exp_magnetic_drive_ships } if = { limit = { has_variable = te_tax_cblock_magnetic_drive_ships } remove_variable = te_tax_cblock_magnetic_drive_ships } }
+		if = { limit = { var:te_tax_pa_imp_manowars >= -3 } set_variable = { name = te_tax_en_imp_manowars value = var:te_tax_pa_imp_manowars } if = { limit = { has_variable = te_tax_cpend_imp_manowars } remove_variable = te_tax_cpend_imp_manowars } if = { limit = { has_variable = te_tax_cblock_manowars } remove_variable = te_tax_cblock_manowars } }
+		if = { limit = { var:te_tax_pa_exp_manowars >= -3 } set_variable = { name = te_tax_en_exp_manowars value = var:te_tax_pa_exp_manowars } if = { limit = { has_variable = te_tax_cpend_exp_manowars } remove_variable = te_tax_cpend_exp_manowars } if = { limit = { has_variable = te_tax_cblock_manowars } remove_variable = te_tax_cblock_manowars } }
+		if = { limit = { var:te_tax_pa_imp_meat >= -3 } set_variable = { name = te_tax_en_imp_meat value = var:te_tax_pa_imp_meat } if = { limit = { has_variable = te_tax_cpend_imp_meat } remove_variable = te_tax_cpend_imp_meat } if = { limit = { has_variable = te_tax_cblock_meat } remove_variable = te_tax_cblock_meat } }
+		if = { limit = { var:te_tax_pa_exp_meat >= -3 } set_variable = { name = te_tax_en_exp_meat value = var:te_tax_pa_exp_meat } if = { limit = { has_variable = te_tax_cpend_exp_meat } remove_variable = te_tax_cpend_exp_meat } if = { limit = { has_variable = te_tax_cblock_meat } remove_variable = te_tax_cblock_meat } }
+		if = { limit = { var:te_tax_pa_imp_merchant_marine >= -3 } set_variable = { name = te_tax_en_imp_merchant_marine value = var:te_tax_pa_imp_merchant_marine } if = { limit = { has_variable = te_tax_cpend_imp_merchant_marine } remove_variable = te_tax_cpend_imp_merchant_marine } if = { limit = { has_variable = te_tax_cblock_merchant_marine } remove_variable = te_tax_cblock_merchant_marine } }
+		if = { limit = { var:te_tax_pa_exp_merchant_marine >= -3 } set_variable = { name = te_tax_en_exp_merchant_marine value = var:te_tax_pa_exp_merchant_marine } if = { limit = { has_variable = te_tax_cpend_exp_merchant_marine } remove_variable = te_tax_cpend_exp_merchant_marine } if = { limit = { has_variable = te_tax_cblock_merchant_marine } remove_variable = te_tax_cblock_merchant_marine } }
+		if = { limit = { var:te_tax_pa_imp_motor_ships >= -3 } set_variable = { name = te_tax_en_imp_motor_ships value = var:te_tax_pa_imp_motor_ships } if = { limit = { has_variable = te_tax_cpend_imp_motor_ships } remove_variable = te_tax_cpend_imp_motor_ships } if = { limit = { has_variable = te_tax_cblock_motor_ships } remove_variable = te_tax_cblock_motor_ships } }
+		if = { limit = { var:te_tax_pa_exp_motor_ships >= -3 } set_variable = { name = te_tax_en_exp_motor_ships value = var:te_tax_pa_exp_motor_ships } if = { limit = { has_variable = te_tax_cpend_exp_motor_ships } remove_variable = te_tax_cpend_exp_motor_ships } if = { limit = { has_variable = te_tax_cblock_motor_ships } remove_variable = te_tax_cblock_motor_ships } }
+		if = { limit = { var:te_tax_pa_imp_oil >= -3 } set_variable = { name = te_tax_en_imp_oil value = var:te_tax_pa_imp_oil } if = { limit = { has_variable = te_tax_cpend_imp_oil } remove_variable = te_tax_cpend_imp_oil } if = { limit = { has_variable = te_tax_cblock_oil } remove_variable = te_tax_cblock_oil } }
+		if = { limit = { var:te_tax_pa_exp_oil >= -3 } set_variable = { name = te_tax_en_exp_oil value = var:te_tax_pa_exp_oil } if = { limit = { has_variable = te_tax_cpend_exp_oil } remove_variable = te_tax_cpend_exp_oil } if = { limit = { has_variable = te_tax_cblock_oil } remove_variable = te_tax_cblock_oil } }
+		if = { limit = { var:te_tax_pa_imp_opium >= -3 } set_variable = { name = te_tax_en_imp_opium value = var:te_tax_pa_imp_opium } if = { limit = { has_variable = te_tax_cpend_imp_opium } remove_variable = te_tax_cpend_imp_opium } if = { limit = { has_variable = te_tax_cblock_opium } remove_variable = te_tax_cblock_opium } }
+		if = { limit = { var:te_tax_pa_exp_opium >= -3 } set_variable = { name = te_tax_en_exp_opium value = var:te_tax_pa_exp_opium } if = { limit = { has_variable = te_tax_cpend_exp_opium } remove_variable = te_tax_cpend_exp_opium } if = { limit = { has_variable = te_tax_cblock_opium } remove_variable = te_tax_cblock_opium } }
+		if = { limit = { var:te_tax_pa_imp_paper >= -3 } set_variable = { name = te_tax_en_imp_paper value = var:te_tax_pa_imp_paper } if = { limit = { has_variable = te_tax_cpend_imp_paper } remove_variable = te_tax_cpend_imp_paper } if = { limit = { has_variable = te_tax_cblock_paper } remove_variable = te_tax_cblock_paper } }
+		if = { limit = { var:te_tax_pa_exp_paper >= -3 } set_variable = { name = te_tax_en_exp_paper value = var:te_tax_pa_exp_paper } if = { limit = { has_variable = te_tax_cpend_exp_paper } remove_variable = te_tax_cpend_exp_paper } if = { limit = { has_variable = te_tax_cblock_paper } remove_variable = te_tax_cblock_paper } }
+		if = { limit = { var:te_tax_pa_imp_porcelain >= -3 } set_variable = { name = te_tax_en_imp_porcelain value = var:te_tax_pa_imp_porcelain } if = { limit = { has_variable = te_tax_cpend_imp_porcelain } remove_variable = te_tax_cpend_imp_porcelain } if = { limit = { has_variable = te_tax_cblock_porcelain } remove_variable = te_tax_cblock_porcelain } }
+		if = { limit = { var:te_tax_pa_exp_porcelain >= -3 } set_variable = { name = te_tax_en_exp_porcelain value = var:te_tax_pa_exp_porcelain } if = { limit = { has_variable = te_tax_cpend_exp_porcelain } remove_variable = te_tax_cpend_exp_porcelain } if = { limit = { has_variable = te_tax_cblock_porcelain } remove_variable = te_tax_cblock_porcelain } }
+		if = { limit = { var:te_tax_pa_imp_radios >= -3 } set_variable = { name = te_tax_en_imp_radios value = var:te_tax_pa_imp_radios } if = { limit = { has_variable = te_tax_cpend_imp_radios } remove_variable = te_tax_cpend_imp_radios } if = { limit = { has_variable = te_tax_cblock_radios } remove_variable = te_tax_cblock_radios } }
+		if = { limit = { var:te_tax_pa_exp_radios >= -3 } set_variable = { name = te_tax_en_exp_radios value = var:te_tax_pa_exp_radios } if = { limit = { has_variable = te_tax_cpend_exp_radios } remove_variable = te_tax_cpend_exp_radios } if = { limit = { has_variable = te_tax_cblock_radios } remove_variable = te_tax_cblock_radios } }
+		if = { limit = { var:te_tax_pa_imp_robotics >= -3 } set_variable = { name = te_tax_en_imp_robotics value = var:te_tax_pa_imp_robotics } if = { limit = { has_variable = te_tax_cpend_imp_robotics } remove_variable = te_tax_cpend_imp_robotics } if = { limit = { has_variable = te_tax_cblock_robotics } remove_variable = te_tax_cblock_robotics } }
+		if = { limit = { var:te_tax_pa_exp_robotics >= -3 } set_variable = { name = te_tax_en_exp_robotics value = var:te_tax_pa_exp_robotics } if = { limit = { has_variable = te_tax_cpend_exp_robotics } remove_variable = te_tax_cpend_exp_robotics } if = { limit = { has_variable = te_tax_cblock_robotics } remove_variable = te_tax_cblock_robotics } }
+		if = { limit = { var:te_tax_pa_imp_rubber >= -3 } set_variable = { name = te_tax_en_imp_rubber value = var:te_tax_pa_imp_rubber } if = { limit = { has_variable = te_tax_cpend_imp_rubber } remove_variable = te_tax_cpend_imp_rubber } if = { limit = { has_variable = te_tax_cblock_rubber } remove_variable = te_tax_cblock_rubber } }
+		if = { limit = { var:te_tax_pa_exp_rubber >= -3 } set_variable = { name = te_tax_en_exp_rubber value = var:te_tax_pa_exp_rubber } if = { limit = { has_variable = te_tax_cpend_exp_rubber } remove_variable = te_tax_cpend_exp_rubber } if = { limit = { has_variable = te_tax_cblock_rubber } remove_variable = te_tax_cblock_rubber } }
+		if = { limit = { var:te_tax_pa_imp_silk >= -3 } set_variable = { name = te_tax_en_imp_silk value = var:te_tax_pa_imp_silk } if = { limit = { has_variable = te_tax_cpend_imp_silk } remove_variable = te_tax_cpend_imp_silk } if = { limit = { has_variable = te_tax_cblock_silk } remove_variable = te_tax_cblock_silk } }
+		if = { limit = { var:te_tax_pa_exp_silk >= -3 } set_variable = { name = te_tax_en_exp_silk value = var:te_tax_pa_exp_silk } if = { limit = { has_variable = te_tax_cpend_exp_silk } remove_variable = te_tax_cpend_exp_silk } if = { limit = { has_variable = te_tax_cblock_silk } remove_variable = te_tax_cblock_silk } }
+		if = { limit = { var:te_tax_pa_imp_small_arms >= -3 } set_variable = { name = te_tax_en_imp_small_arms value = var:te_tax_pa_imp_small_arms } if = { limit = { has_variable = te_tax_cpend_imp_small_arms } remove_variable = te_tax_cpend_imp_small_arms } if = { limit = { has_variable = te_tax_cblock_small_arms } remove_variable = te_tax_cblock_small_arms } }
+		if = { limit = { var:te_tax_pa_exp_small_arms >= -3 } set_variable = { name = te_tax_en_exp_small_arms value = var:te_tax_pa_exp_small_arms } if = { limit = { has_variable = te_tax_cpend_exp_small_arms } remove_variable = te_tax_cpend_exp_small_arms } if = { limit = { has_variable = te_tax_cblock_small_arms } remove_variable = te_tax_cblock_small_arms } }
+		if = { limit = { var:te_tax_pa_imp_steamers >= -3 } set_variable = { name = te_tax_en_imp_steamers value = var:te_tax_pa_imp_steamers } if = { limit = { has_variable = te_tax_cpend_imp_steamers } remove_variable = te_tax_cpend_imp_steamers } if = { limit = { has_variable = te_tax_cblock_steamers } remove_variable = te_tax_cblock_steamers } }
+		if = { limit = { var:te_tax_pa_exp_steamers >= -3 } set_variable = { name = te_tax_en_exp_steamers value = var:te_tax_pa_exp_steamers } if = { limit = { has_variable = te_tax_cpend_exp_steamers } remove_variable = te_tax_cpend_exp_steamers } if = { limit = { has_variable = te_tax_cblock_steamers } remove_variable = te_tax_cblock_steamers } }
+		if = { limit = { var:te_tax_pa_imp_steel >= -3 } set_variable = { name = te_tax_en_imp_steel value = var:te_tax_pa_imp_steel } if = { limit = { has_variable = te_tax_cpend_imp_steel } remove_variable = te_tax_cpend_imp_steel } if = { limit = { has_variable = te_tax_cblock_steel } remove_variable = te_tax_cblock_steel } }
+		if = { limit = { var:te_tax_pa_exp_steel >= -3 } set_variable = { name = te_tax_en_exp_steel value = var:te_tax_pa_exp_steel } if = { limit = { has_variable = te_tax_cpend_exp_steel } remove_variable = te_tax_cpend_exp_steel } if = { limit = { has_variable = te_tax_cblock_steel } remove_variable = te_tax_cblock_steel } }
+		if = { limit = { var:te_tax_pa_imp_sugar >= -3 } set_variable = { name = te_tax_en_imp_sugar value = var:te_tax_pa_imp_sugar } if = { limit = { has_variable = te_tax_cpend_imp_sugar } remove_variable = te_tax_cpend_imp_sugar } if = { limit = { has_variable = te_tax_cblock_sugar } remove_variable = te_tax_cblock_sugar } }
+		if = { limit = { var:te_tax_pa_exp_sugar >= -3 } set_variable = { name = te_tax_en_exp_sugar value = var:te_tax_pa_exp_sugar } if = { limit = { has_variable = te_tax_cpend_exp_sugar } remove_variable = te_tax_cpend_exp_sugar } if = { limit = { has_variable = te_tax_cblock_sugar } remove_variable = te_tax_cblock_sugar } }
+		if = { limit = { var:te_tax_pa_imp_sulfur >= -3 } set_variable = { name = te_tax_en_imp_sulfur value = var:te_tax_pa_imp_sulfur } if = { limit = { has_variable = te_tax_cpend_imp_sulfur } remove_variable = te_tax_cpend_imp_sulfur } if = { limit = { has_variable = te_tax_cblock_sulfur } remove_variable = te_tax_cblock_sulfur } }
+		if = { limit = { var:te_tax_pa_exp_sulfur >= -3 } set_variable = { name = te_tax_en_exp_sulfur value = var:te_tax_pa_exp_sulfur } if = { limit = { has_variable = te_tax_cpend_exp_sulfur } remove_variable = te_tax_cpend_exp_sulfur } if = { limit = { has_variable = te_tax_cblock_sulfur } remove_variable = te_tax_cblock_sulfur } }
+		if = { limit = { var:te_tax_pa_imp_tanks >= -3 } set_variable = { name = te_tax_en_imp_tanks value = var:te_tax_pa_imp_tanks } if = { limit = { has_variable = te_tax_cpend_imp_tanks } remove_variable = te_tax_cpend_imp_tanks } if = { limit = { has_variable = te_tax_cblock_tanks } remove_variable = te_tax_cblock_tanks } }
+		if = { limit = { var:te_tax_pa_exp_tanks >= -3 } set_variable = { name = te_tax_en_exp_tanks value = var:te_tax_pa_exp_tanks } if = { limit = { has_variable = te_tax_cpend_exp_tanks } remove_variable = te_tax_cpend_exp_tanks } if = { limit = { has_variable = te_tax_cblock_tanks } remove_variable = te_tax_cblock_tanks } }
+		if = { limit = { var:te_tax_pa_imp_tea >= -3 } set_variable = { name = te_tax_en_imp_tea value = var:te_tax_pa_imp_tea } if = { limit = { has_variable = te_tax_cpend_imp_tea } remove_variable = te_tax_cpend_imp_tea } if = { limit = { has_variable = te_tax_cblock_tea } remove_variable = te_tax_cblock_tea } }
+		if = { limit = { var:te_tax_pa_exp_tea >= -3 } set_variable = { name = te_tax_en_exp_tea value = var:te_tax_pa_exp_tea } if = { limit = { has_variable = te_tax_cpend_exp_tea } remove_variable = te_tax_cpend_exp_tea } if = { limit = { has_variable = te_tax_cblock_tea } remove_variable = te_tax_cblock_tea } }
+		if = { limit = { var:te_tax_pa_imp_tech_metals >= -3 } set_variable = { name = te_tax_en_imp_tech_metals value = var:te_tax_pa_imp_tech_metals } if = { limit = { has_variable = te_tax_cpend_imp_tech_metals } remove_variable = te_tax_cpend_imp_tech_metals } if = { limit = { has_variable = te_tax_cblock_tech_metals } remove_variable = te_tax_cblock_tech_metals } }
+		if = { limit = { var:te_tax_pa_exp_tech_metals >= -3 } set_variable = { name = te_tax_en_exp_tech_metals value = var:te_tax_pa_exp_tech_metals } if = { limit = { has_variable = te_tax_cpend_exp_tech_metals } remove_variable = te_tax_cpend_exp_tech_metals } if = { limit = { has_variable = te_tax_cblock_tech_metals } remove_variable = te_tax_cblock_tech_metals } }
+		if = { limit = { var:te_tax_pa_imp_telephones >= -3 } set_variable = { name = te_tax_en_imp_telephones value = var:te_tax_pa_imp_telephones } if = { limit = { has_variable = te_tax_cpend_imp_telephones } remove_variable = te_tax_cpend_imp_telephones } if = { limit = { has_variable = te_tax_cblock_telephones } remove_variable = te_tax_cblock_telephones } }
+		if = { limit = { var:te_tax_pa_exp_telephones >= -3 } set_variable = { name = te_tax_en_exp_telephones value = var:te_tax_pa_exp_telephones } if = { limit = { has_variable = te_tax_cpend_exp_telephones } remove_variable = te_tax_cpend_exp_telephones } if = { limit = { has_variable = te_tax_cblock_telephones } remove_variable = te_tax_cblock_telephones } }
+		if = { limit = { var:te_tax_pa_imp_tobacco >= -3 } set_variable = { name = te_tax_en_imp_tobacco value = var:te_tax_pa_imp_tobacco } if = { limit = { has_variable = te_tax_cpend_imp_tobacco } remove_variable = te_tax_cpend_imp_tobacco } if = { limit = { has_variable = te_tax_cblock_tobacco } remove_variable = te_tax_cblock_tobacco } }
+		if = { limit = { var:te_tax_pa_exp_tobacco >= -3 } set_variable = { name = te_tax_en_exp_tobacco value = var:te_tax_pa_exp_tobacco } if = { limit = { has_variable = te_tax_cpend_exp_tobacco } remove_variable = te_tax_cpend_exp_tobacco } if = { limit = { has_variable = te_tax_cblock_tobacco } remove_variable = te_tax_cblock_tobacco } }
+		if = { limit = { var:te_tax_pa_imp_tools >= -3 } set_variable = { name = te_tax_en_imp_tools value = var:te_tax_pa_imp_tools } if = { limit = { has_variable = te_tax_cpend_imp_tools } remove_variable = te_tax_cpend_imp_tools } if = { limit = { has_variable = te_tax_cblock_tools } remove_variable = te_tax_cblock_tools } }
+		if = { limit = { var:te_tax_pa_exp_tools >= -3 } set_variable = { name = te_tax_en_exp_tools value = var:te_tax_pa_exp_tools } if = { limit = { has_variable = te_tax_cpend_exp_tools } remove_variable = te_tax_cpend_exp_tools } if = { limit = { has_variable = te_tax_cblock_tools } remove_variable = te_tax_cblock_tools } }
+		if = { limit = { var:te_tax_pa_imp_tourism >= -3 } set_variable = { name = te_tax_en_imp_tourism value = var:te_tax_pa_imp_tourism } if = { limit = { has_variable = te_tax_cpend_imp_tourism } remove_variable = te_tax_cpend_imp_tourism } if = { limit = { has_variable = te_tax_cblock_tourism } remove_variable = te_tax_cblock_tourism } }
+		if = { limit = { var:te_tax_pa_exp_tourism >= -3 } set_variable = { name = te_tax_en_exp_tourism value = var:te_tax_pa_exp_tourism } if = { limit = { has_variable = te_tax_cpend_exp_tourism } remove_variable = te_tax_cpend_exp_tourism } if = { limit = { has_variable = te_tax_cblock_tourism } remove_variable = te_tax_cblock_tourism } }
+		if = { limit = { var:te_tax_pa_imp_wine >= -3 } set_variable = { name = te_tax_en_imp_wine value = var:te_tax_pa_imp_wine } if = { limit = { has_variable = te_tax_cpend_imp_wine } remove_variable = te_tax_cpend_imp_wine } if = { limit = { has_variable = te_tax_cblock_wine } remove_variable = te_tax_cblock_wine } }
+		if = { limit = { var:te_tax_pa_exp_wine >= -3 } set_variable = { name = te_tax_en_exp_wine value = var:te_tax_pa_exp_wine } if = { limit = { has_variable = te_tax_cpend_exp_wine } remove_variable = te_tax_cpend_exp_wine } if = { limit = { has_variable = te_tax_cblock_wine } remove_variable = te_tax_cblock_wine } }
+		if = { limit = { var:te_tax_pa_imp_wood >= -3 } set_variable = { name = te_tax_en_imp_wood value = var:te_tax_pa_imp_wood } if = { limit = { has_variable = te_tax_cpend_imp_wood } remove_variable = te_tax_cpend_imp_wood } if = { limit = { has_variable = te_tax_cblock_wood } remove_variable = te_tax_cblock_wood } }
+		if = { limit = { var:te_tax_pa_exp_wood >= -3 } set_variable = { name = te_tax_en_exp_wood value = var:te_tax_pa_exp_wood } if = { limit = { has_variable = te_tax_cpend_exp_wood } remove_variable = te_tax_cpend_exp_wood } if = { limit = { has_variable = te_tax_cblock_wood } remove_variable = te_tax_cblock_wood } }
+	}
 	# A package that restates regional relief names its whole state set, its own list
 	# te_tax_pa_relief_states: it replaces the enacted list te_tax_en_relief_states (the canonical set,
 	# at most three) with the states in it that this code keeps (te_tax_relief_listed_state_kept:
@@ -4948,6 +5075,134 @@ te_tax_gen_store_a = {
 	else = {
 		set_variable = { name = te_tax_pa_regrel_states_set value = 0 }
 	}
+	# Customs (plan Task 15): a bill under the customs option carries a field per tradeable
+	# good and direction (-99 to leave it alone), its external version and, as for every
+	# group, the planned version after this approval.
+	if = {
+		limit = { has_variable = te_tax_bl_customs_pver }
+		set_variable = { name = te_tax_pa_imp_advanced_materials value = var:te_tax_bl_imp_advanced_materials }
+		set_variable = { name = te_tax_pa_exp_advanced_materials value = var:te_tax_bl_exp_advanced_materials }
+		set_variable = { name = te_tax_pa_imp_aeroplanes value = var:te_tax_bl_imp_aeroplanes }
+		set_variable = { name = te_tax_pa_exp_aeroplanes value = var:te_tax_bl_exp_aeroplanes }
+		set_variable = { name = te_tax_pa_imp_ammunition value = var:te_tax_bl_imp_ammunition }
+		set_variable = { name = te_tax_pa_exp_ammunition value = var:te_tax_bl_exp_ammunition }
+		set_variable = { name = te_tax_pa_imp_artillery value = var:te_tax_bl_imp_artillery }
+		set_variable = { name = te_tax_pa_exp_artillery value = var:te_tax_bl_exp_artillery }
+		set_variable = { name = te_tax_pa_imp_automobiles value = var:te_tax_bl_imp_automobiles }
+		set_variable = { name = te_tax_pa_exp_automobiles value = var:te_tax_bl_exp_automobiles }
+		set_variable = { name = te_tax_pa_imp_clippers value = var:te_tax_bl_imp_clippers }
+		set_variable = { name = te_tax_pa_exp_clippers value = var:te_tax_bl_exp_clippers }
+		set_variable = { name = te_tax_pa_imp_clothes value = var:te_tax_bl_imp_clothes }
+		set_variable = { name = te_tax_pa_exp_clothes value = var:te_tax_bl_exp_clothes }
+		set_variable = { name = te_tax_pa_imp_coal value = var:te_tax_bl_imp_coal }
+		set_variable = { name = te_tax_pa_exp_coal value = var:te_tax_bl_exp_coal }
+		set_variable = { name = te_tax_pa_imp_coffee value = var:te_tax_bl_imp_coffee }
+		set_variable = { name = te_tax_pa_exp_coffee value = var:te_tax_bl_exp_coffee }
+		set_variable = { name = te_tax_pa_imp_construction value = var:te_tax_bl_imp_construction }
+		set_variable = { name = te_tax_pa_exp_construction value = var:te_tax_bl_exp_construction }
+		set_variable = { name = te_tax_pa_imp_consumer_appliances value = var:te_tax_bl_imp_consumer_appliances }
+		set_variable = { name = te_tax_pa_exp_consumer_appliances value = var:te_tax_bl_exp_consumer_appliances }
+		set_variable = { name = te_tax_pa_imp_digital_assets value = var:te_tax_bl_imp_digital_assets }
+		set_variable = { name = te_tax_pa_exp_digital_assets value = var:te_tax_bl_exp_digital_assets }
+		set_variable = { name = te_tax_pa_imp_dye value = var:te_tax_bl_imp_dye }
+		set_variable = { name = te_tax_pa_exp_dye value = var:te_tax_bl_exp_dye }
+		set_variable = { name = te_tax_pa_imp_electronic_components value = var:te_tax_bl_imp_electronic_components }
+		set_variable = { name = te_tax_pa_exp_electronic_components value = var:te_tax_bl_exp_electronic_components }
+		set_variable = { name = te_tax_pa_imp_engines value = var:te_tax_bl_imp_engines }
+		set_variable = { name = te_tax_pa_exp_engines value = var:te_tax_bl_exp_engines }
+		set_variable = { name = te_tax_pa_imp_explosives value = var:te_tax_bl_imp_explosives }
+		set_variable = { name = te_tax_pa_exp_explosives value = var:te_tax_bl_exp_explosives }
+		set_variable = { name = te_tax_pa_imp_fabric value = var:te_tax_bl_imp_fabric }
+		set_variable = { name = te_tax_pa_exp_fabric value = var:te_tax_bl_exp_fabric }
+		set_variable = { name = te_tax_pa_imp_fertilizer value = var:te_tax_bl_imp_fertilizer }
+		set_variable = { name = te_tax_pa_exp_fertilizer value = var:te_tax_bl_exp_fertilizer }
+		set_variable = { name = te_tax_pa_imp_fine_art value = var:te_tax_bl_imp_fine_art }
+		set_variable = { name = te_tax_pa_exp_fine_art value = var:te_tax_bl_exp_fine_art }
+		set_variable = { name = te_tax_pa_imp_fish value = var:te_tax_bl_imp_fish }
+		set_variable = { name = te_tax_pa_exp_fish value = var:te_tax_bl_exp_fish }
+		set_variable = { name = te_tax_pa_imp_fruit value = var:te_tax_bl_imp_fruit }
+		set_variable = { name = te_tax_pa_exp_fruit value = var:te_tax_bl_exp_fruit }
+		set_variable = { name = te_tax_pa_imp_furniture value = var:te_tax_bl_imp_furniture }
+		set_variable = { name = te_tax_pa_exp_furniture value = var:te_tax_bl_exp_furniture }
+		set_variable = { name = te_tax_pa_imp_glass value = var:te_tax_bl_imp_glass }
+		set_variable = { name = te_tax_pa_exp_glass value = var:te_tax_bl_exp_glass }
+		set_variable = { name = te_tax_pa_imp_grain value = var:te_tax_bl_imp_grain }
+		set_variable = { name = te_tax_pa_exp_grain value = var:te_tax_bl_exp_grain }
+		set_variable = { name = te_tax_pa_imp_groceries value = var:te_tax_bl_imp_groceries }
+		set_variable = { name = te_tax_pa_exp_groceries value = var:te_tax_bl_exp_groceries }
+		set_variable = { name = te_tax_pa_imp_hardwood value = var:te_tax_bl_imp_hardwood }
+		set_variable = { name = te_tax_pa_exp_hardwood value = var:te_tax_bl_exp_hardwood }
+		set_variable = { name = te_tax_pa_imp_iron value = var:te_tax_bl_imp_iron }
+		set_variable = { name = te_tax_pa_exp_iron value = var:te_tax_bl_exp_iron }
+		set_variable = { name = te_tax_pa_imp_ironclads value = var:te_tax_bl_imp_ironclads }
+		set_variable = { name = te_tax_pa_exp_ironclads value = var:te_tax_bl_exp_ironclads }
+		set_variable = { name = te_tax_pa_imp_launch_capacity value = var:te_tax_bl_imp_launch_capacity }
+		set_variable = { name = te_tax_pa_exp_launch_capacity value = var:te_tax_bl_exp_launch_capacity }
+		set_variable = { name = te_tax_pa_imp_lead value = var:te_tax_bl_imp_lead }
+		set_variable = { name = te_tax_pa_exp_lead value = var:te_tax_bl_exp_lead }
+		set_variable = { name = te_tax_pa_imp_liquor value = var:te_tax_bl_imp_liquor }
+		set_variable = { name = te_tax_pa_exp_liquor value = var:te_tax_bl_exp_liquor }
+		set_variable = { name = te_tax_pa_imp_luxury_clothes value = var:te_tax_bl_imp_luxury_clothes }
+		set_variable = { name = te_tax_pa_exp_luxury_clothes value = var:te_tax_bl_exp_luxury_clothes }
+		set_variable = { name = te_tax_pa_imp_luxury_furniture value = var:te_tax_bl_imp_luxury_furniture }
+		set_variable = { name = te_tax_pa_exp_luxury_furniture value = var:te_tax_bl_exp_luxury_furniture }
+		set_variable = { name = te_tax_pa_imp_magnetic_drive_ships value = var:te_tax_bl_imp_magnetic_drive_ships }
+		set_variable = { name = te_tax_pa_exp_magnetic_drive_ships value = var:te_tax_bl_exp_magnetic_drive_ships }
+		set_variable = { name = te_tax_pa_imp_manowars value = var:te_tax_bl_imp_manowars }
+		set_variable = { name = te_tax_pa_exp_manowars value = var:te_tax_bl_exp_manowars }
+		set_variable = { name = te_tax_pa_imp_meat value = var:te_tax_bl_imp_meat }
+		set_variable = { name = te_tax_pa_exp_meat value = var:te_tax_bl_exp_meat }
+		set_variable = { name = te_tax_pa_imp_merchant_marine value = var:te_tax_bl_imp_merchant_marine }
+		set_variable = { name = te_tax_pa_exp_merchant_marine value = var:te_tax_bl_exp_merchant_marine }
+		set_variable = { name = te_tax_pa_imp_motor_ships value = var:te_tax_bl_imp_motor_ships }
+		set_variable = { name = te_tax_pa_exp_motor_ships value = var:te_tax_bl_exp_motor_ships }
+		set_variable = { name = te_tax_pa_imp_oil value = var:te_tax_bl_imp_oil }
+		set_variable = { name = te_tax_pa_exp_oil value = var:te_tax_bl_exp_oil }
+		set_variable = { name = te_tax_pa_imp_opium value = var:te_tax_bl_imp_opium }
+		set_variable = { name = te_tax_pa_exp_opium value = var:te_tax_bl_exp_opium }
+		set_variable = { name = te_tax_pa_imp_paper value = var:te_tax_bl_imp_paper }
+		set_variable = { name = te_tax_pa_exp_paper value = var:te_tax_bl_exp_paper }
+		set_variable = { name = te_tax_pa_imp_porcelain value = var:te_tax_bl_imp_porcelain }
+		set_variable = { name = te_tax_pa_exp_porcelain value = var:te_tax_bl_exp_porcelain }
+		set_variable = { name = te_tax_pa_imp_radios value = var:te_tax_bl_imp_radios }
+		set_variable = { name = te_tax_pa_exp_radios value = var:te_tax_bl_exp_radios }
+		set_variable = { name = te_tax_pa_imp_robotics value = var:te_tax_bl_imp_robotics }
+		set_variable = { name = te_tax_pa_exp_robotics value = var:te_tax_bl_exp_robotics }
+		set_variable = { name = te_tax_pa_imp_rubber value = var:te_tax_bl_imp_rubber }
+		set_variable = { name = te_tax_pa_exp_rubber value = var:te_tax_bl_exp_rubber }
+		set_variable = { name = te_tax_pa_imp_silk value = var:te_tax_bl_imp_silk }
+		set_variable = { name = te_tax_pa_exp_silk value = var:te_tax_bl_exp_silk }
+		set_variable = { name = te_tax_pa_imp_small_arms value = var:te_tax_bl_imp_small_arms }
+		set_variable = { name = te_tax_pa_exp_small_arms value = var:te_tax_bl_exp_small_arms }
+		set_variable = { name = te_tax_pa_imp_steamers value = var:te_tax_bl_imp_steamers }
+		set_variable = { name = te_tax_pa_exp_steamers value = var:te_tax_bl_exp_steamers }
+		set_variable = { name = te_tax_pa_imp_steel value = var:te_tax_bl_imp_steel }
+		set_variable = { name = te_tax_pa_exp_steel value = var:te_tax_bl_exp_steel }
+		set_variable = { name = te_tax_pa_imp_sugar value = var:te_tax_bl_imp_sugar }
+		set_variable = { name = te_tax_pa_exp_sugar value = var:te_tax_bl_exp_sugar }
+		set_variable = { name = te_tax_pa_imp_sulfur value = var:te_tax_bl_imp_sulfur }
+		set_variable = { name = te_tax_pa_exp_sulfur value = var:te_tax_bl_exp_sulfur }
+		set_variable = { name = te_tax_pa_imp_tanks value = var:te_tax_bl_imp_tanks }
+		set_variable = { name = te_tax_pa_exp_tanks value = var:te_tax_bl_exp_tanks }
+		set_variable = { name = te_tax_pa_imp_tea value = var:te_tax_bl_imp_tea }
+		set_variable = { name = te_tax_pa_exp_tea value = var:te_tax_bl_exp_tea }
+		set_variable = { name = te_tax_pa_imp_tech_metals value = var:te_tax_bl_imp_tech_metals }
+		set_variable = { name = te_tax_pa_exp_tech_metals value = var:te_tax_bl_exp_tech_metals }
+		set_variable = { name = te_tax_pa_imp_telephones value = var:te_tax_bl_imp_telephones }
+		set_variable = { name = te_tax_pa_exp_telephones value = var:te_tax_bl_exp_telephones }
+		set_variable = { name = te_tax_pa_imp_tobacco value = var:te_tax_bl_imp_tobacco }
+		set_variable = { name = te_tax_pa_exp_tobacco value = var:te_tax_bl_exp_tobacco }
+		set_variable = { name = te_tax_pa_imp_tools value = var:te_tax_bl_imp_tools }
+		set_variable = { name = te_tax_pa_exp_tools value = var:te_tax_bl_exp_tools }
+		set_variable = { name = te_tax_pa_imp_tourism value = var:te_tax_bl_imp_tourism }
+		set_variable = { name = te_tax_pa_exp_tourism value = var:te_tax_bl_exp_tourism }
+		set_variable = { name = te_tax_pa_imp_wine value = var:te_tax_bl_imp_wine }
+		set_variable = { name = te_tax_pa_exp_wine value = var:te_tax_bl_exp_wine }
+		set_variable = { name = te_tax_pa_imp_wood value = var:te_tax_bl_imp_wood }
+		set_variable = { name = te_tax_pa_exp_wood value = var:te_tax_bl_exp_wood }
+		set_variable = { name = te_tax_pa_xver_customs value = var:te_tax_bl_xver_customs }
+		set_variable = { name = te_tax_pa_pver_customs value = var:te_tax_pver_customs }
+	}
 	debug_log = "TE_TAX stored slot=a; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	set_variable = { name = te_tax_pa_state value = 1 }
 	set_variable = { name = te_tax_pa_on value = 1 }
@@ -5166,6 +5421,133 @@ te_tax_gen_apply_b = {
 	if = { limit = { var:te_tax_pb_g_wood >= 0 } set_variable = { name = te_tax_en_g_wood value = var:te_tax_pb_g_wood } }
 	if = { limit = { var:te_tax_pb_agrel >= 0 } set_variable = { name = te_tax_en_agrel value = var:te_tax_pb_agrel } }
 	if = { limit = { var:te_tax_pb_regrel >= 0 } set_variable = { name = te_tax_en_regrel value = var:te_tax_pb_regrel } }
+	# Customs (plan Task 15), only while the code holds the country's customs (a package
+	# that touches them is current only if no market change moved te_tax_xver_customs since
+	# approval): each level the package sets becomes the enacted one, with any pending
+	# re-assert and blocked mark of the good dropped; the sync then sets the market's level.
+	if = {
+		limit = { te_tax_customs_authority = yes has_variable = te_tax_pb_pver_customs }
+		if = { limit = { var:te_tax_pb_imp_advanced_materials >= -3 } set_variable = { name = te_tax_en_imp_advanced_materials value = var:te_tax_pb_imp_advanced_materials } if = { limit = { has_variable = te_tax_cpend_imp_advanced_materials } remove_variable = te_tax_cpend_imp_advanced_materials } if = { limit = { has_variable = te_tax_cblock_advanced_materials } remove_variable = te_tax_cblock_advanced_materials } }
+		if = { limit = { var:te_tax_pb_exp_advanced_materials >= -3 } set_variable = { name = te_tax_en_exp_advanced_materials value = var:te_tax_pb_exp_advanced_materials } if = { limit = { has_variable = te_tax_cpend_exp_advanced_materials } remove_variable = te_tax_cpend_exp_advanced_materials } if = { limit = { has_variable = te_tax_cblock_advanced_materials } remove_variable = te_tax_cblock_advanced_materials } }
+		if = { limit = { var:te_tax_pb_imp_aeroplanes >= -3 } set_variable = { name = te_tax_en_imp_aeroplanes value = var:te_tax_pb_imp_aeroplanes } if = { limit = { has_variable = te_tax_cpend_imp_aeroplanes } remove_variable = te_tax_cpend_imp_aeroplanes } if = { limit = { has_variable = te_tax_cblock_aeroplanes } remove_variable = te_tax_cblock_aeroplanes } }
+		if = { limit = { var:te_tax_pb_exp_aeroplanes >= -3 } set_variable = { name = te_tax_en_exp_aeroplanes value = var:te_tax_pb_exp_aeroplanes } if = { limit = { has_variable = te_tax_cpend_exp_aeroplanes } remove_variable = te_tax_cpend_exp_aeroplanes } if = { limit = { has_variable = te_tax_cblock_aeroplanes } remove_variable = te_tax_cblock_aeroplanes } }
+		if = { limit = { var:te_tax_pb_imp_ammunition >= -3 } set_variable = { name = te_tax_en_imp_ammunition value = var:te_tax_pb_imp_ammunition } if = { limit = { has_variable = te_tax_cpend_imp_ammunition } remove_variable = te_tax_cpend_imp_ammunition } if = { limit = { has_variable = te_tax_cblock_ammunition } remove_variable = te_tax_cblock_ammunition } }
+		if = { limit = { var:te_tax_pb_exp_ammunition >= -3 } set_variable = { name = te_tax_en_exp_ammunition value = var:te_tax_pb_exp_ammunition } if = { limit = { has_variable = te_tax_cpend_exp_ammunition } remove_variable = te_tax_cpend_exp_ammunition } if = { limit = { has_variable = te_tax_cblock_ammunition } remove_variable = te_tax_cblock_ammunition } }
+		if = { limit = { var:te_tax_pb_imp_artillery >= -3 } set_variable = { name = te_tax_en_imp_artillery value = var:te_tax_pb_imp_artillery } if = { limit = { has_variable = te_tax_cpend_imp_artillery } remove_variable = te_tax_cpend_imp_artillery } if = { limit = { has_variable = te_tax_cblock_artillery } remove_variable = te_tax_cblock_artillery } }
+		if = { limit = { var:te_tax_pb_exp_artillery >= -3 } set_variable = { name = te_tax_en_exp_artillery value = var:te_tax_pb_exp_artillery } if = { limit = { has_variable = te_tax_cpend_exp_artillery } remove_variable = te_tax_cpend_exp_artillery } if = { limit = { has_variable = te_tax_cblock_artillery } remove_variable = te_tax_cblock_artillery } }
+		if = { limit = { var:te_tax_pb_imp_automobiles >= -3 } set_variable = { name = te_tax_en_imp_automobiles value = var:te_tax_pb_imp_automobiles } if = { limit = { has_variable = te_tax_cpend_imp_automobiles } remove_variable = te_tax_cpend_imp_automobiles } if = { limit = { has_variable = te_tax_cblock_automobiles } remove_variable = te_tax_cblock_automobiles } }
+		if = { limit = { var:te_tax_pb_exp_automobiles >= -3 } set_variable = { name = te_tax_en_exp_automobiles value = var:te_tax_pb_exp_automobiles } if = { limit = { has_variable = te_tax_cpend_exp_automobiles } remove_variable = te_tax_cpend_exp_automobiles } if = { limit = { has_variable = te_tax_cblock_automobiles } remove_variable = te_tax_cblock_automobiles } }
+		if = { limit = { var:te_tax_pb_imp_clippers >= -3 } set_variable = { name = te_tax_en_imp_clippers value = var:te_tax_pb_imp_clippers } if = { limit = { has_variable = te_tax_cpend_imp_clippers } remove_variable = te_tax_cpend_imp_clippers } if = { limit = { has_variable = te_tax_cblock_clippers } remove_variable = te_tax_cblock_clippers } }
+		if = { limit = { var:te_tax_pb_exp_clippers >= -3 } set_variable = { name = te_tax_en_exp_clippers value = var:te_tax_pb_exp_clippers } if = { limit = { has_variable = te_tax_cpend_exp_clippers } remove_variable = te_tax_cpend_exp_clippers } if = { limit = { has_variable = te_tax_cblock_clippers } remove_variable = te_tax_cblock_clippers } }
+		if = { limit = { var:te_tax_pb_imp_clothes >= -3 } set_variable = { name = te_tax_en_imp_clothes value = var:te_tax_pb_imp_clothes } if = { limit = { has_variable = te_tax_cpend_imp_clothes } remove_variable = te_tax_cpend_imp_clothes } if = { limit = { has_variable = te_tax_cblock_clothes } remove_variable = te_tax_cblock_clothes } }
+		if = { limit = { var:te_tax_pb_exp_clothes >= -3 } set_variable = { name = te_tax_en_exp_clothes value = var:te_tax_pb_exp_clothes } if = { limit = { has_variable = te_tax_cpend_exp_clothes } remove_variable = te_tax_cpend_exp_clothes } if = { limit = { has_variable = te_tax_cblock_clothes } remove_variable = te_tax_cblock_clothes } }
+		if = { limit = { var:te_tax_pb_imp_coal >= -3 } set_variable = { name = te_tax_en_imp_coal value = var:te_tax_pb_imp_coal } if = { limit = { has_variable = te_tax_cpend_imp_coal } remove_variable = te_tax_cpend_imp_coal } if = { limit = { has_variable = te_tax_cblock_coal } remove_variable = te_tax_cblock_coal } }
+		if = { limit = { var:te_tax_pb_exp_coal >= -3 } set_variable = { name = te_tax_en_exp_coal value = var:te_tax_pb_exp_coal } if = { limit = { has_variable = te_tax_cpend_exp_coal } remove_variable = te_tax_cpend_exp_coal } if = { limit = { has_variable = te_tax_cblock_coal } remove_variable = te_tax_cblock_coal } }
+		if = { limit = { var:te_tax_pb_imp_coffee >= -3 } set_variable = { name = te_tax_en_imp_coffee value = var:te_tax_pb_imp_coffee } if = { limit = { has_variable = te_tax_cpend_imp_coffee } remove_variable = te_tax_cpend_imp_coffee } if = { limit = { has_variable = te_tax_cblock_coffee } remove_variable = te_tax_cblock_coffee } }
+		if = { limit = { var:te_tax_pb_exp_coffee >= -3 } set_variable = { name = te_tax_en_exp_coffee value = var:te_tax_pb_exp_coffee } if = { limit = { has_variable = te_tax_cpend_exp_coffee } remove_variable = te_tax_cpend_exp_coffee } if = { limit = { has_variable = te_tax_cblock_coffee } remove_variable = te_tax_cblock_coffee } }
+		if = { limit = { var:te_tax_pb_imp_construction >= -3 } set_variable = { name = te_tax_en_imp_construction value = var:te_tax_pb_imp_construction } if = { limit = { has_variable = te_tax_cpend_imp_construction } remove_variable = te_tax_cpend_imp_construction } if = { limit = { has_variable = te_tax_cblock_construction } remove_variable = te_tax_cblock_construction } }
+		if = { limit = { var:te_tax_pb_exp_construction >= -3 } set_variable = { name = te_tax_en_exp_construction value = var:te_tax_pb_exp_construction } if = { limit = { has_variable = te_tax_cpend_exp_construction } remove_variable = te_tax_cpend_exp_construction } if = { limit = { has_variable = te_tax_cblock_construction } remove_variable = te_tax_cblock_construction } }
+		if = { limit = { var:te_tax_pb_imp_consumer_appliances >= -3 } set_variable = { name = te_tax_en_imp_consumer_appliances value = var:te_tax_pb_imp_consumer_appliances } if = { limit = { has_variable = te_tax_cpend_imp_consumer_appliances } remove_variable = te_tax_cpend_imp_consumer_appliances } if = { limit = { has_variable = te_tax_cblock_consumer_appliances } remove_variable = te_tax_cblock_consumer_appliances } }
+		if = { limit = { var:te_tax_pb_exp_consumer_appliances >= -3 } set_variable = { name = te_tax_en_exp_consumer_appliances value = var:te_tax_pb_exp_consumer_appliances } if = { limit = { has_variable = te_tax_cpend_exp_consumer_appliances } remove_variable = te_tax_cpend_exp_consumer_appliances } if = { limit = { has_variable = te_tax_cblock_consumer_appliances } remove_variable = te_tax_cblock_consumer_appliances } }
+		if = { limit = { var:te_tax_pb_imp_digital_assets >= -3 } set_variable = { name = te_tax_en_imp_digital_assets value = var:te_tax_pb_imp_digital_assets } if = { limit = { has_variable = te_tax_cpend_imp_digital_assets } remove_variable = te_tax_cpend_imp_digital_assets } if = { limit = { has_variable = te_tax_cblock_digital_assets } remove_variable = te_tax_cblock_digital_assets } }
+		if = { limit = { var:te_tax_pb_exp_digital_assets >= -3 } set_variable = { name = te_tax_en_exp_digital_assets value = var:te_tax_pb_exp_digital_assets } if = { limit = { has_variable = te_tax_cpend_exp_digital_assets } remove_variable = te_tax_cpend_exp_digital_assets } if = { limit = { has_variable = te_tax_cblock_digital_assets } remove_variable = te_tax_cblock_digital_assets } }
+		if = { limit = { var:te_tax_pb_imp_dye >= -3 } set_variable = { name = te_tax_en_imp_dye value = var:te_tax_pb_imp_dye } if = { limit = { has_variable = te_tax_cpend_imp_dye } remove_variable = te_tax_cpend_imp_dye } if = { limit = { has_variable = te_tax_cblock_dye } remove_variable = te_tax_cblock_dye } }
+		if = { limit = { var:te_tax_pb_exp_dye >= -3 } set_variable = { name = te_tax_en_exp_dye value = var:te_tax_pb_exp_dye } if = { limit = { has_variable = te_tax_cpend_exp_dye } remove_variable = te_tax_cpend_exp_dye } if = { limit = { has_variable = te_tax_cblock_dye } remove_variable = te_tax_cblock_dye } }
+		if = { limit = { var:te_tax_pb_imp_electronic_components >= -3 } set_variable = { name = te_tax_en_imp_electronic_components value = var:te_tax_pb_imp_electronic_components } if = { limit = { has_variable = te_tax_cpend_imp_electronic_components } remove_variable = te_tax_cpend_imp_electronic_components } if = { limit = { has_variable = te_tax_cblock_electronic_components } remove_variable = te_tax_cblock_electronic_components } }
+		if = { limit = { var:te_tax_pb_exp_electronic_components >= -3 } set_variable = { name = te_tax_en_exp_electronic_components value = var:te_tax_pb_exp_electronic_components } if = { limit = { has_variable = te_tax_cpend_exp_electronic_components } remove_variable = te_tax_cpend_exp_electronic_components } if = { limit = { has_variable = te_tax_cblock_electronic_components } remove_variable = te_tax_cblock_electronic_components } }
+		if = { limit = { var:te_tax_pb_imp_engines >= -3 } set_variable = { name = te_tax_en_imp_engines value = var:te_tax_pb_imp_engines } if = { limit = { has_variable = te_tax_cpend_imp_engines } remove_variable = te_tax_cpend_imp_engines } if = { limit = { has_variable = te_tax_cblock_engines } remove_variable = te_tax_cblock_engines } }
+		if = { limit = { var:te_tax_pb_exp_engines >= -3 } set_variable = { name = te_tax_en_exp_engines value = var:te_tax_pb_exp_engines } if = { limit = { has_variable = te_tax_cpend_exp_engines } remove_variable = te_tax_cpend_exp_engines } if = { limit = { has_variable = te_tax_cblock_engines } remove_variable = te_tax_cblock_engines } }
+		if = { limit = { var:te_tax_pb_imp_explosives >= -3 } set_variable = { name = te_tax_en_imp_explosives value = var:te_tax_pb_imp_explosives } if = { limit = { has_variable = te_tax_cpend_imp_explosives } remove_variable = te_tax_cpend_imp_explosives } if = { limit = { has_variable = te_tax_cblock_explosives } remove_variable = te_tax_cblock_explosives } }
+		if = { limit = { var:te_tax_pb_exp_explosives >= -3 } set_variable = { name = te_tax_en_exp_explosives value = var:te_tax_pb_exp_explosives } if = { limit = { has_variable = te_tax_cpend_exp_explosives } remove_variable = te_tax_cpend_exp_explosives } if = { limit = { has_variable = te_tax_cblock_explosives } remove_variable = te_tax_cblock_explosives } }
+		if = { limit = { var:te_tax_pb_imp_fabric >= -3 } set_variable = { name = te_tax_en_imp_fabric value = var:te_tax_pb_imp_fabric } if = { limit = { has_variable = te_tax_cpend_imp_fabric } remove_variable = te_tax_cpend_imp_fabric } if = { limit = { has_variable = te_tax_cblock_fabric } remove_variable = te_tax_cblock_fabric } }
+		if = { limit = { var:te_tax_pb_exp_fabric >= -3 } set_variable = { name = te_tax_en_exp_fabric value = var:te_tax_pb_exp_fabric } if = { limit = { has_variable = te_tax_cpend_exp_fabric } remove_variable = te_tax_cpend_exp_fabric } if = { limit = { has_variable = te_tax_cblock_fabric } remove_variable = te_tax_cblock_fabric } }
+		if = { limit = { var:te_tax_pb_imp_fertilizer >= -3 } set_variable = { name = te_tax_en_imp_fertilizer value = var:te_tax_pb_imp_fertilizer } if = { limit = { has_variable = te_tax_cpend_imp_fertilizer } remove_variable = te_tax_cpend_imp_fertilizer } if = { limit = { has_variable = te_tax_cblock_fertilizer } remove_variable = te_tax_cblock_fertilizer } }
+		if = { limit = { var:te_tax_pb_exp_fertilizer >= -3 } set_variable = { name = te_tax_en_exp_fertilizer value = var:te_tax_pb_exp_fertilizer } if = { limit = { has_variable = te_tax_cpend_exp_fertilizer } remove_variable = te_tax_cpend_exp_fertilizer } if = { limit = { has_variable = te_tax_cblock_fertilizer } remove_variable = te_tax_cblock_fertilizer } }
+		if = { limit = { var:te_tax_pb_imp_fine_art >= -3 } set_variable = { name = te_tax_en_imp_fine_art value = var:te_tax_pb_imp_fine_art } if = { limit = { has_variable = te_tax_cpend_imp_fine_art } remove_variable = te_tax_cpend_imp_fine_art } if = { limit = { has_variable = te_tax_cblock_fine_art } remove_variable = te_tax_cblock_fine_art } }
+		if = { limit = { var:te_tax_pb_exp_fine_art >= -3 } set_variable = { name = te_tax_en_exp_fine_art value = var:te_tax_pb_exp_fine_art } if = { limit = { has_variable = te_tax_cpend_exp_fine_art } remove_variable = te_tax_cpend_exp_fine_art } if = { limit = { has_variable = te_tax_cblock_fine_art } remove_variable = te_tax_cblock_fine_art } }
+		if = { limit = { var:te_tax_pb_imp_fish >= -3 } set_variable = { name = te_tax_en_imp_fish value = var:te_tax_pb_imp_fish } if = { limit = { has_variable = te_tax_cpend_imp_fish } remove_variable = te_tax_cpend_imp_fish } if = { limit = { has_variable = te_tax_cblock_fish } remove_variable = te_tax_cblock_fish } }
+		if = { limit = { var:te_tax_pb_exp_fish >= -3 } set_variable = { name = te_tax_en_exp_fish value = var:te_tax_pb_exp_fish } if = { limit = { has_variable = te_tax_cpend_exp_fish } remove_variable = te_tax_cpend_exp_fish } if = { limit = { has_variable = te_tax_cblock_fish } remove_variable = te_tax_cblock_fish } }
+		if = { limit = { var:te_tax_pb_imp_fruit >= -3 } set_variable = { name = te_tax_en_imp_fruit value = var:te_tax_pb_imp_fruit } if = { limit = { has_variable = te_tax_cpend_imp_fruit } remove_variable = te_tax_cpend_imp_fruit } if = { limit = { has_variable = te_tax_cblock_fruit } remove_variable = te_tax_cblock_fruit } }
+		if = { limit = { var:te_tax_pb_exp_fruit >= -3 } set_variable = { name = te_tax_en_exp_fruit value = var:te_tax_pb_exp_fruit } if = { limit = { has_variable = te_tax_cpend_exp_fruit } remove_variable = te_tax_cpend_exp_fruit } if = { limit = { has_variable = te_tax_cblock_fruit } remove_variable = te_tax_cblock_fruit } }
+		if = { limit = { var:te_tax_pb_imp_furniture >= -3 } set_variable = { name = te_tax_en_imp_furniture value = var:te_tax_pb_imp_furniture } if = { limit = { has_variable = te_tax_cpend_imp_furniture } remove_variable = te_tax_cpend_imp_furniture } if = { limit = { has_variable = te_tax_cblock_furniture } remove_variable = te_tax_cblock_furniture } }
+		if = { limit = { var:te_tax_pb_exp_furniture >= -3 } set_variable = { name = te_tax_en_exp_furniture value = var:te_tax_pb_exp_furniture } if = { limit = { has_variable = te_tax_cpend_exp_furniture } remove_variable = te_tax_cpend_exp_furniture } if = { limit = { has_variable = te_tax_cblock_furniture } remove_variable = te_tax_cblock_furniture } }
+		if = { limit = { var:te_tax_pb_imp_glass >= -3 } set_variable = { name = te_tax_en_imp_glass value = var:te_tax_pb_imp_glass } if = { limit = { has_variable = te_tax_cpend_imp_glass } remove_variable = te_tax_cpend_imp_glass } if = { limit = { has_variable = te_tax_cblock_glass } remove_variable = te_tax_cblock_glass } }
+		if = { limit = { var:te_tax_pb_exp_glass >= -3 } set_variable = { name = te_tax_en_exp_glass value = var:te_tax_pb_exp_glass } if = { limit = { has_variable = te_tax_cpend_exp_glass } remove_variable = te_tax_cpend_exp_glass } if = { limit = { has_variable = te_tax_cblock_glass } remove_variable = te_tax_cblock_glass } }
+		if = { limit = { var:te_tax_pb_imp_grain >= -3 } set_variable = { name = te_tax_en_imp_grain value = var:te_tax_pb_imp_grain } if = { limit = { has_variable = te_tax_cpend_imp_grain } remove_variable = te_tax_cpend_imp_grain } if = { limit = { has_variable = te_tax_cblock_grain } remove_variable = te_tax_cblock_grain } }
+		if = { limit = { var:te_tax_pb_exp_grain >= -3 } set_variable = { name = te_tax_en_exp_grain value = var:te_tax_pb_exp_grain } if = { limit = { has_variable = te_tax_cpend_exp_grain } remove_variable = te_tax_cpend_exp_grain } if = { limit = { has_variable = te_tax_cblock_grain } remove_variable = te_tax_cblock_grain } }
+		if = { limit = { var:te_tax_pb_imp_groceries >= -3 } set_variable = { name = te_tax_en_imp_groceries value = var:te_tax_pb_imp_groceries } if = { limit = { has_variable = te_tax_cpend_imp_groceries } remove_variable = te_tax_cpend_imp_groceries } if = { limit = { has_variable = te_tax_cblock_groceries } remove_variable = te_tax_cblock_groceries } }
+		if = { limit = { var:te_tax_pb_exp_groceries >= -3 } set_variable = { name = te_tax_en_exp_groceries value = var:te_tax_pb_exp_groceries } if = { limit = { has_variable = te_tax_cpend_exp_groceries } remove_variable = te_tax_cpend_exp_groceries } if = { limit = { has_variable = te_tax_cblock_groceries } remove_variable = te_tax_cblock_groceries } }
+		if = { limit = { var:te_tax_pb_imp_hardwood >= -3 } set_variable = { name = te_tax_en_imp_hardwood value = var:te_tax_pb_imp_hardwood } if = { limit = { has_variable = te_tax_cpend_imp_hardwood } remove_variable = te_tax_cpend_imp_hardwood } if = { limit = { has_variable = te_tax_cblock_hardwood } remove_variable = te_tax_cblock_hardwood } }
+		if = { limit = { var:te_tax_pb_exp_hardwood >= -3 } set_variable = { name = te_tax_en_exp_hardwood value = var:te_tax_pb_exp_hardwood } if = { limit = { has_variable = te_tax_cpend_exp_hardwood } remove_variable = te_tax_cpend_exp_hardwood } if = { limit = { has_variable = te_tax_cblock_hardwood } remove_variable = te_tax_cblock_hardwood } }
+		if = { limit = { var:te_tax_pb_imp_iron >= -3 } set_variable = { name = te_tax_en_imp_iron value = var:te_tax_pb_imp_iron } if = { limit = { has_variable = te_tax_cpend_imp_iron } remove_variable = te_tax_cpend_imp_iron } if = { limit = { has_variable = te_tax_cblock_iron } remove_variable = te_tax_cblock_iron } }
+		if = { limit = { var:te_tax_pb_exp_iron >= -3 } set_variable = { name = te_tax_en_exp_iron value = var:te_tax_pb_exp_iron } if = { limit = { has_variable = te_tax_cpend_exp_iron } remove_variable = te_tax_cpend_exp_iron } if = { limit = { has_variable = te_tax_cblock_iron } remove_variable = te_tax_cblock_iron } }
+		if = { limit = { var:te_tax_pb_imp_ironclads >= -3 } set_variable = { name = te_tax_en_imp_ironclads value = var:te_tax_pb_imp_ironclads } if = { limit = { has_variable = te_tax_cpend_imp_ironclads } remove_variable = te_tax_cpend_imp_ironclads } if = { limit = { has_variable = te_tax_cblock_ironclads } remove_variable = te_tax_cblock_ironclads } }
+		if = { limit = { var:te_tax_pb_exp_ironclads >= -3 } set_variable = { name = te_tax_en_exp_ironclads value = var:te_tax_pb_exp_ironclads } if = { limit = { has_variable = te_tax_cpend_exp_ironclads } remove_variable = te_tax_cpend_exp_ironclads } if = { limit = { has_variable = te_tax_cblock_ironclads } remove_variable = te_tax_cblock_ironclads } }
+		if = { limit = { var:te_tax_pb_imp_launch_capacity >= -3 } set_variable = { name = te_tax_en_imp_launch_capacity value = var:te_tax_pb_imp_launch_capacity } if = { limit = { has_variable = te_tax_cpend_imp_launch_capacity } remove_variable = te_tax_cpend_imp_launch_capacity } if = { limit = { has_variable = te_tax_cblock_launch_capacity } remove_variable = te_tax_cblock_launch_capacity } }
+		if = { limit = { var:te_tax_pb_exp_launch_capacity >= -3 } set_variable = { name = te_tax_en_exp_launch_capacity value = var:te_tax_pb_exp_launch_capacity } if = { limit = { has_variable = te_tax_cpend_exp_launch_capacity } remove_variable = te_tax_cpend_exp_launch_capacity } if = { limit = { has_variable = te_tax_cblock_launch_capacity } remove_variable = te_tax_cblock_launch_capacity } }
+		if = { limit = { var:te_tax_pb_imp_lead >= -3 } set_variable = { name = te_tax_en_imp_lead value = var:te_tax_pb_imp_lead } if = { limit = { has_variable = te_tax_cpend_imp_lead } remove_variable = te_tax_cpend_imp_lead } if = { limit = { has_variable = te_tax_cblock_lead } remove_variable = te_tax_cblock_lead } }
+		if = { limit = { var:te_tax_pb_exp_lead >= -3 } set_variable = { name = te_tax_en_exp_lead value = var:te_tax_pb_exp_lead } if = { limit = { has_variable = te_tax_cpend_exp_lead } remove_variable = te_tax_cpend_exp_lead } if = { limit = { has_variable = te_tax_cblock_lead } remove_variable = te_tax_cblock_lead } }
+		if = { limit = { var:te_tax_pb_imp_liquor >= -3 } set_variable = { name = te_tax_en_imp_liquor value = var:te_tax_pb_imp_liquor } if = { limit = { has_variable = te_tax_cpend_imp_liquor } remove_variable = te_tax_cpend_imp_liquor } if = { limit = { has_variable = te_tax_cblock_liquor } remove_variable = te_tax_cblock_liquor } }
+		if = { limit = { var:te_tax_pb_exp_liquor >= -3 } set_variable = { name = te_tax_en_exp_liquor value = var:te_tax_pb_exp_liquor } if = { limit = { has_variable = te_tax_cpend_exp_liquor } remove_variable = te_tax_cpend_exp_liquor } if = { limit = { has_variable = te_tax_cblock_liquor } remove_variable = te_tax_cblock_liquor } }
+		if = { limit = { var:te_tax_pb_imp_luxury_clothes >= -3 } set_variable = { name = te_tax_en_imp_luxury_clothes value = var:te_tax_pb_imp_luxury_clothes } if = { limit = { has_variable = te_tax_cpend_imp_luxury_clothes } remove_variable = te_tax_cpend_imp_luxury_clothes } if = { limit = { has_variable = te_tax_cblock_luxury_clothes } remove_variable = te_tax_cblock_luxury_clothes } }
+		if = { limit = { var:te_tax_pb_exp_luxury_clothes >= -3 } set_variable = { name = te_tax_en_exp_luxury_clothes value = var:te_tax_pb_exp_luxury_clothes } if = { limit = { has_variable = te_tax_cpend_exp_luxury_clothes } remove_variable = te_tax_cpend_exp_luxury_clothes } if = { limit = { has_variable = te_tax_cblock_luxury_clothes } remove_variable = te_tax_cblock_luxury_clothes } }
+		if = { limit = { var:te_tax_pb_imp_luxury_furniture >= -3 } set_variable = { name = te_tax_en_imp_luxury_furniture value = var:te_tax_pb_imp_luxury_furniture } if = { limit = { has_variable = te_tax_cpend_imp_luxury_furniture } remove_variable = te_tax_cpend_imp_luxury_furniture } if = { limit = { has_variable = te_tax_cblock_luxury_furniture } remove_variable = te_tax_cblock_luxury_furniture } }
+		if = { limit = { var:te_tax_pb_exp_luxury_furniture >= -3 } set_variable = { name = te_tax_en_exp_luxury_furniture value = var:te_tax_pb_exp_luxury_furniture } if = { limit = { has_variable = te_tax_cpend_exp_luxury_furniture } remove_variable = te_tax_cpend_exp_luxury_furniture } if = { limit = { has_variable = te_tax_cblock_luxury_furniture } remove_variable = te_tax_cblock_luxury_furniture } }
+		if = { limit = { var:te_tax_pb_imp_magnetic_drive_ships >= -3 } set_variable = { name = te_tax_en_imp_magnetic_drive_ships value = var:te_tax_pb_imp_magnetic_drive_ships } if = { limit = { has_variable = te_tax_cpend_imp_magnetic_drive_ships } remove_variable = te_tax_cpend_imp_magnetic_drive_ships } if = { limit = { has_variable = te_tax_cblock_magnetic_drive_ships } remove_variable = te_tax_cblock_magnetic_drive_ships } }
+		if = { limit = { var:te_tax_pb_exp_magnetic_drive_ships >= -3 } set_variable = { name = te_tax_en_exp_magnetic_drive_ships value = var:te_tax_pb_exp_magnetic_drive_ships } if = { limit = { has_variable = te_tax_cpend_exp_magnetic_drive_ships } remove_variable = te_tax_cpend_exp_magnetic_drive_ships } if = { limit = { has_variable = te_tax_cblock_magnetic_drive_ships } remove_variable = te_tax_cblock_magnetic_drive_ships } }
+		if = { limit = { var:te_tax_pb_imp_manowars >= -3 } set_variable = { name = te_tax_en_imp_manowars value = var:te_tax_pb_imp_manowars } if = { limit = { has_variable = te_tax_cpend_imp_manowars } remove_variable = te_tax_cpend_imp_manowars } if = { limit = { has_variable = te_tax_cblock_manowars } remove_variable = te_tax_cblock_manowars } }
+		if = { limit = { var:te_tax_pb_exp_manowars >= -3 } set_variable = { name = te_tax_en_exp_manowars value = var:te_tax_pb_exp_manowars } if = { limit = { has_variable = te_tax_cpend_exp_manowars } remove_variable = te_tax_cpend_exp_manowars } if = { limit = { has_variable = te_tax_cblock_manowars } remove_variable = te_tax_cblock_manowars } }
+		if = { limit = { var:te_tax_pb_imp_meat >= -3 } set_variable = { name = te_tax_en_imp_meat value = var:te_tax_pb_imp_meat } if = { limit = { has_variable = te_tax_cpend_imp_meat } remove_variable = te_tax_cpend_imp_meat } if = { limit = { has_variable = te_tax_cblock_meat } remove_variable = te_tax_cblock_meat } }
+		if = { limit = { var:te_tax_pb_exp_meat >= -3 } set_variable = { name = te_tax_en_exp_meat value = var:te_tax_pb_exp_meat } if = { limit = { has_variable = te_tax_cpend_exp_meat } remove_variable = te_tax_cpend_exp_meat } if = { limit = { has_variable = te_tax_cblock_meat } remove_variable = te_tax_cblock_meat } }
+		if = { limit = { var:te_tax_pb_imp_merchant_marine >= -3 } set_variable = { name = te_tax_en_imp_merchant_marine value = var:te_tax_pb_imp_merchant_marine } if = { limit = { has_variable = te_tax_cpend_imp_merchant_marine } remove_variable = te_tax_cpend_imp_merchant_marine } if = { limit = { has_variable = te_tax_cblock_merchant_marine } remove_variable = te_tax_cblock_merchant_marine } }
+		if = { limit = { var:te_tax_pb_exp_merchant_marine >= -3 } set_variable = { name = te_tax_en_exp_merchant_marine value = var:te_tax_pb_exp_merchant_marine } if = { limit = { has_variable = te_tax_cpend_exp_merchant_marine } remove_variable = te_tax_cpend_exp_merchant_marine } if = { limit = { has_variable = te_tax_cblock_merchant_marine } remove_variable = te_tax_cblock_merchant_marine } }
+		if = { limit = { var:te_tax_pb_imp_motor_ships >= -3 } set_variable = { name = te_tax_en_imp_motor_ships value = var:te_tax_pb_imp_motor_ships } if = { limit = { has_variable = te_tax_cpend_imp_motor_ships } remove_variable = te_tax_cpend_imp_motor_ships } if = { limit = { has_variable = te_tax_cblock_motor_ships } remove_variable = te_tax_cblock_motor_ships } }
+		if = { limit = { var:te_tax_pb_exp_motor_ships >= -3 } set_variable = { name = te_tax_en_exp_motor_ships value = var:te_tax_pb_exp_motor_ships } if = { limit = { has_variable = te_tax_cpend_exp_motor_ships } remove_variable = te_tax_cpend_exp_motor_ships } if = { limit = { has_variable = te_tax_cblock_motor_ships } remove_variable = te_tax_cblock_motor_ships } }
+		if = { limit = { var:te_tax_pb_imp_oil >= -3 } set_variable = { name = te_tax_en_imp_oil value = var:te_tax_pb_imp_oil } if = { limit = { has_variable = te_tax_cpend_imp_oil } remove_variable = te_tax_cpend_imp_oil } if = { limit = { has_variable = te_tax_cblock_oil } remove_variable = te_tax_cblock_oil } }
+		if = { limit = { var:te_tax_pb_exp_oil >= -3 } set_variable = { name = te_tax_en_exp_oil value = var:te_tax_pb_exp_oil } if = { limit = { has_variable = te_tax_cpend_exp_oil } remove_variable = te_tax_cpend_exp_oil } if = { limit = { has_variable = te_tax_cblock_oil } remove_variable = te_tax_cblock_oil } }
+		if = { limit = { var:te_tax_pb_imp_opium >= -3 } set_variable = { name = te_tax_en_imp_opium value = var:te_tax_pb_imp_opium } if = { limit = { has_variable = te_tax_cpend_imp_opium } remove_variable = te_tax_cpend_imp_opium } if = { limit = { has_variable = te_tax_cblock_opium } remove_variable = te_tax_cblock_opium } }
+		if = { limit = { var:te_tax_pb_exp_opium >= -3 } set_variable = { name = te_tax_en_exp_opium value = var:te_tax_pb_exp_opium } if = { limit = { has_variable = te_tax_cpend_exp_opium } remove_variable = te_tax_cpend_exp_opium } if = { limit = { has_variable = te_tax_cblock_opium } remove_variable = te_tax_cblock_opium } }
+		if = { limit = { var:te_tax_pb_imp_paper >= -3 } set_variable = { name = te_tax_en_imp_paper value = var:te_tax_pb_imp_paper } if = { limit = { has_variable = te_tax_cpend_imp_paper } remove_variable = te_tax_cpend_imp_paper } if = { limit = { has_variable = te_tax_cblock_paper } remove_variable = te_tax_cblock_paper } }
+		if = { limit = { var:te_tax_pb_exp_paper >= -3 } set_variable = { name = te_tax_en_exp_paper value = var:te_tax_pb_exp_paper } if = { limit = { has_variable = te_tax_cpend_exp_paper } remove_variable = te_tax_cpend_exp_paper } if = { limit = { has_variable = te_tax_cblock_paper } remove_variable = te_tax_cblock_paper } }
+		if = { limit = { var:te_tax_pb_imp_porcelain >= -3 } set_variable = { name = te_tax_en_imp_porcelain value = var:te_tax_pb_imp_porcelain } if = { limit = { has_variable = te_tax_cpend_imp_porcelain } remove_variable = te_tax_cpend_imp_porcelain } if = { limit = { has_variable = te_tax_cblock_porcelain } remove_variable = te_tax_cblock_porcelain } }
+		if = { limit = { var:te_tax_pb_exp_porcelain >= -3 } set_variable = { name = te_tax_en_exp_porcelain value = var:te_tax_pb_exp_porcelain } if = { limit = { has_variable = te_tax_cpend_exp_porcelain } remove_variable = te_tax_cpend_exp_porcelain } if = { limit = { has_variable = te_tax_cblock_porcelain } remove_variable = te_tax_cblock_porcelain } }
+		if = { limit = { var:te_tax_pb_imp_radios >= -3 } set_variable = { name = te_tax_en_imp_radios value = var:te_tax_pb_imp_radios } if = { limit = { has_variable = te_tax_cpend_imp_radios } remove_variable = te_tax_cpend_imp_radios } if = { limit = { has_variable = te_tax_cblock_radios } remove_variable = te_tax_cblock_radios } }
+		if = { limit = { var:te_tax_pb_exp_radios >= -3 } set_variable = { name = te_tax_en_exp_radios value = var:te_tax_pb_exp_radios } if = { limit = { has_variable = te_tax_cpend_exp_radios } remove_variable = te_tax_cpend_exp_radios } if = { limit = { has_variable = te_tax_cblock_radios } remove_variable = te_tax_cblock_radios } }
+		if = { limit = { var:te_tax_pb_imp_robotics >= -3 } set_variable = { name = te_tax_en_imp_robotics value = var:te_tax_pb_imp_robotics } if = { limit = { has_variable = te_tax_cpend_imp_robotics } remove_variable = te_tax_cpend_imp_robotics } if = { limit = { has_variable = te_tax_cblock_robotics } remove_variable = te_tax_cblock_robotics } }
+		if = { limit = { var:te_tax_pb_exp_robotics >= -3 } set_variable = { name = te_tax_en_exp_robotics value = var:te_tax_pb_exp_robotics } if = { limit = { has_variable = te_tax_cpend_exp_robotics } remove_variable = te_tax_cpend_exp_robotics } if = { limit = { has_variable = te_tax_cblock_robotics } remove_variable = te_tax_cblock_robotics } }
+		if = { limit = { var:te_tax_pb_imp_rubber >= -3 } set_variable = { name = te_tax_en_imp_rubber value = var:te_tax_pb_imp_rubber } if = { limit = { has_variable = te_tax_cpend_imp_rubber } remove_variable = te_tax_cpend_imp_rubber } if = { limit = { has_variable = te_tax_cblock_rubber } remove_variable = te_tax_cblock_rubber } }
+		if = { limit = { var:te_tax_pb_exp_rubber >= -3 } set_variable = { name = te_tax_en_exp_rubber value = var:te_tax_pb_exp_rubber } if = { limit = { has_variable = te_tax_cpend_exp_rubber } remove_variable = te_tax_cpend_exp_rubber } if = { limit = { has_variable = te_tax_cblock_rubber } remove_variable = te_tax_cblock_rubber } }
+		if = { limit = { var:te_tax_pb_imp_silk >= -3 } set_variable = { name = te_tax_en_imp_silk value = var:te_tax_pb_imp_silk } if = { limit = { has_variable = te_tax_cpend_imp_silk } remove_variable = te_tax_cpend_imp_silk } if = { limit = { has_variable = te_tax_cblock_silk } remove_variable = te_tax_cblock_silk } }
+		if = { limit = { var:te_tax_pb_exp_silk >= -3 } set_variable = { name = te_tax_en_exp_silk value = var:te_tax_pb_exp_silk } if = { limit = { has_variable = te_tax_cpend_exp_silk } remove_variable = te_tax_cpend_exp_silk } if = { limit = { has_variable = te_tax_cblock_silk } remove_variable = te_tax_cblock_silk } }
+		if = { limit = { var:te_tax_pb_imp_small_arms >= -3 } set_variable = { name = te_tax_en_imp_small_arms value = var:te_tax_pb_imp_small_arms } if = { limit = { has_variable = te_tax_cpend_imp_small_arms } remove_variable = te_tax_cpend_imp_small_arms } if = { limit = { has_variable = te_tax_cblock_small_arms } remove_variable = te_tax_cblock_small_arms } }
+		if = { limit = { var:te_tax_pb_exp_small_arms >= -3 } set_variable = { name = te_tax_en_exp_small_arms value = var:te_tax_pb_exp_small_arms } if = { limit = { has_variable = te_tax_cpend_exp_small_arms } remove_variable = te_tax_cpend_exp_small_arms } if = { limit = { has_variable = te_tax_cblock_small_arms } remove_variable = te_tax_cblock_small_arms } }
+		if = { limit = { var:te_tax_pb_imp_steamers >= -3 } set_variable = { name = te_tax_en_imp_steamers value = var:te_tax_pb_imp_steamers } if = { limit = { has_variable = te_tax_cpend_imp_steamers } remove_variable = te_tax_cpend_imp_steamers } if = { limit = { has_variable = te_tax_cblock_steamers } remove_variable = te_tax_cblock_steamers } }
+		if = { limit = { var:te_tax_pb_exp_steamers >= -3 } set_variable = { name = te_tax_en_exp_steamers value = var:te_tax_pb_exp_steamers } if = { limit = { has_variable = te_tax_cpend_exp_steamers } remove_variable = te_tax_cpend_exp_steamers } if = { limit = { has_variable = te_tax_cblock_steamers } remove_variable = te_tax_cblock_steamers } }
+		if = { limit = { var:te_tax_pb_imp_steel >= -3 } set_variable = { name = te_tax_en_imp_steel value = var:te_tax_pb_imp_steel } if = { limit = { has_variable = te_tax_cpend_imp_steel } remove_variable = te_tax_cpend_imp_steel } if = { limit = { has_variable = te_tax_cblock_steel } remove_variable = te_tax_cblock_steel } }
+		if = { limit = { var:te_tax_pb_exp_steel >= -3 } set_variable = { name = te_tax_en_exp_steel value = var:te_tax_pb_exp_steel } if = { limit = { has_variable = te_tax_cpend_exp_steel } remove_variable = te_tax_cpend_exp_steel } if = { limit = { has_variable = te_tax_cblock_steel } remove_variable = te_tax_cblock_steel } }
+		if = { limit = { var:te_tax_pb_imp_sugar >= -3 } set_variable = { name = te_tax_en_imp_sugar value = var:te_tax_pb_imp_sugar } if = { limit = { has_variable = te_tax_cpend_imp_sugar } remove_variable = te_tax_cpend_imp_sugar } if = { limit = { has_variable = te_tax_cblock_sugar } remove_variable = te_tax_cblock_sugar } }
+		if = { limit = { var:te_tax_pb_exp_sugar >= -3 } set_variable = { name = te_tax_en_exp_sugar value = var:te_tax_pb_exp_sugar } if = { limit = { has_variable = te_tax_cpend_exp_sugar } remove_variable = te_tax_cpend_exp_sugar } if = { limit = { has_variable = te_tax_cblock_sugar } remove_variable = te_tax_cblock_sugar } }
+		if = { limit = { var:te_tax_pb_imp_sulfur >= -3 } set_variable = { name = te_tax_en_imp_sulfur value = var:te_tax_pb_imp_sulfur } if = { limit = { has_variable = te_tax_cpend_imp_sulfur } remove_variable = te_tax_cpend_imp_sulfur } if = { limit = { has_variable = te_tax_cblock_sulfur } remove_variable = te_tax_cblock_sulfur } }
+		if = { limit = { var:te_tax_pb_exp_sulfur >= -3 } set_variable = { name = te_tax_en_exp_sulfur value = var:te_tax_pb_exp_sulfur } if = { limit = { has_variable = te_tax_cpend_exp_sulfur } remove_variable = te_tax_cpend_exp_sulfur } if = { limit = { has_variable = te_tax_cblock_sulfur } remove_variable = te_tax_cblock_sulfur } }
+		if = { limit = { var:te_tax_pb_imp_tanks >= -3 } set_variable = { name = te_tax_en_imp_tanks value = var:te_tax_pb_imp_tanks } if = { limit = { has_variable = te_tax_cpend_imp_tanks } remove_variable = te_tax_cpend_imp_tanks } if = { limit = { has_variable = te_tax_cblock_tanks } remove_variable = te_tax_cblock_tanks } }
+		if = { limit = { var:te_tax_pb_exp_tanks >= -3 } set_variable = { name = te_tax_en_exp_tanks value = var:te_tax_pb_exp_tanks } if = { limit = { has_variable = te_tax_cpend_exp_tanks } remove_variable = te_tax_cpend_exp_tanks } if = { limit = { has_variable = te_tax_cblock_tanks } remove_variable = te_tax_cblock_tanks } }
+		if = { limit = { var:te_tax_pb_imp_tea >= -3 } set_variable = { name = te_tax_en_imp_tea value = var:te_tax_pb_imp_tea } if = { limit = { has_variable = te_tax_cpend_imp_tea } remove_variable = te_tax_cpend_imp_tea } if = { limit = { has_variable = te_tax_cblock_tea } remove_variable = te_tax_cblock_tea } }
+		if = { limit = { var:te_tax_pb_exp_tea >= -3 } set_variable = { name = te_tax_en_exp_tea value = var:te_tax_pb_exp_tea } if = { limit = { has_variable = te_tax_cpend_exp_tea } remove_variable = te_tax_cpend_exp_tea } if = { limit = { has_variable = te_tax_cblock_tea } remove_variable = te_tax_cblock_tea } }
+		if = { limit = { var:te_tax_pb_imp_tech_metals >= -3 } set_variable = { name = te_tax_en_imp_tech_metals value = var:te_tax_pb_imp_tech_metals } if = { limit = { has_variable = te_tax_cpend_imp_tech_metals } remove_variable = te_tax_cpend_imp_tech_metals } if = { limit = { has_variable = te_tax_cblock_tech_metals } remove_variable = te_tax_cblock_tech_metals } }
+		if = { limit = { var:te_tax_pb_exp_tech_metals >= -3 } set_variable = { name = te_tax_en_exp_tech_metals value = var:te_tax_pb_exp_tech_metals } if = { limit = { has_variable = te_tax_cpend_exp_tech_metals } remove_variable = te_tax_cpend_exp_tech_metals } if = { limit = { has_variable = te_tax_cblock_tech_metals } remove_variable = te_tax_cblock_tech_metals } }
+		if = { limit = { var:te_tax_pb_imp_telephones >= -3 } set_variable = { name = te_tax_en_imp_telephones value = var:te_tax_pb_imp_telephones } if = { limit = { has_variable = te_tax_cpend_imp_telephones } remove_variable = te_tax_cpend_imp_telephones } if = { limit = { has_variable = te_tax_cblock_telephones } remove_variable = te_tax_cblock_telephones } }
+		if = { limit = { var:te_tax_pb_exp_telephones >= -3 } set_variable = { name = te_tax_en_exp_telephones value = var:te_tax_pb_exp_telephones } if = { limit = { has_variable = te_tax_cpend_exp_telephones } remove_variable = te_tax_cpend_exp_telephones } if = { limit = { has_variable = te_tax_cblock_telephones } remove_variable = te_tax_cblock_telephones } }
+		if = { limit = { var:te_tax_pb_imp_tobacco >= -3 } set_variable = { name = te_tax_en_imp_tobacco value = var:te_tax_pb_imp_tobacco } if = { limit = { has_variable = te_tax_cpend_imp_tobacco } remove_variable = te_tax_cpend_imp_tobacco } if = { limit = { has_variable = te_tax_cblock_tobacco } remove_variable = te_tax_cblock_tobacco } }
+		if = { limit = { var:te_tax_pb_exp_tobacco >= -3 } set_variable = { name = te_tax_en_exp_tobacco value = var:te_tax_pb_exp_tobacco } if = { limit = { has_variable = te_tax_cpend_exp_tobacco } remove_variable = te_tax_cpend_exp_tobacco } if = { limit = { has_variable = te_tax_cblock_tobacco } remove_variable = te_tax_cblock_tobacco } }
+		if = { limit = { var:te_tax_pb_imp_tools >= -3 } set_variable = { name = te_tax_en_imp_tools value = var:te_tax_pb_imp_tools } if = { limit = { has_variable = te_tax_cpend_imp_tools } remove_variable = te_tax_cpend_imp_tools } if = { limit = { has_variable = te_tax_cblock_tools } remove_variable = te_tax_cblock_tools } }
+		if = { limit = { var:te_tax_pb_exp_tools >= -3 } set_variable = { name = te_tax_en_exp_tools value = var:te_tax_pb_exp_tools } if = { limit = { has_variable = te_tax_cpend_exp_tools } remove_variable = te_tax_cpend_exp_tools } if = { limit = { has_variable = te_tax_cblock_tools } remove_variable = te_tax_cblock_tools } }
+		if = { limit = { var:te_tax_pb_imp_tourism >= -3 } set_variable = { name = te_tax_en_imp_tourism value = var:te_tax_pb_imp_tourism } if = { limit = { has_variable = te_tax_cpend_imp_tourism } remove_variable = te_tax_cpend_imp_tourism } if = { limit = { has_variable = te_tax_cblock_tourism } remove_variable = te_tax_cblock_tourism } }
+		if = { limit = { var:te_tax_pb_exp_tourism >= -3 } set_variable = { name = te_tax_en_exp_tourism value = var:te_tax_pb_exp_tourism } if = { limit = { has_variable = te_tax_cpend_exp_tourism } remove_variable = te_tax_cpend_exp_tourism } if = { limit = { has_variable = te_tax_cblock_tourism } remove_variable = te_tax_cblock_tourism } }
+		if = { limit = { var:te_tax_pb_imp_wine >= -3 } set_variable = { name = te_tax_en_imp_wine value = var:te_tax_pb_imp_wine } if = { limit = { has_variable = te_tax_cpend_imp_wine } remove_variable = te_tax_cpend_imp_wine } if = { limit = { has_variable = te_tax_cblock_wine } remove_variable = te_tax_cblock_wine } }
+		if = { limit = { var:te_tax_pb_exp_wine >= -3 } set_variable = { name = te_tax_en_exp_wine value = var:te_tax_pb_exp_wine } if = { limit = { has_variable = te_tax_cpend_exp_wine } remove_variable = te_tax_cpend_exp_wine } if = { limit = { has_variable = te_tax_cblock_wine } remove_variable = te_tax_cblock_wine } }
+		if = { limit = { var:te_tax_pb_imp_wood >= -3 } set_variable = { name = te_tax_en_imp_wood value = var:te_tax_pb_imp_wood } if = { limit = { has_variable = te_tax_cpend_imp_wood } remove_variable = te_tax_cpend_imp_wood } if = { limit = { has_variable = te_tax_cblock_wood } remove_variable = te_tax_cblock_wood } }
+		if = { limit = { var:te_tax_pb_exp_wood >= -3 } set_variable = { name = te_tax_en_exp_wood value = var:te_tax_pb_exp_wood } if = { limit = { has_variable = te_tax_cpend_exp_wood } remove_variable = te_tax_cpend_exp_wood } if = { limit = { has_variable = te_tax_cblock_wood } remove_variable = te_tax_cblock_wood } }
+	}
 	# A package that restates regional relief names its whole state set, its own list
 	# te_tax_pb_relief_states: it replaces the enacted list te_tax_en_relief_states (the canonical set,
 	# at most three) with the states in it that this code keeps (te_tax_relief_listed_state_kept:
@@ -5480,6 +5862,134 @@ te_tax_gen_store_b = {
 	}
 	else = {
 		set_variable = { name = te_tax_pb_regrel_states_set value = 0 }
+	}
+	# Customs (plan Task 15): a bill under the customs option carries a field per tradeable
+	# good and direction (-99 to leave it alone), its external version and, as for every
+	# group, the planned version after this approval.
+	if = {
+		limit = { has_variable = te_tax_bl_customs_pver }
+		set_variable = { name = te_tax_pb_imp_advanced_materials value = var:te_tax_bl_imp_advanced_materials }
+		set_variable = { name = te_tax_pb_exp_advanced_materials value = var:te_tax_bl_exp_advanced_materials }
+		set_variable = { name = te_tax_pb_imp_aeroplanes value = var:te_tax_bl_imp_aeroplanes }
+		set_variable = { name = te_tax_pb_exp_aeroplanes value = var:te_tax_bl_exp_aeroplanes }
+		set_variable = { name = te_tax_pb_imp_ammunition value = var:te_tax_bl_imp_ammunition }
+		set_variable = { name = te_tax_pb_exp_ammunition value = var:te_tax_bl_exp_ammunition }
+		set_variable = { name = te_tax_pb_imp_artillery value = var:te_tax_bl_imp_artillery }
+		set_variable = { name = te_tax_pb_exp_artillery value = var:te_tax_bl_exp_artillery }
+		set_variable = { name = te_tax_pb_imp_automobiles value = var:te_tax_bl_imp_automobiles }
+		set_variable = { name = te_tax_pb_exp_automobiles value = var:te_tax_bl_exp_automobiles }
+		set_variable = { name = te_tax_pb_imp_clippers value = var:te_tax_bl_imp_clippers }
+		set_variable = { name = te_tax_pb_exp_clippers value = var:te_tax_bl_exp_clippers }
+		set_variable = { name = te_tax_pb_imp_clothes value = var:te_tax_bl_imp_clothes }
+		set_variable = { name = te_tax_pb_exp_clothes value = var:te_tax_bl_exp_clothes }
+		set_variable = { name = te_tax_pb_imp_coal value = var:te_tax_bl_imp_coal }
+		set_variable = { name = te_tax_pb_exp_coal value = var:te_tax_bl_exp_coal }
+		set_variable = { name = te_tax_pb_imp_coffee value = var:te_tax_bl_imp_coffee }
+		set_variable = { name = te_tax_pb_exp_coffee value = var:te_tax_bl_exp_coffee }
+		set_variable = { name = te_tax_pb_imp_construction value = var:te_tax_bl_imp_construction }
+		set_variable = { name = te_tax_pb_exp_construction value = var:te_tax_bl_exp_construction }
+		set_variable = { name = te_tax_pb_imp_consumer_appliances value = var:te_tax_bl_imp_consumer_appliances }
+		set_variable = { name = te_tax_pb_exp_consumer_appliances value = var:te_tax_bl_exp_consumer_appliances }
+		set_variable = { name = te_tax_pb_imp_digital_assets value = var:te_tax_bl_imp_digital_assets }
+		set_variable = { name = te_tax_pb_exp_digital_assets value = var:te_tax_bl_exp_digital_assets }
+		set_variable = { name = te_tax_pb_imp_dye value = var:te_tax_bl_imp_dye }
+		set_variable = { name = te_tax_pb_exp_dye value = var:te_tax_bl_exp_dye }
+		set_variable = { name = te_tax_pb_imp_electronic_components value = var:te_tax_bl_imp_electronic_components }
+		set_variable = { name = te_tax_pb_exp_electronic_components value = var:te_tax_bl_exp_electronic_components }
+		set_variable = { name = te_tax_pb_imp_engines value = var:te_tax_bl_imp_engines }
+		set_variable = { name = te_tax_pb_exp_engines value = var:te_tax_bl_exp_engines }
+		set_variable = { name = te_tax_pb_imp_explosives value = var:te_tax_bl_imp_explosives }
+		set_variable = { name = te_tax_pb_exp_explosives value = var:te_tax_bl_exp_explosives }
+		set_variable = { name = te_tax_pb_imp_fabric value = var:te_tax_bl_imp_fabric }
+		set_variable = { name = te_tax_pb_exp_fabric value = var:te_tax_bl_exp_fabric }
+		set_variable = { name = te_tax_pb_imp_fertilizer value = var:te_tax_bl_imp_fertilizer }
+		set_variable = { name = te_tax_pb_exp_fertilizer value = var:te_tax_bl_exp_fertilizer }
+		set_variable = { name = te_tax_pb_imp_fine_art value = var:te_tax_bl_imp_fine_art }
+		set_variable = { name = te_tax_pb_exp_fine_art value = var:te_tax_bl_exp_fine_art }
+		set_variable = { name = te_tax_pb_imp_fish value = var:te_tax_bl_imp_fish }
+		set_variable = { name = te_tax_pb_exp_fish value = var:te_tax_bl_exp_fish }
+		set_variable = { name = te_tax_pb_imp_fruit value = var:te_tax_bl_imp_fruit }
+		set_variable = { name = te_tax_pb_exp_fruit value = var:te_tax_bl_exp_fruit }
+		set_variable = { name = te_tax_pb_imp_furniture value = var:te_tax_bl_imp_furniture }
+		set_variable = { name = te_tax_pb_exp_furniture value = var:te_tax_bl_exp_furniture }
+		set_variable = { name = te_tax_pb_imp_glass value = var:te_tax_bl_imp_glass }
+		set_variable = { name = te_tax_pb_exp_glass value = var:te_tax_bl_exp_glass }
+		set_variable = { name = te_tax_pb_imp_grain value = var:te_tax_bl_imp_grain }
+		set_variable = { name = te_tax_pb_exp_grain value = var:te_tax_bl_exp_grain }
+		set_variable = { name = te_tax_pb_imp_groceries value = var:te_tax_bl_imp_groceries }
+		set_variable = { name = te_tax_pb_exp_groceries value = var:te_tax_bl_exp_groceries }
+		set_variable = { name = te_tax_pb_imp_hardwood value = var:te_tax_bl_imp_hardwood }
+		set_variable = { name = te_tax_pb_exp_hardwood value = var:te_tax_bl_exp_hardwood }
+		set_variable = { name = te_tax_pb_imp_iron value = var:te_tax_bl_imp_iron }
+		set_variable = { name = te_tax_pb_exp_iron value = var:te_tax_bl_exp_iron }
+		set_variable = { name = te_tax_pb_imp_ironclads value = var:te_tax_bl_imp_ironclads }
+		set_variable = { name = te_tax_pb_exp_ironclads value = var:te_tax_bl_exp_ironclads }
+		set_variable = { name = te_tax_pb_imp_launch_capacity value = var:te_tax_bl_imp_launch_capacity }
+		set_variable = { name = te_tax_pb_exp_launch_capacity value = var:te_tax_bl_exp_launch_capacity }
+		set_variable = { name = te_tax_pb_imp_lead value = var:te_tax_bl_imp_lead }
+		set_variable = { name = te_tax_pb_exp_lead value = var:te_tax_bl_exp_lead }
+		set_variable = { name = te_tax_pb_imp_liquor value = var:te_tax_bl_imp_liquor }
+		set_variable = { name = te_tax_pb_exp_liquor value = var:te_tax_bl_exp_liquor }
+		set_variable = { name = te_tax_pb_imp_luxury_clothes value = var:te_tax_bl_imp_luxury_clothes }
+		set_variable = { name = te_tax_pb_exp_luxury_clothes value = var:te_tax_bl_exp_luxury_clothes }
+		set_variable = { name = te_tax_pb_imp_luxury_furniture value = var:te_tax_bl_imp_luxury_furniture }
+		set_variable = { name = te_tax_pb_exp_luxury_furniture value = var:te_tax_bl_exp_luxury_furniture }
+		set_variable = { name = te_tax_pb_imp_magnetic_drive_ships value = var:te_tax_bl_imp_magnetic_drive_ships }
+		set_variable = { name = te_tax_pb_exp_magnetic_drive_ships value = var:te_tax_bl_exp_magnetic_drive_ships }
+		set_variable = { name = te_tax_pb_imp_manowars value = var:te_tax_bl_imp_manowars }
+		set_variable = { name = te_tax_pb_exp_manowars value = var:te_tax_bl_exp_manowars }
+		set_variable = { name = te_tax_pb_imp_meat value = var:te_tax_bl_imp_meat }
+		set_variable = { name = te_tax_pb_exp_meat value = var:te_tax_bl_exp_meat }
+		set_variable = { name = te_tax_pb_imp_merchant_marine value = var:te_tax_bl_imp_merchant_marine }
+		set_variable = { name = te_tax_pb_exp_merchant_marine value = var:te_tax_bl_exp_merchant_marine }
+		set_variable = { name = te_tax_pb_imp_motor_ships value = var:te_tax_bl_imp_motor_ships }
+		set_variable = { name = te_tax_pb_exp_motor_ships value = var:te_tax_bl_exp_motor_ships }
+		set_variable = { name = te_tax_pb_imp_oil value = var:te_tax_bl_imp_oil }
+		set_variable = { name = te_tax_pb_exp_oil value = var:te_tax_bl_exp_oil }
+		set_variable = { name = te_tax_pb_imp_opium value = var:te_tax_bl_imp_opium }
+		set_variable = { name = te_tax_pb_exp_opium value = var:te_tax_bl_exp_opium }
+		set_variable = { name = te_tax_pb_imp_paper value = var:te_tax_bl_imp_paper }
+		set_variable = { name = te_tax_pb_exp_paper value = var:te_tax_bl_exp_paper }
+		set_variable = { name = te_tax_pb_imp_porcelain value = var:te_tax_bl_imp_porcelain }
+		set_variable = { name = te_tax_pb_exp_porcelain value = var:te_tax_bl_exp_porcelain }
+		set_variable = { name = te_tax_pb_imp_radios value = var:te_tax_bl_imp_radios }
+		set_variable = { name = te_tax_pb_exp_radios value = var:te_tax_bl_exp_radios }
+		set_variable = { name = te_tax_pb_imp_robotics value = var:te_tax_bl_imp_robotics }
+		set_variable = { name = te_tax_pb_exp_robotics value = var:te_tax_bl_exp_robotics }
+		set_variable = { name = te_tax_pb_imp_rubber value = var:te_tax_bl_imp_rubber }
+		set_variable = { name = te_tax_pb_exp_rubber value = var:te_tax_bl_exp_rubber }
+		set_variable = { name = te_tax_pb_imp_silk value = var:te_tax_bl_imp_silk }
+		set_variable = { name = te_tax_pb_exp_silk value = var:te_tax_bl_exp_silk }
+		set_variable = { name = te_tax_pb_imp_small_arms value = var:te_tax_bl_imp_small_arms }
+		set_variable = { name = te_tax_pb_exp_small_arms value = var:te_tax_bl_exp_small_arms }
+		set_variable = { name = te_tax_pb_imp_steamers value = var:te_tax_bl_imp_steamers }
+		set_variable = { name = te_tax_pb_exp_steamers value = var:te_tax_bl_exp_steamers }
+		set_variable = { name = te_tax_pb_imp_steel value = var:te_tax_bl_imp_steel }
+		set_variable = { name = te_tax_pb_exp_steel value = var:te_tax_bl_exp_steel }
+		set_variable = { name = te_tax_pb_imp_sugar value = var:te_tax_bl_imp_sugar }
+		set_variable = { name = te_tax_pb_exp_sugar value = var:te_tax_bl_exp_sugar }
+		set_variable = { name = te_tax_pb_imp_sulfur value = var:te_tax_bl_imp_sulfur }
+		set_variable = { name = te_tax_pb_exp_sulfur value = var:te_tax_bl_exp_sulfur }
+		set_variable = { name = te_tax_pb_imp_tanks value = var:te_tax_bl_imp_tanks }
+		set_variable = { name = te_tax_pb_exp_tanks value = var:te_tax_bl_exp_tanks }
+		set_variable = { name = te_tax_pb_imp_tea value = var:te_tax_bl_imp_tea }
+		set_variable = { name = te_tax_pb_exp_tea value = var:te_tax_bl_exp_tea }
+		set_variable = { name = te_tax_pb_imp_tech_metals value = var:te_tax_bl_imp_tech_metals }
+		set_variable = { name = te_tax_pb_exp_tech_metals value = var:te_tax_bl_exp_tech_metals }
+		set_variable = { name = te_tax_pb_imp_telephones value = var:te_tax_bl_imp_telephones }
+		set_variable = { name = te_tax_pb_exp_telephones value = var:te_tax_bl_exp_telephones }
+		set_variable = { name = te_tax_pb_imp_tobacco value = var:te_tax_bl_imp_tobacco }
+		set_variable = { name = te_tax_pb_exp_tobacco value = var:te_tax_bl_exp_tobacco }
+		set_variable = { name = te_tax_pb_imp_tools value = var:te_tax_bl_imp_tools }
+		set_variable = { name = te_tax_pb_exp_tools value = var:te_tax_bl_exp_tools }
+		set_variable = { name = te_tax_pb_imp_tourism value = var:te_tax_bl_imp_tourism }
+		set_variable = { name = te_tax_pb_exp_tourism value = var:te_tax_bl_exp_tourism }
+		set_variable = { name = te_tax_pb_imp_wine value = var:te_tax_bl_imp_wine }
+		set_variable = { name = te_tax_pb_exp_wine value = var:te_tax_bl_exp_wine }
+		set_variable = { name = te_tax_pb_imp_wood value = var:te_tax_bl_imp_wood }
+		set_variable = { name = te_tax_pb_exp_wood value = var:te_tax_bl_exp_wood }
+		set_variable = { name = te_tax_pb_xver_customs value = var:te_tax_bl_xver_customs }
+		set_variable = { name = te_tax_pb_pver_customs value = var:te_tax_pver_customs }
 	}
 	debug_log = "TE_TAX stored slot=b; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	set_variable = { name = te_tax_pb_state value = 1 }
@@ -6549,6 +7059,128 @@ te_tax_gen_copy_slot_a = {
 	te_tax_copy_token = { NAME = te_tax_pa_regrel }
 	te_tax_copy_token = { NAME = te_tax_pa_xver_relief }
 	te_tax_copy_token = { NAME = te_tax_pa_regrel_states_set }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_advanced_materials }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_advanced_materials }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_aeroplanes }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_aeroplanes }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_ammunition }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_ammunition }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_artillery }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_artillery }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_automobiles }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_automobiles }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_clippers }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_clippers }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_clothes }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_clothes }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_coal }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_coal }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_coffee }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_coffee }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_construction }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_construction }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_consumer_appliances }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_consumer_appliances }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_digital_assets }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_digital_assets }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_dye }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_dye }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_electronic_components }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_electronic_components }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_engines }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_engines }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_explosives }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_explosives }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_fabric }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_fabric }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_fertilizer }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_fertilizer }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_fine_art }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_fine_art }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_fish }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_fish }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_fruit }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_fruit }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_furniture }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_furniture }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_glass }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_glass }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_grain }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_grain }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_groceries }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_groceries }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_hardwood }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_hardwood }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_iron }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_iron }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_ironclads }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_ironclads }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_launch_capacity }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_launch_capacity }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_lead }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_lead }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_liquor }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_liquor }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_luxury_clothes }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_luxury_clothes }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_magnetic_drive_ships }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_magnetic_drive_ships }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_manowars }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_manowars }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_meat }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_meat }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_merchant_marine }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_merchant_marine }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_motor_ships }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_motor_ships }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_oil }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_oil }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_opium }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_opium }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_paper }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_paper }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_porcelain }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_porcelain }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_radios }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_radios }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_robotics }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_robotics }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_rubber }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_rubber }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_silk }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_silk }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_small_arms }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_small_arms }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_steamers }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_steamers }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_steel }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_steel }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_sugar }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_sugar }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_sulfur }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_sulfur }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_tanks }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_tanks }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_tea }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_tea }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_tech_metals }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_tech_metals }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_telephones }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_telephones }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_tobacco }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_tobacco }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_tools }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_tools }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_tourism }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_tourism }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_wine }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_wine }
+	te_tax_copy_token = { NAME = te_tax_pa_imp_wood }
+	te_tax_copy_token = { NAME = te_tax_pa_exp_wood }
+	te_tax_copy_token = { NAME = te_tax_pa_xver_customs }
+	te_tax_copy_token = { NAME = te_tax_pa_pver_customs }
 	# The package's regional-relief states (te_tax_pa_relief_states), whole.
 	save_scope_as = te_tax_country
 	if = { limit = { has_variable_list = te_tax_pa_relief_states } clear_variable_list = te_tax_pa_relief_states }
@@ -6639,6 +7271,128 @@ te_tax_gen_copy_slot_b = {
 	te_tax_copy_token = { NAME = te_tax_pb_regrel }
 	te_tax_copy_token = { NAME = te_tax_pb_xver_relief }
 	te_tax_copy_token = { NAME = te_tax_pb_regrel_states_set }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_advanced_materials }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_advanced_materials }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_aeroplanes }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_aeroplanes }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_ammunition }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_ammunition }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_artillery }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_artillery }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_automobiles }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_automobiles }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_clippers }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_clippers }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_clothes }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_clothes }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_coal }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_coal }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_coffee }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_coffee }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_construction }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_construction }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_consumer_appliances }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_consumer_appliances }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_digital_assets }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_digital_assets }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_dye }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_dye }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_electronic_components }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_electronic_components }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_engines }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_engines }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_explosives }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_explosives }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_fabric }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_fabric }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_fertilizer }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_fertilizer }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_fine_art }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_fine_art }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_fish }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_fish }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_fruit }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_fruit }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_furniture }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_furniture }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_glass }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_glass }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_grain }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_grain }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_groceries }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_groceries }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_hardwood }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_hardwood }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_iron }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_iron }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_ironclads }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_ironclads }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_launch_capacity }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_launch_capacity }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_lead }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_lead }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_liquor }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_liquor }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_luxury_clothes }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_luxury_clothes }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_magnetic_drive_ships }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_magnetic_drive_ships }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_manowars }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_manowars }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_meat }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_meat }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_merchant_marine }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_merchant_marine }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_motor_ships }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_motor_ships }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_oil }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_oil }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_opium }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_opium }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_paper }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_paper }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_porcelain }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_porcelain }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_radios }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_radios }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_robotics }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_robotics }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_rubber }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_rubber }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_silk }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_silk }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_small_arms }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_small_arms }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_steamers }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_steamers }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_steel }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_steel }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_sugar }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_sugar }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_sulfur }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_sulfur }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_tanks }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_tanks }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_tea }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_tea }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_tech_metals }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_tech_metals }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_telephones }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_telephones }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_tobacco }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_tobacco }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_tools }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_tools }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_tourism }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_tourism }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_wine }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_wine }
+	te_tax_copy_token = { NAME = te_tax_pb_imp_wood }
+	te_tax_copy_token = { NAME = te_tax_pb_exp_wood }
+	te_tax_copy_token = { NAME = te_tax_pb_xver_customs }
+	te_tax_copy_token = { NAME = te_tax_pb_pver_customs }
 	# The package's regional-relief states (te_tax_pb_relief_states), whole.
 	save_scope_as = te_tax_country
 	if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }

@@ -103,6 +103,8 @@ COMMANDS = {
     "draft_relief": ("KEY", "DIR"),
     "draft_relief_choose": (),
     "draft_relief_state": (),
+    # Customs in a draft (Task 15): a customs-catalog good, a direction, a step.
+    "draft_customs": ("GOOD", "D", "DIR"),
     "draft_discard": (),
     "draft_rebase": ("KEY",),
     "introduce": (),
@@ -121,7 +123,8 @@ DOMAINS = {
     "draft_due": {"DIR": ("0", "1")},
     "draft_good": {"GOOD": None},           # the catalog, filled in lazily
     "draft_relief": {"KEY": ("agrel", "regrel"), "DIR": ("0", "1", "2", "3", "4")},
-    "draft_rebase": {"KEY": KEYS + ("goods", "relief")},
+    "draft_rebase": {"KEY": KEYS + ("goods", "relief", "customs")},
+    "draft_customs": {"GOOD": "customs", "D": ("imp", "exp"), "DIR": ("0", "1", "2")},
     "package_reschedule": {"SLOT": SLOTS},
     "package_release": {"SLOT": SLOTS},
 }
@@ -178,7 +181,8 @@ def reach(root, assignment, defined):
 def assignments(command):
     domains = dict(DOMAINS.get(command, {}))
     if "GOOD" in domains:
-        domains["GOOD"] = catalog()
+        # The consumption catalog, or the customs catalog for the customs levels (Task 15).
+        domains["GOOD"] = gen.customs_catalog() if domains["GOOD"] == "customs" else catalog()
     params = COMMANDS[command]
     for values in product(*(domains[param] for param in params)):
         yield dict(zip(params, values))

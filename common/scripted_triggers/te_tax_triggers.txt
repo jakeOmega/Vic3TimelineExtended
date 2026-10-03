@@ -279,6 +279,39 @@ te_tax_dr_relief_ok_4 = {
 	custom_tooltip = { text = te_tax_tt_relief_touched var:te_tax_dr_$KEY$ >= 0 }
 }
 
+# ---------------------------------------------------------------------------
+# Customs in a draft (plan Task 15; docs/systems/tax_code_schema.md, "Customs
+# schedule"). GOOD: a customs-catalog good; D: imp or exp; DIR: 0 one level
+# lower (a lower tariff or a larger subsidy), 1 one level higher, 2 leave the
+# level as existing law has it. Only while the code holds the country's
+# customs: a customs-union member, and every country under the plain rule
+# option, has no customs editor. An untouched level starts from existing law
+# in the draft's month (te_tax_base_dr_<d>_<good>).
+# ---------------------------------------------------------------------------
+te_tax_can_draft_customs = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_customs_authority te_tax_customs_authority = yes }
+	trigger_if = {
+		limit = { te_tax_draft_active = yes has_variable = te_tax_dr_$D$_$GOOD$ }
+		te_tax_dr_customs_ok_$DIR$ = { D = $D$ GOOD = $GOOD$ }
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+te_tax_dr_customs_ok_0 = {
+	custom_tooltip = { text = te_tax_tt_customs_room_down te_tax_dr_eff_$D$_$GOOD$ > -3 }
+}
+
+te_tax_dr_customs_ok_1 = {
+	custom_tooltip = { text = te_tax_tt_customs_room_up te_tax_dr_eff_$D$_$GOOD$ < 3 }
+}
+
+te_tax_dr_customs_ok_2 = {
+	custom_tooltip = { text = te_tax_tt_customs_touched var:te_tax_dr_$D$_$GOOD$ >= -3 }
+}
+
 # Lists the incorporated states to name for regional relief, taking regional
 # relief into the draft as existing law has it. Any open draft.
 te_tax_can_draft_relief_choose = {
@@ -373,6 +406,8 @@ te_tax_can_draft_rebase = {
 		custom_tooltip = {
 			text = te_tax_tt_rebase_needed
 			has_variable = te_tax_dr_$KEY$_pver
+			# customs (plan Task 15) has its token under the customs option only.
+			has_variable = te_tax_pver_$KEY$
 			var:te_tax_dr_$KEY$_pver >= 0
 			NOT = { var:te_tax_dr_$KEY$_pver = var:te_tax_pver_$KEY$ }
 		}
@@ -415,6 +450,13 @@ te_tax_draft_ready = {
 		# three, checked again here. Every named state must still be the
 		# country's own and incorporated (one lost since it was named forces a
 		# revision; inside the list PREV is the country).
+		# Customs (plan Task 15): only a code that holds the country's customs may
+		# change them; a draft that touches them is held to it at introduction and
+		# at every revision (a market lost since the draft was written).
+		trigger_if = {
+			limit = { te_tax_gen_draft_touches_customs = yes }
+			custom_tooltip = { text = te_tax_tt_customs_authority te_tax_customs_authority = yes }
+		}
 		trigger_if = {
 			limit = { var:te_tax_dr_regrel >= 1 }
 			custom_tooltip = {
@@ -472,12 +514,13 @@ te_tax_can_withdraw = {
 }
 
 # The bill under debate is minor: at most two provisions changed, each by at
-# most two index steps from existing law, and no good or relief. It needs
+# most two index steps from existing law, and no good, relief or customs level. It needs
 # te_tax_debate_days_minor days of debate instead of te_tax_debate_days_major.
 te_tax_bill_is_minor = {
 	te_tax_bl_provisions <= 2
 	te_tax_gen_bill_small_steps = yes
 	NOT = { te_tax_gen_bill_touches_goods = yes }
+	NOT = { te_tax_gen_bill_touches_customs = yes }
 	var:te_tax_bl_agrel < 0
 	var:te_tax_bl_regrel < 0
 }
@@ -490,6 +533,7 @@ te_tax_draft_is_minor = {
 	te_tax_dr_provisions <= 2
 	te_tax_gen_draft_small_steps = yes
 	NOT = { te_tax_gen_draft_touches_goods = yes }
+	NOT = { te_tax_gen_draft_touches_customs = yes }
 	var:te_tax_dr_agrel < 0
 	var:te_tax_dr_regrel < 0
 }

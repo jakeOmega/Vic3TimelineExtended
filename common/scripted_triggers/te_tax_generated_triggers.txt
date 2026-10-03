@@ -884,6 +884,134 @@ te_tax_gen_package_touches_goods_a = {
 	}
 }
 
+# Slot a, country scope: the package touches at least one customs provision (plan Task
+# 15; under the customs option only, the fields exist with the slot's customs marker).
+te_tax_gen_package_touches_customs_a = {
+	has_variable = te_tax_pa_pver_customs
+	OR = {
+		var:te_tax_pa_imp_advanced_materials >= -3
+		var:te_tax_pa_exp_advanced_materials >= -3
+		var:te_tax_pa_imp_aeroplanes >= -3
+		var:te_tax_pa_exp_aeroplanes >= -3
+		var:te_tax_pa_imp_ammunition >= -3
+		var:te_tax_pa_exp_ammunition >= -3
+		var:te_tax_pa_imp_artillery >= -3
+		var:te_tax_pa_exp_artillery >= -3
+		var:te_tax_pa_imp_automobiles >= -3
+		var:te_tax_pa_exp_automobiles >= -3
+		var:te_tax_pa_imp_clippers >= -3
+		var:te_tax_pa_exp_clippers >= -3
+		var:te_tax_pa_imp_clothes >= -3
+		var:te_tax_pa_exp_clothes >= -3
+		var:te_tax_pa_imp_coal >= -3
+		var:te_tax_pa_exp_coal >= -3
+		var:te_tax_pa_imp_coffee >= -3
+		var:te_tax_pa_exp_coffee >= -3
+		var:te_tax_pa_imp_construction >= -3
+		var:te_tax_pa_exp_construction >= -3
+		var:te_tax_pa_imp_consumer_appliances >= -3
+		var:te_tax_pa_exp_consumer_appliances >= -3
+		var:te_tax_pa_imp_digital_assets >= -3
+		var:te_tax_pa_exp_digital_assets >= -3
+		var:te_tax_pa_imp_dye >= -3
+		var:te_tax_pa_exp_dye >= -3
+		var:te_tax_pa_imp_electronic_components >= -3
+		var:te_tax_pa_exp_electronic_components >= -3
+		var:te_tax_pa_imp_engines >= -3
+		var:te_tax_pa_exp_engines >= -3
+		var:te_tax_pa_imp_explosives >= -3
+		var:te_tax_pa_exp_explosives >= -3
+		var:te_tax_pa_imp_fabric >= -3
+		var:te_tax_pa_exp_fabric >= -3
+		var:te_tax_pa_imp_fertilizer >= -3
+		var:te_tax_pa_exp_fertilizer >= -3
+		var:te_tax_pa_imp_fine_art >= -3
+		var:te_tax_pa_exp_fine_art >= -3
+		var:te_tax_pa_imp_fish >= -3
+		var:te_tax_pa_exp_fish >= -3
+		var:te_tax_pa_imp_fruit >= -3
+		var:te_tax_pa_exp_fruit >= -3
+		var:te_tax_pa_imp_furniture >= -3
+		var:te_tax_pa_exp_furniture >= -3
+		var:te_tax_pa_imp_glass >= -3
+		var:te_tax_pa_exp_glass >= -3
+		var:te_tax_pa_imp_grain >= -3
+		var:te_tax_pa_exp_grain >= -3
+		var:te_tax_pa_imp_groceries >= -3
+		var:te_tax_pa_exp_groceries >= -3
+		var:te_tax_pa_imp_hardwood >= -3
+		var:te_tax_pa_exp_hardwood >= -3
+		var:te_tax_pa_imp_iron >= -3
+		var:te_tax_pa_exp_iron >= -3
+		var:te_tax_pa_imp_ironclads >= -3
+		var:te_tax_pa_exp_ironclads >= -3
+		var:te_tax_pa_imp_launch_capacity >= -3
+		var:te_tax_pa_exp_launch_capacity >= -3
+		var:te_tax_pa_imp_lead >= -3
+		var:te_tax_pa_exp_lead >= -3
+		var:te_tax_pa_imp_liquor >= -3
+		var:te_tax_pa_exp_liquor >= -3
+		var:te_tax_pa_imp_luxury_clothes >= -3
+		var:te_tax_pa_exp_luxury_clothes >= -3
+		var:te_tax_pa_imp_luxury_furniture >= -3
+		var:te_tax_pa_exp_luxury_furniture >= -3
+		var:te_tax_pa_imp_magnetic_drive_ships >= -3
+		var:te_tax_pa_exp_magnetic_drive_ships >= -3
+		var:te_tax_pa_imp_manowars >= -3
+		var:te_tax_pa_exp_manowars >= -3
+		var:te_tax_pa_imp_meat >= -3
+		var:te_tax_pa_exp_meat >= -3
+		var:te_tax_pa_imp_merchant_marine >= -3
+		var:te_tax_pa_exp_merchant_marine >= -3
+		var:te_tax_pa_imp_motor_ships >= -3
+		var:te_tax_pa_exp_motor_ships >= -3
+		var:te_tax_pa_imp_oil >= -3
+		var:te_tax_pa_exp_oil >= -3
+		var:te_tax_pa_imp_opium >= -3
+		var:te_tax_pa_exp_opium >= -3
+		var:te_tax_pa_imp_paper >= -3
+		var:te_tax_pa_exp_paper >= -3
+		var:te_tax_pa_imp_porcelain >= -3
+		var:te_tax_pa_exp_porcelain >= -3
+		var:te_tax_pa_imp_radios >= -3
+		var:te_tax_pa_exp_radios >= -3
+		var:te_tax_pa_imp_robotics >= -3
+		var:te_tax_pa_exp_robotics >= -3
+		var:te_tax_pa_imp_rubber >= -3
+		var:te_tax_pa_exp_rubber >= -3
+		var:te_tax_pa_imp_silk >= -3
+		var:te_tax_pa_exp_silk >= -3
+		var:te_tax_pa_imp_small_arms >= -3
+		var:te_tax_pa_exp_small_arms >= -3
+		var:te_tax_pa_imp_steamers >= -3
+		var:te_tax_pa_exp_steamers >= -3
+		var:te_tax_pa_imp_steel >= -3
+		var:te_tax_pa_exp_steel >= -3
+		var:te_tax_pa_imp_sugar >= -3
+		var:te_tax_pa_exp_sugar >= -3
+		var:te_tax_pa_imp_sulfur >= -3
+		var:te_tax_pa_exp_sulfur >= -3
+		var:te_tax_pa_imp_tanks >= -3
+		var:te_tax_pa_exp_tanks >= -3
+		var:te_tax_pa_imp_tea >= -3
+		var:te_tax_pa_exp_tea >= -3
+		var:te_tax_pa_imp_tech_metals >= -3
+		var:te_tax_pa_exp_tech_metals >= -3
+		var:te_tax_pa_imp_telephones >= -3
+		var:te_tax_pa_exp_telephones >= -3
+		var:te_tax_pa_imp_tobacco >= -3
+		var:te_tax_pa_exp_tobacco >= -3
+		var:te_tax_pa_imp_tools >= -3
+		var:te_tax_pa_exp_tools >= -3
+		var:te_tax_pa_imp_tourism >= -3
+		var:te_tax_pa_exp_tourism >= -3
+		var:te_tax_pa_imp_wine >= -3
+		var:te_tax_pa_exp_wine >= -3
+		var:te_tax_pa_imp_wood >= -3
+		var:te_tax_pa_exp_wood >= -3
+	}
+}
+
 # Slot a, country scope: every provision group the package touches still has the
 # external-change token it had at approval. Only a non-legislative change bumps
 # te_tax_xver_*, so expected sunsets and other packages never make it stale.
@@ -918,6 +1046,10 @@ te_tax_gen_package_current_a = {
 			var:te_tax_pa_regrel < 0
 		}
 		var:te_tax_pa_xver_relief = var:te_tax_xver_relief
+	}
+	OR = {
+		NOT = { te_tax_gen_package_touches_customs_a = yes }
+		AND = { has_variable = te_tax_xver_customs var:te_tax_pa_xver_customs = var:te_tax_xver_customs }
 	}
 }
 
@@ -966,6 +1098,134 @@ te_tax_gen_package_touches_goods_b = {
 	}
 }
 
+# Slot b, country scope: the package touches at least one customs provision (plan Task
+# 15; under the customs option only, the fields exist with the slot's customs marker).
+te_tax_gen_package_touches_customs_b = {
+	has_variable = te_tax_pb_pver_customs
+	OR = {
+		var:te_tax_pb_imp_advanced_materials >= -3
+		var:te_tax_pb_exp_advanced_materials >= -3
+		var:te_tax_pb_imp_aeroplanes >= -3
+		var:te_tax_pb_exp_aeroplanes >= -3
+		var:te_tax_pb_imp_ammunition >= -3
+		var:te_tax_pb_exp_ammunition >= -3
+		var:te_tax_pb_imp_artillery >= -3
+		var:te_tax_pb_exp_artillery >= -3
+		var:te_tax_pb_imp_automobiles >= -3
+		var:te_tax_pb_exp_automobiles >= -3
+		var:te_tax_pb_imp_clippers >= -3
+		var:te_tax_pb_exp_clippers >= -3
+		var:te_tax_pb_imp_clothes >= -3
+		var:te_tax_pb_exp_clothes >= -3
+		var:te_tax_pb_imp_coal >= -3
+		var:te_tax_pb_exp_coal >= -3
+		var:te_tax_pb_imp_coffee >= -3
+		var:te_tax_pb_exp_coffee >= -3
+		var:te_tax_pb_imp_construction >= -3
+		var:te_tax_pb_exp_construction >= -3
+		var:te_tax_pb_imp_consumer_appliances >= -3
+		var:te_tax_pb_exp_consumer_appliances >= -3
+		var:te_tax_pb_imp_digital_assets >= -3
+		var:te_tax_pb_exp_digital_assets >= -3
+		var:te_tax_pb_imp_dye >= -3
+		var:te_tax_pb_exp_dye >= -3
+		var:te_tax_pb_imp_electronic_components >= -3
+		var:te_tax_pb_exp_electronic_components >= -3
+		var:te_tax_pb_imp_engines >= -3
+		var:te_tax_pb_exp_engines >= -3
+		var:te_tax_pb_imp_explosives >= -3
+		var:te_tax_pb_exp_explosives >= -3
+		var:te_tax_pb_imp_fabric >= -3
+		var:te_tax_pb_exp_fabric >= -3
+		var:te_tax_pb_imp_fertilizer >= -3
+		var:te_tax_pb_exp_fertilizer >= -3
+		var:te_tax_pb_imp_fine_art >= -3
+		var:te_tax_pb_exp_fine_art >= -3
+		var:te_tax_pb_imp_fish >= -3
+		var:te_tax_pb_exp_fish >= -3
+		var:te_tax_pb_imp_fruit >= -3
+		var:te_tax_pb_exp_fruit >= -3
+		var:te_tax_pb_imp_furniture >= -3
+		var:te_tax_pb_exp_furniture >= -3
+		var:te_tax_pb_imp_glass >= -3
+		var:te_tax_pb_exp_glass >= -3
+		var:te_tax_pb_imp_grain >= -3
+		var:te_tax_pb_exp_grain >= -3
+		var:te_tax_pb_imp_groceries >= -3
+		var:te_tax_pb_exp_groceries >= -3
+		var:te_tax_pb_imp_hardwood >= -3
+		var:te_tax_pb_exp_hardwood >= -3
+		var:te_tax_pb_imp_iron >= -3
+		var:te_tax_pb_exp_iron >= -3
+		var:te_tax_pb_imp_ironclads >= -3
+		var:te_tax_pb_exp_ironclads >= -3
+		var:te_tax_pb_imp_launch_capacity >= -3
+		var:te_tax_pb_exp_launch_capacity >= -3
+		var:te_tax_pb_imp_lead >= -3
+		var:te_tax_pb_exp_lead >= -3
+		var:te_tax_pb_imp_liquor >= -3
+		var:te_tax_pb_exp_liquor >= -3
+		var:te_tax_pb_imp_luxury_clothes >= -3
+		var:te_tax_pb_exp_luxury_clothes >= -3
+		var:te_tax_pb_imp_luxury_furniture >= -3
+		var:te_tax_pb_exp_luxury_furniture >= -3
+		var:te_tax_pb_imp_magnetic_drive_ships >= -3
+		var:te_tax_pb_exp_magnetic_drive_ships >= -3
+		var:te_tax_pb_imp_manowars >= -3
+		var:te_tax_pb_exp_manowars >= -3
+		var:te_tax_pb_imp_meat >= -3
+		var:te_tax_pb_exp_meat >= -3
+		var:te_tax_pb_imp_merchant_marine >= -3
+		var:te_tax_pb_exp_merchant_marine >= -3
+		var:te_tax_pb_imp_motor_ships >= -3
+		var:te_tax_pb_exp_motor_ships >= -3
+		var:te_tax_pb_imp_oil >= -3
+		var:te_tax_pb_exp_oil >= -3
+		var:te_tax_pb_imp_opium >= -3
+		var:te_tax_pb_exp_opium >= -3
+		var:te_tax_pb_imp_paper >= -3
+		var:te_tax_pb_exp_paper >= -3
+		var:te_tax_pb_imp_porcelain >= -3
+		var:te_tax_pb_exp_porcelain >= -3
+		var:te_tax_pb_imp_radios >= -3
+		var:te_tax_pb_exp_radios >= -3
+		var:te_tax_pb_imp_robotics >= -3
+		var:te_tax_pb_exp_robotics >= -3
+		var:te_tax_pb_imp_rubber >= -3
+		var:te_tax_pb_exp_rubber >= -3
+		var:te_tax_pb_imp_silk >= -3
+		var:te_tax_pb_exp_silk >= -3
+		var:te_tax_pb_imp_small_arms >= -3
+		var:te_tax_pb_exp_small_arms >= -3
+		var:te_tax_pb_imp_steamers >= -3
+		var:te_tax_pb_exp_steamers >= -3
+		var:te_tax_pb_imp_steel >= -3
+		var:te_tax_pb_exp_steel >= -3
+		var:te_tax_pb_imp_sugar >= -3
+		var:te_tax_pb_exp_sugar >= -3
+		var:te_tax_pb_imp_sulfur >= -3
+		var:te_tax_pb_exp_sulfur >= -3
+		var:te_tax_pb_imp_tanks >= -3
+		var:te_tax_pb_exp_tanks >= -3
+		var:te_tax_pb_imp_tea >= -3
+		var:te_tax_pb_exp_tea >= -3
+		var:te_tax_pb_imp_tech_metals >= -3
+		var:te_tax_pb_exp_tech_metals >= -3
+		var:te_tax_pb_imp_telephones >= -3
+		var:te_tax_pb_exp_telephones >= -3
+		var:te_tax_pb_imp_tobacco >= -3
+		var:te_tax_pb_exp_tobacco >= -3
+		var:te_tax_pb_imp_tools >= -3
+		var:te_tax_pb_exp_tools >= -3
+		var:te_tax_pb_imp_tourism >= -3
+		var:te_tax_pb_exp_tourism >= -3
+		var:te_tax_pb_imp_wine >= -3
+		var:te_tax_pb_exp_wine >= -3
+		var:te_tax_pb_imp_wood >= -3
+		var:te_tax_pb_exp_wood >= -3
+	}
+}
+
 # Slot b, country scope: every provision group the package touches still has the
 # external-change token it had at approval. Only a non-legislative change bumps
 # te_tax_xver_*, so expected sunsets and other packages never make it stale.
@@ -1000,6 +1260,10 @@ te_tax_gen_package_current_b = {
 			var:te_tax_pb_regrel < 0
 		}
 		var:te_tax_pb_xver_relief = var:te_tax_xver_relief
+	}
+	OR = {
+		NOT = { te_tax_gen_package_touches_customs_b = yes }
+		AND = { has_variable = te_tax_xver_customs var:te_tax_pb_xver_customs = var:te_tax_xver_customs }
 	}
 }
 
@@ -1050,6 +1314,7 @@ te_tax_gen_draft_touches_any = {
 		te_tax_gen_draft_touches_goods = yes
 		var:te_tax_dr_agrel >= 0
 		var:te_tax_dr_regrel >= 0
+		te_tax_gen_draft_touches_customs = yes
 	}
 }
 
@@ -1098,6 +1363,134 @@ te_tax_gen_draft_touches_goods = {
 	}
 }
 
+# The draft changes at least one customs level (plan Task 15): its customs fields exist
+# under the customs option only, with the record's customs marker; -99 leaves a level alone.
+te_tax_gen_draft_touches_customs = {
+	has_variable = te_tax_dr_customs_pver
+	OR = {
+		var:te_tax_dr_imp_advanced_materials >= -3
+		var:te_tax_dr_exp_advanced_materials >= -3
+		var:te_tax_dr_imp_aeroplanes >= -3
+		var:te_tax_dr_exp_aeroplanes >= -3
+		var:te_tax_dr_imp_ammunition >= -3
+		var:te_tax_dr_exp_ammunition >= -3
+		var:te_tax_dr_imp_artillery >= -3
+		var:te_tax_dr_exp_artillery >= -3
+		var:te_tax_dr_imp_automobiles >= -3
+		var:te_tax_dr_exp_automobiles >= -3
+		var:te_tax_dr_imp_clippers >= -3
+		var:te_tax_dr_exp_clippers >= -3
+		var:te_tax_dr_imp_clothes >= -3
+		var:te_tax_dr_exp_clothes >= -3
+		var:te_tax_dr_imp_coal >= -3
+		var:te_tax_dr_exp_coal >= -3
+		var:te_tax_dr_imp_coffee >= -3
+		var:te_tax_dr_exp_coffee >= -3
+		var:te_tax_dr_imp_construction >= -3
+		var:te_tax_dr_exp_construction >= -3
+		var:te_tax_dr_imp_consumer_appliances >= -3
+		var:te_tax_dr_exp_consumer_appliances >= -3
+		var:te_tax_dr_imp_digital_assets >= -3
+		var:te_tax_dr_exp_digital_assets >= -3
+		var:te_tax_dr_imp_dye >= -3
+		var:te_tax_dr_exp_dye >= -3
+		var:te_tax_dr_imp_electronic_components >= -3
+		var:te_tax_dr_exp_electronic_components >= -3
+		var:te_tax_dr_imp_engines >= -3
+		var:te_tax_dr_exp_engines >= -3
+		var:te_tax_dr_imp_explosives >= -3
+		var:te_tax_dr_exp_explosives >= -3
+		var:te_tax_dr_imp_fabric >= -3
+		var:te_tax_dr_exp_fabric >= -3
+		var:te_tax_dr_imp_fertilizer >= -3
+		var:te_tax_dr_exp_fertilizer >= -3
+		var:te_tax_dr_imp_fine_art >= -3
+		var:te_tax_dr_exp_fine_art >= -3
+		var:te_tax_dr_imp_fish >= -3
+		var:te_tax_dr_exp_fish >= -3
+		var:te_tax_dr_imp_fruit >= -3
+		var:te_tax_dr_exp_fruit >= -3
+		var:te_tax_dr_imp_furniture >= -3
+		var:te_tax_dr_exp_furniture >= -3
+		var:te_tax_dr_imp_glass >= -3
+		var:te_tax_dr_exp_glass >= -3
+		var:te_tax_dr_imp_grain >= -3
+		var:te_tax_dr_exp_grain >= -3
+		var:te_tax_dr_imp_groceries >= -3
+		var:te_tax_dr_exp_groceries >= -3
+		var:te_tax_dr_imp_hardwood >= -3
+		var:te_tax_dr_exp_hardwood >= -3
+		var:te_tax_dr_imp_iron >= -3
+		var:te_tax_dr_exp_iron >= -3
+		var:te_tax_dr_imp_ironclads >= -3
+		var:te_tax_dr_exp_ironclads >= -3
+		var:te_tax_dr_imp_launch_capacity >= -3
+		var:te_tax_dr_exp_launch_capacity >= -3
+		var:te_tax_dr_imp_lead >= -3
+		var:te_tax_dr_exp_lead >= -3
+		var:te_tax_dr_imp_liquor >= -3
+		var:te_tax_dr_exp_liquor >= -3
+		var:te_tax_dr_imp_luxury_clothes >= -3
+		var:te_tax_dr_exp_luxury_clothes >= -3
+		var:te_tax_dr_imp_luxury_furniture >= -3
+		var:te_tax_dr_exp_luxury_furniture >= -3
+		var:te_tax_dr_imp_magnetic_drive_ships >= -3
+		var:te_tax_dr_exp_magnetic_drive_ships >= -3
+		var:te_tax_dr_imp_manowars >= -3
+		var:te_tax_dr_exp_manowars >= -3
+		var:te_tax_dr_imp_meat >= -3
+		var:te_tax_dr_exp_meat >= -3
+		var:te_tax_dr_imp_merchant_marine >= -3
+		var:te_tax_dr_exp_merchant_marine >= -3
+		var:te_tax_dr_imp_motor_ships >= -3
+		var:te_tax_dr_exp_motor_ships >= -3
+		var:te_tax_dr_imp_oil >= -3
+		var:te_tax_dr_exp_oil >= -3
+		var:te_tax_dr_imp_opium >= -3
+		var:te_tax_dr_exp_opium >= -3
+		var:te_tax_dr_imp_paper >= -3
+		var:te_tax_dr_exp_paper >= -3
+		var:te_tax_dr_imp_porcelain >= -3
+		var:te_tax_dr_exp_porcelain >= -3
+		var:te_tax_dr_imp_radios >= -3
+		var:te_tax_dr_exp_radios >= -3
+		var:te_tax_dr_imp_robotics >= -3
+		var:te_tax_dr_exp_robotics >= -3
+		var:te_tax_dr_imp_rubber >= -3
+		var:te_tax_dr_exp_rubber >= -3
+		var:te_tax_dr_imp_silk >= -3
+		var:te_tax_dr_exp_silk >= -3
+		var:te_tax_dr_imp_small_arms >= -3
+		var:te_tax_dr_exp_small_arms >= -3
+		var:te_tax_dr_imp_steamers >= -3
+		var:te_tax_dr_exp_steamers >= -3
+		var:te_tax_dr_imp_steel >= -3
+		var:te_tax_dr_exp_steel >= -3
+		var:te_tax_dr_imp_sugar >= -3
+		var:te_tax_dr_exp_sugar >= -3
+		var:te_tax_dr_imp_sulfur >= -3
+		var:te_tax_dr_exp_sulfur >= -3
+		var:te_tax_dr_imp_tanks >= -3
+		var:te_tax_dr_exp_tanks >= -3
+		var:te_tax_dr_imp_tea >= -3
+		var:te_tax_dr_exp_tea >= -3
+		var:te_tax_dr_imp_tech_metals >= -3
+		var:te_tax_dr_exp_tech_metals >= -3
+		var:te_tax_dr_imp_telephones >= -3
+		var:te_tax_dr_exp_telephones >= -3
+		var:te_tax_dr_imp_tobacco >= -3
+		var:te_tax_dr_exp_tobacco >= -3
+		var:te_tax_dr_imp_tools >= -3
+		var:te_tax_dr_exp_tools >= -3
+		var:te_tax_dr_imp_tourism >= -3
+		var:te_tax_dr_exp_tourism >= -3
+		var:te_tax_dr_imp_wine >= -3
+		var:te_tax_dr_exp_wine >= -3
+		var:te_tax_dr_imp_wood >= -3
+		var:te_tax_dr_exp_wood >= -3
+	}
+}
+
 # The bill changes at least one taxed good.
 te_tax_gen_bill_touches_goods = {
 	OR = {
@@ -1143,6 +1536,134 @@ te_tax_gen_bill_touches_goods = {
 	}
 }
 
+# The bill changes at least one customs level (plan Task 15): its customs fields exist
+# under the customs option only, with the record's customs marker; -99 leaves a level alone.
+te_tax_gen_bill_touches_customs = {
+	has_variable = te_tax_bl_customs_pver
+	OR = {
+		var:te_tax_bl_imp_advanced_materials >= -3
+		var:te_tax_bl_exp_advanced_materials >= -3
+		var:te_tax_bl_imp_aeroplanes >= -3
+		var:te_tax_bl_exp_aeroplanes >= -3
+		var:te_tax_bl_imp_ammunition >= -3
+		var:te_tax_bl_exp_ammunition >= -3
+		var:te_tax_bl_imp_artillery >= -3
+		var:te_tax_bl_exp_artillery >= -3
+		var:te_tax_bl_imp_automobiles >= -3
+		var:te_tax_bl_exp_automobiles >= -3
+		var:te_tax_bl_imp_clippers >= -3
+		var:te_tax_bl_exp_clippers >= -3
+		var:te_tax_bl_imp_clothes >= -3
+		var:te_tax_bl_exp_clothes >= -3
+		var:te_tax_bl_imp_coal >= -3
+		var:te_tax_bl_exp_coal >= -3
+		var:te_tax_bl_imp_coffee >= -3
+		var:te_tax_bl_exp_coffee >= -3
+		var:te_tax_bl_imp_construction >= -3
+		var:te_tax_bl_exp_construction >= -3
+		var:te_tax_bl_imp_consumer_appliances >= -3
+		var:te_tax_bl_exp_consumer_appliances >= -3
+		var:te_tax_bl_imp_digital_assets >= -3
+		var:te_tax_bl_exp_digital_assets >= -3
+		var:te_tax_bl_imp_dye >= -3
+		var:te_tax_bl_exp_dye >= -3
+		var:te_tax_bl_imp_electronic_components >= -3
+		var:te_tax_bl_exp_electronic_components >= -3
+		var:te_tax_bl_imp_engines >= -3
+		var:te_tax_bl_exp_engines >= -3
+		var:te_tax_bl_imp_explosives >= -3
+		var:te_tax_bl_exp_explosives >= -3
+		var:te_tax_bl_imp_fabric >= -3
+		var:te_tax_bl_exp_fabric >= -3
+		var:te_tax_bl_imp_fertilizer >= -3
+		var:te_tax_bl_exp_fertilizer >= -3
+		var:te_tax_bl_imp_fine_art >= -3
+		var:te_tax_bl_exp_fine_art >= -3
+		var:te_tax_bl_imp_fish >= -3
+		var:te_tax_bl_exp_fish >= -3
+		var:te_tax_bl_imp_fruit >= -3
+		var:te_tax_bl_exp_fruit >= -3
+		var:te_tax_bl_imp_furniture >= -3
+		var:te_tax_bl_exp_furniture >= -3
+		var:te_tax_bl_imp_glass >= -3
+		var:te_tax_bl_exp_glass >= -3
+		var:te_tax_bl_imp_grain >= -3
+		var:te_tax_bl_exp_grain >= -3
+		var:te_tax_bl_imp_groceries >= -3
+		var:te_tax_bl_exp_groceries >= -3
+		var:te_tax_bl_imp_hardwood >= -3
+		var:te_tax_bl_exp_hardwood >= -3
+		var:te_tax_bl_imp_iron >= -3
+		var:te_tax_bl_exp_iron >= -3
+		var:te_tax_bl_imp_ironclads >= -3
+		var:te_tax_bl_exp_ironclads >= -3
+		var:te_tax_bl_imp_launch_capacity >= -3
+		var:te_tax_bl_exp_launch_capacity >= -3
+		var:te_tax_bl_imp_lead >= -3
+		var:te_tax_bl_exp_lead >= -3
+		var:te_tax_bl_imp_liquor >= -3
+		var:te_tax_bl_exp_liquor >= -3
+		var:te_tax_bl_imp_luxury_clothes >= -3
+		var:te_tax_bl_exp_luxury_clothes >= -3
+		var:te_tax_bl_imp_luxury_furniture >= -3
+		var:te_tax_bl_exp_luxury_furniture >= -3
+		var:te_tax_bl_imp_magnetic_drive_ships >= -3
+		var:te_tax_bl_exp_magnetic_drive_ships >= -3
+		var:te_tax_bl_imp_manowars >= -3
+		var:te_tax_bl_exp_manowars >= -3
+		var:te_tax_bl_imp_meat >= -3
+		var:te_tax_bl_exp_meat >= -3
+		var:te_tax_bl_imp_merchant_marine >= -3
+		var:te_tax_bl_exp_merchant_marine >= -3
+		var:te_tax_bl_imp_motor_ships >= -3
+		var:te_tax_bl_exp_motor_ships >= -3
+		var:te_tax_bl_imp_oil >= -3
+		var:te_tax_bl_exp_oil >= -3
+		var:te_tax_bl_imp_opium >= -3
+		var:te_tax_bl_exp_opium >= -3
+		var:te_tax_bl_imp_paper >= -3
+		var:te_tax_bl_exp_paper >= -3
+		var:te_tax_bl_imp_porcelain >= -3
+		var:te_tax_bl_exp_porcelain >= -3
+		var:te_tax_bl_imp_radios >= -3
+		var:te_tax_bl_exp_radios >= -3
+		var:te_tax_bl_imp_robotics >= -3
+		var:te_tax_bl_exp_robotics >= -3
+		var:te_tax_bl_imp_rubber >= -3
+		var:te_tax_bl_exp_rubber >= -3
+		var:te_tax_bl_imp_silk >= -3
+		var:te_tax_bl_exp_silk >= -3
+		var:te_tax_bl_imp_small_arms >= -3
+		var:te_tax_bl_exp_small_arms >= -3
+		var:te_tax_bl_imp_steamers >= -3
+		var:te_tax_bl_exp_steamers >= -3
+		var:te_tax_bl_imp_steel >= -3
+		var:te_tax_bl_exp_steel >= -3
+		var:te_tax_bl_imp_sugar >= -3
+		var:te_tax_bl_exp_sugar >= -3
+		var:te_tax_bl_imp_sulfur >= -3
+		var:te_tax_bl_exp_sulfur >= -3
+		var:te_tax_bl_imp_tanks >= -3
+		var:te_tax_bl_exp_tanks >= -3
+		var:te_tax_bl_imp_tea >= -3
+		var:te_tax_bl_exp_tea >= -3
+		var:te_tax_bl_imp_tech_metals >= -3
+		var:te_tax_bl_exp_tech_metals >= -3
+		var:te_tax_bl_imp_telephones >= -3
+		var:te_tax_bl_exp_telephones >= -3
+		var:te_tax_bl_imp_tobacco >= -3
+		var:te_tax_bl_exp_tobacco >= -3
+		var:te_tax_bl_imp_tools >= -3
+		var:te_tax_bl_exp_tools >= -3
+		var:te_tax_bl_imp_tourism >= -3
+		var:te_tax_bl_exp_tourism >= -3
+		var:te_tax_bl_imp_wine >= -3
+		var:te_tax_bl_exp_wine >= -3
+		var:te_tax_bl_imp_wood >= -3
+		var:te_tax_bl_exp_wood >= -3
+	}
+}
+
 # Every provision the draft changes still has the planned version it had when first
 # touched (te_tax_cmd_draft_rebase acknowledges a change).
 te_tax_gen_draft_baseline_current = {
@@ -1173,6 +1694,10 @@ te_tax_gen_draft_baseline_current = {
 	OR = {
 		AND = { var:te_tax_dr_agrel < 0 var:te_tax_dr_regrel < 0 }
 		var:te_tax_dr_relief_pver = var:te_tax_pver_relief
+	}
+	OR = {
+		NOT = { te_tax_gen_draft_touches_customs = yes }
+		AND = { has_variable = te_tax_pver_customs var:te_tax_dr_customs_pver = var:te_tax_pver_customs }
 	}
 }
 
@@ -1234,6 +1759,7 @@ te_tax_gen_draft_differs_from_bill = {
 		NOT = { var:te_tax_dr_regrel = var:te_tax_bl_regrel }
 		AND = { has_variable_list = te_tax_dr_relief_states any_in_list = { variable = te_tax_dr_relief_states PREV = { NOT = { is_target_in_variable_list = { name = te_tax_bl_relief_states target = PREV } } } } }
 		AND = { has_variable_list = te_tax_bl_relief_states any_in_list = { variable = te_tax_bl_relief_states PREV = { NOT = { is_target_in_variable_list = { name = te_tax_dr_relief_states target = PREV } } } } }
+		AND = { has_variable = te_tax_dr_customs_pver has_variable = te_tax_bl_customs_pver OR = { NOT = { var:te_tax_dr_imp_advanced_materials = var:te_tax_bl_imp_advanced_materials } NOT = { var:te_tax_dr_exp_advanced_materials = var:te_tax_bl_exp_advanced_materials } NOT = { var:te_tax_dr_imp_aeroplanes = var:te_tax_bl_imp_aeroplanes } NOT = { var:te_tax_dr_exp_aeroplanes = var:te_tax_bl_exp_aeroplanes } NOT = { var:te_tax_dr_imp_ammunition = var:te_tax_bl_imp_ammunition } NOT = { var:te_tax_dr_exp_ammunition = var:te_tax_bl_exp_ammunition } NOT = { var:te_tax_dr_imp_artillery = var:te_tax_bl_imp_artillery } NOT = { var:te_tax_dr_exp_artillery = var:te_tax_bl_exp_artillery } NOT = { var:te_tax_dr_imp_automobiles = var:te_tax_bl_imp_automobiles } NOT = { var:te_tax_dr_exp_automobiles = var:te_tax_bl_exp_automobiles } NOT = { var:te_tax_dr_imp_clippers = var:te_tax_bl_imp_clippers } NOT = { var:te_tax_dr_exp_clippers = var:te_tax_bl_exp_clippers } NOT = { var:te_tax_dr_imp_clothes = var:te_tax_bl_imp_clothes } NOT = { var:te_tax_dr_exp_clothes = var:te_tax_bl_exp_clothes } NOT = { var:te_tax_dr_imp_coal = var:te_tax_bl_imp_coal } NOT = { var:te_tax_dr_exp_coal = var:te_tax_bl_exp_coal } NOT = { var:te_tax_dr_imp_coffee = var:te_tax_bl_imp_coffee } NOT = { var:te_tax_dr_exp_coffee = var:te_tax_bl_exp_coffee } NOT = { var:te_tax_dr_imp_construction = var:te_tax_bl_imp_construction } NOT = { var:te_tax_dr_exp_construction = var:te_tax_bl_exp_construction } NOT = { var:te_tax_dr_imp_consumer_appliances = var:te_tax_bl_imp_consumer_appliances } NOT = { var:te_tax_dr_exp_consumer_appliances = var:te_tax_bl_exp_consumer_appliances } NOT = { var:te_tax_dr_imp_digital_assets = var:te_tax_bl_imp_digital_assets } NOT = { var:te_tax_dr_exp_digital_assets = var:te_tax_bl_exp_digital_assets } NOT = { var:te_tax_dr_imp_dye = var:te_tax_bl_imp_dye } NOT = { var:te_tax_dr_exp_dye = var:te_tax_bl_exp_dye } NOT = { var:te_tax_dr_imp_electronic_components = var:te_tax_bl_imp_electronic_components } NOT = { var:te_tax_dr_exp_electronic_components = var:te_tax_bl_exp_electronic_components } NOT = { var:te_tax_dr_imp_engines = var:te_tax_bl_imp_engines } NOT = { var:te_tax_dr_exp_engines = var:te_tax_bl_exp_engines } NOT = { var:te_tax_dr_imp_explosives = var:te_tax_bl_imp_explosives } NOT = { var:te_tax_dr_exp_explosives = var:te_tax_bl_exp_explosives } NOT = { var:te_tax_dr_imp_fabric = var:te_tax_bl_imp_fabric } NOT = { var:te_tax_dr_exp_fabric = var:te_tax_bl_exp_fabric } NOT = { var:te_tax_dr_imp_fertilizer = var:te_tax_bl_imp_fertilizer } NOT = { var:te_tax_dr_exp_fertilizer = var:te_tax_bl_exp_fertilizer } NOT = { var:te_tax_dr_imp_fine_art = var:te_tax_bl_imp_fine_art } NOT = { var:te_tax_dr_exp_fine_art = var:te_tax_bl_exp_fine_art } NOT = { var:te_tax_dr_imp_fish = var:te_tax_bl_imp_fish } NOT = { var:te_tax_dr_exp_fish = var:te_tax_bl_exp_fish } NOT = { var:te_tax_dr_imp_fruit = var:te_tax_bl_imp_fruit } NOT = { var:te_tax_dr_exp_fruit = var:te_tax_bl_exp_fruit } NOT = { var:te_tax_dr_imp_furniture = var:te_tax_bl_imp_furniture } NOT = { var:te_tax_dr_exp_furniture = var:te_tax_bl_exp_furniture } NOT = { var:te_tax_dr_imp_glass = var:te_tax_bl_imp_glass } NOT = { var:te_tax_dr_exp_glass = var:te_tax_bl_exp_glass } NOT = { var:te_tax_dr_imp_grain = var:te_tax_bl_imp_grain } NOT = { var:te_tax_dr_exp_grain = var:te_tax_bl_exp_grain } NOT = { var:te_tax_dr_imp_groceries = var:te_tax_bl_imp_groceries } NOT = { var:te_tax_dr_exp_groceries = var:te_tax_bl_exp_groceries } NOT = { var:te_tax_dr_imp_hardwood = var:te_tax_bl_imp_hardwood } NOT = { var:te_tax_dr_exp_hardwood = var:te_tax_bl_exp_hardwood } NOT = { var:te_tax_dr_imp_iron = var:te_tax_bl_imp_iron } NOT = { var:te_tax_dr_exp_iron = var:te_tax_bl_exp_iron } NOT = { var:te_tax_dr_imp_ironclads = var:te_tax_bl_imp_ironclads } NOT = { var:te_tax_dr_exp_ironclads = var:te_tax_bl_exp_ironclads } NOT = { var:te_tax_dr_imp_launch_capacity = var:te_tax_bl_imp_launch_capacity } NOT = { var:te_tax_dr_exp_launch_capacity = var:te_tax_bl_exp_launch_capacity } NOT = { var:te_tax_dr_imp_lead = var:te_tax_bl_imp_lead } NOT = { var:te_tax_dr_exp_lead = var:te_tax_bl_exp_lead } NOT = { var:te_tax_dr_imp_liquor = var:te_tax_bl_imp_liquor } NOT = { var:te_tax_dr_exp_liquor = var:te_tax_bl_exp_liquor } NOT = { var:te_tax_dr_imp_luxury_clothes = var:te_tax_bl_imp_luxury_clothes } NOT = { var:te_tax_dr_exp_luxury_clothes = var:te_tax_bl_exp_luxury_clothes } NOT = { var:te_tax_dr_imp_luxury_furniture = var:te_tax_bl_imp_luxury_furniture } NOT = { var:te_tax_dr_exp_luxury_furniture = var:te_tax_bl_exp_luxury_furniture } NOT = { var:te_tax_dr_imp_magnetic_drive_ships = var:te_tax_bl_imp_magnetic_drive_ships } NOT = { var:te_tax_dr_exp_magnetic_drive_ships = var:te_tax_bl_exp_magnetic_drive_ships } NOT = { var:te_tax_dr_imp_manowars = var:te_tax_bl_imp_manowars } NOT = { var:te_tax_dr_exp_manowars = var:te_tax_bl_exp_manowars } NOT = { var:te_tax_dr_imp_meat = var:te_tax_bl_imp_meat } NOT = { var:te_tax_dr_exp_meat = var:te_tax_bl_exp_meat } NOT = { var:te_tax_dr_imp_merchant_marine = var:te_tax_bl_imp_merchant_marine } NOT = { var:te_tax_dr_exp_merchant_marine = var:te_tax_bl_exp_merchant_marine } NOT = { var:te_tax_dr_imp_motor_ships = var:te_tax_bl_imp_motor_ships } NOT = { var:te_tax_dr_exp_motor_ships = var:te_tax_bl_exp_motor_ships } NOT = { var:te_tax_dr_imp_oil = var:te_tax_bl_imp_oil } NOT = { var:te_tax_dr_exp_oil = var:te_tax_bl_exp_oil } NOT = { var:te_tax_dr_imp_opium = var:te_tax_bl_imp_opium } NOT = { var:te_tax_dr_exp_opium = var:te_tax_bl_exp_opium } NOT = { var:te_tax_dr_imp_paper = var:te_tax_bl_imp_paper } NOT = { var:te_tax_dr_exp_paper = var:te_tax_bl_exp_paper } NOT = { var:te_tax_dr_imp_porcelain = var:te_tax_bl_imp_porcelain } NOT = { var:te_tax_dr_exp_porcelain = var:te_tax_bl_exp_porcelain } NOT = { var:te_tax_dr_imp_radios = var:te_tax_bl_imp_radios } NOT = { var:te_tax_dr_exp_radios = var:te_tax_bl_exp_radios } NOT = { var:te_tax_dr_imp_robotics = var:te_tax_bl_imp_robotics } NOT = { var:te_tax_dr_exp_robotics = var:te_tax_bl_exp_robotics } NOT = { var:te_tax_dr_imp_rubber = var:te_tax_bl_imp_rubber } NOT = { var:te_tax_dr_exp_rubber = var:te_tax_bl_exp_rubber } NOT = { var:te_tax_dr_imp_silk = var:te_tax_bl_imp_silk } NOT = { var:te_tax_dr_exp_silk = var:te_tax_bl_exp_silk } NOT = { var:te_tax_dr_imp_small_arms = var:te_tax_bl_imp_small_arms } NOT = { var:te_tax_dr_exp_small_arms = var:te_tax_bl_exp_small_arms } NOT = { var:te_tax_dr_imp_steamers = var:te_tax_bl_imp_steamers } NOT = { var:te_tax_dr_exp_steamers = var:te_tax_bl_exp_steamers } NOT = { var:te_tax_dr_imp_steel = var:te_tax_bl_imp_steel } NOT = { var:te_tax_dr_exp_steel = var:te_tax_bl_exp_steel } NOT = { var:te_tax_dr_imp_sugar = var:te_tax_bl_imp_sugar } NOT = { var:te_tax_dr_exp_sugar = var:te_tax_bl_exp_sugar } NOT = { var:te_tax_dr_imp_sulfur = var:te_tax_bl_imp_sulfur } NOT = { var:te_tax_dr_exp_sulfur = var:te_tax_bl_exp_sulfur } NOT = { var:te_tax_dr_imp_tanks = var:te_tax_bl_imp_tanks } NOT = { var:te_tax_dr_exp_tanks = var:te_tax_bl_exp_tanks } NOT = { var:te_tax_dr_imp_tea = var:te_tax_bl_imp_tea } NOT = { var:te_tax_dr_exp_tea = var:te_tax_bl_exp_tea } NOT = { var:te_tax_dr_imp_tech_metals = var:te_tax_bl_imp_tech_metals } NOT = { var:te_tax_dr_exp_tech_metals = var:te_tax_bl_exp_tech_metals } NOT = { var:te_tax_dr_imp_telephones = var:te_tax_bl_imp_telephones } NOT = { var:te_tax_dr_exp_telephones = var:te_tax_bl_exp_telephones } NOT = { var:te_tax_dr_imp_tobacco = var:te_tax_bl_imp_tobacco } NOT = { var:te_tax_dr_exp_tobacco = var:te_tax_bl_exp_tobacco } NOT = { var:te_tax_dr_imp_tools = var:te_tax_bl_imp_tools } NOT = { var:te_tax_dr_exp_tools = var:te_tax_bl_exp_tools } NOT = { var:te_tax_dr_imp_tourism = var:te_tax_bl_imp_tourism } NOT = { var:te_tax_dr_exp_tourism = var:te_tax_bl_exp_tourism } NOT = { var:te_tax_dr_imp_wine = var:te_tax_bl_imp_wine } NOT = { var:te_tax_dr_exp_wine = var:te_tax_bl_exp_wine } NOT = { var:te_tax_dr_imp_wood = var:te_tax_bl_imp_wood } NOT = { var:te_tax_dr_exp_wood = var:te_tax_bl_exp_wood } } }
 	}
 }
 
@@ -1267,6 +1793,10 @@ te_tax_gen_bill_current = {
 	OR = {
 		AND = { var:te_tax_bl_agrel < 0 var:te_tax_bl_regrel < 0 }
 		var:te_tax_bl_xver_relief = var:te_tax_xver_relief
+	}
+	OR = {
+		NOT = { te_tax_gen_bill_touches_customs = yes }
+		AND = { has_variable = te_tax_xver_customs var:te_tax_bl_xver_customs = var:te_tax_xver_customs }
 	}
 }
 
@@ -1367,6 +1897,7 @@ te_tax_gen_bill_overlaps_a = {
 		AND = { var:te_tax_bl_g_wood >= 0 var:te_tax_pa_g_wood >= 0 }
 		AND = { var:te_tax_bl_agrel >= 0 var:te_tax_pa_agrel >= 0 }
 		AND = { var:te_tax_bl_regrel >= 0 var:te_tax_pa_regrel >= 0 }
+		AND = { has_variable = te_tax_bl_customs_pver has_variable = te_tax_pa_pver_customs OR = { AND = { var:te_tax_bl_imp_advanced_materials >= -3 var:te_tax_pa_imp_advanced_materials >= -3 } AND = { var:te_tax_bl_exp_advanced_materials >= -3 var:te_tax_pa_exp_advanced_materials >= -3 } AND = { var:te_tax_bl_imp_aeroplanes >= -3 var:te_tax_pa_imp_aeroplanes >= -3 } AND = { var:te_tax_bl_exp_aeroplanes >= -3 var:te_tax_pa_exp_aeroplanes >= -3 } AND = { var:te_tax_bl_imp_ammunition >= -3 var:te_tax_pa_imp_ammunition >= -3 } AND = { var:te_tax_bl_exp_ammunition >= -3 var:te_tax_pa_exp_ammunition >= -3 } AND = { var:te_tax_bl_imp_artillery >= -3 var:te_tax_pa_imp_artillery >= -3 } AND = { var:te_tax_bl_exp_artillery >= -3 var:te_tax_pa_exp_artillery >= -3 } AND = { var:te_tax_bl_imp_automobiles >= -3 var:te_tax_pa_imp_automobiles >= -3 } AND = { var:te_tax_bl_exp_automobiles >= -3 var:te_tax_pa_exp_automobiles >= -3 } AND = { var:te_tax_bl_imp_clippers >= -3 var:te_tax_pa_imp_clippers >= -3 } AND = { var:te_tax_bl_exp_clippers >= -3 var:te_tax_pa_exp_clippers >= -3 } AND = { var:te_tax_bl_imp_clothes >= -3 var:te_tax_pa_imp_clothes >= -3 } AND = { var:te_tax_bl_exp_clothes >= -3 var:te_tax_pa_exp_clothes >= -3 } AND = { var:te_tax_bl_imp_coal >= -3 var:te_tax_pa_imp_coal >= -3 } AND = { var:te_tax_bl_exp_coal >= -3 var:te_tax_pa_exp_coal >= -3 } AND = { var:te_tax_bl_imp_coffee >= -3 var:te_tax_pa_imp_coffee >= -3 } AND = { var:te_tax_bl_exp_coffee >= -3 var:te_tax_pa_exp_coffee >= -3 } AND = { var:te_tax_bl_imp_construction >= -3 var:te_tax_pa_imp_construction >= -3 } AND = { var:te_tax_bl_exp_construction >= -3 var:te_tax_pa_exp_construction >= -3 } AND = { var:te_tax_bl_imp_consumer_appliances >= -3 var:te_tax_pa_imp_consumer_appliances >= -3 } AND = { var:te_tax_bl_exp_consumer_appliances >= -3 var:te_tax_pa_exp_consumer_appliances >= -3 } AND = { var:te_tax_bl_imp_digital_assets >= -3 var:te_tax_pa_imp_digital_assets >= -3 } AND = { var:te_tax_bl_exp_digital_assets >= -3 var:te_tax_pa_exp_digital_assets >= -3 } AND = { var:te_tax_bl_imp_dye >= -3 var:te_tax_pa_imp_dye >= -3 } AND = { var:te_tax_bl_exp_dye >= -3 var:te_tax_pa_exp_dye >= -3 } AND = { var:te_tax_bl_imp_electronic_components >= -3 var:te_tax_pa_imp_electronic_components >= -3 } AND = { var:te_tax_bl_exp_electronic_components >= -3 var:te_tax_pa_exp_electronic_components >= -3 } AND = { var:te_tax_bl_imp_engines >= -3 var:te_tax_pa_imp_engines >= -3 } AND = { var:te_tax_bl_exp_engines >= -3 var:te_tax_pa_exp_engines >= -3 } AND = { var:te_tax_bl_imp_explosives >= -3 var:te_tax_pa_imp_explosives >= -3 } AND = { var:te_tax_bl_exp_explosives >= -3 var:te_tax_pa_exp_explosives >= -3 } AND = { var:te_tax_bl_imp_fabric >= -3 var:te_tax_pa_imp_fabric >= -3 } AND = { var:te_tax_bl_exp_fabric >= -3 var:te_tax_pa_exp_fabric >= -3 } AND = { var:te_tax_bl_imp_fertilizer >= -3 var:te_tax_pa_imp_fertilizer >= -3 } AND = { var:te_tax_bl_exp_fertilizer >= -3 var:te_tax_pa_exp_fertilizer >= -3 } AND = { var:te_tax_bl_imp_fine_art >= -3 var:te_tax_pa_imp_fine_art >= -3 } AND = { var:te_tax_bl_exp_fine_art >= -3 var:te_tax_pa_exp_fine_art >= -3 } AND = { var:te_tax_bl_imp_fish >= -3 var:te_tax_pa_imp_fish >= -3 } AND = { var:te_tax_bl_exp_fish >= -3 var:te_tax_pa_exp_fish >= -3 } AND = { var:te_tax_bl_imp_fruit >= -3 var:te_tax_pa_imp_fruit >= -3 } AND = { var:te_tax_bl_exp_fruit >= -3 var:te_tax_pa_exp_fruit >= -3 } AND = { var:te_tax_bl_imp_furniture >= -3 var:te_tax_pa_imp_furniture >= -3 } AND = { var:te_tax_bl_exp_furniture >= -3 var:te_tax_pa_exp_furniture >= -3 } AND = { var:te_tax_bl_imp_glass >= -3 var:te_tax_pa_imp_glass >= -3 } AND = { var:te_tax_bl_exp_glass >= -3 var:te_tax_pa_exp_glass >= -3 } AND = { var:te_tax_bl_imp_grain >= -3 var:te_tax_pa_imp_grain >= -3 } AND = { var:te_tax_bl_exp_grain >= -3 var:te_tax_pa_exp_grain >= -3 } AND = { var:te_tax_bl_imp_groceries >= -3 var:te_tax_pa_imp_groceries >= -3 } AND = { var:te_tax_bl_exp_groceries >= -3 var:te_tax_pa_exp_groceries >= -3 } AND = { var:te_tax_bl_imp_hardwood >= -3 var:te_tax_pa_imp_hardwood >= -3 } AND = { var:te_tax_bl_exp_hardwood >= -3 var:te_tax_pa_exp_hardwood >= -3 } AND = { var:te_tax_bl_imp_iron >= -3 var:te_tax_pa_imp_iron >= -3 } AND = { var:te_tax_bl_exp_iron >= -3 var:te_tax_pa_exp_iron >= -3 } AND = { var:te_tax_bl_imp_ironclads >= -3 var:te_tax_pa_imp_ironclads >= -3 } AND = { var:te_tax_bl_exp_ironclads >= -3 var:te_tax_pa_exp_ironclads >= -3 } AND = { var:te_tax_bl_imp_launch_capacity >= -3 var:te_tax_pa_imp_launch_capacity >= -3 } AND = { var:te_tax_bl_exp_launch_capacity >= -3 var:te_tax_pa_exp_launch_capacity >= -3 } AND = { var:te_tax_bl_imp_lead >= -3 var:te_tax_pa_imp_lead >= -3 } AND = { var:te_tax_bl_exp_lead >= -3 var:te_tax_pa_exp_lead >= -3 } AND = { var:te_tax_bl_imp_liquor >= -3 var:te_tax_pa_imp_liquor >= -3 } AND = { var:te_tax_bl_exp_liquor >= -3 var:te_tax_pa_exp_liquor >= -3 } AND = { var:te_tax_bl_imp_luxury_clothes >= -3 var:te_tax_pa_imp_luxury_clothes >= -3 } AND = { var:te_tax_bl_exp_luxury_clothes >= -3 var:te_tax_pa_exp_luxury_clothes >= -3 } AND = { var:te_tax_bl_imp_luxury_furniture >= -3 var:te_tax_pa_imp_luxury_furniture >= -3 } AND = { var:te_tax_bl_exp_luxury_furniture >= -3 var:te_tax_pa_exp_luxury_furniture >= -3 } AND = { var:te_tax_bl_imp_magnetic_drive_ships >= -3 var:te_tax_pa_imp_magnetic_drive_ships >= -3 } AND = { var:te_tax_bl_exp_magnetic_drive_ships >= -3 var:te_tax_pa_exp_magnetic_drive_ships >= -3 } AND = { var:te_tax_bl_imp_manowars >= -3 var:te_tax_pa_imp_manowars >= -3 } AND = { var:te_tax_bl_exp_manowars >= -3 var:te_tax_pa_exp_manowars >= -3 } AND = { var:te_tax_bl_imp_meat >= -3 var:te_tax_pa_imp_meat >= -3 } AND = { var:te_tax_bl_exp_meat >= -3 var:te_tax_pa_exp_meat >= -3 } AND = { var:te_tax_bl_imp_merchant_marine >= -3 var:te_tax_pa_imp_merchant_marine >= -3 } AND = { var:te_tax_bl_exp_merchant_marine >= -3 var:te_tax_pa_exp_merchant_marine >= -3 } AND = { var:te_tax_bl_imp_motor_ships >= -3 var:te_tax_pa_imp_motor_ships >= -3 } AND = { var:te_tax_bl_exp_motor_ships >= -3 var:te_tax_pa_exp_motor_ships >= -3 } AND = { var:te_tax_bl_imp_oil >= -3 var:te_tax_pa_imp_oil >= -3 } AND = { var:te_tax_bl_exp_oil >= -3 var:te_tax_pa_exp_oil >= -3 } AND = { var:te_tax_bl_imp_opium >= -3 var:te_tax_pa_imp_opium >= -3 } AND = { var:te_tax_bl_exp_opium >= -3 var:te_tax_pa_exp_opium >= -3 } AND = { var:te_tax_bl_imp_paper >= -3 var:te_tax_pa_imp_paper >= -3 } AND = { var:te_tax_bl_exp_paper >= -3 var:te_tax_pa_exp_paper >= -3 } AND = { var:te_tax_bl_imp_porcelain >= -3 var:te_tax_pa_imp_porcelain >= -3 } AND = { var:te_tax_bl_exp_porcelain >= -3 var:te_tax_pa_exp_porcelain >= -3 } AND = { var:te_tax_bl_imp_radios >= -3 var:te_tax_pa_imp_radios >= -3 } AND = { var:te_tax_bl_exp_radios >= -3 var:te_tax_pa_exp_radios >= -3 } AND = { var:te_tax_bl_imp_robotics >= -3 var:te_tax_pa_imp_robotics >= -3 } AND = { var:te_tax_bl_exp_robotics >= -3 var:te_tax_pa_exp_robotics >= -3 } AND = { var:te_tax_bl_imp_rubber >= -3 var:te_tax_pa_imp_rubber >= -3 } AND = { var:te_tax_bl_exp_rubber >= -3 var:te_tax_pa_exp_rubber >= -3 } AND = { var:te_tax_bl_imp_silk >= -3 var:te_tax_pa_imp_silk >= -3 } AND = { var:te_tax_bl_exp_silk >= -3 var:te_tax_pa_exp_silk >= -3 } AND = { var:te_tax_bl_imp_small_arms >= -3 var:te_tax_pa_imp_small_arms >= -3 } AND = { var:te_tax_bl_exp_small_arms >= -3 var:te_tax_pa_exp_small_arms >= -3 } AND = { var:te_tax_bl_imp_steamers >= -3 var:te_tax_pa_imp_steamers >= -3 } AND = { var:te_tax_bl_exp_steamers >= -3 var:te_tax_pa_exp_steamers >= -3 } AND = { var:te_tax_bl_imp_steel >= -3 var:te_tax_pa_imp_steel >= -3 } AND = { var:te_tax_bl_exp_steel >= -3 var:te_tax_pa_exp_steel >= -3 } AND = { var:te_tax_bl_imp_sugar >= -3 var:te_tax_pa_imp_sugar >= -3 } AND = { var:te_tax_bl_exp_sugar >= -3 var:te_tax_pa_exp_sugar >= -3 } AND = { var:te_tax_bl_imp_sulfur >= -3 var:te_tax_pa_imp_sulfur >= -3 } AND = { var:te_tax_bl_exp_sulfur >= -3 var:te_tax_pa_exp_sulfur >= -3 } AND = { var:te_tax_bl_imp_tanks >= -3 var:te_tax_pa_imp_tanks >= -3 } AND = { var:te_tax_bl_exp_tanks >= -3 var:te_tax_pa_exp_tanks >= -3 } AND = { var:te_tax_bl_imp_tea >= -3 var:te_tax_pa_imp_tea >= -3 } AND = { var:te_tax_bl_exp_tea >= -3 var:te_tax_pa_exp_tea >= -3 } AND = { var:te_tax_bl_imp_tech_metals >= -3 var:te_tax_pa_imp_tech_metals >= -3 } AND = { var:te_tax_bl_exp_tech_metals >= -3 var:te_tax_pa_exp_tech_metals >= -3 } AND = { var:te_tax_bl_imp_telephones >= -3 var:te_tax_pa_imp_telephones >= -3 } AND = { var:te_tax_bl_exp_telephones >= -3 var:te_tax_pa_exp_telephones >= -3 } AND = { var:te_tax_bl_imp_tobacco >= -3 var:te_tax_pa_imp_tobacco >= -3 } AND = { var:te_tax_bl_exp_tobacco >= -3 var:te_tax_pa_exp_tobacco >= -3 } AND = { var:te_tax_bl_imp_tools >= -3 var:te_tax_pa_imp_tools >= -3 } AND = { var:te_tax_bl_exp_tools >= -3 var:te_tax_pa_exp_tools >= -3 } AND = { var:te_tax_bl_imp_tourism >= -3 var:te_tax_pa_imp_tourism >= -3 } AND = { var:te_tax_bl_exp_tourism >= -3 var:te_tax_pa_exp_tourism >= -3 } AND = { var:te_tax_bl_imp_wine >= -3 var:te_tax_pa_imp_wine >= -3 } AND = { var:te_tax_bl_exp_wine >= -3 var:te_tax_pa_exp_wine >= -3 } AND = { var:te_tax_bl_imp_wood >= -3 var:te_tax_pa_imp_wood >= -3 } AND = { var:te_tax_bl_exp_wood >= -3 var:te_tax_pa_exp_wood >= -3 } } }
 	}
 }
 
@@ -1401,6 +1932,10 @@ te_tax_gen_package_unsuperseded_a = {
 	OR = {
 		AND = { var:te_tax_pa_agrel < 0 var:te_tax_pa_regrel < 0 }
 		AND = { has_variable = te_tax_pa_pver_relief var:te_tax_pa_pver_relief = var:te_tax_pver_relief }
+	}
+	OR = {
+		NOT = { te_tax_gen_package_touches_customs_a = yes }
+		AND = { has_variable = te_tax_pver_customs var:te_tax_pa_pver_customs = var:te_tax_pver_customs }
 	}
 }
 
@@ -1452,6 +1987,7 @@ te_tax_gen_package_empty_a = {
 	var:te_tax_pa_g_wood < 0
 	var:te_tax_pa_agrel < 0
 	var:te_tax_pa_regrel < 0
+	NOT = { te_tax_gen_package_touches_customs_a = yes }
 }
 
 # Slot b's package touches a provision the bill touches. Read only while it is on.
@@ -1503,6 +2039,7 @@ te_tax_gen_bill_overlaps_b = {
 		AND = { var:te_tax_bl_g_wood >= 0 var:te_tax_pb_g_wood >= 0 }
 		AND = { var:te_tax_bl_agrel >= 0 var:te_tax_pb_agrel >= 0 }
 		AND = { var:te_tax_bl_regrel >= 0 var:te_tax_pb_regrel >= 0 }
+		AND = { has_variable = te_tax_bl_customs_pver has_variable = te_tax_pb_pver_customs OR = { AND = { var:te_tax_bl_imp_advanced_materials >= -3 var:te_tax_pb_imp_advanced_materials >= -3 } AND = { var:te_tax_bl_exp_advanced_materials >= -3 var:te_tax_pb_exp_advanced_materials >= -3 } AND = { var:te_tax_bl_imp_aeroplanes >= -3 var:te_tax_pb_imp_aeroplanes >= -3 } AND = { var:te_tax_bl_exp_aeroplanes >= -3 var:te_tax_pb_exp_aeroplanes >= -3 } AND = { var:te_tax_bl_imp_ammunition >= -3 var:te_tax_pb_imp_ammunition >= -3 } AND = { var:te_tax_bl_exp_ammunition >= -3 var:te_tax_pb_exp_ammunition >= -3 } AND = { var:te_tax_bl_imp_artillery >= -3 var:te_tax_pb_imp_artillery >= -3 } AND = { var:te_tax_bl_exp_artillery >= -3 var:te_tax_pb_exp_artillery >= -3 } AND = { var:te_tax_bl_imp_automobiles >= -3 var:te_tax_pb_imp_automobiles >= -3 } AND = { var:te_tax_bl_exp_automobiles >= -3 var:te_tax_pb_exp_automobiles >= -3 } AND = { var:te_tax_bl_imp_clippers >= -3 var:te_tax_pb_imp_clippers >= -3 } AND = { var:te_tax_bl_exp_clippers >= -3 var:te_tax_pb_exp_clippers >= -3 } AND = { var:te_tax_bl_imp_clothes >= -3 var:te_tax_pb_imp_clothes >= -3 } AND = { var:te_tax_bl_exp_clothes >= -3 var:te_tax_pb_exp_clothes >= -3 } AND = { var:te_tax_bl_imp_coal >= -3 var:te_tax_pb_imp_coal >= -3 } AND = { var:te_tax_bl_exp_coal >= -3 var:te_tax_pb_exp_coal >= -3 } AND = { var:te_tax_bl_imp_coffee >= -3 var:te_tax_pb_imp_coffee >= -3 } AND = { var:te_tax_bl_exp_coffee >= -3 var:te_tax_pb_exp_coffee >= -3 } AND = { var:te_tax_bl_imp_construction >= -3 var:te_tax_pb_imp_construction >= -3 } AND = { var:te_tax_bl_exp_construction >= -3 var:te_tax_pb_exp_construction >= -3 } AND = { var:te_tax_bl_imp_consumer_appliances >= -3 var:te_tax_pb_imp_consumer_appliances >= -3 } AND = { var:te_tax_bl_exp_consumer_appliances >= -3 var:te_tax_pb_exp_consumer_appliances >= -3 } AND = { var:te_tax_bl_imp_digital_assets >= -3 var:te_tax_pb_imp_digital_assets >= -3 } AND = { var:te_tax_bl_exp_digital_assets >= -3 var:te_tax_pb_exp_digital_assets >= -3 } AND = { var:te_tax_bl_imp_dye >= -3 var:te_tax_pb_imp_dye >= -3 } AND = { var:te_tax_bl_exp_dye >= -3 var:te_tax_pb_exp_dye >= -3 } AND = { var:te_tax_bl_imp_electronic_components >= -3 var:te_tax_pb_imp_electronic_components >= -3 } AND = { var:te_tax_bl_exp_electronic_components >= -3 var:te_tax_pb_exp_electronic_components >= -3 } AND = { var:te_tax_bl_imp_engines >= -3 var:te_tax_pb_imp_engines >= -3 } AND = { var:te_tax_bl_exp_engines >= -3 var:te_tax_pb_exp_engines >= -3 } AND = { var:te_tax_bl_imp_explosives >= -3 var:te_tax_pb_imp_explosives >= -3 } AND = { var:te_tax_bl_exp_explosives >= -3 var:te_tax_pb_exp_explosives >= -3 } AND = { var:te_tax_bl_imp_fabric >= -3 var:te_tax_pb_imp_fabric >= -3 } AND = { var:te_tax_bl_exp_fabric >= -3 var:te_tax_pb_exp_fabric >= -3 } AND = { var:te_tax_bl_imp_fertilizer >= -3 var:te_tax_pb_imp_fertilizer >= -3 } AND = { var:te_tax_bl_exp_fertilizer >= -3 var:te_tax_pb_exp_fertilizer >= -3 } AND = { var:te_tax_bl_imp_fine_art >= -3 var:te_tax_pb_imp_fine_art >= -3 } AND = { var:te_tax_bl_exp_fine_art >= -3 var:te_tax_pb_exp_fine_art >= -3 } AND = { var:te_tax_bl_imp_fish >= -3 var:te_tax_pb_imp_fish >= -3 } AND = { var:te_tax_bl_exp_fish >= -3 var:te_tax_pb_exp_fish >= -3 } AND = { var:te_tax_bl_imp_fruit >= -3 var:te_tax_pb_imp_fruit >= -3 } AND = { var:te_tax_bl_exp_fruit >= -3 var:te_tax_pb_exp_fruit >= -3 } AND = { var:te_tax_bl_imp_furniture >= -3 var:te_tax_pb_imp_furniture >= -3 } AND = { var:te_tax_bl_exp_furniture >= -3 var:te_tax_pb_exp_furniture >= -3 } AND = { var:te_tax_bl_imp_glass >= -3 var:te_tax_pb_imp_glass >= -3 } AND = { var:te_tax_bl_exp_glass >= -3 var:te_tax_pb_exp_glass >= -3 } AND = { var:te_tax_bl_imp_grain >= -3 var:te_tax_pb_imp_grain >= -3 } AND = { var:te_tax_bl_exp_grain >= -3 var:te_tax_pb_exp_grain >= -3 } AND = { var:te_tax_bl_imp_groceries >= -3 var:te_tax_pb_imp_groceries >= -3 } AND = { var:te_tax_bl_exp_groceries >= -3 var:te_tax_pb_exp_groceries >= -3 } AND = { var:te_tax_bl_imp_hardwood >= -3 var:te_tax_pb_imp_hardwood >= -3 } AND = { var:te_tax_bl_exp_hardwood >= -3 var:te_tax_pb_exp_hardwood >= -3 } AND = { var:te_tax_bl_imp_iron >= -3 var:te_tax_pb_imp_iron >= -3 } AND = { var:te_tax_bl_exp_iron >= -3 var:te_tax_pb_exp_iron >= -3 } AND = { var:te_tax_bl_imp_ironclads >= -3 var:te_tax_pb_imp_ironclads >= -3 } AND = { var:te_tax_bl_exp_ironclads >= -3 var:te_tax_pb_exp_ironclads >= -3 } AND = { var:te_tax_bl_imp_launch_capacity >= -3 var:te_tax_pb_imp_launch_capacity >= -3 } AND = { var:te_tax_bl_exp_launch_capacity >= -3 var:te_tax_pb_exp_launch_capacity >= -3 } AND = { var:te_tax_bl_imp_lead >= -3 var:te_tax_pb_imp_lead >= -3 } AND = { var:te_tax_bl_exp_lead >= -3 var:te_tax_pb_exp_lead >= -3 } AND = { var:te_tax_bl_imp_liquor >= -3 var:te_tax_pb_imp_liquor >= -3 } AND = { var:te_tax_bl_exp_liquor >= -3 var:te_tax_pb_exp_liquor >= -3 } AND = { var:te_tax_bl_imp_luxury_clothes >= -3 var:te_tax_pb_imp_luxury_clothes >= -3 } AND = { var:te_tax_bl_exp_luxury_clothes >= -3 var:te_tax_pb_exp_luxury_clothes >= -3 } AND = { var:te_tax_bl_imp_luxury_furniture >= -3 var:te_tax_pb_imp_luxury_furniture >= -3 } AND = { var:te_tax_bl_exp_luxury_furniture >= -3 var:te_tax_pb_exp_luxury_furniture >= -3 } AND = { var:te_tax_bl_imp_magnetic_drive_ships >= -3 var:te_tax_pb_imp_magnetic_drive_ships >= -3 } AND = { var:te_tax_bl_exp_magnetic_drive_ships >= -3 var:te_tax_pb_exp_magnetic_drive_ships >= -3 } AND = { var:te_tax_bl_imp_manowars >= -3 var:te_tax_pb_imp_manowars >= -3 } AND = { var:te_tax_bl_exp_manowars >= -3 var:te_tax_pb_exp_manowars >= -3 } AND = { var:te_tax_bl_imp_meat >= -3 var:te_tax_pb_imp_meat >= -3 } AND = { var:te_tax_bl_exp_meat >= -3 var:te_tax_pb_exp_meat >= -3 } AND = { var:te_tax_bl_imp_merchant_marine >= -3 var:te_tax_pb_imp_merchant_marine >= -3 } AND = { var:te_tax_bl_exp_merchant_marine >= -3 var:te_tax_pb_exp_merchant_marine >= -3 } AND = { var:te_tax_bl_imp_motor_ships >= -3 var:te_tax_pb_imp_motor_ships >= -3 } AND = { var:te_tax_bl_exp_motor_ships >= -3 var:te_tax_pb_exp_motor_ships >= -3 } AND = { var:te_tax_bl_imp_oil >= -3 var:te_tax_pb_imp_oil >= -3 } AND = { var:te_tax_bl_exp_oil >= -3 var:te_tax_pb_exp_oil >= -3 } AND = { var:te_tax_bl_imp_opium >= -3 var:te_tax_pb_imp_opium >= -3 } AND = { var:te_tax_bl_exp_opium >= -3 var:te_tax_pb_exp_opium >= -3 } AND = { var:te_tax_bl_imp_paper >= -3 var:te_tax_pb_imp_paper >= -3 } AND = { var:te_tax_bl_exp_paper >= -3 var:te_tax_pb_exp_paper >= -3 } AND = { var:te_tax_bl_imp_porcelain >= -3 var:te_tax_pb_imp_porcelain >= -3 } AND = { var:te_tax_bl_exp_porcelain >= -3 var:te_tax_pb_exp_porcelain >= -3 } AND = { var:te_tax_bl_imp_radios >= -3 var:te_tax_pb_imp_radios >= -3 } AND = { var:te_tax_bl_exp_radios >= -3 var:te_tax_pb_exp_radios >= -3 } AND = { var:te_tax_bl_imp_robotics >= -3 var:te_tax_pb_imp_robotics >= -3 } AND = { var:te_tax_bl_exp_robotics >= -3 var:te_tax_pb_exp_robotics >= -3 } AND = { var:te_tax_bl_imp_rubber >= -3 var:te_tax_pb_imp_rubber >= -3 } AND = { var:te_tax_bl_exp_rubber >= -3 var:te_tax_pb_exp_rubber >= -3 } AND = { var:te_tax_bl_imp_silk >= -3 var:te_tax_pb_imp_silk >= -3 } AND = { var:te_tax_bl_exp_silk >= -3 var:te_tax_pb_exp_silk >= -3 } AND = { var:te_tax_bl_imp_small_arms >= -3 var:te_tax_pb_imp_small_arms >= -3 } AND = { var:te_tax_bl_exp_small_arms >= -3 var:te_tax_pb_exp_small_arms >= -3 } AND = { var:te_tax_bl_imp_steamers >= -3 var:te_tax_pb_imp_steamers >= -3 } AND = { var:te_tax_bl_exp_steamers >= -3 var:te_tax_pb_exp_steamers >= -3 } AND = { var:te_tax_bl_imp_steel >= -3 var:te_tax_pb_imp_steel >= -3 } AND = { var:te_tax_bl_exp_steel >= -3 var:te_tax_pb_exp_steel >= -3 } AND = { var:te_tax_bl_imp_sugar >= -3 var:te_tax_pb_imp_sugar >= -3 } AND = { var:te_tax_bl_exp_sugar >= -3 var:te_tax_pb_exp_sugar >= -3 } AND = { var:te_tax_bl_imp_sulfur >= -3 var:te_tax_pb_imp_sulfur >= -3 } AND = { var:te_tax_bl_exp_sulfur >= -3 var:te_tax_pb_exp_sulfur >= -3 } AND = { var:te_tax_bl_imp_tanks >= -3 var:te_tax_pb_imp_tanks >= -3 } AND = { var:te_tax_bl_exp_tanks >= -3 var:te_tax_pb_exp_tanks >= -3 } AND = { var:te_tax_bl_imp_tea >= -3 var:te_tax_pb_imp_tea >= -3 } AND = { var:te_tax_bl_exp_tea >= -3 var:te_tax_pb_exp_tea >= -3 } AND = { var:te_tax_bl_imp_tech_metals >= -3 var:te_tax_pb_imp_tech_metals >= -3 } AND = { var:te_tax_bl_exp_tech_metals >= -3 var:te_tax_pb_exp_tech_metals >= -3 } AND = { var:te_tax_bl_imp_telephones >= -3 var:te_tax_pb_imp_telephones >= -3 } AND = { var:te_tax_bl_exp_telephones >= -3 var:te_tax_pb_exp_telephones >= -3 } AND = { var:te_tax_bl_imp_tobacco >= -3 var:te_tax_pb_imp_tobacco >= -3 } AND = { var:te_tax_bl_exp_tobacco >= -3 var:te_tax_pb_exp_tobacco >= -3 } AND = { var:te_tax_bl_imp_tools >= -3 var:te_tax_pb_imp_tools >= -3 } AND = { var:te_tax_bl_exp_tools >= -3 var:te_tax_pb_exp_tools >= -3 } AND = { var:te_tax_bl_imp_tourism >= -3 var:te_tax_pb_imp_tourism >= -3 } AND = { var:te_tax_bl_exp_tourism >= -3 var:te_tax_pb_exp_tourism >= -3 } AND = { var:te_tax_bl_imp_wine >= -3 var:te_tax_pb_imp_wine >= -3 } AND = { var:te_tax_bl_exp_wine >= -3 var:te_tax_pb_exp_wine >= -3 } AND = { var:te_tax_bl_imp_wood >= -3 var:te_tax_pb_imp_wood >= -3 } AND = { var:te_tax_bl_exp_wood >= -3 var:te_tax_pb_exp_wood >= -3 } } }
 	}
 }
 
@@ -1537,6 +2074,10 @@ te_tax_gen_package_unsuperseded_b = {
 	OR = {
 		AND = { var:te_tax_pb_agrel < 0 var:te_tax_pb_regrel < 0 }
 		AND = { has_variable = te_tax_pb_pver_relief var:te_tax_pb_pver_relief = var:te_tax_pver_relief }
+	}
+	OR = {
+		NOT = { te_tax_gen_package_touches_customs_b = yes }
+		AND = { has_variable = te_tax_pver_customs var:te_tax_pb_pver_customs = var:te_tax_pver_customs }
 	}
 }
 
@@ -1588,6 +2129,7 @@ te_tax_gen_package_empty_b = {
 	var:te_tax_pb_g_wood < 0
 	var:te_tax_pb_agrel < 0
 	var:te_tax_pb_regrel < 0
+	NOT = { te_tax_gen_package_touches_customs_b = yes }
 }
 
 # Policy obligations (plan Task 12; te_tax_repair_obligations_after_civil_war). Country scope.
