@@ -40,6 +40,20 @@ class NormalizeBomTests(unittest.TestCase):
             self.assertTrue(data.startswith(BOM))
             self.assertFalse(data[3:].startswith(BOM))
 
+    def test_collapses_a_doubled_bom(self):
+        # The engine strips one BOM; a second one becomes part of the first
+        # token, so a leading `#` line stops being a comment and every key
+        # after it shifts. 2026-10-03: all 323 company buildings were dropped
+        # ("Duplicated key = will not be created") by a script that re-added a
+        # BOM to text it had decoded without stripping the old one.
+        with tempfile.TemporaryDirectory() as td:
+            p = self._write(td, "common/buildings/b.txt", BOM + BOM + BOM + b"# c\nb = {}")
+            result = normalize_bom(td)
+            self.assertEqual(result["files_normalized"], 1)
+            with open(p, "rb") as fh:
+                self.assertEqual(fh.read(), BOM + b"# c\nb = {}")
+            self.assertEqual(normalize_bom(td)["files_normalized"], 0)
+
     def test_covers_gfx_txt(self):
         with tempfile.TemporaryDirectory() as td:
             self._write(td, "gfx/map/fleet_entities/02_extra.txt", b"e = {}")
@@ -83,6 +97,29 @@ class NormalizeBomTests(unittest.TestCase):
             self._write(td, "common/foo/panel.gui", b"widget = {}")
             result = normalize_bom(td)
             self.assertEqual(result["files_normalized"], 0)
+
+
+class RepoHasNoDoubledBomTests(unittest.TestCase):
+    """CI guard: the normalizer only runs on a full /reload, so a doubled BOM
+    committed from a branch would otherwise reach the game (it did, 2026-10-03).
+    Also covers localization, where the engine reads the file the same way."""
+
+    def test_no_script_or_loc_file_starts_with_two_boms(self):
+        repo = os.path.dirname(os.path.abspath(__file__))
+        doubled = []
+        for root in ("common", "events", "gfx", "gui", "localization"):
+            base = os.path.join(repo, root)
+            if not os.path.isdir(base):
+                continue  # sparse checkout
+            for dirpath, _dirs, files in os.walk(base):
+                for fname in files:
+                    if not fname.endswith((".txt", ".gui", ".yml")):
+                        continue
+                    path = os.path.join(dirpath, fname)
+                    with open(path, "rb") as fh:
+                        if fh.read(6) == BOM + BOM:
+                            doubled.append(os.path.relpath(path, repo))
+        self.assertEqual(doubled, [], "files starting with two UTF-8 BOMs (run bom_normalizer.py)")
 
 
 if __name__ == "__main__":

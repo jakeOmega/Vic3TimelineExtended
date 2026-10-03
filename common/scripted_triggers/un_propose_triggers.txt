@@ -151,9 +151,9 @@ un_propose_sanctions_possible = {
 un_propose_expulsion_available = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	any_country = {
+		has_modifier = un_veto_isolation_modifier	# rarest test first
 		NOT = { this = ROOT }
 		is_un_permanent_member = yes
-		has_modifier = un_veto_isolation_modifier
 	}
 }
 

@@ -123,10 +123,30 @@ je_cultural_hegemony = {
 			}
 
 			# Apply/remove cultural hegemony modifier (hegemon bonus)
+			#
+			# Both multipliers below read a variable set here, as the UN
+			# contributor costs do (un_buttons.txt), not the script value. The
+			# engine keeps a modifier's multiplier expression and may evaluate
+			# it again after this pulse (modifier_multiplier_var_audit), and
+			# these two compute the world's cultural pull; a variable costs one
+			# evaluation per pulse either way. (Whether JE multipliers are
+			# re-evaluated every tick is unproven: the banking fiscal-policy
+			# multiplier, broken the same way until #679, logged its errors
+			# once a month, not daily.) The value is this pulse's, held for the
+			# month, which is what ch_benchmark_applied's display already
+			# assumes. Neither variable is ever removed. 2026-10-03.
 			je:je_cultural_hegemony ?= { remove_modifier = cultural_hegemony_effect }
 			if = {
 				limit = { var:ch_total >= 1 }
-				je:je_cultural_hegemony ?= { add_modifier = { name = cultural_hegemony_effect multiplier = cultural_hegemony_modifier_mult } }
+				set_variable = {
+					name = ch_effect_mult_cached
+					value = {
+						value = cultural_pull_total
+						min = 0
+						max = 100
+					}
+				}
+				je:je_cultural_hegemony ?= { add_modifier = { name = cultural_hegemony_effect multiplier = root.var:ch_effect_mult_cached } }
 			}
 
 			# Apply/remove foreign benchmark (the legitimacy loss from trailing the hegemon)
@@ -134,8 +154,8 @@ je_cultural_hegemony = {
 			if = {
 				limit = { cultural_hegemony_benchmark_mult >= 0.1 }
 				remove_modifier = cultural_hegemony_foreign_benchmark
-				add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = cultural_hegemony_benchmark_mult }
 				set_variable = { name = ch_benchmark_applied value = cultural_hegemony_benchmark_mult }
+				add_modifier = { name = cultural_hegemony_foreign_benchmark multiplier = var:ch_benchmark_applied }
 			}
 			else_if = {
 				limit = { has_modifier = cultural_hegemony_foreign_benchmark }
