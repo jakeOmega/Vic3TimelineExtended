@@ -432,6 +432,19 @@ gw_active_green_building_codes_sgui = {
 # Widget-wide yes/no questions
 # ---------------------------------------------------------------------------
 
+# The Global Warming game rule. With it off, je_global_warming still opens for
+# a country holding a restrictive Resource Transition law (#660), and shows only
+# its Fossil Transition section: the overview, Mitigation Policies, Top
+# Emitters and the reference sections gate on this. The rule is global, so any
+# country scope answers it.
+gw_rule_enabled_sgui = {
+	scope = country
+	is_shown = { has_game_rule = global_warming_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Does this country lead its own market? A market member sees the three
 # market-wide policies as in force but not repealable, and this is what lets the
 # row say "set by market leader" instead of just greying a button.

@@ -1,0 +1,187 @@
+﻿# ============================================================================
+# RESOURCE TRANSITION — the AI's retirement programme buttons (issue #660)
+# ============================================================================
+# Listed on je_global_warming, which activates for any country holding a
+# restrictive transition law. Each carries `is_ai = yes` in its `visible`: a
+# human uses the Fossil Transition section
+# (common/scripted_guis/resource_transition_sguis.txt), which calls the same
+# rt_possible_* triggers and rt_*_programme effects.
+#
+# WHEN AN AI RETIRES. Only when its market can lose the supply
+# (common/scripted_triggers/resource_transition_triggers.txt):
+#   coal, oil   the market makes at least 1.25 times what it burns, the good
+#               is neither short nor 10% above base price
+#               (rt_ai_ready_extraction)
+#   power       clean plants are 60% of generating levels or more, electricity
+#               neither short nor 10% above base (rt_ai_ready_power)
+# and it is not in default and its debt is under half its ceiling, since every
+# retirement pays compensation. It stops a programme when the good (for power
+# plants, electricity) goes short or 40% above base, or when it defaults
+# (rt_ai_programme_hurting). Between the two neither button scores, so a
+# programme does not flap on a passing price move.
+#
+# Weights follow the climate policy buttons' scale
+# (gw_ai_adopt_base_weight 10, gw_ai_max_weight 30).
+# ============================================================================
+
+rt_start_coal_button = {
+	name = "rt_start_coal_button"
+	desc = "rt_start_coal_button_desc"
+
+	visible = {
+		is_ai = yes
+		has_law = law_type:law_managed_fossil_phaseout
+		NOT = { has_variable = rt_prog_coal }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				rt_ai_ready_extraction = { KEY = coal }
+				in_default = no
+				scaled_debt < 0.5
+			}
+			add = 20
+		}
+	}
+
+	possible = { rt_possible_start = { KEY = coal BT = building_coal_mine } }
+
+	effect = { rt_start_programme = { KEY = coal } }
+}
+
+rt_stop_coal_button = {
+	name = "rt_stop_coal_button"
+	desc = "rt_stop_coal_button_desc"
+
+	visible = {
+		is_ai = yes
+		has_variable = rt_prog_coal
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					rt_ai_programme_hurting = { GOOD = coal }
+					in_default = yes
+				}
+			}
+			add = 30
+		}
+	}
+
+	possible = { rt_possible_stop = { KEY = coal } }
+
+	effect = { rt_stop_programme = { KEY = coal } }
+}
+
+rt_start_oil_button = {
+	name = "rt_start_oil_button"
+	desc = "rt_start_oil_button_desc"
+
+	visible = {
+		is_ai = yes
+		has_law = law_type:law_managed_fossil_phaseout
+		NOT = { has_variable = rt_prog_oil }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				rt_ai_ready_extraction = { KEY = oil }
+				in_default = no
+				scaled_debt < 0.5
+			}
+			add = 20
+		}
+	}
+
+	possible = { rt_possible_start = { KEY = oil BT = building_oil_rig } }
+
+	effect = { rt_start_programme = { KEY = oil } }
+}
+
+rt_stop_oil_button = {
+	name = "rt_stop_oil_button"
+	desc = "rt_stop_oil_button_desc"
+
+	visible = {
+		is_ai = yes
+		has_variable = rt_prog_oil
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					rt_ai_programme_hurting = { GOOD = oil }
+					in_default = yes
+				}
+			}
+			add = 30
+		}
+	}
+
+	possible = { rt_possible_stop = { KEY = oil } }
+
+	effect = { rt_stop_programme = { KEY = oil } }
+}
+
+rt_start_power_button = {
+	name = "rt_start_power_button"
+	desc = "rt_start_power_button_desc"
+
+	visible = {
+		is_ai = yes
+		has_law = law_type:law_managed_fossil_phaseout
+		NOT = { has_variable = rt_prog_power }
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				rt_ai_ready_power = yes
+				in_default = no
+				scaled_debt < 0.5
+			}
+			add = 20
+		}
+	}
+
+	possible = { rt_possible_start = { KEY = power BT = building_power_plant } }
+
+	effect = { rt_start_programme = { KEY = power } }
+}
+
+rt_stop_power_button = {
+	name = "rt_stop_power_button"
+	desc = "rt_stop_power_button_desc"
+
+	visible = {
+		is_ai = yes
+		has_variable = rt_prog_power
+	}
+
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				OR = {
+					rt_ai_programme_hurting = { GOOD = electricity }
+					in_default = yes
+				}
+			}
+			add = 30
+		}
+	}
+
+	possible = { rt_possible_stop = { KEY = power } }
+
+	effect = { rt_stop_programme = { KEY = power } }
+}

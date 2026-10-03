@@ -735,6 +735,11 @@ REPLACE:ideology_market_liberal = {
 		law_no_ministry_of_propaganda = approve
 		law_ministry_of_propaganda = neutral
 	}
+	lawgroup_resource_transition = {
+		law_unrestricted_extraction = approve
+		law_fossil_expansion_moratorium = neutral
+		law_managed_fossil_phaseout = disapprove
+	}
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = approve
 		law_ministry_of_the_environment = neutral
@@ -2539,6 +2544,11 @@ REPLACE:ideology_social_democrat = {
 		law_no_ministry_of_refugee_affairs = neutral
 		law_ministry_of_refugee_affairs = approve
 	}
+	lawgroup_resource_transition = {
+		law_unrestricted_extraction = neutral
+		law_fossil_expansion_moratorium = approve
+		law_managed_fossil_phaseout = approve
+	}
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = neutral
 		law_ministry_of_the_environment = approve
@@ -3597,6 +3607,11 @@ REPLACE:ideology_fascist = {
 	lawgroup_ministry_of_refugee_affairs = {
 		law_no_ministry_of_refugee_affairs = approve
 		law_ministry_of_refugee_affairs = strongly_disapprove
+	}
+	lawgroup_resource_transition = {
+		law_unrestricted_extraction = approve
+		law_fossil_expansion_moratorium = neutral
+		law_managed_fossil_phaseout = disapprove
 	}
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = approve
@@ -4770,6 +4785,11 @@ REPLACE:ideology_laissez_faire = {
 		law_no_ministry_of_labor = neutral
 		law_pro_labor_ministry_of_labor = strongly_disapprove
 		law_pro_capital_ministry_of_labor = approve
+	}
+	lawgroup_resource_transition = {
+		law_unrestricted_extraction = approve
+		law_fossil_expansion_moratorium = disapprove
+		law_managed_fossil_phaseout = strongly_disapprove
 	}
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = approve
@@ -7538,6 +7558,11 @@ REPLACE:ideology_reactionary = {
 	lawgroup_ministry_of_culture = {
 		law_no_ministry_of_culture = neutral
 		law_ministry_of_culture = approve
+	}
+	lawgroup_resource_transition = {
+		law_unrestricted_extraction = approve
+		law_fossil_expansion_moratorium = neutral
+		law_managed_fossil_phaseout = disapprove
 	}
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = approve
@@ -10944,6 +10969,11 @@ INJECT:ideology_agrarian = {
 		law_no_ministry_of_the_environment = neutral
 		law_ministry_of_the_environment = approve
 	}
+	lawgroup_resource_transition = {
+		law_unrestricted_extraction = neutral
+		law_fossil_expansion_moratorium = approve
+		law_managed_fossil_phaseout = neutral
+	}
 	lawgroup_ministry_of_labor = {
 		law_no_ministry_of_labor = neutral
 		law_pro_labor_ministry_of_labor = approve
@@ -11312,6 +11342,11 @@ REPLACE:ideology_agrarian_jeffersonian = {
 		law_no_ministry_of_labor = neutral
 		law_pro_labor_ministry_of_labor = approve
 		law_pro_capital_ministry_of_labor = disapprove
+	}
+	lawgroup_resource_transition = {
+		law_unrestricted_extraction = neutral
+		law_fossil_expansion_moratorium = approve
+		law_managed_fossil_phaseout = neutral
 	}
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = neutral
@@ -13424,6 +13459,11 @@ REPLACE:ideology_reactionary_movement = {
 	lawgroup_ministry_of_culture = {
 		law_no_ministry_of_culture = neutral
 		law_ministry_of_culture = approve
+	}
+	lawgroup_resource_transition = {
+		law_unrestricted_extraction = approve
+		law_fossil_expansion_moratorium = neutral
+		law_managed_fossil_phaseout = disapprove
 	}
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = approve

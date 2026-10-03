@@ -5219,6 +5219,59 @@ te_fix_inconsistent_lawgroup_national_bank = {
 
 }
 
+te_fix_inconsistent_lawgroup_resource_transition = {
+	# Active: law_fossil_expansion_moratorium  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_fossil_expansion_moratorium
+			OR = {
+				NOR = {
+					has_law = law_type:law_ministry_of_the_environment
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_ministry_of_the_environment
+				}
+				has_technology_researched = clean_energy_technologies
+			}
+			activate_law = law_type:law_managed_fossil_phaseout
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_unrestricted_extraction
+		}
+	}
+
+	# Active: law_managed_fossil_phaseout  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_managed_fossil_phaseout
+			OR = {
+				NOR = {
+					has_law = law_type:law_ministry_of_the_environment
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_ministry_of_the_environment
+				}
+				has_technology_researched = environmental_movement
+			}
+			activate_law = law_type:law_fossil_expansion_moratorium
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_unrestricted_extraction
+		}
+	}
+
+}
+
 te_fix_inconsistent_lawgroup_ministry_of_refugee_affairs = {
 	# Active: law_ministry_of_refugee_affairs  ->  detect violation, cascade replacements
 	if = {
@@ -5352,6 +5405,7 @@ te_fix_inconsistent_laws = {
 	te_fix_inconsistent_lawgroup_privacy_rights = yes
 	te_fix_inconsistent_lawgroup_electoral_finance = yes
 	te_fix_inconsistent_lawgroup_national_bank = yes
+	te_fix_inconsistent_lawgroup_resource_transition = yes
 	te_fix_inconsistent_lawgroup_ministry_of_refugee_affairs = yes
 	te_fix_inconsistent_lawgroup_ministry_of_propaganda = yes
 	te_fix_inconsistent_lawgroup_ministry_of_thought_control = yes

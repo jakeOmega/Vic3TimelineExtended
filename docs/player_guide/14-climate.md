@@ -37,7 +37,9 @@ The entry is listed, grayed out, for every country from the start of the game,
 with a line saying that it opens once the world has warmed by 0.1 °C and its
 climate policies at 0.5 °C. It activates for everyone once the anomaly reaches
 0.1 °C and then stays active: it never completes and never goes away, even if
-the world cools again. The temperature bar at its top runs to 4 °C, but the
+the world cools again. It also activates early for a country that adopts Fossil
+Expansion Moratorium or Managed Fossil Phaseout, with the Global Warming rule on
+or off ([The fossil transition](#the-fossil-transition)). The temperature bar at its top runs to 4 °C, but the
 penalties keep growing past that.
 
 The same panels appear as a Climate tab in the Market panel, and a change made
@@ -126,6 +128,7 @@ policies you run. The cut changes the moment a policy is adopted or repealed.
 |---|---|---|
 | Mitigation Policies | Open | The eight policies, under Market-Wide and National. Each row has the policy's icon, lit while the policy is in force, its name (hover it for what the policy does), a green check while it is in force, and one control: Adopt while the policy is not in force, Repeal while it is. A grayed control's tooltip lists the conditions and which of them you meet. When one reason grays out every Adopt or every Repeal, a line above the rows says so once: warming below 0.5 °C, an emissions-reduction treaty (only Climate Adaptation can then be repealed), or, for a market member, "Set by our market leader for the whole market" over the market-wide rows. Adoption Around the World, under the rows, counts the nations running each policy. |
 | Top Emitters | Open | The five markets that emit the most, largest first, each named by its leader. Each row shows the leader's flag, the market's annual emissions, its share of world emissions and its cumulative emissions. A treaty icon marks a leader bound by Enforce Emissions Reduction, and your own market's row says "Our market". Hover a row for the market's members and its emissions cut, hover "+N more markets" for every market that emits, and a line gives your market's place when it is not in the five. The figures change each January; the order is redrawn each month. |
+| Fossil Transition | Open | Your Resource Transition law, what is left of your coal mines, oil rigs and power plants with a retirement control for each, and what could replace them. See [The fossil transition](#the-fossil-transition). Shown on your own market only. |
 | History | Open | Charts of global temperature and of your market's share of world emissions. Both step once a year, when the emissions figures update. |
 | How Global Warming Works | Collapsed | The explanations: warming, the warming penalty, emissions and the mitigation policies. |
 
@@ -213,6 +216,81 @@ In practice most countries take up Climate Adaptation around 1.25 °C if they
 have the authority, countries with an environment ministry move early, and
 Fossil-Fuel Divestment is rare below 3 °C. A laissez-faire oil exporter may
 never divest.
+
+## The fossil transition
+
+The Resource Transition laws let you stop building fossil-fuel capacity and then
+retire what you have. They sit in the Economy laws beside the Ministry of the
+Environment, and both restrictive laws need that ministry:
+
+| Law | Needs | Effect |
+|---|---|---|
+| Unrestricted Extraction | | The default. Nothing changes. |
+| Fossil Expansion Moratorium | Environmental Movement, Ministry of the Environment | No new Coal Mine, Oil Rig or Power Plant can be built or expanded in your states, by your government, your investors or foreign investors. Those already running carry on. |
+| Managed Fossil Phaseout | Clean Energy Technologies, Ministry of the Environment funded to level 3 | The moratorium, and retirement programmes for what is already running. |
+
+Hydro, nuclear, fusion and renewable plants, Synthetic Fuel Works, Carbon
+Conversion Works and every other mine stay buildable. If you abolish the
+Ministry of the Environment, the law falls back to Unrestricted Extraction;
+cutting the ministry's funding later does not. Environmentalist leaders support
+the transition and Corpocrat leaders oppose it. Otherwise an ideology that
+favors the Ministry of the Environment approves of the moratorium, and one that
+opposes the ministry disapproves of the phaseout.
+
+Adopting either restrictive law opens the Global Warming journal entry for you
+at once, and its Fossil Transition section holds the controls. With the Global
+Warming rule off, the entry shows only that section; the laws work the same
+way.
+
+### Retirement programmes
+
+Under Managed Fossil Phaseout, the Fossil Transition section has a row for each
+of Coal Mines, Oil Rigs and Power Plants, with the levels you have left and a
+Start button. A running programme closes the smallest building of its kind in
+your states every 3 months, starting 3 months after you press Start:
+
+- the whole building goes, every level, whoever owns it: your government, a
+company, your investors or a foreign investor;
+- you pay its owners compensation, a quarter of what the building would cost to
+build today;
+- its state gets Transition Assistance for 5 years: half the radicals that a fall
+in standard of living would make, and +25% qualifications as the laid-off
+workers retrain.
+
+Hover a row for the next building to close, its state and its compensation, and
+for the cost of closing all that are left. Stop ends a programme; what it closed
+stays closed. Leaving Managed Fossil Phaseout stops every programme.
+
+### Readiness and emissions
+
+Closing mines and rigs cuts supply. Coal and oil get dearer, buildings that burn
+them earn less and switch to cleaner methods where they can, and anything still
+short is imported or goes without. Under Replacement Readiness the section shows
+what could take their place:
+
+| Row | Shows |
+|---|---|
+| Clean Generation | Hydro, nuclear, fusion and renewable plant levels as a share of all generating levels, power plants included. |
+| Synthetic Fuel Plants | Your Synthetic Fuel Works and Carbon Conversion Works levels; hover for whether you have the technologies for oil from grain and electricity (Synthetic Biology) and coal from electricity (Genetic Engineering). |
+| Coal, Oil | What your whole market makes and burns each week; hover for its imports and exports. |
+| Our Market's Emissions | With the Global Warming rule on, the overview's figure. |
+
+None of this is a requirement: you can retire capacity you can't yet replace and
+import the difference, burn less, or accept shortages. The transition earns no
+emission cut of its own. Your market's emissions come from the coal and oil it
+burns wherever they were mined, so closing your mines lowers them only if the
+market burns less. Power plants are safest to retire once clean generation is
+most of your fleet, and mines and rigs once your market makes more of the fuel
+than it burns.
+
+The AI considers the moratorium on the same will as Fossil-Fuel Divestment
+([How the AI adopts climate policy](#how-the-ai-adopts-climate-policy)), and
+only with a quarter of its power fleet clean; it moves to the phaseout with a
+stronger will and half its fleet clean. It starts a programme only while its
+market has fuel to spare (or, for power plants, mostly clean generation) and it
+is not deep in debt, stops one when the fuel or electricity runs short, and
+returns to Unrestricted Extraction when its market is short of coal, oil or
+electricity.
 
 ## Enforce Emissions Reduction
 
