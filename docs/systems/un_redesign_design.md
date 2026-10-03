@@ -179,7 +179,14 @@ The line never falls below the GDP per head of the poorest member in good standi
 not suspended, paying its dues: `un_dev_fund_good_standing`), and a member at or below it
 qualifies, so the Fund always has at least one recipient **(owner, 2026-10-03)**. The floor is
 snapshotted as `un_dev_fund_line_floor` before the line each month. The UN panel's World
-Development Fund section lists who it pays, how much and the line, while it stands.
+Development Fund section lists who it pays, how much and the line, while the UN exists.
+
+The founding-charter row is also the Fund's form **before the vote (owner, 2026-10-03)**: the
+donations pay out from the UN's founding, to members below a tenth of the average, with no
+resolution needed. Founding the Fund (`un_inst_development_fund`) is what lets each reform add
+the budget share and raise the line (`un_dev_fund_line_share` reads the charter level only once
+founded; `un_dev_fund_budget_share` was already gated). As first built, the donations reached no
+one until the Fund was founded, so a major power funding Development Programs paid for nothing.
 
 The donations are the existing Fund Development Programs programme
 (`un_fund_development_button`): unchanged in rank, cost (0.5% of GDP a year) and benefits, but
@@ -385,7 +392,9 @@ the classification and the loc.
    0.25 and `un_dev_fund_line_share` 0.1 / 0.25 / 0.5 by charter level, plus
    `global_var:un_dev_fund_donations`, the monthly sum of `var:un_development_expense_cached`
    over the programme's contributors that are represented and paying dues,
-   `un_dev_fund_contributor`). Contributions flow even at Moribund, when the budget is 0. The
+   `un_dev_fund_contributor`). Contributions flow even at Moribund, when the budget is 0, and
+   before the Fund is founded (owner, 2026-10-03; the pot is snapshotted as
+   `global_var:un_dev_fund_pot`). The
    members' average GDP per head is weighted by population. A grant is the
    recipient's share of the eligible members' people × the weekly pot, stored in
    `var:un_dev_fund_grant` and applied by a hidden event with the recipient as ROOT. It goes

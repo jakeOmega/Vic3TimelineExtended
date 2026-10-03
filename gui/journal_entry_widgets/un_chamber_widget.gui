@@ -2607,8 +2607,10 @@ types un_chamber_widget_types
 		# Who the Fund pays this month and how much, under the line a member's
 		# GDP per head must be at or under: a table of the month's figures,
 		# then the recipients, largest grant first (un_dev_fund_recipient_lines).
-		# Only while the Fund stands; open by default, as a live list. The
-		# rows read the monthly snapshot, so nothing here iterates but the list.
+		# While the UN exists: the Fund pays out the Development Programs
+		# contributions from the UN's founding, founded as an institution or
+		# not (owner, 2026-10-03). Open by default, as a live list. The rows
+		# read the monthly snapshot, so nothing here iterates but the list.
 		un_chamber_section_header = {
 			blockoverride "left_text" {
 				text = "je_un_dev_fund_header"

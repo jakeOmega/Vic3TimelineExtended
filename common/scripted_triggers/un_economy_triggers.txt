@@ -106,12 +106,26 @@ un_dev_fund_eligible = {
 }
 
 # The Fund pays this member a grant this month (var:un_dev_fund_grant, set by
-# the monthly update while the Fund stands; 0 once it stops).
+# the monthly update, founded or not; 0 once it stops).
 # Scope: country
 un_dev_fund_receiving = {
-	has_global_variable = un_inst_development_fund
 	has_variable = un_dev_fund_grant
 	var:un_dev_fund_grant > 0
+}
+
+# The Fund has nothing to pay out this month (global_var:un_dev_fund_pot, the
+# monthly snapshot): no member's Development Programs contribution counts, and
+# it draws nothing from the budget (unfounded, under the founding charter, or
+# at Moribund, when no dues are assessed).
+# Scope: any
+un_dev_fund_pot_empty = {
+	OR = {
+		NOT = { has_global_variable = un_dev_fund_pot }
+		AND = {
+			has_global_variable = un_dev_fund_pot
+			global_var:un_dev_fund_pot <= 0
+		}
+	}
 }
 
 # A Development Programs contributor whose contribution pays the Fund's
@@ -126,21 +140,6 @@ un_dev_fund_contributor = {
 	un_member_represented = yes
 	NOT = { un_dues_is_withholding = yes }
 	un_standing_program_active_development = yes
-}
-
-# No Development Programs contribution reaches the Fund this month (the
-# monthly snapshot of un_dev_fund_donations_value). Under the founding charter,
-# and at Moribund, when no dues are assessed, the contributions are its only
-# money.
-# Scope: any
-un_dev_fund_no_contributions = {
-	OR = {
-		NOT = { has_global_variable = un_dev_fund_donations }
-		AND = {
-			has_global_variable = un_dev_fund_donations
-			global_var:un_dev_fund_donations <= 0
-		}
-	}
 }
 
 # The grant can go into our investment pool: our laws keep one, and the

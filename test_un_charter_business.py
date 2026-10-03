@@ -341,7 +341,7 @@ class DevelopmentFundTierTests(unittest.TestCase):
         for name in ("un_dev_fund_budget_share_reform_1", "un_dev_fund_budget_share_reform_2"):
             self.assertIn(f"add = {name}", at_level)
         self.assertIn("add = un_dev_fund_budget_share_at_level", _flat(_block(charter, "un_dev_fund_budget_share")))
-        line = _flat(_block(_read(ECONOMY_VALUES), "un_dev_fund_line_share"))
+        line = _flat(_block(_read(ECONOMY_VALUES), "un_dev_fund_line_share_at_level"))
         for level in ("founding", "reform_1", "reform_2"):
             self.assertIn(f"add = un_dev_fund_line_share_{level}", line)
 
@@ -351,7 +351,6 @@ class DevelopmentFundTierTests(unittest.TestCase):
         self.assertIn("un_dev_fund_contributor = yes", donations)
         self.assertIn("add = var:un_development_expense_cached", donations)
         self.assertIn("add = global_var:un_dev_fund_donations", _flat(_block(values, "un_dev_fund_pot_weekly_value")))
-        self.assertIn("add = global_var:un_dev_fund_donations", _flat(_block(values, "un_dev_fund_pot_preview_value")))
         update = _flat(_block(_read(ECONOMY_EFFECTS), "un_dev_fund_monthly_update"))
         snapshot = "set_global_variable = { name = un_dev_fund_donations value = un_dev_fund_donations_value }"
         self.assertIn(snapshot, update)
@@ -411,10 +410,50 @@ class DevelopmentFundFloorTests(unittest.TestCase):
         loc = _loc()
         for key in ("je_un_dev_fund_header", "je_un_dev_fund_recipient", "je_un_dev_fund_recipient_us",
                     "je_un_dev_fund_line_floored_tt", "je_un_dev_fund_line_share_tt",
-                    "je_un_chamber_budget_dev_fund_floored", "je_un_chamber_budget_dev_fund_voluntary_floored",
-                    "je_un_chamber_preview_development_fund_floored",
-                    "je_un_chamber_preview_development_fund_voluntary_floored"):
+                    "je_un_chamber_budget_dev_fund_floored", "je_un_chamber_budget_dev_fund_voluntary_floored"):
             self.assertIn(key, loc)
+
+
+class DevelopmentFundVoluntaryTests(unittest.TestCase):
+    """The Development Programs contributions pay the Fund's grants from the UN's
+    founding, whether or not the Assembly has founded the Fund (owner,
+    2026-10-03): founding it only lets each charter reform add a share of the
+    budget and raise the line. Nothing on the grant path may wait for
+    un_inst_development_fund."""
+
+    def test_the_grants_do_not_wait_for_the_vote(self):
+        effects = _read(ECONOMY_EFFECTS)
+        update = _flat(_block(effects, "un_dev_fund_monthly_update"))
+        grants = update[update.index("every_country", update.index("un_dev_fund_pot value")):]
+        self.assertNotIn("un_inst_development_fund", grants)
+        self.assertNotIn("un_inst_development_fund", _flat(_block(effects, "un_dev_fund_country_refresh")))
+        self.assertNotIn("un_inst_development_fund", _flat(_block(effects, "un_economy_obligation_lines")))
+        self.assertNotIn("un_inst_development_fund",
+                         _flat(_block(_read(ECONOMY_TRIGGERS), "un_dev_fund_receiving")))
+        # The pot is snapshotted after the contributions and before the grants.
+        pot = "set_global_variable = { name = un_dev_fund_pot value = un_dev_fund_pot_weekly_value }"
+        donations = "set_global_variable = { name = un_dev_fund_donations value = un_dev_fund_donations_value }"
+        self.assertLess(update.index(donations), update.index(pot))
+        self.assertLess(update.index(pot), update.index("un_dev_fund_grant_value"))
+
+    def test_the_contributions_always_fill_the_pot(self):
+        values = _read(ECONOMY_VALUES)
+        pot = _flat(_block(values, "un_dev_fund_pot_weekly_value"))
+        self.assertIn("add = global_var:un_dev_fund_donations", pot)
+        self.assertNotIn("un_inst_development_fund", pot)
+        # The budget share still needs the Fund founded.
+        self.assertIn("has_global_variable = un_inst_development_fund",
+                      _flat(_block(_read(CHARTER_VALUES), "un_dev_fund_budget_share")))
+
+    def test_the_line_follows_the_charter_only_once_founded(self):
+        line = _flat(_block(_read(ECONOMY_VALUES), "un_dev_fund_line_share"))
+        self.assertIn("value = un_dev_fund_line_share_founding", line)
+        self.assertIn("limit = { has_global_variable = un_inst_development_fund } value = un_dev_fund_line_share_at_level", line)
+
+    def test_the_section_shows_while_the_un_exists(self):
+        sguis = _read(_path("common", "scripted_guis", "un_chamber_sguis.txt"))
+        shown = _flat(_block(sguis, "un_chamber_dev_fund_sgui"))
+        self.assertIn("is_shown = { has_global_variable = un_founded }", shown)
 
 
 class LocTests(unittest.TestCase):

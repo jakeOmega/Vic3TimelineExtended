@@ -669,14 +669,15 @@ un_chamber_budget_sgui = {
 }
 
 # The World Development Fund's section (te_un_sec_dev_fund): is_shown gates the
-# whole section on the Fund standing; the effect renders who it pays and how
-# much, or why nobody is paid (un_dev_fund_recipient_lines,
-# un_economy_effects.txt). Never executed.
+# whole section on the UN existing (the Fund pays out the Development Programs
+# contributions from the UN's founding, founded as an institution or not); the
+# effect renders who it pays and how much, or why nobody is paid
+# (un_dev_fund_recipient_lines, un_economy_effects.txt). Never executed.
 un_chamber_dev_fund_sgui = {
 	scope = country
 
 	is_shown = {
-		has_global_variable = un_inst_development_fund
+		has_global_variable = un_founded
 	}
 	ai_is_valid = { always = no }
 

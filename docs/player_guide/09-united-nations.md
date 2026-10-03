@@ -174,7 +174,7 @@ Jurisdiction, raises the ceiling to 85. Charter Reform II, Veto Restraint and
 the UN Levy, raises it to 100 and restrains the veto: a binding resolution other
 than a charter reform that two thirds of the members with a vote carry is no
 longer stopped by a veto. Each reform also opens new business before the
-Assembly and strengthens the World Development Fund (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
+Assembly and strengthens the World Development Fund once the Assembly has founded it (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
 
 A reform is ripe once authority has held within 5 points of the ceiling for 24
 months running; Why UN Authority Is Moving counts the months. A member of major-power
@@ -654,16 +654,23 @@ after five years without an election.
 
 ### The World Development Fund's grants
 
-Any member can propose the World Development Fund while the UN assesses dues.
-While it stands, it pays out every week to the members whose GDP per head is
-below a line, shared by population. What it pays and where the line sits grow
+From the UN's founding, the World Development Fund pays out every week to the
+members whose GDP per head is below a line, shared by population. Until the
+Assembly founds it as an institution, it pays out the donations alone, to the
+members below a tenth of the average. Any member can propose founding it while
+the UN assesses dues. Once founded, what it pays and where the line sits grow
 with the charter:
 
 | Charter | Paid out each week | Members paid |
 |---|---|---|
-| Founding charter | The donations alone | Below a tenth of the members' average GDP per head |
-| Charter Reform I | 5% of the UN's budget, plus the donations | Below a quarter of the average |
-| Charter Reform II | A quarter of the UN's budget, plus the donations | Below half the average |
+| Not yet founded, or founding charter | The donations alone | Below a tenth of the members' average GDP per head |
+| Charter Reform I (founded) | 5% of the UN's budget, plus the donations | Below a quarter of the average |
+| Charter Reform II (founded) | A quarter of the UN's budget, plus the donations | Below half the average |
+
+Under the founding charter, founding the Fund changes nothing until a reform
+passes. It is worth doing ahead of Charter Reform I, which then strengthens it
+with no second vote. AI members propose founding it only once Reform I has
+passed.
 
 The line never falls below the GDP per head of the poorest member that holds
 its seat and pays its dues. When no such member is under the charter's share of
@@ -672,7 +679,7 @@ least one member.
 
 A reform strengthens a Fund that already stands; nobody votes on it again.
 The donations are the [Fund Development Programs](#un-programs-and-great-power-stances)
-contributions of the major powers: while the Fund stands, a contributor's 0.5%
+contributions of the major powers: founded or not, a contributor's 0.5%
 of GDP a year pays its grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
 Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
 laws allow no investment pool or your banking system has not started. The line
@@ -828,7 +835,7 @@ count in full), and every program earns standing after 24 months.
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
 | Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation and prestige; covers peacekeeping contingents |
-| Fund Development Programs | Major power | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; while the World Development Fund stands, the money pays its grants |
+| Fund Development Programs | Major power | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; the money pays the World Development Fund's grants |
 | Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | Bureaucracy | Prestige, refugee ministry impact |
 | Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | Bureaucracy, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 
@@ -912,7 +919,7 @@ collapsed when they are reference:
 | Programmes and Conventions | Collapsed | How many countries take part in each program and convention, and how many are under sanctions. |
 | Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take. |
 | Our Obligations | Open | Your dues beside the whole budget and what the Standing UN Force and the World Development Fund take from it, your grant from the Fund, your pledge to the World Food Reserve, any ceasefire order against you or your enemy, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
-| World Development Fund | Open | While the Fund stands: the cutoff GDP per head (hover it for how it was set), the members' average, how many members qualify (at or below the cutoff, seated and paying their dues) and what the Fund pays out a week, then each member it pays this month and how much, or why nobody is paid. |
+| World Development Fund | Open | While the UN exists: the cutoff GDP per head (hover it for how it was set), the members' average, how many members qualify (at or below the cutoff, seated and paying their dues) and what the Fund pays out a week, then each member it pays this month and how much, or why nobody is paid. |
 | Our Record | Open | Your case strength and its parts, and whether it would support a condemnation, sanctions or a mandate. |
 | UN Authority History | Open | A chart of authority over time. |
 | Resolutions on the Record | Collapsed | Closed resolutions, with how each member voted. |
