@@ -40,7 +40,8 @@
 Reviewed and rebuilt 2026-10-03, at the owner's request: "if the development fund exists, poor
 countries should want to join more in proportion to the amount they could get from it, and so
 forth." Not yet seen in a running game. Every AI decision point the UN has was read; the table at
-the end gives each one's verdict.
+the end gives each one's verdict. The owner ruled on the five questions the review raised the same
+day ([Owner rulings](#owner-rulings-2026-10-03)), and the build follows the rulings.
 
 **Why.** The buttons a country uses to join, pay and contribute weighed a few laws and the UN's
 authority, and nothing a member gains or pays:
@@ -73,7 +74,7 @@ Reform II the Fund there would pay several members more than their GDP.
 
 ### The shape
 
-Each of four button pairs reads **one score per country** (`common/script_values/un_ai_values.txt`)
+Each of six button pairs reads **one score per country** (`common/script_values/un_ai_values.txt`)
 and a line on it: the "on" button scores only at or above the line, the "off" button only a band
 below it. Between the two neither scores, so a country sits where its conditions put it, and how
 often the engine lets the AI click only sets how fast it gets there (the global-warming policies'
@@ -87,6 +88,8 @@ share); `test_un_ai_values.py` checks the pairing, the bands and the header tabl
 | Pay / Withhold dues | `un_ai_dues_will` | 0 | −25 | will + 5, at most 60 | −25 − will, at most 50 |
 | Fund / Stop funding Development Programs | `un_ai_development_will` | 20 | −5 | will − 10, at most 50 | −5 − will, at most 50 |
 | Contribute to / End peacekeeping | `un_ai_peacekeeping_will` | 20 | −5 | will − 10, at most 50 | −5 − will, at most 50 |
+| Champion / Stop championing the order | `un_ai_order_will` | 20 | −5 | will − 10, at most 50 | −5 − will, at most 50 |
+| Undermine / Stop undermining the order | `un_ai_dissent_will` (minus the order stance) | 20 | −5 | will − 10, at most 50 | −5 − will, at most 50 |
 
 **Money in one unit.** Every money term is a share of GDP a year at 20 points per 1%
 (`un_ai_points_per_gdp_share`). The levy is −2 / −4 / −8 / −20 at Contested / Established /
@@ -106,7 +109,10 @@ covers members only.
 - money (the Fund against the levy);
 - staying out costs: +5 from Established and +5 more from Strong (the pariah modifiers), +30 at
   Supranational for a major power or a nuclear programme or arsenal (the standing case);
-- a UN at Moribund −15;
+- a failing UN: from authority 30 down, −3 a point (−30 at 20, −60 at 10, −90 at 0), so members
+  leave as the crisis deepens, those with the weakest reasons first (ruling 2): a typical small
+  member (about 40) near authority 8, one with weak reasons (about 25) near 13, a great power or a
+  humanitarian member (60 and more) only as the UN dies;
 - help only a member can ask for: +10 with a state below 8 SoL or above 5 devastation, +10 for a
   famine while the World Food Reserve stands;
 - the conventions in force, by the regimes' own tests (`un_ai_convention_terms`, −40 to +15): a
@@ -135,7 +141,8 @@ Worked examples (no conventions in force, no stance unless named):
 | Major-power non-member, Supranational | 30 + 15 − 20 + 10 + 30 = 65 | joins (70) |
 | Isolationist great-power member, Established | 30 + 35 − 80 − 4 + 5 = −14 | in the band: stays, and stays out once out |
 | Isolationist minor member, Established | 30 − 80 − 4 + 5 = −49 | leaves (24) |
-| Small member, Moribund | 30 − 15 = 15 | stays |
+| Small member, authority 15 | 30 − 45 = −15 | in the band: stays |
+| Small member, authority 5 | 30 − 75 = −45 | leaves (20) |
 
 | Member | Dues score | Verdict |
 |--------|------------|---------|
@@ -146,30 +153,55 @@ Worked examples (no conventions in force, no stance unless named):
 | In default, Supranational, a grant of 3% of GDP | 30 + 0 + 40 = 70 | pays (60): the grant covers the dues, so the default counts 0 |
 | Underminer, healthy, Strong | 30 − 60 − 8 = −38 | withholds (13) |
 
-**Development Programs** gives for a reason: humanitarian regulations +20, championing +20,
-recipients among its subjects, bloc partners and allies +15, great power +10, interventionism or
-command economy +10, Established or above +5; laissez-faire −25, isolationism −30, undermining
-−40, drawing a grant itself −15, and the treasury penalty. **Peacekeeping:** humanitarian
+**Development Programs** gives for a reason (ruling 4: most of the time the AI gives no money
+without hope of larger gains, humanitarian leaders excepted): humanitarian regulations +20,
+championing +20, recipients among its subjects, bloc partners and allies +15; great power +5,
+interventionism or command economy +5 and Established or above +5 add to one of those but fall
+short of the line alone (15); laissez-faire −25, isolationism −30, undermining −40, drawing a grant
+itself −15, and the treasury penalty. **Peacekeeping:** humanitarian
 regulations +20, limited war +15, great power +15, championing +15, Established or above +5, a
 peacekeeping or stabilisation mission in the field +10; war −30, total war −20, isolationism −30,
 undermining −40, and the treasury penalty. War is the one deliberate exception to the band rule
 (−30 against 25), as it ended peacekeeping before, and the programme's ten-year cooldown, which
 both buttons respect, holds it to one round a decade.
 
+**Champion and undermine** read one signed stance (ruling 1): humanitarian regulations +25,
+limited war +15, isolationism −30, total war −25, a permanent seat +10, the Multilateral
+Institutions principle +10 to +20 (40 × its alignment), half the convention terms, UN sanctions on
+us −20, a record that would support a condemnation −10, and authority as a mild pull of 0.15 a point
+from 50 (+7.5 at 0, −7.5 at 100). A great power champions at +20, undermines at −20, and does
+neither between; each stops 25 past its own line. Authority's whole swing (15) is inside the band,
+so a power with good reasons either way never switches on authority alone; a neutral power never
+takes a stance on it at all.
+
 **The Fund's vote and proposal.** `un_lean_interests_development_fund` keeps a base of +30 for a
 member under the line, and adds the grant preview (`un_dev_fund_grant_preview_share`) at the same
 20 points per 1% of GDP, at most +30. Under the founding charter the Fund would pay only
 contributions, and none can run before it stands (#672), so the preview is 0 and a poor member
 votes on the base: the hope of contributions. `un_development_fund_ai_chance` is +15 under the
-line plus the preview, at most +20.
+line plus the preview, at most +20. What the richer members give up depends on the charter
+(ruling 5): under the founding charter the Fund takes nothing from the budget, so the richest lean
+−5 and laissez-faire governments −5, and the voluntary Fund passes on the consensus; from Charter
+Reform I it takes a share of the dues they pay, and the richest lean −25, the members above the
+average −10 and laissez-faire governments −15, as before.
+
+**Lobbying by stakeholders** (ruling 5, "not a lot"). On a resolution that accuses no one, the AI
+members whose interests term reaches +35 lobby for it and those at −35 or less against it: at
+most two a side, the strongest first, one campaign each, and only with 300 influence to spare
+(twice the usual floor). They run no pledges. A poor member's +30 for the Fund under the founding
+charter falls short of the line; a large grant at Reform I or II carries it over, and a
+laissez-faire rich member under a reformed charter (−40) lobbies against. Other stakeholders: a
+nuclear power against the prohibition treaty (−60), the cultural hegemon against cultural
+diversity (−50).
 
 **Events.** A read-only triage of every event option's `ai_chance` (109 blocks) found these, each
 checked against the script before it was changed:
 - `un_events.7` (a famine): A, a programme's cost, ×0.2 in default or at 0.75 debt; B ×0.5 in
   default; C, the only free answer, +6 in either.
-- `un_events.4` (a collapse): A, which charges a docket contributor nothing, +5 for a member
-  already running the peacekeeping programme; B, the only option with a running cost, ×0.3 in
-  treasury trouble; C +4 in it.
+- `un_events.4` (a collapse): A now costs a member not running the peacekeeping programme the
+  programme's weekly cost, fading over five years (`un_peacekeeping_deployment_cost`, ruling 3; the
+  mission bills only contingents sent at will), ×0.2 in treasury trouble for such a member, and +5
+  for one running the programme, which already pays; B ×0.3 in treasury trouble; C +4 in it.
 - `un_vote.3` B (complying with a request voted against): ×0.2 for a major power in treasury
   trouble, which compliance bills a programme's cost.
 - `un_events.34` A (the nationalists' demand to leave): ×0.2 for a Fund recipient.
@@ -186,8 +218,8 @@ checked against the script before it was changed:
   already running the peacekeeping programme.
 
 **The debug console.** `te_debug_un.1` option x logs every eligible country's scores to
-`debug.log` (`UN_AI_SCORES` lines: member, the four scores, the convention terms, the money term
-and the Fund prospect as a percentage of GDP).
+`debug.log` (`UN_AI_SCORES` lines: member, the four scores, the order stance, the convention
+terms, the money term and the Fund prospect as a percentage of GDP).
 
 ### Every AI decision point
 
@@ -202,9 +234,9 @@ and the Fund prospect as a percentage of GDP).
 | Event options | `un_events.4`, `.6`, `.7`, `.14`, `.34`, `.36`, `un_vote.3`, `un_referendum.1` | **Fixed** (above) |
 | Founding the UN; the charter invitation | `un_found_button`, `un_events.1` | Fine: no Fund or dues exist yet |
 | Human rights, arms control | their buttons | Fine: law-gated both ways, so the gap between the laws is the band |
-| Champion, undermine | their buttons | **Owner question 1** |
+| Champion, undermine | their buttons | **Fixed**: one signed stance, authority a mild pull (ruling 1) |
 | The vote: lean, noise, veto | `un_vote_lean`, `un_vote_ai_cast` | Fine: one itemised lean the chamber prints (§0.3) |
-| Lobbying | `un_lobby_ai_monthly` | Fine as built; **owner question 5** |
+| Lobbying | `un_lobby_ai_monthly` | **Fixed**: stakeholders lobby a little on a resolution that accuses no one (ruling 5) |
 | Missions joined at will | `un_mission_ai_monthly` | Fine: scored, and debt and default bring contingents home |
 | Proposals (the thin buttons and the phase 7 topics) | `un_buttons.txt`, `un_<key>_ai_chance` | Fine: each needs its case before it can be tabled |
 | Food Reserve pledges | `un_food_reserve_pledge_ai_chance` / `_withdraw_` | Fine: grain held against famine at home |
@@ -213,27 +245,25 @@ and the Fund prospect as a percentage of GDP).
 | A refugee source answering resettlement | `un_events.103` B | Deferred: −SoL and −10 relations against A, but a reaction to emigration, with a Closed Borders bump, is in-fiction |
 | The crisis-response influence cost | `un_events.10` A | Deferred: −10% influence, which nothing reads |
 
-### Owner questions
+### Owner rulings (2026-10-03)
 
-1. **Champion and undermine.** Any great power scores +20 to champion below authority 30 and
-   +15 to undermine at 60 or more, and stops championing only at 80 and undermining only below
-   20. Nothing documents these as a stabiliser, but they act as one on the commitment pillar,
-   and they are ratchets between those lines. Left as they are.
-2. **The crisis exodus.** Below authority 20 every member used to score 10 to leave. The
-   membership score has −15 at Moribund instead, so a member leaves a failing UN only with other
-   reasons. At Moribund there are no dues, and leaving costs standing and five years of
-   `un_withdrawal_penalty_modifier`. Restoring the old weight would be one `if` on the leave
-   chance.
-3. **`un_events.4` A charges a docket contributor nothing.** The mission bills only volunteers
-   (`un_mission_charges`), yet the option is written as the costly answer and C's text says "we
-   cannot spare the resources". Charging it `un_peacekeeping_contributor_cost` would be a design
-   change; this pass only weighted it for programme members.
-4. **Fewer AI contributors.** Development Programs now needs a reason, so fewer AI powers fund
-   it, and under the founding charter contributions are the Fund's only money.
-5. **Lobbying stakeholders.** On a resolution that accuses no one, only the proposer lobbies, so
-   the richest members never campaign against the Fund and the poorest never for it. Letting
-   members with a strong interests term lobby would be new behaviour with an influence cost;
-   #531's rulings are the owner's.
+1. **Champion and undermine.** Any great power used to score +20 to champion below authority 30
+   and +15 to undermine at 60 or more, stopping only at 80 and below 20. The owner: "a mild effect
+   like that is fine, but it should not be strong; countries that otherwise should/shouldn't
+   support the UN for good reasons shouldn't switch just because the authority is high/low." Built
+   as the signed stance above.
+2. **The crisis exodus.** Below authority 20 every member used to score 10 to leave. The owner:
+   gradual rather than a sharp cliff, but it makes sense. Built as the membership score's crisis
+   term.
+3. **`un_events.4` A** charged nothing: the mission bills only contingents sent at will, and its
+   modifier's only cost in money is +5% military goods. The owner: it should charge the
+   programme's cost. Built as `un_peacekeeping_deployment_cost`, like the famine appeal's aid cost.
+4. **Fewer AI contributors.** The owner: most of the time the AI should not give money without
+   hope of larger gains; humanitarian leaders and the like may be the exception. Development
+   Programs' rank and economic-law terms dropped to +5 each.
+5. **Lobbying stakeholders.** The owner: yes, but probably not a lot, and the Fund should not be
+   hard to pass before a charter reform, since it is voluntary. Built as the stakeholder lobbying
+   and the founding-charter lean above.
 
 ### Known roughnesses
 
@@ -261,7 +291,18 @@ and the Fund prospect as a percentage of GDP).
 8. A Development Programs contribution starts only for a power with a reason (humanitarian
    regulations, championing, recipients among its partners).
 9. In a vote on founding the Fund at Reform I or II, a poor member's interests line is above 30
-   and grows with its grant preview.
+   and grows with its grant preview. Under the founding charter the richest member's line is −5,
+   and the Fund carries easily.
+10. A great power with Humanitarian Regulations and nothing else starts championing the order
+    below authority 83 (25 + the pull), and once championing never stops on authority alone; a
+    great power with no stance laws neither champions nor undermines at authority 20 or at 80
+    (`order_stance` in the dump stays between −20 and +20).
+11. As authority falls below about 15, members leave a few at a time, those with the weakest
+    reasons first; great powers stay to the end.
+12. A major power answering a collapse with a full force shows Peacekeeping Deployment Expenses
+    for five years, fading, unless it runs Contribute to Peacekeeping.
+13. On a convention vote, at most two AI members a side run one stakeholder campaign each (the
+    Delegations rows show them), for example nuclear powers against the prohibition treaty.
 
 ---
 
