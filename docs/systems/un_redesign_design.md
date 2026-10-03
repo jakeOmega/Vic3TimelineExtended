@@ -202,7 +202,8 @@ checked against the script before it was changed:
   programme's weekly cost, fading over five years (`un_peacekeeping_deployment_cost`, ruling 3; the
   mission bills only contingents sent at will), ×0.2 in treasury trouble for such a member, and +5
   for one running the programme, which already pays; B ×0.3 in treasury trouble; C +4 in it. Its
-  modifier, Peacekeeping Force Deployed, no longer raises military goods costs.
+  modifier, Peacekeeping Force Deployed, no longer raises military goods costs, and gives +10%
+  army experience gain.
 - `un_vote.3` B (complying with a request voted against): ×0.2 for a major power in treasury
   trouble, which compliance bills a programme's cost.
 - `un_events.34` A (the nationalists' demand to leave): ×0.2 for a Fund recipient.
@@ -261,7 +262,10 @@ terms, the money term and the Fund prospect as a percentage of GDP).
    programme's cost. Built as `un_peacekeeping_deployment_cost`, like the famine appeal's aid cost.
    The deployed modifier's +5% military goods went at the same time (owner): a contingent sent at
    will from the chamber pays money alone, so the force pays one cost too. The peacekeeping
-   programme's modifier keeps its +5%.
+   programme's modifier keeps its +5% (owner: troops sent abroad cost more), and both it and the
+   deployed force give +10% army experience gain (owner: they come home more experienced than a
+   garrison that never left). The programme's is a unit modifier on the journal entry, as arms
+   control's are, so whether it reaches the army is an in-game check (item 14).
 4. **Fewer AI contributors.** The owner: most of the time the AI should not give money without
    hope of larger gains; humanitarian leaders and the like may be the exception. Development
    Programs' rank and economic-law terms dropped to +5 each.
@@ -307,6 +311,10 @@ terms, the money term and the Fund prospect as a percentage of GDP).
     for five years, fading, unless it runs Contribute to Peacekeeping.
 13. On a convention vote, at most two AI members a side run one stakeholder campaign each (the
     Delegations rows show them), for example nuclear powers against the prohibition treaty.
+14. A country running Contribute to Peacekeeping, and one that sent a full force to a collapse,
+    shows +10% in its armies' Weekly Experience Gain tooltip. The programme's comes from a modifier
+    on the journal entry; if it does not show there, arms control's unit modifiers (kill rate,
+    devastation) do not reach the army either, and both belong on the country.
 
 ---
 

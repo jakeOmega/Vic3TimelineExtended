@@ -459,7 +459,8 @@ for five years. A major power that refuses a famine appeal while UN authority is
 40 or more loses prestige and relations improvement speed for five years. Sending
 aid to a famine, or a full peacekeeping force to a collapsed state, costs 0.5% of
 GDP a year, fading over five years; a country already running Contribute to
-Peacekeeping pays nothing extra for the force. Observers or a token gesture cost
+Peacekeeping pays nothing extra for the force. The force earns leverage,
+prestige and +10% army experience gain, fading over ten years. Observers or a token gesture cost
 a quarter of that. The
 lending facility's loan and conditions are covered in [The UN emergency
 loan](04-banking.md#the-un-emergency-loan).
@@ -831,7 +832,7 @@ count in full), and every program earns standing after 24 months.
 
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
-| Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation and prestige; covers peacekeeping contingents |
+| Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
 | Fund Development Programs | Major power, and the World Development Fund founded | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; the money pays the Fund's grants |
 | Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | Bureaucracy | Prestige, refugee ministry impact |
 | Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | Bureaucracy, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
