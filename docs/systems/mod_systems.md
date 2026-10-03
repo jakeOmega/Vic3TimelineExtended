@@ -1148,6 +1148,15 @@ Three amendments can be attached **temporarily** (`add_amendment = { … timeout
 
 The `has_amendment` guards on events 29/31/58 make the permanent and temporary variants mutually exclusive within one enactment. The expiry events re-derive `sunset_law` from `active_law:<lawgroup>` and `industrialists_ig` in `immediate`, and are not in any checkpoint pool. Deferred from issue #278: a financial-regulation phase-in (the three laws' penalties are structurally different — numeric, none, boolean lock) and a wartime rules-of-war clause (no per-country war-start on-action; would need a timeout on an already-active law).
 
+## Legislated Tax Code (`je_tax_code`, `te_tax_code_rule`)
+
+**Experimental, default off.** Under the rule the five vanilla taxation laws cannot be enacted; every country holds the carrier `law_te_tax_code`, whose generated amendments set each rate, and taxes change only through a bill that interest groups must commit to, taking effect on the 1st of its month. The customs option legislates a market owner's tariffs too. AI countries keep the code they are migrated to until AI legislation lands (package 6). The UI is the journal entry and the Budget panel's Tax Code tab.
+
+- **Design of record**: [`tax_code_schema.md`](tax_code_schema.md): tokens and sentinels, the one collection writer, the scheduler, migration, civil wars, drift, the bill lifecycle and support model, offers, obligations, the economy snapshot and fiscal record, the panels and customs. Read it before touching any `te_tax_*` variable.
+- **Engine capabilities and play-tests**: [`../testing/tax-code-capability-ledger.md`](../testing/tax-code-capability-ledger.md): what is verified in game and what is only read statically (row 29 lists the unproven engine forms the panels rely on), the items recorded for later, and the play-test list before merge.
+- **Spec and plan**: [`../superpowers/specs/2026-09-29-legislated-tax-code-design.md`](../superpowers/specs/2026-09-29-legislated-tax-code-design.md), [`../superpowers/plans/2026-10-02-legislated-tax-code-tasks.md`](../superpowers/plans/2026-10-02-legislated-tax-code-tasks.md).
+- **Generated files** come only from `scripts/generators/gen_tax_code.py` (`--check` in the tests; [`../auto_generated_files.md`](../auto_generated_files.md)). Tests: `test_tax_code_*.py`.
+
 ## Collective Governance (`law_direct_democracy`)
 
 The governance principle `law_direct_democracy` is displayed as **Collective Governance**: no individual holds supreme executive power. The key is historical (the law was Direct Democracy) and kept because renaming a law breaks saves. Spec: `docs/superpowers/specs/2026-09-26-collective-governance-design.md`.

@@ -1,5 +1,7 @@
 # Carbon levy: numbers for owner review
 
+> **Draft, parked until PR #674 lands; the numbers will change.** The owner deferred the carbon levy on 2026-10-03 until the per-building emissions and carbon-capture work (PR #674) is merged: it changes the oil factor (1.74 against 2) and steel's coal (30 to 10) and adds `state_carbon_capture_add`, so the levy should tax net emissions. Nothing on this page is implemented, and this branch ships no carbon-levy script. The research file cited below is in the git-ignored `.superpowers/` workspace.
+
 Phase 1 of Task 16 (plan: `docs/superpowers/plans/2026-10-02-legislated-tax-code-tasks.md`; research: `.superpowers/sdd/2026-10-02-legislated-tax-code-tasks/research/F_carbon_tax.md`). The owner chose design C on 2026-10-02. This page proposes the magnitudes. **No game script changes until the owner approves them.**
 
 **Labels.** **[static]** is computed from the script at base prices (merged vanilla 1.14.5 snapshot + mod `common/`). **[inf]** is inferred from the engine model and not confirmed in game. **[assume]** is an assumption chosen for illustration. **[ext]** is external economics, given only as orientation.
