@@ -1,0 +1,35 @@
+﻿# ============================================================================
+# DRUGS WEALTH PROBE — fired only from the console: `event te_debug_drugs.1`
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires this event. It measures pop
+# wealth and Drugs supply for drugs phase 2 § 1 (te_debug_drugs_measure in
+# common/scripted_effects/te_debug_drugs_effects.txt) and shows the world totals.
+# Fire it once per save, paused: the numbers are that save's state. They go to
+# debug.log on TE_DRUGS_PROBE lines, so the game need not be saved afterwards.
+# ============================================================================
+namespace = te_debug_drugs
+
+te_debug_drugs.1 = { # REVIEWED 2026-10-02: console-only test event (`event te_debug_drugs.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/medical_breakthrough.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_drugs.1.t
+	desc = te_debug_drugs.1.d
+	flavor = te_debug_drugs.1.f
+
+	immediate = {
+		te_debug_drugs_measure = yes
+	}
+
+	option = {
+		name = te_debug_drugs.1.a
+		default_option = yes
+	}
+}

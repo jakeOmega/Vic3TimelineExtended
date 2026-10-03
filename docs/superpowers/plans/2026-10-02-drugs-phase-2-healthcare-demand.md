@@ -1,6 +1,6 @@
 # Drugs phase 2: Healthcare demand and plantation penalties
 
-**Status:** not started. A brief for a local Claude Code session on the owner's machine, which has the game install and saves. Read it whole before starting.
+**Status:** §§ 1–3 done on branch `feat/drugs-phase-2-healthcare-demand`: measurements and the owner's answers to § 5 in [the results](../../testing/drugs-wealth-probe-results-2026-10-02.md). § 4's in-game checks are the owner's. A brief for a local Claude Code session on the owner's machine, which has the game install and saves. Read it whole before starting.
 **Phase 1:** [jakeOmega/Vic3TimelineExtended#652](https://github.com/jakeOmega/Vic3TimelineExtended/pull/652) (branch `claude/youthful-turing-sbvv47`). If it hasn't merged, branch from it and open the phase-2 PR with `--base main` (CLAUDE.md § "Stacked PRs must target `main`").
 **Outcome:** pops from about wealth 25 buy a small amount of Drugs as healthcare, and the amount levels off. Health and consumer-protection institutions shrink opium plantations. Every threshold comes from wealth distributions measured in real saves, not from guesses.
 
@@ -44,6 +44,8 @@ None of the numbers in § 2 should be fixed until this step is done. Nothing in 
 - `pop_needs_curves.py`: add `healthcare_need(wealth_level)` and register it in `NEED_CURVES` (around line 100). `generate_buy_packages` already inserts a need a wealth block lacks. It extrapolates wealth 100–200 with a power-law fit over 90–99, so confirm those rows stay at the cap.
 - Localization: `popneed_healthcare` in `localization/english/te_goods_and_needs_l_english.yml`. Vanilla localizes each need with its name key only, and the mod's Convenience and Tourism needs are the precedent.
 - `common/buy_packages/00_buy_packages.txt` is generated. Never hand-edit it; it comes from the full `/reload` in § 4.
+
+> **Superseded (2026-10-02).** The owner revised the curve to about 3% of a rich pop's spending, and took Drugs out of Leisure: see "Revised decisions" in [the results](../../testing/drugs-wealth-probe-results-2026-10-02.md). The table below also misvalues spending: a buy-package value is already a cost at base prices, so multiplying it by a base price again is wrong.
 
 **Starting curve** (rescale it from § 1's measurements). Totals are from the committed buy packages, valuing each need at its default good's base price:
 

@@ -306,6 +306,22 @@ method, and Antibiotic Fermentation about twice as much. An opium plantation's
 Mechanized Farm makes 55 Drugs per level; a coffee or tea plantation's, whose
 goods have the same base price, makes 75.
 
+Pops buy Drugs for two needs: Intoxicants, as in the base game, and from
+wealth 16 the mod's Healthcare ([Pop consumption at high
+wealth](03-economy.md#pop-consumption-at-high-wealth)). Healthcare takes about
+3% of a pop's spending from wealth 29 to 50, so in a rich country most Drugs
+are bought as medicine and Drugs are a large market. Leisure, which also buys
+Drugs in the base game, doesn't in the mod.
+
+A health system shrinks your own opium plantations. Each level of the Ministry
+of Health cuts their throughput by 2% under Charity Hospitals, 3% under
+Private Health Insurance and 5% under Public Health Insurance. Each level of the
+Ministry of Consumer Protection cuts it by another 10%. With both ministries at
+level 9 under Public Health Insurance, the cut is 135%, set against the
+plantations' other throughput bonuses. Pharmaceutical Industries are not affected, and
+neither are other countries' plantations, which can go on selling Drugs into
+your market.
+
 The base game's journal entry The Opium Trade is not offered after 23 January
 1912, and an entry still open on that date fails. Field Hospitals take Drugs as
 upkeep, so they need Drugs for sale in your market.

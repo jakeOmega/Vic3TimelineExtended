@@ -110,3 +110,99 @@ popneed_tourism = {
 		min_supply_share = 0.0
 	}
 }
+
+# Medicine (pop_needs_curves.py, healthcare_need): about 3% of a pop's spending
+# from wealth 29 to 50, so Pharmaceutical Industries come to roughly 1.5-2% of
+# a rich country's GDP. Drugs only: doctors and hospitals are already part of
+# Services, and a services entry would split the demand by market share, not by
+# wealth. The obsession fields are left at the defines' defaults. A culture
+# obsessed with Drugs (Han) should still shift about 25% more of its spending
+# into any need holding them (OBSESSION_POP_NEED_EXPENSE_MULT), this one
+# included; plan § 4 checks it in game.
+popneed_healthcare = {
+	default = opium
+
+	entry = {
+		goods = opium
+		weight = 1
+		max_supply_share = 1.0
+		min_supply_share = 0.0
+	}
+}
+
+# Vanilla's Leisure without Drugs. Leisure grows without limit with wealth, and
+# a market full of Pharmaceutical Industries' output would pull ever more of it
+# into Drugs, turning a medicine industry into a recreational one. Rich pops buy
+# their Drugs through Healthcare; Intoxicants keeps Drugs for the 19th-century
+# opium trade.
+REPLACE:popneed_leisure = {
+	default = services
+
+	obsession_demand_min = 0.5
+	obsession_demand_mult = 2.0
+	prestige_goods_demand_increase = 1.0
+
+	entry = {
+		goods = services
+
+		weight = 0.1
+		max_supply_share = 1.0
+		min_supply_share = 0.0
+	}
+
+	entry = {
+		goods = fine_art
+
+		weight = 4
+		max_supply_share = 1.0
+		min_supply_share = 0.0
+	}
+
+	entry = {
+		goods = small_arms
+
+		weight = 0.75
+		max_supply_share = 0.25
+		min_supply_share = 0.0
+	}
+
+	entry = {
+		goods = aeroplanes
+
+		weight = 1
+		max_supply_share = 0.2
+		min_supply_share = 0.0
+	}
+
+	entry = {
+		goods = automobiles
+
+		weight = 1
+		max_supply_share = 0.25
+		min_supply_share = 0.0
+	}
+
+	entry = {
+		goods = radios
+
+		weight = 1
+		max_supply_share = 0.2
+		min_supply_share = 0.0
+	}
+
+	entry = {
+		goods = clippers
+
+		weight = 1
+		max_supply_share = 0.25
+		min_supply_share = 0.0
+	}
+
+	entry = {
+		goods = steamers
+
+		weight = 0.75
+		max_supply_share = 0.25
+		min_supply_share = 0.0
+	}
+}

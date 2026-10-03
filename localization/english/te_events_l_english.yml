@@ -4615,6 +4615,14 @@
  te_debug_deterrence.5.t:0 "Deterrence Console: Estimates and Guarantees"
 
 #
+# TE_DEBUG_DRUGS
+#
+ te_debug_drugs.1.a:0 "Close"
+ te_debug_drugs.1.d:0 "Console-only measurement for the Healthcare need. Every country now holds its population, the share of it in pops at each wealth level, its Drugs buildings, its market's Drugs price and whether it bans Drugs. We also hold the world totals below. Every number is also written to debug.log, on lines starting TE_DRUGS_PROBE, so there is no need to save.\n\nWorld population: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_pop').GetValue|K]#!\nWealth 10 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w10').GetValue|1]%#!\nWealth 15 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w15').GetValue|1]%#!\nWealth 20 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w20').GetValue|1]%#!\nWealth 25 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w25').GetValue|1]%#!\nWealth 30 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w30').GetValue|1]%#!\nWealth 35 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w35').GetValue|1]%#!\nWealth 40 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w40').GetValue|1]%#!\nWealth 50 or more: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_w50').GetValue|1]%#!\n\nWorld Drugs buy orders: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_buy').GetValue|K]#!\nWorld Drugs sell orders: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_world_sell').GetValue|K]#!\nDrugs price in our market: #v [ROOT.GetCountry.MakeScope.Var('te_dbg_drugs_price').GetValue|2]#! × base"
+ te_debug_drugs.1.f:0 "'How many of them can afford a doctor?'\n\n'Count them and we will know.'"
+ te_debug_drugs.1.t:0 "Drugs Wealth Probe"
+
+#
 # TE_DEBUG_GW
 #
  te_debug_gw.1.a:0 "Set warming to 0.5°C (Moderate)"
