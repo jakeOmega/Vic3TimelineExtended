@@ -777,15 +777,15 @@ Use the `market = { mg:<good> = { add = … } }` **block** form rather than a `t
 
 `min = 0` after the read is the max-with-zero clamp. Under the "clamped" hypothesis exactly one term is non-zero; under the "signed mirror" hypothesis the negative term clamps to zero. Either way `value_rel` is the correct signed fraction. The Strategic Reserve's policy trigger uses this (`st_res_<good>_price_rel`, `common/script_values/st_res_script_values.txt`); the older `st_res_<good>_sale_profit` values still read bare `market_goods_pricier` and are only correct below base under the signed hypothesis.
 
-## A trigger needs a `var:` on its LEFT side — script values only go on the right
+## A trigger's left side must name a value — a bare number is not a trigger
 
-`var:my_variable > my_script_value` is a valid trigger. `my_script_value > 20` is **not** — a bare script value is not a trigger, so a comparison that starts with one is silently not the check you wrote. This bites whenever validation is naturally phrased as "is this derived quantity big enough": *"the gap between these two variables must stay ≥ 15"* has no direct form.
+`var:my_variable > my_script_value` and `my_script_value > 20` are both valid triggers: a **named script value may stand on the left**. Vanilla does it in shipped journal entries (`07_zaibatsu.txt`: `country_levels_owned_by_zaibatsu >= je_zaibatsu_possible_levels_threshold`; `05_grunderzeit.txt`: `grunderzeit_actual_gdp_script_value >= global_var:grunderzeit_combined_gdp_global_var_goal`) and reads one through a scope (`scope:target_country.country_coup_resistance`, `57_orchestrate_coup.txt`), and the mod relies on it (`gw_share_pct_display >= un_regime_emitter_share_pct`, `un_mission_ai_join_score > un_mission_ai_join_threshold`, `un_ai_membership_will >= un_ai_membership_join_line`). Until 2026-10-03 this section said the opposite, with no evidence behind it; code written to it is not wrong, only roundabout. What is **not** a trigger is a left side with nothing to look up: a literal number, or a `$PARAM$` that substitutes to one (`2 = 1`, § "`$D$ = 1` Is Not a Trigger" below).
 
-Invert it. Define the script value as **the limit the variable may not pass**, and compare the variable to it:
+Inverting a rule is still the clearer shape when it guards a control: define the script value as **the limit the variable may not pass**, and compare the variable to it, so the rule stays in `is_valid` where a disabled button can explain itself:
 
 ```
-# NOT a trigger:            my_gap_script_value >= 20
-# Works: define the limit, then compare a variable to it.
+# Also valid, but explains nothing in a tooltip: my_gap_script_value >= 20
+# Clearer: define the limit, then compare a variable to it.
 st_res_<good>_policy_buy_up_limit = {           # = sell_thr - min_gap - step
 	value = 0
 	if = { limit = { has_variable = st_res_<good>_sell_thr }  add = var:st_res_<good>_sell_thr }
@@ -4439,7 +4439,7 @@ A game rule reaches script through `has_game_rule`, reaches production methods t
 
 ## `$D$ = 1` Is Not a Trigger — Branch on a Literal `yes`/`no` Flag
 
-A numeric parameter substituted into a condition gives `2 = 1`, which has no left-hand variable and is not a trigger (the same rule as § A trigger needs a `var:` on its LEFT side). Writing the argument into a variable first and testing that (`set_variable = { name = x value = $D$ }` … `limit = { var:x >= 4 }`) runs correctly but **previews wrongly**: a button or option tooltip evaluates every `limit` against the current state without running the effects above it, so the `var:` still holds the old value and the preview shows the wrong branch. Have the caller pass the branch as a literal flag and test it with `always = $FLAG$`, which reads the same in the preview and in the run. One wrapper per value keeps call sites short: `nd_set_doctrine_4 = { nd_set_doctrine = { D = 4 OFFENSIVE = yes LEAVES_NFU = yes } }` (`nuclear_deterrence_effects.txt`). Comparing a variable *to* a parameter (`var:nd_doctrine = $D$`) is fine.
+A numeric parameter substituted into a condition gives `2 = 1`, which has nothing on its left to look up and is not a trigger (§ A trigger's left side must name a value). Writing the argument into a variable first and testing that (`set_variable = { name = x value = $D$ }` … `limit = { var:x >= 4 }`) runs correctly but **previews wrongly**: a button or option tooltip evaluates every `limit` against the current state without running the effects above it, so the `var:` still holds the old value and the preview shows the wrong branch. Have the caller pass the branch as a literal flag and test it with `always = $FLAG$`, which reads the same in the preview and in the run. One wrapper per value keeps call sites short: `nd_set_doctrine_4 = { nd_set_doctrine = { D = 4 OFFENSIVE = yes LEAVES_NFU = yes } }` (`nuclear_deterrence_effects.txt`). Comparing a variable *to* a parameter (`var:nd_doctrine = $D$`) is fine.
 
 ## A Per-Mille Chance: Roll Twice Rather Than Pass a Fraction to `random`
 

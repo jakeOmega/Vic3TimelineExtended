@@ -478,6 +478,28 @@ class AiLobbyingTest(unittest.TestCase):
     def test_it_lets_a_campaign_go_when_it_runs_short(self):
         self.assertRegex(self.lobby, r"influence\s*<\s*0[\s\S]*?un_lobby_campaign_remove_pact\s*=\s*yes")
 
+    def test_stakeholders_lobby_a_little_on_a_resolution_that_accuses_no_one(self):
+        # Owner, 2026-10-03: "yes, but probably not a lot". Only where no
+        # target's side lobbies already; two a side at most, the strongest
+        # first; one campaign each, with twice the influence to spare.
+        stakes = self.monthly[self.monthly.index("else = {"):]
+        self.assertEqual(len(re.findall(r"un_lobby_ai_stake_lobby\s*=\s*\{", stakes)), 2)
+        self.assertRegex(stakes, r"un_lobby_ai_stakeholder_for\s*=\s*yes[\s\S]*?max\s*=\s*2\b[\s\S]*?DIR\s*=\s*for\s+LOW\s*=\s*-29\s+HIGH\s*=\s*9")
+        self.assertRegex(stakes, r"un_lobby_ai_stakeholder_against\s*=\s*yes[\s\S]*?max\s*=\s*2\b[\s\S]*?DIR\s*=\s*against\s+LOW\s*=\s*-9\s+HIGH\s*=\s*29")
+        stake = _block(_read(LOBBY_EFFECTS), "un_lobby_ai_stake_lobby")
+        self.assertIn("influence >= un_lobby_ai_stake_influence_floor", stake)
+        self.assertIn("var:un_lc_lobbyist ?= scope:un_lai_lobbyist", stake)
+        floor = int(re.search(r"^un_lobby_ai_stake_influence_floor\s*=\s*\{\s*value\s*=\s*(\d+)", self.values, re.M).group(1))
+        self.assertGreater(floor, 150)
+        triggers = _read(LOBBY_TRIGGERS)
+        for side, test in (("for", ">= un_lobby_ai_stake_line"), ("against", "<= un_lobby_ai_stake_line_against")):
+            with self.subTest(side=side):
+                body = _block(triggers, f"un_lobby_ai_stakeholder_{side}")
+                self.assertIn("is_ai = yes", body)
+                self.assertIn("NOT = { scope:un_lai_proposer ?= this }", body)
+                self.assertIn("var:un_lean_res ?= scope:un_lai_res", body)
+                self.assertIn("var:un_lean_interests " + test, body)
+
 
 
 class DelegationRowTest(unittest.TestCase):
