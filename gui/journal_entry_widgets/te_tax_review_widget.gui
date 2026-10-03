@@ -737,7 +737,9 @@ types te_tax_review_widget_types
 					}
 				}
 				te_tax_text = {
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_est_static', 'te_tax_est_stale' )]"
+					# Before the first snapshot (a new country's first month) there is
+					# no date to print and no base to scale.
+					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), '(CFixedPoint)1' ), 'te_tax_est_static', 'te_tax_est_stale' ) )]"
 					tooltip = "te_tax_est_header_tt"
 				}
 				te_tax_review_line = {

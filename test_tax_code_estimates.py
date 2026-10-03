@@ -362,6 +362,14 @@ class EstimatePanelTest(unittest.TestCase):
         self.assertIn("no current base — estimate unavailable", self.loc["te_tax_ig_offer_est_nobase"].lower())
         self.assertIn("te_tax_view_snap_current", self.review)
         self.assertIn("'te_tax_est_static', 'te_tax_est_stale'", self.review)
+        # before the first snapshot: no date (it would print -1.-1) and no base
+        self.assertIn("ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', "
+                      "SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current')",
+                      self.review)
+        self.assertIn("No economy snapshot yet", self.loc["te_tax_est_none"])
+        self.assertNotIn("ScriptValue", self.loc["te_tax_est_none"])
+        # the no-base line states no reason, as it also covers the time before the first snapshot
+        self.assertEqual(self.loc["te_tax_est_nobase"], "No current base — estimate unavailable.")
 
     def test_each_channel_row_has_a_no_base_branch_and_the_budget_getter(self):
         for channel, (getter, keys) in CHANNELS.items():
