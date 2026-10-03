@@ -69,7 +69,8 @@ un_force_war_goal_barred = {
 # The types are every type a play opens with in vanilla, the subjugation types
 # of 1.14 and the mod's reunification, less the goals only a subject can hold
 # (the actor is never one: un_teeth_war_goal_surcharge leaves subjects alone)
-# and the UN mandate's own goal (a bound mandate's holder is left alone too).
+# and the UN mandate's own goal (the play a bound mandate is exercised in is
+# left alone too: un_teeth_war_goal_surcharge, un_mandate_is_bound_play_of).
 # They fall in three groups:
 #   one opening play  struck unless this play is of that type
 #                     (un_force_goal_strikeable)
