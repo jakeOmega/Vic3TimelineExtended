@@ -2316,6 +2316,7 @@
  sr_colony_venus_extraction_desc:0 "A gas extraction operation harvesting atmospheric resources from Venus's dense clouds."
  sr_colony_vesta_mining_desc:0 "Mining operations extracting metallic ores from the differentiated asteroid Vesta."
  sr_colony_vesta_science_desc:0 "A scientific outpost studying Vesta's unique geological history and dawn-lit surface."
+ sr_commercial_space_dividend_desc:0 "With the race run, the rockets, crews and contractors that once competed for milestones haul ore from the asteroids. Each point of monthly space race progress our sources still give adds +5% Extraplanetary Base throughput, up to +50%, recalculated every month. Funding and progress bonuses do not count."
  sr_engineering_breakthrough:0 "Engineering Breakthrough"
  sr_engineering_breakthrough_desc:0 "A fundamental innovation in propulsion engineering has dramatically improved the program's capabilities."
  sr_equatorial_plain:0 "Equatorial Landing Success"
