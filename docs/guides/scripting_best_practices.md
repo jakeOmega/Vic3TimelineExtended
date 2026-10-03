@@ -3718,6 +3718,8 @@ Where a given modifier or trigger can be used:
 - A monthly `random_list` whose entries each scan for the same few building types. One shared check in the on_action's `trigger` replaces them, since a country that fails it can only roll the do-nothing entry.
 - An expensive script value read several times in one pulse, or on every frame of a panel. `cultural_pull_raw` was evaluated twice per `cultural_pull_total`, and that ran several times per country per month.
 
+**Moving a test first can remove a guard.** A test you move later may have been what kept an unset scope from being read. `te_clothes.txt`'s suit weights put `scope:character = { … }` ahead of vanilla's `european_clothes_trigger`, which opens with `exists = scope:character`. Pop portraits have no character, so every one then logged "Undefined event target 'character'" and an unset-scope error: nearly 3,000 in the first 90 seconds after launch. Use `scope:x ?= { … }` (vanilla's form in portrait modifiers, 588 uses), and check error.log for the moved lines after the next launch.
+
 ## Audit and Research Workflow
 
 When researching mod content (auditing for bugs, inventorying which PMs produce/consume a good, mapping a system across files), a few patterns are reliable and a few are surprisingly broken.

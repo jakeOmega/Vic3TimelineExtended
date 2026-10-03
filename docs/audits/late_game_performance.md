@@ -87,7 +87,10 @@ All are exact: they change no result unless a line says otherwise.
   script values that compute the world's cultural pull. That's one fewer
   benchmark computation per pulse, and no exposure if the engine
   re-evaluates multipliers later.
-- **Suit portraits.** The character tests run before the culture triggers.
+- **Suit portraits.** The character tests run before the culture triggers,
+  through `scope:character ?=`. The first version used `=`, and pop portraits,
+  which have no character, logged two errors each (caught in the startup-log
+  check).
 - **UN bulk lobbying.** The `has_variable` guard stops the button's tooltip
   logging 3 errors for each of 24 rows: 1,584 lines in nine minutes with the
   chamber open.

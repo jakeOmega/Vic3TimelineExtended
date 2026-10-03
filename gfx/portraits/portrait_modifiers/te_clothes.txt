@@ -25,7 +25,7 @@
 			base = 0
 			modifier = {
 				add = 15000
-				scope:character = {
+				scope:character ?= {
 					is_female = yes
 					age >= define:NCharacters|ADULT_AGE
 					exists = owner
@@ -45,6 +45,9 @@
 				}
 				# The cheap character tests run first, so the vanilla culture
 				# triggers are only asked for adult women in a country with the tech.
+				# `?=` because pop portraits have no scope:character: the culture
+				# triggers open with `exists = scope:character`, and a plain `=` here
+				# logged two errors per pop portrait once it ran first.
 				OR = {
 					european_clothes_trigger = yes
 					african_diaspora_clothes_trigger = yes
@@ -73,7 +76,7 @@
 			base = 0
 			modifier = {
 				add = 12000
-				scope:character = {
+				scope:character ?= {
 					is_female = yes
 					age >= define:NCharacters|ADULT_AGE
 					is_ruler_of_own_country = yes
@@ -85,6 +88,9 @@
 				}
 				# The cheap character tests run first, so the vanilla culture
 				# triggers are only asked for adult women in a country with the tech.
+				# `?=` because pop portraits have no scope:character: the culture
+				# triggers open with `exists = scope:character`, and a plain `=` here
+				# logged two errors per pop portrait once it ran first.
 				OR = {
 					european_clothes_trigger = yes
 					african_diaspora_clothes_trigger = yes
