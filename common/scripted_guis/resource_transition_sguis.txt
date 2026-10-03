@@ -172,17 +172,6 @@ rt_active_power_sgui = {
 # Section-wide yes/no questions
 # ---------------------------------------------------------------------------
 
-# The Global Warming game rule. With it off the entry still opens for a
-# country that adopts a restrictive transition law, but shows only this
-# section: there is no climate to show.
-gw_rule_enabled_sgui = {
-	scope = country
-	is_shown = { has_game_rule = global_warming_enabled }
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
-
 # Managed Fossil Phaseout is in force: the programme rows' controls can work.
 # Otherwise the section says once what they need.
 rt_phaseout_sgui = {
