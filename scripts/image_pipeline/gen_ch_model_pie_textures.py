@@ -102,7 +102,7 @@ PANEL_PIES: tuple[tuple[str, str], ...] = (
 
 
 def _dds_header(w: int, h: int) -> bytes:
-    """Uncompressed 32-bit BGRA DDS header (same layout as gen_prestige_icons)."""
+    """Uncompressed 32-bit BGRA DDS header."""
     flags = 0x1 | 0x2 | 0x4 | 0x8 | 0x1000  # caps | height | width | pitch | pixelformat
     return b"".join((
         b"DDS ",
