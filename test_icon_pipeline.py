@@ -977,5 +977,53 @@ class RestyleTests(unittest.TestCase):
                                            ("building__building_old", 2, 0.5)])
 
 
+
+class StyleOverrideTests(unittest.TestCase):
+    """An entry's own "style" replaces its category's in the prompt it renders and is written from."""
+
+    def test_entry_style_replaces_the_category_style(self):
+        plain = {"subject": "a station", "seed": None}
+        own = dict(plain, style="{subject} in orbit")
+        self.assertEqual(ip.entry_prompt("building", plain), ip.prompt_for("building", "a station"))
+        self.assertTrue(ip.entry_prompt("building", own).startswith("a station in orbit, no text"))
+
+    def test_check_rejects_a_style_without_its_subject(self):
+        saved = ip.ICONS
+        try:
+            ip.ICONS = {"building": {
+                "building_ok": {"subject": "a station", "seed": None, "style": ip.ORBIT},
+                "building_no_subject": {"subject": "a station", "seed": None, "style": "a painting"},
+                "building_stray_field": {"subject": "a station", "seed": None, "style": "{subject} at {time}"},
+                "building_not_text": {"subject": "a station", "seed": None, "style": 3},
+            }}
+            d = tempfile.mkdtemp()
+            bdir = Path(d) / "common" / "buildings"
+            bdir.mkdir(parents=True)
+            (bdir / "b.txt").write_text("".join(f"{k} = {{\n}}\n" for k in ip.ICONS["building"]),
+                                        encoding="utf-8-sig")
+            r = ip.check(d, on_disk=set())
+        finally:
+            ip.ICONS = saved
+        self.assertEqual(sorted(k for _, k in r["bad_entry"]),
+                         ["building_no_subject", "building_not_text", "building_stray_field"])
+
+    def test_render_uses_the_entry_style(self):
+        import icon_render
+        saved = (ip.ICONS, icon_render.embed, icon_render.render)
+        seen = {}
+        try:
+            ip.ICONS = gi.ICONS = {"building": {"building_station": {"subject": "a station", "seed": None,
+                                                                      "style": "{subject} in orbit"}}}
+            icon_render.embed = lambda prompts, emb_dir: seen.setdefault("prompts", prompts)
+            icon_render.render = lambda jobs, *a, **k: seen.setdefault("jobs", jobs)
+            gi.stage_render("building", set(), Path("/w"), 1, "sequential")
+        finally:
+            ip.ICONS, icon_render.embed, icon_render.render = saved
+            gi.ICONS = ip.ICONS
+        want = ip.prompt_for("building", "a station", "{subject} in orbit")
+        self.assertEqual(seen["prompts"], {"building__building_station": want})
+        self.assertEqual(seen["jobs"], [("building__building_station", want, 0)])
+
+
 if __name__ == "__main__":
     unittest.main()

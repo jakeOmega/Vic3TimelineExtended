@@ -64,7 +64,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 MOD_ROOT = SCRIPT_DIR.parents[1]
 sys.path.insert(0, str(SCRIPT_DIR))
 sys.path.insert(0, str(MOD_ROOT))
-from icon_prompts import (CATEGORIES, ICONS, KEEP, RESTYLE_CROP, icon_path, prompt_for,  # noqa: E402
+from icon_prompts import (CATEGORIES, ICONS, KEEP, RESTYLE_CROP, entry_prompt, icon_path,  # noqa: E402
                           restyle_strengths)
 
 SHEET_ROWS = 20
@@ -357,7 +357,7 @@ def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str)
 
     jobs, prompts, restyles = [], {}, []
     for key, e in generated(cat, only).items():
-        prompt = prompt_for(cat, e["subject"])
+        prompt = entry_prompt(cat, e)
         prompts[name(cat, key)] = prompt
         if "restyle" in e:
             restyles.append((key, e, prompt))
@@ -620,7 +620,7 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
             if extra:
                 want.append(extra)
         else:
-            want = [e["seed"], prompt_for(c, e["subject"])]
+            want = [e["seed"], entry_prompt(c, e)]
             if flux_backdrop(c):
                 # A new backdrop pick or prompt rewrites every icon over it.
                 want += [CATEGORIES[c]["backdrop"]["seed"], backdrop_prompt(c)]
