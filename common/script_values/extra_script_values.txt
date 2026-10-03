@@ -2040,6 +2040,12 @@ financial_cycle_government_fiscal_policy_effect_size = {
 	max = 1
 }
 
+# JE multipliers re-evaluate in JE scope; retain the country formula for other callers.
+financial_cycle_government_fiscal_policy_effect_size_for_je = {
+	value = 0
+	owner = { add = financial_cycle_government_fiscal_policy_effect_size }
+}
+
 # linear up to +0.25 at 50 bubble pressure, then a gentle curve to +0.45 at
 # max pressure. Until 2026-09-22 the upper half was quadratic to +1.25: at
 # bubble 80+ that was a standing +7-12 cycle points a month, which no tool
@@ -2261,6 +2267,12 @@ ce_pool_withdraw_pool_cost = {
 ce_treasury_pool_balance_multiplier = {
 	value = 0
 	subtract = investment_pool_net_income
+}
+
+# Keep the live pool-income read on the JE's owning country.
+ce_treasury_pool_balance_multiplier_for_je = {
+	value = 0
+	owner = { add = ce_treasury_pool_balance_multiplier }
 }
 
 # ====================================================================================

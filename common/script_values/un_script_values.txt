@@ -5,6 +5,22 @@
 
 # ---- Member Statistics ----
 
+# JE multiplier: authority is global, but institutional alignment belongs to
+# the owning country. The owner link survives the modifier's later recalculations.
+un_membership_benefits_multiplier_for_je = {
+	value = 0
+	owner = {
+		add = {
+			value = global_var:un_authority
+			divide = 50
+			multiply = {
+				value = 1
+				add = modifier:country_un_institutional_alignment
+			}
+		}
+	}
+}
+
 # The General Assembly line (§0.8 rulings 7-8): the represented members of the
 # eligible nations, then, apart, the members whose representation is
 # suspended. Both sides of "N of M" ask un_membership_eligible, so N never
