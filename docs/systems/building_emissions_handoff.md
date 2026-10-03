@@ -39,7 +39,7 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 ## Remaining verification
 
 All three phase-0 in-game checks and phase-1 balance review are pending.
-No deployment or game save has been changed. Preserve internal snapshot/history/AI/temperature units when
+No game save has been changed; the test deployment is recorded below. Preserve internal snapshot/history/AI/temperature units when
 scaling display values; the live world-emissions script value also feeds the
 debug snapshot helper, so do not scale that internal calculation.
 
@@ -82,3 +82,28 @@ probe textures reuse existing modern plant icons.
 Phase 1 is deliberately reviewable separately from capture's additional
 balance changes. The next implementation depends on real engine evidence,
 not on an unresolved design preference; the owner decisions are already final.
+
+## Test deployment (2026-10-03)
+
+The feature branch was released from the agent worktree for checkout. Another
+active task switched the shared main checkout back to the performance branch
+while deployment was being prepared, so testing uses an isolated full checkout:
+
+- Path: `/home/jakef/.codex/worktrees/f848/Vic3TimelineExtended`.
+- Local integration branch: `codex/building-emissions-test`.
+- Integrates the emissions feature and performance tip `fd5f0c35`, retaining
+  the company-building BOM fix and current performance work. Do not push this
+  integration branch as the emissions feature PR; keep that PR scoped to
+  `codex/building-emissions`.
+- Target: `/mnt/c/Users/jakef/OneDrive/Documents/Paradox Interactive/Victoria 3/mod/Vic3TimelineExtended`.
+- Normal deployment plus the opt-in phase-0 overlay, including English-label
+  copies for all supported languages. The next normal deploy removes the probe.
+- Integration checks: 125 focused tests passed; deployment dry run had zero
+  deletions. The shared checkout's seven modified generated docs were preserved.
+
+Restart Victoria 3 and use a copied save. Console: `event te_cc_probe.1`.
+The probe README's results table is still pending; deployment does not verify
+engine behavior.
+
+Deployment verification: 27 deployed source/probe files matched by SHA-256;
+the company-building single-BOM fix was retained. The apply steps completed.
