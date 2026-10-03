@@ -426,7 +426,8 @@ class Instrument(NamedTuple):
     step: Decimal       # rate per index
     max_idx: int        # highest index that gets an amendment
     label: str          # shown to the player (title-cased in loc)
-    payer: str          # who pays, as it reads in "Taxes <payer> at <rate>."
+    desc: str           # the amendment's description, {rate} where the rate goes: the rate before any
+                        # clause about who is exempt, so it never reads as the exemption's rate
     percent: bool       # printed as a percentage (else as a bare amount)
     vanilla: tuple      # every value the five vanilla taxation laws set
 
@@ -437,19 +438,20 @@ def _values(text):
 
 INSTRUMENTS = (
     Instrument("wage", "tax_income_add", Decimal("0.025"), 20, "Wage tax",
-               "the wages of employed pops", True,
+               "Taxes the wages of employed pops at {rate}.", True,
                _values("0.05 0.075 0.10 0.125 0.15 0.175 0.20 0.25 0.30")),
     Instrument("div", "tax_dividends_add", Decimal("0.025"), 20, "Dividend tax",
-               "dividends paid to pops who own private buildings", True,
+               "Taxes dividends paid to pops who own private buildings at {rate}.", True,
                _values("0.025 0.05 0.10 0.15 0.20 0.25 0.30")),
     Instrument("land", "tax_land_add", Decimal("0.025"), 48, "Rural assessment",
-               "peasants and farmers working agricultural buildings, who then pay no head tax",
+               "Assesses {rate} on peasants and farmers working agricultural buildings, who then pay no "
+               "head tax.",
                False, _values("0.20 0.275 0.35 0.40 0.425 0.50 0.55 0.70 0.85 1.00")),
     Instrument("head", "tax_per_capita_add", Decimal("0.05"), 30, "Head tax",
-               "working adults who pay no rural assessment", False,
+               "Levies {rate} on each working adult who pays no rural assessment.", False,
                _values("0.40 0.55 0.70 0.85 1.00")),
     Instrument("cons", "tax_consumption_add", Decimal("0.05"), 12, "Consumption tax rate",
-               "goods on the taxed-goods list when pops buy them", True,
+               "Taxes goods on the taxed-goods list at {rate} when pops buy them.", True,
                _values("0.15 0.20 0.25 0.30 0.35")),
 )
 
@@ -1040,15 +1042,16 @@ def _customs_views():
     lines = [
         "",
         "# Customs (plan Task 15). te_tax_cu_native_<d>_<good>: the market's level of the good, read",
-        "# through the capital's state goods, one branch per level (vanilla's default when none can be",
-        "# read). te_tax_view_cu_<d>_<good>: the level a Customs row shows. _on: the draft changes it.",
+        "# through the capital's state goods, null-safe (sg:<good> ?=), one branch per level (vanilla's",
+        "# default when none can be read). te_tax_view_cu_<d>_<good>: the level a Customs row shows.",
+        "# _on: the draft changes it.",
         "# _base: existing law's in the draft's month. _blocked: a treaty or the tariff cooldown kept the",
         "# market's level in that direction, which the code adopted (te_tax_cblock_<d>_<good>).",
     ]
     for good in customs_catalog():
         for d, direction in CUSTOMS_DIRS:
             lines += [f"te_tax_cu_native_{d}_{good} = {{", f"\tvalue = {CUSTOMS_DEFAULT_LEVEL}"]
-            lines += [f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ capital ?= {{ sg:{good} = {{ "
+            lines += [f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ capital ?= {{ sg:{good} ?= {{ "
                       f"{direction}_tariff_level = {key} }} }} }} value = {idx} }}"
                       for n, (idx, key) in enumerate(CUSTOMS_LEVELS)]
             lines.append("}")
@@ -3484,8 +3487,9 @@ def _customs_effects():
         "",
         "# Customs (plan Task 15; docs/systems/tax_code_schema.md, \"Customs schedule\"). The native",
         "# level of a good is stored on its market's owner and set with set_<direction>_tariff_level;",
-        "# script reads it only through a state's goods (capital ?= { sg:<good> = { <direction>_tariff_level",
-        "# = <key> } }, vanilla's je_set_up_grain_import), one branch per level. GOOD is a tradeable good.",
+        "# script reads it only through a state's goods (capital ?= { sg:<good> ?= { <direction>_tariff_level",
+        "# = <key> } }, vanilla's je_set_up_grain_import form, null-safe: the capital may have no state",
+        "# goods for a good; final review A-I3), one branch per level. GOOD is a tradeable good.",
         "# te_tax_gen_customs_set_native_<d>: the market's level becomes the enacted record's.",
     ]
     for d, direction in CUSTOMS_DIRS:
@@ -3497,12 +3501,13 @@ def _customs_effects():
     lines += [
         "",
         "# te_tax_gen_customs_read_native_<d>: the enacted record becomes the market's level; vanilla's",
-        f"# default ({CUSTOMS_DEFAULT_LEVEL}, low tariffs) when no level can be read (no capital).",
+        f"# default ({CUSTOMS_DEFAULT_LEVEL}, low tariffs) when no level can be read (no capital, or no state",
+        "# goods for the good there).",
     ]
     for d, direction in CUSTOMS_DIRS:
         lines += ["", f"te_tax_gen_customs_read_native_{d} = {{"]
         for n, (idx, key) in enumerate(CUSTOMS_LEVELS):
-            lines.append(f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ capital ?= {{ sg:$GOOD$ = {{ "
+            lines.append(f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ capital ?= {{ sg:$GOOD$ ?= {{ "
                          f"{direction}_tariff_level = {key} }} }} }} set_variable = {{ name = te_tax_en_{d}_$GOOD$ "
                          f"value = {idx} }} }}")
         lines.append(f"\telse = {{ set_variable = {{ name = te_tax_en_{d}_$GOOD$ value = {CUSTOMS_DEFAULT_LEVEL} }} }}")
@@ -3573,12 +3578,14 @@ def _customs_effects():
     lines += [
         "}",
         "",
-        "# Drops every failed re-assert count (customs authority lost, a release, a civil war's",
-        "# reunification): the next sync that holds the customs re-asserts afresh, counting from 0.",
+        "# Drops every failed re-assert count and blocked mark (customs authority lost, a release, a",
+        "# civil war's reunification; final review A-Minor 7): the next sync that holds the customs",
+        "# re-asserts afresh, counting from 0, and the review shows no block the winner never met.",
         "te_tax_gen_customs_clear_retries = {",
     ]
     for good in customs_catalog():
         lines += [_remove_if_set(f"te_tax_cretry_{d}_{good}") for d, _ in CUSTOMS_DIRS]
+        lines += [_remove_if_set(f"te_tax_cblock_{d}_{good}") for d, _ in CUSTOMS_DIRS]
     lines.append("}")
     return lines
 
@@ -3589,13 +3596,17 @@ def _customs_triggers():
         "",
         "# Customs (plan Task 15). Country scope. te_tax_gen_customs_matches_<d> = { GOOD }: the market's",
         "# level of GOOD in that direction is the enacted record's, read through the capital's state goods",
-        "# (vanilla's je_set_up_grain_import form), one branch per level; the record's value is tested",
-        "# first, so only one branch reads the market. The caller tests that the record exists.",
+        "# (vanilla's je_set_up_grain_import form, null-safe), one branch per level; the record's value is",
+        "# tested first, so only one branch reads the market. The caller tests that the record exists.",
+        "# A level that cannot be read (no capital, or no state goods for GOOD there; final review A-I3)",
+        "# counts as a match, last so a readable good never pays for the test: the sync then neither",
+        "# re-asserts nor counts it, so it is never adopted, and drift does not count it.",
     ]
     for d, direction in CUSTOMS_DIRS:
         lines += ["", f"te_tax_gen_customs_matches_{d} = {{", "\tOR = {"]
-        lines += [f"\t\tAND = {{ var:te_tax_en_{d}_$GOOD$ = {idx} capital ?= {{ sg:$GOOD$ = {{ "
+        lines += [f"\t\tAND = {{ var:te_tax_en_{d}_$GOOD$ = {idx} capital ?= {{ sg:$GOOD$ ?= {{ "
                   f"{direction}_tariff_level = {key} }} }} }}" for idx, key in CUSTOMS_LEVELS]
+        lines += ["\t\tNOT = { capital ?= { sg:$GOOD$ ?= { always = yes } } }"]
         lines += ["\t}", "}"]
     lines += [
         "",
@@ -3981,7 +3992,7 @@ def localization():
             key = amendment_key(instrument, idx)
             shown = display(instrument, idx)
             entries[key] = f'0 "{instrument.label.title()} {shown}"'
-            entries[f"{key}_desc"] = f'0 "Taxes {instrument.payer} at {shown}."'
+            entries[f"{key}_desc"] = f'0 "{instrument.desc.format(rate=shown)}"'
     # Plan Task 13: the view bands' names and descriptions, and the staple offers' lines.
     for ig in IGS:
         for band, value in VIEW_BANDS:

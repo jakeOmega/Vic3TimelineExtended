@@ -581,6 +581,7 @@
  te_tax_tt_step_touched:0 "The draft changes this tax."
  te_tax_tt_sunset_room_down:0 "The change has an expiry."
  te_tax_tt_sunset_room_up:0 "The change expires sooner than 60 months after it commences."
+ te_tax_tt_vanilla_law_replaced:0 "Not replaced by the $rule_te_tax_code_rule$ game rule"
  te_tax_wb_arrow:0 "→"
  te_tax_wb_col_change:0 "Change"
  te_tax_wb_col_draft:0 "Draft"

@@ -278,18 +278,21 @@ class LocTest(unittest.TestCase):
         self.assertEqual(loc["amendment_te_tax_cons_3"], "Consumption Tax Rate 15%")
         self.assertEqual(loc["amendment_te_tax_div_1"], "Dividend Tax 2.5%")
 
-    def test_each_desc_names_its_payer(self):
+    def test_each_desc_names_its_payer_with_the_rate_first(self):
+        # The rate comes before any clause about who is exempt, so it never reads as
+        # that clause's rate (final review: "...who then pay no head tax at 0.425").
         loc = read_loc(ROOT / LOC)
-        payers = {
-            "wage": "the wages of employed pops",
-            "div": "dividends paid to pops who own private buildings",
-            "land": "peasants and farmers working agricultural buildings, who then pay no head tax",
-            "head": "working adults who pay no rural assessment",
-            "cons": "goods on the taxed-goods list when pops buy them",
+        descs = {
+            "wage_4": "Taxes the wages of employed pops at 10%.",
+            "div_4": "Taxes dividends paid to pops who own private buildings at 10%.",
+            "land_17": "Assesses 0.425 on peasants and farmers working agricultural buildings, who then pay no "
+                       "head tax.",
+            "head_17": "Levies 0.85 on each working adult who pays no rural assessment.",
+            "cons_10": "Taxes goods on the taxed-goods list at 50% when pops buy them.",
         }
-        for key, payer in payers.items():
+        for key, desc in descs.items():
             with self.subTest(key=key):
-                self.assertIn(payer, loc[f"amendment_te_tax_{key}_1_desc"])
+                self.assertEqual(loc[f"amendment_te_tax_{key}_desc"], desc)
 
     def test_percent_sign_only_on_the_rate_instruments(self):
         loc = read_loc(ROOT / LOC)

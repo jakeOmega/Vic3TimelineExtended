@@ -171,7 +171,9 @@ class VanillaLawGateTest(unittest.TestCase):
         self.assertEqual(set(self.injects), {f"INJECT:{law}" for law in VANILLA_TAX_LAWS})
 
     def test_each_gets_exactly_the_two_negated_gates(self):
-        gate = {"NOT": {"te_tax_code_on": "yes"}}
+        # In a custom_tooltip (final review A-Minor 6): it evaluates the same, so a
+        # rule-off game is unchanged, and a tooltip prints one plain line.
+        gate = {"custom_tooltip": {"text": "te_tax_tt_vanilla_law_replaced", "NOT": {"te_tax_code_on": "yes"}}}
         for law in VANILLA_TAX_LAWS:
             with self.subTest(law=law):
                 self.assertEqual(

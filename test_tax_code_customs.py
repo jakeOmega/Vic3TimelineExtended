@@ -190,9 +190,14 @@ class NativeHelperTest(unittest.TestCase):
             body = squash(block(self.triggers, f"te_tax_gen_customs_matches_{d}"))
             for idx, key in LEVELS.items():
                 with self.subTest(d=d, idx=idx):
-                    self.assertIn(f"AND = {{ var:te_tax_en_{d}_$GOOD$ = {idx} capital ?= {{ sg:$GOOD$ = {{ "
+                    # Null-safe (final review A-I3): the capital may have no state goods for GOOD.
+                    self.assertIn(f"AND = {{ var:te_tax_en_{d}_$GOOD$ = {idx} capital ?= {{ sg:$GOOD$ ?= {{ "
                                   f"{direction}_tariff_level = {key} }} }} }}", body)
             self.assertEqual(body.count("AND = {"), len(LEVELS))
+            # A level that cannot be read is a match, tested last: no re-assert, no count,
+            # no adoption, no drift.
+            self.assertTrue(body.endswith("NOT = { capital ?= { sg:$GOOD$ ?= { always = yes } } } }"), body[-120:])
+            self.assertNotRegex(body, r"sg:\$GOOD\$ = ")
 
     def test_setter_writes_the_enacted_level_one_branch_per_level(self):
         for d, direction in DIRS.items():
@@ -208,9 +213,11 @@ class NativeHelperTest(unittest.TestCase):
             body = squash(block(self.effects, f"te_tax_gen_customs_read_native_{d}"))
             for idx, key in LEVELS.items():
                 with self.subTest(d=d, idx=idx):
-                    self.assertIn(f"limit = {{ capital ?= {{ sg:$GOOD$ = {{ {direction}_tariff_level = {key} }} }} }} "
+                    self.assertIn(f"limit = {{ capital ?= {{ sg:$GOOD$ ?= {{ {direction}_tariff_level = {key} }} }} }} "
                                   f"set_variable = {{ name = te_tax_en_{d}_$GOOD$ value = {idx} }}", body)
-            # Unreadable (no capital): vanilla's default level, low tariffs.
+            # Unreadable (no capital, or no state goods for the good there): vanilla's default
+            # level, low tariffs.
+            self.assertNotRegex(body, r"sg:\$GOOD\$ = ")
             self.assertIn(f"else = {{ set_variable = {{ name = te_tax_en_{d}_$GOOD$ value = 1 }} }}", body)
 
 
@@ -488,14 +495,17 @@ class TokenTest(unittest.TestCase):
         enacted = set(re.findall(r"NAME = (\w+)", block(read(GEN_EFFECTS), "te_tax_gen_copy_enacted")))
         self.assertFalse({name for name in enacted if "_imp_" in name or "_exp_" in name or "customs" in name})
 
-    def test_the_win_repair_drops_pending_reasserts(self):
+    def test_the_win_repair_drops_pending_reasserts_and_blocked_marks(self):
+        # Final review A-Minor 7: a winner never inherits a loser's "blocked" mark for a
+        # good it never had blocked.
         repair = block(read(CIVIL_WAR), "te_tax_repair_after_civil_war")
         self.assertIn("te_tax_gen_customs_clear_retries = yes", repair)
         clear = squash(block(read(GEN_EFFECTS), "te_tax_gen_customs_clear_retries"))
         for good in catalog():
             for d in DIRS:
-                self.assertIn(f"if = {{ limit = {{ has_variable = te_tax_cretry_{d}_{good} }} "
-                              f"remove_variable = te_tax_cretry_{d}_{good} }}", clear)
+                for mark in ("cretry", "cblock"):
+                    self.assertIn(f"if = {{ limit = {{ has_variable = te_tax_{mark}_{d}_{good} }} "
+                                  f"remove_variable = te_tax_{mark}_{d}_{good} }}", clear)
 
 
 class BothModesTest(unittest.TestCase):
@@ -885,7 +895,7 @@ class ViewTest(unittest.TestCase):
                 with self.subTest(good=good, d=d):
                     self.assertTrue(body.startswith(f"value = {gen.CUSTOMS_DEFAULT_LEVEL} "))
                     for idx, key in LEVELS.items():
-                        self.assertIn(f"if = {{ limit = {{ capital ?= {{ sg:{good} = {{ {direction}_tariff_level = "
+                        self.assertIn(f"if = {{ limit = {{ capital ?= {{ sg:{good} ?= {{ {direction}_tariff_level = "
                                       f"{key} }} }} }} value = {idx} }}", body)
                     self.assertNotIn("var:", body)
 

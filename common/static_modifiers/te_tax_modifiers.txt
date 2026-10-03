@@ -9,21 +9,21 @@
 # every tax collected from that state's pops (R1a showed it for wages).
 
 te_tax_relief_ag_1 = {
-	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
 	building_group_bg_agriculture_tax_mult = -0.25
 }
 
 te_tax_relief_ag_2 = {
-	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
 	building_group_bg_agriculture_tax_mult = -0.5
 }
 
 te_tax_relief_region_1 = {
-	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
 	state_tax_collection_mult = -0.25
 }
 
 te_tax_relief_region_2 = {
-	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
 	state_tax_collection_mult = -0.5
 }

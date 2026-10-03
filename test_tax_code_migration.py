@@ -464,7 +464,9 @@ class HookTest(unittest.TestCase):
         self.assertEqual(self.parsed["on_game_started_after_lobby"]["on_actions"], ["te_tax_on_game_started"])
         self.assertNotIn("on_game_started", self.parsed)
         gate = self.gated("te_tax_on_game_started")
-        self.assertEqual(gate["every_country"], {"trigger_event": {"id": "te_tax.3"}})
+        # Not a decentralized country (final review A-Minor 1): it has no events.
+        self.assertEqual(gate["every_country"], {"limit": {"NOT": {"is_country_type": "decentralized"}},
+                                                 "trigger_event": {"id": "te_tax.3"}})
 
     def test_a_formed_country_migrates_itself(self):
         self.assertEqual(self.parsed["on_country_formed"]["on_actions"], ["te_tax_on_country_formed"])

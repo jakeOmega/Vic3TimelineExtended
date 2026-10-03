@@ -43,6 +43,11 @@
 #
 # Every handler checks te_tax_code_on first: with the rule off nothing here runs.
 # The engine unions same-name on_action declarations across files.
+#
+# Decentralized countries are left out of the three fan-outs (final review
+# A-Minor 1; extra_on_actions.txt's global-warming pulse does the same): their
+# type has no events, economy or politics, so te_tax.3 would never migrate
+# them and the self-heal would raise it on each of them every month.
 # ============================================================================
 
 # ----------------------------------------------------------------------------
@@ -64,6 +69,7 @@ te_tax_on_game_started = {
 		if = {
 			limit = { te_tax_code_on = yes }
 			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
 				trigger_event = { id = te_tax.3 }
 			}
 		}
@@ -191,6 +197,7 @@ te_tax_monthly_dispatch = {
 			# Migrated countries: this month's processor.
 			every_country = {
 				limit = {
+					NOT = { is_country_type = decentralized }
 					has_variable = te_tax_migrated
 					var:te_tax_migrated > 0
 				}
@@ -201,6 +208,7 @@ te_tax_monthly_dispatch = {
 			# runs next month.
 			every_country = {
 				limit = {
+					NOT = { is_country_type = decentralized }
 					OR = { NOT = { has_variable = te_tax_migrated } var:te_tax_migrated < 1 }
 				}
 				trigger_event = { id = te_tax.3 }

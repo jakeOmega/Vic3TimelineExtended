@@ -3541,1209 +3541,1210 @@ te_tax_view_pb_customs_changed = {
 }
 
 # Customs (plan Task 15). te_tax_cu_native_<d>_<good>: the market's level of the good, read
-# through the capital's state goods, one branch per level (vanilla's default when none can be
-# read). te_tax_view_cu_<d>_<good>: the level a Customs row shows. _on: the draft changes it.
+# through the capital's state goods, null-safe (sg:<good> ?=), one branch per level (vanilla's
+# default when none can be read). te_tax_view_cu_<d>_<good>: the level a Customs row shows.
+# _on: the draft changes it.
 # _base: existing law's in the draft's month. _blocked: a treaty or the tariff cooldown kept the
 # market's level in that direction, which the code adopted (te_tax_cblock_<d>_<good>).
 te_tax_cu_native_imp_advanced_materials = {
 	value = 1
-	if = { limit = { capital ?= { sg:advanced_materials = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_advanced_materials = {
 	value = 1
-	if = { limit = { capital ?= { sg:advanced_materials = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:advanced_materials = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:advanced_materials ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_aeroplanes = {
 	value = 1
-	if = { limit = { capital ?= { sg:aeroplanes = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_aeroplanes = {
 	value = 1
-	if = { limit = { capital ?= { sg:aeroplanes = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:aeroplanes = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:aeroplanes ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_ammunition = {
 	value = 1
-	if = { limit = { capital ?= { sg:ammunition = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:ammunition = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:ammunition = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:ammunition = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:ammunition = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:ammunition = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:ammunition = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_ammunition = {
 	value = 1
-	if = { limit = { capital ?= { sg:ammunition = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:ammunition = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:ammunition = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:ammunition = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:ammunition = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:ammunition = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:ammunition = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:ammunition ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_artillery = {
 	value = 1
-	if = { limit = { capital ?= { sg:artillery = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:artillery = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:artillery = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:artillery = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:artillery = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:artillery = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:artillery = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_artillery = {
 	value = 1
-	if = { limit = { capital ?= { sg:artillery = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:artillery = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:artillery = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:artillery = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:artillery = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:artillery = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:artillery = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:artillery ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_automobiles = {
 	value = 1
-	if = { limit = { capital ?= { sg:automobiles = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:automobiles = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:automobiles = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:automobiles = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:automobiles = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:automobiles = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:automobiles = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_automobiles = {
 	value = 1
-	if = { limit = { capital ?= { sg:automobiles = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:automobiles = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:automobiles = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:automobiles = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:automobiles = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:automobiles = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:automobiles = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:automobiles ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_clippers = {
 	value = 1
-	if = { limit = { capital ?= { sg:clippers = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:clippers = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:clippers = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:clippers = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:clippers = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:clippers = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:clippers = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_clippers = {
 	value = 1
-	if = { limit = { capital ?= { sg:clippers = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:clippers = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:clippers = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:clippers = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:clippers = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:clippers = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:clippers = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:clippers ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_clothes = {
 	value = 1
-	if = { limit = { capital ?= { sg:clothes = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:clothes = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:clothes = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:clothes = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:clothes = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:clothes = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:clothes = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_clothes = {
 	value = 1
-	if = { limit = { capital ?= { sg:clothes = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:clothes = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:clothes = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:clothes = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:clothes = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:clothes = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:clothes = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:clothes ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_coal = {
 	value = 1
-	if = { limit = { capital ?= { sg:coal = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:coal = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:coal = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:coal = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:coal = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:coal = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:coal = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_coal = {
 	value = 1
-	if = { limit = { capital ?= { sg:coal = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:coal = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:coal = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:coal = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:coal = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:coal = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:coal = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:coal ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:coal ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:coal ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:coal ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:coal ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:coal ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:coal ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_coffee = {
 	value = 1
-	if = { limit = { capital ?= { sg:coffee = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:coffee = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:coffee = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:coffee = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:coffee = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:coffee = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:coffee = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:coffee ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_coffee = {
 	value = 1
-	if = { limit = { capital ?= { sg:coffee = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:coffee = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:coffee = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:coffee = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:coffee = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:coffee = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:coffee = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:coffee ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:coffee ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_construction = {
 	value = 1
-	if = { limit = { capital ?= { sg:construction = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:construction = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:construction = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:construction = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:construction = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:construction = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:construction = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:construction ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:construction ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:construction ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:construction ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:construction ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:construction ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:construction ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_construction = {
 	value = 1
-	if = { limit = { capital ?= { sg:construction = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:construction = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:construction = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:construction = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:construction = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:construction = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:construction = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:construction ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:construction ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:construction ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:construction ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:construction ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:construction ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:construction ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_consumer_appliances = {
 	value = 1
-	if = { limit = { capital ?= { sg:consumer_appliances = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_consumer_appliances = {
 	value = 1
-	if = { limit = { capital ?= { sg:consumer_appliances = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:consumer_appliances = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:consumer_appliances ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_digital_assets = {
 	value = 1
-	if = { limit = { capital ?= { sg:digital_assets = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_digital_assets = {
 	value = 1
-	if = { limit = { capital ?= { sg:digital_assets = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:digital_assets = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:digital_assets ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_dye = {
 	value = 1
-	if = { limit = { capital ?= { sg:dye = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:dye = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:dye = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:dye = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:dye = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:dye = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:dye = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_dye = {
 	value = 1
-	if = { limit = { capital ?= { sg:dye = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:dye = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:dye = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:dye = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:dye = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:dye = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:dye = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:dye ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:dye ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:dye ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:dye ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:dye ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:dye ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:dye ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_electronic_components = {
 	value = 1
-	if = { limit = { capital ?= { sg:electronic_components = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_electronic_components = {
 	value = 1
-	if = { limit = { capital ?= { sg:electronic_components = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:electronic_components = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:electronic_components ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_engines = {
 	value = 1
-	if = { limit = { capital ?= { sg:engines = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:engines = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:engines = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:engines = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:engines = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:engines = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:engines = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_engines = {
 	value = 1
-	if = { limit = { capital ?= { sg:engines = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:engines = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:engines = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:engines = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:engines = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:engines = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:engines = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:engines ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:engines ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:engines ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:engines ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:engines ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:engines ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:engines ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_explosives = {
 	value = 1
-	if = { limit = { capital ?= { sg:explosives = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:explosives = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:explosives = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:explosives = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:explosives = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:explosives = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:explosives = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_explosives = {
 	value = 1
-	if = { limit = { capital ?= { sg:explosives = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:explosives = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:explosives = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:explosives = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:explosives = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:explosives = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:explosives = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:explosives ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_fabric = {
 	value = 1
-	if = { limit = { capital ?= { sg:fabric = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:fabric = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:fabric = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:fabric = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:fabric = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:fabric = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:fabric = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_fabric = {
 	value = 1
-	if = { limit = { capital ?= { sg:fabric = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:fabric = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:fabric = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:fabric = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:fabric = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:fabric = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:fabric = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:fabric ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_fertilizer = {
 	value = 1
-	if = { limit = { capital ?= { sg:fertilizer = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_fertilizer = {
 	value = 1
-	if = { limit = { capital ?= { sg:fertilizer = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:fertilizer = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:fertilizer ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_fine_art = {
 	value = 1
-	if = { limit = { capital ?= { sg:fine_art = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:fine_art = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:fine_art = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:fine_art = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:fine_art = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:fine_art = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:fine_art = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_fine_art = {
 	value = 1
-	if = { limit = { capital ?= { sg:fine_art = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:fine_art = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:fine_art = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:fine_art = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:fine_art = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:fine_art = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:fine_art = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:fine_art ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_fish = {
 	value = 1
-	if = { limit = { capital ?= { sg:fish = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:fish = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:fish = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:fish = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:fish = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:fish = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:fish = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:fish ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:fish ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fish ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fish ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:fish ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fish ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fish ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_fish = {
 	value = 1
-	if = { limit = { capital ?= { sg:fish = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:fish = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:fish = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:fish = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:fish = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:fish = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:fish = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:fish ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:fish ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fish ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fish ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:fish ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fish ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fish ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_fruit = {
 	value = 1
-	if = { limit = { capital ?= { sg:fruit = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:fruit = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:fruit = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:fruit = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:fruit = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:fruit = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:fruit = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_fruit = {
 	value = 1
-	if = { limit = { capital ?= { sg:fruit = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:fruit = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:fruit = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:fruit = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:fruit = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:fruit = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:fruit = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:fruit ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_furniture = {
 	value = 1
-	if = { limit = { capital ?= { sg:furniture = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:furniture = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:furniture = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:furniture = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:furniture = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:furniture = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:furniture = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_furniture = {
 	value = 1
-	if = { limit = { capital ?= { sg:furniture = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:furniture = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:furniture = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:furniture = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:furniture = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:furniture = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:furniture = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:furniture ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_glass = {
 	value = 1
-	if = { limit = { capital ?= { sg:glass = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:glass = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:glass = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:glass = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:glass = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:glass = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:glass = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_glass = {
 	value = 1
-	if = { limit = { capital ?= { sg:glass = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:glass = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:glass = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:glass = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:glass = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:glass = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:glass = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:glass ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:glass ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:glass ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:glass ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:glass ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:glass ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:glass ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_grain = {
 	value = 1
-	if = { limit = { capital ?= { sg:grain = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:grain = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:grain = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:grain = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:grain = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:grain = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:grain = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_grain = {
 	value = 1
-	if = { limit = { capital ?= { sg:grain = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:grain = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:grain = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:grain = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:grain = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:grain = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:grain = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:grain ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:grain ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:grain ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:grain ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:grain ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:grain ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:grain ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_groceries = {
 	value = 1
-	if = { limit = { capital ?= { sg:groceries = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:groceries = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:groceries = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:groceries = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:groceries = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:groceries = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:groceries = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_groceries = {
 	value = 1
-	if = { limit = { capital ?= { sg:groceries = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:groceries = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:groceries = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:groceries = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:groceries = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:groceries = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:groceries = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:groceries ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_hardwood = {
 	value = 1
-	if = { limit = { capital ?= { sg:hardwood = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:hardwood = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:hardwood = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:hardwood = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:hardwood = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:hardwood = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:hardwood = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_hardwood = {
 	value = 1
-	if = { limit = { capital ?= { sg:hardwood = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:hardwood = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:hardwood = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:hardwood = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:hardwood = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:hardwood = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:hardwood = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:hardwood ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_iron = {
 	value = 1
-	if = { limit = { capital ?= { sg:iron = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:iron = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:iron = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:iron = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:iron = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:iron = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:iron = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_iron = {
 	value = 1
-	if = { limit = { capital ?= { sg:iron = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:iron = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:iron = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:iron = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:iron = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:iron = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:iron = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:iron ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:iron ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:iron ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:iron ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:iron ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:iron ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:iron ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_ironclads = {
 	value = 1
-	if = { limit = { capital ?= { sg:ironclads = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:ironclads = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:ironclads = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:ironclads = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:ironclads = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:ironclads = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:ironclads = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:ironclads ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_ironclads = {
 	value = 1
-	if = { limit = { capital ?= { sg:ironclads = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:ironclads = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:ironclads = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:ironclads = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:ironclads = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:ironclads = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:ironclads = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:ironclads ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:ironclads ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_launch_capacity = {
 	value = 1
-	if = { limit = { capital ?= { sg:launch_capacity = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_launch_capacity = {
 	value = 1
-	if = { limit = { capital ?= { sg:launch_capacity = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:launch_capacity = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:launch_capacity ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_lead = {
 	value = 1
-	if = { limit = { capital ?= { sg:lead = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:lead = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:lead = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:lead = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:lead = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:lead = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:lead = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:lead ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:lead ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:lead ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:lead ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:lead ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:lead ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:lead ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_lead = {
 	value = 1
-	if = { limit = { capital ?= { sg:lead = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:lead = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:lead = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:lead = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:lead = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:lead = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:lead = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:lead ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:lead ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:lead ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:lead ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:lead ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:lead ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:lead ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_liquor = {
 	value = 1
-	if = { limit = { capital ?= { sg:liquor = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:liquor = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:liquor = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:liquor = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:liquor = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:liquor = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:liquor = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:liquor ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_liquor = {
 	value = 1
-	if = { limit = { capital ?= { sg:liquor = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:liquor = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:liquor = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:liquor = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:liquor = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:liquor = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:liquor = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:liquor ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:liquor ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_luxury_clothes = {
 	value = 1
-	if = { limit = { capital ?= { sg:luxury_clothes = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:luxury_clothes ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_luxury_clothes = {
 	value = 1
-	if = { limit = { capital ?= { sg:luxury_clothes = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:luxury_clothes = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:luxury_clothes ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:luxury_clothes ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_luxury_furniture = {
 	value = 1
-	if = { limit = { capital ?= { sg:luxury_furniture = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:luxury_furniture ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_luxury_furniture = {
 	value = 1
-	if = { limit = { capital ?= { sg:luxury_furniture = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:luxury_furniture = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:luxury_furniture ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:luxury_furniture ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_magnetic_drive_ships = {
 	value = 1
-	if = { limit = { capital ?= { sg:magnetic_drive_ships = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_magnetic_drive_ships = {
 	value = 1
-	if = { limit = { capital ?= { sg:magnetic_drive_ships = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:magnetic_drive_ships = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:magnetic_drive_ships ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_manowars = {
 	value = 1
-	if = { limit = { capital ?= { sg:manowars = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:manowars = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:manowars = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:manowars = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:manowars = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:manowars = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:manowars = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:manowars ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_manowars = {
 	value = 1
-	if = { limit = { capital ?= { sg:manowars = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:manowars = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:manowars = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:manowars = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:manowars = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:manowars = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:manowars = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:manowars ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:manowars ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_meat = {
 	value = 1
-	if = { limit = { capital ?= { sg:meat = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:meat = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:meat = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:meat = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:meat = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:meat = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:meat = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_meat = {
 	value = 1
-	if = { limit = { capital ?= { sg:meat = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:meat = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:meat = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:meat = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:meat = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:meat = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:meat = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:meat ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:meat ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:meat ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:meat ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:meat ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:meat ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:meat ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_merchant_marine = {
 	value = 1
-	if = { limit = { capital ?= { sg:merchant_marine = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_merchant_marine = {
 	value = 1
-	if = { limit = { capital ?= { sg:merchant_marine = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:merchant_marine = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:merchant_marine ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_motor_ships = {
 	value = 1
-	if = { limit = { capital ?= { sg:motor_ships = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_motor_ships = {
 	value = 1
-	if = { limit = { capital ?= { sg:motor_ships = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:motor_ships = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:motor_ships ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_oil = {
 	value = 1
-	if = { limit = { capital ?= { sg:oil = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:oil = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:oil = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:oil = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:oil = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:oil = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:oil = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_oil = {
 	value = 1
-	if = { limit = { capital ?= { sg:oil = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:oil = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:oil = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:oil = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:oil = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:oil = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:oil = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:oil ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:oil ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:oil ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:oil ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:oil ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:oil ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:oil ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_opium = {
 	value = 1
-	if = { limit = { capital ?= { sg:opium = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:opium = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:opium = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:opium = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:opium = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:opium = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:opium = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_opium = {
 	value = 1
-	if = { limit = { capital ?= { sg:opium = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:opium = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:opium = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:opium = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:opium = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:opium = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:opium = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:opium ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:opium ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:opium ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:opium ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:opium ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:opium ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:opium ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_paper = {
 	value = 1
-	if = { limit = { capital ?= { sg:paper = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:paper = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:paper = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:paper = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:paper = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:paper = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:paper = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_paper = {
 	value = 1
-	if = { limit = { capital ?= { sg:paper = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:paper = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:paper = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:paper = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:paper = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:paper = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:paper = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:paper ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:paper ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:paper ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:paper ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:paper ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:paper ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:paper ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_porcelain = {
 	value = 1
-	if = { limit = { capital ?= { sg:porcelain = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:porcelain = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:porcelain = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:porcelain = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:porcelain = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:porcelain = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:porcelain = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:porcelain ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_porcelain = {
 	value = 1
-	if = { limit = { capital ?= { sg:porcelain = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:porcelain = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:porcelain = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:porcelain = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:porcelain = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:porcelain = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:porcelain = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:porcelain ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:porcelain ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_radios = {
 	value = 1
-	if = { limit = { capital ?= { sg:radios = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:radios = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:radios = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:radios = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:radios = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:radios = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:radios = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_radios = {
 	value = 1
-	if = { limit = { capital ?= { sg:radios = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:radios = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:radios = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:radios = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:radios = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:radios = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:radios = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:radios ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:radios ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:radios ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:radios ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:radios ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:radios ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:radios ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_robotics = {
 	value = 1
-	if = { limit = { capital ?= { sg:robotics = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:robotics = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:robotics = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:robotics = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:robotics = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:robotics = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:robotics = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_robotics = {
 	value = 1
-	if = { limit = { capital ?= { sg:robotics = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:robotics = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:robotics = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:robotics = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:robotics = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:robotics = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:robotics = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:robotics ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_rubber = {
 	value = 1
-	if = { limit = { capital ?= { sg:rubber = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:rubber = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:rubber = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:rubber = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:rubber = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:rubber = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:rubber = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_rubber = {
 	value = 1
-	if = { limit = { capital ?= { sg:rubber = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:rubber = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:rubber = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:rubber = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:rubber = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:rubber = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:rubber = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:rubber ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_silk = {
 	value = 1
-	if = { limit = { capital ?= { sg:silk = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:silk = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:silk = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:silk = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:silk = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:silk = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:silk = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_silk = {
 	value = 1
-	if = { limit = { capital ?= { sg:silk = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:silk = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:silk = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:silk = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:silk = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:silk = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:silk = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:silk ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:silk ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:silk ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:silk ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:silk ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:silk ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:silk ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_small_arms = {
 	value = 1
-	if = { limit = { capital ?= { sg:small_arms = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:small_arms = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:small_arms = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:small_arms = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:small_arms = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:small_arms = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:small_arms = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_small_arms = {
 	value = 1
-	if = { limit = { capital ?= { sg:small_arms = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:small_arms = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:small_arms = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:small_arms = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:small_arms = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:small_arms = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:small_arms = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:small_arms ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_steamers = {
 	value = 1
-	if = { limit = { capital ?= { sg:steamers = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:steamers = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:steamers = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:steamers = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:steamers = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:steamers = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:steamers = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:steamers ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_steamers = {
 	value = 1
-	if = { limit = { capital ?= { sg:steamers = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:steamers = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:steamers = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:steamers = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:steamers = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:steamers = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:steamers = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:steamers ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:steamers ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_steel = {
 	value = 1
-	if = { limit = { capital ?= { sg:steel = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:steel = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:steel = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:steel = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:steel = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:steel = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:steel = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_steel = {
 	value = 1
-	if = { limit = { capital ?= { sg:steel = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:steel = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:steel = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:steel = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:steel = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:steel = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:steel = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:steel ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:steel ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:steel ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:steel ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:steel ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:steel ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:steel ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_sugar = {
 	value = 1
-	if = { limit = { capital ?= { sg:sugar = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:sugar = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:sugar = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:sugar = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:sugar = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:sugar = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:sugar = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_sugar = {
 	value = 1
-	if = { limit = { capital ?= { sg:sugar = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:sugar = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:sugar = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:sugar = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:sugar = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:sugar = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:sugar = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:sugar ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_sulfur = {
 	value = 1
-	if = { limit = { capital ?= { sg:sulfur = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:sulfur = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:sulfur = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:sulfur = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:sulfur = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:sulfur = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:sulfur = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_sulfur = {
 	value = 1
-	if = { limit = { capital ?= { sg:sulfur = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:sulfur = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:sulfur = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:sulfur = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:sulfur = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:sulfur = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:sulfur = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:sulfur ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_tanks = {
 	value = 1
-	if = { limit = { capital ?= { sg:tanks = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tanks = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tanks = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tanks = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tanks = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tanks = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tanks = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tanks ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_tanks = {
 	value = 1
-	if = { limit = { capital ?= { sg:tanks = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tanks = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tanks = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tanks = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tanks = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tanks = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tanks = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tanks ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tanks ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_tea = {
 	value = 1
-	if = { limit = { capital ?= { sg:tea = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tea = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tea = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tea = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tea = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tea = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tea = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_tea = {
 	value = 1
-	if = { limit = { capital ?= { sg:tea = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tea = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tea = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tea = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tea = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tea = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tea = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tea ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tea ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tea ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tea ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tea ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tea ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tea ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_tech_metals = {
 	value = 1
-	if = { limit = { capital ?= { sg:tech_metals = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_tech_metals = {
 	value = 1
-	if = { limit = { capital ?= { sg:tech_metals = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tech_metals = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tech_metals ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_telephones = {
 	value = 1
-	if = { limit = { capital ?= { sg:telephones = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:telephones = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:telephones = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:telephones = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:telephones = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:telephones = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:telephones = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_telephones = {
 	value = 1
-	if = { limit = { capital ?= { sg:telephones = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:telephones = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:telephones = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:telephones = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:telephones = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:telephones = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:telephones = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:telephones ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_tobacco = {
 	value = 1
-	if = { limit = { capital ?= { sg:tobacco = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tobacco = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tobacco = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tobacco = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tobacco = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tobacco = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tobacco = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_tobacco = {
 	value = 1
-	if = { limit = { capital ?= { sg:tobacco = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tobacco = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tobacco = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tobacco = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tobacco = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tobacco = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tobacco = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tobacco ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_tools = {
 	value = 1
-	if = { limit = { capital ?= { sg:tools = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tools = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tools = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tools = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tools = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tools = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tools = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_tools = {
 	value = 1
-	if = { limit = { capital ?= { sg:tools = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tools = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tools = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tools = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tools = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tools = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tools = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tools ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tools ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tools ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tools ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tools ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tools ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tools ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_tourism = {
 	value = 1
-	if = { limit = { capital ?= { sg:tourism = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tourism = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tourism = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tourism = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tourism = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tourism = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tourism = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_tourism = {
 	value = 1
-	if = { limit = { capital ?= { sg:tourism = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:tourism = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:tourism = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:tourism = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:tourism = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:tourism = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:tourism = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:tourism ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_wine = {
 	value = 1
-	if = { limit = { capital ?= { sg:wine = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:wine = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:wine = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:wine = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:wine = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:wine = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:wine = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_wine = {
 	value = 1
-	if = { limit = { capital ?= { sg:wine = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:wine = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:wine = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:wine = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:wine = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:wine = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:wine = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:wine ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:wine ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:wine ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:wine ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:wine ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:wine ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:wine ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_imp_wood = {
 	value = 1
-	if = { limit = { capital ?= { sg:wood = { import_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:wood = { import_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:wood = { import_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:wood = { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:wood = { import_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:wood = { import_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:wood = { import_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_cu_native_exp_wood = {
 	value = 1
-	if = { limit = { capital ?= { sg:wood = { export_tariff_level = max_subventions } } } value = -3 }
-	else_if = { limit = { capital ?= { sg:wood = { export_tariff_level = high_subventions } } } value = -2 }
-	else_if = { limit = { capital ?= { sg:wood = { export_tariff_level = low_subventions } } } value = -1 }
-	else_if = { limit = { capital ?= { sg:wood = { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
-	else_if = { limit = { capital ?= { sg:wood = { export_tariff_level = low_tariffs } } } value = 1 }
-	else_if = { limit = { capital ?= { sg:wood = { export_tariff_level = high_tariffs } } } value = 2 }
-	else_if = { limit = { capital ?= { sg:wood = { export_tariff_level = max_tariffs } } } value = 3 }
+	if = { limit = { capital ?= { sg:wood ?= { export_tariff_level = max_subventions } } } value = -3 }
+	else_if = { limit = { capital ?= { sg:wood ?= { export_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:wood ?= { export_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:wood ?= { export_tariff_level = no_tariffs_or_subventions } } } value = 0 }
+	else_if = { limit = { capital ?= { sg:wood ?= { export_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:wood ?= { export_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:wood ?= { export_tariff_level = max_tariffs } } } value = 3 }
 }
 te_tax_view_cu_imp_advanced_materials = {
 	value = 0

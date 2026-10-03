@@ -280,7 +280,8 @@ te_tax_sync_relief = {
 # mark (te_tax_cretry_<d>_<good>, te_tax_cblock_<d>_<good>) and the month guard
 # (te_tax_customs_month) are transient: not schema tokens and not copied at an
 # outbreak, so the rebels count afresh; te_tax_gen_customs_clear_retries drops
-# the counters when the market is lost, at a release and at reunification.
+# the counters and the blocked marks when the market is lost, at a release and
+# at reunification.
 te_tax_sync_customs = {
 	if = {
 		limit = { te_tax_customs_authority = yes }

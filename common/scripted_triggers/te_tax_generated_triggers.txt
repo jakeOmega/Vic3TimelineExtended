@@ -686,30 +686,35 @@ te_tax_gen_amend_drift_cons = {
 
 # Customs (plan Task 15). Country scope. te_tax_gen_customs_matches_<d> = { GOOD }: the market's
 # level of GOOD in that direction is the enacted record's, read through the capital's state goods
-# (vanilla's je_set_up_grain_import form), one branch per level; the record's value is tested
-# first, so only one branch reads the market. The caller tests that the record exists.
+# (vanilla's je_set_up_grain_import form, null-safe), one branch per level; the record's value is
+# tested first, so only one branch reads the market. The caller tests that the record exists.
+# A level that cannot be read (no capital, or no state goods for GOOD there; final review A-I3)
+# counts as a match, last so a readable good never pays for the test: the sync then neither
+# re-asserts nor counts it, so it is never adopted, and drift does not count it.
 
 te_tax_gen_customs_matches_imp = {
 	OR = {
-		AND = { var:te_tax_en_imp_$GOOD$ = -3 capital ?= { sg:$GOOD$ = { import_tariff_level = max_subventions } } }
-		AND = { var:te_tax_en_imp_$GOOD$ = -2 capital ?= { sg:$GOOD$ = { import_tariff_level = high_subventions } } }
-		AND = { var:te_tax_en_imp_$GOOD$ = -1 capital ?= { sg:$GOOD$ = { import_tariff_level = low_subventions } } }
-		AND = { var:te_tax_en_imp_$GOOD$ = 0 capital ?= { sg:$GOOD$ = { import_tariff_level = no_tariffs_or_subventions } } }
-		AND = { var:te_tax_en_imp_$GOOD$ = 1 capital ?= { sg:$GOOD$ = { import_tariff_level = low_tariffs } } }
-		AND = { var:te_tax_en_imp_$GOOD$ = 2 capital ?= { sg:$GOOD$ = { import_tariff_level = high_tariffs } } }
-		AND = { var:te_tax_en_imp_$GOOD$ = 3 capital ?= { sg:$GOOD$ = { import_tariff_level = max_tariffs } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = -3 capital ?= { sg:$GOOD$ ?= { import_tariff_level = max_subventions } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = -2 capital ?= { sg:$GOOD$ ?= { import_tariff_level = high_subventions } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = -1 capital ?= { sg:$GOOD$ ?= { import_tariff_level = low_subventions } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = 0 capital ?= { sg:$GOOD$ ?= { import_tariff_level = no_tariffs_or_subventions } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = 1 capital ?= { sg:$GOOD$ ?= { import_tariff_level = low_tariffs } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = 2 capital ?= { sg:$GOOD$ ?= { import_tariff_level = high_tariffs } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = 3 capital ?= { sg:$GOOD$ ?= { import_tariff_level = max_tariffs } } }
+		NOT = { capital ?= { sg:$GOOD$ ?= { always = yes } } }
 	}
 }
 
 te_tax_gen_customs_matches_exp = {
 	OR = {
-		AND = { var:te_tax_en_exp_$GOOD$ = -3 capital ?= { sg:$GOOD$ = { export_tariff_level = max_subventions } } }
-		AND = { var:te_tax_en_exp_$GOOD$ = -2 capital ?= { sg:$GOOD$ = { export_tariff_level = high_subventions } } }
-		AND = { var:te_tax_en_exp_$GOOD$ = -1 capital ?= { sg:$GOOD$ = { export_tariff_level = low_subventions } } }
-		AND = { var:te_tax_en_exp_$GOOD$ = 0 capital ?= { sg:$GOOD$ = { export_tariff_level = no_tariffs_or_subventions } } }
-		AND = { var:te_tax_en_exp_$GOOD$ = 1 capital ?= { sg:$GOOD$ = { export_tariff_level = low_tariffs } } }
-		AND = { var:te_tax_en_exp_$GOOD$ = 2 capital ?= { sg:$GOOD$ = { export_tariff_level = high_tariffs } } }
-		AND = { var:te_tax_en_exp_$GOOD$ = 3 capital ?= { sg:$GOOD$ = { export_tariff_level = max_tariffs } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = -3 capital ?= { sg:$GOOD$ ?= { export_tariff_level = max_subventions } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = -2 capital ?= { sg:$GOOD$ ?= { export_tariff_level = high_subventions } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = -1 capital ?= { sg:$GOOD$ ?= { export_tariff_level = low_subventions } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = 0 capital ?= { sg:$GOOD$ ?= { export_tariff_level = no_tariffs_or_subventions } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = 1 capital ?= { sg:$GOOD$ ?= { export_tariff_level = low_tariffs } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = 2 capital ?= { sg:$GOOD$ ?= { export_tariff_level = high_tariffs } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = 3 capital ?= { sg:$GOOD$ ?= { export_tariff_level = max_tariffs } } }
+		NOT = { capital ?= { sg:$GOOD$ ?= { always = yes } } }
 	}
 }
 

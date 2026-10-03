@@ -142,8 +142,11 @@ class DispatchTest(unittest.TestCase):
         # Two fan-outs: the processor for migrated countries, then the migration
         # self-heal (te_tax.3, Task 5; test_tax_code_migration.py) for the rest.
         fan_out, self_heal = gate["every_country"]
-        self.assertEqual(fan_out["limit"], {"has_variable": "te_tax_migrated", "var:te_tax_migrated": "0"})
+        # Never a decentralized country (final review A-Minor 1): no events, economy or politics.
+        self.assertEqual(fan_out["limit"], {"NOT": {"is_country_type": "decentralized"},
+                                            "has_variable": "te_tax_migrated", "var:te_tax_migrated": "0"})
         self.assertEqual(fan_out["trigger_event"], {"id": "te_tax.1"})
+        self.assertEqual(self_heal["limit"]["NOT"], {"is_country_type": "decentralized"})
         self.assertEqual(self_heal["trigger_event"], {"id": "te_tax.3"})
         text = read(ON_ACTIONS)
         self.assertRegex(text, r"var:te_tax_migrated > 0")
