@@ -3543,11 +3543,15 @@ un_peacekeeping_contributor_modifier = {
 	country_bureaucracy_cost_add = 25
 }
 
+# A full force sent to a collapsing state (un_events.4 A). What it costs is
+# un_peacekeeping_deployment_cost, money, as a contingent sent at will from the
+# chamber pays money alone (un_mission_service_cost); the +5% military goods
+# cost it once carried went with that (owner, 2026-10-03). The peacekeeping
+# programme's own modifier keeps its +5%.
 un_peacekeeping_deployed_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
 	country_leverage_generation_mult = 0.10
 	country_prestige_mult = 0.05
-	country_military_goods_cost_mult = 0.05
 }
 
 un_observer_mission_modifier = {

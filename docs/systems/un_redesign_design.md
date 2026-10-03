@@ -201,7 +201,8 @@ checked against the script before it was changed:
 - `un_events.4` (a collapse): A now costs a member not running the peacekeeping programme the
   programme's weekly cost, fading over five years (`un_peacekeeping_deployment_cost`, ruling 3; the
   mission bills only contingents sent at will), ×0.2 in treasury trouble for such a member, and +5
-  for one running the programme, which already pays; B ×0.3 in treasury trouble; C +4 in it.
+  for one running the programme, which already pays; B ×0.3 in treasury trouble; C +4 in it. Its
+  modifier, Peacekeeping Force Deployed, no longer raises military goods costs.
 - `un_vote.3` B (complying with a request voted against): ×0.2 for a major power in treasury
   trouble, which compliance bills a programme's cost.
 - `un_events.34` A (the nationalists' demand to leave): ×0.2 for a Fund recipient.
@@ -256,8 +257,11 @@ terms, the money term and the Fund prospect as a percentage of GDP).
    gradual rather than a sharp cliff, but it makes sense. Built as the membership score's crisis
    term.
 3. **`un_events.4` A** charged nothing: the mission bills only contingents sent at will, and its
-   modifier's only cost in money is +5% military goods. The owner: it should charge the
+   modifier's only cost in money was +5% military goods. The owner: it should charge the
    programme's cost. Built as `un_peacekeeping_deployment_cost`, like the famine appeal's aid cost.
+   The deployed modifier's +5% military goods went at the same time (owner): a contingent sent at
+   will from the chamber pays money alone, so the force pays one cost too. The peacekeeping
+   programme's modifier keeps its +5%.
 4. **Fewer AI contributors.** The owner: most of the time the AI should not give money without
    hope of larger gains; humanitarian leaders and the like may be the exception. Development
    Programs' rank and economic-law terms dropped to +5 each.
