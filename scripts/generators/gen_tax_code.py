@@ -145,6 +145,16 @@ MOD_GOODS_GLOB = "common/goods/*.txt"
 # sentinels: te_tax_en_<key><suffix>, then the two version tokens.
 INSTRUMENT_TOKENS = (("", 0), ("_since", -1), ("_exp", -1), ("_succ", -1))
 VERSION_TOKENS = (("te_tax_pver_", 0), ("te_tax_xver_", 0))
+# The AI's per-instrument marks (plan 2026-10-03 Task 18; spec §2.11): the month of its last
+# change to the instrument and that change's direction (+1 raise, -1 cut, 0 none), for the
+# reverse window. Initialised with the instrument's other tokens and copied at the outbreak.
+AI_INSTRUMENT_TOKENS = (("te_tax_ai_last_", -1), ("te_tax_ai_dir_", 0))
+# The AI's country tokens (docs/systems/tax_code_schema.md, "AI legislation"). te_tax_init_country
+# initialises them (te_tax_state_effects.txt); the outbreak copy copies them here like every other
+# schema token, and te_tax_ai_reset_bill_state then resets the rebels' bill state.
+AI_TOKENS = ("te_tax_ai_phase", "te_tax_ai_def_streak", "te_tax_ai_sur_streak", "te_tax_ai_next_month",
+             "te_tax_ai_tpl", "te_tax_ai_bill_month", "te_tax_ai_noviable", "te_tax_ai_offer_month",
+             "te_tax_ai_offer_count", "te_tax_ai_retry")
 
 # Scheduler (docs/systems/tax_code_schema.md, "Scheduler, package slots and
 # history"). Two approved-package slots; a history ring of eight entries.
@@ -1395,6 +1405,12 @@ def _log(event, detail=""):
     return f'debug_log = "{text}"'
 
 
+def _player_log(event, detail=""):
+    """A command's debug line, for player countries only (plan 2026-10-03 Task 18): the AI
+    writes one summary line per action instead (te_tax_ai_log_*, te_tax_ai_effects.txt)."""
+    return f"if = {{ limit = {{ is_ai = no }} {_log(event, detail)} }}"
+
+
 def _history(kind, slot="none", inst=0):
     return f"te_tax_gen_history_write = {{ KIND = {kind} SLOT = {slot} INST = {inst} }}"
 
@@ -1851,6 +1867,8 @@ def _copy_effects():
     code += [name for name, _ in schedule_tokens()]
     code += [name for name, _ in obligation_tokens()]
     code += [name for name, _ in CUSTOMS_TOKENS] + customs_enacted()
+    code += [f"{prefix}{instrument.key}" for instrument in INSTRUMENTS for prefix, _ in AI_INSTRUMENT_TOKENS]
+    code += list(AI_TOKENS)
     lines = [
         "",
         "# Outbreak copy (te_tax_copy_code, te_tax_civil_war_effects.txt): every token the",
@@ -1859,7 +1877,8 @@ def _copy_effects():
         "# their months, the version tokens, the taxed goods, the clock, the package-slot headers,",
         "# the history ring, the obligation-slot headers and the groups' trust; and, under the",
         "# customs option, the customs tokens and the enacted customs records the original holds",
-        "# (plan Task 15; a token the original lacks is not copied, so the plain option writes none).",
+        "# (plan Task 15; a token the original lacks is not copied, so the plain option writes none);",
+        "# the AI's tokens (plan 2026-10-03 Task 18), whose bill state te_tax_copy_code then resets.",
         "te_tax_gen_copy_code = {",
     ]
     lines += [_copy(name) for name in code]
@@ -2800,8 +2819,8 @@ def _bill_triggers():
 
 def _supersede(slot):
     p = f"te_tax_p{slot}"
-    superseded = _log("superseded", f"slot={slot}: a later approval replaced provisions due on or after its own")
-    withdrawn = _log("superseded", f"slot={slot}: every provision replaced; the slot is free")
+    superseded = _player_log("superseded", f"slot={slot}: a later approval replaced provisions due on or after its own")
+    withdrawn = _player_log("superseded", f"slot={slot}: every provision replaced; the slot is free")
     lines = [
         "",
         f"# Slot {slot}: supersession at approval. Called by te_tax_cmd_pass only when the new package",
@@ -3374,13 +3393,14 @@ def scripted_effects():
         "# te_tax_gen_copy_enacted, called by te_tax_civil_war_effects.txt, with the policy",
         "# obligations' te_tax_gen_copy_obligations and te_tax_gen_clear_obligations (plan Task 12).",
         "",
-        "# Each instrument's tokens with their sentinels, if absent.",
+        "# Each instrument's tokens with their sentinels, if absent: the enacted provision, its",
+        "# version tokens and the AI's marks (te_tax_ai_last_<key>, te_tax_ai_dir_<key>).",
         "te_tax_gen_init_instruments = {",
     ]
     for instrument in INSTRUMENTS:
         for suffix, sentinel in INSTRUMENT_TOKENS:
             lines.append(_guarded_write(f"te_tax_en_{instrument.key}{suffix}", sentinel))
-        for prefix, sentinel in VERSION_TOKENS:
+        for prefix, sentinel in VERSION_TOKENS + AI_INSTRUMENT_TOKENS:
             lines.append(_guarded_write(f"{prefix}{instrument.key}", sentinel))
     lines += ["}", "", "# te_tax_en_g_<good> = 0 for every catalog good, if absent.",
               "te_tax_gen_init_goods = {"]

@@ -1,0 +1,164 @@
+﻿# Legislated tax code: the AI's tunables and fiscal reads (plan 2026-10-03,
+# Task 18; spec docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md
+# §2.3 and §2.14; docs/systems/tax_code_schema.md, "AI legislation").
+#
+# Country scope. Every threshold and count the AI reads is named here, first
+# estimates for the play-test. The ratios and the debt and reserve thresholds
+# copy vanilla's own tax AI (common/defines/00_ai.txt, 1.14.5; each line is
+# cited), whose income-to-expenses dead band the AI keeps. A define: read of
+# NAI is unproven in this mod, so the values are copies. Nothing here writes
+# or iterates anything.
+
+# ---------------------------------------------------------------------------
+# Tunables (spec §2.14)
+# ---------------------------------------------------------------------------
+
+# An initiative (a new bill) is considered every this many months, on the
+# country's own phase (te_tax_ai_initiative_due).
+te_tax_ai_cadence_months = 3
+# Consecutive recorded deficits before a raise (te_tax_ai_def_streak).
+te_tax_ai_need_months = 3
+# Consecutive recorded surpluses at the cut ratio before a cut (te_tax_ai_sur_streak).
+te_tax_ai_surplus_months = 6
+# R at or below which revenue is short: 0.9 without significant debt
+# (RAISE_TAX_ABOVE_DESIRED_INCOME_NO_DEBT_THRESHOLD, 00_ai.txt:213), 1.1 with it
+# (_WITH_DEBT_THRESHOLD, :214).
+te_tax_ai_raise_ratio = 0.9
+te_tax_ai_raise_ratio_debt = 1.1
+# R at or above which revenue is ample: 1.25 without significant debt
+# (LOWER_TAX_TO_DESIRED_INCOME_NO_DEBT_THRESHOLD, 00_ai.txt:215), 1.5 with it
+# (_WITH_DEBT_THRESHOLD, :216).
+te_tax_ai_cut_ratio = 1.25
+te_tax_ai_cut_ratio_debt = 1.5
+# D at which debt is significant (CHANGE_TAX_SIGNIFICANT_DEBT_THRESHOLD, 00_ai.txt:210).
+te_tax_ai_debt_significant = 0.1
+# G at or above which the reserves are full enough to ride out a deficit: no
+# raise for need (RAISE_TAX_ABOVE_DESIRED_INCOME_MAX_GOLD_RESERVES_THRESHOLD, 00_ai.txt:212).
+te_tax_ai_reserves_full = 0.1
+# D at which any raise is acceptable: an emergency (RAISE_TAX_HIGH_DEBT_OVERRIDE_RATIO,
+# 00_ai.txt:218).
+te_tax_ai_emergency_debt = 0.5
+# Weeks to bankruptcy, while borrowing, below which the AI acts at once. Above
+# vanilla's 20-week buffers (WAGE_CUT_MIN_WEEKS_OF_GOLD_RESERVES, 00_ai.txt:33),
+# since a normal raise takes longer than that to collect.
+te_tax_ai_emergency_weeks = 30
+# Months without a new initiative after the AI's package commences, and after
+# a bill it had to withdraw.
+te_tax_ai_cooldown_months = 12
+te_tax_ai_fail_cooldown_months = 6
+# Months an AI bill may stay open before it is withdrawn.
+te_tax_ai_bill_patience = 6
+# Offers the AI accepts in one month (the offer chain re-raises the step).
+te_tax_ai_max_offers = 3
+# A war levy's sunset, in months.
+te_tax_ai_levy_sunset = 24
+# Months in which the AI does not reverse its own change to an instrument.
+te_tax_ai_reverse_months = 24
+# The AI taxes luxury goods only while fewer than this many catalog goods are taxed.
+te_tax_ai_max_goods = 4
+# What a binding institution promise adds to the default strategy's
+# institution score for its institution.
+te_tax_ai_promise_institution_score = 200
+# Months before its deadline that a missed institution promise is enacted for the AI.
+te_tax_ai_enact_lead_months = 1
+
+# ---------------------------------------------------------------------------
+# Fiscal reads (spec §2.3), live, in the processor on the 1st or in te_tax.8
+# ---------------------------------------------------------------------------
+
+# R: weekly income over weekly expenses, temporary ones included, the latter
+# floored at 1 (financial_cycle_government_fiscal_policy_effect_size's form).
+te_tax_ai_ratio = {
+	value = income
+	divide = { value = total_expenses min = 1 }
+}
+
+# D: debt principal over the credit limit, vanilla's "debt to max credit
+# ratio" (war_support_from_taking_loans, war_support_values.txt); 0 without credit.
+te_tax_ai_debt = {
+	value = 0
+	if = {
+		limit = { credit > 0 }
+		value = principal
+		divide = credit
+	}
+}
+
+# G: the gold reserves relative to their limit.
+te_tax_ai_reserves = {
+	value = scaled_gold_reserves
+}
+
+# The raise and cut ratios that apply now: the significant-debt pair once D
+# reaches te_tax_ai_debt_significant.
+te_tax_ai_raise_ratio_now = {
+	value = te_tax_ai_raise_ratio
+	if = {
+		limit = { te_tax_ai_debt >= te_tax_ai_debt_significant }
+		value = te_tax_ai_raise_ratio_debt
+	}
+}
+
+te_tax_ai_cut_ratio_now = {
+	value = te_tax_ai_cut_ratio
+	if = {
+		limit = { te_tax_ai_debt >= te_tax_ai_debt_significant }
+		value = te_tax_ai_cut_ratio_debt
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Timing
+# ---------------------------------------------------------------------------
+
+# The country's bucket, 0 to 3, which picks the day of the month te_tax.8 runs
+# on (te_tax_ai_dispatch): te_tax_ai_phase (drawn 0 to 11) modulo 4.
+te_tax_ai_bucket = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_ai_phase var:te_tax_ai_phase >= 0 }
+		value = var:te_tax_ai_phase
+		modulo = 4
+	}
+}
+
+# Where this month falls in the country's initiative cadence: 0 when an
+# initiative is due (te_tax_ai_initiative_due); -1 before the phase is drawn.
+te_tax_ai_cadence_pos = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_ai_phase var:te_tax_ai_phase >= 0 }
+		value = te_history_month_index
+		subtract = var:te_tax_ai_phase
+		modulo = te_tax_ai_cadence_months
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Log reads (te_tax_ai_log_*): debug_log prints a script value, not a variable
+# (scripting_best_practices.md, "debug_log Loc-String Templating Limitations").
+# ---------------------------------------------------------------------------
+
+te_tax_ai_view_tpl = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_ai_tpl }
+		value = var:te_tax_ai_tpl
+	}
+}
+
+te_tax_ai_view_def_streak = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_ai_def_streak }
+		value = var:te_tax_ai_def_streak
+	}
+}
+
+te_tax_ai_view_sur_streak = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_ai_sur_streak }
+		value = var:te_tax_ai_sur_streak
+	}
+}

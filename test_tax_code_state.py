@@ -70,6 +70,12 @@ GUARDED_WRITE = re.compile(
     r"if = \{ limit = \{ NOT = \{ has_variable = (\w+) \} \} "
     r"set_variable = \{ name = (\w+) value = (-?\d+) \} \}"
 )
+# The schema version (2 since the AI rows, plan 2026-10-03 Task 18): a guarded
+# write, then the one unguarded write of the init, which raises an older save's
+# version once its new rows are backfilled.
+SCHEMA_VERSION = 2
+VERSION_BUMP = ("else_if = { limit = { var:te_tax_schema < 2 } "
+                "set_variable = { name = te_tax_schema value = 2 } }")
 
 
 def read(path, strip_comments=True):
@@ -224,7 +230,7 @@ class InitTest(unittest.TestCase):
         country, _ = schema_tokens()
         expected = {token: value for token, value in country.items() if value is not None}
         expected_schema = writes.pop("te_tax_schema", None)
-        self.assertEqual(expected_schema, 1, "te_tax_schema must be set to 1, guarded")
+        self.assertEqual(expected_schema, SCHEMA_VERSION, "te_tax_schema must be set to the version, guarded")
         self.assertEqual(writes, expected)
 
     def test_every_variable_write_in_the_init_effects_is_guarded(self):
@@ -232,15 +238,20 @@ class InitTest(unittest.TestCase):
                      block(self.generated, "te_tax_gen_init_goods"),
                      block(self.generated, "te_tax_gen_init_schedule"),
                      block(self.generated, "te_tax_gen_init_obligations")):
+            # The version bump's else_if is the one write that may overwrite a value.
+            body = " ".join(body.split()).replace(VERSION_BUMP, "", 1)
             self.assertEqual(body.count("set_variable"), len(GUARDED_WRITE.findall(body)))
             self.assertNotIn("change_variable", body)
 
     def test_schema_version_is_written_last(self):
-        last_write = self.init[self.init.rfind("set_variable"):]
-        self.assertTrue(last_write.startswith("set_variable = { name = te_tax_schema value = 1 }"))
-        self.assertEqual(self.init.count("name = te_tax_schema"), 1)
-        self.assertGreater(self.init.find("name = te_tax_schema"),
-                           self.init.find("te_tax_gen_init_goods = yes"))
+        flat = " ".join(self.init.split())
+        guarded = ("if = { limit = { NOT = { has_variable = te_tax_schema } } "
+                   "set_variable = { name = te_tax_schema value = 2 } } ")
+        self.assertIn(guarded + VERSION_BUMP, flat)
+        last_write = flat[flat.rfind("set_variable"):]
+        self.assertTrue(last_write.startswith("set_variable = { name = te_tax_schema value = 2 }"))
+        self.assertEqual(flat.count("name = te_tax_schema"), 2)
+        self.assertGreater(flat.find("name = te_tax_schema"), flat.find("te_tax_gen_init_goods = yes"))
 
 
 class NoTokenRemovalTest(unittest.TestCase):

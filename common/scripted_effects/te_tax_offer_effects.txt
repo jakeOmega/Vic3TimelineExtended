@@ -91,7 +91,10 @@ te_tax_cmd_accept_offer = {
 			set_variable = { name = te_tax_com_$IG$_rev value = var:te_tax_bl_rev }
 		}
 		te_tax_refresh_support = yes
-		debug_log = "TE_TAX offer_accepted a new revision of the bill opened; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX offer_accepted a new revision of the bill opened; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 
@@ -231,7 +234,10 @@ te_tax_force_into = {
 			years = 5
 			is_decaying = yes
 		}
-		debug_log = "TE_TAX forced_through legislative override used to pass the bill; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX forced_through legislative override used to pass the bill; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 		te_tax_pass_into = { SLOT = $SLOT$ OTHER = $OTHER$ }
 	}
 }

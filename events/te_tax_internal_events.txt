@@ -6,7 +6,9 @@
 # te_tax.4 (raised by the migration, by the re-assert te_tax.5 and by te_tax.6)
 # and te_tax.6 (raised by common/scripted_effects/te_tax_civil_war_effects.txt,
 # which also raises te_tax.3 for an uprising or a released country whose parent
-# has no code). ROOT is always the country the event fires on.
+# has no code) and te_tax.8 (the AI step, raised by
+# common/scripted_effects/te_tax_ai_effects.txt). ROOT is always the country the
+# event fires on.
 # Schedule rules: docs/systems/tax_code_schema.md, "Scheduler, package slots and
 # history"; migration: the same file, "Migration".
 #
@@ -138,5 +140,22 @@ te_tax.7 = {
 	immediate = {
 		te_tax_customs_revalidate = yes
 		te_tax_customs_drop_records = yes
+	}
+}
+
+# The AI step (plan 2026-10-03 Task 18; te_tax_ai_effects.txt): raised by the
+# processor's dispatch (te_tax_ai_dispatch) on the country's bucket day, by the
+# step's own offer chain and from the console. The trigger re-checks the rule,
+# the code and that the engine still runs the country, so a country a player
+# took over since the dispatch does nothing. ROOT = THIS = the country, which
+# force-through's multiplier needs.
+te_tax.8 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_ai_can_act = yes }
+
+	immediate = {
+		te_tax_ai_step = yes
 	}
 }

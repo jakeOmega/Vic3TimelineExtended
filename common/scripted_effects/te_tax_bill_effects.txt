@@ -14,7 +14,11 @@
 # trigger a GUI button uses as its is_valid, and says what it does with a
 # custom_tooltip, because variable writes show nothing in a tooltip. Country
 # scope; nothing here reads ROOT. Commands are effects for clicks and AI
-# decisions, never for a GUI's is_shown, is_valid or display values.
+# decisions, never for a GUI's is_shown, is_valid or display values. A
+# command's debug line is written for player countries only
+# (`limit = { is_ai = no }`); the AI writes one summary line per action
+# instead (te_tax_ai_log_*, te_tax_ai_effects.txt). A line the monthly
+# processor also reaches, like a lost market's customs drop, is for every country.
 #
 # The per-instrument, per-good and per-group parts are generated
 # (te_tax_generated_bill_effects.txt, gen_tax_code.py).
@@ -463,7 +467,10 @@ te_tax_cmd_introduce = {
 		te_tax_gen_bill_from_draft = yes
 		set_variable = { name = te_tax_bl_rev value = 1 }
 		te_tax_bill_start_debate = yes
-		debug_log = "TE_TAX introduced; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX introduced; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 
@@ -478,7 +485,10 @@ te_tax_cmd_revise = {
 		te_tax_gen_bill_from_draft = yes
 		change_variable = { name = te_tax_bl_rev add = 1 }
 		te_tax_bill_start_debate = yes
-		debug_log = "TE_TAX revised; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX revised; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 
@@ -530,7 +540,10 @@ te_tax_cmd_withdraw = {
 		limit = { te_tax_can_withdraw = yes }
 		custom_tooltip = te_tax_tt_cmd_withdraw
 		te_tax_bill_close = yes
-		debug_log = "TE_TAX withdrawn; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX withdrawn; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 
@@ -588,10 +601,16 @@ te_tax_pass_into = {
 			te_tax_draft_close = yes
 		}
 		te_tax_bill_close = yes
-		debug_log = "TE_TAX passed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX passed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 	else = {
-		debug_log = "TE_TAX pass_refused the scheduler would not store the bill; nothing changed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX pass_refused the scheduler would not store the bill; nothing changed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 
@@ -616,7 +635,10 @@ te_tax_cmd_reschedule = {
 		}
 		te_tax_bill_set_minor = yes
 		te_tax_refresh_support = yes
-		debug_log = "TE_TAX rescheduled; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX rescheduled; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 
@@ -634,7 +656,10 @@ te_tax_cmd_package_reschedule = {
 		set_variable = { name = te_tax_p$SLOT$_state value = 1 }
 		te_tax_history_push = { KIND = 9 SLOT = $SLOT$ }
 		te_tax_recompute_next_month = yes
-		debug_log = "TE_TAX package_rescheduled to next month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX package_rescheduled to next month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 
@@ -652,7 +677,10 @@ te_tax_cmd_package_release = {
 		te_tax_history_push = { KIND = 10 SLOT = $SLOT$ }
 		te_tax_obl_release_slot = { SLOT = $SLOT$ }
 		te_tax_recompute_next_month = yes
-		debug_log = "TE_TAX package_released; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX package_released; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 

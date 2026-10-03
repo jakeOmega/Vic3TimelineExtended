@@ -22,7 +22,8 @@
 # te_tax_gen_copy_enacted, called by te_tax_civil_war_effects.txt, with the policy
 # obligations' te_tax_gen_copy_obligations and te_tax_gen_clear_obligations (plan Task 12).
 
-# Each instrument's tokens with their sentinels, if absent.
+# Each instrument's tokens with their sentinels, if absent: the enacted provision, its
+# version tokens and the AI's marks (te_tax_ai_last_<key>, te_tax_ai_dir_<key>).
 te_tax_gen_init_instruments = {
 	if = { limit = { NOT = { has_variable = te_tax_en_wage } } set_variable = { name = te_tax_en_wage value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_wage_since } } set_variable = { name = te_tax_en_wage_since value = -1 } }
@@ -30,30 +31,40 @@ te_tax_gen_init_instruments = {
 	if = { limit = { NOT = { has_variable = te_tax_en_wage_succ } } set_variable = { name = te_tax_en_wage_succ value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_pver_wage } } set_variable = { name = te_tax_pver_wage value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_xver_wage } } set_variable = { name = te_tax_xver_wage value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_ai_last_wage } } set_variable = { name = te_tax_ai_last_wage value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_ai_dir_wage } } set_variable = { name = te_tax_ai_dir_wage value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_div } } set_variable = { name = te_tax_en_div value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_div_since } } set_variable = { name = te_tax_en_div_since value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_div_exp } } set_variable = { name = te_tax_en_div_exp value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_div_succ } } set_variable = { name = te_tax_en_div_succ value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_pver_div } } set_variable = { name = te_tax_pver_div value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_xver_div } } set_variable = { name = te_tax_xver_div value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_ai_last_div } } set_variable = { name = te_tax_ai_last_div value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_ai_dir_div } } set_variable = { name = te_tax_ai_dir_div value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_land } } set_variable = { name = te_tax_en_land value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_land_since } } set_variable = { name = te_tax_en_land_since value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_land_exp } } set_variable = { name = te_tax_en_land_exp value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_land_succ } } set_variable = { name = te_tax_en_land_succ value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_pver_land } } set_variable = { name = te_tax_pver_land value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_xver_land } } set_variable = { name = te_tax_xver_land value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_ai_last_land } } set_variable = { name = te_tax_ai_last_land value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_ai_dir_land } } set_variable = { name = te_tax_ai_dir_land value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_head } } set_variable = { name = te_tax_en_head value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_head_since } } set_variable = { name = te_tax_en_head_since value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_head_exp } } set_variable = { name = te_tax_en_head_exp value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_head_succ } } set_variable = { name = te_tax_en_head_succ value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_pver_head } } set_variable = { name = te_tax_pver_head value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_xver_head } } set_variable = { name = te_tax_xver_head value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_ai_last_head } } set_variable = { name = te_tax_ai_last_head value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_ai_dir_head } } set_variable = { name = te_tax_ai_dir_head value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_cons } } set_variable = { name = te_tax_en_cons value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_cons_since } } set_variable = { name = te_tax_en_cons_since value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_cons_exp } } set_variable = { name = te_tax_en_cons_exp value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_en_cons_succ } } set_variable = { name = te_tax_en_cons_succ value = -1 } }
 	if = { limit = { NOT = { has_variable = te_tax_pver_cons } } set_variable = { name = te_tax_pver_cons value = 0 } }
 	if = { limit = { NOT = { has_variable = te_tax_xver_cons } } set_variable = { name = te_tax_xver_cons value = 0 } }
+	if = { limit = { NOT = { has_variable = te_tax_ai_last_cons } } set_variable = { name = te_tax_ai_last_cons value = -1 } }
+	if = { limit = { NOT = { has_variable = te_tax_ai_dir_cons } } set_variable = { name = te_tax_ai_dir_cons value = 0 } }
 }
 
 # te_tax_en_g_<good> = 0 for every catalog good, if absent.
@@ -7280,7 +7291,8 @@ te_tax_gen_ig_views = {
 # their months, the version tokens, the taxed goods, the clock, the package-slot headers,
 # the history ring, the obligation-slot headers and the groups' trust; and, under the
 # customs option, the customs tokens and the enacted customs records the original holds
-# (plan Task 15; a token the original lacks is not copied, so the plain option writes none).
+# (plan Task 15; a token the original lacks is not copied, so the plain option writes none);
+# the AI's tokens (plan 2026-10-03 Task 18), whose bill state te_tax_copy_code then resets.
 te_tax_gen_copy_code = {
 	te_tax_copy_token = { NAME = te_tax_en_wage }
 	te_tax_copy_token = { NAME = te_tax_en_wage_since }
@@ -7549,6 +7561,26 @@ te_tax_gen_copy_code = {
 	te_tax_copy_token = { NAME = te_tax_en_exp_wine }
 	te_tax_copy_token = { NAME = te_tax_en_imp_wood }
 	te_tax_copy_token = { NAME = te_tax_en_exp_wood }
+	te_tax_copy_token = { NAME = te_tax_ai_last_wage }
+	te_tax_copy_token = { NAME = te_tax_ai_dir_wage }
+	te_tax_copy_token = { NAME = te_tax_ai_last_div }
+	te_tax_copy_token = { NAME = te_tax_ai_dir_div }
+	te_tax_copy_token = { NAME = te_tax_ai_last_land }
+	te_tax_copy_token = { NAME = te_tax_ai_dir_land }
+	te_tax_copy_token = { NAME = te_tax_ai_last_head }
+	te_tax_copy_token = { NAME = te_tax_ai_dir_head }
+	te_tax_copy_token = { NAME = te_tax_ai_last_cons }
+	te_tax_copy_token = { NAME = te_tax_ai_dir_cons }
+	te_tax_copy_token = { NAME = te_tax_ai_phase }
+	te_tax_copy_token = { NAME = te_tax_ai_def_streak }
+	te_tax_copy_token = { NAME = te_tax_ai_sur_streak }
+	te_tax_copy_token = { NAME = te_tax_ai_next_month }
+	te_tax_copy_token = { NAME = te_tax_ai_tpl }
+	te_tax_copy_token = { NAME = te_tax_ai_bill_month }
+	te_tax_copy_token = { NAME = te_tax_ai_noviable }
+	te_tax_copy_token = { NAME = te_tax_ai_offer_month }
+	te_tax_copy_token = { NAME = te_tax_ai_offer_count }
+	te_tax_copy_token = { NAME = te_tax_ai_retry }
 }
 
 # Outbreak copy of the policy obligations (plan Task 12): the payload of every slot whose

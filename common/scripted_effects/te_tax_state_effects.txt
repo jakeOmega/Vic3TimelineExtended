@@ -13,8 +13,8 @@
 
 # Country scope. Writes every schema token that is absent with its sentinel and
 # never touches one that exists, so it is safe to call any number of times and
-# backfills only what a newer schema added. te_tax_schema is written last: a
-# country with te_tax_schema has every token of that schema version.
+# backfills only what a newer schema added. te_tax_schema (version 2) is
+# written last: a country with te_tax_schema has every token of that version.
 # Per-instrument, per-good, scheduler (clock, package-slot headers, history
 # ring) and policy-obligation tokens (slot headers, each group's trust):
 # te_tax_gen_init_* (generated, te_tax_generated_effects.txt).
@@ -56,7 +56,24 @@ te_tax_init_country = {
 			if = { limit = { NOT = { has_variable = te_tax_xver_customs } } set_variable = { name = te_tax_xver_customs value = 0 } }
 			if = { limit = { NOT = { has_variable = te_tax_drift_customs } } set_variable = { name = te_tax_drift_customs value = 0 } }
 		}
-		if = { limit = { NOT = { has_variable = te_tax_schema } } set_variable = { name = te_tax_schema value = 1 } }
+		# The AI layer (schema version 2; docs/systems/tax_code_schema.md, "AI
+		# legislation"), written for every country so both sides of a civil war
+		# hold them from the outbreak. The per-instrument marks come with
+		# te_tax_gen_init_instruments. te_tax_ai_phase is drawn by the first
+		# processor run that finds it negative (te_tax_ai_update_streaks).
+		if = { limit = { NOT = { has_variable = te_tax_ai_phase } } set_variable = { name = te_tax_ai_phase value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_def_streak } } set_variable = { name = te_tax_ai_def_streak value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_sur_streak } } set_variable = { name = te_tax_ai_sur_streak value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_next_month } } set_variable = { name = te_tax_ai_next_month value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_tpl } } set_variable = { name = te_tax_ai_tpl value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_bill_month } } set_variable = { name = te_tax_ai_bill_month value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_noviable } } set_variable = { name = te_tax_ai_noviable value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_offer_month } } set_variable = { name = te_tax_ai_offer_month value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_offer_count } } set_variable = { name = te_tax_ai_offer_count value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_retry } } set_variable = { name = te_tax_ai_retry value = 0 } }
+		# The version, last. A save from version 1 holds the variable with 1: the
+		# rows above backfill what version 2 added, then the version moves on.
+		if = { limit = { NOT = { has_variable = te_tax_schema } } set_variable = { name = te_tax_schema value = 2 } } else_if = { limit = { var:te_tax_schema < 2 } set_variable = { name = te_tax_schema value = 2 } }
 	}
 }
 

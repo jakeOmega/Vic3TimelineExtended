@@ -1,0 +1,277 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE — the AI layer
+# ============================================================================
+# Plan 2026-10-03, Tasks 18-22; spec
+# docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md §2;
+# docs/systems/tax_code_schema.md, "AI legislation".
+#
+#   STREAKS   te_tax_ai_update_streaks, processor rule 1b, every migrated
+#             country: the fiscal streaks the need tests read, after the
+#             fiscal record of the 1st; draws the country's phase once.
+#   DISPATCH  te_tax_ai_dispatch, processor rule 1b, AI countries only: when
+#             a step is due (te_tax_ai_step_due) it raises the hidden te_tax.8
+#             on the country's bucket day (5, 12, 19 or 26 days on), or the
+#             next day on a retry. The processor itself never drafts.
+#   STEP      te_tax_ai_step, from te_tax.8 only, with ROOT = THIS = the
+#             country. A stub that logs its signals until Tasks 19-21.
+#   RESET     te_tax_ai_reset_bill_state, at the outbreak (on the rebels),
+#             the win repair and a release (te_tax_civil_war_effects.txt).
+#   LOGS      te_tax_ai_log_*, one summary line per AI action.
+#
+# The AI acts only through the commands the player's buttons run
+# (te_tax_cmd_<c> inside te_tax_can_<c>); nothing here writes native fiscal
+# state. Every te_tax_ai_* variable is a schema token: initialised by
+# te_tax_init_country, copied at the outbreak, never removed.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Processor rule 1b
+# ----------------------------------------------------------------------------
+
+# The fiscal streaks (spec §2.3): consecutive 1sts with a recorded deficit, and
+# with a recorded surplus at or above the cut ratio; any other 1st resets the
+# streak. Every migrated country, so a revolution's player-side tokens stay
+# meaningful. Called only by te_tax_process_month, after the fiscal record
+# (te_tax_record_fiscal_month) and once per processed month. The phase is drawn
+# once, by the first run that finds the sentinel; it is never redrawn.
+te_tax_ai_update_streaks = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_schema
+		}
+		if = {
+			limit = { te_tax_fisc_rec_deficit = yes }
+			change_variable = { name = te_tax_ai_def_streak add = 1 }
+		}
+		else = {
+			set_variable = { name = te_tax_ai_def_streak value = 0 }
+		}
+		if = {
+			limit = {
+				te_tax_fisc_rec_surplus = yes
+				te_tax_ai_ratio >= te_tax_ai_cut_ratio_now
+			}
+			change_variable = { name = te_tax_ai_sur_streak add = 1 }
+		}
+		else = {
+			set_variable = { name = te_tax_ai_sur_streak value = 0 }
+		}
+		if = {
+			limit = { var:te_tax_ai_phase < 0 }
+			te_tax_ai_phase_draw = yes
+		}
+	}
+}
+
+# The country's phase, 0 to 11, drawn once and stored: the UN AI's stored
+# random draw (un_vote_ai_draws, un_dossier_effects.txt), a random_list of
+# equal weights whose branches each set a literal. It spreads the AI's
+# initiatives over the cadence (te_tax_ai_cadence_pos) and its steps over the
+# month (te_tax_ai_bucket).
+te_tax_ai_phase_draw = {
+	random_list = {
+		1 = { set_variable = { name = te_tax_ai_phase value = 0 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 1 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 2 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 3 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 4 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 5 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 6 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 7 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 8 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 9 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 10 } }
+		1 = { set_variable = { name = te_tax_ai_phase value = 11 } }
+	}
+}
+
+# Raises the AI step for an AI country with something due this month: an
+# initiative on its phase, an emergency, or something to manage
+# (te_tax_ai_step_due). A retry (te_tax_ai_retry, set by the step when the
+# native tax level alone blocks passage) raises it for tomorrow, the day after
+# the writer pins the level; otherwise the bucket picks the day, off the
+# month-boundary burst. trigger_event takes a literal delay, hence the chain.
+# Called only by te_tax_process_month, after the streaks.
+te_tax_ai_dispatch = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			is_ai = yes
+			te_tax_ai_step_due = yes
+		}
+		if = {
+			limit = { var:te_tax_ai_retry = 1 }
+			set_variable = { name = te_tax_ai_retry value = 0 }
+			trigger_event = { id = te_tax.8 days = 1 }
+		}
+		else_if = {
+			limit = { te_tax_ai_bucket = 0 }
+			trigger_event = { id = te_tax.8 days = 5 }
+		}
+		else_if = {
+			limit = { te_tax_ai_bucket = 1 }
+			trigger_event = { id = te_tax.8 days = 12 }
+		}
+		else_if = {
+			limit = { te_tax_ai_bucket = 2 }
+			trigger_event = { id = te_tax.8 days = 19 }
+		}
+		else = {
+			trigger_event = { id = te_tax.8 days = 26 }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# The step (te_tax.8)
+# ----------------------------------------------------------------------------
+
+# The AI step, run only by te_tax.8 (te_tax_ai_can_act holds), with ROOT = THIS
+# = the country. Tasks 19-21 fill it: held packages, promises at risk, the open
+# bill, then a new initiative (spec §2.4). For now it logs its signals.
+te_tax_ai_step = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		te_tax_ai_log_step = yes
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Civil wars and releases
+# ----------------------------------------------------------------------------
+
+# No AI bill, offer chain or retry survives a civil war or a release: the
+# outbreak leaves the bill with the government that wrote it, the win repair
+# closes the winner's, and a released country starts without one. The
+# streaks, the phase and the cooldown are the country's own and stay. Called
+# by te_tax_copy_code (on the rebels), te_tax_repair_after_civil_war and
+# te_tax_init_released_country.
+te_tax_ai_reset_bill_state = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		set_variable = { name = te_tax_ai_tpl value = 0 }
+		set_variable = { name = te_tax_ai_bill_month value = -1 }
+		set_variable = { name = te_tax_ai_offer_month value = -1 }
+		set_variable = { name = te_tax_ai_offer_count value = 0 }
+		set_variable = { name = te_tax_ai_retry value = 0 }
+		set_variable = { name = te_tax_ai_noviable value = 0 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Summary lines (spec §2.12)
+# ----------------------------------------------------------------------------
+# One debug.log line per AI action: TE_TAX ai_<verb>, the open bill's template
+# (tpl, 0 none), R, D and G (te_tax_ai_values.txt), the deficit and surplus
+# streaks, and the month, date and country every tax code line carries. They
+# replace the commands' own lines, which are written for players only.
+# debug_log cannot print a parameter, so there is one effect per verb and per
+# reason. SCOPE.ScriptValue reads against ROOT, the country in te_tax.8 and
+# te_tax.1. Withdrawal and no-viable reasons: support, legitimacy, slots,
+# authority, patience (open too long) and draft (introduction refused).
+
+# te_tax.8 ran the step (the stub: Tasks 19-21 fill it).
+te_tax_ai_log_step = {
+	debug_log = "TE_TAX ai_step tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI introduced a bill.
+te_tax_ai_log_introduced = {
+	debug_log = "TE_TAX ai_introduced tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI passed its bill.
+te_tax_ai_log_passed = {
+	debug_log = "TE_TAX ai_passed tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI forced its bill through in an emergency.
+te_tax_ai_log_forced = {
+	debug_log = "TE_TAX ai_forced tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI accepted an interest group's offer.
+te_tax_ai_log_accepted = {
+	debug_log = "TE_TAX ai_accepted tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI released a held package.
+te_tax_ai_log_released = {
+	debug_log = "TE_TAX ai_released tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI rescheduled a missed package.
+te_tax_ai_log_rescheduled = {
+	debug_log = "TE_TAX ai_rescheduled tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI renegotiated a promise it would otherwise breach.
+te_tax_ai_log_renegotiated = {
+	debug_log = "TE_TAX ai_renegotiated tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The bill fails only on legitimacy while the native tax level is off medium; the step retries the day after the pin.
+te_tax_ai_log_waiting_legitimacy_native_level = {
+	debug_log = "TE_TAX ai_waiting reason=legitimacy_native_level tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI withdrew its bill: support.
+te_tax_ai_log_withdrawn_support = {
+	debug_log = "TE_TAX ai_withdrawn reason=support tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI withdrew its bill: legitimacy.
+te_tax_ai_log_withdrawn_legitimacy = {
+	debug_log = "TE_TAX ai_withdrawn reason=legitimacy tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI withdrew its bill: slots.
+te_tax_ai_log_withdrawn_slots = {
+	debug_log = "TE_TAX ai_withdrawn reason=slots tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI withdrew its bill: authority.
+te_tax_ai_log_withdrawn_authority = {
+	debug_log = "TE_TAX ai_withdrawn reason=authority tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI withdrew its bill: patience.
+te_tax_ai_log_withdrawn_patience = {
+	debug_log = "TE_TAX ai_withdrawn reason=patience tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI withdrew its bill: draft.
+te_tax_ai_log_withdrawn_draft = {
+	debug_log = "TE_TAX ai_withdrawn reason=draft tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# No viable bill this episode: support.
+te_tax_ai_log_no_viable_support = {
+	debug_log = "TE_TAX ai_no_viable reason=support tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# No viable bill this episode: legitimacy.
+te_tax_ai_log_no_viable_legitimacy = {
+	debug_log = "TE_TAX ai_no_viable reason=legitimacy tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# No viable bill this episode: slots.
+te_tax_ai_log_no_viable_slots = {
+	debug_log = "TE_TAX ai_no_viable reason=slots tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# No viable bill this episode: authority.
+te_tax_ai_log_no_viable_authority = {
+	debug_log = "TE_TAX ai_no_viable reason=authority tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# No viable bill this episode: patience.
+te_tax_ai_log_no_viable_patience = {
+	debug_log = "TE_TAX ai_no_viable reason=patience tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# No viable bill this episode: draft.
+te_tax_ai_log_no_viable_draft = {
+	debug_log = "TE_TAX ai_no_viable reason=draft tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}

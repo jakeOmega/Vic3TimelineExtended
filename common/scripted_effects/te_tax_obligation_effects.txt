@@ -255,7 +255,10 @@ te_tax_obl_release_slot = {
 		if = {
 			limit = { local_var:te_tax_obl_released = 1 }
 			te_tax_history_push = { KIND = 14 SLOT = $SLOT$ }
-			debug_log = "TE_TAX obl_released the promises bound to a passed bill lapsed with it; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			if = {
+				limit = { is_ai = no }
+				debug_log = "TE_TAX obl_released the promises bound to a passed bill lapsed with it; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
 		}
 	}
 }
@@ -299,7 +302,10 @@ te_tax_obl_bind_one = {
 			limit = { var:te_tax_o$N$_rev = var:te_tax_bl_rev }
 			set_variable = { name = te_tax_o$N$_slot value = te_tax_slot_id_$SLOT$ }
 			set_variable = { name = te_tax_o$N$_state value = 7 }
-			debug_log = "TE_TAX obl_bound a promise binds from the passed bill's commencement; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			if = {
+				limit = { is_ai = no }
+				debug_log = "TE_TAX obl_bound a promise binds from the passed bill's commencement; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
 		}
 		else = {
 			te_tax_obl_release_one = { N = $N$ }
@@ -513,7 +519,10 @@ te_tax_cmd_obl_renegotiate = {
 		te_tax_gen_obl_approval = { N = $N$ MODIFIER = te_tax_obl_renegotiated_modifier }
 		te_tax_gen_obl_trust = { N = $N$ DELTA = -1 }
 		te_tax_history_push = { KIND = 13 SLOT = none }
-		debug_log = "TE_TAX obl_renegotiated a promise was renegotiated and its slot freed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX obl_renegotiated a promise was renegotiated and its slot freed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 

@@ -1,0 +1,106 @@
+﻿# Legislated tax code: the AI's gates and fiscal signals (plan 2026-10-03,
+# Task 18; spec docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md
+# §2.2-§2.4; docs/systems/tax_code_schema.md, "AI legislation").
+#
+# Country scope. The thresholds are the named values of te_tax_ai_values.txt.
+# The recorded deficit and surplus are the fiscal record of the 1st
+# (te_tax_fisc_rec_deficit, _surplus, te_tax_triggers.txt), which the support
+# model's fiscal reason also reads: a raise in a recorded surplus costs support
+# with every group, so the AI raises for need only on a recorded deficit.
+
+# The AI may legislate for this country: the rule is on, the code is in force,
+# the engine runs the country and it holds the carrier law. te_tax.8 re-checks
+# it, so a country a player took over since the dispatch does nothing.
+te_tax_ai_can_act = {
+	te_tax_code_on = yes
+	te_tax_code_in_force = yes
+	is_ai = yes
+	has_law = law_type:law_te_tax_code
+}
+
+# An emergency skips the streaks, the stagger and the cooldown: the country is
+# in default, its debt is at te_tax_ai_emergency_debt of its credit, or it is
+# borrowing with bankruptcy under te_tax_ai_emergency_weeks away (vanilla reads
+# weeks_until_bankruptcy only behind taking_loans, war_support_values.txt).
+te_tax_ai_emergency = {
+	OR = {
+		in_default = yes
+		te_tax_ai_debt >= te_tax_ai_emergency_debt
+		AND = {
+			taking_loans = yes
+			weeks_until_bankruptcy < te_tax_ai_emergency_weeks
+		}
+	}
+}
+
+# Revenue is short (spec §2.3): a recorded deficit with R at or below the raise
+# ratio that applies and the reserves under te_tax_ai_reserves_full, or a
+# fiscal-balance promise in force, which counts as a need until it is fulfilled.
+te_tax_ai_raise_need = {
+	OR = {
+		AND = {
+			te_tax_fisc_rec_deficit = yes
+			te_tax_ai_ratio <= te_tax_ai_raise_ratio_now
+			te_tax_ai_reserves < te_tax_ai_reserves_full
+		}
+		te_tax_ai_kind4_in_force = yes
+	}
+}
+
+# Revenue is ample (spec §2.3): a recorded surplus with R at or above the cut
+# ratio that applies.
+te_tax_ai_cut_need = {
+	te_tax_fisc_rec_surplus = yes
+	te_tax_ai_ratio >= te_tax_ai_cut_ratio_now
+}
+
+# A fiscal-balance promise (kind 4) binds the country: bound to a passed bill,
+# delivering or maintaining (te_tax_obl_binding: state 7, 2 or 3).
+te_tax_ai_kind4_in_force = {
+	OR = {
+		AND = { te_tax_obl_binding = { N = 1 } var:te_tax_o1_kind = 4 }
+		AND = { te_tax_obl_binding = { N = 2 } var:te_tax_o2_kind = 4 }
+		AND = { te_tax_obl_binding = { N = 3 } var:te_tax_o3_kind = 4 }
+		AND = { te_tax_obl_binding = { N = 4 } var:te_tax_o4_kind = 4 }
+	}
+}
+
+# This month the country considers a new bill: (month - phase) modulo
+# te_tax_ai_cadence_months is 0. Never before the phase is drawn.
+te_tax_ai_initiative_due = {
+	has_variable = te_tax_ai_phase
+	var:te_tax_ai_phase >= 0
+	te_tax_ai_cadence_pos = 0
+}
+
+# Something to manage every month: a bill under debate, a package held as
+# conflicting or missed, or a promise being delivered or maintained.
+te_tax_ai_has_management = {
+	OR = {
+		te_tax_bill_active = yes
+		AND = {
+			has_variable = te_tax_pa_on
+			var:te_tax_pa_on = 1
+			OR = { var:te_tax_pa_state = 2 var:te_tax_pa_state = 3 }
+		}
+		AND = {
+			has_variable = te_tax_pb_on
+			var:te_tax_pb_on = 1
+			OR = { var:te_tax_pb_state = 2 var:te_tax_pb_state = 3 }
+		}
+		te_tax_obl_active = { N = 1 }
+		te_tax_obl_active = { N = 2 }
+		te_tax_obl_active = { N = 3 }
+		te_tax_obl_active = { N = 4 }
+	}
+}
+
+# The processor raises te_tax.8 this month (te_tax_ai_dispatch).
+te_tax_ai_step_due = {
+	te_tax_ai_can_act = yes
+	OR = {
+		te_tax_ai_initiative_due = yes
+		te_tax_ai_emergency = yes
+		te_tax_ai_has_management = yes
+	}
+}

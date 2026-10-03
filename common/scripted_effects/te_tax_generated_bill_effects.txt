@@ -1676,7 +1676,7 @@ te_tax_gen_supersede_a = {
 				if = { limit = { var:te_tax_bl_exp_wood >= -3 var:te_tax_pa_exp_wood >= -3 } set_variable = { name = te_tax_pa_exp_wood value = -99 } }
 			}
 			te_tax_history_push = { KIND = 8 SLOT = a }
-			debug_log = "TE_TAX superseded slot=a: a later approval replaced provisions due on or after its own; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			if = { limit = { is_ai = no } debug_log = "TE_TAX superseded slot=a: a later approval replaced provisions due on or after its own; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]" }
 			if = {
 				limit = { te_tax_gen_package_empty_a = yes }
 				set_variable = { name = te_tax_pa_on value = 0 }
@@ -1684,7 +1684,7 @@ te_tax_gen_supersede_a = {
 				if = { limit = { has_variable_list = te_tax_pa_relief_states } clear_variable_list = te_tax_pa_relief_states }
 				# Its bound obligations lapse with it, unbreached (plan Task 12).
 				te_tax_obl_release_slot = { SLOT = a }
-				debug_log = "TE_TAX superseded slot=a: every provision replaced; the slot is free; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+				if = { limit = { is_ai = no } debug_log = "TE_TAX superseded slot=a: every provision replaced; the slot is free; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]" }
 			}
 		}
 	}
@@ -1925,7 +1925,7 @@ te_tax_gen_supersede_b = {
 				if = { limit = { var:te_tax_bl_exp_wood >= -3 var:te_tax_pb_exp_wood >= -3 } set_variable = { name = te_tax_pb_exp_wood value = -99 } }
 			}
 			te_tax_history_push = { KIND = 8 SLOT = b }
-			debug_log = "TE_TAX superseded slot=b: a later approval replaced provisions due on or after its own; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			if = { limit = { is_ai = no } debug_log = "TE_TAX superseded slot=b: a later approval replaced provisions due on or after its own; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]" }
 			if = {
 				limit = { te_tax_gen_package_empty_b = yes }
 				set_variable = { name = te_tax_pb_on value = 0 }
@@ -1933,7 +1933,7 @@ te_tax_gen_supersede_b = {
 				if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
 				# Its bound obligations lapse with it, unbreached (plan Task 12).
 				te_tax_obl_release_slot = { SLOT = b }
-				debug_log = "TE_TAX superseded slot=b: every provision replaced; the slot is free; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+				if = { limit = { is_ai = no } debug_log = "TE_TAX superseded slot=b: every provision replaced; the slot is free; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]" }
 			}
 		}
 	}
