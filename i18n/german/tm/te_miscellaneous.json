@@ -13748,8 +13748,8 @@
   "de": "Die Gesetze"
  },
  "rt_how_programmes": {
-  "en": "Each running programme closes the smallest building of its kind left in our states every #v 3#! months, whoever owns it. The whole building goes, every level of it. Its owners are paid a quarter of what it would cost to build today, and its state gets [GetStaticModifier('rt_transition_assistance').GetName] for #v 5#! years:\\n[GetStaticModifier('rt_transition_assistance').GetDesc]\\nRepealing the phaseout stops every programme.",
-  "de": "Jedes laufende Programm schließt alle #v 3#! Monate das kleinste noch vorhandene Gebäude seiner Art in unseren Staaten, wem auch immer es gehört. Das ganze Gebäude verschwindet, jede Stufe davon. Seine Eigentümer erhalten ein Viertel dessen, was der Bau heute kosten würde, und sein Staat erhält [GetStaticModifier('rt_transition_assistance').GetName] für #v 5#! Jahre:\\n[GetStaticModifier('rt_transition_assistance').GetDesc]\\nDie Aufhebung des Ausstiegs stoppt jedes Programm."
+  "en": "Each running programme closes the smallest building of its kind left in our states every #v 3#! months, whoever owns it, foreign investors included. The whole building goes, every level of it. Its owners are paid a quarter of what it would cost to build today, from the treasury, and its state gets [GetStaticModifier('rt_transition_assistance').GetName] for #v 5#! years:\\n[GetStaticModifier('rt_transition_assistance').GetDesc]\\nRepealing the phaseout stops every programme.",
+  "de": "Jedes laufende Programm schließt alle #v 3#! Monate das kleinste noch vorhandene Gebäude seiner Art in unseren Staaten, wem auch immer es gehört, ausländische Investoren eingeschlossen. Das ganze Gebäude verschwindet, jede Stufe davon. Seine Eigentümer erhalten ein Viertel dessen, was der Bau heute kosten würde, aus der Landeskasse, und sein Staat erhält [GetStaticModifier('rt_transition_assistance').GetName] für #v 5#! Jahre:\\n[GetStaticModifier('rt_transition_assistance').GetDesc]\\nDie Aufhebung des Ausstiegs stoppt jedes Programm."
  },
  "rt_how_programmes_head": {
   "en": "Retirement Programmes",

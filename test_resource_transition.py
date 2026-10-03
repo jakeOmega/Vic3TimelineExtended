@@ -31,6 +31,7 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 
 INDUSTRIES = {"coal": "building_coal_mine", "oil": "building_oil_rig", "power": "building_power_plant"}
 LAW_ORDER = ["law_unrestricted_extraction", "law_fossil_expansion_moratorium", "law_managed_fossil_phaseout"]
+MAX_LAW_DESC_CHARS = 320
 
 
 def _read(path):
@@ -245,13 +246,12 @@ class NumbersTest(unittest.TestCase):
         years = int(_constant("RT_ASSISTANCE_YEARS"))
         retire = _top_level(_read(EFFECTS), "rt_retire_smallest")
         self.assertRegex(retire, rf"years = {years}\s")
-        for key in ("rt_how_programmes", "rt_start_coal_tt", "law_managed_fossil_phaseout_desc"):
+        for key in ("rt_how_programmes", "rt_start_coal_tt"):
             self.assertIn(f"#v {years}#! years", _loc_value(key), key)
 
     def test_compensation_share(self):
         self.assertEqual(_constant("RT_COMPENSATION_SHARE"), 0.25)
-        for key in ("rt_how_programmes", "law_managed_fossil_phaseout_desc"):
-            self.assertIn("a quarter of what it would cost to build", _loc_value(key), key)
+        self.assertIn("a quarter of what it would cost to build", _loc_value("rt_how_programmes"))
         for key in ("concept_fossil_transition_desc",):
             self.assertIn(f"#v {int(_constant('RT_RETIRE_INTERVAL_MONTHS'))}#! months", _loc_value(key), key)
 
@@ -266,9 +266,39 @@ class InGameTextTest(unittest.TestCase):
             self.assertTrue("emissions" in text and ("by itself" in text or "only if" in text), key)
 
     def test_the_phaseout_says_the_whole_building_goes_whoever_owns_it(self):
-        text = _loc_value("law_managed_fossil_phaseout_desc")
-        for phrase in ("the whole building, every level, whoever owns it", "foreign investors included", "from the treasury"):
+        # The law's own description is short (see the next test); the full
+        # account sits in the Fossil Transition section's "how it works" text.
+        text = _loc_value("rt_how_programmes")
+        for phrase in ("whoever owns it, foreign investors included", "The whole building goes, every level of it", "from the treasury"):
             self.assertIn(phrase, text)
+        short = _loc_value("law_managed_fossil_phaseout_desc")
+        for phrase in ("whoever owns it", "the treasury compensates its owners"):
+            self.assertIn(phrase, short)
+
+    def test_law_descriptions_fit_the_enactment_popup(self):
+        """The 'We now have <law>!' popup prints the description in a box that
+        holds roughly nine lines and does not scroll. The phaseout's 650-character
+        text with a paragraph break ran over the law's name and art; the longest
+        vanilla law description is 294 characters. Keep each of the three to one
+        paragraph of at most MAX_LAW_DESC_CHARS as rendered, and put the detail
+        in the journal entry's text instead."""
+        concept_names = {
+            "[concept_greenhouse_gas_emissions]": "Greenhouse Gas Emissions",
+            "[concept_fossil_transition]": "Fossil Transition",
+            "$building_coal_mine$": "Coal Mine",
+            "$building_oil_rig$": "Oil Rig",
+            "$building_power_plant$": "Power Plant",
+            "$je_global_warming$": "Global Warming",
+        }
+        for law in LAW_ORDER:
+            text = _loc_value(f"{law}_desc")
+            for markup, name in concept_names.items():
+                text = text.replace(markup, name)
+            text = re.sub(r"\[GetStaticModifier\([^\]]*\]", "Transition Assistance", text)
+            text = re.sub(r"#\w+ |#!", "", text)
+            self.assertNotIn("\\n", text, f"{law}: one paragraph, a break costs a line of the box")
+            self.assertNotRegex(text, r"\[|\$", f"{law}: unrendered markup left in the measure")
+            self.assertLessEqual(len(text), MAX_LAW_DESC_CHARS, f"{law}: {len(text)} characters")
 
     def test_start_tooltip_carries_the_cost(self):
         start = _top_level(_read(EFFECTS), "rt_start_programme")
