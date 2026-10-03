@@ -8461,6 +8461,7 @@ POST_LOAD_AUDITS = [
     ("any_limit_audit",               "any_limit_audit"),
     ("iterator_limit_audit",          "iterator_limit_audit"),
     ("modifier_multiplier_var_audit", "modifier_multiplier_var_audit"),
+    ("je_multiplier_scope_audit",    "je_multiplier_scope_audit"),
     ("pm_employment_audit",           "pm_employment_audit"),
     ("orphaned_event_audit",          "orphaned_event_audit"),
     ("effect_trigger_validity_audit", "effect_trigger_validity_audit"),

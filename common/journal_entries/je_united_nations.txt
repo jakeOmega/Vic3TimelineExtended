@@ -366,14 +366,8 @@
 						je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
 						je:je_united_nations ?= { add_modifier = {
 								name = un_membership_benefits_modifier
-								multiplier = {
-									value = global_var:un_authority
-									divide = 50
-									multiply = {
-										value = 1
-										add = modifier:country_un_institutional_alignment
-									}
-								} }
+								multiplier = un_membership_benefits_multiplier_for_je
+							}
 						}
 					}
 					else = {
