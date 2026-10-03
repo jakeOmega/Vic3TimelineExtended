@@ -11,10 +11,12 @@ and tiny countries never [collapse](#colonial-collapse-of-tiny-countries).
 
 Decolonization also ends your claims on decentralized nations. Within a month of
 researching it, you lose every claim you hold on a state of a decentralized
-nation, and a Colonial Claims Renounced notice tells you so. A claim you stake
-afterward is dropped the same way, and AI countries lose theirs too. Claims on
-other countries' states, such as the ones a conquest leaves you with or the ones
-behind [reunification](08-diplomacy.md#irredentism-and-reunification), stay.
+nation, and a Colonial Claims Renounced notice tells you so. Stake Colonial
+Claim is no longer open to you, and a claim that reaches you some other way is
+dropped within the month. AI countries lose their claims and stop staking them
+too. Claims on other countries' states, such as the ones a conquest leaves you
+with or the ones behind
+[reunification](08-diplomacy.md#irredentism-and-reunification), stay.
 
 ## The Colonial Empire journal entry
 

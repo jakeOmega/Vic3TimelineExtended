@@ -2068,6 +2068,7 @@
  cultural_renaissance_funding_modifier:0 "Cultural Renaissance Funding"
  cultural_renaissance_prestige_modifier:0 "Cultural Renaissance Celebration"
  cyber_defense_strengthened_modifier:0 "Cyber Defense Strengthened"
+ da_stake_colonial_claim_renounced_tt:0 "Has not renounced [Concept('concept_claim', 'claims')] on [Concept('concept_decentralized_nation', 'decentralized nations')] through [GetTechnology('decolonization').GetName]"
  data_protection_strengthened_modifier:0 "Data Protection Strengthened"
  decolonization_confirm_planned_tt_header:0 "The following overseas colonial territories will be released as independent nations:"
  decolonization_form_country_tt:0 "Form a new independent nation. The metropole's heritage shapes the new state, and its flag color is assigned at random."
