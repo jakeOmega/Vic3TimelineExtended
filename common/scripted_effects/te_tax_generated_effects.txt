@@ -2137,8 +2137,12 @@ te_tax_gen_apply_a = {
 # successor then, by te_tax_gen_apply_<slot>'s rule): the underlying permanent rate,
 # from the other slot's awaiting package if it touches the provision earlier, else
 # from the enacted provision. seq = one above both slots. The slot is switched on last.
+# _due0 keeps the approved month and _pver_<group> the planned versions after this
+# approval, for te_tax_cmd_package_reschedule: a missed package may move only a few
+# months, and only while no later approval has touched what it changes.
 te_tax_gen_store_a = {
 	set_variable = { name = te_tax_pa_due value = var:te_tax_bl_due }
+	set_variable = { name = te_tax_pa_due0 value = var:te_tax_bl_due }
 	if = {
 		limit = { var:te_tax_pb_seq > var:te_tax_pa_seq }
 		set_variable = { name = te_tax_pa_seq value = var:te_tax_pb_seq }
@@ -2389,6 +2393,13 @@ te_tax_gen_store_a = {
 	set_variable = { name = te_tax_pa_g_wine value = var:te_tax_bl_g_wine }
 	set_variable = { name = te_tax_pa_g_wood value = var:te_tax_bl_g_wood }
 	set_variable = { name = te_tax_pa_xver_goods value = var:te_tax_bl_xver_goods }
+	set_variable = { name = te_tax_pa_pver_wage value = var:te_tax_pver_wage }
+	set_variable = { name = te_tax_pa_pver_div value = var:te_tax_pver_div }
+	set_variable = { name = te_tax_pa_pver_land value = var:te_tax_pver_land }
+	set_variable = { name = te_tax_pa_pver_head value = var:te_tax_pver_head }
+	set_variable = { name = te_tax_pa_pver_cons value = var:te_tax_pver_cons }
+	set_variable = { name = te_tax_pa_pver_goods value = var:te_tax_pver_goods }
+	set_variable = { name = te_tax_pa_pver_relief value = var:te_tax_pver_relief }
 	set_variable = { name = te_tax_pa_agrel value = var:te_tax_bl_agrel }
 	set_variable = { name = te_tax_pa_regrel value = var:te_tax_bl_regrel }
 	set_variable = { name = te_tax_pa_xver_relief value = var:te_tax_bl_xver_relief }
@@ -2660,8 +2671,12 @@ te_tax_gen_apply_b = {
 # successor then, by te_tax_gen_apply_<slot>'s rule): the underlying permanent rate,
 # from the other slot's awaiting package if it touches the provision earlier, else
 # from the enacted provision. seq = one above both slots. The slot is switched on last.
+# _due0 keeps the approved month and _pver_<group> the planned versions after this
+# approval, for te_tax_cmd_package_reschedule: a missed package may move only a few
+# months, and only while no later approval has touched what it changes.
 te_tax_gen_store_b = {
 	set_variable = { name = te_tax_pb_due value = var:te_tax_bl_due }
+	set_variable = { name = te_tax_pb_due0 value = var:te_tax_bl_due }
 	if = {
 		limit = { var:te_tax_pa_seq > var:te_tax_pb_seq }
 		set_variable = { name = te_tax_pb_seq value = var:te_tax_pa_seq }
@@ -2912,6 +2927,13 @@ te_tax_gen_store_b = {
 	set_variable = { name = te_tax_pb_g_wine value = var:te_tax_bl_g_wine }
 	set_variable = { name = te_tax_pb_g_wood value = var:te_tax_bl_g_wood }
 	set_variable = { name = te_tax_pb_xver_goods value = var:te_tax_bl_xver_goods }
+	set_variable = { name = te_tax_pb_pver_wage value = var:te_tax_pver_wage }
+	set_variable = { name = te_tax_pb_pver_div value = var:te_tax_pver_div }
+	set_variable = { name = te_tax_pb_pver_land value = var:te_tax_pver_land }
+	set_variable = { name = te_tax_pb_pver_head value = var:te_tax_pver_head }
+	set_variable = { name = te_tax_pb_pver_cons value = var:te_tax_pver_cons }
+	set_variable = { name = te_tax_pb_pver_goods value = var:te_tax_pver_goods }
+	set_variable = { name = te_tax_pb_pver_relief value = var:te_tax_pver_relief }
 	set_variable = { name = te_tax_pb_agrel value = var:te_tax_bl_agrel }
 	set_variable = { name = te_tax_pb_regrel value = var:te_tax_bl_regrel }
 	set_variable = { name = te_tax_pb_xver_relief value = var:te_tax_bl_xver_relief }

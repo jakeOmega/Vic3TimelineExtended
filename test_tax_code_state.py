@@ -414,7 +414,8 @@ class GeneratedSyncTest(unittest.TestCase):
                 "te_tax_gen_bill_touches_goods", "te_tax_gen_draft_baseline_current",
                 "te_tax_gen_draft_differs_from_bill", "te_tax_gen_bill_current",
                 "te_tax_gen_bill_small_steps"} | {
-            f"te_tax_gen_{part}_{slot}" for part in ("bill_overlaps", "package_empty") for slot in ("a", "b")}
+            f"te_tax_gen_{part}_{slot}" for part in ("bill_overlaps", "package_empty", "package_unsuperseded")
+            for slot in ("a", "b")}
         self.assertEqual(
             set(top_level_names(self.triggers)),
             {f"te_tax_amendment_{kind}_{key}" for kind in ("is", "matches") for key in KEYS}

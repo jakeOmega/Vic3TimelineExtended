@@ -816,6 +816,40 @@ te_tax_gen_bill_overlaps_a = {
 	}
 }
 
+# Slot a's package: every provision group it changes still has the planned version
+# it had after this package's approval, so no later bill has touched it. Fails closed
+# for a package stored before the marks existed.
+te_tax_gen_package_unsuperseded_a = {
+	OR = {
+		var:te_tax_pa_wage < 0
+		AND = { has_variable = te_tax_pa_pver_wage var:te_tax_pa_pver_wage = var:te_tax_pver_wage }
+	}
+	OR = {
+		var:te_tax_pa_div < 0
+		AND = { has_variable = te_tax_pa_pver_div var:te_tax_pa_pver_div = var:te_tax_pver_div }
+	}
+	OR = {
+		var:te_tax_pa_land < 0
+		AND = { has_variable = te_tax_pa_pver_land var:te_tax_pa_pver_land = var:te_tax_pver_land }
+	}
+	OR = {
+		var:te_tax_pa_head < 0
+		AND = { has_variable = te_tax_pa_pver_head var:te_tax_pa_pver_head = var:te_tax_pver_head }
+	}
+	OR = {
+		var:te_tax_pa_cons < 0
+		AND = { has_variable = te_tax_pa_pver_cons var:te_tax_pa_pver_cons = var:te_tax_pver_cons }
+	}
+	OR = {
+		NOT = { te_tax_gen_package_touches_goods_a = yes }
+		AND = { has_variable = te_tax_pa_pver_goods var:te_tax_pa_pver_goods = var:te_tax_pver_goods }
+	}
+	OR = {
+		AND = { var:te_tax_pa_agrel < 0 var:te_tax_pa_regrel < 0 }
+		AND = { has_variable = te_tax_pa_pver_relief var:te_tax_pa_pver_relief = var:te_tax_pver_relief }
+	}
+}
+
 # Slot a's package touches nothing (every provision superseded).
 te_tax_gen_package_empty_a = {
 	var:te_tax_pa_wage < 0
@@ -915,6 +949,40 @@ te_tax_gen_bill_overlaps_b = {
 		AND = { var:te_tax_bl_g_wood >= 0 var:te_tax_pb_g_wood >= 0 }
 		AND = { var:te_tax_bl_agrel >= 0 var:te_tax_pb_agrel >= 0 }
 		AND = { var:te_tax_bl_regrel >= 0 var:te_tax_pb_regrel >= 0 }
+	}
+}
+
+# Slot b's package: every provision group it changes still has the planned version
+# it had after this package's approval, so no later bill has touched it. Fails closed
+# for a package stored before the marks existed.
+te_tax_gen_package_unsuperseded_b = {
+	OR = {
+		var:te_tax_pb_wage < 0
+		AND = { has_variable = te_tax_pb_pver_wage var:te_tax_pb_pver_wage = var:te_tax_pver_wage }
+	}
+	OR = {
+		var:te_tax_pb_div < 0
+		AND = { has_variable = te_tax_pb_pver_div var:te_tax_pb_pver_div = var:te_tax_pver_div }
+	}
+	OR = {
+		var:te_tax_pb_land < 0
+		AND = { has_variable = te_tax_pb_pver_land var:te_tax_pb_pver_land = var:te_tax_pver_land }
+	}
+	OR = {
+		var:te_tax_pb_head < 0
+		AND = { has_variable = te_tax_pb_pver_head var:te_tax_pb_pver_head = var:te_tax_pver_head }
+	}
+	OR = {
+		var:te_tax_pb_cons < 0
+		AND = { has_variable = te_tax_pb_pver_cons var:te_tax_pb_pver_cons = var:te_tax_pver_cons }
+	}
+	OR = {
+		NOT = { te_tax_gen_package_touches_goods_b = yes }
+		AND = { has_variable = te_tax_pb_pver_goods var:te_tax_pb_pver_goods = var:te_tax_pver_goods }
+	}
+	OR = {
+		AND = { var:te_tax_pb_agrel < 0 var:te_tax_pb_regrel < 0 }
+		AND = { has_variable = te_tax_pb_pver_relief var:te_tax_pb_pver_relief = var:te_tax_pver_relief }
 	}
 }
 

@@ -238,17 +238,11 @@ te_tax_bill_start_debate = {
 	te_tax_refresh_support = yes
 }
 
-# A minor bill changes at most two provisions, each by at most two steps from
-# existing law, and no good or relief: it needs te_tax_debate_days_minor days.
+# Records whether the bill is minor (te_tax_bill_is_minor, te_tax_triggers.txt):
+# a minor bill needs te_tax_debate_days_minor days of debate.
 te_tax_bill_set_minor = {
 	if = {
-		limit = {
-			te_tax_bl_provisions <= 2
-			te_tax_gen_bill_small_steps = yes
-			NOT = { te_tax_gen_bill_touches_goods = yes }
-			var:te_tax_bl_agrel < 0
-			var:te_tax_bl_regrel < 0
-		}
+		limit = { te_tax_bill_is_minor = yes }
 		set_variable = { name = te_tax_bl_minor value = 1 }
 	}
 	else = {
@@ -272,8 +266,7 @@ te_tax_bill_close = {
 	set_variable = { name = te_tax_bl_on value = 0 }
 }
 
-# Passes the bill: an approved package in slot a if it is free, else b. Groups
-# that opposed it disapprove; a draft identical to it is discarded with it.
+# Passes the bill: an approved package in slot a if it is free, else b.
 te_tax_cmd_pass = {
 	if = {
 		limit = { te_tax_can_pass = yes }
@@ -285,6 +278,27 @@ te_tax_cmd_pass = {
 		else = {
 			te_tax_pass_into = { SLOT = b OTHER = a }
 		}
+	}
+}
+
+# Stores the bill in slot SLOT, and only then records it, lets the groups that
+# opposed it react and closes it. The whole sequence runs only when the store
+# will accept the bill: te_tax_store_package checks exactly
+# te_tax_can_store_package, and nothing between this check and the store
+# changes what it reads (supersession writes only the OTHER slot, the bump only
+# te_tax_pver_*). Checking before the store rather than after keeps the
+# per-group disapproval lines in the Pass button's tooltip, which is rendered
+# while the slot is still empty.
+# Supersession at approval touches only the OTHER slot (provisions it would
+# change on or after this bill's due month); the enacted code and its sunsets
+# are left for commencement. A draft identical to the bill is discarded with it.
+te_tax_pass_into = {
+	if = {
+		limit = { te_tax_can_store_package = { SLOT = $SLOT$ } }
+		te_tax_gen_supersede_$OTHER$ = yes
+		te_tax_gen_bump_pver = yes
+		te_tax_store_package = { SLOT = $SLOT$ }
+		te_tax_history_push = { KIND = 6 SLOT = $SLOT$ }
 		te_tax_gen_oppose_approval = yes
 		if = {
 			limit = {
@@ -296,31 +310,70 @@ te_tax_cmd_pass = {
 		te_tax_bill_close = yes
 		debug_log = "TE_TAX passed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}
-}
-
-# Stores the bill in slot SLOT. Supersession at approval touches only the
-# OTHER slot (provisions it would change on or after this bill's due month);
-# the enacted code and its sunsets are left for commencement. Then the planned
-# versions move, the package is stored (te_tax_store_package validates it
-# again) and history records the approval.
-te_tax_pass_into = {
-	te_tax_gen_supersede_$OTHER$ = yes
-	te_tax_gen_bump_pver = yes
-	te_tax_store_package = { SLOT = $SLOT$ }
-	te_tax_history_push = { KIND = 6 SLOT = $SLOT$ }
+	else = {
+		debug_log = "TE_TAX pass_refused the scheduler would not store the bill; nothing changed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
 }
 
 # Moves the bill's commencement to next month once its due month has come
 # during debate. Same revision: commitments stay; the support snapshot and the
-# minor class follow the new due month.
+# minor class follow the new due month. If the new month changes the class
+# (the baseline moved, so the steps did), the debate clock restarts, because
+# the class decides how long the debate is.
 te_tax_cmd_reschedule = {
 	if = {
 		limit = { te_tax_can_reschedule = yes }
 		custom_tooltip = te_tax_tt_cmd_reschedule
 		set_variable = { name = te_tax_bl_due value = te_tax_due_earliest }
+		if = {
+			limit = {
+				OR = {
+					AND = { var:te_tax_bl_minor = 1 NOT = { te_tax_bill_is_minor = yes } }
+					AND = { var:te_tax_bl_minor = 0 te_tax_bill_is_minor = yes }
+				}
+			}
+			set_variable = { name = te_tax_bl_day value = game_date }
+		}
 		te_tax_bill_set_minor = yes
 		te_tax_refresh_support = yes
 		debug_log = "TE_TAX rescheduled; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Commences a package the scheduler held as missed next month instead (SLOT: a
+# or b). Its approved expiry months stand: the delay is at most three months
+# and every sunset is at least six after the approved month, so each still
+# falls at least three months after the new one. Its external versions are
+# not re-recorded; a missed package has no conflict to accept, and one that
+# meets a change at its new commencement holds as conflicting.
+te_tax_cmd_package_reschedule = {
+	if = {
+		limit = { te_tax_can_package_reschedule = { SLOT = $SLOT$ } }
+		custom_tooltip = te_tax_tt_cmd_package_reschedule
+		set_variable = { name = te_tax_p$SLOT$_due value = te_tax_due_earliest }
+		set_variable = { name = te_tax_p$SLOT$_state value = 1 }
+		te_tax_history_push = { KIND = 9 SLOT = $SLOT$ }
+		te_tax_recompute_next_month = yes
+		debug_log = "TE_TAX package_rescheduled to next month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Releases a held package (SLOT: a or b): the slot frees and nothing the
+# package would have changed takes effect. A held_conflict package is resolved
+# only this way; its terms come back as a new bill.
+te_tax_cmd_package_release = {
+	if = {
+		limit = { te_tax_can_package_release = { SLOT = $SLOT$ } }
+		custom_tooltip = te_tax_tt_cmd_package_release
+		set_variable = { name = te_tax_p$SLOT$_on value = 0 }
+		set_variable = { name = te_tax_p$SLOT$_state value = 0 }
+		every_scope_state = {
+			limit = { has_variable = te_tax_pending_relief_$SLOT$ }
+			set_variable = { name = te_tax_pending_relief_$SLOT$ value = 0 }
+		}
+		te_tax_history_push = { KIND = 10 SLOT = $SLOT$ }
+		te_tax_recompute_next_month = yes
+		debug_log = "TE_TAX package_released; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 	}
 }
 

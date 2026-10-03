@@ -37,7 +37,7 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       te_tax_gen_bill_touches_goods, te_tax_gen_draft_baseline_current,
       te_tax_gen_draft_differs_from_bill, te_tax_gen_bill_current,
       te_tax_gen_bill_small_steps, te_tax_gen_bill_overlaps_<slot>,
-      te_tax_gen_package_empty_<slot>).
+      te_tax_gen_package_empty_<slot>, te_tax_gen_package_unsuperseded_<slot>).
   common/scripted_effects/te_tax_generated_bill_effects.txt
       The draft, bill and passage parts (te_tax_gen_draft_init/_from_bill/
       _clear, te_tax_gen_bill_from_draft/_clear, te_tax_gen_supersede_<slot>,
@@ -115,7 +115,7 @@ SLOT_IDS = (("none", 0), ("a", 1), ("b", 2))    # te_tax_slot_id_<slot>, stored 
 PACKAGE_HEADER = (("_on", 0), ("_due", -1), ("_state", 0), ("_seq", 0))
 HISTORY_SIZE = 8
 HISTORY_FIELDS = (("month", -1), ("kind", 0), ("slot", 0), ("inst", 0), ("version", -1))
-# History kinds the scheduler writes (the schema doc lists all eight).
+# History kinds the scheduler writes (the schema doc lists all ten).
 KIND_COMMENCED, KIND_SUNSET, KIND_HELD_CONFLICT, KIND_HELD_MISSED = 1, 2, 3, 4
 # Package state values.
 STATE_EMPTY, STATE_AWAITING, STATE_HELD_CONFLICT, STATE_HELD_MISSED = 0, 1, 2, 3
@@ -137,7 +137,7 @@ BILL_EFFECTS_PATH = "common/scripted_effects/te_tax_generated_bill_effects.txt"
 SUPPORT_VALUES_PATH = "common/script_values/te_tax_generated_support_values.txt"
 RECORDS = ("dr", "bl")
 RECORD_KEY_FIELDS = (("", -1), ("_sun", 0), ("_pver", -1))   # te_tax_<rec>_<key><field>, draft sentinel
-KIND_APPROVED, KIND_SUPERSEDED = 6, 8
+KIND_APPROVED, KIND_SUPERSEDED, KIND_RESCHEDULED, KIND_RELEASED = 6, 8, 9, 10
 # The interest groups the support model scores, by type key (ig_<key>).
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
        "landowners", "petty_bourgeoisie", "rural_folk", "trade_unions")
@@ -800,8 +800,12 @@ def _store(slot):
         "# successor then, by te_tax_gen_apply_<slot>'s rule): the underlying permanent rate,",
         "# from the other slot's awaiting package if it touches the provision earlier, else",
         "# from the enacted provision. seq = one above both slots. The slot is switched on last.",
+        "# _due0 keeps the approved month and _pver_<group> the planned versions after this",
+        "# approval, for te_tax_cmd_package_reschedule: a missed package may move only a few",
+        "# months, and only while no later approval has touched what it changes.",
         f"te_tax_gen_store_{slot} = {{",
         f"\tset_variable = {{ name = {p}_due value = var:te_tax_bl_due }}",
+        f"\tset_variable = {{ name = {p}_due0 value = var:te_tax_bl_due }}",
         "\tif = {",
         f"\t\tlimit = {{ var:{o}_seq > var:{p}_seq }}",
         f"\t\tset_variable = {{ name = {p}_seq value = var:{o}_seq }}",
@@ -832,6 +836,8 @@ def _store(slot):
     lines += [f"\tset_variable = {{ name = {p}_g_{good} value = var:te_tax_bl_g_{good} }}"
               for good in consumption_catalog()]
     lines.append(f"\tset_variable = {{ name = {p}_xver_goods value = var:te_tax_bl_xver_goods }}")
+    groups = [instrument.key for instrument in INSTRUMENTS] + ["goods", "relief"]
+    lines += [f"\tset_variable = {{ name = {p}_pver_{group} value = var:te_tax_pver_{group} }}" for group in groups]
     lines += [f"\tset_variable = {{ name = {p}_{field} value = var:te_tax_bl_{field} }}"
               for field in PACKAGE_RELIEF_FIELDS]
     lines += [
@@ -1332,6 +1338,22 @@ def _bill_triggers():
         overlaps += [f"AND = {{ var:te_tax_bl_g_{good} >= 0 var:{p}_g_{good} >= 0 }}" for good in goods]
         overlaps += [f"AND = {{ var:te_tax_bl_{field} >= 0 var:{p}_{field} >= 0 }}" for field in ("agrel", "regrel")]
         lines += _or_block(overlaps)
+        lines += [
+            "}",
+            "",
+            f"# Slot {slot}'s package: every provision group it changes still has the planned version",
+            "# it had after this package's approval, so no later bill has touched it. Fails closed",
+            "# for a package stored before the marks existed.",
+            f"te_tax_gen_package_unsuperseded_{slot} = {{",
+        ]
+        for key in keys:
+            mark = f"{p}_pver_{key}"
+            lines += _or_block([f"var:{p}_{key} < 0",
+                                f"AND = {{ has_variable = {mark} var:{mark} = var:te_tax_pver_{key} }}"])
+        lines += _or_block([f"NOT = {{ te_tax_gen_package_touches_goods_{slot} = yes }}",
+                            f"AND = {{ has_variable = {p}_pver_goods var:{p}_pver_goods = var:te_tax_pver_goods }}"])
+        lines += _or_block([f"AND = {{ var:{p}_agrel < 0 var:{p}_regrel < 0 }}",
+                            f"AND = {{ has_variable = {p}_pver_relief var:{p}_pver_relief = var:te_tax_pver_relief }}"])
         lines += ["}", "", f"# Slot {slot}'s package touches nothing (every provision superseded).",
                   f"te_tax_gen_package_empty_{slot} = {{"]
         lines += [f"\tvar:{p}_{key} < 0" for key in keys] + [f"\tvar:{p}_g_{good} < 0" for good in goods]

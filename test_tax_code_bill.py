@@ -86,6 +86,10 @@ PASSAGE_VALUES = {
     "te_tax_debate_days_minor": "15",
 }
 SUNSET_LADDER = (0, 6, 12, 24, 36, 60)
+KIND_APPROVED, KIND_SUPERSEDED, KIND_RESCHEDULED, KIND_RELEASED = 6, 8, 9, 10
+# A held_missed package may be rescheduled when the delay since its approved due
+# month is at most this many months (controller ruling, Task 6 fix round 1).
+RESCHEDULE_MAX_DELAY = 3
 
 # Commands and their parameters, in the order the effect passes them on.
 COMMANDS = {
@@ -101,6 +105,8 @@ COMMANDS = {
     "withdraw": (),
     "pass": (),
     "reschedule": (),
+    "package_reschedule": ("SLOT",),
+    "package_release": ("SLOT",),
 }
 DRAFT_COMMANDS = tuple(name for name in COMMANDS if name.startswith("draft_"))
 # The values each parameter takes for each command.
@@ -110,6 +116,8 @@ DOMAINS = {
     "draft_due": {"DIR": ("0", "1")},
     "draft_good": {"GOOD": None},           # the catalog, filled in lazily
     "draft_rebase": {"KEY": KEYS + ("goods",)},
+    "package_reschedule": {"SLOT": SLOTS},
+    "package_release": {"SLOT": SLOTS},
 }
 
 WRITE = re.compile(r"\b(?:set_variable|change_variable|clamp_variable) = \{ name = ([\w$]+)"
@@ -318,6 +326,21 @@ class CommandTest(unittest.TestCase):
         earliest = load(SUPPORT)["te_tax_due_earliest"]
         self.assertEqual(earliest, {"value": "te_history_month_index", "add": "1"})
 
+    def test_reschedule_restarts_debate_only_when_the_class_changes(self):
+        body = block(self.bill, "te_tax_cmd_reschedule")
+        restart = [nested for _, nested in branches(body)
+                   if "set_variable = { name = te_tax_bl_day value = game_date }" in direct(nested)]
+        self.assertEqual(len(restart), 1)
+        gate = re.sub(r"\s+", " ", limit_of(restart[0]))
+        self.assertIn("AND = { var:te_tax_bl_minor = 1 NOT = { te_tax_bill_is_minor = yes } }", gate)
+        self.assertIn("AND = { var:te_tax_bl_minor = 0 te_tax_bill_is_minor = yes }", gate)
+        positions = [body.find(step) for step in ("name = te_tax_bl_due value = te_tax_due_earliest",
+                                                  "name = te_tax_bl_day value = game_date",
+                                                  "te_tax_bill_set_minor = yes", "te_tax_refresh_support = yes")]
+        self.assertTrue(all(position >= 0 for position in positions))
+        self.assertEqual(positions, sorted(positions), "new due, then the class test, then the new class")
+        self.assertNotIn("te_tax_bl_rev", body, "a reschedule is not a revision")
+
     def test_withdraw_and_discard_leave_the_code_alone(self):
         withdraw = reach("te_tax_cmd_withdraw", {}, self.defined)
         self.assertIn("te_tax_bill_close", withdraw)
@@ -339,20 +362,43 @@ class PassTest(unittest.TestCase):
                                     r"te_tax_pass_into = \{ SLOT = a OTHER = b \}\s*\}\s*"
                                     r"else = \{\s*te_tax_pass_into = \{ SLOT = b OTHER = a \}\s*\}")
 
-    def test_pass_supersedes_bumps_stores_and_records_in_order(self):
+    def guarded_pass(self):
+        """The body of te_tax_pass_into's branch that runs when the store will accept the bill."""
         into = self.defined["te_tax_pass_into"]
-        order = [into.find(step) for step in ("te_tax_gen_supersede_$OTHER$ = yes", "te_tax_gen_bump_pver = yes",
+        self.assertRegex(into, r"^\s*if = \{\s*limit = \{ te_tax_can_store_package = \{ SLOT = \$SLOT\$ \} \}")
+        opener = into.find("if = {") + len("if = {") - 1
+        self.assertTrue(into[close(into, opener) + 1:].strip().startswith("else = {"))
+        return into[opener + 1:close(into, opener)]
+
+    def test_pass_supersedes_bumps_stores_and_records_in_order(self):
+        body = self.guarded_pass()
+        order = [body.find(step) for step in ("te_tax_gen_supersede_$OTHER$ = yes", "te_tax_gen_bump_pver = yes",
                                               "te_tax_store_package = { SLOT = $SLOT$ }",
-                                              "te_tax_history_push = { KIND = 6 SLOT = $SLOT$ }")]
+                                              f"te_tax_history_push = {{ KIND = {KIND_APPROVED} SLOT = $SLOT$ }}")]
         self.assertTrue(all(position >= 0 for position in order))
         self.assertEqual(order, sorted(order))
 
+    def test_nothing_runs_unless_the_store_accepts_the_bill(self):
+        # te_tax_store_package checks exactly te_tax_can_store_package, and nothing
+        # between this check and the store changes what it reads (supersession
+        # writes only the other slot, the bump only te_tax_pver_*), so history,
+        # reactions and closing the bill run only when the package is stored.
+        into = self.defined["te_tax_pass_into"]
+        opener = into.find("if = {") + len("if = {") - 1
+        refused = into[close(into, opener) + 1:]
+        self.assertNotRegex(refused, r"set_variable|change_variable|te_tax_(history_push|bill_close|gen_)")
+        self.assertIn('debug_log = "TE_TAX pass_refused', refused)
+        for step in ("te_tax_history_push", "te_tax_gen_oppose_approval", "te_tax_bill_close",
+                     "te_tax_draft_close", "te_tax_gen_supersede_", "te_tax_gen_bump_pver"):
+            self.assertNotIn(step, self.body, "runs only inside te_tax_pass_into's guarded branch")
+
     def test_pass_then_reacts_discards_an_identical_draft_and_closes_the_bill(self):
-        steps = [self.body.find(step) for step in ("te_tax_pass_into", "te_tax_gen_oppose_approval = yes",
-                                                   "te_tax_draft_close = yes", "te_tax_bill_close = yes")]
+        body = self.guarded_pass()
+        steps = [body.find(step) for step in ("te_tax_store_package", "te_tax_gen_oppose_approval = yes",
+                                              "te_tax_draft_close = yes", "te_tax_bill_close = yes")]
         self.assertTrue(all(position >= 0 for position in steps))
         self.assertEqual(steps, sorted(steps))
-        discard = [nested for _, nested in branches(self.body) if "te_tax_draft_close = yes" in direct(nested)]
+        discard = [nested for _, nested in branches(body) if "te_tax_draft_close = yes" in direct(nested)]
         self.assertEqual(len(discard), 1)
         self.assertIn("NOT = { te_tax_gen_draft_differs_from_bill = yes }", limit_of(discard[0]))
 
@@ -389,7 +435,7 @@ class PassTest(unittest.TestCase):
                                       stripped[0])
                 for good in catalog():
                     self.assertIn(f"var:te_tax_bl_g_{good} >= 0 var:te_tax_p{slot}_g_{good} >= 0", body)
-                self.assertIn(f"te_tax_history_push = {{ KIND = 8 SLOT = {slot} }}", body)
+                self.assertIn(f"te_tax_history_push = {{ KIND = {KIND_SUPERSEDED} SLOT = {slot} }}", body)
                 emptied = [nested for _, nested in branches(body)
                            if limit_of(nested).strip() == f"te_tax_gen_package_empty_{slot} = yes"]
                 self.assertEqual(len(emptied), 1)
@@ -413,6 +459,101 @@ class PassTest(unittest.TestCase):
                 self.assertRegex(body, re.compile(pattern, re.S))
                 self.assertIn(f"var:te_tax_com_{ig} = 1 var:te_tax_com_{ig}_rev = var:te_tax_bl_rev", body)
         self.assertEqual(load(SUPPORT)["te_tax_opposed_approval_days"], "180")
+
+
+class PackageCommandTest(unittest.TestCase):
+    """Resolving a held package (Task 6 fix round 1): reschedule a missed one, release either kind."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.bill = read(BILL)
+        cls.triggers = read(TRIGGERS)
+        cls.defined = all_effects()
+
+    def tips(self, name):
+        return [re.sub(r"\s+", " ", tip) for tip in custom_tooltip_bodies(block(self.triggers, name))]
+
+    def test_reschedule_needs_a_missed_package_delayed_at_most_three_months(self):
+        tips = self.tips("te_tax_can_package_reschedule")
+        for condition in ("var:te_tax_p$SLOT$_on = 1", "var:te_tax_p$SLOT$_state = 3",
+                          "var:te_tax_p$SLOT$_due0 >= te_tax_package_reschedule_floor",
+                          "te_tax_gen_package_unsuperseded_$SLOT$ = yes"):
+            with self.subTest(condition=condition):
+                self.assertTrue(any(condition in tip for tip in tips))
+        body = block(self.triggers, "te_tax_can_package_reschedule")
+        self.assertNotRegex(body, r"_state = [12]\b", "held_conflict and awaiting packages are refused")
+        self.assertIn("has_variable = te_tax_p$SLOT$_due0", body)
+        values = load(SUPPORT)
+        self.assertEqual(Decimal(values["te_tax_reschedule_max_delay"]), RESCHEDULE_MAX_DELAY)
+        # earliest - due0 <= 3  <=>  due0 >= earliest - 3
+        self.assertEqual(values["te_tax_package_reschedule_floor"],
+                         {"value": "te_tax_due_earliest", "subtract": "te_tax_reschedule_max_delay"})
+        self.assertIn("te_tax_tt_package_delay", body)
+
+    def test_release_needs_a_held_package(self):
+        tips = self.tips("te_tax_can_package_release")
+        self.assertTrue(any("var:te_tax_p$SLOT$_on = 1" in tip for tip in tips))
+        self.assertTrue(any("OR = { var:te_tax_p$SLOT$_state = 2 var:te_tax_p$SLOT$_state = 3 }" in tip
+                            for tip in tips))
+        self.assertNotRegex(block(self.triggers, "te_tax_can_package_release"), r"_state = 1\b")
+
+    def test_reschedule_moves_the_due_month_and_reawaits_without_accepting_conflicts(self):
+        body = block(self.bill, "te_tax_cmd_package_reschedule")
+        for line in ("set_variable = { name = te_tax_p$SLOT$_due value = te_tax_due_earliest }",
+                     "set_variable = { name = te_tax_p$SLOT$_state value = 1 }",
+                     f"te_tax_history_push = {{ KIND = {KIND_RESCHEDULED} SLOT = $SLOT$ }}",
+                     "te_tax_recompute_next_month = yes"):
+            self.assertIn(line, body)
+        self.assertNotIn("xver", body, "a missed package has no conflict to accept")
+        self.assertNotIn("_due0", re.sub(r"var:te_tax_p\$SLOT\$_due0", "", body), "the approved month stays")
+
+    def test_release_frees_the_slot_and_its_relief_marks(self):
+        body = block(self.bill, "te_tax_cmd_package_release")
+        for line in ("set_variable = { name = te_tax_p$SLOT$_on value = 0 }",
+                     "set_variable = { name = te_tax_p$SLOT$_state value = 0 }",
+                     f"te_tax_history_push = {{ KIND = {KIND_RELEASED} SLOT = $SLOT$ }}",
+                     "te_tax_recompute_next_month = yes"):
+            self.assertIn(line, body)
+        self.assertRegex(body, r"every_scope_state = \{\s*limit = \{ has_variable = te_tax_pending_relief_\$SLOT\$ \}"
+                               r"\s*set_variable = \{ name = te_tax_pending_relief_\$SLOT\$ value = 0 \}")
+
+    def test_neither_touches_the_enacted_code_or_the_writer(self):
+        for name in ("package_reschedule", "package_release"):
+            for slot in SLOTS:
+                bodies = reach(f"te_tax_cmd_{name}", {"SLOT": slot}, self.defined)
+                names = written(bodies.values())
+                with self.subTest(command=name, slot=slot):
+                    self.assertIn(f"te_tax_cmd_{name}", bodies)
+                    self.assertIn(f"te_tax_p{slot}_state", names)
+                    self.assertFalse({n for n in names if re.match(r"te_tax_(en_|pver_|xver_|code_version|bl_|dr_)", n)})
+                    self.assertFalse({n for n in names if n.startswith(f"te_tax_p{gen._other(slot)}_")})
+                    for forbidden in ("te_tax_sync_collection", "te_tax_store_package", "te_tax_gen_apply_a",
+                                      "te_tax_gen_apply_b", "te_tax_gen_commence_a", "te_tax_gen_commence_b"):
+                        self.assertNotIn(forbidden, bodies)
+
+    def test_store_records_the_approved_month_and_planned_versions(self):
+        for slot in SLOTS:
+            body = block(read(GEN_EFFECTS), f"te_tax_gen_store_{slot}")
+            with self.subTest(slot=slot):
+                self.assertIn(f"set_variable = {{ name = te_tax_p{slot}_due0 value = var:te_tax_bl_due }}", body)
+                for group in KEYS + ("goods", "relief"):
+                    self.assertIn(f"set_variable = {{ name = te_tax_p{slot}_pver_{group} value = var:te_tax_pver_{group} }}",
+                                  body)
+            current = block(read(GEN_TRIGGERS), f"te_tax_gen_package_unsuperseded_{slot}")
+            for key in KEYS:
+                self.assertRegex(current, rf"OR = \{{\s*var:te_tax_p{slot}_{key} < 0\s*AND = \{{ has_variable = "
+                                          rf"te_tax_p{slot}_pver_{key} var:te_tax_p{slot}_pver_{key} = var:te_tax_pver_{key} \}}")
+
+    def test_doc_lists_the_new_history_kinds_and_fields(self):
+        doc = read(SCHEMA_DOC, strip_comments=False)
+        self.assertIn("9 rescheduled, 10 released", doc)
+        country, _ = schema_tokens()
+        for slot in SLOTS:
+            self.assertIn(f"te_tax_p{slot}_due0", country)
+            self.assertIsNone(country[f"te_tax_p{slot}_due0"])
+            for group in KEYS + ("goods", "relief"):
+                self.assertIsNone(country[f"te_tax_p{slot}_pver_{group}"])
+        self.assertIn("held_conflict package can only be released", doc)
 
 
 class PassageTriggerTest(unittest.TestCase):
@@ -588,7 +729,8 @@ class SupportModelTest(unittest.TestCase):
         self.assertEqual(required["if"]["value"], "te_tax_debate_days_minor")
 
     def test_minor_bill_rule(self):
-        body = block(read(BILL), "te_tax_bill_set_minor")
+        self.assertIn("te_tax_bill_is_minor = yes", block(read(BILL), "te_tax_bill_set_minor"))
+        body = block(read(TRIGGERS), "te_tax_bill_is_minor")
         for condition in ("te_tax_bl_provisions <= 2", "te_tax_gen_bill_small_steps = yes",
                           "NOT = { te_tax_gen_bill_touches_goods = yes }", "var:te_tax_bl_agrel < 0",
                           "var:te_tax_bl_regrel < 0"):
@@ -687,7 +829,7 @@ class RefreshWiringTest(unittest.TestCase):
         body = block(read(SCHEDULE), "te_tax_process_month")
         refreshes = [nested for _, nested in branches(body) if "te_tax_refresh_support = yes" in direct(nested)]
         self.assertEqual(len(refreshes), 1)
-        self.assertEqual(limit_of(refreshes[0]).strip(), "var:te_tax_bl_on = 1")
+        self.assertEqual(limit_of(refreshes[0]).strip(), "te_tax_bill_active = yes")
         self.assertGreater(body.find("te_tax_refresh_support = yes"), body.find("te_tax_recompute_next_month = yes"))
 
     def test_refresh_is_gated_and_never_reachable_from_a_gui(self):

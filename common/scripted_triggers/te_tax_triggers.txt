@@ -263,6 +263,17 @@ te_tax_can_withdraw = {
 	custom_tooltip = { text = te_tax_tt_bill_open te_tax_bill_active = yes }
 }
 
+# The bill under debate is minor: at most two provisions changed, each by at
+# most two index steps from existing law, and no good or relief. It needs
+# te_tax_debate_days_minor days of debate instead of te_tax_debate_days_major.
+te_tax_bill_is_minor = {
+	te_tax_bl_provisions <= 2
+	te_tax_gen_bill_small_steps = yes
+	NOT = { te_tax_gen_bill_touches_goods = yes }
+	var:te_tax_bl_agrel < 0
+	var:te_tax_bl_regrel < 0
+}
+
 # The bill's commencement month has come or passed during debate.
 te_tax_can_reschedule = {
 	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
@@ -302,5 +313,47 @@ te_tax_can_pass = {
 	}
 	trigger_else = {
 		custom_tooltip = { text = te_tax_tt_bill_open always = no }
+	}
+}
+
+# SLOT: a or b. A package the scheduler held as missed (state 3: its due month
+# passed without commencement) may commence next month instead, if that is at
+# most te_tax_reschedule_max_delay months after the month it was approved for
+# (te_tax_due_earliest - due0 <= 3, written due0 >= te_tax_due_earliest - 3)
+# and no later bill has touched what it changes. A longer delay, or a package
+# held as conflicting (state 2), changes the bargain: it can only be released
+# and passed again as a new bill.
+te_tax_can_package_reschedule = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = {
+		text = te_tax_tt_package_missed
+		has_variable = te_tax_p$SLOT$_on
+		var:te_tax_p$SLOT$_on = 1
+		var:te_tax_p$SLOT$_state = 3
+	}
+	# The package's payload exists only while the slot is on.
+	trigger_if = {
+		limit = {
+			has_variable = te_tax_p$SLOT$_on
+			var:te_tax_p$SLOT$_on = 1
+		}
+		custom_tooltip = {
+			text = te_tax_tt_package_delay
+			has_variable = te_tax_p$SLOT$_due0
+			var:te_tax_p$SLOT$_due0 >= te_tax_package_reschedule_floor
+		}
+		custom_tooltip = { text = te_tax_tt_package_unsuperseded te_tax_gen_package_unsuperseded_$SLOT$ = yes }
+	}
+}
+
+# SLOT: a or b. A held package (state 2 conflicting or 3 missed) may be
+# released: the slot frees and nothing it would have changed takes effect.
+te_tax_can_package_release = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = {
+		text = te_tax_tt_package_held
+		has_variable = te_tax_p$SLOT$_on
+		var:te_tax_p$SLOT$_on = 1
+		OR = { var:te_tax_p$SLOT$_state = 2 var:te_tax_p$SLOT$_state = 3 }
 	}
 }

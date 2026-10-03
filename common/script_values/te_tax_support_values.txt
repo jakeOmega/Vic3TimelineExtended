@@ -3,7 +3,7 @@
 #
 # The per-instrument and per-group parts (baselines, delta-levels, the material,
 # ideology and government reasons, the clout sums) are generated into
-# te_tax_generated_values.txt by scripts/generators/gen_tax_code.py.
+# te_tax_generated_support_values.txt by scripts/generators/gen_tax_code.py.
 #
 # Passage (fallback rule, spec section 8): interest groups committed to the
 # bill's current revision hold more than te_tax_passage_share of the clout of
@@ -30,6 +30,10 @@ te_tax_default_due_offset = 3
 te_tax_max_due_offset = 60
 # Days a group that opposed a passed bill disapproves (ig_approval_negative_modifier).
 te_tax_opposed_approval_days = 180
+# A package held as missed may be rescheduled to next month only if that is at
+# most this many months after the month it was approved for; a longer delay
+# changes the bargain and needs a new bill.
+te_tax_reschedule_max_delay = 3
 
 # Commencement months, as te_history_month_index values.
 te_tax_due_earliest = {
@@ -45,6 +49,14 @@ te_tax_due_latest = {
 te_tax_due_default = {
 	value = te_history_month_index
 	add = te_tax_default_due_offset
+}
+
+# The earliest approved month a missed package may still be rescheduled from:
+# te_tax_due_earliest - due0 <= te_tax_reschedule_max_delay, i.e.
+# due0 >= te_tax_due_earliest - te_tax_reschedule_max_delay.
+te_tax_package_reschedule_floor = {
+	value = te_tax_due_earliest
+	subtract = te_tax_reschedule_max_delay
 }
 
 # Fiscal reason, the same for every group: in a deficit (net_fixed_income

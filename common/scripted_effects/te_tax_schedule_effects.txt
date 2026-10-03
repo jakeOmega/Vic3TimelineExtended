@@ -74,7 +74,7 @@ te_tax_process_month = {
 			# 5. A bill under debate: refresh the support snapshot once a month
 			# (te_tax_bill_effects.txt), after this month's changes.
 			if = {
-				limit = { var:te_tax_bl_on = 1 }
+				limit = { te_tax_bill_active = yes }
 				te_tax_refresh_support = yes
 			}
 		}
@@ -160,7 +160,7 @@ te_tax_recompute_next_month = {
 
 # Records one event in the history ring. KIND: 1 commenced, 2 sunset,
 # 3 held_conflict, 4 held_missed, 5 migrated, 6 approved, 7 civil-war repair,
-# 8 superseded. SLOT: a, b or none. Sunsets record their instrument through
+# 8 superseded, 9 rescheduled, 10 released. SLOT: a, b or none. Sunsets record their instrument through
 # te_tax_gen_history_write directly; this entry point records INST = 0.
 te_tax_history_push = {
 	if = {
