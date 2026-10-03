@@ -10,3 +10,12 @@ te_cc_probe_market_capture = {
 	}
 	divide = 1000
 }
+
+# ROOT is the event country when debug_log renders this guarded wrapper.
+te_cc_probe_last_read = {
+	value = -1
+	if = {
+		limit = { has_variable = te_cc_probe_read }
+		value = var:te_cc_probe_read
+	}
+}

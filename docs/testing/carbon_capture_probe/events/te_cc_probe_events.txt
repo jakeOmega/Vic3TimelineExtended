@@ -10,20 +10,25 @@ te_cc_probe.1 = { # REVIEWED 2026-10-03: opt-in console probe; deliberately unre
 	option = {
 		name = te_cc_probe.1.log
 		default_option = yes
+		save_scope_as = te_cc_probe_country
 		market = {
 			every_scope_country = {
 				every_scope_state = {
 					limit = { any_scope_building = { is_building_type = building_power_plant } }
 					save_scope_as = te_cc_probe_state
 					set_variable = { name = te_cc_probe_read value = te_cc_probe_state_capture }
-					debug_log = "CC_PROBE: state=[SCOPE.sState('te_cc_probe_state').GetName] capture=[SCOPE.sState('te_cc_probe_state').GetVariable('te_cc_probe_read').GetValue]"
+					debug_log_scopes = yes
+					scope:te_cc_probe_country = {
+						set_variable = { name = te_cc_probe_read value = scope:te_cc_probe_state.var:te_cc_probe_read }
+						debug_log = "CC_PROBE: state_capture=[SCOPE.ScriptValue('te_cc_probe_last_read')|5]"
+						remove_variable = te_cc_probe_read
+					}
 					remove_variable = te_cc_probe_read
 				}
 			}
 		}
-		save_scope_as = te_cc_probe_country
 		set_variable = { name = te_cc_probe_read value = te_cc_probe_market_capture }
-		debug_log = "CC_PROBE: country=[SCOPE.sCountry('te_cc_probe_country').GetName] market_capture_internal=[SCOPE.sCountry('te_cc_probe_country').GetVariable('te_cc_probe_read').GetValue]"
+		debug_log = "CC_PROBE: market_capture_internal=[SCOPE.ScriptValue('te_cc_probe_last_read')|5]"
 		remove_variable = te_cc_probe_read
 	}
 	option = {

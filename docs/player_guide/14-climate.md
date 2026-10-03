@@ -16,8 +16,15 @@ reductions of its market leader and reduced by the carbon captured by Synthetic
 Fuel Works and Carbon Conversion Works in the market. (The mod renames the base
 game's coal good Energy and Carbon Minerals; this chapter calls it coal for
 short.) The year's emissions of every market are added to the world's cumulative
-total, and the temperature anomaly is that total divided by 10,000: a market
-that emits 1,000 a year warms the world by 0.1 °C a year.
+total. In the dashboard's units, a market that emits one million a year warms
+the world by 0.1 °C a year. Figures use K for thousands and M for millions.
+A unit of oil produces 13% less warming than a unit of coal.
+
+Electric Arc Process, Aluminum Substitution and Chromium Substitution in Steel
+Mills use 10 coal per level. Electric Arc Process also uses 50 electricity;
+the two substitution methods use 170 electricity. Their lower coal use cuts
+emissions, while electricity from fossil plants adds emissions elsewhere in
+the market.
 
 Warming does not wear off. The anomaly falls only in a year when the world as a
 whole captures more carbon than it emits. Cutting your emissions slows the rise;

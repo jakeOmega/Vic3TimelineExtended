@@ -32,7 +32,8 @@ and save a baseline before changing anything.
    does the method line show 2.50 per level or the staffed building total?
    Record decimal formatting, including a small fraction during hiring.
 2. Run `event te_cc_probe.1`, choose **Log staffed capture**. `CC_PROBE:` lines
-   in `debug.log` contain each market state with a power plant and the market
+   in `debug.log`, paired with scope dumps identifying each state, contain
+   each market state with a power plant and the market
    sum in internal units. In a state with only one probe-equipped plant, full
    staffing should read `2.5 × level`; half staffing should read half that.
    Record level, staffing and actual read together. The market sum should be
