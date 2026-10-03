@@ -204,6 +204,40 @@ te_tax_ai_surplus_streak_last = {
 }
 
 # ---------------------------------------------------------------------------
+# The open bill (te_tax_ai_manage_bill, Task 20; spec §2.4 step 3)
+# ---------------------------------------------------------------------------
+
+# The month before which the AI starts no new bill once it passed or forced
+# one through: the package's commencement month (the bill's due month, read
+# before the pass closes the record) plus te_tax_ai_cooldown_months.
+te_tax_ai_cooldown_after_pass = {
+	value = te_tax_ai_now
+	if = {
+		limit = { has_variable = te_tax_bl_due }
+		value = var:te_tax_bl_due
+	}
+	add = te_tax_ai_cooldown_months
+}
+
+# The same after it withdrew a bill: te_tax_ai_fail_cooldown_months from now.
+te_tax_ai_cooldown_after_withdrawal = {
+	value = te_tax_ai_now
+	add = te_tax_ai_fail_cooldown_months
+}
+
+# Months the open bill has been the AI's: since it introduced it, or since
+# the step first managed a bill it did not introduce (te_tax_ai_bill_month);
+# 0 without the mark. Withdrawn at te_tax_ai_bill_patience.
+te_tax_ai_bill_age = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_ai_bill_month var:te_tax_ai_bill_month >= 0 }
+		value = te_tax_ai_now
+		subtract = var:te_tax_ai_bill_month
+	}
+}
+
+# ---------------------------------------------------------------------------
 # Log reads (te_tax_ai_log_*): debug_log prints a script value, not a variable
 # (scripting_best_practices.md, "debug_log Loc-String Templating Limitations").
 # ---------------------------------------------------------------------------

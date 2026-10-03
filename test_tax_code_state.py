@@ -449,7 +449,11 @@ class GeneratedSyncTest(unittest.TestCase):
         promises = {f"te_tax_gen_{part}_{n}" for part in ("obl_log_met", "obl_log_unmet", "ai_enact", "ai_log_enacted",
                                                           "ai_log_renegotiated")
                     for n in (1, 2, 3, 4)}
-        self.assertEqual(names, want | scheduler | migration | drift | copies | obligations | views | customs | promises)
+        # The AI's open bill (test_tax_code_ai.py, plan 2026-10-03 Task 20): the offer order and the
+        # reverse-window marks.
+        bill = {"te_tax_gen_ai_accept_offer", "te_tax_gen_ai_record_marks"}
+        self.assertEqual(names, want | scheduler | migration | drift | copies | obligations | views | customs | promises
+                         | bill)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
         for key in KEYS:

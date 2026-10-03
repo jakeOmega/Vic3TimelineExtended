@@ -30,6 +30,16 @@ Task 19 gives the step its first work (spec §2.4 steps 1-2, §2.8):
 * the default strategy weights an institution an AI owes, and no political
   agenda strategy is touched.
 
+Task 20 manages the open bill (spec §2.4 step 3, §2.7, §2.10):
+
+* a bill whose due month has come is rescheduled first, then: pass; wait a
+  day past the pin when only the native tax level's legitimacy blocks it;
+  accept the best offer in a capped chain; force it through in an emergency;
+  withdraw it, hopeless or out of patience, with a reason;
+* each through its command inside its own trigger, the reverse-window marks
+  and the cooldown written before the bill record closes, and the bill state
+  reset after; ai_no_viable once per episode.
+
 Run: python3 -m unittest test_tax_code_ai -v
 """
 
@@ -100,6 +110,8 @@ LOG_VERBS = {
     "step": "ai_step", "introduced": "ai_introduced", "passed": "ai_passed", "forced": "ai_forced",
     "accepted": "ai_accepted", "released": "ai_released", "rescheduled": "ai_rescheduled",
     "waiting_legitimacy_native_level": "ai_waiting reason=legitimacy_native_level",
+    # Task 20: the bill's own due month moved on (a package's is ai_rescheduled).
+    "bill_rescheduled": "ai_bill_rescheduled",
 }
 LOG_REASONS = ("support", "legitimacy", "slots", "authority", "patience", "draft")
 LOG_FIELDS = ("tpl", "R", "D", "G", "def", "sur")
@@ -148,6 +160,13 @@ INSTITUTIONS = {1: "institution_schools", 2: "institution_health_system", 3: "in
 DEADLINE_FIELDS = (("kind", "kind"), ("arg", "arg"), ("target", "target"), ("level", "measure"),
                    ("baseline", "baseline"), ("deadline", "deadline"))
 GRACE = {1: 1, 2: 3, 3: 1, 4: 3}
+# Task 20: the reasons an AI bill is withdrawn for, in the order te_tax_ai_withdraw tests them
+# (spec §2.4 step 3); `draft` (an introduction refused) is Task 21's and has no bill to withdraw.
+WITHDRAW_REASONS = ("legitimacy", "slots", "authority", "support", "patience")
+# The AI's template codes (te_tax_ai_tpl, Task 21): raises, the cut, none (a bill it did not introduce).
+RAISE_TEMPLATES, CUT_TEMPLATE = (1, 2, 3, 6), 5
+# The clout ranking's value for a group the country lacks, or a marginal one: after every other.
+RANK_LAST = 8
 
 
 def promise_fields(o):
@@ -547,7 +566,8 @@ class AiGateTest(unittest.TestCase):
         self.assertIn("te_tax_code_on = yes", block(read(AI_TRIGGERS), "te_tax_ai_can_act"))
         effects_text = read(AI_EFFECTS)
         for name in ("te_tax_ai_update_streaks", "te_tax_ai_dispatch", "te_tax_ai_step", "te_tax_ai_reset_bill_state",
-                     "te_tax_ai_manage_packages", "te_tax_ai_manage_promises"):
+                     "te_tax_ai_manage_packages", "te_tax_ai_manage_promises", "te_tax_ai_manage_bill",
+                     "te_tax_ai_withdraw", *(f"te_tax_ai_withdraw_{reason}" for reason in WITHDRAW_REASONS)):
             with self.subTest(name=name):
                 head = flat(block(effects_text, name))[:120]
                 self.assertRegex(head, r"^if = \{ limit = \{ te_tax_code_on = yes")
@@ -981,6 +1001,384 @@ class PromiseDocTest(unittest.TestCase):
         self.assertEqual(rows[0].split(" | ")[2], "static-only")
         self.assertNotIn("te_tax_obl_inst_met_", rows[0])
         self.assertIn("level=", rows[0])
+
+def top_blocks(body):
+    """[(name, inner)] for the blocks opened at depth 0 of `body`."""
+    found, i = [], 0
+    while True:
+        match = re.compile(r"([\w:$]+) = \{").search(body, i)
+        if match is None:
+            return found
+        end = close(body, match.end() - 1)
+        found.append((match.group(1), body[match.end():end]))
+        i = end + 1
+
+
+def tooltip_conditions(body):
+    """{text key: flattened condition} for every `custom_tooltip = { text = X <condition> }` in `body`."""
+    found = {}
+    for match in re.finditer(r"custom_tooltip = \{", body):
+        inner = flat(body[match.end():close(body, match.end() - 1)])
+        key, condition = re.fullmatch(r"text = (\w+) (.*)", inner).groups()
+        found[key] = condition
+    return found
+
+
+def callers(pattern):
+    """{file name: count} of `pattern` matches in common/ and events/, comments stripped."""
+    found = {}
+    for directory in ("common", "events"):
+        for path in sorted((ROOT / directory).rglob("*.txt")):
+            count = len(re.findall(pattern, read(path.relative_to(ROOT).as_posix())))
+            if count:
+                found[path.name] = count
+    return found
+
+
+class AiBillTest(unittest.TestCase):
+    """Task 20: the open bill (spec §2.4 step 3, §2.7, §2.10)."""
+
+    def setUp(self):
+        self.ai = read(AI_EFFECTS)
+        self.manage = block(self.ai, "te_tax_ai_manage_bill")
+        self.triggers = read(AI_TRIGGERS)
+        self.values = read(AI_VALUES)
+        self.gen = read(GEN_EFFECTS)
+        self.support = read("common/script_values/te_tax_generated_support_values.txt")
+
+    # -- the brief's sample (tightened where it asserted nothing) ---------------
+
+    def test_order_pass_retry_offer_force_withdraw(self):
+        order = [self.manage.index(s) for s in (
+            "te_tax_can_pass = yes", "te_tax_ai_blocked_by_native_level = yes",
+            "te_tax_gen_ai_accept_offer = yes", "te_tax_can_force_through = yes", "te_tax_ai_bill_hopeless = yes")]
+        self.assertEqual(order, sorted(order))
+
+    def test_force_through_only_in_an_emergency(self):
+        # Of the rule chain's branches (the gate's children), the one whose limit holds
+        # te_tax_ai_emergency is the only one with the command, and the file has it once.
+        (gate_kind, gate), = top_blocks(self.manage)
+        self.assertEqual(gate_kind, "if")
+        chain = [(kind, body) for kind, body in top_blocks(gate) if kind in ("if", "else_if", "else")]
+        self.assertGreaterEqual(len(chain), 5)
+        with_force = [body for _, body in chain if "te_tax_cmd_force_through" in body]
+        self.assertEqual(len(with_force), 1)
+        self.assertEqual(flat(limit_of(with_force[0])), "te_tax_ai_emergency = yes te_tax_can_force_through = yes")
+        self.assertEqual([body for _, body in chain if "te_tax_ai_emergency = yes" in limit_of(body)], with_force)
+        self.assertEqual(self.ai.count("te_tax_cmd_force_through = yes"), 1)
+
+    def test_offer_chain_is_capped_and_re_raises_tomorrow(self):
+        available = flat(block(self.triggers, "te_tax_ai_offer_available"))
+        self.assertIn("te_tax_ai_offer_count < te_tax_ai_max_offers", available.replace("var:", ""))
+        self.assertIn("else_if = { limit = { te_tax_ai_offer_available = yes } te_tax_gen_ai_accept_offer = yes }",
+                      flat(self.manage))
+        # The re-raise is the acceptance's own, not the dispatch's.
+        self.assertIn("trigger_event = { id = te_tax.8 days = 1 }", flat(block(self.ai, "te_tax_ai_accept_offer")))
+
+    def test_every_command_runs_behind_its_own_trigger(self):
+        for cmd in ("pass", "force_through", "withdraw", "reschedule"):
+            found = list(re.finditer(rf"te_tax_cmd_{cmd} = yes", self.ai))
+            self.assertTrue(found, cmd)
+            for m in found:
+                before = self.ai[max(0, m.start() - 300):m.start()]
+                self.assertIn(f"te_tax_can_{cmd} = yes", before, cmd)
+
+    def test_no_viable_logs_once_per_episode(self):
+        for reason in WITHDRAW_REASONS:
+            body = block(self.ai, f"te_tax_ai_withdraw_{reason}")
+            call = body.index(f"te_tax_ai_log_no_viable_{reason} = yes")
+            guard = enclosing_brace(body, call)
+            with self.subTest(reason=reason):
+                self.assertRegex(body[:guard].rstrip(), r"(?<!\w)if =$")
+                self.assertEqual(flat(limit_of(body[guard + 1:])), "var:te_tax_ai_noviable = 0")
+                # The marker is read before the reset (which writes 0) and set after it, so it
+                # survives the withdrawal and only a pass or the need ending clears it.
+                reset = body.index("te_tax_ai_reset_bill_state = yes")
+                marker = body.index("set_variable = { name = te_tax_ai_noviable value = 1 }")
+                self.assertLess(guard, reset)
+                self.assertLess(reset, marker)
+                self.assertEqual(body.count("te_tax_ai_noviable"), 2)
+
+    def test_the_reset_follows_pass_force_and_withdraw(self):
+        # Ruling 2: for each, the reset runs in the branch of the command, after it.
+        sites = [("pass", self.manage), ("force_through", self.manage)]
+        sites += [("withdraw", block(self.ai, f"te_tax_ai_withdraw_{reason}")) for reason in WITHDRAW_REASONS]
+        for cmd, text in sites:
+            at = text.index(f"te_tax_cmd_{cmd} = yes")
+            brace = enclosing_brace(text, at)
+            branch = text[brace + 1:close(text, brace)]
+            with self.subTest(cmd=cmd):
+                self.assertEqual(flat(limit_of(branch)), f"te_tax_can_{cmd} = yes")
+                self.assertLess(branch.index(f"te_tax_cmd_{cmd} = yes"), branch.index("te_tax_ai_reset_bill_state = yes"))
+
+    def test_passing_records_the_reverse_window_marks(self):
+        marks = block(self.gen, "te_tax_gen_ai_record_marks")
+        for key in KEYS:
+            self.assertIn(f"te_tax_ai_last_{key}", marks)
+            self.assertIn(f"te_tax_ai_dir_{key}", marks)
+
+    # -- beyond the brief's sample ----------------------------------------------
+
+    def test_the_step_manages_the_open_bill_after_the_promises(self):
+        step = flat(block(self.ai, "te_tax_ai_step"))
+        self.assertIn("te_tax_ai_manage_promises = yes if = { limit = { te_tax_bill_active = yes } "
+                      "te_tax_ai_manage_bill = yes }", step)
+        self.assertEqual(callers(r"\bte_tax_ai_manage_bill = yes"), {"te_tax_ai_effects.txt": 1})
+
+    def test_the_manager_is_the_rule_chain_exactly(self):
+        cooldown = "set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_pass }"
+        self.assertEqual(flat(self.manage), (
+            "if = { limit = { te_tax_code_on = yes te_tax_code_in_force = yes te_tax_bill_active = yes } "
+            # A bill the AI did not introduce (a player's, after a tag switch): its patience starts now.
+            "if = { limit = { var:te_tax_ai_bill_month < 0 } "
+            "set_variable = { name = te_tax_ai_bill_month value = te_tax_ai_now } } "
+            # Its due month came during debate: next month instead, then the chain may pass it.
+            "if = { limit = { te_tax_can_reschedule = yes } te_tax_cmd_reschedule = yes "
+            "te_tax_ai_log_bill_rescheduled = yes } "
+            f"if = {{ limit = {{ te_tax_can_pass = yes }} te_tax_gen_ai_record_marks = yes {cooldown} "
+            "te_tax_cmd_pass = yes te_tax_ai_log_passed = yes te_tax_ai_reset_bill_state = yes } "
+            "else_if = { limit = { te_tax_ai_blocked_by_native_level = yes } "
+            "set_variable = { name = te_tax_ai_retry value = 1 } te_tax_ai_log_waiting_legitimacy_native_level = yes } "
+            "else_if = { limit = { te_tax_ai_offer_available = yes } te_tax_gen_ai_accept_offer = yes } "
+            "else_if = { limit = { te_tax_ai_emergency = yes te_tax_can_force_through = yes } "
+            f"if = {{ limit = {{ te_tax_can_force_through = yes }} te_tax_gen_ai_record_marks = yes {cooldown} "
+            "te_tax_cmd_force_through = yes te_tax_ai_log_forced = yes te_tax_ai_reset_bill_state = yes } } "
+            "else_if = { limit = { OR = { te_tax_ai_bill_hopeless = yes te_tax_ai_bill_age >= te_tax_ai_bill_patience } } "
+            "te_tax_ai_withdraw = yes } }"))
+
+    def test_the_cooldowns_and_the_age_are_named_values(self):
+        self.assertEqual(flat(block(self.values, "te_tax_ai_cooldown_after_pass")),
+                         "value = te_tax_ai_now if = { limit = { has_variable = te_tax_bl_due } "
+                         "value = var:te_tax_bl_due } add = te_tax_ai_cooldown_months")
+        self.assertEqual(flat(block(self.values, "te_tax_ai_cooldown_after_withdrawal")),
+                         "value = te_tax_ai_now add = te_tax_ai_fail_cooldown_months")
+        self.assertEqual(flat(block(self.values, "te_tax_ai_bill_age")),
+                         "value = 0 if = { limit = { has_variable = te_tax_ai_bill_month "
+                         "var:te_tax_ai_bill_month >= 0 } value = te_tax_ai_now subtract = var:te_tax_ai_bill_month }")
+
+    def test_the_native_level_wait_is_the_pass_less_legitimacy(self):
+        # Every line of te_tax_can_pass but legitimacy, with legitimacy short and the native
+        # level off medium (spec §2.10): the writer pins it on the 1st, so the step retries on the 2nd.
+        body = flat(block(self.triggers, "te_tax_ai_blocked_by_native_level"))
+        can_pass = block(read(OBL_TRIGGERS), "te_tax_can_pass")
+        lines = tooltip_conditions(can_pass)
+        self.assertEqual(lines.pop("te_tax_tt_pass_legitimacy"), "legitimacy >= te_tax_passage_legitimacy")
+        lines.pop("te_tax_tt_bill_open")
+        self.assertEqual(len(lines), 9)
+        for key, condition in lines.items():
+            with self.subTest(line=key):
+                self.assertIn(condition, body)
+        self.assertNotIn("legitimacy >= ", body)
+        for extra in ("te_tax_bill_active = yes", "NOT = { tax_level = medium }",
+                      "legitimacy < te_tax_passage_legitimacy"):
+            with self.subTest(extra=extra):
+                self.assertIn(extra, body)
+        self.assertLess(body.index("te_tax_bill_active = yes"), body.index("var:te_tax_bl_"))
+
+    def test_the_authority_reason_is_force_through_short_only_of_capacity_or_authority(self):
+        body = flat(block(self.triggers, "te_tax_ai_force_blocked_by_authority"))
+        lines = tooltip_conditions(block(read(OBL_TRIGGERS), "te_tax_can_force_through"))
+        capacity = lines.pop("te_tax_tt_force_capacity")
+        authority = lines.pop("te_tax_tt_force_authority")
+        lines.pop("te_tax_tt_bill_open")
+        for key, condition in lines.items():
+            with self.subTest(line=key):
+                self.assertIn(condition, body)
+        self.assertTrue(body.startswith("te_tax_ai_emergency = yes "), body[:60])
+        self.assertTrue(body.endswith(f"NOT = {{ AND = {{ {capacity} {authority} }} }}"), body[-160:])
+        self.assertEqual(body.count(capacity), 1)
+        self.assertLess(body.index("te_tax_bill_active = yes"), body.index("var:te_tax_bl_"))
+
+    def test_hopeless_is_short_with_no_offer_and_no_force_path(self):
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_bill_hopeless")),
+                         "te_tax_bill_active = yes te_tax_view_open_share <= te_tax_passage_share "
+                         "NOT = { te_tax_ai_offer_available = yes } "
+                         "NOT = { AND = { te_tax_ai_emergency = yes te_tax_committed_share >= te_tax_force_share } }")
+
+    def test_an_offer_is_available_within_the_budget_while_the_bill_is_short(self):
+        groups = " ".join(f"te_tax_ai_offer_acceptable = {{ IG = {ig} }}" for ig in gen.IGS)
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_offer_available")),
+                         "OR = { NOT = { var:te_tax_ai_offer_month = te_tax_ai_now } "
+                         "var:te_tax_ai_offer_count < te_tax_ai_max_offers } "
+                         f"te_tax_committed_share <= te_tax_passage_share OR = {{ {groups} }}")
+
+    def test_the_acceptance_policy_is_the_spec_table(self):
+        clauses = (gen.OFFER_CUT, gen.OFFER_AGREL, gen.OFFER_STAPLE)
+        self.assertEqual((min(clauses), max(clauses)), (1, 3))
+        kind = "var:te_tax_off_$IG$_kind"
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_offer_acceptable")), (
+            "te_tax_can_accept_offer = { IG = $IG$ } OR = { "
+            f"AND = {{ {kind} >= 1 {kind} <= 3 te_tax_ai_clause_keeps_direction = yes "
+            f"NOT = {{ AND = {{ {kind} = {gen.OFFER_AGREL} te_tax_ai_emergency = yes }} }} }} "
+            f"AND = {{ {kind} = {gen.OFFER_PROMISE + 1} bureaucracy >= 0 approaching_bureaucracy_shortage = no }} "
+            f"AND = {{ {kind} = {gen.OFFER_PROMISE + 2} bureaucracy > 0 approaching_bureaucracy_shortage = no }} "
+            f"AND = {{ {kind} = {gen.OFFER_PROMISE + 4} te_tax_dl_revenue > 0 NOT = {{ te_tax_ai_emergency = yes }} }} }}"))
+        # Kind 3 (military wages) is never offered, so never accepted.
+        self.assertNotIn(f"= {gen.OFFER_PROMISE + 3} ", flat(block(self.triggers, "te_tax_ai_offer_acceptable")))
+
+    def test_a_clause_keeps_the_bill_raising_or_cutting(self):
+        raises = " ".join(f"var:te_tax_ai_tpl = {tpl}" for tpl in RAISE_TEMPLATES)
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_clause_keeps_direction")),
+                         f"OR = {{ AND = {{ OR = {{ {raises} }} te_tax_dl_revenue > 0 }} "
+                         f"AND = {{ var:te_tax_ai_tpl = {CUT_TEMPLATE} te_tax_dl_revenue < 0 }} "
+                         "AND = { var:te_tax_ai_tpl = 0 NOT = { te_tax_dl_revenue = 0 } } }")
+
+    def test_persuadable_is_the_open_clout_test(self):
+        body = flat(block(self.triggers, "te_tax_ai_persuadable"))
+        self.assertEqual(body, "has_variable = te_tax_com_$IG$ var:te_tax_com_$IG$ = 0 "
+                               "has_variable = te_tax_sup_$IG$ var:te_tax_sup_$IG$ >= 0")
+        open_clout = flat(block(self.support, "te_tax_open_clout"))
+        for ig in gen.IGS:
+            with self.subTest(ig=ig):
+                self.assertIn(body.replace("$IG$", ig), open_clout)
+
+    def test_accepting_counts_the_month_logs_and_re_raises(self):
+        self.assertEqual(flat(block(self.ai, "te_tax_ai_accept_offer")), (
+            "if = { limit = { te_tax_can_accept_offer = { IG = $IG$ } } te_tax_cmd_accept_offer = { IG = $IG$ } "
+            "if = { limit = { NOT = { var:te_tax_ai_offer_month = te_tax_ai_now } } "
+            "set_variable = { name = te_tax_ai_offer_count value = 0 } } "
+            "change_variable = { name = te_tax_ai_offer_count add = 1 } "
+            "set_variable = { name = te_tax_ai_offer_month value = te_tax_ai_now } "
+            "te_tax_ai_log_accepted = yes trigger_event = { id = te_tax.8 days = 1 } }"))
+
+    def test_the_withdrawal_reason_follows_the_rule(self):
+        self.assertEqual(flat(block(self.ai, "te_tax_ai_withdraw")), (
+            "if = { limit = { te_tax_code_on = yes } "
+            "if = { limit = { legitimacy < te_tax_passage_legitimacy } te_tax_ai_withdraw_legitimacy = yes } "
+            "else_if = { limit = { NOT = { OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 } } } "
+            "te_tax_ai_withdraw_slots = yes } "
+            "else_if = { limit = { te_tax_ai_force_blocked_by_authority = yes } te_tax_ai_withdraw_authority = yes } "
+            "else_if = { limit = { te_tax_ai_bill_hopeless = yes } te_tax_ai_withdraw_support = yes } "
+            "else = { te_tax_ai_withdraw_patience = yes } }"))
+
+    def test_each_withdrawal_closes_cools_down_logs_and_resets(self):
+        for reason in WITHDRAW_REASONS:
+            with self.subTest(reason=reason):
+                self.assertEqual(flat(block(self.ai, f"te_tax_ai_withdraw_{reason}")), (
+                    "if = { limit = { te_tax_code_on = yes } if = { limit = { te_tax_can_withdraw = yes } "
+                    "te_tax_cmd_withdraw = yes "
+                    "set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal } "
+                    f"te_tax_ai_log_withdrawn_{reason} = yes "
+                    f"if = {{ limit = {{ var:te_tax_ai_noviable = 0 }} te_tax_ai_log_no_viable_{reason} = yes }} "
+                    "te_tax_ai_reset_bill_state = yes set_variable = { name = te_tax_ai_noviable value = 1 } } }"))
+
+    def test_the_parts_are_called_only_where_the_rules_say(self):
+        self.assertEqual(callers(r"\bte_tax_gen_ai_accept_offer = yes"), {"te_tax_ai_effects.txt": 1})
+        self.assertEqual(callers(r"\bte_tax_ai_accept_offer = \{"),
+                         {"te_tax_ai_effects.txt": 1, "te_tax_generated_effects.txt": 2 * len(gen.IGS) ** 2})
+        self.assertEqual(callers(r"\bte_tax_gen_ai_record_marks = yes"), {"te_tax_ai_effects.txt": 2})
+        for reason in WITHDRAW_REASONS:
+            with self.subTest(reason=reason):
+                self.assertEqual(callers(rf"\bte_tax_ai_withdraw_{reason} = yes"), {"te_tax_ai_effects.txt": 1})
+                self.assertIn(f"te_tax_ai_withdraw_{reason} = yes", block(self.ai, "te_tax_ai_withdraw"))
+        self.assertIn("te_tax_ai_withdraw = yes", self.manage)
+
+    def test_the_clout_of_a_present_non_marginal_group_or_minus_one(self):
+        for ig in gen.IGS:
+            with self.subTest(ig=ig):
+                self.assertEqual(flat(block(self.support, f"te_tax_ai_clout_{ig}")),
+                                 f"value = -1 if = {{ limit = {{ exists = ig:ig_{ig} "
+                                 f"ig:ig_{ig} = {{ ig_counts_as_marginal = no }} }} value = ig:ig_{ig}.ig_clout }}")
+
+    def test_the_rank_orders_by_clout_then_igs_with_absent_groups_last(self):
+        """Evaluates the generated ranks on clout tables: the eligible groups take 0..k-1 by
+        clout, largest first, ties in IGS order; a group the country lacks (-1) takes RANK_LAST."""
+        ranks = {}
+        for ig in gen.IGS:
+            body = flat(block(self.support, f"te_tax_ai_clout_rank_{ig}"))
+            head = (f"value = {RANK_LAST} if = {{ limit = {{ te_tax_ai_clout_{ig} >= 0 }} value = 0 ")
+            self.assertTrue(body.startswith(head), body[:120])
+            terms = re.findall(r"if = \{ limit = \{ te_tax_ai_clout_(\w+) (>=|>) te_tax_ai_clout_(\w+) \} add = 1 \}",
+                               body)
+            self.assertEqual(len(terms), len(gen.IGS) - 1)
+            self.assertEqual({rhs for _, _, rhs in terms}, {ig})
+            ranks[ig] = [(other, op) for other, op, _ in terms]
+        tables = [
+            dict(zip(gen.IGS, (5, 9, 1, 7, 3, 8, 2, 6))),
+            dict(zip(gen.IGS, (4, 4, 4, 4, 4, 4, 4, 4))),
+            dict(zip(gen.IGS, (-1, 3, -1, 3, 0.5, -1, 9, 3))),
+            dict(zip(gen.IGS, (-1,) * 7 + (2,))),
+        ]
+        for table in tables:
+            eligible = sorted((ig for ig in gen.IGS if table[ig] >= 0),
+                              key=lambda ig: (-table[ig], gen.IGS.index(ig)))
+            expected = {ig: (eligible.index(ig) if ig in eligible else RANK_LAST) for ig in gen.IGS}
+            got = {}
+            for ig in gen.IGS:
+                if table[ig] < 0:
+                    got[ig] = RANK_LAST
+                    continue
+                got[ig] = sum(1 for other, op in ranks[ig]
+                              if (table[other] >= table[ig] if op == ">=" else table[other] > table[ig]))
+            with self.subTest(table=table):
+                self.assertEqual(got, expected)
+
+    def test_the_offer_chain_takes_persuadable_groups_by_clout_then_opposed_ones(self):
+        locals_ = " ".join(f"set_local_variable = {{ name = te_tax_ai_rank_{ig} value = te_tax_ai_clout_rank_{ig} }}"
+                           for ig in gen.IGS)
+        branches_ = []
+        for persuadable in (True, False):
+            for rank in range(len(gen.IGS)):
+                for ig in gen.IGS:
+                    stance = (f"te_tax_ai_persuadable = {{ IG = {ig} }}" if persuadable
+                              else f"NOT = {{ te_tax_ai_persuadable = {{ IG = {ig} }} }}")
+                    opener = "if" if not branches_ else "else_if"
+                    branches_.append(f"{opener} = {{ limit = {{ local_var:te_tax_ai_rank_{ig} = {rank} {stance} "
+                                     f"te_tax_ai_offer_acceptable = {{ IG = {ig} }} }} "
+                                     f"te_tax_ai_accept_offer = {{ IG = {ig} }} }}")
+        self.assertEqual(flat(block(self.gen, "te_tax_gen_ai_accept_offer")), f"{locals_} {' '.join(branches_)}")
+        # Every group the offer test can accept has a branch: rule 3 is taken only when one is
+        # acceptable (te_tax_ai_offer_available), so the chain always accepts one.
+        available = set(re.findall(r"te_tax_ai_offer_acceptable = \{ IG = (\w+) \}",
+                                   block(self.triggers, "te_tax_ai_offer_available")))
+        self.assertEqual(available, set(gen.IGS))
+        self.assertEqual(RANK_LAST, len(gen.IGS))
+
+    def test_each_mark_records_the_month_and_the_direction_of_a_change(self):
+        marks = flat(block(self.gen, "te_tax_gen_ai_record_marks"))
+        expected = " ".join(
+            f"if = {{ limit = {{ te_tax_bl_dstep_{key} > 0 }} "
+            f"set_variable = {{ name = te_tax_ai_last_{key} value = te_tax_ai_now }} "
+            f"set_variable = {{ name = te_tax_ai_dir_{key} value = 1 }} }} "
+            f"else_if = {{ limit = {{ te_tax_bl_dstep_{key} < 0 }} "
+            f"set_variable = {{ name = te_tax_ai_last_{key} value = te_tax_ai_now }} "
+            f"set_variable = {{ name = te_tax_ai_dir_{key} value = -1 }} }}" for key in KEYS)
+        self.assertEqual(marks, expected)
+
+    def test_the_generated_bill_parts_read_no_is_ai_and_raise_no_event(self):
+        for name in ("te_tax_gen_ai_accept_offer", "te_tax_gen_ai_record_marks"):
+            with self.subTest(name=name):
+                body = block(self.gen, name)
+                self.assertNotIn("is_ai", body)
+                self.assertNotIn("trigger_event", body)
+                self.assertNotIn("te_tax_cmd_", body)
+
+    def test_schema_doc_has_the_open_bill(self):
+        doc = read(SCHEMA_DOC, strip_comments=False)
+        section = doc.split("\n## AI legislation\n", 1)[1].split("\n## ", 1)[0]
+        bill = section.split("\n### The open bill\n", 1)[1].split("\n### ", 1)[0]
+        for phrase in ("te_tax_ai_manage_bill", "te_tax_cmd_reschedule", "te_tax_ai_blocked_by_native_level",
+                       "te_tax_ai_offer_available", "te_tax_gen_ai_accept_offer", "te_tax_ai_clout_rank_<ig>",
+                       "te_tax_ai_bill_hopeless", "te_tax_ai_force_blocked_by_authority", "te_tax_gen_ai_record_marks",
+                       "te_tax_ai_cooldown_after_pass", "te_tax_ai_cooldown_after_withdrawal",
+                       "te_tax_ai_bill_patience", "te_tax_ai_max_offers", "te_tax_ai_noviable",
+                       "approaching_bureaucracy_shortage", "ai_bill_rescheduled"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, bill)
+        for reason in WITHDRAW_REASONS:
+            with self.subTest(reason=reason):
+                self.assertIn(f"`{reason}`", bill)
+        # The offer policy table: one row per kind the AI may accept.
+        rows = [line for line in bill.splitlines() if line.startswith("| ")]
+        self.assertGreaterEqual(len(rows), 6)
+
+    def test_ledger_has_the_ai_passage_loop_row(self):
+        rows = [line for line in read(LEDGER, strip_comments=False).splitlines()
+                if line.startswith("| ") and "| AI passage loop |" in line]
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0].split(" | ")[2], "static-only")
+        self.assertIn("S13", rows[0])
+
 
 class AiFileTest(unittest.TestCase):
     def test_files_have_bom_lf_tabs_and_formatter_parity(self):

@@ -25,6 +25,8 @@
 # te_tax_gen_obl_log_met_<n> and _unmet_<n>, called by te_tax_obl_check_one
 # (te_tax_obligation_effects.txt); te_tax_gen_ai_enact_<n>, te_tax_gen_ai_log_enacted_<n> and
 # te_tax_gen_ai_log_renegotiated_<n>, called by te_tax_ai_manage_promises (te_tax_ai_effects.txt).
+# Then the AI's open bill (plan 2026-10-03 Task 20): te_tax_gen_ai_accept_offer and
+# te_tax_gen_ai_record_marks, called by te_tax_ai_manage_bill.
 
 # Each instrument's tokens with their sentinels, if absent: the enacted provision, its
 # version tokens and the AI's marks (te_tax_ai_last_<key>, te_tax_ai_dir_<key>).
@@ -8445,4 +8447,592 @@ te_tax_gen_ai_log_renegotiated_3 = {
 }
 te_tax_gen_ai_log_renegotiated_4 = {
 	debug_log = "TE_TAX ai_renegotiated slot=4 kind=[SCOPE.ScriptValue('te_tax_view_o4_kind')|0] arg=[SCOPE.ScriptValue('te_tax_view_o4_arg')|0] target=[SCOPE.ScriptValue('te_tax_view_o4_target')|0] level=[SCOPE.ScriptValue('te_tax_view_o4_measure')|0] baseline=[SCOPE.ScriptValue('te_tax_view_o4_baseline')|0] deadline=[SCOPE.ScriptValue('te_tax_view_o4_deadline')|0] tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI accepts the first acceptable offer (te_tax_ai_offer_acceptable, te_tax_ai_triggers.txt)
+# in this order (spec §2.7): persuadable groups (te_tax_ai_persuadable), which commit on
+# acceptance, by clout, largest first, then the others, whose concession raises the open
+# clout. Called only by te_tax_ai_manage_bill, when te_tax_ai_offer_available holds, so one
+# branch matches. The ranks are read once into locals (te_tax_ai_clout_rank_<ig>,
+# te_tax_generated_support_values.txt), and each branch tests its rank first and the offer
+# last. te_tax_ai_accept_offer runs the command behind its own trigger, counts the month's
+# offers, logs ai_accepted and raises te_tax.8 for the next day.
+te_tax_gen_ai_accept_offer = {
+	set_local_variable = { name = te_tax_ai_rank_armed_forces value = te_tax_ai_clout_rank_armed_forces }
+	set_local_variable = { name = te_tax_ai_rank_devout value = te_tax_ai_clout_rank_devout }
+	set_local_variable = { name = te_tax_ai_rank_industrialists value = te_tax_ai_clout_rank_industrialists }
+	set_local_variable = { name = te_tax_ai_rank_intelligentsia value = te_tax_ai_clout_rank_intelligentsia }
+	set_local_variable = { name = te_tax_ai_rank_landowners value = te_tax_ai_clout_rank_landowners }
+	set_local_variable = { name = te_tax_ai_rank_petty_bourgeoisie value = te_tax_ai_clout_rank_petty_bourgeoisie }
+	set_local_variable = { name = te_tax_ai_rank_rural_folk value = te_tax_ai_clout_rank_rural_folk }
+	set_local_variable = { name = te_tax_ai_rank_trade_unions value = te_tax_ai_clout_rank_trade_unions }
+	if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 0 te_tax_ai_persuadable = { IG = armed_forces } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 0 te_tax_ai_persuadable = { IG = devout } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 0 te_tax_ai_persuadable = { IG = industrialists } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 0 te_tax_ai_persuadable = { IG = intelligentsia } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 0 te_tax_ai_persuadable = { IG = landowners } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 0 te_tax_ai_persuadable = { IG = petty_bourgeoisie } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 0 te_tax_ai_persuadable = { IG = rural_folk } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 0 te_tax_ai_persuadable = { IG = trade_unions } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 1 te_tax_ai_persuadable = { IG = armed_forces } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 1 te_tax_ai_persuadable = { IG = devout } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 1 te_tax_ai_persuadable = { IG = industrialists } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 1 te_tax_ai_persuadable = { IG = intelligentsia } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 1 te_tax_ai_persuadable = { IG = landowners } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 1 te_tax_ai_persuadable = { IG = petty_bourgeoisie } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 1 te_tax_ai_persuadable = { IG = rural_folk } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 1 te_tax_ai_persuadable = { IG = trade_unions } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 2 te_tax_ai_persuadable = { IG = armed_forces } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 2 te_tax_ai_persuadable = { IG = devout } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 2 te_tax_ai_persuadable = { IG = industrialists } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 2 te_tax_ai_persuadable = { IG = intelligentsia } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 2 te_tax_ai_persuadable = { IG = landowners } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 2 te_tax_ai_persuadable = { IG = petty_bourgeoisie } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 2 te_tax_ai_persuadable = { IG = rural_folk } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 2 te_tax_ai_persuadable = { IG = trade_unions } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 3 te_tax_ai_persuadable = { IG = armed_forces } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 3 te_tax_ai_persuadable = { IG = devout } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 3 te_tax_ai_persuadable = { IG = industrialists } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 3 te_tax_ai_persuadable = { IG = intelligentsia } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 3 te_tax_ai_persuadable = { IG = landowners } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 3 te_tax_ai_persuadable = { IG = petty_bourgeoisie } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 3 te_tax_ai_persuadable = { IG = rural_folk } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 3 te_tax_ai_persuadable = { IG = trade_unions } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 4 te_tax_ai_persuadable = { IG = armed_forces } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 4 te_tax_ai_persuadable = { IG = devout } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 4 te_tax_ai_persuadable = { IG = industrialists } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 4 te_tax_ai_persuadable = { IG = intelligentsia } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 4 te_tax_ai_persuadable = { IG = landowners } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 4 te_tax_ai_persuadable = { IG = petty_bourgeoisie } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 4 te_tax_ai_persuadable = { IG = rural_folk } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 4 te_tax_ai_persuadable = { IG = trade_unions } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 5 te_tax_ai_persuadable = { IG = armed_forces } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 5 te_tax_ai_persuadable = { IG = devout } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 5 te_tax_ai_persuadable = { IG = industrialists } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 5 te_tax_ai_persuadable = { IG = intelligentsia } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 5 te_tax_ai_persuadable = { IG = landowners } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 5 te_tax_ai_persuadable = { IG = petty_bourgeoisie } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 5 te_tax_ai_persuadable = { IG = rural_folk } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 5 te_tax_ai_persuadable = { IG = trade_unions } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 6 te_tax_ai_persuadable = { IG = armed_forces } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 6 te_tax_ai_persuadable = { IG = devout } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 6 te_tax_ai_persuadable = { IG = industrialists } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 6 te_tax_ai_persuadable = { IG = intelligentsia } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 6 te_tax_ai_persuadable = { IG = landowners } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 6 te_tax_ai_persuadable = { IG = petty_bourgeoisie } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 6 te_tax_ai_persuadable = { IG = rural_folk } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 6 te_tax_ai_persuadable = { IG = trade_unions } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 7 te_tax_ai_persuadable = { IG = armed_forces } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 7 te_tax_ai_persuadable = { IG = devout } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 7 te_tax_ai_persuadable = { IG = industrialists } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 7 te_tax_ai_persuadable = { IG = intelligentsia } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 7 te_tax_ai_persuadable = { IG = landowners } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 7 te_tax_ai_persuadable = { IG = petty_bourgeoisie } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 7 te_tax_ai_persuadable = { IG = rural_folk } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 7 te_tax_ai_persuadable = { IG = trade_unions } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 0 NOT = { te_tax_ai_persuadable = { IG = armed_forces } } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 0 NOT = { te_tax_ai_persuadable = { IG = devout } } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 0 NOT = { te_tax_ai_persuadable = { IG = industrialists } } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 0 NOT = { te_tax_ai_persuadable = { IG = intelligentsia } } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 0 NOT = { te_tax_ai_persuadable = { IG = landowners } } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 0 NOT = { te_tax_ai_persuadable = { IG = petty_bourgeoisie } } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 0 NOT = { te_tax_ai_persuadable = { IG = rural_folk } } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 0 NOT = { te_tax_ai_persuadable = { IG = trade_unions } } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 1 NOT = { te_tax_ai_persuadable = { IG = armed_forces } } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 1 NOT = { te_tax_ai_persuadable = { IG = devout } } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 1 NOT = { te_tax_ai_persuadable = { IG = industrialists } } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 1 NOT = { te_tax_ai_persuadable = { IG = intelligentsia } } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 1 NOT = { te_tax_ai_persuadable = { IG = landowners } } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 1 NOT = { te_tax_ai_persuadable = { IG = petty_bourgeoisie } } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 1 NOT = { te_tax_ai_persuadable = { IG = rural_folk } } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 1 NOT = { te_tax_ai_persuadable = { IG = trade_unions } } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 2 NOT = { te_tax_ai_persuadable = { IG = armed_forces } } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 2 NOT = { te_tax_ai_persuadable = { IG = devout } } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 2 NOT = { te_tax_ai_persuadable = { IG = industrialists } } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 2 NOT = { te_tax_ai_persuadable = { IG = intelligentsia } } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 2 NOT = { te_tax_ai_persuadable = { IG = landowners } } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 2 NOT = { te_tax_ai_persuadable = { IG = petty_bourgeoisie } } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 2 NOT = { te_tax_ai_persuadable = { IG = rural_folk } } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 2 NOT = { te_tax_ai_persuadable = { IG = trade_unions } } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 3 NOT = { te_tax_ai_persuadable = { IG = armed_forces } } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 3 NOT = { te_tax_ai_persuadable = { IG = devout } } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 3 NOT = { te_tax_ai_persuadable = { IG = industrialists } } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 3 NOT = { te_tax_ai_persuadable = { IG = intelligentsia } } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 3 NOT = { te_tax_ai_persuadable = { IG = landowners } } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 3 NOT = { te_tax_ai_persuadable = { IG = petty_bourgeoisie } } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 3 NOT = { te_tax_ai_persuadable = { IG = rural_folk } } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 3 NOT = { te_tax_ai_persuadable = { IG = trade_unions } } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 4 NOT = { te_tax_ai_persuadable = { IG = armed_forces } } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 4 NOT = { te_tax_ai_persuadable = { IG = devout } } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 4 NOT = { te_tax_ai_persuadable = { IG = industrialists } } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 4 NOT = { te_tax_ai_persuadable = { IG = intelligentsia } } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 4 NOT = { te_tax_ai_persuadable = { IG = landowners } } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 4 NOT = { te_tax_ai_persuadable = { IG = petty_bourgeoisie } } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 4 NOT = { te_tax_ai_persuadable = { IG = rural_folk } } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 4 NOT = { te_tax_ai_persuadable = { IG = trade_unions } } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 5 NOT = { te_tax_ai_persuadable = { IG = armed_forces } } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 5 NOT = { te_tax_ai_persuadable = { IG = devout } } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 5 NOT = { te_tax_ai_persuadable = { IG = industrialists } } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 5 NOT = { te_tax_ai_persuadable = { IG = intelligentsia } } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 5 NOT = { te_tax_ai_persuadable = { IG = landowners } } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 5 NOT = { te_tax_ai_persuadable = { IG = petty_bourgeoisie } } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 5 NOT = { te_tax_ai_persuadable = { IG = rural_folk } } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 5 NOT = { te_tax_ai_persuadable = { IG = trade_unions } } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 6 NOT = { te_tax_ai_persuadable = { IG = armed_forces } } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 6 NOT = { te_tax_ai_persuadable = { IG = devout } } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 6 NOT = { te_tax_ai_persuadable = { IG = industrialists } } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 6 NOT = { te_tax_ai_persuadable = { IG = intelligentsia } } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 6 NOT = { te_tax_ai_persuadable = { IG = landowners } } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 6 NOT = { te_tax_ai_persuadable = { IG = petty_bourgeoisie } } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 6 NOT = { te_tax_ai_persuadable = { IG = rural_folk } } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 6 NOT = { te_tax_ai_persuadable = { IG = trade_unions } } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_armed_forces = 7 NOT = { te_tax_ai_persuadable = { IG = armed_forces } } te_tax_ai_offer_acceptable = { IG = armed_forces } }
+		te_tax_ai_accept_offer = { IG = armed_forces }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_devout = 7 NOT = { te_tax_ai_persuadable = { IG = devout } } te_tax_ai_offer_acceptable = { IG = devout } }
+		te_tax_ai_accept_offer = { IG = devout }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_industrialists = 7 NOT = { te_tax_ai_persuadable = { IG = industrialists } } te_tax_ai_offer_acceptable = { IG = industrialists } }
+		te_tax_ai_accept_offer = { IG = industrialists }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_intelligentsia = 7 NOT = { te_tax_ai_persuadable = { IG = intelligentsia } } te_tax_ai_offer_acceptable = { IG = intelligentsia } }
+		te_tax_ai_accept_offer = { IG = intelligentsia }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_landowners = 7 NOT = { te_tax_ai_persuadable = { IG = landowners } } te_tax_ai_offer_acceptable = { IG = landowners } }
+		te_tax_ai_accept_offer = { IG = landowners }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_petty_bourgeoisie = 7 NOT = { te_tax_ai_persuadable = { IG = petty_bourgeoisie } } te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie } }
+		te_tax_ai_accept_offer = { IG = petty_bourgeoisie }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_rural_folk = 7 NOT = { te_tax_ai_persuadable = { IG = rural_folk } } te_tax_ai_offer_acceptable = { IG = rural_folk } }
+		te_tax_ai_accept_offer = { IG = rural_folk }
+	}
+	else_if = {
+		limit = { local_var:te_tax_ai_rank_trade_unions = 7 NOT = { te_tax_ai_persuadable = { IG = trade_unions } } te_tax_ai_offer_acceptable = { IG = trade_unions } }
+		te_tax_ai_accept_offer = { IG = trade_unions }
+	}
+}
+
+# The AI's reverse-window marks (spec §2.5, §2.11): for each instrument the bill changes from
+# existing law in its month (te_tax_bl_dstep_<key>), the month (te_tax_ai_last_<key>) and the
+# direction (te_tax_ai_dir_<key>, 1 raised, -1 cut). te_tax_ai_manage_bill records them just
+# before te_tax_cmd_pass or te_tax_cmd_force_through, which close the bill record they read.
+te_tax_gen_ai_record_marks = {
+	if = {
+		limit = { te_tax_bl_dstep_wage > 0 }
+		set_variable = { name = te_tax_ai_last_wage value = te_tax_ai_now }
+		set_variable = { name = te_tax_ai_dir_wage value = 1 }
+	}
+	else_if = {
+		limit = { te_tax_bl_dstep_wage < 0 }
+		set_variable = { name = te_tax_ai_last_wage value = te_tax_ai_now }
+		set_variable = { name = te_tax_ai_dir_wage value = -1 }
+	}
+	if = {
+		limit = { te_tax_bl_dstep_div > 0 }
+		set_variable = { name = te_tax_ai_last_div value = te_tax_ai_now }
+		set_variable = { name = te_tax_ai_dir_div value = 1 }
+	}
+	else_if = {
+		limit = { te_tax_bl_dstep_div < 0 }
+		set_variable = { name = te_tax_ai_last_div value = te_tax_ai_now }
+		set_variable = { name = te_tax_ai_dir_div value = -1 }
+	}
+	if = {
+		limit = { te_tax_bl_dstep_land > 0 }
+		set_variable = { name = te_tax_ai_last_land value = te_tax_ai_now }
+		set_variable = { name = te_tax_ai_dir_land value = 1 }
+	}
+	else_if = {
+		limit = { te_tax_bl_dstep_land < 0 }
+		set_variable = { name = te_tax_ai_last_land value = te_tax_ai_now }
+		set_variable = { name = te_tax_ai_dir_land value = -1 }
+	}
+	if = {
+		limit = { te_tax_bl_dstep_head > 0 }
+		set_variable = { name = te_tax_ai_last_head value = te_tax_ai_now }
+		set_variable = { name = te_tax_ai_dir_head value = 1 }
+	}
+	else_if = {
+		limit = { te_tax_bl_dstep_head < 0 }
+		set_variable = { name = te_tax_ai_last_head value = te_tax_ai_now }
+		set_variable = { name = te_tax_ai_dir_head value = -1 }
+	}
+	if = {
+		limit = { te_tax_bl_dstep_cons > 0 }
+		set_variable = { name = te_tax_ai_last_cons value = te_tax_ai_now }
+		set_variable = { name = te_tax_ai_dir_cons value = 1 }
+	}
+	else_if = {
+		limit = { te_tax_bl_dstep_cons < 0 }
+		set_variable = { name = te_tax_ai_last_cons value = te_tax_ai_now }
+		set_variable = { name = te_tax_ai_dir_cons value = -1 }
+	}
 }

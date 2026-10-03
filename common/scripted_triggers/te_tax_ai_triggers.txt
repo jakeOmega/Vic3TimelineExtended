@@ -220,3 +220,172 @@ te_tax_ai_owes_institution = {
 		AND = { te_tax_obl_binding = { N = 4 } var:te_tax_o4_kind = 1 var:te_tax_o4_arg = $ARG$ }
 	}
 }
+
+# ---------------------------------------------------------------------------
+# The open bill (plan 2026-10-03, Task 20; spec §2.4 step 3, §2.7, §2.10).
+# Country scope, read by te_tax_ai_manage_bill while a bill is under debate.
+# IG: an interest group key without its ig_ prefix.
+# ---------------------------------------------------------------------------
+
+# The bill would pass but for legitimacy, and the native tax level is off
+# medium (spec §2.10): the native AI moved it since the writer last pinned it,
+# and pays for it in legitimacy. Every other line of te_tax_can_pass, repeated;
+# the step waits for the pin on the 1st and retries on the 2nd.
+te_tax_ai_blocked_by_native_level = {
+	te_tax_code_in_force = yes
+	te_tax_bill_active = yes
+	NOT = { tax_level = medium }
+	legitimacy < te_tax_passage_legitimacy
+	te_tax_committed_share > te_tax_passage_share
+	te_tax_debate_days_left <= 0
+	var:te_tax_bl_due > te_history_month_index
+	OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 }
+	te_tax_gen_bill_current = yes
+	te_tax_gen_bill_sunsets_valid = yes
+	te_tax_bill_changes_something = yes
+	OR = {
+		te_tax_can_store_package = { SLOT = a }
+		te_tax_can_store_package = { SLOT = b }
+	}
+}
+
+# Group IG is persuadable: not committed, no red line, a score of 0 or more
+# (te_tax_open_clout's test). Accepting its offer commits it.
+te_tax_ai_persuadable = {
+	has_variable = te_tax_com_$IG$
+	var:te_tax_com_$IG$ = 0
+	has_variable = te_tax_sup_$IG$
+	var:te_tax_sup_$IG$ >= 0
+}
+
+# A clause leaves the bill doing what the AI wrote it for (spec §2.7): a raise
+# template (1 T1, 2 T2, 3 T3, 6 T6) still raises revenue, the cut (5 T5) still
+# cuts. A bill the AI did not introduce (0) counts as a raise while it raises
+# revenue and as a cut otherwise, so either way it must not stop at nothing.
+te_tax_ai_clause_keeps_direction = {
+	OR = {
+		AND = {
+			OR = {
+				var:te_tax_ai_tpl = 1
+				var:te_tax_ai_tpl = 2
+				var:te_tax_ai_tpl = 3
+				var:te_tax_ai_tpl = 6
+			}
+			te_tax_dl_revenue > 0
+		}
+		AND = {
+			var:te_tax_ai_tpl = 5
+			te_tax_dl_revenue < 0
+		}
+		AND = {
+			var:te_tax_ai_tpl = 0
+			NOT = { te_tax_dl_revenue = 0 }
+		}
+	}
+}
+
+# Group IG's offer is one the AI accepts (spec §2.7), behind the Accept
+# button's own trigger. Clauses (1 soften a raise, 2 agricultural relief,
+# 3 untax a staple) while the bill keeps its direction, relief only outside an
+# emergency. Promises (10 + the obligation kind): an institution level (11)
+# with no bureaucracy deficit and none approaching; the bureaucracy balance
+# (12) with a surplus and none approaching; the fiscal balance (14) while the
+# bill raises revenue, outside an emergency. Military wages (13) are never
+# offered.
+te_tax_ai_offer_acceptable = {
+	te_tax_can_accept_offer = { IG = $IG$ }
+	OR = {
+		AND = {
+			var:te_tax_off_$IG$_kind >= 1
+			var:te_tax_off_$IG$_kind <= 3
+			te_tax_ai_clause_keeps_direction = yes
+			NOT = {
+				AND = {
+					var:te_tax_off_$IG$_kind = 2
+					te_tax_ai_emergency = yes
+				}
+			}
+		}
+		AND = {
+			var:te_tax_off_$IG$_kind = 11
+			bureaucracy >= 0
+			approaching_bureaucracy_shortage = no
+		}
+		AND = {
+			var:te_tax_off_$IG$_kind = 12
+			bureaucracy > 0
+			approaching_bureaucracy_shortage = no
+		}
+		AND = {
+			var:te_tax_off_$IG$_kind = 14
+			te_tax_dl_revenue > 0
+			NOT = { te_tax_ai_emergency = yes }
+		}
+	}
+}
+
+# The AI can still accept an offer this month: fewer than te_tax_ai_max_offers
+# accepted in it (none counted in another month), the bill short of the
+# passage share (the AI never concedes more than it needs), and some group's
+# offer acceptable, so te_tax_gen_ai_accept_offer always accepts one. Reads
+# correctly without a preceding reset (the console, the initiative's check).
+te_tax_ai_offer_available = {
+	OR = {
+		NOT = { var:te_tax_ai_offer_month = te_tax_ai_now }
+		var:te_tax_ai_offer_count < te_tax_ai_max_offers
+	}
+	te_tax_committed_share <= te_tax_passage_share
+	OR = {
+		te_tax_ai_offer_acceptable = { IG = armed_forces }
+		te_tax_ai_offer_acceptable = { IG = devout }
+		te_tax_ai_offer_acceptable = { IG = industrialists }
+		te_tax_ai_offer_acceptable = { IG = intelligentsia }
+		te_tax_ai_offer_acceptable = { IG = landowners }
+		te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie }
+		te_tax_ai_offer_acceptable = { IG = rural_folk }
+		te_tax_ai_offer_acceptable = { IG = trade_unions }
+	}
+}
+
+# The bill cannot pass: the committed and persuadable groups together are at
+# or below the passage share, no offer could still be accepted this month,
+# and there is no force path (an emergency with te_tax_force_share committed).
+te_tax_ai_bill_hopeless = {
+	te_tax_bill_active = yes
+	te_tax_view_open_share <= te_tax_passage_share
+	NOT = { te_tax_ai_offer_available = yes }
+	NOT = {
+		AND = {
+			te_tax_ai_emergency = yes
+			te_tax_committed_share >= te_tax_force_share
+		}
+	}
+}
+
+# In an emergency, force-through fails only on the override capacity or the
+# Authority it costs: every other line of te_tax_can_force_through holds,
+# repeated. The withdrawal's reason is then authority.
+te_tax_ai_force_blocked_by_authority = {
+	te_tax_ai_emergency = yes
+	te_tax_code_in_force = yes
+	te_tax_bill_active = yes
+	NOT = { te_tax_committed_share > te_tax_passage_share }
+	te_tax_committed_share >= te_tax_force_share
+	legitimacy >= te_tax_passage_legitimacy
+	te_tax_debate_days_left <= 0
+	var:te_tax_bl_due > te_history_month_index
+	OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 }
+	te_tax_gen_bill_current = yes
+	te_tax_gen_bill_sunsets_valid = yes
+	te_tax_bill_changes_something = yes
+	OR = {
+		te_tax_can_store_package = { SLOT = a }
+		te_tax_can_store_package = { SLOT = b }
+	}
+	NOT = {
+		AND = {
+			"modifier:country_legislative_override_capacity_add" >= 2
+			produced_authority > forced_law_through_event_authority_cost_medium
+		}
+	}
+}

@@ -250,6 +250,10 @@ STEP_OPS = ((0, "draft_step", 0), (1, "draft_step", 1), (2, "draft_step", 2), (3
 # The interest groups the support model scores, by type key (ig_<key>).
 IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
        "landowners", "petty_bourgeoisie", "rural_folk", "trade_unions")
+# The AI's offer order (plan 2026-10-03 Task 20; spec §2.7) ranks the groups by clout,
+# te_tax_ai_clout_rank_<ig> 0 to k-1 for the k present and non-marginal ones; the others rank
+# AI_RANK_LAST, after every one of them.
+AI_RANK_LAST = len(IGS)
 # One vanilla tax level per channel: the material and ideology reasons count a
 # change in these units (delta index x step / level step).
 LEVEL_STEPS = {"wage": Decimal("0.05"), "div": Decimal("0.05"), "land": Decimal("0.15"),
@@ -2722,7 +2726,7 @@ def support_values():
               "# at the draft's due month; the review's \"then reverts to\")."]
     for key in keys:
         lines += _successor_value(f"te_tax_succ_dr_{key}", "dr", key)
-    lines += _offer_values() + _view_values()
+    lines += _offer_values() + _view_values() + _ai_clout_values()
     return _txt("\n".join(lines) + "\n")
 
 
@@ -3429,6 +3433,8 @@ def scripted_effects():
         "# te_tax_gen_obl_log_met_<n> and _unmet_<n>, called by te_tax_obl_check_one",
         "# (te_tax_obligation_effects.txt); te_tax_gen_ai_enact_<n>, te_tax_gen_ai_log_enacted_<n> and",
         "# te_tax_gen_ai_log_renegotiated_<n>, called by te_tax_ai_manage_promises (te_tax_ai_effects.txt).",
+        "# Then the AI's open bill (plan 2026-10-03 Task 20): te_tax_gen_ai_accept_offer and",
+        "# te_tax_gen_ai_record_marks, called by te_tax_ai_manage_bill.",
         "",
         "# Each instrument's tokens with their sentinels, if absent: the enacted provision, its",
         "# version tokens and the AI's marks (te_tax_ai_last_<key>, te_tax_ai_dir_<key>).",
@@ -3526,7 +3532,7 @@ def scripted_effects():
               for condition in _goods_drift_conditions()]
     lines.append("}")
     lines += (_customs_effects() + _scheduler_effects() + _migration_effects() + _copy_effects()
-              + _ai_obligation_effects())
+              + _ai_obligation_effects() + _ai_bill_effects())
     return _txt("\n".join(lines) + "\n")
 
 
@@ -3603,6 +3609,85 @@ def _ai_obligation_effects():
                 f'\tdebug_log = "TE_TAX {head} slot={n} {_obl_log_fields(n)} {AI_LOG_SIGNALS}; {LOG_STAMP}"',
                 "}",
             ]
+    return lines
+
+
+
+def _ai_clout_values():
+    """The AI's offer order (plan 2026-10-03 Task 20; spec docs/superpowers/specs/
+    2026-10-03-tax-code-ai-and-release-design.md §2.7): te_tax_ai_clout_<ig> is the group's clout
+    when the country has it and it is not marginal (te_tax_eligible_clout's test), else -1;
+    te_tax_ai_clout_rank_<ig> counts the groups ahead of it, by clout, largest first, ties in IGS
+    order. An earlier group is ahead at equal clout and a later one only above it, so the k
+    eligible groups take 0 to k-1, each once; an absent or marginal group ranks AI_RANK_LAST."""
+    lines = [
+        "",
+        "# The AI's offer order (plan 2026-10-03 Task 20; te_tax_gen_ai_accept_offer): each group's clout",
+        "# when the country has it and it is not marginal, else -1, and its rank, the number of groups",
+        "# ahead of it by clout, largest first, ties in a fixed order (an earlier group is ahead at equal",
+        f"# clout, a later one only above it). Eligible groups take 0 to k-1; the rest {AI_RANK_LAST}.",
+    ]
+    for ig in IGS:
+        lines += [f"te_tax_ai_clout_{ig} = {{", "\tvalue = -1", "\tif = {", "\t\tlimit = {",
+                  f"\t\t\texists = ig:ig_{ig}", f"\t\t\tig:ig_{ig} = {{ ig_counts_as_marginal = no }}", "\t\t}",
+                  f"\t\tvalue = ig:ig_{ig}.ig_clout", "\t}", "}"]
+    for index, ig in enumerate(IGS):
+        lines += [f"te_tax_ai_clout_rank_{ig} = {{", f"\tvalue = {AI_RANK_LAST}", "\tif = {",
+                  f"\t\tlimit = {{ te_tax_ai_clout_{ig} >= 0 }}", "\t\tvalue = 0"]
+        for other_index, other in enumerate(IGS):
+            if other != ig:
+                op = ">=" if other_index < index else ">"
+                lines.append(f"\t\tif = {{ limit = {{ te_tax_ai_clout_{other} {op} te_tax_ai_clout_{ig} }} add = 1 }}")
+        lines += ["\t}", "}"]
+    return lines
+
+
+def _ai_bill_effects():
+    """The AI's open bill (plan 2026-10-03 Task 20; spec §2.4 step 3, §2.7), the parts that name
+    every group or instrument: the order in which te_tax_ai_manage_bill accepts an offer, and the
+    reverse-window marks it records before a pass or a force-through closes the bill record."""
+    lines = [
+        "",
+        "# The AI accepts the first acceptable offer (te_tax_ai_offer_acceptable, te_tax_ai_triggers.txt)",
+        "# in this order (spec §2.7): persuadable groups (te_tax_ai_persuadable), which commit on",
+        "# acceptance, by clout, largest first, then the others, whose concession raises the open",
+        "# clout. Called only by te_tax_ai_manage_bill, when te_tax_ai_offer_available holds, so one",
+        "# branch matches. The ranks are read once into locals (te_tax_ai_clout_rank_<ig>,",
+        "# te_tax_generated_support_values.txt), and each branch tests its rank first and the offer",
+        "# last. te_tax_ai_accept_offer runs the command behind its own trigger, counts the month's",
+        "# offers, logs ai_accepted and raises te_tax.8 for the next day.",
+        "te_tax_gen_ai_accept_offer = {",
+    ]
+    lines += [f"\tset_local_variable = {{ name = te_tax_ai_rank_{ig} value = te_tax_ai_clout_rank_{ig} }}"
+              for ig in IGS]
+    first = True
+    for persuadable in (True, False):
+        for rank in range(len(IGS)):
+            for ig in IGS:
+                stance = (f"te_tax_ai_persuadable = {{ IG = {ig} }}" if persuadable
+                          else f"NOT = {{ te_tax_ai_persuadable = {{ IG = {ig} }} }}")
+                lines += [f"\t{'if' if first else 'else_if'} = {{",
+                          f"\t\tlimit = {{ local_var:te_tax_ai_rank_{ig} = {rank} {stance} "
+                          f"te_tax_ai_offer_acceptable = {{ IG = {ig} }} }}",
+                          f"\t\tte_tax_ai_accept_offer = {{ IG = {ig} }}",
+                          "\t}"]
+                first = False
+    lines += [
+        "}",
+        "",
+        "# The AI's reverse-window marks (spec §2.5, §2.11): for each instrument the bill changes from",
+        "# existing law in its month (te_tax_bl_dstep_<key>), the month (te_tax_ai_last_<key>) and the",
+        "# direction (te_tax_ai_dir_<key>, 1 raised, -1 cut). te_tax_ai_manage_bill records them just",
+        "# before te_tax_cmd_pass or te_tax_cmd_force_through, which close the bill record they read.",
+        "te_tax_gen_ai_record_marks = {",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        for opener, op, direction in (("if", ">", 1), ("else_if", "<", -1)):
+            lines += [f"\t{opener} = {{", f"\t\tlimit = {{ te_tax_bl_dstep_{key} {op} 0 }}",
+                      f"\t\tset_variable = {{ name = te_tax_ai_last_{key} value = te_tax_ai_now }}",
+                      f"\t\tset_variable = {{ name = te_tax_ai_dir_{key} value = {direction} }}", "\t}"]
+    lines.append("}")
     return lines
 
 

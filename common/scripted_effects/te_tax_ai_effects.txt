@@ -13,9 +13,9 @@
 #             on the country's bucket day (5, 12, 19 or 26 days on), or the
 #             next day on a retry. The processor itself never drafts.
 #   STEP      te_tax_ai_step, from te_tax.8 only, with ROOT = THIS = the
-#             country: held packages (te_tax_ai_manage_packages), then promises
-#             at risk (te_tax_ai_manage_promises); Tasks 20-21 add the open
-#             bill and the initiative.
+#             country: held packages (te_tax_ai_manage_packages), promises at
+#             risk (te_tax_ai_manage_promises), then the open bill
+#             (te_tax_ai_manage_bill); Task 21 adds the initiative.
 #   RESET     te_tax_ai_reset_bill_state, at the outbreak (on the rebels),
 #             the win repair and a release (te_tax_civil_war_effects.txt).
 #   LOGS      te_tax_ai_log_*, one summary line per AI action.
@@ -132,8 +132,8 @@ te_tax_ai_dispatch = {
 # ----------------------------------------------------------------------------
 
 # The AI step, run only by te_tax.8 (te_tax_ai_can_act holds), with ROOT = THIS
-# = the country (spec §2.4): held packages, then a promise at risk; Task 20
-# adds the open bill and Task 21 a new initiative.
+# = the country (spec §2.4): held packages, then a promise at risk, then the
+# bill under debate; Task 21 adds a new initiative when there is none.
 te_tax_ai_step = {
 	if = {
 		limit = {
@@ -142,7 +142,10 @@ te_tax_ai_step = {
 		}
 		te_tax_ai_manage_packages = yes
 		te_tax_ai_manage_promises = yes
-		# Task 20: the open bill. Task 21: the initiative.
+		if = {
+			limit = { te_tax_bill_active = yes }
+			te_tax_ai_manage_bill = yes
+		}
 	}
 }
 
@@ -256,6 +259,243 @@ te_tax_ai_manage_promises = {
 	}
 }
 
+# Step 3, the open bill (spec §2.4 step 3, §2.7, §2.10; plan Task 20). The
+# AI introduced it (Task 21), or a player did before the country passed to
+# the AI (te_tax_ai_tpl 0), which the same rules manage; its patience then
+# starts the first time the step sees it. Then, once per step:
+#   - a bill whose due month came during debate is moved to next month
+#     (te_tax_cmd_reschedule, commitments kept), so a debate an accepted offer
+#     restarted can still end in a pass;
+#   1. pass it when it may, recording the reverse-window marks and the
+#      cooldown first: the pass closes the bill record they read;
+#   2. wait when only legitimacy blocks it and the native tax level is off
+#      medium: the writer pins it on the 1st, and the next processor raises
+#      te_tax.8 on the 2nd (te_tax_ai_retry). Logged each time, so at most one
+#      line a month;
+#   3. accept the best offer (te_tax_gen_ai_accept_offer), at most
+#      te_tax_ai_max_offers a month, each raising the step again the next day;
+#   4. in an emergency, force it through;
+#   5. withdraw it when it is hopeless or has been open te_tax_ai_bill_patience
+#      months (te_tax_ai_withdraw, with a reason).
+# Each branch ends in one summary line; a pass, a force-through and a
+# withdrawal reset the bill state. Rule 3's limit holds only when some offer is
+# acceptable, so an else-chain never stops at a branch that does nothing.
+te_tax_ai_manage_bill = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			te_tax_code_in_force = yes
+			te_tax_bill_active = yes
+		}
+		if = {
+			limit = { var:te_tax_ai_bill_month < 0 }
+			set_variable = { name = te_tax_ai_bill_month value = te_tax_ai_now }
+		}
+		if = {
+			limit = { te_tax_can_reschedule = yes }
+			te_tax_cmd_reschedule = yes
+			te_tax_ai_log_bill_rescheduled = yes
+		}
+		if = {
+			limit = { te_tax_can_pass = yes }
+			te_tax_gen_ai_record_marks = yes
+			set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_pass }
+			te_tax_cmd_pass = yes
+			te_tax_ai_log_passed = yes
+			te_tax_ai_reset_bill_state = yes
+		}
+		else_if = {
+			limit = { te_tax_ai_blocked_by_native_level = yes }
+			set_variable = { name = te_tax_ai_retry value = 1 }
+			te_tax_ai_log_waiting_legitimacy_native_level = yes
+		}
+		else_if = {
+			limit = { te_tax_ai_offer_available = yes }
+			te_tax_gen_ai_accept_offer = yes
+		}
+		else_if = {
+			limit = {
+				te_tax_ai_emergency = yes
+				te_tax_can_force_through = yes
+			}
+			if = {
+				limit = { te_tax_can_force_through = yes }
+				te_tax_gen_ai_record_marks = yes
+				set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_pass }
+				te_tax_cmd_force_through = yes
+				te_tax_ai_log_forced = yes
+				te_tax_ai_reset_bill_state = yes
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					te_tax_ai_bill_hopeless = yes
+					te_tax_ai_bill_age >= te_tax_ai_bill_patience
+				}
+			}
+			te_tax_ai_withdraw = yes
+		}
+	}
+}
+
+# Accepts group IG's offer through the Accept button's command, called only by
+# te_tax_gen_ai_accept_offer in its order. The acceptance opens a new revision
+# and refreshes support; the step then runs again the next day, so a bargain
+# completes within days. The month's count starts over in a new month.
+te_tax_ai_accept_offer = {
+	if = {
+		limit = { te_tax_can_accept_offer = { IG = $IG$ } }
+		te_tax_cmd_accept_offer = { IG = $IG$ }
+		if = {
+			limit = { NOT = { var:te_tax_ai_offer_month = te_tax_ai_now } }
+			set_variable = { name = te_tax_ai_offer_count value = 0 }
+		}
+		change_variable = { name = te_tax_ai_offer_count add = 1 }
+		set_variable = { name = te_tax_ai_offer_month value = te_tax_ai_now }
+		te_tax_ai_log_accepted = yes
+		trigger_event = { id = te_tax.8 days = 1 }
+	}
+}
+
+# Withdraws the bill with the reason that applies (spec §2.4 step 3):
+# legitimacy below the passage line; no free slot; in an emergency,
+# force-through short only of override capacity or Authority; hopeless on
+# support; otherwise its patience ran out. The initiative (Task 21) calls it
+# for a bill that is hopeless on introduction.
+te_tax_ai_withdraw = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		if = {
+			limit = { legitimacy < te_tax_passage_legitimacy }
+			te_tax_ai_withdraw_legitimacy = yes
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					OR = {
+						var:te_tax_pa_on = 0
+						var:te_tax_pb_on = 0
+					}
+				}
+			}
+			te_tax_ai_withdraw_slots = yes
+		}
+		else_if = {
+			limit = { te_tax_ai_force_blocked_by_authority = yes }
+			te_tax_ai_withdraw_authority = yes
+		}
+		else_if = {
+			limit = { te_tax_ai_bill_hopeless = yes }
+			te_tax_ai_withdraw_support = yes
+		}
+		else = {
+			te_tax_ai_withdraw_patience = yes
+		}
+	}
+}
+
+# One effect per reason, since debug_log cannot print a parameter. Each closes
+# the bill through the Withdraw command, starts the failure cooldown and logs
+# ai_withdrawn, and ai_no_viable once per episode: the marker is read before
+# the reset (which writes 0) and set after it, so only a pass or the need
+# ending (Task 21) starts a new episode.
+
+# Withdrawal: legitimacy below the passage line.
+te_tax_ai_withdraw_legitimacy = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		if = {
+			limit = { te_tax_can_withdraw = yes }
+			te_tax_cmd_withdraw = yes
+			set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal }
+			te_tax_ai_log_withdrawn_legitimacy = yes
+			if = {
+				limit = { var:te_tax_ai_noviable = 0 }
+				te_tax_ai_log_no_viable_legitimacy = yes
+			}
+			te_tax_ai_reset_bill_state = yes
+			set_variable = { name = te_tax_ai_noviable value = 1 }
+		}
+	}
+}
+
+# Withdrawal: both package slots taken.
+te_tax_ai_withdraw_slots = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		if = {
+			limit = { te_tax_can_withdraw = yes }
+			te_tax_cmd_withdraw = yes
+			set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal }
+			te_tax_ai_log_withdrawn_slots = yes
+			if = {
+				limit = { var:te_tax_ai_noviable = 0 }
+				te_tax_ai_log_no_viable_slots = yes
+			}
+			te_tax_ai_reset_bill_state = yes
+			set_variable = { name = te_tax_ai_noviable value = 1 }
+		}
+	}
+}
+
+# Withdrawal: force-through short of override capacity or Authority.
+te_tax_ai_withdraw_authority = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		if = {
+			limit = { te_tax_can_withdraw = yes }
+			te_tax_cmd_withdraw = yes
+			set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal }
+			te_tax_ai_log_withdrawn_authority = yes
+			if = {
+				limit = { var:te_tax_ai_noviable = 0 }
+				te_tax_ai_log_no_viable_authority = yes
+			}
+			te_tax_ai_reset_bill_state = yes
+			set_variable = { name = te_tax_ai_noviable value = 1 }
+		}
+	}
+}
+
+# Withdrawal: too little support, with no offer or force path left.
+te_tax_ai_withdraw_support = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		if = {
+			limit = { te_tax_can_withdraw = yes }
+			te_tax_cmd_withdraw = yes
+			set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal }
+			te_tax_ai_log_withdrawn_support = yes
+			if = {
+				limit = { var:te_tax_ai_noviable = 0 }
+				te_tax_ai_log_no_viable_support = yes
+			}
+			te_tax_ai_reset_bill_state = yes
+			set_variable = { name = te_tax_ai_noviable value = 1 }
+		}
+	}
+}
+
+# Withdrawal: open te_tax_ai_bill_patience months.
+te_tax_ai_withdraw_patience = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		if = {
+			limit = { te_tax_can_withdraw = yes }
+			te_tax_cmd_withdraw = yes
+			set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal }
+			te_tax_ai_log_withdrawn_patience = yes
+			if = {
+				limit = { var:te_tax_ai_noviable = 0 }
+				te_tax_ai_log_no_viable_patience = yes
+			}
+			te_tax_ai_reset_bill_state = yes
+			set_variable = { name = te_tax_ai_noviable value = 1 }
+		}
+	}
+}
+
 # ----------------------------------------------------------------------------
 # Civil wars and releases
 # ----------------------------------------------------------------------------
@@ -324,6 +564,11 @@ te_tax_ai_log_released = {
 # The AI rescheduled a missed package.
 te_tax_ai_log_rescheduled = {
 	debug_log = "TE_TAX ai_rescheduled tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+}
+
+# The AI moved its bill's due month to next month: it came during debate.
+te_tax_ai_log_bill_rescheduled = {
+	debug_log = "TE_TAX ai_bill_rescheduled tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 }
 
 # The bill fails only on legitimacy while the native tax level is off medium; the step retries the day after the pin.

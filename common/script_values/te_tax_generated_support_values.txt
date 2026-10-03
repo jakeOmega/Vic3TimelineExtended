@@ -9029,3 +9029,200 @@ te_tax_ig_band_trade_unions = {
 		else_if = { limit = { ig:ig_trade_unions ?= { law_stance = { law = law_type:law_consumption_based_taxation value < neutral } } } value = -1 }
 	}
 }
+
+# The AI's offer order (plan 2026-10-03 Task 20; te_tax_gen_ai_accept_offer): each group's clout
+# when the country has it and it is not marginal, else -1, and its rank, the number of groups
+# ahead of it by clout, largest first, ties in a fixed order (an earlier group is ahead at equal
+# clout, a later one only above it). Eligible groups take 0 to k-1; the rest 8.
+te_tax_ai_clout_armed_forces = {
+	value = -1
+	if = {
+		limit = {
+			exists = ig:ig_armed_forces
+			ig:ig_armed_forces = { ig_counts_as_marginal = no }
+		}
+		value = ig:ig_armed_forces.ig_clout
+	}
+}
+te_tax_ai_clout_devout = {
+	value = -1
+	if = {
+		limit = {
+			exists = ig:ig_devout
+			ig:ig_devout = { ig_counts_as_marginal = no }
+		}
+		value = ig:ig_devout.ig_clout
+	}
+}
+te_tax_ai_clout_industrialists = {
+	value = -1
+	if = {
+		limit = {
+			exists = ig:ig_industrialists
+			ig:ig_industrialists = { ig_counts_as_marginal = no }
+		}
+		value = ig:ig_industrialists.ig_clout
+	}
+}
+te_tax_ai_clout_intelligentsia = {
+	value = -1
+	if = {
+		limit = {
+			exists = ig:ig_intelligentsia
+			ig:ig_intelligentsia = { ig_counts_as_marginal = no }
+		}
+		value = ig:ig_intelligentsia.ig_clout
+	}
+}
+te_tax_ai_clout_landowners = {
+	value = -1
+	if = {
+		limit = {
+			exists = ig:ig_landowners
+			ig:ig_landowners = { ig_counts_as_marginal = no }
+		}
+		value = ig:ig_landowners.ig_clout
+	}
+}
+te_tax_ai_clout_petty_bourgeoisie = {
+	value = -1
+	if = {
+		limit = {
+			exists = ig:ig_petty_bourgeoisie
+			ig:ig_petty_bourgeoisie = { ig_counts_as_marginal = no }
+		}
+		value = ig:ig_petty_bourgeoisie.ig_clout
+	}
+}
+te_tax_ai_clout_rural_folk = {
+	value = -1
+	if = {
+		limit = {
+			exists = ig:ig_rural_folk
+			ig:ig_rural_folk = { ig_counts_as_marginal = no }
+		}
+		value = ig:ig_rural_folk.ig_clout
+	}
+}
+te_tax_ai_clout_trade_unions = {
+	value = -1
+	if = {
+		limit = {
+			exists = ig:ig_trade_unions
+			ig:ig_trade_unions = { ig_counts_as_marginal = no }
+		}
+		value = ig:ig_trade_unions.ig_clout
+	}
+}
+te_tax_ai_clout_rank_armed_forces = {
+	value = 8
+	if = {
+		limit = { te_tax_ai_clout_armed_forces >= 0 }
+		value = 0
+		if = { limit = { te_tax_ai_clout_devout > te_tax_ai_clout_armed_forces } add = 1 }
+		if = { limit = { te_tax_ai_clout_industrialists > te_tax_ai_clout_armed_forces } add = 1 }
+		if = { limit = { te_tax_ai_clout_intelligentsia > te_tax_ai_clout_armed_forces } add = 1 }
+		if = { limit = { te_tax_ai_clout_landowners > te_tax_ai_clout_armed_forces } add = 1 }
+		if = { limit = { te_tax_ai_clout_petty_bourgeoisie > te_tax_ai_clout_armed_forces } add = 1 }
+		if = { limit = { te_tax_ai_clout_rural_folk > te_tax_ai_clout_armed_forces } add = 1 }
+		if = { limit = { te_tax_ai_clout_trade_unions > te_tax_ai_clout_armed_forces } add = 1 }
+	}
+}
+te_tax_ai_clout_rank_devout = {
+	value = 8
+	if = {
+		limit = { te_tax_ai_clout_devout >= 0 }
+		value = 0
+		if = { limit = { te_tax_ai_clout_armed_forces >= te_tax_ai_clout_devout } add = 1 }
+		if = { limit = { te_tax_ai_clout_industrialists > te_tax_ai_clout_devout } add = 1 }
+		if = { limit = { te_tax_ai_clout_intelligentsia > te_tax_ai_clout_devout } add = 1 }
+		if = { limit = { te_tax_ai_clout_landowners > te_tax_ai_clout_devout } add = 1 }
+		if = { limit = { te_tax_ai_clout_petty_bourgeoisie > te_tax_ai_clout_devout } add = 1 }
+		if = { limit = { te_tax_ai_clout_rural_folk > te_tax_ai_clout_devout } add = 1 }
+		if = { limit = { te_tax_ai_clout_trade_unions > te_tax_ai_clout_devout } add = 1 }
+	}
+}
+te_tax_ai_clout_rank_industrialists = {
+	value = 8
+	if = {
+		limit = { te_tax_ai_clout_industrialists >= 0 }
+		value = 0
+		if = { limit = { te_tax_ai_clout_armed_forces >= te_tax_ai_clout_industrialists } add = 1 }
+		if = { limit = { te_tax_ai_clout_devout >= te_tax_ai_clout_industrialists } add = 1 }
+		if = { limit = { te_tax_ai_clout_intelligentsia > te_tax_ai_clout_industrialists } add = 1 }
+		if = { limit = { te_tax_ai_clout_landowners > te_tax_ai_clout_industrialists } add = 1 }
+		if = { limit = { te_tax_ai_clout_petty_bourgeoisie > te_tax_ai_clout_industrialists } add = 1 }
+		if = { limit = { te_tax_ai_clout_rural_folk > te_tax_ai_clout_industrialists } add = 1 }
+		if = { limit = { te_tax_ai_clout_trade_unions > te_tax_ai_clout_industrialists } add = 1 }
+	}
+}
+te_tax_ai_clout_rank_intelligentsia = {
+	value = 8
+	if = {
+		limit = { te_tax_ai_clout_intelligentsia >= 0 }
+		value = 0
+		if = { limit = { te_tax_ai_clout_armed_forces >= te_tax_ai_clout_intelligentsia } add = 1 }
+		if = { limit = { te_tax_ai_clout_devout >= te_tax_ai_clout_intelligentsia } add = 1 }
+		if = { limit = { te_tax_ai_clout_industrialists >= te_tax_ai_clout_intelligentsia } add = 1 }
+		if = { limit = { te_tax_ai_clout_landowners > te_tax_ai_clout_intelligentsia } add = 1 }
+		if = { limit = { te_tax_ai_clout_petty_bourgeoisie > te_tax_ai_clout_intelligentsia } add = 1 }
+		if = { limit = { te_tax_ai_clout_rural_folk > te_tax_ai_clout_intelligentsia } add = 1 }
+		if = { limit = { te_tax_ai_clout_trade_unions > te_tax_ai_clout_intelligentsia } add = 1 }
+	}
+}
+te_tax_ai_clout_rank_landowners = {
+	value = 8
+	if = {
+		limit = { te_tax_ai_clout_landowners >= 0 }
+		value = 0
+		if = { limit = { te_tax_ai_clout_armed_forces >= te_tax_ai_clout_landowners } add = 1 }
+		if = { limit = { te_tax_ai_clout_devout >= te_tax_ai_clout_landowners } add = 1 }
+		if = { limit = { te_tax_ai_clout_industrialists >= te_tax_ai_clout_landowners } add = 1 }
+		if = { limit = { te_tax_ai_clout_intelligentsia >= te_tax_ai_clout_landowners } add = 1 }
+		if = { limit = { te_tax_ai_clout_petty_bourgeoisie > te_tax_ai_clout_landowners } add = 1 }
+		if = { limit = { te_tax_ai_clout_rural_folk > te_tax_ai_clout_landowners } add = 1 }
+		if = { limit = { te_tax_ai_clout_trade_unions > te_tax_ai_clout_landowners } add = 1 }
+	}
+}
+te_tax_ai_clout_rank_petty_bourgeoisie = {
+	value = 8
+	if = {
+		limit = { te_tax_ai_clout_petty_bourgeoisie >= 0 }
+		value = 0
+		if = { limit = { te_tax_ai_clout_armed_forces >= te_tax_ai_clout_petty_bourgeoisie } add = 1 }
+		if = { limit = { te_tax_ai_clout_devout >= te_tax_ai_clout_petty_bourgeoisie } add = 1 }
+		if = { limit = { te_tax_ai_clout_industrialists >= te_tax_ai_clout_petty_bourgeoisie } add = 1 }
+		if = { limit = { te_tax_ai_clout_intelligentsia >= te_tax_ai_clout_petty_bourgeoisie } add = 1 }
+		if = { limit = { te_tax_ai_clout_landowners >= te_tax_ai_clout_petty_bourgeoisie } add = 1 }
+		if = { limit = { te_tax_ai_clout_rural_folk > te_tax_ai_clout_petty_bourgeoisie } add = 1 }
+		if = { limit = { te_tax_ai_clout_trade_unions > te_tax_ai_clout_petty_bourgeoisie } add = 1 }
+	}
+}
+te_tax_ai_clout_rank_rural_folk = {
+	value = 8
+	if = {
+		limit = { te_tax_ai_clout_rural_folk >= 0 }
+		value = 0
+		if = { limit = { te_tax_ai_clout_armed_forces >= te_tax_ai_clout_rural_folk } add = 1 }
+		if = { limit = { te_tax_ai_clout_devout >= te_tax_ai_clout_rural_folk } add = 1 }
+		if = { limit = { te_tax_ai_clout_industrialists >= te_tax_ai_clout_rural_folk } add = 1 }
+		if = { limit = { te_tax_ai_clout_intelligentsia >= te_tax_ai_clout_rural_folk } add = 1 }
+		if = { limit = { te_tax_ai_clout_landowners >= te_tax_ai_clout_rural_folk } add = 1 }
+		if = { limit = { te_tax_ai_clout_petty_bourgeoisie >= te_tax_ai_clout_rural_folk } add = 1 }
+		if = { limit = { te_tax_ai_clout_trade_unions > te_tax_ai_clout_rural_folk } add = 1 }
+	}
+}
+te_tax_ai_clout_rank_trade_unions = {
+	value = 8
+	if = {
+		limit = { te_tax_ai_clout_trade_unions >= 0 }
+		value = 0
+		if = { limit = { te_tax_ai_clout_armed_forces >= te_tax_ai_clout_trade_unions } add = 1 }
+		if = { limit = { te_tax_ai_clout_devout >= te_tax_ai_clout_trade_unions } add = 1 }
+		if = { limit = { te_tax_ai_clout_industrialists >= te_tax_ai_clout_trade_unions } add = 1 }
+		if = { limit = { te_tax_ai_clout_intelligentsia >= te_tax_ai_clout_trade_unions } add = 1 }
+		if = { limit = { te_tax_ai_clout_landowners >= te_tax_ai_clout_trade_unions } add = 1 }
+		if = { limit = { te_tax_ai_clout_petty_bourgeoisie >= te_tax_ai_clout_trade_unions } add = 1 }
+		if = { limit = { te_tax_ai_clout_rural_folk >= te_tax_ai_clout_trade_unions } add = 1 }
+	}
+}
