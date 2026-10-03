@@ -66,6 +66,11 @@ covert_election_interference_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_election_tt
 			covert_ops_type_below_cap = { TYPE = covert_election_interference_action }
 		}
@@ -109,11 +114,6 @@ covert_election_interference_action = {
 		custom_tooltip = {
 			text = iw_no_good_relations_tt
 			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -241,6 +241,11 @@ covert_financial_subversion_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_financial_tt
 			covert_ops_type_below_cap = { TYPE = covert_financial_subversion_action }
 		}
@@ -273,11 +278,6 @@ covert_financial_subversion_action = {
 		custom_tooltip = {
 			text = iw_no_good_relations_tt
 			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -396,6 +396,11 @@ covert_infrastructure_sabotage_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_infrastructure_tt
 			covert_ops_type_below_cap = { TYPE = covert_infrastructure_sabotage_action }
 		}
@@ -434,11 +439,6 @@ covert_infrastructure_sabotage_action = {
 				has_war_with = scope:target_country
 				is_diplomatic_play_enemy_of = scope:target_country
 			}
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -549,6 +549,11 @@ covert_comms_disruption_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_comms_tt
 			covert_ops_type_below_cap = { TYPE = covert_comms_disruption_action }
 		}
@@ -587,11 +592,6 @@ covert_comms_disruption_action = {
 				has_war_with = scope:target_country
 				is_diplomatic_play_enemy_of = scope:target_country
 			}
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -709,6 +709,11 @@ covert_industrial_espionage_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_industrial_tt
 			covert_ops_type_below_cap = { TYPE = covert_industrial_espionage_action }
 		}
@@ -743,11 +748,6 @@ covert_industrial_espionage_action = {
 			scope:target_country = {
 				techs_researched > ROOT.techs_researched
 			}
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -860,6 +860,11 @@ covert_military_espionage_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_military_tt
 			covert_ops_type_below_cap = { TYPE = covert_military_espionage_action }
 		}
@@ -888,11 +893,6 @@ covert_military_espionage_action = {
 					any_scope_article = { has_type = intelligence_sharing_pact }
 				}
 			}
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -998,6 +998,11 @@ covert_influence_campaign_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_influence_tt
 			covert_ops_type_below_cap = { TYPE = covert_influence_campaign_action }
 		}
@@ -1030,11 +1035,6 @@ covert_influence_campaign_action = {
 		custom_tooltip = {
 			text = iw_target_not_in_bloc_tt
 			NOT = { is_in_same_power_bloc = scope:target_country }
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -1163,6 +1163,11 @@ covert_ideological_subversion_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_ideological_tt
 			covert_ops_type_below_cap = { TYPE = covert_ideological_subversion_action }
 		}
@@ -1201,11 +1206,6 @@ covert_ideological_subversion_action = {
 			scope:target_country = {
 				any_political_movement = { count >= 1 }
 			}
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -1331,6 +1331,11 @@ covert_destabilization_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_destabilization_tt
 			covert_ops_type_below_cap = { TYPE = covert_destabilization_action }
 		}
@@ -1369,11 +1374,6 @@ covert_destabilization_action = {
 			scope:target_country = {
 				any_political_movement = { count >= 1 }
 			}
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -1506,6 +1506,11 @@ covert_regime_change_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_regime_change_tt
 			covert_ops_type_below_cap = { TYPE = covert_regime_change_action }
 		}
@@ -1546,11 +1551,6 @@ covert_regime_change_action = {
 		custom_tooltip = {
 			text = iw_severe_ops_need_tradecraft_tt
 			covert_tradecraft_unlocks_severe_ops = yes
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -1673,6 +1673,11 @@ covert_nuclear_sabotage_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_nuclear_sabotage_tt
 			covert_ops_type_below_cap = { TYPE = covert_nuclear_sabotage_action }
 		}
@@ -1709,11 +1714,6 @@ covert_nuclear_sabotage_action = {
 		custom_tooltip = {
 			text = iw_severe_ops_need_tradecraft_tt
 			covert_tradecraft_unlocks_severe_ops = yes
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -1851,6 +1851,11 @@ covert_space_espionage_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_space_espionage_tt
 			covert_ops_type_below_cap = { TYPE = covert_space_espionage_action }
 		}
@@ -1883,11 +1888,6 @@ covert_space_espionage_action = {
 		custom_tooltip = {
 			text = iw_target_ahead_in_space_tt
 			covert_target_ahead_in_space = { TARGET = scope:target_country }
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -1995,6 +1995,11 @@ covert_cultivate_assets_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_cultivate_assets_tt
 			covert_ops_type_below_cap = { TYPE = covert_cultivate_assets_action }
 		}
@@ -2027,11 +2032,6 @@ covert_cultivate_assets_action = {
 		custom_tooltip = {
 			text = iw_target_not_our_subject_tt
 			NOT = { scope:target_country = { is_subject_of = ROOT } }
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
@@ -2145,6 +2145,11 @@ covert_secure_material_action = {
 
 	possible = {
 		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		custom_tooltip = {
 			text = covert_op_capacity_secure_material_tt
 			covert_ops_type_below_cap = { TYPE = covert_secure_material_action }
 		}
@@ -2177,11 +2182,6 @@ covert_secure_material_action = {
 		custom_tooltip = {
 			text = iw_target_has_loose_material_tt
 			scope:target_country = { nd_loose_has_line = yes }
-		}
-		custom_tooltip = {
-			text = iw_funding_not_zero_tt
-			has_variable = iw_funding_level
-			var:iw_funding_level >= 1
 		}
 	}
 
