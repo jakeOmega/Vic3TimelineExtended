@@ -1,0 +1,105 @@
+﻿# ============================================================================
+# THE STANDING UN FORCE — THE FIGURES (redesign phase 7, §0.12 item 2)
+# ============================================================================
+# The writers are in common/scripted_effects/un_force_effects.txt. The budget
+# share itself (un_force_budget_share, a tenth while the Force stands) is in
+# common/script_values/un_charter_values.txt, which the economy owner's budget
+# lines also read. The electoral observers' figures are in
+# common/script_values/un_mission_values.txt with the other missions'.
+# ============================================================================
+
+# ---- The lean -----------------------------------------------------------------------
+
+# OUR INTERESTS on founding the Force (un_lean_charter_interests adds it).
+# Countries that host a peacekeeping or stabilisation mission want it: their
+# missions can no longer lapse unstaffed or fail when the last contributor
+# leaves, and at Supranational a member's war goals against them are struck
+# (all but the goal a play opens with, which pays a doubled surcharge). Members
+# that run the peacekeeping programme want it: it puts a standing contingent
+# beside theirs. Great powers are somewhat against (a force they do not command
+# limits what they may do, and at Supranational it strikes their war goals);
+# the isolationist are against.
+# Scope: the voting country; expects scope:un_resolution
+un_lean_interests_standing_force = {
+	value = 0
+	if = {
+		limit = { un_mission_protected = yes }
+		add = 25
+	}
+	if = {
+		limit = { un_standing_program_active_peacekeeping = yes }
+		add = 20
+	}
+	if = {
+		limit = { has_law = law_type:law_humanitarian_regulations }
+		add = 10
+	}
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		add = -15
+	}
+	if = {
+		limit = { has_law = law_type:law_isolationism }
+		add = -25
+	}
+}
+
+# ---- The AI ----------------------------------------------------------------------------
+
+# How keen an AI major power is to table the Force (un_propose_standing_force_button).
+# Scope: the proposing country
+un_standing_force_ai_chance = {
+	value = 0
+	if = {
+		limit = { un_standing_program_active_peacekeeping = yes }
+		add = 20
+	}
+	if = {
+		limit = { has_law = law_type:law_humanitarian_regulations }
+		add = 10
+	}
+	# Missions are in the field that the Force would hold up.
+	if = {
+		limit = {
+			has_global_variable_list = un_mission_registry
+			any_in_global_list = {
+				variable = un_mission_registry
+				has_tag = un_msn_active
+				un_mission_is_peace_operation = yes
+			}
+		}
+		add = 10
+	}
+	# A strong Assembly can carry it.
+	if = {
+		limit = {
+			has_global_variable = un_authority
+			global_var:un_authority >= 70
+		}
+		add = 10
+	}
+	# A great power is wary of a force it does not command.
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		add = -10
+	}
+	if = {
+		limit = { has_law = law_type:law_isolationism }
+		add = -40
+	}
+	min = 0
+}
+
+# ---- Display ------------------------------------------------------------------------
+
+# What the Force would take from the budget a week at present, for the
+# chamber's preview: the weekly budget times the share it would take.
+# Globals only.
+un_force_budget_preview_value = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_budget_weekly }
+		add = global_var:un_budget_weekly
+		multiply = un_force_budget_share_base
+	}
+}

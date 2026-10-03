@@ -19,16 +19,44 @@ nd_taboo_is_dismantling = {
 	has_variable = nd_dismantle_months_left
 }
 
-# Our own ceiling or a treaty's binds us.
+# Our own ceiling, a treaty's or the UN Prohibition Treaty's binds us.
 nd_taboo_has_ceiling = {
 	OR = {
 		has_variable = nd_warhead_ceiling
 		has_variable = nd_treaty_ceiling
+		has_variable = nd_tpnw_ceiling
+	}
+}
+
+# A party to the UN Treaty on the Prohibition of Nuclear Weapons while it is in
+# force (redesign phase 7, §0.12 item 8). The §0.9 mirror counts as the
+# modifier: a revolution's winner keeps the treaty in the month or two before
+# its UN entry is rebuilt (un_state_effects.txt), and ratifying adds the
+# modifier in a block where it is not yet visible.
+nd_taboo_is_ban_party = {
+	has_global_variable = un_agency_tpnw
+	OR = {
+		has_modifier = un_nuclear_ban_modifier
+		has_variable = un_nuclear_ban_modifier_on
+	}
+}
+
+# The Prohibition Treaty's ceiling (nd_tpnw_ceiling) is the lowest that binds
+# us: at or below our own and every arms-control treaty's.
+nd_taboo_ban_ceiling_binds = {
+	has_variable = nd_tpnw_ceiling
+	OR = {
+		NOT = { has_variable = nd_warhead_ceiling }
+		var:nd_tpnw_ceiling <= var:nd_warhead_ceiling
+	}
+	OR = {
+		NOT = { has_variable = nd_treaty_ceiling }
+		var:nd_tpnw_ceiling <= var:nd_treaty_ceiling
 	}
 }
 
 # The programme builds nothing while dismantling, or at or above the ceiling
-# that binds us — our own or a treaty's (nd_taboo_programme_held carries the
+# that binds us — our own, a treaty's or the UN ban's (nd_taboo_programme_held carries the
 # programme-pause flag).
 nd_taboo_programme_should_be_held = {
 	OR = {

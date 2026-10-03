@@ -264,6 +264,29 @@ un_regime_refresh_country = {
 				multiplier = un_enforcement
 			}
 		}
+		# Cultural diversity (CCD, redesign phase 7): the world's cultural
+		# hegemon, if a party, projects less cultural pull. The parties'
+		# own terms are in the member modifier (un_cultural_diversity_modifier).
+		# Its mirror counts too: ratifying adds the modifier in the block
+		# that calls this refresh, where it is not yet visible.
+		if = {
+			limit = {
+				has_global_variable = un_agency_ccd
+				OR = {
+					has_modifier = un_cultural_diversity_modifier
+					has_variable = un_cultural_diversity_modifier_on
+				}
+				un_regime_cultural_hegemon = yes
+			}
+			add_modifier = {
+				name = un_regime_cultural_hegemon_modifier
+				multiplier = un_enforcement
+			}
+		}
+		# The prohibition of nuclear weapons (TPNW, redesign phase 7) has no
+		# regime modifier: its terms are the ceiling the nuclear entry keeps
+		# (nd_taboo_refresh_ban_ceiling, nuclear_taboo_effects.txt) and the
+		# taboo it raises (nd_taboo_part_un_value).
 		# Intelligence (§7.4): from the Strong tier, members share it.
 		if = {
 			limit = { un_regime_shared_intelligence = yes }
@@ -324,6 +347,8 @@ un_regime_reapply_conventions = {
 	un_regime_reapply_country = { MODIFIER = un_law_of_sea_modifier }
 	un_regime_reapply_country = { MODIFIER = un_icc_member_modifier }
 	un_regime_reapply_country = { MODIFIER = un_physical_protection_modifier }
+	un_regime_reapply_country = { MODIFIER = un_cultural_diversity_modifier }
+	un_regime_reapply_country = { MODIFIER = un_nuclear_ban_modifier }
 }
 
 # Parameters: $MODIFIER$ = a convention member modifier on the journal entry
@@ -373,6 +398,7 @@ un_regime_clear_country = {
 	un_regime_clear_modifier = { MODIFIER = un_regime_space_laggard_modifier }
 	un_regime_clear_modifier = { MODIFIER = un_regime_space_weapon_modifier }
 	un_regime_clear_modifier = { MODIFIER = un_regime_heritage_site_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_cultural_hegemon_modifier }
 	un_regime_clear_modifier = { MODIFIER = un_regime_shared_intelligence_modifier }
 	every_interest_group = {
 		limit = {

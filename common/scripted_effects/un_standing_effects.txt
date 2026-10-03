@@ -44,6 +44,9 @@
 #   34 a UN mission accomplished its work
 #                                             35 brought a contingent home from a
 #                                                UN mission before its work was done
+#   36-47 redesign phase 7 (§0.12), in blocks of three per owner: 36-38
+#         justice, 39-41 order, 42-44 economy, 45-47 missions. Each owner's
+#         file header names its codes.
 #
 # The 30+ range belongs to resolution lobbying
 # (common/scripted_effects/un_lobby_effects.txt). Both of its codes are stamped

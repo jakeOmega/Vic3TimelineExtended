@@ -13,7 +13,11 @@
 #   funding         -10 .. +10                  who pays for the UN's programmes, less
 #                                               the members withholding their dues
 #   order           -20 .. 0                    wars between members, nuclear use
-#   delivery        0 .. +10                    decaying ledger of aid / peacekeeping delivered
+#   delivery        -10 .. +10                  decaying ledger of aid / peacekeeping delivered
+#                                               (0 .. +10), plus, while the World Food
+#                                               Reserve stands, a hunger term (-10 .. +3:
+#                                               the members' people in famine-struck
+#                                               states; un_economy_values.txt)
 #   policy          -25 .. +25                  what countries' own laws, institutions and
 #                                               decisions add to or take from the UN
 #                                               (country_un_authority_target_add, weighted;
@@ -43,6 +47,10 @@ un_commitment_weight = { value = 25 }
 un_credibility_cap = { value = 25 }
 un_credibility_floor = { value = -25 }
 un_delivery_cap = { value = 10 }
+# The delivery pillar's floor: the ledger alone cannot go below 0, but the
+# World Food Reserve's hunger term can take the pillar down to this (redesign
+# phase 7, §0.12 item 10).
+un_delivery_floor = { value = -10 }
 # Policy: the country_un_authority_target_add modifier, summed over countries
 # weighted by un_actor_weight, held to +-25 from every source together. Only a
 # member in good standing adds to it; anyone else can only take from it
@@ -388,6 +396,10 @@ un_pillar_credibility_value = {
 	max = un_credibility_cap
 }
 
+# The ledger, 0..+10; then, while the World Food Reserve stands, the hunger
+# term (-10..+3, un_food_reserve_hunger_term_value, un_economy_values.txt; 0
+# otherwise), the pillar as a whole held to -10..+10. The clamps are
+# sequential: the first bounds the ledger, the second the sum.
 un_pillar_delivery_value = {
 	value = 0
 	if = {
@@ -395,6 +407,9 @@ un_pillar_delivery_value = {
 		add = global_var:un_ledger_delivery
 	}
 	min = 0
+	max = un_delivery_cap
+	add = un_food_reserve_hunger_term_value
+	min = un_delivery_floor
 	max = un_delivery_cap
 }
 

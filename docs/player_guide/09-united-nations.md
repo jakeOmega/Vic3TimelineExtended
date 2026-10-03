@@ -72,7 +72,8 @@ overlord is a represented member, the overlord is assessed on the subject's GDP
 too, and while the overlord pays, the subject keeps its membership benefits.
 Representation returns as soon as the country conducts its own foreign policy
 again, and Conventions Passed in Our Absence then offers it the conventions
-adopted meanwhile, all or none. Countries that cannot join are never treated as
+adopted meanwhile, all or none (the nuclear ban only to a member holding no
+warheads). Countries that cannot join are never treated as
 pariahs, and an annexed member's seat simply ends.
 
 ### The Require UN Membership treaty article
@@ -95,10 +96,10 @@ world shows over years. The target is the sum of eight pillars:
 | Base | 15 | Constant. |
 | Participation | 0 to +25 | The share of world prestige held by members. |
 | Commitment | −25 to +25 | Members championing (+1) or undermining (−1) the order, weighted by their share of world power. Members of a bloc with Multilateral Institutions count a little in favor. |
-| Credibility | −25 to +25 | Resolutions carried or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, failed missions. |
+| Credibility | −25 to +25 | Resolutions carried or failing, vetoes, members backing or defying the UN in events, lifted sanctions, abused mandates, failed missions, World Court rulings obeyed or defied, ceasefire orders and referendums defied. |
 | Funding | −10 to +10 | The power-weighted share of major and great power members running UN programs, minus up to 15 for dues withheld. |
-| Peace and order | −20 to 0 | Members at war with fellow members, and nuclear use. |
-| Delivery | 0 to +10 | Aid and peacekeepers delivered, emergency loans, mandates discharged, missions accomplished. |
+| Peace and order | −20 to 0 | Members at war with fellow members, nuclear use, and aggressors fighting on under a ceasefire order. |
+| Delivery | −10 to +10 | Aid and peacekeepers delivered, emergency loans, mandates discharged, missions accomplished, ceasefires kept, referendums held and grain the World Food Reserve sends: 0 to +10. While the [World Food Reserve](#the-world-food-reserve-and-hunger) stands, hunger among members adds −10 to +3. |
 | Policy | −25 to +25 | The UN Authority Target modifier carried by laws and institutions, with each country's total scaled by its weight. A member that is not undermining the UN counts for or against; any other country counts only against. A negative total pulls authority down. See [What counts toward Policy](#what-counts-toward-policy). |
 
 Credibility, delivery and the nuclear half of peace and order are kept as
@@ -172,7 +173,8 @@ Established. Charter Reform I, Standing Mandate Force and Compulsory
 Jurisdiction, raises the ceiling to 85. Charter Reform II, Veto Restraint and
 the UN Levy, raises it to 100 and restrains the veto: a binding resolution other
 than a charter reform that two thirds of the members with a vote carry is no
-longer stopped by a veto.
+longer stopped by a veto. Each reform also opens new business before the
+Assembly and strengthens the World Development Fund (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
 
 A reform is ripe once authority has held within 5 points of the ceiling for 24
 months running; Why UN Authority Is Moving counts the months. A member of major-power
@@ -218,7 +220,7 @@ representation. A member two years behind on its dues cannot be seated.
 
 ### Vetoes in the Security Council
 
-A permanent member may veto one of the six binding topics, from the vote event
+A permanent member may veto one of the eleven binding topics, from the vote event
 or the chamber. The veto kills the binding form; if the Assembly still carried
 the resolution, a weaker form applies:
 
@@ -230,6 +232,11 @@ the resolution, a weaker form applies:
 | International Criminal Court | A symbolic censure of the vetoer; no court. |
 | Charter Reform | Blocked outright. |
 | Authorized Military Mandate | Blocked outright. |
+| Refer a Dispute to the World Court | An advisory opinion: the court rules, but nothing changes hands. |
+| Arms Embargo | A voluntary embargo at half strength, for five years. |
+| Establish the Standing UN Force | Blocked outright. |
+| Binding Ceasefire | A call for a ceasefire: one drop in the aggressor's war support. |
+| Supervised Self-Determination Referendum | Blocked outright. |
 
 After Charter Reform II, a resolution that two thirds of the members with a vote
 carry overrides the veto and takes its full form. This covers every binding
@@ -257,10 +264,12 @@ last month of the session. After a year, General Assembly Vote Results applies t
 outcome.
 
 Most topics pass by **Majority**: the votes in favor outnumber those against.
-Charter reforms and motions to expel need **Two-Thirds**: two thirds of all
+Charter reforms, motions to expel and a suspension of credentials need **Two-Thirds**: two thirds of all
 members with a vote, so abstaining counts against them. A vote in favor gives +15 relations with the
 proposer, a vote against −15. On a resolution that accuses a country (a
-condemnation, sanctions, a mandate or a motion to expel), voting in favor also
+condemnation, sanctions, a mandate, a motion to expel, an arms embargo, a
+ceasefire, a suspension of credentials, a referral to the World Court or a
+referendum), voting in favor also
 costs 15 relations with the target and voting against gains 15. When a power
 bloc leader's resolution carries, its bloc gains 3 leverage in each of its other
 members that sits in the Assembly; when it falls, the bloc loses 3.
@@ -269,12 +278,16 @@ members that sits in the Assembly; when it falls, the bloc loses 3.
 
 ### General Assembly topics
 
-There are eighteen topics. Six are binding and can be vetoed: Condemnation of
-Aggression, International Sanctions, Request a Peacekeeping Deployment, the
-International Criminal Court, Charter Reform and Authorized Military Mandate.
-The other twelve are recommendatory. Eleven topics, the ICC among them, are
-conventions (see [UN conventions and agencies](#un-conventions-and-agencies));
-the other seven are:
+There are twenty-nine topics. Eleven are binding and can be vetoed:
+Condemnation of Aggression, International Sanctions, Request a Peacekeeping
+Deployment, the International Criminal Court, Charter Reform, Authorized
+Military Mandate, Refer a Dispute to the World Court, Arms Embargo, Establish
+the Standing UN Force, Binding Ceasefire and Supervised Self-Determination
+Referendum. The other eighteen are recommendatory. Thirteen topics, the ICC
+among them, are conventions (see [UN conventions and
+agencies](#un-conventions-and-agencies)). Nine open with the charter reforms
+(see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
+The other seven are:
 
 | Topic | Who may table it | If it carries |
 |---|---|---|
@@ -313,7 +326,8 @@ Punitive topics need grounds. Every country has a **case strength** from 0 to
 | Nuclear retaliation | 10 |
 | Infamy | 0.8 per point, up to 50 |
 
-Each entry halves every five years. A condemnation needs 30, sanctions 50 and a
+Each entry halves every five years. A condemnation needs 30, an arms embargo or a
+binding ceasefire 40, sanctions or a suspension of credentials 50, and a
 military mandate 60, so a clean record cannot be censured. The Our Record
 section shows your own case, each part of it, and whether it would support a
 condemnation, sanctions or a mandate against you today.
@@ -373,13 +387,18 @@ request (Refuse to take part) means you contribute nothing. Refusing anything
 else (Denounce the decision) is a statement on the record that changes nothing.
 Refusing costs 20 relations with the proposer and 3 infamy, and for a binding
 resolution also 5 standing and 10 case strength. Accepting a binding resolution
-you opposed earns 2 standing. A member that voted in favor, or did not vote,
-ratifies a carried convention without being asked.
+you opposed earns 2 standing, except a peacekeeping request, whose contribution
+is its own reward. A referral to the World Court and a supervised referendum
+bind only the country they name, which answers in its own event, so accepting
+or refusing them here moves no standing or case strength. A member that voted in favor,
+or did not vote, ratifies a carried convention without being asked, except that
+a member holding warheads that did not vote stays outside the nuclear ban.
 
 ### Tabling UN business
 
-You table the seven topics above from the Propose a Resolution rows or the
-journal entry's buttons, and any convention from those rows. The rows sit under
+You table the seven topics above, and the nine the reformed charter opens, from
+the Propose a Resolution rows or the journal entry's buttons, and any convention
+from those rows. The rows sit under
 the General Assembly while no resolution is in session. Each gives the topic,
 whether it is a Binding Resolution (which can be vetoed) or a Recommendatory
 one, its passage rule and its target. "Target: None" means no country gives
@@ -481,6 +500,195 @@ and then vetoes has kept its word.
 
 ![The chamber's Delegations section. Each row shows a member's band as the Assembly estimates it and any campaign on it (Batonga is lobbying South Africa to vote for the resolution), with buttons to start a campaign or ask for a pledge.](images/UN_lobbying.png)
 
+## Business the reformed charter opens
+
+Nine topics beyond the seven above come before the General Assembly. Seven
+wait for a charter reform; the World Food Reserve and the World Development
+Fund need none, and the Fund grows with each reform. The Propose a Resolution list shows the business of the next
+reform before it is adopted, and says which reform each row waits for.
+Charter Reform II's rows only appear once Reform I has carried. The AI tables
+these topics through the journal entry's buttons, as it does the older ones.
+
+| Topic | Needs | Binding | Passes by | If it carries |
+|---|---|---|---|---|
+| Refer a Dispute to the World Court | Charter Reform I | Yes | Majority | The [World Court](#referring-a-dispute-to-the-world-court) rules on a state you claim. |
+| Arms Embargo | Charter Reform I | Yes | Majority | A [UN Arms Embargo](#un-arms-embargoes) for ten years. |
+| Suspension of Credentials | Charter Reform I | No | Two-Thirds | The member's [credentials](#suspension-of-credentials) are rejected for five years. |
+| Establish the Standing UN Force | Charter Reform I | Yes | Majority | The [Standing UN Force](#the-standing-un-force) is founded. |
+| Request Electoral Observers | Charter Reform I | No | Majority | An [Electoral Observer Mission](#electoral-observers) goes to your capital. |
+| World Food Reserve | Nothing | No | Majority | The [World Food Reserve](#the-world-food-reserve-and-hunger) is founded. |
+| Binding Ceasefire | Charter Reform II | Yes | Majority | A [ceasefire order](#binding-ceasefires) against the aggressor for two years. |
+| World Development Fund | Nothing (stronger after each reform) | No | Majority | The [World Development Fund](#the-world-development-funds-grants) is founded. |
+| Supervised Self-Determination Referendum | Charter Reform II and the Decolonization Resolution in force | Yes | Majority | The overlord must [hold a referendum or refuse](#supervised-referendums). |
+
+Effects scale with the UN's enforcement like everything else the Assembly
+does, so a UN that slips back to Contested keeps this business but enforces it
+weakly. The charter only goes back to the founding one if the UN dissolves.
+
+### Referring a dispute to the World Court
+
+Any member with 20 standing or more can refer a state it claims to the World
+Court, if the state's holder is a member that is not its overlord, its subject
+or at war with it, and the state is not the holder's capital. The row picks your best case and shows the odds that the
+court finds for you, between 10% and 90%. Hover them for the terms:
+
+| Term | Effect on your odds |
+|---|---|
+| Your primary cultures are half the state's people (a quarter) | +20 (+10) |
+| The holder's primary cultures are half (a quarter) | −20 (−10) |
+| The state is a homeland of yours, or of the holder's | +10, or −10 |
+| The holder has incorporated it | −10 |
+| Your standing against the holder's | ±0.3 per point of difference, up to ±15 |
+| The holder's case strength, or yours | Up to +15, or up to −15 |
+
+The court rules a month after the vote carries, on the odds as they stand
+then, so a court is less likely to hand a paragon's land to a pariah. If it
+finds for you, the holder chooses in The World Court Rules Against Us:
+
+| Choice | Result |
+|---|---|
+| We abide by the ruling. | The state is yours. The holder gains 2 standing and the UN gains credibility. |
+| The court has no say over our soil. | The holder keeps the state, loses 5 standing, takes a defiance record of 6 and International Court Defied, and the UN loses credibility. For ten years you may table a military mandate over that region against it without the case of 60. |
+
+If the court finds for the holder, your claim on the region is withdrawn, and
+for twenty years each diplomatic play in which you take a war goal there costs
+you 10 × enforcement extra infamy, once per play. The case is struck off as
+moot, and nothing changes hands, if by the time the court rules or the holder
+answers the holder no longer holds the state, has made it its capital, or
+either party no longer exists. A veto turns the ruling into an advisory opinion: the court still
+rules, nothing changes hands, and a holder it rules against loses 2 standing.
+The AI refers a case only when its odds are 60% or better.
+
+### UN arms embargoes
+
+An Arms Embargo can name a rival of yours, or a country at war with a member,
+whose case strength is 40 or more and that is not your ally, overlord or
+subject. If it carries, the target has a UN Arms
+Embargo for ten years: −30% trade advantage in small arms, ammunition,
+artillery, tanks, aeroplanes, man-o'-wars and ironclads, for imports and
+exports alike, and military goods 5% dearer, all × enforcement. It loses 6
+standing. A vetoed embargo, or one the target voted for itself, or both, is a Voluntary
+UN Arms Embargo at half strength for five years and costs 3 standing. A country
+under an embargo cannot propose one.
+
+### Suspension of credentials
+
+The Assembly can reject the credentials of a member whose case strength is 50
+or more and that breaks the Declaration of Human Rights' terms or has a
+defiance record of 10 or more, other than your ally, overlord or subject. A
+permanent member can be named only after Charter Reform II. It needs two thirds of the members with a vote, and no veto
+can stop it. For five years, or until its case strength falls below 30, the
+member is treated like a subject with suspended representation: no vote, no
+tabling, no benefits, no UN programs, no headquarters, and its permanent seat
+is gone for good. Unlike a subject, it still pays its own dues. It loses 8
+standing, or 4 if it voted for its own suspension. If, when the vote closes, the
+member has left the UN or its case strength has fallen below 30, the motion is
+moot and nothing happens to it.
+
+### Binding ceasefires
+
+A Binding Ceasefire names a country with a case strength of 40 or more that
+started a war it is fighting against a member, and the member it attacked. If
+it carries, the aggressor is under a ceasefire order for 24 months. Nobody
+imposes a peace. Each month it fights on against a member:
+
+- its war support in that war falls by 2.5 × enforcement;
+- its aggression record grows;
+- the UN's peace and order suffers, booked every six months.
+
+After three months of fighting on it loses 5 standing (2 if it voted for its own
+censure). How the order ends decides what follows:
+
+| Ending | Result |
+|---|---|
+| The war with the victim ends and the aggressor gained nothing from it | The order is kept. UN delivery rises, peacekeepers deploy to the victim's most devastated state, and an aggressor that stopped within three months gains standing for complying. |
+| The war ends with the victim losing a state, becoming the aggressor's subject or losing its capital region to it | The order is defied. UN credibility falls and the aggressor earns nothing. |
+| The order runs out with the war still on | The order is defied. UN credibility falls. |
+| The victim stops being represented in the Assembly while the war goes on | The order has no effect and lapses quietly. |
+| The victim is destroyed by someone else | The order ends with no penalty. |
+
+A veto makes it a call for a ceasefire: one drop of 10 × enforcement in war
+support. Our Obligations shows an order against you, or against your enemy.
+
+### Supervised referendums
+
+With the Decolonization Resolution in force, a member can ask the Assembly to
+order a referendum in another member's direct subject whose liberty desire is
+50 or more; a subject can ask for its own. A veto blocks it. If it carries, the
+overlord receives A Referendum Ordered:
+
+| Choice | Result |
+|---|---|
+| Open the polling stations. | The subject becomes independent with a chance equal to its liberty desire, rounded down to 5, between 20% and 90%. Otherwise its liberty desire falls by 20. Either way, if the subject is still yours when you choose, you gain 4 standing and UN delivery rises. |
+| We will not put our union to a vote. | The subject's liberty desire rises by 15. For five years you have Referendum Refused (less prestige, and every subject's liberty desire grows faster, × enforcement), you cannot ask for a referendum yourself, and you lose 5 standing and take a defiance record of 10. UN credibility falls. |
+
+An overlord that voted for the referendum must hold it.
+
+### The Standing UN Force
+
+A major-power member can propose the Standing UN Force once. While it stands it
+serves in every peacekeeping and Stabilisation mission as one more contributor,
+and those missions no longer lapse unstaffed or fail when the last contingent
+goes home. It costs a tenth of the UN's budget. At Supranational, a war goal a
+member adds against a country hosting such a mission, in a play it started, is
+struck as soon as it is added. Three kinds of goal are not struck but pay the
+doubled infamy surcharge instead: the goal the play opens with, another goal of
+that same kind, and a unification goal. Countries outside the UN, and members
+whose credentials are suspended, pay that surcharge on every such goal.
+
+### Electoral observers
+
+A member that holds elections and is at peace can Request Electoral Observers.
+It is a request: no veto, and it shares the request cooldown. If it carries
+while you are still at peace and holding elections, an Electoral Observer
+Mission goes to your capital, paid from the UN's budget, so
+nobody sends a contingent. At strength 1 it gives you +5 legitimacy and makes
+Election Interference against you easier to catch, and its state −10% turmoil
+effects and −10% radicals from political movements. While it is there,
+Election Interference cuts your electoral confidence by half as much. It
+succeeds when an election campaign ends while it is there and you still hold
+its state and your seat (UN delivery and 3 standing for you), fails if you are
+attacked or stop holding elections (which also costs 2 standing), and lapses
+after five years without an election.
+
+### The World Development Fund's grants
+
+Any member can propose the World Development Fund while the UN assesses dues.
+While it stands, it pays out every week to the members whose GDP per head is
+below a line, shared by population. What it pays and where the line sits grow
+with the charter:
+
+| Charter | Paid out each week | Members paid |
+|---|---|---|
+| Founding charter | The donations alone | Below a tenth of the members' average GDP per head |
+| Charter Reform I | 5% of the UN's budget, plus the donations | Below a quarter of the average |
+| Charter Reform II | A quarter of the UN's budget, plus the donations | Below half the average |
+
+A reform strengthens a Fund that already stands; nobody votes on it again.
+The donations are the [Fund Development Programs](#un-programs-and-great-power-stances)
+contributions of the major powers: while the Fund stands, a contributor's 0.5%
+of GDP a year pays its grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
+Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
+laws allow no investment pool or your banking system has not started. The line
+and the grants are worked out each month. Our Obligations shows your grant, and
+the budget line shows what the Fund and the Standing UN Force take.
+
+### The World Food Reserve and hunger
+
+The World Food Reserve needs no charter reform. While it stands, a member with
+a Strategic Reserve Hub can press Pledge Grain to the World Food Reserve, and
+Withdraw Our Grain Pledge at any time. When a UN aid mission opens, the Reserve
+takes grain from the pledgers, other than the mission's host, holding at least 500: up to a quarter of each
+one's grain and no more than 2,500 units from any one, 5,000 in all. The
+mission's state gets up to +0.15 food security and −5% mortality for a year,
+scaled by the grain sent. Each pledger drawn on gains 2 standing, and UN
+delivery rises.
+
+Founding the Reserve makes the UN answer for hunger. While it stands, the
+Delivery pillar loses up to 10 points as the share of the members' people
+living in famine-struck states rises to 5%, and gains 3 while that share stays
+below half a percent.
+
 ## UN conventions and agencies
 
 A convention is a standing regime. When it carries it founds its agency (the
@@ -505,19 +713,22 @@ changes and once a year.
 | International Space Cooperation (UNOOSA) | Authority 40; a major-power proposer with Space Exploration | Science ministry impact, space race progress | The space race leader slows and laggards speed up; orbital battlestation holders lose prestige. |
 | Convention on the Law of the Sea (ITLOS) | Authority 30; International Trade | Cheaper port connections, prestige | Great powers gain less prestige from their navies. |
 | Convention on the Physical Protection of Nuclear Material (CPPNM) | Authority 30; warheads missing; a proposer with Nuclear Weapons; the Nuclear Weapons rule | Prestige | Half as many of the parties' warheads go missing, and they may recover lost ones. |
+| Convention on Cultural Diversity | Charter Reform I; authority 40; UNESCO in force; a proposer with Mass Media that is not the cultural hegemon | Prestige; half the Foreign Cultural Benchmark (none at Supranational); minorities assimilate 20% more slowly and their homelands fade 30% more slowly | A cultural hegemon that is a party projects 10% less cultural pull. |
+| Treaty on the Prohibition of Nuclear Weapons (TPNW) | Charter Reform II; authority 40; the NPT in force; a proposer with Nuclear Weapons and no warheads; the Nuclear Weapons rule | Prestige | An armed party is held to its arsenal at ratification, a fifth fewer every five years, none after 25; an unarmed party may build none. An armed member that cast no ballot on it, or joins later, is not bound. |
 
-Three member modifiers also carry a cost: the NPT raises infamy generation and
-lowers your units' kill rate, the Climate Accord lowers bureaucracy, and the ICC
-makes casualties cost more war support. While in force, the NPT and the CPPNM
-also raise the target of the [nuclear
-taboo](13-nuclear.md#what-moves-the-nuclear-taboo), by up to 8 and 4 points, in
-proportion to UN authority.
+Four member modifiers also carry a cost: the NPT raises infamy generation and
+lowers your units' kill rate, the Climate Accord lowers bureaucracy, the ICC
+makes casualties cost more war support, and the Convention on Cultural
+Diversity slows the assimilation of your minorities. While in force, the NPT,
+the CPPNM and the TPNW also raise the target of the [nuclear
+taboo](13-nuclear.md#what-moves-the-nuclear-taboo), by up to 8, 4 and 6 points,
+in proportion to UN authority.
 
-The overview shows eleven specialized agencies, each lit once founded. Ten come
-from the
-conventions in the table: WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR, UNOOSA, ITLOS,
-the ICC and the CPPNM. The eleventh, the International Court of Justice, is
-founded the first time a country accepts a World Court ruling against it. Once
+The overview shows thirteen specialized agencies, each lit once founded. Twelve
+come from the conventions in the table: WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR,
+UNOOSA, ITLOS, the ICC, the CPPNM, Cultural Diversity and the TPNW. The
+thirteenth, the International Court of Justice, is founded the first time a
+country accepts a World Court ruling against it. Once
 the International Criminal Court convention is in force, the court indicts the
 ruler of a country that ratified it (from Established) or of any country (at
 Supranational) for a nuclear first or tactical strike or an exposed
@@ -556,8 +767,8 @@ mandate loses less war support to casualties and defeats.
 Missions put the UN's work in one state:
 
 Hover the name of a mission (on the state panel, in Missions in the Field or in
-a tooltip) for its Peacekeeping Mission, Aid Mission or Stabilisation Mission
-entry, which sets out how that kind opens, what it does, what its progress
+a tooltip) for its Peacekeeping Mission, Aid Mission, Stabilisation Mission or
+Electoral Observer Mission entry, which sets out how that kind opens, what it does, what its progress
 means and when it succeeds, fails or lapses.
 
 | Mission | Opened by | Effect on its state | Succeeds when |
@@ -565,13 +776,19 @@ means and when it succeeds, fails or lapses.
 | Peacekeeping | A peacekeeping request carried in full | Turmoil effects −20%, devastation recovery +50% | The host has 24 months of peace. |
 | Aid | A carried aid request, or a full answer to a famine | Standard of living +1.5, food security +0.2, mortality −5% | After six months, no famine and, without the mission's help, a standard of living of 10 or 1 above where it started, whichever is higher. |
 | Stabilisation | A full answer to a state collapse | Turmoil effects −30%, standard of living +0.5 | About a year after the collapse ends, sooner if the mission served through it (it progresses slowly during the collapse). |
+| Electoral observer | A carried request for [electoral observers](#electoral-observers) | Turmoil effects −10%, radicals from political movements −10%; the host also gains legitimacy and covert defense | An election campaign in the host ends while it is there. |
 
 Effects scale with the UN's enforcement, fall by up to half when members
-withhold dues, and rise with each contributor up to three. A mission fails if
-its host is attacked after it arrived, if every contributor leaves a
-peacekeeping or Stabilisation mission, or if the host expels a Stabilisation
-mission. It lapses after six months if nobody has joined a peacekeeping or
-Stabilisation mission, or if its host or state is gone. A mission has no time
+withhold dues, and rise with each contributor up to three; the [Standing UN
+Force](#the-standing-un-force) counts as one in every peacekeeping and
+Stabilisation mission, and an electoral mission's paid observers count as one.
+A mission fails if its host is attacked after it arrived, if every contributor
+leaves a peacekeeping or Stabilisation mission while the Standing UN Force does
+not serve in it, if the host expels a Stabilisation mission, or if an electoral
+mission's host stops holding elections. It lapses after six months if nobody
+has joined a peacekeeping or Stabilisation mission (never while the Standing UN
+Force stands), after five years without an election for an electoral mission,
+or if its host or state is gone. A mission has no time
 limit: one that is not done goes on for as long as it keeps contributors, so a
 member that keeps paying for its contingent can keep it in the field. Time
 works on the AI instead, which grows less willing to send a contingent to a
@@ -598,7 +815,7 @@ count in full), and every program earns standing after 24 months.
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
 | Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation and prestige; covers peacekeeping contingents |
-| Fund Development Programs | Major power | 0.5% of GDP a year, bureaucracy | Commerce ministry impact |
+| Fund Development Programs | Major power | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; while the World Development Fund stands, the money pays its grants |
 | Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | Bureaucracy | Prestige, refugee ministry impact |
 | Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | Bureaucracy, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 
@@ -609,14 +826,20 @@ suspends your standing benefits until you stop.
 
 ## UN dues and Article 19
 
-Every represented member pays dues, the share of GDP set by the tier, as a
-weekly expense. Withhold our UN dues saves the money but costs 3 standing,
+Every member that conducts its own foreign policy pays dues, the share of GDP
+set by the tier, as a weekly expense; that includes a member whose credentials
+the Assembly has rejected. Withhold our UN dues saves the money but costs 3 standing,
 lowers the funding pillar and weakens every mission. Each month you withhold
 while dues are assessed is a month in arrears. After 24 months you lose your
 vote (Article 19): you cast no ballot, table nothing, cannot be given a
 permanent seat, and lose 5 more standing. Pay our UN dues settles everything
 owed at once and restores the vote. Arrears survive leaving and rejoining; only
 a dissolution writes them off.
+
+The dues paid are the UN's budget. While they stand, the Standing UN Force takes
+a tenth of it and the World Development Fund 5% after Charter Reform I or a
+quarter after Charter Reform II, and the emergency lending facility lends only
+from what is left. Our Obligations shows the split.
 
 ## International standing
 
@@ -637,9 +860,13 @@ it goes to the strongest member with a claim, ranked by power share and stretche
 the same way: a great power in good standing first, a member with a ruined record
 last. You earn it by delivering:
 programs kept for two years, aid and peacekeepers sent, missions accomplished,
-mandates discharged, and binding resolutions accepted at a cost. Gains shrink as
-standing rises, and voting earns none apart from a kept vote pledge. Censure,
-sanctions, defiance, abused mandates, leaving and withheld dues cost it.
+mandates discharged, binding resolutions accepted at a cost, World Court rulings
+obeyed, referendums held, ceasefire orders heeded within three months and grain
+sent through the World Food Reserve. Gains shrink as standing rises, and voting
+earns none apart from a kept vote pledge. Censure, sanctions, arms embargoes,
+suspended credentials, defiance (of the Assembly, the court, a ceasefire order
+or a referendum), abused mandates, leaving and withheld dues cost it. The World
+Court and the suspension of credentials need 20 standing to table.
 
 ## The UN panels
 
@@ -658,7 +885,7 @@ the crisis runs, and your standing. Below them are the authority bar, with a
 tick at the target and the monthly change, and three pies: the members' share
 of the world's countries, GDP and population. Then come the Security Council's
 five flags (hover one for the country, click it to open the country), the
-eleven agencies, lit once founded, and the headquarters. Hover any of them for
+thirteen agencies, lit once founded, and the headquarters. Hover any of them for
 the detail.
 
 The sections below are open by default when they change month to month, and
@@ -671,7 +898,7 @@ collapsed when they are reference:
 | Missions in the Field | Open | A row for each mission, with Send a Contingent or Bring Our Contingent Home; ended missions below, collapsed. |
 | Programmes and Conventions | Collapsed | How many countries take part in each program and convention, and how many are under sanctions. |
 | Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take. |
-| Our Obligations | Open | Your dues beside the whole budget, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
+| Our Obligations | Open | Your dues beside the whole budget and what the Standing UN Force and the World Development Fund take from it, your grant from the Fund, your pledge to the World Food Reserve, any ceasefire order against you or your enemy, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
 | Our Record | Open | Your case strength and its parts, and whether it would support a condemnation, sanctions or a mandate. |
 | UN Authority History | Open | A chart of authority over time. |
 | Resolutions on the Record | Collapsed | Closed resolutions, with how each member voted. |
@@ -688,9 +915,12 @@ that country, its allies and its bloc leader lobby against it. Each runs up to
 three campaigns at once on AI members close to the line, starts at most one a
 month and only with influence to spare, and asks for pledges now and then,
 humans included. They never run campaigns on human members.
-- They table the seven non-convention topics through the journal entry's buttons
-when their situation calls for it, and reach conventions only through the
-docket, so a qualifying human is offered convention business first.
+- They table the sixteen non-convention topics through the journal entry's
+buttons when their situation calls for it, and reach conventions only through
+the docket, so a qualifying human is offered convention business first. They
+refer a dispute to the World Court only on odds of 60% or better.
+- They pledge grain to the World Food Reserve when they hold 2,000 units or
+more, and withdraw the pledge when famine strikes at home.
 - They join readily unless isolationist, and withhold dues when isolationist,
 undermining the order, in default or facing a high levy.
 - They send contingents to missions hosted by allies, bloc partners and
@@ -701,15 +931,21 @@ a mandate is steered toward the target and the authorized goal.
 
 Nuclear strikes lower peace and order and add to the striker's case, the NPT
 reaches threshold states, at authority 60 with the IAEA in place the Nuclear
-Program Aid treaty article is forbidden, and the NPT, the CPPNM and the
-Assembly's verdict on a nuclear use move the nuclear taboo ([Nuclear
+Program Aid treaty article is forbidden, the TPNW holds its armed parties to a
+falling arsenal ceiling, and the NPT, the CPPNM, the TPNW and the Assembly's
+verdict on a nuclear use move the nuclear taboo ([Nuclear
 weapons](13-nuclear.md)). The
 Climate Accord exists only under the Global Warming rule ([Climate and
 pollution](14-climate.md)). The decolonization declaration presses colonial
-powers ([Colonial empires and decolonization](11-decolonization.md)), and the
-space treaty slows the leader ([The space race](15-space.md)). Exposed covert
-operations feed appeals, cases and indictments, and the headquarters host and
-mission contributors build networks faster ([Cultural hegemony and covert
-warfare](10-influence.md)). Power blocs gain cohesion when the UN is Moribund or
+powers and opens supervised referendums ([Colonial empires and
+decolonization](11-decolonization.md)), and the space treaty slows the leader
+([The space race](15-space.md)). Exposed covert operations feed appeals, cases
+and indictments, the headquarters host and mission contributors build networks
+faster, electoral observers halve Election Interference's cut to electoral
+confidence, and the Convention on Cultural Diversity eases the Foreign Cultural
+Benchmark ([Cultural hegemony and covert warfare](10-influence.md)). The same
+convention slows homeland loss ([States and population](07-states.md)). The
+World Food Reserve draws on Strategic Reserves, and the World Development
+Fund pays into the investment pool ([Economy and construction](03-economy.md)). Power blocs gain cohesion when the UN is Moribund or
 gone, and the Multilateral Institutions principle strengthens membership
 benefits ([Diplomacy](08-diplomacy.md)).

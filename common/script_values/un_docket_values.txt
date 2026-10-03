@@ -228,14 +228,12 @@ un_loan_amount_value = {
 	min = 0
 }
 
-# What the budget can lend at once: un_loan_budget_weeks weeks of it. Globals only.
+# What the budget can lend at once: un_loan_budget_weeks weeks of what the
+# Standing Force and the Development Fund leave of it (redesign phase 7,
+# un_budget_free_weekly_value). Globals only.
 un_loan_budget_cap = {
-	value = 0
-	if = {
-		limit = { has_global_variable = un_budget_weekly }
-		add = global_var:un_budget_weekly
-		multiply = un_loan_budget_weeks
-	}
+	value = un_budget_free_weekly_value
+	multiply = un_loan_budget_weeks
 }
 
 # The weekly repayment on the loan the borrower took, read from the loan it

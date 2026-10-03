@@ -796,6 +796,20 @@ un_docket_take_up_agenda = {
 			}
 			un_docket_offer_topic = { TOPIC = decolonization EVENT = un_events.12 }
 		}
+		10 = {
+			trigger = {
+				un_docket_topic_open_cultural_diversity = yes
+				any_country = { un_docket_may_propose_cultural_diversity = yes }
+			}
+			un_docket_offer_topic = { TOPIC = cultural_diversity EVENT = un_events.37 }
+		}
+		10 = {
+			trigger = {
+				un_docket_topic_open_nuclear_ban = yes
+				any_country = { un_docket_may_propose_nuclear_ban = yes }
+			}
+			un_docket_offer_topic = { TOPIC = nuclear_ban EVENT = un_events.38 }
+		}
 	}
 }
 

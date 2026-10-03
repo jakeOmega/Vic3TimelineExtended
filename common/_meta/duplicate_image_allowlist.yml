@@ -121,23 +121,6 @@ buildings:
   - building_synthetics_plant
   - building_synthetics_plant_silk
   reason: Synthetic Clothes Industries is a synthetics-plant variant; vanilla's art fits, kept in the building icon review (2026-09-27)
-- image: gfx/interface/icons/company_icons/basic_construction.dds
-  entities:
-  - building_megastructure_consortium_hq
-  - building_tycho_manufacturing_hq
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/company_icons/basic_electrics.dds
-  entities:
-  - building_hanka_precision_hq
-  - building_neurovault_hq
-  - building_rekal_hq
-  - building_tessier_ashpool_hq
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
-- image: gfx/interface/icons/company_icons/basic_motors.dds
-  entities:
-  - building_axiom_space_hq
-  - building_yoyodyne_propulsion_hq
-  reason: existing reuse - verify intent and rewrite, or remove this entry to re-flag
 technologies:
 - image: gfx/interface/icons/invention_icons/aniline.dds
   entities:

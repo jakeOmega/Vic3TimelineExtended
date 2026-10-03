@@ -109,6 +109,11 @@ Turmoil of 25% or more multiplies it by 1.25, and 50% or more by 1.5. Legitimacy
 below 25 halves it, and legitimacy of 75 or more multiplies it by 1.25. The rate
 stays between 1 and 95 points a year. The Promote National Values decree adds
 +300% speed in its state, which on its own brings a change down to 30 months.
+In the states of a party to the UN Convention on Cultural Diversity, a homeland
+is lost 30% more slowly at the Established tier, scaled by the UN's enforcement
+(see [UN conventions and
+agencies](09-united-nations.md#un-conventions-and-agencies)); forming one is not
+affected.
 
 Laws and principles that move the three numbers:
 

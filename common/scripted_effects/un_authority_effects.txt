@@ -69,6 +69,9 @@
 #   19    a UN mission accomplished (legacy)   20    a UN mission failed (legacy)
 #   21-23 peacekeeping / aid / stabilisation mission accomplished   (state)
 #   24-26 peacekeeping / aid / stabilisation mission failed         (state)
+#   27-39 redesign phase 7 (§0.12), in blocks per owner: 27-29 justice,
+#         30-33 order, 34-36 economy, 37-39 missions. Each owner's file
+#         header names its codes and their subjects.
 #   1NN   legacy: response to UN event un_events.NN (still rendered, for saves)
 #   1NNk  the k-th response to un_events.NN, one code per act: 1041 is
 #         un_events.4's full peacekeeping force, 1042 its observers, 1043 its
@@ -120,6 +123,11 @@ un_authority_monthly_update = {
 	set_global_variable = { name = un_funding_arrears_share value = un_funding_arrears_share_value }
 	set_global_variable = { name = un_budget_weekly value = un_budget_weekly_value }
 	set_global_variable = { name = un_members_at_war_share value = un_members_at_war_share_value }
+	# Hunger (redesign phase 7, §0.12 item 10; un_economy_effects.txt): the
+	# share of the members' people in famine-struck states, and the term it
+	# gives the delivery pillar while the World Food Reserve stands. Before the
+	# pillars below, which read it.
+	un_food_reserve_hunger_snapshot = yes
 	# Last month's pillars, for the overview's trend icons (a pillar's change
 	# since the previous snapshot; un_overview_display_values.txt).
 	if = {

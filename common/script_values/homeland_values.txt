@@ -163,3 +163,20 @@ te_homeland_project_eligible = {
 		value = 1
 	}
 }
+
+# The removal track's rate (te_homeland_removal_monthly_effect): the shared
+# annual rate, slowed by state_homeland_removal_speed_mult — which the UN
+# Convention on Cultural Diversity gives its parties' states — and never below
+# a tenth of it. The creation track keeps the shared rate.
+te_homeland_removal_annual_progress = {
+	value = te_homeland_annual_progress
+	multiply = {
+		value = 1
+		add = modifier:state_homeland_removal_speed_mult
+		min = 0.1
+	}
+}
+te_homeland_removal_monthly_points = {
+	value = te_homeland_removal_annual_progress
+	divide = 12
+}

@@ -1,0 +1,4 @@
+﻿# The charter's new business, economy (redesign phase 7, §0.12 items 7 and 10).
+# Loc: concept_<name> and concept_<name>_desc.
+concept_un_development_fund = {}
+concept_un_food_reserve = {}

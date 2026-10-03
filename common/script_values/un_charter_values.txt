@@ -1,0 +1,128 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — SHARED FIGURES (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12. The dispatchers are in
+# common/scripted_effects/un_charter_effects.txt, which also says who owns
+# each topic. Each topic's own figures live in its owner's files; only what
+# two owners share is here.
+# ============================================================================
+
+# ---- The lean ------------------------------------------------------------------
+
+# OUR INTERESTS on the nine phase 7 decisions, requests and institutions
+# (un_lean_interests adds it). Each topic weighs its own: un_lean_interests_<key>,
+# in its owner's values file. The two phase 7 conventions are weighed in
+# un_lean_interests itself, like the other conventions.
+# Scope: the voting country; expects scope:un_resolution
+un_lean_charter_interests = {
+	value = 0
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_court_referral } }
+		add = un_lean_interests_court_referral
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_arms_embargo } }
+		add = un_lean_interests_arms_embargo
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_credentials } }
+		add = un_lean_interests_credentials
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_standing_force } }
+		add = un_lean_interests_standing_force
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_observer_request } }
+		add = un_lean_interests_observer_request
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_food_reserve } }
+		add = un_lean_interests_food_reserve
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_ceasefire } }
+		add = un_lean_interests_ceasefire
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_development_fund } }
+		add = un_lean_interests_development_fund
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_referendum } }
+		add = un_lean_interests_referendum
+	}
+}
+
+# ---- The budget ----------------------------------------------------------------
+# The paying members' dues (un_budget_weekly, un_dues_values.txt) now pay for
+# two institutions besides the lending facility: the Standing UN Force (owner:
+# missions) and the World Development Fund (owner: economy). Each takes a
+# share while it is in force; the lending facility lends from what is left
+# (un_loan_budget_cap, un_docket_values.txt), and the chamber's budget line
+# says so.
+
+# The share the Standing UN Force takes while it stands.
+un_force_budget_share_base = { value = 0.1 }
+
+# The share the World Development Fund takes while it stands, by charter level
+# (owner, 2026-10-02). Under the founding charter it takes none and pays out
+# only the major powers' Development Programs contributions
+# (un_dev_fund_donations_value, un_economy_values.txt); each reform gives it
+# more, with no new vote.
+un_dev_fund_budget_share_reform_1 = { value = 0.05 }
+un_dev_fund_budget_share_reform_2 = { value = 0.25 }
+
+# Globals only.
+un_force_budget_share = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_inst_standing_force }
+		add = un_force_budget_share_base
+	}
+}
+
+# The Fund's share at the charter's current level, whether or not it stands:
+# 0 under the founding charter. The chamber's preview reads it. Globals only.
+un_dev_fund_budget_share_at_level = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_charter_level
+			global_var:un_charter_level >= 2
+		}
+		add = un_dev_fund_budget_share_reform_2
+	}
+	else_if = {
+		limit = {
+			has_global_variable = un_charter_level
+			global_var:un_charter_level >= 1
+		}
+		add = un_dev_fund_budget_share_reform_1
+	}
+}
+
+# What the Fund takes: its share at the current level while it stands, else 0.
+# Globals only.
+un_dev_fund_budget_share = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_inst_development_fund }
+		add = un_dev_fund_budget_share_at_level
+	}
+}
+
+# What the institutions leave of the weekly budget. Globals only.
+un_budget_free_weekly_value = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_budget_weekly }
+		add = global_var:un_budget_weekly
+		multiply = {
+			value = 1
+			subtract = un_force_budget_share
+			subtract = un_dev_fund_budget_share
+			min = 0
+		}
+	}
+}

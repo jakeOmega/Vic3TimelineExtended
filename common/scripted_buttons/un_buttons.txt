@@ -17,9 +17,10 @@
 # can propose: they are the AI's only proposal path, and hiding a scripted
 # button from humans alone has no verified mechanism in this engine.
 #
-# The eleven conventions (human rights, ICC, NPT, climate, pandemic, refugee,
+# The thirteen conventions (human rights, ICC, NPT, climate, pandemic, refugee,
 # heritage, decolonization, space, law of the sea, physical protection of
-# nuclear material) deliberately have NO button.
+# nuclear material, cultural diversity, the prohibition of nuclear weapons)
+# deliberately have NO button.
 # A human tables one from the chamber (ops 7-17 of un_chamber_propose_sgui);
 # the AI reaches them only through the docket's offers (un_docket_effects.txt),
 # which pace the floor. A button here would give the AI an ai_chance path that
@@ -258,16 +259,17 @@ un_withhold_dues_button = {
 	name = "UN_WITHHOLD_DUES"
 	desc = "UN_WITHHOLD_DUES_DESC"
 
-	# Our dues are our overlord's while our representation is suspended (§0.8).
+	# Our dues are our overlord's while our representation is suspended (§0.8); a member
+	# whose credentials the Assembly rejected (phase 7) still pays its own.
 	visible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { un_representation_suspended = yes }
+		un_dues_self_assessed = yes
 		NOT = { un_dues_is_withholding = yes }
 	}
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { un_representation_suspended = yes }
+		un_dues_self_assessed = yes
 		NOT = { un_dues_is_withholding = yes }
 		custom_tooltip = {
 			text = un_dues_assessed_tt
@@ -310,17 +312,18 @@ un_pay_dues_button = {
 	name = "UN_PAY_DUES"
 	desc = "UN_PAY_DUES_DESC"
 
-	# Our dues are our overlord's while our representation is suspended (§0.8);
+	# Our dues are our overlord's while our representation is suspended (§0.8); a member
+	# whose credentials the Assembly rejected (phase 7) still pays its own;
 	# arrears from before wait until we are restored.
 	visible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { un_representation_suspended = yes }
+		un_dues_self_assessed = yes
 		un_dues_is_withholding = yes
 	}
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		NOT = { un_representation_suspended = yes }
+		un_dues_self_assessed = yes
 		un_dues_is_withholding = yes
 	}
 
@@ -694,6 +697,11 @@ un_end_peacekeeping_button = {
 }
 
 # ---- 4. DEVELOPMENT PROGRAMS ----
+# While the World Development Fund stands (redesign phase 7, owner 2026-10-02),
+# this programme is the Fund's voluntary part: a represented contributor that
+# pays its dues pays the Fund's grants with its programme expense
+# (un_dev_fund_donations_value, un_economy_values.txt). Nothing here changes
+# for it.
 
 un_fund_development_button = {
 	name = "UN_FUND_DEVELOPMENT"
@@ -1064,4 +1072,160 @@ un_stop_undermining_button = {
 			un_state_forget = { MODIFIER = un_undermine_order_cost }
 		}
 	}
+}
+
+# ============================================================================
+# THE CHARTER'S NEW BUSINESS (redesign phase 7, §0.12)
+# ============================================================================
+# The AI's path to the nine phase 7 decisions, requests and institutions, as
+# the buttons above are for the older topics. Each button keeps only its name,
+# description and AI weight; the gates and the effect are the chamber's own
+# (un_propose_triggers.txt, un_propose_effects.txt), and the weight is the
+# topic owner's (un_<key>_ai_chance; un_charter_effects.txt says who owns
+# what). Like the others, they are not hidden from a human, who sees them only
+# when there is a case to table. The two Reform II buttons (the ceasefire and
+# the referendum) also wait until Reform I has carried
+# (un_charter_reform_ii_in_view), as their chamber rows do. The World
+# Development Fund needs no reform (owner, 2026-10-02): each reform strengthens
+# a standing Fund instead.
+
+un_propose_court_referral_button = {
+	name = "UN_PROPOSE_COURT_REFERRAL"
+	desc = "UN_PROPOSE_COURT_REFERRAL_DESC"
+
+	visible = { un_propose_court_referral_available = yes }
+
+	possible = { un_propose_court_referral_possible = yes }
+
+	ai_chance = {
+		value = un_court_referral_ai_chance
+	}
+
+	effect = { un_propose_court_referral_effect = yes }
+}
+
+un_propose_arms_embargo_button = {
+	name = "UN_PROPOSE_ARMS_EMBARGO"
+	desc = "UN_PROPOSE_ARMS_EMBARGO_DESC"
+
+	visible = { un_propose_arms_embargo_available = yes }
+
+	possible = { un_propose_arms_embargo_possible = yes }
+
+	ai_chance = {
+		value = un_arms_embargo_ai_chance
+	}
+
+	effect = { un_propose_arms_embargo_effect = yes }
+}
+
+un_propose_credentials_button = {
+	name = "UN_PROPOSE_CREDENTIALS"
+	desc = "UN_PROPOSE_CREDENTIALS_DESC"
+
+	visible = { un_propose_credentials_available = yes }
+
+	possible = { un_propose_credentials_possible = yes }
+
+	ai_chance = {
+		value = un_credentials_ai_chance
+	}
+
+	effect = { un_propose_credentials_effect = yes }
+}
+
+un_propose_standing_force_button = {
+	name = "UN_PROPOSE_STANDING_FORCE"
+	desc = "UN_PROPOSE_STANDING_FORCE_DESC"
+
+	visible = { un_propose_standing_force_available = yes }
+
+	possible = { un_propose_standing_force_possible = yes }
+
+	ai_chance = {
+		value = un_standing_force_ai_chance
+	}
+
+	effect = { un_propose_standing_force_effect = yes }
+}
+
+un_propose_observer_request_button = {
+	name = "UN_PROPOSE_OBSERVER_REQUEST"
+	desc = "UN_PROPOSE_OBSERVER_REQUEST_DESC"
+
+	visible = { un_propose_observer_request_available = yes }
+
+	possible = { un_propose_observer_request_possible = yes }
+
+	ai_chance = {
+		value = un_observer_request_ai_chance
+	}
+
+	effect = { un_propose_observer_request_effect = yes }
+}
+
+un_propose_food_reserve_button = {
+	name = "UN_PROPOSE_FOOD_RESERVE"
+	desc = "UN_PROPOSE_FOOD_RESERVE_DESC"
+
+	visible = { un_propose_food_reserve_available = yes }
+
+	possible = { un_propose_food_reserve_possible = yes }
+
+	ai_chance = {
+		value = un_food_reserve_ai_chance
+	}
+
+	effect = { un_propose_food_reserve_effect = yes }
+}
+
+un_propose_ceasefire_button = {
+	name = "UN_PROPOSE_CEASEFIRE"
+	desc = "UN_PROPOSE_CEASEFIRE_DESC"
+
+	visible = {
+		un_charter_reform_ii_in_view = yes
+		un_propose_ceasefire_available = yes
+	}
+
+	possible = { un_propose_ceasefire_possible = yes }
+
+	ai_chance = {
+		value = un_ceasefire_ai_chance
+	}
+
+	effect = { un_propose_ceasefire_effect = yes }
+}
+
+un_propose_development_fund_button = {
+	name = "UN_PROPOSE_DEVELOPMENT_FUND"
+	desc = "UN_PROPOSE_DEVELOPMENT_FUND_DESC"
+
+	visible = { un_propose_development_fund_available = yes }
+
+	possible = { un_propose_development_fund_possible = yes }
+
+	ai_chance = {
+		value = un_development_fund_ai_chance
+	}
+
+	effect = { un_propose_development_fund_effect = yes }
+}
+
+un_propose_referendum_button = {
+	name = "UN_PROPOSE_REFERENDUM"
+	desc = "UN_PROPOSE_REFERENDUM_DESC"
+
+	visible = {
+		un_charter_reform_ii_in_view = yes
+		un_propose_referendum_available = yes
+	}
+
+	possible = { un_propose_referendum_possible = yes }
+
+	ai_chance = {
+		value = un_referendum_ai_chance
+	}
+
+	effect = { un_propose_referendum_effect = yes }
 }

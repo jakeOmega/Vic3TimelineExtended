@@ -1,12 +1,25 @@
 ﻿# ============================================================================
-# UN MISSIONS — THE STATE PULSE (redesign phase 6)
+# UN MISSIONS — THE PULSES (redesign phase 6; phase 7 added the last two)
 # ============================================================================
 # A mission's effect lives on its state and scales with the mission's strength,
 # so it is applied from the state's own monthly pulse (the CLAUDE.md rule for
 # state-scoped scaling): un_mission_state_refresh, the single refresh site for
-# the three un_mission_*_state_modifier (un_mission_effects.txt). The engine
+# the four un_mission_*_state_modifier (un_mission_effects.txt). The engine
 # unions same-name on_action declarations across files, so declaring
-# on_monthly_pulse_state here leaves the other systems that extend it alone.
+# on_monthly_pulse_state, on_monthly_pulse_country and on_election_campaign_end
+# here leaves the other systems that extend them alone.
+#
+# Phase 7 (§0.12 item 11), electoral observers:
+#   on_monthly_pulse_country   the host's un_electoral_observers_modifier, x the
+#                              mission's strength (un_mission_electoral_host_refresh,
+#                              its single refresh site; ROOT is the host, so the
+#                              multiplier resolves against it)
+#   on_election_campaign_end   the host's election was observed
+#                              (un_mission_electoral_election_held); the mission
+#                              succeeds at the next monthly update, so Election
+#                              Interference's cut at the same campaign end
+#                              (covert_warfare_on_actions.txt) still sees it
+#                              whichever on_action runs first
 # ============================================================================
 
 on_monthly_pulse_state = {
@@ -26,6 +39,45 @@ un_mission_state_on_action = {
 				}
 			}
 			un_mission_state_refresh = yes
+		}
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		un_mission_country_on_action
+	}
+}
+
+# Root = country. Cheap for a country that hosts no electoral mission and
+# carries nothing to clear: two tests, then the register's few entries.
+un_mission_country_on_action = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_modifier = un_electoral_observers_modifier
+					has_variable = un_msn_electoral_power
+					un_mission_hosts = { TYPE = electoral }
+				}
+			}
+			un_mission_electoral_host_refresh = yes
+		}
+	}
+}
+
+on_election_campaign_end = {
+	on_actions = {
+		un_mission_election_end_on_action
+	}
+}
+
+# Root = the country whose election campaign just ended.
+un_mission_election_end_on_action = {
+	effect = {
+		if = {
+			limit = { un_mission_hosts = { TYPE = electoral } }
+			un_mission_electoral_election_held = yes
 		}
 	}
 }

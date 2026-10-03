@@ -1,0 +1,68 @@
+﻿# ============================================================================
+# THE CHARTER'S NEW BUSINESS — ECONOMY: THE PLEDGE BUTTONS (redesign phase 7)
+# ============================================================================
+# docs/systems/un_redesign_design.md §0.12 item 10. While the World Food
+# Reserve stands, a member whose Strategic Reserve can store grain may pledge
+# part of it, and stop pledging, from the United Nations journal entry
+# (registered in je_united_nations.txt). A pledge lets the Reserve draw up to a
+# quarter of the grain in the member's Strategic Reserve, and at most 2,500
+# units, for each new UN aid mission (un_food_reserve_on_aid_mission_opened,
+# un_economy_effects.txt). A pledge that stops qualifying lapses at the next
+# monthly update. The AI pledges through these buttons when it holds grain to
+# spare, and withdraws when a famine comes home (un_economy_values.txt).
+# ============================================================================
+
+un_food_reserve_pledge_button = {
+	name = "UN_FOOD_RESERVE_PLEDGE"
+	desc = "UN_FOOD_RESERVE_PLEDGE_DESC"
+
+	visible = {
+		has_global_variable = un_inst_food_reserve
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { has_variable = un_fr_pledged }
+	}
+
+	possible = {
+		has_global_variable = un_inst_food_reserve
+		# §0.8: a member whose representation is suspended makes no pledges;
+		# its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
+		custom_tooltip = {
+			text = un_food_reserve_needs_reserve_tt
+			un_food_reserve_can_store_grain = yes
+		}
+		NOT = { has_variable = un_fr_pledged }
+	}
+
+	ai_chance = {
+		value = un_food_reserve_pledge_ai_chance
+	}
+
+	effect = {
+		un_food_reserve_pledge = yes
+	}
+}
+
+un_food_reserve_withdraw_button = {
+	name = "UN_FOOD_RESERVE_WITHDRAW"
+	desc = "UN_FOOD_RESERVE_WITHDRAW_DESC"
+
+	visible = {
+		has_variable = un_fr_pledged
+	}
+
+	possible = {
+		has_variable = un_fr_pledged
+	}
+
+	ai_chance = {
+		value = un_food_reserve_withdraw_ai_chance
+	}
+
+	effect = {
+		un_food_reserve_withdraw_pledge = yes
+	}
+}
