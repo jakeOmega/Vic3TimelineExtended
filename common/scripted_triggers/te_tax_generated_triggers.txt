@@ -684,6 +684,161 @@ te_tax_gen_amend_drift_cons = {
 	}
 }
 
+# Customs (plan Task 15). Country scope. te_tax_gen_customs_matches_<d> = { GOOD }: the market's
+# level of GOOD in that direction is the enacted record's, read through the capital's state goods
+# (vanilla's je_set_up_grain_import form), one branch per level; the record's value is tested
+# first, so only one branch reads the market. The caller tests that the record exists.
+
+te_tax_gen_customs_matches_imp = {
+	OR = {
+		AND = { var:te_tax_en_imp_$GOOD$ = -3 capital ?= { sg:$GOOD$ = { import_tariff_level = max_subventions } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = -2 capital ?= { sg:$GOOD$ = { import_tariff_level = high_subventions } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = -1 capital ?= { sg:$GOOD$ = { import_tariff_level = low_subventions } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = 0 capital ?= { sg:$GOOD$ = { import_tariff_level = no_tariffs_or_subventions } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = 1 capital ?= { sg:$GOOD$ = { import_tariff_level = low_tariffs } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = 2 capital ?= { sg:$GOOD$ = { import_tariff_level = high_tariffs } } }
+		AND = { var:te_tax_en_imp_$GOOD$ = 3 capital ?= { sg:$GOOD$ = { import_tariff_level = max_tariffs } } }
+	}
+}
+
+te_tax_gen_customs_matches_exp = {
+	OR = {
+		AND = { var:te_tax_en_exp_$GOOD$ = -3 capital ?= { sg:$GOOD$ = { export_tariff_level = max_subventions } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = -2 capital ?= { sg:$GOOD$ = { export_tariff_level = high_subventions } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = -1 capital ?= { sg:$GOOD$ = { export_tariff_level = low_subventions } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = 0 capital ?= { sg:$GOOD$ = { export_tariff_level = no_tariffs_or_subventions } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = 1 capital ?= { sg:$GOOD$ = { export_tariff_level = low_tariffs } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = 2 capital ?= { sg:$GOOD$ = { export_tariff_level = high_tariffs } } }
+		AND = { var:te_tax_en_exp_$GOOD$ = 3 capital ?= { sg:$GOOD$ = { export_tariff_level = max_tariffs } } }
+	}
+}
+
+# Drift (te_tax_detect_drift): some good's market level differs from the code's.
+te_tax_gen_customs_drift = {
+	OR = {
+		AND = { has_variable = te_tax_en_imp_advanced_materials NOT = { te_tax_gen_customs_matches_imp = { GOOD = advanced_materials } } }
+		AND = { has_variable = te_tax_en_exp_advanced_materials NOT = { te_tax_gen_customs_matches_exp = { GOOD = advanced_materials } } }
+		AND = { has_variable = te_tax_en_imp_aeroplanes NOT = { te_tax_gen_customs_matches_imp = { GOOD = aeroplanes } } }
+		AND = { has_variable = te_tax_en_exp_aeroplanes NOT = { te_tax_gen_customs_matches_exp = { GOOD = aeroplanes } } }
+		AND = { has_variable = te_tax_en_imp_ammunition NOT = { te_tax_gen_customs_matches_imp = { GOOD = ammunition } } }
+		AND = { has_variable = te_tax_en_exp_ammunition NOT = { te_tax_gen_customs_matches_exp = { GOOD = ammunition } } }
+		AND = { has_variable = te_tax_en_imp_artillery NOT = { te_tax_gen_customs_matches_imp = { GOOD = artillery } } }
+		AND = { has_variable = te_tax_en_exp_artillery NOT = { te_tax_gen_customs_matches_exp = { GOOD = artillery } } }
+		AND = { has_variable = te_tax_en_imp_automobiles NOT = { te_tax_gen_customs_matches_imp = { GOOD = automobiles } } }
+		AND = { has_variable = te_tax_en_exp_automobiles NOT = { te_tax_gen_customs_matches_exp = { GOOD = automobiles } } }
+		AND = { has_variable = te_tax_en_imp_clippers NOT = { te_tax_gen_customs_matches_imp = { GOOD = clippers } } }
+		AND = { has_variable = te_tax_en_exp_clippers NOT = { te_tax_gen_customs_matches_exp = { GOOD = clippers } } }
+		AND = { has_variable = te_tax_en_imp_clothes NOT = { te_tax_gen_customs_matches_imp = { GOOD = clothes } } }
+		AND = { has_variable = te_tax_en_exp_clothes NOT = { te_tax_gen_customs_matches_exp = { GOOD = clothes } } }
+		AND = { has_variable = te_tax_en_imp_coal NOT = { te_tax_gen_customs_matches_imp = { GOOD = coal } } }
+		AND = { has_variable = te_tax_en_exp_coal NOT = { te_tax_gen_customs_matches_exp = { GOOD = coal } } }
+		AND = { has_variable = te_tax_en_imp_coffee NOT = { te_tax_gen_customs_matches_imp = { GOOD = coffee } } }
+		AND = { has_variable = te_tax_en_exp_coffee NOT = { te_tax_gen_customs_matches_exp = { GOOD = coffee } } }
+		AND = { has_variable = te_tax_en_imp_construction NOT = { te_tax_gen_customs_matches_imp = { GOOD = construction } } }
+		AND = { has_variable = te_tax_en_exp_construction NOT = { te_tax_gen_customs_matches_exp = { GOOD = construction } } }
+		AND = { has_variable = te_tax_en_imp_consumer_appliances NOT = { te_tax_gen_customs_matches_imp = { GOOD = consumer_appliances } } }
+		AND = { has_variable = te_tax_en_exp_consumer_appliances NOT = { te_tax_gen_customs_matches_exp = { GOOD = consumer_appliances } } }
+		AND = { has_variable = te_tax_en_imp_digital_assets NOT = { te_tax_gen_customs_matches_imp = { GOOD = digital_assets } } }
+		AND = { has_variable = te_tax_en_exp_digital_assets NOT = { te_tax_gen_customs_matches_exp = { GOOD = digital_assets } } }
+		AND = { has_variable = te_tax_en_imp_dye NOT = { te_tax_gen_customs_matches_imp = { GOOD = dye } } }
+		AND = { has_variable = te_tax_en_exp_dye NOT = { te_tax_gen_customs_matches_exp = { GOOD = dye } } }
+		AND = { has_variable = te_tax_en_imp_electronic_components NOT = { te_tax_gen_customs_matches_imp = { GOOD = electronic_components } } }
+		AND = { has_variable = te_tax_en_exp_electronic_components NOT = { te_tax_gen_customs_matches_exp = { GOOD = electronic_components } } }
+		AND = { has_variable = te_tax_en_imp_engines NOT = { te_tax_gen_customs_matches_imp = { GOOD = engines } } }
+		AND = { has_variable = te_tax_en_exp_engines NOT = { te_tax_gen_customs_matches_exp = { GOOD = engines } } }
+		AND = { has_variable = te_tax_en_imp_explosives NOT = { te_tax_gen_customs_matches_imp = { GOOD = explosives } } }
+		AND = { has_variable = te_tax_en_exp_explosives NOT = { te_tax_gen_customs_matches_exp = { GOOD = explosives } } }
+		AND = { has_variable = te_tax_en_imp_fabric NOT = { te_tax_gen_customs_matches_imp = { GOOD = fabric } } }
+		AND = { has_variable = te_tax_en_exp_fabric NOT = { te_tax_gen_customs_matches_exp = { GOOD = fabric } } }
+		AND = { has_variable = te_tax_en_imp_fertilizer NOT = { te_tax_gen_customs_matches_imp = { GOOD = fertilizer } } }
+		AND = { has_variable = te_tax_en_exp_fertilizer NOT = { te_tax_gen_customs_matches_exp = { GOOD = fertilizer } } }
+		AND = { has_variable = te_tax_en_imp_fine_art NOT = { te_tax_gen_customs_matches_imp = { GOOD = fine_art } } }
+		AND = { has_variable = te_tax_en_exp_fine_art NOT = { te_tax_gen_customs_matches_exp = { GOOD = fine_art } } }
+		AND = { has_variable = te_tax_en_imp_fish NOT = { te_tax_gen_customs_matches_imp = { GOOD = fish } } }
+		AND = { has_variable = te_tax_en_exp_fish NOT = { te_tax_gen_customs_matches_exp = { GOOD = fish } } }
+		AND = { has_variable = te_tax_en_imp_fruit NOT = { te_tax_gen_customs_matches_imp = { GOOD = fruit } } }
+		AND = { has_variable = te_tax_en_exp_fruit NOT = { te_tax_gen_customs_matches_exp = { GOOD = fruit } } }
+		AND = { has_variable = te_tax_en_imp_furniture NOT = { te_tax_gen_customs_matches_imp = { GOOD = furniture } } }
+		AND = { has_variable = te_tax_en_exp_furniture NOT = { te_tax_gen_customs_matches_exp = { GOOD = furniture } } }
+		AND = { has_variable = te_tax_en_imp_glass NOT = { te_tax_gen_customs_matches_imp = { GOOD = glass } } }
+		AND = { has_variable = te_tax_en_exp_glass NOT = { te_tax_gen_customs_matches_exp = { GOOD = glass } } }
+		AND = { has_variable = te_tax_en_imp_grain NOT = { te_tax_gen_customs_matches_imp = { GOOD = grain } } }
+		AND = { has_variable = te_tax_en_exp_grain NOT = { te_tax_gen_customs_matches_exp = { GOOD = grain } } }
+		AND = { has_variable = te_tax_en_imp_groceries NOT = { te_tax_gen_customs_matches_imp = { GOOD = groceries } } }
+		AND = { has_variable = te_tax_en_exp_groceries NOT = { te_tax_gen_customs_matches_exp = { GOOD = groceries } } }
+		AND = { has_variable = te_tax_en_imp_hardwood NOT = { te_tax_gen_customs_matches_imp = { GOOD = hardwood } } }
+		AND = { has_variable = te_tax_en_exp_hardwood NOT = { te_tax_gen_customs_matches_exp = { GOOD = hardwood } } }
+		AND = { has_variable = te_tax_en_imp_iron NOT = { te_tax_gen_customs_matches_imp = { GOOD = iron } } }
+		AND = { has_variable = te_tax_en_exp_iron NOT = { te_tax_gen_customs_matches_exp = { GOOD = iron } } }
+		AND = { has_variable = te_tax_en_imp_ironclads NOT = { te_tax_gen_customs_matches_imp = { GOOD = ironclads } } }
+		AND = { has_variable = te_tax_en_exp_ironclads NOT = { te_tax_gen_customs_matches_exp = { GOOD = ironclads } } }
+		AND = { has_variable = te_tax_en_imp_launch_capacity NOT = { te_tax_gen_customs_matches_imp = { GOOD = launch_capacity } } }
+		AND = { has_variable = te_tax_en_exp_launch_capacity NOT = { te_tax_gen_customs_matches_exp = { GOOD = launch_capacity } } }
+		AND = { has_variable = te_tax_en_imp_lead NOT = { te_tax_gen_customs_matches_imp = { GOOD = lead } } }
+		AND = { has_variable = te_tax_en_exp_lead NOT = { te_tax_gen_customs_matches_exp = { GOOD = lead } } }
+		AND = { has_variable = te_tax_en_imp_liquor NOT = { te_tax_gen_customs_matches_imp = { GOOD = liquor } } }
+		AND = { has_variable = te_tax_en_exp_liquor NOT = { te_tax_gen_customs_matches_exp = { GOOD = liquor } } }
+		AND = { has_variable = te_tax_en_imp_luxury_clothes NOT = { te_tax_gen_customs_matches_imp = { GOOD = luxury_clothes } } }
+		AND = { has_variable = te_tax_en_exp_luxury_clothes NOT = { te_tax_gen_customs_matches_exp = { GOOD = luxury_clothes } } }
+		AND = { has_variable = te_tax_en_imp_luxury_furniture NOT = { te_tax_gen_customs_matches_imp = { GOOD = luxury_furniture } } }
+		AND = { has_variable = te_tax_en_exp_luxury_furniture NOT = { te_tax_gen_customs_matches_exp = { GOOD = luxury_furniture } } }
+		AND = { has_variable = te_tax_en_imp_magnetic_drive_ships NOT = { te_tax_gen_customs_matches_imp = { GOOD = magnetic_drive_ships } } }
+		AND = { has_variable = te_tax_en_exp_magnetic_drive_ships NOT = { te_tax_gen_customs_matches_exp = { GOOD = magnetic_drive_ships } } }
+		AND = { has_variable = te_tax_en_imp_manowars NOT = { te_tax_gen_customs_matches_imp = { GOOD = manowars } } }
+		AND = { has_variable = te_tax_en_exp_manowars NOT = { te_tax_gen_customs_matches_exp = { GOOD = manowars } } }
+		AND = { has_variable = te_tax_en_imp_meat NOT = { te_tax_gen_customs_matches_imp = { GOOD = meat } } }
+		AND = { has_variable = te_tax_en_exp_meat NOT = { te_tax_gen_customs_matches_exp = { GOOD = meat } } }
+		AND = { has_variable = te_tax_en_imp_merchant_marine NOT = { te_tax_gen_customs_matches_imp = { GOOD = merchant_marine } } }
+		AND = { has_variable = te_tax_en_exp_merchant_marine NOT = { te_tax_gen_customs_matches_exp = { GOOD = merchant_marine } } }
+		AND = { has_variable = te_tax_en_imp_motor_ships NOT = { te_tax_gen_customs_matches_imp = { GOOD = motor_ships } } }
+		AND = { has_variable = te_tax_en_exp_motor_ships NOT = { te_tax_gen_customs_matches_exp = { GOOD = motor_ships } } }
+		AND = { has_variable = te_tax_en_imp_oil NOT = { te_tax_gen_customs_matches_imp = { GOOD = oil } } }
+		AND = { has_variable = te_tax_en_exp_oil NOT = { te_tax_gen_customs_matches_exp = { GOOD = oil } } }
+		AND = { has_variable = te_tax_en_imp_opium NOT = { te_tax_gen_customs_matches_imp = { GOOD = opium } } }
+		AND = { has_variable = te_tax_en_exp_opium NOT = { te_tax_gen_customs_matches_exp = { GOOD = opium } } }
+		AND = { has_variable = te_tax_en_imp_paper NOT = { te_tax_gen_customs_matches_imp = { GOOD = paper } } }
+		AND = { has_variable = te_tax_en_exp_paper NOT = { te_tax_gen_customs_matches_exp = { GOOD = paper } } }
+		AND = { has_variable = te_tax_en_imp_porcelain NOT = { te_tax_gen_customs_matches_imp = { GOOD = porcelain } } }
+		AND = { has_variable = te_tax_en_exp_porcelain NOT = { te_tax_gen_customs_matches_exp = { GOOD = porcelain } } }
+		AND = { has_variable = te_tax_en_imp_radios NOT = { te_tax_gen_customs_matches_imp = { GOOD = radios } } }
+		AND = { has_variable = te_tax_en_exp_radios NOT = { te_tax_gen_customs_matches_exp = { GOOD = radios } } }
+		AND = { has_variable = te_tax_en_imp_robotics NOT = { te_tax_gen_customs_matches_imp = { GOOD = robotics } } }
+		AND = { has_variable = te_tax_en_exp_robotics NOT = { te_tax_gen_customs_matches_exp = { GOOD = robotics } } }
+		AND = { has_variable = te_tax_en_imp_rubber NOT = { te_tax_gen_customs_matches_imp = { GOOD = rubber } } }
+		AND = { has_variable = te_tax_en_exp_rubber NOT = { te_tax_gen_customs_matches_exp = { GOOD = rubber } } }
+		AND = { has_variable = te_tax_en_imp_silk NOT = { te_tax_gen_customs_matches_imp = { GOOD = silk } } }
+		AND = { has_variable = te_tax_en_exp_silk NOT = { te_tax_gen_customs_matches_exp = { GOOD = silk } } }
+		AND = { has_variable = te_tax_en_imp_small_arms NOT = { te_tax_gen_customs_matches_imp = { GOOD = small_arms } } }
+		AND = { has_variable = te_tax_en_exp_small_arms NOT = { te_tax_gen_customs_matches_exp = { GOOD = small_arms } } }
+		AND = { has_variable = te_tax_en_imp_steamers NOT = { te_tax_gen_customs_matches_imp = { GOOD = steamers } } }
+		AND = { has_variable = te_tax_en_exp_steamers NOT = { te_tax_gen_customs_matches_exp = { GOOD = steamers } } }
+		AND = { has_variable = te_tax_en_imp_steel NOT = { te_tax_gen_customs_matches_imp = { GOOD = steel } } }
+		AND = { has_variable = te_tax_en_exp_steel NOT = { te_tax_gen_customs_matches_exp = { GOOD = steel } } }
+		AND = { has_variable = te_tax_en_imp_sugar NOT = { te_tax_gen_customs_matches_imp = { GOOD = sugar } } }
+		AND = { has_variable = te_tax_en_exp_sugar NOT = { te_tax_gen_customs_matches_exp = { GOOD = sugar } } }
+		AND = { has_variable = te_tax_en_imp_sulfur NOT = { te_tax_gen_customs_matches_imp = { GOOD = sulfur } } }
+		AND = { has_variable = te_tax_en_exp_sulfur NOT = { te_tax_gen_customs_matches_exp = { GOOD = sulfur } } }
+		AND = { has_variable = te_tax_en_imp_tanks NOT = { te_tax_gen_customs_matches_imp = { GOOD = tanks } } }
+		AND = { has_variable = te_tax_en_exp_tanks NOT = { te_tax_gen_customs_matches_exp = { GOOD = tanks } } }
+		AND = { has_variable = te_tax_en_imp_tea NOT = { te_tax_gen_customs_matches_imp = { GOOD = tea } } }
+		AND = { has_variable = te_tax_en_exp_tea NOT = { te_tax_gen_customs_matches_exp = { GOOD = tea } } }
+		AND = { has_variable = te_tax_en_imp_tech_metals NOT = { te_tax_gen_customs_matches_imp = { GOOD = tech_metals } } }
+		AND = { has_variable = te_tax_en_exp_tech_metals NOT = { te_tax_gen_customs_matches_exp = { GOOD = tech_metals } } }
+		AND = { has_variable = te_tax_en_imp_telephones NOT = { te_tax_gen_customs_matches_imp = { GOOD = telephones } } }
+		AND = { has_variable = te_tax_en_exp_telephones NOT = { te_tax_gen_customs_matches_exp = { GOOD = telephones } } }
+		AND = { has_variable = te_tax_en_imp_tobacco NOT = { te_tax_gen_customs_matches_imp = { GOOD = tobacco } } }
+		AND = { has_variable = te_tax_en_exp_tobacco NOT = { te_tax_gen_customs_matches_exp = { GOOD = tobacco } } }
+		AND = { has_variable = te_tax_en_imp_tools NOT = { te_tax_gen_customs_matches_imp = { GOOD = tools } } }
+		AND = { has_variable = te_tax_en_exp_tools NOT = { te_tax_gen_customs_matches_exp = { GOOD = tools } } }
+		AND = { has_variable = te_tax_en_imp_tourism NOT = { te_tax_gen_customs_matches_imp = { GOOD = tourism } } }
+		AND = { has_variable = te_tax_en_exp_tourism NOT = { te_tax_gen_customs_matches_exp = { GOOD = tourism } } }
+		AND = { has_variable = te_tax_en_imp_wine NOT = { te_tax_gen_customs_matches_imp = { GOOD = wine } } }
+		AND = { has_variable = te_tax_en_exp_wine NOT = { te_tax_gen_customs_matches_exp = { GOOD = wine } } }
+		AND = { has_variable = te_tax_en_imp_wood NOT = { te_tax_gen_customs_matches_imp = { GOOD = wood } } }
+		AND = { has_variable = te_tax_en_exp_wood NOT = { te_tax_gen_customs_matches_exp = { GOOD = wood } } }
+	}
+}
+
 # Slot a, country scope: the package touches at least one catalog good.
 te_tax_gen_package_touches_goods_a = {
 	OR = {

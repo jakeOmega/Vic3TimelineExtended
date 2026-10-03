@@ -35,6 +35,12 @@
 # cascade) is replaced by the carrier again through te_tax.5
 # (docs/systems/tax_code_schema.md, "Native controls and drift").
 #
+# Customs authority (plan Task 15; customs option only). A market merge, a
+# new market and a change of subject status can make a country gain or lose
+# its own market, so its customs authority is revalidated a day later
+# (te_tax.7, te_tax_customs_revalidate); the processor also revalidates at
+# every month's start, which catches any change no hook reports.
+#
 # Every handler checks te_tax_code_on first: with the rule off nothing here runs.
 # The engine unions same-name on_action declarations across files.
 # ============================================================================
@@ -263,6 +269,107 @@ te_tax_on_law_activated = {
 			}
 			owner = {
 				trigger_event = { id = te_tax.5 }
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Customs authority (plan Task 15; docs/systems/tax_code_schema.md, "Customs
+# schedule")
+# ----------------------------------------------------------------------------
+# Only under the customs option, and only for a country whose code is in force
+# (te_tax_customs_revalidate tests both again). Each dispatches the hidden
+# te_tax.7 a day later, once the merge or the change of status has settled
+# (te_monetary_on_become_subject dispatches its own update the same way), so
+# the country revalidates as its own ROOT.
+
+# Root = the dissolving (joining) market; owner = the country whose market
+# dissolves, which now trades in scope:market, whose owner leads it
+# (gw_market_join_on_action, extra_on_actions.txt).
+on_merge_markets = {
+	on_actions = {
+		te_tax_on_merge_markets
+	}
+}
+
+te_tax_on_merge_markets = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes te_tax_customs_on = yes }
+			if = {
+				limit = { exists = owner owner = { te_tax_code_in_force = yes } }
+				owner = { trigger_event = { id = te_tax.7 days = 1 } }
+			}
+			if = {
+				limit = { exists = scope:market.owner scope:market.owner = { te_tax_code_in_force = yes } }
+				scope:market.owner = { trigger_event = { id = te_tax.7 days = 1 } }
+			}
+		}
+	}
+}
+
+# Root = the newly created market (a country leaving a customs union, a
+# released country, an uprising).
+on_create_market = {
+	on_actions = {
+		te_tax_on_create_market
+	}
+}
+
+te_tax_on_create_market = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes te_tax_customs_on = yes }
+			if = {
+				limit = { exists = owner owner = { te_tax_code_in_force = yes } }
+				owner = { trigger_event = { id = te_tax.7 days = 1 } }
+			}
+		}
+	}
+}
+
+# Root = the new subject (vanilla's own block scopes top_overlord from it). A
+# subject pact acts as a customs union, so the subject joins its overlord's
+# market; the overlord is revalidated too.
+on_become_subject = {
+	on_actions = {
+		te_tax_on_become_subject
+	}
+}
+
+te_tax_on_become_subject = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes te_tax_customs_on = yes }
+			if = {
+				limit = { te_tax_code_in_force = yes }
+				trigger_event = { id = te_tax.7 days = 1 }
+			}
+			if = {
+				limit = { exists = overlord overlord = { te_tax_code_in_force = yes } }
+				overlord = { trigger_event = { id = te_tax.7 days = 1 } }
+			}
+		}
+	}
+}
+
+# Root = the newly independent country. It may also fire on a transfer from
+# one overlord to another (decolonization_events.txt), which the revalidation
+# answers the same way: it re-tests the market.
+on_become_independent = {
+	on_actions = {
+		te_tax_on_become_independent
+	}
+}
+
+te_tax_on_become_independent = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes te_tax_customs_on = yes }
+			if = {
+				limit = { te_tax_code_in_force = yes }
+				trigger_event = { id = te_tax.7 days = 1 }
 			}
 		}
 	}

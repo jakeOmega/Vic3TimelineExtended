@@ -218,6 +218,9 @@ te_tax_repair_after_civil_war = {
 		}
 		te_tax_repair_obligations_after_civil_war = yes
 		te_tax_rebuild_relief_marks = yes
+		# A loser's pending customs re-assert must not turn into an adoption at
+		# the winner's next sync (plan Task 15): the winner re-asserts afresh.
+		te_tax_gen_customs_clear_pending = yes
 		set_variable = { name = te_tax_last_month value = -1 }
 		te_tax_history_push = { KIND = 7 SLOT = none }
 		debug_log = "TE_TAX civil_war_repair the winner's code applies across the reunited country; bill and draft closed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
@@ -269,6 +272,11 @@ te_tax_init_released_country = {
 		if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
 		# No promise and no record of kept or broken ones: those are the parent's.
 		te_tax_gen_clear_obligations = yes
+		# Customs (plan Task 15): not the parent's. The released country takes
+		# up the customs of its own market, if it owns one, at its first
+		# revalidation (te_tax_customs_revalidate: the next 1st, or a day after
+		# its market is created); a revived tag's old records stay unread.
+		if = { limit = { te_tax_customs_on = yes } set_variable = { name = te_tax_customs_held value = 0 } te_tax_gen_customs_clear_pending = yes }
 		te_tax_copy_relief_states = yes
 		te_tax_rebuild_relief_marks = yes
 		set_variable = { name = te_tax_last_month value = -1 }

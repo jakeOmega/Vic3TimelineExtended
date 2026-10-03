@@ -477,6 +477,21 @@ te_tax_view_drift_amend = {
 	if = { limit = { has_variable = te_tax_drift_amend } value = var:te_tax_drift_amend }
 }
 
+# Customs (plan Task 15; customs option only): tariff levels found off the
+# code's, per good and direction, while the code held the country's customs.
+te_tax_view_drift_customs = {
+	value = 0
+	if = { limit = { has_variable = te_tax_drift_customs } value = var:te_tax_drift_customs }
+}
+
+# 1 while the code holds the country's customs (te_tax_customs_held): the
+# customs records are live. 0 under the plain rule option, for a country that
+# does not own its market, and for one that lost it (records frozen).
+te_tax_view_customs_held = {
+	value = 0
+	if = { limit = { has_variable = te_tax_customs_held } value = var:te_tax_customs_held }
+}
+
 # ---------------------------------------------------------------------------
 # The economy snapshot and the estimates (plan Task 14;
 # docs/systems/tax_code_schema.md, "Economy snapshot and estimates").

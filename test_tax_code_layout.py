@@ -74,8 +74,8 @@ FIFTH = ("fifth_button", "fifth_button_tooltip", "fifth_button_click", "fifth_bu
          "fifth_button_visibility_checked", "fifth_button_selected")
 HISTORY_SIZE = 8
 # History kinds (docs/systems/tax_code_schema.md, te_tax_h<n>_kind): 1-10 the code's,
-# 11-14 the policy obligations' (Task 12).
-KINDS = range(1, 15)
+# 11-14 the policy obligations' (Task 12), 15-17 the customs schedule's (Task 15).
+KINDS = range(1, 18)
 SUNSET_KIND = 2
 FORBIDDEN_IN_VALUES = re.compile(
     r"\b(set_variable|change_variable|remove_variable|save_scope_as|save_temporary_scope_as|"
@@ -656,9 +656,10 @@ class DisplayValueTest(unittest.TestCase):
             self.assertIn(f"min = var:te_tax_h{n}_month", body)
         for key in KEYS:
             self.assertIn(f"min = var:te_tax_en_{key}_since", body)
-        # kinds that changed the code: commenced, sunset, migrated, civil-war repair
+        # kinds that changed the code: commenced, sunset, migrated, civil-war repair,
+        # and the customs schedule's adopted level and market gained (Task 15)
         kinds = set(re.findall(r"var:te_tax_h1_kind = (\d+)", body))
-        self.assertEqual(kinds, {"1", "2", "5", "7"})
+        self.assertEqual(kinds, {"1", "2", "5", "7", "15", "17"})
 
 
 class HistoryTest(unittest.TestCase):

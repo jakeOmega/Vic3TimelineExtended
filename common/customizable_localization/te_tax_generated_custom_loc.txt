@@ -81,6 +81,18 @@ te_tax_hist_event_1 = {
 		localization_key = te_tax_hist_kind_obl_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_1_kind = 15 }
+		localization_key = te_tax_hist_kind_customs_adopted
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 16 }
+		localization_key = te_tax_hist_kind_customs_lost
+	}
+	text = {
+		trigger = { te_tax_view_hist_1_kind = 17 }
+		localization_key = te_tax_hist_kind_customs_gained
+	}
+	text = {
 		localization_key = te_tax_hist_kind_other
 	}
 }
@@ -159,6 +171,18 @@ te_tax_hist_event_2 = {
 	text = {
 		trigger = { te_tax_view_hist_2_kind = 14 }
 		localization_key = te_tax_hist_kind_obl_released
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 15 }
+		localization_key = te_tax_hist_kind_customs_adopted
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 16 }
+		localization_key = te_tax_hist_kind_customs_lost
+	}
+	text = {
+		trigger = { te_tax_view_hist_2_kind = 17 }
+		localization_key = te_tax_hist_kind_customs_gained
 	}
 	text = {
 		localization_key = te_tax_hist_kind_other
@@ -241,6 +265,18 @@ te_tax_hist_event_3 = {
 		localization_key = te_tax_hist_kind_obl_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_3_kind = 15 }
+		localization_key = te_tax_hist_kind_customs_adopted
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 16 }
+		localization_key = te_tax_hist_kind_customs_lost
+	}
+	text = {
+		trigger = { te_tax_view_hist_3_kind = 17 }
+		localization_key = te_tax_hist_kind_customs_gained
+	}
+	text = {
 		localization_key = te_tax_hist_kind_other
 	}
 }
@@ -319,6 +355,18 @@ te_tax_hist_event_4 = {
 	text = {
 		trigger = { te_tax_view_hist_4_kind = 14 }
 		localization_key = te_tax_hist_kind_obl_released
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 15 }
+		localization_key = te_tax_hist_kind_customs_adopted
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 16 }
+		localization_key = te_tax_hist_kind_customs_lost
+	}
+	text = {
+		trigger = { te_tax_view_hist_4_kind = 17 }
+		localization_key = te_tax_hist_kind_customs_gained
 	}
 	text = {
 		localization_key = te_tax_hist_kind_other
@@ -401,6 +449,18 @@ te_tax_hist_event_5 = {
 		localization_key = te_tax_hist_kind_obl_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_5_kind = 15 }
+		localization_key = te_tax_hist_kind_customs_adopted
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 16 }
+		localization_key = te_tax_hist_kind_customs_lost
+	}
+	text = {
+		trigger = { te_tax_view_hist_5_kind = 17 }
+		localization_key = te_tax_hist_kind_customs_gained
+	}
+	text = {
 		localization_key = te_tax_hist_kind_other
 	}
 }
@@ -479,6 +539,18 @@ te_tax_hist_event_6 = {
 	text = {
 		trigger = { te_tax_view_hist_6_kind = 14 }
 		localization_key = te_tax_hist_kind_obl_released
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 15 }
+		localization_key = te_tax_hist_kind_customs_adopted
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 16 }
+		localization_key = te_tax_hist_kind_customs_lost
+	}
+	text = {
+		trigger = { te_tax_view_hist_6_kind = 17 }
+		localization_key = te_tax_hist_kind_customs_gained
 	}
 	text = {
 		localization_key = te_tax_hist_kind_other
@@ -561,6 +633,18 @@ te_tax_hist_event_7 = {
 		localization_key = te_tax_hist_kind_obl_released
 	}
 	text = {
+		trigger = { te_tax_view_hist_7_kind = 15 }
+		localization_key = te_tax_hist_kind_customs_adopted
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 16 }
+		localization_key = te_tax_hist_kind_customs_lost
+	}
+	text = {
+		trigger = { te_tax_view_hist_7_kind = 17 }
+		localization_key = te_tax_hist_kind_customs_gained
+	}
+	text = {
 		localization_key = te_tax_hist_kind_other
 	}
 }
@@ -639,6 +723,18 @@ te_tax_hist_event_8 = {
 	text = {
 		trigger = { te_tax_view_hist_8_kind = 14 }
 		localization_key = te_tax_hist_kind_obl_released
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 15 }
+		localization_key = te_tax_hist_kind_customs_adopted
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 16 }
+		localization_key = te_tax_hist_kind_customs_lost
+	}
+	text = {
+		trigger = { te_tax_view_hist_8_kind = 17 }
+		localization_key = te_tax_hist_kind_customs_gained
 	}
 	text = {
 		localization_key = te_tax_hist_kind_other

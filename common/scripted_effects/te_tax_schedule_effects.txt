@@ -50,6 +50,11 @@ te_tax_process_month = {
 				limit = { is_ai = no }
 				debug_log = "TE_TAX process month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 			}
+			# 0. Customs authority (plan Task 15; customs option only): whether the
+			# code holds this country's customs follows whether it owns its market,
+			# before any transition, so a package touching customs holds in the
+			# month the market was lost rather than commencing.
+			te_tax_customs_revalidate = yes
 			# 1. Sunsets of the enacted code first; late ones catch up.
 			te_tax_gen_sunset_wage = yes
 			te_tax_gen_sunset_div = yes
@@ -173,7 +178,9 @@ te_tax_recompute_next_month = {
 
 # Records one event in the history ring. KIND: 1 commenced, 2 sunset,
 # 3 held_conflict, 4 held_missed, 5 migrated, 6 approved, 7 civil-war repair,
-# 8 superseded, 9 rescheduled, 10 released. SLOT: a, b or none. Sunsets record their instrument through
+# 8 superseded, 9 rescheduled, 10 released; the obligations' 11-14; customs
+# (plan Task 15) 15 a level adopted, 16 the market lost, 17 the market gained.
+# SLOT: a, b or none. Sunsets record their instrument through
 # te_tax_gen_history_write directly; this entry point records INST = 0.
 te_tax_history_push = {
 	if = {

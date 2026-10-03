@@ -721,9 +721,14 @@ class SchemaTest(unittest.TestCase):
 
 class SafetyTest(unittest.TestCase):
     def test_no_scheduler_file_removes_a_variable(self):
+        # Except the customs schedule's two transient marks (plan Task 15), which
+        # are flags, not schema tokens or payload: a pending re-assert and a
+        # good a treaty or the cooldown blocked, removed when cleared.
+        transient = re.compile(r"^te_tax_(cpend_(imp|exp)|cblock)_\w+$")
         for path in SCHEDULER_FILES:
             with self.subTest(path=path):
-                self.assertNotIn("remove_variable", read(path))
+                removed = re.findall(r"remove_variable = ([\w$]+)", read(path))
+                self.assertEqual([name for name in removed if not transient.match(name)], [])
 
     def test_no_schema_token_is_removed_anywhere_in_the_tax_code(self):
         country, state = schema_tokens()

@@ -2,7 +2,8 @@
 #
 # te_tax_sync_collection is the only effect that changes a rule-on country's
 # native fiscal state: the rate amendments on law_te_tax_code, the
-# consumption-taxed goods, the relief modifiers and the native tax level. It
+# consumption-taxed goods, the relief modifiers, the native tax level and, under
+# the customs option for a market owner, the tariff levels (plan Task 15). It
 # reads the enacted code from the country's variables and changes only what
 # differs. Its per-instrument and per-good parts are generated
 # (te_tax_generated_effects.txt, gen_tax_code.py).
@@ -33,6 +34,10 @@ te_tax_sync_collection = {
 		save_scope_as = te_tax_country
 		# Counters only, before anything below changes the native state.
 		te_tax_detect_drift = yes
+		# Customs (the customs option, a market owner; plan Task 15): before the
+		# amendment block, so a level adopted here moves te_tax_code_version
+		# before the sync mark below records it.
+		te_tax_sync_customs = yes
 		te_tax_pick_sponsor = yes
 		if = {
 			# te_tax_pick_sponsor saved one of THIS country's groups exactly when it has one.
@@ -72,7 +77,10 @@ te_tax_sync_collection = {
 #     tax-level changes, vanilla's negotiation option 7);
 #   te_tax_drift_goods +1 per good taxed or untaxed against the enacted list;
 #   te_tax_drift_amend +1 per instrument whose carrier amendments differ from
-#     its enacted index (a vanilla law activated over the carrier drops them).
+#     its enacted index (a vanilla law activated over the carrier drops them);
+#   te_tax_drift_customs +1 per tradeable good and direction whose market level
+#     differs from the code's, while the code holds the country's customs
+#     (te_tax_customs_authority: the AI's tariff changes, a treaty's entry).
 # Only while te_tax_sync_version equals te_tax_code_version: the code has not
 # changed since the last full sync. A sunset or a commencement changes the code
 # before the processor's sync, and the migration before te_tax.4's, so the
@@ -92,6 +100,7 @@ te_tax_detect_drift = {
 				te_tax_gen_amend_drift_land = yes
 				te_tax_gen_amend_drift_head = yes
 				te_tax_gen_amend_drift_cons = yes
+				AND = { te_tax_customs_authority = yes te_tax_gen_customs_drift = yes }
 			}
 		}
 		# A player's country logs every time. An AI country logs its first drift
@@ -105,11 +114,13 @@ te_tax_detect_drift = {
 						var:te_tax_drift_level = 0
 						var:te_tax_drift_goods = 0
 						var:te_tax_drift_amend = 0
+						# An AI market owner may move tariffs every month (customs option).
+						NAND = { has_variable = te_tax_drift_customs var:te_tax_drift_customs > 0 }
 					}
 				}
 			}
 			te_tax_count_drift = yes
-			debug_log = "TE_TAX drift native state differed from the code before the sync; totals level=[SCOPE.ScriptValue('te_tax_view_drift_level')|0] goods=[SCOPE.ScriptValue('te_tax_view_drift_goods')|0] amend=[SCOPE.ScriptValue('te_tax_view_drift_amend')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			debug_log = "TE_TAX drift native state differed from the code before the sync; totals level=[SCOPE.ScriptValue('te_tax_view_drift_level')|0] goods=[SCOPE.ScriptValue('te_tax_view_drift_goods')|0] amend=[SCOPE.ScriptValue('te_tax_view_drift_amend')|0] customs=[SCOPE.ScriptValue('te_tax_view_drift_customs')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		}
 		else = {
 			te_tax_count_drift = yes
@@ -126,6 +137,7 @@ te_tax_count_drift = {
 	if = { limit = { te_tax_gen_amend_drift_land = yes } change_variable = { name = te_tax_drift_amend add = 1 } }
 	if = { limit = { te_tax_gen_amend_drift_head = yes } change_variable = { name = te_tax_drift_amend add = 1 } }
 	if = { limit = { te_tax_gen_amend_drift_cons = yes } change_variable = { name = te_tax_drift_amend add = 1 } }
+	if = { limit = { te_tax_customs_authority = yes } te_tax_gen_count_customs_drift = yes }
 }
 
 # Country scope. Saves scope:te_tax_sponsor, the interest group recorded as
@@ -200,6 +212,34 @@ te_tax_sync_relief = {
 		else = {
 			if = { limit = { has_modifier = te_tax_relief_region_1 } remove_modifier = te_tax_relief_region_1 }
 			if = { limit = { has_modifier = te_tax_relief_region_2 } remove_modifier = te_tax_relief_region_2 }
+		}
+	}
+}
+
+# Country scope; needs scope:te_tax_country. The customs schedule's sync (plan
+# Task 15; docs/systems/tax_code_schema.md, "Customs schedule"): only while the
+# code holds the country's customs (te_tax_customs_authority: the customs
+# option, the country owns its market and has taken its customs up), so a
+# customs-union member, a subject in its overlord's market and every country
+# under the plain rule option are left alone. Per tradeable good and direction
+# (te_tax_gen_sync_customs, generated): a level the market lacks is set; one a
+# re-assert last month could not restore (a treaty forbids it, or the tariff
+# cooldown refused it) is adopted into the code. Any adoption moves the
+# customs external version once (a change made outside legislation: a bill or
+# a package touching customs then holds), te_tax_code_version once, and writes
+# one history entry (kind 15), however many goods it took. The per-good marks
+# (te_tax_cpend_<d>_<good>, te_tax_cblock_<good>) are transient flags.
+te_tax_sync_customs = {
+	if = {
+		limit = { te_tax_customs_authority = yes }
+		set_local_variable = { name = te_tax_cu_adopted value = 0 }
+		te_tax_gen_sync_customs = yes
+		if = {
+			limit = { local_var:te_tax_cu_adopted = 1 }
+			change_variable = { name = te_tax_xver_customs add = 1 }
+			change_variable = { name = te_tax_code_version add = 1 }
+			te_tax_history_push = { KIND = 15 SLOT = none }
+			debug_log = "TE_TAX customs_adopted a tariff level the code re-asserted last month did not take (a treaty or the cooldown); the market's level was adopted into the code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		}
 	}
 }

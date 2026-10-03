@@ -113,9 +113,10 @@ def catalog():
 def schema_tokens():
     """{token: sentinel} from the schema tables, every placeholder expanded.
 
-    Placeholders: <key> (instrument), <good> (catalog good), <s> (package slot
-    a, b), <n> (history slot 1..8), <o> (obligation slot 1..4) and <ig> (the
-    support model's interest groups), in any combination. Sentinel "—" is
+    Placeholders: <key> (instrument), <good> (catalog good), <tg> (customs
+    catalog good, Task 15), <s> (package slot a, b), <n> (history slot 1..8),
+    <o> (obligation slot 1..4) and <ig> (the support model's interest groups),
+    in any combination. Sentinel "—" is
     None: te_tax_schema (written last with the schema version) and the package
     payload, which te_tax_store_package writes in full and nothing reads while
     the slot is off, so neither is initialised. State-scope rows ("state var")
@@ -126,6 +127,7 @@ def schema_tokens():
     placeholders = {
         "<key>": KEYS,
         "<good>": catalog(),
+        "<tg>": gen.customs_catalog(),
         "<s>": ("a", "b"),
         "<n>": tuple(str(n) for n in range(1, 9)),
         "<o>": tuple(str(n) for n in gen.OBLIGATION_SLOTS),
@@ -385,7 +387,11 @@ class GeneratedSyncTest(unittest.TestCase):
         obligations = {"te_tax_gen_init_obligations", "te_tax_gen_copy_obligations", "te_tax_gen_clear_obligations"}
         # The views of the code (test_tax_code_offers.py).
         views = {"te_tax_gen_ig_views"}
-        self.assertEqual(names, want | scheduler | migration | drift | copies | obligations | views)
+        # The customs schedule (test_tax_code_customs.py).
+        customs = {f"te_tax_gen_customs_{part}_{d}" for part in ("set_native", "read_native") for d in ("imp", "exp")}
+        customs |= {"te_tax_gen_migrate_customs", "te_tax_gen_sync_customs", "te_tax_gen_count_customs_drift",
+                    "te_tax_gen_customs_clear_pending"}
+        self.assertEqual(names, want | scheduler | migration | drift | copies | obligations | views | customs)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
         for key in KEYS:
@@ -445,7 +451,9 @@ class GeneratedSyncTest(unittest.TestCase):
             # The civil-war repair's obligation checks (test_tax_code_obligations.py).
             | {"te_tax_gen_obl_ig_exists", "te_tax_gen_obl_slot_gone"}
             # The offers' feasibility (test_tax_code_offers.py).
-            | {"te_tax_gen_offer_feasible"},
+            | {"te_tax_gen_offer_feasible"}
+            # The customs schedule's level match and drift (test_tax_code_customs.py).
+            | {"te_tax_gen_customs_matches_imp", "te_tax_gen_customs_matches_exp", "te_tax_gen_customs_drift"},
         )
         for key in KEYS:
             family = amendment_family(key)
@@ -624,6 +632,8 @@ class DisplayValueTest(unittest.TestCase):
                  "te_tax_view_open_share", "te_tax_view_passage_share", "te_tax_view_legitimacy"}
         # The writer's native-drift counters (Task 9).
         want |= {"te_tax_view_drift_level", "te_tax_view_drift_goods", "te_tax_view_drift_amend"}
+        # The customs schedule (Task 15): its drift count and whether the code holds customs.
+        want |= {"te_tax_view_drift_customs", "te_tax_view_customs_held"}
         # The policy obligations (Task 12): per slot, and the overview's counts.
         for n in gen.OBLIGATION_SLOTS:
             want |= {f"te_tax_view_o{n}_{field}" for field in (
@@ -696,7 +706,7 @@ class SoleWriterTest(unittest.TestCase):
     """Only the collection writer touches a rule-on country's native fiscal state."""
 
     WRITES = re.compile(
-        r"\b(add_taxed_goods|remove_taxed_goods|set_tax_level)\b"
+        r"\b(add_taxed_goods|remove_taxed_goods|set_tax_level|set_import_tariff_level|set_export_tariff_level)\b"
         r"|add_amendment = \{ type = amendment_te_tax_"
         r"|(add|remove)_modifier = (\{ name = )?te_tax_relief_"
     )

@@ -23,6 +23,41 @@ te_tax_customs_on = {
 	has_game_rule = te_tax_code_enabled_customs
 }
 
+# ---------------------------------------------------------------------------
+# Customs authority (plan Task 15; docs/systems/tax_code_schema.md, "Customs
+# schedule"). Country scope. Only the market owner sets tariff levels
+# (SET_TARIFF_LEVEL_NOT_MARKET_OWNER); a junior partner of a customs union, a
+# subject pact included, trades in its senior's market and may not.
+# ---------------------------------------------------------------------------
+
+# The country owns the market it trades in. market.owner is vanilla's own form
+# (china_buttons.txt `market.owner = root`, 42_subjects_request_market_control.txt
+# `market.owner = this`); is_junior_in_customs_union is the treaty articles'.
+te_tax_owns_market = {
+	exists = market
+	market.owner = this
+	is_junior_in_customs_union = no
+}
+
+# The code may hold this country's customs: the customs option, and its own market.
+te_tax_customs_eligible = {
+	te_tax_customs_on = yes
+	te_tax_owns_market = yes
+}
+
+# The code holds this country's customs now: a code in force that has taken them
+# up (te_tax_customs_held, written by the customs migration and cleared by
+# te_tax_customs_revalidate when the market is lost), and the market is still
+# its own. The customs records (te_tax_en_<d>_<good>) are read, synced and
+# drafted only while this holds; a country that lost its market keeps them
+# frozen until it gains one again, which migrates afresh.
+te_tax_customs_authority = {
+	te_tax_code_in_force = yes
+	te_tax_customs_eligible = yes
+	has_variable = te_tax_customs_held
+	var:te_tax_customs_held = 1
+}
+
 # Country scope. Slot SLOT (a or b) may take a package from the bill record:
 # the rule is on, the country holds the code's tokens, the slot is free, the
 # bill has a due month after the current one, and every sunset in the bill

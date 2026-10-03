@@ -32,7 +32,12 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       for new countries (te_tax_gen_copy_code, te_tax_gen_copy_slot_<slot>,
       te_tax_gen_copy_enacted), and the policy obligations' init, outbreak
       copy and release reset (te_tax_gen_init_obligations,
-      te_tax_gen_copy_obligations, te_tax_gen_clear_obligations).
+      te_tax_gen_copy_obligations, te_tax_gen_clear_obligations), and the
+      customs schedule's per-level and per-good parts (plan Task 15, from
+      CUSTOMS_LEVELS and customs_catalog(): te_tax_gen_customs_set_native_<d>,
+      te_tax_gen_customs_read_native_<d>, te_tax_gen_migrate_customs,
+      te_tax_gen_sync_customs, te_tax_gen_count_customs_drift,
+      te_tax_gen_customs_clear_pending).
   common/scripted_triggers/te_tax_generated_triggers.txt
       Amendment-scope family and match triggers the syncs filter on, the
       scheduler's package and bill checks (te_tax_gen_package_current_<slot>,
@@ -43,7 +48,8 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       te_tax_gen_bill_small_steps, te_tax_gen_bill_overlaps_<slot>,
       te_tax_gen_package_empty_<slot>, te_tax_gen_package_unsuperseded_<slot>)
       and the civil-war repair's obligation checks (te_tax_gen_obl_ig_exists,
-      te_tax_gen_obl_slot_gone).
+      te_tax_gen_obl_slot_gone), and the customs schedule's level match and
+      drift (te_tax_gen_customs_matches_<d>, te_tax_gen_customs_drift).
   common/scripted_effects/te_tax_generated_bill_effects.txt
       The draft, bill and passage parts (te_tax_gen_draft_init/_from_bill/
       _clear, te_tax_gen_bill_from_draft/_clear, te_tax_gen_supersede_<slot>,
@@ -179,9 +185,14 @@ CUSTOM_LOC_PATH = "common/customizable_localization/te_tax_generated_custom_loc.
 KIND_MIGRATED, KIND_REPAIRED = 5, 7
 # History kinds the policy obligations write (plan Task 12; te_tax_obligation_effects.txt).
 KIND_OBL_FULFILLED, KIND_OBL_BREACHED, KIND_OBL_RENEGOTIATED, KIND_OBL_RELEASED = 11, 12, 13, 14
+# History kinds of the customs schedule (plan Task 15): a level a re-assert could not
+# restore (a treaty or the tariff cooldown) adopted into the code; the market lost (the
+# records frozen); a market gained (its native levels migrated into the code).
+KIND_CUSTOMS_ADOPTED, KIND_CUSTOMS_LOST, KIND_CUSTOMS_GAINED = 15, 16, 17
 # Kinds that changed the enacted code (te_tax_code_version moved); the
 # overview's last change is the newest of them.
-CODE_CHANGE_KINDS = (KIND_COMMENCED, KIND_SUNSET, KIND_MIGRATED, KIND_REPAIRED)
+CODE_CHANGE_KINDS = (KIND_COMMENCED, KIND_SUNSET, KIND_MIGRATED, KIND_REPAIRED, KIND_CUSTOMS_ADOPTED,
+                     KIND_CUSTOMS_GAINED)
 # The line each history kind prints (te_tax_l_english.yml). A sunset prints
 # te_tax_hist_kind_sunset_<key> for the instrument in its _inst.
 HISTORY_KIND_KEYS = {
@@ -198,6 +209,9 @@ HISTORY_KIND_KEYS = {
     KIND_OBL_BREACHED: "te_tax_hist_kind_obl_breached",
     KIND_OBL_RENEGOTIATED: "te_tax_hist_kind_obl_renegotiated",
     KIND_OBL_RELEASED: "te_tax_hist_kind_obl_released",
+    KIND_CUSTOMS_ADOPTED: "te_tax_hist_kind_customs_adopted",
+    KIND_CUSTOMS_LOST: "te_tax_hist_kind_customs_lost",
+    KIND_CUSTOMS_GAINED: "te_tax_hist_kind_customs_gained",
 }
 HISTORY_KIND_FALLBACK = "te_tax_hist_kind_other"
 # The workbench (plan Task 8): the per-instrument step handlers and per-good
@@ -349,6 +363,27 @@ VIEW_APPROVAL = {-2: -VANILLA_APPROVAL_FROM_LAW_STRONG, -1: -VANILLA_APPROVAL_FR
 VIEW_ICONS = {-2: "modifier_documents_negative", -1: "modifier_documents_negative",
               1: "modifier_documents_positive", 2: "modifier_documents_positive"}
 MODIFIERS_PATH = "common/static_modifiers/te_tax_generated_modifiers.txt"
+# The customs schedule (plan Task 15; docs/systems/tax_code_schema.md, "Customs schedule"),
+# under the experimental rule option te_tax_code_enabled_customs (te_tax_customs_on) only.
+# Per tradeable good (customs_catalog()) and direction, the market owner's code holds a level
+# on vanilla's one signed scale: subventions below 0, tariffs above, so a subsidy is a negative
+# level (te_tax_en_<d>_<good>). The level keys are vanilla's (history files, 21_no_tariffs.txt,
+# the set_*_tariff_level effects). A draft, bill or package field CUSTOMS_UNTOUCHED leaves the
+# provision alone: -1 is a level. CUSTOMS_DEFAULT_LEVEL is what the customs migration records
+# when no level can be read (no capital): vanilla's DEFAULT_IMPORT/EXPORT_TARIFFS, low tariffs.
+CUSTOMS_DIRS = (("imp", "import"), ("exp", "export"))
+CUSTOMS_LEVELS = ((-3, "max_subventions"), (-2, "high_subventions"), (-1, "low_subventions"),
+                  (0, "no_tariffs_or_subventions"), (1, "low_tariffs"), (2, "high_tariffs"), (3, "max_tariffs"))
+CUSTOMS_MIN, CUSTOMS_MAX = -3, 3
+CUSTOMS_UNTOUCHED = -99
+CUSTOMS_DEFAULT_LEVEL = 1
+# The workbench groups the goods by their goods-file category, in this order.
+CUSTOMS_CATEGORIES = ("staple", "industrial", "luxury", "military")
+# The customs tokens, initialised and copied like the others but under the customs option only:
+# whether the code holds this country's customs now (te_tax_customs_held, the records are read
+# only while it is 1), the customs group's planned and external versions, and its drift count.
+CUSTOMS_TOKENS = (("te_tax_customs_held", 0), ("te_tax_pver_customs", 0), ("te_tax_xver_customs", 0),
+                  ("te_tax_drift_customs", 0))
 
 
 class Instrument(NamedTuple):
@@ -462,6 +497,7 @@ def validate(instruments=INSTRUMENTS):
     migration_indices(instruments)
     for good in consumption_catalog():
         goods_weight(good)
+    customs_by_category()
     if TRUST_CAP * TRUST_WEIGHT > REASON_CAP:
         raise ValueError(f"trust {TRUST_CAP} x {TRUST_WEIGHT} points would pass the reason cap {REASON_CAP}")
 
@@ -592,6 +628,32 @@ def stray_goods():
     """
     catalog = set(consumption_catalog())
     return tuple(good for good in all_goods() if good not in catalog)
+
+
+@functools.lru_cache(maxsize=None)
+def customs_catalog():
+    """The goods a market sets tariffs on (plan Task 15): every good, vanilla and mod, that is
+    neither `local = yes` (services, transportation, electricity: never traded between
+    markets) nor `tradeable = no` (gold), sorted."""
+    return tuple(sorted(good for good, body in goods_definitions().items()
+                        if body.get("local") != "yes" and body.get("tradeable") != "no"))
+
+
+def customs_by_category():
+    """{category: (good, ...)} in CUSTOMS_CATEGORIES order: the workbench's groups and the
+    support model's customs reasons. Raises ValueError for a good of another category."""
+    groups = {category: [] for category in CUSTOMS_CATEGORIES}
+    for good in customs_catalog():
+        category = goods_definitions()[good].get("category")
+        if category not in groups:
+            raise ValueError(f"customs good {good}: category {category!r} is not one of {CUSTOMS_CATEGORIES}")
+        groups[category].append(good)
+    return {category: tuple(goods) for category, goods in groups.items()}
+
+
+def customs_enacted():
+    """The enacted customs records: te_tax_en_<d>_<good> per tradeable good and direction."""
+    return [f"te_tax_en_{d}_{good}" for good in customs_catalog() for d, _ in CUSTOMS_DIRS]
 
 
 # ---------------------------------------------------------------------------
@@ -1645,13 +1707,16 @@ def _copy_effects():
     code += [f"te_tax_en_g_{good}" for good in consumption_catalog()]
     code += [name for name, _ in schedule_tokens()]
     code += [name for name, _ in obligation_tokens()]
+    code += [name for name, _ in CUSTOMS_TOKENS] + customs_enacted()
     lines = [
         "",
         "# Outbreak copy (te_tax_copy_code, te_tax_civil_war_effects.txt): every token the",
         "# generated initialisers write (te_tax_gen_init_instruments, _goods, _schedule,",
         "# _obligations), from scope:te_tax_source onto the uprising: the enacted provisions with",
         "# their months, the version tokens, the taxed goods, the clock, the package-slot headers,",
-        "# the history ring, the obligation-slot headers and the groups' trust.",
+        "# the history ring, the obligation-slot headers and the groups' trust; and, under the",
+        "# customs option, the customs tokens and the enacted customs records the original holds",
+        "# (plan Task 15; a token the original lacks is not copied, so the plain option writes none).",
         "te_tax_gen_copy_code = {",
     ]
     lines += [_copy(name) for name in code]
@@ -3097,8 +3162,140 @@ def scripted_effects():
     lines += [f"\tif = {{ limit = {{ {condition} }} change_variable = {{ name = te_tax_drift_goods add = 1 }} }}"
               for condition in _goods_drift_conditions()]
     lines.append("}")
-    lines += _scheduler_effects() + _migration_effects() + _copy_effects()
+    lines += _customs_effects() + _scheduler_effects() + _migration_effects() + _copy_effects()
     return _txt("\n".join(lines) + "\n")
+
+
+def _customs_mismatch(d, good):
+    """The native level of `good` in direction `d` differs from the enacted record, which exists."""
+    return f"has_variable = te_tax_en_{d}_{good} NOT = {{ te_tax_gen_customs_matches_{d} = {{ GOOD = {good} }} }}"
+
+
+def _remove_if_set(name, indent="\t"):
+    return f"{indent}if = {{ limit = {{ has_variable = {name} }} remove_variable = {name} }}"
+
+
+def _customs_effects():
+    """The customs schedule's per-level and per-good effects (plan Task 15)."""
+    lines = [
+        "",
+        "# Customs (plan Task 15; docs/systems/tax_code_schema.md, \"Customs schedule\"). The native",
+        "# level of a good is stored on its market's owner and set with set_<direction>_tariff_level;",
+        "# script reads it only through a state's goods (capital ?= { sg:<good> = { <direction>_tariff_level",
+        "# = <key> } }, vanilla's je_set_up_grain_import), one branch per level. GOOD is a tradeable good.",
+        "# te_tax_gen_customs_set_native_<d>: the market's level becomes the enacted record's.",
+    ]
+    for d, direction in CUSTOMS_DIRS:
+        lines += ["", f"te_tax_gen_customs_set_native_{d} = {{"]
+        for n, (idx, key) in enumerate(CUSTOMS_LEVELS):
+            lines.append(f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ var:te_tax_en_{d}_$GOOD$ = {idx} }} "
+                         f"set_{direction}_tariff_level = {{ goods = g:$GOOD$ level = {key} }} }}")
+        lines.append("}")
+    lines += [
+        "",
+        "# te_tax_gen_customs_read_native_<d>: the enacted record becomes the market's level; vanilla's",
+        f"# default ({CUSTOMS_DEFAULT_LEVEL}, low tariffs) when no level can be read (no capital).",
+    ]
+    for d, direction in CUSTOMS_DIRS:
+        lines += ["", f"te_tax_gen_customs_read_native_{d} = {{"]
+        for n, (idx, key) in enumerate(CUSTOMS_LEVELS):
+            lines.append(f"\t{'if' if n == 0 else 'else_if'} = {{ limit = {{ capital ?= {{ sg:$GOOD$ = {{ "
+                         f"{direction}_tariff_level = {key} }} }} }} set_variable = {{ name = te_tax_en_{d}_$GOOD$ "
+                         f"value = {idx} }} }}")
+        lines.append(f"\telse = {{ set_variable = {{ name = te_tax_en_{d}_$GOOD$ value = {CUSTOMS_DEFAULT_LEVEL} }} }}")
+        lines.append("}")
+    lines += [
+        "",
+        "# Customs migration (te_tax_migrate_customs, te_tax_migration_effects.txt): every tradeable good's",
+        "# native import and export level becomes the code's, and no re-assert is pending and no good",
+        "# blocked. Only for a country eligible to hold its customs (te_tax_customs_eligible).",
+        "te_tax_gen_migrate_customs = {",
+    ]
+    for good in customs_catalog():
+        lines += [f"\tte_tax_gen_customs_read_native_{d} = {{ GOOD = {good} }}" for d, _ in CUSTOMS_DIRS]
+        lines += [_remove_if_set(f"te_tax_cpend_{d}_{good}") for d, _ in CUSTOMS_DIRS]
+        lines.append(_remove_if_set(f"te_tax_cblock_{good}"))
+    lines += [
+        "}",
+        "",
+        "# Customs sync (te_tax_sync_customs, te_tax_collection_effects.txt, only while the code holds the",
+        "# country's customs). Per tradeable good and direction, when the market's level differs from the",
+        "# code's: if last month's sync re-asserted it (te_tax_cpend_<d>_<good>) and it did not take (a",
+        "# treaty forbids the level, or the tariff cooldown refused it), the market's level is adopted",
+        "# into the code, the good is marked blocked (te_tax_cblock_<good>, for the review) and the caller",
+        "# moves the customs external version once (local te_tax_cu_adopted); otherwise the code's level",
+        "# is set and the re-assert is marked pending. A level that matches clears the pending mark. The",
+        "# two marks are transient flags, not schema tokens: written when set, removed when cleared.",
+        "te_tax_gen_sync_customs = {",
+    ]
+    for good in customs_catalog():
+        for d, _ in CUSTOMS_DIRS:
+            pend = f"te_tax_cpend_{d}_{good}"
+            lines += [
+                "\tif = {",
+                f"\t\tlimit = {{ {_customs_mismatch(d, good)} }}",
+                "\t\tif = {",
+                f"\t\t\tlimit = {{ has_variable = {pend} }}",
+                f"\t\t\tte_tax_gen_customs_read_native_{d} = {{ GOOD = {good} }}",
+                f"\t\t\tremove_variable = {pend}",
+                f"\t\t\tset_variable = {{ name = te_tax_cblock_{good} value = 1 }}",
+                "\t\t\tset_local_variable = { name = te_tax_cu_adopted value = 1 }",
+                "\t\t}",
+                "\t\telse = {",
+                f"\t\t\tte_tax_gen_customs_set_native_{d} = {{ GOOD = {good} }}",
+                f"\t\t\tset_variable = {{ name = {pend} value = 1 }}",
+                "\t\t}",
+                "\t}",
+                f"\telse_if = {{ limit = {{ has_variable = {pend} }} remove_variable = {pend} }}",
+            ]
+    lines += [
+        "}",
+        "",
+        "# Drift (te_tax_count_drift, te_tax_collection_effects.txt, only while the code holds the",
+        "# country's customs): +1 to te_tax_drift_customs per good and direction whose market level",
+        "# differs from the code's, counted before the sync re-asserts it. Writes only the counter.",
+        "te_tax_gen_count_customs_drift = {",
+    ]
+    for good in customs_catalog():
+        lines += [f"\tif = {{ limit = {{ {_customs_mismatch(d, good)} }} change_variable = {{ name = te_tax_drift_customs "
+                  "add = 1 } }" for d, _ in CUSTOMS_DIRS]
+    lines += [
+        "}",
+        "",
+        "# Drops every pending re-assert (customs authority lost, a release, a civil war's reunification):",
+        "# the next sync that holds the customs re-asserts afresh instead of adopting.",
+        "te_tax_gen_customs_clear_pending = {",
+    ]
+    for good in customs_catalog():
+        lines += [_remove_if_set(f"te_tax_cpend_{d}_{good}") for d, _ in CUSTOMS_DIRS]
+    lines.append("}")
+    return lines
+
+
+def _customs_triggers():
+    """The customs schedule's level match and drift triggers (plan Task 15)."""
+    lines = [
+        "",
+        "# Customs (plan Task 15). Country scope. te_tax_gen_customs_matches_<d> = { GOOD }: the market's",
+        "# level of GOOD in that direction is the enacted record's, read through the capital's state goods",
+        "# (vanilla's je_set_up_grain_import form), one branch per level; the record's value is tested",
+        "# first, so only one branch reads the market. The caller tests that the record exists.",
+    ]
+    for d, direction in CUSTOMS_DIRS:
+        lines += ["", f"te_tax_gen_customs_matches_{d} = {{", "\tOR = {"]
+        lines += [f"\t\tAND = {{ var:te_tax_en_{d}_$GOOD$ = {idx} capital ?= {{ sg:$GOOD$ = {{ "
+                  f"{direction}_tariff_level = {key} }} }} }}" for idx, key in CUSTOMS_LEVELS]
+        lines += ["\t}", "}"]
+    lines += [
+        "",
+        "# Drift (te_tax_detect_drift): some good's market level differs from the code's.",
+        "te_tax_gen_customs_drift = {",
+        "\tOR = {",
+    ]
+    for good in customs_catalog():
+        lines += [f"\t\tAND = {{ {_customs_mismatch(d, good)} }}" for d, _ in CUSTOMS_DIRS]
+    lines += ["\t}", "}"]
+    return lines
 
 
 def _goods_drift_conditions():
@@ -3158,6 +3355,7 @@ def scripted_triggers():
             lines += [f"\t\tAND = {{ var:te_tax_en_{key} = {idx} NOT = {{ {law} }} }}",
                       f"\t\tAND = {{ NOT = {{ var:te_tax_en_{key} = {idx} }} {law} }}"]
         lines += ["\t}", "}"]
+    lines += _customs_triggers()
     lines += _scheduler_triggers() + _bill_triggers() + _obligation_triggers() + _offer_triggers()
     return _txt("\n".join(lines) + "\n")
 

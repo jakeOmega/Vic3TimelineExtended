@@ -813,14 +813,14 @@ te_tax_view_pb_due_mo = {
 # The newest change to the enacted code (-1 if none is known), and its year and month.
 te_tax_view_last_change = {
 	value = -1
-	if = { limit = { has_variable = te_tax_h1_kind has_variable = te_tax_h1_month OR = { var:te_tax_h1_kind = 1 var:te_tax_h1_kind = 2 var:te_tax_h1_kind = 5 var:te_tax_h1_kind = 7 } } min = var:te_tax_h1_month }
-	if = { limit = { has_variable = te_tax_h2_kind has_variable = te_tax_h2_month OR = { var:te_tax_h2_kind = 1 var:te_tax_h2_kind = 2 var:te_tax_h2_kind = 5 var:te_tax_h2_kind = 7 } } min = var:te_tax_h2_month }
-	if = { limit = { has_variable = te_tax_h3_kind has_variable = te_tax_h3_month OR = { var:te_tax_h3_kind = 1 var:te_tax_h3_kind = 2 var:te_tax_h3_kind = 5 var:te_tax_h3_kind = 7 } } min = var:te_tax_h3_month }
-	if = { limit = { has_variable = te_tax_h4_kind has_variable = te_tax_h4_month OR = { var:te_tax_h4_kind = 1 var:te_tax_h4_kind = 2 var:te_tax_h4_kind = 5 var:te_tax_h4_kind = 7 } } min = var:te_tax_h4_month }
-	if = { limit = { has_variable = te_tax_h5_kind has_variable = te_tax_h5_month OR = { var:te_tax_h5_kind = 1 var:te_tax_h5_kind = 2 var:te_tax_h5_kind = 5 var:te_tax_h5_kind = 7 } } min = var:te_tax_h5_month }
-	if = { limit = { has_variable = te_tax_h6_kind has_variable = te_tax_h6_month OR = { var:te_tax_h6_kind = 1 var:te_tax_h6_kind = 2 var:te_tax_h6_kind = 5 var:te_tax_h6_kind = 7 } } min = var:te_tax_h6_month }
-	if = { limit = { has_variable = te_tax_h7_kind has_variable = te_tax_h7_month OR = { var:te_tax_h7_kind = 1 var:te_tax_h7_kind = 2 var:te_tax_h7_kind = 5 var:te_tax_h7_kind = 7 } } min = var:te_tax_h7_month }
-	if = { limit = { has_variable = te_tax_h8_kind has_variable = te_tax_h8_month OR = { var:te_tax_h8_kind = 1 var:te_tax_h8_kind = 2 var:te_tax_h8_kind = 5 var:te_tax_h8_kind = 7 } } min = var:te_tax_h8_month }
+	if = { limit = { has_variable = te_tax_h1_kind has_variable = te_tax_h1_month OR = { var:te_tax_h1_kind = 1 var:te_tax_h1_kind = 2 var:te_tax_h1_kind = 5 var:te_tax_h1_kind = 7 var:te_tax_h1_kind = 15 var:te_tax_h1_kind = 17 } } min = var:te_tax_h1_month }
+	if = { limit = { has_variable = te_tax_h2_kind has_variable = te_tax_h2_month OR = { var:te_tax_h2_kind = 1 var:te_tax_h2_kind = 2 var:te_tax_h2_kind = 5 var:te_tax_h2_kind = 7 var:te_tax_h2_kind = 15 var:te_tax_h2_kind = 17 } } min = var:te_tax_h2_month }
+	if = { limit = { has_variable = te_tax_h3_kind has_variable = te_tax_h3_month OR = { var:te_tax_h3_kind = 1 var:te_tax_h3_kind = 2 var:te_tax_h3_kind = 5 var:te_tax_h3_kind = 7 var:te_tax_h3_kind = 15 var:te_tax_h3_kind = 17 } } min = var:te_tax_h3_month }
+	if = { limit = { has_variable = te_tax_h4_kind has_variable = te_tax_h4_month OR = { var:te_tax_h4_kind = 1 var:te_tax_h4_kind = 2 var:te_tax_h4_kind = 5 var:te_tax_h4_kind = 7 var:te_tax_h4_kind = 15 var:te_tax_h4_kind = 17 } } min = var:te_tax_h4_month }
+	if = { limit = { has_variable = te_tax_h5_kind has_variable = te_tax_h5_month OR = { var:te_tax_h5_kind = 1 var:te_tax_h5_kind = 2 var:te_tax_h5_kind = 5 var:te_tax_h5_kind = 7 var:te_tax_h5_kind = 15 var:te_tax_h5_kind = 17 } } min = var:te_tax_h5_month }
+	if = { limit = { has_variable = te_tax_h6_kind has_variable = te_tax_h6_month OR = { var:te_tax_h6_kind = 1 var:te_tax_h6_kind = 2 var:te_tax_h6_kind = 5 var:te_tax_h6_kind = 7 var:te_tax_h6_kind = 15 var:te_tax_h6_kind = 17 } } min = var:te_tax_h6_month }
+	if = { limit = { has_variable = te_tax_h7_kind has_variable = te_tax_h7_month OR = { var:te_tax_h7_kind = 1 var:te_tax_h7_kind = 2 var:te_tax_h7_kind = 5 var:te_tax_h7_kind = 7 var:te_tax_h7_kind = 15 var:te_tax_h7_kind = 17 } } min = var:te_tax_h7_month }
+	if = { limit = { has_variable = te_tax_h8_kind has_variable = te_tax_h8_month OR = { var:te_tax_h8_kind = 1 var:te_tax_h8_kind = 2 var:te_tax_h8_kind = 5 var:te_tax_h8_kind = 7 var:te_tax_h8_kind = 15 var:te_tax_h8_kind = 17 } } min = var:te_tax_h8_month }
 	if = { limit = { has_variable = te_tax_en_wage_since } min = var:te_tax_en_wage_since }
 	if = { limit = { has_variable = te_tax_en_div_since } min = var:te_tax_en_div_since }
 	if = { limit = { has_variable = te_tax_en_land_since } min = var:te_tax_en_land_since }

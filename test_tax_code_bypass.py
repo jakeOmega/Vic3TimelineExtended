@@ -609,8 +609,10 @@ class DriftTest(unittest.TestCase):
 
     def test_logs_the_totals_every_time_for_a_player_and_once_for_the_ai(self):
         squashed = " ".join(self.detect.split())
+        # The customs drift count joins under the customs option (plan Task 15).
         self.assertIn("OR = { is_ai = no AND = { var:te_tax_drift_level = 0 var:te_tax_drift_goods = 0 "
-                      "var:te_tax_drift_amend = 0 } }", squashed)
+                      "var:te_tax_drift_amend = 0 NAND = { has_variable = te_tax_drift_customs "
+                      "var:te_tax_drift_customs > 0 } } }", squashed)
         lines = logs(self.detect)
         self.assertEqual(len(lines), 1)
         line = lines[0]

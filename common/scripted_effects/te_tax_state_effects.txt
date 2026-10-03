@@ -44,6 +44,18 @@ te_tax_init_country = {
 		if = { limit = { NOT = { has_variable = te_tax_drift_level } } set_variable = { name = te_tax_drift_level value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_drift_goods } } set_variable = { name = te_tax_drift_goods value = 0 } }
 		if = { limit = { NOT = { has_variable = te_tax_drift_amend } } set_variable = { name = te_tax_drift_amend value = 0 } }
+		# Customs (plan Task 15): under the customs option only, so the plain
+		# option writes no customs record. Whether the code holds the country's
+		# customs, the customs group's versions and its drift count. The enacted
+		# customs records are written by the customs migration, for a market
+		# owner only (te_tax_migrate_customs, te_tax_migration_effects.txt).
+		if = {
+			limit = { te_tax_customs_on = yes }
+			if = { limit = { NOT = { has_variable = te_tax_customs_held } } set_variable = { name = te_tax_customs_held value = 0 } }
+			if = { limit = { NOT = { has_variable = te_tax_pver_customs } } set_variable = { name = te_tax_pver_customs value = 0 } }
+			if = { limit = { NOT = { has_variable = te_tax_xver_customs } } set_variable = { name = te_tax_xver_customs value = 0 } }
+			if = { limit = { NOT = { has_variable = te_tax_drift_customs } } set_variable = { name = te_tax_drift_customs value = 0 } }
+		}
 		if = { limit = { NOT = { has_variable = te_tax_schema } } set_variable = { name = te_tax_schema value = 1 } }
 	}
 }

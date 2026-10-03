@@ -1,7 +1,8 @@
 ﻿# ============================================================================
 # LEGISLATED TAX CODE — internal country events
 # ============================================================================
-# Hidden, no loc. Raised by common/on_actions/te_tax_on_actions.txt, except
+# Hidden, no loc. Raised by common/on_actions/te_tax_on_actions.txt (te_tax.7
+# by its market and subject hooks), except
 # te_tax.4 (raised by the migration, by the re-assert te_tax.5 and by te_tax.6)
 # and te_tax.6 (raised by common/scripted_effects/te_tax_civil_war_effects.txt,
 # which also raises te_tax.3 for an uprising or a released country whose parent
@@ -116,5 +117,24 @@ te_tax.6 = {
 
 	immediate = {
 		te_tax_adopt_copied_code = yes
+	}
+}
+
+# Customs revalidation (plan Task 15; customs option only): raised a day after a
+# market merge, a new market or a change of subject status
+# (te_tax_on_actions.txt). Whether the code holds this country's customs follows
+# whether it owns its market (te_tax_customs_revalidate): a country that gained
+# its market migrates its native levels into the code, one that lost it keeps
+# its records frozen. Nothing is synced here: the code then equals the market,
+# or the market's owner sets the levels. Firing it again (console: event
+# te_tax.7) changes nothing unless the market changed.
+te_tax.7 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_customs_revalidate = yes
 	}
 }
