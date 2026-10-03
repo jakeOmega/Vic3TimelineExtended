@@ -761,28 +761,30 @@ migration_attraction_script_value = {
 	}
 }
 
+# State scope. Fuel emissions and source capture mirror the building modifiers.
+# Market policy cuts apply to remaining industrial emissions. Atmospheric
+# removal is separate and retains its full credit after policy reductions.
+gw_state_greenhouse_gas_emissions = {
+	value = modifier:state_greenhouse_gas_emissions_add
+	divide = gw_emission_display_scale
+	multiply = {
+		value = 1
+		owner = { value = gw_emission_multiplier_script_value }
+	}
+	add = gw_state_household_greenhouse_gas_emissions
+	subtract = {
+		value = modifier:state_atmospheric_carbon_capture_add
+		divide = gw_emission_display_scale
+	}
+}
+
 market_greenhouse_gas_emissions_script_value = {
-	# Evaluated in the country scope
+	# Country scope. Sum emissions in the location's market once; no fuel-sales proxy.
 	value = 0
 	market = {
-		mg:oil = {
-			add = {
-				value = market_goods_consumption
-				multiply = gw_emission_factor_oil
-			}
+		every_scope_country = {
+			every_scope_state = { add = gw_state_greenhouse_gas_emissions }
 		}
-		mg:coal = {
-			add = {
-				value = market_goods_consumption
-				multiply = gw_emission_factor_coal
-			}
-		}
-	}
-	divide = 10000
-	multiply = gw_emission_multiplier_script_value
-
-	add = {
-		value = market_carbon_capture_script_value
 	}
 }
 

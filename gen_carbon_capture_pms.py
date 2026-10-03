@@ -20,6 +20,7 @@ from pathlib import Path
 from paradox_file_parser import ParadoxFileParser
 import pm_emissions
 import pm_carbon_capture
+import household_emissions
 
 ROOT = Path(__file__).resolve().parent
 OUTPUT = Path("common/script_values/carbon_capture_generated_values.txt")
@@ -88,6 +89,7 @@ def regenerate(mod_state=None, *, root: Path = ROOT, dry_run: bool = False):
     outputs, fuel_methods = pm_emissions.plan_outputs(mod_state, root)
     capture_outputs, capture_counts = pm_carbon_capture.plan_outputs(mod_state, root)
     outputs.update(capture_outputs)
+    outputs.update(household_emissions.plan_outputs(mod_state))
     outputs[OUTPUT] = content
     changed_files = []
     for relative, text in outputs.items():

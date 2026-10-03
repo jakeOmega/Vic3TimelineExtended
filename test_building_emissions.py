@@ -94,6 +94,9 @@ class SyntheticCreditsTest(unittest.TestCase):
                              for name in emissions.BUILDINGS})},
             base_parsers={"PMs": SimpleNamespace(data={})},
         )
+        fixture = emissions.load_state(ROOT)
+        for kind in ("Buy Packages", "Goods"):
+            ms.mod_parsers[kind] = fixture.mod_parsers[kind]
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / emissions.FACTORS).parent.mkdir(parents=True)
@@ -426,15 +429,18 @@ class DisplayBoundaryTest(unittest.TestCase):
             gross = emissions.recipe_emissions(pm, {"coal": Decimal(2), "oil": Decimal("1.74")})
             self.assertEqual(scalar(workforce(pm), emissions.MODIFIER), gross - expected)
 
-    def test_market_consumption_uses_shared_weights_without_rescaling(self):
+    def test_market_uses_generated_state_emissions_without_consumption_proxy(self):
         value = body(self.extra, "market_greenhouse_gas_emissions_script_value")
-        market = body(value, "market")
-        for fuel in ("coal", "oil"):
-            contribution = body(body(market, f"mg:{fuel}"), "add")
-            self.assertEqual(body(contribution, "value"), "market_goods_consumption")
-            self.assertEqual(body(contribution, "multiply"), f"gw_emission_factor_{fuel}")
-        self.assertEqual(scalar(value, "divide"), 10000)
-        self.assertEqual(body(value, "multiply"), "gw_emission_multiplier_script_value")
+        country = body(body(value, "market"), "every_scope_country")
+        self.assertEqual(body(body(country, "every_scope_state"), "add"), "gw_state_greenhouse_gas_emissions")
+        self.assertNotIn("divide", value)
+        self.assertNotIn("multiply", value)
+        state = body(self.extra, "gw_state_greenhouse_gas_emissions")
+        self.assertEqual(body(state, "value"), "modifier:state_greenhouse_gas_emissions_add")
+        self.assertEqual(body(state, "divide"), "gw_emission_display_scale")
+        self.assertEqual(body(state, "add"), "gw_state_household_greenhouse_gas_emissions")
+        removal = body(state, "subtract")
+        self.assertEqual(body(removal, "value"), "modifier:state_atmospheric_carbon_capture_add")
 
 
 if __name__ == "__main__":

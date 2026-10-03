@@ -127,3 +127,26 @@ state_carbon_capture_add = {
 	decimals = 2
 	script_only = yes
 }
+
+# Net industrial emissions (fuel minus source capture), in building display units.
+state_greenhouse_gas_emissions_add = {
+	color = bad
+	percent = no
+	decimals = 2
+	script_only = yes
+}
+
+# Atmospheric offsets are kept separate so policy cuts do not weaken removal.
+state_atmospheric_carbon_capture_add = {
+	color = good
+	percent = no
+	decimals = 2
+	script_only = yes
+}
+
+country_household_greenhouse_gas_emissions_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	game_data = { ai_value = 0 }
+}

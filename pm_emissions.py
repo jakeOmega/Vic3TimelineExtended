@@ -15,6 +15,8 @@ from paradox_file_parser import ParadoxFileParser
 
 BUILDINGS = ("building_power_plant", "building_steel_mill", "building_chemical_plant")
 MODIFIER = "building_greenhouse_gas_emissions_add"
+STATE_MODIFIER = "state_greenhouse_gas_emissions_add"
+ATMOSPHERIC_MODIFIER = "state_atmospheric_carbon_capture_add"
 OUTPUT = Path("common/production_methods/greenhouse_gas_generated_injects.txt")
 FACTORS = Path("common/script_values/greenhouse_gas_factors.txt")
 REMOVALS = {"pm_direct_air_capture": ("coal", "gw_direct_air_capture_coal_equivalent")}
@@ -32,7 +34,7 @@ def load_state(root):
     from mod_state import ModState, VANILLA_COMMON_DIRS
     from vanilla_parsed import load
 
-    kinds = ("Buildings", "PM Groups", "PMs")
+    kinds = ("Buildings", "PM Groups", "PMs", "Buy Packages", "Goods")
     snapshot = load(str(root / "vanilla_parsed"))
     state = ModState(
         {kind: "/nonexistent" for kind in kinds},
@@ -100,8 +102,8 @@ def _with_emission(block, amount, *, removal=False, label=None):
             f" # AUTO-GENERATED: {label}" + block[index:])
 
 
-def _with_state_credit(block, amount):
-    pattern = re.compile(r"(?m)^([\t ]*)state_carbon_capture_add\s*=\s*([\d.]+)[^\n]*\n")
+def _with_state_credit(block, amount, *, modifier="state_carbon_capture_add", label="carbon credit"):
+    pattern = re.compile(r"(?m)^([\t ]*)" + modifier + r"\s*=\s*(-?[\d.]+)[^\n]*\n")
     matches = list(pattern.finditer(block))
     if len(matches) > 1:
         raise ValueError("Duplicate generated state credits")
@@ -109,21 +111,25 @@ def _with_state_credit(block, amount):
         match = matches[0]
         if Decimal(match[2]) == amount:
             return block
-        return (block[:match.start()] + f"{match[1]}state_carbon_capture_add = {amount:.2f}"
-                " # AUTO-GENERATED: carbon credit\n" + block[match.end():])
+        line = f"{match[1]}{modifier} = {amount:.2f} # AUTO-GENERATED: {label}\n" if amount else ""
+        return block[:match.start()] + line + block[match.end():]
+    if not amount:
+        return block
     masked = _mask(block)
     state = re.search(r"\bstate_modifiers\s*=\s*\{", masked)
     if state:
         end = _end(masked, state.end() - 1)
         workforce = re.search(r"\bworkforce_scaled\s*=\s*\{", masked[state.end():end])
         if workforce is None:
-            raise ValueError("Carbon-credit PM has no workforce_scaled state block")
+            index = end - 1
+            return (block[:index] + "\tworkforce_scaled = {\n"
+                    f"\t\t\t{modifier} = {amount:.2f} # AUTO-GENERATED: {label}\n\t\t}}\n\t" + block[index:])
         index = state.end() + workforce.end()
-        return (block[:index] + f"\n\t\t\tstate_carbon_capture_add = {amount:.2f}"
-                " # AUTO-GENERATED: carbon credit" + block[index:])
+        return (block[:index] + f"\n\t\t\t{modifier} = {amount:.2f}"
+                f" # AUTO-GENERATED: {label}" + block[index:])
     index = block.index("{") + 1
     return (block[:index] + "\n\tstate_modifiers = {\n\t\tworkforce_scaled = {\n"
-            f"\t\t\tstate_carbon_capture_add = {amount:.2f} # AUTO-GENERATED: carbon credit\n"
+            f"\t\t\t{modifier} = {amount:.2f} # AUTO-GENERATED: {label}\n"
             "\t\t}\n\t}\n" + block[index:])
 
 
@@ -145,6 +151,7 @@ def plan_outputs(state, root):
         for group in unwrap(unwrap(building).get("production_method_groups", [])):
             covered.update(unwrap(unwrap(groups[group])["production_methods"]))
     amounts = {name: recipe_emissions(methods[name], factors, display_scale) for name in covered}
+    gross_amounts = amounts.copy()
     fuel_methods = sum(bool(amount) for amount in amounts.values())
     credits = {}
     for name, fuel in SYNTHETIC_CREDITS.items():
@@ -166,7 +173,7 @@ def plan_outputs(state, root):
         credits[name] = -amounts[name]
     outputs, owned = {}, set()
     for path in sorted((root / "common/production_methods").rglob("*.txt")):
-        if path == root / OUTPUT:
+        if path == root / OUTPUT or path.name == "carbon_capture_generated_pms.txt":
             continue
         original = path.read_text(encoding="utf-8-sig")
         masked = _mask(original)
@@ -182,8 +189,12 @@ def plan_outputs(state, root):
             block = original[match.start():end]
             replacement = _with_emission(block, amounts.get(name, Decimal(0)), removal=name in credits,
                                          label="net synthetic emissions" if name in SYNTHETIC_CREDITS else None)
+            replacement = _with_state_credit(replacement, gross_amounts.get(name, Decimal(0)),
+                                             modifier=STATE_MODIFIER, label="industrial emissions")
             if name in credits:
                 replacement = _with_state_credit(replacement, credits[name])
+                replacement = _with_state_credit(replacement, credits[name], modifier=ATMOSPHERIC_MODIFIER,
+                                                 label="atmospheric removal")
             if replacement != block:
                 edits.append((match.start(), end, replacement))
         result = original
@@ -201,7 +212,8 @@ def plan_outputs(state, root):
             continue
         if name not in state.base_parsers["PMs"].data:
             raise ValueError(f"Cannot INJECT into a non-vanilla method: {name}")
-        lines.extend([f"INJECT:{name} = {{", "\tbuilding_modifiers = {",
+        lines.extend([f"INJECT:{name} = {{", "\tstate_modifiers = {", "\t\tworkforce_scaled = {",
+                      f"\t\t\t{STATE_MODIFIER} = {amount:.2f}", "\t\t}", "\t}", "\tbuilding_modifiers = {",
                       "\t\tworkforce_scaled = {", f"\t\t\t{MODIFIER} = {amount:.2f}",
                       "\t\t}", "\t}", "}", ""])
     outputs[OUTPUT] = "\n".join(lines)

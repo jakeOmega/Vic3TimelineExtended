@@ -45,7 +45,7 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
    and throughput changes. Synthetic methods now display net values and all
    credits flow through the state sum. No separate building sweeps remain.
 5. Review balance (capture costs, subsidy hiring and warming) before merging.
-   The broader building-sum gross/household accounting is still deferred.
+   Building-driven gross/household accounting is implemented; see the latest checkpoint below.
 
 ## Remaining verification
 
@@ -291,3 +291,35 @@ is removed. The main checkout was not switched.
 The draft PR description is current. Remaining work is the generated production
 regression/balance review listed in Next work above; no engine tests of the new
 342 variants are claimed. Restart Victoria 3 to load the production groups.
+
+## Building-driven climate and household checkpoint
+
+The owner requested replacing gross coal/oil-consumption accounting with the
+building GHG values, then adding household consumption and near-complete cuts.
+They explicitly clarified that the 100% target is households only.
+
+Generated `state_greenhouse_gas_emissions_add` mirrors gross fuel contributions
+and negative source-capture contributions; synthetic/DAC atmospheric credits
+are separate in `state_atmospheric_carbon_capture_add`. Live annual market
+emissions now sum each state's remaining industry after the leader's policy
+cut, plus that state's household estimate, minus full atmospheric removal.
+Source capture and the industrial policy multiplier cannot by themselves make
+industry remove carbon. Display/history/temperature units are preserved.
+
+Households use state population × interpolated heating demand at average_sol,
+normalized by the vanilla 10,000-person package and baseline consumption
+equivalent 0.625 (25% workers plus 75% dependents at half needs). Heating budget
+is assigned 20% coal, 30% oil and 50% non-fossil at merged base prices. This is
+an estimate, not an exact pop-only sales accessor or a change to buy packages.
+The curve and prices regenerate through `household_emissions.py`.
+Green Building Codes −60%, Renewable Investment −25%, Fossil-Fuel Divestment
+−15% stack additively on `country_household_greenhouse_gas_emissions_mult`,
+floored at zero; national cuts apply to the state's owner, not market neighbors.
+Public Transit targets transport rather than this direct fossil-heating estimate.
+
+79 focused tests pass, including 11 numerical regressions using production
+script-value ASTs. Next: full CI/structure checks, deploy, then engine checks
+for mirrors, January totals, household policy adoption/repeal and cooling.
+Standalone military-unit fuel is outside the building-PM mirror; civil transport
+PMs remain included. Fuel-specific input multipliers are not automatically
+applied to custom PM GHG mirrors. A future extension can model those separately.

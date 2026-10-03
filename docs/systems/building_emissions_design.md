@@ -56,6 +56,16 @@
   buildings; the policy has no direct market emissions multiplier. Its country
   flag survives revolution and rebuilds the journal-entry modifier monthly.
 
+- **Building-driven climate and households (owner follow-up):** annual emissions
+  now use generated state mirrors of building fuel emissions minus source
+  capture, after industrial policy cuts. Atmospheric offsets are separate and
+  keep their full credit. Households add a population/average-wealth heating
+  estimate from generated buy-package interpolation. Green Building Codes,
+  Renewable Investment and Fossil-Fuel Divestment cut this footprint by
+  60/25/15%, stacking to zero. The owner clarified that near-zero target is
+  households, not all industry. Standalone military fuel and fuel-specific
+  input-multiplier adjustments remain outside the custom building mirror.
+
 Resume instructions and validation results are in
 [`building_emissions_handoff.md`](building_emissions_handoff.md). Section 1
 records the pre-implementation baseline; §5–§9 remain the intended full design.

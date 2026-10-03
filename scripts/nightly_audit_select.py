@@ -55,6 +55,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/buy_packages/00_buy_packages.txt",
     "common/script_values/auto_combat_unit_market_costs.txt",
     "common/script_values/carbon_capture_generated_values.txt",
+    "common/script_values/household_emissions_generated_values.txt",
     "common/production_methods/greenhouse_gas_generated_injects.txt",
     "common/production_methods/carbon_capture_generated_pms.txt",
     "common/production_method_groups/carbon_capture_generated_groups.txt",

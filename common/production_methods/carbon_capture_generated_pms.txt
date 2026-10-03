@@ -20,6 +20,7 @@ pm_carbon_capture_1_aeroplanes_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -41,6 +42,7 @@ pm_carbon_capture_2_aeroplanes_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -62,6 +64,7 @@ pm_carbon_capture_3_aeroplanes_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -89,6 +92,7 @@ pm_carbon_capture_1_alpine_donawitz_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -110,6 +114,7 @@ pm_carbon_capture_2_alpine_donawitz_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -131,6 +136,7 @@ pm_carbon_capture_3_alpine_donawitz_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -158,6 +164,7 @@ pm_carbon_capture_1_altos_hornos_baracaldo_furnaces_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -179,6 +186,7 @@ pm_carbon_capture_2_altos_hornos_baracaldo_furnaces_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -200,6 +208,7 @@ pm_carbon_capture_3_altos_hornos_baracaldo_furnaces_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -233,6 +242,7 @@ pm_carbon_capture_1_automation_building_arms_industry_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -254,6 +264,7 @@ pm_carbon_capture_2_automation_building_arms_industry_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -275,6 +286,7 @@ pm_carbon_capture_3_automation_building_arms_industry_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -297,6 +309,7 @@ pm_carbon_capture_1_automation_building_arms_industry_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -318,6 +331,7 @@ pm_carbon_capture_2_automation_building_arms_industry_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -339,6 +353,7 @@ pm_carbon_capture_3_automation_building_arms_industry_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -361,6 +376,7 @@ pm_carbon_capture_1_automation_building_arms_industry_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -382,6 +398,7 @@ pm_carbon_capture_2_automation_building_arms_industry_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -403,6 +420,7 @@ pm_carbon_capture_3_automation_building_arms_industry_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -436,6 +454,7 @@ pm_carbon_capture_1_automation_building_automotive_industry_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -457,6 +476,7 @@ pm_carbon_capture_2_automation_building_automotive_industry_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -478,6 +498,7 @@ pm_carbon_capture_3_automation_building_automotive_industry_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -511,6 +532,7 @@ pm_carbon_capture_1_automation_building_furniture_manufactory_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -532,6 +554,7 @@ pm_carbon_capture_2_automation_building_furniture_manufactory_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -553,6 +576,7 @@ pm_carbon_capture_3_automation_building_furniture_manufactory_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -575,6 +599,7 @@ pm_carbon_capture_1_automation_building_furniture_manufactory_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.25
+			state_greenhouse_gas_emissions_add = -0.25
 		}
 	}
 	building_modifiers = {
@@ -596,6 +621,7 @@ pm_carbon_capture_2_automation_building_furniture_manufactory_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -617,6 +643,7 @@ pm_carbon_capture_3_automation_building_furniture_manufactory_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -639,6 +666,7 @@ pm_carbon_capture_1_automation_building_furniture_manufactory_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -660,6 +688,7 @@ pm_carbon_capture_2_automation_building_furniture_manufactory_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -681,6 +710,7 @@ pm_carbon_capture_3_automation_building_furniture_manufactory_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -714,6 +744,7 @@ pm_carbon_capture_1_automation_building_motor_industry_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -735,6 +766,7 @@ pm_carbon_capture_2_automation_building_motor_industry_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -756,6 +788,7 @@ pm_carbon_capture_3_automation_building_motor_industry_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -778,6 +811,7 @@ pm_carbon_capture_1_automation_building_motor_industry_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.25
+			state_greenhouse_gas_emissions_add = -0.25
 		}
 	}
 	building_modifiers = {
@@ -799,6 +833,7 @@ pm_carbon_capture_2_automation_building_motor_industry_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -820,6 +855,7 @@ pm_carbon_capture_3_automation_building_motor_industry_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -842,6 +878,7 @@ pm_carbon_capture_1_automation_building_motor_industry_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -863,6 +900,7 @@ pm_carbon_capture_2_automation_building_motor_industry_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -884,6 +922,7 @@ pm_carbon_capture_3_automation_building_motor_industry_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -917,6 +956,7 @@ pm_carbon_capture_1_automation_building_munition_plant_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -938,6 +978,7 @@ pm_carbon_capture_2_automation_building_munition_plant_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -959,6 +1000,7 @@ pm_carbon_capture_3_automation_building_munition_plant_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -981,6 +1023,7 @@ pm_carbon_capture_1_automation_building_munition_plant_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -1002,6 +1045,7 @@ pm_carbon_capture_2_automation_building_munition_plant_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -1023,6 +1067,7 @@ pm_carbon_capture_3_automation_building_munition_plant_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -1045,6 +1090,7 @@ pm_carbon_capture_1_automation_building_munition_plant_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -1066,6 +1112,7 @@ pm_carbon_capture_2_automation_building_munition_plant_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -1087,6 +1134,7 @@ pm_carbon_capture_3_automation_building_munition_plant_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -1120,6 +1168,7 @@ pm_carbon_capture_1_automation_building_paper_mill_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.25
+			state_greenhouse_gas_emissions_add = -0.25
 		}
 	}
 	building_modifiers = {
@@ -1141,6 +1190,7 @@ pm_carbon_capture_2_automation_building_paper_mill_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -1162,6 +1212,7 @@ pm_carbon_capture_3_automation_building_paper_mill_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -1184,6 +1235,7 @@ pm_carbon_capture_1_automation_building_paper_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -1205,6 +1257,7 @@ pm_carbon_capture_2_automation_building_paper_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -1226,6 +1279,7 @@ pm_carbon_capture_3_automation_building_paper_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -1259,6 +1313,7 @@ pm_carbon_capture_1_automation_building_steel_mill_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.25
+			state_greenhouse_gas_emissions_add = -0.25
 		}
 	}
 	building_modifiers = {
@@ -1280,6 +1335,7 @@ pm_carbon_capture_2_automation_building_steel_mill_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -1301,6 +1357,7 @@ pm_carbon_capture_3_automation_building_steel_mill_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -1323,6 +1380,7 @@ pm_carbon_capture_1_automation_building_steel_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -1344,6 +1402,7 @@ pm_carbon_capture_2_automation_building_steel_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -1365,6 +1424,7 @@ pm_carbon_capture_3_automation_building_steel_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -1398,6 +1458,7 @@ pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -1419,6 +1480,7 @@ pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -1440,6 +1502,7 @@ pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -1462,6 +1525,7 @@ pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -1483,6 +1547,7 @@ pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -1504,6 +1569,7 @@ pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -1526,6 +1592,7 @@ pm_carbon_capture_1_automation_building_tooling_workshop_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -1547,6 +1614,7 @@ pm_carbon_capture_2_automation_building_tooling_workshop_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -1568,6 +1636,7 @@ pm_carbon_capture_3_automation_building_tooling_workshop_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -1590,6 +1659,7 @@ pm_carbon_capture_1_automation_building_tooling_workshop_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -1611,6 +1681,7 @@ pm_carbon_capture_2_automation_building_tooling_workshop_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -1632,6 +1703,7 @@ pm_carbon_capture_3_automation_building_tooling_workshop_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -1665,6 +1737,7 @@ pm_carbon_capture_1_automobile_production_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -1686,6 +1759,7 @@ pm_carbon_capture_2_automobile_production_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -1707,6 +1781,7 @@ pm_carbon_capture_3_automobile_production_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -1729,6 +1804,7 @@ pm_carbon_capture_1_automobile_production_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -1750,6 +1826,7 @@ pm_carbon_capture_2_automobile_production_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -1771,6 +1848,7 @@ pm_carbon_capture_3_automobile_production_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -1804,6 +1882,7 @@ pm_carbon_capture_1_base_building_motor_industry_coal0_oil40 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.74
+			state_greenhouse_gas_emissions_add = -1.74
 		}
 	}
 	building_modifiers = {
@@ -1825,6 +1904,7 @@ pm_carbon_capture_2_base_building_motor_industry_coal0_oil40 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.48
+			state_greenhouse_gas_emissions_add = -3.48
 		}
 	}
 	building_modifiers = {
@@ -1846,6 +1926,7 @@ pm_carbon_capture_3_base_building_motor_industry_coal0_oil40 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 5.22
+			state_greenhouse_gas_emissions_add = -5.22
 		}
 	}
 	building_modifiers = {
@@ -1868,6 +1949,7 @@ pm_carbon_capture_1_base_building_motor_industry_coal0_oil50 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.18
+			state_greenhouse_gas_emissions_add = -2.18
 		}
 	}
 	building_modifiers = {
@@ -1889,6 +1971,7 @@ pm_carbon_capture_2_base_building_motor_industry_coal0_oil50 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 4.35
+			state_greenhouse_gas_emissions_add = -4.35
 		}
 	}
 	building_modifiers = {
@@ -1910,6 +1993,7 @@ pm_carbon_capture_3_base_building_motor_industry_coal0_oil50 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 6.53
+			state_greenhouse_gas_emissions_add = -6.53
 		}
 	}
 	building_modifiers = {
@@ -1932,6 +2016,7 @@ pm_carbon_capture_1_base_building_motor_industry_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -1953,6 +2038,7 @@ pm_carbon_capture_2_base_building_motor_industry_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.00
+			state_greenhouse_gas_emissions_add = -2.00
 		}
 	}
 	building_modifiers = {
@@ -1974,6 +2060,7 @@ pm_carbon_capture_3_base_building_motor_industry_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.00
+			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
 	building_modifiers = {
@@ -2007,6 +2094,7 @@ pm_carbon_capture_1_base_building_oil_rig_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -2028,6 +2116,7 @@ pm_carbon_capture_2_base_building_oil_rig_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -2049,6 +2138,7 @@ pm_carbon_capture_3_base_building_oil_rig_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -2076,6 +2166,7 @@ pm_carbon_capture_1_base_building_power_plant_coal0_oil25 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.09
+			state_greenhouse_gas_emissions_add = -1.09
 		}
 	}
 	building_modifiers = {
@@ -2097,6 +2188,7 @@ pm_carbon_capture_2_base_building_power_plant_coal0_oil25 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.18
+			state_greenhouse_gas_emissions_add = -2.18
 		}
 	}
 	building_modifiers = {
@@ -2118,6 +2210,7 @@ pm_carbon_capture_3_base_building_power_plant_coal0_oil25 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.26
+			state_greenhouse_gas_emissions_add = -3.26
 		}
 	}
 	building_modifiers = {
@@ -2140,6 +2233,7 @@ pm_carbon_capture_1_base_building_power_plant_coal0_oil35 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.52
+			state_greenhouse_gas_emissions_add = -1.52
 		}
 	}
 	building_modifiers = {
@@ -2161,6 +2255,7 @@ pm_carbon_capture_2_base_building_power_plant_coal0_oil35 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.05
+			state_greenhouse_gas_emissions_add = -3.05
 		}
 	}
 	building_modifiers = {
@@ -2182,6 +2277,7 @@ pm_carbon_capture_3_base_building_power_plant_coal0_oil35 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 4.57
+			state_greenhouse_gas_emissions_add = -4.57
 		}
 	}
 	building_modifiers = {
@@ -2204,6 +2300,7 @@ pm_carbon_capture_1_base_building_power_plant_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.25
+			state_greenhouse_gas_emissions_add = -0.25
 		}
 	}
 	building_modifiers = {
@@ -2225,6 +2322,7 @@ pm_carbon_capture_2_base_building_power_plant_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -2246,6 +2344,7 @@ pm_carbon_capture_3_base_building_power_plant_coal5_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -2268,6 +2367,7 @@ pm_carbon_capture_1_base_building_power_plant_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -2289,6 +2389,7 @@ pm_carbon_capture_2_base_building_power_plant_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.00
+			state_greenhouse_gas_emissions_add = -2.00
 		}
 	}
 	building_modifiers = {
@@ -2310,6 +2411,7 @@ pm_carbon_capture_3_base_building_power_plant_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.00
+			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
 	building_modifiers = {
@@ -2332,6 +2434,7 @@ pm_carbon_capture_1_base_building_power_plant_coal25_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.25
+			state_greenhouse_gas_emissions_add = -1.25
 		}
 	}
 	building_modifiers = {
@@ -2353,6 +2456,7 @@ pm_carbon_capture_2_base_building_power_plant_coal25_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.50
+			state_greenhouse_gas_emissions_add = -2.50
 		}
 	}
 	building_modifiers = {
@@ -2374,6 +2478,7 @@ pm_carbon_capture_3_base_building_power_plant_coal25_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.75
+			state_greenhouse_gas_emissions_add = -3.75
 		}
 	}
 	building_modifiers = {
@@ -2407,6 +2512,7 @@ pm_carbon_capture_1_base_building_shipyard_coal0_oil30 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -2428,6 +2534,7 @@ pm_carbon_capture_2_base_building_shipyard_coal0_oil30 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.61
+			state_greenhouse_gas_emissions_add = -2.61
 		}
 	}
 	building_modifiers = {
@@ -2449,6 +2556,7 @@ pm_carbon_capture_3_base_building_shipyard_coal0_oil30 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.92
+			state_greenhouse_gas_emissions_add = -3.92
 		}
 	}
 	building_modifiers = {
@@ -2471,6 +2579,7 @@ pm_carbon_capture_1_base_building_shipyard_coal0_oil35 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.52
+			state_greenhouse_gas_emissions_add = -1.52
 		}
 	}
 	building_modifiers = {
@@ -2492,6 +2601,7 @@ pm_carbon_capture_2_base_building_shipyard_coal0_oil35 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.05
+			state_greenhouse_gas_emissions_add = -3.05
 		}
 	}
 	building_modifiers = {
@@ -2513,6 +2623,7 @@ pm_carbon_capture_3_base_building_shipyard_coal0_oil35 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 4.57
+			state_greenhouse_gas_emissions_add = -4.57
 		}
 	}
 	building_modifiers = {
@@ -2535,6 +2646,7 @@ pm_carbon_capture_1_base_building_shipyard_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -2556,6 +2668,7 @@ pm_carbon_capture_2_base_building_shipyard_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -2577,6 +2690,7 @@ pm_carbon_capture_3_base_building_shipyard_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -2604,6 +2718,7 @@ pm_carbon_capture_1_basf_ludwigshafen_plant_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -2625,6 +2740,7 @@ pm_carbon_capture_2_basf_ludwigshafen_plant_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -2646,6 +2762,7 @@ pm_carbon_capture_3_basf_ludwigshafen_plant_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -2673,6 +2790,7 @@ pm_carbon_capture_1_bhp_broken_hill_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -2694,6 +2812,7 @@ pm_carbon_capture_2_bhp_broken_hill_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -2715,6 +2834,7 @@ pm_carbon_capture_3_bhp_broken_hill_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -2742,6 +2862,7 @@ pm_carbon_capture_1_bolckow_eston_ironworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -2763,6 +2884,7 @@ pm_carbon_capture_2_bolckow_eston_ironworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -2784,6 +2906,7 @@ pm_carbon_capture_3_bolckow_eston_ironworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -2811,6 +2934,7 @@ pm_carbon_capture_1_calcutta_electric_victoria_house_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -2832,6 +2956,7 @@ pm_carbon_capture_2_calcutta_electric_victoria_house_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -2853,6 +2978,7 @@ pm_carbon_capture_3_calcutta_electric_victoria_house_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -2886,6 +3012,7 @@ pm_carbon_capture_1_canning_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -2907,6 +3034,7 @@ pm_carbon_capture_2_canning_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -2928,6 +3056,7 @@ pm_carbon_capture_3_canning_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -2955,6 +3084,7 @@ pm_carbon_capture_1_carnegie_homestead_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -2976,6 +3106,7 @@ pm_carbon_capture_2_carnegie_homestead_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -2997,6 +3128,7 @@ pm_carbon_capture_3_carnegie_homestead_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -3024,6 +3156,7 @@ pm_carbon_capture_1_chr_hansen_copenhagen_laboratory_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -3045,6 +3178,7 @@ pm_carbon_capture_2_chr_hansen_copenhagen_laboratory_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -3066,6 +3200,7 @@ pm_carbon_capture_3_chr_hansen_copenhagen_laboratory_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -3093,6 +3228,7 @@ pm_carbon_capture_1_cockerill_seraing_works_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -3114,6 +3250,7 @@ pm_carbon_capture_2_cockerill_seraing_works_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -3135,6 +3272,7 @@ pm_carbon_capture_3_cockerill_seraing_works_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -3162,6 +3300,7 @@ pm_carbon_capture_1_duro_la_felguera_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -3183,6 +3322,7 @@ pm_carbon_capture_2_duro_la_felguera_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -3204,6 +3344,7 @@ pm_carbon_capture_3_duro_la_felguera_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -3231,6 +3372,7 @@ pm_carbon_capture_1_eea_dock_sud_power_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -3252,6 +3394,7 @@ pm_carbon_capture_2_eea_dock_sud_power_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -3273,6 +3416,7 @@ pm_carbon_capture_3_eea_dock_sud_power_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -3300,6 +3444,7 @@ pm_carbon_capture_1_electricidad_caracas_power_house_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -3321,6 +3466,7 @@ pm_carbon_capture_2_electricidad_caracas_power_house_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -3342,6 +3488,7 @@ pm_carbon_capture_3_electricidad_caracas_power_house_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -3375,6 +3522,7 @@ pm_carbon_capture_1_explosives_building_chemical_plant_coal30_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -3395,6 +3543,7 @@ pm_carbon_capture_2_explosives_building_chemical_plant_coal30_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.00
+			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
 	building_modifiers = {
@@ -3415,6 +3564,7 @@ pm_carbon_capture_3_explosives_building_chemical_plant_coal30_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 4.50
+			state_greenhouse_gas_emissions_add = -4.50
 		}
 	}
 	building_modifiers = {
@@ -3447,6 +3597,7 @@ pm_carbon_capture_1_fertilizer_production_coal0_oil20 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -3467,6 +3618,7 @@ pm_carbon_capture_2_fertilizer_production_coal0_oil20 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.74
+			state_greenhouse_gas_emissions_add = -1.74
 		}
 	}
 	building_modifiers = {
@@ -3487,6 +3639,7 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil20 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.61
+			state_greenhouse_gas_emissions_add = -2.61
 		}
 	}
 	building_modifiers = {
@@ -3508,6 +3661,7 @@ pm_carbon_capture_1_fertilizer_production_coal0_oil120 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 5.22
+			state_greenhouse_gas_emissions_add = -5.22
 		}
 	}
 	building_modifiers = {
@@ -3528,6 +3682,7 @@ pm_carbon_capture_2_fertilizer_production_coal0_oil120 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 10.44
+			state_greenhouse_gas_emissions_add = -10.44
 		}
 	}
 	building_modifiers = {
@@ -3548,6 +3703,7 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil120 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 15.66
+			state_greenhouse_gas_emissions_add = -15.66
 		}
 	}
 	building_modifiers = {
@@ -3569,6 +3725,7 @@ pm_carbon_capture_1_fertilizer_production_coal0_oil160 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 6.96
+			state_greenhouse_gas_emissions_add = -6.96
 		}
 	}
 	building_modifiers = {
@@ -3589,6 +3746,7 @@ pm_carbon_capture_2_fertilizer_production_coal0_oil160 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 13.92
+			state_greenhouse_gas_emissions_add = -13.92
 		}
 	}
 	building_modifiers = {
@@ -3609,6 +3767,7 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil160 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 20.88
+			state_greenhouse_gas_emissions_add = -20.88
 		}
 	}
 	building_modifiers = {
@@ -3630,6 +3789,7 @@ pm_carbon_capture_1_fertilizer_production_coal0_oil180 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 7.83
+			state_greenhouse_gas_emissions_add = -7.83
 		}
 	}
 	building_modifiers = {
@@ -3650,6 +3810,7 @@ pm_carbon_capture_2_fertilizer_production_coal0_oil180 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 15.66
+			state_greenhouse_gas_emissions_add = -15.66
 		}
 	}
 	building_modifiers = {
@@ -3670,6 +3831,7 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil180 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 23.49
+			state_greenhouse_gas_emissions_add = -23.49
 		}
 	}
 	building_modifiers = {
@@ -3691,6 +3853,7 @@ pm_carbon_capture_1_fertilizer_production_coal0_oil220 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 9.57
+			state_greenhouse_gas_emissions_add = -9.57
 		}
 	}
 	building_modifiers = {
@@ -3711,6 +3874,7 @@ pm_carbon_capture_2_fertilizer_production_coal0_oil220 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 19.14
+			state_greenhouse_gas_emissions_add = -19.14
 		}
 	}
 	building_modifiers = {
@@ -3731,6 +3895,7 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil220 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 28.71
+			state_greenhouse_gas_emissions_add = -28.71
 		}
 	}
 	building_modifiers = {
@@ -3763,6 +3928,7 @@ pm_carbon_capture_1_firearms_manufacturing_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -3784,6 +3950,7 @@ pm_carbon_capture_2_firearms_manufacturing_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -3805,6 +3972,7 @@ pm_carbon_capture_3_firearms_manufacturing_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -3838,6 +4006,7 @@ pm_carbon_capture_1_foundries_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -3859,6 +4028,7 @@ pm_carbon_capture_2_foundries_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -3880,6 +4050,7 @@ pm_carbon_capture_3_foundries_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -3902,6 +4073,7 @@ pm_carbon_capture_1_foundries_coal0_oil20 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -3923,6 +4095,7 @@ pm_carbon_capture_2_foundries_coal0_oil20 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.74
+			state_greenhouse_gas_emissions_add = -1.74
 		}
 	}
 	building_modifiers = {
@@ -3944,6 +4117,7 @@ pm_carbon_capture_3_foundries_coal0_oil20 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.61
+			state_greenhouse_gas_emissions_add = -2.61
 		}
 	}
 	building_modifiers = {
@@ -3971,6 +4145,7 @@ pm_carbon_capture_1_fundicao_ipanema_sorocaba_foundry_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -3992,6 +4167,7 @@ pm_carbon_capture_2_fundicao_ipanema_sorocaba_foundry_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -4013,6 +4189,7 @@ pm_carbon_capture_3_fundicao_ipanema_sorocaba_foundry_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -4040,6 +4217,7 @@ pm_carbon_capture_1_fundidora_monterrey_blast_furnace_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -4061,6 +4239,7 @@ pm_carbon_capture_2_fundidora_monterrey_blast_furnace_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -4082,6 +4261,7 @@ pm_carbon_capture_3_fundidora_monterrey_blast_furnace_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -4109,6 +4289,7 @@ pm_carbon_capture_1_generic_foundry_complex_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -4130,6 +4311,7 @@ pm_carbon_capture_2_generic_foundry_complex_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.00
+			state_greenhouse_gas_emissions_add = -2.00
 		}
 	}
 	building_modifiers = {
@@ -4151,6 +4333,7 @@ pm_carbon_capture_3_generic_foundry_complex_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.00
+			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
 	building_modifiers = {
@@ -4178,6 +4361,7 @@ pm_carbon_capture_1_generic_mineral_refinery_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -4199,6 +4383,7 @@ pm_carbon_capture_2_generic_mineral_refinery_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -4220,6 +4405,7 @@ pm_carbon_capture_3_generic_mineral_refinery_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -4247,6 +4433,7 @@ pm_carbon_capture_1_generic_power_hub_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -4268,6 +4455,7 @@ pm_carbon_capture_2_generic_power_hub_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.00
+			state_greenhouse_gas_emissions_add = -2.00
 		}
 	}
 	building_modifiers = {
@@ -4289,6 +4477,7 @@ pm_carbon_capture_3_generic_power_hub_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.00
+			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
 	building_modifiers = {
@@ -4322,6 +4511,7 @@ pm_carbon_capture_1_glassblowing_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -4343,6 +4533,7 @@ pm_carbon_capture_2_glassblowing_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -4364,6 +4555,7 @@ pm_carbon_capture_3_glassblowing_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -4391,6 +4583,7 @@ pm_carbon_capture_1_hanseong_jeongi_gwanghwamun_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -4412,6 +4605,7 @@ pm_carbon_capture_2_hanseong_jeongi_gwanghwamun_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -4433,6 +4627,7 @@ pm_carbon_capture_3_hanseong_jeongi_gwanghwamun_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -4460,6 +4655,7 @@ pm_carbon_capture_1_hughes_yuzovka_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -4481,6 +4677,7 @@ pm_carbon_capture_2_hughes_yuzovka_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -4502,6 +4699,7 @@ pm_carbon_capture_3_hughes_yuzovka_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -4529,6 +4727,7 @@ pm_carbon_capture_1_ilva_bagnoli_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -4550,6 +4749,7 @@ pm_carbon_capture_2_ilva_bagnoli_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -4571,6 +4771,7 @@ pm_carbon_capture_3_ilva_bagnoli_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -4598,6 +4799,7 @@ pm_carbon_capture_1_ingolstadt_power_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -4619,6 +4821,7 @@ pm_carbon_capture_2_ingolstadt_power_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -4640,6 +4843,7 @@ pm_carbon_capture_3_ingolstadt_power_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -4667,6 +4871,7 @@ pm_carbon_capture_1_lilpop_warsaw_metalworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -4688,6 +4893,7 @@ pm_carbon_capture_2_lilpop_warsaw_metalworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -4709,6 +4915,7 @@ pm_carbon_capture_3_lilpop_warsaw_metalworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -4736,6 +4943,7 @@ pm_carbon_capture_1_markwald_bangkok_rice_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -4757,6 +4965,7 @@ pm_carbon_capture_2_markwald_bangkok_rice_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -4778,6 +4987,7 @@ pm_carbon_capture_3_markwald_bangkok_rice_mill_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -4805,6 +5015,7 @@ pm_carbon_capture_1_mfo_oerlikon_works_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -4826,6 +5037,7 @@ pm_carbon_capture_2_mfo_oerlikon_works_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -4847,6 +5059,7 @@ pm_carbon_capture_3_mfo_oerlikon_works_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -4880,6 +5093,7 @@ pm_carbon_capture_1_mining_equipment_building_coal_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -4901,6 +5115,7 @@ pm_carbon_capture_2_mining_equipment_building_coal_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -4922,6 +5137,7 @@ pm_carbon_capture_3_mining_equipment_building_coal_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -4944,6 +5160,7 @@ pm_carbon_capture_1_mining_equipment_building_coal_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -4965,6 +5182,7 @@ pm_carbon_capture_2_mining_equipment_building_coal_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -4986,6 +5204,7 @@ pm_carbon_capture_3_mining_equipment_building_coal_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -5019,6 +5238,7 @@ pm_carbon_capture_1_mining_equipment_building_gold_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -5040,6 +5260,7 @@ pm_carbon_capture_2_mining_equipment_building_gold_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -5061,6 +5282,7 @@ pm_carbon_capture_3_mining_equipment_building_gold_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -5083,6 +5305,7 @@ pm_carbon_capture_1_mining_equipment_building_gold_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -5104,6 +5327,7 @@ pm_carbon_capture_2_mining_equipment_building_gold_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -5125,6 +5349,7 @@ pm_carbon_capture_3_mining_equipment_building_gold_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -5147,6 +5372,7 @@ pm_carbon_capture_1_mining_equipment_building_gold_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -5168,6 +5394,7 @@ pm_carbon_capture_2_mining_equipment_building_gold_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -5189,6 +5416,7 @@ pm_carbon_capture_3_mining_equipment_building_gold_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -5211,6 +5439,7 @@ pm_carbon_capture_1_mining_equipment_building_gold_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -5232,6 +5461,7 @@ pm_carbon_capture_2_mining_equipment_building_gold_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -5253,6 +5483,7 @@ pm_carbon_capture_3_mining_equipment_building_gold_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -5286,6 +5517,7 @@ pm_carbon_capture_1_mining_equipment_building_iron_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -5307,6 +5539,7 @@ pm_carbon_capture_2_mining_equipment_building_iron_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -5328,6 +5561,7 @@ pm_carbon_capture_3_mining_equipment_building_iron_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -5350,6 +5584,7 @@ pm_carbon_capture_1_mining_equipment_building_iron_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -5371,6 +5606,7 @@ pm_carbon_capture_2_mining_equipment_building_iron_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -5392,6 +5628,7 @@ pm_carbon_capture_3_mining_equipment_building_iron_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -5414,6 +5651,7 @@ pm_carbon_capture_1_mining_equipment_building_iron_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -5435,6 +5673,7 @@ pm_carbon_capture_2_mining_equipment_building_iron_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -5456,6 +5695,7 @@ pm_carbon_capture_3_mining_equipment_building_iron_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -5478,6 +5718,7 @@ pm_carbon_capture_1_mining_equipment_building_iron_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -5499,6 +5740,7 @@ pm_carbon_capture_2_mining_equipment_building_iron_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -5520,6 +5762,7 @@ pm_carbon_capture_3_mining_equipment_building_iron_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -5553,6 +5796,7 @@ pm_carbon_capture_1_mining_equipment_building_lead_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -5574,6 +5818,7 @@ pm_carbon_capture_2_mining_equipment_building_lead_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -5595,6 +5840,7 @@ pm_carbon_capture_3_mining_equipment_building_lead_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -5617,6 +5863,7 @@ pm_carbon_capture_1_mining_equipment_building_lead_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -5638,6 +5885,7 @@ pm_carbon_capture_2_mining_equipment_building_lead_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -5659,6 +5907,7 @@ pm_carbon_capture_3_mining_equipment_building_lead_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -5681,6 +5930,7 @@ pm_carbon_capture_1_mining_equipment_building_lead_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -5702,6 +5952,7 @@ pm_carbon_capture_2_mining_equipment_building_lead_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -5723,6 +5974,7 @@ pm_carbon_capture_3_mining_equipment_building_lead_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -5745,6 +5997,7 @@ pm_carbon_capture_1_mining_equipment_building_lead_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -5766,6 +6019,7 @@ pm_carbon_capture_2_mining_equipment_building_lead_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -5787,6 +6041,7 @@ pm_carbon_capture_3_mining_equipment_building_lead_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -5820,6 +6075,7 @@ pm_carbon_capture_1_mining_equipment_building_sulfur_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -5841,6 +6097,7 @@ pm_carbon_capture_2_mining_equipment_building_sulfur_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -5862,6 +6119,7 @@ pm_carbon_capture_3_mining_equipment_building_sulfur_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -5884,6 +6142,7 @@ pm_carbon_capture_1_mining_equipment_building_sulfur_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -5905,6 +6164,7 @@ pm_carbon_capture_2_mining_equipment_building_sulfur_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -5926,6 +6186,7 @@ pm_carbon_capture_3_mining_equipment_building_sulfur_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -5948,6 +6209,7 @@ pm_carbon_capture_1_mining_equipment_building_sulfur_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -5969,6 +6231,7 @@ pm_carbon_capture_2_mining_equipment_building_sulfur_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -5990,6 +6253,7 @@ pm_carbon_capture_3_mining_equipment_building_sulfur_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -6012,6 +6276,7 @@ pm_carbon_capture_1_mining_equipment_building_sulfur_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -6033,6 +6298,7 @@ pm_carbon_capture_2_mining_equipment_building_sulfur_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -6054,6 +6320,7 @@ pm_carbon_capture_3_mining_equipment_building_sulfur_mine_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -6087,6 +6354,7 @@ pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.21750
+			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
 	building_modifiers = {
@@ -6108,6 +6376,7 @@ pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.43500
+			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
 	building_modifiers = {
@@ -6129,6 +6398,7 @@ pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil5 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.65250
+			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
 	building_modifiers = {
@@ -6151,6 +6421,7 @@ pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.44
+			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
 	building_modifiers = {
@@ -6172,6 +6443,7 @@ pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.87
+			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
 	building_modifiers = {
@@ -6193,6 +6465,7 @@ pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil10 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.31
+			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
 	building_modifiers = {
@@ -6220,6 +6493,7 @@ pm_carbon_capture_1_norsk_hydro_rjukan_plant_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -6241,6 +6515,7 @@ pm_carbon_capture_2_norsk_hydro_rjukan_plant_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -6262,6 +6537,7 @@ pm_carbon_capture_3_norsk_hydro_rjukan_plant_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -6295,6 +6571,7 @@ pm_carbon_capture_1_refinement_building_sugar_plantation_coal1_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.05000
+			state_greenhouse_gas_emissions_add = -0.05000
 		}
 	}
 	building_modifiers = {
@@ -6316,6 +6593,7 @@ pm_carbon_capture_2_refinement_building_sugar_plantation_coal1_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.10000
+			state_greenhouse_gas_emissions_add = -0.10000
 		}
 	}
 	building_modifiers = {
@@ -6337,6 +6615,7 @@ pm_carbon_capture_3_refinement_building_sugar_plantation_coal1_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.15000
+			state_greenhouse_gas_emissions_add = -0.15000
 		}
 	}
 	building_modifiers = {
@@ -6359,6 +6638,7 @@ pm_carbon_capture_1_refinement_building_sugar_plantation_coal2_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.10000
+			state_greenhouse_gas_emissions_add = -0.10000
 		}
 	}
 	building_modifiers = {
@@ -6380,6 +6660,7 @@ pm_carbon_capture_2_refinement_building_sugar_plantation_coal2_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.20000
+			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
 	building_modifiers = {
@@ -6401,6 +6682,7 @@ pm_carbon_capture_3_refinement_building_sugar_plantation_coal2_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.30000
+			state_greenhouse_gas_emissions_add = -0.30000
 		}
 	}
 	building_modifiers = {
@@ -6423,6 +6705,7 @@ pm_carbon_capture_1_refinement_building_sugar_plantation_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.20000
+			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
 	building_modifiers = {
@@ -6444,6 +6727,7 @@ pm_carbon_capture_2_refinement_building_sugar_plantation_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.40000
+			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
 	building_modifiers = {
@@ -6465,6 +6749,7 @@ pm_carbon_capture_3_refinement_building_sugar_plantation_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.60000
+			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
 	building_modifiers = {
@@ -6492,6 +6777,7 @@ pm_carbon_capture_1_sandford_newcastle_natal_ironworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -6513,6 +6799,7 @@ pm_carbon_capture_2_sandford_newcastle_natal_ironworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -6534,6 +6821,7 @@ pm_carbon_capture_3_sandford_newcastle_natal_ironworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -6561,6 +6849,7 @@ pm_carbon_capture_1_schneider_le_creusot_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -6582,6 +6871,7 @@ pm_carbon_capture_2_schneider_le_creusot_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -6603,6 +6893,7 @@ pm_carbon_capture_3_schneider_le_creusot_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -6630,6 +6921,7 @@ pm_carbon_capture_1_siam_electric_wat_liab_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -6651,6 +6943,7 @@ pm_carbon_capture_2_siam_electric_wat_liab_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -6672,6 +6965,7 @@ pm_carbon_capture_3_siam_electric_wat_liab_station_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -6705,6 +6999,7 @@ pm_carbon_capture_1_steam_automation_building_gold_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.20000
+			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
 	building_modifiers = {
@@ -6726,6 +7021,7 @@ pm_carbon_capture_2_steam_automation_building_gold_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.40000
+			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
 	building_modifiers = {
@@ -6747,6 +7043,7 @@ pm_carbon_capture_3_steam_automation_building_gold_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.60000
+			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
 	building_modifiers = {
@@ -6780,6 +7077,7 @@ pm_carbon_capture_1_steam_automation_building_iron_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.20000
+			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
 	building_modifiers = {
@@ -6801,6 +7099,7 @@ pm_carbon_capture_2_steam_automation_building_iron_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.40000
+			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
 	building_modifiers = {
@@ -6822,6 +7121,7 @@ pm_carbon_capture_3_steam_automation_building_iron_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.60000
+			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
 	building_modifiers = {
@@ -6855,6 +7155,7 @@ pm_carbon_capture_1_steam_automation_building_lead_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.20000
+			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
 	building_modifiers = {
@@ -6876,6 +7177,7 @@ pm_carbon_capture_2_steam_automation_building_lead_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.40000
+			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
 	building_modifiers = {
@@ -6897,6 +7199,7 @@ pm_carbon_capture_3_steam_automation_building_lead_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.60000
+			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
 	building_modifiers = {
@@ -6930,6 +7233,7 @@ pm_carbon_capture_1_steam_automation_building_sulfur_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.20000
+			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
 	building_modifiers = {
@@ -6951,6 +7255,7 @@ pm_carbon_capture_2_steam_automation_building_sulfur_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.40000
+			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
 	building_modifiers = {
@@ -6972,6 +7277,7 @@ pm_carbon_capture_3_steam_automation_building_sulfur_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.60000
+			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
 	building_modifiers = {
@@ -7005,6 +7311,7 @@ pm_carbon_capture_1_steam_automation_building_tech_metals_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.20000
+			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
 	building_modifiers = {
@@ -7026,6 +7333,7 @@ pm_carbon_capture_2_steam_automation_building_tech_metals_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.40000
+			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
 	building_modifiers = {
@@ -7047,6 +7355,7 @@ pm_carbon_capture_3_steam_automation_building_tech_metals_mine_coal4_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.60000
+			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
 	building_modifiers = {
@@ -7080,6 +7389,7 @@ pm_carbon_capture_1_steelmaking_process_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -7101,6 +7411,7 @@ pm_carbon_capture_2_steelmaking_process_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -7122,6 +7433,7 @@ pm_carbon_capture_3_steelmaking_process_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -7144,6 +7456,7 @@ pm_carbon_capture_1_steelmaking_process_coal30_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -7165,6 +7478,7 @@ pm_carbon_capture_2_steelmaking_process_coal30_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.00
+			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
 	building_modifiers = {
@@ -7186,6 +7500,7 @@ pm_carbon_capture_3_steelmaking_process_coal30_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 4.50
+			state_greenhouse_gas_emissions_add = -4.50
 		}
 	}
 	building_modifiers = {
@@ -7213,6 +7528,7 @@ pm_carbon_capture_1_sumitomo_besshi_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -7234,6 +7550,7 @@ pm_carbon_capture_2_sumitomo_besshi_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -7255,6 +7572,7 @@ pm_carbon_capture_3_sumitomo_besshi_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -7288,6 +7606,7 @@ pm_carbon_capture_1_synthetic_opium_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -7309,6 +7628,7 @@ pm_carbon_capture_2_synthetic_opium_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -7330,6 +7650,7 @@ pm_carbon_capture_3_synthetic_opium_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -7357,6 +7678,7 @@ pm_carbon_capture_1_tata_jamshedpur_works_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -7378,6 +7700,7 @@ pm_carbon_capture_2_tata_jamshedpur_works_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -7399,6 +7722,7 @@ pm_carbon_capture_3_tata_jamshedpur_works_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -7426,6 +7750,7 @@ pm_carbon_capture_1_thyssen_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -7447,6 +7772,7 @@ pm_carbon_capture_2_thyssen_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -7468,6 +7794,7 @@ pm_carbon_capture_3_thyssen_steelworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -7495,6 +7822,7 @@ pm_carbon_capture_1_tokyo_electric_asakusa_station_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -7516,6 +7844,7 @@ pm_carbon_capture_2_tokyo_electric_asakusa_station_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.00
+			state_greenhouse_gas_emissions_add = -2.00
 		}
 	}
 	building_modifiers = {
@@ -7537,6 +7866,7 @@ pm_carbon_capture_3_tokyo_electric_asakusa_station_coal20_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 3.00
+			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
 	building_modifiers = {
@@ -7564,6 +7894,7 @@ pm_carbon_capture_1_uniao_fabril_barreiro_plant_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -7585,6 +7916,7 @@ pm_carbon_capture_2_uniao_fabril_barreiro_plant_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -7606,6 +7938,7 @@ pm_carbon_capture_3_uniao_fabril_barreiro_plant_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -7633,6 +7966,7 @@ pm_carbon_capture_1_van_vlissingen_oostenburg_works_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -7654,6 +7988,7 @@ pm_carbon_capture_2_van_vlissingen_oostenburg_works_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -7675,6 +8010,7 @@ pm_carbon_capture_3_van_vlissingen_oostenburg_works_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -7702,6 +8038,7 @@ pm_carbon_capture_1_witkowitzer_ostrava_ironworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.75
+			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
 	building_modifiers = {
@@ -7723,6 +8060,7 @@ pm_carbon_capture_2_witkowitzer_ostrava_ironworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
@@ -7744,6 +8082,7 @@ pm_carbon_capture_3_witkowitzer_ostrava_ironworks_coal15_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 2.25
+			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
 	building_modifiers = {
@@ -7771,6 +8110,7 @@ pm_carbon_capture_1_yasuda_atosanupuri_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 0.50
+			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
 	building_modifiers = {
@@ -7792,6 +8132,7 @@ pm_carbon_capture_2_yasuda_atosanupuri_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.00
+			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
 	building_modifiers = {
@@ -7813,6 +8154,7 @@ pm_carbon_capture_3_yasuda_atosanupuri_mine_coal10_oil0 = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_carbon_capture_add = 1.50
+			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
 	building_modifiers = {
