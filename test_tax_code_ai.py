@@ -1175,25 +1175,35 @@ class AiBillTest(unittest.TestCase):
                 self.assertIn(extra, body)
         self.assertLess(body.index("te_tax_bill_active = yes"), body.index("var:te_tax_bl_"))
 
-    def test_the_authority_reason_is_force_through_short_only_of_capacity_or_authority(self):
-        body = flat(block(self.triggers, "te_tax_ai_force_blocked_by_authority"))
+    def force_lines(self):
+        """te_tax_can_force_through's structural lines: the shares, the capacity, the Authority."""
         lines = tooltip_conditions(block(read(OBL_TRIGGERS), "te_tax_can_force_through"))
-        capacity = lines.pop("te_tax_tt_force_capacity")
-        authority = lines.pop("te_tax_tt_force_authority")
-        lines.pop("te_tax_tt_bill_open")
-        for key, condition in lines.items():
-            with self.subTest(line=key):
-                self.assertIn(condition, body)
-        self.assertTrue(body.startswith("te_tax_ai_emergency = yes "), body[:60])
-        self.assertTrue(body.endswith(f"NOT = {{ AND = {{ {capacity} {authority} }} }}"), body[-160:])
-        self.assertEqual(body.count(capacity), 1)
-        self.assertLess(body.index("te_tax_bill_active = yes"), body.index("var:te_tax_bl_"))
+        return {key: lines[f"te_tax_tt_force_{key}"] for key in ("short", "share", "capacity", "authority")}
+
+    def test_the_authority_reason_is_force_through_short_only_of_capacity_or_authority(self):
+        # Ruling 11: only the structural lines, so the reason holds at introduction too, while the
+        # debate has just begun (spec §2.4 step 4 lists it there).
+        force = self.force_lines()
+        self.assertEqual(force["capacity"], '"modifier:country_legislative_override_capacity_add" >= 2')
+        self.assertEqual(force["authority"], "produced_authority > forced_law_through_event_authority_cost_medium")
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_force_blocked_by_authority")),
+                         f"te_tax_ai_emergency = yes {force['share']} {force['short']} "
+                         f"NOT = {{ AND = {{ {force['capacity']} {force['authority']} }} }}")
+
+    def test_a_force_path_is_force_through_possible_in_substance(self):
+        # Ruling 11: an emergency, the committed share force-through needs, and its capacity and
+        # Authority, read with te_tax_can_force_through's own lines; no line that only time settles.
+        force = self.force_lines()
+        body = flat(block(self.triggers, "te_tax_ai_force_path"))
+        self.assertEqual(body, f"te_tax_ai_emergency = yes {force['share']} {force['capacity']} {force['authority']}")
+        for transient in ("te_tax_debate_days_left", "te_tax_bl_due", "te_tax_can_store_package", "legitimacy"):
+            with self.subTest(transient=transient):
+                self.assertNotIn(transient, body)
 
     def test_hopeless_is_short_with_no_offer_and_no_force_path(self):
         self.assertEqual(flat(block(self.triggers, "te_tax_ai_bill_hopeless")),
                          "te_tax_bill_active = yes te_tax_view_open_share <= te_tax_passage_share "
-                         "NOT = { te_tax_ai_offer_available = yes } "
-                         "NOT = { AND = { te_tax_ai_emergency = yes te_tax_committed_share >= te_tax_force_share } }")
+                         "NOT = { te_tax_ai_offer_available = yes } NOT = { te_tax_ai_force_path = yes }")
 
     def test_an_offer_is_available_within_the_budget_while_the_bill_is_short(self):
         groups = " ".join(f"te_tax_ai_offer_acceptable = {{ IG = {ig} }}" for ig in gen.IGS)
@@ -1249,7 +1259,10 @@ class AiBillTest(unittest.TestCase):
             "te_tax_ai_withdraw_slots = yes } "
             "else_if = { limit = { te_tax_ai_force_blocked_by_authority = yes } te_tax_ai_withdraw_authority = yes } "
             "else_if = { limit = { te_tax_ai_bill_hopeless = yes } te_tax_ai_withdraw_support = yes } "
-            "else = { te_tax_ai_withdraw_patience = yes } }"))
+            # Minor 1: patience only for a bill open that long, so a caller outside the manager
+            # never logs patience for a bill that just opened.
+            "else_if = { limit = { te_tax_ai_bill_age >= te_tax_ai_bill_patience } te_tax_ai_withdraw_patience = yes } "
+            "else = { te_tax_ai_withdraw_support = yes } }"))
 
     def test_each_withdrawal_closes_cools_down_logs_and_resets(self):
         for reason in WITHDRAW_REASONS:
@@ -1269,7 +1282,9 @@ class AiBillTest(unittest.TestCase):
         self.assertEqual(callers(r"\bte_tax_gen_ai_record_marks = yes"), {"te_tax_ai_effects.txt": 2})
         for reason in WITHDRAW_REASONS:
             with self.subTest(reason=reason):
-                self.assertEqual(callers(rf"\bte_tax_ai_withdraw_{reason} = yes"), {"te_tax_ai_effects.txt": 1})
+                # support: hopeless, and the fallback.
+                self.assertEqual(callers(rf"\bte_tax_ai_withdraw_{reason} = yes"),
+                                 {"te_tax_ai_effects.txt": 2 if reason == "support" else 1})
                 self.assertIn(f"te_tax_ai_withdraw_{reason} = yes", block(self.ai, "te_tax_ai_withdraw"))
         self.assertIn("te_tax_ai_withdraw = yes", self.manage)
 
@@ -1314,7 +1329,8 @@ class AiBillTest(unittest.TestCase):
                 self.assertEqual(got, expected)
 
     def test_the_offer_chain_takes_persuadable_groups_by_clout_then_opposed_ones(self):
-        locals_ = " ".join(f"set_local_variable = {{ name = te_tax_ai_rank_{ig} value = te_tax_ai_clout_rank_{ig} }}"
+        # Locals, not schema tokens, so not te_tax_ai_ (Minor 2; the te_tax_band precedent).
+        locals_ = " ".join(f"set_local_variable = {{ name = te_tax_rank_{ig} value = te_tax_ai_clout_rank_{ig} }}"
                            for ig in gen.IGS)
         branches_ = []
         for persuadable in (True, False):
@@ -1323,7 +1339,7 @@ class AiBillTest(unittest.TestCase):
                     stance = (f"te_tax_ai_persuadable = {{ IG = {ig} }}" if persuadable
                               else f"NOT = {{ te_tax_ai_persuadable = {{ IG = {ig} }} }}")
                     opener = "if" if not branches_ else "else_if"
-                    branches_.append(f"{opener} = {{ limit = {{ local_var:te_tax_ai_rank_{ig} = {rank} {stance} "
+                    branches_.append(f"{opener} = {{ limit = {{ local_var:te_tax_rank_{ig} = {rank} {stance} "
                                      f"te_tax_ai_offer_acceptable = {{ IG = {ig} }} }} "
                                      f"te_tax_ai_accept_offer = {{ IG = {ig} }} }}")
         self.assertEqual(flat(block(self.gen, "te_tax_gen_ai_accept_offer")), f"{locals_} {' '.join(branches_)}")
@@ -1333,6 +1349,12 @@ class AiBillTest(unittest.TestCase):
                                    block(self.triggers, "te_tax_ai_offer_available")))
         self.assertEqual(available, set(gen.IGS))
         self.assertEqual(RANK_LAST, len(gen.IGS))
+        # A group with no branch (absent or marginal, rank RANK_LAST) can never be accepted: the
+        # Accept button's trigger refuses it (Minor 4). Without this line rule 3 could accept nothing.
+        self.assertIn("custom_tooltip = { text = te_tax_tt_offer_not_marginal "
+                      "ig:ig_$IG$ ?= { ig_counts_as_marginal = no } }",
+                      flat(block(read(OBL_TRIGGERS), "te_tax_can_accept_offer")))
+        self.assertNotIn("te_tax_ai_rank_", read(GEN_EFFECTS))
 
     def test_each_mark_records_the_month_and_the_direction_of_a_change(self):
         marks = flat(block(self.gen, "te_tax_gen_ai_record_marks"))
@@ -1358,6 +1380,7 @@ class AiBillTest(unittest.TestCase):
         section = doc.split("\n## AI legislation\n", 1)[1].split("\n## ", 1)[0]
         bill = section.split("\n### The open bill\n", 1)[1].split("\n### ", 1)[0]
         for phrase in ("te_tax_ai_manage_bill", "te_tax_cmd_reschedule", "te_tax_ai_blocked_by_native_level",
+                       "te_tax_ai_force_path", "one support refresh per execution",
                        "te_tax_ai_offer_available", "te_tax_gen_ai_accept_offer", "te_tax_ai_clout_rank_<ig>",
                        "te_tax_ai_bill_hopeless", "te_tax_ai_force_blocked_by_authority", "te_tax_gen_ai_record_marks",
                        "te_tax_ai_cooldown_after_pass", "te_tax_ai_cooldown_after_withdrawal",

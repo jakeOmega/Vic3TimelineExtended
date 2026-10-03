@@ -3612,7 +3612,6 @@ def _ai_obligation_effects():
     return lines
 
 
-
 def _ai_clout_values():
     """The AI's offer order (plan 2026-10-03 Task 20; spec docs/superpowers/specs/
     2026-10-03-tax-code-ai-and-release-design.md §2.7): te_tax_ai_clout_<ig> is the group's clout
@@ -3652,13 +3651,13 @@ def _ai_bill_effects():
         "# in this order (spec §2.7): persuadable groups (te_tax_ai_persuadable), which commit on",
         "# acceptance, by clout, largest first, then the others, whose concession raises the open",
         "# clout. Called only by te_tax_ai_manage_bill, when te_tax_ai_offer_available holds, so one",
-        "# branch matches. The ranks are read once into locals (te_tax_ai_clout_rank_<ig>,",
-        "# te_tax_generated_support_values.txt), and each branch tests its rank first and the offer",
-        "# last. te_tax_ai_accept_offer runs the command behind its own trigger, counts the month's",
-        "# offers, logs ai_accepted and raises te_tax.8 for the next day.",
+        "# branch matches. The ranks (te_tax_ai_clout_rank_<ig>, te_tax_generated_support_values.txt)",
+        "# are read once into the locals te_tax_rank_<ig>, and each branch tests its rank first and",
+        "# the offer last. te_tax_ai_accept_offer runs the command behind its own trigger, counts the",
+        "# month's offers, logs ai_accepted and raises te_tax.8 for the next day.",
         "te_tax_gen_ai_accept_offer = {",
     ]
-    lines += [f"\tset_local_variable = {{ name = te_tax_ai_rank_{ig} value = te_tax_ai_clout_rank_{ig} }}"
+    lines += [f"\tset_local_variable = {{ name = te_tax_rank_{ig} value = te_tax_ai_clout_rank_{ig} }}"
               for ig in IGS]
     first = True
     for persuadable in (True, False):
@@ -3667,7 +3666,7 @@ def _ai_bill_effects():
                 stance = (f"te_tax_ai_persuadable = {{ IG = {ig} }}" if persuadable
                           else f"NOT = {{ te_tax_ai_persuadable = {{ IG = {ig} }} }}")
                 lines += [f"\t{'if' if first else 'else_if'} = {{",
-                          f"\t\tlimit = {{ local_var:te_tax_ai_rank_{ig} = {rank} {stance} "
+                          f"\t\tlimit = {{ local_var:te_tax_rank_{ig} = {rank} {stance} "
                           f"te_tax_ai_offer_acceptable = {{ IG = {ig} }} }}",
                           f"\t\tte_tax_ai_accept_offer = {{ IG = {ig} }}",
                           "\t}"]

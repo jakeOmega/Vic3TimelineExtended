@@ -347,41 +347,35 @@ te_tax_ai_offer_available = {
 	}
 }
 
+# A force path exists (spec §2.4 step 3): an emergency, te_tax_force_share of
+# the clout committed, and the override capacity and Authority force-through
+# needs (te_tax_can_force_through's own lines). The passage lines that only
+# time settles (the debate, the due month, a slot) are not part of it.
+te_tax_ai_force_path = {
+	te_tax_ai_emergency = yes
+	te_tax_committed_share >= te_tax_force_share
+	"modifier:country_legislative_override_capacity_add" >= 2
+	produced_authority > forced_law_through_event_authority_cost_medium
+}
+
 # The bill cannot pass: the committed and persuadable groups together are at
 # or below the passage share, no offer could still be accepted this month,
-# and there is no force path (an emergency with te_tax_force_share committed).
+# and no force path exists.
 te_tax_ai_bill_hopeless = {
 	te_tax_bill_active = yes
 	te_tax_view_open_share <= te_tax_passage_share
 	NOT = { te_tax_ai_offer_available = yes }
-	NOT = {
-		AND = {
-			te_tax_ai_emergency = yes
-			te_tax_committed_share >= te_tax_force_share
-		}
-	}
+	NOT = { te_tax_ai_force_path = yes }
 }
 
-# In an emergency, force-through fails only on the override capacity or the
-# Authority it costs: every other line of te_tax_can_force_through holds,
-# repeated. The withdrawal's reason is then authority.
+# In an emergency, the bill has the committed share force-through needs, is
+# short of a majority, and lacks the override capacity or the Authority to
+# force it: the withdrawal's reason is then authority. Only these structural
+# lines, so it holds at introduction too, while the debate has just begun.
 te_tax_ai_force_blocked_by_authority = {
 	te_tax_ai_emergency = yes
-	te_tax_code_in_force = yes
-	te_tax_bill_active = yes
-	NOT = { te_tax_committed_share > te_tax_passage_share }
 	te_tax_committed_share >= te_tax_force_share
-	legitimacy >= te_tax_passage_legitimacy
-	te_tax_debate_days_left <= 0
-	var:te_tax_bl_due > te_history_month_index
-	OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 }
-	te_tax_gen_bill_current = yes
-	te_tax_gen_bill_sunsets_valid = yes
-	te_tax_bill_changes_something = yes
-	OR = {
-		te_tax_can_store_package = { SLOT = a }
-		te_tax_can_store_package = { SLOT = b }
-	}
+	NOT = { te_tax_committed_share > te_tax_passage_share }
 	NOT = {
 		AND = {
 			"modifier:country_legislative_override_capacity_add" >= 2

@@ -359,10 +359,11 @@ te_tax_ai_accept_offer = {
 }
 
 # Withdraws the bill with the reason that applies (spec §2.4 step 3):
-# legitimacy below the passage line; no free slot; in an emergency,
-# force-through short only of override capacity or Authority; hopeless on
-# support; otherwise its patience ran out. The initiative (Task 21) calls it
-# for a bill that is hopeless on introduction.
+# legitimacy below the passage line; no free slot; in an emergency, enough
+# committed to force it but no override capacity or Authority; hopeless on
+# support; open te_tax_ai_bill_patience months; otherwise support, so a
+# caller outside the manager never logs patience for a bill just opened. The
+# initiative (Task 21) calls it for a bill that is hopeless on introduction.
 te_tax_ai_withdraw = {
 	if = {
 		limit = { te_tax_code_on = yes }
@@ -389,8 +390,12 @@ te_tax_ai_withdraw = {
 			limit = { te_tax_ai_bill_hopeless = yes }
 			te_tax_ai_withdraw_support = yes
 		}
-		else = {
+		else_if = {
+			limit = { te_tax_ai_bill_age >= te_tax_ai_bill_patience }
 			te_tax_ai_withdraw_patience = yes
+		}
+		else = {
+			te_tax_ai_withdraw_support = yes
 		}
 	}
 }
@@ -458,7 +463,8 @@ te_tax_ai_withdraw_authority = {
 	}
 }
 
-# Withdrawal: too little support, with no offer or force path left.
+# Withdrawal: too little support, with no offer or force path left; also the
+# reason when no other applies.
 te_tax_ai_withdraw_support = {
 	if = {
 		limit = { te_tax_code_on = yes }
