@@ -1,9 +1,10 @@
 """Recipe-derived building emissions display, owned by gen_carbon_capture_pms.
 
 Vanilla PMs take INJECTs; mod-owned and REPLACEd PMs must be amended in place.
-Only the positive emissions line is generated in those handwritten recipes.
-Negative capture contributions are owned by the capture-method generator.
-The removal-only PM has its own capacity parameter, independent of goods output.
+Fuel contributions, synthetic net emissions and synthetic/removal state credits
+are generated in those handwritten recipes. Source-capture contributions are
+owned by the capture-method generator. The removal-only PM has its own capacity
+parameter, independent of goods output.
 """
 
 from decimal import Decimal, ROUND_HALF_UP

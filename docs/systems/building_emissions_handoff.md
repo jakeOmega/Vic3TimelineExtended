@@ -19,10 +19,10 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 - Phase 1 implemented: factors, generated synthetic credits, steel recipes,
   display scale, guide chapter 14 and rebuilt PDF. See design §0 for details.
 - `gen_carbon_capture_pms.py` generates synthetic credits and visible emissions
-  for 18 fuel methods across power/steel/chemical buildings. `pm_emissions.py`
+  for 245 fuel methods across 117 building types, plus net synthetic/removal values. `pm_emissions.py`
   derives values from merged recipes and factors, amends mod-owned/REPLACEd PMs
   in place and emits INJECTs for untouched vanilla methods. Extend it for
-  production capture variants in phase 2.
+  future coverage/exceptions alongside `pm_carbon_capture.py`.
 - Era-10 Direct Air Capture and national Carbon Removal Support are implemented;
   see the checkpoints below for recipes, policy effects and pending engine checks.
 - The server on port 8950 did not respond during the initial status check.
@@ -32,22 +32,27 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 
 ## Next work
 
-1. Run the opt-in phase-0 engine probe and record results in its README.
-   First owner logs confirm nonzero state reads (see probe README). This does
-   not yet verify exact staffing/throughput scaling, tooltips or forced fallback.
-2. Judge phase 1 in a real save: oil-heavy markets should emit less, electric
-   furnaces should show 10 coal and 50/170 electricity, shares and temperature
-   must keep their scale, and displayed amounts should render in K/M units.
-3. After recording the engine checks, implement phase 2's generator and capture
-   integration. If hidden variants fail, use design §8's B fallback.
+1. Regression-test the generated production methods in a copied save, after
+   restarting on `codex/building-emissions`. The normal deployment removes the
+   old probe; do not restore it now that production uses the same state credit.
+2. Verify 25/50/75% capture on power, steel and chemicals; independently select
+   steel/arms automation capture; check a company site and mine pumps.
+3. Exercise coal/oil/zero-fuel swaps and Managed Fossil Phaseout's Tier II floor.
+   Check plastics/feedstock and mobile excavator methods get valid NA choices.
+   Verify an old save holding phaseout without CCS falls back after a monthly
+   pulse; research CCS and reenact to test automatic mandated selection.
+4. Check January market capture after source/DAC/synthetic PM swaps, staffing
+   and throughput changes. Synthetic methods now display net values and all
+   credits flow through the state sum. No separate building sweeps remain.
+5. Review balance (capture costs, subsidy hiring and warming) before merging.
+   The broader building-sum gross/household accounting is still deferred.
 
 ## Remaining verification
 
-Exact phase-0 scaling, revised net-emissions tooltips, forced fallback and
-phase-1 balance review are pending; nonzero state reads have been observed.
-No game save has been changed; the test deployment is recorded below. Preserve internal snapshot/history/AI/temperature units when
-scaling display values; the live world-emissions script value also feeds the
-debug snapshot helper, so do not scale that internal calculation.
+The owner confirmed all three original in-game test bundles. Generated
+production methods, expanded coverage and the unified credit sum still need
+regression/balance review. Preserve internal snapshot/history/AI/temperature
+units; display scaling remains confined to amount readers.
 
 Commit and push each coherent checkpoint, updating this file in that commit.
 The user explicitly authorized frequent commits and pushes. Do not merge or
@@ -55,8 +60,9 @@ publish a finished release before engine verification and balance review.
 
 ## Offline checks
 
-- All 3,607 unit/integration tests passed (58 environment-dependent skips).
-  The 13 new recipe/accounting tests are in `test_building_emissions.py`.
+- All 3,636 unit/integration tests passed (58 environment-dependent skips).
+  The 40 emissions/capture tests are in `test_building_emissions.py` and
+  `test_pm_carbon_capture.py`.
 - Ruff, player-guide strict style, PDF freshness, post-load roster, localization
   sanity/organization, Paradox tab formatting and diff whitespace checks passed.
 - All 23 offline CI audits passed.
@@ -67,7 +73,7 @@ Useful commands (use the shared environment above for Python dependencies):
 
 ```sh
 python3 gen_carbon_capture_pms.py --check
-python3 -m unittest test_building_emissions test_resource_transition test_global_warming_layout
+python3 -m unittest test_building_emissions test_pm_carbon_capture test_resource_transition test_global_warming_layout
 python3 scripts/analysis/check_post_load_rosters.py
 python3 scripts/build_player_guide.py --check
 ```
@@ -267,3 +273,21 @@ The first full run therefore had environment import errors; rerun with CI env.
 Similarly GUI reference audit against the local installation reports unresolved
 engine-library types; the CI (vanilla-unavailable) invocation passes, and the
 other 22 CI audits passed. Structure audit: 557 files, zero flags/parse failures.
+
+## Final production checkpoint (2026-10-03)
+
+Pushed: `519df3fa` broad display, `35c1aaeb` production capture and mandate,
+`9427659f` unified credits and synthetic net display. The feature branch includes
+latest `origin/main` (`c59e8a36`), checked again before deployment.
+
+Final validation: 3,636 full-suite tests pass (58 skips), all 23 CI audits pass
+with the documented CI environment, and snapshot-backed structure audit covers
+557 files with zero flags or parse failures. Generator freshness, Ruff,
+localization organization/sanity, tabs, GUI lint, roster and guide checks pass.
+The normal production deploy completed; SHA-256 verification matched all 37
+feature game files and all 310 staged language files. The 17-file probe overlay
+is removed. The main checkout was not switched.
+
+The draft PR description is current. Remaining work is the generated production
+regression/balance review listed in Next work above; no engine tests of the new
+342 variants are claimed. Restart Victoria 3 to load the production groups.
