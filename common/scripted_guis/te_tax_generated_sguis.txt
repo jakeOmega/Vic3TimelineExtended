@@ -16,6 +16,9 @@
 # Every branch tests `exists = scope:op`; an unknown or missing op fails closed
 # (trigger_else = { always = no }) and runs nothing.
 # te_tax_good_<good>_sgui, one per catalog good: te_tax_cmd_draft_good.
+# te_tax_relief_<key>_sgui, one per relief (agrel, regrel), op-coded like the step handlers:
+#   op 0 one band less, 1 one band more, 2 none, 3 the deepest band, 4 out of the draft
+#   (te_tax_cmd_draft_relief DIR = op).
 
 te_tax_step_wage_sgui = {
 	scope = country
@@ -667,4 +670,108 @@ te_tax_good_wood_sgui = {
 	ai_is_valid = { always = no }
 	is_valid = { te_tax_can_draft_good = { GOOD = wood } }
 	effect = { te_tax_cmd_draft_good = { GOOD = wood } }
+}
+
+te_tax_relief_agrel_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_relief = { KEY = agrel DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_relief = { KEY = agrel DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_relief = { KEY = agrel DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			te_tax_can_draft_relief = { KEY = agrel DIR = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			te_tax_can_draft_relief = { KEY = agrel DIR = 4 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_relief = { KEY = agrel DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_relief = { KEY = agrel DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_relief = { KEY = agrel DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			te_tax_cmd_draft_relief = { KEY = agrel DIR = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			te_tax_cmd_draft_relief = { KEY = agrel DIR = 4 }
+		}
+	}
+}
+
+te_tax_relief_regrel_sgui = {
+	scope = country
+	saved_scopes = { op }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_can_draft_relief = { KEY = regrel DIR = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_can_draft_relief = { KEY = regrel DIR = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_can_draft_relief = { KEY = regrel DIR = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			te_tax_can_draft_relief = { KEY = regrel DIR = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			te_tax_can_draft_relief = { KEY = regrel DIR = 4 }
+		}
+		trigger_else = { always = no }
+	}
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_tax_cmd_draft_relief = { KEY = regrel DIR = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			te_tax_cmd_draft_relief = { KEY = regrel DIR = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			te_tax_cmd_draft_relief = { KEY = regrel DIR = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			te_tax_cmd_draft_relief = { KEY = regrel DIR = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			te_tax_cmd_draft_relief = { KEY = regrel DIR = 4 }
+		}
+	}
 }

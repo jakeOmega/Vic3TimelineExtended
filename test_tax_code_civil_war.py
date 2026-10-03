@@ -20,7 +20,11 @@ wiring that keeps it coherent:
 * a release copies only the parent's enacted provisions when the parent holds
   the carrier law, otherwise migrates; formations migrate;
 * a state that changes owner loses its relief marks unless the code that
-  named it travels with it (the Strategic Reserve hub's rule plus a new tag).
+  named it travels with it (the Strategic Reserve hub's rule plus a new tag);
+* the enacted named states are one country list, te_tax_en_relief_states,
+  which a list cannot survive the merge with: the outbreak and a release copy
+  it, and the copies and the repair rebuild the marks from the country's own
+  list (te_tax_rebuild_relief_marks; Task 11, test_tax_code_goods_relief.py).
 
 Shape of test_decolonization_civil_war.py: source text, brace-matched blocks.
 
@@ -205,8 +209,11 @@ class OutbreakTest(unittest.TestCase):
                 self.assertNotIn("activate_law", self.defined[name])
                 self.assertNotIn("add_modifier", self.defined[name])
 
-    def test_relief_marks_travel_and_are_restamped(self):
-        self.assertIn("te_tax_restamp_relief = yes", self.copy)
+    def test_relief_marks_travel_and_are_rebuilt(self):
+        # The original's list of named states is copied whole, then the rebels'
+        # marks are rebuilt from it (Task 11, test_tax_code_goods_relief.py).
+        self.assertIn("te_tax_copy_relief_states = yes", self.copy)
+        self.assertIn("te_tax_rebuild_relief_marks = yes", self.copy)
         self.assertNotRegex(self.copy, r"name = te_tax_(relief_state|pending_relief_[ab]) ")
 
 
@@ -271,7 +278,7 @@ class RepairTest(unittest.TestCase):
                        "set_variable = { name = te_tax_dr_on value = 0 }",
                        "set_variable = { name = te_tax_last_month value = -1 }",
                        "te_tax_history_push = { KIND = 7 SLOT = none }",
-                       "te_tax_restamp_relief = yes",
+                       "te_tax_rebuild_relief_marks = yes",
                        "trigger_event = { id = te_tax.6 }"):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, self.repair)
@@ -330,7 +337,8 @@ class ReleaseTest(unittest.TestCase):
 
     def test_hands_the_month_to_the_dispatch_and_installs_the_carrier(self):
         for phrase in ("set_variable = { name = te_tax_last_month value = -1 }",
-                       "te_tax_recompute_next_month = yes", "te_tax_restamp_relief = yes",
+                       "te_tax_recompute_next_month = yes", "te_tax_copy_relief_states = yes",
+                       "te_tax_rebuild_relief_marks = yes",
                        "trigger_event = { id = te_tax.6 }"):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, self.release)
@@ -385,20 +393,25 @@ class ReliefEligibilityTest(unittest.TestCase):
                 self.assertIn(condition, " ".join(self.stays.split()))
 
     def test_flags_and_marks_are_stamped_where_they_are_set(self):
+        # Commencement replaces the enacted list (Task 11) and sets no flag; the
+        # rebuild derives each flag from the list and stamps it in the same block.
         generated = read(GEN_EFFECTS)
         stamp = "set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }"
+        rebuild = block(self.text, "te_tax_rebuild_relief_marks")
+        flag = rebuild.index("set_variable = { name = te_tax_relief_state value = 1 }")
+        self.assertEqual(rebuild[flag:].split("}", 1)[1].strip().split("\n")[0].strip(), stamp)
+        self.assertLess(rebuild.index("save_scope_as = te_tax_country"), flag)
         for slot in SLOTS:
             with self.subTest(slot=slot):
                 apply = block(generated, f"te_tax_gen_apply_{slot}")
-                flag = apply.index("set_variable = { name = te_tax_relief_state value = 1 }")
-                self.assertEqual(apply[flag:].split("}", 1)[1].strip().split("\n")[0].strip(), stamp)
-                self.assertLess(apply.index("save_scope_as = te_tax_country"), flag)
+                self.assertNotIn("name = te_tax_relief_state value = 1", apply)
+                self.assertIn("te_tax_en_relief_states", apply)
                 store = block(generated, f"te_tax_gen_store_{slot}")
                 mark = store.index(f"set_variable = {{ name = te_tax_pending_relief_{slot} value = 1 }}")
                 self.assertEqual(store[mark:].split("}", 1)[1].strip().split("\n")[0].strip(), stamp)
 
-    def test_the_copies_and_the_repair_restamp(self):
-        restamp = block(self.text, "te_tax_restamp_relief")
+    def test_the_copies_and_the_repair_rebuild(self):
+        restamp = block(self.text, "te_tax_rebuild_relief_marks")
         self.assertIn("save_scope_as = te_tax_country", restamp)
         self.assertIn("set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }", restamp)
         for mark in STATE_MARKS:

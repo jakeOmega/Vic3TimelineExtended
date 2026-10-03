@@ -9,8 +9,8 @@
 ###
 ###   te_tax_workbench_section  open: Draft a Reform, or the draft in five
 ###                             accordions (Income, Land and Head,
-###                             Consumption with the goods catalog, Relief,
-###                             Commencement)
+###                             Consumption with the goods catalog, Relief
+###                             with its named states, Commencement)
 ###   te_tax_draft_summary      the draft at a glance and Review / Discard /
 ###                             Introduce (or Revise). The journal entry shows
 ###                             it under the workbench (te_tax_status_sections'
@@ -326,61 +326,81 @@ types te_tax_workbench_widget_types
 		}
 	}
 
-	### A relief, read-only until bills can change relief: its name, the band
-	### under the enacted code, the band in the draft.
-	### 4 + 146 + 4 + 70 + 4 + 18 + 4 + 70 + 4 = 324.
-	type te_tax_relief_row = flowcontainer {
+	### A state for regional relief (the draft's named states and the candidate
+	### list, both datamodels over a country list whose items set datacontext =
+	### "[Scope.GetState]"): its name, population and the tax collected from its
+	### pops (what a relief forgoes a share of), whether the draft names it, and
+	### Name / Drop. The button passes the row's state as the saved scope te_tax_st
+	### to te_tax_relief_state_sgui, the Grand Monuments rows' shape
+	### (gm_choice_button). Tooltips read only GetPlayer (a datamodel item).
+	### 4 + 150 + 4 + 70 + 4 + 90 + 4 + 60 + 4 + 80 + 4 = 474.
+	type te_tax_relief_state_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		spacing = 4
 		margin = { 4 1 }
 
 		widget = {
-			size = { 146 24 }
+			size = { 150 26 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 146
+				max_width = 150
 				elide = right
 				align = left|nobaseline
 				using = fontsize_medium
+				text = "te_tax_wb_relief_state_name"
+			}
+		}
+		widget = {
+			size = { 70 26 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 70
+				elide = right
+				align = right|nobaseline
+				using = fontsize_medium
 				default_format = "#tooltippable"
-				block "row_label" {}
+				text = "te_tax_wb_relief_state_pop"
+				tooltip = "te_tax_wb_relief_state_pop_tt"
 			}
 		}
 		widget = {
-			size = { 70 24 }
+			size = { 90 26 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 70
+				max_width = 90
 				elide = right
 				align = right|nobaseline
 				using = fontsize_medium
-				block "row_law" {}
+				default_format = "#tooltippable"
+				text = "te_tax_wb_relief_state_tax"
+				tooltip = "te_tax_wb_relief_state_tax_tt"
 			}
 		}
 		widget = {
-			size = { 18 24 }
-			textbox = {
-				parentanchor = center
-				autoresize = yes
-				align = center|nobaseline
-				using = fontsize_medium
-				text = "te_tax_wb_arrow"
-			}
-		}
-		widget = {
-			size = { 70 24 }
+			size = { 60 26 }
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 70
+				max_width = 60
 				elide = right
 				align = right|nobaseline
 				using = fontsize_medium
-				block "row_draft" {}
+				text = "[SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_named', SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_base_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_dropped', 'te_tax_wb_relief_state_none' ) )]"
 			}
+		}
+		button = {
+			using = default_button
+			size = { 80 26 }
+			parentanchor = vcenter
+			datacontext = "[GetScriptedGui('te_tax_relief_state_sgui')]"
+			text = "[SelectLocalization( NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_state'), '(CFixedPoint)0' ), 'te_tax_wb_relief_state_drop', 'te_tax_wb_relief_state_name_it' )]"
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_st', State.MakeScope ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_st', State.MakeScope ).End )]"
+			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_st', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_tax_st', State.MakeScope ).End ) ) )]"
 		}
 	}
 
@@ -625,7 +645,9 @@ types te_tax_workbench_widget_types
 					}
 				}
 
-				### Relief: shown, not yet changed by a bill.
+				### Relief: agricultural and regional relief, each stepped band by
+				### band like a tax (te_tax_relief_<key>_sgui, ops 0-4: none, 25%,
+				### 50%), then the states regional relief names, at most three.
 				te_tax_subsection_header = {
 					blockoverride "left_text" {
 						text = "te_tax_wb_sub_relief"
@@ -646,46 +668,58 @@ types te_tax_workbench_widget_types
 					ignoreinvisible = yes
 					spacing = 2
 
-					te_tax_relief_row = {
+					te_tax_instrument_row = {
+						datacontext = "[GetScriptedGui('te_tax_relief_agrel_sgui')]"
 						blockoverride "row_label" {
 							text = "te_tax_en_agrel"
-							tooltip = "te_tax_en_agrel_tt"
+							tooltip = "te_tax_wb_row_agrel_tt"
 						}
 						blockoverride "row_law" {
-							text = "te_tax_en_agrel_value"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_agrel_base_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_law_agrel' )]"
 						}
 						blockoverride "row_draft" {
-							text = "te_tax_wb_dr_agrel_value"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_agrel_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_draft_agrel' )]"
+						}
+						blockoverride "row_delta" {
+							visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_agrel_on'), '(CFixedPoint)0' )]"
+							text = "te_tax_wb_delta_agrel"
 						}
 					}
-					te_tax_relief_row = {
+					te_tax_instrument_row = {
+						datacontext = "[GetScriptedGui('te_tax_relief_regrel_sgui')]"
 						blockoverride "row_label" {
 							text = "te_tax_en_regrel"
-							tooltip = "te_tax_en_regrel_tt"
+							tooltip = "te_tax_wb_row_regrel_tt"
 						}
 						blockoverride "row_law" {
-							text = "te_tax_en_regrel_value"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_base_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_law_regrel' )]"
 						}
 						blockoverride "row_draft" {
-							text = "te_tax_wb_dr_regrel_value"
+							text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_pct'), '(CFixedPoint)0' ), 'te_tax_none', 'te_tax_wb_draft_regrel' )]"
+						}
+						blockoverride "row_delta" {
+							visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
+							text = "te_tax_wb_delta_regrel"
 						}
 					}
-					# The states the enacted regional relief names: each owned
-					# state with te_tax_relief_state (never a package's pending
-					# marks, which can outlive a released slot).
+
+					# The states regional relief names. While the draft leaves it
+					# alone, existing law's (each owned state existing law names in
+					# the commencement month); once it changes it, the draft's list,
+					# each with Drop.
 					te_tax_text = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_regrel'), '(CFixedPoint)0' )]"
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_pct'), '(CFixedPoint)0' )]"
 						text = "te_tax_wb_relief_states"
 					}
 					flowcontainer = {
-						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_regrel'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
 						direction = vertical
 						ignoreinvisible = yes
 						datamodel = "[AccessPlayer.AccessStates]"
 
 						item = {
 							textbox = {
-								visible = "[NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_relief_state'), '(CFixedPoint)0' )]"
+								visible = "[NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_tax_view_dr_relief_base_state'), '(CFixedPoint)0' )]"
 								autoresize = yes
 								minimumsize = { 480 -1 }
 								maximumsize = { 480 -1 }
@@ -694,6 +728,62 @@ types te_tax_workbench_widget_types
 								using = fontsize_medium
 								elide = right
 								text = "te_tax_wb_relief_state_name"
+							}
+						}
+					}
+					flowcontainer = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
+						direction = vertical
+						ignoreinvisible = yes
+						datamodel = "[GetPlayer.MakeScope.GetList('te_tax_dr_relief_states')]"
+
+						item = {
+							te_tax_relief_state_row = {
+								datacontext = "[Scope.GetState]"
+							}
+						}
+					}
+
+					# Choose States: takes regional relief into the draft as existing
+					# law has it and lists the incorporated states to name from; the
+					# only thing that builds that list (never opening the panel).
+					button = {
+						using = default_button
+						parentanchor = hcenter
+						size = { 480 30 }
+						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' ), 'te_tax_wb_relief_choose', 'te_tax_wb_relief_choose_again' )]"
+						enabled = "[GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_draft_relief_choose_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+					}
+
+					# The incorporated states, as the last Choose States listed them:
+					# open once the draft changes regional relief, closable.
+					te_tax_subsection_header = {
+						visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' )]"
+						blockoverride "left_text" {
+							text = "te_tax_wb_sub_relief_states"
+						}
+						blockoverride "onclick" {
+							onclick = "[GetVariableSystem.Toggle('te_tax_wb_relief_states_closed')]"
+						}
+						blockoverride "onclick_showmore" {
+							visible = "[GetVariableSystem.Exists('te_tax_wb_relief_states_closed')]"
+						}
+						blockoverride "onclick_showless" {
+							visible = "[Not(GetVariableSystem.Exists('te_tax_wb_relief_states_closed'))]"
+						}
+					}
+					flowcontainer = {
+						visible = "[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_dr_regrel_on'), '(CFixedPoint)0' ), Not(GetVariableSystem.Exists('te_tax_wb_relief_states_closed')) )]"
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 1
+						datamodel = "[GetPlayer.MakeScope.GetList('te_tax_dr_relief_candidates')]"
+
+						item = {
+							te_tax_relief_state_row = {
+								datacontext = "[Scope.GetState]"
 							}
 						}
 					}

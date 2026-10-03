@@ -176,6 +176,169 @@ te_tax_cmd_draft_good = {
 	}
 }
 
+# ---------------------------------------------------------------------------
+# Relief (plan Task 11; docs/systems/tax_code_schema.md, "Relief in a bill").
+# Agricultural wage relief and regional relief are bands, 0 none, 1 = -25%,
+# 2 = -50% (te_tax_max_<key>). Regional relief also names its states, at most
+# three, in the country list te_tax_dr_relief_states. The relief group's
+# planned version (te_tax_dr_relief_pver) is recorded when the draft first
+# changes either relief and cleared when it changes neither again.
+# ---------------------------------------------------------------------------
+
+# Moves one relief in the draft. KEY: agrel or regrel. DIR: 0 one band less,
+# 1 one band more, 2 none, 3 the deepest band, 4 leave it as existing law has
+# it. An untouched relief starts from its baseline (te_tax_base_dr_<key>).
+te_tax_cmd_draft_relief = {
+	if = {
+		limit = { te_tax_can_draft_relief = { KEY = $KEY$ DIR = $DIR$ } }
+		te_tax_dr_relief_$DIR$ = { KEY = $KEY$ }
+	}
+}
+
+# The first change to either relief records the relief group's planned
+# version; then the relief itself is taken into the draft at existing law.
+te_tax_dr_relief_touch = {
+	if = {
+		limit = { var:te_tax_dr_agrel < 0 var:te_tax_dr_regrel < 0 }
+		set_variable = { name = te_tax_dr_relief_pver value = var:te_tax_pver_relief }
+	}
+	te_tax_dr_$KEY$_touch = yes
+}
+
+te_tax_dr_agrel_touch = {
+	if = {
+		limit = { var:te_tax_dr_agrel < 0 }
+		set_variable = { name = te_tax_dr_agrel value = te_tax_base_dr_agrel }
+	}
+}
+
+# Regional relief comes into the draft whole: its band and the states existing
+# law names in the draft's commencement month, so a draft that changes only the
+# band restates the same states. Existing law is the enacted list
+# (te_tax_en_relief_states), unless an awaiting package that commences before
+# the draft restates the states: the last of them in commencement order
+# (te_tax_relief_base_from_<slot>), whose states carry its pending marks.
+te_tax_dr_regrel_touch = {
+	if = {
+		limit = { var:te_tax_dr_regrel < 0 }
+		set_variable = { name = te_tax_dr_regrel value = te_tax_base_dr_regrel }
+		clear_variable_list = te_tax_dr_relief_states
+		if = {
+			limit = { var:te_tax_dr_regrel >= 1 }
+			save_scope_as = te_tax_country
+			if = {
+				limit = { te_tax_relief_base_from_a = { DUE = te_tax_dr_due } }
+				every_scope_state = {
+					limit = { has_variable = te_tax_pending_relief_a var:te_tax_pending_relief_a = 1 }
+					owner = { add_to_variable_list = { name = te_tax_dr_relief_states target = prev } }
+				}
+			}
+			else_if = {
+				limit = { te_tax_relief_base_from_b = { DUE = te_tax_dr_due } }
+				every_scope_state = {
+					limit = { has_variable = te_tax_pending_relief_b var:te_tax_pending_relief_b = 1 }
+					owner = { add_to_variable_list = { name = te_tax_dr_relief_states target = prev } }
+				}
+			}
+			else_if = {
+				limit = { has_variable_list = te_tax_en_relief_states }
+				every_in_list = {
+					variable = te_tax_en_relief_states
+					limit = { owner ?= scope:te_tax_country }
+					scope:te_tax_country = { add_to_variable_list = { name = te_tax_dr_relief_states target = PREV } }
+				}
+			}
+		}
+	}
+}
+
+# After every relief change: a regional relief of none names no state, and a
+# draft that changes neither relief drops the relief group's planned version.
+te_tax_dr_relief_settle = {
+	if = {
+		limit = { var:te_tax_dr_regrel < 1 }
+		clear_variable_list = te_tax_dr_relief_states
+	}
+	if = {
+		limit = { var:te_tax_dr_agrel < 0 var:te_tax_dr_regrel < 0 }
+		set_variable = { name = te_tax_dr_relief_pver value = -1 }
+	}
+}
+
+te_tax_dr_relief_0 = {
+	custom_tooltip = te_tax_tt_cmd_draft_relief_down
+	te_tax_dr_relief_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_dr_eff_$KEY$ }
+	change_variable = { name = te_tax_dr_$KEY$ add = -1 }
+	clamp_variable = { name = te_tax_dr_$KEY$ min = 0 max = te_tax_max_$KEY$ }
+	te_tax_dr_relief_settle = yes
+}
+
+te_tax_dr_relief_1 = {
+	custom_tooltip = te_tax_tt_cmd_draft_relief_up
+	te_tax_dr_relief_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_dr_eff_$KEY$ }
+	change_variable = { name = te_tax_dr_$KEY$ add = 1 }
+	clamp_variable = { name = te_tax_dr_$KEY$ min = 0 max = te_tax_max_$KEY$ }
+	te_tax_dr_relief_settle = yes
+}
+
+te_tax_dr_relief_2 = {
+	custom_tooltip = te_tax_tt_cmd_draft_relief_none
+	te_tax_dr_relief_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = 0 }
+	te_tax_dr_relief_settle = yes
+}
+
+te_tax_dr_relief_3 = {
+	custom_tooltip = te_tax_tt_cmd_draft_relief_max
+	te_tax_dr_relief_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_max_$KEY$ }
+	te_tax_dr_relief_settle = yes
+}
+
+te_tax_dr_relief_4 = {
+	custom_tooltip = te_tax_tt_cmd_draft_relief_revert
+	set_variable = { name = te_tax_dr_$KEY$ value = -1 }
+	te_tax_dr_relief_settle = yes
+}
+
+# Takes regional relief into the draft as existing law has it (if the draft
+# does not change it yet) and lists the country's incorporated states to name
+# from (te_tax_dr_relief_candidates), the list the workbench shows. The only
+# place the candidates are built: never when a panel opens. Pressed again, it
+# refreshes the list after states were gained or lost.
+te_tax_cmd_draft_relief_choose = {
+	if = {
+		limit = { te_tax_can_draft_relief_choose = yes }
+		custom_tooltip = te_tax_tt_cmd_draft_relief_choose
+		te_tax_dr_relief_touch = { KEY = regrel }
+		clear_variable_list = te_tax_dr_relief_candidates
+		every_scope_state = {
+			limit = { is_incorporated = yes }
+			owner = { add_to_variable_list = { name = te_tax_dr_relief_candidates target = prev } }
+		}
+	}
+}
+
+# Names a state for the draft's regional relief, or drops it if the draft names
+# it already. The state is scope:te_tax_st (te_tax_relief_state_sgui, from the
+# workbench's state rows). te_tax_can_draft_relief_state holds the draft to at
+# most three states, each incorporated and the country's own.
+te_tax_cmd_draft_relief_state = {
+	if = {
+		limit = { te_tax_can_draft_relief_state = yes }
+		custom_tooltip = te_tax_tt_cmd_draft_relief_state
+		if = {
+			limit = { is_target_in_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st } }
+			remove_list_variable = { name = te_tax_dr_relief_states target = scope:te_tax_st }
+		}
+		else = {
+			add_to_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st }
+		}
+	}
+}
+
 te_tax_cmd_draft_discard = {
 	if = {
 		limit = { te_tax_can_draft_discard = yes }

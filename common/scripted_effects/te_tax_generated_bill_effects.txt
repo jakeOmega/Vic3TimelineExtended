@@ -5,7 +5,9 @@
 # removed when its record closes (it is read only while te_tax_dr_on / te_tax_bl_on is 1);
 # the two tokens themselves are never removed.
 
-# A new draft with every field untouched (te_tax_cmd_draft_new sets te_tax_dr_due).
+# A new draft with every field untouched (te_tax_cmd_draft_new sets te_tax_dr_due). Its
+# regional-relief states and the candidate states to choose them from start empty; the
+# candidates are built only by te_tax_cmd_draft_relief_choose.
 te_tax_gen_draft_init = {
 	set_variable = { name = te_tax_dr_wage value = -1 }
 	set_variable = { name = te_tax_dr_wage_sun value = 0 }
@@ -64,9 +66,13 @@ te_tax_gen_draft_init = {
 	set_variable = { name = te_tax_dr_goods_pver value = -1 }
 	set_variable = { name = te_tax_dr_agrel value = -1 }
 	set_variable = { name = te_tax_dr_regrel value = -1 }
+	set_variable = { name = te_tax_dr_relief_pver value = -1 }
+	clear_variable_list = te_tax_dr_relief_states
+	clear_variable_list = te_tax_dr_relief_candidates
 }
 
-# A new draft copied from the bill under debate, for its revision.
+# A new draft copied from the bill under debate, for its revision, with the bill's
+# regional-relief states.
 te_tax_gen_draft_from_bill = {
 	set_variable = { name = te_tax_dr_due value = var:te_tax_bl_due }
 	set_variable = { name = te_tax_dr_wage value = var:te_tax_bl_wage }
@@ -126,9 +132,20 @@ te_tax_gen_draft_from_bill = {
 	set_variable = { name = te_tax_dr_goods_pver value = var:te_tax_bl_goods_pver }
 	set_variable = { name = te_tax_dr_agrel value = var:te_tax_bl_agrel }
 	set_variable = { name = te_tax_dr_regrel value = var:te_tax_bl_regrel }
+	set_variable = { name = te_tax_dr_relief_pver value = var:te_tax_bl_relief_pver }
+	clear_variable_list = te_tax_dr_relief_states
+	if = {
+		limit = { has_variable_list = te_tax_bl_relief_states }
+		save_scope_as = te_tax_country
+		every_in_list = {
+			variable = te_tax_bl_relief_states
+			scope:te_tax_country = { add_to_variable_list = { name = te_tax_dr_relief_states target = PREV } }
+		}
+	}
+	clear_variable_list = te_tax_dr_relief_candidates
 }
 
-# Closes the draft's payload (te_tax_dr_on is set to 0 by the caller).
+# Closes the draft's payload and its lists (te_tax_dr_on is set to 0 by the caller).
 te_tax_gen_draft_clear = {
 	remove_variable = te_tax_dr_due
 	remove_variable = te_tax_dr_wage
@@ -188,11 +205,14 @@ te_tax_gen_draft_clear = {
 	remove_variable = te_tax_dr_goods_pver
 	remove_variable = te_tax_dr_agrel
 	remove_variable = te_tax_dr_regrel
+	remove_variable = te_tax_dr_relief_pver
+	clear_variable_list = te_tax_dr_relief_states
+	clear_variable_list = te_tax_dr_relief_candidates
 }
 
 # Writes the whole bill record from the draft, every field te_tax_store_package reads, and
-# records the external version of each provision group as it stands now. The regional
-# relief state list starts empty (Task 11 fills it).
+# records the external version of each provision group as it stands now. The bill names
+# the draft's regional-relief states (te_tax_bl_relief_states).
 te_tax_gen_bill_from_draft = {
 	set_variable = { name = te_tax_bl_due value = var:te_tax_dr_due }
 	set_variable = { name = te_tax_bl_wage value = var:te_tax_dr_wage }
@@ -252,6 +272,7 @@ te_tax_gen_bill_from_draft = {
 	set_variable = { name = te_tax_bl_goods_pver value = var:te_tax_dr_goods_pver }
 	set_variable = { name = te_tax_bl_agrel value = var:te_tax_dr_agrel }
 	set_variable = { name = te_tax_bl_regrel value = var:te_tax_dr_regrel }
+	set_variable = { name = te_tax_bl_relief_pver value = var:te_tax_dr_relief_pver }
 	set_variable = { name = te_tax_bl_xver_wage value = var:te_tax_xver_wage }
 	set_variable = { name = te_tax_bl_xver_div value = var:te_tax_xver_div }
 	set_variable = { name = te_tax_bl_xver_land value = var:te_tax_xver_land }
@@ -260,6 +281,14 @@ te_tax_gen_bill_from_draft = {
 	set_variable = { name = te_tax_bl_xver_goods value = var:te_tax_xver_goods }
 	set_variable = { name = te_tax_bl_xver_relief value = var:te_tax_xver_relief }
 	clear_variable_list = te_tax_bl_relief_states
+	if = {
+		limit = { has_variable_list = te_tax_dr_relief_states }
+		save_scope_as = te_tax_country
+		every_in_list = {
+			variable = te_tax_dr_relief_states
+			scope:te_tax_country = { add_to_variable_list = { name = te_tax_bl_relief_states target = PREV } }
+		}
+	}
 }
 
 # Closes the bill's payload (te_tax_bl_on is set to 0 by the caller).
@@ -325,6 +354,7 @@ te_tax_gen_bill_clear = {
 	remove_variable = te_tax_bl_goods_pver
 	remove_variable = te_tax_bl_agrel
 	remove_variable = te_tax_bl_regrel
+	remove_variable = te_tax_bl_relief_pver
 	remove_variable = te_tax_bl_xver_wage
 	remove_variable = te_tax_bl_xver_div
 	remove_variable = te_tax_bl_xver_land

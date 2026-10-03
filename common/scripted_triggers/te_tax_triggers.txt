@@ -208,6 +208,113 @@ te_tax_can_draft_good = {
 	}
 }
 
+# KEY: agrel or regrel. DIR: 0 one band less, 1 one band more, 2 none, 3 the
+# deepest band, 4 leave the relief as existing law has it.
+te_tax_can_draft_relief = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = {
+			te_tax_draft_active = yes
+			has_variable = te_tax_dr_$KEY$
+		}
+		te_tax_dr_relief_ok_$DIR$ = { KEY = $KEY$ }
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+te_tax_dr_relief_ok_0 = {
+	custom_tooltip = { text = te_tax_tt_relief_room_down te_tax_dr_eff_$KEY$ > 0 }
+}
+
+te_tax_dr_relief_ok_1 = {
+	custom_tooltip = { text = te_tax_tt_relief_room_up te_tax_dr_eff_$KEY$ < te_tax_max_$KEY$ }
+}
+
+te_tax_dr_relief_ok_2 = {
+	custom_tooltip = { text = te_tax_tt_relief_not_none NOT = { var:te_tax_dr_$KEY$ = 0 } }
+}
+
+te_tax_dr_relief_ok_3 = {
+	custom_tooltip = { text = te_tax_tt_relief_not_max NOT = { var:te_tax_dr_$KEY$ = te_tax_max_$KEY$ } }
+}
+
+te_tax_dr_relief_ok_4 = {
+	custom_tooltip = { text = te_tax_tt_relief_touched var:te_tax_dr_$KEY$ >= 0 }
+}
+
+# Lists the incorporated states to name for regional relief, taking regional
+# relief into the draft as existing law has it. Any open draft.
+te_tax_can_draft_relief_choose = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_draft_open te_tax_draft_active = yes }
+}
+
+# The state scope:te_tax_st (te_tax_relief_state_sgui's saved scope) may be named
+# for the draft's regional relief, or dropped from it. Dropping a named state
+# is always allowed. Naming one needs a regional relief of at least one band in
+# the draft, the state incorporated and the country's own (PREV, inside
+# scope:te_tax_st, is the country), and room: at most three states
+# (any_in_list's count; variable_list_size's `target` key fails to load in
+# 1.14, te_history_effects.txt).
+te_tax_can_draft_relief_state = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = { te_tax_draft_active = yes }
+		custom_tooltip = { text = te_tax_tt_relief_state_given exists = scope:te_tax_st }
+		custom_tooltip = {
+			text = te_tax_tt_relief_regional_in_draft
+			has_variable = te_tax_dr_regrel
+			var:te_tax_dr_regrel >= 0
+		}
+		trigger_if = {
+			limit = {
+				exists = scope:te_tax_st
+				NOT = { is_target_in_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st } }
+			}
+			custom_tooltip = { text = te_tax_tt_relief_depth_set var:te_tax_dr_regrel >= 1 }
+			custom_tooltip = {
+				text = te_tax_tt_relief_state_eligible
+				scope:te_tax_st = { is_incorporated = yes owner = prev }
+			}
+			custom_tooltip = { text = te_tax_tt_relief_states_max NOT = { any_in_list = { variable = te_tax_dr_relief_states count >= 3 exists = this } } }
+		}
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+# Slot SLOT's package awaits commencement before the month in the variable DUE
+# and restates the regional-relief states (its te_tax_pending_relief_<slot>
+# marks name them).
+te_tax_slot_restates_relief_before = {
+	te_tax_slot_awaits_before = { SLOT = $SLOT$ DUE = $DUE$ }
+	has_variable = te_tax_p$SLOT$_regrel_states_set
+	var:te_tax_p$SLOT$_regrel_states_set = 1
+}
+
+# Existing law's regional-relief states in the month in DUE are slot a's: it
+# restates them before then, and slot b does not, or b commences first.
+te_tax_relief_base_from_a = {
+	te_tax_slot_restates_relief_before = { SLOT = a DUE = $DUE$ }
+	OR = {
+		NOT = { te_tax_slot_restates_relief_before = { SLOT = b DUE = $DUE$ } }
+		te_tax_slot_b_first = yes
+	}
+}
+
+# ...slot b's: it restates them before then, and slot a does not, or a
+# commences first.
+te_tax_relief_base_from_b = {
+	te_tax_slot_restates_relief_before = { SLOT = b DUE = $DUE$ }
+	OR = {
+		NOT = { te_tax_slot_restates_relief_before = { SLOT = a DUE = $DUE$ } }
+		NOT = { te_tax_slot_b_first = yes }
+	}
+}
+
 te_tax_can_draft_discard = {
 	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
 	custom_tooltip = { text = te_tax_tt_draft_open te_tax_draft_active = yes }
@@ -246,12 +353,26 @@ te_tax_draft_ready = {
 		# Traditionalism disallows the vanilla laws that tax wages and dividends
 		# (Per-Capita, Proportional, Graduated); under it a bill may not either.
 		# Here, so a revision is held to it as well as an introduction.
+		# The draft's own index on the left: 0 where it changes the tax, or
+		# untouched (-1) where existing law levies none (te_tax_dr_zero_limit_<key>
+		# is -1 then, -2 otherwise).
 		trigger_if = {
 			limit = { has_law = law_type:law_traditionalism }
 			custom_tooltip = {
 				text = te_tax_tt_draft_traditionalism
-				te_tax_dr_eff_wage < 1
-				te_tax_dr_eff_div < 1
+				has_variable = te_tax_dr_wage
+				has_variable = te_tax_dr_div
+				OR = { var:te_tax_dr_wage = 0 var:te_tax_dr_wage <= te_tax_dr_zero_limit_wage }
+				OR = { var:te_tax_dr_div = 0 var:te_tax_dr_div <= te_tax_dr_zero_limit_div }
+			}
+		}
+		# A regional relief that relieves names at least one state (the toggle
+		# allows at most three); a relief of none names none (te_tax_dr_relief_settle).
+		trigger_if = {
+			limit = { var:te_tax_dr_regrel >= 1 }
+			custom_tooltip = {
+				text = te_tax_tt_relief_states_named
+				any_in_list = { variable = te_tax_dr_relief_states exists = this }
 			}
 		}
 	}
@@ -404,30 +525,40 @@ te_tax_can_package_release = {
 # vanilla law answers with its law.
 # ---------------------------------------------------------------------------
 
+# Indices, not rates (te_tax_step_wage = te_tax_step_div = 0.025): the enacted
+# index variables on the left, each behind has_variable.
+
 # Per-Capita: a wage tax and a head tax, as the law levies both.
 te_tax_code_counts_as_per_capita = {
 	te_tax_code_on = yes
 	has_law = law_type:law_te_tax_code
-	te_tax_view_en_head >= 1
-	te_tax_view_en_wage >= 1
+	has_variable = te_tax_en_head
+	has_variable = te_tax_en_wage
+	var:te_tax_en_head >= 1
+	var:te_tax_en_wage >= 1
 }
 
-# Proportional: a wage tax of at least 10% and a dividend tax (the law's
-# lowest level taxes wages at 10% and dividends at 2.5%).
+# Proportional: a wage tax of at least 10% (index 4) and a dividend tax (the
+# law's lowest level taxes wages at 10% and dividends at 2.5%, index 1).
 te_tax_code_counts_as_proportional = {
 	te_tax_code_on = yes
 	has_law = law_type:law_te_tax_code
-	te_tax_view_en_wage_rate >= 0.1
-	te_tax_view_en_div_rate >= 0.025
+	has_variable = te_tax_en_wage
+	has_variable = te_tax_en_div
+	var:te_tax_en_wage >= 4
+	var:te_tax_en_div >= 1
 }
 
-# Graduated: a wage tax of at least 10% and dividends taxed at least as
-# heavily as wages (the law's levels tax dividends at or above wages).
+# Graduated: a wage tax of at least 10% (index 4) and dividends taxed at least
+# as heavily as wages (the law's levels tax dividends at or above wages; the
+# two share a step, so the indices compare as the rates do).
 te_tax_code_counts_as_graduated = {
 	te_tax_code_on = yes
 	has_law = law_type:law_te_tax_code
-	te_tax_view_en_wage_rate >= 0.1
-	te_tax_view_en_div_rate >= te_tax_view_en_wage_rate
+	has_variable = te_tax_en_wage
+	has_variable = te_tax_en_div
+	var:te_tax_en_wage >= 4
+	var:te_tax_en_div >= var:te_tax_en_wage
 }
 
 # ---------------------------------------------------------------------------
@@ -464,5 +595,25 @@ te_tax_relief_stays_with_code = {
 				scope:te_tax_owner_holder = { var:te_cw_origin ?= scope:te_tax_owner_new }
 			}
 		}
+	}
+}
+
+# State scope, a state in the enacted list te_tax_en_relief_states of
+# scope:te_tax_country (te_tax_rebuild_relief_marks saves it). The list keeps
+# the state by te_tax_relief_stays_with_code's rule, with the list's country
+# as the holder: it is the country's own, or the country's civil-war
+# counterpart holds it (one country definition, or var:te_cw_origin either
+# way; inside scope:te_tax_country, PREV is the owner). So during a civil war
+# both sides keep the states the other holds, and the winner's list still
+# names them at reunification. A state owned by anyone else (captured, or
+# released to a new country, which copies the list and keeps its own) leaves
+# the list at the next rebuild; one without an owner too.
+te_tax_relief_listed_state_kept = {
+	exists = owner
+	OR = {
+		owner = scope:te_tax_country
+		owner = { country_definition = scope:te_tax_country.country_definition }
+		owner = { var:te_cw_origin ?= scope:te_tax_country }
+		owner = { scope:te_tax_country = { var:te_cw_origin ?= prev } }
 	}
 }

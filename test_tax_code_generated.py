@@ -238,6 +238,8 @@ class ScriptValueTest(unittest.TestCase):
             want[f"te_tax_max_{key}"] = Decimal(max_idx)
             if key in PERCENT_KEYS:
                 want[f"te_tax_pct_step_{key}"] = Decimal(step) * 100
+        # The relief bands' maximum (Task 11): 0 none, 1 = -25%, 2 = -50%.
+        want["te_tax_max_agrel"] = want["te_tax_max_regrel"] = Decimal(2)
         # The scheduler's history-ring slot ids (test_tax_code_scheduler.py).
         for name, value in (("none", 0), ("a", 1), ("b", 2)):
             want[f"te_tax_slot_id_{name}"] = Decimal(value)

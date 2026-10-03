@@ -98,6 +98,11 @@ COMMANDS = {
     "draft_sunset": ("KEY", "DIR"),
     "draft_due": ("DIR",),
     "draft_good": ("GOOD",),
+    # Relief in a bill (Task 11); draft_relief_state reads its state from the
+    # saved scope te_tax_st, so it takes no parameter.
+    "draft_relief": ("KEY", "DIR"),
+    "draft_relief_choose": (),
+    "draft_relief_state": (),
     "draft_discard": (),
     "draft_rebase": ("KEY",),
     "introduce": (),
@@ -115,13 +120,14 @@ DOMAINS = {
     "draft_sunset": {"KEY": KEYS, "DIR": ("0", "1")},
     "draft_due": {"DIR": ("0", "1")},
     "draft_good": {"GOOD": None},           # the catalog, filled in lazily
-    "draft_rebase": {"KEY": KEYS + ("goods",)},
+    "draft_relief": {"KEY": ("agrel", "regrel"), "DIR": ("0", "1", "2", "3", "4")},
+    "draft_rebase": {"KEY": KEYS + ("goods", "relief")},
     "package_reschedule": {"SLOT": SLOTS},
     "package_release": {"SLOT": SLOTS},
 }
 
-WRITE = re.compile(r"\b(?:set_variable|change_variable|clamp_variable) = \{ name = ([\w$]+)"
-                   r"|\bremove_variable = ([\w$]+)|\bclear_variable_list = ([\w$]+)")
+WRITE = re.compile(r"\b(?:set_variable|change_variable|clamp_variable|add_to_variable_list|remove_list_variable)"
+                   r" = \{ name = ([\w$]+)|\bremove_variable = ([\w$]+)|\bclear_variable_list = ([\w$]+)")
 CALL = re.compile(r"\b(te_tax_[\w$]+|ig_approval_effect) = (?:yes|\{)")
 FORBIDDEN_IN_DRAFTS = ("te_tax_store_package", "te_tax_sync_collection", "te_tax_history_push",
                        "te_tax_refresh_support", "te_tax_recompute_next_month")
@@ -631,10 +637,15 @@ class SupportModelTest(unittest.TestCase):
             body = block(self.values, f"te_tax_mat_{ig}")
             terms = dict(re.findall(r"add = \{ value = te_tax_dl_(\w+) multiply = ([\d.]+) \}", body))
             expected = {key: value for key, value in EXPOSURE[ig].items() if Decimal(value)}
+            # The bill's goods count on the consumption channel (Task 11).
+            expected["goods"] = EXPOSURE[ig]["cons"]
             with self.subTest(ig=ig):
                 self.assertEqual({k: Decimal(v) for k, v in terms.items()},
                                  {k: Decimal(v) for k, v in expected.items()})
-                self.assertRegex(body, r"multiply = -10\s*min = -40\s*max = 40\s*$")
+                # Relief points (test_tax_code_goods_relief.py) sit between the
+                # weight and the clamp.
+                self.assertRegex(body, r"multiply = -10\s*(add = \{ value = te_tax_bl_dstep_(agrel|regrel) "
+                                       r"multiply = -?\d+ \}\s*)+min = -40\s*max = 40\s*$")
 
     def test_progressiveness_matches_vanilla(self):
         with open(ROOT / "vanilla_parsed" / "common" / "laws.json", encoding="utf-8") as handle:
@@ -800,7 +811,10 @@ class RecordTest(unittest.TestCase):
         removed.add("te_tax_bl_relief_states")
         self.assertEqual(removed, bill_payload)
         draft_payload = written([block(self.generated, "te_tax_gen_draft_init")]) | {"te_tax_dr_due"}
-        removed = set(re.findall(r"remove_variable = (\w+)", block(self.generated, "te_tax_gen_draft_clear")))
+        clear = block(self.generated, "te_tax_gen_draft_clear")
+        # Variables are removed, the draft's two lists (Task 11) cleared.
+        removed = set(re.findall(r"remove_variable = (\w+)", clear)) | set(
+            re.findall(r"clear_variable_list = (\w+)", clear))
         self.assertEqual(removed, draft_payload)
 
     def test_only_the_generated_bill_file_removes_variables(self):

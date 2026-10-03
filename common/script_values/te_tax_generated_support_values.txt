@@ -958,6 +958,65 @@ te_tax_base_bl_cons = {
 	}
 }
 
+# te_tax_base_<record>_<relief>: the relief band in force under existing law in the record's
+# due month (relief has no sunset): the enacted band, then each awaiting package due earlier.
+te_tax_base_dr_agrel = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_agrel } value = var:te_tax_en_agrel }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due } has_variable = te_tax_pb_agrel var:te_tax_pb_agrel >= 0 } value = var:te_tax_pb_agrel }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due } has_variable = te_tax_pa_agrel var:te_tax_pa_agrel >= 0 } value = var:te_tax_pa_agrel }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due } has_variable = te_tax_pa_agrel var:te_tax_pa_agrel >= 0 } value = var:te_tax_pa_agrel }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due } has_variable = te_tax_pb_agrel var:te_tax_pb_agrel >= 0 } value = var:te_tax_pb_agrel }
+	}
+}
+te_tax_base_dr_regrel = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_regrel } value = var:te_tax_en_regrel }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due } has_variable = te_tax_pb_regrel var:te_tax_pb_regrel >= 0 } value = var:te_tax_pb_regrel }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due } has_variable = te_tax_pa_regrel var:te_tax_pa_regrel >= 0 } value = var:te_tax_pa_regrel }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due } has_variable = te_tax_pa_regrel var:te_tax_pa_regrel >= 0 } value = var:te_tax_pa_regrel }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due } has_variable = te_tax_pb_regrel var:te_tax_pb_regrel >= 0 } value = var:te_tax_pb_regrel }
+	}
+}
+te_tax_base_bl_agrel = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_agrel } value = var:te_tax_en_agrel }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_agrel var:te_tax_pb_agrel >= 0 } value = var:te_tax_pb_agrel }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_agrel var:te_tax_pa_agrel >= 0 } value = var:te_tax_pa_agrel }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_agrel var:te_tax_pa_agrel >= 0 } value = var:te_tax_pa_agrel }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_agrel var:te_tax_pb_agrel >= 0 } value = var:te_tax_pb_agrel }
+	}
+}
+te_tax_base_bl_regrel = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_regrel } value = var:te_tax_en_regrel }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_regrel var:te_tax_pb_regrel >= 0 } value = var:te_tax_pb_regrel }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_regrel var:te_tax_pa_regrel >= 0 } value = var:te_tax_pa_regrel }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_regrel var:te_tax_pa_regrel >= 0 } value = var:te_tax_pa_regrel }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_regrel var:te_tax_pb_regrel >= 0 } value = var:te_tax_pb_regrel }
+	}
+}
+
 # te_tax_dr_eff_<key>: the draft's target, or the baseline when the draft leaves it alone.
 te_tax_dr_eff_wage = {
 	value = te_tax_base_dr_wage
@@ -979,8 +1038,36 @@ te_tax_dr_eff_cons = {
 	value = te_tax_base_dr_cons
 	if = { limit = { has_variable = te_tax_dr_cons var:te_tax_dr_cons >= 0 } value = var:te_tax_dr_cons }
 }
+te_tax_dr_eff_agrel = {
+	value = te_tax_base_dr_agrel
+	if = { limit = { has_variable = te_tax_dr_agrel var:te_tax_dr_agrel >= 0 } value = var:te_tax_dr_agrel }
+}
+te_tax_dr_eff_regrel = {
+	value = te_tax_base_dr_regrel
+	if = { limit = { has_variable = te_tax_dr_regrel var:te_tax_dr_regrel >= 0 } value = var:te_tax_dr_regrel }
+}
 
-# te_tax_base_dr_g_<good>: 1 if the good is taxed under existing law in the draft's due month.
+# te_tax_dr_zero_limit_<key>: Traditionalism's test that the draft levies no such tax,
+# written with the draft's index on the left (te_tax_draft_ready):
+#   var:te_tax_dr_<key> = 0  OR  var:te_tax_dr_<key> <= te_tax_dr_zero_limit_<key>
+# The limit is -1 when existing law in the draft's month has no such tax and -2 when it
+# has, so an untouched provision (-1) passes exactly when that law levies none, and a
+# touched one only at 0.
+te_tax_dr_zero_limit_wage = {
+	value = te_tax_base_dr_wage
+	max = 1
+	multiply = -1
+	add = -1
+}
+te_tax_dr_zero_limit_div = {
+	value = te_tax_base_dr_div
+	max = 1
+	multiply = -1
+	add = -1
+}
+
+# te_tax_base_<record>_g_<good>: 1 if the good is taxed under existing law in the
+# draft's (dr) or the bill's (bl) due month.
 te_tax_base_dr_g_aeroplanes = {
 	value = 0
 	if = { limit = { has_variable = te_tax_en_g_aeroplanes } value = var:te_tax_en_g_aeroplanes }
@@ -1527,6 +1614,552 @@ te_tax_base_dr_g_wood = {
 		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due } has_variable = te_tax_pb_g_wood var:te_tax_pb_g_wood >= 0 } value = var:te_tax_pb_g_wood }
 	}
 }
+te_tax_base_bl_g_aeroplanes = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_aeroplanes } value = var:te_tax_en_g_aeroplanes }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_aeroplanes var:te_tax_pb_g_aeroplanes >= 0 } value = var:te_tax_pb_g_aeroplanes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_aeroplanes var:te_tax_pa_g_aeroplanes >= 0 } value = var:te_tax_pa_g_aeroplanes }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_aeroplanes var:te_tax_pa_g_aeroplanes >= 0 } value = var:te_tax_pa_g_aeroplanes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_aeroplanes var:te_tax_pb_g_aeroplanes >= 0 } value = var:te_tax_pb_g_aeroplanes }
+	}
+}
+te_tax_base_bl_g_automobiles = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_automobiles } value = var:te_tax_en_g_automobiles }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_automobiles var:te_tax_pb_g_automobiles >= 0 } value = var:te_tax_pb_g_automobiles }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_automobiles var:te_tax_pa_g_automobiles >= 0 } value = var:te_tax_pa_g_automobiles }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_automobiles var:te_tax_pa_g_automobiles >= 0 } value = var:te_tax_pa_g_automobiles }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_automobiles var:te_tax_pb_g_automobiles >= 0 } value = var:te_tax_pb_g_automobiles }
+	}
+}
+te_tax_base_bl_g_clippers = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_clippers } value = var:te_tax_en_g_clippers }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_clippers var:te_tax_pb_g_clippers >= 0 } value = var:te_tax_pb_g_clippers }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_clippers var:te_tax_pa_g_clippers >= 0 } value = var:te_tax_pa_g_clippers }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_clippers var:te_tax_pa_g_clippers >= 0 } value = var:te_tax_pa_g_clippers }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_clippers var:te_tax_pb_g_clippers >= 0 } value = var:te_tax_pb_g_clippers }
+	}
+}
+te_tax_base_bl_g_clothes = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_clothes } value = var:te_tax_en_g_clothes }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_clothes var:te_tax_pb_g_clothes >= 0 } value = var:te_tax_pb_g_clothes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_clothes var:te_tax_pa_g_clothes >= 0 } value = var:te_tax_pa_g_clothes }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_clothes var:te_tax_pa_g_clothes >= 0 } value = var:te_tax_pa_g_clothes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_clothes var:te_tax_pb_g_clothes >= 0 } value = var:te_tax_pb_g_clothes }
+	}
+}
+te_tax_base_bl_g_coal = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_coal } value = var:te_tax_en_g_coal }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_coal var:te_tax_pb_g_coal >= 0 } value = var:te_tax_pb_g_coal }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_coal var:te_tax_pa_g_coal >= 0 } value = var:te_tax_pa_g_coal }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_coal var:te_tax_pa_g_coal >= 0 } value = var:te_tax_pa_g_coal }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_coal var:te_tax_pb_g_coal >= 0 } value = var:te_tax_pb_g_coal }
+	}
+}
+te_tax_base_bl_g_coffee = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_coffee } value = var:te_tax_en_g_coffee }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_coffee var:te_tax_pb_g_coffee >= 0 } value = var:te_tax_pb_g_coffee }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_coffee var:te_tax_pa_g_coffee >= 0 } value = var:te_tax_pa_g_coffee }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_coffee var:te_tax_pa_g_coffee >= 0 } value = var:te_tax_pa_g_coffee }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_coffee var:te_tax_pb_g_coffee >= 0 } value = var:te_tax_pb_g_coffee }
+	}
+}
+te_tax_base_bl_g_consumer_appliances = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_consumer_appliances } value = var:te_tax_en_g_consumer_appliances }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_consumer_appliances var:te_tax_pb_g_consumer_appliances >= 0 } value = var:te_tax_pb_g_consumer_appliances }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_consumer_appliances var:te_tax_pa_g_consumer_appliances >= 0 } value = var:te_tax_pa_g_consumer_appliances }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_consumer_appliances var:te_tax_pa_g_consumer_appliances >= 0 } value = var:te_tax_pa_g_consumer_appliances }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_consumer_appliances var:te_tax_pb_g_consumer_appliances >= 0 } value = var:te_tax_pb_g_consumer_appliances }
+	}
+}
+te_tax_base_bl_g_digital_access = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_digital_access } value = var:te_tax_en_g_digital_access }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_digital_access var:te_tax_pb_g_digital_access >= 0 } value = var:te_tax_pb_g_digital_access }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_digital_access var:te_tax_pa_g_digital_access >= 0 } value = var:te_tax_pa_g_digital_access }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_digital_access var:te_tax_pa_g_digital_access >= 0 } value = var:te_tax_pa_g_digital_access }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_digital_access var:te_tax_pb_g_digital_access >= 0 } value = var:te_tax_pb_g_digital_access }
+	}
+}
+te_tax_base_bl_g_digital_assets = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_digital_assets } value = var:te_tax_en_g_digital_assets }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_digital_assets var:te_tax_pb_g_digital_assets >= 0 } value = var:te_tax_pb_g_digital_assets }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_digital_assets var:te_tax_pa_g_digital_assets >= 0 } value = var:te_tax_pa_g_digital_assets }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_digital_assets var:te_tax_pa_g_digital_assets >= 0 } value = var:te_tax_pa_g_digital_assets }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_digital_assets var:te_tax_pb_g_digital_assets >= 0 } value = var:te_tax_pb_g_digital_assets }
+	}
+}
+te_tax_base_bl_g_electricity = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_electricity } value = var:te_tax_en_g_electricity }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_electricity var:te_tax_pb_g_electricity >= 0 } value = var:te_tax_pb_g_electricity }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_electricity var:te_tax_pa_g_electricity >= 0 } value = var:te_tax_pa_g_electricity }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_electricity var:te_tax_pa_g_electricity >= 0 } value = var:te_tax_pa_g_electricity }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_electricity var:te_tax_pb_g_electricity >= 0 } value = var:te_tax_pb_g_electricity }
+	}
+}
+te_tax_base_bl_g_fabric = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_fabric } value = var:te_tax_en_g_fabric }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_fabric var:te_tax_pb_g_fabric >= 0 } value = var:te_tax_pb_g_fabric }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_fabric var:te_tax_pa_g_fabric >= 0 } value = var:te_tax_pa_g_fabric }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_fabric var:te_tax_pa_g_fabric >= 0 } value = var:te_tax_pa_g_fabric }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_fabric var:te_tax_pb_g_fabric >= 0 } value = var:te_tax_pb_g_fabric }
+	}
+}
+te_tax_base_bl_g_fine_art = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_fine_art } value = var:te_tax_en_g_fine_art }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_fine_art var:te_tax_pb_g_fine_art >= 0 } value = var:te_tax_pb_g_fine_art }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_fine_art var:te_tax_pa_g_fine_art >= 0 } value = var:te_tax_pa_g_fine_art }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_fine_art var:te_tax_pa_g_fine_art >= 0 } value = var:te_tax_pa_g_fine_art }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_fine_art var:te_tax_pb_g_fine_art >= 0 } value = var:te_tax_pb_g_fine_art }
+	}
+}
+te_tax_base_bl_g_fish = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_fish } value = var:te_tax_en_g_fish }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_fish var:te_tax_pb_g_fish >= 0 } value = var:te_tax_pb_g_fish }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_fish var:te_tax_pa_g_fish >= 0 } value = var:te_tax_pa_g_fish }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_fish var:te_tax_pa_g_fish >= 0 } value = var:te_tax_pa_g_fish }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_fish var:te_tax_pb_g_fish >= 0 } value = var:te_tax_pb_g_fish }
+	}
+}
+te_tax_base_bl_g_fruit = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_fruit } value = var:te_tax_en_g_fruit }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_fruit var:te_tax_pb_g_fruit >= 0 } value = var:te_tax_pb_g_fruit }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_fruit var:te_tax_pa_g_fruit >= 0 } value = var:te_tax_pa_g_fruit }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_fruit var:te_tax_pa_g_fruit >= 0 } value = var:te_tax_pa_g_fruit }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_fruit var:te_tax_pb_g_fruit >= 0 } value = var:te_tax_pb_g_fruit }
+	}
+}
+te_tax_base_bl_g_furniture = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_furniture } value = var:te_tax_en_g_furniture }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_furniture var:te_tax_pb_g_furniture >= 0 } value = var:te_tax_pb_g_furniture }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_furniture var:te_tax_pa_g_furniture >= 0 } value = var:te_tax_pa_g_furniture }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_furniture var:te_tax_pa_g_furniture >= 0 } value = var:te_tax_pa_g_furniture }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_furniture var:te_tax_pb_g_furniture >= 0 } value = var:te_tax_pb_g_furniture }
+	}
+}
+te_tax_base_bl_g_glass = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_glass } value = var:te_tax_en_g_glass }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_glass var:te_tax_pb_g_glass >= 0 } value = var:te_tax_pb_g_glass }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_glass var:te_tax_pa_g_glass >= 0 } value = var:te_tax_pa_g_glass }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_glass var:te_tax_pa_g_glass >= 0 } value = var:te_tax_pa_g_glass }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_glass var:te_tax_pb_g_glass >= 0 } value = var:te_tax_pb_g_glass }
+	}
+}
+te_tax_base_bl_g_grain = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_grain } value = var:te_tax_en_g_grain }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_grain var:te_tax_pb_g_grain >= 0 } value = var:te_tax_pb_g_grain }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_grain var:te_tax_pa_g_grain >= 0 } value = var:te_tax_pa_g_grain }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_grain var:te_tax_pa_g_grain >= 0 } value = var:te_tax_pa_g_grain }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_grain var:te_tax_pb_g_grain >= 0 } value = var:te_tax_pb_g_grain }
+	}
+}
+te_tax_base_bl_g_groceries = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_groceries } value = var:te_tax_en_g_groceries }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_groceries var:te_tax_pb_g_groceries >= 0 } value = var:te_tax_pb_g_groceries }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_groceries var:te_tax_pa_g_groceries >= 0 } value = var:te_tax_pa_g_groceries }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_groceries var:te_tax_pa_g_groceries >= 0 } value = var:te_tax_pa_g_groceries }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_groceries var:te_tax_pb_g_groceries >= 0 } value = var:te_tax_pb_g_groceries }
+	}
+}
+te_tax_base_bl_g_liquor = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_liquor } value = var:te_tax_en_g_liquor }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_liquor var:te_tax_pb_g_liquor >= 0 } value = var:te_tax_pb_g_liquor }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_liquor var:te_tax_pa_g_liquor >= 0 } value = var:te_tax_pa_g_liquor }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_liquor var:te_tax_pa_g_liquor >= 0 } value = var:te_tax_pa_g_liquor }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_liquor var:te_tax_pb_g_liquor >= 0 } value = var:te_tax_pb_g_liquor }
+	}
+}
+te_tax_base_bl_g_luxury_clothes = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_luxury_clothes } value = var:te_tax_en_g_luxury_clothes }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_luxury_clothes var:te_tax_pb_g_luxury_clothes >= 0 } value = var:te_tax_pb_g_luxury_clothes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_luxury_clothes var:te_tax_pa_g_luxury_clothes >= 0 } value = var:te_tax_pa_g_luxury_clothes }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_luxury_clothes var:te_tax_pa_g_luxury_clothes >= 0 } value = var:te_tax_pa_g_luxury_clothes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_luxury_clothes var:te_tax_pb_g_luxury_clothes >= 0 } value = var:te_tax_pb_g_luxury_clothes }
+	}
+}
+te_tax_base_bl_g_luxury_furniture = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_luxury_furniture } value = var:te_tax_en_g_luxury_furniture }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_luxury_furniture var:te_tax_pb_g_luxury_furniture >= 0 } value = var:te_tax_pb_g_luxury_furniture }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_luxury_furniture var:te_tax_pa_g_luxury_furniture >= 0 } value = var:te_tax_pa_g_luxury_furniture }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_luxury_furniture var:te_tax_pa_g_luxury_furniture >= 0 } value = var:te_tax_pa_g_luxury_furniture }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_luxury_furniture var:te_tax_pb_g_luxury_furniture >= 0 } value = var:te_tax_pb_g_luxury_furniture }
+	}
+}
+te_tax_base_bl_g_meat = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_meat } value = var:te_tax_en_g_meat }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_meat var:te_tax_pb_g_meat >= 0 } value = var:te_tax_pb_g_meat }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_meat var:te_tax_pa_g_meat >= 0 } value = var:te_tax_pa_g_meat }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_meat var:te_tax_pa_g_meat >= 0 } value = var:te_tax_pa_g_meat }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_meat var:te_tax_pb_g_meat >= 0 } value = var:te_tax_pb_g_meat }
+	}
+}
+te_tax_base_bl_g_oil = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_oil } value = var:te_tax_en_g_oil }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_oil var:te_tax_pb_g_oil >= 0 } value = var:te_tax_pb_g_oil }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_oil var:te_tax_pa_g_oil >= 0 } value = var:te_tax_pa_g_oil }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_oil var:te_tax_pa_g_oil >= 0 } value = var:te_tax_pa_g_oil }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_oil var:te_tax_pb_g_oil >= 0 } value = var:te_tax_pb_g_oil }
+	}
+}
+te_tax_base_bl_g_opium = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_opium } value = var:te_tax_en_g_opium }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_opium var:te_tax_pb_g_opium >= 0 } value = var:te_tax_pb_g_opium }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_opium var:te_tax_pa_g_opium >= 0 } value = var:te_tax_pa_g_opium }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_opium var:te_tax_pa_g_opium >= 0 } value = var:te_tax_pa_g_opium }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_opium var:te_tax_pb_g_opium >= 0 } value = var:te_tax_pb_g_opium }
+	}
+}
+te_tax_base_bl_g_paper = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_paper } value = var:te_tax_en_g_paper }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_paper var:te_tax_pb_g_paper >= 0 } value = var:te_tax_pb_g_paper }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_paper var:te_tax_pa_g_paper >= 0 } value = var:te_tax_pa_g_paper }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_paper var:te_tax_pa_g_paper >= 0 } value = var:te_tax_pa_g_paper }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_paper var:te_tax_pb_g_paper >= 0 } value = var:te_tax_pb_g_paper }
+	}
+}
+te_tax_base_bl_g_porcelain = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_porcelain } value = var:te_tax_en_g_porcelain }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_porcelain var:te_tax_pb_g_porcelain >= 0 } value = var:te_tax_pb_g_porcelain }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_porcelain var:te_tax_pa_g_porcelain >= 0 } value = var:te_tax_pa_g_porcelain }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_porcelain var:te_tax_pa_g_porcelain >= 0 } value = var:te_tax_pa_g_porcelain }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_porcelain var:te_tax_pb_g_porcelain >= 0 } value = var:te_tax_pb_g_porcelain }
+	}
+}
+te_tax_base_bl_g_radios = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_radios } value = var:te_tax_en_g_radios }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_radios var:te_tax_pb_g_radios >= 0 } value = var:te_tax_pb_g_radios }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_radios var:te_tax_pa_g_radios >= 0 } value = var:te_tax_pa_g_radios }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_radios var:te_tax_pa_g_radios >= 0 } value = var:te_tax_pa_g_radios }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_radios var:te_tax_pb_g_radios >= 0 } value = var:te_tax_pb_g_radios }
+	}
+}
+te_tax_base_bl_g_services = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_services } value = var:te_tax_en_g_services }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_services var:te_tax_pb_g_services >= 0 } value = var:te_tax_pb_g_services }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_services var:te_tax_pa_g_services >= 0 } value = var:te_tax_pa_g_services }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_services var:te_tax_pa_g_services >= 0 } value = var:te_tax_pa_g_services }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_services var:te_tax_pb_g_services >= 0 } value = var:te_tax_pb_g_services }
+	}
+}
+te_tax_base_bl_g_silk = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_silk } value = var:te_tax_en_g_silk }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_silk var:te_tax_pb_g_silk >= 0 } value = var:te_tax_pb_g_silk }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_silk var:te_tax_pa_g_silk >= 0 } value = var:te_tax_pa_g_silk }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_silk var:te_tax_pa_g_silk >= 0 } value = var:te_tax_pa_g_silk }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_silk var:te_tax_pb_g_silk >= 0 } value = var:te_tax_pb_g_silk }
+	}
+}
+te_tax_base_bl_g_small_arms = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_small_arms } value = var:te_tax_en_g_small_arms }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_small_arms var:te_tax_pb_g_small_arms >= 0 } value = var:te_tax_pb_g_small_arms }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_small_arms var:te_tax_pa_g_small_arms >= 0 } value = var:te_tax_pa_g_small_arms }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_small_arms var:te_tax_pa_g_small_arms >= 0 } value = var:te_tax_pa_g_small_arms }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_small_arms var:te_tax_pb_g_small_arms >= 0 } value = var:te_tax_pb_g_small_arms }
+	}
+}
+te_tax_base_bl_g_steamers = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_steamers } value = var:te_tax_en_g_steamers }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_steamers var:te_tax_pb_g_steamers >= 0 } value = var:te_tax_pb_g_steamers }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_steamers var:te_tax_pa_g_steamers >= 0 } value = var:te_tax_pa_g_steamers }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_steamers var:te_tax_pa_g_steamers >= 0 } value = var:te_tax_pa_g_steamers }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_steamers var:te_tax_pb_g_steamers >= 0 } value = var:te_tax_pb_g_steamers }
+	}
+}
+te_tax_base_bl_g_sugar = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_sugar } value = var:te_tax_en_g_sugar }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_sugar var:te_tax_pb_g_sugar >= 0 } value = var:te_tax_pb_g_sugar }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_sugar var:te_tax_pa_g_sugar >= 0 } value = var:te_tax_pa_g_sugar }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_sugar var:te_tax_pa_g_sugar >= 0 } value = var:te_tax_pa_g_sugar }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_sugar var:te_tax_pb_g_sugar >= 0 } value = var:te_tax_pb_g_sugar }
+	}
+}
+te_tax_base_bl_g_tea = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_tea } value = var:te_tax_en_g_tea }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_tea var:te_tax_pb_g_tea >= 0 } value = var:te_tax_pb_g_tea }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_tea var:te_tax_pa_g_tea >= 0 } value = var:te_tax_pa_g_tea }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_tea var:te_tax_pa_g_tea >= 0 } value = var:te_tax_pa_g_tea }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_tea var:te_tax_pb_g_tea >= 0 } value = var:te_tax_pb_g_tea }
+	}
+}
+te_tax_base_bl_g_telephones = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_telephones } value = var:te_tax_en_g_telephones }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_telephones var:te_tax_pb_g_telephones >= 0 } value = var:te_tax_pb_g_telephones }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_telephones var:te_tax_pa_g_telephones >= 0 } value = var:te_tax_pa_g_telephones }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_telephones var:te_tax_pa_g_telephones >= 0 } value = var:te_tax_pa_g_telephones }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_telephones var:te_tax_pb_g_telephones >= 0 } value = var:te_tax_pb_g_telephones }
+	}
+}
+te_tax_base_bl_g_tobacco = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_tobacco } value = var:te_tax_en_g_tobacco }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_tobacco var:te_tax_pb_g_tobacco >= 0 } value = var:te_tax_pb_g_tobacco }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_tobacco var:te_tax_pa_g_tobacco >= 0 } value = var:te_tax_pa_g_tobacco }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_tobacco var:te_tax_pa_g_tobacco >= 0 } value = var:te_tax_pa_g_tobacco }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_tobacco var:te_tax_pb_g_tobacco >= 0 } value = var:te_tax_pb_g_tobacco }
+	}
+}
+te_tax_base_bl_g_tourism = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_tourism } value = var:te_tax_en_g_tourism }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_tourism var:te_tax_pb_g_tourism >= 0 } value = var:te_tax_pb_g_tourism }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_tourism var:te_tax_pa_g_tourism >= 0 } value = var:te_tax_pa_g_tourism }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_tourism var:te_tax_pa_g_tourism >= 0 } value = var:te_tax_pa_g_tourism }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_tourism var:te_tax_pb_g_tourism >= 0 } value = var:te_tax_pb_g_tourism }
+	}
+}
+te_tax_base_bl_g_transportation = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_transportation } value = var:te_tax_en_g_transportation }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_transportation var:te_tax_pb_g_transportation >= 0 } value = var:te_tax_pb_g_transportation }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_transportation var:te_tax_pa_g_transportation >= 0 } value = var:te_tax_pa_g_transportation }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_transportation var:te_tax_pa_g_transportation >= 0 } value = var:te_tax_pa_g_transportation }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_transportation var:te_tax_pb_g_transportation >= 0 } value = var:te_tax_pb_g_transportation }
+	}
+}
+te_tax_base_bl_g_wine = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_wine } value = var:te_tax_en_g_wine }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_wine var:te_tax_pb_g_wine >= 0 } value = var:te_tax_pb_g_wine }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_wine var:te_tax_pa_g_wine >= 0 } value = var:te_tax_pa_g_wine }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_wine var:te_tax_pa_g_wine >= 0 } value = var:te_tax_pa_g_wine }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_wine var:te_tax_pb_g_wine >= 0 } value = var:te_tax_pb_g_wine }
+	}
+}
+te_tax_base_bl_g_wood = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_g_wood } value = var:te_tax_en_g_wood }
+	# Awaiting packages due earlier, in the order they commence.
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_wood var:te_tax_pb_g_wood >= 0 } value = var:te_tax_pb_g_wood }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_wood var:te_tax_pa_g_wood >= 0 } value = var:te_tax_pa_g_wood }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_g_wood var:te_tax_pa_g_wood >= 0 } value = var:te_tax_pa_g_wood }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_g_wood var:te_tax_pb_g_wood >= 0 } value = var:te_tax_pb_g_wood }
+	}
+}
 
 # The bill's change per instrument: in index steps (0 if untouched), then in vanilla tax levels.
 te_tax_bl_dstep_wage = {
@@ -1595,6 +2228,422 @@ te_tax_dl_cons = {
 	divide = te_tax_level_step_cons
 }
 
+# The bill's change per relief, in bands from existing law (0 if untouched).
+te_tax_bl_dstep_agrel = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_agrel var:te_tax_bl_agrel >= 0 }
+		value = var:te_tax_bl_agrel
+		subtract = te_tax_base_bl_agrel
+	}
+}
+te_tax_bl_dstep_regrel = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_regrel var:te_tax_bl_regrel >= 0 }
+		value = var:te_tax_bl_regrel
+		subtract = te_tax_base_bl_regrel
+	}
+}
+
+# The bill's goods, in tax levels on the consumption channel: 0.2 per good it puts on
+# the taxed list (negative for one it takes off), times the good's category weight
+# (GOODS_CATEGORY_WEIGHT in the generator, from the goods file's category). One value per
+# good, so a later provision can zero a single good's term; te_tax_dl_goods is their sum.
+te_tax_dl_g_aeroplanes = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_aeroplanes var:te_tax_bl_g_aeroplanes >= 0 }
+		value = var:te_tax_bl_g_aeroplanes
+		subtract = te_tax_base_bl_g_aeroplanes
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_automobiles = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_automobiles var:te_tax_bl_g_automobiles >= 0 }
+		value = var:te_tax_bl_g_automobiles
+		subtract = te_tax_base_bl_g_automobiles
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_clippers = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_clippers var:te_tax_bl_g_clippers >= 0 }
+		value = var:te_tax_bl_g_clippers
+		subtract = te_tax_base_bl_g_clippers
+		multiply = 0.06
+	}
+}
+te_tax_dl_g_clothes = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_clothes var:te_tax_bl_g_clothes >= 0 }
+		value = var:te_tax_bl_g_clothes
+		subtract = te_tax_base_bl_g_clothes
+		multiply = 0.2
+	}
+}
+te_tax_dl_g_coal = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_coal var:te_tax_bl_g_coal >= 0 }
+		value = var:te_tax_bl_g_coal
+		subtract = te_tax_base_bl_g_coal
+		multiply = 0.06
+	}
+}
+te_tax_dl_g_coffee = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_coffee var:te_tax_bl_g_coffee >= 0 }
+		value = var:te_tax_bl_g_coffee
+		subtract = te_tax_base_bl_g_coffee
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_consumer_appliances = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_consumer_appliances var:te_tax_bl_g_consumer_appliances >= 0 }
+		value = var:te_tax_bl_g_consumer_appliances
+		subtract = te_tax_base_bl_g_consumer_appliances
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_digital_access = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_digital_access var:te_tax_bl_g_digital_access >= 0 }
+		value = var:te_tax_bl_g_digital_access
+		subtract = te_tax_base_bl_g_digital_access
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_digital_assets = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_digital_assets var:te_tax_bl_g_digital_assets >= 0 }
+		value = var:te_tax_bl_g_digital_assets
+		subtract = te_tax_base_bl_g_digital_assets
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_electricity = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_electricity var:te_tax_bl_g_electricity >= 0 }
+		value = var:te_tax_bl_g_electricity
+		subtract = te_tax_base_bl_g_electricity
+		multiply = 0.2
+	}
+}
+te_tax_dl_g_fabric = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_fabric var:te_tax_bl_g_fabric >= 0 }
+		value = var:te_tax_bl_g_fabric
+		subtract = te_tax_base_bl_g_fabric
+		multiply = 0.2
+	}
+}
+te_tax_dl_g_fine_art = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_fine_art var:te_tax_bl_g_fine_art >= 0 }
+		value = var:te_tax_bl_g_fine_art
+		subtract = te_tax_base_bl_g_fine_art
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_fish = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_fish var:te_tax_bl_g_fish >= 0 }
+		value = var:te_tax_bl_g_fish
+		subtract = te_tax_base_bl_g_fish
+		multiply = 0.2
+	}
+}
+te_tax_dl_g_fruit = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_fruit var:te_tax_bl_g_fruit >= 0 }
+		value = var:te_tax_bl_g_fruit
+		subtract = te_tax_base_bl_g_fruit
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_furniture = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_furniture var:te_tax_bl_g_furniture >= 0 }
+		value = var:te_tax_bl_g_furniture
+		subtract = te_tax_base_bl_g_furniture
+		multiply = 0.2
+	}
+}
+te_tax_dl_g_glass = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_glass var:te_tax_bl_g_glass >= 0 }
+		value = var:te_tax_bl_g_glass
+		subtract = te_tax_base_bl_g_glass
+		multiply = 0.06
+	}
+}
+te_tax_dl_g_grain = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_grain var:te_tax_bl_g_grain >= 0 }
+		value = var:te_tax_bl_g_grain
+		subtract = te_tax_base_bl_g_grain
+		multiply = 0.2
+	}
+}
+te_tax_dl_g_groceries = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_groceries var:te_tax_bl_g_groceries >= 0 }
+		value = var:te_tax_bl_g_groceries
+		subtract = te_tax_base_bl_g_groceries
+		multiply = 0.2
+	}
+}
+te_tax_dl_g_liquor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_liquor var:te_tax_bl_g_liquor >= 0 }
+		value = var:te_tax_bl_g_liquor
+		subtract = te_tax_base_bl_g_liquor
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_luxury_clothes = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_luxury_clothes var:te_tax_bl_g_luxury_clothes >= 0 }
+		value = var:te_tax_bl_g_luxury_clothes
+		subtract = te_tax_base_bl_g_luxury_clothes
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_luxury_furniture = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_luxury_furniture var:te_tax_bl_g_luxury_furniture >= 0 }
+		value = var:te_tax_bl_g_luxury_furniture
+		subtract = te_tax_base_bl_g_luxury_furniture
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_meat = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_meat var:te_tax_bl_g_meat >= 0 }
+		value = var:te_tax_bl_g_meat
+		subtract = te_tax_base_bl_g_meat
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_oil = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_oil var:te_tax_bl_g_oil >= 0 }
+		value = var:te_tax_bl_g_oil
+		subtract = te_tax_base_bl_g_oil
+		multiply = 0.06
+	}
+}
+te_tax_dl_g_opium = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_opium var:te_tax_bl_g_opium >= 0 }
+		value = var:te_tax_bl_g_opium
+		subtract = te_tax_base_bl_g_opium
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_paper = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_paper var:te_tax_bl_g_paper >= 0 }
+		value = var:te_tax_bl_g_paper
+		subtract = te_tax_base_bl_g_paper
+		multiply = 0.2
+	}
+}
+te_tax_dl_g_porcelain = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_porcelain var:te_tax_bl_g_porcelain >= 0 }
+		value = var:te_tax_bl_g_porcelain
+		subtract = te_tax_base_bl_g_porcelain
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_radios = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_radios var:te_tax_bl_g_radios >= 0 }
+		value = var:te_tax_bl_g_radios
+		subtract = te_tax_base_bl_g_radios
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_services = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_services var:te_tax_bl_g_services >= 0 }
+		value = var:te_tax_bl_g_services
+		subtract = te_tax_base_bl_g_services
+		multiply = 0.2
+	}
+}
+te_tax_dl_g_silk = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_silk var:te_tax_bl_g_silk >= 0 }
+		value = var:te_tax_bl_g_silk
+		subtract = te_tax_base_bl_g_silk
+		multiply = 0.06
+	}
+}
+te_tax_dl_g_small_arms = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_small_arms var:te_tax_bl_g_small_arms >= 0 }
+		value = var:te_tax_bl_g_small_arms
+		subtract = te_tax_base_bl_g_small_arms
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_steamers = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_steamers var:te_tax_bl_g_steamers >= 0 }
+		value = var:te_tax_bl_g_steamers
+		subtract = te_tax_base_bl_g_steamers
+		multiply = 0.06
+	}
+}
+te_tax_dl_g_sugar = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_sugar var:te_tax_bl_g_sugar >= 0 }
+		value = var:te_tax_bl_g_sugar
+		subtract = te_tax_base_bl_g_sugar
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_tea = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_tea var:te_tax_bl_g_tea >= 0 }
+		value = var:te_tax_bl_g_tea
+		subtract = te_tax_base_bl_g_tea
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_telephones = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_telephones var:te_tax_bl_g_telephones >= 0 }
+		value = var:te_tax_bl_g_telephones
+		subtract = te_tax_base_bl_g_telephones
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_tobacco = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_tobacco var:te_tax_bl_g_tobacco >= 0 }
+		value = var:te_tax_bl_g_tobacco
+		subtract = te_tax_base_bl_g_tobacco
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_tourism = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_tourism var:te_tax_bl_g_tourism >= 0 }
+		value = var:te_tax_bl_g_tourism
+		subtract = te_tax_base_bl_g_tourism
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_transportation = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_transportation var:te_tax_bl_g_transportation >= 0 }
+		value = var:te_tax_bl_g_transportation
+		subtract = te_tax_base_bl_g_transportation
+		multiply = 0.2
+	}
+}
+te_tax_dl_g_wine = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_wine var:te_tax_bl_g_wine >= 0 }
+		value = var:te_tax_bl_g_wine
+		subtract = te_tax_base_bl_g_wine
+		multiply = 0.04
+	}
+}
+te_tax_dl_g_wood = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_g_wood var:te_tax_bl_g_wood >= 0 }
+		value = var:te_tax_bl_g_wood
+		subtract = te_tax_base_bl_g_wood
+		multiply = 0.2
+	}
+}
+te_tax_dl_goods = {
+	value = 0
+	add = te_tax_dl_g_aeroplanes
+	add = te_tax_dl_g_automobiles
+	add = te_tax_dl_g_clippers
+	add = te_tax_dl_g_clothes
+	add = te_tax_dl_g_coal
+	add = te_tax_dl_g_coffee
+	add = te_tax_dl_g_consumer_appliances
+	add = te_tax_dl_g_digital_access
+	add = te_tax_dl_g_digital_assets
+	add = te_tax_dl_g_electricity
+	add = te_tax_dl_g_fabric
+	add = te_tax_dl_g_fine_art
+	add = te_tax_dl_g_fish
+	add = te_tax_dl_g_fruit
+	add = te_tax_dl_g_furniture
+	add = te_tax_dl_g_glass
+	add = te_tax_dl_g_grain
+	add = te_tax_dl_g_groceries
+	add = te_tax_dl_g_liquor
+	add = te_tax_dl_g_luxury_clothes
+	add = te_tax_dl_g_luxury_furniture
+	add = te_tax_dl_g_meat
+	add = te_tax_dl_g_oil
+	add = te_tax_dl_g_opium
+	add = te_tax_dl_g_paper
+	add = te_tax_dl_g_porcelain
+	add = te_tax_dl_g_radios
+	add = te_tax_dl_g_services
+	add = te_tax_dl_g_silk
+	add = te_tax_dl_g_small_arms
+	add = te_tax_dl_g_steamers
+	add = te_tax_dl_g_sugar
+	add = te_tax_dl_g_tea
+	add = te_tax_dl_g_telephones
+	add = te_tax_dl_g_tobacco
+	add = te_tax_dl_g_tourism
+	add = te_tax_dl_g_transportation
+	add = te_tax_dl_g_wine
+	add = te_tax_dl_g_wood
+}
+
 # Revenue direction: the sum of the changes. Progressivity: income channels minus the rest.
 te_tax_dl_total = {
 	value = te_tax_dl_wage
@@ -1622,7 +2671,10 @@ te_tax_bl_provisions = {
 }
 
 # Support reasons per interest group, each clamped to -40..40. Material:
-# -10 x the exposure-weighted change in tax levels. Ideology: 5 x the
+# -10 x the exposure-weighted change in tax levels, the bill's goods counted on the
+# consumption channel (te_tax_dl_goods); then relief in points per band the bill moves it:
+# agricultural rural_folk +8, landowners +3; regional +4 for every group,
+# industrialists -2, petty_bourgeoisie -2 on top. Ideology: 5 x the
 # group's fiscal ideology (its stances on the vanilla taxation laws x their progressiveness
 # / 100) x the change in progressivity. Government: +10 in government.
 te_tax_mat_armed_forces = {
@@ -1632,7 +2684,9 @@ te_tax_mat_armed_forces = {
 	add = { value = te_tax_dl_land multiply = 0.1 }
 	add = { value = te_tax_dl_head multiply = 0.3 }
 	add = { value = te_tax_dl_cons multiply = 0.4 }
+	add = { value = te_tax_dl_goods multiply = 0.4 }
 	multiply = -10
+	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
 	min = -40
 	max = 40
 }
@@ -1677,7 +2731,9 @@ te_tax_mat_devout = {
 	add = { value = te_tax_dl_land multiply = 0.3 }
 	add = { value = te_tax_dl_head multiply = 0.4 }
 	add = { value = te_tax_dl_cons multiply = 0.5 }
+	add = { value = te_tax_dl_goods multiply = 0.5 }
 	multiply = -10
+	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
 	min = -40
 	max = 40
 }
@@ -1721,7 +2777,10 @@ te_tax_mat_industrialists = {
 	add = { value = te_tax_dl_div multiply = 1 }
 	add = { value = te_tax_dl_head multiply = 0.1 }
 	add = { value = te_tax_dl_cons multiply = 0.2 }
+	add = { value = te_tax_dl_goods multiply = 0.2 }
 	multiply = -10
+	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
+	add = { value = te_tax_bl_dstep_regrel multiply = -2 }
 	min = -40
 	max = 40
 }
@@ -1765,7 +2824,9 @@ te_tax_mat_intelligentsia = {
 	add = { value = te_tax_dl_div multiply = 0.2 }
 	add = { value = te_tax_dl_head multiply = 0.3 }
 	add = { value = te_tax_dl_cons multiply = 0.4 }
+	add = { value = te_tax_dl_goods multiply = 0.4 }
 	multiply = -10
+	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
 	min = -40
 	max = 40
 }
@@ -1810,7 +2871,10 @@ te_tax_mat_landowners = {
 	add = { value = te_tax_dl_land multiply = 0.3 }
 	add = { value = te_tax_dl_head multiply = 0.1 }
 	add = { value = te_tax_dl_cons multiply = 0.2 }
+	add = { value = te_tax_dl_goods multiply = 0.2 }
 	multiply = -10
+	add = { value = te_tax_bl_dstep_agrel multiply = 3 }
+	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
 	min = -40
 	max = 40
 }
@@ -1855,7 +2919,10 @@ te_tax_mat_petty_bourgeoisie = {
 	add = { value = te_tax_dl_land multiply = 0.1 }
 	add = { value = te_tax_dl_head multiply = 0.5 }
 	add = { value = te_tax_dl_cons multiply = 0.6 }
+	add = { value = te_tax_dl_goods multiply = 0.6 }
 	multiply = -10
+	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
+	add = { value = te_tax_bl_dstep_regrel multiply = -2 }
 	min = -40
 	max = 40
 }
@@ -1900,7 +2967,10 @@ te_tax_mat_rural_folk = {
 	add = { value = te_tax_dl_land multiply = 1 }
 	add = { value = te_tax_dl_head multiply = 0.3 }
 	add = { value = te_tax_dl_cons multiply = 0.8 }
+	add = { value = te_tax_dl_goods multiply = 0.8 }
 	multiply = -10
+	add = { value = te_tax_bl_dstep_agrel multiply = 8 }
+	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
 	min = -40
 	max = 40
 }
@@ -1943,7 +3013,9 @@ te_tax_mat_trade_unions = {
 	add = { value = te_tax_dl_wage multiply = 1 }
 	add = { value = te_tax_dl_head multiply = 0.8 }
 	add = { value = te_tax_dl_cons multiply = 0.8 }
+	add = { value = te_tax_dl_goods multiply = 0.8 }
 	multiply = -10
+	add = { value = te_tax_bl_dstep_regrel multiply = 4 }
 	min = -40
 	max = 40
 }

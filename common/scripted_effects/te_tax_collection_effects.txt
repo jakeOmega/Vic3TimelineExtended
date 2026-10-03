@@ -156,9 +156,14 @@ te_tax_pick_sponsor = {
 # Country scope; needs scope:te_tax_country. Relief bands as static modifiers:
 # agricultural wage relief on the country (te_tax_en_agrel), regional relief
 # on every owned state flagged te_tax_relief_state = 1 (te_tax_en_regrel).
-# A band is added only when missing and removed only when present, so an
-# unchanged code adds and removes nothing.
+# The flags are derived first from the enacted list of named states
+# (te_tax_rebuild_relief_marks, te_tax_civil_war_effects.txt), which also drops
+# from the list a state the code no longer holds. Variables are visible at
+# once, so the modifiers below read the rebuilt flags. A band is added only
+# when missing and removed only when present, so an unchanged code adds and
+# removes nothing.
 te_tax_sync_relief = {
+	te_tax_rebuild_relief_marks = yes
 	if = {
 		limit = { var:te_tax_en_agrel = 1 }
 		if = { limit = { has_modifier = te_tax_relief_ag_2 } remove_modifier = te_tax_relief_ag_2 }

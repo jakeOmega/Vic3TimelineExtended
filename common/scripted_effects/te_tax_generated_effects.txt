@@ -2180,26 +2180,20 @@ te_tax_gen_apply_a = {
 	if = { limit = { var:te_tax_pa_g_wood >= 0 } set_variable = { name = te_tax_en_g_wood value = var:te_tax_pa_g_wood } }
 	if = { limit = { var:te_tax_pa_agrel >= 0 } set_variable = { name = te_tax_en_agrel value = var:te_tax_pa_agrel } }
 	if = { limit = { var:te_tax_pa_regrel >= 0 } set_variable = { name = te_tax_en_regrel value = var:te_tax_pa_regrel } }
-	# A package that restates regional relief names its whole state set. Each state it
-	# names is stamped with this country (te_tax_relief_holder), so a later change of
-	# owner can tell whether the code that named it went with it
-	# (te_tax_relief_follow_owner, te_tax_civil_war_effects.txt).
+	# A package that restates regional relief names its whole state set: it replaces the
+	# enacted list te_tax_en_relief_states (at most three states), the canonical set.
+	# The state marks (te_tax_relief_state) and their stamps follow from the list in the
+	# writer's relief sync (te_tax_rebuild_relief_marks), which the processor runs after
+	# this month's commencements.
 	if = {
 		limit = { var:te_tax_pa_regrel_states_set = 1 }
-		save_scope_as = te_tax_country
+		clear_variable_list = te_tax_en_relief_states
 		every_scope_state = {
-			if = {
-				limit = {
-					has_variable = te_tax_pending_relief_a
-					var:te_tax_pending_relief_a = 1
-				}
-				set_variable = { name = te_tax_relief_state value = 1 }
-				set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
+			limit = {
+				has_variable = te_tax_pending_relief_a
+				var:te_tax_pending_relief_a = 1
 			}
-			else_if = {
-				limit = { has_variable = te_tax_relief_state }
-				set_variable = { name = te_tax_relief_state value = 0 }
-			}
+			owner = { add_to_variable_list = { name = te_tax_en_relief_states target = prev } }
 		}
 	}
 	every_scope_state = {
@@ -2720,26 +2714,20 @@ te_tax_gen_apply_b = {
 	if = { limit = { var:te_tax_pb_g_wood >= 0 } set_variable = { name = te_tax_en_g_wood value = var:te_tax_pb_g_wood } }
 	if = { limit = { var:te_tax_pb_agrel >= 0 } set_variable = { name = te_tax_en_agrel value = var:te_tax_pb_agrel } }
 	if = { limit = { var:te_tax_pb_regrel >= 0 } set_variable = { name = te_tax_en_regrel value = var:te_tax_pb_regrel } }
-	# A package that restates regional relief names its whole state set. Each state it
-	# names is stamped with this country (te_tax_relief_holder), so a later change of
-	# owner can tell whether the code that named it went with it
-	# (te_tax_relief_follow_owner, te_tax_civil_war_effects.txt).
+	# A package that restates regional relief names its whole state set: it replaces the
+	# enacted list te_tax_en_relief_states (at most three states), the canonical set.
+	# The state marks (te_tax_relief_state) and their stamps follow from the list in the
+	# writer's relief sync (te_tax_rebuild_relief_marks), which the processor runs after
+	# this month's commencements.
 	if = {
 		limit = { var:te_tax_pb_regrel_states_set = 1 }
-		save_scope_as = te_tax_country
+		clear_variable_list = te_tax_en_relief_states
 		every_scope_state = {
-			if = {
-				limit = {
-					has_variable = te_tax_pending_relief_b
-					var:te_tax_pending_relief_b = 1
-				}
-				set_variable = { name = te_tax_relief_state value = 1 }
-				set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
+			limit = {
+				has_variable = te_tax_pending_relief_b
+				var:te_tax_pending_relief_b = 1
 			}
-			else_if = {
-				limit = { has_variable = te_tax_relief_state }
-				set_variable = { name = te_tax_relief_state value = 0 }
-			}
+			owner = { add_to_variable_list = { name = te_tax_en_relief_states target = prev } }
 		}
 	}
 	every_scope_state = {

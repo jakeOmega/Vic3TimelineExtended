@@ -431,7 +431,7 @@ te_tax_due_sgui = {
 
 # Accepts a moved baseline (the review's warnings). op: the instrument as the
 # history ring codes it (te_tax_h<n>_inst: 1 wage, 2 div, 3 land, 4 head,
-# 5 cons), 6 the taxed goods.
+# 5 cons), 6 the taxed goods, 7 relief.
 te_tax_cmd_draft_rebase_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -462,6 +462,10 @@ te_tax_cmd_draft_rebase_sgui = {
 			limit = { exists = scope:op scope:op = 6 }
 			te_tax_can_draft_rebase = { KEY = goods }
 		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			te_tax_can_draft_rebase = { KEY = relief }
+		}
 		trigger_else = { always = no }
 	}
 	effect = {
@@ -489,7 +493,36 @@ te_tax_cmd_draft_rebase_sgui = {
 			limit = { exists = scope:op scope:op = 6 }
 			te_tax_cmd_draft_rebase = { KEY = goods }
 		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			te_tax_cmd_draft_rebase = { KEY = relief }
+		}
 	}
+}
+
+# Lists the incorporated states to name for regional relief (and takes
+# regional relief into the draft as existing law has it). The only way the
+# candidate list is built: a click, never a panel opening.
+te_tax_cmd_draft_relief_choose_sgui = {
+	scope = country
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_tax_can_draft_relief_choose = yes }
+	effect = { te_tax_cmd_draft_relief_choose = yes }
+}
+
+# Names a state for the draft's regional relief, or drops it. The workbench's
+# state rows pass the row's state as the saved scope te_tax_st, the Grand
+# Monuments rows' shape (gm_sguis.txt): a State object in saved_scopes has no
+# vanilla precedent, so te_tax_can_draft_relief_state fails closed without it
+# (its first line: the state exists).
+te_tax_relief_state_sgui = {
+	scope = country
+	saved_scopes = { te_tax_st }
+	is_shown = { te_tax_code_in_force = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_tax_can_draft_relief_state = yes }
+	effect = { te_tax_cmd_draft_relief_state = yes }
 }
 
 # A held passed bill. op: the slot as te_tax_slot_id_<s> codes it, 1 a, 2 b.

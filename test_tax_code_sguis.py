@@ -55,7 +55,11 @@ WRITES = re.compile(r"\b(set_variable|change_variable|remove_variable|clamp_vari
                     r"save_temporary_scope_as|add_modifier|remove_modifier|trigger_event|set_local_variable)\b")
 
 # Handlers with no saved scope: te_tax_cmd_<c>_sgui runs te_tax_cmd_<c> when te_tax_can_<c> holds.
-SIMPLE = ("draft_new", "draft_discard", "introduce", "revise", "withdraw", "pass", "reschedule")
+SIMPLE = ("draft_new", "draft_discard", "introduce", "revise", "withdraw", "pass", "reschedule",
+          "draft_relief_choose")
+# Handlers whose saved scope is an object, not an op (Task 11): sgui -> (command, saved scope).
+SCOPED = {"te_tax_relief_state_sgui": ("draft_relief_state", "te_tax_st")}
+RELIEF_KEYS = ("agrel", "regrel")
 # Instrument codes as the history ring stores them (te_tax_h<n>_inst): 1 wage ... 5 cons.
 INST = {idx: key for idx, key in enumerate(KEYS, start=1)}
 
@@ -65,7 +69,7 @@ def op_tables():
     tables = {
         "te_tax_due_sgui": {0: ("draft_due", "DIR = 0"), 1: ("draft_due", "DIR = 1")},
         "te_tax_cmd_draft_rebase_sgui": {**{idx: ("draft_rebase", f"KEY = {key}") for idx, key in INST.items()},
-                                         6: ("draft_rebase", "KEY = goods")},
+                                         6: ("draft_rebase", "KEY = goods"), 7: ("draft_rebase", "KEY = relief")},
         "te_tax_cmd_package_reschedule_sgui": {1: ("package_reschedule", "SLOT = a"),
                                                2: ("package_reschedule", "SLOT = b")},
         "te_tax_cmd_package_release_sgui": {1: ("package_release", "SLOT = a"),
@@ -76,6 +80,8 @@ def op_tables():
         ops[10] = ("draft_sunset", f"KEY = {key} DIR = 0")
         ops[11] = ("draft_sunset", f"KEY = {key} DIR = 1")
         tables[f"te_tax_step_{key}_sgui"] = ops
+    for key in RELIEF_KEYS:
+        tables[f"te_tax_relief_{key}_sgui"] = {op: ("draft_relief", f"KEY = {key} DIR = {op}") for op in range(5)}
     return tables
 
 
@@ -126,7 +132,7 @@ class HandlerTest(unittest.TestCase):
         cls.actions = [name for name in cls.names if not name.startswith("te_tax_show_")]
 
     def test_the_handler_set(self):
-        self.assertEqual(sorted(self.actions), sorted(set(op_tables()) | set(plain_handlers())))
+        self.assertEqual(sorted(self.actions), sorted(set(op_tables()) | set(plain_handlers()) | set(SCOPED)))
         self.assertEqual(len(self.names), len(set(self.names)), "a handler is defined twice")
 
     def test_every_handler_is_for_the_player_only_and_scope_free_when_shown(self):
@@ -145,6 +151,18 @@ class HandlerTest(unittest.TestCase):
                 self.assertNotIn("saved_scopes", body)
                 self.assertEqual(norm(sub_block(body, "is_valid")), call(command, params, "can"))
                 self.assertEqual(norm(sub_block(body, "effect")), call(command, params, "cmd"))
+
+    def test_scoped_handlers_call_their_command_behind_its_trigger(self):
+        """The saved scope is the row's object (a state); the trigger fails closed without it."""
+        for name, (command, scope) in SCOPED.items():
+            body = block(self.text, name)
+            with self.subTest(name=name):
+                self.assertRegex(body, rf"saved_scopes = \{{ {scope} \}}")
+                self.assertEqual(norm(sub_block(body, "is_valid")), call(command, "", "can"))
+                self.assertEqual(norm(sub_block(body, "effect")), call(command, "", "cmd"))
+                trigger = norm(block(read(TRIGGERS), f"te_tax_can_{command}"))
+                self.assertIn(f"custom_tooltip = {{ text = te_tax_tt_relief_state_given exists = scope:{scope} }}",
+                              trigger)
 
     def test_op_coded_handlers_fail_closed_with_one_op_table(self):
         for name, table in op_tables().items():
@@ -168,12 +186,15 @@ class HandlerTest(unittest.TestCase):
         for table in op_tables().values():
             reached |= {call(c, p, "cmd") for c, p in table.values()}
         reached |= {call(c, p, "cmd") for c, p in plain_handlers().values()}
+        reached |= {call(c, "", "cmd") for c, _ in SCOPED.values()}
         wanted = {call(name, "", "cmd") for name in SIMPLE}
         wanted |= {call("draft_step", f"KEY = {k} DIR = {d}", "cmd") for k in KEYS for d in range(5)}
         wanted |= {call("draft_sunset", f"KEY = {k} DIR = {d}", "cmd") for k in KEYS for d in (0, 1)}
         wanted |= {call("draft_due", f"DIR = {d}", "cmd") for d in (0, 1)}
         wanted |= {call("draft_good", f"GOOD = {g}", "cmd") for g in gen.consumption_catalog()}
-        wanted |= {call("draft_rebase", f"KEY = {k}", "cmd") for k in KEYS + ("goods",)}
+        wanted |= {call("draft_rebase", f"KEY = {k}", "cmd") for k in KEYS + ("goods", "relief")}
+        wanted |= {call("draft_relief", f"KEY = {k} DIR = {d}", "cmd") for k in RELIEF_KEYS for d in range(5)}
+        wanted |= {call("draft_relief_state", "", "cmd")}
         wanted |= {call(c, f"SLOT = {s}", "cmd") for c in ("package_reschedule", "package_release")
                    for s in ("a", "b")}
         self.assertEqual(reached, wanted)
@@ -181,7 +202,8 @@ class HandlerTest(unittest.TestCase):
     def test_generated_handlers_cover_instruments_and_catalog(self):
         generated = set(top_level_names(read(GEN_SGUIS)))
         self.assertEqual(generated, {f"te_tax_step_{key}_sgui" for key in KEYS}
-                         | {f"te_tax_good_{good}_sgui" for good in gen.consumption_catalog()})
+                         | {f"te_tax_good_{good}_sgui" for good in gen.consumption_catalog()}
+                         | {f"te_tax_relief_{key}_sgui" for key in RELIEF_KEYS})
         self.assertEqual(len(gen.consumption_catalog()), 39)
         self.assertIn(gen.HEADER, raw(GEN_SGUIS).splitlines()[:3])
 

@@ -22,6 +22,10 @@ te_tax_step_cons = 0.05
 te_tax_max_cons = 12
 te_tax_pct_step_cons = 5
 
+# Relief bands: 0 none, 1 = -25%, 2 = -50% (te_tax_relief_* static modifiers).
+te_tax_max_agrel = 2
+te_tax_max_regrel = 2
+
 # Package slots as the history ring stores them (te_tax_h<n>_slot): none, a, b.
 # te_tax_gen_history_write reads te_tax_slot_id_<SLOT>, so callers pass the letter.
 te_tax_slot_id_none = 0

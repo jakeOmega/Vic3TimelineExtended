@@ -1015,9 +1015,14 @@ te_tax_gen_draft_baseline_current = {
 		NOT = { te_tax_gen_draft_touches_goods = yes }
 		var:te_tax_dr_goods_pver = var:te_tax_pver_goods
 	}
+	OR = {
+		AND = { var:te_tax_dr_agrel < 0 var:te_tax_dr_regrel < 0 }
+		var:te_tax_dr_relief_pver = var:te_tax_pver_relief
+	}
 }
 
-# The draft differs from the bill in any field.
+# The draft differs from the bill in any field, or one names a state for regional relief
+# that the other does not (inside any_in_list PREV is the country, inside PREV = { } the state).
 te_tax_gen_draft_differs_from_bill = {
 	OR = {
 		NOT = { var:te_tax_dr_due = var:te_tax_bl_due }
@@ -1072,6 +1077,8 @@ te_tax_gen_draft_differs_from_bill = {
 		NOT = { var:te_tax_dr_g_wood = var:te_tax_bl_g_wood }
 		NOT = { var:te_tax_dr_agrel = var:te_tax_bl_agrel }
 		NOT = { var:te_tax_dr_regrel = var:te_tax_bl_regrel }
+		AND = { has_variable_list = te_tax_dr_relief_states any_in_list = { variable = te_tax_dr_relief_states PREV = { NOT = { is_target_in_variable_list = { name = te_tax_bl_relief_states target = PREV } } } } }
+		AND = { has_variable_list = te_tax_bl_relief_states any_in_list = { variable = te_tax_bl_relief_states PREV = { NOT = { is_target_in_variable_list = { name = te_tax_dr_relief_states target = PREV } } } } }
 	}
 }
 

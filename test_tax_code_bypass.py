@@ -30,6 +30,7 @@ import json
 import os
 import re
 import unittest
+from decimal import Decimal
 from pathlib import Path
 
 from test_tax_code_rule import load, plain
@@ -731,15 +732,20 @@ class CountsAsTest(unittest.TestCase):
                 self.assertEqual(body["has_law"], f"law_type:{CARRIER}")
 
     def test_thresholds(self):
+        # Indices with has_variable guards, the enacted variables on the left
+        # (Task 11 ruling; wage and dividends share the 0.025 step, so 10% is
+        # index 4 and 2.5% index 1).
         per_capita = " ".join(block(self.text, "te_tax_code_counts_as_per_capita").split())
-        self.assertIn("te_tax_view_en_head >= 1", per_capita)
-        self.assertIn("te_tax_view_en_wage >= 1", per_capita)
+        self.assertIn("var:te_tax_en_head >= 1", per_capita)
+        self.assertIn("var:te_tax_en_wage >= 1", per_capita)
         proportional = " ".join(block(self.text, "te_tax_code_counts_as_proportional").split())
-        self.assertIn("te_tax_view_en_wage_rate >= 0.1", proportional)
-        self.assertIn("te_tax_view_en_div_rate >= 0.025", proportional)
+        self.assertIn("var:te_tax_en_wage >= 4", proportional)
+        self.assertIn("var:te_tax_en_div >= 1", proportional)
         graduated = " ".join(block(self.text, "te_tax_code_counts_as_graduated").split())
-        self.assertIn("te_tax_view_en_wage_rate >= 0.1", graduated)
-        self.assertIn("te_tax_view_en_div_rate >= te_tax_view_en_wage_rate", graduated)
+        self.assertIn("var:te_tax_en_wage >= 4", graduated)
+        self.assertIn("var:te_tax_en_div >= var:te_tax_en_wage", graduated)
+        self.assertEqual(gen.INSTRUMENTS[0].step * 4, Decimal("0.1"))
+        self.assertEqual(gen.INSTRUMENTS[1].step, Decimal("0.025"))
 
     def test_tooltips_have_loc(self):
         loc = raw(TAX_LOC)
@@ -837,7 +843,9 @@ class TraditionalismTest(unittest.TestCase):
         draft_branch = ready[:ready.find("trigger_else")]
         squashed = " ".join(draft_branch.split())
         self.assertIn("trigger_if = { limit = { has_law = law_type:law_traditionalism } custom_tooltip = { "
-                      "text = te_tax_tt_draft_traditionalism te_tax_dr_eff_wage < 1 te_tax_dr_eff_div < 1 } }",
+                      "text = te_tax_tt_draft_traditionalism has_variable = te_tax_dr_wage has_variable = te_tax_dr_div "
+                      "OR = { var:te_tax_dr_wage = 0 var:te_tax_dr_wage <= te_tax_dr_zero_limit_wage } "
+                      "OR = { var:te_tax_dr_div = 0 var:te_tax_dr_div <= te_tax_dr_zero_limit_div } } }",
                       squashed)
         for name in ("introduce", "revise"):
             self.assertIn("te_tax_draft_ready = yes", block(text, f"te_tax_can_{name}"))

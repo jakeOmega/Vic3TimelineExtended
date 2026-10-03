@@ -231,8 +231,12 @@ te_tax_view_dr_earliest_month_mo = {
 	}
 }
 
-# Relief in the draft: 1 if the draft changes it, and its percentage (the
-# enacted band where the draft leaves it alone). Task 11 makes them editable.
+# Relief in the draft (plan Task 11), per relief (agrel, regrel): 1 if the
+# draft changes it; its percentage under existing law in the draft's
+# commencement month (te_tax_base_dr_<key>, the "Law" column), in the draft
+# (te_tax_dr_eff_<key>, the baseline where the draft leaves it alone) and the
+# change; and whether the relief group's baseline moved since the draft first
+# changed relief (a rebase is needed).
 te_tax_view_dr_agrel_on = {
 	value = 0
 	if = {
@@ -241,12 +245,30 @@ te_tax_view_dr_agrel_on = {
 	}
 }
 
+te_tax_view_dr_agrel_base_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_base_dr_agrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
 te_tax_view_dr_agrel_pct = {
 	value = 0
 	if = {
 		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_agrel }
-		value = te_tax_view_agrel
-		if = { limit = { var:te_tax_dr_agrel >= 0 } value = var:te_tax_dr_agrel }
+		value = te_tax_dr_eff_agrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+te_tax_view_dr_agrel_delta_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_agrel var:te_tax_dr_agrel >= 0 }
+		value = te_tax_dr_eff_agrel
+		subtract = te_tax_base_dr_agrel
 		multiply = te_tax_relief_pct_step
 	}
 }
@@ -259,13 +281,123 @@ te_tax_view_dr_regrel_on = {
 	}
 }
 
+te_tax_view_dr_regrel_base_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_base_dr_regrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
 te_tax_view_dr_regrel_pct = {
 	value = 0
 	if = {
 		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_regrel }
-		value = te_tax_view_regrel
-		if = { limit = { var:te_tax_dr_regrel >= 0 } value = var:te_tax_dr_regrel }
+		value = te_tax_dr_eff_regrel
 		multiply = te_tax_relief_pct_step
+	}
+}
+
+te_tax_view_dr_regrel_delta_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_regrel var:te_tax_dr_regrel >= 0 }
+		value = te_tax_dr_eff_regrel
+		subtract = te_tax_base_dr_regrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+# How many reliefs the draft changes (0, 1 or 2), for the summary and the review.
+te_tax_view_dr_relief_changed = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_agrel var:te_tax_dr_agrel >= 0 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_regrel var:te_tax_dr_regrel >= 0 }
+		add = 1
+	}
+}
+
+te_tax_view_dr_relief_rebase = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_dr_on
+			var:te_tax_dr_on = 1
+			has_variable = te_tax_dr_relief_pver
+			has_variable = te_tax_pver_relief
+			var:te_tax_dr_relief_pver >= 0
+			NOT = { var:te_tax_dr_relief_pver = var:te_tax_pver_relief }
+		}
+		value = 1
+	}
+}
+
+# State scope, for the workbench's and the review's state rows: 1 if the
+# owner's open draft names the state for regional relief. Where the draft
+# leaves regional relief alone, existing law in its commencement month
+# (te_tax_view_dr_relief_base_state). Inside owner = { }, PREV is the state.
+te_tax_view_dr_relief_state = {
+	value = 0
+	if = {
+		limit = {
+			owner ?= {
+				has_variable = te_tax_dr_on
+				var:te_tax_dr_on = 1
+				has_variable = te_tax_dr_regrel
+				var:te_tax_dr_regrel >= 0
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_variable_list = te_tax_dr_relief_states
+					is_target_in_variable_list = { name = te_tax_dr_relief_states target = PREV }
+				}
+			}
+			value = 1
+		}
+	}
+	else = {
+		value = te_tax_view_dr_relief_base_state
+	}
+}
+
+# State scope: 1 if existing law in the owner's draft's commencement month
+# names the state for regional relief: the states of an awaiting package that
+# commences before it and restates them (the last in commencement order, by its
+# pending mark), else the owner's enacted list. 0 without an open draft.
+te_tax_view_dr_relief_base_state = {
+	value = 0
+	if = {
+		limit = {
+			owner ?= {
+				has_variable = te_tax_dr_on
+				var:te_tax_dr_on = 1
+				has_variable = te_tax_dr_due
+			}
+		}
+		if = {
+			limit = { owner = { te_tax_relief_base_from_a = { DUE = te_tax_dr_due } } }
+			if = { limit = { has_variable = te_tax_pending_relief_a var:te_tax_pending_relief_a = 1 } value = 1 }
+		}
+		else_if = {
+			limit = { owner = { te_tax_relief_base_from_b = { DUE = te_tax_dr_due } } }
+			if = { limit = { has_variable = te_tax_pending_relief_b var:te_tax_pending_relief_b = 1 } value = 1 }
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_variable_list = te_tax_en_relief_states
+					is_target_in_variable_list = { name = te_tax_en_relief_states target = PREV }
+				}
+			}
+			value = 1
+		}
 	}
 }
 

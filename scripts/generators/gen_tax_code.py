@@ -48,8 +48,10 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       generated file that removes variables: a closed record's payload.
   common/script_values/te_tax_generated_support_values.txt
       The draft, bill and support-model values: the baselines at the due
-      month, delta-levels, the per-group reasons from the EXPOSURE and
-      TAX_LAW_PROGRESSIVENESS tables, and the clout sums.
+      month (instruments, relief bands, goods), delta-levels, the per-good
+      goods terms (GOODS_CATEGORY_WEIGHT), the per-group reasons from the
+      EXPOSURE, TAX_LAW_PROGRESSIVENESS and relief-points tables, and the
+      clout sums.
   common/customizable_localization/te_tax_generated_custom_loc.txt
       te_tax_hist_event_<i>: the line each history row prints (newest first),
       chosen by the entry's kind and, for a sunset, its instrument.
@@ -148,6 +150,9 @@ BILL_EFFECTS_PATH = "common/scripted_effects/te_tax_generated_bill_effects.txt"
 SUPPORT_VALUES_PATH = "common/script_values/te_tax_generated_support_values.txt"
 RECORDS = ("dr", "bl")
 RECORD_KEY_FIELDS = (("", -1), ("_sun", 0), ("_pver", -1))   # te_tax_<rec>_<key><field>, draft sentinel
+# The draft's country lists (plan Task 11): the states its regional relief names, and the
+# player's incorporated states to choose them from. The bill's: te_tax_bl_relief_states.
+DRAFT_LISTS = ("te_tax_dr_relief_states", "te_tax_dr_relief_candidates")
 KIND_APPROVED, KIND_SUPERSEDED, KIND_RESCHEDULED, KIND_RELEASED = 6, 8, 9, 10
 
 # The panels (plan Task 7): the Budget > Tax Code tab and the journal entry.
@@ -215,6 +220,30 @@ STANCE_BRANCHES = (("value > approve", 2), ("value > neutral", 1),
 MATERIAL_WEIGHT, IDEOLOGY_WEIGHT, GOVERNMENT_BONUS = -10, 5, 10
 REASON_CAP, SCORE_CAP = 40, 100
 SUPPORT_REASONS = ("mat", "ideo", "fisc", "gov", "prom", "trust")
+# Relief provisions (plan Task 11): agricultural wage relief and regional relief, each a
+# band from 0 (none) to RELIEF_MAX (1 = -25%, 2 = -50%; te_tax_relief_* static modifiers).
+# A draft steps them like an instrument (te_tax_cmd_draft_relief, te_tax_relief_<key>_sgui).
+RELIEF_KEYS = ("agrel", "regrel")
+RELIEF_MAX = 2
+# te_tax_relief_<key>_sgui's op table: op -> DIR of te_tax_cmd_draft_relief (no sunsets).
+RELIEF_OPS = (0, 1, 2, 3, 4)
+# The goods and relief parts of the material reason (plan Task 11). A good the bill puts
+# on (or takes off) the taxed list moves the consumption channel by GOODS_LEVEL_STEPS tax
+# levels times its category weight, from the goods file's `category`: staples weigh
+# most, luxuries least; military goods reach pops only through the leisure need
+# (aeroplanes, small_arms), so they weigh as luxuries. Every catalog good must have one.
+GOODS_LEVEL_STEPS = Decimal("0.2")
+GOODS_CATEGORY_WEIGHT = {"staple": Decimal("1.0"), "industrial": Decimal("0.3"),
+                         "luxury": Decimal("0.2"), "military": Decimal("0.2")}
+# Relief, in support points per band the bill moves it from existing law (after the
+# x MATERIAL_WEIGHT of the tax channels): agricultural relief for the workers it
+# relieves and the landowners whose estates employ them; regional relief diffusely for
+# every group, less for the two whose members worry most about the revenue lost.
+AGREL_POINTS = {"rural_folk": 8, "landowners": 3}
+REGREL_POINTS_ALL = 4
+REGREL_POINTS_CONCERN = {"industrialists": -2, "petty_bourgeoisie": -2}
+# Traditionalism holds a bill to no tax on these (te_tax_draft_ready).
+TRADITIONALISM_KEYS = ("wage", "div")
 
 
 class Instrument(NamedTuple):
@@ -301,7 +330,8 @@ def migration_indices(instruments=INSTRUMENTS):
 
 
 def validate(instruments=INSTRUMENTS):
-    """Raise ValueError unless every vanilla value is index x step for some index 1..max."""
+    """Raise ValueError unless every vanilla value is index x step for some index 1..max
+    and every catalog good has a support weight (goods_weight)."""
     for instrument in instruments:
         for value in instrument.vanilla:
             index, remainder = divmod(value, instrument.step)
@@ -311,6 +341,8 @@ def validate(instruments=INSTRUMENTS):
                     f"for an index in 1..{instrument.max_idx}"
                 )
     migration_indices(instruments)
+    for good in consumption_catalog():
+        goods_weight(good)
 
 
 def fmt(value):
@@ -417,6 +449,15 @@ def consumption_catalog():
     return tuple(sorted(pop_need_goods()))
 
 
+def goods_weight(good):
+    """The support model's weight for catalog good `good` (GOODS_CATEGORY_WEIGHT), from its
+    goods-file category. Raises ValueError for a category the table lacks."""
+    category = goods_definitions()[good].get("category")
+    if category not in GOODS_CATEGORY_WEIGHT:
+        raise ValueError(f"catalog good {good}: category {category!r} has no GOODS_CATEGORY_WEIGHT")
+    return GOODS_CATEGORY_WEIGHT[category]
+
+
 def all_goods():
     """Every good defined by vanilla or the mod, sorted."""
     return tuple(sorted(goods_definitions()))
@@ -499,6 +540,8 @@ def script_values():
         ]
         if instrument.percent:
             lines.append(f"te_tax_pct_step_{instrument.key} = {fmt(instrument.step * 100)}")
+    lines += ["", "# Relief bands: 0 none, 1 = -25%, 2 = -50% (te_tax_relief_* static modifiers)."]
+    lines += [f"te_tax_max_{key} = {RELIEF_MAX}" for key in RELIEF_KEYS]
     lines += [
         "",
         "# Package slots as the history ring stores them (te_tax_h<n>_slot): none, a, b.",
@@ -995,26 +1038,20 @@ def _apply(slot):
         lines.append(f"\tif = {{ limit = {{ var:{p}_{field} >= 0 }} "
                      f"set_variable = {{ name = te_tax_en_{field} value = var:{p}_{field} }} }}")
     lines += [
-        "\t# A package that restates regional relief names its whole state set. Each state it",
-        "\t# names is stamped with this country (te_tax_relief_holder), so a later change of",
-        "\t# owner can tell whether the code that named it went with it",
-        "\t# (te_tax_relief_follow_owner, te_tax_civil_war_effects.txt).",
+        "\t# A package that restates regional relief names its whole state set: it replaces the",
+        "\t# enacted list te_tax_en_relief_states (at most three states), the canonical set.",
+        "\t# The state marks (te_tax_relief_state) and their stamps follow from the list in the",
+        "\t# writer's relief sync (te_tax_rebuild_relief_marks), which the processor runs after",
+        "\t# this month's commencements.",
         "\tif = {",
         f"\t\tlimit = {{ var:{p}_regrel_states_set = 1 }}",
-        "\t\tsave_scope_as = te_tax_country",
+        "\t\tclear_variable_list = te_tax_en_relief_states",
         "\t\tevery_scope_state = {",
-        "\t\t\tif = {",
-        "\t\t\t\tlimit = {",
-        f"\t\t\t\t\thas_variable = te_tax_pending_relief_{slot}",
-        f"\t\t\t\t\tvar:te_tax_pending_relief_{slot} = 1",
-        "\t\t\t\t}",
-        "\t\t\t\tset_variable = { name = te_tax_relief_state value = 1 }",
-        f"\t\t\t\t{RELIEF_STAMP}",
+        "\t\t\tlimit = {",
+        f"\t\t\t\thas_variable = te_tax_pending_relief_{slot}",
+        f"\t\t\t\tvar:te_tax_pending_relief_{slot} = 1",
         "\t\t\t}",
-        "\t\t\telse_if = {",
-        "\t\t\t\tlimit = { has_variable = te_tax_relief_state }",
-        "\t\t\t\tset_variable = { name = te_tax_relief_state value = 0 }",
-        "\t\t\t}",
+        "\t\t\towner = { add_to_variable_list = { name = te_tax_en_relief_states target = prev } }",
         "\t\t}",
         "\t}",
         "\tevery_scope_state = {",
@@ -1452,8 +1489,26 @@ def _record_payload(record):
                    for suffix, sentinel in RECORD_KEY_FIELDS]
     fields += [(f"te_tax_{record}_g_{good}", -1) for good in consumption_catalog()]
     fields += [(f"te_tax_{record}_goods_pver", -1), (f"te_tax_{record}_agrel", -1),
-               (f"te_tax_{record}_regrel", -1)]
+               (f"te_tax_{record}_regrel", -1), (f"te_tax_{record}_relief_pver", -1)]
     return fields
+
+
+def _copy_state_list(source, target, indent="\t"):
+    """Lines replacing the country list `target` with the states in `source`, both
+    lists of THIS country (scope:te_tax_country is saved first). Inside the list
+    iteration PREV is the country, inside `scope:te_tax_country = { }` the state."""
+    t = indent
+    return [
+        f"{t}clear_variable_list = {target}",
+        f"{t}if = {{",
+        f"{t}\tlimit = {{ has_variable_list = {source} }}",
+        f"{t}\tsave_scope_as = te_tax_country",
+        f"{t}\tevery_in_list = {{",
+        f"{t}\t\tvariable = {source}",
+        f"{t}\t\tscope:te_tax_country = {{ add_to_variable_list = {{ name = {target} target = PREV }} }}",
+        f"{t}\t}}",
+        f"{t}}}",
+    ]
 
 
 def _bill_versions():
@@ -1573,9 +1628,11 @@ def _provisions(record, keys):
     return lines + ["}"]
 
 
-def _clamped(name, terms, weight):
-    return ([f"{name} = {{", "\tvalue = 0"] + terms
-            + [f"\tmultiply = {weight}", f"\tmin = -{REASON_CAP}", f"\tmax = {REASON_CAP}", "}"])
+def _clamped(name, terms, weight, points=()):
+    """A reason: the `terms` (in tax levels) times `weight`, plus `points` (already in
+    support points), clamped to -REASON_CAP..REASON_CAP."""
+    return ([f"{name} = {{", "\tvalue = 0"] + terms + [f"\tmultiply = {weight}"] + list(points)
+            + [f"\tmin = -{REASON_CAP}", f"\tmax = {REASON_CAP}", "}"])
 
 
 def _ideology_value(ig):
@@ -1632,19 +1689,57 @@ def support_values():
     for record in RECORDS:
         for key in keys:
             lines += _baseline_value(f"te_tax_base_{record}_{key}", record, key, f"te_tax_en_{key}", True)
+    lines += ["", "# te_tax_base_<record>_<relief>: the relief band in force under existing law in the record's",
+              "# due month (relief has no sunset): the enacted band, then each awaiting package due earlier."]
+    for record in RECORDS:
+        for key in RELIEF_KEYS:
+            lines += _baseline_value(f"te_tax_base_{record}_{key}", record, key, f"te_tax_en_{key}", False)
     lines += ["", "# te_tax_dr_eff_<key>: the draft's target, or the baseline when the draft leaves it alone."]
-    for key in keys:
+    for key in keys + list(RELIEF_KEYS):
         lines += [f"te_tax_dr_eff_{key} = {{", f"\tvalue = te_tax_base_dr_{key}",
                   f"\tif = {{ limit = {{ has_variable = te_tax_dr_{key} var:te_tax_dr_{key} >= 0 }} "
                   f"value = var:te_tax_dr_{key} }}", "}"]
-    lines += ["", "# te_tax_base_dr_g_<good>: 1 if the good is taxed under existing law in the draft's due month."]
-    for good in consumption_catalog():
-        lines += _baseline_value(f"te_tax_base_dr_g_{good}", "dr", f"g_{good}", f"te_tax_en_g_{good}", False)
+    lines += [
+        "",
+        "# te_tax_dr_zero_limit_<key>: Traditionalism's test that the draft levies no such tax,",
+        "# written with the draft's index on the left (te_tax_draft_ready):",
+        "#   var:te_tax_dr_<key> = 0  OR  var:te_tax_dr_<key> <= te_tax_dr_zero_limit_<key>",
+        "# The limit is -1 when existing law in the draft's month has no such tax and -2 when it",
+        "# has, so an untouched provision (-1) passes exactly when that law levies none, and a",
+        "# touched one only at 0.",
+    ]
+    for key in TRADITIONALISM_KEYS:
+        lines += [f"te_tax_dr_zero_limit_{key} = {{", f"\tvalue = te_tax_base_dr_{key}", "\tmax = 1",
+                  "\tmultiply = -1", "\tadd = -1", "}"]
+    lines += ["", "# te_tax_base_<record>_g_<good>: 1 if the good is taxed under existing law in the",
+              "# draft's (dr) or the bill's (bl) due month."]
+    for record in RECORDS:
+        for good in consumption_catalog():
+            lines += _baseline_value(f"te_tax_base_{record}_g_{good}", record, f"g_{good}",
+                                     f"te_tax_en_g_{good}", False)
     lines += ["", "# The bill's change per instrument: in index steps (0 if untouched), then in vanilla tax levels."]
     for key in keys:
         lines += _dstep("bl", key)
         lines += [f"te_tax_dl_{key} = {{", f"\tvalue = te_tax_bl_dstep_{key}", f"\tmultiply = te_tax_step_{key}",
                   f"\tdivide = te_tax_level_step_{key}", "}"]
+    lines += ["", "# The bill's change per relief, in bands from existing law (0 if untouched)."]
+    for key in RELIEF_KEYS:
+        lines += _dstep("bl", key)
+    lines += [
+        "",
+        f"# The bill's goods, in tax levels on the consumption channel: {fmt(GOODS_LEVEL_STEPS)} per good it puts on",
+        "# the taxed list (negative for one it takes off), times the good's category weight",
+        "# (GOODS_CATEGORY_WEIGHT in the generator, from the goods file's category). One value per",
+        "# good, so a later provision can zero a single good's term; te_tax_dl_goods is their sum.",
+    ]
+    for good in consumption_catalog():
+        flag = f"te_tax_bl_g_{good}"
+        lines += [f"te_tax_dl_g_{good} = {{", "\tvalue = 0", "\tif = {",
+                  f"\t\tlimit = {{ has_variable = {flag} var:{flag} >= 0 }}",
+                  f"\t\tvalue = var:{flag}", f"\t\tsubtract = te_tax_base_bl_g_{good}",
+                  f"\t\tmultiply = {fmt(goods_weight(good) * GOODS_LEVEL_STEPS)}", "\t}", "}"]
+    lines += ["te_tax_dl_goods = {", "\tvalue = 0"]
+    lines += [f"\tadd = te_tax_dl_g_{good}" for good in consumption_catalog()] + ["}"]
     lines += ["", "# Revenue direction: the sum of the changes. Progressivity: income channels minus the rest."]
     lines += ["te_tax_dl_total = {", f"\tvalue = te_tax_dl_{keys[0]}"]
     lines += [f"\tadd = te_tax_dl_{key}" for key in keys[1:]] + ["}"]
@@ -1654,14 +1749,24 @@ def support_values():
     lines += [
         "",
         f"# Support reasons per interest group, each clamped to -{REASON_CAP}..{REASON_CAP}. Material:",
-        f"# {MATERIAL_WEIGHT} x the exposure-weighted change in tax levels. Ideology: {IDEOLOGY_WEIGHT} x the",
+        f"# {MATERIAL_WEIGHT} x the exposure-weighted change in tax levels, the bill's goods counted on the",
+        "# consumption channel (te_tax_dl_goods); then relief in points per band the bill moves it:",
+        f"# agricultural {', '.join(f'{ig} +{n}' for ig, n in AGREL_POINTS.items())}; regional +{REGREL_POINTS_ALL} for every group,",
+        f"# {', '.join(f'{ig} {n}' for ig, n in REGREL_POINTS_CONCERN.items())} on top. Ideology: {IDEOLOGY_WEIGHT} x the",
         "# group's fiscal ideology (its stances on the vanilla taxation laws x their progressiveness",
         f"# / 100) x the change in progressivity. Government: +{GOVERNMENT_BONUS} in government.",
     ]
     for ig in IGS:
         terms = [f"\tadd = {{ value = te_tax_dl_{key} multiply = {fmt(weight)} }}"
                  for key, weight in exposure(ig).items() if weight]
-        lines += _clamped(f"te_tax_mat_{ig}", terms, MATERIAL_WEIGHT)
+        cons = exposure(ig)["cons"]
+        if cons:
+            terms.append(f"\tadd = {{ value = te_tax_dl_goods multiply = {fmt(cons)} }}")
+        points = [f"\tadd = {{ value = te_tax_bl_dstep_agrel multiply = {AGREL_POINTS[ig]} }}"] if ig in AGREL_POINTS else []
+        points.append(f"\tadd = {{ value = te_tax_bl_dstep_regrel multiply = {REGREL_POINTS_ALL} }}")
+        if ig in REGREL_POINTS_CONCERN:
+            points.append(f"\tadd = {{ value = te_tax_bl_dstep_regrel multiply = {REGREL_POINTS_CONCERN[ig]} }}")
+        lines += _clamped(f"te_tax_mat_{ig}", terms, MATERIAL_WEIGHT, points)
         lines += _ideology_value(ig)
         lines += [f"te_tax_ideo_{ig} = {{", f"\tvalue = te_tax_ideo_p_{ig}", "\tmultiply = te_tax_dl_prog",
                   f"\tmultiply = {IDEOLOGY_WEIGHT}", f"\tmin = -{REASON_CAP}", f"\tmax = {REASON_CAP}", "}"]
@@ -1729,10 +1834,19 @@ def _bill_triggers():
         lines += _or_block([f"var:te_tax_dr_{key} < 0", f"var:te_tax_dr_{key}_pver = var:te_tax_pver_{key}"])
     lines += _or_block(["NOT = { te_tax_gen_draft_touches_goods = yes }",
                         "var:te_tax_dr_goods_pver = var:te_tax_pver_goods"])
-    lines += ["}", "", "# The draft differs from the bill in any field.", "te_tax_gen_draft_differs_from_bill = {"]
+    lines += _or_block(["AND = { var:te_tax_dr_agrel < 0 var:te_tax_dr_regrel < 0 }",
+                        "var:te_tax_dr_relief_pver = var:te_tax_pver_relief"])
+    lines += ["}", "", "# The draft differs from the bill in any field, or one names a state for regional relief",
+              "# that the other does not (inside any_in_list PREV is the country, inside PREV = { } the state).",
+              "te_tax_gen_draft_differs_from_bill = {"]
     fields = ["due"] + [f"{key}{suffix}" for key in keys for suffix in ("", "_sun")]
     fields += [f"g_{good}" for good in goods] + ["agrel", "regrel"]
-    lines += _or_block([f"NOT = {{ var:te_tax_dr_{field} = var:te_tax_bl_{field} }}" for field in fields])
+    differs = [f"NOT = {{ var:te_tax_dr_{field} = var:te_tax_bl_{field} }}" for field in fields]
+    differs += [f"AND = {{ has_variable_list = te_tax_{mine}_relief_states any_in_list = {{ "
+                f"variable = te_tax_{mine}_relief_states PREV = {{ NOT = {{ "
+                f"is_target_in_variable_list = {{ name = te_tax_{theirs}_relief_states target = PREV }} }} }} }} }}"
+                for mine, theirs in (("dr", "bl"), ("bl", "dr"))]
+    lines += _or_block(differs)
     lines += [
         "}",
         "",
@@ -1919,30 +2033,38 @@ def bill_effects():
         "# removed when its record closes (it is read only while te_tax_dr_on / te_tax_bl_on is 1);",
         "# the two tokens themselves are never removed.",
         "",
-        "# A new draft with every field untouched (te_tax_cmd_draft_new sets te_tax_dr_due).",
+        "# A new draft with every field untouched (te_tax_cmd_draft_new sets te_tax_dr_due). Its",
+        "# regional-relief states and the candidate states to choose them from start empty; the",
+        "# candidates are built only by te_tax_cmd_draft_relief_choose.",
         "te_tax_gen_draft_init = {",
     ]
     lines += [f"\tset_variable = {{ name = {name} value = {sentinel} }}" for name, sentinel in draft]
-    lines += ["}", "", "# A new draft copied from the bill under debate, for its revision.",
+    lines += [f"\tclear_variable_list = {name}" for name in DRAFT_LISTS]
+    lines += ["}", "", "# A new draft copied from the bill under debate, for its revision, with the bill's",
+              "# regional-relief states.",
               "te_tax_gen_draft_from_bill = {", "\tset_variable = { name = te_tax_dr_due value = var:te_tax_bl_due }"]
     lines += [f"\tset_variable = {{ name = {name} value = var:te_tax_bl_{name[len('te_tax_dr_'):]} }}"
               for name, _ in draft]
-    lines += ["}", "", "# Closes the draft's payload (te_tax_dr_on is set to 0 by the caller).",
+    lines += _copy_state_list("te_tax_bl_relief_states", "te_tax_dr_relief_states")
+    lines += ["\tclear_variable_list = te_tax_dr_relief_candidates"]
+    lines += ["}", "", "# Closes the draft's payload and its lists (te_tax_dr_on is set to 0 by the caller).",
               "te_tax_gen_draft_clear = {", "\tremove_variable = te_tax_dr_due"]
     lines += [f"\tremove_variable = {name}" for name, _ in draft]
+    lines += [f"\tclear_variable_list = {name}" for name in DRAFT_LISTS]
     lines += [
         "}",
         "",
         "# Writes the whole bill record from the draft, every field te_tax_store_package reads, and",
-        "# records the external version of each provision group as it stands now. The regional",
-        "# relief state list starts empty (Task 11 fills it).",
+        "# records the external version of each provision group as it stands now. The bill names",
+        "# the draft's regional-relief states (te_tax_bl_relief_states).",
         "te_tax_gen_bill_from_draft = {",
         "\tset_variable = { name = te_tax_bl_due value = var:te_tax_dr_due }",
     ]
     lines += [f"\tset_variable = {{ name = te_tax_bl_{name[len('te_tax_dr_'):]} value = var:{name} }}"
               for name, _ in draft]
     lines += [f"\tset_variable = {{ name = {name} value = var:{token} }}" for name, token in _bill_versions()]
-    lines += ["\tclear_variable_list = te_tax_bl_relief_states", "}", "",
+    lines += _copy_state_list("te_tax_dr_relief_states", "te_tax_bl_relief_states")
+    lines += ["}", "",
               "# Closes the bill's payload (te_tax_bl_on is set to 0 by the caller).", "te_tax_gen_bill_clear = {"]
     lines += [f"\tremove_variable = te_tax_bl_{field}" for field in ("due", "rev", "day", "minor")]
     lines += [f"\tremove_variable = {name}" for name, _ in bill]
@@ -2199,6 +2321,9 @@ def generated_sguis():
         "# Every branch tests `exists = scope:op`; an unknown or missing op fails closed",
         "# (trigger_else = { always = no }) and runs nothing.",
         "# te_tax_good_<good>_sgui, one per catalog good: te_tax_cmd_draft_good.",
+        "# te_tax_relief_<key>_sgui, one per relief (agrel, regrel), op-coded like the step handlers:",
+        "#   op 0 one band less, 1 one band more, 2 none, 3 the deepest band, 4 out of the draft",
+        "#   (te_tax_cmd_draft_relief DIR = op).",
     ]
     for instrument in INSTRUMENTS:
         key = instrument.key
@@ -2218,6 +2343,19 @@ def generated_sguis():
         lines += ["", f"te_tax_good_{good}_sgui = {{", "\tscope = country", "\tis_shown = { te_tax_code_in_force = yes }",
                   "\tai_is_valid = { always = no }", f"\tis_valid = {{ te_tax_can_draft_good = {{ GOOD = {good} }} }}",
                   f"\teffect = {{ te_tax_cmd_draft_good = {{ GOOD = {good} }} }}", "}"]
+    for key in RELIEF_KEYS:
+        lines += ["", f"te_tax_relief_{key}_sgui = {{", "\tscope = country", "\tsaved_scopes = { op }",
+                  "\tis_shown = { te_tax_code_in_force = yes }", "\tai_is_valid = { always = no }", "\tis_valid = {"]
+        for n, op in enumerate(RELIEF_OPS):
+            lines += [f"\t\t{'trigger_if' if n == 0 else 'trigger_else_if'} = {{",
+                      f"\t\t\tlimit = {{ exists = scope:op scope:op = {op} }}",
+                      f"\t\t\tte_tax_can_draft_relief = {{ KEY = {key} DIR = {op} }}", "\t\t}"]
+        lines += ["\t\ttrigger_else = { always = no }", "\t}", "\teffect = {"]
+        for n, op in enumerate(RELIEF_OPS):
+            lines += [f"\t\t{'if' if n == 0 else 'else_if'} = {{",
+                      f"\t\t\tlimit = {{ exists = scope:op scope:op = {op} }}",
+                      f"\t\t\tte_tax_cmd_draft_relief = {{ KEY = {key} DIR = {op} }}", "\t\t}"]
+        lines += ["\t}", "}"]
     return _txt("\n".join(lines) + "\n")
 
 

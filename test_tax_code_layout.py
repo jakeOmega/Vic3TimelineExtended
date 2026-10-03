@@ -64,7 +64,7 @@ STATUS = ["te_tax_enacted_table", "te_tax_workbench_section", "te_tax_review_sec
 FLAGS = {"te_tax_enacted_closed", "te_tax_history_open", "te_tax_how_open",
          "te_tax_workbench_closed", "te_tax_wb_income_closed", "te_tax_wb_land_closed",
          "te_tax_wb_cons_closed", "te_tax_wb_goods_open", "te_tax_wb_relief_closed",
-         "te_tax_wb_dates_closed", "te_tax_review_open", "te_tax_politics_closed",
+         "te_tax_wb_relief_states_closed", "te_tax_wb_dates_closed", "te_tax_review_open", "te_tax_politics_closed",
          "te_tax_pending_closed"}
 REFERENCE = ["te_tax_history_section", "te_tax_how_section"]
 ROOTS = [("widget_je_tax_code_overview", "custom_widget_container_1"),

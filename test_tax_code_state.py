@@ -118,7 +118,8 @@ def schema_tokens():
     None: te_tax_schema (written last with the schema version) and the package
     payload, which te_tax_store_package writes in full and nothing reads while
     the slot is off, so neither is initialised. State-scope rows ("state var")
-    are returned separately.
+    are returned separately; country list rows ("list", Task 11) are not tokens
+    and are left out.
     """
     country, state = {}, {}
     placeholders = {
@@ -134,6 +135,8 @@ def schema_tokens():
         if len(cells) != 3 or not cells[0] or "`te_tax_" not in cells[0]:
             continue
         names, _, sentinel = cells
+        if names.startswith("list"):
+            continue    # a country variable list (te_tax_en_relief_states): not a token
         value = None if sentinel in ("—", "-") else int(sentinel)
         target = state if names.startswith("state var") else country
         for name in re.findall(r"`(te_tax_[\w<>]+)`", names):
@@ -598,6 +601,12 @@ class DisplayValueTest(unittest.TestCase):
                  "te_tax_view_dr_debate_days", "te_tax_view_dr_earliest_month", "te_tax_view_dr_earliest_month_y",
                  "te_tax_view_dr_earliest_month_mo", "te_tax_view_dr_agrel_on", "te_tax_view_dr_agrel_pct",
                  "te_tax_view_dr_regrel_on", "te_tax_view_dr_regrel_pct", "te_tax_view_committed_share",
+                 # Relief in a bill (Task 11): existing law's band and the change, the
+                 # count, the rebase flag, and the state rows' state-scope views.
+                 "te_tax_view_dr_agrel_base_pct", "te_tax_view_dr_agrel_delta_pct",
+                 "te_tax_view_dr_regrel_base_pct", "te_tax_view_dr_regrel_delta_pct",
+                 "te_tax_view_dr_relief_changed", "te_tax_view_dr_relief_rebase",
+                 "te_tax_view_dr_relief_state", "te_tax_view_dr_relief_base_state",
                  "te_tax_view_open_share", "te_tax_view_passage_share", "te_tax_view_legitimacy"}
         # The writer's native-drift counters (Task 9).
         want |= {"te_tax_view_drift_level", "te_tax_view_drift_goods", "te_tax_view_drift_amend"}
