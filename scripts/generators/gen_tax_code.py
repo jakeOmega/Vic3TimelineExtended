@@ -330,9 +330,12 @@ OBL_WAGE_LEVELS = ((1, "very_low"), (2, "low"), (3, "medium"), (4, "high"), (5, 
 # te_tax_ai_enact_level_max (te_tax_ai_values.txt). The setter takes a literal level, so
 # te_tax_gen_ai_enact_<o> has a branch per level up to it.
 OBL_MAX_INSTITUTION_LEVEL = 9
-# The views the promise lines print (te_tax_gen_obl_log_*, te_tax_gen_ai_log_enacted_<o>), and the
-# AI summary line's signals (te_tax_ai_log_*, te_tax_ai_effects.txt; the same text).
-OBL_LOG_VIEWS = ("kind", "arg", "target", "baseline", "deadline")
+# The promise lines' fields (te_tax_gen_obl_log_*, te_tax_gen_ai_log_enacted_<o>,
+# te_tax_gen_ai_log_renegotiated_<o>) and the slot view each prints, te_tax_view_o<o>_<view>; `level`
+# is spec §2.8's measure, the value the verifier reads (te_tax_view_o<o>_measure). Then the AI
+# summary line's signals (te_tax_ai_log_*, te_tax_ai_effects.txt; the same text).
+OBL_LOG_FIELDS = (("kind", "kind"), ("arg", "arg"), ("target", "target"), ("level", "measure"),
+                  ("baseline", "baseline"), ("deadline", "deadline"))
 AI_LOG_SIGNALS = ("tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] "
                   "D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] "
                   "def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] "
@@ -885,6 +888,22 @@ def _obligation_views():
         lines.append("}")
         for field in ("deadline", "maint_end"):
             lines += _month_views(f"te_tax_view_o{n}_{field}", f"te_tax_o{n}_{field}", _is_open(token))
+        # The measure the verifier reads (plan 2026-10-03 Task 19, the promise lines' level=): kind 1
+        # the delivered institution level, kinds 2 and 3 1 or 0 as the condition holds, kind 4 the
+        # surplus streak.
+        lines += [f"te_tax_view_o{n}_measure = {{", "\tvalue = 0", "\tif = {",
+                  f"\t\tlimit = {{ {_is_open(token)} has_variable = te_tax_o{n}_kind }}"]
+        lines += [f"\t\t{'if' if arg == 1 else 'else_if'} = {{ limit = {{ var:te_tax_o{n}_kind = 1 "
+                  f"has_variable = te_tax_o{n}_arg var:te_tax_o{n}_arg = {arg} }} value = te_tax_obl_inst_level_{arg} }}"
+                  for arg, _ in OBL_INSTITUTIONS]
+        lines += [
+            f"\t\telse_if = {{ limit = {{ var:te_tax_o{n}_kind = 2 bureaucracy >= 0 }} value = 1 }}",
+            f"\t\telse_if = {{ limit = {{ var:te_tax_o{n}_kind = 3 te_tax_obl_wages_met = {{ N = {n} }} }} value = 1 }}",
+            f"\t\telse_if = {{ limit = {{ var:te_tax_o{n}_kind = 4 has_variable = te_tax_o{n}_streak }} "
+            f"value = var:te_tax_o{n}_streak }}",
+            "\t}",
+            "}",
+        ]
     for name, states in (("binding", OBL_BINDING_STATES), ("pending", (OBL_PENDING,))):
         lines += [f"te_tax_view_obl_{name} = {{", "\tvalue = 0"]
         for n in OBLIGATION_SLOTS:
@@ -3408,8 +3427,8 @@ def scripted_effects():
         "# obligations' te_tax_gen_copy_obligations and te_tax_gen_clear_obligations (plan Task 12).",
         "# The promise lines and the AI's enactment end it (plan 2026-10-03 Task 19):",
         "# te_tax_gen_obl_log_met_<n> and _unmet_<n>, called by te_tax_obl_check_one",
-        "# (te_tax_obligation_effects.txt); te_tax_gen_ai_enact_<n> and te_tax_gen_ai_log_enacted_<n>,",
-        "# called by te_tax_ai_manage_promises (te_tax_ai_effects.txt).",
+        "# (te_tax_obligation_effects.txt); te_tax_gen_ai_enact_<n>, te_tax_gen_ai_log_enacted_<n> and",
+        "# te_tax_gen_ai_log_renegotiated_<n>, called by te_tax_ai_manage_promises (te_tax_ai_effects.txt).",
         "",
         "# Each instrument's tokens with their sentinels, if absent: the enacted provision, its",
         "# version tokens and the AI's marks (te_tax_ai_last_<key>, te_tax_ai_dir_<key>).",
@@ -3511,8 +3530,8 @@ def scripted_effects():
     return _txt("\n".join(lines) + "\n")
 
 
-def _obl_log_fields(n, views=OBL_LOG_VIEWS):
-    return " ".join(f"{view}=[SCOPE.ScriptValue('te_tax_view_o{n}_{view}')|0]" for view in views)
+def _obl_log_fields(n):
+    return " ".join(f"{field}=[SCOPE.ScriptValue('te_tax_view_o{n}_{view}')|0]" for field, view in OBL_LOG_FIELDS)
 
 
 def _ai_obligation_effects():
@@ -3570,17 +3589,20 @@ def _ai_obligation_effects():
         lines.append("}")
     lines += [
         "",
-        "# The AI's summary line for an enacted promise (te_tax_ai_log_*'s form): the slot, what it",
-        "# promised and when, then the fiscal signals. Called right after te_tax_gen_ai_enact_<n>;",
-        "# ROOT = THIS = the country in te_tax.8.",
+        "# The AI's summary lines for a promise it enacted or renegotiated (te_tax_ai_log_*'s form):",
+        "# the slot, what it promised, the measure (level=) and when, then the fiscal signals.",
+        "# te_tax_ai_manage_promises writes each just before it acts: the setter's result is not",
+        "# assumed visible later in the block (level= is the level before the enactment), and a",
+        "# renegotiation frees the slot, after which its views read nothing. ROOT = THIS = the",
+        "# country in te_tax.8.",
     ]
-    for n in OBLIGATION_SLOTS:
-        fields = _obl_log_fields(n, tuple(view for view in OBL_LOG_VIEWS if view != "kind"))
-        lines += [
-            f"te_tax_gen_ai_log_enacted_{n} = {{",
-            f'\tdebug_log = "TE_TAX ai_obl_enacted slot={n} kind=1 {fields} {AI_LOG_SIGNALS}; {LOG_STAMP}"',
-            "}",
-        ]
+    for family, head in (("enacted", "ai_obl_enacted"), ("renegotiated", "ai_renegotiated")):
+        for n in OBLIGATION_SLOTS:
+            lines += [
+                f"te_tax_gen_ai_log_{family}_{n} = {{",
+                f'\tdebug_log = "TE_TAX {head} slot={n} {_obl_log_fields(n)} {AI_LOG_SIGNALS}; {LOG_STAMP}"',
+                "}",
+            ]
     return lines
 
 

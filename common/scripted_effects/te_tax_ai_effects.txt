@@ -187,11 +187,14 @@ te_tax_ai_manage_packages = {
 # never a pending or bound one). A kind-1 promise the AI can enact
 # (te_tax_ai_can_enact) is set to exactly its target by the generated
 # te_tax_gen_ai_enact_<o>, the owner's one exception to the institution's
-# native expansion, and logged (ai_obl_enacted); its native costs apply from
-# then on and the monthly check still verifies it. Any other promise, a
-# balance (kinds 2 and 4), a wage cut copied from a player at an outbreak
-# (kind 3) or an institution that can no longer be enacted, is renegotiated:
-# -2 approval and -1 trust instead of the breach's -5.
+# native expansion; its native costs apply from then on and the monthly check
+# still verifies it. Any other promise, a balance (kinds 2 and 4), a wage cut
+# copied from a player at an outbreak (kind 3) or an institution that can no
+# longer be enacted, is renegotiated: -2 approval and -1 trust instead of the
+# breach's -5. Each is logged first, per slot (ai_obl_enacted,
+# ai_renegotiated, with the promise and its measure): the setter's result is
+# not assumed visible later in the block, and the renegotiation frees the
+# slot, whose views then read nothing.
 te_tax_ai_manage_promises = {
 	if = {
 		limit = {
@@ -202,52 +205,52 @@ te_tax_ai_manage_promises = {
 			limit = { te_tax_ai_promise_at_risk = { N = 1 } }
 			if = {
 				limit = { te_tax_ai_can_enact = { N = 1 } }
-				te_tax_gen_ai_enact_1 = yes
 				te_tax_gen_ai_log_enacted_1 = yes
+				te_tax_gen_ai_enact_1 = yes
 			}
 			else_if = {
 				limit = { te_tax_can_obl_renegotiate = { N = 1 } }
+				te_tax_gen_ai_log_renegotiated_1 = yes
 				te_tax_cmd_obl_renegotiate = { N = 1 }
-				te_tax_ai_log_renegotiated = yes
 			}
 		}
 		else_if = {
 			limit = { te_tax_ai_promise_at_risk = { N = 2 } }
 			if = {
 				limit = { te_tax_ai_can_enact = { N = 2 } }
-				te_tax_gen_ai_enact_2 = yes
 				te_tax_gen_ai_log_enacted_2 = yes
+				te_tax_gen_ai_enact_2 = yes
 			}
 			else_if = {
 				limit = { te_tax_can_obl_renegotiate = { N = 2 } }
+				te_tax_gen_ai_log_renegotiated_2 = yes
 				te_tax_cmd_obl_renegotiate = { N = 2 }
-				te_tax_ai_log_renegotiated = yes
 			}
 		}
 		else_if = {
 			limit = { te_tax_ai_promise_at_risk = { N = 3 } }
 			if = {
 				limit = { te_tax_ai_can_enact = { N = 3 } }
-				te_tax_gen_ai_enact_3 = yes
 				te_tax_gen_ai_log_enacted_3 = yes
+				te_tax_gen_ai_enact_3 = yes
 			}
 			else_if = {
 				limit = { te_tax_can_obl_renegotiate = { N = 3 } }
+				te_tax_gen_ai_log_renegotiated_3 = yes
 				te_tax_cmd_obl_renegotiate = { N = 3 }
-				te_tax_ai_log_renegotiated = yes
 			}
 		}
 		else_if = {
 			limit = { te_tax_ai_promise_at_risk = { N = 4 } }
 			if = {
 				limit = { te_tax_ai_can_enact = { N = 4 } }
-				te_tax_gen_ai_enact_4 = yes
 				te_tax_gen_ai_log_enacted_4 = yes
+				te_tax_gen_ai_enact_4 = yes
 			}
 			else_if = {
 				limit = { te_tax_can_obl_renegotiate = { N = 4 } }
+				te_tax_gen_ai_log_renegotiated_4 = yes
 				te_tax_cmd_obl_renegotiate = { N = 4 }
-				te_tax_ai_log_renegotiated = yes
 			}
 		}
 	}
@@ -321,11 +324,6 @@ te_tax_ai_log_released = {
 # The AI rescheduled a missed package.
 te_tax_ai_log_rescheduled = {
 	debug_log = "TE_TAX ai_rescheduled tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
-}
-
-# The AI renegotiated a promise it would otherwise breach.
-te_tax_ai_log_renegotiated = {
-	debug_log = "TE_TAX ai_renegotiated tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 }
 
 # The bill fails only on legitimacy while the native tax level is off medium; the step retries the day after the pin.

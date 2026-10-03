@@ -111,24 +111,67 @@ te_tax_ai_step_due = {
 # Health System, 3 Social Security.
 # ---------------------------------------------------------------------------
 
-# Obligation N is in force and the next monthly check would breach it: it is
-# delivering, its deadline falls by te_tax_ai_enact_by_month (this month plus
-# the lead) and it is not yet delivered; or it is maintaining and its condition
-# fails now. Never a pending (1) or bound (7) promise: the step neither enacts
-# nor renegotiates what has not started.
+# Obligation N is in force and the next monthly check would breach it (spec
+# §2.4 step 2). Delivering: not yet delivered, and its deadline falls by the
+# next check's month (te_tax_ai_next_check_month), or for an institution
+# promise by te_tax_ai_enact_by_month (the enactment lead); not an institution
+# promise in a bureaucracy deficit, whose deadline the check pauses instead;
+# not a fiscal-balance promise one surplus month short of its streak while the
+# budget is in surplus, which the check delivers. Maintaining: its condition
+# fails now and one more failing check reaches its grace
+# (te_tax_ai_grace_next). Never a pending (1) or bound (7) promise: the step
+# neither enacts nor renegotiates what has not started. Live reads in
+# te_tax.8 stand in for the check's reads on the 1st.
 te_tax_ai_promise_at_risk = {
 	has_variable = te_tax_o$N$_on
 	var:te_tax_o$N$_on = 1
 	OR = {
 		AND = {
 			var:te_tax_o$N$_state = 2
-			var:te_tax_o$N$_deadline <= te_tax_ai_enact_by_month
+			OR = {
+				AND = {
+					var:te_tax_o$N$_kind = 1
+					var:te_tax_o$N$_deadline <= te_tax_ai_enact_by_month
+				}
+				AND = {
+					NOT = { var:te_tax_o$N$_kind = 1 }
+					var:te_tax_o$N$_deadline <= te_tax_ai_next_check_month
+				}
+			}
 			NOT = { te_tax_obl_delivered = { N = $N$ } }
+			NOT = {
+				AND = {
+					var:te_tax_o$N$_kind = 1
+					bureaucracy < 0
+				}
+			}
+			NOT = {
+				AND = {
+					var:te_tax_o$N$_kind = 4
+					var:te_tax_o$N$_streak >= te_tax_ai_surplus_streak_last
+					net_fixed_income > 0
+				}
+			}
 		}
 		AND = {
 			var:te_tax_o$N$_state = 3
 			NOT = { te_tax_obl_holds = { N = $N$ } }
+			te_tax_ai_grace_next = { N = $N$ }
 		}
+	}
+}
+
+# Maintained obligation N has failed as many consecutive checks as its kind's
+# grace allows, less one, so the next failing check breaches it
+# (te_tax_obl_grace_reached's per-kind rule, one check earlier). Always true
+# for kinds 1 and 3 (grace 1). Plain ORs, no trigger_if: it sits inside the
+# OR of te_tax_ai_promise_at_risk, and an unknown kind fails.
+te_tax_ai_grace_next = {
+	OR = {
+		AND = { var:te_tax_o$N$_kind = 1 var:te_tax_o$N$_fails >= te_tax_ai_grace_short_1 }
+		AND = { var:te_tax_o$N$_kind = 2 var:te_tax_o$N$_fails >= te_tax_ai_grace_short_2 }
+		AND = { var:te_tax_o$N$_kind = 3 var:te_tax_o$N$_fails >= te_tax_ai_grace_short_3 }
+		AND = { var:te_tax_o$N$_kind = 4 var:te_tax_o$N$_fails >= te_tax_ai_grace_short_4 }
 	}
 }
 

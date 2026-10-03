@@ -99,7 +99,6 @@ TUNABLES = {
 LOG_VERBS = {
     "step": "ai_step", "introduced": "ai_introduced", "passed": "ai_passed", "forced": "ai_forced",
     "accepted": "ai_accepted", "released": "ai_released", "rescheduled": "ai_rescheduled",
-    "renegotiated": "ai_renegotiated",
     "waiting_legitimacy_native_level": "ai_waiting reason=legitimacy_native_level",
 }
 LOG_REASONS = ("support", "legitimacy", "slots", "authority", "patience", "draft")
@@ -144,8 +143,15 @@ AI_FLAG_LOG = re.compile(r'if = \{ limit = \{ is_ai = yes \} debug_log = "[^"]*"
 # MAX_INSTITUTION_INVESTMENT (common/defines/extra_defines.txt).
 MAX_INSTITUTION_LEVEL = 9
 INSTITUTIONS = {1: "institution_schools", 2: "institution_health_system", 3: "institution_social_security"}
-# The views the deadline and enactment lines print, per obligation slot.
-DEADLINE_VIEWS = ("kind", "arg", "target", "baseline", "deadline")
+# The promise lines' fields and the slot view each prints (te_tax_view_o<o>_<view>): spec §2.8's
+# `level`, the measure the verifier reads, is te_tax_view_o<o>_measure (fix round 1).
+DEADLINE_FIELDS = (("kind", "kind"), ("arg", "arg"), ("target", "target"), ("level", "measure"),
+                   ("baseline", "baseline"), ("deadline", "deadline"))
+GRACE = {1: 1, 2: 3, 3: 1, 4: 3}
+
+
+def promise_fields(o):
+    return " ".join(f"{field}=[SCOPE.ScriptValue('te_tax_view_o{o}_{view}')|0]" for field, view in DEADLINE_FIELDS)
 
 
 def flat(text):
@@ -677,18 +683,55 @@ class AiPromiseTest(unittest.TestCase):
         self.assertLess(body.index("SLOT = a"), body.index("SLOT = b"))
 
     def test_at_risk_is_the_next_check_breaching_a_promise_in_force(self):
+        # Spec §2.4 step 2: only a promise the next monthly check would breach. A delivering
+        # kind-1 promise in a bureaucracy deficit is paused by it, and a kind-4 one a surplus
+        # month short of its streak is delivered by it; a maintaining one breaches only one
+        # failing check short of its grace (fix round 1).
         self.assertEqual(
             flat(block(read(AI_TRIGGERS), "te_tax_ai_promise_at_risk")),
             "has_variable = te_tax_o$N$_on var:te_tax_o$N$_on = 1 OR = { "
-            "AND = { var:te_tax_o$N$_state = 2 var:te_tax_o$N$_deadline <= te_tax_ai_enact_by_month "
-            "NOT = { te_tax_obl_delivered = { N = $N$ } } } "
-            "AND = { var:te_tax_o$N$_state = 3 NOT = { te_tax_obl_holds = { N = $N$ } } } }")
+            "AND = { var:te_tax_o$N$_state = 2 "
+            "OR = { AND = { var:te_tax_o$N$_kind = 1 var:te_tax_o$N$_deadline <= te_tax_ai_enact_by_month } "
+            "AND = { NOT = { var:te_tax_o$N$_kind = 1 } var:te_tax_o$N$_deadline <= te_tax_ai_next_check_month } } "
+            "NOT = { te_tax_obl_delivered = { N = $N$ } } "
+            "NOT = { AND = { var:te_tax_o$N$_kind = 1 bureaucracy < 0 } } "
+            "NOT = { AND = { var:te_tax_o$N$_kind = 4 var:te_tax_o$N$_streak >= te_tax_ai_surplus_streak_last "
+            "net_fixed_income > 0 } } } "
+            "AND = { var:te_tax_o$N$_state = 3 NOT = { te_tax_obl_holds = { N = $N$ } } "
+            "te_tax_ai_grace_next = { N = $N$ } } }")
 
-    def test_the_lead_month_is_the_processors_month_plus_the_lead(self):
-        self.assertEqual(
-            flat(block(read(AI_VALUES), "te_tax_ai_enact_by_month")),
-            "value = te_history_month_index if = { limit = { has_variable = te_tax_now var:te_tax_now >= 0 } "
-            "value = var:te_tax_now } add = te_tax_ai_enact_lead_months")
+    def test_the_deficit_pause_matches_the_monthly_check(self):
+        # te_tax_obl_check_one pauses exactly this case before testing the deadline.
+        check = flat(block(read(OBLIGATIONS), "te_tax_obl_check_one"))
+        self.assertIn("else_if = { limit = { var:te_tax_o$N$_kind = 1 bureaucracy < 0 } "
+                      "change_variable = { name = te_tax_o$N$_deadline add = 1 }", check)
+        # ... and counts the kind-4 streak before testing delivery against te_tax_obl_surplus_months.
+        self.assertLess(check.index("te_tax_o$N$_streak add = 1"), check.index("te_tax_obl_delivered"))
+        self.assertEqual(flat(block(read(AI_VALUES), "te_tax_ai_surplus_streak_last")),
+                         "value = te_tax_obl_surplus_months subtract = 1")
+
+    def test_a_maintained_promise_is_at_risk_one_failing_check_short_of_its_grace(self):
+        body = flat(block(read(AI_TRIGGERS), "te_tax_ai_grace_next"))
+        self.assertEqual(body, "OR = { " + " ".join(
+            f"AND = {{ var:te_tax_o$N$_kind = {kind} var:te_tax_o$N$_fails >= te_tax_ai_grace_short_{kind} }}"
+            for kind in GRACE) + " }")
+        self.assertNotIn("trigger_if", body)
+        values = read(AI_VALUES)
+        obligation_values = load("common/script_values/te_tax_obligation_values.txt")
+        for kind, grace in GRACE.items():
+            with self.subTest(kind=kind):
+                self.assertEqual(flat(block(values, f"te_tax_ai_grace_short_{kind}")),
+                                 f"value = te_tax_obl_grace_{kind} subtract = 1")
+                self.assertEqual(obligation_values[f"te_tax_obl_grace_{kind}"], str(grace))
+
+    def test_the_lead_applies_to_enactment_and_the_next_check_to_the_rest(self):
+        values = read(AI_VALUES)
+        self.assertEqual(flat(block(values, "te_tax_ai_now")),
+                         "value = te_history_month_index if = { limit = { has_variable = te_tax_now "
+                         "var:te_tax_now >= 0 } value = var:te_tax_now }")
+        self.assertEqual(flat(block(values, "te_tax_ai_next_check_month")), "value = te_tax_ai_now add = 1")
+        self.assertEqual(flat(block(values, "te_tax_ai_enact_by_month")),
+                         "value = te_tax_ai_now add = te_tax_ai_enact_lead_months")
 
     def test_one_promise_a_step_in_slot_order(self):
         body = flat(block(self.ai, "te_tax_ai_manage_promises"))
@@ -699,9 +742,12 @@ class AiPromiseTest(unittest.TestCase):
                 self.assertIn(
                     f"{opener} = {{ limit = {{ te_tax_ai_promise_at_risk = {{ N = {n} }} }} "
                     f"if = {{ limit = {{ te_tax_ai_can_enact = {{ N = {n} }} }} "
-                    f"te_tax_gen_ai_enact_{n} = yes te_tax_gen_ai_log_enacted_{n} = yes }} "
+                    f"te_tax_gen_ai_log_enacted_{n} = yes te_tax_gen_ai_enact_{n} = yes }} "
                     f"else_if = {{ limit = {{ te_tax_can_obl_renegotiate = {{ N = {n} }} }} "
-                    f"te_tax_cmd_obl_renegotiate = {{ N = {n} }} te_tax_ai_log_renegotiated = yes }} }}", body)
+                    f"te_tax_gen_ai_log_renegotiated_{n} = yes te_tax_cmd_obl_renegotiate = {{ N = {n} }} }} }}", body)
+        # Each line is written first: the setter's result is not assumed visible later in the
+        # block, and the renegotiation frees the slot, after which its views read nothing.
+        self.assertNotIn("te_tax_ai_log_renegotiated", body)
         positions = [body.index(f"te_tax_ai_promise_at_risk = {{ N = {n} }}") for n in gen.OBLIGATION_SLOTS]
         self.assertEqual(positions, sorted(positions))
         self.assertEqual(body.count("te_tax_ai_promise_at_risk"), len(gen.OBLIGATION_SLOTS))
@@ -753,19 +799,48 @@ class AiPromiseTest(unittest.TestCase):
         self.assertEqual(managers, ["te_tax_ai_effects.txt"])
         self.assertIn("te_tax_ai_manage_promises = yes", block(self.ai, "te_tax_ai_step"))
 
-    def test_the_enactment_line_names_the_promise_and_the_signals(self):
+    def test_the_enactment_and_renegotiation_lines_name_the_promise_and_the_signals(self):
         views = set(re.findall(r"(?m)^(\w+) = ", read(GEN_VALUES)))
         step = re.findall(r'debug_log = "([^"]*)"', block(self.ai, "te_tax_ai_log_step"))[0]
         signals = step[len("TE_TAX ai_step "):]
+        for family, head in (("enacted", "ai_obl_enacted"), ("renegotiated", "ai_renegotiated")):
+            for o in gen.OBLIGATION_SLOTS:
+                body = block(self.gen, f"te_tax_gen_ai_log_{family}_{o}")
+                with self.subTest(family=family, slot=o):
+                    self.assertEqual(re.findall(r'debug_log = "([^"]*)"', body),
+                                     [f"TE_TAX {head} slot={o} {promise_fields(o)} {signals}"])
+                    for _, view in DEADLINE_FIELDS:
+                        self.assertIn(f"te_tax_view_o{o}_{view}", views)
+                    self.assertNotIn("is_ai", body)
+
+    def test_the_bare_renegotiation_line_is_gone(self):
+        for directory in ("common", "events"):
+            for path in sorted((ROOT / directory).rglob("te_tax_*.txt")):
+                with self.subTest(path=path.name):
+                    self.assertNotIn("te_tax_ai_log_renegotiated", read(path.relative_to(ROOT).as_posix()))
+
+    def test_the_measure_is_what_the_verifier_reads(self):
+        values = read(GEN_VALUES)
         for o in gen.OBLIGATION_SLOTS:
-            lines = re.findall(r'debug_log = "([^"]*)"', block(self.gen, f"te_tax_gen_ai_log_enacted_{o}"))
-            fields = " ".join(f"{view}=[SCOPE.ScriptValue('te_tax_view_o{o}_{view}')|0]"
-                              for view in DEADLINE_VIEWS if view != "kind")
+            inst = " ".join(f"{'if' if arg == 1 else 'else_if'} = {{ limit = {{ var:te_tax_o{o}_kind = 1 "
+                            f"has_variable = te_tax_o{o}_arg var:te_tax_o{o}_arg = {arg} }} "
+                            f"value = te_tax_obl_inst_level_{arg} }}"
+                            for arg in INSTITUTIONS)
             with self.subTest(slot=o):
-                self.assertEqual(lines, [f"TE_TAX ai_obl_enacted slot={o} kind=1 {fields} {signals}"])
-                for view in DEADLINE_VIEWS:
-                    self.assertIn(f"te_tax_view_o{o}_{view}", views)
-                self.assertNotIn("is_ai", block(self.gen, f"te_tax_gen_ai_log_enacted_{o}"))
+                self.assertEqual(
+                    flat(block(values, f"te_tax_view_o{o}_measure")),
+                    f"value = 0 if = {{ limit = {{ has_variable = te_tax_o{o}_on var:te_tax_o{o}_on = 1 "
+                    f"has_variable = te_tax_o{o}_kind }} {inst} "
+                    f"else_if = {{ limit = {{ var:te_tax_o{o}_kind = 2 bureaucracy >= 0 }} value = 1 }} "
+                    f"else_if = {{ limit = {{ var:te_tax_o{o}_kind = 3 te_tax_obl_wages_met = {{ N = {o} }} }} value = 1 }} "
+                    f"else_if = {{ limit = {{ var:te_tax_o{o}_kind = 4 has_variable = te_tax_o{o}_streak }} "
+                    f"value = var:te_tax_o{o}_streak }} }}")
+        # The verifier's own reads (te_tax_obl_holds, te_tax_obl_delivered).
+        holds = flat(block(read(OBL_TRIGGERS), "te_tax_obl_holds"))
+        for read_ in ("bureaucracy >= 0", "te_tax_obl_wages_met = { N = $N$ }", "te_tax_obl_inst_met_1 = { N = $N$ }"):
+            self.assertIn(read_, holds)
+        self.assertIn("var:te_tax_o$N$_streak >= te_tax_obl_surplus_months",
+                      flat(block(read(OBL_TRIGGERS), "te_tax_obl_delivered")))
 
 
 class DeadlineLogTest(unittest.TestCase):
@@ -799,9 +874,8 @@ class DeadlineLogTest(unittest.TestCase):
     def test_each_slot_writes_one_line_with_its_views_and_the_ai_flag(self):
         gen_text = read(GEN_EFFECTS)
         for o in gen.OBLIGATION_SLOTS:
-            fields = " ".join(f"{view}=[SCOPE.ScriptValue('te_tax_view_o{o}_{view}')|0]" for view in DEADLINE_VIEWS)
             for result in ("met", "unmet"):
-                head = f"TE_TAX obl_deadline result={result} slot={o} {fields}"
+                head = f"TE_TAX obl_deadline result={result} slot={o} {promise_fields(o)}"
                 with self.subTest(slot=o, result=result):
                     self.assertEqual(
                         flat(block(gen_text, f"te_tax_gen_obl_log_{result}_{o}")),
@@ -877,13 +951,16 @@ class PromiseDocTest(unittest.TestCase):
         doc = read(SCHEMA_DOC, strip_comments=False)
         ai = doc.split("\n## Policy obligations\n", 1)[1].split("### Obligations and the AI\n", 1)[1].split("\n### ", 1)[0]
         for phrase in ("te_tax_ai_manage_promises", "te_tax_gen_ai_enact_", "te_tax_cmd_obl_renegotiate",
-                       "obl_deadline", "edited_default_strategy.txt", "P16", "te_tax_ai_enact_lead_months"):
+                       "obl_deadline", "edited_default_strategy.txt", "P16", "te_tax_ai_enact_lead_months",
+                       "te_tax_ai_grace_next", "te_tax_ai_next_check_month", "te_tax_ai_surplus_streak_last",
+                       "bureaucracy deficit", "te_tax_view_o<o>_measure", "level="):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, ai)
         self.assertNotIn("none holds an obligation yet", ai)
         section = doc.split("\n## AI legislation\n", 1)[1].split("\n## ", 1)[0]
         for phrase in ("te_tax_ai_manage_packages", "te_tax_ai_manage_promises", "te_tax_ai_promise_at_risk",
-                       "ai_obl_enacted", "obl_deadline", "te_tax_ai_owes_institution"):
+                       "ai_obl_enacted", "obl_deadline", "te_tax_ai_owes_institution",
+                       "te_tax_gen_ai_log_renegotiated_<o>"):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, section)
 
@@ -903,6 +980,7 @@ class PromiseDocTest(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0].split(" | ")[2], "static-only")
         self.assertNotIn("te_tax_obl_inst_met_", rows[0])
+        self.assertIn("level=", rows[0])
 
 class AiFileTest(unittest.TestCase):
     def test_files_have_bom_lf_tabs_and_formatter_parity(self):

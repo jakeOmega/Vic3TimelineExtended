@@ -8539,6 +8539,18 @@ te_tax_view_o1_maint_end_mo = {
 		add = 1
 	}
 }
+te_tax_view_o1_measure = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 has_variable = te_tax_o1_kind }
+		if = { limit = { var:te_tax_o1_kind = 1 has_variable = te_tax_o1_arg var:te_tax_o1_arg = 1 } value = te_tax_obl_inst_level_1 }
+		else_if = { limit = { var:te_tax_o1_kind = 1 has_variable = te_tax_o1_arg var:te_tax_o1_arg = 2 } value = te_tax_obl_inst_level_2 }
+		else_if = { limit = { var:te_tax_o1_kind = 1 has_variable = te_tax_o1_arg var:te_tax_o1_arg = 3 } value = te_tax_obl_inst_level_3 }
+		else_if = { limit = { var:te_tax_o1_kind = 2 bureaucracy >= 0 } value = 1 }
+		else_if = { limit = { var:te_tax_o1_kind = 3 te_tax_obl_wages_met = { N = 1 } } value = 1 }
+		else_if = { limit = { var:te_tax_o1_kind = 4 has_variable = te_tax_o1_streak } value = var:te_tax_o1_streak }
+	}
+}
 te_tax_view_o2_on = {
 	value = 0
 	if = { limit = { has_variable = te_tax_o2_on } value = var:te_tax_o2_on }
@@ -8634,6 +8646,18 @@ te_tax_view_o2_maint_end_mo = {
 		multiply = -12
 		add = var:te_tax_o2_maint_end
 		add = 1
+	}
+}
+te_tax_view_o2_measure = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 has_variable = te_tax_o2_kind }
+		if = { limit = { var:te_tax_o2_kind = 1 has_variable = te_tax_o2_arg var:te_tax_o2_arg = 1 } value = te_tax_obl_inst_level_1 }
+		else_if = { limit = { var:te_tax_o2_kind = 1 has_variable = te_tax_o2_arg var:te_tax_o2_arg = 2 } value = te_tax_obl_inst_level_2 }
+		else_if = { limit = { var:te_tax_o2_kind = 1 has_variable = te_tax_o2_arg var:te_tax_o2_arg = 3 } value = te_tax_obl_inst_level_3 }
+		else_if = { limit = { var:te_tax_o2_kind = 2 bureaucracy >= 0 } value = 1 }
+		else_if = { limit = { var:te_tax_o2_kind = 3 te_tax_obl_wages_met = { N = 2 } } value = 1 }
+		else_if = { limit = { var:te_tax_o2_kind = 4 has_variable = te_tax_o2_streak } value = var:te_tax_o2_streak }
 	}
 }
 te_tax_view_o3_on = {
@@ -8733,6 +8757,18 @@ te_tax_view_o3_maint_end_mo = {
 		add = 1
 	}
 }
+te_tax_view_o3_measure = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_kind }
+		if = { limit = { var:te_tax_o3_kind = 1 has_variable = te_tax_o3_arg var:te_tax_o3_arg = 1 } value = te_tax_obl_inst_level_1 }
+		else_if = { limit = { var:te_tax_o3_kind = 1 has_variable = te_tax_o3_arg var:te_tax_o3_arg = 2 } value = te_tax_obl_inst_level_2 }
+		else_if = { limit = { var:te_tax_o3_kind = 1 has_variable = te_tax_o3_arg var:te_tax_o3_arg = 3 } value = te_tax_obl_inst_level_3 }
+		else_if = { limit = { var:te_tax_o3_kind = 2 bureaucracy >= 0 } value = 1 }
+		else_if = { limit = { var:te_tax_o3_kind = 3 te_tax_obl_wages_met = { N = 3 } } value = 1 }
+		else_if = { limit = { var:te_tax_o3_kind = 4 has_variable = te_tax_o3_streak } value = var:te_tax_o3_streak }
+	}
+}
 te_tax_view_o4_on = {
 	value = 0
 	if = { limit = { has_variable = te_tax_o4_on } value = var:te_tax_o4_on }
@@ -8828,6 +8864,18 @@ te_tax_view_o4_maint_end_mo = {
 		multiply = -12
 		add = var:te_tax_o4_maint_end
 		add = 1
+	}
+}
+te_tax_view_o4_measure = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_kind }
+		if = { limit = { var:te_tax_o4_kind = 1 has_variable = te_tax_o4_arg var:te_tax_o4_arg = 1 } value = te_tax_obl_inst_level_1 }
+		else_if = { limit = { var:te_tax_o4_kind = 1 has_variable = te_tax_o4_arg var:te_tax_o4_arg = 2 } value = te_tax_obl_inst_level_2 }
+		else_if = { limit = { var:te_tax_o4_kind = 1 has_variable = te_tax_o4_arg var:te_tax_o4_arg = 3 } value = te_tax_obl_inst_level_3 }
+		else_if = { limit = { var:te_tax_o4_kind = 2 bureaucracy >= 0 } value = 1 }
+		else_if = { limit = { var:te_tax_o4_kind = 3 te_tax_obl_wages_met = { N = 4 } } value = 1 }
+		else_if = { limit = { var:te_tax_o4_kind = 4 has_variable = te_tax_o4_streak } value = var:te_tax_o4_streak }
 	}
 }
 te_tax_view_obl_binding = {

@@ -143,20 +143,64 @@ te_tax_ai_cadence_pos = {
 # Promises (te_tax_ai_promise_at_risk)
 # ---------------------------------------------------------------------------
 
-# A delivering promise whose deadline is at or before this month is at risk:
-# the month the processor last ran (te_tax_now, this month's in te_tax.8, which
-# runs 1 to 26 days after it), or the live month before it ever ran, plus
-# te_tax_ai_enact_lead_months. With the default lead of 1 that is the month the
-# next monthly check tests (te_tax_obl_check_one breaches a delivering promise
-# at var:te_tax_o<N>_deadline <= var:te_tax_now). A script value on the right
-# of the comparison, never inside a quoted trigger call.
-te_tax_ai_enact_by_month = {
+# This month as the obligations see it: the month the processor last ran
+# (te_tax_now; in te_tax.8, which runs 1 to 26 days after it, this month's), or
+# the live month before it ever ran.
+te_tax_ai_now = {
 	value = te_history_month_index
 	if = {
 		limit = { has_variable = te_tax_now var:te_tax_now >= 0 }
 		value = var:te_tax_now
 	}
+}
+
+# The month the next monthly check tests: te_tax_obl_check_one breaches a
+# delivering promise at var:te_tax_o<N>_deadline <= var:te_tax_now. A promise
+# other than an institution's is at risk only when its deadline falls by it.
+te_tax_ai_next_check_month = {
+	value = te_tax_ai_now
+	add = 1
+}
+
+# A delivering institution promise (kind 1) is at risk, and enacted, when its
+# deadline falls by this month: te_tax_ai_enact_lead_months on. At the default
+# lead of 1 it is the next check's month; raising the lead (P16: if the setter
+# sets a target that grows at native speed) brings kind-1 enactment forward
+# and leaves every other kind's renegotiation at the next check.
+te_tax_ai_enact_by_month = {
+	value = te_tax_ai_now
 	add = te_tax_ai_enact_lead_months
+}
+
+# The failing checks a maintained promise of each kind has had when the next
+# failing check breaches it: one short of its grace (te_tax_obl_grace_<kind>,
+# te_tax_obligation_values.txt). 0 for kinds 1 and 3, 2 for kinds 2 and 4.
+te_tax_ai_grace_short_1 = {
+	value = te_tax_obl_grace_1
+	subtract = 1
+}
+
+te_tax_ai_grace_short_2 = {
+	value = te_tax_obl_grace_2
+	subtract = 1
+}
+
+te_tax_ai_grace_short_3 = {
+	value = te_tax_obl_grace_3
+	subtract = 1
+}
+
+te_tax_ai_grace_short_4 = {
+	value = te_tax_obl_grace_4
+	subtract = 1
+}
+
+# A fiscal-balance promise (kind 4) whose surplus streak has reached this is
+# delivered by the next check if the budget is still in surplus: the check
+# counts the month before it tests te_tax_obl_surplus_months.
+te_tax_ai_surplus_streak_last = {
+	value = te_tax_obl_surplus_months
+	subtract = 1
 }
 
 # ---------------------------------------------------------------------------

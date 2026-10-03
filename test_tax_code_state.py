@@ -446,7 +446,8 @@ class GeneratedSyncTest(unittest.TestCase):
         customs |= {"te_tax_gen_migrate_customs", "te_tax_gen_sync_customs", "te_tax_gen_count_customs_drift",
                     "te_tax_gen_customs_clear_retries"}
         # The promises' deadline lines and the AI's enactment (test_tax_code_ai.py, plan 2026-10-03 Task 19).
-        promises = {f"te_tax_gen_{part}_{n}" for part in ("obl_log_met", "obl_log_unmet", "ai_enact", "ai_log_enacted")
+        promises = {f"te_tax_gen_{part}_{n}" for part in ("obl_log_met", "obl_log_unmet", "ai_enact", "ai_log_enacted",
+                                                          "ai_log_renegotiated")
                     for n in (1, 2, 3, 4)}
         self.assertEqual(names, want | scheduler | migration | drift | copies | obligations | views | customs | promises)
 
@@ -709,7 +710,9 @@ class DisplayValueTest(unittest.TestCase):
         for n in gen.OBLIGATION_SLOTS:
             want |= {f"te_tax_view_o{n}_{field}" for field in (
                 "on", "state", "kind", "arg", "target", "ig", "baseline", "streak", "fails", "maint_only", "grace",
-                "deadline", "deadline_y", "deadline_mo", "maint_end", "maint_end_y", "maint_end_mo")}
+                "deadline", "deadline_y", "deadline_mo", "maint_end", "maint_end_y", "maint_end_mo",
+                # The measure the verifier reads, for the promise lines (plan 2026-10-03 Task 19).
+                "measure")}
         want |= {"te_tax_view_obl_binding", "te_tax_view_obl_pending"}
         # The economy snapshot and the estimates (Task 14): the snapshot's date, its
         # aggregates and whether it is current; per instrument its index at the
