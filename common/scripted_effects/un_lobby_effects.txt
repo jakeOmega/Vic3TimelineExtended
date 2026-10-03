@@ -1118,7 +1118,8 @@ un_deleg_bulk_row = {
 		limit = {
 			# The button's tooltip pass reads this limit without having run
 			# un_deleg_bulk_lobby's set_variable, so an unguarded read logged
-			# three script errors per row, 72 per hover (2026-10-03 error.log).
+			# three script errors per row, 72 per tooltip build; 1,584 lines in
+			# nine minutes with the chamber open (2026-10-03 error.log).
 			has_variable = un_bulk_left
 			var:un_bulk_left > 0
 			un_deleg_row_bulk_ok = { N = $N$ DIR = $DIR$ }

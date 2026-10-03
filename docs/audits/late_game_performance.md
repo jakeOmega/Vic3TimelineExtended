@@ -46,12 +46,14 @@ The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.
 Run 5's machine ran vanilla script about 16% faster per call; "speed-adjusted"
 divides that out.
 
-The GUI profiler, the same save and one month boundary each time:
-
-| Monthly country pulse (worst thread) | before | this PR |
-|---|---|---|
-| Whole merged `on_monthly_pulse_country` | ~1.5 s / month | ~1.25 s / month |
-| `remove_invalid_buildings` (company cleanup) | 985 ms | gone from the top callees |
+The GUI profiler gives no clean before/after for the monthly pulse. The
+"before" capture with the most detail came from the session where the
+company buildings failed to load (see the doubled BOM below). Its
+`remove_invalid_buildings` cost 985 ms, inflated by about 1,800
+`remove_building` errors a minute. In this PR's capture that callee is gone
+from the top of the merged monthly pulse. The first capture of the original
+code and this PR's capture also disagree in ways nothing here explains; see
+open item 2.
 
 ## What this PR changed
 
@@ -86,8 +88,9 @@ All are exact: they change no result unless a line says otherwise.
   benchmark computation per pulse, and no exposure if the engine
   re-evaluates multipliers later.
 - **Suit portraits.** The character tests run before the culture triggers.
-- **UN bulk lobbying.** The `has_variable` guard stops 72 error lines per
-  tooltip build.
+- **UN bulk lobbying.** The `has_variable` guard stops the button's tooltip
+  logging 3 errors for each of 24 rows: 1,584 lines in nine minutes with the
+  chamber open.
 
 ## Lessons
 
@@ -112,7 +115,12 @@ All are exact: they change no result unless a line says otherwise.
    took most of the company-building saving. The owner expects it to be
    temporary, as the AI re-plans after #679 changed budgets. Check that it
    settles in a longer run; if not, compare against plain `main`.
-2. **Monthly country pulse, ~1.25 s per month.** Cultural Hegemony
+2. **Monthly country pulse, ~1.25 s per month on the worst thread** (this
+   PR's capture). It and the journal-entry pulses read higher than in the
+   first capture of the original code: the merged pulse 516 ms → 1,249 ms,
+   CH pulse 179 → 319 ms, covert 175 → 262 ms. The captures differ in
+   date, open panels and machine load, so that isn't proof of a regression,
+   but it's unexplained; recapture both builds under the same conditions. Cultural Hegemony
    `ch_monthly_pulse_on_action` 303 ms, monetary 191 ms, combined arms 118 ms,
    `sol_expectations_on_actions.txt:9` 117 ms.
 3. **Journal-entry monthly pulses, 889 ms.** Cultural Hegemony 319 ms, covert
