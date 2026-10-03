@@ -397,21 +397,28 @@ need a large enough building of their industry.
 
 Biotechnology companies need the Corporate Genetic Licensing law ([Economic law
 groups](05-politics.md#economic-law-groups)), which Biotechnology unlocks. Under
-it you can found the generic Biotechnology company and eight flavored ones. Each
-flavored company also needs its technology and a building of its industry at
-level 5 (level 10 for the Rosen Association), and most need a high production
-or wealth rank:
+it you can found the generic Biotechnology company and eight flavored ones.
+
+The generic company needs an Artificial Sweeteners Plant, Beverage Concentrates
+Plant, Cultured Meat Plant or Cultured Produce Facility at level 10. It runs
+those four plants and the Integrated Biorefinery, and while prosperous gives +5%
+Birth Rate and −5% Generated Pollution.
+
+Each flavored company also needs its technology and a building of its industry
+at level 5 (level 10 for the Rosen Association), and most need a high production
+or wealth rank. Their bonuses are larger than the generic company's, so once you
+meet a flavored company's conditions it is the stronger use of a company slot:
 
 | Company | Unlocked by | Also requires | Prosperity bonus |
 |---|---|---|---|
-| Genentech | Biotechnology | Pharmaceutical Industries, top 5 in Drugs production, top 10 in GDP per capita | +15% Pharmaceutical Industries throughput, +5% innovation |
-| Monsanto | Biotechnology | Chemical Plants, top 3 in Grain production | +15% Maize Farms and Cotton Plantations throughput, +5% Chemical Plants throughput |
-| Novo Nordisk | Biotechnology | Pharmaceutical Industries, top 15 in GDP per capita | −5% mortality, +15% Integrated Biorefinery throughput, −10% Generated Pollution |
-| Ajinomoto | Biotechnology | Artificial Sweeteners Plant, top 5 in Groceries production | +10% Food Industries and +15% Artificial Sweeteners Plant throughput |
-| Biocon | Biotechnology | Pharmaceutical Industries, top 10 in Drugs production | +10% Technology Spread, −5% mortality |
-| BGI Group | Biotechnology | Pharmaceutical Industries, 75% literacy, top 10 in GDP | +5% innovation, +10% University throughput |
-| BioNTech | mRNA Therapeutics | Pharmaceutical Industries, top 5 in Drugs production, top 15 in GDP per capita | −5% mortality, +10% Pharmaceutical Industries throughput, +5% Society Research Speed |
-| Rosen Association | Genetic Engineering | Integrated Biorefinery at level 10, top 5 in GDP | +3% Workforce Ratio, +15% Cultured Meat Plant throughput |
+| Genentech | Biotechnology | Pharmaceutical Industries, top 5 in Drugs production, top 10 in GDP per capita | +20% Pharmaceutical Industries throughput, +10% innovation, +5% Society Research Speed |
+| Monsanto | Biotechnology | Chemical Plants, top 3 in Grain production | +20% Maize Farms and Cotton Plantations throughput, +10% Chemical Plants throughput, +5% Agriculture throughput |
+| Novo Nordisk | Biotechnology | Pharmaceutical Industries, top 15 in GDP per capita | −5% mortality, +10% Pharmaceutical Industries and +20% Integrated Biorefinery throughput, −15% Generated Pollution |
+| Ajinomoto | Biotechnology | Artificial Sweeteners Plant, top 5 in Groceries production | +15% Food Industries, +20% Artificial Sweeteners Plant and +15% Beverage Concentrates Plant throughput |
+| Biocon | Biotechnology | Pharmaceutical Industries, top 10 in Drugs production | +20% Technology Spread, −5% mortality, +10% Pharmaceutical Industries throughput |
+| BGI Group | Biotechnology | Pharmaceutical Industries, 75% literacy, top 10 in GDP | +10% innovation, +5% Society Research Speed, +15% University throughput |
+| BioNTech | mRNA Therapeutics | Pharmaceutical Industries, top 5 in Drugs production, top 15 in GDP per capita | −10% mortality, +15% Pharmaceutical Industries throughput, +10% Society Research Speed |
+| Rosen Association | Genetic Engineering | Integrated Biorefinery at level 10, top 5 in GDP | +3% Workforce Ratio, +25% Cultured Meat Plant throughput, +50% Training Rate |
 
 Monsanto, Ajinomoto and Biocon ask for a production rank but no wealth rank,
 so a large but poor economy can found them. Each has a flagship building like

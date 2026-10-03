@@ -908,6 +908,12 @@ building_synthetics_plant_meat_throughput_add = {
 	decimals = 0
 }
 
+building_synthetics_plant_drinks_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}
+
 
 # === Building employment (per-pop-type employment scaling) ===
 
