@@ -1223,8 +1223,18 @@ types te_tax_workbench_widget_types
 						tooltip = "te_tax_sum_changes_tt"
 					}
 					blockoverride "row_value" {
-						# Customs levels join the count under the customs option (plan Task 15).
-						text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)0' ), 'te_tax_sum_changes_value', 'te_tax_sum_changes_value_cu' )]"
+						text = "te_tax_sum_changes_value"
+					}
+				}
+				# Customs levels the draft changes (plan Task 15; the customs option only).
+				te_tax_value_row = {
+					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), '(CFixedPoint)0' )]"
+					blockoverride "row_label" {
+						text = "te_tax_sum_customs"
+						tooltip = "te_tax_sum_customs_tt"
+					}
+					blockoverride "row_value" {
+						text = "te_tax_sum_customs_value"
 					}
 				}
 				te_tax_value_row = {
