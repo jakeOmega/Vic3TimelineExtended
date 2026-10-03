@@ -305,6 +305,22 @@ une_formation_no_internal_rivalry = {
 	}
 }
 
+# A world government needs a world body that already governs: the United
+# Nations stands at the Supranational tier of UN authority (85+, which only
+# Charter Reform II opens). With the UN game rule off there is no UN to ask,
+# so the gate falls away, as the WW3 one never existed. Also gates
+# dp_unify_united_earth, so a unification play cannot form UNE around it.
+# Reads globals only. Scope: any
+une_formation_un_supranational = {
+	trigger_if = {
+		limit = { has_game_rule = united_nations_enabled }
+		custom_tooltip = {
+			text = une_formation_un_supranational_tt
+			un_tier_is_supranational = yes
+		}
+	}
+}
+
 # === Vanilla's Turtle Island JE must not reach the unions =====================
 # Vanilla je_unite_the_nations shows for any North American country with an
 # indigenous-heritage primary culture while TIS does not exist, and its
