@@ -41,6 +41,7 @@ MIGRATION = "common/scripted_effects/te_tax_migration_effects.txt"
 STATE = "common/scripted_effects/te_tax_state_effects.txt"
 ON_ACTIONS = "common/on_actions/te_tax_on_actions.txt"
 EVENTS = "events/te_tax_internal_events.txt"
+CIVIL_WAR = "common/scripted_effects/te_tax_civil_war_effects.txt"
 GEN_EFFECTS = "common/scripted_effects/te_tax_generated_effects.txt"
 SCHEMA_DOC = "docs/systems/tax_code_schema.md"
 VANILLA_LAWS = "vanilla_parsed/common/laws.json"
@@ -406,16 +407,27 @@ class EventTest(unittest.TestCase):
                 self.assertEqual(body["type"], "country_event")
                 self.assertEqual(body["hidden"], "yes")
                 self.assertEqual(body["trigger"], {"te_tax_code_on": "yes"})
-                self.assertEqual(body["immediate"], {effect: "yes"})
+                immediate = dict(body["immediate"])
+                # te_tax.4 logs each post-migration sync (Task 10).
+                log = immediate.pop("debug_log", None)
+                self.assertEqual(immediate, {effect: "yes"})
+                if event == "te_tax.4":
+                    self.assertTrue(log.strip('"').startswith("TE_TAX post-migration sync"))
+                else:
+                    self.assertIsNone(log)
 
     def test_raisers(self):
+        # Both forms, `trigger_event = { id = X }` and the bare `trigger_event = X`.
         raisers = []
         for directory in ("common", "events"):
             for path in sorted((ROOT / directory).rglob("*.txt")):
                 text = read(path.relative_to(ROOT).as_posix())
-                for event in re.findall(r"trigger_event = \{ id = (te_tax\.[34])\b", text):
+                for event in re.findall(r"trigger_event = (?:\{ id = )?(te_tax\.[34])\b", text):
                     raisers.append((path.relative_to(ROOT).as_posix(), event))
-        self.assertEqual(sorted(set(raisers)), [(ON_ACTIONS, "te_tax.3"), (MIGRATION, "te_tax.4")])
+        # The civil-war effects migrate an uprising or a released country whose
+        # parent has no code (te_tax.3) and sync a copied code (te_tax.4, Task 10).
+        self.assertEqual(sorted(set(raisers)), sorted([(CIVIL_WAR, "te_tax.3"), (CIVIL_WAR, "te_tax.4"),
+                                                       (ON_ACTIONS, "te_tax.3"), (MIGRATION, "te_tax.4")]))
 
 
 class HookTest(unittest.TestCase):
@@ -429,6 +441,12 @@ class HookTest(unittest.TestCase):
         self.assertEqual(set(effect), {"if"})
         self.assertEqual(effect["if"]["limit"], {"te_tax_code_on": "yes"})
         return effect["if"]
+
+    def gated_with_source(self, handler):
+        """A gated handler that saves its scope as scope:te_tax_source first."""
+        gate = dict(self.gated(handler))
+        self.assertEqual(gate.pop("save_scope_as"), "te_tax_source")
+        return gate
 
     def test_game_start_fans_out_after_the_lobby(self):
         # on_game_started fires while players are still in the lobby, where the
@@ -444,23 +462,22 @@ class HookTest(unittest.TestCase):
         gate = self.gated("te_tax_on_country_formed")
         self.assertEqual(gate["trigger_event"], {"id": "te_tax.3"})
 
-    def test_released_countries_are_dispatched_to_the_new_country(self):
+    def test_released_countries_are_handled_in_the_new_country(self):
+        # Copy or migrate (Task 10): te_tax_init_released_country runs in
+        # scope:target with the parent saved, and dispatches its events there.
         for hook in ("on_country_released_as_independent", "on_country_released_as_own_subject",
                      "on_country_released_as_overlord_subject", "on_country_released_as_company_subject"):
             with self.subTest(hook=hook):
                 self.assertEqual(self.parsed[hook]["on_actions"], ["te_tax_on_country_released"])
-        gate = self.gated("te_tax_on_country_released")
-        self.assertEqual(gate["scope:target"], {"trigger_event": {"id": "te_tax.3"}})
+        gate = self.gated_with_source("te_tax_on_country_released")
+        self.assertEqual(gate["scope:target"], {"te_tax_init_released_country": "yes"})
         self.assertIn("scope:target ?= {", block(self.text, "te_tax_on_country_released"))
 
-    def test_uprisings_have_their_own_handler(self):
-        # Task 10 replaces this handler's body with the outbreak copy; releases keep theirs.
-        for hook in ("on_revolution_start", "on_secession_start"):
+    def test_uprisings_are_left_to_the_shared_civil_war_hook(self):
+        # The outbreak copy hangs off te_civil_war_on_start (test_tax_code_civil_war.py).
+        for hook in ("on_revolution_start", "on_secession_start", "te_tax_on_uprising_start"):
             with self.subTest(hook=hook):
-                self.assertEqual(self.parsed[hook]["on_actions"], ["te_tax_on_uprising_start"])
-        gate = self.gated("te_tax_on_uprising_start")
-        self.assertEqual(gate["scope:target"], {"trigger_event": {"id": "te_tax.3"}})
-        self.assertIn("scope:target ?= {", block(self.text, "te_tax_on_uprising_start"))
+                self.assertNotIn(hook, self.parsed)
 
     def test_monthly_dispatch_migrates_unmigrated_countries(self):
         fan_outs = self.parsed["te_tax_monthly_dispatch"]["effect"]["if"]["every_country"]

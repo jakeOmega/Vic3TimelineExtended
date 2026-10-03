@@ -429,3 +429,40 @@ te_tax_code_counts_as_graduated = {
 	te_tax_view_en_wage_rate >= 0.1
 	te_tax_view_en_div_rate >= te_tax_view_en_wage_rate
 }
+
+# ---------------------------------------------------------------------------
+# Relief eligibility (docs/systems/tax_code_schema.md, "Civil wars and new
+# countries"). State scope, from te_tax_relief_follow_owner
+# (te_tax_civil_war_effects.txt), which saves first:
+#   scope:te_tax_owner_new     the state's owner now
+#   scope:te_tax_owner_holder  the country whose code named the state, from its
+#                              te_tax_relief_holder stamp (absent: no stamp)
+# True when that code went with the state, so its relief marks stay. Which test
+# holds at a given moment depends on an engine order nobody has read (whether
+# the transfers of an outbreak, a release or a reunification fire before or
+# after the copy and the repair), so any one of them keeps the marks, as for
+# the Strategic Reserve hub (st_res_hub_stays_within_nation):
+#   - the new owner has no code yet: a released country or an uprising that is
+#     about to receive its parent's, which keeps and restamps the marks;
+#   - the new owner is the holder;
+#   - one country definition: a revolution's rebels share the original's;
+#   - var:te_cw_origin in either direction: the two sides of a civil war, at
+#     the outbreak and at reunification (a dead loser still reads).
+# No stamp and a new owner with a code is a capture: the marks go.
+te_tax_relief_stays_with_code = {
+	exists = scope:te_tax_owner_new
+	OR = {
+		scope:te_tax_owner_new = {
+			OR = { NOT = { has_variable = te_tax_migrated } var:te_tax_migrated < 1 }
+		}
+		AND = {
+			exists = scope:te_tax_owner_holder
+			OR = {
+				scope:te_tax_owner_new = { this = scope:te_tax_owner_holder }
+				scope:te_tax_owner_new = { country_definition = scope:te_tax_owner_holder.country_definition }
+				scope:te_tax_owner_new = { var:te_cw_origin ?= scope:te_tax_owner_holder }
+				scope:te_tax_owner_holder = { var:te_cw_origin ?= scope:te_tax_owner_new }
+			}
+		}
+	}
+}

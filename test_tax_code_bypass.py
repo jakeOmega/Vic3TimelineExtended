@@ -474,7 +474,9 @@ class ReassertHookTest(unittest.TestCase):
         raisers = []
         for directory in ("common", "events"):
             for path in sorted((ROOT / directory).rglob("*.txt")):
-                for _ in re.findall(r"trigger_event = \{ id = te_tax\.5\b", read(path.relative_to(ROOT).as_posix())):
+                text = read(path.relative_to(ROOT).as_posix())
+                # Both forms: `trigger_event = { id = te_tax.5 }` and the bare `trigger_event = te_tax.5`.
+                for _ in re.findall(r"trigger_event = (?:\{ id = )?te_tax\.5\b", text):
                     raisers.append(path.relative_to(ROOT).as_posix())
         self.assertEqual(raisers, [ON_ACTIONS])
 

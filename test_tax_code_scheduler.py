@@ -169,7 +169,8 @@ class DispatchTest(unittest.TestCase):
         for directory in ("common", "events"):
             for path in sorted((ROOT / directory).rglob("*.txt")):
                 text = read(path.relative_to(ROOT).as_posix())
-                for event in re.findall(r"trigger_event = \{ id = (te_tax\.[12])\b", text):
+                # Both forms: `trigger_event = { id = X }` and the bare `trigger_event = X`.
+                for event in re.findall(r"trigger_event = (?:\{ id = )?(te_tax\.[12])\b", text):
                     raisers.append((path.relative_to(ROOT).as_posix(), event))
         self.assertEqual(sorted(raisers), [(ON_ACTIONS, "te_tax.1"), (ON_ACTIONS, "te_tax.2")])
 

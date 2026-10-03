@@ -162,8 +162,10 @@ class SchemaDocTest(unittest.TestCase):
         self.assertEqual(country["te_tax_last_month"], -1)
         self.assertEqual(country["te_tax_next_month"], -1)
         self.assertIsNone(country["te_tax_schema"])
+        # te_tax_relief_holder: the country stamped where a mark is set (Task 10,
+        # relief eligibility); a country value, so no sentinel.
         self.assertEqual(state, {"te_tax_relief_state": 0, "te_tax_pending_relief_a": 0,
-                                 "te_tax_pending_relief_b": 0})
+                                 "te_tax_pending_relief_b": 0, "te_tax_relief_holder": None})
 
     def test_doc_lists_the_consumption_catalog_exactly(self):
         text = read(SCHEMA_DOC, strip_comments=False)
@@ -367,7 +369,10 @@ class GeneratedSyncTest(unittest.TestCase):
         migration = {"te_tax_gen_migrate_rates", "te_tax_gen_migrate_goods", "te_tax_gen_migrate_provisions"}
         # The writer's drift count of goods (test_tax_code_bypass.py).
         drift = {"te_tax_gen_count_goods_drift"}
-        self.assertEqual(names, want | scheduler | migration | drift)
+        # The copies for new countries (test_tax_code_civil_war.py).
+        copies = {"te_tax_gen_copy_code", "te_tax_gen_copy_enacted"} | {
+            f"te_tax_gen_copy_slot_{slot}" for slot in ("a", "b")}
+        self.assertEqual(names, want | scheduler | migration | drift | copies)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
         for key in KEYS:

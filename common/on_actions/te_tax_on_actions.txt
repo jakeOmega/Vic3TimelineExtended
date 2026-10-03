@@ -18,8 +18,17 @@
 #
 # Migration. Nothing in the tax code runs for a country until te_tax.3 has
 # migrated it (docs/systems/tax_code_schema.md, "Migration"): every country
-# once the lobby is over, each new country from its creation hook, and any
-# country the monthly dispatch still finds unmigrated.
+# once the lobby is over, each formed country, a released country whose parent
+# has no code, and any country the monthly dispatch still finds unmigrated. A
+# released country whose parent holds the carrier law takes the parent's
+# enacted code instead, and an uprising the original's whole code (the
+# outbreak copy hangs off the shared te_civil_war_on_start,
+# te_civil_war_on_actions.txt): docs/systems/tax_code_schema.md, "Civil wars
+# and new countries".
+#
+# Relief eligibility. A state that changes owner keeps its regional-relief
+# marks only while the code that named it went with it (on_state_owner_change,
+# below).
 #
 # Re-assertion. A taxation law other than law_te_tax_code activated in a
 # migrated country (activate_law from an event, a button or the law-consistency
@@ -56,7 +65,7 @@ te_tax_on_game_started = {
 }
 
 # ----------------------------------------------------------------------------
-# Migration of new countries
+# New countries
 # ----------------------------------------------------------------------------
 # A country already migrated (a formation keeps the forming country's
 # variables) is left alone by te_tax_migrate_country itself.
@@ -77,10 +86,15 @@ te_tax_on_country_formed = {
 	}
 }
 
-# The scope is the releasing country; scope:target is the released one. The
-# event is dispatched to scope:target, never run here, so the migration runs
-# with the new country as its ROOT and never touches the parent (research E,
-# "Dispatch, don't call"; te_monetary_on_actions.txt does the same).
+# The scope is the releasing country; scope:target is the released one.
+# te_tax_init_released_country (te_tax_civil_war_effects.txt) runs in
+# scope:target with the parent saved as scope:te_tax_source: a parent holding
+# the carrier law passes on its enacted provisions, which a copy of variables
+# can do from here; the carrier law and the first sync are dispatched to the
+# new country as te_tax.6, and any other parent's released country gets the
+# migration te_tax.3, so whatever runs as a country event has the new country
+# as its ROOT and never touches the parent (te_monetary_on_actions.txt,
+# "THE UPDATE IS DISPATCHED, NOT CALLED", does the same).
 on_country_released_as_independent = {
 	on_actions = {
 		te_tax_on_country_released
@@ -109,36 +123,38 @@ te_tax_on_country_released = {
 	effect = {
 		if = {
 			limit = { te_tax_code_on = yes }
+			save_scope_as = te_tax_source
 			scope:target ?= {
-				trigger_event = { id = te_tax.3 }
+				te_tax_init_released_country = yes
 			}
 		}
 	}
 }
 
-# The scope is the original country; scope:target is the uprising. Kept apart
-# from the releases: the civil-war task replaces this handler's body with a copy
-# of the original's code (an uprising that inherits the carrier law migrates as
-# zeros until then). Same dispatch for now.
-on_revolution_start = {
+# An uprising (on_revolution_start, on_secession_start) is not handled here: the
+# shared te_civil_war_on_start calls te_tax_on_uprising after it has recorded
+# the two sides. Same-name on_actions are unioned across files in no known
+# order, so a second handler here would race the copy with a migration.
+
+# ----------------------------------------------------------------------------
+# Relief eligibility
+# ----------------------------------------------------------------------------
+# ROOT is the state that changed owner; the hook names no previous owner, so
+# the country whose code named the state is stamped on it beforehand
+# (te_tax_relief_holder). te_tax_relief_follow_owner
+# (te_tax_civil_war_effects.txt) resets the state's relief marks unless that
+# code went with it.
+on_state_owner_change = {
 	on_actions = {
-		te_tax_on_uprising_start
+		te_tax_on_state_owner_change
 	}
 }
 
-on_secession_start = {
-	on_actions = {
-		te_tax_on_uprising_start
-	}
-}
-
-te_tax_on_uprising_start = {
+te_tax_on_state_owner_change = {
 	effect = {
 		if = {
 			limit = { te_tax_code_on = yes }
-			scope:target ?= {
-				trigger_event = { id = te_tax.3 }
-			}
+			te_tax_relief_follow_owner = yes
 		}
 	}
 }
@@ -211,11 +227,14 @@ te_tax_watchdog_on_action = {
 # ----------------------------------------------------------------------------
 # on_law_activated fires for a law activated for any reason, script included
 # (vanilla 00_code_on_actions.txt, the note on the hook), so it catches every
-# activate_law of a vanilla taxation law: Hungary's Per-Capita button,
-# restore_peruvian_constitution, the law-consistency cascade
-# (extra_law_consistency_generated.txt) and anything else. The five vanilla
-# taxation laws cannot be enacted under the rule (te_tax_vanilla_law_gates.txt),
-# so script is the only way in. The vanilla files are left alone.
+# activate_law of a vanilla taxation law: restore_peruvian_constitution
+# (vanilla 00_victoria_scripted_effects.txt, Per-Capita whenever not held), the
+# law-consistency cascade (extra_law_consistency_generated.txt), a taxation law
+# the engine gives an uprising after the outbreak copy, and anything else.
+# Hungary's Per-Capita button is not one: it activates Per-Capita only from
+# Land-Based, which no country holds under the rule. The five vanilla taxation
+# laws cannot be enacted under the rule (te_tax_vanilla_law_gates.txt), so
+# script is the only way in. The vanilla files are left alone.
 #
 # ROOT is the law just activated; its owner is the country. The re-assert is
 # dispatched as te_tax.5, a country event, never run here, so it sees the law

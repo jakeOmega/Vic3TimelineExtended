@@ -28,7 +28,9 @@ Outputs (each is registered in OUTPUTS and written byte for byte):
       te_tax_gen_commence/hold_missed/apply/store_<slot>, te_tax_gen_next_month,
       te_tax_gen_history_write) and the migration's (te_tax_gen_migrate_rates,
       one branch per vanilla taxation law and native level from MIGRATION;
-      te_tax_gen_migrate_goods; te_tax_gen_migrate_provisions).
+      te_tax_gen_migrate_goods; te_tax_gen_migrate_provisions), and the copies
+      for new countries (te_tax_gen_copy_code, te_tax_gen_copy_slot_<slot>,
+      te_tax_gen_copy_enacted).
   common/scripted_triggers/te_tax_generated_triggers.txt
       Amendment-scope family and match triggers the syncs filter on, the
       scheduler's package and bill checks (te_tax_gen_package_current_<slot>,
@@ -126,6 +128,10 @@ KIND_COMMENCED, KIND_SUNSET, KIND_HELD_CONFLICT, KIND_HELD_MISSED = 1, 2, 3, 4
 STATE_EMPTY, STATE_AWAITING, STATE_HELD_CONFLICT, STATE_HELD_MISSED = 0, 1, 2, 3
 # Relief fields a package carries besides the per-instrument and per-good ones.
 PACKAGE_RELIEF_FIELDS = ("agrel", "regrel", "xver_relief")
+# Wherever a state is named for regional relief (te_tax_relief_state) or marked for a
+# package's (te_tax_pending_relief_<slot>), it is stamped with the naming country, saved
+# as scope:te_tax_country (docs/systems/tax_code_schema.md, "Civil wars and new countries").
+RELIEF_STAMP = "set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }"
 # Every scheduler debug line ends with these. In the country events that run the
 # scheduler ROOT = THIS = the country: the tax probe printed month=22032 through
 # this ScriptValue form from a country event, and vanilla 1.14.5's election
@@ -989,9 +995,13 @@ def _apply(slot):
         lines.append(f"\tif = {{ limit = {{ var:{p}_{field} >= 0 }} "
                      f"set_variable = {{ name = te_tax_en_{field} value = var:{p}_{field} }} }}")
     lines += [
-        "\t# A package that restates regional relief names its whole state set.",
+        "\t# A package that restates regional relief names its whole state set. Each state it",
+        "\t# names is stamped with this country (te_tax_relief_holder), so a later change of",
+        "\t# owner can tell whether the code that named it went with it",
+        "\t# (te_tax_relief_follow_owner, te_tax_civil_war_effects.txt).",
         "\tif = {",
         f"\t\tlimit = {{ var:{p}_regrel_states_set = 1 }}",
+        "\t\tsave_scope_as = te_tax_country",
         "\t\tevery_scope_state = {",
         "\t\t\tif = {",
         "\t\t\t\tlimit = {",
@@ -999,6 +1009,7 @@ def _apply(slot):
         f"\t\t\t\t\tvar:te_tax_pending_relief_{slot} = 1",
         "\t\t\t\t}",
         "\t\t\t\tset_variable = { name = te_tax_relief_state value = 1 }",
+        f"\t\t\t\t{RELIEF_STAMP}",
         "\t\t\t}",
         "\t\t\telse_if = {",
         "\t\t\t\tlimit = { has_variable = te_tax_relief_state }",
@@ -1114,7 +1125,7 @@ def _store(slot):
     lines += [
         "\t# Regional relief: a bill that touches it (te_tax_bl_regrel >= 0) names its whole",
         "\t# state set in te_tax_bl_relief_states, possibly none; commencement moves the marks",
-        "\t# to te_tax_relief_state.",
+        "\t# to te_tax_relief_state. Each marked state is stamped with this country.",
         "\tevery_scope_state = {",
         f"\t\tlimit = {{ has_variable = te_tax_pending_relief_{slot} }}",
         f"\t\tset_variable = {{ name = te_tax_pending_relief_{slot} value = 0 }}",
@@ -1128,6 +1139,7 @@ def _store(slot):
         "\t\t\t\tvariable = te_tax_bl_relief_states",
         "\t\t\t\tlimit = { owner = scope:te_tax_country }",
         f"\t\t\t\tset_variable = {{ name = te_tax_pending_relief_{slot} value = 1 }}",
+        f"\t\t\t\t{RELIEF_STAMP}",
         "\t\t\t}",
         "\t\t}",
         "\t}",
@@ -1209,6 +1221,79 @@ def _scheduler_effects():
     for slot in SLOTS:
         lines += _commence(slot) + _hold_missed(slot) + _apply(slot) + _store(slot)
     return lines + _next_month() + _history_write()
+
+
+# ---------------------------------------------------------------------------
+# Copies for new countries (docs/systems/tax_code_schema.md, "Civil wars and new
+# countries"). te_tax_copy_token (te_tax_state_effects.txt) copies one token from
+# scope:te_tax_source onto THIS when the source holds it.
+# ---------------------------------------------------------------------------
+
+def slot_payload(slot):
+    """Every payload variable te_tax_gen_store_<slot> writes, header (PACKAGE_HEADER) excluded."""
+    p = f"te_tax_p{slot}"
+    names = [f"{p}_due0"]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        names += [f"{p}_{key}", f"{p}_xver_{key}", f"{p}_{key}_exp", f"{p}_{key}_succ"]
+    names += [f"{p}_g_{good}" for good in consumption_catalog()]
+    names.append(f"{p}_xver_goods")
+    names += [f"{p}_pver_{group}" for group in [i.key for i in INSTRUMENTS] + ["goods", "relief"]]
+    names += [f"{p}_{field}" for field in PACKAGE_RELIEF_FIELDS]
+    names.append(f"{p}_regrel_states_set")
+    return names
+
+
+def enacted_tokens():
+    """The enacted provisions a released country takes from its parent: every
+    instrument with its operative month, sunset and successor, the taxed goods
+    and the two relief depths."""
+    names = [f"te_tax_en_{instrument.key}{suffix}" for instrument in INSTRUMENTS
+             for suffix, _ in INSTRUMENT_TOKENS]
+    names += [f"te_tax_en_g_{good}" for good in consumption_catalog()]
+    return names + ["te_tax_en_agrel", "te_tax_en_regrel"]
+
+
+def _copy(name):
+    return f"\tte_tax_copy_token = {{ NAME = {name} }}"
+
+
+def _copy_effects():
+    code = [f"te_tax_en_{instrument.key}{suffix}" for instrument in INSTRUMENTS
+            for suffix, _ in INSTRUMENT_TOKENS]
+    code += [f"{prefix}{instrument.key}" for instrument in INSTRUMENTS for prefix, _ in VERSION_TOKENS]
+    code += [f"te_tax_en_g_{good}" for good in consumption_catalog()]
+    code += [name for name, _ in schedule_tokens()]
+    lines = [
+        "",
+        "# Outbreak copy (te_tax_copy_code, te_tax_civil_war_effects.txt): every token the",
+        "# generated initialisers write (te_tax_gen_init_instruments, _goods, _schedule), from",
+        "# scope:te_tax_source onto the uprising: the enacted provisions with their months,",
+        "# the version tokens, the taxed goods, the clock, the package-slot headers and the",
+        "# history ring.",
+        "te_tax_gen_copy_code = {",
+    ]
+    lines += [_copy(name) for name in code]
+    lines.append("}")
+    for slot in SLOTS:
+        lines += [
+            "",
+            f"# Outbreak copy of slot {slot}'s package: every payload field te_tax_gen_store_{slot}",
+            "# writes, with its original dates, so the package commences on the rebels in its own",
+            "# month. Called only while the source's slot is occupied (te_tax_p<slot>_on = 1).",
+            f"te_tax_gen_copy_slot_{slot} = {{",
+        ]
+        lines += [_copy(name) for name in slot_payload(slot)]
+        lines.append("}")
+    lines += [
+        "",
+        "# Release copy (te_tax_init_released_country): the parent's enacted provisions only;",
+        "# its packages, bill, draft and commitments stay with it.",
+        "te_tax_gen_copy_enacted = {",
+    ]
+    lines += [_copy(name) for name in enacted_tokens()]
+    lines.append("}")
+    return lines
 
 
 # ---------------------------------------------------------------------------
@@ -1941,9 +2026,11 @@ def scripted_effects():
         "# The scheduler's parts follow the syncs: te_tax_gen_sunset_<key>,",
         "# te_tax_gen_commence_<slot>, te_tax_gen_hold_missed_<slot>, te_tax_gen_apply_<slot>,",
         "# te_tax_gen_store_<slot>, te_tax_gen_next_month and te_tax_gen_history_write, called",
-        "# by te_tax_schedule_effects.txt. The migration's parts close the file:",
+        "# by te_tax_schedule_effects.txt. The migration's parts follow:",
         "# te_tax_gen_migrate_rates, te_tax_gen_migrate_goods and te_tax_gen_migrate_provisions,",
-        "# called by te_tax_migrate_country (te_tax_migration_effects.txt).",
+        "# called by te_tax_migrate_country (te_tax_migration_effects.txt). The copies for new",
+        "# countries close the file: te_tax_gen_copy_code, te_tax_gen_copy_slot_<slot> and",
+        "# te_tax_gen_copy_enacted, called by te_tax_civil_war_effects.txt.",
         "",
         "# Each instrument's tokens with their sentinels, if absent.",
         "te_tax_gen_init_instruments = {",
@@ -2030,7 +2117,7 @@ def scripted_effects():
     lines += [f"\tif = {{ limit = {{ {condition} }} change_variable = {{ name = te_tax_drift_goods add = 1 }} }}"
               for condition in _goods_drift_conditions()]
     lines.append("}")
-    lines += _scheduler_effects() + _migration_effects()
+    lines += _scheduler_effects() + _migration_effects() + _copy_effects()
     return _txt("\n".join(lines) + "\n")
 
 

@@ -15,9 +15,11 @@
 # The scheduler's parts follow the syncs: te_tax_gen_sunset_<key>,
 # te_tax_gen_commence_<slot>, te_tax_gen_hold_missed_<slot>, te_tax_gen_apply_<slot>,
 # te_tax_gen_store_<slot>, te_tax_gen_next_month and te_tax_gen_history_write, called
-# by te_tax_schedule_effects.txt. The migration's parts close the file:
+# by te_tax_schedule_effects.txt. The migration's parts follow:
 # te_tax_gen_migrate_rates, te_tax_gen_migrate_goods and te_tax_gen_migrate_provisions,
-# called by te_tax_migrate_country (te_tax_migration_effects.txt).
+# called by te_tax_migrate_country (te_tax_migration_effects.txt). The copies for new
+# countries close the file: te_tax_gen_copy_code, te_tax_gen_copy_slot_<slot> and
+# te_tax_gen_copy_enacted, called by te_tax_civil_war_effects.txt.
 
 # Each instrument's tokens with their sentinels, if absent.
 te_tax_gen_init_instruments = {
@@ -2178,9 +2180,13 @@ te_tax_gen_apply_a = {
 	if = { limit = { var:te_tax_pa_g_wood >= 0 } set_variable = { name = te_tax_en_g_wood value = var:te_tax_pa_g_wood } }
 	if = { limit = { var:te_tax_pa_agrel >= 0 } set_variable = { name = te_tax_en_agrel value = var:te_tax_pa_agrel } }
 	if = { limit = { var:te_tax_pa_regrel >= 0 } set_variable = { name = te_tax_en_regrel value = var:te_tax_pa_regrel } }
-	# A package that restates regional relief names its whole state set.
+	# A package that restates regional relief names its whole state set. Each state it
+	# names is stamped with this country (te_tax_relief_holder), so a later change of
+	# owner can tell whether the code that named it went with it
+	# (te_tax_relief_follow_owner, te_tax_civil_war_effects.txt).
 	if = {
 		limit = { var:te_tax_pa_regrel_states_set = 1 }
+		save_scope_as = te_tax_country
 		every_scope_state = {
 			if = {
 				limit = {
@@ -2188,6 +2194,7 @@ te_tax_gen_apply_a = {
 					var:te_tax_pending_relief_a = 1
 				}
 				set_variable = { name = te_tax_relief_state value = 1 }
+				set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
 			}
 			else_if = {
 				limit = { has_variable = te_tax_relief_state }
@@ -2477,7 +2484,7 @@ te_tax_gen_store_a = {
 	set_variable = { name = te_tax_pa_xver_relief value = var:te_tax_bl_xver_relief }
 	# Regional relief: a bill that touches it (te_tax_bl_regrel >= 0) names its whole
 	# state set in te_tax_bl_relief_states, possibly none; commencement moves the marks
-	# to te_tax_relief_state.
+	# to te_tax_relief_state. Each marked state is stamped with this country.
 	every_scope_state = {
 		limit = { has_variable = te_tax_pending_relief_a }
 		set_variable = { name = te_tax_pending_relief_a value = 0 }
@@ -2491,6 +2498,7 @@ te_tax_gen_store_a = {
 				variable = te_tax_bl_relief_states
 				limit = { owner = scope:te_tax_country }
 				set_variable = { name = te_tax_pending_relief_a value = 1 }
+				set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
 			}
 		}
 	}
@@ -2712,9 +2720,13 @@ te_tax_gen_apply_b = {
 	if = { limit = { var:te_tax_pb_g_wood >= 0 } set_variable = { name = te_tax_en_g_wood value = var:te_tax_pb_g_wood } }
 	if = { limit = { var:te_tax_pb_agrel >= 0 } set_variable = { name = te_tax_en_agrel value = var:te_tax_pb_agrel } }
 	if = { limit = { var:te_tax_pb_regrel >= 0 } set_variable = { name = te_tax_en_regrel value = var:te_tax_pb_regrel } }
-	# A package that restates regional relief names its whole state set.
+	# A package that restates regional relief names its whole state set. Each state it
+	# names is stamped with this country (te_tax_relief_holder), so a later change of
+	# owner can tell whether the code that named it went with it
+	# (te_tax_relief_follow_owner, te_tax_civil_war_effects.txt).
 	if = {
 		limit = { var:te_tax_pb_regrel_states_set = 1 }
+		save_scope_as = te_tax_country
 		every_scope_state = {
 			if = {
 				limit = {
@@ -2722,6 +2734,7 @@ te_tax_gen_apply_b = {
 					var:te_tax_pending_relief_b = 1
 				}
 				set_variable = { name = te_tax_relief_state value = 1 }
+				set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
 			}
 			else_if = {
 				limit = { has_variable = te_tax_relief_state }
@@ -3011,7 +3024,7 @@ te_tax_gen_store_b = {
 	set_variable = { name = te_tax_pb_xver_relief value = var:te_tax_bl_xver_relief }
 	# Regional relief: a bill that touches it (te_tax_bl_regrel >= 0) names its whole
 	# state set in te_tax_bl_relief_states, possibly none; commencement moves the marks
-	# to te_tax_relief_state.
+	# to te_tax_relief_state. Each marked state is stamped with this country.
 	every_scope_state = {
 		limit = { has_variable = te_tax_pending_relief_b }
 		set_variable = { name = te_tax_pending_relief_b value = 0 }
@@ -3025,6 +3038,7 @@ te_tax_gen_store_b = {
 				variable = te_tax_bl_relief_states
 				limit = { owner = scope:te_tax_country }
 				set_variable = { name = te_tax_pending_relief_b value = 1 }
+				set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
 			}
 		}
 	}
@@ -3564,4 +3578,353 @@ te_tax_gen_migrate_provisions = {
 	set_variable = { name = te_tax_en_cons_exp value = -1 }
 	set_variable = { name = te_tax_en_cons_succ value = -1 }
 	change_variable = { name = te_tax_xver_cons add = 1 }
+}
+
+# Outbreak copy (te_tax_copy_code, te_tax_civil_war_effects.txt): every token the
+# generated initialisers write (te_tax_gen_init_instruments, _goods, _schedule), from
+# scope:te_tax_source onto the uprising: the enacted provisions with their months,
+# the version tokens, the taxed goods, the clock, the package-slot headers and the
+# history ring.
+te_tax_gen_copy_code = {
+	te_tax_copy_token = { NAME = te_tax_en_wage }
+	te_tax_copy_token = { NAME = te_tax_en_wage_since }
+	te_tax_copy_token = { NAME = te_tax_en_wage_exp }
+	te_tax_copy_token = { NAME = te_tax_en_wage_succ }
+	te_tax_copy_token = { NAME = te_tax_en_div }
+	te_tax_copy_token = { NAME = te_tax_en_div_since }
+	te_tax_copy_token = { NAME = te_tax_en_div_exp }
+	te_tax_copy_token = { NAME = te_tax_en_div_succ }
+	te_tax_copy_token = { NAME = te_tax_en_land }
+	te_tax_copy_token = { NAME = te_tax_en_land_since }
+	te_tax_copy_token = { NAME = te_tax_en_land_exp }
+	te_tax_copy_token = { NAME = te_tax_en_land_succ }
+	te_tax_copy_token = { NAME = te_tax_en_head }
+	te_tax_copy_token = { NAME = te_tax_en_head_since }
+	te_tax_copy_token = { NAME = te_tax_en_head_exp }
+	te_tax_copy_token = { NAME = te_tax_en_head_succ }
+	te_tax_copy_token = { NAME = te_tax_en_cons }
+	te_tax_copy_token = { NAME = te_tax_en_cons_since }
+	te_tax_copy_token = { NAME = te_tax_en_cons_exp }
+	te_tax_copy_token = { NAME = te_tax_en_cons_succ }
+	te_tax_copy_token = { NAME = te_tax_pver_wage }
+	te_tax_copy_token = { NAME = te_tax_xver_wage }
+	te_tax_copy_token = { NAME = te_tax_pver_div }
+	te_tax_copy_token = { NAME = te_tax_xver_div }
+	te_tax_copy_token = { NAME = te_tax_pver_land }
+	te_tax_copy_token = { NAME = te_tax_xver_land }
+	te_tax_copy_token = { NAME = te_tax_pver_head }
+	te_tax_copy_token = { NAME = te_tax_xver_head }
+	te_tax_copy_token = { NAME = te_tax_pver_cons }
+	te_tax_copy_token = { NAME = te_tax_xver_cons }
+	te_tax_copy_token = { NAME = te_tax_en_g_aeroplanes }
+	te_tax_copy_token = { NAME = te_tax_en_g_automobiles }
+	te_tax_copy_token = { NAME = te_tax_en_g_clippers }
+	te_tax_copy_token = { NAME = te_tax_en_g_clothes }
+	te_tax_copy_token = { NAME = te_tax_en_g_coal }
+	te_tax_copy_token = { NAME = te_tax_en_g_coffee }
+	te_tax_copy_token = { NAME = te_tax_en_g_consumer_appliances }
+	te_tax_copy_token = { NAME = te_tax_en_g_digital_access }
+	te_tax_copy_token = { NAME = te_tax_en_g_digital_assets }
+	te_tax_copy_token = { NAME = te_tax_en_g_electricity }
+	te_tax_copy_token = { NAME = te_tax_en_g_fabric }
+	te_tax_copy_token = { NAME = te_tax_en_g_fine_art }
+	te_tax_copy_token = { NAME = te_tax_en_g_fish }
+	te_tax_copy_token = { NAME = te_tax_en_g_fruit }
+	te_tax_copy_token = { NAME = te_tax_en_g_furniture }
+	te_tax_copy_token = { NAME = te_tax_en_g_glass }
+	te_tax_copy_token = { NAME = te_tax_en_g_grain }
+	te_tax_copy_token = { NAME = te_tax_en_g_groceries }
+	te_tax_copy_token = { NAME = te_tax_en_g_liquor }
+	te_tax_copy_token = { NAME = te_tax_en_g_luxury_clothes }
+	te_tax_copy_token = { NAME = te_tax_en_g_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_en_g_meat }
+	te_tax_copy_token = { NAME = te_tax_en_g_oil }
+	te_tax_copy_token = { NAME = te_tax_en_g_opium }
+	te_tax_copy_token = { NAME = te_tax_en_g_paper }
+	te_tax_copy_token = { NAME = te_tax_en_g_porcelain }
+	te_tax_copy_token = { NAME = te_tax_en_g_radios }
+	te_tax_copy_token = { NAME = te_tax_en_g_services }
+	te_tax_copy_token = { NAME = te_tax_en_g_silk }
+	te_tax_copy_token = { NAME = te_tax_en_g_small_arms }
+	te_tax_copy_token = { NAME = te_tax_en_g_steamers }
+	te_tax_copy_token = { NAME = te_tax_en_g_sugar }
+	te_tax_copy_token = { NAME = te_tax_en_g_tea }
+	te_tax_copy_token = { NAME = te_tax_en_g_telephones }
+	te_tax_copy_token = { NAME = te_tax_en_g_tobacco }
+	te_tax_copy_token = { NAME = te_tax_en_g_tourism }
+	te_tax_copy_token = { NAME = te_tax_en_g_transportation }
+	te_tax_copy_token = { NAME = te_tax_en_g_wine }
+	te_tax_copy_token = { NAME = te_tax_en_g_wood }
+	te_tax_copy_token = { NAME = te_tax_now }
+	te_tax_copy_token = { NAME = te_tax_pa_on }
+	te_tax_copy_token = { NAME = te_tax_pa_due }
+	te_tax_copy_token = { NAME = te_tax_pa_state }
+	te_tax_copy_token = { NAME = te_tax_pa_seq }
+	te_tax_copy_token = { NAME = te_tax_pb_on }
+	te_tax_copy_token = { NAME = te_tax_pb_due }
+	te_tax_copy_token = { NAME = te_tax_pb_state }
+	te_tax_copy_token = { NAME = te_tax_pb_seq }
+	te_tax_copy_token = { NAME = te_tax_h_head }
+	te_tax_copy_token = { NAME = te_tax_h1_month }
+	te_tax_copy_token = { NAME = te_tax_h1_kind }
+	te_tax_copy_token = { NAME = te_tax_h1_slot }
+	te_tax_copy_token = { NAME = te_tax_h1_inst }
+	te_tax_copy_token = { NAME = te_tax_h1_version }
+	te_tax_copy_token = { NAME = te_tax_h2_month }
+	te_tax_copy_token = { NAME = te_tax_h2_kind }
+	te_tax_copy_token = { NAME = te_tax_h2_slot }
+	te_tax_copy_token = { NAME = te_tax_h2_inst }
+	te_tax_copy_token = { NAME = te_tax_h2_version }
+	te_tax_copy_token = { NAME = te_tax_h3_month }
+	te_tax_copy_token = { NAME = te_tax_h3_kind }
+	te_tax_copy_token = { NAME = te_tax_h3_slot }
+	te_tax_copy_token = { NAME = te_tax_h3_inst }
+	te_tax_copy_token = { NAME = te_tax_h3_version }
+	te_tax_copy_token = { NAME = te_tax_h4_month }
+	te_tax_copy_token = { NAME = te_tax_h4_kind }
+	te_tax_copy_token = { NAME = te_tax_h4_slot }
+	te_tax_copy_token = { NAME = te_tax_h4_inst }
+	te_tax_copy_token = { NAME = te_tax_h4_version }
+	te_tax_copy_token = { NAME = te_tax_h5_month }
+	te_tax_copy_token = { NAME = te_tax_h5_kind }
+	te_tax_copy_token = { NAME = te_tax_h5_slot }
+	te_tax_copy_token = { NAME = te_tax_h5_inst }
+	te_tax_copy_token = { NAME = te_tax_h5_version }
+	te_tax_copy_token = { NAME = te_tax_h6_month }
+	te_tax_copy_token = { NAME = te_tax_h6_kind }
+	te_tax_copy_token = { NAME = te_tax_h6_slot }
+	te_tax_copy_token = { NAME = te_tax_h6_inst }
+	te_tax_copy_token = { NAME = te_tax_h6_version }
+	te_tax_copy_token = { NAME = te_tax_h7_month }
+	te_tax_copy_token = { NAME = te_tax_h7_kind }
+	te_tax_copy_token = { NAME = te_tax_h7_slot }
+	te_tax_copy_token = { NAME = te_tax_h7_inst }
+	te_tax_copy_token = { NAME = te_tax_h7_version }
+	te_tax_copy_token = { NAME = te_tax_h8_month }
+	te_tax_copy_token = { NAME = te_tax_h8_kind }
+	te_tax_copy_token = { NAME = te_tax_h8_slot }
+	te_tax_copy_token = { NAME = te_tax_h8_inst }
+	te_tax_copy_token = { NAME = te_tax_h8_version }
+}
+
+# Outbreak copy of slot a's package: every payload field te_tax_gen_store_a
+# writes, with its original dates, so the package commences on the rebels in its own
+# month. Called only while the source's slot is occupied (te_tax_p<slot>_on = 1).
+te_tax_gen_copy_slot_a = {
+	te_tax_copy_token = { NAME = te_tax_pa_due0 }
+	te_tax_copy_token = { NAME = te_tax_pa_wage }
+	te_tax_copy_token = { NAME = te_tax_pa_xver_wage }
+	te_tax_copy_token = { NAME = te_tax_pa_wage_exp }
+	te_tax_copy_token = { NAME = te_tax_pa_wage_succ }
+	te_tax_copy_token = { NAME = te_tax_pa_div }
+	te_tax_copy_token = { NAME = te_tax_pa_xver_div }
+	te_tax_copy_token = { NAME = te_tax_pa_div_exp }
+	te_tax_copy_token = { NAME = te_tax_pa_div_succ }
+	te_tax_copy_token = { NAME = te_tax_pa_land }
+	te_tax_copy_token = { NAME = te_tax_pa_xver_land }
+	te_tax_copy_token = { NAME = te_tax_pa_land_exp }
+	te_tax_copy_token = { NAME = te_tax_pa_land_succ }
+	te_tax_copy_token = { NAME = te_tax_pa_head }
+	te_tax_copy_token = { NAME = te_tax_pa_xver_head }
+	te_tax_copy_token = { NAME = te_tax_pa_head_exp }
+	te_tax_copy_token = { NAME = te_tax_pa_head_succ }
+	te_tax_copy_token = { NAME = te_tax_pa_cons }
+	te_tax_copy_token = { NAME = te_tax_pa_xver_cons }
+	te_tax_copy_token = { NAME = te_tax_pa_cons_exp }
+	te_tax_copy_token = { NAME = te_tax_pa_cons_succ }
+	te_tax_copy_token = { NAME = te_tax_pa_g_aeroplanes }
+	te_tax_copy_token = { NAME = te_tax_pa_g_automobiles }
+	te_tax_copy_token = { NAME = te_tax_pa_g_clippers }
+	te_tax_copy_token = { NAME = te_tax_pa_g_clothes }
+	te_tax_copy_token = { NAME = te_tax_pa_g_coal }
+	te_tax_copy_token = { NAME = te_tax_pa_g_coffee }
+	te_tax_copy_token = { NAME = te_tax_pa_g_consumer_appliances }
+	te_tax_copy_token = { NAME = te_tax_pa_g_digital_access }
+	te_tax_copy_token = { NAME = te_tax_pa_g_digital_assets }
+	te_tax_copy_token = { NAME = te_tax_pa_g_electricity }
+	te_tax_copy_token = { NAME = te_tax_pa_g_fabric }
+	te_tax_copy_token = { NAME = te_tax_pa_g_fine_art }
+	te_tax_copy_token = { NAME = te_tax_pa_g_fish }
+	te_tax_copy_token = { NAME = te_tax_pa_g_fruit }
+	te_tax_copy_token = { NAME = te_tax_pa_g_furniture }
+	te_tax_copy_token = { NAME = te_tax_pa_g_glass }
+	te_tax_copy_token = { NAME = te_tax_pa_g_grain }
+	te_tax_copy_token = { NAME = te_tax_pa_g_groceries }
+	te_tax_copy_token = { NAME = te_tax_pa_g_liquor }
+	te_tax_copy_token = { NAME = te_tax_pa_g_luxury_clothes }
+	te_tax_copy_token = { NAME = te_tax_pa_g_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_pa_g_meat }
+	te_tax_copy_token = { NAME = te_tax_pa_g_oil }
+	te_tax_copy_token = { NAME = te_tax_pa_g_opium }
+	te_tax_copy_token = { NAME = te_tax_pa_g_paper }
+	te_tax_copy_token = { NAME = te_tax_pa_g_porcelain }
+	te_tax_copy_token = { NAME = te_tax_pa_g_radios }
+	te_tax_copy_token = { NAME = te_tax_pa_g_services }
+	te_tax_copy_token = { NAME = te_tax_pa_g_silk }
+	te_tax_copy_token = { NAME = te_tax_pa_g_small_arms }
+	te_tax_copy_token = { NAME = te_tax_pa_g_steamers }
+	te_tax_copy_token = { NAME = te_tax_pa_g_sugar }
+	te_tax_copy_token = { NAME = te_tax_pa_g_tea }
+	te_tax_copy_token = { NAME = te_tax_pa_g_telephones }
+	te_tax_copy_token = { NAME = te_tax_pa_g_tobacco }
+	te_tax_copy_token = { NAME = te_tax_pa_g_tourism }
+	te_tax_copy_token = { NAME = te_tax_pa_g_transportation }
+	te_tax_copy_token = { NAME = te_tax_pa_g_wine }
+	te_tax_copy_token = { NAME = te_tax_pa_g_wood }
+	te_tax_copy_token = { NAME = te_tax_pa_xver_goods }
+	te_tax_copy_token = { NAME = te_tax_pa_pver_wage }
+	te_tax_copy_token = { NAME = te_tax_pa_pver_div }
+	te_tax_copy_token = { NAME = te_tax_pa_pver_land }
+	te_tax_copy_token = { NAME = te_tax_pa_pver_head }
+	te_tax_copy_token = { NAME = te_tax_pa_pver_cons }
+	te_tax_copy_token = { NAME = te_tax_pa_pver_goods }
+	te_tax_copy_token = { NAME = te_tax_pa_pver_relief }
+	te_tax_copy_token = { NAME = te_tax_pa_agrel }
+	te_tax_copy_token = { NAME = te_tax_pa_regrel }
+	te_tax_copy_token = { NAME = te_tax_pa_xver_relief }
+	te_tax_copy_token = { NAME = te_tax_pa_regrel_states_set }
+}
+
+# Outbreak copy of slot b's package: every payload field te_tax_gen_store_b
+# writes, with its original dates, so the package commences on the rebels in its own
+# month. Called only while the source's slot is occupied (te_tax_p<slot>_on = 1).
+te_tax_gen_copy_slot_b = {
+	te_tax_copy_token = { NAME = te_tax_pb_due0 }
+	te_tax_copy_token = { NAME = te_tax_pb_wage }
+	te_tax_copy_token = { NAME = te_tax_pb_xver_wage }
+	te_tax_copy_token = { NAME = te_tax_pb_wage_exp }
+	te_tax_copy_token = { NAME = te_tax_pb_wage_succ }
+	te_tax_copy_token = { NAME = te_tax_pb_div }
+	te_tax_copy_token = { NAME = te_tax_pb_xver_div }
+	te_tax_copy_token = { NAME = te_tax_pb_div_exp }
+	te_tax_copy_token = { NAME = te_tax_pb_div_succ }
+	te_tax_copy_token = { NAME = te_tax_pb_land }
+	te_tax_copy_token = { NAME = te_tax_pb_xver_land }
+	te_tax_copy_token = { NAME = te_tax_pb_land_exp }
+	te_tax_copy_token = { NAME = te_tax_pb_land_succ }
+	te_tax_copy_token = { NAME = te_tax_pb_head }
+	te_tax_copy_token = { NAME = te_tax_pb_xver_head }
+	te_tax_copy_token = { NAME = te_tax_pb_head_exp }
+	te_tax_copy_token = { NAME = te_tax_pb_head_succ }
+	te_tax_copy_token = { NAME = te_tax_pb_cons }
+	te_tax_copy_token = { NAME = te_tax_pb_xver_cons }
+	te_tax_copy_token = { NAME = te_tax_pb_cons_exp }
+	te_tax_copy_token = { NAME = te_tax_pb_cons_succ }
+	te_tax_copy_token = { NAME = te_tax_pb_g_aeroplanes }
+	te_tax_copy_token = { NAME = te_tax_pb_g_automobiles }
+	te_tax_copy_token = { NAME = te_tax_pb_g_clippers }
+	te_tax_copy_token = { NAME = te_tax_pb_g_clothes }
+	te_tax_copy_token = { NAME = te_tax_pb_g_coal }
+	te_tax_copy_token = { NAME = te_tax_pb_g_coffee }
+	te_tax_copy_token = { NAME = te_tax_pb_g_consumer_appliances }
+	te_tax_copy_token = { NAME = te_tax_pb_g_digital_access }
+	te_tax_copy_token = { NAME = te_tax_pb_g_digital_assets }
+	te_tax_copy_token = { NAME = te_tax_pb_g_electricity }
+	te_tax_copy_token = { NAME = te_tax_pb_g_fabric }
+	te_tax_copy_token = { NAME = te_tax_pb_g_fine_art }
+	te_tax_copy_token = { NAME = te_tax_pb_g_fish }
+	te_tax_copy_token = { NAME = te_tax_pb_g_fruit }
+	te_tax_copy_token = { NAME = te_tax_pb_g_furniture }
+	te_tax_copy_token = { NAME = te_tax_pb_g_glass }
+	te_tax_copy_token = { NAME = te_tax_pb_g_grain }
+	te_tax_copy_token = { NAME = te_tax_pb_g_groceries }
+	te_tax_copy_token = { NAME = te_tax_pb_g_liquor }
+	te_tax_copy_token = { NAME = te_tax_pb_g_luxury_clothes }
+	te_tax_copy_token = { NAME = te_tax_pb_g_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_pb_g_meat }
+	te_tax_copy_token = { NAME = te_tax_pb_g_oil }
+	te_tax_copy_token = { NAME = te_tax_pb_g_opium }
+	te_tax_copy_token = { NAME = te_tax_pb_g_paper }
+	te_tax_copy_token = { NAME = te_tax_pb_g_porcelain }
+	te_tax_copy_token = { NAME = te_tax_pb_g_radios }
+	te_tax_copy_token = { NAME = te_tax_pb_g_services }
+	te_tax_copy_token = { NAME = te_tax_pb_g_silk }
+	te_tax_copy_token = { NAME = te_tax_pb_g_small_arms }
+	te_tax_copy_token = { NAME = te_tax_pb_g_steamers }
+	te_tax_copy_token = { NAME = te_tax_pb_g_sugar }
+	te_tax_copy_token = { NAME = te_tax_pb_g_tea }
+	te_tax_copy_token = { NAME = te_tax_pb_g_telephones }
+	te_tax_copy_token = { NAME = te_tax_pb_g_tobacco }
+	te_tax_copy_token = { NAME = te_tax_pb_g_tourism }
+	te_tax_copy_token = { NAME = te_tax_pb_g_transportation }
+	te_tax_copy_token = { NAME = te_tax_pb_g_wine }
+	te_tax_copy_token = { NAME = te_tax_pb_g_wood }
+	te_tax_copy_token = { NAME = te_tax_pb_xver_goods }
+	te_tax_copy_token = { NAME = te_tax_pb_pver_wage }
+	te_tax_copy_token = { NAME = te_tax_pb_pver_div }
+	te_tax_copy_token = { NAME = te_tax_pb_pver_land }
+	te_tax_copy_token = { NAME = te_tax_pb_pver_head }
+	te_tax_copy_token = { NAME = te_tax_pb_pver_cons }
+	te_tax_copy_token = { NAME = te_tax_pb_pver_goods }
+	te_tax_copy_token = { NAME = te_tax_pb_pver_relief }
+	te_tax_copy_token = { NAME = te_tax_pb_agrel }
+	te_tax_copy_token = { NAME = te_tax_pb_regrel }
+	te_tax_copy_token = { NAME = te_tax_pb_xver_relief }
+	te_tax_copy_token = { NAME = te_tax_pb_regrel_states_set }
+}
+
+# Release copy (te_tax_init_released_country): the parent's enacted provisions only;
+# its packages, bill, draft and commitments stay with it.
+te_tax_gen_copy_enacted = {
+	te_tax_copy_token = { NAME = te_tax_en_wage }
+	te_tax_copy_token = { NAME = te_tax_en_wage_since }
+	te_tax_copy_token = { NAME = te_tax_en_wage_exp }
+	te_tax_copy_token = { NAME = te_tax_en_wage_succ }
+	te_tax_copy_token = { NAME = te_tax_en_div }
+	te_tax_copy_token = { NAME = te_tax_en_div_since }
+	te_tax_copy_token = { NAME = te_tax_en_div_exp }
+	te_tax_copy_token = { NAME = te_tax_en_div_succ }
+	te_tax_copy_token = { NAME = te_tax_en_land }
+	te_tax_copy_token = { NAME = te_tax_en_land_since }
+	te_tax_copy_token = { NAME = te_tax_en_land_exp }
+	te_tax_copy_token = { NAME = te_tax_en_land_succ }
+	te_tax_copy_token = { NAME = te_tax_en_head }
+	te_tax_copy_token = { NAME = te_tax_en_head_since }
+	te_tax_copy_token = { NAME = te_tax_en_head_exp }
+	te_tax_copy_token = { NAME = te_tax_en_head_succ }
+	te_tax_copy_token = { NAME = te_tax_en_cons }
+	te_tax_copy_token = { NAME = te_tax_en_cons_since }
+	te_tax_copy_token = { NAME = te_tax_en_cons_exp }
+	te_tax_copy_token = { NAME = te_tax_en_cons_succ }
+	te_tax_copy_token = { NAME = te_tax_en_g_aeroplanes }
+	te_tax_copy_token = { NAME = te_tax_en_g_automobiles }
+	te_tax_copy_token = { NAME = te_tax_en_g_clippers }
+	te_tax_copy_token = { NAME = te_tax_en_g_clothes }
+	te_tax_copy_token = { NAME = te_tax_en_g_coal }
+	te_tax_copy_token = { NAME = te_tax_en_g_coffee }
+	te_tax_copy_token = { NAME = te_tax_en_g_consumer_appliances }
+	te_tax_copy_token = { NAME = te_tax_en_g_digital_access }
+	te_tax_copy_token = { NAME = te_tax_en_g_digital_assets }
+	te_tax_copy_token = { NAME = te_tax_en_g_electricity }
+	te_tax_copy_token = { NAME = te_tax_en_g_fabric }
+	te_tax_copy_token = { NAME = te_tax_en_g_fine_art }
+	te_tax_copy_token = { NAME = te_tax_en_g_fish }
+	te_tax_copy_token = { NAME = te_tax_en_g_fruit }
+	te_tax_copy_token = { NAME = te_tax_en_g_furniture }
+	te_tax_copy_token = { NAME = te_tax_en_g_glass }
+	te_tax_copy_token = { NAME = te_tax_en_g_grain }
+	te_tax_copy_token = { NAME = te_tax_en_g_groceries }
+	te_tax_copy_token = { NAME = te_tax_en_g_liquor }
+	te_tax_copy_token = { NAME = te_tax_en_g_luxury_clothes }
+	te_tax_copy_token = { NAME = te_tax_en_g_luxury_furniture }
+	te_tax_copy_token = { NAME = te_tax_en_g_meat }
+	te_tax_copy_token = { NAME = te_tax_en_g_oil }
+	te_tax_copy_token = { NAME = te_tax_en_g_opium }
+	te_tax_copy_token = { NAME = te_tax_en_g_paper }
+	te_tax_copy_token = { NAME = te_tax_en_g_porcelain }
+	te_tax_copy_token = { NAME = te_tax_en_g_radios }
+	te_tax_copy_token = { NAME = te_tax_en_g_services }
+	te_tax_copy_token = { NAME = te_tax_en_g_silk }
+	te_tax_copy_token = { NAME = te_tax_en_g_small_arms }
+	te_tax_copy_token = { NAME = te_tax_en_g_steamers }
+	te_tax_copy_token = { NAME = te_tax_en_g_sugar }
+	te_tax_copy_token = { NAME = te_tax_en_g_tea }
+	te_tax_copy_token = { NAME = te_tax_en_g_telephones }
+	te_tax_copy_token = { NAME = te_tax_en_g_tobacco }
+	te_tax_copy_token = { NAME = te_tax_en_g_tourism }
+	te_tax_copy_token = { NAME = te_tax_en_g_transportation }
+	te_tax_copy_token = { NAME = te_tax_en_g_wine }
+	te_tax_copy_token = { NAME = te_tax_en_g_wood }
+	te_tax_copy_token = { NAME = te_tax_en_agrel }
+	te_tax_copy_token = { NAME = te_tax_en_regrel }
 }

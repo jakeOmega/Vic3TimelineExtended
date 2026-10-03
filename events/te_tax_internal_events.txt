@@ -1,9 +1,11 @@
 ﻿# ============================================================================
 # LEGISLATED TAX CODE — internal country events
 # ============================================================================
-# Hidden, no loc. Raised only by common/on_actions/te_tax_on_actions.txt, except
-# te_tax.4 (raised by the migration and by the re-assert te_tax.5), so ROOT is
-# the country the event fires on.
+# Hidden, no loc. Raised by common/on_actions/te_tax_on_actions.txt, except
+# te_tax.4 (raised by the migration, by the re-assert te_tax.5 and by te_tax.6)
+# and te_tax.6 (raised by common/scripted_effects/te_tax_civil_war_effects.txt,
+# which also raises te_tax.3 for an uprising or a released country whose parent
+# has no code). ROOT is always the country the event fires on.
 # Schedule rules: docs/systems/tax_code_schema.md, "Scheduler, package slots and
 # history"; migration: the same file, "Migration".
 #
@@ -59,9 +61,9 @@ te_tax.3 = {
 }
 
 # Post-migration sync: raised by the migration a day after it, when the carrier
-# law it activated is in place, and by the re-assert (te_tax.5) the same way.
-# One collection write; the writer does nothing for a country not on the
-# carrier.
+# law it activated is in place, by the re-assert (te_tax.5) and by te_tax.6 the
+# same way. One collection write; the writer does nothing for a country not on
+# the carrier.
 te_tax.4 = {
 	type = country_event
 	hidden = yes
@@ -69,6 +71,7 @@ te_tax.4 = {
 	trigger = { te_tax_code_on = yes }
 
 	immediate = {
+		debug_log = "TE_TAX post-migration sync month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 		te_tax_sync_collection = yes
 	}
 }
@@ -86,5 +89,21 @@ te_tax.5 = {
 
 	immediate = {
 		te_tax_reassert_carrier = yes
+	}
+}
+
+# Adopt a copied code: raised on an uprising at the outbreak, on a released
+# country that took its parent's code and on a civil war's winner after the
+# repair (te_tax_civil_war_effects.txt). Installs the carrier law if the country
+# does not hold it and raises te_tax.4 for the next day's sync. Firing it again
+# (console: event te_tax.6) only schedules another sync.
+te_tax.6 = {
+	type = country_event
+	hidden = yes
+
+	trigger = { te_tax_code_on = yes }
+
+	immediate = {
+		te_tax_adopt_copied_code = yes
 	}
 }
