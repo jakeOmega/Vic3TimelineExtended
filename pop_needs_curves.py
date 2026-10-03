@@ -230,6 +230,15 @@ def _extrapolate_power_law(x, a, b):
     return a * (x ** b)
 
 
+def _extrapolation_params(x_data, y_data):
+    """(a, b) for y = a * x**b over x_data, or None if no fit. A need flat over
+    x_data stays flat: the fit returns 59.99... for a flat 60, which int()
+    truncates to 59."""
+    if len(set(y_data)) == 1:
+        return y_data[0], 0
+    return _fit_power_law(x_data, y_data)
+
+
 def generate_buy_packages(dry_run: bool = False, replace_political: bool = False) -> str:
     """Read vanilla buy_packages, apply modded need curves, optionally replace
     political strength values, and write output.
@@ -320,12 +329,7 @@ def generate_buy_packages(dry_run: bool = False, replace_political: bool = False
         x_data = list(range(90, 100))
         y_data = [_get_need_value(need, i) for i in x_data]
         if any(y_data):
-            if len(set(y_data)) == 1:
-                # A need flat over 90-99 stays flat. The fit returns 59.99...
-                # for a flat 60, which int() truncates to 59.
-                params = (y_data[0], 0)
-            else:
-                params = _fit_power_law(x_data, y_data)
+            params = _extrapolation_params(x_data, y_data)
             if params is None:
                 continue
             for i in range(100, 201):

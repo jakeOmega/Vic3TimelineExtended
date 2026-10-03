@@ -320,7 +320,7 @@ Four new needs appear as pops grow rich:
 
 Healthcare levels off: a pop buys its full amount of Drugs at wealth 40, and a
 richer pop buys no more. These Drugs come on top of the Drugs pops buy for
-Intoxicants ([Pharmaceutical Industries and
+Intoxicants and Leisure ([Pharmaceutical Industries and
 Drugs](02-timeline.md#pharmaceutical-industries-and-drugs)). The other needs,
 and Services, grow steeply with wealth. By wealth 60, services and
 leisure, Convenience, Art and Tourism take about four fifths of what a pop

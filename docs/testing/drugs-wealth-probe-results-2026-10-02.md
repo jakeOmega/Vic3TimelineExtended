@@ -185,6 +185,13 @@ Observations the owner chose the curve from (decisions below).
   healthcare demand. Pharmaceutical Industries made at most 3% of supply in any save; #652's
   earlier unlock is what changes that, and § 4 checks it.
 - **Qing banned Drugs only in the 1883 save.**
+- **Leisure buys Drugs too (found after the decisions; open question).** Vanilla's Leisure need
+  lists Drugs (weight 0.5 of 10.1, at most half the need) and declares the obsession fields.
+  In the buy packages Leisure is 394 at wealth 40, 9,648 at 60 and 442,526 at 100, so a rich
+  pop's Drugs demand keeps growing long after Healthcare's cap of 60. That works against the
+  goal that the ultra-wealthy don't buy orders of magnitude more, and it may be part of the
+  2069 shortage, when Byzantium had 97% of its people at wealth 40 or more. Whether to cut or
+  cap Drugs in Leisure (`REPLACE:popneed_leisure`) is the owner's call.
 
 ## Saving a pre-#500 save
 
@@ -204,9 +211,9 @@ the same save, save it without firing the probe, and see whether it crashes.
   Healthcare's own effect on the price. It can come down afterwards.
 - **Plantation penalties:** on `building_opium_plantation_throughput_add`, the only
   plantation-only lever (`goods_output_opium_mult` applies per good and would cut
-  Pharmaceutical Industries too). Per investment level: Charitable Health System −2%,
-  Private Health Insurance −3%, Public Health Insurance −5%, Ministry of Consumer Protection
-  −10%. The mod's institution cap is 9 levels, so the two together reach −135%; a
+  Pharmaceutical Industries too). Per investment level of the Ministry of Health
+  (`institution_health_system`): Charity Hospitals −2%, Private Health Insurance −3%, Public
+  Health Insurance −5%; and per level of the Ministry of Consumer Protection −10%. The mod's institution cap is 9 levels, so the two together reach −135%; a
   plantation's other throughput bonuses cushion that.
 - **Follow-ups, each in its own PR:** a UN drug convention modelled on the 1961 Single
   Convention, and a random event with a high chance of firing while Drugs are short, in

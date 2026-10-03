@@ -52,6 +52,15 @@ class HealthLaws(unittest.TestCase):
             self.assertEqual(_values(inst, MODIFIER), [value], opener)
 
 
+    def test_no_replace_drops_the_injects(self):
+        # A REPLACE: of these laws anywhere would silently discard the INJECTs.
+        laws = [opener.split(":", 1)[1] for opener in EXPECTED_LAWS]
+        for path in sorted((ROOT / "common/laws").glob("*.txt")):
+            text = path.read_text(encoding="utf-8-sig")
+            for law in laws:
+                self.assertNotRegex(text, rf"(?m)^\s*REPLACE(_OR_CREATE)?:{law}\b", path.name)
+
+
 class MinistryOfConsumerProtection(unittest.TestCase):
     def test_ministry_cuts_plantations(self):
         text = INSTITUTIONS.read_text(encoding="utf-8-sig")

@@ -14,8 +14,8 @@ import re
 import unittest
 from pathlib import Path
 
-import pop_needs_curves
-from pop_needs_curves import NEED_CURVES, healthcare_need
+from pop_needs_curves import (NEED_CURVES, _extrapolate_power_law, _extrapolation_params,
+                              healthcare_need)
 
 ROOT = Path(__file__).resolve().parent
 BUY_PACKAGES = ROOT / "common/buy_packages/00_buy_packages.txt"
@@ -68,7 +68,26 @@ class HealthcareCurve(unittest.TestCase):
 
     def test_registered_with_the_generator(self):
         self.assertIs(NEED_CURVES.get("popneed_healthcare"), healthcare_need)
-        self.assertIs(pop_needs_curves.healthcare_need, healthcare_need)
+
+
+class Extrapolation(unittest.TestCase):
+    """Wealth 100-200 come from a power-law fit over 90-99. CI can't rerun the
+    generator (it reads the game's buy packages), so the fit rule is tested
+    here directly."""
+
+    WEALTH = list(range(90, 100))
+
+    def test_flat_need_stays_flat(self):
+        # A fit of a flat 60 returned 59.99..., which int() made 59.
+        for flat in (26, 60, 216):
+            a, b = _extrapolation_params(self.WEALTH, [flat] * 10)
+            for wl in (100, 150, 200):
+                self.assertEqual(int(_extrapolate_power_law(wl, a, b)), flat, (flat, wl))
+
+    def test_rising_need_keeps_rising(self):
+        y = [int(0.5 * wl ** 2) for wl in self.WEALTH]
+        a, b = _extrapolation_params(self.WEALTH, y)
+        self.assertGreater(_extrapolate_power_law(150, a, b), y[-1])
 
 
 class GeneratedBuyPackages(unittest.TestCase):

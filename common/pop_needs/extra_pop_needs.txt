@@ -115,8 +115,8 @@ popneed_tourism = {
 # (pop_needs_curves.py, healthcare_need). Drugs only: doctors and hospitals are
 # already part of Services, and a services entry would split the demand by
 # market share, not by wealth. No obsession_demand_* fields: vanilla's staple
-# needs omit them, so Han's opium obsession should multiply Intoxicants only
-# (not yet confirmed in game; plan § 4).
+# needs omit them, so Han's opium obsession should multiply only Intoxicants
+# and Leisure, which declare them (not yet confirmed in game; plan § 4).
 popneed_healthcare = {
 	default = opium
 
