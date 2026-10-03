@@ -15,7 +15,7 @@ Checks:
      each vanilla label that spells the good out is overridden in the
      `replace/` file with the spliced text.
 
-Labels of building groups (`building_group_bg_coal_mining_*`) and buildings
+Labels of building groups (`building_group_bg_mining_*`) and buildings
 (`building_coal_mine_*`) name the group or building, not the good, and are
 left alone. So is a label for a good the mod does not rename, whose vanilla
 text is already right.

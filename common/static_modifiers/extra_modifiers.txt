@@ -1314,7 +1314,6 @@ carbon_tax_modifier = {
 	goods_output_oil_mult = -0.10
 	building_group_bg_manufacturing_tax_mult = 0.1
 	building_group_bg_oil_extraction_tax_mult = 1
-	building_group_bg_coal_mining_tax_mult = 1
 	country_greenhouse_gas_emissions_mult = -0.20         # 20% direct emissions reduction
 }
 
@@ -1364,7 +1363,6 @@ public_transit_modifier = {
 
 fossil_fuel_divestment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	building_group_bg_coal_mining_tax_mult = 0.25
 	building_group_bg_oil_extraction_tax_mult = 0.25
 	goods_input_coal_mult = -0.05
 	goods_input_oil_mult = -0.05
@@ -1537,7 +1535,7 @@ green_tech_boom_modifier = {
 
 fossil_lobby_concessions_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	building_group_bg_coal_mining_throughput_add = 0.10
+	building_coal_mine_throughput_add = 0.10
 	building_group_bg_oil_extraction_throughput_add = 0.10
 	country_greenhouse_gas_emissions_mult = 0.10
 	state_pollution_generation_mult = 0.05
@@ -1546,7 +1544,7 @@ fossil_lobby_concessions_modifier = {
 # Replacement when global warming rule is disabled
 fossil_lobby_concessions_no_gw_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	building_group_bg_coal_mining_throughput_add = 0.10
+	building_coal_mine_throughput_add = 0.10
 	building_group_bg_oil_extraction_throughput_add = 0.10
 	state_pollution_generation_mult = 0.15
 }
@@ -1664,7 +1662,7 @@ crop_failure_austerity_modifier = {
 # Rejecting international climate accord - fossil fuels unrestricted (event 13C)
 climate_accord_rejection_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_group_bg_coal_mining_throughput_add = 0.05
+	building_coal_mine_throughput_add = 0.05
 	building_group_bg_oil_extraction_throughput_add = 0.05
 	country_greenhouse_gas_emissions_mult = 0.05
 }
@@ -1672,7 +1670,7 @@ climate_accord_rejection_modifier = {
 # Replacement when global warming rule is disabled
 climate_accord_rejection_no_gw_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_group_bg_coal_mining_throughput_add = 0.05
+	building_coal_mine_throughput_add = 0.05
 	building_group_bg_oil_extraction_throughput_add = 0.05
 	state_pollution_generation_mult = 0.10
 }
