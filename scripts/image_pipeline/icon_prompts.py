@@ -320,8 +320,10 @@ CATEGORIES = {
     # (median 0.92), centred. The folder is vanilla's, so the grade and the
     # sheet's neighbours come from its icons. The mod's 15 used to be their
     # base good's icon under a gold halo (gen_prestige_icons.py).
+    # grade_strength 0.4, as for the silver Space Race craft: at 0.7 the
+    # silver airliner turned copper and the olive tank a pale lime.
     "prestige_good": dict(
-        folder="goods_icons/prestige_goods", size=256, mode="cutout", fill=0.92,
+        folder="goods_icons/prestige_goods", size=256, mode="cutout", fill=0.92, grade_strength=0.4,
         entity_dir="common/prestige_goods", field="texture",
         style="{subject}, one chunky readable object, " + PAINTED),
     "journal_entry": dict(
@@ -1014,35 +1016,40 @@ ICONS: dict[str, dict[str, dict]] = {
     # vanilla's are (see the category). Base good in brackets.
     "prestige_good": {
         # [fine_art, Art and Entertainment] Masterpieces: Disney, Sony, Netflix, Nintendo.
-        "prestige_good_entertainment": {"subject": "a gleaming gold 1930s movie camera with two large film reels on top, on a short wooden tripod", "seed": None},
+        # Not s1, whose two reels sit in perpendicular planes (owner).
+        "prestige_good_entertainment": {"subject": "a gleaming gold 1930s movie camera with two large film reels on top, on a short wooden tripod", "seed": 0},
         # [consumer_appliances] Premium Appliances: Apple, Samsung, Sony, HP.
-        "prestige_good_generic_consumer_appliances": {"subject": "a sleek brushed-aluminium laptop computer, half open, its screen glowing a deep blue gradient", "seed": None},
+        "prestige_good_generic_consumer_appliances": {"subject": "a sleek brushed-aluminium laptop computer, half open, its screen glowing a deep blue gradient", "seed": 2},
         # [electronic_components] High-Precision Components: TSMC, Intel, ASML, NVIDIA.
-        "prestige_good_generic_electronic_components": {"subject": "a polished silicon wafer disc covered in a shimmering rainbow grid of tiny square chips, with one black microchip with rows of gold pins lying in front of it", "seed": None},
+        "prestige_good_generic_electronic_components": {"subject": "a polished silicon wafer disc covered in a shimmering rainbow grid of tiny square chips, with one black microchip with rows of gold pins lying in front of it", "seed": 0},
         # [digital_assets, Software] Enterprise Solutions: Microsoft, Oracle, SAP, Google.
-        "prestige_good_generic_software": {"subject": "a tall black server cabinet with a glass door, rows of thin servers inside lit by small blue and green status lights", "seed": None},
+        # s1 is retouched: lettering on the cabinet's foot.
+        "prestige_good_generic_software": {"subject": "a tall black server cabinet with a glass door, rows of thin servers inside lit by small blue and green status lights", "seed": 1},
         # [advanced_materials, a buckyball] High-Performance Materials.
-        "prestige_good_generic_advanced_materials": {"subject": "a ball-shaped molecular lattice of polished gold rods joined by small glossy deep-blue spheres", "seed": None},
+        "prestige_good_generic_advanced_materials": {"subject": "a ball-shaped molecular lattice of polished gold rods joined by small glossy deep-blue spheres", "seed": 0},
         # [automobiles] Luxury Automobiles: Rolls-Royce, Ferrari, Toyota.
-        "prestige_good_luxury_automobiles": {"subject": "a long sleek glossy deep-red 1930s grand touring car with flowing curved fenders, chrome trim and chrome wire wheels", "seed": None},
+        "prestige_good_luxury_automobiles": {"subject": "a long sleek glossy deep-red 1930s grand touring car with flowing curved fenders, chrome trim and chrome wire wheels", "seed": 1},
         # [aeroplanes] Superior Airframes: Airbus, Boeing, Dassault, Lockheed Martin.
-        "prestige_good_advanced_aircraft": {"subject": "a gleaming polished-silver supersonic airliner with a long pointed needle nose and slim delta wings, in flight", "seed": None},
+        "prestige_good_advanced_aircraft": {"subject": "a gleaming polished-silver supersonic airliner with a long pointed needle nose and slim delta wings, in flight", "seed": 3},
         # [tanks] Cutting-Edge Armaments: FCM (the Char 2C), Hyundai (Hyundai Rotem's K2).
-        "prestige_good_advanced_weaponry": {"subject": "a modern angular main battle tank in dark olive green with a long smooth gun barrel and wide tracks", "seed": None},
+        # s0 is retouched: a white number plate on the hull.
+        "prestige_good_advanced_weaponry": {"subject": "a modern angular main battle tank in dark olive green with a long smooth gun barrel and wide tracks", "seed": 0},
         # [robotics, Industrial Robotics] Advanced Automation: Boston Dynamics, Fanuc, Toyota.
-        "prestige_good_precision_robotics": {"subject": "a sleek polished-silver humanoid robot standing upright, its head a smooth rounded dark glass visor with no face", "seed": None},
+        # "A sleek polished-silver humanoid robot" drew cute white toy robots.
+        "prestige_good_precision_robotics": {"subject": "a sleek precision robotic arm of polished chrome steel with black joints and a slim three-fingered gripper, mounted on a round black base", "seed": 0},
         # [launch_capacity] Heavy-Lift Launch Systems: SpaceX, Roscosmos, Lockheed Martin.
-        "prestige_good_heavy_lift_launch": {"subject": "a tall gleaming stainless-steel super-heavy rocket with small black fins, rising on a bright column of orange flame", "seed": None},
+        # "A tall gleaming stainless-steel super-heavy rocket with small black fins" drew retro toy rockets.
+        "prestige_good_heavy_lift_launch": {"subject": "a towering multi-stage heavy-lift rocket with a plain dark grey body and four strap-on boosters, lifting off on a thick column of bright orange flame", "seed": 2},
         # [oil] Refined Petrochemicals: Aramco, Shell, BP, Petrobras.
-        "prestige_good_refined_petrochemicals": {"subject": "a glossy dark-blue steel oil drum with polished brass bands, beside a tall glass laboratory flask of clear amber liquid", "seed": None},
+        "prestige_good_refined_petrochemicals": {"subject": "a glossy dark-blue steel oil drum with polished brass bands, beside a tall glass laboratory flask of clear amber liquid", "seed": 2},
         # [merchant_marine, Bulk Transportation] Integrated Logistics Solutions: Amazon, SAP, Shopify.
-        "prestige_good_integrated_logistics": {"subject": "a large modern container ship with a dark-blue hull, its deck stacked high with plain ribbed red, orange, green and blue shipping containers", "seed": None},
+        "prestige_good_integrated_logistics": {"subject": "a large modern container ship with a dark-blue hull, its deck stacked high with plain ribbed red, orange, green and blue shipping containers", "seed": 2},
         # [telephones, Wired Telecommunication Gear] Advanced Telecommunications: Apple, Samsung, Huawei.
-        "prestige_good_advanced_telecom": {"subject": "a slim black glass smartphone standing upright, its screen glowing a deep teal gradient", "seed": None},
+        "prestige_good_advanced_telecom": {"subject": "a slim black glass smartphone standing upright, its screen glowing a deep teal gradient", "seed": 3},
         # [tourism] Resort Travel: Disney, Axiom Space.
-        "prestige_good_resort_travel": {"subject": "two stacked tan leather suitcases with brass corners and buckled straps, beside an open red-and-yellow striped beach umbrella", "seed": None},
+        "prestige_good_resort_travel": {"subject": "two stacked tan leather suitcases with brass corners and buckled straps, beside an open red-and-yellow striped beach umbrella", "seed": 1},
         # [lead, Conductive and Base Metals] Pure Heavy Metals: BHP.
-        "prestige_good_generic_lead": {"subject": "a neat stack of polished copper ingots and blue-grey metal ingots, topped by a rainbow-iridescent bismuth crystal with stepped square terraces", "seed": None},
+        "prestige_good_generic_lead": {"subject": "a neat stack of polished copper ingots and blue-grey metal ingots, topped by a rainbow-iridescent bismuth crystal with stepped square terraces", "seed": 2},
     },
     # Journal entries on vanilla's event icons (the nine Space Race milestones
     # shared its gears; the rest a newspaper, portrait, flag or building icon).
