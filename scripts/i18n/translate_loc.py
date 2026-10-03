@@ -744,7 +744,8 @@ def repair_bare_quotes(line: str) -> str | None:
 def read_output(work: str, chunk_id: str) -> tuple[dict[str, str], set[str]]:
     """Every `key:0 "value"` line from the agent's output part files, and the
     keys whose line had to be repaired (`repair_bare_quotes`): text after the
-    first closing quote, which the game's loader would cut at."""
+    first closing quote, where `split_loc_line` (and so every loc tool here) cuts
+    the value."""
     values: dict[str, str] = {}
     repaired: set[str] = set()
     for path in sorted(glob.glob(os.path.join(work, "out", chunk_id + ".*.txt"))):

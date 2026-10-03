@@ -38,7 +38,7 @@ Everything that isn't prose passes through unchanged. The checker compares them 
 | Icons | `@money!`, `@bur!` | Copy verbatim. Keep each next to the word it illustrates. |
 | Format codes | `#b text#!`, `#header …#!`, `#v $VAL$#!`, `#tooltippable #tooltip:[…] …#!#!` | Keep every opening code and every `#!` closer. Translate the text between them. |
 | Line breaks | `\n` (a backslash and an n, written literally) | Keep the same number, in the same places. Never write a real line break inside a value. |
-| Quotation marks | | Never put a plain `"` inside a value; the loader cuts the line there. Use German quotes: „so“. |
+| Quotation marks | | Never put a plain `"` inside a value; the scripts that check and ship your lines cut it there. Use German quotes: „so“. |
 
 A value that contains nothing to translate (only markup, or a bare `$reference$`) is copied as it is.
 
