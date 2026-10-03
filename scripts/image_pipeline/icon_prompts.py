@@ -313,6 +313,17 @@ CATEGORIES = {
     # of the side (median 0.89), median saturation 0.45 and value 0.57. The
     # Nuclear Weapons entry's mushroom_cloud.dds is a hand-made 1024 px file
     # and is not part of this registry.
+    # Prestige goods (256 px, PrestigeGood.GetTexture, read from `texture =`).
+    # Vanilla's 74 are its goods icons' painted objects made finer: the same
+    # kind of thing (tea for tea, a car for a car), so the two read as a pair
+    # in the company panel. Measured: objects span 0.84-0.97 of the side
+    # (median 0.92), centred. The folder is vanilla's, so the grade and the
+    # sheet's neighbours come from its icons. The mod's 15 used to be their
+    # base good's icon under a gold halo (gen_prestige_icons.py).
+    "prestige_good": dict(
+        folder="goods_icons/prestige_goods", size=256, mode="cutout", fill=0.92,
+        entity_dir="common/prestige_goods", field="texture",
+        style="{subject}, one chunky readable object, " + PAINTED),
     "journal_entry": dict(
         folder="event_icons", size=150, mode="cutout", fill=0.89, panel_preview=True,
         entity_dir="common/journal_entries", field="icon",
@@ -998,6 +1009,40 @@ ICONS: dict[str, dict[str, dict]] = {
         "ideology_environmentalists": {"subject": "a broad oak tree with a round leafy crown and spreading roots", "seed": 0},
         "ideology_optimist_transhumanist": {"subject": "a DNA double helix rising in front of a half sun with bold rays", "seed": 1},
         "ideology_corporate": {"subject": "a leather briefcase in front of a tall skyscraper", "seed": 1},
+    },
+    # The mod's prestige goods, each its base good's object made finer, as
+    # vanilla's are (see the category). Base good in brackets.
+    "prestige_good": {
+        # [fine_art, Art and Entertainment] Masterpieces: Disney, Sony, Netflix, Nintendo.
+        "prestige_good_entertainment": {"subject": "a gleaming gold 1930s movie camera with two large film reels on top, on a short wooden tripod", "seed": None},
+        # [consumer_appliances] Premium Appliances: Apple, Samsung, Sony, HP.
+        "prestige_good_generic_consumer_appliances": {"subject": "a sleek brushed-aluminium laptop computer, half open, its screen glowing a deep blue gradient", "seed": None},
+        # [electronic_components] High-Precision Components: TSMC, Intel, ASML, NVIDIA.
+        "prestige_good_generic_electronic_components": {"subject": "a polished silicon wafer disc covered in a shimmering rainbow grid of tiny square chips, with one black microchip with rows of gold pins lying in front of it", "seed": None},
+        # [digital_assets, Software] Enterprise Solutions: Microsoft, Oracle, SAP, Google.
+        "prestige_good_generic_software": {"subject": "a tall black server cabinet with a glass door, rows of thin servers inside lit by small blue and green status lights", "seed": None},
+        # [advanced_materials, a buckyball] High-Performance Materials.
+        "prestige_good_generic_advanced_materials": {"subject": "a ball-shaped molecular lattice of polished gold rods joined by small glossy deep-blue spheres", "seed": None},
+        # [automobiles] Luxury Automobiles: Rolls-Royce, Ferrari, Toyota.
+        "prestige_good_luxury_automobiles": {"subject": "a long sleek glossy deep-red 1930s grand touring car with flowing curved fenders, chrome trim and chrome wire wheels", "seed": None},
+        # [aeroplanes] Superior Airframes: Airbus, Boeing, Dassault, Lockheed Martin.
+        "prestige_good_advanced_aircraft": {"subject": "a gleaming polished-silver supersonic airliner with a long pointed needle nose and slim delta wings, in flight", "seed": None},
+        # [tanks] Cutting-Edge Armaments. No company holds it (2026-10-02).
+        "prestige_good_advanced_weaponry": {"subject": "a modern angular main battle tank in dark olive green with a long smooth gun barrel and wide tracks", "seed": None},
+        # [robotics, Industrial Robotics] Advanced Automation: Boston Dynamics, Fanuc, Toyota.
+        "prestige_good_precision_robotics": {"subject": "a sleek polished-silver humanoid robot standing upright, its head a smooth rounded dark glass visor with no face", "seed": None},
+        # [launch_capacity] Heavy-Lift Launch Systems: SpaceX, Roscosmos, Lockheed Martin.
+        "prestige_good_heavy_lift_launch": {"subject": "a tall gleaming stainless-steel super-heavy rocket with small black fins, rising on a bright column of orange flame", "seed": None},
+        # [oil] Refined Petrochemicals: Aramco, Shell, BP, Petrobras.
+        "prestige_good_refined_petrochemicals": {"subject": "a glossy dark-blue steel oil drum with polished brass bands, beside a tall glass laboratory flask of clear amber liquid", "seed": None},
+        # [merchant_marine, Bulk Transportation] Integrated Logistics Solutions: Amazon, SAP, Shopify.
+        "prestige_good_integrated_logistics": {"subject": "a large modern container ship with a dark-blue hull, its deck stacked high with plain ribbed red, orange, green and blue shipping containers", "seed": None},
+        # [telephones, Wired Telecommunication Gear] Advanced Telecommunications: Apple, Samsung, Huawei.
+        "prestige_good_advanced_telecom": {"subject": "a slim black glass smartphone standing upright, its screen glowing a deep teal gradient", "seed": None},
+        # [tourism] Resort Travel: Disney, Axiom Space.
+        "prestige_good_resort_travel": {"subject": "two stacked tan leather suitcases with brass corners and buckled straps, beside an open red-and-yellow striped beach umbrella", "seed": None},
+        # [lead, Conductive and Base Metals] Pure Heavy Metals: BHP.
+        "prestige_good_generic_lead": {"subject": "a neat stack of polished copper ingots and blue-grey metal ingots, topped by a rainbow-iridescent bismuth crystal with stepped square terraces", "seed": None},
     },
     # Journal entries on vanilla's event icons (the nine Space Race milestones
     # shared its gears; the rest a newspaper, portrait, flag or building icon).
