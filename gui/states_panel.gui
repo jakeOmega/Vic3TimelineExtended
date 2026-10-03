@@ -2275,7 +2275,7 @@ types state_panel_types
 				tooltip = "TE_STATE_SOLAR_TT"
 
 				blockoverride "texture" {
-					texture = "gfx/interface/icons/building_icons/space_elevator.dds"
+					texture = "gfx/interface/icons/building_icons/building_solar_collector.dds"
 				}
 
 				blockoverride "name" {

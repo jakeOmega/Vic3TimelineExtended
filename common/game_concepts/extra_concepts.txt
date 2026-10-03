@@ -160,10 +160,10 @@ concept_tourism_base_appeal = {
 	texture = "gfx/interface/icons/goods_icons/tourism.dds"
 }
 concept_solar_collector_array = {
-	texture = "gfx/interface/icons/building_icons/space_elevator.dds"
+	texture = "gfx/interface/icons/building_icons/building_solar_collector.dds"
 }
 concept_antimatter_facility = {
-	texture = "gfx/interface/icons/building_icons/power_plant.dds"
+	texture = "gfx/interface/icons/building_icons/building_antimatter_facility.dds"
 }
 
 # Military & Diplomacy

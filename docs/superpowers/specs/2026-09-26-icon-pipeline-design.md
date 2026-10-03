@@ -351,7 +351,7 @@ A scratch scan read every depth-1 `icon =` / `texture =` gfx path in vanilla's a
 | `nuclear_plant.dds` (cooling towers) | Nuclear Plant, and the wonder ITER |
 | `goods_icons/rocket.dds` (the Launch Capacity good, no frame) | Space Program. A share across types, which `/duplicate-images` cannot see |
 
-The other 15 are unique but in the old style: Airport, Appliances, Ocean Mine, Fusion Plant, Highway, Hydro Plant, National Park, Renewable Energy Plant, Robotics, Semiconductors, Software, Tourism, and the opium, oil and rubber synthetics plants (`drugs.dds`, `synth_oil.dds`, `synth_rubber.dds`). Two calls for the owner: do the megaproject construction sites share their building's icon or get their own (today the Space Elevator's site has its own and lends it to two others, while three sites use their building's), and are the 15 unique ones redone in the same batch?
+The other 15 are unique but in the old style: Airport, Appliances, Ocean Mine, Fusion Plant, Highway, Hydro Plant, National Park, Renewable Energy Plant, Robotics, Semiconductors, Software, Tourism, and the opium, oil and rubber synthetics plants (`drugs.dds`, `synth_oil.dds`, `synth_rubber.dds`). The owner gave every megaproject construction site an icon of its own (the Space Elevator's site had lent its icon to two others, and three sites used their building's) and had the 15 unique ones done in the same batch. "Buildings batch 2" below covers all 38.
 
 **Companies.**
 - **18 PLACEHOLDER cards** (`gen_placeholder_company_icons.py`), referenced 35 times: 17 companies and 18 flagships. The building slice's count of 76 was wrong; a contact sheet of all 83 mod logos and the generator's own list both give 18.
@@ -370,7 +370,7 @@ The other 15 are unique but in the old style: Airport, Appliances, Ocean Mine, F
 
 **A broken reference.** Three heir-education modifiers (`heir_education_modifiers.txt`) point at `timed_modifier_icons/modifier_administrative.dds`, which exists in neither the mod nor vanilla. This was the case from d56f6cac (2026-03-31) until 2026-10-02, when they moved to vanilla's `modifier_documents_positive.dds`.
 
-**Allowlist.** A batch that takes one of these on deletes its entries from `common/_meta/duplicate_image_allowlist.yml`. Buildings: `advanced_materials`, `network`, `nuclear_plant`, `space`, `space_base`, `space_elevator` and `space_elevator_construction_site` (the three `basic_*` entries went with the rewires). Laws: the 25 "verify intent" entries.
+**Allowlist.** A batch that takes one of these on deletes its entries from `common/_meta/duplicate_image_allowlist.yml`. Buildings: `advanced_materials`, `network`, `nuclear_plant`, `space`, `space_base`, `space_elevator` and `space_elevator_construction_site`, deleted with batch 2 (the three `basic_*` entries went with the rewires). Laws: the 25 "verify intent" entries.
 
 ## Review lessons (2026-09-27)
 
@@ -405,3 +405,23 @@ The retouching went beyond the row fill:
 - **Some flaws are in the cutout, not the render, so fix the composed icon.** White highlights on glass came out as holes, and a glow as grey blobs. Fill enclosed alpha holes, or clear the blobs, in `final/<name>.png`, then delete the DDS and run `write`. `write` reuses a composed file that is newer than its raw.
 - **A hand repaint is sometimes quicker than a reroll.** A laser turret's beam, a pale rod that read as a missile, was erased and redrawn as a glowing line.
 
+
+## Buildings batch 2 (2026-10-02)
+
+This batch followed the mod-placeholders audit: buildings that borrowed another mod building's icon, and the 22 icons the mod drew before the pipeline. All 38 are in the building section of `icon_prompts.py`.
+
+- **16 new icons.** Each megaproject construction site got its own icon, as the owner asked: the finished building's subject, half-built. Four orbital buildings and ITER needed a second subject:
+  - **Orbital buildings.** The building style asks for an aerial view of a miniature diorama with surrounding landscape. It drew the solar collector, its site, the ISS and the battlestation as small models over a map. An entry may now carry its own `style`, and `ORBIT` draws the station close up above the Earth's curved edge, with black space behind.
+  - **ITER.** A plain render was a grey hall that read as a warehouse. A cutaway shows the reactor.
+  - **The Antimatter Facility site.** "A trench" drew an open pit. The finished facility's ring, half-built, reads better.
+- **The `restyle` entry kind.** It keeps an old icon's picture and refits it to the gold frame:
+  - It erodes the old outline, fills the emptied corners from the picture, then offers img2img repaints at a few strengths.
+  - schnell keeps the input's style even at 0.75. A flat vector icon stays flat, so for those a restyle only adds the frame.
+  - From 0.625, the repaints write lettering onto signs and devices.
+- **The owner's calls on the 22 old icons.** Nine were redrawn in the building style: the flat vectors (airport, hydro plant, national park), the interiors (robotics, semiconductors) and the still lifes (pharmaceuticals, advanced materials, network infrastructure, tourism). The other 13 kept their pictures:
+  - the redraws of the appliances factory were warehouses of crates;
+  - the owner preferred the old ocean floor for the deep-sea mine;
+  - the redrawn highway interchanges made no sense.
+  Each redrawn entry's comment names the restyle it replaced, so the old picture is one edit away.
+- **Blank a lettered sign with its own colour.** Inpainting the whole board from its edges pulled the letters' cream into it. Fitting a smooth gradient to the board's darker pixels, and filling the panel with it plus matching grain, left a plain teal sign (the appliances factory's QUALITY TESTED).
+- **Two concepts and a state-panel row moved to the new icons.** The solar collector concept and row had shown the space elevator's icon, and the antimatter concept vanilla's power plant. The 22 old files and the 7 allowlist entries for their shared pictures are gone.
