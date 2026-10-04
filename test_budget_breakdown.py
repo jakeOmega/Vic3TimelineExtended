@@ -212,9 +212,15 @@ class BudgetAllocationTests(unittest.TestCase):
                 h.scopes.update({"row_" + key: Decimal(amount) for key, amount in zip(keys, amounts)})
                 expected = sorted((key for key, amount in zip(keys, amounts) if amount),
                                   key=lambda key: (-h.scopes["row_" + key], keys.index(key)))
-                self.assertEqual(h(side + "_legend_height"), len(expected) * 44)
-                self.assertEqual([h(side + "_" + key + "_row_y") for key in expected],
-                                 [i * 44 for i in range(len(expected))])
+                self.assertEqual(h(side + "_visible_rows"), len(expected))
+                self.assertEqual([h(side + "_" + key + "_row_rank") for key in expected],
+                                 list(range(len(expected))))
+                # Slots read cached ranks: no all-category rescan per child row.
+                h.scopes.update({"rank_" + key: h(side + "_" + key + "_row_rank") for key in keys})
+                for slot, selected in enumerate(expected):
+                    visible = [key for key in keys if h.scopes["row_" + key]
+                               and h(side + "_" + key + "_cached_rank") == slot]
+                    self.assertEqual(visible, [selected])
 
 
 class BudgetWiringTests(unittest.TestCase):
@@ -263,6 +269,22 @@ class BudgetWiringTests(unittest.TestCase):
             self.assertEqual(found, expected)
             self.assertNotIn("progressbar =", chart)
             self.assertEqual(chart.count('framesize = { 128 128 }'), len(expected))
+
+    def test_sorted_rows_use_flow_slots_instead_of_expression_vectors(self):
+        from scripts.analysis.check_gui_lint import bare_vector_expressions
+        gui = gen.generated_gui()
+        self.assertEqual(bare_vector_expressions(gui), [])
+        for side in ("income", "expense"):
+            chart = gen.chart(side)
+            keys = [key for key, _ in gen.categories(side)]
+            self.assertIn(f"type te_budget_{side}_legend = flowcontainer", chart)
+            self.assertIn(f"type te_budget_{side}_sorted_slot = flowcontainer", chart)
+            self.assertNotIn("position =", chart)
+            slots = re.findall(r"AddScope\('row_slot', MakeScopeValue\('\(CFixedPoint\)(\d+)'\)\)", chart)
+            self.assertEqual(slots, [str(i) for i in range(len(keys))])
+            for key in keys:
+                self.assertIn(f"te_budget_{side}_row_{key} = {{}}", chart)
+                self.assertIn(f"te_budget_{side}_{key}_row_rank", chart)
 
     def test_both_public_headers_exclude_the_transfer(self):
         for side, getter in (("income", "PredictWeeklyIncome"), ("expense", "GetWeeklyExpenses")):

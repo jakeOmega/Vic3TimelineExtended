@@ -150,142 +150,212 @@ types te_budget_generated_charts {
 			}
 		}
 	}
-	type te_budget_income_legend = widget {
-		size = { 480 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_legend_height'))] }
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_income_tax_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_income_tax'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
-			blockoverride "label" { text = "BUDGET_INCOME_TAXES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_income_tax')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_income_tax_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_poll_tax_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_poll_tax'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
-			blockoverride "label" { text = "BUDGET_POLL_TAXES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_poll_tax')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_poll_tax_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_consumption_tax_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_consumption_tax'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
-			blockoverride "label" { text = "BUDGET_CONSUMPTION_TAXES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_consumption_tax')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_consumption_tax_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_dividends_tax_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_dividends_tax'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
-			blockoverride "label" { text = "BUDGET_DIVIDENDS_TAXES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_dividends_tax')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_dividends_tax_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_tariffs_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_tariffs'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
-			blockoverride "label" { text = "BUDGET_TARIFFS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_tariffs')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_tariffs_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_minting_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_minting'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
-			blockoverride "label" { text = "BUDGET_MINTING" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_minting')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_minting_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_government_dividends_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_government_dividends'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
-			blockoverride "label" { text = "DIVIDENDS_FROM_GOVERNMENT_SHARES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_government_dividends')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_government_dividends_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_pacts_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_pacts'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
-			blockoverride "label" { text = "BUDGET_DIPLOMATIC_PACTS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_pacts')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_pacts_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_treaties_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_treaties'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
-			blockoverride "label" { text = "BUDGET_TREATIES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_treaties')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_treaties_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_un_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_un'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_income_un_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_income_un" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_un')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_un_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_reserve_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_reserve'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_income_reserve_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_income_reserve" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_reserve')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_reserve_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_war_tax_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_war_tax'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_income_war_tax_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_income_war_tax" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_war_tax')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_war_tax_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_tax_code_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_tax_code'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_income_tax_code_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_income_tax_code" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_tax_code')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_tax_code_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_additional_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_additional'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
-			blockoverride "label" { text = "te_budget_chart_additional_income" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_additional')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_additional_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_income_other_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_other'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
-			blockoverride "label" { text = "te_budget_chart_other_income" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_other')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_other_share')|%1]" }
+	type te_budget_income_row_income_tax = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_income_tax'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_income_tax_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
+		blockoverride "label" { text = "BUDGET_INCOME_TAXES" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_income_tax')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_income_tax_share')|%1]" }
+	}
+	type te_budget_income_row_poll_tax = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_poll_tax'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_poll_tax_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
+		blockoverride "label" { text = "BUDGET_POLL_TAXES" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_poll_tax')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_poll_tax_share')|%1]" }
+	}
+	type te_budget_income_row_consumption_tax = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_consumption_tax'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_consumption_tax_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
+		blockoverride "label" { text = "BUDGET_CONSUMPTION_TAXES" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_consumption_tax')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_consumption_tax_share')|%1]" }
+	}
+	type te_budget_income_row_dividends_tax = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_dividends_tax'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_dividends_tax_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
+		blockoverride "label" { text = "BUDGET_DIVIDENDS_TAXES" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_dividends_tax')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_dividends_tax_share')|%1]" }
+	}
+	type te_budget_income_row_tariffs = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_tariffs'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_tariffs_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
+		blockoverride "label" { text = "BUDGET_TARIFFS" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_tariffs')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_tariffs_share')|%1]" }
+	}
+	type te_budget_income_row_minting = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_minting'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_minting_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
+		blockoverride "label" { text = "BUDGET_MINTING" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_minting')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_minting_share')|%1]" }
+	}
+	type te_budget_income_row_government_dividends = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_government_dividends'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_government_dividends_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
+		blockoverride "label" { text = "DIVIDENDS_FROM_GOVERNMENT_SHARES" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_government_dividends')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_government_dividends_share')|%1]" }
+	}
+	type te_budget_income_row_pacts = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_pacts'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_pacts_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
+		blockoverride "label" { text = "BUDGET_DIPLOMATIC_PACTS" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_pacts')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_pacts_share')|%1]" }
+	}
+	type te_budget_income_row_treaties = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_treaties'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_treaties_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
+		blockoverride "label" { text = "BUDGET_TREATIES" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_treaties')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_treaties_share')|%1]" }
+	}
+	type te_budget_income_row_un = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_un'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_un_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_income_un_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_income_un" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_un')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_un_share')|%1]" }
+	}
+	type te_budget_income_row_reserve = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_reserve'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_reserve_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_income_reserve_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_income_reserve" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_reserve')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_reserve_share')|%1]" }
+	}
+	type te_budget_income_row_war_tax = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_war_tax'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_war_tax_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_income_war_tax_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_income_war_tax" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_war_tax')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_war_tax_share')|%1]" }
+	}
+	type te_budget_income_row_tax_code = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_tax_code'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_tax_code_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_income_tax_code_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_income_tax_code" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_tax_code')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_tax_code_share')|%1]" }
+	}
+	type te_budget_income_row_additional = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_additional'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_additional_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
+		blockoverride "label" { text = "te_budget_chart_additional_income" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_additional')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_additional_share')|%1]" }
+	}
+	type te_budget_income_row_other = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_other'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_income_other_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
+		blockoverride "label" { text = "te_budget_chart_other_income" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_income_other')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_income_other_share')|%1]" }
+	}
+	type te_budget_income_sorted_slot = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		te_budget_income_row_income_tax = {}
+		te_budget_income_row_poll_tax = {}
+		te_budget_income_row_consumption_tax = {}
+		te_budget_income_row_dividends_tax = {}
+		te_budget_income_row_tariffs = {}
+		te_budget_income_row_minting = {}
+		te_budget_income_row_government_dividends = {}
+		te_budget_income_row_pacts = {}
+		te_budget_income_row_treaties = {}
+		te_budget_income_row_un = {}
+		te_budget_income_row_reserve = {}
+		te_budget_income_row_war_tax = {}
+		te_budget_income_row_tax_code = {}
+		te_budget_income_row_additional = {}
+		te_budget_income_row_other = {}
+	}
+	type te_budget_income_legend = flowcontainer {
+		direction = vertical
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			datacontext = "[TopScope.AddScope('rank_income_tax', MakeScopeValue(TopScope.ScriptValue('te_budget_income_income_tax_row_rank'))).AddScope('rank_poll_tax', MakeScopeValue(TopScope.ScriptValue('te_budget_income_poll_tax_row_rank'))).AddScope('rank_consumption_tax', MakeScopeValue(TopScope.ScriptValue('te_budget_income_consumption_tax_row_rank'))).AddScope('rank_dividends_tax', MakeScopeValue(TopScope.ScriptValue('te_budget_income_dividends_tax_row_rank'))).AddScope('rank_tariffs', MakeScopeValue(TopScope.ScriptValue('te_budget_income_tariffs_row_rank'))).AddScope('rank_minting', MakeScopeValue(TopScope.ScriptValue('te_budget_income_minting_row_rank'))).AddScope('rank_government_dividends', MakeScopeValue(TopScope.ScriptValue('te_budget_income_government_dividends_row_rank'))).AddScope('rank_pacts', MakeScopeValue(TopScope.ScriptValue('te_budget_income_pacts_row_rank'))).AddScope('rank_treaties', MakeScopeValue(TopScope.ScriptValue('te_budget_income_treaties_row_rank'))).AddScope('rank_un', MakeScopeValue(TopScope.ScriptValue('te_budget_income_un_row_rank'))).AddScope('rank_reserve', MakeScopeValue(TopScope.ScriptValue('te_budget_income_reserve_row_rank'))).AddScope('rank_war_tax', MakeScopeValue(TopScope.ScriptValue('te_budget_income_war_tax_row_rank'))).AddScope('rank_tax_code', MakeScopeValue(TopScope.ScriptValue('te_budget_income_tax_code_row_rank'))).AddScope('rank_additional', MakeScopeValue(TopScope.ScriptValue('te_budget_income_additional_row_rank'))).AddScope('rank_other', MakeScopeValue(TopScope.ScriptValue('te_budget_income_other_row_rank'))).AddScope('visible_rows', MakeScopeValue(TopScope.ScriptValue('te_budget_income_visible_rows')))]"
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)0')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)0'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)1')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)1'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)2')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)2'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)3')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)3'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)4')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)4'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)5')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)5'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)6')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)6'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)7')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)7'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)8')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)8'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)9')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)9'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)10')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)10'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)11')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)11'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)12')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)12'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)13')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)13'))]"
+			}
+			te_budget_income_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)14')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)14'))]"
+			}
 		}
 	}
 	type te_budget_income_section = flowcontainer {
@@ -751,430 +821,628 @@ types te_budget_generated_charts {
 			}
 		}
 	}
-	type te_budget_expense_legend = widget {
-		size = { 480 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_legend_height'))] }
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_colonial_affairs_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
-			blockoverride "label" { text = "institution_colonial_affairs" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_health_system_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_health_system'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_health_system_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
-			blockoverride "label" { text = "institution_health_system" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_health_system')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_health_system_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_home_affairs_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_home_affairs'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_home_affairs_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
-			blockoverride "label" { text = "institution_home_affairs" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_home_affairs')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_home_affairs_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_migration_controls_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_migration_controls'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_migration_controls_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
-			blockoverride "label" { text = "institution_migration_controls" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_migration_controls')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_migration_controls_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_commerce_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
-			blockoverride "label" { text = "institution_ministry_of_commerce" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_consumer_protection_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
-			blockoverride "label" { text = "institution_ministry_of_consumer_protection" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_culture_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
-			blockoverride "label" { text = "institution_ministry_of_culture" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_foreign_affairs_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
-			blockoverride "label" { text = "institution_ministry_of_foreign_affairs" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_intelligence_and_security_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
-			blockoverride "label" { text = "institution_ministry_of_intelligence_and_security" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_international_aid_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
-			blockoverride "label" { text = "institution_ministry_of_international_aid" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_labor_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
-			blockoverride "label" { text = "institution_ministry_of_labor" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_propaganda_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
-			blockoverride "label" { text = "institution_ministry_of_propaganda" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_refugee_affairs_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
-			blockoverride "label" { text = "institution_ministry_of_refugee_affairs" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_religion_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
-			blockoverride "label" { text = "institution_ministry_of_religion" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_science_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
-			blockoverride "label" { text = "institution_ministry_of_science" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_the_environment_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
-			blockoverride "label" { text = "institution_ministry_of_the_environment" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_thought_control_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
-			blockoverride "label" { text = "institution_ministry_of_thought_control" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_urban_planning_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
-			blockoverride "label" { text = "institution_ministry_of_urban_planning" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_ministry_of_war_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
-			blockoverride "label" { text = "institution_ministry_of_war" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_national_bank_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_national_bank'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_national_bank_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
-			blockoverride "label" { text = "institution_national_bank" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_national_bank')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_national_bank_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_police_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_police'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_police_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
-			blockoverride "label" { text = "institution_police" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_police')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_police_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_schools_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_schools'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_schools_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
-			blockoverride "label" { text = "institution_schools" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_schools')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_schools_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_social_security_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_social_security'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_social_security_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
-			blockoverride "label" { text = "institution_social_security" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_social_security')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_social_security_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_institution_workplace_safety_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_workplace_safety'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_institution_workplace_safety_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
-			blockoverride "label" { text = "institution_workplace_safety" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_workplace_safety')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_workplace_safety_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_administration_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_administration'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
-			blockoverride "label" { text = "te_budget_chart_administration" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_administration')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_administration_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_civil_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_civil'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
-			blockoverride "label" { text = "te_budget_chart_civil" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_civil')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_civil_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_construction_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_construction'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
-			blockoverride "label" { text = "BUDGET_CONSTRUCTION_GOODS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_construction')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_construction_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_military_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_military'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
-			blockoverride "label" { text = "te_budget_chart_military" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_military')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_military_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_shipping_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_shipping'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
-			blockoverride "label" { text = "te_budget_chart_shipping" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_shipping')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_shipping_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_welfare_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_welfare'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
-			blockoverride "label" { text = "BUDGET_WELFARE_PAYMENTS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_welfare')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_welfare_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_subsidies_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_subsidies'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
-			blockoverride "label" { text = "BUDGET_SUBSIDIES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_subsidies')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_subsidies_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_subventions_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_subventions'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
-			blockoverride "label" { text = "BUDGET_SUBVENTIONS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_subventions')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_subventions_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_government_losses_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_government_losses'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
-			blockoverride "label" { text = "LOSSES_FROM_GOVERNMENT_SHARES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_government_losses')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_government_losses_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_pacts_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_pacts'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
-			blockoverride "label" { text = "BUDGET_DIPLOMATIC_PACTS" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_pacts')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_pacts_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_treaties_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_treaties'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
-			blockoverride "label" { text = "BUDGET_TREATIES" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_treaties')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_treaties_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_interest_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_interest'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
-			blockoverride "label" { text = "BUDGET_INTEREST" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_interest')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_interest_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_banking_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_banking'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_expense_banking_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_expense_banking" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_banking')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_banking_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_covert_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_covert'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_expense_covert_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_expense_covert" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_covert')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_covert_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_culture_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_culture'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_expense_culture_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_expense_culture" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_culture')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_culture_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_colonial_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_colonial'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_expense_colonial_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_expense_colonial" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_colonial')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_colonial_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_un_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_un'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_expense_un_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_expense_un" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_un')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_un_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_nuclear_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_nuclear'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_expense_nuclear_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_expense_nuclear" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_nuclear_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_nuclear_taboo_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_nuclear_taboo'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_expense_nuclear_taboo_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_expense_nuclear_taboo" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_nuclear_taboo')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_nuclear_taboo_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_space_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_space'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_expense_space_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_expense_space" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_space')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_space_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_drugs_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_drugs'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_source_expense_drugs_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
-			blockoverride "label" { text = "te_budget_chart_source_expense_drugs" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_drugs')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_drugs_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_additional_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_additional'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
-			blockoverride "label" { text = "te_budget_chart_additional_expense" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_additional')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_additional_share')|%1]" }
-		}
-		te_budget_chart_row = {
-			position = { 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_expense_other_row_y'))] }
-			visible = "[NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_other'), '(CFixedPoint)0')]"
-			tooltip = "te_budget_chart_row_tt"
-			blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
-			blockoverride "label" { text = "te_budget_chart_other_expense" }
-			blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_other')|D]" }
-			blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_other_share')|%1]" }
+	type te_budget_expense_row_institution_colonial_affairs = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_colonial_affairs_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
+		blockoverride "label" { text = "institution_colonial_affairs" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_health_system = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_health_system'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_health_system_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_health_system_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
+		blockoverride "label" { text = "institution_health_system" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_health_system')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_health_system_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_home_affairs = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_home_affairs'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_home_affairs_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_home_affairs_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
+		blockoverride "label" { text = "institution_home_affairs" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_home_affairs')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_home_affairs_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_migration_controls = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_migration_controls'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_migration_controls_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_migration_controls_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
+		blockoverride "label" { text = "institution_migration_controls" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_migration_controls')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_migration_controls_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_commerce = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_commerce_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
+		blockoverride "label" { text = "institution_ministry_of_commerce" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_consumer_protection = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_consumer_protection_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
+		blockoverride "label" { text = "institution_ministry_of_consumer_protection" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_culture = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_culture_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
+		blockoverride "label" { text = "institution_ministry_of_culture" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_foreign_affairs = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_foreign_affairs_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
+		blockoverride "label" { text = "institution_ministry_of_foreign_affairs" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_intelligence_and_security = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_intelligence_and_security_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
+		blockoverride "label" { text = "institution_ministry_of_intelligence_and_security" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_international_aid = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_international_aid_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
+		blockoverride "label" { text = "institution_ministry_of_international_aid" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_labor = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_labor_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
+		blockoverride "label" { text = "institution_ministry_of_labor" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_propaganda = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_propaganda_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
+		blockoverride "label" { text = "institution_ministry_of_propaganda" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_refugee_affairs = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_refugee_affairs_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
+		blockoverride "label" { text = "institution_ministry_of_refugee_affairs" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_religion = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_religion_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
+		blockoverride "label" { text = "institution_ministry_of_religion" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_science = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_science_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
+		blockoverride "label" { text = "institution_ministry_of_science" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_the_environment = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_the_environment_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
+		blockoverride "label" { text = "institution_ministry_of_the_environment" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_thought_control = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_thought_control_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
+		blockoverride "label" { text = "institution_ministry_of_thought_control" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_urban_planning = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_urban_planning_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
+		blockoverride "label" { text = "institution_ministry_of_urban_planning" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_ministry_of_war = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_ministry_of_war_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
+		blockoverride "label" { text = "institution_ministry_of_war" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_national_bank = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_national_bank'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_national_bank_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_national_bank_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
+		blockoverride "label" { text = "institution_national_bank" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_national_bank')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_national_bank_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_police = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_police'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_police_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_police_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
+		blockoverride "label" { text = "institution_police" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_police')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_police_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_schools = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_schools'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_schools_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_schools_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
+		blockoverride "label" { text = "institution_schools" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_schools')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_schools_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_social_security = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_social_security'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_social_security_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_social_security_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
+		blockoverride "label" { text = "institution_social_security" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_social_security')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_social_security_share')|%1]" }
+	}
+	type te_budget_expense_row_institution_workplace_safety = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_workplace_safety'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_institution_workplace_safety_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_institution_workplace_safety_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
+		blockoverride "label" { text = "institution_workplace_safety" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_institution_workplace_safety')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_institution_workplace_safety_share')|%1]" }
+	}
+	type te_budget_expense_row_administration = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_administration'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_administration_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
+		blockoverride "label" { text = "te_budget_chart_administration" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_administration')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_administration_share')|%1]" }
+	}
+	type te_budget_expense_row_civil = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_civil'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_civil_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
+		blockoverride "label" { text = "te_budget_chart_civil" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_civil')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_civil_share')|%1]" }
+	}
+	type te_budget_expense_row_construction = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_construction'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_construction_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
+		blockoverride "label" { text = "BUDGET_CONSTRUCTION_GOODS" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_construction')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_construction_share')|%1]" }
+	}
+	type te_budget_expense_row_military = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_military'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_military_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
+		blockoverride "label" { text = "te_budget_chart_military" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_military')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_military_share')|%1]" }
+	}
+	type te_budget_expense_row_shipping = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_shipping'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_shipping_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
+		blockoverride "label" { text = "te_budget_chart_shipping" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_shipping')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_shipping_share')|%1]" }
+	}
+	type te_budget_expense_row_welfare = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_welfare'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_welfare_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
+		blockoverride "label" { text = "BUDGET_WELFARE_PAYMENTS" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_welfare')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_welfare_share')|%1]" }
+	}
+	type te_budget_expense_row_subsidies = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_subsidies'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_subsidies_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
+		blockoverride "label" { text = "BUDGET_SUBSIDIES" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_subsidies')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_subsidies_share')|%1]" }
+	}
+	type te_budget_expense_row_subventions = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_subventions'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_subventions_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
+		blockoverride "label" { text = "BUDGET_SUBVENTIONS" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_subventions')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_subventions_share')|%1]" }
+	}
+	type te_budget_expense_row_government_losses = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_government_losses'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_government_losses_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
+		blockoverride "label" { text = "LOSSES_FROM_GOVERNMENT_SHARES" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_government_losses')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_government_losses_share')|%1]" }
+	}
+	type te_budget_expense_row_pacts = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_pacts'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_pacts_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
+		blockoverride "label" { text = "BUDGET_DIPLOMATIC_PACTS" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_pacts')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_pacts_share')|%1]" }
+	}
+	type te_budget_expense_row_treaties = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_treaties'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_treaties_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
+		blockoverride "label" { text = "BUDGET_TREATIES" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_treaties')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_treaties_share')|%1]" }
+	}
+	type te_budget_expense_row_interest = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_interest'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_interest_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
+		blockoverride "label" { text = "BUDGET_INTEREST" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_interest')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_interest_share')|%1]" }
+	}
+	type te_budget_expense_row_banking = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_banking'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_banking_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_expense_banking_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_expense_banking" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_banking')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_banking_share')|%1]" }
+	}
+	type te_budget_expense_row_covert = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_covert'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_covert_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_expense_covert_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_expense_covert" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_covert')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_covert_share')|%1]" }
+	}
+	type te_budget_expense_row_culture = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_culture'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_culture_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_expense_culture_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_expense_culture" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_culture')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_culture_share')|%1]" }
+	}
+	type te_budget_expense_row_colonial = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_colonial'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_colonial_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_expense_colonial_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_expense_colonial" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_colonial')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_colonial_share')|%1]" }
+	}
+	type te_budget_expense_row_un = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_un'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_un_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_expense_un_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_expense_un" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_un')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_un_share')|%1]" }
+	}
+	type te_budget_expense_row_nuclear = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_nuclear'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_nuclear_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_expense_nuclear_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_expense_nuclear" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_nuclear_share')|%1]" }
+	}
+	type te_budget_expense_row_nuclear_taboo = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_nuclear_taboo'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_nuclear_taboo_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_expense_nuclear_taboo_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_expense_nuclear_taboo" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_nuclear_taboo')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_nuclear_taboo_share')|%1]" }
+	}
+	type te_budget_expense_row_space = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_space'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_space_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_expense_space_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_expense_space" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_space')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_space_share')|%1]" }
+	}
+	type te_budget_expense_row_drugs = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_drugs'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_drugs_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_source_expense_drugs_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
+		blockoverride "label" { text = "te_budget_chart_source_expense_drugs" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_drugs')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_drugs_share')|%1]" }
+	}
+	type te_budget_expense_row_additional = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_additional'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_additional_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
+		blockoverride "label" { text = "te_budget_chart_additional_expense" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_additional')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_additional_share')|%1]" }
+	}
+	type te_budget_expense_row_other = te_budget_chart_row {
+		visible = "[And(NotEqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_other'), '(CFixedPoint)0'), EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_expense_other_cached_rank'), TopScope.ScriptValue('te_budget_row_slot')))]"
+		tooltip = "te_budget_chart_row_tt"
+		blockoverride "swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
+		blockoverride "label" { text = "te_budget_chart_other_expense" }
+		blockoverride "amount" { raw_text = "@money![TopScope.ScriptValue('te_budget_expense_other')|D]" }
+		blockoverride "share" { raw_text = "[TopScope.ScriptValue('te_budget_expense_other_share')|%1]" }
+	}
+	type te_budget_expense_sorted_slot = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		te_budget_expense_row_institution_colonial_affairs = {}
+		te_budget_expense_row_institution_health_system = {}
+		te_budget_expense_row_institution_home_affairs = {}
+		te_budget_expense_row_institution_migration_controls = {}
+		te_budget_expense_row_institution_ministry_of_commerce = {}
+		te_budget_expense_row_institution_ministry_of_consumer_protection = {}
+		te_budget_expense_row_institution_ministry_of_culture = {}
+		te_budget_expense_row_institution_ministry_of_foreign_affairs = {}
+		te_budget_expense_row_institution_ministry_of_intelligence_and_security = {}
+		te_budget_expense_row_institution_ministry_of_international_aid = {}
+		te_budget_expense_row_institution_ministry_of_labor = {}
+		te_budget_expense_row_institution_ministry_of_propaganda = {}
+		te_budget_expense_row_institution_ministry_of_refugee_affairs = {}
+		te_budget_expense_row_institution_ministry_of_religion = {}
+		te_budget_expense_row_institution_ministry_of_science = {}
+		te_budget_expense_row_institution_ministry_of_the_environment = {}
+		te_budget_expense_row_institution_ministry_of_thought_control = {}
+		te_budget_expense_row_institution_ministry_of_urban_planning = {}
+		te_budget_expense_row_institution_ministry_of_war = {}
+		te_budget_expense_row_institution_national_bank = {}
+		te_budget_expense_row_institution_police = {}
+		te_budget_expense_row_institution_schools = {}
+		te_budget_expense_row_institution_social_security = {}
+		te_budget_expense_row_institution_workplace_safety = {}
+		te_budget_expense_row_administration = {}
+		te_budget_expense_row_civil = {}
+		te_budget_expense_row_construction = {}
+		te_budget_expense_row_military = {}
+		te_budget_expense_row_shipping = {}
+		te_budget_expense_row_welfare = {}
+		te_budget_expense_row_subsidies = {}
+		te_budget_expense_row_subventions = {}
+		te_budget_expense_row_government_losses = {}
+		te_budget_expense_row_pacts = {}
+		te_budget_expense_row_treaties = {}
+		te_budget_expense_row_interest = {}
+		te_budget_expense_row_banking = {}
+		te_budget_expense_row_covert = {}
+		te_budget_expense_row_culture = {}
+		te_budget_expense_row_colonial = {}
+		te_budget_expense_row_un = {}
+		te_budget_expense_row_nuclear = {}
+		te_budget_expense_row_nuclear_taboo = {}
+		te_budget_expense_row_space = {}
+		te_budget_expense_row_drugs = {}
+		te_budget_expense_row_additional = {}
+		te_budget_expense_row_other = {}
+	}
+	type te_budget_expense_legend = flowcontainer {
+		direction = vertical
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			datacontext = "[TopScope.AddScope('rank_institution_colonial_affairs', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_colonial_affairs_row_rank'))).AddScope('rank_institution_health_system', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_health_system_row_rank'))).AddScope('rank_institution_home_affairs', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_home_affairs_row_rank'))).AddScope('rank_institution_migration_controls', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_migration_controls_row_rank'))).AddScope('rank_institution_ministry_of_commerce', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_commerce_row_rank'))).AddScope('rank_institution_ministry_of_consumer_protection', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_consumer_protection_row_rank'))).AddScope('rank_institution_ministry_of_culture', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_culture_row_rank'))).AddScope('rank_institution_ministry_of_foreign_affairs', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_foreign_affairs_row_rank'))).AddScope('rank_institution_ministry_of_intelligence_and_security', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_intelligence_and_security_row_rank'))).AddScope('rank_institution_ministry_of_international_aid', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_international_aid_row_rank'))).AddScope('rank_institution_ministry_of_labor', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_labor_row_rank'))).AddScope('rank_institution_ministry_of_propaganda', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_propaganda_row_rank'))).AddScope('rank_institution_ministry_of_refugee_affairs', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_refugee_affairs_row_rank'))).AddScope('rank_institution_ministry_of_religion', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_religion_row_rank'))).AddScope('rank_institution_ministry_of_science', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_science_row_rank'))).AddScope('rank_institution_ministry_of_the_environment', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_the_environment_row_rank'))).AddScope('rank_institution_ministry_of_thought_control', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_thought_control_row_rank'))).AddScope('rank_institution_ministry_of_urban_planning', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_urban_planning_row_rank'))).AddScope('rank_institution_ministry_of_war', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_ministry_of_war_row_rank'))).AddScope('rank_institution_national_bank', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_national_bank_row_rank'))).AddScope('rank_institution_police', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_police_row_rank'))).AddScope('rank_institution_schools', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_schools_row_rank'))).AddScope('rank_institution_social_security', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_social_security_row_rank'))).AddScope('rank_institution_workplace_safety', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_institution_workplace_safety_row_rank'))).AddScope('rank_administration', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_administration_row_rank'))).AddScope('rank_civil', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_civil_row_rank'))).AddScope('rank_construction', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_construction_row_rank'))).AddScope('rank_military', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_military_row_rank'))).AddScope('rank_shipping', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_shipping_row_rank'))).AddScope('rank_welfare', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_welfare_row_rank'))).AddScope('rank_subsidies', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_subsidies_row_rank'))).AddScope('rank_subventions', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_subventions_row_rank'))).AddScope('rank_government_losses', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_government_losses_row_rank'))).AddScope('rank_pacts', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_pacts_row_rank'))).AddScope('rank_treaties', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_treaties_row_rank'))).AddScope('rank_interest', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_interest_row_rank'))).AddScope('rank_banking', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_banking_row_rank'))).AddScope('rank_covert', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_covert_row_rank'))).AddScope('rank_culture', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_culture_row_rank'))).AddScope('rank_colonial', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_colonial_row_rank'))).AddScope('rank_un', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_un_row_rank'))).AddScope('rank_nuclear', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_nuclear_row_rank'))).AddScope('rank_nuclear_taboo', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_nuclear_taboo_row_rank'))).AddScope('rank_space', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_space_row_rank'))).AddScope('rank_drugs', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_drugs_row_rank'))).AddScope('rank_additional', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_additional_row_rank'))).AddScope('rank_other', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_other_row_rank'))).AddScope('visible_rows', MakeScopeValue(TopScope.ScriptValue('te_budget_expense_visible_rows')))]"
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)0')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)0'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)1')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)1'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)2')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)2'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)3')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)3'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)4')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)4'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)5')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)5'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)6')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)6'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)7')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)7'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)8')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)8'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)9')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)9'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)10')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)10'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)11')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)11'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)12')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)12'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)13')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)13'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)14')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)14'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)15')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)15'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)16')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)16'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)17')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)17'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)18')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)18'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)19')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)19'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)20')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)20'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)21')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)21'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)22')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)22'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)23')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)23'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)24')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)24'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)25')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)25'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)26')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)26'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)27')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)27'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)28')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)28'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)29')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)29'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)30')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)30'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)31')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)31'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)32')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)32'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)33')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)33'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)34')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)34'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)35')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)35'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)36')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)36'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)37')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)37'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)38')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)38'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)39')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)39'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)40')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)40'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)41')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)41'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)42')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)42'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)43')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)43'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)44')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)44'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)45')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)45'))]"
+			}
+			te_budget_expense_sorted_slot = {
+				visible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_cached_visible_rows'), '(CFixedPoint)46')]"
+				datacontext = "[TopScope.AddScope('row_slot', MakeScopeValue('(CFixedPoint)46'))]"
+			}
 		}
 	}
 	type te_budget_expense_section = flowcontainer {

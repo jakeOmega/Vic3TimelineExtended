@@ -49,6 +49,8 @@ NEW_GUI = BOM + """types t {
 			margin_right = 8
 		}
 		icon = { margin = { 2 2 } }
+		widget = { size = { 480 [FixedPointToInt(TopScope.ScriptValue('height'))] } }
+		widget = { position = { 0 [FixedPointToInt(TopScope.ScriptValue('rank'))] } }
 		flowcontainer = { margin_right = 8 }
 		textbox = { margin_left = 4 }
 	}
@@ -134,6 +136,20 @@ class LintTest(unittest.TestCase):
         # Already on the base: inherited (vanilla's right_click_menu.gui), so a warning.
         self.assertEqual([m for m in self.msgs("gui/inherited.gui", "ERROR") if "directly inside" in m], [])
         self.assertEqual(len([m for m in self.msgs("gui/inherited.gui", "WARN") if "directly inside" in m]), 1)
+
+    def test_bare_vector_expressions_are_errors(self):
+        errs = [m for m in self.msgs("gui/new.gui", "ERROR") if "brace vector" in m]
+        self.assertEqual(len(errs), 2, errs)
+        self.assertTrue(any("'size'" in m for m in errs))
+        self.assertTrue(any("'position'" in m for m in errs))
+
+    def test_vector_lint_accepts_literals_and_whole_vector_bindings(self):
+        self.assertEqual(lint.bare_vector_expressions(
+            'widget = { size = { 480 44 } position = { @x @y } }\n'
+            'widget = { size = "[Window.GetSize]" position = "[Window.GetPosition]" }\n'
+            'textbox = { raw_text = "size = { 0 [MyValue] }" }'), [])
+        self.assertEqual(lint.bare_vector_expressions(
+            "widget = {\nposition = {\n0 [Binding.Value]\n}\n}"), [(2, "position")])
 
     def test_unproven_warnings(self):
         warns = " | ".join(self.msgs("gui/new.gui", "WARN"))

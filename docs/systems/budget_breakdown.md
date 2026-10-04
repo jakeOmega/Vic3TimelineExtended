@@ -81,8 +81,15 @@ There are no effects, saved variables, pulse hooks or journal-entry dependencies
 
 The list binds each signed category amount once as a value scope. Each row
 counts the nonzero categories with larger amounts to determine its vertical
-position; catalogue order breaks ties. Zero rows consume no space, and signed
-negative amounts follow positive amounts. Rows reserve two lines for labels.
+rank; catalogue order breaks ties. These ranks and the count of nonzero rows
+are bound once before the slots render, so each child row reads a cached rank
+instead of rescanning all categories. Zero rows consume no space, and signed
+negative amounts follow positive amounts. Each rank has a normal flow slot that
+shows exactly one category row. Hidden slots and rows consume no space. The
+engine determines list height and row positions; expressions inside brace-vector
+components are unsupported and collapse the rows onto each other. Rows reserve
+two lines for labels.
+
 The palette stays in catalogue order so sorting never changes category colors.
 
 Historical stacked bars are deferred: script pulses expose aggregate budget
@@ -108,7 +115,7 @@ Engine rendering and accounting still require an in-game check:
 
 1. Open Breakdown with banking/tax rules both disabled, then enabled. Check all
    six tabs fit, zero rows disappear, long institution names wrap and tooltips
-   retain the parent `TopScope` context. Check dynamic row positions and list
+   retain the parent `TopScope` context. Check sorted flow slots and list
    height after a tax change: rows must move without overlap or gaps, with equal
    amounts in catalogue order and negative adjustments below positive amounts.
 2. Compare administration's `weekly_profit` against the sum of those buildings'

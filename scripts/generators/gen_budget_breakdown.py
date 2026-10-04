@@ -181,18 +181,19 @@ def generated_values():
                     body += "\n" + "\n".join(f"\tsubtract = te_budget_expense_{source}" for source in SOURCES[side])
                 out.append(sv(f"te_budget_expense_{key}", body))
         out.append(sv(f"te_budget_{side}_other", "\tvalue = scope:total\n" + "\n".join(f"\tsubtract = te_budget_{side}_{key}" for key, _ in items[:-1])))
-        # Absolute row positions let the GUI sort live without writing game state.
+        # Ranked flow slots let the GUI sort live without writing game state.
         # Compare cached amounts only; catalogue order deterministically breaks ties.
-        out.append(sv(f"te_budget_{side}_legend_height", "\tvalue = 0\n" + "\n".join(
-            f"\tif = {{ limit = {{ NOT = {{ scope:row_{key} = 0 }} }} add = 44 }}" for key, _ in items)))
+        out.append(sv(f"te_budget_{side}_visible_rows", "\tvalue = 0\n" + "\n".join(
+            f"\tif = {{ limit = {{ NOT = {{ scope:row_{key} = 0 }} }} add = 1 }}" for key, _ in items)))
         for i, (key, _) in enumerate(items):
             body = "\tvalue = 0"
             for j, (other, _) in enumerate(items):
                 if key == other:
                     continue
                 op = ">=" if j < i else ">"
-                body += f"\n\tif = {{ limit = {{ NOT = {{ scope:row_{other} = 0 }} scope:row_{other} {op} scope:row_{key} }} add = 44 }}"
-            out.append(sv(f"te_budget_{side}_{key}_row_y", body))
+                body += f"\n\tif = {{ limit = {{ NOT = {{ scope:row_{other} = 0 }} scope:row_{other} {op} scope:row_{key} }} add = 1 }}"
+            out.append(sv(f"te_budget_{side}_{key}_row_rank", body))
+            out.append(sv(f"te_budget_{side}_{key}_cached_rank", f"\tvalue = scope:rank_{key}"))
         for key, _ in items:
             out.append(sv(f"te_budget_{side}_{key}_positive", f"\tvalue = te_budget_{side}_{key}\n\tmin = 0"))
         out.append(sv(f"te_budget_{side}_positive_total", "\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{key}_positive" for key, _ in items)))
@@ -211,15 +212,41 @@ def chart(side):
     out = [f"\ttype te_budget_{side}_charts = flowcontainer {{", "\t\tdirection = horizontal", "\t\tspacing = 16", "\t\tparentanchor = hcenter", "\t\twidget = {", "\t\t\tsize = { 176 176 }", '\t\t\ttooltip = "te_budget_chart_pie_tt"', '\t\t\ticon = { size = { 100% 100% } texture = "gfx/interface/backgrounds/round_frame_dec.dds" }', "\t\t\twidget = {", "\t\t\t\tsize = { 75% 75% }", "\t\t\t\tparentanchor = center"]
     for i in reversed(range(len(items))):
         out += ["\t\t\t\tprogresspie = {", "\t\t\t\t\tsize = { 100% 100% }", "\t\t\t\t\tmin = 0", "\t\t\t\t\tmax = 1", f'\t\t\t\t\tvalue = "[FixedPointToFloat({expression(side, f"{side}_cum_{i}")})]"', f'\t\t\t\t\ttexture = "{pie_texture(i)}"', "\t\t\t\t\tframesize = { 128 128 }", "\t\t\t\t\tframe = 2", "\t\t\t\t}"]
-    out += ["\t\t\t}", "\t\t}", "\t}", f"\ttype te_budget_{side}_legend = widget {{", f"\t\tsize = {{ 480 [FixedPointToInt(TopScope.ScriptValue('te_budget_{side}_legend_height'))] }}"]
+    out += ["\t\t\t}", "\t\t}", "\t}"]
     for i, (key, label) in enumerate(items):
         val = expression(side, f"{side}_{key}")
         share = expression(side, f"{side}_{key}_share")
+        rank = expression(side, f"{side}_{key}_cached_rank")
+        slot = "TopScope.ScriptValue('te_budget_row_slot')"
         tooltip = f"te_budget_chart_{key}_tt" if key.startswith("institution_") else "te_budget_chart_row_tt"
         if key in SOURCES[side]:
             tooltip = f"te_budget_chart_source_{side}_{key}_tt"
-        out += ["\t\tte_budget_chart_row = {", f"\t\t\tposition = {{ 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_{side}_{key}_row_y'))] }}", f'\t\t\tvisible = "[NotEqualTo_CFixedPoint({val}, \'(CFixedPoint)0\')]"', f'\t\t\ttooltip = "{tooltip}"', f'\t\t\tblockoverride "swatch" {{ texture = "{pie_texture(i)}" }}', f'\t\t\tblockoverride "label" {{ text = "{label}" }}', f'\t\t\tblockoverride "amount" {{ raw_text = "@money![{val}|D]" }}', f'\t\t\tblockoverride "share" {{ raw_text = "[{share}|%1]" }}', "\t\t}"]
-    out += ["\t}"]
+        out += [f"\ttype te_budget_{side}_row_{key} = te_budget_chart_row {{",
+                f'\t\tvisible = "[And(NotEqualTo_CFixedPoint({val}, \'(CFixedPoint)0\'), EqualTo_CFixedPoint({rank}, {slot}))]"',
+                f'\t\ttooltip = "{tooltip}"',
+                f'\t\tblockoverride "swatch" {{ texture = "{pie_texture(i)}" }}',
+                f'\t\tblockoverride "label" {{ text = "{label}" }}',
+                f'\t\tblockoverride "amount" {{ raw_text = "@money![{val}|D]" }}',
+                f'\t\tblockoverride "share" {{ raw_text = "[{share}|%1]" }}', "\t}"]
+    # A visible slot has exactly one visible category row. Normal flow layout
+    # determines its size and position; brace-vector components cannot bind GUI
+    # expressions (the engine parses their tokens as extra numeric components).
+    out += [f"\ttype te_budget_{side}_sorted_slot = flowcontainer {{", "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes"]
+    out += [f"\t\tte_budget_{side}_row_{key} = {{}}" for key, _ in items]
+    rank_scopes = "TopScope" + "".join(
+        f".AddScope('rank_{key}', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_{key}_row_rank')))"
+        for key, _ in items
+    ) + f".AddScope('visible_rows', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_visible_rows')))"
+    out += ["\t}", f"\ttype te_budget_{side}_legend = flowcontainer {{", "\t\tdirection = vertical",
+            "\t\tflowcontainer = {", "\t\t\tdirection = vertical", "\t\t\tignoreinvisible = yes",
+            "\t\t\tspacing = 2", f'\t\t\tdatacontext = "[{rank_scopes}]"']
+    for i in range(len(items)):
+        out += [f"\t\t\tte_budget_{side}_sorted_slot = {{",
+                f'\t\t\t\tvisible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue(\'te_budget_cached_visible_rows\'), \'(CFixedPoint){i}\')]"',
+                f'\t\t\t\tdatacontext = "[TopScope.AddScope(\'row_slot\', MakeScopeValue(\'(CFixedPoint){i}\'))]"',
+                "\t\t\t}"]
+    out += ["\t\t}", "\t}"]
     return "\n".join(out)
 
 
