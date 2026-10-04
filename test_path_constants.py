@@ -9,6 +9,7 @@ import contextlib
 import os
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -159,6 +160,29 @@ class LazyResolutionTest(unittest.TestCase):
         for name in LAZY_NAMES:
             self.assertIn(name, listed)
         self.assertIn("mod_path", listed)
+
+
+class RefreshTest(unittest.TestCase):
+    def test_refresh_sees_a_digest_checkout_cloned_after_first_use(self):
+        """A fresh machine's first cold start: the server resolves the digest
+        snapshot at import, before its digests step clones the checkout."""
+        with tempfile.TemporaryDirectory() as tmp:
+            digests = Path(tmp) / "Modding-Digests"
+            with isolated({"VIC3_MODDING_DIGESTS_REPO": str(digests)}):
+                self.assertIsNone(pc.vanilla_snapshot_docs_path_default)
+                docs = digests / "1.14.5" / "docs"
+                docs.mkdir(parents=True)
+                (docs / "modifiers.log").write_text("")
+                # Still the cached None until refreshed.
+                self.assertIsNone(pc.vanilla_snapshot_docs_path_default)
+                self.assertEqual(pc.refresh("vanilla_snapshot_docs_path_default"), str(docs))
+                self.assertEqual(pc.vanilla_snapshot_docs_path_default, str(docs))
+
+    def test_refresh_rejects_eager_and_unknown_names(self):
+        for name in ("mod_path", "not_a_path_constant"):
+            with self.assertRaises(AttributeError):
+                pc.refresh(name)
+        self.assertEqual(pc.mod_path, str(REPO_ROOT))
 
 
 if __name__ == "__main__":
