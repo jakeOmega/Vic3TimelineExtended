@@ -127,6 +127,7 @@ REPLACE:ideology_paternalistic = {
 		law_elected_bureaucrats = disapprove
 	}
 	lawgroup_policing = {
+		law_private_policing = disapprove
 		law_local_police = approve
 		law_dedicated_police = neutral
 		law_militarized_police = neutral
@@ -217,7 +218,7 @@ INJECT:ideology_particularist = {
 	}
 }
 
-# Forced REPLACE due to existing section(s): lawgroup_navy_model
+# Forced REPLACE due to existing section(s): lawgroup_navy_model, lawgroup_policing
 REPLACE:ideology_patriotic = {
 	icon = "gfx/interface/icons/ideology_icons/patriotic.dds"
 	lawgroup_antitrust = {
@@ -298,6 +299,7 @@ REPLACE:ideology_patriotic = {
 		law_decentralized_cryptocurrency = disapprove
 	}
 	lawgroup_policing = {
+		law_private_policing = disapprove
 		law_militarized_police = strongly_approve
 		law_dedicated_police = approve
 		law_local_police = neutral
@@ -1925,6 +1927,9 @@ REPLACE:ideology_populist = {
 REPLACE:ideology_radical = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_radical.dds"
 	character_ideology = yes
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_bureaucracy = {
 		law_communal_administration = approve
 	}
@@ -2483,6 +2488,9 @@ REPLACE:ideology_radical = {
 REPLACE:ideology_social_democrat = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_social_democrat.dds"
 	character_ideology = yes
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_bureaucracy = {
 		law_contracted_administration = disapprove
 	}
@@ -2908,6 +2916,9 @@ REPLACE:ideology_social_democrat = {
 REPLACE:ideology_vanguardist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_vanguardist.dds"
 	character_ideology = yes
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_bureaucracy = {
 		law_automated_bureaucracy = approve
 		law_contracted_administration = disapprove
@@ -3530,6 +3541,9 @@ REPLACE:ideology_vanguardist = {
 REPLACE:ideology_fascist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_fascist.dds"
 	character_ideology = yes
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_criminal_justice = {
 		law_penal_labor_camps = strongly_approve
 	}
@@ -4181,7 +4195,7 @@ REPLACE:ideology_fascist = {
 	}
 }
 
-# Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
+# Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_policing
 REPLACE:ideology_anarchist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_anarchist.dds"
 	character_ideology = yes
@@ -4368,6 +4382,7 @@ REPLACE:ideology_anarchist = {
 		law_outlawed_dissent = strongly_disapprove
 	}
 	lawgroup_policing = {
+		law_private_policing = strongly_disapprove
 		law_no_police = approve
 		law_local_police = disapprove
 		law_dedicated_police = disapprove
@@ -4962,6 +4977,9 @@ INJECT:ideology_egalitarian = {
 REPLACE:ideology_egalitarian_modern = {
 	icon = "gfx/interface/icons/ideology_icons/egalitarian.dds"
 	priority = 100
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = neutral
@@ -5134,6 +5152,9 @@ REPLACE:ideology_meritocratic = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_colonization
 REPLACE:ideology_jingoist = {
 	icon = "gfx/interface/icons/ideology_icons/jingoist.dds"
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = neutral
 		law_pro_natalist_subsidies = strongly_approve
@@ -5197,6 +5218,9 @@ REPLACE:ideology_jingoist = {
 REPLACE:ideology_jingoist_leader = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_jingoist.dds"
 	character_ideology = yes
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_genetic_rights = {
 		law_traditional_heredity = neutral
 		law_ban_on_genetic_modification = disapprove
@@ -5561,6 +5585,9 @@ REPLACE:ideology_individualist = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare
 REPLACE:ideology_proletarian = {
 	icon = "gfx/interface/icons/ideology_icons/proletarian.dds"
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_bureaucracy = {
 		law_contracted_administration = disapprove
 		law_communal_administration = approve
@@ -5669,6 +5696,9 @@ REPLACE:ideology_proletarian = {
 REPLACE:ideology_communist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_communist.dds"
 	character_ideology = yes
+	lawgroup_policing = {
+		law_private_policing = strongly_disapprove
+	}
 	lawgroup_bureaucracy = {
 		law_contracted_administration = disapprove
 		law_communal_administration = approve
@@ -6841,6 +6871,9 @@ REPLACE:ideology_feminist_ig = {
 REPLACE:ideology_humanitarian = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarism.dds"
 	character_ideology = yes
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = neutral
 		law_pro_natalist_subsidies = neutral
@@ -7949,6 +7982,7 @@ REPLACE:ideology_republican_paternalistic = {
 		law_elected_bureaucrats = neutral
 	}
 	lawgroup_policing = {
+		law_private_policing = disapprove
 		law_local_police = approve
 		law_dedicated_police = neutral
 		law_militarized_police = neutral
@@ -7959,6 +7993,9 @@ REPLACE:ideology_republican_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_socialist = {
 	icon = "gfx/interface/icons/ideology_icons/socialist.dds"
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_bureaucracy = {
 		law_contracted_administration = disapprove
 		law_communal_administration = approve
@@ -8100,6 +8137,7 @@ REPLACE:ideology_scholar_paternalistic = {
 		law_hereditary_bureaucrats = disapprove
 	}
 	lawgroup_policing = {
+		law_private_policing = disapprove
 		law_local_police = approve
 		law_dedicated_police = neutral
 		law_militarized_police = neutral
@@ -8188,6 +8226,7 @@ REPLACE:ideology_junker_paternalistic = {
 		law_elected_bureaucrats = disapprove
 	}
 	lawgroup_policing = {
+		law_private_policing = disapprove
 		law_local_police = approve
 		law_dedicated_police = neutral
 		law_militarized_police = neutral
@@ -8271,6 +8310,7 @@ REPLACE:ideology_papal_paternalistic = {
 		law_elected_bureaucrats = disapprove
 	}
 	lawgroup_policing = {
+		law_private_policing = disapprove
 		law_local_police = approve
 		law_dedicated_police = neutral
 		law_militarized_police = neutral
@@ -10519,6 +10559,9 @@ REPLACE:ideology_oriental_orthodox_patriarch = {
 REPLACE:ideology_authoritarian = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/authoritarian.dds"
 	character_ideology = yes
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_criminal_justice = {
 		law_penal_labor_camps = approve
 	}
@@ -11397,7 +11440,7 @@ REPLACE:ideology_agrarian_jeffersonian = {
 	}
 }
 
-# Forced REPLACE due to existing section(s): lawgroup_distribution_of_power
+# Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_policing
 REPLACE:ideology_integralist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_integralist.dds"
 	character_ideology = yes
@@ -11416,6 +11459,7 @@ REPLACE:ideology_integralist = {
 		law_secret_police = strongly_approve
 	}
 	lawgroup_policing = {
+		law_private_policing = disapprove
 		law_militarized_police = strongly_approve
 		law_local_police = approve
 		law_dedicated_police = approve
@@ -12498,6 +12542,9 @@ REPLACE:ideology_royalist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare
 REPLACE:ideology_proletarian_movement = {
 	icon = "gfx/interface/icons/ideology_icons/proletarian.dds"
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_genetic_rights = {
 		law_traditional_heredity = neutral
 		law_ban_on_genetic_modification = neutral
@@ -12574,6 +12621,9 @@ REPLACE:ideology_proletarian_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare, lawgroup_governance_principles
 REPLACE:ideology_socialist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/socialist.dds"
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_bureaucracy = {
 		law_contracted_administration = disapprove
 	}
@@ -12671,6 +12721,9 @@ REPLACE:ideology_socialist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_communist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/communist.dds"
+	lawgroup_policing = {
+		law_private_policing = strongly_disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = strongly_disapprove
@@ -12762,7 +12815,7 @@ REPLACE:ideology_communist_movement = {
 	}
 }
 
-# Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
+# Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_policing
 REPLACE:ideology_anarchist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/anarchist.dds"
 	lawgroup_bureaucracy = {
@@ -12856,6 +12909,7 @@ REPLACE:ideology_anarchist_movement = {
 		law_outlawed_dissent = strongly_disapprove
 	}
 	lawgroup_policing = {
+		law_private_policing = strongly_disapprove
 		law_no_police = approve
 		law_local_police = disapprove
 		law_dedicated_police = disapprove
@@ -12877,6 +12931,9 @@ REPLACE:ideology_anarchist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_vanguardist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/vanguardist.dds"
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_disapprove
 		law_pro_natalist_subsidies = neutral
@@ -12956,7 +13013,7 @@ REPLACE:ideology_vanguardist_movement = {
 	}
 }
 
-# Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_governance_principles
+# Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_governance_principles, lawgroup_policing
 REPLACE:ideology_fascist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/fascist.dds"
 	lawgroup_criminal_justice = {
@@ -13065,6 +13122,7 @@ REPLACE:ideology_fascist_movement = {
 		law_outlawed_dissent = strongly_approve
 	}
 	lawgroup_policing = {
+		law_private_policing = disapprove
 		law_local_police = approve
 		law_dedicated_police = approve
 		law_militarized_police = strongly_approve
@@ -13206,6 +13264,9 @@ REPLACE:ideology_liberal_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_governance_principles
 REPLACE:ideology_radical_movement = {
 	icon = "gfx/interface/icons/ideology_icons/radical.dds"
+	lawgroup_policing = {
+		law_private_policing = disapprove
+	}
 	lawgroup_bureaucracy = {
 		law_communal_administration = approve
 	}
