@@ -36,6 +36,15 @@ violation unresolved until the relevant tech is researched).
 Carrier laws (CARRIER_LAW_DENYLIST) hold amendments only: they are never
 replacement candidates, never a group's fallback, and never trigger a cascade.
 
+An `unlocking_laws` entry from the law's OWN group is a transition gate, not a
+standing requirement: law_legacy_slavery's `unlocking_laws = { law_slave_trade }`
+means it can only be enacted from Slave Trade. Once it is held, Slave Trade
+cannot be, so checking that entry as a violation fires on every holder. Until
+this was fixed it moved every Legacy Slavery country to Colonial Slavery before
+day one, so the USA's incorporated states stopped being slave states. Such
+entries still gate a law as a replacement candidate (`_validity_clause`), but
+never count as a violation of the held law (`held_unlocking_laws`).
+
 Output: common/scripted_effects/extra_law_consistency_generated.txt
 Auto-runs via mod_state_server `_run_post_load_generators`.
 
@@ -505,8 +514,23 @@ def laws_by_group(laws):
     return grouped
 
 
-def has_constraints(law):
-    return bool(law["unlocking_laws"]) or bool(law["disallowing_laws"])
+def held_unlocking_laws(law, laws=None):
+    """The `unlocking_laws` a law must keep satisfied while it is held.
+
+    An entry from the law's own group only says which law it can be enacted
+    from (see the module docstring), so it is dropped. Without `laws` to look
+    groups up in, or for an id `laws` doesn't know, every entry is kept.
+    """
+    if laws is None:
+        return list(law["unlocking_laws"])
+    return [
+        lid for lid in law["unlocking_laws"]
+        if lid not in laws or laws[lid]["group"] != law["group"]
+    ]
+
+
+def has_constraints(law, laws=None):
+    return bool(held_unlocking_laws(law, laws)) or bool(law["disallowing_laws"])
 
 
 def constraint_having_groups(laws):
@@ -514,7 +538,7 @@ def constraint_having_groups(laws):
     grouped = laws_by_group(laws)
     out = []
     for group_id, law_ids in grouped.items():
-        if any(has_constraints(laws[lid]) for lid in law_ids):
+        if any(has_constraints(laws[lid], laws) for lid in law_ids):
             out.append(group_id)
     return out
 
@@ -551,17 +575,19 @@ def candidate_order(active_law_id, group_law_ids, laws, attitudes):
 # ── Emission ────────────────────────────────────────────────────────────────
 
 
-def _violation_clause(law, indent, law_id=None):
+def _violation_clause(law, indent, law_id=None, laws=None):
     """Emit the trigger clauses that detect law's own constraints being violated.
 
     The full violation predicate (used inside a `limit = { has_law=...; OR={...} }`
     block) is `unlocking_violated OR any_disallowing_active`. We compose it with
-    a single OR.
+    a single OR. Pass `laws` so same-group unlocking_laws are left out
+    (`held_unlocking_laws`).
     """
     parts = []
-    if law["unlocking_laws"]:
+    held_unlocking = held_unlocking_laws(law, laws)
+    if held_unlocking:
         unlocking = "\n".join(
-            f"{indent}\t\thas_law = law_type:{law_id}" for law_id in law["unlocking_laws"]
+            f"{indent}\t\thas_law = law_type:{lid}" for lid in held_unlocking
         )
         parts.append(f"{indent}\tNOR = {{\n{unlocking}\n{indent}\t}}")
     for d_law in law["disallowing_laws"]:
@@ -616,14 +642,14 @@ def emit_lawgroup_helper(group_id, group_law_ids, laws, attitudes):
 
     constrained = [
         lid for lid in group_law_ids
-        if lid not in CARRIER_LAW_DENYLIST and has_constraints(laws[lid])
+        if lid not in CARRIER_LAW_DENYLIST and has_constraints(laws[lid], laws)
     ]
     # Stable order for diffability: sort by file_order
     constrained.sort(key=lambda lid: (laws[lid]["file_order"], lid))
 
     for active_id in constrained:
         active = laws[active_id]
-        violation_clause = _violation_clause(active, "\t\t\t", active_id)
+        violation_clause = _violation_clause(active, "\t\t\t", active_id, laws)
         # Sanity: should always be non-empty since `has_constraints(active)` was True
         if not violation_clause:
             continue
