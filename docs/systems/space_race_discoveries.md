@@ -30,8 +30,9 @@ retroactive rolls for colonies founded before this change.
 
 The two Europa candidates are independent: detecting vents neither guarantees
 nor excludes life. The two living-biology events use reproducible growth and
-metabolism with contamination controls. Martian evidence remains a candidate
-biosignature. Other organic finds explicitly do not establish biology.
+metabolism with contamination controls. The Hellas event establishes ancient microbial fossils. Chemistry and geology
+finds report their own confirmed results without implying an additional life
+discovery.
 
 ## Choice rewards
 
@@ -53,17 +54,24 @@ technology, rapid terraforming, or profitable export of bulk material to Earth.
 
 ## Event catalog and scientific foundations
 
-All descriptions are fictional future colony findings. The links distinguish
-observations and research models from the extrapolations used for each event.
+The events occur after a permanent colony has had time to survey, excavate,
+operate laboratories and develop instruments on the world in question. Every
+event reports a confirmed discovery in that fictional future. The choice is
+what to do with the finding: preserve it, investigate its history, share it, or
+develop its practical uses. Further research concerns those uses and details.
+
+The source notes below describe present-day observations and research models.
+Their uncertainty concerns what humanity knows today; it does not qualify the
+results reported by the future colony.
 Existing colony pictures are reused. Probabilities apply per eligible month.
 
 | ID | Colony | Discovery | Monthly chance | Choices |
 |---|---|---|---|---|
-| 1 | europa | A Second Living World | 1% | Protect the ocean and establish a permanent biology institute. / Publish the evidence through an international research consortium. |
+| 1 | europa | A Second Living World | 1% | Protect the ocean and establish a permanent biology institute. / Share the discovery through an international research consortium. |
 | 2 | europa | Chimneys Beneath the Ice | 2% | Keep the vent field undisturbed for chemical research. / Develop instruments for operations in hot, pressurized water. |
 | 3 | enceladus | Life in the Ice Grains | 1% | Designate the plume catchment as a protected biological reserve. / Share sealed samples and methods with international laboratories. |
 | 4 | titan | An Impact-Born Chemical Laboratory | 2% | Preserve the deposit and reconstruct its chemical history. / Use the reaction pathways to improve industrial synthesis. |
-| 5 | hellas_planitia | An Ancient Martian Biosignature | 1% | Protect the excavation and fund further tests of the biological interpretation. / Open the archive to international teams for independent scrutiny. |
+| 5 | hellas_planitia | The Fossils of Hellas | 1% | Protect the fossil beds and establish a paleontology institute. / Open the fossil archive to international research teams. |
 | 6 | olympus_mons | Rooms Inside the Volcano | 2% | Survey the tubes as an archive of Martian volcanism. / Fit inspected chambers with sealed habitat modules. |
 | 7 | utopia_planitia | The Buried Glacier | 2% | Preserve a continuous core for climate research. / Develop the cleanest ice layers as a water and propellant source. |
 | 8 | arcadia_planitia | Salt Water in the Drill | 2% | Isolate the boreholes and study the salt chemistry. / Build purification systems and corrosion-resistant equipment. |
@@ -74,7 +82,7 @@ Existing colony pictures are reused. Probabilities apply per eligible month.
 | 13 | venus | A Wave That Holds Its Ground | 2% | Build a long-term atmospheric observatory. / Use the wave forecasts to improve aerostat navigation. |
 | 14 | mercury | An Archive in Permanent Shadow | 2% | Protect representative layers for volatile and organic chemistry research. / Develop the deposit as a local water and propellant source. |
 | 15 | io | The Moving Floor of Io | 2% | Move the installations and monitor the channel from a safe distance. / Develop mobile foundations and continuous subsurface warning systems. |
-| 16 | ganymede | Oceans Between Layers | 2% | Publish a model of the layered ocean and its chemical limits. / Develop instruments and pressure vessels for deep-ice operations. |
+| 16 | ganymede | Oceans Between Layers | 2% | Publish the mapped ocean structure and chemical profiles. / Develop instruments and pressure vessels for deep-ice operations. |
 | 17 | callisto | The Crater Under the Crater | 2% | Keep the layered section intact as an impact chronology. / Use mapped deposits to improve shielding and construction. |
 | 18 | titania | Warmth Beneath Titania | 2% | Keep a permanent observatory above the liquid layer. / Apply the deep-ice survey methods to colony engineering. |
 | 19 | triton | A Jet Beneath the Landing Field | 2% | Close the field and establish a remote geyser observatory. / Relocate the field and develop pressure monitoring equipment. |
@@ -82,27 +90,27 @@ Existing colony pictures are reused. Probabilities apply per eligible month.
 
 ### 1. A Second Living World
 
-An ocean and possible water-rock energy sources make microbes and hydrothermal activity plausible; neither has been detected. The event's cultures and probes are fictional future results. [Europa: ingredients for life](https://science.nasa.gov/mission/europa-clipper/why-europa-ingredients-for-life/).
+Present-day evidence supports an ocean and possible water-rock energy sources. Event 1 establishes living microbes through replicated cultures; event 2 establishes a hydrothermal vent field through direct surveys and sampling. [Europa: ingredients for life](https://science.nasa.gov/mission/europa-clipper/why-europa-ingredients-for-life/).
 
 ### 2. Chimneys Beneath the Ice
 
-An ocean and possible water-rock energy sources make microbes and hydrothermal activity plausible; neither has been detected. The event's cultures and probes are fictional future results. [Europa: ingredients for life](https://science.nasa.gov/mission/europa-clipper/why-europa-ingredients-for-life/).
+Present-day evidence supports an ocean and possible water-rock energy sources. Event 1 establishes living microbes through replicated cultures; event 2 establishes a hydrothermal vent field through direct surveys and sampling. [Europa: ingredients for life](https://science.nasa.gov/mission/europa-clipper/why-europa-ingredients-for-life/).
 
 ### 3. Life in the Ice Grains
 
-Phosphorus adds to evidence for habitable chemistry. Living organisms are an extrapolation, requiring reproducible metabolism, reproduction, and contamination controls. [Cassini: phosphorus in Enceladus' ocean](https://www.nasa.gov/missions/cassini/nasa-cassini-data-reveals-building-block-for-life-in-enceladus-ocean/).
+Present-day phosphorus measurements add to evidence for habitable chemistry. The future colony confirms indigenous life through replicated culture experiments and contamination controls. [Cassini: phosphorus in Enceladus' ocean](https://www.nasa.gov/missions/cassini/nasa-cassini-data-reveals-building-block-for-life-in-enceladus-ocean/).
 
 ### 4. An Impact-Born Chemical Laboratory
 
-Impact heating can mix organics and liquid water. Preserved reaction products are plausible; the event claims no life. [Impact craters and Titan's chemistry](https://www.nasa.gov/missions/cassini/impact-craters-reveal-details-of-titans-dynamic-surface-weathering/).
+Impact heating can mix organics and liquid water. The future colony identifies preserved reaction products and reproduces their formation in its laboratories. [Impact craters and Titan's chemistry](https://www.nasa.gov/missions/cassini/impact-craters-reveal-details-of-titans-dynamic-surface-weathering/).
 
-### 5. An Ancient Martian Biosignature
+### 5. The Fossils of Hellas
 
-Potential biosignatures require exclusion of abiotic explanations. Hellas deposits and stronger converging evidence are fictional, and the event leaves confirmation open. [Potential Martian biosignatures](https://www.nasa.gov/news-release/nasa-says-mars-rover-discovered-potential-biosignature-last-year/).
+Present-day Martian biosignatures remain under investigation. The future Hellas colony confirms mineralized microbial fossils, growth layers and metabolic chemistry through independent laboratory analysis. [Potential Martian biosignatures](https://www.nasa.gov/news-release/nasa-says-mars-rover-discovered-potential-biosignature-last-year/).
 
 ### 6. Rooms Inside the Volcano
 
-Lava tubes could shelter subsurface exploration and habitats. An extensive stable network near Olympus Mons remains a fictional local discovery. [Mars cave exploration mission concept](https://arxiv.org/abs/2105.05281).
+Lava tubes are plausible settings for subsurface exploration and habitats. The future colony maps a stable network near Olympus Mons and certifies inspected chambers for occupation. [Mars cave exploration mission concept](https://arxiv.org/abs/2105.05281).
 
 ### 7. The Buried Glacier
 
@@ -110,52 +118,52 @@ Buried Martian ice is real; unusually clean, thick and accessible layers are the
 
 ### 8. Salt Water in the Drill
 
-Models severely constrain near-surface brines. Drilling heat melts salty ice temporarily in this event; no persistent natural liquid or inhabited aquifer is asserted. [Martian brines and habitability](https://arxiv.org/abs/2012.00100).
+Present-day models constrain near-surface brines. The future colony establishes the composition of a corrosive perchlorate deposit and measures the temporary brine produced by its drilling equipment. [Martian brines and habitability](https://arxiv.org/abs/2012.00100).
 
 ### 9. A Reservoir Below Ceres
 
-Dawn data support deep brines near Occator. The accessible branch and useful yields are extrapolations, with no claim of biology. [Ceres' buried salty reservoir](https://www.jpl.nasa.gov/news/mystery-solved-bright-areas-on-ceres-come-from-salty-water-below/).
+Dawn data support deep brines near Occator. The future colony maps an accessible branch, samples its chemistry and demonstrates usable yields through trial extraction. [Ceres' buried salty reservoir](https://www.jpl.nasa.gov/news/mystery-solved-bright-areas-on-ceres-come-from-salty-water-below/).
 
 ### 10. A Visitor Preserved in Vesta
 
-Carbonaceous impactors explain dark material on Vesta. The preserved buried fragments are a plausible local variation; organics do not establish life. [Carbonaceous material delivered to Vesta](https://ntrs.nasa.gov/citations/20120011565).
+Carbonaceous impactors explain dark material on Vesta. The future colony recovers buried fragments and establishes their origin and mineral history. [Carbonaceous material delivered to Vesta](https://ntrs.nasa.gov/citations/20120011565).
 
 ### 11. A Rich Seam in Psyche
 
-Psyche may mix substantial metal and rock. A continuous rich seam is speculative, and the event avoids treating a bare metallic core as established. [Psyche mission overview](https://science.nasa.gov/mission/psyche/mission-overview/).
+Present-day observations indicate mixed metal and rock on Psyche. The future colony maps and assays a continuous rich seam within that mixture. [Psyche mission overview](https://science.nasa.gov/mission/psyche/mission-overview/).
 
 ### 12. Water Bound in Stone
 
-Spectra support hydrated minerals on Pallas. A concentrated seam and viable thermal extraction are fictional local and engineering outcomes. [Pallas surface hydration](https://www.lpi.usra.edu/meetings/lpsc1995/pdf/1587.pdf).
+Spectra support hydrated minerals on Pallas. The future colony maps a concentrated seam and demonstrates thermal extraction in an operating pilot plant. [Pallas surface hydration](https://www.lpi.usra.edu/meetings/lpsc1995/pdf/1587.pdf).
 
 ### 13. A Wave That Holds Its Ground
 
-Terrain-associated stationary atmospheric gravity waves have been observed. Better forecasts for an aerostat colony are an engineering extrapolation. [Stationary waves in Venus' clouds](https://arxiv.org/abs/1707.07796).
+Terrain-associated stationary atmospheric gravity waves have been observed. The future colony measures their behavior over an extended survey and establishes forecasts for its aerostat crews. [Stationary waves in Venus' clouds](https://arxiv.org/abs/1707.07796).
 
 ### 14. An Archive in Permanent Shadow
 
-Ice and a possibly organic dark covering occur in permanently shadowed craters. The unusually thick and useful deposit is the rare variation. [Mercury polar ice and dark material](https://www.jpl.nasa.gov/news/nasa-spacecraft-finds-new-mercury-water-ice-evidence/).
+Present-day observations support polar ice and a dark covering that may contain organics. The future colony samples an unusually thick deposit and establishes its chemistry and extraction yield. [Mercury polar ice and dark material](https://www.jpl.nasa.gov/news/nasa-spacecraft-finds-new-mercury-water-ice-evidence/).
 
 ### 15. The Moving Floor of Io
 
-Io is volcanically active. A changing lava channel beneath a colony is a plausible local hazard; adaptive infrastructure is speculative engineering. [Io overview](https://science.nasa.gov/jupiter/moons/io/).
+Io is volcanically active. The future colony directly maps a changing lava channel beneath existing installations and identifies the structures threatened by collapse. [Io overview](https://science.nasa.gov/jupiter/moons/io/).
 
 ### 16. Oceans Between Layers
 
-Layered liquid and high-pressure ice are modeled possibilities. The event supplies future measurements and emphasizes restricted rock-water exchange. [Ganymede ocean layers](https://www.jpl.nasa.gov/news/ganymede-may-harbor-club-sandwich-of-oceans-and-ice/).
+Present-day models allow layered liquid and high-pressure ice. The future colony establishes the layering and salinities through seismic profiles and borehole samples. [Ganymede ocean layers](https://www.jpl.nasa.gov/news/ganymede-may-harbor-club-sandwich-of-oceans-and-ice/).
 
 ### 17. The Crater Under the Crater
 
-Callisto has an old, heavily cratered surface. A well-preserved, datable buried sequence is the rare local discovery. [Callisto overview](https://science.nasa.gov/jupiter/moons/callisto/).
+Callisto has an old, heavily cratered surface. The future colony dates a preserved buried sequence and establishes an impact chronology. [Callisto overview](https://science.nasa.gov/jupiter/moons/callisto/).
 
 ### 18. Warmth Beneath Titania
 
-Models allow Titania to retain a liquid layer. Its detection is fictional; chemistry, rock contact and biology remain unconfirmed. [Possible oceans in Uranus' large moons](https://www.jpl.nasa.gov/news/new-study-of-uranus-large-moons-shows-4-may-hold-water/).
+Present-day models allow Titania to retain a liquid layer. The future colony confirms the ocean, measures its salts and ammonia, and establishes its heat supply. [Possible oceans in Uranus' large moons](https://www.jpl.nasa.gov/news/new-study-of-uranus-large-moons-shows-4-may-hold-water/).
 
 ### 19. A Jet Beneath the Landing Field
 
-Nitrogen jets are observed, with solar heating beneath translucent ice a proposed mechanism. The landing-field hazard is fictional. [Triton overview](https://science.nasa.gov/neptune/moons/triton/).
+Nitrogen jets are observed, with solar heating beneath translucent ice a proposed mechanism. The future colony measures that mechanism directly and maps the deposit threatening its landing field. [Triton overview](https://science.nasa.gov/neptune/moons/triton/).
 
 ### 20. Antifreeze at the Edge of the System
 
-Models consider ocean survival and ammonia chemistry. Future cores and seismic evidence are extrapolations; no organisms are inferred. [Pluto and Triton ocean evolution](https://ael.gsfc.nasa.gov/600/public-nuggets/Triton-nugget20240401.pdf).
+Present-day models consider ocean survival and ammonia chemistry. The future colony confirms an ocean through deep sounding and recovered fluid, and establishes the chemical and thermal conditions sustaining it. [Pluto and Triton ocean evolution](https://ael.gsfc.nasa.gov/600/public-nuggets/Triton-nugget20240401.pdf).

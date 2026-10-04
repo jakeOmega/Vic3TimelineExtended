@@ -138,7 +138,7 @@ space_race_discovery_events.4 = {
 	}
 }
 
-# An Ancient Martian Biosignature (hellas_planitia); 10% founding roll, 1% per eligible month.
+# The Fossils of Hellas (hellas_planitia); 10% founding roll, 1% per eligible month.
 space_race_discovery_events.5 = {
 	type = country_event
 	placement = root

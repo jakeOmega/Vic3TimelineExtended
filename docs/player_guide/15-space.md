@@ -362,7 +362,7 @@ speed, +10% influence and +15% cultural pull.
 
 New colonies can also produce rare discoveries after their founding event.
 Twenty discoveries cover microbial life in Europa's or Enceladus's oceans,
-possible ancient Martian biosignatures, buried ice, mineral deposits, ocean
+confirmed ancient Martian fossils, buried ice, mineral deposits, ocean
 layers, atmospheric waves and local geological hazards. Each discovery offers
 two choices with different small permanent bonuses on the colony journal entry.
 
@@ -374,9 +374,11 @@ occurs once, and other possible finds wait through that spacing period.
 Surveys continue while colonization is idle and after all worlds are claimed.
 Colonies founded in an older save receive no new founding rolls.
 
-The biological events distinguish living microbes from possible fossils and
-from organic compounds formed without life. Their probabilities are game rules,
-not estimates of how likely those discoveries are in the real solar system.
+Each event reports a confirmed discovery by an established colony. The
+biological finds include living microbes and ancient microbial fossils; other
+finds establish geological features or chemical processes. Their probabilities
+are game rules, not estimates of how likely those discoveries are in the real
+solar system.
 
 ## After the space race
 

@@ -5,6 +5,7 @@ they do not substitute for an engine play-test.
 """
 from pathlib import Path
 import re
+import subprocess
 import unittest
 
 from paradox_file_parser import ParadoxFileParser
@@ -117,6 +118,11 @@ class DiscoveryTests(unittest.TestCase):
         cls.effects = load('common/scripted_effects/space_race_discovery_effects.txt')
         cls.events = load('events/space_race_discovery_events.txt')
         cls.modifiers = load('common/static_modifiers/space_race_discovery_modifiers.txt')
+        # CI intentionally omits gfx/ from its sparse checkout. Validate asset
+        # references against Git's index, without requiring texture downloads.
+        cls.pictures = set(subprocess.check_output(
+            ['git', 'ls-files', '--', 'gfx/event_pictures/*.dds'],
+            cwd=ROOT, text=True).splitlines())
 
     def state(self):
         return ScriptState(self.effects)
@@ -230,7 +236,7 @@ class DiscoveryTests(unittest.TestCase):
             event = self.events[eid][1]
             self.assertEqual(value(event, 'type'), 'country_event')
             texture = value(value(event, 'event_image'), 'texture').strip('"')
-            self.assertTrue((ROOT / texture).is_file(), texture)
+            self.assertIn(texture, self.pictures)
             for field in ('title', 'desc', 'flavor'):
                 self.assertIn(value(event, field), loc_keys)
             options = event['option']
