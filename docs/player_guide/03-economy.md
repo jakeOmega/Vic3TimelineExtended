@@ -121,7 +121,7 @@ National Queue tab.
 | Still moving toward it | Fixed Budget only, and only while the purchase has not yet reached what your budget buys: the share of the remaining gap that closes this week. Its tooltip explains why the purchase moves in steps. |
 | Private investors buy | Points investors bought this week and the share of construction going to private projects. |
 | Price | What one construction point costs now: the market price, raised in rich countries by Construction Cost Scaling. |
-| Your market | Construction on sale (including imports) against construction wanted (every buyer, including maintenance and exports). A red "shortage" marks demand above supply. |
+| Your market | Construction on sale (including imports) against construction wanted (every buyer, including maintenance and exports). A red "shortage" marks demand above supply: the price rises, but you still get all the construction you buy. |
 
 ### Fixed quantity or fixed budget
 
