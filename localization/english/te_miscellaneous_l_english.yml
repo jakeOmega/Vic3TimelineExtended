@@ -5018,7 +5018,7 @@
  un_walkout_join_modifier:0 "Joined Assembly Walkout"
  un_walkout_mediator_modifier:0 "Assembly Walkout Mediator"
  un_withdrawal_penalty_modifier:0 "UN Withdrawal Consequences"
- une_formation_sole_great_power_tt:0 "Is the only [concept_great_power]"
+ une_formation_bloc_unanimity_tt:0 "Every other [concept_great_power] is in our [concept_power_bloc]"
  une_formation_un_supranational_tt:0 "[concept_un_authority] stands at the [concept_un_tier_supranational] tier"
  veteran_mental_health_modifier:0 "Veteran Mental Health Services"
  veterancy5:"Veteran"
