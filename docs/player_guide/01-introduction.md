@@ -100,10 +100,12 @@ turn a default system off.
 
 ## Reading the Budget breakdown
 
-The Budget panel's Breakdown tab shows weekly income and expenses as pie charts,
-stacked bars and a list of amounts. It is available under every game-rule setting.
-Colors and percentages match across the charts and the list; hover an institution
-for its allocation.
+The Budget panel's Breakdown tab shows weekly income and expenses as pie charts
+and lists ordered from largest to smallest amount. It is available under every
+game-rule setting.
+Colors and percentages match across the pies and lists; hover an institution
+for its allocation. Investment Pool Transfer and the construction it funds are
+private spending, so they are excluded from the totals and Construction Goods.
 
 Government Administration's operating costs are divided between your institutions
 and General Administration. Institutions receive the share corresponding to the

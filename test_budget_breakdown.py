@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent
 
 
 class BudgetHarness:
-    def __init__(self, *, levels=None, production=2800, usage=1400, administration=39000, civil=50000, total=70000, charges=None):
+    def __init__(self, *, levels=None, production=2800, usage=1400, administration=39000, civil=50000, total=70000, private_construction=0, charges=None):
         parser = ParadoxFileParser()
         self.values = {}
         for name in ("te_budget_values.txt", "te_budget_generated_values.txt"):
@@ -24,7 +24,7 @@ class BudgetHarness:
             self.values.update({key: val for key, _, val in entries(parser.parse_object(parser.tokenize("{" + text + "}"))[0])})
         self.levels = levels if levels is not None else {"institution_schools": 3, "institution_national_bank": 2}
         self.production = Decimal(production)
-        self.scopes = {"total": Decimal(total), "institution_usage": Decimal(usage)}
+        self.scopes = {"total": Decimal(total), "institution_usage": Decimal(usage), "private_construction": Decimal(private_construction)}
         for key, _, getters in gen.EXPENSE:
             self.scopes.update({f"{key}_{i}": Decimal(0) for i in range(len(getters))})
         self.scopes["civil_0"] = Decimal(civil)
@@ -62,9 +62,11 @@ class BudgetHarness:
                 results.append(value in self.levels)
             elif key == "is_building_type":
                 results.append(context[0] == value)
+            elif key == "NOT":
+                results.append(not self.limit(value, context))
             else:
-                assert op == ">", op
-                results.append(self.operand(key, context) > self.operand(value, context))
+                left, right = self.operand(key, context), self.operand(value, context)
+                results.append({">": left > right, ">=": left >= right, "=": left == right}[op])
         return all(results)
 
     def block(self, node, acc=Decimal(0), context=None):
@@ -193,6 +195,27 @@ class BudgetAllocationTests(unittest.TestCase):
         self.assertEqual(h("income_additional"), 100)
         self.assertEqual(h("income_other"), 0)
 
+    def test_private_construction_is_removed_once_and_totals_reconcile(self):
+        h = BudgetHarness(civil=0, administration=0, total=50000, private_construction=30000,
+                          charges={"construction": 50000, "military": 30000})
+        self.assertEqual(h("expense_construction"), 20000)
+        self.assertEqual(h("expense_other"), 0)
+        self.assertEqual(sum(h("expense_" + key) for key, _ in gen.categories("expense")), 50000)
+        self.assertEqual(h("expense_construction_share"), Decimal('0.4'))
+        self.assertNotIn("investment", [key for key, _, _ in gen.INCOME])
+
+    def test_rows_sort_signed_amounts_descending_hide_zeros_and_break_ties(self):
+        h = BudgetHarness()
+        for side in ("income", "expense"):
+            keys = [key for key, _ in gen.categories(side)]
+            for amounts in ([0] * len(keys), [100, 100, -5, 0, 250] + [0] * (len(keys) - 5)):
+                h.scopes.update({"row_" + key: Decimal(amount) for key, amount in zip(keys, amounts)})
+                expected = sorted((key for key, amount in zip(keys, amounts) if amount),
+                                  key=lambda key: (-h.scopes["row_" + key], keys.index(key)))
+                self.assertEqual(h(side + "_legend_height"), len(expected) * 44)
+                self.assertEqual([h(side + "_" + key + "_row_y") for key in expected],
+                                 [i * 44 for i in range(len(expected))])
+
 
 class BudgetWiringTests(unittest.TestCase):
     def test_generated_values_are_current(self):
@@ -232,13 +255,20 @@ class BudgetWiringTests(unittest.TestCase):
                 loc = (ROOT / "localization/english/te_budget_l_english.yml").read_text(encoding="utf-8-sig")
                 self.assertIn(f"GetPlayer.GetModifier.GetDescFor('{gen.source_type(side, key)}')", loc)
 
-    def test_pie_and_stack_follow_identical_reverse_cumulative_order(self):
+    def test_pie_follows_reverse_cumulative_order_without_bar(self):
         for side in ("income", "expense"):
             chart = gen.chart(side)
             found = re.findall(rf"ScriptValue\('te_budget_{side}_cum_(\d+)'\)", chart)
             expected = [str(i) for i in reversed(range(len(gen.categories(side))))]
-            self.assertEqual(found, expected * 2)
+            self.assertEqual(found, expected)
+            self.assertNotIn("progressbar =", chart)
             self.assertEqual(chart.count('framesize = { 128 128 }'), len(expected))
+
+    def test_both_public_headers_exclude_the_transfer(self):
+        for side, getter in (("income", "PredictWeeklyIncome"), ("expense", "GetWeeklyExpenses")):
+            scope = gen.scope(side)
+            self.assertIn(f"Subtract_CFixedPoint(GetPlayer.{getter}, GetPlayer.GetInvestmentIncome)", scope)
+            self.assertIn("TopScope.ScriptValue('te_budget_total')", gen.section(side))
 
     def test_budget_tab_is_always_available(self):
         gui = (ROOT / "gui/budget_panel.gui").read_text(encoding="utf-8-sig")

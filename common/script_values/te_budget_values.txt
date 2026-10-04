@@ -1,5 +1,9 @@
 ﻿# Country scope. Read-only; GUI passes current engine budget getters as value
-# scopes. No monthly cache, game-rule gate or journal entry is required.
+# scopes (with private construction excluded). No monthly cache, game-rule gate
+# or journal entry is required.
+
+# Public total passed by the GUI after excluding Investment Pool Transfer.
+te_budget_total = { value = scope:total }
 
 # Administration produces bureaucracy/tax capacity rather than saleable goods.
 # Its negative weekly profit therefore measures its wages + input goods (and

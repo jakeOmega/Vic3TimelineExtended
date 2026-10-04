@@ -69,7 +69,6 @@ INCOME = (
     ("tariffs", "BUDGET_TARIFFS", "PredictTariffs"),
     ("minting", "BUDGET_MINTING", "PredictMinting"),
     ("government_dividends", "DIVIDENDS_FROM_GOVERNMENT_SHARES", "PredictGovernmentShareDividends"),
-    ("investment", "BUDGET_INVESTMENT_INCOME", "GetInvestmentIncome"),
     ("pacts", "BUDGET_DIPLOMATIC_PACTS", "PredictDiplomaticPactsIncome"),
     ("treaties", "BUDGET_TREATIES", "PredictTreatyIncome"),
     *((key, f"te_budget_chart_source_{side}_{key}", source_getter(side, key)) for side in ("income",) for key in SOURCES[side]),
@@ -95,10 +94,9 @@ EXPENSE = (
 
 LOCALIZATION = {
     "tab": "Breakdown",
-    "tab_tt": "Weekly income and expenses as pies, stacked bars and itemized amounts. Government Administration costs are allocated among your institutions.",
+    "tab_tt": "Weekly public income and expenses as pies and itemized amounts. Government Administration costs are allocated among your institutions.",
     "income": "Weekly Income",
     "expense": "Weekly Expenses",
-    "stack": "Share of Weekly Total",
     "civil": "Other Civil Buildings",
     "military": "Military",
     "shipping": "Shipping and Connections",
@@ -109,10 +107,10 @@ LOCALIZATION = {
     "additional_expense": "Other Additional Expenses",
     "no_income": "No positive income this week.",
     "no_expense": "No positive expenses this week.",
-    "pie_tt": "Each color matches a row below. Pies and stacked bars show shares of positive amounts; signed adjustments remain in the list. Weekly headers include those adjustments.",
-    "row_tt": "Weekly amount and share of positive amounts. Other Civil Buildings excludes the administration costs allocated to institutions and General Administration. Other Income and Other Expenses reconcile the listed amounts to the budget totals, including temporary flows and uncategorized items.",
+    "pie_tt": "Each color matches a row below. Pies show shares of positive amounts; signed adjustments remain in the list. Weekly headers include those adjustments and exclude Investment Pool Transfer.",
+    "row_tt": "Weekly amount and share of positive amounts. Other Civil Buildings excludes the administration costs allocated to institutions and General Administration. Other Income and Other Expenses reconcile the listed amounts to the public budget totals after excluding Investment Pool Transfer, including temporary flows and uncategorized items.",
     "how": "How the Breakdown Works",
-    "how_text": "#b Administration Allocation#!\\nGovernment Administration produces bureaucracy and tax capacity rather than goods for sale. Its weekly operating deficit is the cost of its wages and input goods, including any slave upkeep. Universities, ports and other civil buildings stay under Other Civil Buildings.\\n\\nThe share allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. Each institution receives that pool in proportion to its current level, including institutions with reduced bureaucracy costs. Targets still being implemented do not count. General Administration receives the remainder, including unused capacity and non-institution bureaucracy use. With no production or no institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration buildings report their latest weekly balance. Allocation is capped at the government's civil wage, goods and slave-upkeep total, so a wage change cannot allocate more than that total.\\n\\n#b Charts and Amounts#!\\nIncome uses the same forecasts as Overview; expenses use the same weekly total. Military includes army and navy wages, goods, slave upkeep, warship construction and warship maintenance. Shipping covers supply ships and port connections.\\n\\n#b Journal Systems#!\\nBanking, Covert Actions, Cultural Hegemony, the United Nations and other systems have separate rows. Hover over a row to see its currently applied sources. Their amounts are removed from Additional Expenses or Income once; only the unattributed remainder stays there. One-time treasury payments and non-monetary resource costs are outside the weekly budget.\\n\\nColors follow the same order in both charts and the list. With many institutions the palette repeats; use the names and percentages to identify each category. Signed negative adjustments appear in the list with a zero chart share. Charts are empty when there are no positive amounts.",
+    "how_text": "#b Administration Allocation#!\\nGovernment Administration produces bureaucracy and tax capacity rather than goods for sale. Its weekly operating deficit is the cost of its wages and input goods, including any slave upkeep. Universities, ports and other civil buildings stay under Other Civil Buildings.\\n\\nThe share allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. Each institution receives that pool in proportion to its current level, including institutions with reduced bureaucracy costs. Targets still being implemented do not count. General Administration receives the remainder, including unused capacity and non-institution bureaucracy use. With no production or no institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration buildings report their latest weekly balance. Allocation is capped at the government's civil wage, goods and slave-upkeep total, so a wage change cannot allocate more than that total.\\n\\n#b Charts and Amounts#!\\nIncome and expense totals exclude Investment Pool Transfer. Construction Goods also excludes that transfer, which funds private construction. Military includes army and navy wages, goods, slave upkeep, warship construction and warship maintenance. Shipping covers supply ships and port connections.\\n\\n#b Journal Systems#!\\nBanking, Covert Actions, Cultural Hegemony, the United Nations and other systems have separate rows. Hover over a row to see its currently applied sources. Their amounts are removed from Additional Expenses or Income once; only the unattributed remainder stays there. One-time treasury payments and non-monetary resource costs are outside the weekly budget.\\n\\nRows are ordered from largest to smallest amount. Category colors stay fixed across the charts and the list. With many institutions the palette repeats; use the names and percentages to identify each category. Signed negative adjustments appear in the list with a zero chart share. Charts are empty when there are no positive amounts.",
 }
 
 
@@ -138,7 +136,9 @@ def sv(name, body):
 def scope(side):
     expr = "GuiScope.SetRoot(GetPlayer.MakeScope)"
     total = "PredictWeeklyIncome" if side == "income" else "GetWeeklyExpenses"
-    expr += f".AddScope('total', MakeScopeValue(GetPlayer.{total}))"
+    expr += f".AddScope('total', MakeScopeValue(Subtract_CFixedPoint(GetPlayer.{total}, GetPlayer.GetInvestmentIncome)))"
+    if side == "expense":
+        expr += ".AddScope('private_construction', MakeScopeValue(GetPlayer.GetInvestmentIncome))"
     if side == "income":
         fields = [(key, getter) for key, _, getter in INCOME]
     else:
@@ -173,12 +173,26 @@ def generated_values():
             out.append(sv("te_budget_expense_administration", "\tvalue = te_budget_administration_cost\n\tsubtract = te_budget_allocated_institutions"))
             for key, _, getters in EXPENSE:
                 body = "\tvalue = 0\n" + "\n".join(f"\tadd = scope:{key}_{i}" for i in range(len(getters)))
+                if key == "construction":
+                    body += "\n\tsubtract = scope:private_construction"
                 if key == "civil":
                     body += "\n\tsubtract = te_budget_administration_cost"
                 if key == "additional":
                     body += "\n" + "\n".join(f"\tsubtract = te_budget_expense_{source}" for source in SOURCES[side])
                 out.append(sv(f"te_budget_expense_{key}", body))
         out.append(sv(f"te_budget_{side}_other", "\tvalue = scope:total\n" + "\n".join(f"\tsubtract = te_budget_{side}_{key}" for key, _ in items[:-1])))
+        # Absolute row positions let the GUI sort live without writing game state.
+        # Compare cached amounts only; catalogue order deterministically breaks ties.
+        out.append(sv(f"te_budget_{side}_legend_height", "\tvalue = 0\n" + "\n".join(
+            f"\tif = {{ limit = {{ NOT = {{ scope:row_{key} = 0 }} }} add = 44 }}" for key, _ in items)))
+        for i, (key, _) in enumerate(items):
+            body = "\tvalue = 0"
+            for j, (other, _) in enumerate(items):
+                if key == other:
+                    continue
+                op = ">=" if j < i else ">"
+                body += f"\n\tif = {{ limit = {{ NOT = {{ scope:row_{other} = 0 }} scope:row_{other} {op} scope:row_{key} }} add = 44 }}"
+            out.append(sv(f"te_budget_{side}_{key}_row_y", body))
         for key, _ in items:
             out.append(sv(f"te_budget_{side}_{key}_positive", f"\tvalue = te_budget_{side}_{key}\n\tmin = 0"))
         out.append(sv(f"te_budget_{side}_positive_total", "\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{key}_positive" for key, _ in items)))
@@ -192,27 +206,19 @@ def pie_texture(i):
     return f"gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_{MODELS[i % len(MODELS)][0]}.dds"
 
 
-def color(i):
-    rgb = MODELS[i % len(MODELS)][1]
-    return " ".join(f"{int(rgb[k:k + 2], 16) / 255:.4f}" for k in (1, 3, 5)) + " 1.0"
-
-
 def chart(side):
     items = categories(side)
     out = [f"\ttype te_budget_{side}_charts = flowcontainer {{", "\t\tdirection = horizontal", "\t\tspacing = 16", "\t\tparentanchor = hcenter", "\t\twidget = {", "\t\t\tsize = { 176 176 }", '\t\t\ttooltip = "te_budget_chart_pie_tt"', '\t\t\ticon = { size = { 100% 100% } texture = "gfx/interface/backgrounds/round_frame_dec.dds" }', "\t\t\twidget = {", "\t\t\t\tsize = { 75% 75% }", "\t\t\t\tparentanchor = center"]
     for i in reversed(range(len(items))):
         out += ["\t\t\t\tprogresspie = {", "\t\t\t\t\tsize = { 100% 100% }", "\t\t\t\t\tmin = 0", "\t\t\t\t\tmax = 1", f'\t\t\t\t\tvalue = "[FixedPointToFloat({expression(side, f"{side}_cum_{i}")})]"', f'\t\t\t\t\ttexture = "{pie_texture(i)}"', "\t\t\t\t\tframesize = { 128 128 }", "\t\t\t\t\tframe = 2", "\t\t\t\t}"]
-    out += ["\t\t\t}", "\t\t}", "\t\tflowcontainer = {", "\t\t\tdirection = vertical", "\t\t\tspacing = 6", "\t\t\tparentanchor = vcenter", "\t\t\ttextbox = {", '\t\t\t\ttext = "te_budget_chart_stack"', "\t\t\t\tsize = { 280 24 }", "\t\t\t\talign = hcenter|nobaseline", "\t\t\t\tusing = fontsize_medium", "\t\t\t}", "\t\t\twidget = {", "\t\t\t\tsize = { 280 36 }", '\t\t\t\ttooltip = "te_budget_chart_pie_tt"']
-    for i in reversed(range(len(items))):
-        out += ["\t\t\t\tprogressbar = {", "\t\t\t\t\tsize = { 100% 100% }", "\t\t\t\t\tmin = 0", "\t\t\t\t\tmax = 1", f'\t\t\t\t\tvalue = "[FixedPointToFloat({expression(side, f"{side}_cum_{i}")})]"', '\t\t\t\t\tprogresstexture = "gfx/interface/backgrounds/white.dds"', '\t\t\t\t\tnoprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"', f"\t\t\t\t\tcolor = {{ {color(i)} }}", "\t\t\t\t\tskip_initial_animation = yes", "\t\t\t\t}"]
-    out += ["\t\t\t}", "\t\t}", "\t}", f"\ttype te_budget_{side}_legend = flowcontainer {{", "\t\tdirection = vertical", "\t\tignoreinvisible = yes", "\t\tspacing = 2"]
+    out += ["\t\t\t}", "\t\t}", "\t}", f"\ttype te_budget_{side}_legend = widget {{", f"\t\tsize = {{ 480 [FixedPointToInt(TopScope.ScriptValue('te_budget_{side}_legend_height'))] }}"]
     for i, (key, label) in enumerate(items):
         val = expression(side, f"{side}_{key}")
         share = expression(side, f"{side}_{key}_share")
         tooltip = f"te_budget_chart_{key}_tt" if key.startswith("institution_") else "te_budget_chart_row_tt"
         if key in SOURCES[side]:
             tooltip = f"te_budget_chart_source_{side}_{key}_tt"
-        out += ["\t\tte_budget_chart_row = {", f'\t\t\tvisible = "[NotEqualTo_CFixedPoint({val}, \'(CFixedPoint)0\')]"', f'\t\t\ttooltip = "{tooltip}"', f'\t\t\tblockoverride "swatch" {{ texture = "{pie_texture(i)}" }}', f'\t\t\tblockoverride "label" {{ text = "{label}" }}', f'\t\t\tblockoverride "amount" {{ raw_text = "@money![{val}|D]" }}', f'\t\t\tblockoverride "share" {{ raw_text = "[{share}|%1]" }}', "\t\t}"]
+        out += ["\t\tte_budget_chart_row = {", f"\t\t\tposition = {{ 0 [FixedPointToInt(TopScope.ScriptValue('te_budget_{side}_{key}_row_y'))] }}", f'\t\t\tvisible = "[NotEqualTo_CFixedPoint({val}, \'(CFixedPoint)0\')]"', f'\t\t\ttooltip = "{tooltip}"', f'\t\t\tblockoverride "swatch" {{ texture = "{pie_texture(i)}" }}', f'\t\t\tblockoverride "label" {{ text = "{label}" }}', f'\t\t\tblockoverride "amount" {{ raw_text = "@money![{val}|D]" }}', f'\t\t\tblockoverride "share" {{ raw_text = "[{share}|%1]" }}', "\t\t}"]
     out += ["\t}"]
     return "\n".join(out)
 
@@ -222,13 +228,16 @@ def indent(text, depth=1):
 
 
 def section(side):
-    total = "PredictWeeklyIncome" if side == "income" else "GetWeeklyExpenses"
+    row_scopes = "TopScope" + "".join(
+        f".AddScope('row_{key}', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_{key}')))"
+        for key, _ in categories(side)
+    )
     plots = f'''flowcontainer = {{
 \tdirection = vertical
 \tspacing = 8
 \tdatacontext = "[TopScope.AddScope('positive_total', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_positive_total')))]"
 \tte_budget_{side}_charts = {{}}
-\tte_budget_{side}_legend = {{ parentanchor = hcenter }}
+\tte_budget_{side}_legend = {{ parentanchor = hcenter datacontext = "[{row_scopes}]" }}
 \ttextbox = {{
 \t\tvisible = "[EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_{side}_positive_total'), '(CFixedPoint)0')]"
 \t\ttext = "te_budget_chart_no_{side}"
@@ -252,14 +261,14 @@ def section(side):
 \tdefault_header_2texts = {{
 \t\tblockoverride "size" {{ size = {{ 520 44 }} }}
 \t\tblockoverride "text1" {{ text = "te_budget_chart_{side}" }}
-\t\tblockoverride "text2" {{ raw_text = "@money![GetPlayer.{total}|D]" }}
+\t\tblockoverride "text2" {{ raw_text = "@money![TopScope.ScriptValue('te_budget_total')|D]" }}
 \t}}
 {indent(plots)}
 }}''')
 
 
 def generated_gui():
-    return "# AUTO-GENERATED by scripts/generators/gen_budget_breakdown.py; do not edit manually.\n# Pie, stack and legend use the same cumulative order and palette.\ntypes te_budget_generated_charts {\n" + "\n".join(chart(side) + "\n" + section(side) for side in ("income", "expense")) + "\n}\n"
+    return "# AUTO-GENERATED by scripts/generators/gen_budget_breakdown.py; do not edit manually.\n# Pies use catalogue order/colors; lists sort descending by signed amount.\ntypes te_budget_generated_charts {\n" + "\n".join(chart(side) + "\n" + section(side) for side in ("income", "expense")) + "\n}\n"
 
 
 def generated_source_types():
