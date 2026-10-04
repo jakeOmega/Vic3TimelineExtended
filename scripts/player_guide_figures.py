@@ -8,7 +8,7 @@
 Figures:
 
 * ``pop_spending_by_wealth.png``: how a pop's spending divides between need
-  groups at rising wealth, priced at each need's default good's base price, in
+  groups at rising wealth, at base prices (a buy-package value is a cost), in
   two panels: wealth 5 to 60 in steps of 5, and the full range to 200. It
   reads the mod's generated ``common/buy_packages/00_buy_packages.txt`` (from
   ``pop_needs_curves.py``), so rerun this after changing the needs curves, then
@@ -26,7 +26,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 import pop_needs_curves as needs  # noqa: E402
-from path_constants import base_game_path, mod_path  # noqa: E402
+from path_constants import mod_path  # noqa: E402
 
 IMAGES = REPO_ROOT / "docs" / "player_guide" / "images"
 WEALTH_LEVELS = [10, 20, 30, 40, 50, 60, 80, 100, 150, 200]
@@ -42,7 +42,7 @@ GROUPS = [
     ("Luxuries", "#eb6834", ["luxury_food", "luxury_drinks", "luxury_items",
                              "intoxicants", "stimulants"]),
     ("Services and leisure", "#1baf7a", ["services", "leisure", "communication",
-                                          "free_movement"]),
+                                          "free_movement", "healthcare"]),
     ("Convenience", "#eda100", ["convenience"]),
     ("Art", "#e87ba4", ["art"]),
     ("Tourism", "#008300", ["tourism"]),
@@ -55,16 +55,6 @@ GRID = "#e4e3df"
 
 def spending_shares(levels: list[int]) -> dict[int, dict[str, float]]:
     """Share of spending per need group at each wealth level in ``levels``."""
-    pop_needs = needs._read_and_combine([
-        os.path.join(base_game_path, "game", "common", "pop_needs", "00_pop_needs.txt"),
-        os.path.join(mod_path, "common", "pop_needs", "extra_pop_needs.txt"),
-    ])
-    goods = needs._read_and_combine([
-        os.path.join(base_game_path, "game", "common", "goods", "00_goods.txt"),
-        os.path.join(mod_path, "common", "goods", "timeline_extended_extra_goods.txt"),
-    ])
-    defaults = needs._extract_pop_needs_defaults(pop_needs)
-    cost = needs._extract_goods_cost(goods)
     packages_path = os.path.join(mod_path, "common", "buy_packages", "00_buy_packages.txt")
     with open(packages_path, encoding="utf-8-sig") as f:
         packages = needs._extract_buy_packages(f.read())
@@ -77,7 +67,8 @@ def spending_shares(levels: list[int]) -> dict[int, dict[str, float]]:
             need = popneed.replace("popneed_", "")
             if need not in group_of:
                 continue
-            spend[group_of[need]] += amount * cost.get(defaults.get(need, ""), 0)
+            # A need's value is already its cost at base prices.
+            spend[group_of[need]] += amount
         total = sum(spend.values()) or 1.0
         shares[wealth] = {name: value / total for name, value in spend.items()}
     return shares

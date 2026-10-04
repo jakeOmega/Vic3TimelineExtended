@@ -30,10 +30,12 @@
 #   policy                   laissez_faire  industrialists  movement  wealth  fossil
 #   climate_adaptation                 -10               0         5     -10       0
 #   reforestation                      -10               0        10      -5       0
+#   carbon_removal                     -20              -5        10      10       0
 #   renewable_investment               -20              -5        10      10     -10
 #   public_transit                     -10               0        10       5      -5
 #   green_building_codes               -20              -5        10      10       0
 #   emission_standards                 -20             -12        10      10      -5
+#   fossil_fuel_tariffs                -20              -8        10       5     -20
 #   carbon_tax                         -25             -12        10      10     -20
 #   fossil_fuel_divestment             -25              -8        10      10     -25
 #
@@ -51,9 +53,9 @@
 #                       infrastructure, which laissez-faire minds least.
 #   green_building_codes  +5% construction input: a cost on builders.
 #   emission_standards  -5% throughput in EVERY building: industry pays.
-#   carbon_tax          oil and coal extraction taxed double, -10% fuel output,
+#   carbon_tax          oil extraction taxed double, -10% fuel output,
 #                       +10% manufacturing tax: exporters and industry pay.
-#   fossil_fuel_divestment  +25% extraction tax: aimed at the fuel sector.
+#   fossil_fuel_divestment  +25% oil extraction tax: aimed at the fuel sector.
 #
 # THE BAND MUST STAY WIDER THAN ANY ONE POLITICAL SWING. Interest groups change
 # at every election, and both IG terms are yes/no; with a band narrower than an
@@ -379,5 +381,44 @@ gw_ai_adopt_margin_fossil_fuel_divestment = {
 gw_ai_repeal_margin_fossil_fuel_divestment = {
 	value = 0
 	subtract = gw_ai_adopt_margin_fossil_fuel_divestment
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_will_carbon_removal = {
+	value = gw_ai_will_shared
+	add = { value = gw_ai_sig_laissez_faire multiply = -20 }
+	add = { value = gw_ai_sig_industrialists multiply = -5 }
+	add = { value = gw_ai_sig_movement multiply = 10 }
+	add = { value = gw_ai_sig_wealth multiply = 10 }
+	add = { value = gw_ai_sig_fossil multiply = 0 }
+}
+
+gw_ai_adopt_margin_carbon_removal = {
+	value = gw_ai_will_carbon_removal
+	subtract = 50
+}
+gw_ai_repeal_margin_carbon_removal = {
+	value = 0
+	subtract = gw_ai_adopt_margin_carbon_removal
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_will_fossil_fuel_tariffs = {
+	value = gw_ai_will_shared
+	add = { value = gw_ai_sig_laissez_faire multiply = -20 }
+	add = { value = gw_ai_sig_industrialists multiply = -8 }
+	add = { value = gw_ai_sig_movement multiply = 10 }
+	add = { value = gw_ai_sig_wealth multiply = 5 }
+	add = { value = gw_ai_sig_fossil multiply = -20 }
+}
+
+gw_ai_adopt_margin_fossil_fuel_tariffs = {
+	value = gw_ai_will_fossil_fuel_tariffs
+	subtract = 55
+}
+
+gw_ai_repeal_margin_fossil_fuel_tariffs = {
+	value = 0
+	subtract = gw_ai_adopt_margin_fossil_fuel_tariffs
 	subtract = gw_ai_repeal_band
 }

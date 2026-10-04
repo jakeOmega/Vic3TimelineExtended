@@ -1,0 +1,176 @@
+﻿# Permanent, modest discovery bonuses, held on the solar colonization entry.
+sr_discovery_europa_life_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.02
+}
+sr_discovery_europa_life_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.03
+	country_diplomatic_reputation_add = 0.5
+}
+sr_discovery_europa_vents_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_europa_vents_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	goods_output_launch_capacity_mult = 0.01
+	country_space_race_progress_add = 0.1
+}
+sr_discovery_enceladus_life_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.02
+}
+sr_discovery_enceladus_life_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.03
+	country_diplomatic_reputation_add = 0.5
+}
+sr_discovery_titan_chemistry_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_titan_chemistry_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_advanced_materials_mult = 0.02
+}
+sr_discovery_hellas_fossils_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.02
+}
+sr_discovery_hellas_fossils_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.03
+	country_diplomatic_reputation_add = 0.5
+}
+sr_discovery_olympus_tubes_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_olympus_tubes_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_space_mine_throughput_add = 0.02
+}
+sr_discovery_utopia_glacier_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_utopia_glacier_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_space_mine_throughput_add = 0.01
+	goods_output_launch_capacity_mult = 0.01
+}
+sr_discovery_arcadia_brines_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_arcadia_brines_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	goods_output_launch_capacity_mult = 0.01
+	country_space_race_progress_add = 0.1
+}
+sr_discovery_ceres_reservoir_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_ceres_reservoir_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_space_mine_throughput_add = 0.01
+	goods_output_launch_capacity_mult = 0.01
+}
+sr_discovery_vesta_impactor_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_vesta_impactor_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_advanced_materials_mult = 0.02
+}
+sr_discovery_psyche_metal_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_psyche_metal_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_advanced_materials_mult = 0.02
+}
+sr_discovery_pallas_water_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_pallas_water_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_space_mine_throughput_add = 0.01
+	goods_output_launch_capacity_mult = 0.01
+}
+sr_discovery_venus_waves_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_venus_waves_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	goods_output_launch_capacity_mult = 0.01
+	country_space_race_progress_add = 0.1
+}
+sr_discovery_mercury_archive_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_mercury_archive_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_space_mine_throughput_add = 0.01
+	goods_output_launch_capacity_mult = 0.01
+}
+sr_discovery_io_roof_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_io_roof_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	goods_output_launch_capacity_mult = 0.01
+	country_space_race_progress_add = 0.1
+}
+sr_discovery_ganymede_layers_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_ganymede_layers_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	goods_output_launch_capacity_mult = 0.01
+	country_space_race_progress_add = 0.1
+}
+sr_discovery_callisto_archive_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_callisto_archive_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	building_space_mine_throughput_add = 0.02
+}
+sr_discovery_titania_ocean_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_titania_ocean_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	goods_output_launch_capacity_mult = 0.01
+	country_space_race_progress_add = 0.1
+}
+sr_discovery_triton_jet_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_triton_jet_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	goods_output_launch_capacity_mult = 0.01
+	country_space_race_progress_add = 0.1
+}
+sr_discovery_pluto_antifreeze_a = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_tech_research_speed_mult = 0.01
+}
+sr_discovery_pluto_antifreeze_b = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	goods_output_launch_capacity_mult = 0.01
+	country_space_race_progress_add = 0.1
+}

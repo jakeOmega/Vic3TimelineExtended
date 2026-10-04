@@ -1,0 +1,4 @@
+﻿# Opt-in engine probe; never deployed by scripts/deploy.sh.
+INJECT:building_power_plant = {
+	production_method_groups = { pmg_te_cc_probe }
+}

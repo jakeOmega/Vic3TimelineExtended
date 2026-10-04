@@ -761,70 +761,44 @@ migration_attraction_script_value = {
 	}
 }
 
+# State scope. Fuel emissions and source capture mirror the building modifiers.
+# National policy cuts apply to remaining industrial emissions. Atmospheric
+# removal is separate and retains its full credit after policy reductions.
+gw_state_greenhouse_gas_emissions = {
+	value = modifier:state_greenhouse_gas_emissions_add
+	divide = gw_emission_display_scale
+	multiply = {
+		value = 1
+		owner = { value = gw_emission_multiplier_script_value }
+	}
+	add = gw_state_household_greenhouse_gas_emissions
+	subtract = {
+		value = modifier:state_atmospheric_carbon_capture_add
+		divide = gw_emission_display_scale
+	}
+}
+
 market_greenhouse_gas_emissions_script_value = {
-	# Evaluated in the country scope
+	# Country scope. Sum emissions in the location's market once; no fuel-sales proxy.
 	value = 0
 	market = {
-		mg:oil = {
-			add = {
-				value = market_goods_consumption
-				multiply = 2
-			}
+		every_scope_country = {
+			every_scope_state = { add = gw_state_greenhouse_gas_emissions }
 		}
-		mg:coal = {
-			add = {
-				value = market_goods_consumption
-				multiply = 2
-			}
-		}
-	}
-	divide = 10000
-	multiply = gw_emission_multiplier_script_value
-
-	add = {
-		value = market_carbon_capture_script_value
 	}
 }
 
 market_carbon_capture_script_value = {
-	# Evaluated in the country scope
-	# Returns a negative value representing carbon captured by synthetic fuel plants
-	# Uses base output values only (throughput bonuses are country-scoped, not readable from building scope in script values)
+	# Country scope. Only removal-only PMs take carbon out of the atmosphere.
+	# Workforce scaling includes levels, staffing and throughput. Read once in
+	# each location's market, including foreign-owned sites; never rescale staffing.
 	value = 0
 	market = {
 		every_scope_country = {
-			# Carbon capture: subtract synthetic oil/coal production (not fossil extraction)
-			# Split into two iterations to avoid the nested if/limit pattern that
-			# confuses the engine's static scope analyzer (false "market vs. building"
-			# scope warning) inside script values.
-			every_scope_building = {
-				limit = {
-					is_building_type = building_synthetics_plant_oil
-					has_active_production_method = pm_synthetic_oil_2
-				}
-				add = {
-					value = this.level
-					multiply = occupancy
-					multiply = -0.06  # 300 oil * 2 weight / 10000
-				}
-			}
-			every_scope_building = {
-				limit = {
-					is_building_type = building_synthetics_plant_oil
-					NOT = { has_active_production_method = pm_synthetic_oil_2 }
-				}
-				add = {
-					value = this.level
-					multiply = occupancy
-					multiply = -0.036  # 180 oil * 2 weight / 10000
-				}
-			}
-			every_scope_building = {
-				limit = { is_building_type = building_synthetics_plant_coal }
-				add = {
-					value = this.level
-					multiply = occupancy
-					multiply = -0.168  # 840 coal * 2 weight / 10000
+			every_scope_state = {
+				subtract = {
+					value = modifier:state_atmospheric_carbon_capture_add
+					divide = gw_emission_display_scale
 				}
 			}
 		}
@@ -834,6 +808,7 @@ market_carbon_capture_script_value = {
 market_greenhouse_gas_emissions_script_value_display = {
 	# Evaluated in the country scope
 	value = market_greenhouse_gas_emissions_script_value
+	multiply = gw_emission_display_scale
 	round = yes
 }
 
@@ -895,21 +870,12 @@ temperature_anomaly_display = {
 }
 
 gw_emission_multiplier_script_value = {
-	# Evaluated in country scope
-	# Returns the net emission multiplier for this market's leader (1.0 = full, 0.8 = 20% reduction, etc.).
-	# Uses market_capital.owner to reach the market leader country where the modifier lives.
+	# Country scope: industrial reductions belong to the state owner's country.
+	# Each market sums its members after their own reductions have applied.
 	value = 1
-	market_capital = {
-		owner = {
-			add = modifier:country_greenhouse_gas_emissions_mult
-		}
-	}
-	# Floor at 0: the cuts stack additively (the three market-wide policies,
-	# the environment ministry per investment level, the sustainability
-	# principle, conventions, summits) and can pass -100%, which would make
-	# burning coal and oil remove carbon. Capture is modelled separately
-	# (market_carbon_capture_script_value), and a market goes net negative only
-	# through it. Must stay after the add above.
+	add = modifier:country_greenhouse_gas_emissions_mult
+	# Reductions cannot turn fuel burning into removal. Atmospheric capture
+	# keeps its full credit in gw_state_greenhouse_gas_emissions.
 	min = 0
 }
 
@@ -2040,6 +2006,12 @@ financial_cycle_government_fiscal_policy_effect_size = {
 	max = 1
 }
 
+# JE multipliers re-evaluate in JE scope; retain the country formula for other callers.
+financial_cycle_government_fiscal_policy_effect_size_for_je = {
+	value = 0
+	owner = { add = financial_cycle_government_fiscal_policy_effect_size }
+}
+
 # linear up to +0.25 at 50 bubble pressure, then a gentle curve to +0.45 at
 # max pressure. Until 2026-09-22 the upper half was quadratic to +1.25: at
 # bubble 80+ that was a standing +7-12 cycle points a month, which no tool
@@ -2261,6 +2233,12 @@ ce_pool_withdraw_pool_cost = {
 ce_treasury_pool_balance_multiplier = {
 	value = 0
 	subtract = investment_pool_net_income
+}
+
+# Keep the live pool-income read on the JE's owning country.
+ce_treasury_pool_balance_multiplier_for_je = {
+	value = 0
+	owner = { add = ce_treasury_pool_balance_multiplier }
 }
 
 # ====================================================================================
@@ -2909,3 +2887,10 @@ banking_display_points_free = {
 # empire disable buttons; the global warming repeals carry their own table
 # (gw_ai_authority_deficit_repeal_weight in global_warming_ai_values.txt).
 te_ai_authority_deficit_repeal_weight = 30
+
+# Country scope. Location assigns buildings, including foreign-owned sites,
+# to the country governing the state. Households and removal follow it too.
+country_greenhouse_gas_emissions_script_value = {
+	value = 0
+	every_scope_state = { add = gw_state_greenhouse_gas_emissions }
+}

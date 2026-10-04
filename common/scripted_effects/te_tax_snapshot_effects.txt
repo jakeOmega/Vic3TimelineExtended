@@ -1,0 +1,102 @@
+﻿# Legislated tax code: the economy snapshot (plan Task 14;
+# docs/systems/tax_code_schema.md, "Economy snapshot and estimates").
+#
+# One dated snapshot per country, against which the review and the offers print
+# their revenue estimates: today's Budget receipts (the Budget's own getters, in
+# the GUI) scaled by each schedule's index over the index in force at the
+# snapshot. The snapshot is what dates an estimate: the panels mark it out of
+# date once the month, the code or the bill revision has moved on
+# (te_tax_view_snap_current).
+#
+# CALLERS. Each after a collection write or a new revision, at most once per
+# execution: the monthly processor (te_tax_process_month, inside the month it
+# claims, after the collection write: once per month, unless a lost market's
+# customs drop opened a revision earlier in the same run, which took it:
+# te_tax_snapshot_current); the watchdog
+# (te_tax_watchdog_month), only when a sunset made it sync; te_tax.4, the sync
+# the day after a migration, a re-assert or a copied code (a civil-war repair or
+# a release included), after it; and te_tax_bill_open_revision (introduction,
+# revision and an accepted offer, each a new revision; after the bill is open,
+# so the revision is recorded). Never a GUI: opening a panel reads the guarded
+# views only. Its variables are a display cache, not schema tokens: every call
+# writes all of them, nothing removes them, and a view reads them only through
+# has_variable. A civil war's winner may inherit a loser's snapshot for a
+# variable it lacks until the repair's te_tax.4 retakes it the next day; the
+# code-version and month tests mark a stale one out of date meanwhile.
+#
+# Country scope; nothing reads ROOT. Variable writes only: no modifier, no
+# native setting, no tooltip.
+te_tax_take_snapshot = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_schema
+		}
+		set_variable = { name = te_tax_snap_month value = te_history_month_index }
+		# The engine's aggregates (te_tax_display_values.txt). tax_income is the
+		# domestic tax aggregate (unclassified): shown under that name only.
+		set_variable = { name = te_tax_snap_tax_income value = te_tax_read_tax_income }
+		set_variable = { name = te_tax_snap_net_fixed value = te_tax_read_net_fixed_income }
+		set_variable = { name = te_tax_snap_net_total value = te_tax_read_net_total_income }
+		set_variable = { name = te_tax_snap_gdp value = te_tax_read_gdp }
+		# What the snapshot is keyed to: the code version and the bill revision
+		# (0 without a bill).
+		set_variable = { name = te_tax_snap_code_version value = te_tax_view_code_version }
+		set_variable = { name = te_tax_snap_bill_rev value = te_tax_view_bl_rev }
+		# The index in force per instrument, the base each estimate scales from.
+		set_variable = { name = te_tax_snap_wage value = te_tax_view_en_wage }
+		set_variable = { name = te_tax_snap_div value = te_tax_view_en_div }
+		set_variable = { name = te_tax_snap_land value = te_tax_view_en_land }
+		set_variable = { name = te_tax_snap_head value = te_tax_view_en_head }
+		set_variable = { name = te_tax_snap_cons value = te_tax_view_en_cons }
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX snapshot tax_income=[SCOPE.ScriptValue('te_tax_view_snap_tax_income')|0] version=[SCOPE.ScriptValue('te_tax_view_code_version')|0] rev=[SCOPE.ScriptValue('te_tax_view_bl_rev')|0] month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# The fiscal record (final review A-I2): the budget as it stood on the 1st,
+# which the support model's fiscal reason (te_tax_fiscal_reason) and the
+# maintenance test of the two budget promises (te_tax_obl_is_maintenance_2,
+# _4; te_tax_fisc_rec_*, te_tax_triggers.txt) read instead of the live figures,
+# so a budget slider moved for a few days moves neither. Called only by the
+# monthly processor (te_tax_process_month), once a month, after it claims the
+# month and before any transition. Like the snapshot, a refreshed cache, not
+# schema tokens: every call writes all three, nothing removes them, and a
+# reader tests has_variable (no record yet reads as no deficit and as
+# maintenance). A civil war's winner may inherit a loser's record for a
+# variable it lacks until its own next 1st.
+#   te_tax_fisc_deficit  1 if net_fixed_income was below 0, else 0
+#   te_tax_fisc_surplus  1 if net_fixed_income was above 0, else 0
+#   te_tax_fisc_bur_ok   1 if bureaucracy was at 0 or above, else 0
+# Country scope; nothing reads ROOT. Variable writes only.
+te_tax_record_fiscal_month = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_schema
+		}
+		if = {
+			limit = { net_fixed_income < 0 }
+			set_variable = { name = te_tax_fisc_deficit value = 1 }
+		}
+		else = {
+			set_variable = { name = te_tax_fisc_deficit value = 0 }
+		}
+		if = {
+			limit = { net_fixed_income > 0 }
+			set_variable = { name = te_tax_fisc_surplus value = 1 }
+		}
+		else = {
+			set_variable = { name = te_tax_fisc_surplus value = 0 }
+		}
+		if = {
+			limit = { bureaucracy >= 0 }
+			set_variable = { name = te_tax_fisc_bur_ok value = 1 }
+		}
+		else = {
+			set_variable = { name = te_tax_fisc_bur_ok value = 0 }
+		}
+	}
+}

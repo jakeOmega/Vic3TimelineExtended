@@ -333,8 +333,10 @@ un_mandate_try_bind = {
 	}
 }
 
-# Notice a prohibited objective taken against the mandate's target. Called from
-# on_wargoal_added and from the monthly sweep.
+# Notice a prohibited objective taken against the mandate's target in the play
+# the mandate is exercised in (un_mandate_has_prohibited_goal; a goal in
+# another play or war does not count). Called from on_wargoal_added and from
+# the monthly sweep.
 # Scope: the mandate actor
 un_mandate_check_prohibited = {
 	if = {
@@ -603,18 +605,44 @@ un_mandates_monthly_update = {
 # where the holder is the play's initiator (`remove_war_goal` addresses a goal
 # by side and type); if nothing is struck, un_mandate_check_prohibited still
 # runs afterwards and the ordinary violation applies.
+#
+# Only in the mandate's own play: a dp_te_un_mandate_restore_state play
+# against the mandate's target. on_wargoal_added fires for every goal the
+# holder adds to any play, so without this gate a bound AI holder that opened
+# an unrelated play (a dp_conquer_state against a third country) had the goal
+# that play opened with struck the moment it was added, and whether a play
+# survives losing its opening goal is unproven. The mandate's play opens with
+# te_un_mandate_restore_state, which is not on the list below, so nothing
+# struck here can be a play's opening goal. A mandate bound in a play of
+# another type (its goal added to a play already open against the target)
+# gets no strike: there the ordinary violation applies, as it does to a holder
+# that is not the initiator.
+#
+# A type is struck only when the holder holds a goal of it against the
+# mandate's target, the case un_mandate_has_prohibited_goal counts: a
+# conquer_state against the target's ally is allowed and is left alone. If
+# the holder holds both, remove_war_goal takes the allowed one too, since it
+# cannot tell them apart. test_un_mandate_play_scope.py pins the gate and the
+# list.
 # Scope: diplomatic play; expects scope:actor (from on_wargoal_added)
 un_mandate_ai_strike_prohibited = {
 	if = {
 		limit = {
 			exists = scope:actor
 			initiator ?= scope:actor
+			is_diplomatic_play_type = dp_te_un_mandate_restore_state
 			scope:actor = {
 				is_ai = yes
 				has_variable = un_mandate_current
-				var:un_mandate_current ?= { has_tag = un_mandate_bound }
+				var:un_mandate_current ?= {
+					has_tag = un_mandate_bound
+					exists = var:un_mnd_target
+				}
 			}
+			target ?= scope:actor.var:un_mandate_current.var:un_mnd_target
 		}
+		# The play's target, which the limit just matched to the mandate's.
+		target = { save_temporary_scope_as = un_mandate_strike_target }
 		un_mandate_strike_goal_type = { TYPE = annex_country }
 		un_mandate_strike_goal_type = { TYPE = conquer_state }
 		un_mandate_strike_goal_type = { TYPE = return_state }
@@ -636,10 +664,23 @@ un_mandate_ai_strike_prohibited = {
 	}
 }
 
-# Scope: diplomatic play
+# Strike $TYPE$ from this play if the holder holds one against the mandate's
+# target here. has_play_goal reads this play only, the holder's test every
+# play it takes part in, so both are asked (as un_mandate_prohibited_goal_held
+# does).
+# Parameters: $TYPE$ = war goal type
+# Scope: diplomatic play; expects scope:actor and scope:un_mandate_strike_target
 un_mandate_strike_goal_type = {
 	if = {
-		limit = { has_play_goal = $TYPE$ }
+		limit = {
+			has_play_goal = $TYPE$
+			scope:actor = {
+				play_participant_has_war_goal_of_type_against = {
+					type = $TYPE$
+					target = scope:un_mandate_strike_target
+				}
+			}
+		}
 		remove_war_goal = { who = initiator type = $TYPE$ }
 	}
 }

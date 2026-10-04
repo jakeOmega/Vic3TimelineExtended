@@ -1,0 +1,29 @@
+﻿# Legislated tax code: relief bands (docs/systems/tax_code_schema.md).
+# Applied and removed only by te_tax_sync_relief (te_tax_collection_effects.txt),
+# from te_tax_en_agrel and te_tax_en_regrel; never by an event or a button.
+#
+# Agricultural wage relief goes on the country. The 2026-10-02 probe (R1b,
+# docs/testing/tax-code-probe-results-2026-10-02.md) showed this modifier lowers
+# the wage tax of agricultural workers and leaves dividends alone, so the loc
+# promises wages only. Regional relief goes on each named state; there it scales
+# every tax collected from that state's pops (R1a showed it for wages).
+
+te_tax_relief_ag_1 = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+	building_group_bg_agriculture_tax_mult = -0.25
+}
+
+te_tax_relief_ag_2 = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+	building_group_bg_agriculture_tax_mult = -0.5
+}
+
+te_tax_relief_region_1 = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+	state_tax_collection_mult = -0.25
+}
+
+te_tax_relief_region_2 = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+	state_tax_collection_mult = -0.5
+}

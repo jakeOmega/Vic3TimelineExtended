@@ -1,17 +1,6 @@
-"""Global Warming's Top Emitters list (the owner, 2026-09-30: "show the top
-emitters, so the player knows who to target for climate agreements... show
-current and cumulative emissions").
-
-The panel lists the five markets emitting most, each named by its leader, with
-its annual emissions, its share of the world's and its cumulative total. There
-is no datamodel of markets a journal-entry widget can walk, so, as the Space
-Race's Rivals rows do (test_space_race_rivals.py), a monthly refresh for players
-only stores how many markets emit and the first five leaders' capitals on the
-viewer; the figures on each row are read live from the listed leader.
-
-The cumulative total is a new per-leader variable, added in the same yearly step
-that adds the market's figure to the world total.
-"""
+"""Country emissions rank separately even inside one market. Annual snapshots
+and cumulative totals receive exactly the contributions added to the world.
+The GUI still stores five capitals as bridges to country scopes."""
 import glob
 import os
 import re
@@ -71,10 +60,10 @@ def _callers(token):
 
 
 class EmitterTestTest(unittest.TestCase):
-    def test_a_ranked_emitter_leads_its_market_and_emits(self):
+    def test_a_ranked_emitter_emits_regardless_of_market_leadership(self):
         body = " ".join(_body(_read(TRIGGERS), "gw_is_ranked_emitter").split())
-        self.assertEqual(body, "gw_is_market_leader = yes has_variable = gw_disp_market_emis "
-                               "var:gw_disp_market_emis > 0")
+        self.assertEqual(body, "has_variable = gw_disp_country_emis "
+                               "var:gw_disp_country_emis > 0")
 
     def test_one_test_for_the_count_the_slots_the_rank_and_the_full_list(self):
         effects = _read(EFFECTS)
@@ -88,31 +77,31 @@ class EmitterTestTest(unittest.TestCase):
 
 class CumulativeTest(unittest.TestCase):
     def test_the_total_starts_at_zero_and_adds_the_year_s_figure(self):
-        body = _body(_read(EFFECTS), "gw_accumulate_market_emissions_effect")
-        self.assertRegex(body, r"hidden_effect = \{\s*if = \{\s*limit = \{ NOT = \{ has_variable = gw_disp_market_emis_cum \} \}\s*"
-                               r"set_variable = \{\s*name = gw_disp_market_emis_cum\s*value = 0\s*\}\s*\}\s*"
-                               r"change_variable = \{\s*name = gw_disp_market_emis_cum\s*add = var:gw_disp_market_emis\s*\}")
+        body = _body(_read(EFFECTS), "gw_accumulate_country_emissions_effect")
+        self.assertRegex(body, r"hidden_effect = \{\s*if = \{\s*limit = \{ NOT = \{ has_variable = gw_disp_country_emis_cum \} \}\s*"
+                               r"set_variable = \{\s*name = gw_disp_country_emis_cum\s*value = 0\s*\}\s*\}\s*"
+                               r"change_variable = \{\s*name = gw_disp_country_emis_cum\s*add = var:gw_disp_country_emis\s*\}")
 
     def test_it_runs_in_the_step_that_adds_to_the_world_total(self):
         """Right after the leader's figure goes into the world total, so the
         cumulative is the sum of exactly the numbers the world received."""
         pulse = _body(_read(ON_ACTIONS), "global_warming_update_on_action")
-        self.assertRegex(pulse, r"owner = \{\s*gw_snapshot_market_emissions_effect = yes\s*"
+        self.assertRegex(pulse, r"owner = \{\s*gw_snapshot_country_emissions_effect = yes\s*"
                                 r"change_global_variable = \{\s*name = greenhouse_gas_emissions\s*"
-                                r"add = var:gw_disp_market_emis\s*\}\s*"
-                                r"gw_accumulate_market_emissions_effect = yes\s*\}")
-        self.assertEqual(_callers("gw_accumulate_market_emissions_effect = yes"),
+                                r"add = var:gw_disp_country_emis\s*\}\s*"
+                                r"gw_accumulate_country_emissions_effect = yes\s*\}")
+        self.assertEqual(_callers("gw_accumulate_country_emissions_effect = yes"),
                          [os.path.relpath(ON_ACTIONS, REPO)])
 
-    def test_the_rule_is_written_down(self):
-        effects = _read(EFFECTS, comments=True)
-        comment = effects[:effects.index("gw_accumulate_market_emissions_effect = {")]
-        comment = comment[comment.rindex("# The market's CUMULATIVE emissions"):]
-        for phrase in ("THE RULE WHEN LEADERSHIP CHANGES", "keeps its total but adds nothing",
-                       "starts from its own total", "when markets merge", "revolution"):
-            self.assertIn(phrase, comment)
+    def test_country_totals_do_not_import_old_market_totals(self):
+        effects = _read(EFFECTS)
+        snapshot = _body(effects, "gw_snapshot_country_emissions_effect")
+        self.assertIn("value = country_greenhouse_gas_emissions_script_value", snapshot)
+        cumulative = _body(effects, "gw_accumulate_country_emissions_effect")
+        self.assertNotIn("gw_disp_market_emis", snapshot + cumulative)
+        self.assertNotIn("gw_is_market_leader", snapshot + cumulative)
         tt = _loc("gw_te_head_cum_tt")
-        for phrase in ("keeps its total but adds nothing", "starts from its own total", "When markets merge"):
+        for phrase in ("Negative years", "Market joins", "next January", "Revolutions"):
             self.assertIn(phrase, tt)
 
 
@@ -166,7 +155,7 @@ class RefreshTest(unittest.TestCase):
         self.assertIn("set_variable = { name = gw_emitters_own_slot value = 0 }", self.refresh)
         self.assertIn("scope:gw_te_viewer = {\n\t\t\t\t\tset_variable = { name = gw_emitters_own_slot value = $N$ }",
                       self.slot)
-        self.assertIn("var:gw_disp_market_emis > scope:gw_te_viewer.var:gw_emitters_own_emis", self.refresh)
+        self.assertIn("var:gw_disp_country_emis > scope:gw_te_viewer.var:gw_emitters_own_emis", self.refresh)
         self.assertIn("remove_variable = gw_emitters_own_emis", self.refresh)   # scratch, never left behind
 
 
@@ -188,7 +177,7 @@ class GuardTest(unittest.TestCase):
 
     def test_the_state_code(self):
         body = _body(_read(VALUES), "gw_disp_emitters_state")
-        self.assertRegex(body, r"value = 0\s*if = \{\s*limit = \{ gw_has_yearly_figures = yes \}\s*value = 1\s*"
+        self.assertRegex(body, r"value = 0\s*if = \{\s*limit = \{ gw_has_country_yearly_figures = yes \}\s*value = 1\s*"
                                r"if = \{\s*limit = \{ has_variable = gw_emitters_total \}\s*value = 2")
 
 
@@ -213,7 +202,7 @@ class TooltipBuilderTest(unittest.TestCase):
         self.assertIn("order_by = gw_disp_own_emis", full)
         self.assertIn("check_range_bounds = no", full)
         members = _body(_read(SGUIS), "gw_te_members_sgui")
-        self.assertIn("market_capital ?= { owner ?= ROOT.owner }", members)
+        self.assertIn("market_capital = ROOT.owner.market_capital", members)
 
 
 class RowTest(unittest.TestCase):
@@ -226,7 +215,8 @@ class RowTest(unittest.TestCase):
 
     def test_the_section_follows_mitigation_policies(self):
         composer = _body(self.gui, "te_gw_status_sections", prefix=r"\ttype ")
-        self.assertEqual(re.findall(r"^\t\t(te_gw_sec_\w+) = \{", composer, re.M),
+        # Fossil Transition (#660) comes after the two.
+        self.assertEqual(re.findall(r"^\t\t(te_gw_sec_\w+) = \{", composer, re.M)[:2],
                          ["te_gw_sec_policies", "te_gw_sec_emitters"])
 
     def test_the_row_reads_its_slot_only_when_shown(self):
@@ -304,14 +294,12 @@ class LocTest(unittest.TestCase):
             self.assertIn(f"State.GetCountry.MakeScope.ScriptValue('{value}')", _loc(key), key)
         self.assertEqual(_loc("gw_te_row_name"), "[State.GetCountry.GetNameNoFormatting]")
 
-    def test_annual_is_the_overview_s_figure(self):
-        """For a leader, gw_disp_own_emis reads the same variable the overview's
-        Our Market's Emissions reads through market_capital.owner."""
+    def test_country_rows_and_market_overview_have_separate_snapshots(self):
         values = _read(VALUES)
-        self.assertIn("add = var:gw_disp_market_emis", _body(values, "gw_disp_own_emis"))
-        self.assertIn("add = var:gw_disp_market_emis", _body(values, "gw_market_emis_display"))
-        self.assertIn("ScriptValue('gw_market_emis_display')|1]/yr", _loc("gw_emis_market_value"))
-        self.assertIn("ScriptValue('gw_disp_own_emis')|1]/yr", _loc("gw_te_row_annual"))
+        self.assertIn("add = var:gw_disp_country_emis", _body(values, "gw_disp_own_emis"))
+        self.assertIn("add = var:gw_disp_market_emis", _body(values, "gw_market_emis_raw"))
+        for name in ("gw_disp_own_emis", "gw_market_emis_display"):
+            self.assertIn("multiply = gw_emission_display_scale", _body(values, name))
 
 
 if __name__ == "__main__":

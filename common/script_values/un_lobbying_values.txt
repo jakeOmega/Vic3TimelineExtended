@@ -93,6 +93,39 @@ un_lean_lobbying = {
 # `count >= 3` in un_lobby_ai_lobby).
 un_lobby_ai_influence_floor = { value = 150 }
 
+# Stakeholders on a resolution that accuses no one (un_lobby_ai_monthly): a
+# member whose interests term reaches +35 lobbies for, -35 or less against.
+# At most two a side (the literal `max = 2` in un_lobby_ai_monthly), the
+# strongest first, one campaign each, and only with
+# twice the usual influence to spare: a little lobbying, not a campaign season
+# (owner, 2026-10-03). A poor member's +30 for the World Development Fund under
+# the founding charter falls short of the line, so the voluntary Fund passes on
+# the consensus; once a reform funds it, a large grant carries a poor member
+# over it, and a laissez-faire rich member under a reformed charter (-40) lobbies
+# against.
+un_lobby_ai_stake_line = { value = 35 }
+un_lobby_ai_stake_line_against = { value = -35 }
+un_lobby_ai_stake_influence_floor = { value = 300 }
+
+# The order stakeholders are taken in: the strongest interest first. Scope:
+# the member, with a snapshot for the resolution (the stakeholder trigger has
+# checked it).
+un_lobby_ai_stake_for_order = {
+	value = 0
+	if = {
+		limit = { has_variable = un_lean_interests }
+		add = var:un_lean_interests
+	}
+}
+
+un_lobby_ai_stake_against_order = {
+	value = 0
+	if = {
+		limit = { has_variable = un_lean_interests }
+		subtract = var:un_lean_interests
+	}
+}
+
 # Which lobbyable member the AI works on first: the one nearest the line, whose
 # vote a campaign is likeliest to turn. Scope: the member, with a snapshot for
 # the resolution in session (un_lobby_true_lean_in has checked it).

@@ -817,41 +817,49 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_olympus_mons } }
 				set_global_variable = { name = sr_colony_olympus_mons value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = olympus_tubes }
 				trigger_event = { id = space_race_colony_events.2 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_hellas_planitia } }
 				set_global_variable = { name = sr_colony_hellas_planitia value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = hellas_fossils }
 				trigger_event = { id = space_race_colony_events.3 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_utopia_planitia } }
 				set_global_variable = { name = sr_colony_utopia_planitia value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = utopia_glacier }
 				trigger_event = { id = space_race_colony_events.4 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_arcadia_planitia } }
 				set_global_variable = { name = sr_colony_arcadia_planitia value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = arcadia_brines }
 				trigger_event = { id = space_race_colony_events.5 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_ceres } }
 				set_global_variable = { name = sr_colony_ceres value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = ceres_reservoir }
 				trigger_event = { id = space_race_colony_events.6 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_vesta } }
 				set_global_variable = { name = sr_colony_vesta value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = vesta_impactor }
 				trigger_event = { id = space_race_colony_events.7 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_psyche } }
 				set_global_variable = { name = sr_colony_psyche value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = psyche_metal }
 				trigger_event = { id = space_race_colony_events.8 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_pallas } }
 				set_global_variable = { name = sr_colony_pallas value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = pallas_water }
 				trigger_event = { id = space_race_colony_events.9 }
 			}
 			10 = {
@@ -868,21 +876,26 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_io } }
 				set_global_variable = { name = sr_colony_io value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = io_roof }
 				trigger_event = { id = space_race_colony_events.11 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_europa } }
 				set_global_variable = { name = sr_colony_europa value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = europa_life }
+				sr_seed_colony_discovery = { DISCOVERY = europa_vents }
 				trigger_event = { id = space_race_colony_events.12 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_ganymede } }
 				set_global_variable = { name = sr_colony_ganymede value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = ganymede_layers }
 				trigger_event = { id = space_race_colony_events.13 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_callisto } }
 				set_global_variable = { name = sr_colony_callisto value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = callisto_archive }
 				trigger_event = { id = space_race_colony_events.14 }
 			}
 			10 = {
@@ -898,6 +911,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_venus } }
 				set_global_variable = { name = sr_colony_venus value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = venus_waves }
 				trigger_event = { id = space_race_colony_events.17 }
 			}
 		}
@@ -909,16 +923,19 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_mercury } }
 				set_global_variable = { name = sr_colony_mercury value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = mercury_archive }
 				trigger_event = { id = space_race_colony_events.18 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_titan } }
 				set_global_variable = { name = sr_colony_titan value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = titan_chemistry }
 				trigger_event = { id = space_race_colony_events.19 }
 			}
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_enceladus } }
 				set_global_variable = { name = sr_colony_enceladus value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = enceladus_life }
 				trigger_event = { id = space_race_colony_events.20 }
 			}
 			10 = {
@@ -945,6 +962,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_titania } }
 				set_global_variable = { name = sr_colony_titania value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = titania_ocean }
 				trigger_event = { id = space_race_colony_events.24 }
 			}
 			10 = {
@@ -965,6 +983,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_triton } }
 				set_global_variable = { name = sr_colony_triton value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = triton_jet }
 				trigger_event = { id = space_race_colony_events.28 }
 			}
 			10 = {
@@ -981,6 +1000,7 @@ sr_establish_colony_effect = {
 			10 = {
 				trigger = { NOT = { has_global_variable = sr_colony_pluto } }
 				set_global_variable = { name = sr_colony_pluto value = yes }
+				sr_seed_colony_discovery = { DISCOVERY = pluto_antifreeze }
 				trigger_event = { id = space_race_colony_events.30 }
 			}
 			10 = {
@@ -1516,6 +1536,9 @@ sr_record_probe_result = {
 #     sr_sync_solar_colonization_entry.
 #   - sr_solar_system_trade (solar colonization entry): from
 #     sr_completed_solar_colonization, by sr_sync_solar_colonization_entry.
+#   - sr_commercial_space_dividend (country): from the variables
+#     sr_space_race_concluded reads, by sr_refresh_space_dividend, which
+#     re-applies it every month anyway (end of this file).
 #
 # Country modifiers come back in sr_repair_after_civil_war, which the shared
 # civil-war hook runs for the winner (te_civil_war_on_won in
@@ -1749,6 +1772,7 @@ sr_sync_solar_colonization_entry = {
 	# Only a colony holder has any, and its entry is always open.
 	if = {
 		limit = { sr_has_space_colony = yes }
+		sr_sync_colony_discovery_modifiers = yes
 		# The colony specialisations, in space_race_colony_events order.
 		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_valles_marineris_research }
 		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_valles_marineris_mining   }
@@ -1839,4 +1863,38 @@ sr_sync_space_race_entries = {
 	sr_sync_mars_landing_entry = yes
 	sr_sync_interstellar_probe_entry = yes
 	sr_sync_solar_colonization_entry = yes
+}
+
+# ======= After the race: Commercial Space Industry =======
+# Country scope; its one refresh site is the monthly country pulse
+# (space_race_on_action). Once the race is over for the country
+# (sr_space_race_concluded), the flat progress its sources still give is paid
+# as Extraplanetary Base throughput: sr_commercial_space_dividend at
+# multiplier = sr_space_dividend_points (+5% a point, capped; the reasoning is
+# at the script value). Re-applied every month, so it follows its sources (a
+# Space Elevator level built, a company losing prosperity), and it comes back
+# on its own after a revolution: the winner inherits every variable the test
+# reads, though no modifier. The first time it applies, a player gets
+# space_race_events.77, which explains it; the variable that records the
+# announcement is inherited too, so a revolution does not repeat it.
+sr_refresh_space_dividend = {
+	if = {
+		limit = { has_modifier = sr_commercial_space_dividend }
+		remove_modifier = sr_commercial_space_dividend
+	}
+	if = {
+		limit = {
+			sr_space_race_concluded = yes
+			sr_space_dividend_points > 0
+		}
+		add_modifier = { name = sr_commercial_space_dividend multiplier = sr_space_dividend_points }
+		if = {
+			limit = { NOT = { has_variable = sr_space_dividend_announced } }
+			set_variable = { name = sr_space_dividend_announced value = yes }
+			if = {
+				limit = { is_player = yes }
+				trigger_event = { id = space_race_events.77 days = 1 }
+			}
+		}
+	}
 }

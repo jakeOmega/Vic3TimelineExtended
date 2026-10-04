@@ -1,0 +1,384 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE — migration, monthly dispatch and watchdog
+# ============================================================================
+# Schedule rules: docs/systems/tax_code_schema.md, "Scheduler, package slots
+# and history".
+#
+# Dispatch. The global on_monthly_pulse runs on the 1st of every calendar month
+# (docs/guides/scripting_best_practices.md, "on_monthly_pulse_country Is a
+# 30-Day Timer, Not a Calendar Month"), so a package due in a month commences
+# on its 1st. The global pulse has no ROOT, and the collection writer needs the
+# country as ROOT for its amendment sponsor, so each country gets the hidden
+# country event te_tax.1, whose ROOT is that country. The processor claims the
+# month first, so a second dispatch in the same month does nothing.
+#
+# Watchdog. A country's own on_monthly_pulse_country is a 30-day timer; it only
+# looks for a month the dispatch has not processed while a transition is due,
+# and then runs te_tax.2, which never commences and never claims the month.
+#
+# Migration. Nothing in the tax code runs for a country until te_tax.3 has
+# migrated it (docs/systems/tax_code_schema.md, "Migration"): every country
+# once the lobby is over, each formed country, a released country whose parent
+# has no code, and any country the monthly dispatch still finds unmigrated. A
+# released country whose parent holds the carrier law takes the parent's
+# enacted code instead, and an uprising the original's whole code (the
+# outbreak copy hangs off the shared te_civil_war_on_start,
+# te_civil_war_on_actions.txt): docs/systems/tax_code_schema.md, "Civil wars
+# and new countries".
+#
+# Relief eligibility. A state that changes owner keeps its regional-relief
+# marks only while the code that named it went with it (on_state_owner_change,
+# below).
+#
+# Re-assertion. A taxation law other than law_te_tax_code activated in a
+# migrated country (activate_law from an event, a button or the law-consistency
+# cascade) is replaced by the carrier again through te_tax.5
+# (docs/systems/tax_code_schema.md, "Native controls and drift").
+#
+# Customs authority (plan Task 15; customs option only). A market merge, a
+# new market and a change of subject status can make a country gain or lose
+# its own market, so its customs authority is revalidated a day later
+# (te_tax.7, te_tax_customs_revalidate); the processor also revalidates at
+# every month's start, which catches any change no hook reports.
+#
+# Every handler checks te_tax_code_on first: with the rule off nothing here runs.
+# The engine unions same-name on_action declarations across files.
+#
+# Decentralized countries are left out of the three fan-outs (final review
+# A-Minor 1; extra_on_actions.txt's global-warming pulse does the same): their
+# type has no events, economy or politics, so te_tax.3 would never migrate
+# them and the self-heal would raise it on each of them every month.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Migration at game start
+# ----------------------------------------------------------------------------
+# After the lobby, not on_game_started: that fires while the players are still
+# in the lobby, where the rule can still change (scripting_best_practices.md,
+# "Convert what history placed after the lobby"). Migrating there and turning
+# the rule off in the lobby would leave every country on the carrier law in a
+# rule-off campaign. No scope here; the event makes each country its own ROOT.
+on_game_started_after_lobby = {
+	on_actions = {
+		te_tax_on_game_started
+	}
+}
+
+te_tax_on_game_started = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes }
+			every_country = {
+				limit = { NOT = { is_country_type = decentralized } }
+				trigger_event = { id = te_tax.3 }
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# New countries
+# ----------------------------------------------------------------------------
+# A country already migrated (a formation keeps the forming country's
+# variables) is left alone by te_tax_migrate_country itself.
+
+# The scope is the newly formed country.
+on_country_formed = {
+	on_actions = {
+		te_tax_on_country_formed
+	}
+}
+
+te_tax_on_country_formed = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes }
+			trigger_event = { id = te_tax.3 }
+		}
+	}
+}
+
+# The scope is the releasing country; scope:target is the released one.
+# te_tax_init_released_country (te_tax_civil_war_effects.txt) runs in
+# scope:target with the parent saved as scope:te_tax_source: a parent holding
+# the carrier law passes on its enacted provisions, which a copy of variables
+# can do from here; the carrier law and the first sync are dispatched to the
+# new country as te_tax.6, and any other parent's released country gets the
+# migration te_tax.3, so whatever runs as a country event has the new country
+# as its ROOT and never touches the parent (te_monetary_on_actions.txt,
+# "THE UPDATE IS DISPATCHED, NOT CALLED", does the same).
+on_country_released_as_independent = {
+	on_actions = {
+		te_tax_on_country_released
+	}
+}
+
+on_country_released_as_own_subject = {
+	on_actions = {
+		te_tax_on_country_released
+	}
+}
+
+on_country_released_as_overlord_subject = {
+	on_actions = {
+		te_tax_on_country_released
+	}
+}
+
+on_country_released_as_company_subject = {
+	on_actions = {
+		te_tax_on_country_released
+	}
+}
+
+te_tax_on_country_released = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes }
+			save_scope_as = te_tax_source
+			scope:target ?= {
+				te_tax_init_released_country = yes
+			}
+		}
+	}
+}
+
+# An uprising (on_revolution_start, on_secession_start) is not handled here: the
+# shared te_civil_war_on_start calls te_tax_on_uprising after it has recorded
+# the two sides. Same-name on_actions are unioned across files in no known
+# order, so a second handler here would race the copy with a migration.
+
+# ----------------------------------------------------------------------------
+# Relief eligibility
+# ----------------------------------------------------------------------------
+# ROOT is the state that changed owner; the hook names no previous owner, so
+# the country whose code named the state is stamped on it beforehand
+# (te_tax_relief_holder). te_tax_relief_follow_owner
+# (te_tax_civil_war_effects.txt) resets the state's relief marks unless that
+# code went with it.
+on_state_owner_change = {
+	on_actions = {
+		te_tax_on_state_owner_change
+	}
+}
+
+te_tax_on_state_owner_change = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes }
+			te_tax_relief_follow_owner = yes
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Monthly dispatch and watchdog
+# ----------------------------------------------------------------------------
+
+on_monthly_pulse = {
+	on_actions = {
+		te_tax_monthly_dispatch
+	}
+}
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_tax_watchdog_on_action
+	}
+}
+
+# Global scope (no ROOT). The date only: the month index is printed by each
+# country's te_tax.1, the same day.
+te_tax_monthly_dispatch = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes }
+			debug_log = "TE_TAX dispatch date=[TimeKeeper.GetCurrentDate.GetString]"
+			# Migrated countries: this month's processor.
+			every_country = {
+				limit = {
+					NOT = { is_country_type = decentralized }
+					has_variable = te_tax_migrated
+					var:te_tax_migrated > 0
+				}
+				trigger_event = { id = te_tax.1 }
+			}
+			# Self-heal: a country no hook migrated (one created by an effect, or a
+			# game-start dispatch that missed it) migrates now; its first te_tax.1
+			# runs next month.
+			every_country = {
+				limit = {
+					NOT = { is_country_type = decentralized }
+					OR = { NOT = { has_variable = te_tax_migrated } var:te_tax_migrated < 1 }
+				}
+				trigger_event = { id = te_tax.3 }
+			}
+		}
+	}
+}
+
+# Country scope (ROOT = the country).
+te_tax_watchdog_on_action = {
+	effect = {
+		if = {
+			limit = {
+				te_tax_code_on = yes
+				has_variable = te_tax_migrated
+				var:te_tax_migrated > 0
+				has_variable = te_tax_last_month
+				var:te_tax_last_month < te_history_month_index
+				has_variable = te_tax_next_month
+				var:te_tax_next_month >= 0
+				var:te_tax_next_month <= te_history_month_index
+			}
+			trigger_event = { id = te_tax.2 }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Re-assertion of the carrier
+# ----------------------------------------------------------------------------
+# on_law_activated fires for a law activated for any reason, script included
+# (vanilla 00_code_on_actions.txt, the note on the hook), so it catches every
+# activate_law of a vanilla taxation law: restore_peruvian_constitution
+# (vanilla 00_victoria_scripted_effects.txt, Per-Capita whenever not held), the
+# law-consistency cascade (extra_law_consistency_generated.txt), a taxation law
+# the engine gives an uprising after the outbreak copy, and anything else.
+# Hungary's Per-Capita button is not one: it activates Per-Capita only from
+# Land-Based, which no country holds under the rule. The five vanilla taxation
+# laws cannot be enacted under the rule (te_tax_vanilla_law_gates.txt), so
+# script is the only way in. The vanilla files are left alone.
+#
+# ROOT is the law just activated; its owner is the country. The re-assert is
+# dispatched as te_tax.5, a country event, never run here, so it sees the law
+# this activation installed (precedent: te_collective_governance_from_law_scope,
+# extra_on_actions.txt). Only a migrated country: at game start history and the
+# political setup activate vanilla laws before the migration. The carrier's own
+# activation (the migration's, or te_tax.5's) is not another taxation law, so it
+# never re-dispatches.
+on_law_activated = {
+	on_actions = {
+		te_tax_on_law_activated
+	}
+}
+
+te_tax_on_law_activated = {
+	effect = {
+		if = {
+			limit = {
+				te_tax_code_on = yes
+				law_type = { is_same_law_group_as = law_type:law_te_tax_code }
+				NOT = { law_type = law_type:law_te_tax_code }
+				owner = {
+					has_variable = te_tax_migrated
+					var:te_tax_migrated > 0
+				}
+			}
+			owner = {
+				trigger_event = { id = te_tax.5 }
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Customs authority (plan Task 15; docs/systems/tax_code_schema.md, "Customs
+# schedule")
+# ----------------------------------------------------------------------------
+# Only under the customs option, and only for a country whose code is in force
+# (te_tax_customs_revalidate tests both again). Each dispatches the hidden
+# te_tax.7 a day later, once the merge or the change of status has settled
+# (te_monetary_on_become_subject dispatches its own update the same way), so
+# the country revalidates as its own ROOT.
+
+# Root = the dissolving (joining) market; owner = the country whose market
+# dissolves, which now trades in scope:market, whose owner leads it
+# (gw_market_join_on_action, extra_on_actions.txt).
+on_merge_markets = {
+	on_actions = {
+		te_tax_on_merge_markets
+	}
+}
+
+te_tax_on_merge_markets = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes te_tax_customs_on = yes }
+			if = {
+				limit = { exists = owner owner = { te_tax_code_in_force = yes } }
+				owner = { trigger_event = { id = te_tax.7 days = 1 } }
+			}
+			if = {
+				limit = { exists = scope:market.owner scope:market.owner = { te_tax_code_in_force = yes } }
+				scope:market.owner = { trigger_event = { id = te_tax.7 days = 1 } }
+			}
+		}
+	}
+}
+
+# Root = the newly created market (a country leaving a customs union, a
+# released country, an uprising).
+on_create_market = {
+	on_actions = {
+		te_tax_on_create_market
+	}
+}
+
+te_tax_on_create_market = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes te_tax_customs_on = yes }
+			if = {
+				limit = { exists = owner owner = { te_tax_code_in_force = yes } }
+				owner = { trigger_event = { id = te_tax.7 days = 1 } }
+			}
+		}
+	}
+}
+
+# Root = the new subject (vanilla's own block scopes top_overlord from it). A
+# subject pact acts as a customs union, so the subject joins its overlord's
+# market; the overlord is revalidated too.
+on_become_subject = {
+	on_actions = {
+		te_tax_on_become_subject
+	}
+}
+
+te_tax_on_become_subject = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes te_tax_customs_on = yes }
+			if = {
+				limit = { te_tax_code_in_force = yes }
+				trigger_event = { id = te_tax.7 days = 1 }
+			}
+			if = {
+				limit = { exists = overlord overlord = { te_tax_code_in_force = yes } }
+				overlord = { trigger_event = { id = te_tax.7 days = 1 } }
+			}
+		}
+	}
+}
+
+# Root = the newly independent country. It may also fire on a transfer from
+# one overlord to another (decolonization_events.txt), which the revalidation
+# answers the same way: it re-tests the market.
+on_become_independent = {
+	on_actions = {
+		te_tax_on_become_independent
+	}
+}
+
+te_tax_on_become_independent = {
+	effect = {
+		if = {
+			limit = { te_tax_code_on = yes te_tax_customs_on = yes }
+			if = {
+				limit = { te_tax_code_in_force = yes }
+				trigger_event = { id = te_tax.7 days = 1 }
+			}
+		}
+	}
+}

@@ -15,6 +15,19 @@ Each ICONS entry is {"subject": <phrase>, "seed": <state>}:
 or {"use": "gfx/interface/icons/.../x.dds"}: a different existing icon fits
 better than the borrowed one (vanilla's crossed-out guarantee for withdrawing
 one); never rendered, and `wire` points the entity at it.
+A "restyle": "gfx/.../x.dds" entry keeps an existing mod icon's picture and
+refits it to the category's vanilla look, instead of drawing a new one (the
+mod's pre-pipeline building icons, 2024-25, had no gold frame). Its subject
+describes that picture. Candidate i is the picture repainted by FLUX
+image-to-image at strength i of the category's `restyle_strengths` (or the
+entry's own "strengths"); strength 0 is the picture unpainted. The old icon's
+outline is shrunk past its own rim and the emptied corners filled from the
+picture (icon_render.prepare_restyle); "crop" (default RESTYLE_CROP) then cuts
+that share from each side, 0.1 for a circular badge. The source is read from disk,
+else from git, so the old file can be deleted once nothing points at it.
+An entry may carry its own "style" (a template with {subject}) in place of the
+category's: the building style's aerial diorama put orbital stations low over
+a map, small (ORBIT).
 In a GUI-hosted category (`gui`: icons a .gui file draws, not an entity's),
 an entry also names the placeholder it replaces, "now": <vanilla path>, and
 may instead be derived: {"from": "<cat>/<key>", "tint": "grey"|"faint",
@@ -96,6 +109,7 @@ Usage:
 from __future__ import annotations
 
 KEEP = "keep"
+RESTYLE_CROP = 0.03
 
 # Style = what makes a category look like its vanilla folder. Subject = the one
 # per-entity phrase a human (or an LLM draft from loc) has to write.
@@ -116,6 +130,14 @@ SILHOUETTE = ("a bold solid black silhouette icon of {subject}, simple flat pict
 # The UN's GUI icons show at 32-40 px: one bold object in clear colours.
 UN_STYLE = ("{subject}, one compact bold object filling the frame, simple chunky silhouette, strong clear "
             "colours, " + PAINTED)
+
+# Orbital buildings, in place of the building style: its "aerial view ...
+# miniature diorama ... surrounding landscape" drew a station as a small model
+# hovering over a map (2026-10-02). The restyled space elevator shows the
+# Earth's curved edge under black space, as this does.
+ORBIT = ("{subject}, seen from close by in orbit, filling most of the picture, the curved blue edge of the "
+         "Earth below it and black starry space above, detailed painted illustration, warm golden sunlight, "
+         "muted palette")
 
 # The system panels whose GUI icons come from here (the style pass,
 # #573-#583): registry prefix -> folder under gfx/interface/icons/, and the
@@ -168,8 +190,10 @@ CATEGORIES = {
         folder="diplomatic_action_icons", size=100, mode="plinth", fill=0.8,
         entity_dir="common/diplomatic_actions", field="texture", lens_folder="lens_toolbar_icons",
         style=("{subject}, a compact miniature sculpture, simple chunky silhouette, " + PAINTED)),
+    # restyle_strengths: as is, then repaints (applied in eighths, see icon_render.RESTYLE_STEPS).
+    # Up to 0.5 the repaint adds texture but keeps a flat picture flat; the brushwork shows from 0.625.
     "building": dict(
-        folder="building_icons", size=256, mode="framed",
+        folder="building_icons", size=256, mode="framed", restyle_strengths=(0.0, 0.375, 0.5, 0.625, 0.75),
         entity_dir="common/buildings", field="icon",
         style=("aerial three-quarter view of {subject}, detailed painted illustration "
                "of a miniature diorama, warm golden afternoon light, muted earthy "
@@ -289,6 +313,19 @@ CATEGORIES = {
     # of the side (median 0.89), median saturation 0.45 and value 0.57. The
     # Nuclear Weapons entry's mushroom_cloud.dds is a hand-made 1024 px file
     # and is not part of this registry.
+    # Prestige goods (256 px, PrestigeGood.GetTexture, read from `texture =`).
+    # Vanilla's 74 are its goods icons' painted objects made finer: the same
+    # kind of thing (tea for tea, a car for a car), so the two read as a pair
+    # in the company panel. Measured: objects span 0.84-0.97 of the side
+    # (median 0.92), centred. The folder is vanilla's, so the grade and the
+    # sheet's neighbours come from its icons. The mod's 15 used to be their
+    # base good's icon under a gold halo (gen_prestige_icons.py).
+    # grade_strength 0.4, as for the silver Space Race craft: at 0.7 the
+    # silver airliner turned copper and the olive tank a pale lime.
+    "prestige_good": dict(
+        folder="goods_icons/prestige_goods", size=256, mode="cutout", fill=0.92, grade_strength=0.4,
+        entity_dir="common/prestige_goods", field="texture",
+        style="{subject}, one chunky readable object, " + PAINTED),
     "journal_entry": dict(
         folder="event_icons", size=150, mode="cutout", fill=0.89, panel_preview=True,
         entity_dir="common/journal_entries", field="icon",
@@ -370,8 +407,18 @@ CATEGORIES = {
 }
 
 
-def prompt_for(cat: str, subject: str) -> str:
-    return CATEGORIES[cat]["style"].format(subject=subject) + ", no text, no writing, no letters"
+def prompt_for(cat: str, subject: str, style: str | None = None) -> str:
+    return (style or CATEGORIES[cat]["style"]).format(subject=subject) + ", no text, no writing, no letters"
+
+
+def entry_prompt(cat: str, entry: dict) -> str:
+    """An entry's prompt: its subject in its own "style" if it has one, else in the category's."""
+    return prompt_for(cat, entry["subject"], entry.get("style"))
+
+
+def restyle_strengths(cat: str, entry: dict) -> tuple:
+    """A restyle entry's candidates: the img2img strength of each, by candidate number."""
+    return tuple(entry.get("strengths", CATEGORIES[cat].get("restyle_strengths", ())))
 
 
 def icon_path(cat: str, key: str) -> str:
@@ -381,6 +428,7 @@ def icon_path(cat: str, key: str) -> str:
 
 
 _GI = "gfx/interface/icons"
+_BI = f"{_GI}/building_icons"
 
 ICONS: dict[str, dict[str, dict]] = {
     "technology": {
@@ -726,6 +774,60 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_phosphate_mine": {"subject": "a wide open-cast mine with pale tan terraces and a long conveyor belt, with a heap of pale grey-tan phosphate rock pellets in the foreground", "seed": 0},
         "building_potash_mine": {"subject": "a mine with a tall headframe beside huge pink salt heaps, with a pile of pink and red potash salt crystals in the foreground", "seed": 0},
         "building_industrial_mineral_salt_mine": {"subject": "shallow salt evaporation pans and white salt heaps with conveyor belts, with a pile of large white salt crystals and grey gypsum chunks in the foreground", "seed": 1},
+        # Mod buildings that shared another mod building's icon (the 2026-10-02 audit).
+        # Each megaproject construction site gets its own: the building's subject,
+        # half-built. The orbital ones are in ORBIT: in the building style both
+        # solar collector renders were small arrays over a map.
+        "building_consciousness_network": {"subject": "a futuristic government data centre: a low dark glass building with a glowing blue dome of light on its roof, linked by glowing blue fibre-optic lines to small relay nodes across green countryside, loosely hand-painted with visible brush strokes", "seed": 0},
+        "building_consciousness_network_construction_site": {"subject": "the construction site of a futuristic data centre: a half-built low glass building in scaffolding with tower cranes, the steel ribs of a dome going up on its roof, cable trenches dug across green countryside, loosely hand-painted with visible brush strokes", "seed": 0},
+        "building_mind_upload_nexus": {"subject": "a sleek futuristic white tower clad in glass, rings of glowing teal server racks visible through its walls, a beam of pale light rising from its crown, in a landscaped plaza, loosely hand-painted with visible brush strokes", "seed": 0},
+        "building_mind_upload_nexus_construction_site": {"subject": "a half-built sleek white glass tower wrapped in scaffolding with tower cranes, its lower floors already glowing teal, stacks of building materials in a landscaped plaza, loosely hand-painted with visible brush strokes", "seed": 1},
+        "building_orbital_battlestation": {"subject": "a large armoured military space station: a dark grey ring-shaped hull bristling with long gun turrets and missile pods, small craft docking at it, plain unmarked hull", "style": ORBIT, "seed": 3},
+        "building_orbital_battlestation_construction_site": {"subject": "a half-assembled ring-shaped military space station: an open lattice skeleton with only part of its dark grey armour plating fitted, small construction craft and floating girders around it", "style": ORBIT, "seed": 3},
+        "building_antimatter_warhead_plant": {"subject": "a high-security weapons plant in a desert: low windowless concrete bunkers behind double fences and watchtowers, a round armoured reactor dome glowing violet at its centre, loosely hand-painted with visible brush strokes", "seed": 1},
+        "building_nanofabrication_center": {"subject": "a modern fabrication campus of white cleanroom halls with sawtooth roofs and rooftop air vents around a glass dome glowing pale blue, green parkland around it, with a heap of shimmering silver-grey metallic powder in the foreground, loosely hand-painted with visible brush strokes", "seed": 0},
+        "building_nanofabrication_center_construction_site": {"subject": "the construction site of a modern fabrication campus: half-built white cleanroom halls on bare steel frames, scaffolding and tower cranes, the ribs of a glass dome going up in the middle, loosely hand-painted with visible brush strokes", "seed": 1},
+        "building_solar_collector": {"subject": "a huge orbital solar power station: a vast square array of dark blue solar panels on a golden lattice frame, a round collector dish at its centre glowing with gathered sunlight and sending a pale beam down toward the Earth", "style": ORBIT, "seed": 1},
+        "building_solar_collector_construction_site": {"subject": "a half-built orbital solar power station: a vast square golden lattice frame with only its first rows of dark blue solar panels fitted and the rest still bare girders, small construction craft carrying more panels to it", "style": ORBIT, "seed": 1},
+        "building_antimatter_facility_construction_site": {"subject": "the construction site of a futuristic research complex on orange desert sand: a wide round ring-shaped building of pale concrete half-built, part of its curved roof still bare steel girders, the steel frame of a round glass dome going up at its centre, tower cranes and scaffolding, stacks of materials, loosely hand-painted with visible brush strokes", "seed": 0},
+        "building_space_program": {"subject": "a national space agency headquarters: a modern glass mission control building with a big white satellite dish on its roof and a tall white rocket standing upright on display in the plaza in front, landscaped grounds, loosely hand-painted with visible brush strokes", "seed": 0},
+        # Wonders: the landmark alone.
+        # A plain render of ITER is a grey hall that reads as a warehouse; the cutaway shows the reactor.
+        # The ISS in the building style was a flat orange cross over a map.
+        "building_wonder_iter": {"subject": "a cutaway of the ITER fusion reactor building among the green hills of southern France, its roof open to show a giant doughnut-shaped tokamak reactor ring of steel magnet coils glowing with pink-violet plasma inside the concrete hall, cranes and tiny workers around it", "seed": 1},
+        "building_wonder_international_space_station": {"subject": "the International Space Station: a long grey central truss carrying four pairs of huge dark golden solar panel wings, white cylindrical modules clustered at its middle", "style": ORBIT, "seed": 3},
+        "building_wonder_kennedy_space_center": {"subject": "the Kennedy Space Center: a huge plain grey-white boxy rocket assembly building beside a launch pad where a white rocket stands in its steel gantry tower, flat green Florida marshland, lagoons and the sea", "seed": 1},
+        # The mod's own icons from before the pipeline (2024-25): kept, refitted to
+        # the gold frame (`restyle`). Each subject describes the picture as it is.
+        # The owner of each formerly shared picture keeps it.
+        # s0's QUALITY TESTED sign was painted out of the raw (retouched lettering, 2026-10-02).
+        "building_electrics_industry_appliances": {"restyle": f"{_BI}/appliance.dds", "subject": "a bright factory floor where workers in green overalls assemble cream-coloured refrigerators and toasters", "seed": 0},
+        "building_ocean_mine": {"restyle": f"{_BI}/deep_sea_mine.dds", "crop": 0.1, "subject": "a deep-sea mining machine with glowing lamps crawling over the dark ocean floor, cables rising toward the surface", "seed": 2},
+        "building_fusion_plant": {"restyle": f"{_BI}/fusion_plant.dds", "crop": 0.1, "subject": "a futuristic fusion power plant: a tall silver cylindrical reactor with a glowing blue ring at its base, surrounded by white technical buildings and pipes", "seed": 2},
+        "building_highway": {"restyle": f"{_BI}/highway.dds", "subject": "a wide multi-lane highway full of cars and trucks running toward the horizon under an overpass, green trees on both sides", "seed": 0},
+        "building_renewable_energy_plant": {"restyle": f"{_BI}/renewable_plant.dds", "crop": 0.1, "subject": "a renewable energy plant: white wind turbines and fields of solar panels around a white power building, green fields", "seed": 0},
+        "building_software_industry": {"restyle": f"{_BI}/software.dds", "crop": 0.06, "subject": "a modern dark glass office building at night with rows of lit windows and a glowing blue sign on its facade", "seed": 0},
+        "building_synthetics_plant_oil": {"restyle": f"{_BI}/synth_oil.dds", "subject": "an old smoky synthetic fuel refinery with tall towers and pipes, workers and a tank train in the foreground, sepia haze", "seed": 0},
+        "building_synthetics_plant_rubber": {"restyle": f"{_BI}/synth_rubber.dds", "subject": "a synthetic rubber works: workers by a conveyor of rubber sheets in front of a chemical plant with domed tanks and chimneys, olive-green haze", "seed": 3},
+        "building_space_mine": {"restyle": f"{_BI}/space_base.dds", "crop": 0.1, "subject": "an extraplanetary base: white domed habitats, solar panels and a small rover on a red rocky planet at dusk, a moon in the sky", "seed": 2},
+        "building_aerospace_industry": {"restyle": f"{_BI}/space.dds", "crop": 0.06, "subject": "a rocket lifting off from its launch tower at night in a burst of orange flame and smoke, a radar dish nearby", "seed": 2},
+        "building_space_elevator": {"restyle": f"{_BI}/space_elevator.dds", "subject": "a space elevator: a single thin tether rising from the Earth's curved horizon up into black starry space, a climber pod on it", "seed": 0},
+        "building_space_elevator_construction_site": {"restyle": f"{_BI}/space_elevator_construction_site.dds", "crop": 0.15, "subject": "the construction site of a space elevator's base tower: a tall steel lattice tower in scaffolding with cranes, workers and stacked materials", "seed": 2},
+        "building_nuclear_plant": {"restyle": f"{_BI}/nuclear_plant.dds", "crop": 0.1, "subject": "a nuclear power plant with two large concrete cooling towers releasing white steam, reactor buildings and power lines, green fields and a river", "seed": 0},
+        # Redrawn in the building style (owner, 2026-10-02: "make new ones for hydro, and any
+        # other existing ones you don't think are great"): the flat vectors, the interiors
+        # and the still lifes; the comment names the restyle each replaced. The old picture
+        # won for appliances (every redraw was a warehouse of crates), the deep-sea mine
+        # (the owner likes the ocean floor) and the highway (the interchanges made no sense).
+        "building_airport": {"subject": "a modern airport: a long curved glass terminal with a tall control tower, plain white jet airliners parked at its gates and one taking off from a long runway, green fields around", "seed": 3},  # fallback: restyle airport.dds
+        "building_synthetics_plant_opium": {"subject": "a clean modern pharmaceutical plant: white factory buildings with gleaming steel tanks and pipes and a glass-walled laboratory wing, green lawns and trees around, loosely hand-painted with visible brush strokes", "seed": 0},  # fallback: restyle drugs.dds
+        "building_hydro_plant": {"subject": "a hydroelectric power plant: a tall curved concrete arch dam across a river gorge between wooded green hills, white water rushing from its spillways, a power station at its foot and power lines on steel pylons climbing the hillside, a blue reservoir lake behind", "seed": 0},  # fallback: restyle hydro_plant.dds, crop 0.18
+        "building_national_park": {"subject": "a national park: a log-cabin ranger station with a wooden lookout tower beside a calm blue lake, a winding trail through pine forests, snowy mountains behind", "seed": 0},  # fallback: restyle national_park.dds
+        "building_robotics_industry": {"subject": "a modern robotics factory: long white halls with sawtooth roofs, through the open end of one hall a line of big yellow robotic arms welding car bodies in showers of sparks, loosely hand-painted with visible brush strokes", "seed": 1},  # fallback: restyle robot.dds, crop 0.08
+        "building_electronic_components_and_semiconductor_industry": {"subject": "a semiconductor plant: a big boxy windowless white cleanroom building with rows of rooftop air handlers and silver exhaust stacks, a glass entrance hall glowing golden, car parks and green lawns around, loosely hand-painted with visible brush strokes", "seed": 1},  # fallback: restyle semiconductor.dds
+        "building_tourism_industry": {"subject": "a seaside resort: a tall white hotel with balconies above a sandy beach lined with rows of colourful parasols, palm trees and a promenade with cafes, a turquoise sea with small sailing boats", "seed": 2},  # fallback: restyle tourism.dds
+        "building_network_infrastructure": {"subject": "a telecommunications hub: a tall red-and-white steel radio mast and several big white satellite dishes beside a low grey exchange building, telephone poles and cable trenches running away across green countryside toward a distant city", "seed": 0},  # fallback: restyle network.dds
+        "building_advanced_material_fabricator": {"subject": "a high-tech materials plant: a sleek dark grey factory hall with a glowing orange furnace seen through its open doors, stacks of black carbon-fibre sheets and dark composite panels in its yard, loosely hand-painted with visible brush strokes", "seed": 0},  # fallback: restyle advanced_materials.dds
     },
     "mobilization_option": {
         # Mod-added options on a vanilla icon (14 on machinegunners), by group.
@@ -910,6 +1012,47 @@ ICONS: dict[str, dict[str, dict]] = {
         "ideology_optimist_transhumanist": {"subject": "a DNA double helix rising in front of a half sun with bold rays", "seed": 1},
         "ideology_corporate": {"subject": "a leather briefcase in front of a tall skyscraper", "seed": 1},
     },
+    # The mod's prestige goods, each its base good's object made finer, as
+    # vanilla's are (see the category). Base good in brackets.
+    "prestige_good": {
+        # [fine_art, Art and Entertainment] Masterpieces: Disney, Sony, Netflix, Nintendo.
+        # Not s1, whose two reels sit in perpendicular planes (owner).
+        "prestige_good_entertainment": {"subject": "a gleaming gold 1930s movie camera with two large film reels on top, on a short wooden tripod", "seed": 0},
+        # [consumer_appliances] Premium Appliances: Apple, Samsung, Sony, HP.
+        "prestige_good_generic_consumer_appliances": {"subject": "a sleek brushed-aluminium laptop computer, half open, its screen glowing a deep blue gradient", "seed": 2},
+        # [electronic_components] High-Precision Components: TSMC, Intel, ASML, NVIDIA.
+        "prestige_good_generic_electronic_components": {"subject": "a polished silicon wafer disc covered in a shimmering rainbow grid of tiny square chips, with one black microchip with rows of gold pins lying in front of it", "seed": 0},
+        # [digital_assets, Software] Enterprise Solutions: Microsoft, Oracle, SAP, Google.
+        # s1 is retouched: lettering on the cabinet's foot.
+        "prestige_good_generic_software": {"subject": "a tall black server cabinet with a glass door, rows of thin servers inside lit by small blue and green status lights", "seed": 1},
+        # [advanced_materials, a buckyball] High-Performance Materials.
+        "prestige_good_generic_advanced_materials": {"subject": "a ball-shaped molecular lattice of polished gold rods joined by small glossy deep-blue spheres", "seed": 0},
+        # [automobiles] Luxury Automobiles: Rolls-Royce, Ferrari, Toyota.
+        "prestige_good_luxury_automobiles": {"subject": "a long sleek glossy deep-red 1930s grand touring car with flowing curved fenders, chrome trim and chrome wire wheels", "seed": 1},
+        # [aeroplanes] Superior Airframes: Airbus, Boeing, Dassault, Lockheed Martin.
+        "prestige_good_advanced_aircraft": {"subject": "a gleaming polished-silver supersonic airliner with a long pointed needle nose and slim delta wings, in flight", "seed": 3},
+        # [tanks] Cutting-Edge Armaments: FCM (the Char 2C), Hyundai (Hyundai Rotem's K2).
+        # s0 is retouched: a white number plate on the hull.
+        "prestige_good_advanced_weaponry": {"subject": "a modern angular main battle tank in dark olive green with a long smooth gun barrel and wide tracks", "seed": 0},
+        # [robotics, Industrial Robotics] Advanced Automation: Boston Dynamics, Fanuc, Toyota.
+        # "A sleek polished-silver humanoid robot" drew cute white toy robots.
+        "prestige_good_precision_robotics": {"subject": "a sleek precision robotic arm of polished chrome steel with black joints and a slim three-fingered gripper, mounted on a round black base", "seed": 0},
+        # [launch_capacity] Heavy-Lift Launch Systems: SpaceX, Roscosmos, Lockheed Martin.
+        # "A tall gleaming stainless-steel super-heavy rocket with small black fins" drew retro toy rockets;
+        # "... with a plain dark grey body and four strap-on boosters, lifting off" a dark upright
+        # sliver, lost on the dark UI at 32 px. Light, and at a slant to fill the square.
+        "prestige_good_heavy_lift_launch": {"subject": "a huge realistic multi-stage heavy-lift rocket with a light silver-grey body, thin black bands and four strap-on boosters, climbing at a steep diagonal slant on a long plume of bright orange flame", "seed": 2},
+        # [oil] Refined Petrochemicals: Aramco, Shell, BP, Petrobras.
+        "prestige_good_refined_petrochemicals": {"subject": "a glossy dark-blue steel oil drum with polished brass bands, beside a tall glass laboratory flask of clear amber liquid", "seed": 2},
+        # [merchant_marine, Bulk Transportation] Integrated Logistics Solutions: Amazon, SAP, Shopify.
+        "prestige_good_integrated_logistics": {"subject": "a large modern container ship with a dark-blue hull, its deck stacked high with plain ribbed red, orange, green and blue shipping containers", "seed": 2},
+        # [telephones, Wired Telecommunication Gear] Advanced Telecommunications: Apple, Samsung, Huawei.
+        "prestige_good_advanced_telecom": {"subject": "a slim black glass smartphone standing upright, its screen glowing a deep teal gradient", "seed": 3},
+        # [tourism] Resort Travel: Disney, Axiom Space.
+        "prestige_good_resort_travel": {"subject": "two stacked tan leather suitcases with brass corners and buckled straps, beside an open red-and-yellow striped beach umbrella", "seed": 1},
+        # [lead, Conductive and Base Metals] Pure Heavy Metals: BHP.
+        "prestige_good_generic_lead": {"subject": "a neat stack of polished copper ingots and blue-grey metal ingots, topped by a rainbow-iridescent bismuth crystal with stepped square terraces", "seed": 2},
+    },
     # Journal entries on vanilla's event icons (the nine Space Race milestones
     # shared its gears; the rest a newspaper, portrait, flag or building icon).
     # Not the Nuclear Weapons entry, which has its own mushroom cloud, nor
@@ -932,6 +1075,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_state_collapse": {"subject": "a single weathered stone column with its top half fallen and lying broken in rubble at its base", "seed": 0},
         "je_create_new_religion": {"subject": "a plain grey stone altar block with a lit red candle on top and a brass bowl beside it", "seed": 0},
         "je_world_war": {"subject": "a dark thundercloud with yellow lightning bolts above a small black iron field cannon", "seed": 0},
+        # Legislated tax code (plan Task 7): on vanilla's event_scales.dds until reviewed.
+        "je_tax_code": {"subject": "a thick open ledger book with a red wax seal on its page and a short stack of gold coins beside it", "seed": None},
     },
     # The Space Race milestones, in order, over the shared backdrop. Silhouettes
     # have to differ at 40 px, and none may redraw a space tech's icon
@@ -1660,7 +1805,10 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
       unknown     a key with no plain or REPLACE_OR_CREATE: top-level definition
                   in its entity_dir
       bad_entry   an empty subject, a seed that is not None, an int or "keep",
-                  or a "use" that is not a gfx/ .dds path; for a GUI-hosted
+                  or a "use" that is not a gfx/ .dds path; a "restyle" that is
+                  not one, or with a crop outside 0-0.3, no strengths, or a seed
+                  past its last strength; a "style" with no {subject}, or with
+                  other braces; for a GUI-hosted
                   category, a missing `now` placeholder; a malformed mark, or a
                   derived entry whose source is not a rendered entry
       missing_dds an accepted seed whose DDS is not committed (or on disk)
@@ -1727,6 +1875,12 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
                                                 or (isinstance(seed, int) and seed >= 0)):
                 report["bad_entry"].append((cat, key))
                 continue
+            if "restyle" in entry and not _restyle_ok(cat, entry):
+                report["bad_entry"].append((cat, key))
+                continue
+            if "style" in entry and not _style_ok(entry["style"]):
+                report["bad_entry"].append((cat, key))
+                continue
             if seed is None:
                 states["unreviewed"] += 1
             elif seed == KEEP:
@@ -1769,6 +1923,28 @@ def _ref(path) -> tuple[str, str] | None:
         return None
     cat, key = path.split("/", 1)
     return (cat, key) if key in ICONS.get(cat, {}) else None
+
+
+def _restyle_ok(cat: str, entry: dict) -> bool:
+    """A gfx .dds source, a crop that leaves most of it, strengths in [0, 1), and a seed among them."""
+    strengths = restyle_strengths(cat, entry)
+    crop = entry.get("crop", RESTYLE_CROP)
+    seed = entry.get("seed")
+    return (_is_gfx_path(entry["restyle"], (".dds",))
+            and isinstance(crop, (int, float)) and 0 <= crop < 0.3
+            and bool(strengths) and all(isinstance(x, (int, float)) and 0 <= x < 1 for x in strengths)
+            and (not isinstance(seed, int) or seed < len(strengths)))
+
+
+def _style_ok(style) -> bool:
+    """A template that places the subject and has no other fields."""
+    if not isinstance(style, str) or "{subject}" not in style:
+        return False
+    try:
+        style.format(subject="")
+    except (KeyError, IndexError, ValueError):
+        return False
+    return True
 
 
 def _is_derived(entry: dict) -> bool:

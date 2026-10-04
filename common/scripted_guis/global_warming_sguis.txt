@@ -4,13 +4,13 @@
 # Read by gui/journal_entry_widgets/global_warming_widget.gui.
 #
 # The AI never uses these (`ai_is_valid = { always = no }`). AI policy selection
-# still runs through the `ai_chance` blocks on je_global_warming's sixteen
+# still runs through the `ai_chance` blocks on je_global_warming's eighteen
 # scripted buttons, which are untouched. Every action handler delegates to the
 # same `gw_possible_*` / `gw_effect_*` helpers the buttons call, so the two
 # surfaces cannot drift.
 #
 # OP CODES — one handler per policy, two actions, selected by the `op` saved
-# scope. Identical for all eight policies, so the widget's row type hard-codes
+# scope. Identical for all ten policies, so the widget's row type hard-codes
 # them and a row instance carries no op markup of its own:
 #
 #   0   Adopt   -> gw_possible_<policy>        / gw_effect_<policy>
@@ -432,8 +432,21 @@ gw_active_green_building_codes_sgui = {
 # Widget-wide yes/no questions
 # ---------------------------------------------------------------------------
 
-# Does this country lead its own market? A market member sees the three
-# market-wide policies as in force but not repealable, and this is what lets the
+# The Global Warming game rule. With it off, je_global_warming still opens for
+# a country holding a restrictive Resource Transition law (#660), and shows only
+# its Fossil Transition section: the overview, Mitigation Policies, Top
+# Emitters and the reference sections gate on this. The rule is global, so any
+# country scope answers it.
+gw_rule_enabled_sgui = {
+	scope = country
+	is_shown = { has_game_rule = global_warming_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Does this country lead its own market? A member sees the tariff policy
+# as in force but not repealable, and this is what lets the
 # row say "set by market leader" instead of just greying a button.
 gw_is_market_leader_sgui = {
 	scope = country
@@ -458,7 +471,7 @@ gw_has_yearly_figures_sgui = {
 # gw_possible_<policy> needs 0.5 C (gw_cond_warming_mild; divestment 1.0 C), so
 # until then every Adopt control is greyed for the same reason. The Mitigation
 # Policies section says so once, above the rows (style guide rule 6), instead of
-# leaving eight greyed buttons to explain it one hover at a time.
+# leaving nine greyed buttons to explain it one hover at a time.
 # test_global_warming_layout.py holds this threshold to gw_possible_carbon_tax's.
 gw_policies_waiting_sgui = {
 	scope = country
@@ -498,7 +511,7 @@ gw_te_members_sgui = {
 	effect = {
 		custom_tooltip_no_bullet = gw_te_members_intro
 		every_country = {
-			limit = { market_capital ?= { owner ?= ROOT.owner } }
+			limit = { market_capital = ROOT.owner.market_capital }
 			custom_tooltip = gw_te_list_entry
 		}
 	}
@@ -520,4 +533,96 @@ gw_top_emitters_sgui = {
 			custom_tooltip = gw_te_all_entry
 		}
 	}
+}
+
+
+gw_policy_carbon_removal_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_carbon_removal = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_carbon_removal = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 is_player = yes }
+			gw_effect_carbon_removal = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 is_player = yes }
+			gw_effect_remove_carbon_removal = yes
+		}
+	}
+}
+
+gw_active_carbon_removal_sgui = {
+	scope = country
+	is_shown = { gw_policy_carbon_removal_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+gw_policy_fossil_fuel_tariffs_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_global_warming
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			gw_possible_fossil_fuel_tariffs = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			gw_possible_remove_fossil_fuel_tariffs = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 is_player = yes }
+			gw_effect_fossil_fuel_tariffs = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 is_player = yes }
+			gw_effect_remove_fossil_fuel_tariffs = yes
+		}
+	}
+}
+gw_active_fossil_fuel_tariffs_sgui = {
+	scope = country
+	is_shown = { gw_policy_fossil_fuel_tariffs_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
 }

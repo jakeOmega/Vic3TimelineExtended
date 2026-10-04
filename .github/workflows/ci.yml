@@ -162,6 +162,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 modifier_multiplier_var_audit.py --strict
 
+      - name: Audit — journal-entry multiplier scope
+        if: ${{ !cancelled() }}
+        run: python3 je_multiplier_scope_audit.py --strict
+
       - name: Audit — event images
         if: ${{ !cancelled() }}
         run: python3 event_image_audit.py --strict
@@ -205,6 +209,26 @@ jobs:
       - name: Audit — variable operations in building scope
         if: ${{ !cancelled() }}
         run: python3 building_scope_variable_audit.py --strict
+
+      - name: Audit — principle tiers restate the tier below
+        if: ${{ !cancelled() }}
+        run: python3 principle_tier_audit.py --strict
+
+      - name: Audit — prestige goods the company's roster makes
+        if: ${{ !cancelled() }}
+        run: python3 prestige_good_roster_audit.py --strict
+
+      - name: Audit — every amendment has a scripted way in
+        if: ${{ !cancelled() }}
+        run: python3 amendment_reachability_audit.py --strict
+
+      - name: Audit — ideology lawgroup blocks name every law
+        if: ${{ !cancelled() }}
+        run: python3 ideology_lawgroup_audit.py --strict
+
+      - name: Audit — loc keys named in script that no loc file defines
+        if: ${{ !cancelled() }}
+        run: python3 script_loc_reference_audit.py --strict
 
       # Fails when a POST_LOAD_REGENERATORS / POST_LOAD_AUDITS module in
       # mod_state_server.py is missing from CLAUDE.md, docs/guides/python_tools.md

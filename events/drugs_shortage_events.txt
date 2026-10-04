@@ -1,0 +1,133 @@
+﻿# ============================================================================
+# DRUGS SHORTAGE — a medicine shortage while Drugs (vanilla opium) run short
+# ============================================================================
+# Rolled every year (common/on_actions/drugs_shortage_on_actions.txt) and likely
+# to fire while the shortage lasts; the cooldown spaces repeats. The trigger is
+# vanilla's goods-shortage alert for Drugs (00_alert_types.txt,
+# market_goods_shortage_alert), plus enough pops buying Drugs as medicine
+# (drugs_healthcare_population_share, te_drugs_values.txt).
+# ============================================================================
+namespace = drugs_shortage
+
+drugs_shortage.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = drugs_shortage.1.t
+	desc = drugs_shortage.1.d
+	flavor = drugs_shortage.1.f
+
+	event_image = { texture = "gfx/event_pictures/pandemic_hospital_ward.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	duration = 3
+	cooldown = { days = short_modifier_time }
+
+	trigger = {
+		NOT = { is_banning_goods = g:opium }
+		market ?= {
+			mg:opium ?= {
+				market_goods_shortage_ratio > 0.33
+				country_has_local_shortage = ROOT
+			}
+		}
+		drugs_healthcare_population_share >= 3
+	}
+
+	# Buy abroad at any price
+	option = {
+		name = drugs_shortage.1.a
+		default_option = yes
+		add_modifier = {
+			name = drugs_shortage_spending
+			days = short_modifier_time
+			multiplier = sv_money_flow_event_medium
+		}
+		ai_chance = {
+			base = 10
+			modifier = {
+				trigger = { scaled_debt > 0.5 }
+				add = -8
+			}
+		}
+	}
+
+	# Ration what we have
+	option = {
+		name = drugs_shortage.1.b
+		add_modifier = {
+			name = drugs_shortage_rationing
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { scaled_debt > 0.5 }
+				add = 10
+			}
+		}
+	}
+
+	# Put the pharmaceutical works on a war footing
+	option = {
+		name = drugs_shortage.1.c
+		trigger = {
+			any_scope_building = { is_building_type = building_synthetics_plant_opium }
+		}
+		add_modifier = {
+			name = drugs_shortage_spending
+			days = short_modifier_time
+			multiplier = sv_money_flow_event_large
+		}
+		add_modifier = {
+			name = drugs_shortage_pharma_drive
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		ai_chance = {
+			base = 15
+			modifier = {
+				trigger = { scaled_debt > 0.5 }
+				add = -12
+			}
+		}
+	}
+
+	# Let the poppy growers fill the gap
+	option = {
+		name = drugs_shortage.1.e
+		trigger = {
+			any_scope_building = { is_building_type = building_opium_plantation }
+		}
+		add_modifier = {
+			name = drugs_shortage_poppy_relief
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		ig:ig_intelligentsia ?= {
+			add_modifier = {
+				name = ig_approval_very_negative_modifier
+				days = short_modifier_time
+			}
+		}
+		ig:ig_devout ?= {
+			add_modifier = {
+				name = ig_approval_negative_modifier
+				days = short_modifier_time
+			}
+		}
+		ig:ig_landowners ?= {
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = short_modifier_time
+			}
+		}
+		ai_chance = {
+			base = 5
+		}
+	}
+}

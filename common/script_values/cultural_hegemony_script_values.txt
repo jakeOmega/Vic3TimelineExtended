@@ -363,16 +363,32 @@ cultural_pull_from_tech_leadership = {
 # Monument / wonder bonus: counts monument-group wonders, excluding power bloc statues
 # Also folds in the capped Grand Monument contribution below, so the "Monuments" line
 # in the Cultural Hegemony JE breakdown stays a complete account of monument pull.
+#
+# The two *_has_building_group_levels gates are engine lookups that skip a
+# country, or a state, with no monument level at all; only those can pass the
+# per-building limit, so they change no result. Without them this walked every
+# building in the country, and cultural_pull_raw is read several times per
+# country per month and on every frame the Cultural Hegemony panel is open
+# (2026-10-03 script profile). bg_monuments has no child groups, so the level
+# sum counts exactly the buildings is_building_group matches.
 cultural_pull_from_monuments = {
 	value = 0
-	every_scope_state = {
-		every_scope_building = {
+	if = {
+		limit = {
+			country_has_building_group_levels = { type = bg_monuments value >= 1 }
+		}
+		every_scope_state = {
 			limit = {
-				is_building_group = bg_monuments
-				NOT = { is_building_type = building_power_bloc_statue }
-				level >= 1
+				state_has_building_group_levels = { type = bg_monuments value >= 1 }
 			}
-			add = cultural_pull_monument_bonus
+			every_scope_building = {
+				limit = {
+					is_building_group = bg_monuments
+					NOT = { is_building_type = building_power_bloc_statue }
+					level >= 1
+				}
+				add = cultural_pull_monument_bonus
+			}
 		}
 	}
 	add = cultural_pull_from_grand_monuments

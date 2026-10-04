@@ -1,0 +1,534 @@
+﻿# Legislated tax code: the AI's gates and fiscal signals (plan 2026-10-03,
+# Task 18; spec docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md
+# §2.2-§2.4; docs/systems/tax_code_schema.md, "AI legislation").
+#
+# Country scope. The thresholds are the named values of te_tax_ai_values.txt.
+# The recorded deficit and surplus are the fiscal record of the 1st
+# (te_tax_fisc_rec_deficit, _surplus, te_tax_triggers.txt), which the support
+# model's fiscal reason also reads: a raise in a recorded surplus costs support
+# with every group, so the AI raises for need only on a recorded deficit.
+
+# The AI may legislate for this country: the rule is on, the code is in force,
+# the engine runs the country and it holds the carrier law. te_tax.8 re-checks
+# it, so a country a player took over since the dispatch does nothing.
+te_tax_ai_can_act = {
+	te_tax_code_on = yes
+	te_tax_code_in_force = yes
+	is_ai = yes
+	has_law = law_type:law_te_tax_code
+}
+
+# An emergency skips the streaks, the stagger and the cooldown after a pass
+# (not the one after a failure, te_tax_ai_initiative_ready): the country is
+# in default, its debt is at te_tax_ai_emergency_debt of its credit, or it is
+# borrowing with bankruptcy under te_tax_ai_emergency_weeks away (vanilla reads
+# weeks_until_bankruptcy only behind taking_loans, war_support_values.txt).
+te_tax_ai_emergency = {
+	OR = {
+		in_default = yes
+		te_tax_ai_debt >= te_tax_ai_emergency_debt
+		AND = {
+			taking_loans = yes
+			weeks_until_bankruptcy < te_tax_ai_emergency_weeks
+		}
+	}
+}
+
+# Revenue is short (spec §2.3): a recorded deficit with R at or below the raise
+# ratio that applies and the reserves under te_tax_ai_reserves_full, or a
+# fiscal-balance promise in force, which counts as a need until it is fulfilled.
+te_tax_ai_raise_need = {
+	OR = {
+		AND = {
+			te_tax_fisc_rec_deficit = yes
+			te_tax_ai_ratio <= te_tax_ai_raise_ratio_now
+			te_tax_ai_reserves < te_tax_ai_reserves_full
+		}
+		# A promised surplus not yet recorded on the 1st (final review A-I1): the
+		# AI raises toward it, never into a surplus it already has.
+		AND = {
+			te_tax_ai_kind4_in_force = yes
+			NOT = { te_tax_fisc_rec_surplus = yes }
+		}
+	}
+}
+
+# Revenue is ample (spec §2.3): a recorded surplus with R at or above the cut
+# ratio that applies, and no fiscal-balance promise in force, which counts as
+# a need for revenue until the surplus streak delivers it (Task 21).
+te_tax_ai_cut_need = {
+	te_tax_fisc_rec_surplus = yes
+	te_tax_ai_ratio >= te_tax_ai_cut_ratio_now
+	NOT = { te_tax_ai_kind4_in_force = yes }
+}
+
+# A fiscal-balance promise (kind 4) binds the country: bound to a passed bill,
+# delivering or maintaining (te_tax_obl_binding: state 7, 2 or 3).
+te_tax_ai_kind4_in_force = {
+	OR = {
+		AND = { te_tax_obl_binding = { N = 1 } var:te_tax_o1_kind = 4 }
+		AND = { te_tax_obl_binding = { N = 2 } var:te_tax_o2_kind = 4 }
+		AND = { te_tax_obl_binding = { N = 3 } var:te_tax_o3_kind = 4 }
+		AND = { te_tax_obl_binding = { N = 4 } var:te_tax_o4_kind = 4 }
+	}
+}
+
+# This month the country considers a new bill: (month - phase) modulo
+# te_tax_ai_cadence_months is 0. Never before the phase is drawn.
+te_tax_ai_initiative_due = {
+	has_variable = te_tax_ai_phase
+	var:te_tax_ai_phase >= 0
+	te_tax_ai_cadence_pos = 0
+}
+
+# Something to manage every month: a bill under debate, a package held as
+# conflicting or missed, or a promise being delivered or maintained.
+te_tax_ai_has_management = {
+	OR = {
+		te_tax_bill_active = yes
+		AND = {
+			has_variable = te_tax_pa_on
+			var:te_tax_pa_on = 1
+			OR = { var:te_tax_pa_state = 2 var:te_tax_pa_state = 3 }
+		}
+		AND = {
+			has_variable = te_tax_pb_on
+			var:te_tax_pb_on = 1
+			OR = { var:te_tax_pb_state = 2 var:te_tax_pb_state = 3 }
+		}
+		te_tax_obl_active = { N = 1 }
+		te_tax_obl_active = { N = 2 }
+		te_tax_obl_active = { N = 3 }
+		te_tax_obl_active = { N = 4 }
+	}
+}
+
+# The processor raises te_tax.8 this month (te_tax_ai_dispatch).
+te_tax_ai_step_due = {
+	te_tax_ai_can_act = yes
+	OR = {
+		te_tax_ai_initiative_due = yes
+		te_tax_ai_emergency = yes
+		te_tax_ai_has_management = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Promises (plan 2026-10-03, Task 19; spec §2.4 step 2, §2.8). Country scope.
+# N: an obligation slot, 1 to 4. ARG: kind 1's institution, 1 Education, 2
+# Health System, 3 Social Security.
+# ---------------------------------------------------------------------------
+
+# Obligation N is in force and the next monthly check would breach it (spec
+# §2.4 step 2). Delivering: not yet delivered, and its deadline falls by the
+# next check's month (te_tax_ai_next_check_month), or for an institution
+# promise by te_tax_ai_enact_by_month (the enactment lead); not an institution
+# promise in a bureaucracy deficit, whose deadline the check pauses instead;
+# not a fiscal-balance promise one surplus month short of its streak while the
+# budget is in surplus, which the check delivers. Maintaining: its condition
+# fails now and one more failing check reaches its grace
+# (te_tax_ai_grace_next). Never a pending (1) or bound (7) promise: the step
+# neither enacts nor renegotiates what has not started. Live reads in
+# te_tax.8 stand in for the check's reads on the 1st.
+te_tax_ai_promise_at_risk = {
+	has_variable = te_tax_o$N$_on
+	var:te_tax_o$N$_on = 1
+	OR = {
+		AND = {
+			var:te_tax_o$N$_state = 2
+			OR = {
+				AND = {
+					var:te_tax_o$N$_kind = 1
+					var:te_tax_o$N$_deadline <= te_tax_ai_enact_by_month
+				}
+				AND = {
+					NOT = { var:te_tax_o$N$_kind = 1 }
+					var:te_tax_o$N$_deadline <= te_tax_ai_next_check_month
+				}
+			}
+			NOT = { te_tax_obl_delivered = { N = $N$ } }
+			NOT = {
+				AND = {
+					var:te_tax_o$N$_kind = 1
+					bureaucracy < 0
+				}
+			}
+			NOT = {
+				AND = {
+					var:te_tax_o$N$_kind = 4
+					var:te_tax_o$N$_streak >= te_tax_ai_surplus_streak_last
+					net_fixed_income > 0
+				}
+			}
+		}
+		AND = {
+			var:te_tax_o$N$_state = 3
+			NOT = { te_tax_obl_holds = { N = $N$ } }
+			te_tax_ai_grace_next = { N = $N$ }
+		}
+	}
+}
+
+# Maintained obligation N has failed as many consecutive checks as its kind's
+# grace allows, less one, so the next failing check breaches it
+# (te_tax_obl_grace_reached's per-kind rule, one check earlier). Always true
+# for kinds 1 and 3 (grace 1). Plain ORs, no trigger_if: it sits inside the
+# OR of te_tax_ai_promise_at_risk, and an unknown kind fails.
+te_tax_ai_grace_next = {
+	OR = {
+		AND = { var:te_tax_o$N$_kind = 1 var:te_tax_o$N$_fails >= te_tax_ai_grace_short_1 }
+		AND = { var:te_tax_o$N$_kind = 2 var:te_tax_o$N$_fails >= te_tax_ai_grace_short_2 }
+		AND = { var:te_tax_o$N$_kind = 3 var:te_tax_o$N$_fails >= te_tax_ai_grace_short_3 }
+		AND = { var:te_tax_o$N$_kind = 4 var:te_tax_o$N$_fails >= te_tax_ai_grace_short_4 }
+	}
+}
+
+# Obligation N is a kind-1 promise the AI can enact for itself: its target is a
+# level te_tax_gen_ai_enact_<N> has a branch for (1 to te_tax_ai_enact_level_max),
+# the country has the institution, the target is within the level it may
+# invest in (te_tax_obl_inst_cap_<arg>) and above the level it holds, so the
+# enactment raises the institution to exactly the target and never lowers it.
+# Otherwise the step renegotiates the promise, as for any other kind.
+te_tax_ai_can_enact = {
+	var:te_tax_o$N$_kind = 1
+	var:te_tax_o$N$_target >= 1
+	var:te_tax_o$N$_target <= te_tax_ai_enact_level_max
+	OR = {
+		AND = {
+			var:te_tax_o$N$_arg = 1
+			has_institution = institution_schools
+			var:te_tax_o$N$_target <= te_tax_obl_inst_cap_1
+			var:te_tax_o$N$_target > te_tax_obl_inst_level_1
+		}
+		AND = {
+			var:te_tax_o$N$_arg = 2
+			has_institution = institution_health_system
+			var:te_tax_o$N$_target <= te_tax_obl_inst_cap_2
+			var:te_tax_o$N$_target > te_tax_obl_inst_level_2
+		}
+		AND = {
+			var:te_tax_o$N$_arg = 3
+			has_institution = institution_social_security
+			var:te_tax_o$N$_target <= te_tax_obl_inst_cap_3
+			var:te_tax_o$N$_target > te_tax_obl_inst_level_3
+		}
+	}
+}
+
+# The country owes institution ARG: a kind-1 promise of it binds the country
+# (te_tax_obl_binding: bound, delivering or maintaining). Read by the default
+# AI strategy's institution scores (edited_default_strategy.txt), so the native
+# AI invests in what it promised; false in every rule-off game.
+te_tax_ai_owes_institution = {
+	te_tax_code_on = yes
+	OR = {
+		AND = { te_tax_obl_binding = { N = 1 } var:te_tax_o1_kind = 1 var:te_tax_o1_arg = $ARG$ }
+		AND = { te_tax_obl_binding = { N = 2 } var:te_tax_o2_kind = 1 var:te_tax_o2_arg = $ARG$ }
+		AND = { te_tax_obl_binding = { N = 3 } var:te_tax_o3_kind = 1 var:te_tax_o3_arg = $ARG$ }
+		AND = { te_tax_obl_binding = { N = 4 } var:te_tax_o4_kind = 1 var:te_tax_o4_arg = $ARG$ }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The open bill (plan 2026-10-03, Task 20; spec §2.4 step 3, §2.7, §2.10).
+# Country scope, read by te_tax_ai_manage_bill while a bill is under debate.
+# IG: an interest group key without its ig_ prefix.
+# ---------------------------------------------------------------------------
+
+# The bill would pass but for legitimacy, and the native tax level is off
+# medium (spec §2.10): the native AI moved it since the writer last pinned it,
+# and pays for it in legitimacy. Every other line of te_tax_can_pass, repeated;
+# the step waits for the pin on the 1st and retries on the 2nd.
+te_tax_ai_blocked_by_native_level = {
+	te_tax_code_in_force = yes
+	te_tax_bill_active = yes
+	NOT = { tax_level = medium }
+	legitimacy < te_tax_passage_legitimacy
+	te_tax_committed_share > te_tax_passage_share
+	te_tax_debate_days_left <= 0
+	var:te_tax_bl_due > te_history_month_index
+	OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 }
+	te_tax_gen_bill_current = yes
+	te_tax_gen_bill_sunsets_valid = yes
+	te_tax_bill_changes_something = yes
+	OR = {
+		te_tax_can_store_package = { SLOT = a }
+		te_tax_can_store_package = { SLOT = b }
+	}
+}
+
+# Group IG is persuadable: not committed, no red line, a score of 0 or more
+# (te_tax_open_clout's test). Accepting its offer commits it.
+te_tax_ai_persuadable = {
+	has_variable = te_tax_com_$IG$
+	var:te_tax_com_$IG$ = 0
+	has_variable = te_tax_sup_$IG$
+	var:te_tax_sup_$IG$ >= 0
+}
+
+# A clause leaves the bill doing what the AI wrote it for (spec §2.7): a raise
+# template (1 T1, 2 T2, 3 T3, 6 T6) still raises revenue, the cut (5 T5) still
+# cuts. A bill the AI did not introduce (0) counts as a raise while it raises
+# revenue and as a cut otherwise, so either way it must not stop at nothing.
+te_tax_ai_clause_keeps_direction = {
+	OR = {
+		AND = {
+			OR = {
+				var:te_tax_ai_tpl = 1
+				var:te_tax_ai_tpl = 2
+				var:te_tax_ai_tpl = 3
+				var:te_tax_ai_tpl = 6
+			}
+			te_tax_dl_revenue > 0
+		}
+		AND = {
+			var:te_tax_ai_tpl = 5
+			te_tax_dl_revenue < 0
+		}
+		AND = {
+			var:te_tax_ai_tpl = 0
+			NOT = { te_tax_dl_revenue = 0 }
+		}
+	}
+}
+
+# Group IG's offer is one the AI accepts (spec §2.7), behind the Accept
+# button's own trigger. Clauses (1 soften a raise, 2 agricultural relief,
+# 3 untax a staple) while the bill keeps its direction, relief only outside an
+# emergency. Promises (10 + the obligation kind): an institution level (11)
+# with no bureaucracy deficit and none approaching; the bureaucracy balance
+# (12) with a surplus and none approaching; the fiscal balance (14) while the
+# bill raises revenue, outside an emergency. Military wages (13) are never
+# offered.
+te_tax_ai_offer_acceptable = {
+	te_tax_can_accept_offer = { IG = $IG$ }
+	OR = {
+		AND = {
+			var:te_tax_off_$IG$_kind >= 1
+			var:te_tax_off_$IG$_kind <= 3
+			te_tax_ai_clause_keeps_direction = yes
+			NOT = {
+				AND = {
+					var:te_tax_off_$IG$_kind = 2
+					te_tax_ai_emergency = yes
+				}
+			}
+		}
+		AND = {
+			var:te_tax_off_$IG$_kind = 11
+			bureaucracy >= 0
+			approaching_bureaucracy_shortage = no
+		}
+		AND = {
+			var:te_tax_off_$IG$_kind = 12
+			bureaucracy > 0
+			approaching_bureaucracy_shortage = no
+		}
+		AND = {
+			var:te_tax_off_$IG$_kind = 14
+			te_tax_dl_revenue > 0
+			NOT = { te_tax_ai_emergency = yes }
+		}
+	}
+}
+
+# The AI can still accept an offer this month: fewer than te_tax_ai_max_offers
+# accepted in it (none counted in another month), the bill short of the
+# passage share (the AI never concedes more than it needs), and some group's
+# offer acceptable, so te_tax_gen_ai_accept_offer always accepts one. Reads
+# correctly without a preceding reset (the console, the initiative's check).
+te_tax_ai_offer_available = {
+	OR = {
+		NOT = { var:te_tax_ai_offer_month = te_tax_ai_now }
+		var:te_tax_ai_offer_count < te_tax_ai_max_offers
+	}
+	te_tax_committed_share <= te_tax_passage_share
+	OR = {
+		te_tax_ai_offer_acceptable = { IG = armed_forces }
+		te_tax_ai_offer_acceptable = { IG = devout }
+		te_tax_ai_offer_acceptable = { IG = industrialists }
+		te_tax_ai_offer_acceptable = { IG = intelligentsia }
+		te_tax_ai_offer_acceptable = { IG = landowners }
+		te_tax_ai_offer_acceptable = { IG = petty_bourgeoisie }
+		te_tax_ai_offer_acceptable = { IG = rural_folk }
+		te_tax_ai_offer_acceptable = { IG = trade_unions }
+	}
+}
+
+# A force path exists (spec §2.4 step 3): an emergency, te_tax_force_share of
+# the clout committed, and the override capacity and Authority force-through
+# needs (te_tax_can_force_through's own lines). The passage lines that only
+# time settles (the debate, the due month, a slot) are not part of it.
+te_tax_ai_force_path = {
+	te_tax_ai_emergency = yes
+	te_tax_committed_share >= te_tax_force_share
+	"modifier:country_legislative_override_capacity_add" >= 2
+	produced_authority > forced_law_through_event_authority_cost_medium
+}
+
+# The bill cannot pass: the committed and persuadable groups together are at
+# or below the passage share, no offer could still be accepted this month,
+# and no force path exists; or legitimacy is below the passage line while the
+# native tax level is medium, so nothing but time would lift it (final review
+# A-M1; a level off medium is the next-day retry instead, Ruling 5).
+te_tax_ai_bill_hopeless = {
+	te_tax_bill_active = yes
+	OR = {
+		AND = {
+			te_tax_view_open_share <= te_tax_passage_share
+			NOT = { te_tax_ai_offer_available = yes }
+			NOT = { te_tax_ai_force_path = yes }
+		}
+		AND = {
+			legitimacy < te_tax_passage_legitimacy
+			tax_level = medium
+		}
+	}
+}
+
+# In an emergency, the bill has the committed share force-through needs, is
+# short of a majority, and lacks the override capacity or the Authority to
+# force it: the withdrawal's reason is then authority. Only these structural
+# lines, so it holds at introduction too, while the debate has just begun.
+te_tax_ai_force_blocked_by_authority = {
+	te_tax_ai_emergency = yes
+	te_tax_committed_share >= te_tax_force_share
+	NOT = { te_tax_committed_share > te_tax_passage_share }
+	NOT = {
+		AND = {
+			"modifier:country_legislative_override_capacity_add" >= 2
+			produced_authority > forced_law_through_event_authority_cost_medium
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The initiative (plan 2026-10-03, Task 21; spec §2.4 step 4, §2.5). Country
+# scope, read by te_tax_ai_step when no bill is under debate.
+# ---------------------------------------------------------------------------
+
+# The AI may start a bill (spec §2.4 step 4): the code is in force, no bill is
+# under debate, and either an initiative is due on the country's cadence, its
+# cooldown is over and no package waits to commence, or an emergency holds.
+# An emergency skips the cadence, the streaks, the waiting package and most of
+# the cooldown after a pass, but not the cooldown after a failure (Ruling 12):
+# te_tax_ai_noviable is 1 exactly while te_tax_ai_next_month holds a failure
+# cooldown (every withdrawal and refused draft sets both; a pass's reset
+# clears the marker), so a hopeless emergency bill is tried once every
+# te_tax_ai_fail_cooldown_months, not every month. After a pass it waits for
+# the month after the package commenced (te_tax_ai_emergency_gate_month,
+# Ruling 13), so each emergency bill is judged by a fiscal record that has
+# seen the one before.
+te_tax_ai_initiative_ready = {
+	te_tax_code_in_force = yes
+	NOT = { te_tax_bill_active = yes }
+	OR = {
+		AND = {
+			te_tax_ai_emergency = yes
+			OR = {
+				AND = {
+					var:te_tax_ai_noviable = 0
+					te_tax_ai_now > te_tax_ai_emergency_gate_month
+				}
+				te_tax_ai_cooldown_over = yes
+			}
+		}
+		AND = {
+			te_tax_ai_initiative_due = yes
+			te_tax_ai_cooldown_over = yes
+			NOT = { te_tax_ai_package_awaits = yes }
+		}
+	}
+}
+
+# The AI's cooldown is over: its month has come. The sentinel -1 has always
+# come.
+te_tax_ai_cooldown_over = {
+	var:te_tax_ai_next_month <= te_tax_ai_now
+}
+
+# A package waits to commence in slot a or b (state 1).
+te_tax_ai_package_awaits = {
+	OR = {
+		AND = {
+			has_variable = te_tax_pa_on
+			var:te_tax_pa_on = 1
+			var:te_tax_pa_state = 1
+		}
+		AND = {
+			has_variable = te_tax_pb_on
+			var:te_tax_pb_on = 1
+			var:te_tax_pb_state = 1
+		}
+	}
+}
+
+# The episode is over: neither a raise nor a cut is needed and no emergency
+# holds. The step then clears te_tax_ai_noviable, so the next "no viable bill"
+# line is written again. Never in an emergency, so an emergency's failure
+# cooldown keeps its marker (te_tax_ai_initiative_ready).
+te_tax_ai_need_ended = {
+	NOT = { te_tax_ai_raise_need = yes }
+	NOT = { te_tax_ai_cut_need = yes }
+	NOT = { te_tax_ai_emergency = yes }
+}
+
+# T1's need (spec §2.5): the raise need held over te_tax_ai_need_months
+# recorded deficits in a row (the hysteresis), or a fiscal-balance promise in
+# force, which keeps the AI raising revenue until the surplus streak delivers
+# it (spec §2.8) and waits for no deficit streak.
+te_tax_ai_raise_wanted = {
+	te_tax_ai_raise_need = yes
+	OR = {
+		var:te_tax_ai_def_streak >= te_tax_ai_need_months
+		te_tax_ai_kind4_in_force = yes
+	}
+}
+
+# T5's need (spec §2.5): the cut need held over te_tax_ai_surplus_months
+# recorded surpluses in a row, with the reserves full.
+te_tax_ai_cut_wanted = {
+	te_tax_ai_cut_need = yes
+	var:te_tax_ai_sur_streak >= te_tax_ai_surplus_months
+	te_tax_ai_reserves >= te_tax_ai_reserves_full
+}
+
+# The templates (spec §2.5), tried in the order T2, T3, T6, T1, T5
+# (te_tax_ai_initiative); the codes are te_tax_ai_tpl's. T3 and T6 apply only
+# while this episode has had no failure (te_tax_ai_noviable 0), so a failed
+# levy or luxury-goods bill is followed by a T1 (Ruling 14).
+
+# T2, the emergency bill: an emergency.
+te_tax_ai_template_2_applies = {
+	te_tax_ai_emergency = yes
+}
+
+# T3, a war levy: at war, and T1's need holds.
+te_tax_ai_template_3_applies = {
+	var:te_tax_ai_noviable = 0
+	is_at_war = yes
+	te_tax_ai_raise_wanted = yes
+}
+
+# T6, luxury goods, in place of a consumption-rate raise (spec §2.5: T1 and T6
+# compete on pre-score; Ruling 14): T1's need holds, the raise pick is the
+# consumption rate (code 5, te_tax_gen_ai_pick_raise's local te_tax_pick, set
+# by te_tax_ai_initiative before the choice; read only there), the rate is
+# above 0 and fewer than te_tax_ai_max_goods catalog goods are taxed.
+te_tax_ai_template_6_applies = {
+	var:te_tax_ai_noviable = 0
+	te_tax_ai_raise_wanted = yes
+	local_var:te_tax_pick = 5
+	var:te_tax_en_cons >= 1
+	te_tax_ai_taxed_goods < te_tax_ai_max_goods
+}
+
+# T1, a raise: T1's need holds.
+te_tax_ai_template_1_applies = {
+	te_tax_ai_raise_wanted = yes
+}
+
+# T5, a cut: T5's need holds.
+te_tax_ai_template_5_applies = {
+	te_tax_ai_cut_wanted = yes
+}

@@ -250,14 +250,18 @@ collection changes, approval requirements, and obligations from the displayed in
 
 Start the AI command client in the probe harness; this package makes it autonomous and robust.
 
-- [ ] Generate bounded candidate packages from revenue needs and actor preferences. Use the same
+- [x] Generate bounded candidate packages from revenue needs and actor preferences. Use the same
       estimates, authority rules, offers, support accounting, and commitment constraints as players.
-- [ ] Add revision/acceptance/withdrawal decisions, hysteresis, and legal crisis responses. Count
+      (Built statically: plan 2026-10-03 Tasks 18–21, schema "AI legislation".)
+- [x] Add revision/acceptance/withdrawal decisions, hysteresis, and legal crisis responses. Count
       future approved changes when planning; avoid emergency behavior that silently sets native rates.
+      (Built statically: Tasks 19–21; AI customs waits for the customs probe.)
 - [ ] Test small and large countries, revenue shocks, war spending, opposition, low legitimacy,
+      *(in game: runbook PT-13, PT-16 to PT-22)*
       already-pending changes, and obligations that become impossible. Log why no legal package is
       viable; do not compensate with free revenue or bypassed passage.
 - [ ] Measure candidate counts, snapshot refresh costs, GUI-open overhead, and simulation progression
+      *(in game: runbook PT-14 and the profiler recipe)*
       against the baseline. Tune refresh cadence and bounds to the budgets declared in package 0.
 
 **Exit:** both player and AI use the complete draft → bargain → approval → commencement loop,
@@ -288,6 +292,8 @@ whitespace checks, not the gameplay suite.
 | Large-country/world performance and open GUI | Meets declared budgets without per-frame expensive aggregation |
 
 - [ ] Publish scenario results, logs/save comparisons, known limitations, and approved fallbacks.
+      *(the instrument is built: runbook `docs/testing/tax-code-playtest.md`, the ledger's evidence
+      matrix and known limitations, `scripts/analysis/tax_code_save_report.py`; results pending)*
       Use the existing save-analysis tooling where useful; retain enough setup detail to reproduce.
 - [ ] Resolve unexplained economic discrepancies and material script errors before release.
 - [ ] Update the capability ledger and design with decisions actually supported by evidence.

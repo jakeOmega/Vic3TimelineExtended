@@ -310,6 +310,7 @@ on_monthly_pulse_state = {
 		state_yearly_cultural_acceptance_add_on_action
 		tourism_on_action
 		ministry_of_thought_control_on_action
+		te_state_treaty_article_sync_on_action
 	}
 }
 
@@ -679,11 +680,13 @@ te_on_military_formation_created = {
 # ============================================================================
 # STATE OWNER CHANGE (Root = state)
 # When a state changes hands (e.g. conquest), remove building_space_program
-# if it exists and this state is not the new owner's market capital.
+# if it exists and this state is not the new owner's market capital, and
+# bring the state-input treaty articles' effects in line with the new owner.
 # ============================================================================
 on_state_owner_change = {
 	on_actions = {
 		te_on_state_owner_change
+		te_state_treaty_article_owner_change_on_action
 	}
 }
 te_on_state_owner_change = {
@@ -772,22 +775,14 @@ on_merge_markets = {
 # Root = the dissolving (joining) market, scope:market = the absorbing market.
 # owner = the country whose market is dissolving (new market member).
 # scope:market.owner = the country that owns the absorbing market (the market leader).
+# National climate policies remain with the joining country. A former leader's
+# tariff programme ends; its settings must never write into the new market.
 gw_market_join_on_action = {
 	effect = {
-		if = {
-			limit = {
-				exists = owner
-				exists = scope:market.owner
-			}
-			scope:market.owner = { save_scope_as = gw_policy_leader }
-			owner = {
-				# The joiner's market-wide policies become the absorbing leader's.
-				# Its market's other members follow at the monthly reconciliation
-				# (gw_reconcile_market_policies_effect).
-				if = {
-					limit = { has_journal_entry = je_global_warming }
-					gw_sync_market_policy_modifiers = yes
-				}
+		owner ?= {
+			if = {
+				limit = { has_journal_entry = je_global_warming }
+				gw_drop_fossil_fuel_tariffs_effect = yes
 			}
 		}
 	}
@@ -858,8 +853,23 @@ remove_invalid_buildings = {
 		# whole iteration no matter where it sits in the block, so a single
 		# every_scope_state with the space-program limit would gate the company
 		# sweep as well (it did, until 2026-09-12).
-		every_scope_state = {
-			remove_invalid_company_buildings_effect = yes
+		#
+		# The company sweep asks has_building for all 323 company building
+		# types, so it runs only where a company building stands: every one is
+		# in bg_company_buildings (no child groups), and each removal needs
+		# has_building, i.e. a level, so the level gates change nothing. It was
+		# the biggest single cost in the monthly country pulse (2026-10-03
+		# script profile).
+		if = {
+			limit = {
+				country_has_building_group_levels = { type = bg_company_buildings value >= 1 }
+			}
+			every_scope_state = {
+				limit = {
+					state_has_building_group_levels = { type = bg_company_buildings value >= 1 }
+				}
+				remove_invalid_company_buildings_effect = yes
+			}
 		}
 		every_scope_state = {
 			limit = {
@@ -904,38 +914,29 @@ pollution_on_action = {
 global_warming_update_on_action = {
 	effect = {
 		if = {
+			limit = { NOT = { has_global_variable = greenhouse_gas_emissions } }
+			set_global_variable = { name = greenhouse_gas_emissions value = 0 }
+		}
+		if = {
 			limit = {
-				NOT = { has_global_variable = greenhouse_gas_emissions }
+				has_game_rule = global_warming_enabled
+				owner.capital = THIS
 			}
-			set_global_variable = {
-				name = greenhouse_gas_emissions
-				value = 0
+			owner = {
+				gw_snapshot_country_emissions_effect = yes
+				change_global_variable = {
+					name = greenhouse_gas_emissions
+					add = var:gw_disp_country_emis
+				}
+				gw_accumulate_country_emissions_effect = yes
 			}
 		}
-		# With the rule disabled there is no climate change: emissions never
-		# accumulate, so temperature_anomaly_display stays 0 for every reader
-		# (UN docket, election events, movements, treaty article 109).
 		if = {
 			limit = {
 				has_game_rule = global_warming_enabled
 				owner.market_capital = THIS
 			}
-			owner = {
-				# Snapshot first, accumulate from the snapshot. The market-wide
-				# emissions sweep is evaluated exactly once, as before, and the
-				# journal-entry widget then reads the stored figure instead of
-				# recomputing it in loc every frame. Variable writes are visible
-				# later in the same effect block, so the number added to the
-				# global total is identical to what this on_action added before.
-				gw_snapshot_market_emissions_effect = yes
-				change_global_variable = {
-					name = greenhouse_gas_emissions
-					add = var:gw_disp_market_emis
-				}
-				# The same figure into this leader's cumulative total, for the
-				# panel's Top Emitters list (display only).
-				gw_accumulate_market_emissions_effect = yes
-			}
+			owner = { gw_snapshot_market_emissions_effect = yes }
 		}
 	}
 }
@@ -946,15 +947,14 @@ global_warming_events_on_action = {
 		# this on_action is the one global-scope monthly pulse, so each runs
 		# exactly once for the whole world rather than once per country.
 		# gw_refresh_global_counts_effect is a single country sweep that fills
-		# all eight adoption counters; gw_rebase_annual_emissions_effect is O(1)
+		# all ten adoption counters; gw_rebase_annual_emissions_effect is O(1)
 		# and only does work in January. Neither has a gameplay effect.
-		# Everything climate-specific in this pulse is gated on the rule: with it
-		# disabled there are no greenhouse figures to show and no threshold events.
+		# Tariff maintenance also runs with the rule off to restore prior settings.
+		# Emissions and threshold events remain gated on the climate rule.
+		gw_refresh_tariff_policies_effect = yes
 		if = {
 			limit = { has_game_rule = global_warming_enabled }
 			gw_rebase_annual_emissions_effect = yes
-			# Before the counters, so they count the reconciled policies.
-			gw_reconcile_market_policies_effect = yes
 			gw_refresh_global_counts_effect = yes
 
 			# Fire warming-threshold environmentalism events exactly once globally when
@@ -1177,7 +1177,8 @@ tech_spread_on_action = {
 # the bool triggers the same result, and it also catches any path to the tech
 # that skips its on_researched. Monthly, so a grant lands within a month of the
 # research. The bools are defined in era_6.txt (decolonization) and era_7.txt
-# (civil_rights_movement).
+# (civil_rights_movement). Decolonization's three: recognition, the
+# anti-colonialist ideology, and dropping claims on decentralized states.
 tech_marker_grants_on_action = {
 	effect = {
 		# decolonization
@@ -1214,6 +1215,37 @@ tech_marker_grants_on_action = {
 				}
 				post_notification = ideology_anti_colonialist_added
 			}
+		}
+		# Renounce our claims on decentralized states. Claims sit on state
+		# regions, so test the claimer's has_claim against each state's region,
+		# not has_claim_by on the decentralized owner's portion of a split state
+		# (e.g. Equateur shared with Sudan). Use the dedicated decentralized
+		# country iterators and walk only those countries' states
+		# (a few hundred) rather than every state in the world. It runs every
+		# month, not once: a claim that reaches us after the first sweep is dropped
+		# within the month too. The stake action itself (da_stake_colonial_claim) is
+		# closed to us by te_stake_colonial_claim_injection.txt, so this is the
+		# backstop for claims that arrive another way. number_of_claims > 0 keeps a
+		# country with none off the scan.
+		if = {
+			limit = {
+				modifier:country_remove_decentralized_claims_bool = yes
+				number_of_claims > 0
+				any_decentralized_country = {
+					any_scope_state = {
+						state_region = { ROOT = { has_claim = PREV } }
+					}
+				}
+			}
+			every_decentralized_country = {
+				every_scope_state = {
+					limit = {
+						state_region = { ROOT = { has_claim = PREV } }
+					}
+					state_region = { remove_claim = ROOT }
+				}
+			}
+			post_notification = decentralized_claims_renounced
 		}
 		# civil_rights_movement
 		if = {
@@ -2844,6 +2876,26 @@ construction_cost_scaling_on_action = {
 migration_crowding_on_action = {
 	effect = {
 		te_update_migration_crowding_modifier = yes
+	}
+}
+
+# ---- State-input treaty articles (state scope) ----
+# Free Port Concession, Minority Protection, Religious Mission Rights and
+# Demilitarized Zone put their effects on the state they name, and a treaty
+# can end without the article's on_break / on_withdrawal removing them (a
+# party annexed). Monthly, a state that carries one but is no longer conceded
+# under it loses it; a change of owner also puts them back on a state that
+# returns to the country that conceded it. treaty_article_effects.txt.
+te_state_treaty_article_sync_on_action = {
+	effect = {
+		te_sync_state_treaty_articles = yes
+	}
+}
+
+te_state_treaty_article_owner_change_on_action = {
+	effect = {
+		te_sync_state_treaty_articles = yes
+		te_restore_state_treaty_articles = yes
 	}
 }
 

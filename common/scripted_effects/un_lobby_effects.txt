@@ -801,12 +801,17 @@ un_lobby_campaign_add_to_member = {
 #   for      its proposer, if AI;
 #   against  on a resolution that accuses its target: the target, its allies
 #            and its power bloc's leader, if AI.
+#   stakes   on a resolution that accuses no one, the AI members with the
+#            strongest interests in the topic (un_lobby_ai_stakeholder_for /
+#            _against), at most two a side (the literal max = 2), one campaign
+#            each (owner, 2026-10-03: "yes, but probably not a lot").
 # Each lobbies only AI members that can still be lobbied, by their TRUE lean
 # (the AI reads the snapshot, not the chamber's band): for, a member between
 # leaning against and undecided (−29 to +9); against, one between undecided
 # and leaning for (−9 to +29). It starts at most one campaign a month, runs at
-# most three, starts only with un_lobby_ai_influence_floor influence to spare,
-# and lets one go each month its influence is below 0.
+# most three (a stakeholder one), starts only with un_lobby_ai_influence_floor
+# influence to spare (a stakeholder un_lobby_ai_stake_influence_floor), and
+# lets one go each month its influence is below 0.
 
 # Scope: resolution container (= scope:un_resolution), voting
 un_lobby_ai_monthly = {
@@ -844,6 +849,57 @@ un_lobby_ai_monthly = {
 			}
 			un_lobby_ai_lobby = { DIR = against LOW = -9 HIGH = 29 }
 		}
+	}
+	# Members with a stake in a resolution that accuses no one: the poor for
+	# the World Development Fund once a reform funds it, a nuclear power
+	# against the prohibition treaty, the cultural hegemon against cultural
+	# diversity. On an accusing resolution the target's side lobbies already.
+	else = {
+		var:un_res_proposer ?= { save_temporary_scope_as = un_lai_proposer }
+		ordered_country = {
+			limit = { un_lobby_ai_stakeholder_for = yes }
+			order_by = un_lobby_ai_stake_for_order
+			max = 2 # at most two a side (un_lobby_ai_stake_line's note)
+			check_range_bounds = no
+			un_lobby_ai_stake_lobby = { DIR = for LOW = -29 HIGH = 9 }
+		}
+		ordered_country = {
+			limit = { un_lobby_ai_stakeholder_against = yes }
+			order_by = un_lobby_ai_stake_against_order
+			max = 2 # at most two a side (un_lobby_ai_stake_line's note)
+			check_range_bounds = no
+			un_lobby_ai_stake_lobby = { DIR = against LOW = -9 HIGH = 29 }
+		}
+	}
+}
+
+# One stakeholder's month: one campaign at most, started only with
+# un_lobby_ai_stake_influence_floor to spare; un_lobby_ai_lobby does the rest,
+# and lets the campaign go when influence runs short.
+# Parameters: as un_lobby_ai_lobby
+# Scope: the AI stakeholder; scope:un_lai_res = the resolution
+un_lobby_ai_stake_lobby = {
+	save_temporary_scope_as = un_lai_lobbyist
+	if = {
+		limit = {
+			OR = {
+				influence < 0
+				AND = {
+					influence >= un_lobby_ai_stake_influence_floor
+					NOT = {
+						scope:un_lai_res = {
+							has_variable_list = un_res_campaigns
+							any_in_list = {
+								variable = un_res_campaigns
+								has_tag = un_lobby_campaign
+								var:un_lc_lobbyist ?= scope:un_lai_lobbyist
+							}
+						}
+					}
+				}
+			}
+		}
+		un_lobby_ai_lobby = { DIR = $DIR$ LOW = $LOW$ HIGH = $HIGH$ }
 	}
 }
 
@@ -1060,6 +1116,11 @@ un_deleg_row_pledge = {
 un_deleg_bulk_row = {
 	if = {
 		limit = {
+			# The button's tooltip pass reads this limit without having run
+			# un_deleg_bulk_lobby's set_variable, so an unguarded read logged
+			# three script errors per row, 72 per tooltip build; 1,584 lines in
+			# nine minutes with the chamber open (2026-10-03 error.log).
+			has_variable = un_bulk_left
 			var:un_bulk_left > 0
 			un_deleg_row_bulk_ok = { N = $N$ DIR = $DIR$ }
 		}

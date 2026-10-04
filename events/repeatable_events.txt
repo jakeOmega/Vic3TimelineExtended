@@ -379,7 +379,16 @@ repeatable_events.60 = {
 	option = {
 		name = repeatable_events.60.a
 		default_option = yes
-		add_modifier = { name = re_spectrum_auction days = short_modifier_time }
+		# Under the legislated tax code only the code sets tax rates: the auction
+		# pays its yield as flat income instead of raising the dividend tax.
+		if = {
+			limit = { te_tax_code_on = yes }
+			add_modifier = { name = te_tax_spectrum_auction days = short_modifier_time }
+			add_modifier = { name = te_tax_spectrum_auction_proceeds days = short_modifier_time multiplier = sv_money_flow_event_small }
+		}
+		else = {
+			add_modifier = { name = re_spectrum_auction days = short_modifier_time }
+		}
 	}
 
 	option = {

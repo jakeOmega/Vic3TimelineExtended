@@ -1,0 +1,23 @@
+﻿# Legislated tax code: policy obligations (plan Task 12; docs/systems/tax_code_schema.md,
+# "Policy obligations").
+#
+# The beneficiary interest group's reaction to a promise's outcome
+# (te_tax_obligation_effects.txt), applied through the shared
+# ig_approval_effect, decaying over te_tax_obl_approval_days: kept +3, broken
+# -5, renegotiated -2. Their own modifiers, so the group's approval breakdown
+# names the tax promise.
+
+te_tax_obl_kept_modifier = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+	interest_group_approval_add = 3
+}
+
+te_tax_obl_broken_modifier = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+	interest_group_approval_add = -5
+}
+
+te_tax_obl_renegotiated_modifier = {
+	icon = "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+	interest_group_approval_add = -2
+}

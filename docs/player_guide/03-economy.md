@@ -309,18 +309,24 @@ expectations below the base-game level.
 ## Pop consumption at high wealth
 
 Pops in the base game stop at wealth 99; in the mod they can reach wealth 200.
-Three new needs appear as pops grow rich:
+Four new needs appear as pops grow rich:
 
 | Need | Starts at wealth | Goods that meet it |
 |---|---|---|
 | Convenience | 20 | Services, Consumer Appliances, Digital Access, Software |
+| Healthcare | 16 | Drugs |
 | Art | 25 | Art and Entertainment, some Services |
 | Tourism | 25 | Tourism, some Personal Transportation |
 
-These needs, and Services, grow steeply with wealth. By wealth 60, services and
+Healthcare takes about 3% of what a pop spends from wealth 29 to 50. Past
+wealth 50 it grows by the same amount at each level, so a richer pop buys more
+Drugs but they take a falling share of its spending. These Drugs come on top of
+the Drugs pops buy for Intoxicants ([Pharmaceutical Industries and
+Drugs](02-timeline.md#pharmaceutical-industries-and-drugs)). The other needs,
+and Services, grow steeply with wealth. By wealth 60, services and
 leisure, Convenience, Art and Tourism take about four fifths of what a pop
-spends, and by wealth 100 nearly all of it. Luxuries peak at about half of
-spending around wealth 30 and then fade.
+spends, and by wealth 100 nearly all of it. Luxuries peak at a little under half
+of spending around wealth 30 and then fade.
 
 ![How a pop's spending divides between needs as its wealth rises, at base prices. Left: wealth 5 to 60, where most pops spend most of a campaign. Right: the full range to 200.](images/pop_spending_by_wealth.png)
 

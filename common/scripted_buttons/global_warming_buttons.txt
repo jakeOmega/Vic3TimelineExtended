@@ -19,7 +19,7 @@
 #
 # `visible` is deliberately left as it was otherwise, inconsistencies included
 # (some rows hid themselves before the warming threshold, others showed greyed).
-# The widget normalises that by showing all eight rows always and letting
+# The widget normalises that by showing all ten rows always and letting
 # `is_valid` carry the anomaly and authority gates as readable conditions, so it
 # is intentionally more forthcoming than this grid ever was.
 #
@@ -37,8 +37,6 @@ gw_carbon_tax_button = {
 	visible = {
 		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
-		# Emissions reduction only applies for the market leader; restrict button accordingly
-		market_capital.owner = THIS
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -67,7 +65,6 @@ gw_remove_carbon_tax_button = {
 	visible = {
 		is_ai = yes
 		je:je_global_warming = { has_modifier = carbon_tax_modifier }
-		market_capital.owner = THIS
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -95,8 +92,6 @@ gw_renewable_investment_button = {
 	visible = {
 		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
-		# Emissions reduction only applies for the market leader; restrict button accordingly
-		market_capital.owner = THIS
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -125,7 +120,6 @@ gw_remove_renewable_investment_button = {
 	visible = {
 		is_ai = yes
 		je:je_global_warming = { has_modifier = renewable_investment_modifier }
-		market_capital.owner = THIS
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -214,7 +208,6 @@ gw_emission_standards_button = {
 		is_ai = yes
 		NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
 		temperature_anomaly_display >= 0.5
-		market_capital.owner = THIS
 	}
 
 	# Adopt only at or above this policy's threshold on the country's climate
@@ -245,7 +238,6 @@ gw_remove_emission_standards_button = {
 	visible = {
 		is_ai = yes
 		je:je_global_warming = { has_modifier = emission_standards_modifier }
-		market_capital.owner = THIS
 		NOT = { gw_bound_by_emissions_treaty = yes }
 	}
 
@@ -513,4 +505,134 @@ gw_remove_green_building_codes_button = {
 	possible = { gw_possible_remove_green_building_codes = yes }
 
 	effect = { gw_effect_remove_green_building_codes = yes }
+}
+
+
+gw_carbon_removal_button = {
+	name = "GW_CARBON_REMOVAL"
+	desc = "GW_CARBON_REMOVAL_DESC"
+
+	visible = {
+		is_ai = yes
+		NOT = { je:je_global_warming = { has_modifier = carbon_removal_modifier } }
+		temperature_anomaly_display >= 0.5
+	}
+
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt), and only with
+	# the 100 authority it costs to spare.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				gw_ai_adopt_margin_carbon_removal >= 0
+				authority >= 100
+				any_scope_building = { is_building_type = building_synthetics_plant_coal }
+			}
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_carbon_removal
+		}
+		max = gw_ai_max_weight
+	}
+
+	possible = { gw_possible_carbon_removal = yes }
+
+	effect = { gw_effect_carbon_removal = yes }
+}
+
+gw_remove_carbon_removal_button = {
+	name = "GW_REMOVE_CARBON_REMOVAL"
+	desc = "GW_REMOVE_CARBON_REMOVAL_DESC"
+
+	visible = {
+		is_ai = yes
+		je:je_global_warming = { has_modifier = carbon_removal_modifier }
+		NOT = { gw_bound_by_emissions_treaty = yes }
+	}
+
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold, or while authority is in deficit.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { gw_ai_repeal_margin_carbon_removal > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_carbon_removal
+		}
+		if = {
+			limit = { authority < 0 }
+			add = gw_ai_authority_deficit_repeal_weight
+		}
+		if = {
+			limit = { NOT = { any_scope_building = { is_building_type = building_synthetics_plant_coal } } }
+			add = gw_ai_authority_deficit_repeal_weight
+		}
+		max = gw_ai_max_weight
+	}
+
+	possible = { gw_possible_remove_carbon_removal = yes }
+
+	effect = { gw_effect_remove_carbon_removal = yes }
+}
+
+gw_fossil_fuel_tariffs_button = {
+	name = "GW_FOSSIL_FUEL_TARIFFS"
+	desc = "GW_FOSSIL_FUEL_TARIFFS_DESC"
+
+	visible = {
+		is_ai = yes
+		te_tax_owns_market = yes
+		NOT = { je:je_global_warming = { has_modifier = fossil_fuel_tariffs_modifier } }
+	}
+
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt), and only with
+	# the 100 authority it costs to spare.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				gw_ai_adopt_margin_fossil_fuel_tariffs >= 0
+				authority >= 100
+			}
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_fossil_fuel_tariffs
+		}
+		max = gw_ai_max_weight
+	}
+
+	possible = { gw_possible_fossil_fuel_tariffs = yes }
+
+	effect = { gw_effect_fossil_fuel_tariffs = yes }
+}
+
+gw_remove_fossil_fuel_tariffs_button = {
+	name = "GW_REMOVE_FOSSIL_FUEL_TARIFFS"
+	desc = "GW_REMOVE_FOSSIL_FUEL_TARIFFS_DESC"
+
+	visible = {
+		is_ai = yes
+		te_tax_owns_market = yes
+		je:je_global_warming = { has_modifier = fossil_fuel_tariffs_modifier }
+	}
+
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold, or while authority is in deficit.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { gw_ai_repeal_margin_fossil_fuel_tariffs > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_fossil_fuel_tariffs
+		}
+		if = {
+			limit = { authority < 0 }
+			add = gw_ai_authority_deficit_repeal_weight
+		}
+		max = gw_ai_max_weight
+	}
+
+	possible = { gw_possible_remove_fossil_fuel_tariffs = yes }
+
+	effect = { gw_effect_remove_fossil_fuel_tariffs = yes }
 }

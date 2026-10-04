@@ -1,0 +1,416 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE — civil wars, new countries and relief eligibility
+# ============================================================================
+# docs/systems/tax_code_schema.md, "Civil wars and new countries"; spec §10.
+#
+# The code is plain country variables, and a civil war's winner inherits every
+# loser variable it does not hold itself, but no modifier and no list
+# (docs/guides/scripting_best_practices.md, "What a Civil War's Winner
+# Inherits"). So:
+#
+#   OUTBREAK  te_tax_on_uprising, from te_civil_war_on_start (the shared hook,
+#             te_civil_war_on_actions.txt) after te_civil_war_record_start:
+#             the rebels receive every token of the original's code, including
+#             the approved packages with their original dates, but no bill, no
+#             draft and no commitments. The hidden te_tax.6 then installs the
+#             carrier law on them and syncs collection the next day (te_tax.4).
+#             Both sides then legislate on their own.
+#   WIN       te_tax_repair_after_civil_war, from te_civil_war_on_won. The
+#             rebels hold every token from the outbreak, so after the merge the
+#             winner holds its own value of each and no loser-only token can
+#             surface: its code is complete and coherent as it stands. The
+#             repair closes the bill and the draft, hands the month back to
+#             the dispatch, records history kind 7 and resyncs collection.
+#   RELEASE   te_tax_init_released_country, from te_tax_on_country_released
+#             (te_tax_on_actions.txt): a parent holding the carrier law passes
+#             on its enacted provisions; any other parent's released country
+#             migrates from its own law (te_tax.3).
+#   RELIEF    The enacted named states are the country list
+#             te_tax_en_relief_states; lists do not survive a civil war's
+#             merge, so each side holds its own copy from the outbreak and the
+#             winner's own list is the one that applies. The state marks are
+#             derived from it (te_tax_rebuild_relief_marks).
+#             te_tax_relief_follow_owner, from on_state_owner_change: a state
+#             whose new owner's code did not name it loses its relief marks
+#             and leaves the naming country's list.
+#
+# Everything is gated on te_tax_code_on, written positively. Nothing here
+# removes a schema token, reads ROOT or writes native fiscal state:
+# collection is te_tax_sync_collection's alone (te_tax_collection_effects.txt).
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Outbreak
+# ----------------------------------------------------------------------------
+# Called from te_civil_war_on_start with THIS = the original country and
+# scope:target = the uprising (on_revolution_start, on_secession_start), after
+# te_civil_war_record_start, so the rebels already carry te_cw_origin. The
+# variables are copied here, at the moment of the outbreak; set_variable does
+# not depend on ROOT. The carrier law and the first sync go through te_tax.6,
+# a country event on the rebels, so they run with the rebels as ROOT. Whether
+# it fires before or after the engine has finished setting the rebels' laws is
+# unread; a taxation law the engine gives them later is replaced by the
+# carrier again (te_tax.5), since the copy has made them a migrated country.
+te_tax_on_uprising = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			exists = scope:target
+		}
+		if = {
+			limit = { te_tax_code_in_force = yes }
+			save_scope_as = te_tax_source
+			scope:target = {
+				te_tax_copy_code = yes
+				# After the copy, which writes te_tax_migrated last: te_tax.6 needs
+				# the code in force, and an event raised without days may run at once.
+				trigger_event = { id = te_tax.6 }
+			}
+		}
+		else = {
+			# The original has no code yet: the rebels migrate from their own law.
+			scope:target = {
+				trigger_event = { id = te_tax.3 }
+			}
+		}
+	}
+}
+
+# The uprising's scope; scope:te_tax_source = the original. Every country token
+# of the schema (docs/systems/tax_code_schema.md, "Schema"), copied with the
+# original's value: the enacted provisions with their operative months, sunsets
+# and successors; the version tokens; the taxed goods; the relief depths; the
+# clock, including te_tax_last_month, so a month the original has processed is
+# not processed again; the package slots, with the payload of each occupied
+# one; the history ring and the drift counters. The rebels' own:
+#   te_tax_bl_on, te_tax_dr_on = 0  unfinished bills and drafts stay with the
+#                                    government that wrote them (spec §10)
+#   commitments                      released (te_tax_gen_reset_commitments)
+#   pending promises                 released (te_tax_obl_release_pending);
+#                                    binding ones are copied with their clocks
+#   te_tax_sync_version = -1         the rebels' writer has never synced their
+#                                    carrier, so its first sync is a fresh one
+#                                    and whatever the carrier arrived with is
+#                                    not counted as drift
+#   te_tax_migrated = 1              written last, as the migration does
+# The enacted named states (te_tax_en_relief_states) are copied whole, the
+# states the original still holds included: each side keeps the other's while
+# the war lasts (te_tax_relief_listed_state_kept), so a winning rebel names
+# them at reunification. Then the rebels' marks are rebuilt from their list.
+te_tax_copy_code = {
+	te_tax_gen_copy_code = yes
+	te_tax_copy_token = { NAME = te_tax_schema }
+	te_tax_copy_token = { NAME = te_tax_migration_discrepancy }
+	te_tax_copy_token = { NAME = te_tax_code_version }
+	te_tax_copy_token = { NAME = te_tax_last_month }
+	te_tax_copy_token = { NAME = te_tax_next_month }
+	te_tax_copy_token = { NAME = te_tax_pver_goods }
+	te_tax_copy_token = { NAME = te_tax_xver_goods }
+	te_tax_copy_token = { NAME = te_tax_en_agrel }
+	te_tax_copy_token = { NAME = te_tax_en_regrel }
+	te_tax_copy_token = { NAME = te_tax_pver_relief }
+	te_tax_copy_token = { NAME = te_tax_xver_relief }
+	te_tax_copy_token = { NAME = te_tax_drift_level }
+	te_tax_copy_token = { NAME = te_tax_drift_goods }
+	te_tax_copy_token = { NAME = te_tax_drift_amend }
+	# Approved packages, held ones included, with their original dates.
+	if = { limit = { scope:te_tax_source = { var:te_tax_pa_on = 1 } } te_tax_gen_copy_slot_a = yes }
+	if = { limit = { scope:te_tax_source = { var:te_tax_pb_on = 1 } } te_tax_gen_copy_slot_b = yes }
+	# Binding policy obligations (bound to a passed bill, delivering or
+	# maintaining) with their terms and clocks; the obligation-slot headers and
+	# the groups' trust came with te_tax_gen_copy_code.
+	te_tax_gen_copy_obligations = yes
+	# Any token the original lacked, with its sentinel (none, for a country
+	# holding te_tax_schema).
+	te_tax_init_country = yes
+	set_variable = { name = te_tax_bl_on value = 0 }
+	set_variable = { name = te_tax_dr_on value = 0 }
+	te_tax_gen_reset_commitments = yes
+	# A pending promise belongs to the bill, which stays with the government.
+	te_tax_obl_release_pending = yes
+	# So does the AI's bill state (te_tax_ai_effects.txt); the AI tokens were
+	# copied with the rest, the streaks, the phase and the cooldown included.
+	te_tax_ai_reset_bill_state = yes
+	set_variable = { name = te_tax_sync_version value = -1 }
+	te_tax_copy_relief_states = yes
+	te_tax_rebuild_relief_marks = yes
+	debug_log = "TE_TAX uprising_copy the uprising received the code of the country it rose against; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	set_variable = { name = te_tax_migrated value = 1 }
+}
+
+# The hidden te_tax.6, on a country that has just received a copied code (an
+# uprising or a released country) or been repaired after a civil war. Installs
+# the carrier law if the country does not hold it, and syncs collection a day
+# later (te_tax.4), as the migration does: whether activate_law is visible
+# later in the same execution is unverified. Both lines say whether the carrier
+# had arrived with the country (the tax probe's unrun P15). A taxation law the
+# engine activates on the rebels after the copy (a revolutionary movement's) is
+# replaced by the carrier again through on_law_activated (te_tax.5), since the
+# copy has made them a migrated country: both sides keep the code.
+te_tax_adopt_copied_code = {
+	if = {
+		limit = { te_tax_code_in_force = yes }
+		if = {
+			limit = { NOT = { has_law = law_type:law_te_tax_code } }
+			activate_law = law_type:law_te_tax_code
+			debug_log = "TE_TAX adopted the copied code and activated the tax code law; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_TAX adopted the copied code; the tax code law was already in place; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		trigger_event = { id = te_tax.4 days = 1 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Reunification
+# ----------------------------------------------------------------------------
+# Called from te_civil_war_on_won with THIS = the winner, after the merge and
+# after te_civil_war_resolve_sides. It runs when two codes met: the rebels won a
+# revolution (te_cw_rebels_won = 1) or the original government won
+# (te_cw_role = 1). A seceder that won is a new nation and nothing merged into
+# it, so it keeps its code untouched (cr_repair_after_civil_war branches the
+# same way).
+#
+# The winner's code is already whole: both sides held every token from the
+# outbreak copy, so the merge kept the winner's own value of each and no
+# loser-only token or package can surface. Nothing is copied from the loser,
+# no external-change token moves (that would hold every package the winner
+# approved during the war) and nothing commences: the winner's own packages
+# keep their dates and the dispatch processes them. What the repair does:
+#   - closes the bill and the draft (spec §10: pending bills are revalidated;
+#     a reunified country reintroduces its reform) and releases commitments,
+#     with no approval effect;
+#   - rebuilds the relief marks of every state it now owns from its OWN
+#     list of named states (te_tax_en_relief_states): lists are not
+#     inherited, so the loser's list cannot leak in, and the marks a state
+#     brought from the loser's side are reset unless the winner's list names
+#     it (the winner's code applies whole, never a mixture);
+#   - te_tax_last_month = -1: the next dispatch processes the country; only
+#     the processor claims a month;
+#   - history kind 7 (civil-war repair);
+#   - te_tax.6: the carrier if missing, and collection rebuilt from the
+#     winner's variables the next day (modifiers do not survive the merge);
+#   - te_tax_repair_obligations_after_civil_war (te_tax_obligation_effects.txt),
+#     after the bill is closed: the winner's obligations are reassessed for
+#     deliverability, never marked fulfilled because the responsible country
+#     changed (spec §10), and their clocks are kept.
+te_tax_repair_after_civil_war = {
+	if = {
+		limit = {
+			te_tax_code_in_force = yes
+			OR = {
+				AND = { has_variable = te_cw_rebels_won var:te_cw_rebels_won = 1 }
+				AND = { has_variable = te_cw_role var:te_cw_role = 1 }
+			}
+		}
+		if = {
+			limit = { var:te_tax_bl_on = 1 }
+			te_tax_bill_close = yes
+		}
+		else = {
+			te_tax_gen_reset_commitments = yes
+			set_variable = { name = te_tax_bl_on value = 0 }
+		}
+		if = {
+			limit = { var:te_tax_dr_on = 1 }
+			te_tax_draft_close = yes
+		}
+		else = {
+			set_variable = { name = te_tax_dr_on value = 0 }
+		}
+		te_tax_repair_obligations_after_civil_war = yes
+		# No AI bill survives the repair; the winner's own streaks and cooldown stay.
+		te_tax_ai_reset_bill_state = yes
+		te_tax_rebuild_relief_marks = yes
+		# A loser's pending customs re-assert must not turn into an adoption at
+		# the winner's next sync (plan Task 15): the winner re-asserts afresh.
+		te_tax_gen_customs_clear_retries = yes
+		set_variable = { name = te_tax_last_month value = -1 }
+		te_tax_history_push = { KIND = 7 SLOT = none }
+		debug_log = "TE_TAX civil_war_repair the winner's code applies across the reunited country; bill and draft closed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		trigger_event = { id = te_tax.6 }
+	}
+	else_if = {
+		limit = { te_tax_code_on = yes }
+		debug_log = "TE_TAX civil_war_repair_skipped nothing merged (a seceder won) or the winner has no code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Releases
+# ----------------------------------------------------------------------------
+# The released country's scope; scope:te_tax_source = the releasing country
+# (te_tax_on_country_released saves it; on_country_released_as_* runs in the
+# parent). A released country may inherit the carrier law from its parent, and
+# the migration would then record all zeros (te_tax_migrate_country, the
+# carrier-holder branch), so a parent holding the carrier passes on its enacted
+# provisions: every instrument with its operative month, sunset and successor,
+# the taxed goods and the relief depths. Its packages, bill, draft,
+# commitments and policy obligations stay with it. Its named states: the parent's list is copied and
+# the rebuild keeps those it now owns (te_tax_relief_listed_state_kept), marks
+# and stamps them as its own; the parent's own rebuild drops them from the
+# parent's list. Its package slots' state lists are emptied, since the
+# packages stayed behind (a revived tag may hold old ones). Nothing changed in the code, so no history is
+# recorded and te_tax_code_version stays at its sentinel. Any other parent's
+# released country migrates from its own law (te_tax.3).
+te_tax_init_released_country = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			exists = scope:te_tax_source
+			scope:te_tax_source = {
+				te_tax_code_in_force = yes
+				has_law = law_type:law_te_tax_code
+			}
+		}
+		te_tax_gen_copy_enacted = yes
+		te_tax_init_country = yes
+		# Explicit, in case a revived tag still carries tokens from an earlier life.
+		set_variable = { name = te_tax_bl_on value = 0 }
+		set_variable = { name = te_tax_dr_on value = 0 }
+		set_variable = { name = te_tax_pa_on value = 0 }
+		set_variable = { name = te_tax_pa_state value = 0 }
+		set_variable = { name = te_tax_pb_on value = 0 }
+		set_variable = { name = te_tax_pb_state value = 0 }
+		if = { limit = { has_variable_list = te_tax_pa_relief_states } clear_variable_list = te_tax_pa_relief_states }
+		if = { limit = { has_variable_list = te_tax_pb_relief_states } clear_variable_list = te_tax_pb_relief_states }
+		# No promise and no record of kept or broken ones: those are the parent's.
+		te_tax_gen_clear_obligations = yes
+		# Nor the AI's bill state or fiscal streaks (a revived tag may hold them
+		# from an earlier life; final review A-M4).
+		te_tax_ai_reset_bill_state = yes
+		set_variable = { name = te_tax_ai_def_streak value = 0 }
+		set_variable = { name = te_tax_ai_sur_streak value = 0 }
+		# Customs (plan Task 15): not the parent's. The released country takes
+		# up the customs of its own market, if it owns one, at its first
+		# revalidation (te_tax_customs_revalidate: the next 1st, or a day after
+		# its market is created); a revived tag's old records stay unread.
+		if = { limit = { te_tax_customs_on = yes } set_variable = { name = te_tax_customs_held value = 0 } te_tax_gen_customs_clear_retries = yes }
+		te_tax_copy_relief_states = yes
+		te_tax_rebuild_relief_marks = yes
+		set_variable = { name = te_tax_last_month value = -1 }
+		te_tax_recompute_next_month = yes
+		debug_log = "TE_TAX release_copy the released country took its parent's enacted code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		set_variable = { name = te_tax_migrated value = 1 }
+		# After te_tax_migrated: te_tax.6 needs the code in force, and an event
+		# raised without days may run at once.
+		trigger_event = { id = te_tax.6 }
+	}
+	else_if = {
+		limit = { te_tax_code_on = yes }
+		trigger_event = { id = te_tax.3 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Relief eligibility
+# ----------------------------------------------------------------------------
+# Country scope. The enacted named states are the list te_tax_en_relief_states
+# (at most three; commencement replaces it, te_tax_gen_apply_<slot>); the
+# state marks te_tax_relief_state are derived from it here, so they always
+# say what the list says. Called by the writer's relief sync
+# (te_tax_sync_relief) before the modifiers, and after the outbreak copy, a
+# release and the civil-war repair. In order:
+#   1. prune: a listed state the list no longer keeps
+#      (te_tax_relief_listed_state_kept: not the country's own and not its
+#      civil-war counterpart's) leaves the list. Collected in a temporary list
+#      first: the persistent list is never changed while it is iterated;
+#   2. every owned state with a mark the list does not name loses it;
+#   3. every owned state the list names is marked and stamped with this
+#      country (te_tax_relief_holder), so a later change of owner can tell
+#      whose code named it.
+# A package's states are its slot's own list (te_tax_p<slot>_relief_states),
+# filtered by the same keep rule when it commences; they carry no mark.
+# Writes state variables and the list only; the modifiers are the sync's.
+te_tax_rebuild_relief_marks = {
+	save_scope_as = te_tax_country
+	if = {
+		limit = { has_variable_list = te_tax_en_relief_states }
+		every_in_list = {
+			variable = te_tax_en_relief_states
+			limit = { NOT = { te_tax_relief_listed_state_kept = yes } }
+			add_to_temporary_list = te_tax_relief_dropped
+		}
+		# The temporary list lives for the whole top-level effect, so an earlier
+		# rebuild in it may have left states there: test each again.
+		every_in_list = {
+			list = te_tax_relief_dropped
+			limit = { NOT = { te_tax_relief_listed_state_kept = yes } }
+			scope:te_tax_country = { remove_list_variable = { name = te_tax_en_relief_states target = PREV } }
+		}
+	}
+	every_scope_state = {
+		limit = {
+			has_variable = te_tax_relief_state
+			var:te_tax_relief_state = 1
+		}
+		set_variable = { name = te_tax_relief_state value = 0 }
+	}
+	if = {
+		limit = { has_variable_list = te_tax_en_relief_states }
+		every_in_list = {
+			variable = te_tax_en_relief_states
+			limit = { owner ?= scope:te_tax_country }
+			set_variable = { name = te_tax_relief_state value = 1 }
+			set_variable = { name = te_tax_relief_holder value = scope:te_tax_country }
+		}
+	}
+}
+
+# Country scope; scope:te_tax_source = the country whose code THIS takes (the
+# original at an outbreak, the parent at a release). THIS's enacted named
+# states become the source's, all of them: te_tax_rebuild_relief_marks, run
+# next, drops those THIS's code does not keep. Lists are copied state by state
+# (inside the source's list PREV is the source, inside scope:te_tax_country the
+# state).
+te_tax_copy_relief_states = {
+	save_scope_as = te_tax_country
+	if = { limit = { has_variable_list = te_tax_en_relief_states } clear_variable_list = te_tax_en_relief_states }
+	if = {
+		limit = { scope:te_tax_source = { has_variable_list = te_tax_en_relief_states } }
+		scope:te_tax_source = {
+			every_in_list = {
+				variable = te_tax_en_relief_states
+				scope:te_tax_country = { add_to_variable_list = { name = te_tax_en_relief_states target = PREV } }
+			}
+		}
+	}
+}
+
+# State scope (on_state_owner_change, through te_tax_on_state_owner_change; the
+# hook gives the state and its new owner, never the old one, so the country
+# that named the state was stamped on it beforehand). A state named for
+# regional relief keeps its mark only while the code that named it went with
+# it (te_tax_relief_stays_with_code, te_tax_triggers.txt): to a new tag that is
+# about to receive a copy, to the stamped holder, or across the two sides of a
+# civil war. Otherwise the new owner's code never named it: the mark is reset
+# to 0 and the state leaves
+# the holder's list of named states (te_tax_en_relief_states; the holder's own
+# rebuild would drop it at its next sync too). The relief modifier itself is
+# left to the new owner's next sync, which removes it from a state without the
+# mark: only te_tax_sync_collection writes collection.
+te_tax_relief_follow_owner = {
+	if = {
+		limit = {
+			exists = owner
+			has_variable = te_tax_relief_state
+			var:te_tax_relief_state = 1
+		}
+		save_scope_as = te_tax_relief_moved
+		owner = { save_scope_as = te_tax_owner_new }
+		var:te_tax_relief_holder ?= { save_scope_as = te_tax_owner_holder }
+		if = {
+			limit = { NOT = { te_tax_relief_stays_with_code = yes } }
+			if = {
+				limit = {
+					exists = scope:te_tax_owner_holder
+					scope:te_tax_owner_holder = { has_variable_list = te_tax_en_relief_states }
+				}
+				scope:te_tax_owner_holder = { remove_list_variable = { name = te_tax_en_relief_states target = scope:te_tax_relief_moved } }
+			}
+			set_variable = { name = te_tax_relief_state value = 0 }
+			debug_log = "TE_TAX relief_cleared a state changed owner and the new owner's code did not name it for relief; date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+}

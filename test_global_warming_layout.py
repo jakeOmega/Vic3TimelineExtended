@@ -17,16 +17,20 @@ CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "global_w
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "global_warming_gui_icons.md")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-STATUS = ["te_gw_sec_policies", "te_gw_sec_emitters"]
+STATUS = ["te_gw_sec_policies", "te_gw_sec_emitters", "te_gw_sec_transition"]
+# National, the player's own (#660): the Market tab shows it on our market only.
+OWN_MARKET_ONLY = {"te_gw_sec_transition"}
 REFERENCE = ["te_gw_sec_history", "te_gw_sec_how"]
 ROOTS = {"widget_je_gw_overview": ("custom_widget_container_1", "te_gw_overview_panel"),
          "widget_je_gw_status": ("custom_widget_container_2", "te_gw_status_sections"),
          "widget_je_gw_reference": ("custom_widget_container_3", "te_gw_reference_sections")}
-FLAGS = {"gw_policies_closed", "gw_emitters_closed", "gw_world_closed", "gw_hist_closed", "gw_how_open"}
+FLAGS = {"gw_policies_closed", "gw_emitters_closed", "gw_world_closed", "gw_hist_closed", "gw_how_open",
+         "rt_transition_closed", "rt_how_open"}
 OLD_FLAGS = ["gw_hist_open", "gw_world_open", "gw_emissions_closed"]
-MARKET_WIDE = ["carbon_tax", "renewable_investment", "emission_standards"]
-NATIONAL = ["climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
+MARKET_WIDE = ["fossil_fuel_tariffs"]
+NATIONAL = ["carbon_tax", "renewable_investment", "emission_standards", "climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
             "green_building_codes"]
+NATIONAL.insert(5, "carbon_removal")
 # Textures in the widget that are not icons: frames, fills and blanks.
 NOT_ICONS = {"gfx/interface/backgrounds/round_frame_dec.dds",
                     "gfx/interface/backgrounds/white.dds",   # the threshold line, a tinted flat fill
@@ -183,7 +187,7 @@ class GatedLinesTest(unittest.TestCase):
 
 
 class PolicyRowTest(unittest.TestCase):
-    def test_eight_rows_market_wide_first_each_wired_to_its_own_handlers(self):
+    def test_ten_rows_tariffs_first_each_wired_to_its_own_handlers(self):
         body = _type_body(_read(GUI), "te_gw_sec_policies")
         rows = re.findall(r"gw_policy_row = \{\s*datacontext = \"\[GetScriptedGui\('gw_active_(\w+)_sgui'\)\]\"", body)
         self.assertEqual(rows, MARKET_WIDE + NATIONAL)
@@ -609,6 +613,10 @@ OLD_PLACEHOLDERS = {
 # The two marks that stay vanilla by design.
 VANILLA_MARKS = {"gfx/interface/icons/generic_icons/green_checkmark.dds",
                  "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"}
+# The Fossil Transition rows (#660) show the buildings' own vanilla icons.
+TRANSITION_ICONS = {"coal": "gfx/interface/icons/building_icons/coal_mine.dds",
+                    "oil": "gfx/interface/icons/building_icons/oil_rig.dds",
+                    "power": "gfx/interface/icons/building_icons/power_plant.dds"}
 
 
 class GwIconsTest(unittest.TestCase):
@@ -637,19 +645,26 @@ class GwIconsTest(unittest.TestCase):
 
     def test_every_policy_has_its_own_file(self):
         for p in MARKET_WIDE + NATIONAL:
+            icon = {"carbon_removal": "renewable_investment", "fossil_fuel_tariffs": "fossil_fuel_divestment"}.get(p, p)
             self.assertRegex(self.policies, rf"GetScriptedGui\('gw_active_{p}_sgui'\)\]\"\s*"
-                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(GW_ICONS)}policy_{p}\.dds"', p)
+                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(GW_ICONS)}policy_{icon}\.dds"', p)
 
     def test_pies(self):
         for pie, key in (("pie_share", "gw_ov_pie_share"), ("pie_cut", "gw_ov_pie_cut")):
             self.assertRegex(self.overview, rf'texture = "{re.escape(GW_ICONS)}{pie}\.dds"\s*\}}\s*'
                                             rf'blockoverride "label" \{{\s*text = "{key}"')
 
+    def test_every_programme_has_its_buildings_icon(self):
+        body = _type_body(self.gui, "te_gw_sec_transition")
+        for key, path in TRANSITION_ICONS.items():
+            self.assertRegex(body, rf"GetScriptedGui\('rt_active_{key}_sgui'\)\]\"\s*"
+                                   rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(path)}"', key)
+
     def test_no_placeholder_left(self):
         textures = set(re.findall(r'texture = "(gfx/[^"]+)"', self.gui))
         self.assertEqual(textures & OLD_PLACEHOLDERS, set())
-        icons = textures - NOT_ICONS - VANILLA_MARKS - {"gfx/interface/icons/un_icons/pie_rest.dds",
-                                                        "gfx/interface/icons/un_icons/pie_members.dds"}
+        icons = textures - NOT_ICONS - VANILLA_MARKS - set(TRANSITION_ICONS.values()) - {
+            "gfx/interface/icons/un_icons/pie_rest.dds", "gfx/interface/icons/un_icons/pie_members.dds"}
         self.assertTrue(all(t.startswith(GW_ICONS) for t in icons), sorted(icons))
         self.assertEqual(len(icons), 7 + 2 + 1 + 8 + 2)   # tiers, roles, penalty, policies, pies
 
@@ -669,6 +684,7 @@ MARKET = os.path.join(REPO, "gui", "market_panel.gui")
 TAB_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")
 TAB_WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
 BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "global_warming_buttons.txt")
+RT_BUTTONS = os.path.join(REPO, "common", "scripted_buttons", "resource_transition_buttons.txt")
 GW_TAB_GATE = "GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
 GW_TAB_UNLOCK = "GetScriptedGui('te_market_global_warming_tab_unlock_sgui')"
 OWN_MARKET = "MarketPanel.GetMarket.IsSame( GetPlayer.GetCapital.GetMarket )"
@@ -829,7 +845,8 @@ class MarketTabTest(unittest.TestCase):
         roots = [wrapped for _, wrapped in ROOTS.values()]
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{", own, re.M), roots[:2])
         status = re.findall(r"^\t\t(te_gw_sec_\w+) = \{", _type_body(_read(GUI), "te_gw_status_sections"), re.M)
-        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{", foreign, re.M), roots[:1] + status)
+        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{", foreign, re.M),
+                         roots[:1] + [s for s in status if s not in OWN_MARKET_ONLY])
         # The reference sections follow both, as the entry's third root does.
         rest = body[body.index(foreign) + len(foreign):]
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", rest, re.M), roots[2:])
@@ -1059,21 +1076,28 @@ class MarketTabTest(unittest.TestCase):
     def test_the_gates_read_the_rule_and_the_entry(self):
         sguis = _read(TAB_SGUIS)
         gate = _txt_block(sguis, "te_market_global_warming_tab_sgui")
-        self.assertIn("has_game_rule = global_warming_enabled", gate)
         self.assertIn("has_journal_entry = je_global_warming", gate)
         unlock = _txt_block(sguis, "te_market_global_warming_tab_unlock_sgui")
-        self.assertIn("is_shown = { has_game_rule = global_warming_enabled }", unlock)
         self.assertIn("is_valid = { gw_entry_unlocked = yes }", unlock)
-        # The tab is on the strip exactly when the greyed entry is in the journal.
-        self.assertRegex(_read(JE), r"is_shown_when_inactive = \{\s*has_game_rule = global_warming_enabled\s*\}")
+        # The tab is on the strip whenever the greyed entry is in the journal:
+        # under the rule, or with a restrictive transition law (#660), whose
+        # entry opens with the rule off too.
+        shown = re.search(r"is_shown = \{\s*OR = \{([^{}]*)\}\s*\}", unlock)
+        self.assertTrue(shown, unlock)
+        for clause in ("has_game_rule = global_warming_enabled", "rt_restrictive_transition_law = yes"):
+            self.assertIn(clause, shown.group(1))
+        self.assertRegex(_read(JE), r"is_shown_when_inactive = \{\s*OR = \{\s*has_game_rule = global_warming_enabled\s*"
+                                    r"rt_restrictive_transition_law = yes\s*\}\s*\}")
 
     def test_the_checklist_is_the_entrys_own_test_in_one_line(self):
         trig = _top_level(_read(TRIGGERS), "gw_entry_unlocked")
-        m = re.search(r"custom_tooltip = \{\s*text = gw_entry_unlock_tt\s*(.*?)\s*\}", trig, re.S)
+        m = re.search(r"custom_tooltip = \{\s*text = gw_entry_unlock_tt", trig)
         self.assertTrue(m, trig)
+        tested = _block_from(trig, trig.index("{", m.start()) + 1)
+        tested = tested.split("text = gw_entry_unlock_tt", 1)[1]
         possible = _top_level(_read(JE), "je_global_warming")
         possible = _block_from(possible, possible.index("possible = {") + len("possible = {"))
-        self.assertEqual(" ".join(m.group(1).split()), " ".join(possible.split()))
+        self.assertEqual(" ".join(tested.split()), " ".join(possible.split()))
         self.assertIn("0.1", _loc_value("gw_entry_unlock_tt"))
 
     def test_what_the_journal_draws_besides_the_roots_needs_nothing_in_the_tab(self):
@@ -1085,9 +1109,10 @@ class MarketTabTest(unittest.TestCase):
         # The status text is empty while the entry is active.
         self.assertEqual(_loc_value("je_global_warming_status_none"), "")
         # Every scripted button is the AI's.
+        # Eighteen climate buttons and six retirement programme buttons (#660).
         names = re.findall(r"(?m)^\tscripted_button = (\w+)", je)
-        self.assertEqual(len(names), 16)
-        buttons = _read(BUTTONS)
+        self.assertEqual(len(names), 26)
+        buttons = _read(BUTTONS) + "\n" + _read(RT_BUTTONS)
         for name in names:
             self.assertRegex(_top_level(buttons, name), r"visible = \{\s*is_ai = yes", name)
 

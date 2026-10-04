@@ -103,6 +103,14 @@
   "en": "Foreign Subversion Exposed",
   "de": "Fremde Umsturzversuche aufgedeckt"
  },
+ "notification_decentralized_claims_renounced_desc": {
+  "en": "In keeping with decolonization, we have renounced our [Concept('concept_claim', 'claims')] on the states of [Concept('concept_decentralized_nation', 'decentralized nations')].",
+  "de": "Im Einklang mit der Dekolonisierung haben wir unsere [Concept('concept_claim', 'Ansprüche')] auf die Staaten von [Concept('concept_decentralized_nation', 'Dezentral-Nationen')] aufgegeben."
+ },
+ "notification_decentralized_claims_renounced_name": {
+  "en": "Colonial Claims Renounced",
+  "de": "Koloniale Ansprüche aufgegeben"
+ },
  "notification_decol_truce_proposal_accepted_notice_desc": {
   "en": "[SCOPE.sCountry('truce_responder').GetName] has accepted our offer: a five-year truce now binds both our nations.",
   "de": "[SCOPE.sCountry('truce_responder').GetAltName('NOM')|U] hat unser Angebot angenommen: Ein fünfjähriger Waffenstillstand bindet nun beide Nationen."
@@ -293,7 +301,7 @@
  },
  "notification_headlines_tech_aluminum_mass_production_name": {
   "en": "#b FORMER 'JEWELRY METAL' NOW PLENTIFUL #!",
-  "de": "#b EHEMALIGES „SCHMUCKMETALL” JETZT IM ÜBERFLUSS #!"
+  "de": "#b EHEMALIGES „SCHMUCKMETALL“ JETZT IM ÜBERFLUSS #!"
  },
  "notification_headlines_tech_animation_desc": {
   "en": "A new form of entertainment, animation, is being pioneered by artists in [SCOPE.sCountry('headlines_animation_researcher').GetName]. #lore By rapidly displaying a sequence of drawings, a magical illusion of movement is created, opening up a novel medium for storytelling and artistic expression... #!",
@@ -317,7 +325,7 @@
  },
  "notification_headlines_tech_anti_war_movement_name": {
   "en": "#b THOUSANDS MARCH, DEMANDING 'PEACE NOW!' #!",
-  "de": "#b TAUSENDE DEMONSTRIEREN UND FORDERN: „FRIEDEN JETZT!” #!"
+  "de": "#b TAUSENDE DEMONSTRIEREN UND FORDERN: „FRIEDEN JETZT!“ #!"
  },
  "notification_headlines_tech_antibiotic_mass_production_desc": {
   "en": "[SCOPE.sCountry('headlines_antibiotic_mass_production_researcher').GetName] has achieved antibiotic mass production. #lore The ability to produce these miracle drugs in large quantities means that once-fatal bacterial infections can now be treated. This development is expected to have a dramatic positive effect on public health and life expectancy... #!",
@@ -325,7 +333,7 @@
  },
  "notification_headlines_tech_antibiotic_mass_production_name": {
   "en": "#b 'WONDER DRUGS' NOW WIDELY AVAILABLE #!",
-  "de": "#b „WUNDERMITTEL” JETZT WEIT VERBREITET #!"
+  "de": "#b „WUNDERMITTEL“ JETZT WEIT VERBREITET #!"
  },
  "notification_headlines_tech_antimatter_production_desc": {
   "en": "Physicists in [SCOPE.sCountry('headlines_antimatter_production_researcher').GetName] report a breakthrough in antimatter production. #lore With an incredible energy density, this substance promises to revolutionize spacecraft propulsion and power generation, though its volatility remains a significant concern... #!",
@@ -349,7 +357,7 @@
  },
  "notification_headlines_tech_artificial_intelligence_name": {
   "en": "#b A 'THINKING MACHINE' IS BORN #!",
-  "de": "#b EINE „DENKENDE MASCHINE” IST GEBOREN #!"
+  "de": "#b EINE „DENKENDE MASCHINE“ IST GEBOREN #!"
  },
  "notification_headlines_tech_asteroid_mining_desc": {
   "en": "Corporations in [SCOPE.sCountry('headlines_asteroid_mining_researcher').GetName] have announced the first viable plans for asteroid mining. #lore The prospect of extracting valuable metals and minerals from near-earth asteroids could fuel further space exploration and create immense wealth, kicking off a new extra-terrestrial resource race... #!",
@@ -477,7 +485,7 @@
  },
  "notification_headlines_tech_cloud_computing_name": {
   "en": "#b DATA 'IN THE CLOUD' TRANSFORMS TECH #!",
-  "de": "#b DATEN „IN DER CLOUD” VERÄNDERN DIE TECHNIKWELT #!"
+  "de": "#b DATEN „IN DER CLOUD“ VERÄNDERN DIE TECHNIKWELT #!"
  },
  "notification_headlines_tech_combined_arms_desc": {
   "en": "Military theorists in [SCOPE.sCountry('headlines_combined_arms_researcher').GetName] have perfected the doctrine of combined arms. #lore By tightly coordinating infantry, armor, and air power, armed forces can achieve a battlefield effectiveness far greater than the sum of their parts, setting a new standard for military operations... #!",
@@ -517,7 +525,7 @@
  },
  "notification_headlines_tech_computer_networks_name": {
   "en": "#b COMPUTERS BEGIN TO 'TALK' TO ONE ANOTHER #!",
-  "de": "#b COMPUTER BEGINNEN, MITEINANDER ZU „SPRECHEN” #!"
+  "de": "#b COMPUTER BEGINNEN, MITEINANDER ZU „SPRECHEN“ #!"
  },
  "notification_headlines_tech_computing_machines_desc": {
   "en": "Early computing machines developed in [SCOPE.sCountry('headlines_computing_machines_researcher').GetName] are changing information processing. #lore These massive devices can automate complex calculations at speeds no human could match, leading to major advancements in science and engineering... #!",
@@ -525,7 +533,7 @@
  },
  "notification_headlines_tech_computing_machines_name": {
   "en": "#b 'ELECTRONIC BRAINS' TACKLE COMPLEX CALCULATIONS #!",
-  "de": "#b „ELEKTRONISCHE GEHIRNE” BEWÄLTIGEN KOMPLEXE BERECHNUNGEN #!"
+  "de": "#b „ELEKTRONISCHE GEHIRNE“ BEWÄLTIGEN KOMPLEXE BERECHNUNGEN #!"
  },
  "notification_headlines_tech_consumer_credit_desc": {
   "en": "The rise of consumer credit in [SCOPE.sCountry('headlines_consumer_credit_researcher').GetName] has transformed the retail economy. #lore A system that allows people to purchase goods on credit is fueling unprecedented consumer spending, though some economists warn of the potential risks of rising debt... #!",
@@ -533,7 +541,7 @@
  },
  "notification_headlines_tech_consumer_credit_name": {
   "en": "#b 'BUY NOW, PAY LATER' FUELS ECONOMIC GROWTH #!",
-  "de": "#b „JETZT KAUFEN, SPÄTER ZAHLEN” BEFLÜGELT DAS WIRTSCHAFTSWACHSTUM #!"
+  "de": "#b „JETZT KAUFEN, SPÄTER ZAHLEN“ BEFLÜGELT DAS WIRTSCHAFTSWACHSTUM #!"
  },
  "notification_headlines_tech_containerization_desc": {
   "en": "The process of containerization, pioneered in [SCOPE.sCountry('headlines_containerization_researcher').GetName], has revolutionized global trade. #lore By placing goods in standardized containers, ships and ports can operate with incredible efficiency, dramatically lowering the cost of moving goods around the world... #!",
@@ -549,7 +557,7 @@
  },
  "notification_headlines_tech_contraceptive_pill_name": {
   "en": "#b 'THE PILL' SPARKS SOCIAL REVOLUTION #!",
-  "de": "#b „DIE PILLE” LÖST GESELLSCHAFTLICHE REVOLUTION AUS #!"
+  "de": "#b „DIE PILLE“ LÖST GESELLSCHAFTLICHE REVOLUTION AUS #!"
  },
  "notification_headlines_tech_cryptography_desc": {
   "en": "Masters of cryptography in [SCOPE.sCountry('headlines_cryptography_researcher').GetName] are working in secret to gain an edge in the war. #lore The art of writing and solving codes is a crucial tool for securing communications while breaking into the enemy's, providing a vital intelligence advantage... #!",
@@ -629,7 +637,7 @@
  },
  "notification_headlines_tech_directed_energy_weapons_name": {
   "en": "#b 'RAY GUNS' NO LONGER SCIENCE FICTION #!",
-  "de": "#b „STRAHLENWAFFEN” SIND KEINE SCIENCE-FICTION MEHR #!"
+  "de": "#b „STRAHLENWAFFEN“ SIND KEINE SCIENCE-FICTION MEHR #!"
  },
  "notification_headlines_tech_e-commerce_desc": {
   "en": "Thanks to the internet, buying and selling goods from anywhere is now a reality. #lore This system of e-commerce, pioneered by companies in [SCOPE.sCountry('headlines_e-commerce_researcher').GetName], is a convenient new way to shop and a great way for businesses to reach new customers... #!",
@@ -637,7 +645,7 @@
  },
  "notification_headlines_tech_e-commerce_name": {
   "en": "#b SHOPPING FROM HOME WITH 'E-COMMERCE' #!",
-  "de": "#b EINKAUFEN VON ZU HAUSE DURCH „E-COMMERCE” #!"
+  "de": "#b EINKAUFEN VON ZU HAUSE DURCH „E-COMMERCE“ #!"
  },
  "notification_headlines_tech_early_nanotechnology_desc": {
   "en": "Scientists in [SCOPE.sCountry('headlines_early_nanotechnology_researcher').GetName] are making breakthroughs in early nanotechnology. #lore The ability to manipulate materials at the atomic level could lead to incredible breakthroughs in medicine, materials, and computing... #!",
@@ -741,7 +749,7 @@
  },
  "notification_headlines_tech_guided_missiles_name": {
   "en": "#b 'SMART' MISSILES CAN NOW FIND THEIR OWN TARGETS #!",
-  "de": "#b „INTELLIGENTE” RAKETEN FINDEN NUN IHR ZIEL SELBST #!"
+  "de": "#b „INTELLIGENTE“ RAKETEN FINDEN NUN IHR ZIEL SELBST #!"
  },
  "notification_headlines_tech_hydraulic_fracturing_desc": {
   "en": "A controversial but effective way to extract natural gas and oil from underground, hydraulic fracturing is booming in [SCOPE.sCountry('headlines_hydraulic_fracturing_researcher').GetName]. #lore It's a boon for the energy industry and national independence, but not so much for the environment... #!",
@@ -749,7 +757,7 @@
  },
  "notification_headlines_tech_hydraulic_fracturing_name": {
   "en": "#b 'FRACKING' UNLOCKS VAST ENERGY RESERVES #!",
-  "de": "#b „FRACKING” ERSCHLIESST GEWALTIGE ENERGIERESERVEN #!"
+  "de": "#b „FRACKING“ ERSCHLIESST GEWALTIGE ENERGIERESERVEN #!"
  },
  "notification_headlines_tech_hypersonic_weapons_desc": {
   "en": "[SCOPE.sCountry('headlines_hypersonic_weapons_researcher').GetName] has tested new hypersonic weapons. #lore These weapons can travel at more than five times the speed of sound. They're incredibly fast and precise, and a real headache for existing defense systems... #!",
@@ -861,7 +869,7 @@
  },
  "notification_headlines_tech_mainframe_computers_name": {
   "en": "#b 'BIG IRON' COMPUTERS POWER MODERN INDUSTRY #!",
-  "de": "#b „BIG-IRON”-COMPUTER TREIBEN DIE MODERNE INDUSTRIE AN #!"
+  "de": "#b „BIG-IRON“-COMPUTER TREIBEN DIE MODERNE INDUSTRIE AN #!"
  },
  "notification_headlines_tech_marketing_research_desc": {
   "en": "By studying what consumers want, businesses in [SCOPE.sCountry('headlines_marketing_research_researcher').GetName] can create more effective advertising and better products. #lore This new field of marketing research is all about understanding people's desires, and then selling them back to them... #!",
@@ -941,7 +949,7 @@
  },
  "notification_headlines_tech_modern_management_techniques_name": {
   "en": "#b 'SCIENTIFIC MANAGEMENT' BOOSTS PRODUCTIVITY #!",
-  "de": "#b „WISSENSCHAFTLICHE BETRIEBSFÜHRUNG” STEIGERT DIE PRODUKTIVITÄT #!"
+  "de": "#b „WISSENSCHAFTLICHE BETRIEBSFÜHRUNG“ STEIGERT DIE PRODUKTIVITÄT #!"
  },
  "notification_headlines_tech_modern_material_science_desc": {
   "en": "From graphene to metamaterials, scientists in [SCOPE.sCountry('headlines_modern_material_science_researcher').GetName] are creating new substances with unique properties. #lore This advanced modern material science is set to revolutionize everything from electronics to aerospace... #!",
@@ -949,7 +957,7 @@
  },
  "notification_headlines_tech_modern_material_science_name": {
   "en": "#b 'WONDER MATERIALS' TO CHANGE THE FUTURE #!",
-  "de": "#b „WUNDERMATERIALIEN” SOLLEN DIE ZUKUNFT VERÄNDERN #!"
+  "de": "#b „WUNDERMATERIALIEN“ SOLLEN DIE ZUKUNFT VERÄNDERN #!"
  },
  "notification_headlines_tech_modern_materials_desc": {
   "en": "[SCOPE.sCountry('headlines_modern_materials_researcher').GetAdjective] chemists have invented new modern materials. #lore Materials like fiberglass, nylon, and Teflon are stronger, lighter, and more versatile than what came before. They've changed the way things are built and manufactured... #!",
@@ -1149,7 +1157,7 @@
  },
  "notification_headlines_tech_precision_guided_munitions_name": {
   "en": "#b 'SMART BOMBS' CAN HIT A PINPOINT TARGET #!",
-  "de": "#b „INTELLIGENTE BOMBEN” TREFFEN PUNKTGENAU #!"
+  "de": "#b „INTELLIGENTE BOMBEN“ TREFFEN PUNKTGENAU #!"
  },
  "notification_headlines_tech_predictive_logistics_desc": {
   "en": "By using data to forecast supply chain needs, companies in [SCOPE.sCountry('headlines_predictive_logistics_researcher').GetName] can make their logistics more efficient and less costly. #lore This system of predictive logistics is a smarter way to get things where they need to go... #!",
@@ -1509,7 +1517,7 @@
  },
  "notification_headlines_tech_world_wide_web_name": {
   "en": "#b 'WORLD WIDE WEB' CONNECTS THE GLOBE #!",
-  "de": "#b „WORLD WIDE WEB” VERBINDET DEN GLOBUS #!"
+  "de": "#b „WORLD WIDE WEB“ VERBINDET DEN GLOBUS #!"
  },
  "notification_homeland_created_desc": {
   "en": "A new [SCOPE.sCulture('form_culture').GetName] [concept_homeland] has been created in [SCOPE.GetRootScope.GetState.GetName].",
@@ -1615,6 +1623,30 @@
   "en": "Doctrine Bound by Law",
   "de": "Doktrin gesetzlich gebunden"
  },
+ "notification_rt_coal_retired_notice_desc": {
+  "en": "Our retirement programme has closed the $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid to its owners.",
+  "de": "Unser Stilllegungsprogramm hat die $building_coal_mine$ in [SCOPE.sState('rt_retire_state').GetName] geschlossen: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! Stufen, wobei @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! an die Eigentümer gezahlt wurden."
+ },
+ "notification_rt_coal_retired_notice_name": {
+  "en": "$building_coal_mine$ Retired",
+  "de": "$building_coal_mine$ stillgelegt"
+ },
+ "notification_rt_oil_retired_notice_desc": {
+  "en": "Our retirement programme has closed the $building_oil_rig$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid to its owners.",
+  "de": "Unser Stilllegungsprogramm hat die $building_oil_rig$ in [SCOPE.sState('rt_retire_state').GetName] geschlossen: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! Stufen, wobei @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! an die Eigentümer gezahlt wurden."
+ },
+ "notification_rt_oil_retired_notice_name": {
+  "en": "$building_oil_rig$ Retired",
+  "de": "$building_oil_rig$ stillgelegt"
+ },
+ "notification_rt_power_retired_notice_desc": {
+  "en": "Our retirement programme has closed the $building_power_plant$ in [SCOPE.sState('rt_retire_state').GetName]: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! levels, with @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! paid to its owners.",
+  "de": "Unser Stilllegungsprogramm hat die $building_power_plant$ in [SCOPE.sState('rt_retire_state').GetName] geschlossen: #v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_levels').GetValue|0]#! Stufen, wobei @money!#v [SCOPE.sState('rt_retire_state').MakeScope.Var('rt_retired_cost').GetValue|K]#! an die Eigentümer gezahlt wurden."
+ },
+ "notification_rt_power_retired_notice_name": {
+  "en": "$building_power_plant$ Retired",
+  "de": "$building_power_plant$ stillgelegt"
+ },
  "notification_tactical_nuke_fails_attacker_desc": {
   "en": "Our tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] was stopped by their defenses.",
   "de": "Unser taktischer [concept_nuclear_strike] auf [SCOPE.sState('target_state').GetName] wurde von ihrer Abwehr gestoppt."
@@ -1647,6 +1679,14 @@
   "en": "Tactical [concept_nuclear_strike] Suffered",
   "de": "Taktischer [concept_nuclear_strike] erlitten"
  },
+ "notification_un_arms_embargo_lifted_notice_desc": {
+  "en": "The arms embargo the General Assembly imposed on us has run its course. Our trade in military goods is free again.",
+  "de": "Das Waffenembargo, das uns die Generalversammlung auferlegt hat, ist ausgelaufen. Unser Handel mit Militärwaren ist wieder frei."
+ },
+ "notification_un_arms_embargo_lifted_notice_name": {
+  "en": "The Arms Embargo Ends",
+  "de": "Das Waffenembargo endet"
+ },
  "notification_un_article_19_notice_desc": {
   "en": "Two years in arrears on our UN dues have cost us our vote in the General Assembly. We cast no ballot and table no resolution until we pay what we owe.",
   "de": "Zwei Jahre Rückstand bei unseren UN-Beiträgen haben uns das Stimmrecht in der Generalversammlung gekostet. Wir geben keine Stimme ab und bringen keine Resolution ein, bis wir unsere Schulden begleichen."
@@ -1671,6 +1711,30 @@
   "en": "A Founding Conference",
   "de": "Eine Gründungskonferenz"
  },
+ "notification_un_court_bar_notice_desc": {
+  "en": "We added a war goal while we hold a goal to conquer or return a state from a country that owns part of a region the World Court found we have no claim to. For twenty years after the ruling, each such diplomatic play costs 10 extra infamy, scaled by the UN's enforcement. The test is approximate: it cannot tell which goal was added, so a goal for any state of that country counts, even one outside the region.",
+  "de": "Wir haben ein Kriegsziel hinzugefügt, während wir ein Ziel verfolgen, einen Staat von einem Land zu erobern oder zurückzuholen, das einen Teil einer Region besitzt, auf die wir laut Internationalem Gerichtshof keinen Anspruch haben. Zwanzig Jahre nach dem Urteil kostet jedes solche Diplomatiespiel 10 zusätzliche Verrufenheit, skaliert mit der UN-Durchsetzung. Die Prüfung ist näherungsweise: Sie kann nicht feststellen, welches Ziel hinzugefügt wurde, daher zählt ein Ziel für jeden Staat dieses Landes, auch für einen außerhalb der Region."
+ },
+ "notification_un_court_bar_notice_name": {
+  "en": "A Claim the Court Struck Down",
+  "de": "Ein vom Gericht gestrichener Anspruch"
+ },
+ "notification_un_credentials_restored_notice_desc": {
+  "en": "The suspension of our delegation's credentials has ended. We vote, table resolutions and draw the benefits of membership again. A permanent seat we lost is not given back.",
+  "de": "Die Aussetzung der Vollmachten unserer Delegation ist beendet. Wir stimmen wieder ab, bringen Resolutionen ein und beziehen die Vorteile der Mitgliedschaft. Ein ständiger Sitz, den wir verloren haben, wird nicht zurückgegeben."
+ },
+ "notification_un_credentials_restored_notice_name": {
+  "en": "Our Credentials Are Restored",
+  "de": "Unsere Vollmachten sind wiederhergestellt"
+ },
+ "notification_un_credentials_suspended_notice_desc": {
+  "en": "The General Assembly has suspended our delegation's credentials. We remain a member and still pay our UN dues, but we cast no vote and table no resolution, any permanent seat and our UN programmes are given up, and we draw none of the benefits of membership. The suspension lasts five years, or until our record improves to a case strength below 30.",
+  "de": "Die Generalversammlung hat die Vollmachten unserer Delegation ausgesetzt. Wir bleiben Mitglied und zahlen weiterhin unsere UN-Beiträge, geben aber keine Stimme ab und bringen keine Resolution ein, jeder ständige Sitz und unsere UN-Programme werden aufgegeben, und wir beziehen keinen der Vorteile der Mitgliedschaft. Die Aussetzung dauert fünf Jahre oder bis sich unsere Bilanz auf eine Fallstärke unter 30 verbessert."
+ },
+ "notification_un_credentials_suspended_notice_name": {
+  "en": "Our Credentials Are Suspended",
+  "de": "Unsere Vollmachten sind ausgesetzt"
+ },
  "notification_un_crisis_closed_notice_desc": {
   "en": "UN authority has climbed back above 20. The United Nations is no longer in crisis.",
   "de": "Die UN-Autorität ist wieder über 20 gestiegen. Die Vereinten Nationen befinden sich nicht mehr in der Krise."
@@ -1687,6 +1751,14 @@
   "en": "The United Nations in Crisis",
   "de": "Die Vereinten Nationen in der Krise"
  },
+ "notification_un_dev_fund_contribution_lapsed_notice_desc": {
+  "en": "Our contribution to UN development programs has ended: no [concept_un_development_fund] stands to pay its grants, so the money reached no one. We can contribute again once the [concept_un_general_assembly] founds the Fund.",
+  "de": "Unser Beitrag zu den Entwicklungsprogrammen der UN ist beendet: Es besteht kein [concept_un_development_fund], der seine Zuschüsse auszahlt, daher erreichte das Geld niemanden. Wir können wieder beitragen, sobald die [concept_un_general_assembly] den Fonds gründet."
+ },
+ "notification_un_dev_fund_contribution_lapsed_notice_name": {
+  "en": "Development Programs Contribution Ended",
+  "de": "Beitrag zu Entwicklungsprogrammen beendet"
+ },
  "notification_un_floor_open_notice_desc": {
   "en": "The General Assembly's recess is over. Every member may table business again.",
   "de": "Die Sitzungspause der Generalversammlung ist vorbei. Jedes Mitglied kann wieder Anträge einbringen."
@@ -1694,6 +1766,38 @@
  "notification_un_floor_open_notice_name": {
   "en": "The Floor Is Open",
   "de": "Das Wort ist frei"
+ },
+ "notification_un_food_reserve_drawn_notice_desc": {
+  "en": "The [concept_un_food_reserve] has drawn #v [GetPlayer.MakeScope.ScriptValue('un_disp_food_last_draw')|0]#! units of grain from our Strategic Reserve for the UN aid mission in [SCOPE.sState('un_msn_state').GetName], as we pledged. Our international standing rises for it.",
+  "de": "Die [concept_un_food_reserve] hat #v [GetPlayer.MakeScope.ScriptValue('un_disp_food_last_draw')|0]#! Einheiten Getreide aus unserer Strategischen Reserve für die UN-Hilfsmission in [SCOPE.sState('un_msn_state').GetName] entnommen, wie von uns zugesagt. Unser Internationales Ansehen steigt dadurch."
+ },
+ "notification_un_food_reserve_drawn_notice_name": {
+  "en": "Our Grain Feeds a UN Aid Mission",
+  "de": "Unser Getreide ernährt eine UN-Hilfsmission"
+ },
+ "notification_un_food_reserve_empty_notice_desc": {
+  "en": "A UN aid mission has opened in [SCOPE.sState('un_msn_state').GetName], but no member that pledged to the [concept_un_food_reserve] holds grain to send. The mission goes without it.",
+  "de": "In [SCOPE.sState('un_msn_state').GetName] wurde eine UN-Hilfsmission eröffnet, aber kein Mitglied, das der [concept_un_food_reserve] etwas zugesagt hat, besitzt Getreide zum Versenden. Die Mission muss darauf verzichten."
+ },
+ "notification_un_food_reserve_empty_notice_name": {
+  "en": "The World Food Reserve Is Empty",
+  "de": "Die Welternährungsreserve ist leer"
+ },
+ "notification_un_food_reserve_relief_notice_desc": {
+  "en": "The [concept_un_food_reserve] is sending grain with the UN aid mission to [SCOPE.sState('un_msn_state').GetName]. Its food security rises for a year.",
+  "de": "Die [concept_un_food_reserve] schickt Getreide mit der UN-Hilfsmission nach [SCOPE.sState('un_msn_state').GetName]. Die Ernährungssicherheit dort steigt ein Jahr lang."
+ },
+ "notification_un_food_reserve_relief_notice_name": {
+  "en": "Grain from the World Food Reserve",
+  "de": "Getreide aus der Welternährungsreserve"
+ },
+ "notification_un_force_war_goal_struck_notice_desc": {
+  "en": "We added a war goal against [SCOPE.sCountry('un_force_protected').GetName], which hosts a UN peacekeeping or stabilisation mission. With the [concept_un_standing_force] in being and the United Nations at the Supranational tier, a member may press no further war goals on a country under its protection: ours have been struck from the play. Only the goal the play opened with, and others of its kind, may stay, at twice the usual [concept_infamy].",
+  "de": "Wir haben ein Kriegsziel gegen [SCOPE.sCountry('un_force_protected').GetAltName('AKK')] hinzugefügt; dort ist eine UN-Friedens- oder Stabilisierungsmission stationiert. Da die [concept_un_standing_force] besteht und sich die Vereinten Nationen auf der Stufe „Supranational“ befinden, darf ein Mitglied einem Land unter ihrem Schutz keine weiteren Kriegsziele aufdrängen: Unsere wurden aus dem Spiel gestrichen. Nur das Ziel, mit dem das Spiel eröffnet wurde, und weitere seiner Art dürfen bleiben, bei doppelter [concept_infamy]."
+ },
+ "notification_un_force_war_goal_struck_notice_name": {
+  "en": "A War Goal Struck",
+  "de": "Ein Kriegsziel gestrichen"
  },
  "notification_un_humanitarian_token_received_desc": {
   "en": "A foreign power has provided modest humanitarian assistance to help address the ongoing crisis.",
@@ -1703,45 +1807,101 @@
   "en": "Humanitarian Assistance Received",
   "de": "Humanitäre Hilfe erhalten"
  },
- "notification_un_mission_failed_notice_desc": {
-  "en": "A UN mission has failed: its host was attacked, it was sent home, or everyone who served in it left. The Assembly's credibility suffers.",
-  "de": "Eine UN-Mission ist gescheitert: Ihr Gastland wurde angegriffen, sie wurde nach Hause geschickt, oder alle, die in ihr dienten, haben sie verlassen. Die Glaubwürdigkeit der Versammlung leidet darunter."
+ "notification_un_mission_aid_failed_notice_desc": {
+  "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked. The Assembly's credibility suffers.",
+  "de": "Die [Concept('concept_un_mission_aid', 'UN-Hilfsmission')] in [SCOPE.sState('un_msn_state_done').GetName] ist gescheitert: Ihr Gastgeber wurde angegriffen. Die Glaubwürdigkeit der Versammlung leidet."
  },
- "notification_un_mission_failed_notice_name": {
-  "en": "A UN Mission Fails",
-  "de": "Eine UN-Mission scheitert"
+ "notification_un_mission_aid_failed_notice_name": {
+  "en": "A UN Aid Mission Fails",
+  "de": "Eine UN-Hilfsmission scheitert"
+ },
+ "notification_un_mission_aid_succeeded_notice_desc": {
+  "en": "The UN [Concept('concept_un_mission_aid', 'aid mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
+  "de": "Die [Concept('concept_un_mission_aid', 'UN-Hilfsmission')] in [SCOPE.sState('un_msn_state_done').GetName] hat ihre Aufgabe erfüllt. Die Leistungsbilanz der Versammlung wächst, und die Länder, die in ihr gedient haben, werden dafür geehrt."
+ },
+ "notification_un_mission_aid_succeeded_notice_name": {
+  "en": "A UN Aid Mission Accomplished",
+  "de": "Eine UN-Hilfsmission erfüllt ihren Auftrag"
+ },
+ "notification_un_mission_electoral_failed_notice_desc": {
+  "en": "The UN [Concept('concept_un_mission_electoral', 'electoral observers')] in [SCOPE.sState('un_msn_state_done').GetName] have left before an election: we were attacked, or we no longer hold elections. The Assembly's credibility suffers.",
+  "de": "Die [Concept('concept_un_mission_electoral', 'UN-Wahlbeobachter')] in [SCOPE.sState('un_msn_state_done').GetName] sind vor einer Wahl abgezogen: Wir wurden angegriffen, oder wir halten keine Wahlen mehr ab. Die Glaubwürdigkeit der Versammlung leidet."
+ },
+ "notification_un_mission_electoral_failed_notice_name": {
+  "en": "UN Electoral Observers Withdrawn",
+  "de": "UN-Wahlbeobachter abgezogen"
+ },
+ "notification_un_mission_electoral_lapsed_notice_desc": {
+  "en": "The UN electoral observers in our country have gone home without seeing an election: five years passed without one, or we left the United Nations.",
+  "de": "Die UN-Wahlbeobachter in unserem Land sind nach Hause gegangen, ohne eine Wahl erlebt zu haben: Fünf Jahre vergingen ohne eine, oder wir haben die Vereinten Nationen verlassen."
+ },
+ "notification_un_mission_electoral_lapsed_notice_name": {
+  "en": "UN Electoral Observers Go Home",
+  "de": "UN-Wahlbeobachter reisen ab"
+ },
+ "notification_un_mission_electoral_succeeded_notice_desc": {
+  "en": "The UN [Concept('concept_un_mission_electoral', 'electoral observers')] in [SCOPE.sState('un_msn_state_done').GetName] have seen our election through and gone home. The Assembly's record of delivery grows, and our international standing with it.",
+  "de": "Die [Concept('concept_un_mission_electoral', 'UN-Wahlbeobachter')] in [SCOPE.sState('un_msn_state_done').GetName] haben unsere Wahl bis zum Ende begleitet und sind nach Hause gereist. Die Leistungsbilanz der Versammlung wächst, und unser Internationales Ansehen mit ihr."
+ },
+ "notification_un_mission_electoral_succeeded_notice_name": {
+  "en": "An Election Observed",
+  "de": "Eine beobachtete Wahl"
  },
  "notification_un_mission_lapsed_notice_desc": {
-  "en": "A UN mission in our country has ended with its work unfinished: its time ran out, or it had nothing left to do there.",
-  "de": "Eine UN-Mission in unserem Land hat mit unerledigter Arbeit geendet: Ihre Zeit ist abgelaufen, oder es gab dort nichts mehr für sie zu tun."
+  "en": "A UN mission in our country has ended with its work unfinished: it had nothing left to do there, or nobody ever joined a force the Assembly voted for.",
+  "de": "Eine UN-Mission in unserem Land hat mit unerledigter Arbeit geendet: Es gab dort nichts mehr für sie zu tun, oder niemand ist je einer Streitmacht beigetreten, für die die Versammlung gestimmt hatte."
  },
  "notification_un_mission_lapsed_notice_name": {
   "en": "A UN Mission Ends",
   "de": "Eine UN-Mission endet"
  },
  "notification_un_mission_opened_notice_desc": {
-  "en": "The United Nations has sent a mission to one of our states. Its work is shown in the state, and in the chamber's register of missions.",
-  "de": "Die Vereinten Nationen haben eine Mission in einen unserer Bundesstaaten entsandt. Ihre Arbeit wird im Bundesstaat angezeigt sowie im Missionsregister des Plenarsaals."
+  "en": "The United Nations has sent a [Concept('concept_un_mission', 'mission')] to one of our states. Its work is shown in the state, and in the chamber's register of missions.",
+  "de": "Die Vereinten Nationen haben eine [Concept('concept_un_mission', 'Mission')] in einen unserer Staaten entsandt. Ihre Arbeit wird im Staat angezeigt sowie im Missionsregister des Plenarsaals."
  },
  "notification_un_mission_opened_notice_name": {
   "en": "A UN Mission Arrives",
   "de": "Eine UN-Mission trifft ein"
  },
+ "notification_un_mission_peacekeeping_failed_notice_desc": {
+  "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, or everyone who served in it left. The Assembly's credibility suffers.",
+  "de": "Die [Concept('concept_un_mission_peacekeeping', 'UN-Friedensmission')] in [SCOPE.sState('un_msn_state_done').GetName] ist gescheitert: Ihr Gastgeber wurde angegriffen, oder alle, die in ihr gedient haben, sind abgezogen. Die Glaubwürdigkeit der Versammlung leidet."
+ },
+ "notification_un_mission_peacekeeping_failed_notice_name": {
+  "en": "A UN Peacekeeping Mission Fails",
+  "de": "Eine UN-Friedensmission scheitert"
+ },
+ "notification_un_mission_peacekeeping_succeeded_notice_desc": {
+  "en": "The UN [Concept('concept_un_mission_peacekeeping', 'peacekeeping mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
+  "de": "Die [Concept('concept_un_mission_peacekeeping', 'UN-Friedensmission')] in [SCOPE.sState('un_msn_state_done').GetName] hat ihre Aufgabe erfüllt. Die Leistungsbilanz der Versammlung wächst, und die Länder, die in ihr gedient haben, werden dafür geehrt."
+ },
+ "notification_un_mission_peacekeeping_succeeded_notice_name": {
+  "en": "A UN Peacekeeping Mission Accomplished",
+  "de": "Eine UN-Friedensmission erfüllt ihren Auftrag"
+ },
  "notification_un_mission_reinforced_notice_desc": {
-  "en": "Another member has sent a contingent to the UN mission in one of our states. The mission grows stronger.",
-  "de": "Ein weiteres Mitglied hat ein Kontingent zur UN-Mission in einem unserer Bundesstaaten entsandt. Die Mission wird gestärkt."
+  "en": "Another member has sent a contingent to the [Concept('concept_un_mission', 'UN mission')] in one of our states. The mission grows stronger.",
+  "de": "Ein weiteres Mitglied hat ein Kontingent zur [Concept('concept_un_mission', 'UN-Mission')] in einem unserer Staaten entsandt. Die Mission wird gestärkt."
  },
  "notification_un_mission_reinforced_notice_name": {
   "en": "A UN Mission Reinforced",
   "de": "Eine UN-Mission verstärkt"
  },
- "notification_un_mission_succeeded_notice_desc": {
-  "en": "A UN mission has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
-  "de": "Eine UN-Mission hat ihre Arbeit vollbracht. Die Erfolgsbilanz der Versammlung wächst, und die Länder, die in ihr gedient haben, werden dafür geehrt."
+ "notification_un_mission_stabilisation_failed_notice_desc": {
+  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] in [SCOPE.sState('un_msn_state_done').GetName] has failed: its host was attacked, it was sent home, or everyone who served in it left. The Assembly's credibility suffers.",
+  "de": "Die [Concept('concept_un_mission_stabilisation', 'UN-Stabilisierungsmission')] in [SCOPE.sState('un_msn_state_done').GetName] ist gescheitert: Ihr Gastgeber wurde angegriffen, sie wurde nach Hause geschickt, oder alle, die in ihr gedient haben, sind abgezogen. Die Glaubwürdigkeit der Versammlung leidet."
  },
- "notification_un_mission_succeeded_notice_name": {
-  "en": "A UN Mission Accomplished",
-  "de": "Eine UN-Mission vollbracht"
+ "notification_un_mission_stabilisation_failed_notice_name": {
+  "en": "A UN Stabilisation Mission Fails",
+  "de": "Eine UN-Stabilisierungsmission scheitert"
+ },
+ "notification_un_mission_stabilisation_succeeded_notice_desc": {
+  "en": "The UN [Concept('concept_un_mission_stabilisation', 'stabilisation mission')] in [SCOPE.sState('un_msn_state_done').GetName] has accomplished its work. The Assembly's record of delivery grows, and the countries that served in it are honoured for it.",
+  "de": "Die [Concept('concept_un_mission_stabilisation', 'UN-Stabilisierungsmission')] in [SCOPE.sState('un_msn_state_done').GetName] hat ihre Aufgabe erfüllt. Die Leistungsbilanz der Versammlung wächst, und die Länder, die in ihr gedient haben, werden dafür geehrt."
+ },
+ "notification_un_mission_stabilisation_succeeded_notice_name": {
+  "en": "A UN Stabilisation Mission Accomplished",
+  "de": "Eine UN-Stabilisierungsmission erfüllt ihren Auftrag"
  },
  "notification_un_mission_withdrawn_notice_desc": {
   "en": "A member has brought its contingent home from the UN mission in one of our states. A peacekeeping or stabilisation mission with nobody left to serve in it fails.",
@@ -1792,8 +1952,8 @@
   "de": "Handelszugeständnisse angeboten"
  },
  "notification_un_war_surcharge_notice_desc": {
-  "en": "We added a war goal without a military mandate from the United Nations. At its present strength, the Assembly makes every such goal cost extra infamy: 2 at the Established tier, 4 at Strong, 10 at Supranational, and twice that from Strong against a country under UN peacekeeping.",
-  "de": "Wir haben ein Kriegsziel ohne militärisches Mandat der Vereinten Nationen hinzugefügt. Bei ihrer derzeitigen Stärke lässt die Versammlung jedes solche Ziel zusätzliche Schande kosten: 2 auf der Stufe Etabliert, 4 auf Stark, 10 auf Supranational, und das Doppelte davon ab Stark gegen ein Land unter UN-Friedenssicherung."
+  "en": "We added a war goal without a military mandate from the United Nations. At its present strength, the Assembly makes every such goal cost extra infamy: 2 at the Established tier, 4 at Strong, 10 at Supranational, and twice that from Strong against a country hosting a UN peacekeeping or stabilisation mission.",
+  "de": "Wir haben ein Kriegsziel ohne militärisches Mandat der Vereinten Nationen hinzugefügt. Bei ihrer derzeitigen Stärke lässt die Versammlung jedes solche Ziel zusätzliche Verrufenheit kosten: 2 auf der Stufe Etabliert, 4 auf Stark, 10 auf Supranational, und das Doppelte davon ab Stark gegen ein Land, das eine UN-Friedens- oder Stabilisierungsmission beherbergt."
  },
  "notification_un_war_surcharge_notice_name": {
   "en": "A War Without a Mandate",

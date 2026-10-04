@@ -1,0 +1,50 @@
+﻿# Household fossil heating is estimated from population, average wealth and
+# the generated buy-package curve. State scope unless noted otherwise.
+gw_state_household_greenhouse_gas_emissions = {
+	value = gw_household_heating_budget
+	multiply = gw_household_consuming_population
+	divide = gw_household_pop_package
+	multiply = gw_household_consumption_equivalent
+	multiply = {
+		value = gw_household_coal_heating_share
+		divide = gw_household_coal_base_price
+		multiply = gw_emission_factor_coal
+		add = {
+			value = gw_household_oil_heating_share
+			divide = gw_household_oil_base_price
+			multiply = gw_emission_factor_oil
+		}
+	}
+	divide = 10000
+	multiply = {
+		value = 1
+		owner = { value = gw_household_emission_multiplier }
+	}
+}
+
+# Country scope. National policies affect only that country's households;
+# market-wide Renewable Investment is synchronized onto every member.
+gw_household_emission_multiplier = {
+	value = 1
+	add = modifier:country_household_greenhouse_gas_emissions_mult
+	min = 0
+	max = 1
+}
+
+# Discount subsistence peasants using the current merged pop-type coefficient.
+# Annual state-local sums use flat pop-size reads; UI reads January snapshots.
+gw_household_consuming_population = {
+	value = 0
+	every_scope_pop = {
+		limit = { NOT = { is_pop_type = peasants } }
+		add = total_size
+	}
+	add = {
+		value = 0
+		every_scope_pop = {
+			limit = { is_pop_type = peasants }
+			add = total_size
+		}
+		multiply = gw_household_peasant_consumption
+	}
+}

@@ -1,0 +1,1420 @@
+﻿# Legislated tax code: game-rule gates (common/game_rules/extra_game_rules.txt,
+# te_tax_code_rule).
+#
+# Both read only a game rule, so they work from any scope. Every hook, pulse,
+# event, effect entry point, GUI root and AI path of the tax code asks
+# te_tax_code_on; customs legislation asks te_tax_customs_on as well.
+#
+# They are written positively on purpose. A save from before the rule existed
+# has no value stored for it, so NOT = { has_game_rule = te_tax_code_disabled }
+# would be true there and migrate the campaign. Do not rewrite these as
+# negations, and do not add a negated check anywhere else.
+
+# True under both enabled settings.
+te_tax_code_on = {
+	OR = {
+		has_game_rule = te_tax_code_enabled
+		has_game_rule = te_tax_code_enabled_customs
+	}
+}
+
+# True only under the setting that also legislates customs.
+te_tax_customs_on = {
+	has_game_rule = te_tax_code_enabled_customs
+}
+
+# ---------------------------------------------------------------------------
+# Customs authority (plan Task 15; docs/systems/tax_code_schema.md, "Customs
+# schedule"). Country scope. Only the market owner sets tariff levels
+# (SET_TARIFF_LEVEL_NOT_MARKET_OWNER); a junior partner of a customs union, a
+# subject pact included, trades in its senior's market and may not.
+# ---------------------------------------------------------------------------
+
+# The country owns the market it trades in. market.owner is vanilla's own form
+# (china_buttons.txt `market.owner = root`, 42_subjects_request_market_control.txt
+# `market.owner = this`); is_junior_in_customs_union is the treaty articles'.
+te_tax_owns_market = {
+	exists = market
+	market.owner = this
+	is_junior_in_customs_union = no
+}
+
+# The code may hold this country's customs: the customs option, and its own market.
+te_tax_customs_eligible = {
+	te_tax_customs_on = yes
+	te_tax_owns_market = yes
+}
+
+# The code holds this country's customs now: a code in force that has taken them
+# up (te_tax_customs_held, written by the customs migration and cleared by
+# te_tax_customs_revalidate when the market is lost), and the market is still
+# its own. The customs records (te_tax_en_<d>_<good>) are read, synced and
+# drafted only while this holds; a country that lost its market keeps them
+# frozen until it gains one again, which migrates afresh.
+te_tax_customs_authority = {
+	te_tax_code_in_force = yes
+	te_tax_customs_eligible = yes
+	has_variable = te_tax_customs_held
+	var:te_tax_customs_held = 1
+}
+
+# The market was lost (te_tax_customs_revalidate): under the customs option the
+# code in force no longer holds this country's customs, yet the open draft
+# (_draft) or the bill under debate (_bill) still changes a customs level.
+# te_tax_customs_drop_records drops those levels. Neither record can change a
+# customs level without the authority (te_tax_can_draft_customs), so this
+# holds only after a loss, and only until the drop.
+te_tax_customs_drop_due_draft = {
+	te_tax_customs_on = yes
+	te_tax_code_in_force = yes
+	NOT = { te_tax_customs_authority = yes }
+	te_tax_draft_active = yes
+	te_tax_gen_draft_touches_customs = yes
+}
+
+te_tax_customs_drop_due_bill = {
+	te_tax_customs_on = yes
+	te_tax_code_in_force = yes
+	NOT = { te_tax_customs_authority = yes }
+	te_tax_bill_active = yes
+	te_tax_gen_bill_touches_customs = yes
+}
+
+# Country scope. Slot SLOT (a or b) may take a package from the bill record:
+# the rule is on, the country holds the code's tokens, the slot is free, the
+# bill has a due month after the current one, and every sunset in the bill
+# falls at least one month after commencement (te_tax_gen_bill_sunsets_valid:
+# the store writes _exp = due + offset, so _exp >= _due + 1 exactly when the
+# offset is at least 1). te_tax_store_package checks it; Task 6's passage
+# trigger repeats the sunset and slot checks for the player's tooltip.
+te_tax_can_store_package = {
+	te_tax_code_on = yes
+	has_variable = te_tax_schema
+	var:te_tax_p$SLOT$_on = 0
+	has_variable = te_tax_bl_due
+	var:te_tax_bl_due > te_history_month_index
+	te_tax_gen_bill_sunsets_valid = yes
+}
+
+# Country scope. The economy snapshot (te_tax_take_snapshot) is current: taken
+# this calendar month, under the code in force and, while a bill is open, for
+# its current revision. The processor takes the month's snapshot unless one is
+# (an accepted revision earlier in the same run took it); the views read the
+# same test through te_tax_view_snap_current.
+te_tax_snapshot_current = {
+	has_variable = te_tax_snap_month
+	var:te_tax_snap_month = te_history_month_index
+	has_variable = te_tax_snap_code_version
+	has_variable = te_tax_code_version
+	var:te_tax_snap_code_version = var:te_tax_code_version
+	has_variable = te_tax_snap_bill_rev
+	OR = {
+		NOT = { AND = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 } }
+		AND = { has_variable = te_tax_bl_rev var:te_tax_snap_bill_rev = var:te_tax_bl_rev }
+	}
+}
+
+# Country scope. The collection writer already ran today (te_tax_sync_day, the
+# day te_tax_sync_collection last wrote; final review A-I1): a second sync the
+# same day defers to te_tax.4 the next day (te_tax_defer_sync).
+te_tax_synced_today = {
+	has_variable = te_tax_sync_day
+	var:te_tax_sync_day >= te_tax_today
+}
+
+# ---------------------------------------------------------------------------
+# The fiscal record (final review A-I2; te_tax_record_fiscal_month,
+# te_tax_snapshot_effects.txt): the budget as the monthly processor read it on
+# the 1st, never the live figure, so a budget slider moved for a few days
+# changes neither the fiscal reason (te_tax_fiscal_reason) nor whether a
+# bureaucracy or budget promise only maintains what held (te_tax_obl_is_maintenance_2,
+# _4). Country scope. Before the country's first processed month there is no
+# record: no deficit is recorded, and a promise counts as maintenance.
+# ---------------------------------------------------------------------------
+
+# The fixed budget was in deficit (net_fixed_income below 0) on the 1st.
+te_tax_fisc_rec_deficit = {
+	has_variable = te_tax_fisc_deficit
+	var:te_tax_fisc_deficit = 1
+}
+
+# The fixed budget was in surplus (net_fixed_income above 0) on the 1st, or
+# there is no record yet.
+te_tax_fisc_rec_surplus = {
+	OR = {
+		NOT = { has_variable = te_tax_fisc_surplus }
+		var:te_tax_fisc_surplus = 1
+	}
+}
+
+# The bureaucracy had no deficit (bureaucracy at 0 or above) on the 1st, or
+# there is no record yet.
+te_tax_fisc_rec_bur_ok = {
+	OR = {
+		NOT = { has_variable = te_tax_fisc_bur_ok }
+		var:te_tax_fisc_bur_ok = 1
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Draft, bill and passage (docs/systems/tax_code_schema.md, "Draft, bill and
+# passage"). Country scope. Each command te_tax_cmd_<c>
+# (te_tax_bill_effects.txt) runs only when te_tax_can_<c> holds; a GUI button
+# uses the same trigger as its is_valid, so every condition is a custom_tooltip
+# line and the disabled tooltip lists each one that fails. A condition that
+# reads a record's payload sits behind trigger_if on the record being open, so
+# a closed record (payload removed) is never read.
+# ---------------------------------------------------------------------------
+
+# The code is in force: the rule is on and the country's code exists.
+te_tax_code_in_force = {
+	te_tax_code_on = yes
+	has_variable = te_tax_schema
+	has_variable = te_tax_migrated
+	var:te_tax_migrated >= 1
+}
+
+# The journal entry (je_tax_code's `possible`) and the Budget panel's Tax Code
+# tab (te_budget_tax_tab_unlock_sgui's `is_valid`) open once the code is in
+# force, so the greyed tab's checklist and the entry cannot disagree. One
+# custom_tooltip line: the checklist is IsValidTooltip, which would print the
+# conditions inside te_tax_code_in_force without a heading of their own.
+te_tax_entry_unlocked = {
+	custom_tooltip = {
+		text = te_tax_tt_code_in_force
+		te_tax_code_in_force = yes
+	}
+}
+
+# A draft is open (its payload exists exactly while it is).
+te_tax_draft_active = {
+	has_variable = te_tax_dr_on
+	var:te_tax_dr_on = 1
+	has_variable = te_tax_dr_due
+}
+
+# A bill is under debate (its payload exists exactly while it is).
+te_tax_bill_active = {
+	has_variable = te_tax_bl_on
+	var:te_tax_bl_on = 1
+	has_variable = te_tax_bl_due
+}
+
+# Slot SLOT (a or b) holds a package awaiting commencement in a month before
+# the one in the variable DUE (te_tax_dr_due or te_tax_bl_due). For the
+# baselines in te_tax_generated_values.txt.
+te_tax_slot_awaits_before = {
+	has_variable = te_tax_p$SLOT$_on
+	var:te_tax_p$SLOT$_on = 1
+	var:te_tax_p$SLOT$_state = 1
+	has_variable = $DUE$
+	var:te_tax_p$SLOT$_due < var:$DUE$
+}
+
+# Slot b's package commences before slot a's: an earlier month, or the same
+# month and a lower approval sequence (the scheduler's order).
+te_tax_slot_b_first = {
+	has_variable = te_tax_pa_due
+	has_variable = te_tax_pb_due
+	has_variable = te_tax_pa_seq
+	has_variable = te_tax_pb_seq
+	OR = {
+		var:te_tax_pb_due < var:te_tax_pa_due
+		AND = {
+			var:te_tax_pb_due = var:te_tax_pa_due
+			var:te_tax_pb_seq < var:te_tax_pa_seq
+		}
+	}
+}
+
+te_tax_can_draft_new = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_no_draft NOT = { te_tax_draft_active = yes } }
+}
+
+# KEY: wage, div, land, head or cons. DIR: 0 down, 1 up, 2 zero, 3 highest,
+# 4 leave the provision alone.
+te_tax_can_draft_step = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = {
+			te_tax_draft_active = yes
+			has_variable = te_tax_dr_$KEY$
+		}
+		te_tax_dr_step_ok_$DIR$ = { KEY = $KEY$ }
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+te_tax_dr_step_ok_0 = {
+	custom_tooltip = { text = te_tax_tt_step_room_down te_tax_dr_eff_$KEY$ > 0 }
+}
+
+te_tax_dr_step_ok_1 = {
+	custom_tooltip = { text = te_tax_tt_step_room_up te_tax_dr_eff_$KEY$ < te_tax_max_$KEY$ }
+}
+
+te_tax_dr_step_ok_2 = {
+	custom_tooltip = { text = te_tax_tt_step_not_min NOT = { var:te_tax_dr_$KEY$ = 0 } }
+}
+
+te_tax_dr_step_ok_3 = {
+	custom_tooltip = { text = te_tax_tt_step_not_max NOT = { var:te_tax_dr_$KEY$ = te_tax_max_$KEY$ } }
+}
+
+te_tax_dr_step_ok_4 = {
+	custom_tooltip = { text = te_tax_tt_step_touched var:te_tax_dr_$KEY$ >= 0 }
+}
+
+# KEY: an instrument the draft changes. DIR: 0 shorter (6 months becomes
+# permanent), 1 longer; the ladder is 0 (permanent), 6, 12, 24, 36, 60 months.
+te_tax_can_draft_sunset = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = {
+			te_tax_draft_active = yes
+			has_variable = te_tax_dr_$KEY$
+		}
+		custom_tooltip = { text = te_tax_tt_step_touched var:te_tax_dr_$KEY$ >= 0 }
+		te_tax_dr_sunset_ok_$DIR$ = { KEY = $KEY$ }
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+te_tax_dr_sunset_ok_0 = {
+	custom_tooltip = { text = te_tax_tt_sunset_room_down var:te_tax_dr_$KEY$_sun > 0 }
+}
+
+te_tax_dr_sunset_ok_1 = {
+	custom_tooltip = { text = te_tax_tt_sunset_room_up var:te_tax_dr_$KEY$_sun < 60 }
+}
+
+# DIR: 0 a month earlier, 1 a month later; from next month to 60 months on.
+te_tax_can_draft_due = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = { te_tax_draft_active = yes }
+		te_tax_dr_due_ok_$DIR$ = yes
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+te_tax_dr_due_ok_0 = {
+	custom_tooltip = { text = te_tax_tt_due_room_earlier var:te_tax_dr_due > te_tax_due_earliest }
+}
+
+te_tax_dr_due_ok_1 = {
+	custom_tooltip = { text = te_tax_tt_due_room_later var:te_tax_dr_due < te_tax_due_latest }
+}
+
+# GOOD: a consumption-catalog good (a draft holds te_tax_dr_g_<good> for each).
+te_tax_can_draft_good = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = { te_tax_draft_active = yes }
+		custom_tooltip = { text = te_tax_tt_draft_good_known has_variable = te_tax_dr_g_$GOOD$ }
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+# KEY: agrel or regrel. DIR: 0 one band less, 1 one band more, 2 none, 3 the
+# deepest band, 4 leave the relief as existing law has it.
+te_tax_can_draft_relief = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = {
+			te_tax_draft_active = yes
+			has_variable = te_tax_dr_$KEY$
+		}
+		te_tax_dr_relief_ok_$DIR$ = { KEY = $KEY$ }
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+te_tax_dr_relief_ok_0 = {
+	custom_tooltip = { text = te_tax_tt_relief_room_down te_tax_dr_eff_$KEY$ > 0 }
+}
+
+te_tax_dr_relief_ok_1 = {
+	custom_tooltip = { text = te_tax_tt_relief_room_up te_tax_dr_eff_$KEY$ < te_tax_max_$KEY$ }
+}
+
+te_tax_dr_relief_ok_2 = {
+	custom_tooltip = { text = te_tax_tt_relief_not_none NOT = { var:te_tax_dr_$KEY$ = 0 } }
+}
+
+te_tax_dr_relief_ok_3 = {
+	custom_tooltip = { text = te_tax_tt_relief_not_max NOT = { var:te_tax_dr_$KEY$ = te_tax_max_$KEY$ } }
+}
+
+te_tax_dr_relief_ok_4 = {
+	custom_tooltip = { text = te_tax_tt_relief_touched var:te_tax_dr_$KEY$ >= 0 }
+}
+
+# ---------------------------------------------------------------------------
+# Customs in a draft (plan Task 15; docs/systems/tax_code_schema.md, "Customs
+# schedule"). GOOD: a customs-catalog good; D: imp or exp; DIR: 0 one level
+# lower (a lower tariff or a larger subsidy), 1 one level higher, 2 leave the
+# level as existing law has it. Only while the code holds the country's
+# customs: a customs-union member, and every country under the plain rule
+# option, has no customs editor. An untouched level starts from existing law
+# in the draft's month (te_tax_base_dr_<d>_<good>).
+# ---------------------------------------------------------------------------
+te_tax_can_draft_customs = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_customs_authority te_tax_customs_authority = yes }
+	trigger_if = {
+		limit = { te_tax_draft_active = yes has_variable = te_tax_dr_$D$_$GOOD$ }
+		te_tax_dr_customs_ok_$DIR$ = { D = $D$ GOOD = $GOOD$ }
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+te_tax_dr_customs_ok_0 = {
+	custom_tooltip = { text = te_tax_tt_customs_room_down te_tax_dr_eff_$D$_$GOOD$ > -3 }
+}
+
+te_tax_dr_customs_ok_1 = {
+	custom_tooltip = { text = te_tax_tt_customs_room_up te_tax_dr_eff_$D$_$GOOD$ < 3 }
+}
+
+te_tax_dr_customs_ok_2 = {
+	custom_tooltip = { text = te_tax_tt_customs_touched var:te_tax_dr_$D$_$GOOD$ >= -3 }
+}
+
+# Lists the incorporated states to name for regional relief, taking regional
+# relief into the draft as existing law has it. Any open draft.
+te_tax_can_draft_relief_choose = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_draft_open te_tax_draft_active = yes }
+}
+
+# The state scope:te_tax_st (te_tax_relief_state_sgui's saved scope) may be named
+# for the draft's regional relief, or dropped from it. Dropping a named state
+# is always allowed. Naming one needs a regional relief of at least one band in
+# the draft, the state incorporated and the country's own (PREV, inside
+# scope:te_tax_st, is the country), and room: at most three states
+# (any_in_list's count; variable_list_size's `target` key fails to load in
+# 1.14, te_history_effects.txt).
+te_tax_can_draft_relief_state = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = { te_tax_draft_active = yes }
+		custom_tooltip = { text = te_tax_tt_relief_state_given exists = scope:te_tax_st }
+		custom_tooltip = {
+			text = te_tax_tt_relief_regional_in_draft
+			has_variable = te_tax_dr_regrel
+			var:te_tax_dr_regrel >= 0
+		}
+		trigger_if = {
+			limit = {
+				exists = scope:te_tax_st
+				NAND = {
+					has_variable_list = te_tax_dr_relief_states
+					is_target_in_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st }
+				}
+			}
+			custom_tooltip = { text = te_tax_tt_relief_depth_set var:te_tax_dr_regrel >= 1 }
+			custom_tooltip = {
+				text = te_tax_tt_relief_state_eligible
+				scope:te_tax_st = { is_incorporated = yes owner = prev }
+			}
+			custom_tooltip = {
+				text = te_tax_tt_relief_states_max
+				NAND = {
+					has_variable_list = te_tax_dr_relief_states
+					any_in_list = { variable = te_tax_dr_relief_states count >= 3 exists = this }
+				}
+			}
+		}
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+# Slot SLOT's package awaits commencement before the month in the variable DUE
+# and restates the regional-relief states (its own list,
+# te_tax_p<slot>_relief_states, names them).
+te_tax_slot_restates_relief_before = {
+	te_tax_slot_awaits_before = { SLOT = $SLOT$ DUE = $DUE$ }
+	has_variable = te_tax_p$SLOT$_regrel_states_set
+	var:te_tax_p$SLOT$_regrel_states_set = 1
+}
+
+# Existing law's regional-relief states in the month in DUE are slot a's: it
+# restates them before then, and slot b does not, or b commences first.
+te_tax_relief_base_from_a = {
+	te_tax_slot_restates_relief_before = { SLOT = a DUE = $DUE$ }
+	OR = {
+		NOT = { te_tax_slot_restates_relief_before = { SLOT = b DUE = $DUE$ } }
+		te_tax_slot_b_first = yes
+	}
+}
+
+# ...slot b's: it restates them before then, and slot a does not, or a
+# commences first.
+te_tax_relief_base_from_b = {
+	te_tax_slot_restates_relief_before = { SLOT = b DUE = $DUE$ }
+	OR = {
+		NOT = { te_tax_slot_restates_relief_before = { SLOT = a DUE = $DUE$ } }
+		NOT = { te_tax_slot_b_first = yes }
+	}
+}
+
+te_tax_can_draft_discard = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_draft_open te_tax_draft_active = yes }
+}
+
+# KEY: an instrument, or goods. The draft changes it, and an approval or an
+# outside change has moved its planned version since the draft first did.
+te_tax_can_draft_rebase = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = { te_tax_draft_active = yes }
+		custom_tooltip = {
+			text = te_tax_tt_rebase_needed
+			has_variable = te_tax_dr_$KEY$_pver
+			# customs (plan Task 15) has its token under the customs option only.
+			has_variable = te_tax_pver_$KEY$
+			var:te_tax_dr_$KEY$_pver >= 0
+			NOT = { var:te_tax_dr_$KEY$_pver = var:te_tax_pver_$KEY$ }
+		}
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+# The draft can become the bill: it changes something, commences within range,
+# and every provision it changes is still on the baseline it was drafted on.
+te_tax_draft_ready = {
+	trigger_if = {
+		limit = { te_tax_draft_active = yes }
+		custom_tooltip = { text = te_tax_tt_draft_changes te_tax_gen_draft_touches_any = yes }
+		custom_tooltip = {
+			text = te_tax_tt_draft_due_range
+			var:te_tax_dr_due >= te_tax_due_earliest
+			var:te_tax_dr_due <= te_tax_due_latest
+		}
+		custom_tooltip = { text = te_tax_tt_draft_baseline te_tax_gen_draft_baseline_current = yes }
+		# Traditionalism disallows the vanilla laws that tax wages and dividends
+		# (Per-Capita, Proportional, Graduated); under it a bill may not either.
+		# Here, so a revision is held to it as well as an introduction.
+		# The draft's own index on the left: 0 where it changes the tax, or
+		# untouched (-1) where existing law levies none (te_tax_dr_zero_limit_<key>
+		# is -1 then, -2 otherwise).
+		trigger_if = {
+			limit = { has_law = law_type:law_traditionalism }
+			custom_tooltip = {
+				text = te_tax_tt_draft_traditionalism
+				has_variable = te_tax_dr_wage
+				has_variable = te_tax_dr_div
+				OR = { var:te_tax_dr_wage = 0 var:te_tax_dr_wage <= te_tax_dr_zero_limit_wage }
+				OR = { var:te_tax_dr_div = 0 var:te_tax_dr_div <= te_tax_dr_zero_limit_div }
+			}
+		}
+		# A regional relief that relieves names at least one state; a relief of
+		# none names none (te_tax_dr_relief_settle). The toggle allows at most
+		# three, checked again here. Every named state must still be the
+		# country's own and incorporated (one lost since it was named forces a
+		# revision; inside the list PREV is the country).
+		# Customs (plan Task 15): only a code that holds the country's customs may
+		# change them; a draft that touches them is held to it at introduction and
+		# at every revision (a market lost since the draft was written).
+		trigger_if = {
+			limit = { te_tax_gen_draft_touches_customs = yes }
+			custom_tooltip = { text = te_tax_tt_customs_authority te_tax_customs_authority = yes }
+		}
+		trigger_if = {
+			limit = { var:te_tax_dr_regrel >= 1 }
+			custom_tooltip = {
+				text = te_tax_tt_relief_states_named
+				has_variable_list = te_tax_dr_relief_states
+				any_in_list = { variable = te_tax_dr_relief_states exists = this }
+			}
+		}
+		trigger_if = {
+			limit = { has_variable_list = te_tax_dr_relief_states }
+			custom_tooltip = {
+				text = te_tax_tt_relief_states_at_most
+				NOT = { any_in_list = { variable = te_tax_dr_relief_states count >= 4 exists = this } }
+			}
+			custom_tooltip = {
+				text = te_tax_tt_relief_states_own
+				NOT = {
+					any_in_list = {
+						variable = te_tax_dr_relief_states
+						NAND = { is_incorporated = yes owner = PREV }
+					}
+				}
+			}
+		}
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_draft_open always = no }
+	}
+}
+
+te_tax_can_introduce = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_no_bill NOT = { te_tax_bill_active = yes } }
+	te_tax_draft_ready = yes
+}
+
+te_tax_can_revise = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = { te_tax_bill_active = yes }
+		te_tax_draft_ready = yes
+		trigger_if = {
+			limit = { te_tax_draft_active = yes }
+			custom_tooltip = { text = te_tax_tt_draft_differs te_tax_gen_draft_differs_from_bill = yes }
+		}
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_bill_open always = no }
+	}
+}
+
+te_tax_can_withdraw = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_bill_open te_tax_bill_active = yes }
+}
+
+# The bill under debate is minor: at most two provisions changed, each by at
+# most two index steps from existing law, and no good, relief or customs level. It needs
+# te_tax_debate_days_minor days of debate instead of te_tax_debate_days_major.
+te_tax_bill_is_minor = {
+	te_tax_bl_provisions <= 2
+	te_tax_gen_bill_small_steps = yes
+	NOT = { te_tax_gen_bill_touches_goods = yes }
+	NOT = { te_tax_gen_bill_touches_customs = yes }
+	var:te_tax_bl_agrel < 0
+	var:te_tax_bl_regrel < 0
+}
+
+# The open draft would make a minor bill: te_tax_bill_is_minor's rule on the
+# draft's fields, so the workbench shows the class the bill would get
+# (test_tax_code_sguis.py checks the two read the same). Read only while a draft
+# is open (te_tax_draft_active), as it reads the draft's payload.
+te_tax_draft_is_minor = {
+	te_tax_dr_provisions <= 2
+	te_tax_gen_draft_small_steps = yes
+	NOT = { te_tax_gen_draft_touches_goods = yes }
+	NOT = { te_tax_gen_draft_touches_customs = yes }
+	var:te_tax_dr_agrel < 0
+	var:te_tax_dr_regrel < 0
+}
+
+# The bill's commencement month has come or passed during debate.
+te_tax_can_reschedule = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = { te_tax_bill_active = yes }
+		custom_tooltip = {
+			text = te_tax_tt_reschedule_due_passed
+			NOT = { var:te_tax_bl_due > te_history_month_index }
+		}
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_bill_open always = no }
+	}
+}
+
+# Passage under the fallback rule. The last line repeats the scheduler's own
+# check (te_tax_can_store_package) so the trigger and the store cannot drift
+# apart; it fails only together with a line above it.
+te_tax_can_pass = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = { te_tax_bill_active = yes }
+		custom_tooltip = { text = te_tax_tt_pass_support te_tax_committed_share > te_tax_passage_share }
+		custom_tooltip = { text = te_tax_tt_pass_legitimacy legitimacy >= te_tax_passage_legitimacy }
+		custom_tooltip = { text = te_tax_tt_pass_debate te_tax_debate_days_left <= 0 }
+		custom_tooltip = { text = te_tax_tt_pass_due var:te_tax_bl_due > te_history_month_index }
+		custom_tooltip = { text = te_tax_tt_pass_slot OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 } }
+		custom_tooltip = { text = te_tax_tt_pass_current te_tax_gen_bill_current = yes }
+		custom_tooltip = { text = te_tax_tt_pass_sunsets te_tax_gen_bill_sunsets_valid = yes }
+		custom_tooltip = { text = te_tax_tt_pass_changes te_tax_bill_changes_something = yes }
+		custom_tooltip = {
+			text = te_tax_tt_pass_store
+			OR = {
+				te_tax_can_store_package = { SLOT = a }
+				te_tax_can_store_package = { SLOT = b }
+			}
+		}
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_bill_open always = no }
+	}
+}
+
+# The bill under debate changes something from existing law in its month
+# (Task 15 fix round 1; Task 13's change counts, never a mere restatement): an
+# instrument (its rate, an expiry it sets or a pending one it replaces,
+# te_tax_gen_bill_changes_instruments), a taxed good, agricultural relief,
+# regional relief's band or states, or a customs level. Passage requires it,
+# defensively, and a bill whose customs a lost market dropped is withdrawn
+# without it (te_tax_bill_drop_customs). Read only while a bill is open.
+te_tax_bill_changes_something = {
+	OR = {
+		te_tax_gen_bill_changes_instruments = yes
+		te_tax_bl_goods_changed >= 1
+		NOT = { te_tax_bl_dstep_agrel = 0 }
+		te_tax_bl_regrel_differs = yes
+		te_tax_bl_customs_changed >= 1
+	}
+}
+
+# SLOT: a or b. A package the scheduler held as missed (state 3: its due month
+# passed without commencement) may commence next month instead, if that is at
+# most te_tax_reschedule_max_delay months after the month it was approved for
+# (te_tax_due_earliest - due0 <= 3, written due0 >= te_tax_due_earliest - 3)
+# and no later bill has touched what it changes. A longer delay, or a package
+# held as conflicting (state 2), changes the bargain: it can only be released
+# and passed again as a new bill.
+te_tax_can_package_reschedule = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = {
+		text = te_tax_tt_package_missed
+		has_variable = te_tax_p$SLOT$_on
+		var:te_tax_p$SLOT$_on = 1
+		var:te_tax_p$SLOT$_state = 3
+	}
+	# The package's payload exists only while the slot is on.
+	trigger_if = {
+		limit = {
+			has_variable = te_tax_p$SLOT$_on
+			var:te_tax_p$SLOT$_on = 1
+		}
+		custom_tooltip = {
+			text = te_tax_tt_package_delay
+			has_variable = te_tax_p$SLOT$_due0
+			var:te_tax_p$SLOT$_due0 >= te_tax_package_reschedule_floor
+		}
+		custom_tooltip = { text = te_tax_tt_package_unsuperseded te_tax_gen_package_unsuperseded_$SLOT$ = yes }
+	}
+}
+
+# SLOT: a or b. A held package (state 2 conflicting or 3 missed) may be
+# released: the slot frees and nothing it would have changed takes effect.
+te_tax_can_package_release = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = {
+		text = te_tax_tt_package_held
+		has_variable = te_tax_p$SLOT$_on
+		var:te_tax_p$SLOT$_on = 1
+		OR = { var:te_tax_p$SLOT$_state = 2 var:te_tax_p$SLOT$_state = 3 }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Vanilla objectives (docs/systems/tax_code_schema.md, "Native controls and
+# drift"). Country scope. Under the rule every country holds law_te_tax_code,
+# so an objective that needs Per-Capita, Proportional or Graduated taxation
+# could never be met; each of these says the code collects what that law
+# would. The three vanilla journal entries that need one
+# (te_tax_vanilla_je_overrides.txt) accept them in a custom_tooltip; the AI can
+# read them too. Only the rule and the carrier gate them: a country still on a
+# vanilla law answers with its law.
+# ---------------------------------------------------------------------------
+
+# Indices, not rates (te_tax_step_wage = te_tax_step_div = 0.025): the enacted
+# index variables on the left, each behind has_variable.
+
+# Per-Capita: a wage tax and a head tax, as the law levies both.
+te_tax_code_counts_as_per_capita = {
+	te_tax_code_on = yes
+	has_law = law_type:law_te_tax_code
+	has_variable = te_tax_en_head
+	has_variable = te_tax_en_wage
+	var:te_tax_en_head >= 1
+	var:te_tax_en_wage >= 1
+}
+
+# Proportional: a wage tax of at least 10% (index 4) and a dividend tax (the
+# law's lowest level taxes wages at 10% and dividends at 2.5%, index 1).
+te_tax_code_counts_as_proportional = {
+	te_tax_code_on = yes
+	has_law = law_type:law_te_tax_code
+	has_variable = te_tax_en_wage
+	has_variable = te_tax_en_div
+	var:te_tax_en_wage >= 4
+	var:te_tax_en_div >= 1
+}
+
+# Graduated: a wage tax of at least 10% (index 4) and dividends taxed at least
+# as heavily as wages (the law's levels tax dividends at or above wages; the
+# two share a step, so the indices compare as the rates do).
+te_tax_code_counts_as_graduated = {
+	te_tax_code_on = yes
+	has_law = law_type:law_te_tax_code
+	has_variable = te_tax_en_wage
+	has_variable = te_tax_en_div
+	var:te_tax_en_wage >= 4
+	var:te_tax_en_div >= var:te_tax_en_wage
+}
+
+# The vanilla taxation law the enacted code is equivalent to (plan Task 13,
+# controller ruling), for the interest groups' views of the code
+# (te_tax_ig_band_<ig>): Graduated if the code counts as Graduated; else
+# Proportional if it counts as Proportional; else Per-Capita if it counts as
+# Per-Capita; else Land-Based if it levies a rural assessment; else
+# Consumption-Based. Exactly one holds for a rule-on country holding the carrier
+# law, none without it. Every migrated row of the vanilla laws maps back to its
+# own law (test_tax_code_offers.py), so the migration changes no group's
+# approval.
+te_tax_code_equivalent_graduated = {
+	te_tax_code_counts_as_graduated = yes
+}
+
+te_tax_code_equivalent_proportional = {
+	NOT = { te_tax_code_counts_as_graduated = yes }
+	te_tax_code_counts_as_proportional = yes
+}
+
+te_tax_code_equivalent_per_capita = {
+	NOT = { te_tax_code_counts_as_graduated = yes }
+	NOT = { te_tax_code_counts_as_proportional = yes }
+	te_tax_code_counts_as_per_capita = yes
+}
+
+te_tax_code_equivalent_land_based = {
+	te_tax_code_on = yes
+	has_law = law_type:law_te_tax_code
+	NOT = { te_tax_code_counts_as_graduated = yes }
+	NOT = { te_tax_code_counts_as_proportional = yes }
+	NOT = { te_tax_code_counts_as_per_capita = yes }
+	has_variable = te_tax_en_land
+	var:te_tax_en_land >= 1
+}
+
+te_tax_code_equivalent_consumption_based = {
+	te_tax_code_on = yes
+	has_law = law_type:law_te_tax_code
+	NOT = { te_tax_code_counts_as_graduated = yes }
+	NOT = { te_tax_code_counts_as_proportional = yes }
+	NOT = { te_tax_code_counts_as_per_capita = yes }
+	NAND = {
+		has_variable = te_tax_en_land
+		var:te_tax_en_land >= 1
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Relief eligibility (docs/systems/tax_code_schema.md, "Civil wars and new
+# countries"). State scope, from te_tax_relief_follow_owner
+# (te_tax_civil_war_effects.txt), which saves first:
+#   scope:te_tax_owner_new     the state's owner now
+#   scope:te_tax_owner_holder  the country whose code named the state, from its
+#                              te_tax_relief_holder stamp (absent: no stamp)
+# True when that code went with the state, so its relief marks stay. Which test
+# holds at a given moment depends on an engine order nobody has read (whether
+# the transfers of an outbreak, a release or a reunification fire before or
+# after the copy and the repair), so any one of them keeps the marks, as for
+# the Strategic Reserve hub (st_res_hub_stays_within_nation):
+#   - the new owner has no code yet: a released country or an uprising that is
+#     about to receive its parent's, which keeps and restamps the marks;
+#   - the new owner is the holder;
+#   - one country definition: a revolution's rebels share the original's;
+#   - var:te_cw_origin in either direction: the two sides of a civil war, at
+#     the outbreak and at reunification (a dead loser still reads).
+# No stamp and a new owner with a code is a capture: the marks go.
+te_tax_relief_stays_with_code = {
+	exists = scope:te_tax_owner_new
+	OR = {
+		scope:te_tax_owner_new = {
+			OR = { NOT = { has_variable = te_tax_migrated } var:te_tax_migrated < 1 }
+		}
+		AND = {
+			exists = scope:te_tax_owner_holder
+			OR = {
+				scope:te_tax_owner_new = { this = scope:te_tax_owner_holder }
+				scope:te_tax_owner_new = { country_definition = scope:te_tax_owner_holder.country_definition }
+				scope:te_tax_owner_new = { var:te_cw_origin ?= scope:te_tax_owner_holder }
+				scope:te_tax_owner_holder = { var:te_cw_origin ?= scope:te_tax_owner_new }
+			}
+		}
+	}
+}
+
+# State scope, a state in the enacted list te_tax_en_relief_states of
+# scope:te_tax_country (te_tax_rebuild_relief_marks saves it). The list keeps
+# the state by te_tax_relief_stays_with_code's rule, with the list's country
+# as the holder: it is the country's own, or the country's civil-war
+# counterpart holds it (one country definition, or var:te_cw_origin either
+# way; inside scope:te_tax_country, PREV is the owner). So during a civil war
+# both sides keep the states the other holds, and the winner's list still
+# names them at reunification. A state owned by anyone else (captured, or
+# released to a new country, which copies the list and keeps its own) leaves
+# the list at the next rebuild; one without an owner too.
+te_tax_relief_listed_state_kept = {
+	exists = owner
+	OR = {
+		owner = scope:te_tax_country
+		owner = { country_definition = scope:te_tax_country.country_definition }
+		owner = { var:te_cw_origin ?= scope:te_tax_country }
+		owner = { scope:te_tax_country = { var:te_cw_origin ?= prev } }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Policy obligations (plan Task 12; docs/systems/tax_code_schema.md, "Policy
+# obligations"). Country scope. N is an obligation slot, 1 to 4
+# (te_tax_o<N>_*); its payload is read only while its _on is 1, which the
+# callers test first. Each kind's monthly condition reads the measure the
+# promise names, never a value requested or scheduled:
+#   1  an institution level: the delivered level (te_tax_obl_inst_level_<arg>,
+#      institution:<x>.investment, 0 without the institution) reaches the
+#      target, while the country has the institution (capability ledger row
+#      28, pending P16). A bureaucracy deficit is not a condition of it: it
+#      pauses the deadline (te_tax_obl_check_one);
+#   2  the bureaucracy balance: no deficit (bureaucracy >= 0);
+#   3  military wages: the level set now, sampled each month (no hook fires
+#      on a change), at or below the promised one;
+#   4  the fixed budget: a surplus (net_fixed_income > 0, vanilla's own read
+#      of a healthy budget: construction is not a fixed expense, loan interest
+#      is), delivered after te_tax_obl_surplus_months consecutive checks.
+# ---------------------------------------------------------------------------
+
+# Obligation slot N is in force: its bill has taken effect and it is being
+# delivered (2) or maintained (3). Only such a promise can be renegotiated.
+te_tax_obl_active = {
+	has_variable = te_tax_o$N$_on
+	var:te_tax_o$N$_on = 1
+	OR = {
+		var:te_tax_o$N$_state = 2
+		var:te_tax_o$N$_state = 3
+	}
+}
+
+# A maintained obligation N has failed as many consecutive monthly checks
+# as its kind allows (te_tax_obl_grace_<kind>): it is breached. An outcome
+# (kinds 2 and 4) gets a few months to recover; a level or an action (kinds 1
+# and 3) none.
+te_tax_obl_grace_reached = {
+	trigger_if = {
+		limit = { var:te_tax_o$N$_kind = 1 }
+		var:te_tax_o$N$_fails >= te_tax_obl_grace_1
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_kind = 2 }
+		var:te_tax_o$N$_fails >= te_tax_obl_grace_2
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_kind = 3 }
+		var:te_tax_o$N$_fails >= te_tax_obl_grace_3
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_kind = 4 }
+		var:te_tax_o$N$_fails >= te_tax_obl_grace_4
+	}
+	trigger_else = { always = yes }
+}
+
+# Obligation slot N binds the country: bound to a passed bill (7), delivering
+# (2) or maintaining (3). A pending one (1) belongs to the bill under debate.
+te_tax_obl_binding = {
+	has_variable = te_tax_o$N$_on
+	var:te_tax_o$N$_on = 1
+	OR = {
+		var:te_tax_o$N$_state = 7
+		var:te_tax_o$N$_state = 2
+		var:te_tax_o$N$_state = 3
+	}
+}
+
+# This month, the condition obligation N promises holds.
+te_tax_obl_holds = {
+	trigger_if = {
+		limit = { var:te_tax_o$N$_kind = 1 }
+		trigger_if = {
+			limit = { var:te_tax_o$N$_arg = 1 }
+			te_tax_obl_inst_met_1 = { N = $N$ }
+		}
+		trigger_else_if = {
+			limit = { var:te_tax_o$N$_arg = 2 }
+			te_tax_obl_inst_met_2 = { N = $N$ }
+		}
+		trigger_else_if = {
+			limit = { var:te_tax_o$N$_arg = 3 }
+			te_tax_obl_inst_met_3 = { N = $N$ }
+		}
+		trigger_else = { always = no }
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_kind = 2 }
+		bureaucracy >= 0
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_kind = 3 }
+		te_tax_obl_wages_met = { N = $N$ }
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_kind = 4 }
+		net_fixed_income > 0
+	}
+	trigger_else = { always = no }
+}
+
+# Obligation N has been delivered: kinds 1 to 3 when their condition holds;
+# kind 4 once its surplus has lasted te_tax_obl_surplus_months consecutive
+# monthly checks (te_tax_o<N>_streak, counted by te_tax_obl_check_one), so a
+# single favourable month never delivers it.
+te_tax_obl_delivered = {
+	trigger_if = {
+		limit = { var:te_tax_o$N$_kind = 4 }
+		var:te_tax_o$N$_streak >= te_tax_obl_surplus_months
+	}
+	trigger_else_if = {
+		limit = {
+			var:te_tax_o$N$_kind >= 1
+			var:te_tax_o$N$_kind <= 3
+		}
+		te_tax_obl_holds = { N = $N$ }
+	}
+	trigger_else = { always = no }
+}
+
+# Kind 1, per institution (_arg 1 Education, 2 Health System, 3 Social
+# Security): the delivered level reaches the target, while the country has
+# the institution. The variable leads the comparison and the guarded level
+# value follows it (the je_space_race.txt form). Never NOT = {
+# expanding_institution }: a country at its target that starts growing
+# further still holds it.
+te_tax_obl_inst_met_1 = {
+	trigger_if = {
+		limit = { has_institution = institution_schools }
+		var:te_tax_o$N$_target <= te_tax_obl_inst_level_1
+	}
+	trigger_else = { always = no }
+}
+
+te_tax_obl_inst_met_2 = {
+	trigger_if = {
+		limit = { has_institution = institution_health_system }
+		var:te_tax_o$N$_target <= te_tax_obl_inst_level_2
+	}
+	trigger_else = { always = no }
+}
+
+te_tax_obl_inst_met_3 = {
+	trigger_if = {
+		limit = { has_institution = institution_social_security }
+		var:te_tax_o$N$_target <= te_tax_obl_inst_level_3
+	}
+	trigger_else = { always = no }
+}
+
+# Kind 3: military wages are at or below the level _arg names (1 very low ...
+# 5 very high).
+te_tax_obl_wages_met = {
+	trigger_if = {
+		limit = { var:te_tax_o$N$_arg = 1 }
+		military_wage_level <= very_low
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_arg = 2 }
+		military_wage_level <= low
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_arg = 3 }
+		military_wage_level <= medium
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_arg = 4 }
+		military_wage_level <= high
+	}
+	trigger_else_if = {
+		limit = { var:te_tax_o$N$_arg = 5 }
+		military_wage_level <= very_high
+	}
+	trigger_else = { always = no }
+}
+
+# ---------------------------------------------------------------------------
+# Feasibility at offer time (plan Task 13 asks one before offering a promise;
+# te_tax_obl_propose does not). KIND and ARG are literal; TARGET may be a
+# number, a variable or a script value (te_tax_obl_inst_next_<arg> for "one
+# level more"), always on the right of a comparison.
+#   te_tax_obl_feasible_1 = { ARG = <1..3> TARGET = <level> }
+#   te_tax_obl_feasible_2 = yes
+#   te_tax_obl_feasible_3 = { ARG = <1..5> }
+#   te_tax_obl_feasible_4 = yes
+# ---------------------------------------------------------------------------
+
+# Kind 1: the country has the institution, the target is within the level it
+# may invest in, and the deadline (12 months a level from today's level, plus
+# 6) falls within te_tax_obl_horizon months.
+te_tax_obl_feasible_1 = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	te_tax_obl_inst_feasible_$ARG$ = { TARGET = $TARGET$ }
+}
+
+te_tax_obl_inst_feasible_1 = {
+	has_institution = institution_schools
+	custom_tooltip = { text = te_tax_tt_obl_inst_cap te_tax_obl_inst_cap_1 >= $TARGET$ }
+	custom_tooltip = { text = te_tax_tt_obl_inst_reach te_tax_obl_inst_reach_1 >= $TARGET$ }
+}
+
+te_tax_obl_inst_feasible_2 = {
+	has_institution = institution_health_system
+	custom_tooltip = { text = te_tax_tt_obl_inst_cap te_tax_obl_inst_cap_2 >= $TARGET$ }
+	custom_tooltip = { text = te_tax_tt_obl_inst_reach te_tax_obl_inst_reach_2 >= $TARGET$ }
+}
+
+te_tax_obl_inst_feasible_3 = {
+	has_institution = institution_social_security
+	custom_tooltip = { text = te_tax_tt_obl_inst_cap te_tax_obl_inst_cap_3 >= $TARGET$ }
+	custom_tooltip = { text = te_tax_tt_obl_inst_reach te_tax_obl_inst_reach_3 >= $TARGET$ }
+}
+
+# Kind 2: always (an outcome; a country already without a deficit promises to
+# keep it so).
+te_tax_obl_feasible_2 = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+}
+
+# Kind 3: an action, so the promised level must be below the one set now; a
+# promise to keep wages where they already are is a restraint, which the
+# first catalog does not offer.
+te_tax_obl_feasible_3 = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_obl_wages_above te_tax_obl_wages_above_$ARG$ = yes }
+}
+
+te_tax_obl_wages_above_1 = {
+	military_wage_level > very_low
+}
+
+te_tax_obl_wages_above_2 = {
+	military_wage_level > low
+}
+
+te_tax_obl_wages_above_3 = {
+	military_wage_level > medium
+}
+
+te_tax_obl_wages_above_4 = {
+	military_wage_level > high
+}
+
+te_tax_obl_wages_above_5 = {
+	always = no
+}
+
+# Kind 4: always (an outcome; a country already in surplus promises to keep
+# it).
+te_tax_obl_feasible_4 = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+}
+
+# The promise would only maintain existing provision (spec §7.2: labelled
+# maintenance, not new investment): what it asks for already holds. Task 13
+# prices such an offer lower; te_tax_obl_write records this same test in
+# _maint_only, and a kept maintenance promise earns approval but no trust.
+# The two budget kinds read the fiscal record of the 1st, not the live budget
+# (final review A-I2): a deficit has to last over a 1st to make a promise to
+# end it a new one, worth more and earning trust.
+# KIND and ARG literal, TARGET any value (as for the feasibility triggers).
+# The kind helpers take both parameters and use what their kind needs (an
+# unused parameter is passed elsewhere in the mod: st_res_policy_set_by_hand_base).
+te_tax_obl_is_maintenance = {
+	te_tax_obl_is_maintenance_$KIND$ = { ARG = $ARG$ TARGET = $TARGET$ }
+}
+
+te_tax_obl_is_maintenance_1 = {
+	te_tax_obl_inst_level_$ARG$ >= $TARGET$
+}
+
+te_tax_obl_is_maintenance_2 = {
+	te_tax_fisc_rec_bur_ok = yes
+}
+
+te_tax_obl_is_maintenance_3 = {
+	NOT = { te_tax_obl_wages_above_$ARG$ = yes }
+}
+
+te_tax_obl_is_maintenance_4 = {
+	te_tax_fisc_rec_surplus = yes
+}
+
+# ---------------------------------------------------------------------------
+# Commands (te_tax_obligation_effects.txt), one custom_tooltip line per
+# condition.
+# ---------------------------------------------------------------------------
+
+# te_tax_obl_propose = { KIND ARG TARGET IG } may record a promise: a bill is
+# under debate, no pending or binding obligation has the same kind and
+# argument (one promise cannot buy support twice; two military wage promises
+# never coexist, whatever their levels), and a slot is free.
+te_tax_can_obl_propose = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_bill_open te_tax_bill_active = yes }
+	custom_tooltip = {
+		text = te_tax_tt_obl_not_duplicate
+		NOR = {
+			AND = { has_variable = te_tax_o1_on var:te_tax_o1_on = 1 has_variable = te_tax_o1_kind var:te_tax_o1_kind = $KIND$ OR = { var:te_tax_o1_arg = $ARG$ var:te_tax_o1_kind = 3 } }
+			AND = { has_variable = te_tax_o2_on var:te_tax_o2_on = 1 has_variable = te_tax_o2_kind var:te_tax_o2_kind = $KIND$ OR = { var:te_tax_o2_arg = $ARG$ var:te_tax_o2_kind = 3 } }
+			AND = { has_variable = te_tax_o3_on var:te_tax_o3_on = 1 has_variable = te_tax_o3_kind var:te_tax_o3_kind = $KIND$ OR = { var:te_tax_o3_arg = $ARG$ var:te_tax_o3_kind = 3 } }
+			AND = { has_variable = te_tax_o4_on var:te_tax_o4_on = 1 has_variable = te_tax_o4_kind var:te_tax_o4_kind = $KIND$ OR = { var:te_tax_o4_arg = $ARG$ var:te_tax_o4_kind = 3 } }
+		}
+	}
+	custom_tooltip = {
+		text = te_tax_tt_obl_slot_free
+		OR = {
+			var:te_tax_o1_on = 0
+			var:te_tax_o2_on = 0
+			var:te_tax_o3_on = 0
+			var:te_tax_o4_on = 0
+		}
+	}
+}
+
+# Obligation N may be renegotiated: it is in force (delivering or
+# maintaining). A pending one changes with the bill; a bound one waiting for
+# its bill's commencement lapses only if that package is dropped.
+te_tax_can_obl_renegotiate = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	custom_tooltip = { text = te_tax_tt_obl_active te_tax_obl_active = { N = $N$ } }
+}
+
+# ---------------------------------------------------------------------------
+# Offers and force-through (plan Task 13; docs/systems/tax_code_schema.md,
+# "Offers" and "Force through"). Country scope. IG is an interest group key
+# without its ig_ prefix; an offer's payload (te_tax_off_<IG>_*) is read only
+# while its kind is above 0.
+# ---------------------------------------------------------------------------
+
+# Group IG's offer can be accepted: a bill is under debate, the group made an
+# offer for this revision, it is not marginal and has not committed since, and
+# the offer can still be carried out (te_tax_gen_offer_feasible: the bill still
+# raises the tax a cut softens or adds the staple, relief has a band to add, or
+# the promise is still feasible and could be recorded; false without an offer).
+# No line sits inside a trigger_if that could pass for want of an offer.
+te_tax_can_accept_offer = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = { te_tax_bill_active = yes }
+		custom_tooltip = {
+			text = te_tax_tt_offer_made
+			has_variable = te_tax_off_$IG$_kind
+			has_variable = te_tax_off_$IG$_rev
+			var:te_tax_off_$IG$_kind > 0
+			var:te_tax_off_$IG$_rev = var:te_tax_bl_rev
+		}
+		custom_tooltip = {
+			text = te_tax_tt_offer_not_marginal
+			ig:ig_$IG$ ?= { ig_counts_as_marginal = no }
+		}
+		custom_tooltip = {
+			text = te_tax_tt_offer_not_committed
+			NAND = {
+				has_variable = te_tax_com_$IG$
+				has_variable = te_tax_com_$IG$_rev
+				var:te_tax_com_$IG$ = 1
+				var:te_tax_com_$IG$_rev = var:te_tax_bl_rev
+			}
+		}
+		custom_tooltip = { text = te_tax_tt_offer_feasible te_tax_gen_offer_feasible = { IG = $IG$ } }
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_bill_open always = no }
+	}
+}
+
+# A clause offer never empties the bill (plan Task 13): a cut of KEY leaves it
+# changing something from existing law (the raise stays above it, or the bill
+# changes another provision, a good or relief), and taking back an added staple
+# leaves it changing a provision, relief or another good. Only real changes
+# count, never a restatement of existing law: instruments and goods by their
+# change from the baseline (te_tax_bl_changed_provisions, te_tax_bl_goods_changed),
+# agricultural relief by its band change, regional relief by
+# te_tax_bl_regrel_differs. Read while a bill is open.
+te_tax_offer_cut_leaves_a_bill = {
+	OR = {
+		te_tax_bl_dstep_$KEY$ >= 2
+		te_tax_bl_changed_provisions >= 2
+		te_tax_bl_goods_changed >= 1
+		NOT = { te_tax_bl_dstep_agrel = 0 }
+		te_tax_bl_regrel_differs = yes
+		# A customs level the bill changes (plan Task 15; 0 under the plain option).
+		te_tax_bl_customs_changed >= 1
+	}
+}
+
+te_tax_offer_untax_leaves_a_bill = {
+	OR = {
+		te_tax_bl_changed_provisions >= 1
+		te_tax_bl_goods_changed >= 2
+		NOT = { te_tax_bl_dstep_agrel = 0 }
+		te_tax_bl_regrel_differs = yes
+		# A customs level the bill changes (plan Task 15; 0 under the plain option).
+		te_tax_bl_customs_changed >= 1
+	}
+}
+
+# The bill's regional relief differs from existing law's in its month: another
+# band, or at a band of 1 or more another set of named states.
+te_tax_bl_regrel_differs = {
+	has_variable = te_tax_bl_regrel
+	var:te_tax_bl_regrel >= 0
+	OR = {
+		NOT = { var:te_tax_bl_regrel = te_tax_base_bl_regrel }
+		AND = {
+			var:te_tax_bl_regrel >= 1
+			NOT = { te_tax_bl_relief_states_match = yes }
+		}
+	}
+}
+
+# The bill names the same regional-relief states as existing law in its month:
+# an awaiting package's list that restates them before then (the last in
+# commencement order), else the enacted list.
+te_tax_bl_relief_states_match = {
+	trigger_if = {
+		limit = { te_tax_relief_base_from_a = { DUE = te_tax_bl_due } }
+		te_tax_relief_lists_match = { BASE = te_tax_pa_relief_states }
+	}
+	trigger_else_if = {
+		limit = { te_tax_relief_base_from_b = { DUE = te_tax_bl_due } }
+		te_tax_relief_lists_match = { BASE = te_tax_pb_relief_states }
+	}
+	trigger_else = {
+		te_tax_relief_lists_match = { BASE = te_tax_en_relief_states }
+	}
+}
+
+# Every state on the bill's list te_tax_bl_relief_states is on the country list
+# BASE, and every one on BASE that the country owns is on the bill's (the bill
+# names only the country's own states, te_tax_draft_ready). A missing list is an
+# empty one. Inside a list PREV is the country (te_tax_draft_ready's
+# `owner = PREV`); inside owner = { } from there, PREV is the state (the
+# te_tax_view_dr_relief_state form). A bill state another country has taken
+# since counts as a difference.
+te_tax_relief_lists_match = {
+	NAND = {
+		has_variable_list = te_tax_bl_relief_states
+		any_in_list = {
+			variable = te_tax_bl_relief_states
+			NAND = {
+				exists = owner
+				owner = PREV
+				owner = {
+					has_variable_list = $BASE$
+					is_target_in_variable_list = { name = $BASE$ target = PREV }
+				}
+			}
+		}
+	}
+	NAND = {
+		has_variable_list = $BASE$
+		any_in_list = {
+			variable = $BASE$
+			exists = owner
+			owner = PREV
+			NOT = {
+				owner = {
+					has_variable_list = te_tax_bl_relief_states
+					is_target_in_variable_list = { name = te_tax_bl_relief_states target = PREV }
+				}
+			}
+		}
+	}
+}
+
+# Group IG's promise accepted under this bill (te_tax_bl_prom_<IG>_*) is a live
+# pending obligation in slot N: the same kind and arg, made to IG, for the
+# bill's current revision. A promise counts in the promises reason only while
+# it is live (te_tax_prom_<ig>), so one that could not be recorded, because
+# the same promise is already pending or binding, adds nothing.
+te_tax_offer_prom_in_slot = {
+	has_variable = te_tax_o$N$_on
+	has_variable = te_tax_o$N$_kind
+	has_variable = te_tax_o$N$_rev
+	var:te_tax_o$N$_on = 1
+	var:te_tax_o$N$_state = 1
+	var:te_tax_o$N$_kind = var:te_tax_bl_prom_$IG$_kind
+	var:te_tax_o$N$_arg = var:te_tax_bl_prom_$IG$_arg
+	var:te_tax_o$N$_ig = te_tax_ig_id_$IG$
+	var:te_tax_o$N$_rev = var:te_tax_bl_rev
+}
+
+# ...and only maintains what already held when it was proposed (_maint_only,
+# recorded by te_tax_obl_write with the test te_tax_obl_is_maintenance makes).
+te_tax_offer_prom_maint_in_slot = {
+	te_tax_offer_prom_in_slot = { IG = $IG$ N = $N$ }
+	has_variable = te_tax_o$N$_maint_only
+	var:te_tax_o$N$_maint_only = 1
+}
+
+te_tax_offer_prom_live = {
+	has_variable = te_tax_bl_rev
+	has_variable = te_tax_bl_prom_$IG$_kind
+	var:te_tax_bl_prom_$IG$_kind > 0
+	OR = {
+		te_tax_offer_prom_in_slot = { IG = $IG$ N = 1 }
+		te_tax_offer_prom_in_slot = { IG = $IG$ N = 2 }
+		te_tax_offer_prom_in_slot = { IG = $IG$ N = 3 }
+		te_tax_offer_prom_in_slot = { IG = $IG$ N = 4 }
+	}
+}
+
+te_tax_offer_prom_live_maint = {
+	has_variable = te_tax_bl_rev
+	has_variable = te_tax_bl_prom_$IG$_kind
+	var:te_tax_bl_prom_$IG$_kind > 0
+	OR = {
+		te_tax_offer_prom_maint_in_slot = { IG = $IG$ N = 1 }
+		te_tax_offer_prom_maint_in_slot = { IG = $IG$ N = 2 }
+		te_tax_offer_prom_maint_in_slot = { IG = $IG$ N = 3 }
+		te_tax_offer_prom_maint_in_slot = { IG = $IG$ N = 4 }
+	}
+}
+
+# Force through: a bill short of the majority passage needs, with at least
+# te_tax_force_share of the clout committed, an override capacity of 2 (the
+# forced-law event's medium tier, read as the raw modifier sum) and the
+# Authority the override costs, and every other passage condition of
+# te_tax_can_pass, repeated line for line.
+te_tax_can_force_through = {
+	custom_tooltip = { text = te_tax_tt_code_in_force te_tax_code_in_force = yes }
+	trigger_if = {
+		limit = { te_tax_bill_active = yes }
+		custom_tooltip = { text = te_tax_tt_force_short NOT = { te_tax_committed_share > te_tax_passage_share } }
+		custom_tooltip = { text = te_tax_tt_force_share te_tax_committed_share >= te_tax_force_share }
+		custom_tooltip = { text = te_tax_tt_force_capacity "modifier:country_legislative_override_capacity_add" >= 2 }
+		custom_tooltip = { text = te_tax_tt_force_authority produced_authority > forced_law_through_event_authority_cost_medium }
+		custom_tooltip = { text = te_tax_tt_pass_legitimacy legitimacy >= te_tax_passage_legitimacy }
+		custom_tooltip = { text = te_tax_tt_pass_debate te_tax_debate_days_left <= 0 }
+		custom_tooltip = { text = te_tax_tt_pass_due var:te_tax_bl_due > te_history_month_index }
+		custom_tooltip = { text = te_tax_tt_pass_slot OR = { var:te_tax_pa_on = 0 var:te_tax_pb_on = 0 } }
+		custom_tooltip = { text = te_tax_tt_pass_current te_tax_gen_bill_current = yes }
+		custom_tooltip = { text = te_tax_tt_pass_sunsets te_tax_gen_bill_sunsets_valid = yes }
+		custom_tooltip = { text = te_tax_tt_pass_changes te_tax_bill_changes_something = yes }
+		custom_tooltip = {
+			text = te_tax_tt_pass_store
+			OR = {
+				te_tax_can_store_package = { SLOT = a }
+				te_tax_can_store_package = { SLOT = b }
+			}
+		}
+	}
+	trigger_else = {
+		custom_tooltip = { text = te_tax_tt_bill_open always = no }
+	}
+}

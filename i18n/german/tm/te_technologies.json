@@ -263,6 +263,14 @@
   "en": "We can now connect human brains directly to computers. This opens up amazing new possibilities for medicine, communication, and even enhancing our own abilities.",
   "de": "Wir können menschliche Gehirne nun direkt mit Computern verbinden. Das eröffnet erstaunliche neue Möglichkeiten für Medizin, Kommunikation und sogar die Erweiterung unserer eigenen Fähigkeiten."
  },
+ "carbon_capture_and_storage": {
+  "en": "Carbon Capture and Storage",
+  "de": "CO2-Abscheidung und -Speicherung"
+ },
+ "carbon_capture_and_storage_desc": {
+  "en": "Capturing carbon at stationary sources and storing it, or removing it directly from the atmosphere. Unlocks 50% source capture, Carbon Conversion Works with Direct Air Capture, and the technology requirement for Managed Fossil Phaseout.",
+  "de": "Das Abscheiden von Kohlenstoff an ortsfesten Quellen und dessen Speicherung oder die direkte Entnahme aus der Atmosphäre. Schaltet 50% Abscheidung an der Quelle, Kohlenstoffumwandlungswerke mit Direktabscheidung aus der Luft und die Technologievoraussetzung für den Gesteuerten Fossilausstieg frei."
+ },
  "cellular_networks": {
   "en": "Cellular Networks",
   "de": "Mobilfunknetze"
@@ -464,8 +472,8 @@
   "de": "Elektrofahrzeuge"
  },
  "electric_vehicles_desc": {
-  "en": "Battery-electric powertrains overtake internal combustion for passenger transport. Charging [concept_infrastructure], regenerative braking, and rare-earth supply chains reshape automotive manufacturing.",
-  "de": "Batterieelektrische Antriebe überholen den Verbrennungsmotor im Personenverkehr. Lade-[concept_infrastructure], Rekuperationsbremsen und Lieferketten für Seltene Erden formen die Automobilfertigung neu."
+  "en": "Battery-electric powertrains overtake internal combustion for passenger transport. Charging infrastructure, regenerative braking, and rare-earth supply chains reshape automotive manufacturing.",
+  "de": "Batterieelektrische Antriebe überholen den Verbrennungsmotor im Personenverkehr. Ladeinfrastruktur, Rekuperationsbremsen und Lieferketten für Seltene Erden formen die Automobilfertigung neu."
  },
  "electronic_warfare": {
   "en": "Electronic Warfare",

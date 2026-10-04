@@ -130,13 +130,8 @@ un_join_button = {
 	}
 
 	ai_chance = {
-		value = 50
-		if = { limit = { country_rank >= rank_value:great_power } add = 30 }
-		if = { limit = { country_rank >= rank_value:major_power } add = 15 }
-		if = { limit = { has_law = law_type:law_isolationism } add = -80 }
-		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 20 }
-		if = { limit = { has_law = law_type:law_limited_war } add = 20 }
-		if = { limit = { has_law = law_type:law_total_war } add = -40 }
+		# common/script_values/un_ai_values.txt
+		value = un_join_ai_chance
 	}
 
 	effect = {
@@ -235,10 +230,8 @@ un_leave_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { has_law = law_type:law_isolationism } add = 20 }
-		if = { limit = { has_law = law_type:law_total_war } add = 15 }
-		if = { limit = { global_var:un_authority < 20 } add = 10 }
+		# common/script_values/un_ai_values.txt
+		value = un_leave_ai_chance
 	}
 
 	effect = {
@@ -278,26 +271,8 @@ un_withhold_dues_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		# An isolationist or an underminer has no wish to pay for the order.
-		if = { limit = { has_law = law_type:law_isolationism } add = 15 }
-		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
-			add = 20
-		}
-		# The levy bites: 0.4% of GDP at Strong, 1% at Supranational.
-		if = { limit = { un_tier_at_least_strong = yes } add = 5 }
-		if = { limit = { un_tier_is_supranational = yes } add = 10 }
-		# A treasury in trouble looks for savings.
-		if = { limit = { in_default = yes } add = 25 }
-		else_if = { limit = { scaled_debt > 0.75 } add = 10 }
-		# A champion of the order pays; so does anyone who values the vote.
-		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
-			add = -50
-		}
-		if = { limit = { is_un_permanent_member = yes } add = -10 }
-		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = -10 }
+		# common/script_values/un_ai_values.txt
+		value = un_withhold_dues_ai_chance
 	}
 
 	effect = {
@@ -328,27 +303,8 @@ un_pay_dues_button = {
 	}
 
 	ai_chance = {
-		value = 5
-		# Settle when the treasury can carry it...
-		if = {
-			limit = {
-				NOT = { in_default = yes }
-				scaled_debt < 0.25
-			}
-			add = 15
-		}
-		# ...and above all once the vote is gone.
-		if = { limit = { un_dues_vote_suspended = yes } add = 20 }
-		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
-			add = 30
-		}
-		if = { limit = { has_law = law_type:law_isolationism } add = -15 }
-		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
-			add = -20
-		}
-		if = { limit = { in_default = yes } add = -30 }
+		# common/script_values/un_ai_values.txt
+		value = un_pay_dues_ai_chance
 	}
 
 	effect = {
@@ -633,11 +589,8 @@ un_peacekeeping_mission_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { global_var:un_authority >= 40 } add = 15 }
-		if = { limit = { country_rank >= rank_value:great_power } add = 20 }
-		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 15 }
-		if = { limit = { has_law = law_type:law_limited_war } add = 15 }
+		# common/script_values/un_ai_values.txt
+		value = un_peacekeeping_ai_chance
 	}
 
 	effect = {
@@ -680,9 +633,8 @@ un_end_peacekeeping_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { global_var:un_authority < 20 } add = 15 }
-		if = { limit = { is_at_war = yes } add = 25 }
+		# common/script_values/un_ai_values.txt
+		value = un_end_peacekeeping_ai_chance
 	}
 
 	effect = {
@@ -697,11 +649,13 @@ un_end_peacekeeping_button = {
 }
 
 # ---- 4. DEVELOPMENT PROGRAMS ----
-# While the World Development Fund stands (redesign phase 7, owner 2026-10-02),
-# this programme is the Fund's voluntary part: a represented contributor that
-# pays its dues pays the Fund's grants with its programme expense
-# (un_dev_fund_donations_value, un_economy_values.txt). Nothing here changes
-# for it.
+# This programme is the World Development Fund's voluntary part (redesign
+# phase 7, owner 2026-10-02): a represented contributor that pays its dues pays
+# the Fund's grants with its programme expense (un_dev_fund_donations_value,
+# un_economy_values.txt). It opens only once the Assembly has founded the Fund
+# (owner, 2026-10-03): before that its money would reach nobody. A contribution
+# running with no Fund lapses at the next monthly update
+# (un_dev_fund_lapse_contributions, un_economy_effects.txt).
 
 un_fund_development_button = {
 	name = "UN_FUND_DEVELOPMENT"
@@ -721,22 +675,16 @@ un_fund_development_button = {
 			NOT = { un_representation_suspended = yes }
 		}
 		country_rank >= rank_value:major_power
+		custom_tooltip = {
+			text = un_fund_development_needs_fund_tt
+			has_global_variable = un_inst_development_fund
+		}
 		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { global_var:un_authority >= 40 } add = 10 }
-		if = { limit = { country_rank >= rank_value:great_power } add = 15 }
-		if = {
-			limit = {
-				OR = {
-					has_law = law_type:law_interventionism
-					has_law = law_type:law_command_economy
-				}
-			}
-			add = 10
-		}
+		# common/script_values/un_ai_values.txt
+		value = un_fund_development_ai_chance
 	}
 
 	effect = {
@@ -768,9 +716,8 @@ un_defund_development_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { has_law = law_type:law_laissez_faire } add = 15 }
-		if = { limit = { global_var:un_authority < 25 } add = 10 }
+		# common/script_values/un_ai_values.txt
+		value = un_defund_development_ai_chance
 	}
 
 	effect = {
@@ -937,8 +884,9 @@ un_withdraw_arms_control_button = {
 
 # ---- 7. GREAT POWER INFLUENCE ON UN (TOGGLES) ----
 # These are strategic-orientation toggles: champion or undermine.
-# While active the ongoing cost modifier persists and authority drifts
-# each month in the JE on_monthly_pulse (see je_united_nations.txt).
+# While active the ongoing cost modifier persists, and the stance counts +1 or
+# -1 in the commitment pillar (un_authority_values.txt). The AI reads one
+# signed stance for all four (un_ai_order_will, un_ai_values.txt).
 
 un_champion_order_button = {
 	name = "UN_CHAMPION_ORDER"
@@ -964,10 +912,8 @@ un_champion_order_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 30 }
-		if = { limit = { has_law = law_type:law_limited_war } add = 20 }
-		if = { limit = { global_var:un_authority < 30 } add = 20 }
+		# common/script_values/un_ai_values.txt
+		value = un_champion_order_ai_chance
 	}
 
 	effect = {
@@ -992,10 +938,8 @@ un_stop_championing_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { has_law = law_type:law_total_war } add = 15 }
-		if = { limit = { has_law = law_type:law_isolationism } add = 15 }
-		if = { limit = { global_var:un_authority >= 80 } add = 10 }
+		# common/script_values/un_ai_values.txt
+		value = un_stop_championing_ai_chance
 	}
 
 	effect = {
@@ -1031,10 +975,8 @@ un_undermine_order_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { has_law = law_type:law_total_war } add = 25 }
-		if = { limit = { has_law = law_type:law_isolationism } add = 20 }
-		if = { limit = { global_var:un_authority >= 60 } add = 15 }
+		# common/script_values/un_ai_values.txt
+		value = un_undermine_order_ai_chance
 	}
 
 	effect = {
@@ -1059,10 +1001,8 @@ un_stop_undermining_button = {
 	}
 
 	ai_chance = {
-		value = 0
-		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 15 }
-		if = { limit = { has_law = law_type:law_limited_war } add = 15 }
-		if = { limit = { global_var:un_authority < 20 } add = 10 }
+		# common/script_values/un_ai_values.txt
+		value = un_stop_undermining_ai_chance
 	}
 
 	effect = {

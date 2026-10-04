@@ -363,3 +363,30 @@ grand_monuments_rule = {
 		flag = grand_monuments_disabled
 	}
 }
+
+# Legislated tax code (docs/superpowers/specs/2026-09-29-legislated-tax-code-design.md).
+# Off by default: with it off, taxes work exactly as in the base game. The two
+# enabled settings replace the five vanilla taxation laws with one carrier law,
+# law_te_tax_code, whose generated amendments hold the rates; the second also
+# puts customs and trade policy under legislation.
+#
+# Every check is written POSITIVELY, through te_tax_code_on and te_tax_customs_on
+# (common/scripted_triggers/te_tax_triggers.txt), never as
+# NOT = { has_game_rule = te_tax_code_disabled }. A save from before this rule
+# existed has no value stored for it, and a negated check would read that as
+# "enabled" and migrate a running campaign onto the carrier law.
+te_tax_code_rule = {
+	default = te_tax_code_disabled
+
+	te_tax_code_disabled = {
+		flag = te_tax_code_disabled
+	}
+
+	te_tax_code_enabled = {
+		flag = te_tax_code_enabled
+	}
+
+	te_tax_code_enabled_customs = {
+		flag = te_tax_code_enabled_customs
+	}
+}

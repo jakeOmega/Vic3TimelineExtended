@@ -489,3 +489,46 @@ te_debug_un_drop = {
 		}
 	}
 }
+
+# Every country's UN AI scores to debug.log (common/script_values/un_ai_values.txt):
+# the membership, dues, Development Programs and peacekeeping wills, the
+# order stance (champion at +20, undermine at -20), the
+# Fund prospect as a share of GDP and the money term, and whether it is a
+# member. Read the lines with the log-triage skill's /logs request. The lines
+# say UN_AI_SCORES so they are easy to grep.
+# Scope: any
+te_debug_un_log_ai_scores = {
+	every_country = {
+		limit = { un_membership_eligible = yes }
+		save_scope_as = te_debug_un_c
+		set_variable = { name = te_dbg_un_member value = 0 }
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			set_variable = { name = te_dbg_un_member value = 1 }
+		}
+		set_variable = { name = te_dbg_un_m value = un_ai_membership_will }
+		set_variable = { name = te_dbg_un_d value = un_ai_dues_will }
+		set_variable = { name = te_dbg_un_dev value = un_ai_development_will }
+		set_variable = { name = te_dbg_un_pk value = un_ai_peacekeeping_will }
+		set_variable = { name = te_dbg_un_order value = un_ai_order_will }
+		set_variable = { name = te_dbg_un_conv value = un_ai_convention_terms }
+		set_variable = { name = te_dbg_un_money value = un_ai_money_points }
+		set_variable = {
+			name = te_dbg_un_prospect
+			value = {
+				value = un_dev_fund_prospect_share
+				multiply = 100
+			}
+		}
+		debug_log = "UN_AI_SCORES: [SCOPE.sCountry('te_debug_un_c').GetName] member=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_member').GetValue] membership=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_m').GetValue] dues=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_d').GetValue] development=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_dev').GetValue] peacekeeping=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_pk').GetValue] order_stance=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_order').GetValue] conventions=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_conv').GetValue] money=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_money').GetValue] fund_prospect_pct_gdp=[SCOPE.sCountry('te_debug_un_c').GetVariable('te_dbg_un_prospect').GetValue]"
+		remove_variable = te_dbg_un_member
+		remove_variable = te_dbg_un_m
+		remove_variable = te_dbg_un_d
+		remove_variable = te_dbg_un_dev
+		remove_variable = te_dbg_un_pk
+		remove_variable = te_dbg_un_order
+		remove_variable = te_dbg_un_conv
+		remove_variable = te_dbg_un_money
+		remove_variable = te_dbg_un_prospect
+	}
+}

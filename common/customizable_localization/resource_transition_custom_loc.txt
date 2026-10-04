@@ -1,0 +1,46 @@
+﻿# ============================================================================
+# RESOURCE TRANSITION — the law in force, by name (issue #660)
+# ============================================================================
+# Read by the Fossil Transition section (te_gw_sec_transition,
+# gui/journal_entry_widgets/global_warming_widget.gui) as
+# [Country.GetCustom('<key>')]. rt_law_name is the law's own name key, so a
+# rename reaches the panel. rt_law_effects is the hover on the law line: the
+# law's flavor description followed by the same effect lines its enactment
+# preview shows (on_enact in common/laws/resource_transition_laws.txt), so the
+# rules read the same before and after enactment.
+
+rt_law_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_law = law_type:law_managed_fossil_phaseout }
+		localization_key = law_managed_fossil_phaseout
+	}
+	text = {
+		trigger = { has_law = law_type:law_fossil_expansion_moratorium }
+		localization_key = law_fossil_expansion_moratorium
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = law_unrestricted_extraction
+	}
+}
+
+rt_law_effects = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { has_law = law_type:law_managed_fossil_phaseout }
+		localization_key = rt_law_effects_phaseout
+	}
+	text = {
+		trigger = { has_law = law_type:law_fossil_expansion_moratorium }
+		localization_key = rt_law_effects_moratorium
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = law_unrestricted_extraction_desc
+	}
+}

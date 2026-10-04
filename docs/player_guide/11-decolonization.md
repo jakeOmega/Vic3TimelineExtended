@@ -9,6 +9,15 @@ go on your own terms before they break away. The Decolonization game rule
 controls the system; with it off, the journal entry and its events never appear,
 and tiny countries never [collapse](#colonial-collapse-of-tiny-countries).
 
+Decolonization also ends your claims on decentralized nations. Within a month of
+researching it, you lose every claim you hold on a state of a decentralized
+nation, and a Colonial Claims Renounced notice tells you so. Stake Colonial
+Claim is no longer open to you, and a claim that reaches you some other way is
+dropped within the month. AI countries lose their claims and stop staking them
+too. Claims on other countries' states, such as the ones a conquest leaves you
+with or the ones behind
+[reunification](08-diplomacy.md#irredentism-and-reunification), stay.
+
 ## The Colonial Empire journal entry
 
 Decolonization is a society technology in era 6, the first of the mod's eras.

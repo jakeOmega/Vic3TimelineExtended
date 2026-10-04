@@ -10,7 +10,19 @@ te_debug_tax.1 = { # REVIEWED 2026-10-01: console/temporary GUI engine probe; hi
 		always = yes
 	}
 	immediate = {
-		te_tp_arm = yes
+		# The harness's carrier and amendments must never run beside the production
+		# tax code. Written inline (te_tax_code_on is defined with the game rule).
+		# The guard sits here, not in the trigger, so a refused arm can say so.
+		if = {
+			limit = {
+				NOT = { has_game_rule = te_tax_code_enabled }
+				NOT = { has_game_rule = te_tax_code_enabled_customs }
+			}
+			te_tp_arm = yes
+		}
+		else = {
+			debug_log = "TE_TAX_PROBE harness disabled under the tax-code game rule, not armed: [THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 
@@ -753,5 +765,62 @@ te_debug_tax.71 = { # REVIEWED 2026-10-01: console/temporary GUI probe
 	}
 	immediate = {
 		set_variable = { name = te_tp_customs_clause value = 1 }
+	}
+}
+
+# P09b: the lock (docs/testing/tax-code-probes.md, "Customs: lock or carrier").
+te_debug_tax.80 = { # REVIEWED 2026-10-03: console-only customs probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_lock_grain_low
+		add_modifier = { name = te_tp_lock_grain_low }
+		debug_log = "TE_TAX_PROBE p09b lock applied: grain import level bounded to low tariffs; [THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# P09c: the carrier: maxima cancelled, then a per-good grain import rate.
+te_debug_tax.81 = { # REVIEWED 2026-10-03: console-only customs probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		# Console invocation can bypass the event trigger. Check the bench here
+		# before subtracting Protectionism's maxima; Free Trade would go negative.
+		if = {
+			limit = {
+				has_variable = te_tp_armed
+				has_law_or_variant = law_type:law_protectionism
+				te_tax_owns_market = yes
+			}
+			remove_modifier = te_tp_cancel_max
+			add_modifier = { name = te_tp_cancel_max }
+			remove_modifier = te_tp_grain_import
+			add_modifier = { name = te_tp_grain_import }
+			debug_log = "TE_TAX_PROBE p09c carrier applied: trade-law maxima cancelled, grain import rate +0.10; [THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_TAX_PROBE p09c refused: arm a Protectionism market owner first; [THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# P09b/P09c undo: removes both probes' modifiers (te_tp_clear also does).
+te_debug_tax.82 = { # REVIEWED 2026-10-03: console-only customs probe; hidden by design
+	type = country_event
+	hidden = yes
+	trigger = {
+		has_variable = te_tp_armed
+	}
+	immediate = {
+		remove_modifier = te_tp_lock_grain_low
+		remove_modifier = te_tp_cancel_max
+		remove_modifier = te_tp_grain_import
+		debug_log = "TE_TAX_PROBE p09b/p09c modifiers removed; [THIS.GetCountry.GetNameNoFormatting]"
 	}
 }

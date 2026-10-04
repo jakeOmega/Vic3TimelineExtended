@@ -1,0 +1,684 @@
+﻿# Rare discoveries from established solar colonies. Scientific foundations and
+# all gameplay probabilities: docs/systems/space_race_discoveries.md.
+namespace = space_race_discovery_events
+
+# A Second Living World (europa); 10% founding roll, 1% per eligible month.
+space_race_discovery_events.1 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_europa.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.1.t
+	desc = space_race_discovery_events.1.d
+	flavor = space_race_discovery_events.1.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_europa_life_pending
+		NOT = { has_variable = sr_discovery_europa_life_done }
+		NOT = { has_variable = sr_discovery_europa_life_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = europa_life } }
+	}
+	option = {
+		name = space_race_discovery_events.1.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_europa_life_a }
+	}
+	option = {
+		name = space_race_discovery_events.1.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_europa_life_b }
+	}
+}
+
+# Chimneys Beneath the Ice (europa); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.2 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_europa.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.2.t
+	desc = space_race_discovery_events.2.d
+	flavor = space_race_discovery_events.2.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_europa_vents_pending
+		NOT = { has_variable = sr_discovery_europa_vents_done }
+		NOT = { has_variable = sr_discovery_europa_vents_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = europa_vents } }
+	}
+	option = {
+		name = space_race_discovery_events.2.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_europa_vents_a }
+	}
+	option = {
+		name = space_race_discovery_events.2.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_europa_vents_b }
+	}
+}
+
+# Life in the Ice Grains (enceladus); 10% founding roll, 1% per eligible month.
+space_race_discovery_events.3 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_enceladus.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.3.t
+	desc = space_race_discovery_events.3.d
+	flavor = space_race_discovery_events.3.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_enceladus_life_pending
+		NOT = { has_variable = sr_discovery_enceladus_life_done }
+		NOT = { has_variable = sr_discovery_enceladus_life_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = enceladus_life } }
+	}
+	option = {
+		name = space_race_discovery_events.3.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_enceladus_life_a }
+	}
+	option = {
+		name = space_race_discovery_events.3.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_enceladus_life_b }
+	}
+}
+
+# An Impact-Born Chemical Laboratory (titan); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.4 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_titan.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.4.t
+	desc = space_race_discovery_events.4.d
+	flavor = space_race_discovery_events.4.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_titan_chemistry_pending
+		NOT = { has_variable = sr_discovery_titan_chemistry_done }
+		NOT = { has_variable = sr_discovery_titan_chemistry_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = titan_chemistry } }
+	}
+	option = {
+		name = space_race_discovery_events.4.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_titan_chemistry_a }
+	}
+	option = {
+		name = space_race_discovery_events.4.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_titan_chemistry_b }
+	}
+}
+
+# The Fossils of Hellas (hellas_planitia); 10% founding roll, 1% per eligible month.
+space_race_discovery_events.5 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_hellas_planitia.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.5.t
+	desc = space_race_discovery_events.5.d
+	flavor = space_race_discovery_events.5.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_hellas_fossils_pending
+		NOT = { has_variable = sr_discovery_hellas_fossils_done }
+		NOT = { has_variable = sr_discovery_hellas_fossils_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = hellas_fossils } }
+	}
+	option = {
+		name = space_race_discovery_events.5.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_hellas_fossils_a }
+	}
+	option = {
+		name = space_race_discovery_events.5.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_hellas_fossils_b }
+	}
+}
+
+# Rooms Inside the Volcano (olympus_mons); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.6 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_olympus_mons.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.6.t
+	desc = space_race_discovery_events.6.d
+	flavor = space_race_discovery_events.6.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_olympus_tubes_pending
+		NOT = { has_variable = sr_discovery_olympus_tubes_done }
+		NOT = { has_variable = sr_discovery_olympus_tubes_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = olympus_tubes } }
+	}
+	option = {
+		name = space_race_discovery_events.6.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_olympus_tubes_a }
+	}
+	option = {
+		name = space_race_discovery_events.6.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_olympus_tubes_b }
+	}
+}
+
+# The Buried Glacier (utopia_planitia); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.7 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_utopia_planitia.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.7.t
+	desc = space_race_discovery_events.7.d
+	flavor = space_race_discovery_events.7.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_utopia_glacier_pending
+		NOT = { has_variable = sr_discovery_utopia_glacier_done }
+		NOT = { has_variable = sr_discovery_utopia_glacier_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = utopia_glacier } }
+	}
+	option = {
+		name = space_race_discovery_events.7.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_utopia_glacier_a }
+	}
+	option = {
+		name = space_race_discovery_events.7.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_utopia_glacier_b }
+	}
+}
+
+# Salt Water in the Drill (arcadia_planitia); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.8 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_arcadia_planitia.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.8.t
+	desc = space_race_discovery_events.8.d
+	flavor = space_race_discovery_events.8.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_arcadia_brines_pending
+		NOT = { has_variable = sr_discovery_arcadia_brines_done }
+		NOT = { has_variable = sr_discovery_arcadia_brines_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = arcadia_brines } }
+	}
+	option = {
+		name = space_race_discovery_events.8.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_arcadia_brines_a }
+	}
+	option = {
+		name = space_race_discovery_events.8.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_arcadia_brines_b }
+	}
+}
+
+# A Reservoir Below Ceres (ceres); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.9 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_ceres.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.9.t
+	desc = space_race_discovery_events.9.d
+	flavor = space_race_discovery_events.9.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_ceres_reservoir_pending
+		NOT = { has_variable = sr_discovery_ceres_reservoir_done }
+		NOT = { has_variable = sr_discovery_ceres_reservoir_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = ceres_reservoir } }
+	}
+	option = {
+		name = space_race_discovery_events.9.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_ceres_reservoir_a }
+	}
+	option = {
+		name = space_race_discovery_events.9.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_ceres_reservoir_b }
+	}
+}
+
+# A Visitor Preserved in Vesta (vesta); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.10 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_vesta.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.10.t
+	desc = space_race_discovery_events.10.d
+	flavor = space_race_discovery_events.10.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_vesta_impactor_pending
+		NOT = { has_variable = sr_discovery_vesta_impactor_done }
+		NOT = { has_variable = sr_discovery_vesta_impactor_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = vesta_impactor } }
+	}
+	option = {
+		name = space_race_discovery_events.10.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_vesta_impactor_a }
+	}
+	option = {
+		name = space_race_discovery_events.10.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_vesta_impactor_b }
+	}
+}
+
+# A Rich Seam in Psyche (psyche); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.11 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_psyche.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.11.t
+	desc = space_race_discovery_events.11.d
+	flavor = space_race_discovery_events.11.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_psyche_metal_pending
+		NOT = { has_variable = sr_discovery_psyche_metal_done }
+		NOT = { has_variable = sr_discovery_psyche_metal_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = psyche_metal } }
+	}
+	option = {
+		name = space_race_discovery_events.11.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_psyche_metal_a }
+	}
+	option = {
+		name = space_race_discovery_events.11.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_psyche_metal_b }
+	}
+}
+
+# Water Bound in Stone (pallas); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.12 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_pallas.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.12.t
+	desc = space_race_discovery_events.12.d
+	flavor = space_race_discovery_events.12.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_pallas_water_pending
+		NOT = { has_variable = sr_discovery_pallas_water_done }
+		NOT = { has_variable = sr_discovery_pallas_water_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = pallas_water } }
+	}
+	option = {
+		name = space_race_discovery_events.12.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_pallas_water_a }
+	}
+	option = {
+		name = space_race_discovery_events.12.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_pallas_water_b }
+	}
+}
+
+# A Wave That Holds Its Ground (venus); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.13 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_venus_cloud.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.13.t
+	desc = space_race_discovery_events.13.d
+	flavor = space_race_discovery_events.13.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_venus_waves_pending
+		NOT = { has_variable = sr_discovery_venus_waves_done }
+		NOT = { has_variable = sr_discovery_venus_waves_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = venus_waves } }
+	}
+	option = {
+		name = space_race_discovery_events.13.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_venus_waves_a }
+	}
+	option = {
+		name = space_race_discovery_events.13.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_venus_waves_b }
+	}
+}
+
+# An Archive in Permanent Shadow (mercury); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.14 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_mercury.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.14.t
+	desc = space_race_discovery_events.14.d
+	flavor = space_race_discovery_events.14.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_mercury_archive_pending
+		NOT = { has_variable = sr_discovery_mercury_archive_done }
+		NOT = { has_variable = sr_discovery_mercury_archive_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = mercury_archive } }
+	}
+	option = {
+		name = space_race_discovery_events.14.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_mercury_archive_a }
+	}
+	option = {
+		name = space_race_discovery_events.14.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_mercury_archive_b }
+	}
+}
+
+# The Moving Floor of Io (io); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.15 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_io.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.15.t
+	desc = space_race_discovery_events.15.d
+	flavor = space_race_discovery_events.15.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_io_roof_pending
+		NOT = { has_variable = sr_discovery_io_roof_done }
+		NOT = { has_variable = sr_discovery_io_roof_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = io_roof } }
+	}
+	option = {
+		name = space_race_discovery_events.15.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_io_roof_a }
+	}
+	option = {
+		name = space_race_discovery_events.15.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_io_roof_b }
+	}
+}
+
+# Oceans Between Layers (ganymede); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.16 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_ganymede.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.16.t
+	desc = space_race_discovery_events.16.d
+	flavor = space_race_discovery_events.16.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_ganymede_layers_pending
+		NOT = { has_variable = sr_discovery_ganymede_layers_done }
+		NOT = { has_variable = sr_discovery_ganymede_layers_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = ganymede_layers } }
+	}
+	option = {
+		name = space_race_discovery_events.16.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_ganymede_layers_a }
+	}
+	option = {
+		name = space_race_discovery_events.16.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_ganymede_layers_b }
+	}
+}
+
+# The Crater Under the Crater (callisto); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.17 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_callisto.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.17.t
+	desc = space_race_discovery_events.17.d
+	flavor = space_race_discovery_events.17.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_callisto_archive_pending
+		NOT = { has_variable = sr_discovery_callisto_archive_done }
+		NOT = { has_variable = sr_discovery_callisto_archive_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = callisto_archive } }
+	}
+	option = {
+		name = space_race_discovery_events.17.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_callisto_archive_a }
+	}
+	option = {
+		name = space_race_discovery_events.17.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_callisto_archive_b }
+	}
+}
+
+# Warmth Beneath Titania (titania); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.18 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_uranus_moon.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.18.t
+	desc = space_race_discovery_events.18.d
+	flavor = space_race_discovery_events.18.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_titania_ocean_pending
+		NOT = { has_variable = sr_discovery_titania_ocean_done }
+		NOT = { has_variable = sr_discovery_titania_ocean_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = titania_ocean } }
+	}
+	option = {
+		name = space_race_discovery_events.18.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_titania_ocean_a }
+	}
+	option = {
+		name = space_race_discovery_events.18.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_titania_ocean_b }
+	}
+}
+
+# A Jet Beneath the Landing Field (triton); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.19 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_triton.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.19.t
+	desc = space_race_discovery_events.19.d
+	flavor = space_race_discovery_events.19.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_triton_jet_pending
+		NOT = { has_variable = sr_discovery_triton_jet_done }
+		NOT = { has_variable = sr_discovery_triton_jet_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = triton_jet } }
+	}
+	option = {
+		name = space_race_discovery_events.19.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_triton_jet_a }
+	}
+	option = {
+		name = space_race_discovery_events.19.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_triton_jet_b }
+	}
+}
+
+# Antifreeze at the Edge of the System (pluto); 10% founding roll, 2% per eligible month.
+space_race_discovery_events.20 = {
+	type = country_event
+	placement = root
+	event_image = { texture = "gfx/event_pictures/colony_deep_kuiper.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+	title = space_race_discovery_events.20.t
+	desc = space_race_discovery_events.20.d
+	flavor = space_race_discovery_events.20.f
+	duration = 3
+	trigger = {
+		has_game_rule = space_race_enabled
+		sr_has_space_colony = yes
+		has_variable = sr_discovery_pluto_antifreeze_pending
+		NOT = { has_variable = sr_discovery_pluto_antifreeze_done }
+		NOT = { has_variable = sr_discovery_pluto_antifreeze_survey }
+	}
+	immediate = {
+		hidden_effect = { sr_finish_colony_discovery = { DISCOVERY = pluto_antifreeze } }
+	}
+	option = {
+		name = space_race_discovery_events.20.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_pluto_antifreeze_a }
+	}
+	option = {
+		name = space_race_discovery_events.20.b
+		ai_chance = { base = 5 }
+		sr_grant_colony_modifier = { MODIFIER = sr_discovery_pluto_antifreeze_b }
+	}
+}
+

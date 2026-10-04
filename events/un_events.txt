@@ -611,6 +611,21 @@ un_events.4 = {
 				trigger = { country_rank >= rank_value:great_power }
 				add = 3
 			}
+			# The peacekeeping programme already pays for a deployment; the
+			# observers in option B would cost a member running it extra.
+			modifier = {
+				trigger = { un_standing_program_active_peacekeeping = yes }
+				add = 5
+			}
+			# Anyone else pays the deployment's cost, which a treasury in
+			# default or near its ceiling cannot carry.
+			modifier = {
+				trigger = {
+					OR = { in_default = yes scaled_debt >= 0.75 }
+					NOT = { un_standing_program_active_peacekeeping = yes }
+				}
+				factor = 0.2
+			}
 			# Less willing to join a mission that has dragged on.
 			modifier = {
 				trigger = { scope:peacekeeping_target = { un_mission_hosts_aged = { TYPE = stabilisation MONTHS = 36 } } }
@@ -629,6 +644,20 @@ un_events.4 = {
 			name = un_peacekeeping_deployed_modifier
 			days = long_modifier_time
 			is_decaying = yes
+		}
+		# A full force is not free (owner, 2026-10-03): the peacekeeping
+		# programme's weekly cost, fading over five years, as the famine
+		# appeal's aid costs (un_events.7 A). The mission bills only contingents
+		# sent at will (un_mission_charges), and a member running the programme
+		# already pays for a deployment.
+		if = {
+			limit = { NOT = { un_standing_program_active_peacekeeping = yes } }
+			add_modifier = {
+				name = un_peacekeeping_deployment_cost
+				multiplier = un_program_expense_value
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		# Booked below, once the mission shows which state the force went to.
 		custom_tooltip = un_ledger_tt_delivery_up_1_5
@@ -685,6 +714,11 @@ un_events.4 = {
 		name = un_events.4.b
 		ai_chance = {
 			base = 5
+			# The only option here with a running cost.
+			modifier = {
+				trigger = { OR = { in_default = yes scaled_debt >= 0.75 } }
+				factor = 0.3
+			}
 		}
 		add_modifier = {
 			name = un_observer_mission_modifier
@@ -712,6 +746,10 @@ un_events.4 = {
 			modifier = {
 				trigger = { is_at_war = yes }
 				add = 5
+			}
+			modifier = {
+				trigger = { OR = { in_default = yes scaled_debt >= 0.75 } }
+				add = 4
 			}
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
@@ -956,9 +994,23 @@ un_events.6 = {
 		name = un_events.6.b
 		ai_chance = {
 			base = 4
+			# Every recipient is a great power (the trigger); a permanent
+			# member holds a seat to protect, the more so when Reform II would
+			# restrain its veto.
 			modifier = {
-				trigger = { country_rank >= rank_value:great_power }
+				trigger = { is_un_permanent_member = yes }
 				add = 3
+			}
+			modifier = {
+				trigger = {
+					is_un_permanent_member = yes
+					un_charter_next_stage >= 2
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				add = 4
 			}
 		}
 		add_modifier = {
@@ -1053,6 +1105,12 @@ un_events.7 = {
 				trigger = { scope:crisis_country = { un_mission_hosts_aged = { TYPE = aid MONTHS = 120 } } }
 				factor = 0.5
 			}
+			# A full programme's cost (0.5% of GDP a year) is the last thing a
+			# treasury in default or near its debt ceiling takes on.
+			modifier = {
+				trigger = { OR = { in_default = yes scaled_debt >= 0.75 } }
+				factor = 0.2
+			}
 		}
 		add_modifier = {
 			name = un_humanitarian_aid_modifier
@@ -1130,6 +1188,11 @@ un_events.7 = {
 		name = un_events.7.b
 		ai_chance = {
 			base = 5
+			# A quarter of the cost is still a cost in default.
+			modifier = {
+				trigger = { in_default = yes }
+				factor = 0.5
+			}
 		}
 		add_modifier = {
 			name = un_humanitarian_token_modifier
@@ -1174,6 +1237,11 @@ un_events.7 = {
 			modifier = {
 				trigger = { global_var:un_authority >= 60 country_rank >= rank_value:great_power }
 				add = -3
+			}
+			# The only answer that costs no money, for a treasury that has none.
+			modifier = {
+				trigger = { OR = { in_default = yes scaled_debt >= 0.75 } }
+				add = 6
 			}
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
@@ -1889,8 +1957,10 @@ un_events.14 = {
 		default_option = yes
 		ai_chance = {
 			base = 5
+			# The treaty's security guarantee is for a state with no bomb and
+			# no programme; a threshold state pays its inspections (option C).
 			modifier = {
-				trigger = { NOT = { var:nuclear_weapon_stockpile >= 1 } }
+				trigger = { un_regime_npt_guaranteed = yes }
 				add = 3
 			}
 		}
@@ -1929,8 +1999,17 @@ un_events.14 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { var:nuclear_weapon_stockpile >= 1 }
+				trigger = {
+					has_variable = nuclear_weapon_stockpile
+					var:nuclear_weapon_stockpile >= 1
+				}
 				add = 3
+			}
+			# The inspections slow a threshold state's programme
+			# (un_regime_npt_inspection_modifier).
+			modifier = {
+				trigger = { un_regime_npt_threshold = yes }
+				add = 5
 			}
 			modifier = {
 				trigger = { is_at_war = yes }
@@ -3815,6 +3894,12 @@ un_events.34 = {
 				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
 				add = -1
 			}
+			# Leaving ends the World Development Fund's grant, which at these
+			# tiers is usually worth more than the dues it saves.
+			modifier = {
+				trigger = { un_dev_fund_receiving = yes }
+				factor = 0.2
+			}
 		}
 		every_interest_group = {
 			limit = { un_regime_ig_resents_un = yes }
@@ -4005,6 +4090,19 @@ un_events.36 = {
 			modifier = {
 				trigger = { has_law = law_type:law_isolationism }
 				add = -2
+			}
+			# Ratifying everything at once takes on the regimes' terms
+			# (un_regime_refresh_country): the rights violator's legitimacy
+			# loss, the threshold state's inspections, the hegemon's pull.
+			modifier = {
+				trigger = {
+					OR = {
+						un_regime_human_rights_violator = yes
+						un_regime_npt_threshold = yes
+						un_regime_cultural_hegemon = yes
+					}
+				}
+				factor = 0.3
 			}
 		}
 		if = {

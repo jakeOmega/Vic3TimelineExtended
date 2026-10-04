@@ -127,7 +127,7 @@
 			else = {
 				multiply = {
 					value = 0.2
-					desc = "UPPER_CLASS"
+					desc = "POP_UPPER_STRATA"
 				}
 			}
 		}
@@ -156,7 +156,7 @@
 			else = {
 				multiply = {
 					value = 2
-					desc = "MIDDLE_CLASS"
+					desc = "POP_MIDDLE_STRATA"
 				}
 			}
 		}
@@ -166,7 +166,7 @@
 			}
 			multiply = {
 				value = 0.5
-				desc = "LOWER_CLASS"
+				desc = "POP_LOWER_STRATA"
 			}
 		}
 
@@ -295,6 +295,11 @@
 					produced_authority > 200
 				}
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_EMISSION_STANDARDS" }
+			}
+
+			if = { # Atmospheric carbon removal: a small satisfaction bonus
+				limit = { gw_policy_carbon_removal_active = yes }
+				add = { value = -0.05 desc = "POLICY_ACTIVE_CARBON_REMOVAL" }
 			}
 
 			if = { # Reforestation subsidies
@@ -486,7 +491,7 @@ movement_civil_rights = {
 			else = {
 				multiply = {
 					value = 0.5
-					desc = "UPPER_CLASS"
+					desc = "POP_UPPER_STRATA"
 				}
 			}
 		}
@@ -515,7 +520,7 @@ movement_civil_rights = {
 			else = {
 				multiply = {
 					value = 2
-					desc = "MIDDLE_CLASS"
+					desc = "POP_MIDDLE_STRATA"
 				}
 			}
 		}
@@ -525,7 +530,7 @@ movement_civil_rights = {
 			}
 			multiply = {
 				value = 0.75
-				desc = "LOWER_CLASS"
+				desc = "POP_LOWER_STRATA"
 			}
 		}
 
@@ -763,7 +768,7 @@ movement_anti_war = {
 			else = {
 				multiply = {
 					value = 0.5
-					desc = "UPPER_CLASS"
+					desc = "POP_UPPER_STRATA"
 				}
 			}
 		}
@@ -792,7 +797,7 @@ movement_anti_war = {
 			else = {
 				multiply = {
 					value = 1.25
-					desc = "MIDDLE_CLASS"
+					desc = "POP_MIDDLE_STRATA"
 				}
 			}
 		}
@@ -802,7 +807,7 @@ movement_anti_war = {
 			}
 			multiply = {
 				value = 0.5
-				desc = "LOWER_CLASS"
+				desc = "POP_LOWER_STRATA"
 			}
 		}
 
@@ -1030,7 +1035,7 @@ movement_transhumanist = {
 			else = {
 				multiply = {
 					value = 2
-					desc = "UPPER_CLASS"
+					desc = "POP_UPPER_STRATA"
 				}
 			}
 		}
@@ -1068,7 +1073,7 @@ movement_transhumanist = {
 			else = {
 				multiply = {
 					value = 1.5
-					desc = "MIDDLE_CLASS"
+					desc = "POP_MIDDLE_STRATA"
 				}
 			}
 		}
@@ -1078,7 +1083,7 @@ movement_transhumanist = {
 			}
 			multiply = {
 				value = 0.25
-				desc = "LOWER_CLASS"
+				desc = "POP_LOWER_STRATA"
 			}
 		}
 

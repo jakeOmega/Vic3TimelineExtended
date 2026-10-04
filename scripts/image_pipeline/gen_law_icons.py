@@ -1754,6 +1754,40 @@ def draw_building_ministry_tag() -> Image.Image:
     return Image.fromarray(arr)
 
 
+def draw_badge_tag() -> Image.Image:
+    """Police shield badge with a price tag hanging from it — Private Policing.
+
+    Protection is bought: Contracted Administration's tag, tied to the badge's
+    top corner by a short cord, with a five-pointed star cut through the shield.
+    """
+    img = _new(); d = _d(img)
+    # Shield badge, set left to leave room for the tag
+    bx = C - 45
+    d.polygon([(bx, 95), (bx + 175, 130), (bx + 170, 310), (bx + 88, 415),
+               (bx, 478), (bx - 88, 415), (bx - 170, 310), (bx - 175, 130)], fill=W)
+    # Tag: a pentagon pointing down-left at the badge's top-right corner
+    d.polygon([(C + 95, 105), (C + 140, 35), (C + 245, 35),
+               (C + 245, 175), (C + 140, 175)], fill=W)
+    d.line([(bx + 172, 132), (C + 118, 108)], fill=W, width=16)   # cord
+    arr = np.array(img)
+    y, x = np.ogrid[:S, :S]
+    eyelet = ((x - (C + 145)) ** 2 + (y - 105) ** 2) < 16 ** 2
+    arr[eyelet] = [0, 0, 0, 0]
+    img = Image.fromarray(arr)
+    # Star cut-out in the shield
+    star = _new(); sd = _d(star)
+    cx, cy, ro, ri = bx, 285, 112, 46
+    pts = []
+    for k in range(10):
+        ang = -math.pi / 2 + k * math.pi / 5
+        r = ro if k % 2 == 0 else ri
+        pts.append((cx + r * math.cos(ang), cy + r * math.sin(ang)))
+    sd.polygon(pts, fill=W)
+    arr = np.array(img)
+    arr[np.array(star)[..., 3] > 0] = [0, 0, 0, 0]
+    return Image.fromarray(arr)
+
+
 def draw_people_pediment() -> Image.Image:
     """Three figures under a pediment roof — Communal Administration.
 
@@ -1964,6 +1998,7 @@ SHAPES: dict[str, callable] = {
     "building_ministry_circuit": draw_building_ministry_circuit,
     "building_ministry_tag":     draw_building_ministry_tag,
     "people_pediment":           draw_people_pediment,
+    "badge_tag":                 draw_badge_tag,
     # ── prohibition / "no X" overlay variants ───────────────────────────
     "lightbulb_no":           draw_lightbulb_no,
     "wifi_no":                draw_wifi_no,
@@ -2164,6 +2199,7 @@ LAW_ICON_MAP: dict[str, tuple[str, str, str | None]] = {
     "law_automated_bureaucracy":          ("building_ministry_circuit", "gold", None),
     "law_contracted_administration":      ("building_ministry_tag", "gold",  None),
     "law_communal_administration":        ("people_pediment",     "gold",      None),
+    "law_private_policing":               ("badge_tag",           "gold",      None),
 
     # ── Ministries (active) ──
     "law_ministry_of_foreign_affairs":             ("building_ministry", "gold", None),

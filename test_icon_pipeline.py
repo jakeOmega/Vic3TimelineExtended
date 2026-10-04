@@ -861,5 +861,171 @@ class PanelStateTests(unittest.TestCase):
             gi.ICONS = ip.ICONS
 
 
+class RestyleTests(unittest.TestCase):
+    """A restyle entry refits an existing icon: validation, candidates, source lookup and preparation."""
+
+    def test_check_validates_restyle_entries(self):
+        src = "gfx/interface/icons/building_icons/old.dds"
+        saved = ip.ICONS
+        try:
+            ip.ICONS = {"building": {
+                "building_ok": {"restyle": src, "subject": "an airport", "seed": None},
+                "building_picked": {"restyle": src, "subject": "an airport", "seed": 2, "crop": 0.15},
+                "building_own_strengths": {"restyle": src, "subject": "an airport", "seed": 3,
+                                           "strengths": [0.0, 0.375, 0.5, 0.5]},
+                "building_bad_path": {"restyle": "old.dds", "subject": "an airport", "seed": None},
+                "building_bad_crop": {"restyle": src, "subject": "an airport", "seed": None, "crop": 0.4},
+                "building_past_last": {"restyle": src, "subject": "an airport", "seed": 9},
+                "building_bad_strength": {"restyle": src, "subject": "an airport", "seed": None, "strengths": [1.0]},
+            }}
+            d = tempfile.mkdtemp()
+            bdir = Path(d) / "common" / "buildings"
+            bdir.mkdir(parents=True)
+            (bdir / "b.txt").write_text("".join(f"{k} = {{\n}}\n" for k in ip.ICONS["building"]),
+                                        encoding="utf-8-sig")
+            r = ip.check(d, on_disk={ip.icon_path("building", "building_picked"),
+                                     ip.icon_path("building", "building_own_strengths")})
+        finally:
+            ip.ICONS = saved
+        self.assertEqual(sorted(k for _, k in r["bad_entry"]),
+                         ["building_bad_crop", "building_bad_path", "building_bad_strength", "building_past_last"])
+        self.assertEqual(r["missing_dds"], [])
+
+    def test_candidates_are_the_strengths(self):
+        bare = {"restyle": "gfx/interface/icons/building_icons/old.dds", "subject": "an airport", "seed": None}
+        self.assertEqual(ip.restyle_strengths("building", bare), ip.CATEGORIES["building"]["restyle_strengths"])
+        e = dict(bare, strengths=[0.0, 0.375, 0.5])                # an entry's own list wins
+        self.assertEqual(ip.restyle_strengths("building", e), (0.0, 0.375, 0.5))
+        self.assertEqual(gi.caption("building", e, 0), "s0 as is")
+        self.assertEqual(gi.caption("building", e, 2), "s2 repaint 0.5")
+        self.assertEqual(gi.caption("building", {"subject": "a mine", "seed": None}, 1), "s1")
+        self.assertEqual(gi.restyle_settings("building", dict(e, crop=0.15), 1),
+                         {"restyle": e["restyle"], "crop": 0.15, "strength": 0.375})
+        self.assertEqual(gi.restyle_settings("building", bare, 0)["crop"], ip.RESTYLE_CROP)
+
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_prepare_crops_the_border_and_fills_transparent_corners(self):
+        import icon_render
+        from PIL import ImageDraw
+        im = Image.new("RGBA", (200, 200), (0, 0, 0, 0))                         # a circular badge:
+        ImageDraw.Draw(im).ellipse((0, 0, 199, 199), fill=(200, 40, 40, 255),    # red picture,
+                                   outline=(0, 0, 255, 255), width=4)            # blue rim of its own
+        out = np.asarray(icon_render.prepare_restyle(im, 0.05, size=64))
+        self.assertEqual(out.shape, (64, 64, 3))
+        corner = out[:4, -4:].reshape(-1, 3).mean(0)
+        self.assertGreater(corner[0], 150)          # the empty corner takes the picture's red, not black
+        self.assertLess(out[:, :, 2].max(), 60)     # the rim is gone
+
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_strength_zero_keeps_the_source_without_the_model(self):
+        import icon_render
+        raw_dir = Path(tempfile.mkdtemp())
+        source = Image.new("RGB", (32, 32), (10, 120, 30))
+        icon_render.restyle([("building__x", "p", 0, source, 0.0, "note")], raw_dir / "e", raw_dir)
+        out = raw_dir / "building__x__s0.png"
+        self.assertEqual(Image.open(out).getpixel((5, 5)), (10, 120, 30))
+        self.assertEqual(out.with_suffix(".prompt.txt").read_text(encoding="utf-8"), "note")
+
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_source_is_read_from_disk_head_or_before_its_deletion(self):
+        import subprocess
+        root = Path(tempfile.mkdtemp())
+
+        def git(*args):
+            subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True)
+
+        git("init", "-q")
+        git("config", "user.email", "t@t")
+        git("config", "user.name", "t")
+        rel = "gfx/old.png"
+        (root / "gfx").mkdir()
+        Image.new("RGB", (8, 8), (1, 2, 3)).save(root / rel)
+        git("add", rel)
+        git("commit", "-qm", "add")
+        self.assertEqual(gi.restyle_source(rel, root).convert("RGB").getpixel((0, 0)), (1, 2, 3))   # on disk
+        (root / rel).unlink()
+        self.assertEqual(gi.restyle_source(rel, root).convert("RGB").getpixel((0, 0)), (1, 2, 3))   # HEAD
+        git("rm", "-q", "--cached", rel)
+        git("commit", "-qm", "delete")
+        self.assertEqual(gi.restyle_source(rel, root).convert("RGB").getpixel((0, 0)), (1, 2, 3))   # history
+        with self.assertRaisesRegex(SystemExit, "neither on disk nor in git"):
+            gi.restyle_source("gfx/never.png", root)
+
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_render_sends_restyle_entries_to_img2img(self):
+        import icon_render
+        saved = (ip.ICONS, icon_render.embed, icon_render.render, getattr(icon_render, "restyle"), gi.restyle_jobs)
+        seen = {}
+        try:
+            ip.ICONS = gi.ICONS = {"building": {
+                "building_new": {"subject": "a mine", "seed": None},
+                "building_old": {"restyle": "gfx/interface/icons/building_icons/old.dds", "subject": "an airport",
+                                 "seed": None, "strengths": [0.0, 0.375, 0.5]},
+            }}
+            icon_render.embed = lambda prompts, emb_dir: seen.setdefault("embedded", sorted(prompts))
+            icon_render.render = lambda jobs, *a, **k: seen.setdefault("render", [(n, s) for n, _, s in jobs])
+            gi.restyle_jobs = lambda cat, items: [(gi.name(cat, k), p, i, None, x, "")
+                                                  for k, e, p in items
+                                                  for i, x in enumerate(ip.restyle_strengths(cat, e))]
+            icon_render.restyle = lambda jobs, *a, **k: seen.setdefault("restyle", [(n, s, x) for n, _, s, _, x, _ in jobs])
+            gi.stage_render("building", set(), Path("/w"), 2, "sequential")
+        finally:
+            ip.ICONS, icon_render.embed, icon_render.render, icon_render.restyle, gi.restyle_jobs = saved
+            gi.ICONS = ip.ICONS
+        self.assertEqual(seen["embedded"], ["building__building_new", "building__building_old"])
+        self.assertEqual(seen["render"], [("building__building_new", 0), ("building__building_new", 1)])
+        self.assertEqual(seen["restyle"], [("building__building_old", 0, 0.0), ("building__building_old", 1, 0.375),
+                                           ("building__building_old", 2, 0.5)])
+
+
+
+class StyleOverrideTests(unittest.TestCase):
+    """An entry's own "style" replaces its category's in the prompt it renders and is written from."""
+
+    def test_entry_style_replaces_the_category_style(self):
+        plain = {"subject": "a station", "seed": None}
+        own = dict(plain, style="{subject} in orbit")
+        self.assertEqual(ip.entry_prompt("building", plain), ip.prompt_for("building", "a station"))
+        self.assertTrue(ip.entry_prompt("building", own).startswith("a station in orbit, no text"))
+
+    def test_check_rejects_a_style_without_its_subject(self):
+        saved = ip.ICONS
+        try:
+            ip.ICONS = {"building": {
+                "building_ok": {"subject": "a station", "seed": None, "style": ip.ORBIT},
+                "building_no_subject": {"subject": "a station", "seed": None, "style": "a painting"},
+                "building_stray_field": {"subject": "a station", "seed": None, "style": "{subject} at {time}"},
+                "building_not_text": {"subject": "a station", "seed": None, "style": 3},
+            }}
+            d = tempfile.mkdtemp()
+            bdir = Path(d) / "common" / "buildings"
+            bdir.mkdir(parents=True)
+            (bdir / "b.txt").write_text("".join(f"{k} = {{\n}}\n" for k in ip.ICONS["building"]),
+                                        encoding="utf-8-sig")
+            r = ip.check(d, on_disk=set())
+        finally:
+            ip.ICONS = saved
+        self.assertEqual(sorted(k for _, k in r["bad_entry"]),
+                         ["building_no_subject", "building_not_text", "building_stray_field"])
+
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_render_uses_the_entry_style(self):
+        import icon_render
+        saved = (ip.ICONS, icon_render.embed, icon_render.render)
+        seen = {}
+        try:
+            ip.ICONS = gi.ICONS = {"building": {"building_station": {"subject": "a station", "seed": None,
+                                                                      "style": "{subject} in orbit"}}}
+            icon_render.embed = lambda prompts, emb_dir: seen.setdefault("prompts", prompts)
+            icon_render.render = lambda jobs, *a, **k: seen.setdefault("jobs", jobs)
+            gi.stage_render("building", set(), Path("/w"), 1, "sequential")
+        finally:
+            ip.ICONS, icon_render.embed, icon_render.render = saved
+            gi.ICONS = ip.ICONS
+        want = ip.prompt_for("building", "a station", "{subject} in orbit")
+        self.assertEqual(seen["prompts"], {"building__building_station": want})
+        self.assertEqual(seen["jobs"], [("building__building_station", want, 0)])
+
+
 if __name__ == "__main__":
     unittest.main()

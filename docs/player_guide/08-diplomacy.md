@@ -33,6 +33,14 @@ articles to the same partner only once at a time, across all their treaties, so
 a second demilitarized zone against the same country waits until the first
 ends. The company articles can be repeated for different companies.
 
+The four state articles act on the state itself, and only while the conceding
+country owns it under a treaty in force. They end with the treaty, and they
+leave the state at once if it passes to another country, which includes the
+conceding country being annexed. If the other party is annexed instead, they
+end within a month. A state taken by rebels in a civil war keeps them, and one
+that returns to the conceding country while the treaty still stands gets them
+back.
+
 ![Choosing the company for a Disband Company article. The list holds the conceding country's companies.](images/disband_company.png)
 
 ### Treaty articles by purpose
@@ -374,7 +382,7 @@ subject, and no rivalry or war with any of them.
 | Intermarium | 65% | |
 | North American Union | 65% | |
 | Dar-Al-Islam | 50% | Pan-nationalism; a Sunni, Shiite or Ibadi state religion, without Total Separation or State Atheism |
-| United Earth | 75% | Quantum Communications and Space Colonization; you lead a bloc holding every great power but at most one, which must be aligned with you; no rivalry or war with any great power |
+| United Earth | 75% | Quantum Communications and Space Colonization; you lead a bloc holding every great power but at most one, which must be aligned with you; no rivalry or war with any great power. With the United Nations game rule on, the United Nations at the Supranational tier; with it off, no great power outside your bloc |
 | India | 65% of its core | |
 | Indonesia | 65% of its core | |
 | China | 65% | |

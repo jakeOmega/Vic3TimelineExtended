@@ -155,9 +155,9 @@ effects. A tier is entered at its floor and left 4 points below it.
 |---|---|---|---|---|
 | Moribund | below 20 | ×0 | none | Resolutions are recommendations, vetoes cost only relations, members lose UN Membership Benefits, and power blocs gain cohesion and leverage (Vacuum of World Order). |
 | Contested | 20–45 | ×0.5 | 0.1% | Membership benefits are paid. |
-| Established | 45–70 | ×1 | 0.2% | Countries that could join but stay out become International Pariahs. Each war goal a play's initiator adds without a mandate costs 2 extra infamy. Peacekeeping requests send full deployments. |
+| Established | 45–70 | ×1 | 0.2% | Countries that could join but stay out become International Pariahs. Each war goal a play's initiator adds costs 2 extra infamy, except in the play a mandate is used in. Peacekeeping requests send full deployments. |
 | Strong (needs Charter Reform I) | 70–85 | ×1.5 | 0.4% | Outsiders also lose trade advantage and leverage. Sanctions become embargoes, condemned countries are Shunned, the surcharge rises to 4, members share intelligence, and nationalist interest groups resent the UN. With the IAEA, members without the bomb are held to disarmament. |
-| Supranational (needs Charter Reform II) | 85+ | ×2.5 | 1% | The surcharge rises to 10, condemned countries are also Restrained, and outsiders of major rank or with a nuclear program carry a standing case of 50. |
+| Supranational (needs Charter Reform II) | 85+ | ×2.5 | 1% | The surcharge rises to 10, condemned countries are also Restrained, and outsiders of major rank or with a nuclear program carry a standing case of 50. Forming United Earth requires this tier. |
 
 From Strong, the surcharge doubles against a country hosting UN peacekeepers,
 your patriotic, jingoist, isolationist and sovereignist interest groups lose
@@ -315,7 +315,7 @@ Punitive topics need grounds. Every country has a **case strength** from 0 to
 
 | Record | Case |
 |---|---|
-| War begun without a mandate | 10 to 30 (more against a greater power) |
+| War begun, other than a mandate's own | 10 to 30 (more against a greater power) |
 | Binding resolution refused | 10 |
 | Sanctions busted | 8 |
 | Court ruling defied | 6 |
@@ -349,8 +349,8 @@ the Recorded Ballot shows every voter's lean and why the members voted as they d
 | The proposer's standing | Exemplary +5, Respected +2, Poor −2, Disgraced −5 |
 | A pledged vote | +100 for, −100 against |
 | The target accepted the verdict | +15 |
-| The cost to us, on aid and peacekeeping requests | −15 per earlier contribution, up to three; more for aid to a great, major or richer country |
-| Our interests on this topic | Laws, technologies and what the convention's terms would do to us |
+| The cost to us, on aid and peacekeeping requests | −15 per earlier contribution, up to three; more for aid to a great, major or richer country; −30 for a major power in default or near its debt ceiling, which a carried request would bill |
+| Our interests on this topic | Laws, technologies and what the convention's terms would do to us. On the World Development Fund: +30 below its line and up to +30 more for the grant it would pay us; the richest −5 and laissez-faire governments −5 under the founding charter, when it takes nothing from the budget; once a charter reform gives it a share, the richest −25, those above the average −10, laissez-faire −15 |
 | Lobbying campaigns on us (AI members only) | 3 a month per campaign, up to 15; at most 20 each way |
 
 An AI member votes in favor when its lean, plus a random −20 to +20, is above
@@ -456,7 +456,12 @@ party goes first to a human member that qualifies. Every proposer event has
 "Leave it to another delegation", which passes the item on and earns nothing;
 refusing a convention outright costs credibility and bars you from tabling it
 for five years. A major power that refuses a famine appeal while UN authority is
-40 or more loses prestige and relations improvement speed for five years. The
+40 or more loses prestige and relations improvement speed for five years. Sending
+aid to a famine, or a full peacekeeping force to a collapsed state, costs 0.5% of
+GDP a year, fading over five years; a country already running Contribute to
+Peacekeeping pays nothing extra for the force. The force earns leverage,
+prestige and +10% army experience gain, fading over ten years. Observers or a token gesture cost
+a quarter of that. The
 lending facility's loan and conditions are covered in [The UN emergency
 loan](04-banking.md#the-un-emergency-loan).
 
@@ -634,7 +639,8 @@ member adds against a country hosting such a mission, in a play it started, is
 struck as soon as it is added. Three kinds of goal are not struck but pay the
 doubled infamy surcharge instead: the goal the play opens with, another goal of
 that same kind, and a unification goal. Countries outside the UN, and members
-whose credentials are suspended, pay that surcharge on every such goal.
+whose credentials are suspended, pay that surcharge on every such goal. Nothing
+is struck or charged in the play a mandate is used in.
 
 ### Electoral observers
 
@@ -664,14 +670,23 @@ with the charter:
 | Charter Reform I | 5% of the UN's budget, plus the donations | Below a quarter of the average |
 | Charter Reform II | A quarter of the UN's budget, plus the donations | Below half the average |
 
+The line never falls below the GDP per head of the poorest member that holds
+its seat and pays its dues. When no such member is under the charter's share of
+the average, the line rises to that member's figure, so the Fund always pays at
+least one member.
+
 A reform strengthens a Fund that already stands; nobody votes on it again.
 The donations are the [Fund Development Programs](#un-programs-and-great-power-stances)
-contributions of the major powers: while the Fund stands, a contributor's 0.5%
-of GDP a year pays its grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
+contributions of the major powers, which open only once the Fund stands: a
+contributor's 0.5% of GDP a year pays its grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
 Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
 laws allow no investment pool or your banking system has not started. The line
 and the grants are worked out each month. Our Obligations shows your grant, and
-the budget line shows what the Fund and the Standing UN Force take.
+the budget line shows what the Fund and the Standing UN Force take. The World
+Development Fund section of the UN panel lists every member the Fund pays this
+month, largest grant first, with its weekly grant and GDP per head, under the
+cutoff, the members' average and what the Fund pays out a week. Hover the cutoff
+to see how it was set.
 
 ### The World Food Reserve and hunger
 
@@ -766,10 +781,13 @@ available against that country, for that state, at no infamy, in one diplomatic
 play. Enforcing the goal adds delivery and 6 standing. Adding any other demand
 against that country in that play for territory, subjugation, regime change or
 humiliation abuses the mandate, and so does backing down; reparations and
-similar demands are allowed at their normal price. Abuse ends the mandate,
-brings a condemnation, costs 12 standing, suspends your standing benefits for
-ten years and adds 20 to your case. From Strong, a holder at war under the
-mandate loses less war support to casualties and defeats.
+similar demands are allowed at their normal price. Demands against that country
+in another play or war do not touch the mandate. The mandate covers its own war
+and no other: any other war you begin pays the surcharge, goes on your record
+and can come before the Assembly as usual. Abuse ends the mandate, brings a
+condemnation, costs 12 standing, suspends your standing benefits for ten years
+and adds 20 to your case. From Strong, a holder at war under the mandate loses
+less war support to casualties and defeats.
 
 ## UN missions in the field
 
@@ -823,8 +841,8 @@ count in full), and every program earns standing after 24 months.
 
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
-| Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation and prestige; covers peacekeeping contingents |
-| Fund Development Programs | Major power | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; while the World Development Fund stands, the money pays its grants |
+| Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
+| Fund Development Programs | Major power, and the World Development Fund founded | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; the money pays the Fund's grants |
 | Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | Bureaucracy | Prestige, refugee ministry impact |
 | Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | Bureaucracy, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
 
@@ -908,6 +926,7 @@ collapsed when they are reference:
 | Programmes and Conventions | Collapsed | How many countries take part in each program and convention, and how many are under sanctions. |
 | Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take. |
 | Our Obligations | Open | Your dues beside the whole budget and what the Standing UN Force and the World Development Fund take from it, your grant from the Fund, your pledge to the World Food Reserve, any ceasefire order against you or your enemy, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
+| World Development Fund | Open | While the Fund stands: the cutoff GDP per head (hover it for how it was set), the members' average, how many members qualify (at or below the cutoff, seated and paying their dues) and what the Fund pays out a week, then each member it pays this month and how much, or why nobody is paid. |
 | Our Record | Open | Your case strength and its parts, and whether it would support a condemnation, sanctions or a mandate. |
 | UN Authority History | Open | A chart of authority over time. |
 | Resolutions on the Record | Collapsed | Closed resolutions, with how each member voted. |
@@ -923,15 +942,43 @@ of the session.
 that country, its allies and its bloc leader lobby against it. Each runs up to
 three campaigns at once on AI members close to the line, starts at most one a
 month and only with influence to spare, and asks for pledges now and then,
-humans included. They never run campaigns on human members.
+humans included. On a resolution that accuses no one, up to two AI members a
+side with a strong stake in the topic (interests of +35, or −35 or less) run one
+campaign each, when they have 300 influence to spare: a nuclear power against
+the prohibition treaty, poor members for a World Development Fund that would
+pay them well. They never run campaigns on human members.
 - They table the sixteen non-convention topics through the journal entry's
 buttons when their situation calls for it, and reach conventions only through
 the docket, so a qualifying human is offered convention business first. They
 refer a dispute to the World Court only on odds of 60% or better.
 - They pledge grain to the World Food Reserve when they hold 2,000 units or
 more, and withdraw the pledge when famine strikes at home.
-- They join readily unless isolationist, and withhold dues when isolationist,
-undermining the order, in default or facing a high levy.
+- They join or leave by what a seat is worth to them: their laws and rank, the
+dues against the grant the World Development Fund would pay them (both as a
+share of their GDP, so a poor country that would draw a large grant wants in
+most), what staying out costs at the UN's tier, the aid and peacekeepers only
+members can ask for, and the conventions they would have to keep. A country
+whose case is close to the line neither joins nor leaves, so it doesn't walk
+out and back. Below UN Authority 30 a seat is worth less with every point
+lost, so members leave a failing UN a few at a time as the crisis deepens,
+those with the weakest reasons first.
+- They stop paying their dues when their treasury defaults or they undermine
+the order. Debt near the ceiling, isolationism and a high levy count against
+paying and can add up to it. A member the Fund pays more than its dues keeps
+paying even in default, and one that has lost its vote under Article 19 pays
+sooner. A healthy member doesn't withhold to save the levy and then pay again.
+- Major powers fund Development Programs only with a reason: humanitarian law,
+championing the order, or Fund recipients among their subjects, bloc partners
+and allies. They contribute to peacekeeping for the same kinds of reasons, more
+when missions are in the field. They stop either one when their treasury fails
+or their laws turn against it, and stop peacekeeping at war; peacekeeping only
+once its ten years have run.
+- Great powers champion or undermine the order for their own reasons:
+Humanitarian Regulations or Limited War, a permanent seat and their bloc's
+Multilateral Institutions principle pull toward championing; isolationism,
+Total War, conventions that cost them, UN sanctions and a heavy record toward
+undermining. UN Authority adds only a small pull (a weak UN draws champions, a
+strong one makes powers wary), never enough to turn a power on its own.
 - They send contingents to missions hosted by allies, bloc partners and
 subjects, and bring them home when attacked or short of money. A country holding
 a mandate is steered toward the target and the authorized goal.

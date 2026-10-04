@@ -1,0 +1,41 @@
+﻿# Engine-native country_{good}_{direction}_tariffs_rate_add patterns need
+# explicit per-good registration. The unregistered grain probe failed to load;
+# its deployed registrations load without rejection in the 2026-10-04 logs.
+# Coal/oil types are present in engine modifiers.log but absent from vanilla's
+# and the mod's type definitions. Shape follows the registered grain probe.
+
+country_coal_import_tariffs_rate_add = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_coal_export_tariffs_rate_add = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_oil_import_tariffs_rate_add = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+country_oil_export_tariffs_rate_add = {
+	decimals = 0
+	color = neutral
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}

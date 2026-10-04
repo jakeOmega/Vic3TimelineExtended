@@ -7,12 +7,10 @@
 #
 # WHY THIS FILE EXISTS: every value below is O(1). The figures the journal entry
 # used to show were computed live, in loc, every frame the panel was open --
-# `global_greenhouse_gas_emissions_script_value_display` iterates every state in
-# the world, `market_greenhouse_gas_emissions_script_value` runs three
-# `every_scope_building` sweeps across a whole market, and the eight
-# `gw_countries_with_*` values were an `every_country` sweep each. The heavy
-# work now happens once a year (per market leader, at the site that was already
-# computing it) and once a month (one country sweep for all eight counts); these
+# live market/world values now include state and household pop sweeps. All UI
+# readers, including the emissions map and treaty text, use stored snapshots.
+# The heavy work happens once a year per market leader and once a month for
+# the policy adoption counts; these
 # readers only fetch what was stored.
 #
 # EVERY READER IS GUARDED. The journal entry has `is_shown_when_inactive`, so
@@ -26,15 +24,12 @@
 # ============================================================================
 
 # ----------------------------------------------------------------------------
-# Emissions — all read from the yearly snapshots
+# Emissions — snapshots retain internal units; formatted amounts scale ×1000
 # ----------------------------------------------------------------------------
 
-# This country's MARKET's annual emissions. Stored on the market leader, because
-# the sweep that produces it is market-wide: a member reads its leader's copy.
-# There is no per-country emissions figure in this system -- emissions are a
-# property of a market's oil and coal consumption, not of one member.
-# Scope: country
-gw_market_emis_display = {
+# Market totals remain available to maps, UN shares and the market overview.
+# Country snapshots independently feed the Top Emitters table.
+gw_market_emis_raw = {
 	value = 0
 	market_capital ?= {
 		owner ?= {
@@ -46,7 +41,13 @@ gw_market_emis_display = {
 	}
 }
 
-# The negative part of the above: carbon captured by synthetic fuel plants.
+# Formatted emission amount only; raw readers above retain internal units.
+gw_market_emis_display = {
+	value = gw_market_emis_raw
+	multiply = gw_emission_display_scale
+}
+
+# The negative part of the above: atmospheric carbon removed by Direct Air Capture.
 # Scope: country
 gw_capture_display = {
 	value = 0
@@ -63,12 +64,18 @@ gw_capture_display = {
 # World annual emissions, measured as the change in the cumulative global
 # variable over the last calendar year rather than re-summed from every market.
 # Scope: any
-gw_global_emis_display = {
+gw_global_emis_raw = {
 	value = 0
 	if = {
 		limit = { has_global_variable = gw_g_global_emis }
 		add = global_var:gw_g_global_emis
 	}
+}
+
+# Formatted emission amount only; raw readers above retain internal units.
+gw_global_emis_display = {
+	value = gw_global_emis_raw
+	multiply = gw_emission_display_scale
 }
 
 # This market's share of world annual emissions, in per cent. Clamped to 0-100
@@ -83,7 +90,7 @@ gw_share_pct_display = {
 			has_global_variable = gw_g_global_emis
 			global_var:gw_g_global_emis > 0
 		}
-		add = gw_market_emis_display
+		add = gw_market_emis_raw
 		divide = global_var:gw_g_global_emis
 		multiply = 100
 	}
@@ -96,7 +103,7 @@ gw_share_pct_display = {
 # moves it by that year's emissions / 10000.
 # Scope: any
 gw_yearly_change_display = {
-	value = gw_global_emis_display
+	value = gw_global_emis_raw
 	divide = 10000
 }
 
@@ -126,16 +133,18 @@ gw_emissions_cut_pct_display = {
 	multiply = 100
 }
 
-# How many of the eight policies are in force for this country. Live: eight
+# How many of the ten policies are in force for this country. Live: ten
 # journal-entry modifier lookups, and it must react to a click immediately.
 # Scope: country
 gw_policies_active_count_display = {
 	value = 0
+	if = { limit = { gw_policy_fossil_fuel_tariffs_active = yes } add = 1 }
 	if = { limit = { gw_policy_carbon_tax_active = yes } add = 1 }
 	if = { limit = { gw_policy_renewable_investment_active = yes } add = 1 }
 	if = { limit = { gw_policy_emission_standards_active = yes } add = 1 }
 	if = { limit = { gw_policy_climate_adaptation_active = yes } add = 1 }
 	if = { limit = { gw_policy_reforestation_active = yes } add = 1 }
+	if = { limit = { gw_policy_carbon_removal_active = yes } add = 1 }
 	if = { limit = { gw_policy_public_transit_active = yes } add = 1 }
 	if = { limit = { gw_policy_fossil_fuel_divestment_active = yes } add = 1 }
 	if = { limit = { gw_policy_green_building_codes_active = yes } add = 1 }
@@ -154,7 +163,7 @@ gw_warming_penalty_scale_display = {
 # World adoption counts — O(1) readers over the monthly global snapshot.
 # These replace the eight `gw_countries_with_*_script_value` definitions, each
 # of which was a full `every_country` sweep rendered live in the JE's reason
-# text. Do not reintroduce a sweeping version: one sweep now fills all eight.
+# text. Do not reintroduce a sweeping version: one sweep now fills all ten.
 # Scope: any
 # ----------------------------------------------------------------------------
 gw_world_n_carbon_tax_display = {
@@ -421,26 +430,19 @@ gw_disp_cut_frac = {
 gw_disp_captured = {
 	value = gw_capture_display
 	multiply = -1
+	multiply = gw_emission_display_scale
 }
 
 # ----------------------------------------------------------------------------
 # Top Emitters (te_gw_sec_emitters). The first four are read in a LISTED
-# LEADER's scope (State.GetCountry.MakeScope.ScriptValue on a row, and
-# gw_disp_own_emis also as the ranking's order_by); they read that country's
-# own variables, the figures its market's last yearly pulse stored, so a row
-# shows the numbers it was ranked by. The rest are read in the viewer's scope,
-# over the snapshot gw_top_emitters_refresh writes (global_warming_effects.txt).
-# Every read is guarded: a country that never led a market has none of these.
-# ----------------------------------------------------------------------------
-
-# This leader's market's annual emissions (the figure the overview's "Our
-# Market's Emissions" shows for a member of that market).
+# Listed COUNTRY scope: its annual snapshot, also the ranking's order_by.
 gw_disp_own_emis = {
 	value = 0
 	if = {
-		limit = { has_variable = gw_disp_market_emis }
-		add = var:gw_disp_market_emis
+		limit = { has_variable = gw_disp_country_emis }
+		add = var:gw_disp_country_emis
 	}
+	multiply = gw_emission_display_scale
 }
 
 # Its share of the world's annual emissions, in per cent (0-100, as the
@@ -449,11 +451,11 @@ gw_disp_own_share_pct = {
 	value = 0
 	if = {
 		limit = {
-			has_variable = gw_disp_market_emis
+			has_variable = gw_disp_country_emis
 			has_global_variable = gw_g_global_emis
 			global_var:gw_g_global_emis > 0
 		}
-		add = var:gw_disp_market_emis
+		add = var:gw_disp_country_emis
 		divide = global_var:gw_g_global_emis
 		multiply = 100
 	}
@@ -461,14 +463,14 @@ gw_disp_own_share_pct = {
 	max = 100
 }
 
-# Its cumulative emissions: every year's figure this country's market added to
-# the world total while this country led it (gw_accumulate_market_emissions_effect).
+# Country cumulative emissions, including negative years and market changes.
 gw_disp_own_cum = {
 	value = 0
 	if = {
-		limit = { has_variable = gw_disp_market_emis_cum }
-		add = var:gw_disp_market_emis_cum
+		limit = { has_variable = gw_disp_country_emis_cum }
+		add = var:gw_disp_country_emis_cum
 	}
+	multiply = gw_emission_display_scale
 }
 
 # 1 while an Enforce Emissions Reduction treaty binds this leader.
@@ -480,7 +482,7 @@ gw_disp_is_treaty_bound = {
 	}
 }
 
-# Viewer scope: how many markets emit (the rows show five).
+# Viewer scope: how many countries emit (the rows show five).
 gw_disp_emitters_total = {
 	value = 0
 	if = {
@@ -495,7 +497,7 @@ gw_disp_emitters_total = {
 gw_disp_emitters_state = {
 	value = 0
 	if = {
-		limit = { gw_has_yearly_figures = yes }
+		limit = { gw_has_country_yearly_figures = yes }
 		value = 1
 		if = {
 			limit = { has_variable = gw_emitters_total }
@@ -520,7 +522,7 @@ gw_disp_emitters_more = {
 	min = 0
 }
 
-# Viewer scope: the row (1-5) that is our own market, 0 when none is.
+# Viewer scope: the row (1-5) that is our own country, 0 when none is.
 gw_disp_emitters_own_slot = {
 	value = 0
 	if = {
@@ -529,12 +531,28 @@ gw_disp_emitters_own_slot = {
 	}
 }
 
-# Viewer scope: our market's place among all emitting markets, 0 when it does
+# Viewer scope: our country's place among all emitting markets, 0 when it does
 # not emit on balance.
 gw_disp_emitters_own_rank = {
 	value = 0
 	if = {
 		limit = { has_variable = gw_emitters_own_rank }
 		add = var:gw_emitters_own_rank
+	}
+}
+
+gw_world_n_carbon_removal_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_carbon_removal }
+		add = global_var:gw_g_n_carbon_removal
+	}
+}
+
+gw_world_n_fossil_fuel_tariffs_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_n_fossil_fuel_tariffs }
+		add = global_var:gw_g_n_fossil_fuel_tariffs
 	}
 }

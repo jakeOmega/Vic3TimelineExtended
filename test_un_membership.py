@@ -103,7 +103,7 @@ _TOP = re.compile(r"^([A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{", re.M)
 _ARTICLE_19_ONLY = {
     "un_dues_vote_suspended",   # the definition
     "un_chamber_dues_lines",    # the dues display
-    "un_pay_dues_button",       # an AI weight: settle once the vote is gone
+    "un_ai_dues_will",          # an AI weight: settle once the vote is gone
 }
 
 

@@ -2596,6 +2596,84 @@ types un_chamber_widget_types
 		}
 	}
 
+	type te_un_sec_dev_fund = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		visible = "[GetScriptedGui('un_chamber_dev_fund_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+		# ---- The World Development Fund (owner, 2026-10-03) ----
+		# Who the Fund pays this month and how much, under the line a member's
+		# GDP per head must be at or under: a table of the month's figures,
+		# then the recipients, largest grant first (un_dev_fund_recipient_lines).
+		# Only while the Fund stands; open by default, as a live list. The
+		# rows read the monthly snapshot, so nothing here iterates but the list.
+		un_chamber_section_header = {
+			blockoverride "left_text" {
+				text = "je_un_dev_fund_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('un_chamber_dev_fund_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('un_chamber_dev_fund_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('un_chamber_dev_fund_closed'))]"
+			}
+		}
+
+		un_chamber_panel = {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_dev_fund_closed'))]"
+
+			# The line, with how it was set this month on hover.
+			un_chamber_value_row = {
+				tooltip = "[GetScriptedGui('un_chamber_dev_fund_line_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+				blockoverride "row_label" {
+					text = "je_un_dev_fund_line_label"
+				}
+				blockoverride "row_value" {
+					text = "je_un_dev_fund_line_value"
+				}
+			}
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_dev_fund_avg_label"
+				}
+				blockoverride "row_value" {
+					text = "je_un_dev_fund_avg_value"
+				}
+			}
+			un_chamber_value_row = {
+				tooltip = "je_un_dev_fund_eligible_tt"
+				blockoverride "row_label" {
+					text = "je_un_dev_fund_eligible_label"
+				}
+				blockoverride "row_value" {
+					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dev_fund_recipients')|0]"
+				}
+			}
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_dev_fund_paid_label"
+				}
+				blockoverride "row_value" {
+					text = "je_un_dev_fund_paid_value"
+				}
+			}
+
+			un_chamber_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_dev_fund_sub_recipients"
+				}
+			}
+			un_chamber_text = {
+				text = "[GetScriptedGui('un_chamber_dev_fund_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
+		}
+	}
+
 	type te_un_sec_ballot = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter

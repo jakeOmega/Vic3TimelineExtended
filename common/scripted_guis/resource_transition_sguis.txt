@@ -1,0 +1,239 @@
+﻿# ============================================================================
+# RESOURCE TRANSITION — Fossil Transition section handlers (issue #660)
+# ============================================================================
+# Read by te_gw_sec_transition in gui/journal_entry_widgets/global_warming_widget.gui,
+# which je_global_warming and the Market panel's Climate tab both show.
+#
+# The AI never uses these (`ai_is_valid = { always = no }`): it starts and
+# stops programmes through the scripted buttons in
+# common/scripted_buttons/resource_transition_buttons.txt, which call the same
+# rt_possible_* triggers and rt_*_programme effects, so the two surfaces cannot
+# drift.
+#
+# OP CODES, as in global_warming_sguis.txt, so the section reuses its Adopt and
+# Repeal button types:
+#
+#   0   Start  -> rt_possible_start / rt_start_programme
+#   1   Stop   -> rt_possible_stop  / rt_stop_programme
+#
+# An op nobody defined falls through to `trigger_else = { always = no }`.
+# `is_shown` never reads scope:op (global_warming_sguis.txt says why); "is it
+# running?" is the separate rt_active_<key>_sgui. Each action also requires
+# is_player, as the climate policies' do.
+#
+# READ-ONLY HANDLERS carry `is_valid = { always = no }` and an empty effect:
+# the widget asks script a yes/no question instead of re-encoding it in .gui.
+
+# ---------------------------------------------------------------------------
+# Programme actions
+# ---------------------------------------------------------------------------
+rt_programme_coal_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			rt_possible_start = { KEY = coal BT = building_coal_mine }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			rt_possible_stop = { KEY = coal }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 is_player = yes }
+			rt_start_programme = { KEY = coal }
+		}
+		else_if = {
+			limit = { scope:op = 1 is_player = yes }
+			rt_stop_programme = { KEY = coal }
+		}
+	}
+}
+
+rt_programme_oil_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			rt_possible_start = { KEY = oil BT = building_oil_rig }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			rt_possible_stop = { KEY = oil }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 is_player = yes }
+			rt_start_programme = { KEY = oil }
+		}
+		else_if = {
+			limit = { scope:op = 1 is_player = yes }
+			rt_stop_programme = { KEY = oil }
+		}
+	}
+}
+
+rt_programme_power_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		always = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			rt_possible_start = { KEY = power BT = building_power_plant }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			rt_possible_stop = { KEY = power }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 is_player = yes }
+			rt_start_programme = { KEY = power }
+		}
+		else_if = {
+			limit = { scope:op = 1 is_player = yes }
+			rt_stop_programme = { KEY = power }
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Is this programme running? (the row's lit icon, check and Start/Stop pair)
+# ---------------------------------------------------------------------------
+rt_active_coal_sgui = {
+	scope = country
+	is_shown = { has_variable = rt_prog_coal }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+rt_active_oil_sgui = {
+	scope = country
+	is_shown = { has_variable = rt_prog_oil }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+rt_active_power_sgui = {
+	scope = country
+	is_shown = { has_variable = rt_prog_power }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# Section-wide yes/no questions
+# ---------------------------------------------------------------------------
+
+# Managed Fossil Phaseout is in force: the programme rows' controls can work.
+# Otherwise the section says once what they need.
+rt_phaseout_sgui = {
+	scope = country
+	is_shown = { has_law = law_type:law_managed_fossil_phaseout }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The panel's snapshot has been taken (rt_refresh_display_effect). False only
+# until the first monthly pulse after a save from before #660 loads.
+rt_has_snapshot_sgui = {
+	scope = country
+	is_shown = { has_variable = rt_d_lv_coal }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Readiness: the two technologies behind carbon-neutral synthetic fuel. Oil
+# from grain and electricity (pm_synthetic_oil_2, Synthetic Biology) and coal
+# from electricity (pm_synthetic_coal, Genetic Engineering). The works itself
+# unlocks earlier for direct air capture, which supplies no replacement fuel.
+rt_synth_oil_tech_sgui = {
+	scope = country
+	is_shown = { has_technology_researched = synthetic_biology }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+rt_synth_coal_tech_sgui = {
+	scope = country
+	is_shown = { has_technology_researched = genetic_engineering }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Is there a building left for this programme to retire? The row's hover names
+# the next one, or says none is left.
+rt_has_next_coal_sgui = {
+	scope = country
+	is_shown = { has_variable = rt_d_next_state_coal }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+rt_has_next_oil_sgui = {
+	scope = country
+	is_shown = { has_variable = rt_d_next_state_oil }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+rt_has_next_power_sgui = {
+	scope = country
+	is_shown = { has_variable = rt_d_next_state_power }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

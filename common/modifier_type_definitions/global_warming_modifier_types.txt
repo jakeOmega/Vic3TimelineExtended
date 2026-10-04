@@ -72,19 +72,9 @@ country_building_renewable_energy_plant_require_subsidies_bool = {
 	}
 }
 
-building_group_bg_coal_mining_tax_mult = {
-	decimals = 1
-	color = neutral
-	percent = yes
-	game_data = {
-		ai_value = 0
-	}
-}
-
-building_group_bg_coal_mining_throughput_add = {
-	decimals = 0
-	color = good
-	percent = yes
+country_building_synthetics_plant_coal_require_subsidies_bool = {
+	color = bad
+	boolean = yes
 	game_data = {
 		ai_value = 0
 	}
@@ -119,4 +109,30 @@ state_harvest_condition_hailstorm_impact_mult = {
 	game_data = {
 		ai_value = 0
 	}
+}
+
+# Net industrial emissions (fuel minus source capture and synthetic credits), in
+# display units. Fuel methods carry it in state_modifiers, so it is both the
+# annual market sum's input and the only emissions line their tooltips show.
+# script_only does not hide it from tooltips.
+state_greenhouse_gas_emissions_add = {
+	color = bad
+	percent = no
+	decimals = 2
+	script_only = yes
+}
+
+# Atmospheric offsets are kept separate so policy cuts do not weaken removal.
+state_atmospheric_carbon_capture_add = {
+	color = good
+	percent = no
+	decimals = 2
+	script_only = yes
+}
+
+country_household_greenhouse_gas_emissions_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	game_data = { ai_value = 0 }
 }

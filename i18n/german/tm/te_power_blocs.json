@@ -5,19 +5,19 @@
  },
  "power_bloc_can_enact_decree_cultural_emigration_initiative_bool": {
   "en": "Can Enact Cultural Emigration Initiative [Concept('concept_decree', 'Decree')]",
-  "de": "Kann den [Concept('concept_decree', 'Erlass')] „Initiative für kulturelle Auswanderung” erlassen"
+  "de": "Kann den [Concept('concept_decree', 'Erlass')] „Initiative für kulturelle Auswanderung“ erlassen"
  },
  "power_bloc_can_enact_decree_cultural_emigration_initiative_bool_desc": {
   "en": "Can enact the Cultural Emigration Initiative [concept_decree], which encourages emigration of non-[concept_primary_cultures] to other countries.",
-  "de": "Kann den [concept_decree] „Initiative für kulturelle Auswanderung” erlassen, der die Auswanderung von Bevölkerung außerhalb der [concept_primary_cultures] in andere Länder fördert."
+  "de": "Kann den [concept_decree] „Initiative für kulturelle Auswanderung“ erlassen, der die Auswanderung von Bevölkerung außerhalb der [concept_primary_cultures] in andere Länder fördert."
  },
  "power_bloc_can_enact_greenest_grass_campaign_bool": {
   "en": "Can Enact Greenest Grass Campaign",
-  "de": "Kann die Kampagne „Das Gras ist immer grüner” erlassen"
+  "de": "Kann die Kampagne „Das Gras ist immer grüner“ erlassen"
  },
  "power_bloc_can_enact_greenest_grass_campaign_bool_desc": {
   "en": "Can enact the Greenest Grass Campaign [concept_decree], an upgraded version of the Greener Grass Campaign decree.",
-  "de": "Kann den [concept_decree] „Das Gras ist immer grüner”-Kampagne erlassen, eine verbesserte Version des Erlasses „Grüneres Gras”-Kampagne."
+  "de": "Kann den [concept_decree] „Das Gras ist immer grüner“-Kampagne erlassen, eine verbesserte Version des Erlasses „Grüneres Gras“-Kampagne."
  },
  "power_bloc_can_give_development_aid_bool": {
   "en": "Members Can Give Development Assistance",
@@ -77,19 +77,19 @@
  },
  "power_bloc_can_use_crisis_resolution_bool": {
   "en": "Leader Can Use Crisis Resolution [concept_diplomatic_action]",
-  "de": "Anführer kann die [concept_diplomatic_action] „Krisenlösung” nutzen"
+  "de": "Anführer kann die [concept_diplomatic_action] „Krisenlösung“ nutzen"
  },
  "power_bloc_can_use_crisis_resolution_bool_desc": {
   "en": "Leader can use the Crisis Resolution [concept_diplomatic_action] to resolve crises and stabilize [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')], at the cost of [concept_authority].",
-  "de": "Anführer kann die [concept_diplomatic_action] „Krisenlösung” auf Kosten von [concept_authority] nutzen, um Krisen zu lösen und [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] zu stabilisieren."
+  "de": "Anführer kann die [concept_diplomatic_action] „Krisenlösung“ auf Kosten von [concept_authority] nutzen, um Krisen zu lösen und [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] zu stabilisieren."
  },
  "power_bloc_can_use_extend_influence_bool": {
   "en": "Can Use Extend Influence [concept_diplomatic_action]",
-  "de": "Kann die [concept_diplomatic_action] „Einfluss ausweiten” nutzen"
+  "de": "Kann die [concept_diplomatic_action] „Einfluss ausweiten“ nutzen"
  },
  "power_bloc_can_use_extend_influence_bool_desc": {
   "en": "Can use the Extend Influence [concept_diplomatic_action] to increase the leverage of the [concept_power_bloc] in a [concept_country].",
-  "de": "Kann die [concept_diplomatic_action] „Einfluss ausweiten” nutzen, um den Einfluss des [concept_power_bloc] in einem [concept_country] zu erhöhen."
+  "de": "Kann die [concept_diplomatic_action] „Einfluss ausweiten“ nutzen, um den Einflusshebel des [concept_power_bloc] in einem [concept_country] zu erhöhen."
  },
  "power_bloc_can_use_join_united_nations_bool": {
   "en": "Leader Can Require UN Membership",
@@ -97,7 +97,7 @@
  },
  "power_bloc_can_use_join_united_nations_bool_desc": {
   "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can add the Require UN Membership article to treaties, binding another country into the United Nations.",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann den Artikel „UN-Mitgliedschaft verlangen” zu Verträgen hinzufügen und so ein anderes Land in die Vereinten Nationen binden."
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann den Artikel „UN-Mitgliedschaft verlangen“ zu Verträgen hinzufügen und so ein anderes Land in die Vereinten Nationen binden."
  },
  "power_bloc_fiscal_backstop_bool": {
   "en": "The leader is lender of last resort to every adopter, and their overvaluation premium is halved",

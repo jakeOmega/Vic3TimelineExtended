@@ -5,66 +5,34 @@
 # common/scripted_buttons/global_warming_buttons.txt. The journal-entry button
 # and the widget's scripted GUI both call these.
 #
-# A market-wide repeal skips members bound by an emissions reduction treaty
-# (gw_bound_by_emissions_treaty): the treaty locks their policies in, and a
-# removal would freeze it.
-#
-# The `custom_tooltip` wrapper around each market-wide policy is LOAD-BEARING:
-# without it the `every_country` iteration enumerates every market member in the
-# button/control tooltip (see docs/guides/scripting_best_practices.md,
-# "`every_*` Iterators Enumerate in Tooltip Previews").
+# National policies modify only the acting country's journal entry. Tariffs
+# alone belong to the market leader and write native customs settings.
 
 gw_effect_carbon_tax = {
 	custom_tooltip = {
 		text = "GW_CARBON_TAX_DESC"
-		every_country = {
-			limit = {
-				market_capital = ROOT.market_capital
-				NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } }
-			}
-			je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
-		}
+		je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
 	}
 }
 
 gw_effect_remove_carbon_tax = {
 	custom_tooltip = {
 		text = "GW_REMOVE_CARBON_TAX_DESC"
-		every_country = {
-			limit = {
-				market_capital = ROOT.market_capital
-				je:je_global_warming = { has_modifier = carbon_tax_modifier }
-				NOT = { gw_bound_by_emissions_treaty = yes }
-			}
-			je:je_global_warming = { remove_modifier = carbon_tax_modifier }
-		}
+		je:je_global_warming = { remove_modifier = carbon_tax_modifier }
 	}
 }
 
 gw_effect_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_RENEWABLE_INVESTMENT_DESC"
-		every_country = {
-			limit = {
-				market_capital = ROOT.market_capital
-				NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } }
-			}
-			je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
-		}
+		je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
 	}
 }
 
 gw_effect_remove_renewable_investment = {
 	custom_tooltip = {
 		text = "GW_REMOVE_RENEWABLE_INVESTMENT_DESC"
-		every_country = {
-			limit = {
-				market_capital = ROOT.market_capital
-				je:je_global_warming = { has_modifier = renewable_investment_modifier }
-				NOT = { gw_bound_by_emissions_treaty = yes }
-			}
-			je:je_global_warming = { remove_modifier = renewable_investment_modifier }
-		}
+		je:je_global_warming = { remove_modifier = renewable_investment_modifier }
 	}
 }
 
@@ -85,27 +53,14 @@ gw_effect_remove_climate_adaptation = {
 gw_effect_emission_standards = {
 	custom_tooltip = {
 		text = "GW_EMISSION_STANDARDS_DESC"
-		every_country = {
-			limit = {
-				market_capital = ROOT.market_capital
-				NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } }
-			}
-			je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
-		}
+		je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
 	}
 }
 
 gw_effect_remove_emission_standards = {
 	custom_tooltip = {
 		text = "GW_REMOVE_EMISSION_STANDARDS_DESC"
-		every_country = {
-			limit = {
-				market_capital = ROOT.market_capital
-				je:je_global_warming = { has_modifier = emission_standards_modifier }
-				NOT = { gw_bound_by_emissions_treaty = yes }
-			}
-			je:je_global_warming = { remove_modifier = emission_standards_modifier }
-		}
+		je:je_global_warming = { remove_modifier = emission_standards_modifier }
 	}
 }
 
@@ -181,16 +136,8 @@ gw_effect_remove_green_building_codes = {
 # widget and the docs say "re-based each January" rather than implying live data.
 # ============================================================================
 
-# Store this market's annual emissions on its LEADER, whose yearly pulse is
-# already evaluating the figure to accumulate the global total.
-#
-# The order matters: `market_greenhouse_gas_emissions_script_value` is evaluated
-# once, into the variable, and the global accumulation then reads the variable.
-# Variable writes ARE visible later in the same effect block (unlike
-# add_modifier), so this stores and accumulates exactly the same number the
-# on_action added before, with no second evaluation of the market-wide sweep.
-#
-# Scope: country (the market leader)
+# Country scope, market leader: retain market snapshots for existing market
+# overview, map and UN readers. The world accumulates country snapshots instead.
 gw_snapshot_market_emissions_effect = {
 	hidden_effect = {
 		set_variable = {
@@ -204,40 +151,26 @@ gw_snapshot_market_emissions_effect = {
 	}
 }
 
-# The market's CUMULATIVE emissions, for the panel's Top Emitters list: every
-# year's figure this country's market added to the world total while this
-# country led it. Called right after gw_snapshot_market_emissions_effect and the
-# global accumulation (global_warming_update_on_action), so it adds exactly the
-# number the world total received that year. Display only; nothing reads it but
-# the panel.
-#
-# THE RULE WHEN LEADERSHIP CHANGES. Like the annual figure, the total is stored
-# on the leader, so it follows the country, not the market:
-# - a country that stops leading (it joins another market, or a customs union
-#   it led dissolves) keeps its total but adds nothing until it leads a market
-#   again, when it carries on from where it stopped;
-# - a market's new leader starts from its own total (zero if it never led one);
-# - when markets merge, the leader of the merged market goes on adding to its
-#   own total, and the absorbed leader's total stays with that country.
-# The panel labels the figure accordingly ("while this country led its market").
-# A variable, so a revolution's winner keeps it (CLAUDE.md's revolution rule).
-# The annual figure can be negative (a market that captures more than it
-# emits), so the total can fall.
-#
-# Scope: country (the market leader)
-gw_accumulate_market_emissions_effect = {
+gw_snapshot_country_emissions_effect = {
+	hidden_effect = {
+		set_variable = {
+			name = gw_disp_country_emis
+			value = country_greenhouse_gas_emissions_script_value
+		}
+	}
+}
+
+# The exact annual contribution to the world total, including negative years.
+# Existing market totals stay untouched: they cannot be split retrospectively.
+# Country totals begin on the first yearly capital pulse after this update,
+# follow the country across market changes, and inherit through revolutions.
+gw_accumulate_country_emissions_effect = {
 	hidden_effect = {
 		if = {
-			limit = { NOT = { has_variable = gw_disp_market_emis_cum } }
-			set_variable = {
-				name = gw_disp_market_emis_cum
-				value = 0
-			}
+			limit = { NOT = { has_variable = gw_disp_country_emis_cum } }
+			set_variable = { name = gw_disp_country_emis_cum value = 0 }
 		}
-		change_variable = {
-			name = gw_disp_market_emis_cum
-			add = var:gw_disp_market_emis
-		}
+		change_variable = { name = gw_disp_country_emis_cum add = var:gw_disp_country_emis }
 	}
 }
 
@@ -278,8 +211,8 @@ gw_rebase_annual_emissions_effect = {
 	}
 }
 
-# Count how many countries run each of the eight policies, in ONE country sweep
-# that fills all eight counters. Replaces eight separate sweeping script values
+# Count how many countries run each of the ten policies, in ONE country sweep
+# that fills all ten counters. Replaces eight separate sweeping script values
 # that were rendered live in the reason text.
 #
 # The same sweep stores the mean standard of living over these countries
@@ -289,11 +222,13 @@ gw_rebase_annual_emissions_effect = {
 # Scope: any (called from the global monthly pulse)
 gw_refresh_global_counts_effect = {
 	hidden_effect = {
+		set_global_variable = { name = gw_g_n_fossil_fuel_tariffs value = 0 }
 		set_global_variable = { name = gw_g_n_carbon_tax value = 0 }
 		set_global_variable = { name = gw_g_n_renewable_investment value = 0 }
 		set_global_variable = { name = gw_g_n_emission_standards value = 0 }
 		set_global_variable = { name = gw_g_n_climate_adaptation value = 0 }
 		set_global_variable = { name = gw_g_n_reforestation value = 0 }
+		set_global_variable = { name = gw_g_n_carbon_removal value = 0 }
 		set_global_variable = { name = gw_g_n_public_transit value = 0 }
 		set_global_variable = { name = gw_g_n_fossil_fuel_divestment value = 0 }
 		set_global_variable = { name = gw_g_n_green_building_codes value = 0 }
@@ -301,6 +236,10 @@ gw_refresh_global_counts_effect = {
 		set_global_variable = { name = gw_g_sol_n value = 0 }
 		every_country = {
 			limit = { has_journal_entry = je_global_warming }
+			if = {
+				limit = { je:je_global_warming ?= { has_modifier = fossil_fuel_tariffs_modifier } }
+				change_global_variable = { name = gw_g_n_fossil_fuel_tariffs add = 1 }
+			}
 			change_global_variable = { name = gw_g_sol_sum add = average_sol }
 			change_global_variable = { name = gw_g_sol_n add = 1 }
 			if = {
@@ -322,6 +261,10 @@ gw_refresh_global_counts_effect = {
 			if = {
 				limit = { gw_policy_reforestation_active = yes }
 				change_global_variable = { name = gw_g_n_reforestation add = 1 }
+			}
+			if = {
+				limit = { gw_policy_carbon_removal_active = yes }
+				change_global_variable = { name = gw_g_n_carbon_removal add = 1 }
 			}
 			if = {
 				limit = { gw_policy_public_transit_active = yes }
@@ -352,35 +295,13 @@ gw_refresh_global_counts_effect = {
 # ---------------------------------------------------------------------------
 # Top Emitters (display only)
 # ---------------------------------------------------------------------------
-# The panel's Top Emitters section (global_warming_widget.gui,
-# te_gw_sec_emitters) lists the five markets emitting most, each named by its
-# leader. There is no datamodel of markets a journal-entry widget can walk (the
-# only market lists in any .gui are per-market: Market.AccessParticipants,
-# Market.GetExports, ...), so, as the Space Race's Rivals rows do
-# (sr_rivals_estimate_refresh), the viewer keeps a snapshot:
-#   gw_emitters_total        how many markets emit (gw_is_ranked_emitter)
-#   gw_emitter_1 .. _5       the first five leaders' capitals, largest first
-#                            (gotcha #11: the GUI reaches a country through a
-#                            stored state)
-#   gw_emitters_shown        how many of those rows are filled (0-5)
-#   gw_emitters_own_slot     1-5 when our own market is one of those rows
-#   gw_emitters_own_rank     our market's place among all of them (0: ours
-#                            does not emit on balance)
-# The figures on each row are read live from the listed leader's own variables
-# (gw_disp_own_* in global_warming_values.txt). Monthly and for players only
-# (je_global_warming's on_monthly_pulse): the leaders' figures are written on
-# their market capitals' yearly state pulses, not on the viewer's, so a
-# snapshot taken once a year could predate some of them and list the rows out
-# of the order their figures show; monthly, the order is at most a month
-# behind. Everything is a variable, so a revolution's winner keeps it, and the
-# snapshot is rebuilt every month anyway.
-# Scope: country (a player).
+# Top Emitters ranks countries by their last yearly country snapshot. Players
+# store five capitals for the GUI and their own place, rebuilt monthly. The
+# capital is only a GUI bridge; the numbers belong to its country.
 gw_top_emitters_refresh = {
 	hidden_effect = {
 		save_scope_as = gw_te_viewer
-		market_capital ?= {
-			owner ?= { save_scope_as = gw_te_own_leader }
-		}
+		save_scope_as = gw_te_own_country
 		set_variable = { name = gw_emitters_total value = 0 }
 		every_country = {
 			limit = { gw_is_ranked_emitter = yes }
@@ -396,7 +317,7 @@ gw_top_emitters_refresh = {
 		gw_top_emitter_slot = { N = 5 POS = 4 }
 		# How many rows to show: the filled slots, counted from the first. A
 		# slot is empty only past the end of the list (or, in principle, for a
-		# leader with no capital), and the rows after an empty one hide too.
+		# country with no capital), and the rows after an empty one hide too.
 		set_variable = { name = gw_emitters_shown value = 0 }
 		if = {
 			limit = { has_variable = gw_emitter_1 }
@@ -418,22 +339,22 @@ gw_top_emitters_refresh = {
 				}
 			}
 		}
-		# Our market's place: one more than the markets emitting more than it.
+		# Our country's place: one more than the countries emitting more than it.
 		set_variable = { name = gw_emitters_own_rank value = 0 }
 		if = {
 			limit = {
-				exists = scope:gw_te_own_leader
-				scope:gw_te_own_leader = { gw_is_ranked_emitter = yes }
+				exists = scope:gw_te_own_country
+				scope:gw_te_own_country = { gw_is_ranked_emitter = yes }
 			}
 			set_variable = {
 				name = gw_emitters_own_emis
-				value = scope:gw_te_own_leader.var:gw_disp_market_emis
+				value = scope:gw_te_own_country.var:gw_disp_country_emis
 			}
 			set_variable = { name = gw_emitters_own_rank value = 1 }
 			every_country = {
 				limit = {
 					gw_is_ranked_emitter = yes
-					var:gw_disp_market_emis > scope:gw_te_viewer.var:gw_emitters_own_emis
+					var:gw_disp_country_emis > scope:gw_te_viewer.var:gw_emitters_own_emis
 				}
 				scope:gw_te_viewer = {
 					change_variable = { name = gw_emitters_own_rank add = 1 }
@@ -444,12 +365,12 @@ gw_top_emitters_refresh = {
 	}
 }
 
-# Slot $N$ (1-5) gets the leader at position $POS$ ($N$ - 1) by annual
+# Slot $N$ (1-5) gets the country at position $POS$ ($N$ - 1) by annual
 # emissions. An ordered_ position past the end of the list clamps to the last
 # element instead of skipping (un_overview_display_effects.txt), so the count
-# is checked first. The capital is saved under a name per slot, so a leader
+# is checked first. The capital is saved under a name per slot, so a country
 # without one can never pass on the previous slot's. Scope: the viewer
-# (scope:gw_te_viewer, and scope:gw_te_own_leader when it exists, are set).
+# (scope:gw_te_viewer, and scope:gw_te_own_country when it exists, are set).
 gw_top_emitter_slot = {
 	if = {
 		limit = {
@@ -465,8 +386,8 @@ gw_top_emitter_slot = {
 			capital ?= { save_scope_as = gw_te_capital_$N$ }
 			if = {
 				limit = {
-					exists = scope:gw_te_own_leader
-					THIS = scope:gw_te_own_leader
+					exists = scope:gw_te_own_country
+					THIS = scope:gw_te_own_country
 				}
 				scope:gw_te_viewer = {
 					set_variable = { name = gw_emitters_own_slot value = $N$ }
@@ -485,5 +406,79 @@ gw_top_emitter_slot = {
 	else_if = {
 		limit = { has_variable = gw_emitter_$N$ }
 		remove_variable = gw_emitter_$N$
+	}
+}
+
+
+gw_effect_carbon_removal = {
+	custom_tooltip = {
+		text = "GW_CARBON_REMOVAL_DESC"
+		hidden_effect = { set_variable = { name = gw_carbon_removal_policy value = yes } }
+		je:je_global_warming = { add_modifier = { name = carbon_removal_modifier } }
+	}
+}
+
+gw_effect_remove_carbon_removal = {
+	custom_tooltip = {
+		text = "GW_REMOVE_CARBON_REMOVAL_DESC"
+		hidden_effect = { remove_variable = gw_carbon_removal_policy }
+		je:je_global_warming = { remove_modifier = carbon_removal_modifier }
+	}
+}
+
+# A revolution inherits the country flag; rebuild the journal-entry modifier.
+gw_restore_carbon_removal_policy_effect = {
+	if = {
+		limit = {
+			has_variable = gw_carbon_removal_policy
+			NOT = { gw_policy_carbon_removal_active = yes }
+		}
+		je:je_global_warming = { add_modifier = { name = carbon_removal_modifier } }
+	}
+}
+
+# Tariff rates are native per-good modifiers registered explicitly in
+# global_warming_tariff_modifier_types.txt. Adoption and repeal leave the
+# player's native tariff levels intact; the additive rate can coexist with
+# legislated customs. No saved-level or monthly setter workaround is needed.
+gw_effect_fossil_fuel_tariffs = {
+	custom_tooltip = {
+		text = "GW_FOSSIL_FUEL_TARIFFS_DESC"
+		je:je_global_warming = { add_modifier = { name = fossil_fuel_tariffs_modifier } }
+	}
+}
+
+gw_effect_remove_fossil_fuel_tariffs = {
+	custom_tooltip = {
+		text = "GW_REMOVE_FOSSIL_FUEL_TARIFFS_DESC"
+		je:je_global_warming = { remove_modifier = fossil_fuel_tariffs_modifier }
+	}
+}
+
+# Country scope. A former leader must not retain a tariff policy after its
+# customs authority moves. National mitigation choices remain its own.
+gw_drop_fossil_fuel_tariffs_effect = {
+	je:je_global_warming ?= { remove_modifier = fossil_fuel_tariffs_modifier }
+}
+
+# Ownership cleanup only; rate modifiers themselves need no reassertion.
+# Run with climate disabled too so the programme's ongoing cost is released.
+gw_refresh_fossil_fuel_tariffs_effect = {
+	if = {
+		limit = {
+			je:je_global_warming ?= { has_modifier = fossil_fuel_tariffs_modifier }
+			OR = {
+				NOT = { te_tax_owns_market = yes }
+				NOT = { has_game_rule = global_warming_enabled }
+			}
+		}
+		gw_drop_fossil_fuel_tariffs_effect = yes
+	}
+}
+
+gw_refresh_tariff_policies_effect = {
+	every_country = {
+		limit = { has_journal_entry = je_global_warming }
+		gw_refresh_fossil_fuel_tariffs_effect = yes
 	}
 }

@@ -148,6 +148,22 @@ class NumberFormatTests(unittest.TestCase):
         self.assertEqual(t.localize_numbers("2.5", "2.5", "japanese"), "2.5")
 
 
+class QuoteFormatTests(unittest.TestCase):
+    def test_escaped_straight_quotes_become_german(self):
+        self.assertEqual(t.localize_quotes('\\"Ja.\\"\\n\\n\\"Nein.\\"', "german"), "„Ja.“\\n\\n„Nein.“")
+
+    def test_inner_pair_nests_as_single_marks(self):
+        self.assertEqual(t.localize_quotes('\\"Mit „ja“ beginnen.\\"', "german"), "„Mit ‚ja‘ beginnen.“")
+
+    def test_wrong_closing_mark(self):
+        self.assertEqual(t.localize_quotes("Die Aktion „Krisenlösung” nutzen", "german"), "Die Aktion „Krisenlösung“ nutzen")
+
+    def test_unpaired_quotes_left_alone(self):
+        odd = '\\"Eins.\\" Zwei.\\"'
+        self.assertEqual(t.localize_quotes(odd, "german"), odd)
+        self.assertEqual(t.localize_quotes("„Ja“", "french"), "„Ja“")
+
+
 class TermCheckTests(unittest.TestCase):
     def test_inflected_rendering_passes_other_rendering_flagged(self):
         tm = {
@@ -200,6 +216,37 @@ class GlossarySelectionTests(unittest.TestCase):
         self.assertFalse(t.is_country_name(t.Entry(f, "dyn_c_african_empire_adj", "African")))
 
 
+class ChunkFileTests(unittest.TestCase):
+    def test_stale_line_carries_its_previous_translation(self):
+        chunk = [t.Entry("te_x_l_english.yml", "a", "Dues"), t.Entry("te_x_l_english.yml", "b", "New")]
+        previous = {"a": {"en": "Our Dues", "de": "Unsere Beiträge"}}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "c-001.txt")
+            t.write_chunk(path, "c-001", chunk, [], [], "german", previous, "de")
+            with open(path, encoding="utf-8") as fh:
+                lines = fh.read().splitlines()
+        i = lines.index(' a:0 "Dues"')
+        self.assertEqual(lines[i - 2:i], ["# PREVIOUS ENGLISH: Our Dues", "# PREVIOUS TRANSLATION: Unsere Beiträge"])
+        j = lines.index(' b:0 "New"')
+        self.assertFalse(lines[j - 1].startswith("# PREVIOUS"))  # a new key has none
+
+    def test_dev_only_files_are_not_loaded(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for name in ("te_x_l_english.yml", *t.DEV_ONLY_FILES):
+                with open(os.path.join(tmp, name), "w", encoding="utf-8-sig") as fh:
+                    fh.write(f'l_english:\n {name[:4]}key:0 "Text"\n')
+            self.assertEqual([e.file for e in t.load_english(tmp)], ["te_x_l_english.yml"])
+
+
+class GlossaryMatchTests(unittest.TestCase):
+    def test_multiword_terms_match_in_any_case_lone_words_as_written(self):
+        chunk = [t.Entry("te_x_l_english.yml", "a", "Escalates the diplomatic play over green fields.")]
+        lines = t.chunk_glossary(chunk, {}, None, set(), "de",
+                                 terms={"Diplomatic Play": "Diplomatiespiel", "Green": "Grüne"})
+        self.assertIn("#   Diplomatic Play => Diplomatiespiel", lines)
+        self.assertFalse(any("Grüne" in line for line in lines))
+
+
 class RoundTripTests(unittest.TestCase):
     """prepare-free: a manifest and agent output on disk, then merge and save."""
 
@@ -245,6 +292,19 @@ class RoundTripTests(unittest.TestCase):
         self.assertTrue(any("concept links" in e for e in rejected["law_x"]))
         # The country forms live in the base key's file.
         self.assertTrue(os.path.isfile(os.path.join(self.dirs[0], "tm", "te_formable_countries.json")))
+
+    def test_refresh_keeps_country_forms_and_previous_translations(self):
+        with open(os.path.join(self.dirs[1], "manifest.json"), encoding="utf-8") as fh:
+            manifest = json.load(fh)
+        manifest["names-001"]["previous"] = {"law_y": {"en": "Old plain", "de": "Alt"}}
+        with open(os.path.join(self.dirs[1], "manifest.json"), "w", encoding="utf-8") as fh:
+            json.dump(manifest, fh)
+        with mock.patch.object(t, "VanillaTerms", lambda language: None):
+            t.cmd_refresh(mock.Mock(language="german", field="de", chunks=["names-001"]))
+        with open(os.path.join(self.dirs[1], "chunks", "names-001.txt"), encoding="utf-8") as fh:
+            text = fh.read()
+        self.assertIn("=== COUNTRY NAME FORMS ===", text)
+        self.assertIn("# PREVIOUS TRANSLATION: Alt", text)
 
 
 if __name__ == "__main__":

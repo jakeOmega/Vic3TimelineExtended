@@ -422,6 +422,19 @@ un_lean_burden = {
 			limit = { scope:un_vote_proposer ?= { gdp_per_capita_ranking <= 15 } }
 			add = -15
 		}
+		# A major power that carries it is billed a programme's cost
+		# (un_vote_apply_resolution_compliance), which a treasury in default
+		# or near its ceiling cannot carry.
+		if = {
+			limit = {
+				country_rank >= rank_value:major_power
+				OR = {
+					in_default = yes
+					scaled_debt >= 0.75
+				}
+			}
+			add = -30
+		}
 	}
 	else_if = {
 		limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
@@ -432,6 +445,20 @@ un_lean_burden = {
 				max = 3
 				multiply = -15
 			}
+		}
+		# The same bill for a full deployment (Established and above), unless
+		# the peacekeeping programme already pays it.
+		if = {
+			limit = {
+				country_rank >= rank_value:major_power
+				un_tier_at_least_established = yes
+				NOT = { un_standing_program_active_peacekeeping = yes }
+				OR = {
+					in_default = yes
+					scaled_debt >= 0.75
+				}
+			}
+			add = -30
 		}
 	}
 }

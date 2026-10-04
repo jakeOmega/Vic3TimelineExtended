@@ -1,6 +1,6 @@
 ﻿# =================================================================
 # TREATY ARTICLE: enforce_emissions_reduction
-# Forces a market leader to adopt all greenhouse gas reduction
+# Forces a country to adopt all greenhouse gas reduction
 # policies (carbon tax, renewable investment, emission standards,
 # reforestation, public transit, fossil fuel divestment, green
 # building codes) and imposes additional fossil fuel restrictions.
@@ -31,7 +31,7 @@ enforce_emissions_reduction = {
 		intergovernmental_organizations
 	}
 
-	# Source = the market leader being forced to reduce emissions
+	# Source = the country being forced to reduce emissions
 	# Additional penalties on top of the forced policy modifiers
 	#
 	# AUTHORITY: the treaty itself costs none, and it waives what it forces. Five
@@ -51,7 +51,7 @@ enforce_emissions_reduction = {
 	# forced to cut their own emissions.
 	source_modifier = {
 		building_power_plant_throughput_add = -0.20
-		building_group_bg_coal_mining_throughput_add = -0.10
+		building_coal_mine_throughput_add = -0.10
 		building_group_bg_oil_extraction_throughput_add = -0.10
 		country_authority_cost_add = -750
 		interest_group_ig_industrialists_approval_add = -2
@@ -62,22 +62,18 @@ enforce_emissions_reduction = {
 		country_prestige_mult = 0.02
 	}
 
-	# ROOT in visible and possible is the source, the market leader being
+	# ROOT in visible and possible is the source, the country being
 	# forced to reduce emissions; scope:other_country is the demanding target
 	# (vanilla 14_treaty_port, 29_recognize_independence).
 	visible = {
 		# Only visible once global warming is active
 		temperature_anomaly_display > 0.1
-		# Only market leaders can be forced
-		market_capital.owner = root
 	}
 
 	possible = {
 		has_diplomatic_relevance = scope:other_country
 		NOT = { is_country_type = decentralized }
 		temperature_anomaly_display >= 0.5
-		# Must be a market leader
-		market_capital.owner = root
 		# The policies live on the climate journal entry, and the authority
 		# waiver above assumes they are there to be waived
 		has_journal_entry = je_global_warming
@@ -99,36 +95,17 @@ enforce_emissions_reduction = {
 				# Set treaty flag so remove buttons are blocked
 				set_variable = has_emissions_reduction_treaty
 
-				# Apply all market-wide GW mitigation modifiers.
-				# NOTE: use prev.market_capital (prev = source_country) here, NOT
-				# ROOT.market_capital. on_entry_into_force runs in treaty_article scope,
-				# so ROOT is the article (no .market_capital) — unlike the GW scripted
-				# buttons this idiom was lifted from, where ROOT is the acting country.
-				# No outer "does the source already have it" test: the sweep's own
-				# limit skips whoever has the policy, and an outer test used to skip
-				# topping up members that lacked a policy the source already had.
-				every_country = {
-					limit = {
-						market_capital = prev.market_capital
-						has_journal_entry = je_global_warming
-						NOT = { je:je_global_warming ?= { has_modifier = carbon_tax_modifier } }
-					}
+				# Force only the source country's policies, including for market members.
+				if = {
+					limit = { NOT = { je:je_global_warming = { has_modifier = carbon_tax_modifier } } }
 					je:je_global_warming = { add_modifier = { name = carbon_tax_modifier } }
 				}
-				every_country = {
-					limit = {
-						market_capital = prev.market_capital
-						has_journal_entry = je_global_warming
-						NOT = { je:je_global_warming ?= { has_modifier = renewable_investment_modifier } }
-					}
+				if = {
+					limit = { NOT = { je:je_global_warming = { has_modifier = renewable_investment_modifier } } }
 					je:je_global_warming = { add_modifier = { name = renewable_investment_modifier } }
 				}
-				every_country = {
-					limit = {
-						market_capital = prev.market_capital
-						has_journal_entry = je_global_warming
-						NOT = { je:je_global_warming ?= { has_modifier = emission_standards_modifier } }
-					}
+				if = {
+					limit = { NOT = { je:je_global_warming = { has_modifier = emission_standards_modifier } } }
 					je:je_global_warming = { add_modifier = { name = emission_standards_modifier } }
 				}
 

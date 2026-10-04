@@ -11,6 +11,10 @@ production pipeline). Nothing here knows about a particular entity list.
              jobs. Each render gets a `<name>__s<seed>.prompt.txt` beside it and
              is redone when that differs, so editing a subject re-renders only
              what it changes; an embedding made from an older prompt is an error.
+  prepare_restyle() / restyle()
+             An existing icon refitted instead of redrawn: its own border cut
+             off and transparent corners filled, then repainted by FLUX
+             image-to-image at a strength (0 keeps it as it is).
   Composer   Fits a raw render into its category's vanilla layout:
                cutout           background removed (rembg), trimmed, padded, graded
                framed           full-bleed scene inside the frame lifted from vanilla
@@ -67,17 +71,17 @@ def vanilla_icons_dir() -> Path:
     return Path(base_game_path) / "game" / "gfx" / "interface" / "icons"
 
 
-def load_pipe(**components):
-    """FluxPipeline from local files only.
+def load_pipe(pipeline: str = "FluxPipeline", **components):
+    """A FLUX pipeline (`FluxPipeline`, or `FluxImg2ImgPipeline` for restyle) from local files only.
 
     A bare hub id with an unset or stale HF_HOME would otherwise start a 32 GB
     download (see the spec's runtime notes).
     """
+    import diffusers
     import torch
-    from diffusers import FluxPipeline
     try:
-        return FluxPipeline.from_pretrained(MODEL, local_files_only=True,
-                                            torch_dtype=torch.bfloat16, **components)
+        return getattr(diffusers, pipeline).from_pretrained(MODEL, local_files_only=True,
+                                                            torch_dtype=torch.bfloat16, **components)
     except OSError as e:
         raise SystemExit(f"FLUX weights not found locally ({MODEL}). Point FLUX_MODEL_DIR at a "
                          f"local FLUX.1-schnell snapshot; this script never downloads.\n{e}")
@@ -155,6 +159,131 @@ def render(jobs: list[tuple[str, str, int]], emb_dir: Path, raw_dir: Path,
         ).images[0]
         image.save(dest)
         note.write_text(prompt, encoding="utf-8")
+        print(f"  [{i}/{len(todo)}] {dest.name}  {time.time() - t1:.0f}s", flush=True)
+
+
+# ── restyle: an existing icon refitted rather than redrawn ───────────────
+
+# img2img runs floor(steps x strength) of `steps` denoising steps, so a
+# strength is applied in eighths: 0.375 is 3 steps, 0.5 is 4.
+RESTYLE_STEPS = 8
+
+
+def _upsample2(a: np.ndarray, shape: tuple[int, int]) -> np.ndarray:
+    """Double an (h, w, c) array smoothly: repeat, then a separable [1, 2, 1] blur."""
+    up = a.repeat(2, 0).repeat(2, 1)
+    p = np.pad(up, ((1, 1), (1, 1), (0, 0)), mode="edge")
+    up = (p[:-2] + 2 * p[1:-1] + p[2:]) / 4
+    up = (up[:, :-2] + 2 * up[:, 1:-1] + up[:, 2:]) / 4
+    return up[:shape[0], :shape[1]]
+
+
+def fill_transparent(im: Image.Image) -> Image.Image:
+    """RGB with every transparent pixel filled from its opaque surroundings (push-pull).
+
+    Each level halves the image, averaging colour weighted by alpha; on the way
+    back up, a pixel takes its own colour where it is opaque and the smoothly
+    upsampled coarser level's where it is not. A badge's empty corners come
+    out as a soft continuation of its edge, which img2img then paints over.
+    """
+    a = np.asarray(im.convert("RGBA"), dtype=np.float32) / 255.0
+    rgb, alpha = a[..., :3] * a[..., 3:], a[..., 3:]
+
+    def pull(rgb, alpha):
+        if min(alpha.shape[:2]) <= 1:
+            return rgb / np.maximum(alpha, 1e-6)
+        h, w = (alpha.shape[0] + 1) // 2 * 2, (alpha.shape[1] + 1) // 2 * 2
+        pr = np.pad(rgb, ((0, h - rgb.shape[0]), (0, w - rgb.shape[1]), (0, 0)), mode="edge")
+        pa = np.pad(alpha, ((0, h - alpha.shape[0]), (0, w - alpha.shape[1]), (0, 0)), mode="edge")
+        coarse = pull(pr.reshape(h // 2, 2, w // 2, 2, 3).sum((1, 3)), pa.reshape(h // 2, 2, w // 2, 2, 1).sum((1, 3)))
+        up = _upsample2(coarse, rgb.shape[:2])
+        weight = np.clip(alpha, 0, 1)
+        return rgb / np.maximum(alpha, 1e-6) * weight + up * (1 - weight)
+
+    out = pull(rgb, alpha)
+    return Image.fromarray((np.clip(out, 0, 1) * 255 + 0.5).astype(np.uint8), "RGB")
+
+
+def prepare_restyle(src: Image.Image, crop: float, rim: float = 0.035, size: int = GEN_SIZE) -> Image.Image:
+    """The source icon without its own border, filled square, at the render size.
+
+    The old icons are rounded tiles or circular badges on transparency, each
+    with a rim of its own. Their outline is shrunk by `rim` (a share of the
+    side) so the rim counts as empty too; empty pixels are then filled from
+    the picture; `crop` cuts that share from each edge, zooming in past the
+    filled corners (0.12 or so for a circle).
+    """
+    im = src.convert("RGBA")
+    w, h = im.size
+    small = im.getchannel("A").resize((256, 256), Image.BILINEAR)
+    k = 2 * max(1, round(rim * 256)) + 1
+    inner = small.point(lambda v: 255 if v > 128 else 0).filter(ImageFilter.MinFilter(k))
+    inner = inner.filter(ImageFilter.GaussianBlur(1)).resize((w, h), Image.BILINEAR)
+    alpha = np.minimum(np.asarray(im.getchannel("A")), np.asarray(inner))
+    im.putalpha(Image.fromarray(alpha.astype(np.uint8)))
+    filled = fill_transparent(im)
+    box = (round(w * crop), round(h * crop), round(w * (1 - crop)), round(h * (1 - crop)))
+    return filled.crop(box).resize((size, size), Image.LANCZOS)
+
+
+def restyle(jobs: list[tuple], emb_dir: Path, raw_dir: Path, offload: str = "sequential") -> None:
+    """Repaint prepared sources: jobs are (name, prompt, seed, source RGB image, strength, note).
+
+    Writes raw_dir/<name>__s<seed>.png like render() and skips a raw whose
+    `.prompt.txt` already holds `note` (the prompt plus the restyle settings).
+    Strength 0 saves the prepared source itself, so the model is loaded only
+    when some job repaints.
+    """
+    import time
+
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    todo, as_is = [], 0
+    for name, prompt, seed, source, strength, note_text in jobs:
+        dest = raw_path(raw_dir, name, seed)
+        note = dest.with_suffix(".prompt.txt")
+        if dest.exists() and note.exists() and note.read_text(encoding="utf-8") == note_text:
+            continue
+        if strength <= 0:
+            source.save(dest)
+            note.write_text(note_text, encoding="utf-8")
+            as_is += 1
+            continue
+        todo.append((name, prompt, seed, source, strength, dest, note, note_text))
+    if not todo:
+        print(f"restyle: nothing to repaint ({as_is} candidates saved as they are)")
+        return
+
+    import torch
+
+    embeds = {}
+    for name, prompt, *_ in todo:
+        if name not in embeds:
+            emb_path = emb_dir / f"{name}.pt"
+            if not emb_path.exists():
+                raise SystemExit(f"no embedding for {name}: embed first")
+            embeds[name] = torch.load(emb_path)
+            if embeds[name]["prompt"] != prompt:
+                raise SystemExit(f"the embedding for {name} was made from an older prompt: embed again")
+    t0 = time.time()
+    pipe = load_pipe("FluxImg2ImgPipeline", text_encoder=None, text_encoder_2=None, tokenizer=None, tokenizer_2=None)
+    if offload == "sequential":
+        pipe.enable_sequential_cpu_offload()
+    else:
+        pipe.enable_model_cpu_offload()
+    print(f"loaded transformer in {time.time() - t0:.0f}s ({offload} offload); {len(todo)} to repaint")
+    for i, (name, _prompt, seed, source, strength, dest, note, note_text) in enumerate(todo, 1):
+        t1 = time.time()
+        emb = embeds[name]
+        image = pipe(
+            prompt_embeds=emb["prompt_embeds"].to("cuda"),
+            pooled_prompt_embeds=emb["pooled"].to("cuda"),
+            image=source, strength=strength,
+            guidance_scale=0.0, num_inference_steps=RESTYLE_STEPS, max_sequence_length=256,
+            width=source.width, height=source.height,
+            generator=torch.Generator("cpu").manual_seed(1000 + seed),
+        ).images[0]
+        image.save(dest)
+        note.write_text(note_text, encoding="utf-8")
         print(f"  [{i}/{len(todo)}] {dest.name}  {time.time() - t1:.0f}s", flush=True)
 
 

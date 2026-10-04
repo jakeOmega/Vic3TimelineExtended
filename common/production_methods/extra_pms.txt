@@ -14,6 +14,7 @@
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -60,6 +61,7 @@ pm_dragline_excavators_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -106,6 +108,7 @@ pm_dragline_excavators_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -145,6 +148,7 @@ pm_dragline_excavators_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -196,6 +200,7 @@ pm_dragline_excavators_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -249,6 +254,7 @@ pm_dragline_excavators_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -288,6 +294,7 @@ pm_large_scale_earth_movers_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -342,6 +349,7 @@ pm_large_scale_earth_movers_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -390,6 +398,7 @@ pm_large_scale_earth_movers_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -438,6 +447,7 @@ pm_large_scale_earth_movers_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -491,6 +501,7 @@ pm_large_scale_earth_movers_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -533,6 +544,7 @@ pm_large_scale_earth_movers_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -589,6 +601,7 @@ pm_geophysical_survey_techniques_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -640,6 +653,7 @@ pm_geophysical_survey_techniques_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -691,6 +705,7 @@ pm_geophysical_survey_techniques_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -742,6 +757,7 @@ pm_geophysical_survey_techniques_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -798,6 +814,7 @@ pm_geophysical_survey_techniques_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -843,6 +860,7 @@ pm_geophysical_survey_techniques_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -900,6 +918,7 @@ pm_ore_sorting_and_separation_technology_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -951,6 +970,7 @@ pm_ore_sorting_and_separation_technology_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -1002,6 +1022,7 @@ pm_ore_sorting_and_separation_technology_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -1053,6 +1074,7 @@ pm_ore_sorting_and_separation_technology_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -1109,6 +1131,7 @@ pm_ore_sorting_and_separation_technology_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -1155,6 +1178,7 @@ pm_ore_sorting_and_separation_technology_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -1558,6 +1582,7 @@ pm_diesel_pump_building_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -1597,6 +1622,7 @@ pm_high_pressure_hydraulic_pump_building_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -1639,6 +1665,7 @@ pm_high_pressure_hydraulic_pump_building_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -1681,6 +1708,7 @@ pm_high_pressure_hydraulic_pump_building_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -1723,6 +1751,7 @@ pm_high_pressure_hydraulic_pump_building_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -1770,6 +1799,7 @@ pm_high_pressure_hydraulic_pump_building_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -1808,6 +1838,7 @@ pm_high_pressure_hydraulic_pump_building_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -1850,6 +1881,7 @@ pm_continuous_miners_building_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -1892,6 +1924,7 @@ pm_continuous_miners_building_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -1934,6 +1967,7 @@ pm_continuous_miners_building_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -1976,6 +2010,7 @@ pm_continuous_miners_building_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -2023,6 +2058,7 @@ pm_continuous_miners_building_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -2065,6 +2101,7 @@ pm_continuous_miners_building_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -2107,6 +2144,7 @@ pm_smart_miners_building_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -2153,6 +2191,7 @@ pm_smart_miners_building_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -2199,6 +2238,7 @@ pm_smart_miners_building_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -2245,6 +2285,7 @@ pm_smart_miners_building_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -2296,6 +2337,7 @@ pm_smart_miners_building_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -2342,6 +2384,7 @@ pm_smart_miners_building_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -5153,6 +5196,7 @@ pm_gas_turbine_engines = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 6.96 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -5227,6 +5271,12 @@ pm_hydrogen_fuel_cell_engines = {
 }
 
 pm_graphene_electric_motors = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 4.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p2.dds"
 	unlocking_technologies = {
 		modern_material_science
@@ -5709,6 +5759,7 @@ pm_aluminum_substitution = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -5717,8 +5768,8 @@ pm_aluminum_substitution = {
 		workforce_scaled = {
 			# Input goods
 			goods_input_iron_add = 100                           # Price:   40, Total cost:  4000.0 (42.55%)
-			goods_input_coal_add = 30                            # Price:   30, Total cost:   900.0 (9.57%)
-			goods_input_electricity_add = 150                    # Price:   30, Total cost:  4500.0 (47.87%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (3.19%)
+			goods_input_electricity_add = 170                    # Price:   30, Total cost:  5100.0 (54.26%)
 			# Output goods
 			goods_output_steel_add = 250                         # Price:   50, Total cost: 12500.0 (100.00%)
 			# Total input cost: 9400.0
@@ -5751,6 +5802,7 @@ pm_chromium_substitution = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -5759,8 +5811,8 @@ pm_chromium_substitution = {
 		workforce_scaled = {
 			# Input goods
 			goods_input_iron_add = 150                           # Price:   40, Total cost:  6000.0 (52.63%)
-			goods_input_coal_add = 30                            # Price:   30, Total cost:   900.0 (7.89%)
-			goods_input_electricity_add = 150                    # Price:   30, Total cost:  4500.0 (39.47%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (2.63%)
+			goods_input_electricity_add = 170                    # Price:   30, Total cost:  5100.0 (44.74%)
 			# Output goods
 			goods_output_steel_add = 300                         # Price:   50, Total cost: 15000.0 (100.00%)
 			# Total input cost: 11400.0
@@ -6204,6 +6256,7 @@ pm_injection_molding = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 4.35 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 18
 		}
 	}
@@ -6243,6 +6296,7 @@ pm_blow_molding = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 5.22 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -6386,6 +6440,7 @@ pm_massed_produced_plastics = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -6499,6 +6554,7 @@ pm_petroleum_dyes = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 12.44 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -6636,6 +6692,12 @@ REPLACE:pm_rayon = {
 }
 
 pm_polyester = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p1.dds"
 
 	unlocking_technologies = {
@@ -6668,6 +6730,12 @@ pm_polyester = {
 }
 
 pm_nylon = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p2.dds"
 
 	unlocking_technologies = {
@@ -6704,6 +6772,7 @@ pm_microfiber_blends = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -6743,6 +6812,7 @@ pm_elastomeric_blends = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -6785,6 +6855,7 @@ pm_performance_textiles = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -6902,6 +6973,7 @@ pm_synthetic_oil_1 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 4.68 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 50
 		}
 	}
@@ -6935,6 +7007,12 @@ pm_synthetic_oil_1 = {
 }
 
 pm_synthetic_oil_2 = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -52.20 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 
 	unlocking_technologies = {
@@ -6977,6 +7055,7 @@ pm_polyisoprene_rubber = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 8.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -7020,6 +7099,7 @@ pm_styrene_butadiene_rubber = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 12.18 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -7063,6 +7143,7 @@ pm_ziegler_natta_catalyzation = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 13.92 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -7107,6 +7188,7 @@ pm_neodymium_catalyzation = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 17.40 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -7221,6 +7303,12 @@ pm_pharma_alkaloid_extraction = {
 }
 
 pm_pharma_synthetic_chemistry = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p1.dds"
 
 	unlocking_technologies = {
@@ -7391,7 +7479,14 @@ pm_pharma_precision_medicine = {
 }
 
 pm_synthetic_coal = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -168.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/chemical_fertilizers.dds"
+	unlocking_technologies = { genetic_engineering }
 
 
 	building_modifiers = {
@@ -9488,6 +9583,7 @@ pm_hydraulic_equipment = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.35 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -9528,6 +9624,7 @@ pm_automated_mechanical_harvesters = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.35 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -9570,6 +9667,7 @@ pm_automated_harvesters_and_planters = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.35 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -9611,6 +9709,7 @@ pm_hydraulic_equipment_building_rice_farm = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -9651,6 +9750,7 @@ pm_automated_mechanical_harvesters_building_rice_farm = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -9693,6 +9793,7 @@ pm_automated_harvesters_and_planters_building_rice_farm = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -9784,6 +9885,7 @@ pm_skidders_and_forwarders = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -9813,6 +9915,12 @@ pm_skidders_and_forwarders = {
 }
 
 pm_purse_seine_nets = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 
 
@@ -9850,6 +9958,7 @@ REPLACE:pm_automobile_production = {
 	texture = "gfx/interface/icons/production_method_icons/automobiles.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -9884,6 +9993,7 @@ REPLACE:pm_mass_automobile_production = {
 	texture = "gfx/interface/icons/production_method_icons/standardized_automobiles.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -9923,6 +10033,7 @@ pm_modern_automobile_production = {
 	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p1.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -10041,6 +10152,12 @@ pm_fusion_battery_vehicles = {
 }
 
 pm_rocket_artillery = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
 
 	unlocking_technologies = {
@@ -10079,6 +10196,7 @@ pm_precision_guided_shells = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -10119,6 +10237,12 @@ pm_precision_guided_shells = {
 }
 
 pm_electromagnetic_projectors = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p2.dds"
 
 	unlocking_technologies = {
@@ -10159,6 +10283,12 @@ pm_electromagnetic_projectors = {
 }
 
 pm_programmable_matter_artillery = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p3.dds"
 
 	unlocking_technologies = {
@@ -10485,6 +10615,7 @@ pm_aeroplane_production_2 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -10529,6 +10660,7 @@ pm_aeroplane_production_3 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -10571,6 +10703,7 @@ pm_airport = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 100
 			building_economy_of_scale_level_cap_add = 5
 			state_infrastructure_add = 50
@@ -10659,6 +10792,7 @@ pm_civil_highway = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 8.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 40
 			state_infrastructure_from_automobiles_consumption_add = 0.25
 			state_infrastructure_add = 25
@@ -10700,6 +10834,7 @@ pm_industrial_highway = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 8.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 40
 			state_infrastructure_from_automobiles_consumption_add = 0.25
 			state_infrastructure_add = 25
@@ -10907,6 +11042,7 @@ REPLACE:pm_coal-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 4.00 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 50
 		}
 	}
@@ -10944,6 +11080,7 @@ REPLACE:pm_oil-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 4.35 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 40
 		}
 	}
@@ -10981,6 +11118,7 @@ pm_modern_coal-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 5.00 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 30
 		}
 	}
@@ -11019,6 +11157,7 @@ pm_modern_oil-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 6.09 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 25
 		}
 	}
@@ -11360,6 +11499,12 @@ pm_ai_managed_power_plant = {
 }
 
 pm_semiautomatic_rifles = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p1.dds"
 
 	unlocking_technologies = {
@@ -11399,6 +11544,12 @@ pm_semiautomatic_rifles = {
 }
 
 pm_networked_small_arms = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p2.dds"
 
 	unlocking_technologies = {
@@ -11438,6 +11589,12 @@ pm_networked_small_arms = {
 }
 
 pm_programmable_matter_small_arms = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p3.dds"
 
 	unlocking_technologies = {
@@ -11864,6 +12021,12 @@ INJECT:pm_vacuum_canning_principle_3 = {
 }
 
 pm_flexible_packaging = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_cloth_purple_p1.dds"
 
 	unlocking_technologies = {
@@ -11982,6 +12145,7 @@ pm_advanced_assembly_lines_building_tooling_workshop = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -12072,6 +12236,7 @@ pm_advanced_assembly_lines_building_arms_industry = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -12123,6 +12288,7 @@ pm_advanced_assembly_lines_building_munition_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -12209,6 +12375,7 @@ pm_robotic_assembly_lines_building_tooling_workshop = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -12346,6 +12513,12 @@ pm_ai_managed_building_furniture_manufactory = {
 }
 
 pm_ai_managed_building_tooling_workshop = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_factory_green_p3.dds"
 
 
@@ -12437,6 +12610,12 @@ pm_ai_managed_building_motor_industry = {
 }
 
 pm_ai_managed_building_arms_industry = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p2.dds"
 
 
@@ -12485,6 +12664,12 @@ pm_ai_managed_building_arms_industry = {
 }
 
 pm_ai_managed_building_munition_plant = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_green_p2.dds"
 
 
@@ -12894,6 +13079,7 @@ REPLACE:pm_nitrogen_fixation = {
 	texture = "gfx/interface/icons/production_method_icons/nitrogen_fixation.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -12933,6 +13119,7 @@ pm_catalytic_cracking = {
 	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 20.88 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -12975,6 +13162,7 @@ pm_polymerization_processes = {
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p1.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 27.84 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 25
 		}
 	}
@@ -13018,6 +13206,7 @@ pm_automated_chemical_reactors = {
 	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 31.32 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -13059,6 +13248,7 @@ pm_flow_chemistry_production = {
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p2.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 38.28 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -13136,6 +13326,12 @@ pm_molecular_foundry = {
 }
 
 pm_ammonium_nitrate_explosives = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 6.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p1.dds"
 
 	unlocking_technologies = {
@@ -13266,6 +13462,7 @@ REPLACE:pm_early_trains = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.40 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 20
 			state_pollution_generation_add = 25
 		}
@@ -13304,6 +13501,7 @@ REPLACE:pm_steam_trains = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.00 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 25
 			state_pollution_generation_add = 20
 		}
@@ -13383,6 +13581,7 @@ REPLACE:pm_diesel_trains = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 40
 			state_pollution_generation_add = 15
 		}
@@ -13441,6 +13640,7 @@ REPLACE:pm_steam_trains_principle_transport_3 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.20 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 30
 			state_pollution_generation_add = 25
 		}
@@ -13532,6 +13732,7 @@ REPLACE:pm_diesel_trains_principle_transport_3 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.91 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 55
 			state_pollution_generation_add = 20
 		}
@@ -13571,6 +13772,7 @@ pm_centralized_traffic_control = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 55
 			state_pollution_generation_add = 15
 		}
@@ -13611,6 +13813,7 @@ pm_containerized_cargo = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 55
 			state_pollution_generation_add = 15
 		}
@@ -13652,6 +13855,7 @@ pm_automated_loading_and_unloading = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 55
 			state_pollution_generation_add = 15
 		}
@@ -13690,6 +13894,7 @@ pm_autonomous_trains = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 55
 		}
 	}
@@ -13850,6 +14055,7 @@ pm_container_ports = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 			state_infrastructure_add = 15
 		}
@@ -13892,6 +14098,7 @@ pm_global_ports = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 			state_infrastructure_add = 30
 		}
@@ -13952,6 +14159,12 @@ pm_sailing_ships = {
 }
 
 pm_steam_paddleboats = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p2.dds"
 
 	unlocking_technologies = {
@@ -13977,6 +14190,12 @@ pm_steam_paddleboats = {
 }
 
 pm_diesel_electric_ferries = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
 
 	unlocking_technologies = {
@@ -14002,6 +14221,12 @@ pm_diesel_electric_ferries = {
 }
 
 pm_modern_cruise_ships = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p4.dds"
 
 	unlocking_technologies = {
@@ -14042,6 +14267,7 @@ pm_motor_trawlers = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -14079,6 +14305,7 @@ pm_motor_whaling_ships = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.61 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -14122,6 +14349,7 @@ pm_magnetic_drive_ports = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 25
 			state_infrastructure_add = 50
 		}
@@ -14155,6 +14383,12 @@ pm_magnetic_drive_ports = {
 }
 
 pm_magnetic_drive_cruise_ships = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p4.dds"
 
 	unlocking_technologies = {
@@ -14190,6 +14424,7 @@ pm_magnetic_drive_trawlers = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -14227,6 +14462,7 @@ pm_magnetic_drive_whaling_ships = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.61 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 25
 		}
 	}
@@ -14970,7 +15206,7 @@ pm_fusion_ssto_craft = {
 }
 
 pm_space_elevator_construction_paused = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p1.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -14994,7 +15230,7 @@ pm_space_elevator_construction_paused = {
 }
 
 pm_space_elevator_construction_slow = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p2.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -15035,7 +15271,7 @@ pm_space_elevator_construction_slow = {
 }
 
 pm_space_elevator_construction_medium = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p3.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -15076,7 +15312,7 @@ pm_space_elevator_construction_medium = {
 }
 
 pm_space_elevator_construction_fast = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p4.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -15117,7 +15353,7 @@ pm_space_elevator_construction_fast = {
 }
 
 pm_space_elevator = {
-	texture = "gfx/interface/icons/production_method_icons/aeroplanes.dds"
+	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
 
 	state_modifiers = {
 		level_scaled = {
@@ -16069,6 +16305,12 @@ pm_3d_printed_buildings = {
 }
 
 pm_modular_shipbuilding = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 5.22 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p1.dds"
 
 
@@ -16111,6 +16353,12 @@ pm_modular_shipbuilding = {
 }
 
 pm_diesel_shipbuilding = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 6.09 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p2.dds"
 
 

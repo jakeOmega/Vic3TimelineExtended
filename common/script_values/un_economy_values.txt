@@ -7,8 +7,11 @@
 # (its header holds the variable table), the tests in
 # common/scripted_triggers/un_economy_triggers.txt.
 #
-# A trigger never puts a script value on its left: every comparison below
-# reads a variable or a global the monthly update wrote, against a value.
+# The Fund's own tests compare a variable or a global the monthly update wrote,
+# so the chamber and the grants read one snapshot. The AI's prospect below
+# (un_dev_fund_prospect_value) reads a non-member's GDP per head live, since
+# the snapshot covers members only; a named script value on a trigger's left
+# is valid (vanilla 07_zaibatsu.txt, 05_grunderzeit.txt).
 #
 # RE-TUNING CHECKLIST. These figures are also written in words in the loc
 # (te_concepts, te_miscellaneous, te_journal_entries and te_events
@@ -17,7 +20,9 @@
 # pillar's tooltip): the Fund's three forms (the Development Programs
 # contributions only, below a tenth of the members' average; 5% of the budget
 # below a quarter after Reform I; a quarter of the budget below half after
-# Reform II); a quarter of the grain and at most 2,500 units, 500 units held,
+# Reform II), and the line's floor at the poorest member in good standing
+# (te_concepts' concept_un_development_fund_desc and the chamber's
+# _floored lines); a quarter of the grain and at most 2,500 units, 500 units held,
 # 5,000 units a mission, +0.15 food security and -5% mortality for a year, -10
 # at 5% and +3 below half a percent. Change both.
 # ============================================================================
@@ -108,14 +113,46 @@ un_dev_fund_avg_value = {
 	}
 }
 
-# The line a recipient's GDP per head must be under, at the charter's current
-# level. Globals only.
-un_dev_fund_line_value = {
+# The level's share of the members' average: the line before its floor.
+# Globals only.
+un_dev_fund_line_base_value = {
 	value = 0
 	if = {
 		limit = { has_global_variable = un_dev_fund_avg }
 		add = global_var:un_dev_fund_avg
 		multiply = un_dev_fund_line_share
+	}
+}
+
+# The line a recipient's GDP per head must be at or under: the level's share
+# of the average, never below the poorest member in good standing's GDP per
+# head (global_var:un_dev_fund_line_floor, snapshotted just before; owner,
+# 2026-10-03), so at least one member always qualifies. Globals only.
+un_dev_fund_line_value = {
+	value = un_dev_fund_line_base_value
+	if = {
+		limit = { has_global_variable = un_dev_fund_line_floor }
+		min = global_var:un_dev_fund_line_floor
+	}
+}
+
+# Orders the members poorest first: ordered_* iterators sort descending, so
+# the key is the negated GDP per head (scripting_best_practices.md).
+# Scope: country
+un_dev_fund_poverty_order = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dev_fund_gdp_ph }
+		subtract = var:un_dev_fund_gdp_ph
+	}
+}
+
+# Orders the recipients largest grant first. Scope: country
+un_dev_fund_grant_order = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dev_fund_grant }
+		add = var:un_dev_fund_grant
 	}
 }
 
@@ -225,6 +262,76 @@ un_dev_fund_grant_value = {
 un_dev_fund_grant_preview_value = {
 	value = un_dev_fund_pop_share_value
 	multiply = un_dev_fund_pot_preview_value
+	min = 0
+}
+
+# ---- The World Development Fund: the AI's prospect ---------------------------------
+# What the Fund means to a country deciding whether to join, pay its dues or
+# vote for it (common/script_values/un_ai_values.txt). Read by the AI only.
+
+# The weekly grant the scoped country would draw this month as a represented
+# member paying its dues: its own grant while the Fund pays it; otherwise, if
+# its GDP per head is at or under the line, its people's share of the pot,
+# counted beside the people the Fund pays now. 0 unless the Fund stands. A
+# non-member or a member withholding its dues is not in un_dev_fund_eligible_pop,
+# so its people are added to it here. A joiner would also shift the members'
+# average a little; that is ignored. Scope: country
+un_dev_fund_prospect_value = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_inst_development_fund
+			has_global_variable = un_dev_fund_line
+		}
+		if = {
+			limit = { un_dev_fund_eligible = yes }
+			add = un_dev_fund_grant_value
+		}
+		else_if = {
+			limit = {
+				total_population > 0
+				un_dev_fund_gdp_per_head <= global_var:un_dev_fund_line
+			}
+			add = total_population
+			divide = un_dev_fund_prospect_pop_value
+			multiply = un_dev_fund_pot_weekly_value
+			min = 0
+		}
+	}
+}
+
+# The people the Fund would pay with us among them: those it pays now, and
+# ours. Scope: country (one not in un_dev_fund_eligible_pop)
+un_dev_fund_prospect_pop_value = {
+	value = total_population
+	if = {
+		limit = { has_global_variable = un_dev_fund_eligible_pop }
+		add = global_var:un_dev_fund_eligible_pop
+	}
+	min = 1
+}
+
+# The prospect as a share of our GDP a year: 0.01 is 1%. Scope: country
+un_dev_fund_prospect_share = {
+	value = un_dev_fund_prospect_value
+	multiply = 52
+	divide = {
+		value = gdp
+		min = 1
+	}
+	min = 0
+}
+
+# What it would be paid a week if the Fund stood today, as a share of our GDP a
+# year (the vote's lean: the Fund is not yet founded, or its form is about to
+# be read at a new level). Scope: country
+un_dev_fund_grant_preview_share = {
+	value = un_dev_fund_grant_preview_value
+	multiply = 52
+	divide = {
+		value = gdp
+		min = 1
+	}
 	min = 0
 }
 
@@ -436,28 +543,62 @@ un_fr_delivery_points_value = {
 # the topic's own interests term. Scope: the voting country; expects
 # scope:un_resolution. Sizes as in un_lean_interests (un_dossier_values.txt).
 
-# The World Development Fund: the members it would pay are strongly for, the
-# members above the average against (they pay its share of the dues and get
-# nothing back), the richest more so; laissez-faire governments against. "Below
-# the line" reads the line at the charter's current level (the monthly
-# snapshot, un_dev_fund_below_line).
+# The World Development Fund: the members it would pay are strongly for, and
+# the more so the larger the grant it would bring them; once a reformed charter
+# gives it a share of the budget, the members above the average against (they
+# pay its share of the dues and get nothing back), the richest more so, and
+# laissez-faire governments against. Under the founding charter it costs them
+# nothing, and they lean against it only a little. "Below the line" reads
+# the line at the charter's current level (the monthly snapshot,
+# un_dev_fund_below_line). The grant is today's preview as a share of our GDP
+# (un_dev_fund_grant_preview_share), at un_ai_points_per_gdp_share points: 20
+# for a grant of 1% of GDP a year, at most un_lean_dev_fund_grant_cap. Under
+# the founding charter the Fund would pay only contributions, and none can run
+# before it stands (owner, 2026-10-03), so the preview there is 0 and a poor
+# member votes on the base alone: the hope of contributions.
+un_lean_dev_fund_below_line_base = { value = 30 }
+un_lean_dev_fund_grant_cap = { value = 30 }
+
 un_lean_interests_development_fund = {
 	value = 0
 	if = {
 		limit = { un_dev_fund_below_line = yes }
-		add = 35
+		add = un_lean_dev_fund_below_line_base
+		add = {
+			value = un_dev_fund_grant_preview_share
+			multiply = un_ai_points_per_gdp_share
+			max = un_lean_dev_fund_grant_cap
+		}
+	}
+	# What the richer members give up. Under the founding charter the Fund
+	# takes nothing from the budget and pays out the voluntary contributions
+	# alone, so they lose nothing by it and it should pass easily (owner,
+	# 2026-10-03); only the richest and laissez-faire governments grumble. From
+	# Charter Reform I it takes a share of the dues they pay.
+	else_if = {
+		limit = { un_dev_fund_budget_share_at_level > 0 }
+		if = {
+			limit = { un_dev_fund_rich = yes }
+			add = -25
+		}
+		else_if = {
+			limit = { un_dev_fund_above_average = yes }
+			add = -10
+		}
 	}
 	else_if = {
 		limit = { un_dev_fund_rich = yes }
-		add = -25
-	}
-	else_if = {
-		limit = { un_dev_fund_above_average = yes }
-		add = -10
+		add = -5
 	}
 	if = {
 		limit = { has_law_or_variant = law_type:law_laissez_faire }
-		add = -15
+		if = {
+			limit = { un_dev_fund_budget_share_at_level > 0 }
+			add = -15
+		}
+		else = {
+			add = -5
+		}
 	}
 	if = {
 		limit = { has_law = law_type:law_humanitarian_regulations }
@@ -492,12 +633,19 @@ un_lean_interests_food_reserve = {
 # un_<key>_ai_chance: the scripted button's weight (un_buttons.txt). Scope: the
 # proposing country.
 
-# The line read is the one at the charter's current level.
+# The line read is the one at the charter's current level; a member under it
+# reaches for the Fund harder the larger its grant would be (the lean's
+# scale, at most +20 more).
 un_development_fund_ai_chance = {
 	value = 0
 	if = {
 		limit = { un_dev_fund_below_line = yes }
-		add = 20
+		add = 15
+		add = {
+			value = un_dev_fund_grant_preview_share
+			multiply = un_ai_points_per_gdp_share
+			max = 20
+		}
 	}
 	if = {
 		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
@@ -645,6 +793,24 @@ un_disp_dev_fund_budget_level_pct = {
 un_disp_dev_fund_line_pct = {
 	value = un_dev_fund_line_share
 	multiply = 100
+}
+
+# The level's share of the average before the floor, and the floor: the
+# poorest member in good standing's GDP per head (this month's snapshot).
+un_disp_dev_fund_line_base = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_dev_fund_line_base }
+		add = global_var:un_dev_fund_line_base
+	}
+}
+
+un_disp_dev_fund_line_floor = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_dev_fund_line_floor }
+		add = global_var:un_dev_fund_line_floor
+	}
 }
 
 # What the Development Programs contributors pay a week, all together, and

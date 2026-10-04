@@ -90,6 +90,39 @@ sr_progress = {
 	min = 0.5
 }
 
+# ======= After the race: Commercial Space Industry =======
+# The points of sr_commercial_space_dividend (space_race_modifiers.txt), each
+# worth +5% Extraplanetary Base throughput: the flat progress the country's
+# sources still give once it has nothing left to race for
+# (sr_space_race_concluded). Applied only then, by sr_refresh_space_dividend.
+# - The flat sum, not sr_progress: its 0.5 floor would pay every finished
+#   country for nothing, and the progress bonuses (Antimatter Engines alone
+#   reach +250%) would let the dividend run away.
+# - Funding is already out of it: sr_funding_progress sits only on a billed
+#   entry (sr_apply_milestone_cost_modifiers_base), and nothing is billed then.
+# - Capped: the Space Elevator alone gives up to 20 points, twice what all 33
+#   progress-granting colony specialisations give together (9.25). At 5% a
+#   point a progress specialisation (0.28 on average) is worth about a quarter
+#   of a mining one (+6% Extraplanetary Base throughput on average), so mining
+#   stays the long-term pick.
+sr_space_dividend_max_points = {
+	value = 10
+}
+sr_space_dividend_points = {
+	value = modifier:country_space_race_progress_add
+	min = 0
+	max = sr_space_dividend_max_points
+}
+# The same in percent of throughput, for the text: points × the modifier's 0.05.
+sr_space_dividend_pct = {
+	value = sr_space_dividend_points
+	multiply = 5
+}
+sr_space_dividend_max_pct = {
+	value = sr_space_dividend_max_points
+	multiply = 5
+}
+
 # ======= Per-milestone setback risk =======
 # Each milestone's base failure-roll risk. These literals used to live at the
 # call site (`RISK = N` on sr_monthly_progress_update_effect, and an inline

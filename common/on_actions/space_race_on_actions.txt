@@ -1,7 +1,8 @@
 ﻿# Space Race On-Actions
 
 # Once a month per country (not per journal entry): the inactive-milestone
-# cleanup, the revolution backstop and the global failure-cooldown tick.
+# cleanup, the revolution backstop, the post-race dividend and the global
+# failure-cooldown tick.
 on_monthly_pulse_country = {
 	on_actions = {
 		space_race_on_action
@@ -11,6 +12,7 @@ on_monthly_pulse_country = {
 space_race_on_action = {
 	effect = {
 		sr_cleanup_inactive_space_race_milestones = yes
+		sr_monthly_colony_discoveries = yes
 		# What a revolution's winner keeps (space_race_effects.txt): the
 		# backstop that puts the entries' modifiers back, and the probe result's
 		# record, which also migrates a save from before the record existed.
@@ -20,6 +22,9 @@ space_race_on_action = {
 			limit = { sr_space_race_participant = yes }
 			sr_sync_space_race_entries = yes
 			sr_sync_probe_data = yes
+			# After the race, the leftover progress pays Extraplanetary Base
+			# throughput (space_race_effects.txt). Its one refresh site.
+			sr_refresh_space_dividend = yes
 			# The Rivals rows' estimates (space_race_effects.txt): players only.
 			if = {
 				limit = { is_player = yes }

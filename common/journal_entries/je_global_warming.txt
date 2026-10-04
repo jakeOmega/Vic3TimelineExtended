@@ -3,12 +3,27 @@
 
 	group = je_group_internal_affairs
 
+	# Activation needs both of these (vanilla journal_entries.md). The entry
+	# opens at 0.1 C of warming under the Global Warming game rule, or for any
+	# country holding a restrictive Resource Transition law (#660), with the
+	# rule on or off: its Fossil Transition section carries the retirement
+	# programmes. With the rule off the entry shows that section alone
+	# (gw_rule_enabled_sgui), and nothing climate runs: the temperature stays 0
+	# (global_warming_events_on_action), so no warming modifier, threshold
+	# event or policy follows. gw_entry_unlocked repeats `possible` for the
+	# Market panel's Climate tab, word for word.
 	is_shown_when_inactive = {
-		has_game_rule = global_warming_enabled
+		OR = {
+			has_game_rule = global_warming_enabled
+			rt_restrictive_transition_law = yes
+		}
 	}
 
 	possible = {
-		temperature_anomaly_display >= 0.1
+		OR = {
+			temperature_anomaly_display >= 0.1
+			rt_restrictive_transition_law = yes
+		}
 	}
 
 	# No status line while the entry is active: the overview above it shows the
@@ -61,7 +76,7 @@
 	progressbar = yes
 
 	# ---- PLAYER-FACING SURFACE: the climate panels -------------------------
-	# The sixteen scripted buttons below stay declared because their `ai_chance`
+	# The twenty climate scripted buttons below stay declared because their `ai_chance`
 	# is the AI's only route into this system, but each carries `is_ai = yes` in
 	# its `visible`, so a human sees these three widgets instead of the grid.
 	# Every action the grid offered has a control here — see the mapping in
@@ -101,6 +116,8 @@
 		container = "custom_widget_container_7"
 	}
 
+	scripted_button = gw_fossil_fuel_tariffs_button
+	scripted_button = gw_remove_fossil_fuel_tariffs_button
 	scripted_button = gw_carbon_tax_button
 	scripted_button = gw_remove_carbon_tax_button
 	scripted_button = gw_renewable_investment_button
@@ -111,12 +128,24 @@
 	scripted_button = gw_remove_emission_standards_button
 	scripted_button = gw_reforestation_button
 	scripted_button = gw_remove_reforestation_button
+	scripted_button = gw_carbon_removal_button
+	scripted_button = gw_remove_carbon_removal_button
 	scripted_button = gw_public_transit_button
 	scripted_button = gw_remove_public_transit_button
 	scripted_button = gw_fossil_fuel_divestment_button
 	scripted_button = gw_remove_fossil_fuel_divestment_button
 	scripted_button = gw_green_building_codes_button
 	scripted_button = gw_remove_green_building_codes_button
+
+	# Resource Transition retirement programmes (#660): the AI's route, as the
+	# climate buttons above are (is_ai = yes; a human uses the Fossil
+	# Transition section). common/scripted_buttons/resource_transition_buttons.txt.
+	scripted_button = rt_start_coal_button
+	scripted_button = rt_stop_coal_button
+	scripted_button = rt_start_oil_button
+	scripted_button = rt_stop_oil_button
+	scripted_button = rt_start_power_button
+	scripted_button = rt_stop_power_button
 
 	immediate = {
 	}
@@ -127,6 +156,7 @@
 
 	on_monthly_pulse = {
 		effect = {
+			gw_restore_carbon_removal_policy_effect = yes
 			# ---- Update warming modifier: temperature anomaly used directly as multiplier ----
 			if = {
 				limit = { temperature_anomaly_display >= 0.01 }

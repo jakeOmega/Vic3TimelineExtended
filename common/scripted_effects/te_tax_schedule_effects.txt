@@ -1,0 +1,232 @@
+﻿# Legislated tax code: the scheduler (docs/systems/tax_code_schema.md,
+# "Scheduler, package slots and history").
+#
+# Approved packages wait in two slots (te_tax_pa_*, te_tax_pb_*) and commence on
+# the 1st of their due month; enacted values with a sunset revert to their
+# successor. Every transition runs in te_tax_process_month, once per country per
+# calendar month, from the global on_monthly_pulse (the 1st) through the hidden
+# country event te_tax.1 (common/on_actions/te_tax_on_actions.txt). The
+# country pulse is a 30-day timer that can skip a calendar month, which is how
+# the tax probe commenced and expired a package in one call
+# (scripting_best_practices.md, "on_monthly_pulse_country Is a 30-Day Timer");
+# it only runs the watchdog, te_tax_watchdog_month, which never commences.
+#
+# The guarantees: a package commences only in its due month (_due = now) and is
+# held, never applied late, once that month has passed; a sunset runs only when
+# its value has been operative since an earlier month (_since < now), so a
+# package's own sunset can never share its commencement call; the store refuses
+# a sunset less than one month after commencement. Collection is synced once per
+# processed month, after every transition.
+#
+# Per-instrument, per-good and per-slot parts are generated
+# (te_tax_generated_effects.txt, gen_tax_code.py). Country scope throughout;
+# nothing reads ROOT. Debug lines carry the month index and the date for the
+# scheduler retest (docs/testing/tax-code-capability-ledger.md, "Scheduler
+# retest"); the routine "process" and "skip" lines are written for player
+# countries only, every transition line for every country.
+
+# The monthly processor. Called only by te_tax.1. At most once per calendar
+# month: the month is claimed (te_tax_last_month) before any transition, so a
+# second call in the same month does nothing.
+te_tax_process_month = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_schema
+		}
+		# Backfills tokens a newer schema added; never overwrites one.
+		te_tax_init_country = yes
+		set_variable = { name = te_tax_now value = te_history_month_index }
+		if = {
+			limit = { var:te_tax_last_month >= var:te_tax_now }
+			if = {
+				limit = { is_ai = no }
+				debug_log = "TE_TAX skip already processed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
+		}
+		else = {
+			set_variable = { name = te_tax_last_month value = var:te_tax_now }
+			if = {
+				limit = { is_ai = no }
+				debug_log = "TE_TAX process month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			}
+			# 0a. The fiscal record of the 1st (te_tax_snapshot_effects.txt), which
+			# the support model's fiscal reason and the budget promises' maintenance
+			# test read instead of the live budget (final review A-I2).
+			te_tax_record_fiscal_month = yes
+			# 0b. Customs authority (plan Task 15; customs option only): whether the
+			# code holds this country's customs follows whether it owns its market,
+			# before any transition, so a package touching customs holds in the
+			# month the market was lost rather than commencing. What the loss does
+			# to the open draft and bill waits for step 7.
+			te_tax_customs_revalidate = yes
+			# 0c. The AI (rule 1b; te_tax_ai_effects.txt): the fiscal streaks for
+			# every country, from the record just taken; then, for an AI country
+			# with something due, its step is raised for its bucket day. The
+			# processor never drafts.
+			te_tax_ai_update_streaks = yes
+			te_tax_ai_dispatch = yes
+			# An AI country's yearly drift summary, in January (Task 22).
+			te_tax_ai_log_year = yes
+			# 1. Sunsets of the enacted code first; late ones catch up.
+			te_tax_gen_sunset_wage = yes
+			te_tax_gen_sunset_div = yes
+			te_tax_gen_sunset_land = yes
+			te_tax_gen_sunset_head = yes
+			te_tax_gen_sunset_cons = yes
+			# 2. Commencements, lower approval sequence first (slot a on a tie).
+			if = {
+				limit = { var:te_tax_pb_seq < var:te_tax_pa_seq }
+				te_tax_gen_commence_b = yes
+				te_tax_gen_commence_a = yes
+			}
+			else = {
+				te_tax_gen_commence_a = yes
+				te_tax_gen_commence_b = yes
+			}
+			# 3. Policy obligations (te_tax_obligation_effects.txt): those a
+			# commencement above has just started, and every other binding one,
+			# checked once this month.
+			te_tax_obl_check_month = yes
+			# 4. The interest groups' views of the enacted code: one approval band
+			# per group (te_tax_offer_effects.txt), after this month's changes.
+			te_tax_refresh_ig_views = yes
+			# 5. One collection write per month, changed or not: it also re-asserts
+			# the code over any native change since last month.
+			te_tax_sync_collection = yes
+			# 6. The next due transition.
+			te_tax_recompute_next_month = yes
+			# 7. The support snapshot, after this month's changes, so a promise kept
+			# or broken this month moves its group's trust reason at once. If the
+			# market was lost (customs option; te_tax_migration_effects.txt) and
+			# the bill under debate still changes a customs level, its customs are
+			# dropped and it opens a new revision, whose debate start takes the
+			# economy snapshot and refreshes the support snapshot itself (or, if it
+			# changed only customs, it is withdrawn). Otherwise only an open
+			# draft's customs can be dropped, and a bill under debate is refreshed
+			# here (te_tax_bill_effects.txt). Either way each snapshot is taken at
+			# most once in this execution (final review A-Minor 5).
+			if = {
+				limit = { te_tax_customs_drop_due_bill = yes }
+				te_tax_customs_drop_records = yes
+			}
+			else = {
+				te_tax_customs_drop_records = yes
+				if = {
+					limit = { te_tax_bill_active = yes }
+					te_tax_refresh_support = yes
+				}
+			}
+			# 8. The economy snapshot the estimates are dated by
+			# (te_tax_snapshot_effects.txt), once a month, of the code just written,
+			# unless step 7 opened a revision, which took one of this month, code
+			# and revision (te_tax_snapshot_current).
+			if = {
+				limit = { NOT = { te_tax_snapshot_current = yes } }
+				te_tax_take_snapshot = yes
+			}
+		}
+	}
+}
+
+# The watchdog. Called only by te_tax.2, from the country pulse, when this
+# month has not been processed although a transition is due. It never claims
+# the month and never commences: a country's pulse can land on the 1st before
+# the global pulse, and claiming the month there would make the dispatch skip
+# that month's commencements. It runs the sunsets (each runs once, because it
+# clears its own _exp), holds any package whose due month has passed, and syncs
+# collection only if a sunset ran (te_tax_code_version moved), so on the 1st it
+# does not sync again in the tick the processor syncs. A "TE_TAX watchdog" line
+# on the 1st just before that country's "TE_TAX process" line is that ordering,
+# not a missed dispatch.
+te_tax_watchdog_month = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_schema
+		}
+		te_tax_init_country = yes
+		set_variable = { name = te_tax_now value = te_history_month_index }
+		if = {
+			limit = {
+				var:te_tax_last_month < var:te_tax_now
+				var:te_tax_next_month >= 0
+				var:te_tax_next_month <= var:te_tax_now
+			}
+			debug_log = "TE_TAX watchdog month not yet processed with a transition due; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+			# Every executed sunset bumps the version; nothing else here does.
+			set_local_variable = { name = te_tax_wd_version value = var:te_tax_code_version }
+			te_tax_gen_sunset_wage = yes
+			te_tax_gen_sunset_div = yes
+			te_tax_gen_sunset_land = yes
+			te_tax_gen_sunset_head = yes
+			te_tax_gen_sunset_cons = yes
+			te_tax_gen_hold_missed_a = yes
+			te_tax_gen_hold_missed_b = yes
+			if = {
+				limit = { var:te_tax_code_version > local_var:te_tax_wd_version }
+				te_tax_sync_collection = yes
+				# The code changed: date the estimates by it now, not on the 1st.
+				te_tax_take_snapshot = yes
+			}
+			te_tax_recompute_next_month = yes
+		}
+	}
+}
+
+# Writes an approved package into slot SLOT (a or b) from the bill record
+# te_tax_bl_* (Task 6's te_tax_cmd_pass calls it, after dropping the bill's
+# provisions from an earlier-approved slot due on or after it; the enacted
+# provision is superseded at commencement, in te_tax_gen_apply_<slot>), if
+# te_tax_can_store_package allows it. It writes the package only: it does not
+# touch the enacted code or collection and does not record history (the pass
+# records kind 6, approved). Bill fields it reads: te_tax_bl_due;
+# te_tax_bl_<key>, te_tax_bl_<key>_sun, te_tax_bl_xver_<key>; te_tax_bl_g_<good>,
+# te_tax_bl_xver_goods; te_tax_bl_agrel, te_tax_bl_regrel, te_tax_bl_xver_relief;
+# the state list te_tax_bl_relief_states (optional). Only te_tax_pass_into
+# (Pass, Force through) calls it, so its lines are written for players only.
+te_tax_store_package = {
+	if = {
+		limit = { te_tax_can_store_package = { SLOT = $SLOT$ } }
+		save_scope_as = te_tax_country
+		te_tax_gen_store_$SLOT$ = yes
+		te_tax_recompute_next_month = yes
+	}
+	else = {
+		# Reached only through Pass and Force through: a player's line.
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX store_refused the slot is taken, the due month is not in the future or a sunset is under one month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Recomputes te_tax_next_month, the earliest month a transition is due (-1 if
+# none). The watchdog's trigger reads it.
+te_tax_recompute_next_month = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_schema
+		}
+		te_tax_gen_next_month = yes
+	}
+}
+
+# Records one event in the history ring. KIND: 1 commenced, 2 sunset,
+# 3 held_conflict, 4 held_missed, 5 migrated, 6 approved, 7 civil-war repair,
+# 8 superseded, 9 rescheduled, 10 released; the obligations' 11-14; customs
+# (plan Task 15) 15 levels adopted (one a month, the count in _inst), 16 the
+# market lost, 17 the market gained, 18 a draft's and bill's customs dropped
+# with the market (_inst 1: the bill was withdrawn).
+# SLOT: a, b or none. Sunsets record their instrument through
+# te_tax_gen_history_write directly; this entry point records INST = 0.
+te_tax_history_push = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_schema
+		}
+		te_tax_gen_history_write = { KIND = $KIND$ SLOT = $SLOT$ INST = 0 }
+	}
+}
