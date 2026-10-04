@@ -58,6 +58,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 from collections import defaultdict
@@ -78,7 +79,7 @@ DEPLOY_DIR_NAME = "Vic3TimelineExtended_RealismAI_Compat"
 OUT_DIR = REPO / "build" / "compat" / "realism_ai"
 FILE_PREFIX = "zzz_te_realism_ai_"
 
-DEPLOYED_DIRS = ("common", "events", "gui", "localization", "map_data")
+DEPLOYED_DIRS = ("common", "events", "gui", "localization", "map_data", "gfx")
 INJECT_FAMILY = {"INJECT", "TRY_INJECT", "INJECT_OR_CREATE"}
 REPLACE_FAMILY = {"REPLACE", "TRY_REPLACE", "REPLACE_OR_CREATE"}
 DIRECTIVE_RE = re.compile(r"^(INJECT|REPLACE|TRY_INJECT|TRY_REPLACE|REPLACE_OR_CREATE|INJECT_OR_CREATE):(.+)$")
@@ -443,9 +444,14 @@ def build_ideologies(ra, out, log):
             if group not in got:
                 raise BuildError(f"{name}: RA's {group} block was lost")
             ours_here = {law for law, _s in modifications[name].get(group, [])}
-            for law in values(block)[0]:
-                if law not in values(got[group])[0] and law not in ours_here:
+            got_block = values(got[group])[0]
+            for law, stance in values(block)[0].items():
+                if law in ours_here:
+                    continue
+                if law not in got_block:
                     raise BuildError(f"{name}: RA's {group} {law} was lost")
+                if [str(v) for v in values(got_block[law])] != [str(v) for v in values(stance)]:
+                    raise BuildError(f"{name}: RA's {group} {law} stance changed in the merge")
     log.append(f"ideologies: {len(merged)} merged ({', '.join(sorted(merged))})")
     return set(merged)
 
@@ -680,6 +686,13 @@ def _files(root):
         base = Path(root) / d
         if base.is_dir():
             out |= {p.relative_to(root).as_posix() for p in base.rglob("*") if p.is_file()}
+    if Path(root) == REPO:
+        # A sparse worktree has no gfx/ on disk; the index still lists it.
+        listed = subprocess.run(
+            ["git", "-C", str(REPO), "ls-files", "--", *DEPLOYED_DIRS], capture_output=True, text=True
+        )
+        if listed.returncode == 0:
+            out |= set(listed.stdout.splitlines())
     return out
 
 
@@ -792,6 +805,10 @@ def deploy_target():
 
 def build(ra, out):
     if out.exists():
+        meta = out / ".metadata" / "metadata.json"
+        is_patch = meta.exists() and json.loads(read_text(meta)).get("id") == PATCH_ID
+        if any(out.iterdir()) and not is_patch:
+            raise BuildError(f"{out} exists and isn't a previous build of this patch; not deleting it")
         shutil.rmtree(out)
     out.mkdir(parents=True)
     log = []
@@ -844,6 +861,8 @@ def main():
                 diffs = tree_diff(Path(tmp) / "patch", target)
                 for d in diffs:
                     print(d)
+                for f in findings:
+                    print(f"unhandled overlap: {f}")
                 print("deployed patch is current" if not diffs else f"deployed patch is stale ({len(diffs)} differences)")
                 sys.exit(1 if diffs else 0)
         log, findings = build(ra, args.out)

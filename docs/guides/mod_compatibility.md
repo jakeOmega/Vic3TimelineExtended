@@ -54,7 +54,7 @@ Workshop `2893069455`, mod id `realism_ai_historical_flavor_mod`. Checked agains
 
 ### The patch
 
-`scripts/generators/build_realism_ai_compatch.py` builds it into `build/compat/realism_ai/` (gitignored). `--deploy` copies it into the game's mod folder as `Vic3TimelineExtended_RealismAI_Compat`. `--check` exits 1 when that copy is stale. Each part checks its own output and the build stops when an anchor is missing or a merge didn't take. The closing rescan lists overlaps the patch doesn't handle (`--strict` makes them fatal). The rescan is how an RA update shows up.
+`scripts/generators/build_realism_ai_compatch.py` builds it into `build/compat/realism_ai/` (gitignored). `--deploy` copies it into the game's mod folder as `Vic3TimelineExtended_RealismAI_Compat`. `--check` exits 1 when that copy is stale. Each part checks its own output and the build stops when an anchor is missing or a merge didn't take. The closing rescan lists overlaps the patch doesn't handle (`--strict` makes them fatal), and `--check` prints them too. The rescan is how an RA update shows up. It reads our `gfx/` from the git index, so it covers textures from a sparse worktree too.
 
 - **Load order:** Realism AI, then Vic3TimelineExtended, then the patch.
 - **Rebuild** after an RA update, and after changing `ideology_modifications.py`, `common/laws/modified.txt`, `deposits_config.json`, `state_trait_config.json`, `gui/topbar.gui`, or `common/country_ranks/`.
@@ -62,7 +62,7 @@ Workshop `2893069455`, mod id `realism_ai_historical_flavor_mod`. Checked agains
 
 ### In-game checks
 
-1. `debug.log`: no `Duplicated key` for `dp_leadership_*`, and no errors from `zzz_te_realism_ai_*` or the patched `topbar.gui`. Set aside RA's own errors.
+1. `debug.log`: no `Duplicated key` for `dp_leadership_*`, and no errors from `zzz_te_realism_ai_*` or the patched `topbar.gui`. Set aside RA's own errors. The patch doesn't fix the `dp_leadership_india` collision; the rename does. So until the deployed Timeline Extended has the rename, that line still appears.
 2. California: RA's capped resources and our deposits are both there (both mods edit its resources).
 3. Liberal's ideology tooltip lists Free Speech once, with RA's laws in it; Jacksonian Democrat shows our bureaucracy stances.
 4. Ethnostate's modifier breakdown shows +400 authority (ours 200 plus RA's 200) and RA's birth-rate line.
