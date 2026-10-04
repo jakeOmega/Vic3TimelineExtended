@@ -140,5 +140,26 @@ class AiConsoleTest(unittest.TestCase):
         self.assertLess(body.index("te_tax_ai_log_year = yes"), body.index("te_tax_gen_sunset_wage = yes"))
 
 
+SCHEMA_DOC = "docs/systems/tax_code_schema.md"
+
+
+class DebugTagIndexTest(unittest.TestCase):
+    """Plan Task 25: the schema doc's "Debug-line index" lists every TE_TAX tag the
+    script writes, and nothing it no longer writes, so the play-test can read
+    debug.log from the doc."""
+
+    def test_every_tag_written_is_indexed_and_every_indexed_tag_is_written(self):
+        written = set()
+        for folder in ("common", "events"):
+            for path in sorted((ROOT / folder).rglob("*.txt")):
+                written |= set(re.findall(r'debug_log = "TE_TAX ([a-z_]+)', path.read_text(encoding="utf-8-sig")))
+        doc = (ROOT / SCHEMA_DOC).read_text(encoding="utf-8")
+        start = doc.index("### Debug-line index")
+        section = doc[start:doc.index("\n### ", start + 1)]
+        indexed = set(re.findall(r"(?m)^\| `([a-z_]+)` \|", section))
+        self.assertEqual(sorted(written - indexed), [], "tags written but not in the index")
+        self.assertEqual(sorted(indexed - written), [], "tags in the index no longer written")
+
+
 if __name__ == "__main__":
     unittest.main()

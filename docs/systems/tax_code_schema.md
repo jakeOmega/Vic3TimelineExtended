@@ -207,7 +207,85 @@ An approved package waits in slot `a` or `b` and takes effect on the 1st of its 
 
 **Operative interval.** The store refuses a package whose sunset would fall before `_exp ≥ _due + 1`. A package's provisions start with `_since = now`, and rule 2 needs `_since < now`, so a package's own sunset can never run in its commencement call; every package is in force for at least one calendar month. The only same-call pair is the sunset of one enacted value followed by the commencement of a different package, in that order.
 
-**Debug lines.** Each processor branch writes one `debug_log` line, `TE_TAX <branch> … month=<index> date=<game date> country=<name>`, with `<branch>` one of `dispatch` (global, date only), `process`, `skip`, `sunset`, `sunset_deferred`, `sunset_dropped`, `commenced`, `held_conflict`, `held_missed`, `watchdog`, `stored`, `store_refused`, `snapshot`, and the collection writer's `sync_deferred` (a second sync in one day, [The collection writer](#the-collection-writer)). `process`, `skip`, `snapshot`, `stored` and `store_refused` are written for player countries only (every migrated country runs the processor monthly; a package is stored only by the Pass and Force through commands); every transition line is written for every country, the promises' `obl_deadline` line included ([Obligations and the AI](#obligations-and-the-ai)). The commands' own lines (`introduced`, `passed`, `withdrawn`, `offer_accepted`, `forced_through`, `obl_bound`, …) are written for player countries only; the AI writes one summary line per action instead ([AI legislation](#ai-legislation)). A command line the transitions also reach (a lost market's customs drop and the promises it re-proposes, the monthly obligations check, the civil-war repair) stays for every country; `test_tax_code_ai.py` computes that set. The month comes from `[SCOPE.ScriptValue('te_history_month_index')|0]`, which printed `month=22032` from the tax probe's country event, and the date from `[TimeKeeper.GetCurrentDate.GetString]`, which vanilla 1.14.5's election lines print (for example "January 8, 2069").
+**Debug lines** (every tag: [Debug-line index](#debug-line-index)). Each processor branch writes one `debug_log` line, `TE_TAX <branch> … month=<index> date=<game date> country=<name>`, with `<branch>` one of `dispatch` (global, date only), `process`, `skip`, `sunset`, `sunset_deferred`, `sunset_dropped`, `commenced`, `held_conflict`, `held_missed`, `watchdog`, `stored`, `store_refused`, `snapshot`, and the collection writer's `sync_deferred` (a second sync in one day, [The collection writer](#the-collection-writer)). `process`, `skip`, `snapshot`, `stored` and `store_refused` are written for player countries only (every migrated country runs the processor monthly; a package is stored only by the Pass and Force through commands); every transition line is written for every country, the promises' `obl_deadline` line included ([Obligations and the AI](#obligations-and-the-ai)). The commands' own lines (`introduced`, `passed`, `withdrawn`, `offer_accepted`, `forced_through`, `obl_bound`, …) are written for player countries only; the AI writes one summary line per action instead ([AI legislation](#ai-legislation)). A command line the transitions also reach (a lost market's customs drop and the promises it re-proposes, the monthly obligations check, the civil-war repair) stays for every country; `test_tax_code_ai.py` computes that set. The month comes from `[SCOPE.ScriptValue('te_history_month_index')|0]`, which printed `month=22032` from the tax probe's country event, and the date from `[TimeKeeper.GetCurrentDate.GetString]`, which vanilla 1.14.5's election lines print (for example "January 8, 2069").
+
+### Debug-line index
+
+Every `TE_TAX <tag>` line in `common/` and `events/` (`test_tax_code_console.py` fails on a tag missing here or listed here and no longer written). *Player* lines are written only for a player's country (inside `if = { limit = { is_ai = no } }`); *every country* lines for any country that reaches them (the `ai_*` lines only ever for an AI country, or the console's). `docs/testing/tax-code-playtest.md` says which check reads which.
+
+| Tag | Written for | Where | Means |
+|---|---|---|---|
+| `adopted` | every country | te_tax_civil_war_effects.txt | a country took over a code copied at an outbreak or a release (`te_tax.6`) |
+| `ai_accepted` | every country | te_tax_ai_effects.txt | an AI country accepted an interest group's offer |
+| `ai_bill_rescheduled` | every country | te_tax_ai_effects.txt | an AI country moved its bill's due month to next month (Ruling 10) |
+| `ai_forced` | every country | te_tax_ai_effects.txt | an AI country forced its bill through in an emergency |
+| `ai_introduced` | every country | te_tax_ai_effects.txt | an AI country introduced a template bill |
+| `ai_no_viable` | every country | te_tax_ai_effects.txt | an AI country found no legal bill, once per episode, with a reason |
+| `ai_obl_enacted` | every country | te_tax_generated_effects.txt | the AI step enacted an institution promise the native AI was about to miss |
+| `ai_passed` | every country | te_tax_ai_effects.txt | an AI country passed its bill |
+| `ai_released` | every country | te_tax_ai_effects.txt | an AI country dropped a held package |
+| `ai_renegotiated` | every country | te_tax_generated_effects.txt | the AI step renegotiated a promise that would otherwise break |
+| `ai_rescheduled` | every country | te_tax_ai_effects.txt | an AI country moved a missed package to next month |
+| `ai_step` | every country | te_tax_ai_effects.txt | the AI's signals (console `te_tax_debug.2`, `.3`) |
+| `ai_waiting` | every country | te_tax_ai_effects.txt | an AI bill blocked only by the native tax level's legitimacy; retried the day after the 1st |
+| `ai_withdrawn` | every country | te_tax_ai_effects.txt | an AI country withdrew its bill, with a reason |
+| `ai_year` | every country | te_tax_ai_effects.txt | January: an AI country's drift counters, template and streaks |
+| `civil_war_repair` | every country | te_tax_civil_war_effects.txt | the winner's code was restored after a civil war |
+| `civil_war_repair_skipped` | every country | te_tax_civil_war_effects.txt | a civil war ended with nothing to repair (a seceder won, or the winner has no code) |
+| `commenced` | every country | te_tax_generated_effects.txt | a passed package took effect |
+| `customs_adopted` | every country | te_tax_collection_effects.txt | the code adopted market levels after failed monthly re-asserts |
+| `customs_bill_withdrawn` | every country | te_tax_bill_effects.txt | a bill that changed only customs was withdrawn when the market was lost |
+| `customs_dropped` | every country | te_tax_migration_effects.txt | a lost market dropped the customs changes of the draft and bill |
+| `customs_gained` | every country | te_tax_migration_effects.txt | the country came to own its market and took its levels into the code |
+| `customs_lost` | every country | te_tax_migration_effects.txt | the country no longer owns its market |
+| `debug` | every country | te_tax_debug_events.txt | a console test event (`te_tax_debug.*`) |
+| `dispatch` | every country | te_tax_on_actions.txt | the global monthly dispatch ran (date only) |
+| `drift` | every country | te_tax_collection_effects.txt | the sync found native settings off the code (every time for a player, the first time for an AI) |
+| `forced_through` | player | te_tax_offer_effects.txt | a bill was forced through |
+| `held_conflict` | every country | te_tax_generated_effects.txt | a package was held: an outside change reached a provision it changes |
+| `held_missed` | every country | te_tax_generated_effects.txt | a package was held: its month went by |
+| `introduced` | player | te_tax_bill_effects.txt | a bill was introduced |
+| `migrated` | every country | te_tax_migration_effects.txt | a country's taxation law was carried over into its code |
+| `migration_discrepancy` | every country | te_tax_generated_effects.txt | the migration found no mapping for the active taxation law |
+| `obl_bound` | player | te_tax_obligation_effects.txt | a pending promise bound to the package just stored |
+| `obl_breached` | every country | te_tax_obligation_effects.txt | a promise broke |
+| `obl_deadline` | every country | te_tax_generated_effects.txt | a promise's delivery phase ended, `result=met` or `unmet`, with its `level=` |
+| `obl_failing` | every country | te_tax_obligation_effects.txt | a maintained promise failed a check within its grace |
+| `obl_fulfilled` | every country | te_tax_obligation_effects.txt | a promise was kept for its whole term |
+| `obl_maintaining` | every country | te_tax_obligation_effects.txt | a promise was delivered and entered maintenance |
+| `obl_paused` | every country | te_tax_obligation_effects.txt | a bureaucracy deficit moved an institution promise's deadline a month |
+| `obl_propose_refused` | every country | te_tax_obligation_effects.txt | a promise could not be recorded (identical one, or no free slot) |
+| `obl_proposed` | every country | te_tax_obligation_effects.txt | a promise was recorded on the bill under debate |
+| `obl_released` | player | te_tax_obligation_effects.txt | promises lapsed with their bill or package |
+| `obl_renegotiated` | player | te_tax_obligation_effects.txt | a promise was renegotiated (the player's command) |
+| `obl_repair` | every country | te_tax_obligation_effects.txt | the civil-war repair reassessed the promises |
+| `obl_started` | every country | te_tax_obligation_effects.txt | a bound promise started with its package |
+| `offer_accepted` | player | te_tax_offer_effects.txt | an interest group's offer was accepted |
+| `offer_promise_dropped` | every country | te_tax_generated_bill_effects.txt | a promise accepted under the bill could not be proposed again on a new revision |
+| `package_released` | player | te_tax_bill_effects.txt | a held package was dropped |
+| `package_rescheduled` | player | te_tax_bill_effects.txt | a missed package was moved to next month |
+| `pass_refused` | player | te_tax_bill_effects.txt | the store refused the bill at Pass; nothing changed |
+| `passed` | player | te_tax_bill_effects.txt | a bill passed |
+| `post` | every country | te_tax_internal_events.txt | `TE_TAX post-migration sync`: the day-after sync of a migration, a re-assert or a copied code (`te_tax.4`) |
+| `process` | player | te_tax_schedule_effects.txt | a country's monthly processor ran |
+| `reasserted` | every country | te_tax_migration_effects.txt | a vanilla taxation law was replaced by the carrier again |
+| `release_copy` | every country | te_tax_civil_war_effects.txt | a released country copied its parent's enacted code |
+| `relief_cleared` | every country | te_tax_civil_war_effects.txt | a state that changed owner lost its regional relief mark |
+| `rescheduled` | player | te_tax_bill_effects.txt | a bill whose month came during debate moved to next month |
+| `revised` | player | te_tax_bill_effects.txt | a bill was revised |
+| `skip` | player | te_tax_schedule_effects.txt | the processor ran twice in a month; the second did nothing |
+| `snapshot` | player | te_tax_snapshot_effects.txt | the economy snapshot was taken |
+| `store_refused` | player | te_tax_schedule_effects.txt | the scheduler refused to store a package |
+| `stored` | player | te_tax_generated_effects.txt | a package was stored in a slot |
+| `sunset` | every country | te_tax_generated_effects.txt | a temporary rate expired |
+| `sunset_deferred` | every country | te_tax_generated_effects.txt | an expiry waited a month: its rate began this month |
+| `sunset_dropped` | every country | te_tax_generated_effects.txt | a corrupt expiry (no successor) was cleared |
+| `superseded` | player | te_tax_generated_bill_effects.txt | a later bill replaced part of an earlier-approved package |
+| `sync` | every country | te_tax_collection_effects.txt | the collection writer left a country alone (a carrier without tokens) or its rate amendments (no interest group to sponsor them) |
+| `sync_deferred` | every country | te_tax_collection_effects.txt | a second sync in one day was deferred to the next |
+| `uprising_copy` | every country | te_tax_civil_war_effects.txt | rebels received the original's code at the outbreak |
+| `watchdog` | every country | te_tax_schedule_effects.txt | the country-pulse watchdog ran sunsets the processor had not |
+| `withdrawn` | player | te_tax_bill_effects.txt | a bill was withdrawn |
 
 ### Storing a package
 
