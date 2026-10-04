@@ -1,0 +1,183 @@
+﻿# Legislated tax code: migration from the vanilla taxation law
+# (docs/systems/tax_code_schema.md, "Migration").
+#
+# Turns the country's active vanilla taxation law, its native tax level and its
+# consumption-taxed goods into an enacted code with the same rates, and installs
+# the carrier law_te_tax_code. Until a country is migrated nothing else in the
+# tax code runs for it: the monthly dispatch processes only migrated countries.
+#
+# Raised as the hidden country event te_tax.3 (events/te_tax_internal_events.txt)
+# from common/on_actions/te_tax_on_actions.txt: every country after the lobby,
+# each newly created country, and any rule-on country the monthly dispatch finds
+# still unmigrated. Country scope; the event makes the country ROOT, which the
+# migrated line's ScriptValue reads.
+#
+# Collection is not synced here. Whether activate_law is visible later in the
+# same execution is unverified (amendment and modifier changes are not); if it
+# is not, the writer would still see the vanilla law and attach the amendments
+# to it. The hidden te_tax.4 syncs a day later; te_tax_last_month = -1
+# also hands the country to the next global dispatch, whose te_tax.1 syncs again
+# (a later execution, so that changes nothing).
+
+# Country scope. Runs once: te_tax_migrated (the migration version, 1) is written
+# last, and a country holding it at 1 or more is left alone, so re-running the
+# event changes nothing.
+te_tax_migrate_country = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			OR = { NOT = { has_variable = te_tax_migrated } var:te_tax_migrated < 1 }
+		}
+		# Every schema token, with its sentinel where absent.
+		te_tax_init_country = yes
+		set_variable = { name = te_tax_migration_discrepancy value = 0 }
+		# Rates from the active law and the native level (one generated branch per
+		# pair; any other law migrates as zeros and sets the discrepancy flag).
+		te_tax_gen_migrate_rates = yes
+		# Taxed goods: the catalog goods the country taxes natively.
+		te_tax_gen_migrate_goods = yes
+		# Operative from this month, no sunsets; external-change tokens move.
+		te_tax_gen_migrate_provisions = yes
+		# Customs (the customs option, a market owner; plan Task 15): every
+		# tradeable good's native import and export level becomes the code's.
+		if = { limit = { te_tax_customs_eligible = yes } te_tax_migrate_customs = yes }
+		# A country already on the carrier keeps it: activating a held law again
+		# does not behave like a fresh activation.
+		if = {
+			limit = { NOT = { has_law = law_type:law_te_tax_code } }
+			activate_law = law_type:law_te_tax_code
+		}
+		# The next global dispatch processes this country (te_tax.1); only the
+		# processor claims a month.
+		set_variable = { name = te_tax_last_month value = -1 }
+		change_variable = { name = te_tax_code_version add = 1 }
+		te_tax_history_push = { KIND = 5 SLOT = none }
+		debug_log = "TE_TAX migrated wage=[SCOPE.ScriptValue('te_tax_view_en_wage')|0] div=[SCOPE.ScriptValue('te_tax_view_en_div')|0] land=[SCOPE.ScriptValue('te_tax_view_en_land')|0] head=[SCOPE.ScriptValue('te_tax_view_en_head')|0] cons=[SCOPE.ScriptValue('te_tax_view_en_cons')|0] goods=[SCOPE.ScriptValue('te_tax_view_goods_count')|0] customs=[SCOPE.ScriptValue('te_tax_view_customs_held')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		# The carrier is in place by tomorrow: sync collection then, so the
+		# country does not collect nothing until the 1st of next month.
+		trigger_event = { id = te_tax.4 days = 1 }
+		set_variable = { name = te_tax_migrated value = 1 }
+	}
+}
+
+# Country scope (the hidden te_tax.5, raised from on_law_activated when another
+# taxation law was activated in a migrated country). Puts the carrier back. The
+# enacted code is not touched: it is still the law, and the next sync writes it
+# onto the carrier again. Like the migration, it never syncs in the same
+# execution (activate_law may not be visible yet; the writer would attach the
+# amendments to the law being replaced): te_tax.4 syncs tomorrow, and that
+# sync's drift check counts the lost amendments (te_tax_drift_amend), since the
+# code itself did not change. te_tax_last_month = -1 hands the country to the
+# next dispatch; only the processor claims a month. A country already holding
+# the carrier (a second te_tax.5 from one cascade) is left alone.
+te_tax_reassert_carrier = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			has_variable = te_tax_migrated
+			var:te_tax_migrated >= 1
+			NOT = { has_law = law_type:law_te_tax_code }
+		}
+		debug_log = "TE_TAX reasserted the tax code law over another taxation law; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		activate_law = law_type:law_te_tax_code
+		set_variable = { name = te_tax_last_month value = -1 }
+		trigger_event = { id = te_tax.4 days = 1 }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Customs authority (plan Task 15; docs/systems/tax_code_schema.md, "Customs
+# schedule"). Under the customs option the code holds a country's customs
+# exactly while it owns its market (te_tax_customs_eligible,
+# te_tax_triggers.txt); the records are then live (te_tax_customs_held = 1).
+# ---------------------------------------------------------------------------
+
+# Country scope; the caller has tested te_tax_customs_eligible. Every
+# tradeable good's native import and export level becomes the code's
+# (te_tax_gen_migrate_customs, one branch per level through the capital's
+# state goods), the code holds the customs, and the customs group's external
+# version moves: a change made outside legislation, so a bill or a package
+# drafted against the old records holds. The caller moves te_tax_code_version
+# and writes the history entry (the migration's kind 5, or kind 17).
+te_tax_migrate_customs = {
+	te_tax_gen_migrate_customs = yes
+	set_variable = { name = te_tax_customs_held value = 1 }
+	change_variable = { name = te_tax_xver_customs add = 1 }
+}
+
+# Country scope (the processor at every month's start, after it claims the
+# month and before any transition; te_tax.7, a day after a market merge, a new
+# market, or a change of subject status). Whether the code holds this
+# country's customs follows whether it owns its market:
+#   - a country that gains its market (or never held its customs) migrates
+#     from the market's native levels (te_tax_migrate_customs), history kind 17;
+#   - a country that loses it keeps its records frozen, unread
+#     (te_tax_customs_held = 0): its market owner sets the levels now. The
+#     customs external version moves, so a package touching customs holds;
+#     its failed re-assert counts and blocked marks are dropped; history
+#     kind 16. The open draft and bill are left to te_tax_customs_drop_records
+#     (below), which te_tax.7 runs next and the processor after the month's
+#     transitions.
+# Writes nothing for a country whose standing did not change, and nothing at
+# all under the plain rule option.
+te_tax_customs_revalidate = {
+	if = {
+		limit = { te_tax_customs_on = yes te_tax_code_in_force = yes }
+		# Backfills the customs tokens on a save from before them; never overwrites one.
+		te_tax_init_country = yes
+		if = {
+			limit = { te_tax_customs_eligible = yes NOT = { var:te_tax_customs_held = 1 } }
+			te_tax_migrate_customs = yes
+			change_variable = { name = te_tax_code_version add = 1 }
+			# A draft's note that its customs changes were dropped with the market no longer holds.
+			if = { limit = { has_variable = te_tax_dr_customs_dropped } set_variable = { name = te_tax_dr_customs_dropped value = 0 } }
+			te_tax_history_push = { KIND = 17 SLOT = none }
+			debug_log = "TE_TAX customs_gained the country owns its market; its tariff levels were carried over into the tax code; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else_if = {
+			limit = { NOT = { te_tax_customs_eligible = yes } var:te_tax_customs_held = 1 }
+			set_variable = { name = te_tax_customs_held value = 0 }
+			change_variable = { name = te_tax_xver_customs add = 1 }
+			te_tax_gen_customs_clear_retries = yes
+			te_tax_history_push = { KIND = 16 SLOT = none }
+			debug_log = "TE_TAX customs_lost the country no longer owns its market; its customs records are frozen; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Country scope (te_tax.7 right after te_tax_customs_revalidate; the processor
+# at step 7, after the month's transitions and the sync). The code no longer
+# holds this country's customs (te_tax_customs_drop_due_draft, _bill: the
+# market was lost), yet the open draft or bill still changes a customs level:
+# those levels are dropped (-99) so both stay usable, with one debug line and
+# history kind 18 (controller ruling); the review says why. The bill opens a
+# new revision, its text having changed, whose debate start takes the economy
+# snapshot and refreshes the support snapshot; a bill that changed only
+# customs is withdrawn instead (fix round 1; _inst 1). Read from the records,
+# not from the moment of the loss, so it runs once: afterwards neither touches
+# customs. Split from te_tax_customs_revalidate (final review A-Minor 5) so the
+# processor drops them after the month's transitions, where the new revision's
+# snapshot and support refresh are the month's own and each runs once.
+te_tax_customs_drop_records = {
+	if = {
+		limit = {
+			te_tax_customs_on = yes
+			OR = {
+				te_tax_customs_drop_due_draft = yes
+				te_tax_customs_drop_due_bill = yes
+			}
+		}
+		set_local_variable = { name = te_tax_cu_withdrawn value = 0 }
+		if = {
+			limit = { te_tax_customs_drop_due_draft = yes }
+			te_tax_draft_drop_customs = yes
+		}
+		if = {
+			limit = { te_tax_customs_drop_due_bill = yes }
+			te_tax_bill_drop_customs = yes
+		}
+		# _inst 1: the bill changed only customs and was withdrawn.
+		te_tax_gen_history_write = { KIND = 18 SLOT = none INST = local_var:te_tax_cu_withdrawn }
+		debug_log = "TE_TAX customs_dropped the market was lost; the customs changes of the open draft and bill were dropped; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}

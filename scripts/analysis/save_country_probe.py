@@ -80,6 +80,15 @@ check_save_history_order.py).
             reference (the value is its id), printed as country#<id>(<TAG>), or
             (gone) when no country block has that id. Other kinds print raw.
 
+  variable lists (in the same 0x0555 block, beside the variable data; worked out 2026-10-03 on a 1.14.5 save)
+            0x0555 = { 0x00f0 = { ... }  0x0351 = { { 0x001b = "<name>"
+                         0x0352 = { 0x00e1 = <kind> 0x00db = <id> }  ... 0x006d = { <n> ... } } ... }
+                       0x0583 = { ... } }
+            Items keep their saved order. Item kinds are the variables' own: 0x0360 a script container,
+            0x01b7 a state, 0x333c a country; any other prints as `0x....#<id>`. 0x0583 holds the maps
+            (not decoded). A state id is the state's slot; the state database is not decoded, so a list
+            of states prints `state#<id>`.
+
   modifiers (a direct child of the country block)
             0x333b = { 0x0d00 = { { 0x000b = u32:<instance>  0x0c1f = "<name>"
                                     0x0cf8 = i32:<start>  [0x0cf9 = i32:<end>] ... } ... } }
@@ -144,13 +153,16 @@ from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from check_save_history_order import find_saves, read_gamestate  # noqa: E402
+from check_save_history_order import PlainTextSave, find_saves, read_gamestate  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[2]
 
 FIXED = 100000.0
 KEY_DEF, KEY_VARS, KEY_DATA, KEY_NAME, KEY_VAL, KEY_KIND = 0x07DD, 0x0555, 0x00F0, 0x0384, 0x00DB, 0x00E1
 KEY_MODS, KEY_MODLIST, KEY_MODNAME = 0x333B, 0x0D00, 0x0C1F
+# Variable lists: a sibling of the variable data, `0x0351 = { { 0x001b = "name" (0x0352 = { kind id })... 0x006d = {n} } }`.
+KEY_LIST, KEY_LIST_NAME, KEY_LIST_ITEM = 0x0351, 0x001B, 0x0352
+LIST_KINDS = {0x0360: "container", 0x01B7: "state", 0x333C: "country"}
 KIND_VALUE, KIND_COUNTRY = 0x02D2, 0x333C
 FLAG_TAG_HOLDER, FLAG_REVOLUTIONARY = 0x538B, 0x4386
 FLAG_GUESSES = {FLAG_TAG_HOLDER: "tag holder?", FLAG_REVOLUTIONARY: "revolutionary?"}
@@ -304,6 +316,31 @@ def read_variables(items):
         else:
             kind_text = f"0x{kind[1]:04x}" if kind and kind[0] == "tok" else str(kind)
             out[name[1]] = f"{kind_text}:{val[1] if not isinstance(val, list) else '{...}'}"
+    return out
+
+
+def read_lists(items):
+    """{name: ["state#5", "container#2", ...]} for a country's variable lists, in saved order.
+
+    An item whose kind token is not in LIST_KINDS prints the token: `0x1234#9`.
+    """
+    out = {}
+    block = get(items, KEY_VARS)
+    lists = get(block, KEY_LIST) if isinstance(block, list) else None
+    for _, entry in lists or []:
+        if not isinstance(entry, list):
+            continue
+        name = get(entry, KEY_LIST_NAME)
+        if not name or name[0] != "str":
+            continue
+        found = []
+        for key, item in entry:
+            if key != ("tok", KEY_LIST_ITEM) or not isinstance(item, list):
+                continue
+            kind, val = get(item, KEY_KIND), get(item, KEY_VAL)
+            label = LIST_KINDS.get(kind[1], f"0x{kind[1]:04x}") if kind and kind[0] == "tok" else "?"
+            found.append(f"{label}#{val[1] if val and not isinstance(val, list) else '?'}")
+        out[name[1]] = found
     return out
 
 
@@ -526,7 +563,7 @@ class Filters:
 
     def matches(self, rec):
         """Called on a trimmed record: does it hold something every content filter asked for?"""
-        if self.var and not rec["vars"]:
+        if self.var and not (rec["vars"] or rec["lists"]):
             return False
         if self.modifier and not rec["modifiers"]:
             return False
@@ -539,6 +576,7 @@ class Filters:
     def trim(self, rec):
         if self.var:
             rec["vars"] = {k: v for k, v in rec["vars"].items() if self.var.search(k)}
+            rec["lists"] = {k: v for k, v in rec["lists"].items() if self.var.search(k)}
         if self.modifier:
             rec["modifiers"] = [m for m in rec["modifiers"] if self.modifier.search(m)]
         if self.je:
@@ -600,6 +638,7 @@ class Save:
             "tag": tag,
             "flags": flags,
             "vars": read_variables(items),
+            "lists": read_lists(items),
             "modifiers": read_modifiers(items),
             "journal": sorted((t, a) for t, a, _ in self.journal.get(cid, [])),
             "laws": self.laws_of(cid),
@@ -689,6 +728,9 @@ def describe(rec, tags, filters, indent="  "):
     if filters.shows("vars"):
         lines.append(f"{indent}  variables ({len(rec['vars'])}):")
         lines += [f"{indent}    {k} = {fmt_value(v, tags)}" for k, v in sorted(rec["vars"].items())]
+        if rec["lists"]:
+            lines.append(f"{indent}  variable lists ({len(rec['lists'])}):")
+            lines += [f"{indent}    {k} = {' '.join(v) or '(empty)'}" for k, v in sorted(rec["lists"].items())]
     if filters.shows("laws"):
         label = "laws, active and matching" if filters.law else "laws, active"
         lines.append(f"{indent}  {label} ({len(rec['laws'])}):")
@@ -818,6 +860,11 @@ def diff(before, after, filters, groups=None):
                 for k in sorted(set(p["vars"]) | set(q["vars"]))
                 if p["vars"].get(k) != q["vars"].get(k)
             ]
+            ch += [
+                f"list {k}: {' '.join(p['lists'].get(k, ['-']))} -> {' '.join(q['lists'].get(k, ['-']))}"
+                for k in sorted(set(p["lists"]) | set(q["lists"]))
+                if p["lists"].get(k) != q["lists"].get(k)
+            ]
             ch += [f"+modifier {m}" for m in q["modifiers"] if m not in p["modifiers"]]
             ch += [f"-modifier {m}" for m in p["modifiers"] if m not in q["modifiers"]]
             p_laws, q_laws = {x["law"]: x for x in p["laws"]}, {x["law"]: x for x in q["laws"]}
@@ -858,6 +905,14 @@ def main(argv):
     parser.add_argument("--law-conflicts", action="store_true",
                         help="list countries with two or more active laws in one group (--tag narrows it)")
     args = parser.parse_args(argv)
+    try:
+        return run_args(args, parser)
+    except PlainTextSave as exc:  # a debug-mode save: say what it is, not a traceback
+        print(exc)
+        return 1
+
+
+def run_args(args, parser):
     filters = Filters(args.tag, args.var, args.modifier, args.je, args.laws, args.law)
     if args.law_conflicts and (args.diff or args.var or args.modifier or args.je or args.laws or args.law):
         parser.error("--law-conflicts takes only --tag")

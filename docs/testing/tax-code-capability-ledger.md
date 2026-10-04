@@ -1,0 +1,299 @@
+# Tax code capability ledger
+
+Opened 2026-10-02 from the UK first pass ([results](tax-code-probe-results-2026-10-02.md)) and a
+static read of the vanilla 1.14.5 install. One row per engine capability that the legislated tax
+code ([spec](../superpowers/specs/2026-09-29-legislated-tax-code-design.md), [plan](../superpowers/plans/2026-10-02-legislated-tax-code-tasks.md);
+the AI and the release: [spec](../superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md), [plan](../superpowers/plans/2026-10-03-tax-code-ai-and-release-tasks.md))
+depends on. A row that is not `verified` limits what the first playable may promise, so read it
+before widening the catalog. Later tasks update a row when they produce new evidence.
+
+**Status.** `verified`: observed in game (a probe row or a log line). `partial`: part of the
+capability observed and the rest unverified; the parenthesis says what was seen. `static-only`: read
+from vanilla script, engine docs or this repo; nothing observed in game. `untested`: no evidence
+either way. `failed`: observed not to work. A parenthesis after any status says how far it goes.
+
+**Evidence tags.** `R<n>` is a row of the probe results. `V:` is the installed vanilla **1.14.5**
+`game/` folder. `ENG:` is `~/src/vic3-engine-docs/1.14.5/docs/`. `log HH:MM:SS` is a line of the 2026-10-02
+`debug.log` family in the game's `logs/` folder. The files rotate on every launch, so such a line is
+cited by its time stamp and quoted text, never by file name. Other paths are repo-relative.
+
+| # | Capability | Status | Evidence | Production decision | Next check |
+|---|---|---|---|---|---|
+| 1 | Flat wage and dividend amendments on one law collect together | verified | R3 coexistence: `event te_debug_tax.62` entered stage 3 and Budget and pop views showed both collections. Writer `common/scripted_effects/te_debug_tax_effects.txt:20-27`; amendments `common/amendments/te_debug_tax_amendments.txt:4-27`. | The carrier law plus generated rate amendments is the collection mechanism for the wage and dividend channels. | Re-run through the production writer once it exists. Two clauses is all that was seen. |
+| 2 | Rebuild from stored state is idempotent | verified | R3 reconstruction: `event te_debug_tax.65` twice left taxes and dates unchanged for about a game week. `te_tp_rebuild`, `te_debug_tax_effects.txt:217-228`. | One writer derives native state from the canonical variables and is safe to call repeatedly. Add the missing amendments and remove the extra ones, so nothing is cleared and re-added. | Whether add/remove of an amendment has sponsor or IG side effects is unobserved: watch for it when the writer first runs in game. |
+| 3 | Three or more amendments coexisting on one law | untested | R3 itself says it "does not establish arbitrary clause counts". The probe only ever held wage plus dividend. | Generate the rate-grid amendments as planned, but treat a full-code stack as unproven. | First in-game check after the writer lands: wage, dividend, rural, head and consumption at once, then rebuild twice and compare receipts. |
+| 4 | Land, head and consumption-rate amendment channels | static-only | Same mechanism as R3: `tax_land_add`, `tax_per_capita_add`, `tax_consumption_add` (`te_debug_tax_amendments.txt`, `amendment_te_tp_rural`, `_head`, `_consumption`, `_consumption_high`) are `tax`-mask modifiers in ENG:modifiers.log:2011-2033. P01 to P05 were not run (`tax-code-probes-extended.md:144-157`). | Offer the channels as assessments, not as land or wealth taxes. Estimates stay approximate (row 10). | P01 to P05 per channel: payer coverage, eligible counts, behaviour at all five native levels. |
+| 5 | Country variables and absolute month indices survive save and reload | verified | R4 variables: pending stage, Due 22033 and Expiry 22034 kept their original values across reload. | Canonical state lives in bounded country variables; dates are absolute `te_history_month_index` values. | Repeat in the production reload retest (row 7). |
+| 6 | Containers as records | partial (count only) | R4 containers, "Partial": "Two-record count survived reload and the third append was rejected." The inspector printed only `owned records=2`, not the nested owner or month fields. The results doc's caveat: "a fresh inspection after reload supports reference/owner access, whereas a surviving cached count alone does not. Month-field persistence and independent copies remain unverified." | Fixed variable slots for the first playable; no container-backed records. | Inspect the nested fields after a reload if a later design needs records (P12). |
+| 7 | Automatic scheduling from `on_monthly_pulse_country` | failed | R3 scheduling: a package due in 22033 never commenced in its month; at 22034 commencement and expiry ran in one call (results, "Scheduling evidence"). Most likely cause: the country pulse is a 30-day timer, not a calendar month. This was observed on Byzantium, not on the UK, whose January 30/31 pulse phase was never seen; the scheduler retest confirms or refutes it. A Byzantium run logged one `te_tp_monthly` snapshot per month index, 24802 to 24819 (for example `TE_TAX_PROBE country=Byzantium seq=64 month=24815` at 13:24:42), and the dated lines that bracketed its pulses (read 2026-10-02, since rotated out) fit a 30-day period in all 21 brackets. The global `on_monthly_pulse` ran on the 1st: its `TE_TABOO: score` lines (13:24:05, 13:25:40, 13:27:44) came 1 to 2 s before monthly autosaves whose headers read the 1st (headers read 2026-10-02; the files have since been overwritten). Second defect: `expiry = due + 1` with two independent `>=` branches let one call commence and expire (`te_debug_tax_effects.txt:204-207, 229-262`). Write-up: `docs/guides/scripting_best_practices.md`, "`on_monthly_pulse_country` Is a 30-Day Timer, Not a Calendar Month". | Transitions dispatch from the global pulse (the 1st) through a country event with a last-processed-month guard. The country pulse is a watchdog that never commences. A late commencement holds; a late expiry catches up after its commencement month (plan Task 4). | Scheduler retest (see Open probes). |
+| 8 | State wage relief through `state_tax_collection_mult` | verified (wages only) | R1a: with `te_tp_state_relief` (`common/static_modifiers/te_debug_tax_modifiers.txt:4-7`, -0.5) London's payer rate fell from 5% to 2.5% and a non-London payer stayed at 5%. ENG:modifiers.log:1935 describes the modifier as "the final amount of all Taxes collected from Pops", so it scales every pop tax in the state, not only wages. Aggregate state receipts did not halve exactly. | Regional relief is a state modifier, and the bill must say it relieves all pop taxes in the state. | P06: dividends and consumption inside a relieved state; relief stacked with an exemption. |
+| 9 | Agricultural relief through `building_group_bg_agriculture_tax_mult` | verified (wages only) | R1b: `te_tp_agriculture` (`te_debug_tax_modifiers.txt:24-27`, -0.5) took agricultural workers from 5% to 2.5% and left non-agricultural workers at 5%. It did not relieve dividends: a Yorkshire Manor House aristocrat and a Financial Center capitalist stayed at 5%. | Offer agricultural relief for wages only and say so. No dividend-relief claim; targeting ownership buildings is a candidate, not a result. | P06: manufacturing group, and a relief aimed at ownership buildings. |
+| 10 | Script-readable taxable bases | static-only (absent) | R2b: a bounded search of ENG:triggers.log found no direct pre-tax wage, dividend or consumption getter. This is not proof that none exists. | Estimates are explicitly approximate and use documented proxy inputs. Player-facing figures come from GUI getters, not from script values. | Re-search the engine docs after each vanilla bump; zero-rate bench (`tax-code-probes-extended.md:140-142`). |
+| 11 | `tax_income` aggregate | partial (readable; semantics unclassified) | R2a: `tax_income` read 32.4k, then 39.5k after Wage 0.05; log `tax_income=32176.123` at stage 2 with no operative probe tax (results doc). ENG:triggers.log:15707 calls it "weekly income from taxation, excluding tariffs, pacts, transfers and other external sources", but the zero-bench value resembles minting (about 32.3k). | Unclassified aggregate: use it as a direction signal, never as domestic receipts or as a wage base. | Check its baseline, components and update timing before any fiscal-balance rule leans on it (P16). |
+| 12 | Native tax-level political statics | static-only | V:`common/static_modifiers/00_code_static_modifiers.txt:320-360` (`tax_modifier_*`: legitimacy +10, +5, 0, -10, -20, plus radicals, IG attraction and expected SoL). The probe carrier and amendments hold identical values in all five `tax_modifier_*` blocks (amendments asserted in `test_tax_code_probes.py`; carrier blocks identical by inspection), so a level change moves only these statics. Millet System and People of the Book (`tax_heathen_add`, V:`common/laws/00_church_and_state.txt:199-217, 300-318`) and `amendment_redemption_payments` (V:`common/amendments/00_amendments_enactment_04.txt:1312-1328`) also carry per-level blocks. | Carrier and amendments stay level-invariant. The writer pins the native level to `medium` each month, which fixes those three at their medium values. IG views of the code replace the statics (plan Task 13). | In game: change the level on a carrier country and confirm receipts do not move (P01 to P05, "repeat at native very-low through very-high"). |
+| 13 | AI tax-level, consumption-tax and tariff writes | static-only (no lever) | No per-country lock exists: ENG lists only the setters (`set_tax_level` effects.log:36790, `set_import_tariff_level` :36573, `set_export_tariff_level` :36480, `add_taxed_goods` :436) and no on-action fires when a level, a taxed good or a tariff changes (ENG:on_actions.log). The only switches are global defines, `TAX_LEVEL_CHANGES_ENABLED` (V:`common/defines/00_ai.txt:19`) and `GOVERNMENT_AUTHORITY_SPENDING_ENABLED` (:18), which cannot follow a game rule and would change rule-off games. | Do not touch the defines. Make the native control inert (row 12) and re-assert the code monthly. An AI write between re-asserts is a documented limitation, pending P11 and P14. The writer counts each write it undoes (`te_tax_drift_level`, `te_tax_drift_goods`, `te_tax_drift_amend`; row 24). | P11 interception map and P14 AI parity. In game: an AI country's first level change logs `TE_TAX drift … level=` on the next 1st (later ones only count), and its level is back at medium. |
+| 14 | Per-good `country_<good>_*_tariffs_*` modifiers | failed | log, 2026-10-02 14:23 launch, 14:23:47: "Unknown modifier type: country_grain_import_tariffs_rate_add. It is either invalid, or a potential dynamic modifier type definition missing from the database", and the same for `country_grain_export_tariffs_rate_add`, `country_grain_max_import_tariffs_level_add` and `country_grain_min_import_tariffs_level_add`, from `te_debug_tax_modifiers.txt:51,56,61,66`. ENG:modifiers.log:17827-17837 lists all six for grain, a vanilla good, so the cause is unknown. | No per-good rate or level-bound modifiers in the schedule. Customs levers are the setters (row 15) and the state-scoped `state_tariff_*_add` maxima. **Re-test pending (2026-10-03):** the message is the one a dynamic pattern with no registration gives (`docs/guides/scripting_best_practices.md`), and nothing registered these families. `common/modifier_type_definitions/te_tax_probe_modifier_types.txt` now registers all six for grain and iron. | P09b (lock) and P09c (carrier) in `docs/testing/tax-code-probes.md`, "Customs: lock or carrier": decides whether customs switches the native controls off at their source (spec 2026-10-03 §2.9). |
+| 15 | `set_import_tariff_level` and `set_export_tariff_level` | static-only (Task 15 writes them for a market owner under the customs option) | ENG:effects.log:36482, 36575 (`{ goods = g:iron level = max_tariffs }`). V:`common/defines/00_defines.txt:643-646`: default `low_tariffs`, cooldown 3 months, 7-day grace. Vanilla calls the setters only from treaty articles and history. Whether the setter obeys the market-owner rule, treaty bans or the cooldown is unobserved. | Customs legislation stays behind the experimental `te_tax_code_enabled_customs` option. | P08 (level factors on this build), P10 (authority and cooldown). |
+| 16 | Customs-union authority | static-only | V:`localization/english/interfaces_l_english.yml:9098` (`SET_TARIFF_LEVEL_NOT_MARKET_OWNER`: "Only the market owner can set tariff levels") and `:9102` (cooldown). V:`localization/english/concepts_l_english.yml:1226, 1229, 1234`: the senior partner controls levels, a junior may not, and a subject pact acts as a customs union. The Budget buttons are enabled only when `Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket)` (`gui/budget_panel.gui:1782`). | Key customs provisions to the market owner; juniors see imposed provisions; revalidate on market merge and creation. | P10 as leader, member and treaty-constrained country, before and after entry. |
+| 17 | Consumption-tax authority cost for scripted adds | untested | `country_consumption_tax_cost_mult` is the "Authority cost of Consumption Taxes" (ENG:modifiers.log:507); the probe modifier is `te_tp_authority` (`te_debug_tax_modifiers.txt:34-37`). P05 was not run (`tax-code-probes-extended.md:152-157`). | Selected goods are part of the code. If a scripted add evades the authority cost, record it as a limitation, not as a free-tax design. | P05: authority before and after a scripted add, a native add and a removal. |
+| 18 | Institution delivered versus requested level | static-only (delivered strongly indicated) | ENG:event_targets.log:1662-1663 gives `investment` as the "current investment level". The GUI separates current from target (V:`gui/politics_panel_institutions.gui:557, 595, 757`). The tutorial entry completes on `scope:target.investment` while `is_progressing` follows `expanding_institution` (V:`common/journal_entries/00_tutorial.txt:699-712`), and vanilla's strike promise tests `institution_investment_level >= 3` (V:`common/scripted_triggers/00_strike_triggers.txt:28-35`). No script accessor exists for the requested target. | Verify delivery with `institution_investment_level >= N`, never with `NOT = { expanding_institution }`. No service promise leaves experimental status before P16. | P16 gate: sample the level, `expanding_institution` and the GUI daily across one expansion, a cancel and a bureaucracy deficit. |
+| 19 | Civil-war copy of amendments to rebels | untested | A revolution's winner inherits the loser's variables but no modifiers and no variable lists (`CLAUDE.md` "Top gotchas"; `docs/guides/scripting_best_practices.md`, "What a Civil War's Winner Inherits"). What happens to a law's amendments is unobserved; P15 was not run. | Stateless rebuild: canonical variables decide, tokens are never removed, and the win repair rebuilds collection from the winner's variables (plan Task 10). Nothing relies on an amendment copy. | P15: both outcomes, secession, release, state transfer. |
+| 20 | Modifier duration from a variable (`days = var:X`) | failed (rejected at load) | log, 2026-10-02 14:23 launch, 14:23:51: "Named value not found: var:te_tp_timer_days" for `add_modifier = { name = te_tp_authority days = var:te_tp_timer_days }` in `te_debug_tax.69` (`events/te_debug_tax_events.txt`). No other mod file writes `days = var:`. | Production never computes a duration from a variable. Calendar behaviour uses absolute month indices (row 7). | P12 timer half: retry with a named script value only if a duration is ever needed. |
+| 21 | `bg_coal_mining` legacy building group | static-only | V:`common/building_groups/00_building_groups.txt:754-757`: "legacy building groups ... only for save game compatibility and are not actually used". `building_coal_mine` is in `bg_mining` (V:`common/buildings/03_mines.txt:1-2`) and no building declares `bg_coal_mining`. Six mod static modifiers and one treaty article use its keys: `carbon_tax_modifier` (`common/static_modifiers/extra_modifiers.txt:1317`), `fossil_fuel_divestment_modifier` (`:1367`), `fossil_lobby_concessions_modifier` and `_no_gw_` (`:1540, 1549`), `climate_accord_rejection_modifier` and `_no_gw_` (`:1667, 1675`) and `common/treaty_articles/109_enforce_emissions_reduction.txt:54`. The keys are registered in `common/modifier_type_definitions/global_warming_modifier_types.txt:75,84`, so they parse and do nothing. | Replace the dead keys with live ones where the intent survives (plan Task 16). | Task 16: confirm in game that coal and oil extraction feel the levy. |
+| 22 | Gates on vanilla's fiscal controls | static-only | `te_tax_native_controls_sgui` (valid with the rule off and no probe lock) is ANDed into the `enabled` of the five tax-level buttons and the consumption-tax "+" (`gui/budget_panel.gui`), the add menu's item (`gui/add_consumption_tax_menu.gui`), the four Tax/Untax items (`gui/right_click_menu.gui`) and the type `consumption_tax_button_toggle` (`gui/goods_panel.gui`), whose instances in V:`gui/goods_state_panel.gui:207,219` and V:`gui/custom_tooltip.gui:4785,4797` either set `enabled = no` already or take the type's. `te_tax_native_tariff_controls_sgui` (valid unless the customs option is on) gates the 14 tariff and subvention buttons. `test_tax_code_bypass.py` lists every site. The call form `GetScriptedGui(...).IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )` is used about 370 times in mod GUI, and the probe's own gate sat on the Budget buttons, but never yet inside a type every goods view instantiates. Whether an already-open menu or tooltip re-reads it is unobserved. | The player cannot change the level or the taxed goods by hand under the rule, nor tariffs under the customs option. With the rule off the gates are the probe gate they replaced. | P11, under each rule option: Budget (level, "+", tariffs), the goods panel, the goods-in-state panel, the goods tooltip, both goods right-click menus and an add menu opened before the rule's gate could close it. |
+| 23 | Re-assert after `activate_law` of a vanilla taxation law | static-only | `activate_law` ignores `can_enact` (`gen_law_consistency.py` header; vanilla history relies on it). V:`common/on_actions/00_code_on_actions.txt`, the note on `on_law_activated`: "executed when the law is activated for any reason ... script can activate laws directly". The mod's monetary harness relies on the same (`events/te_debug_monetary_events.txt`, "on_law_activated DOES fire"). Script paths: `restore_peruvian_constitution` (V:`common/scripted_effects/00_victoria_scripted_effects.txt:2930-2935`, Per-Capita whenever the country lacks it), the law-consistency cascade (generated), a taxation law the engine gives an uprising after the outbreak copy (Task 10), `effect_starting_politics_*` (V:`common/scripted_effects/00_political_setup.txt`, game start, before the migration, so not re-asserted), Cultural Hegemony's law pressure (mod; now excludes `lawgroup_taxation` under the rule). Not a live path: Hungary's Per-Capita button (V:`common/scripted_buttons/05_hungary_buttons.txt:229-237`; V:`events/balkans_events/00_ip3_hungary_events.txt:1708` shows the same activation in a `show_as_tooltip`) activates Per-Capita only from Land-Based, which no country holds under the rule. | `te_tax_on_law_activated` dispatches `te_tax.5` to a migrated owner; it re-activates `law_te_tax_code` (if not held), sets `te_tax_last_month = -1` and raises `te_tax.4` for the next day's sync. No vanilla file is edited. | Console `event te_tax_debug.1` (activates Per-Capita over the carrier) in a rule-on game: `TE_TAX reasserted` the same day, the carrier in the law panel, the next day's sync and a `TE_TAX drift … amend=` line, collection unchanged afterwards. |
+| 24 | Native drift counters | static-only | `te_tax_detect_drift` (`common/scripted_effects/te_tax_collection_effects.txt`) runs in the writer before any sync, only while `te_tax_sync_version` equals `te_tax_code_version`: level off `medium` (`te_tax_drift_level`), each good taxed or untaxed against the enacted list (`te_tax_drift_goods`), each instrument whose amendments differ from its index (`te_tax_drift_amend`). A month with a sunset or a commencement puts drift back uncounted. One `TE_TAX drift` line per drift for a player's country, the first only for an AI's. | Count and log every native write the monthly sync undoes; use the counts to judge P11/P14, not to change collection. | First runs in game: a `TE_TAX drift` line after an AI level change and after `event te_tax_debug.1`, none in a month a package commences. |
+| 25 | Vanilla objectives that need Per-Capita, Proportional or Graduated taxation | static-only | `REPLACE:je_great_reforms_bureaucratic`, `REPLACE:je_portugal_regeneration` and `REPLACE:je_imperialism_of_promise` (`common/journal_entries/te_tax_vanilla_je_overrides.txt`; vanilla 1.14.5 entries, the mod's precedent `te_vanilla_turtle_island.txt`). Under the rule each `complete` also accepts `te_tax_code_counts_as_per_capita` (head and wage tax), `_proportional` (wage ≥ 10%, dividends ≥ 2.5%) or `_graduated` (wage ≥ 10%, dividends ≥ wages); with the rule off a `trigger_else` holds vanilla's condition. `test_tax_code_bypass.py` compares the rest of each entry with `vanilla_parsed/`. | The three objectives stay reachable through the code. | In game: Russia (Great Reforms), Portugal (Regeneration), BIC (Imperialism of Promise) with a qualifying code; the entry's tooltip shows the counts-as line. |
+| 26 | Traditionalism under the code | static-only | V:`common/laws/01_economic_system.txt:12-17`: Traditionalism disallows Per-Capita, Proportional and Graduated by name; the carrier is in neither list, so the law alone does not stop a code that taxes wages or dividends. | `te_tax_draft_ready` (introduce and revise) adds "no wage or dividend tax" while `law_traditionalism` is enacted. Enacting Traditionalism while the code taxes wages is not blocked; the next bill must zero them. Every AI template adds permanent wage and dividend repeals when its final due-month rates are positive, via `te_tax_ai_prepare_traditionalist_draft` and the guarded player draft commands; the full bill still needs support and passage. | In game: under Traditionalism a draft with a wage or dividend tax cannot be introduced, and its tooltip says why. |
+| 27 | Regional-relief states chosen in the workbench and kept in country lists | static-only | The candidate list `te_tax_dr_relief_candidates` is built by `te_tax_cmd_draft_relief_choose` (never on opening a panel) and shown by a datamodel over `GetPlayer.MakeScope.GetList(...)` (the mod's other list datamodels root on `JournalEntry.GetCountry`); each row passes its state to `te_tax_relief_state_sgui` as the saved scope `te_tax_st`, the Grand Monuments rows' shape (`gm_sguis.txt`: a State object in `saved_scopes` has no vanilla precedent). The enacted states are the list `te_tax_en_relief_states`; the writer's relief sync derives the state marks from it (`te_tax_rebuild_relief_marks`, pruned by `add_to_temporary_list` and a second pass). Max three, by `any_in_list = { count >= 3 }` (`variable_list_size`'s `target` fails to load in 1.14). | The bill names at most three states; the state rows are the only way to choose them. | In game: Choose States lists the incorporated states; Name and Drop change the draft and their tooltips list what fails; a passed bill's states get `te_tax_relief_region_<n>` on the 1st of its month; a captured named state loses it within a month. |
+| 28 | Policy-obligation verification against delivered values | static-only (kind 1: pending P16) | Kind 1 (institution level) is checked by `te_tax_obl_inst_met_<arg>` (`common/scripted_triggers/te_tax_triggers.txt`): `var:te_tax_o<N>_target <= te_tax_obl_inst_level_<arg>` behind `has_institution`, the variable leading as in `je_space_race.txt`; the level value reads `institution:<x>` `investment`, the delivered level by the engine doc and row 18's evidence, and nothing in the tax code sets an institution's level, except the AI's enactment of a kind-1 promise it is about to miss (row 31). A bureaucracy deficit never breaches it: each deficit month moves a delivering kind-1 deadline a month later (`TE_TAX obl_paused`). Kind 2 reads `bureaucracy >= 0`; kind 3 samples `military_wage_level` each month (no on-action fires on a wage change, ENG:on_actions.log); kind 4 reads `net_fixed_income > 0`, the read `te_construction_market_ai_values.txt` already uses as a value. Maintenance breaches after `te_tax_obl_grace_<kind>` consecutive failing checks (1 for kinds 1 and 3, 3 for kinds 2 and 4). The checks run once a month from the processor (`te_tax_obl_check_month`). Whether a promise only maintains (`_maint_only`, which also prices its offer) and the kind 2 and 4 baselines read the processor's fiscal record of the 1st (`te_tax_record_fiscal_month`, `te_tax_fisc_rec_*`; final review A-I2), never the live budget. | Institution promises verify the delivered level and are **pending P16**: until it settles that `investment` is not the requested level, they stay in the experimental catalog. | P16 gate (row 18); in game, the spec §8 education promise end to end: a deficit month moving the deadline (`TE_TAX obl_paused`), a breach applied once at a missed deadline, a fulfilment after the term. |
+| 29 | Engine forms the panels and commands rely on | static-only (none observed in game) | Final review B-I3. (a) **A script value on the left of a comparison inside a scripted GUI's `is_shown`/`is_valid`** — highest risk: `docs/guides/scripting_best_practices.md` (this branch's edit) records that the form once failed in exactly this context, while vanilla 1.14.5 uses it in journal-entry triggers. Sites: Pass, `te_tax_can_pass` (`te_tax_committed_share > te_tax_passage_share`, `te_tax_debate_days_left <= 0`) and its rows `te_tax_show_pass_support_sgui`, `te_tax_show_pass_debate_sgui`; Force Through (`te_tax_committed_share >= te_tax_force_share`); the customs steppers (`te_tax_dr_customs_ok_0/_1`: `te_tax_dr_eff_<d>_<good> > -3` / `< 3`); the minor-bill and offer tests (`te_tax_bl_provisions <= 2`, `te_tax_bl_goods_changed >= 1`, `te_tax_bl_customs_changed >= 1`); the overview's last change (`te_tax_view_last_change >= 0`); obligation feasibility (`te_tax_obl_inst_cap_<n> >= TARGET`). (b) **`local_var` across scripted effects**: `te_tax_cu_withdrawn` (set in `te_tax_bill_drop_customs`, read by `te_tax_customs_drop_records` as a history `INST`), `te_tax_cu_counts` and `te_tax_cu_adopted` (set in `te_tax_sync_customs`, read and changed in the generated `te_tax_gen_sync_customs`), `local_var:te_tax_cu_adopted` as a history `INST`; **on the right of a comparison**: `var:te_tax_code_version > local_var:te_tax_wd_version` (the watchdog). (c) **Interest-group scope `owner = { … }` reads** in the cards' `te_tax_disp_ig_*` (`te_tax_generated_values.txt`), and `multiply = owner.<script value>` in the state-scope estimates `te_tax_est_regrel_keep_law` and `_keep_bill` (`te_tax_display_values.txt`). (d) **Saved scopes from datamodel rows**: `AddScope('te_tax_ig', InterestGroup.MakeScope)` (Accept, `te_tax_politics_widget.gui`) and `AddScope('te_tax_st', …)` with a State (the relief rows), over `GetPlayer.MakeScope.GetList('te_tax_dr_relief_candidates')` and `AccessPlayer.AccessAllInterestGroups` datamodels (row 27). (e) **`Multiply_CFixedPoint(<Budget getter>, ScriptValue(…))` in loc** (the estimates, `te_tax_l_english.yml`). (f) **`InformationPanelBar.OpenPanelTab('budget', 'te_tax_code')`** (Open Budget, `te_tax_layout_widget.gui`). (g) **`capital ?= { sg:<good> ?= { … } }` for every customs good**, mod goods included (final review A-I3; row 15). (h) **`var:X >= te_tax_today`**, `game_date` read through a script value on the right (the one-sync-a-day guard, row 30). | Built on all of them; (a) is the one that can disable a command outright (Pass never enables). | In game, in this order: (a) introduce a bill and watch Pass and its support row flip when the committed share crosses the threshold, the debate row at 0 days, a customs stepper grey at level ±3; (b) a lost market with a customs-only bill writes history kind 18 with `_inst` 1, an adoption's kind 15 prints its count, a watchdog sync after a sunset; (c) the IG cards show scores and reasons, and a relief state row its estimate; (d) Accept takes the right group's offer, Name/Drop the right state; (e) the review prints numbers, not raw loc; (f) Open Budget selects the Tax Code tab (fallback `OpenPanel('budget')`); (g) customs item 9 below; (h) row 30's check. |
+| 30 | At most one collection sync a day | static-only (the hazard is unobserved) | Final review A-I1: whether one event's `add_amendment` is visible to a second event in the same daily tick is unverified; if not, a second sync would add the enacted rate amendment again, which nothing removes or detects. `te_tax_sync_collection` stamps `te_tax_sync_day` (`te_tax_today`, the date in days) after every sync; a call when `te_tax_synced_today` holds writes nothing and runs `te_tax_defer_sync`, which raises `te_tax.4` for the next day unless a deferral raised today is pending (`te_tax_sync_defer_day`) and logs `TE_TAX sync_deferred`. Same-day callers: the watchdog and the processor on the 1st, a `te_tax.4` raised the day before (a migration, a re-assert, a copied code), several `te_tax.4` from one law cascade. | A second sync in one day always defers. A package's collections then change on the 2nd when another sync ran first on the 1st. Once `any_scope_amendment` is probe-tested, a duplicate sweep (`count >= 2`) could add self-repair. | Play-test step 1 below: `event te_tax_debug.1` twice on day D; on D+1 one sync and one `TE_TAX sync_deferred`, on D+2 a sync that changes nothing, and exactly one amendment per instrument on the carrier on D+1 and D+2. |
+| 31 | AI promise delivery (default-strategy boost; enactment fallback) | static-only | **Boost:** the mod's `INJECT:ai_strategy_default` (`common/ai_strategies/edited_default_strategy.txt`) adds `te_tax_ai_promise_institution_score` (200) to `institution_schools` and `institution_health_system` while `te_tax_ai_owes_institution = { ARG }` holds (a binding kind-1 promise; false with the rule off). Vanilla says institution scores in several strategies add up (V:`common/ai_strategies/00_default_strategy.txt:1214-1215`), so an agenda strategy's own score (V:`common/ai_strategies/03_political_strategies.txt`, five agendas) should not mask it; the agenda strategies are not touched (spec §2.8). Vanilla steers the AI the same way from a negotiation journal entry (`wanted_army_size_script_value`, V:`common/script_values/ai_script_values.txt:134`, its `je_negotiate_army_quest` read at `:310`). **Fallback:** `te_tax_ai_manage_promises` (`te_tax.8`) enacts a kind-1 promise the next monthly check would breach (`te_tax_ai_promise_at_risk`, `te_tax_ai_can_enact`) through the generated `te_tax_gen_ai_enact_<o>`, `set_institution_investment_level = { institution level }` with a literal level, "Sets the investment level" (ENG:effects.log:36583); vanilla calls it only from history. Whether it sets the current level or a target is row 18's P16. Every delivery phase ends in one `TE_TAX obl_deadline result=met|unmet slot= kind= arg= target= level= baseline= deadline= ai=yes|no` line, for every country (`level` is the measure the verifier reads, `te_tax_view_o<o>_measure`); an enactment writes `TE_TAX ai_obl_enacted` with the same fields just before the setter, so its `level=` is what the native AI had reached. | The native AI is asked first; the enactment is the owner's fallback (2026-10-03), one month ahead (`te_tax_ai_enact_lead_months`, 1, kind 1 only), and never for a promise the next check would only pause (a bureaucracy deficit). Balance promises are renegotiated instead, at the next check's month, or one failing check short of their grace in maintenance (`TE_TAX ai_renegotiated slot= … level=`). | In game, an AI country holding a schools promise (accepted in a bargain; on your own country, `te_tax_debug.2` runs the same managers, and a bureaucracy deficit pauses the deadline rather than enacting): `ai_obl_enacted` one month before the deadline, then `obl_deadline result=met` at the next check. If `result=unmet` follows an `ai_obl_enacted`, P16 has found a target, not a level: raise `te_tax_ai_enact_lead_months` by the months a level takes. Over a long AI run, `met` lines less `ai_obl_enacted` lines measure how often the native AI delivers on its own; an agenda-strategy country (for example one under `ai_strategy_progressive_agenda`) that delivers without an enactment shows the boost reaches it. |
+| 32 | AI passage loop | static-only | `te_tax_ai_manage_bill` (`te_tax.8`, `common/scripted_effects/te_tax_ai_effects.txt`) runs the player's commands, each behind its own trigger: it moves a bill whose due month came during debate to next month (`te_tax_cmd_reschedule`, `ai_bill_rescheduled`), then the first of: pass (`ai_passed`); wait for the pin when only legitimacy blocks it and the native tax level is off medium (`ai_waiting reason=legitimacy_native_level`, the step retried on the 2nd); accept the best offer (`ai_accepted`, at most `te_tax_ai_max_offers` (3) a month, persuadable groups first by clout, `te_tax.8` raised again the next day); force through in an emergency (`ai_forced`); withdraw when hopeless or open `te_tax_ai_bill_patience` (6) months (`ai_withdrawn reason=legitimacy|slots|authority|support|patience`, and `ai_no_viable` once per episode). None of it has run in game. The clout order compares script values in a limit (`te_tax_ai_clout_rank_<ig>`, read into locals; the comparison form is the mod's own, `te_tax_ai_ratio >= te_tax_ai_cut_ratio_now`), and force-through's `multiplier` needs ROOT = the country, true in `te_tax.8`. | The AI legislates only through the commands. The cooldowns (`te_tax_ai_cooldown_after_pass`, the commencement month + 12; `te_tax_ai_cooldown_after_withdrawal`, now + 6), the monthly offer cap and the patience bound how often it acts and logs. A bill that took offers is rescheduled when its due month comes, since each accepted offer restarts the debate clock past the next monthly step. | Play-test S13: S13a, a T1 passes (`ai_introduced`, then `ai_passed`, within about 8 months); S13b, an emergency T2 (`ai_forced` when short with an override capacity of 2); S13c, offers (at most 3 `ai_accepted` lines a month per country, each followed by a step the next day, persuadable groups first by clout); S13d, one `ai_withdrawn reason=…` and one `ai_no_viable` per episode, with no second `ai_no_viable` before a pass. After an `ai_passed`, the save report shows `te_tax_ai_last_<key>` and `te_tax_ai_dir_<key>` for each instrument the bill changed. |
+| 33 | AI pre-score vs real support | static-only | `te_tax_ai_cost_<key>` (`common/script_values/te_tax_generated_support_values.txt`, from `EXPOSURE`, `PROGRESSIVE_KEYS` and `ai_step_levels()` in `scripts/generators/gen_tax_code.py`) restates, for a +1 step, only the support model's material and ideology reasons, summed over the present non-marginal groups by `ig_clout`: no fiscal, government, trust or promise reason (the same for every instrument), no goods term, no per-reason clamp, constants rounded to five decimals. It only picks which instrument a template moves (`te_tax_gen_ai_pick_raise` / `_cut`); the bill is then judged by its own refresh after introduction (spec §2.6, introduce and observe), so a pre-score that misjudges costs at most a withdrawn bill and a 6-month failure cooldown, not a bad law. None of it has run in game. | The pre-score orders the instruments; it never passes or withdraws a bill. A template's instrument is excluded at its maximum (as the step command reads it), under Traditionalism for wage and dividends, for the consumption rate with no good taxed, and within `te_tax_ai_reverse_months` (24) of the AI's own opposite change. | Play-test: `event te_tax_debug.3` prints the five pre-scores; compare their order with the support the introduced bill then shows (`ai_introduced`, then `ai_passed` or `ai_withdrawn reason=support`). A T1 that is withdrawn for support while another instrument's pre-score was close suggests the omitted reasons or the clamps matter; one `ai_withdrawn` per `te_tax_ai_fail_cooldown_months` per country is the bound. |
+
+## First-playable catalog
+
+What the first playable may offer, with the row that limits each item.
+
+- **Collected through the carrier:** wage (row 1), dividends (row 1), rural (land) assessment and head
+  (per-capita) tax (row 4), consumption rate plus selected goods (rows 4 and 17).
+- **Relief provisions:** agricultural wage relief, wages only (row 9); regional (state) relief, which
+  relieves every pop tax in the state (row 8).
+- **Obligations:** institution level (rows 18 and 28, pending P16), bureaucracy balance, military wage
+  action and the fiscal-balance outcome (rows 11, 18 and 28). Every obligation is checked against a delivered value, not
+  a request, and the fiscal outcome is a direction, not a reconciliation.
+- **Customs schedule:** only under the `te_tax_code_enabled_customs` rule option, labelled
+  experimental (rows 14 to 16). The `te_tax_code_enabled` option leaves tariffs native.
+- **Not offered:** per-good duty rates or level bounds (row 14), any claim that a state relief spares
+  dividends or that agricultural relief reaches them (rows 8 and 9), a service promise checked against
+  anything but the delivered level (rows 18 and 28: such promises exist from Task 12 and stay
+  experimental until P16 confirms the reading), and any copy of amendments across a civil war (row 19).
+
+## Vanilla content under the rule
+
+What the rule does to vanilla content that names a taxation law or the native tax level, and what is left as it is. The rows below carry their own file and line evidence.
+
+| Content | Under the rule | Decision |
+|---|---|---|
+| `je_great_reforms_bureaucratic`, `je_portugal_regeneration`, `je_imperialism_of_promise` (need Per-Capita, Proportional or Graduated) | would be impossible | patched (row 25) |
+| Gates that need the absence of a law: `je_urbanization` (no Land-Based), `je_hawaii`, the East Indies entries, `je_sick_man_bureaucracy`, Hungary's entry (no Land-Based / Consumption-Based), Montenegro's entry (no Consumption-Based) | always true | inert, left as they are |
+| `restore_peruvian_constitution`, the law-consistency cascade, Cultural Hegemony's pressure | `activate_law` of a vanilla taxation law | re-asserted (row 23); Cultural Hegemony no longer picks taxation |
+| Hungary's reform button (V:`common/scripted_buttons/05_hungary_buttons.txt:229-237`: Per-Capita only for a country on Land-Based) | its taxation clause never runs: no country holds Land-Based | dead under the rule |
+| Negotiation option 7 (V:`events/iberia_events/negotiation_events.txt:580-615`, `set_tax_level` low/very_low) and its promise `je_negotiate_taxes` (fails when `tax_level > low`) | the option stays offered (it needs `tax_level > low`, and the writer pins medium); the level it sets is collection-inert and the next sync pins medium again, so the promise entry fails a month later | known limitation: a player accepting it is penalised. The mod has no precedent for overriding a vanilla scripted trigger or event by name. Owner decision, not taken: skip the pin while `je_negotiate_taxes` is active (the lower level then costs nothing fiscally, which makes the promise free) |
+| Sepoy Mutiny progress bars and the IP4 negotiation bar (`tax_level`), the budget tutorial lessons | read a level pinned to medium | inert |
+| Party membership weights keyed to the taxation laws (V:`common/parties/*.txt`, 8 files), ideology stances on `lawgroup_taxation`, IG lobbies and petitions naming a tax law | no country holds a vanilla taxation law | inert; the IG views of the code replace them (plan Task 13) |
+| The enactment events `tax.1`–`tax.6` (`is_enacting_law` of a vanilla tax law), the law-commitment treaty article, IP4 modernization triggers | the five laws cannot be enacted | dead under the rule |
+| `amendment_short_term_tax_cuts` (`allowed_laws` excludes the carrier) | cannot attach | dead under the rule |
+| Mod event modifier `re_spectrum_auction` (`tax_dividends_add = 0.01`, repeatable_events.60.a) | a rate change outside the code | rerouted: under the rule the option grants `te_tax_spectrum_auction` (its legitimacy cost) and `te_tax_spectrum_auction_proceeds` (`country_tax_income_add = 1` × `sv_money_flow_event_small`, about 0.5% of GDP a year, the order of a one-point dividend tax; the size is an estimate) for the same `short_modifier_time`; unchanged with the rule off |
+
+## Open probes
+
+Procedures are in [tax-code-probes-extended.md](tax-code-probes-extended.md); none of these has a
+result yet.
+
+- **P05**: authority cost of a scripted consumption add against a native add and a removal (row 17).
+- **P08**: zero, low and maximum duties, and low and maximum subventions, each direction on its own;
+  the 0.25, 0.5 and 1.0 level factors measured on this build (row 15).
+- **P09**: how a native level combines with the state maximum (`te_tp_import_rate`,
+  `te_tp_export_rate`). The per-good half is blocked by row 14.
+- **P10**: setter behaviour as leader, member and treaty-constrained country; the cooldown; market
+  changes (rows 15 and 16).
+- **Customs schedule in game** (Task 15, `te_tax_code_enabled_customs` only; P08 to P10 against the
+  implementation, [schema](../systems/tax_code_schema.md#customs-schedule)):
+  1. At game start a market owner's `TE_TAX migrated … customs=1`, a subject's or customs-union
+     member's `customs=0`; the workbench's Customs section shows the owner's levels to the member,
+     "Set by" with the owner's name, and no steppers.
+  2. A bill raising one good's import level from Low to High tariff passes and commences: the Budget
+     and goods panels show High on the 1st, no `TE_TAX customs_adopted` line follows on the next 1st,
+     and the import duty collected for the good rises (P08's level factor).
+  3. Cooldown: a second bill on the same good commencing within 3 months of the first. If the setter
+     is refused, the monthly sync re-asserts (`te_tax_cretry_<d>_<good>` counts up) and the level
+     takes once the cooldown ends; the market's level is adopted only after 4 failed monthly
+     re-asserts (`te_tax_customs_adopt_after`, controller ruling): no `TE_TAX customs_adopted` line
+     for a plain cooldown.
+  4. Treaty: a `no_tariffs` article on a good the code taxes; the entry sets both levels to none,
+     the sync re-asserts each month, and the fifth month adopts the market's level if the ban holds
+     (`TE_TAX customs_adopted`, one history entry with the count, the review's "Blocked" line).
+  5. Whether `set_*_tariff_level` is refused, silently ignored or obeyed for a junior partner (the
+     sync never calls it for one; console only).
+  6. Union entry and exit: join a customs union (Market Unification) as junior, then leave it.
+     `TE_TAX customs_lost` a day after the merge (te_tax.7), the records unchanged; on leaving,
+     `TE_TAX customs_gained` with the new market's levels carried over. A package touching customs
+     approved before the merge holds as held_conflict. With a draft and a bill that change customs
+     open at the merge: `TE_TAX customs_dropped`, both keep their other changes, the bill restarts
+     debate as a new revision, and the review shows "Customs changes dropped". A bill that changed
+     only customs is withdrawn instead (`TE_TAX customs_bill_withdrawn`, the history's withdrawn
+     line). While the country owns a market whose customs the code has not yet taken up, the
+     Customs section says they come under the code next month, never "Set by" its own name.
+  7. AI market owners: their tariff changes are re-asserted each 1st; one that the AI keeps changing
+     for four months in a row reads as blocked and is adopted (at most one history entry a month).
+     Check the drift counters (`te_tax_drift_customs`) and the debug log volume over ten years.
+  8. Per-frame cost of the Customs section open. Each level cell holds seven level texts, each its
+     own `ScriptValue` of the cell's view (no proven single-read form: a customizable localization or
+     a `SelectLocalization` chain over one view still evaluates the view once per tested level), so
+     120 cells make 840 view evaluations a frame. A member's view (mode 2) runs
+     `te_tax_customs_authority` and up to seven state-goods tests: about 5.9k trigger evaluations a
+     frame. The owner's (mode 1) runs the draft's baseline with two package-slot checks: about 20k.
+     The review's customs lines add two cells per changed level. If it stutters, the next step is a
+     collapse flag per goods category (only the open category's rows evaluate) or a snapshot of the
+     levels taken on the 1st.
+  9. Unreadable levels (final review A-I3): which customs goods have no state goods in the capital at
+     the 1836 start (late-era and mod goods). Every read is null-safe (`sg:<good> ?=`) and such a
+     level counts as a match, so for those goods there is no `te_tax_cretry_*` count, no
+     `TE_TAX customs_adopted` line every four months and no invalid-link line in error.log; their
+     Customs row shows vanilla's default level. Repeat in a late-game save.
+  10. Layout at the 7 px bound (final review B-I2): the level cells are 88 wide for "High subsidy"
+     (84 at 7 px a character), the name cells 156 to 170 for "Electronic Components" and
+     "Construction Services" (147). Check them, and the hovers on the names, in game.
+- **P11**: the interception and bypass map: Budget, goods panel, right-click menus, popovers, events,
+  treaty entry and the native AI (row 13).
+- **P09b, P09c** (customs probe, plan Task 23): whether the per-good tariff families work once
+  registered, and which of the lock (min = max level) or the carrier (maxima cancelled plus a
+  per-good rate) holds. Steps: [tax-code-probes.md](tax-code-probes.md), "Customs: lock or carrier".
+- **P14**: superseded by package 6. The AI now uses the player's commands from `te_tax.8`; the
+  runbook's AI checks (PT-16 to PT-22) observe it in game.
+- **P15**: both civil-war outcomes, secession, release, state transfer and capital move (row 19).
+- **P16**: delivered against requested institution level, military wage effects, and fixed and total
+  balances over four weekly updates (rows 11 and 18). Since package 6 it also decides whether
+  `set_institution_investment_level` sets the level at once or a target, and so whether the AI's
+  enactment lead (`te_tax_ai_enact_lead_months`) must rise (row 31).
+- **Scheduler retest** (row 7), after the global-pulse dispatch exists:
+  1. Print `[TimeKeeper.GetCurrentDate.GetString]` and the month index at the global dispatch, the
+     dispatched event, the country watchdog, commence, expire and hold.
+  2. UK from 1836.1.1: approve in January with due February (22033) and expiry March (22034).
+     Commencement should log on Feb 1 and expiry on Mar 1, with collection visible in the weekly
+     ticks between them.
+  3. Repeat the approval in the month after a known skipped-February country month; the result must
+     match.
+  4. Fire the dispatch event twice in one month; the second call must do nothing.
+  5. Run late on purpose: with the dispatch disabled for one month, the commencement must hold as
+     missed and a late expiry must catch up, only after its commencement month.
+  6. Save and reload between approval and due, then repeat step 2.
+
+## Recorded for later (final review, 2026-10-03)
+
+Resolved during the PR update:
+
+- **Traditionalism with a wage or dividend tax in force** (package 6): every AI template now
+  includes permanent repeal of any wage or dividend tax its draft would otherwise levy, through
+  the player's draft commands. The rates are read at the template's final due month, including
+  scheduled changes. The full bill still needs normal support and passage; it may be major
+  because of the extra repeals. Regression checks are static; the in-game check is PT-32.
+
+Owner questions, carried in the PR body:
+
+- **Renegotiation against breach** (final review A-Minor 2): renegotiating costs −2 approval and −1
+  trust, against a breach's −5 and −1, and is open from the month the package commences, so a
+  promise buys a +20 commitment for −2. Price it like a breach before the deadline, or open it only
+  after the first maintenance month? Package 6 sharpens this: an AI country renegotiates a budget or
+  bureaucracy promise one check before it would break, and enacts an institution promise it is
+  about to miss, so AI promises never break by neglect (plan 2026-10-03, Rulings 7 and 9).
+- **AI time off the medium tax level** (the ruling that the level is pinned, ledger row 12 and
+  `te_tax_detect_drift`): for an AI country this is not a one-month residue; the AI may move the
+  level every month the sync pins it back, and taxes goods natively between syncs. Measure
+  `te_tax_drift_level` and `te_tax_drift_goods` per AI country per year in a ten-year observer run;
+  if the rate is high the ruling is revisited. Package 6 logs the counters each January for every AI
+  country (`TE_TAX ai_year`, runbook PT-13). A native level raised mid-month also costs the
+  AI legitimacy until the 1st, which can block its own bill; the AI retries the pass on the 2nd
+  (`ai_waiting reason=legitimacy_native_level`).
+
+Design limits, left as they are:
+
+- **The equivalent-law check ignores regressive instruments** (A-Minor 3, later):
+  `te_tax_code_counts_as_*` reads the wage and dividend taxes only, so a Per-Capita-shaped code
+  (high head tax) with a dividend tax at or above the wage tax counts as Graduated. A fix would
+  bound head and consumption taxes in the Graduated and Proportional tests.
+- **A bound promise can lapse without a trust cost** (A-Minor 4, design): a package emptied by
+  supersession, or a held package released, frees its promises unbreached
+  (`te_tax_obl_release_slot`, history kind 14). Under the customs option a deliberate market loss
+  can hold a customs-touching package and then release it. Low value; the lapse is in the history.
+
+GUI and wording minors from review B, for a later GUI pass:
+
+- The greyed native controls (tax level, consumption "+", tariff steppers, goods toggle,
+  right-click Tax/Untax) keep vanilla's tooltips, which do not say the tax code holds them; the
+  tariff tooltips are built from data functions, so a fix needs a per-site
+  `SelectLocalization`/`Concatenate`. Deferred to a GUI follow-up if the play-test finds it
+  confusing (`docs/testing/tax-code-playtest.md` PT-05; package 7 Ruling 15).
+- Explanations in live sections: `te_tax_pol_groups_note` repeats How's passage text, and
+  `te_tax_wb_intro` and the customs intro repeat the click hints the row tooltips give.
+- The Customs accordion shows under the plain option too, with only the Market-panel note (by
+  design: it tells the player where tariffs are set).
+- Wording (fixed in package 7, plan Task 26): "Customs Levels", "Industrial Goods" and "Military
+  Goods" are title case like the other headings, and the customs-loss lines say "the country no
+  longer owns its market".
+- A rebased draft is flagged only on Introduce's hover and inside the collapsed Review; the
+  summary could carry a line gated by `te_tax_show_draft_rebase_sgui`.
+- The Enacted Code table does not list the customs schedule; a member's "Set by" shows only in the
+  workbench (the Market panel still shows the levels).
+- "Rural Assessment 0.425" and "Head Tax 0.85" carry no unit or money icon.
+- `te_tax_tab_locked_tt` now splices `$je_tax_code$`, as the other locked tabs do (fixed in package 7).
+
+## Evidence matrix
+
+The release scenarios of the package plan (§10) and the AI's (S13), each with the play-test checks
+that give its evidence. The checks and how to run them are in the
+[play-test runbook](tax-code-playtest.md); PT-01 to PT-15 are the PR's original fifteen, highest risk
+first. Fill a row's result from its checks: *passed* only when every check passed in game.
+
+| # | Scenario | Required observation | Checks | Result | Evidence |
+|---|---|---|---|---|---|
+| S1 | Draft, edit, discard and failed passage | No collection or reward changes | PT-02, PT-06, PT-26, PT-32, PT-37, PT-41 | | |
+| S2 | January expiry and February replacement | Both timelines execute as reviewed; no stale snapshot restoration | PT-06, PT-31 | | |
+| S3 | Conflicting commencement and same-date transitions | Whole package holds or executes in approved order; no partial collection | PT-01, PT-09, PT-31, PT-38, PT-42 | | |
+| S4 | Zero-rate channel becomes taxable | Estimate base available or approximation explicit; payer/receipt reconciliation | PT-08, PT-15, PT-23, PT-25, PT-34 | | |
+| S5 | Relief, subsidy, treaty and market changes | Correct authority, direction, beneficiaries, costs; no secondary controls | PT-05, PT-11, PT-15, PT-24, PT-36, PT-42 | | |
+| S6 | Institution delivery and explicit deficit promise | Native costs apply; independent promises fulfil or breach independently | PT-07, PT-15, PT-21, PT-26, PT-28 | | |
+| S7 | Save/load at each lifecycle stage | Dates, revisions, commitments and future changes preserved | PT-29 | | |
+| S8 | Both civil-war outcomes with different wartime reforms | Winner's coherent schedule restored; no loser-only clauses or repeated rewards | PT-10 | | |
+| S9 | Secession, releases, transfers and moved capital | Explicit initialisation and territorial eligibility | PT-10, PT-30 | | |
+| S10 | AI fiscal crisis | Same legal constraints, explainable failures, no free collections | PT-13, PT-16, PT-17, PT-19 | | |
+| S11 | Disabled rule and repeated migration | Existing behaviour retained when disabled; migration idempotent | PT-03, PT-04, PT-27, PT-32, PT-35, PT-39 | | |
+| S12 | Large-country/world performance and open GUI | Meets budgets without per-frame expensive aggregation | PT-12, PT-14, PT-33, PT-40, PT-41 | | |
+| S13 | AI legislation (package 6) | AI countries draft, bargain, pass and keep promises through the player's commands, with bounded loops and logs | PT-13, PT-16 to PT-22 | | |
+
+## Known limitations
+
+What this release leaves as it is, each a design decision or an engine gap rather than an open bug.
+The PR body cites this list; the player guide describes the AI as built.
+
+- **AI customs.** AI countries pass no customs bills. Their tariffs follow the base game's trade
+  decisions, and under the customs option the code adopts a level an AI market owner keeps choosing
+  after four failed monthly re-asserts. The customs probe (P09b/P09c) decides the follow-up.
+- **AI promise delivery.** The institution boost sits only in `ai_strategy_default`; a country whose
+  political agenda strategy scores the same institution may not feel it, and the enactment fallback
+  covers it (row 31). Whether that fallback sets the level at once depends on P16.
+- **Maintained institution promises.** The AI step runs mid-month and the check on the 1st, so a
+  level that falls after the step breaks the promise before the step can enact it; the boost is
+  what protects maintenance.
+- **T1 always raises two taxes when two may be raised**, with no fallback to one if the two-tax bill
+  cannot pass; the bill is withdrawn and the country waits the failure cooldown.
+- **Legitimacy falling after introduction.** A bill whose country drops below 25 legitimacy after
+  it was introduced still accepts offers (each a support refresh) before the hopeless check
+  withdraws it, because the open-bill manager tries offers first. At introduction the hopeless
+  check comes first, so a country already below 25 withdraws at once.
+- **Rebels below 25 legitimacy** try a bill once per failure cooldown (six months), logging
+  `ai_no_viable` once per episode; they never loop monthly.
+- **Emergency bills** follow one another about three months apart (Ruling 13), and a clearing of
+  the episode marker (the need ending, a civil-war or release reset) can allow one early attempt.
+- **One-day slip.** A package's collections start on the 2nd when another sync of the code already
+  ran on the 1st; old rates collect for that day, so there is no gap and no double.
+- **Fiscal record granularity.** The fiscal reason and the budget promises read the budget as it
+  stood on the 1st; a deficit that spans the 1st counts for the whole month. The AI's at-risk test
+  reads live values mid-month, so it can misjudge a promise once.
+- **Unreadable customs goods.** A good whose market level can't be read counts as matching, so a
+  legislated level for it is never written (customs item 9 above).
+- **Institution-deadline pause is uncapped.** Each month of bureaucracy deficit moves an
+  institution promise's deadline a month; a permanent deficit never breaks it. The deficit's own
+  native penalties make this costly.
+- **Revise needs a current bill.** A bill whose baseline moved must be withdrawn and reintroduced
+  rather than revised.
+- **year.month dates** read 1842.1 for January; the play-test (PT-12) judges whether month names are
+  needed.
+- **Greyed native controls keep vanilla's tooltips** (Ruling 15); PT-05 decides whether a GUI
+  follow-up adds a "held by the tax code" line.
+- **Deferred:** the carbon levy (after #674, `docs/systems/carbon_levy_numbers.md` is a parked
+  draft); the probe harness's retirement (after the owner's probe pass; the runbook lists the files);
+  the Households, Businesses and Regions estimate views.

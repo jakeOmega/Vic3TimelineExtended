@@ -1,0 +1,660 @@
+﻿# Legislated tax code: display values for the code's schema-level tokens
+# (docs/systems/tax_code_schema.md, "Display values"). The per-instrument and
+# per-good ones, and the panels' per-record, per-slot, last-change and history
+# views, are generated into te_tax_generated_values.txt.
+#
+# Every te_tax_view_* reads only variables it has just tested with has_variable
+# and returns the schema sentinel when one is absent (0 for a counter, an index
+# or a flag, -1 for a month). They write nothing and iterate nothing, so a GUI
+# can read them on every frame.
+
+# Percentage points per relief band: band 1 = 25%, band 2 = 50%
+# (te_tax_relief_* in common/static_modifiers/te_tax_modifiers.txt).
+te_tax_relief_pct_step = 25
+
+te_tax_view_schema = {
+	value = 0
+	if = { limit = { has_variable = te_tax_schema } value = var:te_tax_schema }
+}
+
+te_tax_view_migrated = {
+	value = 0
+	if = { limit = { has_variable = te_tax_migrated } value = var:te_tax_migrated }
+}
+
+te_tax_view_code_version = {
+	value = 0
+	if = { limit = { has_variable = te_tax_code_version } value = var:te_tax_code_version }
+}
+
+te_tax_view_last_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_last_month } value = var:te_tax_last_month }
+}
+
+te_tax_view_next_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_next_month } value = var:te_tax_next_month }
+}
+
+# Agricultural wage relief band (0 none, 1, 2) and its percentage.
+te_tax_view_agrel = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_agrel } value = var:te_tax_en_agrel }
+}
+
+te_tax_view_agrel_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_agrel }
+		value = var:te_tax_en_agrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+# Regional relief band (0 none, 1, 2) and its percentage.
+te_tax_view_regrel = {
+	value = 0
+	if = { limit = { has_variable = te_tax_en_regrel } value = var:te_tax_en_regrel }
+}
+
+te_tax_view_regrel_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_en_regrel }
+		value = var:te_tax_en_regrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+# State scope: 1 if the state is named in the enacted regional relief.
+te_tax_view_relief_state = {
+	value = 0
+	if = { limit = { has_variable = te_tax_relief_state } value = var:te_tax_relief_state }
+}
+
+# The next scheduled change's year and 1-based month (-1 when none is scheduled).
+te_tax_view_next_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_next_month var:te_tax_next_month >= 0 }
+		value = var:te_tax_next_month
+		divide = 12
+		floor = yes
+	}
+}
+
+te_tax_view_next_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_next_month var:te_tax_next_month >= 0 }
+		value = var:te_tax_next_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_next_month
+		add = 1
+	}
+}
+
+# The bill under debate's revision (0 without a bill): read only while the
+# bill is open, as its payload is removed when it closes.
+te_tax_view_bl_rev = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_bl_on
+			var:te_tax_bl_on = 1
+			has_variable = te_tax_bl_rev
+		}
+		value = var:te_tax_bl_rev
+	}
+}
+
+# Days of debate the bill still needs (te_tax_support_values.txt), 0 without a
+# bill. The wrapper repeats the bill's guard so the panels read one value.
+te_tax_view_debate_days_left = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_bl_on
+			var:te_tax_bl_on = 1
+			has_variable = te_tax_bl_day
+		}
+		value = te_tax_debate_days_left
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The workbench, review and passage panels (plan Task 8). The per-instrument,
+# per-good, per-slot and interest-group views are generated
+# (te_tax_generated_values.txt). A draft view reads the draft only while
+# te_tax_dr_on is 1, a bill view the bill only while te_tax_bl_on is 1: the
+# support snapshot (te_tax_sup_*, te_tax_com_*) outlives the bill it was for.
+# ---------------------------------------------------------------------------
+
+# 1 if the open draft would make a minor bill (te_tax_draft_is_minor), else 0.
+te_tax_view_dr_minor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		if = {
+			limit = { te_tax_draft_is_minor = yes }
+			value = 1
+		}
+	}
+}
+
+# Days of debate a bill made from the open draft would need.
+te_tax_view_dr_debate_days = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_debate_days_major
+		if = {
+			limit = { te_tax_draft_is_minor = yes }
+			value = te_tax_debate_days_minor
+		}
+	}
+}
+
+# The day a bill introduced today could pass (game_date counts days in 365-day
+# years from day 0, 1 January: te_tax_support_values.txt, "Debate clock"), and
+# that day's month as a te_history_month_index value.
+te_tax_dr_pass_day = {
+	value = game_date
+	add = te_tax_view_dr_debate_days
+}
+
+te_tax_dr_pass_year = {
+	value = te_tax_dr_pass_day
+	divide = 365
+	floor = yes
+}
+
+te_tax_dr_pass_day_of_year = {
+	value = te_tax_dr_pass_year
+	multiply = -365
+	add = te_tax_dr_pass_day
+}
+
+te_tax_dr_pass_month = {
+	value = te_tax_dr_pass_year
+	multiply = 12
+	# The first day of each month after January, counted from 1 January.
+	if = { limit = { te_tax_dr_pass_day_of_year >= 334 } add = 11 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 304 } add = 10 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 273 } add = 9 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 243 } add = 8 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 212 } add = 7 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 181 } add = 6 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 151 } add = 5 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 120 } add = 4 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 90 } add = 3 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 59 } add = 2 }
+	else_if = { limit = { te_tax_dr_pass_day_of_year >= 31 } add = 1 }
+}
+
+# The earliest commencement month the open draft can have and still pass in
+# time if it is introduced today: the month after the one its debate ends in
+# (a bill passes only before its commencement month, te_tax_can_pass). -1
+# without a draft.
+te_tax_view_dr_earliest_month = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_dr_pass_month
+		add = 1
+	}
+}
+
+te_tax_view_dr_earliest_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 te_tax_view_dr_earliest_month >= 0 }
+		value = te_tax_view_dr_earliest_month
+		divide = 12
+		floor = yes
+	}
+}
+
+te_tax_view_dr_earliest_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 te_tax_view_dr_earliest_month >= 0 }
+		value = te_tax_view_dr_earliest_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = te_tax_view_dr_earliest_month
+		add = 1
+	}
+}
+
+# Relief in the draft (plan Task 11), per relief (agrel, regrel): 1 if the
+# draft changes it; its percentage under existing law in the draft's
+# commencement month (te_tax_base_dr_<key>, the "Law" column), in the draft
+# (te_tax_dr_eff_<key>, the baseline where the draft leaves it alone) and the
+# change; and whether the relief group's baseline moved since the draft first
+# changed relief (a rebase is needed).
+te_tax_view_dr_agrel_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_agrel var:te_tax_dr_agrel >= 0 }
+		value = 1
+	}
+}
+
+te_tax_view_dr_agrel_base_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_base_dr_agrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+te_tax_view_dr_agrel_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_agrel }
+		value = te_tax_dr_eff_agrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+te_tax_view_dr_agrel_delta_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_agrel var:te_tax_dr_agrel >= 0 }
+		value = te_tax_dr_eff_agrel
+		subtract = te_tax_base_dr_agrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+te_tax_view_dr_regrel_on = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_regrel var:te_tax_dr_regrel >= 0 }
+		value = 1
+	}
+}
+
+te_tax_view_dr_regrel_base_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_due }
+		value = te_tax_base_dr_regrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+te_tax_view_dr_regrel_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_regrel }
+		value = te_tax_dr_eff_regrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+te_tax_view_dr_regrel_delta_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_regrel var:te_tax_dr_regrel >= 0 }
+		value = te_tax_dr_eff_regrel
+		subtract = te_tax_base_dr_regrel
+		multiply = te_tax_relief_pct_step
+	}
+}
+
+# How many reliefs the draft changes (0, 1 or 2), for the summary and the review.
+te_tax_view_dr_relief_changed = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_agrel var:te_tax_dr_agrel >= 0 }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = te_tax_dr_on var:te_tax_dr_on = 1 has_variable = te_tax_dr_regrel var:te_tax_dr_regrel >= 0 }
+		add = 1
+	}
+}
+
+te_tax_view_dr_relief_rebase = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_dr_on
+			var:te_tax_dr_on = 1
+			has_variable = te_tax_dr_relief_pver
+			has_variable = te_tax_pver_relief
+			var:te_tax_dr_relief_pver >= 0
+			NOT = { var:te_tax_dr_relief_pver = var:te_tax_pver_relief }
+		}
+		value = 1
+	}
+}
+
+# State scope, for the workbench's and the review's state rows: 1 if the
+# owner's open draft names the state for regional relief. Where the draft
+# leaves regional relief alone, existing law in its commencement month
+# (te_tax_view_dr_relief_base_state). Inside owner = { }, PREV is the state.
+te_tax_view_dr_relief_state = {
+	value = 0
+	if = {
+		limit = {
+			owner ?= {
+				has_variable = te_tax_dr_on
+				var:te_tax_dr_on = 1
+				has_variable = te_tax_dr_regrel
+				var:te_tax_dr_regrel >= 0
+			}
+		}
+		if = {
+			limit = {
+				owner = {
+					has_variable_list = te_tax_dr_relief_states
+					is_target_in_variable_list = { name = te_tax_dr_relief_states target = PREV }
+				}
+			}
+			value = 1
+		}
+	}
+	else = {
+		value = te_tax_view_dr_relief_base_state
+	}
+}
+
+# State scope: 1 if existing law in the owner's draft's commencement month
+# names the state for regional relief: the list of an awaiting package that
+# commences before it and restates the states (the last in commencement order,
+# te_tax_p<slot>_relief_states), else the owner's enacted list. 0 without an
+# open draft. Inside owner = { }, PREV is the state.
+te_tax_view_dr_relief_base_state = {
+	value = 0
+	if = {
+		limit = {
+			owner ?= {
+				has_variable = te_tax_dr_on
+				var:te_tax_dr_on = 1
+				has_variable = te_tax_dr_due
+			}
+		}
+		if = {
+			limit = { owner = { te_tax_relief_base_from_a = { DUE = te_tax_dr_due } } }
+			if = {
+				limit = {
+					owner = {
+						has_variable_list = te_tax_pa_relief_states
+						is_target_in_variable_list = { name = te_tax_pa_relief_states target = PREV }
+					}
+				}
+				value = 1
+			}
+		}
+		else_if = {
+			limit = { owner = { te_tax_relief_base_from_b = { DUE = te_tax_dr_due } } }
+			if = {
+				limit = {
+					owner = {
+						has_variable_list = te_tax_pb_relief_states
+						is_target_in_variable_list = { name = te_tax_pb_relief_states target = PREV }
+					}
+				}
+				value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_variable_list = te_tax_en_relief_states
+					is_target_in_variable_list = { name = te_tax_en_relief_states target = PREV }
+				}
+			}
+			value = 1
+		}
+	}
+}
+
+# The passage panel, while a bill is under debate: the clout share committed to
+# its current revision (te_tax_committed_share), that share plus the
+# persuadable groups' (te_tax_open_clout), the share passage needs, and the
+# country's legitimacy.
+te_tax_view_committed_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_due }
+		value = te_tax_committed_share
+	}
+}
+
+te_tax_view_open_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 has_variable = te_tax_bl_due }
+		if = {
+			limit = { te_tax_eligible_clout > 0 }
+			value = te_tax_committed_clout
+			add = te_tax_open_clout
+			divide = te_tax_eligible_clout
+		}
+	}
+}
+
+te_tax_view_passage_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 }
+		value = te_tax_passage_share
+	}
+}
+
+te_tax_view_legitimacy = {
+	value = 0
+	if = {
+		limit = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 }
+		value = legitimacy
+	}
+}
+
+# Native drift counters (te_tax_detect_drift, te_tax_collection_effects.txt):
+# syncs that found the tax level off medium, goods found taxed or untaxed
+# against the enacted list, instruments found with the wrong amendments.
+te_tax_view_drift_level = {
+	value = 0
+	if = { limit = { has_variable = te_tax_drift_level } value = var:te_tax_drift_level }
+}
+
+te_tax_view_drift_goods = {
+	value = 0
+	if = { limit = { has_variable = te_tax_drift_goods } value = var:te_tax_drift_goods }
+}
+
+te_tax_view_drift_amend = {
+	value = 0
+	if = { limit = { has_variable = te_tax_drift_amend } value = var:te_tax_drift_amend }
+}
+
+# Customs (plan Task 15; customs option only): tariff levels found off the
+# code's, per good and direction, while the code held the country's customs.
+te_tax_view_drift_customs = {
+	value = 0
+	if = { limit = { has_variable = te_tax_drift_customs } value = var:te_tax_drift_customs }
+}
+
+# 1 while the code holds the country's customs (te_tax_customs_held): the
+# customs records are live. 0 under the plain rule option, for a country that
+# does not own its market, and for one that lost it (records frozen).
+te_tax_view_customs_held = {
+	value = 0
+	if = { limit = { has_variable = te_tax_customs_held } value = var:te_tax_customs_held }
+}
+
+# What the workbench's Customs section shows (plan Task 15): 0 under the plain
+# rule option (tariffs stay in the Market panel), 1 while the code sets this
+# country's customs (the editor), 2 under the customs option for a country in
+# a market it does not own: a customs-union member, a subject in its
+# overlord's market, or a country that lost its market (the market owner's
+# levels, read only), 3 for one that owns its market and whose code has not
+# taken its customs up yet (the next revalidation does; its own levels, read
+# only), so it never reads "Set by" its own name (fix round 1).
+te_tax_view_customs_mode = {
+	value = 0
+	if = { limit = { te_tax_customs_authority = yes has_variable = te_tax_customs_held } value = 1 }
+	else_if = { limit = { te_tax_customs_on = yes NOT = { te_tax_owns_market = yes } } value = 2 }
+	else_if = { limit = { te_tax_customs_on = yes } value = 3 }
+}
+
+# ---------------------------------------------------------------------------
+# The economy snapshot and the estimates (plan Task 14;
+# docs/systems/tax_code_schema.md, "Economy snapshot and estimates").
+# te_tax_take_snapshot (te_tax_snapshot_effects.txt) writes the snapshot from the
+# monthly processor and when a bill revision opens, never from a GUI. The
+# per-instrument and per-Budget-line estimate values are generated
+# (te_tax_generated_values.txt).
+# ---------------------------------------------------------------------------
+
+# The engine's own aggregates, read as values the way the tax probe read them
+# (te_tp_read_*, te_debug_tax_values.txt). tax_income is "weekly income from
+# taxation, excluding tariffs, pacts, transfers and other external sources"
+# (triggers.log), but the probe read about 32k a week with no tax collected, so
+# it is shown only as the domestic tax aggregate (unclassified), never as
+# receipts (docs/testing/tax-code-capability-ledger.md, row 11).
+te_tax_read_tax_income = { value = tax_income }
+te_tax_read_net_fixed_income = { value = net_fixed_income }
+te_tax_read_net_total_income = { value = net_total_income }
+te_tax_read_gdp = { value = gdp }
+
+# The month of the snapshot (-1 before the first), and its year and 1-based month.
+te_tax_view_snap_month = {
+	value = -1
+	if = { limit = { has_variable = te_tax_snap_month } value = var:te_tax_snap_month }
+}
+
+te_tax_view_snap_month_y = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_snap_month var:te_tax_snap_month >= 0 }
+		value = var:te_tax_snap_month
+		divide = 12
+		floor = yes
+	}
+}
+
+te_tax_view_snap_month_mo = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_snap_month var:te_tax_snap_month >= 0 }
+		value = var:te_tax_snap_month
+		divide = 12
+		floor = yes
+		multiply = -12
+		add = var:te_tax_snap_month
+		add = 1
+	}
+}
+
+# The aggregates at the snapshot, weekly except GDP.
+te_tax_view_snap_tax_income = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_tax_income } value = var:te_tax_snap_tax_income }
+}
+
+te_tax_view_snap_net_fixed = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_net_fixed } value = var:te_tax_snap_net_fixed }
+}
+
+te_tax_view_snap_net_total = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_net_total } value = var:te_tax_snap_net_total }
+}
+
+te_tax_view_snap_gdp = {
+	value = 0
+	if = { limit = { has_variable = te_tax_snap_gdp } value = var:te_tax_snap_gdp }
+}
+
+# 1 while the snapshot is current: taken this calendar month (the processor
+# retakes it on the 1st, so an older one means a month was missed), under the
+# code in force (every writer of the code is followed by a snapshot, a migration
+# by te_tax.4's the next day; the test catches the gap and an inherited one),
+# and, while a bill is under debate, for its current revision. 0 otherwise: the
+# panels mark the estimate out of date.
+te_tax_view_snap_current = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_tax_snap_month
+			var:te_tax_snap_month = te_history_month_index
+			has_variable = te_tax_snap_code_version
+			has_variable = te_tax_code_version
+			var:te_tax_snap_code_version = var:te_tax_code_version
+			has_variable = te_tax_snap_bill_rev
+			OR = {
+				NOT = { AND = { has_variable = te_tax_bl_on var:te_tax_bl_on = 1 } }
+				AND = { has_variable = te_tax_bl_rev var:te_tax_snap_bill_rev = var:te_tax_bl_rev }
+			}
+		}
+		value = 1
+	}
+}
+
+# State scope, the review's regional relief rows: the change in the state's taxes
+# the draft makes against existing law in its month, as a multiple of what the
+# state collects now (State.GetTaxationRevenue in the GUI). A band n is
+# state_tax_collection_mult -0.25 n (te_tax_relief_region_<n>), so a state keeps
+# (4 - n) / 4 of its taxes; other collection modifiers are taken as unchanged.
+# 0 without a draft that changes regional relief.
+te_tax_view_est_regrel_state = {
+	value = 0
+	if = {
+		limit = {
+			owner ?= {
+				has_variable = te_tax_dr_on
+				var:te_tax_dr_on = 1
+				has_variable = te_tax_dr_due
+				has_variable = te_tax_dr_regrel
+				var:te_tax_dr_regrel >= 0
+			}
+		}
+		value = te_tax_est_regrel_keep_bill
+		subtract = te_tax_est_regrel_keep_law
+		divide = te_tax_est_regrel_keep_now
+	}
+}
+
+# State scope: 4 - the band the state has now (its mark, te_tax_relief_state,
+# with the owner's enacted band); at least 1, so never a zero divisor.
+te_tax_est_regrel_keep_now = {
+	value = 4
+	if = {
+		limit = {
+			has_variable = te_tax_relief_state
+			var:te_tax_relief_state = 1
+			owner ?= { has_variable = te_tax_en_regrel }
+		}
+		subtract = owner.var:te_tax_en_regrel
+	}
+	min = 1
+}
+
+# State scope: 4 - the band existing law gives the state in the draft's month
+# (te_tax_view_dr_relief_base_state names it, at te_tax_base_dr_regrel).
+te_tax_est_regrel_keep_law = {
+	value = te_tax_view_dr_relief_base_state
+	multiply = owner.te_tax_base_dr_regrel
+	multiply = -1
+	add = 4
+}
+
+# State scope: 4 - the band the draft gives the state (te_tax_view_dr_relief_state
+# names it, at the draft's band te_tax_dr_eff_regrel).
+te_tax_est_regrel_keep_bill = {
+	value = te_tax_view_dr_relief_state
+	multiply = owner.te_tax_dr_eff_regrel
+	multiply = -1
+	add = 4
+}

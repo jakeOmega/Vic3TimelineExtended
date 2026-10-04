@@ -1,0 +1,88 @@
+﻿# Legislated tax code: canonical state (docs/systems/tax_code_schema.md).
+#
+# The enacted code lives in plain country variables, one token per schema row,
+# with absolute month indexes (te_history_month_index). Nothing ever removes a
+# token: "empty" is its sentinel (-1 for a month or a successor, 0 for an index,
+# a flag or a counter). A civil war's winner inherits the loser's variables
+# where it holds none of its own, so a removed token would come back with the
+# loser's value; a sentinel cannot.
+#
+# Native fiscal state (the carrier's amendments, taxed goods, relief modifiers,
+# the tax level) is never written here. te_tax_sync_collection
+# (te_tax_collection_effects.txt) derives it from these variables.
+
+# Country scope. Writes every schema token that is absent with its sentinel and
+# never touches one that exists, so it is safe to call any number of times and
+# backfills only what a newer schema added. te_tax_schema (version 2) is
+# written last: a country with te_tax_schema has every token of that version.
+# Per-instrument, per-good, scheduler (clock, package-slot headers, history
+# ring) and policy-obligation tokens (slot headers, each group's trust):
+# te_tax_gen_init_* (generated, te_tax_generated_effects.txt).
+# The state variable te_tax_relief_state is not written here (a state without
+# it is named in no relief), nor are the relief lists (a missing list is empty).
+te_tax_init_country = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		if = { limit = { NOT = { has_variable = te_tax_migrated } } set_variable = { name = te_tax_migrated value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_code_version } } set_variable = { name = te_tax_code_version value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_last_month } } set_variable = { name = te_tax_last_month value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_next_month } } set_variable = { name = te_tax_next_month value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_migration_discrepancy } } set_variable = { name = te_tax_migration_discrepancy value = 0 } }
+		te_tax_gen_init_instruments = yes
+		te_tax_gen_init_goods = yes
+		te_tax_gen_init_schedule = yes
+		te_tax_gen_init_obligations = yes
+		if = { limit = { NOT = { has_variable = te_tax_pver_goods } } set_variable = { name = te_tax_pver_goods value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_xver_goods } } set_variable = { name = te_tax_xver_goods value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_en_agrel } } set_variable = { name = te_tax_en_agrel value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_en_regrel } } set_variable = { name = te_tax_en_regrel value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_pver_relief } } set_variable = { name = te_tax_pver_relief value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_xver_relief } } set_variable = { name = te_tax_xver_relief value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_dr_on } } set_variable = { name = te_tax_dr_on value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_bl_on } } set_variable = { name = te_tax_bl_on value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_sync_version } } set_variable = { name = te_tax_sync_version value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_drift_level } } set_variable = { name = te_tax_drift_level value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_drift_goods } } set_variable = { name = te_tax_drift_goods value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_drift_amend } } set_variable = { name = te_tax_drift_amend value = 0 } }
+		# Customs (plan Task 15): under the customs option only, so the plain
+		# option writes no customs record. Whether the code holds the country's
+		# customs, the customs group's versions and its drift count. The enacted
+		# customs records are written by the customs migration, for a market
+		# owner only (te_tax_migrate_customs, te_tax_migration_effects.txt).
+		if = {
+			limit = { te_tax_customs_on = yes }
+			if = { limit = { NOT = { has_variable = te_tax_customs_held } } set_variable = { name = te_tax_customs_held value = 0 } }
+			if = { limit = { NOT = { has_variable = te_tax_pver_customs } } set_variable = { name = te_tax_pver_customs value = 0 } }
+			if = { limit = { NOT = { has_variable = te_tax_xver_customs } } set_variable = { name = te_tax_xver_customs value = 0 } }
+			if = { limit = { NOT = { has_variable = te_tax_drift_customs } } set_variable = { name = te_tax_drift_customs value = 0 } }
+		}
+		# The AI layer (schema version 2; docs/systems/tax_code_schema.md, "AI
+		# legislation"), written for every country so both sides of a civil war
+		# hold them from the outbreak. The per-instrument marks come with
+		# te_tax_gen_init_instruments. te_tax_ai_phase is drawn by the first
+		# processor run that finds it negative (te_tax_ai_update_streaks).
+		if = { limit = { NOT = { has_variable = te_tax_ai_phase } } set_variable = { name = te_tax_ai_phase value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_def_streak } } set_variable = { name = te_tax_ai_def_streak value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_sur_streak } } set_variable = { name = te_tax_ai_sur_streak value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_next_month } } set_variable = { name = te_tax_ai_next_month value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_tpl } } set_variable = { name = te_tax_ai_tpl value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_bill_month } } set_variable = { name = te_tax_ai_bill_month value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_noviable } } set_variable = { name = te_tax_ai_noviable value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_offer_month } } set_variable = { name = te_tax_ai_offer_month value = -1 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_offer_count } } set_variable = { name = te_tax_ai_offer_count value = 0 } }
+		if = { limit = { NOT = { has_variable = te_tax_ai_retry } } set_variable = { name = te_tax_ai_retry value = 0 } }
+		# The version, last. A save from version 1 holds the variable with 1: the
+		# rows above backfill what version 2 added, then the version moves on.
+		if = { limit = { NOT = { has_variable = te_tax_schema } } set_variable = { name = te_tax_schema value = 2 } } else_if = { limit = { var:te_tax_schema < 2 } set_variable = { name = te_tax_schema value = 2 } }
+	}
+}
+
+# Country scope. Copies one token from scope:te_tax_source onto THIS, when the
+# source holds it; otherwise THIS keeps its own value. For the civil-war
+# outbreak copy, which writes every token on the rebels (plan Task 10).
+te_tax_copy_token = {
+	if = {
+		limit = { scope:te_tax_source = { has_variable = $NAME$ } }
+		set_variable = { name = $NAME$ value = scope:te_tax_source.var:$NAME$ }
+	}
+}

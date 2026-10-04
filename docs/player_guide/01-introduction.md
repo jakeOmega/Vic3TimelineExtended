@@ -59,7 +59,7 @@ the mod.
 
 ### Game rules
 
-The mod adds sixteen game rules to the game setup screen. Each one turns a
+The mod adds seventeen game rules to the game setup screen. Each one turns a
 system on or off, and a few offer a reduced version of the system. You choose
 them when you start a campaign, and outside Ironman you can change them later.
 
@@ -95,6 +95,7 @@ turn a default system off.
 | World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](12-military.md) |
 | Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](05-politics.md) |
 | Universal Aptitude Traits | Disabled | Gives aptitude traits to every adult character, with or without Heir Education. | [Government, laws and characters](05-politics.md) |
+| Legislated Tax Code | Tax Code Disabled | Experimental. *Tax Code Enabled*: the five taxation laws can't be enacted; every country holds the Legislated Tax Code instead, and each tax rate changes only through a bill that enough interest groups commit to, taking effect on the 1st of its month. AI countries legislate their taxes the same way. *Tax Code and Customs Enabled*: as Enabled, and a country that owns its market sets its tariffs and subsidies by bill too. *Tax Code Disabled*: base-game taxes. | [Taxation (experimental)](04-tax-code.md) |
 | Custom Religion Allowed | Not allowed | A journal entry that lets you design a religion of your own. | [Government, laws and characters](05-politics.md) |
 
 ## How the guide is organized
@@ -106,6 +107,7 @@ The chapters follow the game's own areas rather than the order systems appear.
 | [The extended timeline](02-timeline.md) | The seven new eras, their technologies, new goods and buildings, company buildings, wonders and megaprojects. |
 | [Economy and construction](03-economy.md) | The construction market, construction costs, living-standard expectations, Bulk Transportation, the Strategic Reserve and wartime demand for munitions. |
 | [Banking and monetary policy](04-banking.md) | The banking cycle, crashes and contagion, the policy rate, inflation, exchange rates and international monetary arrangements. |
+| [Taxation (experimental)](04-tax-code.md) | The Legislated Tax Code rule: drafting tax bills, winning interest groups over, promises, passed bills and legislated customs. |
 | [Government, laws and characters](05-politics.md) | New laws and law groups, ministries, political movements and parties, elections, heir education, custom religions and state collapse. |
 | [Social movements](06-social-movements.md) | The movement journal entries, from civil rights to post-scarcity, and the movements carried by events. |
 | [States and population](07-states.md) | Migration crowding, dynamic homelands, cultural acceptance, tourism, world city rankings and internal resettlement. |

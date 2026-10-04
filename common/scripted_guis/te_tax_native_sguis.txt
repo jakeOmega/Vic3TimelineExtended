@@ -1,0 +1,51 @@
+﻿# ============================================================================
+# LEGISLATED TAX CODE — gates on vanilla's own fiscal controls
+# ============================================================================
+# docs/systems/tax_code_schema.md, "Native controls and drift". Each gate is
+# ANDed into the `enabled` of a vanilla control that changes what a country
+# collects, keeping vanilla's own condition:
+#   enabled = "[And( GetScriptedGui('<gate>').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), <vanilla> )]"
+#
+# te_tax_native_controls_sgui: the tax level (gui/budget_panel.gui, five
+# buttons), the consumption-tax "+" that opens the add menu (budget_panel.gui),
+# the add menu's items (gui/add_consumption_tax_menu.gui), the goods panel's
+# toggle type consumption_tax_button_toggle (gui/goods_panel.gui; vanilla's
+# goods_state_panel.gui and custom_tooltip.gui instantiate the same type) and
+# the four Tax/Untax items of the goods right-click menus
+# (gui/right_click_menu.gui). Under either rule option the code sets those, so
+# they are greyed.
+#
+# te_tax_native_tariff_controls_sgui: the 14 tariff and subvention buttons
+# (budget_panel.gui's two set_level_bar types, which the market, goods and
+# right-click views share). The plain rule option leaves tariffs native, so it
+# greys them only under the customs option.
+#
+# With the rule off each is the probe gate it replaced, NOT te_tp_lock (the tax
+# probe harness, te_debug_tax_*): the controls behave exactly as before. The
+# rule check is NOT = { te_tax_code_on = yes }, the negation of the positive
+# trigger (as te_tax_vanilla_law_gates.txt writes it), never a test of the
+# disabled option, so a save without the rule reads as rule off. Read-only:
+# no effect, nothing for the AI, which never uses these buttons.
+# ============================================================================
+
+te_tax_native_controls_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		NOT = { te_tax_code_on = yes }
+		NOT = { has_variable = te_tp_lock }
+	}
+	effect = { }
+}
+
+te_tax_native_tariff_controls_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		NOT = { te_tax_customs_on = yes }
+		NOT = { has_variable = te_tp_lock }
+	}
+	effect = { }
+}

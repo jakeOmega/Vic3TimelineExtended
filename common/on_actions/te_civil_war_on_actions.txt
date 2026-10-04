@@ -34,6 +34,11 @@ te_civil_war_on_start = {
 			nd_custody_on_civil_war_start = yes
 			# The rebels share the nation's agricultural-diffusion bonuses (#460).
 			agdiff_on_uprising = yes
+			# Both sides keep the legislated tax code: the rebels get a copy of
+			# the original's, approved packages and their dates included
+			# (te_tax_civil_war_effects.txt). After te_civil_war_record_start,
+			# so the rebels already carry te_cw_origin.
+			te_tax_on_uprising = yes
 		}
 	}
 }
@@ -103,7 +108,9 @@ on_civil_war_won = {
 # the merge keeps the winner's value) and scope:te_cw_loser (when it resolves).
 # Owner ruling 2026-09-26: a revolution's winner continues the nation, so each
 # repair restores what the loser held (#460-#465). Each is a no-op for a
-# loyalist winner, and none depends on the order of the others.
+# loyalist winner except the tax code's, which runs for either winner of a
+# merge (the winner's own code applies; it closes the bill and the draft and
+# resyncs collection), and none depends on the order of the others.
 te_civil_war_on_won = {
 	effect = {
 		te_civil_war_resolve_sides = yes
@@ -115,6 +122,7 @@ te_civil_war_on_won = {
 		sr_repair_after_civil_war = yes			# #464
 		decol_repair_after_civil_war = yes		# PR #508
 		gm_repair_after_civil_war = yes			# Grand Monuments: adopt the loser's monuments
+		te_tax_repair_after_civil_war = yes		# Legislated tax code: the winner's code applies
 		te_civil_war_clear = yes
 	}
 }

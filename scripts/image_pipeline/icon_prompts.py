@@ -1075,6 +1075,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_state_collapse": {"subject": "a single weathered stone column with its top half fallen and lying broken in rubble at its base", "seed": 0},
         "je_create_new_religion": {"subject": "a plain grey stone altar block with a lit red candle on top and a brass bowl beside it", "seed": 0},
         "je_world_war": {"subject": "a dark thundercloud with yellow lightning bolts above a small black iron field cannon", "seed": 0},
+        # Legislated tax code (plan Task 7): on vanilla's event_scales.dds until reviewed.
+        "je_tax_code": {"subject": "a thick open ledger book with a red wax seal on its page and a short stack of gold coins beside it", "seed": None},
     },
     # The Space Race milestones, in order, over the shared backdrop. Silhouettes
     # have to differ at 40 px, and none may redraw a space tech's icon

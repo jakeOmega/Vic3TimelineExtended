@@ -1,0 +1,1319 @@
+SAV0100c5f1489c000006bf
+meta_data={
+	save_game_version=1790665805
+	version="1.14.5"
+	game_date=1836.3.1
+	real_date=126.10.3
+	name="Great Britain"
+	rank=great_power
+	mods={ "Vic3TimelineExtended" }
+	ironman=no
+	number_of_players=1
+}
+ironman={
+	ironman=no
+	date=1.1.1
+	save_game=""
+}
+playthrough_id="3aed1ab6-ded0-49b6-abb2-9d81b05d6760"
+date=1836.3.1
+speed=4
+country_manager={
+	database={
+0={
+	definition="GER"
+	dead=yes
+	budget={
+		weekly_expenses={ 11.36597 0 30388.88504 11374.40342 0 38340.12051 }
+		country_building_budget={
+			expenses={
+				government_goods={
+				}				government_slaves={
+				}				military_goods={
+				}
+			}			incomes={
+				income_taxes={
+				}
+			}		}
+		base_wage=500
+	}
+	cultures={ 15 289 }
+	religion=protestant
+	counters={
+country_map_color=4
+	}
+}
+1={
+	is_main_tag=yes
+	definition="GBR"
+	budget={
+		weekly_expenses={ 11.36597 0 30388.88504 11374.40342 0 38340.12051 }
+		country_building_budget={
+			expenses={
+				government_goods={
+				}				government_slaves={
+				}				military_goods={
+				}
+			}			incomes={
+				income_taxes={
+				}
+			}		}
+		base_wage=500
+	}
+	variables={
+		data={ {
+				flag=slavery_recently_abolished
+				tick=1817
+				data={
+					type=boolean
+					identity=1
+				}
+			} {
+				flag=ch_tech_firsts_recent
+				data={
+					type=value
+					identity=360000
+				}
+			} {
+				flag=te_tp_version
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_schema
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_migrated
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_migration_discrepancy
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_code_version
+				data={
+					type=value
+					identity=300000
+				}
+			} {
+				flag=te_tax_last_month
+				data={
+					type=value
+					identity=2203400000
+				}
+			} {
+				flag=te_tax_next_month
+				data={
+					type=value
+					identity=2203800000
+				}
+			} {
+				flag=te_tax_now
+				data={
+					type=value
+					identity=2203400000
+				}
+			} {
+				flag=te_tax_sync_version
+				data={
+					type=value
+					identity=300000
+				}
+			} {
+				flag=te_tax_en_wage
+				data={
+					type=value
+					identity=600000
+				}
+			} {
+				flag=te_tax_en_wage_since
+				data={
+					type=value
+					identity=2203200000
+				}
+			} {
+				flag=te_tax_en_wage_exp
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_en_wage_succ
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pver_wage
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_xver_wage
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_en_div
+				data={
+					type=value
+					identity=400000
+				}
+			} {
+				flag=te_tax_en_div_since
+				data={
+					type=value
+					identity=2203200000
+				}
+			} {
+				flag=te_tax_en_div_exp
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_en_div_succ
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pver_div
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_xver_div
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_en_land
+				data={
+					type=value
+					identity=1200000
+				}
+			} {
+				flag=te_tax_en_land_since
+				data={
+					type=value
+					identity=2203200000
+				}
+			} {
+				flag=te_tax_en_land_exp
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_en_land_succ
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pver_land
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_xver_land
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_en_head
+				data={
+					type=value
+					identity=400000
+				}
+			} {
+				flag=te_tax_en_head_since
+				data={
+					type=value
+					identity=2203200000
+				}
+			} {
+				flag=te_tax_en_head_exp
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_en_head_succ
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pver_head
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_xver_head
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_en_cons
+				data={
+					type=value
+					identity=300000
+				}
+			} {
+				flag=te_tax_en_cons_since
+				data={
+					type=value
+					identity=2203300000
+				}
+			} {
+				flag=te_tax_en_cons_exp
+				data={
+					type=value
+					identity=2205000000
+				}
+			} {
+				flag=te_tax_en_cons_succ
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_pver_cons
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_xver_cons
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_en_g_liquor
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_en_g_tea
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_en_g_luxury_clothes
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_en_g_luxury_furniture
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_pver_goods
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_xver_goods
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_en_agrel
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_en_regrel
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_pver_relief
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_xver_relief
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_customs_held
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_drift_level
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_drift_goods
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_drift_amend
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_pa_on
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_pa_due
+				data={
+					type=value
+					identity=2203800000
+				}
+			} {
+				flag=te_tax_pa_state
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_pa_seq
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_pa_wage
+				data={
+					type=value
+					identity=700000
+				}
+			} {
+				flag=te_tax_pa_wage_exp
+				data={
+					type=value
+					identity=2205000000
+				}
+			} {
+				flag=te_tax_pa_wage_succ
+				data={
+					type=value
+					identity=600000
+				}
+			} {
+				flag=te_tax_pa_div
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pa_land
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pa_head
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pa_cons
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pa_g_tea
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_pa_g_liquor
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pa_agrel
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pa_regrel
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_pa_regrel_states_set
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_pa_due0
+				data={
+					type=value
+					identity=2203800000
+				}
+			} {
+				flag=te_tax_pb_on
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_pb_due
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_pb_state
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_pb_seq
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_pb_wage
+				data={
+					type=value
+					identity=900000
+				}
+			} {
+				flag=te_tax_dr_on
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_bl_on
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_bl_rev
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_bl_day
+				data={
+					type=value
+					identity=730000000
+				}
+			} {
+				flag=te_tax_bl_minor
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_bl_due
+				data={
+					type=value
+					identity=2204000000
+				}
+			} {
+				flag=te_tax_bl_wage
+				data={
+					type=value
+					identity=800000
+				}
+			} {
+				flag=te_tax_bl_wage_sun
+				data={
+					type=value
+					identity=1200000
+				}
+			} {
+				flag=te_tax_bl_div
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_bl_land
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_bl_head
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_bl_cons
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_bl_prom_rural_folk_kind
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_bl_prom_rural_folk_arg
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_bl_prom_rural_folk_target
+				data={
+					type=value
+					identity=300000
+				}
+			} {
+				flag=te_tax_bl_got_rural_folk_1
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_sup_rural_folk
+				data={
+					type=value
+					identity=3500000
+				}
+			} {
+				flag=te_tax_sup_landowners
+				data={
+					type=value
+					identity=-4000000
+				}
+			} {
+				flag=te_tax_com_rural_folk
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_com_rural_folk_rev
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_com_landowners
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_com_landowners_rev
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_off_devout_kind
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_off_devout_arg
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_off_devout_rev
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_o1_on
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_o1_state
+				data={
+					type=value
+					identity=700000
+				}
+			} {
+				flag=te_tax_o1_kind
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_o1_arg
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_o1_target
+				data={
+					type=value
+					identity=300000
+				}
+			} {
+				flag=te_tax_o1_baseline
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_o1_ig
+				data={
+					type=value
+					identity=700000
+				}
+			} {
+				flag=te_tax_o1_deadline
+				data={
+					type=value
+					identity=2204400000
+				}
+			} {
+				flag=te_tax_o1_maint_end
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_o1_slot
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_o1_rev
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_o2_on
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_o2_state
+				data={
+					type=value
+					identity=400000
+				}
+			} {
+				flag=te_tax_trust_rural_folk
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_trust_rural_folk_month
+				data={
+					type=value
+					identity=2203300000
+				}
+			} {
+				flag=te_tax_trust_devout
+				data={
+					type=value
+					identity=-200000
+				}
+			} {
+				flag=te_tax_trust_devout_month
+				data={
+					type=value
+					identity=2203200000
+				}
+			} {
+				flag=te_tax_ai_last_month
+				data={
+					type=value
+					identity=2203400000
+				}
+			} {
+				flag=te_tax_ai_cooldown
+				data={
+					type=value
+					identity=2203600000
+				}
+			} {
+				flag=te_tax_ai_offers
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_h_head
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_h1_month
+				data={
+					type=value
+					identity=2203500000
+				}
+			} {
+				flag=te_tax_h1_kind
+				data={
+					type=value
+					identity=600000
+				}
+			} {
+				flag=te_tax_h1_slot
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_h1_inst
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h1_version
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_h2_month
+				data={
+					type=value
+					identity=2203700000
+				}
+			} {
+				flag=te_tax_h2_kind
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_h2_slot
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h2_inst
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_h2_version
+				data={
+					type=value
+					identity=300000
+				}
+			} {
+				flag=te_tax_h3_month
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_h3_kind
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h3_slot
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h3_inst
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h3_version
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_h4_month
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_h4_kind
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h4_slot
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h4_inst
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h4_version
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_h5_month
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_h5_kind
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h5_slot
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h5_inst
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h5_version
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_h6_month
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_h6_kind
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h6_slot
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h6_inst
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h6_version
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_h7_month
+				data={
+					type=value
+					identity=2203200000
+				}
+			} {
+				flag=te_tax_h7_kind
+				data={
+					type=value
+					identity=500000
+				}
+			} {
+				flag=te_tax_h7_slot
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h7_inst
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h7_version
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_h8_month
+				data={
+					type=value
+					identity=2203300000
+				}
+			} {
+				flag=te_tax_h8_kind
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_h8_slot
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_h8_inst
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h8_version
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_snap_month
+				data={
+					type=value
+					identity=2203400000
+				}
+			} {
+				flag=te_tax_snap_code_version
+				data={
+					type=value
+					identity=300000
+				}
+			} {
+				flag=te_tax_fisc_deficit
+				data={
+					type=value
+					identity=100000
+				}
+			} }
+		list={ {
+				name="te_tp_records"
+				item={
+					type=container
+					identity=2
+				}
+				item={
+					type=container
+					identity=3
+				}
+				duration={ 2 0=0 1=0 }
+			} {
+				name="te_tax_en_relief_states"
+				item={
+					type=state
+					identity=5
+				}
+				item={
+					type=state
+					identity=456
+				}
+				duration={ 2 0=0 1=0 }
+			} {
+				name="te_tax_pa_relief_states"
+				item={
+					type=state
+					identity=5
+				}
+				duration={ 1 0=0 }
+			} }
+	}
+	cultures={ 15 289 }
+	religion=protestant
+	taxed_goods={ liquor tea }
+	counters={
+country_map_color=4
+	}
+}
+2={
+	is_main_tag=yes
+	definition="FRA"
+	budget={
+		weekly_expenses={ 11.36597 0 30388.88504 11374.40342 0 38340.12051 }
+		country_building_budget={
+			expenses={
+				government_goods={
+				}				government_slaves={
+				}				military_goods={
+				}
+			}			incomes={
+				income_taxes={
+				}
+			}		}
+		base_wage=500
+	}
+	variables={
+		data={ {
+				flag=te_tax_schema
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_migrated
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_code_version
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_now
+				data={
+					type=value
+					identity=2203400000
+				}
+			} {
+				flag=te_tax_sync_version
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_en_wage
+				data={
+					type=value
+					identity=400000
+				}
+			} {
+				flag=te_tax_en_wage_since
+				data={
+					type=value
+					identity=2203200000
+				}
+			} {
+				flag=te_tax_en_wage_exp
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_en_wage_succ
+				data={
+					type=value
+					identity=-100000
+				}
+			} {
+				flag=te_tax_en_div
+				data={
+					type=value
+					identity=200000
+				}
+			} {
+				flag=te_tax_en_land
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_en_head
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_en_cons
+				data={
+					type=value
+					identity=600000
+				}
+			} {
+				flag=te_tax_pa_on
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_pb_on
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_dr_on
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_bl_on
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h_head
+				data={
+					type=value
+					identity=100000
+				}
+			} {
+				flag=te_tax_h1_month
+				data={
+					type=value
+					identity=2203200000
+				}
+			} {
+				flag=te_tax_h1_kind
+				data={
+					type=value
+					identity=500000
+				}
+			} {
+				flag=te_tax_h1_slot
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h1_inst
+				data={
+					type=value
+				}
+			} {
+				flag=te_tax_h1_version
+				data={
+					type=value
+					identity=100000
+				}
+			} }
+	}
+	cultures={ 15 289 }
+	religion=protestant
+	tax_level=low
+	taxed_goods={ liquor }
+	counters={
+country_map_color=4
+	}
+}
+	}
+}
+states={
+	database={
+5={
+	country=1
+}
+	}
+}
+laws={
+	database={
+0={
+	law=law_monarchy
+	country=1
+	active=yes
+	activation_date=1836.1.1
+}
+1={
+	law=law_te_tax_code
+	country=1
+	active=yes
+	activation_date=1836.1.1
+}
+2={
+	law=law_te_tax_code
+	country=2
+	active=yes
+	activation_date=1836.1.1
+}
+3={
+	law=law_te_tax_code
+	country=0
+}
+	}
+}
+amendment_manager={
+	database={
+0={
+	type=amendment_electoral_clientelism
+	law=0
+	sponsor=972
+	cooldown=0
+	timeout=0
+	cooldown_end_date=1836.1.1
+	timeout_date=-1.1.1
+}
+1={
+	type=amendment_te_tax_wage_6
+	law=1
+	sponsor=1
+	cooldown=0
+	timeout=0
+	cooldown_end_date=1836.1.1
+	timeout_date=-1.1.1
+}
+2={
+	type=amendment_te_tax_div_4
+	law=1
+	sponsor=1
+	cooldown=0
+	timeout=0
+	cooldown_end_date=1836.1.1
+	timeout_date=-1.1.1
+}
+3={
+	type=amendment_te_tax_land_12
+	law=1
+	sponsor=1
+	cooldown=0
+	timeout=0
+	cooldown_end_date=1836.1.1
+	timeout_date=-1.1.1
+}
+4={
+	type=amendment_te_tax_head_4
+	law=1
+	sponsor=1
+	cooldown=0
+	timeout=0
+	cooldown_end_date=1836.1.1
+	timeout_date=-1.1.1
+}
+5={
+	type=amendment_te_tax_cons_3
+	law=1
+	sponsor=1
+	cooldown=0
+	timeout=0
+	cooldown_end_date=1836.1.1
+	timeout_date=-1.1.1
+}
+6={
+	type=amendment_te_tax_wage_4
+	law=2
+	sponsor=2
+	cooldown=0
+	timeout=0
+	cooldown_end_date=1836.1.1
+	timeout_date=-1.1.1
+}
+	}
+}

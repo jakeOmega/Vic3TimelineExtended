@@ -1,0 +1,699 @@
+﻿# Legislated tax code: drafts, bills and passage (docs/systems/tax_code_schema.md,
+# "Draft, bill and passage").
+#
+# One editable draft (te_tax_dr_*) and at most one bill under debate
+# (te_tax_bl_*) per country. The draft changes nothing; introducing it copies it
+# into the bill and starts debate; interest groups commit to the bill's
+# revision through the support refresh; passing it stores an approved package
+# in a free slot (te_tax_store_package), which the scheduler commences on its
+# due month. Withdrawing a bill or discarding a draft leaves the enacted code
+# and the approved packages exactly as they were.
+#
+# Every command te_tax_cmd_<c> runs only inside
+# `if = { limit = { te_tax_can_<c> ... } }` (te_tax_triggers.txt), the same
+# trigger a GUI button uses as its is_valid, and says what it does with a
+# custom_tooltip, because variable writes show nothing in a tooltip. Country
+# scope; nothing here reads ROOT. Commands are effects for clicks and AI
+# decisions, never for a GUI's is_shown, is_valid or display values. A
+# command's debug line is written for player countries only
+# (`limit = { is_ai = no }`); the AI writes one summary line per action
+# instead (te_tax_ai_log_*, te_tax_ai_effects.txt). A line the monthly
+# processor also reaches, like a lost market's customs drop, is for every country.
+#
+# The per-instrument, per-good and per-group parts are generated
+# (te_tax_generated_bill_effects.txt, gen_tax_code.py).
+
+# Opens a draft: a copy of the bill under debate if there is one (to revise
+# it), else every provision untouched and commencement three months on.
+te_tax_cmd_draft_new = {
+	if = {
+		limit = { te_tax_can_draft_new = yes }
+		custom_tooltip = te_tax_tt_cmd_draft_new
+		if = {
+			limit = { te_tax_bill_active = yes }
+			te_tax_gen_draft_from_bill = yes
+		}
+		else = {
+			te_tax_gen_draft_init = yes
+			set_variable = { name = te_tax_dr_due value = te_tax_due_default }
+		}
+		set_variable = { name = te_tax_dr_on value = 1 }
+	}
+}
+
+# Moves one instrument's target in the draft. KEY: wage, div, land, head, cons.
+# DIR: 0 one step down, 1 one step up, 2 zero, 3 the highest index, 4 leave the
+# provision alone. An untouched provision starts from its baseline (the rate in
+# force under existing law in the draft's due month, te_tax_base_dr_<key>).
+te_tax_cmd_draft_step = {
+	if = {
+		limit = { te_tax_can_draft_step = { KEY = $KEY$ DIR = $DIR$ } }
+		te_tax_dr_step_$DIR$ = { KEY = $KEY$ }
+	}
+}
+
+# Records the provision's planned version when the draft first touches it, so
+# a later approval of the same provision shows as a changed baseline.
+te_tax_dr_touch = {
+	if = {
+		limit = { var:te_tax_dr_$KEY$ < 0 }
+		set_variable = { name = te_tax_dr_$KEY$_pver value = var:te_tax_pver_$KEY$ }
+	}
+}
+
+te_tax_dr_step_0 = {
+	custom_tooltip = te_tax_tt_cmd_draft_step_down
+	te_tax_dr_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_dr_eff_$KEY$ }
+	change_variable = { name = te_tax_dr_$KEY$ add = -1 }
+	clamp_variable = { name = te_tax_dr_$KEY$ min = 0 max = te_tax_max_$KEY$ }
+}
+
+te_tax_dr_step_1 = {
+	custom_tooltip = te_tax_tt_cmd_draft_step_up
+	te_tax_dr_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_dr_eff_$KEY$ }
+	change_variable = { name = te_tax_dr_$KEY$ add = 1 }
+	clamp_variable = { name = te_tax_dr_$KEY$ min = 0 max = te_tax_max_$KEY$ }
+}
+
+te_tax_dr_step_2 = {
+	custom_tooltip = te_tax_tt_cmd_draft_step_min
+	te_tax_dr_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = 0 }
+}
+
+te_tax_dr_step_3 = {
+	custom_tooltip = te_tax_tt_cmd_draft_step_max
+	te_tax_dr_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_max_$KEY$ }
+}
+
+te_tax_dr_step_4 = {
+	custom_tooltip = te_tax_tt_cmd_draft_step_revert
+	set_variable = { name = te_tax_dr_$KEY$ value = -1 }
+	set_variable = { name = te_tax_dr_$KEY$_sun value = 0 }
+	set_variable = { name = te_tax_dr_$KEY$_pver value = -1 }
+}
+
+# Moves a changed provision's expiry along the ladder 0 (permanent), 6, 12, 24,
+# 36, 60 months after commencement. DIR: 0 shorter, 1 longer.
+te_tax_cmd_draft_sunset = {
+	if = {
+		limit = { te_tax_can_draft_sunset = { KEY = $KEY$ DIR = $DIR$ } }
+		te_tax_dr_sunset_$DIR$ = { KEY = $KEY$ }
+	}
+}
+
+te_tax_dr_sunset_0 = {
+	custom_tooltip = te_tax_tt_cmd_draft_sunset_down
+	if = { limit = { var:te_tax_dr_$KEY$_sun = 60 } set_variable = { name = te_tax_dr_$KEY$_sun value = 36 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 36 } set_variable = { name = te_tax_dr_$KEY$_sun value = 24 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 24 } set_variable = { name = te_tax_dr_$KEY$_sun value = 12 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 12 } set_variable = { name = te_tax_dr_$KEY$_sun value = 6 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 6 } set_variable = { name = te_tax_dr_$KEY$_sun value = 0 } }
+}
+
+te_tax_dr_sunset_1 = {
+	custom_tooltip = te_tax_tt_cmd_draft_sunset_up
+	if = { limit = { var:te_tax_dr_$KEY$_sun = 0 } set_variable = { name = te_tax_dr_$KEY$_sun value = 6 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 6 } set_variable = { name = te_tax_dr_$KEY$_sun value = 12 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 12 } set_variable = { name = te_tax_dr_$KEY$_sun value = 24 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 24 } set_variable = { name = te_tax_dr_$KEY$_sun value = 36 } }
+	else_if = { limit = { var:te_tax_dr_$KEY$_sun = 36 } set_variable = { name = te_tax_dr_$KEY$_sun value = 60 } }
+}
+
+# Moves the draft's commencement a month. DIR: 0 earlier, 1 later (a due month
+# already in the past jumps to next month).
+te_tax_cmd_draft_due = {
+	if = {
+		limit = { te_tax_can_draft_due = { DIR = $DIR$ } }
+		te_tax_dr_due_$DIR$ = yes
+	}
+}
+
+te_tax_dr_due_0 = {
+	custom_tooltip = te_tax_tt_cmd_draft_due_earlier
+	change_variable = { name = te_tax_dr_due add = -1 }
+}
+
+te_tax_dr_due_1 = {
+	custom_tooltip = te_tax_tt_cmd_draft_due_later
+	if = {
+		limit = { var:te_tax_dr_due < te_tax_due_earliest }
+		set_variable = { name = te_tax_dr_due value = te_tax_due_earliest }
+	}
+	else = {
+		change_variable = { name = te_tax_dr_due add = 1 }
+	}
+}
+
+# Toggles a catalog good in the draft: an untouched good flips from its
+# baseline (taxed under existing law in the due month, or not); a touched good
+# returns to untouched. The goods' planned version is recorded when the first
+# good is touched and cleared when the last is untouched.
+te_tax_cmd_draft_good = {
+	if = {
+		limit = { te_tax_can_draft_good = { GOOD = $GOOD$ } }
+		custom_tooltip = te_tax_tt_cmd_draft_good
+		if = {
+			limit = { var:te_tax_dr_g_$GOOD$ >= 0 }
+			set_variable = { name = te_tax_dr_g_$GOOD$ value = -1 }
+			if = {
+				limit = { NOT = { te_tax_gen_draft_touches_goods = yes } }
+				set_variable = { name = te_tax_dr_goods_pver value = -1 }
+			}
+		}
+		else = {
+			if = {
+				limit = { NOT = { te_tax_gen_draft_touches_goods = yes } }
+				set_variable = { name = te_tax_dr_goods_pver value = var:te_tax_pver_goods }
+			}
+			if = {
+				limit = { te_tax_base_dr_g_$GOOD$ > 0 }
+				set_variable = { name = te_tax_dr_g_$GOOD$ value = 0 }
+			}
+			else = {
+				set_variable = { name = te_tax_dr_g_$GOOD$ value = 1 }
+			}
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Relief (plan Task 11; docs/systems/tax_code_schema.md, "Relief in a bill").
+# Agricultural wage relief and regional relief are bands, 0 none, 1 = -25%,
+# 2 = -50% (te_tax_max_<key>). Regional relief also names its states, at most
+# three, in the country list te_tax_dr_relief_states. The relief group's
+# planned version (te_tax_dr_relief_pver) is recorded when the draft first
+# changes either relief and cleared when it changes neither again.
+# ---------------------------------------------------------------------------
+
+# Moves one relief in the draft. KEY: agrel or regrel. DIR: 0 one band less,
+# 1 one band more, 2 none, 3 the deepest band, 4 leave it as existing law has
+# it. An untouched relief starts from its baseline (te_tax_base_dr_<key>).
+te_tax_cmd_draft_relief = {
+	if = {
+		limit = { te_tax_can_draft_relief = { KEY = $KEY$ DIR = $DIR$ } }
+		te_tax_dr_relief_$DIR$ = { KEY = $KEY$ }
+	}
+}
+
+# The first change to either relief records the relief group's planned
+# version; then the relief itself is taken into the draft at existing law.
+te_tax_dr_relief_touch = {
+	if = {
+		limit = { var:te_tax_dr_agrel < 0 var:te_tax_dr_regrel < 0 }
+		set_variable = { name = te_tax_dr_relief_pver value = var:te_tax_pver_relief }
+	}
+	te_tax_dr_$KEY$_touch = yes
+}
+
+te_tax_dr_agrel_touch = {
+	if = {
+		limit = { var:te_tax_dr_agrel < 0 }
+		set_variable = { name = te_tax_dr_agrel value = te_tax_base_dr_agrel }
+	}
+}
+
+# Regional relief comes into the draft whole: its band and the states existing
+# law names in the draft's commencement month, so a draft that changes only the
+# band restates the same states. Existing law is the enacted list
+# (te_tax_en_relief_states), unless an awaiting package that commences before
+# the draft restates the states: the last of them in commencement order
+# (te_tax_relief_base_from_<slot>), whose own list (te_tax_p<slot>_relief_states)
+# names them. Only the country's own states are copied.
+te_tax_dr_regrel_touch = {
+	if = {
+		limit = { var:te_tax_dr_regrel < 0 }
+		set_variable = { name = te_tax_dr_regrel value = te_tax_base_dr_regrel }
+		if = { limit = { has_variable_list = te_tax_dr_relief_states } clear_variable_list = te_tax_dr_relief_states }
+		if = {
+			limit = { var:te_tax_dr_regrel >= 1 }
+			save_scope_as = te_tax_country
+			if = {
+				limit = { te_tax_relief_base_from_a = { DUE = te_tax_dr_due } }
+				te_tax_dr_copy_relief_states = { LIST = te_tax_pa_relief_states }
+			}
+			else_if = {
+				limit = { te_tax_relief_base_from_b = { DUE = te_tax_dr_due } }
+				te_tax_dr_copy_relief_states = { LIST = te_tax_pb_relief_states }
+			}
+			else = {
+				te_tax_dr_copy_relief_states = { LIST = te_tax_en_relief_states }
+			}
+		}
+	}
+}
+
+# Adds the country's own states in the country list LIST to the draft's named
+# states. Needs scope:te_tax_country (THIS); inside the list PREV is the
+# country, inside scope:te_tax_country the state.
+te_tax_dr_copy_relief_states = {
+	if = {
+		limit = { has_variable_list = $LIST$ }
+		every_in_list = {
+			variable = $LIST$
+			limit = { owner ?= scope:te_tax_country }
+			scope:te_tax_country = { add_to_variable_list = { name = te_tax_dr_relief_states target = PREV } }
+		}
+	}
+}
+
+# After every relief change: a regional relief of none names no state, and a
+# draft that changes neither relief drops the relief group's planned version.
+te_tax_dr_relief_settle = {
+	if = {
+		limit = {
+			var:te_tax_dr_regrel < 1
+			has_variable_list = te_tax_dr_relief_states
+		}
+		clear_variable_list = te_tax_dr_relief_states
+	}
+	if = {
+		limit = { var:te_tax_dr_agrel < 0 var:te_tax_dr_regrel < 0 }
+		set_variable = { name = te_tax_dr_relief_pver value = -1 }
+	}
+}
+
+te_tax_dr_relief_0 = {
+	custom_tooltip = te_tax_tt_cmd_draft_relief_down
+	te_tax_dr_relief_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_dr_eff_$KEY$ }
+	change_variable = { name = te_tax_dr_$KEY$ add = -1 }
+	clamp_variable = { name = te_tax_dr_$KEY$ min = 0 max = te_tax_max_$KEY$ }
+	te_tax_dr_relief_settle = yes
+}
+
+te_tax_dr_relief_1 = {
+	custom_tooltip = te_tax_tt_cmd_draft_relief_up
+	te_tax_dr_relief_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_dr_eff_$KEY$ }
+	change_variable = { name = te_tax_dr_$KEY$ add = 1 }
+	clamp_variable = { name = te_tax_dr_$KEY$ min = 0 max = te_tax_max_$KEY$ }
+	te_tax_dr_relief_settle = yes
+}
+
+te_tax_dr_relief_2 = {
+	custom_tooltip = te_tax_tt_cmd_draft_relief_none
+	te_tax_dr_relief_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = 0 }
+	te_tax_dr_relief_settle = yes
+}
+
+te_tax_dr_relief_3 = {
+	custom_tooltip = te_tax_tt_cmd_draft_relief_max
+	te_tax_dr_relief_touch = { KEY = $KEY$ }
+	set_variable = { name = te_tax_dr_$KEY$ value = te_tax_max_$KEY$ }
+	te_tax_dr_relief_settle = yes
+}
+
+te_tax_dr_relief_4 = {
+	custom_tooltip = te_tax_tt_cmd_draft_relief_revert
+	set_variable = { name = te_tax_dr_$KEY$ value = -1 }
+	te_tax_dr_relief_settle = yes
+}
+
+# ---------------------------------------------------------------------------
+# Customs (plan Task 15; docs/systems/tax_code_schema.md, "Customs schedule").
+# One level per tradeable good and direction, -3 (maximum subventions) to 3
+# (maximum tariffs); -99 leaves it alone. The customs group's planned version
+# (te_tax_dr_customs_pver) is recorded when the draft first changes a level
+# and cleared when it changes none again.
+# ---------------------------------------------------------------------------
+
+# Moves one customs level in the draft. GOOD: a customs-catalog good. D: imp or
+# exp. DIR: 0 one level lower, 1 one level higher, 2 leave it as existing law
+# has it. An untouched level starts from existing law in the draft's month
+# (te_tax_base_dr_<d>_<good>).
+te_tax_cmd_draft_customs = {
+	if = {
+		limit = { te_tax_can_draft_customs = { GOOD = $GOOD$ D = $D$ DIR = $DIR$ } }
+		te_tax_dr_customs_$DIR$ = { GOOD = $GOOD$ D = $D$ }
+	}
+}
+
+te_tax_customs_dr_touch = {
+	if = {
+		limit = { NOT = { te_tax_gen_draft_touches_customs = yes } }
+		set_variable = { name = te_tax_dr_customs_pver value = var:te_tax_pver_customs }
+	}
+}
+
+te_tax_dr_customs_0 = {
+	custom_tooltip = te_tax_tt_cmd_draft_customs_down
+	te_tax_customs_dr_touch = yes
+	set_variable = { name = te_tax_dr_$D$_$GOOD$ value = te_tax_dr_eff_$D$_$GOOD$ }
+	change_variable = { name = te_tax_dr_$D$_$GOOD$ add = -1 }
+	clamp_variable = { name = te_tax_dr_$D$_$GOOD$ min = -3 max = 3 }
+}
+
+te_tax_dr_customs_1 = {
+	custom_tooltip = te_tax_tt_cmd_draft_customs_up
+	te_tax_customs_dr_touch = yes
+	set_variable = { name = te_tax_dr_$D$_$GOOD$ value = te_tax_dr_eff_$D$_$GOOD$ }
+	change_variable = { name = te_tax_dr_$D$_$GOOD$ add = 1 }
+	clamp_variable = { name = te_tax_dr_$D$_$GOOD$ min = -3 max = 3 }
+}
+
+te_tax_dr_customs_2 = {
+	custom_tooltip = te_tax_tt_cmd_draft_customs_revert
+	set_variable = { name = te_tax_dr_$D$_$GOOD$ value = -99 }
+	if = {
+		limit = { NOT = { te_tax_gen_draft_touches_customs = yes } }
+		set_variable = { name = te_tax_dr_customs_pver value = -1 }
+	}
+}
+
+# The market was lost (te_tax_customs_revalidate, controller ruling): the open
+# draft's customs levels are left alone again (-99), every other provision
+# kept, and te_tax_dr_customs_dropped = 1 tells the review why.
+te_tax_draft_drop_customs = {
+	te_tax_gen_customs_drop_draft = yes
+}
+
+# The same for the bill under debate: its customs levels are dropped. A bill
+# that still changes something from existing law (te_tax_bill_changes_something)
+# opens a new revision, since its text changed, as an accepted offer does
+# (commitments released, promises proposed again, support refreshed). One that
+# changed only customs would now change nothing, so it is withdrawn as
+# te_tax_cmd_withdraw withdraws (te_tax_bill_close: commitments and pending
+# promises released, payload removed); the caller's history entry says so
+# (local te_tax_cu_withdrawn; fix round 1).
+te_tax_bill_drop_customs = {
+	te_tax_gen_customs_drop_bill = yes
+	if = {
+		limit = { te_tax_bill_changes_something = yes }
+		change_variable = { name = te_tax_bl_rev add = 1 }
+		te_tax_bill_start_debate = yes
+	}
+	else = {
+		te_tax_bill_close = yes
+		set_local_variable = { name = te_tax_cu_withdrawn value = 1 }
+		debug_log = "TE_TAX customs_bill_withdrawn the market was lost and the bill changed only customs; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
+# Takes regional relief into the draft as existing law has it (if the draft
+# does not change it yet) and lists the country's incorporated states to name
+# from (te_tax_dr_relief_candidates), the list the workbench shows. The only
+# place the candidates are built: never when a panel opens. Pressed again, it
+# refreshes the list after states were gained or lost.
+te_tax_cmd_draft_relief_choose = {
+	if = {
+		limit = { te_tax_can_draft_relief_choose = yes }
+		custom_tooltip = te_tax_tt_cmd_draft_relief_choose
+		te_tax_dr_relief_touch = { KEY = regrel }
+		if = { limit = { has_variable_list = te_tax_dr_relief_candidates } clear_variable_list = te_tax_dr_relief_candidates }
+		every_scope_state = {
+			limit = { is_incorporated = yes }
+			owner = { add_to_variable_list = { name = te_tax_dr_relief_candidates target = prev } }
+		}
+	}
+}
+
+# Names a state for the draft's regional relief, or drops it if the draft names
+# it already. The state is scope:te_tax_st (te_tax_relief_state_sgui, from the
+# workbench's state rows). te_tax_can_draft_relief_state holds the draft to at
+# most three states, each incorporated and the country's own.
+te_tax_cmd_draft_relief_state = {
+	if = {
+		limit = { te_tax_can_draft_relief_state = yes }
+		custom_tooltip = te_tax_tt_cmd_draft_relief_state
+		if = {
+			limit = {
+				has_variable_list = te_tax_dr_relief_states
+				is_target_in_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st }
+			}
+			remove_list_variable = { name = te_tax_dr_relief_states target = scope:te_tax_st }
+		}
+		else = {
+			add_to_variable_list = { name = te_tax_dr_relief_states target = scope:te_tax_st }
+		}
+	}
+}
+
+te_tax_cmd_draft_discard = {
+	if = {
+		limit = { te_tax_can_draft_discard = yes }
+		custom_tooltip = te_tax_tt_cmd_draft_discard
+		te_tax_draft_close = yes
+	}
+}
+
+# Closes the draft. The token stays (0); the payload goes.
+te_tax_draft_close = {
+	te_tax_gen_draft_clear = yes
+	set_variable = { name = te_tax_dr_on value = 0 }
+}
+
+# Acknowledges that an approval or an outside change has moved the baseline of
+# a provision the draft changes (KEY: an instrument, or goods). The draft keeps
+# its own target.
+te_tax_cmd_draft_rebase = {
+	if = {
+		limit = { te_tax_can_draft_rebase = { KEY = $KEY$ } }
+		custom_tooltip = te_tax_tt_cmd_draft_rebase
+		set_variable = { name = te_tax_dr_$KEY$_pver value = var:te_tax_pver_$KEY$ }
+	}
+}
+
+# Introduces the draft as revision 1 of a bill. The draft stays open, for a
+# later revision.
+te_tax_cmd_introduce = {
+	if = {
+		limit = { te_tax_can_introduce = yes }
+		custom_tooltip = te_tax_tt_cmd_introduce
+		te_tax_gen_bill_from_draft = yes
+		set_variable = { name = te_tax_bl_rev value = 1 }
+		te_tax_bill_start_debate = yes
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX introduced; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Replaces the bill with the draft as a new revision: every commitment is
+# released and debate starts again. The player rewrote the bill, so the
+# promises accepted under it and the clauses groups gained are dropped
+# (te_tax_gen_bill_from_draft writes the records empty); the groups offer again.
+te_tax_cmd_revise = {
+	if = {
+		limit = { te_tax_can_revise = yes }
+		custom_tooltip = te_tax_tt_cmd_revise
+		te_tax_gen_bill_from_draft = yes
+		change_variable = { name = te_tax_bl_rev add = 1 }
+		te_tax_bill_start_debate = yes
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX revised; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Starts the debate on the bill's current revision (introduction or revision):
+# the revision opened (te_tax_bill_open_revision), every promise accepted under
+# this bill proposed again (none after an introduction or a revision from the
+# draft, which write the records empty; te_tax_gen_offer_repropose), then the
+# first support snapshot. Accepting an offer (te_tax_cmd_accept_offer,
+# te_tax_offer_effects.txt) runs the same steps with the accepting group's
+# commitment between the last two.
+te_tax_bill_start_debate = {
+	te_tax_bill_open_revision = yes
+	te_tax_gen_offer_repropose = yes
+	te_tax_refresh_support = yes
+}
+
+# Opens the bill's current revision: the clock (game_date, in days), the
+# minor/major class, commitments released and offers withdrawn, the bill
+# opened, and the economy snapshot its estimates are dated by.
+te_tax_bill_open_revision = {
+	set_variable = { name = te_tax_bl_day value = game_date }
+	te_tax_bill_set_minor = yes
+	te_tax_gen_reset_commitments = yes
+	# Promises are made for one text: a new revision releases the pending ones
+	# (te_tax_obligation_effects.txt), as it releases the commitments; the ones
+	# accepted under this bill are proposed again after it.
+	te_tax_obl_release_pending = yes
+	set_variable = { name = te_tax_bl_on value = 1 }
+	# Every caller (introduction, revision, an accepted offer) has moved the
+	# revision on and the bill is open, so the snapshot records this revision
+	# (te_tax_snapshot_effects.txt).
+	te_tax_take_snapshot = yes
+}
+
+# Records whether the bill is minor (te_tax_bill_is_minor, te_tax_triggers.txt):
+# a minor bill needs te_tax_debate_days_minor days of debate.
+te_tax_bill_set_minor = {
+	if = {
+		limit = { te_tax_bill_is_minor = yes }
+		set_variable = { name = te_tax_bl_minor value = 1 }
+	}
+	else = {
+		set_variable = { name = te_tax_bl_minor value = 0 }
+	}
+}
+
+te_tax_cmd_withdraw = {
+	if = {
+		limit = { te_tax_can_withdraw = yes }
+		custom_tooltip = te_tax_tt_cmd_withdraw
+		te_tax_bill_close = yes
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX withdrawn; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Closes the bill: commitments and pending promises released, payload removed,
+# the token kept (0). On passage the promises have already bound to the
+# package (te_tax_obl_bind), so only a withdrawn or repaired bill's lapse here.
+te_tax_bill_close = {
+	te_tax_gen_reset_commitments = yes
+	te_tax_obl_release_pending = yes
+	te_tax_gen_bill_clear = yes
+	set_variable = { name = te_tax_bl_on value = 0 }
+}
+
+# Passes the bill: an approved package in slot a if it is free, else b.
+te_tax_cmd_pass = {
+	if = {
+		limit = { te_tax_can_pass = yes }
+		custom_tooltip = te_tax_tt_cmd_pass
+		if = {
+			limit = { var:te_tax_pa_on = 0 }
+			te_tax_pass_into = { SLOT = a OTHER = b }
+		}
+		else = {
+			te_tax_pass_into = { SLOT = b OTHER = a }
+		}
+	}
+}
+
+# Stores the bill in slot SLOT, and only then records it, lets the groups that
+# opposed it react and closes it. The whole sequence runs only when the store
+# will accept the bill: te_tax_store_package checks exactly
+# te_tax_can_store_package, and nothing between this check and the store
+# changes what it reads (supersession writes only the OTHER slot, the bump only
+# te_tax_pver_*). Checking before the store rather than after keeps the
+# per-group disapproval lines in the Pass button's tooltip, which is rendered
+# while the slot is still empty.
+# Supersession at approval touches only the OTHER slot (provisions it would
+# change on or after this bill's due month); the enacted code and its sunsets
+# are left for commencement. A draft identical to the bill is discarded with it.
+te_tax_pass_into = {
+	if = {
+		limit = { te_tax_can_store_package = { SLOT = $SLOT$ } }
+		te_tax_gen_supersede_$OTHER$ = yes
+		te_tax_gen_bump_pver = yes
+		te_tax_store_package = { SLOT = $SLOT$ }
+		# The promises recorded on this revision bind to the stored package.
+		te_tax_obl_bind = { SLOT = $SLOT$ }
+		te_tax_history_push = { KIND = 6 SLOT = $SLOT$ }
+		te_tax_gen_oppose_approval = yes
+		if = {
+			limit = {
+				te_tax_draft_active = yes
+				NOT = { te_tax_gen_draft_differs_from_bill = yes }
+			}
+			te_tax_draft_close = yes
+		}
+		te_tax_bill_close = yes
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX passed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+	else = {
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX pass_refused the scheduler would not store the bill; nothing changed; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Moves the bill's commencement to next month once its due month has come
+# during debate. Same revision: commitments stay; the support snapshot and the
+# minor class follow the new due month. If the new month changes the class
+# (the baseline moved, so the steps did), the debate clock restarts, because
+# the class decides how long the debate is.
+te_tax_cmd_reschedule = {
+	if = {
+		limit = { te_tax_can_reschedule = yes }
+		custom_tooltip = te_tax_tt_cmd_reschedule
+		set_variable = { name = te_tax_bl_due value = te_tax_due_earliest }
+		if = {
+			limit = {
+				OR = {
+					AND = { var:te_tax_bl_minor = 1 NOT = { te_tax_bill_is_minor = yes } }
+					AND = { var:te_tax_bl_minor = 0 te_tax_bill_is_minor = yes }
+				}
+			}
+			set_variable = { name = te_tax_bl_day value = game_date }
+		}
+		te_tax_bill_set_minor = yes
+		te_tax_refresh_support = yes
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX rescheduled; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Commences a package the scheduler held as missed next month instead (SLOT: a
+# or b). Its approved expiry months stand: the delay is at most three months
+# and every sunset is at least six after the approved month, so each still
+# falls at least three months after the new one. Its external versions are
+# not re-recorded; a missed package has no conflict to accept, and one that
+# meets a change at its new commencement holds as conflicting.
+te_tax_cmd_package_reschedule = {
+	if = {
+		limit = { te_tax_can_package_reschedule = { SLOT = $SLOT$ } }
+		custom_tooltip = te_tax_tt_cmd_package_reschedule
+		set_variable = { name = te_tax_p$SLOT$_due value = te_tax_due_earliest }
+		set_variable = { name = te_tax_p$SLOT$_state value = 1 }
+		te_tax_history_push = { KIND = 9 SLOT = $SLOT$ }
+		te_tax_recompute_next_month = yes
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX package_rescheduled to next month; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Releases a held package (SLOT: a or b): the slot frees and nothing the
+# package would have changed takes effect, and the promises bound to it lapse
+# unbreached (te_tax_obl_release_slot). A held_conflict package is resolved
+# only this way; its terms come back as a new bill.
+te_tax_cmd_package_release = {
+	if = {
+		limit = { te_tax_can_package_release = { SLOT = $SLOT$ } }
+		custom_tooltip = te_tax_tt_cmd_package_release
+		set_variable = { name = te_tax_p$SLOT$_on value = 0 }
+		set_variable = { name = te_tax_p$SLOT$_state value = 0 }
+		if = { limit = { has_variable_list = te_tax_p$SLOT$_relief_states } clear_variable_list = te_tax_p$SLOT$_relief_states }
+		te_tax_history_push = { KIND = 10 SLOT = $SLOT$ }
+		te_tax_obl_release_slot = { SLOT = $SLOT$ }
+		te_tax_recompute_next_month = yes
+		if = {
+			limit = { is_ai = no }
+			debug_log = "TE_TAX package_released; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+		}
+	}
+}
+
+# Writes the support snapshot: each interest group's reasons, score and
+# commitment (te_tax_gen_refresh_support). Called on introduction, revision and
+# rescheduling, and monthly by the processor (te_tax_process_month) while a
+# bill is open. Never from a GUI.
+te_tax_refresh_support = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			te_tax_bill_active = yes
+		}
+		te_tax_gen_refresh_support = yes
+	}
+}

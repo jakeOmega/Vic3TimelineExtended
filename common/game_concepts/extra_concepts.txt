@@ -242,3 +242,10 @@ concept_grandeur = {
 # does not honour (the Monuments journal entry and its How Grand Monuments Work).
 concept_contested_monument = {}
 concept_heritage_monument = {}
+
+# Legislated Tax Code (the Budget panel's Tax Code tab and je_tax_code; plan
+# Task 7): the code itself, a bill to change it and the day a passed bill
+# takes effect.
+concept_tax_code = {}
+concept_tax_bill = {}
+concept_tax_commencement = {}
