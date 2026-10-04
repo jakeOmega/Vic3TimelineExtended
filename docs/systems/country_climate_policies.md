@@ -27,14 +27,21 @@ customs authority or with climate disabled. The market-merge hook also clears
 it; national choices never synchronize to the leader.
 
 Registration evidence: the 2026-10-02 unregistered grain probe reported unknown
-modifier types. The deployed grain/iron registration file matches the repository
-and predates the latest modded-game debug/error logs, modified 2026-10-04
-06:25:37 UTC. Those logs contain no unknown modifier types, while showing
-production tax-code execution. The engine catalog also lists the coal/oil rate
+modifier types. The deployed grain/iron registration file matches the repository.
+The fresh 2026-10-04 game logs show P09c executing in the French Republic with no
+grain/iron registration errors. The engine catalog also lists the coal/oil rate
 patterns, but vanilla and this mod had no explicit definitions for them. This
 rules out the old load rejection as evidence that rates are unsupported.
+
+The first runtime screenshot showed negative grain tariff income, but the
+country had Free Trade. The old P09c subtracts Protectionism's 0.50 tariff maxima;
+under Free Trade those maxima start at zero and become negative. That run is
+invalid as a collection test. P09c now guards its immediate effects against any
+unarmed country, non-market-owner or non-Protectionism law, including console
+invocation. Undo with `.82` before changing the law and rerunning. The production
+climate tariff only adds a positive rate and never cancels the law's maxima.
 Actual collection at native levels, under customs unions and treaty exemptions
-still requires the P09c runtime probe; clean loading alone cannot establish it.
+still requires runtime validation; clean loading alone cannot establish it.
 
 Tariffs cannot distinguish synthetic coal/oil from mined fossil fuels, and
 import barriers can protect domestic extraction. They carry no automatic

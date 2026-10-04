@@ -790,11 +790,23 @@ te_debug_tax.81 = { # REVIEWED 2026-10-03: console-only customs probe; hidden by
 		has_variable = te_tp_armed
 	}
 	immediate = {
-		remove_modifier = te_tp_cancel_max
-		add_modifier = { name = te_tp_cancel_max }
-		remove_modifier = te_tp_grain_import
-		add_modifier = { name = te_tp_grain_import }
-		debug_log = "TE_TAX_PROBE p09c carrier applied: trade-law maxima cancelled, grain import rate +0.10; [THIS.GetCountry.GetNameNoFormatting]"
+		# Console invocation can bypass the event trigger. Check the bench here
+		# before subtracting Protectionism's maxima; Free Trade would go negative.
+		if = {
+			limit = {
+				has_variable = te_tp_armed
+				has_law_or_variant = law_type:law_protectionism
+				te_tax_owns_market = yes
+			}
+			remove_modifier = te_tp_cancel_max
+			add_modifier = { name = te_tp_cancel_max }
+			remove_modifier = te_tp_grain_import
+			add_modifier = { name = te_tp_grain_import }
+			debug_log = "TE_TAX_PROBE p09c carrier applied: trade-law maxima cancelled, grain import rate +0.10; [THIS.GetCountry.GetNameNoFormatting]"
+		}
+		else = {
+			debug_log = "TE_TAX_PROBE p09c refused: arm a Protectionism market owner first; [THIS.GetCountry.GetNameNoFormatting]"
+		}
 	}
 }
 

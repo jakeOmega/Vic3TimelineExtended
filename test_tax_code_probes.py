@@ -244,6 +244,26 @@ class CustomsProbeTest(unittest.TestCase):
         for name in ("te_tp_lock_grain_low", "te_tp_cancel_max"):
             self.assertIn(f"remove_modifier = {name}", clear)
 
+    def test_p09c_console_guard_prevents_negative_maxima_on_free_trade(self):
+        # Console events can bypass trigger checks. All mutations must be
+        # inside the immediate guard, since cancellation assumes Protectionism.
+        text = "\n".join(line.lstrip() for line in read("events/te_debug_tax_events.txt").splitlines())
+        event = _txt_block(text, "te_debug_tax.81")
+        immediate = _txt_block(event, "immediate")
+        guarded = _txt_block(immediate, "if")
+        conditions = _txt_block(guarded, "limit")
+        for condition in ("has_variable = te_tp_armed",
+                          "has_law_or_variant = law_type:law_protectionism",
+                          "te_tax_owns_market = yes"):
+            self.assertIn(condition, conditions)
+        for modifier in ("te_tp_cancel_max", "te_tp_grain_import"):
+            mutation = f"add_modifier = {{ name = {modifier} }}"
+            self.assertEqual(immediate.count(mutation), 1)
+            self.assertIn(mutation, guarded)
+        refused = _txt_block(immediate, "else")
+        self.assertIn("p09c refused", refused)
+        self.assertNotIn("add_modifier", refused)
+
 
 if __name__ == "__main__":
     unittest.main()
