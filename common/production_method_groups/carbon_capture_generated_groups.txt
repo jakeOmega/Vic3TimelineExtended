@@ -551,6 +551,12 @@ pmg_carbon_capture_mining_equipment_building_coal_mine = {
 		pm_carbon_capture_1_mining_equipment_building_coal_mine_coal0_oil10
 		pm_carbon_capture_2_mining_equipment_building_coal_mine_coal0_oil10
 		pm_carbon_capture_3_mining_equipment_building_coal_mine_coal0_oil10
+		pm_carbon_capture_1_mining_equipment_building_coal_mine_coal10_oil0
+		pm_carbon_capture_2_mining_equipment_building_coal_mine_coal10_oil0
+		pm_carbon_capture_3_mining_equipment_building_coal_mine_coal10_oil0
+		pm_carbon_capture_1_mining_equipment_building_coal_mine_coal15_oil0
+		pm_carbon_capture_2_mining_equipment_building_coal_mine_coal15_oil0
+		pm_carbon_capture_3_mining_equipment_building_coal_mine_coal15_oil0
 	}
 }
 
@@ -702,6 +708,17 @@ pmg_carbon_capture_siam_electric_wat_liab_station = {
 		pm_carbon_capture_1_siam_electric_wat_liab_station_coal15_oil0
 		pm_carbon_capture_2_siam_electric_wat_liab_station_coal15_oil0
 		pm_carbon_capture_3_siam_electric_wat_liab_station_coal15_oil0
+	}
+}
+
+pmg_carbon_capture_steam_automation_building_coal_mine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_green_p2.dds"
+	production_methods = {
+		pm_no_carbon_capture_steam_automation_building_coal_mine
+		pm_carbon_capture_na_steam_automation_building_coal_mine
+		pm_carbon_capture_1_steam_automation_building_coal_mine_coal3_oil0
+		pm_carbon_capture_2_steam_automation_building_coal_mine_coal3_oil0
+		pm_carbon_capture_3_steam_automation_building_coal_mine_coal3_oil0
 	}
 }
 

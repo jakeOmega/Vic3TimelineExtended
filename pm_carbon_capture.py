@@ -61,9 +61,11 @@ def workforce(pm):
     return u(u(u(pm).get("building_modifiers", {})).get("workforce_scaled", {}))
 
 
-def fuel_recipe(pm):
+def fuel_recipe(pm, name=None):
+    """(coal, oil) burned per level: the recipe's inputs plus fuel netted from its output."""
     w = workforce(pm)
-    return tuple(Decimal(u(w.get(f"goods_input_{f}_add", 0))) for f in ("coal", "oil"))
+    netted = emissions.netted_fuel(name, pm)
+    return tuple(Decimal(u(w.get(f"goods_input_{f}_add", 0))) + netted.get(f, 0) for f in ("coal", "oil"))
 
 
 def exemption(building, group, method, recipe):
@@ -121,7 +123,7 @@ def capture_catalog(state):
             classes, exempt = defaultdict(list), []
             pms = u(u(groups[group])["production_methods"])
             for pm in pms:
-                recipe = fuel_recipe(methods[pm])
+                recipe = fuel_recipe(methods[pm], pm)
                 reason = exemption(building, group, pm, recipe)
                 if any(recipe) and reason:
                     exceptions.append((building, group, pm, reason))
@@ -210,8 +212,7 @@ def plan_outputs(state, root):
                     methods.append(f"\tdisallowing_laws = {{ {MANDATE} }}")
                 methods.extend(["\tstate_modifiers = {", "\t\tworkforce_scaled = {",
                                 f"\t\t\t{emissions.STATE_MODIFIER} = -{cut_text}", "\t\t}", "\t}",
-                                "\tbuilding_modifiers = {", "\t\tworkforce_scaled = {",
-                                f"\t\t\t{emissions.MODIFIER} = -{cut_text}"])
+                                "\tbuilding_modifiers = {", "\t\tworkforce_scaled = {"])
                 for key, value in operating_costs((coal, oil), fraction, concentrated, power).items():
                     methods.append(f"\t\t\t{key} = {value}")
                 methods.extend(["\t\t}", "\t}", "}", ""])

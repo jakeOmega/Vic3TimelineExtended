@@ -7,7 +7,7 @@ import unittest
 
 import household_emissions as household
 import pm_emissions as emissions
-from test_building_emissions import parsed, body, scalar, workforce
+from test_building_emissions import parsed, body, scalar, state_scaled, workforce
 
 ROOT = Path(__file__).resolve().parent
 D = Decimal
@@ -185,30 +185,30 @@ class HouseholdEmissionsTest(unittest.TestCase):
         self.assertGreaterEqual(self.values.value("gw_state_greenhouse_gas_emissions", state(industry=D("1.25"), industry_cut=0)), 0)
         self.assertEqual(self.values.value("gw_state_greenhouse_gas_emissions", state(industry=D("1.25"), industry_cut=0, removal=168)), D("-0.168"))
 
-    def test_every_fuel_method_mirrors_net_and_capture_mirrors_its_negative(self):
+    def test_every_fuel_method_carries_its_gross_and_capture_its_cut(self):
         methods = self.graph.mod_parsers["PMs"].data
         checked = 0
         for name, pm in methods.items():
-            gross = emissions.recipe_emissions(pm, {"coal": D(2), "oil": D("1.74")})
+            gross = emissions.recipe_emissions(pm, {"coal": D(2), "oil": D("1.74")},
+                                               netted=emissions.netted_fuel(name, pm))
             if not gross:
                 continue
             checked += 1
-            mirror = body(body(emissions.unwrap(pm), "state_modifiers"), "workforce_scaled")
-            self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), scalar(workforce(pm), emissions.MODIFIER), name)
-        self.assertEqual(checked, 245)
+            if name not in emissions.SYNTHETIC_CREDITS:  # net of the output credit; checked below
+                self.assertEqual(scalar(state_scaled(pm), emissions.STATE_MODIFIER), gross, name)
+        self.assertEqual(checked, 248)
         for name, pm in parsed("common/production_methods/carbon_capture_generated_pms.txt").items():
             if "state_modifiers" in emissions.unwrap(pm):
-                mirror = body(body(emissions.unwrap(pm), "state_modifiers"), "workforce_scaled")
-                self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), scalar(workforce(pm), emissions.MODIFIER), name)
+                self.assertLess(scalar(state_scaled(pm), emissions.STATE_MODIFIER), 0, name)
 
     def test_synthetic_credits_scale_with_industry_and_do_not_create_removal(self):
         for name, fuel in emissions.SYNTHETIC_CREDITS.items():
             pm = emissions.unwrap(self.graph.mod_parsers["PMs"].data[name])
             mirror = body(body(pm, "state_modifiers"), "workforce_scaled")
-            net = scalar(workforce(pm), emissions.MODIFIER)
-            self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), net)
+            net = scalar(mirror, emissions.STATE_MODIFIER)
             self.assertNotIn(emissions.ATMOSPHERIC_MODIFIER, mirror)
             burn = scalar(workforce(pm), f"goods_output_{fuel}_add") * D({"coal": "2", "oil": "1.74"}[fuel]) / 10
+            self.assertEqual(net, emissions.recipe_emissions(pm, {"coal": D(2), "oil": D("1.74")}) - burn)
             self.assertNotIn("state_carbon_capture_add", mirror)
             for multiplier in (D(1), D("0.5"), D("0.25"), D(0)):
                 self.assertEqual(self.values.value("gw_state_greenhouse_gas_emissions", state(industry=net, industry_cut=multiplier)), net * multiplier / 1000)
@@ -216,10 +216,13 @@ class HouseholdEmissionsTest(unittest.TestCase):
                 gross = emissions.recipe_emissions(pm, {"coal": D(2), "oil": D("1.74")})
                 self.assertEqual(chain, gross * multiplier / 1000)
                 self.assertGreaterEqual(chain, 0)
-        for name in emissions.REMOVALS:
+        factors = parsed(emissions.FACTORS)
+        for name, (fuel, parameter) in emissions.REMOVALS.items():
             pm = emissions.unwrap(self.graph.mod_parsers["PMs"].data[name])
             mirror = body(body(pm, "state_modifiers"), "workforce_scaled")
-            self.assertEqual(scalar(mirror, emissions.ATMOSPHERIC_MODIFIER), -scalar(workforce(pm), emissions.MODIFIER))
+            capacity = scalar(factors, parameter) * scalar(factors, f"gw_emission_factor_{fuel}") / 10
+            self.assertEqual(scalar(mirror, emissions.ATMOSPHERIC_MODIFIER), capacity)
+            self.assertNotIn(emissions.STATE_MODIFIER, mirror)
 
     def test_removal_policy_throughput_is_registered_and_state_types_have_localization(self):
         types = parsed("common/modifier_type_definitions/mod_entity_modifier_types.txt")
@@ -251,7 +254,10 @@ class HouseholdEmissionsTest(unittest.TestCase):
                     cost += D(emissions.unwrap(amount)) * scalar(emissions.unwrap(goods[good]), "cost")
                 if key == "goods_output_electricity_add":
                     cost -= D(emissions.unwrap(amount)) * scalar(emissions.unwrap(goods["electricity"]), "cost")
-            return cost / -scalar(recipe, emissions.MODIFIER)
+            mirror = state_scaled(methods[name])
+            if emissions.ATMOSPHERIC_MODIFIER in mirror:
+                return cost / scalar(mirror, emissions.ATMOSPHERIC_MODIFIER)
+            return cost / -scalar(mirror, emissions.STATE_MODIFIER)
         self.assertGreater(cost_per_unit("pm_direct_air_capture"), cost_per_unit("pm_carbon_capture_2_base_building_power_plant_coal25_oil0"))
 
     def test_ownership_updates_preserve_other_state_blocks_and_remove_stale_mirrors(self):

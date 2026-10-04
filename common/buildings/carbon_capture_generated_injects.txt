@@ -23,6 +23,7 @@ INJECT:building_chemical_plant = {
 INJECT:building_coal_mine = {
 	production_method_groups = {
 		pmg_carbon_capture_mining_equipment_building_coal_mine
+		pmg_carbon_capture_steam_automation_building_coal_mine
 	}
 }
 

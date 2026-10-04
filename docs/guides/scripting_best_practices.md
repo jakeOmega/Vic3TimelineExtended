@@ -311,7 +311,7 @@ state_building_my_building_max_level_add = {
 - `decimals`: Number of decimal places (0 for integers)
 - `game_data = { ai_value = N }`: Optional AI weight for PM selection
 - `boolean = yes`: For yes/no flag modifiers
-- `script_only = yes`: For modifiers the engine never consumes natively; only script reads them (`modifier:X`). They still render in modifier tooltips like any other field
+- `script_only = yes`: For modifiers the engine never consumes natively; only script reads them (`modifier:X`). They still render in modifier tooltips like any other field, and no field hides one (vanilla's types use only `color`, `decimals`, `percent`, `boolean`, `script_only`, `prefix`, `suffix`, `difference_sign`, `game_data`). So a production method that carries a script-read state mirror *and* a building-scoped display copy shows the figure twice, because the game lists a method's state modifiers alongside its building ones. Carry one field and give it the player-facing name; the climate system's `building_greenhouse_gas_emissions_add` was retired for this (2026-10-04)
 
 ### Localization
 

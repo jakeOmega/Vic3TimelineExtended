@@ -6,8 +6,9 @@ anomaly drives penalties that every country shares. The Global Warming journal
 entry tracks it and holds the climate policies you can adopt. The Global Warming
 game rule (on by default) controls all of this; with it off, the world never
 warms. State pollution, the Environmental Movement and the pollution scandal
-event work under either setting. Building emissions tooltips and the phaseout
-mandate also remain active with the rule off; capture still costs goods.
+event work under either setting. The emissions lines in production method
+tooltips and the phaseout mandate also remain active with the rule off; capture
+still costs goods.
 
 ## How emissions become warming
 
@@ -30,10 +31,19 @@ world by 0.1 °C a year. Figures use K for thousands and M for millions. A unit 
 oil produces 13% less warming than a unit of coal. The mod calls coal Energy
 and Carbon Minerals; this chapter calls it coal for short.
 
-Buildings that use coal or oil show Greenhouse Gas Emissions. Fuel methods add
-to the figure; capture methods subtract from it. Process fuel and automation
-both contribute. The figure grows with staffing and throughput and feeds the
-climate calculation. The state owner's industrial policy cut applies afterward.
+Production methods that burn coal or oil show Greenhouse Gas Emissions in their
+tooltips. Fuel methods add to the figure; capture methods subtract from it.
+Process fuel and automation both contribute. The figure grows with staffing and
+throughput and feeds the climate calculation. The state owner's industrial
+policy cut applies afterward.
+
+Coal Mines and Graphite Mines burn some of their own coal. Their Atmospheric
+Engine Pump, Condensing Engine Pump and Steam Donkey methods take that coal off
+the mine's output instead of listing it as an input, so the methods show no coal
+cost but still show the emissions: 2.00 and 3.00 a level for the two pumps and
+0.60 for the Steam Donkey, at full staffing and base throughput. These are the
+same figures an Iron Mine shows for the same pumps. Oil-fired methods in every
+mine list their oil as an input and show it as usual.
 
 Household heating demand follows the buy packages at your states' average
 wealth, with fossil heating weighted by the coal, oil, wood, fabric and
@@ -366,9 +376,10 @@ what could take their place:
 
 None of this is a requirement: you can retire capacity you can't yet replace and
 import the difference, burn less, or accept shortages. The transition earns no
-emission cut of its own. Your market's emissions come from the coal and oil it
-burns wherever they were mined, so closing your mines lowers them only if the
-market burns less. Power plants are safest to retire once clean generation is
+emission cut of its own. Your market's emissions come from the coal and oil its
+buildings and households burn, wherever it was mined. Closing a mine cuts only
+the fuel that mine burned itself, plus whatever the market then burns less.
+Power plants are safest to retire once clean generation is
 most of your fleet, and mines and rigs once your market makes more of the fuel
 than it burns.
 

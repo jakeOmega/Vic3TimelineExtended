@@ -33,15 +33,6 @@ country_institution_impact_institution_ministry_of_the_environment_mult = {
 }
 
 # ----- Global Warming -----
-building_greenhouse_gas_emissions_add = {
-	color = bad
-	percent = no
-	decimals = 2
-	game_data = {
-		ai_value = 0
-	}
-}
-
 country_greenhouse_gas_emissions_mult = {
 	color = bad
 	percent = yes
@@ -120,7 +111,10 @@ state_harvest_condition_hailstorm_impact_mult = {
 	}
 }
 
-# Net industrial emissions (fuel minus source capture and synthetic credits), in building display units.
+# Net industrial emissions (fuel minus source capture and synthetic credits), in
+# display units. Fuel methods carry it in state_modifiers, so it is both the
+# annual market sum's input and the only emissions line their tooltips show.
+# script_only does not hide it from tooltips.
 state_greenhouse_gas_emissions_add = {
 	color = bad
 	percent = no

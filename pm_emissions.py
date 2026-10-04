@@ -1,9 +1,11 @@
-"""Recipe-derived building emissions display, owned by gen_carbon_capture_pms.
+"""Recipe-derived building emissions, owned by gen_carbon_capture_pms.
 
+Each fuel method carries one workforce-scaled state modifier: the line players
+see in the method's tooltip, and the figure the annual market sum reads.
 Vanilla PMs take INJECTs; mod-owned and REPLACEd PMs must be amended in place.
-Fuel contributions, synthetic net emissions and synthetic/removal state credits
-are generated in those handwritten recipes. Source-capture contributions are
-owned by the capture-method generator. The removal-only PM has its own capacity
+Fuel contributions, synthetic net emissions and the removal credit are
+generated in those handwritten recipes. Source-capture contributions are owned
+by the capture-method generator. The removal-only PM has its own capacity
 parameter, independent of goods output.
 """
 
@@ -13,16 +15,33 @@ import re
 
 from paradox_file_parser import ParadoxFileParser
 
-MODIFIER = "building_greenhouse_gas_emissions_add"
 STATE_MODIFIER = "state_greenhouse_gas_emissions_add"
 ATMOSPHERIC_MODIFIER = "state_atmospheric_carbon_capture_add"
 OUTPUT = Path("common/production_methods/greenhouse_gas_generated_injects.txt")
 FACTORS = Path("common/script_values/greenhouse_gas_factors.txt")
+# Retired fields stripped from owned recipes. The building-scoped copy of
+# STATE_MODIFIER went because a method tooltip lists building and state
+# modifiers alike, so it showed every figure twice.
+OBSOLETE_MODIFIERS = ("state_carbon_capture_add", "building_greenhouse_gas_emissions_add")
 REMOVALS = {"pm_direct_air_capture": ("coal", "gw_direct_air_capture_coal_equivalent")}
 SYNTHETIC_CREDITS = {"pm_synthetic_oil_1": "oil", "pm_synthetic_oil_2": "oil", "pm_synthetic_coal": "coal"}
+# Fuel a method burns out of the goods it makes. Vanilla's Coal Mine takes the
+# coal its machinery burns off the output instead of listing it as an input, so
+# the recipe shows no fuel and recipe-derived emissions would be zero. Evidence,
+# per level at full staffing:
+#   - Iron, lead, sulfur and gold mines list the same pumps and donkey with
+#     coal inputs of 10 (atmospheric), 15 (condensing) and 4 (steam donkey).
+#   - The Coal Mine's gross output runs 1.25x the iron mine's (picks and shovels
+#     25/20, every explosive 15/12 ... 250/200). Its pumps come out exactly net
+#     of that coal: 40 = 1.25 x 40 - 10, 60 = 1.25 x 60 - 15.
+#   - Its steam donkey outputs -3 coal, the coal it takes off the output.
+# Oil-fuelled Coal Mine methods list their oil input, so they are not here.
+NETTED_FUEL = {
+    "pm_atmospheric_engine_pump_building_coal_mine": {"coal": Decimal(10)},
+    "pm_condensing_engine_pump_building_coal_mine": {"coal": Decimal(15)},
+    "pm_steam_donkey_building_coal_mine": {"coal": Decimal(3)},
+}
 _DEFINITION = re.compile(r"(?m)^((?:INJECT:|REPLACE:|REPLACE_OR_CREATE:)?[\w-]+)\s*=\s*\{")
-_LINE = re.compile(r"(?m)^([\t ]*)" + MODIFIER + r"\s*=\s*([\d.]+)[^\n]*\n")
-_SIGNED_LINE = re.compile(r"(?m)^([\t ]*)" + MODIFIER + r"\s*=\s*(-?[\d.]+)[^\n]*\n")
 
 
 def unwrap(value):
@@ -45,7 +64,24 @@ def load_state(root):
     return state
 
 
-def recipe_emissions(method, factors, display_scale=Decimal(1000)):
+def netted_fuel(name, method):
+    """Fuel `name` burns out of its own output (see NETTED_FUEL), checked against its recipe.
+
+    A method that already lists the fuel as an input would count it twice, so a
+    vanilla change that adds the input to one of these methods fails loudly
+    here instead of doubling the emissions.
+    """
+    netted = NETTED_FUEL.get(name, {})
+    building = unwrap(unwrap(method).get("building_modifiers", {}))
+    workforce = unwrap(building.get("workforce_scaled", {}))
+    for fuel in netted:
+        if Decimal(unwrap(workforce.get(f"goods_input_{fuel}_add", 0))):
+            raise ValueError(f"{name} lists a {fuel} input and also nets {fuel} from its output; "
+                             "remove it from NETTED_FUEL")
+    return netted
+
+
+def recipe_emissions(method, factors, display_scale=Decimal(1000), netted=None):
     building = unwrap(unwrap(method).get("building_modifiers", {}))
     workforce = unwrap(building.get("workforce_scaled", {}))
     total = Decimal(0)
@@ -53,7 +89,7 @@ def recipe_emissions(method, factors, display_scale=Decimal(1000)):
         amount = Decimal(unwrap(workforce.get(f"goods_input_{fuel}_add", 0)))
         if not amount.is_finite() or amount < 0:
             raise ValueError(f"Invalid merged {fuel} input: {amount}")
-        total += amount * factor
+        total += (amount + (netted or {}).get(fuel, 0)) * factor
     return (total * display_scale / 10000).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
 
@@ -72,33 +108,6 @@ def _end(text, opening):
             if depth == 0:
                 return index + 1
     raise ValueError("Unbalanced production method")
-
-
-def _with_emission(block, amount, *, removal=False, label=None):
-    matches = list((_SIGNED_LINE if removal else _LINE).finditer(block))
-    label = label or ("carbon removal" if removal else "fuel emissions")
-    if len(matches) > 1:
-        raise ValueError("Duplicate generated emissions lines")
-    if matches:
-        match = matches[0]
-        if amount and Decimal(match[2]) == amount:
-            return block
-        line = (f"{match[1]}{MODIFIER} = {amount:.2f} # AUTO-GENERATED: {label}\n"
-                if amount else "")
-        return block[:match.start()] + line + block[match.end():]
-    if not amount:
-        return block
-    masked = _mask(block)
-    building = re.search(r"\bbuilding_modifiers\s*=\s*\{", masked)
-    if building is None:
-        raise ValueError("Fuel recipe has no building_modifiers block")
-    closing = _end(masked, building.end() - 1)
-    workforce = re.search(r"\bworkforce_scaled\s*=\s*\{", masked[building.end():closing])
-    if workforce is None:
-        raise ValueError("Fuel recipe has no workforce_scaled block")
-    index = building.end() + workforce.end()
-    return (block[:index] + f"\n\t\t\t{MODIFIER} = {amount:.2f}"
-            f" # AUTO-GENERATED: {label}" + block[index:])
 
 
 def _with_state_modifier(block, amount, *, modifier, label="state accounting"):
@@ -149,8 +158,10 @@ def plan_outputs(state, root):
     for building in buildings.values():
         for group in unwrap(unwrap(building).get("production_method_groups", [])):
             covered.update(unwrap(unwrap(groups[group])["production_methods"]))
-    amounts = {name: recipe_emissions(methods[name], factors, display_scale) for name in covered}
-    gross_amounts = amounts.copy()
+    if unknown := NETTED_FUEL.keys() - methods.keys():
+        raise ValueError(f"Netted-fuel methods are not defined: {sorted(unknown)}")
+    amounts = {name: recipe_emissions(methods[name], factors, display_scale, netted_fuel(name, methods[name]))
+               for name in covered}
     fuel_methods = sum(bool(amount) for amount in amounts.values())
     credits = {}
     for name, fuel in SYNTHETIC_CREDITS.items():
@@ -167,9 +178,8 @@ def plan_outputs(state, root):
         capacity = Decimal(unwrap(parser.data[parameter]))
         if not capacity.is_finite() or capacity <= 0:
             raise ValueError(f"Invalid carbon removal capacity: {capacity}")
-        amounts[name] = (-capacity * factors[fuel] * display_scale / 10000).quantize(
+        credits[name] = (capacity * factors[fuel] * display_scale / 10000).quantize(
             Decimal("0.01"), rounding=ROUND_HALF_UP)
-        credits[name] = -amounts[name]
     outputs, owned = {}, set()
     for path in sorted((root / "common/production_methods").rglob("*.txt")):
         if path == root / OUTPUT or path.name == "carbon_capture_generated_pms.txt":
@@ -186,13 +196,11 @@ def plan_outputs(state, root):
             owned.add(name)
             end = _end(masked, match.end() - 1)
             block = original[match.start():end]
-            replacement = _with_emission(block, amounts.get(name, Decimal(0)), removal=name in credits,
-                                         label="net synthetic emissions" if name in SYNTHETIC_CREDITS else None)
-            industrial = amounts[name] if name in SYNTHETIC_CREDITS else gross_amounts.get(name, Decimal(0))
-            replacement = _with_state_modifier(replacement, industrial,
-                                             modifier=STATE_MODIFIER, label="industrial emissions")
-            # Remove the obsolete display-only credit from previously generated recipes.
-            replacement = _with_state_modifier(replacement, Decimal(0), modifier="state_carbon_capture_add")
+            replacement = _with_state_modifier(block, amounts.get(name, Decimal(0)),
+                                               modifier=STATE_MODIFIER, label="industrial emissions")
+            for obsolete in OBSOLETE_MODIFIERS:
+                # A zero amount deletes the line, whichever block holds it.
+                replacement = _with_state_modifier(replacement, Decimal(0), modifier=obsolete)
             if name in credits:
                 atmospheric = credits[name] if name in REMOVALS else Decimal(0)
                 replacement = _with_state_modifier(replacement, atmospheric, modifier=ATMOSPHERIC_MODIFIER,
@@ -214,9 +222,9 @@ def plan_outputs(state, root):
             continue
         if name not in state.base_parsers["PMs"].data:
             raise ValueError(f"Cannot INJECT into a non-vanilla method: {name}")
+        for fuel, burn in NETTED_FUEL.get(name, {}).items():
+            lines.append(f"# {burn:g} {fuel} burned from this method's own output; its recipe lists no {fuel} input.")
         lines.extend([f"INJECT:{name} = {{", "\tstate_modifiers = {", "\t\tworkforce_scaled = {",
-                      f"\t\t\t{STATE_MODIFIER} = {amount:.2f}", "\t\t}", "\t}", "\tbuilding_modifiers = {",
-                      "\t\tworkforce_scaled = {", f"\t\t\t{MODIFIER} = {amount:.2f}",
-                      "\t\t}", "\t}", "}", ""])
+                      f"\t\t\t{STATE_MODIFIER} = {amount:.2f}", "\t\t}", "\t}", "}", ""])
     outputs[OUTPUT] = "\n".join(lines)
     return outputs, fuel_methods

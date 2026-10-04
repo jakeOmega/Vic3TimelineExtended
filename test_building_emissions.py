@@ -7,6 +7,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
+from unittest import mock
 
 import gen_carbon_capture_pms as gen
 import pm_emissions as emissions
@@ -28,6 +29,12 @@ def body(data, key):
 
 def workforce(method):
     return body(body(gen.unwrap(method), "building_modifiers"), "workforce_scaled")
+
+
+def state_scaled(method):
+    """The method's workforce-scaled state modifiers, or {} when it has none."""
+    state = gen.unwrap(gen.unwrap(method).get("state_modifiers", {}))
+    return gen.unwrap(state.get("workforce_scaled", {})) if isinstance(state, dict) else {}
 
 
 def scalar(data, key):
@@ -65,6 +72,7 @@ class SyntheticCreditsTest(unittest.TestCase):
         ms = SimpleNamespace(
             mod_parsers={"PMs": SimpleNamespace(data={
                              **self.methods,
+                             **{name: self.state.mod_parsers["PMs"].data[name] for name in emissions.NETTED_FUEL},
                              "pm_direct_air_capture": parsed("common/production_methods/direct_air_capture.txt")["pm_direct_air_capture"]}),
                          "PM Groups": SimpleNamespace(data={}),
                          "Buildings": SimpleNamespace(data={
@@ -139,7 +147,7 @@ class BuildingEmissionsTest(unittest.TestCase):
 
     def test_covered_fuel_methods_use_merged_inputs(self):
         outputs, count = emissions.plan_outputs(self.state, ROOT)
-        self.assertEqual(count, 245)
+        self.assertEqual(count, 248)
         self.assertEqual(set(outputs), {emissions.OUTPUT})
         pms = self.state.mod_parsers["PMs"].data
         for name, expected in (("pm_modern_coal-fired_plant", "5.00"),
@@ -148,8 +156,54 @@ class BuildingEmissionsTest(unittest.TestCase):
                                ("pm_rotary_valve_engine_building_steel_mill", "2.00"),
                                ("pm_flow_chemistry_production", "38.28")):
             with self.subTest(name=name):
-                self.assertEqual(scalar(workforce(pms[name]), emissions.MODIFIER), Decimal(expected))
-        self.assertNotIn(emissions.MODIFIER, workforce(pms["pm_molecular_foundry"]))
+                self.assertEqual(scalar(state_scaled(pms[name]), emissions.STATE_MODIFIER), Decimal(expected))
+        self.assertNotIn(emissions.STATE_MODIFIER, state_scaled(pms["pm_molecular_foundry"]))
+
+    def test_no_method_carries_a_retired_emissions_field(self):
+        # A method tooltip lists building and state modifiers alike, so the old
+        # building-scoped copy of the state line showed every figure twice.
+        for path in (ROOT / "common/production_methods").rglob("*.txt"):
+            text = path.read_text(encoding="utf-8-sig")
+            for retired in emissions.OBSOLETE_MODIFIERS:
+                with self.subTest(path=path.name, retired=retired):
+                    self.assertNotIn(retired, text)
+
+    def test_coal_mine_counts_the_coal_vanilla_nets_out_of_its_output(self):
+        pms = self.state.mod_parsers["PMs"].data
+        stale = "vanilla changed the Coal Mine or Iron Mine pump recipes; re-derive NETTED_FUEL (pm_emissions.py)"
+        for coal_pm, iron_pm in (("pm_atmospheric_engine_pump_building_coal_mine", "pm_atmospheric_engine_pump_building_iron_mine"),
+                                 ("pm_condensing_engine_pump_building_coal_mine", "pm_condensing_engine_pump_building_iron_mine")):
+            with self.subTest(method=coal_pm):
+                coal, iron = workforce(pms[coal_pm]), workforce(pms[iron_pm])
+                # The Coal Mine lists no coal input, so the recipe alone shows no fuel...
+                self.assertNotIn("goods_input_coal_add", coal)
+                # ...but its output is the iron mine's, scaled up and net of the iron mine's coal.
+                burn = scalar(iron, "goods_input_coal_add")
+                self.assertEqual(emissions.NETTED_FUEL[coal_pm], {"coal": burn}, stale)
+                self.assertEqual(scalar(coal, "goods_output_coal_add"),
+                                 Decimal("1.25") * scalar(iron, "goods_output_iron_add") - burn, stale)
+                # Same machinery, same burn, so the two mines show the same emissions.
+                self.assertEqual(scalar(state_scaled(pms[coal_pm]), emissions.STATE_MODIFIER),
+                                 scalar(state_scaled(pms[iron_pm]), emissions.STATE_MODIFIER))
+        donkey = workforce(pms["pm_steam_donkey_building_coal_mine"])
+        self.assertNotIn("goods_input_coal_add", donkey)
+        self.assertEqual(emissions.NETTED_FUEL["pm_steam_donkey_building_coal_mine"],
+                         {"coal": -scalar(donkey, "goods_output_coal_add")}, stale)
+        self.assertEqual(scalar(state_scaled(pms["pm_steam_donkey_building_coal_mine"]), emissions.STATE_MODIFIER),
+                         Decimal("0.60"))
+
+    def test_netted_fuel_rejects_a_double_count_and_unknown_methods(self):
+        state = copy.copy(self.state)
+        state.mod_parsers = dict(self.state.mod_parsers)
+        state.mod_parsers["PMs"] = copy.copy(self.state.mod_parsers["PMs"])
+        state.mod_parsers["PMs"].data = copy.deepcopy(self.state.mod_parsers["PMs"].data)
+        pump = state.mod_parsers["PMs"].data["pm_atmospheric_engine_pump_building_coal_mine"]
+        workforce(pump)["goods_input_coal_add"] = ("=", "10")
+        with self.assertRaisesRegex(ValueError, "lists a coal input"):
+            emissions.plan_outputs(state, ROOT)
+        with mock.patch.dict(emissions.NETTED_FUEL, {"pm_no_such_method": {"coal": Decimal(1)}}):
+            with self.assertRaisesRegex(ValueError, "not defined"):
+                emissions.plan_outputs(self.state, ROOT)
 
     def test_every_reachable_fuel_recipe_has_a_visible_contribution(self):
         methods = self.state.mod_parsers["PMs"].data
@@ -157,10 +211,11 @@ class BuildingEmissionsTest(unittest.TestCase):
         for building in self.state.mod_parsers["Buildings"].data.values():
             for group in body(gen.unwrap(building), "production_method_groups"):
                 for name in body(gen.unwrap(groups[group]), "production_methods"):
-                    amount = emissions.recipe_emissions(methods[name], {"coal": Decimal(2), "oil": Decimal("1.74")})
+                    amount = emissions.recipe_emissions(methods[name], {"coal": Decimal(2), "oil": Decimal("1.74")},
+                                                        netted=emissions.netted_fuel(name, methods[name]))
                     if amount and name not in emissions.REMOVALS and name not in emissions.SYNTHETIC_CREDITS:
                         with self.subTest(method=name):
-                            self.assertEqual(scalar(workforce(methods[name]), emissions.MODIFIER), amount)
+                            self.assertEqual(scalar(state_scaled(methods[name]), emissions.STATE_MODIFIER), amount)
 
     def test_generated_injects_target_only_untouched_vanilla(self):
         injects = parsed(emissions.OUTPUT)
@@ -172,15 +227,16 @@ class BuildingEmissionsTest(unittest.TestCase):
         self.assertNotIn("INJECT:pm_modern_coal-fired_plant", injects)
 
     def test_probe_capture_subtracts_from_gross_in_the_same_building(self):
+        # The historical probe predates the state line and keeps its building-scoped cut.
         probe = parsed("docs/testing/carbon_capture_probe/common/production_methods/te_cc_probe_pms.txt")
         pms = self.state.mod_parsers["PMs"].data
         for fuel, expected in (("coal", "2.50"), ("oil", "3.04")):
-            gross = scalar(workforce(pms[f"pm_modern_{fuel}-fired_plant"]), emissions.MODIFIER)
-            capture = scalar(workforce(probe[f"pm_te_cc_probe_{fuel}"]), emissions.MODIFIER)
+            gross = scalar(state_scaled(pms[f"pm_modern_{fuel}-fired_plant"]), emissions.STATE_MODIFIER)
+            capture = scalar(workforce(probe[f"pm_te_cc_probe_{fuel}"]), "building_greenhouse_gas_emissions_add")
             self.assertLess(capture, 0)
             self.assertEqual(gross + capture, Decimal(expected))
 
-    def test_in_place_update_preserves_recipe_and_negative_capture(self):
+    def test_in_place_update_preserves_recipe_and_drops_retired_display_copy(self):
         block = """REPLACE:pm_test = {
 \ttexture = "brace{#}"
 \tbuilding_modifiers = {
@@ -190,13 +246,24 @@ class BuildingEmissionsTest(unittest.TestCase):
 \t\t}
 \t}
 } """
-        updated = emissions._with_emission(block, Decimal("5.00"))
-        self.assertEqual(emissions._with_emission(updated, Decimal("5.00")), updated)
-        self.assertEqual(emissions._with_emission(updated, Decimal(0)), block)
-        amended = emissions._with_emission(updated, Decimal("6.00"))
-        self.assertIn(f"{emissions.MODIFIER} = 6.00", amended)
-        negative = updated.replace("= 5.00", "= -2.50")
-        self.assertEqual(emissions._with_emission(negative, Decimal(0)), negative)
+        retired = block.replace("\t\t\tgoods_input_coal_add",
+                                "\t\t\tbuilding_greenhouse_gas_emissions_add = -2.50 # AUTO-GENERATED: fuel emissions\n"
+                                "\t\t\tgoods_input_coal_add")
+        stripped = retired
+        for obsolete in emissions.OBSOLETE_MODIFIERS:
+            stripped = emissions._with_state_modifier(stripped, Decimal(0), modifier=obsolete)
+        self.assertEqual(stripped, block)
+        updated = emissions._with_state_modifier(block, Decimal("5.00"), modifier=emissions.STATE_MODIFIER)
+        self.assertIn('texture = "brace{#}"', updated)
+        self.assertIn("goods_input_coal_add = 25", updated)
+        self.assertEqual(emissions._with_state_modifier(updated, Decimal("5.00"), modifier=emissions.STATE_MODIFIER),
+                         updated)
+        amended = emissions._with_state_modifier(updated, Decimal("6.00"), modifier=emissions.STATE_MODIFIER)
+        self.assertIn(f"{emissions.STATE_MODIFIER} = 6.00", amended)
+        negative = emissions._with_state_modifier(updated, Decimal("-2.50"), modifier=emissions.STATE_MODIFIER)
+        self.assertIn(f"{emissions.STATE_MODIFIER} = -2.50", negative)
+        self.assertNotIn(emissions.STATE_MODIFIER,
+                         emissions._with_state_modifier(negative, Decimal(0), modifier=emissions.STATE_MODIFIER))
 
     def test_recipe_invalid_inputs_fail(self):
         factors = {"coal": Decimal(2), "oil": Decimal("1.74")}
@@ -221,20 +288,20 @@ class BuildingEmissionsTest(unittest.TestCase):
                 (root / relative).write_bytes((ROOT / relative).read_bytes())
             method["goods_input_coal_add"] = ("=", "30")
             output, count = emissions.plan_outputs(state, root)
-            self.assertEqual(count, 245)
+            self.assertEqual(count, 248)
             rewritten = output[Path("common/production_methods/extra_pms.txt")]
             parser = ParadoxFileParser()
             parsed_path = root / "result.txt"
             parsed_path.write_text(rewritten, encoding="utf-8-sig")
             parser.parse_file(str(parsed_path), apply_directives=False)
-            self.assertEqual(scalar(workforce(parser.data["pm_modern_coal-fired_plant"]), emissions.MODIFIER), 6)
+            self.assertEqual(scalar(state_scaled(parser.data["pm_modern_coal-fired_plant"]), emissions.STATE_MODIFIER), 6)
             method["goods_input_coal_add"] = ("=", "0")
             output, count = emissions.plan_outputs(state, root)
-            self.assertEqual(count, 244)
+            self.assertEqual(count, 247)
             parser = ParadoxFileParser()
             parsed_path.write_text(output[Path("common/production_methods/extra_pms.txt")], encoding="utf-8-sig")
             parser.parse_file(str(parsed_path), apply_directives=False)
-            self.assertNotIn(emissions.MODIFIER, workforce(parser.data["pm_modern_coal-fired_plant"]))
+            self.assertNotIn(emissions.STATE_MODIFIER, state_scaled(parser.data["pm_modern_coal-fired_plant"]))
 
     def test_cost_annotations_preserve_generated_modifier(self):
         import pm_costs
@@ -248,7 +315,7 @@ class BuildingEmissionsTest(unittest.TestCase):
 \t}
 }
 """
-        generated = emissions._with_emission(block, Decimal("5.00"))
+        generated = emissions._with_state_modifier(block, Decimal("5.00"), modifier=emissions.STATE_MODIFIER)
         with TemporaryDirectory() as tmp:
             path = Path(tmp) / "pms.txt"
             path.write_text(generated, encoding="utf-8-sig")
@@ -257,19 +324,26 @@ class BuildingEmissionsTest(unittest.TestCase):
                 lambda *_: (750, 2700), lambda *_: 0,
             )
             annotated = path.read_text(encoding="utf-8-sig")
-            self.assertIn(f"{emissions.MODIFIER} = 5.00", annotated)
-            self.assertEqual(emissions._with_emission(annotated, Decimal("5.00")), annotated)
+            self.assertIn(f"{emissions.STATE_MODIFIER} = 5.00", annotated)
+            self.assertEqual(emissions._with_state_modifier(annotated, Decimal("5.00"), modifier=emissions.STATE_MODIFIER),
+                             annotated)
 
-    def test_display_visible_and_capture_accounting_hidden(self):
+    def test_state_lines_are_the_only_emissions_display(self):
+        # script_only means the engine never reads the field; the tooltip still lists it.
         types = parsed("common/modifier_type_definitions/global_warming_modifier_types.txt")
-        display = body(types, emissions.MODIFIER)
-        self.assertEqual(body(display, "color"), "bad")
-        self.assertEqual(body(display, "percent"), "no")
-        self.assertEqual(scalar(display, "decimals"), 2)
-        self.assertNotIn("script_only", display)
-        for modifier in (emissions.STATE_MODIFIER, emissions.ATMOSPHERIC_MODIFIER):
-            self.assertEqual(body(body(types, modifier), "script_only"), "yes")
-        self.assertNotIn("state_carbon_capture_add", types)
+        for modifier, color in ((emissions.STATE_MODIFIER, "bad"), (emissions.ATMOSPHERIC_MODIFIER, "good")):
+            with self.subTest(modifier=modifier):
+                display = body(types, modifier)
+                self.assertEqual(body(display, "color"), color)
+                self.assertEqual(body(display, "percent"), "no")
+                self.assertEqual(scalar(display, "decimals"), 2)
+                self.assertEqual(body(display, "script_only"), "yes")
+        loc = "\n".join(p.read_text(encoding="utf-8-sig") for p in (ROOT / "localization/english").glob("*.yml"))
+        self.assertTrue(f' {emissions.STATE_MODIFIER}:0 "Greenhouse Gas Emissions"' in loc, "state line name")
+        for retired in emissions.OBSOLETE_MODIFIERS:
+            with self.subTest(retired=retired):
+                self.assertNotIn(retired, types)
+                self.assertFalse(f" {retired}:" in loc, f"{retired} is still localized")
 
 
 class DirectAirCaptureTest(unittest.TestCase):
@@ -300,7 +374,8 @@ class DirectAirCaptureTest(unittest.TestCase):
             self.assertGreater(scalar(inputs, key), 0)
         jobs = body(body(gen.unwrap(self.pm), "building_modifiers"), "level_scaled")
         self.assertEqual(sum(Decimal(gen.unwrap(value)) for value in jobs.values()), 5500)
-        self.assertEqual(scalar(inputs, emissions.MODIFIER), -42)
+        self.assertEqual(scalar(state_scaled(self.pm), emissions.ATMOSPHERIC_MODIFIER), 42)
+        self.assertNotIn(emissions.STATE_MODIFIER, state_scaled(self.pm))
 
     def test_market_reads_staffed_removal_once_without_double_scaling(self):
         value = body(parsed("common/script_values/extra_script_values.txt"), "market_carbon_capture_script_value")
@@ -312,7 +387,6 @@ class DirectAirCaptureTest(unittest.TestCase):
         self.assertNotIn("every_scope_building", countries)
         state = body(body(gen.unwrap(self.pm), "state_modifiers"), "workforce_scaled")
         self.assertEqual(scalar(state, emissions.ATMOSPHERIC_MODIFIER), 42)
-        self.assertEqual(scalar(workforce(self.pm), emissions.MODIFIER), -42)
 
     def test_removal_capacity_changes_independently_of_coal_output(self):
         with TemporaryDirectory() as tmp:
@@ -325,9 +399,9 @@ class DirectAirCaptureTest(unittest.TestCase):
                 "gw_direct_air_capture_coal_equivalent = 210", "gw_direct_air_capture_coal_equivalent = 420"),
                 encoding="utf-8-sig")
             outputs, count = emissions.plan_outputs(self.state, root)
-            self.assertEqual(count, 245)
+            self.assertEqual(count, 248)
             text = outputs[Path("common/production_methods/direct_air_capture.txt")]
-            self.assertIn(f"{emissions.MODIFIER} = -84.00", text)
+            self.assertIn(f"{emissions.ATMOSPHERIC_MODIFIER} = 84.00", text)
             self.assertNotIn("goods_output_coal_add", text)
             self.assertNotIn(Path("common/production_methods/extra_pms.txt"), outputs)
 
@@ -406,7 +480,6 @@ class DisplayBoundaryTest(unittest.TestCase):
             expected = scalar(workforce(pm), f"goods_output_{fuel}_add") * scalar(factors, f"gw_emission_factor_{fuel}") / 10
             self.assertNotIn("state_carbon_capture_add", state)
             gross = emissions.recipe_emissions(pm, {"coal": Decimal(2), "oil": Decimal("1.74")})
-            self.assertEqual(scalar(workforce(pm), emissions.MODIFIER), gross - expected)
             self.assertEqual(scalar(state, emissions.STATE_MODIFIER), gross - expected)
 
     def test_map_and_treaty_display_use_snapshots_without_live_household_sweeps(self):

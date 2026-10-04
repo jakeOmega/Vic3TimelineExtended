@@ -8,22 +8,12 @@ INJECT:centrifugal_machine_sugar = {
 			state_greenhouse_gas_emissions_add = 0.80
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.80
-		}
-	}
 }
 
 INJECT:pm_assembly_lines_building_arms_industry = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 1.74
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.74
 		}
 	}
 }
@@ -34,22 +24,12 @@ INJECT:pm_assembly_lines_building_automotive_industry = {
 			state_greenhouse_gas_emissions_add = 0.87
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
-		}
-	}
 }
 
 INJECT:pm_assembly_lines_building_furniture_manufactory = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 0.87
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
 		}
 	}
 }
@@ -60,22 +40,12 @@ INJECT:pm_assembly_lines_building_motor_industry = {
 			state_greenhouse_gas_emissions_add = 0.87
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
-		}
-	}
 }
 
 INJECT:pm_assembly_lines_building_munition_plant = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 1.74
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.74
 		}
 	}
 }
@@ -86,9 +56,13 @@ INJECT:pm_assembly_lines_building_tooling_workshop = {
 			state_greenhouse_gas_emissions_add = 1.74
 		}
 	}
-	building_modifiers = {
+}
+
+# 10 coal burned from this method's own output; its recipe lists no coal input.
+INJECT:pm_atmospheric_engine_pump_building_coal_mine = {
+	state_modifiers = {
 		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.74
+			state_greenhouse_gas_emissions_add = 2.00
 		}
 	}
 }
@@ -99,22 +73,12 @@ INJECT:pm_atmospheric_engine_pump_building_gold_mine = {
 			state_greenhouse_gas_emissions_add = 2.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
-		}
-	}
 }
 
 INJECT:pm_atmospheric_engine_pump_building_iron_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 2.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
 		}
 	}
 }
@@ -125,22 +89,12 @@ INJECT:pm_atmospheric_engine_pump_building_lead_mine = {
 			state_greenhouse_gas_emissions_add = 2.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
-		}
-	}
 }
 
 INJECT:pm_atmospheric_engine_pump_building_sulfur_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 2.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
 		}
 	}
 }
@@ -151,22 +105,12 @@ INJECT:pm_automatic_bottle_blowers = {
 			state_greenhouse_gas_emissions_add = 0.87
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
-		}
-	}
 }
 
 INJECT:pm_bessemer_process = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 6.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 6.00
 		}
 	}
 }
@@ -177,22 +121,12 @@ INJECT:pm_blister_steel_process = {
 			state_greenhouse_gas_emissions_add = 6.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 6.00
-		}
-	}
 }
 
 INJECT:pm_bolt_action_rifles = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 1.74
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.74
 		}
 	}
 }
@@ -203,22 +137,12 @@ INJECT:pm_canal = {
 			state_greenhouse_gas_emissions_add = 3.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 3.00
-		}
-	}
 }
 
 INJECT:pm_chainsaws = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 0.70
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.70
 		}
 	}
 }
@@ -229,9 +153,13 @@ INJECT:pm_compression_ignition_tractors = {
 			state_greenhouse_gas_emissions_add = 0.35
 		}
 	}
-	building_modifiers = {
+}
+
+# 15 coal burned from this method's own output; its recipe lists no coal input.
+INJECT:pm_condensing_engine_pump_building_coal_mine = {
+	state_modifiers = {
 		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.35
+			state_greenhouse_gas_emissions_add = 3.00
 		}
 	}
 }
@@ -242,22 +170,12 @@ INJECT:pm_condensing_engine_pump_building_gold_mine = {
 			state_greenhouse_gas_emissions_add = 3.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 3.00
-		}
-	}
 }
 
 INJECT:pm_condensing_engine_pump_building_iron_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 3.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 3.00
 		}
 	}
 }
@@ -268,22 +186,12 @@ INJECT:pm_condensing_engine_pump_building_lead_mine = {
 			state_greenhouse_gas_emissions_add = 3.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 3.00
-		}
-	}
 }
 
 INJECT:pm_condensing_engine_pump_building_sulfur_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 3.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 3.00
 		}
 	}
 }
@@ -294,22 +202,12 @@ INJECT:pm_diesel_engines = {
 			state_greenhouse_gas_emissions_add = 8.70
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 8.70
-		}
-	}
 }
 
 INJECT:pm_diesel_pump_building_coal_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 0.87
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
 		}
 	}
 }
@@ -320,22 +218,12 @@ INJECT:pm_diesel_pump_building_gold_mine = {
 			state_greenhouse_gas_emissions_add = 0.87
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
-		}
-	}
 }
 
 INJECT:pm_diesel_pump_building_iron_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 0.87
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
 		}
 	}
 }
@@ -346,22 +234,12 @@ INJECT:pm_diesel_pump_building_lead_mine = {
 			state_greenhouse_gas_emissions_add = 0.87
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
-		}
-	}
 }
 
 INJECT:pm_diesel_pump_building_sulfur_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 0.87
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
 		}
 	}
 }
@@ -372,22 +250,12 @@ INJECT:pm_early_power_plant = {
 			state_greenhouse_gas_emissions_add = 1.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.00
-		}
-	}
 }
 
 INJECT:pm_electric_arc_process = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 2.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
 		}
 	}
 }
@@ -398,22 +266,12 @@ INJECT:pm_gas_streetlights = {
 			state_greenhouse_gas_emissions_add = 0.40
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.40
-		}
-	}
 }
 
 INJECT:pm_houseware_plastics = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 3.48
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 3.48
 		}
 	}
 }
@@ -424,22 +282,12 @@ INJECT:pm_industrial_port = {
 			state_greenhouse_gas_emissions_add = 1.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.00
-		}
-	}
 }
 
 INJECT:pm_mechanized_slaughtering = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 1.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.00
 		}
 	}
 }
@@ -450,22 +298,12 @@ INJECT:pm_metal_shipbuilding = {
 			state_greenhouse_gas_emissions_add = 2.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
-		}
-	}
 }
 
 INJECT:pm_modern_port = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 1.74
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.74
 		}
 	}
 }
@@ -476,22 +314,12 @@ INJECT:pm_open_hearth_process = {
 			state_greenhouse_gas_emissions_add = 6.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 6.00
-		}
-	}
 }
 
 INJECT:pm_recoiled_barrels = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 1.74
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.74
 		}
 	}
 }
@@ -502,22 +330,12 @@ INJECT:pm_rotary_valve_engine_building_arms_industry = {
 			state_greenhouse_gas_emissions_add = 3.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 3.00
-		}
-	}
 }
 
 INJECT:pm_rotary_valve_engine_building_furniture_manufactory = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 2.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
 		}
 	}
 }
@@ -528,22 +346,12 @@ INJECT:pm_rotary_valve_engine_building_motor_industry = {
 			state_greenhouse_gas_emissions_add = 2.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
-		}
-	}
 }
 
 INJECT:pm_rotary_valve_engine_building_munition_plant = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 3.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 3.00
 		}
 	}
 }
@@ -554,22 +362,12 @@ INJECT:pm_rotary_valve_engine_building_paper_mill = {
 			state_greenhouse_gas_emissions_add = 2.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
-		}
-	}
 }
 
 INJECT:pm_rotary_valve_engine_building_steel_mill = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 2.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
 		}
 	}
 }
@@ -580,11 +378,6 @@ INJECT:pm_rotary_valve_engine_building_tooling_workshop = {
 			state_greenhouse_gas_emissions_add = 3.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 3.00
-		}
-	}
 }
 
 INJECT:pm_steam_derricks = {
@@ -593,9 +386,13 @@ INJECT:pm_steam_derricks = {
 			state_greenhouse_gas_emissions_add = 2.00
 		}
 	}
-	building_modifiers = {
+}
+
+# 3 coal burned from this method's own output; its recipe lists no coal input.
+INJECT:pm_steam_donkey_building_coal_mine = {
+	state_modifiers = {
 		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
+			state_greenhouse_gas_emissions_add = 0.60
 		}
 	}
 }
@@ -606,22 +403,12 @@ INJECT:pm_steam_donkey_building_logging_camp = {
 			state_greenhouse_gas_emissions_add = 0.80
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.80
-		}
-	}
 }
 
 INJECT:pm_steam_donkey_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 0.80
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.80
 		}
 	}
 }
@@ -632,22 +419,12 @@ INJECT:pm_steam_threshers = {
 			state_greenhouse_gas_emissions_add = 0.20
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.20
-		}
-	}
 }
 
 INJECT:pm_steam_threshers_building_rice_farm = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 0.40
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.40
 		}
 	}
 }
@@ -658,22 +435,12 @@ INJECT:pm_steam_trawlers = {
 			state_greenhouse_gas_emissions_add = 3.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 3.00
-		}
-	}
 }
 
 INJECT:pm_steam_whaling_ships = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 4.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 4.00
 		}
 	}
 }
@@ -684,22 +451,12 @@ INJECT:pm_tractors = {
 			state_greenhouse_gas_emissions_add = 0.40
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.40
-		}
-	}
 }
 
 INJECT:pm_vacuum_canning = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 0.87
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
 		}
 	}
 }
@@ -710,22 +467,12 @@ INJECT:pm_vacuum_canning_principle_3 = {
 			state_greenhouse_gas_emissions_add = 0.87
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.87
-		}
-	}
 }
 
 INJECT:pm_watertube_boiler_building_furniture_manufactory = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 1.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.00
 		}
 	}
 }
@@ -736,22 +483,12 @@ INJECT:pm_watertube_boiler_building_motor_industry = {
 			state_greenhouse_gas_emissions_add = 1.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.00
-		}
-	}
 }
 
 INJECT:pm_watertube_boiler_building_paper_mill = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 1.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.00
 		}
 	}
 }
@@ -762,22 +499,12 @@ INJECT:pm_watertube_boiler_building_steel_mill = {
 			state_greenhouse_gas_emissions_add = 1.00
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 1.00
-		}
-	}
 }
 
 INJECT:pm_watertube_boiler_building_tooling_workshop = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 2.00
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 2.00
 		}
 	}
 }
@@ -788,22 +515,12 @@ INJECT:steam_powered_evaporation_sugar = {
 			state_greenhouse_gas_emissions_add = 0.40
 		}
 	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.40
-		}
-	}
 }
 
 INJECT:vacuum_pan_sugar = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 0.20
-		}
-	}
-	building_modifiers = {
-		workforce_scaled = {
-			building_greenhouse_gas_emissions_add = 0.20
 		}
 	}
 }
