@@ -6,8 +6,9 @@ anomaly drives penalties that every country shares. The Global Warming journal
 entry tracks it and holds the climate policies you can adopt. The Global Warming
 game rule (on by default) controls all of this; with it off, the world never
 warms. State pollution, the Environmental Movement and the pollution scandal
-event work under either setting. Building emissions tooltips and the phaseout
-mandate also remain active with the rule off; capture still costs goods.
+event work under either setting. The emissions lines in production method
+tooltips and the phaseout mandate also remain active with the rule off; capture
+still costs goods.
 
 ## How emissions become warming
 
@@ -29,10 +30,11 @@ world by 0.1 °C a year. Figures use K for thousands and M for millions. A unit 
 oil produces 13% less warming than a unit of coal. The mod calls coal Energy
 and Carbon Minerals; this chapter calls it coal for short.
 
-Buildings that use coal or oil show Greenhouse Gas Emissions. Fuel methods add
-to the figure; capture methods subtract from it. Process fuel and automation
-both contribute. The figure grows with staffing and throughput and feeds the
-climate calculation. The market leader's industrial policy cut applies afterward.
+Production methods that burn coal or oil show Greenhouse Gas Emissions in their
+tooltips. Fuel methods add to the figure; capture methods subtract from it.
+Process fuel and automation both contribute. The figure grows with staffing and
+throughput and feeds the climate calculation. The market leader's industrial
+policy cut applies afterward.
 
 Coal Mines and Graphite Mines burn some of their own coal. Their Atmospheric
 Engine Pump, Condensing Engine Pump and Steam Donkey methods take that coal off

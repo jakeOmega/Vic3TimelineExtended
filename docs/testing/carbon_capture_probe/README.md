@@ -96,6 +96,11 @@ the failure and use the building-percentage fallback in design §8. If the
 state read fails, investigate scope and modifier registration before choosing
 an accounting mechanism.
 
+Production has since retired `building_greenhouse_gas_emissions_add` (2026-10-04):
+the state mirror turned out to be visible, so method tooltips showed each figure
+twice. The probe's building-scoped lines would need their own type definition
+to load. See the design's §0, "One emissions line".
+
 ## Owner verification (2026-10-03)
 
 The owner confirmed the fuel-gating/fallback and mandate checks, reported that

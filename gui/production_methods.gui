@@ -91,70 +91,87 @@ types production_methods
 				position = { 110 0 }
 				parentanchor = bottom
 
-				fixedgridbox = {
-					datamodel = "[BuildingBrowserBuildingTypeItem.GetBuildingType.AccessProductionMethodGroups]"
-					flipdirection = yes
-					addcolumn = 52
-					addrow = 50
+				# MOD: past four groups the strip scrolls, as the condensed rows'
+				# do (condensed_building_information_pms). The mod's buildings carry
+				# up to seven, and vanilla's grid ran them over the rest of the row.
+				scrollarea = {
+					maximumsize = { 208 -1 }
+					autoresizescrollarea = yes
+					scrollbarpolicy_horizontal = as_needed
+					scrollbarpolicy_vertical = as_needed
+					scrollbar_horizontal = {
+						using = horizontal_scrollbar
+					}
+					scrollbar_vertical = {
+						using = vertical_scrollbar
+					}
 
-					item = {
-						widget = {
-							size = { 50 50 }
-							visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')))]"
-							tooltip = "BUILDING_TYPE_BULK_CHANGE_TOOLTIP"
-							using = tooltip_ne
+					scrollwidget = {
+						flowcontainer = {
+							datamodel = "[BuildingBrowserBuildingTypeItem.GetBuildingType.AccessProductionMethodGroups]"
+							direction = horizontal
+							spacing = 2
 
-							button = {
-								visible = "[NotEqualTo_int32( GetDataModelSize( ProductionMethodGroup.AccessCountryProductionMethods( GetPlayer.Self ) ), '(int32)1' )]"
-								distribute_visual_state = no
-								inherit_visual_state = no
-								using = expand_button_bg_dropdown
-								size = { 100% 100% }
-								onclick = "[BuildingBrowserBuildingTypeItem.ToggleSwitchProductionMethodMenu( ProductionMethodGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
-								enabled = "[Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry))]"
-							}
+							item = {
+								widget = {
+									size = { 50 50 }
+									visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')))]"
+									tooltip = "BUILDING_TYPE_BULK_CHANGE_TOOLTIP"
+									using = tooltip_ne
 
-							### pm icon
-							icon = {
-								visible = "[BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self )]"
-								size = { 40 40 }
-								parentanchor = center
-								texture = "[BuildingBrowserBuildingTypeItem.GetAllSameProductionMethodTexture( ProductionMethodGroup.Self )]"
-							}
+									button = {
+										visible = "[NotEqualTo_int32( GetDataModelSize( ProductionMethodGroup.AccessCountryProductionMethods( GetPlayer.Self ) ), '(int32)1' )]"
+										distribute_visual_state = no
+										inherit_visual_state = no
+										using = expand_button_bg_dropdown
+										size = { 100% 100% }
+										onclick = "[BuildingBrowserBuildingTypeItem.ToggleSwitchProductionMethodMenu( ProductionMethodGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
+										enabled = "[Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry))]"
+									}
 
-							### mixed pm icon
-							icon = {
-								visible = "[Not( BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self ) )]"
-								size = { 35 35 }
-								parentanchor = center
-								texture = "[ProductionMethodGroup.GetMixedIcon]"
-							}
+									### pm icon
+									icon = {
+										visible = "[BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self )]"
+										size = { 40 40 }
+										parentanchor = center
+										texture = "[BuildingBrowserBuildingTypeItem.GetAllSameProductionMethodTexture( ProductionMethodGroup.Self )]"
+									}
 
-							### new pm
-							has_new_pm_icon = {
-								position = { -2 2 }
-								parentanchor = bottom|left
-								blockoverride "visible" {
-									visible = "[And(GetPlayer.HasNewProductionMethodInGroup( ProductionMethodGroup.Self ), Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry)))]"
-								}
-							}
+									### mixed pm icon
+									icon = {
+										visible = "[Not( BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self ) )]"
+										size = { 35 35 }
+										parentanchor = center
+										texture = "[ProductionMethodGroup.GetMixedIcon]"
+									}
+
+									### new pm
+									has_new_pm_icon = {
+										position = { -2 2 }
+										parentanchor = bottom|left
+										blockoverride "visible" {
+											visible = "[And(GetPlayer.HasNewProductionMethodInGroup( ProductionMethodGroup.Self ), Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry)))]"
+										}
+									}
 
 
-							### nr available
-							textbox = {
-								raw_text = "#bold [ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf)]#!"
-								parentanchor = right
-								position = { -5 0 }
-								autoresize = yes
-								align = right|nobaseline
-								visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf), '(int32)1')]"
-								tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
-								using = tooltip_above
-								using = fontsize_small
+									### nr available
+									textbox = {
+										raw_text = "#bold [ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf)]#!"
+										parentanchor = right
+										position = { -5 0 }
+										autoresize = yes
+										align = right|nobaseline
+										visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf), '(int32)1')]"
+										tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
+										using = tooltip_above
+										using = fontsize_small
 
-								background = {
-									using = default_background
-									margin = { 8 4 }
+										background = {
+											using = default_background
+											margin = { 8 4 }
+										}
+									}
 								}
 							}
 						}
@@ -351,60 +368,77 @@ types production_methods
 				parentanchor = bottom
 				alpha = 0.3
 
-				fixedgridbox = {
-					datamodel = "[BuildingBrowserBuildingTypeItem.GetBuildingType.AccessProductionMethodGroups]"
-					flipdirection = yes
-					addcolumn = 52
-					addrow = 50
+				# MOD: past four groups the strip scrolls, as the condensed rows'
+				# do (condensed_building_information_pms). The mod's buildings carry
+				# up to seven, and vanilla's grid ran them over the rest of the row.
+				scrollarea = {
+					maximumsize = { 208 -1 }
+					autoresizescrollarea = yes
+					scrollbarpolicy_horizontal = as_needed
+					scrollbarpolicy_vertical = as_needed
+					scrollbar_horizontal = {
+						using = horizontal_scrollbar
+					}
+					scrollbar_vertical = {
+						using = vertical_scrollbar
+					}
 
-					item = {
-						widget = {
-							size = { 50 50 }
-							visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')))]"
-							tooltip = "BUILDING_TYPE_BULK_CHANGE_TOOLTIP"
-							using = tooltip_ne
+					scrollwidget = {
+						flowcontainer = {
+							datamodel = "[BuildingBrowserBuildingTypeItem.GetBuildingType.AccessProductionMethodGroups]"
+							direction = horizontal
+							spacing = 2
 
-							### pm icon
-							icon = {
-								visible = "[BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self )]"
-								size = { 40 40 }
-								parentanchor = center
-								texture = "[BuildingBrowserBuildingTypeItem.GetAllSameProductionMethodTexture( ProductionMethodGroup.Self )]"
-							}
+							item = {
+								widget = {
+									size = { 50 50 }
+									visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')))]"
+									tooltip = "BUILDING_TYPE_BULK_CHANGE_TOOLTIP"
+									using = tooltip_ne
 
-							### mixed pm icon
-							icon = {
-								visible = "[Not( BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self ) )]"
-								size = { 35 35 }
-								parentanchor = center
-								texture = "[ProductionMethodGroup.GetMixedIcon]"
-							}
+									### pm icon
+									icon = {
+										visible = "[BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self )]"
+										size = { 40 40 }
+										parentanchor = center
+										texture = "[BuildingBrowserBuildingTypeItem.GetAllSameProductionMethodTexture( ProductionMethodGroup.Self )]"
+									}
 
-							### new pm
-							has_new_pm_icon = {
-								position = { -2 2 }
-								parentanchor = bottom|left
-								blockoverride "visible" {
-									visible = "[And(GetPlayer.HasNewProductionMethodInGroup( ProductionMethodGroup.Self ), Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry)))]"
-								}
-							}
+									### mixed pm icon
+									icon = {
+										visible = "[Not( BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self ) )]"
+										size = { 35 35 }
+										parentanchor = center
+										texture = "[ProductionMethodGroup.GetMixedIcon]"
+									}
+
+									### new pm
+									has_new_pm_icon = {
+										position = { -2 2 }
+										parentanchor = bottom|left
+										blockoverride "visible" {
+											visible = "[And(GetPlayer.HasNewProductionMethodInGroup( ProductionMethodGroup.Self ), Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry)))]"
+										}
+									}
 
 
-							### nr available
-							textbox = {
-								raw_text = "#bold [ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf)]#!"
-								parentanchor = right
-								position = { -5 0 }
-								autoresize = yes
-								align = right|nobaseline
-								visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf), '(int32)1')]"
-								tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
-								using = tooltip_above
-								using = fontsize_small
+									### nr available
+									textbox = {
+										raw_text = "#bold [ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf)]#!"
+										parentanchor = right
+										position = { -5 0 }
+										autoresize = yes
+										align = right|nobaseline
+										visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf), '(int32)1')]"
+										tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
+										using = tooltip_above
+										using = fontsize_small
 
-								background = {
-									using = default_background
-									margin = { 8 4 }
+										background = {
+											using = default_background
+											margin = { 8 4 }
+										}
+									}
 								}
 							}
 						}
@@ -656,69 +690,86 @@ types production_methods
 
 					### production methods grouped
 					container = {						
-						fixedgridbox = {
-							datamodel = "[BuildingProductionMethodsEntry.GetBuildingType.AccessProductionMethodGroups]"
-							flipdirection = yes
-							addcolumn = 52
-							addrow = 50
+						# MOD: past four groups the strip scrolls, as the condensed rows'
+						# do (condensed_building_information_pms). The mod's buildings carry
+						# up to seven, and vanilla's grid ran them over the rest of the row.
+						scrollarea = {
+							maximumsize = { 208 -1 }
+							autoresizescrollarea = yes
+							scrollbarpolicy_horizontal = as_needed
+							scrollbarpolicy_vertical = as_needed
+							scrollbar_horizontal = {
+								using = horizontal_scrollbar
+							}
+							scrollbar_vertical = {
+								using = vertical_scrollbar
+							}
 
-							item = {
-								widget = {
-									size = { 50 50 }
-									visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')))]"
-									tooltip = "[BuildingProductionMethodsEntry.GetBulkChangeTooltip( ProductionMethodGroup.Self )]"
-									using = tooltip_above
+							scrollwidget = {
+								flowcontainer = {
+									datamodel = "[BuildingProductionMethodsEntry.GetBuildingType.AccessProductionMethodGroups]"
+									direction = horizontal
+									spacing = 2
 
-									button = {
-										visible = "[NotEqualTo_int32( GetDataModelSize( ProductionMethodGroup.AccessCountryProductionMethods( GetPlayer.Self ) ), '(int32)1' )]"
-										distribute_visual_state = no
-										inherit_visual_state = no
-										using = expand_button_bg_dropdown
-										size = { 100% 100% }
-										onclick = "[RightClickMenuManager.ToggleSwitchProductionMethodMenuForType(BuildingProductionMethodsEntry.GetBuildingType, ProductionMethodGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
-									}
+									item = {
+										widget = {
+											size = { 50 50 }
+											visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')))]"
+											tooltip = "[BuildingProductionMethodsEntry.GetBulkChangeTooltip( ProductionMethodGroup.Self )]"
+											using = tooltip_above
+
+											button = {
+												visible = "[NotEqualTo_int32( GetDataModelSize( ProductionMethodGroup.AccessCountryProductionMethods( GetPlayer.Self ) ), '(int32)1' )]"
+												distribute_visual_state = no
+												inherit_visual_state = no
+												using = expand_button_bg_dropdown
+												size = { 100% 100% }
+												onclick = "[RightClickMenuManager.ToggleSwitchProductionMethodMenuForType(BuildingProductionMethodsEntry.GetBuildingType, ProductionMethodGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
+											}
 									
-									### pm icon
-									icon = {
-										visible = "[BuildingProductionMethodsEntry.HasAllSameProductionMethod( ProductionMethodGroup.Self )]"
-										size = { 40 40 }
-										parentanchor = center
-										texture = "[BuildingProductionMethodsEntry.GetAllSameProductionMethodTexture( ProductionMethodGroup.Self )]"
-									}
+											### pm icon
+											icon = {
+												visible = "[BuildingProductionMethodsEntry.HasAllSameProductionMethod( ProductionMethodGroup.Self )]"
+												size = { 40 40 }
+												parentanchor = center
+												texture = "[BuildingProductionMethodsEntry.GetAllSameProductionMethodTexture( ProductionMethodGroup.Self )]"
+											}
 									
-									### mixed pm icon
-									icon = {
-										visible = "[Not( BuildingProductionMethodsEntry.HasAllSameProductionMethod( ProductionMethodGroup.Self ) )]"
-										size = { 35 35 }
-										parentanchor = center
-										texture = "[ProductionMethodGroup.GetMixedIcon]"
-									}
+											### mixed pm icon
+											icon = {
+												visible = "[Not( BuildingProductionMethodsEntry.HasAllSameProductionMethod( ProductionMethodGroup.Self ) )]"
+												size = { 35 35 }
+												parentanchor = center
+												texture = "[ProductionMethodGroup.GetMixedIcon]"
+											}
 									
-									### new pm
-									has_new_pm_icon = {
-										position = { -2 2 }
-										parentanchor = bottom|left
-										blockoverride "visible" {
-											visible = "[GetPlayer.HasNewProductionMethodInGroup( ProductionMethodGroup.Self )]"
-										}
-									}
+											### new pm
+											has_new_pm_icon = {
+												position = { -2 2 }
+												parentanchor = bottom|left
+												blockoverride "visible" {
+													visible = "[GetPlayer.HasNewProductionMethodInGroup( ProductionMethodGroup.Self )]"
+												}
+											}
 																		
 
-									### nr available
-									textbox = {
-										raw_text = "#bold [ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingProductionMethodsEntry.GetBuildingType)]#!"
-										parentanchor = right
-										position = { -5 0 }
-										autoresize = yes
-										align = right|nobaseline
-										visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingProductionMethodsEntry.GetBuildingType), '(int32)1')]"
-										tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
-										using = tooltip_above
-										using = fontsize_small
+											### nr available
+											textbox = {
+												raw_text = "#bold [ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingProductionMethodsEntry.GetBuildingType)]#!"
+												parentanchor = right
+												position = { -5 0 }
+												autoresize = yes
+												align = right|nobaseline
+												visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingProductionMethodsEntry.GetBuildingType), '(int32)1')]"
+												tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
+												using = tooltip_above
+												using = fontsize_small
 
-										background = {
-											using = default_background
-											margin = { 8 4 }
+												background = {
+													using = default_background
+													margin = { 8 4 }
+												}
+											}
 										}
 									}
 								}

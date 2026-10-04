@@ -520,3 +520,16 @@ discounts remain economic only; concentrated-stream unlocks, coal-to-liquids
 recipe/artwork, the eventual placement of this temporary handoff and optional
 PR splitting remain deferred decisions. All six in-game checks above remain
 pending. PR #681 stays draft/unmerged and review monitoring stays active.
+
+
+## One emissions line checkpoint (2026-10-04)
+
+The owner's screenshot showed Greenhouse Gas Emissions and Industrial
+Greenhouse Gas Emissions listed together at the same value: the building
+display copy and the state mirror. That settles the pending state-line
+visibility check. The generator now writes only `state_greenhouse_gas_emissions_add`
+and strips `building_greenhouse_gas_emissions_add` from owned recipes. The
+building type and its loc are deleted, and the state line is renamed Greenhouse
+Gas Emissions. Accounting is unchanged. The "net emissions display" section
+above describes the retired building line. Details: design doc §0, "One
+emissions line".
