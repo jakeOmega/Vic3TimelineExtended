@@ -73,7 +73,7 @@ REPLACE:dp_unify_india = {
 	on_war_end = {}
 }
 
-dp_leadership_india = {
+dp_leadership_bharat = {
 	war_goal = unification_leadership
 
 	requires_interest_marker = no
