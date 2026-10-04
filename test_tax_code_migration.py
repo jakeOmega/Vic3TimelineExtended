@@ -433,10 +433,13 @@ class EventTest(unittest.TestCase):
         # The civil-war effects migrate an uprising or a released country whose
         # parent has no code (te_tax.3) and sync a copied code (te_tax.4, Task 10).
         # The collection writer defers a second sync in one day to te_tax.4 the
-        # next day (te_tax_defer_sync, final review A-I1).
+        # next day (te_tax_defer_sync, final review A-I1). The console's relief
+        # setup (te_tax_debug.8, plan Task 25) syncs its outside change the next
+        # day; it is never fired by script (test_tax_code_console.py).
         self.assertEqual(sorted(set(raisers)), sorted([(CIVIL_WAR, "te_tax.3"), (CIVIL_WAR, "te_tax.4"),
                                                        (ON_ACTIONS, "te_tax.3"), (MIGRATION, "te_tax.4"),
-                                                       (COLLECTION, "te_tax.4")]))
+                                                       (COLLECTION, "te_tax.4"),
+                                                       ("events/te_tax_debug_events.txt", "te_tax.4")]))
 
 
 class HookTest(unittest.TestCase):
