@@ -191,6 +191,7 @@ INITIATIVE_GEN = ("te_tax_gen_ai_pick_raise", "te_tax_gen_ai_pick_cut", "te_tax_
                   "te_tax_gen_ai_levy_sunset", "te_tax_gen_ai_tax_luxury")
 # The initiative's hand-written effects.
 INITIATIVE_EFFECTS = ("te_tax_ai_initiative", "te_tax_ai_open_draft", "te_tax_ai_introduce_and_judge",
+                      "te_tax_ai_prepare_traditionalist_draft",
                       *(f"te_tax_ai_build_t{n}" for n in TEMPLATE_ORDER))
 # The support model's weights the pre-score restates for one step (spec §2.5).
 MATERIAL_POINTS, IDEOLOGY_POINTS = 10, 5
@@ -1764,11 +1765,75 @@ class AiInitiativeTest(unittest.TestCase):
 
     # -- introduce and judge -------------------------------------------------------
 
+    def test_traditionalist_repeals_use_commands_and_the_final_due_month(self):
+        body = block(self.ai, "te_tax_ai_prepare_traditionalist_draft")
+        gate = limit_of(body[body.index("if = {") + len("if = {"):])
+        self.assertEqual(flat(gate),
+                         "te_tax_code_on = yes te_tax_draft_active = yes has_law = law_type:law_traditionalism")
+        for key in ("wage", "div"):
+            self.assertIn(flat(f"if = {{ limit = {{ te_tax_dr_eff_{key} > 0 }} if = {{ limit = {{ "
+                               f"te_tax_can_draft_step = {{ KEY = {key} DIR = 2 }} }} "
+                               f"te_tax_cmd_draft_step = {{ KEY = {key} DIR = 2 }} }} }}"), flat(body))
+        self.assertNotIn("set_variable", body)
+        judge = block(self.ai, "te_tax_ai_introduce_and_judge")
+        self.assertLess(judge.index("te_tax_ai_prepare_traditionalist_draft = yes"),
+                        judge.index("te_tax_can_introduce = yes"))
+        self.assertEqual(callers(r"\bte_tax_ai_prepare_traditionalist_draft = yes"),
+                         {"te_tax_ai_effects.txt": 1})
+
+    def test_traditionalist_repeals_cover_either_tax_and_leave_zero_rates_untouched(self):
+        # Execute the helper's conditions with due-month effective rates as inputs.
+        # These include a scheduled tax even when the enacted rate is currently zero.
+        statements, _ = tree(tokens(block(self.ai, "te_tax_ai_prepare_traditionalist_draft")))
+        for rule_on, draft_open, traditionalist in ((True, True, True), (False, True, True),
+                                                  (True, False, True), (True, True, False)):
+            for wage, div in ((0, 0), (1, 0), (0, 1), (4, 7), (12, 12)):
+                with self.subTest(rule=rule_on, draft=draft_open, traditionalist=traditionalist,
+                                  wage=wage, div=div):
+                    rates = {"wage": wage, "div": div}
+                    commands = []
+
+                    def holds(condition):
+                        key, op, value = condition
+                        flags = {"te_tax_code_on": rule_on, "te_tax_draft_active": draft_open,
+                                 "has_law": traditionalist}
+                        if key in flags:
+                            return flags[key]
+                        if key == "te_tax_can_draft_step":
+                            return rule_on and draft_open
+                        match = re.fullmatch(r"te_tax_dr_eff_(wage|div)", key)
+                        self.assertIsNotNone(match, key)
+                        self.assertEqual(op, ">")
+                        return rates[match[1]] > int(value)
+
+                    def run(items):
+                        for key, _, value in items:
+                            if key == "if":
+                                conditions = next(v for k, _, v in value if k == "limit")
+                                if all(holds(c) for c in conditions):
+                                    run([s for s in value if s[0] != "limit"])
+                            else:
+                                self.assertEqual(key, "te_tax_cmd_draft_step")
+                                args = {k: v for k, _, v in value}
+                                self.assertEqual(args["DIR"], "2")
+                                commands.append(args["KEY"])
+                                rates[args["KEY"]] = 0
+
+                    run(statements)
+                    expected = ([key for key, rate in (("wage", wage), ("div", div)) if rate > 0]
+                                if rule_on and draft_open and traditionalist else [])
+                    self.assertEqual(commands, expected)
+                    if rule_on and draft_open and traditionalist:
+                        self.assertEqual(rates, {"wage": 0, "div": 0})
+                    else:
+                        self.assertEqual(rates, {"wage": wage, "div": div})
+
     def test_introduce_and_judge(self):
         self.assertEqual(flat(block(self.ai, "te_tax_ai_introduce_and_judge")), (
             "if = { limit = { te_tax_code_on = yes } "
             # Set before the introduction, so a refused draft's lines name the template (review minor 1).
             "set_variable = { name = te_tax_ai_tpl value = $TPL$ } "
+            "te_tax_ai_prepare_traditionalist_draft = yes "
             "if = { limit = { te_tax_can_introduce = yes } te_tax_cmd_introduce = yes } "
             # The bill holds a copy; an AI draft lives for one step (spec §2.4).
             "if = { limit = { te_tax_can_draft_discard = yes } te_tax_cmd_draft_discard = yes } "

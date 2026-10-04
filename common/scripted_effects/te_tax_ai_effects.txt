@@ -653,6 +653,38 @@ te_tax_ai_build_t6 = {
 	}
 }
 
+# Traditionalism requires both wage and dividend taxes to be zero in the
+# draft's due month. Include their repeal in any template that would otherwise
+# retain them, through the player's zero-rate commands. Run after the template
+# has chosen its due month (T2 moves it), so scheduled taxes and sunsets are
+# read at the final date. Untaxed provisions stay untouched. The fresh draft's
+# sunsets are zero, so these repeals are permanent; raise picks exclude wage
+# and dividends under Traditionalism, and T5's cut adds no sunset.
+# The full bill, including the repeals, still goes through support and passage.
+te_tax_ai_prepare_traditionalist_draft = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			te_tax_draft_active = yes
+			has_law = law_type:law_traditionalism
+		}
+		if = {
+			limit = { te_tax_dr_eff_wage > 0 }
+			if = {
+				limit = { te_tax_can_draft_step = { KEY = wage DIR = 2 } }
+				te_tax_cmd_draft_step = { KEY = wage DIR = 2 }
+			}
+		}
+		if = {
+			limit = { te_tax_dr_eff_div > 0 }
+			if = {
+				limit = { te_tax_can_draft_step = { KEY = div DIR = 2 } }
+				te_tax_cmd_draft_step = { KEY = div DIR = 2 }
+			}
+		}
+	}
+}
+
 # Introduces the draft and judges the bill in the same execution (spec §2.6,
 # introduce and observe: the bill's own support refresh scores it). TPL: the
 # template's code. The draft is discarded either way: the bill holds its copy,
@@ -662,9 +694,9 @@ te_tax_ai_build_t6 = {
 #     already (te_tax_ai_bill_hopeless) is withdrawn at once with its reason
 #     (te_tax_ai_withdraw: failure cooldown, ai_withdrawn, ai_no_viable once
 #     per episode). Introduction and withdrawal cost nothing politically.
-#   - Refused (te_tax_can_introduce failed; e.g. every instrument excluded, or
-#     Traditionalism's rule): no bill to withdraw. The failure cooldown, so it
-#     is not retried every month, ai_withdrawn reason=draft for the attempt,
+#   - Refused (te_tax_can_introduce failed; e.g. every instrument excluded):
+#     no bill to withdraw. The failure cooldown, so it is not retried every
+#     month, ai_withdrawn reason=draft for the attempt,
 #     and ai_no_viable reason=draft once per episode, with the same marker.
 # The template code is written first, so the refused lines name the template
 # too; with no bill it goes back to 0 after them.
@@ -672,6 +704,7 @@ te_tax_ai_introduce_and_judge = {
 	if = {
 		limit = { te_tax_code_on = yes }
 		set_variable = { name = te_tax_ai_tpl value = $TPL$ }
+		te_tax_ai_prepare_traditionalist_draft = yes
 		if = {
 			limit = { te_tax_can_introduce = yes }
 			te_tax_cmd_introduce = yes

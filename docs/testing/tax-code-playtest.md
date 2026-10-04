@@ -371,7 +371,18 @@ Imperialism of Promise with a qualifying code; a draft levying wage tax under
 Traditionalism.
 Expect the entries to complete with the counts-as line in their tooltips (rule *off*: the
 vanilla tooltip), and Introduce refused under Traditionalism with its tooltip line.
-Serves S1, S11. Result: ___
+
+For the AI regression, start with a code levying wage tax, dividend tax, then both,
+and enact Traditionalism. With no bill open and an income/expense ratio below
+the AI raise threshold, use `event te_tax_debug.4` to set the deficit streak,
+then `event te_tax_debug.2` to run the AI. Expect `ai_introduced`, with
+the bill showing permanent zero rates for each prohibited tax; support may still
+cause `ai_withdrawn reason=support`, but Traditionalism alone must not cause
+`ai_withdrawn reason=draft`. Also test an emergency (T2's earlier due date) and a
+wage or dividend tax scheduled to commence before the draft is due. With neither
+tax levied in the due month, expect the AI to leave both provisions untouched.
+When a repeal bill passes, verify both enacted rates become zero at commencement.
+Serves S1, S11, S13. Result: ___
 
 ### PT-33 Open both hosts in every state
 
