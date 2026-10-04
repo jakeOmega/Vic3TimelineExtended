@@ -157,7 +157,7 @@ effects. A tier is entered at its floor and left 4 points below it.
 | Contested | 20–45 | ×0.5 | 0.1% | Membership benefits are paid. |
 | Established | 45–70 | ×1 | 0.2% | Countries that could join but stay out become International Pariahs. Each war goal a play's initiator adds costs 2 extra infamy, except in the play a mandate is used in. Peacekeeping requests send full deployments. |
 | Strong (needs Charter Reform I) | 70–85 | ×1.5 | 0.4% | Outsiders also lose trade advantage and leverage. Sanctions become embargoes, condemned countries are Shunned, the surcharge rises to 4, members share intelligence, and nationalist interest groups resent the UN. With the IAEA, members without the bomb are held to disarmament. |
-| Supranational (needs Charter Reform II) | 85+ | ×2.5 | 1% | The surcharge rises to 10, condemned countries are also Restrained, and outsiders of major rank or with a nuclear program carry a standing case of 50. United Earth can be formed. |
+| Supranational (needs Charter Reform II) | 85+ | ×2.5 | 1% | The surcharge rises to 10, condemned countries are also Restrained, and outsiders of major rank or with a nuclear program carry a standing case of 50. Forming United Earth requires this tier. |
 
 From Strong, the surcharge doubles against a country hosting UN peacekeepers,
 your patriotic, jingoist, isolationist and sovereignist interest groups lose

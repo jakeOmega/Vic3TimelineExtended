@@ -305,18 +305,32 @@ une_formation_no_internal_rivalry = {
 	}
 }
 
-# A world government needs a world body that already governs: the United
-# Nations stands at the Supranational tier of UN authority (85+, which only
-# Charter Reform II opens). With the UN game rule off there is no UN to ask,
-# so the gate falls away, as the WW3 one never existed. Also gates
-# dp_unify_united_earth, so a unification play cannot form UNE around it.
-# Reads globals only. Scope: any
-une_formation_un_supranational = {
+# A world government needs a world order already in place. With the UN game
+# rule on, that is the United Nations at the Supranational tier of UN
+# authority (85+, which only Charter Reform II opens). With it off there is no
+# UN to ask, so ROOT must instead be the only great power: great power rank is
+# 75% of the prestige leader's prestige, so no other country has three
+# quarters of ROOT's. Also gates dp_unify_united_earth, so a unification play
+# cannot form UNE around it.
+# Scope: country (ROOT is the candidate or the play's initiator)
+une_formation_world_order = {
 	trigger_if = {
 		limit = { has_game_rule = united_nations_enabled }
 		custom_tooltip = {
 			text = une_formation_un_supranational_tt
 			un_tier_is_supranational = yes
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = une_formation_sole_great_power_tt
+			country_rank >= rank_value:great_power
+			NOT = {
+				any_country = {
+					country_rank >= rank_value:great_power
+					NOT = { this = ROOT }
+				}
+			}
 		}
 	}
 }

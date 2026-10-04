@@ -249,7 +249,7 @@ dp_unify_united_earth = {
 		NOT = { is_country_type = decentralized }
 		has_technology_researched = quantum_communications
 		has_technology_researched = space_colonization
-		une_formation_un_supranational = yes
+		une_formation_world_order = yes
 	}
 
 	on_weekly_pulse = {}

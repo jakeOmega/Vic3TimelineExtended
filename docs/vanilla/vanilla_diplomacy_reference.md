@@ -30,6 +30,8 @@ A non-playable eighth rank, **decentralized nation**, exists for tribal/uncoloni
 
 Rank is **dynamic and computed against global prestige**, not fixed. For each tier the threshold is the higher of (a) some multiplier of the *global average* prestige, or (b) some fraction of the *current highest* prestige (great > major > minor uses progressively smaller multipliers and fractions). Pulling current values requires reading `common/country_ranks/00_country_ranks.txt`.
 
+For great power the fraction is 0.75 of the leader's prestige (`prestige_relative_threshold`), and in practice that is the line that decides the rank. So "the only great power" is a reachable state: no other country has three quarters of the leader's prestige. It is not a fixed number of slots. The mod's United Earth gate uses it (`une_formation_world_order` in `formable_gating_triggers.txt`).
+
 Because the cutoff is relative, the prestige number that bought a great-power slot in 1840 won't necessarily hold it in 1900 — global GDP and population growth lift the curve. Promotion is instantaneous; demotion fires only after a grace period if prestige sits below the rank's threshold.
 
 ### 1.2 Recognition
