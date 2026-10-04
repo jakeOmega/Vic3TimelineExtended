@@ -6,6 +6,7 @@ state or refresh effect: the panel evaluates current country data on demand.
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from pathlib import Path
 import re
 import sys
@@ -107,11 +108,20 @@ LOCALIZATION = {
     "additional_expense": "Other Additional Expenses",
     "no_income": "No positive income this week.",
     "no_expense": "No positive expenses this week.",
-    "pie_tt": "Each color matches a row below. Pies show shares of positive amounts; signed adjustments remain in the list. Weekly headers include those adjustments and exclude Investment Pool Transfer.",
+    "pie_tt": "Each color matches a row below. Collapsed groups form one slice; expanded groups use their visible children. Pies show shares of positive component amounts; signed adjustments remain in the list. Weekly headers include those adjustments and exclude Investment Pool Transfer.",
     "row_tt": "Weekly amount and share of positive amounts. Other Civil Buildings excludes the administration costs allocated to institutions and General Administration. Other Income and Other Expenses reconcile the listed amounts to the public budget totals after excluding Investment Pool Transfer, including temporary flows and uncategorized items.",
     "how": "How the Breakdown Works",
-    "how_text": "#b Administration Allocation#!\\nGovernment Administration produces bureaucracy and tax capacity rather than goods for sale. Its weekly operating deficit is the cost of its wages and input goods, including any slave upkeep. Universities, ports and other civil buildings stay under Other Civil Buildings.\\n\\nThe share allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. Each institution receives that pool in proportion to its current level, including institutions with reduced bureaucracy costs. Targets still being implemented do not count. General Administration receives the remainder, including unused capacity and non-institution bureaucracy use. With no production or no institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration buildings report their latest weekly balance. Allocation is capped at the government's civil wage, goods and slave-upkeep total, so a wage change cannot allocate more than that total.\\n\\n#b Charts and Amounts#!\\nIncome and expense totals exclude Investment Pool Transfer. Construction Goods also excludes that transfer, which funds private construction. Military includes army and navy wages, goods, slave upkeep, warship construction and warship maintenance. Shipping covers supply ships and port connections.\\n\\n#b Journal Systems#!\\nBanking, Covert Actions, Cultural Hegemony, the United Nations and other systems have separate rows. Hover over a row to see its currently applied sources. Their amounts are removed from Additional Expenses or Income once; only the unattributed remainder stays there. One-time treasury payments and non-monetary resource costs are outside the weekly budget.\\n\\nRows are ordered from largest to smallest amount. Category colors stay fixed across the charts and the list. With many institutions the palette repeats; use the names and percentages to identify each category. Signed negative adjustments appear in the list with a zero chart share. Charts are empty when there are no positive amounts.",
+    "how_text": "#b Administration Allocation#!\\nGovernment Administration produces bureaucracy and tax capacity rather than goods for sale. Its weekly operating deficit is the cost of its wages and input goods, including any slave upkeep. Universities, ports and other civil buildings stay under Other Civil Buildings.\\n\\nThe share allocated to institutions is their current bureaucracy use divided by all bureaucracy produced, capped at 100%. Each institution receives that pool in proportion to its current level, including institutions with reduced bureaucracy costs. Targets still being implemented do not count. General Administration receives the remainder, including unused capacity and non-institution bureaucracy use. With no production or no institution levels, all administration costs stay there.\\n\\nThe budget predicts wages while administration buildings report their latest weekly balance. Allocation is capped at the government's civil wage, goods and slave-upkeep total, so a wage change cannot allocate more than that total.\\n\\n#b Charts and Amounts#!\\nIncome and expense totals exclude Investment Pool Transfer. Construction Goods also excludes that transfer, which funds private construction. Military includes army and navy wages, goods, slave upkeep, warship construction and warship maintenance. Shipping covers supply ships and port connections.\\n\\n#b Journal Systems#!\\nBanking, Covert Actions, Cultural Hegemony, the United Nations and other systems have separate rows. Hover over a row to see its currently applied sources. Their amounts are removed from Additional Expenses or Income once; only the unattributed remainder stays there. One-time treasury payments and non-monetary resource costs are outside the weekly budget.\\n\\nGroups start collapsed. Click the arrow to expand Taxes, Administration, Military, Shipping, Programme Costs or diplomatic flows. Army and Navy each expand to Wages and Materials. Rows are ordered from largest to smallest amount within each group. Collapsed groups have one pie slice; expanded groups give their visible parts separate slices. Military wages are derived from each branch’s forecast total minus its goods; Navy Materials also includes warship construction and maintenance. Other Military Costs reconciles remaining military upkeep and forecast differences. Category colors stay fixed across the charts and the list. With many institutions the palette repeats; use the names and percentages to identify each category. Signed negative adjustments appear in the list with a zero chart share. Charts are empty when there are no positive amounts.",
 }
+
+LOCALIZATION.update({
+    "taxes": "Taxes", "administration_group": "Administration", "army": "Army", "navy": "Navy",
+    "wages": "Wages", "materials": "Materials", "military_adjustment": "Other Military Costs",
+    "programmes": "Programme Costs", "diplomacy_income": "Diplomatic Income", "diplomacy_expense": "Diplomatic Payments",
+    "supply_construction": "Supply Ship Construction", "supply_maintenance": "Supply Ship Maintenance", "port_connections": "Port Connections",
+    "expand_tt": "Expand or collapse this breakdown. The pie groups collapsed categories and separates expanded categories into their visible parts.",
+    "group_tt": "This total includes the indented rows below it. Expand to see its components as separate pie slices. Shares count positive component amounts; refunds remain signed, so expansion never changes the denominator. A zero net group can still contain costs and refunds.",
+})
 
 
 def institutions():
@@ -122,11 +132,62 @@ def institutions():
 
 
 def categories(side):
+    """Canonical accounting categories, before presentation grouping."""
     if side == "income":
         return [(key, label) for key, label, _ in INCOME] + [("other", "te_budget_chart_other_income")]
     return [(key, key) for key in institutions()] + [("administration", "te_budget_chart_administration")] + [
         (key, label) for key, label, _ in EXPENSE
     ] + [("other", "te_budget_chart_other_expense")]
+
+
+@dataclass(frozen=True)
+class Node:
+    key: str
+    label: str
+    children: tuple[Node, ...] = ()
+
+
+def tree(side):
+    """Display hierarchy; existing totals remain the reconciliation basis."""
+    leaves = {key: Node(key, label) for key, label in categories(side)}
+    def group(key, label, keys):
+        return Node(key, "te_budget_chart_" + label, tuple(leaves[k] for k in keys))
+    diplomacy = group("diplomacy", "diplomacy_" + side, ("pacts", "treaties"))
+    if side == "income":
+        taxes = group("taxes", "taxes", ("income_tax", "poll_tax", "consumption_tax", "dividends_tax", "tariffs", "war_tax"))
+        grouped = {child.key for parent in (taxes, diplomacy) for child in parent.children}
+        return (taxes, diplomacy, *(node for key, node in leaves.items() if key not in grouped))
+    army = Node("army", "te_budget_chart_army", (Node("army_wages", "te_budget_chart_wages"), Node("army_materials", "te_budget_chart_materials")))
+    navy = Node("navy", "te_budget_chart_navy", (Node("navy_wages", "te_budget_chart_wages"), Node("navy_materials", "te_budget_chart_materials")))
+    military = Node("military", leaves["military"].label, (army, navy, Node("military_adjustment", "te_budget_chart_military_adjustment")))
+    shipping = Node("shipping", leaves["shipping"].label, tuple(Node(key, "te_budget_chart_" + key) for key in ("supply_construction", "supply_maintenance", "port_connections")))
+    administration = group("administration_group", "administration_group", (*institutions(), "administration"))
+    programmes = group("programmes", "programmes", tuple(SOURCES[side]))
+    grouped = {child.key for parent in (administration, programmes, diplomacy) for child in parent.children} | {"military", "shipping"}
+    return (administration, military, shipping, programmes, diplomacy, *(node for key, node in leaves.items() if key not in grouped))
+
+
+def walk(nodes, ancestors=()):
+    for node in nodes:
+        yield node, ancestors
+        yield from walk(node.children, ancestors + (node,))
+
+
+def sibling_sets(side):
+    yield "root", tree(side)
+    for node, _ in walk(tree(side)):
+        if node.children:
+            yield node.key, node.children
+
+
+def flag(side, key):
+    return f"te_budget_{side}_{key}_open"
+
+
+MILITARY_FIELDS = {
+    "army_total": "PredictTotalArmyExpenses", "navy_total": "PredictTotalNavyExpenses",
+    "army_goods": "GetArmyGoodsExpenses", "navy_goods": "GetNavyGoodsExpenses",
+}
 
 
 def sv(name, body):
@@ -146,7 +207,12 @@ def scope(side):
         expr += ".AddScope('administration_actual', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_administration_actual')))"
         expr += ".AddScope('institution_levels', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_institution_levels')))"
         fields = [(f"{key}_{i}", getter) for key, _, getters in EXPENSE for i, getter in enumerate(getters)]
-    return expr + "".join(f".AddScope('{key}', MakeScopeValue(GetPlayer.{getter}))" for key, getter in fields)
+    if side == "expense":
+        fields += list(MILITARY_FIELDS.items())
+    expr += "".join(f".AddScope('{key}', MakeScopeValue(GetPlayer.{getter}))" for key, getter in fields)
+    expr += "".join(f".AddScope('open_{node.key}', MakeScopeValue(Select_CFixedPoint(GetVariableSystem.Exists('{flag(side, node.key)}'), '(CFixedPoint)1', '(CFixedPoint)0')))"
+                    for node, _ in walk(tree(side)) if node.children)
+    return expr
 
 
 def expression(side, name):
@@ -181,25 +247,69 @@ def generated_values():
                     body += "\n" + "\n".join(f"\tsubtract = te_budget_expense_{source}" for source in SOURCES[side])
                 out.append(sv(f"te_budget_expense_{key}", body))
         out.append(sv(f"te_budget_{side}_other", "\tvalue = scope:total\n" + "\n".join(f"\tsubtract = te_budget_{side}_{key}" for key, _ in items[:-1])))
-        # Ranked flow slots let the GUI sort live without writing game state.
-        # Compare cached amounts only; catalogue order deterministically breaks ties.
-        out.append(sv(f"te_budget_{side}_visible_rows", "\tvalue = 0\n" + "\n".join(
-            f"\tif = {{ limit = {{ NOT = {{ scope:row_{key} = 0 }} }} add = 1 }}" for key, _ in items)))
-        for i, (key, _) in enumerate(items):
-            body = "\tvalue = 0"
-            for j, (other, _) in enumerate(items):
-                if key == other:
-                    continue
-                op = ">=" if j < i else ">"
-                body += f"\n\tif = {{ limit = {{ NOT = {{ scope:row_{other} = 0 }} scope:row_{other} {op} scope:row_{key} }} add = 1 }}"
-            out.append(sv(f"te_budget_{side}_{key}_row_rank", body))
+        nodes = list(walk(tree(side)))
+        if side == "expense":
+            extra = {
+                "army_wages": "value = scope:army_total\n\tsubtract = scope:army_goods",
+                "army_materials": "value = scope:army_goods",
+                "navy_wages": "value = scope:navy_total\n\tsubtract = scope:navy_goods",
+                "navy_materials": "value = scope:navy_goods\n\tadd = scope:military_3\n\tadd = scope:military_4",
+                "military_adjustment": "value = te_budget_expense_military\n\tsubtract = te_budget_expense_army\n\tsubtract = te_budget_expense_navy",
+                "supply_construction": "value = scope:shipping_0",
+                "supply_maintenance": "value = scope:shipping_1",
+                "port_connections": "value = scope:shipping_2",
+            }
+            for key, body in extra.items():
+                out.append(sv(f"te_budget_expense_{key}", "\t" + body))
+        existing = {key for key, _ in items}
+        for node, ancestors in nodes:
+            key = node.key
+            if key not in existing and node.children:
+                out.append(sv(f"te_budget_{side}_{key}", "\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{child.key}" for child in node.children)))
+            positive = ("\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{child.key}_positive" for child in node.children)
+                        if node.children else f"\tvalue = te_budget_{side}_{key}\n\tmin = 0")
+            out.append(sv(f"te_budget_{side}_{key}_positive", positive))
+            active = ("\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{child.key}_active" for child in node.children) + "\n\tmax = 1"
+                      if node.children else f"\tvalue = 0\n\tif = {{ limit = {{ NOT = {{ te_budget_{side}_{key} = 0 }} }} value = 1 }}")
+            out.append(sv(f"te_budget_{side}_{key}_active", active))
+            subtree = f"\tvalue = te_budget_{side}_{key}_active"
+            if node.children:
+                subtree += f"\n\tif = {{ limit = {{ scope:open_{key} = 1 }}\n" + "\n".join(f"\t\tadd = te_budget_{side}_{child.key}_subtree_rows" for child in node.children) + "\n\t}"
+            out.append(sv(f"te_budget_{side}_{key}_subtree_rows", subtree))
+            visible = f"\tvalue = te_budget_{side}_{key}_active"
+            if ancestors:
+                visible = "\tvalue = 0\n\tif = { limit = { " + " ".join(f"scope:open_{parent.key} = 1" for parent in ancestors) + f" }} value = te_budget_{side}_{key}_active }}"
+            out.append(sv(f"te_budget_{side}_{key}_visible", visible))
             out.append(sv(f"te_budget_{side}_{key}_cached_rank", f"\tvalue = scope:rank_{key}"))
-        for key, _ in items:
-            out.append(sv(f"te_budget_{side}_{key}_positive", f"\tvalue = te_budget_{side}_{key}\n\tmin = 0"))
-        out.append(sv(f"te_budget_{side}_positive_total", "\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{key}_positive" for key, _ in items)))
-        for i, (key, _) in enumerate(items):
+            out.append(sv(f"te_budget_{side}_{key}_cached_active", f"\tvalue = scope:active_{key}"))
+            limits = [f"scope:open_{parent.key} = 1" for parent in ancestors]
+            if node.children:
+                limits.append(f"scope:open_{key} = 0")
+            body = f"\tvalue = scope:positive_{side}_{key}"
+            if limits:
+                body = "\tvalue = 0\n\tif = {\n\t\tlimit = { " + " ".join(limits) + f" }}\n\t\tvalue = scope:positive_{side}_{key}\n\t}}"
+            out.append(sv(f"te_budget_{side}_{key}_slice", body))
             out.append(sv(f"te_budget_{side}_{key}_share", f"\tvalue = te_budget_{side}_{key}_positive\n\tdivide = {{ value = scope:positive_total min = 0.001 }}\n\tmin = 0\n\tmax = 1"))
-            out.append(sv(f"te_budget_{side}_cum_{i}", "\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{k}_positive" for k, _ in items[:i + 1]) + "\n\tdivide = { value = scope:positive_total min = 0.001 }\n\tmin = 0\n\tmax = 1"))
+        out.append(sv(f"te_budget_{side}_positive_total", "\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{node.key}_positive" for node in tree(side))))
+        out.append(sv(f"te_budget_{side}_root_cached_count", "\tvalue = scope:count_root"))
+        siblings_by_parent = dict(sibling_sets(side))
+        for node, ancestors in nodes:
+            # A flat flow slot list preserves preorder without replicating nested
+            # child lists once per possible parent slot. Count whole preceding
+            # subtrees at each ancestor level, plus the ancestor headers.
+            body = f"\tvalue = {len(ancestors)}"
+            for depth, target in enumerate((*ancestors, node)):
+                siblings = siblings_by_parent[ancestors[depth - 1].key if depth else "root"]
+                index = siblings.index(target)
+                for j, other in enumerate(siblings):
+                    if other == target:
+                        continue
+                    op = ">=" if j < index else ">"
+                    body += f"\n\tif = {{ limit = {{ scope:subtree_{other.key} > 0 scope:row_{other.key} {op} scope:row_{target.key} }} add = scope:subtree_{other.key} }}"
+            out.append(sv(f"te_budget_{side}_{node.key}_display_rank", body))
+        out.append(sv(f"te_budget_{side}_display_count", "\tvalue = 0\n" + "\n".join(f"\tadd = scope:subtree_{node.key}" for node in tree(side))))
+        for i, _ in enumerate(nodes):
+            out.append(sv(f"te_budget_{side}_cum_{i}", "\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{node.key}_slice" for node, _ in nodes[:i + 1]) + "\n\tdivide = { value = scope:positive_total min = 0.001 }\n\tmin = 0\n\tmax = 1"))
     return "\n".join(out)
 
 
@@ -208,45 +318,47 @@ def pie_texture(i):
 
 
 def chart(side):
-    items = categories(side)
-    out = [f"\ttype te_budget_{side}_charts = flowcontainer {{", "\t\tdirection = horizontal", "\t\tspacing = 16", "\t\tparentanchor = hcenter", "\t\twidget = {", "\t\t\tsize = { 176 176 }", '\t\t\ttooltip = "te_budget_chart_pie_tt"', '\t\t\ticon = { size = { 100% 100% } texture = "gfx/interface/backgrounds/round_frame_dec.dds" }', "\t\t\twidget = {", "\t\t\t\tsize = { 75% 75% }", "\t\t\t\tparentanchor = center"]
-    for i in reversed(range(len(items))):
+    nodes = list(walk(tree(side)))
+    out = [f"\ttype te_budget_{side}_charts = flowcontainer {{", "\t\tparentanchor = hcenter", "\t\twidget = {", "\t\t\tsize = { 176 176 }", '\t\t\ttooltip = "te_budget_chart_pie_tt"', '\t\t\ticon = { size = { 100% 100% } texture = "gfx/interface/backgrounds/round_frame_dec.dds" }', "\t\t\twidget = {", "\t\t\t\tsize = { 75% 75% }", "\t\t\t\tparentanchor = center"]
+    for i in reversed(range(len(nodes))):
         out += ["\t\t\t\tprogresspie = {", "\t\t\t\t\tsize = { 100% 100% }", "\t\t\t\t\tmin = 0", "\t\t\t\t\tmax = 1", f'\t\t\t\t\tvalue = "[FixedPointToFloat({expression(side, f"{side}_cum_{i}")})]"', f'\t\t\t\t\ttexture = "{pie_texture(i)}"', "\t\t\t\t\tframesize = { 128 128 }", "\t\t\t\t\tframe = 2", "\t\t\t\t}"]
     out += ["\t\t\t}", "\t\t}", "\t}"]
-    for i, (key, label) in enumerate(items):
-        val = expression(side, f"{side}_{key}")
-        share = expression(side, f"{side}_{key}_share")
-        rank = expression(side, f"{side}_{key}_cached_rank")
-        slot = "TopScope.ScriptValue('te_budget_row_slot')"
+    for i, (node, ancestors) in enumerate(nodes):
+        key, label = node.key, node.label
+        val, share = expression(side, f"{side}_{key}"), expression(side, f"{side}_{key}_share")
+        rank, active = expression(side, f"{side}_{key}_cached_rank"), expression(side, f"{side}_{key}_cached_active")
         tooltip = f"te_budget_chart_{key}_tt" if key.startswith("institution_") else "te_budget_chart_row_tt"
         if key in SOURCES[side]:
             tooltip = f"te_budget_chart_source_{side}_{key}_tt"
-        out += [f"\ttype te_budget_{side}_row_{key} = te_budget_chart_row {{",
-                f'\t\tvisible = "[And(NotEqualTo_CFixedPoint({val}, \'(CFixedPoint)0\'), EqualTo_CFixedPoint({rank}, {slot}))]"',
-                f'\t\ttooltip = "{tooltip}"',
-                f'\t\tblockoverride "swatch" {{ texture = "{pie_texture(i)}" }}',
-                f'\t\tblockoverride "label" {{ text = "{label}" }}',
-                f'\t\tblockoverride "amount" {{ raw_text = "@money![{val}|D]" }}',
-                f'\t\tblockoverride "share" {{ raw_text = "[{share}|%1]" }}', "\t}"]
-    # A visible slot has exactly one visible category row. Normal flow layout
-    # determines its size and position; brace-vector components cannot bind GUI
-    # expressions (the engine parses their tokens as extra numeric components).
-    out += [f"\ttype te_budget_{side}_sorted_slot = flowcontainer {{", "\t\tdirection = vertical",
-            "\t\tignoreinvisible = yes"]
-    out += [f"\t\tte_budget_{side}_row_{key} = {{}}" for key, _ in items]
-    rank_scopes = "TopScope" + "".join(
-        f".AddScope('rank_{key}', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_{key}_row_rank')))"
-        for key, _ in items
-    ) + f".AddScope('visible_rows', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_visible_rows')))"
-    out += ["\t}", f"\ttype te_budget_{side}_legend = flowcontainer {{", "\t\tdirection = vertical",
-            "\t\tflowcontainer = {", "\t\t\tdirection = vertical", "\t\t\tignoreinvisible = yes",
-            "\t\t\tspacing = 2", f'\t\t\tdatacontext = "[{rank_scopes}]"']
-    for i in range(len(items)):
-        out += [f"\t\t\tte_budget_{side}_sorted_slot = {{",
-                f'\t\t\t\tvisible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue(\'te_budget_cached_visible_rows\'), \'(CFixedPoint){i}\')]"',
-                f'\t\t\t\tdatacontext = "[TopScope.AddScope(\'row_slot\', MakeScopeValue(\'(CFixedPoint){i}\'))]"',
-                "\t\t\t}"]
-    out += ["\t\t}", "\t}"]
+        if node.children:
+            tooltip = "te_budget_chart_group_tt"
+        depth = len(ancestors)
+        swatch_alpha = (f' alpha = "[Select_float(GetVariableSystem.Exists(\'{flag(side, key)}\'), \'(float)0\', \'(float)1\')]"'
+                        if node.children else "")
+        out += [f"\ttype te_budget_{side}_row_{key} = flowcontainer {{", "\t\tdirection = vertical", "\t\tignoreinvisible = yes",
+                f'\t\tvisible = "[And(GreaterThan_CFixedPoint({active}, \'(CFixedPoint)0\'), EqualTo_CFixedPoint({rank}, TopScope.ScriptValue(\'te_budget_row_slot\')))]"',
+                "\t\tte_budget_chart_row = {", f'\t\t\ttooltip = "{tooltip}"',
+                f"\t\t\tblockoverride \"indent\" {{ size = {{ {depth * 14} 1 }} }}",
+                f"\t\t\tblockoverride \"label_width\" {{ minimumsize = {{ {271 - depth * 14} 28 }} maximumsize = {{ {271 - depth * 14} -1 }} }}",
+                f'\t\t\tblockoverride "swatch" {{ texture = "{pie_texture(i)}"{swatch_alpha} }}', f'\t\t\tblockoverride "label" {{ text = "{label}" }}',
+                f'\t\t\tblockoverride "amount" {{ raw_text = "@money![{val}|D]" }}', f'\t\t\tblockoverride "share" {{ raw_text = "[{share}|%1]" }}']
+        if node.children:
+            f = flag(side, key)
+            out += ["\t\t\tblockoverride \"toggle\" {", "\t\t\t\tbutton = {", "\t\t\t\t\tsize = { 18 24 }", "\t\t\t\t\tparentanchor = vcenter",
+                    f'\t\t\t\t\tonclick = "[GetVariableSystem.Toggle(\'{f}\')]"', '\t\t\t\t\ttooltip = "te_budget_chart_expand_tt"',
+                    f'\t\t\t\t\tbutton = {{ using = expand_arrow size = {{ 18 18 }} parentanchor = center alwaystransparent = yes visible = "[Not(GetVariableSystem.Exists(\'{f}\'))]" }}',
+                    f'\t\t\t\t\tbutton = {{ using = expand_arrow_expanded size = {{ 18 18 }} parentanchor = center alwaystransparent = yes visible = "[GetVariableSystem.Exists(\'{f}\')]" }}', "\t\t\t\t}", "\t\t\t}"]
+        out += ["\t\t}"]
+        out += ["\t}"]
+    # Flat sorted slots; each row uses a preorder rank that counts preceding
+    # visible subtrees. Expansion never requires nested slot instantiation.
+    out += [f"\ttype te_budget_{side}_slot_root = flowcontainer {{", "\t\tdirection = vertical", "\t\tignoreinvisible = yes"]
+    out += [f"\t\tte_budget_{side}_row_{node.key} = {{}}" for node, _ in nodes]
+    out += ["\t}", f"\ttype te_budget_{side}_list_root = flowcontainer {{", "\t\tdirection = vertical", "\t\tignoreinvisible = yes", "\t\tspacing = 1"]
+    for i in range(len(nodes)):
+        out += [f"\t\tte_budget_{side}_slot_root = {{", f'\t\t\tvisible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue(\'te_budget_{side}_root_cached_count\'), \'(CFixedPoint){i}\')]"',
+                f'\t\t\tdatacontext = "[TopScope.AddScope(\'row_slot\', MakeScopeValue(\'(CFixedPoint){i}\'))]"', "\t\t}"]
+    out += ["\t}"]
     return "\n".join(out)
 
 
@@ -255,35 +367,43 @@ def indent(text, depth=1):
 
 
 def section(side):
-    row_scopes = "TopScope" + "".join(
-        f".AddScope('row_{key}', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_{key}')))"
-        for key, _ in categories(side)
-    )
+    nodes = list(walk(tree(side)))
+    amounts = "TopScope" + "".join(f".AddScope('row_{node.key}', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_{node.key}')))" for node, _ in nodes)
+    subtrees = "TopScope" + "".join(f".AddScope('subtree_{node.key}', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_{node.key}_subtree_rows')))" for node, _ in nodes)
+    cached = "TopScope.AddScope('positive_total', MakeScopeValue(TopScope.ScriptValue('te_budget_" + side + "_positive_total')))"
+    for node, _ in nodes:
+        for dest, suffix in (("rank_" + node.key, "display_rank"), ("active_" + node.key, "visible"), ("positive_" + side + "_" + node.key, "positive")):
+            cached += f".AddScope('{dest}', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_{node.key}_{suffix}')))"
+    cached += f".AddScope('count_root', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_display_count')))"
     plots = f'''flowcontainer = {{
 \tdirection = vertical
-\tspacing = 8
-\tdatacontext = "[TopScope.AddScope('positive_total', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_positive_total')))]"
-\tte_budget_{side}_charts = {{}}
-\tte_budget_{side}_legend = {{ parentanchor = hcenter datacontext = "[{row_scopes}]" }}
-\ttextbox = {{
-\t\tvisible = "[EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_{side}_positive_total'), '(CFixedPoint)0')]"
-\t\ttext = "te_budget_chart_no_{side}"
-\t\tautoresize = yes
-\t\tparentanchor = hcenter
-\t\tusing = fontsize_medium
+\tdatacontext = "[{amounts}]"
+\tflowcontainer = {{
+\t\tdirection = vertical
+\t\tdatacontext = "[{subtrees}]"
+\t\tflowcontainer = {{
+\t\t\tdirection = vertical
+\t\t\tspacing = 4
+\t\t\tdatacontext = "[{cached}]"
+\t\t\tte_budget_{side}_charts = {{}}
+\t\t\tte_budget_{side}_list_root = {{ parentanchor = hcenter }}
+\t\t\ttextbox = {{
+\t\t\t\tvisible = "[EqualTo_CFixedPoint(TopScope.ScriptValue('te_budget_{side}_positive_total'), '(CFixedPoint)0')]"
+\t\t\t\ttext = "te_budget_chart_no_{side}"
+\t\t\t\tautoresize = yes
+\t\t\t\tparentanchor = hcenter
+\t\t\t\tusing = fontsize_medium
+\t\t\t}}
+\t\t}}
 \t}}
 }}'''
     if side == "expense":
-        plots = '''flowcontainer = {
-\tdirection = vertical
-\tspacing = 8
-\tdatacontext = "[TopScope.AddScope('institution_pool', MakeScopeValue(TopScope.ScriptValue('te_budget_institution_pool')))]"
-''' + indent(plots) + "\n}"
+        plots = "flowcontainer = {\n\tdirection = vertical\n\tdatacontext = \"[TopScope.AddScope('institution_pool', MakeScopeValue(TopScope.ScriptValue('te_budget_institution_pool')))]\"\n" + indent(plots) + "\n}"
     return indent(f'''type te_budget_{side}_section = flowcontainer {{
 \tdirection = vertical
-\tspacing = 8
+\tspacing = 4
 \tignoreinvisible = yes
-\t# Intermediate value scopes share the building sum, pool and denominator.
+\t# GUI-local expansion flags, then cached amounts/ranks/positive totals.
 \tdatacontext = "[{scope(side)}]"
 \tdefault_header_2texts = {{
 \t\tblockoverride "size" {{ size = {{ 520 44 }} }}
@@ -295,7 +415,7 @@ def section(side):
 
 
 def generated_gui():
-    return "# AUTO-GENERATED by scripts/generators/gen_budget_breakdown.py; do not edit manually.\n# Pies use catalogue order/colors; lists sort descending by signed amount.\ntypes te_budget_generated_charts {\n" + "\n".join(chart(side) + "\n" + section(side) for side in ("income", "expense")) + "\n}\n"
+    return "# AUTO-GENERATED by scripts/generators/gen_budget_breakdown.py; do not edit manually.\n# Expandable sibling lists sort by amount; pie slices follow the visible frontier.\ntypes te_budget_generated_charts {\n" + "\n".join(chart(side) + "\n" + section(side) for side in ("income", "expense")) + "\n}\n"
 
 
 def generated_source_types():

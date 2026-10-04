@@ -101,24 +101,35 @@ turn a default system off.
 ## Reading the Budget breakdown
 
 The Budget panel's Breakdown tab shows weekly income and expenses as pie charts
-and lists ordered from largest to smallest amount. It is available under every
-game-rule setting.
+and expandable lists. Groups start collapsed; click an arrow to see their
+components. Entries are ordered from largest to smallest amount at each level.
+The tab is available under every game-rule setting.
 Colors and percentages match across the pies and lists; hover an institution
 for its allocation. Investment Pool Transfer and the construction it funds are
 private spending, so they are excluded from the totals and Construction Goods.
 
-Government Administration's operating costs are divided between your institutions
+Taxes groups the individual tax receipts. Military expands into Army and Navy,
+which each expand into Wages and Materials. Navy Materials includes warship
+construction and maintenance. Shipping and diplomatic flows have their own
+expandable groups. A collapsed group occupies one pie slice; expanding it
+replaces that slice with its visible components.
+
+Administration groups your institutions and General Administration. Government
+Administration's operating costs are divided between your institutions
 and General Administration. Institutions receive the share corresponding to the
 bureaucracy they use, then divide it in proportion to their current levels.
 General Administration covers the remainder, including unused capacity. Other
 civil buildings, the military, construction and welfare have their own rows.
 
 Recurring costs from Banking, Covert Actions, Cultural Hegemony, the United
-Nations and other journal systems have separate rows. Hover over one to see its
+Nations and other journal systems appear under Programme Costs. Expand it and
+hover over a system to see its
 current sources and amounts. One-time treasury payments and costs in resources
 such as innovation are outside this weekly money breakdown.
 
-The charts show positive amounts; negative adjustments stay in the list. Open
+The charts show positive component amounts; negative adjustments stay in the
+list. Expanding a group preserves the chart total, including when costs and
+refunds offset each other inside that group. Open
 How the Breakdown Works at the bottom for the accounting details.
 
 ## How the guide is organized

@@ -8,8 +8,6 @@ te_budget_total = { value = scope:total }
 # Ordinal passed by each sorted flow slot; no engine layout vector binding.
 te_budget_row_slot = { value = scope:row_slot }
 
-te_budget_cached_visible_rows = { value = scope:visible_rows }
-
 # Administration produces bureaucracy/tax capacity rather than saleable goods.
 # Its negative weekly profit therefore measures its wages + input goods (and
 # slave upkeep, if any). Do not use ALL government buildings' expenses: that
