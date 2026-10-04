@@ -37,6 +37,7 @@ from urllib.request import urlopen
 
 from mod_state import VANILLA_COMMON_DIRS, ModState, iter_loc_lines
 from paradox_file_parser import ParadoxFileParser
+import path_constants
 from path_constants import (
     base_game_path,
     doc_path,
@@ -2221,6 +2222,11 @@ def _pattern_token(pattern: str) -> str:
 engine_docs_sources: dict = {}  # {key: filesystem path of source .log}
 engine_docs_source_label: str = ""  # "vanilla_snapshot" or "mod_loaded" — which path was read
 _vanilla_snapshot_contamination: list = []  # mod-only script_only modifier names found in the "vanilla" snapshot
+# Why the last _load_engine_docs left docs/engine/ unrendered, as reload
+# warnings ([] when it rendered). A list of its own because the post-load chain
+# resets _post_load_warnings after this runs. Folded into POST /reload
+# `warnings` and shown in /status `vanilla_snapshot`.
+_engine_docs_warnings: list[dict] = []
 pattern_catalog: list[dict] = []  # Loaded from common/_meta/modifier_patterns.yml
 pattern_index: dict = {}          # {pattern_str: {placeholder_value: engine_doc_entry}}
 discovered_patterns: list[dict] = []  # Auto-detected patterns not in catalog
@@ -3098,6 +3104,7 @@ def _reload_engine_only():
     except Exception as e:
         logger.exception("Failed to reload engine docs")
         errors.append(_failure_warning("engine_docs", "mod_state_server._load_engine_docs", e))
+    errors.extend(_engine_docs_warnings)
     # Re-run the validation pass against the existing mod state.
     try:
         _last_validation_report = _validate_engine_coverage()
@@ -3376,6 +3383,73 @@ def _union_mod_custom_localization(engine_docs: dict) -> None:
         )
 
 
+# The engine-doc reference files name the version they were rendered from in
+# their first line: "# Auto-generated from modifiers.log (engine docs 1.14.5)."
+_RENDERED_ENGINE_DOCS_VERSION_RE = re.compile(r"\(engine docs (\d+(?:\.\d+)+)\)")
+
+
+def _rendered_engine_docs_version(engine_dir: str) -> Optional[str]:
+    """The engine-docs version docs/engine/ was last rendered from, read from
+    the modifiers_summary.txt header; None when the file or version is absent."""
+    try:
+        with open(os.path.join(engine_dir, "modifiers_summary.txt"), "r", encoding="utf-8") as f:
+            header = f.readline()
+    except OSError:
+        return None
+    m = _RENDERED_ENGINE_DOCS_VERSION_RE.search(header)
+    return m.group(1) if m else None
+
+
+def _engine_docs_render_blockers(
+    chosen_dir: str, source_label: str, failed_logs: list, engine_dir: str
+) -> list[dict]:
+    """Return a one-entry reload-warning list when the parsed engine docs must
+    not be rendered over docs/engine/, else [].
+
+    render_all rewrites the ~30k committed lines of engine reference from
+    whatever parsed. With a log missing (no game install, or a fresh machine's
+    digest snapshot not cloned yet), that is mod-only content. With a snapshot
+    older than the one the files came from (the digest resolver skips open-beta
+    versions, #332), it is a silent downgrade. Either way the audits that read
+    those files change their verdicts. Rendering from the same or a newer
+    version still goes ahead: the mod's own modifier types are unioned in.
+    """
+    source_version = _version_from_text(chosen_dir)
+    rendered_version = _rendered_engine_docs_version(engine_dir)
+    if failed_logs:
+        reason = (
+            f"engine docs incomplete in {chosen_dir} ({source_label}): "
+            f"{', '.join(failed_logs)} missing, unparseable or empty"
+        )
+    elif (
+        source_version and rendered_version
+        and tuple(map(int, source_version.split(".")))
+        < tuple(map(int, rendered_version.split(".")))
+    ):
+        reason = (
+            f"engine docs in {chosen_dir} ({source_label}) are {source_version}, "
+            f"older than {rendered_version}, the version docs/engine/ was rendered from"
+        )
+    else:
+        return []
+    warning = {
+        "label": "engine_docs_render_skipped",
+        "detail": (
+            f"{reason}, so the docs/engine/ reference files were left as they "
+            "were, not re-rendered. Endpoints serve whatever did parse. Set "
+            "`vanilla_snapshot_docs_path` to a complete script_docs dump of the "
+            "current vanilla version, then reload."
+        ),
+        "source_label": source_label,
+        "source_dir": chosen_dir,
+        "source_version": source_version,
+        "rendered_version": rendered_version,
+    }
+    if failed_logs:
+        warning["missing"] = list(failed_logs)
+    return [warning]
+
+
 def _load_engine_docs():
     """Parse all engine documentation files into structured data.
 
@@ -3386,9 +3460,10 @@ def _load_engine_docs():
       - "unknown" when read from the fallback runtime path (we can't tell)
       - "mod"     after the mod-source-derived union below
     """
-    global engine_docs, engine_docs_sources, engine_docs_source_label
+    global engine_docs, engine_docs_sources, engine_docs_source_label, _engine_docs_warnings
     engine_docs = {}
     engine_docs_sources = {}
+    _engine_docs_warnings = []
 
     chosen_dir, source_label = _engine_docs_source()
     engine_docs_source_label = source_label
@@ -3408,6 +3483,7 @@ def _load_engine_docs():
         "custom-localization": ("custom_localization.log", _parse_custom_localization_log),
     }
 
+    failed_logs: list[str] = []  # missing, unparseable or empty
     for key, (filename, parser_fn) in doc_files.items():
         filepath = os.path.join(chosen_dir, filename)
         if os.path.isfile(filepath):
@@ -3427,6 +3503,13 @@ def _load_engine_docs():
         else:
             logger.warning(f"Engine doc not found: {filepath}")
             engine_docs[key] = []
+        if not engine_docs[key]:
+            failed_logs.append(filename)
+
+    engine_docs_out = os.path.join(doc_path, "engine")
+    _engine_docs_warnings = _engine_docs_render_blockers(
+        chosen_dir, source_label, failed_logs, engine_docs_out
+    )
 
     # Union in mod-declared modifier types. The mod state already parsed these
     # entities; we shape them like engine-doc modifier entries and tag origin=mod.
@@ -3447,23 +3530,26 @@ def _load_engine_docs():
     except Exception as e:
         logger.error(f"Failed to build pattern state: {e}\n{traceback.format_exc()}")
 
-    # Regenerate the engine-doc reference files in docs/engine/
-    try:
-        from engine_docs_render import render_all as _render_engine_docs
-        catalog, index, discovered, vocabs = _build_pattern_data()
-        engine_docs_out = os.path.join(doc_path, "engine")
-        written = _render_engine_docs(
-            engine_docs,
-            engine_docs_out,
-            pattern_catalog=catalog,
-            pattern_index=index,
-            discovered_patterns=discovered,
-            vocabularies=vocabs,
-            source_paths=engine_docs_sources,
-        )
-        logger.info(f"Regenerated {len(written)} engine reference files in {engine_docs_out}")
-    except Exception as e:
-        logger.error(f"Failed to regenerate engine reference docs: {e}\n{traceback.format_exc()}")
+    # Regenerate the engine-doc reference files in docs/engine/, unless the
+    # parse can't reproduce them (_engine_docs_render_blockers).
+    if _engine_docs_warnings:
+        logger.warning(f"[engine-docs WARN] {_engine_docs_warnings[0]['detail']}")
+    else:
+        try:
+            from engine_docs_render import render_all as _render_engine_docs
+            catalog, index, discovered, vocabs = _build_pattern_data()
+            written = _render_engine_docs(
+                engine_docs,
+                engine_docs_out,
+                pattern_catalog=catalog,
+                pattern_index=index,
+                discovered_patterns=discovered,
+                vocabularies=vocabs,
+                source_paths=engine_docs_sources,
+            )
+            logger.info(f"Regenerated {len(written)} engine reference files in {engine_docs_out}")
+        except Exception as e:
+            logger.error(f"Failed to regenerate engine reference docs: {e}\n{traceback.format_exc()}")
 
     # Run §4 validation pass and write the Markdown report.
     global _last_validation_report
@@ -5155,6 +5241,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     # via the shared collector used by POST /validate/registries.
                     warnings = (
                         list(_vanilla_source_warnings)
+                        + list(_engine_docs_warnings)
                         + list(_post_load_warnings)
                         + _collect_registry_warnings()
                     )
@@ -5508,6 +5595,16 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "— it was likely generated with the mod loaded. Re-run "
                 "`script_docs` in pure-vanilla to refresh."
             )
+
+        # docs/engine/ left unrendered by the last engine-docs load. A cold
+        # start records no `last_reload`, so this is where a skip at startup
+        # shows.
+        if _engine_docs_warnings:
+            skipped = _engine_docs_warnings[0]
+            vanilla_block["render_skipped"] = True
+            vanilla_block["render_skipped_reason"] = skipped["detail"]
+            if skipped.get("missing"):
+                vanilla_block["missing_logs"] = skipped["missing"]
 
         # Files ModState skipped because they failed to parse. Empty is the
         # expected state; anything here means that file's entities are missing
@@ -9102,6 +9199,24 @@ def _ensure_modding_digests_fresh() -> None:
         logger.warning(f"[digests] git not invokable: {exc}; continuing")
 
 
+def _refresh_digest_snapshot_path() -> None:
+    """Re-resolve the Modding-Digests engine-docs snapshot after the digests step.
+
+    This module's `from path_constants import` resolved it at import, before
+    _ensure_modding_digests_fresh ran. On a fresh machine's first cold start
+    the checkout didn't exist yet, so it was None and the engine docs fell back
+    to the runtime path. A fast-forward can also add a newer version directory.
+    """
+    global vanilla_snapshot_docs_path_default
+    fresh = path_constants.refresh("vanilla_snapshot_docs_path_default")
+    if fresh != vanilla_snapshot_docs_path_default:
+        logger.info(
+            f"[digests] engine-docs snapshot now resolves to {fresh} "
+            f"(was {vanilla_snapshot_docs_path_default})"
+        )
+    vanilla_snapshot_docs_path_default = fresh
+
+
 # Snapshot of vanilla loc (English), populated on the first full load and
 # reused by /reload?mod_only=true to skip re-reading vanilla .yml files.
 # Refreshed on every full /reload (no flags) so vanilla bumps propagate.
@@ -9260,6 +9375,7 @@ def main():
     atexit.register(_cleanup_pid_file)
 
     _ensure_modding_digests_fresh()
+    _refresh_digest_snapshot_path()
     _load_mod_state()
 
     try:

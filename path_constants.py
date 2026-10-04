@@ -170,6 +170,21 @@ def _lazy(name: str):
     return value
 
 
+def refresh(name: str):
+    """Drop `name`'s cached value and resolve it again.
+
+    For a value that can change while a process runs. mod_state_server
+    re-resolves `vanilla_snapshot_docs_path_default` after its Modding-Digests
+    step: its `from path_constants import` resolved the path before that step
+    ran, so on a fresh machine's first cold start the checkout didn't exist yet
+    and the path came back None. A caller that imported the name by value must
+    rebind it to the returned value."""
+    if name not in _LAZY_SPECS and name not in _LAZY_ALIASES and name not in _LAZY_DERIVED:
+        raise AttributeError(f"{name!r} is not a lazily resolved path constant")
+    globals().pop(name, None)
+    return _lazy(name)
+
+
 def _semver_key(name: str) -> tuple:
     """Sort key for digest version dirs (e.g. '1.13.4' → (1, 13, 4))."""
     parts = []

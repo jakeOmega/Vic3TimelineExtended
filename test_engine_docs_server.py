@@ -3,6 +3,8 @@
   out of the markdown-styled docs (previously these all landed in description).
 - `_engine_docs_find_usage`: filters vanilla `common/` for call-site usages,
   excludes definitions and trigger-localization labels by default.
+- `_load_engine_docs` leaves the committed docs/engine/ files alone when the
+  engine logs are incomplete or older than the ones they were rendered from.
 
 Both are tested by direct module import rather than via the HTTP server (the
 server takes ~90s to warm up; the underlying functions are pure-Python and
@@ -11,6 +13,7 @@ testable in isolation).
 import os
 import tempfile
 import unittest
+from unittest import mock
 
 import mod_state_server as mss
 
@@ -455,6 +458,128 @@ class LocFunctionEndpointTests(unittest.TestCase):
         r = self._call(["loc-functions"], {"min_count": ["1000"], "limit": ["50"]})
         for e in r["entries"]:
             self.assertGreaterEqual(e["count"], 1000)
+
+
+_ENGINE_LOGS = (
+    "effects.log", "triggers.log", "modifiers.log",
+    "event_targets.log", "on_actions.log", "custom_localization.log",
+)
+
+
+def _fake_log_parser(path: str) -> list[dict]:
+    """One entry per non-empty log, none for an empty one."""
+    return [{"name": os.path.basename(path)}] if os.path.getsize(path) else []
+
+
+class EngineDocsRenderGuardTests(unittest.TestCase):
+    """`_load_engine_docs` must not re-render docs/engine/ from missing, empty
+    or older engine logs: in a game-less container that replaced ~30k committed
+    lines with mod-only content, and the audits reading them changed verdicts."""
+
+    COMMITTED = "# Auto-generated from modifiers.log (engine docs 1.14.5). Do not hand-edit.\ncommitted\n"
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.root = tmp.name
+        self.engine_dir = os.path.join(self.root, "docs", "engine")
+        os.makedirs(self.engine_dir)
+        self.summary = os.path.join(self.engine_dir, "modifiers_summary.txt")
+        with open(self.summary, "w", encoding="utf-8") as f:
+            f.write(self.COMMITTED)
+        self.render = mock.Mock(return_value={})
+        self.source = (os.path.join(self.root, "missing"), "mod_loaded")
+        patches = [
+            mock.patch.object(mss, "doc_path", os.path.join(self.root, "docs")),
+            mock.patch.object(mss, "_engine_docs_source", lambda: self.source),
+            mock.patch("engine_docs_render.render_all", self.render),
+            mock.patch("game_log_reader.render_error_log_digest", return_value=""),
+            mock.patch.object(mss, "_build_pattern_data", return_value=([], {}, [], {})),
+            mock.patch.object(mss, "_validate_engine_coverage", return_value={}),
+            mock.patch.object(mss, "_annotate_validation_with_error_log"),
+            mock.patch.object(mss, "_render_engine_coverage_md", return_value=""),
+            # Module state _load_engine_docs rebinds; restored afterwards.
+            mock.patch.object(mss, "engine_docs", {}),
+            mock.patch.object(mss, "engine_docs_sources", {}),
+            mock.patch.object(mss, "engine_docs_source_label", ""),
+            mock.patch.object(mss, "_engine_docs_warnings", []),
+            mock.patch.object(mss, "_last_validation_report", None),
+        ]
+        for name in ("_union_vanilla_modifier_decimals", "_union_mod_modifier_types",
+                     "_union_mod_custom_localization", "_refresh_pattern_state"):
+            patches.append(mock.patch.object(mss, name))
+        for name in ("_parse_effects_triggers_log", "_parse_modifiers_log",
+                     "_parse_event_targets_log", "_parse_on_actions_log",
+                     "_parse_custom_localization_log"):
+            patches.append(mock.patch.object(mss, name, _fake_log_parser))
+        for p in patches:
+            p.start()
+            self.addCleanup(p.stop)
+
+    def _use_logs(self, version_dir: str, *, empty=(), absent=()) -> None:
+        docs = os.path.join(self.root, "digests", version_dir, "docs")
+        os.makedirs(docs)
+        for name in _ENGINE_LOGS:
+            if name in absent:
+                continue
+            with open(os.path.join(docs, name), "w", encoding="utf-8") as f:
+                f.write("" if name in empty else "## entry\n")
+        self.source = (docs, "digest_snapshot")
+
+    def _assert_skipped(self) -> dict:
+        self.render.assert_not_called()
+        with open(self.summary, encoding="utf-8") as f:
+            self.assertEqual(f.read(), self.COMMITTED)
+        self.assertEqual(len(mss._engine_docs_warnings), 1)
+        warning = mss._engine_docs_warnings[0]
+        self.assertEqual(warning["label"], "engine_docs_render_skipped")
+        self.assertIn("not re-rendered", warning["detail"])
+        return warning
+
+    def test_no_engine_logs_skips_render(self):
+        mss._load_engine_docs()
+        warning = self._assert_skipped()
+        self.assertEqual(warning["missing"], list(_ENGINE_LOGS))
+        self.assertEqual(warning["source_label"], "mod_loaded")
+
+    def test_one_missing_log_skips_render(self):
+        self._use_logs("1.14.5", absent=("on_actions.log",))
+        mss._load_engine_docs()
+        self.assertEqual(self._assert_skipped()["missing"], ["on_actions.log"])
+
+    def test_empty_log_skips_render(self):
+        self._use_logs("1.14.5", empty=("custom_localization.log",))
+        mss._load_engine_docs()
+        self.assertEqual(self._assert_skipped()["missing"], ["custom_localization.log"])
+
+    def test_older_snapshot_than_rendered_skips_render(self):
+        self._use_logs("1.13.11")
+        mss._load_engine_docs()
+        warning = self._assert_skipped()
+        self.assertNotIn("missing", warning)
+        self.assertEqual(warning["source_version"], "1.13.11")
+        self.assertEqual(warning["rendered_version"], "1.14.5")
+
+    def test_complete_logs_render(self):
+        for version in ("1.14.5", "1.14.10"):
+            with self.subTest(version=version):
+                self.render.reset_mock()
+                self._use_logs(version)
+                mss._load_engine_docs()
+                self.render.assert_called_once()
+                self.assertEqual(mss._engine_docs_warnings, [])
+
+    def test_complete_logs_render_without_a_rendered_version(self):
+        os.remove(self.summary)
+        self._use_logs("1.13.11")
+        mss._load_engine_docs()
+        self.render.assert_called_once()
+
+    def test_engine_only_reload_reports_the_skip(self):
+        warnings = mss._reload_engine_only()
+        self.assertEqual(
+            [w["label"] for w in warnings], ["engine_docs_render_skipped"]
+        )
 
 
 if __name__ == "__main__":
