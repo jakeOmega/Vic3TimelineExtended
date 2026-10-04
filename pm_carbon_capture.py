@@ -210,8 +210,7 @@ def plan_outputs(state, root):
                     methods.append(f"\tdisallowing_laws = {{ {MANDATE} }}")
                 methods.extend(["\tstate_modifiers = {", "\t\tworkforce_scaled = {",
                                 f"\t\t\t{emissions.STATE_MODIFIER} = -{cut_text}", "\t\t}", "\t}",
-                                "\tbuilding_modifiers = {", "\t\tworkforce_scaled = {",
-                                f"\t\t\t{emissions.MODIFIER} = -{cut_text}"])
+                                "\tbuilding_modifiers = {", "\t\tworkforce_scaled = {"])
                 for key, value in operating_costs((coal, oil), fraction, concentrated, power).items():
                     methods.append(f"\t\t\t{key} = {value}")
                 methods.extend(["\t\t}", "\t}", "}", ""])
