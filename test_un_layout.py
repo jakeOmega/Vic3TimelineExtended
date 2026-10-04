@@ -96,7 +96,7 @@ class SessionStripTest(unittest.TestCase):
     def test_every_topic_has_an_icon(self):
         codes = {int(n) for n in re.findall(
             r"ScriptValue\('un_disp_res_topic_code'\), '\(CFixedPoint\)(\d+)'", _read(LAYOUT))}
-        self.assertEqual(codes, set(range(29)))
+        self.assertEqual(codes, set(range(30)))
 
 AUTHORITY = os.path.join(W, "un_authority_widget.gui")
 PILLARS = ("participation", "commitment", "credibility", "funding", "order", "delivery")
@@ -233,7 +233,7 @@ CHAMBER_SGUIS = os.path.join(REPO, "common", "scripted_guis", "un_chamber_sguis.
 NAMED_TARGETS = ("condemn", "sanctions", "expulsion", "mandate", "refugee")
 UNNAMED_CASES = ("peacekeepers", "aid", "decolonization")
 CONVENTIONS = ("human_rights", "icc", "npt", "climate", "pandemic", "refugee", "heritage",
-               "decolonization", "space", "law_of_sea", "physical_protection")
+               "decolonization", "space", "law_of_sea", "physical_protection", "narcotics")
 
 
 def _block(text, name):
@@ -359,6 +359,7 @@ MEMBER_MODIFIERS = {   # convention -> (member modifier, where it sits); test_un
     "space": ("un_space_partnership_modifier", "je"),
     "law_of_sea": ("un_law_of_sea_modifier", "country"),
     "physical_protection": ("un_physical_protection_modifier", "country"),
+    "narcotics": ("un_narcotics_control_modifier", "country"),
 }
 TERMS = {   # convention -> its regime terms, in display order
     "human_rights": ("un_regime_rights_violator_modifier",),
@@ -613,7 +614,7 @@ class TabUnlockTooltipTest(unittest.TestCase):
 
 
 CONV_KEYS = ("human_rights", "icc", "npt", "climate", "pandemic", "refugee", "heritage", "decolonization",
-             "space", "law_of_sea", "physical_protection")
+             "space", "law_of_sea", "physical_protection", "narcotics")
 REGIME_TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "un_regime_triggers.txt")
 
 

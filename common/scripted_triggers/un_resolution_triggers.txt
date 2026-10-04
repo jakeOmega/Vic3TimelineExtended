@@ -211,6 +211,7 @@ un_resolution_is_convention = {
 		has_tag = un_topic_space
 		has_tag = un_topic_law_of_sea
 		has_tag = un_topic_physical_protection
+		has_tag = un_topic_narcotics
 		has_tag = un_topic_cultural_diversity
 		has_tag = un_topic_nuclear_ban
 		AND = {

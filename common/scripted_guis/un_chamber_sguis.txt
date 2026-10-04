@@ -1230,7 +1230,7 @@ un_chamber_vote_sgui = {
 #   op 5   request humanitarian aid
 #   op 6   charter reform (redesign phase 2)
 #
-#   The thirteen conventions, which the docket also raises (no scripted button):
+#   The fourteen conventions, which the docket also raises (no scripted button):
 #   op 7   Universal Declaration of Human Rights
 #   op 8   International Criminal Court
 #   op 9   Nuclear Non-Proliferation Treaty
@@ -1260,7 +1260,7 @@ un_chamber_vote_sgui = {
 # every effect is shared through common/scripted_triggers/un_propose_triggers.txt
 # and common/scripted_effects/un_propose_effects.txt: ops 0-6 and 20-28 with
 # the journal-entry buttons, so a human proposing here and an AI proposing
-# through the button grid run identical script; ops 7-19 with the docket's
+# through the button grid run identical script; ops 7-19 and 29 with the docket's
 # proposer events, which call the same un_propose_<key>_table the Propose
 # control does.
 #
@@ -1423,6 +1423,14 @@ un_chamber_propose_sgui = {
 				un_propose_physical_protection_available = yes
 			}
 			un_propose_physical_protection_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_narcotics
+				un_propose_narcotics_available = yes
+			}
+			un_propose_narcotics_possible = yes
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 18 }
@@ -1591,6 +1599,10 @@ un_chamber_propose_sgui = {
 			un_propose_physical_protection_effect = yes
 		}
 		else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			un_propose_narcotics_effect = yes
+		}
+		else_if = {
 			limit = { exists = scope:op scope:op = 18 }
 			un_propose_cultural_diversity_effect = yes
 		}
@@ -1727,6 +1739,10 @@ un_chamber_propose_row_sgui = {
 				un_chamber_propose_physical_protection_row = yes
 			}
 			else_if = {
+				limit = { exists = scope:op scope:op = 29 }
+				un_chamber_propose_narcotics_row = yes
+			}
+			else_if = {
 				limit = { exists = scope:op scope:op = 18 }
 				un_chamber_propose_cultural_diversity_row = yes
 			}
@@ -1843,7 +1859,7 @@ un_chamber_propose_intro_sgui = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			custom_tooltip_no_bullet = je_un_chamber_propose_intro
 			# A held floor greys every row's button; it is said here, once,
-			# rather than on each of the twenty-nine rows.
+			# rather than on each of the thirty rows.
 			if = {
 				limit = {
 					has_global_variable = un_vote_active

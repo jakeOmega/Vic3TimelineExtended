@@ -111,6 +111,10 @@ un_chamber_topic_line = {
 		custom_tooltip_no_bullet = je_un_chamber_topic_physical_protection
 	}
 	else_if = {
+		limit = { has_tag = un_topic_narcotics }
+		custom_tooltip_no_bullet = je_un_chamber_topic_narcotics
+	}
+	else_if = {
 		limit = { has_tag = un_topic_icc }
 		custom_tooltip_no_bullet = je_un_chamber_topic_icc
 	}
@@ -468,6 +472,10 @@ un_chamber_consequences_line = {
 	else_if = {
 		limit = { has_tag = un_topic_physical_protection }
 		custom_tooltip_no_bullet = je_un_chamber_conseq_physical_protection
+	}
+	else_if = {
+		limit = { has_tag = un_topic_narcotics }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_narcotics
 	}
 	else_if = {
 		limit = { has_tag = un_topic_icc }
@@ -1481,7 +1489,7 @@ un_chamber_propose_referendum_row = {
 	}
 }
 
-# The thirteen conventions and declarations (ops 7-19). The docket raises them for
+# The fourteen conventions and declarations (ops 7-19 and 29). The docket raises them for
 # everyone (redesign phase 4, un_docket_effects.txt), and a member may table
 # one on its own motion. Each row says what the topic is, whether it binds,
 # its passage rule (when the docket raises it anyway is on hover over the
@@ -2247,6 +2255,7 @@ un_chamber_regime_lines = {
 	un_chamber_convention_line_country = { MODIFIER = un_law_of_sea_modifier LINE = je_un_chamber_conv_law_of_sea }
 	un_chamber_regime_line = { MODIFIER = un_regime_naval_curb_modifier LINE = je_un_chamber_regime_naval_curb }
 	un_chamber_convention_line_country = { MODIFIER = un_physical_protection_modifier LINE = je_un_chamber_conv_physical_protection }
+	un_chamber_convention_line_country = { MODIFIER = un_narcotics_control_modifier LINE = je_un_chamber_conv_narcotics }
 	un_chamber_convention_line_country = { MODIFIER = un_cultural_diversity_modifier LINE = je_un_chamber_conv_cultural_diversity }
 	un_chamber_regime_line = { MODIFIER = un_regime_cultural_hegemon_modifier LINE = je_un_chamber_regime_cultural_hegemon }
 	un_chamber_convention_line_country = { MODIFIER = un_nuclear_ban_modifier LINE = je_un_chamber_conv_nuclear_ban }
@@ -2750,5 +2759,16 @@ un_chamber_deleg_firm_list = {
 				custom_tooltip = je_un_chamber_deleg_firm_against_entry
 			}
 		}
+	}
+}
+
+un_chamber_propose_narcotics_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_narcotics
+		TOPIC = narcotics
+		BINDING = je_un_chamber_recommendatory
+		IN_FORCE = un_propose_narcotics_in_force
+		AVAILABLE = un_propose_narcotics_available
+		NO_CASE = je_un_chamber_topic_in_force
 	}
 }

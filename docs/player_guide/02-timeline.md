@@ -285,6 +285,12 @@ with opium plantations. The building comes with the base game's Pharmaceuticals
 technology and costs 800 construction per level, four times as much as a
 plantation. You can't build it while your country bans Drugs.
 
+Once a UN member researches Antibiotic Mass Production, the Assembly can raise
+the [Single Convention on Narcotic Drugs](09-united-nations.md#un-conventions-and-agencies).
+At ×1 UN enforcement, parties gain 5% Pharmaceutical Industries throughput and
+3% prestige, while their Opium Plantations lose 15% throughput. These terms
+scale with UN enforcement.
+
 | Method | Unlocked by | Drugs per level | Inputs per level |
 |---|---|---|---|
 | Alkaloid Extraction | Pharmaceuticals | 30 | 15 Chemicals, 10 Glass and Plastics, 10 Sugar |

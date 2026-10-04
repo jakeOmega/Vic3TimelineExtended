@@ -603,6 +603,7 @@ un_disp_res_topic_code = {
 	if = { limit = { un_session_topic_is = { TOPIC = space } } value = 15 }
 	if = { limit = { un_session_topic_is = { TOPIC = law_of_sea } } value = 16 }
 	if = { limit = { un_session_topic_is = { TOPIC = physical_protection } } value = 17 }
+	if = { limit = { un_session_topic_is = { TOPIC = narcotics } } value = 29 }
 	if = { limit = { un_session_topic_is = { TOPIC = cultural_diversity } } value = 18 }
 	if = { limit = { un_session_topic_is = { TOPIC = nuclear_ban } } value = 19 }
 	if = { limit = { un_session_topic_is = { TOPIC = court_referral } } value = 20 }
@@ -614,4 +615,9 @@ un_disp_res_topic_code = {
 	if = { limit = { un_session_topic_is = { TOPIC = ceasefire } } value = 26 }
 	if = { limit = { un_session_topic_is = { TOPIC = development_fund } } value = 27 }
 	if = { limit = { un_session_topic_is = { TOPIC = referendum } } value = 28 }
+}
+
+un_disp_agency_incb = {
+	value = 0
+	if = { limit = { has_global_variable = un_agency_incb } value = 1 }
 }

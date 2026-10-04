@@ -129,6 +129,10 @@ un_vote.1 = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_physical_protection } }
 			}
 			triggered_desc = {
+				desc = un_vote.1.t_narcotics
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_narcotics } }
+			}
+			triggered_desc = {
 				desc = un_vote.1.t_icc
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 			}
@@ -272,6 +276,10 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.d_physical_protection
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_physical_protection } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_narcotics
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_narcotics } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_icc
@@ -762,10 +770,18 @@ un_vote.2 = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_physical_protection has_tag = un_res_passed } }
 				desc = un_vote.2.d_physical_protection_passed
 			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_narcotics has_tag = un_res_passed } }
+				desc = un_vote.2.d_narcotics_passed
+			}
 			# Physical Protection of Nuclear Material - Failed
 			triggered_desc = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_physical_protection } }
 				desc = un_vote.2.d_physical_protection_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_narcotics } }
+				desc = un_vote.2.d_narcotics_failed
 			}
 			# International Criminal Court - Passed (vetoed: symbolic censure only)
 			triggered_desc = {
@@ -1664,6 +1680,12 @@ un_vote.2 = {
 				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				set_global_variable = un_agency_cppnm
 			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_narcotics } }
+				custom_tooltip = un_vote_narcotics_passed_tt
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				set_global_variable = un_agency_incb
+			}
 
 			# ---- Convention on Cultural Diversity (redesign phase 7, §0.12
 			#      item 5): parties' minorities assimilate and lose their
@@ -2212,6 +2234,15 @@ un_vote.3 = {
 					}
 				}
 				add = 25
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_narcotics }
+					ig:ig_landowners ?= {
+						is_powerful = yes
+					}
+				}
+				add = 20
 			}
 			# The nuclear ban: an armed power will not ratify its own disarmament
 			modifier = {
