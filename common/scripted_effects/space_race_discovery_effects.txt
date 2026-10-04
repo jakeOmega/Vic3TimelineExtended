@@ -1,0 +1,114 @@
+﻿# Rare colony discoveries. Country scope; flags are rolled once at the actual
+# claim, before the founding event, independently of the specialization chosen.
+# Existing colonies are not retroactively seeded. Game odds are not scientific
+# estimates. The survey and spacing clocks expire in calendar days.
+sr_seed_colony_discovery = {
+	if = {
+		limit = { NOT = { has_variable = sr_discovery_$DISCOVERY$_rolled } }
+		set_variable = { name = sr_discovery_$DISCOVERY$_rolled value = yes }
+		random = {
+			chance = 10
+			set_variable = { name = sr_discovery_$DISCOVERY$_pending value = yes }
+			set_variable = { name = sr_discovery_$DISCOVERY$_survey value = yes days = 365 }
+		}
+	}
+}
+
+sr_roll_colony_discovery = {
+	if = {
+		limit = {
+			has_variable = sr_discovery_$DISCOVERY$_pending
+			NOT = { has_variable = sr_discovery_$DISCOVERY$_done }
+			NOT = { has_variable = sr_discovery_$DISCOVERY$_survey }
+			NOT = { has_variable = sr_discovery_cooldown }
+		}
+		random = {
+			chance = $CHANCE$
+			# Reserve the spacing clock before dispatch, so another candidate
+			# cannot queue a second discovery in this monthly pulse.
+			set_variable = { name = sr_discovery_cooldown value = yes days = 180 }
+			trigger_event = { id = $EVENT$ }
+		}
+	}
+}
+
+sr_finish_colony_discovery = {
+	remove_variable = sr_discovery_$DISCOVERY$_pending
+	set_variable = { name = sr_discovery_$DISCOVERY$_done value = yes }
+}
+
+# Colony surveys continue in passive mode and after all sites are claimed.
+# No rank or AI race-participation gate: these are activities of existing colonies.
+sr_monthly_colony_discoveries = {
+	if = {
+		limit = {
+			has_game_rule = space_race_enabled
+			sr_has_space_colony = yes
+			NOT = { has_variable = sr_discovery_cooldown }
+		}
+		sr_roll_colony_discovery = { DISCOVERY = europa_life EVENT = space_race_discovery_events.1 CHANCE = 1 }
+		sr_roll_colony_discovery = { DISCOVERY = europa_vents EVENT = space_race_discovery_events.2 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = enceladus_life EVENT = space_race_discovery_events.3 CHANCE = 1 }
+		sr_roll_colony_discovery = { DISCOVERY = titan_chemistry EVENT = space_race_discovery_events.4 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = hellas_fossils EVENT = space_race_discovery_events.5 CHANCE = 1 }
+		sr_roll_colony_discovery = { DISCOVERY = olympus_tubes EVENT = space_race_discovery_events.6 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = utopia_glacier EVENT = space_race_discovery_events.7 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = arcadia_brines EVENT = space_race_discovery_events.8 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = ceres_reservoir EVENT = space_race_discovery_events.9 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = vesta_impactor EVENT = space_race_discovery_events.10 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = psyche_metal EVENT = space_race_discovery_events.11 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = pallas_water EVENT = space_race_discovery_events.12 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = venus_waves EVENT = space_race_discovery_events.13 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = mercury_archive EVENT = space_race_discovery_events.14 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = io_roof EVENT = space_race_discovery_events.15 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = ganymede_layers EVENT = space_race_discovery_events.16 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = callisto_archive EVENT = space_race_discovery_events.17 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = titania_ocean EVENT = space_race_discovery_events.18 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = triton_jet EVENT = space_race_discovery_events.19 CHANCE = 2 }
+		sr_roll_colony_discovery = { DISCOVERY = pluto_antifreeze EVENT = space_race_discovery_events.20 CHANCE = 2 }
+	}
+}
+
+# Permanent choices use the existing colony reward ledger and revolution repair.
+sr_sync_colony_discovery_modifiers = {
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_europa_life_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_europa_life_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_europa_vents_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_europa_vents_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_enceladus_life_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_enceladus_life_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_titan_chemistry_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_titan_chemistry_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_hellas_fossils_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_hellas_fossils_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_olympus_tubes_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_olympus_tubes_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_utopia_glacier_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_utopia_glacier_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_arcadia_brines_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_arcadia_brines_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_ceres_reservoir_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_ceres_reservoir_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_vesta_impactor_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_vesta_impactor_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_psyche_metal_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_psyche_metal_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_pallas_water_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_pallas_water_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_venus_waves_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_venus_waves_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_mercury_archive_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_mercury_archive_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_io_roof_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_io_roof_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_ganymede_layers_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_ganymede_layers_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_callisto_archive_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_callisto_archive_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_titania_ocean_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_titania_ocean_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_triton_jet_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_triton_jet_b }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_pluto_antifreeze_a }
+	sr_sync_colony_modifier_base = { MODIFIER = sr_discovery_pluto_antifreeze_b }
+}

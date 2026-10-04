@@ -358,6 +358,28 @@ whoever took the last world and whether or not its program is running.
 Finishing grants Interplanetary Trade Networks: +10% prestige, +5% research
 speed, +10% influence and +15% cultural pull.
 
+### Rare colony discoveries
+
+New colonies can also produce rare discoveries after their founding event.
+Twenty discoveries cover microbial life in Europa's or Enceladus's oceans,
+confirmed ancient Martian fossils, buried ice, mineral deposits, ocean
+layers, atmospheric waves and local geological hazards. Each discovery offers
+two choices with different small permanent bonuses on the colony journal entry.
+
+Each candidate has a hidden 10% chance of being possible when its colony is
+founded. A successful founding roll starts a year of surveying. After that,
+the discovery has a 1% monthly chance for biological finds or 2% for other finds.
+A country can receive at most one discovery every six months. Each discovery
+occurs once, and other possible finds wait through that spacing period.
+Surveys continue while colonization is idle and after all worlds are claimed.
+Colonies founded in an older save receive no new founding rolls.
+
+Each event reports a confirmed discovery by an established colony. The
+biological finds include living microbes and ancient microbial fossils; other
+finds establish geological features or chemical processes. Their probabilities
+are game rules, not estimates of how likely those discoveries are in the real
+solar system.
+
 ## After the space race
 
 The race is over for you once you have finished all seven single-goal
