@@ -109,9 +109,11 @@ for its allocation. Investment Pool Transfer and the construction it funds are
 private spending, so they are excluded from the totals and Construction Goods.
 
 Taxes groups the individual tax receipts. Military expands into Army and Navy,
-which each expand into Wages and Materials. Navy Materials includes warship
-construction and maintenance. Shipping and diplomatic flows have their own
-expandable groups. A collapsed group occupies one pie slice; expanding it
+which each expand into Wages plus Materials and Support. Materials and Support
+includes logistics centres and naval fortifications, whose operating costs
+combine wages, goods and any slave upkeep. Existing branch costs are subtracted
+first to avoid double counting. Navy also includes warship construction and
+maintenance. Shipping and diplomatic flows have their own expandable groups. A collapsed group occupies one pie slice; expanding it
 replaces that slice with its visible components.
 
 Administration groups your institutions and General Administration. Government

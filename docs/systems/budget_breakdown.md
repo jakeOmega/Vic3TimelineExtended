@@ -19,15 +19,28 @@ Income groups Taxes (including war-profit tax receipts) and Diplomatic Income.
 Expenses group Administration (institutions plus General Administration),
 Military, Shipping and Connections, Programme Costs and Diplomatic Payments.
 Military expands into Army, Navy and Other Military Costs; Army and Navy each
-expand again into Wages and Materials. Shipping separates supply-ship
-construction, maintenance and port connections. Every original accounting
+expand again into Wages plus Materials and Support. Shipping separates
+supply-ship construction, maintenance and port connections. Every original accounting
 category occurs exactly once in the tree, except Military and Shipping whose
 existing totals are subdivided into new leaves.
 
 Branch wages are the engine's predicted branch total minus its goods expense.
-Navy Materials adds warship construction and maintenance to navy goods.
-Other Military Costs reconciles the original military total against Army plus
-Navy, retaining slave upkeep and any forecast differences as a signed remainder.
+The native branch getters can omit logistics centres and naval fortification
+upkeep even though the main military goods total includes them. Read each
+branch's full operating deficit once using `every_scope_building` over its
+building groups, including conscription, logistics, naval administration and
+fortifications. Private arms factories and government civil buildings do not
+enter either sum. Nonnegative profits contribute no operating cost.
+
+Materials and Support = native branch goods + max(branch operating deficit −
+native predicted branch total, 0). This retains existing native costs and adds
+only operating costs not already covered by the native branch forecast. Navy
+also adds warship construction and maintenance. Support combines goods, wages
+and any slave upkeep, because scripts cannot read these components separately;
+the label and tooltip deliberately identify the combined amount. A declining
+operating balance never subtracts existing forecast costs. Weekly building
+balances can differ from wage predictions, so Other Military Costs remains a
+signed reconciliation of the original military total against Army plus Navy.
 The original military total and both public headers retain their prior formulas.
 
 A collapsed group contributes one slice; expanding it replaces that slice with
@@ -103,8 +116,8 @@ rules are in `common/script_values/te_budget_values.txt`; the panel layout is in
 `gui/te_budget_breakdown.gui`.
 
 Each section binds the engine getters into a `TopScope`. The administration
-building sum, total institution levels, allocated pool and positive chart total
-are passed as value scopes before the charts are drawn, so nested cumulative
+building sum, military branch operating deficits, total institution levels,
+allocated pool and positive chart total are passed as value scopes before the charts are drawn, so nested cumulative
 values do not scan buildings or repeatedly recalculate the whole denominator.
 There are no effects, saved variables, pulse hooks or journal-entry dependencies.
 
@@ -134,8 +147,8 @@ repeats with many institutions, so category names and percentages remain visible
 `test_budget_breakdown.py` executes the actual script values in a strict offline
 harness: the requested example, shortages, zero production, absent and zero-level
 institutions, current-level changes, reduced civil wages, negative adjustments,
-tied row amounts, zero rows, category reconciliation, military branch accounting,
-every combination of expansion flags, sorted preorder ranks, zero-net groups,
+tied row amounts, zero rows, category reconciliation, military branch accounting
+and modern support buildings, every combination of expansion flags, sorted preorder ranks, zero-net groups,
 cumulative pie layers and private-spending exclusion. GUI lint and reference audits cover local names, localization, braces and textures.
 Source tests also verify separate simultaneous JE charges, signed banking
 offsets, exact mirror coefficients, complete attribution of the mod's recurring
@@ -164,7 +177,12 @@ Engine rendering and accounting still require an in-game check:
    child expansion state on reopening. Confirm totals and denominators stay
    unchanged, including an offsetting Programme Costs refund. Check arrows,
    indentation, wrapped labels and frame time with Administration expanded.
-7. Apply Banking and Covert Actions charges together. Check their rows and source
+7. Compare modern military upkeep against Overview's building-type tooltip.
+   Army logistics must appear in Army's Materials and Support; naval logistics
+   and fortifications must appear in Navy's. Check an empty branch, conscription,
+   a wage change and slave upkeep. Confirm branch forecasts already covering a
+   building are not added twice, and public totals remain unchanged.
+8. Apply Banking and Covert Actions charges together. Check their rows and source
    tooltips against Additional Expenses, including JE-owned modifiers, decaying
    charges, refunds and removal. On an existing save, verify modifier-definition
    changes are picked up; otherwise let the owning system refresh its modifier.

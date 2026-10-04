@@ -1913,6 +1913,7 @@ te_budget_expense_army_wages = {
 
 te_budget_expense_army_materials = {
 	value = scope:army_goods
+	add = { value = scope:army_operating_actual subtract = scope:army_total min = 0 }
 }
 
 te_budget_expense_navy_wages = {
@@ -1922,6 +1923,7 @@ te_budget_expense_navy_wages = {
 
 te_budget_expense_navy_materials = {
 	value = scope:navy_goods
+	add = { value = scope:navy_operating_actual subtract = scope:navy_total min = 0 }
 	add = scope:military_3
 	add = scope:military_4
 }

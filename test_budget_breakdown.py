@@ -3,6 +3,7 @@
 This verifies math and wiring, not the game's GUI renderer or weekly_profit
 accounting. See docs/systems/budget_breakdown.md for the in-game checks.
 """
+import json
 from decimal import Decimal
 from itertools import product
 from pathlib import Path
@@ -17,7 +18,7 @@ ROOT = Path(__file__).resolve().parent
 
 
 class BudgetHarness:
-    def __init__(self, *, levels=None, production=2800, usage=1400, administration=39000, civil=50000, total=70000, private_construction=0, charges=None, military_fields=None):
+    def __init__(self, *, levels=None, production=2800, usage=1400, administration=39000, civil=50000, total=70000, private_construction=0, charges=None, military_fields=None, military_buildings=()):
         parser = ParadoxFileParser()
         self.values = {}
         for name in ("te_budget_values.txt", "te_budget_generated_values.txt"):
@@ -25,6 +26,7 @@ class BudgetHarness:
             self.values.update({key: val for key, _, val in entries(parser.parse_object(parser.tokenize("{" + text + "}"))[0])})
         self.levels = levels if levels is not None else {"institution_schools": 3, "institution_national_bank": 2}
         self.production = Decimal(production)
+        self.building_definitions = json.loads((ROOT / "vanilla_parsed/common/buildings.json").read_text())
         self.scopes = {"total": Decimal(total), "institution_usage": Decimal(usage), "private_construction": Decimal(private_construction)}
         for key, _, getters in gen.EXPENSE:
             self.scopes.update({f"{key}_{i}": Decimal(0) for i in range(len(getters))})
@@ -35,10 +37,13 @@ class BudgetHarness:
         self.scopes["civil_0"] = Decimal(civil)
         for key, value in (charges or {}).items():
             self.scopes[f"{key}_0"] = Decimal(value)
-        self.buildings = [("building_government_administration", -Decimal(administration)), ("building_university", Decimal(-11000))]
+        self.buildings = [("building_government_administration", -Decimal(administration)), ("building_university", Decimal(-11000)),
+                          *((key, -Decimal(cost)) for key, cost in military_buildings)]
         self.scopes["administration_actual"] = self("administration_actual")
         self.scopes["institution_levels"] = self("institution_levels")
         self.scopes["institution_pool"] = self("institution_pool")
+        for branch in ("army", "navy"):
+            self.scopes[branch + "_operating_actual"] = self(branch + "_operating_actual")
         self.scopes["positive_total"] = self("expense_positive_total")
 
     def __call__(self, name):
@@ -70,6 +75,10 @@ class BudgetHarness:
                 results.append(value in self.levels)
             elif key == "is_building_type":
                 results.append(context[0] == value)
+            elif key == "is_building_group":
+                results.append(self.building_definitions[context[0]][1]["building_group"][1] == value)
+            elif key == "OR":
+                results.append(any(self.limit({k: [op, v]}, context) for k, op, v in entries(value)))
             elif key == "NOT":
                 results.append(not self.limit(value, context))
             else:
@@ -232,6 +241,52 @@ class BudgetAllocationTests(unittest.TestCase):
             self.assertEqual(h("expense_" + key), expected)
         self.assertEqual(h("expense_other"), 0)
 
+    def test_logistics_and_fortifications_belong_to_branch_support_not_other(self):
+        # Modern branch goods getters return zero despite £8,470 of goods in
+        # the military total. Support also includes £590 of logistics wages.
+        h = BudgetHarness(civil=0, administration=0, total=15390,
+                          charges={"military": 4340},
+                          military_fields={"army_total": 2040, "navy_total": 1710},
+                          military_buildings=(("building_barrack", 2040),
+                                              ("building_army_logistics_center", 4640),
+                                              ("building_naval_administration", 1710),
+                                              ("building_naval_logistics_center", 2880),
+                                              ("building_naval_fortification", 1540)))
+        h.scopes.update(military_1=Decimal(8470), military_4=Decimal(2580))
+        self.assertEqual(h("army_operating_actual"), 6680)
+        self.assertEqual(h("navy_operating_actual"), 6130)
+        self.assertEqual(h("expense_army_materials"), 4640)
+        self.assertEqual(h("expense_army"), 6680)
+        self.assertEqual(h("expense_navy_materials"), 7000)
+        self.assertEqual(h("expense_navy"), 8710)
+        self.assertEqual(h("expense_military_adjustment"), 0)
+        self.assertEqual(h("expense_other"), 0)
+        h.scopes["positive_total"] = h("expense_positive_total")
+        h.scopes.update(open_military=Decimal(1), open_army=Decimal(1), open_navy=Decimal(1))
+        self.assertEqual(h("expense_army_materials_slice"), 4640)
+        self.assertAlmostEqual(h("expense_army_materials_share"), Decimal(4640) / 15390)
+
+    def test_already_covered_branch_upkeep_is_not_counted_again(self):
+        for actual in (0, 9000, 10000, 12500):
+            with self.subTest(actual=actual):
+                h = BudgetHarness(civil=0, administration=0, total=max(actual, 10000),
+                                  charges={"military": max(actual, 10000)},
+                                  military_fields={"army_total": 10000, "army_goods": 4000},
+                                  military_buildings=(("building_barrack", actual),))
+                self.assertEqual(h("expense_army_wages"), 6000)
+                self.assertEqual(h("expense_army_materials"), 4000 + max(actual - 10000, 0))
+                self.assertEqual(h("expense_military_adjustment"), 0)
+                self.assertEqual(h("expense_other"), 0)
+
+    def test_only_branch_buildings_with_operating_deficits_are_attributed(self):
+        h = BudgetHarness(military_buildings=(("building_army_logistics_center", -500),
+                                               ("building_barrack", 5000),
+                                               ("building_conscription_center", 3000),
+                                               ("building_arms_industry", 10000)))
+        self.assertEqual(h("army_operating_actual"), 8000)
+        self.assertEqual(h("navy_operating_actual"), 0)
+        self.assertEqual(h("administration_actual"), 39000)
+
     def test_group_totals_equal_children_without_double_counting(self):
         h = BudgetHarness(charges={"military": 10000, "shipping": 1500, "additional": 800,
                                    "banking": -200, "covert": 1000})
@@ -244,8 +299,10 @@ class BudgetAllocationTests(unittest.TestCase):
             self.assertAlmostEqual(sum(h(side + "_" + node.key) for node in gen.tree(side)), h.scopes["total"])
 
     def test_every_expansion_state_partitions_positive_leaf_amounts(self):
-        h = BudgetHarness(charges={"military": 10000, "additional": 800, "banking": -200, "covert": 1000},
-                          military_fields={"army_total": 7000, "army_goods": 2000, "navy_total": 3000, "navy_goods": 1000})
+        h = BudgetHarness(charges={"military": 15000, "additional": 800, "banking": -200, "covert": 1000},
+                          military_fields={"army_total": 7000, "army_goods": 2000, "navy_total": 3000, "navy_goods": 1000},
+                          military_buildings=(("building_barrack", 7000), ("building_army_logistics_center", 3000),
+                                              ("building_naval_administration", 3000), ("building_naval_fortification", 2000)))
         h.scopes.update({key: Decimal(100) for key, _, _ in gen.INCOME})
         for side in ("income", "expense"):
             nodes = list(gen.walk(gen.tree(side)))
@@ -399,6 +456,9 @@ class BudgetWiringTests(unittest.TestCase):
         self.assertNotIn("every_scope_building", values)
         self.assertIn("value = scope:institution_pool", values)
         self.assertIn("value = scope:positive_total", values)
+        for branch in ("army", "navy"):
+            self.assertIn(f"AddScope('{branch}_operating_actual', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_{branch}_operating_actual')))", gen.scope("expense"))
+            self.assertIn(f"value = scope:{branch}_operating_actual", values)
 
 
 if __name__ == "__main__":
