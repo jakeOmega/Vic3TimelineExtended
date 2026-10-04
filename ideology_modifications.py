@@ -3240,8 +3240,8 @@ modifications = {
     # ideologies with no other modification. A law a block leaves out is
     # implicitly neutral, so a group that disapproves of the current law backs
     # enacting it; ideology_lawgroup_audit.py requires each vanilla block to
-    # name the laws the mod adds to its group. These add laws only, so
-    # apply_ideologies.py writes each as an INJECT carrying just the new laws.
+    # name the laws the mod adds to its group. Each touches a vanilla block, so
+    # apply_ideologies.py writes it as a REPLACE of vanilla's whole entry.
     "ideology_japan_hierarchic_2": {
         "lawgroup_army_model": [
             ("law_private_military_contractors", "disapprove"),

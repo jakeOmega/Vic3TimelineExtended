@@ -1,12 +1,12 @@
-"""apply_ideologies.py: INJECT for additions, REPLACE only to change vanilla.
+"""apply_ideologies.py: INJECT only new blocks, REPLACE to touch a vanilla one.
 
 The generator writes common/ideologies/modified.txt from
 ideology_modifications.py and vanilla's raw ideology files. An ideology whose
-modifications only add (a block vanilla lacks, or laws a vanilla block doesn't
-name) is an INJECT holding just the additions; one that changes a stance
-vanilla sets is a REPLACE carrying vanilla's whole entry. An INJECT that
-restated a vanilla stance would lean on unread engine behaviour, and a REPLACE
-freezes vanilla's text until the next regeneration, so both directions matter.
+modifications only add lawgroup blocks vanilla lacks is an INJECT of those
+blocks. One that touches a block vanilla has, to change a stance or to add a
+law, is a REPLACE carrying vanilla's whole entry. An INJECT of a block vanilla
+already has is not merged: the engine keeps both blocks and the ideology
+tooltip lists the law group twice (read in game 2026-10-04).
 
 The committed-file checks need no game install: vanilla comes from the
 vanilla_parsed/ snapshot. They catch a modified.txt left stale after an edit
@@ -20,16 +20,20 @@ import tempfile
 import unittest
 
 import apply_ideologies
-import ideology_modifications
 import ideology_lawgroup_audit
+import ideology_modifications
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 GENERATED = os.path.join(REPO, "common", "ideologies", "modified.txt")
+REGENERATE = (
+    "regenerate common/ideologies/modified.txt with apply_ideologies.py (or a mod "
+    "state server reload) on a machine with the game"
+)
 
 VANILLA_ENTRY = (
     "{\n"
     '\ticon = "gfx/x.dds"\n'
-    "\tlawgroup_alpha = { # vanilla comment\n"
+    "\tlawgroup_alpha = {\n"
     "\t\tlaw_a = approve\n"
     "\t\tlaw_b = disapprove\n"
     "\t}\n"
@@ -38,56 +42,61 @@ VANILLA_ENTRY = (
     "\t}\n"
     "}\n"
 )
+NO_BLOCKS_ENTRY = '{\n\ticon = "gfx/y.dds"\n}\n'
 
 
-class PlanTests(unittest.TestCase):
-    def test_new_block_is_injected_whole(self):
-        inject, changed = apply_ideologies._plan(
-            VANILLA_ENTRY, {"lawgroup_beta": [("law_c", "approve"), ("law_d", "neutral")]}
-        )
-        self.assertEqual(changed, [])
-        self.assertEqual(inject, [("lawgroup_beta", [("law_c", "approve"), ("law_d", "neutral")])])
+class ModifyEntriesTests(unittest.TestCase):
+    def _run(self, mods, entries=None):
+        entries = entries or {key: VANILLA_ENTRY for key in mods}
+        return apply_ideologies.modify_entries(entries, mods)
 
-    def test_new_law_in_a_vanilla_block_is_injected_alone(self):
-        inject, changed = apply_ideologies._plan(
-            VANILLA_ENTRY, {"lawgroup_alpha": [("law_a", "approve"), ("law_new", "strongly_approve")]}
-        )
-        self.assertEqual(changed, [])
-        self.assertEqual(inject, [("lawgroup_alpha", [("law_new", "strongly_approve")])])
+    def test_new_block_only_is_an_inject(self):
+        result, _ = self._run({"ideology_x": {"lawgroup_beta": [("law_c", "approve"), ("law_d", "neutral")]}})
+        kw, body, reasons = result["ideology_x"]
+        self.assertEqual((kw, reasons), ("INJECT", []))
+        self.assertIn("\tlawgroup_beta = {\n\t\tlaw_c = approve\n\t\tlaw_d = neutral\n\t}", body)
 
-    def test_changed_vanilla_stance_forces_replace(self):
-        inject, changed = apply_ideologies._plan(
-            VANILLA_ENTRY, {"lawgroup_alpha": [("law_b", "approve"), ("law_new", "approve")]}
-        )
-        self.assertEqual(changed, ["lawgroup_alpha: law_b"])
-
-    def test_modify_entries_writes_inject_and_replace(self):
-        entries = {"ideology_x": VANILLA_ENTRY, "ideology_y": VANILLA_ENTRY, "ideology_z": VANILLA_ENTRY}
-        mods = {
-            "ideology_x": {"lawgroup_alpha": [("law_new", "approve")]},
-            "ideology_y": {"lawgroup_alpha": [("law_a", "neutral")]},
-            "ideology_z": {"lawgroup_alpha": [("law_a", "approve")]},  # restates vanilla only
-            "ideology_missing": {"lawgroup_alpha": [("law_a", "approve")]},
-        }
-        result, unmatched = apply_ideologies.modify_entries(entries, mods)
-        self.assertEqual(unmatched, ["ideology_missing"])
-        self.assertEqual(set(result), {"ideology_x", "ideology_y"})
-        kw, body, _ = result["ideology_x"]
-        self.assertEqual(kw, "INJECT")
-        self.assertEqual(body, "{\n\tlawgroup_alpha = {\n\t\tlaw_new = approve\n\t}\n}\n")
-        kw, body, reasons = result["ideology_y"]
-        self.assertEqual(kw, "REPLACE")
-        self.assertEqual(reasons, ["lawgroup_alpha: law_a"])
-        self.assertIn("\t\tlaw_a = neutral\n", body)
+    def test_new_law_in_a_vanilla_block_is_a_replace(self):
+        result, _ = self._run({"ideology_x": {"lawgroup_alpha": [("law_new", "strongly_approve")]}})
+        kw, body, reasons = result["ideology_x"]
+        self.assertEqual((kw, reasons), ("REPLACE", ["lawgroup_alpha"]))
+        self.assertIn("\tlawgroup_alpha = {\n\t\tlaw_new = strongly_approve\n\t\tlaw_a = approve\n", body)
         self.assertIn("country_trigger", body)
 
+    def test_changed_vanilla_stance_is_a_replace(self):
+        result, _ = self._run({"ideology_x": {"lawgroup_alpha": [("law_b", "approve")]}})
+        kw, body, _ = result["ideology_x"]
+        self.assertEqual(kw, "REPLACE")
+        self.assertIn("\t\tlaw_b = approve\n", body)
+        self.assertNotIn("law_b = disapprove", body)
+
+    def test_new_block_on_an_ideology_with_no_lawgroup_block_is_kept(self):
+        mods = {"ideology_y": {"lawgroup_beta": [("law_c", "approve")]}}
+        result, _ = self._run(mods, {"ideology_y": NO_BLOCKS_ENTRY})
+        self.assertIn("\tlawgroup_beta = {\n\t\tlaw_c = approve\n\t}\n}\n", result["ideology_y"][1])
+
+    def test_unmatched_key_is_reported(self):
+        _, unmatched = self._run({"ideology_missing": {"lawgroup_alpha": []}}, {"ideology_x": VANILLA_ENTRY})
+        self.assertEqual(unmatched, ["ideology_missing"])
+
+    def test_write_to_file(self):
+        mods = {
+            "ideology_x": {"lawgroup_beta": [("law_c", "approve")]},
+            "ideology_y": {"lawgroup_alpha": [("law_new", "approve")]},
+        }
+        result, _ = self._run(mods)
         with tempfile.TemporaryDirectory() as tmp:
             out = os.path.join(tmp, "modified.txt")
-            apply_ideologies.write_to_file(out, result)
+            orig = apply_ideologies.modifications
+            apply_ideologies.modifications = mods  # write_to_file extracts INJECT blocks by these keys
+            try:
+                apply_ideologies.write_to_file(out, result)
+            finally:
+                apply_ideologies.modifications = orig
             with open(out, encoding="utf-8-sig") as fh:
                 text = fh.read()
-        self.assertIn("INJECT:ideology_x = {\n\tlawgroup_alpha = {\n\t\tlaw_new = approve\n\t}\n}\n", text)
-        self.assertIn("# REPLACE: changes vanilla stances in lawgroup_alpha (law_a)\nREPLACE:ideology_y = {", text)
+        self.assertIn("INJECT:ideology_x = {\n\tlawgroup_beta = {\n\t\tlaw_c = approve\n\t}\n}\n", text)
+        self.assertIn("# Forced REPLACE due to existing section(s): lawgroup_alpha\nREPLACE:ideology_y = {", text)
 
 
 def _committed_entries():
@@ -110,35 +119,27 @@ class CommittedFileTests(unittest.TestCase):
         cls.entries = _committed_entries()
         cls.merged = ideology_lawgroup_audit.load_state(REPO, cls.vanilla).get_data("Ideologies")
 
-    def _vanilla_block(self, ideology, group):
-        block = self.vanilla_ideologies.get(ideology, {}).get(group)
-        if block is None:
-            return None
-        return {law: ideology_lawgroup_audit._unwrap(v) for law, v in ideology_lawgroup_audit._unwrap(block).items()}
-
-    def test_injects_carry_only_laws_vanilla_does_not_state(self):
+    def test_injects_name_only_blocks_vanilla_lacks(self):
+        # An injected block vanilla already has shows twice in the tooltip.
         for ideology, (kw, body) in self.entries.items():
             if kw != "INJECT":
                 continue
-            for group, inner in re.findall(r"(?m)^\t(\w+) = \{\n((?:\t\t.*\n)*)\t\}", body):
-                vanilla = self._vanilla_block(ideology, group) or {}
-                for law in re.findall(r"(?m)^\t\t([\w\-]+) = ", inner):
-                    with self.subTest(ideology=ideology, group=group, law=law):
-                        self.assertNotIn(law, vanilla)
+            vanilla = self.vanilla_ideologies.get(ideology, {})
+            for group in re.findall(r"(?m)^\t(\w+) = \{", body):
+                with self.subTest(ideology=ideology, group=group):
+                    self.assertNotIn(group, vanilla, REGENERATE)
 
-    def test_replaces_change_a_vanilla_stance(self):
+    def test_replaces_touch_a_vanilla_block(self):
         mods = ideology_modifications.modifications
         for ideology, (kw, _body) in self.entries.items():
             if kw != "REPLACE":
                 continue
-            changes = [
-                law
-                for group, lines in mods[ideology].items()
-                for law, stance in lines
-                if (self._vanilla_block(ideology, group) or {}).get(law, stance) != stance
-            ]
+            vanilla = self.vanilla_ideologies.get(ideology, {})
             with self.subTest(ideology=ideology):
-                self.assertTrue(changes, "a REPLACE that changes no vanilla stance should be an INJECT")
+                self.assertTrue(
+                    any(group in vanilla for group in mods[ideology]),
+                    "a REPLACE that touches no vanilla block should be an INJECT",
+                )
 
     def test_every_modification_is_in_effect(self):
         # Stale modified.txt: ideology_modifications.py was edited and the
@@ -149,8 +150,8 @@ class CommittedFileTests(unittest.TestCase):
                 block = ideology_lawgroup_audit._unwrap(body.get(group)) if isinstance(body, dict) else None
                 for law, stance in dict(lines).items():
                     with self.subTest(ideology=ideology, group=group, law=law):
-                        self.assertIsInstance(block, dict)
-                        self.assertEqual(ideology_lawgroup_audit._unwrap(block.get(law)), stance)
+                        self.assertIsInstance(block, dict, REGENERATE)
+                        self.assertEqual(ideology_lawgroup_audit._unwrap(block.get(law)), stance, REGENERATE)
 
     def test_every_generated_entry_has_a_modification(self):
         self.assertEqual(set(self.entries) - set(ideology_modifications.modifications), set())

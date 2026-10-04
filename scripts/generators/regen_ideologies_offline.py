@@ -8,13 +8,15 @@ runs both generators' own code on stand-ins:
 
 - modified.txt: vanilla ideologies are serialized from the committed
   `vanilla_parsed/` snapshot (their lawgroup blocks, which is all an INJECT
-  entry depends on). An entry the generator still writes as a REPLACE (a
-  vanilla stance changes) needs vanilla's raw text, so it starts from its
-  committed REPLACE body with the mod's edits undone: mod-added blocks
-  removed, inserted laws dropped, vanilla's values put back and the opener's
-  trailing comment moved back (the generator carries it onto the
-  first-inserted law). A REPLACE with no committed body can't be produced
-  here; the run stops and says which.
+  entry, one that only adds blocks vanilla lacks, depends on). A REPLACE
+  entry (the ideology touches a block vanilla has) needs vanilla's raw text,
+  so it starts from its committed REPLACE body with the mod's edits undone:
+  mod-added blocks removed, inserted laws dropped, vanilla's values put back
+  and the opener's trailing comment moved back (the generator carries it onto
+  the first-inserted law). A REPLACE with no committed body, such as the
+  first stance on a vanilla ideology the mod hasn't touched, can't be
+  produced here; the run stops and says which, and only a machine with the
+  game can write it.
 - extra_law_consistency_generated.txt: gen_law_consistency runs against a
   synthetic `<tmp>/game/common/{laws,ideologies}` serialized from the snapshot.
 
@@ -142,8 +144,8 @@ def regen_modified(out_path):
     blind = sorted(k for k, v in result.items() if v[0] == "REPLACE" and k not in committed)
     if blind:
         raise SystemExit(
-            "These ideologies now change a vanilla stance, so they need a REPLACE built from vanilla's "
-            f"raw text, which only a machine with the game has: {', '.join(blind)}"
+            "These ideologies now touch a vanilla lawgroup block, so they need a REPLACE built from "
+            f"vanilla's raw text, which only a machine with the game has: {', '.join(blind)}"
         )
     result = apply_ideologies.update_law_reqs(result)
     apply_ideologies.write_to_file(out_path, result)

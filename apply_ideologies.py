@@ -5,14 +5,15 @@ Reads modification directives from ideology_modifications.py, applies them to
 vanilla's ideology files, and writes common/ideologies/modified.txt. Each
 ideology the dict names becomes one of:
 
-- INJECT, when the modifications only add: a lawgroup block vanilla's ideology
-  lacks (written whole), or laws a block vanilla has doesn't name (written as
-  that block holding just the new laws). The engine merges the block into
-  vanilla's. A line restating vanilla's own stance is dropped.
-- REPLACE, when a modification changes a stance vanilla's block already sets.
-  The entry then carries vanilla's whole ideology, copied from the raw file
-  with the modifications applied, which is why this generator needs the game
-  files and can't run from the vanilla_parsed/ snapshot.
+- INJECT, when every lawgroup block it modifies is one vanilla's ideology
+  lacks. The entry holds just those blocks.
+- REPLACE, when it touches a block vanilla's ideology already has, whether to
+  change a stance or to add a law. The entry carries vanilla's whole ideology,
+  copied from the raw file with the modifications applied, which is why this
+  generator needs the game files and can't run from the vanilla_parsed/
+  snapshot. An INJECT of a block vanilla already has is not merged into it:
+  the engine keeps both blocks, and the ideology tooltip lists the law group
+  twice (read in game 2026-10-04; docs/guides/scripting_best_practices.md).
 
 Usage:
     python apply_ideologies.py          # Apply all modifications
@@ -67,63 +68,33 @@ def parse_file(file_path):
     return entries
 
 
-def _vanilla_stances(original_entry: str, sub_key: str) -> dict | None:
-    """{law: stance} in vanilla's `sub_key` block, or None when the block can't
-    be read."""
-    block = _extract_block(original_entry, sub_key)
-    if block is None:
-        return None
-    code = "\n".join(line.split("#", 1)[0] for line in block.split("\n"))
-    inner = code[code.find("{") + 1:code.rfind("}")]
-    return dict(re.findall(r"([\w\-]+)\s*=\s*([\w\-]+)", inner))
+def _is_append_only(original_entry: str, sub_entries_mods: dict) -> bool:
+    """Return True if modifications only add brand-new top-level sub-entries.
+
+    If we touch (edit/extend) an already-existing sub-entry, we must REPLACE.
+    """
+
+    # Any modification that targets an existing "<sub_key> = {" block is not append-only.
+    for sub_key in sub_entries_mods.keys():
+        if f"{sub_key} = {{" in original_entry:
+            return False
+    return True
 
 
-def _plan(original_entry: str, sub_entries: dict) -> tuple[list, list]:
-    """Split one ideology's modifications into what an INJECT carries and the
-    vanilla stances they would change.
+def _replacement_reasons(original_entry: str, sub_entries_mods: dict) -> list[str]:
+    """Return a list of sub_keys that already exist (thus forcing REPLACE)."""
 
-    Returns (inject, changed). `inject` is [(sub_key, [(law, stance)])] in
-    modification order: every line of a block vanilla lacks, and only the new
-    laws of a block vanilla has (a line restating vanilla's stance is dropped).
-    `changed` names each vanilla stance a line changes ("sub_key: law"), or the
-    block when vanilla's copy can't be read; any entry forces a REPLACE."""
-    inject: list = []
-    changed: list = []
-    for sub_key, lines in sub_entries.items():
-        if f"{sub_key} = {{" not in original_entry:
-            inject.append((sub_key, list(dict(lines).items())))
-            continue
-        vanilla = _vanilla_stances(original_entry, sub_key)
-        if vanilla is None:
-            changed.append(sub_key)
-            continue
-        new: dict = {}
-        for law, stance in lines:
-            if law not in vanilla:
-                new[law] = stance
-            elif vanilla[law] != stance:
-                changed.append(f"{sub_key}: {law}")
-        if new:
-            inject.append((sub_key, list(new.items())))
-    return inject, changed
-
-
-def _inject_body(inject: list) -> str:
-    body = "{\n"
-    for sub_key, lines in inject:
-        body += f"\t{sub_key} = {{\n"
-        body += "".join(f"\t\t{law} = {stance}\n" for law, stance in lines)
-        body += "\t}\n"
-    return body + "}\n"
+    reasons = []
+    for sub_key in sub_entries_mods.keys():
+        if f"{sub_key} = {{" in original_entry:
+            reasons.append(sub_key)
+    return reasons
 
 
 def modify_entries(entries, modifications):
     """Apply `modifications` to parsed ideology entries.
 
-    Returns a dict mapping ideology key -> (keyword, entry_text, reasons):
-    ("INJECT", the block(s) to merge, []) or ("REPLACE", vanilla's whole entry
-    with the modifications applied, the vanilla stances it changes). An
-    ideology whose modifications all restate vanilla is left out.
+    Returns a dict mapping ideology key -> (keyword, new_entry_text, replace_reasons).
     """
 
     result = {}
@@ -142,13 +113,8 @@ def modify_entries(entries, modifications):
             continue
 
         original_entry = entries[key]
-        inject, changed = _plan(original_entry, sub_entries)
-        if not changed:
-            if inject:
-                result[key] = ("INJECT", _inject_body(inject), [])
-            continue
-
         entry = original_entry
+
         for sub_key, lines in sub_entries.items():
             if sub_key + " = {" in entry:
                 # Modify existing lines within the sub-entry or add new lines
@@ -167,9 +133,17 @@ def modify_entries(entries, modifications):
                 new_value = "\n".join([f"\t\t{line[0]} = {line[1]}" for line in lines])
                 new_sub_entry = f"\t{sub_key} = {{\n{new_value}\n\t}}"
                 pattern = re.compile(r"(\n\tlawgroup_)", re.DOTALL)
-                entry = pattern.sub("\n" + new_sub_entry + r"\1", entry, 1)
+                new_entry = pattern.sub("\n" + new_sub_entry + r"\1", entry, 1)
+                if new_entry == entry:
+                    # Vanilla's ideology has no lawgroup block to insert
+                    # before: put the new one before its closing brace.
+                    cut = entry.rstrip().rfind("}")
+                    new_entry = entry[:cut] + new_sub_entry + "\n" + entry[cut:]
+                entry = new_entry
 
-        result[key] = ("REPLACE", entry, changed)
+        replace_reasons = _replacement_reasons(original_entry, sub_entries)
+        keyword = "INJECT" if len(replace_reasons) == 0 else "REPLACE"
+        result[key] = (keyword, entry, replace_reasons)
 
     return result, unmatched
 
@@ -245,18 +219,23 @@ def write_to_file(file_path, entries):
                     reasons = []
 
                 if keyword == "REPLACE" and reasons:
-                    # Paradox-style comment: which vanilla stances force it.
-                    by_block: dict = {}
-                    for reason in reasons:
-                        block, _, law = reason.partition(": ")
-                        by_block.setdefault(block, []).append(law)
-                    shown = "; ".join(
-                        f"{block} ({', '.join(laws)})" if laws[0] else block
-                        for block, laws in by_block.items()
+                    # Paradox-style comment
+                    f.write(
+                        f"# Forced REPLACE due to existing section(s): {', '.join(reasons[:3])}\n"
                     )
-                    f.write(f"# REPLACE: changes vanilla stances in {shown}\n")
 
-                f.write(f"{keyword}:{key} = {body}\n")
+                if keyword == "INJECT":
+                    # Only output the new lawgroup_* blocks that were added.
+                    # These are the sub-entries present in `modifications[key]`.
+                    inject_body = "{\n"
+                    for sub_key in modifications.get(key, {}).keys():
+                        block = _extract_block(body, sub_key)
+                        if block:
+                            inject_body += block
+                    inject_body += "}\n"
+                    f.write(f"INJECT:{key} = {inject_body}\n")
+                else:
+                    f.write(f"{keyword}:{key} = {body}\n")
             else:
                 # Fallback: previous behavior
                 f.write(f"{key} = {value}\n")
