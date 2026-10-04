@@ -88,7 +88,7 @@
  te_tax_hist_kind_customs_adopted_6:0 "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_6_inst')|0]#! tariff levels a treaty or the tariff cooldown kept in place for [GetPlayer.MakeScope.ScriptValue('te_tax_customs_adopt_after')|0] months were adopted into the tax code."
  te_tax_hist_kind_customs_adopted_7:0 "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_7_inst')|0]#! tariff levels a treaty or the tariff cooldown kept in place for [GetPlayer.MakeScope.ScriptValue('te_tax_customs_adopt_after')|0] months were adopted into the tax code."
  te_tax_hist_kind_customs_adopted_8:0 "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_hist_8_inst')|0]#! tariff levels a treaty or the tariff cooldown kept in place for [GetPlayer.MakeScope.ScriptValue('te_tax_customs_adopt_after')|0] months were adopted into the tax code."
- te_tax_hist_kind_customs_dropped:0 "Customs changes dropped from the open draft, and from the bill under debate if there was one, which opened a new revision: the country no longer owns its market."
+ te_tax_hist_kind_customs_dropped:0 "Customs changes dropped from the open draft or the bill under debate, whichever had them; a bill opened a new revision. The country no longer owns its market."
  te_tax_hist_kind_customs_dropped_withdrawn:0 "Customs changes dropped and the bill withdrawn: the country no longer owns its market, and the bill changed nothing else."
  te_tax_hist_kind_customs_gained:0 "The country now sets its own tariffs: its market's levels were carried over into the tax code."
  te_tax_hist_kind_customs_lost:0 "The country no longer owns its market: its market owner sets its tariffs, and the tax code's customs provisions wait unchanged."

@@ -9,7 +9,7 @@ chapter by chapter:
 2. [The extended timeline](02-timeline.md)
 3. [Economy and construction](03-economy.md)
 4. [Banking and monetary policy](04-banking.md)
-5. [Taxation (experimental)](04-tax-code.md): the Legislated Tax Code rule
+5. [Taxation (experimental)](04-tax-code.md)
 6. [Government, laws and characters](05-politics.md)
 7. [Social movements](06-social-movements.md)
 8. [States and population](07-states.md)

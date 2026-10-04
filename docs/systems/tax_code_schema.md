@@ -233,7 +233,7 @@ Every `TE_TAX <tag>` line in `common/` and `events/` (`test_tax_code_console.py`
 | `civil_war_repair` | every country | te_tax_civil_war_effects.txt | the winner's code was restored after a civil war |
 | `civil_war_repair_skipped` | every country | te_tax_civil_war_effects.txt | a civil war ended with nothing to repair (a seceder won, or the winner has no code) |
 | `commenced` | every country | te_tax_generated_effects.txt | a passed package took effect |
-| `customs_adopted` | every country | te_tax_collection_effects.txt | the code adopted market levels after failed monthly re-asserts |
+| `customs_adopted` | every country | te_tax_collection_effects.txt | the code adopted market levels after failed monthly re-asserts (every time for a player, the first time for an AI) |
 | `customs_bill_withdrawn` | every country | te_tax_bill_effects.txt | a bill that changed only customs was withdrawn when the market was lost |
 | `customs_dropped` | every country | te_tax_migration_effects.txt | a lost market dropped the customs changes of the draft and bill |
 | `customs_gained` | every country | te_tax_migration_effects.txt | the country came to own its market and took its levels into the code |
@@ -605,9 +605,9 @@ A bound obligation has its own state (7), not state 1 with a slot, so every read
 | Kind | Delivered when (`te_tax_obl_delivered`, `te_tax_obl_holds`) | Deadline, from commencement C | Kept for (breached at `te_tax_obl_grace_<kind>` consecutive failing checks) | Offered only if (`te_tax_obl_feasible_<kind>`) |
 |---|---|---|---|---|
 | 1 institution level | `var:te_tax_o<N>_target <= te_tax_obl_inst_level_<arg>` while `has_institution = <x>` (`te_tax_obl_inst_met_<arg>`; the level value reads `institution:<x>` `investment`, 0 without the institution; the variable leads, as in `je_space_race.txt`) | C + 12 × max(0, target − level at C) + 6, plus a month for each month of bureaucracy deficit while delivering | 24 months (1) | `has_institution`; target ≤ `te_tax_obl_inst_cap_<arg>` (`investment_max`, the cap with its modifiers); target ≤ `te_tax_obl_inst_reach_<arg>` (today's level + `te_tax_obl_max_levels` = ⌊(60 − 6) / 12⌋ = 4), so the deadline falls within 60 months |
-| 2 bureaucracy balance | `bureaucracy >= 0` (maintenance test: the fiscal record's `te_tax_fisc_rec_bur_ok`) | C + 12 | 24 months (3) | always |
+| 2 bureaucracy balance | `bureaucracy >= 0`, read live at the monthly check (the fiscal record's `te_tax_fisc_rec_bur_ok` sets only the baseline and the maintenance label) | C + 12 | 24 months (3) | always |
 | 3 military wage action | `military_wage_level <= <level>` (sampled monthly: no hook fires on a wage change) | C + 1 | 24 months (1) | the level set now is above the promised one (`te_tax_obl_wages_above_<arg>`): a cut, not a restraint |
-| 4 fiscal balance outcome (maintenance test: the fiscal record's `te_tax_fisc_rec_surplus`) | `net_fixed_income > 0` at `te_tax_obl_surplus_months` (6) consecutive monthly checks (`_streak`) | C + 24 | 12 months, `net_fixed_income > 0` each month (3) | always |
+| 4 fiscal balance outcome (read live at the monthly check; the fiscal record's `te_tax_fisc_rec_surplus` sets only the baseline and the maintenance label) | `net_fixed_income > 0` at `te_tax_obl_surplus_months` (6) consecutive monthly checks (`_streak`) | C + 24 | 12 months, `net_fixed_income > 0` each month (3) | always |
 
 - **Kind 1 reads the delivered level** (`investment`, "current investment level"), never the level requested, and never `NOT = { expanding_institution }`, which would fail a country at its target that starts growing further (capability ledger row 28: **pending P16**). Nothing in the tax code sets an institution's level (`set_institution_investment_level`, `change_institution_investment_level`): native expansion time and costs stay in force. The one exception is the owner's (2026-10-03): an AI country's kind-1 promise the native AI is about to miss is enacted at its target ([Obligations and the AI](#obligations-and-the-ai)).
 - **A bureaucracy deficit never breaches a kind-1 promise**: its verifier does not read bureaucracy, and each monthly check that finds a delivering kind-1 promise undelivered in a deficit (`bureaucracy < 0`) moves its deadline a month later before the deadline is tested (`TE_TAX obl_paused`, once per obligation and month): an institution does not grow during a deficit, so the deficit pauses the clock.
@@ -776,7 +776,7 @@ Under the customs option a draft, a bill and a package carry a field per tradeab
 
 ## AI legislation
 
-Package 6 (spec `docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md` §2; plan `docs/superpowers/plans/2026-10-03-tax-code-ai-and-release-tasks.md`, Tasks 18 to 22). An AI country legislates through the same commands the player's buttons run, each inside its own `te_tax_can_<c>`, and never writes native fiscal state. Its state is the [AI rows](#ai-rows) of the schema. Files: `common/scripted_effects/te_tax_ai_effects.txt`, `common/scripted_triggers/te_tax_ai_triggers.txt`, `common/script_values/te_tax_ai_values.txt`. Everything is gated on `te_tax_code_on`; `test_tax_code_ai.py` pins it. Tasks 19 to 22 extend this section with what the step does.
+Package 6 (spec `docs/superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md` §2; plan `docs/superpowers/plans/2026-10-03-tax-code-ai-and-release-tasks.md`, Tasks 18 to 22). An AI country legislates through the same commands the player's buttons run, each inside its own `te_tax_can_<c>`, and never writes native fiscal state. Its state is the [AI rows](#ai-rows) of the schema. Files: `common/scripted_effects/te_tax_ai_effects.txt`, `common/scripted_triggers/te_tax_ai_triggers.txt`, `common/script_values/te_tax_ai_values.txt`. Everything is gated on `te_tax_code_on`; `test_tax_code_ai.py` pins it. The subsections below say what the step does.
 
 ### Signals
 

@@ -247,7 +247,8 @@ leaves the code as it was. Introducing and withdrawing a bill costs nothing.
 
 Force Through passes a bill that is short of a majority. It needs Legislative
 Override Capacity of at least 2, committed groups holding at least 35% of the
-clout, and every other condition for passage. It costs authority and 5
+clout, enough authority to pay for it, and every other condition for passage.
+It costs authority and 5
 legitimacy, angers the opposition and spends override capacity, as forcing a
 law through does, with the effects fading over five years.
 
@@ -378,20 +379,26 @@ AI countries draft, introduce and pass bills through the same conditions as
 you. They get no taxes for free, and no bill passes for them without the
 committed clout, legitimacy and debate it needs.
 
-An AI country acts on its budget as it stood on the 1st of each month:
+An AI country counts deficits and surpluses from its budget on the 1st of each
+month, and reads its income, debt and gold reserves when it acts:
 
-- After three months of fixed deficit, with income short of expenses and its
-  gold reserves low, it introduces a bill raising one or two taxes by a step.
-  It picks the taxes its interest groups mind least. When raising the
-  consumption rate is the cheapest choice, it taxes up to two luxury goods instead.
-- At war it prefers a larger rise that expires after 24 months.
-- After six months of surplus, with full reserves, it cuts the tax its groups
-  mind most by a step.
+- After three months of fixed deficit, with income at most 90% of expenses
+  (110% if it has significant debt) and its gold reserves under a tenth of
+  their limit, it introduces a bill raising one or two taxes by a step. It
+  picks the taxes its interest groups mind least. When raising the consumption
+  rate is the cheapest choice and it taxes fewer than four goods, it taxes up
+  to two luxury goods instead.
+- At war it prefers a two-step rise of a single tax that expires after 24
+  months.
+- After six months of surplus, with income at least 125% of expenses (150% if
+  it has significant debt) and its gold reserves at least a tenth of their
+  limit, it cuts the tax its groups mind most by a step.
 - In a financial emergency (default, heavy debt, or bankruptcy within about
   30 weeks) it introduces a minor bill at once, with 15 days of debate, and
-  forces it through if enough groups back it and it has the override capacity.
-  It waits about three months before the next emergency bill, so the first one
-  can show in its budget.
+  forces it through if enough groups back it and it has the override capacity
+  and the authority. After an emergency bill passes it waits about three
+  months before the next, so the first can show in its budget; after one fails
+  it waits six.
 
 It looks at new bills about once every three months, and waits a year after a
 bill takes effect before starting another. It accepts interest-group offers

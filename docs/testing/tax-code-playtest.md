@@ -28,7 +28,7 @@ whether the engine does what the design assumes is decided here.
   | `te_tax_debug.5` | Stores a package raising the wage tax one step from next month, with a 1-month expiry |
   | `te_tax_debug.6` | Makes the next monthly dispatch skip this country, so a package due then is missed |
   | `te_tax_debug.7` | Records an outside change to the wage tax, so a waiting package touching it is held as conflicting |
-  | `te_tax_debug.8` | Names the selected state for regional relief in the enacted code |
+  | `te_tax_debug.8` | Names the capital's state for regional relief in the enacted code |
 
 - **Logs.** Read `debug.log`, not `error.log`. Every tax-code line starts `TE_TAX`; the
   tags are listed in `docs/systems/tax_code_schema.md`, "Debug lines". Lines from player
@@ -36,7 +36,15 @@ whether the engine does what the design assumes is decided here.
 - **Saves.** `python3 scripts/analysis/tax_code_save_report.py <save> --country <TAG>`
   prints a country's whole code from a save (text or binary), and
   `--diff <before> <after>` compares two saves group by group. Use it for every check
-  that says "save report".
+  that says "save report". **Validate it once first** (part of PT-04): it was built
+  before any save held the code, so two save layouts are assumed. On the first rule-on
+  save, compare its report with the game for one country. If "carrier amendments" reads
+  none while the code's indices are set, the amendment join is wrong; if "native tax
+  level" is not medium, the medium-omission rule is wrong. Until it is fixed, read
+  the save by hand rather than trust its verdicts.
+- **Targeting.** The console's `event` runs on the player's country. The AI checks
+  observe AI countries through their `TE_TAX ai_*` lines, and use `te_tax_debug.2` on the
+  player's own country to run the same managers by hand.
 - **Recording.** Copy the result cells into
   `docs/testing/tax-code-capability-ledger.md`'s evidence matrix: *passed*, *failed*,
   *unclear* or *skipped*, with the date, the game version and the log lines or save names
@@ -47,7 +55,8 @@ whether the engine does what the design assumes is decided here.
 ### PT-01 One sync a day
 
 Rule *on*. Day D: `event te_tax_debug.1` twice.
-Expect on D+1 one `TE_TAX` sync and one `TE_TAX sync_deferred`; on D+2 nothing changes.
+Expect on D+1 two `TE_TAX post-migration sync` lines (one per `te_tax.4`) and one
+`TE_TAX sync_deferred`; on D+2 nothing changes.
 The carrier law holds exactly one amendment per tax on D+1 and D+2. Also release a
 country on the last day of a month: the release's sync and the 1st's processor share a
 tick, and the released country must still hold one amendment per tax.
@@ -124,8 +133,10 @@ Serves S4. Result: ___
 
 ### PT-09 Held packages
 
-Rule *on*. Pass a bill, then `event te_tax_debug.6` before its month; on another bill,
-`event te_tax_debug.7` before its month.
+Rule *on*. `event te_tax_debug.5` (a wage-tax package for next month), then
+`event te_tax_debug.6` before its month; repeat with a fresh `.5` package and
+`event te_tax_debug.7` (an outside change to the wage tax, so the package must change
+the wage tax to conflict).
 Expect the first held as missed, with Move to Next Month available for three months
 (history: rescheduled) and Drop always; the second held as conflicting, with only Drop.
 Dropping frees promises bound to it (`obl_released`). If the debate class changes, the
@@ -169,7 +180,8 @@ Serves S12. Result: ___
 
 Rule *on*. A ten-year observer run, then a played run with an AI neighbour in deficit.
 Expect `TE_TAX ai_introduced`, `ai_passed` or `ai_withdrawn` lines from AI countries with
-fiscal need, and their Budget rates moving only on the 1st after an `ai_passed`. Each
+fiscal need, and the rates their code sets changing only on the 1st after an
+`ai_passed` (native changes between 1sts are the drift the counters measure). Each
 January every AI country writes a `TE_TAX ai_year` line with its drift counters, template
 and streaks: record the counters' yearly change per country (owner question 2: does the
 native AI keep moving its tax level?) and count the `ai_introduced`, `ai_passed` and
@@ -180,14 +192,16 @@ Serves S10, S13. Result: ___
 ### PT-14 Frame time
 
 Rule *customs*. Customs section open with eight groups holding offers; the review's
-estimates open; the 1st of the month in a late-game save; the lobby to day 1.
-Expect no visible hitch against a rule-*off* run of the same save. Profile with the
-script profiler (below) if there is one.
+estimates open; the 1st of the month in a late-game save; the lobby to day 1; and the
+AI step's days, the 5th, 12th, 19th and 26th, in a late-game save.
+Expect no visible hitch against a rule-*off* run of the same save, and the AI step's
+daily cost (`te_tax.8` and `te_tax_ai_*` in the profiler) below the 1st's processor
+cost (`te_tax.1`). Profile with the script profiler (below) if there is one.
 Serves S12. Result: ___
 
 ### PT-15 The probe harness's open items
 
-Rule *off*. P05, P08–P11, P14–P16 from `docs/testing/tax-code-probes.md` and
+Rule *off*. P05, P08–P11, P15 and P16 from `docs/testing/tax-code-probes.md` and
 `docs/testing/tax-code-probes-extended.md`, and the customs probe, P09b and P09c ("Customs:
 lock or carrier" in `docs/testing/tax-code-probes.md`).
 Expect each recorded in the capability ledger's row for it. P09b/P09c decide whether
@@ -200,13 +214,16 @@ Serves S4, S5, S6. Result: ___
 
 ### PT-16 An AI country in deficit raises a tax
 
-Rule *on*. Select an AI country with a fixed deficit (or `event te_tax_debug.4` on it
-after selecting it), and watch it for a year.
+Rule *on*. Watch an AI country with a fixed deficit, income at most 90% of its expenses
+and low gold reserves for a year. To see it on your own country instead, put it in
+that state, then `event te_tax_debug.4` (sets the deficit streak) and
+`event te_tax_debug.2`: the streak is reset on the next 1st if the budget is not in
+deficit, and the income and reserves conditions still apply.
 Expect, within about 8 months of three deficit 1sts in a row, `TE_TAX ai_introduced
 tpl=1` (or `tpl=6`, luxury goods, when the consumption rate is the cheapest tax to raise),
 then `ai_accepted` for any offers, then `ai_passed`, and
-the new rate collecting from its commencement month. `event te_tax_debug.3` on it shows
-the signals that decided it.
+the new rate collecting from its commencement month. `event te_tax_debug.3` (on your own
+country) shows the signals and the five pre-scores.
 Serves S10, S13. Result: ___
 
 ### PT-17 An AI emergency bill
@@ -214,9 +231,11 @@ Serves S10, S13. Result: ___
 Rule *on*. An AI country in default, or with debt at half its credit limit.
 Expect `ai_introduced tpl=2` without waiting for its quarter, a minor bill (15-day
 debate), and `ai_forced` if it lacks the votes but has 35% committed, the override
-capacity and the Authority. The next emergency bill comes no sooner than about three
-months later, once a fiscal record has seen the first. One early attempt can follow a
-reset of the episode marker (the need ending, a civil war, a release); note any.
+capacity and the Authority. After an emergency bill passes, the next comes no sooner
+than about three months later, once a fiscal record has seen the first; after one is
+withdrawn, the country waits the six-month failure cooldown (Ruling 12). One early
+attempt can follow a reset of the episode marker (the need ending, a civil war, a
+release); note any.
 Serves S10, S13. Result: ___
 
 ### PT-18 AI offers and the chain cap
@@ -236,8 +255,9 @@ Serves S10, S13. Result: ___
 
 ### PT-20 AI held packages
 
-Rule *on*. On an AI country with a waiting package: `event te_tax_debug.6` (missed) or
-`event te_tax_debug.7` (conflict), selected on that country.
+Rule *on*. On your own country: `event te_tax_debug.5`, then `.6` (missed) or `.7`
+(conflict) before its month; after the month passes, `event te_tax_debug.2`. In an
+observer run, watch AI countries' `ai_rescheduled` and `ai_released` lines.
 Expect `ai_rescheduled` for a missed package within three months, `ai_released`
 otherwise; never both slots held for more than a month.
 Serves S13. Result: ___
@@ -277,7 +297,7 @@ Serves S4. Result: ___
 ### PT-24 Relief
 
 Rule *on*. Agricultural and regional relief; Choose States, Name, Drop; capture a named
-state; `event te_tax_debug.8` on a selected state.
+state; `event te_tax_debug.8` (names the capital's state).
 Expect only incorporated states listed and a fourth refused; Regional Tax Relief on the
 named states from the 1st; a captured state loses it within a month (`relief_cleared`);
 Cost to Members scaling with the population covered. Record whether agricultural relief
@@ -437,7 +457,12 @@ layer's forms: `modulo = te_tax_ai_cadence_months` (a named value as the operand
 country ever introduces a bill outside an emergency, try a literal 3), the stored
 `random_list` phase draw (AI countries' `te_tax.8` lines should spread over days 5, 12, 19
 and 26), a local variable read inside a scripted trigger in the same execution (the
-initiative's raise pick, `te_tax_pick`), and the 128-branch offer-acceptance chain's cost.
+initiative's raise pick, `te_tax_pick`), the same local variable passed through a
+parameter into a `limit` (`$INST$`, the picked instrument's step), the inline
+`ig:<group>.ig_clout` multiply in each pre-score `te_tax_ai_cost_<key>`, and the
+128-branch offer-acceptance chain's cost. Observables for the pre-score: `event
+te_tax_debug.3` prints five pre-scores that are nonzero and differ by tax, and a T1 bill
+then raises the taxes it ranks cheapest.
 Expect each to load without a `debug.log` error and to print or do the right thing.
 Serves S3, S5. Result: ___
 
@@ -446,7 +471,7 @@ Serves S3, S5. Result: ___
 In the console, `Script.Profiling.Gui` opens the profiler; `Script.Profiling.Start`,
 `Stop` and `Restart` control capture. The binary also carries `ScriptProfiling.Enable`
 and `ScriptProfiling.Dump`, which write `logs/script_profiling.txt` with call counts
-(unverified; confirm they write first). The profiler names files by basename only, and a
+(verified 2026-10-03; the dump records triggers, script values and some effects, not events or on_actions, so read `te_tax.8` from the GUI). The profiler names files by basename only, and a
 journal entry's monthly pulse appears as `event (immediate) @ <file>:<line>`. Scripted
 GUI `is_shown` blocks and display values appear only while their panel is open, so note
 which panels were open. (From the late-game performance work, commit 6815868c.)
