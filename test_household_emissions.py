@@ -158,7 +158,7 @@ class HouseholdEmissionsTest(unittest.TestCase):
         self.assertGreaterEqual(self.values.value("gw_state_greenhouse_gas_emissions", state(industry=D("1.25"), industry_cut=0)), 0)
         self.assertEqual(self.values.value("gw_state_greenhouse_gas_emissions", state(industry=D("1.25"), industry_cut=0, removal=168)), D("-0.168"))
 
-    def test_every_fuel_method_mirrors_gross_and_capture_mirrors_its_negative(self):
+    def test_every_fuel_method_mirrors_net_and_capture_mirrors_its_negative(self):
         methods = self.graph.mod_parsers["PMs"].data
         checked = 0
         for name, pm in methods.items():
@@ -167,21 +167,39 @@ class HouseholdEmissionsTest(unittest.TestCase):
                 continue
             checked += 1
             mirror = body(body(emissions.unwrap(pm), "state_modifiers"), "workforce_scaled")
-            self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), gross, name)
+            self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), scalar(workforce(pm), emissions.MODIFIER), name)
         self.assertEqual(checked, 245)
         for name, pm in parsed("common/production_methods/carbon_capture_generated_pms.txt").items():
             if "state_modifiers" in emissions.unwrap(pm):
                 mirror = body(body(emissions.unwrap(pm), "state_modifiers"), "workforce_scaled")
                 self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), scalar(workforce(pm), emissions.MODIFIER), name)
 
-    def test_synthetic_and_direct_removal_have_separate_atmospheric_credit(self):
-        for name in (*emissions.SYNTHETIC_CREDITS, *emissions.REMOVALS):
+    def test_synthetic_credits_scale_with_industry_and_do_not_create_removal(self):
+        for name, fuel in emissions.SYNTHETIC_CREDITS.items():
             pm = emissions.unwrap(self.graph.mod_parsers["PMs"].data[name])
-            mirror = body(body(emissions.unwrap(pm), "state_modifiers"), "workforce_scaled")
-            credit = scalar(mirror, emissions.ATMOSPHERIC_MODIFIER)
-            self.assertEqual(credit, scalar(mirror, "state_carbon_capture_add"))
-            gross = scalar(mirror, emissions.STATE_MODIFIER) if emissions.STATE_MODIFIER in mirror else 0
-            self.assertEqual(gross - credit, scalar(workforce(pm), emissions.MODIFIER))
+            mirror = body(body(pm, "state_modifiers"), "workforce_scaled")
+            net = scalar(workforce(pm), emissions.MODIFIER)
+            self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), net)
+            self.assertNotIn(emissions.ATMOSPHERIC_MODIFIER, mirror)
+            burn = scalar(mirror, "state_carbon_capture_add")
+            for multiplier in (D(1), D("0.5"), D("0.25"), D(0)):
+                self.assertEqual(self.values.value("gw_state_greenhouse_gas_emissions", state(industry=net, industry_cut=multiplier)), net * multiplier / 1000)
+                chain = self.values.value("gw_state_greenhouse_gas_emissions", state(industry=net+burn, industry_cut=multiplier))
+                gross = emissions.recipe_emissions(pm, {"coal": D(2), "oil": D("1.74")})
+                self.assertEqual(chain, gross * multiplier / 1000)
+                self.assertGreaterEqual(chain, 0)
+        for name in emissions.REMOVALS:
+            pm = emissions.unwrap(self.graph.mod_parsers["PMs"].data[name])
+            mirror = body(body(pm, "state_modifiers"), "workforce_scaled")
+            self.assertEqual(scalar(mirror, emissions.ATMOSPHERIC_MODIFIER), -scalar(workforce(pm), emissions.MODIFIER))
+
+    def test_removal_policy_throughput_is_registered_and_state_types_have_localization(self):
+        types = parsed("common/modifier_type_definitions/mod_entity_modifier_types.txt")
+        self.assertIn("building_synthetics_plant_coal_throughput_add", types)
+        loc = "\n".join(p.read_text(encoding="utf-8-sig") for p in (ROOT / "localization/english").glob("*.yml"))
+        for modifier in (emissions.STATE_MODIFIER, emissions.ATMOSPHERIC_MODIFIER, "state_carbon_capture_add"):
+            self.assertIn(f" {modifier}:0 ", loc)
+            self.assertIn(f" {modifier}_desc:0 ", loc)
 
     def test_ownership_updates_preserve_other_state_blocks_and_remove_stale_mirrors(self):
         block = 'pm_test = {\n\tstate_modifiers = {\n\t\tunscaled = { state_pollution_generation_add = 2 }\n\t}\n}\n'

@@ -11,11 +11,10 @@ event work under either setting.
 ## How emissions become warming
 
 Emissions belong to a market, not a country. Buildings contribute the greenhouse
-gases shown by their production methods, with source capture subtracted. The
+gases shown by their production methods, with source capture and synthetic-fuel credits subtracted. The
 market leader's reductions cut the remaining industrial emissions. Households
-add a heating footprint estimated from population and average wealth. Synthetic
-Fuel Works and Carbon Conversion Works then subtract their atmospheric carbon
-credits. Each building's location determines its market, including foreign-owned
+add a heating footprint estimated from population and average wealth. Direct Air Capture at Carbon Conversion Works then subtracts atmospheric
+removal. Each building's location determines its market, including foreign-owned
 sites. The year's net emissions add to the world's cumulative total and set
 warming.
 
@@ -59,7 +58,7 @@ after Clean Energy Technologies. Their Direct Air Capture method removes CO₂
 from the atmosphere without producing goods to sell. At full staffing and base
 throughput, each level removes 168 a year in the dashboard's units and uses
 1,200 electricity, plus engines, steel, chemicals and electronic components.
-Removal, including synthetic-fuel credits, follows staffing and throughput. Subsidize the works to keep them
+Removal and synthetic-fuel credits follow staffing and throughput. Subsidize the works to keep them
 staffed; a fossil-powered grid adds emissions from the electricity they use.
 Genetic Engineering in era 11 unlocks their Synthetic Coal alternative, which
 produces fuel while capturing carbon.

@@ -138,7 +138,7 @@ class CaptureGeneratorTest(unittest.TestCase):
         countries = body(market, "every_scope_country")
         state = body(countries, "every_scope_state")
         credit = body(state, "subtract")
-        self.assertEqual(body(credit, "value"), "modifier:state_carbon_capture_add")
+        self.assertEqual(body(credit, "value"), "modifier:state_atmospheric_carbon_capture_add")
         self.assertEqual(body(credit, "divide"), "gw_emission_display_scale")
         self.assertNotIn("multiply", credit)
 

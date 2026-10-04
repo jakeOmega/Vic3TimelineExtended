@@ -189,11 +189,13 @@ def plan_outputs(state, root):
             block = original[match.start():end]
             replacement = _with_emission(block, amounts.get(name, Decimal(0)), removal=name in credits,
                                          label="net synthetic emissions" if name in SYNTHETIC_CREDITS else None)
-            replacement = _with_state_credit(replacement, gross_amounts.get(name, Decimal(0)),
+            industrial = amounts[name] if name in SYNTHETIC_CREDITS else gross_amounts.get(name, Decimal(0))
+            replacement = _with_state_credit(replacement, industrial,
                                              modifier=STATE_MODIFIER, label="industrial emissions")
             if name in credits:
                 replacement = _with_state_credit(replacement, credits[name])
-                replacement = _with_state_credit(replacement, credits[name], modifier=ATMOSPHERIC_MODIFIER,
+                atmospheric = credits[name] if name in REMOVALS else Decimal(0)
+                replacement = _with_state_credit(replacement, atmospheric, modifier=ATMOSPHERIC_MODIFIER,
                                                  label="atmospheric removal")
             if replacement != block:
                 edits.append((match.start(), end, replacement))

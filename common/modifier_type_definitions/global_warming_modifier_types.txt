@@ -120,7 +120,7 @@ state_harvest_condition_hailstorm_impact_mult = {
 	}
 }
 
-# Positive source-capture credit, aggregated by location and hidden from tooltips.
+# Positive source-capture credit, aggregated by location; script-only fields can appear in tooltips.
 state_carbon_capture_add = {
 	color = good
 	percent = no
@@ -128,7 +128,7 @@ state_carbon_capture_add = {
 	script_only = yes
 }
 
-# Net industrial emissions (fuel minus source capture), in building display units.
+# Net industrial emissions (fuel minus source capture and synthetic credits), in building display units.
 state_greenhouse_gas_emissions_add = {
 	color = bad
 	percent = no

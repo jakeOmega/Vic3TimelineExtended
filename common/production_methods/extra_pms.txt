@@ -7029,8 +7029,7 @@ pm_synthetic_oil_1 = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_atmospheric_carbon_capture_add = 31.32 # AUTO-GENERATED: atmospheric removal
-			state_greenhouse_gas_emissions_add = 36.00 # AUTO-GENERATED: industrial emissions
+			state_greenhouse_gas_emissions_add = 4.68 # AUTO-GENERATED: industrial emissions
 			state_carbon_capture_add = 31.32 # AUTO-GENERATED: carbon credit
 			state_pollution_generation_add = 50
 		}
@@ -7068,7 +7067,7 @@ pm_synthetic_oil_1 = {
 pm_synthetic_oil_2 = {
 	state_modifiers = {
 		workforce_scaled = {
-			state_atmospheric_carbon_capture_add = 52.20 # AUTO-GENERATED: atmospheric removal
+			state_greenhouse_gas_emissions_add = -52.20 # AUTO-GENERATED: industrial emissions
 			state_carbon_capture_add = 52.20 # AUTO-GENERATED: carbon credit
 		}
 	}
@@ -7547,7 +7546,7 @@ pm_pharma_precision_medicine = {
 pm_synthetic_coal = {
 	state_modifiers = {
 		workforce_scaled = {
-			state_atmospheric_carbon_capture_add = 168.00 # AUTO-GENERATED: atmospheric removal
+			state_greenhouse_gas_emissions_add = -168.00 # AUTO-GENERATED: industrial emissions
 			state_carbon_capture_add = 168.00 # AUTO-GENERATED: carbon credit
 		}
 	}

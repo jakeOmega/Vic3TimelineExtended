@@ -789,7 +789,7 @@ market_greenhouse_gas_emissions_script_value = {
 }
 
 market_carbon_capture_script_value = {
-	# Country scope. All capture/removal PMs feed the same positive state credit.
+	# Country scope. Only removal-only PMs take carbon out of the atmosphere.
 	# Workforce scaling includes levels, staffing and throughput. Read once in
 	# each location's market, including foreign-owned sites; never rescale staffing.
 	value = 0
@@ -797,7 +797,7 @@ market_carbon_capture_script_value = {
 		every_scope_country = {
 			every_scope_state = {
 				subtract = {
-					value = modifier:state_carbon_capture_add
+					value = modifier:state_atmospheric_carbon_capture_add
 					divide = gw_emission_display_scale
 				}
 			}

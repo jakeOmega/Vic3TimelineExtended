@@ -348,3 +348,19 @@ checkout was not switched. Draft PR #681 describes the current implementation.
 Restart Victoria 3 before testing. The five checks in Next work are the current
 continuation plan. No in-game verification of the new building-driven annual
 formula or household estimate is claimed.
+
+
+## PR review checkpoint (2026-10-03, review 5403672148)
+
+Review items 1–4 are addressed: synthetic output credits now enter net industrial
+emissions before the market leader's cut; only DAC writes atmospheric removal.
+The Carbon Captured dashboard row now reads atmospheric removal only, and its
+tooltip names Direct Air Capture. Carbon Removal Support's coal-works throughput
+modifier is registered. All three state accounting types have names/descriptions
+in localization; script-only does not guarantee hiding from tooltips.
+
+Inline comments addressed: 4175604053, 4175604258, 4175604463. Numerical
+regressions cover synthetic fuel production/combustion at 0/50/75/100% policy
+cuts, preserving DAC's full credit. Further review work: household calibration,
+fuel-input policy effects, AI support eligibility, DAC balance, employment-audit
+coverage and stale player/developer text. Pending in-game checks remain pending.

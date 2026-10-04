@@ -327,7 +327,7 @@ class DirectAirCaptureTest(unittest.TestCase):
         value = body(parsed("common/script_values/extra_script_values.txt"), "market_carbon_capture_script_value")
         countries = body(body(value, "market"), "every_scope_country")
         credit = body(body(countries, "every_scope_state"), "subtract")
-        self.assertEqual(body(credit, "value"), "modifier:state_carbon_capture_add")
+        self.assertEqual(body(credit, "value"), "modifier:state_atmospheric_carbon_capture_add")
         self.assertEqual(body(credit, "divide"), "gw_emission_display_scale")
         self.assertNotIn("multiply", credit)
         self.assertNotIn("every_scope_building", countries)
@@ -417,7 +417,7 @@ class DisplayBoundaryTest(unittest.TestCase):
     def test_all_capture_uses_one_staffed_state_sweep(self):
         countries = body(body(body(self.extra, "market_carbon_capture_script_value"), "market"), "every_scope_country")
         credit = body(body(countries, "every_scope_state"), "subtract")
-        self.assertEqual(body(credit, "value"), "modifier:state_carbon_capture_add")
+        self.assertEqual(body(credit, "value"), "modifier:state_atmospheric_carbon_capture_add")
         self.assertNotIn("every_scope_building", countries)
         methods = gen.load_synthetic_methods(ROOT)
         factors = parsed("common/script_values/greenhouse_gas_factors.txt")
