@@ -5,10 +5,39 @@ setting. It reads the weekly income forecast and expense total from Overview,
 then subtracts Investment Pool Transfer from both totals and from Construction
 Goods. These are public-budget totals: private construction funding is excluded
 from income, expenses, residuals and chart denominators. Each side has a pie and
-a list with currency amounts and percentages, sorted largest amount first. Zero rows are hidden; negative adjustments remain in
-the list and are excluded from the positive chart denominator. The headers are
+an expandable list with currency amounts and percentages, sorted largest amount
+first within each level. Groups start collapsed. Zero leaves and entirely empty
+groups are hidden; groups with offsetting nonzero components remain expandable.
+Negative adjustments remain in the list and are excluded from the positive
+chart denominator. The headers are
 the signed public-budget totals. Other Income/Expenses reconcile uncategorized and
 temporary flows to those public totals.
+
+## Expandable groups and pies
+
+Income groups Taxes (including war-profit tax receipts) and Diplomatic Income.
+Expenses group Administration (institutions plus General Administration),
+Military, Shipping and Connections, Programme Costs and Diplomatic Payments.
+Military expands into Army, Navy and Other Military Costs; Army and Navy each
+expand again into Wages and Materials. Shipping separates supply-ship
+construction, maintenance and port connections. Every original accounting
+category occurs exactly once in the tree, except Military and Shipping whose
+existing totals are subdivided into new leaves.
+
+Branch wages are the engine's predicted branch total minus its goods expense.
+Navy Materials adds warship construction and maintenance to navy goods.
+Other Military Costs reconciles the original military total against Army plus
+Navy, retaining slave upkeep and any forecast differences as a signed remainder.
+The original military total and both public headers retain their prior formulas.
+
+A collapsed group contributes one slice; expanding it replaces that slice with
+its visible descendants. Pie weights sum positive **terminal** leaf amounts,
+so the denominator never changes during expansion. Group percentages sum their
+children's percentages; their signed monetary totals can differ from that
+positive sum when costs and refunds offset. A zero-net group can therefore have
+a positive slice and expandable nonzero components. Hidden descendants retain
+their GUI-local expansion flags; collapsing an ancestor hides every descendant
+slice, including descendants previously expanded.
 
 ## Journal systems and source amounts
 
@@ -79,16 +108,16 @@ are passed as value scopes before the charts are drawn, so nested cumulative
 values do not scan buildings or repeatedly recalculate the whole denominator.
 There are no effects, saved variables, pulse hooks or journal-entry dependencies.
 
-The list binds each signed category amount once as a value scope. Each row
-counts the nonzero categories with larger amounts to determine its vertical
-rank; catalogue order breaks ties. These ranks and the count of nonzero rows
-are bound once before the slots render, so each child row reads a cached rank
-instead of rescanning all categories. Zero rows consume no space, and signed
-negative amounts follow positive amounts. Each rank has a normal flow slot that
-shows exactly one category row. Hidden slots and rows consume no space. The
-engine determines list height and row positions; expressions inside brace-vector
-components are unsupported and collapse the rows onto each other. Rows reserve
-two lines for labels.
+The list binds every signed amount once, then caches each subtree's visible row
+count. Each row's display rank counts preceding sibling subtrees at every
+ancestor level and adds the ancestor headers. Amounts sort descending; catalogue
+order breaks ties. This produces the same order as a sorted preorder traversal.
+One flat set of normal flow slots selects rows by cached rank and visibility,
+avoiding nested slot grids that multiply widget instances. Zero and hidden rows
+consume no space. The engine determines list height and positions; expressions
+inside brace-vector components are unsupported and collapse rows onto each
+other. Rows have a 28-pixel minimum and grow for wrapped labels, with indentation
+at each level. Expansion flags live only in `GetVariableSystem`, never saves.
 
 The palette stays in catalogue order so sorting never changes category colors.
 
@@ -105,8 +134,9 @@ repeats with many institutions, so category names and percentages remain visible
 `test_budget_breakdown.py` executes the actual script values in a strict offline
 harness: the requested example, shortages, zero production, absent and zero-level
 institutions, current-level changes, reduced civil wages, negative adjustments,
-tied row amounts, zero rows, category reconciliation, cumulative pie layers and
-private-spending exclusion. GUI lint and reference audits cover local names, localization, braces and textures.
+tied row amounts, zero rows, category reconciliation, military branch accounting,
+every combination of expansion flags, sorted preorder ranks, zero-net groups,
+cumulative pie layers and private-spending exclusion. GUI lint and reference audits cover local names, localization, braces and textures.
 Source tests also verify separate simultaneous JE charges, signed banking
 offsets, exact mirror coefficients, complete attribution of the mod's recurring
 monetary sources, and unchanged economic fields.
@@ -129,7 +159,12 @@ Engine rendering and accounting still require an in-game check:
    with an institution-specific bureaucracy discount.
 5. Open the panel in a large country and check frame time. All intermediate
    GUI bindings must refresh with current values while sharing them with children.
-6. Apply Banking and Covert Actions charges together. Check their rows and source
+6. Expand every group and nested Army/Navy, then collapse Military while Army
+   remains open. Check pies show exactly the visible frontier and restore the
+   child expansion state on reopening. Confirm totals and denominators stay
+   unchanged, including an offsetting Programme Costs refund. Check arrows,
+   indentation, wrapped labels and frame time with Administration expanded.
+7. Apply Banking and Covert Actions charges together. Check their rows and source
    tooltips against Additional Expenses, including JE-owned modifiers, decaying
    charges, refunds and removal. On an existing save, verify modifier-definition
    changes are picked up; otherwise let the owning system refresh its modifier.

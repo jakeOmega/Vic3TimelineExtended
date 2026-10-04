@@ -3,32 +3,36 @@
 types te_budget_breakdown {
 	type te_budget_chart_row = flowcontainer {
 		direction = horizontal
-		spacing = 6
-		minimumsize = { 480 44 }
-		maximumsize = { 480 44 }
+		spacing = 5
+		minimumsize = { 480 28 }
+		maximumsize = { 480 -1 }
+		widget = { block "indent" { size = { 0 1 } } }
+		widget = { size = { 18 28 } parentanchor = vcenter block "toggle" {} }
 		icon = {
-			size = { 14 14 }
+			size = { 12 12 }
 			parentanchor = vcenter
 			framesize = { 128 128 }
 			frame = 2
 			block "swatch" {}
 		}
 		textbox = {
-			minimumsize = { 288 44 }
-			maximumsize = { 288 44 }
+			block "label_width" { minimumsize = { 271 28 } maximumsize = { 271 -1 } }
+			autoresize = yes
 			multiline = yes
 			align = left|vcenter|nobaseline
 			using = fontsize_medium
 			block "label" {}
 		}
 		textbox = {
-			size = { 94 44 }
+			size = { 94 28 }
+			parentanchor = vcenter
 			align = right|vcenter|nobaseline
 			using = fontsize_medium
 			block "amount" {}
 		}
 		textbox = {
-			size = { 60 44 }
+			size = { 60 28 }
+			parentanchor = vcenter
 			align = right|vcenter|nobaseline
 			using = fontsize_medium
 			block "share" {}

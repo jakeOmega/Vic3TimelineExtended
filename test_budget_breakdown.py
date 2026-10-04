@@ -4,6 +4,7 @@ This verifies math and wiring, not the game's GUI renderer or weekly_profit
 accounting. See docs/systems/budget_breakdown.md for the in-game checks.
 """
 from decimal import Decimal
+from itertools import product
 from pathlib import Path
 import re
 import unittest
@@ -16,7 +17,7 @@ ROOT = Path(__file__).resolve().parent
 
 
 class BudgetHarness:
-    def __init__(self, *, levels=None, production=2800, usage=1400, administration=39000, civil=50000, total=70000, private_construction=0, charges=None):
+    def __init__(self, *, levels=None, production=2800, usage=1400, administration=39000, civil=50000, total=70000, private_construction=0, charges=None, military_fields=None):
         parser = ParadoxFileParser()
         self.values = {}
         for name in ("te_budget_values.txt", "te_budget_generated_values.txt"):
@@ -27,6 +28,10 @@ class BudgetHarness:
         self.scopes = {"total": Decimal(total), "institution_usage": Decimal(usage), "private_construction": Decimal(private_construction)}
         for key, _, getters in gen.EXPENSE:
             self.scopes.update({f"{key}_{i}": Decimal(0) for i in range(len(getters))})
+        self.scopes.update({key: Decimal(0) for key in gen.MILITARY_FIELDS})
+        self.scopes.update({key: Decimal(value) for key, value in (military_fields or {}).items()})
+        for side in ("income", "expense"):
+            self.scopes.update({"open_" + node.key: Decimal(0) for node, _ in gen.walk(gen.tree(side)) if node.children})
         self.scopes["civil_0"] = Decimal(civil)
         for key, value in (charges or {}).items():
             self.scopes[f"{key}_0"] = Decimal(value)
@@ -43,7 +48,10 @@ class BudgetHarness:
         if isinstance(item, (dict, list)):
             return self.block(item, context=context)
         if item.startswith("scope:"):
-            return self.scopes[item[6:]]
+            key = item[6:]
+            if key.startswith("positive_") and key != "positive_total":
+                return self(key[9:] + "_positive")
+            return self.scopes[key]
         if item == "produced_bureaucracy":
             return self.production
         if item == "investment":
@@ -149,11 +157,11 @@ class BudgetAllocationTests(unittest.TestCase):
             keys = [key for key, _ in gen.categories("expense")]
             self.assertAlmostEqual(sum(h("expense_" + k) for k in keys), total)
             last = Decimal(0)
-            for i, key in enumerate(keys):
+            for i, (node, _) in enumerate(gen.walk(gen.tree("expense"))):
                 cumulative = h(f"expense_cum_{i}")
                 self.assertGreaterEqual(cumulative, last)
                 self.assertLessEqual(cumulative, 1)
-                self.assertAlmostEqual(cumulative - last, h(f"expense_{key}_share"))
+                self.assertAlmostEqual(cumulative - last, h(f"expense_{node.key}_slice") / max(h.scopes["positive_total"], Decimal("0.001")))
                 last = cumulative
             self.assertEqual(last, 1 if h("expense_positive_total") else 0)
 
@@ -204,23 +212,100 @@ class BudgetAllocationTests(unittest.TestCase):
         self.assertEqual(h("expense_construction_share"), Decimal('0.4'))
         self.assertNotIn("investment", [key for key, _, _ in gen.INCOME])
 
-    def test_rows_sort_signed_amounts_descending_hide_zeros_and_break_ties(self):
-        h = BudgetHarness()
+    def test_empty_groups_have_no_display_rows(self):
+        h = BudgetHarness(civil=0, administration=0, total=0)
+        nodes = list(gen.walk(gen.tree("expense")))
+        h.scopes.update({"subtree_" + node.key: h("expense_" + node.key + "_subtree_rows") for node, _ in nodes})
+        self.assertEqual(h("expense_display_count"), 0)
+        self.assertTrue(all(h("expense_" + node.key + "_visible") == 0 for node, _ in nodes))
+
+    def test_military_branch_breakdowns_reconcile_wages_goods_and_ship_costs(self):
+        h = BudgetHarness(civil=0, administration=0, total=20500,
+                          charges={"military": 10000},
+                          military_fields={"army_total": 10000, "army_goods": 4000,
+                                           "navy_total": 6000, "navy_goods": 2000})
+        h.scopes.update(military_1=Decimal(6000), military_2=Decimal(500),
+                        military_3=Decimal(3000), military_4=Decimal(1000))
+        for key, expected in (("army_wages", 6000), ("army_materials", 4000), ("army", 10000),
+                              ("navy_wages", 4000), ("navy_materials", 6000), ("navy", 10000),
+                              ("military_adjustment", 500), ("military", 20500)):
+            self.assertEqual(h("expense_" + key), expected)
+        self.assertEqual(h("expense_other"), 0)
+
+    def test_group_totals_equal_children_without_double_counting(self):
+        h = BudgetHarness(charges={"military": 10000, "shipping": 1500, "additional": 800,
+                                   "banking": -200, "covert": 1000})
+        h.scopes.update({key: Decimal(100) for key, _, _ in gen.INCOME})
         for side in ("income", "expense"):
-            keys = [key for key, _ in gen.categories(side)]
-            for amounts in ([0] * len(keys), [100, 100, -5, 0, 250] + [0] * (len(keys) - 5)):
-                h.scopes.update({"row_" + key: Decimal(amount) for key, amount in zip(keys, amounts)})
-                expected = sorted((key for key, amount in zip(keys, amounts) if amount),
-                                  key=lambda key: (-h.scopes["row_" + key], keys.index(key)))
-                self.assertEqual(h(side + "_visible_rows"), len(expected))
-                self.assertEqual([h(side + "_" + key + "_row_rank") for key in expected],
-                                 list(range(len(expected))))
-                # Slots read cached ranks: no all-category rescan per child row.
-                h.scopes.update({"rank_" + key: h(side + "_" + key + "_row_rank") for key in keys})
-                for slot, selected in enumerate(expected):
-                    visible = [key for key in keys if h.scopes["row_" + key]
-                               and h(side + "_" + key + "_cached_rank") == slot]
-                    self.assertEqual(visible, [selected])
+            for node, _ in gen.walk(gen.tree(side)):
+                if node.children:
+                    self.assertAlmostEqual(h(side + "_" + node.key),
+                                           sum(h(side + "_" + child.key) for child in node.children))
+            self.assertAlmostEqual(sum(h(side + "_" + node.key) for node in gen.tree(side)), h.scopes["total"])
+
+    def test_every_expansion_state_partitions_positive_leaf_amounts(self):
+        h = BudgetHarness(charges={"military": 10000, "additional": 800, "banking": -200, "covert": 1000},
+                          military_fields={"army_total": 7000, "army_goods": 2000, "navy_total": 3000, "navy_goods": 1000})
+        h.scopes.update({key: Decimal(100) for key, _, _ in gen.INCOME})
+        for side in ("income", "expense"):
+            nodes = list(gen.walk(gen.tree(side)))
+            groups = [node for node, _ in nodes if node.children]
+            total = h(side + "_positive_total")
+            h.scopes["positive_total"] = total
+            leaves = sum(max(h(side + "_" + node.key), 0) for node, _ in nodes if not node.children)
+            self.assertAlmostEqual(total, leaves)
+            for state in product((0, 1), repeat=len(groups)):
+                h.scopes.update({"open_" + node.key: Decimal(value) for node, value in zip(groups, state)})
+                h.scopes.update({"row_" + node.key: h(side + "_" + node.key) for node, _ in nodes})
+                h.scopes.update({"subtree_" + node.key: h(side + "_" + node.key + "_subtree_rows") for node, _ in nodes})
+                def sorted_visible(siblings):
+                    # Stable descending sort at each level, then preorder.
+                    for item in sorted(siblings, key=lambda item: -h(side + "_" + item.key)):
+                        if not h(side + "_" + item.key + "_active"):
+                            continue
+                        yield item.key
+                        if item.children and h.scopes["open_" + item.key]:
+                            yield from sorted_visible(item.children)
+                ordered = list(sorted_visible(gen.tree(side)))
+                self.assertEqual(h(side + "_display_count"), len(ordered))
+                h.scopes.update({"rank_" + node.key: h(side + "_" + node.key + "_display_rank") for node, _ in nodes})
+                for rank, key in enumerate(ordered):
+                    self.assertEqual(h(side + "_" + key + "_cached_rank"), rank)
+                self.assertEqual({node.key for node, _ in nodes if h(side + "_" + node.key + "_visible")}, set(ordered))
+                slices = []
+                for node, ancestors in nodes:
+                    visible = all(h.scopes["open_" + p.key] for p in ancestors)
+                    visible = visible and (not node.children or not h.scopes["open_" + node.key])
+                    actual = h(side + "_" + node.key + "_slice")
+                    self.assertEqual(actual, h(side + "_" + node.key + "_positive") if visible else 0)
+                    slices.append(actual)
+                self.assertAlmostEqual(sum(slices), total)
+                self.assertEqual(h(side + "_cum_" + str(len(nodes) - 1)), 1)
+
+    def test_zero_net_group_keeps_cost_and_refund_accessible(self):
+        h = BudgetHarness(civil=0, administration=0, total=0, charges={"banking": -1000, "covert": 1000})
+        self.assertEqual(h("expense_programmes"), 0)
+        self.assertEqual(h("expense_programmes_active"), 1)
+        self.assertEqual(h("expense_programmes_slice"), 1000)
+        self.assertEqual(h("expense_programmes_share"), 1)
+        h.scopes["open_programmes"] = Decimal(1)
+        self.assertEqual(h("expense_programmes_slice"), 0)
+        self.assertEqual(h("expense_banking_slice"), 0)
+        self.assertEqual(h("expense_covert_slice"), 1000)
+        self.assertEqual(h("expense_banking_active"), 1)
+        self.assertEqual(h("expense_positive_total"), 1000)
+
+    def test_parent_collapse_hides_previously_open_descendants(self):
+        h = BudgetHarness(civil=0, administration=0, total=10000, charges={"military": 10000},
+                          military_fields={"army_total": 10000, "army_goods": 4000})
+        h.scopes["open_army"] = Decimal(1)
+        self.assertEqual(h("expense_army_wages_slice"), 0)
+        self.assertEqual(h("expense_military_slice"), 10000)
+        h.scopes["open_military"] = Decimal(1)
+        self.assertEqual(h("expense_military_slice"), 0)
+        self.assertEqual(h("expense_army_slice"), 0)
+        self.assertEqual(h("expense_army_wages_slice"), 6000)
+        self.assertEqual(h("expense_army_materials_slice"), 4000)
 
 
 class BudgetWiringTests(unittest.TestCase):
@@ -265,7 +350,7 @@ class BudgetWiringTests(unittest.TestCase):
         for side in ("income", "expense"):
             chart = gen.chart(side)
             found = re.findall(rf"ScriptValue\('te_budget_{side}_cum_(\d+)'\)", chart)
-            expected = [str(i) for i in reversed(range(len(gen.categories(side))))]
+            expected = [str(i) for i in reversed(range(len(list(gen.walk(gen.tree(side))))))]
             self.assertEqual(found, expected)
             self.assertNotIn("progressbar =", chart)
             self.assertEqual(chart.count('framesize = { 128 128 }'), len(expected))
@@ -276,15 +361,26 @@ class BudgetWiringTests(unittest.TestCase):
         self.assertEqual(bare_vector_expressions(gui), [])
         for side in ("income", "expense"):
             chart = gen.chart(side)
-            keys = [key for key, _ in gen.categories(side)]
-            self.assertIn(f"type te_budget_{side}_legend = flowcontainer", chart)
-            self.assertIn(f"type te_budget_{side}_sorted_slot = flowcontainer", chart)
+            keys = [node.key for node, _ in gen.walk(gen.tree(side))]
+            self.assertIn(f"type te_budget_{side}_list_root = flowcontainer", chart)
+            self.assertIn(f"type te_budget_{side}_slot_root = flowcontainer", chart)
             self.assertNotIn("position =", chart)
             slots = re.findall(r"AddScope\('row_slot', MakeScopeValue\('\(CFixedPoint\)(\d+)'\)\)", chart)
             self.assertEqual(slots, [str(i) for i in range(len(keys))])
             for key in keys:
                 self.assertIn(f"te_budget_{side}_row_{key} = {{}}", chart)
-                self.assertIn(f"te_budget_{side}_{key}_row_rank", chart)
+                self.assertIn(f"te_budget_{side}_{key}_cached_rank", chart)
+                self.assertIn(f"te_budget_{side}_{key}_display_rank", gen.section(side))
+
+    def test_expansion_controls_and_cached_visibility_share_the_same_state(self):
+        for side in ("income", "expense"):
+            chart, context = gen.chart(side), gen.section(side)
+            for node, _ in gen.walk(gen.tree(side)):
+                self.assertIn(f"AddScope('active_{node.key}', MakeScopeValue(TopScope.ScriptValue('te_budget_{side}_{node.key}_visible')))", context)
+                if node.children:
+                    state = gen.flag(side, node.key)
+                    self.assertIn(f"GetVariableSystem.Toggle('{state}')", chart)
+                    self.assertIn(f"AddScope('open_{node.key}', MakeScopeValue(Select_CFixedPoint(GetVariableSystem.Exists('{state}'), '(CFixedPoint)1', '(CFixedPoint)0')))", context)
 
     def test_both_public_headers_exclude_the_transfer(self):
         for side, getter in (("income", "PredictWeeklyIncome"), ("expense", "GetWeeklyExpenses")):
