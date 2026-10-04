@@ -4594,3 +4594,108 @@ law_auxiliary_fleet = {
 		}
 	}
 }
+
+# =================================================================
+# Policing: who provides ordinary enforcement, who pays, whom it answers to
+# Beside vanilla's No Police, Local Police (public constabularies under local
+# notables), Dedicated Police and Militarized Police. Internal Security is
+# regime protection and Criminal Justice is punishment and rehabilitation; this
+# group is the street-level force. Amendments: Corporate Security Powers and
+# Civilian Oversight (extra_amendments.txt).
+# Spec: docs/superpowers/specs/2026-10-04-policing-laws-design.md
+# =================================================================
+
+# Commercial providers carry out most ordinary police work, hired and directed
+# by property owners, firms and residents' associations; the state licenses
+# them and keeps a smaller public force. Coverage follows who can pay: within
+# every state the wealthy districts are guarded and the poor ones are not, so
+# the effects fall on strata, not on states.
+law_private_policing = {
+	group = lawgroup_policing
+	icon = "gfx/interface/icons/law_icons/private_policing.dds"
+
+	# gen_law_consistency moves a country that loses its market economy to the
+	# nearest-progressiveness valid law. At Dedicated Police's 25 that is
+	# Dedicated Police (nationalization, the institution's investment kept);
+	# No Police (0) is the cascade's terminal fallback.
+	progressiveness = 25
+
+	# Alarm networks and monitored CCTV; in the US and Britain private guards
+	# came to outnumber public police in the 1970s and 1980s.
+	unlocking_technologies = {
+		computer_networks
+	}
+
+	# A market to buy protection in. Contracted Administration's list, which
+	# already excludes Command Economy and Cooperative Ownership.
+	unlocking_laws = {
+		law_laissez_faire
+		law_interventionism
+	}
+
+	disallowing_laws = {
+		law_council_republic
+	}
+
+	can_impose = {
+		OR = {
+			AND = {
+				is_in_same_power_bloc = scope:target_country
+				AND = {
+					modifier:country_can_impose_same_lawgroup_policing_in_power_bloc_bool = yes
+					has_law = scope:law
+				}
+			}
+			can_impose_law_default = yes
+		}
+	}
+
+	# The public institution remains, as under vanilla's Private Schools and
+	# Private Health Insurance, and at their cost cut: the state licenses and
+	# backs up the providers instead of fielding the whole force.
+	institution = institution_police
+
+	modifier = {
+		country_institution_cost_institution_police_mult = -0.4
+		# Guards break strikes, and the strikes turn political.
+		interest_group_ig_trade_unions_pol_str_mult = -0.1
+		state_pop_support_movement_labor_mult = 0.15
+		# The force answers to its clients, not the legislature: No Police's
+		# -0.5 (legislative_override_capacity.txt). The institution's own +0.1
+		# a level still applies.
+		country_legislative_override_capacity_add = -0.5
+	}
+
+	# Per level of investment, i.e. per size of the private force.
+	institution_modifier = {
+		# Wealthy neighbourhoods are policed, in every state. Private Health
+		# Insurance pays upper strata +0.5 a level the same way.
+		state_upper_strata_standard_of_living_add = 0.25
+		state_middle_strata_standard_of_living_add = 0.1
+		# Unrest happens where nobody pays for cover: cancels half of the
+		# institution's own -10% turmoil effects a level.
+		state_turmoil_effects_mult = 0.05
+		# Owners pay for their protection: the guards are service workers on
+		# shops', offices' and estates' payrolls, so Urban Center owners and
+		# Services buyers, mostly the better-off, bear the cost through prices.
+		goods_output_services_mult = -0.01
+	}
+
+	# Only a Corpocrat ruler pursues it (Neocameralism's rule); in the
+	# ideologies only Corpocrat and Corporate Rule favour it.
+	ai_will_do = {
+		exists = ruler
+		ruler = {
+			has_ideology = ideology:ideology_corporate
+		}
+	}
+
+	ai_enact_weight_modifier = {
+		value = 10
+
+		if = {
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
+			add = 750
+		}
+	}
+}

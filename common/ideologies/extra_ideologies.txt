@@ -667,6 +667,10 @@ ideology_corporate = {
 		law_communal_administration = disapprove
 	}
 
+	lawgroup_policing = {
+		law_private_policing = strongly_approve
+	}
+
 	country_trigger = {
 		owner = { has_technology_researched = mutual_funds }
 	}
@@ -1278,6 +1282,7 @@ ideology_custom_religion_traditionalist_society = {
 		law_dedicated_police = neutral
 		law_militarized_police = neutral
 		law_no_police = disapprove
+		law_private_policing = disapprove
 	}
 
 	lawgroup_free_speech = {
@@ -1374,6 +1379,7 @@ ideology_custom_religion_inclusive_society = {
 		law_dedicated_police = approve
 		law_militarized_police = strongly_disapprove
 		law_no_police = approve
+		law_private_policing = disapprove
 	}
 
 	lawgroup_free_speech = {
@@ -1470,6 +1476,7 @@ ideology_custom_religion_totalitarian_society = {
 		law_dedicated_police = neutral
 		law_militarized_police = strongly_approve
 		law_no_police = strongly_disapprove
+		law_private_policing = strongly_disapprove
 	}
 
 	lawgroup_free_speech = {
@@ -1566,6 +1573,7 @@ ideology_custom_religion_meritocratic_society = {
 		law_dedicated_police = approve
 		law_militarized_police = disapprove
 		law_no_police = strongly_disapprove
+		law_private_policing = neutral
 	}
 
 	lawgroup_free_speech = {
@@ -1662,6 +1670,7 @@ ideology_custom_religion_imperial_cult_society = {
 		law_dedicated_police = approve
 		law_militarized_police = approve
 		law_no_police = strongly_disapprove
+		law_private_policing = disapprove
 	}
 
 	lawgroup_free_speech = {
@@ -1758,6 +1767,7 @@ ideology_custom_religion_theocratic_society = {
 		law_dedicated_police = neutral
 		law_militarized_police = neutral
 		law_no_police = neutral
+		law_private_policing = disapprove
 	}
 
 	lawgroup_free_speech = {
@@ -2064,6 +2074,10 @@ ideology_custom_religion_corporate_governance = {
 		law_neocameralism = strongly_approve
 		law_direct_democracy = disapprove
 		law_social_monarchy = disapprove
+	}
+
+	lawgroup_policing = {
+		law_private_policing = approve
 	}
 
 	lawgroup_distribution_of_power = {
