@@ -18275,33 +18275,212 @@ REPLACE:ideology_oligarchic = {
 	}
 }
 
-INJECT:ideology_pro_slavery_movement = {
+# Forced REPLACE due to existing section(s): lawgroup_policing
+REPLACE:ideology_pro_slavery_movement = {
+	icon = "gfx/interface/icons/ideology_icons/slaver.dds"
+	lawgroup_slavery = {
+		law_slave_trade = approve
+		law_debt_slavery = approve
+		law_legacy_slavery = approve
+		law_colonial_slavery = disapprove
+		law_slavery_banned = strongly_disapprove
+	}
 	lawgroup_policing = {
 		law_private_policing = approve
+		law_local_police = approve
+		law_dedicated_police = disapprove
+		law_militarized_police = neutral
+		law_no_police = strongly_disapprove
 	}
 }
 
-INJECT:ideology_slave_revolt_movement = {
+# Forced REPLACE due to existing section(s): lawgroup_policing
+REPLACE:ideology_slave_revolt_movement = {
+	icon = "gfx/interface/icons/ideology_icons/abolitionist.dds"
+	lawgroup_slavery = {
+		law_slavery_banned = strongly_approve
+		law_legacy_slavery = disapprove
+		law_colonial_slavery = disapprove
+		law_debt_slavery = strongly_disapprove
+		law_slave_trade = strongly_disapprove
+	}
+	lawgroup_land_reform = {
+		law_serfdom = strongly_disapprove
+		law_tenant_farmers = disapprove
+		law_commercialized_agriculture = neutral
+		law_peasant_proprietorship = approve
+		law_collectivized_agriculture = approve
+	}
 	lawgroup_policing = {
 		law_private_policing = strongly_disapprove
+		law_local_police = strongly_disapprove
+		law_no_police = neutral
+		law_dedicated_police = disapprove
+		law_militarized_police = strongly_disapprove
+	}
+	lawgroup_citizenship = {
+		law_ethnostate = strongly_disapprove
+		law_subjecthood = disapprove
+		law_national_supremacy = disapprove
+		law_racial_segregation = disapprove
+		law_cultural_exclusion = neutral
+		law_multicultural = approve
 	}
 }
 
-INJECT:ideology_sovereignist = {
+# Forced REPLACE due to existing section(s): lawgroup_policing
+REPLACE:ideology_sovereignist = {
+	icon = "gfx/interface/icons/ideology_icons/sovereignist.dds"
 	lawgroup_policing = {
 		law_private_policing = disapprove
+		law_local_police = approve
+		law_no_police = neutral
+		law_dedicated_police = disapprove
+		law_militarized_police = strongly_disapprove
+	}
+	lawgroup_migration = {
+		law_closed_borders = approve
+		law_migration_controls = strongly_approve
+		law_no_migration_controls = disapprove
+	}
+	lawgroup_free_speech = {
+		law_outlawed_dissent = strongly_disapprove
+		law_censorship = disapprove
+		law_right_of_assembly = approve
+		law_protected_speech = strongly_approve
+	}
+	lawgroup_citizenship = {
+		law_ethnostate = strongly_disapprove
+		law_subjecthood = neutral
+		law_national_supremacy = disapprove
+		law_racial_segregation = disapprove
+		law_cultural_exclusion = neutral
+		law_multicultural = approve
 	}
 }
 
-INJECT:ideology_sovereignist_leader = {
+# Forced REPLACE due to existing section(s): lawgroup_policing
+REPLACE:ideology_sovereignist_leader = {
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_sovereignist.dds"
+	character_ideology = yes
 	lawgroup_policing = {
 		law_private_policing = disapprove
+		law_local_police = approve
+		law_no_police = neutral
+		law_dedicated_police = disapprove
+		law_militarized_police = strongly_disapprove
+	}
+	lawgroup_migration = {
+		law_closed_borders = approve
+		law_migration_controls = strongly_approve
+		law_no_migration_controls = disapprove
+	}
+	lawgroup_free_speech = {
+		law_outlawed_dissent = strongly_disapprove
+		law_censorship = disapprove
+		law_right_of_assembly = approve
+		law_protected_speech = strongly_approve
+	}
+	lawgroup_citizenship = {
+		law_ethnostate = strongly_disapprove
+		law_subjecthood = neutral
+		law_national_supremacy = disapprove
+		law_racial_segregation = disapprove
+		law_cultural_exclusion = neutral
+		law_multicultural = approve
+	}
+	country_trigger = {
+		country_is_colonial_or_company = yes
+	}
+	interest_group_leader_trigger = {
+		ideology_sovereignist_leader_valid_trigger = yes
+	}
+	non_interest_group_leader_trigger = {
+		owner = {
+			country_average_culture_pop_acceptance = { culture = prev.culture value <= acceptance_status_4 }
+		}
+		interest_group ?= {
+			ideology_sovereignist_leader_valid_trigger = yes
+		}
+	}
+	interest_group_leader_weight = {
+		add = {
+			value = 100
+			desc = "base_value"
+		}
+		if = {
+			limit = {
+				OR = {
+					has_variable = communist_ig_var
+					has_variable = chose_vanguardism
+					has_variable = chose_anarchism
+					has_variable = chose_communism
+					has_variable = chose_ethno_nationalism
+					has_variable = chose_conservatism
+					has_variable = chose_fascism
+				}
+			}
+			multiply = {
+				value = 0.1
+				desc = "CHOSE_A_DIFFERENT_PATH"
+			}
+		}
+	}
+	non_interest_group_leader_weight = {
+		value = 100
+		if = {
+			limit = {
+				has_role_of_type = agitator
+			}
+			multiply = 2
+		}
+		if = {
+			limit = {
+				interest_group ?= {
+					OR = {
+						has_variable = communist_ig_var
+						has_variable = chose_vanguardism
+						has_variable = chose_anarchism
+						has_variable = chose_communism
+						has_variable = chose_ethno_nationalism
+						has_variable = chose_conservatism
+						has_variable = chose_fascism
+					}
+				}
+			}
+			multiply = 0.1
+		}
 	}
 }
 
-INJECT:ideology_sovereignist_movement = {
+# Forced REPLACE due to existing section(s): lawgroup_policing
+REPLACE:ideology_sovereignist_movement = {
+	icon = "gfx/interface/icons/ideology_icons/sovereignist.dds"
 	lawgroup_policing = {
 		law_private_policing = disapprove
+		law_local_police = approve
+		law_no_police = neutral
+		law_dedicated_police = disapprove
+		law_militarized_police = strongly_disapprove
+	}
+	lawgroup_migration = {
+		law_closed_borders = approve
+		law_migration_controls = strongly_approve
+		law_no_migration_controls = disapprove
+	}
+	lawgroup_free_speech = {
+		law_outlawed_dissent = strongly_disapprove
+		law_censorship = disapprove
+		law_right_of_assembly = approve
+		law_protected_speech = strongly_approve
+	}
+	lawgroup_citizenship = {
+		law_ethnostate = strongly_disapprove
+		law_subjecthood = neutral
+		law_national_supremacy = disapprove
+		law_racial_segregation = disapprove
+		law_cultural_exclusion = neutral
+		law_multicultural = approve
 	}
 }
 
