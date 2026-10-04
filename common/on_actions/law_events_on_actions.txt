@@ -73,6 +73,8 @@ on_law_checkpoint_debate = {
 		10 = extra_law_events.34	# A Question of Conscience (LGBTQ Rights – Amendment)
 		10 = extra_law_events.87	# To the Victor Belong the Spoils (Bureaucracy – Amendment)
 		10 = extra_law_events.88	# A Test of the Tongue (Citizenship – Amendment)
+		10 = extra_law_events.89	# Guards at the Mill Gate (Policing – Amendment)
+		10 = extra_law_events.90	# Who Watches the Watchmen (Policing – Amendment)
 
 		# --- Extra Law Events — issue #81 debate flavor ---
 		10 = extra_law_events.61	# Industry vs Public Consultation (Financial Regulation)

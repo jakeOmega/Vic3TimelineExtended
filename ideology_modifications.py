@@ -683,10 +683,9 @@ pmc_strongly_disapprove = [("law_private_military_contractors", "strongly_disapp
 # it (common/ideologies/extra_ideologies.txt); market ideologies are left
 # neutral. The left opposes a force hired by property owners, paternalists the
 # local notables' constabularies it displaces, nationalists and militarists any
-# force outside the state's monopoly. Each is its ideology's last entry: the
-# stances were added without the game files by replaying apply_ideologies'
-# insert over the committed bodies, which equals a real run only for the last
-# sub-entry (docs/superpowers/specs/2026-10-04-policing-laws-design.md).
+# force outside the state's monopoly
+# (docs/superpowers/specs/2026-10-04-policing-laws-design.md). An ideology the
+# Policing block is new to also states the four base-game police laws.
 private_policing_disapprove = [("law_private_policing", "disapprove")]
 private_policing_strongly_disapprove = [("law_private_policing", "strongly_disapprove")]
 
@@ -807,6 +806,9 @@ modifications = {
         "lawgroup_army_model": [
             ("law_private_military_contractors", "disapprove"),
         ],
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
+        ],
     },
     "ideology_patriotic": {
         # Section 13 puts the Petite Bourgeoisie on the hard-money side, and
@@ -910,6 +912,9 @@ modifications = {
         ],
         "lawgroup_language_policy": language_pluralist,
         "lawgroup_antitrust": antitrust_ordoliberal,
+        "lawgroup_policing": [
+            ("law_private_policing", "neutral"),
+        ],
     },
     "ideology_liberal_modern": {
         "lawgroup_monetary_policy": advanced_curency,
@@ -979,6 +984,9 @@ modifications = {
         ],
         "lawgroup_language_policy": language_technologist,
         "lawgroup_antitrust": antitrust_ordoliberal,
+        "lawgroup_policing": [
+            ("law_private_policing", "neutral"),
+        ],
     },
     "ideology_market_liberal": {
         "lawgroup_army_model": pmc_approve + [
@@ -1144,7 +1152,12 @@ modifications = {
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "disapprove"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "neutral"),
+            ("law_local_police", "disapprove"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "strongly_disapprove"),
+        ],
     },
     "ideology_social_democrat": {
         "lawgroup_army_model": pmc_disapprove + [
@@ -1216,7 +1229,12 @@ modifications = {
             ("law_automated_bureaucracy", "neutral"),
             ("law_communal_administration", "neutral"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "disapprove"),
+            ("law_local_police", "neutral"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "disapprove"),
+        ],
     },
     "ideology_vanguardist": {
         "lawgroup_army_model": pmc_strongly_disapprove + [
@@ -1278,7 +1296,12 @@ modifications = {
             ("law_elected_bureaucrats", "disapprove"),
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "strongly_disapprove"),
+            ("law_local_police", "disapprove"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "approve"),
+        ],
     },
     "ideology_fascist": {
         "lawgroup_army_model": pmc_strongly_disapprove,
@@ -1349,7 +1372,12 @@ modifications = {
             ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "strongly_disapprove"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "strongly_disapprove"),
+            ("law_local_police", "disapprove"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "strongly_approve"),
+        ],
     },
     "ideology_anarchist": {
         "lawgroup_army_model": pmc_strongly_disapprove + [
@@ -1559,7 +1587,12 @@ modifications = {
         ),
         "lawgroup_language_policy": language_pluralist,
         "lawgroup_antitrust": antitrust_ordoliberal,
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "disapprove"),
+            ("law_local_police", "neutral"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "strongly_disapprove"),
+        ],
     },
     "ideology_meritocratic": {
         "lawgroup_human_augmentation": unregulated_augmentation,
@@ -1627,7 +1660,12 @@ modifications = {
             ("law_population_control_measures", "neutral"),
             ("law_communal_child_rearing", "disapprove"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "disapprove"),
+            ("law_local_police", "neutral"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "approve"),
+        ],
     },
     "ideology_jingoist_leader": {
         "lawgroup_army_model": pmc_disapprove,
@@ -1649,7 +1687,12 @@ modifications = {
             ("law_open_source_genetics", "disapprove"),
             ("law_state_eugenics_program", "strongly_approve"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "disapprove"),
+            ("law_local_police", "neutral"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "approve"),
+        ],
     },
     "ideology_individualist": {
         "lawgroup_army_model": pmc_approve + [
@@ -1727,7 +1770,12 @@ modifications = {
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "disapprove"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "neutral"),
+            ("law_local_police", "neutral"),
+            ("law_dedicated_police", "neutral"),
+            ("law_militarized_police", "strongly_disapprove"),
+        ],
     },
     "ideology_communist": {
         "lawgroup_army_model": pmc_strongly_disapprove + [
@@ -1778,7 +1826,12 @@ modifications = {
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "neutral"),
         ],
-        "lawgroup_policing": private_policing_strongly_disapprove,
+        "lawgroup_policing": private_policing_strongly_disapprove + [
+            ("law_no_police", "neutral"),
+            ("law_local_police", "approve"),
+            ("law_dedicated_police", "neutral"),
+            ("law_militarized_police", "disapprove"),
+        ],
     },
     "ideology_pacifist": {
         "lawgroup_army_model": pmc_disapprove,
@@ -1910,7 +1963,12 @@ modifications = {
             ("law_population_control_measures", "strongly_disapprove"),
             ("law_communal_child_rearing", "neutral"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "disapprove"),
+            ("law_local_police", "neutral"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "strongly_disapprove"),
+        ],
     },
     "ideology_humanitarian_royalist": {
         "lawgroup_LGBTQ_rights": lgbtq_love,
@@ -2094,7 +2152,12 @@ modifications = {
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "neutral"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "neutral"),
+            ("law_local_police", "approve"),
+            ("law_dedicated_police", "neutral"),
+            ("law_militarized_police", "strongly_disapprove"),
+        ],
     },
     "ideology_scholar_paternalistic": {
         "lawgroup_monetary_policy": simple_currency,
@@ -2280,6 +2343,9 @@ modifications = {
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "neutral"),
             ("law_communal_administration", "disapprove"),
+        ],
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
         ],
     },
     "ideology_buddhist_moralist": {
@@ -2480,7 +2546,12 @@ modifications = {
             ("law_algorithmic_governance", "neutral"),
         ],
         "lawgroup_criminal_justice": authoritarian_criminal_justice,
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "strongly_disapprove"),
+            ("law_local_police", "neutral"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "strongly_approve"),
+        ],
     },
     "ideology_austrian_hegemony": {
         "lawgroup_ministry_of_propaganda": ministry_constructor(
@@ -2701,7 +2772,12 @@ modifications = {
             ("law_open_source_genetics", "approve"),
             ("law_state_eugenics_program", "disapprove"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "neutral"),
+            ("law_local_police", "neutral"),
+            ("law_dedicated_police", "neutral"),
+            ("law_militarized_police", "strongly_disapprove"),
+        ],
     },
     "ideology_socialist_movement": {
         "lawgroup_welfare": [
@@ -2742,7 +2818,12 @@ modifications = {
             ("law_automated_bureaucracy", "neutral"),
             ("law_communal_administration", "approve"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "neutral"),
+            ("law_local_police", "approve"),
+            ("law_dedicated_police", "neutral"),
+            ("law_militarized_police", "strongly_disapprove"),
+        ],
     },
     "ideology_communist_movement": {
         "lawgroup_governance_principles": [
@@ -2763,7 +2844,12 @@ modifications = {
         ],
         "lawgroup_language_policy": language_reformist,
         "lawgroup_antitrust": antitrust_command_coop,
-        "lawgroup_policing": private_policing_strongly_disapprove,
+        "lawgroup_policing": private_policing_strongly_disapprove + [
+            ("law_no_police", "neutral"),
+            ("law_local_police", "approve"),
+            ("law_dedicated_police", "neutral"),
+            ("law_militarized_police", "disapprove"),
+        ],
     },
     "ideology_anarchist_movement": {
         "lawgroup_governance_principles": [
@@ -2823,7 +2909,12 @@ modifications = {
             ("law_population_control_measures", "approve"),
             ("law_communal_child_rearing", "strongly_approve"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "strongly_disapprove"),
+            ("law_local_police", "disapprove"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "approve"),
+        ],
     },
     "ideology_fascist_movement": {
         "lawgroup_ministry_of_propaganda": ministry_constructor(
@@ -2941,7 +3032,12 @@ modifications = {
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "disapprove"),
         ],
-        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_policing": private_policing_disapprove + [
+            ("law_no_police", "neutral"),
+            ("law_local_police", "disapprove"),
+            ("law_dedicated_police", "approve"),
+            ("law_militarized_police", "strongly_disapprove"),
+        ],
     },
     "ideology_liberal_republican_movement": {
         "lawgroup_criminal_justice": progressive_criminal_justice,
@@ -3228,6 +3324,9 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
         ],
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
+        ],
     },
     "ideology_magnatial": {
         "lawgroup_monetary_policy": simple_currency,
@@ -3242,6 +3341,9 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
         ],
     },
     "ideology_carlist_ig": {
@@ -3258,6 +3360,9 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
         ],
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
+        ],
     },
     "ideology_moderantist": {
         "lawgroup_monetary_policy": simple_currency,
@@ -3272,6 +3377,9 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+        ],
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
         ],
     },
     # --- Stances on the laws the mod adds to vanilla law groups, for vanilla
@@ -3381,6 +3489,9 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
         ],
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
+        ],
     },
     "ideology_cartist": {
         "lawgroup_bureaucracy": [
@@ -3404,6 +3515,9 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
+        ],
+        "lawgroup_policing": [
+            ("law_private_policing", "neutral"),
         ],
     },
     "ideology_hindu_moralist_british_india": {
@@ -3529,11 +3643,17 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
         ],
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
+        ],
     },
     "ideology_montenegrin_moralist": {
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
         ],
     },
     "ideology_nihilist": {
@@ -3573,6 +3693,9 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
         ],
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
+        ],
     },
     "ideology_colonialist": {
         "lawgroup_colonization": [
@@ -3583,10 +3706,16 @@ modifications = {
         "lawgroup_colonization": [
             ("law_neocolonialism", "disapprove"),
         ],
+        "lawgroup_policing": [
+            ("law_private_policing", "approve"),
+        ],
     },
     "ideology_ilustrado": {
         "lawgroup_rights_of_women": [
             ("law_protected_class", "neutral"),
+        ],
+        "lawgroup_policing": [
+            ("law_private_policing", "neutral"),
         ],
     },
     "ideology_traditionalist_minoritarian": {
@@ -3620,6 +3749,31 @@ modifications = {
         "lawgroup_welfare": [
             ("law_universal_basic_income", "strongly_disapprove"),
             ("law_post-scarcity", "disapprove"),
+        ],
+    },
+    "ideology_pro_slavery_movement": {
+        "lawgroup_policing": [
+            ("law_private_policing", "approve"),
+        ],
+    },
+    "ideology_slave_revolt_movement": {
+        "lawgroup_policing": [
+            ("law_private_policing", "strongly_disapprove"),
+        ],
+    },
+    "ideology_sovereignist": {
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
+        ],
+    },
+    "ideology_sovereignist_leader": {
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
+        ],
+    },
+    "ideology_sovereignist_movement": {
+        "lawgroup_policing": [
+            ("law_private_policing", "disapprove"),
         ],
     },
 }

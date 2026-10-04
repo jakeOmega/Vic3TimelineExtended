@@ -540,7 +540,7 @@ IMAGES = {
     "drug_policy_hearing": {
         "prompt": "A public hearing on drug policy with experts and citizens.",
         "style": "oil painting, academic art, warm interior light",
-        "events": ["extra_law_events.33", "extra_law_events.34"],
+        "events": ["extra_law_events.33", "extra_law_events.34", "extra_law_events.90"],
     },
 
     # =========================================================================

@@ -688,6 +688,10 @@ ideology_corporate = {
 
 	lawgroup_policing = {
 		law_private_policing = strongly_approve
+		law_no_police = disapprove
+		law_local_police = disapprove
+		law_dedicated_police = neutral
+		law_militarized_police = disapprove
 	}
 
 	country_trigger = {
@@ -2145,6 +2149,10 @@ ideology_custom_religion_corporate_governance = {
 
 	lawgroup_policing = {
 		law_private_policing = approve
+		law_no_police = disapprove
+		law_local_police = neutral
+		law_dedicated_police = approve
+		law_militarized_police = disapprove
 	}
 
 	lawgroup_distribution_of_power = {

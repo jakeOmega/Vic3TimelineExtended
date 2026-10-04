@@ -242,10 +242,11 @@ the mod's laws](#amendments-to-the-mods-laws)). Corporate Security Powers gives
 companies police powers in their own mines, mills and company towns beside a
 public force, from Corporate Charters on. Interest groups take the same stance
 on it as on Private Policing, so until Corpocrats appear (Mutual Funds) it
-depends on the Industrialists, who sponsor it whatever their leader. Civilian Oversight sets up review boards for
+depends on the Industrialists, who sponsor it whatever their leader; the Guards at the Mill
+Gate event offers it during the debate. Civilian Oversight sets up review boards for
 complaints against police officers and licensed firms, from the Civil Rights
 Movement technology on, and interest groups judge it as they judge Guaranteed
-Liberties.
+Liberties; the Who Watches the Watchmen event offers it during the debate.
 
 ### Law enactment events
 
@@ -352,8 +353,8 @@ amendments to the Legislated Tax Code law, and only tax bills change them (see
 | Small Donor Matching | Donation Limits, Publicly Funded Elections | +5 legitimacy, higher bureaucracy cost |
 | Religious Exemption Clause | Any LGBTQ+ protection law | Devout approval |
 | Environmental Grandfather Clause | Ministry of the Environment Established | Industrialist approval, 5% more pollution and emissions |
-| Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing |
-| Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties |
+| Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing; the Guards at the Mill Gate event offers it |
+| Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
 
 ### Sunset clauses

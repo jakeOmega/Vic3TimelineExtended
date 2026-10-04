@@ -1589,11 +1589,21 @@
  extra_law_events.88.d:0 "With the citizenship bill under debate, the [SCOPE.gsInterestGroup('language_test_ig').GetName] propose an [concept_amendment]: no one should be naturalised who cannot speak our official language. A common tongue, they argue, makes a common people. Immigrant associations answer that a grammar examination measures schooling, not loyalty, and that it will turn away the very workers our farms and factories are short of."
  extra_law_events.88.f:0 "\"Read the passage aloud, please.\"\n\n\"'Every citizen owes allegiance to the...' Forgive me. The next word?\"\n\n\"Constitution.\"\n\n\"Constitution. I have lived here eleven years, sir. I have paid taxes for eleven years. My children correct my grammar at supper.\"\n\nThe clerk made a mark on the form. \"Then your children may apply when they come of age.\""
  extra_law_events.88.t:0 "A Test of the Tongue"
+ extra_law_events.89.a:0 "Let the companies guard what they own."
+ extra_law_events.89.b:0 "Policing is the business of the state."
+ extra_law_events.89.d:0 "As the police bill goes through the legislature, the [SCOPE.gsInterestGroup('industrialists_ig').GetName] have offered their votes on one condition: that companies may commission guards of their own to police their mines, mills and company towns beside the public force. Their spokesmen promise order at no cost to the treasury. Union men answer that a guard paid by the owner will never stand between the owner and a strike."
+ extra_law_events.89.f:0 "\"Thirty men, armed, deputised by the county and paid by the company,\" the superintendent said. \"The sheriff has four deputies for the whole valley. Do the arithmetic.\"\n\n\"And when the miners walk out?\"\n\n\"Then the law will be on hand to keep the peace.\"\n\n\"Whose peace?\"\n\nThe superintendent smiled. \"Is there more than one?\""
+ extra_law_events.89.t:0 "Guards at the Mill Gate"
  extra_law_events.9.a:0 "The reform is long overdue - pass it now!"
  extra_law_events.9.b:0 "Build an academic consensus with the intelligentsia."
  extra_law_events.9.d:0 "Our proposed changes to intellectual property law have split the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName]. Some argue passionately that ideas are the common heritage of mankind, while others insist that without the protection of patents, the wellspring of invention will dry up."
  extra_law_events.9.f:0 "\"If I plant an apple tree, the apples are mine. But if I sing a song, does it not belong to everyone who hears it? The question of who owns an idea is, I suspect, the question that will define this century.\""
  extra_law_events.9.t:0 "The Pirate's Dilemma"
+ extra_law_events.90.a:0 "Let the public sit in judgment of its police."
+ extra_law_events.90.b:0 "The police answer to their own superiors."
+ extra_law_events.90.d:0 "The [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] have proposed an [concept_amendment] to the police bill: civilian review boards, empowered to hear complaints against officers and to discipline them. They argue that a force accountable only to itself breeds the grievances that fill the streets with marchers. Senior officers warn that every arrest will be second-guessed by people who have never made one."
+ extra_law_events.90.f:0 "The complaint ran to three pages, typed, with a carbon copy for the board. The officer named in it sat at the end of the long table with his cap on his knee and listened to it read aloud.\n\n\"Do you wish to respond?\"\n\n\"I've worn this badge for nineteen years,\" he said. \"Nobody ever asked me to before.\"\n\n\"That,\" said the woman at the head of the table, \"is rather the point.\""
+ extra_law_events.90.t:0 "Who Watches the Watchmen"
 
 #
 # FORMATION_TE
