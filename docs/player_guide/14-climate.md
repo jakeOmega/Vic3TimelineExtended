@@ -11,13 +11,14 @@ mandate also remain active with the rule off; capture still costs goods.
 
 ## How emissions become warming
 
-Emissions belong to a market, not a country. Buildings contribute the greenhouse
-gases shown by their production methods, with source capture and synthetic-fuel credits subtracted. The
-market leader's reductions cut the remaining industrial emissions. Households
-add a heating footprint estimated from population and average wealth. Direct Air Capture at Carbon Conversion Works then subtracts atmospheric
-removal. Each building's location determines its market, including foreign-owned
-sites. The year's net emissions add to the world's cumulative total and set
-warming.
+Each country counts the buildings and households in its own states. Buildings
+contribute their production methods' greenhouse gases, with source capture and
+synthetic-fuel credits subtracted. The country's own industrial reductions cut
+its remaining industrial emissions. Households add a heating footprint estimated
+from population and average wealth. Direct Air Capture at Carbon Conversion
+Works subtracts atmospheric removal. Buildings count where they stand, including
+foreign-owned sites. Markets sum their members; every country's net annual
+contribution adds once to the world's cumulative total and sets warming.
 
 Exporting synthetic fuels can make the producing market's figure negative:
 the fuel's production credit counts there, while burning it counts in the
@@ -32,16 +33,14 @@ and Carbon Minerals; this chapter calls it coal for short.
 Buildings that use coal or oil show Greenhouse Gas Emissions. Fuel methods add
 to the figure; capture methods subtract from it. Process fuel and automation
 both contribute. The figure grows with staffing and throughput and feeds the
-climate calculation. The market leader's industrial policy cut applies afterward.
+climate calculation. The state owner's industrial policy cut applies afterward.
 
 Household heating demand follows the buy packages at your states' average
 wealth, with fossil heating weighted by the coal, oil, wood, fabric and
 electricity available in the market. Peasants contribute only 5% of the
 purchased heating estimate. Green Building Codes cuts the estimated household fossil footprint by
 60%, Renewable Investment by 25%, and Fossil-Fuel Divestment by 15%. These cuts
-add together: all three eliminate household fossil-heating emissions. National
-policies affect your own households; Renewable Investment covers every market
-member. Industrial emissions still depend on production methods and capture.
+add together: all three eliminate household fossil-heating emissions. All three policies affect your own households. Industrial emissions still depend on production methods and capture.
 
 Fuel-input discounts reduce goods costs; the custom emissions figure follows
 the recipe and its staffing and throughput. Public Transit's oil discount has
@@ -60,13 +59,12 @@ Warming does not wear off. The anomaly falls only in a year when the world as a
 whole captures more carbon than it emits. Cutting your emissions slows the rise;
 it does not undo what is already there.
 
-Industrial policy reductions come from the market leader and apply to every
-member's remaining industrial emissions.
-The leader's Greenhouse Gas Emissions modifier comes mainly from the three
-market-wide climate policies, the Ministry of the Environment (−5% per level)
-and the Environmental Sustainability power bloc principle (−5% to −25% by tier).
-A member's own ministry does nothing for the market's emissions. The industrial cuts add together and stop at complete elimination. Atmospheric
-removal retains its full credit and can take the market below zero.
+Industrial policy reductions come from each country's Carbon Tax, Renewable
+Investment, Emission Standards, Ministry of the Environment (−5% per level),
+Environmental Sustainability principle (−5% to −25% by tier) and other national
+measures. A market member's own ministry reduces its own states' emissions.
+The industrial cuts add together and stop at complete elimination. Atmospheric
+removal retains its full credit and can take a country or market below zero.
 
 Carbon Conversion Works unlock with Carbon Capture and Storage in era 10,
 after Clean Energy Technologies. Their Direct Air Capture method removes CO₂
@@ -178,7 +176,7 @@ it has no status line: the overview carries the tier and the readings.
 
 The overview's first row is icons with a word under each: the warming tier
 (hover it for what the tier means), Market Leader or Market Member (whether you
-set the market-wide policies), and Penalty with the Climate Warming modifier's
+set fossil-fuel tariffs), and Penalty with the Climate Warming modifier's
 current multiplier. A Treaty-Bound icon joins them while an Enforce Emissions
 Reduction treaty binds you.
 
@@ -199,49 +197,50 @@ They update each January; before the first January of a game, a line says when
 they arrive.
 
 Two pies close the overview. Our Share is your market's share of world
-emissions. Emissions Cut shows the market leader's policy reduction to remaining industrial emissions; hover it for how many of the nine
+emissions. Emissions Cut shows your country's policy reduction to its remaining industrial emissions; hover it for how many of the ten
 policies you run. The cut changes the moment a policy is adopted or repealed.
 
 | Section | Starts | Shows |
 |---|---|---|
-| Mitigation Policies | Open | The nine policies, under Market-Wide and National. Each row has the policy's icon, lit while the policy is in force, its name (hover it for what the policy does), a green check while it is in force, and one control: Adopt while the policy is not in force, Repeal while it is. A grayed control's tooltip lists the conditions and which of them you meet. When one reason grays out every Adopt or every Repeal, a line above the rows says so once: warming below 0.5 °C, an emissions-reduction treaty (only Climate Adaptation can then be repealed), or, for a market member, "Set by our market leader for the whole market" over the market-wide rows. Adoption Around the World, under the rows, counts the nations running each policy. |
-| Top Emitters | Open | The five markets that emit the most, largest first, each named by its leader. Each row shows the leader's flag, the market's annual emissions, its share of world emissions and its cumulative emissions. A treaty icon marks a leader bound by Enforce Emissions Reduction, and your own market's row says "Our market". Hover a row for the market's members and its emissions cut, hover "+N more markets" for every market that emits, and a line gives your market's place when it is not in the five. The figures change each January; the order is redrawn each month. |
+| Mitigation Policies | Open | Ten policies: market-wide Fossil-Fuel Tariffs first, then nine National policies. Each row has an icon, its name and effect tooltip, an active check, and Adopt or Repeal. Grayed controls explain the warming, authority, market ownership and customs conditions. Adoption Around the World counts countries using each policy; the tariff row counts market leaders. |
+| Top Emitters | Open | The five countries emitting most, largest first, including market members. Each row shows its flag, annual emissions, share of world emissions and national cumulative total. A treaty icon marks a bound country; your row says "Our country". Hover for its industrial reduction and market context, or "+N more countries" for the full list. Figures update each January; rankings update monthly. |
 | Fossil Transition | Open | Your Resource Transition law, what is left of your coal mines, oil rigs and power plants with a retirement control for each, and what could replace them. See [The fossil transition](#the-fossil-transition). Shown on your own market only. |
 | History | Open | Charts of global temperature and of your market's share of world emissions. Both step once a year, when the emissions figures update. |
 | How Global Warming Works | Collapsed | The explanations: warming, the warming penalty, emissions and the mitigation policies. |
 
-Top Emitters tells you whom to bind. A market leader sets the market-wide
-policies for every member, so Enforce Emissions Reduction on a leader high in
-the list cuts the most. A market that captures as much carbon as it emits is not
-listed. The cumulative figure belongs to the leader, not the market: it counts
-the years that country led a market, carries over if it leads another later,
-and a new leader starts from its own total.
+Top Emitters tells you whom to bind: every country controls its own industrial
+policies, whether it leads its market or belongs to another country's. A country
+that captures as much carbon as it emits is not listed. Its cumulative total
+follows it through market joins, departures and leadership changes; negative
+years subtract from it. The tooltip says when cumulative counting begins. Each member can adopt or
+repeal its own policies independently.
 
 ## Climate policies
 
-There are nine policies. Three are market-wide: only a market leader can adopt
-or repeal them, and they then apply to every country in its market, which sees
-them in force under "Set by our market leader for the whole market". The other six are national, open to every
-country. Every policy needs the anomaly to have reached 0.5 °C, except
-Fossil-Fuel Divestment, which needs 1.0 °C. Carbon Removal Support also needs
-Carbon Capture and Storage.
+There are ten policies. Nine are national, open to every country. Only
+Fossil-Fuel Tariffs is market-wide and controlled by the market leader. Every
+policy needs 0.5 °C of warming, except Fossil-Fuel Divestment, which needs 1.0 °C.
+Carbon Removal Support also needs Carbon Capture and Storage.
 
-Members always follow their leader's market-wide policies. A country that joins
-another market takes the ones its new leader has and drops the ones the leader
-lacks, and each month every member is brought into line with its leader the
-same way. A country bound by an [Enforce Emissions
-Reduction](#enforce-emissions-reduction) treaty is the exception: it keeps its
-policies when it joins a market and when its leader repeals them.
+National policies stay with a country when it changes market, and the leader's
+adoption or repeal changes only its own country. Most policies carry an
+Authority Cost for as long as they are in force; adoption requires producing
+more authority than that cost. Emission Standards charges only the adopter.
 
-Most policies carry an Authority Cost for as long as they are in force, and you
-can only adopt one while you produce more authority than that cost. Emission
-Standards charges its cost to every country in the market, members included.
+Fossil-Fuel Tariffs adds 10 percentage points to coal and oil import and export
+tariff rates and costs 100 Authority. The leader's native tariff levels stay as
+chosen; repeal removes only the surcharge. It can coexist with legislated
+customs. Losing market control ends the former leader's policy. Tariffs can
+change trade and fuel costs; they grant no automatic emissions reduction and
+also apply to traded synthetic coal and oil, which use the same goods as fossil
+fuels.
 
 | Policy | Scope | Authority | Effects |
 |---|---|---|---|
-| Carbon Tax | Market | none | Industrial emissions −20%; coal and oil output −10%; taxes on oil extraction doubled, manufacturing taxes +10%. |
-| Renewable Investment | Market | none | Industrial emissions −15%; household emissions −25%; Renewable Energy Plants +10% throughput but need subsidies; conventional power plants −10% throughput; power buildings built 25% faster. |
-| Emission Standards | Market | 200 | Industrial emissions −10%; generated pollution −25%; −5% throughput for every building. |
+| Fossil-Fuel Tariffs | Market leader | 100 | Coal and oil import and export tariff rates +10 percentage points; native levels remain as chosen. |
+| Carbon Tax | National | none | Industrial emissions −20%; coal and oil output −10%; taxes on oil extraction doubled, manufacturing taxes +10%. |
+| Renewable Investment | National | none | Industrial emissions −15%; household emissions −25%; Renewable Energy Plants +10% throughput but need subsidies; conventional power plants −10% throughput; power buildings built 25% faster. |
+| Emission Standards | National | 200 | Industrial emissions −10%; generated pollution −25%; −5% throughput for every building. |
 | Climate Adaptation | National | 250 | Mortality −2.5% and standard of living +0.5 in every state. |
 | Reforestation Subsidies | National | 100 | Farm throughput +5%; droughts and floods 25% weaker and shorter. |
 | Carbon Removal Support | National | 100 | Carbon Conversion Works require subsidies and gain +5% throughput; Environmental Movement radicalism −5 percentage points. Needs Carbon Capture and Storage. |
@@ -256,16 +255,16 @@ methods. Repealing it ends the requirement and bonus; you can still subsidize
 the buildings yourself. Direct Air Capture has no sales income, so withdrawing
 its funding stops it as its workers leave.
 
-The three market-wide policies cut industrial emissions directly. Green
+Carbon Tax, Renewable Investment and Emission Standards cut your own industrial emissions directly. Green
 Building Codes and Fossil-Fuel Divestment cut your own household footprint.
 Other national measures protect people and calm the Environmental Movement ([The Environmental
 Movement](#the-environmental-movement)). Climate Adaptation is the one that pays
 off even if nobody else acts.
 
-If you lead a market that burns a large share of the world's coal and oil, the
-market-wide policies are where your choice matters. If you are a member, you can
-reduce your household footprint and use capture: the leader sets the
-market-wide industrial policy cut.
+Your industrial policies, household measures and capture work whether you lead
+your market or are a member. Tariffs are a separate choice for leaders: they can
+reduce fossil-fuel trade, but higher import tariffs can also protect domestic
+coal and oil producers. Watch the actual emissions figure when judging them.
 
 ## How the AI adopts climate policy
 
@@ -383,23 +382,22 @@ electricity.
 
 ## Enforce Emissions Reduction
 
-Enforce Emissions Reduction is a treaty article that forces a market leader to
-run every climate policy except Climate Adaptation. It appears once the world
-has warmed past 0.1 °C and can be signed from 0.5 °C, with the Intergovernmental
-Organizations technology, against a country that leads its own market. Any
-country can demand it. It can be a war goal, and it can be requested or offered
-in a treaty.
+Enforce Emissions Reduction forces its source country to maintain seven
+national policies: Carbon Tax, Renewable Investment, Emission Standards,
+Reforestation, Public Transit, Fossil-Fuel Divestment and Green Building Codes.
+It appears past 0.1 °C and can be signed from 0.5 °C with Intergovernmental
+Organizations, including against a market member. It can be a war goal or a
+requested or offered treaty article. Climate Adaptation, Carbon Removal Support
+and Fossil-Fuel Tariffs are not forced; the first and last remain freely
+revocable, while the existing treaty lock also bars repealing removal support
+if the bound country chooses to adopt it.
 
-On entry into force, the bound country adopts the three market-wide policies for
-its whole market and the other four national policies for itself. While the
-treaty holds, it can't repeal them, and it also suffers −20% power plant
+Only the source country's policies change. It also suffers −20% power plant
 throughput, −10% Coal Mine and oil extraction throughput and −2 Industrialists
-approval. The treaty also waives the Authority Cost of the five forced policies
-that charge one (−750 in all), since the country can no longer repeal them. The
-demanding side gains +2% prestige and pays the article's upkeep. If the bound
-country loses one of the policies anyway, the treaty freezes. Treaty mechanics
-are in [Diplomacy](08-diplomacy.md); while a United Nations exists, it also
-negotiates climate accords ([The United Nations](09-united-nations.md)).
+approval. The treaty waives the five forced policies' Authority Cost (−750 in
+all). The demanding side gains +2% prestige and pays upkeep. Losing a forced
+policy freezes the treaty. See [Diplomacy](08-diplomacy.md) and
+[The United Nations](09-united-nations.md) for treaty mechanics and climate accords.
 
 ## Climate events
 

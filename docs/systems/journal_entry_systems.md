@@ -604,8 +604,8 @@ The reason text used to compute **14 script values live, in loc, every frame the
 | `gw_snapshot_market_emissions_effect` | yearly state pulse, market leaders only (`global_warming_update_on_action`) | `gw_disp_market_emis`, `gw_disp_capture` |
 | `gw_rebase_annual_emissions_effect` | monthly global pulse, acts in January | `gw_g_global_emis`, `gw_g_emis_prev` |
 | `gw_refresh_global_counts_effect` | monthly global pulse, one country sweep | the eight `gw_g_n_*` counters |
-| `gw_accumulate_market_emissions_effect` | yearly state pulse, right after the leader's figure goes into the world total | `gw_disp_market_emis_cum` (on the leader) |
-| `gw_top_emitters_refresh` | the entry's monthly pulse, players only | on the viewer: `gw_emitters_total`, `gw_emitter_1`–`_5` (capitals), `gw_emitters_shown`, `gw_emitters_own_slot`, `gw_emitters_own_rank` |
+| `gw_snapshot_country_emissions_effect` / `gw_accumulate_country_emissions_effect` | yearly state pulse, each country capital; snapshot then exact contribution to the world and national totals | `gw_disp_country_emis`, `gw_disp_country_emis_cum` |
+| `gw_top_emitters_refresh` | monthly JE pulse, players only | five country capital bridges and the player country's rank, regardless of market leadership |
 
 The market sweep is evaluated **once**: the value goes into the variable and the global accumulation then reads the variable, so the number added to `greenhouse_gas_emissions` is unchanged.
 

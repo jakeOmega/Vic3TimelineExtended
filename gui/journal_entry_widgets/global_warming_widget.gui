@@ -14,8 +14,8 @@
 ###   widget_je_gw_status    -> custom_widget_container_2 (below the status line,
 ###                             above the vanilla button grid, which is hidden
 ###                             from humans)
-###       te_gw_status_sections: Mitigation Policies (the nine rows, with
-###       Around the World nested), Top Emitters (the five markets emitting
+###       te_gw_status_sections: Mitigation Policies (the ten rows, with
+###       Around the World nested), Top Emitters (the five countries emitting
 ###       most, named by their leaders) and Fossil Transition (#660: the
 ###       Resource Transition law, retirement programmes, readiness). Open.
 ###       With the Global Warming game rule off only Fossil Transition shows.
@@ -58,8 +58,8 @@
 ###   every figure        -> a ScriptValue from global_warming_values.txt, all of
 ###                          them O(1) reads over pulse-written snapshots
 ###
-### MARKET LEADERSHIP IS NOT A VISIBILITY RULE. All nine rows render for every
-### country, because the three market-wide policies are applied to a market
+### MARKET LEADERSHIP IS NOT A VISIBILITY RULE. All ten rows render for every
+### country, because the market tariff policy are applied to a market
 ### MEMBER's journal entry by its leader. A member sees them lit and "Active",
 ### with "Set by our market leader" said once above them and a greyed control.
 ###
@@ -834,7 +834,7 @@ types global_warming_widget_types
 	### te_gw_reference_sections below.
 	### ======================================================================
 
-	### Mitigation Policies: the nine rows, market-wide first. What greys every
+	### Mitigation Policies: the ten rows, tariffs first. What greys every
 	### Adopt or every Repeal is said once, above the rows (style rule 6), and
 	### only while it holds. How many nations run each policy is a nested table
 	### at the foot, open by default. Everything here reads `Country`, which
@@ -892,11 +892,39 @@ types global_warming_widget_types
 					text = "gw_pol_sub_market"
 				}
 			}
-			# A member's three market-wide controls are all greyed by the same
+			# A member's market tariff control are all greyed by the same
 			# rule; say it once.
 			gw_text = {
 				visible = "[Not( GetScriptedGui('gw_is_market_leader_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 				text = "gw_pol_set_by_leader"
+			}
+
+			gw_policy_row = {
+				datacontext = "[GetScriptedGui('gw_active_fossil_fuel_tariffs_sgui')]"
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/gw_icons/policy_fossil_fuel_divestment.dds"
+				}
+				blockoverride "row_label" {
+					text = "GW_FOSSIL_FUEL_TARIFFS_ROW"
+					tooltip = "GW_FOSSIL_FUEL_TARIFFS_DESC"
+				}
+				blockoverride "adopt_action" {
+					gw_adopt_button = {
+						datacontext = "[GetScriptedGui('gw_policy_fossil_fuel_tariffs_sgui')]"
+					}
+				}
+				blockoverride "repeal_action" {
+					gw_repeal_button = {
+						datacontext = "[GetScriptedGui('gw_policy_fossil_fuel_tariffs_sgui')]"
+					}
+				}
+			}
+
+			### ---- National (every country sets its own) ----
+			gw_subheader = {
+				blockoverride "subheader_text" {
+					text = "gw_pol_sub_national"
+				}
 			}
 
 			gw_policy_row = {
@@ -959,13 +987,6 @@ types global_warming_widget_types
 					gw_repeal_button = {
 						datacontext = "[GetScriptedGui('gw_policy_emission_standards_sgui')]"
 					}
-				}
-			}
-
-			### ---- National (every country sets its own) ----
-			gw_subheader = {
-				blockoverride "subheader_text" {
-					text = "gw_pol_sub_national"
 				}
 			}
 
@@ -1127,6 +1148,14 @@ types global_warming_widget_types
 
 				gw_value_row = {
 					blockoverride "row_label" {
+						text = "GW_FOSSIL_FUEL_TARIFFS_ROW"
+					}
+					blockoverride "row_value" {
+						text = "gw_world_n_fossil_fuel_tariffs"
+					}
+				}
+				gw_value_row = {
+					blockoverride "row_label" {
 						text = "GW_CARBON_TAX_ROW"
 					}
 					blockoverride "row_value" {
@@ -1265,7 +1294,7 @@ types global_warming_widget_types
 		}
 	}
 
-	### One market, named by its leader, on two lines, so a long name (up to
+	### One country, on two lines, so a long name (up to
 	### "United Socialist Council Republics of California", 48 characters)
 	### has the whole 480 column. The second line is fixed cells under
 	### gw_emitter_header's headings: the leader's flag (vanilla's tiny_flag:
@@ -1381,10 +1410,10 @@ types global_warming_widget_types
 		}
 	}
 
-	### Top Emitters: the five markets emitting most, largest first, each named
+	### Top Emitters: the five countries emitting most, largest first, each named
 	### by its leader, with its annual and cumulative emissions and its share
 	### of the world's; "+N more" lists the rest on hover; a line says where
-	### our own market stands when it is not among the five. The rows come from
+	### our own country stands when it is not among the five. The rows come from
 	### the viewer's snapshot (gw_top_emitters_refresh,
 	### global_warming_effects.txt, monthly, players only); the figures on a
 	### row are read live from the listed leader. A live list, so open by

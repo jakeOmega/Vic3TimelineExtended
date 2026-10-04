@@ -76,7 +76,7 @@
 	progressbar = yes
 
 	# ---- PLAYER-FACING SURFACE: the climate panels -------------------------
-	# The sixteen scripted buttons below stay declared because their `ai_chance`
+	# The twenty climate scripted buttons below stay declared because their `ai_chance`
 	# is the AI's only route into this system, but each carries `is_ai = yes` in
 	# its `visible`, so a human sees these three widgets instead of the grid.
 	# Every action the grid offered has a control here — see the mapping in
@@ -116,6 +116,8 @@
 		container = "custom_widget_container_7"
 	}
 
+	scripted_button = gw_fossil_fuel_tariffs_button
+	scripted_button = gw_remove_fossil_fuel_tariffs_button
 	scripted_button = gw_carbon_tax_button
 	scripted_button = gw_remove_carbon_tax_button
 	scripted_button = gw_renewable_investment_button

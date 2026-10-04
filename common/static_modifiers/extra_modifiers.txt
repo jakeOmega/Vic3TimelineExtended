@@ -1307,7 +1307,7 @@ global_warming = {
 }
 
 # ----- Climate mitigation and adaptation policies -----
-# Market leader policies
+# National industrial policies
 carbon_tax_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_coal_mult = -0.10
@@ -8226,4 +8226,14 @@ banking_emergency_import_financing = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_banking_intervention_max_add = -3
 	state_import_advantage_mult = 0.15
+}
+
+# Market leader only: additive tariff rates leave native levels intact.
+fossil_fuel_tariffs_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_coal_import_tariffs_rate_add = 0.10
+	country_coal_export_tariffs_rate_add = 0.10
+	country_oil_import_tariffs_rate_add = 0.10
+	country_oil_export_tariffs_rate_add = 0.10
+	country_authority_cost_add = 100
 }

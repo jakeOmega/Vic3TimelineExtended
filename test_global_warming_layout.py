@@ -27,10 +27,10 @@ ROOTS = {"widget_je_gw_overview": ("custom_widget_container_1", "te_gw_overview_
 FLAGS = {"gw_policies_closed", "gw_emitters_closed", "gw_world_closed", "gw_hist_closed", "gw_how_open",
          "rt_transition_closed", "rt_how_open"}
 OLD_FLAGS = ["gw_hist_open", "gw_world_open", "gw_emissions_closed"]
-MARKET_WIDE = ["carbon_tax", "renewable_investment", "emission_standards"]
-NATIONAL = ["climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
+MARKET_WIDE = ["fossil_fuel_tariffs"]
+NATIONAL = ["carbon_tax", "renewable_investment", "emission_standards", "climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
             "green_building_codes"]
-NATIONAL.insert(2, "carbon_removal")
+NATIONAL.insert(5, "carbon_removal")
 # Textures in the widget that are not icons: frames, fills and blanks.
 NOT_ICONS = {"gfx/interface/backgrounds/round_frame_dec.dds",
                     "gfx/interface/backgrounds/white.dds",   # the threshold line, a tinted flat fill
@@ -187,7 +187,7 @@ class GatedLinesTest(unittest.TestCase):
 
 
 class PolicyRowTest(unittest.TestCase):
-    def test_nine_rows_market_wide_first_each_wired_to_its_own_handlers(self):
+    def test_ten_rows_tariffs_first_each_wired_to_its_own_handlers(self):
         body = _type_body(_read(GUI), "te_gw_sec_policies")
         rows = re.findall(r"gw_policy_row = \{\s*datacontext = \"\[GetScriptedGui\('gw_active_(\w+)_sgui'\)\]\"", body)
         self.assertEqual(rows, MARKET_WIDE + NATIONAL)
@@ -645,7 +645,7 @@ class GwIconsTest(unittest.TestCase):
 
     def test_every_policy_has_its_own_file(self):
         for p in MARKET_WIDE + NATIONAL:
-            icon = "renewable_investment" if p == "carbon_removal" else p
+            icon = {"carbon_removal": "renewable_investment", "fossil_fuel_tariffs": "fossil_fuel_divestment"}.get(p, p)
             self.assertRegex(self.policies, rf"GetScriptedGui\('gw_active_{p}_sgui'\)\]\"\s*"
                                             rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(GW_ICONS)}policy_{icon}\.dds"', p)
 
@@ -1111,7 +1111,7 @@ class MarketTabTest(unittest.TestCase):
         # Every scripted button is the AI's.
         # Eighteen climate buttons and six retirement programme buttons (#660).
         names = re.findall(r"(?m)^\tscripted_button = (\w+)", je)
-        self.assertEqual(len(names), 24)
+        self.assertEqual(len(names), 26)
         buttons = _read(BUTTONS) + "\n" + _read(RT_BUTTONS)
         for name in names:
             self.assertRegex(_top_level(buttons, name), r"visible = \{\s*is_ai = yes", name)
