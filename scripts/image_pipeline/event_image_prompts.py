@@ -511,7 +511,7 @@ IMAGES = {
         "style": "oil painting, academic art, warm interior light",
         "events": [
             "decolonization_events.205", "extra_law_events.13", "extra_law_events.49",
-            "extra_law_events.73",
+            "extra_law_events.73", "extra_law_events.88",
         ],
     },
     "digital_privacy_screen": {

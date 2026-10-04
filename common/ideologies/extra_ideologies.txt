@@ -156,6 +156,7 @@ ideology_multicultural = {
 		law_racial_segregation = disapprove
 		law_cultural_exclusion = neutral
 		law_multicultural = strongly_approve
+		law_subjecthood = neutral
 	}
 
 	lawgroup_minority_rights = {
@@ -172,6 +173,7 @@ ideology_multicultural = {
 		law_unitary_state = neutral
 		law_federal_system = approve
 		law_devolution = strongly_approve
+		law_feudal_contracts = disapprove
 	}
 
 	country_trigger = {
@@ -243,6 +245,7 @@ ideology_multicultural_ig = {
 		law_racial_segregation = disapprove
 		law_cultural_exclusion = neutral
 		law_multicultural = strongly_approve
+		law_subjecthood = neutral
 	}
 
 	lawgroup_minority_rights = {
@@ -259,6 +262,7 @@ ideology_multicultural_ig = {
 		law_unitary_state = neutral
 		law_federal_system = approve
 		law_devolution = strongly_approve
+		law_feudal_contracts = disapprove
 	}
 }
 
@@ -276,6 +280,7 @@ ideology_multicultural_inclusive = {
 		law_racial_segregation = disapprove
 		law_cultural_exclusion = neutral
 		law_multicultural = strongly_approve
+		law_subjecthood = neutral
 	}
 
 	lawgroup_minority_rights = {
@@ -300,6 +305,7 @@ ideology_multicultural_inclusive = {
 		law_unitary_state = neutral
 		law_federal_system = approve
 		law_devolution = strongly_approve
+		law_feudal_contracts = disapprove
 	}
 
 	country_trigger = {
@@ -477,6 +483,7 @@ ideology_optimist_transhumanist = {
 		law_medical_augmentation_only = disapprove
 		law_regulated_augmentation_market = approve
 		law_mandatory_augmentation = neutral
+		law_no_augmentation = strongly_disapprove
 	}
 
 	lawgroup_intellectual_property = {
@@ -516,10 +523,16 @@ ideology_optimist_transhumanist = {
 		law_autocracy = neutral
 		law_single_party_state = neutral
 		law_algorithmic_governance = strongly_approve
+		law_elder_council = neutral
 	}
 
 	lawgroup_bureaucracy = {
 		law_automated_bureaucracy = strongly_approve
+		law_appointed_bureaucrats = neutral
+		law_elected_bureaucrats = neutral
+		law_hereditary_bureaucrats = disapprove
+		law_communal_administration = neutral
+		law_contracted_administration = neutral
 	}
 
 	lawgroup_internet_governance = {
@@ -601,6 +614,8 @@ ideology_corporate = {
 		law_neocameralism = strongly_approve
 		law_direct_democracy = disapprove
 		law_social_monarchy = disapprove
+		law_chiefdom = strongly_disapprove
+		law_corporate_state = neutral
 	}
 
 	lawgroup_economic_system = {
@@ -665,6 +680,10 @@ ideology_corporate = {
 	lawgroup_bureaucracy = {
 		law_contracted_administration = strongly_approve
 		law_communal_administration = disapprove
+		law_appointed_bureaucrats = neutral
+		law_elected_bureaucrats = disapprove
+		law_hereditary_bureaucrats = strongly_disapprove
+		law_automated_bureaucracy = approve
 	}
 
 	country_trigger = {
@@ -724,6 +743,8 @@ ideology_custom_religion_traditionalist_economy = {
 		law_command_economy = disapprove
 		law_traditionalism = strongly_approve
 		law_laissez_faire = disapprove
+		law_extraction_economy = disapprove
+		law_industry_banned = approve
 	}
 
 	lawgroup_trade_policy = {
@@ -746,6 +767,7 @@ ideology_custom_religion_traditionalist_economy = {
 		law_traditional_ip_protection = approve
 		law_strict_ip_protection = neutral
 		law_open_source_innovation = strongly_disapprove
+		law_state_intellectual_property = neutral
 	}
 
 	lawgroup_monetary_policy = {
@@ -753,6 +775,7 @@ ideology_custom_religion_traditionalist_economy = {
 		law_gold_standard = strongly_approve
 		law_fiat_currency = disapprove
 		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
 	}
 
 	lawgroup_ministry_of_commerce = {
@@ -813,6 +836,8 @@ ideology_custom_religion_free_market_economy = {
 		law_command_economy = disapprove
 		law_traditionalism = disapprove
 		law_laissez_faire = strongly_approve
+		law_extraction_economy = strongly_disapprove
+		law_industry_banned = strongly_disapprove
 	}
 
 	lawgroup_trade_policy = {
@@ -835,6 +860,7 @@ ideology_custom_religion_free_market_economy = {
 		law_traditional_ip_protection = approve
 		law_strict_ip_protection = approve
 		law_open_source_innovation = disapprove
+		law_state_intellectual_property = strongly_disapprove
 	}
 
 	lawgroup_monetary_policy = {
@@ -842,6 +868,7 @@ ideology_custom_religion_free_market_economy = {
 		law_gold_standard = neutral
 		law_fiat_currency = approve
 		law_digital_currency = strongly_approve
+		law_decentralized_cryptocurrency = approve
 	}
 
 	lawgroup_ministry_of_commerce = {
@@ -902,6 +929,8 @@ ideology_custom_religion_socialist_economy = {
 		law_command_economy = approve
 		law_traditionalism = disapprove
 		law_laissez_faire = strongly_disapprove
+		law_extraction_economy = strongly_disapprove
+		law_industry_banned = strongly_disapprove
 	}
 
 	lawgroup_trade_policy = {
@@ -924,6 +953,7 @@ ideology_custom_religion_socialist_economy = {
 		law_traditional_ip_protection = disapprove
 		law_strict_ip_protection = strongly_disapprove
 		law_open_source_innovation = approve
+		law_state_intellectual_property = approve
 	}
 
 	lawgroup_monetary_policy = {
@@ -931,6 +961,7 @@ ideology_custom_religion_socialist_economy = {
 		law_gold_standard = neutral
 		law_fiat_currency = approve
 		law_digital_currency = strongly_approve
+		law_decentralized_cryptocurrency = strongly_disapprove
 	}
 
 	lawgroup_ministry_of_commerce = {
@@ -991,6 +1022,8 @@ ideology_custom_religion_social_democratic_economy = {
 		law_command_economy = disapprove
 		law_traditionalism = disapprove
 		law_laissez_faire = disapprove
+		law_extraction_economy = strongly_disapprove
+		law_industry_banned = disapprove
 	}
 
 	lawgroup_trade_policy = {
@@ -1013,6 +1046,7 @@ ideology_custom_religion_social_democratic_economy = {
 		law_traditional_ip_protection = approve
 		law_strict_ip_protection = neutral
 		law_open_source_innovation = approve
+		law_state_intellectual_property = neutral
 	}
 
 	lawgroup_monetary_policy = {
@@ -1020,6 +1054,7 @@ ideology_custom_religion_social_democratic_economy = {
 		law_gold_standard = neutral
 		law_fiat_currency = approve
 		law_digital_currency = strongly_approve
+		law_decentralized_cryptocurrency = disapprove
 	}
 
 	lawgroup_ministry_of_commerce = {
@@ -1080,6 +1115,8 @@ ideology_custom_religion_imperial_cult_economy = {
 		law_command_economy = strongly_approve
 		law_traditionalism = disapprove
 		law_laissez_faire = neutral
+		law_extraction_economy = disapprove
+		law_industry_banned = strongly_disapprove
 	}
 
 	lawgroup_trade_policy = {
@@ -1102,6 +1139,7 @@ ideology_custom_religion_imperial_cult_economy = {
 		law_traditional_ip_protection = approve
 		law_strict_ip_protection = neutral
 		law_open_source_innovation = disapprove
+		law_state_intellectual_property = approve
 	}
 
 	lawgroup_monetary_policy = {
@@ -1109,6 +1147,7 @@ ideology_custom_religion_imperial_cult_economy = {
 		law_gold_standard = approve
 		law_fiat_currency = strongly_approve
 		law_digital_currency = strongly_approve
+		law_decentralized_cryptocurrency = strongly_disapprove
 	}
 
 	lawgroup_ministry_of_commerce = {
@@ -1169,6 +1208,8 @@ ideology_custom_religion_theocratic_economy = {
 		law_command_economy = disapprove
 		law_traditionalism = neutral
 		law_laissez_faire = strongly_disapprove
+		law_extraction_economy = disapprove
+		law_industry_banned = neutral
 	}
 
 	lawgroup_trade_policy = {
@@ -1191,6 +1232,7 @@ ideology_custom_religion_theocratic_economy = {
 		law_traditional_ip_protection = disapprove
 		law_strict_ip_protection = strongly_disapprove
 		law_open_source_innovation = neutral
+		law_state_intellectual_property = disapprove
 	}
 
 	lawgroup_monetary_policy = {
@@ -1198,6 +1240,7 @@ ideology_custom_religion_theocratic_economy = {
 		law_gold_standard = approve
 		law_fiat_currency = neutral
 		law_digital_currency = neutral
+		law_decentralized_cryptocurrency = disapprove
 	}
 
 	lawgroup_ministry_of_commerce = {
@@ -1257,6 +1300,7 @@ ideology_custom_religion_traditionalist_society = {
 		law_racial_segregation = neutral
 		law_cultural_exclusion = disapprove
 		law_multicultural = strongly_disapprove
+		law_subjecthood = approve
 	}
 
 	lawgroup_church_and_state = {
@@ -1271,6 +1315,7 @@ ideology_custom_religion_traditionalist_society = {
 		law_serfdom = strongly_approve
 		law_tenant_farmers = approve
 		law_commercialized_agriculture = neutral
+		law_peasant_proprietorship = disapprove
 	}
 
 	lawgroup_policing = {
@@ -1353,6 +1398,7 @@ ideology_custom_religion_inclusive_society = {
 		law_racial_segregation = disapprove
 		law_cultural_exclusion = neutral
 		law_multicultural = strongly_approve
+		law_subjecthood = disapprove
 	}
 
 	lawgroup_church_and_state = {
@@ -1367,6 +1413,7 @@ ideology_custom_religion_inclusive_society = {
 		law_serfdom = strongly_disapprove
 		law_tenant_farmers = neutral
 		law_commercialized_agriculture = approve
+		law_peasant_proprietorship = approve
 	}
 
 	lawgroup_policing = {
@@ -1449,6 +1496,7 @@ ideology_custom_religion_totalitarian_society = {
 		law_racial_segregation = neutral
 		law_cultural_exclusion = disapprove
 		law_multicultural = strongly_disapprove
+		law_subjecthood = disapprove
 	}
 
 	lawgroup_church_and_state = {
@@ -1463,6 +1511,7 @@ ideology_custom_religion_totalitarian_society = {
 		law_serfdom = approve
 		law_tenant_farmers = neutral
 		law_commercialized_agriculture = approve
+		law_peasant_proprietorship = disapprove
 	}
 
 	lawgroup_policing = {
@@ -1545,6 +1594,7 @@ ideology_custom_religion_meritocratic_society = {
 		law_racial_segregation = neutral
 		law_cultural_exclusion = neutral
 		law_multicultural = disapprove
+		law_subjecthood = neutral
 	}
 
 	lawgroup_church_and_state = {
@@ -1559,6 +1609,7 @@ ideology_custom_religion_meritocratic_society = {
 		law_serfdom = disapprove
 		law_tenant_farmers = neutral
 		law_commercialized_agriculture = strongly_approve
+		law_peasant_proprietorship = neutral
 	}
 
 	lawgroup_policing = {
@@ -1641,6 +1692,7 @@ ideology_custom_religion_imperial_cult_society = {
 		law_racial_segregation = neutral
 		law_cultural_exclusion = disapprove
 		law_multicultural = strongly_disapprove
+		law_subjecthood = strongly_approve
 	}
 
 	lawgroup_church_and_state = {
@@ -1655,6 +1707,7 @@ ideology_custom_religion_imperial_cult_society = {
 		law_serfdom = strongly_disapprove
 		law_tenant_farmers = disapprove
 		law_commercialized_agriculture = neutral
+		law_peasant_proprietorship = approve
 	}
 
 	lawgroup_policing = {
@@ -1737,6 +1790,7 @@ ideology_custom_religion_theocratic_society = {
 		law_racial_segregation = neutral
 		law_cultural_exclusion = neutral
 		law_multicultural = approve
+		law_subjecthood = approve
 	}
 
 	lawgroup_church_and_state = {
@@ -1751,6 +1805,7 @@ ideology_custom_religion_theocratic_society = {
 		law_serfdom = strongly_disapprove
 		law_tenant_farmers = disapprove
 		law_commercialized_agriculture = disapprove
+		law_peasant_proprietorship = approve
 	}
 
 	lawgroup_policing = {
@@ -1837,6 +1892,8 @@ ideology_custom_religion_aristocratic_governance = {
 		law_neocameralism = disapprove
 		law_direct_democracy = neutral
 		law_social_monarchy = strongly_approve
+		law_chiefdom = approve
+		law_corporate_state = disapprove
 	}
 
 	lawgroup_distribution_of_power = {
@@ -1850,6 +1907,7 @@ ideology_custom_religion_aristocratic_governance = {
 		law_autocracy = strongly_approve
 		law_single_party_state = disapprove
 		law_algorithmic_governance = disapprove
+		law_elder_council = approve
 	}
 
 	lawgroup_bureaucracy = {
@@ -1913,6 +1971,8 @@ ideology_custom_religion_technocratic_governance = {
 		law_neocameralism = neutral
 		law_direct_democracy = neutral
 		law_social_monarchy = disapprove
+		law_chiefdom = strongly_disapprove
+		law_corporate_state = approve
 	}
 
 	lawgroup_distribution_of_power = {
@@ -1926,6 +1986,7 @@ ideology_custom_religion_technocratic_governance = {
 		law_autocracy = neutral
 		law_single_party_state = approve
 		law_algorithmic_governance = strongly_approve
+		law_elder_council = disapprove
 	}
 
 	lawgroup_bureaucracy = {
@@ -1989,6 +2050,8 @@ ideology_custom_religion_republican_governance = {
 		law_neocameralism = disapprove
 		law_direct_democracy = approve
 		law_social_monarchy = strongly_disapprove
+		law_chiefdom = strongly_disapprove
+		law_corporate_state = disapprove
 	}
 
 	lawgroup_distribution_of_power = {
@@ -2002,6 +2065,7 @@ ideology_custom_religion_republican_governance = {
 		law_autocracy = strongly_disapprove
 		law_single_party_state = disapprove
 		law_algorithmic_governance = disapprove
+		law_elder_council = disapprove
 	}
 
 	lawgroup_bureaucracy = {
@@ -2010,6 +2074,7 @@ ideology_custom_religion_republican_governance = {
 		law_elected_bureaucrats = approve
 		law_automated_bureaucracy = neutral
 		law_communal_administration = approve
+		law_contracted_administration = neutral
 	}
 
 	lawgroup_privacy_rights = {
@@ -2064,6 +2129,8 @@ ideology_custom_religion_corporate_governance = {
 		law_neocameralism = strongly_approve
 		law_direct_democracy = disapprove
 		law_social_monarchy = disapprove
+		law_chiefdom = strongly_disapprove
+		law_corporate_state = neutral
 	}
 
 	lawgroup_distribution_of_power = {
@@ -2077,6 +2144,7 @@ ideology_custom_religion_corporate_governance = {
 		law_autocracy = disapprove
 		law_single_party_state = neutral
 		law_algorithmic_governance = approve
+		law_elder_council = disapprove
 	}
 
 	lawgroup_bureaucracy = {
@@ -2140,6 +2208,8 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_neocameralism = strongly_disapprove
 		law_direct_democracy = strongly_disapprove
 		law_social_monarchy = strongly_approve
+		law_chiefdom = disapprove
+		law_corporate_state = disapprove
 	}
 
 	lawgroup_distribution_of_power = {
@@ -2153,6 +2223,7 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_autocracy = strongly_approve
 		law_single_party_state = disapprove
 		law_algorithmic_governance = disapprove
+		law_elder_council = disapprove
 	}
 
 	lawgroup_bureaucracy = {
@@ -2216,6 +2287,8 @@ ideology_custom_religion_theocratic_governance = {
 		law_neocameralism = disapprove
 		law_direct_democracy = disapprove
 		law_social_monarchy = neutral
+		law_chiefdom = neutral
+		law_corporate_state = disapprove
 	}
 
 	lawgroup_distribution_of_power = {
@@ -2229,6 +2302,7 @@ ideology_custom_religion_theocratic_governance = {
 		law_autocracy = approve
 		law_single_party_state = approve
 		law_algorithmic_governance = disapprove
+		law_elder_council = neutral
 	}
 
 	lawgroup_bureaucracy = {
@@ -2237,6 +2311,7 @@ ideology_custom_religion_theocratic_governance = {
 		law_elected_bureaucrats = disapprove
 		law_automated_bureaucracy = disapprove
 		law_communal_administration = disapprove
+		law_contracted_administration = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -2287,6 +2362,7 @@ ideology_custom_religion_pacifist_outlook = {
 		law_professional_army = disapprove
 		law_national_militia = strongly_approve
 		law_mass_conscription = neutral
+		law_private_military_contractors = strongly_disapprove
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2334,6 +2410,7 @@ ideology_custom_religion_militarist_outlook = {
 		law_professional_army = strongly_approve
 		law_national_militia = disapprove
 		law_mass_conscription = strongly_approve
+		law_private_military_contractors = disapprove
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2381,6 +2458,7 @@ ideology_custom_religion_isolationist_outlook = {
 		law_professional_army = disapprove
 		law_national_militia = neutral
 		law_mass_conscription = disapprove
+		law_private_military_contractors = strongly_disapprove
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2428,6 +2506,7 @@ ideology_custom_religion_exploitative_outlook = {
 		law_professional_army = approve
 		law_national_militia = neutral
 		law_mass_conscription = neutral
+		law_private_military_contractors = approve
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2475,6 +2554,7 @@ ideology_custom_religion_imperialist_outlook = {
 		law_professional_army = strongly_approve
 		law_national_militia = disapprove
 		law_mass_conscription = strongly_approve
+		law_private_military_contractors = neutral
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2522,6 +2602,7 @@ ideology_custom_religion_theocratic_outlook = {
 		law_professional_army = neutral
 		law_national_militia = approve
 		law_mass_conscription = disapprove
+		law_private_military_contractors = disapprove
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {

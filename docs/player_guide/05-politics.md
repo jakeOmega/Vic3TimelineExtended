@@ -282,15 +282,16 @@ bureaucracy, and countries that start with the law begin at level 6.
 ## Amendments to the mod's laws
 
 Interest groups sponsor amendments to the mod's laws as they do for base-game
-laws, and several law events attach them. One amendment, the Spoils System,
-attaches to base-game laws. Under the Legislated Tax Code rule the tax rates are
+laws, and every one of them also comes with an event or another way into the
+game: most are offered by enactment events as the price of passage. One
+amendment, the Spoils System, attaches to base-game laws. Under the Legislated Tax Code rule the tax rates are
 amendments to the Legislated Tax Code law, and only tax bills change them (see
 [Taxation (experimental)](04-tax-code.md)).
 
 | Amendment | Attaches to | Effect |
 |---|---|---|
 | Minority Script Preservation | Civic Monolingualism, State-Led Language Reform | Slower assimilation, less separatism |
-| Language Requirement for Naturalization | Cultural, Assimilatory or Universal Citizenship, alongside Civic Monolingualism, State-Led Language Reform or Linguistic Purity | Faster assimilation, tighter migration |
+| Language Requirement for Naturalization | Cultural, Assimilatory or Universal Citizenship, alongside Civic Monolingualism, State-Led Language Reform or Linguistic Purity | Faster assimilation, tighter migration. The A Test of the Tongue event offers it while one of those citizenship laws is enacted, sponsored by the Petite Bourgeoisie (or the Rural Folk) |
 | Official Bilingualism | Multilingual Federalism, State-Led Language Reform | Weaker separatism, higher bureaucracy cost |
 | National Champion Exemption | Antitrust Enforcement, Regulated Utilities | Company output up, general output slightly down |
 | Worker Cooperative Preference | Antitrust Enforcement, Regulated Utilities | Trade Unions gain political strength, Industrialists lose it |
@@ -303,7 +304,7 @@ amendments to the Legislated Tax Code law, and only tax bills change them (see
 | Small Donor Matching | Donation Limits, Publicly Funded Elections | +5 legitimacy, higher bureaucracy cost |
 | Religious Exemption Clause | Any LGBTQ+ protection law | Devout approval |
 | Environmental Grandfather Clause | Ministry of the Environment Established | Industrialist approval, 5% more pollution and emissions |
-| Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat |
+| Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
 
 ### Sunset clauses
 
@@ -360,7 +361,9 @@ its conditions and ruler title.
 ## Ideologies, parties and movements
 
 The mod adds ideologies, three parties and four political movements, and gives
-many base-game ideologies stances on some of the new law groups.
+many base-game ideologies stances on the new law groups. Every ideology with a
+view on a law group also states one on each law the mod adds to that group, so a
+group that dislikes the current law doesn't back a new law it has no view on.
 
 ### New ideologies
 

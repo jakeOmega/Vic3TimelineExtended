@@ -71,6 +71,8 @@ on_law_checkpoint_debate = {
 		10 = extra_law_events.32	# Laws of the New Battlefield (Rules of War – Amendment)
 		10 = extra_law_events.33	# Small Donors, Big Voices (Electoral Finance – Amendment)
 		10 = extra_law_events.34	# A Question of Conscience (LGBTQ Rights – Amendment)
+		10 = extra_law_events.87	# To the Victor Belong the Spoils (Bureaucracy – Amendment)
+		10 = extra_law_events.88	# A Test of the Tongue (Citizenship – Amendment)
 
 		# --- Extra Law Events — issue #81 debate flavor ---
 		10 = extra_law_events.61	# Industry vs Public Consultation (Financial Regulation)

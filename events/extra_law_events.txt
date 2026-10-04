@@ -7683,3 +7683,201 @@ extra_law_events.86 = {
 		}
 	}
 }
+
+# ======================================================================
+#  87 – To the Victor Belong the Spoils  (Bureaucracy – Amendment)
+#  The scripted way in for amendment_spoils_system: the governing group
+#  with the most clout asks to fill the new offices with its own people.
+#  Pooled in on_law_checkpoint_debate beside the other amendment events.
+# ======================================================================
+extra_law_events.87 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.87.t
+	desc = extra_law_events.87.d
+	flavor = extra_law_events.87.f
+
+	category = enactment
+
+	event_image = { video = "unspecific_politicians_arguing" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_appointed_bureaucrats
+			is_enacting_law = law_type:law_elected_bureaucrats
+		}
+		any_interest_group = { is_in_government = yes }
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_spoils_system
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		ordered_interest_group = {
+			limit = { is_in_government = yes }
+			order_by = ig_clout
+			position = 0
+			check_range_bounds = no
+			save_scope_as = spoils_ig
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Accept the spoils system
+		name = extra_law_events.87.a
+		trigger = { exists = scope:spoils_ig }
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_spoils_system
+				sponsor = scope:spoils_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		add_radicals = {
+			value = small_radicals
+			pop_type = academics
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Keep the offices out of party hands
+		name = extra_law_events.87.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		scope:spoils_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		add_loyalists = {
+			value = very_small_radicals
+			pop_type = academics
+		}
+	}
+}
+
+# ======================================================================
+#  88 – A Test of the Tongue  (Citizenship – Amendment)
+#  The scripted way in for amendment_language_naturalization_requirement:
+#  while a citizenship law is debated under an official-language law, a
+#  group that would sponsor it asks for a language test for citizenship.
+#  The trigger restates the amendment's `possible`. Pooled in
+#  on_law_checkpoint_debate beside the other amendment events.
+# ======================================================================
+extra_law_events.88 = {
+	type = country_event
+	placement = root
+
+	title = extra_law_events.88.t
+	desc = extra_law_events.88.d
+	flavor = extra_law_events.88.f
+
+	category = enactment
+
+	event_image = { texture = "gfx/event_pictures/language_reform_classroom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		OR = {
+			is_enacting_law = law_type:law_national_supremacy
+			is_enacting_law = law_type:law_cultural_exclusion
+			is_enacting_law = law_type:law_multicultural
+		}
+		OR = {
+			has_law = law_type:law_civic_monolingualism
+			has_law = law_type:law_state_led_language_reform
+			has_law = law_type:law_linguistic_purity
+		}
+		OR = {
+			exists = ig:ig_petty_bourgeoisie
+			exists = ig:ig_rural_folk
+		}
+		NOT = {
+			currently_enacting_law = {
+				has_amendment = amendment_type:amendment_language_naturalization_requirement
+			}
+		}
+	}
+
+	immediate = {
+		currently_enacting_law = {
+			save_scope_as = current_law_scope
+		}
+		if = {
+			limit = { exists = ig:ig_petty_bourgeoisie }
+			ig:ig_petty_bourgeoisie = {
+				save_scope_as = language_test_ig
+			}
+		}
+		else = {
+			ig:ig_rural_folk ?= {
+				save_scope_as = language_test_ig
+			}
+		}
+	}
+
+	cancellation_trigger = {
+		NOT = { currently_enacting_law = scope:current_law_scope }
+	}
+
+	option = { # Require the national language for citizenship
+		name = extra_law_events.88.a
+		trigger = { exists = scope:language_test_ig }
+		currently_enacting_law = {
+			add_amendment = {
+				type = amendment_language_naturalization_requirement
+				sponsor = scope:language_test_ig
+				cooldown = 120
+			}
+		}
+		add_enactment_modifier = {
+			name = amendment_compromise_modifier
+		}
+		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
+		add_loyalists = {
+			value = very_small_radicals
+			strata = middle
+		}
+	}
+
+	option = { # Citizenship needs no language test
+		name = extra_law_events.88.b
+		default_option = yes
+		add_enactment_modifier = {
+			name = amendment_purist_modifier
+		}
+		scope:language_test_ig ?= {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+	}
+}
