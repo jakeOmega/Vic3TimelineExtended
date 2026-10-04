@@ -1,15 +1,16 @@
 {
 	"name" : "Vic3TimelineExtended",
 	"id" : "",
-	"version" : "1.0.0",
+	"version" : "1.1.6",
 	"supported_game_version" : "1.14.5",
 	"short_description" : "Extends the Victoria 3 timeline with new eras, systems, and content including banking cycles, global warming, nuclear weapons, cultural hegemony, covert warfare, and more.",
 	"tags" : [
-		"Alternative History",
-		"Content",
-		"Events",
+		"Diplomacy",
 		"Expansion",
-		"Gameplay"
+		"Economy and Buildings",
+		"Gameplay",
+		"Journal Entries",
+		"Technologies"
 	],
 	"relationships" : [],
 	"game_custom_data" : {
