@@ -1336,22 +1336,22 @@ IMAGES = {
     "colony_olympus_mons": {
         "prompt": "A research station on the slopes of Olympus Mons.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.2"],
+        "events": ["space_race_colony_events.2", "space_race_discovery_events.6"],
     },
     "colony_hellas_planitia": {
         "prompt": "A settlement in Hellas Planitia with greenhouse domes.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.3"],
+        "events": ["space_race_colony_events.3", "space_race_discovery_events.5"],
     },
     "colony_utopia_planitia": {
         "prompt": "An industrial colony on Utopia Planitia with manufacturing domes.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.4"],
+        "events": ["space_race_colony_events.4", "space_race_discovery_events.7"],
     },
     "colony_arcadia_planitia": {
         "prompt": "An agricultural colony exploiting subsurface ice on Arcadia Planitia.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.5"],
+        "events": ["space_race_colony_events.5", "space_race_discovery_events.8"],
     },
 
     # =========================================================================
@@ -1360,22 +1360,22 @@ IMAGES = {
     "colony_ceres": {
         "prompt": "A waystation colony on Ceres, the largest body in the asteroid belt. Domed habitats cluster around the bright spot of Occator Crater. Low gravity means soaring interior spaces. Ships dock at an orbital tether above.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.6"],
+        "events": ["space_race_colony_events.6", "space_race_discovery_events.9"],
     },
     "colony_vesta": {
         "prompt": "Mining habitat carved into Vesta crater walls, with excavators and ore haulers under a black sky.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.7"],
+        "events": ["space_race_colony_events.7", "space_race_discovery_events.10"],
     },
     "colony_psyche": {
         "prompt": "A colony on the metallic asteroid 16 Psyche — a world made almost entirely of iron and nickel. The landscape gleams like polished metal under the distant sun. Mining lasers cut into the metallic surface.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.8"],
+        "events": ["space_race_colony_events.8", "space_race_discovery_events.11"],
     },
     "colony_pallas": {
         "prompt": "A research station on 2 Pallas, a dark, carbon-rich asteroid. Scientists study ancient organic compounds in pressurized labs built into craters. The surface is dark as charcoal. Solar panels strain to catch weak sunlight.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.9"],
+        "events": ["space_race_colony_events.9", "space_race_discovery_events.12"],
     },
     "colony_hygiea": {
         "prompt": "Remote icy outpost on Hygiea with fuel tanks, drilling rigs, and docked cargo shuttles.",
@@ -1389,22 +1389,22 @@ IMAGES = {
     "colony_io": {
         "prompt": "A hardened colony on Io, Jupiter's volcanic moon. Active volcanoes erupt sulfur plumes hundreds of kilometers high in the background. The colony sits on a rare stable plain, heavily shielded from Jupiter's intense radiation belts. Yellow-orange sulfur landscape.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.11"],
+        "events": ["space_race_colony_events.11", "space_race_discovery_events.15"],
     },
     "colony_europa": {
         "prompt": "A colony on Europa's cracked ice surface. The ice shell stretches in all directions, fractured into geometric patterns. A drill station penetrates toward the subsurface ocean below.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.12"],
+        "events": ["space_race_colony_events.12", "space_race_discovery_events.1", "space_race_discovery_events.2"],
     },
     "colony_ganymede": {
         "prompt": "The largest colony in the Jovian system on Ganymede, the biggest moon in the solar system. A proper city under domes: multi-story buildings, parks, a university. The capital of Jupiter's moons, a beacon of civilization at 5 AU.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.13"],
+        "events": ["space_race_colony_events.13", "space_race_discovery_events.16"],
     },
     "colony_callisto": {
         "prompt": "A sleepy colony on Callisto, Jupiter's outermost major moon. Chosen for its low radiation environment. Comfortable, quiet habitats on an ancient, heavily cratered surface. A retirement colony of the outer system — safe, stable, boring.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.14"],
+        "events": ["space_race_colony_events.14", "space_race_discovery_events.17"],
     },
     "colony_himalia": {
         "prompt": "A tiny research outpost on Himalia, one of Jupiter's irregular moons. A handful of pressurized modules on a dark, potato-shaped rock only 170km across. The most remote manned station in the Jovian system. Jupiter a distant bright disc.",
@@ -1423,12 +1423,12 @@ IMAGES = {
     "colony_venus_cloud": {
         "prompt": "A floating cloud city in Venus's upper atmosphere, suspended by buoyancy at 50km altitude where temperature and pressure are Earth-like. Airship habitats connected by sky-bridges, solar panels above, the impenetrable yellow cloud deck below. A fantasy made real.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.17"],
+        "events": ["space_race_colony_events.17", "space_race_discovery_events.13"],
     },
     "colony_mercury": {
         "prompt": "A colony at Mercury's north pole, built inside permanently shadowed craters. Solar collectors on sunlit ridges beam power down. The colony rides the terminator — the boundary between Mercury's blazing day and frozen night.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.18"],
+        "events": ["space_race_colony_events.18", "space_race_discovery_events.14"],
     },
 
     # =========================================================================
@@ -1437,12 +1437,12 @@ IMAGES = {
     "colony_titan": {
         "prompt": "A colony on Titan, Saturn's largest moon. Through the thick orange haze, domed habitats sit beside a methane lake. Rain falls — not water, but liquid methane.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.19"],
+        "events": ["space_race_colony_events.19", "space_race_discovery_events.4"],
     },
     "colony_enceladus": {
         "prompt": "A research colony near Enceladus's south pole, where geysers of water ice erupt from tiger-stripe fissures into space. Scientists study the plumes for signs of life from the subsurface ocean. Saturn's rings arc across the sky.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.20"],
+        "events": ["space_race_colony_events.20", "space_race_discovery_events.3"],
     },
     "colony_saturn_icy_moon": {
         "prompt": "A small outpost on one of Saturn's mid-sized icy moons. A cratered, ice-covered landscape stretches under Saturn's magnificent ring system visible edge-on across the sky. Limited facilities, essential science, breathtaking view.",
@@ -1465,6 +1465,7 @@ IMAGES = {
             "space_race_colony_events.25",
             "space_race_colony_events.26",
             "space_race_colony_events.27",
+            "space_race_discovery_events.18",
         ],
     },
 
@@ -1474,7 +1475,7 @@ IMAGES = {
     "colony_triton": {
         "prompt": "A colony on Triton, Neptune's captured moon orbiting retrograde. Nitrogen geysers erupt from the cantaloupe-textured surface. Neptune's deep blue sphere dominates the sky. The coldest inhabited place in the solar system at -235°C.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_colony_events.28"],
+        "events": ["space_race_colony_events.28", "space_race_discovery_events.19"],
     },
     "colony_neptune_outpost": {
         "prompt": "A tiny automated monitoring station on Proteus, an irregularly shaped moon of Neptune. Solar panels are useless this far out — nuclear reactors power everything. Neptune's blue disc hangs in the sky.",
@@ -1497,6 +1498,7 @@ IMAGES = {
             "space_race_colony_events.31",
             "space_race_colony_events.32",
             "space_race_colony_events.33",
+            "space_race_discovery_events.20",
         ],
     },
     "colony_sedna": {
