@@ -670,60 +670,76 @@ types goods_state_panel {
 					size = { 270 0 }
 				}
 
-				flowcontainer = {
-					datamodel = "[Building.AccessProductionMethodGroups]"
-					spacing = 4
+				# MOD: past five groups the strip scrolls, as the building panels' do.
+				scrollarea = {
+					maximumsize = { 270 -1 }
+					autoresizescrollarea = yes
+					scrollbarpolicy_horizontal = as_needed
+					scrollbarpolicy_vertical = as_needed
+					scrollbar_horizontal = {
+						using = horizontal_scrollbar
+					}
+					scrollbar_vertical = {
+						using = vertical_scrollbar
+					}
 
-					item = {
-						widget = {
-							size = { 50 50 }
-							visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')))]"
-							datacontext = "[Building.AccessProductionMethod(ProductionMethodGroup.Self)]"
-							datacontext = "[ProductionMethod]"
-							datacontext = "[Building]"
-							datacontext = "[ProductionMethodGroup]"
-							using = tooltip_above
+					scrollwidget = {
+						flowcontainer = {
+							datamodel = "[Building.AccessProductionMethodGroups]"
+							spacing = 4
 
-							tooltip = "CHANGE_FROM_CURRENT_PRODUCTION_METHOD_TOOLTIP"
+							item = {
+								widget = {
+									size = { 50 50 }
+									visible = "[And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')))]"
+									datacontext = "[Building.AccessProductionMethod(ProductionMethodGroup.Self)]"
+									datacontext = "[ProductionMethod]"
+									datacontext = "[Building]"
+									datacontext = "[ProductionMethodGroup]"
+									using = tooltip_above
 
-							button = {
-								visible = "[NotEqualTo_int32( GetDataModelSize( ProductionMethodGroup.AccessBuildingProductionMethods( Building.Self ) ), '(int32)1' )]"
-								using = expand_button_bg_dropdown
-								size = { 50 50 }
-								enabled = "[Building.IsOwner( GetPlayer.Self )]"
-								onclick = "[RightClickMenuManager.ToggleSwitchProductionMethodMenu(Building.AccessSelf, ProductionMethodGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
-							}
+									tooltip = "CHANGE_FROM_CURRENT_PRODUCTION_METHOD_TOOLTIP"
 
-							icon = {
-								size = { 35 35 }
-								parentanchor = center
-								texture = "[ProductionMethod.GetTexture]"
-							}
+									button = {
+										visible = "[NotEqualTo_int32( GetDataModelSize( ProductionMethodGroup.AccessBuildingProductionMethods( Building.Self ) ), '(int32)1' )]"
+										using = expand_button_bg_dropdown
+										size = { 50 50 }
+										enabled = "[Building.IsOwner( GetPlayer.Self )]"
+										onclick = "[RightClickMenuManager.ToggleSwitchProductionMethodMenu(Building.AccessSelf, ProductionMethodGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
+									}
 
-							### new pm
-							has_new_pm_icon	= {
-								blockoverride "visible" {
-									visible = "[And(Building.IsOwner( GetPlayer.Self ), GetPlayer.HasNewProductionMethodInSameGroup( Building.GetBuildingType.Self, ProductionMethod.Self ))]"
-								}
-								position = { 0 0 }
-								tooltip = "TOOLTIP_NEW_PRODUCTION_METHOD"
-								parentanchor = bottom
-							}
+									icon = {
+										size = { 35 35 }
+										parentanchor = center
+										texture = "[ProductionMethod.GetTexture]"
+									}
 
-							textbox = {
-								raw_text = "#P #bold [ProductionMethodGroup.GetNumAvailableOptions(Building.AccessSelf)]#!#!"
-								parentanchor = top|right
-								position = { -2 0 }
-								autoresize = yes
-								align = right|nobaseline
-								visible = "[NotEqualTo_int32( ProductionMethodGroup.GetNumAvailableOptions(Building.AccessSelf), '(int32)1')]"
-								tooltip = "PRODUCTION_METHOD_OPTIONS"
-								using = tooltip_above
-								using = fontsize_small
+									### new pm
+									has_new_pm_icon	= {
+										blockoverride "visible" {
+											visible = "[And(Building.IsOwner( GetPlayer.Self ), GetPlayer.HasNewProductionMethodInSameGroup( Building.GetBuildingType.Self, ProductionMethod.Self ))]"
+										}
+										position = { 0 0 }
+										tooltip = "TOOLTIP_NEW_PRODUCTION_METHOD"
+										parentanchor = bottom
+									}
 
-								background = {
-									using = default_background
-									margin = { 8 4 }
+									textbox = {
+										raw_text = "#P #bold [ProductionMethodGroup.GetNumAvailableOptions(Building.AccessSelf)]#!#!"
+										parentanchor = top|right
+										position = { -2 0 }
+										autoresize = yes
+										align = right|nobaseline
+										visible = "[NotEqualTo_int32( ProductionMethodGroup.GetNumAvailableOptions(Building.AccessSelf), '(int32)1')]"
+										tooltip = "PRODUCTION_METHOD_OPTIONS"
+										using = tooltip_above
+										using = fontsize_small
+
+										background = {
+											using = default_background
+											margin = { 8 4 }
+										}
+									}
 								}
 							}
 						}
