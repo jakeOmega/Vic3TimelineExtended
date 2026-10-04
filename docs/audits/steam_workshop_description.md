@@ -108,6 +108,8 @@ The ideology system is expanded to support these laws, with new factions (enviro
 
 Vanilla ideologies, ~60 vanilla PMs, state-region map data, and 20 vanilla GUI panels are overridden — avoid pairing with other mods that touch those. Otherwise the mod uses INJECT to extend rather than replace vanilla content, so most non-overlapping mods coexist. Load this mod [b]last[/b].
 
+[b]Realism Ai Historical Flavor Mod:[/b] use the Timeline Extended + Realism AI Compatibility Patch, loaded after both mods (Realism AI, then this mod, then the patch).
+
 [hr][/hr]
 
 [h1]Feedback and AI-generated content[/h1]

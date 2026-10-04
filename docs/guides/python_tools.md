@@ -262,6 +262,12 @@ Notes:
 
 - **`map_data/state_regions/*.txt` lists province ids both quoted and bare** (`"x29CCD6"` and `x29CCD6`) — both are valid to the engine. Any generator that scans provinces out of a state region block needs a regex that matches both forms; `scripts/generators/gen_region_area.py`'s `HEX_RE` (`\bx([0-9A-Fa-f]{6})\b`, no quote anchor) is the pattern to copy.
 
+## Compatibility Patches
+
+| Script | Purpose | Run |
+|--------|---------|-----|
+| `scripts/generators/build_realism_ai_compatch.py` | Builds the separate patch mod for running Realism Ai Historical Flavor Mod (Workshop `2893069455`) alongside this one into `build/compat/realism_ai/` (gitignored). RA's state regions get our deposits and traits (with `resources.py`'s own code), RA's top bar gets our Banking widget, the 16 ideologies both mods replace are merged (with `apply_ideologies.py`'s own code), RA's modifiers are summed into the two laws we `REPLACE`, and RA's `super_power` rank gets our Great Power injections. Each part checks its own output and the build stops on a missing anchor. A closing rescan lists overlaps the patch doesn't handle (`--strict`: exit 2). `--deploy` copies the patch to `<mod folder>/Vic3TimelineExtended_RealismAI_Compat`; `--check` exits 1 when that copy is stale. Needs RA installed (`--ra-path` if it isn't in the Workshop folder) and the game files. **Manual run, not post-load.** Rerun after an RA update and after editing anything it merges. Analysis, load order and in-game checks: `docs/guides/mod_compatibility.md`. `test_build_realism_ai_compatch.py` covers its text helpers. | `.venv/bin/python scripts/generators/build_realism_ai_compatch.py [--deploy \| --check] [--strict]` |
+
 ## Event Scaffolding (`scripts/generators/gen_event.py`)
 
 Generates boilerplate-free Paradox event definitions and localization entries from compact JSON specs. Handles auto-ID allocation (scans existing event files), UTF-8 BOM encoding, triggered_desc chains, default option inheritance, and section headers.
