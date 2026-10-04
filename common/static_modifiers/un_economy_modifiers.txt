@@ -27,6 +27,7 @@ un_dev_fund_pool_grant_modifier = {
 un_dev_fund_treasury_grant_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_tax_income_add = 1
+	country_te_budget_income_un_add = 1
 }
 
 # The World Food Reserve's grain in a state where a UN aid mission opened, for

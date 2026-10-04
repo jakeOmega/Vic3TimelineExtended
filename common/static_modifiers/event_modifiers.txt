@@ -128,6 +128,7 @@ te_tax_spectrum_auction_proceeds = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	# Base 1: applied with multiplier = sv_money_flow_event_small (GDP-scaled flat income).
 	country_tax_income_add = 1
+	country_te_budget_income_tax_code_add = 1
 }
 re_spectrum_public_grid = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
@@ -781,6 +782,7 @@ we_se_trade_national = {
 we_se_debris_clearance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_space_add = 1
 }
 we_se_debris_defense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
@@ -998,6 +1000,7 @@ we_am_propulsion_civilian = {
 drugs_shortage_spending = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_drugs_add = 1
 }
 drugs_shortage_rationing = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds

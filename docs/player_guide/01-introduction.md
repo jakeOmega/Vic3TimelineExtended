@@ -98,6 +98,27 @@ turn a default system off.
 | Legislated Tax Code | Tax Code Disabled | Experimental. *Tax Code Enabled*: the five taxation laws can't be enacted; every country holds the Legislated Tax Code instead, and each tax rate changes only through a bill that enough interest groups commit to, taking effect on the 1st of its month. AI countries legislate their taxes the same way. *Tax Code and Customs Enabled*: as Enabled, and a country that owns its market sets its tariffs and subsidies by bill too. *Tax Code Disabled*: base-game taxes. | [Taxation (experimental)](04-tax-code.md) |
 | Custom Religion Allowed | Not allowed | A journal entry that lets you design a religion of your own. | [Government, laws and characters](05-politics.md) |
 
+## Reading the Budget breakdown
+
+The Budget panel's Breakdown tab shows weekly income and expenses as pie charts,
+stacked bars and a list of amounts. It is available under every game-rule setting.
+Colors and percentages match across the charts and the list; hover an institution
+for its allocation.
+
+Government Administration's operating costs are divided between your institutions
+and General Administration. Institutions receive the share corresponding to the
+bureaucracy they use, then divide it in proportion to their current levels.
+General Administration covers the remainder, including unused capacity. Other
+civil buildings, the military, construction and welfare have their own rows.
+
+Recurring costs from Banking, Covert Actions, Cultural Hegemony, the United
+Nations and other journal systems have separate rows. Hover over one to see its
+current sources and amounts. One-time treasury payments and costs in resources
+such as innovation are outside this weekly money breakdown.
+
+The charts show positive amounts; negative adjustments stay in the list. Open
+How the Breakdown Works at the bottom for the accounting details.
+
 ## How the guide is organized
 
 The chapters follow the game's own areas rather than the order systems appear.

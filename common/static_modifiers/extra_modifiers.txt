@@ -667,6 +667,7 @@ banking_event_investigation_chill = {
 banking_event_deposit_guarantee_emergency = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_event_selective_bailout = {
@@ -704,6 +705,7 @@ banking_event_import_and_subsidy = {
 banking_event_import_and_subsidy_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 # --- Event 10: Sovereign Debt Scare ---
@@ -756,6 +758,7 @@ banking_event_housing_boom = {
 banking_event_fx_defense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_event_emergency_controls = {
@@ -796,6 +799,7 @@ banking_event_derivatives_crackdown = {
 banking_event_quiet_rescue = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 # --- Event 19: Sovereign Wealth Fund ---
@@ -817,21 +821,25 @@ banking_event_shadow_regulation = {
 banking_event_selective_bailout_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_event_rural_credit_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_event_harvest_subsidy_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_event_sovereign_wealth_fund_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 # ----- Interventions (buttons spend points here via negative adds) -----
@@ -1183,6 +1191,7 @@ banking_bail_in_regime = {
 banking_crash_response_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 # ----- Per-law base options (one visible per crash, gated by financial-regulation law) -----
@@ -2093,6 +2102,7 @@ colonial_development_investment_modifier = {
 colonial_development_investment_expense_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_colonial_add = 1
 }
 
 colonial_military_garrison_modifier = {
@@ -2837,6 +2847,7 @@ war_profit_tax_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	# Base 1 — apply with multiplier = sv_money_flow_event_<tier> for GDP-scaled tax income.
 	country_tax_income_add = 1
+	country_te_budget_income_war_tax_add = 1
 }
 
 # ============================================================================
@@ -3307,6 +3318,7 @@ un_founding_cost_modifier = {
 	country_prestige_mult = -0.10
 	country_bureaucracy_add = -100
 	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
 }
 
 # Cooldown after requesting UN action
@@ -4180,16 +4192,19 @@ un_tariff_retaliation_modifier = {
 un_peacekeeping_contributor_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
 }
 
 un_development_contributor_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
 }
 
 un_humanitarian_aid_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
 }
 
 # Redesign phase 4: the cheaper answers to a docket appeal are not free.
@@ -4198,11 +4213,13 @@ un_humanitarian_aid_cost = {
 un_humanitarian_token_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
 }
 
 un_observer_mission_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
 }
 
 # A full peacekeeping force sent to a collapsing state (un_events.4 A), by a
@@ -4212,6 +4229,7 @@ un_observer_mission_cost = {
 un_peacekeeping_deployment_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
 }
 
 # The contingents a member sends to UN missions at will (un_mission_volunteer).
@@ -4221,6 +4239,7 @@ un_peacekeeping_deployment_cost = {
 un_mission_service_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
 }
 
 # Redesign phase 5 (§7.2): a member's assessed dues, a share of its GDP set by
@@ -4230,6 +4249,7 @@ un_mission_service_cost = {
 un_dues_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
 }
 
 # Redesign phase 5, un_events.35: the emergency lending facility. The
@@ -4238,6 +4258,7 @@ un_dues_modifier = {
 un_loan_repayment_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_un_add = 1
 }
 un_loan_conditions_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
@@ -4922,6 +4943,7 @@ banking_event_telegraph_settlement = {
 banking_event_interbank_guarantee = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_event_cooperative_growth = {
@@ -4983,6 +5005,7 @@ banking_event_microfinance = {
 banking_event_microfinance_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_event_qe_stimulus = {
@@ -5006,6 +5029,7 @@ banking_event_student_debt_relief = {
 banking_event_student_debt_relief_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_event_green_bonds = {
@@ -5029,6 +5053,7 @@ banking_event_predatory_crackdown = {
 banking_event_bailout_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 banking_event_bailout_goodwill = {
@@ -5194,6 +5219,7 @@ planning_treasury_pool_balance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_weekly_investment_pool_add = 1
 	country_expenses_add = 1
+	country_te_budget_expense_banking_add = 1
 }
 
 # ============================================================
@@ -6485,6 +6511,7 @@ covert_comms_disruption = {
 covert_operation_funding_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_covert_add = 1
 }
 
 # Defensive bonus from intelligence capacity
@@ -6768,6 +6795,7 @@ ch_cultural_program_funding = {
 ch_cultural_program_funding_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_culture_add = 1
 }
 
 # Cultural Hegemony JE button: fund cultural institutes
@@ -6806,6 +6834,7 @@ ch_world_exposition = {
 ch_world_exposition_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_culture_add = 1
 }
 
 # Cultural Hegemony TEST CONSOLE ONLY (`event te_debug_ch.1`, option A). Grants a
@@ -7298,6 +7327,7 @@ st_res_fertilizer_withdraw_flow = {
 st_res_sell_profit_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_tax_income_add = 1
+	country_te_budget_income_reserve_add = 1
 }
 
 # === Tiered scaled prestige/bureaucracy modifiers (mult-based) ============
@@ -7829,6 +7859,7 @@ te_mon_currency_reform_premium = {
 te_mon_gold_carry_expense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1 # REVIEWED 2026-09-20: unit value, multiplied by te_gold_carry_applied (weekly pounds of interest on te_gold_hot_money)
+	country_te_budget_expense_banking_add = 1
 }
 
 # Suspend convertibility: +2pp of cyclical premium for the five years the
