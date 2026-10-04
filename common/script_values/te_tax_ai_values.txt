@@ -306,3 +306,18 @@ te_tax_ai_view_sur_streak = {
 		value = var:te_tax_ai_sur_streak
 	}
 }
+
+te_tax_ai_view_next_month = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_ai_next_month }
+		value = var:te_tax_ai_next_month
+	}
+}
+
+# The month of the year, 0 for January: the yearly AI summary (te_tax_ai_log_year)
+# is written on January's processor run.
+te_tax_ai_month_of_year = {
+	value = te_history_month_index
+	modulo = 12
+}

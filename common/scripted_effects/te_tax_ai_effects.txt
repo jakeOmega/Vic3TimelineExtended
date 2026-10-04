@@ -736,6 +736,22 @@ te_tax_ai_reset_bill_state = {
 # te_tax.1. Withdrawal and no-viable reasons: support, legitimacy, slots,
 # authority, patience (open too long) and draft (introduction refused).
 
+# The yearly summary for an observer run (spec §2.10; runbook PT-13): on the
+# 1st of January, from the processor, each AI country logs its drift counters,
+# which only grow (te_tax_detect_drift), with its template and streaks; the
+# year's drift is the difference from last January's line. Owner question 2:
+# does the native AI keep moving its tax level under the code?
+te_tax_ai_log_year = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			is_ai = yes
+			te_tax_ai_month_of_year = 0
+		}
+		debug_log = "TE_TAX ai_year drift_level=[SCOPE.ScriptValue('te_tax_view_drift_level')|0] drift_goods=[SCOPE.ScriptValue('te_tax_view_drift_goods')|0] drift_amend=[SCOPE.ScriptValue('te_tax_view_drift_amend')|0] tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
+	}
+}
+
 # The country's signals, for the console (Task 22); the step itself logs only
 # its actions.
 te_tax_ai_log_step = {

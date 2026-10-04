@@ -66,6 +66,8 @@ te_tax_process_month = {
 			# processor never drafts.
 			te_tax_ai_update_streaks = yes
 			te_tax_ai_dispatch = yes
+			# An AI country's yearly drift summary, in January (Task 22).
+			te_tax_ai_log_year = yes
 			# 1. Sunsets of the enacted code first; late ones catch up.
 			te_tax_gen_sunset_wage = yes
 			te_tax_gen_sunset_div = yes

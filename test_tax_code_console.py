@@ -83,5 +83,62 @@ class ConsoleEventTest(unittest.TestCase):
         self.assertNotIn("remove_variable", body)
 
 
+AI_CONSOLE = ("te_tax_debug.2", "te_tax_debug.3", "te_tax_debug.4")
+AI_EFFECTS = "common/scripted_effects/te_tax_ai_effects.txt"
+SCHEDULE = "common/scripted_effects/te_tax_schedule_effects.txt"
+
+
+class AiConsoleTest(unittest.TestCase):
+    """Plan Task 22: the AI's console options and its yearly summary."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = read(EVENTS)
+
+    def test_the_ai_console_runs_the_managers_never_the_step_or_te_tax_8(self):
+        body = block(self.text, "te_tax_debug.2")
+        self.assertIn("te_tax_code_in_force = yes", body)
+        self.assertIn("NOT = { is_country_type = decentralized }", body)
+        order = [body.index(s) for s in ("te_tax_ai_manage_packages = yes", "te_tax_ai_manage_promises = yes",
+                                         "te_tax_ai_manage_bill = yes", "te_tax_ai_initiative = yes")]
+        self.assertEqual(order, sorted(order))
+        self.assertNotIn("te_tax_ai_step = yes", body)
+        self.assertNotIn("te_tax.8", self.text)
+
+    def test_only_the_step_and_the_console_run_the_managers(self):
+        # Task 19 review minor 3: a manager run from events/ on a player country would
+        # enact or renegotiate for the player; only the console may do that.
+        for manager in ("te_tax_ai_manage_packages", "te_tax_ai_manage_promises",
+                        "te_tax_ai_manage_bill", "te_tax_ai_initiative"):
+            callers = set()
+            for folder in ("common", "events"):
+                for path in sorted((ROOT / folder).rglob("*.txt")):
+                    if re.search(rf"\b{manager} = yes", read(path.relative_to(ROOT).as_posix())):
+                        callers.add(path.name)
+            self.assertEqual(callers, {"te_tax_ai_effects.txt", "te_tax_debug_events.txt"}, manager)
+
+    def test_the_signals_option_only_logs(self):
+        body = block(self.text, "te_tax_debug.3")
+        self.assertNotRegex(body, r"set_variable|change_variable|te_tax_cmd_|te_tax_ai_manage")
+        for key in ("wage", "div", "land", "head", "cons"):
+            self.assertIn(f"te_tax_ai_cost_{key}", body)
+
+    def test_the_streak_option_writes_only_the_need_streak_the_cooldown_and_the_marker(self):
+        body = block(self.text, "te_tax_debug.4")
+        self.assertEqual(sorted(re.findall(r"name = (te_tax_\w+)", body)),
+                         ["te_tax_ai_def_streak", "te_tax_ai_next_month", "te_tax_ai_noviable"])
+        self.assertIn("set_variable = { name = te_tax_ai_noviable value = 0 }", body)
+
+    def test_the_yearly_summary_is_ai_only_in_january_from_the_processor(self):
+        effect = block(read(AI_EFFECTS), "te_tax_ai_log_year")
+        self.assertIn("te_tax_code_on = yes", effect)
+        self.assertIn("is_ai = yes", effect)
+        self.assertIn("te_tax_ai_month_of_year = 0", effect)
+        self.assertIn("TE_TAX ai_year", effect)
+        body = block(read(SCHEDULE), "te_tax_process_month")
+        self.assertLess(body.index("te_tax_ai_dispatch = yes"), body.index("te_tax_ai_log_year = yes"))
+        self.assertLess(body.index("te_tax_ai_log_year = yes"), body.index("te_tax_gen_sunset_wage = yes"))
+
+
 if __name__ == "__main__":
     unittest.main()

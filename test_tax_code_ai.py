@@ -503,7 +503,8 @@ class AiDispatchTest(unittest.TestCase):
         self.assertLess(customs, streaks)
         self.assertLess(streaks, dispatch)
         self.assertLess(dispatch, sunset)
-        self.assertEqual(body.count("te_tax_ai_"), 2, "the processor only updates the streaks and dispatches")
+        self.assertEqual(body.count("te_tax_ai_"), 3,
+                         "the processor only updates the streaks, dispatches and writes the yearly summary")
         self.assertNotIn("te_tax_ai_", block(read(SCHEDULE), "te_tax_watchdog_month"))
 
     def test_dispatch_is_ai_only_and_uses_literal_bucket_days(self):
@@ -1156,7 +1157,9 @@ class AiBillTest(unittest.TestCase):
         step = flat(block(self.ai, "te_tax_ai_step"))
         self.assertIn("te_tax_ai_manage_promises = yes if = { limit = { te_tax_bill_active = yes } "
                       "te_tax_ai_manage_bill = yes }", step)
-        self.assertEqual(callers(r"\bte_tax_ai_manage_bill = yes"), {"te_tax_ai_effects.txt": 1})
+        # The step, and the console's te_tax_debug.2 (Task 22, Ruling 6).
+        self.assertEqual(callers(r"\bte_tax_ai_manage_bill = yes"), {"te_tax_ai_effects.txt": 1,
+                                                                   "te_tax_debug_events.txt": 1})
 
     def test_the_manager_is_the_rule_chain_exactly(self):
         cooldown = "set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_pass }"
@@ -1578,7 +1581,9 @@ class AiInitiativeTest(unittest.TestCase):
         step = flat(block(self.ai, "te_tax_ai_step"))
         self.assertIn("if = { limit = { te_tax_bill_active = yes } te_tax_ai_manage_bill = yes } "
                       "else_if = { limit = { te_tax_ai_initiative_ready = yes } te_tax_ai_initiative = yes }", step)
-        self.assertEqual(callers(r"\bte_tax_ai_initiative = yes"), {"te_tax_ai_effects.txt": 1})
+        # The step, and the console's te_tax_debug.2 (Task 22, Ruling 6).
+        self.assertEqual(callers(r"\bte_tax_ai_initiative = yes"), {"te_tax_ai_effects.txt": 1,
+                                                                    "te_tax_debug_events.txt": 1})
 
     def test_the_step_clears_the_episode_marker_when_the_need_ends(self):
         # Before the managers, so a bill the step withdraws later in the same run starts the new episode.
@@ -1653,8 +1658,11 @@ class AiInitiativeTest(unittest.TestCase):
         # Nothing else in common/ writes the cooldown (the init's guarded sentinel aside).
         self.assertEqual(callers(r"name = te_tax_ai_next_month value = te_tax_ai_cooldown"),
                          {"te_tax_ai_effects.txt": 8})
+        # Plus the console's te_tax_debug.4 (Task 22), which clears the cooldown to the
+        # sentinel together with the marker (test_tax_code_console.py).
         self.assertEqual(callers(r"name = te_tax_ai_next_month value"),
-                         {"te_tax_ai_effects.txt": 8, "te_tax_state_effects.txt": 1})
+                         {"te_tax_ai_effects.txt": 8, "te_tax_state_effects.txt": 1,
+                          "te_tax_debug_events.txt": 1})
 
     # -- templates -----------------------------------------------------------------
 
