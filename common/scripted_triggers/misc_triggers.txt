@@ -208,6 +208,44 @@ no_duplicate_treaty_article = {
 	}
 }
 
+# State scope. True while this state is conceded under an in-force
+# $ARTICLE_TYPE$ article (a state-input article: free_port_concession,
+# minority_protection, religious_mission_rights, demilitarized_zone): its
+# owner is the article's source, bound by a treaty whose article names this
+# state. A state held by rebels risen against that source counts too, for the
+# length of the civil war, as in vanilla treaty_port's requirement_to_maintain.
+# Read by te_sync_state_treaty_articles (treaty_article_effects.txt).
+te_state_article_concession_in_force = {
+	save_temporary_scope_as = te_saci_state
+	owner = {
+		OR = {
+			te_country_concedes_state_article = { ARTICLE_TYPE = $ARTICLE_TYPE$ }
+			AND = {
+				OR = {
+					is_revolutionary = yes
+					is_secessionist = yes
+				}
+				civil_war_origin_country ?= {
+					te_country_concedes_state_article = { ARTICLE_TYPE = $ARTICLE_TYPE$ }
+				}
+			}
+		}
+	}
+}
+
+# Country scope; the state is scope:te_saci_state, saved by
+# te_state_article_concession_in_force, its only caller.
+te_country_concedes_state_article = {
+	save_temporary_scope_as = te_saci_source
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = $ARTICLE_TYPE$
+			source_country = scope:te_saci_source
+			input_state = scope:te_saci_state
+		}
+	}
+}
+
 # True if the building's owner country can build industrial-grade mining/extraction.
 # Building scope. Allows law_extraction_economy (which is the whole point) but
 # blocks law_industry_banned. Use for mines and similar discoverable extractors.

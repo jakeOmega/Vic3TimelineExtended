@@ -2,7 +2,7 @@
 
 A planning map of the mod's own modifier types by the scope they work at: which are already state-level, which country-level ones could move to states, and which must stay national and why. Read it before designing a mechanic that should vary between a country's states: it tells you whether a lever already exists and what a move would cost.
 
-**Snapshot: 2026-09-26.** Counts and grant sources drift as content lands. Re-check a row before building on it: `/modifier-grants/<name>?scope=mod` lists grant sites (it does not scan production methods, institutions or treaty articles yet, #327 / #334, so also `git grep -n '^\s*<name>\s*='`), and `git grep -n 'modifier:<name>'` lists readers. Watch for parameterized reads, such as `modifier:building_annual_$WONDER$_progress`, which a literal grep misses.
+**Snapshot: 2026-09-26.** Counts and grant sources drift as content lands. Re-check a row before building on it: `/modifier-grants/<name>?scope=mod` lists grant sites across every `common/` entity directory (production methods, institutions, treaty articles and country ranks included since #327; check `entity_types_scanned` in the response), and `git grep -n 'modifier:<name>'` lists readers. Watch for parameterized reads, such as `modifier:building_annual_$WONDER$_progress`, which a literal grep misses.
 
 **Scope of the survey.** About 180 modifier types the mod invented, from the topical files in `common/modifier_type_definitions/`. The ~600 entries in `mod_entity_modifier_types.txt` that only register a vanilla pattern for mod content (`state_building_<b>_max_level_add`, `goods_output_<good>_add`, `country_institution_<i>_*`, …) are listed only where they matter: the engine decides their scope, not the mod.
 

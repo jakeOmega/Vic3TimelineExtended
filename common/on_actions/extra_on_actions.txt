@@ -310,6 +310,7 @@ on_monthly_pulse_state = {
 		state_yearly_cultural_acceptance_add_on_action
 		tourism_on_action
 		ministry_of_thought_control_on_action
+		te_state_treaty_article_sync_on_action
 	}
 }
 
@@ -679,11 +680,13 @@ te_on_military_formation_created = {
 # ============================================================================
 # STATE OWNER CHANGE (Root = state)
 # When a state changes hands (e.g. conquest), remove building_space_program
-# if it exists and this state is not the new owner's market capital.
+# if it exists and this state is not the new owner's market capital, and
+# bring the state-input treaty articles' effects in line with the new owner.
 # ============================================================================
 on_state_owner_change = {
 	on_actions = {
 		te_on_state_owner_change
+		te_state_treaty_article_owner_change_on_action
 	}
 }
 te_on_state_owner_change = {
@@ -2873,6 +2876,26 @@ construction_cost_scaling_on_action = {
 migration_crowding_on_action = {
 	effect = {
 		te_update_migration_crowding_modifier = yes
+	}
+}
+
+# ---- State-input treaty articles (state scope) ----
+# Free Port Concession, Minority Protection, Religious Mission Rights and
+# Demilitarized Zone put their effects on the state they name, and a treaty
+# can end without the article's on_break / on_withdrawal removing them (a
+# party annexed). Monthly, a state that carries one but is no longer conceded
+# under it loses it; a change of owner also puts them back on a state that
+# returns to the country that conceded it. treaty_article_effects.txt.
+te_state_treaty_article_sync_on_action = {
+	effect = {
+		te_sync_state_treaty_articles = yes
+	}
+}
+
+te_state_treaty_article_owner_change_on_action = {
+	effect = {
+		te_sync_state_treaty_articles = yes
+		te_restore_state_treaty_articles = yes
 	}
 }
 

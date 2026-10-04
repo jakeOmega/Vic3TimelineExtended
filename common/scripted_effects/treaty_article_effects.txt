@@ -151,3 +151,195 @@ update_intel_sharing_defense = {
 		}
 	}
 }
+
+# ============================================================================
+# STATE-INPUT ARTICLES: the state's effects follow the treaty
+# ============================================================================
+# Free Port Concession, Minority Protection, Religious Mission Rights and
+# Demilitarized Zone each name one of the conceding country's states and put
+# their effects on that state: a static modifier and a variable, which
+# te_update_free_port_tariff and religious_mission_conversion_on_action read
+# on the yearly state pulse. One apply and one clear effect per article (state
+# scope) serve the article's own hooks and the two checks below.
+#
+# A treaty can end without on_break or on_withdrawal undoing them. A player
+# who annexed Belgium kept a free port in Flanders whose treaty was gone, and
+# te_update_free_port_tariff renewed it every year off the stale has_free_port.
+# A state can also change hands while the treaty stands. So the treaty is the
+# record (te_state_article_concession_in_force, misc_triggers.txt), and the
+# state is checked against it:
+#   te_sync_state_treaty_articles     clears an article's effects from a state
+#                                     no longer conceded under it. Monthly
+#                                     (te_state_treaty_article_sync_on_action)
+#                                     and on every change of owner.
+#   te_restore_state_treaty_articles  puts them back on a state that returns to
+#                                     the country that conceded it while the
+#                                     treaty still stands. On a change of owner.
+# ============================================================================
+
+te_free_port_state_apply = {
+	add_modifier = {
+		name = free_port_state_modifier
+	}
+	set_variable = has_free_port
+	# The tariff modifiers wait for te_update_free_port_tariff on the yearly
+	# pulse: the article's entry hook can't run its has_variable reads.
+}
+
+te_free_port_state_clear = {
+	remove_modifier = free_port_state_modifier
+	remove_modifier = free_port_tariff_import_modifier
+	remove_modifier = free_port_tariff_export_modifier
+	remove_variable = has_free_port
+}
+
+te_minority_protection_state_apply = {
+	add_modifier = {
+		name = minority_protection_state_modifier
+	}
+	set_variable = has_minority_protection
+}
+
+te_minority_protection_state_clear = {
+	remove_modifier = minority_protection_state_modifier
+	remove_variable = has_minority_protection
+}
+
+# $MISSION_COUNTRY$ = the article's target, whose religion the missions spread.
+te_religious_mission_state_apply = {
+	add_modifier = {
+		name = religious_mission_state_modifier
+	}
+	set_variable = {
+		name = religious_mission_country
+		value = $MISSION_COUNTRY$
+	}
+}
+
+te_religious_mission_state_clear = {
+	remove_modifier = religious_mission_state_modifier
+	remove_variable = religious_mission_country
+}
+
+te_demilitarized_zone_state_apply = {
+	add_modifier = {
+		name = demilitarized_zone_state_modifier
+	}
+	# The modifier caps a base at no levels; take down one already
+	# standing rather than rely on the engine to shrink it.
+	if = { limit = { has_building = building_military_base } remove_building = building_military_base }
+	set_variable = has_demilitarized_zone
+}
+
+te_demilitarized_zone_state_clear = {
+	remove_modifier = demilitarized_zone_state_modifier
+	remove_variable = has_demilitarized_zone
+}
+
+# State scope. Gated on the variable or the modifier, so a state with neither
+# never walks a treaty.
+te_sync_state_treaty_articles = {
+	if = {
+		limit = {
+			OR = {
+				has_variable = has_free_port
+				has_modifier = free_port_state_modifier
+			}
+			NOT = { te_state_article_concession_in_force = { ARTICLE_TYPE = free_port_concession } }
+		}
+		te_free_port_state_clear = yes
+	}
+	if = {
+		limit = {
+			OR = {
+				has_variable = has_minority_protection
+				has_modifier = minority_protection_state_modifier
+			}
+			NOT = { te_state_article_concession_in_force = { ARTICLE_TYPE = minority_protection } }
+		}
+		te_minority_protection_state_clear = yes
+	}
+	if = {
+		limit = {
+			OR = {
+				has_variable = religious_mission_country
+				has_modifier = religious_mission_state_modifier
+			}
+			NOT = { te_state_article_concession_in_force = { ARTICLE_TYPE = religious_mission_rights } }
+		}
+		te_religious_mission_state_clear = yes
+	}
+	if = {
+		limit = {
+			OR = {
+				has_variable = has_demilitarized_zone
+				has_modifier = demilitarized_zone_state_modifier
+			}
+			NOT = { te_state_article_concession_in_force = { ARTICLE_TYPE = demilitarized_zone } }
+		}
+		te_demilitarized_zone_state_clear = yes
+	}
+}
+
+# State scope, ROOT = the state (on_state_owner_change). Walks the new owner's
+# treaties for an article it conceded on this state, which is only there when
+# the state has come back to the country that conceded it.
+te_restore_state_treaty_articles = {
+	save_scope_as = te_rsta_state
+	owner = {
+		save_scope_as = te_rsta_owner
+		every_scope_treaty = {
+			every_scope_article = {
+				limit = {
+					OR = {
+						has_type = free_port_concession
+						has_type = minority_protection
+						has_type = religious_mission_rights
+						has_type = demilitarized_zone
+					}
+					source_country = scope:te_rsta_owner
+					input_state = scope:te_rsta_state
+				}
+				if = {
+					limit = { has_type = free_port_concession }
+					scope:te_rsta_state = {
+						if = {
+							limit = { NOT = { has_variable = has_free_port } }
+							te_free_port_state_apply = yes
+						}
+					}
+				}
+				else_if = {
+					limit = { has_type = minority_protection }
+					scope:te_rsta_state = {
+						if = {
+							limit = { NOT = { has_variable = has_minority_protection } }
+							te_minority_protection_state_apply = yes
+						}
+					}
+				}
+				else_if = {
+					limit = { has_type = religious_mission_rights }
+					target_country = {
+						save_scope_as = te_rsta_mission_country
+					}
+					scope:te_rsta_state = {
+						if = {
+							limit = { NOT = { has_variable = religious_mission_country } }
+							te_religious_mission_state_apply = { MISSION_COUNTRY = scope:te_rsta_mission_country }
+						}
+					}
+				}
+				else_if = {
+					limit = { has_type = demilitarized_zone }
+					scope:te_rsta_state = {
+						if = {
+							limit = { NOT = { has_variable = has_demilitarized_zone } }
+							te_demilitarized_zone_state_apply = yes
+						}
+					}
+				}
+			}
+		}
+	}
+}
