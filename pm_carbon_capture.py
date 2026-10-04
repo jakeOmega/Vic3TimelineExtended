@@ -209,7 +209,6 @@ def plan_outputs(state, root):
                 if tier == 1:
                     methods.append(f"\tdisallowing_laws = {{ {MANDATE} }}")
                 methods.extend(["\tstate_modifiers = {", "\t\tworkforce_scaled = {",
-                                f"\t\t\tstate_carbon_capture_add = {cut_text}",
                                 f"\t\t\t{emissions.STATE_MODIFIER} = -{cut_text}", "\t\t}", "\t}",
                                 "\tbuilding_modifiers = {", "\t\tworkforce_scaled = {",
                                 f"\t\t\t{emissions.MODIFIER} = -{cut_text}"])

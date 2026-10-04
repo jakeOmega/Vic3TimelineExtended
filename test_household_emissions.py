@@ -40,6 +40,10 @@ class Values:
 
     def condition(self, block, scope):
         for name, (op, rhs) in block.items():
+            if name == "NOT":
+                if self.condition(rhs, scope):
+                    return False
+                continue
             if name == "is_pop_type":
                 if scope["pop_type"] != rhs:
                     return False
@@ -63,7 +67,8 @@ class Values:
                         chosen = True
                 elif key == "every_scope_pop":
                     for pop in scope["pops"]:
-                        total = self.block(arg, pop, total)
+                        if "limit" not in arg or self.condition(body(arg, "limit"), pop):
+                            total = self.block({k: v for k, v in arg.items() if k != "limit"}, pop, total)
                 elif key in ("owner", "market") or key.startswith("mg:"):
                     total = self.block(arg, scope[key], total)
                 else:
@@ -203,7 +208,8 @@ class HouseholdEmissionsTest(unittest.TestCase):
             net = scalar(workforce(pm), emissions.MODIFIER)
             self.assertEqual(scalar(mirror, emissions.STATE_MODIFIER), net)
             self.assertNotIn(emissions.ATMOSPHERIC_MODIFIER, mirror)
-            burn = scalar(mirror, "state_carbon_capture_add")
+            burn = scalar(workforce(pm), f"goods_output_{fuel}_add") * D({"coal": "2", "oil": "1.74"}[fuel]) / 10
+            self.assertNotIn("state_carbon_capture_add", mirror)
             for multiplier in (D(1), D("0.5"), D("0.25"), D(0)):
                 self.assertEqual(self.values.value("gw_state_greenhouse_gas_emissions", state(industry=net, industry_cut=multiplier)), net * multiplier / 1000)
                 chain = self.values.value("gw_state_greenhouse_gas_emissions", state(industry=net+burn, industry_cut=multiplier))
@@ -219,9 +225,19 @@ class HouseholdEmissionsTest(unittest.TestCase):
         types = parsed("common/modifier_type_definitions/mod_entity_modifier_types.txt")
         self.assertIn("building_synthetics_plant_coal_throughput_add", types)
         loc = "\n".join(p.read_text(encoding="utf-8-sig") for p in (ROOT / "localization/english").glob("*.yml"))
-        for modifier in (emissions.STATE_MODIFIER, emissions.ATMOSPHERIC_MODIFIER, "state_carbon_capture_add"):
+        for modifier in (emissions.STATE_MODIFIER, emissions.ATMOSPHERIC_MODIFIER):
             self.assertIn(f" {modifier}:0 ", loc)
             self.assertIn(f" {modifier}_desc:0 ", loc)
+
+    def test_synthetic_export_negative_accounting_is_not_atmospheric_removal(self):
+        producer = self.values.value("gw_state_greenhouse_gas_emissions", state(industry=-168))
+        importer = self.values.value("gw_state_greenhouse_gas_emissions", state(industry=168))
+        self.assertLess(producer, 0)
+        self.assertEqual(producer + importer, 0)
+        for key in ("gw_emis_capture_tt_ours", "gw_emis_capture_tt_theirs"):
+            line = next(line for line in (ROOT / "localization/english/te_miscellaneous_l_english.yml").read_text(encoding="utf-8-sig").splitlines() if line.startswith(f" {key}:"))
+            self.assertIn("Exporting synthetic fuels", line)
+            self.assertNotIn("only way", line)
 
     def test_dac_goods_cost_exceeds_representative_tier_two_source_capture(self):
         methods = self.graph.mod_parsers["PMs"].data
@@ -240,10 +256,10 @@ class HouseholdEmissionsTest(unittest.TestCase):
 
     def test_ownership_updates_preserve_other_state_blocks_and_remove_stale_mirrors(self):
         block = 'pm_test = {\n\tstate_modifiers = {\n\t\tunscaled = { state_pollution_generation_add = 2 }\n\t}\n}\n'
-        changed = emissions._with_state_credit(block, D(5), modifier=emissions.STATE_MODIFIER)
+        changed = emissions._with_state_modifier(block, D(5), modifier=emissions.STATE_MODIFIER)
         self.assertIn("state_pollution_generation_add = 2", changed)
-        self.assertEqual(emissions._with_state_credit(changed, D(5), modifier=emissions.STATE_MODIFIER), changed)
-        self.assertNotIn(emissions.STATE_MODIFIER, emissions._with_state_credit(changed, D(0), modifier=emissions.STATE_MODIFIER))
+        self.assertEqual(emissions._with_state_modifier(changed, D(5), modifier=emissions.STATE_MODIFIER), changed)
+        self.assertNotIn(emissions.STATE_MODIFIER, emissions._with_state_modifier(changed, D(0), modifier=emissions.STATE_MODIFIER))
 
     def test_generated_output_is_current(self):
         self.assertEqual((ROOT / household.OUTPUT).read_text(encoding="utf-8-sig"), household.plan_outputs(self.graph)[household.OUTPUT])

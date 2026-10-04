@@ -84,7 +84,9 @@ class CaptureGeneratorTest(unittest.TestCase):
             if "state_modifiers" not in method:
                 continue
             tiers += 1
-            credit = scalar(body(body(method, "state_modifiers"), "workforce_scaled"), "state_carbon_capture_add")
+            mirror = body(body(method, "state_modifiers"), "workforce_scaled")
+            self.assertNotIn("state_carbon_capture_add", mirror)
+            credit = -scalar(mirror, emissions.STATE_MODIFIER)
             self.assertGreater(credit, 0)
             self.assertEqual(scalar(workforce(method), emissions.MODIFIER), -credit)
             self.assertNotIn("goods_input_coal_add", workforce(method))

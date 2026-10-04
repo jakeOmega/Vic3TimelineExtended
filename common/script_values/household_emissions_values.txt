@@ -32,16 +32,19 @@ gw_household_emission_multiplier = {
 }
 
 # Discount subsistence peasants using the current merged pop-type coefficient.
-# One state-local pop sweep when annual emissions are calculated; no GUI sweeps.
+# Annual state-local sums use flat pop-size reads; UI reads January snapshots.
 gw_household_consuming_population = {
 	value = 0
 	every_scope_pop = {
-		add = {
-			value = total_size
-			if = {
-				limit = { is_pop_type = peasants }
-				multiply = gw_household_peasant_consumption
-			}
+		limit = { NOT = { is_pop_type = peasants } }
+		add = total_size
+	}
+	add = {
+		value = 0
+		every_scope_pop = {
+			limit = { is_pop_type = peasants }
+			add = total_size
 		}
+		multiply = gw_household_peasant_consumption
 	}
 }

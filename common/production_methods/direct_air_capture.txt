@@ -4,7 +4,6 @@ pm_direct_air_capture = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_atmospheric_carbon_capture_add = 42.00 # AUTO-GENERATED: atmospheric removal
-			state_carbon_capture_add = 42.00 # AUTO-GENERATED: carbon credit
 		}
 	}
 

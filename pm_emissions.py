@@ -101,7 +101,7 @@ def _with_emission(block, amount, *, removal=False, label=None):
             f" # AUTO-GENERATED: {label}" + block[index:])
 
 
-def _with_state_credit(block, amount, *, modifier="state_carbon_capture_add", label="carbon credit"):
+def _with_state_modifier(block, amount, *, modifier, label="state accounting"):
     pattern = re.compile(r"(?m)^([\t ]*)" + modifier + r"\s*=\s*(-?[\d.]+)[^\n]*\n")
     matches = list(pattern.finditer(block))
     if len(matches) > 1:
@@ -189,12 +189,13 @@ def plan_outputs(state, root):
             replacement = _with_emission(block, amounts.get(name, Decimal(0)), removal=name in credits,
                                          label="net synthetic emissions" if name in SYNTHETIC_CREDITS else None)
             industrial = amounts[name] if name in SYNTHETIC_CREDITS else gross_amounts.get(name, Decimal(0))
-            replacement = _with_state_credit(replacement, industrial,
+            replacement = _with_state_modifier(replacement, industrial,
                                              modifier=STATE_MODIFIER, label="industrial emissions")
+            # Remove the obsolete display-only credit from previously generated recipes.
+            replacement = _with_state_modifier(replacement, Decimal(0), modifier="state_carbon_capture_add")
             if name in credits:
-                replacement = _with_state_credit(replacement, credits[name])
                 atmospheric = credits[name] if name in REMOVALS else Decimal(0)
-                replacement = _with_state_credit(replacement, atmospheric, modifier=ATMOSPHERIC_MODIFIER,
+                replacement = _with_state_modifier(replacement, atmospheric, modifier=ATMOSPHERIC_MODIFIER,
                                                  label="atmospheric removal")
             if replacement != block:
                 edits.append((match.start(), end, replacement))

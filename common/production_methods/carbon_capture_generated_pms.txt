@@ -19,7 +19,6 @@ pm_carbon_capture_1_aeroplanes_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -41,7 +40,6 @@ pm_carbon_capture_2_aeroplanes_coal0_oil10 = {
 	unlocking_production_methods = { pm_aeroplane_production_2 pm_aeroplane_production_3 }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -63,7 +61,6 @@ pm_carbon_capture_3_aeroplanes_coal0_oil10 = {
 	unlocking_production_methods = { pm_aeroplane_production_2 pm_aeroplane_production_3 }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -91,7 +88,6 @@ pm_carbon_capture_1_alpine_donawitz_steelworks_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -113,7 +109,6 @@ pm_carbon_capture_2_alpine_donawitz_steelworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_alpine_donawitz_steelworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -135,7 +130,6 @@ pm_carbon_capture_3_alpine_donawitz_steelworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_alpine_donawitz_steelworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -163,7 +157,6 @@ pm_carbon_capture_1_altos_hornos_baracaldo_furnaces_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -185,7 +178,6 @@ pm_carbon_capture_2_altos_hornos_baracaldo_furnaces_coal15_oil0 = {
 	unlocking_production_methods = { pm_altos_hornos_baracaldo_furnaces }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -207,7 +199,6 @@ pm_carbon_capture_3_altos_hornos_baracaldo_furnaces_coal15_oil0 = {
 	unlocking_production_methods = { pm_altos_hornos_baracaldo_furnaces }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -241,7 +232,6 @@ pm_carbon_capture_1_automation_building_arms_industry_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -263,7 +253,6 @@ pm_carbon_capture_2_automation_building_arms_industry_coal0_oil5 = {
 	unlocking_production_methods = { pm_advanced_assembly_lines_building_arms_industry pm_ai_managed_building_arms_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -285,7 +274,6 @@ pm_carbon_capture_3_automation_building_arms_industry_coal0_oil5 = {
 	unlocking_production_methods = { pm_advanced_assembly_lines_building_arms_industry pm_ai_managed_building_arms_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -308,7 +296,6 @@ pm_carbon_capture_1_automation_building_arms_industry_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -330,7 +317,6 @@ pm_carbon_capture_2_automation_building_arms_industry_coal0_oil10 = {
 	unlocking_production_methods = { pm_assembly_lines_building_arms_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -352,7 +338,6 @@ pm_carbon_capture_3_automation_building_arms_industry_coal0_oil10 = {
 	unlocking_production_methods = { pm_assembly_lines_building_arms_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -375,7 +360,6 @@ pm_carbon_capture_1_automation_building_arms_industry_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -397,7 +381,6 @@ pm_carbon_capture_2_automation_building_arms_industry_coal15_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_arms_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -419,7 +402,6 @@ pm_carbon_capture_3_automation_building_arms_industry_coal15_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_arms_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -453,7 +435,6 @@ pm_carbon_capture_1_automation_building_automotive_industry_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -475,7 +456,6 @@ pm_carbon_capture_2_automation_building_automotive_industry_coal0_oil5 = {
 	unlocking_production_methods = { pm_assembly_lines_building_automotive_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -497,7 +477,6 @@ pm_carbon_capture_3_automation_building_automotive_industry_coal0_oil5 = {
 	unlocking_production_methods = { pm_assembly_lines_building_automotive_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -531,7 +510,6 @@ pm_carbon_capture_1_automation_building_furniture_manufactory_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -553,7 +531,6 @@ pm_carbon_capture_2_automation_building_furniture_manufactory_coal0_oil5 = {
 	unlocking_production_methods = { pm_assembly_lines_building_furniture_manufactory }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -575,7 +552,6 @@ pm_carbon_capture_3_automation_building_furniture_manufactory_coal0_oil5 = {
 	unlocking_production_methods = { pm_assembly_lines_building_furniture_manufactory }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -598,7 +574,6 @@ pm_carbon_capture_1_automation_building_furniture_manufactory_coal5_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.25
 			state_greenhouse_gas_emissions_add = -0.25
 		}
 	}
@@ -620,7 +595,6 @@ pm_carbon_capture_2_automation_building_furniture_manufactory_coal5_oil0 = {
 	unlocking_production_methods = { pm_watertube_boiler_building_furniture_manufactory }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -642,7 +616,6 @@ pm_carbon_capture_3_automation_building_furniture_manufactory_coal5_oil0 = {
 	unlocking_production_methods = { pm_watertube_boiler_building_furniture_manufactory }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -665,7 +638,6 @@ pm_carbon_capture_1_automation_building_furniture_manufactory_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -687,7 +659,6 @@ pm_carbon_capture_2_automation_building_furniture_manufactory_coal10_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_furniture_manufactory }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -709,7 +680,6 @@ pm_carbon_capture_3_automation_building_furniture_manufactory_coal10_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_furniture_manufactory }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -743,7 +713,6 @@ pm_carbon_capture_1_automation_building_motor_industry_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -765,7 +734,6 @@ pm_carbon_capture_2_automation_building_motor_industry_coal0_oil5 = {
 	unlocking_production_methods = { pm_assembly_lines_building_motor_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -787,7 +755,6 @@ pm_carbon_capture_3_automation_building_motor_industry_coal0_oil5 = {
 	unlocking_production_methods = { pm_assembly_lines_building_motor_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -810,7 +777,6 @@ pm_carbon_capture_1_automation_building_motor_industry_coal5_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.25
 			state_greenhouse_gas_emissions_add = -0.25
 		}
 	}
@@ -832,7 +798,6 @@ pm_carbon_capture_2_automation_building_motor_industry_coal5_oil0 = {
 	unlocking_production_methods = { pm_watertube_boiler_building_motor_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -854,7 +819,6 @@ pm_carbon_capture_3_automation_building_motor_industry_coal5_oil0 = {
 	unlocking_production_methods = { pm_watertube_boiler_building_motor_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -877,7 +841,6 @@ pm_carbon_capture_1_automation_building_motor_industry_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -899,7 +862,6 @@ pm_carbon_capture_2_automation_building_motor_industry_coal10_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_motor_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -921,7 +883,6 @@ pm_carbon_capture_3_automation_building_motor_industry_coal10_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_motor_industry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -955,7 +916,6 @@ pm_carbon_capture_1_automation_building_munition_plant_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -977,7 +937,6 @@ pm_carbon_capture_2_automation_building_munition_plant_coal0_oil5 = {
 	unlocking_production_methods = { pm_advanced_assembly_lines_building_munition_plant pm_ai_managed_building_munition_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -999,7 +958,6 @@ pm_carbon_capture_3_automation_building_munition_plant_coal0_oil5 = {
 	unlocking_production_methods = { pm_advanced_assembly_lines_building_munition_plant pm_ai_managed_building_munition_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -1022,7 +980,6 @@ pm_carbon_capture_1_automation_building_munition_plant_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -1044,7 +1001,6 @@ pm_carbon_capture_2_automation_building_munition_plant_coal0_oil10 = {
 	unlocking_production_methods = { pm_assembly_lines_building_munition_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -1066,7 +1022,6 @@ pm_carbon_capture_3_automation_building_munition_plant_coal0_oil10 = {
 	unlocking_production_methods = { pm_assembly_lines_building_munition_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -1089,7 +1044,6 @@ pm_carbon_capture_1_automation_building_munition_plant_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -1111,7 +1065,6 @@ pm_carbon_capture_2_automation_building_munition_plant_coal15_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_munition_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -1133,7 +1086,6 @@ pm_carbon_capture_3_automation_building_munition_plant_coal15_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_munition_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -1167,7 +1119,6 @@ pm_carbon_capture_1_automation_building_paper_mill_coal5_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.25
 			state_greenhouse_gas_emissions_add = -0.25
 		}
 	}
@@ -1189,7 +1140,6 @@ pm_carbon_capture_2_automation_building_paper_mill_coal5_oil0 = {
 	unlocking_production_methods = { pm_watertube_boiler_building_paper_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -1211,7 +1161,6 @@ pm_carbon_capture_3_automation_building_paper_mill_coal5_oil0 = {
 	unlocking_production_methods = { pm_watertube_boiler_building_paper_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -1234,7 +1183,6 @@ pm_carbon_capture_1_automation_building_paper_mill_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -1256,7 +1204,6 @@ pm_carbon_capture_2_automation_building_paper_mill_coal10_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_paper_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -1278,7 +1225,6 @@ pm_carbon_capture_3_automation_building_paper_mill_coal10_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_paper_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -1312,7 +1258,6 @@ pm_carbon_capture_1_automation_building_steel_mill_coal5_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.25
 			state_greenhouse_gas_emissions_add = -0.25
 		}
 	}
@@ -1334,7 +1279,6 @@ pm_carbon_capture_2_automation_building_steel_mill_coal5_oil0 = {
 	unlocking_production_methods = { pm_watertube_boiler_building_steel_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -1356,7 +1300,6 @@ pm_carbon_capture_3_automation_building_steel_mill_coal5_oil0 = {
 	unlocking_production_methods = { pm_watertube_boiler_building_steel_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -1379,7 +1322,6 @@ pm_carbon_capture_1_automation_building_steel_mill_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -1401,7 +1343,6 @@ pm_carbon_capture_2_automation_building_steel_mill_coal10_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_steel_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -1423,7 +1364,6 @@ pm_carbon_capture_3_automation_building_steel_mill_coal10_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_steel_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -1457,7 +1397,6 @@ pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -1479,7 +1418,6 @@ pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil5 = {
 	unlocking_production_methods = { pm_advanced_assembly_lines_building_tooling_workshop pm_robotic_assembly_lines_building_tooling_workshop pm_ai_managed_building_tooling_workshop }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -1501,7 +1439,6 @@ pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil5 = {
 	unlocking_production_methods = { pm_advanced_assembly_lines_building_tooling_workshop pm_robotic_assembly_lines_building_tooling_workshop pm_ai_managed_building_tooling_workshop }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -1524,7 +1461,6 @@ pm_carbon_capture_1_automation_building_tooling_workshop_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -1546,7 +1482,6 @@ pm_carbon_capture_2_automation_building_tooling_workshop_coal0_oil10 = {
 	unlocking_production_methods = { pm_assembly_lines_building_tooling_workshop }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -1568,7 +1503,6 @@ pm_carbon_capture_3_automation_building_tooling_workshop_coal0_oil10 = {
 	unlocking_production_methods = { pm_assembly_lines_building_tooling_workshop }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -1591,7 +1525,6 @@ pm_carbon_capture_1_automation_building_tooling_workshop_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -1613,7 +1546,6 @@ pm_carbon_capture_2_automation_building_tooling_workshop_coal10_oil0 = {
 	unlocking_production_methods = { pm_watertube_boiler_building_tooling_workshop }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -1635,7 +1567,6 @@ pm_carbon_capture_3_automation_building_tooling_workshop_coal10_oil0 = {
 	unlocking_production_methods = { pm_watertube_boiler_building_tooling_workshop }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -1658,7 +1589,6 @@ pm_carbon_capture_1_automation_building_tooling_workshop_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -1680,7 +1610,6 @@ pm_carbon_capture_2_automation_building_tooling_workshop_coal15_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_tooling_workshop }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -1702,7 +1631,6 @@ pm_carbon_capture_3_automation_building_tooling_workshop_coal15_oil0 = {
 	unlocking_production_methods = { pm_rotary_valve_engine_building_tooling_workshop }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -1736,7 +1664,6 @@ pm_carbon_capture_1_automobile_production_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -1758,7 +1685,6 @@ pm_carbon_capture_2_automobile_production_coal0_oil5 = {
 	unlocking_production_methods = { pm_automobile_production }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -1780,7 +1706,6 @@ pm_carbon_capture_3_automobile_production_coal0_oil5 = {
 	unlocking_production_methods = { pm_automobile_production }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -1803,7 +1728,6 @@ pm_carbon_capture_1_automobile_production_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -1825,7 +1749,6 @@ pm_carbon_capture_2_automobile_production_coal0_oil10 = {
 	unlocking_production_methods = { pm_mass_automobile_production pm_modern_automobile_production }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -1847,7 +1770,6 @@ pm_carbon_capture_3_automobile_production_coal0_oil10 = {
 	unlocking_production_methods = { pm_mass_automobile_production pm_modern_automobile_production }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -1881,7 +1803,6 @@ pm_carbon_capture_1_base_building_motor_industry_coal0_oil40 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.74
 			state_greenhouse_gas_emissions_add = -1.74
 		}
 	}
@@ -1903,7 +1824,6 @@ pm_carbon_capture_2_base_building_motor_industry_coal0_oil40 = {
 	unlocking_production_methods = { pm_gas_turbine_engines }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.48
 			state_greenhouse_gas_emissions_add = -3.48
 		}
 	}
@@ -1925,7 +1845,6 @@ pm_carbon_capture_3_base_building_motor_industry_coal0_oil40 = {
 	unlocking_production_methods = { pm_gas_turbine_engines }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 5.22
 			state_greenhouse_gas_emissions_add = -5.22
 		}
 	}
@@ -1948,7 +1867,6 @@ pm_carbon_capture_1_base_building_motor_industry_coal0_oil50 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.18
 			state_greenhouse_gas_emissions_add = -2.18
 		}
 	}
@@ -1970,7 +1888,6 @@ pm_carbon_capture_2_base_building_motor_industry_coal0_oil50 = {
 	unlocking_production_methods = { pm_diesel_engines }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 4.35
 			state_greenhouse_gas_emissions_add = -4.35
 		}
 	}
@@ -1992,7 +1909,6 @@ pm_carbon_capture_3_base_building_motor_industry_coal0_oil50 = {
 	unlocking_production_methods = { pm_diesel_engines }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 6.53
 			state_greenhouse_gas_emissions_add = -6.53
 		}
 	}
@@ -2015,7 +1931,6 @@ pm_carbon_capture_1_base_building_motor_industry_coal20_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -2037,7 +1952,6 @@ pm_carbon_capture_2_base_building_motor_industry_coal20_oil0 = {
 	unlocking_production_methods = { pm_graphene_electric_motors }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.00
 			state_greenhouse_gas_emissions_add = -2.00
 		}
 	}
@@ -2059,7 +1973,6 @@ pm_carbon_capture_3_base_building_motor_industry_coal20_oil0 = {
 	unlocking_production_methods = { pm_graphene_electric_motors }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.00
 			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
@@ -2093,7 +2006,6 @@ pm_carbon_capture_1_base_building_oil_rig_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -2115,7 +2027,6 @@ pm_carbon_capture_2_base_building_oil_rig_coal10_oil0 = {
 	unlocking_production_methods = { pm_steam_derricks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -2137,7 +2048,6 @@ pm_carbon_capture_3_base_building_oil_rig_coal10_oil0 = {
 	unlocking_production_methods = { pm_steam_derricks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -2165,7 +2075,6 @@ pm_carbon_capture_1_base_building_power_plant_coal0_oil25 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.09
 			state_greenhouse_gas_emissions_add = -1.09
 		}
 	}
@@ -2187,7 +2096,6 @@ pm_carbon_capture_2_base_building_power_plant_coal0_oil25 = {
 	unlocking_production_methods = { pm_oil-fired_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.18
 			state_greenhouse_gas_emissions_add = -2.18
 		}
 	}
@@ -2209,7 +2117,6 @@ pm_carbon_capture_3_base_building_power_plant_coal0_oil25 = {
 	unlocking_production_methods = { pm_oil-fired_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.26
 			state_greenhouse_gas_emissions_add = -3.26
 		}
 	}
@@ -2232,7 +2139,6 @@ pm_carbon_capture_1_base_building_power_plant_coal0_oil35 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.52
 			state_greenhouse_gas_emissions_add = -1.52
 		}
 	}
@@ -2254,7 +2160,6 @@ pm_carbon_capture_2_base_building_power_plant_coal0_oil35 = {
 	unlocking_production_methods = { pm_modern_oil-fired_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.05
 			state_greenhouse_gas_emissions_add = -3.05
 		}
 	}
@@ -2276,7 +2181,6 @@ pm_carbon_capture_3_base_building_power_plant_coal0_oil35 = {
 	unlocking_production_methods = { pm_modern_oil-fired_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 4.57
 			state_greenhouse_gas_emissions_add = -4.57
 		}
 	}
@@ -2299,7 +2203,6 @@ pm_carbon_capture_1_base_building_power_plant_coal5_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.25
 			state_greenhouse_gas_emissions_add = -0.25
 		}
 	}
@@ -2321,7 +2224,6 @@ pm_carbon_capture_2_base_building_power_plant_coal5_oil0 = {
 	unlocking_production_methods = { pm_early_power_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -2343,7 +2245,6 @@ pm_carbon_capture_3_base_building_power_plant_coal5_oil0 = {
 	unlocking_production_methods = { pm_early_power_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -2366,7 +2267,6 @@ pm_carbon_capture_1_base_building_power_plant_coal20_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -2388,7 +2288,6 @@ pm_carbon_capture_2_base_building_power_plant_coal20_oil0 = {
 	unlocking_production_methods = { pm_coal-fired_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.00
 			state_greenhouse_gas_emissions_add = -2.00
 		}
 	}
@@ -2410,7 +2309,6 @@ pm_carbon_capture_3_base_building_power_plant_coal20_oil0 = {
 	unlocking_production_methods = { pm_coal-fired_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.00
 			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
@@ -2433,7 +2331,6 @@ pm_carbon_capture_1_base_building_power_plant_coal25_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.25
 			state_greenhouse_gas_emissions_add = -1.25
 		}
 	}
@@ -2455,7 +2352,6 @@ pm_carbon_capture_2_base_building_power_plant_coal25_oil0 = {
 	unlocking_production_methods = { pm_modern_coal-fired_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.50
 			state_greenhouse_gas_emissions_add = -2.50
 		}
 	}
@@ -2477,7 +2373,6 @@ pm_carbon_capture_3_base_building_power_plant_coal25_oil0 = {
 	unlocking_production_methods = { pm_modern_coal-fired_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.75
 			state_greenhouse_gas_emissions_add = -3.75
 		}
 	}
@@ -2511,7 +2406,6 @@ pm_carbon_capture_1_base_building_shipyard_coal0_oil30 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -2533,7 +2427,6 @@ pm_carbon_capture_2_base_building_shipyard_coal0_oil30 = {
 	unlocking_production_methods = { pm_modular_shipbuilding }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.61
 			state_greenhouse_gas_emissions_add = -2.61
 		}
 	}
@@ -2555,7 +2448,6 @@ pm_carbon_capture_3_base_building_shipyard_coal0_oil30 = {
 	unlocking_production_methods = { pm_modular_shipbuilding }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.92
 			state_greenhouse_gas_emissions_add = -3.92
 		}
 	}
@@ -2578,7 +2470,6 @@ pm_carbon_capture_1_base_building_shipyard_coal0_oil35 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.52
 			state_greenhouse_gas_emissions_add = -1.52
 		}
 	}
@@ -2600,7 +2491,6 @@ pm_carbon_capture_2_base_building_shipyard_coal0_oil35 = {
 	unlocking_production_methods = { pm_diesel_shipbuilding }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.05
 			state_greenhouse_gas_emissions_add = -3.05
 		}
 	}
@@ -2622,7 +2512,6 @@ pm_carbon_capture_3_base_building_shipyard_coal0_oil35 = {
 	unlocking_production_methods = { pm_diesel_shipbuilding }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 4.57
 			state_greenhouse_gas_emissions_add = -4.57
 		}
 	}
@@ -2645,7 +2534,6 @@ pm_carbon_capture_1_base_building_shipyard_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -2667,7 +2555,6 @@ pm_carbon_capture_2_base_building_shipyard_coal10_oil0 = {
 	unlocking_production_methods = { pm_metal_shipbuilding }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -2689,7 +2576,6 @@ pm_carbon_capture_3_base_building_shipyard_coal10_oil0 = {
 	unlocking_production_methods = { pm_metal_shipbuilding }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -2717,7 +2603,6 @@ pm_carbon_capture_1_basf_ludwigshafen_plant_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -2739,7 +2624,6 @@ pm_carbon_capture_2_basf_ludwigshafen_plant_coal10_oil0 = {
 	unlocking_production_methods = { pm_basf_ludwigshafen_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -2761,7 +2645,6 @@ pm_carbon_capture_3_basf_ludwigshafen_plant_coal10_oil0 = {
 	unlocking_production_methods = { pm_basf_ludwigshafen_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -2789,7 +2672,6 @@ pm_carbon_capture_1_bhp_broken_hill_mine_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -2811,7 +2693,6 @@ pm_carbon_capture_2_bhp_broken_hill_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_bhp_broken_hill_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -2833,7 +2714,6 @@ pm_carbon_capture_3_bhp_broken_hill_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_bhp_broken_hill_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -2861,7 +2741,6 @@ pm_carbon_capture_1_bolckow_eston_ironworks_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -2883,7 +2762,6 @@ pm_carbon_capture_2_bolckow_eston_ironworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_bolckow_eston_ironworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -2905,7 +2783,6 @@ pm_carbon_capture_3_bolckow_eston_ironworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_bolckow_eston_ironworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -2933,7 +2810,6 @@ pm_carbon_capture_1_calcutta_electric_victoria_house_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -2955,7 +2831,6 @@ pm_carbon_capture_2_calcutta_electric_victoria_house_coal15_oil0 = {
 	unlocking_production_methods = { pm_calcutta_electric_victoria_house }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -2977,7 +2852,6 @@ pm_carbon_capture_3_calcutta_electric_victoria_house_coal15_oil0 = {
 	unlocking_production_methods = { pm_calcutta_electric_victoria_house }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -3011,7 +2885,6 @@ pm_carbon_capture_1_canning_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -3033,7 +2906,6 @@ pm_carbon_capture_2_canning_coal0_oil5 = {
 	unlocking_production_methods = { pm_vacuum_canning pm_vacuum_canning_principle_3 pm_flexible_packaging }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -3055,7 +2927,6 @@ pm_carbon_capture_3_canning_coal0_oil5 = {
 	unlocking_production_methods = { pm_vacuum_canning pm_vacuum_canning_principle_3 pm_flexible_packaging }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -3083,7 +2954,6 @@ pm_carbon_capture_1_carnegie_homestead_mill_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -3105,7 +2975,6 @@ pm_carbon_capture_2_carnegie_homestead_mill_coal10_oil0 = {
 	unlocking_production_methods = { pm_carnegie_homestead_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -3127,7 +2996,6 @@ pm_carbon_capture_3_carnegie_homestead_mill_coal10_oil0 = {
 	unlocking_production_methods = { pm_carnegie_homestead_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -3155,7 +3023,6 @@ pm_carbon_capture_1_chr_hansen_copenhagen_laboratory_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -3177,7 +3044,6 @@ pm_carbon_capture_2_chr_hansen_copenhagen_laboratory_coal10_oil0 = {
 	unlocking_production_methods = { pm_chr_hansen_copenhagen_laboratory }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -3199,7 +3065,6 @@ pm_carbon_capture_3_chr_hansen_copenhagen_laboratory_coal10_oil0 = {
 	unlocking_production_methods = { pm_chr_hansen_copenhagen_laboratory }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -3227,7 +3092,6 @@ pm_carbon_capture_1_cockerill_seraing_works_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -3249,7 +3113,6 @@ pm_carbon_capture_2_cockerill_seraing_works_coal15_oil0 = {
 	unlocking_production_methods = { pm_cockerill_seraing_works }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -3271,7 +3134,6 @@ pm_carbon_capture_3_cockerill_seraing_works_coal15_oil0 = {
 	unlocking_production_methods = { pm_cockerill_seraing_works }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -3299,7 +3161,6 @@ pm_carbon_capture_1_duro_la_felguera_steelworks_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -3321,7 +3182,6 @@ pm_carbon_capture_2_duro_la_felguera_steelworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_duro_la_felguera_steelworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -3343,7 +3203,6 @@ pm_carbon_capture_3_duro_la_felguera_steelworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_duro_la_felguera_steelworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -3371,7 +3230,6 @@ pm_carbon_capture_1_eea_dock_sud_power_station_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -3393,7 +3251,6 @@ pm_carbon_capture_2_eea_dock_sud_power_station_coal15_oil0 = {
 	unlocking_production_methods = { pm_eea_dock_sud_power_station }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -3415,7 +3272,6 @@ pm_carbon_capture_3_eea_dock_sud_power_station_coal15_oil0 = {
 	unlocking_production_methods = { pm_eea_dock_sud_power_station }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -3443,7 +3299,6 @@ pm_carbon_capture_1_electricidad_caracas_power_house_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -3465,7 +3320,6 @@ pm_carbon_capture_2_electricidad_caracas_power_house_coal15_oil0 = {
 	unlocking_production_methods = { pm_electricidad_caracas_power_house }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -3487,7 +3341,6 @@ pm_carbon_capture_3_electricidad_caracas_power_house_coal15_oil0 = {
 	unlocking_production_methods = { pm_electricidad_caracas_power_house }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -3521,7 +3374,6 @@ pm_carbon_capture_1_explosives_building_chemical_plant_coal30_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -3542,7 +3394,6 @@ pm_carbon_capture_2_explosives_building_chemical_plant_coal30_oil0 = {
 	unlocking_production_methods = { pm_ammonium_nitrate_explosives }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.00
 			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
@@ -3563,7 +3414,6 @@ pm_carbon_capture_3_explosives_building_chemical_plant_coal30_oil0 = {
 	unlocking_production_methods = { pm_ammonium_nitrate_explosives }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 4.50
 			state_greenhouse_gas_emissions_add = -4.50
 		}
 	}
@@ -3596,7 +3446,6 @@ pm_carbon_capture_1_fertilizer_production_coal0_oil20 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -3617,7 +3466,6 @@ pm_carbon_capture_2_fertilizer_production_coal0_oil20 = {
 	unlocking_production_methods = { pm_nitrogen_fixation }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.74
 			state_greenhouse_gas_emissions_add = -1.74
 		}
 	}
@@ -3638,7 +3486,6 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil20 = {
 	unlocking_production_methods = { pm_nitrogen_fixation }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.61
 			state_greenhouse_gas_emissions_add = -2.61
 		}
 	}
@@ -3660,7 +3507,6 @@ pm_carbon_capture_1_fertilizer_production_coal0_oil120 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 5.22
 			state_greenhouse_gas_emissions_add = -5.22
 		}
 	}
@@ -3681,7 +3527,6 @@ pm_carbon_capture_2_fertilizer_production_coal0_oil120 = {
 	unlocking_production_methods = { pm_catalytic_cracking }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 10.44
 			state_greenhouse_gas_emissions_add = -10.44
 		}
 	}
@@ -3702,7 +3547,6 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil120 = {
 	unlocking_production_methods = { pm_catalytic_cracking }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 15.66
 			state_greenhouse_gas_emissions_add = -15.66
 		}
 	}
@@ -3724,7 +3568,6 @@ pm_carbon_capture_1_fertilizer_production_coal0_oil160 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 6.96
 			state_greenhouse_gas_emissions_add = -6.96
 		}
 	}
@@ -3745,7 +3588,6 @@ pm_carbon_capture_2_fertilizer_production_coal0_oil160 = {
 	unlocking_production_methods = { pm_polymerization_processes }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 13.92
 			state_greenhouse_gas_emissions_add = -13.92
 		}
 	}
@@ -3766,7 +3608,6 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil160 = {
 	unlocking_production_methods = { pm_polymerization_processes }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 20.88
 			state_greenhouse_gas_emissions_add = -20.88
 		}
 	}
@@ -3788,7 +3629,6 @@ pm_carbon_capture_1_fertilizer_production_coal0_oil180 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 7.83
 			state_greenhouse_gas_emissions_add = -7.83
 		}
 	}
@@ -3809,7 +3649,6 @@ pm_carbon_capture_2_fertilizer_production_coal0_oil180 = {
 	unlocking_production_methods = { pm_automated_chemical_reactors }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 15.66
 			state_greenhouse_gas_emissions_add = -15.66
 		}
 	}
@@ -3830,7 +3669,6 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil180 = {
 	unlocking_production_methods = { pm_automated_chemical_reactors }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 23.49
 			state_greenhouse_gas_emissions_add = -23.49
 		}
 	}
@@ -3852,7 +3690,6 @@ pm_carbon_capture_1_fertilizer_production_coal0_oil220 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 9.57
 			state_greenhouse_gas_emissions_add = -9.57
 		}
 	}
@@ -3873,7 +3710,6 @@ pm_carbon_capture_2_fertilizer_production_coal0_oil220 = {
 	unlocking_production_methods = { pm_flow_chemistry_production }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 19.14
 			state_greenhouse_gas_emissions_add = -19.14
 		}
 	}
@@ -3894,7 +3730,6 @@ pm_carbon_capture_3_fertilizer_production_coal0_oil220 = {
 	unlocking_production_methods = { pm_flow_chemistry_production }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 28.71
 			state_greenhouse_gas_emissions_add = -28.71
 		}
 	}
@@ -3927,7 +3762,6 @@ pm_carbon_capture_1_firearms_manufacturing_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -3949,7 +3783,6 @@ pm_carbon_capture_2_firearms_manufacturing_coal0_oil10 = {
 	unlocking_production_methods = { pm_bolt_action_rifles pm_semiautomatic_rifles pm_networked_small_arms pm_programmable_matter_small_arms }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -3971,7 +3804,6 @@ pm_carbon_capture_3_firearms_manufacturing_coal0_oil10 = {
 	unlocking_production_methods = { pm_bolt_action_rifles pm_semiautomatic_rifles pm_networked_small_arms pm_programmable_matter_small_arms }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -4005,7 +3837,6 @@ pm_carbon_capture_1_foundries_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -4027,7 +3858,6 @@ pm_carbon_capture_2_foundries_coal0_oil10 = {
 	unlocking_production_methods = { pm_recoiled_barrels }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -4049,7 +3879,6 @@ pm_carbon_capture_3_foundries_coal0_oil10 = {
 	unlocking_production_methods = { pm_recoiled_barrels }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -4072,7 +3901,6 @@ pm_carbon_capture_1_foundries_coal0_oil20 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -4094,7 +3922,6 @@ pm_carbon_capture_2_foundries_coal0_oil20 = {
 	unlocking_production_methods = { pm_rocket_artillery pm_precision_guided_shells pm_electromagnetic_projectors pm_programmable_matter_artillery }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.74
 			state_greenhouse_gas_emissions_add = -1.74
 		}
 	}
@@ -4116,7 +3943,6 @@ pm_carbon_capture_3_foundries_coal0_oil20 = {
 	unlocking_production_methods = { pm_rocket_artillery pm_precision_guided_shells pm_electromagnetic_projectors pm_programmable_matter_artillery }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.61
 			state_greenhouse_gas_emissions_add = -2.61
 		}
 	}
@@ -4144,7 +3970,6 @@ pm_carbon_capture_1_fundicao_ipanema_sorocaba_foundry_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -4166,7 +3991,6 @@ pm_carbon_capture_2_fundicao_ipanema_sorocaba_foundry_coal15_oil0 = {
 	unlocking_production_methods = { pm_fundicao_ipanema_sorocaba_foundry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -4188,7 +4012,6 @@ pm_carbon_capture_3_fundicao_ipanema_sorocaba_foundry_coal15_oil0 = {
 	unlocking_production_methods = { pm_fundicao_ipanema_sorocaba_foundry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -4216,7 +4039,6 @@ pm_carbon_capture_1_fundidora_monterrey_blast_furnace_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -4238,7 +4060,6 @@ pm_carbon_capture_2_fundidora_monterrey_blast_furnace_coal15_oil0 = {
 	unlocking_production_methods = { pm_fundidora_monterrey_blast_furnace }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -4260,7 +4081,6 @@ pm_carbon_capture_3_fundidora_monterrey_blast_furnace_coal15_oil0 = {
 	unlocking_production_methods = { pm_fundidora_monterrey_blast_furnace }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -4288,7 +4108,6 @@ pm_carbon_capture_1_generic_foundry_complex_coal20_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -4310,7 +4129,6 @@ pm_carbon_capture_2_generic_foundry_complex_coal20_oil0 = {
 	unlocking_production_methods = { pm_generic_foundry_complex }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.00
 			state_greenhouse_gas_emissions_add = -2.00
 		}
 	}
@@ -4332,7 +4150,6 @@ pm_carbon_capture_3_generic_foundry_complex_coal20_oil0 = {
 	unlocking_production_methods = { pm_generic_foundry_complex }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.00
 			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
@@ -4360,7 +4177,6 @@ pm_carbon_capture_1_generic_mineral_refinery_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -4382,7 +4198,6 @@ pm_carbon_capture_2_generic_mineral_refinery_coal15_oil0 = {
 	unlocking_production_methods = { pm_generic_mineral_refinery }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -4404,7 +4219,6 @@ pm_carbon_capture_3_generic_mineral_refinery_coal15_oil0 = {
 	unlocking_production_methods = { pm_generic_mineral_refinery }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -4432,7 +4246,6 @@ pm_carbon_capture_1_generic_power_hub_coal20_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -4454,7 +4267,6 @@ pm_carbon_capture_2_generic_power_hub_coal20_oil0 = {
 	unlocking_production_methods = { pm_generic_power_hub }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.00
 			state_greenhouse_gas_emissions_add = -2.00
 		}
 	}
@@ -4476,7 +4288,6 @@ pm_carbon_capture_3_generic_power_hub_coal20_oil0 = {
 	unlocking_production_methods = { pm_generic_power_hub }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.00
 			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
@@ -4510,7 +4321,6 @@ pm_carbon_capture_1_glassblowing_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -4532,7 +4342,6 @@ pm_carbon_capture_2_glassblowing_coal0_oil5 = {
 	unlocking_production_methods = { pm_automatic_bottle_blowers }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -4554,7 +4363,6 @@ pm_carbon_capture_3_glassblowing_coal0_oil5 = {
 	unlocking_production_methods = { pm_automatic_bottle_blowers }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -4582,7 +4390,6 @@ pm_carbon_capture_1_hanseong_jeongi_gwanghwamun_station_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -4604,7 +4411,6 @@ pm_carbon_capture_2_hanseong_jeongi_gwanghwamun_station_coal15_oil0 = {
 	unlocking_production_methods = { pm_hanseong_jeongi_gwanghwamun_station }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -4626,7 +4432,6 @@ pm_carbon_capture_3_hanseong_jeongi_gwanghwamun_station_coal15_oil0 = {
 	unlocking_production_methods = { pm_hanseong_jeongi_gwanghwamun_station }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -4654,7 +4459,6 @@ pm_carbon_capture_1_hughes_yuzovka_steelworks_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -4676,7 +4480,6 @@ pm_carbon_capture_2_hughes_yuzovka_steelworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_hughes_yuzovka_steelworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -4698,7 +4501,6 @@ pm_carbon_capture_3_hughes_yuzovka_steelworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_hughes_yuzovka_steelworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -4726,7 +4528,6 @@ pm_carbon_capture_1_ilva_bagnoli_steelworks_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -4748,7 +4549,6 @@ pm_carbon_capture_2_ilva_bagnoli_steelworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_ilva_bagnoli_steelworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -4770,7 +4570,6 @@ pm_carbon_capture_3_ilva_bagnoli_steelworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_ilva_bagnoli_steelworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -4798,7 +4597,6 @@ pm_carbon_capture_1_ingolstadt_power_station_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -4820,7 +4618,6 @@ pm_carbon_capture_2_ingolstadt_power_station_coal15_oil0 = {
 	unlocking_production_methods = { pm_ingolstadt_power_station }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -4842,7 +4639,6 @@ pm_carbon_capture_3_ingolstadt_power_station_coal15_oil0 = {
 	unlocking_production_methods = { pm_ingolstadt_power_station }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -4870,7 +4666,6 @@ pm_carbon_capture_1_lilpop_warsaw_metalworks_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -4892,7 +4687,6 @@ pm_carbon_capture_2_lilpop_warsaw_metalworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_lilpop_warsaw_metalworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -4914,7 +4708,6 @@ pm_carbon_capture_3_lilpop_warsaw_metalworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_lilpop_warsaw_metalworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -4942,7 +4735,6 @@ pm_carbon_capture_1_markwald_bangkok_rice_mill_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -4964,7 +4756,6 @@ pm_carbon_capture_2_markwald_bangkok_rice_mill_coal10_oil0 = {
 	unlocking_production_methods = { pm_markwald_bangkok_rice_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -4986,7 +4777,6 @@ pm_carbon_capture_3_markwald_bangkok_rice_mill_coal10_oil0 = {
 	unlocking_production_methods = { pm_markwald_bangkok_rice_mill }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -5014,7 +4804,6 @@ pm_carbon_capture_1_mfo_oerlikon_works_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -5036,7 +4825,6 @@ pm_carbon_capture_2_mfo_oerlikon_works_coal10_oil0 = {
 	unlocking_production_methods = { pm_mfo_oerlikon_works }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -5058,7 +4846,6 @@ pm_carbon_capture_3_mfo_oerlikon_works_coal10_oil0 = {
 	unlocking_production_methods = { pm_mfo_oerlikon_works }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -5092,7 +4879,6 @@ pm_carbon_capture_1_mining_equipment_building_coal_mine_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -5114,7 +4900,6 @@ pm_carbon_capture_2_mining_equipment_building_coal_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_coal_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -5136,7 +4921,6 @@ pm_carbon_capture_3_mining_equipment_building_coal_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_coal_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -5159,7 +4943,6 @@ pm_carbon_capture_1_mining_equipment_building_coal_mine_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -5181,7 +4964,6 @@ pm_carbon_capture_2_mining_equipment_building_coal_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_coal_mine pm_continuous_miners_building_coal_mine pm_smart_miners_building_coal_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -5203,7 +4985,6 @@ pm_carbon_capture_3_mining_equipment_building_coal_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_coal_mine pm_continuous_miners_building_coal_mine pm_smart_miners_building_coal_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -5237,7 +5018,6 @@ pm_carbon_capture_1_mining_equipment_building_gold_mine_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -5259,7 +5039,6 @@ pm_carbon_capture_2_mining_equipment_building_gold_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_gold_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -5281,7 +5060,6 @@ pm_carbon_capture_3_mining_equipment_building_gold_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_gold_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -5304,7 +5082,6 @@ pm_carbon_capture_1_mining_equipment_building_gold_mine_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -5326,7 +5103,6 @@ pm_carbon_capture_2_mining_equipment_building_gold_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_gold_mine pm_continuous_miners_building_gold_mine pm_smart_miners_building_gold_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -5348,7 +5124,6 @@ pm_carbon_capture_3_mining_equipment_building_gold_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_gold_mine pm_continuous_miners_building_gold_mine pm_smart_miners_building_gold_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -5371,7 +5146,6 @@ pm_carbon_capture_1_mining_equipment_building_gold_mine_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -5393,7 +5167,6 @@ pm_carbon_capture_2_mining_equipment_building_gold_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_atmospheric_engine_pump_building_gold_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -5415,7 +5188,6 @@ pm_carbon_capture_3_mining_equipment_building_gold_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_atmospheric_engine_pump_building_gold_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -5438,7 +5210,6 @@ pm_carbon_capture_1_mining_equipment_building_gold_mine_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -5460,7 +5231,6 @@ pm_carbon_capture_2_mining_equipment_building_gold_mine_coal15_oil0 = {
 	unlocking_production_methods = { pm_condensing_engine_pump_building_gold_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -5482,7 +5252,6 @@ pm_carbon_capture_3_mining_equipment_building_gold_mine_coal15_oil0 = {
 	unlocking_production_methods = { pm_condensing_engine_pump_building_gold_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -5516,7 +5285,6 @@ pm_carbon_capture_1_mining_equipment_building_iron_mine_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -5538,7 +5306,6 @@ pm_carbon_capture_2_mining_equipment_building_iron_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_iron_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -5560,7 +5327,6 @@ pm_carbon_capture_3_mining_equipment_building_iron_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_iron_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -5583,7 +5349,6 @@ pm_carbon_capture_1_mining_equipment_building_iron_mine_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -5605,7 +5370,6 @@ pm_carbon_capture_2_mining_equipment_building_iron_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_iron_mine pm_continuous_miners_building_iron_mine pm_smart_miners_building_iron_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -5627,7 +5391,6 @@ pm_carbon_capture_3_mining_equipment_building_iron_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_iron_mine pm_continuous_miners_building_iron_mine pm_smart_miners_building_iron_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -5650,7 +5413,6 @@ pm_carbon_capture_1_mining_equipment_building_iron_mine_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -5672,7 +5434,6 @@ pm_carbon_capture_2_mining_equipment_building_iron_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_atmospheric_engine_pump_building_iron_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -5694,7 +5455,6 @@ pm_carbon_capture_3_mining_equipment_building_iron_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_atmospheric_engine_pump_building_iron_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -5717,7 +5477,6 @@ pm_carbon_capture_1_mining_equipment_building_iron_mine_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -5739,7 +5498,6 @@ pm_carbon_capture_2_mining_equipment_building_iron_mine_coal15_oil0 = {
 	unlocking_production_methods = { pm_condensing_engine_pump_building_iron_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -5761,7 +5519,6 @@ pm_carbon_capture_3_mining_equipment_building_iron_mine_coal15_oil0 = {
 	unlocking_production_methods = { pm_condensing_engine_pump_building_iron_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -5795,7 +5552,6 @@ pm_carbon_capture_1_mining_equipment_building_lead_mine_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -5817,7 +5573,6 @@ pm_carbon_capture_2_mining_equipment_building_lead_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_lead_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -5839,7 +5594,6 @@ pm_carbon_capture_3_mining_equipment_building_lead_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_lead_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -5862,7 +5616,6 @@ pm_carbon_capture_1_mining_equipment_building_lead_mine_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -5884,7 +5637,6 @@ pm_carbon_capture_2_mining_equipment_building_lead_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_lead_mine pm_continuous_miners_building_lead_mine pm_smart_miners_building_lead_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -5906,7 +5658,6 @@ pm_carbon_capture_3_mining_equipment_building_lead_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_lead_mine pm_continuous_miners_building_lead_mine pm_smart_miners_building_lead_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -5929,7 +5680,6 @@ pm_carbon_capture_1_mining_equipment_building_lead_mine_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -5951,7 +5701,6 @@ pm_carbon_capture_2_mining_equipment_building_lead_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_atmospheric_engine_pump_building_lead_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -5973,7 +5722,6 @@ pm_carbon_capture_3_mining_equipment_building_lead_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_atmospheric_engine_pump_building_lead_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -5996,7 +5744,6 @@ pm_carbon_capture_1_mining_equipment_building_lead_mine_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -6018,7 +5765,6 @@ pm_carbon_capture_2_mining_equipment_building_lead_mine_coal15_oil0 = {
 	unlocking_production_methods = { pm_condensing_engine_pump_building_lead_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -6040,7 +5786,6 @@ pm_carbon_capture_3_mining_equipment_building_lead_mine_coal15_oil0 = {
 	unlocking_production_methods = { pm_condensing_engine_pump_building_lead_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -6074,7 +5819,6 @@ pm_carbon_capture_1_mining_equipment_building_sulfur_mine_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -6096,7 +5840,6 @@ pm_carbon_capture_2_mining_equipment_building_sulfur_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_sulfur_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -6118,7 +5861,6 @@ pm_carbon_capture_3_mining_equipment_building_sulfur_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_sulfur_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -6141,7 +5883,6 @@ pm_carbon_capture_1_mining_equipment_building_sulfur_mine_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -6163,7 +5904,6 @@ pm_carbon_capture_2_mining_equipment_building_sulfur_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_sulfur_mine pm_continuous_miners_building_sulfur_mine pm_smart_miners_building_sulfur_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -6185,7 +5925,6 @@ pm_carbon_capture_3_mining_equipment_building_sulfur_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_sulfur_mine pm_continuous_miners_building_sulfur_mine pm_smart_miners_building_sulfur_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -6208,7 +5947,6 @@ pm_carbon_capture_1_mining_equipment_building_sulfur_mine_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -6230,7 +5968,6 @@ pm_carbon_capture_2_mining_equipment_building_sulfur_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_atmospheric_engine_pump_building_sulfur_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -6252,7 +5989,6 @@ pm_carbon_capture_3_mining_equipment_building_sulfur_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_atmospheric_engine_pump_building_sulfur_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -6275,7 +6011,6 @@ pm_carbon_capture_1_mining_equipment_building_sulfur_mine_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -6297,7 +6032,6 @@ pm_carbon_capture_2_mining_equipment_building_sulfur_mine_coal15_oil0 = {
 	unlocking_production_methods = { pm_condensing_engine_pump_building_sulfur_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -6319,7 +6053,6 @@ pm_carbon_capture_3_mining_equipment_building_sulfur_mine_coal15_oil0 = {
 	unlocking_production_methods = { pm_condensing_engine_pump_building_sulfur_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -6353,7 +6086,6 @@ pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil5 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.21750
 			state_greenhouse_gas_emissions_add = -0.21750
 		}
 	}
@@ -6375,7 +6107,6 @@ pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_tech_metals_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.43500
 			state_greenhouse_gas_emissions_add = -0.43500
 		}
 	}
@@ -6397,7 +6128,6 @@ pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil5 = {
 	unlocking_production_methods = { pm_diesel_pump_building_tech_metals_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.65250
 			state_greenhouse_gas_emissions_add = -0.65250
 		}
 	}
@@ -6420,7 +6150,6 @@ pm_carbon_capture_1_mining_equipment_building_tech_metals_mine_coal0_oil10 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.44
 			state_greenhouse_gas_emissions_add = -0.44
 		}
 	}
@@ -6442,7 +6171,6 @@ pm_carbon_capture_2_mining_equipment_building_tech_metals_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_tech_metals_mine pm_continuous_miners_building_tech_metals_mine pm_smart_miners_building_tech_metals_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.87
 			state_greenhouse_gas_emissions_add = -0.87
 		}
 	}
@@ -6464,7 +6192,6 @@ pm_carbon_capture_3_mining_equipment_building_tech_metals_mine_coal0_oil10 = {
 	unlocking_production_methods = { pm_high_pressure_hydraulic_pump_building_tech_metals_mine pm_continuous_miners_building_tech_metals_mine pm_smart_miners_building_tech_metals_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.31
 			state_greenhouse_gas_emissions_add = -1.31
 		}
 	}
@@ -6492,7 +6219,6 @@ pm_carbon_capture_1_norsk_hydro_rjukan_plant_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -6514,7 +6240,6 @@ pm_carbon_capture_2_norsk_hydro_rjukan_plant_coal10_oil0 = {
 	unlocking_production_methods = { pm_norsk_hydro_rjukan_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -6536,7 +6261,6 @@ pm_carbon_capture_3_norsk_hydro_rjukan_plant_coal10_oil0 = {
 	unlocking_production_methods = { pm_norsk_hydro_rjukan_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -6570,7 +6294,6 @@ pm_carbon_capture_1_refinement_building_sugar_plantation_coal1_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.05000
 			state_greenhouse_gas_emissions_add = -0.05000
 		}
 	}
@@ -6592,7 +6315,6 @@ pm_carbon_capture_2_refinement_building_sugar_plantation_coal1_oil0 = {
 	unlocking_production_methods = { vacuum_pan_sugar }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.10000
 			state_greenhouse_gas_emissions_add = -0.10000
 		}
 	}
@@ -6614,7 +6336,6 @@ pm_carbon_capture_3_refinement_building_sugar_plantation_coal1_oil0 = {
 	unlocking_production_methods = { vacuum_pan_sugar }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.15000
 			state_greenhouse_gas_emissions_add = -0.15000
 		}
 	}
@@ -6637,7 +6358,6 @@ pm_carbon_capture_1_refinement_building_sugar_plantation_coal2_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.10000
 			state_greenhouse_gas_emissions_add = -0.10000
 		}
 	}
@@ -6659,7 +6379,6 @@ pm_carbon_capture_2_refinement_building_sugar_plantation_coal2_oil0 = {
 	unlocking_production_methods = { steam_powered_evaporation_sugar }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.20000
 			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
@@ -6681,7 +6400,6 @@ pm_carbon_capture_3_refinement_building_sugar_plantation_coal2_oil0 = {
 	unlocking_production_methods = { steam_powered_evaporation_sugar }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.30000
 			state_greenhouse_gas_emissions_add = -0.30000
 		}
 	}
@@ -6704,7 +6422,6 @@ pm_carbon_capture_1_refinement_building_sugar_plantation_coal4_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.20000
 			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
@@ -6726,7 +6443,6 @@ pm_carbon_capture_2_refinement_building_sugar_plantation_coal4_oil0 = {
 	unlocking_production_methods = { centrifugal_machine_sugar }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.40000
 			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
@@ -6748,7 +6464,6 @@ pm_carbon_capture_3_refinement_building_sugar_plantation_coal4_oil0 = {
 	unlocking_production_methods = { centrifugal_machine_sugar }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.60000
 			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
@@ -6776,7 +6491,6 @@ pm_carbon_capture_1_sandford_newcastle_natal_ironworks_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -6798,7 +6512,6 @@ pm_carbon_capture_2_sandford_newcastle_natal_ironworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_sandford_newcastle_natal_ironworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -6820,7 +6533,6 @@ pm_carbon_capture_3_sandford_newcastle_natal_ironworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_sandford_newcastle_natal_ironworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -6848,7 +6560,6 @@ pm_carbon_capture_1_schneider_le_creusot_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -6870,7 +6581,6 @@ pm_carbon_capture_2_schneider_le_creusot_coal15_oil0 = {
 	unlocking_production_methods = { pm_schneider_le_creusot }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -6892,7 +6602,6 @@ pm_carbon_capture_3_schneider_le_creusot_coal15_oil0 = {
 	unlocking_production_methods = { pm_schneider_le_creusot }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -6920,7 +6629,6 @@ pm_carbon_capture_1_siam_electric_wat_liab_station_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -6942,7 +6650,6 @@ pm_carbon_capture_2_siam_electric_wat_liab_station_coal15_oil0 = {
 	unlocking_production_methods = { pm_siam_electric_wat_liab_station }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -6964,7 +6671,6 @@ pm_carbon_capture_3_siam_electric_wat_liab_station_coal15_oil0 = {
 	unlocking_production_methods = { pm_siam_electric_wat_liab_station }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -6998,7 +6704,6 @@ pm_carbon_capture_1_steam_automation_building_gold_mine_coal4_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.20000
 			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
@@ -7020,7 +6725,6 @@ pm_carbon_capture_2_steam_automation_building_gold_mine_coal4_oil0 = {
 	unlocking_production_methods = { pm_steam_donkey_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.40000
 			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
@@ -7042,7 +6746,6 @@ pm_carbon_capture_3_steam_automation_building_gold_mine_coal4_oil0 = {
 	unlocking_production_methods = { pm_steam_donkey_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.60000
 			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
@@ -7076,7 +6779,6 @@ pm_carbon_capture_1_steam_automation_building_iron_mine_coal4_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.20000
 			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
@@ -7098,7 +6800,6 @@ pm_carbon_capture_2_steam_automation_building_iron_mine_coal4_oil0 = {
 	unlocking_production_methods = { pm_steam_donkey_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.40000
 			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
@@ -7120,7 +6821,6 @@ pm_carbon_capture_3_steam_automation_building_iron_mine_coal4_oil0 = {
 	unlocking_production_methods = { pm_steam_donkey_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.60000
 			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
@@ -7154,7 +6854,6 @@ pm_carbon_capture_1_steam_automation_building_lead_mine_coal4_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.20000
 			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
@@ -7176,7 +6875,6 @@ pm_carbon_capture_2_steam_automation_building_lead_mine_coal4_oil0 = {
 	unlocking_production_methods = { pm_steam_donkey_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.40000
 			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
@@ -7198,7 +6896,6 @@ pm_carbon_capture_3_steam_automation_building_lead_mine_coal4_oil0 = {
 	unlocking_production_methods = { pm_steam_donkey_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.60000
 			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
@@ -7232,7 +6929,6 @@ pm_carbon_capture_1_steam_automation_building_sulfur_mine_coal4_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.20000
 			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
@@ -7254,7 +6950,6 @@ pm_carbon_capture_2_steam_automation_building_sulfur_mine_coal4_oil0 = {
 	unlocking_production_methods = { pm_steam_donkey_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.40000
 			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
@@ -7276,7 +6971,6 @@ pm_carbon_capture_3_steam_automation_building_sulfur_mine_coal4_oil0 = {
 	unlocking_production_methods = { pm_steam_donkey_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.60000
 			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
@@ -7310,7 +7004,6 @@ pm_carbon_capture_1_steam_automation_building_tech_metals_mine_coal4_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.20000
 			state_greenhouse_gas_emissions_add = -0.20000
 		}
 	}
@@ -7332,7 +7025,6 @@ pm_carbon_capture_2_steam_automation_building_tech_metals_mine_coal4_oil0 = {
 	unlocking_production_methods = { pm_steam_donkey_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.40000
 			state_greenhouse_gas_emissions_add = -0.40000
 		}
 	}
@@ -7354,7 +7046,6 @@ pm_carbon_capture_3_steam_automation_building_tech_metals_mine_coal4_oil0 = {
 	unlocking_production_methods = { pm_steam_donkey_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.60000
 			state_greenhouse_gas_emissions_add = -0.60000
 		}
 	}
@@ -7388,7 +7079,6 @@ pm_carbon_capture_1_steelmaking_process_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -7410,7 +7100,6 @@ pm_carbon_capture_2_steelmaking_process_coal10_oil0 = {
 	unlocking_production_methods = { pm_electric_arc_process pm_aluminum_substitution pm_chromium_substitution }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -7432,7 +7121,6 @@ pm_carbon_capture_3_steelmaking_process_coal10_oil0 = {
 	unlocking_production_methods = { pm_electric_arc_process pm_aluminum_substitution pm_chromium_substitution }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -7455,7 +7143,6 @@ pm_carbon_capture_1_steelmaking_process_coal30_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -7477,7 +7164,6 @@ pm_carbon_capture_2_steelmaking_process_coal30_oil0 = {
 	unlocking_production_methods = { pm_blister_steel_process pm_bessemer_process pm_open_hearth_process }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.00
 			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
@@ -7499,7 +7185,6 @@ pm_carbon_capture_3_steelmaking_process_coal30_oil0 = {
 	unlocking_production_methods = { pm_blister_steel_process pm_bessemer_process pm_open_hearth_process }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 4.50
 			state_greenhouse_gas_emissions_add = -4.50
 		}
 	}
@@ -7527,7 +7212,6 @@ pm_carbon_capture_1_sumitomo_besshi_mine_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -7549,7 +7233,6 @@ pm_carbon_capture_2_sumitomo_besshi_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_sumitomo_besshi_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -7571,7 +7254,6 @@ pm_carbon_capture_3_sumitomo_besshi_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_sumitomo_besshi_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -7605,7 +7287,6 @@ pm_carbon_capture_1_synthetic_opium_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -7627,7 +7308,6 @@ pm_carbon_capture_2_synthetic_opium_coal10_oil0 = {
 	unlocking_production_methods = { pm_pharma_synthetic_chemistry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -7649,7 +7329,6 @@ pm_carbon_capture_3_synthetic_opium_coal10_oil0 = {
 	unlocking_production_methods = { pm_pharma_synthetic_chemistry }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -7677,7 +7356,6 @@ pm_carbon_capture_1_tata_jamshedpur_works_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -7699,7 +7377,6 @@ pm_carbon_capture_2_tata_jamshedpur_works_coal10_oil0 = {
 	unlocking_production_methods = { pm_tata_jamshedpur_works }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -7721,7 +7398,6 @@ pm_carbon_capture_3_tata_jamshedpur_works_coal10_oil0 = {
 	unlocking_production_methods = { pm_tata_jamshedpur_works }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -7749,7 +7425,6 @@ pm_carbon_capture_1_thyssen_steelworks_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -7771,7 +7446,6 @@ pm_carbon_capture_2_thyssen_steelworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_thyssen_steelworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -7793,7 +7467,6 @@ pm_carbon_capture_3_thyssen_steelworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_thyssen_steelworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -7821,7 +7494,6 @@ pm_carbon_capture_1_tokyo_electric_asakusa_station_coal20_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -7843,7 +7515,6 @@ pm_carbon_capture_2_tokyo_electric_asakusa_station_coal20_oil0 = {
 	unlocking_production_methods = { pm_tokyo_electric_asakusa_station }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.00
 			state_greenhouse_gas_emissions_add = -2.00
 		}
 	}
@@ -7865,7 +7536,6 @@ pm_carbon_capture_3_tokyo_electric_asakusa_station_coal20_oil0 = {
 	unlocking_production_methods = { pm_tokyo_electric_asakusa_station }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 3.00
 			state_greenhouse_gas_emissions_add = -3.00
 		}
 	}
@@ -7893,7 +7563,6 @@ pm_carbon_capture_1_uniao_fabril_barreiro_plant_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -7915,7 +7584,6 @@ pm_carbon_capture_2_uniao_fabril_barreiro_plant_coal10_oil0 = {
 	unlocking_production_methods = { pm_uniao_fabril_barreiro_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -7937,7 +7605,6 @@ pm_carbon_capture_3_uniao_fabril_barreiro_plant_coal10_oil0 = {
 	unlocking_production_methods = { pm_uniao_fabril_barreiro_plant }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -7965,7 +7632,6 @@ pm_carbon_capture_1_van_vlissingen_oostenburg_works_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -7987,7 +7653,6 @@ pm_carbon_capture_2_van_vlissingen_oostenburg_works_coal10_oil0 = {
 	unlocking_production_methods = { pm_van_vlissingen_oostenburg_works }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -8009,7 +7674,6 @@ pm_carbon_capture_3_van_vlissingen_oostenburg_works_coal10_oil0 = {
 	unlocking_production_methods = { pm_van_vlissingen_oostenburg_works }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -8037,7 +7701,6 @@ pm_carbon_capture_1_witkowitzer_ostrava_ironworks_coal15_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.75
 			state_greenhouse_gas_emissions_add = -0.75
 		}
 	}
@@ -8059,7 +7722,6 @@ pm_carbon_capture_2_witkowitzer_ostrava_ironworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_witkowitzer_ostrava_ironworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}
@@ -8081,7 +7743,6 @@ pm_carbon_capture_3_witkowitzer_ostrava_ironworks_coal15_oil0 = {
 	unlocking_production_methods = { pm_witkowitzer_ostrava_ironworks }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 2.25
 			state_greenhouse_gas_emissions_add = -2.25
 		}
 	}
@@ -8109,7 +7770,6 @@ pm_carbon_capture_1_yasuda_atosanupuri_mine_coal10_oil0 = {
 	disallowing_laws = { law_managed_fossil_phaseout }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 0.50
 			state_greenhouse_gas_emissions_add = -0.50
 		}
 	}
@@ -8131,7 +7791,6 @@ pm_carbon_capture_2_yasuda_atosanupuri_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_yasuda_atosanupuri_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.00
 			state_greenhouse_gas_emissions_add = -1.00
 		}
 	}
@@ -8153,7 +7812,6 @@ pm_carbon_capture_3_yasuda_atosanupuri_mine_coal10_oil0 = {
 	unlocking_production_methods = { pm_yasuda_atosanupuri_mine }
 	state_modifiers = {
 		workforce_scaled = {
-			state_carbon_capture_add = 1.50
 			state_greenhouse_gas_emissions_add = -1.50
 		}
 	}

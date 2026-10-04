@@ -450,3 +450,25 @@ values and the historical probe overlay are absent. Restart the game for these
 changes. The six Next work checks remain pending; DAC now removes 42 per full
 level, and Carbon Captured reports DAC only. The PR remains draft/unmerged,
 and the recurring review monitor remains active.
+
+
+## Follow-up review checkpoint (2026-10-03)
+
+Reviews 5403821644 and 5403833930: emissions map colors and treaty 109 now
+read guarded January snapshots, avoiding annual market/pop sweeps during UI
+refreshes. Household consuming population uses flat total_size additions in
+separate non-peasant and peasant sums, retaining the merged 0.05 weight.
+The write-only state_carbon_capture_add type, localization and 346 production
+PM writes are removed; its historical opt-in probe stays outside deployment.
+Synthetic credits still enter net industry, source capture still reduces it,
+and DAC alone writes atmospheric removal. Synthetic exports can yield a
+negative producing market without DAC; both capture tooltips and the guide
+now explain the credit/combustion attribution.
+
+Inline comments 4175753439, 4175753547 and 4175753673: restored explicit
+20/15/10% industrial cuts to the climate-policy concept, marked foreign-owner
+probe evidence pending, and matched the standard goods-output localization
+style for Chemicals. 69 focused tests pass, including map/treaty snapshot
+regressions, population partitions and synthetic export neutrality. Broader
+validation/deployment follows this checkpoint. The six in-game checks above
+remain pending; review automation stays active and PR #681 stays draft.

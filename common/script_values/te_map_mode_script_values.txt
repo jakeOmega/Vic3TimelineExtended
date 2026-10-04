@@ -30,9 +30,9 @@ te_map_mode_correction_for_gdp_per_capita = {
 }
 
 # Country-level GHG broadcast: every state of a country shares the owner's
-# value, so the map colors by country in this mode (not by state).
+# January snapshot, so refreshing map colors never runs the household pop sweep.
 te_map_mode_correction_for_emissions = {
-	value = owner.market_greenhouse_gas_emissions_script_value
+	value = owner.gw_market_emis_raw
 	subtract = migration_pull
 	divide = te_map_mode_one_plus_pull_mult
 }

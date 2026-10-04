@@ -53,7 +53,7 @@ class SyntheticCreditsTest(unittest.TestCase):
         state.mod_parsers["PMs"].data = copy.deepcopy(self.state.mod_parsers["PMs"].data)
         workforce(state.mod_parsers["PMs"].data["pm_synthetic_oil_2"])["goods_output_oil_add"] = ("=", "400")
         output = emissions.plan_outputs(state, ROOT)[0][Path("common/production_methods/extra_pms.txt")]
-        self.assertIn("state_carbon_capture_add = 69.60", output)
+        self.assertNotIn("state_carbon_capture_add", output)
         self.assertIn("state_greenhouse_gas_emissions_add = -69.60", output)
         for amount in ("0", "-10", "NaN", "Infinity"):
             workforce(state.mod_parsers["PMs"].data["pm_synthetic_oil_2"])["goods_output_oil_add"] = ("=", amount)
@@ -267,8 +267,9 @@ class BuildingEmissionsTest(unittest.TestCase):
         self.assertEqual(body(display, "percent"), "no")
         self.assertEqual(scalar(display, "decimals"), 2)
         self.assertNotIn("script_only", display)
-        hidden = parsed("docs/testing/carbon_capture_probe/common/modifier_type_definitions/te_cc_probe_types.txt")
-        self.assertEqual(body(body(hidden, "state_carbon_capture_add"), "script_only"), "yes")
+        for modifier in (emissions.STATE_MODIFIER, emissions.ATMOSPHERIC_MODIFIER):
+            self.assertEqual(body(body(types, modifier), "script_only"), "yes")
+        self.assertNotIn("state_carbon_capture_add", types)
 
 
 class DirectAirCaptureTest(unittest.TestCase):
@@ -310,7 +311,7 @@ class DirectAirCaptureTest(unittest.TestCase):
         self.assertNotIn("multiply", credit)
         self.assertNotIn("every_scope_building", countries)
         state = body(body(gen.unwrap(self.pm), "state_modifiers"), "workforce_scaled")
-        self.assertEqual(scalar(state, "state_carbon_capture_add"), 42)
+        self.assertEqual(scalar(state, emissions.ATMOSPHERIC_MODIFIER), 42)
         self.assertEqual(scalar(workforce(self.pm), emissions.MODIFIER), -42)
 
     def test_removal_capacity_changes_independently_of_coal_output(self):
@@ -403,9 +404,18 @@ class DisplayBoundaryTest(unittest.TestCase):
             pm = gen.unwrap(methods[name])
             state = body(body(pm, "state_modifiers"), "workforce_scaled")
             expected = scalar(workforce(pm), f"goods_output_{fuel}_add") * scalar(factors, f"gw_emission_factor_{fuel}") / 10
-            self.assertEqual(scalar(state, "state_carbon_capture_add"), expected)
+            self.assertNotIn("state_carbon_capture_add", state)
             gross = emissions.recipe_emissions(pm, {"coal": Decimal(2), "oil": Decimal("1.74")})
             self.assertEqual(scalar(workforce(pm), emissions.MODIFIER), gross - expected)
+            self.assertEqual(scalar(state, emissions.STATE_MODIFIER), gross - expected)
+
+    def test_map_and_treaty_display_use_snapshots_without_live_household_sweeps(self):
+        mapping = parsed("common/script_values/te_map_mode_script_values.txt")
+        self.assertEqual(body(body(mapping, "te_map_mode_correction_for_emissions"), "value"), "owner.gw_market_emis_raw")
+        loc = (ROOT / "localization/english/te_concepts_l_english.yml").read_text(encoding="utf-8-sig")
+        treaty = next(line for line in loc.splitlines() if line.startswith(" enforce_emissions_reduction_article_short_desc:"))
+        self.assertIn("SOURCE_COUNTRY.MakeScope.ScriptValue('gw_market_emis_display')", treaty)
+        self.assertNotIn("market_greenhouse_gas_emissions_script_value", treaty)
 
     def test_market_uses_generated_state_emissions_without_consumption_proxy(self):
         value = body(self.extra, "market_greenhouse_gas_emissions_script_value")

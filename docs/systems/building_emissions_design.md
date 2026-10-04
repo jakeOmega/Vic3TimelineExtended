@@ -20,7 +20,11 @@
 - **Steel:** Electric Arc Process uses a delta INJECT; the two mod substitution
   methods are edited in place. Merged recipes read 10 coal and 50/170
   electricity, with unchanged goods cost at base prices.
-- **Display:** amount readers and treaty 109's text scale by 1000 and use `|K`.
+- **Display:** amount readers and treaty 109's text scale January snapshots by
+  1000 and use `|K`; the emissions map reads the raw snapshot. Neither UI path
+  runs the annual household sweeps. Synthetic-fuel export credits can make a
+  producing market negative while combustion is counted in the importing market;
+  only DAC contributes atmospheric removal.
   Separate raw snapshot readers feed shares and temperature; stored snapshots,
   history, AI, thresholds and the console's live world-total calculation keep
   internal units. Chapter 14 and its PDF describe the new figures.
@@ -36,8 +40,8 @@
   synthetic-credit exceptions. Process and automation get separate controls,
   avoiding combinatorial gates and covering steel boilers too. See the generated
   `carbon_capture_coverage.md` for the full inventory and exceptions.
-  State capture is hidden, subtracted once in the location's market, and mirrored
-  as negative building emissions. Managed Fossil Phaseout now requires the era-10
+  Source capture contributes negative state industrial emissions, counted once
+  in the location's market and mirrored as negative building emissions. Managed Fossil Phaseout now requires the era-10
   technology and disallows no capture/Tier I; the existing law-consistency walk
   repairs a held phaseout law without its required technology. Three existing
   shield icons distinguish tiers. Generated production regression remains pending.
@@ -46,7 +50,7 @@
   Direct Air Capture is their default PM; Synthetic Coal keeps an era-11
   Genetic Engineering gate. The new PM produces no goods, consumes electricity
   and equipment, and contributes negative workforce-scaled building emissions mirrored as a
-  state capture credit read once by the market sum. Its capacity is independently configured in coal
+  `state_atmospheric_carbon_capture_add` value read once by the market sum. Its capacity is independently configured in coal
   equivalents rather than inferred from nonexistent goods output.
 - **Carbon Removal Support:** a ninth climate policy, national, available at
   0.5 °C with Carbon Capture and Storage. Requires subsidies for these works,

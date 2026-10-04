@@ -19,6 +19,11 @@ removal. Each building's location determines its market, including foreign-owned
 sites. The year's net emissions add to the world's cumulative total and set
 warming.
 
+Exporting synthetic fuels can make the producing market's figure negative:
+the fuel's production credit counts there, while burning it counts in the
+importing market. Carbon Captured measures atmospheric removal by Direct Air
+Capture; synthetic-fuel production does not add to that row.
+
 In the dashboard's units, a market that emits one million a year warms the
 world by 0.1 °C a year. Figures use K for thousands and M for millions. A unit of
 oil produces 13% less warming than a unit of coal. The mod calls coal Energy

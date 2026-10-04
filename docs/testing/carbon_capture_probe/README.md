@@ -89,7 +89,7 @@ log excerpts, selected fallback, and elapsed game time for each observation.
 | Fuel swap without mandate | Drops invalid variant; record fallback | Owner confirmed initial bundles; detailed measurement not supplied |
 | Law applied to default | Automatically selects a valid variant | Owner confirmed initial bundles; detailed measurement not supplied |
 | Fuel swap under mandate | Lands on valid capture, never the default | Owner confirmed initial bundles; detailed measurement not supplied |
-| Market sweep and foreign ownership | Location's state/market, counted once | Owner confirmed initial bundles; detailed measurement not supplied |
+| Market sweep and foreign ownership | Location's state/market, counted once | Pending: foreign ownership has not been verified in game |
 
 If hidden gating or forced fallback fails, do not build A′ unchanged. Record
 the failure and use the building-percentage fallback in design §8. If the
