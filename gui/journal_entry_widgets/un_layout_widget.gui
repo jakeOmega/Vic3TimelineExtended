@@ -144,6 +144,11 @@ types un_layout_widget_types
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)17' )]"
 							texture = "gfx/interface/icons/un_icons/topic_physical_protection.dds"
 						}
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)29' )]"
+							texture = "gfx/interface/icons/un_icons/topic_narcotics.dds"
+						}
 						# Phase 7 (§0.12): each topic's icon is, for now, a copy of its
 						# nearest older topic's, under its own name, so new art drops in.
 						icon = {

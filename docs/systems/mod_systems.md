@@ -34,6 +34,8 @@ Drugs are vanilla's `opium` good under a new name, so anything that adds Drugs s
 - **Field Hospitals** use Drugs as in vanilla; First Aid and Medevac Helicopters use liquor.
 - Companies, prestige goods, Britain's plantation JE, the opium mobilization option and Free Trade's ban removal key off plantations or the good existing, not off demand levels.
 
+- **Single Convention on Narcotic Drugs (INCB)**: Assembly business opens after any UN member researches `antibiotic_mass_production`, at authority ≥20. Major powers with `pharmaceuticals` may propose. Country-scoped parties carry `un_narcotics_control_modifier` at ×E: −15% `building_opium_plantation_throughput_add`, +5% `building_synthetics_plant_opium_throughput_add`, +3% prestige. No exporter regime term; see `test_un_convention_registry.py` and the approved narcotics spec.
+
 ## Global Warming (`je_global_warming`)
 
 > See also: `docs/systems/journal_entry_systems.md` for full JE system documentation.

@@ -52,3 +52,17 @@ un_nuclear_ban_refusal_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.03
 }
+
+# Single Convention on Narcotic Drugs (INCB). Country-scoped at x E.
+# The owner's approved terms have no additional exporter inspection penalty.
+un_narcotics_control_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	building_opium_plantation_throughput_add = -0.15
+	building_synthetics_plant_opium_throughput_add = 0.05
+	country_prestige_mult = 0.03
+}
+
+un_narcotics_refusal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
+}

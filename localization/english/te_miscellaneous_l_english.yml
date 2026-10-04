@@ -5022,3 +5022,7 @@
  ww_war_propaganda_modifier:0 "War Propaganda Campaign"
  ww_wartime_rationing_modifier:0 "Wartime Rationing"
  youth_mental_health_funding_modifier:0 "Youth Mental Health Funding"
+ un_narcotics_mass_production_tt:0 "A UN member has researched #bold Antibiotic Mass Production#!"
+ un_narcotics_control_modifier:0 "Single Convention on Narcotic Drugs"
+ un_narcotics_refusal_modifier:0 "Refused Narcotics Convention"
+ un_vote_narcotics_passed_tt:0 "The Single Convention on Narcotic Drugs was adopted and the International Narcotics Control Board established. #G UN credibility +1, moving [concept_un_authority]'s target.#! At ×1 enforcement, parties receive #R −15%#! Opium Plantation throughput, #G +5%#! Pharmaceutical Industries throughput and #G +3%#! prestige. The terms scale with [concept_un_enforcement]."

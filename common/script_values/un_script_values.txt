@@ -454,6 +454,7 @@ un_agency_count = {
 	if = { limit = { has_global_variable = un_agency_itlos } add = 1 }
 	if = { limit = { has_global_variable = un_agency_icc } add = 1 }
 	if = { limit = { has_global_variable = un_agency_cppnm } add = 1 }
+	if = { limit = { has_global_variable = un_agency_incb } add = 1 }
 	if = { limit = { has_global_variable = un_agency_ccd } add = 1 }
 	if = { limit = { has_global_variable = un_agency_tpnw } add = 1 }
 }

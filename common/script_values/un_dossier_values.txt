@@ -630,6 +630,20 @@ un_lean_interests = {
 		if = { limit = { has_law = law_type:law_isolationism } add = -20 }
 	}
 	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_narcotics } }
+		if = {
+			limit = {
+				has_building = building_synthetics_plant_opium
+				NOT = { has_building = building_opium_plantation }
+			}
+			add = 15
+		}
+		if = { limit = { country_has_building_type_levels = { target = bt:building_opium_plantation value >= 10 } } add = -20 }
+		if = { limit = { country_has_building_type_levels = { target = bt:building_opium_plantation value >= 30 } } add = -15 }
+		if = { limit = { has_law = law_type:law_public_health_insurance } add = 10 }
+		if = { limit = { has_law = law_type:law_laissez_faire } add = -10 }
+	}
+	else_if = {
 		limit = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 		if = { limit = { has_law = law_type:law_universal_suffrage } add = 15 }
 		if = { limit = { has_law = law_type:law_multicultural } add = 10 }

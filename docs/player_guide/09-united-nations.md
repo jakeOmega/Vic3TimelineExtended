@@ -278,12 +278,12 @@ members that sits in the Assembly; when it falls, the bloc loses 3.
 
 ### General Assembly topics
 
-There are twenty-nine topics. Eleven are binding and can be vetoed:
+There are thirty topics. Eleven are binding and can be vetoed:
 Condemnation of Aggression, International Sanctions, Request a Peacekeeping
 Deployment, the International Criminal Court, Charter Reform, Authorized
 Military Mandate, Refer a Dispute to the World Court, Arms Embargo, Establish
 the Standing UN Force, Binding Ceasefire and Supervised Self-Determination
-Referendum. The other eighteen are recommendatory. Thirteen topics, the ICC
+Referendum. The other nineteen are recommendatory. Fourteen topics, the ICC
 among them, are conventions (see [UN conventions and
 agencies](#un-conventions-and-agencies)). Nine open with the charter reforms
 (see [Business the reformed charter opens](#business-the-reformed-charter-opens)).
@@ -713,6 +713,7 @@ changes and once a year.
 | International Space Cooperation (UNOOSA) | Authority 40; a major-power proposer with Space Exploration | Science ministry impact, space race progress | The space race leader slows and laggards speed up; orbital battlestation holders lose prestige. |
 | Convention on the Law of the Sea (ITLOS) | Authority 30; International Trade | Cheaper port connections, prestige | Great powers gain less prestige from their navies. |
 | Convention on the Physical Protection of Nuclear Material (CPPNM) | Authority 30; warheads missing; a proposer with Nuclear Weapons; the Nuclear Weapons rule | Prestige | Half as many of the parties' warheads go missing, and they may recover lost ones. |
+| Single Convention on Narcotic Drugs (INCB) | Authority 20; a member with Antibiotic Mass Production; a major-power proposer with Pharmaceuticals | Pharmaceutical Industries throughput +5%, prestige +3% | Opium Plantation throughput −15%; no additional exporter penalty. |
 | Convention on Cultural Diversity | Charter Reform I; authority 40; UNESCO in force; a proposer with Mass Media that is not the cultural hegemon | Prestige; half the Foreign Cultural Benchmark (none at Supranational); minorities assimilate 20% more slowly and their homelands fade 30% more slowly | A cultural hegemon that is a party projects 10% less cultural pull. |
 | Treaty on the Prohibition of Nuclear Weapons (TPNW) | Charter Reform II; authority 40; the NPT in force; a proposer with Nuclear Weapons and no warheads; the Nuclear Weapons rule | Prestige | An armed party is held to its arsenal at ratification, a fifth fewer every five years, none after 25; an unarmed party may build none. An armed member that cast no ballot on it, or joins later, is not bound. |
 
@@ -724,10 +725,18 @@ the CPPNM and the TPNW also raise the target of the [nuclear
 taboo](13-nuclear.md#what-moves-the-nuclear-taboo), by up to 8, 4 and 6 points,
 in proportion to UN authority.
 
-The overview shows thirteen specialized agencies, each lit once founded. Twelve
+The narcotics convention shifts Drugs production toward medicine. Its figures
+above are at ×1 enforcement and scale with the UN's enforcement. Countries with
+Pharmaceutical Industries and no Opium Plantations favor it; governments with
+10 or more plantation levels resist, and those with 30 or more resist more
+strongly. Public Health Insurance favors quotas; Laissez-Faire opposes them.
+A powerful Landowners group makes a country that voted against the convention
+more likely to refuse ratification.
+
+The overview shows fourteen specialized agencies, each lit once founded. Thirteen
 come from the conventions in the table: WHO, UNESCO, UNHRC, IAEA, UNEP, UNHCR,
-UNOOSA, ITLOS, the ICC, the CPPNM, Cultural Diversity and the TPNW. The
-thirteenth, the International Court of Justice, is founded the first time a
+UNOOSA, ITLOS, the ICC, the CPPNM, Cultural Diversity, the TPNW and the INCB. The
+fourteenth, the International Court of Justice, is founded the first time a
 country accepts a World Court ruling against it. Once
 the International Criminal Court convention is in force, the court indicts the
 ruler of a country that ratified it (from Established) or of any country (at
@@ -885,7 +894,7 @@ the crisis runs, and your standing. Below them are the authority bar, with a
 tick at the target and the monthly change, and three pies: the members' share
 of the world's countries, GDP and population. Then come the Security Council's
 five flags (hover one for the country, click it to open the country), the
-thirteen agencies, lit once founded, and the headquarters. Hover any of them for
+fourteen agencies, lit once founded, and the headquarters. Hover any of them for
 the detail.
 
 The sections below are open by default when they change month to month, and

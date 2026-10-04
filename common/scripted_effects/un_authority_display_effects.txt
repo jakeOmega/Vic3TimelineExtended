@@ -344,6 +344,7 @@ un_authority_log_reason_line = {
 		un_authority_log_reason_case = { CODE = 1211 KEY = je_un_led_reason_1211 }
 		un_authority_log_reason_case = { CODE = 1221 KEY = je_un_led_reason_1221 }
 		un_authority_log_reason_case = { CODE = 1231 KEY = je_un_led_reason_1231 }
+		un_authority_log_reason_case = { CODE = 1391 KEY = je_un_led_reason_1391 }
 		un_authority_log_reason_case = { CODE = 1341 KEY = je_un_led_reason_1341 }
 		un_authority_log_reason_case = { CODE = 1371 KEY = je_un_led_reason_1371 }
 		un_authority_log_reason_case = { CODE = 1381 KEY = je_un_led_reason_1381 }
@@ -509,6 +510,7 @@ un_authority_log_resolution_lines = {
 	un_authority_log_topic_case = { TOPIC = space KEY = je_un_led_topic_space }
 	un_authority_log_topic_case = { TOPIC = law_of_sea KEY = je_un_led_topic_law_of_sea }
 	un_authority_log_topic_case = { TOPIC = physical_protection KEY = je_un_led_topic_physical_protection }
+	un_authority_log_topic_case = { TOPIC = narcotics KEY = je_un_led_topic_narcotics }
 	un_authority_log_topic_case = { TOPIC = icc KEY = je_un_led_topic_icc }
 	un_authority_log_topic_case = { TOPIC = peacekeeping_request KEY = je_un_led_topic_peacekeeping_request }
 	un_authority_log_topic_case = { TOPIC = aid_request KEY = je_un_led_topic_aid_request }

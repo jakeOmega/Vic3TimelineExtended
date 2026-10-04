@@ -22,7 +22,7 @@
 # topic, un_propose_reform_*): it is also still raised by its proposer event,
 # un_events.6, under the same gates.
 #
-# THE THIRTEEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
+# THE FOURTEEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
 # heritage, decolonization, space, law of the sea, physical protection of
 # nuclear material, cultural diversity, the prohibition of nuclear weapons) are
 # at the bottom of the file. The docket raises them for everyone through the proposer events in
@@ -598,9 +598,9 @@ un_propose_referendum_possible = {
 }
 
 # ============================================================================
-# THE THIRTEEN CONVENTIONS
+# THE FOURTEEN CONVENTIONS
 # ============================================================================
-# Tabled on our own motion from the chamber (ops 7-19 of
+# Tabled on our own motion from the chamber (ops 7-19 and 29 of
 # un_chamber_propose_sgui), or on the docket's offer through the proposer
 # events. Every topic below is recommendatory except the ICC, which is binding
 # and can be vetoed; all pass by simple majority.
@@ -1124,4 +1124,34 @@ un_propose_nuclear_ban_possible = {
 	un_propose_own_motion_possible = yes
 	un_docket_topic_open_nuclear_ban = yes
 	un_propose_nuclear_ban_qualifies = yes
+}
+
+# Single Convention on Narcotic Drugs: licensed medical production and quotas.
+un_propose_narcotics_in_force = {
+	has_global_variable = un_agency_incb
+}
+
+un_propose_narcotics_qualifies = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	country_rank >= rank_value:major_power
+	has_technology_researched = pharmaceuticals
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_narcotics_control_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_narcotics_refusal_modifier }
+	}
+}
+
+un_propose_narcotics_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_narcotics_in_force = yes }
+}
+
+un_propose_narcotics_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_narcotics = yes
+	un_propose_narcotics_qualifies = yes
 }

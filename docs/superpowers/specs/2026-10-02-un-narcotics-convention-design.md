@@ -1,6 +1,6 @@
-# UN Single Convention on Narcotic Drugs — design (draft)
+# UN Single Convention on Narcotic Drugs — approved design
 
-**Status:** draft for the owner's review; nothing built. A follow-up to drugs phase 2
+**Status:** approved by the owner on 2026-10-04; implemented in PR #658. A follow-up to drugs phase 2
 (#656), which the owner asked for on 2026-10-02.
 **Why:** phase 2's plantation penalties cut only the enacting country's own opium
 plantations. India, Persia and the other exporters rarely enact them and keep exporting until
@@ -12,10 +12,10 @@ Read first: the convention survey below, `docs/systems/journal_entry_systems.md`
 "Adding a convention" (CRLF file), `test_un_convention_registry.py` (the executable
 checklist) and `docs/player_guide/09-united-nations.md` § "UN conventions and agencies".
 
-## How conventions work today (survey of `main` at d6bc2dcd)
+## Convention architecture (updated for implementation)
 
-- **Thirteen conventions** are in `CONVENTIONS`. Each has an agency flag (`un_agency_<x>`),
-  a member modifier carried by parties (×E, the regime epoch), a chamber op, a proposer event
+- **Fourteen conventions** are in `CONVENTIONS`. Each has an agency flag (`un_agency_<x>`),
+  a member modifier carried by parties (×E, the enforcement multiplier), a chamber op, a proposer event
   in `un_events`, a refusal modifier, optional regime terms and an optional game rule.
 - **The AI reaches a convention only through the docket.** Conventions have no
   journal-entry buttons. A situation (a docket item code) or the Assembly's agenda
@@ -29,7 +29,7 @@ checklist) and `docs/player_guide/09-united-nations.md` § "UN conventions and a
   "thirty sites, twenty files" undercounts). Sites the registry doesn't check are listed under
   [Build notes](#build-notes).
 
-## Proposal
+## Approved implementation
 
 ### Identity
 
@@ -37,7 +37,7 @@ checklist) and `docs/player_guide/09-united-nations.md` § "UN conventions and a
 |---|---|---|
 | key | `narcotics` | topic `un_topic_narcotics`, propose key `un_propose_narcotics_*` |
 | agency | `un_agency_incb` (International Narcotics Control Board) | short name `incb` |
-| member modifier | `un_narcotics_control_modifier`, **country** scope | a journal-entry modifier is lost when a revolution wins; the four newest conventions are country-scoped |
+| member modifier | `un_narcotics_control_modifier`, **country** scope | a journal-entry modifier is lost when a revolution wins; the six country-scoped conventions are country-scoped |
 | op | 29 | ops 20–28 are phase 7's charter decisions; relax `test_ops_follow_the_member_topics` to "contiguous except the charter-decision block" rather than renumber 20–28 |
 | proposer event | `un_events.39` | refusal reason 1391 (100 × event + 1) |
 | refusal modifier | `un_narcotics_refusal_modifier` | bars the refuser from tabling it |
@@ -51,15 +51,12 @@ The convention licenses production for medical use and quotas the rest.
 | Field | Proposed | Why |
 |---|---|---|
 | `building_opium_plantation_throughput_add` | −0.15 | Production quotas: the convention's point, and the lever that reaches exporters. Sums with the health-law penalties. |
-| `building_synthetics_plant_opium_throughput_add` | +0.05 | Licensed manufacture for medicine: parties' Pharmaceutical Industries gain a little, so ratifying shifts supply rather than only cutting it. Optional (question 3). |
+| `building_synthetics_plant_opium_throughput_add` | +0.05 | Licensed manufacture for medicine: parties' Pharmaceutical Industries gain a little, so ratifying shifts supply rather than only cutting it. Approved by the owner. |
 | `country_prestige_mult` | +0.03 | The pattern every convention follows (+2% to +5%). |
 
-### Regime terms (optional; question 4)
+### Regime terms
 
-One loser term, `un_regime_narcotics_producer`, for a **party** that stays a large Drugs
-exporter: its market leads, and it exports more Drugs than it imports at, say, 20%+ of world
-Drugs exports (`market_goods_export_share`). It gets a further −10% plantation throughput
-(inspection). No winner term.
+None. The owner dropped the additional exporter inspection penalty.
 
 ### When it comes up (`un_docket_topic_open_narcotics`)
 
@@ -114,13 +111,11 @@ when its Landowners are powerful.
 - **Player guide:** a row in `09-united-nations.md`'s conventions table, the agency
   counts, a line in `02-timeline.md`'s Pharmaceutical Industries section, and a PDF rebuild.
 
-## Questions for the owner
+## Owner decisions (2026-10-04)
 
-1. **Name and agency:** "Single Convention on Narcotic Drugs" / INCB, or a fictional name?
-2. **When:** tied to `antibiotic_mass_production` (era 7), or earlier, as with the 1912
-   International Opium Convention that closes The Opium Trade?
-3. **Terms:** −15% plantation throughput for parties? And the +5% for Pharmaceutical
-   Industries, or quotas only?
-4. **Regime term:** the extra −10% for a party that remains a top exporter, or none?
-5. **The lean table:** do these inputs and sizes look right?
-6. **Icons:** generate two new ones in the icon pipeline, or reuse placeholders first?
+1. Use the real Single Convention on Narcotic Drugs and INCB.
+2. Keep the Antibiotic Mass Production world-state gate.
+3. Include both −15% plantation throughput and +5% Pharmaceutical Industries throughput, plus +3% prestige.
+4. Drop the additional exporter regime penalty.
+5. Keep the proposed AI lean table and proposer/ratification weights.
+6. Reuse pandemic and WHO art as placeholder topic/agency icons under the new filenames.

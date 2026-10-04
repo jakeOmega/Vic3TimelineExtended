@@ -2874,3 +2874,5 @@
  ww_war_propaganda_modifier_desc:0 "The government has mobilized the press and media to maintain public support for the war effort."
  ww_wartime_rationing_modifier_desc:0 "Strict rationing has been imposed to ensure the military has the supplies it needs. Civilian consumption suffers."
  youth_mental_health_funding_modifier_desc:0 "Youth mental health services reduce mortality among young people."
+ un_narcotics_control_modifier_desc:0 "This country is party to the Single Convention on Narcotic Drugs. Plantation quotas reduce Drugs production from Opium Plantations, while licensed medical manufacture raises Pharmaceutical Industries throughput. The terms scale with UN enforcement."
+ un_narcotics_refusal_modifier_desc:0 "This country refused to table the Single Convention on Narcotic Drugs and cannot propose it while this penalty lasts."
