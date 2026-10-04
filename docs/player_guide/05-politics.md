@@ -331,7 +331,9 @@ bureaucracy, and countries that start with the law begin at level 6.
 
 Interest groups sponsor amendments to the mod's laws as they do for base-game
 laws, and every one of them also comes with an event or another way into the
-game: most are offered by enactment events as the price of passage. Three
+game: most are offered by enactment events as the price of passage, and most can
+also be asked for later, on a law already in force (see [Amendment
+petitions](#amendment-petitions)). Three
 amendments attach to base-game laws: the Spoils System, Corporate Security
 Powers and Civilian Oversight. Under the Legislated Tax Code rule the tax rates are
 amendments to the Legislated Tax Code law, and only tax bills change them (see
@@ -356,6 +358,18 @@ amendments to the Legislated Tax Code law, and only tax bills change them (see
 | Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing; the Guards at the Mill Gate event offers it |
 | Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
+
+### Amendment petitions
+
+Once a law has passed, an interest group can still ask you to amend it when your
+situation gives it a case: the Armed Forces want the Military Necessity Clause in
+wartime, the Industrialists the National Champion Exemption in a recession.
+Attaching the amendment pleases the petitioners and angers its opponents, and you
+can't repeal it for five years; refusing angers the petitioners. Each petition
+has a yearly chance of 2.5% to 25% while you qualify, and after any petition no
+other comes for five years. [Amendment petition
+list](19-appendix-reference-lists.md#amendment-petition-list) gives each one,
+what brings it on and its chance.
 
 ### Sunset clauses
 

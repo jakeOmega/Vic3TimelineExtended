@@ -1,0 +1,176 @@
+﻿# ======================================================================
+#  AMENDMENT PETITIONS – ON ACTIONS
+#
+#  Each petition (events/amendment_petition_events.txt) rolls on its own
+#  once a year: its pool pairs a no-event weight (`N = 0`, as in
+#  cultural_hegemony_events_on_actions.txt) with the event, the two
+#  summing to 1000, so the event's weight is its yearly chance in tenths
+#  of a percent while the country qualifies. A country that doesn't
+#  qualify sees nothing, whether the engine drops a failing event before
+#  the pick or after it.
+#
+#  The chance follows how long the situation tends to last: a lasting one
+#  (a multicultural population, a dominant governing group) rolls every
+#  year it holds, so it rolls low; a short or rare one (a war, an election
+#  campaign the yearly pulse lands in) rolls high.
+#    25  = 2.5%   lasting situations
+#    50  = 5%     situations that come and go over years
+#    100 = 10%    hard times or unrest
+#    250 = 25%    a war or an election campaign
+#
+#  On top of the roll, te_ap_window_open holds back every petition for
+#  five years after the last one, and each event has a twenty-year
+#  cooldown of its own.
+#  Docs: docs/systems/mod_systems.md § Amendment Petitions.
+# ======================================================================
+
+# Root = Country
+on_yearly_pulse_country = {
+	on_actions = {
+		te_amendment_petition_minority_script_preservation
+		te_amendment_petition_language_naturalization_requirement
+		te_amendment_petition_official_bilingualism
+		te_amendment_petition_national_champion_exemption
+		te_amendment_petition_cooperative_preference
+		te_amendment_petition_mandatory_minimums
+		te_amendment_petition_community_service
+		te_amendment_petition_corporate_data_exemption
+		te_amendment_petition_whistleblower_shield
+		te_amendment_petition_no_first_strike
+		te_amendment_petition_military_necessity_clause
+		te_amendment_petition_small_donor_matching
+		te_amendment_petition_religious_exemption
+		te_amendment_petition_spoils_system
+		te_amendment_petition_corporate_security_powers
+		te_amendment_petition_civilian_police_oversight
+	}
+}
+
+# The Old Letters: a restive minority comes and goes. 5%.
+te_amendment_petition_minority_script_preservation = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.1
+	}
+}
+
+# Spoken Like a Citizen: a multicultural population lasts for decades. 2.5%.
+te_amendment_petition_language_naturalization_requirement = {
+	random_events = {
+		975 = 0
+		25 = amendment_petition_events.2
+	}
+}
+
+# A Second Official Tongue: a large minority that is also restive. 5%.
+te_amendment_petition_official_bilingualism = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.3
+	}
+}
+
+# Too Large to Break: hard times. 10%.
+te_amendment_petition_national_champion_exemption = {
+	random_events = {
+		900 = 0
+		100 = amendment_petition_events.4
+	}
+}
+
+# The Workers' Own Firms: a labor movement and strong unions. 5%.
+te_amendment_petition_cooperative_preference = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.5
+	}
+}
+
+# Order in the Courts: unrest. 10%.
+te_amendment_petition_mandatory_minimums = {
+	random_events = {
+		900 = 0
+		100 = amendment_petition_events.6
+	}
+}
+
+# The Cost of Cells: heavy debt can last for years. 5%.
+te_amendment_petition_community_service = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.7
+	}
+}
+
+# The Data Lobby: hard times. 10%.
+te_amendment_petition_corporate_data_exemption = {
+	random_events = {
+		900 = 0
+		100 = amendment_petition_events.8
+	}
+}
+
+# Those Who Speak Up: low legitimacy can last for years. 5%.
+te_amendment_petition_whistleblower_shield = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.9
+	}
+}
+
+# Never the First: a nuclear-armed rival lasts. 5%.
+te_amendment_petition_no_first_strike = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.10
+	}
+}
+
+# Necessity Knows No Law: a war. 25%.
+te_amendment_petition_military_necessity_clause = {
+	random_events = {
+		750 = 0
+		250 = amendment_petition_events.11
+	}
+}
+
+# Pennies Against Millions: an election campaign, six months in four years,
+# which the yearly pulse lands in about once every other cycle. 25%.
+te_amendment_petition_small_donor_matching = {
+	random_events = {
+		750 = 0
+		250 = amendment_petition_events.12
+	}
+}
+
+# The Pulpit's Exception: a strong, discontented Devout. 5%.
+te_amendment_petition_religious_exemption = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.13
+	}
+}
+
+# Rotation in Office: a dominant governing group is the usual state. 2.5%.
+te_amendment_petition_spoils_system = {
+	random_events = {
+		975 = 0
+		25 = amendment_petition_events.14
+	}
+}
+
+# Company Men: labor agitation or unrest. 5%.
+te_amendment_petition_corporate_security_powers = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.15
+	}
+}
+
+# Complaints Against the Force: civil-rights agitation or unrest. 5%.
+te_amendment_petition_civilian_police_oversight = {
+	random_events = {
+		950 = 0
+		50 = amendment_petition_events.16
+	}
+}

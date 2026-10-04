@@ -75,6 +75,39 @@ the sections after it.
 | Crisis Response | Asset Relief Program | 5 | Keynesian Economics |
 | Crisis Response | Bail-in Regime | 3 | Globalization |
 
+## Amendment petition list
+
+These are the interest-group requests described in [Amendment
+petitions](05-politics.md#amendment-petitions). Each also needs a law the
+amendment attaches to, and none comes while you are enacting another law in that
+law's group. A group asks only if it isn't marginal; where two are named, the
+second asks when the first is marginal or absent. The chance is per year while
+you qualify.
+
+| Amendment (petition) | Comes when | Chance | Asked by |
+|---|---|---|---|
+| Minority Script Preservation (*The Old Letters*) | A separatist movement is growing, or a cultural minority movement has 5% support | 5% | Intelligentsia |
+| Language Requirement for Naturalization (*Spoken Like a Citizen*) | A cultural majority movement has 5% support, or under 70% of your population belongs to your primary cultures | 2.5% | Petite Bourgeoisie, or Rural Folk |
+| Official Bilingualism (*A Second Official Tongue*) | Under 80% of your population belongs to your primary cultures, and the minority stirs as for The Old Letters | 5% | Intelligentsia, or Trade Unions |
+| National Champion Exemption (*Too Large to Break*) | You have a company, and a banking-cycle panic or downturn, a fall in power rank or a default | 10% | Industrialists |
+| Worker Cooperative Preference (*The Workers' Own Firms*) | A labor movement has 5% support, and the Trade Unions are powerful or in government | 5% | Trade Unions |
+| Mandatory Minimum Sentences (*Order in the Courts*) | Country-wide turmoil above 20%, or more than 15% of your population radical | 10% | Petite Bourgeoisie, or Armed Forces |
+| Community Service Alternative (*The Cost of Cells*) | Debt at a quarter of your debt ceiling or more, or a default | 5% | Intelligentsia, or Trade Unions |
+| Corporate Data Access Exemption (*The Data Lobby*) | Hard times as for Too Large to Break, and the Industrialists powerful or in government | 10% | Industrialists |
+| Whistleblower Protection Act (*Those Who Speak Up*) | Legitimacy below 40 | 5% | Intelligentsia |
+| No-First-Strike Pledge (*Never the First*) | Nuclear Weapons researched and at peace, with a nuclear-armed rival or an anti-war movement at 5% support, and either no arsenal yet or a doctrine already at No First Use | 5% | Intelligentsia, or Trade Unions |
+| Military Necessity Clause (*Necessity Knows No Law*) | At war, with the Armed Forces powerful or in government | 25% | Armed Forces |
+| Small Donor Matching (*Pennies Against Millions*) | An election campaign, with the Industrialists or the Landowners powerful | 25% | Trade Unions, or Intelligentsia |
+| Religious Exemption Clause (*The Pulpit's Exception*) | The Devout are powerful or in government, and their approval is below zero | 5% | Devout |
+| Spoils System (*Rotation in Office*) | One group holds at least half of your government's political strength | 2.5% | That group |
+| Corporate Security Powers (*Company Men*) | A labor movement has 5% support, or unrest as for Order in the Courts; from Corporate Charters on | 5% | Industrialists |
+| Civilian Oversight (*Complaints Against the Force*) | A civil rights movement has 5% support, or unrest as for Order in the Courts; from the Civil Rights Movement technology on | 5% | Intelligentsia |
+
+Refusing Order in the Courts or Those Who Speak Up also costs up to 2 legitimacy
+for a few years, and refusing The Pulpit's Exception costs the Devout 5 approval
+instead of 3. The No-First-Strike Pledge holds your nuclear doctrine at No First
+Use, so its petition comes only when that changes nothing today.
+
 ## Government type list
 
 These government types follow from the governance laws in [Collective

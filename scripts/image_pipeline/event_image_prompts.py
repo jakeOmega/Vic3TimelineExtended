@@ -218,6 +218,7 @@ IMAGES = {
             "banking_cycle_events.60", "banking_cycle_events.62",
             "banking_cycle_events.66", "banking_cycle_events.67",
             "banking_cycle_events.166",
+            "amendment_petition_events.5",
         ],
     },
     "cooperative_strain": {
@@ -292,7 +293,7 @@ IMAGES = {
     "cultural_debate_panel": {
         "prompt": "A heated panel discussion in a conference hall.",
         "style": "oil painting, impressionist, warm light",
-        "events": ["cultural_hegemony.15"],
+        "events": ["cultural_hegemony.15", "amendment_petition_events.3"],
     },
 
     # =========================================================================
@@ -512,6 +513,7 @@ IMAGES = {
         "events": [
             "decolonization_events.205", "extra_law_events.13", "extra_law_events.49",
             "extra_law_events.73", "extra_law_events.88",
+            "amendment_petition_events.1",
         ],
     },
     "digital_privacy_screen": {
@@ -530,6 +532,7 @@ IMAGES = {
         "events": [
             "extra_law_events.22", "extra_law_events.23", "extra_law_events.29",
             "extra_law_events.82",
+            "amendment_petition_events.15",
         ],
     },
     "media_press_freedom": {
@@ -666,7 +669,7 @@ IMAGES = {
     "lgbtq_religious_backlash": {
         "prompt": "Religious leaders delivering a sermon opposing social change.",
         "style": "oil painting, academic art, dramatic pulpit light",
-        "events": [],
+        "events": ["amendment_petition_events.13"],
     },
     "hate_crime_vigil": {
         "prompt": "A candlelight vigil mourning victims of a hate crime.",
@@ -720,7 +723,7 @@ IMAGES = {
     "institutional_abuse_exposed": {
         "prompt": "A journalist spreading documents exposing institutional abuse.",
         "style": "oil painting, intimate realism, empathetic light",
-        "events": ["decolonization_events.52", "mental_health_events.5"],
+        "events": ["decolonization_events.52", "mental_health_events.5", "amendment_petition_events.9"],
     },
     "mental_health_stigma": {
         "prompt": "A person hesitating at the entrance of a mental health clinic.",
@@ -879,6 +882,7 @@ IMAGES = {
         "events": [
             "modern_election_events.27", "modern_election_events.28",
             "modern_election_events.29",
+            "amendment_petition_events.12",
         ],
     },
 
@@ -999,6 +1003,7 @@ IMAGES = {
             "nuclear_custody.8", "nuclear_custody.12", "nuclear_incident.12",
             "nuclear_loose.8", "nuclear_weapon_events.11", "nuclear_weapon_events.12",
             "nuclear_weapon_events.19", "nuclear_weapon_events.21",
+            "amendment_petition_events.10",
         ],
     },
     "nuclear_defense_shield": {
@@ -1175,6 +1180,7 @@ IMAGES = {
         "events": [
             "extra_law_events.58", "social_tensions_events.3",
             "social_tensions_events.9", "social_tensions_events.10",
+            "amendment_petition_events.8",
         ],
     },
     "monopoly_corporate_tower": {
@@ -1185,7 +1191,7 @@ IMAGES = {
     "police_brutality_protest": {
         "prompt": "Riot police confronting civilian protesters amid tear gas.",
         "style": "oil painting, social realism, dramatic light",
-        "events": ["social_tensions_events.5", "social_tensions_events.6"],
+        "events": ["social_tensions_events.5", "social_tensions_events.6", "amendment_petition_events.16"],
     },
     "wartime_atrocity_evidence": {
         "prompt": "Forensic investigators documenting wartime atrocities in a ruined village.",
@@ -1769,7 +1775,7 @@ IMAGES = {
     "budget_hearing_congress": {
         "prompt": "A congressional budget hearing for the space program. An administrator defends the program with models and photographs while skeptical legislators wave cost reports. The perennial battle between the dream of space and the reality of budgets.",
         "style": "digital painting, cinematic light, hard sci-fi",
-        "events": ["space_race_events.24", "space_race_events.26"],
+        "events": ["space_race_events.24", "space_race_events.26", "amendment_petition_events.7"],
     },
 
     # =========================================================================
