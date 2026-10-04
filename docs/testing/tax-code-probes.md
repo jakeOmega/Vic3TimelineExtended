@@ -193,6 +193,14 @@ Note grain's and iron's import and export levels, the Budget's tariff income and
 - **The carrier collects a per-good rate with the maxima cancelled, and the level no longer matters:** the follow-up applies legislated rates instead of levels. Subventions need their own answer: the rate families are tariffs only.
 - **Neither:** keep re-assert and adoption, and AI customs stays native.
 
+2026-10-04 runtime result: after correction from Free Trade to Protectionism,
+P09c collected no grain tariffs with `.40` and positive tariff income with `.42`.
+The registered rate works, but the carrier does not make levels inert. On the UK
+Protectionism P09b bench, `.80` logged application yet all tariff buttons remained
+available, and `.40`/`.42` still changed the selected level. The tested -3..3
+assumption did not lock the level. Do not generalize that result to other bound
+values or native AI behaviour; neither was tested.
+
 Record the result in the capability ledger, row 14.
 
 ## Granularity and exit rule

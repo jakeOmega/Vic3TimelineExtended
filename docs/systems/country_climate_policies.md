@@ -18,8 +18,9 @@ source, including a market member; its forced seven and authority waiver are
 unchanged.
 
 Fossil-Fuel Tariffs adds 0.10 to the four native coal/oil import/export tariff
-rate modifiers. All four need explicit type registrations, even though the
-engine lists their patterns. The journal marker costs 100 authority, has an AI
+rate modifiers, scaled by the selected level: +2.5 percentage points at Low,
++5 at High and +10 at Maximum. None still collects no tariffs. All four need
+explicit type registrations, even though the engine lists their patterns. The journal marker costs 100 authority, has an AI
 will with a repeal band, and is shown for market members through their leader.
 Adoption/repeal does not write native levels; legislated customs can coexist.
 Monthly maintenance only removes the former leader's modifier after loss of
@@ -40,8 +41,19 @@ invalid as a collection test. P09c now guards its immediate effects against any
 unarmed country, non-market-owner or non-Protectionism law, including console
 invocation. Undo with `.82` before changing the law and rerunning. The production
 climate tariff only adds a positive rate and never cancels the law's maxima.
-Actual collection at native levels, under customs unions and treaty exemptions
-still requires runtime validation; clean loading alone cannot establish it.
+On the corrected Protectionism bench, P09c collected zero with `.40` (no tariffs)
+and positive tariff income with `.42` (maximum tariffs). Registration enables
+collection, but the rate still scales with the native level. Vanilla defines
+apply 25% of the rate at low, 50% at high and 100% at maximum, so +0.10 increases
+those levels by 2.5, 5 and 10 percentage points respectively.
+
+On the UK Protectionism bench, P09b logged its application but all native buttons
+remained available, and both `.40` and `.42` still changed the selection.
+The assumed -3..3 bounds did not enforce a lock on this build. This does not
+establish the native AI's behaviour or alternative bounds; no production policy
+uses these unverified level modifiers. The shipped climate policy raises the
+rate while preserving native level controls, rather than claiming a fixed
+surcharge. Customs unions and treaty exemptions still need runtime validation.
 
 Tariffs cannot distinguish synthetic coal/oil from mined fossil fuels, and
 import barriers can protect domestic extraction. They carry no automatic

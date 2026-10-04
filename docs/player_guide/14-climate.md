@@ -227,9 +227,10 @@ adoption or repeal changes only its own country. Most policies carry an
 Authority Cost for as long as they are in force; adoption requires producing
 more authority than that cost. Emission Standards charges only the adopter.
 
-Fossil-Fuel Tariffs adds 10 percentage points to coal and oil import and export
-tariff rates and costs 100 Authority. The leader's native tariff levels stay as
-chosen; repeal removes only the surcharge. It can coexist with legislated
+Fossil-Fuel Tariffs raises coal and oil import and export tariffs and costs 100
+Authority. It adds 2.5 percentage points at Low, 5 at High and 10 at Maximum.
+The leader's native tariff levels stay as chosen; None still collects no
+tariffs. Repeal removes only the rate increase. It can coexist with legislated
 customs. Losing market control ends the former leader's policy. Tariffs can
 change trade and fuel costs; they grant no automatic emissions reduction and
 also apply to traded synthetic coal and oil, which use the same goods as fossil
@@ -237,7 +238,7 @@ fuels.
 
 | Policy | Scope | Authority | Effects |
 |---|---|---|---|
-| Fossil-Fuel Tariffs | Market leader | 100 | Coal and oil import and export tariff rates +10 percentage points; native levels remain as chosen. |
+| Fossil-Fuel Tariffs | Market leader | 100 | Coal and oil import/export tariffs +2.5/+5/+10 percentage points at Low/High/Maximum; None stays tariff-free. |
 | Carbon Tax | National | none | Industrial emissions −20%; coal and oil output −10%; taxes on oil extraction doubled, manufacturing taxes +10%. |
 | Renewable Investment | National | none | Industrial emissions −15%; household emissions −25%; Renewable Energy Plants +10% throughput but need subsidies; conventional power plants −10% throughput; power buildings built 25% faster. |
 | Emission Standards | National | 200 | Industrial emissions −10%; generated pollution −25%; −5% throughput for every building. |
