@@ -395,12 +395,15 @@ te_tax_ai_force_blocked_by_authority = {
 # The AI may start a bill (spec §2.4 step 4): the code is in force, no bill is
 # under debate, and either an initiative is due on the country's cadence, its
 # cooldown is over and no package waits to commence, or an emergency holds.
-# An emergency skips the cadence, the streaks, the waiting package and the
-# cooldown after a pass, but not the cooldown after a failure (Ruling 12):
+# An emergency skips the cadence, the streaks, the waiting package and most of
+# the cooldown after a pass, but not the cooldown after a failure (Ruling 12):
 # te_tax_ai_noviable is 1 exactly while te_tax_ai_next_month holds a failure
 # cooldown (every withdrawal and refused draft sets both; a pass's reset
 # clears the marker), so a hopeless emergency bill is tried once every
-# te_tax_ai_fail_cooldown_months, not every month.
+# te_tax_ai_fail_cooldown_months, not every month. After a pass it waits for
+# the month after the package commenced (te_tax_ai_emergency_gate_month,
+# Ruling 13), so each emergency bill is judged by a fiscal record that has
+# seen the one before.
 te_tax_ai_initiative_ready = {
 	te_tax_code_in_force = yes
 	NOT = { te_tax_bill_active = yes }
@@ -408,7 +411,10 @@ te_tax_ai_initiative_ready = {
 		AND = {
 			te_tax_ai_emergency = yes
 			OR = {
-				var:te_tax_ai_noviable = 0
+				AND = {
+					var:te_tax_ai_noviable = 0
+					te_tax_ai_now > te_tax_ai_emergency_gate_month
+				}
 				te_tax_ai_cooldown_over = yes
 			}
 		}
@@ -473,7 +479,9 @@ te_tax_ai_cut_wanted = {
 }
 
 # The templates (spec §2.5), tried in the order T2, T3, T6, T1, T5
-# (te_tax_ai_initiative); the codes are te_tax_ai_tpl's.
+# (te_tax_ai_initiative); the codes are te_tax_ai_tpl's. T3 and T6 apply only
+# while this episode has had no failure (te_tax_ai_noviable 0), so a failed
+# levy or luxury-goods bill is followed by a T1 (Ruling 14).
 
 # T2, the emergency bill: an emergency.
 te_tax_ai_template_2_applies = {
@@ -482,14 +490,20 @@ te_tax_ai_template_2_applies = {
 
 # T3, a war levy: at war, and T1's need holds.
 te_tax_ai_template_3_applies = {
+	var:te_tax_ai_noviable = 0
 	is_at_war = yes
 	te_tax_ai_raise_wanted = yes
 }
 
-# T6, luxury goods: T1's need holds, the consumption rate is above 0 and
-# fewer than te_tax_ai_max_goods catalog goods are taxed.
+# T6, luxury goods, in place of a consumption-rate raise (spec §2.5: T1 and T6
+# compete on pre-score; Ruling 14): T1's need holds, the raise pick is the
+# consumption rate (code 5, te_tax_gen_ai_pick_raise's local te_tax_pick, set
+# by te_tax_ai_initiative before the choice; read only there), the rate is
+# above 0 and fewer than te_tax_ai_max_goods catalog goods are taxed.
 te_tax_ai_template_6_applies = {
+	var:te_tax_ai_noviable = 0
 	te_tax_ai_raise_wanted = yes
+	local_var:te_tax_pick = 5
 	var:te_tax_en_cons >= 1
 	te_tax_ai_taxed_goods < te_tax_ai_max_goods
 }

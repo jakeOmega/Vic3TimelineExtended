@@ -527,43 +527,49 @@ te_tax_ai_withdraw_patience = {
 # te_tax_ai_initiative_ready holds: the first template that applies, T2 (an
 # emergency), T3 (a war levy), T6 (luxury goods), T1 (a raise) or T5 (a cut),
 # built in a fresh draft with the draft commands, then introduced and judged in
-# the same execution. Exactly one bill; none when no template applies. Not
-# gated on is_ai, like the managers: the step's te_tax_ai_can_act is, and the
-# console (Task 22) may run it on its own country.
+# the same execution. Exactly one bill, and no draft at all when no template
+# applies: the gate is T2's, T1's or T5's condition, and T3 and T6 need T1's, so
+# with the draft open a branch always takes it (te_tax_ai_introduce_and_judge
+# discards it). The raise pick comes before the choice, since T6 applies only
+# when it is the consumption rate (Ruling 14); T1 to T3 then move it. Not gated
+# on is_ai, like the managers: the step's te_tax_ai_can_act is, and the console
+# (Task 22) may run it on its own country.
 te_tax_ai_initiative = {
 	if = {
 		limit = {
 			te_tax_code_on = yes
 			te_tax_code_in_force = yes
 			NOT = { te_tax_bill_active = yes }
+			OR = {
+				te_tax_ai_template_2_applies = yes
+				te_tax_ai_template_1_applies = yes
+				te_tax_ai_template_5_applies = yes
+			}
 		}
+		te_tax_ai_open_draft = yes
+		te_tax_gen_ai_pick_raise = yes
 		if = {
 			limit = { te_tax_ai_template_2_applies = yes }
-			te_tax_ai_open_draft = yes
 			te_tax_ai_build_t2 = yes
 			te_tax_ai_introduce_and_judge = { TPL = 2 }
 		}
 		else_if = {
 			limit = { te_tax_ai_template_3_applies = yes }
-			te_tax_ai_open_draft = yes
 			te_tax_ai_build_t3 = yes
 			te_tax_ai_introduce_and_judge = { TPL = 3 }
 		}
 		else_if = {
 			limit = { te_tax_ai_template_6_applies = yes }
-			te_tax_ai_open_draft = yes
 			te_tax_ai_build_t6 = yes
 			te_tax_ai_introduce_and_judge = { TPL = 6 }
 		}
 		else_if = {
 			limit = { te_tax_ai_template_1_applies = yes }
-			te_tax_ai_open_draft = yes
 			te_tax_ai_build_t1 = yes
 			te_tax_ai_introduce_and_judge = { TPL = 1 }
 		}
 		else_if = {
 			limit = { te_tax_ai_template_5_applies = yes }
-			te_tax_ai_open_draft = yes
 			te_tax_ai_build_t5 = yes
 			te_tax_ai_introduce_and_judge = { TPL = 5 }
 		}
@@ -587,18 +593,18 @@ te_tax_ai_open_draft = {
 	}
 }
 
-# The templates (spec §2.5). Each picks its instrument with the generated
-# pre-score (te_tax_gen_ai_pick_raise / _cut, into the locals te_tax_pick and
-# te_tax_pick2) and moves it through the generated per-instrument parts, every
-# command behind its own trigger. A pick of 0 (every instrument excluded)
-# leaves the draft untouched, and its introduction is refused.
+# The templates (spec §2.5). Each moves the instrument the generated pre-score
+# picked (the locals te_tax_pick and te_tax_pick2: the raise pick, made by
+# te_tax_ai_initiative before the choice; T5 makes the cut pick) through the
+# generated per-instrument parts, every command behind its own trigger. A pick
+# of 0 (every instrument excluded) leaves the draft untouched, and its
+# introduction is refused.
 
 # T1, a raise: +1 index step on the cheapest instrument and +1 on the next
 # cheapest when there is one, due at the draft's default, now + 3.
 te_tax_ai_build_t1 = {
 	if = {
 		limit = { te_tax_code_on = yes }
-		te_tax_gen_ai_pick_raise = yes
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick2 DIR = 1 }
 	}
@@ -609,7 +615,6 @@ te_tax_ai_build_t1 = {
 te_tax_ai_build_t2 = {
 	if = {
 		limit = { te_tax_code_on = yes }
-		te_tax_gen_ai_pick_raise = yes
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
 		if = {
@@ -624,7 +629,6 @@ te_tax_ai_build_t2 = {
 te_tax_ai_build_t3 = {
 	if = {
 		limit = { te_tax_code_on = yes }
-		te_tax_gen_ai_pick_raise = yes
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
 		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
 		te_tax_gen_ai_levy_sunset = { INST = local_var:te_tax_pick }
@@ -662,9 +666,12 @@ te_tax_ai_build_t6 = {
 #     Traditionalism's rule): no bill to withdraw. The failure cooldown, so it
 #     is not retried every month, ai_withdrawn reason=draft for the attempt,
 #     and ai_no_viable reason=draft once per episode, with the same marker.
+# The template code is written first, so the refused lines name the template
+# too; with no bill it goes back to 0 after them.
 te_tax_ai_introduce_and_judge = {
 	if = {
 		limit = { te_tax_code_on = yes }
+		set_variable = { name = te_tax_ai_tpl value = $TPL$ }
 		if = {
 			limit = { te_tax_can_introduce = yes }
 			te_tax_cmd_introduce = yes
@@ -675,7 +682,6 @@ te_tax_ai_introduce_and_judge = {
 		}
 		if = {
 			limit = { te_tax_bill_active = yes }
-			set_variable = { name = te_tax_ai_tpl value = $TPL$ }
 			set_variable = { name = te_tax_ai_bill_month value = te_tax_ai_now }
 			te_tax_ai_log_introduced = yes
 			if = {
@@ -691,6 +697,7 @@ te_tax_ai_introduce_and_judge = {
 				te_tax_ai_log_no_viable_draft = yes
 			}
 			set_variable = { name = te_tax_ai_noviable value = 1 }
+			set_variable = { name = te_tax_ai_tpl value = 0 }
 		}
 	}
 }

@@ -3489,7 +3489,8 @@ def scripted_effects():
         "# Then the AI's open bill (plan 2026-10-03 Task 20): te_tax_gen_ai_accept_offer and",
         "# te_tax_gen_ai_record_marks, called by te_tax_ai_manage_bill. Then its initiative (Task 21):",
         "# te_tax_gen_ai_pick_raise / _cut, te_tax_gen_ai_step_inst, te_tax_gen_ai_levy_sunset and",
-        "# te_tax_gen_ai_tax_luxury, called by te_tax_ai_build_t<n>.",
+        "# te_tax_gen_ai_tax_luxury, called by te_tax_ai_initiative (the raise pick) and",
+        "# te_tax_ai_build_t<n>.",
         "",
         "# Each instrument's tokens with their sentinels, if absent: the enacted provision, its",
         "# version tokens and the AI's marks (te_tax_ai_last_<key>, te_tax_ai_dir_<key>).",
@@ -3807,14 +3808,17 @@ def _ai_pick(direction):
 def _ai_initiative_effects():
     """The AI's initiative (plan 2026-10-03 Task 21; spec §2.4 step 4, §2.5), the parts that name every
     instrument or good: the picks, a step or a war levy's sunset on the picked instrument, and the
-    luxury goods. Called by te_tax_ai_build_t<n> (te_tax_ai_effects.txt) in a fresh draft; every
-    command runs inside its own trigger, with the same arguments."""
+    luxury goods. Called by te_tax_ai_initiative (the raise pick, before the template choice) and
+    te_tax_ai_build_t<n> (te_tax_ai_effects.txt) in a fresh draft; every command runs inside its own
+    trigger, with the same arguments."""
     attempts = len(SUNSET_LADDER) - 1
     lines = [
         "",
         "# The AI's picks (plan 2026-10-03 Task 21; spec §2.5): the instrument a template moves, as a code",
         "# in the local te_tax_pick (1 to 5: " + ", ".join(i.key for i in INSTRUMENTS) + "; 0 none) and the next in",
-        "# te_tax_pick2 (T1's second instrument). A raise takes the lowest pre-score (te_tax_ai_cost_<key>),",
+        "# te_tax_pick2 (T1's second instrument). The raise pick is made by te_tax_ai_initiative before",
+        "# the template choice (T6 applies only when it is the consumption rate), the cut pick by T5's",
+        "# build. A raise takes the lowest pre-score (te_tax_ai_cost_<key>),",
         "# a cut the highest, the largest clout-weighted grievance; an excluded instrument",
         "# (te_tax_ai_excluded_<raise|cut>_<key>) never; ties go to the earlier instrument. Each cost and",
         "# exclusion is read once into a local. Locals, not te_tax_ai_ tokens: they last one execution.",

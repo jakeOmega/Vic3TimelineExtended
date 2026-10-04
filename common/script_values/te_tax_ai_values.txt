@@ -255,6 +255,21 @@ te_tax_ai_goods_room = {
 	min = 0
 }
 
+# The month after which an emergency bill may follow the AI's last bill
+# (Ruling 13, hysteresis): te_tax_ai_next_month less te_tax_ai_cooldown_months.
+# After a pass that is the package's commencement month, so from the month
+# after it the fiscal record of the 1st covers a month at the new rates: an
+# emergency bill (due now + 2) about every three months. From the sentinel -1,
+# or a failure's now + te_tax_ai_fail_cooldown_months, it lies in the past.
+te_tax_ai_emergency_gate_month = {
+	value = -1
+	if = {
+		limit = { has_variable = te_tax_ai_next_month }
+		value = var:te_tax_ai_next_month
+	}
+	subtract = te_tax_ai_cooldown_months
+}
+
 # The first month of the reverse window: the AI does not reverse a change it
 # made to an instrument in or after it (te_tax_ai_excluded_<raise|cut>_<key>,
 # te_tax_ai_last_<key> and te_tax_ai_dir_<key>).

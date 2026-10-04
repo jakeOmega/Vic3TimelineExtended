@@ -1521,6 +1521,13 @@ class AiInitiativeTest(unittest.TestCase):
         body = block(self.ai, "te_tax_ai_initiative")
         order = [body.index(f"te_tax_ai_build_t{n} = yes") for n in (2, 3, 6, 1, 5)]
         self.assertEqual(order, sorted(order))
+        # Ruling 14 (spec §2.5, T1 and T6 compete): the raise pick comes before the choice, and T6
+        # applies only when it is the consumption rate, so T6 replaces a rate raise with luxury goods.
+        chain = flat(body)
+        self.assertLess(chain.index("te_tax_gen_ai_pick_raise = yes"),
+                        chain.index("if = { limit = { te_tax_ai_template_2_applies = yes } te_tax_ai_build_t2 = yes"))
+        self.assertIn(f"local_var:te_tax_pick = {INSTRUMENT_CODES['cons']}",
+                      block(self.triggers, "te_tax_ai_template_6_applies"))
 
     def test_pre_score_constants_follow_exposure_and_level_steps(self):
         for key in KEYS:
@@ -1587,7 +1594,9 @@ class AiInitiativeTest(unittest.TestCase):
     def test_ready_is_an_initiative_month_off_cooldown_or_an_emergency_not_after_a_failure(self):
         self.assertEqual(flat(block(self.triggers, "te_tax_ai_initiative_ready")), (
             "te_tax_code_in_force = yes NOT = { te_tax_bill_active = yes } OR = { "
-            "AND = { te_tax_ai_emergency = yes OR = { var:te_tax_ai_noviable = 0 te_tax_ai_cooldown_over = yes } } "
+            "AND = { te_tax_ai_emergency = yes OR = { "
+            "AND = { var:te_tax_ai_noviable = 0 te_tax_ai_now > te_tax_ai_emergency_gate_month } "
+            "te_tax_ai_cooldown_over = yes } } "
             "AND = { te_tax_ai_initiative_due = yes te_tax_ai_cooldown_over = yes "
             "NOT = { te_tax_ai_package_awaits = yes } } }"))
         self.assertEqual(flat(block(self.triggers, "te_tax_ai_cooldown_over")),
@@ -1595,6 +1604,32 @@ class AiInitiativeTest(unittest.TestCase):
         self.assertEqual(flat(block(self.triggers, "te_tax_ai_package_awaits")), (
             "OR = { AND = { has_variable = te_tax_pa_on var:te_tax_pa_on = 1 var:te_tax_pa_state = 1 } "
             "AND = { has_variable = te_tax_pb_on var:te_tax_pb_on = 1 var:te_tax_pb_state = 1 } }"))
+
+    def test_an_emergency_bill_waits_for_a_record_of_the_last_one(self):
+        # Ruling 13 (parent design §10, hysteresis): with no failure this episode, the next emergency
+        # bill waits until the fiscal record of the 1st covers a month at the previous AI bill's new
+        # rates. After a pass the cooldown is the package's commencement month + te_tax_ai_cooldown_months
+        # (te_tax_ai_cooldown_after_pass), so the gate is that commencement month and the step may act
+        # from the month after it: a T2 (due now + 2) about every three months. From the sentinel the
+        # gate lies in the past.
+        values = read(AI_VALUES)
+        self.assertEqual(flat(block(values, "te_tax_ai_emergency_gate_month")),
+                         "value = -1 if = { limit = { has_variable = te_tax_ai_next_month } "
+                         "value = var:te_tax_ai_next_month } subtract = te_tax_ai_cooldown_months")
+        self.assertEqual(flat(block(values, "te_tax_ai_cooldown_after_pass")),
+                         "value = te_tax_ai_now if = { limit = { has_variable = te_tax_bl_due } "
+                         "value = var:te_tax_bl_due } add = te_tax_ai_cooldown_months")
+
+        def gate(next_month):
+            return next_month - int(TUNABLES["te_tax_ai_cooldown_months"])
+
+        introduced = 100
+        due = introduced + 2                                    # T2: the default due month one earlier
+        after_pass = due + int(TUNABLES["te_tax_ai_cooldown_months"])
+        first = min(now for now in range(introduced, introduced + 24) if now > gate(after_pass))
+        self.assertEqual(first, due + 1)
+        self.assertEqual(first - introduced, 3)
+        self.assertTrue(0 > gate(-1), "the sentinel always passes")
 
     def test_a_failure_cooldown_always_marks_the_episode(self):
         # Ruling 12: te_tax_ai_noviable is 1 exactly while te_tax_ai_next_month holds a failure
@@ -1624,13 +1659,22 @@ class AiInitiativeTest(unittest.TestCase):
     # -- templates -----------------------------------------------------------------
 
     def test_the_initiative_builds_one_template_in_a_fresh_draft(self):
+        # Opened only when T2, T1 or T5 applies; T3 and T6 need T1's need, so a branch always takes the
+        # draft and te_tax_ai_introduce_and_judge discards it. The raise pick precedes the choice (Ruling 14).
         branches = " ".join(
             f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ te_tax_ai_template_{n}_applies = yes }} "
-            f"te_tax_ai_open_draft = yes te_tax_ai_build_t{n} = yes te_tax_ai_introduce_and_judge = {{ TPL = {n} }} }}"
+            f"te_tax_ai_build_t{n} = yes te_tax_ai_introduce_and_judge = {{ TPL = {n} }} }}"
             for i, n in enumerate(TEMPLATE_ORDER))
         self.assertEqual(flat(block(self.ai, "te_tax_ai_initiative")), (
-            "if = { limit = { te_tax_code_on = yes te_tax_code_in_force = yes NOT = { te_tax_bill_active = yes } } "
+            "if = { limit = { te_tax_code_on = yes te_tax_code_in_force = yes NOT = { te_tax_bill_active = yes } "
+            "OR = { te_tax_ai_template_2_applies = yes te_tax_ai_template_1_applies = yes "
+            "te_tax_ai_template_5_applies = yes } } "
+            "te_tax_ai_open_draft = yes te_tax_gen_ai_pick_raise = yes "
             f"{branches} }}"))
+        for n in (3, 6):
+            with self.subTest(template=n):
+                self.assertIn("te_tax_ai_raise_wanted = yes", block(self.triggers, f"te_tax_ai_template_{n}_applies"))
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_template_1_applies")), "te_tax_ai_raise_wanted = yes")
         # The codes are the ones the open bill's clause rule reads (te_tax_ai_clause_keeps_direction).
         self.assertEqual(set(TEMPLATE_ORDER), set(RAISE_TEMPLATES) | {CUT_TEMPLATE})
 
@@ -1644,11 +1688,11 @@ class AiInitiativeTest(unittest.TestCase):
         pick, pick2 = "local_var:te_tax_pick", "local_var:te_tax_pick2"
         step = "te_tax_gen_ai_step_inst = {{ INST = {} DIR = {} }}"
         builds = {
-            1: f"te_tax_gen_ai_pick_raise = yes {step.format(pick, 1)} {step.format(pick2, 1)}",
-            2: (f"te_tax_gen_ai_pick_raise = yes {step.format(pick, 1)} {step.format(pick, 1)} "
+            # T1 to T3 move the raise pick the initiative made before the choice (Ruling 14).
+            1: f"{step.format(pick, 1)} {step.format(pick2, 1)}",
+            2: (f"{step.format(pick, 1)} {step.format(pick, 1)} "
                 "if = { limit = { te_tax_can_draft_due = { DIR = 0 } } te_tax_cmd_draft_due = { DIR = 0 } }"),
-            3: (f"te_tax_gen_ai_pick_raise = yes {step.format(pick, 1)} {step.format(pick, 1)} "
-                f"te_tax_gen_ai_levy_sunset = {{ INST = {pick} }}"),
+            3: f"{step.format(pick, 1)} {step.format(pick, 1)} te_tax_gen_ai_levy_sunset = {{ INST = {pick} }}",
             5: f"te_tax_gen_ai_pick_cut = yes {step.format(pick, 0)}",
             6: "te_tax_gen_ai_tax_luxury = yes",
         }
@@ -1660,8 +1704,12 @@ class AiInitiativeTest(unittest.TestCase):
     def test_template_conditions_follow_spec_2_5(self):
         bodies = {
             2: "te_tax_ai_emergency = yes",
-            3: "is_at_war = yes te_tax_ai_raise_wanted = yes",
-            6: "te_tax_ai_raise_wanted = yes var:te_tax_en_cons >= 1 te_tax_ai_taxed_goods < te_tax_ai_max_goods",
+            # A failed T3 or T6 is followed by a T1 in the same episode (Ruling 14).
+            3: "var:te_tax_ai_noviable = 0 is_at_war = yes te_tax_ai_raise_wanted = yes",
+            # T6 only in place of a consumption-rate raise: the raise pick is cons (Ruling 14).
+            6: (f"var:te_tax_ai_noviable = 0 te_tax_ai_raise_wanted = yes "
+                f"local_var:te_tax_pick = {INSTRUMENT_CODES['cons']} var:te_tax_en_cons >= 1 "
+                "te_tax_ai_taxed_goods < te_tax_ai_max_goods"),
             1: "te_tax_ai_raise_wanted = yes",
             5: "te_tax_ai_cut_wanted = yes",
         }
@@ -1689,11 +1737,12 @@ class AiInitiativeTest(unittest.TestCase):
     def test_introduce_and_judge(self):
         self.assertEqual(flat(block(self.ai, "te_tax_ai_introduce_and_judge")), (
             "if = { limit = { te_tax_code_on = yes } "
+            # Set before the introduction, so a refused draft's lines name the template (review minor 1).
+            "set_variable = { name = te_tax_ai_tpl value = $TPL$ } "
             "if = { limit = { te_tax_can_introduce = yes } te_tax_cmd_introduce = yes } "
             # The bill holds a copy; an AI draft lives for one step (spec §2.4).
             "if = { limit = { te_tax_can_draft_discard = yes } te_tax_cmd_draft_discard = yes } "
             "if = { limit = { te_tax_bill_active = yes } "
-            "set_variable = { name = te_tax_ai_tpl value = $TPL$ } "
             "set_variable = { name = te_tax_ai_bill_month value = te_tax_ai_now } "
             "te_tax_ai_log_introduced = yes "
             "if = { limit = { te_tax_ai_bill_hopeless = yes } te_tax_ai_withdraw = yes } } "
@@ -1702,16 +1751,18 @@ class AiInitiativeTest(unittest.TestCase):
             "set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal } "
             "te_tax_ai_log_withdrawn_draft = yes "
             "if = { limit = { var:te_tax_ai_noviable = 0 } te_tax_ai_log_no_viable_draft = yes } "
-            "set_variable = { name = te_tax_ai_noviable value = 1 } } }"))
+            "set_variable = { name = te_tax_ai_noviable value = 1 } "
+            # No bill: no template.
+            "set_variable = { name = te_tax_ai_tpl value = 0 } } }"))
 
     def test_the_parts_are_called_where_the_templates_say(self):
         # Calls only: a definition starts its line, a call is indented.
         self.assertEqual(callers(r"[ \t]te_tax_ai_introduce_and_judge = \{"), {"te_tax_ai_effects.txt": 5})
-        self.assertEqual(callers(r"\bte_tax_ai_open_draft = yes"), {"te_tax_ai_effects.txt": 5})
+        self.assertEqual(callers(r"\bte_tax_ai_open_draft = yes"), {"te_tax_ai_effects.txt": 1})
         for n in TEMPLATE_ORDER:
             with self.subTest(template=n):
                 self.assertEqual(callers(rf"\bte_tax_ai_build_t{n} = yes"), {"te_tax_ai_effects.txt": 1})
-        for name, count in (("te_tax_gen_ai_pick_raise = yes", 3), ("te_tax_gen_ai_pick_cut = yes", 1),
+        for name, count in (("te_tax_gen_ai_pick_raise = yes", 1), ("te_tax_gen_ai_pick_cut = yes", 1),
                             ("te_tax_gen_ai_step_inst = {", 7), ("te_tax_gen_ai_levy_sunset = {", 1),
                             ("te_tax_gen_ai_tax_luxury = yes", 1)):
             with self.subTest(name=name):
@@ -1866,7 +1917,9 @@ class AiInitiativeTest(unittest.TestCase):
                        "te_tax_ai_excluded_raise_<key>", "te_tax_ai_excluded_cut_<key>", "te_tax_gen_ai_pick_raise",
                        "te_tax_gen_ai_pick_cut", "te_tax_gen_ai_step_inst", "te_tax_gen_ai_levy_sunset",
                        "te_tax_gen_ai_tax_luxury", "te_tax_ai_introduce_and_judge", "te_tax_ai_reverse_since",
-                       "reason=draft", "Ruling 12", "te_tax_ai_noviable", "obsession_chance"):
+                       "reason=draft", "Ruling 12", "te_tax_ai_noviable", "obsession_chance",
+                       # Fix round 1: the emergency's pacing and T6 in place of a consumption-rate raise.
+                       "Ruling 13", "te_tax_ai_emergency_gate_month", "Ruling 14"):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, initiative)
         rows = [line for line in initiative.splitlines() if line.startswith("| ")]
