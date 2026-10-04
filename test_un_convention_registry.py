@@ -2,7 +2,7 @@
 """The UN convention registry: every convention in one table, pinned against
 every site that lists conventions by hand.
 
-Adding a convention touches about thirty hand-kept places across twenty files:
+Adding a convention touches about sixty hand-kept places across thirty-eight files:
 the propose triggers and effects, the docket, the chamber's switches, widget
 row and row renderer, un_vote.1 and un_vote.2, the treaty modifier and its
 preview, the joiner's catch-up, the suspended member's snapshot and
@@ -124,6 +124,9 @@ CONVENTIONS = (
     Convention("physical_protection", "un_agency_cppnm", "un_physical_protection_modifier", "country",
                17, 23, 1231, "un_physical_protection_refusal_modifier",
                (), ("nuclear_weapons_enabled", "un_chamber_nuclear_rule_sgui"), True),
+    Convention("narcotics", "un_agency_incb", "un_narcotics_control_modifier", "country",
+               29, 39, 1391, "un_narcotics_refusal_modifier",
+               (), None, True),
     # Redesign phase 7 (docs/systems/un_redesign_design.md §0.12 items 5 and 8).
     Convention("cultural_diversity", "un_agency_ccd", "un_cultural_diversity_modifier", "country",
                18, 37, 1371, "un_cultural_diversity_refusal_modifier",
@@ -356,7 +359,9 @@ class TableTests(unittest.TestCase):
 
     def test_ops_follow_the_member_topics(self):
         self.assertEqual(sorted(c.op for c in CONVENTIONS),
-                         list(range(FIRST_CONVENTION_OP, FIRST_CONVENTION_OP + len(CONVENTIONS))))
+                         [op for op in range(FIRST_CONVENTION_OP,
+                                             FIRST_CONVENTION_OP + len(CONVENTIONS) + len(CHARTER_DECISION_OPS))
+                          if op not in CHARTER_DECISION_OPS])
 
     def test_scope_goes_with_the_member_modifier(self):
         for c in CONVENTIONS:
@@ -977,6 +982,52 @@ class CountTests(unittest.TestCase):
                             with self.subTest(file=os.path.relpath(path, REPO), line=n):
                                 self.assertEqual(NUMBER_WORDS.index(word.lower()), expected, line.strip())
 
+
+
+class NarcoticsTests(unittest.TestCase):
+    """The approved terms and postwar gate, beyond registry completeness."""
+
+    def test_world_gate_needs_a_member_with_mass_production(self):
+        body = _block(_read(DOCKET_TRIGGERS), "un_docket_topic_open_narcotics")
+        world = _flat(_sub_block(body, "any_country"))
+        self.assertIn("je:je_united_nations ?= { has_modifier = un_member_modifier }", world)
+        self.assertIn("has_technology_researched = antibiotic_mass_production", world)
+        self.assertIn("global_var:un_authority >= 20", body)
+
+    def test_proposer_needs_pharmaceuticals_and_major_power_rank(self):
+        body = _block(_read(PROPOSE_TRIGGERS), "un_propose_narcotics_qualifies")
+        self.assertIn("country_rank >= rank_value:major_power", body)
+        self.assertIn("has_technology_researched = pharmaceuticals", body)
+        self.assertNotIn("antibiotic_mass_production", body)
+
+    def test_country_terms_have_both_industry_changes_and_no_exporter_term(self):
+        convention = BY_KEY["narcotics"]
+        self.assertEqual(convention.scope, "country")
+        self.assertEqual(convention.regime_modifiers, ())
+        body = _block(_read(_path("common", "static_modifiers", "un_conventions_modifiers.txt")),
+                      convention.member_modifier)
+        self.assertIn("building_opium_plantation_throughput_add = -0.15", body)
+        self.assertIn("building_synthetics_plant_opium_throughput_add = 0.05", body)
+        self.assertIn("country_prestige_mult = 0.03", body)
+
+    def test_lean_keeps_the_approved_inputs_and_cumulative_plantation_penalties(self):
+        lean = _topic_segments(_block(_read(DOSSIER), "un_lean_interests"))["narcotics"]
+        flat = _flat(lean)
+        self.assertIn("has_building = building_synthetics_plant_opium", flat)
+        self.assertIn("NOT = { has_building = building_opium_plantation }", flat)
+        for threshold, penalty in ((10, -20), (30, -15)):
+            self.assertIn("target = bt:building_opium_plantation value >= "
+                          f"{threshold} }} }} add = {penalty}", flat)
+        for law, weight in (("public_health_insurance", 10), ("laissez_faire", -10)):
+            self.assertIn(f"has_law = law_type:law_{law} }} add = {weight}", flat)
+        self.assertIn("add = 15", lean)
+
+    def test_opposing_landowners_discourage_ratification(self):
+        vote = _block(_read(VOTE_EVENTS), "un_vote.3")
+        refusal = _options(vote)[2]
+        flat = _flat(refusal)
+        self.assertIn("has_tag = un_topic_narcotics } "
+                      "ig:ig_landowners ?= { is_powerful = yes } } add = 20", flat)
 
 if __name__ == "__main__":
     unittest.main()

@@ -602,6 +602,13 @@ un_vote_apply_treaty_modifier = {
 		}
 		un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
 	}
+	if = {
+		limit = {
+			scope:un_resolution ?= { has_tag = un_topic_narcotics }
+			NOT = { has_modifier = un_narcotics_control_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_narcotics_control_modifier }
+	}
 	# The phase 7 conventions (§0.12): country-scoped too, so the cultural
 	# hegemony, homeland and nuclear code read them without a je: hop.
 	if = {
@@ -733,6 +740,13 @@ un_apply_ratified_conventions = {
 			NOT = { has_modifier = un_physical_protection_modifier }
 		}
 		un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
+	}
+	if = {
+		limit = {
+			has_global_variable = un_agency_incb
+			NOT = { has_modifier = un_narcotics_control_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_narcotics_control_modifier }
 	}
 	# Convention on Cultural Diversity (CCD in force).
 	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.

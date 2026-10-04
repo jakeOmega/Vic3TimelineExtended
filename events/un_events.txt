@@ -4133,7 +4133,7 @@ un_events.36 = {
 			limit = { un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier } }
 			un_convention_on = { MODIFIER = un_space_partnership_modifier }
 		}
-		# The five country-scoped conventions, as un_apply_ratified_conventions has them.
+		# The six country-scoped conventions, as un_apply_ratified_conventions has them.
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier } }
 			un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
@@ -4141,6 +4141,10 @@ un_events.36 = {
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = cppnm MODIFIER = un_physical_protection_modifier } }
 			un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = incb MODIFIER = un_narcotics_control_modifier } }
+			un_convention_country_on = { MODIFIER = un_narcotics_control_modifier }
 		}
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier } }
@@ -4178,5 +4182,91 @@ un_events.36 = {
 		}
 		custom_tooltip = un_events.36.b_tt
 		hidden_effect = { un_rep_convention_forget = yes }
+	}
+}
+
+un_events.39 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_events.39.t
+	desc = un_events.39.d
+	flavor = un_events.39.f
+
+	duration = 3
+
+	trigger = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_docket_topic_open_narcotics = yes
+		country_rank >= rank_value:major_power
+		has_technology_researched = pharmaceuticals
+		NOT = { has_modifier = un_narcotics_control_modifier }
+		NOT = { has_modifier = un_narcotics_refusal_modifier }
+		NOT = { has_global_variable = un_vote_active }
+	}
+
+	immediate = {
+		un_vote_reserve = yes
+	}
+
+	# Option A: Table licensed production and quotas.
+	option = {
+		name = un_events.39.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { has_law = law_type:law_public_health_insurance }
+				add = 3
+			}
+		}
+		custom_tooltip = un_vote_initiated_tt
+		# The proposer ratifies on passage with every other member. What
+		# tabling it does is the chamber's Propose control's script too
+		# (un_propose_narcotics_table, un_propose_effects.txt).
+		un_propose_narcotics_table = yes
+	}
+
+	# Option B: Leave it to another delegation.
+	option = {
+		name = un_docket_option_pass
+		ai_chance = {
+			base = 3
+		}
+		custom_tooltip = un_docket_pass_tt
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = narcotics EVENT = un_events.39 }
+		}
+	}
+
+	# Option C: Keep the plantation trade unrestricted.
+	option = {
+		name = un_events.39.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_has_building_type_levels = { target = bt:building_opium_plantation value >= 10 } }
+				add = 4
+			}
+		}
+		add_modifier = {
+			name = un_narcotics_refusal_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_ledger_tt_credibility_down_1
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1391 }
+		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = narcotics EVENT = un_events.39 }
+		}
 	}
 }

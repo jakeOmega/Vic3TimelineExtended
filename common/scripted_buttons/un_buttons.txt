@@ -17,7 +17,7 @@
 # can propose: they are the AI's only proposal path, and hiding a scripted
 # button from humans alone has no verified mechanism in this engine.
 #
-# The thirteen conventions (human rights, ICC, NPT, climate, pandemic, refugee,
+# The fourteen conventions (human rights, ICC, NPT, climate, pandemic, refugee,
 # heritage, decolonization, space, law of the sea, physical protection of
 # nuclear material, cultural diversity, the prohibition of nuclear weapons)
 # deliberately have NO button.

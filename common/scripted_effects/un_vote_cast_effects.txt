@@ -111,6 +111,10 @@ un_vote_cast_yes = {
 				add_modifier = { name = un_physical_protection_modifier multiplier = un_convention_multiplier }
 			}
 			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_narcotics } }
+				add_modifier = { name = un_narcotics_control_modifier multiplier = un_convention_multiplier }
+			}
+			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
 				add_modifier = { name = un_cultural_diversity_modifier multiplier = un_convention_multiplier }
 				un_cultural_diversity_terms_tt = yes

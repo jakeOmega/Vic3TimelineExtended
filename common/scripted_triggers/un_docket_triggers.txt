@@ -604,6 +604,10 @@ un_docket_agenda_ready = {
 			any_country = { un_docket_may_propose_physical_protection = yes }
 		}
 		AND = {
+			un_docket_topic_open_narcotics = yes
+			any_country = { un_docket_may_propose_narcotics = yes }
+		}
+		AND = {
 			un_docket_topic_open_decolonization = yes
 			any_country = { un_docket_may_propose_decolonization = yes }
 		}
@@ -624,4 +628,32 @@ un_docket_agenda_ready = {
 un_docket_cause_is = {
 	has_variable = un_dkt_cause
 	var:un_dkt_cause = $CAUSE$
+}
+
+# The postwar medical-production gate is world state, not the proposer's tech.
+un_docket_topic_open_narcotics = {
+	custom_tooltip = {
+		text = un_narcotics_mass_production_tt
+		any_country = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			has_technology_researched = antibiotic_mass_production
+		}
+	}
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_narcotics_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = narcotics } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_20_tt
+		global_var:un_authority >= 20
+	}
+}
+
+un_docket_may_propose_narcotics = {
+	un_docket_can_be_offered = yes
+	un_propose_narcotics_qualifies = yes
 }

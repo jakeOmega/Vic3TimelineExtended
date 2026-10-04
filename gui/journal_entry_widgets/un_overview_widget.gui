@@ -612,6 +612,18 @@ types un_overview_widget_types
 							}
 						}
 						te_un_ov_agency = {
+							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_incb_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_incb'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
+							blockoverride "agency_texture" {
+								texture = "gfx/interface/icons/un_icons/agency_incb.dds"
+							}
+							blockoverride "lit" {
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_incb'), '(CFixedPoint)1' )]"
+							}
+							blockoverride "unlit" {
+								visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_incb'), '(CFixedPoint)1' ) )]"
+							}
+						}
+						te_un_ov_agency = {
 							tooltip = "[Concatenate( Localize( 'je_un_ov_agency_ccd_tt' ), SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_agency_ccd'), '(CFixedPoint)1' ), 'je_un_ov_agency_founded', 'je_un_ov_agency_not_founded' ) )]"
 							blockoverride "agency_texture" {
 								texture = "gfx/interface/icons/un_icons/agency_ccd.dds"

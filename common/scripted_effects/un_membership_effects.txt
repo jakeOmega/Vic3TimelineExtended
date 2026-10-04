@@ -120,6 +120,7 @@ un_rep_convention_snapshot = {
 	un_rep_convention_mark = { AGENCY = unoosa }
 	un_rep_convention_mark = { AGENCY = itlos }
 	un_rep_convention_mark = { AGENCY = cppnm }
+	un_rep_convention_mark = { AGENCY = incb }
 	un_rep_convention_mark = { AGENCY = icc }
 	un_rep_convention_mark = { AGENCY = ccd }
 	un_rep_convention_mark = { AGENCY = tpnw }
@@ -146,6 +147,7 @@ un_rep_convention_forget = {
 	un_rep_convention_unmark = { AGENCY = unoosa }
 	un_rep_convention_unmark = { AGENCY = itlos }
 	un_rep_convention_unmark = { AGENCY = cppnm }
+	un_rep_convention_unmark = { AGENCY = incb }
 	un_rep_convention_unmark = { AGENCY = icc }
 	un_rep_convention_unmark = { AGENCY = ccd }
 	un_rep_convention_unmark = { AGENCY = tpnw }

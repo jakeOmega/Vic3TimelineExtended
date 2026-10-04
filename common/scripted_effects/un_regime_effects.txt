@@ -347,6 +347,7 @@ un_regime_reapply_conventions = {
 	un_regime_reapply_country = { MODIFIER = un_law_of_sea_modifier }
 	un_regime_reapply_country = { MODIFIER = un_icc_member_modifier }
 	un_regime_reapply_country = { MODIFIER = un_physical_protection_modifier }
+	un_regime_reapply_country = { MODIFIER = un_narcotics_control_modifier }
 	un_regime_reapply_country = { MODIFIER = un_cultural_diversity_modifier }
 	un_regime_reapply_country = { MODIFIER = un_nuclear_ban_modifier }
 }

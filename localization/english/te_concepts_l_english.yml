@@ -2734,6 +2734,8 @@
  un_mission_peacekeeping_state_modifier_desc:0 "A [Concept('concept_un_mission_peacekeeping', 'UN peacekeeping mission')] is deployed in this state. Its strength follows the UN's enforcement, its budget and its contributors."
  un_mission_service_cost_desc:0 "The cost of the contingents this country has sent to [Concept('concept_un_mission', 'UN missions')] of its own accord: a quarter of a percent of its GDP a year for each mission it pays to serve in."
  un_mission_stabilisation_state_modifier_desc:0 "A [Concept('concept_un_mission_stabilisation', 'UN stabilisation mission')] is working in this state to end the collapse. Its strength follows the UN's enforcement, its budget and its contributors."
+ un_narcotics_control_modifier_desc:0 "This country is party to the Single Convention on Narcotic Drugs. Plantation quotas reduce Drugs production from Opium Plantations, while licensed medical manufacture raises Pharmaceutical Industries throughput. The terms scale with UN enforcement."
+ un_narcotics_refusal_modifier_desc:0 "This country refused to table the Single Convention on Narcotic Drugs and cannot propose it while this penalty lasts."
  un_nonmember_pariah_modifier_desc:0 "As the UN's authority grows, nations outside the international order face diplomatic isolation, reduced [concept_prestige], and diminished influence."
  un_nonmember_pariah_strong_modifier_desc:0 "The United Nations is strong, and this country stands outside it: members trade with it less willingly and give it less leverage."
  un_nonproliferation_modifier:0 "Non-Proliferation Treaty Signatory"
