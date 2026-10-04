@@ -211,8 +211,11 @@ class CustomsProbeTest(unittest.TestCase):
         expected = {f"country_{g}_{f}" for g in PROBE_GOODS for f in PROBE_FAMILIES}
         self.assertEqual(names, expected)
 
-    def test_no_production_file_names_a_per_good_tariff_modifier(self):
-        pattern = re.compile(r"\bcountry_\w+?_(?:import|export)_tariffs_\w+")
+    def test_no_production_file_uses_the_probe_only_tariff_modifiers(self):
+        # Grain/iron remain experimental probe carriers. Production climate
+        # rates use separately registered coal/oil types and their own tests.
+        names = [f"country_{good}_{family}" for good in PROBE_GOODS for family in PROBE_FAMILIES]
+        pattern = re.compile(r"\b(?:" + "|".join(map(re.escape, names)) + r")\b")
         offenders = []
         for folder in ("common", "events", "gui"):
             for path in sorted((ROOT / folder).rglob("*")):
