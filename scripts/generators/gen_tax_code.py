@@ -82,6 +82,16 @@ views (te_tax_cu_native_<d>_<good>, te_tax_view_cu_*); the handlers
 te_tax_customs_<good>_sgui; and the workbench's and review's customs rows
 (te_tax_wb_customs_rows_<category>, te_tax_rv_customs_rows).
 
+The AI layer (plan 2026-10-03 Tasks 18 to 21; docs/systems/tax_code_schema.md, "AI
+legislation") adds its per-instrument tokens to the init and the outbreak copy, the
+promise lines and the kind-1 enactment (te_tax_gen_obl_log_*, te_tax_gen_ai_enact_<n>,
+te_tax_gen_ai_log_*), the offer order (te_tax_ai_clout_<ig>, te_tax_ai_clout_rank_<ig>,
+te_tax_gen_ai_accept_offer), the reverse-window marks (te_tax_gen_ai_record_marks) and
+the initiative's parts: the pre-score te_tax_ai_cost_<key> (EXPOSURE, PROGRESSIVE_KEYS
+and ai_step_levels(), from INSTRUMENTS and LEVEL_STEPS), the exclusions
+te_tax_ai_excluded_<raise|cut>_<key>, the picks, a step or a war levy's sunset on the
+picked instrument (SUNSET_LADDER) and the luxury goods (ai_luxury_order()).
+
 The script-value file also carries the guarded te_tax_view_* display values
 for every instrument and every catalog good, and the panels' views: the open
 draft and bill, the package slots, the last change and the history ring
@@ -254,6 +264,13 @@ IGS = ("armed_forces", "devout", "industrialists", "intelligentsia",
 # te_tax_ai_clout_rank_<ig> 0 to k-1 for the k present and non-marginal ones; the others rank
 # AI_RANK_LAST, after every one of them.
 AI_RANK_LAST = len(IGS)
+# The AI's initiative (plan 2026-10-03 Task 21; spec §2.5): its pre-score's constants are
+# written to the engine's fixed point (script values hold five decimals); a war levy walks
+# the draft's sunset ladder (te_tax_dr_sunset_1, te_tax_bill_effects.txt, test-pinned) up to
+# te_tax_ai_levy_sunset; the luxury-goods template taxes goods of this category.
+AI_COST_PLACES = Decimal("0.00001")
+SUNSET_LADDER = (0, 6, 12, 24, 36, 60)
+AI_LUXURY_CATEGORY = "luxury"
 # One vanilla tax level per channel: the material and ideology reasons count a
 # change in these units (delta index x step / level step).
 LEVEL_STEPS = {"wage": Decimal("0.05"), "div": Decimal("0.05"), "land": Decimal("0.15"),
@@ -2182,6 +2199,42 @@ def staple_order():
     return sorted((good for good in consumption_catalog() if definitions[good].get("category") == "staple"), key=rank)
 
 
+def ai_step_levels():
+    """{key: Decimal} one index step of each instrument in vanilla tax levels, step / level step
+    (wage 0.5, div 0.5, land 1/6, head 1/3, cons 1): the support model's delta-level of a +1 step
+    (te_tax_dl_<key>), which the AI's pre-score prices (plan 2026-10-03 Task 21; spec §2.5)."""
+    return {instrument.key: instrument.step / LEVEL_STEPS[instrument.key] for instrument in INSTRUMENTS}
+
+
+def ai_cost_terms(ig, key):
+    """(ideology, material): the constants of interest group `ig`'s term in te_tax_ai_cost_<key>,
+    clout x (material + ideology x P(ig)). A +1 step scores MATERIAL_WEIGHT x s x exposure (the
+    material reason) plus IDEOLOGY_WEIGHT x P x sign x s (the ideology reason, sign +1 for a
+    progressive channel), s the step in tax levels; the cost is that score with its sign turned.
+    Rounded to the engine's fixed point."""
+    step = ai_step_levels()[key]
+    sign = 1 if key in PROGRESSIVE_KEYS else -1
+    ideology = -IDEOLOGY_WEIGHT * sign * step
+    material = -MATERIAL_WEIGHT * step * exposure(ig)[key]
+    return ideology.quantize(AI_COST_PLACES), material.quantize(AI_COST_PLACES)
+
+
+def ai_luxury_order():
+    """The catalog's luxuries (goods category AI_LUXURY_CATEGORY) in the order the AI's luxury-goods
+    template (T6) taxes them: the most habit-forming first (the goods file's obsession_chance, a
+    good without one 0), then the cheapest, which the most pops can buy, then by name. Vanilla's
+    own history taxes liquor, tobacco, wine and opium among the luxuries; they lead."""
+    if AI_LUXURY_CATEGORY not in GOODS_CATEGORY_WEIGHT:
+        raise ValueError(f"AI_LUXURY_CATEGORY {AI_LUXURY_CATEGORY!r} is not a GOODS_CATEGORY_WEIGHT category")
+    definitions = goods_definitions()
+
+    def rank(good):
+        entry = definitions[good]
+        return (-Decimal(entry.get("obsession_chance") or "0"), Decimal(entry.get("cost") or "0"), good)
+    return tuple(sorted((good for good in consumption_catalog()
+                         if definitions[good].get("category") == AI_LUXURY_CATEGORY), key=rank))
+
+
 def clause_offers(ig):
     """The clause offers interest group `ig` may make, preferred first."""
     return CLAUSE_OFFERS.get(ig, (OFFER_CUT,))
@@ -2726,7 +2779,7 @@ def support_values():
               "# at the draft's due month; the review's \"then reverts to\")."]
     for key in keys:
         lines += _successor_value(f"te_tax_succ_dr_{key}", "dr", key)
-    lines += _offer_values() + _view_values() + _ai_clout_values()
+    lines += _offer_values() + _view_values() + _ai_clout_values() + _ai_cost_values()
     return _txt("\n".join(lines) + "\n")
 
 
@@ -3434,7 +3487,9 @@ def scripted_effects():
         "# (te_tax_obligation_effects.txt); te_tax_gen_ai_enact_<n>, te_tax_gen_ai_log_enacted_<n> and",
         "# te_tax_gen_ai_log_renegotiated_<n>, called by te_tax_ai_manage_promises (te_tax_ai_effects.txt).",
         "# Then the AI's open bill (plan 2026-10-03 Task 20): te_tax_gen_ai_accept_offer and",
-        "# te_tax_gen_ai_record_marks, called by te_tax_ai_manage_bill.",
+        "# te_tax_gen_ai_record_marks, called by te_tax_ai_manage_bill. Then its initiative (Task 21):",
+        "# te_tax_gen_ai_pick_raise / _cut, te_tax_gen_ai_step_inst, te_tax_gen_ai_levy_sunset and",
+        "# te_tax_gen_ai_tax_luxury, called by te_tax_ai_build_t<n>.",
         "",
         "# Each instrument's tokens with their sentinels, if absent: the enacted provision, its",
         "# version tokens and the AI's marks (te_tax_ai_last_<key>, te_tax_ai_dir_<key>).",
@@ -3532,7 +3587,7 @@ def scripted_effects():
               for condition in _goods_drift_conditions()]
     lines.append("}")
     lines += (_customs_effects() + _scheduler_effects() + _migration_effects() + _copy_effects()
-              + _ai_obligation_effects() + _ai_bill_effects())
+              + _ai_obligation_effects() + _ai_bill_effects() + _ai_initiative_effects())
     return _txt("\n".join(lines) + "\n")
 
 
@@ -3641,6 +3696,37 @@ def _ai_clout_values():
     return lines
 
 
+def _ai_cost_values():
+    """The AI's pre-score (plan 2026-10-03 Task 21; spec §2.5): te_tax_ai_cost_<key>, the clout-weighted
+    political cost of a +1 step on the instrument, the support model's material and ideology reasons
+    for that step with the sign turned (ai_cost_terms), summed over the groups the country has that
+    are not marginal (te_tax_eligible_clout's test), each weighted by its clout."""
+    levels = ai_step_levels()
+    lines = [
+        "",
+        "# The AI's pre-score (plan 2026-10-03 Task 21; te_tax_gen_ai_pick_raise / _cut): the political",
+        "# cost of a +1 step on the instrument, the sum over the present, non-marginal groups of",
+        f"#   clout x ({-MATERIAL_WEIGHT} x s x exposure - {IDEOLOGY_WEIGHT} x sign x s x P(ig))",
+        "# with s the step in tax levels ("
+        + ", ".join(f"{key} {fmt(levels[key].quantize(AI_COST_PLACES))}" for key in levels) + "),",
+        f"# sign +1 for {' and '.join(PROGRESSIVE_KEYS)} and -1 otherwise, and P(ig) te_tax_ideo_p_<ig>: the",
+        "# material and ideology reasons of the step with the sign turned. A cut's gain is the same",
+        "# value. Only the initiative reads it, to pick the instrument a template moves; the bill's",
+        "# own support refresh then judges the bill.",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        lines += [f"te_tax_ai_cost_{key} = {{", "\tvalue = 0"]
+        for ig in IGS:
+            ideology, material = ai_cost_terms(ig, key)
+            lines += ["\tif = {", "\t\tlimit = {", f"\t\t\texists = ig:ig_{ig}",
+                      f"\t\t\tig:ig_{ig} = {{ ig_counts_as_marginal = no }}", "\t\t}", "\t\tadd = {",
+                      f"\t\t\tvalue = te_tax_ideo_p_{ig}", f"\t\t\tmultiply = {fmt(ideology)}",
+                      f"\t\t\tadd = {fmt(material)}", f"\t\t\tmultiply = ig:ig_{ig}.ig_clout", "\t\t}", "\t}"]
+        lines.append("}")
+    return lines
+
+
 def _ai_bill_effects():
     """The AI's open bill (plan 2026-10-03 Task 20; spec §2.4 step 3, §2.7), the parts that name
     every group or instrument: the order in which te_tax_ai_manage_bill accepts an offer, and the
@@ -3686,6 +3772,99 @@ def _ai_bill_effects():
             lines += [f"\t{opener} = {{", f"\t\tlimit = {{ te_tax_bl_dstep_{key} {op} 0 }}",
                       f"\t\tset_variable = {{ name = te_tax_ai_last_{key} value = te_tax_ai_now }}",
                       f"\t\tset_variable = {{ name = te_tax_ai_dir_{key} value = {direction} }}", "\t}"]
+    lines.append("}")
+    return lines
+
+
+def _ai_pick(direction):
+    """te_tax_gen_ai_pick_<direction>: the locals te_tax_pick and te_tax_pick2, the instrument codes
+    (1 to 5 in INSTRUMENTS order, 0 none) of the cheapest (raise) or dearest (cut) instrument by
+    te_tax_ai_cost_<key> and of the next, skipping the excluded ones; ties go to INSTRUMENTS order."""
+    better = "<" if direction == "raise" else ">"
+    lines = [f"te_tax_gen_ai_pick_{direction} = {{"]
+    lines += [f"\tset_local_variable = {{ name = {name} value = 0 }}"
+              for name in ("te_tax_pick", "te_tax_pick2", "te_tax_pick_cost", "te_tax_pick2_cost")]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        lines += [f"\tset_local_variable = {{ name = te_tax_cost_{key} value = te_tax_ai_cost_{key} }}",
+                  f"\tset_local_variable = {{ name = te_tax_ok_{key} value = 0 }}",
+                  "\tif = {", f"\t\tlimit = {{ NOT = {{ te_tax_ai_excluded_{direction}_{key} = yes }} }}",
+                  f"\t\tset_local_variable = {{ name = te_tax_ok_{key} value = 1 }}", "\t}"]
+    for pick, first in (("te_tax_pick", None), ("te_tax_pick2", "te_tax_pick")):
+        for code, instrument in enumerate(INSTRUMENTS, start=1):
+            key = instrument.key
+            limit = [f"local_var:te_tax_ok_{key} = 1"]
+            if first:
+                limit.append(f"NOT = {{ local_var:{first} = {code} }}")
+            limit.append(f"OR = {{ local_var:{pick} = 0 local_var:te_tax_cost_{key} {better} local_var:{pick}_cost }}")
+            lines += ["\tif = {", "\t\tlimit = {"] + [f"\t\t\t{condition}" for condition in limit] + [
+                "\t\t}", f"\t\tset_local_variable = {{ name = {pick} value = {code} }}",
+                f"\t\tset_local_variable = {{ name = {pick}_cost value = local_var:te_tax_cost_{key} }}", "\t}"]
+    lines.append("}")
+    return lines
+
+
+def _ai_initiative_effects():
+    """The AI's initiative (plan 2026-10-03 Task 21; spec §2.4 step 4, §2.5), the parts that name every
+    instrument or good: the picks, a step or a war levy's sunset on the picked instrument, and the
+    luxury goods. Called by te_tax_ai_build_t<n> (te_tax_ai_effects.txt) in a fresh draft; every
+    command runs inside its own trigger, with the same arguments."""
+    attempts = len(SUNSET_LADDER) - 1
+    lines = [
+        "",
+        "# The AI's picks (plan 2026-10-03 Task 21; spec §2.5): the instrument a template moves, as a code",
+        "# in the local te_tax_pick (1 to 5: " + ", ".join(i.key for i in INSTRUMENTS) + "; 0 none) and the next in",
+        "# te_tax_pick2 (T1's second instrument). A raise takes the lowest pre-score (te_tax_ai_cost_<key>),",
+        "# a cut the highest, the largest clout-weighted grievance; an excluded instrument",
+        "# (te_tax_ai_excluded_<raise|cut>_<key>) never; ties go to the earlier instrument. Each cost and",
+        "# exclusion is read once into a local. Locals, not te_tax_ai_ tokens: they last one execution.",
+    ]
+    lines += _ai_pick("raise") + _ai_pick("cut")
+    lines += [
+        "",
+        "# One draft step on the instrument coded INST (a pick), DIR as te_tax_cmd_draft_step's (0 down,",
+        "# 1 up): the step's command behind its own trigger. INST 0 matches no branch and does nothing.",
+        "te_tax_gen_ai_step_inst = {",
+    ]
+    for code, instrument in enumerate(INSTRUMENTS, start=1):
+        key = instrument.key
+        lines += [f"\t{'if' if code == 1 else 'else_if'} = {{", f"\t\tlimit = {{ $INST$ = {code} }}", "\t\tif = {",
+                  f"\t\t\tlimit = {{ te_tax_can_draft_step = {{ KEY = {key} DIR = $DIR$ }} }}",
+                  f"\t\t\tte_tax_cmd_draft_step = {{ KEY = {key} DIR = $DIR$ }}", "\t\t}", "\t}"]
+    lines += [
+        "}",
+        "",
+        "# A war levy's sunset (T3) on the instrument coded INST: the draft's sunset one step longer",
+        f"# along its ladder ({', '.join(str(m) for m in SUNSET_LADDER)} months, te_tax_dr_sunset_1) while it is",
+        f"# shorter than te_tax_ai_levy_sunset (24): up to {attempts} steps, the ladder's length, so the levy",
+        "# runs the shortest sunset on the ladder at least that long and reverts by itself.",
+        "te_tax_gen_ai_levy_sunset = {",
+    ]
+    for code, instrument in enumerate(INSTRUMENTS, start=1):
+        key = instrument.key
+        lines += [f"\t{'if' if code == 1 else 'else_if'} = {{", f"\t\tlimit = {{ $INST$ = {code} }}"]
+        for _ in range(attempts):
+            lines += ["\t\tif = {",
+                      f"\t\t\tlimit = {{ has_variable = te_tax_dr_{key}_sun var:te_tax_dr_{key}_sun < te_tax_ai_levy_sunset }}",
+                      "\t\t\tif = {", f"\t\t\t\tlimit = {{ te_tax_can_draft_sunset = {{ KEY = {key} DIR = 1 }} }}",
+                      f"\t\t\t\tte_tax_cmd_draft_sunset = {{ KEY = {key} DIR = 1 }}", "\t\t\t}", "\t\t}"]
+        lines.append("\t}")
+    lines += [
+        "}",
+        "",
+        "# The luxury-goods template (T6): taxes the first untaxed luxuries in a fixed order (the most",
+        "# habit-forming first, then the cheapest; ai_luxury_order in the generator), as many as",
+        "# te_tax_ai_goods_room allows: at most two, and never past te_tax_ai_max_goods taxed goods.",
+        "# Untaxed means untaxed under existing law in the draft's due month (te_tax_base_dr_g_<good>),",
+        "# so the draft command, which flips an untouched good from that baseline, taxes it.",
+        "te_tax_gen_ai_tax_luxury = {",
+        "\tset_local_variable = { name = te_tax_goods_room value = te_tax_ai_goods_room }",
+    ]
+    for good in ai_luxury_order():
+        lines += ["\tif = {", f"\t\tlimit = {{ local_var:te_tax_goods_room > 0 te_tax_base_dr_g_{good} = 0 }}",
+                  "\t\tif = {", f"\t\t\tlimit = {{ te_tax_can_draft_good = {{ GOOD = {good} }} }}",
+                  f"\t\t\tte_tax_cmd_draft_good = {{ GOOD = {good} }}",
+                  "\t\t\tchange_local_variable = { name = te_tax_goods_room add = -1 }", "\t\t}", "\t}"]
     lines.append("}")
     return lines
 
@@ -3897,7 +4076,38 @@ def scripted_triggers():
         lines += ["\t}", "}"]
     lines += _customs_triggers()
     lines += _scheduler_triggers() + _bill_triggers() + _obligation_triggers() + _offer_triggers()
+    lines += _ai_initiative_triggers()
     return _txt("\n".join(lines) + "\n")
+
+
+def _ai_initiative_triggers():
+    """The instruments the AI's initiative may not move (plan 2026-10-03 Task 21; spec §2.5), per
+    instrument and direction: te_tax_ai_excluded_raise_<key> and te_tax_ai_excluded_cut_<key>."""
+    lines = [
+        "",
+        "# The AI's initiative (plan 2026-10-03 Task 21; spec §2.5): an instrument the AI's pick skips",
+        "# (te_tax_gen_ai_pick_raise / _cut). For a raise: at its maximum, read as the step command",
+        "# reads it (te_tax_dr_eff_<key>, existing law in the draft's due month, the enacted index",
+        f"# without a draft); under Traditionalism, {' and '.join(TRADITIONALISM_KEYS)} (te_tax_draft_ready refuses",
+        "# a draft that levies them); the consumption rate while no catalog good is taxed; or one the",
+        "# AI cut in its reverse window (te_tax_ai_reverse_since, te_tax_ai_reverse_months back). For a",
+        "# cut: at 0, or one the AI raised in the window.",
+    ]
+    for instrument in INSTRUMENTS:
+        key = instrument.key
+        for direction, edge, mark in (("raise", f"te_tax_dr_eff_{key} >= te_tax_max_{key}", -1),
+                                      ("cut", f"te_tax_dr_eff_{key} <= 0", 1)):
+            conditions = [edge]
+            if direction == "raise" and key in TRADITIONALISM_KEYS:
+                conditions.append("has_law = law_type:law_traditionalism")
+            if direction == "raise" and key == "cons":
+                conditions.append("te_tax_ai_taxed_goods <= 0")
+            lines += [f"te_tax_ai_excluded_{direction}_{key} = {{", "\tOR = {"]
+            lines += [f"\t\t{condition}" for condition in conditions]
+            lines += ["\t\tAND = {", f"\t\t\thas_variable = te_tax_ai_dir_{key}", f"\t\t\tvar:te_tax_ai_dir_{key} = {mark}",
+                      f"\t\t\thas_variable = te_tax_ai_last_{key}",
+                      f"\t\t\tvar:te_tax_ai_last_{key} >= te_tax_ai_reverse_since", "\t\t}", "\t}", "}"]
+    return lines
 
 
 def _offer_triggers():

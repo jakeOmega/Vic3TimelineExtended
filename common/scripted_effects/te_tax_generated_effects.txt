@@ -26,7 +26,9 @@
 # (te_tax_obligation_effects.txt); te_tax_gen_ai_enact_<n>, te_tax_gen_ai_log_enacted_<n> and
 # te_tax_gen_ai_log_renegotiated_<n>, called by te_tax_ai_manage_promises (te_tax_ai_effects.txt).
 # Then the AI's open bill (plan 2026-10-03 Task 20): te_tax_gen_ai_accept_offer and
-# te_tax_gen_ai_record_marks, called by te_tax_ai_manage_bill.
+# te_tax_gen_ai_record_marks, called by te_tax_ai_manage_bill. Then its initiative (Task 21):
+# te_tax_gen_ai_pick_raise / _cut, te_tax_gen_ai_step_inst, te_tax_gen_ai_levy_sunset and
+# te_tax_gen_ai_tax_luxury, called by te_tax_ai_build_t<n>.
 
 # Each instrument's tokens with their sentinels, if absent: the enacted provision, its
 # version tokens and the AI's marks (te_tax_ai_last_<key>, te_tax_ai_dir_<key>).
@@ -9034,5 +9036,660 @@ te_tax_gen_ai_record_marks = {
 		limit = { te_tax_bl_dstep_cons < 0 }
 		set_variable = { name = te_tax_ai_last_cons value = te_tax_ai_now }
 		set_variable = { name = te_tax_ai_dir_cons value = -1 }
+	}
+}
+
+# The AI's picks (plan 2026-10-03 Task 21; spec §2.5): the instrument a template moves, as a code
+# in the local te_tax_pick (1 to 5: wage, div, land, head, cons; 0 none) and the next in
+# te_tax_pick2 (T1's second instrument). A raise takes the lowest pre-score (te_tax_ai_cost_<key>),
+# a cut the highest, the largest clout-weighted grievance; an excluded instrument
+# (te_tax_ai_excluded_<raise|cut>_<key>) never; ties go to the earlier instrument. Each cost and
+# exclusion is read once into a local. Locals, not te_tax_ai_ tokens: they last one execution.
+te_tax_gen_ai_pick_raise = {
+	set_local_variable = { name = te_tax_pick value = 0 }
+	set_local_variable = { name = te_tax_pick2 value = 0 }
+	set_local_variable = { name = te_tax_pick_cost value = 0 }
+	set_local_variable = { name = te_tax_pick2_cost value = 0 }
+	set_local_variable = { name = te_tax_cost_wage value = te_tax_ai_cost_wage }
+	set_local_variable = { name = te_tax_ok_wage value = 0 }
+	if = {
+		limit = { NOT = { te_tax_ai_excluded_raise_wage = yes } }
+		set_local_variable = { name = te_tax_ok_wage value = 1 }
+	}
+	set_local_variable = { name = te_tax_cost_div value = te_tax_ai_cost_div }
+	set_local_variable = { name = te_tax_ok_div value = 0 }
+	if = {
+		limit = { NOT = { te_tax_ai_excluded_raise_div = yes } }
+		set_local_variable = { name = te_tax_ok_div value = 1 }
+	}
+	set_local_variable = { name = te_tax_cost_land value = te_tax_ai_cost_land }
+	set_local_variable = { name = te_tax_ok_land value = 0 }
+	if = {
+		limit = { NOT = { te_tax_ai_excluded_raise_land = yes } }
+		set_local_variable = { name = te_tax_ok_land value = 1 }
+	}
+	set_local_variable = { name = te_tax_cost_head value = te_tax_ai_cost_head }
+	set_local_variable = { name = te_tax_ok_head value = 0 }
+	if = {
+		limit = { NOT = { te_tax_ai_excluded_raise_head = yes } }
+		set_local_variable = { name = te_tax_ok_head value = 1 }
+	}
+	set_local_variable = { name = te_tax_cost_cons value = te_tax_ai_cost_cons }
+	set_local_variable = { name = te_tax_ok_cons value = 0 }
+	if = {
+		limit = { NOT = { te_tax_ai_excluded_raise_cons = yes } }
+		set_local_variable = { name = te_tax_ok_cons value = 1 }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_wage = 1
+			OR = { local_var:te_tax_pick = 0 local_var:te_tax_cost_wage < local_var:te_tax_pick_cost }
+		}
+		set_local_variable = { name = te_tax_pick value = 1 }
+		set_local_variable = { name = te_tax_pick_cost value = local_var:te_tax_cost_wage }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_div = 1
+			OR = { local_var:te_tax_pick = 0 local_var:te_tax_cost_div < local_var:te_tax_pick_cost }
+		}
+		set_local_variable = { name = te_tax_pick value = 2 }
+		set_local_variable = { name = te_tax_pick_cost value = local_var:te_tax_cost_div }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_land = 1
+			OR = { local_var:te_tax_pick = 0 local_var:te_tax_cost_land < local_var:te_tax_pick_cost }
+		}
+		set_local_variable = { name = te_tax_pick value = 3 }
+		set_local_variable = { name = te_tax_pick_cost value = local_var:te_tax_cost_land }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_head = 1
+			OR = { local_var:te_tax_pick = 0 local_var:te_tax_cost_head < local_var:te_tax_pick_cost }
+		}
+		set_local_variable = { name = te_tax_pick value = 4 }
+		set_local_variable = { name = te_tax_pick_cost value = local_var:te_tax_cost_head }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_cons = 1
+			OR = { local_var:te_tax_pick = 0 local_var:te_tax_cost_cons < local_var:te_tax_pick_cost }
+		}
+		set_local_variable = { name = te_tax_pick value = 5 }
+		set_local_variable = { name = te_tax_pick_cost value = local_var:te_tax_cost_cons }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_wage = 1
+			NOT = { local_var:te_tax_pick = 1 }
+			OR = { local_var:te_tax_pick2 = 0 local_var:te_tax_cost_wage < local_var:te_tax_pick2_cost }
+		}
+		set_local_variable = { name = te_tax_pick2 value = 1 }
+		set_local_variable = { name = te_tax_pick2_cost value = local_var:te_tax_cost_wage }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_div = 1
+			NOT = { local_var:te_tax_pick = 2 }
+			OR = { local_var:te_tax_pick2 = 0 local_var:te_tax_cost_div < local_var:te_tax_pick2_cost }
+		}
+		set_local_variable = { name = te_tax_pick2 value = 2 }
+		set_local_variable = { name = te_tax_pick2_cost value = local_var:te_tax_cost_div }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_land = 1
+			NOT = { local_var:te_tax_pick = 3 }
+			OR = { local_var:te_tax_pick2 = 0 local_var:te_tax_cost_land < local_var:te_tax_pick2_cost }
+		}
+		set_local_variable = { name = te_tax_pick2 value = 3 }
+		set_local_variable = { name = te_tax_pick2_cost value = local_var:te_tax_cost_land }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_head = 1
+			NOT = { local_var:te_tax_pick = 4 }
+			OR = { local_var:te_tax_pick2 = 0 local_var:te_tax_cost_head < local_var:te_tax_pick2_cost }
+		}
+		set_local_variable = { name = te_tax_pick2 value = 4 }
+		set_local_variable = { name = te_tax_pick2_cost value = local_var:te_tax_cost_head }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_cons = 1
+			NOT = { local_var:te_tax_pick = 5 }
+			OR = { local_var:te_tax_pick2 = 0 local_var:te_tax_cost_cons < local_var:te_tax_pick2_cost }
+		}
+		set_local_variable = { name = te_tax_pick2 value = 5 }
+		set_local_variable = { name = te_tax_pick2_cost value = local_var:te_tax_cost_cons }
+	}
+}
+te_tax_gen_ai_pick_cut = {
+	set_local_variable = { name = te_tax_pick value = 0 }
+	set_local_variable = { name = te_tax_pick2 value = 0 }
+	set_local_variable = { name = te_tax_pick_cost value = 0 }
+	set_local_variable = { name = te_tax_pick2_cost value = 0 }
+	set_local_variable = { name = te_tax_cost_wage value = te_tax_ai_cost_wage }
+	set_local_variable = { name = te_tax_ok_wage value = 0 }
+	if = {
+		limit = { NOT = { te_tax_ai_excluded_cut_wage = yes } }
+		set_local_variable = { name = te_tax_ok_wage value = 1 }
+	}
+	set_local_variable = { name = te_tax_cost_div value = te_tax_ai_cost_div }
+	set_local_variable = { name = te_tax_ok_div value = 0 }
+	if = {
+		limit = { NOT = { te_tax_ai_excluded_cut_div = yes } }
+		set_local_variable = { name = te_tax_ok_div value = 1 }
+	}
+	set_local_variable = { name = te_tax_cost_land value = te_tax_ai_cost_land }
+	set_local_variable = { name = te_tax_ok_land value = 0 }
+	if = {
+		limit = { NOT = { te_tax_ai_excluded_cut_land = yes } }
+		set_local_variable = { name = te_tax_ok_land value = 1 }
+	}
+	set_local_variable = { name = te_tax_cost_head value = te_tax_ai_cost_head }
+	set_local_variable = { name = te_tax_ok_head value = 0 }
+	if = {
+		limit = { NOT = { te_tax_ai_excluded_cut_head = yes } }
+		set_local_variable = { name = te_tax_ok_head value = 1 }
+	}
+	set_local_variable = { name = te_tax_cost_cons value = te_tax_ai_cost_cons }
+	set_local_variable = { name = te_tax_ok_cons value = 0 }
+	if = {
+		limit = { NOT = { te_tax_ai_excluded_cut_cons = yes } }
+		set_local_variable = { name = te_tax_ok_cons value = 1 }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_wage = 1
+			OR = { local_var:te_tax_pick = 0 local_var:te_tax_cost_wage > local_var:te_tax_pick_cost }
+		}
+		set_local_variable = { name = te_tax_pick value = 1 }
+		set_local_variable = { name = te_tax_pick_cost value = local_var:te_tax_cost_wage }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_div = 1
+			OR = { local_var:te_tax_pick = 0 local_var:te_tax_cost_div > local_var:te_tax_pick_cost }
+		}
+		set_local_variable = { name = te_tax_pick value = 2 }
+		set_local_variable = { name = te_tax_pick_cost value = local_var:te_tax_cost_div }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_land = 1
+			OR = { local_var:te_tax_pick = 0 local_var:te_tax_cost_land > local_var:te_tax_pick_cost }
+		}
+		set_local_variable = { name = te_tax_pick value = 3 }
+		set_local_variable = { name = te_tax_pick_cost value = local_var:te_tax_cost_land }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_head = 1
+			OR = { local_var:te_tax_pick = 0 local_var:te_tax_cost_head > local_var:te_tax_pick_cost }
+		}
+		set_local_variable = { name = te_tax_pick value = 4 }
+		set_local_variable = { name = te_tax_pick_cost value = local_var:te_tax_cost_head }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_cons = 1
+			OR = { local_var:te_tax_pick = 0 local_var:te_tax_cost_cons > local_var:te_tax_pick_cost }
+		}
+		set_local_variable = { name = te_tax_pick value = 5 }
+		set_local_variable = { name = te_tax_pick_cost value = local_var:te_tax_cost_cons }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_wage = 1
+			NOT = { local_var:te_tax_pick = 1 }
+			OR = { local_var:te_tax_pick2 = 0 local_var:te_tax_cost_wage > local_var:te_tax_pick2_cost }
+		}
+		set_local_variable = { name = te_tax_pick2 value = 1 }
+		set_local_variable = { name = te_tax_pick2_cost value = local_var:te_tax_cost_wage }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_div = 1
+			NOT = { local_var:te_tax_pick = 2 }
+			OR = { local_var:te_tax_pick2 = 0 local_var:te_tax_cost_div > local_var:te_tax_pick2_cost }
+		}
+		set_local_variable = { name = te_tax_pick2 value = 2 }
+		set_local_variable = { name = te_tax_pick2_cost value = local_var:te_tax_cost_div }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_land = 1
+			NOT = { local_var:te_tax_pick = 3 }
+			OR = { local_var:te_tax_pick2 = 0 local_var:te_tax_cost_land > local_var:te_tax_pick2_cost }
+		}
+		set_local_variable = { name = te_tax_pick2 value = 3 }
+		set_local_variable = { name = te_tax_pick2_cost value = local_var:te_tax_cost_land }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_head = 1
+			NOT = { local_var:te_tax_pick = 4 }
+			OR = { local_var:te_tax_pick2 = 0 local_var:te_tax_cost_head > local_var:te_tax_pick2_cost }
+		}
+		set_local_variable = { name = te_tax_pick2 value = 4 }
+		set_local_variable = { name = te_tax_pick2_cost value = local_var:te_tax_cost_head }
+	}
+	if = {
+		limit = {
+			local_var:te_tax_ok_cons = 1
+			NOT = { local_var:te_tax_pick = 5 }
+			OR = { local_var:te_tax_pick2 = 0 local_var:te_tax_cost_cons > local_var:te_tax_pick2_cost }
+		}
+		set_local_variable = { name = te_tax_pick2 value = 5 }
+		set_local_variable = { name = te_tax_pick2_cost value = local_var:te_tax_cost_cons }
+	}
+}
+
+# One draft step on the instrument coded INST (a pick), DIR as te_tax_cmd_draft_step's (0 down,
+# 1 up): the step's command behind its own trigger. INST 0 matches no branch and does nothing.
+te_tax_gen_ai_step_inst = {
+	if = {
+		limit = { $INST$ = 1 }
+		if = {
+			limit = { te_tax_can_draft_step = { KEY = wage DIR = $DIR$ } }
+			te_tax_cmd_draft_step = { KEY = wage DIR = $DIR$ }
+		}
+	}
+	else_if = {
+		limit = { $INST$ = 2 }
+		if = {
+			limit = { te_tax_can_draft_step = { KEY = div DIR = $DIR$ } }
+			te_tax_cmd_draft_step = { KEY = div DIR = $DIR$ }
+		}
+	}
+	else_if = {
+		limit = { $INST$ = 3 }
+		if = {
+			limit = { te_tax_can_draft_step = { KEY = land DIR = $DIR$ } }
+			te_tax_cmd_draft_step = { KEY = land DIR = $DIR$ }
+		}
+	}
+	else_if = {
+		limit = { $INST$ = 4 }
+		if = {
+			limit = { te_tax_can_draft_step = { KEY = head DIR = $DIR$ } }
+			te_tax_cmd_draft_step = { KEY = head DIR = $DIR$ }
+		}
+	}
+	else_if = {
+		limit = { $INST$ = 5 }
+		if = {
+			limit = { te_tax_can_draft_step = { KEY = cons DIR = $DIR$ } }
+			te_tax_cmd_draft_step = { KEY = cons DIR = $DIR$ }
+		}
+	}
+}
+
+# A war levy's sunset (T3) on the instrument coded INST: the draft's sunset one step longer
+# along its ladder (0, 6, 12, 24, 36, 60 months, te_tax_dr_sunset_1) while it is
+# shorter than te_tax_ai_levy_sunset (24): up to 5 steps, the ladder's length, so the levy
+# runs the shortest sunset on the ladder at least that long and reverts by itself.
+te_tax_gen_ai_levy_sunset = {
+	if = {
+		limit = { $INST$ = 1 }
+		if = {
+			limit = { has_variable = te_tax_dr_wage_sun var:te_tax_dr_wage_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = wage DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = wage DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_wage_sun var:te_tax_dr_wage_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = wage DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = wage DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_wage_sun var:te_tax_dr_wage_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = wage DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = wage DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_wage_sun var:te_tax_dr_wage_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = wage DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = wage DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_wage_sun var:te_tax_dr_wage_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = wage DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = wage DIR = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { $INST$ = 2 }
+		if = {
+			limit = { has_variable = te_tax_dr_div_sun var:te_tax_dr_div_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = div DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = div DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_div_sun var:te_tax_dr_div_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = div DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = div DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_div_sun var:te_tax_dr_div_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = div DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = div DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_div_sun var:te_tax_dr_div_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = div DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = div DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_div_sun var:te_tax_dr_div_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = div DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = div DIR = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { $INST$ = 3 }
+		if = {
+			limit = { has_variable = te_tax_dr_land_sun var:te_tax_dr_land_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = land DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = land DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_land_sun var:te_tax_dr_land_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = land DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = land DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_land_sun var:te_tax_dr_land_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = land DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = land DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_land_sun var:te_tax_dr_land_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = land DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = land DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_land_sun var:te_tax_dr_land_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = land DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = land DIR = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { $INST$ = 4 }
+		if = {
+			limit = { has_variable = te_tax_dr_head_sun var:te_tax_dr_head_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = head DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = head DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_head_sun var:te_tax_dr_head_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = head DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = head DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_head_sun var:te_tax_dr_head_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = head DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = head DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_head_sun var:te_tax_dr_head_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = head DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = head DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_head_sun var:te_tax_dr_head_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = head DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = head DIR = 1 }
+			}
+		}
+	}
+	else_if = {
+		limit = { $INST$ = 5 }
+		if = {
+			limit = { has_variable = te_tax_dr_cons_sun var:te_tax_dr_cons_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = cons DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = cons DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_cons_sun var:te_tax_dr_cons_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = cons DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = cons DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_cons_sun var:te_tax_dr_cons_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = cons DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = cons DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_cons_sun var:te_tax_dr_cons_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = cons DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = cons DIR = 1 }
+			}
+		}
+		if = {
+			limit = { has_variable = te_tax_dr_cons_sun var:te_tax_dr_cons_sun < te_tax_ai_levy_sunset }
+			if = {
+				limit = { te_tax_can_draft_sunset = { KEY = cons DIR = 1 } }
+				te_tax_cmd_draft_sunset = { KEY = cons DIR = 1 }
+			}
+		}
+	}
+}
+
+# The luxury-goods template (T6): taxes the first untaxed luxuries in a fixed order (the most
+# habit-forming first, then the cheapest; ai_luxury_order in the generator), as many as
+# te_tax_ai_goods_room allows: at most two, and never past te_tax_ai_max_goods taxed goods.
+# Untaxed means untaxed under existing law in the draft's due month (te_tax_base_dr_g_<good>),
+# so the draft command, which flips an untouched good from that baseline, taxes it.
+te_tax_gen_ai_tax_luxury = {
+	set_local_variable = { name = te_tax_goods_room value = te_tax_ai_goods_room }
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_opium = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = opium } }
+			te_tax_cmd_draft_good = { GOOD = opium }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_liquor = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = liquor } }
+			te_tax_cmd_draft_good = { GOOD = liquor }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_tobacco = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = tobacco } }
+			te_tax_cmd_draft_good = { GOOD = tobacco }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_wine = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = wine } }
+			te_tax_cmd_draft_good = { GOOD = wine }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_sugar = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = sugar } }
+			te_tax_cmd_draft_good = { GOOD = sugar }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_coffee = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = coffee } }
+			te_tax_cmd_draft_good = { GOOD = coffee }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_tea = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = tea } }
+			te_tax_cmd_draft_good = { GOOD = tea }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_fruit = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = fruit } }
+			te_tax_cmd_draft_good = { GOOD = fruit }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_meat = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = meat } }
+			te_tax_cmd_draft_good = { GOOD = meat }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_luxury_clothes = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = luxury_clothes } }
+			te_tax_cmd_draft_good = { GOOD = luxury_clothes }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_luxury_furniture = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = luxury_furniture } }
+			te_tax_cmd_draft_good = { GOOD = luxury_furniture }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_porcelain = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = porcelain } }
+			te_tax_cmd_draft_good = { GOOD = porcelain }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_telephones = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = telephones } }
+			te_tax_cmd_draft_good = { GOOD = telephones }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_consumer_appliances = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = consumer_appliances } }
+			te_tax_cmd_draft_good = { GOOD = consumer_appliances }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_radios = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = radios } }
+			te_tax_cmd_draft_good = { GOOD = radios }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_automobiles = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = automobiles } }
+			te_tax_cmd_draft_good = { GOOD = automobiles }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_digital_access = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = digital_access } }
+			te_tax_cmd_draft_good = { GOOD = digital_access }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_fine_art = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = fine_art } }
+			te_tax_cmd_draft_good = { GOOD = fine_art }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_tourism = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = tourism } }
+			te_tax_cmd_draft_good = { GOOD = tourism }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_tax_goods_room > 0 te_tax_base_dr_g_digital_assets = 0 }
+		if = {
+			limit = { te_tax_can_draft_good = { GOOD = digital_assets } }
+			te_tax_cmd_draft_good = { GOOD = digital_assets }
+			change_local_variable = { name = te_tax_goods_room add = -1 }
+		}
 	}
 }

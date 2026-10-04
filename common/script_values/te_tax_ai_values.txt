@@ -238,6 +238,32 @@ te_tax_ai_bill_age = {
 }
 
 # ---------------------------------------------------------------------------
+# The initiative (te_tax_ai_initiative, Task 21; spec §2.4 step 4, §2.5)
+# ---------------------------------------------------------------------------
+
+# Catalog goods the enacted code taxes: the panel's count.
+te_tax_ai_taxed_goods = {
+	value = te_tax_view_goods_count
+}
+
+# Goods the luxury-goods template (T6) may still tax: at most two (spec §2.5,
+# one or two), and never more than take the code to te_tax_ai_max_goods.
+te_tax_ai_goods_room = {
+	value = te_tax_ai_max_goods
+	subtract = te_tax_ai_taxed_goods
+	max = 2
+	min = 0
+}
+
+# The first month of the reverse window: the AI does not reverse a change it
+# made to an instrument in or after it (te_tax_ai_excluded_<raise|cut>_<key>,
+# te_tax_ai_last_<key> and te_tax_ai_dir_<key>).
+te_tax_ai_reverse_since = {
+	value = te_tax_ai_now
+	subtract = te_tax_ai_reverse_months
+}
+
+# ---------------------------------------------------------------------------
 # Log reads (te_tax_ai_log_*): debug_log prints a script value, not a variable
 # (scripting_best_practices.md, "debug_log Loc-String Templating Limitations").
 # ---------------------------------------------------------------------------

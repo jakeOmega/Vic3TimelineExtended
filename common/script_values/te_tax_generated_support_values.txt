@@ -9226,3 +9226,507 @@ te_tax_ai_clout_rank_trade_unions = {
 		if = { limit = { te_tax_ai_clout_rural_folk >= te_tax_ai_clout_trade_unions } add = 1 }
 	}
 }
+
+# The AI's pre-score (plan 2026-10-03 Task 21; te_tax_gen_ai_pick_raise / _cut): the political
+# cost of a +1 step on the instrument, the sum over the present, non-marginal groups of
+#   clout x (10 x s x exposure - 5 x sign x s x P(ig))
+# with s the step in tax levels (wage 0.5, div 0.5, land 0.16667, head 0.33333, cons 1),
+# sign +1 for wage and div and -1 otherwise, and P(ig) te_tax_ideo_p_<ig>: the
+# material and ideology reasons of the step with the sign turned. A cut's gain is the same
+# value. Only the initiative reads it, to pick the instrument a template moves; the bill's
+# own support refresh then judges the bill.
+te_tax_ai_cost_wage = {
+	value = 0
+	if = {
+		limit = {
+			exists = ig:ig_armed_forces
+			ig:ig_armed_forces = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_armed_forces
+			multiply = -2.5
+			add = 1.5
+			multiply = ig:ig_armed_forces.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_devout
+			ig:ig_devout = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_devout
+			multiply = -2.5
+			add = 2
+			multiply = ig:ig_devout.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_industrialists
+			ig:ig_industrialists = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_industrialists
+			multiply = -2.5
+			add = 1
+			multiply = ig:ig_industrialists.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_intelligentsia
+			ig:ig_intelligentsia = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_intelligentsia
+			multiply = -2.5
+			add = 3
+			multiply = ig:ig_intelligentsia.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_landowners
+			ig:ig_landowners = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_landowners
+			multiply = -2.5
+			add = 0.5
+			multiply = ig:ig_landowners.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_petty_bourgeoisie
+			ig:ig_petty_bourgeoisie = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_petty_bourgeoisie
+			multiply = -2.5
+			add = 3
+			multiply = ig:ig_petty_bourgeoisie.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_rural_folk
+			ig:ig_rural_folk = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_rural_folk
+			multiply = -2.5
+			add = 2
+			multiply = ig:ig_rural_folk.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_trade_unions
+			ig:ig_trade_unions = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_trade_unions
+			multiply = -2.5
+			add = 5
+			multiply = ig:ig_trade_unions.ig_clout
+		}
+	}
+}
+te_tax_ai_cost_div = {
+	value = 0
+	if = {
+		limit = {
+			exists = ig:ig_armed_forces
+			ig:ig_armed_forces = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_armed_forces
+			multiply = -2.5
+			add = 1
+			multiply = ig:ig_armed_forces.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_devout
+			ig:ig_devout = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_devout
+			multiply = -2.5
+			add = 1.5
+			multiply = ig:ig_devout.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_industrialists
+			ig:ig_industrialists = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_industrialists
+			multiply = -2.5
+			add = 5
+			multiply = ig:ig_industrialists.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_intelligentsia
+			ig:ig_intelligentsia = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_intelligentsia
+			multiply = -2.5
+			add = 1
+			multiply = ig:ig_intelligentsia.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_landowners
+			ig:ig_landowners = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_landowners
+			multiply = -2.5
+			add = 4
+			multiply = ig:ig_landowners.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_petty_bourgeoisie
+			ig:ig_petty_bourgeoisie = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_petty_bourgeoisie
+			multiply = -2.5
+			add = 2
+			multiply = ig:ig_petty_bourgeoisie.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_rural_folk
+			ig:ig_rural_folk = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_rural_folk
+			multiply = -2.5
+			add = 0.5
+			multiply = ig:ig_rural_folk.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_trade_unions
+			ig:ig_trade_unions = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_trade_unions
+			multiply = -2.5
+			add = 0
+			multiply = ig:ig_trade_unions.ig_clout
+		}
+	}
+}
+te_tax_ai_cost_land = {
+	value = 0
+	if = {
+		limit = {
+			exists = ig:ig_armed_forces
+			ig:ig_armed_forces = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_armed_forces
+			multiply = 0.83333
+			add = 0.16667
+			multiply = ig:ig_armed_forces.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_devout
+			ig:ig_devout = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_devout
+			multiply = 0.83333
+			add = 0.5
+			multiply = ig:ig_devout.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_industrialists
+			ig:ig_industrialists = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_industrialists
+			multiply = 0.83333
+			add = 0
+			multiply = ig:ig_industrialists.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_intelligentsia
+			ig:ig_intelligentsia = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_intelligentsia
+			multiply = 0.83333
+			add = 0
+			multiply = ig:ig_intelligentsia.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_landowners
+			ig:ig_landowners = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_landowners
+			multiply = 0.83333
+			add = 0.5
+			multiply = ig:ig_landowners.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_petty_bourgeoisie
+			ig:ig_petty_bourgeoisie = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_petty_bourgeoisie
+			multiply = 0.83333
+			add = 0.16667
+			multiply = ig:ig_petty_bourgeoisie.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_rural_folk
+			ig:ig_rural_folk = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_rural_folk
+			multiply = 0.83333
+			add = 1.66667
+			multiply = ig:ig_rural_folk.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_trade_unions
+			ig:ig_trade_unions = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_trade_unions
+			multiply = 0.83333
+			add = 0
+			multiply = ig:ig_trade_unions.ig_clout
+		}
+	}
+}
+te_tax_ai_cost_head = {
+	value = 0
+	if = {
+		limit = {
+			exists = ig:ig_armed_forces
+			ig:ig_armed_forces = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_armed_forces
+			multiply = 1.66667
+			add = 1
+			multiply = ig:ig_armed_forces.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_devout
+			ig:ig_devout = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_devout
+			multiply = 1.66667
+			add = 1.33333
+			multiply = ig:ig_devout.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_industrialists
+			ig:ig_industrialists = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_industrialists
+			multiply = 1.66667
+			add = 0.33333
+			multiply = ig:ig_industrialists.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_intelligentsia
+			ig:ig_intelligentsia = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_intelligentsia
+			multiply = 1.66667
+			add = 1
+			multiply = ig:ig_intelligentsia.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_landowners
+			ig:ig_landowners = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_landowners
+			multiply = 1.66667
+			add = 0.33333
+			multiply = ig:ig_landowners.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_petty_bourgeoisie
+			ig:ig_petty_bourgeoisie = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_petty_bourgeoisie
+			multiply = 1.66667
+			add = 1.66667
+			multiply = ig:ig_petty_bourgeoisie.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_rural_folk
+			ig:ig_rural_folk = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_rural_folk
+			multiply = 1.66667
+			add = 1
+			multiply = ig:ig_rural_folk.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_trade_unions
+			ig:ig_trade_unions = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_trade_unions
+			multiply = 1.66667
+			add = 2.66667
+			multiply = ig:ig_trade_unions.ig_clout
+		}
+	}
+}
+te_tax_ai_cost_cons = {
+	value = 0
+	if = {
+		limit = {
+			exists = ig:ig_armed_forces
+			ig:ig_armed_forces = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_armed_forces
+			multiply = 5
+			add = 4
+			multiply = ig:ig_armed_forces.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_devout
+			ig:ig_devout = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_devout
+			multiply = 5
+			add = 5
+			multiply = ig:ig_devout.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_industrialists
+			ig:ig_industrialists = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_industrialists
+			multiply = 5
+			add = 2
+			multiply = ig:ig_industrialists.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_intelligentsia
+			ig:ig_intelligentsia = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_intelligentsia
+			multiply = 5
+			add = 4
+			multiply = ig:ig_intelligentsia.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_landowners
+			ig:ig_landowners = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_landowners
+			multiply = 5
+			add = 2
+			multiply = ig:ig_landowners.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_petty_bourgeoisie
+			ig:ig_petty_bourgeoisie = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_petty_bourgeoisie
+			multiply = 5
+			add = 6
+			multiply = ig:ig_petty_bourgeoisie.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_rural_folk
+			ig:ig_rural_folk = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_rural_folk
+			multiply = 5
+			add = 8
+			multiply = ig:ig_rural_folk.ig_clout
+		}
+	}
+	if = {
+		limit = {
+			exists = ig:ig_trade_unions
+			ig:ig_trade_unions = { ig_counts_as_marginal = no }
+		}
+		add = {
+			value = te_tax_ideo_p_trade_unions
+			multiply = 5
+			add = 8
+			multiply = ig:ig_trade_unions.ig_clout
+		}
+	}
+}

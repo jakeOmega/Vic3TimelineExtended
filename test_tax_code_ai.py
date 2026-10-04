@@ -40,11 +40,24 @@ Task 20 manages the open bill (spec §2.4 step 3, §2.7, §2.10):
   and the cooldown written before the bill record closes, and the bill state
   reset after; ai_no_viable once per episode.
 
+Task 21 starts a bill when none is open (spec §2.4 step 4, §2.5, §2.6):
+
+* ready on an initiative month off cooldown with no package waiting, or in
+  an emergency, which still waits out the cooldown after a failure
+  (Ruling 12), so no introduce-and-withdraw loop;
+* the first template that applies, T2, T3, T6, T1 or T5, built in a fresh
+  draft with the draft commands only, each behind its own trigger, on the
+  instrument the generated pre-score picks; never customs or relief;
+* one introduction, judged in the same execution: withdrawn at once when
+  hopeless; a refused draft discarded, with ai_no_viable reason=draft once
+  per episode.
+
 Run: python3 -m unittest test_tax_code_ai -v
 """
 
 import re
 import unittest
+from decimal import Decimal
 from pathlib import Path
 
 from test_tax_code_rule import load
@@ -167,6 +180,22 @@ WITHDRAW_REASONS = ("legitimacy", "slots", "authority", "support", "patience")
 RAISE_TEMPLATES, CUT_TEMPLATE = (1, 2, 3, 6), 5
 # The clout ranking's value for a group the country lacks, or a marginal one: after every other.
 RANK_LAST = 8
+# Task 21: the templates in the order te_tax_ai_initiative tries them (te_tax_ai_tpl codes).
+TEMPLATE_ORDER = (2, 3, 6, 1, 5)
+# te_tax_gen_ai_step_inst's instrument codes: 1 to 5 in INSTRUMENTS order, 0 none.
+INSTRUMENT_CODES = {key: code for code, key in enumerate(KEYS, start=1)}
+GEN_TRIGGERS = "common/scripted_triggers/te_tax_generated_triggers.txt"
+GEN_SUPPORT = "common/script_values/te_tax_generated_support_values.txt"
+# The initiative's generated parts (te_tax_generated_effects.txt).
+INITIATIVE_GEN = ("te_tax_gen_ai_pick_raise", "te_tax_gen_ai_pick_cut", "te_tax_gen_ai_step_inst",
+                  "te_tax_gen_ai_levy_sunset", "te_tax_gen_ai_tax_luxury")
+# The initiative's hand-written effects.
+INITIATIVE_EFFECTS = ("te_tax_ai_initiative", "te_tax_ai_open_draft", "te_tax_ai_introduce_and_judge",
+                      *(f"te_tax_ai_build_t{n}" for n in TEMPLATE_ORDER))
+# The support model's weights the pre-score restates for one step (spec §2.5).
+MATERIAL_POINTS, IDEOLOGY_POINTS = 10, 5
+# The engine's script values are fixed point to 1e-5; the pre-score's constants are written to it.
+FIXED_POINT = Decimal("0.00001")
 
 
 def promise_fields(o):
@@ -386,9 +415,12 @@ class AiTriggerTest(unittest.TestCase):
                          "OR = { AND = { te_tax_fisc_rec_deficit = yes te_tax_ai_ratio <= te_tax_ai_raise_ratio_now "
                          "te_tax_ai_reserves < te_tax_ai_reserves_full } te_tax_ai_kind4_in_force = yes }")
 
-    def test_cut_need_is_a_recorded_surplus_at_the_cut_ratio(self):
+    def test_cut_need_is_a_recorded_surplus_at_the_cut_ratio_and_no_promised_surplus(self):
+        # Task 21 (Task 18's hand-off): a fiscal-balance promise in force counts as revenue need
+        # (spec §2.3), so it is never also a need to cut.
         self.assertEqual(self.body("te_tax_ai_cut_need"),
-                         "te_tax_fisc_rec_surplus = yes te_tax_ai_ratio >= te_tax_ai_cut_ratio_now")
+                         "te_tax_fisc_rec_surplus = yes te_tax_ai_ratio >= te_tax_ai_cut_ratio_now "
+                         "NOT = { te_tax_ai_kind4_in_force = yes }")
 
     def test_kind4_in_force_is_a_binding_fiscal_promise_in_any_slot(self):
         body = self.body("te_tax_ai_kind4_in_force")
@@ -567,7 +599,8 @@ class AiGateTest(unittest.TestCase):
         effects_text = read(AI_EFFECTS)
         for name in ("te_tax_ai_update_streaks", "te_tax_ai_dispatch", "te_tax_ai_step", "te_tax_ai_reset_bill_state",
                      "te_tax_ai_manage_packages", "te_tax_ai_manage_promises", "te_tax_ai_manage_bill",
-                     "te_tax_ai_withdraw", *(f"te_tax_ai_withdraw_{reason}" for reason in WITHDRAW_REASONS)):
+                     "te_tax_ai_withdraw", *(f"te_tax_ai_withdraw_{reason}" for reason in WITHDRAW_REASONS),
+                     *INITIATIVE_EFFECTS):
             with self.subTest(name=name):
                 head = flat(block(effects_text, name))[:120]
                 self.assertRegex(head, r"^if = \{ limit = \{ te_tax_code_on = yes")
@@ -1401,6 +1434,457 @@ class AiBillTest(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0].split(" | ")[2], "static-only")
         self.assertIn("S13", rows[0])
+
+
+def tokens(text):
+    """`text` flattened into tokens, braces apart."""
+    return flat(text).replace("{", " { ").replace("}", " } ").split()
+
+
+def tree(toks, i=0):
+    """[(key, op, value)] read from `toks` at `i` to the closing `}` (or the end), and where it
+    stopped; a value is a token or such a list."""
+    out = []
+    while i < len(toks) and toks[i] != "}":
+        key, op = toks[i], toks[i + 1]
+        if toks[i + 2] == "{":
+            value, i = tree(toks, i + 3)
+            i += 1
+        else:
+            value, i = toks[i + 2], i + 3
+        out.append((key, op, value))
+    return out, i
+
+
+class PickSim:
+    """Runs a generated te_tax_gen_ai_pick_<direction> body: set_local_variable, if/limit, and
+    the comparisons it uses. `costs` stand for te_tax_ai_cost_<key>, `excluded` for the keys
+    whose te_tax_ai_excluded_<direction>_<key> holds. Reading a local before it is set fails."""
+
+    def __init__(self, costs, excluded):
+        self.costs, self.excluded, self.local = costs, excluded, {}
+
+    def value(self, token):
+        if token.startswith("local_var:"):
+            return self.local[token.split(":", 1)[1]]
+        match = re.fullmatch(r"te_tax_ai_cost_(\w+)", token)
+        return self.costs[match.group(1)] if match else Decimal(token)
+
+    def holds(self, condition):
+        key, op, value = condition
+        if key in ("NOT", "OR", "AND"):
+            results = [self.holds(item) for item in value]
+            return {"NOT": not all(results), "OR": any(results), "AND": all(results)}[key]
+        match = re.fullmatch(r"te_tax_ai_excluded_(?:raise|cut)_(\w+)", key)
+        if match:
+            assert (op, value) == ("=", "yes"), condition
+            return match.group(1) in self.excluded
+        left, right = self.value(key), self.value(value)
+        return {"=": left == right, "<": left < right, ">": left > right}[op]
+
+    def run(self, statements):
+        for key, _, value in statements:
+            if key == "set_local_variable":
+                fields = {k: v for k, _, v in value}
+                self.local[fields["name"]] = self.value(fields["value"])
+            elif key == "if":
+                limit = [v for k, _, v in value if k == "limit"][0]
+                if all(self.holds(c) for c in limit):
+                    self.run([s for s in value if s[0] != "limit"])
+            else:
+                raise AssertionError(f"unexpected statement {key}")
+        return self
+
+
+def expected_picks(costs, excluded, direction):
+    """(pick, pick2): the cheapest (raise) or dearest (cut) instruments not excluded, ties in
+    INSTRUMENTS order, as codes; 0 where there is none."""
+    sign = 1 if direction == "raise" else -1
+    ranked = sorted((key for key in KEYS if key not in excluded), key=lambda k: (sign * costs[k], KEYS.index(k)))
+    codes = [INSTRUMENT_CODES[key] for key in ranked] + [0, 0]
+    return codes[0], codes[1]
+
+
+class AiInitiativeTest(unittest.TestCase):
+    """Task 21: the initiative (spec §2.4 step 4, §2.5, §2.6)."""
+
+    def setUp(self):
+        self.ai = read(AI_EFFECTS)
+        self.values = read(GEN_SUPPORT) + read(AI_VALUES)
+        self.triggers = read(AI_TRIGGERS)
+        self.gen_triggers = read(GEN_TRIGGERS)
+        self.gen = read(GEN_EFFECTS)
+
+    # -- the brief's sample (adapted where noted) --------------------------------
+
+    def test_template_order_is_emergency_war_goods_raise_cut(self):
+        body = block(self.ai, "te_tax_ai_initiative")
+        order = [body.index(f"te_tax_ai_build_t{n} = yes") for n in (2, 3, 6, 1, 5)]
+        self.assertEqual(order, sorted(order))
+
+    def test_pre_score_constants_follow_exposure_and_level_steps(self):
+        for key in KEYS:
+            cost = block(self.values, f"te_tax_ai_cost_{key}")
+            for ig in gen.IGS:
+                self.assertIn(f"ig:ig_{ig}", cost)
+            self.assertIn("ig_counts_as_marginal = no", cost)
+
+    def test_templates_use_only_draft_commands_behind_triggers(self):
+        for cmd in ("draft_new", "draft_due", "draft_sunset", "draft_good", "draft_discard", "introduce"):
+            for m in re.finditer(rf"te_tax_cmd_{cmd}\b", self.ai):
+                self.assertIn(f"te_tax_can_{cmd}", self.ai[max(0, m.start() - 300):m.start()], cmd)
+
+    def test_no_template_touches_customs_or_relief(self):
+        parts = self.ai + "".join(block(self.gen, name) for name in INITIATIVE_GEN)
+        for name in ("te_tax_cmd_draft_customs", "te_tax_cmd_draft_relief", "te_tax_cmd_draft_relief_state"):
+            self.assertNotIn(name, parts)
+
+    def test_one_bill_per_initiative_and_judged_in_the_same_execution(self):
+        judge = block(self.ai, "te_tax_ai_introduce_and_judge")
+        self.assertEqual(judge.count("te_tax_cmd_introduce = yes"), 1)
+        self.assertLess(judge.index("te_tax_cmd_introduce = yes"), judge.index("te_tax_ai_bill_hopeless = yes"))
+
+    def test_reverse_window_excludes_recent_opposite_moves(self):
+        # The brief asserts the literal te_tax_ai_reverse_months in each trigger; the window's
+        # first month is the one named value te_tax_ai_reverse_since (now - te_tax_ai_reverse_months).
+        triggers = self.gen_triggers + self.triggers
+        for key in KEYS:
+            excl = block(triggers, f"te_tax_ai_excluded_raise_{key}")
+            self.assertIn(f"te_tax_ai_dir_{key}", excl)
+            self.assertIn("te_tax_ai_reverse_since", excl)
+        self.assertEqual(flat(block(read(AI_VALUES), "te_tax_ai_reverse_since")),
+                         "value = te_tax_ai_now subtract = te_tax_ai_reverse_months")
+
+    def test_step_levels_are_the_step_over_one_vanilla_tax_level(self):
+        levels = gen.ai_step_levels()
+        self.assertEqual(levels, {"wage": Decimal("0.5"), "div": Decimal("0.5"), "land": Decimal(1) / Decimal(6),
+                                  "head": Decimal(1) / Decimal(3), "cons": Decimal(1)})
+        for key, level in levels.items():
+            with self.subTest(key=key):
+                self.assertIsInstance(level, Decimal)
+                instrument = [i for i in gen.INSTRUMENTS if i.key == key][0]
+                self.assertEqual(level, instrument.step / gen.LEVEL_STEPS[key])
+
+    # -- the step and readiness ----------------------------------------------------
+
+    def test_the_step_starts_the_initiative_only_without_a_bill(self):
+        step = flat(block(self.ai, "te_tax_ai_step"))
+        self.assertIn("if = { limit = { te_tax_bill_active = yes } te_tax_ai_manage_bill = yes } "
+                      "else_if = { limit = { te_tax_ai_initiative_ready = yes } te_tax_ai_initiative = yes }", step)
+        self.assertEqual(callers(r"\bte_tax_ai_initiative = yes"), {"te_tax_ai_effects.txt": 1})
+
+    def test_the_step_clears_the_episode_marker_when_the_need_ends(self):
+        # Before the managers, so a bill the step withdraws later in the same run starts the new episode.
+        step = flat(block(self.ai, "te_tax_ai_step"))
+        self.assertTrue(step.startswith(
+            "if = { limit = { te_tax_code_on = yes te_tax_ai_can_act = yes } "
+            "if = { limit = { te_tax_ai_need_ended = yes } set_variable = { name = te_tax_ai_noviable value = 0 } } "
+            "te_tax_ai_manage_packages = yes"), step[:200])
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_need_ended")),
+                         "NOT = { te_tax_ai_raise_need = yes } NOT = { te_tax_ai_cut_need = yes } "
+                         "NOT = { te_tax_ai_emergency = yes }")
+
+    def test_ready_is_an_initiative_month_off_cooldown_or_an_emergency_not_after_a_failure(self):
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_initiative_ready")), (
+            "te_tax_code_in_force = yes NOT = { te_tax_bill_active = yes } OR = { "
+            "AND = { te_tax_ai_emergency = yes OR = { var:te_tax_ai_noviable = 0 te_tax_ai_cooldown_over = yes } } "
+            "AND = { te_tax_ai_initiative_due = yes te_tax_ai_cooldown_over = yes "
+            "NOT = { te_tax_ai_package_awaits = yes } } }"))
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_cooldown_over")),
+                         "var:te_tax_ai_next_month <= te_tax_ai_now")
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_package_awaits")), (
+            "OR = { AND = { has_variable = te_tax_pa_on var:te_tax_pa_on = 1 var:te_tax_pa_state = 1 } "
+            "AND = { has_variable = te_tax_pb_on var:te_tax_pb_on = 1 var:te_tax_pb_state = 1 } }"))
+
+    def test_a_failure_cooldown_always_marks_the_episode(self):
+        # Ruling 12: te_tax_ai_noviable is 1 exactly while te_tax_ai_next_month holds a failure
+        # cooldown, so an emergency, which skips the cooldown after a pass, still waits out the one
+        # after a withdrawal or a refused draft: no introduce-and-withdraw loop every month. Every
+        # failure cooldown is followed in its block by the marker; every pass cooldown by the
+        # reset, which clears it.
+        failure = "set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal }"
+        passed = "set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_pass }"
+        text = flat(self.ai)
+        for write, then, count in ((failure, "set_variable = { name = te_tax_ai_noviable value = 1 }", 6),
+                                   (passed, "te_tax_ai_reset_bill_state = yes", 2)):
+            found = [m.start() for m in re.finditer(re.escape(write), text)]
+            self.assertEqual(len(found), count, write)
+            for at in found:
+                with self.subTest(write=write, at=at):
+                    brace = enclosing_brace(text, at)
+                    branch = text[brace + 1:close(text, brace)]
+                    self.assertIn(then, branch[branch.index(write):])
+        self.assertEqual(RESET["te_tax_ai_noviable"], "0")
+        # Nothing else in common/ writes the cooldown (the init's guarded sentinel aside).
+        self.assertEqual(callers(r"name = te_tax_ai_next_month value = te_tax_ai_cooldown"),
+                         {"te_tax_ai_effects.txt": 8})
+        self.assertEqual(callers(r"name = te_tax_ai_next_month value"),
+                         {"te_tax_ai_effects.txt": 8, "te_tax_state_effects.txt": 1})
+
+    # -- templates -----------------------------------------------------------------
+
+    def test_the_initiative_builds_one_template_in_a_fresh_draft(self):
+        branches = " ".join(
+            f"{'if' if i == 0 else 'else_if'} = {{ limit = {{ te_tax_ai_template_{n}_applies = yes }} "
+            f"te_tax_ai_open_draft = yes te_tax_ai_build_t{n} = yes te_tax_ai_introduce_and_judge = {{ TPL = {n} }} }}"
+            for i, n in enumerate(TEMPLATE_ORDER))
+        self.assertEqual(flat(block(self.ai, "te_tax_ai_initiative")), (
+            "if = { limit = { te_tax_code_on = yes te_tax_code_in_force = yes NOT = { te_tax_bill_active = yes } } "
+            f"{branches} }}"))
+        # The codes are the ones the open bill's clause rule reads (te_tax_ai_clause_keeps_direction).
+        self.assertEqual(set(TEMPLATE_ORDER), set(RAISE_TEMPLATES) | {CUT_TEMPLATE})
+
+    def test_a_fresh_draft_discards_a_stale_one_first(self):
+        self.assertEqual(flat(block(self.ai, "te_tax_ai_open_draft")), (
+            "if = { limit = { te_tax_code_on = yes } "
+            "if = { limit = { te_tax_can_draft_discard = yes } te_tax_cmd_draft_discard = yes } "
+            "if = { limit = { te_tax_can_draft_new = yes } te_tax_cmd_draft_new = yes } }"))
+
+    def test_each_template_builds_its_bill(self):
+        pick, pick2 = "local_var:te_tax_pick", "local_var:te_tax_pick2"
+        step = "te_tax_gen_ai_step_inst = {{ INST = {} DIR = {} }}"
+        builds = {
+            1: f"te_tax_gen_ai_pick_raise = yes {step.format(pick, 1)} {step.format(pick2, 1)}",
+            2: (f"te_tax_gen_ai_pick_raise = yes {step.format(pick, 1)} {step.format(pick, 1)} "
+                "if = { limit = { te_tax_can_draft_due = { DIR = 0 } } te_tax_cmd_draft_due = { DIR = 0 } }"),
+            3: (f"te_tax_gen_ai_pick_raise = yes {step.format(pick, 1)} {step.format(pick, 1)} "
+                f"te_tax_gen_ai_levy_sunset = {{ INST = {pick} }}"),
+            5: f"te_tax_gen_ai_pick_cut = yes {step.format(pick, 0)}",
+            6: "te_tax_gen_ai_tax_luxury = yes",
+        }
+        for n, body in builds.items():
+            with self.subTest(template=n):
+                self.assertEqual(flat(block(self.ai, f"te_tax_ai_build_t{n}")),
+                                 f"if = {{ limit = {{ te_tax_code_on = yes }} {body} }}")
+
+    def test_template_conditions_follow_spec_2_5(self):
+        bodies = {
+            2: "te_tax_ai_emergency = yes",
+            3: "is_at_war = yes te_tax_ai_raise_wanted = yes",
+            6: "te_tax_ai_raise_wanted = yes var:te_tax_en_cons >= 1 te_tax_ai_taxed_goods < te_tax_ai_max_goods",
+            1: "te_tax_ai_raise_wanted = yes",
+            5: "te_tax_ai_cut_wanted = yes",
+        }
+        for n, body in bodies.items():
+            with self.subTest(template=n):
+                self.assertEqual(flat(block(self.triggers, f"te_tax_ai_template_{n}_applies")), body)
+        # The need with its hysteresis: te_tax_ai_need_months recorded deficits, or a promised surplus,
+        # which keeps the AI raising until the surplus delivers (spec §2.8); a cut after
+        # te_tax_ai_surplus_months recorded surpluses with the reserves full.
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_raise_wanted")),
+                         "te_tax_ai_raise_need = yes OR = { var:te_tax_ai_def_streak >= te_tax_ai_need_months "
+                         "te_tax_ai_kind4_in_force = yes }")
+        self.assertEqual(flat(block(self.triggers, "te_tax_ai_cut_wanted")),
+                         "te_tax_ai_cut_need = yes var:te_tax_ai_sur_streak >= te_tax_ai_surplus_months "
+                         "te_tax_ai_reserves >= te_tax_ai_reserves_full")
+
+    def test_the_goods_values(self):
+        values = read(AI_VALUES)
+        self.assertEqual(flat(block(values, "te_tax_ai_taxed_goods")), "value = te_tax_view_goods_count")
+        self.assertEqual(flat(block(values, "te_tax_ai_goods_room")),
+                         "value = te_tax_ai_max_goods subtract = te_tax_ai_taxed_goods max = 2 min = 0")
+
+    # -- introduce and judge -------------------------------------------------------
+
+    def test_introduce_and_judge(self):
+        self.assertEqual(flat(block(self.ai, "te_tax_ai_introduce_and_judge")), (
+            "if = { limit = { te_tax_code_on = yes } "
+            "if = { limit = { te_tax_can_introduce = yes } te_tax_cmd_introduce = yes } "
+            # The bill holds a copy; an AI draft lives for one step (spec §2.4).
+            "if = { limit = { te_tax_can_draft_discard = yes } te_tax_cmd_draft_discard = yes } "
+            "if = { limit = { te_tax_bill_active = yes } "
+            "set_variable = { name = te_tax_ai_tpl value = $TPL$ } "
+            "set_variable = { name = te_tax_ai_bill_month value = te_tax_ai_now } "
+            "te_tax_ai_log_introduced = yes "
+            "if = { limit = { te_tax_ai_bill_hopeless = yes } te_tax_ai_withdraw = yes } } "
+            # Refused: no bill to withdraw; the failure cooldown, a line, and the episode's one no-viable.
+            "else = { "
+            "set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal } "
+            "te_tax_ai_log_withdrawn_draft = yes "
+            "if = { limit = { var:te_tax_ai_noviable = 0 } te_tax_ai_log_no_viable_draft = yes } "
+            "set_variable = { name = te_tax_ai_noviable value = 1 } } }"))
+
+    def test_the_parts_are_called_where_the_templates_say(self):
+        # Calls only: a definition starts its line, a call is indented.
+        self.assertEqual(callers(r"[ \t]te_tax_ai_introduce_and_judge = \{"), {"te_tax_ai_effects.txt": 5})
+        self.assertEqual(callers(r"\bte_tax_ai_open_draft = yes"), {"te_tax_ai_effects.txt": 5})
+        for n in TEMPLATE_ORDER:
+            with self.subTest(template=n):
+                self.assertEqual(callers(rf"\bte_tax_ai_build_t{n} = yes"), {"te_tax_ai_effects.txt": 1})
+        for name, count in (("te_tax_gen_ai_pick_raise = yes", 3), ("te_tax_gen_ai_pick_cut = yes", 1),
+                            ("te_tax_gen_ai_step_inst = {", 7), ("te_tax_gen_ai_levy_sunset = {", 1),
+                            ("te_tax_gen_ai_tax_luxury = yes", 1)):
+            with self.subTest(name=name):
+                self.assertEqual(callers(r"[ \t]" + re.escape(name)), {"te_tax_ai_effects.txt": count})
+        # Withdrawal on introduction is the dispatcher, only behind hopeless (Task 20's hand-off).
+        self.assertEqual(flat(self.ai).count("if = { limit = { te_tax_ai_bill_hopeless = yes } te_tax_ai_withdraw = yes }"), 1)
+
+    # -- the pre-score and the picks (generated) ------------------------------------
+
+    def test_the_pre_score_is_the_support_models_cost_of_one_step(self):
+        # cost_k = sum over present, non-marginal groups of clout x (10 s_k exposure - 5 sign_k s_k P(ig)):
+        # the material and ideology reasons of a +1 step with the sign turned (spec §2.5).
+        self.assertEqual((gen.MATERIAL_WEIGHT, gen.IDEOLOGY_WEIGHT), (-MATERIAL_POINTS, IDEOLOGY_POINTS))
+        support = read(GEN_SUPPORT)
+        levels = gen.ai_step_levels()
+        term = re.compile(r"if = \{ limit = \{ exists = ig:ig_(\w+) ig:ig_\1 = \{ ig_counts_as_marginal = no \} \} "
+                          r"add = \{ value = te_tax_ideo_p_\1 multiply = (\S+) add = (\S+) "
+                          r"multiply = ig:ig_\1\.ig_clout \} \}")
+        for key in KEYS:
+            cost = flat(block(support, f"te_tax_ai_cost_{key}"))
+            terms = list(term.finditer(cost))
+            sign = 1 if key in gen.PROGRESSIVE_KEYS else -1
+            with self.subTest(key=key):
+                self.assertEqual(cost, "value = 0 " + " ".join(m.group(0) for m in terms))
+                self.assertEqual([m.group(1) for m in terms], list(gen.IGS))
+            for m in terms:
+                ig, ideology, material = m.group(1), Decimal(m.group(2)), Decimal(m.group(3))
+                with self.subTest(key=key, ig=ig):
+                    self.assertLessEqual(abs(material - MATERIAL_POINTS * levels[key] * gen.exposure(ig)[key]),
+                                         FIXED_POINT / 2)
+                    self.assertLessEqual(abs(ideology + IDEOLOGY_POINTS * sign * levels[key]), FIXED_POINT / 2)
+                    self.assertEqual(material, material.quantize(FIXED_POINT))
+                    self.assertEqual(ideology, ideology.quantize(FIXED_POINT))
+
+    def test_exclusions(self):
+        def window(key, direction):
+            return (f"AND = {{ has_variable = te_tax_ai_dir_{key} var:te_tax_ai_dir_{key} = {direction} "
+                    f"has_variable = te_tax_ai_last_{key} var:te_tax_ai_last_{key} >= te_tax_ai_reverse_since }}")
+
+        for key in KEYS:
+            raise_ = [f"te_tax_dr_eff_{key} >= te_tax_max_{key}"]
+            if key in gen.TRADITIONALISM_KEYS:
+                raise_.append("has_law = law_type:law_traditionalism")
+            if key == "cons":
+                raise_.append("te_tax_ai_taxed_goods <= 0")
+            raise_.append(window(key, -1))
+            cut = [f"te_tax_dr_eff_{key} <= 0", window(key, 1)]
+            with self.subTest(key=key):
+                self.assertEqual(flat(block(self.gen_triggers, f"te_tax_ai_excluded_raise_{key}")),
+                                 f"OR = {{ {' '.join(raise_)} }}")
+                self.assertEqual(flat(block(self.gen_triggers, f"te_tax_ai_excluded_cut_{key}")),
+                                 f"OR = {{ {' '.join(cut)} }}")
+        # "At its maximum" and "at 0" are what the step command tests (te_tax_dr_step_ok_1 / _0).
+        commands = read("common/scripted_triggers/te_tax_triggers.txt")
+        self.assertIn("te_tax_dr_eff_$KEY$ < te_tax_max_$KEY$", block(commands, "te_tax_dr_step_ok_1"))
+        self.assertIn("te_tax_dr_eff_$KEY$ > 0", block(commands, "te_tax_dr_step_ok_0"))
+        self.assertIn("has_law = law_type:law_traditionalism", block(commands, "te_tax_draft_ready"))
+
+    def test_the_picks_are_the_cheapest_or_dearest_not_excluded_ties_in_order(self):
+        # Every instrument cheapest and dearest once (the rotations), then ties of all and of some.
+        base = ("3", "1", "2", "5", "4")
+        tables = tuple(dict(zip(KEYS, base[i:] + base[:i])) for i in range(len(base))) + (
+            {"wage": "1", "div": "1", "land": "1", "head": "1", "cons": "1"},
+            {"wage": "-2.5", "div": "0.4", "land": "-2.5", "head": "0.4", "cons": "-7"},
+            {"wage": "0", "div": "0", "land": "0", "head": "0", "cons": "0"},
+        )
+        exclusions = ((), ("cons",), ("wage", "land"), ("div", "land", "head", "cons"), tuple(KEYS))
+        for direction in ("raise", "cut"):
+            statements, rest = tree(tokens(block(self.gen, f"te_tax_gen_ai_pick_{direction}")))
+            self.assertEqual(rest, len(tokens(block(self.gen, f"te_tax_gen_ai_pick_{direction}"))))
+            for table in tables:
+                costs = {key: Decimal(value) for key, value in table.items()}
+                for excluded in exclusions:
+                    with self.subTest(direction=direction, costs=table, excluded=excluded):
+                        sim = PickSim(costs, set(excluded)).run(statements)
+                        self.assertEqual((sim.local["te_tax_pick"], sim.local["te_tax_pick2"]),
+                                         expected_picks(costs, excluded, direction))
+            # Each cost is read once, into a local, then compared.
+            body = block(self.gen, f"te_tax_gen_ai_pick_{direction}")
+            for key in KEYS:
+                with self.subTest(direction=direction, key=key):
+                    self.assertEqual(body.count(f"te_tax_ai_cost_{key}"), 1)
+                    self.assertEqual(body.count(f"te_tax_ai_excluded_{direction}_{key} = yes"), 1)
+
+    def test_a_step_on_the_picked_instrument_runs_behind_its_own_trigger(self):
+        expected = " ".join(
+            f"{'if' if code == 1 else 'else_if'} = {{ limit = {{ $INST$ = {code} }} "
+            f"if = {{ limit = {{ te_tax_can_draft_step = {{ KEY = {key} DIR = $DIR$ }} }} "
+            f"te_tax_cmd_draft_step = {{ KEY = {key} DIR = $DIR$ }} }} }}" for key, code in INSTRUMENT_CODES.items())
+        self.assertEqual(flat(block(self.gen, "te_tax_gen_ai_step_inst")), expected)
+
+    def test_the_war_levy_walks_the_sunset_ladder_to_the_levy_length(self):
+        ladder_1 = block(read(BILL), "te_tax_dr_sunset_1")
+        steps = dict((int(a), int(b)) for a, b in re.findall(
+            r"var:te_tax_dr_\$KEY\$_sun = (\d+) \} set_variable = \{ name = te_tax_dr_\$KEY\$_sun value = (\d+)",
+            flat(ladder_1)))
+        ladder = [0]
+        while ladder[-1] in steps:
+            ladder.append(steps[ladder[-1]])
+        self.assertEqual(tuple(ladder), gen.SUNSET_LADDER)
+        levy = int(TUNABLES["te_tax_ai_levy_sunset"])
+        self.assertIn(levy, ladder, "a levy's sunset is a step of the ladder")
+        attempts = len(ladder) - 1
+        expected = []
+        for key, code in INSTRUMENT_CODES.items():
+            attempt = (f"if = {{ limit = {{ has_variable = te_tax_dr_{key}_sun "
+                       f"var:te_tax_dr_{key}_sun < te_tax_ai_levy_sunset }} "
+                       f"if = {{ limit = {{ te_tax_can_draft_sunset = {{ KEY = {key} DIR = 1 }} }} "
+                       f"te_tax_cmd_draft_sunset = {{ KEY = {key} DIR = 1 }} }} }}")
+            expected.append(f"{'if' if code == 1 else 'else_if'} = {{ limit = {{ $INST$ = {code} }} "
+                            f"{' '.join([attempt] * attempts)} }}")
+        self.assertEqual(flat(block(self.gen, "te_tax_gen_ai_levy_sunset")), " ".join(expected))
+
+    def test_luxury_goods_are_taxed_in_a_fixed_order_within_the_room(self):
+        definitions = gen.goods_definitions()
+        luxuries = [good for good in gen.consumption_catalog() if definitions[good].get("category") == "luxury"]
+        self.assertIn("luxury", gen.GOODS_CATEGORY_WEIGHT)
+        order = gen.ai_luxury_order()
+        self.assertEqual(sorted(order), sorted(luxuries))
+        self.assertEqual(list(order), sorted(luxuries, key=lambda g: (
+            -Decimal(definitions[g].get("obsession_chance") or "0"), Decimal(definitions[g].get("cost") or "0"), g)))
+        # Vanilla history's own taxed luxuries lead (V: common/history/countries).
+        self.assertEqual(set(order[:4]), {"liquor", "tobacco", "opium", "wine"})
+        expected = "set_local_variable = { name = te_tax_goods_room value = te_tax_ai_goods_room } " + " ".join(
+            f"if = {{ limit = {{ local_var:te_tax_goods_room > 0 te_tax_base_dr_g_{good} = 0 }} "
+            f"if = {{ limit = {{ te_tax_can_draft_good = {{ GOOD = {good} }} }} "
+            f"te_tax_cmd_draft_good = {{ GOOD = {good} }} "
+            f"change_local_variable = {{ name = te_tax_goods_room add = -1 }} }} }}" for good in order)
+        self.assertEqual(flat(block(self.gen, "te_tax_gen_ai_tax_luxury")), expected)
+
+    def test_the_generated_parts_call_commands_inside_their_own_triggers(self):
+        for name in INITIATIVE_GEN:
+            body = block(self.gen, name)
+            with self.subTest(name=name):
+                self.assertNotRegex(body, r"\b(is_ai|trigger_event|set_variable|change_variable|remove_variable)\b")
+                for setter in NATIVE_SETTERS:
+                    self.assertNotRegex(body, rf"\b{setter}\b")
+            for match in re.finditer(r"\bte_tax_cmd_(\w+) = (\{[^{}]*\}|yes)", body):
+                with self.subTest(name=name, call=match.group(0)):
+                    brace = enclosing_brace(body, match.start())
+                    self.assertRegex(body[:brace].rstrip(), r"(?<!\w)if =$")
+                    self.assertEqual(flat(limit_of(body[brace + 1:close(body, brace)])),
+                                     f"te_tax_can_{match.group(1)} = {flat(match.group(2))}")
+
+    # -- docs ------------------------------------------------------------------------
+
+    def test_schema_doc_has_the_initiative(self):
+        doc = read(SCHEMA_DOC, strip_comments=False)
+        section = doc.split("\n## AI legislation\n", 1)[1].split("\n## ", 1)[0]
+        initiative = section.split("\n### The initiative\n", 1)[1].split("\n### ", 1)[0]
+        for phrase in ("te_tax_ai_initiative_ready", "te_tax_ai_need_ended", "te_tax_ai_cost_<key>",
+                       "te_tax_ai_excluded_raise_<key>", "te_tax_ai_excluded_cut_<key>", "te_tax_gen_ai_pick_raise",
+                       "te_tax_gen_ai_pick_cut", "te_tax_gen_ai_step_inst", "te_tax_gen_ai_levy_sunset",
+                       "te_tax_gen_ai_tax_luxury", "te_tax_ai_introduce_and_judge", "te_tax_ai_reverse_since",
+                       "reason=draft", "Ruling 12", "te_tax_ai_noviable", "obsession_chance"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, initiative)
+        rows = [line for line in initiative.splitlines() if line.startswith("| ")]
+        for template in ("T1", "T2", "T3", "T5", "T6"):
+            with self.subTest(template=template):
+                self.assertTrue(any(row.startswith(f"| {template} ") for row in rows))
+        for name in TUNABLES:
+            with self.subTest(tunable=name):
+                self.assertIn(f"`{name}`", initiative)
+        for path in ("Normal raise", "Emergency", "Cut"):
+            with self.subTest(path=path):
+                self.assertTrue(any(row.startswith(f"| {path} ") for row in rows))
+
+    def test_ledger_has_the_pre_score_row(self):
+        rows = [line for line in read(LEDGER, strip_comments=False).splitlines()
+                if line.startswith("| ") and "| AI pre-score vs real support |" in line]
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0].split(" | ")[2], "static-only")
 
 
 class AiFileTest(unittest.TestCase):

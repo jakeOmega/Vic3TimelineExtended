@@ -15,7 +15,9 @@
 #   STEP      te_tax_ai_step, from te_tax.8 only, with ROOT = THIS = the
 #             country: held packages (te_tax_ai_manage_packages), promises at
 #             risk (te_tax_ai_manage_promises), then the open bill
-#             (te_tax_ai_manage_bill); Task 21 adds the initiative.
+#             (te_tax_ai_manage_bill) or, with none, a new one
+#             (te_tax_ai_initiative: one template bill, introduced and judged
+#             in the same execution).
 #   RESET     te_tax_ai_reset_bill_state, at the outbreak (on the rebels),
 #             the win repair and a release (te_tax_civil_war_effects.txt).
 #   LOGS      te_tax_ai_log_*, one summary line per AI action.
@@ -133,18 +135,30 @@ te_tax_ai_dispatch = {
 
 # The AI step, run only by te_tax.8 (te_tax_ai_can_act holds), with ROOT = THIS
 # = the country (spec §2.4): held packages, then a promise at risk, then the
-# bill under debate; Task 21 adds a new initiative when there is none.
+# bill under debate or, with none, a new one when the initiative is ready.
+# First, when the need has ended (te_tax_ai_need_ended), the episode's
+# "no viable bill" marker is cleared, so the next episode logs its line again;
+# here rather than in the initiative, so a need that ends during a cooldown
+# still ends the episode.
 te_tax_ai_step = {
 	if = {
 		limit = {
 			te_tax_code_on = yes
 			te_tax_ai_can_act = yes
 		}
+		if = {
+			limit = { te_tax_ai_need_ended = yes }
+			set_variable = { name = te_tax_ai_noviable value = 0 }
+		}
 		te_tax_ai_manage_packages = yes
 		te_tax_ai_manage_promises = yes
 		if = {
 			limit = { te_tax_bill_active = yes }
 			te_tax_ai_manage_bill = yes
+		}
+		else_if = {
+			limit = { te_tax_ai_initiative_ready = yes }
+			te_tax_ai_initiative = yes
 		}
 	}
 }
@@ -363,7 +377,8 @@ te_tax_ai_accept_offer = {
 # committed to force it but no override capacity or Authority; hopeless on
 # support; open te_tax_ai_bill_patience months; otherwise support, so a
 # caller outside the manager never logs patience for a bill just opened. The
-# initiative (Task 21) calls it for a bill that is hopeless on introduction.
+# initiative calls it for a bill that is hopeless on introduction
+# (te_tax_ai_introduce_and_judge).
 te_tax_ai_withdraw = {
 	if = {
 		limit = { te_tax_code_on = yes }
@@ -404,7 +419,9 @@ te_tax_ai_withdraw = {
 # the bill through the Withdraw command, starts the failure cooldown and logs
 # ai_withdrawn, and ai_no_viable once per episode: the marker is read before
 # the reset (which writes 0) and set after it, so only a pass or the need
-# ending (Task 21) starts a new episode.
+# ending (te_tax_ai_step) starts a new episode. The marker set with the
+# failure cooldown is what holds an emergency to that cooldown
+# (te_tax_ai_initiative_ready).
 
 # Withdrawal: legitimacy below the passage line.
 te_tax_ai_withdraw_legitimacy = {
@@ -497,6 +514,182 @@ te_tax_ai_withdraw_patience = {
 				te_tax_ai_log_no_viable_patience = yes
 			}
 			te_tax_ai_reset_bill_state = yes
+			set_variable = { name = te_tax_ai_noviable value = 1 }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Step 4, the initiative (plan 2026-10-03, Task 21; spec §2.4 step 4, §2.5, §2.6)
+# ----------------------------------------------------------------------------
+
+# A new bill, when the step finds none under debate and
+# te_tax_ai_initiative_ready holds: the first template that applies, T2 (an
+# emergency), T3 (a war levy), T6 (luxury goods), T1 (a raise) or T5 (a cut),
+# built in a fresh draft with the draft commands, then introduced and judged in
+# the same execution. Exactly one bill; none when no template applies. Not
+# gated on is_ai, like the managers: the step's te_tax_ai_can_act is, and the
+# console (Task 22) may run it on its own country.
+te_tax_ai_initiative = {
+	if = {
+		limit = {
+			te_tax_code_on = yes
+			te_tax_code_in_force = yes
+			NOT = { te_tax_bill_active = yes }
+		}
+		if = {
+			limit = { te_tax_ai_template_2_applies = yes }
+			te_tax_ai_open_draft = yes
+			te_tax_ai_build_t2 = yes
+			te_tax_ai_introduce_and_judge = { TPL = 2 }
+		}
+		else_if = {
+			limit = { te_tax_ai_template_3_applies = yes }
+			te_tax_ai_open_draft = yes
+			te_tax_ai_build_t3 = yes
+			te_tax_ai_introduce_and_judge = { TPL = 3 }
+		}
+		else_if = {
+			limit = { te_tax_ai_template_6_applies = yes }
+			te_tax_ai_open_draft = yes
+			te_tax_ai_build_t6 = yes
+			te_tax_ai_introduce_and_judge = { TPL = 6 }
+		}
+		else_if = {
+			limit = { te_tax_ai_template_1_applies = yes }
+			te_tax_ai_open_draft = yes
+			te_tax_ai_build_t1 = yes
+			te_tax_ai_introduce_and_judge = { TPL = 1 }
+		}
+		else_if = {
+			limit = { te_tax_ai_template_5_applies = yes }
+			te_tax_ai_open_draft = yes
+			te_tax_ai_build_t5 = yes
+			te_tax_ai_introduce_and_judge = { TPL = 5 }
+		}
+	}
+}
+
+# A fresh draft: a stale one (a player's, left when the country passed to the
+# AI) is discarded first, so the picks and exclusions read only the AI's own,
+# untouched draft (te_tax_dr_eff_<key>: existing law in its due month).
+te_tax_ai_open_draft = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		if = {
+			limit = { te_tax_can_draft_discard = yes }
+			te_tax_cmd_draft_discard = yes
+		}
+		if = {
+			limit = { te_tax_can_draft_new = yes }
+			te_tax_cmd_draft_new = yes
+		}
+	}
+}
+
+# The templates (spec §2.5). Each picks its instrument with the generated
+# pre-score (te_tax_gen_ai_pick_raise / _cut, into the locals te_tax_pick and
+# te_tax_pick2) and moves it through the generated per-instrument parts, every
+# command behind its own trigger. A pick of 0 (every instrument excluded)
+# leaves the draft untouched, and its introduction is refused.
+
+# T1, a raise: +1 index step on the cheapest instrument and +1 on the next
+# cheapest when there is one, due at the draft's default, now + 3.
+te_tax_ai_build_t1 = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		te_tax_gen_ai_pick_raise = yes
+		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
+		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick2 DIR = 1 }
+	}
+}
+
+# T2, the emergency bill: +2 on the cheapest instrument, a minor bill (15
+# days' debate), due a month before the default, now + 2.
+te_tax_ai_build_t2 = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		te_tax_gen_ai_pick_raise = yes
+		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
+		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
+		if = {
+			limit = { te_tax_can_draft_due = { DIR = 0 } }
+			te_tax_cmd_draft_due = { DIR = 0 }
+		}
+	}
+}
+
+# T3, a war levy: +2 on the cheapest instrument with a sunset of
+# te_tax_ai_levy_sunset months (24), so it reverts by itself.
+te_tax_ai_build_t3 = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		te_tax_gen_ai_pick_raise = yes
+		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
+		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 1 }
+		te_tax_gen_ai_levy_sunset = { INST = local_var:te_tax_pick }
+	}
+}
+
+# T5, a cut: -1 on the instrument with the largest clout-weighted grievance,
+# the highest pre-score.
+te_tax_ai_build_t5 = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		te_tax_gen_ai_pick_cut = yes
+		te_tax_gen_ai_step_inst = { INST = local_var:te_tax_pick DIR = 0 }
+	}
+}
+
+# T6, luxury goods: one or two untaxed luxuries, in the generator's order.
+te_tax_ai_build_t6 = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		te_tax_gen_ai_tax_luxury = yes
+	}
+}
+
+# Introduces the draft and judges the bill in the same execution (spec §2.6,
+# introduce and observe: the bill's own support refresh scores it). TPL: the
+# template's code. The draft is discarded either way: the bill holds its copy,
+# and an AI draft lives for one step.
+#   - Introduced: the template and the month are recorded (te_tax_ai_tpl,
+#     te_tax_ai_bill_month), ai_introduced is logged, and a bill hopeless
+#     already (te_tax_ai_bill_hopeless) is withdrawn at once with its reason
+#     (te_tax_ai_withdraw: failure cooldown, ai_withdrawn, ai_no_viable once
+#     per episode). Introduction and withdrawal cost nothing politically.
+#   - Refused (te_tax_can_introduce failed; e.g. every instrument excluded, or
+#     Traditionalism's rule): no bill to withdraw. The failure cooldown, so it
+#     is not retried every month, ai_withdrawn reason=draft for the attempt,
+#     and ai_no_viable reason=draft once per episode, with the same marker.
+te_tax_ai_introduce_and_judge = {
+	if = {
+		limit = { te_tax_code_on = yes }
+		if = {
+			limit = { te_tax_can_introduce = yes }
+			te_tax_cmd_introduce = yes
+		}
+		if = {
+			limit = { te_tax_can_draft_discard = yes }
+			te_tax_cmd_draft_discard = yes
+		}
+		if = {
+			limit = { te_tax_bill_active = yes }
+			set_variable = { name = te_tax_ai_tpl value = $TPL$ }
+			set_variable = { name = te_tax_ai_bill_month value = te_tax_ai_now }
+			te_tax_ai_log_introduced = yes
+			if = {
+				limit = { te_tax_ai_bill_hopeless = yes }
+				te_tax_ai_withdraw = yes
+			}
+		}
+		else = {
+			set_variable = { name = te_tax_ai_next_month value = te_tax_ai_cooldown_after_withdrawal }
+			te_tax_ai_log_withdrawn_draft = yes
+			if = {
+				limit = { var:te_tax_ai_noviable = 0 }
+				te_tax_ai_log_no_viable_draft = yes
+			}
 			set_variable = { name = te_tax_ai_noviable value = 1 }
 		}
 	}
@@ -607,7 +800,8 @@ te_tax_ai_log_withdrawn_patience = {
 	debug_log = "TE_TAX ai_withdrawn reason=patience tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 }
 
-# The AI withdrew its bill: draft.
+# The AI's draft was refused at introduction (te_tax_ai_introduce_and_judge):
+# no bill opened; the draft was discarded.
 te_tax_ai_log_withdrawn_draft = {
 	debug_log = "TE_TAX ai_withdrawn reason=draft tpl=[SCOPE.ScriptValue('te_tax_ai_view_tpl')|0] R=[SCOPE.ScriptValue('te_tax_ai_ratio')|2] D=[SCOPE.ScriptValue('te_tax_ai_debt')|2] G=[SCOPE.ScriptValue('te_tax_ai_reserves')|2] def=[SCOPE.ScriptValue('te_tax_ai_view_def_streak')|0] sur=[SCOPE.ScriptValue('te_tax_ai_view_sur_streak')|0]; month=[SCOPE.ScriptValue('te_history_month_index')|0] date=[TimeKeeper.GetCurrentDate.GetString] country=[THIS.GetCountry.GetNameNoFormatting]"
 }

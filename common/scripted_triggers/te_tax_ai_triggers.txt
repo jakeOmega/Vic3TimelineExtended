@@ -18,7 +18,8 @@ te_tax_ai_can_act = {
 	has_law = law_type:law_te_tax_code
 }
 
-# An emergency skips the streaks, the stagger and the cooldown: the country is
+# An emergency skips the streaks, the stagger and the cooldown after a pass
+# (not the one after a failure, te_tax_ai_initiative_ready): the country is
 # in default, its debt is at te_tax_ai_emergency_debt of its credit, or it is
 # borrowing with bankruptcy under te_tax_ai_emergency_weeks away (vanilla reads
 # weeks_until_bankruptcy only behind taking_loans, war_support_values.txt).
@@ -48,10 +49,12 @@ te_tax_ai_raise_need = {
 }
 
 # Revenue is ample (spec §2.3): a recorded surplus with R at or above the cut
-# ratio that applies.
+# ratio that applies, and no fiscal-balance promise in force, which counts as
+# a need for revenue until the surplus streak delivers it (Task 21).
 te_tax_ai_cut_need = {
 	te_tax_fisc_rec_surplus = yes
 	te_tax_ai_ratio >= te_tax_ai_cut_ratio_now
+	NOT = { te_tax_ai_kind4_in_force = yes }
 }
 
 # A fiscal-balance promise (kind 4) binds the country: bound to a passed bill,
@@ -382,4 +385,121 @@ te_tax_ai_force_blocked_by_authority = {
 			produced_authority > forced_law_through_event_authority_cost_medium
 		}
 	}
+}
+
+# ---------------------------------------------------------------------------
+# The initiative (plan 2026-10-03, Task 21; spec §2.4 step 4, §2.5). Country
+# scope, read by te_tax_ai_step when no bill is under debate.
+# ---------------------------------------------------------------------------
+
+# The AI may start a bill (spec §2.4 step 4): the code is in force, no bill is
+# under debate, and either an initiative is due on the country's cadence, its
+# cooldown is over and no package waits to commence, or an emergency holds.
+# An emergency skips the cadence, the streaks, the waiting package and the
+# cooldown after a pass, but not the cooldown after a failure (Ruling 12):
+# te_tax_ai_noviable is 1 exactly while te_tax_ai_next_month holds a failure
+# cooldown (every withdrawal and refused draft sets both; a pass's reset
+# clears the marker), so a hopeless emergency bill is tried once every
+# te_tax_ai_fail_cooldown_months, not every month.
+te_tax_ai_initiative_ready = {
+	te_tax_code_in_force = yes
+	NOT = { te_tax_bill_active = yes }
+	OR = {
+		AND = {
+			te_tax_ai_emergency = yes
+			OR = {
+				var:te_tax_ai_noviable = 0
+				te_tax_ai_cooldown_over = yes
+			}
+		}
+		AND = {
+			te_tax_ai_initiative_due = yes
+			te_tax_ai_cooldown_over = yes
+			NOT = { te_tax_ai_package_awaits = yes }
+		}
+	}
+}
+
+# The AI's cooldown is over: its month has come. The sentinel -1 has always
+# come.
+te_tax_ai_cooldown_over = {
+	var:te_tax_ai_next_month <= te_tax_ai_now
+}
+
+# A package waits to commence in slot a or b (state 1).
+te_tax_ai_package_awaits = {
+	OR = {
+		AND = {
+			has_variable = te_tax_pa_on
+			var:te_tax_pa_on = 1
+			var:te_tax_pa_state = 1
+		}
+		AND = {
+			has_variable = te_tax_pb_on
+			var:te_tax_pb_on = 1
+			var:te_tax_pb_state = 1
+		}
+	}
+}
+
+# The episode is over: neither a raise nor a cut is needed and no emergency
+# holds. The step then clears te_tax_ai_noviable, so the next "no viable bill"
+# line is written again. Never in an emergency, so an emergency's failure
+# cooldown keeps its marker (te_tax_ai_initiative_ready).
+te_tax_ai_need_ended = {
+	NOT = { te_tax_ai_raise_need = yes }
+	NOT = { te_tax_ai_cut_need = yes }
+	NOT = { te_tax_ai_emergency = yes }
+}
+
+# T1's need (spec §2.5): the raise need held over te_tax_ai_need_months
+# recorded deficits in a row (the hysteresis), or a fiscal-balance promise in
+# force, which keeps the AI raising revenue until the surplus streak delivers
+# it (spec §2.8) and waits for no deficit streak.
+te_tax_ai_raise_wanted = {
+	te_tax_ai_raise_need = yes
+	OR = {
+		var:te_tax_ai_def_streak >= te_tax_ai_need_months
+		te_tax_ai_kind4_in_force = yes
+	}
+}
+
+# T5's need (spec §2.5): the cut need held over te_tax_ai_surplus_months
+# recorded surpluses in a row, with the reserves full.
+te_tax_ai_cut_wanted = {
+	te_tax_ai_cut_need = yes
+	var:te_tax_ai_sur_streak >= te_tax_ai_surplus_months
+	te_tax_ai_reserves >= te_tax_ai_reserves_full
+}
+
+# The templates (spec §2.5), tried in the order T2, T3, T6, T1, T5
+# (te_tax_ai_initiative); the codes are te_tax_ai_tpl's.
+
+# T2, the emergency bill: an emergency.
+te_tax_ai_template_2_applies = {
+	te_tax_ai_emergency = yes
+}
+
+# T3, a war levy: at war, and T1's need holds.
+te_tax_ai_template_3_applies = {
+	is_at_war = yes
+	te_tax_ai_raise_wanted = yes
+}
+
+# T6, luxury goods: T1's need holds, the consumption rate is above 0 and
+# fewer than te_tax_ai_max_goods catalog goods are taxed.
+te_tax_ai_template_6_applies = {
+	te_tax_ai_raise_wanted = yes
+	var:te_tax_en_cons >= 1
+	te_tax_ai_taxed_goods < te_tax_ai_max_goods
+}
+
+# T1, a raise: T1's need holds.
+te_tax_ai_template_1_applies = {
+	te_tax_ai_raise_wanted = yes
+}
+
+# T5, a cut: T5's need holds.
+te_tax_ai_template_5_applies = {
+	te_tax_ai_cut_wanted = yes
 }

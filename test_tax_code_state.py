@@ -452,8 +452,12 @@ class GeneratedSyncTest(unittest.TestCase):
         # The AI's open bill (test_tax_code_ai.py, plan 2026-10-03 Task 20): the offer order and the
         # reverse-window marks.
         bill = {"te_tax_gen_ai_accept_offer", "te_tax_gen_ai_record_marks"}
+        # The AI's initiative (test_tax_code_ai.py, plan 2026-10-03 Task 21): the picks, a step or a
+        # sunset on the picked instrument, and the luxury goods.
+        initiative = {"te_tax_gen_ai_pick_raise", "te_tax_gen_ai_pick_cut", "te_tax_gen_ai_step_inst",
+                      "te_tax_gen_ai_levy_sunset", "te_tax_gen_ai_tax_luxury"}
         self.assertEqual(names, want | scheduler | migration | drift | copies | obligations | views | customs | promises
-                         | bill)
+                         | bill | initiative)
 
     def test_each_sync_adds_exactly_its_family_one_to_one(self):
         for key in KEYS:
@@ -520,7 +524,9 @@ class GeneratedSyncTest(unittest.TestCase):
                "te_tax_gen_draft_touches_customs", "te_tax_gen_bill_touches_customs",
                "te_tax_gen_package_touches_customs_a", "te_tax_gen_package_touches_customs_b",
                # Whether the bill changes an instrument from existing law (Task 15 fix round 1).
-               "te_tax_gen_bill_changes_instruments"},
+               "te_tax_gen_bill_changes_instruments"}
+            # The instruments the AI's initiative may not move (test_tax_code_ai.py, plan 2026-10-03 Task 21).
+            | {f"te_tax_ai_excluded_{direction}_{key}" for direction in ("raise", "cut") for key in KEYS},
         )
         for key in KEYS:
             family = amendment_family(key)

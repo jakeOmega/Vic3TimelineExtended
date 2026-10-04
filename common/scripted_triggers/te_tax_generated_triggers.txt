@@ -2204,3 +2204,124 @@ te_tax_gen_offer_feasible = {
 	trigger_else_if = { limit = { var:te_tax_off_$IG$_kind = 14 var:te_tax_off_$IG$_arg = 0 } te_tax_obl_feasible_4 = yes te_tax_can_obl_propose = { KIND = 4 ARG = 0 } }
 	trigger_else = { always = no }
 }
+
+# The AI's initiative (plan 2026-10-03 Task 21; spec §2.5): an instrument the AI's pick skips
+# (te_tax_gen_ai_pick_raise / _cut). For a raise: at its maximum, read as the step command
+# reads it (te_tax_dr_eff_<key>, existing law in the draft's due month, the enacted index
+# without a draft); under Traditionalism, wage and div (te_tax_draft_ready refuses
+# a draft that levies them); the consumption rate while no catalog good is taxed; or one the
+# AI cut in its reverse window (te_tax_ai_reverse_since, te_tax_ai_reverse_months back). For a
+# cut: at 0, or one the AI raised in the window.
+te_tax_ai_excluded_raise_wage = {
+	OR = {
+		te_tax_dr_eff_wage >= te_tax_max_wage
+		has_law = law_type:law_traditionalism
+		AND = {
+			has_variable = te_tax_ai_dir_wage
+			var:te_tax_ai_dir_wage = -1
+			has_variable = te_tax_ai_last_wage
+			var:te_tax_ai_last_wage >= te_tax_ai_reverse_since
+		}
+	}
+}
+te_tax_ai_excluded_cut_wage = {
+	OR = {
+		te_tax_dr_eff_wage <= 0
+		AND = {
+			has_variable = te_tax_ai_dir_wage
+			var:te_tax_ai_dir_wage = 1
+			has_variable = te_tax_ai_last_wage
+			var:te_tax_ai_last_wage >= te_tax_ai_reverse_since
+		}
+	}
+}
+te_tax_ai_excluded_raise_div = {
+	OR = {
+		te_tax_dr_eff_div >= te_tax_max_div
+		has_law = law_type:law_traditionalism
+		AND = {
+			has_variable = te_tax_ai_dir_div
+			var:te_tax_ai_dir_div = -1
+			has_variable = te_tax_ai_last_div
+			var:te_tax_ai_last_div >= te_tax_ai_reverse_since
+		}
+	}
+}
+te_tax_ai_excluded_cut_div = {
+	OR = {
+		te_tax_dr_eff_div <= 0
+		AND = {
+			has_variable = te_tax_ai_dir_div
+			var:te_tax_ai_dir_div = 1
+			has_variable = te_tax_ai_last_div
+			var:te_tax_ai_last_div >= te_tax_ai_reverse_since
+		}
+	}
+}
+te_tax_ai_excluded_raise_land = {
+	OR = {
+		te_tax_dr_eff_land >= te_tax_max_land
+		AND = {
+			has_variable = te_tax_ai_dir_land
+			var:te_tax_ai_dir_land = -1
+			has_variable = te_tax_ai_last_land
+			var:te_tax_ai_last_land >= te_tax_ai_reverse_since
+		}
+	}
+}
+te_tax_ai_excluded_cut_land = {
+	OR = {
+		te_tax_dr_eff_land <= 0
+		AND = {
+			has_variable = te_tax_ai_dir_land
+			var:te_tax_ai_dir_land = 1
+			has_variable = te_tax_ai_last_land
+			var:te_tax_ai_last_land >= te_tax_ai_reverse_since
+		}
+	}
+}
+te_tax_ai_excluded_raise_head = {
+	OR = {
+		te_tax_dr_eff_head >= te_tax_max_head
+		AND = {
+			has_variable = te_tax_ai_dir_head
+			var:te_tax_ai_dir_head = -1
+			has_variable = te_tax_ai_last_head
+			var:te_tax_ai_last_head >= te_tax_ai_reverse_since
+		}
+	}
+}
+te_tax_ai_excluded_cut_head = {
+	OR = {
+		te_tax_dr_eff_head <= 0
+		AND = {
+			has_variable = te_tax_ai_dir_head
+			var:te_tax_ai_dir_head = 1
+			has_variable = te_tax_ai_last_head
+			var:te_tax_ai_last_head >= te_tax_ai_reverse_since
+		}
+	}
+}
+te_tax_ai_excluded_raise_cons = {
+	OR = {
+		te_tax_dr_eff_cons >= te_tax_max_cons
+		te_tax_ai_taxed_goods <= 0
+		AND = {
+			has_variable = te_tax_ai_dir_cons
+			var:te_tax_ai_dir_cons = -1
+			has_variable = te_tax_ai_last_cons
+			var:te_tax_ai_last_cons >= te_tax_ai_reverse_since
+		}
+	}
+}
+te_tax_ai_excluded_cut_cons = {
+	OR = {
+		te_tax_dr_eff_cons <= 0
+		AND = {
+			has_variable = te_tax_ai_dir_cons
+			var:te_tax_ai_dir_cons = 1
+			has_variable = te_tax_ai_last_cons
+			var:te_tax_ai_last_cons >= te_tax_ai_reverse_since
+		}
+	}
+}
