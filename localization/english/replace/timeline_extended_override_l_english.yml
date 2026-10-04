@@ -125,3 +125,5 @@
  law_local_police_desc:0 "Towns and counties raise their own constables and watchmen, paid from local rates and overseen by magistrates and local notables. The force is public, but local elites decide what it does."
  law_dedicated_police_desc:0 "A national police force of career officers with standardized training and a professional chain of command, paid from the national budget and answerable to the government."
  law_militarized_police_desc:0 "A national police organized along military lines, with military ranks, equipment and training. It answers to the government as an instrument of its will, which it carries out more effectively and more violently."
+ state_building_construction_sector_max_level_add:0 "[concept_urban_engineering]"
+ state_building_construction_sector_max_level_add_desc:0 "Each point lets a [concept_state] house #v 1,000#! more people before [concept_migration_crowding] cuts its [concept_migration_pull], however little [concept_arable_land] it has. The state's $state_migration_crowding_density_mult$ multiplies these people as it does its land."

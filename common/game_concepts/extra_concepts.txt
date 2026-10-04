@@ -127,6 +127,9 @@ concept_te_construction_market = {
 concept_migration_crowding = {
 	texture = "gfx/interface/icons/generic_icons/population.dds"
 }
+concept_urban_engineering = {
+	texture = "gfx/interface/icons/building_icons/urban_center.dds"
+}
 concept_homeland_dynamics = {
 	texture = "gfx/interface/icons/state_status_icons/state_homelands.dds"
 }

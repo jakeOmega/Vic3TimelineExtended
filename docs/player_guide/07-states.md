@@ -30,9 +30,18 @@ explanation, and its tooltip breaks the numbers down.
 
 Every state has a crowding threshold of 10,000 people for each unit of its
 geographic arable land, the land the state starts with before technologies add
-to it. Once the population passes the threshold, the state carries a Population
-Pressure modifier that cuts its migration pull. The modifier is recalculated
-once a year.
+to it, plus 1,000 people for each point of Urban Engineering. Once the
+population passes the threshold, the state carries a Population Pressure
+modifier that cuts its migration pull. The modifier is recalculated once a
+year.
+
+Urban Engineering takes the place of the base game's Construction Sector Max
+Level, which the mod's construction has no use for, on the same technologies:
+Urbanization gives 10 points, and Urban Planning, Modern Sewerage, Steel-Frame
+Buildings and Elevators 5 each. With all five, every state houses 30,000 more
+people before crowding. That barely moves a large farming province, but it
+doubles the threshold of a state with three units of arable land, so a small
+state can still hold a large city.
 
 The penalty starts gently and then climbs fast. Up to ten times the threshold it
 grows with the square of the excess; beyond that it adds 10 percentage points
@@ -49,9 +58,11 @@ for each further multiple.
 
 ### Raising crowding tolerance
 
-The Migration Crowding Tolerance modifier multiplies the threshold: +50%
-tolerance lets a state hold half as many people again before the penalty starts.
-The tile's tooltip lists every source, under Urban Capacity.
+The Migration Crowding Tolerance modifier multiplies the threshold, Urban
+Engineering's share included: +50% tolerance lets a state hold half as many
+people again before the penalty starts. The tile's tooltip breaks the threshold
+into arable land, Urban Engineering and tolerance; hover each figure for its
+sources.
 
 | Source | Tolerance |
 |---|---|

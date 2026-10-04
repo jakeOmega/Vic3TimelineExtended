@@ -317,7 +317,8 @@ The sweep is a fallback only for a swap the hook missed. If the hook fired and t
 - **Modifier:** `migration_crowding` — `state_migration_pull_mult = -0.1` (base, scaled by multiplier).
 - **Script values:** `common/script_values/extra_script_values.txt` — search for `MIGRATION CROWDING`.
 - **On action:** `migration_crowding_on_action`, wired to `on_yearly_pulse_state`.
-- **Density-based:** Uses `state_population / arable_land_base` as a proxy.
+- **Density-based:** Uses `state_population / migration_crowding_effective_land` as a proxy. The effective land is `arable_land_base` (min 1) plus Urban Engineering's land equivalent.
+- **Urban Engineering:** vanilla's `state_building_construction_sector_max_level_add`, relocalized (`replace/timeline_extended_override_l_english.yml`, `concept_urban_engineering`). The mod's `REPLACE:building_construction_sector` drops `has_max_level`, so the modifier is free; vanilla grants it from `urbanization` (+10), `urban_planning`, `modern_sewerage`, `steel_frame_buildings` and `elevator` (+5 each). Each point adds `migration_crowding_urban_engineering_pop` (1,000) people to the threshold before tolerance: `migration_crowding_effective_land` adds points × 1,000 / the floor density as arable land, so threshold = (10,000 × arable + 1,000 × points) × (1 + tolerance), and the 10x knee moves with it. It does not touch the resettlement frontier densities (`resettlement_crowding_scale`), which are per km² over the region.
 - **Density modifier:** `state_migration_crowding_density_mult` — custom modifier that divides effective density (density / (1 + mult)). Applied by `institution_ministry_of_urban_planning` (+10% per level) and five technologies: `modern_skyscrapers` (+15%), `modern_urban_planning` (+20%), `advanced_structural_engineering` (+20%), `autonomous_vehicles` (+15%), `post-scarcity_economy` (+15%).
 - **Scaling:** Quadratic up to the 10x density knee, then linear beyond it. `migration_crowding_ratio` is 0 at the floor, 1.0 at the 10x knee, and can exceed 1.0 in the linear tail. `migration_crowding_mult` uses `4.5 * r^2` below the knee and `9 * r - 4.5` above it, giving a 45% pull penalty at 10x density and 145% at 20x density.
 - **Tuning:** `migration_crowding_density_reference` (10000), `migration_crowding_floor_ratio` (1x), `migration_crowding_ceiling_ratio` (10x knee).
@@ -342,7 +343,7 @@ Custom `state_panel_status_item_small` tiles added to `gui/states_panel.gui` for
 |---|---|---|---|---|
 | **Homeland Dynamics** | `state_homelands.dds` | `concept_homeland_dynamics` | Creation / removal sections, each shown only when it applies: per-culture progress bars and live status; one pause line, or one line when nothing here can change | Effective thresholds, annual progress, speed modifiers, pause/reset rules and what enables homeland changes (also the hover on the unlock pause line) |
 | **Arable Land** | `wheat_farm.dds` | `concept_arable_land` | Total, regional additions, multiplier % | Geographic base, `GetValueWithBreakdownFor('state_arable_land_mult')` |
-| **Migration Crowding** | `population.dds` | `concept_migration_crowding` | Population, threshold, ratio (+ a bar to the 10x knee), pull penalty | Curve explanation, urban capacity breakdown |
+| **Migration Crowding** | `population.dds` | `concept_migration_crowding` | Population, threshold, ratio (+ a bar to the 10x knee), pull penalty | Threshold breakdown (arable land, Urban Engineering, tolerance), curve explanation |
 | **Solar Collector** | `space_elevator.dds` | `concept_solar_collector_array` | Available, generated | Active / reserved / queued |
 | **Antimatter Facility** | `power_plant.dds` | `concept_antimatter_facility` | Available, generated | Active / reserved / queued |
 

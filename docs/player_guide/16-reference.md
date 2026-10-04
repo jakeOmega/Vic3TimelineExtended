@@ -106,4 +106,5 @@ Terms the mod introduces, or uses in its own sense.
 | Tradecraft | Your intelligence agency's experience, from 0 to 100, which unlocks higher priorities and harder operations. | [Cultural hegemony and covert warfare](10-influence.md#tradecraft) |
 | UN Authority | How seriously the world takes the UN, from 0 to 100. It sets the tier and the strength of every resolution. | [The United Nations](09-united-nations.md#un-authority) |
 | UN enforcement | The multiplier the UN's tier puts on every penalty the Assembly imposes and on every convention's effects, from ×0 at Moribund to ×2.5 at Supranational. | [The United Nations](09-united-nations.md#un-authority-tiers) |
+| Urban Engineering | Points from five early urban technologies. Each adds 1,000 people to every state's crowding threshold, before Migration Crowding Tolerance multiplies it. | [States and population](07-states.md#migration-crowding) |
 | Weight in world affairs | A country's share of world prestige against a typical great power's 10% (×1), up to ×5. What its acts add to UN Authority's ledgers is multiplied by it. | [The United Nations](09-united-nations.md#un-authority) |

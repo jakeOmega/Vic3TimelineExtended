@@ -1266,7 +1266,7 @@
  state_infrastructure_from_transportation_consumption_add:0 "[concept_infrastructure] from [concept_pop] [GetGoods('transportation').GetName] Consumption"
  state_infrastructure_from_transportation_consumption_add_desc:0 "The amount of [concept_state] [concept_infrastructure] added for each unit of [GetGoods('transportation').GetName] consumed by the [Concept('concept_pop', '$concept_pops$')] that live there"
  state_migration_crowding_density_mult:0 "[concept_migration_crowding] Tolerance"
- state_migration_crowding_density_mult_desc:0 "Increases the population density a state can sustain before [concept_migration_crowding] reduces [concept_migration_pull]. Improved by urban planning, [concept_infrastructure], and modern transportation."
+ state_migration_crowding_density_mult_desc:0 "Multiplies the population a state can hold before [concept_migration_crowding] reduces [concept_migration_pull]: both the share its [concept_arable_land] allows and the share its [concept_urban_engineering] adds. Improved by urban planning, [concept_infrastructure], and modern transportation."
  state_min_cultural_acceptance_delta_add:0 "Minimum Local Acceptance"
  state_min_cultural_acceptance_delta_add_desc:0 "A change in the minimum local cultural acceptance that can be applied in a [concept_state]."
  state_monthly_loyalists_add:0 "Monthly [Concept('concept_loyalist','$concept_loyalists$')]"
