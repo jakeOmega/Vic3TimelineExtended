@@ -961,7 +961,7 @@ global_warming_events_on_action = {
 		# this on_action is the one global-scope monthly pulse, so each runs
 		# exactly once for the whole world rather than once per country.
 		# gw_refresh_global_counts_effect is a single country sweep that fills
-		# all eight adoption counters; gw_rebase_annual_emissions_effect is O(1)
+		# all nine adoption counters; gw_rebase_annual_emissions_effect is O(1)
 		# and only does work in January. Neither has a gameplay effect.
 		# Everything climate-specific in this pulse is gated on the rule: with it
 		# disabled there are no greenhouse figures to show and no threshold events.

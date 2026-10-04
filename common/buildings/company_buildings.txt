@@ -3644,6 +3644,7 @@ building_generic_power_hub = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_generic_power_hub
+		pmg_carbon_capture_generic_power_hub
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -4059,6 +4060,7 @@ building_carnegie_homestead_mill = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_carnegie_homestead_mill
+		pmg_carbon_capture_carnegie_homestead_mill
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -4234,6 +4236,7 @@ building_schneider_le_creusot = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_schneider_le_creusot
+		pmg_carbon_capture_schneider_le_creusot
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -4405,6 +4408,7 @@ building_tata_jamshedpur_works = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_tata_jamshedpur_works
+		pmg_carbon_capture_tata_jamshedpur_works
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -5054,6 +5058,7 @@ building_generic_foundry_complex = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_generic_foundry_complex
+		pmg_carbon_capture_generic_foundry_complex
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -5879,6 +5884,7 @@ building_generic_mineral_refinery = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_generic_mineral_refinery
+		pmg_carbon_capture_generic_mineral_refinery
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -6346,6 +6352,7 @@ building_altos_hornos_baracaldo_furnaces = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_altos_hornos_baracaldo_furnaces
+		pmg_carbon_capture_altos_hornos_baracaldo_furnaces
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -6906,6 +6913,7 @@ building_basf_ludwigshafen_plant = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_basf_ludwigshafen_plant
+		pmg_carbon_capture_basf_ludwigshafen_plant
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -7074,6 +7082,7 @@ building_bolckow_eston_ironworks = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_bolckow_eston_ironworks
+		pmg_carbon_capture_bolckow_eston_ironworks
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -7298,6 +7307,7 @@ building_calcutta_electric_victoria_house = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_calcutta_electric_victoria_house
+		pmg_carbon_capture_calcutta_electric_victoria_house
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -7578,6 +7588,7 @@ building_chr_hansen_copenhagen_laboratory = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_chr_hansen_copenhagen_laboratory
+		pmg_carbon_capture_chr_hansen_copenhagen_laboratory
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -8082,6 +8093,7 @@ building_duro_la_felguera_steelworks = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_duro_la_felguera_steelworks
+		pmg_carbon_capture_duro_la_felguera_steelworks
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -8138,6 +8150,7 @@ building_eea_dock_sud_power_station = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_eea_dock_sud_power_station
+		pmg_carbon_capture_eea_dock_sud_power_station
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -8306,6 +8319,7 @@ building_electricidad_caracas_power_house = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_electricidad_caracas_power_house
+		pmg_carbon_capture_electricidad_caracas_power_house
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -8922,6 +8936,7 @@ building_fundicao_ipanema_sorocaba_foundry = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_fundicao_ipanema_sorocaba_foundry
+		pmg_carbon_capture_fundicao_ipanema_sorocaba_foundry
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -8978,6 +8993,7 @@ building_fundidora_monterrey_blast_furnace = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_fundidora_monterrey_blast_furnace
+		pmg_carbon_capture_fundidora_monterrey_blast_furnace
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -9482,6 +9498,7 @@ building_hanseong_jeongi_gwanghwamun_station = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_hanseong_jeongi_gwanghwamun_station
+		pmg_carbon_capture_hanseong_jeongi_gwanghwamun_station
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -9706,6 +9723,7 @@ building_ilva_bagnoli_steelworks = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_ilva_bagnoli_steelworks
+		pmg_carbon_capture_ilva_bagnoli_steelworks
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -9930,6 +9948,7 @@ building_ingolstadt_power_station = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_ingolstadt_power_station
+		pmg_carbon_capture_ingolstadt_power_station
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -10378,6 +10397,7 @@ building_cockerill_seraing_works = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_cockerill_seraing_works
+		pmg_carbon_capture_cockerill_seraing_works
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -10490,6 +10510,7 @@ building_hughes_yuzovka_steelworks = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_hughes_yuzovka_steelworks
+		pmg_carbon_capture_hughes_yuzovka_steelworks
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -11106,6 +11127,7 @@ building_lilpop_warsaw_metalworks = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_lilpop_warsaw_metalworks
+		pmg_carbon_capture_lilpop_warsaw_metalworks
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -12282,6 +12304,7 @@ building_norsk_hydro_rjukan_plant = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_norsk_hydro_rjukan_plant
+		pmg_carbon_capture_norsk_hydro_rjukan_plant
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -12338,6 +12361,7 @@ building_alpine_donawitz_steelworks = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_alpine_donawitz_steelworks
+		pmg_carbon_capture_alpine_donawitz_steelworks
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -14746,6 +14770,7 @@ building_uniao_fabril_barreiro_plant = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_uniao_fabril_barreiro_plant
+		pmg_carbon_capture_uniao_fabril_barreiro_plant
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -15194,6 +15219,7 @@ building_sandford_newcastle_natal_ironworks = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_sandford_newcastle_natal_ironworks
+		pmg_carbon_capture_sandford_newcastle_natal_ironworks
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -15250,6 +15276,7 @@ building_witkowitzer_ostrava_ironworks = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_witkowitzer_ostrava_ironworks
+		pmg_carbon_capture_witkowitzer_ostrava_ironworks
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -16327,6 +16354,7 @@ building_thyssen_steelworks = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_thyssen_steelworks
+		pmg_carbon_capture_thyssen_steelworks
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -16663,6 +16691,7 @@ building_sumitomo_besshi_mine = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_sumitomo_besshi_mine
+		pmg_carbon_capture_sumitomo_besshi_mine
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -16724,6 +16753,7 @@ building_yasuda_atosanupuri_mine = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_yasuda_atosanupuri_mine
+		pmg_carbon_capture_yasuda_atosanupuri_mine
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -16780,6 +16810,7 @@ building_tokyo_electric_asakusa_station = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_tokyo_electric_asakusa_station
+		pmg_carbon_capture_tokyo_electric_asakusa_station
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -16948,6 +16979,7 @@ building_bhp_broken_hill_mine = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_bhp_broken_hill_mine
+		pmg_carbon_capture_bhp_broken_hill_mine
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -17116,6 +17148,7 @@ building_siam_electric_wat_liab_station = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_siam_electric_wat_liab_station
+		pmg_carbon_capture_siam_electric_wat_liab_station
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -17228,6 +17261,7 @@ building_van_vlissingen_oostenburg_works = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_van_vlissingen_oostenburg_works
+		pmg_carbon_capture_van_vlissingen_oostenburg_works
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -17284,6 +17318,7 @@ building_mfo_oerlikon_works = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_mfo_oerlikon_works
+		pmg_carbon_capture_mfo_oerlikon_works
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self
@@ -17340,6 +17375,7 @@ building_markwald_bangkok_rice_mill = {
 	ai_nationalization_desire = 0
 	production_method_groups = {
 		pmg_markwald_bangkok_rice_mill
+		pmg_carbon_capture_markwald_bangkok_rice_mill
 	}
 	required_construction = construction_cost_mega_high
 	ownership_type = self

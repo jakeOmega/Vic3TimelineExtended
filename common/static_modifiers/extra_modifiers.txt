@@ -1318,6 +1318,7 @@ carbon_tax_modifier = {
 }
 
 renewable_investment_modifier = {
+	country_household_greenhouse_gas_emissions_mult = -0.25 # Household heating transition
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_building_renewable_energy_plant_require_subsidies_bool = yes      # forces renewable plants to require subsidies, representing government support and market distortion
 	building_renewable_energy_plant_throughput_add = 0.10                     # direct boost to clean energy output
@@ -1342,6 +1343,13 @@ emission_standards_modifier = {
 }
 
 # Indirect-effect policies (available to all countries)
+carbon_removal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_building_synthetics_plant_coal_require_subsidies_bool = yes
+	building_synthetics_plant_coal_throughput_add = 0.05
+	country_authority_cost_add = 100
+}
+
 reforestation_subsidies_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	building_group_bg_agriculture_throughput_add = 0.05
@@ -1362,6 +1370,7 @@ public_transit_modifier = {
 }
 
 fossil_fuel_divestment_modifier = {
+	country_household_greenhouse_gas_emissions_mult = -0.15 # Household heating transition
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	building_group_bg_oil_extraction_tax_mult = 0.25
 	goods_input_coal_mult = -0.05
@@ -1370,6 +1379,7 @@ fossil_fuel_divestment_modifier = {
 }
 
 green_building_codes_modifier = {
+	country_household_greenhouse_gas_emissions_mult = -0.60 # Household heating transition
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	goods_input_construction_mult = 0.05
 	goods_input_electricity_mult = -0.025

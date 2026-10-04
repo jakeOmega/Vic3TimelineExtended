@@ -53,6 +53,7 @@ One drawn thermometer on a drawn disc with a gold rim, one per `gw_disp_tier_cod
 | Emission Standards | a red-brick smokestack with a round gauge on its side, the needle in the green | `policy_emission_standards.dds` |
 | Climate Adaptation | a grey stone sea wall with a deep blue wave breaking against it | `policy_climate_adaptation.dds` |
 | Reforestation Subsidies | a young sapling planted in a mound of earth | `policy_reforestation.dds` |
+| Carbon Removal Support | shares Renewable Investment's clean-industry artwork | `policy_renewable_investment.dds` |
 | Public Transit | a green electric tram, front view, its pantograph on top | `policy_public_transit.dds` |
 | Fossil-Fuel Divestment | a black oil barrel, a gold coin flying up and away from it (the list's red arrow was left out) | `policy_fossil_fuel_divestment.dds` |
 | Green Building Codes | a small red-brick building front with a bright green leaf on its wall | `policy_green_building_codes.dds` |

@@ -5757,6 +5757,36 @@ class ModStateHandler(BaseHTTPRequestHandler):
         return {
             "auto_generated": [
                 {
+                    "pattern": "common/production_methods/carbon_capture_generated_pms.txt",
+                    "owner": "gen_carbon_capture_pms.py",
+                    "input": "merged building/PM graph + capture tiers, costs and exclusions",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "common/production_method_groups/carbon_capture_generated_groups.txt",
+                    "owner": "gen_carbon_capture_pms.py",
+                    "input": "merged building/PM graph + capture tiers, costs and exclusions",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "common/buildings/carbon_capture_generated_injects.txt",
+                    "owner": "gen_carbon_capture_pms.py",
+                    "input": "merged building/PM graph + capture tiers, costs and exclusions",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "common/production_methods/greenhouse_gas_generated_injects.txt",
+                    "owner": "gen_carbon_capture_pms.py",
+                    "input": "merged PM coal/oil inputs + shared greenhouse-gas factors",
+                    "header_marker": True,
+                },
+                {
+                    "pattern": "common/script_values/household_emissions_generated_values.txt",
+                    "owner": "gen_carbon_capture_pms.py",
+                    "input": "merged buy packages, heating weights/caps, pop types, coal/oil prices",
+                    "header_marker": True,
+                },
+                {
                     "pattern": "common/ideologies/modified.txt",
                     "owner": "apply_ideologies.py",
                     "input": "ideology_modifications.py",
@@ -8435,6 +8465,7 @@ POST_LOAD_REGENERATORS = [
     ("resources",                     "resources"),
     ("gen_pb_principle_unlock_descs", "gen_pb_principle_unlock_descs"),
     ("gen_un_button_descs",           "gen_un_button_descs"),
+    ("gen_carbon_capture_pms",        "gen_carbon_capture_pms"),
     ("gen_law_consistency",           "gen_law_consistency"),
     ("gen_company_building_cleanup",  "scripts.generators.gen_company_building_cleanup"),
     ("organize_loc",                  "organize_loc"),

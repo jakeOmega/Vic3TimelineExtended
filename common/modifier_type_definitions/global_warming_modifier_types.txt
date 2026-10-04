@@ -33,6 +33,15 @@ country_institution_impact_institution_ministry_of_the_environment_mult = {
 }
 
 # ----- Global Warming -----
+building_greenhouse_gas_emissions_add = {
+	color = bad
+	percent = no
+	decimals = 2
+	game_data = {
+		ai_value = 0
+	}
+}
+
 country_greenhouse_gas_emissions_mult = {
 	color = bad
 	percent = yes
@@ -72,6 +81,14 @@ country_building_renewable_energy_plant_require_subsidies_bool = {
 	}
 }
 
+country_building_synthetics_plant_coal_require_subsidies_bool = {
+	color = bad
+	boolean = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
 # Vanilla 1.13.9 deregistered these three per-condition harvest modifier types
 # (the hailstorm/torrential_rains harvest conditions themselves still exist).
 # The mod's global-warming static modifiers use them, so re-register with the
@@ -101,4 +118,27 @@ state_harvest_condition_hailstorm_impact_mult = {
 	game_data = {
 		ai_value = 0
 	}
+}
+
+# Net industrial emissions (fuel minus source capture and synthetic credits), in building display units.
+state_greenhouse_gas_emissions_add = {
+	color = bad
+	percent = no
+	decimals = 2
+	script_only = yes
+}
+
+# Atmospheric offsets are kept separate so policy cuts do not weaken removal.
+state_atmospheric_carbon_capture_add = {
+	color = good
+	percent = no
+	decimals = 2
+	script_only = yes
+}
+
+country_household_greenhouse_gas_emissions_mult = {
+	color = bad
+	percent = yes
+	decimals = 0
+	game_data = { ai_value = 0 }
 }

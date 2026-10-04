@@ -6,30 +6,109 @@ anomaly drives penalties that every country shares. The Global Warming journal
 entry tracks it and holds the climate policies you can adopt. The Global Warming
 game rule (on by default) controls all of this; with it off, the world never
 warms. State pollution, the Environmental Movement and the pollution scandal
-event work under either setting.
+event work under either setting. Building emissions tooltips and the phaseout
+mandate also remain active with the rule off; capture still costs goods.
 
 ## How emissions become warming
 
-Emissions belong to a market, not a country. Each year a market emits in
-proportion to the coal and oil consumed anywhere in it, cut by the emission
-reductions of its market leader and reduced by the carbon captured by Synthetic
-Fuel Works and Carbon Conversion Works in the market. (The mod renames the base
-game's coal good Energy and Carbon Minerals; this chapter calls it coal for
-short.) The year's emissions of every market are added to the world's cumulative
-total, and the temperature anomaly is that total divided by 10,000: a market
-that emits 1,000 a year warms the world by 0.1 °C a year.
+Emissions belong to a market, not a country. Buildings contribute the greenhouse
+gases shown by their production methods, with source capture and synthetic-fuel credits subtracted. The
+market leader's reductions cut the remaining industrial emissions. Households
+add a heating footprint estimated from population and average wealth. Direct Air Capture at Carbon Conversion Works then subtracts atmospheric
+removal. Each building's location determines its market, including foreign-owned
+sites. The year's net emissions add to the world's cumulative total and set
+warming.
+
+Exporting synthetic fuels can make the producing market's figure negative:
+the fuel's production credit counts there, while burning it counts in the
+importing market. Carbon Captured measures atmospheric removal by Direct Air
+Capture; synthetic-fuel production does not add to that row.
+
+In the dashboard's units, a market that emits one million a year warms the
+world by 0.1 °C a year. Figures use K for thousands and M for millions. A unit of
+oil produces 13% less warming than a unit of coal. The mod calls coal Energy
+and Carbon Minerals; this chapter calls it coal for short.
+
+Buildings that use coal or oil show Greenhouse Gas Emissions. Fuel methods add
+to the figure; capture methods subtract from it. Process fuel and automation
+both contribute. The figure grows with staffing and throughput and feeds the
+climate calculation. The market leader's industrial policy cut applies afterward.
+
+Household heating demand follows the buy packages at your states' average
+wealth, with fossil heating weighted by the coal, oil, wood, fabric and
+electricity available in the market. Peasants contribute only 5% of the
+purchased heating estimate. Green Building Codes cuts the estimated household fossil footprint by
+60%, Renewable Investment by 25%, and Fossil-Fuel Divestment by 15%. These cuts
+add together: all three eliminate household fossil-heating emissions. National
+policies affect your own households; Renewable Investment covers every market
+member. Industrial emissions still depend on production methods and capture.
+
+Fuel-input discounts reduce goods costs; the custom emissions figure follows
+the recipe and its staffing and throughput. Public Transit's oil discount has
+an economic effect, while Fossil-Fuel Divestment also reduces household
+emissions. The Environmental Sustainability principle's explicit emissions
+reduction counts toward warming; its coal and oil input discounts reduce costs.
+Standalone military-unit and ship fuel is outside this building-based figure.
+
+Electric Arc Process, Aluminum Substitution and Chromium Substitution in Steel
+Mills use 10 coal per level. Electric Arc Process also uses 50 electricity;
+the two substitution methods use 170 electricity. Their lower coal use cuts
+emissions, while electricity from fossil plants adds emissions elsewhere in
+the market.
 
 Warming does not wear off. The anomaly falls only in a year when the world as a
 whole captures more carbon than it emits. Cutting your emissions slows the rise;
 it does not undo what is already there.
 
-Only the market leader's reductions count, and they apply to the whole market.
+Industrial policy reductions come from the market leader and apply to every
+member's remaining industrial emissions.
 The leader's Greenhouse Gas Emissions modifier comes mainly from the three
 market-wide climate policies, the Ministry of the Environment (−5% per level)
 and the Environmental Sustainability power bloc principle (−5% to −25% by tier).
-A member's own ministry does nothing for the market's emissions. The cuts add
-together, but however far they go they only bring a market's emissions down to
-zero; only carbon capture takes a market below it.
+A member's own ministry does nothing for the market's emissions. The industrial cuts add together and stop at complete elimination. Atmospheric
+removal retains its full credit and can take the market below zero.
+
+Carbon Conversion Works unlock with Carbon Capture and Storage in era 10,
+after Clean Energy Technologies. Their Direct Air Capture method removes CO₂
+from the atmosphere without producing goods to sell. At full staffing and base
+throughput, each level removes 42 a year in the dashboard's units and uses
+1,200 electricity, plus engines, steel, chemicals and electronic components.
+Removal and synthetic-fuel credits follow staffing and throughput. Subsidize the works to keep them
+staffed; a fossil-powered grid adds emissions from the electricity they use.
+Genetic Engineering in era 11 unlocks their Synthetic Coal alternative, which
+produces fuel while capturing carbon.
+
+## Capturing carbon at the source
+
+Stationary coal and oil consumers have Carbon Capture controls, including
+industrial plants, mine pumps, steam-powered automation and eligible company
+sites. Each fuel-consuming production group has its own control. A Steel Mill
+can capture its furnace emissions and its automation emissions independently.
+Only the variants matching the group's current fuel use appear.
+
+| Method | Needs | Captures |
+|---|---|---|
+| Partial Carbon Capture | Clean Energy Technologies, era 9 | 25% |
+| Carbon Capture and Storage | Carbon Capture and Storage, era 10 | 50% |
+| Advanced Carbon Capture | Modern Material Science, era 11 | 75% |
+
+Capture uses engines and steel, plus chemicals for most sources. Power plants
+lose electricity output to run capture equipment; other buildings buy
+additional electricity. Costs follow the fuel used by that production group.
+The tooltips show the reduction and goods cost. Capturing a fossil power
+plant's emissions can make it unprofitable, so subsidies may be needed.
+
+Switching fuel can reset your capture choice. Under Managed Fossil Phaseout,
+eligible sources must use at least the middle tier. Without that law, select
+the tier yourself; the AI generally prefers the cheaper option without capture.
+A method with no eligible fuel use has Capture Not Applicable and stays valid
+under the mandate.
+
+Transport exhaust, dispersed agricultural and logging machinery, mobile mine
+excavators and street lighting have no source capture. Oil used as plastics,
+textile and other chemical feedstock, refinery inventory, and synthetic-fuel
+carbon already credited elsewhere are also exempt. These consumers still show
+emissions and contribute to the industrial climate total.
 
 ## The Global Warming journal entry
 
@@ -120,13 +199,12 @@ They update each January; before the first January of a game, a line says when
 they arrive.
 
 Two pies close the overview. Our Share is your market's share of world
-emissions. Emissions Cut is how far your market's emissions are held below what
-its coal and oil use would otherwise produce; hover it for how many of the eight
+emissions. Emissions Cut shows the market leader's policy reduction to remaining industrial emissions; hover it for how many of the nine
 policies you run. The cut changes the moment a policy is adopted or repealed.
 
 | Section | Starts | Shows |
 |---|---|---|
-| Mitigation Policies | Open | The eight policies, under Market-Wide and National. Each row has the policy's icon, lit while the policy is in force, its name (hover it for what the policy does), a green check while it is in force, and one control: Adopt while the policy is not in force, Repeal while it is. A grayed control's tooltip lists the conditions and which of them you meet. When one reason grays out every Adopt or every Repeal, a line above the rows says so once: warming below 0.5 °C, an emissions-reduction treaty (only Climate Adaptation can then be repealed), or, for a market member, "Set by our market leader for the whole market" over the market-wide rows. Adoption Around the World, under the rows, counts the nations running each policy. |
+| Mitigation Policies | Open | The nine policies, under Market-Wide and National. Each row has the policy's icon, lit while the policy is in force, its name (hover it for what the policy does), a green check while it is in force, and one control: Adopt while the policy is not in force, Repeal while it is. A grayed control's tooltip lists the conditions and which of them you meet. When one reason grays out every Adopt or every Repeal, a line above the rows says so once: warming below 0.5 °C, an emissions-reduction treaty (only Climate Adaptation can then be repealed), or, for a market member, "Set by our market leader for the whole market" over the market-wide rows. Adoption Around the World, under the rows, counts the nations running each policy. |
 | Top Emitters | Open | The five markets that emit the most, largest first, each named by its leader. Each row shows the leader's flag, the market's annual emissions, its share of world emissions and its cumulative emissions. A treaty icon marks a leader bound by Enforce Emissions Reduction, and your own market's row says "Our market". Hover a row for the market's members and its emissions cut, hover "+N more markets" for every market that emits, and a line gives your market's place when it is not in the five. The figures change each January; the order is redrawn each month. |
 | Fossil Transition | Open | Your Resource Transition law, what is left of your coal mines, oil rigs and power plants with a retirement control for each, and what could replace them. See [The fossil transition](#the-fossil-transition). Shown on your own market only. |
 | History | Open | Charts of global temperature and of your market's share of world emissions. Both step once a year, when the emissions figures update. |
@@ -141,11 +219,12 @@ and a new leader starts from its own total.
 
 ## Climate policies
 
-There are eight policies. Three are market-wide: only a market leader can adopt
+There are nine policies. Three are market-wide: only a market leader can adopt
 or repeal them, and they then apply to every country in its market, which sees
-them in force under "Set by our market leader for the whole market". The other five are national, open to every
+them in force under "Set by our market leader for the whole market". The other six are national, open to every
 country. Every policy needs the anomaly to have reached 0.5 °C, except
-Fossil-Fuel Divestment, which needs 1.0 °C.
+Fossil-Fuel Divestment, which needs 1.0 °C. Carbon Removal Support also needs
+Carbon Capture and Storage.
 
 Members always follow their leader's market-wide policies. A country that joins
 another market takes the ones its new leader has and drops the ones the leader
@@ -160,24 +239,33 @@ Standards charges its cost to every country in the market, members included.
 
 | Policy | Scope | Authority | Effects |
 |---|---|---|---|
-| Carbon Tax | Market | none | Emissions −20%; coal and oil output −10%; taxes on oil extraction doubled, manufacturing taxes +10%. |
-| Renewable Investment | Market | none | Emissions −15%; Renewable Energy Plants +10% throughput but need subsidies; conventional power plants −10% throughput; power buildings built 25% faster. |
-| Emission Standards | Market | 200 | Emissions −10%; generated pollution −25%; −5% throughput for every building. |
+| Carbon Tax | Market | none | Industrial emissions −20%; coal and oil output −10%; taxes on oil extraction doubled, manufacturing taxes +10%. |
+| Renewable Investment | Market | none | Industrial emissions −15%; household emissions −25%; Renewable Energy Plants +10% throughput but need subsidies; conventional power plants −10% throughput; power buildings built 25% faster. |
+| Emission Standards | Market | 200 | Industrial emissions −10%; generated pollution −25%; −5% throughput for every building. |
 | Climate Adaptation | National | 250 | Mortality −2.5% and standard of living +0.5 in every state. |
 | Reforestation Subsidies | National | 100 | Farm throughput +5%; droughts and floods 25% weaker and shorter. |
+| Carbon Removal Support | National | 100 | Carbon Conversion Works require subsidies and gain +5% throughput; Environmental Movement radicalism −5 percentage points. Needs Carbon Capture and Storage. |
 | Public Transit | National | 150 | Personal Transportation output +10%; oil input −5%; infrastructure built 10% faster; pops' automobiles add less infrastructure. |
-| Fossil-Fuel Divestment | National | 200 | Taxes on oil extraction +25%; coal and oil input −5%. |
-| Green Building Codes | National | 100 | Construction goods input +5%; electricity input −2.5%. |
+| Fossil-Fuel Divestment | National | 200 | Taxes on oil extraction +25%; coal and oil input −5%; household emissions −15%. |
+| Green Building Codes | National | 100 | Construction goods input +5%; electricity input −2.5%; household emissions −60%. |
 
-Only the three market-wide policies cut the emissions figure directly. The
-national ones trim oil, coal and electricity use at the margin, protect your
-people from the damage, and calm the Environmental Movement ([The Environmental
+Carbon Removal Support funds the works in your own country, whether you lead
+your market or joined it. The policy itself removes no CO₂: staffed works must
+run Direct Air Capture or Synthetic Coal. Its subsidy requirement covers both
+methods. Repealing it ends the requirement and bonus; you can still subsidize
+the buildings yourself. Direct Air Capture has no sales income, so withdrawing
+its funding stops it as its workers leave.
+
+The three market-wide policies cut industrial emissions directly. Green
+Building Codes and Fossil-Fuel Divestment cut your own household footprint.
+Other national measures protect people and calm the Environmental Movement ([The Environmental
 Movement](#the-environmental-movement)). Climate Adaptation is the one that pays
 off even if nobody else acts.
 
 If you lead a market that burns a large share of the world's coal and oil, the
 market-wide policies are where your choice matters. If you are a member, you can
-only protect yourself: the leader decides your market's emissions.
+reduce your household footprint and use capture: the leader sets the
+market-wide industrial policy cut.
 
 ## How the AI adopts climate policy
 
@@ -209,6 +297,7 @@ policy alone, so an election doesn't flip policies back and forth.
 | Renewable Investment | 35 |
 | Public Transit | 40 |
 | Green Building Codes, Emission Standards | 45 |
+| Carbon Removal Support | 50 |
 | Carbon Tax | 55 |
 | Fossil-Fuel Divestment | 70 |
 
@@ -227,7 +316,7 @@ Environment, and both restrictive laws need that ministry:
 |---|---|---|
 | Unrestricted Extraction | | The default. Nothing changes. |
 | Fossil Expansion Moratorium | Environmental Movement, Ministry of the Environment | No new Coal Mine, Oil Rig or Power Plant can be built or expanded in your states, by your government, your investors or foreign investors. Those already running carry on. |
-| Managed Fossil Phaseout | Clean Energy Technologies, Ministry of the Environment funded to level 3 | The moratorium, and retirement programmes for what is already running. |
+| Managed Fossil Phaseout | Carbon Capture and Storage, Ministry of the Environment funded to level 3 | The moratorium, retirement programmes, and at least 50% capture for eligible stationary sources. |
 
 Hydro, nuclear, fusion and renewable plants, Synthetic Fuel Works, Carbon
 Conversion Works and every other mine stay buildable. If you abolish the
@@ -271,7 +360,7 @@ what could take their place:
 | Row | Shows |
 |---|---|
 | Clean Generation | Hydro, nuclear, fusion and renewable plant levels as a share of all generating levels, power plants included. |
-| Synthetic Fuel Plants | Your Synthetic Fuel Works and Carbon Conversion Works levels; hover for whether you have the technologies for oil from grain and electricity (Synthetic Biology) and coal from electricity (Genetic Engineering). |
+| Synthetic Fuel Plants | Your Synthetic Fuel Works and Carbon Conversion Works levels; hover for whether you have the technologies for oil from grain and electricity (Synthetic Biology) and coal from electricity (Genetic Engineering). Carbon Conversion Works unlock earlier for Direct Air Capture with Carbon Capture and Storage, which removes CO₂ without providing replacement fuel. |
 | Coal, Oil | What your whole market makes and burns each week; hover for its imports and exports. |
 | Our Market's Emissions | With the Global Warming rule on, the overview's figure. |
 

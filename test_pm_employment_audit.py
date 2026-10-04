@@ -107,6 +107,35 @@ class AuditTests(unittest.TestCase):
         self.assertTrue(f.mod_relevant)
         self.assertIsNone(f.exemption)
 
+    def test_capture_groups_do_not_disable_employment_audit(self):
+        buildings = {"B": {"production_method_groups": ["base", "auto", "capture_a", "capture_b"]}}
+        pmgs = {"base": {"production_methods": ["base_pm"]},
+                "auto": {"production_methods": ["auto_pm"]}}
+        pms = {"base_pm": _emp("level_scaled", laborers=1000),
+               "auto_pm": _emp("level_scaled", laborers=-3500)}
+        for group in ("capture_a", "capture_b"):
+            names = [f"{group}_{i}" for i in range(500)]
+            pmgs[group] = {"production_methods": names}
+            pms.update({name: {} if i == 0 else {"unlocking_production_methods": ["base_pm"]}
+                        for i, name in enumerate(names)})
+        with tempfile.TemporaryDirectory() as tmp:
+            res = self._run(buildings, pmgs, pms, tmp)
+        self.assertEqual(res.coverage["buildings_skipped_large"], 0)
+        self.assertEqual(len(res.flags), 1)
+        self.assertEqual(res.flags[0].total, -2500)
+
+    def test_employment_neutral_group_required_by_automation_is_retained(self):
+        buildings = {"B": {"production_method_groups": ["base", "auto", "gate"]}}
+        pmgs = {"base": {"production_methods": ["base_pm"]},
+                "auto": {"production_methods": ["auto_pm"]},
+                "gate": {"production_methods": ["gate_pm"]}}
+        pms = {"base_pm": _emp("level_scaled", laborers=1000),
+               "auto_pm": {**_emp("level_scaled", laborers=-3500), "unlocking_production_methods": ["gate_pm"]},
+               "gate_pm": {}}
+        with tempfile.TemporaryDirectory() as tmp:
+            res = self._run(buildings, pmgs, pms, tmp)
+        self.assertEqual(len(res.flags), 1)
+
     def test_offset_not_flagged(self):
         buildings = {"B": {"production_method_groups": ["g_base", "g_auto"]}}
         pmgs = {"g_base": {"production_methods": ["pm_base"]},

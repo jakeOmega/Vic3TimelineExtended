@@ -1,0 +1,12 @@
+﻿l_english:
+ pmg_te_cc_probe:0 "Carbon Capture Engine Probe"
+ pm_te_cc_probe_none:0 "Probe: No Carbon Capture"
+ pm_te_cc_probe_coal:0 "Probe: Coal Capture (50%)"
+ pm_te_cc_probe_oil:0 "Probe: Oil Capture (50%)"
+ state_carbon_capture_add:0 "Carbon Captured"
+ state_carbon_capture_add_desc:0 "Carbon captured at the source, scaled by staffing."
+ te_cc_probe.1.t:0 "Carbon Capture Engine Probe"
+ te_cc_probe.1.desc:0 "Use a copied save. Log the staffed state modifier and market sum, or toggle the real phaseout law to test method fallback. The oil variant tests fallback only; it has no capture cost."
+ te_cc_probe.1.log:0 "Log staffed capture to debug.log"
+ te_cc_probe.1.mandate:0 "Research prerequisites and impose the phaseout mandate"
+ te_cc_probe.1.clear:0 "Remove the phaseout mandate"

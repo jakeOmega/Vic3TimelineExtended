@@ -528,10 +528,10 @@ Persistent environmental tracker that applies scaled penalties based on global t
 - **7 temperature tiers:** negligible (<0.1°C), slight (0.1-0.5), moderate (0.5-1.0), significant (1.0-2.0), severe (2.0-3.0), catastrophic (3.0-4.0), apocalyptic (4.0+). Defined **once**, in `gw_severity_text` / `gw_severity_short` (`common/customizable_localization/global_warming_custom_loc.txt`); `status_desc` and the widget both read it.
 - **Dynamic modifier pattern:** `global_warming` modifier × `temperature_anomaly_display` multiplier, reapplied monthly
 - **Activation:** `is_shown_when_inactive = { OR = { has_game_rule = global_warming_enabled  rt_restrictive_transition_law = yes } }` plus `possible = { OR = { temperature_anomaly_display >= 0.1  rt_restrictive_transition_law = yes } }`. Both must hold, so under the rule the entry renders greyed for every country for the decades before the world warms. The second clause (#660) opens it for any country holding a Fossil Expansion Moratorium or Managed Fossil Phaseout, with the Global Warming rule on or off, because the retirement programmes live in its Fossil Transition section. With the rule off such an entry shows that section alone, its description says why it is open (`je_global_warming_reason` switches on the rule through the `gw_reason` custom loc), and nothing climate runs: the temperature stays 0, so the `global_warming` modifier, the threshold and recurring events, the policies (0.5 °C) and treaty 109 (0.5 °C) all stay off; every other reader of `has_journal_entry = je_global_warming` also needs warming or a policy modifier. Under the rule, a country that adopts a restrictive law below 0.1 °C opens the entry early and takes the `global_warming` modifier from 0.01 °C instead of 0.1 °C, a negligible difference (the modifier scales with the anomaly). There is **no** `should_be_involved` block (an earlier version of this doc claimed one).
-- **Emissions are a property of a market, not a country.** `market_greenhouse_gas_emissions_script_value` sums the whole market's oil and coal consumption, so there is no per-country emissions figure to show. The snapshot lives on the market leader and every member reads it.
+- **Emissions are a property of a market, not a country.** `market_greenhouse_gas_emissions_script_value` sums state building emissions after source capture, synthetic-fuel credits and industrial policy cuts, plus estimated household fossil heating, minus Direct Air Capture, so there is no per-country emissions figure to show. The snapshot lives on the market leader and every member reads it.
 
-### Buttons (22)
-8 toggle pairs for climate policies, and 3 Start/Stop pairs for the Resource Transition retirement programmes (`rt_start_<key>_button` / `rt_stop_<key>_button`, `common/scripted_buttons/resource_transition_buttons.txt`; see `mod_systems.md` § Resource Transition). All 22 carry `is_ai = yes`.
+### Buttons (24)
+9 toggle pairs for climate policies, and 3 Start/Stop pairs for the Resource Transition retirement programmes (`rt_start_<key>_button` / `rt_stop_<key>_button`, `common/scripted_buttons/resource_transition_buttons.txt`; see `mod_systems.md` § Resource Transition). All 24 carry `is_ai = yes`.
 
 The 8 climate pairs:
 - Carbon tax, renewable investment, climate adaptation, emission standards
@@ -543,7 +543,7 @@ Each button's `possible` lives in `gw_possible_<button>` (`common/scripted_trigg
 
 **How the AI chooses.** Every button's `ai_chance` reads `common/script_values/global_warming_ai_values.txt`, which gives each country a climate will per policy. Each will has two parts:
 
-- **A shared core**, the same for all eight policies: temperature (20 per °C, capped at 100 = 5 °C, so stacked opposition can still hold out), the environment ministry (+15), and an environmentalist leading a governing interest group (+8).
+- **A shared core**, the same for all nine policies: temperature (20 per °C, capped at 100 = 5 °C, so stacked opposition can still hold out), the environment ministry (+15), and an environmentalist leading a governing interest group (+8).
 - **Five signals, weighted per policy** by who the policy costs or helps: laissez-faire, industrialists in government, the environmental movement's support, standard of living against the world mean (the mean is stored by `gw_refresh_global_counts_effect`), and how far the market is a net coal and oil exporter. Each signal runs from 0 to 1, or −1 to 1 for wealth.
 
 The weight table sits in the file's header with one line of reasoning per row, taken from what each policy's modifier does. For example, wealth counts *against* Climate Adaptation, because its flat +0.5 standard of living is worth most in poor countries. Fossil exports weigh −25 on divestment and −20 on carbon tax, and nothing on adaptation. Every will lists all five signals, zeros included.
@@ -578,7 +578,7 @@ Areas, in order. Collapse flags say their default: `_closed` sections are open u
 The overview replaces two vanilla pieces. **The status line** prints only while the entry is inactive (`status_desc` is a `first_valid` whose active branch is the empty `je_global_warming_status_none`, which hides vanilla's status box), because the tier sentence repeated the overview. **The goal bar** near the foot is hidden by the bars-on-top marker in `custom_widget_container_7` (from #582, which extends the marker to the goal bar); `progressbar = yes` itself is unchanged.
 
 
-**Op table** (identical for all eight policy handlers, so the row type bakes them in and a row instance carries no op markup):
+**Op table** (identical for all nine policy handlers, so the row type bakes them in and a row instance carries no op markup):
 
 | op | action | delegates to |
 |---|---|---|

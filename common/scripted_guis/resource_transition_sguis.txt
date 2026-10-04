@@ -194,7 +194,8 @@ rt_has_snapshot_sgui = {
 
 # Readiness: the two technologies behind carbon-neutral synthetic fuel. Oil
 # from grain and electricity (pm_synthetic_oil_2, Synthetic Biology) and coal
-# from electricity (building_synthetics_plant_coal, Genetic Engineering).
+# from electricity (pm_synthetic_coal, Genetic Engineering). The works itself
+# unlocks earlier for direct air capture, which supplies no replacement fuel.
 rt_synth_oil_tech_sgui = {
 	scope = country
 	is_shown = { has_technology_researched = synthetic_biology }

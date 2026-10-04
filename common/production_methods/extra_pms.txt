@@ -14,12 +14,14 @@
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (46.38%)
 			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (34.78%)
@@ -60,12 +62,14 @@ pm_dragline_excavators_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (46.38%)
 			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (34.78%)
@@ -106,12 +110,14 @@ pm_dragline_excavators_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (46.38%)
 			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (34.78%)
@@ -145,6 +151,7 @@ pm_dragline_excavators_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -158,6 +165,7 @@ pm_dragline_excavators_sulfur_mine = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (46.38%)
 			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (34.78%)
@@ -196,6 +204,7 @@ pm_dragline_excavators_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -209,6 +218,7 @@ pm_dragline_excavators_gold_mine = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (46.38%)
 			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (34.78%)
@@ -249,12 +259,14 @@ pm_dragline_excavators_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 4                            # Price:   40, Total cost:   160.0 (46.38%)
 			goods_input_engines_add = 2                          # Price:   60, Total cost:   120.0 (34.78%)
@@ -288,6 +300,7 @@ pm_large_scale_earth_movers_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -300,6 +313,7 @@ pm_large_scale_earth_movers_coal_mine = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 6                            # Price:   40, Total cost:   240.0 (36.36%)
 			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (27.27%)
@@ -342,12 +356,14 @@ pm_large_scale_earth_movers_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 6                            # Price:   40, Total cost:   240.0 (36.36%)
 			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (27.27%)
@@ -390,12 +406,14 @@ pm_large_scale_earth_movers_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 6                            # Price:   40, Total cost:   240.0 (36.36%)
 			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (27.27%)
@@ -438,12 +456,14 @@ pm_large_scale_earth_movers_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 6                            # Price:   40, Total cost:   240.0 (36.36%)
 			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (27.27%)
@@ -491,12 +511,14 @@ pm_large_scale_earth_movers_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 6                            # Price:   40, Total cost:   240.0 (36.36%)
 			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (27.27%)
@@ -533,6 +555,7 @@ pm_large_scale_earth_movers_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -547,6 +570,7 @@ pm_large_scale_earth_movers_tech_metals_mine = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 6                            # Price:   40, Total cost:   240.0 (36.36%)
 			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (27.27%)
@@ -589,12 +613,14 @@ pm_geophysical_survey_techniques_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (8.65%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (11.54%)
@@ -640,12 +666,14 @@ pm_geophysical_survey_techniques_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (8.65%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (11.54%)
@@ -691,12 +719,14 @@ pm_geophysical_survey_techniques_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (8.65%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (11.54%)
@@ -742,12 +772,14 @@ pm_geophysical_survey_techniques_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (8.65%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (11.54%)
@@ -798,12 +830,14 @@ pm_geophysical_survey_techniques_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (8.65%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (11.54%)
@@ -843,6 +877,7 @@ pm_geophysical_survey_techniques_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -856,6 +891,7 @@ pm_geophysical_survey_techniques_tech_metals_mine = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (8.65%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (11.54%)
@@ -900,12 +936,14 @@ pm_ore_sorting_and_separation_technology_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (6.34%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (8.45%)
@@ -951,12 +989,14 @@ pm_ore_sorting_and_separation_technology_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (6.34%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (8.45%)
@@ -1002,12 +1042,14 @@ pm_ore_sorting_and_separation_technology_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (6.34%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (8.45%)
@@ -1053,12 +1095,14 @@ pm_ore_sorting_and_separation_technology_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (6.34%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (8.45%)
@@ -1109,12 +1153,14 @@ pm_ore_sorting_and_separation_technology_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (6.34%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (8.45%)
@@ -1155,6 +1201,7 @@ pm_ore_sorting_and_separation_technology_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -1168,6 +1215,7 @@ pm_ore_sorting_and_separation_technology_tech_metals_mine = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 3                       # Price:   30, Total cost:    90.0 (6.34%)
 			goods_input_tools_add = 3                            # Price:   40, Total cost:   120.0 (8.45%)
@@ -1558,12 +1606,14 @@ pm_diesel_pump_building_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (75.00%)
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (25.00%)
@@ -1597,12 +1647,14 @@ pm_high_pressure_hydraulic_pump_building_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (29.63%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (14.81%)
@@ -1639,12 +1691,14 @@ pm_high_pressure_hydraulic_pump_building_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (29.63%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (14.81%)
@@ -1681,12 +1735,14 @@ pm_high_pressure_hydraulic_pump_building_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (29.63%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (14.81%)
@@ -1723,12 +1779,14 @@ pm_high_pressure_hydraulic_pump_building_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (29.63%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (14.81%)
@@ -1770,12 +1828,14 @@ pm_high_pressure_hydraulic_pump_building_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (29.63%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (14.81%)
@@ -1808,12 +1868,14 @@ pm_high_pressure_hydraulic_pump_building_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (29.63%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (14.81%)
@@ -1850,12 +1912,14 @@ pm_continuous_miners_building_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 25                           # Price:   40, Total cost:  1000.0 (16.95%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (6.78%)
@@ -1892,12 +1956,14 @@ pm_continuous_miners_building_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 25                           # Price:   40, Total cost:  1000.0 (16.95%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (6.78%)
@@ -1934,12 +2000,14 @@ pm_continuous_miners_building_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 25                           # Price:   40, Total cost:  1000.0 (16.95%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (6.78%)
@@ -1976,12 +2044,14 @@ pm_continuous_miners_building_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 25                           # Price:   40, Total cost:  1000.0 (16.95%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (6.78%)
@@ -2023,12 +2093,14 @@ pm_continuous_miners_building_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 25                           # Price:   40, Total cost:  1000.0 (16.95%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (6.78%)
@@ -2065,12 +2137,14 @@ pm_continuous_miners_building_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 25                           # Price:   40, Total cost:  1000.0 (16.95%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (6.78%)
@@ -2107,12 +2181,14 @@ pm_smart_miners_building_coal_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 35                           # Price:   40, Total cost:  1400.0 (9.52%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (2.72%)
@@ -2153,12 +2229,14 @@ pm_smart_miners_building_iron_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 35                           # Price:   40, Total cost:  1400.0 (9.52%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (2.72%)
@@ -2199,12 +2277,14 @@ pm_smart_miners_building_lead_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 35                           # Price:   40, Total cost:  1400.0 (9.52%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (2.72%)
@@ -2245,12 +2325,14 @@ pm_smart_miners_building_sulfur_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 35                           # Price:   40, Total cost:  1400.0 (9.52%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (2.72%)
@@ -2296,12 +2378,14 @@ pm_smart_miners_building_gold_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 35                           # Price:   40, Total cost:  1400.0 (9.52%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (2.72%)
@@ -2342,12 +2426,14 @@ pm_smart_miners_building_tech_metals_mine = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 35                           # Price:   40, Total cost:  1400.0 (9.52%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (2.72%)
@@ -5153,12 +5239,14 @@ pm_gas_turbine_engines = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 6.96 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 6.96 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (3.61%)
 			goods_input_oil_add = 40                             # Price:   40, Total cost:  1600.0 (19.28%)
@@ -5227,6 +5315,12 @@ pm_hydrogen_fuel_cell_engines = {
 }
 
 pm_graphene_electric_motors = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 4.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p2.dds"
 	unlocking_technologies = {
 		modern_material_science
@@ -5234,6 +5328,7 @@ pm_graphene_electric_motors = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 4.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (4.43%)
 			goods_input_electronic_components_add = 20           # Price:   80, Total cost:  1600.0 (11.81%)
@@ -5709,16 +5804,18 @@ pm_aluminum_substitution = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_iron_add = 100                           # Price:   40, Total cost:  4000.0 (42.55%)
-			goods_input_coal_add = 30                            # Price:   30, Total cost:   900.0 (9.57%)
-			goods_input_electricity_add = 150                    # Price:   30, Total cost:  4500.0 (47.87%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (3.19%)
+			goods_input_electricity_add = 170                    # Price:   30, Total cost:  5100.0 (54.26%)
 			# Output goods
 			goods_output_steel_add = 250                         # Price:   50, Total cost: 12500.0 (100.00%)
 			# Total input cost: 9400.0
@@ -5751,16 +5848,18 @@ pm_chromium_substitution = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_iron_add = 150                           # Price:   40, Total cost:  6000.0 (52.63%)
-			goods_input_coal_add = 30                            # Price:   30, Total cost:   900.0 (7.89%)
-			goods_input_electricity_add = 150                    # Price:   30, Total cost:  4500.0 (39.47%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (2.63%)
+			goods_input_electricity_add = 170                    # Price:   30, Total cost:  5100.0 (44.74%)
 			# Output goods
 			goods_output_steel_add = 300                         # Price:   50, Total cost: 15000.0 (100.00%)
 			# Total input cost: 11400.0
@@ -6204,12 +6303,14 @@ pm_injection_molding = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 4.35 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 18
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 4.35 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 25                             # Price:   40, Total cost:  1000.0 (35.71%)
 			goods_input_lead_add = 35                            # Price:   40, Total cost:  1400.0 (50.00%)
@@ -6243,12 +6344,14 @@ pm_blow_molding = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 5.22 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 5.22 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 30                             # Price:   40, Total cost:  1200.0 (34.29%)
 			goods_input_lead_add = 40                            # Price:   40, Total cost:  1600.0 (45.71%)
@@ -6386,12 +6489,14 @@ pm_massed_produced_plastics = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (21.43%)
 			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (21.43%)
@@ -6499,6 +6604,7 @@ pm_petroleum_dyes = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 12.44 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -6509,6 +6615,7 @@ pm_petroleum_dyes = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 12.44 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 60                             # Price:   40, Total cost:  2400.0 (80.00%)
 			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (10.00%)
@@ -6636,6 +6743,12 @@ REPLACE:pm_rayon = {
 }
 
 pm_polyester = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p1.dds"
 
 	unlocking_technologies = {
@@ -6644,6 +6757,7 @@ pm_polyester = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (57.14%)
 			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (42.86%)
@@ -6668,6 +6782,12 @@ pm_polyester = {
 }
 
 pm_nylon = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p2.dds"
 
 	unlocking_technologies = {
@@ -6676,6 +6796,7 @@ pm_nylon = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (57.14%)
 			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (42.86%)
@@ -6704,6 +6825,7 @@ pm_microfiber_blends = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -6714,6 +6836,7 @@ pm_microfiber_blends = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (57.14%)
 			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (42.86%)
@@ -6743,6 +6866,7 @@ pm_elastomeric_blends = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -6753,6 +6877,7 @@ pm_elastomeric_blends = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (36.36%)
 			goods_input_rubber_add = 10                          # Price:   40, Total cost:   400.0 (36.36%)
@@ -6785,6 +6910,7 @@ pm_performance_textiles = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -6795,6 +6921,7 @@ pm_performance_textiles = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (28.57%)
 			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (21.43%)
@@ -6902,12 +7029,14 @@ pm_synthetic_oil_1 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 4.68 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 50
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 4.68 # AUTO-GENERATED: net synthetic emissions
 			# Input goods
 			goods_input_electricity_add = 45                     # Price:   30, Total cost:  1350.0 (18.75%)
 			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (6.25%)
@@ -6935,6 +7064,12 @@ pm_synthetic_oil_1 = {
 }
 
 pm_synthetic_oil_2 = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -52.20 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 
 	unlocking_technologies = {
@@ -6943,6 +7078,7 @@ pm_synthetic_oil_2 = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = -52.20 # AUTO-GENERATED: net synthetic emissions
 			# Input goods
 			goods_input_grain_add = 180                          # Price:   20, Total cost:  3600.0 (34.78%)
 			goods_input_engines_add = 15                         # Price:   60, Total cost:   900.0 (8.70%)
@@ -6977,12 +7113,14 @@ pm_polyisoprene_rubber = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 8.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 8.70 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 50                             # Price:   40, Total cost:  2000.0 (58.82%)
 			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (8.82%)
@@ -7020,12 +7158,14 @@ pm_styrene_butadiene_rubber = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 12.18 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 12.18 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 70                             # Price:   40, Total cost:  2800.0 (60.87%)
 			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (6.52%)
@@ -7063,12 +7203,14 @@ pm_ziegler_natta_catalyzation = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 13.92 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 13.92 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 80                             # Price:   40, Total cost:  3200.0 (50.00%)
 			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (9.38%)
@@ -7107,12 +7249,14 @@ pm_neodymium_catalyzation = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 17.40 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 17.40 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 100                            # Price:   40, Total cost:  4000.0 (47.06%)
 			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (7.06%)
@@ -7221,6 +7365,12 @@ pm_pharma_alkaloid_extraction = {
 }
 
 pm_pharma_synthetic_chemistry = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p1.dds"
 
 	unlocking_technologies = {
@@ -7229,6 +7379,7 @@ pm_pharma_synthetic_chemistry = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 20                      # Price:   30, Total cost:   600.0 (46.15%)
 			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (23.08%)
@@ -7391,11 +7542,19 @@ pm_pharma_precision_medicine = {
 }
 
 pm_synthetic_coal = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = -168.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/chemical_fertilizers.dds"
+	unlocking_technologies = { genetic_engineering }
 
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = -168.00 # AUTO-GENERATED: net synthetic emissions
 			# Input goods
 			goods_input_grain_add = 5                            # Price:   20, Total cost:   100.0 (0.28%)
 			goods_input_electronic_components_add = 1            # Price:   80, Total cost:    80.0 (0.22%)
@@ -9488,12 +9647,14 @@ pm_hydraulic_equipment = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.35 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.35 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 2                              # Price:   40, Total cost:    80.0 (30.77%)
 			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (69.23%)
@@ -9528,12 +9689,14 @@ pm_automated_mechanical_harvesters = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.35 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.35 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 2                              # Price:   40, Total cost:    80.0 (19.05%)
 			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (42.86%)
@@ -9570,12 +9733,14 @@ pm_automated_harvesters_and_planters = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.35 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.35 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 2                              # Price:   40, Total cost:    80.0 (14.55%)
 			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (32.73%)
@@ -9611,12 +9776,14 @@ pm_hydraulic_equipment_building_rice_farm = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 4                              # Price:   40, Total cost:   160.0 (30.77%)
 			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (69.23%)
@@ -9651,12 +9818,14 @@ pm_automated_mechanical_harvesters_building_rice_farm = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 4                              # Price:   40, Total cost:   160.0 (19.05%)
 			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (42.86%)
@@ -9693,12 +9862,14 @@ pm_automated_harvesters_and_planters_building_rice_farm = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 4                              # Price:   40, Total cost:   160.0 (14.55%)
 			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (32.73%)
@@ -9784,12 +9955,14 @@ pm_skidders_and_forwarders = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.70 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 3                          # Price:   60, Total cost:   180.0 (24.32%)
 			goods_input_oil_add = 4                              # Price:   40, Total cost:   160.0 (21.62%)
@@ -9813,6 +9986,12 @@ pm_skidders_and_forwarders = {
 }
 
 pm_purse_seine_nets = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
 
 
@@ -9821,6 +10000,7 @@ pm_purse_seine_nets = {
 	}
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_steamers_add = 5                         # Price:   70, Total cost:   350.0 (33.33%)
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (19.05%)
@@ -9850,12 +10030,14 @@ REPLACE:pm_automobile_production = {
 	texture = "gfx/interface/icons/production_method_icons/automobiles.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (60.00%)
 			goods_input_rubber_add = 5                           # Price:   40, Total cost:   200.0 (20.00%)
@@ -9884,6 +10066,7 @@ REPLACE:pm_mass_automobile_production = {
 	texture = "gfx/interface/icons/production_method_icons/standardized_automobiles.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -9894,6 +10077,7 @@ REPLACE:pm_mass_automobile_production = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (38.71%)
 			goods_input_rubber_add = 10                          # Price:   40, Total cost:   400.0 (25.81%)
@@ -9923,6 +10107,7 @@ pm_modern_automobile_production = {
 	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p1.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -9933,6 +10118,7 @@ pm_modern_automobile_production = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (12.00%)
 			goods_input_engines_add = 15                         # Price:   60, Total cost:   900.0 (36.00%)
@@ -10041,6 +10227,12 @@ pm_fusion_battery_vehicles = {
 }
 
 pm_rocket_artillery = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
 
 	unlocking_technologies = {
@@ -10049,6 +10241,7 @@ pm_rocket_artillery = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_steel_add = 40                           # Price:   50, Total cost:  2000.0 (47.62%)
 			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (19.05%)
@@ -10079,6 +10272,7 @@ pm_precision_guided_shells = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -10089,6 +10283,7 @@ pm_precision_guided_shells = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_tools_add = 20                           # Price:   40, Total cost:   800.0 (15.38%)
 			goods_input_oil_add = 20                             # Price:   40, Total cost:   800.0 (15.38%)
@@ -10119,6 +10314,12 @@ pm_precision_guided_shells = {
 }
 
 pm_electromagnetic_projectors = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p2.dds"
 
 	unlocking_technologies = {
@@ -10127,6 +10328,7 @@ pm_electromagnetic_projectors = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_advanced_materials_add = 0.5             # Price: 4000, Total cost:  2000.0 (25.64%)
 			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (7.69%)
@@ -10159,6 +10361,12 @@ pm_electromagnetic_projectors = {
 }
 
 pm_programmable_matter_artillery = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p3.dds"
 
 	unlocking_technologies = {
@@ -10167,6 +10375,7 @@ pm_programmable_matter_artillery = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_advanced_materials_add = 1.5             # Price: 4000, Total cost:  6000.0 (50.85%)
 			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (5.08%)
@@ -10485,12 +10694,14 @@ pm_aeroplane_production_2 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (7.50%)
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (15.00%)
@@ -10529,12 +10740,14 @@ pm_aeroplane_production_3 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (6.90%)
 			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (9.20%)
@@ -10571,6 +10784,7 @@ pm_airport = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 100
 			building_economy_of_scale_level_cap_add = 5
 			state_infrastructure_add = 50
@@ -10581,6 +10795,7 @@ pm_airport = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_aeroplanes_add = 25                      # Price:  160, Total cost:  4000.0 (90.91%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (9.09%)
@@ -10659,6 +10874,7 @@ pm_civil_highway = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 8.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 40
 			state_infrastructure_from_automobiles_consumption_add = 0.25
 			state_infrastructure_add = 25
@@ -10671,6 +10887,7 @@ pm_civil_highway = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 8.70 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 30                      # Price:   30, Total cost:   900.0 (20.45%)
 			goods_input_automobiles_add = 15                     # Price:  100, Total cost:  1500.0 (34.09%)
@@ -10700,6 +10917,7 @@ pm_industrial_highway = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 8.70 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 40
 			state_infrastructure_from_automobiles_consumption_add = 0.25
 			state_infrastructure_add = 25
@@ -10711,6 +10929,7 @@ pm_industrial_highway = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 8.70 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 30                      # Price:   30, Total cost:   900.0 (20.45%)
 			goods_input_automobiles_add = 15                     # Price:  100, Total cost:  1500.0 (34.09%)
@@ -10907,12 +11126,14 @@ REPLACE:pm_coal-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 4.00 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 50
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 4.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (37.50%)
 			goods_input_coal_add = 20                            # Price:   30, Total cost:   600.0 (62.50%)
@@ -10944,12 +11165,14 @@ REPLACE:pm_oil-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 4.35 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 40
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 4.35 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (37.50%)
 			goods_input_oil_add = 25                             # Price:   40, Total cost:  1000.0 (62.50%)
@@ -10981,12 +11204,14 @@ pm_modern_coal-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 5.00 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 30
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 5.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (20.69%)
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.59%)
@@ -11019,12 +11244,14 @@ pm_modern_oil-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 6.09 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 25
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 6.09 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 10                         # Price:   60, Total cost:   600.0 (25.00%)
 			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (16.67%)
@@ -11360,6 +11587,12 @@ pm_ai_managed_power_plant = {
 }
 
 pm_semiautomatic_rifles = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p1.dds"
 
 	unlocking_technologies = {
@@ -11368,6 +11601,7 @@ pm_semiautomatic_rifles = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (28.99%)
 			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (4.35%)
@@ -11399,6 +11633,12 @@ pm_semiautomatic_rifles = {
 }
 
 pm_networked_small_arms = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p2.dds"
 
 	unlocking_technologies = {
@@ -11407,6 +11647,7 @@ pm_networked_small_arms = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (19.80%)
 			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (2.97%)
@@ -11438,6 +11679,12 @@ pm_networked_small_arms = {
 }
 
 pm_programmable_matter_small_arms = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p3.dds"
 
 	unlocking_technologies = {
@@ -11446,6 +11693,7 @@ pm_programmable_matter_small_arms = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_advanced_materials_add = 1               # Price: 4000, Total cost:  4000.0 (44.20%)
 			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (11.05%)
@@ -11864,6 +12112,12 @@ INJECT:pm_vacuum_canning_principle_3 = {
 }
 
 pm_flexible_packaging = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_cloth_purple_p1.dds"
 
 	unlocking_technologies = {
@@ -11872,6 +12126,7 @@ pm_flexible_packaging = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fish_add = 30                            # Price:   20, Total cost:   600.0 (24.00%)
 			goods_input_meat_add = 20                            # Price:   30, Total cost:   600.0 (24.00%)
@@ -11982,6 +12237,7 @@ pm_advanced_assembly_lines_building_tooling_workshop = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -11999,6 +12255,7 @@ pm_advanced_assembly_lines_building_tooling_workshop = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (22.22%)
 			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (16.67%)
@@ -12072,6 +12329,7 @@ pm_advanced_assembly_lines_building_arms_industry = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -12089,6 +12347,7 @@ pm_advanced_assembly_lines_building_arms_industry = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (22.22%)
 			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (16.67%)
@@ -12123,12 +12382,14 @@ pm_advanced_assembly_lines_building_munition_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (22.22%)
 			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (16.67%)
@@ -12209,6 +12470,7 @@ pm_robotic_assembly_lines_building_tooling_workshop = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 10
 		}
 	}
@@ -12225,6 +12487,7 @@ pm_robotic_assembly_lines_building_tooling_workshop = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (24.39%)
 			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (18.29%)
@@ -12346,6 +12609,12 @@ pm_ai_managed_building_furniture_manufactory = {
 }
 
 pm_ai_managed_building_tooling_workshop = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_factory_green_p3.dds"
 
 
@@ -12364,6 +12633,7 @@ pm_ai_managed_building_tooling_workshop = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (14.08%)
 			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (10.56%)
@@ -12437,6 +12707,12 @@ pm_ai_managed_building_motor_industry = {
 }
 
 pm_ai_managed_building_arms_industry = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p2.dds"
 
 
@@ -12457,6 +12733,7 @@ pm_ai_managed_building_arms_industry = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (14.08%)
 			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (10.56%)
@@ -12485,6 +12762,12 @@ pm_ai_managed_building_arms_industry = {
 }
 
 pm_ai_managed_building_munition_plant = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_green_p2.dds"
 
 
@@ -12505,6 +12788,7 @@ pm_ai_managed_building_munition_plant = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (14.08%)
 			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (10.56%)
@@ -12894,6 +13178,7 @@ REPLACE:pm_nitrogen_fixation = {
 	texture = "gfx/interface/icons/production_method_icons/nitrogen_fixation.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -12904,6 +13189,7 @@ REPLACE:pm_nitrogen_fixation = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_sulfur_add = 40                          # Price:   50, Total cost:  2000.0 (50.00%)
 			goods_input_oil_add = 20                             # Price:   40, Total cost:   800.0 (20.00%)
@@ -12933,6 +13219,7 @@ pm_catalytic_cracking = {
 	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 20.88 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
@@ -12943,6 +13230,7 @@ pm_catalytic_cracking = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 20.88 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_sulfur_add = 50                          # Price:   50, Total cost:  2500.0 (30.12%)
 			goods_input_oil_add = 120                            # Price:   40, Total cost:  4800.0 (57.83%)
@@ -12975,6 +13263,7 @@ pm_polymerization_processes = {
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p1.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 27.84 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 25
 		}
 	}
@@ -12985,6 +13274,7 @@ pm_polymerization_processes = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 27.84 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_sulfur_add = 100                         # Price:   50, Total cost:  5000.0 (38.02%)
 			goods_input_oil_add = 160                            # Price:   40, Total cost:  6400.0 (48.67%)
@@ -13018,6 +13308,7 @@ pm_automated_chemical_reactors = {
 	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 31.32 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
@@ -13028,6 +13319,7 @@ pm_automated_chemical_reactors = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 31.32 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_sulfur_add = 120                         # Price:   50, Total cost:  6000.0 (35.71%)
 			goods_input_oil_add = 180                            # Price:   40, Total cost:  7200.0 (42.86%)
@@ -13059,6 +13351,7 @@ pm_flow_chemistry_production = {
 	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p2.dds"
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 38.28 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 5
 		}
 	}
@@ -13069,6 +13362,7 @@ pm_flow_chemistry_production = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 38.28 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_sulfur_add = 150                         # Price:   50, Total cost:  7500.0 (33.63%)
 			goods_input_oil_add = 220                            # Price:   40, Total cost:  8800.0 (39.46%)
@@ -13136,6 +13430,12 @@ pm_molecular_foundry = {
 }
 
 pm_ammonium_nitrate_explosives = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 6.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p1.dds"
 
 	unlocking_technologies = {
@@ -13144,6 +13444,7 @@ pm_ammonium_nitrate_explosives = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 6.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_fertilizer_add = 200                     # Price:   30, Total cost:  6000.0 (76.92%)
 			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (11.54%)
@@ -13244,6 +13545,7 @@ REPLACE:pm_early_trains = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.40 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (83.33%)
 			goods_input_coal_add = 2                             # Price:   30, Total cost:    60.0 (16.67%)
@@ -13266,6 +13568,7 @@ REPLACE:pm_early_trains = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.40 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 20
 			state_pollution_generation_add = 25
 		}
@@ -13282,6 +13585,7 @@ REPLACE:pm_steam_trains = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (66.67%)
 			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (33.33%)
@@ -13304,6 +13608,7 @@ REPLACE:pm_steam_trains = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.00 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 25
 			state_pollution_generation_add = 20
 		}
@@ -13360,6 +13665,7 @@ REPLACE:pm_diesel_trains = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (48.39%)
 			goods_input_oil_add = 8                              # Price:   40, Total cost:   320.0 (51.61%)
@@ -13383,6 +13689,7 @@ REPLACE:pm_diesel_trains = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 40
 			state_pollution_generation_add = 15
 		}
@@ -13419,6 +13726,7 @@ REPLACE:pm_steam_trains_principle_transport_3 = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.20 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (66.67%)
 			goods_input_coal_add = 6                             # Price:   30, Total cost:   180.0 (33.33%)
@@ -13441,6 +13749,7 @@ REPLACE:pm_steam_trains_principle_transport_3 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.20 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 30
 			state_pollution_generation_add = 25
 		}
@@ -13509,6 +13818,7 @@ REPLACE:pm_diesel_trains_principle_transport_3 = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.91 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 6                          # Price:   60, Total cost:   360.0 (45.00%)
 			goods_input_oil_add = 11                             # Price:   40, Total cost:   440.0 (55.00%)
@@ -13532,6 +13842,7 @@ REPLACE:pm_diesel_trains_principle_transport_3 = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.91 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 55
 			state_pollution_generation_add = 20
 		}
@@ -13547,6 +13858,7 @@ pm_centralized_traffic_control = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (31.91%)
 			goods_input_oil_add = 8                              # Price:   40, Total cost:   320.0 (34.04%)
@@ -13571,6 +13883,7 @@ pm_centralized_traffic_control = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 55
 			state_pollution_generation_add = 15
 		}
@@ -13586,6 +13899,7 @@ pm_containerized_cargo = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (22.39%)
 			goods_input_oil_add = 8                              # Price:   40, Total cost:   320.0 (23.88%)
@@ -13611,6 +13925,7 @@ pm_containerized_cargo = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 55
 			state_pollution_generation_add = 15
 		}
@@ -13627,6 +13942,7 @@ pm_automated_loading_and_unloading = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (17.24%)
 			goods_input_oil_add = 8                              # Price:   40, Total cost:   320.0 (18.39%)
@@ -13652,6 +13968,7 @@ pm_automated_loading_and_unloading = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 55
 			state_pollution_generation_add = 15
 		}
@@ -13667,6 +13984,7 @@ pm_autonomous_trains = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (9.32%)
 			goods_input_oil_add = 8                              # Price:   40, Total cost:   320.0 (9.94%)
@@ -13690,6 +14008,7 @@ pm_autonomous_trains = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.39 # AUTO-GENERATED: industrial emissions
 			state_infrastructure_add = 55
 		}
 	}
@@ -13850,6 +14169,7 @@ pm_container_ports = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 			state_infrastructure_add = 15
 		}
@@ -13857,6 +14177,7 @@ pm_container_ports = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_motor_ships_add = 5                      # Price:   90, Total cost:   450.0 (37.50%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (33.33%)
@@ -13892,6 +14213,7 @@ pm_global_ports = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 			state_infrastructure_add = 30
 		}
@@ -13899,6 +14221,7 @@ pm_global_ports = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_motor_ships_add = 10                     # Price:   90, Total cost:   900.0 (43.90%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (19.51%)
@@ -13952,6 +14275,12 @@ pm_sailing_ships = {
 }
 
 pm_steam_paddleboats = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p2.dds"
 
 	unlocking_technologies = {
@@ -13960,6 +14289,7 @@ pm_steam_paddleboats = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_steamers_add = 5                         # Price:   70, Total cost:   350.0 (70.00%)
 			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (30.00%)
@@ -13977,6 +14307,12 @@ pm_steam_paddleboats = {
 }
 
 pm_diesel_electric_ferries = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.00 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
 
 	unlocking_technologies = {
@@ -13985,6 +14321,7 @@ pm_diesel_electric_ferries = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.00 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_motor_ships_add = 10                     # Price:   90, Total cost:   900.0 (85.71%)
 			goods_input_coal_add = 5                             # Price:   30, Total cost:   150.0 (14.29%)
@@ -14002,6 +14339,12 @@ pm_diesel_electric_ferries = {
 }
 
 pm_modern_cruise_ships = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p4.dds"
 
 	unlocking_technologies = {
@@ -14010,6 +14353,7 @@ pm_modern_cruise_ships = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_motor_ships_add = 10                     # Price:   90, Total cost:   900.0 (60.00%)
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (13.33%)
@@ -14042,12 +14386,14 @@ pm_motor_trawlers = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 15
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_motor_ships_add = 5                      # Price:   90, Total cost:   450.0 (36.00%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (32.00%)
@@ -14079,12 +14425,14 @@ pm_motor_whaling_ships = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.61 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 2.61 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_motor_ships_add = 5                      # Price:   90, Total cost:   450.0 (42.86%)
 			goods_input_oil_add = 15                             # Price:   40, Total cost:   600.0 (57.14%)
@@ -14122,6 +14470,7 @@ pm_magnetic_drive_ports = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 25
 			state_infrastructure_add = 50
 		}
@@ -14129,6 +14478,7 @@ pm_magnetic_drive_ports = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (43.33%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (13.33%)
@@ -14155,6 +14505,12 @@ pm_magnetic_drive_ports = {
 }
 
 pm_magnetic_drive_cruise_ships = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p4.dds"
 
 	unlocking_technologies = {
@@ -14163,6 +14519,7 @@ pm_magnetic_drive_cruise_ships = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.87 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_magnetic_drive_ships_add = 10            # Price:  130, Total cost:  1300.0 (54.17%)
 			goods_input_oil_add = 5                              # Price:   40, Total cost:   200.0 (8.33%)
@@ -14190,12 +14547,14 @@ pm_magnetic_drive_trawlers = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 20
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 1.74 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_magnetic_drive_ships_add = 5             # Price:  130, Total cost:   650.0 (44.83%)
 			goods_input_oil_add = 10                             # Price:   40, Total cost:   400.0 (27.59%)
@@ -14227,12 +14586,14 @@ pm_magnetic_drive_whaling_ships = {
 
 	state_modifiers = {
 		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.61 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 25
 		}
 	}
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 2.61 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_magnetic_drive_ships_add = 5             # Price:  130, Total cost:   650.0 (39.39%)
 			goods_input_oil_add = 15                             # Price:   40, Total cost:   600.0 (36.36%)
@@ -16069,6 +16430,12 @@ pm_3d_printed_buildings = {
 }
 
 pm_modular_shipbuilding = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 5.22 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p1.dds"
 
 
@@ -16084,6 +16451,7 @@ pm_modular_shipbuilding = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 5.22 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_steel_add = 30                           # Price:   50, Total cost:  1500.0 (35.71%)
 			goods_input_electricity_add = 30                     # Price:   30, Total cost:   900.0 (21.43%)
@@ -16111,6 +16479,12 @@ pm_modular_shipbuilding = {
 }
 
 pm_diesel_shipbuilding = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 6.09 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p2.dds"
 
 
@@ -16126,6 +16500,7 @@ pm_diesel_shipbuilding = {
 
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 6.09 # AUTO-GENERATED: fuel emissions
 			# Input goods
 			goods_input_steel_add = 30                           # Price:   50, Total cost:  1500.0 (32.97%)
 			goods_input_electricity_add = 25                     # Price:   30, Total cost:   750.0 (16.48%)

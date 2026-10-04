@@ -20,7 +20,7 @@
 #   h    become a market member under a great power that has imposed a carbon
 #        tax -- the state the old button grid showed nothing for
 #   i    recompute the yearly snapshots now instead of waiting for January
-#   j/k  adopt or repeal all eight policies at once
+#   j/k  adopt or repeal all nine policies at once
 #   l    log every country's AI climate will, part by part, to debug.log
 #        (grep GW_AI_WILL) -- the check on global_warming_ai_values.txt
 # ============================================================================

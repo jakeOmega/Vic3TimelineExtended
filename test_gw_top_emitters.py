@@ -310,9 +310,12 @@ class LocTest(unittest.TestCase):
         Our Market's Emissions reads through market_capital.owner."""
         values = _read(VALUES)
         self.assertIn("add = var:gw_disp_market_emis", _body(values, "gw_disp_own_emis"))
-        self.assertIn("add = var:gw_disp_market_emis", _body(values, "gw_market_emis_display"))
-        self.assertIn("ScriptValue('gw_market_emis_display')|1]/yr", _loc("gw_emis_market_value"))
-        self.assertIn("ScriptValue('gw_disp_own_emis')|1]/yr", _loc("gw_te_row_annual"))
+        self.assertIn("add = var:gw_disp_market_emis", _body(values, "gw_market_emis_raw"))
+        self.assertIn("value = gw_market_emis_raw", _body(values, "gw_market_emis_display"))
+        for name in ("gw_disp_own_emis", "gw_market_emis_display"):
+            self.assertIn("multiply = gw_emission_display_scale", _body(values, name))
+        self.assertIn("ScriptValue('gw_market_emis_display')|K]/yr", _loc("gw_emis_market_value"))
+        self.assertIn("ScriptValue('gw_disp_own_emis')|K]/yr", _loc("gw_te_row_annual"))
 
 
 if __name__ == "__main__":

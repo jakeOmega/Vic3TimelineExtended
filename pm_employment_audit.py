@@ -78,9 +78,8 @@ _REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
 )
 
-# Guard against pathological Cartesian products. No real building approaches
-# this (sugar plantation is 4×4×3×4 = 192); a building exceeding it is recorded
-# as skipped rather than enumerated.
+# Guard against pathological Cartesian products after removing independent
+# employment-neutral groups. Record any remaining oversized building as skipped.
 _COMBO_CAP = 200_000
 
 _EMP_PREFIX = "building_employment_"
@@ -263,6 +262,14 @@ def _audit_building(
     )
     if not has_negative:
         return [], False, False
+
+    # An employment-neutral group with an unconditional fallback cannot change
+    # the result unless another group's PM requires one of its methods. Capture
+    # controls meet this criterion even though their tier variants are gated.
+    required = {pm for reqs in pm_unlock.values() for pm in reqs}
+    groups = [(g, pms) for g, pms in groups
+              if any(pm_emp[pm] for pm in pms) or required.intersection(pms)
+              or all(pm_unlock[pm] for pm in pms)]
 
     # Combination-count guard.
     combo_count = 1

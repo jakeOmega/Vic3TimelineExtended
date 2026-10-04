@@ -297,6 +297,11 @@
 				add = { value = 0.1 desc = "POLICY_POSSIBLE_EMISSION_STANDARDS" }
 			}
 
+			if = { # Atmospheric carbon removal: a small satisfaction bonus
+				limit = { gw_policy_carbon_removal_active = yes }
+				add = { value = -0.05 desc = "POLICY_ACTIVE_CARBON_REMOVAL" }
+			}
+
 			if = { # Reforestation subsidies
 				limit = { has_journal_entry = je_global_warming je:je_global_warming = { has_modifier = reforestation_subsidies_modifier } }
 				add = { value = -0.1 desc = "POLICY_ACTIVE_REFORESTATION_SUBSIDIES" }

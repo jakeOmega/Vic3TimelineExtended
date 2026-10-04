@@ -153,6 +153,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_opium = {
 		pmg_synthetic_opium
 		pmg_automation_building_chemical_plant
 		pmg_maintenance
+		pmg_carbon_capture_synthetic_opium
 	}
 
 	required_construction = construction_cost_very_high
@@ -183,7 +184,7 @@ REPLACE_OR_CREATE:building_synthetics_plant_coal = {
 	levels_per_mesh = -1
 
 	unlocking_technologies = {
-		genetic_engineering
+		carbon_capture_and_storage
 	}
 
 	production_method_groups = {
@@ -489,6 +490,8 @@ REPLACE:building_automotive_industry = {
 		pmg_automation_building_automotive_industry
 		pmg_emissions_control
 		pmg_maintenance
+		pmg_carbon_capture_automobile_production
+		pmg_carbon_capture_automation_building_automotive_industry
 	}
 
 	required_construction = construction_cost_very_high
@@ -786,6 +789,7 @@ REPLACE_OR_CREATE:building_aerospace_industry = {
 		pmg_base_building_aerospace_industry
 		pmg_automation_building_aerospace_industry
 		pmg_maintenance
+		pmg_carbon_capture_aeroplanes
 	}
 
 	required_construction = construction_cost_mega_high
@@ -1288,6 +1292,8 @@ REPLACE_OR_CREATE:building_manganese_mine = {
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_iron_mine
+		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -1317,6 +1323,8 @@ REPLACE_OR_CREATE:building_chromium_mine = {
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_iron_mine
+		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -1346,6 +1354,8 @@ REPLACE_OR_CREATE:building_specialty_alloy_metal_mine = {
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_iron_mine
+		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -1375,6 +1385,8 @@ REPLACE_OR_CREATE:building_copper_mine = {
 		pmg_train_automation_building_lead_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_lead_mine
+		pmg_carbon_capture_steam_automation_building_lead_mine
 	}
 
 	required_construction = construction_cost_high
@@ -1404,6 +1416,8 @@ REPLACE_OR_CREATE:building_bauxite_mine = {
 		pmg_train_automation_building_iron_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_iron_mine
+		pmg_carbon_capture_steam_automation_building_iron_mine
 	}
 
 	required_construction = construction_cost_high
@@ -1433,6 +1447,8 @@ REPLACE_OR_CREATE:building_precious_minor_base_metal_mine = {
 		pmg_train_automation_building_lead_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_lead_mine
+		pmg_carbon_capture_steam_automation_building_lead_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -1462,6 +1478,8 @@ REPLACE_OR_CREATE:building_nickel_cobalt_mine = {
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_tech_metals_mine
+		pmg_carbon_capture_steam_automation_building_tech_metals_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -1491,6 +1509,8 @@ REPLACE_OR_CREATE:building_lithium_mine = {
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_tech_metals_mine
+		pmg_carbon_capture_steam_automation_building_tech_metals_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -1520,6 +1540,8 @@ REPLACE_OR_CREATE:building_rare_earth_metals_mine = {
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_tech_metals_mine
+		pmg_carbon_capture_steam_automation_building_tech_metals_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -1549,6 +1571,8 @@ REPLACE_OR_CREATE:building_platinum_group_metals_mine = {
 		pmg_train_automation_building_tech_metals_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_tech_metals_mine
+		pmg_carbon_capture_steam_automation_building_tech_metals_mine
 	}
 
 	required_construction = construction_cost_very_high
@@ -1578,6 +1602,7 @@ REPLACE_OR_CREATE:building_graphite_mine = {
 		pmg_train_automation_building_coal_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_coal_mine
 	}
 
 	required_construction = construction_cost_high
@@ -1607,6 +1632,8 @@ REPLACE_OR_CREATE:building_phosphate_mine = {
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_sulfur_mine
+		pmg_carbon_capture_steam_automation_building_sulfur_mine
 	}
 
 	required_construction = construction_cost_high
@@ -1636,6 +1663,8 @@ REPLACE_OR_CREATE:building_potash_mine = {
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_sulfur_mine
+		pmg_carbon_capture_steam_automation_building_sulfur_mine
 	}
 
 	required_construction = construction_cost_high
@@ -1665,6 +1694,8 @@ REPLACE_OR_CREATE:building_industrial_mineral_salt_mine = {
 		pmg_train_automation_building_sulfur_mine
 		pmg_tailings_wastewater_management
 		pmg_maintenance_light
+		pmg_carbon_capture_mining_equipment_building_sulfur_mine
+		pmg_carbon_capture_steam_automation_building_sulfur_mine
 	}
 
 	required_construction = construction_cost_high

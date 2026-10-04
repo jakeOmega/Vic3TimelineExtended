@@ -1,0 +1,10 @@
+﻿# Preserve unrelated vanilla changes: swap 20 coal for 20 electricity.
+# The two mod-owned substitution processes are edited in extra_pms.txt.
+INJECT:pm_electric_arc_process = {
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_coal_add = -20
+			goods_input_electricity_add = 20
+		}
+	}
+}

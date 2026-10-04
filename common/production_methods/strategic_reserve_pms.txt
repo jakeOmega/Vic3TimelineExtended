@@ -18,6 +18,12 @@
 
 # ---------------- GRAIN ----------------
 pm_st_res_hub_reserve = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: industrial emissions
+		}
+	}
+
 	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
 	country_modifiers = {
 		level_scaled = {
@@ -34,6 +40,7 @@ pm_st_res_hub_reserve = {
 	}
 	building_modifiers = {
 		workforce_scaled = {
+			building_greenhouse_gas_emissions_add = 0.17 # AUTO-GENERATED: fuel emissions
 			goods_input_grain_add = 1
 			goods_output_grain_add = 1
 			goods_input_ammunition_add = 1

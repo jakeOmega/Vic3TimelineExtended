@@ -3878,3 +3878,9 @@ state_building_sumitomo_besshi_mine_max_level_add = {
 	color = good
 	percent = no
 }
+
+building_synthetics_plant_coal_throughput_add = {
+	color = good
+	percent = yes
+	decimals = 0
+}

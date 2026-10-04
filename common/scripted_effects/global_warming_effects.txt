@@ -278,8 +278,8 @@ gw_rebase_annual_emissions_effect = {
 	}
 }
 
-# Count how many countries run each of the eight policies, in ONE country sweep
-# that fills all eight counters. Replaces eight separate sweeping script values
+# Count how many countries run each of the nine policies, in ONE country sweep
+# that fills all nine counters. Replaces eight separate sweeping script values
 # that were rendered live in the reason text.
 #
 # The same sweep stores the mean standard of living over these countries
@@ -294,6 +294,7 @@ gw_refresh_global_counts_effect = {
 		set_global_variable = { name = gw_g_n_emission_standards value = 0 }
 		set_global_variable = { name = gw_g_n_climate_adaptation value = 0 }
 		set_global_variable = { name = gw_g_n_reforestation value = 0 }
+		set_global_variable = { name = gw_g_n_carbon_removal value = 0 }
 		set_global_variable = { name = gw_g_n_public_transit value = 0 }
 		set_global_variable = { name = gw_g_n_fossil_fuel_divestment value = 0 }
 		set_global_variable = { name = gw_g_n_green_building_codes value = 0 }
@@ -322,6 +323,10 @@ gw_refresh_global_counts_effect = {
 			if = {
 				limit = { gw_policy_reforestation_active = yes }
 				change_global_variable = { name = gw_g_n_reforestation add = 1 }
+			}
+			if = {
+				limit = { gw_policy_carbon_removal_active = yes }
+				change_global_variable = { name = gw_g_n_carbon_removal add = 1 }
 			}
 			if = {
 				limit = { gw_policy_public_transit_active = yes }
@@ -485,5 +490,33 @@ gw_top_emitter_slot = {
 	else_if = {
 		limit = { has_variable = gw_emitter_$N$ }
 		remove_variable = gw_emitter_$N$
+	}
+}
+
+
+gw_effect_carbon_removal = {
+	custom_tooltip = {
+		text = "GW_CARBON_REMOVAL_DESC"
+		hidden_effect = { set_variable = { name = gw_carbon_removal_policy value = yes } }
+		je:je_global_warming = { add_modifier = { name = carbon_removal_modifier } }
+	}
+}
+
+gw_effect_remove_carbon_removal = {
+	custom_tooltip = {
+		text = "GW_REMOVE_CARBON_REMOVAL_DESC"
+		hidden_effect = { remove_variable = gw_carbon_removal_policy }
+		je:je_global_warming = { remove_modifier = carbon_removal_modifier }
+	}
+}
+
+# A revolution inherits the country flag; rebuild the journal-entry modifier.
+gw_restore_carbon_removal_policy_effect = {
+	if = {
+		limit = {
+			has_variable = gw_carbon_removal_policy
+			NOT = { gw_policy_carbon_removal_active = yes }
+		}
+		je:je_global_warming = { add_modifier = { name = carbon_removal_modifier } }
 	}
 }

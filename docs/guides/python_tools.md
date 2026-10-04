@@ -10,7 +10,7 @@ Only `mod_path` and `doc_path` are computed at import; every per-machine path (`
 
 ## Auto-run on server reload
 
-`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical rosters are `POST_LOAD_REGENERATORS` (the 12 file-rewriting generators) and `POST_LOAD_AUDITS` (the 28 read-only audits) in `mod_state_server.py`; the default reload runs `POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS`. Each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED`, recorded in the reload response's `warnings` array, and skipped — they don't block startup. `POST /reload?engine_only=true` bypasses `_load_mod_state` and so skips these; `POST /reload?audits_only=true` runs only `POST_LOAD_AUDITS` (no working-tree side effects beyond `docs/engine/*_report.md`).
+`mod_state_server.py` runs a chain of idempotent transformers after every full ModState load (server startup and `POST /reload`). The canonical rosters are `POST_LOAD_REGENERATORS` (the 13 file-rewriting generators) and `POST_LOAD_AUDITS` (the 28 read-only audits) in `mod_state_server.py`; the default reload runs `POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS`. Each entry must expose `regenerate(mod_state=None)` and finish in well under a second. Failures are logged with `[post-load] <name> FAILED`, recorded in the reload response's `warnings` array, and skipped — they don't block startup. `POST /reload?engine_only=true` bypasses `_load_mod_state` and so skips these; `POST /reload?audits_only=true` runs only `POST_LOAD_AUDITS` (no working-tree side effects beyond `docs/engine/*_report.md`).
 
 **Audit warnings**: when a generator's return dict contains `unreviewed > 0` or `hard_fails > 0`, the runner logs `[post-load WARN] <label> surfaced issues: <key>=<n>` at WARNING level and adds an entry to the `/reload` response's `warnings` array — caller sees regressions in the same response, no log-scraping required. Add new actionable counter names to `_POST_LOAD_WARN_KEYS` in `mod_state_server.py` if a new audit invents one.
 
@@ -29,6 +29,7 @@ Only `mod_path` and `doc_path` are computed at import; every per-machine path (`
 | `resources` | `map_data/state_regions/*.txt` |
 | `gen_pb_principle_unlock_descs` | `*_pb_principles_bool_desc` keys in `localization/english/te_power_bloc_unlocks_l_english.yml` |
 | `gen_un_button_descs` | `localization/english/te_un_button_effects_l_english.yml` |
+| `gen_carbon_capture_pms` | `common/production_methods/greenhouse_gas_generated_injects.txt`, positive `building_greenhouse_gas_emissions_add` lines in mod-owned/REPLACEd covered PMs, negative removal line in `direct_air_capture.txt` |
 | `gen_law_consistency` | `common/scripted_effects/extra_law_consistency_generated.txt` |
 | `gen_company_building_cleanup` | `common/scripted_effects/company_building_cleanup_effects.txt` — one `remove_building` guard per company building plus `remove_disbanded_company_buildings_effect`. The only roster entry that lives under `scripts/generators/`; it is imported by dotted path (`scripts.generators.gen_company_building_cleanup`), see § "Adding a new post-load generator". |
 | `organize_loc` | `localization/english/te_*_l_english.yml` (30 category files) |
@@ -553,7 +554,7 @@ Timings are order-of-magnitude and move with the machine; the ordering is the pa
 |---|---|---|---|---|
 | (none) | ~60–90 s | regenerator output under `common/`, `localization/english/`, `events/` + audit reports under `docs/engine/` | nothing | Normal "I edited mod files, re-run everything" reload. |
 | `?engine_only=true` | <1 s | none | the entire ModState rebuild (only re-reads engine-doc snapshots) | After re-launching the game with no mod-file edits, when you only want freshly-typed `script_docs` output to be picked up. |
-| `?audits_only=true` | ~60–90 s | audit reports under `docs/engine/*_report.md` only | the 12 file-rewriting `POST_LOAD_REGENERATORS` | When you want a clean re-check of audit warnings without regenerators reshuffling your diff. Time-savings are modest — the parse dominates. The real win is the clean diff. |
+| `?audits_only=true` | ~60–90 s | audit reports under `docs/engine/*_report.md` only | the 13 file-rewriting `POST_LOAD_REGENERATORS` | When you want a clean re-check of audit warnings without regenerators reshuffling your diff. Time-savings are modest — the parse dominates. The real win is the clean diff. |
 | `?mod_only=true` | ~25 s | regenerator output (as above) | the vanilla parse + vanilla loc re-read (uses cached snapshot from the previous full load) + the engine-docs / dev-refs reload | When you've only edited mod files and want a quick reload. Vanilla cache is opt-in — if you bump vanilla, run an unflagged `/reload` to refresh it. |
 | `?mod_only=true&audits_only=true` | ~25 s | audit reports under `docs/engine/*_report.md` only | both regenerators *and* the vanilla re-read | **The fast-verify path used by the nightly audit.** Safe to call after every batch of fixes. |
 

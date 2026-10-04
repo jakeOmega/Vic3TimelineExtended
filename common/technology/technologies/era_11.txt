@@ -116,7 +116,7 @@ autonomous_vehicles = {
 }
 
 genetic_engineering = {
-	# Synthetic Coal, Drinks, Biomass Industries buildings, Bioengineered Rubber
+	# Synthetic Coal PM, Drinks and Biomass Industries buildings, Bioengineered Rubber
 	# PM for Synthetic Rubber Factories, State Eugenics Program law
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/genetic_engineering.dds"
