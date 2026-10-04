@@ -305,6 +305,35 @@ une_formation_no_internal_rivalry = {
 	}
 }
 
+# A world government needs a world order already in place. With the UN game
+# rule on, that is the United Nations at the Supranational tier of UN
+# authority (85+, which only Charter Reform II opens). With it off there is no
+# UN to ask, so ROOT's bloc must stand in for it: no great power outside it,
+# where une_formation_supermajority allows one aligned outsider. Also gates
+# dp_unify_united_earth, so a unification play cannot form UNE around it.
+# Scope: country (ROOT is the candidate or the play's initiator)
+une_formation_world_order = {
+	trigger_if = {
+		limit = { has_game_rule = united_nations_enabled }
+		custom_tooltip = {
+			text = une_formation_un_supranational_tt
+			un_tier_is_supranational = yes
+		}
+	}
+	trigger_else = {
+		custom_tooltip = {
+			text = une_formation_bloc_unanimity_tt
+			NOT = {
+				any_country = {
+					country_rank >= rank_value:great_power
+					NOT = { this = ROOT }
+					NOT = { is_in_same_power_bloc = ROOT }
+				}
+			}
+		}
+	}
+}
+
 # === Vanilla's Turtle Island JE must not reach the unions =====================
 # Vanilla je_unite_the_nations shows for any North American country with an
 # indigenous-heritage primary culture while TIS does not exist, and its
