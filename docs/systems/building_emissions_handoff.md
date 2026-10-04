@@ -494,3 +494,29 @@ testing. All six Next work checks remain pending, including foreign ownership
 and the new annual household/model totals. PR stays draft/unmerged; review
 monitor stays active. Reviews 5403821644/5403833930 and their three inline
 comments are handled and recorded above.
+
+
+## Owner-reported wording sweep checkpoint
+
+The owner supplied a reviewer recheck of f5fb6cef that found unreported stale
+policy counts. Corrected the player-facing journal-entry reason and both debug
+option labels to nine. Debug adopt/repeal-all already includes Carbon Removal
+Support; no effect change is required. Corrected all four widget comments,
+current snapshot/population-counter comments, the debug event header and
+AI/op-table developer documentation. The treaty-lock comment now correctly
+counts eight protected policies (all except adaptation). Historical eight-policy
+references and the eight retired no-GW fallback modifiers remain accurate.
+
+Validation: 67 existing climate-layout tests pass, localization sanity and
+organization pass, GUI lint has zero errors/warnings, capture generation is
+current (zero writes), tabs and diff whitespace pass. journal_entry_systems.md
+retains CRLF. Deployment dry run had no deletions; apply completed. All 45
+feature game files and 310 staged language files match by SHA-256. CI runs on
+the pushed checkpoint. The previous complete suite remains 3,651 tests passing
+with 58 skips; this checkpoint changes wording/comments only.
+
+The broader review did not establish that all work is complete. Fuel-input
+discounts remain economic only; concentrated-stream unlocks, coal-to-liquids
+recipe/artwork, the eventual placement of this temporary handoff and optional
+PR splitting remain deferred decisions. All six in-game checks above remain
+pending. PR #681 stays draft/unmerged and review monitoring stays active.

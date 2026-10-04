@@ -69,7 +69,7 @@ gw_is_market_leader = {
 
 # Bound by an Enforce Emissions Reduction treaty article
 # (109_enforce_emissions_reduction.txt sets the variable on its source). Such a
-# country keeps every policy it holds: its own repeal is barred (the seven
+# country keeps every policy it holds: its own repeal is barred (the eight
 # gw_possible_remove_* below, gw_cond_not_treaty_bound, and the matching
 # journal-entry buttons' `visible`), its market leader's repeal skips it
 # (gw_effect_remove_*), and so do the join sync and the monthly reconciliation

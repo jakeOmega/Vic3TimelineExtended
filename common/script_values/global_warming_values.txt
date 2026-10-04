@@ -136,7 +136,7 @@ gw_emissions_cut_pct_display = {
 	multiply = 100
 }
 
-# How many of the eight policies are in force for this country. Live: eight
+# How many of the nine policies are in force for this country. Live: nine
 # journal-entry modifier lookups, and it must react to a click immediately.
 # Scope: country
 gw_policies_active_count_display = {
@@ -165,7 +165,7 @@ gw_warming_penalty_scale_display = {
 # World adoption counts — O(1) readers over the monthly global snapshot.
 # These replace the eight `gw_countries_with_*_script_value` definitions, each
 # of which was a full `every_country` sweep rendered live in the JE's reason
-# text. Do not reintroduce a sweeping version: one sweep now fills all eight.
+# text. Do not reintroduce a sweeping version: one sweep now fills all nine.
 # Scope: any
 # ----------------------------------------------------------------------------
 gw_world_n_carbon_tax_display = {

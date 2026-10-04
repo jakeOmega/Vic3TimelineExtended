@@ -543,7 +543,7 @@ Each button's `possible` lives in `gw_possible_<button>` (`common/scripted_trigg
 
 **How the AI chooses.** Every button's `ai_chance` reads `common/script_values/global_warming_ai_values.txt`, which gives each country a climate will per policy. Each will has two parts:
 
-- **A shared core**, the same for all eight policies: temperature (20 per °C, capped at 100 = 5 °C, so stacked opposition can still hold out), the environment ministry (+15), and an environmentalist leading a governing interest group (+8).
+- **A shared core**, the same for all nine policies: temperature (20 per °C, capped at 100 = 5 °C, so stacked opposition can still hold out), the environment ministry (+15), and an environmentalist leading a governing interest group (+8).
 - **Five signals, weighted per policy** by who the policy costs or helps: laissez-faire, industrialists in government, the environmental movement's support, standard of living against the world mean (the mean is stored by `gw_refresh_global_counts_effect`), and how far the market is a net coal and oil exporter. Each signal runs from 0 to 1, or −1 to 1 for wealth.
 
 The weight table sits in the file's header with one line of reasoning per row, taken from what each policy's modifier does. For example, wealth counts *against* Climate Adaptation, because its flat +0.5 standard of living is worth most in poor countries. Fossil exports weigh −25 on divestment and −20 on carbon tax, and nothing on adaptation. Every will lists all five signals, zeros included.
@@ -578,7 +578,7 @@ Areas, in order. Collapse flags say their default: `_closed` sections are open u
 The overview replaces two vanilla pieces. **The status line** prints only while the entry is inactive (`status_desc` is a `first_valid` whose active branch is the empty `je_global_warming_status_none`, which hides vanilla's status box), because the tier sentence repeated the overview. **The goal bar** near the foot is hidden by the bars-on-top marker in `custom_widget_container_7` (from #582, which extends the marker to the goal bar); `progressbar = yes` itself is unchanged.
 
 
-**Op table** (identical for all eight policy handlers, so the row type bakes them in and a row instance carries no op markup):
+**Op table** (identical for all nine policy handlers, so the row type bakes them in and a row instance carries no op markup):
 
 | op | action | delegates to |
 |---|---|---|
