@@ -6,6 +6,9 @@
 # identities. The country_subjugation_*_strength_add modifiers are read
 # (conditionally on axis match) by the te_subjugation_strength script_value,
 # which gates the rebalanced force_become_subject diplomatic action.
+# The Subjugate tooltip reads these values live, but the Subjugation Strength
+# concept (concept_subjugation_strength_desc, te_concepts_l_english.yml)
+# quotes them as text: retune both together.
 #
 # identity_diplomatic (mod-defined) is intentionally not wired in — it's
 # strong via alignment and pact leverage already, and its leader pays

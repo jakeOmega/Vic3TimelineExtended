@@ -252,3 +252,9 @@ concept_heritage_monument = {}
 concept_tax_code = {}
 concept_tax_bill = {}
 concept_tax_commencement = {}
+
+# Subjugate (force_become_subject): the score its possible clause gates on
+# (script value te_subjugation_strength). The action's tooltip breaks it down.
+concept_subjugation_strength = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/force_become_subject.dds"
+}

@@ -2767,14 +2767,110 @@ arable_land_mult_pct = {
 #   - Sovereign Empire: +0.5 universal       →  10x prestige anywhere
 #   - Per-identity matched: +0.4 in domain   →  ~12x prestige (axis-aligned)
 #   - identity_diplomatic: no bonus on purpose
+#
+# The total is the sum of the three parts below, each its own script value so
+# the Subjugate tooltip (te_subjugation_strength_sufficient_tt) can show them
+# and cannot drift from this gate. The player-facing explanation is
+# concept_subjugation_strength_desc: keep its numbers in step with the
+# identity bonuses in common/power_bloc_identities/te_subjugation_identity_overrides.txt.
 te_subjugation_strength = {
+	value = te_subjugation_strength_prestige
+	add = te_subjugation_strength_identity
+	add = te_subjugation_strength_other
+}
+
+# Country scope, scope:target_country set. Own prestige over the target's.
+te_subjugation_prestige_ratio = {
+	value = prestige
+	divide = { value = scope:target_country.prestige min = 1 }
+}
+
+# Country scope, scope:target_country set. The base part: the prestige ratio over 20.
+te_subjugation_strength_prestige = {
+	value = te_subjugation_prestige_ratio
+	divide = 20
+}
+
+# Country scope, scope:target_country set. Display only: the two prestige
+# figures the Subjugate tooltip quotes.
+te_subjugation_prestige_own = {
+	value = prestige
+}
+te_subjugation_prestige_target = {
+	value = scope:target_country.prestige
+}
+
+# Country scope. The flat part, from country_subjugation_strength_add.
+te_subjugation_strength_other = {
+	value = modifier:country_subjugation_strength_add
+}
+
+# Country scope. Display only: which identity line the Subjugate tooltip shows.
+#   0 none (Diplomatic Framework, or an identity with no subjugation bonus)
+#   1 Sovereign Empire, 2 Religious, 3 Ideological Union, 4 Cultural,
+#   5 Trade League, 6 Military Treaty Organization
+te_subjugation_identity_index = {
 	value = 0
-	add = {
-		value = prestige
-		divide = { value = scope:target_country.prestige min = 1 }
-		divide = 20
+	if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_sovereign_empire } }
+		value = 1
 	}
-	add = modifier:country_subjugation_strength_add
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_religious } }
+		value = 2
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_ideological_union } }
+		value = 3
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_cultural } }
+		value = 4
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_trade_league } }
+		value = 5
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_military_treaty_organization } }
+		value = 6
+	}
+}
+
+# Country scope. Display only: the bonus the bloc's identity pays when its
+# condition holds, whether or not it holds against this target.
+te_subjugation_identity_bonus = {
+	value = 0
+	if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_sovereign_empire } }
+		add = modifier:country_subjugation_sovereign_strength_add
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_religious } }
+		add = modifier:country_subjugation_religious_strength_add
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_ideological_union } }
+		add = modifier:country_subjugation_ideological_strength_add
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_cultural } }
+		add = modifier:country_subjugation_cultural_strength_add
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_trade_league } }
+		add = modifier:country_subjugation_trade_strength_add
+	}
+	else_if = {
+		limit = { power_bloc ?= { has_identity = identity:identity_military_treaty_organization } }
+		add = modifier:country_subjugation_military_strength_add
+	}
+}
+
+# Country scope, scope:target_country set. The identity part: the bloc
+# identity's bonus, paid when its condition holds against the target.
+te_subjugation_strength_identity = {
+	value = 0
 
 	# Sovereign Empire — universal (no axis match needed)
 	if = {

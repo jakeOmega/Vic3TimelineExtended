@@ -64,7 +64,9 @@ REPLACE:force_become_subject = {
 		}
 
 		# Replaces vanilla's flat `prestige >= target.prestige * 5` with a
-		# scored gate. See te_subjugation_strength for the full formula.
+		# scored gate. See te_subjugation_strength for the full formula. The
+		# tooltip shows the current score and its parts (prestige, identity
+		# bonus, flat bonus) through the te_subjugation_* display script values.
 		custom_tooltip = {
 			text = te_subjugation_strength_sufficient_tt
 			te_subjugation_strength >= 1.0
