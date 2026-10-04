@@ -21,6 +21,14 @@ So:
   law, date or condition that starts it), what its numbers mean, what each
   choice does, what can go wrong, how the AI behaves, and how it connects to
   other systems.
+- Match the depth of the text around you. A system is something the player
+  works through: a journal entry, a panel, buttons, a chain of event choices.
+  Most of the mod is single buildings, production methods, goods, companies
+  and laws, and each of those gets a table row, a list entry or a sentence
+  beside its peers, not a section. Don't add per-method input tables, staffing
+  figures, every modifier a law grants or every option of a one-off event; the
+  tooltips show them. When you edit a chapter for a change, update what the
+  chapter already says and add only what a player needs to plan around.
 - Give the numbers a player plans around: thresholds, tiers, durations, caps,
   costs in the units the game shows. Leave out coefficients and formulas. The
   in-game tooltips carry the exact figures, so say so when a figure varies.

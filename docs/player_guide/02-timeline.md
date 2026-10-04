@@ -109,12 +109,11 @@ Tourism Industry with Romanticism.
 The further the world's leading powers advance, the faster everyone else
 catches up. Once a year, every country checks a list of 54 mid-century and later
 technologies, from Television and Cryptography to Space Colonization. Each one
-that any great power (or a country ranked above that) has researched adds a
-bonus to technology spread, the trickle of innovation that pulls you toward
-technologies others already have. The bonuses add up, and the later the
-technology, the more it is worth: the earliest tier adds a small step, and the
-last tier (Artificial Intelligence, Space Colonization and their peers) adds ten
-times as much. Only great powers count, so a technology first reached by a
+that any great power has researched adds a bonus to technology spread, the
+trickle of innovation that pulls you toward technologies others already have.
+The bonuses add up, and the later the technology, the more it is worth: the
+earliest tier adds a small step, and the last tier (Artificial Intelligence,
+Space Colonization and their peers) adds ten times as much. Only great powers count, so a technology first reached by a
 minor country does not move the world's pace until a great power follows.
 
 The bonus appears on your country as the Global Technological Development
@@ -122,12 +121,14 @@ modifier, and every country gets the same one, recognized or not. It is a
 catch-up mechanism, not a research boost for the leaders. A backward country
 gains the most from it, because spread only works on technologies you lack. The
 leaders gain little, since spread only ever feeds technologies someone has
-already researched. So the further ahead the great powers pull, the harder it is
-for a country to stay far behind them. The tooltip on the modifier shows your
-current figure. It sits alongside the usual sources of spread (literacy, laws
-and power bloc principles) and is separate from
-[agricultural diffusion](#agricultural-diffusion), which grants arable land
-rather than research.
+already researched. The further ahead the great powers pull, the larger the
+bonus, but it closes the gap less than that suggests. The bonus is a flat amount
+of spread, and technology costs climb much faster than its tiers do: an era 12
+technology costs a hundred times as much as an era 6 one. So the same bonus
+pays for less of each technology as the eras go on. The tooltip on the modifier shows your current figure. It sits alongside the
+usual sources of spread (literacy, laws and power bloc principles) and is
+separate from [agricultural diffusion](#agricultural-diffusion), which grants
+arable land rather than research.
 
 ### Agricultural diffusion
 
@@ -155,10 +156,10 @@ with nothing else changed each one lowers the level your literacy settles at by
 
 This is deliberate. Each of these technologies raises the standard for what
 counts as literate: working with computers, networks and digital systems asks
-more of a person than reading a newspaper, so the same schooling reaches a
-smaller share of the population. The technology tooltip shows the penalty. It
-also keeps education relevant in the late game, because the gain has to be kept
-up as the bar rises.
+more of a person than reading a newspaper, so someone who counted as literate
+under the old standard may not under the new one. The technology tooltip shows
+the penalty. It also keeps education relevant in the late game, because the
+gain has to be kept up as the bar rises.
 
 Each of the four also raises the Schools institution's maximum investment by one
 level. Funding schools and the laws that raise education access are how a
@@ -280,72 +281,18 @@ Resort Colony production method, which produces art and tourism instead.
 
 ### Pharmaceutical Industries and Drugs
 
-Pharmaceutical Industries make Drugs, the base game's opium, so they compete
-with opium plantations. The building comes with the base game's Pharmaceuticals
-technology and costs 800 construction per level, four times as much as a
-plantation. You can't build it while your country bans Drugs.
-
-Once a UN member researches Antibiotic Mass Production, the Assembly can raise
-the [Single Convention on Narcotic Drugs](09-united-nations.md#un-conventions-and-agencies).
-At ×1 UN enforcement, parties gain 5% Pharmaceutical Industries throughput and
-3% prestige, while their Opium Plantations lose 15% throughput. These terms
-scale with UN enforcement.
-
-| Method | Unlocked by | Drugs per level | Inputs per level |
-|---|---|---|---|
-| Alkaloid Extraction | Pharmaceuticals | 30 | 15 Chemicals, 10 Glass and Plastics, 10 Sugar |
-| Synthetic Drug Chemistry | Antibiotics | 75 | 20 Chemicals, 10 Energy and Carbon Minerals, 10 Glass and Plastics |
-| Antibiotic Fermentation | Antibiotic Mass Production | 135 | 20 Chemicals, 20 Sugar, 15 Electricity, 15 Glass and Plastics |
-| Rational Drug Design | Modern Pharmaceuticals | 190 | 20 Chemicals, 20 Electronic Components, 10 Electricity, 10 Chemical and Industrial Minerals |
-| Biologics and mRNA | mRNA Therapeutics | 265 | 30 Electricity, 20 Electronic Components, 20 Chemicals, 20 Sugar |
-| Precision Medicine | Personalized Medicine | 345 | 30 Electricity, 15 Software, 15 Electronic Components, 15 Chemicals |
-
-The figures are for a fully staffed level. Every method employs 2,000
-engineers per level; Alkaloid Extraction employs 7,000 workers in all and every
-later method 5,500.
-
-Alkaloid Extraction earns about a quarter as much per worker as an opium
-plantation. It covers its wages only where Drugs sell well above their base
-price, so opium plantations stay the cheaper source of Drugs until Antibiotics.
-Synthetic Drug Chemistry earns about as much per worker as the best plantation
-method, and Antibiotic Fermentation about twice as much. An opium plantation's
-Mechanized Farm makes 55 Drugs per level; a coffee or tea plantation's, whose
-goods have the same base price, makes 75.
-
-Pops buy Drugs for two needs: Intoxicants, as in the base game, and from
-wealth 16 the mod's Healthcare ([Pop consumption at high
-wealth](03-economy.md#pop-consumption-at-high-wealth)). Healthcare takes about
-3% of a pop's spending from wealth 29 to 50, so in a rich country most Drugs
-are bought as medicine and Drugs are a large market. Leisure, which also buys
-Drugs in the base game, doesn't in the mod.
-
-A health system shrinks your own opium plantations. Each level of the Ministry
-of Health cuts their throughput by 2% under Charity Hospitals, 3% under
-Private Health Insurance and 5% under Public Health Insurance. Each level of the
-Ministry of Consumer Protection cuts it by another 10%. With both ministries at
-level 9 under Public Health Insurance, the cut is 135%, set against the
-plantations' other throughput bonuses. Pharmaceutical Industries are not affected, and
-neither are other countries' plantations, which can go on selling Drugs into
-your market.
-
-A Medicine Shortage event can come when your market is short of Drugs (the base
-game's goods-shortage alert) and at least 3% of your people live in pops at
-wealth 25 or more, which is about where medicine becomes a third of what your
-country spends on Drugs. While the shortage lasts, the event comes in about
-three years out of four, then not again for two and a half years. You choose how
-to get through it; buying abroad keeps patients treated but doesn't end the
-shortage in your market.
-
-| Option | Effect for two and a half years |
-|---|---|
-| Buy abroad at any price | A weekly cost of about 0.02% of GDP |
-| Ration what we have | +3% mortality, fading |
-| Put the Pharmaceutical Industries on a war footing (needs one) | A weekly cost of about 0.04% of GDP and +25% throughput for your Pharmaceutical Industries, fading |
-| Let the poppy growers fill the gap (needs an opium plantation) | +30% throughput for your opium plantations, fading; the Intelligentsia and the Devout disapprove, the Landowners approve |
-
-The base game's journal entry The Opium Trade is not offered after 23 January
-1912, and an entry still open on that date fails. Field Hospitals take Drugs as
-upkeep, so they need Drugs for sale in your market.
+Drugs, the base game's opium, also come from Pharmaceutical Industries, which
+arrive with the base game's Pharmaceuticals technology and gain better
+production methods with later medical technologies. Opium plantations are the
+cheaper source of Drugs until Antibiotics brings the factory level with them;
+its later methods pull ahead. Pops buy Drugs for Intoxicants and, from wealth
+16, for the mod's Healthcare need ([Pop consumption at high
+wealth](03-economy.md#pop-consumption-at-high-wealth)), so in a rich country
+most Drugs are bought as medicine. The Ministry of Health and the Ministry of
+Consumer Protection cut the throughput of your own opium plantations, and a
+rich country whose market runs short of Drugs can get a Medicine Shortage
+event. The base game's journal entry The Opium Trade is not offered after
+January 1912, and one still open then fails.
 
 ### Later production methods for existing buildings
 
@@ -399,39 +346,10 @@ the leading producer of their good. Japan can found Saudi Aramco and the United
 States can found Volkswagen if they meet those conditions. Generic companies
 need a large enough building of their industry.
 
-### Biotechnology companies
-
-Biotechnology companies need the Corporate Genetic Licensing law ([Economic law
-groups](05-politics.md#economic-law-groups)), which Biotechnology unlocks. Under
-it you can found the generic Biotechnology company and eight flavored ones.
-
-The generic company needs an Artificial Sweeteners Plant, Beverage Concentrates
-Plant, Cultured Meat Plant or Cultured Produce Facility at level 10. It runs
-those four plants and the Integrated Biorefinery, and while prosperous gives +5%
-Birth Rate and −5% Generated Pollution.
-
-Each flavored company also needs its technology and a building of its industry
-at level 5 (level 10 for the Rosen Association), and most need a high production
-or wealth rank. Their bonuses are larger than the generic company's, so once you
-meet a flavored company's conditions it is the stronger use of a company slot:
-
-| Company | Unlocked by | Also requires | Prosperity bonus |
-|---|---|---|---|
-| Genentech | Biotechnology | Pharmaceutical Industries, top 5 in Drugs production, top 10 in GDP per capita | +20% Pharmaceutical Industries throughput, +10% innovation, +5% Society Research Speed |
-| Monsanto | Biotechnology | Chemical Plants, top 3 in Grain production | +20% Maize Farms and Cotton Plantations throughput, +10% Chemical Plants throughput, +5% Agriculture throughput |
-| Novo Nordisk | Biotechnology | Pharmaceutical Industries, top 15 in GDP per capita | −5% mortality, +10% Pharmaceutical Industries and +20% Integrated Biorefinery throughput, −15% Generated Pollution |
-| Ajinomoto | Biotechnology | Artificial Sweeteners Plant, top 5 in Groceries production | +15% Food Industries, +20% Artificial Sweeteners Plant and +15% Beverage Concentrates Plant throughput |
-| Biocon | Biotechnology | Pharmaceutical Industries, top 10 in Drugs production | +20% Technology Spread, −5% mortality, +10% Pharmaceutical Industries throughput |
-| BGI Group | Biotechnology | Pharmaceutical Industries, 75% literacy, top 10 in GDP | +10% innovation, +5% Society Research Speed, +15% University throughput |
-| BioNTech | mRNA Therapeutics | Pharmaceutical Industries, top 5 in Drugs production, top 15 in GDP per capita | −10% mortality, +15% Pharmaceutical Industries throughput, +10% Society Research Speed |
-| Rosen Association | Genetic Engineering | Integrated Biorefinery at level 10, top 5 in GDP | +3% Workforce Ratio, +25% Cultured Meat Plant throughput, +50% Training Rate |
-
-Monsanto, Ajinomoto and Biocon ask for a production rank but no wealth rank,
-so a large but poor economy can found them. Each has a flagship building like
-every other company. The Novo Nordisk Kalundborg
-Plant cuts Generated Pollution in its state by up to 15% ([State
-pollution](14-climate.md#state-pollution)), and the Rosen Association
-Headquarters raises its state's Workforce Ratio by up to 5%.
+Biotechnology companies, the generic one and eight flavored ones such as
+Genentech and BioNTech, also need the Corporate Genetic Licensing law
+([Economic law groups](05-politics.md#economic-law-groups)), which
+Biotechnology unlocks.
 
 ## Wonders
 

@@ -382,7 +382,7 @@ subject, and no rivalry or war with any of them.
 | Intermarium | 65% | |
 | North American Union | 65% | |
 | Dar-Al-Islam | 50% | Pan-nationalism; a Sunni, Shiite or Ibadi state religion, without Total Separation or State Atheism |
-| United Earth | 75% | Quantum Communications and Space Colonization; you lead a bloc holding every great power but at most one, which must be aligned with you; no rivalry or war with any great power. With the United Nations game rule on, the United Nations at the Supranational tier; with it off, no great power outside your bloc |
+| United Earth | 75% | Quantum Communications and Space Colonization; the United Nations at the Supranational tier (with the United Nations game rule off, no great power outside your bloc instead); you lead a bloc holding every great power but at most one, which must be aligned with you; no rivalry or war with any great power |
 | India | 65% of its core | |
 | Indonesia | 65% of its core | |
 | China | 65% | |

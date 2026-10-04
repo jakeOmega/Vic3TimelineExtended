@@ -1,7 +1,7 @@
 # Climate and pollution
 
-Burning coal and oil warms the world in this mod. Every market's emissions add
-to one global total, the total sets a global temperature anomaly, and the
+Burning coal and oil warms the world in this mod. Every country's emissions
+add to one global total, the total sets a global temperature anomaly, and the
 anomaly drives penalties that every country shares. The Global Warming journal
 entry tracks it and holds the climate policies you can adopt. The Global Warming
 game rule (on by default) controls all of this; with it off, the world never
@@ -26,8 +26,8 @@ the fuel's production credit counts there, while burning it counts in the
 importing market. Carbon Captured measures atmospheric removal by Direct Air
 Capture; synthetic-fuel production does not add to that row.
 
-In the dashboard's units, a market that emits one million a year warms the
-world by 0.1 °C a year. Figures use K for thousands and M for millions. A unit of
+In the dashboard's units, emissions of one million a year warm the world by
+0.1 °C a year. Figures use K for thousands and M for millions. A unit of
 oil produces 13% less warming than a unit of coal. The mod calls coal Energy
 and Carbon Minerals; this chapter calls it coal for short.
 
