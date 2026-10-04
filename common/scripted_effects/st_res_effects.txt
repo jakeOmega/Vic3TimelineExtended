@@ -1507,8 +1507,9 @@ st_res_policy_apply_good_effect = {
 # AI
 # --------------------------------------------------------------------------
 # building_strategic_reserve_hub carries a real ai_value (2000 for a great or
-# major power at peace, 1000 at war — common/buildings/strategic_reserve.txt),
-# so AI majors DO build hubs and DO get this journal entry. Before policies existed
+# major power at peace, 1000 at war, plus 10000 for any country above
+# st_res_ai_hub_min_gdp — common/buildings/strategic_reserve.txt),
+# so AI majors and any rich AI DO build hubs and DO get this journal entry. Before policies existed
 # they simply never moved a rate and the reserve sat empty forever.
 #
 # st_res_ai_seed_good_effect hands an AI country the Conservative preset once,

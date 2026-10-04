@@ -385,7 +385,7 @@ Two buildings make up the reserve, both unlocked by Logistics.
 
 | Building | Where | Construction cost | Adds | Staff |
 |---|---|---|---|---|
-| Strategic Reserve Hub | Capital only; one per country, at one level | Low | 5,000 storage for each good; each good may move 1,000 units a week | 5,000 |
+| Strategic Reserve Hub | Capital only; one per country, at one level | Very low | 5,000 storage for each good; each good may move 1,000 units a week | 5,000 |
 | Strategic Reserve Silo | Any state, any number of levels | High | Per level: 1,000 storage for each good; +100 to each good's weekly limit | 500 per level |
 
 The hub is the reserve: it holds the controls and does the buying and selling.
