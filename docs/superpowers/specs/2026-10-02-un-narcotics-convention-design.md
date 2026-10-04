@@ -99,10 +99,10 @@ when its Landowners are powerful.
   - The per-convention weights in `un_vote.3`.
   - `te_debug_un_effects.txt`.
   - The guide's "thirteen agencies" counts.
-  - The hard-coded lists in `test_un_layout.py` (`range(29)`, `MEMBER_MODIFIERS`, `CONV_KEYS`) and `test_un_overview_data.py` (`TOPIC_ICONS`, `AGENCY_KEYS`).
+  - The hard-coded lists in `test_un_layout.py` (`range(30)`, `MEMBER_MODIFIERS`, `CONV_KEYS`) and `test_un_overview_data.py` (`TOPIC_ICONS`, `AGENCY_KEYS`).
 - **Two icons:** `gfx/interface/icons/un_icons/topic_narcotics.dds` and `agency_incb.dds`.
-  These come from the icon pipeline, or a placeholder reused from the pandemic convention
-  until then (question 6).
+  These reuse `topic_pandemic.dds` and `agency_who.dds` as placeholders, under
+  the new filenames.
 - **Engine-silent traps:**
   - Add the member modifier only through `un_convention_country_on` with `un_convention_multiplier`, never at ×0.
   - Pass loc keys literally, not built from `$PARAM$`, or `organize_loc` files them as unused.
