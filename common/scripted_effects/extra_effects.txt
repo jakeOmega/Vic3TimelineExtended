@@ -1162,6 +1162,8 @@ te_update_migration_crowding_modifier = {
 # Refreshes the free port tariff reduction modifiers.
 # Removes then re-applies so the multiplier reads the tariff rate
 # WITHOUT our own contribution, preventing negative tariffs.
+# has_free_port is kept in step with the treaty by
+# te_sync_state_treaty_articles (treaty_article_effects.txt), monthly.
 te_update_free_port_tariff = {
 	remove_modifier = free_port_tariff_import_modifier
 	remove_modifier = free_port_tariff_export_modifier

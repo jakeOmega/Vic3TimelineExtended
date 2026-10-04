@@ -77,10 +77,7 @@ minority_protection = {
 			if = {
 				limit = { exists = input_state }
 				input_state = {
-					add_modifier = {
-						name = minority_protection_state_modifier
-					}
-					set_variable = has_minority_protection
+					te_minority_protection_state_apply = yes
 				}
 			}
 		}
@@ -88,15 +85,13 @@ minority_protection = {
 
 	on_break = {
 		scope:article_options.input_state ?= {
-			remove_modifier = minority_protection_state_modifier
-			remove_variable = has_minority_protection
+			te_minority_protection_state_clear = yes
 		}
 	}
 
 	on_withdrawal = {
 		scope:article_options.input_state ?= {
-			remove_modifier = minority_protection_state_modifier
-			remove_variable = has_minority_protection
+			te_minority_protection_state_clear = yes
 		}
 	}
 

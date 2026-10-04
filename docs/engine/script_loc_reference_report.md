@@ -16,98 +16,7 @@ Suppress an intentional case with a trailing comment on the same line:
 
 ## Unreviewed Flags
 
-### `common/parties/green_party.txt` (15)
-
-- line 127: `desc = from_environmentalism`
-- line 142: `desc = from_progressive_values`
-- line 157: `desc = from_left_progressive`
-- line 168: `desc = from_feminist`
-- line 177: `desc = from_rural_conservation`
-- line 186: `desc = from_academic_base`
-- line 203: `desc = from_strong_green_movement`
-- line 212: `desc = from_industry_opposition`
-- line 223: `desc = from_reactionary`
-- line 238: `desc = from_far_right`
-- line 252: `desc = from_militarist`
-- line 261: `desc = from_military`
-- line 275: `desc = from_communist`
-- line 315: `desc = from_three_prior_members`
-- line 324: `desc = from_more_than_three_prior_members`
-
-### `common/parties/populist_party.txt` (14)
-
-- line 160: `desc = from_ethno_nationalism`
-- line 171: `desc = from_reactionary`
-- line 199: `desc = from_traditionalist`
-- line 208: `desc = from_devout`
-- line 217: `desc = from_rural_base`
-- line 226: `desc = from_petit_bourgeois_anxiety`
-- line 242: `desc = from_military_nationalists`
-- line 259: `desc = from_strong_populist_movement`
-- line 275: `desc = from_liberal_opposition`
-- line 310: `desc = from_intelligentsia`
-- line 321: `desc = from_environmentalist`
-- line 335: `desc = from_fascist_distinction`
-- line 364: `desc = from_three_prior_members`
-- line 373: `desc = from_more_than_three_prior_members`
-
-### `common/parties/technocratic_party.txt` (15)
-
-- line 108: `desc = from_corporate`
-- line 119: `desc = from_transhumanist`
-- line 155: `desc = from_reformer`
-- line 164: `desc = from_industrialist_base`
-- line 173: `desc = from_expertise`
-- line 184: `desc = from_green_tech`
-- line 195: `desc = from_reactionary`
-- line 206: `desc = from_populist_opposition`
-- line 215: `desc = from_religious_skepticism`
-- line 224: `desc = from_rural_skepticism`
-- line 239: `desc = from_socialist_opposition`
-- line 248: `desc = from_landowner_tradition`
-- line 262: `desc = from_militarist`
-- line 291: `desc = from_three_prior_members`
-- line 300: `desc = from_more_than_three_prior_members`
-
-### `common/political_movements/new_ideological_movements.txt` (23)
-
-- line 72: `desc = POLLUTED_STATE`
-- line 103: `desc = TEMPERATURE_ANOMALY_1.0`
-- line 130: `desc = UPPER_CLASS`
-- line 159: `desc = MIDDLE_CLASS`
-- line 169: `desc = LOWER_CLASS`
-- line 184: `desc = TECHNOLOGY_RESEARCHED_environmental_movement`
-- line 191: `desc = TECHNOLOGY_RESEARCHED_genetic_engineering`
-- line 489: `desc = UPPER_CLASS`
-- line 518: `desc = MIDDLE_CLASS`
-- line 528: `desc = LOWER_CLASS`
-- line 766: `desc = UPPER_CLASS`
-- line 795: `desc = MIDDLE_CLASS`
-- line 805: `desc = LOWER_CLASS`
-- line 996: `desc = TECHNOLOGY_RESEARCHED_biohacking_and_human_augmentation`
-- line 1004: `desc = TECHNOLOGY_RESEARCHED_mind_backups`
-- line 1012: `desc = TECHNOLOGY_RESEARCHED_post-scarcity_economy`
-- line 1033: `desc = UPPER_CLASS`
-- line 1071: `desc = MIDDLE_CLASS`
-- line 1081: `desc = LOWER_CLASS`
-- line 1132: `desc = LAW_HUMAN_PURITY`
-- line 1139: `desc = LAW_BAN_ON_GENETIC_MODIFICATION`
-- line 1146: `desc = LAW_UNRESTRICTED_AUGMENTATION`
-- line 1153: `desc = LAW_REGULATED_AUGMENTATION`
-
-### `common/script_values/extra_script_values.txt` (2)
-
-- line 357: `desc = POWER_BLOC_MANDATE_PROGRESS_AVERAGE_LITERACY`
-- line 362: `desc = POWER_BLOC_MANDATE_PROGRESS_NUM_STATES`
-
-### `common/treaty_articles/05_transfer_money.txt` (1)
-
-- line 550: `desc = INFAMY_MONEY_TRANSFER_QUANTITY_ROOT_HAS_ALREADY_ESTABLISHED_FACTOR`
-
-### `common/treaty_articles/extra_treaty_articles.txt` (2)
-
-- line 2114: `desc = AI_ISOLATIONIST`
-- line 2122: `desc = AI_TOTAL_WAR`
+_None._
 
 ## Reviewed Exemptions
 
@@ -115,7 +24,7 @@ _None._
 
 ## Coverage
 
-- total flags: 72
-- unreviewed: 72
+- total flags: 0
+- unreviewed: 0
 - exempted: 0
 

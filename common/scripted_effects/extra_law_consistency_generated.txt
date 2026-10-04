@@ -2650,6 +2650,33 @@ te_fix_inconsistent_lawgroup_internal_security = {
 
 }
 
+te_fix_inconsistent_lawgroup_policing = {
+	# Active: law_private_policing  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_private_policing
+			OR = {
+				NOR = {
+					has_law = law_type:law_laissez_faire
+					has_law = law_type:law_interventionism
+				}
+				has_law = law_type:law_council_republic
+			}
+		}
+		if = {
+			limit = {
+				has_technology_researched = law_enforcement
+			}
+			activate_law = law_type:law_dedicated_police
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_no_police
+		}
+	}
+
+}
+
 te_fix_inconsistent_lawgroup_trade_policy = {
 	# Active: law_free_trade  ->  detect violation, cascade replacements
 	if = {
@@ -5396,6 +5423,7 @@ te_fix_inconsistent_laws = {
 	te_fix_inconsistent_lawgroup_bureaucracy = yes
 	te_fix_inconsistent_lawgroup_army_model = yes
 	te_fix_inconsistent_lawgroup_internal_security = yes
+	te_fix_inconsistent_lawgroup_policing = yes
 	te_fix_inconsistent_lawgroup_trade_policy = yes
 	te_fix_inconsistent_lawgroup_taxation = yes
 	te_fix_inconsistent_lawgroup_land_reform = yes

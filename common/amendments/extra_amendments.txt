@@ -706,6 +706,136 @@ amendment_spoils_system = {
 	amendment_activism_multiplier = 0.5
 }
 
+# ======================================================================
+#  POLICING
+#  Spec: docs/superpowers/specs/2026-10-04-policing-laws-design.md
+# ======================================================================
+
+# Corporate Security Powers - companies police their own mines, mills and
+# company towns beside a public force: the Pinkerton Agency (1850) and
+# Pennsylvania's Coal and Iron Police (1865-1931), commissioned by the state
+# and paid by the companies. The narrow form of Private Policing, which
+# delegates the whole force and so is not an allowed law. Its parent is
+# Private Policing, so interest groups take the same stance on it: only
+# Corpocrat and Corporate Rule favour it. Before Corpocrats exist (Mutual
+# Funds) only an Industrialist sponsor carries it.
+amendment_corporate_security_powers = {
+	parent = law_private_policing
+
+	allowed_laws = {
+		law_local_police
+		law_dedicated_police
+		law_militarized_police
+	}
+
+	modifier = {
+		# The companies police their own districts.
+		country_institution_cost_institution_police_mult = -0.1
+		# Company guards break strikes, and the strikes turn political.
+		interest_group_ig_trade_unions_pol_str_mult = -0.1
+		state_pop_support_movement_labor_mult = 0.15
+	}
+
+	# Whoever commands the guards gains from it.
+	sponsor_modifier = {
+		interest_group_pol_str_mult = 0.1
+	}
+
+	# Companies to commission, and an economy with private owners.
+	possible = {
+		has_technology_researched = corporate_charters
+		NOR = {
+			has_law = law_type:law_command_economy
+			has_law = law_type:law_cooperative_ownership
+			has_law = law_type:law_industry_banned
+		}
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_industrialists
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_private_policing
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Civilian Oversight - civilian review boards hear complaints against the
+# police, public or private, and can discipline officers and licensed
+# providers (New York's Civilian Complaint Review Board, 1953 and 1966). It
+# modifies a police force rather than replacing one, so it is an amendment,
+# not a law. Distinct from Guaranteed Liberties (what home affairs may
+# investigate), Dedicated Police (a professional force) and Restorative
+# Justice (what follows a conviction): this is who the street-level force
+# answers to. Militarized Police is not an allowed law: a force built to carry
+# out the government's will does not answer to the public.
+amendment_civilian_police_oversight = {
+	parent = law_guaranteed_liberties
+
+	allowed_laws = {
+		law_local_police
+		law_dedicated_police
+		law_private_policing
+	}
+
+	modifier = {
+		# Boards, investigators and hearings.
+		country_institution_cost_institution_police_mult = 0.1
+		# Grievances against the police get a hearing instead of a movement.
+		state_pop_support_movement_civil_rights_mult = -0.15
+		# Officers answer to the boards as well as to their superiors.
+		country_legislative_override_capacity_add = -0.5
+	}
+
+	possible = {
+		has_technology_researched = civil_rights_movement
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_guaranteed_liberties
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
 # ----------------------------------------------------------------------
 #  Environmental grandfather clause (issue #278)
 #  Attached TEMPORARILY (timeout = 120 months from law activation) by

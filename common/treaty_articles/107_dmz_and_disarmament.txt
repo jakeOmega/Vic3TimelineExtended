@@ -74,13 +74,7 @@ demilitarized_zone = {
 			if = {
 				limit = { exists = input_state }
 				input_state = {
-					add_modifier = {
-						name = demilitarized_zone_state_modifier
-					}
-					# The modifier caps a base at no levels; take down one already
-					# standing rather than rely on the engine to shrink it.
-					if = { limit = { has_building = building_military_base } remove_building = building_military_base }
-					set_variable = has_demilitarized_zone
+					te_demilitarized_zone_state_apply = yes
 				}
 			}
 		}
@@ -88,15 +82,13 @@ demilitarized_zone = {
 
 	on_break = {
 		scope:article_options.input_state ?= {
-			remove_modifier = demilitarized_zone_state_modifier
-			remove_variable = has_demilitarized_zone
+			te_demilitarized_zone_state_clear = yes
 		}
 	}
 
 	on_withdrawal = {
 		scope:article_options.input_state ?= {
-			remove_modifier = demilitarized_zone_state_modifier
-			remove_variable = has_demilitarized_zone
+			te_demilitarized_zone_state_clear = yes
 		}
 	}
 

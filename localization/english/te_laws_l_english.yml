@@ -218,6 +218,8 @@
  law_primogeniture_desc:0 "The eldest child, typically the firstborn son, inherits the entire estate or title of the deceased parent. This system ensures the preservation of family wealth and power within a single line of descent."
  law_private_military_contractors:0 "Private Military Contractors"
  law_private_military_contractors_desc:0 "The state contracts private firms to wage its wars. Operations abroad gain plausible deniability and the home front tolerates protracted conflicts, but contractors are expensive, line-combat performance suffers, and reliance on mercenaries draws international suspicion."
+ law_private_policing:0 "Private Policing"
+ law_private_policing_desc:0 "Licensed private firms carry out most ordinary police work, hired and directed by property owners, businesses and residents' associations, while a smaller public force backs them up. Wealthy districts are well guarded and poor ones are left to fend for themselves."
  law_pro_capital_ministry_of_labor:0 "Pro-Capital Ministry of Labor Established"
  law_pro_capital_ministry_of_labor_desc:0 "The Ministry of Labor regulates employment laws, employer rights, and labor market conditions, aiming to ensure qualified workers are trained and employed where needed."
  law_pro_labor_ministry_of_labor:0 "Pro-Labor Ministry of Labor Established"

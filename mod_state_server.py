@@ -851,56 +851,112 @@ def _engine_docs_find_usage(
 
 
 # ---------------------------------------------------------------------------
-# Reverse modifier-GRANT lookup  (issue #128)
+# Reverse modifier-GRANT lookup  (issues #128, #327)
 #
 # `/engine-docs/usage/<name>` greps for effect/trigger CALL sites and is blind
 # to `modifier = { <name> = <value> }` APPLICATION blocks inside laws, techs,
-# principles, amendments, decrees, buildings, and static modifiers. This scans
-# those entity files directly (the parser discards file/line, so a file scan is
-# the only way to satisfy the {entity_type, entity_id, file, line, value}
-# contract) and answers "which entities GRANT modifier X, and at what value?".
+# country ranks, institutions, company types, production methods, ... This
+# scans the entity files directly (the parser discards file/line, so a file
+# scan is the only way to satisfy the {entity_type, entity_id, file, line,
+# value} contract) and answers "which entities GRANT modifier X, and at what
+# value?".
 #
-# Entity types scanned, matching the issue's explicit list. `mode`:
-#   "wrapped" — modifier keys live inside a named bag block (modifier = {...},
-#               member_modifier = {...}, tax_modifier_high = {...}, etc.).
+# It walks EVERY `common/` entity directory (minus _GRANT_SKIP_DIRS) rather
+# than an allow-list, because an allow-list fails silently: the first version
+# covered seven types and a monetary-policy inventory found 16 of 88 grant
+# sites missing with `truncated: false` (#327). A directory missing from
+# MODIFIER_GRANT_SOURCES is still scanned, under a name derived from the
+# directory. `mode`:
+#   "wrapped" — modifier keys live inside a named bag block (`modifier`,
+#               `member_modifier`, `prosperity_modifier`, `country_modifiers`
+#               ...; see _is_modifier_bag).
 #   "direct"  — modifier keys are direct fields of the entity (static
 #               modifiers have no wrapper).
 # ---------------------------------------------------------------------------
 MODIFIER_GRANT_SOURCES: list[tuple[str, str, str]] = [
-    ("Laws",         "laws",                                       "wrapped"),
-    ("Technologies", os.path.join("technology", "technologies"),   "wrapped"),
-    ("Decrees",      "decrees",                                    "wrapped"),
-    ("Amendments",   "amendments",                                 "wrapped"),
-    ("Principles",   "power_bloc_principles",                      "wrapped"),
-    ("Buildings",    "buildings",                                  "wrapped"),
-    ("Modifiers",    "static_modifiers",                           "direct"),
+    ("Laws",                  "laws",                                      "wrapped"),
+    ("Technologies",          "technology/technologies",                   "wrapped"),
+    ("Decrees",               "decrees",                                   "wrapped"),
+    ("Amendments",            "amendments",                                "wrapped"),
+    ("Principles",            "power_bloc_principles",                     "wrapped"),
+    ("Buildings",             "buildings",                                 "wrapped"),
+    ("Modifiers",             "static_modifiers",                          "direct"),
+    ("Country Ranks",         "country_ranks",                             "wrapped"),
+    ("Institutions",          "institutions",                              "wrapped"),
+    ("Company Types",         "company_types",                             "wrapped"),
+    ("Interest Group Traits", "interest_group_traits",                     "wrapped"),
+    ("PMs",                   "production_methods",                        "wrapped"),
+    ("Character Traits",      "character_traits",                          "wrapped"),
+    ("Power Bloc Identities", "power_bloc_identities",                     "wrapped"),
+    ("Treaty Articles",       "treaty_articles",                           "wrapped"),
+    ("State Traits",          "state_traits",                              "wrapped"),
+    ("Diplomatic Actions",    "diplomatic_actions",                        "wrapped"),
+    ("Mobilization Options",  "mobilization_options",                      "wrapped"),
+    ("Combat Unit Types",     "combat_unit_types",                         "wrapped"),
+    ("Combat Unit Experience Levels", "combat_unit_experience_levels",     "wrapped"),
+    ("Ship Types",            "ship_types",                                "wrapped"),
+    ("Ship Modifications",    "ship_modifications",                        "wrapped"),
+    ("Battle Conditions",     "battle_conditions",                         "wrapped"),
+    ("Harvest Condition Types", "harvest_condition_types",                 "wrapped"),
 ]
 
-# Named blocks (immediate child of an entity) whose contents are modifier
-# key=value grants. Verified by enumeration across mod + vanilla. Weight blocks
-# (ai_enact_weight_modifier) and effect calls (add_modifier) are NOT here, and
-# in any case can't false-positive a *specific* modifier-name query since they
-# hold value/add/name keys, not modifier keys.
-_MODIFIER_BAG_BLOCKS: frozenset[str] = frozenset({
-    "modifier",
-    "member_modifier", "leader_modifier", "non_leader_modifier",
-    "power_bloc_modifier", "institution_modifier", "sponsor_modifier",
-    "tax_modifier_very_low", "tax_modifier_low", "tax_modifier_medium",
-    "tax_modifier_high", "tax_modifier_very_high",
-    "construction_modifier",
+# `common/` directories that hold script (effects, triggers, weights, GUIs,
+# config), not entities that carry modifier bags. A `modifier = { add = 1 }`
+# weight block or a `*_modifier = { ... }` argument list in these would look
+# like a bag, so they stay out of the walk. Everything else is scanned.
+_GRANT_SKIP_DIRS: frozenset[str] = frozenset({
+    "scripted_effects", "scripted_triggers", "scripted_modifiers",
+    "scripted_guis", "scripted_buttons", "scripted_progress_bars",
+    "scripted_rules", "script_values", "on_actions",
+    "customizable_localization", "defines", "modifier_type_definitions",
+    "game_rules", "history", "flag_definitions", "named_colors",
+    "dynamic_country_names", "dynamic_treaty_names", "ai_strategies",
 })
+# Entity directories that sit one level down (`technology/technologies`,
+# `technology/eras`, ...) instead of directly under common/.
+_GRANT_NESTED_PARENTS: frozenset[str] = frozenset({"technology"})
+
+# A bag is the first block inside an entity whose name says "modifier":
+# `modifier`, `member_modifier`, `acceptance_modifier`, `prosperity_modifier`,
+# `country_modifiers`, `upkeep_modifier_unscaled`, `tax_modifier_very_high`.
+# Matching on the name (not a fixed list) is what stops a new bag name, such as
+# the law-level `acceptance_modifier` the first version never knew, from being
+# silently dropped. `ai_*` blocks are AI-weight modifiers, not grants.
+_MODIFIER_BAG_RE = re.compile(
+    r"^(?:tax_modifier_[a-z_]+|(?:[a-z0-9_]+_)?modifiers?(?:_unscaled)?)$"
+)
 # Per-unit scaling sub-wrappers that may sit between a bag and its grant lines.
 _SCALING_WRAPPERS: frozenset[str] = frozenset({
-    "workforce_scaled", "level_scaled", "unscaled", "timed_modifier",
+    "workforce_scaled", "level_scaled", "unscaled", "throughput_scaled",
+    "timed_modifier",
 })
+# Blocks that hold bags without being one (`pact = { first_modifier = {...} }`
+# in diplomatic actions).
+_BAG_CONTAINERS: frozenset[str] = frozenset({"pact"})
 
 # Entity ids may contain `-` (`post-scarcity_economy`, `law_post-scarcity`,
 # `e-commerce`, #327); the first character stays a letter/underscore so a
-# `-1 = {` or `value = -1` line can never open an entity.
-_GRANT_OPENER_RE = re.compile(r"^\s*(?:INJECT:|REPLACE:)?([A-Za-z_][\w-]*)\s*=\s*\{")
+# `-1 = {` or `value = -1` line can never open an entity. An optional
+# directive prefix (`INJECT:`, `REPLACE:`, `REPLACE_OR_CREATE:`, ...) is
+# captured separately: with only `INJECT:`/`REPLACE:` allowed, an entity opened
+# by `REPLACE_OR_CREATE:` (158 in the mod's building, building group and PM group
+# files) never opened, and any grant in it would have been dropped (#327).
+_GRANT_OPENER_RE = re.compile(
+    r"^\s*(?:(?P<directive>[A-Z][A-Z_]*):)?(?P<name>[A-Za-z_][\w-]*)\s*=\s*\{"
+)
 _GRANT_LINE_RE = re.compile(
     r"^\s*([a-z_][a-z0-9_]*)\s*=\s*(-?\d+(?:\.\d+)?|yes|no)\s*$"
 )
+# A mod entity that REPLACEs a vanilla one wholesale (the vanilla copy's grants
+# are not in effect).
+_GRANT_REPLACE_RE = re.compile(
+    r"^\s*REPLACE(?:_OR_CREATE)?:(?P<name>[A-Za-z_][\w-]*)\s*=\s*\{"
+)
+
+
+def _is_modifier_bag(name) -> bool:
+    return (isinstance(name, str) and not name.startswith("ai_")
+            and _MODIFIER_BAG_RE.match(name) is not None)
 
 
 def _grant_block_label(name_stack: list, mode: str):
@@ -908,14 +964,20 @@ def _grant_block_label(name_stack: list, mode: str):
     entity) places the current line inside a modifier-grant context, else None.
 
     direct: keys must be direct entity fields (stack == [entity]).
-    wrapped: the first block inside the entity must be a known modifier bag;
-             only per-unit scaling wrappers may nest between it and the line."""
+    wrapped: the first block inside the entity (or inside a _BAG_CONTAINERS
+             block) must be a modifier bag; only per-unit scaling wrappers may
+             nest between it and the line."""
     if mode == "direct":
         return "direct" if len(name_stack) == 1 else None
-    if len(name_stack) < 2 or name_stack[1] not in _MODIFIER_BAG_BLOCKS:
+    idx = 1
+    label = ""
+    if len(name_stack) > 1 and name_stack[1] in _BAG_CONTAINERS:
+        label = name_stack[1] + "/"
+        idx = 2
+    if len(name_stack) <= idx or not _is_modifier_bag(name_stack[idx]):
         return None
-    label = name_stack[1]
-    for extra in name_stack[2:]:
+    label += name_stack[idx]
+    for extra in name_stack[idx + 1:]:
         if extra not in _SCALING_WRAPPERS:
             return None
         label += "/" + extra
@@ -927,17 +989,23 @@ def _scan_file_for_grants(abs_path: str, rel: str, entity_type: str, mode: str,
     """Yield grant dicts for one file. Line-by-line state machine: tracks the
     column-0 entity opener and a name stack parallel to brace depth. Paradox
     files are one-token-per-line, so a line is an opener, a grant, or a closer;
-    single-line `bag = { k = v }` with inline numerics does not occur in the
-    scanned dirs (verified) and is a documented blind spot."""
+    single-line `bag = { k = v }` with inline numerics, several `k = v` pairs on
+    one line and `k = @constant` values do not occur in the entity dirs
+    (verified) and are a documented blind spot.
+
+    A file that does not contain `target` at all is skipped without the line
+    scan: walking every entity directory per query stays cheap that way."""
     try:
         with open(abs_path, "r", encoding="utf-8-sig", errors="replace") as f:
-            lines = f.readlines()
+            content = f.read()
     except OSError:
+        return
+    if target is not None and target not in content:
         return
     depth = 0
     name_stack: list = []
     current_entity = None
-    for lineno, raw in enumerate(lines, 1):
+    for lineno, raw in enumerate(content.split("\n"), 1):
         text = raw.split("#", 1)[0]
 
         # Grant candidate (no brace on the line) — test in current context.
@@ -966,9 +1034,10 @@ def _scan_file_for_grants(abs_path: str, rel: str, entity_type: str, mode: str,
         opens = text.count("{")
         closes = text.count("}")
         if opener and opens:
+            name = opener.group("name")
             if depth == 0:
-                current_entity = opener.group(1)
-            name_stack.append(opener.group(1))
+                current_entity = name
+            name_stack.append(name)
             for _ in range(opens - 1):
                 name_stack.append(None)
             depth += opens
@@ -986,10 +1055,100 @@ def _scan_file_for_grants(abs_path: str, rel: str, entity_type: str, mode: str,
                 name_stack = []
 
 
+def _grant_entity_dirs(common_root: str) -> list[str]:
+    """Every entity directory under a `common/` root, as '/'-joined paths
+    relative to it (`laws`, `technology/technologies`)."""
+    try:
+        names = sorted(os.listdir(common_root))
+    except OSError:
+        return []
+    found: list[str] = []
+    for name in names:
+        if name in _GRANT_SKIP_DIRS or name.startswith(("_", ".")):
+            continue
+        path = os.path.join(common_root, name)
+        if not os.path.isdir(path):
+            continue
+        if name in _GRANT_NESTED_PARENTS:
+            for sub in sorted(os.listdir(path)):
+                if os.path.isdir(os.path.join(path, sub)):
+                    found.append(f"{name}/{sub}")
+        else:
+            found.append(name)
+    return found
+
+
+def _grant_entity_type_name(subdir: str) -> str:
+    """Display name for an entity directory: the MODIFIER_GRANT_SOURCES name,
+    else the directory path title-cased (`interest_group_traits` ->
+    `Interest Group Traits`)."""
+    for entity_type, known_dir, _mode in MODIFIER_GRANT_SOURCES:
+        if known_dir == subdir:
+            return entity_type
+    return subdir.replace("/", " ").replace("_", " ").title()
+
+
+def _grant_scan_plan(common_roots: list[str]) -> list[tuple[str, str, str]]:
+    """[(entity_type, subdir, mode)] for every entity directory present under
+    any of `common_roots`: the MODIFIER_GRANT_SOURCES order first, then every
+    other directory alphabetically."""
+    present: set[str] = set()
+    for root in common_roots:
+        present.update(_grant_entity_dirs(root))
+    plan = [(et, sub, mode) for et, sub, mode in MODIFIER_GRANT_SOURCES
+            if sub in present]
+    known = {sub for _, sub, _ in plan}
+    plan.extend((_grant_entity_type_name(sub), sub, "wrapped")
+                for sub in sorted(present - known))
+    return plan
+
+
+def _grant_type_key(name: str) -> str:
+    """Normal form for matching an entity-type filter: case, spaces and
+    underscores don't matter (`PMs`, `pms`, `Country Ranks`, `country_ranks`)."""
+    return re.sub(r"[^a-z0-9]+", "", name.lower())
+
+
+def _mod_replaced_entity_ids(scan_dir: str) -> set[str]:
+    """Ids of the vanilla entities the mod `REPLACE:`s (or `REPLACE_OR_CREATE:`s)
+    in one entity directory."""
+    ids: set[str] = set()
+    for dirpath, dirs, files in os.walk(scan_dir):
+        dirs.sort()
+        for fname in sorted(files):
+            if not fname.endswith(".txt") or fname.startswith("_"):
+                continue
+            try:
+                with open(os.path.join(dirpath, fname), "r",
+                          encoding="utf-8-sig", errors="replace") as f:
+                    content = f.read()
+            except OSError:
+                continue
+            if "REPLACE" not in content:
+                continue
+            for raw in content.split("\n"):
+                m = _GRANT_REPLACE_RE.match(raw.split("#", 1)[0])
+                if m:
+                    ids.add(m.group("name"))
+    return ids
+
+
 def _find_modifier_grants(target: str, *, scope: str = "both",
-                          limit: int = 200) -> dict:
-    """Enumerate every entity that GRANTS modifier `target` across the entity
-    types in MODIFIER_GRANT_SOURCES. `scope` in {mod, vanilla, both}."""
+                          limit: int = 200, entity_types=None,
+                          effective: bool = False) -> dict:
+    """Enumerate every entity that GRANTS modifier `target` across every
+    `common/` entity directory. `scope` in {mod, vanilla, both}.
+
+    `entity_types` (iterable of names, e.g. ["Laws", "pms"]) restricts the walk
+    to those types; an unknown name is an error (unless no tree was found at all,
+    where the answer is the empty result plus `warnings`). The whole walk always runs, so
+    `total` is the true number of grant sites and `truncated` is exactly
+    `total > returned`; `limit` only caps the rows returned.
+
+    Under scope=both a vanilla row whose entity the mod replaces is still
+    listed, marked `"shadowed_by": "mod"`: the mod `REPLACE:`s the entity, or
+    ships a file at the same path as the vanilla file (which replaces the whole
+    file). `effective=True` drops those rows."""
     if not target or not re.match(r"^[a-z_][a-z0-9_]*$", target):
         return {
             "name": target,
@@ -1009,41 +1168,84 @@ def _find_modifier_grants(target: str, *, scope: str = "both",
         roots.append(("mod", _MOD_COMMON, mod_path))
     if scope in ("vanilla", "both"):
         roots.append(("vanilla", _BASE_COMMON, os.path.join(base_game_path, "game")))
+    present_roots = [r for r in roots if os.path.isdir(r[1])]
+    warnings = [
+        f"{origin} common/ directory not found: {origin} grants were NOT scanned"
+        for origin, common_root, _ in roots if not os.path.isdir(common_root)
+    ]
+
+    plan = _grant_scan_plan([r[1] for r in present_roots])
+    wanted = {_grant_type_key(t) for t in entity_types or () if t.strip()}
+    if wanted and plan:
+        known = {}
+        for et, sub, _mode in plan:
+            known[_grant_type_key(et)] = et
+            known[_grant_type_key(sub)] = et
+        unknown = sorted(t for t in wanted if t not in known)
+        if unknown:
+            return {
+                "name": target,
+                "error": "Unknown entity type(s): " + ", ".join(unknown),
+                "known_types": [et for et, _s, _m in plan],
+                "grants": [],
+            }
+        plan = [(et, sub, mode) for et, sub, mode in plan
+                if _grant_type_key(et) in wanted or _grant_type_key(sub) in wanted]
+
+    # Mod entity ids / files that shadow vanilla ones, computed per directory
+    # the first time a vanilla row needs them.
+    replaced_cache: dict[str, set[str]] = {}
+
+    def shadowed(row: dict, subdir: str) -> bool:
+        if row["origin"] != "vanilla" or not os.path.isdir(_MOD_COMMON):
+            return False
+        if os.path.isfile(os.path.join(mod_path, row["file"])):
+            return True
+        if subdir not in replaced_cache:
+            replaced_cache[subdir] = _mod_replaced_entity_ids(
+                os.path.join(_MOD_COMMON, *subdir.split("/")))
+        return row["entity_id"] in replaced_cache[subdir]
 
     grants: list[dict] = []
-    truncated = False
-    for entity_type, subdir, mode in MODIFIER_GRANT_SOURCES:
-        for origin, common_root, repo_root in roots:
-            scan_dir = os.path.join(common_root, subdir)
+    total = 0
+    scanned_types: list[str] = []
+    for entity_type, subdir, mode in plan:
+        seen_dir = False
+        for origin, common_root, repo_root in present_roots:
+            scan_dir = os.path.join(common_root, *subdir.split("/"))
             if not os.path.isdir(scan_dir):
                 continue
-            for dirpath, _dirs, files in os.walk(scan_dir):
+            seen_dir = True
+            for dirpath, dirs, files in os.walk(scan_dir):
+                dirs.sort()
                 for fname in sorted(files):
                     if not fname.endswith(".txt") or fname.startswith("_"):
                         continue
                     abs_path = os.path.join(dirpath, fname)
-                    rel = os.path.relpath(abs_path, repo_root)
+                    rel = os.path.relpath(abs_path, repo_root).replace(os.sep, "/")
                     for grant in _scan_file_for_grants(
                         abs_path, rel, entity_type, mode, origin, target
                     ):
-                        grants.append(grant)
-                        if len(grants) >= limit:
-                            truncated = True
-                            break
-                    if truncated:
-                        break
-                if truncated:
-                    break
-            if truncated:
-                break
-        if truncated:
-            break
+                        if shadowed(grant, subdir):
+                            if effective:
+                                continue
+                            grant["shadowed_by"] = "mod"
+                        total += 1
+                        if len(grants) < limit:
+                            grants.append(grant)
+        if seen_dir and entity_type not in scanned_types:
+            scanned_types.append(entity_type)
 
     return {
         "name": target,
         "scope": scope,
+        "effective": effective,
+        "entity_types_scanned": scanned_types,
+        "origins_scanned": [r[0] for r in present_roots],
+        "warnings": warnings,
+        "total": total,
         "returned": len(grants),
-        "truncated": truncated,
+        "truncated": total > len(grants),
         "grants": grants,
     }
 
@@ -5148,7 +5350,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/tech-unlocks/<tech>", "desc": "What a tech unlocks (PMs, buildings, laws, etc.)."},
                 {"path": "/unlocked-by/<entity>", "desc": "Inverse of tech-unlocks: what gates an entity."},
                 {"path": "/modifier-search?q=<name>", "desc": "Validate / discover modifier keys against the engine catalog."},
-                {"path": "/modifier-grants/<name>?scope=both", "desc": "Reverse lookup: every law/tech/principle/amendment/decree/building/static-modifier that GRANTS modifier <name>, with file:line + value."},
+                {"path": "/modifier-grants/<name>?scope=both&entity_types=&effective=", "desc": "Reverse lookup: every entity in any common/ directory (law, tech, principle, country rank, institution, company, PM, trait, static modifier, ...) that GRANTS modifier <name>, with file:line + value + block. Reports entity_types_scanned; vanilla rows the mod REPLACEs carry shadowed_by."},
                 {"path": "/modifier-patterns/<sub?>", "desc": "Modifier pattern catalog and discovered families."},
                 {"path": "/engine-docs/<type>/<name?>", "desc": "Engine reference (effects/triggers/modifiers/event-targets/on-actions/custom-localization). With <name>: that one entry, or 404 with did_you_mean. Listing: ?q=&scope=&mask=&origin=&group=, capped at ?limit= (default 500); check `truncated` (`count` is the filtered total, `returned` the entries sent). Also /engine-docs/origin/<name> (every type), /engine-docs/usage/<name> (vanilla call sites), /engine-docs/loc-functions/<name?>."},
                 {"path": "/dev-docs/<section?>", "desc": "Vanilla developer-reference markdown docs."},
@@ -6334,7 +6536,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
         blocks = []
         if isinstance(pd, dict):
             for k, v in pd.items():
-                if k not in _MODIFIER_BAG_BLOCKS:
+                if not _is_modifier_bag(k):
                     continue
                 val = v[1] if isinstance(v, tuple) and len(v) >= 2 else v
                 if isinstance(val, dict):
@@ -7754,17 +7956,26 @@ class ModStateHandler(BaseHTTPRequestHandler):
     # ---- reverse modifier-grant lookup ------------------------------------
     def _modifier_grants(self, parts, params):
         """GET /modifier-grants/<modifier_name>?scope=both&limit=200
+                 &entity_types=Laws,PMs&effective=true
 
-        Enumerate every entity that GRANTS the modifier (Laws, Technologies,
-        Power Bloc Principles, Amendments, Decrees, Buildings, Static
-        Modifiers), returning {entity_type, entity_id, origin, file, line,
-        value, block} per site. Complements /engine-docs/usage, which only
-        finds effect/trigger call sites. scope: mod | vanilla | both.
+        Enumerate every entity that GRANTS the modifier, across every
+        `common/` entity directory (laws, techs, principles, amendments,
+        decrees, buildings, static modifiers, country ranks, institutions,
+        company types, interest group traits, production methods, character
+        traits, power bloc identities, treaty articles, ...), returning
+        {entity_type, entity_id, origin, file, line, value, block} per site.
+        `entity_types_scanned` and `origins_scanned` in the response say what
+        was covered. Complements /engine-docs/usage, which only finds
+        effect/trigger call sites. scope: mod | vanilla | both.
+        `entity_types` (comma-separated names or directory names) restricts the
+        walk. `total` is the true number of sites; `limit` only caps the rows.
 
-        Note: under scope=both a modifier the mod INJECTs/REPLACEs into a
-        vanilla entity is reported twice (vanilla original + mod patch) for the
-        same entity_id; `origin` disambiguates. Use scope=mod for the mod's
-        effective additions only."""
+        Note: under scope=both a modifier the mod INJECTs into a vanilla entity
+        is reported twice (vanilla original + mod patch) for the same
+        entity_id; `origin` disambiguates. A vanilla row the mod REPLACEs (the
+        entity, or the whole file by shipping the same path) is marked
+        `"shadowed_by": "mod"`; `effective=true` drops those rows. Use
+        scope=mod for the mod's own additions only."""
         if not parts:
             raise BadRequest("Provide a modifier name, e.g. "
                              "/modifier-grants/state_homeland_creation_threshold_add")
@@ -7773,10 +7984,16 @@ class ModStateHandler(BaseHTTPRequestHandler):
             limit = int(params.get("limit", ["200"])[0])
         except ValueError:
             limit = 200
-        result = _find_modifier_grants(parts[0], scope=scope, limit=limit)
-        # The finder rejects a malformed name / scope in-band; that's a 400.
-        # Pass the whole payload through so the body keeps `name` and the empty
-        # `grants` list callers already parse. (#254)
+        entity_types = [t.strip()
+                        for raw in params.get("entity_types", [])
+                        for t in raw.split(",") if t.strip()] or None
+        effective = params.get("effective", ["false"])[0].lower() in ("1", "true", "yes")
+        result = _find_modifier_grants(parts[0], scope=scope, limit=limit,
+                                       entity_types=entity_types,
+                                       effective=effective)
+        # The finder rejects a malformed name / scope / entity type in-band;
+        # that's a 400. Pass the whole payload through so the body keeps `name`
+        # and the empty `grants` list callers already parse. (#254)
         if isinstance(result, dict) and "error" in result:
             raise _EndpointError(result, 400)
         return result

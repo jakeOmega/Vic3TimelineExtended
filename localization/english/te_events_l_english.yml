@@ -4620,6 +4620,7 @@
 #
 # TEMPERATURE_ANOMALY_1
 #
+ TEMPERATURE_ANOMALY_1.0:0 "Global warming has reached 1°C above pre-industrial levels."
  TEMPERATURE_ANOMALY_1.5:0 "Global warming has reached 1.5°C above pre-industrial levels."
 
 #

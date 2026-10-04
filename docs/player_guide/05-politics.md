@@ -21,7 +21,7 @@ grouped here by theme, and ten further laws join base-game law groups.
 |---|---|---|
 | Minority Rights | Violent Hostility, Ghettoization, Discrimination, Cultural Assimilation, Indifference, Protection, Affirmative Action | How the state treats cultural and religious minorities. |
 | LGBTQ+ Rights | Active Persecution, Legal Limbo, Basic Protections, Anti-Discrimination Laws, Full Equality and Protection | Legal status of LGBTQ+ people. |
-| Criminal Justice | Penal Labor Camps, Punishment-Focused Criminal Justice, Restorative Justice, Rehabilitation-Focused Criminal Justice | Prisons, policing and reintegration. Penal Labor Camps needs Mass Surveillance and one of Autocracy, Single-Party State or Outlawed Dissent: it trades legitimacy, the Intelligentsia's and Trade Unions' support and a stronger liberal opposition for authority, easier suppression and a small boost to mines, logging camps, plantations and rubber plantations. |
+| Criminal Justice | Penal Labor Camps, Punishment-Focused Criminal Justice, Restorative Justice, Rehabilitation-Focused Criminal Justice | Prisons, sentencing and reintegration; who polices is the base-game Policing group (see [Who polices](#who-polices)). Penal Labor Camps needs Mass Surveillance and one of Autocracy, Single-Party State or Outlawed Dissent: it trades legitimacy, the Intelligentsia's and Trade Unions' support and a stronger liberal opposition for authority, easier suppression and a small boost to mines, logging camps, plantations and rubber plantations. |
 | Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Subsidies, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
@@ -126,6 +126,7 @@ policy](04-banking.md).
 | Automated Bureaucracy | Bureaucracy | Generative AI | Machines run the administration under your government: institutions cost less bureaucracy and change size faster. |
 | Algorithmic Governance | Distribution of Power | Artificial General Intelligence | Machines hold supreme authority and run the administration too. |
 | Neocolonialism | Colonization | Decolonization | See [Colonial empires and decolonization](11-decolonization.md). |
+| Private Policing | Policing | Computer Networks, with Laissez-Faire or Interventionism | Licensed private firms do most police work for whoever pays them; see [Who polices](#who-polices). |
 | Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% dearer military goods and −10% unit offense and defense. |
 | Littoral Defense | Navy Model | Naval Convoy Defense | A coastal navy: ships operate only half as far from port, torpedo craft build faster and capital ships slower, navy goods cost 20% less, and Naval Fortifications get two more levels and resist invasion better. Coastal countries only. |
 | Auxiliary Fleet | Navy Model | Predictive Logistics | A navy that carries the army: ships reach 50% farther from port, naval invasions go better, ships carry 30% more marines and supply ships 30% more supply, supply ships build faster and capital ships slower. Coastal countries only. |
@@ -201,6 +202,51 @@ you to or near 100 even under heavier taxes, and a deep slump drops you toward
 Unstable Government. Radicals and loyalists from changes in living standards
 double as well, so a falling standard of living turns on you fast.
 
+### Who polices
+
+The base-game Policing group decides who provides ordinary law enforcement, who
+pays for it and whom it answers to. Local Police Force is town and county
+constables under local notables, Dedicated Police Force a national
+professional force, and Militarized Police Force a national police run along
+military lines. The mod adds Private Policing, where licensed firms do most of
+the work, hired and directed by property owners, businesses and residents'
+associations. All four police laws keep the Ministry of Public Safety, so
+switching between them keeps its investment.
+
+| | Private Policing |
+|---|---|
+| Available | From Computer Networks, with Laissez-Faire or Interventionism; not in a Council Republic |
+| Ministry of Public Safety | Costs 40% less bureaucracy, as base-game Private Schools and Private Health Insurance do for theirs |
+| Each Ministry level | Upper strata +0.25 standard of living, middle strata +0.1; the Ministry's turmoil reduction is halved, to 5% a level; Services output −1% |
+| Also | Trade Unions −10% political strength; Labor Movement pop attraction +15%; Legislative Override Capacity −0.5 |
+
+Protection follows money. In every state the wealthy districts are guarded
+and the poor ones are not, so the upper and middle strata live better while
+turmoil, which comes from the poor, is held back only half as well. Owners pay
+for their guards: each Ministry level takes 1% of the country's Services
+output, so Services cost more for the Urban Centers' customers, mostly the
+better-off. Guards break strikes, which costs the Trade Unions strength and
+feeds the Labor Movement, and a force that answers to its clients is harder
+to turn on the legislature (see [Forceful Legislation](#forceful-legislation)).
+
+Only Corpocrat leaders, and a custom religion's Corporate Rule, favor Private
+Policing. Market liberals and plutocrats are indifferent. Socialists, social
+democrats, radicals, humanitarians, egalitarians, paternalists, patriots,
+jingoists, fascists, integralists and authoritarians oppose it, and
+anarchists and communists strongly oppose it. The AI enacts it only under a
+Corpocrat ruler. A country that loses its market economy or becomes a Council
+Republic moves to Dedicated Police Force, keeping its Ministry's investment.
+
+Two amendments adjust a police law without replacing it (see [Amendments to
+the mod's laws](#amendments-to-the-mods-laws)). Corporate Security Powers gives
+companies police powers in their own mines, mills and company towns beside a
+public force, from Corporate Charters on. Interest groups take the same stance
+on it as on Private Policing, so until Corpocrats appear (Mutual Funds) it
+depends on the Industrialists, who sponsor it whatever their leader. Civilian Oversight sets up review boards for
+complaints against police officers and licensed firms, from the Civil Rights
+Movement technology on, and interest groups judge it as they judge Guaranteed
+Liberties.
+
 ### Law enactment events
 
 The mod's laws have their own events at the enactment checkpoints, such as a
@@ -220,7 +266,8 @@ take away 3, and Guaranteed Liberties, Devolved Administration and Communal
 Administration 2.
 Establishing the Ministry of Thought Control adds 2, and the ministries of
 Propaganda and of Intelligence and Security 1 each. The Policing laws count
-too, from −0.5 for No Police to +1 for a Militarized Police Force. Each level of
+too, from −0.5 for No Police and Private Policing to +1 for a Militarized
+Police Force, and the Civilian Oversight amendment takes away 0.5. Each level of
 investment adds a fraction more: 0.4 in Thought Control, 0.2 in Propaganda and
 0.1 in the Ministry of Public Safety, the base game's Law Enforcement
 institution under its new name. Below 0, the event never appears, and each
@@ -283,8 +330,9 @@ bureaucracy, and countries that start with the law begin at level 6.
 
 Interest groups sponsor amendments to the mod's laws as they do for base-game
 laws, and every one of them also comes with an event or another way into the
-game: most are offered by enactment events as the price of passage. One
-amendment, the Spoils System, attaches to base-game laws. Under the Legislated Tax Code rule the tax rates are
+game: most are offered by enactment events as the price of passage. Three
+amendments attach to base-game laws: the Spoils System, Corporate Security
+Powers and Civilian Oversight. Under the Legislated Tax Code rule the tax rates are
 amendments to the Legislated Tax Code law, and only tax bills change them (see
 [Taxation (experimental)](04-tax-code.md)).
 
@@ -304,6 +352,8 @@ amendments to the Legislated Tax Code law, and only tax bills change them (see
 | Small Donor Matching | Donation Limits, Publicly Funded Elections | +5 legitimacy, higher bureaucracy cost |
 | Religious Exemption Clause | Any LGBTQ+ protection law | Devout approval |
 | Environmental Grandfather Clause | Ministry of the Environment Established | Industrialist approval, 5% more pollution and emissions |
+| Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing |
+| Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
 
 ### Sunset clauses
@@ -374,7 +424,7 @@ group that dislikes the current law doesn't back a new law it has no view on.
 | Inclusive Multiculturalist | Leaders | As Multiculturalist, after the Sexual Revolution; adds LGBTQ+ rights |
 | Anti-Colonialist | Leaders; also added to the Trade Unions and Intelligentsia | With the Decolonization technology; opposes colonial laws |
 | Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics, Automated Bureaucracy and Algorithmic Governance |
-| Corpocrat | Leaders | From Mutual Funds, mostly Industrialists; favors Neocameralism and Contracted Administration |
+| Corpocrat | Leaders | From Mutual Funds, mostly Industrialists; favors Neocameralism, Contracted Administration and Private Policing |
 | Islamic Inheritance | The Devout in Sunni and Shiite countries | From the start; favors Partible and Equal Inheritance |
 
 Interest-group leaders, commanders and politicians are more often women under

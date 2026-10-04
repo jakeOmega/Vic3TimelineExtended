@@ -127,7 +127,7 @@
 			else = {
 				multiply = {
 					value = 0.2
-					desc = "UPPER_CLASS"
+					desc = "POP_UPPER_STRATA"
 				}
 			}
 		}
@@ -156,7 +156,7 @@
 			else = {
 				multiply = {
 					value = 2
-					desc = "MIDDLE_CLASS"
+					desc = "POP_MIDDLE_STRATA"
 				}
 			}
 		}
@@ -166,7 +166,7 @@
 			}
 			multiply = {
 				value = 0.5
-				desc = "LOWER_CLASS"
+				desc = "POP_LOWER_STRATA"
 			}
 		}
 
@@ -491,7 +491,7 @@ movement_civil_rights = {
 			else = {
 				multiply = {
 					value = 0.5
-					desc = "UPPER_CLASS"
+					desc = "POP_UPPER_STRATA"
 				}
 			}
 		}
@@ -520,7 +520,7 @@ movement_civil_rights = {
 			else = {
 				multiply = {
 					value = 2
-					desc = "MIDDLE_CLASS"
+					desc = "POP_MIDDLE_STRATA"
 				}
 			}
 		}
@@ -530,7 +530,7 @@ movement_civil_rights = {
 			}
 			multiply = {
 				value = 0.75
-				desc = "LOWER_CLASS"
+				desc = "POP_LOWER_STRATA"
 			}
 		}
 
@@ -768,7 +768,7 @@ movement_anti_war = {
 			else = {
 				multiply = {
 					value = 0.5
-					desc = "UPPER_CLASS"
+					desc = "POP_UPPER_STRATA"
 				}
 			}
 		}
@@ -797,7 +797,7 @@ movement_anti_war = {
 			else = {
 				multiply = {
 					value = 1.25
-					desc = "MIDDLE_CLASS"
+					desc = "POP_MIDDLE_STRATA"
 				}
 			}
 		}
@@ -807,7 +807,7 @@ movement_anti_war = {
 			}
 			multiply = {
 				value = 0.5
-				desc = "LOWER_CLASS"
+				desc = "POP_LOWER_STRATA"
 			}
 		}
 
@@ -1035,7 +1035,7 @@ movement_transhumanist = {
 			else = {
 				multiply = {
 					value = 2
-					desc = "UPPER_CLASS"
+					desc = "POP_UPPER_STRATA"
 				}
 			}
 		}
@@ -1073,7 +1073,7 @@ movement_transhumanist = {
 			else = {
 				multiply = {
 					value = 1.5
-					desc = "MIDDLE_CLASS"
+					desc = "POP_MIDDLE_STRATA"
 				}
 			}
 		}
@@ -1083,7 +1083,7 @@ movement_transhumanist = {
 			}
 			multiply = {
 				value = 0.25
-				desc = "LOWER_CLASS"
+				desc = "POP_LOWER_STRATA"
 			}
 		}
 

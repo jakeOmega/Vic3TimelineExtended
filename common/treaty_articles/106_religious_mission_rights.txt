@@ -100,13 +100,7 @@ religious_mission_rights = {
 			if = {
 				limit = { exists = input_state }
 				input_state = {
-					add_modifier = {
-						name = religious_mission_state_modifier
-					}
-					set_variable = {
-						name = religious_mission_country
-						value = scope:mission_country
-					}
+					te_religious_mission_state_apply = { MISSION_COUNTRY = scope:mission_country }
 				}
 			}
 		}
@@ -114,15 +108,13 @@ religious_mission_rights = {
 
 	on_break = {
 		scope:article_options.input_state ?= {
-			remove_modifier = religious_mission_state_modifier
-			remove_variable = religious_mission_country
+			te_religious_mission_state_clear = yes
 		}
 	}
 
 	on_withdrawal = {
 		scope:article_options.input_state ?= {
-			remove_modifier = religious_mission_state_modifier
-			remove_variable = religious_mission_country
+			te_religious_mission_state_clear = yes
 		}
 	}
 

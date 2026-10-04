@@ -19,6 +19,7 @@ import json
 import os
 import tempfile
 import unittest
+from unittest import mock
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import urlopen
@@ -314,6 +315,30 @@ class ModifierGrantBlockLabelTests(unittest.TestCase):
         self.assertIsNone(mss._grant_block_label(["law_x", "possible"], "wrapped"))
         self.assertIsNone(mss._grant_block_label(["law_x"], "wrapped"))
 
+    def test_wrapped_matches_bag_names_not_a_list(self):
+        for bag in ("acceptance_modifier", "prosperity_modifier", "country_modifier",
+                    "building_modifiers", "upkeep_modifier_unscaled",
+                    "tax_modifier_very_high", "unit_modifier", "mutual_modifier"):
+            with self.subTest(bag=bag):
+                self.assertEqual(mss._grant_block_label(["e", bag], "wrapped"), bag)
+
+    def test_wrapped_rejects_ai_weight_modifiers(self):
+        self.assertIsNone(
+            mss._grant_block_label(["law_x", "ai_enact_weight_modifier"], "wrapped"))
+        self.assertIsNone(mss._grant_block_label(["law_x", None], "wrapped"))
+
+    def test_pact_container_is_transparent(self):
+        self.assertEqual(
+            mss._grant_block_label(["act", "pact", "first_modifier"], "wrapped"),
+            "pact/first_modifier")
+        self.assertIsNone(mss._grant_block_label(["act", "pact"], "wrapped"))
+        self.assertIsNone(mss._grant_block_label(["act", "pact", "possible"], "wrapped"))
+
+    def test_throughput_scaled_wrapper(self):
+        self.assertEqual(
+            mss._grant_block_label(["pm", "country_modifiers", "throughput_scaled"], "wrapped"),
+            "country_modifiers/throughput_scaled")
+
     def test_wrapped_scaling_wrapper_nested(self):
         self.assertEqual(
             mss._grant_block_label(["b", "construction_modifier", "workforce_scaled"], "wrapped"),
@@ -415,7 +440,42 @@ class ModifierGrantScanTests(unittest.TestCase):
         self.assertIsNone(mss._GRANT_OPENER_RE.match("\tvalue = -1"))
         self.assertIsNone(mss._GRANT_OPENER_RE.match("\tx >= {"))
         self.assertEqual(
-            mss._GRANT_OPENER_RE.match("lab-grown_food = {").group(1), "lab-grown_food")
+            mss._GRANT_OPENER_RE.match("lab-grown_food = {").group("name"), "lab-grown_food")
+
+    def test_opener_captures_the_directive_prefix(self):
+        for prefix in ("INJECT", "REPLACE", "REPLACE_OR_CREATE"):
+            m = mss._GRANT_OPENER_RE.match(f"{prefix}:law_x = {{")
+            self.assertEqual((m.group("directive"), m.group("name")), (prefix, "law_x"))
+        self.assertIsNone(mss._GRANT_OPENER_RE.match("law_x = {").group("directive"))
+
+    def test_replace_or_create_entity_opens(self):
+        # #327: only INJECT:/REPLACE: were recognised, so an entity opened by
+        # REPLACE_OR_CREATE: never opened and its grants were dropped.
+        out = self._scan(
+            "REPLACE_OR_CREATE:building_x = {\n\tmodifier = {\n\t\ttarget_mod = 2\n\t}\n}\n",
+            entity_type="Buildings")
+        self.assertEqual([(g["entity_id"], g["value"]) for g in out], [("building_x", 2)])
+
+    def test_new_bag_names_from_the_issue(self):
+        # #327: each of these types carries a real grant the first version missed.
+        cases = [
+            ("Country Ranks", "great_power = {\n\tmodifier = {\n\t\ttarget_mod = -0.5\n\t}\n}\n", "modifier"),
+            ("Institutions", "inst_x = {\n\tmodifier = {\n\t\ttarget_mod = -0.05\n\t}\n}\n", "modifier"),
+            ("Company Types", "company_x = {\n\tprosperity_modifier = {\n\t\ttarget_mod = 0.1\n\t}\n}\n", "prosperity_modifier"),
+            ("Interest Group Traits", "ig_trait_x = {\n\tmodifier = {\n\t\ttarget_mod = 0.1\n\t}\n}\n", "modifier"),
+            ("PMs", "pm_x = {\n\tcountry_modifiers = {\n\t\tworkforce_scaled = {\n\t\t\ttarget_mod = 0.3\n\t\t}\n\t}\n}\n",
+             "country_modifiers/workforce_scaled"),
+            ("Character Traits", "trait_x = {\n\tcountry_modifier = {\n\t\ttarget_mod = 0.2\n\t}\n}\n", "country_modifier"),
+            ("Laws", "law_x = {\n\tacceptance_modifier = {\n\t\ttarget_mod = 0.2\n\t}\n}\n", "acceptance_modifier"),
+        ]
+        for entity_type, body, block in cases:
+            with self.subTest(entity_type=entity_type):
+                out = self._scan(body, entity_type=entity_type)
+                self.assertEqual([g["block"] for g in out], [block])
+
+    def test_file_without_the_target_is_skipped(self):
+        self.assertEqual(
+            self._scan("law_x = {\n\tmodifier = {\n\t\tother_mod = 1\n\t}\n}\n"), [])
 
 
 class ExtractModifierFieldsTests(unittest.TestCase):
@@ -488,6 +548,295 @@ class ModifierGrantLookupTests(unittest.TestCase):
             "state_homeland_creation_threshold_add", scope="mod", limit=2)
         self.assertEqual(r["returned"], 2)
         self.assertTrue(r["truncated"])
+
+
+class ModifierGrantFinderTreeTests(unittest.TestCase):
+    """#327 — `_find_modifier_grants` over a hand-built mod + vanilla tree."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.mod = os.path.join(self._tmp.name, "mod")
+        self.base = os.path.join(self._tmp.name, "base")
+        os.makedirs(os.path.join(self.mod, "common"))
+        os.makedirs(os.path.join(self.base, "game", "common"))
+        for name, value in (
+            ("mod_path", self.mod),
+            ("_MOD_COMMON", os.path.join(self.mod, "common")),
+            ("base_game_path", self.base),
+            ("_BASE_COMMON", os.path.join(self.base, "game", "common")),
+        ):
+            patcher = mock.patch.object(mss, name, value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
+
+    def _write(self, origin, rel, body):
+        root = self.mod if origin == "mod" else os.path.join(self.base, "game")
+        path = os.path.join(root, "common", *rel.split("/"))
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(body)
+
+    @staticmethod
+    def _bag(entity, bag="modifier", value=1, key="target_mod", prefix=""):
+        return f"{prefix}{entity} = {{\n\t{bag} = {{\n\t\t{key} = {value}\n\t}}\n}}\n"
+
+    def test_walks_every_entity_directory_not_a_list(self):
+        self._write("mod", "country_ranks/r.txt", self._bag("great_power", value=-0.5))
+        self._write("mod", "institutions/i.txt", self._bag("inst_x"))
+        self._write("mod", "company_types/c.txt", self._bag("company_x", "prosperity_modifier"))
+        # A directory the endpoint has never heard of is still walked...
+        self._write("mod", "brand_new_things/b.txt", self._bag("thing_x"))
+        # ...but script directories are not: their `modifier = {}` blocks are weights.
+        self._write("mod", "scripted_effects/e.txt", self._bag("effect_x"))
+        self._write("mod", "script_values/v.txt", self._bag("value_x"))
+        r = mss._find_modifier_grants("target_mod", scope="mod")
+        self.assertEqual(
+            {(g["entity_type"], g["entity_id"]) for g in r["grants"]},
+            {("Country Ranks", "great_power"), ("Institutions", "inst_x"),
+             ("Company Types", "company_x"), ("Brand New Things", "thing_x")})
+        self.assertEqual(
+            r["entity_types_scanned"],
+            ["Country Ranks", "Institutions", "Company Types", "Brand New Things"])
+        self.assertEqual(r["origins_scanned"], ["mod"])
+        self.assertEqual((r["total"], r["returned"], r["truncated"]), (4, 4, False))
+        self.assertEqual(r["warnings"], [])
+
+    def test_hyphenated_directive_and_technology_subdirectories(self):
+        self._write("mod", "technology/technologies/t.txt",
+                    self._bag("post-scarcity_economy", prefix=""))
+        self._write("mod", "technology/eras/e.txt", self._bag("era_x"))
+        r = mss._find_modifier_grants("target_mod", scope="mod")
+        self.assertEqual(
+            sorted((g["entity_type"], g["entity_id"]) for g in r["grants"]),
+            [("Technologies", "post-scarcity_economy"), ("Technology Eras", "era_x")])
+
+    def test_entity_types_filter_accepts_names_and_directory_names(self):
+        self._write("mod", "country_ranks/r.txt", self._bag("great_power"))
+        self._write("mod", "production_methods/p.txt", self._bag("pm_x", "country_modifiers"))
+        self._write("mod", "laws/l.txt", self._bag("law_x"))
+        for filt in (["Country Ranks"], ["country_ranks"], ["COUNTRY RANKS"]):
+            with self.subTest(filt=filt):
+                r = mss._find_modifier_grants("target_mod", scope="mod", entity_types=filt)
+                self.assertEqual(r["entity_types_scanned"], ["Country Ranks"])
+                self.assertEqual([g["entity_id"] for g in r["grants"]], ["great_power"])
+        r = mss._find_modifier_grants(
+            "target_mod", scope="mod", entity_types=["pms", "production_methods", "Laws"])
+        self.assertEqual(r["entity_types_scanned"], ["Laws", "PMs"])
+
+    def test_pm_bag_gets_its_scaling_label(self):
+        self._write(
+            "mod", "production_methods/p.txt",
+            "pm_x = {\n\tcountry_modifiers = {\n\t\tworkforce_scaled = {\n"
+            "\t\t\ttarget_mod = 0.5\n\t\t}\n\t}\n\tstate_modifiers = {\n"
+            "\t\tlevel_scaled = {\n\t\t\ttarget_mod = 2\n\t\t}\n\t}\n}\n")
+        r = mss._find_modifier_grants("target_mod", scope="mod")
+        self.assertEqual([g["block"] for g in r["grants"]],
+                         ["country_modifiers/workforce_scaled", "state_modifiers/level_scaled"])
+
+    def test_unknown_entity_type_is_an_error_listing_the_known_ones(self):
+        self._write("mod", "laws/l.txt", self._bag("law_x"))
+        r = mss._find_modifier_grants("target_mod", scope="mod", entity_types=["Lawz"])
+        self.assertIn("lawz", r["error"])
+        self.assertEqual(r["known_types"], ["Laws"])
+        self.assertEqual(r["grants"], [])
+
+    def test_blank_entity_types_filter_means_no_filter(self):
+        self._write("mod", "laws/l.txt", self._bag("law_x"))
+        r = mss._find_modifier_grants("target_mod", scope="mod", entity_types=[" "])
+        self.assertEqual(r["returned"], 1)
+
+    def test_total_and_truncated_are_exact(self):
+        body = "".join(self._bag(f"law_{i}") for i in range(5))
+        self._write("mod", "laws/l.txt", body)
+        for limit, truncated in ((5, False), (6, False), (4, True), (0, True)):
+            with self.subTest(limit=limit):
+                r = mss._find_modifier_grants("target_mod", scope="mod", limit=limit)
+                self.assertEqual(r["total"], 5)
+                self.assertEqual(r["returned"], min(limit, 5))
+                self.assertEqual(r["truncated"], truncated)
+
+    def test_missing_vanilla_is_reported_not_silent(self):
+        os.rmdir(os.path.join(self.base, "game", "common"))
+        self._write("mod", "laws/l.txt", self._bag("law_x"))
+        r = mss._find_modifier_grants("target_mod", scope="both")
+        self.assertEqual(r["origins_scanned"], ["mod"])
+        self.assertEqual(len(r["warnings"]), 1)
+        self.assertIn("vanilla", r["warnings"][0])
+        self.assertEqual(r["returned"], 1)
+
+    def test_filter_with_no_tree_to_scan_is_a_warning_not_an_unknown_type(self):
+        os.rmdir(os.path.join(self.base, "game", "common"))
+        r = mss._find_modifier_grants("target_mod", scope="vanilla", entity_types=["Laws"])
+        self.assertNotIn("error", r)
+        self.assertEqual((r["grants"], r["origins_scanned"], r["entity_types_scanned"]),
+                         ([], [], []))
+        self.assertEqual(len(r["warnings"]), 1)
+
+    def test_both_origins_scanned_when_both_trees_exist(self):
+        self._write("mod", "laws/l.txt", self._bag("law_x"))
+        self._write("vanilla", "laws/00_laws.txt", self._bag("law_v"))
+        r = mss._find_modifier_grants("target_mod", scope="both")
+        self.assertEqual(r["origins_scanned"], ["mod", "vanilla"])
+        self.assertEqual(sorted(g["origin"] for g in r["grants"]), ["mod", "vanilla"])
+
+    def test_mod_replace_marks_the_vanilla_row_shadowed(self):
+        self._write("vanilla", "static_modifiers/00.txt",
+                    "declared_bankruptcy = {\n\ttarget_mod = 1\n}\nkept = {\n\ttarget_mod = 2\n}\n")
+        self._write("mod", "static_modifiers/mod.txt",
+                    "REPLACE:declared_bankruptcy = {\n\ttarget_mod = 3\n}\n")
+        r = mss._find_modifier_grants("target_mod", scope="both")
+        rows = {(g["origin"], g["entity_id"]): g for g in r["grants"]}
+        self.assertEqual(rows[("vanilla", "declared_bankruptcy")]["shadowed_by"], "mod")
+        self.assertNotIn("shadowed_by", rows[("mod", "declared_bankruptcy")])
+        self.assertNotIn("shadowed_by", rows[("vanilla", "kept")])
+
+    def test_replace_that_drops_the_grant_still_shadows_the_vanilla_row(self):
+        # The mod's replacement does not grant target_mod at all, so there is no
+        # mod row to point at; the vanilla row must still be marked.
+        self._write("vanilla", "laws/00.txt", self._bag("law_x"))
+        self._write("mod", "laws/mod.txt", self._bag("law_x", key="other_mod", prefix="REPLACE:"))
+        r = mss._find_modifier_grants("target_mod", scope="both")
+        self.assertEqual([(g["origin"], g.get("shadowed_by")) for g in r["grants"]],
+                         [("vanilla", "mod")])
+        r = mss._find_modifier_grants("target_mod", scope="both", effective=True)
+        self.assertEqual((r["grants"], r["total"], r["effective"]), ([], 0, True))
+
+    def test_replace_or_create_shadows_too(self):
+        self._write("vanilla", "buildings/00.txt", self._bag("building_x"))
+        self._write("mod", "buildings/mod.txt",
+                    self._bag("building_x", prefix="REPLACE_OR_CREATE:"))
+        r = mss._find_modifier_grants("target_mod", scope="both")
+        marks = {g["origin"]: g.get("shadowed_by") for g in r["grants"]}
+        self.assertEqual(marks, {"vanilla": "mod", "mod": None})
+
+    def test_same_path_mod_file_shadows_the_whole_vanilla_file(self):
+        self._write("vanilla", "institutions/00_institutions.txt", self._bag("inst_a"))
+        self._write("vanilla", "institutions/01_other.txt", self._bag("inst_b"))
+        self._write("mod", "institutions/00_institutions.txt", self._bag("inst_c"))
+        r = mss._find_modifier_grants("target_mod", scope="both")
+        marks = {g["entity_id"]: g.get("shadowed_by") for g in r["grants"]}
+        self.assertEqual(marks, {"inst_a": "mod", "inst_b": None, "inst_c": None})
+
+    def test_inject_does_not_shadow(self):
+        self._write("vanilla", "laws/00.txt", self._bag("law_x"))
+        self._write("mod", "laws/mod.txt", self._bag("law_x", value=5, prefix="INJECT:"))
+        r = mss._find_modifier_grants("target_mod", scope="both")
+        self.assertEqual(len(r["grants"]), 2)
+        self.assertTrue(all("shadowed_by" not in g for g in r["grants"]))
+
+    def test_effective_drops_shadowed_rows_and_keeps_the_rest(self):
+        self._write("vanilla", "laws/00.txt", self._bag("law_a") + self._bag("law_b"))
+        self._write("mod", "laws/mod.txt", self._bag("law_a", value=9, prefix="REPLACE:"))
+        r = mss._find_modifier_grants("target_mod", scope="both", effective=True)
+        self.assertEqual(sorted((g["origin"], g["entity_id"]) for g in r["grants"]),
+                         [("mod", "law_a"), ("vanilla", "law_b")])
+        self.assertEqual(r["total"], 2)
+
+    def test_shadowing_is_per_entity_type(self):
+        # A mod REPLACE of `thing` in laws must not shadow a vanilla `thing` in institutions.
+        self._write("vanilla", "institutions/00.txt", self._bag("thing"))
+        self._write("mod", "laws/mod.txt", self._bag("thing", prefix="REPLACE:"))
+        r = mss._find_modifier_grants("target_mod", scope="vanilla")
+        self.assertNotIn("shadowed_by", r["grants"][0])
+
+    def test_scope_vanilla_still_marks_shadowed_rows(self):
+        self._write("vanilla", "laws/00.txt", self._bag("law_x"))
+        self._write("mod", "laws/mod.txt", self._bag("law_x", key="other_mod", prefix="REPLACE:"))
+        r = mss._find_modifier_grants("target_mod", scope="vanilla")
+        self.assertEqual(r["grants"][0]["shadowed_by"], "mod")
+
+
+class ModifierGrantCoverageTests(unittest.TestCase):
+    """#327 — the walk must claim every grant in the real mod tree. An allow-list
+    fails silently, so a modifier written in a block the scanner does not
+    recognise as a bag fails here instead of vanishing from /modifier-grants."""
+
+    # Registered modifier names that are used as plain fields, not grants.
+    # `construction_goods` / `materiel_goods` hold the goods a ship costs to
+    # build or supply (`goods_input_steel_add = 1700`); nothing applies them.
+    NON_GRANT_BLOCKS = {"construction_goods", "materiel_goods"}
+
+    @unittest.skipUnless(os.path.isdir(mss._MOD_COMMON), "mod common/ not found")
+    def test_every_registered_modifier_in_an_entity_file_is_claimed(self):
+        import glob
+        from paradox_file_parser import ParadoxFileParser
+
+        vanilla_types = os.path.join(
+            os.path.dirname(os.path.abspath(mss.__file__)),
+            "vanilla_parsed", "common", "modifier_types.json")
+        if not os.path.isfile(vanilla_types):
+            self.skipTest("vanilla_parsed/ not found")
+        with open(vanilla_types, encoding="utf-8") as fh:
+            registered = set(json.load(fh))
+        for path in glob.glob(os.path.join(mss._MOD_COMMON, "modifier_type_definitions", "*.txt")):
+            parser = ParadoxFileParser()
+            parser.parse_file(path, apply_directives=False)
+            registered.update(parser.data)
+
+        claimed = set()
+        for entity_type, subdir, mode in mss._grant_scan_plan([mss._MOD_COMMON]):
+            for dirpath, _dirs, files in os.walk(
+                    os.path.join(mss._MOD_COMMON, *subdir.split("/"))):
+                for fname in files:
+                    if fname.endswith(".txt") and not fname.startswith("_"):
+                        abs_path = os.path.join(dirpath, fname)
+                        for g in mss._scan_file_for_grants(
+                                abs_path, abs_path, entity_type, mode, "mod", None):
+                            claimed.add((abs_path, g["line"]))
+
+        missed = []
+        for subdir in (d for d in os.listdir(mss._MOD_COMMON)
+                       if d not in mss._GRANT_SKIP_DIRS and not d.startswith("_")):
+            for abs_path in glob.glob(
+                    os.path.join(mss._MOD_COMMON, subdir, "**", "*.txt"), recursive=True):
+                # Independent brace tracker: stack[0] is the entity, stack[1]
+                # the first block inside it.
+                stack: list = []
+                depth = 0
+                with open(abs_path, encoding="utf-8-sig") as fh:
+                    lines = fh.read().split("\n")
+                for lineno, raw in enumerate(lines, 1):
+                    text = raw.split("#", 1)[0]
+                    m = mss._GRANT_LINE_RE.match(text)
+                    if (m and m.group(1) in registered and len(stack) >= 2
+                            and (abs_path, lineno) not in claimed
+                            and stack[1] not in self.NON_GRANT_BLOCKS):
+                        missed.append(
+                            f"{os.path.relpath(abs_path, mss.mod_path)}:{lineno} "
+                            f"{text.strip()} in {'/'.join(map(str, stack))}")
+                    opener = mss._GRANT_OPENER_RE.match(text)
+                    opens, closes = text.count("{"), text.count("}")
+                    if opener and opens:
+                        stack.append(opener.group("name"))
+                        stack.extend([None] * (opens - 1))
+                        depth += opens
+                    elif opens:
+                        stack.extend([None] * opens)
+                        depth += opens
+                    for _ in range(closes):
+                        if stack:
+                            stack.pop()
+                        depth -= 1
+                        if depth <= 0:
+                            depth, stack = 0, []
+        self.assertEqual(missed, [], "grants in blocks the scanner does not recognise "
+                         "as modifier bags (extend _is_modifier_bag / _GRANT_SKIP_DIRS)")
+
+    @unittest.skipUnless(os.path.isdir(mss._MOD_COMMON), "mod common/ not found")
+    def test_the_types_the_issue_names_are_scanned(self):
+        r = mss._find_modifier_grants("phantom_modifier_does_not_exist_xyz", scope="mod")
+        for entity_type in ("Country Ranks", "Institutions", "Company Types",
+                            "Interest Group Traits", "PMs", "Character Traits"):
+            self.assertIn(entity_type, r["entity_types_scanned"])
+        self.assertEqual(r["total"], 0)
+        self.assertFalse(r["truncated"])
+
+    @unittest.skipUnless(os.path.isdir(mss._MOD_COMMON), "mod common/ not found")
+    def test_post_scarcity_economy_is_found(self):
+        # #327: the hyphenated id was missing from this modifier's grants.
+        r = mss._find_modifier_grants("country_voting_power_mult", scope="mod", limit=500)
+        self.assertIn("post-scarcity_economy", {g["entity_id"] for g in r["grants"]})
 
 
 # ---------------------------------------------------------------------------
@@ -929,7 +1278,6 @@ import logging
 import threading
 import types
 from http.server import ThreadingHTTPServer
-from unittest import mock
 from urllib.request import Request
 
 import mod_state_client
@@ -1422,6 +1770,46 @@ class ErrorBodyStatusTests(unittest.TestCase):
         # The finder's body shape survives the status change.
         self.assertEqual(ctx.exception.payload["grants"], [])
         self.assertEqual(ctx.exception.payload["name"], "Not A Modifier!")
+
+    def test_modifier_grants_passes_the_coverage_params_through(self):
+        # #327: ?entity_types= (comma-separated, repeatable) and ?effective=.
+        stub = {"name": "x", "grants": []}
+        with mock.patch.object(mss, "_find_modifier_grants", return_value=stub) as find:
+            mss.ModStateHandler._modifier_grants(
+                self.handler, ["x"],
+                {"entity_types": ["Laws, PMs", "country_ranks"], "effective": ["TRUE"],
+                 "scope": ["mod"], "limit": ["7"]})
+            find.assert_called_once_with(
+                "x", scope="mod", limit=7,
+                entity_types=["Laws", "PMs", "country_ranks"], effective=True)
+            find.reset_mock()
+            mss.ModStateHandler._modifier_grants(self.handler, ["x"], {})
+            find.assert_called_once_with(
+                "x", scope="both", limit=200, entity_types=None, effective=False)
+
+    def test_principle_detail_lists_modifier_bags_by_name(self):
+        # `/principles/<id>` shares _is_modifier_bag with /modifier-grants (it
+        # used to import a fixed list that the grants rewrite removed).
+        raw = ("=", {
+            "member_modifier": ("=", {"target_mod": ("=", "0.2")}),
+            "institution_modifier": ("=", {"target_mod": ("=", "0.1")}),
+            "possible": ("=", {"target_mod": ("=", "5")}),
+            "ai_weight_modifier": ("=", {"target_mod": ("=", "9")}),
+        })
+        with mock.patch.object(mss, "ms", _StubModState(data={"Principle Groups": {}})):
+            info = mss.ModStateHandler._format_principle_detail(self.handler, "p_x", raw)
+        self.assertEqual([b["block"] for b in info["modifier_blocks"]],
+                         ["member_modifier", "institution_modifier"])
+
+    def test_modifier_grants_unknown_entity_type_is_400_with_known_types(self):
+        with self.assertRaises(mss._EndpointError) as ctx:
+            mss.ModStateHandler._modifier_grants(
+                self.handler, ["target_mod"],
+                {"scope": ["mod"], "entity_types": ["Not A Type"]})
+        self.assertEqual(ctx.exception.status, 400)
+        self.assertIn("notatype", ctx.exception.payload["error"])
+        self.assertIsInstance(ctx.exception.payload["known_types"], list)
+        self.assertEqual(ctx.exception.payload["grants"], [])
 
 
 class UnlocalizeFormTests(unittest.TestCase):
