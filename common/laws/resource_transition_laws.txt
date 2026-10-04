@@ -15,7 +15,8 @@
 # "First Law in a Lawgroup File Is the Unseeded Default").
 #
 # One technology per law (the issue's agreed progression): the moratorium needs
-# Environmental Movement, the phaseout Clean Energy Technologies only. Both need
+# Environmental Movement; phaseout needs Carbon Capture and Storage and mandates
+# at least 50% source capture. Both need
 # the Ministry of the Environment (`unlocking_laws`, so the engine greys the law
 # with its own tooltip). gen_law_consistency enforces `unlocking_laws` after
 # enactment too: abolishing the ministry drops a restrictive law back to the

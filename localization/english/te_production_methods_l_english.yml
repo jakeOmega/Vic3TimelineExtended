@@ -1918,7 +1918,7 @@
  pmg_carbon_capture_duro_la_felguera_steelworks:0 "Carbon Capture ($pmg_duro_la_felguera_steelworks$)"
  pmg_carbon_capture_eea_dock_sud_power_station:0 "Carbon Capture ($pmg_eea_dock_sud_power_station$)"
  pmg_carbon_capture_electricidad_caracas_power_house:0 "Carbon Capture ($pmg_electricidad_caracas_power_house$)"
- pmg_carbon_capture_explosives_building_chemical_plant:0 "Carbon Capture ($pmg_explosives_building_chemical_plant$)"
+ pmg_carbon_capture_explosives_building_chemical_plant:0 "Carbon Capture ($building_explosives_factory$)"
  pmg_carbon_capture_fertilizer_production:0 "Carbon Capture ($pmg_fertilizer_production$)"
  pmg_carbon_capture_firearms_manufacturing:0 "Carbon Capture ($pmg_firearms_manufacturing$)"
  pmg_carbon_capture_foundries:0 "Carbon Capture ($pmg_foundries$)"

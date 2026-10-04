@@ -371,6 +371,8 @@
  goods_output_electronic_components_mult_desc:0 "The amount of @electronic_components! $electronic_components$ produced by buildings"
  goods_output_explosives_mult:0 "Building @explosives! $explosives$ output"
  goods_output_explosives_mult_desc:0 "A bonus or penalty to the amount of @explosives! $explosives$ produced by buildings"
+ goods_output_fertilizer_mult:0 "Chemicals Output"
+ goods_output_fertilizer_mult_desc:0 "Changes the output of Chemicals. This mod uses the base-game fertilizer good for Chemicals."
  goods_output_fine_art_mult:0 "Building @fine_art! $fine_art$ output"
  goods_output_fine_art_mult_desc:0 "A bonus or penalty to the amount of @fine_art! $fine_art$ produced by buildings"
  goods_output_fish_mult:0 "Building @fish! $fish$ output"

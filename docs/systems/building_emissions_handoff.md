@@ -1,5 +1,9 @@
 # Building emissions implementation handoff
 
+> Temporary feature-branch continuation log; the durable implementation and
+> pending engine checks live in building_emissions_design.md §0. Historical
+> checkpoints below may describe superseded formulas or balance.
+
 Draft PR: [#681](https://github.com/jakeOmega/Vic3TimelineExtended/pull/681).
 Branch: `codex/building-emissions`. Base: `ba906c2b` from `origin/main`,
 pulled on 2026-10-03. The working tree was clean when work began.
@@ -12,7 +16,8 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 ## Current checkpoint
 
 - Feature branch contains latest `origin/main` (`c59e8a36`), fetched again before
-  the latest deployment. Implementation `0e2e811b` is pushed and deployed.
+  the latest deployment. Review fixes are validated and deployed; checkpoints
+  and feedback IDs are recorded at the end of this file.
 - Repository guidance read (`CLAUDE.md`, docs index, player-guide style).
 - Phase-0 probe assets remain under `docs/testing/carbon_capture_probe/` for
   historical evidence. The overlay is removed from deployment; do not restore
@@ -48,7 +53,10 @@ coal/oil factors 2/1.74, and display-only scaling by 1000.
 4. Check DAC/synthetic PM changes replace their atmospheric credits once.
    A market with enough atmospheric removal can remain net negative even with
    industrial policy reductions. Source capture alone must not cause cooling.
-5. Finish expanded production regression: independent automation/company
+5. Check foreign-owned phaseout buildings whose owner lacks CCS; localized
+   state-modifier tooltip lines; 114 hidden variants per technology; AI electricity
+   prices and mandate repeal/re-enactment churn.
+6. Finish expanded production regression: independent automation/company
    controls; fuel/zero-fuel/feedstock/mobile swaps under the mandate; old-save
    phaseout fallback without CCS after a monthly pulse. Review balance before
    merging. Remaining scope gaps are documented in the latest checkpoint.
@@ -66,13 +74,13 @@ publish a finished release before engine verification and balance review.
 
 ## Offline checks
 
-- All 3,647 unit/integration tests passed (58 environment-dependent skips).
+- All 3,649 unit/integration tests passed (58 environment-dependent skips).
   The 51 emissions/capture/household tests are in `test_building_emissions.py`,
   `test_pm_carbon_capture.py` and `test_household_emissions.py`.
 - Ruff, player-guide strict style, PDF freshness, post-load roster, localization
   sanity/organization, Paradox tab formatting and diff whitespace checks passed.
 - All 23 offline CI audits passed.
-- Snapshot-backed ModState structure audit: 559 files, zero unreviewed flags
+- Snapshot-backed ModState structure audit: 558 files, zero unreviewed flags
   and zero parse failures. Modified script files pass BOM/tab checks.
 
 Useful commands (use the shared environment above for Python dependencies):
@@ -397,3 +405,48 @@ name. The generated coverage report describes current building-based accounting.
 Inline comments addressed: 4175605250, 4175605340. This branch handoff is kept
 because the owner explicitly requested agent continuity; treat it as a temporary
 checkpoint log, with the design's §0 as the durable system description.
+
+
+## PR review text and continuation checkpoint
+
+Review 5403672148's stale player/developer text is updated: nine policies,
+building/household accounting, DAC-only capture row, Tier II mandate, game-rule
+off behavior, input-discount and military limitations. Generic Base labels use
+building names. Historical design sketches and probe evidence are marked as
+superseded/owner-confirmed without inventing missing measurements.
+Inline comment 4175605430 is fixed. Comment 4175605652 is addressed by a clear
+temporary-session banner and durable checks/decisions in design §0; this handoff
+remains available because the owner requested continuity between agents.
+
+Balance follow-ups retained for owner/engine review: heavier capture costs and
+UI, concentrated-stream earlier unlocks, coal-to-liquids recipe realism, artwork
+choices and actual foreign-owner technology/law scoping. No split or merge is
+performed. Fuel-input discounts deliberately remain economic with clear text,
+rather than approximating them with a second custom national cut.
+
+
+## Validated PR review deployment (2026-10-03)
+
+Review 5403672148 and all ten inline comments are evaluated/addressed above.
+Pushed implementation checkpoints: `a9336c48` accounting/registration/localization,
+`d5e203a9` household/DAC/AI calibration, audit coverage and dead-code cleanup.
+The final text checkpoint follows them. No newer comments arrived during this run.
+
+Final full suite: 3,649 tests pass, 58 skips. All 23 CI audits, Ruff, generator
+freshness, localization organization/sanity, GUI lint, post-load rosters, modified
+Paradox tabs/BOMs and guide style/PDF checks pass. Snapshot structure: 558 files,
+zero flags/parse failures. Localization coverage (with installed vanilla English)
+has zero unreviewed flags; the three state types are localized. One preexisting
+Chemicals-output type missing its vanilla localization was also given a name.
+Employment audit covers 545 buildings, enumerates 87, skips zero, and has zero
+unreviewed mod findings. A regeneration check preserves comments/version-less
+loc keys. CRLF in journal_entry_systems.md is preserved; use
+`git -c core.whitespace=cr-at-eol diff --check` for that file.
+
+Main `c59e8a36` was fetched/verified before deployment. The dry run's sole
+deletion was the removed legacy synthetic-values file. Apply completed; all
+40 feature game files and 310 staged language files match by SHA-256. Obsolete
+values and the historical probe overlay are absent. Restart the game for these
+changes. The six Next work checks remain pending; DAC now removes 42 per full
+level, and Carbon Captured reports DAC only. The PR remains draft/unmerged,
+and the recurring review monitor remains active.

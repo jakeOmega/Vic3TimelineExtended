@@ -32,7 +32,7 @@
 # This country's MARKET's annual emissions. Stored on the market leader, because
 # the sweep that produces it is market-wide: a member reads its leader's copy.
 # There is no per-country emissions figure in this system -- emissions are a
-# property of a market's oil and coal consumption, not of one member.
+# property of net building emissions plus household heating and atmospheric removal.
 # Scope: country
 gw_market_emis_raw = {
 	value = 0
@@ -52,7 +52,7 @@ gw_market_emis_display = {
 	multiply = gw_emission_display_scale
 }
 
-# The negative part of the above: carbon captured by synthetic fuel plants.
+# The negative part of the above: atmospheric carbon removed by Direct Air Capture.
 # Scope: country
 gw_capture_display = {
 	value = 0

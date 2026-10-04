@@ -1,10 +1,13 @@
 # Carbon capture engine probe (design phase 0)
 
-This is an opt-in overlay for a **copied test save**, kept outside the deployed
+**Historical probe: do not install alongside production capture.** The owner
+confirmed the initial bundles; normal production now supplies the capture groups.
+
+This was an opt-in overlay for a **copied test save**, kept outside the deployed
 mod directories. `scripts/deploy.sh` does not include it. Its handwritten coal
 variant is the design's Modern Coal-Fired Plant Tier II example. A second,
 cost-free oil variant supplies a valid mandated fallback; it is a diagnostic,
-not a balanced gameplay method. No market emissions formula reads the probe.
+not a balanced gameplay method. Installing it now would duplicate production state credits.
 
 ## Loading the overlay
 
@@ -64,16 +67,9 @@ and save a baseline before changing anything.
 
 ## Evidence record
 
-The removal-only building and subsidy policy can also be tested in the normal
-mod (the overlay is only needed for the unfinished source-capture tiers):
-research Carbon Capture and Storage, build Carbon Conversion Works, and select
-Direct Air Capture. At full staffing and base throughput expect −168 Greenhouse
-Gas Emissions per level and no goods output. Subsidize the works and compare
-hiring, a throughput bonus and the next January's Carbon Captured reading.
-Carbon Removal Support needs 0.5 °C warming and the new technology; verify its
-100 Authority cost, required subsidies, +5% throughput and movement radicalism
-bonus, then repeal it. Synthetic Coal must remain gated by Genetic Engineering;
-switching methods must replace the credit, never add both.
+Production checks now use the normal mod without this overlay. See the design's
+§0 for current Direct Air Capture capacity and policy requirements. The numbers
+below describe the original test fixture, not current production balance.
 
 The owner supplied nonzero state reads on 2026-10-03 (ROOT Byzantium, country
 88): Bougainville 1.43647, Sicily 1.43647, Abruzzo 1.07660, Apulia 2.87897 and
@@ -85,15 +81,15 @@ log excerpts, selected fallback, and elapsed game time for each observation.
 
 | Check | Expected | Observed |
 |---|---|---|
-| State read, fully staffed | 2.5 per coal plant level | Pending |
-| State read, half staffed | Half the fully staffed total | Pending |
-| Net emissions tooltip | Coal +5.00 −2.50 = 2.50; oil +6.09 −3.05 = 3.04, scaled by staffing and throughput | Pending updated overlay |
-| Throughput scaling | Fuel emissions and capture grow together with throughput | Pending |
-| Hidden fuel gating | Only the matching modern fuel's variant | Pending |
-| Fuel swap without mandate | Drops invalid variant; record fallback | Pending |
-| Law applied to default | Automatically selects a valid variant | Pending |
-| Fuel swap under mandate | Lands on valid capture, never the default | Pending |
-| Market sweep and foreign ownership | Location's state/market, counted once | Pending |
+| State read, fully staffed | 2.5 per coal plant level | Owner confirmed initial bundles; detailed measurement not supplied |
+| State read, half staffed | Half the fully staffed total | Owner confirmed initial bundles; detailed measurement not supplied |
+| Net emissions tooltip | Coal +5.00 −2.50 = 2.50; oil +6.09 −3.05 = 3.04, scaled by staffing and throughput | Owner confirmed totals look right; no screenshot supplied |
+| Throughput scaling | Fuel emissions and capture grow together with throughput | Owner confirmed initial bundles; detailed measurement not supplied |
+| Hidden fuel gating | Only the matching modern fuel's variant | Owner confirmed initial bundles; detailed measurement not supplied |
+| Fuel swap without mandate | Drops invalid variant; record fallback | Owner confirmed initial bundles; detailed measurement not supplied |
+| Law applied to default | Automatically selects a valid variant | Owner confirmed initial bundles; detailed measurement not supplied |
+| Fuel swap under mandate | Lands on valid capture, never the default | Owner confirmed initial bundles; detailed measurement not supplied |
+| Market sweep and foreign ownership | Location's state/market, counted once | Owner confirmed initial bundles; detailed measurement not supplied |
 
 If hidden gating or forced fallback fails, do not build A′ unchanged. Record
 the failure and use the building-percentage fallback in design §8. If the

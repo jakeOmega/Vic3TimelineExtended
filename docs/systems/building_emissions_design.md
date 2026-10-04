@@ -7,17 +7,16 @@
 - **Phase 0:** an opt-in, handwritten power-plant probe lives in
   [`../testing/carbon_capture_probe/`](../testing/carbon_capture_probe/README.md).
   It includes instructions, a console event, a state-modifier read, a market
-  state sweep, and a pending evidence table. Normal deployments exclude it.
+  state sweep, and a historical evidence table. Normal deployments exclude it.
   Its scripts parse offline. The owner's first logs confirm nonzero state
   reads. The owner subsequently confirmed the gating/fallback and mandate checks,
   reported the displayed/logged totals look right, and approved the atmospheric
   removal/policy checks.
-- **Phase 1:** `greenhouse_gas_factors.txt` is the source for coal (2), oil
-  (1.74), and the display scale (1000). The market consumption formula reads
-  those factors. `gen_carbon_capture_pms.py` generates synthetic
-  credits from PM outputs; the shared factors are applied at runtime rather
-  than copied into generated coefficients. The old three constants are gone. The generated compatibility values remain,
-  while live accounting now reads workforce-scaled synthetic state credits.
+- **Factors:** `greenhouse_gas_factors.txt` owns coal (2), oil (1.74) and
+  display scale (1000). The generator derives fuel emissions and synthetic
+  credits directly from merged recipes; unused per-level compatibility values
+  are removed. Synthetic credits enter net industry before policy cuts; DAC
+  alone writes atmospheric removal. The capture dashboard row counts DAC only.
 - **Steel:** Electric Arc Process uses a delta INJECT; the two mod substitution
   methods are edited in place. Merged recipes read 10 coal and 50/170
   electricity, with unchanged goods cost at base prices.
@@ -58,7 +57,7 @@
 
 - **Building-driven climate and households (owner follow-up):** annual emissions
   now use generated state mirrors of building fuel emissions minus source
-  capture, after industrial policy cuts. Atmospheric offsets are separate and
+  capture and synthetic output credits, after industrial policy cuts. Atmospheric offsets are separate and
   keep their full credit. Households add a population/average-wealth heating
   estimate from generated buy-package interpolation. Green Building Codes,
   Renewable Investment and Fossil-Fuel Divestment cut this footprint by
@@ -68,9 +67,31 @@
 
 Resume instructions and validation results are in
 [`building_emissions_handoff.md`](building_emissions_handoff.md). Section 1
-records the pre-implementation baseline; §5–§9 remain the intended full design.
+records the pre-implementation baseline; §5–§9 retain historical design sketches superseded where §0 differs.
+
+### Review corrections and current accounting
+
+Synthetic fuel output credits reduce net industrial emissions before policy cuts;
+only removal-only DAC keeps an atmospheric offset afterward. Its capacity is
+210 coal-equivalent units (−42 display units per level), at the existing 1,200
+electricity and equipment inputs. The household estimate discounts peasants
+using their merged consumption coefficient and derives fossil shares from
+weighted heating-good market supply, avoiding oil emissions before oil is sold.
+State average wealth and baseline dependent needs remain approximations.
+Green Building Codes/Renewable Investment/Fossil-Fuel Divestment still stack
+60/25/15% to eliminate households. Fuel-input discounts have economic effects
+but do not automatically scale custom recipe emissions; standalone military and
+ship fuel remains outside the mirror. These limitations are player-facing.
+
+Expanded in-game checks remain required: foreign-owned buildings under phaseout
+when the owner lacks CCS, visibility of localized state-accounting lines,
+technology tooltip/tree rendering of 114 variants per tier, mandate electricity
+prices and repeal/re-enactment churn, and household/removal January totals.
+The game rule off still leaves building tooltips and costly capture mandates.
 
 ## 1. How emissions work today
+
+> Historical design discussion; accounting and implementation status are superseded by §0.
 
 One script value carries the whole system. Everything else reads it.
 
@@ -169,7 +190,7 @@ Follow-up after the first engine logs (2026-10-03):
   building-based total. Alternatively, estimate household use from population
   and average wealth using a hardcoded curve derived from buy packages, with
   appropriate climate policies reducing it. This is a future accounting option;
-  the current consumption formula already includes households directly.
+  the original consumption formula included households directly; the current estimate is described below.
 
 ## 5. Design: generated carbon-capture methods (A′)
 
@@ -250,6 +271,8 @@ The rates are the owner's (25/50/75 over the recommended 30/60/90): read them as
 On a clean grid, net is the headline. Each tier costs less per tonne than the one before (technology learning, §5.5), so a higher tier is never the worse deal per tonne. Tier III costs about what Tier II does a level and captures half as much again.
 
 ### 5.4 Accounting and display
+
+> Historical design discussion; accounting and implementation status are superseded by §0.
 
 - **Visible net emissions:** `building_greenhouse_gas_emissions_add` is building-scoped, `color = bad`, `percent = no`, `decimals = 2`. Every fuel method in a covered building's groups contributes `(coal × factor + oil × factor) / 10` in `building_modifiers.workforce_scaled`. Capture variants contribute the negative cut in the same block. The building therefore shows the sum after capture. The generator derives gross values from merged recipes and shared factors, including automation fuel.
 - **Hidden accounting credit:** `state_carbon_capture_add` (`common/modifier_type_definitions/global_warming_modifier_types.txt`; `color = good`; `decimals = 2`; `script_only = yes`). It is state-scoped. A state modifier from a method lands on the building's state, so the cut counts in the market where the fuel burns, whoever owns the building; for country modifiers that is unverified (§3).
@@ -364,6 +387,8 @@ Carbon per unit of energy (IPCC 2006 defaults): bituminous coal 94.6 kg CO₂/GJ
 
 ## 8. Alternatives considered
 
+> Historical design discussion; accounting and implementation status are superseded by §0.
+
 ### B. Building-level gross and a percentage cut (the draft's recommendation)
 
 The fuel methods carry a generated `building_greenhouse_gas_emissions_add` (2 × their coal and oil, written into vanilla, mod and `REPLACE`d PMs by three different routes, §3). The tier methods carry `building_carbon_capture_mult` (−25/−50/−75%), and a yearly building sweep multiplies the two. B's cost can follow fuel too: put the energy penalty on the tier method as `goods_output_electricity_mult` (power) or as an electricity input, and the non-energy part as one figure per building and tier. With that, the real differences are:
@@ -389,6 +414,8 @@ Make the market's gross Σ of a per-building add, read through a state mirror. E
 - About 194 methods would have to be kept in step.
 
 ## 9. Plan
+
+> Historical design discussion; accounting and implementation status are superseded by §0.
 
 | Phase | What | Size |
 |---|---|---|

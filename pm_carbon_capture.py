@@ -173,7 +173,7 @@ def plan_outputs(state, root):
         none = "pm_no_carbon_capture_" + token
         names = [none]
         label = "$" + source + "$"
-        if source.startswith("pmg_base_"):
+        if source.startswith("pmg_base_") or source == "pmg_explosives_building_chemical_plant":
             attached = sorted(b for b, gs in attachments.items() if group in gs)
             if attached:
                 label = "$" + attached[0] + "$"
