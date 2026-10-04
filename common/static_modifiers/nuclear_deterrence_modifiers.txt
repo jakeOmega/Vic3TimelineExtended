@@ -96,6 +96,7 @@ nd_readiness_mod_3 = {
 nd_upkeep_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_nuclear_add = 1
 }
 
 # ---- Domestic stance: one per interest group, refreshed monthly -----------
@@ -171,6 +172,7 @@ nd_crisis_programme_freeze = {
 nd_exercise_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+	country_te_budget_expense_nuclear_add = 1
 }
 
 # ---- Pledges and reputation -----------------------------------------------

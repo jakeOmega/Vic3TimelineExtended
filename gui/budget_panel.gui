@@ -62,7 +62,7 @@ types budget
 			}
 
 			#TABS
-			tab_buttons = {
+			te_tab_buttons_six = {
 				blockoverride "first_button"
 				{
 					text = "BUDGET_TAB_OVERVIEW"
@@ -179,7 +179,7 @@ types budget
 				### END MOD ###
 
 				### MOD: Tax Code tab (te_tax_code) ###
-				# The fifth and last slot: the legislated tax code's journal entry
+				# The fifth slot: the legislated tax code's journal entry
 				# panels (the content block at the foot of scrollarea_content). On
 				# the strip whenever the tax code rule is on
 				# (te_budget_tax_tab_unlock_sgui), greyed until je_tax_code runs
@@ -212,6 +212,20 @@ types budget
 					text = "te_tax_tab"
 				}
 				### END MOD ###
+
+				# Always available; this is a budget view, independent of JEs.
+				blockoverride "sixth_button" { text = "te_budget_chart_tab" }
+				blockoverride "sixth_button_selected" { text = "te_budget_chart_tab" }
+				blockoverride "sixth_button_tooltip" { tooltip = "te_budget_chart_tab_tt" }
+				blockoverride "sixth_button_click" {
+					onclick = "[InformationPanel.SelectTab('te_breakdown')]"
+				}
+				blockoverride "sixth_button_visibility" {
+					visible = "[InformationPanel.IsTabSelected('te_breakdown')]"
+				}
+				blockoverride "sixth_button_visibility_checked" {
+					visible = "[Not(InformationPanel.IsTabSelected('te_breakdown'))]"
+				}
 			}
 
 			widget = { size = { 1 10 }}
@@ -1663,6 +1677,12 @@ types budget
 				}
 			}
 			### END MOD ###
+			flowcontainer = {
+				visible = "[InformationPanel.IsTabSelected('te_breakdown')]"
+				using = default_content_fade
+				using = default_list_position
+				te_budget_breakdown_panel = {}
+			}
 		}
 
 		### MOD: Tax Code tab (te_tax_code) ###

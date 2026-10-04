@@ -1,0 +1,43 @@
+﻿# Country scope. Read-only; GUI passes current engine budget getters as value
+# scopes. No monthly cache, game-rule gate or journal entry is required.
+
+# Administration produces bureaucracy/tax capacity rather than saleable goods.
+# Its negative weekly profit therefore measures its wages + input goods (and
+# slave upkeep, if any). Do not use ALL government buildings' expenses: that
+# would also allocate universities, ports and construction sites to ministries.
+te_budget_administration_actual = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_government_administration }
+		add = { value = weekly_profit multiply = -1 min = 0 }
+	}
+}
+
+# The overview predicts wages but uses last week's goods, while weekly_profit
+# is last week's building balance. Limit allocation to the civil budget pool
+# so a wage-level change cannot allocate more money than that pool contains.
+te_budget_administration_cost = {
+	value = scope:administration_actual
+	max = {
+		value = scope:civil_0
+		add = scope:civil_1
+		add = scope:civil_2
+		min = 0
+	}
+}
+
+te_budget_produced_bureaucracy = { value = produced_bureaucracy min = 0 }
+
+te_budget_institution_pool = {
+	value = 0
+	if = {
+		limit = {
+			te_budget_produced_bureaucracy > 0
+			scope:institution_levels > 0
+		}
+		value = te_budget_administration_cost
+		multiply = { value = scope:institution_usage min = 0 }
+		divide = te_budget_produced_bureaucracy
+		max = te_budget_administration_cost
+	}
+}
