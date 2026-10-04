@@ -169,10 +169,12 @@ Serves S12. Result: ___
 
 Rule *on*. A ten-year observer run, then a played run with an AI neighbour in deficit.
 Expect `TE_TAX ai_introduced`, `ai_passed` or `ai_withdrawn` lines from AI countries with
-fiscal need, and their Budget rates moving only on the 1st after an `ai_passed`. Record
-per AI country per year from the `TE_TAX ai_year` lines: the drift counters (owner
-question 2: does the native AI keep moving its tax level?), bills introduced, passed and
-withdrawn. A country never logs `ai_no_viable` twice in a row for the same episode.
+fiscal need, and their Budget rates moving only on the 1st after an `ai_passed`. Each
+January every AI country writes a `TE_TAX ai_year` line with its drift counters, template
+and streaks: record the counters' yearly change per country (owner question 2: does the
+native AI keep moving its tax level?) and count the `ai_introduced`, `ai_passed` and
+`ai_withdrawn` lines per country per year. A country never logs `ai_no_viable` twice in a
+row for the same episode.
 Serves S10, S13. Result: ___
 
 ### PT-14 Frame time
@@ -201,7 +203,8 @@ Serves S4, S5, S6. Result: ___
 Rule *on*. Select an AI country with a fixed deficit (or `event te_tax_debug.4` on it
 after selecting it), and watch it for a year.
 Expect, within about 8 months of three deficit 1sts in a row, `TE_TAX ai_introduced
-tpl=1` (or 6 for luxury goods), then `ai_accepted` for any offers, then `ai_passed`, and
+tpl=1` (or `tpl=6`, luxury goods, when the consumption rate is the cheapest tax to raise),
+then `ai_accepted` for any offers, then `ai_passed`, and
 the new rate collecting from its commencement month. `event te_tax_debug.3` on it shows
 the signals that decided it.
 Serves S10, S13. Result: ___
@@ -210,7 +213,10 @@ Serves S10, S13. Result: ___
 
 Rule *on*. An AI country in default, or with debt at half its credit limit.
 Expect `ai_introduced tpl=2` without waiting for its quarter, a minor bill (15-day
-debate), and `ai_forced` if it lacks the votes but has the override capacity.
+debate), and `ai_forced` if it lacks the votes but has 35% committed, the override
+capacity and the Authority. The next emergency bill comes no sooner than about three
+months later, once a fiscal record has seen the first. One early attempt can follow a
+reset of the episode marker (the need ending, a civil war, a release); note any.
 Serves S10, S13. Result: ___
 
 ### PT-18 AI offers and the chain cap
@@ -224,7 +230,8 @@ Serves S13. Result: ___
 
 Rule *on*. An AI country whose groups oppose any rise, or with legitimacy below 25.
 Expect `ai_withdrawn` with a reason, one `ai_no_viable` for the episode, and no new AI
-bill for six months. Rebels below 25 legitimacy log once and stop.
+bill for six months. Rebels below 25 legitimacy log `ai_no_viable` once and try again at
+most every six months.
 Serves S10, S13. Result: ___
 
 ### PT-20 AI held packages
@@ -423,10 +430,15 @@ Serves S1, S12. Result: ___
 
 ### PT-42 Script forms never used before in the mod
 
-Rule *on* (*customs* for the last two). A watchdog sync after an expiry (a local
-variable on a comparison's right side); a customs-only bill when its market is lost; an
-adoption count in the history; a regional estimate (`multiply = owner.<value>`).
-Expect each to load without a `debug.log` error and to print the right value.
+Rule *on* (*customs* for the two customs items). A watchdog sync after an expiry (a
+local variable on a comparison's right side); a customs-only bill when its market is lost;
+an adoption count in the history; a regional estimate (`multiply = owner.<value>`). The AI
+layer's forms: `modulo = te_tax_ai_cadence_months` (a named value as the operand: if no AI
+country ever introduces a bill outside an emergency, try a literal 3), the stored
+`random_list` phase draw (AI countries' `te_tax.8` lines should spread over days 5, 12, 19
+and 26), a local variable read inside a scripted trigger in the same execution (the
+initiative's raise pick, `te_tax_pick`), and the 128-branch offer-acceptance chain's cost.
+Expect each to load without a `debug.log` error and to print or do the right thing.
 Serves S3, S5. Result: ___
 
 ## Script profiler
@@ -441,9 +453,26 @@ which panels were open. (From the late-game performance work, commit 6815868c.)
 
 ## Retiring the probe harness
 
-After the owner's probe pass, the harness (`te_debug_tax*`, the `te_tp_*` modifiers,
-the `law_te_probe_carrier` law) is deleted in its own PR. Delete
-`common/modifier_type_definitions/te_tax_probe_modifier_types.txt` and its 24 loc keys in
-`localization/english/te_modifiers_l_english.yml` with it, unless P09b or P09c passed and
-a customs follow-up kept the registrations. Saves made since #585 hold the probe
-carrier's law records, so PT-35 runs before and after the deletion.
+After the owner's probe pass, the harness is deleted in its own PR. Its files: the
+`te_debug_tax*` script, GUI and loc files (`common/amendments/`, `common/laws/zz_te_debug_tax_carrier.txt`,
+`common/on_actions/`, `common/script_values/`, `common/scripted_effects/`, `common/scripted_guis/`,
+`common/scripted_triggers/`, `common/static_modifiers/`, `events/te_debug_tax_events.txt`,
+`gui/te_debug_tax_widgets.gui`, `localization/english/te_debug_tax_l_english.yml`), and, unless
+P09b or P09c passed and a customs follow-up kept them, the customs probe's registrations
+(`common/modifier_type_definitions/te_tax_probe_modifier_types.txt` and its 24 loc keys in
+`localization/english/te_modifiers_l_english.yml`). The tax code's own console
+(`events/te_tax_debug_events.txt`, `te_tax_debug.*`) is not harness and stays.
+
+Its hooks in production files must change with it: the Tax Probes tab in
+`gui/te_systems_window.gui` and `te_window_launcher_sgui` (`te_system_tab_sguis.txt`); the
+`te_tp_observe_controls` calls in `banking_policy_effects.txt` and
+`te_monetary_arrangement_effects.txt`; the `te_tp_lock` test in both gates of
+`common/scripted_guis/te_tax_native_sguis.txt`; `organize_loc.py`'s `DEBUG_TAX` category and its
+tests; `scripts/i18n/translate_loc.py`'s `DEV_ONLY_FILES`; and the harness exemptions in
+`test_tax_code_bypass.py`, `test_tax_code_customs.py` and `test_tax_code_state.py`.
+`gui/budget_panel.gui` holds no harness mark any more, whatever
+`docs/testing/tax-code-probes-extended.md`'s older list says. `te_tp_` is not unique to the
+harness: the trade-partner chart's `te_tp_import_markets` and kin stay.
+
+Saves made since #585 hold the probe carrier's law records, so PT-35 runs before and after the
+deletion.

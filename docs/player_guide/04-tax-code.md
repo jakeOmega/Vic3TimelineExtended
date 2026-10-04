@@ -382,14 +382,16 @@ An AI country acts on its budget as it stood on the 1st of each month:
 
 - After three months of fixed deficit, with income short of expenses and its
   gold reserves low, it introduces a bill raising one or two taxes by a step.
-  It picks the taxes its interest groups mind least. With a consumption tax in
-  place it taxes luxury goods first.
+  It picks the taxes its interest groups mind least. When raising the
+  consumption rate is the cheapest choice, it taxes up to two luxury goods instead.
 - At war it prefers a larger rise that expires after 24 months.
 - After six months of surplus, with full reserves, it cuts the tax its groups
   mind most by a step.
 - In a financial emergency (default, heavy debt, or bankruptcy within about
   30 weeks) it introduces a minor bill at once, with 15 days of debate, and
-  forces it through if it has the override capacity.
+  forces it through if enough groups back it and it has the override capacity.
+  It waits about three months before the next emergency bill, so the first one
+  can show in its budget.
 
 It looks at new bills about once every three months, and waits a year after a
 bill takes effect before starting another. It accepts interest-group offers

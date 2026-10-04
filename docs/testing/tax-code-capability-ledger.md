@@ -2,7 +2,8 @@
 
 Opened 2026-10-02 from the UK first pass ([results](tax-code-probe-results-2026-10-02.md)) and a
 static read of the vanilla 1.14.5 install. One row per engine capability that the legislated tax
-code ([spec](../superpowers/specs/2026-09-29-legislated-tax-code-design.md), [plan](../superpowers/plans/2026-10-02-legislated-tax-code-tasks.md))
+code ([spec](../superpowers/specs/2026-09-29-legislated-tax-code-design.md), [plan](../superpowers/plans/2026-10-02-legislated-tax-code-tasks.md);
+the AI and the release: [spec](../superpowers/specs/2026-10-03-tax-code-ai-and-release-design.md), [plan](../superpowers/plans/2026-10-03-tax-code-ai-and-release-tasks.md))
 depends on. A row that is not `verified` limits what the first playable may promise, so read it
 before widening the catalog. Later tasks update a row when they produce new evidence.
 
@@ -148,10 +149,16 @@ result yet.
      "Construction Services" (147). Check them, and the hovers on the names, in game.
 - **P11**: the interception and bypass map: Budget, goods panel, right-click menus, popovers, events,
   treaty entry and the native AI (row 13).
-- **P14**: an explicitly armed AI uses the same command path and constraints as a player (row 13).
+- **P09b, P09c** (customs probe, plan Task 23): whether the per-good tariff families work once
+  registered, and which of the lock (min = max level) or the carrier (maxima cancelled plus a
+  per-good rate) holds. Steps: [tax-code-probes.md](tax-code-probes.md), "Customs: lock or carrier".
+- **P14**: superseded by package 6. The AI now uses the player's commands from `te_tax.8`; the
+  runbook's AI checks (PT-16 to PT-22) observe it in game.
 - **P15**: both civil-war outcomes, secession, release, state transfer and capital move (row 19).
 - **P16**: delivered against requested institution level, military wage effects, and fixed and total
-  balances over four weekly updates (rows 11 and 18).
+  balances over four weekly updates (rows 11 and 18). Since package 6 it also decides whether
+  `set_institution_investment_level` sets the level at once or a target, and so whether the AI's
+  enactment lead (`te_tax_ai_enact_lead_months`) must rise (row 31).
 - **Scheduler retest** (row 7), after the global-pulse dispatch exists:
   1. Print `[TimeKeeper.GetCurrentDate.GetString]` and the month index at the global dispatch, the
      dispatched event, the country watchdog, commence, expire and hold.
@@ -172,12 +179,17 @@ Owner questions, carried in the PR body:
 - **Renegotiation against breach** (final review A-Minor 2): renegotiating costs −2 approval and −1
   trust, against a breach's −5 and −1, and is open from the month the package commences, so a
   promise buys a +20 commitment for −2. Price it like a breach before the deadline, or open it only
-  after the first maintenance month?
+  after the first maintenance month? Package 6 sharpens this: an AI country renegotiates a budget or
+  bureaucracy promise one check before it would break, and enacts an institution promise it is
+  about to miss, so AI promises never break by neglect (plan 2026-10-03, Rulings 7 and 9).
 - **AI time off the medium tax level** (the ruling that the level is pinned, ledger row 12 and
   `te_tax_detect_drift`): for an AI country this is not a one-month residue; the AI may move the
   level every month the sync pins it back, and taxes goods natively between syncs. Measure
   `te_tax_drift_level` and `te_tax_drift_goods` per AI country per year in a ten-year observer run;
-  if the rate is high it belongs on the package-6 (AI legislation) list, and the ruling is revisited.
+  if the rate is high the ruling is revisited. Package 6 logs the counters each January for every AI
+  country (`TE_TAX ai_year`, runbook PT-13). A native level raised mid-month also costs the
+  AI legitimacy until the 1st, which can block its own bill; the AI retries the pass on the 2nd
+  (`ai_waiting reason=legitimacy_native_level`).
 
 Design limits, left as they are:
 
@@ -209,45 +221,68 @@ GUI and wording minors from review B, for a later GUI pass:
 - The Enacted Code table does not list the customs schedule; a member's "Set by" shows only in the
   workbench (the Market panel still shows the levels).
 - "Rural Assessment 0.425" and "Head Tax 0.85" carry no unit or money icon.
-- `te_tax_tab_locked_tt` spells "Tax Code" rather than splicing `$je_tax_code$`, as the other
-  locked tabs do.
+- `te_tax_tab_locked_tt` now splices `$je_tax_code$`, as the other locked tabs do (fixed in package 7).
 
-## Play-test before the PR merges
+## Evidence matrix
 
-The minimum in-game pass for this branch (final reviews A and B, 2026-10-03), highest risk first.
-The PR body carries the same list.
+The release scenarios of the package plan (§10) and the AI's (S13), each with the play-test checks
+that give its evidence. The checks and how to run them are in the
+[play-test runbook](tax-code-playtest.md); PT-01 to PT-15 are the PR's original fifteen, highest risk
+first. Fill a row's result from its checks: *passed* only when every check passed in game.
 
-1. **One sync a day** (row 30): on day D run `event te_tax_debug.1` twice (each activates
-   Per-Capita, so `te_tax.5` re-asserts the carrier and raises `te_tax.4` for D+1). On D+1 the two
-   `te_tax.4` land in one tick: one syncs and one logs `TE_TAX sync_deferred`; on D+2 the deferred
-   sync changes nothing. Inspect the carrier's amendments on D+1 and D+2: one per instrument.
-2. **Script value on the left in a scripted GUI** (row 29a): introduce a bill; Pass and its support
-   row flip when the committed share crosses the threshold, the debate row at 0 days, a customs
-   stepper greys at level ±3.
-3. **Rule off**, any save: Budget shows no Tax Code tab and an unchanged bottom edge; the tax level,
-   "+", tariffs, the goods toggle and right-click Tax/Untax all work; no Tax Code entry; the five
-   taxation laws' tooltips show at most one plain line about the rule (`te_tax_tt_vanilla_law_replaced`).
-4. **Rule on, game start**: one `TE_TAX migrated` line per country and none for a decentralized
-   country, nor a monthly `te_tax.3` for one; the entry activates and the tab unlocks; Open Budget
-   opens the tab.
-5. **Native gates** under each option: greyed level, "+", add menu, goods panel, goods-in-state,
-   goods tooltip, both right-click menus; tariffs greyed only under customs. Note whether vanilla's
-   tooltips on them confuse.
-6. **A bill end to end**: draft, introduce, offers, Accept, pass, commencement on the 1st, sunset.
-   The IG cards show values (interest-group scope `owner` reads, row 29c); Accept's enabled state is
-   right; collections change only at commencement.
-7. **Fiscal record** (final review A-I2): tip the budget into deficit mid-month with a bill under
-   debate; the State of the Budget reason does not move until the 1st, and a bureaucracy or budget
-   promise offered before then is labelled Maintain.
-8. **Estimates**: `Multiply_CFixedPoint` lines print numbers; "out of date" after a revision.
-9. **Held packages**: a missed one can be rescheduled, a conflicting one only released.
-10. **Civil war**, both outcomes, a release and a state transfer (P15): the schema's outbreak and
-    repair lines, no doubled amendments, no "blocked" customs line the winner never had.
-11. **Customs option**: the "Customs schedule in game" items 1 to 10 above, How's Customs topic and
-    its monthly line.
-12. **Layout**: the long good names (customs rows, review lines, goods catalog) and their hovers; the
-    IG name and stance cells ("Petite Bourgeoisie", "Marginal"); the sunset cell with money taxes.
-13. **AI countries** keep their migrated code (expected until package 6); in a ten-year observer
-    run, record the drift counters for the owner question above.
-14. **Frame time** with the Customs section open and eight groups holding offers.
-15. **The probe harness's open items** (P05, P08 to P11, P14 to P16) stay as listed above.
+| # | Scenario | Required observation | Checks | Result | Evidence |
+|---|---|---|---|---|---|
+| S1 | Draft, edit, discard and failed passage | No collection or reward changes | PT-02, PT-06, PT-26, PT-32, PT-37, PT-41 | | |
+| S2 | January expiry and February replacement | Both timelines execute as reviewed; no stale snapshot restoration | PT-06, PT-31 | | |
+| S3 | Conflicting commencement and same-date transitions | Whole package holds or executes in approved order; no partial collection | PT-01, PT-09, PT-31, PT-38, PT-42 | | |
+| S4 | Zero-rate channel becomes taxable | Estimate base available or approximation explicit; payer/receipt reconciliation | PT-08, PT-15, PT-23, PT-25, PT-34 | | |
+| S5 | Relief, subsidy, treaty and market changes | Correct authority, direction, beneficiaries, costs; no secondary controls | PT-05, PT-11, PT-15, PT-24, PT-36, PT-42 | | |
+| S6 | Institution delivery and explicit deficit promise | Native costs apply; independent promises fulfil or breach independently | PT-07, PT-15, PT-21, PT-26, PT-28 | | |
+| S7 | Save/load at each lifecycle stage | Dates, revisions, commitments and future changes preserved | PT-29 | | |
+| S8 | Both civil-war outcomes with different wartime reforms | Winner's coherent schedule restored; no loser-only clauses or repeated rewards | PT-10 | | |
+| S9 | Secession, releases, transfers and moved capital | Explicit initialisation and territorial eligibility | PT-10, PT-30 | | |
+| S10 | AI fiscal crisis | Same legal constraints, explainable failures, no free collections | PT-13, PT-16, PT-17, PT-19 | | |
+| S11 | Disabled rule and repeated migration | Existing behaviour retained when disabled; migration idempotent | PT-03, PT-04, PT-27, PT-32, PT-35, PT-39 | | |
+| S12 | Large-country/world performance and open GUI | Meets budgets without per-frame expensive aggregation | PT-12, PT-14, PT-33, PT-40, PT-41 | | |
+| S13 | AI legislation (package 6) | AI countries draft, bargain, pass and keep promises through the player's commands, with bounded loops and logs | PT-13, PT-16 to PT-22 | | |
+
+## Known limitations
+
+What this release leaves as it is, each a design decision or an engine gap rather than an open bug.
+The PR body and the player guide cite this list.
+
+- **AI customs.** AI countries pass no customs bills. Their tariffs follow the base game's trade
+  decisions, and under the customs option the code adopts a level an AI market owner keeps choosing
+  after four failed monthly re-asserts. The customs probe (P09b/P09c) decides the follow-up.
+- **AI promise delivery.** The institution boost sits only in `ai_strategy_default`; a country whose
+  political agenda strategy scores the same institution may not feel it, and the enactment fallback
+  covers it (row 31). Whether that fallback sets the level at once depends on P16.
+- **Maintained institution promises.** The AI step runs mid-month and the check on the 1st, so a
+  level that falls after the step breaks the promise before the step can enact it; the boost is
+  what protects maintenance.
+- **Traditionalism with a wage or dividend tax in force** refuses every AI draft (a draft must zero
+  them), so such a country keeps its code and logs `ai_no_viable reason=draft` once per episode.
+  Vanilla's Traditionalist countries start with neither tax.
+- **Rebels below 25 legitimacy** try a bill once per failure cooldown (six months), logging
+  `ai_no_viable` once per episode; they never loop monthly.
+- **Emergency bills** follow one another about three months apart (Ruling 13), and a clearing of
+  the episode marker (the need ending, a civil-war or release reset) can allow one early attempt.
+- **One-day slip.** A package's collections start on the 2nd when another sync of the code already
+  ran on the 1st; old rates collect for that day, so there is no gap and no double.
+- **Fiscal record granularity.** The fiscal reason and the budget promises read the budget as it
+  stood on the 1st; a deficit that spans the 1st counts for the whole month. The AI's at-risk test
+  reads live values mid-month, so it can misjudge a promise once.
+- **Unreadable customs goods.** A good whose market level can't be read counts as matching, so a
+  legislated level for it is never written (customs item 9 above).
+- **Institution-deadline pause is uncapped.** Each month of bureaucracy deficit moves an
+  institution promise's deadline a month; a permanent deficit never breaks it. The deficit's own
+  native penalties make this costly.
+- **Revise needs a current bill.** A bill whose baseline moved must be withdrawn and reintroduced
+  rather than revised.
+- **year.month dates** read 1842.1 for January; the play-test (PT-12) judges whether month names are
+  needed.
+- **Greyed native controls keep vanilla's tooltips** (Ruling 15); PT-05 decides whether a GUI
+  follow-up adds a "held by the tax code" line.
+- **Deferred:** the carbon levy (after #674, `docs/systems/carbon_levy_numbers.md` is a parked
+  draft); the probe harness's retirement (after the owner's probe pass; the runbook lists the files);
+  the Households, Businesses and Regions estimate views.

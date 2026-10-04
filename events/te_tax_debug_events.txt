@@ -183,7 +183,7 @@ te_tax_debug.5 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 
 # te_tax_debug.6: the next 1st's processor skips this country, as if its
 # dispatch had not run, so a package due next month is held as missed the
-# month after (runbook PT-09, PT-22). It claims next month in advance:
+# month after (runbook PT-09, PT-20). It claims next month in advance:
 # te_tax_last_month = this month + 1, the processor's own once-a-month guard
 # (docs/systems/tax_code_schema.md, "Processor rules", rule 1). The watchdog
 # stays quiet, since it runs only for a month not yet claimed.
@@ -206,7 +206,7 @@ te_tax_debug.6 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax
 # civil-war repair records (te_tax_xver_wage + 1, the rate unchanged), so a
 # passed bill waiting to change the wage tax is held as conflicting at its
 # commencement and a bill under debate shows Outside Changes (runbook PT-09,
-# PT-22).
+# PT-20).
 te_tax_debug.7 = { # REVIEWED 2026-10-03: console-only test event (`event te_tax_debug.7`); never fired by script on purpose
 	type = country_event
 	hidden = yes

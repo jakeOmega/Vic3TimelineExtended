@@ -533,6 +533,8 @@ Consumption ladder = 0.15/0.20/0.25/0.30/0.35 for every law. Index = value / ste
 
 ### Task 16: Carbon levy — split fiscal and environmental effects, banded abatement
 
+> **Status (2026-10-03):** phase 1 only (the numbers doc); deferred by the owner until PR #674 lands.
+
 **Goal:** The Global Warming carbon tax stops relying on an output cut and on inert keys; its environmental effect is fuel-input efficiency with a real compliance cost, in discrete bands with diminishing returns; under the rule the band is a legislated provision of the market leader's code; with the rule off the existing adopt/repeal controls select one default band.
 
 **Owner input:** the owner chose design **C** on 2026-10-02 (research F §f): abatement (fuel-input efficiency with a compliance cost, banded with diminishing returns) plus a levy on residual fuel use paid from the investment pool into the treasury; no output cut; coal and oil producers lose through the lower fuel price. **Magnitudes are not chosen in this task's first commit:** write `docs/systems/carbon_levy_numbers.md` with the inputs table from research F §"Inputs a numbers table would need" filled from static data (PM fuel inputs per level, existing stacked input cuts, emissions floor), proposed band values, and the per-band expected emissions and cost effect, and stop for owner review before committing magnitudes. If the controller tells you the owner approved the table, continue.
@@ -544,6 +546,8 @@ Consumption ladder = 0.15/0.20/0.25/0.30/0.35 for every law. Index = value / ste
 ---
 
 ### Task 17: In-game test checklist and system documentation
+
+> **Status (2026-10-03):** superseded by plan `2026-10-03-tax-code-ai-and-release-tasks.md` Tasks 25–27 (runbook `docs/testing/tax-code-playtest.md`, the ledger's evidence matrix, the system docs).
 
 **Goal:** The owner can play-test packages 1–5 in rounds from one checklist; the system is documented for later agents.
 
