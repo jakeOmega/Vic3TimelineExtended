@@ -364,3 +364,36 @@ regressions cover synthetic fuel production/combustion at 0/50/75/100% policy
 cuts, preserving DAC's full credit. Further review work: household calibration,
 fuel-input policy effects, AI support eligibility, DAC balance, employment-audit
 coverage and stale player/developer text. Pending in-game checks remain pending.
+
+
+## PR review calibration/tooling checkpoint
+
+Review 5403672148: household heating now uses weighted market sell orders for
+all heating goods, with weights/caps generated from the merged heating need.
+Absent fuels contribute zero. A state-local annual pop sweep weights peasants
+by their merged consumption_mult (0.05); state average wealth and the baseline
+worker/dependent fraction remain estimates. The three policies still eliminate
+household heating. Old fixed 20/30% fossil shares are superseded.
+
+DAC capacity is 210 coal-equivalent units, giving −42 display units per level
+with unchanged 1,200 electricity/equipment/5,500 workers. This makes removal
+more expensive than the representative Tier II source capture; check subsidy
+budget/hiring in game. Synthetic Coal remains 840 output and its credit is
+industrial. AI removal-support adoption needs an existing works, and losing
+the last works increases repeal weight. Input discounts retain economic effects;
+the guide explicitly describes the recipe mirror's limitation and military gap.
+
+Employment audit now removes independent employment-neutral groups with an
+unconditional fallback before enumeration, preserving referenced PM gates.
+This restores mine coverage without raising its combination cap. 69 focused
+tests pass, including large-neutral-group and dependent-gate regressions.
+Inline comments addressed: 4175604771, 4175604946, 4175605126.
+
+Generator cleanup removes unused synthetic per-level script values and their
+ownership/exclusion rows; there is no save state to preserve. Synthetic recipe
+regressions now exercise the live net/state output. Capture localization preserves
+comments and version-less keys, and generic Base capture groups use the building
+name. The generated coverage report describes current building-based accounting.
+Inline comments addressed: 4175605250, 4175605340. This branch handoff is kept
+because the owner explicitly requested agent continuity; treat it as a temporary
+checkpoint log, with the design's §0 as the durable system description.

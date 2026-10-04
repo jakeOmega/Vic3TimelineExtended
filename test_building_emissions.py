@@ -37,8 +37,8 @@ def scalar(data, key):
 class SyntheticCreditsTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.methods = gen.load_synthetic_methods(ROOT)
-        cls.generated = parsed(gen.OUTPUT)
+        cls.state = emissions.load_state(ROOT)
+        cls.methods = {name: cls.state.mod_parsers["PMs"].data[name] for name in emissions.SYNTHETIC_CREDITS}
         cls.factors = parsed("common/script_values/greenhouse_gas_factors.txt")
 
     def test_fuel_weights_and_display_scale(self):
@@ -46,41 +46,19 @@ class SyntheticCreditsTest(unittest.TestCase):
         self.assertEqual(scalar(self.factors, "gw_emission_factor_oil"), Decimal("1.74"))
         self.assertEqual(scalar(self.factors, "gw_emission_display_scale"), 1000)
 
-    def test_generated_credits_match_each_recipe_and_factor(self):
-        expected = {
-            "pm_synthetic_oil_1": Decimal("-0.03132"),
-            "pm_synthetic_oil_2": Decimal("-0.05220"),
-            "pm_synthetic_coal": Decimal("-0.16800"),
-        }
-        for pm, fuel in gen.SYNTHETIC_METHODS.items():
-            with self.subTest(pm=pm):
-                credit = body(self.generated, f"gw_{pm[3:]}_capture_per_level")
-                factor_name = body(credit, "multiply")
-                self.assertEqual(factor_name, f"gw_emission_factor_{fuel}")
-                recipe_output = scalar(workforce(self.methods[pm]), f"goods_output_{fuel}_add")
-                self.assertEqual(scalar(credit, "value"), -recipe_output)
-                self.assertEqual(
-                    scalar(credit, "value") * scalar(self.factors, factor_name)
-                    / scalar(credit, "divide"), expected[pm],
-                )
-
-    def test_recipe_change_updates_credit_without_changing_generator(self):
-        methods = copy.deepcopy(self.methods)
-        workforce(methods["pm_synthetic_oil_2"])["goods_output_oil_add"] = ("=", "400")
-        output = gen.build_synthetic_values(methods)
-        self.assertIn("value = -400", output)
-        self.assertNotIn("value = -300", output)
-
-    def test_invalid_output_fails_before_writing(self):
+    def test_recipe_change_updates_net_and_credit_without_changing_generator(self):
+        state = copy.copy(self.state)
+        state.mod_parsers = dict(self.state.mod_parsers)
+        state.mod_parsers["PMs"] = copy.copy(self.state.mod_parsers["PMs"])
+        state.mod_parsers["PMs"].data = copy.deepcopy(self.state.mod_parsers["PMs"].data)
+        workforce(state.mod_parsers["PMs"].data["pm_synthetic_oil_2"])["goods_output_oil_add"] = ("=", "400")
+        output = emissions.plan_outputs(state, ROOT)[0][Path("common/production_methods/extra_pms.txt")]
+        self.assertIn("state_carbon_capture_add = 69.60", output)
+        self.assertIn("state_greenhouse_gas_emissions_add = -69.60", output)
         for amount in ("0", "-10", "NaN", "Infinity"):
-            methods = copy.deepcopy(self.methods)
-            workforce(methods["pm_synthetic_oil_2"])["goods_output_oil_add"] = ("=", amount)
+            workforce(state.mod_parsers["PMs"].data["pm_synthetic_oil_2"])["goods_output_oil_add"] = ("=", amount)
             with self.subTest(amount=amount), self.assertRaises(ValueError):
-                gen.build_synthetic_values(methods)
-
-    def test_missing_recipe_fails(self):
-        with self.assertRaises(KeyError):
-            gen.build_synthetic_values({})
+                emissions.plan_outputs(state, ROOT)
 
     def test_post_load_entrypoint_and_idempotent_write(self):
         # Exercise the actual ModState entity key, not only the standalone CLI.
@@ -91,11 +69,11 @@ class SyntheticCreditsTest(unittest.TestCase):
                          "PM Groups": SimpleNamespace(data={}),
                          "Buildings": SimpleNamespace(data={
                              name: {"production_method_groups": ("=", [])}
-                             for name in emissions.BUILDINGS})},
+                             for name in ("building_power_plant", "building_steel_mill", "building_chemical_plant")})},
             base_parsers={"PMs": SimpleNamespace(data={})},
         )
         fixture = emissions.load_state(ROOT)
-        for kind in ("Buy Packages", "Goods"):
+        for kind in ("Buy Packages", "Goods", "Pop Needs", "Pop Types"):
             ms.mod_parsers[kind] = fixture.mod_parsers[kind]
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -107,13 +85,13 @@ class SyntheticCreditsTest(unittest.TestCase):
             extra = Path("common/production_methods/extra_pms.txt")
             (root / extra).write_bytes((ROOT / extra).read_bytes())
             self.assertTrue(gen.regenerate(ms, root=root, dry_run=True)["changed"])
-            self.assertFalse((root / gen.OUTPUT).exists())
+            self.assertFalse((root / emissions.OUTPUT).exists())
             self.assertTrue(gen.regenerate(ms, root=root)["changed"])
-            target = root / gen.OUTPUT
+            target = root / emissions.OUTPUT
             stamp = target.stat().st_mtime_ns
             self.assertFalse(gen.regenerate(ms, root=root)["changed"])
             self.assertEqual(target.stat().st_mtime_ns, stamp)
-            self.assertEqual(target.read_bytes(), gen.build_synthetic_values(self.methods).encode("utf-8-sig"))
+            self.assertEqual(target.read_bytes(), emissions.plan_outputs(ms, root)[0][emissions.OUTPUT].encode("utf-8-sig"))
 
     def test_committed_output_is_current(self):
         self.assertFalse(gen.regenerate(root=ROOT, dry_run=True)["changed"])
@@ -321,7 +299,7 @@ class DirectAirCaptureTest(unittest.TestCase):
             self.assertGreater(scalar(inputs, key), 0)
         jobs = body(body(gen.unwrap(self.pm), "building_modifiers"), "level_scaled")
         self.assertEqual(sum(Decimal(gen.unwrap(value)) for value in jobs.values()), 5500)
-        self.assertEqual(scalar(inputs, emissions.MODIFIER), -168)
+        self.assertEqual(scalar(inputs, emissions.MODIFIER), -42)
 
     def test_market_reads_staffed_removal_once_without_double_scaling(self):
         value = body(parsed("common/script_values/extra_script_values.txt"), "market_carbon_capture_script_value")
@@ -332,8 +310,8 @@ class DirectAirCaptureTest(unittest.TestCase):
         self.assertNotIn("multiply", credit)
         self.assertNotIn("every_scope_building", countries)
         state = body(body(gen.unwrap(self.pm), "state_modifiers"), "workforce_scaled")
-        self.assertEqual(scalar(state, "state_carbon_capture_add"), 168)
-        self.assertEqual(scalar(workforce(self.pm), emissions.MODIFIER), -168)
+        self.assertEqual(scalar(state, "state_carbon_capture_add"), 42)
+        self.assertEqual(scalar(workforce(self.pm), emissions.MODIFIER), -42)
 
     def test_removal_capacity_changes_independently_of_coal_output(self):
         with TemporaryDirectory() as tmp:
@@ -343,7 +321,7 @@ class DirectAirCaptureTest(unittest.TestCase):
                 (root / relative).write_bytes((ROOT / relative).read_bytes())
             path = root / emissions.FACTORS
             path.write_text(path.read_text(encoding="utf-8-sig").replace(
-                "gw_direct_air_capture_coal_equivalent = 840", "gw_direct_air_capture_coal_equivalent = 420"),
+                "gw_direct_air_capture_coal_equivalent = 210", "gw_direct_air_capture_coal_equivalent = 420"),
                 encoding="utf-8-sig")
             outputs, count = emissions.plan_outputs(self.state, root)
             self.assertEqual(count, 245)
@@ -419,9 +397,9 @@ class DisplayBoundaryTest(unittest.TestCase):
         credit = body(body(countries, "every_scope_state"), "subtract")
         self.assertEqual(body(credit, "value"), "modifier:state_atmospheric_carbon_capture_add")
         self.assertNotIn("every_scope_building", countries)
-        methods = gen.load_synthetic_methods(ROOT)
+        methods = {name: emissions.load_state(ROOT).mod_parsers["PMs"].data[name] for name in emissions.SYNTHETIC_CREDITS}
         factors = parsed("common/script_values/greenhouse_gas_factors.txt")
-        for name, fuel in gen.SYNTHETIC_METHODS.items():
+        for name, fuel in emissions.SYNTHETIC_CREDITS.items():
             pm = gen.unwrap(methods[name])
             state = body(body(pm, "state_modifiers"), "workforce_scaled")
             expected = scalar(workforce(pm), f"goods_output_{fuel}_add") * scalar(factors, f"gw_emission_factor_{fuel}") / 10

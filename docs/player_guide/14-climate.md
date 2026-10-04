@@ -6,7 +6,8 @@ anomaly drives penalties that every country shares. The Global Warming journal
 entry tracks it and holds the climate policies you can adopt. The Global Warming
 game rule (on by default) controls all of this; with it off, the world never
 warms. State pollution, the Environmental Movement and the pollution scandal
-event work under either setting.
+event work under either setting. Building emissions tooltips and the phaseout
+mandate also remain active with the rule off; capture still costs goods.
 
 ## How emissions become warming
 
@@ -29,11 +30,20 @@ both contribute. The figure grows with staffing and throughput and feeds the
 climate calculation. The market leader's industrial policy cut applies afterward.
 
 Household heating demand follows the buy packages at your states' average
-wealth. Green Building Codes cuts the estimated household fossil footprint by
+wealth, with fossil heating weighted by the coal, oil, wood, fabric and
+electricity available in the market. Peasants contribute only 5% of the
+purchased heating estimate. Green Building Codes cuts the estimated household fossil footprint by
 60%, Renewable Investment by 25%, and Fossil-Fuel Divestment by 15%. These cuts
 add together: all three eliminate household fossil-heating emissions. National
 policies affect your own households; Renewable Investment covers every market
 member. Industrial emissions still depend on production methods and capture.
+
+Fuel-input discounts reduce goods costs; the custom emissions figure follows
+the recipe and its staffing and throughput. Public Transit's oil discount has
+an economic effect, while Fossil-Fuel Divestment also reduces household
+emissions. The Environmental Sustainability principle's explicit emissions
+reduction counts toward warming; its coal and oil input discounts reduce costs.
+Standalone military-unit and ship fuel is outside this building-based figure.
 
 Electric Arc Process, Aluminum Substitution and Chromium Substitution in Steel
 Mills use 10 coal per level. Electric Arc Process also uses 50 electricity;
@@ -56,7 +66,7 @@ removal retains its full credit and can take the market below zero.
 Carbon Conversion Works unlock with Carbon Capture and Storage in era 10,
 after Clean Energy Technologies. Their Direct Air Capture method removes CO₂
 from the atmosphere without producing goods to sell. At full staffing and base
-throughput, each level removes 168 a year in the dashboard's units and uses
+throughput, each level removes 42 a year in the dashboard's units and uses
 1,200 electricity, plus engines, steel, chemicals and electronic components.
 Removal and synthetic-fuel credits follow staffing and throughput. Subsidize the works to keep them
 staffed; a fossil-powered grid adds emissions from the electricity they use.

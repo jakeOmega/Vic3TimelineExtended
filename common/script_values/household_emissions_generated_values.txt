@@ -73,7 +73,48 @@ gw_household_heating_budget = {
 
 gw_household_pop_package = 10000
 gw_household_consumption_equivalent = 0.625
-gw_household_coal_heating_share = 0.20
 gw_household_coal_base_price = 30
-gw_household_oil_heating_share = 0.30
 gw_household_oil_base_price = 40
+gw_household_peasant_consumption = 0.05
+
+# Market scope: a weighted supply estimate, not exact pop sales.
+gw_household_weighted_heating_supply = {
+	value = 0
+	mg:wood = {
+		add = { value = market_goods_sell_orders multiply = 0.75 min = 0 }
+	}
+	mg:fabric = {
+		add = { value = market_goods_sell_orders multiply = 0.25 min = 0 }
+	}
+	mg:coal = {
+		add = { value = market_goods_sell_orders multiply = 2 min = 0 }
+	}
+	mg:oil = {
+		add = { value = market_goods_sell_orders multiply = 3 min = 0 }
+	}
+	mg:electricity = {
+		add = { value = market_goods_sell_orders multiply = 3 min = 0 }
+	}
+}
+
+gw_household_coal_heating_share = {
+	value = 0
+	owner = {
+		market = {
+			mg:coal = { value = market_goods_sell_orders multiply = 2 min = 0 }
+			divide = { value = gw_household_weighted_heating_supply min = 1 }
+			max = 0.8
+		}
+	}
+}
+
+gw_household_oil_heating_share = {
+	value = 0
+	owner = {
+		market = {
+			mg:oil = { value = market_goods_sell_orders multiply = 3 min = 0 }
+			divide = { value = gw_household_weighted_heating_supply min = 1 }
+			max = 1.0
+		}
+	}
+}

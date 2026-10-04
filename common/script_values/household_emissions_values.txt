@@ -2,7 +2,7 @@
 # the generated buy-package curve. State scope unless noted otherwise.
 gw_state_household_greenhouse_gas_emissions = {
 	value = gw_household_heating_budget
-	multiply = state_population
+	multiply = gw_household_consuming_population
 	divide = gw_household_pop_package
 	multiply = gw_household_consumption_equivalent
 	multiply = {
@@ -29,4 +29,19 @@ gw_household_emission_multiplier = {
 	add = modifier:country_household_greenhouse_gas_emissions_mult
 	min = 0
 	max = 1
+}
+
+# Discount subsistence peasants using the current merged pop-type coefficient.
+# One state-local pop sweep when annual emissions are calculated; no GUI sweeps.
+gw_household_consuming_population = {
+	value = 0
+	every_scope_pop = {
+		add = {
+			value = total_size
+			if = {
+				limit = { is_pop_type = peasants }
+				multiply = gw_household_peasant_consumption
+			}
+		}
+	}
 }

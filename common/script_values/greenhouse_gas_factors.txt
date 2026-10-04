@@ -10,4 +10,5 @@ gw_emission_display_scale = 1000
 
 # Removal-only capacity, measured in coal-equivalent fuel units per level.
 # Independent of Synthetic Coal output: no fuel is produced or sold.
-gw_direct_air_capture_coal_equivalent = 840
+# 210 at 1,200 electricity keeps atmospheric removal costlier than source capture.
+gw_direct_air_capture_coal_equivalent = 210

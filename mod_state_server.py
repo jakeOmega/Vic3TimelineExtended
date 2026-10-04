@@ -5783,13 +5783,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {
                     "pattern": "common/script_values/household_emissions_generated_values.txt",
                     "owner": "gen_carbon_capture_pms.py",
-                    "input": "merged buy packages + coal/oil prices + household baseline",
-                    "header_marker": True,
-                },
-                {
-                    "pattern": "common/script_values/carbon_capture_generated_values.txt",
-                    "owner": "gen_carbon_capture_pms.py",
-                    "input": "synthetic PM outputs + shared greenhouse-gas factors",
+                    "input": "merged buy packages, heating weights/caps, pop types, coal/oil prices",
                     "header_marker": True,
                 },
                 {

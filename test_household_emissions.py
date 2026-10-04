@@ -40,6 +40,10 @@ class Values:
 
     def condition(self, block, scope):
         for name, (op, rhs) in block.items():
+            if name == "is_pop_type":
+                if scope["pop_type"] != rhs:
+                    return False
+                continue
             left, right = self.value(name, scope), self.value(rhs, scope)
             if not {"<": left < right, "<=": left <= right, ">": left > right,
                     ">=": left >= right, "=": left == right}[op]:
@@ -57,8 +61,11 @@ class Values:
                     if not chosen and (key == "else" or self.condition(body(arg, "limit"), scope)):
                         total = self.block({k: v for k, v in arg.items() if k != "limit"}, scope, total)
                         chosen = True
-                elif key == "owner":
-                    total = self.block(arg, scope["owner"], total)
+                elif key == "every_scope_pop":
+                    for pop in scope["pops"]:
+                        total = self.block(arg, pop, total)
+                elif key in ("owner", "market") or key.startswith("mg:"):
+                    total = self.block(arg, scope[key], total)
                 else:
                     value = self.value(arg, scope)
                     if key == "value":
@@ -80,11 +87,15 @@ class Values:
         return total
 
 
-def state(*, population=0, wealth=20, industry=5, removal=0, industry_cut=1, household_cut=0):
+def state(*, population=0, wealth=20, industry=5, removal=0, industry_cut=1, household_cut=0, peasants=0, supply=None):
+    supply = supply if supply is not None else dict.fromkeys(("wood", "fabric", "coal", "oil", "electricity"), 1)
+    market = {f"mg:{good}": {"market_goods_sell_orders": supply.get(good, 0)} for good in ("wood", "fabric", "coal", "oil", "electricity")}
     return {"state_population": population, "average_sol": wealth,
+            "pops": [{"total_size": D(population) * (1-D(peasants)), "pop_type": "laborers"},
+                     {"total_size": D(population) * D(peasants), "pop_type": "peasants"}],
             f"modifier:{emissions.STATE_MODIFIER}": industry,
             f"modifier:{emissions.ATMOSPHERIC_MODIFIER}": removal,
-            "owner": {"gw_emission_multiplier_script_value": industry_cut,
+            "owner": {"market": market, "gw_emission_multiplier_script_value": industry_cut,
                       "modifier:country_household_greenhouse_gas_emissions_mult": household_cut}}
 
 
@@ -120,10 +131,21 @@ class HouseholdEmissionsTest(unittest.TestCase):
 
     def test_population_and_baseline_consumption_units(self):
         baseline = self.values.value("gw_state_household_greenhouse_gas_emissions", state(population=10000, wealth=1))
-        expected = D(15) * D("0.625") * (D("0.2") / 30 * 2 + D("0.3") / 40 * D("1.74")) / 10000
-        self.assertEqual(baseline, expected)
+        expected = D(15) * D("0.625") * (D(2) / 9 / 30 * 2 + D(3) / 9 / 40 * D("1.74")) / 10000
+        self.assertAlmostEqual(baseline, expected, places=20)
         self.assertAlmostEqual(self.values.value("gw_state_household_greenhouse_gas_emissions", state(population=20000, wealth=1)), baseline * 2, places=20)
         self.assertEqual(self.values.value("gw_state_household_greenhouse_gas_emissions", state(population=0)), 0)
+
+    def test_household_supply_and_subsistence_calibration(self):
+        evaluate = lambda **kw: self.values.value("gw_state_household_greenhouse_gas_emissions", state(population=1000000, **kw))
+        self.assertEqual(evaluate(supply={"wood": 100, "fabric": 50}), 0)
+        self.assertEqual(self.values.value("gw_household_oil_heating_share", state(supply={"coal": 100, "wood": 100})), 0)
+        baseline = evaluate()
+        self.assertAlmostEqual(evaluate(peasants=1), baseline * D("0.05"), places=20)
+        self.assertAlmostEqual(evaluate(peasants=D("0.8")), baseline * D("0.24"), places=20)
+        self.assertLess(evaluate(supply={"coal": 1, "oil": 1, "electricity": 100}), baseline)
+        self.assertEqual(evaluate(supply={}), 0)
+        self.assertEqual(self.values.value("gw_household_coal_heating_share", state(supply={"coal": 100})), D("0.8"))
 
     def test_three_policies_eliminate_household_emissions_without_negative_burn(self):
         modifiers = parsed("common/static_modifiers/extra_modifiers.txt")
@@ -200,6 +222,21 @@ class HouseholdEmissionsTest(unittest.TestCase):
         for modifier in (emissions.STATE_MODIFIER, emissions.ATMOSPHERIC_MODIFIER, "state_carbon_capture_add"):
             self.assertIn(f" {modifier}:0 ", loc)
             self.assertIn(f" {modifier}_desc:0 ", loc)
+
+    def test_dac_goods_cost_exceeds_representative_tier_two_source_capture(self):
+        methods = self.graph.mod_parsers["PMs"].data
+        goods = self.graph.mod_parsers["Goods"].data
+        def cost_per_unit(name):
+            recipe = workforce(methods[name])
+            cost = D(0)
+            for key, amount in recipe.items():
+                if key.startswith("goods_input_") and key.endswith("_add"):
+                    good = key[len("goods_input_"):-len("_add")]
+                    cost += D(emissions.unwrap(amount)) * scalar(emissions.unwrap(goods[good]), "cost")
+                if key == "goods_output_electricity_add":
+                    cost -= D(emissions.unwrap(amount)) * scalar(emissions.unwrap(goods["electricity"]), "cost")
+            return cost / -scalar(recipe, emissions.MODIFIER)
+        self.assertGreater(cost_per_unit("pm_direct_air_capture"), cost_per_unit("pm_carbon_capture_2_base_building_power_plant_coal25_oil0"))
 
     def test_ownership_updates_preserve_other_state_blocks_and_remove_stale_mirrors(self):
         block = 'pm_test = {\n\tstate_modifiers = {\n\t\tunscaled = { state_pollution_generation_add = 2 }\n\t}\n}\n'

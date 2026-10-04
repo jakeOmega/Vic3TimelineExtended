@@ -13,7 +13,6 @@ import re
 
 from paradox_file_parser import ParadoxFileParser
 
-BUILDINGS = ("building_power_plant", "building_steel_mill", "building_chemical_plant")
 MODIFIER = "building_greenhouse_gas_emissions_add"
 STATE_MODIFIER = "state_greenhouse_gas_emissions_add"
 ATMOSPHERIC_MODIFIER = "state_atmospheric_carbon_capture_add"
@@ -34,7 +33,7 @@ def load_state(root):
     from mod_state import ModState, VANILLA_COMMON_DIRS
     from vanilla_parsed import load
 
-    kinds = ("Buildings", "PM Groups", "PMs", "Buy Packages", "Goods")
+    kinds = ("Buildings", "PM Groups", "PMs", "Buy Packages", "Goods", "Pop Needs", "Pop Types")
     snapshot = load(str(root / "vanilla_parsed"))
     state = ModState(
         {kind: "/nonexistent" for kind in kinds},

@@ -1,9 +1,9 @@
 """Generate the wealth/heating curve used by household climate accounting.
 
 This is an explicit estimate, not a market-sales measurement. Heating demand
-comes from merged buy packages; 20% is modelled as coal and 30% as oil at base
-prices. The rest is non-fossil household heating. Average state wealth and a
-baseline workforce/dependent equivalent avoid iterating every pop each year.
+comes from merged buy packages at average state wealth. Fossil shares follow
+weighted market supply, with absent fuels contributing nothing; peasants buy
+only their pop type's consumption fraction. This remains an approximation.
 """
 
 from decimal import Decimal
@@ -14,7 +14,7 @@ from pm_emissions import unwrap as u
 OUTPUT = Path("common/script_values/household_emissions_generated_values.txt")
 POP_PACKAGE = Decimal(10000)
 CONSUMPTION_EQUIVALENT = Decimal("0.25") + Decimal("0.75") * Decimal("0.5")
-FUEL_SHARES = {"coal": Decimal("0.20"), "oil": Decimal("0.30")}
+FUELS = ("coal", "oil")
 
 
 def heating_curve(state):
@@ -59,11 +59,38 @@ def plan_outputs(state):
                   f"gw_household_pop_package = {POP_PACKAGE:f}",
                   f"gw_household_consumption_equivalent = {CONSUMPTION_EQUIVALENT:f}"])
     goods = state.mod_parsers["Goods"].data
-    for fuel, share in FUEL_SHARES.items():
+    for fuel in FUELS:
         price = Decimal(u(u(goods[fuel])["cost"]))
         if not price.is_finite() or price <= 0:
             raise ValueError(f"Invalid {fuel} base price: {price}")
-        lines.extend([f"gw_household_{fuel}_heating_share = {share:f}",
-                      f"gw_household_{fuel}_base_price = {price:f}"])
-    lines.append("")
+        lines.append(f"gw_household_{fuel}_base_price = {price:f}")
+    peasants = u(state.mod_parsers["Pop Types"].data["peasants"])
+    fraction = Decimal(u(peasants["consumption_mult"]))
+    if not fraction.is_finite() or not 0 <= fraction <= 1:
+        raise ValueError(f"Invalid peasant consumption fraction: {fraction}")
+    lines.extend([f"gw_household_peasant_consumption = {fraction:f}", ""])
+    need = u(state.mod_parsers["Pop Needs"].data["popneed_heating"])
+    entries = need["entry"]
+    entries = entries if isinstance(entries, list) else [entries]
+    weights = {}
+    caps = {}
+    for entry in entries:
+        entry = u(entry)
+        good = u(entry["goods"])
+        weight = Decimal(u(entry["weight"]))
+        cap = Decimal(u(entry.get("max_supply_share", 1)))
+        if not weight.is_finite() or weight < 0 or not cap.is_finite() or not 0 <= cap <= 1:
+            raise ValueError(f"Invalid heating supply weight/cap for {good}")
+        weights[good] = weight
+        caps[good] = cap
+    lines.extend(["# Market scope: a weighted supply estimate, not exact pop sales.",
+                  "gw_household_weighted_heating_supply = {", "\tvalue = 0"])
+    for good, weight in weights.items():
+        lines.extend([f"\tmg:{good} = {{", f"\t\tadd = {{ value = market_goods_sell_orders multiply = {weight:f} min = 0 }}", "\t}"])
+    lines.extend(["}", ""])
+    for fuel in FUELS:
+        lines.extend([f"gw_household_{fuel}_heating_share = {{", "\tvalue = 0", "\towner = {", "\t\tmarket = {",
+                      f"\t\t\tmg:{fuel} = {{ value = market_goods_sell_orders multiply = {weights[fuel]:f} min = 0 }}",
+                      "\t\t\tdivide = { value = gw_household_weighted_heating_supply min = 1 }",
+                      f"\t\t\tmax = {caps[fuel]:f}", "\t\t}", "\t}", "}", ""])
     return {OUTPUT: "\n".join(lines)}
