@@ -2370,7 +2370,10 @@ construction_cost_scaling_direct_adjusted_mult = {
 #
 # Behavior / formula (normalized ratio r):
 # - Compute `state_population_density` = state_population /
-#   (arable_land - same_owner_state_region_arable_land_added) × density_mult.
+#   (`migration_crowding_effective_land` × (1 + state_migration_crowding_density_mult)),
+#   where the effective land is base arable land (arable_land -
+#   same_owner_state_region_arable_land_added) plus Urban Engineering's land
+#   equivalent (below).
 # - Normalize: r = (density - floor) / (ceiling - floor). r = 0 at floor, r = 1 at ceiling.
 # - Multiplier M (continuous piecewise):
 #     * r <= 0:         M = 0
@@ -2397,12 +2400,40 @@ migration_crowding_density_ceiling = {
 	multiply = migration_crowding_ceiling_ratio
 }
 
+# Urban Engineering: vanilla's state_building_construction_sector_max_level_add,
+# relocalized (timeline_extended_override_l_english.yml). The mod's
+# Construction Sector has no level cap (te_construction_market_site.txt drops
+# has_max_level), so nothing else reads it. Vanilla grants it from Urbanization
+# (+10), Urban Planning, Modern Sewerage, Steel Frame Buildings and Elevator
+# (+5 each). Each point houses this many people before crowding, whatever the
+# state's arable land, and tolerance multiplies them like the land.
+migration_crowding_urban_engineering_pop = 1000
+
+# State scope. People Urban Engineering houses, before tolerance.
+migration_crowding_urban_engineering_capacity = {
+	value = modifier:state_building_construction_sector_max_level_add
+	multiply = migration_crowding_urban_engineering_pop
+	min = 0
+}
+
+# State scope. The arable land the crowding threshold is measured against:
+# base arable land (at least 1) plus Urban Engineering's capacity as land at the
+# floor density, so the threshold gains exactly that many people before tolerance.
+migration_crowding_effective_land = {
+	value = migration_crowding_urban_engineering_capacity
+	divide = migration_crowding_density_floor
+	add = {
+		value = arable_land_base
+		min = 1
+	}
+}
+
 # State population density calculation.
 # Use the same-owner regional arable-land cache so split states don't undercount base land.
 state_population_density = {
 	value = state_population
 	divide = {
-		value = arable_land_base
+		value = migration_crowding_effective_land
 		min = 1
 	}
 	divide = {
@@ -2665,19 +2696,29 @@ antimatter_points_reserved = {
 # GUI Display Script Values — Migration Crowding Threshold
 #==================================================
 # State scope. The population at which crowding starts affecting migration pull.
-# crowding_threshold_pop = density_floor × base_arable_land × density_mult_factor
+# crowding_threshold_pop = (density_floor × base_arable_land + Urban Engineering
+# capacity) × (1 + state_migration_crowding_density_mult)
 # Base arable land subtracts the same-owner regional cache to stay correct in split states.
 migration_crowding_threshold_pop = {
 	value = migration_crowding_density_floor
 	multiply = {
-		value = arable_land
-		subtract = same_owner_state_region_arable_land_added
+		value = migration_crowding_effective_land
 		min = 1
 	}
 	multiply = {
 		value = 1
 		add = modifier:state_migration_crowding_density_mult
 		min = 0.1
+	}
+}
+
+# State scope. The arable land's share of the threshold before tolerance
+# (TE_STATE_CROWDING_TT): density_floor × base arable land.
+migration_crowding_land_pop = {
+	value = migration_crowding_density_floor
+	multiply = {
+		value = arable_land_base
+		min = 1
 	}
 }
 
