@@ -13,6 +13,7 @@ untracked ones. Run it from the checkout (or worktree) being linted.
 
 ERROR (exit 1):
   - no UTF-8 BOM; unbalanced braces, quotes, [ ] or ( )
+  - unquoted GUI expressions inside brace-vector size/position components
   - a bare loc key (text/tooltip = "key", or a quoted key argument of Localize,
     SelectLocalization, AddLocalizationIf, AddTextIf) in neither the mod's
     English loc nor vanilla's (vanilla_parsed/localization_english.json)
@@ -120,6 +121,20 @@ def margin_on_plain_widget(text):
                 hits.append((ln, stack[-1], name, lines[ln - 1].strip()))
             if brace:
                 stack.append(base or name)
+    return hits
+
+
+def bare_vector_expressions(text):
+    """Reject bare bindings the engine tokenizes as extra vector components.
+
+    Whole-vector quoted bindings (size = "[...]") remain supported. Mask
+    strings while preserving line offsets, so expressions in text, tooltips
+    and other properties cannot be mistaken for vector components.
+    """
+    bare = re.sub(r'"[^"\n]*"', lambda m: " " * len(m.group()), text)
+    hits = []
+    for m in re.finditer(r"\b(size|position|minimumsize|maximumsize|framesize)\s*=\s*\{[^{}]*\[[^{}]*\}", bare):
+        hits.append((bare.count("\n", 0, m.start()) + 1, m.group(1)))
     return hits
 
 
@@ -289,6 +304,10 @@ class Linter:
                                        "setting properties\" for the widget (#633's history chart shipped one). Inset "
                                        "with position (parentanchor = right + position = { -8 0 }), or put the "
                                        "margin on a flowcontainer, hbox or vbox")
+        for ln, prop in bare_vector_expressions(text):
+            self.report("ERROR", path, ln, f"unquoted data expression inside '{prop}' brace vector; "
+                        "the engine reads its tokens as extra numeric components. Use literal "
+                        "components, a quoted whole-vector binding, or flow layout")
         for m in BLOCKOVERRIDE.finditer(text):
             if m.group(1) not in self.known_blocks:
                 self.report("WARN", path, lineno(m.start()),
