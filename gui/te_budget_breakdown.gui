@@ -1,0 +1,73 @@
+﻿# The Budget panel's always-available Breakdown tab. The generated chart
+# library owns category order, amounts and colours; this file owns layout.
+types te_budget_breakdown {
+	type te_budget_chart_row = flowcontainer {
+		direction = horizontal
+		spacing = 6
+		minimumsize = { 480 28 }
+		maximumsize = { 480 -1 }
+		icon = {
+			size = { 14 14 }
+			parentanchor = vcenter
+			framesize = { 128 128 }
+			frame = 2
+			block "swatch" {}
+		}
+		textbox = {
+			minimumsize = { 288 28 }
+			maximumsize = { 288 -1 }
+			multiline = yes
+			align = left|vcenter|nobaseline
+			using = fontsize_medium
+			block "label" {}
+		}
+		textbox = {
+			size = { 94 28 }
+			align = right|vcenter|nobaseline
+			using = fontsize_medium
+			block "amount" {}
+		}
+		textbox = {
+			size = { 60 28 }
+			align = right|vcenter|nobaseline
+			using = fontsize_medium
+			block "share" {}
+		}
+	}
+
+	type te_budget_breakdown_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		minimumsize = { 520 -1 }
+		maximumsize = { 520 -1 }
+		spacing = 8
+		ignoreinvisible = yes
+
+		te_budget_income_section = {}
+		te_budget_expense_section = {}
+
+		section_header_button = {
+			blockoverride "layout" { parentanchor = hcenter size = { 520 38 } }
+			blockoverride "left_text" { text = "te_budget_chart_how" }
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_budget_chart_how_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_budget_chart_how_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_budget_chart_how_open')]"
+			}
+		}
+		textbox = {
+			visible = "[GetVariableSystem.Exists('te_budget_chart_how_open')]"
+			minimumsize = { 480 -1 }
+			maximumsize = { 480 -1 }
+			parentanchor = hcenter
+			autoresize = yes
+			multiline = yes
+			using = fontsize_medium
+			text = "te_budget_chart_how_text"
+		}
+	}
+}

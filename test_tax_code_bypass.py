@@ -707,7 +707,10 @@ class SpectrumAuctionTest(unittest.TestCase):
         self.assertEqual({k: v for k, v in politics.items() if k != "icon"},
                          {k: v for k, v in original.items() if k not in ("icon", "tax_dividends_add")})
         proceeds = modifiers["te_tax_spectrum_auction_proceeds"]
-        self.assertEqual({k: v for k, v in proceeds.items() if k != "icon"}, {"country_tax_income_add": "1"})
+        self.assertEqual({k: v for k, v in proceeds.items() if k != "icon"}, {
+            "country_tax_income_add": "1",
+            "country_te_budget_income_tax_code_add": "1",
+        })
         for name in ("te_tax_spectrum_auction", "te_tax_spectrum_auction_proceeds"):
             with self.subTest(name=name):
                 self.assertNotRegex(json.dumps(modifiers[name]), r'"tax_(income|dividends|land|per_capita|'

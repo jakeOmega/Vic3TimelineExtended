@@ -213,7 +213,7 @@ class TabStripTest(unittest.TestCase):
         strip = text.index("### MOD: Tax Code tab")
         banking_end = text.index("### END MOD ###", text.index("### MOD: Banking tab"))
         self.assertGreater(strip, banking_end)
-        tab_buttons = text.index("tab_buttons = {")
+        tab_buttons = text.index("te_tab_buttons_six = {")
         self.assertLess(strip, close(text, text.index("{", tab_buttons)))
 
     def test_the_six_fifth_slot_blocks_and_no_icon(self):

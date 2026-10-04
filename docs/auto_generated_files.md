@@ -39,6 +39,22 @@ The scripts in this section auto-run inside `mod_state_server.py` after every fu
 | `common/geographic_regions/te_formable_regions_generated.txt` | `scripts/generators/gen_formable_regions.py` | vanilla `common/strategic_regions/*.txt` + inline config in the script | Holds explicit-state-list `geographic_region_united_{europe,africa,north_america,earth}` for the EUN/AFU/UNA/UNE formables. Vic3's formable code only reads `state_regions = {...}` (not `strategic_regions = {...}`) when expanding required states. **Manual rerun only** — not in the post-load chain; rerun after vanilla strategic-region rebalances. Fails loudly if a configured strategic region disappears, which is the prompt to update its inline config. |
 | *(no new files)* — every mod `.txt` under `common/`, `events/`, `gfx/` and every `.gui` under `gui/` | `bom_normalizer.py` | the files themselves | **Runs last in `POST_LOAD_REGENERATORS`.** Prepends the UTF-8 BOM to any in-scope file missing one, so the engine stops logging `should be in utf8-bom encoding` (issues #148, #255). Idempotent — only BOM-less files are rewritten, so it never dirties a clean tree. Never touches YAML / JSON / Python / `.metadata/`. Not a content generator: it owns no file, so hand-editing these files stays fine. |
 
+## Budget display (explicit regeneration)
+
+Run `python3 scripts/generators/gen_budget_breakdown.py` after changing its income
+or expense catalogue or adding an institution. It reads the committed vanilla
+institution snapshot and mod definitions, and writes:
+
+| File | Owner script | Input |
+|---|---|---|
+| `common/script_values/te_budget_generated_values.txt` | `scripts/generators/gen_budget_breakdown.py` | Institution roster and budget catalogue |
+| `gui/te_budget_generated_charts.gui` | `scripts/generators/gen_budget_breakdown.py` | Same roster/catalogue and Cultural Hegemony palette |
+| `common/modifier_type_definitions/te_budget_generated_types.txt` | `scripts/generators/gen_budget_breakdown.py` | Accounting mirrors for each system's recurring monetary modifiers |
+| `localization/english/te_budget_l_english.yml` | `scripts/generators/gen_budget_breakdown.py` | Generator's labels and institution allocation tooltips |
+
+This generator runs explicitly; it is not a post-load regenerator. The localization
+organizer preserves its BUDGET family and output format.
+
 ## Tooling data
 
 | File / glob | Owner script | Input | Notes |

@@ -1,0 +1,111 @@
+# Budget Breakdown
+
+The Budget panel's sixth tab, **Breakdown**, is available under every rule
+setting. It reads the same weekly income forecast and expense total as Overview.
+Each side has a pie, a horizontal stacked bar and a matching list with currency
+amounts and percentages. Zero rows are hidden; negative adjustments remain in
+the list and are excluded from the positive chart denominator. The headers are
+the signed budget totals. Other Income/Expenses reconcile uncategorized and
+temporary flows to those totals.
+
+## Journal systems and source amounts
+
+Banking, Covert Actions, Cultural Hegemony, Colonial Development, the United
+Nations, Nuclear Program, Nuclear Civil Defence, Space Race and Drug Shortage
+Response each have a separate expense category. UN grants, Strategic Reserve
+sales, war-profit taxes and spectrum auctions have separate income categories.
+Hover a row for the engine's applied modifier sources and amounts.
+
+Each contributing static modifier has a `script_only` accounting field with
+the same coefficient as its native `country_expenses_add` or
+`country_tax_income_add`. The engine applies the same multiplier, stacking,
+duration and decay to both fields. These fields have no economic effect. Their
+localized descriptions clarify that the value is already charged/credited;
+they also appear in the source modifier's ordinary tooltip. The panel reads
+their current sums, then subtracts them from Additional Expenses/Income once.
+Only the unattributed remainder appears in Other Additional Expenses/Income.
+No live formula is reevaluated to guess what a timed modifier currently charges.
+
+Only money in the weekly budget is included. One-time `add_treasury` payments
+and costs in innovation, influence or other resources are excluded. For example,
+Space Race's recurring `sr_space_program_cost` spends innovation, not money;
+its monetary debris-clearance response is attributed to Space Race.
+
+## Administration allocation
+
+Only `building_government_administration` enters the administration pool.
+Its negative `weekly_profit` supplies its operating cost: its production methods
+produce bureaucracy and tax capacity, not saleable goods. This includes wages,
+goods and any slave upkeep. Other government buildings remain in Other Civil
+Buildings. The actual administration cost is capped at the Overview's civil
+wage/goods/slave total because wages there are predicted while the building's
+balance is from the latest week.
+
+Let A be that administration cost, B be `produced_bureaucracy`, U be
+`Country.GetInstitutionInvestmentBureaucracyCost`, and L the sum of current
+institution investments. When B and L are positive:
+
+- institution pool = min(A, A × max(U, 0) / B)
+- institution i = pool × current investment i / L
+- General Administration = A − sum(all institution allocations)
+- Other Civil Buildings = Overview civil expenses − A
+
+When B or L is zero the institution pool is zero. Using the sum of allocations
+for the remainder also conserves currency after fixed-point truncation.
+Institution-specific bureaucracy discounts affect U but deliberately do not
+change the level-based split. Target levels awaiting implementation do not count.
+
+With A = £39,000, B = 2,800, U = 1,400, Education level 3 and National Bank
+level 2, the pool is £19,500: Education £11,700, National Bank £7,800 and
+General Administration £19,500.
+
+## Files and regeneration
+
+`scripts/generators/gen_budget_breakdown.py` contains the income/expense
+catalogue and discovers every institution from the committed vanilla snapshot
+and mod definitions. Run it explicitly after editing the catalogue or adding an
+institution. It writes `te_budget_generated_values.txt`,
+`te_budget_generated_charts.gui`, `te_budget_generated_types.txt` and
+`te_budget_l_english.yml`. Localization's
+organizer preserves the generated BUDGET category. Hand-written calculation
+rules are in `common/script_values/te_budget_values.txt`; the panel layout is in
+`gui/te_budget_breakdown.gui`.
+
+Each section binds the engine getters into a `TopScope`. The administration
+building sum, total institution levels, allocated pool and positive chart total
+are passed as value scopes before the charts are drawn, so nested cumulative
+values do not scan buildings or repeatedly recalculate the whole denominator.
+There are no effects, saved variables, pulse hooks or journal-entry dependencies.
+The palette reuses Cultural Hegemony's existing pie textures and colors; it
+repeats with many institutions, so category names and percentages remain visible.
+
+## Validation and in-game checks
+
+`test_budget_breakdown.py` executes the actual script values in a strict offline
+harness: the requested example, shortages, zero production, absent and zero-level
+institutions, current-level changes, reduced civil wages, negative adjustments,
+category reconciliation and matching cumulative chart layers. GUI lint and
+reference audits cover local names, localization, braces and textures.
+Source tests also verify separate simultaneous JE charges, signed banking
+offsets, exact mirror coefficients, complete attribution of the mod's recurring
+monetary sources, and unchanged economic fields.
+
+Engine rendering and accounting still require an in-game check:
+
+1. Open Breakdown with banking/tax rules both disabled, then enabled. Check all
+   six tabs fit, zero rows disappear, long institution names wrap and tooltips
+   retain the parent `TopScope` context.
+2. Compare administration's `weekly_profit` against the sum of those buildings'
+   wages and goods, including a construction-good input under FMC. Confirm that
+   treasury funding does not turn that profit into zero.
+3. Compare all list amounts with Overview after a weekly tick, a wage change,
+   institution investment completing and an administration building changing PM.
+4. Check pie and stack colors/shares match the list; no-production and zero-
+   budget countries have empty charts. Test a bureaucracy shortage and a country
+   with an institution-specific bureaucracy discount.
+5. Open the panel in a large country and check frame time. All intermediate
+   GUI bindings must refresh with current values while sharing them with children.
+6. Apply Banking and Covert Actions charges together. Check their rows and source
+   tooltips against Additional Expenses, including JE-owned modifiers, decaying
+   charges, refunds and removal. On an existing save, verify modifier-definition
+   changes are picked up; otherwise let the owning system refresh its modifier.
