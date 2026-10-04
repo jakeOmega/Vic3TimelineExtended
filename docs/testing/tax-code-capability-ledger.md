@@ -270,6 +270,10 @@ The PR body cites this list; the player guide describes the AI as built.
   Vanilla's Traditionalist countries start with neither tax.
 - **T1 always raises two taxes when two may be raised**, with no fallback to one if the two-tax bill
   cannot pass; the bill is withdrawn and the country waits the failure cooldown.
+- **Legitimacy falling after introduction.** A bill whose country drops below 25 legitimacy after
+  it was introduced still accepts offers (each a support refresh) before the hopeless check
+  withdraws it, because the open-bill manager tries offers first. At introduction the hopeless
+  check comes first, so a country already below 25 withdraws at once.
 - **Rebels below 25 legitimacy** try a bill once per failure cooldown (six months), logging
   `ai_no_viable` once per episode; they never loop monthly.
 - **Emergency bills** follow one another about three months apart (Ruling 13), and a clearing of
