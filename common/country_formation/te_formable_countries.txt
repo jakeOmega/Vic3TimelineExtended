@@ -154,6 +154,7 @@ UNE = {
 		une_formation_supermajority = yes
 		une_formation_bloc_aligned = yes
 		une_formation_no_internal_rivalry = yes
+		une_formation_world_order = yes
 	}
 
 	possible = {
@@ -163,6 +164,7 @@ UNE = {
 		une_formation_supermajority = yes
 		une_formation_bloc_aligned = yes
 		une_formation_no_internal_rivalry = yes
+		une_formation_world_order = yes
 	}
 
 	max_num_formation_candidates = 3
