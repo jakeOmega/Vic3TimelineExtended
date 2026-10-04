@@ -997,7 +997,7 @@
  },
  "te_tax_ov_snapshot": {
   "en": "Economy Snapshot",
-  "de": "Wirtschaftslage"
+  "de": "Wirtschaftsmomentaufnahme"
  },
  "te_tax_ov_snapshot_tt": {
   "en": "The economy the revenue estimates are measured against: the rates in force and the country's income, taken on the 1st of each month and whenever a bill is introduced, revised or takes an offer.",
@@ -2269,7 +2269,7 @@
  },
  "te_tax_wb_good_untax": {
   "en": "Exempt",
-  "de": "Befreit"
+  "de": "Befreien"
  },
  "te_tax_wb_good_untaxed": {
   "en": "Exempt",
