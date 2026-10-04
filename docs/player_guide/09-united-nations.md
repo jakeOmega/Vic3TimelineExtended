@@ -349,8 +349,8 @@ the Recorded Ballot shows every voter's lean and why the members voted as they d
 | The proposer's standing | Exemplary +5, Respected +2, Poor −2, Disgraced −5 |
 | A pledged vote | +100 for, −100 against |
 | The target accepted the verdict | +15 |
-| The cost to us, on aid and peacekeeping requests | −15 per earlier contribution, up to three; more for aid to a great, major or richer country |
-| Our interests on this topic | Laws, technologies and what the convention's terms would do to us |
+| The cost to us, on aid and peacekeeping requests | −15 per earlier contribution, up to three; more for aid to a great, major or richer country; −30 for a major power in default or near its debt ceiling, which a carried request would bill |
+| Our interests on this topic | Laws, technologies and what the convention's terms would do to us. On the World Development Fund: +30 below its line and up to +30 more for the grant it would pay us; the richest −5 and laissez-faire governments −5 under the founding charter, when it takes nothing from the budget; once a charter reform gives it a share, the richest −25, those above the average −10, laissez-faire −15 |
 | Lobbying campaigns on us (AI members only) | 3 a month per campaign, up to 15; at most 20 each way |
 
 An AI member votes in favor when its lean, plus a random −20 to +20, is above
@@ -456,7 +456,12 @@ party goes first to a human member that qualifies. Every proposer event has
 "Leave it to another delegation", which passes the item on and earns nothing;
 refusing a convention outright costs credibility and bars you from tabling it
 for five years. A major power that refuses a famine appeal while UN authority is
-40 or more loses prestige and relations improvement speed for five years. The
+40 or more loses prestige and relations improvement speed for five years. Sending
+aid to a famine, or a full peacekeeping force to a collapsed state, costs 0.5% of
+GDP a year, fading over five years; a country already running Contribute to
+Peacekeeping pays nothing extra for the force. The force earns leverage,
+prestige and +10% army experience gain, fading over ten years. Observers or a token gesture cost
+a quarter of that. The
 lending facility's loan and conditions are covered in [The UN emergency
 loan](04-banking.md#the-un-emergency-loan).
 
@@ -827,7 +832,7 @@ count in full), and every program earns standing after 24 months.
 
 | Button | Requires | Cost | Gives |
 |---|---|---|---|
-| Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation and prestige; covers peacekeeping contingents |
+| Contribute to Peacekeeping | Major power | 0.5% of GDP a year, bureaucracy, +5% military goods cost; cannot be ended for ten years | Leverage generation, prestige and +10% army experience gain; covers peacekeeping contingents |
 | Fund Development Programs | Major power, and the World Development Fund founded | 0.5% of GDP a year, bureaucracy | Commerce ministry impact; the money pays the Fund's grants |
 | Champion Human Rights Resolution | Universal Citizenship, Universal Suffrage or Protected Speech | Bureaucracy | Prestige, refugee ministry impact |
 | Join Arms Control Treaty | War Crimes Forbidden, Humanitarian Regulations or Limited War | Bureaucracy, +5% infamy generation | Faster infamy decay, less devastation, cheaper military goods; lower kill rate |
@@ -928,15 +933,43 @@ of the session.
 that country, its allies and its bloc leader lobby against it. Each runs up to
 three campaigns at once on AI members close to the line, starts at most one a
 month and only with influence to spare, and asks for pledges now and then,
-humans included. They never run campaigns on human members.
+humans included. On a resolution that accuses no one, up to two AI members a
+side with a strong stake in the topic (interests of +35, or −35 or less) run one
+campaign each, when they have 300 influence to spare: a nuclear power against
+the prohibition treaty, poor members for a World Development Fund that would
+pay them well. They never run campaigns on human members.
 - They table the sixteen non-convention topics through the journal entry's
 buttons when their situation calls for it, and reach conventions only through
 the docket, so a qualifying human is offered convention business first. They
 refer a dispute to the World Court only on odds of 60% or better.
 - They pledge grain to the World Food Reserve when they hold 2,000 units or
 more, and withdraw the pledge when famine strikes at home.
-- They join readily unless isolationist, and withhold dues when isolationist,
-undermining the order, in default or facing a high levy.
+- They join or leave by what a seat is worth to them: their laws and rank, the
+dues against the grant the World Development Fund would pay them (both as a
+share of their GDP, so a poor country that would draw a large grant wants in
+most), what staying out costs at the UN's tier, the aid and peacekeepers only
+members can ask for, and the conventions they would have to keep. A country
+whose case is close to the line neither joins nor leaves, so it doesn't walk
+out and back. Below UN Authority 30 a seat is worth less with every point
+lost, so members leave a failing UN a few at a time as the crisis deepens,
+those with the weakest reasons first.
+- They stop paying their dues when their treasury defaults or they undermine
+the order. Debt near the ceiling, isolationism and a high levy count against
+paying and can add up to it. A member the Fund pays more than its dues keeps
+paying even in default, and one that has lost its vote under Article 19 pays
+sooner. A healthy member doesn't withhold to save the levy and then pay again.
+- Major powers fund Development Programs only with a reason: humanitarian law,
+championing the order, or Fund recipients among their subjects, bloc partners
+and allies. They contribute to peacekeeping for the same kinds of reasons, more
+when missions are in the field. They stop either one when their treasury fails
+or their laws turn against it, and stop peacekeeping at war; peacekeeping only
+once its ten years have run.
+- Great powers champion or undermine the order for their own reasons:
+Humanitarian Regulations or Limited War, a permanent seat and their bloc's
+Multilateral Institutions principle pull toward championing; isolationism,
+Total War, conventions that cost them, UN sanctions and a heavy record toward
+undermining. UN Authority adds only a small pull (a weak UN draws champions, a
+strong one makes powers wary), never enough to turn a power on its own.
 - They send contingents to missions hosted by allies, bloc partners and
 subjects, and bring them home when attacked or short of money. A country holding
 a mandate is steered toward the target and the authorized goal.

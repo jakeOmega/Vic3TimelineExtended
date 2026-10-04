@@ -1837,7 +1837,13 @@ REPLACE_OR_CREATE:building_solar_receiver = {
 		custom_tooltip = {
 			text = building_solar_receiver_slots_tt
 			OR = {
-				owner = { solar_receiver_slots_remaining > 0 }
+				# The modifier check is implied by the slot count (it only subtracts
+				# queued levels from the modifier) and skips the building walk for
+				# countries with no slots. Not added to the >= 0 test below.
+				owner = {
+					modifier:country_solar_receiver_max_level_add > 0
+					solar_receiver_slots_remaining > 0
+				}
 				AND = {
 					any_scope_building = {
 						is_building_type = building_solar_receiver
@@ -2055,12 +2061,18 @@ REPLACE_OR_CREATE:building_antimatter_engine = {
 	possible = {
 		custom_tooltip = {
 			text = building_antimatter_sub_slots_tt
+			# Cheap tests first. The modifier check is implied by the slot
+			# count (it only subtracts queued levels from the modifier) and
+			# skips that country-wide building walk for countries with no slots.
 			OR = {
-				owner = { antimatter_sub_building_slots_remaining > 0 }
 				has_building = building_antimatter_engine
 				any_scope_building = {
 					is_building_type = building_antimatter_engine
 					is_under_construction = yes
+				}
+				owner = {
+					modifier:country_antimatter_facility_max_level_add > 0
+					antimatter_sub_building_slots_remaining > 0
 				}
 			}
 		}
@@ -2093,12 +2105,18 @@ REPLACE_OR_CREATE:building_antimatter_warhead_plant = {
 	possible = {
 		custom_tooltip = {
 			text = building_antimatter_sub_slots_tt
+			# Cheap tests first. The modifier check is implied by the slot
+			# count (it only subtracts queued levels from the modifier) and
+			# skips that country-wide building walk for countries with no slots.
 			OR = {
-				owner = { antimatter_sub_building_slots_remaining > 0 }
 				has_building = building_antimatter_warhead_plant
 				any_scope_building = {
 					is_building_type = building_antimatter_warhead_plant
 					is_under_construction = yes
+				}
+				owner = {
+					modifier:country_antimatter_facility_max_level_add > 0
+					antimatter_sub_building_slots_remaining > 0
 				}
 			}
 		}

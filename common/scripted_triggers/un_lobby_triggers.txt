@@ -192,6 +192,32 @@ un_lobby_ai_side_against = {
 	}
 }
 
+# A stakeholder that lobbies for / against a resolution that accuses no one
+# (un_lobby_ai_monthly): an AI member with a vote, not the proposer, whose own
+# interests in the topic (its snapshot's un_lean_interests for this
+# resolution) reach un_lobby_ai_stake_line, or minus it.
+# Scope: country; scope:un_lai_res = the resolution, scope:un_lai_proposer its
+# proposer if any
+un_lobby_ai_stakeholder_for = {
+	is_ai = yes
+	un_lobby_campaign_selectable = yes
+	NOT = { scope:un_lai_proposer ?= this }
+	has_variable = un_lean_res
+	var:un_lean_res ?= scope:un_lai_res
+	has_variable = un_lean_interests
+	var:un_lean_interests >= un_lobby_ai_stake_line
+}
+
+un_lobby_ai_stakeholder_against = {
+	is_ai = yes
+	un_lobby_campaign_selectable = yes
+	NOT = { scope:un_lai_proposer ?= this }
+	has_variable = un_lean_res
+	var:un_lean_res ?= scope:un_lai_res
+	has_variable = un_lean_interests
+	var:un_lean_interests <= un_lobby_ai_stake_line_against
+}
+
 # ---- Campaigns (spec §3) --------------------------------------------------------------
 
 # The lobbyist's side of both campaign pacts: a member with a vote, while a

@@ -7,7 +7,26 @@
 # ============================================================================
 # WONDER BUILDING EVENTS - monthly chance for countries with wonder buildings
 # ============================================================================
+# Every entry but the do-nothing one needs a building of one of these eight
+# types, so a country with none of them could only ever roll nothing. This one
+# scan stands in for the twenty-six the entries' own triggers would otherwise
+# run for every country, every month (2026-10-03 script profile: ~0.5 s per
+# month boundary late game). Keep the list in step with the entries below.
 wonder_events_on_action = {
+	trigger = {
+		any_scope_building = {
+			OR = {
+				is_building_type = building_space_elevator_construction_site
+				is_building_type = building_space_elevator
+				is_building_type = building_solar_collector_construction_site
+				is_building_type = building_solar_collector
+				is_building_type = building_orbital_battlestation_construction_site
+				is_building_type = building_orbital_battlestation
+				is_building_type = building_antimatter_facility_construction_site
+				is_building_type = building_antimatter_facility
+			}
+		}
+	}
 	effect = {
 		random_list = {
 			600 = { } # ~majority chance of nothing

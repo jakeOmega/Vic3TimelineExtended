@@ -80,6 +80,15 @@ un_referendum.1 = {
 		}
 		ai_chance = {
 			base = 60
+			# The odds the subject goes (un_ref_chance, 20-90): a vote we
+			# expect to win costs little to hold.
+			modifier = {
+				trigger = {
+					has_variable = un_ref_chance
+					var:un_ref_chance <= 40
+				}
+				add = 30
+			}
 			modifier = {
 				trigger = { un_tier_at_least_strong = yes }
 				add = 20
@@ -135,6 +144,14 @@ un_referendum.1 = {
 		}
 		ai_chance = {
 			base = 30
+			# A vote the subject would likely win means losing it.
+			modifier = {
+				trigger = {
+					has_variable = un_ref_chance
+					var:un_ref_chance >= 70
+				}
+				add = 40
+			}
 			modifier = {
 				trigger = { country_rank >= rank_value:great_power }
 				add = 20
