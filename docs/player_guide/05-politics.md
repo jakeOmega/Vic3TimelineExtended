@@ -242,10 +242,11 @@ the mod's laws](#amendments-to-the-mods-laws)). Corporate Security Powers gives
 companies police powers in their own mines, mills and company towns beside a
 public force, from Corporate Charters on. Interest groups take the same stance
 on it as on Private Policing, so until Corpocrats appear (Mutual Funds) it
-depends on the Industrialists, who sponsor it whatever their leader. Civilian Oversight sets up review boards for
+depends on the Industrialists, who sponsor it whatever their leader; the Guards at the Mill
+Gate event offers it during the debate. Civilian Oversight sets up review boards for
 complaints against police officers and licensed firms, from the Civil Rights
 Movement technology on, and interest groups judge it as they judge Guaranteed
-Liberties.
+Liberties; the Who Watches the Watchmen event offers it during the debate.
 
 ### Law enactment events
 
@@ -329,16 +330,17 @@ bureaucracy, and countries that start with the law begin at level 6.
 ## Amendments to the mod's laws
 
 Interest groups sponsor amendments to the mod's laws as they do for base-game
-laws, and several law events attach them. Three amendments attach to
-base-game laws: the Spoils System, Corporate Security Powers and Civilian
-Oversight. Under the Legislated Tax Code rule the tax rates are
+laws, and every one of them also comes with an event or another way into the
+game: most are offered by enactment events as the price of passage. Three
+amendments attach to base-game laws: the Spoils System, Corporate Security
+Powers and Civilian Oversight. Under the Legislated Tax Code rule the tax rates are
 amendments to the Legislated Tax Code law, and only tax bills change them (see
 [Taxation (experimental)](04-tax-code.md)).
 
 | Amendment | Attaches to | Effect |
 |---|---|---|
 | Minority Script Preservation | Civic Monolingualism, State-Led Language Reform | Slower assimilation, less separatism |
-| Language Requirement for Naturalization | Cultural, Assimilatory or Universal Citizenship, alongside Civic Monolingualism, State-Led Language Reform or Linguistic Purity | Faster assimilation, tighter migration |
+| Language Requirement for Naturalization | Cultural, Assimilatory or Universal Citizenship, alongside Civic Monolingualism, State-Led Language Reform or Linguistic Purity | Faster assimilation, tighter migration. The A Test of the Tongue event offers it while one of those citizenship laws is enacted, sponsored by the Petite Bourgeoisie (or the Rural Folk) |
 | Official Bilingualism | Multilingual Federalism, State-Led Language Reform | Weaker separatism, higher bureaucracy cost |
 | National Champion Exemption | Antitrust Enforcement, Regulated Utilities | Company output up, general output slightly down |
 | Worker Cooperative Preference | Antitrust Enforcement, Regulated Utilities | Trade Unions gain political strength, Industrialists lose it |
@@ -351,9 +353,9 @@ amendments to the Legislated Tax Code law, and only tax bills change them (see
 | Small Donor Matching | Donation Limits, Publicly Funded Elections | +5 legitimacy, higher bureaucracy cost |
 | Religious Exemption Clause | Any LGBTQ+ protection law | Devout approval |
 | Environmental Grandfather Clause | Ministry of the Environment Established | Industrialist approval, 5% more pollution and emissions |
-| Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing |
-| Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties |
-| Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat |
+| Corporate Security Powers | Local, Dedicated or Militarized Police Force | Ministry of Public Safety costs 10% less bureaucracy; Trade Unions −10% political strength; Labor Movement pop attraction +15%; the sponsoring group gains 10% political strength. Not under Command Economy, Cooperative Ownership or Industry Banned. The Industrialists sponsor it, and so does any group that approves of Private Policing; the Guards at the Mill Gate event offers it |
+| Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Civil Rights Movement pop attraction −15%; Legislative Override Capacity −0.5. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
+| Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
 
 ### Sunset clauses
 
@@ -410,7 +412,9 @@ its conditions and ruler title.
 ## Ideologies, parties and movements
 
 The mod adds ideologies, three parties and four political movements, and gives
-many base-game ideologies stances on some of the new law groups.
+many base-game ideologies stances on the new law groups. Every ideology with a
+view on a law group also states one on each law the mod adds to that group, so a
+group that dislikes the current law doesn't back a new law it has no view on.
 
 ### New ideologies
 

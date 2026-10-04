@@ -1,9 +1,19 @@
 # -*- coding: utf-8 -*-
 """Apply ideology attitude modifications to vanilla ideology files.
 
-Reads modification directives from ideology_modifications.py, applies REPLACE
-(overwrite existing sub-entry) or INJECT (add new sub-entry) to vanilla ideology
-files, and writes the result to the mod's common/ideologies/ directory.
+Reads modification directives from ideology_modifications.py, applies them to
+vanilla's ideology files, and writes common/ideologies/modified.txt. Each
+ideology the dict names becomes one of:
+
+- INJECT, when every lawgroup block it modifies is one vanilla's ideology
+  lacks. The entry holds just those blocks.
+- REPLACE, when it touches a block vanilla's ideology already has, whether to
+  change a stance or to add a law. The entry carries vanilla's whole ideology,
+  copied from the raw file with the modifications applied, which is why this
+  generator needs the game files and can't run from the vanilla_parsed/
+  snapshot. An INJECT of a block vanilla already has is not merged into it:
+  the engine keeps both blocks, and the ideology tooltip lists the law group
+  twice (read in game 2026-10-04; docs/guides/scripting_best_practices.md).
 
 Usage:
     python apply_ideologies.py          # Apply all modifications
@@ -15,8 +25,10 @@ import os
 import re
 from os import walk
 
+# path_constants resolves the game path on first use; reading it inside the
+# functions keeps this module importable (and testable) without a game install.
+import path_constants
 from ideology_modifications import modifications
-from path_constants import base_game_path, mod_path
 
 
 def parse_file(file_path):
@@ -121,7 +133,13 @@ def modify_entries(entries, modifications):
                 new_value = "\n".join([f"\t\t{line[0]} = {line[1]}" for line in lines])
                 new_sub_entry = f"\t{sub_key} = {{\n{new_value}\n\t}}"
                 pattern = re.compile(r"(\n\tlawgroup_)", re.DOTALL)
-                entry = pattern.sub("\n" + new_sub_entry + r"\1", entry, 1)
+                new_entry = pattern.sub("\n" + new_sub_entry + r"\1", entry, 1)
+                if new_entry == entry:
+                    # Vanilla's ideology has no lawgroup block to insert
+                    # before: put the new one before its closing brace.
+                    cut = entry.rstrip().rfind("}")
+                    new_entry = entry[:cut] + new_sub_entry + "\n" + entry[cut:]
+                entry = new_entry
 
         replace_reasons = _replacement_reasons(original_entry, sub_entries)
         keyword = "INJECT" if len(replace_reasons) == 0 else "REPLACE"
@@ -225,7 +243,7 @@ def write_to_file(file_path, entries):
 
 def _build_modified_entries(verbose: bool = False):
     entries = {}
-    ideologies_dir = os.path.join(base_game_path, "game", "common", "ideologies")
+    ideologies_dir = os.path.join(path_constants.base_game_path, "game", "common", "ideologies")
     filenames = next(walk(ideologies_dir), (None, None, []))[2]
     for file in filenames:
         if verbose:
@@ -249,7 +267,7 @@ def regenerate(mod_state=None):
     the generator would otherwise say nothing about it.
     """
     modified_entries, unmatched = _build_modified_entries(verbose=False)
-    output_path = os.path.join(mod_path, "common", "ideologies", "modified.txt")
+    output_path = os.path.join(path_constants.mod_path, "common", "ideologies", "modified.txt")
     write_to_file(output_path, modified_entries)
     return {
         "hard_fails": len(unmatched),
@@ -263,7 +281,7 @@ def main():
     args = parser.parse_args()
 
     modified_entries, unmatched = _build_modified_entries(verbose=True)
-    output_path = os.path.join(mod_path, "common", "ideologies", "modified.txt")
+    output_path = os.path.join(path_constants.mod_path, "common", "ideologies", "modified.txt")
     if unmatched:
         print(
             f"\nWARNING: {len(unmatched)} modification key(s) match no vanilla "

@@ -103,6 +103,8 @@ CHECKS = ("system_ungated", "unchosen_self_action", "imputed_foreign_action")
 FOREIGN_CHECKS = frozenset({
     "silent_variable",  # silent_variable_audit
     "empty_block", "no_effect_option",  # empty_effect_audit
+    "amendment_reachability",  # amendment_reachability_audit (an add_amendment line in an event)
+    "ideology_lawgroup",  # ideology_lawgroup_audit
 })
 
 # ---------------------------------------------------------------------------

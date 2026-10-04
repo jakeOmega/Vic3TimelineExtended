@@ -124,7 +124,7 @@ class IdeologyStanceTests(unittest.TestCase):
         for where, block in _script_ideology_stances().items():
             punishment = block.get("law_punishment_focused_criminal_justice")
             camps = block.get(LAW)
-            if punishment in ("approve", "strongly_approve") and camps:
+            if punishment in ("approve", "strongly_approve") and camps and camps != "strongly_approve":
                 with self.subTest(where=where):
                     self.assertLessEqual(order.index(camps), order.index(punishment))
             if punishment in ("disapprove", "strongly_disapprove"):

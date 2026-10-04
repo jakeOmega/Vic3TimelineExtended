@@ -511,7 +511,7 @@ IMAGES = {
         "style": "oil painting, academic art, warm interior light",
         "events": [
             "decolonization_events.205", "extra_law_events.13", "extra_law_events.49",
-            "extra_law_events.73",
+            "extra_law_events.73", "extra_law_events.88",
         ],
     },
     "digital_privacy_screen": {
@@ -540,7 +540,7 @@ IMAGES = {
     "drug_policy_hearing": {
         "prompt": "A public hearing on drug policy with experts and citizens.",
         "style": "oil painting, academic art, warm interior light",
-        "events": ["extra_law_events.33", "extra_law_events.34"],
+        "events": ["extra_law_events.33", "extra_law_events.34", "extra_law_events.90"],
     },
 
     # =========================================================================

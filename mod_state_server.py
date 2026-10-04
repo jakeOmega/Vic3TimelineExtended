@@ -8825,6 +8825,8 @@ POST_LOAD_AUDITS = [
     ("building_scope_variable_audit", "building_scope_variable_audit"),
     ("principle_tier_audit",          "principle_tier_audit"),
     ("prestige_good_roster_audit",    "prestige_good_roster_audit"),
+    ("amendment_reachability_audit",  "amendment_reachability_audit"),
+    ("ideology_lawgroup_audit",       "ideology_lawgroup_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS

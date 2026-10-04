@@ -159,6 +159,12 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 		}
 		else_if = {
 			limit = {
+				has_technology_researched = corporatism
+			}
+			activate_law = law_type:law_corporate_state
+		}
+		else_if = {
+			limit = {
 				OR = {
 					has_law = law_type:law_landed_voting
 					has_law = law_type:law_wealth_voting
@@ -174,12 +180,6 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				has_technology_researched = political_agitation
 			}
 			activate_law = law_type:law_direct_democracy
-		}
-		else_if = {
-			limit = {
-				has_technology_researched = corporatism
-			}
-			activate_law = law_type:law_corporate_state
 		}
 		else_if = {
 			limit = {
@@ -354,6 +354,21 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 			activate_law = law_type:law_direct_democracy
 		}
 		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_autocracy
+				}
+				has_technology_researched = democracy
+			}
+			activate_law = law_type:law_parliamentary_republic
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = democracy
+			}
+			activate_law = law_type:law_presidential_republic
+		}
+		else_if = {
 			limit = { always = yes }
 			activate_law = law_type:law_chiefdom
 		}
@@ -401,12 +416,9 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 		}
 		else_if = {
 			limit = {
-				country_is_colonial_or_company = yes
-				NOR = {
-					has_law = law_type:law_anarchy
-				}
+				has_technology_researched = democracy
 			}
-			activate_law = law_type:law_colonial_administration
+			activate_law = law_type:law_presidential_republic
 		}
 		else_if = {
 			limit = {
@@ -420,9 +432,12 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = democracy
+				country_is_colonial_or_company = yes
+				NOR = {
+					has_law = law_type:law_anarchy
+				}
 			}
-			activate_law = law_type:law_presidential_republic
+			activate_law = law_type:law_colonial_administration
 		}
 		else_if = {
 			limit = {
@@ -439,6 +454,12 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 				}
 			}
 			activate_law = law_type:law_theocracy
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = socialism
+			}
+			activate_law = law_type:law_council_republic
 		}
 		else_if = {
 			limit = { always = yes }
@@ -595,12 +616,6 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = artificial_intelligence
-			}
-			activate_law = law_type:law_algorithmic_governance
-		}
-		else_if = {
-			limit = {
 				NOR = {
 					has_law = law_type:law_chiefdom
 					has_law = law_type:law_command_economy
@@ -648,12 +663,6 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				is_subject = yes
 			}
 			activate_law = law_type:law_organic_regulation
-		}
-		else_if = {
-			limit = {
-				has_technology_researched = artificial_intelligence
-			}
-			activate_law = law_type:law_algorithmic_governance
 		}
 		else_if = {
 			limit = { always = yes }
@@ -843,6 +852,12 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 		}
 		else_if = {
 			limit = {
+				has_technology_researched = artificial_intelligence
+			}
+			activate_law = law_type:law_algorithmic_governance
+		}
+		else_if = {
+			limit = {
 				NOR = {
 					has_law = law_type:law_chiefdom
 					has_law = law_type:law_command_economy
@@ -850,12 +865,6 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				has_technology_researched = democracy
 			}
 			activate_law = law_type:law_wealth_voting
-		}
-		else_if = {
-			limit = {
-				has_technology_researched = artificial_intelligence
-			}
-			activate_law = law_type:law_algorithmic_governance
 		}
 		else_if = {
 			limit = {
@@ -932,6 +941,12 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 		}
 		else_if = {
 			limit = {
+				has_technology_researched = artificial_intelligence
+			}
+			activate_law = law_type:law_algorithmic_governance
+		}
+		else_if = {
+			limit = {
 				NOR = {
 					has_law = law_type:law_chiefdom
 					has_law = law_type:law_command_economy
@@ -939,12 +954,6 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 				has_technology_researched = democracy
 			}
 			activate_law = law_type:law_wealth_voting
-		}
-		else_if = {
-			limit = {
-				has_technology_researched = artificial_intelligence
-			}
-			activate_law = law_type:law_algorithmic_governance
 		}
 		else_if = {
 			limit = {
@@ -1154,12 +1163,6 @@ te_fix_inconsistent_lawgroup_economic_system = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = colonization
-			}
-			activate_law = law_type:law_extraction_economy
-		}
-		else_if = {
-			limit = {
 				NOR = {
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_factory_councils
@@ -1167,6 +1170,12 @@ te_fix_inconsistent_lawgroup_economic_system = {
 				has_technology_researched = romanticism
 			}
 			activate_law = law_type:law_industry_banned
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = colonization
+			}
+			activate_law = law_type:law_extraction_economy
 		}
 		else_if = {
 			limit = {
@@ -2144,15 +2153,6 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 		}
 		else_if = {
 			limit = {
-				NOR = {
-					has_law = law_type:law_council_republic
-					has_law = law_type:law_algorithmic_governance
-				}
-			}
-			activate_law = law_type:law_hereditary_bureaucrats
-		}
-		else_if = {
-			limit = {
 				OR = {
 					has_law = law_type:law_landed_voting
 					has_law = law_type:law_wealth_voting
@@ -2166,6 +2166,15 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 				}
 			}
 			activate_law = law_type:law_elected_bureaucrats
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_council_republic
+					has_law = law_type:law_algorithmic_governance
+				}
+			}
+			activate_law = law_type:law_hereditary_bureaucrats
 		}
 		else_if = {
 			limit = {
@@ -2515,6 +2524,12 @@ te_fix_inconsistent_lawgroup_army_model = {
 				has_technology_researched = guided_missiles
 			}
 			activate_law = law_type:law_private_military_contractors
+		}
+		else_if = {
+			limit = {
+				country_has_primary_culture = cu:japanese
+			}
+			activate_law = law_type:law_warrior_caste
 		}
 		else_if = {
 			limit = { always = yes }
