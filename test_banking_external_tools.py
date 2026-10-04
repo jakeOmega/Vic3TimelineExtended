@@ -407,9 +407,9 @@ class NonModifierTooltipTest(unittest.TestCase):
                 with self.subTest(effect=effect, key=key):
                     self.assertIn(key, drawn)
 
-    def test_every_line_opens_with_a_not_a_modifier_label(self):
+    def test_every_line_opens_with_a_label(self):
         for label in LABELS:
-            self.assertIn('(not a modifier)', self.loc[label])
+            self.assertRegex(self.loc[label], r'^#title [^#]+:#!$')
         for key in {k for keys in NONMOD_LINES.values() for k in keys}:
             with self.subTest(key=key):
                 self.assertRegex(self.loc[key], r'^\$(%s)\$ ' % '|'.join(LABELS))

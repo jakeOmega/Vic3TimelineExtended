@@ -10,10 +10,10 @@
 # flows, inflation pressure, the treasury or a stock of its own. The engine draws
 # none of that, so each such effect names it in a `custom_tooltip` keyed
 # banking_nonmod_*_tt, whose text opens with one of the shared labels
-# (banking_nonmod_monthly_label / _lifted_label / _war_end_label, "... (not a
-# modifier):"). The dashboard row tooltip (banking_dash_tt_cb_*) splices the
-# same keys under its modifier list. A new tool whose pulse does more than its
-# modifier adds a key here and there too;
+# (banking_nonmod_monthly_label / _lifted_label / _war_end_label: "Each month:",
+# "After lifting:", "When the war ends:"). The dashboard row tooltip
+# (banking_dash_tt_cb_*) splices the same keys under its modifier list. A new
+# tool whose pulse does more than its modifier adds a key here and there too;
 # test_banking_external_tools.NonModifierTooltipTest pins the figures in the
 # text to the script values.
 
